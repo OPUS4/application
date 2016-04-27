@@ -27,9 +27,9 @@
  * @category    Application
  * @package     Module_Solrsearch
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 class Solrsearch_Model_Series {
@@ -46,7 +46,7 @@ class Solrsearch_Model_Series {
             $s = new Opus_Series($seriesId);
         }
         catch (Opus_Model_NotFoundException $e) {
-            throw new Solrsearch_Model_Exception("Series with id '" . $seriesId . "' does not exist.");            
+            throw new Solrsearch_Model_Exception("Series with id '" . $seriesId . "' does not exist.");
         }
 
         if ($s->getVisible() !== '1') {
@@ -84,26 +84,8 @@ class Solrsearch_Model_Series {
                 }
             }
         }
-        return null;        
+        return null;
     }
 
-    public static function hasDisplayableSeries() {
-        return count(self::getVisibleNonEmptySeriesSortedBySortKey()) > 0;
-    }
-
-    /**
-     * Return all non-empty visible Opus_Series objects in sorted order. 
-     *
-     * @return array an array of Opus_Series objects
-     */
-    public static function getVisibleNonEmptySeriesSortedBySortKey() {
-        $visibleSeries = array();
-        foreach (Opus_Series::getAllSortedBySortKey() as $series) {
-            if ($series->getVisible() == '1' && $series->getNumOfAssociatedPublishedDocuments() > 0) {
-                array_push($visibleSeries, $series);
-            }
-        }
-        return $visibleSeries;       
-    }
 }
 

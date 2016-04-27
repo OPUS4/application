@@ -450,35 +450,40 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         $this->dispatch('/solrsearch/index/search/searchtype/series/id/5');
         $this->assertResponseCode(200);
 
-        $this->assertContains('/series_logos/5/400_100.png', $this->getResponse()->getBody());
-        $this->assertContains('Lorem ipsum dolor sit amet,', $this->getResponse()->getBody());
+        $body = $this->getResponse()->getBody();
+
+        $this->assertContains('/series_logos/5/400_100.png', $body);
+        $this->assertContains('Lorem ipsum dolor sit amet,', $body);
 
         // pagination links
-        $this->assertTrue(substr_count($this->getResponse()->getBody(), '/solrsearch/index/search/searchtype/series/id/5/start/10/rows/10">') == 4);
+        $this->assertTrue(substr_count($body, '/solrsearch/index/search/searchtype/series/id/5/start/10/rows/10">') == 4);
 
         // sorting links
-        $this->assertContains('/solrsearch/index/search/searchtype/series/id/5/start/0/rows/10/sortfield/seriesnumber/sortorder/asc', $this->getResponse()->getBody());
-        $this->assertNotContains('/solrsearch/index/search/searchtype/series/id/5/start/0/rows/10/sortfield/seriesnumber/sortorder/desc', $this->getResponse()->getBody());
-        $this->assertContains('/solrsearch/index/search/searchtype/series/id/5/start/0/rows/10/sortfield/year/sortorder/asc', $this->getResponse()->getBody());
-        $this->assertContains('/solrsearch/index/search/searchtype/series/id/5/start/0/rows/10/sortfield/year/sortorder/desc', $this->getResponse()->getBody());
-        $this->assertContains('/solrsearch/index/search/searchtype/series/id/5/start/0/rows/10/sortfield/title/sortorder/asc', $this->getResponse()->getBody());
-        $this->assertContains('/solrsearch/index/search/searchtype/series/id/5/start/0/rows/10/sortfield/title/sortorder/desc', $this->getResponse()->getBody());
-        $this->assertContains('/solrsearch/index/search/searchtype/series/id/5/start/0/rows/10/sortfield/author/sortorder/asc', $this->getResponse()->getBody());
-        $this->assertContains('/solrsearch/index/search/searchtype/series/id/5/start/0/rows/10/sortfield/author/sortorder/desc', $this->getResponse()->getBody());
+        $this->assertContains('/solrsearch/index/search/searchtype/series/id/5/start/0/rows/10/sortfield/seriesnumber/sortorder/asc', $body);
+        $this->assertNotContains('/solrsearch/index/search/searchtype/series/id/5/start/0/rows/10/sortfield/seriesnumber/sortorder/desc', $body);
+        $this->assertContains('/solrsearch/index/search/searchtype/series/id/5/start/0/rows/10/sortfield/year/sortorder/asc', $body);
+        $this->assertContains('/solrsearch/index/search/searchtype/series/id/5/start/0/rows/10/sortfield/year/sortorder/desc', $body);
+        $this->assertContains('/solrsearch/index/search/searchtype/series/id/5/start/0/rows/10/sortfield/title/sortorder/asc', $body);
+        $this->assertContains('/solrsearch/index/search/searchtype/series/id/5/start/0/rows/10/sortfield/title/sortorder/desc', $body);
+        $this->assertContains('/solrsearch/index/search/searchtype/series/id/5/start/0/rows/10/sortfield/author/sortorder/asc', $body);
+        $this->assertContains('/solrsearch/index/search/searchtype/series/id/5/start/0/rows/10/sortfield/author/sortorder/desc', $body);
     }
 
     public function testSeriesSearchPaginationWorks() {
         $this->dispatch('/solrsearch/index/search/searchtype/series/id/5/start/10/rows/10');
         $this->assertResponseCode(200);
 
-        $this->assertContains('/frontdoor/index/index/docId/3', $this->getResponse()->getBody());
-        $this->assertContains('/frontdoor/index/index/docId/2', $this->getResponse()->getBody());
-        $this->assertContains('/frontdoor/index/index/docId/1', $this->getResponse()->getBody());
-        $this->assertContains('<dt class="results_seriesnumber">C</dt>', $this->getResponse()->getBody());
-        $this->assertContains('<dt class="results_seriesnumber">B</dt>', $this->getResponse()->getBody());
-        $this->assertContains('<dt class="results_seriesnumber">A</dt>', $this->getResponse()->getBody());
-        $this->assertContains('/series_logos/5/400_100.png', $this->getResponse()->getBody());
-        $this->assertContains('Lorem ipsum dolor sit amet,', $this->getResponse()->getBody());
+        $body = $this->getResponse()->getBody();
+
+        $this->assertXpathCount('//a[contains(@href, "/docId/3") and contains(@href, "/frontdoor/index/index")]', 1);
+        $this->assertXpathCount('//a[contains(@href, "/docId/2") and contains(@href, "/frontdoor/index/index")]', 1);
+        $this->assertXpathCount('//a[contains(@href, "/docId/1") and contains(@href, "/frontdoor/index/index")]', 1);
+
+        $this->assertContains('<dt class="results_seriesnumber">C</dt>', $body);
+        $this->assertContains('<dt class="results_seriesnumber">B</dt>', $body);
+        $this->assertContains('<dt class="results_seriesnumber">A</dt>', $body);
+        $this->assertContains('/series_logos/5/400_100.png', $body);
+        $this->assertContains('Lorem ipsum dolor sit amet,', $body);
 
         // pagination links
         $this->assertTrue(substr_count($this->getResponse()->getBody(), '/solrsearch/index/search/searchtype/series/id/5/start/0/rows/10">') == 4);
@@ -496,9 +501,9 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         $responseBody = $this->getResponse()->getBody();
         $seriesIds = array(146, 93, 92, 94, 91);
         foreach ($seriesIds as $seriesId) {
-            $pos = strpos($responseBody, '/frontdoor/index/index/docId/' . $seriesId);
-            $this->assertTrue($pos !== false);
-            $responseBody = substr($responseBody, $pos);
+            preg_match("/\/frontdoor\/index\/index.*\/docId\/$seriesId/", $responseBody, $matches, PREG_OFFSET_CAPTURE);
+            $this->assertNotEmpty($matches, "Document $seriesId not found!");
+            $responseBody = substr($responseBody, $matches[0][1]);
         }
     }
 
@@ -514,9 +519,9 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         $responseBody = $this->getResponse()->getBody();
         $seriesIds = array_reverse(array(146, 93, 92, 94, 91));
         foreach ($seriesIds as $seriesId) {
-            $pos = strpos($responseBody, '/frontdoor/index/index/docId/' . $seriesId);
-            $this->assertTrue($pos !== false);
-            $responseBody = substr($responseBody, $pos);
+            preg_match("/\/frontdoor\/index\/index.*\/docId\/$seriesId/", $responseBody, $matches, PREG_OFFSET_CAPTURE);
+            $this->assertNotEmpty($matches, "Document $seriesId not found!");
+            $responseBody = substr($responseBody, $matches[0][1]);
         }
     }
 
@@ -531,9 +536,9 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
 
         $seriesIds = array(146, 93, 92, 94, 91);
         foreach ($seriesIds as $seriesId) {
-            $pos = strpos($responseBody, '/frontdoor/index/index/docId/' . $seriesId);
-            $this->assertTrue($pos !== false);
-            $responseBody = substr($responseBody, $pos);
+            preg_match("/\/frontdoor\/index\/index.*\/docId\/$seriesId/", $responseBody, $matches, PREG_OFFSET_CAPTURE);
+            $this->assertNotEmpty($matches, "Document $seriesId not found!");
+            $responseBody = substr($responseBody, $matches[0][1]);
         }
     }
 
@@ -859,6 +864,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
             'Fluiddynamik und Schiffstheorie M-8',
             'Geotechnik und Baubetrieb B-5',
             'Hochfrequenztechnik E-3');
+
         $this->assertPositions($this->getResponse()->getBody(), $searchStrings, 'id="institute_facet"');
 
         $this->dispatch('/solrsearch/index/search/searchtype/all');
@@ -997,8 +1003,17 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         $newerDocId = $newerDoc->store();
 
         $this->dispatch('/solrsearch/index/search/searchtype/simple/query/*%3A*/browsing/true/doctypefq/article');
-        $olderDocPosition = strpos ($this->_response->getBody(), '<a href="/frontdoor/index/index/docId/' . $olderDocId);
-        $newerDocPosition = strpos ($this->_response->getBody(), '<a href="/frontdoor/index/index/docId/' . $newerDocId);
+
+        $responseBody = $this->getResponse()->getBody();
+
+        preg_match("$/frontdoor/index/index.*/docId/$olderDocId$", $responseBody, $matches, PREG_OFFSET_CAPTURE);
+        $this->assertNotEmpty($matches, "Document $olderDocId not found!");
+        $olderDocPosition = $matches[0][1];
+
+        preg_match("$/frontdoor/index/index.*/docId/$newerDocId$", $responseBody, $matches, PREG_OFFSET_CAPTURE);
+        $this->assertNotEmpty($matches, "Document $newerDocId not found!");
+        $newerDocPosition = $matches[0][1];
+
         $this->assertTrue($newerDocPosition < $olderDocPosition);
     }
 
@@ -1034,8 +1049,15 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
 
         $this->dispatch('/solrsearch/index/search/searchtype/simple/query/*%3A*/browsing/true/doctypefq/article/sortfield/title/sortorder/desc');
 
-        $olderDocPosition = strpos ($this->_response->getBody(), '<a href="/frontdoor/index/index/docId/' . $olderDocId);
-        $newerDocPosition = strpos ($this->_response->getBody(), '<a href="/frontdoor/index/index/docId/' . $newerDocId);
+        $responseBody = $this->getResponse()->getBody();
+
+        preg_match("$/frontdoor/index/index.*/docId/$olderDocId$", $responseBody, $matches, PREG_OFFSET_CAPTURE);
+        $this->assertNotEmpty($matches, "Document $olderDocId not found!");
+        $olderDocPosition = $matches[0][1];
+
+        preg_match("$/frontdoor/index/index.*/docId/$newerDocId$", $responseBody, $matches, PREG_OFFSET_CAPTURE);
+        $this->assertNotEmpty($matches, "Document $newerDocId not found!");
+        $newerDocPosition = $matches[0][1];
 
         $this->assertTrue($newerDocPosition > $olderDocPosition, "Documents are not sorted by sortfield (title).");
     }
@@ -1047,6 +1069,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
     public function testAuthorFacetOpen() {
         $this->useEnglish();
         $this->dispatch('/solrsearch/index/search/searchtype/all/start/0/rows/10/facetNumber_author_facet/all');
+        $this->assertXpathCount('//a[contains(@href, "author_facetfq")]', 104); // stimmt für Testdaten TODO über SQL
         $this->assertQueryContentContains('//a', 'Wilfried Stecher');
         $this->assertQueryContentContains('//a', 'Wally Walruss');
         $this->assertQueryContentContains('//a', 'M. Scheinpflug');

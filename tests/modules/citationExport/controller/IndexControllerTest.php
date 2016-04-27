@@ -592,6 +592,32 @@ class CitationExport_IndexControllerTest extends ControllerTestCase {
         $this->assertQueryContentContains('//pre', "{2015}");
     }
 
+    public function testBibtexTypeMasterthesis()
+    {
+        $doc = $this->createTestDocument();
+        $doc->setType('masterthesis');
+        $docId = $doc->store();
+        $this->dispatch('/citationExport/index/index/output/bibtex/docId/' . $docId);
+        $this->assertQueryContentContains('//pre', "{masterthesis}");
+    }
+
+    public function testBibtexTypeDoctoralthesis()
+    {
+        $doc = $this->createTestDocument();
+        $doc->setType('doctoralthesis');
+        $docId = $doc->store();
+        $this->dispatch('/citationExport/index/index/output/bibtex/docId/' . $docId);
+        $this->assertQueryContentContains('//pre', "{doctoralthesis}");
+    }
+
+    public function testBibtexNoType()
+    {
+        $doc = $this->createTestDocument();
+        $docId = $doc->store();
+        $this->dispatch('/citationExport/index/index/output/bibtex/docId/' . $docId);
+        $this->assertNotQueryContentContains('//pre', "type        =");
+    }
+
     private function setDocumentType($documenttype) {
         $doc = new Opus_Document($this->documentId);
         $doc->setType($documenttype);

@@ -75,5 +75,10 @@ class Publish_IndexController extends Application_Controller_Action {
             $this->view->extensions = $config->publish->filetypes->allowed;
         }
 
+        // Quick bug fix for OPUSVIER-3564
+        $translate = Zend_Registry::get('Zend_Translate');
+        if ($translate->isTranslated('tooltip_documentType')) {
+            $this->view->documentType['hint'] = 'tooltip_documentType';
+        }
     }
 }

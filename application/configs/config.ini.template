@@ -26,7 +26,8 @@
 ; @author      Ralf Claussnitzer <ralf.claussnitzer@slub-dresden.de>
 ; @author      Thoralf Klein <thoralf.klein@zib.de>
 ; @author      Pascal-Nicolas Becker <becker@zib.de>
-; @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+; @author      Jens Schwidder <schwidder@zib.de>
+; @copyright   Copyright (c) 2008-2016, OPUS 4 development team
 ; @license     http://www.gnu.org/licenses/gpl.html General Public License
 ; @version     $Id$
 
@@ -50,13 +51,11 @@ searchengine.solr.default.service.default.endpoint.localhost.host = @searchengin
 searchengine.solr.default.service.default.endpoint.localhost.port = @searchengine.index.port@
 searchengine.solr.default.service.default.endpoint.localhost.path = @searchengine.index.app@
 ; The text extraction can run on a different solr server as the metadata indexer
-; doese. You can also use the same solr server, then you would have to enter
-; the same credentials as above.
-searchengine.solr.default.service.extract.endpoint.localhost.host = @searchengine.index.host@
-searchengine.solr.default.service.extract.endpoint.localhost.port = @searchengine.index.port@
-searchengine.solr.default.service.extract.endpoint.localhost.path = @searchengine.index.app@
-
-
+; does. You can also use the same solr server, then you would have to enter
+; the same connection as above.
+searchengine.solr.default.service.extract.endpoint.localhost.host = @searchengine.extract.host@
+searchengine.solr.default.service.extract.endpoint.localhost.port = @searchengine.extract.port@
+searchengine.solr.default.service.extract.endpoint.localhost.path = @searchengine.extract.app@
 
 ; SUPPORTED LANGUAGES
 ; Change the setting to 'de' or 'en' in order to disable language selection.
@@ -200,5 +199,11 @@ setup.translation.modules.allowed = default,publish
 [staging : production]
 
 [testing : production]
+
+; Additional document types for testing
+publish.path.documenttypes[] = APPLICATION_PATH "/application/configs/doctypes"
+publish.path.documenttypes[] = APPLICATION_PATH "/tests/resources/doctypes"
+publish.path.documenttemplates[] = APPLICATION_PATH "/application/configs/doctypes_templates"
+publish.path.documenttemplates[] = APPLICATION_PATH "/tests/resources/doctypes_templates"
 
 [development : production]

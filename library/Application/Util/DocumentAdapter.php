@@ -167,6 +167,8 @@ class Application_Util_DocumentAdapter {
      * TODO or should it be getPublishedYear (?)
      */
     public function getPublishedDate($yearOnly = false) {
+        $datesHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('Dates');
+
         try {
             $date = $this->document->getPublishedDate();
 
@@ -174,12 +176,15 @@ class Application_Util_DocumentAdapter {
                 $date = $this->document->getPublishedYear();
             }
 
-            if ($yearOnly && !empty($date) && ($date instanceof Opus_Date)) {
-                return htmlspecialchars($date);
+            if (!empty($date) && $date instanceof Opus_Date) {
+                if ($yearOnly) {
+                    $date = $date->getYear();
+                }
+                else {
+                    $date = $datesHelper->getDateString($date);
+                }
             }
-            else {
-                return htmlspecialchars($date);
-            }
+            return htmlspecialchars($date);
         }
         catch (Exception $e) {
             return 'unknown';
@@ -187,6 +192,8 @@ class Application_Util_DocumentAdapter {
     }
 
     public function getCompletedDate($yearOnly = false) {
+        $datesHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('Dates');
+
         try {
             $date = $this->document->getCompletedDate();
 
@@ -194,12 +201,17 @@ class Application_Util_DocumentAdapter {
                 $date = $this->document->getCompletedYear();
             }
 
-            if ($yearOnly && !empty($date) && ($date instanceof Opus_Date)) {
-                return htmlspecialchars($date->getYear());
+            if (!empty($date) && $date instanceof Opus_Date) {
+                if ($yearOnly) {
+                    $date = $date->getYear();
+                }
+                else {
+                    $date = $datesHelper->getDateString($date);
+                }
             }
-            else {
-                return htmlspecialchars($date);
-            }
+
+            return htmlspecialchars($date);
+
         }
         catch (Exception $e) {
             return 'unknown';

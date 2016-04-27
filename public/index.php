@@ -58,14 +58,24 @@ require_once 'autoload.php';
 $config = new Zend_Config_Ini(
         APPLICATION_PATH . '/application/configs/application.ini',
         APPLICATION_ENV,
-        array('allowModifications'=>true));
+        array('allowModifications'=>true)
+);
 
 $localConfig = new Zend_Config_Ini(
         APPLICATION_PATH . '/application/configs/config.ini',
         APPLICATION_ENV,
-        array('allowModifications'=>true));
+        array('allowModifications'=>true)
+);
 
 $config->merge($localConfig);
+
+// configuration file that is modified via application user interface
+if (is_readable(APPLICATION_PATH . '/application/configs/config.xml')) {
+    $onlineConfig = new Zend_Config_Xml(
+            APPLICATION_PATH . '/application/configs/config.xml'
+    );
+    $config->merge($onlineConfig);
+}
 
 //// Create application, bootstrap, and run
 $application = new Zend_Application(APPLICATION_ENV, $config);

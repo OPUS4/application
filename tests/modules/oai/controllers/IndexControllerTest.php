@@ -29,9 +29,13 @@
  * @package     Tests
  * @author      Thoralf Klein <thoralf.klein@zib.de>
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
+ *
+ * TODO split specific protocol tests into separate classes
+ * TODO unit tests transformations directly without "dispatch"
+ * TODO create plugins for formats/protocols/standards
  */
 class Oai_IndexControllerTest extends ControllerTestCase {
 
@@ -559,19 +563,22 @@ class Oai_IndexControllerTest extends ControllerTestCase {
      * Opusvier-3341
      */
     public function testThesisLevelForXMetaDissPlus() {
-        $thesisLevel = array('diplom', 'examen', 'magister');
-        foreach ($thesisLevel as $level) {
+        $thesisLevel = array('diplom' => 'Diplom', 'magister' => 'M.A.', 'examen' => 'other');
+        foreach ($thesisLevel as $level => $label) {
             $doc = $this->createTestDocument();
             $doc->setType($level);
             $doc->setServerState('published');
             $docId = $doc->store();
 
             $this->dispatch('/oai?verb=GetRecord&metadataPrefix=XMetaDissPlus&identifier=oai:opus4.demo:' . $docId);
+
             $xpath = $this->prepareXpathFromResultString($this->getResponse()->getBody());
+
             $elements = $xpath->query('//thesis:degree/thesis:level');
-            $this->assertEquals($elements->item(0)->nodeValue, $level);
+            $this->assertEquals($label, $elements->item(0)->nodeValue);
+
             $elements = $xpath->query('//dc:type[@xsi:type="dini:PublType"]');
-            $this->assertEquals($elements->item(0)->nodeValue, 'masterThesis');
+            $this->assertEquals('masterThesis', $elements->item(0)->nodeValue);
         }
     }
 
@@ -1527,6 +1534,16 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->assertEquals(0, $dcCreator->length);
     }
 
+    public function testDcLangUsesShortest639Code() {
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=oai_dc&identifier=oai::305');
+
+        $body = $this->getResponse()->getBody();
+
+        $this->assertNotContains('xml:lang="deu"', $body);
+        $this->assertNotContains('xml:lang="ger"', $body);
+        $this->assertContains('xml:lang="de"', $body);
+    }
+
     /**
      * Regression Test for OPUSVIER-2762
      */
@@ -1559,7 +1576,40 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->assertEquals($parentTitleValue . ', ' .
                             $doc->getVolume() . ', ' .
                             $doc->getIssue() . ', ' .
-                            $doc->getPageNumber(), $dcSource->item(0)->nodeValue);
+                            'S. ' . $doc->getPageFirst() . '-' . $doc->getPageLast(), $dcSource->item(0)->nodeValue);
+    }
+
+    public function testXMetaDissPlusDcsourceContainsTitleParentPageNumber() {
+        $doc = $this->createTestDocument();
+
+        $doc->setServerState('published');
+
+        $title = $doc->addTitleMain();
+        $title->setValue('TitleMain');
+        $title->setLanguage('deu');
+
+        $title = $doc->addTitleParent();
+        $title->setValue('TitleParent');
+        $title->setLanguage('deu');
+
+        $doc->setVolume('5');
+        $doc->setIssue('12');
+        $doc->setPageNumber('34');
+
+        $docId = $doc->store();
+
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=XMetaDissPlus&identifier=oai::' . $docId);
+
+        $xpath = $this->prepareXpathFromResultString($this->getResponse()->getBody());
+
+        $dcSource = $xpath->query('//xMetaDiss:xMetaDiss/dc:source');
+
+        $this->assertEquals(1, $dcSource->length);
+
+        $this->assertEquals('TitleParent, ' .
+            $doc->getVolume() . ', ' .
+            $doc->getIssue() . ', ' .
+            $doc->getPageNumber() . ' S.', $dcSource->item(0)->nodeValue);
     }
 
     public function testXMetaDissPlusDctermsispartofContainsSeriesTitleAndNumber() {
@@ -1693,10 +1743,39 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=XMetaDissPlus&identifier=oai:opus4.demo:' . $docId);
 
-        $xpath = $this->prepareXpathFromResultString($this->_response->getBody());
+        $xpath = $this->prepareXpathFromResultString($this->getResponse()->getBody());
         $elements = $xpath->query('//dcterms:isPartOf[@xsi:type="ddb:ZSTitelID"]');
         $this->assertEquals($elements->item(0)->nodeValue, 7, 'data contains wrong series id. expected id: 7');
         $elements = $xpath->query('//dcterms:isPartOf[@xsi:type="ddb:ZS-Ausgabe"]');
         $this->assertEquals($elements->item(0)->nodeValue, '1337', 'data contains wrong series number; expected number: 1337');
     }
+
+    public function testGetRecordXMetaDissPlusLanguageCodes() {
+        $doc = $this->createTestDocument();
+        $doc->setServerState('published');
+        $title = $doc->addTitleMain();
+        $title->setValue('French title');
+        $title->setLanguage('fra');
+        $title = $doc->addTitleMain();
+        $title->setValue('German title');
+        $title->setLanguage('deu');
+        $docId = $doc->store();
+
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=XMetaDissPlus&identifier=oai:opus4.demo:' . $docId);
+
+        $xpath = $this->prepareXpathFromResultString($this->getResponse()->getBody());
+
+        $elements = $xpath->query('//dc:title[@lang = "fra"]');
+        $this->assertEquals(0, $elements->length);
+
+        $elements = $xpath->query('//dc:title[@lang = "fre"]');
+        $this->assertEquals(1, $elements->length);
+
+        $elements = $xpath->query('//dc:title[@lang = "deu"]');
+        $this->assertEquals(0, $elements->length);
+
+        $elements = $xpath->query('//dc:title[@lang = "ger"]');
+        $this->assertEquals(1, $elements->length);
+    }
+
 }

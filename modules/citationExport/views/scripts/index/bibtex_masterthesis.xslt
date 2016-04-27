@@ -118,7 +118,7 @@
         </xsl:call-template>
         <xsl:call-template name="outputFieldValue">
             <xsl:with-param name="field">type       </xsl:with-param>
-            <xsl:with-param name="value"><xsl:value-of select ="Enrichment[@KeyName='type']/@Value" /></xsl:with-param>
+            <xsl:with-param name="value"><xsl:value-of select ="@Type" /></xsl:with-param>
             <xsl:with-param name="delimiter">,</xsl:with-param>
         </xsl:call-template>
        <xsl:call-template name="outputFieldValue">

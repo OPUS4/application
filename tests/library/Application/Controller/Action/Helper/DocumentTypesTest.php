@@ -40,7 +40,7 @@
 class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerTestCase {
 
     /**
-     * @var Controller_Helper_DocumentTypes Instance of DocumentTypes helper for testing.
+     * @var Application_Controller_Action_Helper_DocumentTypes Instance of DocumentTypes helper for testing.
      */
     private $docTypeHelper;
 
@@ -69,11 +69,11 @@ class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerT
      */
     public function testActiveDoctypes() {
         $validationArray = $this->docTypeHelper->getDocumentTypes();
-        $this->assertTrue(in_array('all', $validationArray));
-        $this->assertTrue(in_array('preprint', $validationArray));
-        $this->assertTrue(in_array('demo_invalid', $validationArray));
-        $this->assertTrue(in_array('foobar', $validationArray));
-        $this->assertFalse(in_array('article', $validationArray));
+        $this->assertArrayHasKey('all', $validationArray);
+        $this->assertArrayHasKey('preprint', $validationArray);
+        $this->assertArrayHasKey('demo_invalid', $validationArray);
+        $this->assertArrayHasKey('foobar', $validationArray);
+        $this->assertArrayNotHasKey('article', $validationArray);
     }
 
     /*
@@ -170,15 +170,12 @@ class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerT
      */
     public function testGetAllDocumentTypes() {
         $config = Zend_Registry::get('Zend_Config');
-
         unset($config->documentTypes);
 
         $documentTypes = $this->docTypeHelper->getDocumentTypes();
 
         $this->assertNotNull($documentTypes);
         $this->assertArrayHasKey('article', $documentTypes);
-
-        // TODO: restore config key "documentTypes"
     }
 
     /**
@@ -206,16 +203,14 @@ class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerT
      * Test getting path for document types with path not set.
      *
      * @expectedException Application_Exception
+     * @expectedExceptionMessage Path to document types not configured
      */
     public function testGetDocumentTypesWithPathNotSet() {
         $config = Zend_Registry::get('Zend_Config');
 
         unset($config->publish->path->documenttypes);
 
-        $path = $this->docTypeHelper->getDocTypesPath();
-
-        // TODO: missing assertion(s)
-        // TODO: restore config key "publish.path.documenttypes"
+        $this->docTypeHelper->getDocTypesPath();
     }
 
     /**
@@ -227,7 +222,7 @@ class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerT
 
         $documentTypes = $this->docTypeHelper->getDocumentTypes();
 
-        foreach ($documentTypes as $docType) {
+        foreach ($documentTypes as $docType => $docTypePath) {
             if (!in_array($docType, $excludeFromTranslationCheck)) {
                 $this->assertNotEquals($docType, $translate->translate($docType), 'Could not translate document type: ' . $docType);
             }
@@ -237,8 +232,9 @@ class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerT
     /**
      * Regression test for OPUSVIER-2168
      */
-    public function testValidateAllXMLDocumentTypeDefinitions() {
-        $iterator = new DirectoryIterator($this->docTypeHelper->getDocTypesPath());
+    public function testValidateAllXMLDocumentTypeDefinitions()
+    {
+        $iterator = $this->docTypeHelper->getDirectoryIterator($this->docTypeHelper->getDocTypesPath());
 
         // Enable user error handling while validating input file
         libxml_clear_errors();
@@ -250,13 +246,12 @@ class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerT
 
                 $xml = new DOMDocument();
                 $xml->load($fileinfo->getPathname());
-		$result = $xml->schemaValidate(Zend_Registry::get('Zend_Config')->documentTypes->xmlSchema);
-		if ($fileinfo->getFilename() == 'demo_invalid.xml' || $fileinfo->getFilename() == 'demo_invalidfieldname.xml') {
-                   $this->assertFalse($result, $fileinfo->getFilename() . ' is valid');
-		}
-		else {
-                   $this->assertTrue($result, $fileinfo->getFilename() . ' is not valid');
-		}
+                $result = $xml->schemaValidate($this->docTypeHelper->getXmlSchemaPath());
+                if ($fileinfo->getFilename() == 'demo_invalid.xml' || $fileinfo->getFilename() == 'demo_invalidfieldname.xml') {
+                    $this->assertFalse($result, $fileinfo->getFilename() . ' is valid');
+                } else {
+                    $this->assertTrue($result, $fileinfo->getFilename() . ' is not valid');
+                }
             }
         }
 
@@ -289,12 +284,81 @@ class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerT
 
     private function getFileNames($path, $extension) {
         $fileNames = array();
-        foreach (new DirectoryIterator($path) as $fileinfo) {
+
+        if ($path instanceof Zend_Config) {
+            $path = $path->toArray();
+        }
+
+        $iterator = $this->docTypeHelper->getDirectoryIterator($path);
+        foreach ($iterator as $fileinfo) {
             if ($fileinfo->isFile()) {
                 $fileNames[$fileinfo->getBaseName($extension)] = $fileinfo->getBaseName($extension);
             }
         }
         return $fileNames;
+    }
+
+    public function testGetDocTypesPathAsArray() {
+        $paths = $this->docTypeHelper->getDocTypesPath();
+
+        $this->assertNotNull($paths);
+        $this->assertInternalType("array", $paths);
+        $this->assertCount(2, $paths);
+        $this->assertContains(APPLICATION_PATH . '/application/configs/doctypes', $paths);
+        $this->assertContains(APPLICATION_PATH . '/tests/resources/doctypes', $paths);
+    }
+
+    public function testGetDocTypesPath() {
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
+            'publish' => array(
+                'path' => array(
+                    'documenttypes' => APPLICATION_PATH . '/application/configs/doctypes'
+                )
+            )
+        )));
+
+        $paths = $this->docTypeHelper->getDocTypesPath();
+
+        $this->assertNotNull($paths);
+        $this->assertInternalType("string", $paths);
+        $this->assertEquals(APPLICATION_PATH . '/application/configs/doctypes', $paths);
+    }
+
+    public function testGetTemplates() {
+        $templates = $this->docTypeHelper->getTemplates();
+
+        $this->assertCount(31, $templates);
+
+        foreach ($templates as $name => $path) {
+            $file = new SplFileInfo($path);
+            $this->assertEquals($file->getFilename(), $name . '.phtml');
+            $this->assertTrue($file->isReadable(), "Document type template '$name' cannot be read.");
+        }
+    }
+
+    public function testTemplateForEveryDocumentType() {
+        $config = Zend_Registry::get('Zend_Config');
+        unset($config->documentTypes);
+
+        $docTypes = $this->docTypeHelper->getAllDocumentTypes();
+
+        // remove document types without templates
+        unset($docTypes['demo_invalid']);
+        unset($docTypes['barbaz']);
+        unset($docTypes['bazbar']);
+        unset($docTypes['demo_invalidfieldname']);
+        unset($docTypes['foobar']);
+
+        foreach ($docTypes as $docType => $path) {
+            $templateName = $this->docTypeHelper->getTemplateName($docType);
+            $templatePath = $this->docTypeHelper->getTemplatePath($templateName);
+
+            $this->assertTrue(is_readable($templatePath), "Document type '$docType' has no template.");
+        }
+    }
+
+    public function testGetTemplatePathUnknownName() {
+        $this->assertNull($this->docTypeHelper->getTemplatePath('unknown'));
     }
 
 }

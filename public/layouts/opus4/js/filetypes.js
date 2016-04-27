@@ -25,24 +25,24 @@
  *
  * @category    Application
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
- *
  */
 
 $(function() {
     var fileElem = $("input:file")[0];
 
-    fileElem.validFileExtensions = null; // nichts erlaubt, wird auf Publishseite überschrieben
-    fileElem.invalidFileMessage = 'The extension of file \'%value%\' is not allowed.';
-    fileElem.onchange = function() {
-        var filename = this.value;
-        var ext = filename.match(/\.([^\.]+)$/);
-        if (fileElem.validFileExtensions != null && (ext == null || $.inArray(ext[1], this.validFileExtensions) == -1)) {
-            $message = fileElem.invalidFileMessage;
-            alert($message.replace('%value%', filename));
-            this.value = null;
-        }
-    };
+    if (! typeof fileElem === "undefined") {
+        fileElem.validFileExtensions = null; // nichts erlaubt, wird auf Publishseite überschrieben
+        fileElem.invalidFileMessage = 'The extension of file \'%value%\' is not allowed.';
+        fileElem.onchange = function() {
+            var filename = this.value;
+            var ext = filename.match(/\.([^\.]+)$/);
+            if (fileElem.validFileExtensions != null && (ext == null || $.inArray(ext[1], this.validFileExtensions) == -1)) {
+                $message = fileElem.invalidFileMessage;
+                alert($message.replace('%value%', filename));
+                this.value = null;
+            }
+        };
+    }
 });

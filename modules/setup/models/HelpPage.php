@@ -34,7 +34,7 @@
  */
 
 /**
- * 
+ *
  */
 class Setup_Model_HelpPage extends Setup_Model_Abstract {
 
@@ -44,8 +44,8 @@ class Setup_Model_HelpPage extends Setup_Model_Abstract {
     protected $_contentBasepath = '';
 
     /**
-     * Path to directory containing content files. 
-     * 
+     * Path to directory containing content files.
+     *
      * @param string $basePath name of directory used to read / write page content
      */
     public function setContentBasepath($basePath) {
@@ -60,7 +60,7 @@ class Setup_Model_HelpPage extends Setup_Model_Abstract {
         $resultArray = array();
         $translationUnits = $this->getTranslation();
         if ($translationUnits === false) { // error reading files, this should not happen
-            throw new Setup_Model_Exception('No tmx data found.'); 
+            throw new Setup_Model_Exception('No tmx data found.');
         }
         foreach ($translationUnits as $translationUnit => $variants) {
             $resultArray[$translationUnit] = array();
@@ -92,14 +92,14 @@ class Setup_Model_HelpPage extends Setup_Model_Abstract {
         $filteredTmxData = array();
         foreach ($helpConfigArray as $helpKey => $helpContents) {
             if (isset($tmxData[$helpKey])) {
-                $filteredTmxData[$helpKey] = $tmxData[$helpKey]; 
+                $filteredTmxData[$helpKey] = $tmxData[$helpKey];
             }
             foreach ($helpContents as $value) {
                 if (isset($tmxData["help_title_$value"])) {
-                    $filteredTmxData["help_title_$value"] = $tmxData["help_title_$value"]; 
+                    $filteredTmxData["help_title_$value"] = $tmxData["help_title_$value"];
                 }
                 if (isset($tmxData["help_content_$value"])) {
-                    $filteredTmxData["help_content_$value"] = $tmxData["help_content_$value"]; 
+                    $filteredTmxData["help_content_$value"] = $tmxData["help_content_$value"];
                 }
             }
         }
@@ -111,7 +111,7 @@ class Setup_Model_HelpPage extends Setup_Model_Abstract {
      */
     public function fromArray(array $data) {
         $resultData = array();
-        $resultTmx = new Util_TmxFile();
+        $resultTmx = new Application_Util_TmxFile();
 
         foreach ($data as $translationUnit => $variants) {
             foreach ($variants as $language => $contents) {

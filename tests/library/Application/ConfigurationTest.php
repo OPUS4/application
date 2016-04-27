@@ -28,15 +28,17 @@
  * @package     Application
  * @author      Jens Schwidder <schwidder@zib.de>
  * @author      Michael Lang <lang@zib.de
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 class Application_ConfigurationTest extends ControllerTestCase {
-    
+
+    /**
+     * @var Application_Configuration
+     */
     private $config;
-    
+
     public function setUp() {
         parent::setUp();
         $this->config = new Application_Configuration();
@@ -67,15 +69,15 @@ class Application_ConfigurationTest extends ControllerTestCase {
     public function testGetSupportedLanguages() {
         $this->assertEquals(array('de', 'en'), $this->config->getSupportedLanguages());
     }
-    
+
     public function testIsLanguageSupportedTrue() {
         $this->assertTrue($this->config->isLanguageSupported('en'));
     }
-    
+
     public function testIsLanguageSupportedFalse() {
         $this->assertFalse($this->config->isLanguageSupported('ru'));
     }
-    
+
     public function testIsLanguageSupportedFalseNull() {
         $this->assertFalse($this->config->isLanguageSupported(null));
     }
@@ -91,10 +93,11 @@ class Application_ConfigurationTest extends ControllerTestCase {
 
     public function testGetOpusInfo() {
         $data = Application_Configuration::getOpusInfo();
-        $config = Zend_Registry::get('Zend_Config');
         $this->assertInternalType('array', $data);
+        /* OPUSVIER-3542 Version not working the same way with git
         $this->assertArrayHasKey('admin_info_version', $data);
         $this->assertEquals($config->version, $data['admin_info_version']);
+        */
     }
 
     public function testIsLanguageSelectionEnabledTrue() {
@@ -115,6 +118,43 @@ class Application_ConfigurationTest extends ControllerTestCase {
     public function testGetDefaultLanguageIfOnlyOneIsSupported() {
         Zend_Registry::get('Zend_Config')->supportedLanguages = 'de';
         $this->assertEquals('de', $this->config->getDefaultLanguage());
+    }
+
+    /**
+     * Checks that the path is correct with '/' at the end.
+     */
+    public function testGetWorkspacePath() {
+        $workspacePath = $this->config->getWorkspacePath();
+
+        $this->assertEquals(APPLICATION_PATH . '/tests/workspace/', $workspacePath);
+    }
+
+    /**
+     * Checks path if setting already provides '/' at the end.
+     */
+    public function testGetWorkspacePathSetWithSlash() {
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
+            'workspacePath' => APPLICATION_PATH . '/tests/workspace/'
+        )));
+
+        $workspacePath = $this->config->getWorkspacePath();
+
+        $this->assertEquals(APPLICATION_PATH . '/tests/workspace/', $workspacePath);
+    }
+
+    public function testGetFilesPath() {
+        $this->assertEquals(APPLICATION_PATH . '/tests/workspace/files/', $this->config->getFilesPath());
+    }
+
+    public function testGetTempPath() {
+        $this->assertEquals(APPLICATION_PATH . '/tests/workspace/tmp/', $this->config->getTempPath());
+    }
+
+    public function testGetInstance() {
+        $config = Application_Configuration::getInstance();
+        $this->assertNotNull($config);
+        $this->assertInstanceOf('Application_Configuration', $config);
+        $this->assertSame($config, Application_Configuration::getInstance());
     }
 
 }

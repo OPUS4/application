@@ -27,14 +27,12 @@
  * @category    Application
  * @package     Tests
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 class Solrsearch_Model_SeriesTest extends ControllerTestCase {
-
-    private $visibilities = array();
 
     public function testConstructWithInvalidSeriesId() {
         $this->setExpectedException('Solrsearch_Model_Exception');
@@ -74,42 +72,6 @@ class Solrsearch_Model_SeriesTest extends ControllerTestCase {
     public function testGetLogoFilenameForNoLogoSeries() {
         $series = new Solrsearch_Model_Series(6);
         $this->assertNull($series->getLogoFilename());
-    }
-
-    public function testHasDisplayableSeries() {
-        $this->assertTrue(Solrsearch_Model_Series::hasDisplayableSeries());
-
-        $this->setAllSeriesToUnvisible();
-        $this->assertFalse(Solrsearch_Model_Series::hasDisplayableSeries());
-
-        $this->restoreVisiblitySettings();
-        $this->assertTrue(Solrsearch_Model_Series::hasDisplayableSeries());
-    }
-
-    public function testGetVisibleNonEmptySeriesSortedBySortKey() {
-        $this->assertTrue(count(Solrsearch_Model_Series::getVisibleNonEmptySeriesSortedBySortKey()) === 5);
-
-        $this->setAllSeriesToUnvisible();
-        $this->assertTrue(count(Solrsearch_Model_Series::getVisibleNonEmptySeriesSortedBySortKey()) === 0);
-
-        $this->restoreVisiblitySettings();
-        $this->assertTrue(count(Solrsearch_Model_Series::getVisibleNonEmptySeriesSortedBySortKey()) === 5);
-    }
-
-    private function setAllSeriesToUnvisible() {
-        foreach (Opus_Series::getAll() as $seriesItem) {
-            $this->visibilities[$seriesItem->getId()] = $seriesItem->getVisible();
-            $seriesItem->setVisible(0);
-            $seriesItem->store();
-        }
-    }
-
-    private function restoreVisiblitySettings() {
-        foreach (Opus_Series::getAll() as $seriesItem) {
-            $seriesItem->setVisible($this->visibilities[$seriesItem->getId()]);
-            $seriesItem->store();
-        }
-        
     }
 
 }

@@ -145,7 +145,7 @@ class Oai_IndexController extends Application_Controller_Xml {
         // Setup stylesheet
         $this->loadStyleSheet($this->view->getScriptPath('index') . '/oai-pmh.xslt');
 
-        $this->_proc->registerPHPFunctions('Oai_IndexController::getLanguageCode');
+        $this->_proc->registerPHPFunctions('Oai_Model_Language::getLanguageCode');
         $this->_proc->setParameter('', 'urnResolverUrl', $this->getConfig()->urn->resolverUrl);
 
         // Set response time
@@ -737,8 +737,4 @@ class Oai_IndexController extends Application_Controller_Xml {
         }
     }
 
-    public static function getLanguageCode($code, $inPart='part2_t', $outPart='part2_b') {
-        $result = Opus_Language::getPropertiesByPart2T($code);
-        return empty($result) ? $code : $result['part2_b'];
-    }
 }

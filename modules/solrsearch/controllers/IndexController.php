@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -31,9 +30,8 @@
  * @author      Sascha Szott <szott@zib.de>
  * @author      Michael Lang <lang@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -43,9 +41,29 @@
  */
 class Solrsearch_IndexController extends Application_Controller_Action {
 
+    /**
+     * Search query.
+     * @var
+     */
     private $_query;
+
+    /**
+     * Total number of search results.
+     * @var
+     */
     private $_numOfHits;
+
+    /**
+     * Type of search.
+     *
+     * @var
+     */
     private $_searchtype;
+
+    /**
+     * Search results.
+     * @var
+     */
     private $_resultList;
 
     /**
@@ -54,7 +72,6 @@ class Solrsearch_IndexController extends Application_Controller_Action {
      * @var Solrsearch_Model_FacetMenu
      */
     private $_facetMenu;
-    private $_openFacets;
 
     /**
      * Initialize controller.
@@ -71,7 +88,7 @@ class Solrsearch_IndexController extends Application_Controller_Action {
      * Displays simple search form.
      */
     public function indexAction() {
-        $this->view->title = $this->view->translate('solrsearch_title_simple');
+        $this->view->title = 'solrsearch_title_simple';
     }
 
     /**
@@ -175,7 +192,11 @@ class Solrsearch_IndexController extends Application_Controller_Action {
             $this->_query = $query;
             $this->performSearch();
             $this->setViewValues();
-            $this->setViewFacets();
+            $this->_facetMenu->prepareViewFacets($this->_resultList, $this->getRequest());
+            $this->view->facets = $this->_facetMenu->getFacets();
+            $this->view->selectedFacets = $this->_facetMenu->getSelectedFacets();
+            $this->view->facetNumberContainer = $this->_facetMenu->getFacetNumberContainer();
+            $this->view->showFacetExtender = $this->_facetMenu->getShowFacetExtender();
 
             $this->setLinkRelCanonical();
 
@@ -204,7 +225,8 @@ class Solrsearch_IndexController extends Application_Controller_Action {
 
             if ($this->_numOfHits === 0 || $this->_query->getStart() >= $this->_numOfHits) {
                 $this->render('nohits');
-            } else {
+            }
+            else {
                 $this->render('results');
             }
         }
@@ -232,9 +254,10 @@ class Solrsearch_IndexController extends Application_Controller_Action {
         $this->getLogger()->debug('performing search');
         try {
             $searcher = new Opus_SolrSearch_Searcher();
-            $this->_openFacets = Opus_Search_Facet_Set::getFacetLimitsFromInput( $this->_request->getParams() );
-            $searcher->setFacetArray($this->_openFacets);
+            $openFacets = $this->_facetMenu->buildFacetArray( $this->getRequest()->getParams() );
+            $searcher->setFacetArray($openFacets);
             $this->_resultList = $searcher->search($this->_query);
+            $this->view->openFacets = $openFacets;
         }
         catch (Opus_SolrSearch_Exception $e) {
             $this->getLogger()->err(__METHOD__ . ' : ' . $e);
@@ -332,35 +355,6 @@ class Solrsearch_IndexController extends Application_Controller_Action {
 
     private function setRssUrl() {
         $this->view->rssUrl = self::createSearchUrlArray(array(), true);
-    }
-
-    private function setViewFacets() {
-        $facets = $this->_resultList->getFacets();
-        $facetLimit = Opus_Search_Config::getFacetLimits();
-
-        $facetArray = array();
-        $selectedFacets = array();
-        $this->view->facetNumberContainer = array();
-        $this->view->showFacetExtender = array();
-
-        foreach ($facets as $key=>$facet) {
-            $this->view->showFacetExtender[$key] = ($facetLimit[$key] <= sizeof($facet));
-            $this->getLogger()->debug("found $key facet in search results");
-            $this->view->facetNumberContainer[$key] = sizeof($facet);
-            $facetValue = $this->getRequest()->getParam($key . 'fq', '');
-            if ($facetValue !== '') {
-                $selectedFacets[$key] = $facetValue;
-                $this->view->showFacetExtender[$key] = false;
-            }
-
-            if (count($facets[$key]) > 1 || $facetValue !== '') {
-                $facetArray[$key] = $facet;
-            }
-        }
-
-        $this->view->openFacets = $this->_openFacets;
-        $this->view->facets = $facetArray;
-        $this->view->selectedFacets = $selectedFacets;
     }
 
     /**

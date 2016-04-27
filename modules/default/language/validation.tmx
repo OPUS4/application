@@ -79,6 +79,33 @@
         </tuv>
     </tu>
 
+    <tu tuid="validation_error_number_tooSmall">
+        <tuv xml:lang="en">
+            <seg>Please provide a number higher than %min%.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Bitte geben Sie eine positive Zahl, die größer als %min% ist.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="validation_error_number_notBetween">
+        <tuv xml:lang="en">
+            <seg>Please provide a number between %min% and %max%.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Bitte geben Sie eine Zahl zwischen %min% und %max% ein.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="validation_error_language_not_supported">
+        <tuv xml:lang="en">
+            <seg>Please choose at least one language.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Bitte wählen Sie mindestens eine Sprache.</seg>
+        </tuv>
+    </tu>
+
     <tu tuid="validation_error_unknown_enrichmentkey">
       <tuv xml:lang="en">
           <seg>Unknown enrichment key.</seg>

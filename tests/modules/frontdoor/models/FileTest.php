@@ -351,4 +351,24 @@ class Frontdoor_Model_FileTest extends ControllerTestCase {
         $this->assertEquals('test.pdf', $file->getPathName());
     }
 
+    public function testGetFileObjectForUnpublishedFileForDocumentsAdmin() {
+        $this->loginUser('security8', 'security8pwd');
+        $file = $this->createTestFile('test.pdf');
+        $doc = $this->createTestDocument();
+        $doc->setServerState('unpublished');
+        $doc->addFile($file);
+
+        $date = new Opus_Date();
+        $date->setYear('2100')->setMonth('00')->setDay('01');
+        $doc->setEmbargoDate($date);
+
+        $docId = $doc->store();
+
+        $model = new Frontdoor_Model_File($docId, "test.pdf");
+        $realm = new MockRealm(true,true);
+        $opusFile = $model->getFileObject($realm);
+
+        $this->assertEquals("test.pdf", $opusFile->getPathName());
+    }
+
 }
