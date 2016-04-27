@@ -105,6 +105,23 @@ class Application_Configuration {
     }
 
     /**
+     * Returns name of repository.
+     * @return string
+     */
+    public function getName() {
+        $config = $this->getConfig();
+
+        if (isset($config->name)) {
+            $name = $config->name;
+        }
+        else {
+            $name = 'OPUS 4';
+        }
+
+        return $name;
+    }
+
+    /**
      * Liefert die Sprachen, die von OPUS unterstützt werden.
      * @return array
      */
