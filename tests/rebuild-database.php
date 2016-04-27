@@ -91,7 +91,7 @@ echo('done' . PHP_EOL);
 
 echo(PHP_EOL . "Importing database schema ... " . PHP_EOL);
 // TODO move into $database->create()?
-$database->import(APPLICATION_PATH . '/db/schema/opus4current.sql');
+$database->import(APPLICATION_PATH . '/db/schema/opus4schema.sql');
 
 echo(PHP_EOL . 'Import master data ... ' . PHP_EOL);
 $database->import(APPLICATION_PATH . '/db/masterdata');

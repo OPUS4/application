@@ -6,7 +6,7 @@
     "zendframework/zendframework1": "1.12.18",
     "jpgraph/jpgraph": "dev-master",
     "solarium/solarium": "3.4.1",
-    "opus4-repo/framework": "4.5.0-RC1",
+    "opus4-repo/framework": "dev-master",
     "opus4-repo/search": "4.5.0-RC1",
     "components/jquery": "1.9.*"
   },
