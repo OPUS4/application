@@ -246,4 +246,34 @@ class Home_IndexControllerTest extends ControllerTestCase {
         $this->assertXPath('//meta[@http-equiv="Content-Language" and @content="de"]');
     }
 
+    /**
+     * Assumes that test are not run in 'production' environment.
+     */
+    public function testSignalNonProductionEnvironment() {
+        $this->useEnglish();
+
+        $this->dispatch('/home');
+
+        $this->assertQueryContentContains('//div#top-header', 'NON PRODUCTION ENVIRONMENT');
+    }
+
+    /**
+     * No way to change APPLICATION_ENV once it is set. It makes testing 'production' impossible,
+     * but that is a good thing because environment cannot be hidden by some other code.
+     */
+    public function testNoSignalingOfEnvironment() {
+        $this->useEnglish();
+
+        $this->dispatch('/home');
+
+        if (APPLICATION_ENV !== 'production') {
+            $this->assertQueryContentContains(
+                '//div#top-header', 'NON PRODUCTION ENVIRONMENT (' . APPLICATION_ENV . ')'
+            );
+        }
+        else {
+            $this->assertNotQueryContentContains('//div#top-header', 'NON PRODUCTION ENVIRONMENT');
+        }
+    }
+
 }

@@ -140,6 +140,9 @@ if (isset($config->javascript->latex->mathjax)) {
                     <?php endif ?>
                     <div id="login-bar" class="nav"><?= $this->loginBar() ?></div>
                 </div>
+                <?php if (APPLICATION_ENV !== 'production') : ?>
+                <div class="<?= APPLICATION_ENV ?>"><?= $this->translate('opus.environment') ?> (<?= APPLICATION_ENV ?>)</div>
+                <?php endif ?>
             </div>
 
             <div id="header">
