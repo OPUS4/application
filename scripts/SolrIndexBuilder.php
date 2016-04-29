@@ -39,6 +39,8 @@ require_once dirname(__FILE__) . '/common/bootstrap.php';
  * Indexes all or a range of documents.
  *
  * If all documents are indexed the index is cleared first.
+ *
+ * TODO move to class and unit test
  */
 class SolrIndexBuilder {
 
@@ -187,6 +189,12 @@ class SolrIndexBuilder {
             }
         }
 
+        // Index leftover documents
+        if (count($docs) > 0) {
+            $this->addDocumentsToIndex( $indexer, $docs );
+            $this->outputProgress($runtime, $numOfDocs);
+        }
+
         $runtime = microtime(true) - $runtime;
         echo PHP_EOL . date('Y-m-d H:i:s') . ' Finished indexing.' . PHP_EOL;
         // new search API doesn't track number of indexed files, but issues are kept written to log file
@@ -202,8 +210,8 @@ class SolrIndexBuilder {
     /**
      * Returns IDs for published documents in range.
      *
-     * @param $start Start of ID range
-     * @param $end End of ID range
+     * @param $start int Start of ID range
+     * @param $end int End of ID range
      * @return array Array of document IDs
      */
     private function getDocumentIds($start, $end) {
@@ -225,7 +233,7 @@ class SolrIndexBuilder {
     /**
      * Output current processing status and performance.
      *
-     * @param $runtime Time of start of processing
+     * @param $runtime long Time of start of processing
      * @param $numOfDocs Number of processed documents
      */
     private function outputProgress($runtime, $numOfDocs) {
