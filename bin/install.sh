@@ -112,7 +112,19 @@ echo
 echo "Installing Composer and dependencies ..."
 echo
 
-"$SCRIPT_PATH/install-composer.sh" "$BASEDIR"
+if [[ $SUDO_ENABLED -eq 0 ]] ;
+then
+    "$SCRIPT_PATH/install-composer.sh" "$BASEDIR"
+else
+    if [[ -e $BASEDIR/vendor ]] ;
+    then
+        echo "Skipping composer install/update since script is executed as root."
+        echo "Please run 'bin/install-composer.sh' separately without 'sudo'."
+    else
+        echo "Please run 'bin/install-composer.sh' without 'sudo' before the installation."
+        exit 1;
+    fi
+fi
 
 #
 # Prepare Apache2 configuration
