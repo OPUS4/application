@@ -222,6 +222,13 @@
         </exec>
     </target>
 
+    <target name="remove-hhar-files">
+        <exec executable="php" dir="${basedir}/scripts" failonerror="true">
+            <arg line="opus-console.php" />
+            <arg line="snippets/delete_files.php" />
+        </exec>
+    </target>
+
     <!--
         requires: version, date, CHANGES and RELEASE_NOTES already updated
         tag release
