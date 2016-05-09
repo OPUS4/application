@@ -53,6 +53,7 @@ defined('APPLICATION_PATH')
     || define('APPLICATION_PATH', realpath(dirname(dirname(dirname(__FILE__)))));
 
 // Define application environment
+// TODO scripts using this might be executed with a different environment than requests to the application
 defined('APPLICATION_ENV')
     || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));
 
