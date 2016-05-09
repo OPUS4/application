@@ -323,5 +323,4 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         $view->headMeta()->appendName('Opus-Version', Application_Configuration::getOpusVersion());
     }
 
-
 }
