@@ -57,6 +57,7 @@ defined('APPLICATION_ENV')
     || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));
 
 require_once 'autoload.php';
+require_once 'opus-php-compatibility.php';
 
 // environment initializiation
 $application = new Zend_Application(

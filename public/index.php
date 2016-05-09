@@ -53,8 +53,9 @@ set_include_path(implode(PATH_SEPARATOR, array(
         )));
 
 require_once 'autoload.php';
+require_once 'opus-php-compatibility.php';
 
-///** Zend_Application */
+// Zend_Application
 $config = new Zend_Config_Ini(
         APPLICATION_PATH . '/application/configs/application.ini',
         APPLICATION_ENV,
@@ -77,7 +78,7 @@ if (is_readable(APPLICATION_PATH . '/application/configs/config.xml')) {
     $config->merge($onlineConfig);
 }
 
-//// Create application, bootstrap, and run
+// Create application, bootstrap, and run
 $application = new Zend_Application(APPLICATION_ENV, $config);
 
 try {
