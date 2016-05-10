@@ -24,6 +24,7 @@ public/.htaccess
 public/js
 public/series_logos
 
+build/
 tests/build/
 tests/config.ini
 tests/workspace/**/*
