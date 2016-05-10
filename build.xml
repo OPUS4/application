@@ -134,7 +134,10 @@
 
     <target name="phpmd">
         <exec executable="${bindir}/phpmd" dir="${basedir}" logerror="on" output="${basedir}/build/logs/pmd.xml" >
-            <arg line="--exclude tests . xml codesize,unusedcode,naming,design" />
+            <arg line="--exclude tests,vendor" />
+            <arg line="." />
+            <arg line="xml" />
+            <arg line="codesize,unusedcode,naming,design" />
         </exec>
     </target>
 
