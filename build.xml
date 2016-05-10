@@ -54,7 +54,7 @@
 
     <target name="setup" depends="prepare-dependencies,prepare-javascript,prepare-config" />
 
-    <target name="prepare" depends="clean">
+    <target name="prepare" depends="clean,prepare-dependencies">
         <mkdir dir="${basedir}/build/logs" />
         <mkdir dir="${basedir}/build/coverage" />
         <mkdir dir="${basedir}/build/api" />
