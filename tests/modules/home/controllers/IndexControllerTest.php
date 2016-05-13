@@ -53,17 +53,27 @@ class Home_IndexControllerTest extends ControllerTestCase {
     /**
      * Test help action.
      */
-    public function testHelpAction() {
+    public function testHelpActionEnglish() {
+        $this->useEnglish();
         $this->dispatch('/home/index/help');
         $this->assertResponseCode(200);
         $this->assertModule('home');
         $this->assertController('index');
         $this->assertAction('help');
-        // $this->validateXHTML(); TODO viele Anpassungen in Hilfedateien (DE, EN)
+        $this->validateXHTML();
+    }
+
+    public function testHelpActionGerman() {
+        $this->useGerman();
+        $this->dispatch('/home/index/help');
+        $this->assertResponseCode(200);
+        $this->assertModule('home');
+        $this->assertController('index');
+        $this->assertAction('help');
+        $this->validateXHTML();
     }
 
     public function testHelpActionSeparate() {
-        $this->markTestSkipped('Is *help.separate* parameter still supported?');
         $config = Zend_Registry::get('Zend_Config');
         $config->help->separate = true;
         $this->dispatch('/home/index/help');
@@ -71,6 +81,7 @@ class Home_IndexControllerTest extends ControllerTestCase {
         $this->assertModule('home');
         $this->assertController('index');
         $this->assertAction('help');
+        $this->validateXHTML();
     }
 
     /**

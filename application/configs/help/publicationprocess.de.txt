@@ -1,8 +1,8 @@
 Klicken Sie auf der Startseite auf Veröffentlichen.<br/>
-Sie werden zunächst aufgefordert, einen Dokumenttyp auszuwählen. Direkt darunter können Sie Ihr(e) Dokument(e) hochladen. Klicken Sie anschließend auf "Abschicken". Es folgt das eigentliche Formular. Hier werden verschiedene Daten zu Ihrer Publikation 
-(sog. Metadaten) abgefragt, die der Beschreibung in Katalogen und anderen bibliographischen Verzeichnissen 
+Sie werden zunächst aufgefordert, einen Dokumenttyp auszuwählen. Direkt darunter können Sie Ihr(e) Dokument(e) hochladen. Klicken Sie anschließend auf "Abschicken". Es folgt das eigentliche Formular. Hier werden verschiedene Daten zu Ihrer Publikation
+(sog. Metadaten) abgefragt, die der Beschreibung in Katalogen und anderen bibliographischen Verzeichnissen
 dienen. Beschreiben Sie hier anhand der vorgegebenen Kategorien das Dokument, das Sie einbringen wollen.
-Abhängig vom Dokumenttyp sind einige der Felder <span class="required">Pflichtfelder</span> und müssen also von Ihnen ausgefüllt werden. 
+Abhängig vom Dokumenttyp sind einige der Felder <span class="required">Pflichtfelder</span> und müssen also von Ihnen ausgefüllt werden.
 Machen Sie ansonsten so genaue Angaben wie möglich.
 Zum Beispiel werden erfasst:<br/>
 <ul>
@@ -14,7 +14,7 @@ Zum Beispiel werden erfasst:<br/>
 <li>die Lizenz, unter der Sie Ihr Dokument veröffentlichen wollen (aus einer Liste auszuwählen)</li>
 </ul>
 Wenn Sie nicht wissen, was Sie in einem Formularfeld eintragen sollen, fahren Sie bitte mit dem Cursor über das Eingabefeld. Es wird ein erläuternder Hilfetext eingeblendet (Tooltip).<br/>
-Zum Abschluss der Datenerfassung werden Ihnen Ihre Eingaben noch einmal angezeigt und Sie haben drei Möglichkeiten: Sie können die Eingaben zu Ihrem Dokument gegebenenfalls korrigieren, 
-es einer Sammlung (Collection) hinzufügen oder direkt abspeichern.<br><br/>
+Zum Abschluss der Datenerfassung werden Ihnen Ihre Eingaben noch einmal angezeigt und Sie haben drei Möglichkeiten: Sie können die Eingaben zu Ihrem Dokument gegebenenfalls korrigieren,
+es einer Sammlung (Collection) hinzufügen oder direkt abspeichern.<br/><br/>
 <b>Hinweis:</b><br/>
 Cookies müssen im Webbrowser eingeschaltet sein, um Dokumente über das Veröffentlichungsformular einstellen zu können.
