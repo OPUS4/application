@@ -61,4 +61,32 @@ class ControllerTestCaseTest extends ControllerTestCase {
         $this->assertNotContains('administrator', $realm->getRoles());
     }
 
+    public function testSetHostname() {
+        $view = Zend_Registry::get('Opus_View');
+
+        $this->assertEquals('http://', $view->serverUrl());
+
+        $this->setHostname('localhost');
+
+        $this->assertEquals('http://localhost', $view->serverUrl());
+    }
+
+    public function testSetBaseUrlNotSet() {
+        $view = Zend_Registry::get('Opus_View');
+
+        $this->assertEquals('', $view->baseUrl());
+
+        // base Url must be set before first baseUrl() call, won't be changed afterwards
+        $this->setBaseUrl('opus4');
+        $this->assertEquals('', $view->baseUrl());
+    }
+
+    public function testSetBaseUrlSet() {
+        $view = Zend_Registry::get('Opus_View');
+
+        $this->setBaseUrl('opus4');
+
+        $this->assertEquals('opus4', $view->baseUrl());
+    }
+
 }
