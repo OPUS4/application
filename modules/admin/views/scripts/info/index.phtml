@@ -33,12 +33,14 @@
  */
 ?>
 
+<?PHP if (!empty(Application_Configuration::getOpusInfo())) : ?>
 <dl>
     <?PHP foreach (Application_Configuration::getOpusInfo() as $infoKey => $infoValue) : ?>
         <dt id="<?= $infoKey ?>"><?= htmlspecialchars($this->translate($infoKey)) ?></dt>
         <dd><?= $infoValue ?></dd>
     <?PHP endforeach ?>
 </dl>
+<?PHP endif ?>
 
 <?PHP /* OPUSVIER-3542 deaktiviert
 <dl>

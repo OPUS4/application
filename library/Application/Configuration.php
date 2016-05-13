@@ -231,7 +231,7 @@ class Application_Configuration {
      */
     public static function getOpusInfo() {
         $info = array();
-        // OPUSVIER-3542 deaktiviert: $info['admin_info_version'] = self::getOpusVersion();
+        $info['admin_info_version'] = self::getOpusVersion();
         return $info;
     }
 
