@@ -73,8 +73,24 @@ class Admin_InfoController extends Application_Controller_Action {
             $this->view->message = $this->view->translate('admin_info_version_current');
         }
         else {
-            $this->view->message = $this->view->translate('admin_info_version_outdated');
-            $this->view->latestVersion = $latestVersion;
+            if (strpos($localVersion, 'DEV') === false) {
+                if (version_compare($localVersion, $latestVersion) >= 0) {
+                    $this->view->message = $this->view->translate('admin_info_version_current');
+                }
+                else {
+                    $this->view->message = $this->view->translate('admin_info_version_outdated');
+                    $this->view->latestVersion = $latestVersion;
+                }
+            }
+            else {
+                if (version_compare(substr($localVersion, 0, 5), substr($latestVersion, 0, 5)) < 0) {
+                    $this->view->message = $this->view->translate('admin_info_version_outdated');
+                    $this->view->latestVersion = $latestVersion;
+                }
+                else {
+                    $this->view->message = $this->view->translate('admin_info_version_current');
+                }
+            }
         }
     }
 
