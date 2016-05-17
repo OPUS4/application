@@ -66,9 +66,30 @@ class Application_Controller_Action_Helper_Version extends Application_Controlle
      * TODO Exception handling for connection problems (e.g. not found)
      */
     public function getLatestReleaseFromServer() {
-        $versionFileContent = file_get_contents(Zend_Registry::get('Zend_Config')->update->latestVersionCheckUrl);
-        $fileContentArray = explode("\n", $versionFileContent);
-        return $fileContentArray[0];
+        $latestUrl = Zend_Registry::get('Zend_Config')->update->latestVersionCheckUrl;
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_URL, $latestUrl);
+        curl_setopt($ch, CURLOPT_USERAGENT, 'OPUS 4');
+        curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+        $response = curl_exec($ch);
+        curl_close($ch);
+
+        if (!$response) {
+            // TODO no response
+            return "online check failed";
+        }
+
+        $data = json_decode($response);
+        if (isset($data->tag_name)) {
+            $version = $data->tag_name;
+        }
+        else {
+            $version = 'unknown';
+        }
+        return $version;
     }
 
 }
