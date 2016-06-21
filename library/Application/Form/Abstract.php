@@ -141,7 +141,7 @@ abstract class Application_Form_Abstract extends Zend_Form_SubForm {
     protected function applyCustomMessages($element) {
         if ($element->isRequired()) {
             // wenn Validator 'notEmpty' bereits gesetzt ist; nicht modifizieren
-            if (!$element->getValidator('notEmpty')) {
+            if (!$element->getValidator('notEmpty') && $element->autoInsertNotEmptyValidator()) {
                 $notEmptyValidator = new Zend_Validate_NotEmpty();
                 $notEmptyValidator->setMessage('admin_validate_error_notempty');
                 $element->addValidator($notEmptyValidator);

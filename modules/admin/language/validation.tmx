@@ -104,10 +104,10 @@
                 <seg>Value is required and can't be empty.</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>Es muss ein Wert eingeben werden.</seg>
+                <seg>Es muss ein Wert eingegeben werden.</seg>
             </tuv>
         </tu>
-        
+
         <tu tuid="admin_validate_error_email">
             <tuv xml:lang="en">
                 <seg>Invalid Email Address</seg>
@@ -116,7 +116,7 @@
                 <seg>Ungültige E-Mail-Adresse</seg>
             </tuv>
         </tu>
-        
+
         <tu tuid="admin_validate_error_date">
             <tuv xml:lang="en">
                 <seg>Invalid Date</seg>

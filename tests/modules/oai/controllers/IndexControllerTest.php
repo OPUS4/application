@@ -1534,6 +1534,16 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->assertEquals(0, $dcCreator->length);
     }
 
+    public function testDcLangUsesShortest639Code() {
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=oai_dc&identifier=oai::305');
+
+        $body = $this->getResponse()->getBody();
+
+        $this->assertNotContains('xml:lang="deu"', $body);
+        $this->assertNotContains('xml:lang="ger"', $body);
+        $this->assertContains('xml:lang="de"', $body);
+    }
+
     /**
      * Regression Test for OPUSVIER-2762
      */

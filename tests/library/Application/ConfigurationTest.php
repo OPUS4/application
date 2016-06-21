@@ -34,6 +34,9 @@
 
 class Application_ConfigurationTest extends ControllerTestCase {
 
+    /**
+     * @var Application_Configuration
+     */
     private $config;
 
     public function setUp() {
@@ -90,10 +93,11 @@ class Application_ConfigurationTest extends ControllerTestCase {
 
     public function testGetOpusInfo() {
         $data = Application_Configuration::getOpusInfo();
-        $config = Zend_Registry::get('Zend_Config');
         $this->assertInternalType('array', $data);
+        /* OPUSVIER-3542 Version not working the same way with git
         $this->assertArrayHasKey('admin_info_version', $data);
         $this->assertEquals($config->version, $data['admin_info_version']);
+        */
     }
 
     public function testIsLanguageSelectionEnabledTrue() {
@@ -114,6 +118,43 @@ class Application_ConfigurationTest extends ControllerTestCase {
     public function testGetDefaultLanguageIfOnlyOneIsSupported() {
         Zend_Registry::get('Zend_Config')->supportedLanguages = 'de';
         $this->assertEquals('de', $this->config->getDefaultLanguage());
+    }
+
+    /**
+     * Checks that the path is correct with '/' at the end.
+     */
+    public function testGetWorkspacePath() {
+        $workspacePath = $this->config->getWorkspacePath();
+
+        $this->assertEquals(APPLICATION_PATH . '/tests/workspace/', $workspacePath);
+    }
+
+    /**
+     * Checks path if setting already provides '/' at the end.
+     */
+    public function testGetWorkspacePathSetWithSlash() {
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
+            'workspacePath' => APPLICATION_PATH . '/tests/workspace/'
+        )));
+
+        $workspacePath = $this->config->getWorkspacePath();
+
+        $this->assertEquals(APPLICATION_PATH . '/tests/workspace/', $workspacePath);
+    }
+
+    public function testGetFilesPath() {
+        $this->assertEquals(APPLICATION_PATH . '/tests/workspace/files/', $this->config->getFilesPath());
+    }
+
+    public function testGetTempPath() {
+        $this->assertEquals(APPLICATION_PATH . '/tests/workspace/tmp/', $this->config->getTempPath());
+    }
+
+    public function testGetInstance() {
+        $config = Application_Configuration::getInstance();
+        $this->assertNotNull($config);
+        $this->assertInstanceOf('Application_Configuration', $config);
+        $this->assertSame($config, Application_Configuration::getInstance());
     }
 
 }

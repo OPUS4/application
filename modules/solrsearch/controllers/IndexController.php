@@ -41,9 +41,29 @@
  */
 class Solrsearch_IndexController extends Application_Controller_Action {
 
+    /**
+     * Search query.
+     * @var
+     */
     private $_query;
+
+    /**
+     * Total number of search results.
+     * @var
+     */
     private $_numOfHits;
+
+    /**
+     * Type of search.
+     *
+     * @var
+     */
     private $_searchtype;
+
+    /**
+     * Search results.
+     * @var
+     */
     private $_resultList;
 
     /**
@@ -205,7 +225,8 @@ class Solrsearch_IndexController extends Application_Controller_Action {
 
             if ($this->_numOfHits === 0 || $this->_query->getStart() >= $this->_numOfHits) {
                 $this->render('nohits');
-            } else {
+            }
+            else {
                 $this->render('results');
             }
         }

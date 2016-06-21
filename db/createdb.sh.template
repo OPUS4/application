@@ -2,6 +2,12 @@
 
 set -e
 
+SCRIPT_NAME="`basename "$0"`"
+SCRIPT_NAME_FULL="`readlink -f "$0"`"
+SCRIPT_PATH="`dirname "$SCRIPT_NAME_FULL"`"
+
+BASEDIR="`dirname "$SCRIPT_PATH"`"
+
 #
 # begin editable part
 #
@@ -16,7 +22,7 @@ dbname=@db.name@
 # path to mysql binary
 mysql_bin=/usr/bin/mysql
 # path to schema file
-schema_file=schema/opus4current.sql
+schema_file="$BASEDIR/vendor/opus4-repo/framework/db/schema/opus4current.sql"
 # path to different sql locations
 master_dir=masterdata/
 

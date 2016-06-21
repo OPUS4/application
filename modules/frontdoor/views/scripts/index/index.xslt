@@ -44,10 +44,10 @@
                 xmlns:php="http://php.net/xsl"
                 exclude-result-prefixes="php">
 
-   <xsl:include href="templates/services.xsl"/>
-   <xsl:include href="templates/metadata.xsl"/>
-   <xsl:include href="templates/functions.xsl"/>
-   <xsl:include href="templates/main.xsl"/>
+   <xsl:include href="templates/services.xslt"/>
+   <xsl:include href="templates/metadata.xslt"/>
+   <xsl:include href="templates/functions.xslt"/>
+   <xsl:include href="templates/main.xslt"/>
 
     <xsl:output method="xml" omit-xml-declaration="yes" />
 

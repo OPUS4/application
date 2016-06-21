@@ -33,7 +33,29 @@
 
 class Admin_Form_ConfigurationTest extends ControllerTestCase {
 
-    public function testUpdateConfig() {
+    public function testInit() {
+        $form = new Admin_Form_Configuration();
+
+        $this->assertTrue(count($form->getElements()) > 3);
+        $this->assertNotNull($form->getElement('supportedLanguages'));
+        $this->assertNotNull($form->getElement('Save'));
+        $this->assertNotNull($form->getElement('Cancel'));
+    }
+
+    public function testPopulateFromModel() {
+        $form = new Admin_Form_Configuration();
+
+        $form->populateFromModel(new Zend_Config(array(
+            'supportedLanguages' => 'en,de'
+        )));
+
+        $element = $form->getElement('supportedLanguages');
+
+        $this->assertNotNull($element);
+        $this->assertEquals(array('en', 'de'), $element->getValue());
+    }
+
+    public function testUpdateModel() {
         $form = new Admin_Form_Configuration();
 
         $form->getElement('supportedLanguages')->setValue('de');
@@ -44,11 +66,24 @@ class Admin_Form_ConfigurationTest extends ControllerTestCase {
         $form->updateModel($config);
 
         $this->assertEquals('de', $config->supportedLanguages);
-        $this->assertEquals(15, $config->searchengine->solr->numberOfDefaultSearchResults);
+        $this->assertEquals(15, $config->searchengine->solr->parameterDefaults->rows);
     }
 
     public function testValidationSuccess() {
-        $this->markTestIncomplete('Validation has not been implemented yet.');
+        $form = new Admin_Form_Configuration();
+
+        $this->assertTrue($form->isValid(array(
+            'supportedLanguages' => array('de'),
+            'maxSearchResults' => '10'
+        )));
+    }
+
+    public function testValidationFailure() {
+        $form = new Admin_Form_Configuration();
+
+        $this->assertFalse($form->isValid(array(
+            'supportedLanguages' => array('ru')
+        )));
     }
 
 }

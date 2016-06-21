@@ -28,11 +28,21 @@
  * @category    Application
  * @package     Module_Oai
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2009 - 2011, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2009 - 2016, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
+/**
+ * Class Oai_ContainerController deliveres files of a document for OAI clients.
+ *
+ * If a document has only one file it is returned.
+ *
+ * If a document has multiple files that are available through OAI a TAR file
+ * containing all the files is returned.
+ *
+ * TODO apparently cannot handle filenames with spaces
+ */
 class Oai_ContainerController extends Application_Controller_Action {
 
     public function indexAction() {
@@ -40,12 +50,13 @@ class Oai_ContainerController extends Application_Controller_Action {
 
         $container = null;
         $fileHandle = null;
+
         try {
-            $container = new Oai_Model_Container($docId, $this->getLogger());
+            $container = new Oai_Model_Container($docId);
             $fileHandle = $container->getFileHandle();
         }
-        catch (Oai_Model_Exception $e) {
-            $this->view->errorMessage = $e->getMessage();
+        catch (Application_Exception $ome) {
+            $this->view->errorMessage = $ome->getMessage();
             $this->getResponse()->setHttpResponseCode(500);
             return $this->render('error');
         }
@@ -62,11 +73,12 @@ class Oai_ContainerController extends Application_Controller_Action {
                 );
 
         $this->_helper->SendFile->setLogger($this->getLogger());
+
         try {
             $this->_helper->SendFile($fileHandle->getPath());
         }
-        catch (Exception $e) {
-            $this->getLogger()->err($e->getMessage());
+        catch (Exception $ex) {
+            $this->getLogger()->err($ex->getMessage());
             $this->getResponse()->clearAllHeaders();
             $this->getResponse()->clearBody();
             $this->getResponse()->setHttpResponseCode(500);

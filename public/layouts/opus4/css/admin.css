@@ -341,7 +341,7 @@ ul.form-action{
    min-width: 250px;
 }
 #Document-Goto.dropdown ul a{
-   color: white;  
+   color: white;
 }
 #Document-Goto dd ul{
    padding: 0.3em 15px 0.8em;
@@ -365,7 +365,7 @@ ul.form-action{
    font-size: 1em;
    color: black;
    position: relative;
-   z-index: 500; 
+   z-index: 500;
    background: url(../img/theme/admin/transparent.png);/* IE Fix */
 }
 .docstateMenu dl.dropdown dt a:after,
@@ -640,7 +640,7 @@ ul.links input:hover{
    color: white;
    position: relative;
    margin: 0;
-  
+
 }
 .adminContainer form .wrapper > .subform > fieldset > legend + *{
    margin-top: 1.3em;
@@ -730,11 +730,11 @@ ul.links input:hover{
    clear: left;
 }
 .adminContainer .data-wrapper > div.label{
-   width: 32.7083%;   
+   width: 32.7083%;
 }
 .adminContainer td.SeriesId-data,
 .adminContainer td.KeyName-data{
-   width: 32%;   
+   width: 32%;
 }
 .adminContainer .multiple-data .data-wrapper > div.label{
    width: 38.4803%;
@@ -834,7 +834,7 @@ ul.links input:hover{
    width: auto;
    background-color: #7d7e7a;
    color: white;
-   border-radius: 0 4px 4px 0;  
+   border-radius: 0 4px 4px 0;
    padding: 0;
 }
 .adminContainer .subform legend .button-group .data-wrapper{
@@ -859,13 +859,13 @@ ul.links input:hover{
    border: 1px solid;
 }
 .adminContainer .Add-data input{
-   background-position: -14px -16px;   
+   background-position: -14px -16px;
 }
 .adminContainer .Import-data input{
-   background-position: -14px -353px;   
+   background-position: -14px -353px;
 }
 .adminContainer .Sort-data input{
-   background-position: -14px -426px;   
+   background-position: -14px -426px;
 }
 
 .adminContainer legend .Add-data input,
@@ -876,7 +876,7 @@ ul.links input:hover{
    color: white;
    font-weight: normal;
    font: 0.8em Verdana, Arial, Helvetica, sans-serif;
-   cursor: pointer; 
+   cursor: pointer;
    width: auto;
 }
 /* @end */
@@ -1275,15 +1275,15 @@ table + .paginationControl{
 }
 .adminContainer td.edit a{
    background-position: -20px -257px;
-   padding-left: 19px; 
+   padding-left: 19px;
 }
 .adminContainer td.move-up a{
    background-position: -20px -122px;
-   padding-left: 16px; 
+   padding-left: 16px;
 }
 .adminContainer td.move-down a{
    background-position: -20px -87px;
-   padding-left: 16px; 
+   padding-left: 16px;
 }
 .adminContainer td.linked a{
    background-position: -20px -288px;
@@ -1323,8 +1323,8 @@ table + .paginationControl{
 }
 .adminContainer table a.add:hover{
    text-decoration: none;
-   -webkit-box-shadow:0 0 15px #a0c3e1; 
-   -moz-box-shadow: 0 0 15px #a0c3e1; 
+   -webkit-box-shadow:0 0 15px #a0c3e1;
+   -moz-box-shadow: 0 0 15px #a0c3e1;
    box-shadow:0 0 8px 2px #a0c2dd;
 
 }
@@ -1359,7 +1359,7 @@ table + .paginationControl{
    font-weight: bold;
 }
 .adminContainer #FileManager-Files-Add-element input{
-   background-position: -14px -391px;   
+   background-position: -14px -391px;
 }
 
 /* @end */
@@ -1407,8 +1407,8 @@ table + .paginationControl{
 }
 #adminMenuContainer a:hover{
    border: 3px solid #a0c3e1;
-   -webkit-box-shadow:0 0 15px #a0c3e1; 
-   -moz-box-shadow: 0 0 15px #a0c3e1; 
+   -webkit-box-shadow:0 0 15px #a0c3e1;
+   -moz-box-shadow: 0 0 15px #a0c3e1;
    box-shadow:0 0 15px #a0c2dd;
 }
 #adminMenuContainer li br{
@@ -1537,9 +1537,9 @@ table + .paginationControl{
 }
 
 .admin_indexmaintenance .featuredisabled {
-    font-size: 120%;    
+    font-size: 120%;
     color: blue;
-    padding: 2em;   
+    padding: 2em;
 }
 
 .admin_doctype {
@@ -1618,3 +1618,16 @@ table + .paginationControl{
 .no-js #collectionActions dl.dropdown ul {
     background-color: #767676;
 }
+
+/* Options Form */
+
+.admin_config fieldset {
+    border-top: 1px solid #e2e6e9;
+    background: #f3f6f8;
+    margin-top: 1em;
+    padding: 1em;
+}
+
+.admin_config legend {
+}
+

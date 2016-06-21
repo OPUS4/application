@@ -35,21 +35,22 @@
 /**
  * Form for editing selected OPUS 4 configuration options.
  *
- * TODO deal with section name
- * TODO configure options
+ * TODO Application_Form_Abstract should be enough (not ID element needed)
  */
 class Admin_Form_Configuration extends Application_Form_Model_Abstract {
 
     /**
      * Prefix for translation keys of configuration options.
+     *
+     * TODO wird auf von Admin_Model_Option verwendet
      */
     const LABEL_TRANSLATION_PREFIX = 'admin_config_';
 
-    const ELEMENT_SAVE = 'Save';
-
-    const ELEMENT_CANCEL = 'Cancel';
-
-    private $options;
+    /**
+     * Configured options for form.
+     * @var array
+     */
+    private $_options;
 
     /**
      * Configures form and creates form elements.
@@ -57,26 +58,37 @@ class Admin_Form_Configuration extends Application_Form_Model_Abstract {
     public function init() {
         parent::init();
 
-        $this->options = array(
-            'maxSearchResults' => 'searchengine.solr.numberOfDefaultSearchResults',
-            'supportedLanguages' => 'supportedLanguages'
-        );
+        $options = new Admin_Model_Options();
 
-        foreach ($this->options as $name => $option) {
-            $this->addElement('text', $name, array('label' => $this->getOptionLabel($name),
-                'description' => $this->getOptionDescription($name)));
+        $this->_options = $options->getOptions();
+
+        foreach ($this->_options as $name => $option) {
+            $section = $option->getSection();
+
+            $element = $this->createElement(
+                $option->getElementType(),
+                $name,
+                array_merge(array(
+                    'label' => $option->getLabel(),
+                    'description' => $option->getDescription()
+                    ),
+                    $option->getOptions()
+                )
+            );
+
+            $this->addElement($element);
+            $this->addElementToSection($element, $section);
         }
 
-        $this->addElement('submit', self::ELEMENT_SAVE);
-        $this->addElement('submit', self::ELEMENT_CANCEL);
+        $this->removeElement(self::ELEMENT_MODEL_ID);
     }
 
     /**
      * Initializes values of form elements from configuration.
      */
     public function populateFromModel($config) {
-        foreach ($this->options as $name => $option) {
-            $value = Application_Configuration::getValueFromConfig($config, $option);
+        foreach ($this->_options as $name => $option) {
+            $value = Application_Configuration::getValueFromConfig($config, $option->getKey());
             $this->getElement($name)->setValue($value);
         }
     }
@@ -85,24 +97,44 @@ class Admin_Form_Configuration extends Application_Form_Model_Abstract {
      * Updates configuration with values from form elements.
      */
     public function updateModel($config) {
-        foreach ($this->options as $name => $option) {
+        foreach ($this->_options as $name => $option) {
             $value = $this->getElement($name)->getValue();
-            Application_Configuration::setValueInConfig($config, $option, $value);
+
+            // TODO move into Admin_Model_Option?
+            if (is_array($value)) {
+                $value = implode(',', $value);
+            }
+
+            Application_Configuration::setValueInConfig($config, $option->getKey(), $value);
         }
     }
 
     /**
-     * Returns label name for option.
+     * Adds an element to a section (display group) of the form.
      *
-     * @param $name
-     * @return string
+     * If necessary a new display group is created.
+     *
+     * @param $element Form element
+     * @param $section Name of section
+     * @throws Zend_Form_Exception
      */
-    protected function getOptionLabel($name) {
-        return self::LABEL_TRANSLATION_PREFIX . $name;
-    }
+    public function addElementToSection($element, $section)
+    {
+        $group = $this->getDisplayGroup($section);
 
-    protected function getOptionDescription($name) {
-        return self::LABEL_TRANSLATION_PREFIX . $name . '_description';
+        if (is_null($group)) {
+            $this->addDisplayGroup(
+                array($element),
+                $section,
+                array(
+                    'legend' => self::LABEL_TRANSLATION_PREFIX . 'section_' . $section,
+                    'decorators' => array('FormElements', 'Fieldset')
+                )
+            );
+        }
+        else {
+            $group->addElement($element);
+        }
     }
 
 }

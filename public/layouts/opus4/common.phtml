@@ -110,10 +110,13 @@ if (isset($config->javascript->latex->mathjax)) {
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?= $pageLanguage ?>" lang="<?= $pageLanguage ?>" dir="ltr" class="no-js">
 
     <head>
-        <?= $this->headMeta() ?>
-        <?= $this->headTitle() ?>
-        <?= $this->headLink() ?>
-        <?= $this->headScript() ?>
+<?= $this->headMeta()->setIndent(8) ?>
+
+<?= $this->headTitle()->setIndent(8) ?>
+
+<?= $this->headLink()->setIndent(8) ?>
+
+<?= $this->headScript()->setIndent(8) ?>
 
 	<!--[if IE 6]>
         <link rel="stylesheet" type="text/css" href="<?= $this->layoutPath() ?>/css/opus-ie.css" />

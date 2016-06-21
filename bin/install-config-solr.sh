@@ -12,11 +12,30 @@
 # GNU General Public License for more details.
 #
 # @author      Thoralf Klein <thoralf.klein@zib.de>
-# @copyright   Copyright (c) 2011, OPUS 4 development team
+# @author      Jens Schwidder <schwidder@zib.de>
+# @copyright   Copyright (c) 2011-2016, OPUS 4 development team
 # @license     http://www.gnu.org/licenses/gpl.html General Public License
-# @version     $Id: install.sh 8791 2011-08-03 11:34:33Z tklein $
+
+#
+# Sets configuration parameters for Solr connection.
+#
+# Parameters:
+# 1) Path to configuration file
+# 2) Host for indexing
+# 3) Port for indexing
+# 4) Context for indexing
+# 5) Host for text extraction
+# 6) Port for text extraction
+# 7) Context for text extraction
+#
 
 set -e
+
+if [ $# -ne 7 ]
+then
+  echo "Missing arguments for Solr configuration!"
+  exit 1
+fi
 
 CONFIG_INI="$1"
 SOLR_INDEX_HOST="`echo "$2" |sed 's/\!/\\\!/g'`"

@@ -401,6 +401,16 @@ class Publish_Model_Validation {
                         $sets[$id] = $title;
                     }
             }
+
+            $config = Zend_Registry::get('Zend_Config');
+
+            if (isset($config->browsing->series->sortByTitle) && boolval($config->browsing->series->sortByTitle))
+            {
+                uasort($sets, function ($value1, $value2) {
+                    return strnatcmp($value1, $value2);
+                });
+            }
+
             $this->series = $sets;
             return $sets;
         }

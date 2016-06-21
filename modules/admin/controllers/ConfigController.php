@@ -44,9 +44,14 @@ class Admin_ConfigController extends Application_Controller_Action {
 
             switch ($result) {
                 case Admin_Form_Configuration::RESULT_SAVE:
-                    $config = new Zend_Config(array(), true);
-                    $form->updateModel($config);
-                    Application_Configuration::save($config);
+                    if ($form->isValid($data)) {
+                        $config = new Zend_Config(array(), true);
+                        $form->updateModel($config);
+                        Application_Configuration::save($config);
+                    }
+                    else {
+                        break;
+                    }
                 case Admin_Form_Configuration::RESULT_CANCEL:
                     $this->_redirectTo('setup', null, 'index', 'admin');
                     break;

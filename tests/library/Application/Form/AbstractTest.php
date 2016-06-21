@@ -183,8 +183,9 @@ class Application_Form_AbstractTest extends ControllerTestCase {
 
         $element = $this->form->getElement('test');
 
+        $this->assertNotNull($element);
         $this->assertTrue($element->isRequired());
-        $this->assertNotNull($element->getValidator('notEmpty'));
+        $this->assertNotFalse($element->getValidator('notEmpty'));
 
         $messages = $element->getValidator('notEmpty')->getMessageTemplates();
 
@@ -192,6 +193,16 @@ class Application_Form_AbstractTest extends ControllerTestCase {
         $this->assertNotEquals('admin_validate_error_notempty', $messages['isEmpty']);
         $this->assertArrayHasKey('notEmptyInvalid', $messages);
         $this->assertNotEquals('admin_validate_error_notempty', $messages['notEmptyInvalid']);
+    }
+
+    public function testAddElementRequiredAutoAddingDisabled() {
+        $this->form->addElement('text', 'test', array('required' => true, 'autoInsertNotEmptyValidator' => false));
+
+        $element = $this->form->getElement('test');
+
+        $this->assertNotNull($element);
+        $this->assertTrue($element->isRequired());
+        $this->assertFalse($element->getValidator('notEmpty'));
     }
 
     /**

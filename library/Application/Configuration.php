@@ -61,6 +61,23 @@ class Application_Configuration {
     private $_languageSelectionEnabled = null;
 
     /**
+     * @var Application_Configuration
+     */
+    private static $_instance;
+
+    /**
+     * Returns instance of class.
+     * @return Application_Configuration
+     */
+    public static function getInstance() {
+        if (is_null(self::$_instance)) {
+            self::$_instance = new Application_Configuration();
+        }
+
+        return self::$_instance;
+    }
+
+    /**
      * Liefert den Logger für diese Klasse.
      * @return Zend_Log
      */
@@ -143,6 +160,47 @@ class Application_Configuration {
     }
 
     /**
+     * Returns the path to the application workspace.
+     *
+     * @throws Application_Exception
+     */
+    public function getWorkspacePath() {
+        $config = $this->getConfig();
+
+        if (!isset($config->workspacePath)) {
+            $this->getLogger()->err('missing config key workspacePath');
+            throw new Application_Exception('missing configuration key workspacePath');
+        }
+
+        $workspacePath = $config->workspacePath;
+
+        if (substr($workspacePath, -1) === DIRECTORY_SEPARATOR) {
+            return $workspacePath;
+        }
+        else {
+            return $config->workspacePath . DIRECTORY_SEPARATOR;
+        }
+    }
+
+    /**
+     * Returns path to temporary files folder.
+     * @return string Path for temporary files.
+     * @throws Application_Exception
+     */
+    public function getTempPath() {
+        return $this->getWorkspacePath() . 'tmp' . DIRECTORY_SEPARATOR;
+    }
+
+    /**
+     * Returns path to files folder for document files.
+     * @return string Folder for storing document files
+     * @throws Application_Exception
+     */
+    public function getFilesPath() {
+        return $this->getWorkspacePath() . 'files' . DIRECTORY_SEPARATOR;
+    }
+
+    /**
      * Liest Inhalt von VERSION.txt um die installierte Opusversion zu ermitteln.
      */
     public static function getOpusVersion() {
@@ -156,7 +214,7 @@ class Application_Configuration {
      */
     public static function getOpusInfo() {
         $info = array();
-        $info['admin_info_version'] = self::getOpusVersion();
+        // OPUSVIER-3542 deaktiviert: $info['admin_info_version'] = self::getOpusVersion();
         return $info;
     }
 
@@ -185,17 +243,18 @@ class Application_Configuration {
         foreach ($keys as $key) {
             $subconfig = $subconfig->get($key);
             if (!($subconfig instanceof Zend_Config)) {
-                return $subconfig;
+                break;
             }
         }
+        return $subconfig;
     }
 
     /**
      * Updates a value in a Zend_Config object.
      *
      * @param Zend_Config $config
-     * @param $option Name of option
-     * @param $value New value
+     * @param $option string Name of option
+     * @param $value string New value for option
      * @throws Zend_Exception
      */
     public static function setValueInConfig(Zend_Config $config, $option, $value) {

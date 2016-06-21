@@ -28,9 +28,9 @@
  * @package     Tests
  * @author      Sascha Szott <szott@zib.de>
  * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 class Oai_Model_ContainerTest extends ControllerTestCase {
@@ -45,7 +45,7 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
         if (!isset($config->workspacePath)) {
             throw new Exception("config key 'workspacePath' not defined in config file");
         }
-        $this->workspacePath = $config->workspacePath;        
+        $this->workspacePath = $config->workspacePath;
     }
 
     public function tearDown() {
@@ -93,7 +93,7 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
         $this->assertTrue(is_null($model));
     }
 
-    public function testConstructorWithUnublishedDocument() {
+    public function testConstructorWithUnpublishedDocument() {
         $r = Opus_UserRole::fetchByName('guest');
 
         $modules = $r->listAccessModules();
@@ -108,7 +108,7 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
         $security = $config->security;
         $config->security = '1';
         Zend_Registry::set('Zend_Config', $config);
-        
+
         $doc = $this->createTestDocument();
         $doc->setServerState('unpublished');
         $doc->store();
@@ -122,7 +122,7 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
             $this->assertEquals('access to requested document is forbidden', $e->getMessage());
         }
         $this->assertTrue(is_null($tarball));
-        
+
         if ($addOaiModuleAccess) {
             $r->removeAccessModule('oai');
             $r->store();
@@ -149,7 +149,7 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
         $this->assertTrue(is_null($tarball));
     }
 
-    public function testFunctionGetName() {
+    public function testGetName() {
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
         $file = new Opus_File();
@@ -185,7 +185,7 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
         $this->assertTrue(is_null($tarball));
     }
 
-    public function testDocumentWithNonExistentFile() {       
+    public function testDocumentWithNonExistentFile() {
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
         $file = new Opus_File();
@@ -394,4 +394,35 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
             $this->assertEquals('access to requested document is forbidden', $exceptionMessage);
         }
     }
+
+    /**
+     * @expectedException Oai_Model_Exception
+     * @expectedExceptionMessage access to requested document files is embargoed
+     */
+    public function testGetAccessibleFilesForEmbargoedDocument() {
+        $this->enableSecurity();
+
+        $doc = $this->createTestDocument();
+        $doc->setServerState('published');
+
+        // set embargo date to tomorrow
+        $date = new Opus_Date();
+        $date->setDateTime(new DateTime('tomorrow'));
+        $doc->setEmbargoDate($date);
+
+        // add a file visible in OAI
+        $file = $this->createTestFile('foo.pdf');
+        $file->setVisibleInOai(true);
+        $doc->addFile($file);
+
+        $doc->store();
+
+        $this->assertFalse($doc->hasEmbargoPassed()); // not yet passed
+
+        $container = new Oai_Model_Container($doc->getId());
+        $files = $container->getAccessibleFiles();
+
+        $this->assertCount(1, $files);
+    }
+
 }

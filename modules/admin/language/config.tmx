@@ -26,21 +26,48 @@
         </tuv>
     </tu>
 
-    <tu tuid="admin_config_supportedLanguages">
+    <tu tuid="admin_config_section_searchopt">
         <tuv xml:lang="en">
-            <seg>Supported Languages (en,de)</seg>
+            <seg>Search</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Unterstützte Sprachen (en,de)</seg>
+            <seg>Suche</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="admin_config_section_general">
+        <tuv xml:lang="en">
+            <seg>General</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Allgemein</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="admin_config_section_browsing">
+        <tuv xml:lang="en">
+            <seg>Browsing</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Browsing</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="admin_config_supportedLanguages">
+        <tuv xml:lang="en">
+            <seg>Supported Languages</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Unterstützte Sprachen</seg>
         </tuv>
     </tu>
 
     <tu tuid="admin_config_supportedLanguages_description">
         <tuv xml:lang="en">
-            <seg>List of languages for user interface. Languages 'de' and 'en' are supported.</seg>
+            <seg>Languages for the user interface. Select at least one.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Kommaliste mit Sprachen für die Benutzeroberfläche. Die Werte 'de' und 'en' werden unterstützt.</seg>
+            <seg>Sprachen für die Benutzeroberfläche. Mindestens eine auswählen.</seg>
         </tuv>
     </tu>
 
@@ -59,6 +86,24 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>Anzahl der Suchergebnisse, die auf einer Seite angezeigt werden sollen.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_config_seriesSortByTitle">
+      <tuv xml:lang="en">
+        <seg>Sort series by title</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Alphabetische Sortierung der Schriftenreihen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_config_seriesSortByTitle_description">
+      <tuv xml:lang="en">
+        <seg>Activates alphabetical sorting of series in browsing list and publish form.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Aktiviert die alphabetische Sortierung der Schriftenreihen beim Browsing und im Publish-Formular.</seg>
       </tuv>
     </tu>
 

@@ -31,6 +31,12 @@
  * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+/**
+ * Class Solrsearch_Model_FacetMenu
+ *
+ * TODO refactor as view helper or something better
+ */
 class Solrsearch_Model_FacetMenu extends Application_Model_Abstract {
 
     private $_facets;
@@ -53,6 +59,7 @@ class Solrsearch_Model_FacetMenu extends Application_Model_Abstract {
      */
     public function prepareViewFacets($result, $request) {
         $facets = $result->getFacets();
+
         $facetLimit = Opus_Search_Config::getFacetLimits();
 
         $facetArray = array();
@@ -60,7 +67,7 @@ class Solrsearch_Model_FacetMenu extends Application_Model_Abstract {
         $facetNumberContainer = array();
         $showFacetExtender = array();
 
-        foreach ($facets as $key=>$facet) {
+        foreach ($facets as $key => $facet) {
             $showFacetExtender[$key] = ($facetLimit[$key] <= sizeof($facet));
             $this->getLogger()->debug("found $key facet in search results");
             $facetNumberContainer[$key] = sizeof($facet);
@@ -75,7 +82,12 @@ class Solrsearch_Model_FacetMenu extends Application_Model_Abstract {
             }
         }
 
-        // $this->filterHiddenFacets(unset($facetArray['institute']);
+        // Hide institutes facet if collection does not exist or is hidden
+        $institutes = Opus_CollectionRole::fetchByName('institutes');
+
+        if (is_null($institutes) || !$institutes->getVisible()) {
+            unset($facetArray['institute']);
+        }
 
         $this->_facets = $facetArray;
         $this->_selectedFacets = $selectedFacets;

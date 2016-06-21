@@ -12,15 +12,25 @@
 # GNU General Public License for more details.
 #
 # @author      Thomas Urban <thomas.urban@cepharum.de>
-# @copyright   Copyright (c) 2010-2011, OPUS 4 development team
+# @author      Jens Schwidder <schwidder@zib.de>
+# @copyright   Copyright (c) 2010-2016, OPUS 4 development team
 # @license     http://www.gnu.org/licenses/gpl.html General Public License
-# @version     $Id$
+
+#
+# Skript for installing composer and OPUS 4 dependencies.
+#
+# Call like this "bin/install-composer.sh ." from the base directory of the
+# OPUS 4 application to install composer.phar into the same directory and
+# install the necessary dependencies.
+#
+# Parameters:
+#   1) Directory for installing composer
+#
 
 set -e
 
 SCRIPT_NAME="$(basename "$0")"
 BASEDIR="$1"
-
 
 # create base folder on demand and qualify its pathname
 mkdir -p "$BASEDIR" || exit 1
@@ -28,7 +38,8 @@ cd "$BASEDIR"
 BASEDIR="$(pwd)"
 
 
-if [ -e composer.phar ]; then
+if [ -e composer.phar ] ;
+then
 	# upgrade existing composer
 	php composer.phar selfupdate || {
 		echo "failed self-updating composer" >&2
