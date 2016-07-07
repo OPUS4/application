@@ -2,7 +2,7 @@
 <import>
     <opusDocument language="deu" type="article">
         <titlesMain>
-            <titleMain>Der Titel</titleMain>
+            <titleMain language="deu">Der Titel</titleMain>
         </titlesMain>
     </opusDocument>
 </import>

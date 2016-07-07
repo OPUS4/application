@@ -33,14 +33,27 @@
 
 class Application_Import_XmlValidationTest extends ControllerTestCase {
 
+    /**
+     * Check if all 'import*.xml' files are valid.
+     */
     public function testValidation() {
-        $validator = new Application_Import_XmlValidation();
-
-        $xml = file_get_contents(APPLICATION_PATH . '/tests/resources/import/import1.xml');
-
-        $this->assertTrue($validator->validate($xml));
+        foreach (new DirectoryIterator(APPLICATION_PATH . '/tests/resources/import') as $fileInfo) {
+            if ($fileInfo->getExtension() !== 'xsd' && !$fileInfo->isDot()
+                    && strpos($fileInfo->getBasename(), 'import') === 0) {
+                $xml = file_get_contents($fileInfo->getRealPath());
+                $this->_checkValid($xml, $fileInfo->getBasename());
+            }
+        }
     }
 
+    public function testValidation2() {
+        $xml = file_get_contents(APPLICATION_PATH . '/tests/resources/import/import2.xml');
+        $this->_checkValid($xml, 'import2.xml');
+    }
+
+    /**
+     * TODO Check if all 'invalid-import*.xml' files are invalid.
+     */
     public function testInvalid() {
         $validator = new Application_Import_XmlValidation();
 
@@ -52,4 +65,11 @@ class Application_Import_XmlValidationTest extends ControllerTestCase {
 
         $this->assertCount(1, $errors);
     }
+
+    private function _checkValid($xml, $name) {
+        $validator = new Application_Import_XmlValidation();
+
+        $this->assertTrue($validator->validate($xml), "Import XML file '$name' not valid.");
+    }
+
 }

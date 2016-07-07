@@ -57,14 +57,14 @@
                         document.</xsd:documentation>
                 </xsd:annotation>
                 <xsd:complexType>
-                    <xsd:sequence>
+                    <xsd:all>
                         <xsd:element name="titlesMain" type="titlesMainType"/>
                         <xsd:element name="titles" type="titlesType" minOccurs="0"/>
                         <xsd:element name="abstracts" type="abstractsType" minOccurs="0"/>
                         <xsd:element name="persons" type="personsType" minOccurs="0"/>
                         <xsd:element name="keywords" type="keywordsType" minOccurs="0"/>
                         <xsd:element name="dnbInstitutions" type="dnbInstitutionsType" minOccurs="0"/>
-                        <xsd:element name="dates" type="datesType"/>
+                        <xsd:element name="dates" type="datesType" minOccurs="0"/>
                         <xsd:element name="identifiers" type="identifiersType" minOccurs="0"/>
                         <xsd:element name="notes" type="notesType" minOccurs="0"/>
                         <xsd:element name="collections" type="collectionsType" minOccurs="0"/>
@@ -72,7 +72,7 @@
                         <xsd:element name="enrichments" type="enrichmentsType" minOccurs="0"/>
                         <xsd:element name="licences" type="licencesType" minOccurs="0"/>
                         <xsd:element name="files" type="filesType" minOccurs="0" />
-                    </xsd:sequence>
+                    </xsd:all>
                     <xsd:attribute name="oldId" type="xsd:string"/>
                     <xsd:attribute name="docId" type="xsd:integer"/>
                     <xsd:attribute name="language" type="xsd:string" use="required"/>
