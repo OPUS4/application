@@ -28,307 +28,307 @@
  * @category    Application
  * @package     Import
  * @author      Sascha Szott <szott@zib.de>
+ * @author      Jens Schwidder <schwidder@zib.de>
  * @author      Doreen Thiede <thiede@zib.de>
- * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 -->
 
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 
-    <xs:element name="import" type="opusDocumentType"/>
+    <xsd:element name="import" type="opusDocumentType"/>
 
-    <xs:complexType name="opusDocumentType">
-        <xs:sequence>
-            <xs:element name="opusDocument" maxOccurs="unbounded">
-                <xs:complexType>
-                    <xs:sequence>
-                        <xs:element name="titlesMain" type="titlesMainType"/>
-                        <xs:element name="titles" type="titlesType" minOccurs="0"/>
-                        <xs:element name="abstracts" type="abstractsType" minOccurs="0"/>
-                        <xs:element name="persons" type="personsType" minOccurs="0"/>
-                        <xs:element name="keywords" type="keywordsType" minOccurs="0"/>
-                        <xs:element name="dnbInstitutions" type="dnbInstitutionsType" minOccurs="0"/>
-                        <xs:element name="dates" type="datesType"/>
-                        <xs:element name="identifiers" type="identifiersType" minOccurs="0"/>
-                        <xs:element name="notes" type="notesType" minOccurs="0"/>
-                        <xs:element name="collections" type="collectionsType" minOccurs="0"/>
-                        <xs:element name="series" type="seriesType" minOccurs="0"/>
-                        <xs:element name="enrichments" type="enrichmentsType" minOccurs="0"/>
-                        <xs:element name="licences" type="licencesType" minOccurs="0"/>
-                    </xs:sequence>
-                    <xs:attribute name="oldId" type="xs:string" use="required"/>
-                    <xs:attribute name="docId" type="xs:integer"/>
-                    <xs:attribute name="language" type="xs:string" use="required"/>
-                    <xs:attribute name="type" type="xs:string" use="required"/>                    
-                    <xs:attribute name="pageFirst" type="xs:string"/>
-                    <xs:attribute name="pageLast" type="xs:string"/>
-                    <xs:attribute name="pageNumber" type="xs:string"/>
-                    <xs:attribute name="edition" type="xs:string"/>
-                    <xs:attribute name="volume" type="xs:string"/>
-                    <xs:attribute name="issue" type="xs:string"/>
-                    <xs:attribute name="publisherName" type="xs:string"/>
-                    <xs:attribute name="publisherPlace" type="xs:string"/>
-                    <xs:attribute name="creatingCorporation" type="xs:string"/>
-                    <xs:attribute name="contributingCorporation" type="xs:string"/>
-                    <xs:attribute name="belongsToBibliography" type="xs:boolean"/>
-                    <xs:attribute name="serverState" type="serverStateType" use="required"/>
-                </xs:complexType>
-            </xs:element>
-        </xs:sequence>
-    </xs:complexType>
+    <xsd:complexType name="opusDocumentType">
+        <xsd:sequence>
+            <xsd:element name="opusDocument" maxOccurs="unbounded">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="titlesMain" type="titlesMainType"/>
+                        <xsd:element name="titles" type="titlesType" minOccurs="0"/>
+                        <xsd:element name="abstracts" type="abstractsType" minOccurs="0"/>
+                        <xsd:element name="persons" type="personsType" minOccurs="0"/>
+                        <xsd:element name="keywords" type="keywordsType" minOccurs="0"/>
+                        <xsd:element name="dnbInstitutions" type="dnbInstitutionsType" minOccurs="0"/>
+                        <xsd:element name="dates" type="datesType"/>
+                        <xsd:element name="identifiers" type="identifiersType" minOccurs="0"/>
+                        <xsd:element name="notes" type="notesType" minOccurs="0"/>
+                        <xsd:element name="collections" type="collectionsType" minOccurs="0"/>
+                        <xsd:element name="series" type="seriesType" minOccurs="0"/>
+                        <xsd:element name="enrichments" type="enrichmentsType" minOccurs="0"/>
+                        <xsd:element name="licences" type="licencesType" minOccurs="0"/>
+                    </xsd:sequence>
+                    <xsd:attribute name="oldId" type="xsd:string" use="required"/>
+                    <xsd:attribute name="docId" type="xsd:integer"/>
+                    <xsd:attribute name="language" type="xsd:string" use="required"/>
+                    <xsd:attribute name="type" type="xsd:string" use="required"/>
+                    <xsd:attribute name="pageFirst" type="xsd:string"/>
+                    <xsd:attribute name="pageLast" type="xsd:string"/>
+                    <xsd:attribute name="pageNumber" type="xsd:string"/>
+                    <xsd:attribute name="edition" type="xsd:string"/>
+                    <xsd:attribute name="volume" type="xsd:string"/>
+                    <xsd:attribute name="issue" type="xsd:string"/>
+                    <xsd:attribute name="publisherName" type="xsd:string"/>
+                    <xsd:attribute name="publisherPlace" type="xsd:string"/>
+                    <xsd:attribute name="creatingCorporation" type="xsd:string"/>
+                    <xsd:attribute name="contributingCorporation" type="xsd:string"/>
+                    <xsd:attribute name="belongsToBibliography" type="xsd:boolean"/>
+                    <xsd:attribute name="serverState" type="serverStateType" use="required"/>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
 
-    <xs:simpleType name="serverStateType">
-        <xs:restriction base="xs:string">
-            <xs:enumeration value="audited"/>
-            <xs:enumeration value="published"/>
-            <xs:enumeration value="restricted"/>
-            <xs:enumeration value="inprogress"/>
-            <xs:enumeration value="unpublished"/>
-        </xs:restriction>
-    </xs:simpleType>
+    <xsd:simpleType name="serverStateType">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="audited"/>
+            <xsd:enumeration value="published"/>
+            <xsd:enumeration value="restricted"/>
+            <xsd:enumeration value="inprogress"/>
+            <xsd:enumeration value="unpublished"/>
+        </xsd:restriction>
+    </xsd:simpleType>
 
-    <xs:complexType name="titlesMainType">
-        <xs:sequence>
-            <xs:element name="titleMain" maxOccurs="unbounded">
-                <xs:complexType>
-                    <xs:simpleContent>
-                        <xs:extension base="xs:string">
-                            <xs:attribute name="language" type="xs:string" use="required"/>
-                        </xs:extension>
-                    </xs:simpleContent>
-                </xs:complexType>
-            </xs:element>
-        </xs:sequence>
-    </xs:complexType>
+    <xsd:complexType name="titlesMainType">
+        <xsd:sequence>
+            <xsd:element name="titleMain" maxOccurs="unbounded">
+                <xsd:complexType>
+                    <xsd:simpleContent>
+                        <xsd:extension base="xsd:string">
+                            <xsd:attribute name="language" type="xsd:string" use="required"/>
+                        </xsd:extension>
+                    </xsd:simpleContent>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
 
-    <xs:complexType name="titlesType">
-        <xs:sequence>
-            <xs:element name="title" maxOccurs="unbounded">
-                <xs:complexType>
-                    <xs:simpleContent>
-                        <xs:extension base="xs:string">
-                            <xs:attribute name="type" type="titleTypeValues" use="required"/>
-                            <xs:attribute name="language" type="xs:string" use="required"/>
-                        </xs:extension>
-                    </xs:simpleContent>
-                </xs:complexType>
-            </xs:element>
-        </xs:sequence>
-    </xs:complexType>
+    <xsd:complexType name="titlesType">
+        <xsd:sequence>
+            <xsd:element name="title" maxOccurs="unbounded">
+                <xsd:complexType>
+                    <xsd:simpleContent>
+                        <xsd:extension base="xsd:string">
+                            <xsd:attribute name="type" type="titleTypeValues" use="required"/>
+                            <xsd:attribute name="language" type="xsd:string" use="required"/>
+                        </xsd:extension>
+                    </xsd:simpleContent>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
 
-    <xs:simpleType name="titleTypeValues">
-        <xs:restriction base="xs:string">
-            <xs:enumeration value="parent"/>
-            <xs:enumeration value="sub"/>
-            <xs:enumeration value="additional"/>
-        </xs:restriction>
-    </xs:simpleType>
+    <xsd:simpleType name="titleTypeValues">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="parent"/>
+            <xsd:enumeration value="sub"/>
+            <xsd:enumeration value="additional"/>
+        </xsd:restriction>
+    </xsd:simpleType>
 
-    <xs:complexType name="abstractsType">
-        <xs:sequence>
-            <xs:element name="abstract" maxOccurs="unbounded">
-                <xs:complexType>
-                    <xs:simpleContent>
-                        <xs:extension base="xs:string">
-                            <xs:attribute name="language" type="xs:string" use="required"/>
-                        </xs:extension>
-                    </xs:simpleContent>
-                </xs:complexType>
-            </xs:element>
-        </xs:sequence>
-    </xs:complexType>
+    <xsd:complexType name="abstractsType">
+        <xsd:sequence>
+            <xsd:element name="abstract" maxOccurs="unbounded">
+                <xsd:complexType>
+                    <xsd:simpleContent>
+                        <xsd:extension base="xsd:string">
+                            <xsd:attribute name="language" type="xsd:string" use="required"/>
+                        </xsd:extension>
+                    </xsd:simpleContent>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
 
-    <xs:complexType name="personsType">
-        <xs:sequence>
-            <xs:element name="person" maxOccurs="unbounded">
-                <xs:complexType>
-                    <xs:attribute name="role" type="personRoleType" use="required"/>
-                    <xs:attribute name="firstName" type="xs:string" use="required"/>
-                    <xs:attribute name="lastName" type="xs:string" use="required"/>
-                    <xs:attribute name="academicTitle" type="xs:string"/>
-                    <xs:attribute name="email" type="xs:string"/>
-                    <xs:attribute name="allowEmailContact" type="xs:boolean"/>
-                    <xs:attribute name="placeOfBirth" type="xs:string"/>
-                    <xs:attribute name="dateOfBirth" type="xs:date"/>
-                </xs:complexType>
-            </xs:element>
-        </xs:sequence>
-    </xs:complexType>
+    <xsd:complexType name="personsType">
+        <xsd:sequence>
+            <xsd:element name="person" maxOccurs="unbounded">
+                <xsd:complexType>
+                    <xsd:attribute name="role" type="personRoleType" use="required"/>
+                    <xsd:attribute name="firstName" type="xsd:string" use="required"/>
+                    <xsd:attribute name="lastName" type="xsd:string" use="required"/>
+                    <xsd:attribute name="academicTitle" type="xsd:string"/>
+                    <xsd:attribute name="email" type="xsd:string"/>
+                    <xsd:attribute name="allowEmailContact" type="xsd:boolean"/>
+                    <xsd:attribute name="placeOfBirth" type="xsd:string"/>
+                    <xsd:attribute name="dateOfBirth" type="xsd:date"/>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
 
-    <xs:simpleType name="personRoleType">
-        <xs:restriction base="xs:string">
-            <xs:enumeration value="advisor"/>
-            <xs:enumeration value="author"/>
-            <xs:enumeration value="contributor"/>
-            <xs:enumeration value="editor"/>
-            <xs:enumeration value="referee"/>
-            <xs:enumeration value="translator"/>
-            <xs:enumeration value="submitter"/>
-            <xs:enumeration value="other"/>
-        </xs:restriction>
-    </xs:simpleType>
+    <xsd:simpleType name="personRoleType">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="advisor"/>
+            <xsd:enumeration value="author"/>
+            <xsd:enumeration value="contributor"/>
+            <xsd:enumeration value="editor"/>
+            <xsd:enumeration value="referee"/>
+            <xsd:enumeration value="translator"/>
+            <xsd:enumeration value="submitter"/>
+            <xsd:enumeration value="other"/>
+        </xsd:restriction>
+    </xsd:simpleType>
 
-    <xs:complexType name="keywordsType">
-        <xs:sequence>
-            <xs:element name="keyword" maxOccurs="unbounded">
-                <xs:complexType>
-                    <xs:simpleContent>
-                        <xs:extension base="xs:string">
-                            <xs:attribute name="type" type="keywordTypeValues" use="required"/>
-                            <xs:attribute name="language" type="xs:string" use="required"/>
-                        </xs:extension>
-                    </xs:simpleContent>
-                </xs:complexType>
-            </xs:element>
-        </xs:sequence>
-    </xs:complexType>
+    <xsd:complexType name="keywordsType">
+        <xsd:sequence>
+            <xsd:element name="keyword" maxOccurs="unbounded">
+                <xsd:complexType>
+                    <xsd:simpleContent>
+                        <xsd:extension base="xsd:string">
+                            <xsd:attribute name="type" type="keywordTypeValues" use="required"/>
+                            <xsd:attribute name="language" type="xsd:string" use="required"/>
+                        </xsd:extension>
+                    </xsd:simpleContent>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
 
-    <xs:simpleType name="keywordTypeValues">
-        <xs:restriction base="xs:string">
-            <xs:enumeration value="swd"/>
-            <xs:enumeration value="uncontrolled"/>
-        </xs:restriction>
-    </xs:simpleType>
+    <xsd:simpleType name="keywordTypeValues">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="swd"/>
+            <xsd:enumeration value="uncontrolled"/>
+        </xsd:restriction>
+    </xsd:simpleType>
 
-    <xs:complexType name="dnbInstitutionsType">
-        <xs:sequence>
-            <xs:element name="dnbInstitution" maxOccurs="unbounded">
-                <xs:complexType>
-                    <xs:attribute name="id" type="xs:integer" use="required"/>
-                    <xs:attribute name="role" type="dnbInstitutionTypeValues" use="required"/>
-                </xs:complexType>
-            </xs:element>
-        </xs:sequence>
-    </xs:complexType>
+    <xsd:complexType name="dnbInstitutionsType">
+        <xsd:sequence>
+            <xsd:element name="dnbInstitution" maxOccurs="unbounded">
+                <xsd:complexType>
+                    <xsd:attribute name="id" type="xsd:integer" use="required"/>
+                    <xsd:attribute name="role" type="dnbInstitutionTypeValues" use="required"/>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
 
-    <xs:simpleType name="dnbInstitutionTypeValues">
-        <xs:restriction base="xs:string">
-            <xs:enumeration value="publisher"/>
-            <xs:enumeration value="grantor"/>
-        </xs:restriction>
-    </xs:simpleType>
+    <xsd:simpleType name="dnbInstitutionTypeValues">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="publisher"/>
+            <xsd:enumeration value="grantor"/>
+        </xsd:restriction>
+    </xsd:simpleType>
 
-    <xs:complexType name="datesType">
-        <xs:sequence>
-            <xs:element name="date" maxOccurs="unbounded">
-                <xs:complexType>
-                    <xs:attribute name="type" type="dateTypeValues" use="required"/>
-                    <xs:attribute name="monthDay" type="xs:gMonthDay"/>
-                    <xs:attribute name="year" type="xs:gYear" use="required"/>
-                </xs:complexType>
-            </xs:element>
-        </xs:sequence>
-    </xs:complexType>
+    <xsd:complexType name="datesType">
+        <xsd:sequence>
+            <xsd:element name="date" maxOccurs="unbounded">
+                <xsd:complexType>
+                    <xsd:attribute name="type" type="dateTypeValues" use="required"/>
+                    <xsd:attribute name="monthDay" type="xsd:gMonthDay"/>
+                    <xsd:attribute name="year" type="xsd:gYear" use="required"/>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
 
-    <xs:simpleType name="dateTypeValues">
-        <xs:restriction base="xs:string">
-            <xs:enumeration value="completed"/>
-            <xs:enumeration value="published"/>
-            <xs:enumeration value="thesisAccepted"/>
-        </xs:restriction>
-    </xs:simpleType>
+    <xsd:simpleType name="dateTypeValues">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="completed"/>
+            <xsd:enumeration value="published"/>
+            <xsd:enumeration value="thesisAccepted"/>
+        </xsd:restriction>
+    </xsd:simpleType>
 
-    <xs:complexType name="identifiersType">
-        <xs:sequence>
-            <xs:element name="identifier" maxOccurs="unbounded">
-                <xs:complexType>
-                    <xs:simpleContent>
-                        <xs:extension base="xs:string">
-                            <xs:attribute name="type" type="identifierTypeValues" use="required"/>
-                        </xs:extension>
-                    </xs:simpleContent>
-                </xs:complexType>
-            </xs:element>
-        </xs:sequence>
-    </xs:complexType>
+    <xsd:complexType name="identifiersType">
+        <xsd:sequence>
+            <xsd:element name="identifier" maxOccurs="unbounded">
+                <xsd:complexType>
+                    <xsd:simpleContent>
+                        <xsd:extension base="xsd:string">
+                            <xsd:attribute name="type" type="identifierTypeValues" use="required"/>
+                        </xsd:extension>
+                    </xsd:simpleContent>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
 
-    <xs:simpleType name="identifierTypeValues">
-        <xs:restriction base="xs:string">
-            <xs:enumeration value="old"/>
-            <xs:enumeration value="serial"/>
-            <xs:enumeration value="uuid"/>
-            <xs:enumeration value="isbn"/>
-            <xs:enumeration value="urn"/>
-            <xs:enumeration value="doi"/>
-            <xs:enumeration value="handle"/>
-            <xs:enumeration value="url"/>
-            <xs:enumeration value="issn"/>
-            <xs:enumeration value="std-doi"/>
-            <xs:enumeration value="cris-link"/>
-            <xs:enumeration value="splash-url"/>
-            <xs:enumeration value="opus3-id"/>
-            <xs:enumeration value="opac-id"/>
-            <xs:enumeration value="pmid"/>
-            <xs:enumeration value="arxiv"/>
-        </xs:restriction>
-    </xs:simpleType>
+    <xsd:simpleType name="identifierTypeValues">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="old"/>
+            <xsd:enumeration value="serial"/>
+            <xsd:enumeration value="uuid"/>
+            <xsd:enumeration value="isbn"/>
+            <xsd:enumeration value="urn"/>
+            <xsd:enumeration value="doi"/>
+            <xsd:enumeration value="handle"/>
+            <xsd:enumeration value="url"/>
+            <xsd:enumeration value="issn"/>
+            <xsd:enumeration value="std-doi"/>
+            <xsd:enumeration value="cris-link"/>
+            <xsd:enumeration value="splash-url"/>
+            <xsd:enumeration value="opus3-id"/>
+            <xsd:enumeration value="opac-id"/>
+            <xsd:enumeration value="pmid"/>
+            <xsd:enumeration value="arxiv"/>
+        </xsd:restriction>
+    </xsd:simpleType>
 
-    <xs:complexType name="notesType">
-        <xs:sequence>
-            <xs:element name="note" maxOccurs="unbounded">
-                <xs:complexType>
-                    <xs:simpleContent>
-                        <xs:extension base="xs:string">
-                            <xs:attribute name="visibility" type="visibilityTypeValues" use="required"/>
-                        </xs:extension>
-                    </xs:simpleContent>
-                </xs:complexType>
-            </xs:element>
-        </xs:sequence>
-    </xs:complexType>
+    <xsd:complexType name="notesType">
+        <xsd:sequence>
+            <xsd:element name="note" maxOccurs="unbounded">
+                <xsd:complexType>
+                    <xsd:simpleContent>
+                        <xsd:extension base="xsd:string">
+                            <xsd:attribute name="visibility" type="visibilityTypeValues" use="required"/>
+                        </xsd:extension>
+                    </xsd:simpleContent>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
 
-    <xs:simpleType name="visibilityTypeValues">
-        <xs:restriction base="xs:string">
-            <xs:enumeration value="private"/>
-            <xs:enumeration value="public"/>
-        </xs:restriction>
-    </xs:simpleType>
+    <xsd:simpleType name="visibilityTypeValues">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="private"/>
+            <xsd:enumeration value="public"/>
+        </xsd:restriction>
+    </xsd:simpleType>
 
-    <xs:complexType name="collectionsType">
-        <xs:sequence>
-            <xs:element name="collection" maxOccurs="unbounded">
-                <xs:complexType>
-                    <xs:attribute name="id" type="xs:integer" use="required"/>
-                </xs:complexType>
-            </xs:element>
-        </xs:sequence>
-    </xs:complexType>
+    <xsd:complexType name="collectionsType">
+        <xsd:sequence>
+            <xsd:element name="collection" maxOccurs="unbounded">
+                <xsd:complexType>
+                    <xsd:attribute name="id" type="xsd:integer" use="required"/>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
 
-    <xs:complexType name="seriesType">
-        <xs:sequence>
-            <xs:element name="seriesItem" maxOccurs="unbounded">
-                <xs:complexType>
-                    <xs:attribute name="id" type="xs:integer" use="required"/>
-                    <xs:attribute name="number" type="xs:string" use="required"/>
-                </xs:complexType>
-            </xs:element>
-        </xs:sequence>
-    </xs:complexType>
+    <xsd:complexType name="seriesType">
+        <xsd:sequence>
+            <xsd:element name="seriesItem" maxOccurs="unbounded">
+                <xsd:complexType>
+                    <xsd:attribute name="id" type="xsd:integer" use="required"/>
+                    <xsd:attribute name="number" type="xsd:string" use="required"/>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
 
-    <xs:complexType name="enrichmentsType">
-        <xs:sequence>
-            <xs:element name="enrichment" maxOccurs="unbounded">
-                <xs:complexType>
-                    <xs:simpleContent>
-                        <xs:extension base="xs:string">
-                            <xs:attribute name="key" type="xs:string" use="required"/>
-                        </xs:extension>
-                    </xs:simpleContent>
-                </xs:complexType>
-            </xs:element>
-        </xs:sequence>
-    </xs:complexType>
+    <xsd:complexType name="enrichmentsType">
+        <xsd:sequence>
+            <xsd:element name="enrichment" maxOccurs="unbounded">
+                <xsd:complexType>
+                    <xsd:simpleContent>
+                        <xsd:extension base="xsd:string">
+                            <xsd:attribute name="key" type="xsd:string" use="required"/>
+                        </xsd:extension>
+                    </xsd:simpleContent>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
 
-    <xs:complexType name="licencesType">
-        <xs:sequence>
-            <xs:element name="licence" maxOccurs="unbounded">
-                <xs:complexType>
-                    <xs:attribute name="id" type="xs:integer" use="required"/>
-                </xs:complexType>
-            </xs:element>
-        </xs:sequence>
-    </xs:complexType>
+    <xsd:complexType name="licencesType">
+        <xsd:sequence>
+            <xsd:element name="licence" maxOccurs="unbounded">
+                <xsd:complexType>
+                    <xsd:attribute name="id" type="xsd:integer" use="required"/>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
 
-</xs:schema>
+</xsd:schema>
