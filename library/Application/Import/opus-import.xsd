@@ -73,7 +73,7 @@
                     <xsd:attribute name="creatingCorporation" type="xsd:string"/>
                     <xsd:attribute name="contributingCorporation" type="xsd:string"/>
                     <xsd:attribute name="belongsToBibliography" type="xsd:boolean"/>
-                    <xsd:attribute name="serverState" type="serverStateType" use="required"/>
+                    <xsd:attribute name="serverState" type="serverStateType"/>
                 </xsd:complexType>
             </xsd:element>
         </xsd:sequence>
