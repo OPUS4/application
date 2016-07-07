@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * This file is part of OPUS. The software OPUS has been originally developed
+ * at the University of Stuttgart with funding from the German Research Net,
+ * the Federal Department of Higher Education and Research and the Ministry
+ * of Science, Research and the Arts of the State of Baden-Wuerttemberg.
+ *
+ * OPUS 4 is a complete rewrite of the original OPUS software and was developed
+ * by the Stuttgart University Library, the Library Service Center
+ * Baden-Wuerttemberg, the Cooperative Library Network Berlin-Brandenburg,
+ * the Saarland University and State Library, the Saxon State Library -
+ * Dresden State and University Library, the Bielefeld University Library and
+ * the University Library of Hamburg University of Technology with funding from
+ * the German Research Foundation and the European Regional Development Fund.
+ *
+ * LICENCE
+ * OPUS is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the Licence, or any later version.
+ * OPUS is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details. You should have received a copy of the GNU General Public License
+ * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
+ * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * @category    Application
+ * @package     Import
+ * @author      Sascha Szott <szott@zib.de>
+ * @author      Doreen Thiede <thiede@zib.de>
+ * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
+ * @version     $Id$
+ */
+-->
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <xs:element name="import" type="opusDocumentType"/>
+
+    <xs:complexType name="opusDocumentType">
+        <xs:sequence>
+            <xs:element name="opusDocument" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="titlesMain" type="titlesMainType"/>
+                        <xs:element name="titles" type="titlesType" minOccurs="0"/>
+                        <xs:element name="abstracts" type="abstractsType" minOccurs="0"/>
+                        <xs:element name="persons" type="personsType" minOccurs="0"/>
+                        <xs:element name="keywords" type="keywordsType" minOccurs="0"/>
+                        <xs:element name="dnbInstitutions" type="dnbInstitutionsType" minOccurs="0"/>
+                        <xs:element name="dates" type="datesType"/>
+                        <xs:element name="identifiers" type="identifiersType" minOccurs="0"/>
+                        <xs:element name="notes" type="notesType" minOccurs="0"/>
+                        <xs:element name="collections" type="collectionsType" minOccurs="0"/>
+                        <xs:element name="series" type="seriesType" minOccurs="0"/>
+                        <xs:element name="enrichments" type="enrichmentsType" minOccurs="0"/>
+                        <xs:element name="licences" type="licencesType" minOccurs="0"/>
+                    </xs:sequence>
+                    <xs:attribute name="oldId" type="xs:string" use="required"/>
+                    <xs:attribute name="docId" type="xs:integer"/>
+                    <xs:attribute name="language" type="xs:string" use="required"/>
+                    <xs:attribute name="type" type="xs:string" use="required"/>                    
+                    <xs:attribute name="pageFirst" type="xs:string"/>
+                    <xs:attribute name="pageLast" type="xs:string"/>
+                    <xs:attribute name="pageNumber" type="xs:string"/>
+                    <xs:attribute name="edition" type="xs:string"/>
+                    <xs:attribute name="volume" type="xs:string"/>
+                    <xs:attribute name="issue" type="xs:string"/>
+                    <xs:attribute name="publisherName" type="xs:string"/>
+                    <xs:attribute name="publisherPlace" type="xs:string"/>
+                    <xs:attribute name="creatingCorporation" type="xs:string"/>
+                    <xs:attribute name="contributingCorporation" type="xs:string"/>
+                    <xs:attribute name="belongsToBibliography" type="xs:boolean"/>
+                    <xs:attribute name="serverState" type="serverStateType" use="required"/>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:simpleType name="serverStateType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="audited"/>
+            <xs:enumeration value="published"/>
+            <xs:enumeration value="restricted"/>
+            <xs:enumeration value="inprogress"/>
+            <xs:enumeration value="unpublished"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="titlesMainType">
+        <xs:sequence>
+            <xs:element name="titleMain" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:simpleContent>
+                        <xs:extension base="xs:string">
+                            <xs:attribute name="language" type="xs:string" use="required"/>
+                        </xs:extension>
+                    </xs:simpleContent>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="titlesType">
+        <xs:sequence>
+            <xs:element name="title" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:simpleContent>
+                        <xs:extension base="xs:string">
+                            <xs:attribute name="type" type="titleTypeValues" use="required"/>
+                            <xs:attribute name="language" type="xs:string" use="required"/>
+                        </xs:extension>
+                    </xs:simpleContent>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:simpleType name="titleTypeValues">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="parent"/>
+            <xs:enumeration value="sub"/>
+            <xs:enumeration value="additional"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="abstractsType">
+        <xs:sequence>
+            <xs:element name="abstract" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:simpleContent>
+                        <xs:extension base="xs:string">
+                            <xs:attribute name="language" type="xs:string" use="required"/>
+                        </xs:extension>
+                    </xs:simpleContent>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="personsType">
+        <xs:sequence>
+            <xs:element name="person" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:attribute name="role" type="personRoleType" use="required"/>
+                    <xs:attribute name="firstName" type="xs:string" use="required"/>
+                    <xs:attribute name="lastName" type="xs:string" use="required"/>
+                    <xs:attribute name="academicTitle" type="xs:string"/>
+                    <xs:attribute name="email" type="xs:string"/>
+                    <xs:attribute name="allowEmailContact" type="xs:boolean"/>
+                    <xs:attribute name="placeOfBirth" type="xs:string"/>
+                    <xs:attribute name="dateOfBirth" type="xs:date"/>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:simpleType name="personRoleType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="advisor"/>
+            <xs:enumeration value="author"/>
+            <xs:enumeration value="contributor"/>
+            <xs:enumeration value="editor"/>
+            <xs:enumeration value="referee"/>
+            <xs:enumeration value="translator"/>
+            <xs:enumeration value="submitter"/>
+            <xs:enumeration value="other"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="keywordsType">
+        <xs:sequence>
+            <xs:element name="keyword" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:simpleContent>
+                        <xs:extension base="xs:string">
+                            <xs:attribute name="type" type="keywordTypeValues" use="required"/>
+                            <xs:attribute name="language" type="xs:string" use="required"/>
+                        </xs:extension>
+                    </xs:simpleContent>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:simpleType name="keywordTypeValues">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="swd"/>
+            <xs:enumeration value="uncontrolled"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="dnbInstitutionsType">
+        <xs:sequence>
+            <xs:element name="dnbInstitution" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:attribute name="id" type="xs:integer" use="required"/>
+                    <xs:attribute name="role" type="dnbInstitutionTypeValues" use="required"/>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:simpleType name="dnbInstitutionTypeValues">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="publisher"/>
+            <xs:enumeration value="grantor"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="datesType">
+        <xs:sequence>
+            <xs:element name="date" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:attribute name="type" type="dateTypeValues" use="required"/>
+                    <xs:attribute name="monthDay" type="xs:gMonthDay"/>
+                    <xs:attribute name="year" type="xs:gYear" use="required"/>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:simpleType name="dateTypeValues">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="completed"/>
+            <xs:enumeration value="published"/>
+            <xs:enumeration value="thesisAccepted"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="identifiersType">
+        <xs:sequence>
+            <xs:element name="identifier" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:simpleContent>
+                        <xs:extension base="xs:string">
+                            <xs:attribute name="type" type="identifierTypeValues" use="required"/>
+                        </xs:extension>
+                    </xs:simpleContent>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:simpleType name="identifierTypeValues">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="old"/>
+            <xs:enumeration value="serial"/>
+            <xs:enumeration value="uuid"/>
+            <xs:enumeration value="isbn"/>
+            <xs:enumeration value="urn"/>
+            <xs:enumeration value="doi"/>
+            <xs:enumeration value="handle"/>
+            <xs:enumeration value="url"/>
+            <xs:enumeration value="issn"/>
+            <xs:enumeration value="std-doi"/>
+            <xs:enumeration value="cris-link"/>
+            <xs:enumeration value="splash-url"/>
+            <xs:enumeration value="opus3-id"/>
+            <xs:enumeration value="opac-id"/>
+            <xs:enumeration value="pmid"/>
+            <xs:enumeration value="arxiv"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="notesType">
+        <xs:sequence>
+            <xs:element name="note" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:simpleContent>
+                        <xs:extension base="xs:string">
+                            <xs:attribute name="visibility" type="visibilityTypeValues" use="required"/>
+                        </xs:extension>
+                    </xs:simpleContent>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:simpleType name="visibilityTypeValues">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="private"/>
+            <xs:enumeration value="public"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="collectionsType">
+        <xs:sequence>
+            <xs:element name="collection" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:attribute name="id" type="xs:integer" use="required"/>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="seriesType">
+        <xs:sequence>
+            <xs:element name="seriesItem" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:attribute name="id" type="xs:integer" use="required"/>
+                    <xs:attribute name="number" type="xs:string" use="required"/>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="enrichmentsType">
+        <xs:sequence>
+            <xs:element name="enrichment" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:simpleContent>
+                        <xs:extension base="xs:string">
+                            <xs:attribute name="key" type="xs:string" use="required"/>
+                        </xs:extension>
+                    </xs:simpleContent>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="licencesType">
+        <xs:sequence>
+            <xs:element name="licence" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:attribute name="id" type="xs:integer" use="required"/>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+</xs:schema>
