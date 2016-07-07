@@ -32,6 +32,11 @@
  * @author      Doreen Thiede <thiede@zib.de>
  * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
+ *
+ * Notes:
+ *
+ * Use '<![CDATA[ ... ]]>' if documentation contains example tags and other content that
+ * otherwise needs to be escaped.
  */
 -->
 
@@ -47,6 +52,10 @@
     <xsd:complexType name="opusDocumentType">
         <xsd:sequence>
             <xsd:element name="opusDocument" maxOccurs="unbounded">
+                <xsd:annotation>
+                    <xsd:documentation>Element for documents. Required are language and type for each
+                        document.</xsd:documentation>
+                </xsd:annotation>
                 <xsd:complexType>
                     <xsd:sequence>
                         <xsd:element name="titlesMain" type="titlesMainType"/>
