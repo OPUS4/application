@@ -37,6 +37,11 @@
 
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 
+    <xsd:annotation>
+        <xsd:appinfo>OPUS 4 Import</xsd:appinfo>
+        <xsd:documentation>This schema defines the OPUS 4 import format.</xsd:documentation>
+    </xsd:annotation>
+
     <xsd:element name="import" type="opusDocumentType"/>
 
     <xsd:complexType name="opusDocumentType">
@@ -144,6 +149,9 @@
         <xsd:sequence>
             <xsd:element name="person" maxOccurs="unbounded">
                 <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="identifiers" type="personIdentifiersType" minOccurs="0" />
+                    </xsd:sequence>
                     <xsd:attribute name="role" type="personRoleType" use="required"/>
                     <xsd:attribute name="firstName" type="xsd:string" use="required"/>
                     <xsd:attribute name="lastName" type="xsd:string" use="required"/>
@@ -167,6 +175,28 @@
             <xsd:enumeration value="translator"/>
             <xsd:enumeration value="submitter"/>
             <xsd:enumeration value="other"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:complexType name="personIdentifiersType">
+        <xsd:sequence>
+            <xsd:element name="identifier" maxOccurs="unbounded">
+                <xsd:complexType>
+                    <xsd:simpleContent>
+                        <xsd:extension base="xsd:string">
+                            <xsd:attribute name="type" type="personIdentifierTypeValues" use="required"/>
+                        </xsd:extension>
+                    </xsd:simpleContent>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:simpleType name="personIdentifierTypeValues">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="orcid" />
+            <xsd:enumeration value="gnd" />
+            <xsd:enumeration value="intern" />
         </xsd:restriction>
     </xsd:simpleType>
 
