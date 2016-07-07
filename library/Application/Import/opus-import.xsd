@@ -58,7 +58,7 @@
                         <xsd:element name="enrichments" type="enrichmentsType" minOccurs="0"/>
                         <xsd:element name="licences" type="licencesType" minOccurs="0"/>
                     </xsd:sequence>
-                    <xsd:attribute name="oldId" type="xsd:string" use="required"/>
+                    <xsd:attribute name="oldId" type="xsd:string"/>
                     <xsd:attribute name="docId" type="xsd:integer"/>
                     <xsd:attribute name="language" type="xsd:string" use="required"/>
                     <xsd:attribute name="type" type="xsd:string" use="required"/>
