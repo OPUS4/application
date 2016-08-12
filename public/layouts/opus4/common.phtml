@@ -75,7 +75,7 @@ $this->container = Zend_Registry::get('Opus_Navigation');
 
 $jsFiles = array('searchutil.js', 'frontdoorutil.js', 'submit.js');
 
-if (in_array($this->moduleName, array('admin', 'review', 'setup'))) {
+if (in_array($this->moduleName, array('admin', 'review', 'setup', 'account'))) {
     $jsFiles[] = 'theme.js';
     $jsFiles[] = 'theme_lic.js';
 }
