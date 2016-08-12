@@ -35,8 +35,9 @@
 /**
  * Script for exporting all documents.
  *
+ * TODO more cleanup
  * TODO move code into classes
- * TODO add command line parameters
+ * TODO add command line parameters, e.g. export target
  * TODO add options for selected export? (only published)
  * TODO add progress reporting
  */
@@ -44,8 +45,27 @@
 require_once dirname(__FILE__) . '/common/bootstrap.php';
 
 $config = Zend_Registry::get('Zend_Config');
-$exportPath = $config->workspacePath . DIRECTORY_SEPARATOR . "export";
-$exportFilePath = $exportPath . DIRECTORY_SEPARATOR . "export.xml";
+
+// process options
+$options = getopt('o:');
+
+if (array_key_exists('o', $options)) {
+    $exportFilePath = $options['o'];
+    $exportPath = dirname($exportFilePath);
+    $exportFilePath = basename($exportFilePath);
+
+    // if path is not absolute use export folder
+    if ($exportPath === '.') {
+        $exportPath = $config->workspacePath . DIRECTORY_SEPARATOR . "export";
+    }
+}
+else {
+    $exportFilePath = 'export.xml';
+    $exportPath = $config->workspacePath . DIRECTORY_SEPARATOR . "export";
+}
+
+$exportFilePath = $exportPath . DIRECTORY_SEPARATOR . $exportFilePath;
+
 
 // Exception if not writeable
 try {
@@ -78,12 +98,7 @@ foreach ($docFinder->ids() as $id) {
         continue;
     }
 
-    $xmlModelOutput = new Opus_Model_Xml();
-    $xmlModelOutput->setModel($doc);
-    $xmlModelOutput->setStrategy(new Opus_Model_Xml_Version1());
-    $xmlModelOutput->excludeEmptyFields();
-
-    $domDocument = $xmlModelOutput->getDomDocument();
+    $domDocument = $doc->toXml();
     $opusDocument = $domDocument->getElementsByTagName('Opus_Document')->item(0);
     $node = $opusDocuments->importNode($opusDocument, true);
     $export->appendChild($node);
@@ -92,6 +107,7 @@ foreach ($docFinder->ids() as $id) {
 $opusDocuments->appendChild($export);
 
 // write XML to export file
+echo "Writing export to $exportFilePath ..." . PHP_EOL;
 $exportFile= fopen($exportFilePath, 'w');
 fputs($exportFile, $opusDocuments->saveXML());
 fclose($exportFile);
