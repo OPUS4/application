@@ -38,6 +38,7 @@
  * Used in forms that allow setting or modifying the login name.
  *
  * TODO reconsider the pattern for login names
+ * TODO depends on framework right now
  */
 class Application_Form_Element_Login extends Application_Form_Element_Text {
 
