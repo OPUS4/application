@@ -50,6 +50,10 @@ class Application_Form_Element_Password extends Zend_Form_Element_Password {
         $this->addPrefixPath('Application_Form_Decorator', 'Application/Form/Decorator', Zend_Form::DECORATOR);
         $this->setAllowEmpty(false);
         $this->addValidator('stringLength', false, array('min' => 6));
+
+        // framework class Opus_Account determines validation
+        $account = new Opus_Account();
+        $this->addValidator($account->getField('Login')->getValidator());
     }
 
     /**

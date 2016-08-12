@@ -169,7 +169,7 @@ if (isset($config->javascript->latex->mathjax)) {
                 </div>
             </div>
 
-            <div id="content" class="opus <?= (in_array($this->moduleName, array('admin', 'review', 'setup'))) ? 'adminContainer' : ''?> <?= $this->moduleName ?><?php if ($this->moduleName === 'publish') : ?>"><?php else : ?><?= ($this->controllerName === 'index' ? '' : '_'.$this->controllerName)?><?= ($this->actionName === 'index' ? '' : '_'.$this->actionName)?><?= ($this->searchType === 'collection' || $this->searchType === 'latest' ? ' '.$this->searchType : '') ?>"><?php  endif; ?>
+            <div id="content" class="opus <?= (in_array($this->moduleName, array('admin', 'review', 'setup', 'account'))) ? 'adminContainer' : ''?> <?= $this->moduleName ?><?php if ($this->moduleName === 'publish') : ?>"><?php else : ?><?= ($this->controllerName === 'index' ? '' : '_'.$this->controllerName)?><?= ($this->actionName === 'index' ? '' : '_'.$this->actionName)?><?= ($this->searchType === 'collection' || $this->searchType === 'latest' ? ' '.$this->searchType : '') ?>"><?php  endif; ?>
 
                 <?PHP $messages = !is_null($this->flashMessenger) ? $this->flashMessenger->getMessages() : null ?>
 
