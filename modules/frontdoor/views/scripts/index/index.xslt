@@ -187,7 +187,7 @@
             <xsl:apply-templates select="TitleAdditional" mode="mainLanguage" />
             <xsl:apply-templates select="TitleAdditional" mode="otherLanguage" />
             <xsl:apply-templates select="Series[@Visible=1]" >
-                <xsl:sort select="@SortOrder"/>
+                <xsl:sort select="@SortOrder" data-type="number" />
             </xsl:apply-templates>
             <xsl:apply-templates select="@PublisherName" />
             <xsl:apply-templates select="@PublisherPlace" />
