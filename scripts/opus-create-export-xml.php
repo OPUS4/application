@@ -25,48 +25,56 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @author      Gunar Maiwald <szott@zib.de>
- * @copyright   Copyright (c) 2011, OPUS 4 development team
+ * @author      Gunar Maiwald <maiwald@zib.de>
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2011-2016, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 
 /**
- * Tries to export all documents.
+ * Script for exporting all documents.
+ *
+ * TODO move code into classes
+ * TODO add command line parameters
+ * TODO add options for selected export? (only published)
+ * TODO add progress reporting
  */
 
 require_once dirname(__FILE__) . '/common/bootstrap.php';
 
 $config = Zend_Registry::get('Zend_Config');
-$exportFilePath = $config->workspacePath . DIRECTORY_SEPARATOR . "export" . DIRECTORY_SEPARATOR . "export.xml";
+$exportPath = $config->workspacePath . DIRECTORY_SEPARATOR . "export";
+$exportFilePath = $exportPath . DIRECTORY_SEPARATOR . "export.xml";
 
 // Exception if not writeable
 try {
-    if (!is_writeable($exportFilePath)) {
-        throw new Exception('exportfile is not writeable');
+    if (!is_writeable($exportPath)) {
+        throw new Exception("export folder is not writeable ($exportPath)");
+    }
+    if (file_exists($exportFilePath)) {
+        throw new Exception("export file already exists ($exportFilePath)");
     }
 } catch (Exception $e) {
-    echo $e;
-    exit();
+    echo $e->getMessage() . PHP_EOL;
+    exit(1);
 }
 
-
-$docFinder = new Opus_DocumentFinder();
 $opusDocuments = new DOMDocument('1.0', 'utf-8');
 $opusDocuments->formatOutput = true; 
 $export = $opusDocuments->createElement('export');
 
 $docFinder = new Opus_DocumentFinder();
 
+// get all documents
 foreach ($docFinder->ids() as $id) {
-
     $doc = null;
+
     try {
         $doc = new Opus_Document($id);
     }
     catch (Opus_Model_NotFoundException $e) {
-        // document with id $id does not exist
+        echo "Document with id $id does not exist." . PHP_EOL;
         continue;
     }
 
@@ -74,6 +82,7 @@ foreach ($docFinder->ids() as $id) {
     $xmlModelOutput->setModel($doc);
     $xmlModelOutput->setStrategy(new Opus_Model_Xml_Version1());
     $xmlModelOutput->excludeEmptyFields();
+
     $domDocument = $xmlModelOutput->getDomDocument();
     $opusDocument = $domDocument->getElementsByTagName('Opus_Document')->item(0);
     $node = $opusDocuments->importNode($opusDocument, true);
@@ -82,6 +91,7 @@ foreach ($docFinder->ids() as $id) {
 
 $opusDocuments->appendChild($export);
 
+// write XML to export file
 $exportFile= fopen($exportFilePath, 'w');
 fputs($exportFile, $opusDocuments->saveXML());
 fclose($exportFile);
