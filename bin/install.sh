@@ -269,6 +269,25 @@ LimitString
 fi
 
 #
+# Set password for administrator account
+#
+
+while [[ -z $ADMIN_PWD || "$ADMIN_PWD" != "$ADMIN_PWD_VERIFY" ]] ;
+do
+  echo
+  read -p "Please enter password for 'admin' account: " -s ADMIN_PWD
+  echo
+  read -p "Please enter password again: " -s ADMIN_PWD_VERIFY
+  echo
+  if [[ $ADMIN_PWD != $ADMIN_PWD_VERIFY ]] ;
+  then
+    echo "Passwords do not match. Please try again."
+  fi
+done
+
+php $BASEDIR/scripts/change-password.php admin "$ADMIN_PWD"
+
+#
 # Create config.ini and set database related parameters.
 #
 # TODO overwrite existing file?
