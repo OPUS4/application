@@ -75,6 +75,12 @@ class SolrIndexBuilder {
     private $_showHelp = false;
 
     /**
+     * Flag for deleting document xml cache before indexing.
+     * @var bool
+     */
+    private $_clearCache = false;
+
+    /**
      * Prints a help message to the console.
      */
     private function printHelpMessage($argv) {
@@ -83,7 +89,7 @@ class SolrIndexBuilder {
             "This program can be used to build up an initial Solr index (e.g., useful when migrating instances)" .
             PHP_EOL .
             PHP_EOL .
-            "Usage: " . $argv[0] . " [starting with ID] [ending with ID]" . PHP_EOL .
+            "Usage: " . $argv[0] . " [-c] [starting with ID] [ending with ID]" . PHP_EOL .
             PHP_EOL .
             "[starting with ID] If system aborted indexing at some ID, you can restart this command by supplying" .
             " this parameter." . PHP_EOL .
@@ -95,7 +101,9 @@ class SolrIndexBuilder {
             PHP_EOL .
             "In case both parameters are not specified the currently used index is deleted before insertion of new" .
             " documents begins." . PHP_EOL .
-            PHP_EOL
+            PHP_EOL .
+            'You can use option \'-c\' to clear the document XML cache entries of the documents before indexing.' .
+            PHP_EOL . PHP_EOL
         );
     }
 
@@ -107,6 +115,10 @@ class SolrIndexBuilder {
             $this->_showHelp = true;
         }
         else {
+            if (true === in_array('-c', $argv)) {
+                $this->_clearCache = true;
+            }
+
             if ($argc >= 2) {
                 $this->_start = $argv[1];
             }
@@ -165,8 +177,14 @@ class SolrIndexBuilder {
 
         // measure time for each document
 
+        $cache = new Opus_Model_Xml_Cache();
+
         foreach ($docIds as $docId) {
             $timeStart = microtime(true);
+
+            if ($this->_clearCache) {
+                $cache->removeAllEntriesWhereDocumentId($docId);
+            }
 
             $doc = new Opus_Document($docId);
 
