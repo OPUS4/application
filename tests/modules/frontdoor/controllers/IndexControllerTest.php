@@ -1079,6 +1079,33 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $this->assertQueryContentContains('//td', '2012/02/01');
     }
 
+    public function testMetaTagsForFiles() {
+        $file = $this->createTestFile('foo.pdf');
+
+        $doc = $this->createTestDocument();
+        $doc->setServerState('published');
+        $doc->addFile($file);
+        $docId = $doc->store();
+
+        $this->dispatch('frontdoor/index/index/docId/' . $docId);
+
+        $this->assertQueryContentContains('//meta/@content', "/files/$docId/foo.pdf");
+    }
+
+    public function testMetaTagsforEmbargoedDocument() {
+        $file = $this->createTestFile('foo.pdf');
+
+        $doc = $this->createTestDocument();
+        $doc->setEmbargoDate('2112-02-01');
+        $doc->setServerState('published');
+        $doc->addFile($file);
+        $docId = $doc->store();
+
+        $this->dispatch('frontdoor/index/index/docId/' . $docId);
+
+        $this->assertNotQueryContentContains('//meta/@content', "/files/$docId/foo.pdf");
+    }
+
     /**
      * EmbargoDate should be shown in metadata table, no matter if it has passed or not.
      * OPUSVIER-3270.
