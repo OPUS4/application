@@ -1079,6 +1079,10 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $this->assertQueryContentContains('//td', '2012/02/01');
     }
 
+    public function testMetaTagsForFileAccess() {
+        $this->markTestIncomplete('test not implemented');
+    }
+
     public function testMetaTagsForFiles() {
         $file = $this->createTestFile('foo.pdf');
 
