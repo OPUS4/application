@@ -944,6 +944,32 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         }
     }
 
+    public function testSortingOfFiles() {
+        $doc = $this->createTestDocument();
+        $doc->setServerState('published');
+
+        $file = $this->createTestFile('file1.txt');
+        $file->setSortOrder(1);
+        $doc->addFile($file);
+
+        $file = $this->createTestFile('file2.txt');
+        $file->setSortOrder(2);
+        $doc->addFile($file);
+
+        $file = $this->createTestFile('file10.txt');
+        $file->setSortOrder(10);
+        $doc->addFile($file);
+
+        $docId = $doc->store();
+
+        $this->dispatch("/frontdoor/index/index/docId/$docId");
+
+        $body = $this->getResponse()->getBody();
+
+        $this->assertTrue(strpos($body, '>file1.txt') < strpos($body, '>file2.txt'), "Order of files is wrong.");
+        $this->assertTrue(strpos($body, '>file2.txt') < strpos($body, '>file10.txt'), "Order of files is wrong.");
+    }
+
     /**
      * Tests, whether the current language of a document's file is shown behind the link as flag.
      */

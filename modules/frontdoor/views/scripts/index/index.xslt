@@ -107,7 +107,7 @@
                            <xsl:choose>
                                <xsl:when test="php:functionString('Frontdoor_IndexController::useCustomSortOrder', @Id)">
                                   <xsl:apply-templates select="File[@VisibleInFrontdoor='1']">
-                                     <xsl:sort select="@SortOrder"/>
+                                     <xsl:sort select="@SortOrder" data-type="number" />
                                   </xsl:apply-templates>
                                </xsl:when>
                                <xsl:otherwise>
