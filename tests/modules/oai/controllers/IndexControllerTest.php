@@ -1313,6 +1313,25 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->assertNotContains('<setSpec>pacs:07.75.', $body);
         $this->assertNotContains('<setSpec>pacs:85.85.', $body);
     }
+
+    public function testListRecordsForEmptySet() {
+        $this->dispatch('/oai?verb=ListRecords&metadataPrefix=oai_dc&set=open_access');
+
+        $this->assertResponseCode(200);
+
+        $body = $this->getResponse()->getBody();
+
+        $this->assertContains('<error code="noRecordsMatch">', $body);
+    }
+
+    public function testListRecordsForEmptySubset() {
+        $this->dispatch('/oai?verb=ListRecords&metadataPrefix=oai_dc&set=open_access:open_access');
+
+        $this->assertResponseCode(200);
+        $body = $this->getResponse()->getBody();
+        $this->assertContains('<error code="noRecordsMatch">', $body);
+    }
+
     /**
      * Regression test for OPUSVIER-2607
      */
