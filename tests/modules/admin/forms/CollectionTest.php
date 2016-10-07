@@ -73,6 +73,22 @@ class Admin_Form_CollectionTest extends ControllerTestCase {
         $this->assertEquals('plain', $form->getElement('Theme')->getValue());
     }
 
+    public function testHandlingOfNullValue() {
+        $form = new Admin_Form_Collection();
+
+        $model = new Opus_Collection();
+
+        $model->setName('TestName');
+        $model->setNumber(null);
+        $model->setOaiSubset(null);
+
+        $form->populateFromModel($model);
+
+        $this->assertEquals('TestName', $form->getElement('Name')->getValue());
+        $this->assertNull($form->getElement('Number')->getValue());
+        $this->assertNull($form->getElement('OaiSubset')->getValue());
+    }
+
     public function testPopulateFromModelWithId() {
         $form = new Admin_Form_Collection();
 
