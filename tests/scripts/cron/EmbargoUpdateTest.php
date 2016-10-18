@@ -27,7 +27,7 @@
  *
  * @category    Cronjob
  * @package     Tests
- * @author      Edouard Simon (edouard.simon@zib.de)
+ * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
@@ -35,46 +35,51 @@
 require_once('CronTestCase.php');
 
 /**
- * 
+ *
  */
-class UpdateDocumentCacheTest extends CronTestCase {
+class EmbargoUpdateTest extends CronTestCase
+{
 
-    public function testUpdateOnLicenceChange() {
-        $document = $this->createTestDocument();
-        $document->store();
+    public function testEmbargoUpdate()
+    {
+        $yesterday = new Opus_Date();
+        $yesterday->setDateTime(new DateTime(date('Y-m-d H:i:s', strtotime('-1 day'))));
 
-        $documentCacheTable = new Opus_Db_DocumentXmlCache();
+        $today = date('Y-m-d', time());
+        $tomorrow = date('Y-m-d', time() + (60 * 60 * 24));
 
-        $docXmlCache = $documentCacheTable->find($document->getId(), '1')->current()->xml_data;
-        $domDoc = new DomDocument();
-        $domDoc->loadXML($docXmlCache);
-        $licences = $domDoc->getElementsByTagName('Licence');
-        $this->assertTrue($licences->length == 0, 'Expected no Licence element in dom.');
+        $doc = new Opus_Document();
+        $doc->setEmbargoDate($today);
+        $expiredId = $doc->store();
 
-        $licence = new Opus_Licence();
-        $licence->setNameLong('TestLicence');
-        $licence->setLinkLicence('http://example.org/licence');
-        $licenceId = $licence->store();
-        $document->setServerState('published');
-        $document->setLicence($licence);
-        $docId = $document->store();
+        $doc = new Opus_Document();
+        $noEmbargoId = $doc->store();
 
-        $licence = new Opus_Licence($licenceId);
-        $licence->setNameLong('TestLicenceAltered');
-        $licence->store();
+        $doc = new Opus_Document();
+        $doc->setEmbargoDate($tomorrow);
+        $notExpiredId = $doc->store();
 
-        $docXmlCacheResult = $documentCacheTable->find($document->getId(), '1');
+        Opus_Document::setServerDateModifiedByIds($yesterday, array($expiredId, $noEmbargoId, $notExpiredId));
 
-        $this->assertTrue($docXmlCacheResult->count() == 0, 'Expected empty document xml cache');
+        $this->executeScript('cron-embargo-update.php');
 
-        $this->executeScript('cron-update-document-cache.php');
-        $docXmlCacheAfter = $documentCacheTable->find($docId, '1')->current()->xml_data;
-        $domDocAfter = new DomDocument();
-        $domDocAfter->loadXML($docXmlCacheAfter);
-        $licencesAfter = $domDocAfter->getElementsByTagName('Licence');
-        $this->assertTrue($licencesAfter->length == 1, 'Expected one Licence element in dom.');
-        $licences = $document->getLicence();
-        $licences[0]->delete();
+        $doc = new Opus_Document($expiredId);
+        $this->assertTrue($this->sameDay(new DateTime($today), $doc->getServerDateModified()->getDateTime()));
+
+        $doc = new Opus_Document($notExpiredId);
+        $this->assertTrue($this->sameDay($yesterday->getDateTime(), $doc->getServerDateModified()->getDateTime()));
+
+        $doc = new Opus_Document($noEmbargoId);
+        $this->assertTrue($this->sameDay($yesterday->getDateTime(), $doc->getServerDateModified()->getDateTime()));
+    }
+
+    private function sameDay($firstDate, $secondDate)
+    {
+        $first = $firstDate->format('Y-m-d');
+        $second = $secondDate->format('Y-m-d');
+        return $first == $second;
     }
 
 }
+
+
