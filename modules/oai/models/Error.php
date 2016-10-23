@@ -65,7 +65,7 @@ class Oai_Model_Error {
      */
     public static function mapCode($code) {
         if (false === array_key_exists($code, self::$_oaiErrorCodes)) {
-                throw new Oai_Model_Exception("Unknown oai error code $code");
+                throw new Oai_Model_Exception($e->getMessage());
         }
 
         return self::$_oaiErrorCodes[$code];

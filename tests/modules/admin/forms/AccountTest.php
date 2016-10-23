@@ -140,7 +140,10 @@ class Admin_Form_AccountTest extends ControllerTestCase {
 
         $this->assertFalse($form->isValid($postData));
 
-        $this->assertContains('notMatch', $form->getErrors('confirmPassword'));
+        $errors = $form->getErrors();
+
+        $this->assertTrue(isset($errors['confirmPassword']));
+        $this->assertTrue(in_array('notMatch', $errors['confirmPassword']));
     }
 
     public function testValidationBadEmail() {
@@ -156,7 +159,10 @@ class Admin_Form_AccountTest extends ControllerTestCase {
 
         $this->assertFalse($form->isValid($postData));
 
-        $this->assertContains('emailAddressInvalidFormat', $form->getErrors('email'));
+        $errors = $form->getErrors();
+
+        $this->assertTrue(isset($errors['email']));
+        $this->assertTrue(in_array('emailAddressInvalidFormat', $errors['email']));
     }
 
 }

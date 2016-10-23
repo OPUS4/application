@@ -151,11 +151,20 @@ class Admin_AccountController extends Application_Controller_Action {
             $postData = $this->getRequest()->getPost();
 
             if ($accountForm->isValid($postData)) {
+                $login = $postData['username'];
+                $password = $postData['password'];
+                $firstname = $postData['firstname'];
+                $lastname = $postData['lastname'];
+                $email = $postData['email'];
+                $roles = Admin_Form_Account::parseSelectedRoles($postData);
+
                 $account = new Opus_Account();
 
-                $accountForm->updateModel($account);
-
-                $roles = Admin_Form_Account::parseSelectedRoles($postData);
+                $account->setLogin($login);
+                $account->setPassword($password);
+                $account->setFirstName($firstname);
+                $account->setLastName($lastname);
+                $account->setEmail($email);
                 $account->setRole($roles);
 
                 $account->store();

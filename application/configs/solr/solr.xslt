@@ -136,9 +136,9 @@
                 <xsl:for-each select="/Opus/Opus_Document/PersonAuthor">
                     <xsl:element name="field">
                         <xsl:attribute name="name">author</xsl:attribute>
-                        <xsl:value-of select="@LastName" />
-                        <xsl:text>, </xsl:text>
                         <xsl:value-of select="@FirstName" />
+                        <xsl:text> </xsl:text>
+                        <xsl:value-of select="@LastName" />
                     </xsl:element>
                 </xsl:for-each>
 

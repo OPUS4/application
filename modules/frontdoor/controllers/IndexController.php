@@ -33,7 +33,6 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  *
- * TODO move XSLT functions into model class
  */
 class Frontdoor_IndexController extends Application_Controller_Action {
 
@@ -243,8 +242,6 @@ class Frontdoor_IndexController extends Application_Controller_Action {
      *
      * @param Opus_Date $now
      * @return bool true - if embargo date has passed; false - if not
-     *
-     * TODO another document instantiation (find more efficient way)
      */
     public static function checkIfFileEmbargoHasPassed($docId) {
         $doc = new Opus_Document($docId);
@@ -312,15 +309,11 @@ class Frontdoor_IndexController extends Application_Controller_Action {
         }
     }
 
-    /**
-     * @param $document
-     * @return array
-     * TODO separate different tags into function/plugins ???
-     */
     private function createMetaTagsForDocument($document) {
         $config = $this->getConfig();
-        $baseUrlFiles = $this->view->fullUrl()
-                . (isset($config, $config->deliver->url->prefix) ? $config->deliver->url->prefix : '/files');
+        $serverUrl = $this->view->serverUrl();
+        $baseUrlFiles = $serverUrl
+                . (isset($config, $config->deliver->url->prefix) ? $config->deliver->url->prefix : '/documents');
 
         $metas = array();
 
@@ -382,29 +375,18 @@ class Frontdoor_IndexController extends Application_Controller_Action {
             $metas[] = array('DC.Identifier', $identifierValue);
             $metas[] = array('DC.Identifier', $config->urn->resolverUrl . $identifierValue);
         }
-        $metas[] = array(
-            'DC.Identifier', $this->view->fullUrl() . '/frontdoor/index/index/docId/' . $document->getId()
-        );
+        $metas[] = array('DC.Identifier', $this->view->fullUrl() . '/frontdoor/index/index/docId/' . $document->getId());
 
-        if (self::checkIfFileEmbargoHasPassed($document->getId())) {
-            foreach ($document->getFile() AS $file) {
-                if (!$file->exists()
-                        or ($file->getVisibleInFrontdoor() !== '1')
-                        or !self::checkIfUserHasFileAccess($file->getId())) {
-                    continue;
-                }
-                $metas[] = array('DC.Identifier', "$baseUrlFiles/" . $document->getId() . "/" . $file->getPathName());
+        foreach ($document->getFile() AS $file) {
+            if (!$file->exists() or ( $file->getVisibleInFrontdoor() !== '1')) {
+                continue;
+            }
+            $metas[] = array('DC.Identifier', "$baseUrlFiles/" . $document->getId() . "/" . $file->getPathName());
 
-                if ($file->getMimeType() == 'application/pdf') {
-                    $metas[] = array(
-                        'citation_pdf_url', "$baseUrlFiles/" . $document->getId() . "/" . $file->getPathName()
-                    );
-                }
-                else if ($file->getMimeType() == 'application/postscript') {
-                    $metas[] = array(
-                        'citation_ps_url', "$baseUrlFiles/" . $document->getId() . "/" . $file->getPathName()
-                    );
-                }
+            if ($file->getMimeType() == 'application/pdf') {
+                $metas[] = array('citation_pdf_url', "$baseUrlFiles/" . $document->getId() . "/" . $file->getPathName());
+            } else if ($file->getMimeType() == 'application/postscript') {
+                $metas[] = array('citation_ps_url', "$baseUrlFiles/" . $document->getId() . "/" . $file->getPathName());
             }
         }
 

@@ -105,23 +105,6 @@ class Application_Configuration {
     }
 
     /**
-     * Returns name of repository.
-     * @return string
-     */
-    public function getName() {
-        $config = $this->getConfig();
-
-        if (isset($config->name)) {
-            $name = $config->name;
-        }
-        else {
-            $name = 'OPUS 4';
-        }
-
-        return $name;
-    }
-
-    /**
      * Liefert die Sprachen, die von OPUS unterstützt werden.
      * @return array
      */
@@ -231,7 +214,7 @@ class Application_Configuration {
      */
     public static function getOpusInfo() {
         $info = array();
-        $info['admin_info_version'] = self::getOpusVersion();
+        // OPUSVIER-3542 deaktiviert: $info['admin_info_version'] = self::getOpusVersion();
         return $info;
     }
 

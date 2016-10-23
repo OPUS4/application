@@ -2,14 +2,6 @@
 
 ---
 
-## Release 4.5 2016-05-xx
-
-Der Schlüssel 'name' in der config.ini kann verwendet werden, um den Namen der
-Instanz zu definieren, z.B. 'OPUS 4 Demo'. Dieser Name wird z.B. im Titel von
-RSS Feeds eingesetzt, anstelle des bisherigen 'OPUS RSS Feed'.
-
----
-
 ## Release 4.5-RC1 2016-04-25
 
 Dies ist der erste Release Candidate für OPUS 4.5. Er dient dazu den Release

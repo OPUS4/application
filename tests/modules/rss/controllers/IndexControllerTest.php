@@ -29,13 +29,9 @@
  * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
+ * @version     $Id$
  */
 
-/**
- * Class Rss_IndexControllerTest
- *
- * TODO fix Solr configuration
- */
 class Rss_IndexControllerTest extends ControllerTestCase {
 
     public function testIndexAction() {

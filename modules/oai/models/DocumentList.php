@@ -59,8 +59,6 @@ class Oai_Model_DocumentList {
      *
      * @param array &$oaiRequest
      * @return array
-     *
-     * TODO function contains metadataPrefix specifische criteria for generating document list (refactor!)
      */
     public function query(array $oaiRequest) {
         $finder = new Opus_DocumentFinder();
@@ -134,17 +132,8 @@ class Oai_Model_DocumentList {
                     );
 
                     if (count($foundSubsets) < 1) {
-                        $emptySubsets = array_filter($role->getAllOaiSetNames(), function ($s) use ($subsetName) {
-                            return $s['oai_subset'] === $subsetName;
-                        });
-
-                        if (count($emptySubsets) === 1) {
-                            return array();
-                        }
-                        else {
-                            $msg = "Invalid SetSpec: Subset does not exist.";
-                            throw new Oai_Model_Exception($msg);
-                        }
+                        $msg = "Invalid SetSpec: Subset does not exist.";
+                        throw new Oai_Model_Exception($msg);
                     }
 
                     foreach ($foundSubsets AS $subset) {

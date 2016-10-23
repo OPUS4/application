@@ -26,7 +26,6 @@
 # TODO query user for setting permissions on other folders (language_custom, config files)?
 # TODO add special handling for access to config.ini (more restricted?)
 # TODO add special handling for access to resources that can be edited in setup pages
-# TODO restrict access to folders/files for web server (bin,scripts,tests,db)
 #
 
 set -e

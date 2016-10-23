@@ -112,19 +112,7 @@ echo
 echo "Installing Composer and dependencies ..."
 echo
 
-if [[ $SUDO_ENABLED -eq 0 ]] ;
-then
-    "$SCRIPT_PATH/install-composer.sh" "$BASEDIR"
-else
-    if [[ -e $BASEDIR/vendor ]] ;
-    then
-        echo "Skipping composer install/update since script is executed as root."
-        echo "Please run 'bin/install-composer.sh' separately without 'sudo'."
-    else
-        echo "Please run 'bin/install-composer.sh' without 'sudo' before the installation."
-        exit 1;
-    fi
-fi
+"$SCRIPT_PATH/install-composer.sh" "$BASEDIR"
 
 #
 # Prepare Apache2 configuration
@@ -267,25 +255,6 @@ LimitString
     fi
 
 fi
-
-#
-# Set password for administrator account
-#
-
-while [[ -z $ADMIN_PWD || "$ADMIN_PWD" != "$ADMIN_PWD_VERIFY" ]] ;
-do
-  echo
-  read -p "Please enter password for 'admin' account: " -s ADMIN_PWD
-  echo
-  read -p "Please enter password again: " -s ADMIN_PWD_VERIFY
-  echo
-  if [[ $ADMIN_PWD != $ADMIN_PWD_VERIFY ]] ;
-  then
-    echo "Passwords do not match. Please try again."
-  fi
-done
-
-php $BASEDIR/scripts/change-password.php admin "$ADMIN_PWD"
 
 #
 # Create config.ini and set database related parameters.

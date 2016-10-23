@@ -58,15 +58,13 @@ class Admin_InfoController extends Application_Controller_Action {
      * Zeigt an, ob eine neuere Version von OPUS verfügbar ist.
      *
      * TODO Behandlung von is_null($latestVersion) hängt vom Verhalten der Version Helpers ab (ueberarbeiten)
-     * TODO move comparison code into non-controller class, e.g. Application_Configuration
      */
     public function updateAction() {
         $localVersion = Application_Configuration::getOpusVersion();
         $latestVersion = $this->_helper->version();
 
         $this->view->currentVersion = $localVersion;
-        $this->view->latestVersion = $latestVersion;
-        $this->view->showUpdateLink = false;
+        $this->view->latestVersion = null;
 
         if (is_null($latestVersion)) {
             $this->view->message = $this->view->translate('admin_info_version_error_getting_latest');
@@ -75,24 +73,8 @@ class Admin_InfoController extends Application_Controller_Action {
             $this->view->message = $this->view->translate('admin_info_version_current');
         }
         else {
-            if (strpos($localVersion, 'DEV') === false) {
-                if (version_compare($localVersion, $latestVersion) >= 0) {
-                    $this->view->message = $this->view->translate('admin_info_version_current');
-                }
-                else {
-                    $this->view->message = $this->view->translate('admin_info_version_outdated');
-                    $this->view->showUpdateLink = true;
-                }
-            }
-            else {
-                if (version_compare(substr($localVersion, 0, 5), substr($latestVersion, 0, 5)) < 0) {
-                    $this->view->message = $this->view->translate('admin_info_version_outdated');
-                    $this->view->showUpdateLink = true;
-                }
-                else {
-                    $this->view->message = $this->view->translate('admin_info_version_current');
-                }
-            }
+            $this->view->message = $this->view->translate('admin_info_version_outdated');
+            $this->view->latestVersion = $latestVersion;
         }
     }
 

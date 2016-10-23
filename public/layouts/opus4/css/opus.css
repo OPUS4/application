@@ -1145,12 +1145,3 @@ dl.result_box {
 #appmode-production {
     display: none;
 }
-
-/* Testumgebung */
-#top-header .testing,.staging,.development {
-    color: black;
-    background: #ff5a5a;
-    font-weight:bold;
-    font-size:120%;
-    text-align: center
-}
