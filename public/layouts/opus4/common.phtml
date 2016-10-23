@@ -75,7 +75,7 @@ $this->container = Zend_Registry::get('Opus_Navigation');
 
 $jsFiles = array('searchutil.js', 'frontdoorutil.js', 'submit.js');
 
-if (in_array($this->moduleName, array('admin', 'review', 'setup'))) {
+if (in_array($this->moduleName, array('admin', 'review', 'setup', 'account'))) {
     $jsFiles[] = 'theme.js';
     $jsFiles[] = 'theme_lic.js';
 }
@@ -140,6 +140,9 @@ if (isset($config->javascript->latex->mathjax)) {
                     <?php endif ?>
                     <div id="login-bar" class="nav"><?= $this->loginBar() ?></div>
                 </div>
+                <?php if (APPLICATION_ENV !== 'production') : ?>
+                <div class="<?= APPLICATION_ENV ?>"><?= $this->translate('opus.environment') ?> (<?= APPLICATION_ENV ?>)</div>
+                <?php endif ?>
             </div>
 
             <div id="header">
@@ -166,7 +169,7 @@ if (isset($config->javascript->latex->mathjax)) {
                 </div>
             </div>
 
-            <div id="content" class="opus <?= (in_array($this->moduleName, array('admin', 'review', 'setup'))) ? 'adminContainer' : ''?> <?= $this->moduleName ?><?php if ($this->moduleName === 'publish') : ?>"><?php else : ?><?= ($this->controllerName === 'index' ? '' : '_'.$this->controllerName)?><?= ($this->actionName === 'index' ? '' : '_'.$this->actionName)?><?= ($this->searchType === 'collection' || $this->searchType === 'latest' ? ' '.$this->searchType : '') ?>"><?php  endif; ?>
+            <div id="content" class="opus <?= (in_array($this->moduleName, array('admin', 'review', 'setup', 'account'))) ? 'adminContainer' : ''?> <?= $this->moduleName ?><?php if ($this->moduleName === 'publish') : ?>"><?php else : ?><?= ($this->controllerName === 'index' ? '' : '_'.$this->controllerName)?><?= ($this->actionName === 'index' ? '' : '_'.$this->actionName)?><?= ($this->searchType === 'collection' || $this->searchType === 'latest' ? ' '.$this->searchType : '') ?>"><?php  endif; ?>
 
                 <?PHP $messages = !is_null($this->flashMessenger) ? $this->flashMessenger->getMessages() : null ?>
 

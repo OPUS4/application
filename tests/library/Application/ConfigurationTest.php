@@ -157,4 +157,16 @@ class Application_ConfigurationTest extends ControllerTestCase {
         $this->assertSame($config, Application_Configuration::getInstance());
     }
 
+    public function testGetName() {
+        $config = Application_Configuration::getInstance();
+        $this->assertEquals('OPUS 4', $config->getName());
+
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array('name' => 'OPUS Test')));
+        $this->assertEquals('OPUS Test', $config->getName());
+
+        $zendConfig = Zend_Registry::get('Zend_Config');
+        unset($zendConfig->name);
+        $this->assertEquals('OPUS 4', $config->getName());
+    }
+
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -26,54 +27,36 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @author      Pascal-Nicolas Becker <becker@zib.de>
- * @author      Ralf Claussnitzer <ralf.claussnitzer@slub-dresden.de>
- * @author      Thoralf Klein <thoralf.klein@zib.de>
- * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
- * @copyright   Copyright (c) 2009-2010, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2011-2016, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
-// Configure include path.
-set_include_path(
-    implode(
-        PATH_SEPARATOR, array(
-        '.',
-        dirname(__FILE__),
-        dirname(dirname(dirname(__FILE__))) . '/library',
-        dirname(dirname(dirname(__FILE__))) . '/vendor',
-        get_include_path(),
-        )
-    )
-);
+require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
-// Define path to application directory
-defined('APPLICATION_PATH')
-    || define('APPLICATION_PATH', realpath(dirname(dirname(dirname(__FILE__)))));
+/*
+ * This cron job must be used if embargo dates are used in repository.
+ *
+ * This script finds documents with expired embargo date that have to been
+ * updated after the expiration (ServerDateModified < EmbargoDate) and sets
+ * ServerDateModified to the current time.
+ *
+ * The expiration of an embargo date does not change the document. Until the
+ * date is expired access to the files of the document is blocked. After the
+ * expiration access to the files is possible. However the document will not
+ * be harvested again automatically. In order for the document to be included
+ * in the next harvesting ServerDateModified needs to be updated.
+ */
 
-// Define application environment
-// TODO scripts using this might be executed with a different environment than requests to the application
-defined('APPLICATION_ENV')
-    || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));
+$docfinder = new Opus_DocumentFinder();
 
-require_once 'autoload.php';
-require_once 'opus-php-compatibility.php';
+$now = new Opus_Date();
+$now->setNow();
 
-// environment initializiation
-$application = new Zend_Application(
-    APPLICATION_ENV,
-    array(
-        "config"=>array(
-            APPLICATION_PATH . '/application/configs/application.ini',
-            APPLICATION_PATH . '/application/configs/config.ini'
-        )
-    )
-);
+// Find documents with expired EmbargoDate and ServerDateModified < EmbargoDate
+$docfinder->setEmbargoDateBeforeNotModifiedAfter($now);
 
-// Bootstrapping application
-$application->bootstrap('Backend');
+$foundIds = $docfinder->ids();
 
-// Bootstrapping modules
-$application->getBootstrap()->getPluginResource('modules')->init();
-
+// Update ServerDateModified for all found documents
+Opus_Document::setServerDateModifiedByIds($now, $foundIds);

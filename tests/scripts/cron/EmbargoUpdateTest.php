@@ -1,5 +1,6 @@
-<?PHP
-/*
+<?php
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,36 +25,61 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Application_Form_Element
+ * @category    Cronjob
+ * @package     Tests
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013-2015, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
+require_once('CronTestCase.php');
 
 /**
- * Form element for entering login name of user account.
  *
- * Used in forms that allow setting or modifying the login name.
- *
- * TODO reconsider the pattern for login names
- * TODO depends on framework right now
  */
-class Application_Form_Element_Login extends Application_Form_Element_Text {
+class EmbargoUpdateTest extends CronTestCase
+{
 
-    /**
-     * Initialises the form element.
-     */
-    public function init() {
-        parent::init();
-        $this->setLabel('admin_account_label_login');
+    public function testEmbargoUpdate()
+    {
+        $yesterday = new Opus_Date();
+        $yesterday->setDateTime(new DateTime(date('Y-m-d H:i:s', strtotime('-1 day'))));
 
-        // NOTE: This validation is also defined in Opus_Account.
-        $this->addValidator('regex', false, array('/^[a-z0-9@._-]+$/'));
+        $today = date('Y-m-d', time());
+        $tomorrow = date('Y-m-d', time() + (60 * 60 * 24));
 
-        $this->addValidator('stringLength', false, array('min' => 3, 'max' => 50));
-        $this->setRequired(true);
+        $doc = new Opus_Document();
+        $doc->setEmbargoDate($today);
+        $expiredId = $doc->store();
+
+        $doc = new Opus_Document();
+        $noEmbargoId = $doc->store();
+
+        $doc = new Opus_Document();
+        $doc->setEmbargoDate($tomorrow);
+        $notExpiredId = $doc->store();
+
+        Opus_Document::setServerDateModifiedByIds($yesterday, array($expiredId, $noEmbargoId, $notExpiredId));
+
+        $this->executeScript('cron-embargo-update.php');
+
+        $doc = new Opus_Document($expiredId);
+        $this->assertTrue($this->sameDay(new DateTime($today), $doc->getServerDateModified()->getDateTime()));
+
+        $doc = new Opus_Document($notExpiredId);
+        $this->assertTrue($this->sameDay($yesterday->getDateTime(), $doc->getServerDateModified()->getDateTime()));
+
+        $doc = new Opus_Document($noEmbargoId);
+        $this->assertTrue($this->sameDay($yesterday->getDateTime(), $doc->getServerDateModified()->getDateTime()));
+    }
+
+    private function sameDay($firstDate, $secondDate)
+    {
+        $first = $firstDate->format('Y-m-d');
+        $second = $secondDate->format('Y-m-d');
+        return $first == $second;
     }
 
 }
+
+

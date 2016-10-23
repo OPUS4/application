@@ -29,11 +29,11 @@
  * @author      Sascha Szott <szott@zib.de>
  * @author      Michael Lang <lang@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  *
  * TODO context spezifische Titel für RSS feed (latest, collections, ...)
+ * TODO move feed code into Rss_Model_Feed
  */
 
 class Rss_IndexController extends Application_Controller_Xml {
@@ -81,7 +81,8 @@ class Rss_IndexController extends Application_Controller_Xml {
         }
 
         $this->loadStyleSheet($this->view->getScriptPath('') . 'stylesheets' . DIRECTORY_SEPARATOR . 'rss2_0.xslt');
-        $this->setLink();
+
+        $this->setParameters();
         $this->setDates($resultList);
         $this->setItems($resultList);
         $this->setFrontdoorBaseUrl();
@@ -107,10 +108,17 @@ class Rss_IndexController extends Application_Controller_Xml {
         }
     }
 
-    private function setLink() {
-        $this->_proc->setParameter(
-            '', 'link', $this->view->serverUrl() . $this->getRequest()->getBaseUrl() . '/index/index/'
-        );
+    /**
+     * Sets parameters for XSLT processor.
+     */
+    private function setParameters() {
+        $feed = new Rss_Model_Feed($this->view);
+
+        $feedLink = $this->view->serverUrl() . $this->getRequest()->getBaseUrl() . '/index/index/';
+
+        $this->_proc->setParameter('', 'feedTitle', $feed->getTitle());
+        $this->_proc->setParameter('', 'feedDescription', $feed->getDescription());
+        $this->_proc->setParameter('', 'link', $feedLink);
     }
 
     private function setDates($resultList) {
@@ -118,14 +126,12 @@ class Rss_IndexController extends Application_Controller_Xml {
             $latestDoc = $resultList->getResults();
             $document = new Opus_Document($latestDoc[0]->getId());
             $date = new Zend_Date($document->getServerDatePublished());
-            $this->_proc->setParameter('', 'lastBuildDate', $date->get(Zend_Date::RFC_2822));
-            $this->_proc->setParameter('', 'pubDate', $date->get(Zend_Date::RFC_2822));
         }
         else {
             $date = Zend_Date::now();
-            $this->_proc->setParameter('', 'lastBuildDate', $date->get(Zend_Date::RFC_2822));
-            $this->_proc->setParameter('', 'pubDate', $date->get(Zend_Date::RFC_2822));
         }
+        $this->_proc->setParameter('', 'lastBuildDate', $date->get(Zend_Date::RFC_2822));
+        $this->_proc->setParameter('', 'pubDate', $date->get(Zend_Date::RFC_2822));
     }
 
     private function setItems($resultList) {
@@ -148,4 +154,3 @@ class Rss_IndexController extends Application_Controller_Xml {
     }
 
 }
-

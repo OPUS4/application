@@ -6,7 +6,7 @@
     "zendframework/zendframework1": "1.12.18",
     "jpgraph/jpgraph": "dev-master",
     "solarium/solarium": "3.4.1",
-    "opus4-repo/framework": "4.5.0-RC1",
+    "opus4-repo/framework": "dev-master",
     "opus4-repo/search": "4.5.0-RC1",
     "components/jquery": "1.9.*"
   },
@@ -16,6 +16,12 @@
     "phpunit/phpunit-story": "~1.0",
     "phpunit/phpunit-selenium": "~1.4",
     "phpunit/php-invoker": "~1.1",
+    "phploc/phploc": "*",
+    "phpdocumentor/phpdocumentor": "2.*",
+    "phpmd/phpmd" : "2.4.3",
+    "sebastian/phpcpd": "*",
+    "mayflower/php-codebrowser": "~1.1",
+    "squizlabs/php_codesniffer": "2.*",
     "opus4-repo/codesniffer": "dev-master"
   },
   "minimum-stability": "dev",

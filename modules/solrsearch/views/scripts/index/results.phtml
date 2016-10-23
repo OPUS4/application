@@ -135,10 +135,11 @@ if($this->jQueryEnabled()) {
                         </dt>
                         <?php if (!is_null($result->getAsset( 'author' ))) : ?>
                             <dt class="results_author">
-                                <?php foreach($result->getAsset( 'author' ) as $author) :
-                                   $authorSearch = $this->authorSearch;
-                                   $authorSearch['author'] = '"'.$author.'"';
+                                <?php foreach($result->getAsset( 'author' ) as $authorIndex => $author) :
+                                    $authorSearch = $this->authorSearch;
+                                    $authorSearch['author'] = '"'.$author.'"';
                                 ?>
+                                    <?PHP if ($authorIndex !== 0) : ?> ; <?PHP endif ?>
                                     <a href="<?= $this->url($authorSearch, null, true); ?>"><?= htmlspecialchars($author) ?></a>
                                 <?php endforeach ?>
                             </dt>

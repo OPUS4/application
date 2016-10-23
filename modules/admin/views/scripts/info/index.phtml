@@ -33,19 +33,19 @@
  */
 ?>
 
+<?PHP if (!empty(Application_Configuration::getOpusInfo())) : ?>
 <dl>
     <?PHP foreach (Application_Configuration::getOpusInfo() as $infoKey => $infoValue) : ?>
         <dt id="<?= $infoKey ?>"><?= htmlspecialchars($this->translate($infoKey)) ?></dt>
         <dd><?= $infoValue ?></dd>
     <?PHP endforeach ?>
 </dl>
+<?PHP endif ?>
 
-<?PHP /* OPUSVIER-3542 deaktiviert
 <dl>
     <dt><a href="<?= $this->url(array('module' => 'admin', 'controller' => 'info', 'action' => 'update')) ?>">
         <?= htmlspecialchars($this->translate('admin_info_versioncheck')) ?></a></dt>
 </dl>
- */ ?>
 
 <fieldset>
     <legend><?= $this->translate('admin_info_section_upload') ?></legend>

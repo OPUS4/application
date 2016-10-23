@@ -323,70 +323,16 @@ class Oai_IndexController extends Application_Controller_Xml {
      * @return void
      */
     private function __handleListSets() {
+        $logger = $this->getLogger();
+
         $repIdentifier = $this->_configuration->getRepositoryIdentifier();
 
         $this->_proc->setParameter('', 'repIdentifier', $repIdentifier);
         $this->_xml->appendChild($this->_xml->createElement('Documents'));
 
-        $sets = array(
-            'bibliography:true'  => 'Set for bibliographic entries',
-            'bibliography:false' => 'Set for non-bibliographic entries',
-        );
+        $oaiSets = new Oai_Model_Sets();
 
-        $logger = $this->getLogger();
-        $setSpecPattern = '[A-Za-z0-9\-_\.!~\*\'\(\)]+';
-
-        $finder = new Opus_DocumentFinder();
-        $finder->setServerState('published');
-        foreach ($finder->groupedTypesPlusCount() AS $doctype => $row) {
-            if (0 == preg_match("/^$setSpecPattern$/", $doctype)) {
-                $msg = "Invalid SetSpec (doctype='".$doctype."')."
-                        . " Allowed characters are [$setSpecPattern].";
-                $logger->err("OAI-PMH: $msg");
-                continue;
-            }
-
-            $setSpec = 'doc-type:' . $doctype;
-            // $count = $row['count'];
-            $sets[$setSpec] = "Set for document type '$doctype'";
-        }
-
-        $oaiRolesSets = Opus_CollectionRole::fetchAllOaiEnabledRoles();
-        foreach ($oaiRolesSets AS $result) {
-            if ($result['oai_name'] == 'doc-type') {
-                continue;
-            }
-
-            if (0 == preg_match("/^$setSpecPattern$/", $result['oai_name'])) {
-                $msg = "Invalid SetSpec (oai_name='".$result['oai_name']."'). "
-                       . " Please check collection role " . $result['id'] . ". "
-                        . " Allowed characters are $setSpecPattern.";
-                $logger->err("OAI-PMH: $msg");
-                continue;
-            }
-
-            $setSpec = $result['oai_name'];
-            // $count = $result['count'];
-            $sets[$setSpec] = "Set for collection '" . $result['oai_name'] . "'";
-
-            $role = new Opus_CollectionRole($result['id']);
-            foreach ($role->getOaiSetNames() AS $subset) {
-                $subSetSpec  = "$setSpec:" . $subset['oai_subset'];
-                // $subSetCount = $subset['count'];
-
-                if (0 == preg_match("/^$setSpecPattern$/", $subset['oai_subset'])) {
-                    $msg = "Invalid SetSpec (oai_name='".$subset['oai_subset']."')."
-                       . " Please check collection " . $subset['id'] . ". "
-                            . " Allowed characters are [$setSpecPattern].";
-                    $logger->err("OAI-PMH: $msg");
-                    continue;
-                }
-
-                $sets[$subSetSpec] = "Subset '" . $subset['oai_subset'] . "'"
-                        . " for collection '" . $result['oai_name'] . "'"
-                        . ': "' . trim($subset['name']) . '"';
-            }
-        }
+        $sets = $oaiSets->getSets();
 
         foreach ($sets as $type => $name) {
             $opusDoc = $this->_xml->createElement('Opus_Sets');
