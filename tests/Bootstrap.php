@@ -60,6 +60,7 @@ $autoloader->suppressNotFoundWarnings(false);
 $autoloader->setFallbackAutoloader(true);
 
 // make sure necessary directories are available
+ensureDirectory(APPLICATION_PATH . '/tests/workspace');
 ensureDirectory(APPLICATION_PATH . '/tests/workspace/tmp');
 ensureDirectory(APPLICATION_PATH . '/tests/workspace/tmp/resumption');
 ensureDirectory(APPLICATION_PATH . '/tests/workspace/incoming');
