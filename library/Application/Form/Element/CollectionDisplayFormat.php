@@ -27,9 +27,8 @@
  * @category    Application
  * @package     Form_Element
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  *
  * The values of the options must be existing Collection field names that are separated by commas.
  */
@@ -48,6 +47,18 @@ class Application_Form_Element_CollectionDisplayFormat extends Application_Form_
         foreach ($options as $label => $value) {
             $this->addMultiOption($value, $label);
         }
+    }
+
+    /**
+     * Set value of field.
+     *
+     * @param String $value
+     */
+    public function setValue($value) {
+        // previous database versions sometimes used spaces in value like "Name, Number"
+        $trimmed = preg_replace('/\s+/', '', $value);
+
+        parent::setValue($trimmed);
     }
 
 }
