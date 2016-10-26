@@ -4,12 +4,12 @@
 
 INSERT INTO `collections_roles` (`id`, `name`, `oai_name`, `position`, `visible`, `visible_browsing_start`, `display_browsing`, `visible_frontdoor`, `display_frontdoor`, `visible_oai`) VALUES
 (1,'institutes','institutes',1,1,1,'Name',1,'Name',1),
-(2,'ddc','ddc',2,1,1,'Number, Name',1,'Number, Name',1),
-(3,'ccs','ccs',3,1,1,'Number, Name',1,'Number, Name',1),
-(4,'pacs','pacs',4,1,1,'Number, Name',1,'Number, Name',1),
-(5,'jel','jel',5,1,1,'Number, Name',1,'Number, Name',1),
-(6,'msc','msc',6,1,1,'Number, Name',1,'Number, Name',1),
-(7,'bk','bk',7,1,1,'Number, Name',1,'Number, Name',1);
+(2,'ddc','ddc',2,1,1,'Number,Name',1,'Number,Name',1),
+(3,'ccs','ccs',3,1,1,'Number,Name',1,'Number,Name',1),
+(4,'pacs','pacs',4,1,1,'Number,Name',1,'Number,Name',1),
+(5,'jel','jel',5,1,1,'Number,Name',1,'Number,Name',1),
+(6,'msc','msc',6,1,1,'Number,Name',1,'Number,Name',1),
+(7,'bk','bk',7,1,1,'Number,Name',1,'Number,Name',1);
 
 --
 -- Dumping data for table `collections`
