@@ -27,9 +27,8 @@
  * @category    Application Unit Test
  * @package     Form_Element
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 class Application_Form_Element_CollectionDisplayFormatTest extends FormElementTestCase {
 
@@ -68,6 +67,18 @@ class Application_Form_Element_CollectionDisplayFormatTest extends FormElementTe
         foreach ($this->keys as $key) {
             $this->assertTrue($translator->isTranslated($key), "Key '$key' not translated.");
         }
+    }
+
+    public function testSetValueWithSpaces() {
+        $element = $this->getElement();
+
+        $element->setValue(' Name, Number ');
+
+        $this->assertEquals('Name,Number', $element->getValue());
+
+        $element->setValue('Number, Name');
+
+        $this->assertEquals('Number,Name', $element->getValue());
     }
 
 }
