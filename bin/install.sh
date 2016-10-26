@@ -375,13 +375,7 @@ CONFIG_INI="$BASEDIR/application/configs/$OPUS_CONF"
 # Prepare workspace
 #
 
-mkdir -p "$BASEDIR/workspace/files"
-mkdir -p "$BASEDIR/workspace/incoming"
-mkdir -p "$BASEDIR/workspace/log"
-mkdir -p "$BASEDIR/workspace/cache"
-mkdir -p "$BASEDIR/workspace/export"
-mkdir -p "$BASEDIR/workspace/tmp"
-mkdir -p "$BASEDIR/workspace/tmp/resumption"
+"$SCRIPT_PATH/prepare-workspace.sh"
 
 #
 # Import some test documents optionally
