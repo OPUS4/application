@@ -377,6 +377,7 @@ CONFIG_INI="$BASEDIR/application/configs/$OPUS_CONF"
 
 mkdir -p "$BASEDIR/workspace/files"
 mkdir -p "$BASEDIR/workspace/incoming"
+mkdir -p "$BASEDIR/workspace/log"
 
 #
 # Import some test documents optionally
