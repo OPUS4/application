@@ -305,6 +305,9 @@ sed -i -e "s!@db.user.name@!'$DB_USER_ESC'!" \
        -e "s!@db.user.password@!'$DB_USER_PASSWORD_ESC'!" \
        -e "s!@db.name@!'$DBNAME_ESC'!" "$OPUS_CONF"
 
+sed -i -e "s!@db.admin.name@!'$DB_ADMIN_ESC'!" \
+       -e "s!@db.admin.password@!'$DB_ADMIN_PASSWORD_ESC'!" "$OPUS_CONF"
+
 #
 # Install and configure Solr search server
 #
