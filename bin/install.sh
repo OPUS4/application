@@ -294,6 +294,12 @@ sed -i -e "s!@db.admin.name@!'$DB_ADMIN_ESC'!" \
        -e "s!@db.admin.password@!'$DB_ADMIN_PASSWORD_ESC'!" "$OPUS_CONSOLE_CONF"
 
 #
+# Prepare workspace
+#
+
+"$SCRIPT_PATH/prepare-workspace.sh"
+
+#
 # Set password for administrator account
 #
 
@@ -377,12 +383,6 @@ CONFIG_INI="$BASEDIR/application/configs/$OPUS_CONF"
 "$SCRIPT_PATH/install-config-solr.sh" "$CONFIG_INI" \
     "${SOLR_SERVER_HOST}" "$SOLR_SERVER_PORT" "${SOLR_CONTEXT}" \
     "${SOLR_EXTRACT_SERVER_HOST}" "$SOLR_EXTRACT_SERVER_PORT" "${SOLR_EXTRACT_CONTEXT}"
-
-#
-# Prepare workspace
-#
-
-"$SCRIPT_PATH/prepare-workspace.sh"
 
 #
 # Import some test documents optionally
