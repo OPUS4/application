@@ -67,6 +67,8 @@ $application = new Zend_Application(
     )
 );
 
+Zend_Registry::set('opus.disableDatabaseVersionCheck', true);
+
 // Bootstrapping application
 $application->bootstrap('Backend');
 
