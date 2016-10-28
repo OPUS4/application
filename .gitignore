@@ -10,7 +10,6 @@ vendor
 
 # ignore composer runtime
 composer.phar
-composer.lock
 
 # ignore all workspace files
 workspace/**/*
@@ -19,6 +18,7 @@ workspace/**/*
 apacheconf/apache.conf
 application/configs/config.ini
 application/configs/config.xml
+application/configs/console.ini
 db/createdb.sh
 public/.htaccess
 public/js

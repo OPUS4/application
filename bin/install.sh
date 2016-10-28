@@ -55,6 +55,7 @@ fi
 # Set defaults
 APACHE_CONF="${APACHE_CONF:-apache.conf}"
 OPUS_CONF="${OPUS_CONF:-config.ini}"
+OPUS_CONSOLE_CONF="${OPUS_CONSOLE_CONF:-console.ini}"
 
 SCRIPT_NAME="`basename "$0"`"
 SCRIPT_NAME_FULL="`readlink -f "$0"`"
@@ -305,8 +306,11 @@ sed -i -e "s!@db.user.name@!'$DB_USER_ESC'!" \
        -e "s!@db.user.password@!'$DB_USER_PASSWORD_ESC'!" \
        -e "s!@db.name@!'$DBNAME_ESC'!" "$OPUS_CONF"
 
+# Add admin credentials to configuration for command line scripts
+cp console.ini.template "$OPUS_CONSOLE_CONF"
+
 sed -i -e "s!@db.admin.name@!'$DB_ADMIN_ESC'!" \
-       -e "s!@db.admin.password@!'$DB_ADMIN_PASSWORD_ESC'!" "$OPUS_CONF"
+       -e "s!@db.admin.password@!'$DB_ADMIN_PASSWORD_ESC'!" "$OPUS_CONSOLE_CONF"
 
 #
 # Install and configure Solr search server

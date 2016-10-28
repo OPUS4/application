@@ -46,11 +46,6 @@ db.params.username = @db.user.name@
 db.params.password = @db.user.password@
 db.params.dbname   = @db.name@
 
-; Admin access for is used to create or rebuild the database.
-; TODO move to separate ini that only gets loaded by scripts for creating and updating database?
-opusdb.params.admin.name = @db.admin.name@
-opusdb.params.admin.password = @db.admin.password@
-
 ;SEARCH ENGINE SETTINGS
 searchengine.solr.default.service.default.endpoint.localhost.host = @searchengine.index.host@
 searchengine.solr.default.service.default.endpoint.localhost.port = @searchengine.index.port@
