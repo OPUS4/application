@@ -270,25 +270,6 @@ LimitString
 fi
 
 #
-# Set password for administrator account
-#
-
-while [[ -z $ADMIN_PWD || "$ADMIN_PWD" != "$ADMIN_PWD_VERIFY" ]] ;
-do
-  echo
-  read -p "Please enter password for 'admin' account: " -s ADMIN_PWD
-  echo
-  read -p "Please enter password again: " -s ADMIN_PWD_VERIFY
-  echo
-  if [[ $ADMIN_PWD != $ADMIN_PWD_VERIFY ]] ;
-  then
-    echo "Passwords do not match. Please try again."
-  fi
-done
-
-php $BASEDIR/scripts/change-password.php admin "$ADMIN_PWD"
-
-#
 # Create config.ini and set database related parameters.
 #
 # TODO overwrite existing file?
@@ -311,6 +292,25 @@ cp console.ini.template "$OPUS_CONSOLE_CONF"
 
 sed -i -e "s!@db.admin.name@!'$DB_ADMIN_ESC'!" \
        -e "s!@db.admin.password@!'$DB_ADMIN_PASSWORD_ESC'!" "$OPUS_CONSOLE_CONF"
+
+#
+# Set password for administrator account
+#
+
+while [[ -z $ADMIN_PWD || "$ADMIN_PWD" != "$ADMIN_PWD_VERIFY" ]] ;
+do
+  echo
+  read -p "Please enter password for OPUS 'admin' account: " -s ADMIN_PWD
+  echo
+  read -p "Please enter password again: " -s ADMIN_PWD_VERIFY
+  echo
+  if [[ $ADMIN_PWD != $ADMIN_PWD_VERIFY ]] ;
+  then
+    echo "Passwords do not match. Please try again."
+  fi
+done
+
+php $BASEDIR/scripts/change-password.php admin "$ADMIN_PWD"
 
 #
 # Install and configure Solr search server
