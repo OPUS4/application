@@ -227,7 +227,8 @@ class Oai_IndexController extends Application_Controller_Xml {
         }
 
         // do not deliver documents which are restricted by document state
-        if (is_null($document) or false === in_array($document->getServerState(), $this->_deliveringDocumentStates)) {
+        if (is_null($document) or false === in_array($document->getServerState(), $this->_deliveringDocumentStates)
+            or false === $document->hasEmbargoPassed()) {
             throw new Oai_Model_Exception('Document is not available for OAI export!', Oai_Model_Error::NORECORDSMATCH);
         }
 

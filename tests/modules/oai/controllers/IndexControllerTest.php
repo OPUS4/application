@@ -235,6 +235,27 @@ class Oai_IndexControllerTest extends ControllerTestCase {
                 "Response must contain 'xMetaDiss'");
     }
 
+    public function testGetRecordXMetaDissPlusOnlyIfNotInEmbargo() {
+        $today = date('Y-m-d', time());
+
+        $doc = $this->createTestDocument();
+        $doc->setServerState('published');
+        $doc->setEmbargoDate($today);
+        $docId = $doc->store();
+
+        $this->dispatch("/oai?verb=GetRecord&metadataPrefix=XMetaDissPlus&identifier=oai::$docId");
+        $this->assertResponseCode(200);
+
+        $response = $this->getResponse()->getBody();
+        $badStrings = array("Exception", "Stacktrace", "badVerb");
+        $this->checkForCustomBadStringsInHtml($response, $badStrings);
+
+        $this->assertContains("oai::$docId", $response, "Response must contain 'oai::$docId'");
+
+        $this->assertContains('noRecordsMatch', $response);
+        $this->assertContains('Document is not available for OAI export!', $response);
+    }
+
     /**
      * Test verb=GetRecord, prefix=xMetaDissPlus.
      */
@@ -1823,6 +1844,20 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
         $elements = $xpath->query('//dc:title[@lang = "ger"]');
         $this->assertEquals(1, $elements->length);
+    }
+
+    public function testExampleLinkListIdentifiers()
+    {
+        $this->dispatch('/oai?verb=ListIdentifiers&metadataPrefix=oai_dc');
+
+        $body = $this->getResponse()->getBody();
+
+        $domDocument = new DOMDocument();
+        $domDocument->loadXML($body);
+
+        $elements = $domDocument->getElementsByTagName('header');
+
+        $this->assertEquals(10, $elements->length);
     }
 
 }
