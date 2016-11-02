@@ -308,6 +308,7 @@
 
             <xsl:apply-templates select="Patent" />
             <xsl:apply-templates select="Licence" />
+            <xsl:apply-templates select="@BelongsToBibliography" />
         </table>
 
     </xsl:template>
