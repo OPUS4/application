@@ -60,6 +60,12 @@ class AuthControllerTest extends ControllerTestCase {
         $this->assertEquals(1, $treffer);
     }
 
+    public function testLoginActionRedirectToHomeIfAlreadyLoggedIn() {
+        $this->loginUser('security1', 'security1pwd');
+        $this->dispatch('/auth/login');
+        $this->assertRedirectTo('/home');
+    }
+
     /**
      * @depends testGetLoginPage
      */
