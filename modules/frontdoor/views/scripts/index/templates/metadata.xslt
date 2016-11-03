@@ -134,13 +134,25 @@
                         <xsl:text>/solrsearch/index/search/searchtype/collection/id/</xsl:text>
                         <xsl:value-of select="@Id" />
                     </xsl:attribute>
-
-                    <xsl:attribute name="title">
-                        <xsl:call-template name="translateString">
-                            <xsl:with-param name="string">frontdoor_collection_link</xsl:with-param>
-                        </xsl:call-template>
-                    </xsl:attribute>
-                    <xsl:value-of select="@DisplayFrontdoor" />
+                    <xsl:choose>
+                        <xsl:when test="@DisplayFrontdoor != ''">
+                            <xsl:attribute name="title">
+                                <xsl:call-template name="translateString">
+                                    <xsl:with-param name="string">frontdoor_collection_link</xsl:with-param>
+                                </xsl:call-template>
+                            </xsl:attribute>
+                            <xsl:value-of select="@DisplayFrontdoor" />
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:call-template name="translateStringWithDefault">
+                                <xsl:with-param name="string">default_collection_role_<xsl:value-of select="@RoleName" />
+                                </xsl:with-param>
+                                <xsl:with-param name="default">
+                                    <xsl:value-of select="@RoleName" />
+                                </xsl:with-param>
+                            </xsl:call-template>
+                        </xsl:otherwise>
+                    </xsl:choose>
                 </a>
             </td>
         </tr>
