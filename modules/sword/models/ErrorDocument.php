@@ -98,6 +98,18 @@ class Sword_Model_ErrorDocument {
     public function setMissingXml() {
         $this->setResponse(400, 'http://www.opus-repository.org/sword/error/MissingXml');
     }
+    
+    /**
+     * Es wurde ein valides opus.xml mit mindestens einem Metadatensatz eingeliefert.
+     * Allerdings konnte kein Datensatz erfolgreich in OPUS angelegt werden. Eine
+     * mögliche Ursache ist eine URN Collision (wenn ein Datensatz einen Identifier
+     * vom Typ urn verwendet und bereits ein Datensatz im Repositorium existiert,
+     * der diese URN besitzt. Es sollte das Logfile konsultiert werden, um die
+     * Fehlerursache genauer zu analysieren.
+     */
+    public function setInternalFrameworkError() {
+        $this->setResponse(400, 'http://www.opus-repository.org/sword/error/InternalFrameworkError');
+    }
 
     private function setResponse($statusCode, $errorCond) {
         $this->response->setHeader('Content-Type', 'text/xml; charset=UTF-8', true);

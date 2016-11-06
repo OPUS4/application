@@ -189,7 +189,9 @@ class Application_Import_Importer {
             $this->log("Import finished successfully. $numOfDocsImported documents were imported.");
         } else {
             $this->log("Import finished. $numOfDocsImported documents were imported. $numOfSkippedDocs documents were skipped.");
-            throw new Application_Import_MetadataImportSkippedDocumentsException("$numOfSkippedDocs documents were skipped during import.");
+            if (!$this->swordContext) {
+                throw new Application_Import_MetadataImportSkippedDocumentsException("$numOfSkippedDocs documents were skipped during import.");
+            }
         }
     }
     

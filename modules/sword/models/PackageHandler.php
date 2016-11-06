@@ -76,27 +76,13 @@ class Sword_Model_PackageHandler {
             unlink($tmpFileName);
         }
                 
-        if ($statusDoc == null) {
-            return null;
-        }        
-        $atomEntryDoc = $this->createAtomEntryDocument($statusDoc);
-        return $atomEntryDoc;        
+        return $statusDoc;        
     }
     
     private function getPackageReader() {        
         $packageReader = new Application_Import_PackageReader($this->additionalEnrichments);
         return $packageReader;
-    }
-    
-    /**
-     * 
-     * @param Application_Import_ImportStatusDocument $statusDoc
-     */
-    private function createAtomEntryDocument($statusDoc) {
-        $atomEntryDoc = new Sword_Model_AtomEntryDocument();
-        $atomEntryDoc->setEntries($statusDoc->getDocs());
-        return $atomEntryDoc;
-    }
+    }    
     
     private function savePackage($payload, $tmpFileName) {        
         file_put_contents($tmpFileName, $payload);        

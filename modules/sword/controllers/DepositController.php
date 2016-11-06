@@ -93,10 +93,23 @@ class Sword_DepositController extends Zend_Rest_Controller {
             }
         }
                 
-        $atomDoc = null;        
         try {
             $packageHandler = new Sword_Model_PackageHandler($additionalEnrichments, $contentType);
-            $atomDoc = $packageHandler->handlePackage($payload);
+            $statusDoc = $packageHandler->handlePackage($payload);
+            if (is_null($statusDoc)) {
+                // im Archiv befindet sich keine Datei opus.xml oder die Datei ist leer
+                $errorDoc = new Sword_Model_ErrorDocument($request, $response);
+                $errorDoc->setMissingXml();
+                return;                
+            }
+            
+            if ($statusDoc->noDocImported()) {
+                // im Archiv befindet sich zwar ein nicht leeres opus.xml; es 
+                // konnte aber kein Dokument erfolgreich importiert werden
+                $errorDoc = new Sword_Model_ErrorDocument($request, $response);
+                $errorDoc->setInternalFrameworkError();
+                return;
+            }
         } 
         catch (Application_Import_MetadataImportInvalidXmlException $ex) {
             $errorDoc = new Sword_Model_ErrorDocument($request, $response);
@@ -108,15 +121,23 @@ class Sword_DepositController extends Zend_Rest_Controller {
             return;
         }
         
-        if (is_null($atomDoc)) {
-            // im Archiv befindet sich keine Datei opus.xml oder die Datei ist leer
-            $errorDoc = new Sword_Model_ErrorDocument($request, $response);
-            $errorDoc->setMissingXml();
-            return;
-        }
-        
-        $atomDoc->setResponse($request, $response, $this->getFullUrl(), $userName);
+        $this->returnAtomEntryDocument($statusDoc, $request, $response, $userName);
     }
+    
+    private function returnAtomEntryDocument($statusDoc, $request, $response, $userName) {
+        $atomDoc = $this->createAtomEntryDocument($statusDoc);
+        $atomDoc->setResponse($request, $response, $this->getFullUrl(), $userName);        
+    }
+    
+    /**
+     * 
+     * @param Application_Import_ImportStatusDocument $statusDoc
+     */
+    private function createAtomEntryDocument($statusDoc) {
+        $atomEntryDoc = new Sword_Model_AtomEntryDocument();
+        $atomEntryDoc->setEntries($statusDoc->getDocs());
+        return $atomEntryDoc;
+    }    
     
     private function maxUploadSizeExceeded($payload) {
         if (function_exists('mb_strlen')) {

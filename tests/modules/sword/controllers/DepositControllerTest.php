@@ -75,7 +75,28 @@ class Sword_DepositControllerTest extends ControllerTestCase {
         $doc->deletePermanent();
         $this->testHelper->removeImportCollection();
     }
-        
+
+    public function testZipArchiveWithUrnCollision() {
+        $doc = $this->depositSuccessful('urn-collision.zip', DepositTestHelper::CONTENT_TYPE_ZIP, false, false);
+        $this->checkOnlyOneDocIsImported($doc);
+        $doc->deletePermanent();
+        $this->testHelper->removeImportCollection();
+    }
+    
+    public function testTarArchiveWithUrnCollision() {
+        $doc = $this->depositSuccessful('urn-collision.tar', DepositTestHelper::CONTENT_TYPE_TAR, false, false);   
+        $this->checkOnlyOneDocIsImported($doc);
+        $doc->deletePermanent();
+        $this->testHelper->removeImportCollection();        
+    }
+    
+    private function checkOnlyOneDocIsImported($doc) {
+        $this->assertEquals('eng', $doc->getLanguage());
+        $this->assertEquals('article', $doc->getType());        
+        $this->testHelper->assertTitleValues($doc->getTitleMain(0), 'The Title Main 1', 'eng');
+        $this->assertEquals('colliding-urn', $doc->getIdentifierUrn(0)->getValue());
+    }
+    
     private function checkMinimalDoc($doc) {
         $this->assertEquals('deu', $doc->getLanguage());
         $this->assertEquals('book', $doc->getType());        

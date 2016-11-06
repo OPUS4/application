@@ -35,12 +35,15 @@ class Application_Import_ImportStatusDocument {
     
     private $docs = array();
     
-    function addDoc($doc) {
+    public function addDoc($doc) {
         $this->docs[] = $doc;
     }
 
-    function getDocs() {
+    public function getDocs() {
         return $this->docs;
     }
     
+    public function noDocImported() {
+        return empty($this->docs);
+    }
 }

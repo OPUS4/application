@@ -159,6 +159,25 @@ class Sword_DepositControllerErrorCasesTest extends ControllerTestCase {
         $this->depositError('minimal-record.tar', DepositTestHelper::CONTENT_TYPE_TAR, 412, 'http://purl.org/net/sword/error/ErrorChecksumMismatch', '01234567890123456789012345678901');
     }
     
+    public function testZipArchiveProvokeUrnCollision() {
+        $doc = $this->addDocWithUrn();
+        $this->depositError('one-doc-with-urn.zip', DepositTestHelper::CONTENT_TYPE_ZIP, 400, 'http://www.opus-repository.org/sword/error/InternalFrameworkError');
+        $doc->deletePermanent();
+    }
+    
+    public function testTarArchiveProvokeUrnCollision() {
+        $doc = $this->addDocWithUrn();
+        $this->depositError('one-doc-with-urn.tar', DepositTestHelper::CONTENT_TYPE_TAR, 400, 'http://www.opus-repository.org/sword/error/InternalFrameworkError');
+        $doc->deletePermanent();        
+    }
+    
+    private function addDocWithUrn() {
+        $doc = new Opus_Document();
+        $doc->addIdentifier()->setType('urn')->setValue('colliding-urn');
+        $doc->store();
+        return $doc;
+    }
+        
     public function testIndexAction() {
         $this->getRequest()->setMethod('POST');
         $this->dispatch('/sword/deposit/index');
