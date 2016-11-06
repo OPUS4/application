@@ -371,23 +371,41 @@
         </xsd:sequence>
     </xsd:complexType>
 
-    <xsd:complexType name="filesType">
+    <xsd:complexType name="filesType">        
         <xsd:sequence>
             <xsd:element name="file" maxOccurs="unbounded">
                 <xsd:complexType>
-                    <xsd:attribute name="path" type="xsd:string" />
-                    <xsd:attribute name="name" type="xsd:string" use="required"/>
+                    <xsd:all>
+                        <xsd:element name="comment" type="xsd:string" minOccurs="0"/>                        
+                        <xsd:element name="checksum" minOccurs="0">
+                            <xsd:complexType>
+                                <xsd:simpleContent>
+                                    <xsd:extension base="xsd:string">
+                                        <xsd:attribute name="type" type="checksumTypes" use="required"/>
+                                    </xsd:extension>
+                                </xsd:simpleContent>
+                            </xsd:complexType>
+                        </xsd:element>
+                    </xsd:all>                    
+                    <xsd:attribute name="path" type="xsd:string"/>
+                    <xsd:attribute name="name" type="xsd:string"/>
                     <xsd:attribute name="language" type="xsd:string"/>
                     <xsd:attribute name="displayName" type="xsd:string"/>
-                    <xsd:attribute name="comment" type="xsd:string"/> <!-- TODO make subelement? -->
-                    <xsd:attribute name="mimetype" type="xsd:string"/> <!-- TODO needed? -->
-                    <!-- TODO checksum element with type -->
-                    <xsd:attribute name="visibleInOai" type="xsd:boolean"/>
-                    <xsd:attribute name="visibleInFrontdoor" type="xsd:boolean"/>
+                    <xsd:attribute name="visibleInOai" type="xsd:boolean" default="true"/>
+                    <xsd:attribute name="visibleInFrontdoor" type="xsd:boolean" default="true"/>
                     <xsd:attribute name="sortOrder" type="xsd:int"/>
                 </xsd:complexType>
             </xsd:element>
         </xsd:sequence>
+        <xsd:attribute name="basedir" type="xsd:string"/>
     </xsd:complexType>
+
+    <xsd:simpleType name="checksumTypes">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="md5"/>
+            <xsd:enumeration value="sha256"/>
+            <xsd:enumeration value="sha512"/>
+        </xsd:restriction>
+    </xsd:simpleType>
 
 </xsd:schema>
