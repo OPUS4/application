@@ -724,23 +724,5 @@
         </tuv>
     </tu>
 
-    <tu tuid="frontdoor_belongsToBibliography_0">
-        <tuv xml:lang="en">
-            <seg>no</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>nein</seg>
-        </tuv>
-    </tu>
-
-   <tu tuid="frontdoor_belongsToBibliography_1">
-        <tuv xml:lang="en">
-            <seg>yes</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>ja</seg>
-        </tuv>
-    </tu>
-
   </body>
 </tmx>

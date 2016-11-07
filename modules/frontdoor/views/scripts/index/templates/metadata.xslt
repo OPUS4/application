@@ -111,9 +111,18 @@
                 <xsl:call-template name="translateFieldname" />
             </th>
             <td>
-                <xsl:call-template name="translateString">
-                   <xsl:with-param name="string">frontdoor_belongsToBibliography_<xsl:value-of select="." /></xsl:with-param>
-                </xsl:call-template>
+                <xsl:choose>
+                    <xsl:when test=". = '1'">
+                        <xsl:call-template name="translateString">
+                           <xsl:with-param name="string">answer_yes</xsl:with-param>
+                        </xsl:call-template>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:call-template name="translateString">
+                           <xsl:with-param name="string">answer_no</xsl:with-param>
+                        </xsl:call-template>
+                    </xsl:otherwise>
+                </xsl:choose>
             </td>
         </tr>
     </xsl:template>

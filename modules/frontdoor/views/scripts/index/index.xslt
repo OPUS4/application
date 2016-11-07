@@ -309,12 +309,9 @@
             <xsl:apply-templates select="Patent" />
             <xsl:apply-templates select="Licence" />
 
-            <!-- TODO add new config option to control whether this attribute is displayed on document's frontdoor
-                      this option is needed since we cannot decide if attribute belongsToBibliography is
-                      used in a given instance or not as there are only 2 valid attribute values -->
-            <!-- as long as this new config option is missing: uncomment the following apply-template element if
-                 you wish to display belongsToBibliography on document's frontdoor -->
-            <!--xsl:apply-templates select="@BelongsToBibliography" -->
+            <xsl:if test="php:functionString('Frontdoor_IndexController::isDisplayField', 'BelongsToBibliography')">
+                <xsl:apply-templates select="@BelongsToBibliography" />" />
+            </xsl:if>
         </table>
 
     </xsl:template>
