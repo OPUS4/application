@@ -105,6 +105,19 @@
         </tr>
     </xsl:template>
 
+    <xsl:template match="@BelongsToBibliography">
+        <tr>
+            <th class="name">
+                <xsl:call-template name="translateFieldname" />
+            </th>
+            <td>
+                <xsl:call-template name="translateString">
+                   <xsl:with-param name="string">frontdoor_belongsToBibliography_<xsl:value-of select="." /></xsl:with-param>
+                </xsl:call-template>
+            </td>
+        </tr>
+    </xsl:template>
+
     <!-- -->
     <!-- Templates for "external fields". -->
     <!-- -->
