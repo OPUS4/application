@@ -1240,4 +1240,26 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $this->assertXpath('//meta[@name="DC.Identifier" and @content="' . $urnResolverUrl . 'urn:nbn:op:123"]');
     }
 
+    public function testBelongsToBibliographyTurnedOn() {
+        $this->useEnglish();
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
+            'frontdoor' => array('metadata' => array('BelongsToBibliography' => 1)
+        ))));
+
+        $this->dispatch('/frontdoor/index/index/docId/146');
+
+        $this->assertXpath('//td[contains(@class, "BelongsToBibliography")]');
+        $this->assertXpathContentContains('//td[contains(@class, "BelongsToBibliography")]', 'Yes');
+    }
+
+    public function testBelongsToBibliographyTurnedOff() {
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
+            'frontdoor' => array('metadata' => array('BelongsToBibliography' => 0)
+        ))));
+
+        $this->dispatch('/frontdoor/index/index/docId/146');
+
+        $this->assertNotXpath('//td[contains(@class, "BelongsToBibliography")]');
+    }
+
 }
