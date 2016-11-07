@@ -110,7 +110,7 @@
             <th class="name">
                 <xsl:call-template name="translateFieldname" />
             </th>
-            <td>
+            <td class="value BelongsToBibliography">
                 <xsl:choose>
                     <xsl:when test=". = '1'">
                         <xsl:call-template name="translateString">
