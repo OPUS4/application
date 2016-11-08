@@ -70,4 +70,17 @@ $(document).ready(function() {
 			  $(this).removeClass('blur');
 		}
 	});
+
+    // add autocomplete to GND subject input
+    $( '.subject' ).autocomplete({
+        source: window.opusBaseUrl + "/admin/autocomplete/subject",
+        minLength: 2,
+        select: function(event, ui) {
+            // automaticaly set external key field
+            if (typeof ui.item.extkey !== 'undefinded') {
+                var elemId = "#" + this.id.replace('Value', 'ExternalKey');
+                $(elemId).val(ui.item.extkey);
+            }
+        }
+    });
 });
