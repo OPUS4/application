@@ -23,6 +23,7 @@ db/createdb.sh
 public/.htaccess
 public/js
 public/series_logos
+public/assets
 
 build/
 tests/build/
