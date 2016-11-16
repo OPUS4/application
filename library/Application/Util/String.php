@@ -44,14 +44,20 @@ class Application_Util_String
      * @param $properties array with replacement values
      * @return string
      */
-    public static function replaceProperties($content, $properties)
+    public static function replaceProperties($content, $properties, $quote = true)
     {
         $filtered = $content;
 
-        foreach ($properties as $key => $value)
-        {
-            $filtered = str_replace($key, self::quoteValue($value), $filtered);
+        $keys = array_keys($properties);
+
+        if ($quote) {
+            array_walk($properties, function(&$value, $key)
+            {
+                $value = self::quoteValue($value);
+            });
         }
+
+        $filtered = str_replace($keys, $properties, $filtered);
 
         return $filtered;
     }
