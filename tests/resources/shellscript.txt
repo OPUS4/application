@@ -1,0 +1,29 @@
+#! /bin/bash
+
+set -e
+
+# comment line
+
+# user should has rights to drop and create a database (grant rights)
+user= 'opus4admin'
+
+password='abc456%pwd'
+
+# host=localhost
+
+port= '3308'
+dbname='opusdb'
+
+  mysql_bin=/usr/bin/mysql
+
+schema_file=schema/opus4schema.sql
+
+master_dir=masterdata/
+
+mysql="${mysql_bin} --default-character-set=utf8 --user=`printf %q "${user}"` --host=`printf %q "${host}"` --port=`printf %q "${port}"`"
+
+if [ -n "${password}" ]; then
+     mysql="${mysql} --password=`printf %q "${password}"`"
+fi
+
+echo "Creating database: '${dbname}'"
