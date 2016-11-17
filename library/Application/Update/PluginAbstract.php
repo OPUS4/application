@@ -34,17 +34,33 @@
 /**
  * Base class for update plugins.
  */
-class Application_Update_PluginAbstract
+abstract class Application_Update_PluginAbstract
 {
 
+    /**
+     * Prints messages to console.
+     * @param $message
+     */
     public function println($message)
     {
         echo $message . PHP_EOL;
     }
 
+    /**
+     * Writes message to log.
+     * @param $message
+     *
+     * TODO log to file
+     */
     public function log($message)
     {
         echo $message . PHP_EOL;
     }
+
+    /**
+     * Performs update operation.
+     * @return mixed
+     */
+    abstract public function run();
 
 }
