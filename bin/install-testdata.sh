@@ -32,6 +32,18 @@ SCRIPT_PATH="`dirname "$SCRIPT_NAME_FULL"`"
 BASEDIR="`dirname "$SCRIPT_PATH"`"
 
 #
+# Prepare test workspace directories
+#
+
+mkdir -p "$BASEDIR/tests/workspace/files"
+mkdir -p "$BASEDIR/tests/workspace/incoming"
+mkdir -p "$BASEDIR/tests/workspace/log"
+mkdir -p "$BASEDIR/tests/workspace/cache"
+mkdir -p "$BASEDIR/tests/workspace/export"
+mkdir -p "$BASEDIR/tests/workspace/tmp"
+mkdir -p "$BASEDIR/tests/workspace/tmp/resumption"
+
+#
 # Import test data into database
 #
 cd "$BASEDIR/tests"
