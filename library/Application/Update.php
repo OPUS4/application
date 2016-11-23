@@ -59,7 +59,7 @@ class Application_Update extends Application_Update_PluginAbstract
 
         $application = new Zend_Application(APPLICATION_ENV, array("config"=>$configFiles));
 
-        $application->bootstrap('Configuration');
+        $application->bootstrap(array('Configuration', 'Logging'));
     }
 
     /**
