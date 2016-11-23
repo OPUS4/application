@@ -60,11 +60,6 @@ then
 		echo "failed self-updating composer" >&2
 		exit 1
 	}
-
-	php composer.phar update || {
-		echo "failed updating dependencies" >&2
-		exit 1
-	}
 else
 	# install composer
 	curl -s http://getcomposer.org/installer | php || {
