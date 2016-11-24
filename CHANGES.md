@@ -65,10 +65,10 @@
 
 ### Aufgaben
 
-* [OPUSVIER-231] - Entfernen von nicht mehr unterstützten Layouts inkl. MenuHelper aus dem System
-* [OPUSVIER-533] - Init-Skript für Selenium-RC Server erstellen
-* [OPUSVIER-889] - Aufnahme des Admin-Accounts für die Weboberfläche in des Install-Skript
-* [OPUSVIER-922] - Validierung von Username/Passwort an zu vielen Stellen
+* [OPUSVIER-231]  - Entfernen von nicht mehr unterstützten Layouts inkl. MenuHelper aus dem System
+* [OPUSVIER-533]  - Init-Skript für Selenium-RC Server erstellen
+* [OPUSVIER-889]  - Aufnahme des Admin-Accounts für die Weboberfläche in des Install-Skript
+* [OPUSVIER-922]  - Validierung von Username/Passwort an zu vielen Stellen
 * [OPUSVIER-1427] - Update Bibliotheken wie zum Beispiel Solr-Client, ZEND, usw.
 * [OPUSVIER-1473] - chmod im workspace Verzeichnis selektiver ausführen
 * [OPUSVIER-1617] - Installations-Script: Apache-Neustart am Ende des Install-Scripts auslagern
@@ -124,8 +124,8 @@
 
 ### Dokumentation
 
-* [OPUSVIER-476] - Dokumentation der Datei- und Verzeichnisrechte
-* [OPUSVIER-828] - Platzierung von Dokumenten ohne Titel in Suchergebnissen erläutern
+* [OPUSVIER-476]  - Dokumentation der Datei- und Verzeichnisrechte
+* [OPUSVIER-828]  - Platzierung von Dokumenten ohne Titel in Suchergebnissen erläutern
 * [OPUSVIER-1419] - Dokumentation der Datumsfelder
 * [OPUSVIER-1618] - Installations-Dokumentation: Apache-Einrichtung sollte *nach* Install-Script erklärt werden
 * [OPUSVIER-2453] - OPUS4-Webseite neu machen
