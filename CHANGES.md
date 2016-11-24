@@ -2,6 +2,141 @@
 
 ---
 
+## Release 4.5 2016-11-25
+
+### Bugs
+
+* [OPUSVIER-1341] - Abspeichern von unzulässigen Werten für Feld server_state
+* [OPUSVIER-1561] - Performance-Probleme in Solrsearch_Model_CollectionRoles (wird auch von Publish-Modul benutzt!)
+* [OPUSVIER-1691] - Anzeige der zugewiesenen CollectionRoles auf der Frontdoor irreführend
+* [OPUSVIER-1860] - Block "Metadaten exportieren" in der Frontdoor mit zu geringer Höhe
+* [OPUSVIER-2196] - Script "opus-create-export-xml.php" lässt sich nicht aufrufen
+* [OPUSVIER-2275] - UnitTest Solrsearch_IndexControllerTest::testLastPageUrlEqualsNextPageUrlDocTypeArticle erfordert genau 20 Dokumente
+* [OPUSVIER-2286] - Layoutfehler in der erweiterter Suche: Dropdowns unterschiedlich lang
+* [OPUSVIER-2357] - OAI-Set wird nur ausgegeben, wenn es ein Subset hat, an dem mindestens ein Dokument im Serverstate published hängt
+* [OPUSVIER-2358] - Irreführende Ausgabe bei leeren OAI-Subsets
+* [OPUSVIER-2375] - Fehler und Empfehlungen in der OAI-Schnittstelle
+* [OPUSVIER-2412] - Module "crawlers" und Guest-Zugriff darauf in Dokumentation erläutern
+* [OPUSVIER-2511] - Host- und Instancename in der Testumgebung sind leer
+* [OPUSVIER-2547] - DB-Schema hält Rolle 'owner' vor, die über das Framework nicht abgebildet wird.
+* [OPUSVIER-2615] - Nach dem zweimal hintereinander auf Login geklickt wurde, erscheint nach dem erfolgreichen Login das leere Login-Formular
+* [OPUSVIER-2660] - Problem mit Encoding auf dem CI-System
+* [OPUSVIER-3110] - Verzögerter Selenium Build Break in Jenkins
+* [OPUSVIER-3214] - Fataler Fehler, wenn User gelöscht wird, der noch eine Session besitzt
+* [OPUSVIER-3232] - Inkonsistentes Verhalten des Admin-Formulars bei Änderung von Sammlungseinträgen
+* [OPUSVIER-3347] - Unit Test Home_IndexControllerTest::testStartPageContainsTotalNumOfDocs läuft nicht mehr durch
+* [OPUSVIER-3381] - Unit Tests modifizieren Testdokument 146, so daß sich ServerDateModified ändert
+* [OPUSVIER-3472] - Sortierung Anzeige von Schriftenreihen auf der Frontdoor
+* [OPUSVIER-3477] - opus4ci.zib.de verschickt Mails an ungültige Mail-Adresse
+* [OPUSVIER-3508] - OAI-Schnittstelle liefert Volltext aus, bei gesetztem EmbargoDate
+* [OPUSVIER-3542] - OPUS-Update-Check funktioniert nicht mehr
+* [OPUSVIER-3599] - SolrIndexBuilder indiziert letzte (<16) Dokumente nicht
+* [OPUSVIER-3600] - Opus_UserRoleTest::testAccessDocumentsInsertRemove gebrochen
+* [OPUSVIER-3601] - opus4current.sql nicht korrekt verlinkt
+* [OPUSVIER-3602] - Search Engine Settings in config.ini.template falsch definiert
+* [OPUSVIER-3605] - Publish-Modul verwendet boolval (PHP 5.5) Funktion
+* [OPUSVIER-3606] - Verknüpfte Metadaten fehlen in Datenbank (RHEL, PHP 5.4, MariaDB)
+* [OPUSVIER-3609] - OPUS 4 Handbuch Job gebrochen auf CI-System
+* [OPUSVIER-3610] - Fehler beim Aufbau der Datenbank werden nicht angezeigt
+* [OPUSVIER-3611] - Optionale SQL Felder für Accounts dürfen nicht NULL sein und haben kein Defaultwert
+* [OPUSVIER-3614] - NOT NULL ohne DEFAULT in SQL Schema
+* [OPUSVIER-3617] - Fehler weil SQL für Testdokumente "server_date_created" nicht setzt
+* [OPUSVIER-3618] - Foreign Key Constraints Fehler beim Löschen von Sammlungen
+* [OPUSVIER-3619] - Speichern von VisibleInOAI = "false" für Opus_File schlägt fehl
+* [OPUSVIER-3620] - Fehler bei der Fehlerbehandlung in Oai_Model_Error Klasse
+* [OPUSVIER-3621] - SQL Fehler beim Abruf der ListSets in OAI
+* [OPUSVIER-3637] - Falsche Sortierung von Autoren mit führenden Leerzeichen im Namen
+* [OPUSVIER-3640] - Pfade für Dateien in Frontdoor META-Tags fehlerhaft
+* [OPUSVIER-3641] - Sortierreihenfolge von Dateien in Frontdoor falsch
+* [OPUSVIER-3643] - ORDER BY ist nicht in GROUP BY Fehler in SQL Statements
+* [OPUSVIER-3644] - ORDER BY ist nicht in SELECT list
+* [OPUSVIER-3645] - Warnung beim Speichern von zu langen Werten in der Datenbank
+* [OPUSVIER-3649] - Setzen von Admin Passwort bei der Installation schlägt fehl
+* [OPUSVIER-3651] - XMetaDissPlus soll Dokumente im Embargo nicht ausliefern
+
+### Features
+
+* [OPUSVIER-3230] - Lexikographische Sortierung der Facette Autor (Author) nach dem Nachnamen
+* [OPUSVIER-3563] - Erweiterung der Frontdoor um die Angabe "Gehört zur Bibliographie " (BelongsToBibliography)
+* [OPUSVIER-3575] - Repositorium spezifische Titel von RSS Feeds
+* [OPUSVIER-3636] - Autoren in Suchergebnissen als "Nachname, Vorname" anzeigen
+* [OPUSVIER-3646] - Navigation in Frontdoor mit Links/Rechts Cursortasten
+* [OPUSVIER-3652] - Autocomplete für GND Schlagwörter in Administration
+
+### Aufgaben
+
+* [OPUSVIER-231] - Entfernen von nicht mehr unterstützten Layouts inkl. MenuHelper aus dem System
+* [OPUSVIER-533] - Init-Skript für Selenium-RC Server erstellen
+* [OPUSVIER-889] - Aufnahme des Admin-Accounts für die Weboberfläche in des Install-Skript
+* [OPUSVIER-922] - Validierung von Username/Passwort an zu vielen Stellen
+* [OPUSVIER-1427] - Update Bibliotheken wie zum Beispiel Solr-Client, ZEND, usw.
+* [OPUSVIER-1473] - chmod im workspace Verzeichnis selektiver ausführen
+* [OPUSVIER-1617] - Installations-Script: Apache-Neustart am Ende des Install-Scripts auslagern
+* [OPUSVIER-1677] - Catchable Fatal errors entsprechend behandeln
+* [OPUSVIER-2313] - Anleitung zum Neustart des Selenium Servers
+* [OPUSVIER-2384] - Migration des CI-Systems auf leistungsfähige Hardware
+* [OPUSVIER-2578] - Zugriff auf Mailing-Listen Archiv
+* [OPUSVIER-2782] - Editieren von Collections im Metadaten-Formular
+* [OPUSVIER-2788] - Allgemeine Formularklassen für neues Metadaten-Formular
+* [OPUSVIER-3012] - XHTML DTDs lokal cachen um schnelle Validierungen zu ermöglichen
+* [OPUSVIER-3015] - Seiten im Modul Home durch XHTML Validierung abdecken
+* [OPUSVIER-3038] - Änderungen an Unit Tests sollten keinen Selenium Build triggern
+* [OPUSVIER-3070] - Server in Jenkins integrieren
+* [OPUSVIER-3073] - Automatische Konfiguration der mail.opus Einstellungen für CI System
+* [OPUSVIER-3074] - Framework Fast Target in Jenkins einrichten
+* [OPUSVIER-3077] - Selenium Target in Jenkins einrichten
+* [OPUSVIER-3078] - Migration Target in Jenkins einrichten
+* [OPUSVIER-3079] - Startup Script für SOLR auf dem CI-System
+* [OPUSVIER-3080] - Startup Script für OPUS SMTP Dumpserver auf dem CI-System
+* [OPUSVIER-3081] - CodeBrowser in Jenkins installieren (Problem mit Dependencies)
+* [OPUSVIER-3082] - CI-System verschickt Testmessages nach draußen
+* [OPUSVIER-3083] - Running Ant produziert "Unable to locate tools.jar" Meldung
+* [OPUSVIER-3084] - Jenkins URL auf dem CI-System von / nach /jenkins verschieben
+* [OPUSVIER-3085] - Jenkins Jobs auf Extended Email Plugin umstellen
+* [OPUSVIER-3086] - Regeln für parallele Builds definieren und dokumentieren
+* [OPUSVIER-3087] - Integrate Jenkins mit JIRA
+* [OPUSVIER-3088] - Automatisches Update der Demo-Instanz
+* [OPUSVIER-3093] - Setup Jenkins für automatischen Start nach opus4ci.zib.de boot
+* [OPUSVIER-3096] - Selenium Tests auf neuem CI-System fixen
+* [OPUSVIER-3097] - OPUS 4 Testserver von opus4mig nach opus4web umziehen
+* [OPUSVIER-3366] - Umstellung auf Solr-4.8
+* [OPUSVIER-3495] - Update Solr Schnittstelle 
+* [OPUSVIER-3517] - Update Solr auf opus4web zu Version 4.8 oder neuer
+* [OPUSVIER-3519] - Version von Schema in Datenbank speichern
+* [OPUSVIER-3524] - Update Selenium Instanz von GitHub Sourcen
+* [OPUSVIER-3531] - composer.phar für Build auf CI System verwenden
+* [OPUSVIER-3550] - Nacharbeiten zum Solr Update
+* [OPUSVIER-3552] - CI-System auf GitHub Entwicklung umstellen
+* [OPUSVIER-3593] - Alte SQL Dateien vom Framework entfernen
+* [OPUSVIER-3594] - Anzeigen mit welchem APPLICATION_ENV OPUS läuft
+* [OPUSVIER-3597] - Composer nicht mit "sudo" ausführen
+* [OPUSVIER-3604] - Selenium Tests fixen
+* [OPUSVIER-3612] - Ablauf des Embargo muss server_date_modified aktualisieren
+* [OPUSVIER-3615] - Skript für Datenbankveränderungen
+* [OPUSVIER-3616] - Accounts "user" und "referee" aus Masterdaten entfernen
+* [OPUSVIER-3638] - Funktion zum Löschen des Dokumentcaches hinzufügen
+* [OPUSVIER-3647] - .gitignore in ansonsten leeren Workspace-Verzeichnissen entfernen
+* [OPUSVIER-3648] - Konfigurationsdatei console.ini hinzufügen
+* [OPUSVIER-3650] - Datenbank Update für 4.5 Schema
+* [OPUSVIER-3658] - Workspace Verzeichnisse für Tests bei der Installation anlegen
+* [OPUSVIER-3659] - Fehlermeldungen bei der Ausführung von SQL Skripten 
+* [OPUSVIER-3662] - Composer Installation ohne SUDO ausführen
+
+## Dokumentation
+
+* [OPUSVIER-476] - Dokumentation der Datei- und Verzeichnisrechte
+* [OPUSVIER-828] - Platzierung von Dokumenten ohne Titel in Suchergebnissen erläutern
+* [OPUSVIER-1419] - Dokumentation der Datumsfelder
+* [OPUSVIER-1618] - Installations-Dokumentation: Apache-Einrichtung sollte *nach* Install-Script erklärt werden
+* [OPUSVIER-2453] - OPUS4-Webseite neu machen
+* [OPUSVIER-2559] - URN-Vergabe: vorgesehenen Dokument-Workflow dokumentieren
+* [OPUSVIER-2917] - Anleitung wie man Selenium lokal ohne Behinderung laufen lassen kann
+* [OPUSVIER-3410] - Kapitel 12.1 zum Import enthält falsche Informationen zum XML Schema
+* [OPUSVIER-3461] - jQuery UI Einbindung klären
+* [OPUSVIER-3551] - Installations- und Updateanleitung für 4.5
+
+---
+
 ## Release 4.5.0-RC1 2016-04-25
 
 ### Bugs
