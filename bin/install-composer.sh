@@ -33,7 +33,6 @@ SCRIPT_NAME="$(basename "$0")"
 SCRIPT_NAME_FULL="`readlink -f "$0"`"
 SCRIPT_PATH="`dirname "$SCRIPT_NAME_FULL"`"
 
-
 BASEDIR="`dirname "$SCRIPT_PATH"`"
 
 # get BASEDIR from first argument if present
@@ -66,10 +65,10 @@ else
 		echo "failed getting composer" >&2
 		exit 1
 	}
-
-	# install all dependencies
-	php composer.phar install || {
-		echo "failed installing dependencies" >&2
-		exit 1
-	}
 fi
+
+# install all dependencies
+php composer.phar install || {
+    echo "failed installing dependencies" >&2
+    exit 1
+}
