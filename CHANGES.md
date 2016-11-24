@@ -61,7 +61,7 @@
 * [OPUSVIER-3575] - Repositorium spezifische Titel von RSS Feeds
 * [OPUSVIER-3636] - Autoren in Suchergebnissen als "Nachname, Vorname" anzeigen
 * [OPUSVIER-3646] - Navigation in Frontdoor mit Links/Rechts Cursortasten
-* [OPUSVIER-3652] - Autocomplete für GND Schlagwörter in Administration
+* [OPUSVIER-3652] - Vorschlagsfunktion für Schlagwörter (GND) in Administration (aus der Datenbank)
 
 ### Aufgaben
 
@@ -122,7 +122,7 @@
 * [OPUSVIER-3659] - Fehlermeldungen bei der Ausführung von SQL Skripten 
 * [OPUSVIER-3662] - Composer Installation ohne SUDO ausführen
 
-## Dokumentation
+### Dokumentation
 
 * [OPUSVIER-476] - Dokumentation der Datei- und Verzeichnisrechte
 * [OPUSVIER-828] - Platzierung von Dokumenten ohne Titel in Suchergebnissen erläutern
