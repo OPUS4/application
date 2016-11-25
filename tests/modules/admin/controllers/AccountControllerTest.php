@@ -36,6 +36,14 @@
  */
 class Admin_AccountControllerTest extends ControllerTestCase {
 
+    public static function tearDownAfterClass() {
+        // even if something fails, the created test account won't be left in database
+        $account = Opus_Account::fetchAccountByLogin('wally');
+        if ($account instanceof Opus_Account) {
+            $account->delete();
+        }
+    }
+
     /**
      * Tests routing to and successfull execution of 'index' action.
      */
@@ -111,7 +119,7 @@ class Admin_AccountControllerTest extends ControllerTestCase {
      * FIXME cancel form for now, since creating account results in database lock timeout
      */
     public function testCreateAction() {
-         $this->request
+         $this->getRequest()
                 ->setMethod('POST')
                 ->setPost(array(
                     'username' => 'wally',

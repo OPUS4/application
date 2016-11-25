@@ -273,7 +273,9 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
      * Regression test for OPUSVIER-2147 (doctype browsing)
      */
     public function testPaginationBarContainsOverallNumberOfHitsInDoctypeBrowsing() {
-        $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/query/*%3A*/browsing/true/doctypefq/report', null, null);
+        $this->doStandardControllerTest(
+            '/solrsearch/index/search/searchtype/simple/query/*%3A*/browsing/true/doctypefq/report', null, null
+        );
         $this->assertEquals(52, $this->getNumOfHits());
     }
 
@@ -285,12 +287,26 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
     public function testLastPageUrlEqualsNextPageUrlDocTypeArticle() {
         $docFinder = new Opus_DocumentFinder();
         $docFinder->setType('article')->setServerState('published');
-        $this->assertEquals(20, $docFinder->count(), "Test data changed!");
 
-        $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/query/*%3A*/browsing/true/doctypefq/article', null, null);
-        $this->assertTrue(4 == substr_count($this->getResponse()->getBody(), '/solrsearch/index/search/searchtype/simple/query/%2A%3A%2A/browsing/true/doctypefq/article/start/10/rows/10">'));
-        $this->assertNotContains('solrsearch/index/search/searchtype/simple/query/%2A%3A%2A/browsing/true/doctypefq/doctoralthesis/start/19/rows/10">', $this->getResponse()->getBody());
-        $this->assertEquals(20, $this->getNumOfHits());
+        // check if test requirements are met
+        $docCount = $docFinder->count();
+
+        $this->assertGreaterThan(10, $docCount, "Test requires at least 11 documents.");
+
+        $startLast = floor(($docCount - 1) / 10) * 10; // 10 results per page, multiple of 10
+        $start = $startLast - 10;
+
+        $this->doStandardControllerTest(
+            "/solrsearch/index/search/searchtype/simple/query/*%3A*/browsing/true/doctypefq/article/start/$start",
+            null, null
+        );
+
+        $link = '/solrsearch/index/search/searchtype/simple/query/%2A%3A%2A/browsing/true/doctypefq/article';
+
+        // check four next/last page links are all the same
+        $this->assertTrue(4 == substr_count($this->getResponse()->getBody(), "$link/start/$startLast/rows/10\">"));
+        $this->assertNotContains("$link/start/19/rows/10\">", $this->getResponse()->getBody());
+        $this->assertEquals($docCount, $this->getNumOfHits());
     }
 
     /**

@@ -502,16 +502,16 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
         Zend_Debug::dump($this->getResponse()->getBody());
     }
 
+    /**
+     * Removes a test document from the database.
+     * @param $value Opus_Document|int
+     */
     public function removeDocument($value) {
         if (!is_null($value)) {
             try {
                 // check if value is Opus_Document or ID
-                $doc = ($value instanceof Opus_Document) ? new Opus_Document($value->getId()) : new Opus_Document($value);
-
-                // if (!$doc->isNewRecord()) {
-                    // only delete if document has been stored
-                    $doc->deletePermanent();
-                // }
+                $doc = ($value instanceof Opus_Document) ? $value : new Opus_Document($value);
+                $doc->deletePermanent();
             }
             catch (Opus_Model_NotFoundException $omnfe) {
                 // Model nicht gefunden -> alles gut (hoffentlich)

@@ -110,7 +110,7 @@
 	list-style: none;
 }
 #download-fulltext{
-        word-wrap: break-word;
+    word-wrap: break-word;
 }
 
 #download-fulltext li img.file-icon {
@@ -124,8 +124,13 @@
 
 #export li{
 	display: inline;
-        float: left;
+    float: left;
 	margin-right: 5px;
+}
+#export::after {
+    content: "";
+    display: block;
+    clear: both;
 }
 #services h3,
 .facet h4{
@@ -1107,6 +1112,9 @@ dl.result_box {
 	float: left;
 	width: 100%;
 	/* background-color: white; */
+}
+#fieldset-searchfields select {
+	width: 100%;
 }
 
 /* Series browsing */

@@ -33,6 +33,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  *
+ * TODO move XSLT functions into model class (makes unit tests easier)
  */
 class Frontdoor_IndexController extends Application_Controller_Action {
 
@@ -47,6 +48,7 @@ class Frontdoor_IndexController extends Application_Controller_Action {
     const SORT_ORDER_FUNCTION = 'Frontdoor_IndexController::useCustomSortOrder';
     const CHECK_LANGUAGE_FILE_FUNCTION = 'Frontdoor_IndexController::checkLanguageFile';
     const GET_STYLESHEET_FUNCTION = 'Frontdoor_IndexController::getStylesheet';
+    const IS_DISPLAY_FIELD_FUNCTION = 'Frontdoor_IndexController::isDisplayField';
 
     /**
      * Displays the metadata of a document.
@@ -158,6 +160,7 @@ class Frontdoor_IndexController extends Application_Controller_Action {
         $proc->registerPHPFunctions(self::SORT_ORDER_FUNCTION);
         $proc->registerPHPFunctions(self::CHECK_LANGUAGE_FILE_FUNCTION);
         $proc->registerPHPFunctions(self::GET_STYLESHEET_FUNCTION);
+        $proc->registerPHPFunctions(self::IS_DISPLAY_FIELD_FUNCTION);
         $proc->registerPHPFunctions('urlencode');
         $proc->importStyleSheet($xslt);
 
@@ -242,6 +245,8 @@ class Frontdoor_IndexController extends Application_Controller_Action {
      *
      * @param Opus_Date $now
      * @return bool true - if embargo date has passed; false - if not
+     *
+     * TODO another document instantiation (find more efficient way)
      */
     public static function checkIfFileEmbargoHasPassed($docId) {
         $doc = new Opus_Document($docId);
@@ -309,11 +314,15 @@ class Frontdoor_IndexController extends Application_Controller_Action {
         }
     }
 
+    /**
+     * @param $document
+     * @return array
+     * TODO separate different tags into function/plugins ???
+     */
     private function createMetaTagsForDocument($document) {
         $config = $this->getConfig();
-        $serverUrl = $this->view->serverUrl();
-        $baseUrlFiles = $serverUrl
-                . (isset($config, $config->deliver->url->prefix) ? $config->deliver->url->prefix : '/documents');
+        $baseUrlFiles = $this->view->fullUrl()
+                . (isset($config, $config->deliver->url->prefix) ? $config->deliver->url->prefix : '/files');
 
         $metas = array();
 
@@ -375,18 +384,29 @@ class Frontdoor_IndexController extends Application_Controller_Action {
             $metas[] = array('DC.Identifier', $identifierValue);
             $metas[] = array('DC.Identifier', $config->urn->resolverUrl . $identifierValue);
         }
-        $metas[] = array('DC.Identifier', $this->view->fullUrl() . '/frontdoor/index/index/docId/' . $document->getId());
+        $metas[] = array(
+            'DC.Identifier', $this->view->fullUrl() . '/frontdoor/index/index/docId/' . $document->getId()
+        );
 
-        foreach ($document->getFile() AS $file) {
-            if (!$file->exists() or ( $file->getVisibleInFrontdoor() !== '1')) {
-                continue;
-            }
-            $metas[] = array('DC.Identifier', "$baseUrlFiles/" . $document->getId() . "/" . $file->getPathName());
+        if (self::checkIfFileEmbargoHasPassed($document->getId())) {
+            foreach ($document->getFile() AS $file) {
+                if (!$file->exists()
+                        or ($file->getVisibleInFrontdoor() !== '1')
+                        or !self::checkIfUserHasFileAccess($file->getId())) {
+                    continue;
+                }
+                $metas[] = array('DC.Identifier', "$baseUrlFiles/" . $document->getId() . "/" . $file->getPathName());
 
-            if ($file->getMimeType() == 'application/pdf') {
-                $metas[] = array('citation_pdf_url', "$baseUrlFiles/" . $document->getId() . "/" . $file->getPathName());
-            } else if ($file->getMimeType() == 'application/postscript') {
-                $metas[] = array('citation_ps_url', "$baseUrlFiles/" . $document->getId() . "/" . $file->getPathName());
+                if ($file->getMimeType() == 'application/pdf') {
+                    $metas[] = array(
+                        'citation_pdf_url', "$baseUrlFiles/" . $document->getId() . "/" . $file->getPathName()
+                    );
+                }
+                else if ($file->getMimeType() == 'application/postscript') {
+                    $metas[] = array(
+                        'citation_ps_url', "$baseUrlFiles/" . $document->getId() . "/" . $file->getPathName()
+                    );
+                }
             }
         }
 
@@ -441,6 +461,26 @@ class Frontdoor_IndexController extends Application_Controller_Action {
         $registry = Zend_Registry::getInstance();
         $translate = $registry->get('Zend_Translate');
         return $translate->_($key);
+    }
+
+    /**
+     * Check if a field should be displayed in the frontdoor.
+     * @param string $name Name of field
+     * @return bool
+     */
+    static public function isDisplayField($name) {
+        $config = Zend_Registry::get('Zend_Config');
+
+        if (is_null($config)) {
+            return false;
+        }
+
+        if (isset($config->frontdoor->metadata->$name)) {
+            return $config->frontdoor->metadata->$name == 1;
+        }
+        else {
+            return false;
+        }
     }
 
     /**

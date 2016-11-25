@@ -55,7 +55,7 @@
                 <?php if ($this->searchPosition == $this->firstEntry) : ?>
                     <div title="<?= $this->translate('pagination_previous_entry') ?>"></div>
                 <?php else: ?>
-                    <a title="<?= $this->translate('pagination_previous_entry') ?>" href="<?= $this->url(array('start' => $this->previousEntry, 'nav' => 'prev', 'docId' => null)); ?>"></a>
+                    <a id="frontdoor-link-prev" title="<?= $this->translate('pagination_previous_entry') ?>" href="<?= $this->url(array('start' => $this->previousEntry, 'nav' => 'prev', 'docId' => null)); ?>"></a>
                 <?php endif ?>
             </li>
 
@@ -63,7 +63,7 @@
                 <?php if ($this->searchPosition == $this->lastEntry) : ?>
                     <div title="<?= $this->translate('pagination_next_entry') ?>"></div>
                 <?php else: ?>
-                    <a title="<?= $this->translate('pagination_next_entry') ?>" href="<?= $this->url(array('start' => $this->nextEntry, 'nav' => 'next', 'docId' => null)); ?>"></a>
+                    <a id="frontdoor-link-next" title="<?= $this->translate('pagination_next_entry') ?>" href="<?= $this->url(array('start' => $this->nextEntry, 'nav' => 'next', 'docId' => null)); ?>"></a>
                 <?php endif ?>
             </li>
         </ul>

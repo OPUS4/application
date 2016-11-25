@@ -50,7 +50,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="admin_account_label_confirmpassword">
+    <tu tuid="admin_account_label_confirmPassword">
       <tuv xml:lang="en">
         <seg>Confirm password:</seg>
       </tuv>

@@ -1631,3 +1631,6 @@ table + .paginationControl{
 .admin_config legend {
 }
 
+.ui-widget-content {
+   font-size: 0.9em;
+}

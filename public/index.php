@@ -87,7 +87,10 @@ try {
 catch (Exception $e) {
     if (APPLICATION_ENV === 'production') {
         header("HTTP/1.0 500 Internal Server Error");
-        echo $e->getMessage();
+        echo '<b>OPUS 4</b>' . PHP_EOL;
+        echo '<p>Internal server error - See server logs for more information.</p>' . PHP_EOL;
+        echo 'Timestamp: ' . date('Y-m-d H:i:s', time()) . PHP_EOL;
+        error_log($e->getMessage());
     }
     else {
         throw $e;
