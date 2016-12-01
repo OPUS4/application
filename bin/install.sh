@@ -293,6 +293,14 @@ sed -i -e "s!@db.admin.name@!'$DB_ADMIN_ESC'!" \
        -e "s!@db.admin.password@!'$DB_ADMIN_PASSWORD_ESC'!" "$OPUS_CONSOLE_CONF"
 
 #
+# Set file permissions
+#
+# TODO make it possible to run without sudo
+#
+
+"$SCRIPT_PATH/set-file-permissions.sh" -g www-data
+
+#
 # Set password for administrator account
 #
 
@@ -454,14 +462,6 @@ then
 fi
 
 cd "$BASEDIR"
-
-#
-# Set file permissions
-#
-# TODO make it possible to run without sudo
-#
-
-"$SCRIPT_PATH/set-file-permissions.sh" -g www-data
 
 #
 # Restart Apache2 (optionally)
