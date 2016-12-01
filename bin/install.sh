@@ -106,6 +106,12 @@ then
 fi
 
 #
+# Prepare workspace
+#
+
+"$SCRIPT_PATH/prepare-workspace.sh"
+
+#
 # Install Composer and dependencies
 #
 
@@ -285,12 +291,6 @@ cp console.ini.template "$OPUS_CONSOLE_CONF"
 
 sed -i -e "s!@db.admin.name@!'$DB_ADMIN_ESC'!" \
        -e "s!@db.admin.password@!'$DB_ADMIN_PASSWORD_ESC'!" "$OPUS_CONSOLE_CONF"
-
-#
-# Prepare workspace
-#
-
-"$SCRIPT_PATH/prepare-workspace.sh"
 
 #
 # Set password for administrator account
