@@ -298,6 +298,8 @@ sed -i -e "s!@db.admin.name@!'$DB_ADMIN_ESC'!" \
 # TODO make it possible to run without sudo
 #
 
+cd "$BASEDIR"
+
 "$SCRIPT_PATH/set-file-permissions.sh" -g www-data
 
 #
