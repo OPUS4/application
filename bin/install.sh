@@ -120,8 +120,6 @@ else
     sudo -u "$SUDO_USER" "$SCRIPT_PATH/install-composer.sh" "$BASEDIR"
 fi
 
-exit 0;
-
 #
 # Prepare Apache2 configuration
 #
@@ -311,7 +309,7 @@ do
   fi
 done
 
-php $BASEDIR/scripts/change-password.php admin "$ADMIN_PWD"
+php "$BASEDIR/scripts/change-password.php" admin "$ADMIN_PWD"
 
 #
 # Install and configure Solr search server
