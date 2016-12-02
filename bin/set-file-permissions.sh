@@ -86,5 +86,5 @@ cd "$(readlink "$BASEDIR/workspace")"
 
 # Setting full access for owner and group but not others
 find workspace -type d -print0 | xargs -0 -- chmod 770
-find workspace -type f -print0 | xargs -0 -- chmod 660
+find workspace -type f -print0 | xargs -0 -- chmod -f 660
 

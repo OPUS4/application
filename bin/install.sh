@@ -295,12 +295,20 @@ sed -i -e "s!@db.admin.name@!'$DB_ADMIN_ESC'!" \
 #
 # Set file permissions
 #
-# TODO make it possible to run without sudo
 #
 
 cd "$BASEDIR"
 
-"$SCRIPT_PATH/set-file-permissions.sh" -g www-data
+if [[ $SUDO_ENABLED -eq 1 ]] ;
+then
+    "$SCRIPT_PATH/set-file-permissions.sh" -g www-data
+else
+    cat <<LimitString
+Make sure read/write permissions for workspace folder are setup properly. You can use to set default permissions:
+
+sudo bin/set-file-permissions.sh
+LimitString
+fi
 
 #
 # Set password for administrator account
