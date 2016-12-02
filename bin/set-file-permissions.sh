@@ -87,11 +87,10 @@ cd "$(readlink "$BASEDIR/workspace")"
 # Setting full access for owner and group but not others
 find workspace -type d -print0 | xargs -0 -- chmod 770
 
-FILES=$(find workspace -type f)
-FILE_COUNT=$(wc -l <<< "$FILES")
+FILE_COUNT=$(find workspace -type f | wc -l)
 
 if [ $FILE_COUNT -gt 0 ]; then
-    # TODO how to avoid running find twice (use $FILES)
+    # TODO how to avoid running find twice (store result in variable)
     find workspace -type f -print0 | xargs -0 -- chmod 660
 fi
 
