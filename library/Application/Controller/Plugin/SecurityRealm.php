@@ -63,7 +63,12 @@ class Application_Controller_Plugin_SecurityRealm extends Zend_Controller_Plugin
             try {
                 $realm->setUser($identity);
             }
+            catch (Opus_Security_Exception $e) {
+                // unknown account -> clean identity (e.g. session of deleted user - OPUSVIER-3214)
+                $auth->clearIdentity();
+            }
             catch (Exception $e) {
+                // unexpected exception -> clear identity and throw
                 $auth->clearIdentity();
                 throw new Exception($e);
             }

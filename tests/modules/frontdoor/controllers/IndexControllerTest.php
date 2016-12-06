@@ -944,6 +944,32 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         }
     }
 
+    public function testSortingOfFiles() {
+        $doc = $this->createTestDocument();
+        $doc->setServerState('published');
+
+        $file = $this->createTestFile('file1.txt');
+        $file->setSortOrder(1);
+        $doc->addFile($file);
+
+        $file = $this->createTestFile('file2.txt');
+        $file->setSortOrder(2);
+        $doc->addFile($file);
+
+        $file = $this->createTestFile('file10.txt');
+        $file->setSortOrder(10);
+        $doc->addFile($file);
+
+        $docId = $doc->store();
+
+        $this->dispatch("/frontdoor/index/index/docId/$docId");
+
+        $body = $this->getResponse()->getBody();
+
+        $this->assertTrue(strpos($body, '>file1.txt') < strpos($body, '>file2.txt'), "Order of files is wrong.");
+        $this->assertTrue(strpos($body, '>file2.txt') < strpos($body, '>file10.txt'), "Order of files is wrong.");
+    }
+
     /**
      * Tests, whether the current language of a document's file is shown behind the link as flag.
      */
@@ -1079,6 +1105,37 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $this->assertQueryContentContains('//td', '2012/02/01');
     }
 
+    public function testMetaTagsForFileAccess() {
+        $this->markTestIncomplete('test not implemented');
+    }
+
+    public function testMetaTagsForFiles() {
+        $file = $this->createTestFile('foo.pdf');
+
+        $doc = $this->createTestDocument();
+        $doc->setServerState('published');
+        $doc->addFile($file);
+        $docId = $doc->store();
+
+        $this->dispatch('frontdoor/index/index/docId/' . $docId);
+
+        $this->assertQueryContentContains('//meta/@content', "/files/$docId/foo.pdf");
+    }
+
+    public function testMetaTagsforEmbargoedDocument() {
+        $file = $this->createTestFile('foo.pdf');
+
+        $doc = $this->createTestDocument();
+        $doc->setEmbargoDate('2112-02-01');
+        $doc->setServerState('published');
+        $doc->addFile($file);
+        $docId = $doc->store();
+
+        $this->dispatch('frontdoor/index/index/docId/' . $docId);
+
+        $this->assertNotQueryContentContains('//meta/@content', "/files/$docId/foo.pdf");
+    }
+
     /**
      * EmbargoDate should be shown in metadata table, no matter if it has passed or not.
      * OPUSVIER-3270.
@@ -1181,6 +1238,28 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
 
         $this->assertXpath('//meta[@name="DC.Identifier" and @content="urn:nbn:op:123"]');
         $this->assertXpath('//meta[@name="DC.Identifier" and @content="' . $urnResolverUrl . 'urn:nbn:op:123"]');
+    }
+
+    public function testBelongsToBibliographyTurnedOn() {
+        $this->useEnglish();
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
+            'frontdoor' => array('metadata' => array('BelongsToBibliography' => 1)
+        ))));
+
+        $this->dispatch('/frontdoor/index/index/docId/146');
+
+        $this->assertXpath('//td[contains(@class, "BelongsToBibliography")]');
+        $this->assertXpathContentContains('//td[contains(@class, "BelongsToBibliography")]', 'Yes');
+    }
+
+    public function testBelongsToBibliographyTurnedOff() {
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
+            'frontdoor' => array('metadata' => array('BelongsToBibliography' => 0)
+        ))));
+
+        $this->dispatch('/frontdoor/index/index/docId/146');
+
+        $this->assertNotXpath('//td[contains(@class, "BelongsToBibliography")]');
     }
 
 }

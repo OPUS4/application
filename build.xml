@@ -2,12 +2,11 @@
 <project name="opus4server" default="build">
 
     <property environment="env" />
-    <property name="workspace" value="${env.WORKSPACE}" /><!-- Wird von Jenkins gesetzt. -->
-    <property name="configfile" location="${workspace}/../opus-config.properties" />
-    <property name="libsdir" location="/home/opus4ci/libs" />
+    <property name="configfile" location="${basedir}/../opus-config.properties" />
     <property name="testpath" value="" />
     <property name="codingstandard" location="${basedir}/vendor/opus4-repo/codesniffer/ruleset.xml" />
     <property name="adminPassword" value="AdminAdmin" />
+    <property name="bindir" value="${basedir}/vendor/bin" />
 
     <target name="analyse-code" depends="phpcs,phpmd,phpcpd,phploc" />
 
@@ -55,7 +54,7 @@
 
     <target name="setup" depends="prepare-dependencies,prepare-javascript,prepare-config" />
 
-    <target name="prepare" depends="clean">
+    <target name="prepare" depends="clean,prepare-dependencies">
         <mkdir dir="${basedir}/build/logs" />
         <mkdir dir="${basedir}/build/coverage" />
         <mkdir dir="${basedir}/build/api" />
@@ -63,19 +62,15 @@
     </target>
 
     <target name="prepare-dependencies">
-        <exec executable="composer">
-            <arg value="install" />
-        </exec>
-        <exec executable="composer">
-            <arg value="update" />
-        </exec>
+        <exec executable="${basedir}/bin/install-composer.sh" />
         <symlink link="${basedir}/db/schema" resource="${basedir}/vendor/opus4-repo/framework/db/schema"
                  failonerror="false" />
     </target>
 
     <target name="prepare-javascript">
         <mkdir dir="${basedir}/public/js" />
-        <symlink link="${basedir}/public/js/jquery.js" resource="${libsdir}/jquery.js" failonerror="false" />
+        <symlink link="${basedir}/public/js/jquery.js" resource="${basedir}/components/jquery/jquery.js"
+                 failonerror="false" />
     </target>
 
     <target name="prepare-config" description="Prepares the configuration files">
@@ -93,6 +88,11 @@
               toFile="${basedir}/application/configs/config.ini" filtering="true" overwrite="true">
             <filterset filtersFile="${configfile}" />
         </copy>
+
+        <copy file="${basedir}/application/configs/console.ini.template"
+              toFile="${basedir}/application/configs/console.ini" filtering="true" overwrite="true">
+            <filterset filtersFile="${configfile}" />
+        </copy>
     </target>
 
     <target name="lint" description="Prüft, ob PHP Dateien Syntaxfehler enthalten.">
@@ -107,7 +107,7 @@
     </target>
 
     <target name="phploc" description="">
-        <exec executable="phploc">
+        <exec executable="${bindir}/phploc">
             <arg value="--log-csv" />
             <arg value="${basedir}/build/logs/phploc.csv" />
             <arg path="${basedir}/modules" /> <!-- TODO library code -->
@@ -115,7 +115,7 @@
     </target>
 
     <target name="phpdoc">
-        <exec executable="phpdoc" dir="${basedir}" logerror="on">
+        <exec executable="${bindir}/phpdoc" dir="${basedir}" logerror="on">
             <arg value="--directory" />
             <arg path="${basedir}/modules" />
             <arg value="--target" />
@@ -125,7 +125,7 @@
 
     <target name="phpcs">
         <echo message="Coding Standard = '${codingstandard}'" />
-        <exec executable="phpcs" dir="${basedir}" output="${basedir}/build/logs/checkstyle.xml"
+        <exec executable="${bindir}/phpcs" dir="${basedir}" output="${basedir}/build/logs/checkstyle.xml"
               error="${basedir}/build/logs/checkstyle-error.log">
             <arg value="--report=checkstyle" />
             <arg value="--standard=${codingstandard}" />
@@ -138,13 +138,16 @@
     </target>
 
     <target name="phpmd">
-        <exec executable="phpmd" dir="${basedir}" logerror="on" output="${basedir}/build/logs/pmd.xml" >
-            <arg line="--exclude tests . xml codesize,unusedcode,naming,design" />
+        <exec executable="${bindir}/phpmd" dir="${basedir}" logerror="on" output="${basedir}/build/logs/pmd.xml" >
+            <arg line="--exclude tests,vendor" />
+            <arg line="." />
+            <arg line="xml" />
+            <arg line="codesize,unusedcode,naming,design" />
         </exec>
     </target>
 
     <target name="phpcpd">
-        <exec executable="phpcpd" dir="${basedir}" logerror="on" >
+        <exec executable="${bindir}/phpcpd" dir="${basedir}" logerror="on" >
             <arg line="--min-lines 3" />
             <arg line="--min-tokens 30" />
             <arg line="--log-pmd ${basedir}/build/logs/pmd-cpd.xml" />
@@ -153,7 +156,7 @@
     </target>
 
     <target name="pdepend" depends="phpunit" description="Generates software metrics charts.">
-        <exec executable="pdepend" dir="${basedir}" logerror="on">
+        <exec executable="${bindir}/pdepend" dir="${basedir}" logerror="on">
             <arg line="--coverage-report=${basedir}/build/logs/phpunit.coverage.xml" />
             <arg line="--jdepend-xml=${basedir}/build/logs/jdepend.xml" />
             <arg line="--jdepend-chart=${basedir}/build/pdepend/dependencies.svg" />
@@ -166,7 +169,7 @@
     </target>
 
     <target name="phpcb" description="Aggregates tool output with PHP_CodeBrowser.">
-        <exec executable="phpcb">
+        <exec executable="${bindir}/phpcb">
             <arg value="--log" />
             <arg path="${basedir}/build/logs" />
             <arg value="--source" />
@@ -187,7 +190,7 @@
     </target>
 
     <target name="phpunit" depends="rebuild-database,rebuild-index" description="Runs unit tests with coverage">
-        <exec executable="${basedir}/vendor/bin/phpunit" dir="${basedir}/tests" failonerror="true">
+        <exec executable="${bindir}/phpunit" dir="${basedir}/tests" failonerror="true">
             <arg line="--log-junit ${basedir}/build/logs/phpunit.xml" />
             <arg line="--coverage-clover ${basedir}/build/logs/phpunit.coverage.xml" />
             <arg line="--coverage-html ${basedir}/build/coverage" />
@@ -197,11 +200,14 @@
     </target>
 
     <target name="phpunit-fast" depends="rebuild-database,rebuild-index" description="Runs unit tests without coverage">
-        <exec executable="${basedir}/vendor/bin/phpunit" dir="${basedir}/tests" failonerror="true">
+        <exec executable="${bindir}/phpunit" dir="${basedir}/tests" failonerror="true">
             <arg line="--log-junit ${basedir}/build/logs/phpunit.xml" />
             <arg line="--configuration phpunit.xml" />
             <arg line="${testpath}" />
         </exec>
+    </target>
+
+    <target name="reset-testdata" depends="rebuild-database,rebuild-index,clean-cache">
     </target>
 
     <target name="demo-reset" depends="rebuild-database,demo-prepare-docs,rebuild-index,demo-reset-password">
@@ -222,64 +228,11 @@
         </exec>
     </target>
 
-    <!--
-        requires: version, date, CHANGES and RELEASE_NOTES already updated
-        tag release
-        build tarball
-        copy, encode, commit CHANGES/RELEASE_NOTES
-    -->
-    <target name="prepare-release-check">
-        <condition property="runPrepareRelease">
-            <and>
-                <isset property="releaseVersion" />
-                <isset property="releaseTag" />
-                <!-- TODO check existence of tag -->
-            </and>
-        </condition>
-    </target>
-
-    <!-- TODO  tagging: releaseDate -->
-    <target name="tag-release" depends="prepare-release-check" if="runPrepareRelease">
-        <exec executable="./tag-release.sh" dir="${basedir}/scripts/packaging">
-            <arg line="${releaseDate}" />
-            <arg line="${releaseVersion}" />
+    <target name="remove-hhar-files">
+        <exec executable="php" dir="${basedir}/scripts" failonerror="true">
+            <arg line="opus-console.php" />
+            <arg line="snippets/delete_files.php" />
         </exec>
-    </target>
-
-    <target name="prepare-release-notes">
-        <mkdir dir="${basedir}/build/release" />
-
-        <!-- prepare website files -->
-        <copy file="/CHANGES.txt"
-              tofile="${basedir}/build/release/CHANGES.txt"
-              filtering="true" encoding="UTF-8" outputencoding="ISO-8859-1" />
-        <copy file="/RELEASE_NOTES.txt"
-              tofile="${basedir}/build/release/RELEASE_NOTES.txt"
-              filtering="true" encoding="UTF-8" outputencoding="ISO-8859-1" />
-    </target>
-
-    <target name="prepare-release" depends="prepare-release-check" if="runPrepareRelease"
-            description="Builds release files (tarball, CHANGES, RELEASE_NOTES)">
-        <echo message="Preparing release files ..." />
-
-        <mkdir dir="${basedir}/build/release" />
-
-        <!-- build tarball -->
-        <exec executable="./prepare_tarball.sh" dir="${basedir}/scripts/packaging" failonerror="true">
-            <arg line="tags/${releaseTag}" />
-            <arg line="opus-${releaseVersion}" />
-        </exec>
-
-        <!-- Move release files to build folder. -->
-        <move todir="${basedir}/build/release">
-            <fileset dir="${basedir}/scripts/packaging">
-                <include name="opus-${releaseVersion}.*" />
-            </fileset>
-        </move>
-
-        <delete dir="${basedir}/scripts/packaging/opus-${releaseVersion}" />
-
-        <!-- TODO  commit website files to svn -->
     </target>
 
 </project>

@@ -38,6 +38,7 @@
  * Used in forms that allow setting or modifying the login name.
  *
  * TODO reconsider the pattern for login names
+ * TODO depends on framework right now
  */
 class Application_Form_Element_Login extends Application_Form_Element_Text {
 
@@ -47,7 +48,10 @@ class Application_Form_Element_Login extends Application_Form_Element_Text {
     public function init() {
         parent::init();
         $this->setLabel('admin_account_label_login');
+
+        // NOTE: This validation is also defined in Opus_Account.
         $this->addValidator('regex', false, array('/^[a-z0-9@._-]+$/'));
+
         $this->addValidator('stringLength', false, array('min' => 3, 'max' => 50));
         $this->setRequired(true);
     }

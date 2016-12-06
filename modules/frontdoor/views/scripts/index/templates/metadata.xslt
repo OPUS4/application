@@ -105,6 +105,28 @@
         </tr>
     </xsl:template>
 
+    <xsl:template match="@BelongsToBibliography">
+        <tr>
+            <th class="name">
+                <xsl:call-template name="translateFieldname" />
+            </th>
+            <td class="value BelongsToBibliography">
+                <xsl:choose>
+                    <xsl:when test=". = '1'">
+                        <xsl:call-template name="translateString">
+                           <xsl:with-param name="string">answer_yes</xsl:with-param>
+                        </xsl:call-template>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:call-template name="translateString">
+                           <xsl:with-param name="string">answer_no</xsl:with-param>
+                        </xsl:call-template>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </td>
+        </tr>
+    </xsl:template>
+
     <!-- -->
     <!-- Templates for "external fields". -->
     <!-- -->
@@ -134,13 +156,25 @@
                         <xsl:text>/solrsearch/index/search/searchtype/collection/id/</xsl:text>
                         <xsl:value-of select="@Id" />
                     </xsl:attribute>
-
-                    <xsl:attribute name="title">
-                        <xsl:call-template name="translateString">
-                            <xsl:with-param name="string">frontdoor_collection_link</xsl:with-param>
-                        </xsl:call-template>
-                    </xsl:attribute>
-                    <xsl:value-of select="@DisplayFrontdoor" />
+                    <xsl:choose>
+                        <xsl:when test="@DisplayFrontdoor != ''">
+                            <xsl:attribute name="title">
+                                <xsl:call-template name="translateString">
+                                    <xsl:with-param name="string">frontdoor_collection_link</xsl:with-param>
+                                </xsl:call-template>
+                            </xsl:attribute>
+                            <xsl:value-of select="@DisplayFrontdoor" />
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:call-template name="translateStringWithDefault">
+                                <xsl:with-param name="string">default_collection_role_<xsl:value-of select="@RoleName" />
+                                </xsl:with-param>
+                                <xsl:with-param name="default">
+                                    <xsl:value-of select="@RoleName" />
+                                </xsl:with-param>
+                            </xsl:call-template>
+                        </xsl:otherwise>
+                    </xsl:choose>
                 </a>
             </td>
         </tr>

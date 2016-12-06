@@ -30,13 +30,27 @@
 set -e
 
 SCRIPT_NAME="$(basename "$0")"
-BASEDIR="$1"
+SCRIPT_NAME_FULL="`readlink -f "$0"`"
+SCRIPT_PATH="`dirname "$SCRIPT_NAME_FULL"`"
+
+BASEDIR="`dirname "$SCRIPT_PATH"`"
+
+# get BASEDIR from first argument if present
+if [ $# -ge 1 ] ;
+then
+    BASEDIR="$1"
+fi
+
+# Don't run Composer as root - Composer itself warns against that
+if [[ $EUID -eq 0 ]]; then
+    echo -e "\nERROR: This script must not be run as root.\n" 1>&2
+    exit 1
+fi
 
 # create base folder on demand and qualify its pathname
 mkdir -p "$BASEDIR" || exit 1
 cd "$BASEDIR"
 BASEDIR="$(pwd)"
-
 
 if [ -e composer.phar ] ;
 then
@@ -45,21 +59,16 @@ then
 		echo "failed self-updating composer" >&2
 		exit 1
 	}
-
-	php composer.phar update || {
-		echo "failed updating dependencies" >&2
-		exit 1
-	}
 else
 	# install composer
 	curl -s http://getcomposer.org/installer | php || {
 		echo "failed getting composer" >&2
 		exit 1
 	}
-
-	# install all dependencies
-	php composer.phar install || {
-		echo "failed installing dependencies" >&2
-		exit 1
-	}
 fi
+
+# install all dependencies
+php composer.phar install || {
+    echo "failed installing dependencies" >&2
+    exit 1
+}

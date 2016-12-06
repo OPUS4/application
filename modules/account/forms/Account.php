@@ -32,7 +32,7 @@
  * @version     $Id$
  */
 
-class Account_Form_Account extends Application_Form_Abstract {
+class Account_Form_Account extends Application_Form_Model_Abstract {
 
     const ELEMENT_LOGIN = 'username';
     const ELEMENT_FIRSTNAME = 'firstname';
@@ -44,13 +44,6 @@ class Account_Form_Account extends Application_Form_Abstract {
 
     public function init() {
         parent::init();
-
-        $this->setDecorators(
-            array(
-                'FormElements',
-                'Form'
-            )
-        );
 
         $this->setUseNameAsLabel(true);
         $this->setLabelPrefix('admin_account_label_');
@@ -68,7 +61,7 @@ class Account_Form_Account extends Application_Form_Abstract {
 
         $this->addElement('Password', self::ELEMENT_PASSWORD);
         $this->addElement('Password', self::ELEMENT_CONFIRM_PASSWORD, array(
-            'label' => 'admin_account_label_confirmpassword'
+            'label' => 'admin_account_label_confirmPassword'
         ));
 
         $this->getElement(self::ELEMENT_CONFIRM_PASSWORD)->addValidator(
@@ -78,8 +71,6 @@ class Account_Form_Account extends Application_Form_Abstract {
         $this->getElement(self::ELEMENT_PASSWORD)->addErrorMessages(
             array(Zend_Validate_StringLength::TOO_SHORT => 'admin_account_error_password_tooshort')
         );
-
-        $this->addElement('Submit', self::ELEMENT_SUBMIT, array('label' => 'account_form_save'));
     }
 
     /**
@@ -109,6 +100,10 @@ class Account_Form_Account extends Application_Form_Abstract {
         if ($login === 'admin') {
             $this->getElement('username')->setAttrib('disabled', true);
         }
+    }
+
+    public function updateModel($account) {
+
     }
 
 }

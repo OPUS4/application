@@ -26,6 +26,7 @@
 # TODO query user for setting permissions on other folders (language_custom, config files)?
 # TODO add special handling for access to config.ini (more restricted?)
 # TODO add special handling for access to resources that can be edited in setup pages
+# TODO restrict access to folders/files for web server (bin,scripts,tests,db)
 #
 
 set -e
@@ -85,5 +86,11 @@ cd "$(readlink "$BASEDIR/workspace")"
 
 # Setting full access for owner and group but not others
 find workspace -type d -print0 | xargs -0 -- chmod 770
-find workspace -type f -print0 | xargs -0 -- chmod 660
+
+FILE_COUNT=$(find workspace -type f | wc -l)
+
+if [ $FILE_COUNT -gt 0 ]; then
+    # TODO how to avoid running find twice (store result in variable)
+    find workspace -type f -print0 | xargs -0 -- chmod 660
+fi
 

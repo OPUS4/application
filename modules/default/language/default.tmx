@@ -77,8 +77,8 @@
             </tuv>
         </tu>
 
-  
-    
+
+
         <tu tuid="home_modulename">
           <tuv xml:lang="en">
             <seg>Home</seg>
@@ -113,7 +113,7 @@
         </tu>
 
 
-    
+
         <tu tuid="home_index_index_actionname">
           <tuv xml:lang="en">
             <seg>Home</seg>
@@ -392,7 +392,7 @@
             <seg>Speichern</seg>
           </tuv>
         </tu>
-        
+
         <tu tuid="Cancel">
           <tuv xml:lang="en">
             <seg>Cancel</seg>
@@ -400,8 +400,8 @@
           <tuv xml:lang="de">
             <seg>Abbrechen</seg>
           </tuv>
-        </tu>        
-        
+        </tu>
+
         <tu tuid="Next">
           <tuv xml:lang="en">
             <seg>Next</seg>
@@ -410,7 +410,7 @@
             <seg>Weitere</seg>
           </tuv>
         </tu>
-		
+
         <tu tuid="pkm_list_keys">
           <tuv xml:lang="en">
             <seg>Key Management</seg>
@@ -689,7 +689,7 @@
             <seg>Nachricht vom OPUS 4 Repository bezüglich Ihrer Veröffentlichung</seg>
         </tuv>
     </tu>
-    
+
      <tu tuid="results_title_single">
          <tuv xml:lang="en">
              <seg>search hit</seg>
@@ -708,7 +708,14 @@
          </tuv>
      </tu>
 
-
+     <tu tuid="opus.environment">
+         <tuv xml:lang="en">
+             <seg>NON PRODUCTION ENVIRONMENT</seg>
+         </tuv>
+         <tuv xml:lang="de">
+             <seg>TESTUMGEBUNG</seg>
+         </tuv>
+     </tu>
 
     </body>
 </tmx>

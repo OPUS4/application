@@ -60,11 +60,14 @@ $application = new Zend_Application(
         "config"=>array(
             APPLICATION_PATH . '/application/configs/application.ini',
             APPLICATION_PATH . '/application/configs/config.ini',
+            APPLICATION_PATH . '/application/configs/console.ini',
             APPLICATION_PATH . '/tests/config.ini',
             APPLICATION_PATH . '/tests/tests.ini'
         )
     )
 );
+
+Zend_Registry::set('opus.disableDatabaseVersionCheck', true);
 
 // Bootstrapping application
 $application->bootstrap('Backend');
@@ -91,7 +94,7 @@ echo('done' . PHP_EOL);
 
 echo(PHP_EOL . "Importing database schema ... " . PHP_EOL);
 // TODO move into $database->create()?
-$database->import(APPLICATION_PATH . '/db/schema/opus4current.sql');
+$database->import(APPLICATION_PATH . '/db/schema/opus4schema.sql');
 
 echo(PHP_EOL . 'Import master data ... ' . PHP_EOL);
 $database->import(APPLICATION_PATH . '/db/masterdata');

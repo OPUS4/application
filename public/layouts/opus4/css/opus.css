@@ -110,7 +110,7 @@
 	list-style: none;
 }
 #download-fulltext{
-        word-wrap: break-word;
+    word-wrap: break-word;
 }
 
 #download-fulltext li img.file-icon {
@@ -124,8 +124,13 @@
 
 #export li{
 	display: inline;
-        float: left;
+    float: left;
 	margin-right: 5px;
+}
+#export::after {
+    content: "";
+    display: block;
+    clear: both;
 }
 #services h3,
 .facet h4{
@@ -1108,6 +1113,9 @@ dl.result_box {
 	width: 100%;
 	/* background-color: white; */
 }
+#fieldset-searchfields select {
+	width: 100%;
+}
 
 /* Series browsing */
 
@@ -1144,4 +1152,13 @@ dl.result_box {
 
 #appmode-production {
     display: none;
+}
+
+/* Testumgebung */
+#top-header .testing,.staging,.development {
+    color: black;
+    background: #ff5a5a;
+    font-weight:bold;
+    font-size:120%;
+    text-align: center
 }
