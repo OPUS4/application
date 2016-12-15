@@ -26,55 +26,25 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @author      Pascal-Nicolas Becker <becker@zib.de>
- * @author      Ralf Claussnitzer <ralf.claussnitzer@slub-dresden.de>
- * @author      Thoralf Klein <thoralf.klein@zib.de>
- * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
- * @copyright   Copyright (c) 2009-2010, OPUS 4 development team
+ * @package     Module_Admin
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
-// Configure include path.
-set_include_path(
-    implode(
-        PATH_SEPARATOR, array(
-        '.',
-        dirname(__FILE__),
-        dirname(dirname(dirname(__FILE__))) . '/library',
-        dirname(dirname(dirname(__FILE__))) . '/vendor',
-        get_include_path(),
-        )
-    )
-);
+class Application_Data_SubjectProvider {
 
-// Define path to application directory
-defined('APPLICATION_PATH')
-    || define('APPLICATION_PATH', realpath(dirname(dirname(dirname(__FILE__)))));
+    /**
+     * Returns matching values as suggestions for autocomplete.
+     *
+     * value
+     * extkey
+     *
+     * @param $term
+     * @return array
+     */
+    public function getValues($term) {
+        return Opus_Subject::getMatchingSubjects($term);
+    }
 
-// Define application environment
-// TODO scripts using this might be executed with a different environment than requests to the application
-defined('APPLICATION_ENV')
-    || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));
-
-require_once 'autoload.php';
-require_once 'opus-php-compatibility.php';
-
-// environment initializiation
-$application = new Zend_Application(
-    APPLICATION_ENV,
-    array(
-        "config"=>array(
-            APPLICATION_PATH . '/application/configs/application.ini',
-            APPLICATION_PATH . '/application/configs/config.ini',
-            APPLICATION_PATH . '/application/configs/console.ini'
-        )
-    )
-);
-
-// Bootstrapping application
-$application->bootstrap('Backend');
-
-// Bootstrapping modules
-$application->getBootstrap()->getPluginResource('modules')->init();
-
+}

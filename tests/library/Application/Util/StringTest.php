@@ -24,54 +24,31 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Tests
+ * @category    Application
+ * @package     Tests
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-// Define path to application directory
-defined('APPLICATION_PATH')
-|| define('APPLICATION_PATH', realpath(dirname(dirname(__FILE__))));
+class Application_Util_StringTest extends ControllerTestCase
+{
 
-// Define application environment
-defined('APPLICATION_ENV')
-|| define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));
+    public function testReplaceProperties() {
+        $content = "User @user@ and parameters. value1 value1";
+        $expected = 'User "admin" and "password". "value2" "value2"';
+        $properties = array(
+            '@user@' => 'admin',
+            'parameters' => 'password',
+            'value1' => 'value2'
+        );
 
-// Configure include path.
-set_include_path(
-    implode(
-        PATH_SEPARATOR, array(
-            '.',
-            dirname(__FILE__),
-            APPLICATION_PATH . '/library',
-            APPLICATION_PATH . '/vendor',
-            get_include_path(),
-        )
-    )
-);
+        $this->assertEquals($expected, Application_Util_String::replaceProperties($content, $properties));
+    }
 
-require_once 'autoload.php';
+    public function testQuoteString() {
+        $this->assertEquals('"dummy"', Application_Util_String::quoteValue('dummy'));
+        $this->assertEquals('"dum\"my"', Application_Util_String::quoteValue('dum"my'));
+    }
 
-// environment initializiation
-$application = new Zend_Application(
-    APPLICATION_ENV,
-    array(
-        "config"=>array(
-            APPLICATION_PATH . '/application/configs/application.ini',
-            APPLICATION_PATH . '/application/configs/config.ini',
-            APPLICATION_PATH . '/application/configs/console.ini',
-            APPLICATION_PATH . '/tests/config.ini',
-            APPLICATION_PATH . '/tests/tests.ini'
-        )
-    )
-);
-
-// Bootstrapping application
-$application->bootstrap('Backend');
-
-$config = Zend_Registry::get('Zend_Config');
-$config = $config->merge(new Zend_Config_Ini(dirname(__FILE__) . '/config.ini'));
-
-$database = new Opus_Database();
-$database->import(APPLICATION_PATH . '/tests/sql');
+}

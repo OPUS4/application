@@ -63,6 +63,8 @@ class Oai_Model_DocumentList {
      * TODO function contains metadataPrefix specifische criteria for generating document list (refactor!)
      */
     public function query(array $oaiRequest) {
+        $today = date('Y-m-d', time());
+
         $finder = new Opus_DocumentFinder();
 
         // add server state restrictions
@@ -72,9 +74,11 @@ class Oai_Model_DocumentList {
         if ('xMetaDissPlus' === $metadataPrefix 
             || 'xMetaDiss' === $metadataPrefix) {
             $finder->setFilesVisibleInOai();
+            $finder->setNotEmbargoedOn($today);
         }
         if ('xMetaDiss' === $metadataPrefix) {
             $finder->setTypeInList($this->xMetaDissRestriction);
+            $finder->setNotEmbargoedOn($today);
         }
         if ('epicur' === $metadataPrefix) {
             $finder->setIdentifierTypeExists('urn');

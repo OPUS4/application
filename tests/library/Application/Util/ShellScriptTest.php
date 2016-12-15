@@ -24,54 +24,52 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Tests
+ * @category    Application
+ * @package     Tests
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-// Define path to application directory
-defined('APPLICATION_PATH')
-|| define('APPLICATION_PATH', realpath(dirname(dirname(__FILE__))));
+class Application_Util_ShellScriptTest extends ControllerTestCase
+{
 
-// Define application environment
-defined('APPLICATION_ENV')
-|| define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));
+    private $scriptPath;
 
-// Configure include path.
-set_include_path(
-    implode(
-        PATH_SEPARATOR, array(
-            '.',
-            dirname(__FILE__),
-            APPLICATION_PATH . '/library',
-            APPLICATION_PATH . '/vendor',
-            get_include_path(),
-        )
-    )
-);
+    public function setUp() {
+        parent::setUp();
 
-require_once 'autoload.php';
+        $this->scriptPath = APPLICATION_PATH . '/tests/resources/shellscript.txt';
+    }
 
-// environment initializiation
-$application = new Zend_Application(
-    APPLICATION_ENV,
-    array(
-        "config"=>array(
-            APPLICATION_PATH . '/application/configs/application.ini',
-            APPLICATION_PATH . '/application/configs/config.ini',
-            APPLICATION_PATH . '/application/configs/console.ini',
-            APPLICATION_PATH . '/tests/config.ini',
-            APPLICATION_PATH . '/tests/tests.ini'
-        )
-    )
-);
+    public function testGetPropertiesFromScript() {
+        $properties = Application_Util_ShellScript::getPropertiesFromScript($this->scriptPath);
 
-// Bootstrapping application
-$application->bootstrap('Backend');
+        $this->assertCount(8, $properties);
 
-$config = Zend_Registry::get('Zend_Config');
-$config = $config->merge(new Zend_Config_Ini(dirname(__FILE__) . '/config.ini'));
+        $this->assertArrayHasKey('user', $properties);
+        $this->assertEquals('opus4admin', $properties['user']);
 
-$database = new Opus_Database();
-$database->import(APPLICATION_PATH . '/tests/sql');
+        $this->assertArrayHasKey('password', $properties);
+        $this->assertEquals('abc456%pwd', $properties['password']);
+
+        $this->assertArrayHasKey('port', $properties);
+        $this->assertEquals('3308', $properties['port']);
+
+        $this->assertArrayHasKey('dbname', $properties);
+        $this->assertEquals('opusdb', $properties['dbname']);
+
+        $this->assertArrayHasKey('mysql_bin', $properties);
+        $this->assertEquals('/usr/bin/mysql', $properties['mysql_bin']);
+
+        $this->assertArrayHasKey('schema_file', $properties);
+        $this->assertEquals('schema/opus4schema.sql', $properties['schema_file']);
+
+        $this->assertArrayHasKey('master_dir', $properties);
+        $this->assertEquals('masterdata/', $properties['master_dir']);
+
+        $this->assertArrayHasKey('mysql', $properties);
+        $this->assertEquals('${mysql} --password=`printf %q "${password}"`', $properties['mysql']);
+    }
+
+}

@@ -24,54 +24,29 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Tests
+ * @category    Application
+ * @package     Application_Update
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
+ *
+ * Updates database.
  */
+class Application_Update_Database extends Application_Update_PluginAbstract
+{
 
-// Define path to application directory
-defined('APPLICATION_PATH')
-|| define('APPLICATION_PATH', realpath(dirname(dirname(__FILE__))));
+    /**
+     * Performs database update.
+     */
+    public function run()
+    {
+        $this->println('Updating database ...');
 
-// Define application environment
-defined('APPLICATION_ENV')
-|| define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));
+        $database = new Opus_Database();
 
-// Configure include path.
-set_include_path(
-    implode(
-        PATH_SEPARATOR, array(
-            '.',
-            dirname(__FILE__),
-            APPLICATION_PATH . '/library',
-            APPLICATION_PATH . '/vendor',
-            get_include_path(),
-        )
-    )
-);
+        $database->update();
 
-require_once 'autoload.php';
+        $this->println('Database update finished');
+    }
 
-// environment initializiation
-$application = new Zend_Application(
-    APPLICATION_ENV,
-    array(
-        "config"=>array(
-            APPLICATION_PATH . '/application/configs/application.ini',
-            APPLICATION_PATH . '/application/configs/config.ini',
-            APPLICATION_PATH . '/application/configs/console.ini',
-            APPLICATION_PATH . '/tests/config.ini',
-            APPLICATION_PATH . '/tests/tests.ini'
-        )
-    )
-);
-
-// Bootstrapping application
-$application->bootstrap('Backend');
-
-$config = Zend_Registry::get('Zend_Config');
-$config = $config->merge(new Zend_Config_Ini(dirname(__FILE__) . '/config.ini'));
-
-$database = new Opus_Database();
-$database->import(APPLICATION_PATH . '/tests/sql');
+}

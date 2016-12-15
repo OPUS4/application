@@ -24,54 +24,60 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Tests
+ * @category    Application
+ * @package     Tests
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-// Define path to application directory
-defined('APPLICATION_PATH')
-|| define('APPLICATION_PATH', realpath(dirname(dirname(__FILE__))));
+class Application_Util_FileTest extends ControllerTestCase
+{
 
-// Define application environment
-defined('APPLICATION_ENV')
-|| define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));
+    public function testCopyAndFilter() {
+        $source = $this->createTestFile('source.txt');
+        $dest = $this->createTestFile('test.txt');
 
-// Configure include path.
-set_include_path(
-    implode(
-        PATH_SEPARATOR, array(
-            '.',
-            dirname(__FILE__),
-            APPLICATION_PATH . '/library',
-            APPLICATION_PATH . '/vendor',
-            get_include_path(),
-        )
-    )
-);
+        $sourcePath = $source->getTempFile();
+        $destPath = $dest->getTempFile();
 
-require_once 'autoload.php';
+        $properties = array(
+            '@db.user.name@' => 'opus4user',
+            '@db.user.password@' => 'dummypwd'
+        );
 
-// environment initializiation
-$application = new Zend_Application(
-    APPLICATION_ENV,
-    array(
-        "config"=>array(
-            APPLICATION_PATH . '/application/configs/application.ini',
-            APPLICATION_PATH . '/application/configs/config.ini',
-            APPLICATION_PATH . '/application/configs/console.ini',
-            APPLICATION_PATH . '/tests/config.ini',
-            APPLICATION_PATH . '/tests/tests.ini'
-        )
-    )
-);
+        $content = <<<TEXT
+# Filtered File
+db.user = @db.user.name@
+db.password = @db.user.password@
+TEXT;
 
-// Bootstrapping application
-$application->bootstrap('Backend');
+        file_put_contents($sourcePath, $content);
 
-$config = Zend_Registry::get('Zend_Config');
-$config = $config->merge(new Zend_Config_Ini(dirname(__FILE__) . '/config.ini'));
+        Application_Util_File::copyAndFilter($sourcePath, $destPath, $properties);
 
-$database = new Opus_Database();
-$database->import(APPLICATION_PATH . '/tests/sql');
+        $result = file_get_contents($destPath);
+
+        $expected = <<<TEXT
+# Filtered File
+db.user = "opus4user"
+db.password = "dummypwd"
+TEXT;
+
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * @expectedException Exception
+     * @expectedExceptionMessage could not read source file
+     */
+    public function testCopyAndFilterMissingSource() {
+        $source = APPLICATION_PATH . '/tests/resources/doesnotexist.txt';
+        $dest = $this->createTestFile('dest.txt');
+
+        $properties = array('@user@', 'admin');
+
+        Application_Util_File::copyAndFilter($source, $dest->getTempFile(), $properties);
+    }
+
+}

@@ -24,54 +24,40 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Tests
+ * @category    Application
+ * @package     Application_Util
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-// Define path to application directory
-defined('APPLICATION_PATH')
-|| define('APPLICATION_PATH', realpath(dirname(dirname(__FILE__))));
+/**
+ * Helper class for file operations.
+ */
+class Application_Util_File
+{
 
-// Define application environment
-defined('APPLICATION_ENV')
-|| define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));
+    /**
+     * Copies a file and replaces keys with values in the copied file.
+     *
+     * @param $source Path to source file
+     * @param $dest Path for destination file
+     * @param $properties Array with properties for replacement
+     * @throws Exception
+     */
+    public static function copyAndFilter($source, $dest, $properties) {
+        if (is_readable($source))
+        {
+            $content = file_get_contents($source);
 
-// Configure include path.
-set_include_path(
-    implode(
-        PATH_SEPARATOR, array(
-            '.',
-            dirname(__FILE__),
-            APPLICATION_PATH . '/library',
-            APPLICATION_PATH . '/vendor',
-            get_include_path(),
-        )
-    )
-);
+            $content = Application_Util_String::replaceProperties($content, $properties);
 
-require_once 'autoload.php';
+            file_put_contents($dest, $content);
+        }
+        else
+        {
+            throw new Exception("could not read source file ($source)");
+        }
+    }
 
-// environment initializiation
-$application = new Zend_Application(
-    APPLICATION_ENV,
-    array(
-        "config"=>array(
-            APPLICATION_PATH . '/application/configs/application.ini',
-            APPLICATION_PATH . '/application/configs/config.ini',
-            APPLICATION_PATH . '/application/configs/console.ini',
-            APPLICATION_PATH . '/tests/config.ini',
-            APPLICATION_PATH . '/tests/tests.ini'
-        )
-    )
-);
-
-// Bootstrapping application
-$application->bootstrap('Backend');
-
-$config = Zend_Registry::get('Zend_Config');
-$config = $config->merge(new Zend_Config_Ini(dirname(__FILE__) . '/config.ini'));
-
-$database = new Opus_Database();
-$database->import(APPLICATION_PATH . '/tests/sql');
+}

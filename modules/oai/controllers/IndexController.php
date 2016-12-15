@@ -226,13 +226,16 @@ class Oai_IndexController extends Application_Controller_Xml {
             );
         }
 
+        $metadataPrefix = $oaiRequest['metadataPrefix'];
+
         // do not deliver documents which are restricted by document state
-        if (is_null($document) or false === in_array($document->getServerState(), $this->_deliveringDocumentStates)) {
+        if (is_null($document)
+            or (false === in_array($document->getServerState(), $this->_deliveringDocumentStates))
+            or (false === $document->hasEmbargoPassed() and stripos($metadataPrefix, 'xmetadiss') === 0)) {
             throw new Oai_Model_Exception('Document is not available for OAI export!', Oai_Model_Error::NORECORDSMATCH);
         }
 
         // for xMetaDiss it must be habilitation-thesis or doctoral-thesis
-        $metadataPrefix = $oaiRequest['metadataPrefix'];
         if ('xMetaDiss' === $metadataPrefix) {
             $type = $document->getType();
             $isHabOrDoc = in_array($type, $this->_xMetaDissRestriction);

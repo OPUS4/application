@@ -33,7 +33,6 @@ SCRIPT_NAME="$(basename "$0")"
 SCRIPT_NAME_FULL="`readlink -f "$0"`"
 SCRIPT_PATH="`dirname "$SCRIPT_NAME_FULL"`"
 
-
 BASEDIR="`dirname "$SCRIPT_PATH"`"
 
 # get BASEDIR from first argument if present
@@ -60,21 +59,16 @@ then
 		echo "failed self-updating composer" >&2
 		exit 1
 	}
-
-	php composer.phar update || {
-		echo "failed updating dependencies" >&2
-		exit 1
-	}
 else
 	# install composer
 	curl -s http://getcomposer.org/installer | php || {
 		echo "failed getting composer" >&2
 		exit 1
 	}
-
-	# install all dependencies
-	php composer.phar install || {
-		echo "failed installing dependencies" >&2
-		exit 1
-	}
 fi
+
+# install all dependencies
+php composer.phar install || {
+    echo "failed installing dependencies" >&2
+    exit 1
+}

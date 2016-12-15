@@ -26,55 +26,38 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @author      Pascal-Nicolas Becker <becker@zib.de>
- * @author      Ralf Claussnitzer <ralf.claussnitzer@slub-dresden.de>
- * @author      Thoralf Klein <thoralf.klein@zib.de>
- * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
- * @copyright   Copyright (c) 2009-2010, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2009-2016, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
-// Configure include path.
+/*
+ * Script for executing OPUS 4 update.
+ *
+ * For an update it is assumed that the relevant configuration files exist.
+ */
+
 set_include_path(
     implode(
         PATH_SEPARATOR, array(
-        '.',
-        dirname(__FILE__),
-        dirname(dirname(dirname(__FILE__))) . '/library',
-        dirname(dirname(dirname(__FILE__))) . '/vendor',
-        get_include_path(),
+            dirname(dirname(dirname(__FILE__))) . '/library',
+            dirname(dirname(dirname(__FILE__))) . '/vendor',
+            get_include_path()
         )
     )
 );
 
-// Define path to application directory
-defined('APPLICATION_PATH')
-    || define('APPLICATION_PATH', realpath(dirname(dirname(dirname(__FILE__)))));
+defined('APPLICATION_PATH') || define('APPLICATION_PATH', realpath(dirname(dirname(dirname(__FILE__)))));
 
-// Define application environment
-// TODO scripts using this might be executed with a different environment than requests to the application
-defined('APPLICATION_ENV')
-    || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));
+defined('APPLICATION_ENV') || define('APPLICATION_ENV', 'production');
 
 require_once 'autoload.php';
 require_once 'opus-php-compatibility.php';
 
-// environment initializiation
-$application = new Zend_Application(
-    APPLICATION_ENV,
-    array(
-        "config"=>array(
-            APPLICATION_PATH . '/application/configs/application.ini',
-            APPLICATION_PATH . '/application/configs/config.ini',
-            APPLICATION_PATH . '/application/configs/console.ini'
-        )
-    )
-);
+$autoloader = Zend_Loader_Autoloader::getInstance();
+$autoloader->suppressNotFoundWarnings(false);
+$autoloader->setFallbackAutoloader(true);
 
-// Bootstrapping application
-$application->bootstrap('Backend');
-
-// Bootstrapping modules
-$application->getBootstrap()->getPluginResource('modules')->init();
-
+$update = new Application_Update();
+$update->bootstrap();
+$update->run();

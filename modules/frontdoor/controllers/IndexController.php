@@ -33,7 +33,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  *
- * TODO move XSLT functions into model class
+ * TODO move XSLT functions into model class (makes unit tests easier)
  */
 class Frontdoor_IndexController extends Application_Controller_Action {
 
@@ -48,6 +48,7 @@ class Frontdoor_IndexController extends Application_Controller_Action {
     const SORT_ORDER_FUNCTION = 'Frontdoor_IndexController::useCustomSortOrder';
     const CHECK_LANGUAGE_FILE_FUNCTION = 'Frontdoor_IndexController::checkLanguageFile';
     const GET_STYLESHEET_FUNCTION = 'Frontdoor_IndexController::getStylesheet';
+    const IS_DISPLAY_FIELD_FUNCTION = 'Frontdoor_IndexController::isDisplayField';
 
     /**
      * Displays the metadata of a document.
@@ -159,6 +160,7 @@ class Frontdoor_IndexController extends Application_Controller_Action {
         $proc->registerPHPFunctions(self::SORT_ORDER_FUNCTION);
         $proc->registerPHPFunctions(self::CHECK_LANGUAGE_FILE_FUNCTION);
         $proc->registerPHPFunctions(self::GET_STYLESHEET_FUNCTION);
+        $proc->registerPHPFunctions(self::IS_DISPLAY_FIELD_FUNCTION);
         $proc->registerPHPFunctions('urlencode');
         $proc->importStyleSheet($xslt);
 
@@ -459,6 +461,26 @@ class Frontdoor_IndexController extends Application_Controller_Action {
         $registry = Zend_Registry::getInstance();
         $translate = $registry->get('Zend_Translate');
         return $translate->_($key);
+    }
+
+    /**
+     * Check if a field should be displayed in the frontdoor.
+     * @param string $name Name of field
+     * @return bool
+     */
+    static public function isDisplayField($name) {
+        $config = Zend_Registry::get('Zend_Config');
+
+        if (is_null($config)) {
+            return false;
+        }
+
+        if (isset($config->frontdoor->metadata->$name)) {
+            return $config->frontdoor->metadata->$name == 1;
+        }
+        else {
+            return false;
+        }
     }
 
     /**

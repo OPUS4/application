@@ -1,4 +1,4 @@
-#!/usr/bin/env php5
+#!/usr/bin/env php
 <?php
 /**
  * This file is part of OPUS. The software OPUS has been originally developed

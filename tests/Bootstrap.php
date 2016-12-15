@@ -58,3 +58,20 @@ require_once 'autoload.php';
 $autoloader = Zend_Loader_Autoloader::getInstance();
 $autoloader->suppressNotFoundWarnings(false);
 $autoloader->setFallbackAutoloader(true);
+
+// make sure necessary directories are available
+ensureDirectory(APPLICATION_PATH . '/tests/workspace');
+ensureDirectory(APPLICATION_PATH . '/tests/workspace/tmp');
+ensureDirectory(APPLICATION_PATH . '/tests/workspace/tmp/resumption');
+ensureDirectory(APPLICATION_PATH . '/tests/workspace/incoming');
+ensureDirectory(APPLICATION_PATH . '/tests/workspace/log');
+ensureDirectory(APPLICATION_PATH . '/tests/workspace/files');
+ensureDirectory(APPLICATION_PATH . '/tests/workspace/cache');
+ensureDirectory(APPLICATION_PATH . '/tests/workspace/export');
+
+function ensureDirectory($path) {
+    if (!is_dir($path)) {
+        mkdir($path);
+        echo "Created directory '$path'" . PHP_EOL;
+    }
+}

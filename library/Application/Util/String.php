@@ -24,54 +24,58 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Tests
+ * @category    Application
+ * @package     Application_Util
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-// Define path to application directory
-defined('APPLICATION_PATH')
-|| define('APPLICATION_PATH', realpath(dirname(dirname(__FILE__))));
+/**
+ * Helper class with string functions.
+ */
+class Application_Util_String
+{
 
-// Define application environment
-defined('APPLICATION_ENV')
-|| define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));
+    /**
+     * Replaces keys in a string with values from an array.
+     *
+     * @param $content string
+     * @param $properties array with replacement values
+     * @return string
+     */
+    public static function replaceProperties($content, $properties, $quote = true)
+    {
+        $filtered = $content;
 
-// Configure include path.
-set_include_path(
-    implode(
-        PATH_SEPARATOR, array(
-            '.',
-            dirname(__FILE__),
-            APPLICATION_PATH . '/library',
-            APPLICATION_PATH . '/vendor',
-            get_include_path(),
-        )
-    )
-);
+        $keys = array_keys($properties);
 
-require_once 'autoload.php';
+        if ($quote) {
+            array_walk($properties, function(&$value, $key)
+            {
+                $value = self::quoteValue($value);
+            });
+        }
 
-// environment initializiation
-$application = new Zend_Application(
-    APPLICATION_ENV,
-    array(
-        "config"=>array(
-            APPLICATION_PATH . '/application/configs/application.ini',
-            APPLICATION_PATH . '/application/configs/config.ini',
-            APPLICATION_PATH . '/application/configs/console.ini',
-            APPLICATION_PATH . '/tests/config.ini',
-            APPLICATION_PATH . '/tests/tests.ini'
-        )
-    )
-);
+        $filtered = str_replace($keys, $properties, $filtered);
 
-// Bootstrapping application
-$application->bootstrap('Backend');
+        return $filtered;
+    }
 
-$config = Zend_Registry::get('Zend_Config');
-$config = $config->merge(new Zend_Config_Ini(dirname(__FILE__) . '/config.ini'));
+    /**
+     * Puts double quotes around a string.
+     *
+     * @param $value
+     * @return string
+     */
+    public static function quoteValue($value)
+    {
+        if (strpos($value, '"') !== false)
+        {
+            $value = str_replace('"', '\"', $value);
+        }
 
-$database = new Opus_Database();
-$database->import(APPLICATION_PATH . '/tests/sql');
+        return "\"$value\"";
+    }
+
+}

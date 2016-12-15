@@ -54,7 +54,7 @@ $now = new Opus_Date();
 $now->setNow();
 
 // Find documents with expired EmbargoDate and ServerDateModified < EmbargoDate
-$docfinder->setEmbargoDateBeforeNotModifiedAfter($now);
+$docfinder->setEmbargoDateBeforeNotModifiedAfter(date('Y-m-d', time()));
 
 $foundIds = $docfinder->ids();
 

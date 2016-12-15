@@ -11,16 +11,15 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 #
+# @author      Sascha Szott <szott@zib.de>
 # @author      Jens Schwidder <schwidder@zib.de>
 # @copyright   Copyright (c) 2010-2016, OPUS 4 development team
 # @license     http://www.gnu.org/licenses/gpl.html General Public License
 
 #
-# Adds testdata to database and rebuilds the index.
+# Creates folders for workspace.
 #
-# TODO verify waiting for Solr works for local and remote setup
-# TODO requires DB_ADMIN_PASSWORD DB_ADMIN DB_NAME (get from config.ini?)
-#
+# TODO add parameter for workspace location
 #
 
 set -e
@@ -31,25 +30,11 @@ SCRIPT_PATH="`dirname "$SCRIPT_NAME_FULL"`"
 
 BASEDIR="`dirname "$SCRIPT_PATH"`"
 
-#
-# Prepare test workspace directories
-#
+mkdir -p "$BASEDIR/workspace/files"
+mkdir -p "$BASEDIR/workspace/incoming"
+mkdir -p "$BASEDIR/workspace/log"
+mkdir -p "$BASEDIR/workspace/cache"
+mkdir -p "$BASEDIR/workspace/export"
+mkdir -p "$BASEDIR/workspace/tmp"
+mkdir -p "$BASEDIR/workspace/tmp/resumption"
 
-mkdir -p "$BASEDIR/tests/workspace/files"
-mkdir -p "$BASEDIR/tests/workspace/incoming"
-mkdir -p "$BASEDIR/tests/workspace/log"
-mkdir -p "$BASEDIR/tests/workspace/cache"
-mkdir -p "$BASEDIR/tests/workspace/export"
-mkdir -p "$BASEDIR/tests/workspace/tmp"
-mkdir -p "$BASEDIR/tests/workspace/tmp/resumption"
-
-#
-# Import test data into database
-#
-cd "$BASEDIR/tests"
-php import-testdata.php
-
-# copy test fulltexts to workspace directory
-cd "$BASEDIR"
-
-cp -rv tests/fulltexts/* workspace/files

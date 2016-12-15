@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,54 +24,63 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Tests
+ * @category    Application
+ * @package     Application
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-// Define path to application directory
-defined('APPLICATION_PATH')
-|| define('APPLICATION_PATH', realpath(dirname(dirname(__FILE__))));
+/**
+ * Class for performing updates of OPUS 4.
+ *
+ * TODO logging to file
+ * TODO output version numbers
+ */
+class Application_Update extends Application_Update_PluginAbstract
+{
 
-// Define application environment
-defined('APPLICATION_ENV')
-|| define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));
-
-// Configure include path.
-set_include_path(
-    implode(
-        PATH_SEPARATOR, array(
-            '.',
-            dirname(__FILE__),
-            APPLICATION_PATH . '/library',
-            APPLICATION_PATH . '/vendor',
-            get_include_path(),
-        )
-    )
-);
-
-require_once 'autoload.php';
-
-// environment initializiation
-$application = new Zend_Application(
-    APPLICATION_ENV,
-    array(
-        "config"=>array(
+    /**
+     * Bootstrap Zend_Application for update process.
+     */
+    public function bootstrap()
+    {
+        $configFiles = array(
             APPLICATION_PATH . '/application/configs/application.ini',
-            APPLICATION_PATH . '/application/configs/config.ini',
-            APPLICATION_PATH . '/application/configs/console.ini',
-            APPLICATION_PATH . '/tests/config.ini',
-            APPLICATION_PATH . '/tests/tests.ini'
-        )
-    )
-);
+            APPLICATION_PATH . '/application/configs/config.ini'
+        );
 
-// Bootstrapping application
-$application->bootstrap('Backend');
+        $consoleIniPath = APPLICATION_PATH . '/application/configs/console.ini';
 
-$config = Zend_Registry::get('Zend_Config');
-$config = $config->merge(new Zend_Config_Ini(dirname(__FILE__) . '/config.ini'));
+        if (is_readable($consoleIniPath))
+        {
+            $configFiles[] = $consoleIniPath;
+        }
 
-$database = new Opus_Database();
-$database->import(APPLICATION_PATH . '/tests/sql');
+        $application = new Zend_Application(APPLICATION_ENV, array("config"=>$configFiles));
+
+        $application->bootstrap(array('Configuration', 'Logging'));
+    }
+
+    /**
+     * Perform update.
+     *
+     * TODO modify update steps dynamically based on versions involved
+     */
+    public function run()
+    {
+        $this->log('Updating OPUS 4 ...');
+
+        // Create console.ini if missing
+        $consoleIni = new Application_Update_ConsoleIni();
+        $consoleIni->run();
+
+        // Bootstrap again with console.ini containing admin credentials
+        $this->bootstrap();
+
+        // Update database
+        $database = new Application_Update_Database();
+        $database->run();
+    }
+
+}

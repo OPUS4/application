@@ -308,6 +308,10 @@
 
             <xsl:apply-templates select="Patent" />
             <xsl:apply-templates select="Licence" />
+
+            <xsl:if test="php:functionString('Frontdoor_IndexController::isDisplayField', 'BelongsToBibliography')">
+                <xsl:apply-templates select="@BelongsToBibliography" />
+            </xsl:if>
         </table>
 
     </xsl:template>

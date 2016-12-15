@@ -235,6 +235,27 @@ class Oai_IndexControllerTest extends ControllerTestCase {
                 "Response must contain 'xMetaDiss'");
     }
 
+    public function testGetRecordXMetaDissPlusOnlyIfNotInEmbargo() {
+        $today = date('Y-m-d', time());
+
+        $doc = $this->createTestDocument();
+        $doc->setServerState('published');
+        $doc->setEmbargoDate($today);
+        $docId = $doc->store();
+
+        $this->dispatch("/oai?verb=GetRecord&metadataPrefix=XMetaDissPlus&identifier=oai::$docId");
+        $this->assertResponseCode(200);
+
+        $response = $this->getResponse()->getBody();
+        $badStrings = array("Exception", "Stacktrace", "badVerb");
+        $this->checkForCustomBadStringsInHtml($response, $badStrings);
+
+        $this->assertContains("oai::$docId", $response, "Response must contain 'oai::$docId'");
+
+        $this->assertContains('noRecordsMatch', $response);
+        $this->assertContains('Document is not available for OAI export!', $response);
+    }
+
     /**
      * Test verb=GetRecord, prefix=xMetaDissPlus.
      */
@@ -833,22 +854,50 @@ class Oai_IndexControllerTest extends ControllerTestCase {
     /**
      * Regression Test for OPUSVIER-3142
      */
-    public function testListRecordsXMetaDissPlusDocumentsWithFilesOnly() {
-
+    public function testListRecordsXMetaDissPlusDocumentsWithFilesOnly()
+    {
         Zend_Registry::get('Zend_Config')->merge(
-                new Zend_Config(array(
-                    'oai' => array(
-                        'max' => array(
-                            'listrecords' => 100,
-                            'listidentifiers' => 200,
-                        )
-                    ))));
+            new Zend_Config(array(
+                'oai' => array(
+                    'max' => array(
+                        'listrecords' => 100,
+                        'listidentifiers' => 200,
+                    )
+                )
+            ))
+        );
         $this->dispatch('/oai?verb=ListRecords&metadataPrefix=xMetaDissPlus');
 
         $responseBody = $this->getResponse()->getBody();
 
         $this->assertNotContains('<ddb:fileNumber>0</ddb:fileNumber>', $responseBody,
         "Response must not contain records without files");
+    }
+
+    public function testListRecordsXMetaDissPlusDocumentsNotInEmbargoOnly()
+    {
+        $tomorrow = date('Y-m-d', strtotime('tomorrow'));
+        $yesterday = date('Y-m-d', strtotime('yesterday'));
+
+        $doc = $this->createTestDocument();
+        $doc->setServerState('published');
+        $doc->setEmbargoDate($tomorrow);
+        $file = $this->createTestFile('volltext.pdf');
+        $doc->addFile($file);
+        $docId = $doc->store();
+
+        $doc = $this->createTestDocument();
+        $doc->setServerState('published');
+        $file = $this->createTestFile('volltext2.pdf');
+        $doc->addFile($file);
+        $visibleId = $doc->store();
+
+        $this->dispatch("/oai?verb=ListRecords&metadataPrefix=xMetaDissPlus&from=$yesterday");
+
+        $body = $this->getResponse()->getBody();
+
+        $this->assertNotContains("oai::$docId", $body, 'Response should not contain embargoed document.');
+        $this->assertContains("oai::$visibleId", $body, 'Reponse should contain document without embargo.');
     }
 
     /**
@@ -1795,6 +1844,20 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
         $elements = $xpath->query('//dc:title[@lang = "ger"]');
         $this->assertEquals(1, $elements->length);
+    }
+
+    public function testExampleLinkListIdentifiers()
+    {
+        $this->dispatch('/oai?verb=ListIdentifiers&metadataPrefix=oai_dc');
+
+        $body = $this->getResponse()->getBody();
+
+        $domDocument = new DOMDocument();
+        $domDocument->loadXML($body);
+
+        $elements = $domDocument->getElementsByTagName('header');
+
+        $this->assertEquals(10, $elements->length);
     }
 
 }
