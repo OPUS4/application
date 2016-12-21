@@ -1076,12 +1076,16 @@ dl.result_box {
 	width: auto;
 	padding: 0;
 }
+#edit-search-wrapper input {
+    outline: none;
+    border: none;
+}
 #edit-submit-search-wrapper{
 	float: right;
 }
 #fieldset-search .form-text{
 	width: 370px;
-	font-size: 18px;
+	font-size: 1.7em;
 	border: none;
 	background-color: transparent;
 	padding: 2px 0 0;
