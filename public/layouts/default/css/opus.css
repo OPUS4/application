@@ -344,7 +344,6 @@ div > .form-button{
 	background: #2b5580 url(../img/theme/bg_button.gif) repeat-x center;
 	-moz-border-radius: 5px;
 	border-radius: 5px;
-	border: 1px solid #26517d;
 	color: white;
 	padding: 5px 5px;
 	font-family: Arial, Helvetica, sans-serif;
@@ -394,12 +393,6 @@ div > .abort-button{
 .opus fieldset .form-errors{
 	clear: both;
 }
-.opus fieldset .form-files{
-	width: 100%;
-	margin-left: 610px;
-	margin-top: -70px;
-	color: #26517D;
-}
 .left-labels label,
 .right-labels label{
 	width: 24%;
@@ -424,15 +417,6 @@ div > .abort-button{
 	padding: 0;
 	list-style: none;
 	color: #cc3300;
-}
-.opus fieldset .form-files ul {
-	margin: 0 0 0 0;
-	padding-left: 1em;
-	list-style: none;
-}
-.opus fieldset .form-files li {
-	background: url(../img/theme/icon-dash-small.gif) no-repeat 0 50%;
-	padding: 0 0 0 9px;
 }
 .opus .form-hint{
 	padding: 0 10px;
@@ -476,7 +460,6 @@ h1,
 	margin: 0 0 0.8em;
 }
 .opus h2{
-	color: #26517d;
 	background-color: #f3f6f8;
 	padding: 4px 10px;
 	font-weight: normal;
@@ -490,7 +473,6 @@ h1,
 	padding: 0 10px 4px;
 }
 a{
-	color: #26517D;
 	background-color: transparent;
 }
 a:hover{
@@ -513,8 +495,7 @@ a img{
 	padding: 10px 10px 10px;
 	margin: 0 10px 1em;
 }
-.opus legend{
-	color: #26517d;
+.opus legend {
 	padding: 0 0 2px;
 	text-transform: uppercase;
 	font-size: 0.9em;
@@ -527,7 +508,6 @@ a img{
 	float: left;
 }
 .intro{
-	color: #26517D;
 	background-color: transparent;
 	line-height: 1.6em;
 	float: left;
@@ -555,7 +535,6 @@ a img{
 }
 #top-header{
 	background: #f4f6f8;
-	color: #26517d;
 	height: 33px;
 	font: normal 12px Arial, Helvetica, sans-serif;
 	line-height: 30px;
@@ -597,7 +576,6 @@ body > #top-header{
 	background-color: transparent;
 }
 #top-header a{
-	color: #26517d;
 	background-color: transparent;
 	text-decoration: none;
 }
@@ -623,7 +601,6 @@ body > #top-header{
 #primary-nav *{
 	float: left;
 	font: normal 14px Arial, Helvetica, sans-serif;
-	color: #26517d;
 	background-color: transparent;
 }
 #primary-nav a{
@@ -762,7 +739,6 @@ body > #top-header{
 .facet h4{
 	font-size: 13px;
 	font-weight: bold;
-	color: #26517D;
 	margin: 0 0 0.5em;
 	padding-left: 18px;
 	background: url(../img/theme/icon-filter-small-blue.gif) no-repeat 0 50%;
@@ -1135,7 +1111,6 @@ dl.result_box {
 #seriesinfobox {
     padding-left: 420px;
     font-size: larger;
-    color: #26517D;
 }
 
 #seriesinfobox.max-width-available {

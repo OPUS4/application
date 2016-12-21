@@ -81,9 +81,6 @@
 }
 
 .adminContainer .breadcrumbsContainer {
-    /*color: #333;*/
-    /*color: #1d4065;*/
-    color: #26517d;
     background-color: #f3f6f8;
     padding: 4px 10px;
     border: solid #e2e6e9;
@@ -215,7 +212,6 @@
 }
 
 .adminContainer .docstateMenu a.workflow {
-    background-color: #26517D;
     color: white;
     padding: 0px 6px;
     padding-bottom: 1px;
