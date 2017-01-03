@@ -248,10 +248,6 @@
                                 <xsl:attribute name="name">project</xsl:attribute>
                                 <xsl:value-of select="@Number" />
                             </xsl:element>
-                            <xsl:element name="field">
-                                <xsl:attribute name="name">app_area</xsl:attribute>
-                                <xsl:value-of select="substring(@Number, 0, 2)" />
-                            </xsl:element>
                         </xsl:when>
                         <xsl:when test="@RoleName = 'institutes'">
                             <xsl:element name="field">
