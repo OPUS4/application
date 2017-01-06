@@ -81,10 +81,8 @@ class Admin_IndexmaintenanceController extends Application_Controller_Action {
             $jobId = $this->_model->createJob();
             if (!is_null($jobId)) {
                 return $this->_redirectToAndExit(
-                    'index', $this->view->translate(
-                        'admin_indexmaintenance_jobsumitted',
-                        $jobId
-                    )
+                    'index',
+                    $this->view->translate('admin_indexmaintenance_jobsumitted', array($jobId))
                 );
             }
         }

@@ -36,8 +36,8 @@
 // TODO move some of the processing into model or controller
 ?>
 
-<h1><?= $this->translate('access_select_module', $this->roleName) ?></h1>
-<p><?= $this->translate('access_current_role_name', $this->roleName) ?></p>
+<h1><?= $this->translate('access_select_module', array($this->roleName)) ?></h1>
+<p><?= $this->translate('access_current_role_name', array($this->roleName)) ?></p>
 
 <h2><?= $this->translate('access_module_changes_affect_accounts') ?></h2>
 <div>
