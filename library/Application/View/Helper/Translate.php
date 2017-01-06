@@ -42,6 +42,10 @@ class Application_View_Helper_Translate extends Zend_View_Helper_Translate {
      * The default value for $messageid is changed to distinguish between null values and no
      * parameter at all. This way translate() can still be used to obtain the translation object,
      * which is the default behavior.
+     *
+     * Also makes sure, that first option is never interpreted as a locale. This avoids the problem
+     * of a placeholder value that matches a locale, for instance a collection with the name 'de'.
+     * (for more information see OPUSVIER-2546)
      */
     public function translate($messageid = -1.1) {
         if (is_null($messageid)) {
@@ -56,6 +60,11 @@ class Application_View_Helper_Translate extends Zend_View_Helper_Translate {
 
         if ((count($options) === 1) and (is_array($options[0]) === true)) {
             $options = $options[0];
+        }
+        else if (count($options) > 1)
+        {
+            $locale = array_pop($options);
+            return parent::translate($messageid, $options, $locale);
         }
 
         return parent::translate($messageid, $options);
