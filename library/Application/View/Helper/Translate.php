@@ -46,6 +46,9 @@ class Application_View_Helper_Translate extends Zend_View_Helper_Translate {
      * Also makes sure, that first option is never interpreted as a locale. This avoids the problem
      * of a placeholder value that matches a locale, for instance a collection with the name 'de'.
      * (for more information see OPUSVIER-2546)
+     *
+     * TODO replace parent function entirely? Doing basically same things twice is not very efficient.
+     * TODO really try to get rid of this
      */
     public function translate($messageid = -1.1) {
         if (is_null($messageid)) {
@@ -58,16 +61,29 @@ class Application_View_Helper_Translate extends Zend_View_Helper_Translate {
         $options = func_get_args();
         array_shift($options);
 
+        $locale = null;
+
+        $count = count($options);
+
+        if ($count > 1)
+        {
+            if (Zend_Locale::isLocale($options[($count - 1)], null, false) !== false) {
+                $locale = array_pop($options);
+            }
+        }
+
         if ((count($options) === 1) and (is_array($options[0]) === true)) {
             $options = $options[0];
         }
-        else if (count($options) > 1)
+
+        if (is_null($locale))
         {
-            $locale = array_pop($options);
+            return parent::translate($messageid, $options);
+        }
+        else
+        {
             return parent::translate($messageid, $options, $locale);
         }
-
-        return parent::translate($messageid, $options);
     }
 
 }
