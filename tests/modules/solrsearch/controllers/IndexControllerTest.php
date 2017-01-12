@@ -567,8 +567,8 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         $this->dispatch('/solrsearch/index/search/searchtype/simple/start/0/rows/10/query/"\""');
 
         $body = $this->getResponse()->getBody();
-        $this->assertNotContains("exception 'Application_Exception' with message 'error_search_unavailable'", $body);
-        $this->assertContains("exception 'Application_SearchException' with message 'error_search_invalidquery'", $body);
+        $this->assertNotContains('Application_Exception: error_search_unavailable', $body);
+        $this->assertContains('Application_SearchException: error_search_invalidquery', $body);
         $this->assertEquals(500, $this->getResponse()->getHttpResponseCode());
     }
 
@@ -1087,9 +1087,9 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         $this->useEnglish();
         $this->dispatch('/solrsearch/index/search/searchtype/all/start/0/rows/10/facetNumber_author_facet/all');
         $this->assertXpathCount('//a[contains(@href, "author_facetfq")]', 104); // stimmt für Testdaten TODO über SQL
-        $this->assertQueryContentContains('//a', 'Wilfried Stecher');
-        $this->assertQueryContentContains('//a', 'Wally Walruss');
-        $this->assertQueryContentContains('//a', 'M. Scheinpflug');
+        $this->assertQueryContentContains('//a', 'Stecher, Wilfried');
+        $this->assertQueryContentContains('//a', 'Walruss, Wally');
+        $this->assertQueryContentContains('//a', 'Scheinpflug, M.');
         $this->assertQueryContentContains("//div[@id='author_facet_facet']/div/a", ' - less');
     }
 
@@ -1101,11 +1101,11 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
     public function testAuthorFacetClosed() {
         $this->useEnglish();
         $this->dispatch('/solrsearch/index/search/searchtype/all/start/0/rows/10');
-        $this->assertQueryContentContains('//a', 'John Doe');
-        $this->assertQueryContentContains('//a', 'Gerold A. Schneider');
-        $this->assertNotQueryContentContains('//a', 'Wilfried Stecher');
-        $this->assertNotQueryContentContains('//a', 'Wally Walruss');
-        $this->assertNotQueryContentContains('//a', 'M. Scheinpflug');
+        $this->assertQueryContentContains('//a', 'Doe, John');
+        $this->assertQueryContentContains('//a', 'Schneider, Gerold A.');
+        $this->assertNotQueryContentContains('//a', 'Stecher, Wilfried');
+        $this->assertNotQueryContentContains('//a', 'Walruss, Wally');
+        $this->assertNotQueryContentContains('//a', 'Scheinpflug, M.');
         $this->assertQueryContentContains("//div[@id='author_facet_facet']/div/a", ' + more');
         $this->assertNotQueryContentContains("//div[@id='has_fulltext_facet']//a", ' + more');
         $this->assertNotQueryContentContains("//div[@id='belongs_to_bibliography_facet']//a", ' + more');
