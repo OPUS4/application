@@ -577,22 +577,23 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
 
         // manipulate solr configuration
         $config = Zend_Registry::get('Zend_Config');
-        $host = $config->searchengine->index->host;
-        $port = $config->searchengine->index->port;
-        $oldValue = $config->searchengine->index->app;
-        $config->searchengine->solr->default->service->endpoint->localhost->path = '/solr/corethatdoesnotexist';
+
+        $host = $config->searchengine->solr->default->service->default->endpoint->primary->host;
+        $port = $config->searchengine->solr->default->service->default->endpoint->primary->port;
+        $oldValue = $config->searchengine->solr->default->service->default->endpoint->primary->path;
+        $config->searchengine->solr->default->service->default->endpoint->primary->path = '/solr/corethatdoesnotexist';
         Zend_Registry::set('Zend_Config', $config);
 
         $this->dispatch('/solrsearch/browse/doctypes');
 
         $body = $this->getResponse()->getBody();
         $this->assertNotContains("http://${host}:${port}/solr/corethatdoesnotexist", $body);
-        $this->assertContains("exception 'Application_SearchException' with message 'error_search_unavailable'", $body);
+        $this->assertContains("Application_SearchException: error_search_unavailable", $body);
         $this->assertResponseCode(503);
 
         // restore configuration
         $config = Zend_Registry::get('Zend_Config');
-        $config->searchengine->index->app = $oldValue;
+        $config->searchengine->solr->default->service->default->endpoint->primary->path = $oldValue;
         Zend_Registry::set('Zend_Config', $config);
     }
 
