@@ -46,28 +46,45 @@ class Application_View_Helper_Translate extends Zend_View_Helper_Translate {
      * Also makes sure, that first option is never interpreted as a locale. This avoids the problem
      * of a placeholder value that matches a locale, for instance a collection with the name 'de'.
      * (for more information see OPUSVIER-2546)
+     *
+     * TODO review if the behaviour changes are worth it - is there a better way?
      */
     public function translate($messageid = -1.1) {
         if (is_null($messageid)) {
             return '';
         }
         else if ($messageid === -1.1) {
-            $messageid = null;
+            return $this;
         }
 
         $options = func_get_args();
         array_shift($options);
 
-        if ((count($options) === 1) and (is_array($options[0]) === true)) {
+        $optCount = count($options);
+
+        $locale = null;
+
+        if (($optCount === 1) and (is_array($options[0]) === true)) {
             $options = $options[0];
         }
-        else if (count($options) > 1)
+        else if ($optCount > 1)
         {
-            $locale = array_pop($options);
-            return parent::translate($messageid, $options, $locale);
+            if (Zend_Locale::isLocale($options[$optCount - 1])) {
+                $locale = array_pop($options);
+            }
         }
 
-        return parent::translate($messageid, $options);
+        $translate = $this->getTranslator();
+
+        if ($translate !== null) {
+            $messageid = $translate->translate($messageid, $locale);
+        }
+
+        if (count($options) === 0) {
+            return $messageid;
+        }
+
+        return vsprintf($messageid, $options);
     }
 
 }

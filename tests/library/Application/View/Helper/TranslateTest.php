@@ -132,6 +132,19 @@ class Application_View_Helper_TranslateTest extends ControllerTestCase {
         );
     }
 
+    public function testTranslationMultipleParameters()
+    {
+        $this->useEnglish();
+
+        Zend_Registry::get('Zend_Translate')->loadModule('admin');
+
+        $helper = new Application_View_Helper_Translate();
+
+        $result = $helper->translate("search_results_from_to", 1, 10);
+
+        $this->assertEquals('Showing results <b>1</b> to <b>10</b>', $result);
+    }
+
 
 
 }
