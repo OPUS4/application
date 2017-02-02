@@ -583,7 +583,7 @@ class CitationExport_IndexControllerTest extends ControllerTestCase {
     public function testBibtexYearExportWithEmptyStrings() {
         $doc = $this->createTestDocument();
         $doc->setCompletedDate('');
-        $doc->setCompletedYear('');
+        $doc->setCompletedYear(null);
         $doc->setPublishedDate('');
         $doc->setPublishedYear('2015');
         $docId = $doc->store();
