@@ -140,8 +140,11 @@ class Sword_DepositController extends Zend_Rest_Controller {
     }    
     
     private function maxUploadSizeExceeded($payload) {
-        // retrieve number of bytes (not characters) of HTTP payload (SWORD package)
-        $size = mb_strlen($payload, '8bit');
+        if (function_exists('mb_strlen')) {
+            $size = mb_strlen($payload, '8bit');
+        } else {
+            $size = strlen($payload);
+        }
         
         $maxUploadSize = (new Application_Util_MaxUploadSize())->getMaxUploadSizeInByte();
         if ($size > $maxUploadSize) {
