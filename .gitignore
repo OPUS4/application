@@ -19,7 +19,7 @@ workspace/**/*
 apacheconf/apache.conf
 application/configs/config.ini
 application/configs/config.xml
-application/configs/sword-module-passwords.txt
+application/configs/modules/sword/passwords.txt
 db/createdb.sh
 public/.htaccess
 public/js
