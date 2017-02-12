@@ -30,6 +30,20 @@
  * @copyright   Copyright (c) 2016
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
+ * 
+ * This class holds OPUS specific enrichments that are associated with every
+ * document that is imported via SWORD API.
+ * 
+ * opus.import.user     : name of user (as used in HTTP Basic Auth) that issued
+ *                        the SWORD request
+ * opus.import.date     : datestamp of import
+ * opus.import.file     : name of package file (zip / tar archive) that was used
+ *                        as SWORD payload (as specified in HTTP
+ *                        Content-Disposition header)
+ * opus.import.checksum : md5 checksum of SWORD package (as specified in HTTP
+ *                        Content-MD5 header)
+ * 
+ * 
  */
 class Application_Import_AdditionalEnrichments {
     
