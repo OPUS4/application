@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -62,8 +63,7 @@ class Application_Controller_Plugin_SecurityRealm extends Zend_Controller_Plugin
         if (false === empty($identity)) {
             try {
                 $realm->setUser($identity);
-            }
-            catch (Exception $e) {
+            } catch (Exception $e) {
                 $auth->clearIdentity();
                 throw new Exception($e);
             }
@@ -75,6 +75,35 @@ class Application_Controller_Plugin_SecurityRealm extends Zend_Controller_Plugin
         if (isset($_SERVER['REMOTE_ADDR']) and preg_match('/:/', $_SERVER['REMOTE_ADDR']) === 0) {
             $realm->setIp($_SERVER['REMOTE_ADDR']);
         }
+    }
+
+    
+    // adjustments to enable different authentication mechanism for SWORD module
+    public function __construct($groups = array()) {
+        $this->groups = array();
+        foreach ((array) $groups as $id => $modules) {
+            $this->groups[$id] = (array) $modules;
+        }
+    }
+
+    private function getModuleMemberName($moduleName) {
+        $member = Zend_Auth_Storage_Session::MEMBER_DEFAULT;
+        // try to find group of module
+        foreach ($this->groups as $id => $modules) {
+            if (in_array($moduleName, $modules)) {
+                // return group's member name
+                return $member . $id;
+            }
+        }
+        // return fallback member name
+        return $member;
+    }
+
+    public function preDispatch(Zend_Controller_Request_Abstract $request) {
+        $namespace = Zend_Auth_Storage_Session::NAMESPACE_DEFAULT;
+        $member = $this->getModuleMemberName($request->getModuleName());
+        $storage = new Zend_Auth_Storage_Session($namespace, $member);
+        Zend_Auth::getInstance()->setStorage($storage);
     }
 
 }

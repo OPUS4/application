@@ -33,14 +33,5 @@
  * @version     $Id$
  */
 class Sword_Bootstrap extends Zend_Application_Module_Bootstrap {
-
-    protected function _initRestRoute() {
-        $frontController = Zend_Controller_Front::getInstance();
-        $restRoute = new Zend_Rest_Route($frontController, array(), array('sword'));
-        $frontController->getRouter()->addRoute('rest', $restRoute);
-        if ($frontController->hasPlugin('Application_Controller_Plugin_SecurityRealm')) {
-            $frontController->unregisterPlugin('Application_Controller_Plugin_SecurityRealm');
-        }
-    }
-
+    
 }
