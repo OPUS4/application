@@ -57,12 +57,14 @@ class Sword_DepositController extends Zend_Rest_Controller {
             return;                       
         }
        
-        // currently OPUS supports deposit of ZIP and TAR packages only
-        $contentType = $request->getHeader('Content-Type');
-        if (is_null($contentType) || $contentType === false || ($contentType != 'application/zip' && $contentType != 'application/tar')) {
+        // currently OPUS supports deposit of ZIP and TAR packages only       
+        try {
+            $contentType = $request->getHeader('Content-Type');
+            $packageHandler = new Sword_Model_PackageHandler($contentType);    
+        } catch (Exception $e) {
             $errorDoc = new Sword_Model_ErrorDocument($request, $response);
             $errorDoc->setErrorContent();
-            return;           
+            return;
         }
         
         // check that package size does not exceed maximum upload size 
@@ -76,6 +78,7 @@ class Sword_DepositController extends Zend_Rest_Controller {
         // check that all import enrichment keys are present
         try {
             $additionalEnrichments = $this->getAdditionalEnrichments($userName, $request);
+            $packageHandler->setAdditionalEnrichments($additionalEnrichments);
         } catch (Exception $ex) {
             $errorDoc = new Sword_Model_ErrorDocument($request, $response);
             $errorDoc->setMissingImportEnrichmentKey();
@@ -94,7 +97,6 @@ class Sword_DepositController extends Zend_Rest_Controller {
         }
                 
         try {
-            $packageHandler = new Sword_Model_PackageHandler($additionalEnrichments, $contentType);
             $statusDoc = $packageHandler->handlePackage($payload);
             if (is_null($statusDoc)) {
                 // im Archiv befindet sich keine Datei opus.xml oder die Datei ist leer

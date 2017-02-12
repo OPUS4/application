@@ -41,12 +41,19 @@ class Sword_Model_PackageHandler {
     
     const PACKAGE_TYPE_TAR = 'tar';
     
-    public function __construct($additionalEnrichments, $contentType) {
-        $this->additionalEnrichments = $additionalEnrichments;
+    public function __construct($contentType) {
         $this->setPackageType($contentType);
     }
     
+    public function setAdditionalEnrichments($additionalEnrichments) {
+        $this->additionalEnrichments = $additionalEnrichments;
+    }
+
     private function setPackageType($contentType) {
+        if (is_null($contentType) || $contentType === false) {
+            throw new Exception('Content-Type header is required');
+        }
+
         switch ($contentType) {
             case 'application/zip':
                 $this->packageType = self::PACKAGE_TYPE_ZIP;
