@@ -65,7 +65,8 @@ class Sword_ServicedocumentController extends Zend_Rest_Controller {
     }
     
     private function setServiceDocument($response) {
-        $serviceDocument = new Sword_Model_ServiceDocument($this->getFullUrl());
+        $fullUrl = $this->view->fullUrl();
+        $serviceDocument = new Sword_Model_ServiceDocument($fullUrl);
         $domDocument = $serviceDocument->getDocument();
         
         $config = Zend_Registry::get('Zend_Config');
@@ -77,13 +78,6 @@ class Sword_ServicedocumentController extends Zend_Rest_Controller {
         
         $response->setBody($domDocument->saveXml());        
     }
-    
-    private function getFullUrl() {
-        $fullUrlHelper = new Application_View_Helper_FullUrl();
-        $fullUrlHelper->setView(new Zend_View());
-        return $fullUrlHelper->fullUrl();
-    }
-    
     public function deleteAction() {
         $this->return500($this->getResponse());
     }
