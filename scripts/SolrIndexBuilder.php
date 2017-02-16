@@ -90,27 +90,32 @@ class SolrIndexBuilder {
      * Prints a help message to the console.
      */
     private function printHelpMessage($argv) {
-        $this->write(
-            PHP_EOL .
-            "This program can be used to build up an initial Solr index (e.g., useful when migrating instances)" .
-            PHP_EOL .
-            PHP_EOL .
-            "Usage: " . $argv[0] . " [-c] [starting with ID] [ending with ID]" . PHP_EOL .
-            PHP_EOL .
-            "[starting with ID] If system aborted indexing at some ID, you can restart this command by supplying" .
-            " this parameter." . PHP_EOL .
-            "It should be the ID where the program stopped before." . PHP_EOL .
-            "Default start value is 0." . PHP_EOL .
-            PHP_EOL .
-            "[ending with ID] You can also supply a second ID where the indexer should stop indexing." . PHP_EOL .
-            "If you omit this parameter or set it to -1, the indexer will index all remaining documents." . PHP_EOL .
-            PHP_EOL .
-            "In case both parameters are not specified the currently used index is deleted before insertion of new" .
-            " documents begins." . PHP_EOL .
-            PHP_EOL .
-            'You can use option \'-c\' to clear the document XML cache entries of the documents before indexing.' .
-            PHP_EOL . PHP_EOL
-        );
+        $text = <<<EOT
+OPUS 4 SolrIndexBuilder
+
+This program can be used to build up an initial Solr index (e.g., useful when
+migrating instances).
+
+Usage:
+
+  php $argv[0] [-c] [Start ID] [End ID]
+
+  [Start ID] ID of document where indexing should start
+  [End ID]   ID of document where indexing should stop
+
+If only the starting ID is specified all remaining documents with higher IDs
+will be indexed.
+
+If no ID is specified the entire index will be cleared before reindexing all
+documents.
+
+Options:
+  -c : Clear document XML cache entries before indexing
+  -h : Shows this help message (--help)
+  -d : Enables debug output (--debug) - NOT IMPLEMENTED YET
+
+EOT;
+        $this->write($text . PHP_EOL);
     }
 
     /**
