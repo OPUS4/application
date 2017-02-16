@@ -81,6 +81,12 @@ class SolrIndexBuilder {
     private $_clearCache = false;
 
     /**
+     * Flag for debug output.
+     * @var bool
+     */
+    private $_debugEnabled = false;
+
+    /**
      * Prints a help message to the console.
      */
     private function printHelpMessage($argv) {
@@ -111,24 +117,44 @@ class SolrIndexBuilder {
      * Evaluates command line arguments.
      */
     private function evaluateArguments($argc, $argv) {
-        if (true === in_array('--help', $argv) || true === in_array('-h', $argv)) {
-            $this->_showHelp = true;
-        }
-        else {
-            if (true === in_array('-c', $argv)) {
-                $this->_clearCache = true;
-            }
+        $options = getopt("cdh", array('help', 'debug'));
 
-            if ($argc >= 2) {
-                $this->_start = $argv[1];
-            }
-            if ($argc >= 3) {
-                $this->_end = $argv[2];
-            }
-            if (is_null($this->_start) && is_null($this->_end)) {
-                // TODO gesondertes Argument für Indexdeletion einführen
-                $this->_deleteAllDocs = true;
-            }
+        if (array_key_exists('debug', $options) || array_key_exists('d', $options)) {
+            $this->_debugEnabled = true;
+        }
+
+        if (array_key_exists('help', $options) || array_key_exists('h', $options)) {
+            $this->_showHelp = true;
+            return;
+        }
+
+        if (true === array_key_exists('c', $options)) {
+            $this->_clearCache = true;
+        }
+
+        if ($argc == 2)
+        {
+            $start = $argv[$argc - 1];
+        }
+        else if ($argc > 2)
+        {
+            $start = $argv[$argc - 2];
+            $end = $argv[$argc - 1];
+        }
+
+        if (is_numeric($start) && ctype_digit($start))
+        {
+            $this->_start = $start;
+        }
+
+        if (is_numeric($end) && ctype_digit($end))
+        {
+            $this->_end = $end;
+        }
+
+        if (is_null($this->_start) && is_null($this->_end)) {
+            // TODO gesondertes Argument für Indexdeletion einführen
+            $this->_deleteAllDocs = true;
         }
     }
 
@@ -141,6 +167,14 @@ class SolrIndexBuilder {
         if ($this->_showHelp) {
             $this->printHelpMessage($argv);
             return;
+        }
+
+        if (!is_null($this->_end))
+        {
+            echo PHP_EOL . "Indexing documents {$this->_start} to {$this->_end} ..." . PHP_EOL;
+        }
+        else {
+            echo PHP_EOL . "Indexing documents starting at ID = {$this->_start} ..." . PHP_EOL;
         }
 
         try {
