@@ -204,7 +204,8 @@ EOT;
 
         $indexer = Opus_Search_Service::selectIndexingService( 'indexBuilder' );
 
-        if ( !$this->_deleteAllDocs ) {
+        if ($this->_deleteAllDocs) {
+            echo 'Removing all documents from the index ...' . PHP_EOL;
             $indexer->removeAllDocumentsFromIndex();
         }
 
