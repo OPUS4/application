@@ -70,7 +70,7 @@ class Sword_Model_ServiceDocument {
         $this->addSwordElement('verbose', self::SWORD_SUPPORT_VERBOSE_MODE, $rootElement);
         $this->addSwordElement('noOp', self::SWORD_SUPPORT_NOOP_MODE, $rootElement);
 
-        $maxUploadSize = new Application_Util_MaxUploadSize();
+        $maxUploadSize = new Application_Configuration_MaxUploadSize();
         $this->addSwordElement('maxUploadSize', $maxUploadSize->getMaxUploadSizeInKB(), $rootElement);
 
         $workspaceNode = $this->document->createElement('workspace');

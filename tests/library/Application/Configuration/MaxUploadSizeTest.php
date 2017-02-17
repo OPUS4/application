@@ -1,5 +1,5 @@
 <?php
-class Application_Util_MaxUploadSizeTest extends ControllerTestCase {
+class Application_Configuration_MaxUploadSizeTest extends ControllerTestCase {
     
     /**
      * Der Wert von sword:maxUploadSize ist als das Minimum von den folgenden
@@ -11,7 +11,7 @@ class Application_Util_MaxUploadSizeTest extends ControllerTestCase {
      * 
      */
     public function testMaxUploadSize() {
-        $maxUploadSize = new Application_Util_MaxUploadSize();
+        $maxUploadSize = new Application_Configuration_MaxUploadSize();
         $maxUploadSizeByte = $maxUploadSize->getMaxUploadSizeInByte();
         $maxUploadSizeKByte = $maxUploadSize->getMaxUploadSizeInKB();
         

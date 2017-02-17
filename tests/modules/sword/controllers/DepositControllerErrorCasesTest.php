@@ -87,7 +87,7 @@ class Sword_DepositControllerErrorCasesTest extends ControllerTestCase {
         $this->getRequest()->setHeader('Content-Type', DepositTestHelper::CONTENT_TYPE_ZIP);
         $this->testHelper->setValidAuthorizationHeader($this->getRequest(), DepositTestHelper::USER_AGENT);
         
-        $maxUploadSize = new Application_Util_MaxUploadSize();
+        $maxUploadSize = new Application_Configuration_MaxUploadSize();
         $numOfBytes = 1 + $maxUploadSize->getMaxUploadSizeInByte();
         $payload = '';
         for ($i = 0; $i < $numOfBytes; $i++) {

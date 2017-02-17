@@ -25,13 +25,13 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Application_Util
+ * @package     Application_Configuration
  * @author      Sascha Szott
  * @copyright   Copyright (c) 2016
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Application_Util_MaxUploadSize {
+class Application_Configuration_MaxUploadSize {
     
     /**
      * The element sword:maxUploadSize indicates the maximum size (in kB) of 

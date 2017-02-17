@@ -144,7 +144,7 @@ class Sword_ServiceDocumentControllerTest extends ControllerTestCase {
         
         $this->testHelper->assertNodeProperties(3, $root, 'sword:noOp', Sword_Model_ServiceDocument::SWORD_SUPPORT_NOOP_MODE);
 
-        $maxUploadSize = new Application_Util_MaxUploadSize();
+        $maxUploadSize = new Application_Configuration_MaxUploadSize();
         $this->testHelper->assertNodeProperties(4, $root, 'sword:maxUploadSize', $maxUploadSize->getMaxUploadSizeInKB());        
         
         $workspaceNode = $root->item(5);
