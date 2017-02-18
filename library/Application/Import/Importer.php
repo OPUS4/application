@@ -47,6 +47,7 @@ class Application_Import_Importer {
     private $statusDoc = null;
     private $additionalEnrichments = null;
     private $importCollection = null;
+    private $singleDocImport = false;
 
     public function __construct($xml, $isFile = false, $logger = null, $logfile = null) {
         $this->logger = $logger;
@@ -103,6 +104,12 @@ class Application_Import_Importer {
         $numOfSkippedDocs = 0;
 
         $opusDocuments = $this->xml->getElementsByTagName('opusDocument');
+        
+        // in case of a single document deposit (via SWORD) we allow to omit 
+        // the explicit declaration of file elements (within <files>..</files>)
+        // and automatically import all files in the root level of the SWORD package
+        $this->singleDocImport = $opusDocuments->length == 1;
+        
         foreach ($opusDocuments as $opusDocumentElement) {
 
             // save oldId for later referencing of the record under consideration
@@ -150,7 +157,12 @@ class Application_Import_Importer {
 
             try {
                 $this->processAttributes($opusDocumentElement->attributes, $doc);
-                $this->processElements($opusDocumentElement->childNodes, $doc);
+                $filesElementFound = $this->processElements($opusDocumentElement->childNodes, $doc);
+                if ($this->swordContext && $this->singleDocImport && !$filesElementFound) {
+                    // add all files in the root level of the package to the currently
+                    // processed document
+                    $this->importFilesDirectly($doc);
+                }
             } catch (Exception $e) {
                 $this->log('Error while processing document #' . $oldId . ': ' . $e->getMessage());
                 $this->appendDocIdToRejectList($oldId);
@@ -331,8 +343,14 @@ class Application_Import_Importer {
      *
      * @param DOMNodeList $elements
      * @param Opus_Document $doc
+     * 
+     * @return boolean returns true if the import XML definition of the
+     *                 currently processed document contains the first level
+     *                 element files
      */
-    private function processElements($elements, $doc) {        
+    private function processElements($elements, $doc) {
+        $filesElementPresent = false;
+        
         foreach ($elements as $node) {
             if ($node instanceof DOMElement) {
                 switch ($node->tagName) {
@@ -375,7 +393,8 @@ class Application_Import_Importer {
                     case 'dates':
                         $this->handleDates($node, $doc);
                         break;
-                    case 'files':                        
+                    case 'files':
+                        $filesElementPresent = true;
                         if (!is_null($this->importDir)) {
                             $baseDir = trim($node->getAttribute('basedir'));
                             $this->handleFiles($node, $doc, $baseDir);                            
@@ -386,6 +405,7 @@ class Application_Import_Importer {
                 }
             }
         }
+        return $filesElementPresent;
     }
 
     /**
@@ -746,51 +766,69 @@ class Application_Import_Importer {
                     $this->log('At least one of the file attributes name or path must be defined!');
                     continue;
                 }
-                
-                $fullPath = $this->importDir;
-                if ($baseDir != '') {
-                    $fullPath .= $baseDir . DIRECTORY_SEPARATOR;
-                }                
-                $fullPath .= ($path != '') ? $path : $name;                                                
-                
-                if (!is_readable($fullPath)) {
-                    $this->log('Cannot read file ' . $fullPath . ': make sure that it is contained in import package');
-                    continue;
-                }                
-                
-                if (!$this->validMimeType($fullPath)) {
-                    $this->log('MIME type of file ' . $fullPath . ' is not allowed for import');
-                    continue;
-                }                
-                                                
-                if (!$this->checksumValidation($childNode, $fullPath)) {
-                    $this->log('Checksum validation of file ' . $fullPath . ' was not successful: check import package');
-                    continue;
-                }                
-                
-                $file = new Opus_File();
-                $this->handleFileAttributes($childNode, $file);                                
-                if (is_null($file->getLanguage())) {
-                    $file->setLanguage($doc->getLanguage());
-                }
-
-                $file->setTempFile($fullPath);
-                // allow to overwrite file name (if attribute name was specified)
-                $pathName = $name;
-                if ($pathName == '') {
-                    $pathName = $fullPath;
-                }
-                $file->setPathName(basename($pathName));
                                 
-                $comments = $childNode->getElementsByTagName('comment');
-                if ($comments->length == 1) {
-                    $comment = $comments->item(0);
-                    $file->setComment(trim($comment->textContent));
-                }
-                
-                $doc->addFile($file);
+                $this->addSingleFile($doc, $name, $baseDir, $path, $childNode);
             }
         }
+    }
+    
+    /**
+     * 
+     * Add a single file to the given Opus_Document.
+     * 
+     * @param Opus_Document $doc the given document
+     * @param type $name name of the file that should be imported (relative to baseDir)
+     * @param string $baseDir (optional) path of the file that should be imported (relative to the import directory)
+     * @param string $path (optional) path (and name) of the file that should be imported (relative to baseDir)
+     * @param DOMNodeList $childNode (optional) additional metadata of the file (taken from import XML)
+     */
+    private function addSingleFile($doc, $name, $baseDir = '', $path = '', $childNode = null) {
+        $fullPath = $this->importDir;
+        if ($baseDir != '') {
+            $fullPath .= $baseDir . DIRECTORY_SEPARATOR;
+        }                
+        $fullPath .= ($path != '') ? $path : $name;                                                
+
+        if (!is_readable($fullPath)) {
+            $this->log('Cannot read file ' . $fullPath . ': make sure that it is contained in import package');
+            return;
+        }                
+
+        if (!$this->validMimeType($fullPath)) {
+            $this->log('MIME type of file ' . $fullPath . ' is not allowed for import');
+            return;
+        }                
+
+        if (!is_null($childNode) && !$this->checksumValidation($childNode, $fullPath)) {
+            $this->log('Checksum validation of file ' . $fullPath . ' was not successful: check import package');
+            return;
+        }                
+                
+        $file = new Opus_File();
+        if (!is_null($childNode)) {
+            $this->handleFileAttributes($childNode, $file);                                
+        }        
+        if (is_null($file->getLanguage())) {
+            $file->setLanguage($doc->getLanguage());
+        }
+
+        $file->setTempFile($fullPath);
+        // allow to overwrite file name (if attribute name was specified)
+        $pathName = $name;
+        if ($pathName == '') {
+            $pathName = $fullPath;
+        }
+        $file->setPathName(basename($pathName));
+
+        if (!is_null($childNode)) {
+            $comments = $childNode->getElementsByTagName('comment');
+            if ($comments->length == 1) {
+                $comment = $comments->item(0);
+                $file->setComment(trim($comment->textContent));
+            }            
+        }
+
+        $doc->addFile($file);        
     }
     
     /**
@@ -866,6 +904,19 @@ class Application_Import_Importer {
                 $methodName = 'set' . ucfirst($attribute);
                 $file->$methodName($value);
             }
+        }
+    }
+    
+    /**
+     * Add all files in the root level of the import package to the given
+     * document.
+     * 
+     * @param Opus_Document $doc document
+     */
+    private function importFilesDirectly($doc) {
+        $files = array_diff(scandir($this->importDir), array('..', '.', 'opus.xml'));
+        foreach ($files as $file) {
+            $this->addSingleFile($doc, $file);
         }
     }
 

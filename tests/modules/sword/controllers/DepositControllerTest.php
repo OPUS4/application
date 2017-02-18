@@ -98,7 +98,7 @@ class Sword_DepositControllerTest extends ControllerTestCase {
     }
 
     public function testTarArchiveWithEmptyElementsDocumentDeposit() {
-        $doc = $this->depositSuccessful('empty-elements.zip', DepositTestHelper::CONTENT_TYPE_ZIP, false, false);
+        $doc = $this->depositSuccessful('empty-elements.tar', DepositTestHelper::CONTENT_TYPE_TAR, false, false);
         $this->checkMinimalDoc($doc, 'eng', 'book', 'titlemain');
         $doc->deletePermanent();
         $this->testHelper->removeImportCollection();
@@ -112,10 +112,34 @@ class Sword_DepositControllerTest extends ControllerTestCase {
     }
 
     public function testTarArchiveWithEmptyElementsDocumentDepositAlternative() {
-        $doc = $this->depositSuccessful('empty-elements-alternative.zip', DepositTestHelper::CONTENT_TYPE_ZIP, false, false);
+        $doc = $this->depositSuccessful('empty-elements-alternative.tar', DepositTestHelper::CONTENT_TYPE_TAR, false, false);
         $this->checkMinimalDoc($doc, 'eng', 'book', 'titlemain');
         $doc->deletePermanent();
         $this->testHelper->removeImportCollection();
+    }
+    
+    public function testZipSingleDocWithMultipleFilesImplicit() {
+        $doc = $this->depositSuccessful('single-doc-files-implicit.zip', DepositTestHelper::CONTENT_TYPE_ZIP, false, false);
+        $this->checkMinimalDoc($doc, 'eng', 'book', 'titlemain', 3);
+        $files = $doc->getFile();
+        $language = $doc->getLanguage();
+        $this->checkFile($files[0], 'doc1.pdf', $language, null, 1, 1);
+        $this->checkFile($files[1], 'doc1.txt', $language, null, 1, 1);
+        $this->checkFile($files[2], 'foo.txt', $language, null, 1, 1);
+        $doc->deletePermanent();
+        $this->testHelper->removeImportCollection();        
+    }
+    
+    public function testTarSingleDocWithMultipleFilesImplicit() {
+        $doc = $this->depositSuccessful('single-doc-files-implicit.tar', DepositTestHelper::CONTENT_TYPE_TAR, false, false);
+        $this->checkMinimalDoc($doc, 'eng', 'book', 'titlemain', 3);
+        $files = $doc->getFile();
+        $language = $doc->getLanguage();
+        $this->checkFile($files[0], 'doc1.pdf', $language, null, 1, 1);
+        $this->checkFile($files[1], 'doc1.txt', $language, null, 1, 1);
+        $this->checkFile($files[2], 'foo.txt', $language, null, 1, 1);
+        $doc->deletePermanent();
+        $this->testHelper->removeImportCollection();        
     }
 
     private function checkOnlyOneDocIsImported($doc) {
@@ -125,12 +149,12 @@ class Sword_DepositControllerTest extends ControllerTestCase {
         $this->assertEquals('colliding-urn', $doc->getIdentifierUrn(0)->getValue());
     }
 
-    private function checkMinimalDoc($doc, $language = 'deu', $docType = 'book', $titleMainValue = 'Title Main deu') {
+    private function checkMinimalDoc($doc, $language = 'deu', $docType = 'book', $titleMainValue = 'Title Main deu', $fileCount = 0) {
         $this->assertEquals($language, $doc->getLanguage());
         $this->assertEquals($docType, $doc->getType());
         $this->testHelper->assertTitleValues($doc->getTitleMain(0), $titleMainValue, $language);
-        $this->assertEquals(0, count($doc->getFile()));
-   }
+        $this->assertEquals($fileCount, count($doc->getFile()));
+    }
 
     private function checkAllFieldsImport($doc) {
         $this->assertEquals('deu', $doc->getLanguage());
@@ -245,7 +269,7 @@ class Sword_DepositControllerTest extends ControllerTestCase {
         $this->checkFile($files[3], 'doc1.pdf', 'deu', 'doc1', 1, 1, 2, 'comment1');        
     }
     
-    public function checkFile($file, $name, $language, $displayName, $visibleInOai, $visibleInFrontdoor, $sortOrder, $comment) {
+    private function checkFile($file, $name, $language, $displayName, $visibleInOai, $visibleInFrontdoor, $sortOrder = null, $comment = null) {
         $this->assertEquals($name, $file->getPathName());
         $this->assertEquals($language, $file->getLanguage());
         if (!is_null($displayName)) {
@@ -256,7 +280,9 @@ class Sword_DepositControllerTest extends ControllerTestCase {
         if (!is_null($sortOrder)) {
             $this->assertEquals($sortOrder, $file->getSortOrder());
         }
-        $this->assertEquals($comment, $file->getComment());
+        if (!is_null($comment)) {
+            $this->assertEquals($comment, $file->getComment());
+        }        
     }
     
     private function checkLicence($licence, $id) {
