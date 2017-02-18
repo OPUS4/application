@@ -84,23 +84,51 @@ class Sword_DepositControllerTest extends ControllerTestCase {
     }
     
     public function testTarArchiveWithUrnCollision() {
-        $doc = $this->depositSuccessful('urn-collision.tar', DepositTestHelper::CONTENT_TYPE_TAR, false, false);   
+        $doc = $this->depositSuccessful('urn-collision.tar', DepositTestHelper::CONTENT_TYPE_TAR, false, false);
         $this->checkOnlyOneDocIsImported($doc);
         $doc->deletePermanent();
         $this->testHelper->removeImportCollection();        
     }
     
+    public function testZipArchiveWithEmptyElementsDocumentDeposit() {
+        $doc = $this->depositSuccessful('empty-elements.zip', DepositTestHelper::CONTENT_TYPE_ZIP, false, false);
+        $this->checkMinimalDoc($doc, 'eng', 'book', 'titlemain');
+        $doc->deletePermanent();
+        $this->testHelper->removeImportCollection();
+    }
+
+    public function testTarArchiveWithEmptyElementsDocumentDeposit() {
+        $doc = $this->depositSuccessful('empty-elements.zip', DepositTestHelper::CONTENT_TYPE_ZIP, false, false);
+        $this->checkMinimalDoc($doc, 'eng', 'book', 'titlemain');
+        $doc->deletePermanent();
+        $this->testHelper->removeImportCollection();
+    }
+
+    public function testZipArchiveWithEmptyElementsDocumentDepositAlternative() {
+        $doc = $this->depositSuccessful('empty-elements-alternative.zip', DepositTestHelper::CONTENT_TYPE_ZIP, false, false);
+        $this->checkMinimalDoc($doc, 'eng', 'book', 'titlemain');
+        $doc->deletePermanent();
+        $this->testHelper->removeImportCollection();
+    }
+
+    public function testTarArchiveWithEmptyElementsDocumentDepositAlternative() {
+        $doc = $this->depositSuccessful('empty-elements-alternative.zip', DepositTestHelper::CONTENT_TYPE_ZIP, false, false);
+        $this->checkMinimalDoc($doc, 'eng', 'book', 'titlemain');
+        $doc->deletePermanent();
+        $this->testHelper->removeImportCollection();
+    }
+
     private function checkOnlyOneDocIsImported($doc) {
         $this->assertEquals('eng', $doc->getLanguage());
         $this->assertEquals('article', $doc->getType());        
         $this->testHelper->assertTitleValues($doc->getTitleMain(0), 'The Title Main 1', 'eng');
         $this->assertEquals('colliding-urn', $doc->getIdentifierUrn(0)->getValue());
     }
-    
-    private function checkMinimalDoc($doc) {
-        $this->assertEquals('deu', $doc->getLanguage());
-        $this->assertEquals('book', $doc->getType());        
-        $this->testHelper->assertTitleValues($doc->getTitleMain(0), 'Title Main deu', 'deu');
+
+    private function checkMinimalDoc($doc, $language = 'deu', $docType = 'book', $titleMainValue = 'Title Main deu') {
+        $this->assertEquals($language, $doc->getLanguage());
+        $this->assertEquals($docType, $doc->getType());
+        $this->testHelper->assertTitleValues($doc->getTitleMain(0), $titleMainValue, $language);
         $this->assertEquals(0, count($doc->getFile()));
    }
 
