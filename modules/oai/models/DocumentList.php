@@ -59,8 +59,12 @@ class Oai_Model_DocumentList {
      *
      * @param array &$oaiRequest
      * @return array
+     *
+     * TODO function contains metadataPrefix specifische criteria for generating document list (refactor!)
      */
     public function query(array $oaiRequest) {
+        $today = date('Y-m-d', time());
+
         $finder = new Opus_DocumentFinder();
 
         // add server state restrictions
@@ -70,9 +74,11 @@ class Oai_Model_DocumentList {
         if ('xMetaDissPlus' === $metadataPrefix 
             || 'xMetaDiss' === $metadataPrefix) {
             $finder->setFilesVisibleInOai();
+            $finder->setNotEmbargoedOn($today);
         }
         if ('xMetaDiss' === $metadataPrefix) {
             $finder->setTypeInList($this->xMetaDissRestriction);
+            $finder->setNotEmbargoedOn($today);
         }
         if ('epicur' === $metadataPrefix) {
             $finder->setIdentifierTypeExists('urn');
@@ -132,8 +138,17 @@ class Oai_Model_DocumentList {
                     );
 
                     if (count($foundSubsets) < 1) {
-                        $msg = "Invalid SetSpec: Subset does not exist.";
-                        throw new Oai_Model_Exception($msg);
+                        $emptySubsets = array_filter($role->getAllOaiSetNames(), function ($s) use ($subsetName) {
+                            return $s['oai_subset'] === $subsetName;
+                        });
+
+                        if (count($emptySubsets) === 1) {
+                            return array();
+                        }
+                        else {
+                            $msg = "Invalid SetSpec: Subset does not exist.";
+                            throw new Oai_Model_Exception($msg);
+                        }
                     }
 
                     foreach ($foundSubsets AS $subset) {

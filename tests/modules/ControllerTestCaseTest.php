@@ -89,4 +89,40 @@ class ControllerTestCaseTest extends ControllerTestCase {
         $this->assertEquals('opus4', $view->baseUrl());
     }
 
+    /**
+     * Test removing document using identifier.
+     *
+     * @expectedException Opus_Model_NotFoundException
+     */
+    public function testRemoveDocumentById() {
+        $doc = new Opus_Document();
+        $docId = $doc->store();
+
+        $this->removeDocument($docId);
+
+        $doc = new Opus_Document($docId);
+    }
+
+    /**
+     * Test removing document using object.
+     *
+     * @expectedException Opus_Model_NotFoundException
+     */
+    public function testRemoveDocument() {
+        $doc = new Opus_Document();
+        $docId = $doc->store();
+
+        $this->removeDocument($doc);
+
+        $doc = new Opus_Document($docId);
+    }
+
+    /**
+     * Test removing document that has not been stored.
+     */
+    public function testRemoveDocumentNotStored() {
+        $doc = new Opus_Document();
+
+        $this->removeDocument($doc);
+    }
 }

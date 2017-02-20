@@ -34,18 +34,26 @@
 
 class Solrsearch_Model_CollectionRoles {
 
-    private $_collectionRoles = array();
+    private $_collectionRoles = null;
 
-    public function __construct() {
-        foreach (Opus_CollectionRole::fetchAll() as $collectionRole) {
-            if ($this->isVisible($collectionRole) && ($this->HasVisibleChildren($collectionRole)
-                    || $this->hasPublishedDocs($collectionRole))) {
-                array_push($this->_collectionRoles, $collectionRole);
+    /**
+     * Returns visible collection roles.
+     * @return array of Opus_CollectionRole objects
+     */
+    public function getAllVisible()
+    {
+        if (is_null($this->_collectionRoles)) {
+            $this->_collectionRoles = array();
+            foreach (Opus_CollectionRole::fetchAll() as $collectionRole) {
+                if ($this->isVisible($collectionRole)
+                    && ($this->hasVisibleChildren($collectionRole)
+                    || $this->hasPublishedDocs($collectionRole)))
+                {
+                    array_push($this->_collectionRoles, $collectionRole);
+                }
             }
         }
-    }
 
-    public function getAllVisible() {
         return $this->_collectionRoles;
     }
 
@@ -56,7 +64,8 @@ class Solrsearch_Model_CollectionRoles {
      * @param Opus_CollectionRole $collectionRole
      * @return bool
      */
-    private function hasVisibleChildren($collectionRole) {
+    private function hasVisibleChildren($collectionRole)
+    {
         $rootCollection = $collectionRole->getRootCollection();
         if (is_null($rootCollection)) {
             return false;
@@ -71,7 +80,8 @@ class Solrsearch_Model_CollectionRoles {
      * @param Opus_CollectionRole $collectionRole
      * @return bool
      */
-    private function hasPublishedDocs($collectionRole) {
+    private function hasPublishedDocs($collectionRole)
+    {
         $rootCollection = $collectionRole->getRootCollection();
         if (is_null($rootCollection)) {
             return false;
@@ -80,8 +90,15 @@ class Solrsearch_Model_CollectionRoles {
         return is_array($publishedDocIDs) && !empty($publishedDocIDs);
     }
 
-    private function isVisible($collectionRole) {
+    /**
+     * Returns true if collection role is visible in browsing.
+     * @param $collectionRole Opus_CollectionRole
+     * @return bool
+     */
+    private function isVisible($collectionRole)
+    {
         return $collectionRole->getVisible() === '1' and $collectionRole->getVisibleBrowsingStart() === '1';
     }
+
 }
 

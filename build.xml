@@ -88,6 +88,11 @@
               toFile="${basedir}/application/configs/config.ini" filtering="true" overwrite="true">
             <filterset filtersFile="${configfile}" />
         </copy>
+
+        <copy file="${basedir}/application/configs/console.ini.template"
+              toFile="${basedir}/application/configs/console.ini" filtering="true" overwrite="true">
+            <filterset filtersFile="${configfile}" />
+        </copy>
     </target>
 
     <target name="lint" description="Prüft, ob PHP Dateien Syntaxfehler enthalten.">
@@ -200,6 +205,9 @@
             <arg line="--configuration phpunit.xml" />
             <arg line="${testpath}" />
         </exec>
+    </target>
+
+    <target name="reset-testdata" depends="rebuild-database,rebuild-index,clean-cache">
     </target>
 
     <target name="demo-reset" depends="rebuild-database,demo-prepare-docs,rebuild-index,demo-reset-password">

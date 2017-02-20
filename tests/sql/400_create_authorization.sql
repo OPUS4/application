@@ -1,6 +1,8 @@
 # Rollen anlegen
 # beachte, dass Werte des Attributs 'name' nur Ziffern und Buchstaben enthalten dürfen
-INSERT INTO `user_roles` (`id`, `name`) VALUES 
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+
+INSERT INTO `user_roles` (`id`, `name`) VALUES
 (10, 'fulladmin'),
 (11, 'licenceadmin'),
 (12, 'testuserrole'),

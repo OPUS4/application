@@ -35,7 +35,7 @@
 /**
  * Abstract class for supporting editing of Opus roles in form.
  */
-abstract class Admin_Form_RolesAbstract extends Zend_Form {
+abstract class Admin_Form_RolesAbstract extends Application_Form_Model_Abstract {
 
     protected $_roleGroupLegendKey = 'admin_form_group_roles';
 

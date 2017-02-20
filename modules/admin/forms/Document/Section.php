@@ -83,4 +83,50 @@ class Admin_Form_Document_Section extends Admin_Form_AbstractDocumentSubForm {
         }
     }
 
+    /**
+     * TODO redundant - look into MultSubForm as base class
+     * TODO parameter is hack for OPUSVIER-3232
+     */
+    public function removeGapsInSubFormOrder($baseName) {
+        $subforms = $this->getSubForms();
+
+        $renamedSubforms = array();
+
+        $pos = 0;
+
+        foreach ($subforms as $index => $subform) {
+            $subform->setOrder($pos);
+            $name = $baseName . $pos;
+            $renamedSubforms[$name] = $subform;
+            $this->setOddEven($subform);
+            $pos++;
+        }
+
+        $this->setSubForms($renamedSubforms);
+    }
+
+    /**
+     * TODO redundant - look into MultSubForm as base class
+     */
+    public function setOddEven($subForm) {
+        $position = $subForm->getOrder();
+
+        $multiWrapper = $subForm->getDecorator('multiWrapper');
+
+        if (!is_null($multiWrapper) && $multiWrapper instanceof Zend_Form_Decorator_HtmlTag) {
+            $multiClass = $multiWrapper->getOption('class');
+            $markerClass = ($position % 2 == 0) ? 'even' : 'odd';
+
+            // TODO nicht 100% robust aber momentan ausreichend
+            if (strpos($multiClass, 'even') !== false || strpos($multiClass, 'odd') !== false) {
+                $multiClass = preg_replace('/odd|even/', $markerClass, $multiClass);
+            }
+            else {
+                $multiClass .= ' ' . $markerClass;
+            }
+
+            $multiWrapper->setOption('class', $multiClass);
+        }
+    }
+
 }

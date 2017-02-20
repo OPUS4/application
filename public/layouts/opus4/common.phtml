@@ -54,6 +54,7 @@ if (isset($this->title)) {
 }
 
 $this->headLink()
+    ->appendStylesheet($this->baseUrl() . '/' . $config->css->jqueryui->path, 'screen')
     ->appendStylesheet($this->layoutPath() . '/css/opus.css', 'screen,print')
     ->appendStylesheet($this->layoutPath() . '/css/admin.css', 'screen,print')
     ->headLink(array(
@@ -75,7 +76,7 @@ $this->container = Zend_Registry::get('Opus_Navigation');
 
 $jsFiles = array('searchutil.js', 'frontdoorutil.js', 'submit.js');
 
-if (in_array($this->moduleName, array('admin', 'review', 'setup'))) {
+if (in_array($this->moduleName, array('admin', 'review', 'setup', 'account'))) {
     $jsFiles[] = 'theme.js';
     $jsFiles[] = 'theme_lic.js';
 }
@@ -84,6 +85,7 @@ else if (in_array($this->moduleName, array('publish'))) {
 }
 
 if ($this->jQueryEnabled()) {
+    $this->headScript()->prependFile($this->baseUrl() . '/' . $config->javascript->jqueryui->path);
     $this->headScript()->prependFile($this->baseUrl() . '/' . $config->javascript->jquery->path);
 
     foreach ($jsFiles as $filename) {
@@ -115,6 +117,13 @@ if (isset($config->javascript->latex->mathjax)) {
 <?= $this->headTitle()->setIndent(8) ?>
 
 <?= $this->headLink()->setIndent(8) ?>
+
+
+        <script type="text/javascript">
+        //<![CDATA[
+            window.opusBaseUrl = '<?= $this->serverUrl() . $this->baseUrl() ?>';
+        //]]>
+        </script>
 
 <?= $this->headScript()->setIndent(8) ?>
 
@@ -169,7 +178,7 @@ if (isset($config->javascript->latex->mathjax)) {
                 </div>
             </div>
 
-            <div id="content" class="opus <?= (in_array($this->moduleName, array('admin', 'review', 'setup'))) ? 'adminContainer' : ''?> <?= $this->moduleName ?><?php if ($this->moduleName === 'publish') : ?>"><?php else : ?><?= ($this->controllerName === 'index' ? '' : '_'.$this->controllerName)?><?= ($this->actionName === 'index' ? '' : '_'.$this->actionName)?><?= ($this->searchType === 'collection' || $this->searchType === 'latest' ? ' '.$this->searchType : '') ?>"><?php  endif; ?>
+            <div id="content" class="opus <?= (in_array($this->moduleName, array('admin', 'review', 'setup', 'account'))) ? 'adminContainer' : ''?> <?= $this->moduleName ?><?php if ($this->moduleName === 'publish') : ?>"><?php else : ?><?= ($this->controllerName === 'index' ? '' : '_'.$this->controllerName)?><?= ($this->actionName === 'index' ? '' : '_'.$this->actionName)?><?= ($this->searchType === 'collection' || $this->searchType === 'latest' ? ' '.$this->searchType : '') ?>"><?php  endif; ?>
 
                 <?PHP $messages = !is_null($this->flashMessenger) ? $this->flashMessenger->getMessages() : null ?>
 

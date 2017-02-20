@@ -1,4 +1,4 @@
-#!/usr/bin/env php5
+#!/usr/bin/env php
 <?php
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
@@ -75,48 +75,97 @@ class SolrIndexBuilder {
     private $_showHelp = false;
 
     /**
+     * Flag for deleting document xml cache before indexing.
+     * @var bool
+     */
+    private $_clearCache = false;
+
+    /**
+     * Flag for debug output.
+     * @var bool
+     */
+    private $_debugEnabled = false;
+
+    /**
      * Prints a help message to the console.
      */
     private function printHelpMessage($argv) {
-        $this->write(
-            PHP_EOL .
-            "This program can be used to build up an initial Solr index (e.g., useful when migrating instances)" .
-            PHP_EOL .
-            PHP_EOL .
-            "Usage: " . $argv[0] . " [starting with ID] [ending with ID]" . PHP_EOL .
-            PHP_EOL .
-            "[starting with ID] If system aborted indexing at some ID, you can restart this command by supplying" .
-            " this parameter." . PHP_EOL .
-            "It should be the ID where the program stopped before." . PHP_EOL .
-            "Default start value is 0." . PHP_EOL .
-            PHP_EOL .
-            "[ending with ID] You can also supply a second ID where the indexer should stop indexing." . PHP_EOL .
-            "If you omit this parameter or set it to -1, the indexer will index all remaining documents." . PHP_EOL .
-            PHP_EOL .
-            "In case both parameters are not specified the currently used index is deleted before insertion of new" .
-            " documents begins." . PHP_EOL .
-            PHP_EOL
-        );
+        $text = <<<EOT
+OPUS 4 SolrIndexBuilder
+
+This program can be used to build up an initial Solr index (e.g., useful when
+migrating instances).
+
+Usage:
+
+  php $argv[0] [-c] [Start ID] [End ID]
+
+  [Start ID] ID of document where indexing should start
+  [End ID]   ID of document where indexing should stop
+
+If only the starting ID is specified all remaining documents with higher IDs
+will be indexed.
+
+If no ID is specified the entire index will be cleared before reindexing all
+documents.
+
+Options:
+  -c : Clear document XML cache entries before indexing
+  -h : Shows this help message (--help)
+  -d : Enables debug output (--debug) - NOT IMPLEMENTED YET
+
+EOT;
+        $this->write($text . PHP_EOL);
     }
 
     /**
      * Evaluates command line arguments.
      */
     private function evaluateArguments($argc, $argv) {
-        if (true === in_array('--help', $argv) || true === in_array('-h', $argv)) {
-            $this->_showHelp = true;
+        $options = getopt("cdh", array('help', 'debug'));
+
+        if (array_key_exists('debug', $options) || array_key_exists('d', $options)) {
+            $this->_debugEnabled = true;
         }
-        else {
-            if ($argc >= 2) {
-                $this->_start = $argv[1];
-            }
-            if ($argc >= 3) {
-                $this->_end = $argv[2];
-            }
-            if (is_null($this->_start) && is_null($this->_end)) {
-                // TODO gesondertes Argument für Indexdeletion einführen
-                $this->_deleteAllDocs = true;
-            }
+
+        if (array_key_exists('help', $options) || array_key_exists('h', $options)) {
+            $this->_showHelp = true;
+            return;
+        }
+
+        if (true === array_key_exists('c', $options)) {
+            $this->_clearCache = true;
+        }
+
+        if ($argc == 2)
+        {
+            $start = $argv[$argc - 1];
+        }
+        else if ($argc > 2)
+        {
+            $start = $argv[$argc - 2];
+            $end = $argv[$argc - 1];
+        }
+
+        if (is_numeric($start) && ctype_digit($start))
+        {
+            $this->_start = $start;
+        }
+
+        if (is_numeric($end) && ctype_digit($end))
+        {
+            $this->_end = $end;
+        }
+
+        // check if only end is set (happens when options are used)
+        if (is_null($this->_start) && !is_null($this->_end)) {
+            $this->_start = $this->_end;
+            $this->_end = null;
+        }
+
+        if (is_null($this->_start) && is_null($this->_end)) {
+            // TODO gesondertes Argument für Indexdeletion einführen
+            $this->_deleteAllDocs = true;
         }
     }
 
@@ -129,6 +178,19 @@ class SolrIndexBuilder {
         if ($this->_showHelp) {
             $this->printHelpMessage($argv);
             return;
+        }
+
+        if (!is_null($this->_end))
+        {
+            echo PHP_EOL . "Indexing documents {$this->_start} to {$this->_end} ..." . PHP_EOL;
+        }
+        else if (!is_null($this->_start))
+        {
+            echo PHP_EOL . "Indexing documents starting at ID = {$this->_start} ..." . PHP_EOL;
+        }
+        else
+        {
+            echo PHP_EOL . 'Indexing all documents ...' . PHP_EOL;
         }
 
         try {
@@ -153,7 +215,8 @@ class SolrIndexBuilder {
 
         $indexer = Opus_Search_Service::selectIndexingService( 'indexBuilder' );
 
-        if ( !$this->_deleteAllDocs ) {
+        if ($this->_deleteAllDocs) {
+            echo 'Removing all documents from the index ...' . PHP_EOL;
             $indexer->removeAllDocumentsFromIndex();
         }
 
@@ -165,8 +228,14 @@ class SolrIndexBuilder {
 
         // measure time for each document
 
+        $cache = new Opus_Model_Xml_Cache();
+
         foreach ($docIds as $docId) {
             $timeStart = microtime(true);
+
+            if ($this->_clearCache) {
+                $cache->removeAllEntriesWhereDocumentId($docId);
+            }
 
             $doc = new Opus_Document($docId);
 

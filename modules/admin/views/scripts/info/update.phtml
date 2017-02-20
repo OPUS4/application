@@ -44,7 +44,7 @@
 <div>
     <?= $this->message ?>
 
-    <?PHP if (!is_null($this->latestVersion)) : ?>
-        <a href="http://www.kobv.de/opus4/software/"><?= $this->translate('admin_info_version_get_update') ?></a>
+    <?PHP if ($this->showUpdateLink) : ?>
+        <a href="http://opus4.github.io/userdoc/update/"><?= $this->translate('admin_info_version_get_update') ?></a>
     <?PHP endif; ?>
 </div>

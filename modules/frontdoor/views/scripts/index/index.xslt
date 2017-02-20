@@ -107,7 +107,7 @@
                            <xsl:choose>
                                <xsl:when test="php:functionString('Frontdoor_IndexController::useCustomSortOrder', @Id)">
                                   <xsl:apply-templates select="File[@VisibleInFrontdoor='1']">
-                                     <xsl:sort select="@SortOrder"/>
+                                     <xsl:sort select="@SortOrder" data-type="number" />
                                   </xsl:apply-templates>
                                </xsl:when>
                                <xsl:otherwise>
@@ -187,7 +187,7 @@
             <xsl:apply-templates select="TitleAdditional" mode="mainLanguage" />
             <xsl:apply-templates select="TitleAdditional" mode="otherLanguage" />
             <xsl:apply-templates select="Series[@Visible=1]" >
-                <xsl:sort select="@SortOrder"/>
+                <xsl:sort select="@SortOrder" data-type="number" />
             </xsl:apply-templates>
             <xsl:apply-templates select="@PublisherName" />
             <xsl:apply-templates select="@PublisherPlace" />
@@ -308,6 +308,10 @@
 
             <xsl:apply-templates select="Patent" />
             <xsl:apply-templates select="Licence" />
+
+            <xsl:if test="php:functionString('Frontdoor_IndexController::isDisplayField', 'BelongsToBibliography')">
+                <xsl:apply-templates select="@BelongsToBibliography" />
+            </xsl:if>
         </table>
 
     </xsl:template>

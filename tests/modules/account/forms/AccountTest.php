@@ -36,6 +36,34 @@
  */
 class Account_Form_AccountTest extends ControllerTestCase {
 
+    private $account = null;
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        $account = Opus_Account::fetchAccountByLogin('user');
+
+        if (is_null($account))
+        {
+            $account = new Opus_Account();
+            $account->setLogin('user');
+            $account->setPassword('userpwd');
+            $account->store();
+            $this->account = $account;
+        }
+    }
+
+    public function tearDown()
+    {
+        if (!is_null($this->account))
+        {
+            $this->account->delete();
+        }
+
+        parent::tearDown();
+    }
+
     /**
      * Test creating an account form.
      */

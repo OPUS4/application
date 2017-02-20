@@ -222,6 +222,8 @@ class Admin_Form_Document_PatentTest extends ControllerTestCase {
 
         $form->getElement('Number')->setValue('323');
         $form->getElement('YearApplied')->setValue(''); // Leeres Feld
+        $form->getElement('Countries')->setValue('Germany');
+        $form->getElement('Application')->setValue('description');
 
         $patent = new Opus_Patent();
 

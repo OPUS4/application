@@ -123,13 +123,11 @@ class Admin_Form_Document_Collections extends Admin_Form_AbstractDocumentSubForm
                     foreach ($collections as $key => $collection) {
                         $colForm = $roleForm->getSubForm($key);
 
-                        $result = $colForm->processPost($collection, $context);
+                        if (!is_null($colForm)) {
+                            $result = $colForm->processPost($collection, $context);
 
-                        if ($result === 'remove') {
-                            // TODO move to function _removeSubForm?
-                            $roleForm->removeSubForm($colForm->getName());
-                            if (count($roleForm->getSubForms()) == 0) {
-                                $this->removeSubForm($roleForm->getName());
+                            if ($result === 'remove') {
+                                $this->_removeCollection($roleForm, $colForm);
                             }
                         }
                     }
@@ -137,7 +135,17 @@ class Admin_Form_Document_Collections extends Admin_Form_AbstractDocumentSubForm
             }
         }
     }
-    
+
+    protected function _removeCollection($roleForm, $colForm) {
+        $roleForm->removeSubForm($colForm->getName());
+        if (count($roleForm->getSubForms()) == 0) {
+            $this->removeSubForm($roleForm->getName());
+        }
+        else {
+            $roleForm->removeGapsInSubFormOrder('collection');
+        }
+    }
+
     /**
      * Erzeugt Unterformulare basierend auf den Informationen in den POST Daten.
      */
@@ -212,7 +220,11 @@ class Admin_Form_Document_Collections extends Admin_Form_AbstractDocumentSubForm
 
         $this->addSubForm($roleForm, $roleName);
     }
-    
+
+    /**
+     * Adds a collection to the form.
+     * @param $colId
+     */
     protected function _addCollection($colId) {
         $collection = new Opus_Collection($colId);
         
@@ -227,8 +239,10 @@ class Admin_Form_Document_Collections extends Admin_Form_AbstractDocumentSubForm
         $collectionForm->populateFromModel($collection);
 
         $position = count($roleForm->getSubForms());
-            
+
         $roleForm->addSubForm($collectionForm, 'collection' . $position);
+
+        $roleForm->removeGapsInSubFormOrder('collection');
     }
     
     protected function _getRoleForm($roleName) {

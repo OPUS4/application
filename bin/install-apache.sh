@@ -28,6 +28,7 @@
 #
 # TODO protection against using an existing site?
 # TODO handle updating/creating configuration of site already available in Apache2
+# TODO add sudo check before running apache2 commands
 #
 
 set -e

@@ -91,4 +91,60 @@ class Application_View_Helper_TranslateTest extends ControllerTestCase {
         );
     }
 
+    /**
+     * Make sure first value is not interpreted as locale (default behaviour).
+     */
+    public function testTranslateWithPlaceholderValueMatchingLocale()
+    {
+        $this->useEnglish();
+
+        Zend_Registry::get('Zend_Translate')->loadModule('admin');
+
+        $helper = new Application_View_Helper_Translate();
+
+        $this->assertEquals(
+            'Collection \'de\' was edited successfully.', $helper->translate('admin_collections_edit', 'de')
+        );
+
+        $this->assertEquals(
+            'Sammlungseintrag \'test\' wurde erfolgreich bearbeitet.',
+            $helper->translate('admin_collections_edit', 'test', 'de')
+        );
+    }
+
+    /**
+     * Make sure there is a way to force a different locale without placeholder values.
+     */
+    public function testTranslateWithLocale()
+    {
+        $this->useEnglish();
+
+        Zend_Registry::get('Zend_Translate')->loadModule('admin');
+
+        $helper = new Application_View_Helper_Translate();
+
+        $this->assertEquals(
+            'Manage Collections', $helper->translate('admin_collectionroles_index')
+        );
+
+        $this->assertEquals(
+            'Sammlungsverwaltung', $helper->translate('admin_collectionroles_index', null, 'de')
+        );
+    }
+
+    public function testTranslationMultipleParameters()
+    {
+        $this->useEnglish();
+
+        Zend_Registry::get('Zend_Translate')->loadModule('admin');
+
+        $helper = new Application_View_Helper_Translate();
+
+        $result = $helper->translate("search_results_from_to", 1, 10);
+
+        $this->assertEquals('Showing results <b>1</b> to <b>10</b>', $result);
+    }
+
+
+
 }

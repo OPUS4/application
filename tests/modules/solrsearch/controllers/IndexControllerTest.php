@@ -273,7 +273,9 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
      * Regression test for OPUSVIER-2147 (doctype browsing)
      */
     public function testPaginationBarContainsOverallNumberOfHitsInDoctypeBrowsing() {
-        $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/query/*%3A*/browsing/true/doctypefq/report', null, null);
+        $this->doStandardControllerTest(
+            '/solrsearch/index/search/searchtype/simple/query/*%3A*/browsing/true/doctypefq/report', null, null
+        );
         $this->assertEquals(52, $this->getNumOfHits());
     }
 
@@ -285,12 +287,26 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
     public function testLastPageUrlEqualsNextPageUrlDocTypeArticle() {
         $docFinder = new Opus_DocumentFinder();
         $docFinder->setType('article')->setServerState('published');
-        $this->assertEquals(20, $docFinder->count(), "Test data changed!");
 
-        $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/query/*%3A*/browsing/true/doctypefq/article', null, null);
-        $this->assertTrue(4 == substr_count($this->getResponse()->getBody(), '/solrsearch/index/search/searchtype/simple/query/%2A%3A%2A/browsing/true/doctypefq/article/start/10/rows/10">'));
-        $this->assertNotContains('solrsearch/index/search/searchtype/simple/query/%2A%3A%2A/browsing/true/doctypefq/doctoralthesis/start/19/rows/10">', $this->getResponse()->getBody());
-        $this->assertEquals(20, $this->getNumOfHits());
+        // check if test requirements are met
+        $docCount = $docFinder->count();
+
+        $this->assertGreaterThan(10, $docCount, "Test requires at least 11 documents.");
+
+        $startLast = floor(($docCount - 1) / 10) * 10; // 10 results per page, multiple of 10
+        $start = $startLast - 10;
+
+        $this->doStandardControllerTest(
+            "/solrsearch/index/search/searchtype/simple/query/*%3A*/browsing/true/doctypefq/article/start/$start",
+            null, null
+        );
+
+        $link = '/solrsearch/index/search/searchtype/simple/query/%2A%3A%2A/browsing/true/doctypefq/article';
+
+        // check four next/last page links are all the same
+        $this->assertTrue(4 == substr_count($this->getResponse()->getBody(), "$link/start/$startLast/rows/10\">"));
+        $this->assertNotContains("$link/start/19/rows/10\">", $this->getResponse()->getBody());
+        $this->assertEquals($docCount, $this->getNumOfHits());
     }
 
     /**
@@ -551,8 +567,8 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         $this->dispatch('/solrsearch/index/search/searchtype/simple/start/0/rows/10/query/"\""');
 
         $body = $this->getResponse()->getBody();
-        $this->assertNotContains("exception 'Application_Exception' with message 'error_search_unavailable'", $body);
-        $this->assertContains("exception 'Application_SearchException' with message 'error_search_invalidquery'", $body);
+        $this->assertNotContains('Application_Exception: error_search_unavailable', $body);
+        $this->assertContains('Application_SearchException: error_search_invalidquery', $body);
         $this->assertEquals(500, $this->getResponse()->getHttpResponseCode());
     }
 
@@ -561,22 +577,23 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
 
         // manipulate solr configuration
         $config = Zend_Registry::get('Zend_Config');
-        $host = $config->searchengine->index->host;
-        $port = $config->searchengine->index->port;
-        $oldValue = $config->searchengine->index->app;
-        $config->searchengine->solr->default->service->endpoint->localhost->path = '/solr/corethatdoesnotexist';
+
+        $host = $config->searchengine->solr->default->service->default->endpoint->primary->host;
+        $port = $config->searchengine->solr->default->service->default->endpoint->primary->port;
+        $oldValue = $config->searchengine->solr->default->service->default->endpoint->primary->path;
+        $config->searchengine->solr->default->service->default->endpoint->primary->path = '/solr/corethatdoesnotexist';
         Zend_Registry::set('Zend_Config', $config);
 
         $this->dispatch('/solrsearch/browse/doctypes');
 
         $body = $this->getResponse()->getBody();
         $this->assertNotContains("http://${host}:${port}/solr/corethatdoesnotexist", $body);
-        $this->assertContains("exception 'Application_SearchException' with message 'error_search_unavailable'", $body);
+        $this->assertContains("Application_SearchException: error_search_unavailable", $body);
         $this->assertResponseCode(503);
 
         // restore configuration
         $config = Zend_Registry::get('Zend_Config');
-        $config->searchengine->index->app = $oldValue;
+        $config->searchengine->solr->default->service->default->endpoint->primary->path = $oldValue;
         Zend_Registry::set('Zend_Config', $config);
     }
 
@@ -1070,9 +1087,9 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         $this->useEnglish();
         $this->dispatch('/solrsearch/index/search/searchtype/all/start/0/rows/10/facetNumber_author_facet/all');
         $this->assertXpathCount('//a[contains(@href, "author_facetfq")]', 104); // stimmt für Testdaten TODO über SQL
-        $this->assertQueryContentContains('//a', 'Wilfried Stecher');
-        $this->assertQueryContentContains('//a', 'Wally Walruss');
-        $this->assertQueryContentContains('//a', 'M. Scheinpflug');
+        $this->assertQueryContentContains('//a', 'Stecher, Wilfried');
+        $this->assertQueryContentContains('//a', 'Walruss, Wally');
+        $this->assertQueryContentContains('//a', 'Scheinpflug, M.');
         $this->assertQueryContentContains("//div[@id='author_facet_facet']/div/a", ' - less');
     }
 
@@ -1084,11 +1101,11 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
     public function testAuthorFacetClosed() {
         $this->useEnglish();
         $this->dispatch('/solrsearch/index/search/searchtype/all/start/0/rows/10');
-        $this->assertQueryContentContains('//a', 'John Doe');
-        $this->assertQueryContentContains('//a', 'Gerold A. Schneider');
-        $this->assertNotQueryContentContains('//a', 'Wilfried Stecher');
-        $this->assertNotQueryContentContains('//a', 'Wally Walruss');
-        $this->assertNotQueryContentContains('//a', 'M. Scheinpflug');
+        $this->assertQueryContentContains('//a', 'Doe, John');
+        $this->assertQueryContentContains('//a', 'Schneider, Gerold A.');
+        $this->assertNotQueryContentContains('//a', 'Stecher, Wilfried');
+        $this->assertNotQueryContentContains('//a', 'Walruss, Wally');
+        $this->assertNotQueryContentContains('//a', 'Scheinpflug, M.');
         $this->assertQueryContentContains("//div[@id='author_facet_facet']/div/a", ' + more');
         $this->assertNotQueryContentContains("//div[@id='has_fulltext_facet']//a", ' + more');
         $this->assertNotQueryContentContains("//div[@id='belongs_to_bibliography_facet']//a", ' + more');
