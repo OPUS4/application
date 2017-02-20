@@ -25,7 +25,7 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Application
+ * @package     Import
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
@@ -58,9 +58,9 @@ class Application_Import_XmlValidation extends Application_Model_Abstract {
         libxml_clear_errors();
         libxml_use_internal_errors(true);
 
-        $valid = $xml->schemaValidate(__DIR__ . DIRECTORY_SEPARATOR . 'opus-import.xsd');
+        $valid = $xml->schemaValidate(__DIR__ . DIRECTORY_SEPARATOR . 'opus-import.xsd');        
 
-        $this->errors = libxml_get_errors();
+        $this->errors = libxml_get_errors();                
         libxml_clear_errors();
         libxml_use_internal_errors(false);
 
@@ -71,7 +71,7 @@ class Application_Import_XmlValidation extends Application_Model_Abstract {
         return $this->errors;
     }
 
-    public function getDocument($xml) {
+    private function getDocument($xml) {
         libxml_clear_errors();
         libxml_use_internal_errors(true);
 
@@ -85,6 +85,26 @@ class Application_Import_XmlValidation extends Application_Model_Abstract {
         libxml_clear_errors();
 
         return $doc;
+    }
+    
+    public function getErrorsPrettyPrinted() {
+        $errorMsg = '';
+        foreach ($this->errors as $error) {
+            $errorMsg .= "\non line $error->line ";
+            switch ($error->level) {
+                case LIBXML_ERR_WARNING:
+                    $errorMsg .= "(Warning $error->code): ";
+                    break;
+                case LIBXML_ERR_ERROR:
+                    $errorMsg .= "(Error $error->code): ";
+                    break;
+                case LIBXML_ERR_FATAL:
+                    $errorMsg .= "(Fatal Error $error->code): ";
+                    break;
+            }
+            $errorMsg .= trim($error->message);
+        }
+        return $errorMsg;
     }
 
 }

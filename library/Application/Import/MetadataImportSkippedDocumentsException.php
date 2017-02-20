@@ -25,25 +25,14 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
+ * @package     Import
+ * @author      Gunar Maiwald <maiwald@zib.de>
+ * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
+ * @version     $Id$
  */
 
-// Provide boolval function for PHP <5.5
-if (!function_exists('boolval')) {
-    function boolval($value) {
-        return (bool) $value;
-    }
+class Application_Import_MetadataImportSkippedDocumentsException extends Exception {
+
+
 }
-
-
-// mb_strlen is required to get the total number of bytes in a given string
-// fall back to strlen even if we retrieve the number of characters instead of bytes
-// in PHP installation with multibyte character support
-if (!function_exists('mb_strlen')) {
-    function mb_strlen($str, $encoding) {
-        return strlen($str);
-    }
-}
-
