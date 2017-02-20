@@ -1,0 +1,411 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * This file is part of OPUS. The software OPUS has been originally developed
+ * at the University of Stuttgart with funding from the German Research Net,
+ * the Federal Department of Higher Education and Research and the Ministry
+ * of Science, Research and the Arts of the State of Baden-Wuerttemberg.
+ *
+ * OPUS 4 is a complete rewrite of the original OPUS software and was developed
+ * by the Stuttgart University Library, the Library Service Center
+ * Baden-Wuerttemberg, the Cooperative Library Network Berlin-Brandenburg,
+ * the Saarland University and State Library, the Saxon State Library -
+ * Dresden State and University Library, the Bielefeld University Library and
+ * the University Library of Hamburg University of Technology with funding from
+ * the German Research Foundation and the European Regional Development Fund.
+ *
+ * LICENCE
+ * OPUS is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the Licence, or any later version.
+ * OPUS is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details. You should have received a copy of the GNU General Public License
+ * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
+ * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * @category    Application
+ * @package     Import
+ * @author      Sascha Szott <szott@zib.de>
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @author      Doreen Thiede <thiede@zib.de>
+ * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
+ *
+ * Notes:
+ *
+ * Use '<![CDATA[ ... ]]>' if documentation contains example tags and other content that
+ * otherwise needs to be escaped.
+ */
+-->
+
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+    <xsd:annotation>
+        <xsd:appinfo>OPUS 4 Import</xsd:appinfo>
+        <xsd:documentation>This schema defines the OPUS 4 import format.</xsd:documentation>
+    </xsd:annotation>
+
+    <xsd:element name="import" type="opusDocumentType"/>
+
+    <xsd:complexType name="opusDocumentType">
+        <xsd:sequence>
+            <xsd:element name="opusDocument" maxOccurs="unbounded">
+                <xsd:annotation>
+                    <xsd:documentation>Element for documents. Required are language and type for each
+                        document.</xsd:documentation>
+                </xsd:annotation>
+                <xsd:complexType>
+                    <xsd:all>
+                        <xsd:element name="titlesMain" type="titlesMainType"/>
+                        <xsd:element name="titles" type="titlesType" minOccurs="0"/>
+                        <xsd:element name="abstracts" type="abstractsType" minOccurs="0"/>
+                        <xsd:element name="persons" type="personsType" minOccurs="0"/>
+                        <xsd:element name="keywords" type="keywordsType" minOccurs="0"/>
+                        <xsd:element name="dnbInstitutions" type="dnbInstitutionsType" minOccurs="0"/>
+                        <xsd:element name="dates" type="datesType" minOccurs="0"/>
+                        <xsd:element name="identifiers" type="identifiersType" minOccurs="0"/>
+                        <xsd:element name="notes" type="notesType" minOccurs="0"/>
+                        <xsd:element name="collections" type="collectionsType" minOccurs="0"/>
+                        <xsd:element name="series" type="seriesType" minOccurs="0"/>
+                        <xsd:element name="enrichments" type="enrichmentsType" minOccurs="0"/>
+                        <xsd:element name="licences" type="licencesType" minOccurs="0"/>
+                        <xsd:element name="files" type="filesType" minOccurs="0" />
+                    </xsd:all>
+                    <xsd:attribute name="oldId" type="xsd:string"/>
+                    <xsd:attribute name="docId" type="xsd:integer"/>
+                    <xsd:attribute name="language" type="xsd:string" use="required"/>
+                    <xsd:attribute name="type" type="xsd:string" use="required"/>
+                    <xsd:attribute name="pageFirst" type="xsd:string"/>
+                    <xsd:attribute name="pageLast" type="xsd:string"/>
+                    <xsd:attribute name="pageNumber" type="xsd:string"/>
+                    <xsd:attribute name="edition" type="xsd:string"/>
+                    <xsd:attribute name="volume" type="xsd:string"/>
+                    <xsd:attribute name="issue" type="xsd:string"/>
+                    <xsd:attribute name="publisherName" type="xsd:string"/>
+                    <xsd:attribute name="publisherPlace" type="xsd:string"/>
+                    <xsd:attribute name="creatingCorporation" type="xsd:string"/>
+                    <xsd:attribute name="contributingCorporation" type="xsd:string"/>
+                    <xsd:attribute name="belongsToBibliography" type="xsd:boolean"/>
+                    <xsd:attribute name="serverState" type="serverStateType"/>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:simpleType name="serverStateType">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="audited"/>
+            <xsd:enumeration value="published"/>
+            <xsd:enumeration value="restricted"/>
+            <xsd:enumeration value="inprogress"/>
+            <xsd:enumeration value="unpublished"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:complexType name="titlesMainType">
+        <xsd:sequence>
+            <xsd:element name="titleMain" maxOccurs="unbounded">
+                <xsd:complexType>
+                    <xsd:simpleContent>
+                        <xsd:extension base="xsd:string">
+                            <xsd:attribute name="language" type="xsd:string" use="required"/>
+                        </xsd:extension>
+                    </xsd:simpleContent>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="titlesType">
+        <xsd:sequence>
+            <xsd:element name="title" minOccurs="0" maxOccurs="unbounded">
+                <xsd:complexType>
+                    <xsd:simpleContent>
+                        <xsd:extension base="xsd:string">
+                            <xsd:attribute name="type" type="titleTypeValues" use="required"/>
+                            <xsd:attribute name="language" type="xsd:string" use="required"/>
+                        </xsd:extension>
+                    </xsd:simpleContent>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:simpleType name="titleTypeValues">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="parent"/>
+            <xsd:enumeration value="sub"/>
+            <xsd:enumeration value="additional"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:complexType name="abstractsType">
+        <xsd:sequence>
+            <xsd:element name="abstract" minOccurs="0" maxOccurs="unbounded">
+                <xsd:complexType>
+                    <xsd:simpleContent>
+                        <xsd:extension base="xsd:string">
+                            <xsd:attribute name="language" type="xsd:string" use="required"/>
+                        </xsd:extension>
+                    </xsd:simpleContent>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="personsType">
+        <xsd:sequence>
+            <xsd:element name="person" minOccurs="0" maxOccurs="unbounded">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="identifiers" type="personIdentifiersType" minOccurs="0" />
+                    </xsd:sequence>
+                    <xsd:attribute name="role" type="personRoleType" use="required"/>
+                    <xsd:attribute name="firstName" type="xsd:string" use="required"/>
+                    <xsd:attribute name="lastName" type="xsd:string" use="required"/>
+                    <xsd:attribute name="academicTitle" type="xsd:string"/>
+                    <xsd:attribute name="email" type="xsd:string"/>
+                    <xsd:attribute name="allowEmailContact" type="xsd:boolean"/>
+                    <xsd:attribute name="placeOfBirth" type="xsd:string"/>
+                    <xsd:attribute name="dateOfBirth" type="xsd:date"/>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:simpleType name="personRoleType">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="advisor"/>
+            <xsd:enumeration value="author"/>
+            <xsd:enumeration value="contributor"/>
+            <xsd:enumeration value="editor"/>
+            <xsd:enumeration value="referee"/>
+            <xsd:enumeration value="translator"/>
+            <xsd:enumeration value="submitter"/>
+            <xsd:enumeration value="other"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:complexType name="personIdentifiersType">
+        <xsd:sequence>
+            <xsd:element name="identifier" minOccurs="0" maxOccurs="unbounded">
+                <xsd:complexType>
+                    <xsd:simpleContent>
+                        <xsd:extension base="xsd:string">
+                            <xsd:attribute name="type" type="personIdentifierTypeValues" use="required"/>
+                        </xsd:extension>
+                    </xsd:simpleContent>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:simpleType name="personIdentifierTypeValues">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="orcid" />
+            <xsd:enumeration value="gnd" />
+            <xsd:enumeration value="intern" />
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:complexType name="keywordsType">
+        <xsd:sequence>
+            <xsd:element name="keyword" minOccurs="0" maxOccurs="unbounded">
+                <xsd:complexType>
+                    <xsd:simpleContent>
+                        <xsd:extension base="xsd:string">
+                            <xsd:attribute name="type" type="keywordTypeValues" use="required"/>
+                            <xsd:attribute name="language" type="xsd:string" use="required"/>
+                        </xsd:extension>
+                    </xsd:simpleContent>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:simpleType name="keywordTypeValues">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="swd"/>
+            <xsd:enumeration value="uncontrolled"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:complexType name="dnbInstitutionsType">
+        <xsd:sequence>
+            <xsd:element name="dnbInstitution" minOccurs="0" maxOccurs="unbounded">
+                <xsd:complexType>
+                    <xsd:attribute name="id" type="xsd:integer" use="required"/>
+                    <xsd:attribute name="role" type="dnbInstitutionTypeValues" use="required"/>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:simpleType name="dnbInstitutionTypeValues">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="publisher"/>
+            <xsd:enumeration value="grantor"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:complexType name="datesType">
+        <xsd:sequence>
+            <xsd:element name="date" minOccurs="0" maxOccurs="unbounded">
+                <xsd:complexType>
+                    <xsd:attribute name="type" type="dateTypeValues" use="required"/>
+                    <xsd:attribute name="monthDay" type="xsd:gMonthDay"/>
+                    <xsd:attribute name="year" type="xsd:gYear" use="required"/>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:simpleType name="dateTypeValues">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="completed"/>
+            <xsd:enumeration value="published"/>
+            <xsd:enumeration value="thesisAccepted"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:complexType name="identifiersType">
+        <xsd:sequence>
+            <xsd:element name="identifier" minOccurs="0" maxOccurs="unbounded">
+                <xsd:complexType>
+                    <xsd:simpleContent>
+                        <xsd:extension base="xsd:string">
+                            <xsd:attribute name="type" type="identifierTypeValues" use="required"/>
+                        </xsd:extension>
+                    </xsd:simpleContent>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:simpleType name="identifierTypeValues">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="old"/>
+            <xsd:enumeration value="serial"/>
+            <xsd:enumeration value="uuid"/>
+            <xsd:enumeration value="isbn"/>
+            <xsd:enumeration value="urn"/>
+            <xsd:enumeration value="doi"/>
+            <xsd:enumeration value="handle"/>
+            <xsd:enumeration value="url"/>
+            <xsd:enumeration value="issn"/>
+            <xsd:enumeration value="std-doi"/>
+            <xsd:enumeration value="cris-link"/>
+            <xsd:enumeration value="splash-url"/>
+            <xsd:enumeration value="opus3-id"/>
+            <xsd:enumeration value="opac-id"/>
+            <xsd:enumeration value="pmid"/>
+            <xsd:enumeration value="arxiv"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:complexType name="notesType">
+        <xsd:sequence>
+            <xsd:element name="note" minOccurs="0" maxOccurs="unbounded">
+                <xsd:complexType>
+                    <xsd:simpleContent>
+                        <xsd:extension base="xsd:string">
+                            <xsd:attribute name="visibility" type="visibilityTypeValues" use="required"/>
+                        </xsd:extension>
+                    </xsd:simpleContent>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:simpleType name="visibilityTypeValues">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="private"/>
+            <xsd:enumeration value="public"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:complexType name="collectionsType">
+        <xsd:sequence>
+            <xsd:element name="collection" minOccurs="0" maxOccurs="unbounded">
+                <xsd:complexType>
+                    <xsd:attribute name="id" type="xsd:integer" use="required"/>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="seriesType">
+        <xsd:sequence>
+            <xsd:element name="seriesItem" minOccurs="0" maxOccurs="unbounded">
+                <xsd:complexType>
+                    <xsd:attribute name="id" type="xsd:integer" use="required"/>
+                    <xsd:attribute name="number" type="xsd:string" use="required"/>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="enrichmentsType">
+        <xsd:sequence>
+            <xsd:element name="enrichment" minOccurs="0" maxOccurs="unbounded">
+                <xsd:complexType>
+                    <xsd:simpleContent>
+                        <xsd:extension base="xsd:string">
+                            <xsd:attribute name="key" type="xsd:string" use="required"/>
+                        </xsd:extension>
+                    </xsd:simpleContent>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="licencesType">
+        <xsd:sequence>
+            <xsd:element name="licence" minOccurs="0" maxOccurs="unbounded">
+                <xsd:complexType>
+                    <xsd:attribute name="id" type="xsd:integer" use="required"/>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="filesType">        
+        <xsd:sequence>
+            <xsd:element name="file" minOccurs="0" maxOccurs="unbounded">
+                <xsd:complexType>
+                    <xsd:all>
+                        <xsd:element name="comment" type="xsd:string" minOccurs="0"/>                        
+                        <xsd:element name="checksum" minOccurs="0">
+                            <xsd:complexType>
+                                <xsd:simpleContent>
+                                    <xsd:extension base="xsd:string">
+                                        <xsd:attribute name="type" type="checksumTypes" use="required"/>
+                                    </xsd:extension>
+                                </xsd:simpleContent>
+                            </xsd:complexType>
+                        </xsd:element>
+                    </xsd:all>                    
+                    <xsd:attribute name="path" type="xsd:string"/>
+                    <xsd:attribute name="name" type="xsd:string"/>
+                    <xsd:attribute name="language" type="xsd:string"/>
+                    <xsd:attribute name="displayName" type="xsd:string"/>
+                    <xsd:attribute name="visibleInOai" type="xsd:boolean" default="true"/>
+                    <xsd:attribute name="visibleInFrontdoor" type="xsd:boolean" default="true"/>
+                    <xsd:attribute name="sortOrder" type="xsd:int"/>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:sequence>
+        <xsd:attribute name="basedir" type="xsd:string"/>
+    </xsd:complexType>
+
+    <xsd:simpleType name="checksumTypes">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="md5"/>
+            <xsd:enumeration value="sha256"/>
+            <xsd:enumeration value="sha512"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+</xsd:schema>
