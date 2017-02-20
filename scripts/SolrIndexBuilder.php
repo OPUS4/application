@@ -157,6 +157,12 @@ EOT;
             $this->_end = $end;
         }
 
+        // check if only end is set (happens when options are used)
+        if (is_null($this->_start) && !is_null($this->_end)) {
+            $this->_start = $this->_end;
+            $this->_end = null;
+        }
+
         if (is_null($this->_start) && is_null($this->_end)) {
             // TODO gesondertes Argument für Indexdeletion einführen
             $this->_deleteAllDocs = true;
@@ -178,8 +184,13 @@ EOT;
         {
             echo PHP_EOL . "Indexing documents {$this->_start} to {$this->_end} ..." . PHP_EOL;
         }
-        else {
+        else if (!is_null($this->_start))
+        {
             echo PHP_EOL . "Indexing documents starting at ID = {$this->_start} ..." . PHP_EOL;
+        }
+        else
+        {
+            echo PHP_EOL . 'Indexing all documents ...' . PHP_EOL;
         }
 
         try {
