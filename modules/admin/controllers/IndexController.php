@@ -51,15 +51,25 @@ class Admin_IndexController extends Application_Controller_Action {
     }
 
     public function setupAction() {
-        $this->view->title = $this->view->translate('admin_title_setup');
+        $this->renderSubmenu('admin_title_setup');
     }
 
     public function securityAction() {
-        $this->view->title = $this->view->translate('admin_title_security');
+        $this->renderSubmenu('admin_title_security');
     }
 
     public function infoAction() {
-        $this->view->title = $this->view->translate('admin_title_info');
+        $this->renderSubmenu('admin_title_info');
+    }
+
+    public function configAction() {
+        $this->renderSubmenu('admin_title_settings');
+    }
+
+    protected function renderSubmenu($title)
+    {
+        $this->view->title = $this->view->translate($title);
+        $this->renderScript('index/submenu.phtml');
     }
 
 }
