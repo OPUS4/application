@@ -24,41 +24,67 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
+ * @category    Application Unit Test
+ * @package     Application
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-/**
- * Controller for module management.
- *
- * @category    Application
- * @package     Module_Admin
- */
-class Admin_ModuleController extends Application_Controller_Action
+class Application_ModulesTest extends ControllerTestCase
 {
 
-    /**
-     * Displays table with all modules.
-     *
-     * @throws Zend_Exception
-     */
-    public function indexAction()
+    public function testGetInstance()
+    {
+        $modules = Application_Modules::getInstance();
+
+        $this->assertNotNull($modules);
+        $this->assertInstanceOf('Application_Modules', $modules);
+
+        $this->assertSame($modules, Application_Modules::getInstance());
+    }
+
+    public function testRegisterModule()
+    {
+        $module = new Application_Configuration_Module('frontdoor');
+
+        $this->assertFalse(Application_Modules::getInstance()->isRegistered('frontdoor'));
+
+        Application_Modules::registerModule($module);
+
+        $this->assertTrue(Application_Modules::getInstance()->isRegistered('frontdoor'));
+    }
+
+
+    public function testGetModulesPath()
+    {
+        $path = Application_Modules::getInstance()->getModulesPath();
+
+        $this->assertEquals(APPLICATION_PATH . DIRECTORY_SEPARATOR . 'modules', $path);
+    }
+
+    public function testGetModules()
     {
         $modules = Application_Modules::getInstance()->getModules();
 
-        $this->view->modules = $modules;
+        $this->assertCount(16, $modules);
 
-        // load translations for all registered modules for descriptions and other language resources
-        foreach ($modules as $name => $descriptor)
+        $expectedModules = array('admin', 'frontdoor');
+
+        foreach ($expectedModules as $name)
         {
-            if ($descriptor->isRegistered())
-            {
-                Zend_Registry::get('Zend_Translate')->loadModule($descriptor->getName());
-            }
+            $this->assertArrayHasKey($name, $modules, "Module [$name] is missing");
+            $this->assertInstanceOf('Application_Configuration_Module', $modules[$name]);
         }
+    }
+
+    public function testGetModulesDefaultNotIncluded()
+    {
+        $modules = Application_Modules::getInstance()->getModules();
+
+        $this->assertNotNull($modules);
+        $this->assertInternalType('array', $modules);
+        $this->assertArrayNotHasKey('default', $modules);
     }
 
 }

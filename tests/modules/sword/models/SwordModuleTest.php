@@ -24,41 +24,28 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
+ * @category    Tests
+ * @package     Sword_Model
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2017
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-/**
- * Controller for module management.
- *
- * @category    Application
- * @package     Module_Admin
- */
-class Admin_ModuleController extends Application_Controller_Action
+class Sword_Model_SwordModuleTest extends ControllerTestCase
 {
 
-    /**
-     * Displays table with all modules.
-     *
-     * @throws Zend_Exception
-     */
-    public function indexAction()
+    public function testConstruct() {
+        $module = new Sword_Model_SwordModule();
+
+        $this->assertEquals('sword', $module->getName());
+    }
+
+    public function testDescriptionTranslation()
     {
-        $modules = Application_Modules::getInstance()->getModules();
+        $module = new Sword_Model_SwordModule();
 
-        $this->view->modules = $modules;
-
-        // load translations for all registered modules for descriptions and other language resources
-        foreach ($modules as $name => $descriptor)
-        {
-            if ($descriptor->isRegistered())
-            {
-                Zend_Registry::get('Zend_Translate')->loadModule($descriptor->getName());
-            }
-        }
+        $this->assertEquals('', $module->getDescription());
     }
 
 }
+

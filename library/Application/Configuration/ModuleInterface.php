@@ -25,62 +25,62 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_Admin
- * @author      Thoralf Klein <thoralf.klein@zib.de>
- * @authro      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
+ * @package     Application_Configuration
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2017
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
- * Model for getting list of modules in server application.
- *
- * Die Liste der Module wird verwendet, damit ein Administration bestimmen kann auf welche Module eine Role zugreifen
- * darf.
+ * Interface for OPUS module descriptors.
  */
-class Application_Util_Modules {
+interface Application_Configuration_ModuleInterface
+{
 
     /**
-     * Directory path for modules.
-     * @var String
+     * Name of the module.
+     *
+     * This is also the name of the folder that contains the module.
+     *
+     * @return string
      */
-    private $_moduleDirectory;
-
-    public function __construct($moduleDirectory = null) {
-        if (!is_null($moduleDirectory)) {
-            $this->_moduleDirectory = $moduleDirectory;
-        }
-        else {
-            $this->_moduleDirectory = APPLICATION_PATH . DIRECTORY_SEPARATOR . 'modules';
-        }
-    }
+    public function getName();
 
     /**
-     * Iterates over module directories and returns all module names
-     * @return array List of module names
+     * A short description of the module.
+     *
+     * This is displayed underneath the module name on the modules management page.
+     *
+     * @return string
      */
-    public function getAll() {
-        $moduleDir = $this->_moduleDirectory;
-        $deadPaths = Array( ".", "..", ".svn");
-        $modules = array();
+    public function getDescription();
 
-        $temp = array_diff(scandir($moduleDir), $deadPaths);
-        foreach ($temp as $module) {
-            if (!is_dir($moduleDir . '/' . $module)) {
-                continue;
-            }
+    /**
+     * Returns true if the module has been registered with a custom descriptor.
+     *
+     * @return boolean
+     */
+    public function isRegistered();
 
-            if (!is_dir($moduleDir . '/' . $module . '/controllers/')) {
-                continue;
-            }
+    /**
+     * Returns true if 'guest' has access to the module.
+     *
+     * @return boolean
+     */
+    public function isPublic();
 
-            // Zugriff auf 'default' muß immer erlaubt sein
-            if ($module !== 'default') {
-                $modules[] = $module;
-            }
-        }
-        return $modules;
-    }
+    /**
+     * Validates if the module has been setup properly.
+     *
+     * @return mixed
+     */
+    public function validateSetup();
+
+    /**
+     * Returns true if the module can be configured.
+     *
+     * @return boolean
+     */
+    public function isConfigurable();
 
 }

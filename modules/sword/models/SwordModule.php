@@ -25,40 +25,31 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_Admin
+ * @package     Module_Sword
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2017
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
- * Controller for module management.
- *
- * @category    Application
- * @package     Module_Admin
+ * Descriptor for SWORD module.
  */
-class Admin_ModuleController extends Application_Controller_Action
+class Sword_Model_SwordModule extends Application_Configuration_Module
 {
 
-    /**
-     * Displays table with all modules.
-     *
-     * @throws Zend_Exception
-     */
-    public function indexAction()
+    public function __construct()
     {
-        $modules = Application_Modules::getInstance()->getModules();
+        parent::__construct('sword');
+    }
 
-        $this->view->modules = $modules;
+    public function getDescription()
+    {
+        return 'sword_module_description';
+    }
 
-        // load translations for all registered modules for descriptions and other language resources
-        foreach ($modules as $name => $descriptor)
-        {
-            if ($descriptor->isRegistered())
-            {
-                Zend_Registry::get('Zend_Translate')->loadModule($descriptor->getName());
-            }
-        }
+    public function isConfigurable()
+    {
+        return false;
     }
 
 }
