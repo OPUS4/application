@@ -24,52 +24,28 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Ralf Claussnitzer (ralf.claussnitzer@slub-dresden.de)
- * @author      Oliver Marahrens (o.marahrens@tu-harburg.de)
- * @author      Jens Schwidder (schwidder@zib.de)
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @category    Tests
+ * @package     Sword_Model
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2017
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
-/**
- * Main menu for administration module.
- *
- * @category    Application
- * @package     Module_Admin
- */
-class Admin_IndexController extends Application_Controller_Action {
+class Sword_Model_SwordModuleTest extends ControllerTestCase
+{
 
-    /**
-     * Shows main menu.
-     */
-    public function indexAction() {
-        $this->view->title = 'admin_index_title';
-        $this->view->navigation()->breadcrumbs()->setMinDepth(0);
+    public function testConstruct() {
+        $module = new Sword_Model_SwordModule();
+
+        $this->assertEquals('sword', $module->getName());
     }
 
-    public function setupAction() {
-        $this->renderSubmenu('admin_title_setup');
-    }
-
-    public function securityAction() {
-        $this->renderSubmenu('admin_title_security');
-    }
-
-    public function infoAction() {
-        $this->renderSubmenu('admin_title_info');
-    }
-
-    public function configAction() {
-        $this->renderSubmenu('admin_title_settings');
-    }
-
-    protected function renderSubmenu($title)
+    public function testDescriptionTranslation()
     {
-        $this->view->title = $this->view->translate($title);
-        $this->renderScript('index/submenu.phtml');
+        $module = new Sword_Model_SwordModule();
+
+        $this->assertEquals('', $module->getDescription());
     }
 
 }
+

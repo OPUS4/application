@@ -774,6 +774,28 @@
                     </pages>
                 </setup>
 
+                <settings>
+                    <type>mvc</type>
+                    <label>admin_title_settings</label>
+                    <description>admin_title_settings_description</description>
+                    <group>group-caffelatte</group>
+                    <module>admin</module>
+                    <controller>index</controller>
+                    <action>config</action>
+                    <pages>
+                        <modules>
+                            <type>mvc</type>
+                            <label>admin_title_module</label>
+                            <description>admin_title_module_description</description>
+                            <group>group-caffelatte</group>
+                            <module>admin</module>
+                            <controller>module</controller>
+                            <action>index</action>
+                            <resource>options</resource> <!-- TODO -->
+                        </modules>
+                    </pages>
+                </settings>
+
                 <info>
                     <type>mvc</type>
                     <label>admin_title_info</label>
@@ -887,6 +909,7 @@
                         </doctype>
                     </pages>
                 </info>
+
             </pages>
         </administration>
     </nav>

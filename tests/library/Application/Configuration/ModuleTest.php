@@ -24,52 +24,59 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Ralf Claussnitzer (ralf.claussnitzer@slub-dresden.de)
- * @author      Oliver Marahrens (o.marahrens@tu-harburg.de)
- * @author      Jens Schwidder (schwidder@zib.de)
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @category    Tests
+ * @package     Application_Configuration
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
-/**
- * Main menu for administration module.
- *
- * @category    Application
- * @package     Module_Admin
- */
-class Admin_IndexController extends Application_Controller_Action {
+class Application_Configuration_ModuleTest extends ControllerTestCase
+{
 
-    /**
-     * Shows main menu.
-     */
-    public function indexAction() {
-        $this->view->title = 'admin_index_title';
-        $this->view->navigation()->breadcrumbs()->setMinDepth(0);
-    }
-
-    public function setupAction() {
-        $this->renderSubmenu('admin_title_setup');
-    }
-
-    public function securityAction() {
-        $this->renderSubmenu('admin_title_security');
-    }
-
-    public function infoAction() {
-        $this->renderSubmenu('admin_title_info');
-    }
-
-    public function configAction() {
-        $this->renderSubmenu('admin_title_settings');
-    }
-
-    protected function renderSubmenu($title)
+    public function testIsRegistered()
     {
-        $this->view->title = $this->view->translate($title);
-        $this->renderScript('index/submenu.phtml');
+        $module = new Application_Configuration_Module('frontdoor');
+
+        $this->assertFalse($module->isRegistered());
+
+        Application_Modules::registerModule($module);
+
+        $this->assertTrue($module->isRegistered());
+    }
+
+    public function testConstruct()
+    {
+        $module = new Application_Configuration_Module('frontdoor');
+
+        $this->assertEquals('frontdoor', $module->getName());
+        $this->assertNull($module->getDescription());
+    }
+
+    public function testConstructWithDescription()
+    {
+        $module = new Application_Configuration_Module('frontdoor', 'Shows document metadata.');
+
+        $this->assertEquals('frontdoor', $module->getName());
+        $this->assertEquals('Shows document metadata.', $module->getDescription());
+    }
+
+    public function testIsPublic()
+    {
+        $module = new Application_Configuration_Module('frontdoor');
+
+        $this->assertTrue($module->isPublic());
+
+        $module = new Application_Configuration_Module('admin');
+
+        $this->assertFalse($module->isPublic());
+    }
+
+    public function testIsPublicBadName()
+    {
+        $module = new Application_Configuration_Module('badname');
+
+        $this->assertFalse($module->isPublic());
     }
 
 }
