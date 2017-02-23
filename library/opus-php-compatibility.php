@@ -37,3 +37,13 @@ if (!function_exists('boolval')) {
     }
 }
 
+
+// mb_strlen is required to get the total number of bytes in a given string
+// fall back to strlen even if we retrieve the number of characters instead of bytes
+// in PHP installation with multibyte character support
+if (!function_exists('mb_strlen')) {
+    function mb_strlen($str, $encoding) {
+        return strlen($str);
+    }
+}
+

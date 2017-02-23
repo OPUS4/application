@@ -13,6 +13,9 @@ In 2015 the development was moved to GitHub in order to better support collabora
 efforts. The first OPUS 4 version developed at GitHub is 4.5. Starting with this version OPUS 4 should be installed
 using Git, since this will make updates for bug fixes and new features easier. More information can be found online.
 
+The current version of OPUS is 4.5. It is available using the 4.5 tag and on the master branch. The master branch 
+will be updated for releases or if urgent bugs have been fixed.
+
 [Documentation][DOC]
 : Information on setting up a repository, for users and administrators.
 

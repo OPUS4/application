@@ -29,9 +29,9 @@
  * @category    Application
  * @package     Module_Solrsearch
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2011, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2011-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 -->
 
@@ -42,8 +42,8 @@
 
     <xsl:template match="/">
         <OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
-            <ShortName><xsl:text>OPUS 4</xsl:text></ShortName>
-            <Description><xsl:text>OPUS 4 Search</xsl:text></Description>
+            <ShortName><xsl:value-of select="$name" /></ShortName>
+            <Description><xsl:value-of select="$name" /><xsl:text> Search</xsl:text></Description>
             <Url type="text/html" template="{$searchBaseUrl}"/>
             <Image height="16" width="16" type="image/x-icon">
                 <xsl:value-of select="$faviconUrl"/>

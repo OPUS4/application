@@ -120,7 +120,7 @@
 
     <xsd:complexType name="titlesType">
         <xsd:sequence>
-            <xsd:element name="title" maxOccurs="unbounded">
+            <xsd:element name="title" minOccurs="0" maxOccurs="unbounded">
                 <xsd:complexType>
                     <xsd:simpleContent>
                         <xsd:extension base="xsd:string">
@@ -143,7 +143,7 @@
 
     <xsd:complexType name="abstractsType">
         <xsd:sequence>
-            <xsd:element name="abstract" maxOccurs="unbounded">
+            <xsd:element name="abstract" minOccurs="0" maxOccurs="unbounded">
                 <xsd:complexType>
                     <xsd:simpleContent>
                         <xsd:extension base="xsd:string">
@@ -157,7 +157,7 @@
 
     <xsd:complexType name="personsType">
         <xsd:sequence>
-            <xsd:element name="person" maxOccurs="unbounded">
+            <xsd:element name="person" minOccurs="0" maxOccurs="unbounded">
                 <xsd:complexType>
                     <xsd:sequence>
                         <xsd:element name="identifiers" type="personIdentifiersType" minOccurs="0" />
@@ -190,7 +190,7 @@
 
     <xsd:complexType name="personIdentifiersType">
         <xsd:sequence>
-            <xsd:element name="identifier" maxOccurs="unbounded">
+            <xsd:element name="identifier" minOccurs="0" maxOccurs="unbounded">
                 <xsd:complexType>
                     <xsd:simpleContent>
                         <xsd:extension base="xsd:string">
@@ -212,7 +212,7 @@
 
     <xsd:complexType name="keywordsType">
         <xsd:sequence>
-            <xsd:element name="keyword" maxOccurs="unbounded">
+            <xsd:element name="keyword" minOccurs="0" maxOccurs="unbounded">
                 <xsd:complexType>
                     <xsd:simpleContent>
                         <xsd:extension base="xsd:string">
@@ -234,7 +234,7 @@
 
     <xsd:complexType name="dnbInstitutionsType">
         <xsd:sequence>
-            <xsd:element name="dnbInstitution" maxOccurs="unbounded">
+            <xsd:element name="dnbInstitution" minOccurs="0" maxOccurs="unbounded">
                 <xsd:complexType>
                     <xsd:attribute name="id" type="xsd:integer" use="required"/>
                     <xsd:attribute name="role" type="dnbInstitutionTypeValues" use="required"/>
@@ -252,7 +252,7 @@
 
     <xsd:complexType name="datesType">
         <xsd:sequence>
-            <xsd:element name="date" maxOccurs="unbounded">
+            <xsd:element name="date" minOccurs="0" maxOccurs="unbounded">
                 <xsd:complexType>
                     <xsd:attribute name="type" type="dateTypeValues" use="required"/>
                     <xsd:attribute name="monthDay" type="xsd:gMonthDay"/>
@@ -272,7 +272,7 @@
 
     <xsd:complexType name="identifiersType">
         <xsd:sequence>
-            <xsd:element name="identifier" maxOccurs="unbounded">
+            <xsd:element name="identifier" minOccurs="0" maxOccurs="unbounded">
                 <xsd:complexType>
                     <xsd:simpleContent>
                         <xsd:extension base="xsd:string">
@@ -307,7 +307,7 @@
 
     <xsd:complexType name="notesType">
         <xsd:sequence>
-            <xsd:element name="note" maxOccurs="unbounded">
+            <xsd:element name="note" minOccurs="0" maxOccurs="unbounded">
                 <xsd:complexType>
                     <xsd:simpleContent>
                         <xsd:extension base="xsd:string">
@@ -328,7 +328,7 @@
 
     <xsd:complexType name="collectionsType">
         <xsd:sequence>
-            <xsd:element name="collection" maxOccurs="unbounded">
+            <xsd:element name="collection" minOccurs="0" maxOccurs="unbounded">
                 <xsd:complexType>
                     <xsd:attribute name="id" type="xsd:integer" use="required"/>
                 </xsd:complexType>
@@ -338,7 +338,7 @@
 
     <xsd:complexType name="seriesType">
         <xsd:sequence>
-            <xsd:element name="seriesItem" maxOccurs="unbounded">
+            <xsd:element name="seriesItem" minOccurs="0" maxOccurs="unbounded">
                 <xsd:complexType>
                     <xsd:attribute name="id" type="xsd:integer" use="required"/>
                     <xsd:attribute name="number" type="xsd:string" use="required"/>
@@ -349,7 +349,7 @@
 
     <xsd:complexType name="enrichmentsType">
         <xsd:sequence>
-            <xsd:element name="enrichment" maxOccurs="unbounded">
+            <xsd:element name="enrichment" minOccurs="0" maxOccurs="unbounded">
                 <xsd:complexType>
                     <xsd:simpleContent>
                         <xsd:extension base="xsd:string">
@@ -363,7 +363,7 @@
 
     <xsd:complexType name="licencesType">
         <xsd:sequence>
-            <xsd:element name="licence" maxOccurs="unbounded">
+            <xsd:element name="licence" minOccurs="0" maxOccurs="unbounded">
                 <xsd:complexType>
                     <xsd:attribute name="id" type="xsd:integer" use="required"/>
                 </xsd:complexType>
@@ -371,23 +371,41 @@
         </xsd:sequence>
     </xsd:complexType>
 
-    <xsd:complexType name="filesType">
+    <xsd:complexType name="filesType">        
         <xsd:sequence>
-            <xsd:element name="file" maxOccurs="unbounded">
+            <xsd:element name="file" minOccurs="0" maxOccurs="unbounded">
                 <xsd:complexType>
-                    <xsd:attribute name="path" type="xsd:string" />
-                    <xsd:attribute name="name" type="xsd:string" use="required"/>
+                    <xsd:all>
+                        <xsd:element name="comment" type="xsd:string" minOccurs="0"/>                        
+                        <xsd:element name="checksum" minOccurs="0">
+                            <xsd:complexType>
+                                <xsd:simpleContent>
+                                    <xsd:extension base="xsd:string">
+                                        <xsd:attribute name="type" type="checksumTypes" use="required"/>
+                                    </xsd:extension>
+                                </xsd:simpleContent>
+                            </xsd:complexType>
+                        </xsd:element>
+                    </xsd:all>                    
+                    <xsd:attribute name="path" type="xsd:string"/>
+                    <xsd:attribute name="name" type="xsd:string"/>
                     <xsd:attribute name="language" type="xsd:string"/>
                     <xsd:attribute name="displayName" type="xsd:string"/>
-                    <xsd:attribute name="comment" type="xsd:string"/> <!-- TODO make subelement? -->
-                    <xsd:attribute name="mimetype" type="xsd:string"/> <!-- TODO needed? -->
-                    <!-- TODO checksum element with type -->
-                    <xsd:attribute name="visibleInOai" type="xsd:boolean"/>
-                    <xsd:attribute name="visibleInFrontdoor" type="xsd:boolean"/>
+                    <xsd:attribute name="visibleInOai" type="xsd:boolean" default="true"/>
+                    <xsd:attribute name="visibleInFrontdoor" type="xsd:boolean" default="true"/>
                     <xsd:attribute name="sortOrder" type="xsd:int"/>
                 </xsd:complexType>
             </xsd:element>
         </xsd:sequence>
+        <xsd:attribute name="basedir" type="xsd:string"/>
     </xsd:complexType>
+
+    <xsd:simpleType name="checksumTypes">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="md5"/>
+            <xsd:enumeration value="sha256"/>
+            <xsd:enumeration value="sha512"/>
+        </xsd:restriction>
+    </xsd:simpleType>
 
 </xsd:schema>

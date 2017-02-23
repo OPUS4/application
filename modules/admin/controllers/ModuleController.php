@@ -26,20 +26,39 @@
  *
  * @category    Application
  * @package     Module_Admin
- * @author      Ralf Claussnitzer (ralf.claussnitzer@slub-dresden.de)
- * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
- * @author      Jens Schwidder (schwidder@zib.de)
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-?>
 
-<div id="adminMenuContainer">
-    <?PHP
-    $partial = array('menu.phtml', 'admin');
-    $this->navigation()->menu()->setPartial($partial);
-    echo $this->navigation()->menu()->render();
-    $this->navigation()->menu()->setPartial(null); // prevents invluencing main menu
-    ?>
-</div>
+/**
+ * Controller for module management.
+ *
+ * @category    Application
+ * @package     Module_Admin
+ */
+class Admin_ModuleController extends Application_Controller_Action
+{
+
+    /**
+     * Displays table with all modules.
+     *
+     * @throws Zend_Exception
+     */
+    public function indexAction()
+    {
+        $modules = Application_Modules::getInstance()->getModules();
+
+        $this->view->modules = $modules;
+
+        // load translations for all registered modules for descriptions and other language resources
+        foreach ($modules as $name => $descriptor)
+        {
+            if ($descriptor->isRegistered())
+            {
+                Zend_Registry::get('Zend_Translate')->loadModule($descriptor->getName());
+            }
+        }
+    }
+
+}

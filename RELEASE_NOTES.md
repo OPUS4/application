@@ -2,7 +2,7 @@
 
 ---
 
-## Release 4.5 2016-11-25
+## Release 4.5 2016-12-06
 
 Dieser Release enhält viele Fehlerkorrekturen und grundlegenden Arbeiten
 um eine stabile und effektive Weiterentwicklung von OPUS 4 sicherzustellen.

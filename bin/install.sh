@@ -106,6 +106,12 @@ then
 fi
 
 #
+# Prepare workspace
+#
+
+"$SCRIPT_PATH/prepare-workspace.sh"
+
+#
 # Install Composer and dependencies
 #
 
@@ -119,8 +125,6 @@ then
 else
     sudo -u "$SUDO_USER" "$SCRIPT_PATH/install-composer.sh" "$BASEDIR"
 fi
-
-exit 0;
 
 #
 # Prepare Apache2 configuration
@@ -289,10 +293,22 @@ sed -i -e "s!@db.admin.name@!'$DB_ADMIN_ESC'!" \
        -e "s!@db.admin.password@!'$DB_ADMIN_PASSWORD_ESC'!" "$OPUS_CONSOLE_CONF"
 
 #
-# Prepare workspace
+# Set file permissions
+#
 #
 
-"$SCRIPT_PATH/prepare-workspace.sh"
+cd "$BASEDIR"
+
+if [[ $SUDO_ENABLED -eq 1 ]] ;
+then
+    "$SCRIPT_PATH/set-file-permissions.sh" -g www-data
+else
+    cat <<LimitString
+Make sure read/write permissions for workspace folder are setup properly. You can use to set default permissions:
+
+sudo bin/set-file-permissions.sh
+LimitString
+fi
 
 #
 # Set password for administrator account
@@ -311,7 +327,7 @@ do
   fi
 done
 
-php $BASEDIR/scripts/change-password.php admin "$ADMIN_PWD"
+php "$BASEDIR/scripts/change-password.php" admin "$ADMIN_PWD"
 
 #
 # Install and configure Solr search server
@@ -456,14 +472,6 @@ then
 fi
 
 cd "$BASEDIR"
-
-#
-# Set file permissions
-#
-# TODO make it possible to run without sudo
-#
-
-"$SCRIPT_PATH/set-file-permissions.sh" -g www-data
 
 #
 # Restart Apache2 (optionally)

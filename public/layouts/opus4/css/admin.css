@@ -1632,5 +1632,34 @@ table + .paginationControl{
 }
 
 .ui-widget-content {
-   font-size: 0.9em;
+    font-size: 0.9em;
+}
+
+.adminContainer .opus-module-name {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.adminContainer .opus-module-description {
+    color: gray;
+}
+
+.adminContainer .module-access.closed {
+    color: #ff5a5a;
+}
+
+.adminContainer .module-access.public {
+    color: darkgreen;
+}
+
+.adminContainer tr.public .opus-module-name {
+    color: darkgreen;
+}
+
+.adminContainer tr.closed .opus-module-name {
+    color: #ff5a5a;
+}
+
+.adminContainer .wrapper table td.module-options {
+    text-align: right; /* TODO not working yet */
 }

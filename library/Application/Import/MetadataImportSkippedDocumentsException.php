@@ -25,62 +25,14 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_Admin
- * @author      Thoralf Klein <thoralf.klein@zib.de>
- * @authro      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
+ * @package     Import
+ * @author      Gunar Maiwald <maiwald@zib.de>
+ * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
-/**
- * Model for getting list of modules in server application.
- *
- * Die Liste der Module wird verwendet, damit ein Administration bestimmen kann auf welche Module eine Role zugreifen
- * darf.
- */
-class Application_Util_Modules {
+class Application_Import_MetadataImportSkippedDocumentsException extends Exception {
 
-    /**
-     * Directory path for modules.
-     * @var String
-     */
-    private $_moduleDirectory;
-
-    public function __construct($moduleDirectory = null) {
-        if (!is_null($moduleDirectory)) {
-            $this->_moduleDirectory = $moduleDirectory;
-        }
-        else {
-            $this->_moduleDirectory = APPLICATION_PATH . DIRECTORY_SEPARATOR . 'modules';
-        }
-    }
-
-    /**
-     * Iterates over module directories and returns all module names
-     * @return array List of module names
-     */
-    public function getAll() {
-        $moduleDir = $this->_moduleDirectory;
-        $deadPaths = Array( ".", "..", ".svn");
-        $modules = array();
-
-        $temp = array_diff(scandir($moduleDir), $deadPaths);
-        foreach ($temp as $module) {
-            if (!is_dir($moduleDir . '/' . $module)) {
-                continue;
-            }
-
-            if (!is_dir($moduleDir . '/' . $module . '/controllers/')) {
-                continue;
-            }
-
-            // Zugriff auf 'default' muß immer erlaubt sein
-            if ($module !== 'default') {
-                $modules[] = $module;
-            }
-        }
-        return $modules;
-    }
 
 }

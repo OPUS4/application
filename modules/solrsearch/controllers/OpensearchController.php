@@ -28,18 +28,15 @@
  * @package     Module_Solrsearch
  * @author      Sascha Szott <szott@zib.de>
  * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 class Solrsearch_OpensearchController extends Application_Controller_Xml {
 
-    public function init() {
-        parent::init();
-    }
-
     public function indexAction() {
+        $config = Application_Configuration::getInstance();
         $this->_proc->setParameter(
             '',
             'searchBaseUrl',
@@ -50,6 +47,7 @@ class Solrsearch_OpensearchController extends Application_Controller_Xml {
             'faviconUrl',
             $this->view->serverUrl() . $this->view->layoutPath() . '/img/logo/favicon.ico'
         );
+        $this->_proc->setParameter('', 'name', $config->getName());
         $this->loadStyleSheet($this->view->getScriptPath('opensearch') . DIRECTORY_SEPARATOR . 'opensearch.xslt');
     }
 }
