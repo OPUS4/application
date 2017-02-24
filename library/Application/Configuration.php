@@ -61,6 +61,12 @@ class Application_Configuration {
     private $_languageSelectionEnabled = null;
 
     /**
+     * Path to folder for temporary files.
+     * @var string
+     */
+    private $_tempPath = null;
+
+    /**
      * @var Application_Configuration
      */
     private static $_instance;
@@ -204,8 +210,23 @@ class Application_Configuration {
      * @return string Path for temporary files.
      * @throws Application_Exception
      */
-    public function getTempPath() {
-        return $this->getWorkspacePath() . 'tmp' . DIRECTORY_SEPARATOR;
+    public function getTempPath()
+    {
+        if (is_null($this->_tempPath))
+        {
+            $this->_tempPath = trim($this->getWorkspacePath() . 'tmp' . DIRECTORY_SEPARATOR);
+        }
+
+        return $this->_tempPath;
+    }
+
+    /**
+     * Set path to folder for temporary files.
+     * @param $tempPath
+     */
+    public function setTempPath($tempPath)
+    {
+        $this->_tempPath = $tempPath;
     }
 
     /**
@@ -298,6 +319,16 @@ class Application_Configuration {
                 eval('$subconfig->' . $key . ' = $value;');
             }
         }
+    }
+
+    /**
+     * Removes instance.
+     *
+     * This is used to reset the configuration to defaults in ini files.
+     */
+    public static function clearInstance()
+    {
+        self::$_instance = null;
     }
 
 }

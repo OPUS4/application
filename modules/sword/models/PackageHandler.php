@@ -96,8 +96,7 @@ class Sword_Model_PackageHandler {
     }
     
     private function getTmpFileName($payload) {
-        $config = Zend_Registry::get('Zend_Config');
-        $dirName = trim($config->workspacePath) . DIRECTORY_SEPARATOR . 'tmp' . DIRECTORY_SEPARATOR;
+        $dirName = Application_Configuration::getInstance()->getTempPath();
         $fileName = md5($payload) . '-' . time() . '-' . rand(10000, 99999) . '.' . $this->packageType;
         $tmpFileName = $dirName . $fileName;
         $suffix = 0;

@@ -38,6 +38,7 @@ class Sword_DepositControllerErrorCasesTest extends ControllerTestCase {
     public function setUp() {
         parent::setUp();
         $this->testHelper = new DepositTestHelper();
+        $this->testHelper->setupTmpDir();
     }
     
     public function testPostActionWithoutPassword() {
@@ -217,9 +218,9 @@ class Sword_DepositControllerErrorCasesTest extends ControllerTestCase {
         $this->testHelper->setValidAuthorizationHeader($this->getRequest(), DepositTestHelper::USER_AGENT);
         $this->testHelper->uploadFile($this->getRequest(), $fileName, $invalidChecksum);
         
-        $this->dispatch('/sword/deposit');                
+        $this->dispatch('/sword/deposit');
         $this->testHelper->assertEmptyTmpDir();
-        $this->checkErrorDocument($responseCode, $responseBody);        
+        $this->checkErrorDocument($responseCode, $responseBody);
     }   
     
     private function checkErrorDocument($responseCode, $hrefValue) {

@@ -27,9 +27,9 @@
  * @category    Application
  * @package     Tests
  * @author      Sascha Szott
- * @copyright   Copyright (c) 2016
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2016-2017
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 class DepositTestHelper extends PHPUnit_Framework_Assert {
 
@@ -48,13 +48,7 @@ class DepositTestHelper extends PHPUnit_Framework_Assert {
     private $configBackup;
     
     private $frontdoorUrl;
-    
-    function __construct() {
-        $config = Zend_Registry::get('Zend_Config');
-        $config->sword->authFile = APPLICATION_PATH . '/tests/resources/sword-module-passwords.txt';
-        Zend_Registry::set('Zend_Config', $config);
-    }
-    
+
     public function getCollectionId() {
         return $this->collectionId;
     }
@@ -78,7 +72,7 @@ class DepositTestHelper extends PHPUnit_Framework_Assert {
     }
     
     public function setValidAuthorizationHeader($request, $userAgent) {
-        $authString = base64_encode("username:password");
+        $authString = base64_encode('sworduser:sworduserpwd');
         $request->setHeader('Authorization','Basic ' . $authString);        
         $request->setHeader('User-Agent', $userAgent);
     }
@@ -101,7 +95,9 @@ class DepositTestHelper extends PHPUnit_Framework_Assert {
     public function addImportCollection() {
         if (is_null($this->collectionId)) {
             $collectionRole = Opus_CollectionRole::fetchByName('Import');
-            $this->assertFalse(is_null($collectionRole), 'Collection Role "Import" is part of standard distribution since OPUS 4.5');
+            $this->assertFalse(
+                is_null($collectionRole), 'Collection Role "Import" is part of standard distribution since OPUS 4.5'
+            );
             $rootCollection = $collectionRole->getRootCollection();
 
             // create temporary collection
@@ -137,14 +133,34 @@ class DepositTestHelper extends PHPUnit_Framework_Assert {
     public function assertTitleValues($title, $value, $language) {
         $this->assertEquals($value, $title->getValue());
         $this->assertEquals($language, $title->getLanguage());        
-    }    
-    
+    }
+
+    /**
+     * Creates separate tmp folder for sword tests.
+     *
+     * TODO folder is reused, but never removed
+     */
+    public function setupTmpDir()
+    {
+        $appConfig = Application_Configuration::getInstance();
+        $tempPath = $appConfig->getTempPath() . 'sword';
+        if (!file_exists($tempPath))
+        {
+            mkdir($tempPath);
+        }
+        $appConfig->setTempPath($tempPath);
+    }
+
+    /**
+     * Check if workspace/tmp folder does not contain unexpected files.
+     *
+     * @throws Zend_Exception
+     */
     public function assertEmptyTmpDir() {
-        $config = Zend_Registry::get('Zend_Config');
-        $dirName = trim($config->workspacePath) . DIRECTORY_SEPARATOR . 'tmp' . DIRECTORY_SEPARATOR;
+        $dirName = Application_Configuration::getInstance()->getTempPath();
         $files = scandir($dirName);
         foreach ($files as $file) {
-            $this->assertTrue(in_array($file, array( '.', '..', '.gitignore', 'resumption')));
+            $this->assertTrue(in_array($file, array( '.', '..', '.gitignore', 'resumption')), $dirName);
         }
     }
 
@@ -173,7 +189,7 @@ class DepositTestHelper extends PHPUnit_Framework_Assert {
                     $this->assertEquals($fileName, $enrichment->getValue());
                     break;
                 case Application_Import_AdditionalEnrichments::OPUS_IMPORT_USER:
-                    $this->assertEquals('username', $enrichment->getValue());
+                    $this->assertEquals('sworduser', $enrichment->getValue());
                     break;
                 default:
                     if ($expectedNumOfEnrichments == 4) {
@@ -183,7 +199,10 @@ class DepositTestHelper extends PHPUnit_Framework_Assert {
         }        
     }
     
-    public function checkAtomEntryDocument($root, $fileName, $checksum, $abstractExist = true, $numOfEnrichments = 4, $numOfCollections = 1) {
+    public function checkAtomEntryDocument(
+        $root, $fileName, $checksum, $abstractExist = true, $numOfEnrichments = 4, $numOfCollections = 1
+    )
+    {
         $this->assertEquals('entry', $root->nodeName);
         $attributes = $root->attributes;
         $this->assertEquals(0, $attributes->length);        
@@ -210,7 +229,7 @@ class DepositTestHelper extends PHPUnit_Framework_Assert {
         $this->assertEquals(1, $authorChildren->length);
         $nameNode = $authorChildren->item(0);
         $this->assertEquals('name', $nameNode->nodeName);
-        $this->assertEquals('username', $nameNode->nodeValue);
+        $this->assertEquals('sworduser', $nameNode->nodeValue);
 
         $offset = 0;
         if ($abstractExist) {
@@ -241,7 +260,9 @@ class DepositTestHelper extends PHPUnit_Framework_Assert {
         $treatmentValue = $config->sword->treatment;
         $this->assertNodeProperties(7 + $offset, $entryChildren, 'sword:treatment', $treatmentValue);
         
-        $this->assertNodeProperties(8 + $offset, $entryChildren, 'sword:packaging', 'sword.collection.default.acceptPackaging');
+        $this->assertNodeProperties(
+            8 + $offset, $entryChildren, 'sword:packaging', 'sword.collection.default.acceptPackaging'
+        );
         $this->assertNodeProperties(9 + $offset, $entryChildren, 'sword:verboseDescription', '');
         $this->assertNodeProperties(10 + $offset, $entryChildren, 'sword:noOp', 'false');
 

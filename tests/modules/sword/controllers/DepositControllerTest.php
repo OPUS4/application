@@ -27,9 +27,9 @@
  * @category    Application
  * @package     Tests
  * @author      Sascha Szott
- * @copyright   Copyright (c) 2016
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2016-2017
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 class Sword_DepositControllerTest extends ControllerTestCase {
         
@@ -38,7 +38,8 @@ class Sword_DepositControllerTest extends ControllerTestCase {
     public function setUp() {
         parent::setUp();
         $this->testHelper = new DepositTestHelper();
-    }    
+        $this->testHelper->setupTmpDir();
+    }
     
     public function testZipArchiveMinimalDocumentDeposit() {
         $this->depositSuccessful('minimal-record.zip', DepositTestHelper::CONTENT_TYPE_ZIP);
@@ -371,7 +372,11 @@ class Sword_DepositControllerTest extends ControllerTestCase {
      * @param type $serverState
      * @return Opus_Document
      */
-    private function depositSuccessful($fileName, $contentType, $abstractExist = true, $deleteDoc = true, $deleteCollection = true, $numOfEnrichments = 4, $numOfCollections = 1, $serverState = 'unpublished') {
+    private function depositSuccessful(
+        $fileName, $contentType, $abstractExist = true, $deleteDoc = true, $deleteCollection = true,
+        $numOfEnrichments = 4, $numOfCollections = 1, $serverState = 'unpublished'
+    )
+    {
         $this->testHelper->assertEmptyTmpDir();
         $this->testHelper->disableExceptionConversion();
         $this->getRequest()->setMethod('POST');

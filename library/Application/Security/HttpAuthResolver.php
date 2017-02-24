@@ -25,37 +25,40 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Application_Security 
- * @author      Sascha Szott
- * @copyright   Copyright (c) 2016
+ * @package     Application_Security
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2017
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Application_Security_BasicAuthProtection
-{
-    
-    static public function accessAllowed($request, $response)
-    {
-        $adapter = new Application_Security_HttpAuthAdapter(array(
-            'accept_schemes' => 'basic',
-            'realm' => 'opus-sword'            
-        ));
-        
-        $adapter->setBasicResolver(new Application_Security_HttpAuthResolver());
-        $adapter->setRequest($request);
-        $adapter->setResponse($response);
-        
-        $auth = Zend_Auth::getInstance();
-        $result = $auth->authenticate($adapter);
-        
-        if (!$result->isValid())
-        {
-            return false;
-        }
-        
-        $userName = $result->getIdentity()['username'];
-        $auth->clearIdentity();
 
-        return $userName;
+/**
+ * HTTP auth resolver using OPUS accounts.
+ */
+class Application_Security_HttpAuthResolver implements Zend_Auth_Adapter_Http_Resolver_Interface
+{
+
+    /**
+     * Returns password for user from database.
+     *
+     * The passwords stored in the database are hashed.
+     *
+     * @param string $username
+     * @param string $realm
+     * @return string|false
+     */
+    public function resolve($username, $realm)
+    {
+        $user = Opus_Account::fetchAccountByLogin($username);
+
+        if (!is_null($user))
+        {
+            if (Opus_Security_Realm::checkModuleForUser('sword', $username))
+            {
+                return $user->getPassword();
+            }
+        }
+
+        return false;
     }
 
 }

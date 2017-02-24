@@ -25,37 +25,33 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Application_Security 
- * @author      Sascha Szott
- * @copyright   Copyright (c) 2016
+ * @package     Application_Security
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2017
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Application_Security_BasicAuthProtection
-{
-    
-    static public function accessAllowed($request, $response)
-    {
-        $adapter = new Application_Security_HttpAuthAdapter(array(
-            'accept_schemes' => 'basic',
-            'realm' => 'opus-sword'            
-        ));
-        
-        $adapter->setBasicResolver(new Application_Security_HttpAuthResolver());
-        $adapter->setRequest($request);
-        $adapter->setResponse($response);
-        
-        $auth = Zend_Auth::getInstance();
-        $result = $auth->authenticate($adapter);
-        
-        if (!$result->isValid())
-        {
-            return false;
-        }
-        
-        $userName = $result->getIdentity()['username'];
-        $auth->clearIdentity();
 
-        return $userName;
+/**
+ * Custom HTTP auth adapter for OPUS 4.
+ *
+ * This class is needed because the passwords in the database are hashed.
+ */
+class Application_Security_HttpAuthAdapter extends Zend_Auth_Adapter_Http
+{
+
+    /**
+     * Compares two string hashing the second string.
+     *
+     * The second string is the password from the request and needs to be hashed before it can be compared to the
+     * string stored in the OPUS 4 database.
+     *
+     * @param string $a Password from database
+     * @param string $b Password from request
+     * @return bool true - if strings are identical
+     */
+    protected function _secureStringCompare($a, $b)
+    {
+        return parent::_secureStringCompare($a, sha1($b));
     }
 
 }

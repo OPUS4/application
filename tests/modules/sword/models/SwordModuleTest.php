@@ -44,7 +44,7 @@ class Sword_Model_SwordModuleTest extends ControllerTestCase
     {
         $module = new Sword_Model_SwordModule();
 
-        $this->assertEquals('', $module->getDescription());
+        $this->assertEquals('sword_module_description', $module->getDescription());
     }
 
 }
