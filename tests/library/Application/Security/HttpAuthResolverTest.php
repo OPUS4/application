@@ -43,6 +43,15 @@ class Application_Security_HttpAuthResolverTest extends ControllerTestCase
         $this->assertEquals(sha1('sworduserpwd'), $resolver->resolve('sworduser', 'opus-sword'));
     }
 
+    public function testResolveAdmin()
+    {
+        $this->enableSecurity();
+
+        $resolver = new Application_Security_HttpAuthResolver();
+
+        $this->assertFalse($resolver->resolve('admin', 'opus-sword'));
+    }
+
     public function testResolveUnknownUser()
     {
         $this->enableSecurity();
