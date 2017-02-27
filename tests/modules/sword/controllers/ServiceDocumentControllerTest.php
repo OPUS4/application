@@ -34,6 +34,8 @@
 class Sword_ServiceDocumentControllerTest extends ControllerTestCase {
     
     private $testHelper;
+
+    private $_credentials = 'sworduser:sworduserpwd';
     
     public function setUp() {
         parent::setUp();
@@ -53,7 +55,7 @@ class Sword_ServiceDocumentControllerTest extends ControllerTestCase {
     }
     
     public function testIndexActionWithWrongPassword() {
-        $authString = base64_encode("username:badpassword");
+        $authString = base64_encode("sworduser:badpassword");
         $this->getRequest()->setHeader('Authorization','Basic ' . $authString);
         $this->getRequest()->setMethod('GET');
         $this->dispatch('/sword/servicedocument/index');
@@ -61,7 +63,7 @@ class Sword_ServiceDocumentControllerTest extends ControllerTestCase {
     }    
     
     public function testGetActionWithWrongPassword() {
-        $authString = base64_encode("username:badpassword");
+        $authString = base64_encode("sworduser:badpassword");
         $this->getRequest()->setHeader('Authorization','Basic ' . $authString);
         $this->getRequest()->setMethod('GET');
         $this->dispatch('/sword/servicedocument');
@@ -70,7 +72,7 @@ class Sword_ServiceDocumentControllerTest extends ControllerTestCase {
     
     public function testIndexActionWithValidPassword() {
         $this->testHelper->addImportCollection();
-        $authString = base64_encode("username:password");
+        $authString = base64_encode($this->_credentials);
         $this->getRequest()->setHeader('Authorization','Basic ' . $authString);
         $this->getRequest()->setMethod('GET');
         $this->dispatch('/sword/servicedocument/index');
@@ -80,7 +82,7 @@ class Sword_ServiceDocumentControllerTest extends ControllerTestCase {
     
     public function testGetActionWithValidPassword() {
         $this->testHelper->addImportCollection();
-        $authString = base64_encode("username:password");
+        $authString = base64_encode($this->_credentials);
         $this->getRequest()->setHeader('Authorization','Basic ' . $authString);
         $this->getRequest()->setMethod('GET');
         $this->dispatch('/sword/servicedocument');

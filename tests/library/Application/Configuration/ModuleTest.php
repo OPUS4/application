@@ -24,38 +24,59 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Application_Security 
- * @author      Sascha Szott
- * @copyright   Copyright (c) 2016
+ * @category    Tests
+ * @package     Application_Configuration
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Application_Security_BasicAuthProtection
-{
-    
-    static public function accessAllowed($request, $response)
-    {
-        $adapter = new Application_Security_HttpAuthAdapter(array(
-            'accept_schemes' => 'basic',
-            'realm' => 'opus-sword'            
-        ));
-        
-        $adapter->setBasicResolver(new Application_Security_HttpAuthResolver());
-        $adapter->setRequest($request);
-        $adapter->setResponse($response);
-        
-        $auth = Zend_Auth::getInstance();
-        $result = $auth->authenticate($adapter);
-        
-        if (!$result->isValid())
-        {
-            return false;
-        }
-        
-        $userName = $result->getIdentity()['username'];
-        $auth->clearIdentity();
 
-        return $userName;
+class Application_Configuration_ModuleTest extends ControllerTestCase
+{
+
+    public function testIsRegistered()
+    {
+        $module = new Application_Configuration_Module('frontdoor');
+
+        $this->assertFalse($module->isRegistered());
+
+        Application_Modules::registerModule($module);
+
+        $this->assertTrue($module->isRegistered());
+    }
+
+    public function testConstruct()
+    {
+        $module = new Application_Configuration_Module('frontdoor');
+
+        $this->assertEquals('frontdoor', $module->getName());
+        $this->assertNull($module->getDescription());
+    }
+
+    public function testConstructWithDescription()
+    {
+        $module = new Application_Configuration_Module('frontdoor', 'Shows document metadata.');
+
+        $this->assertEquals('frontdoor', $module->getName());
+        $this->assertEquals('Shows document metadata.', $module->getDescription());
+    }
+
+    public function testIsPublic()
+    {
+        $module = new Application_Configuration_Module('frontdoor');
+
+        $this->assertTrue($module->isPublic());
+
+        $module = new Application_Configuration_Module('admin');
+
+        $this->assertFalse($module->isPublic());
+    }
+
+    public function testIsPublicBadName()
+    {
+        $module = new Application_Configuration_Module('badname');
+
+        $this->assertFalse($module->isPublic());
     }
 
 }

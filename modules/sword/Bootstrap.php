@@ -28,10 +28,16 @@
  * @category    Application
  * @package     Module_Sword
  * @author      Sascha Szott
- * @copyright   Copyright (c) 2016
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2016-2017
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class Sword_Bootstrap extends Zend_Application_Module_Bootstrap {
+class Sword_Bootstrap extends Zend_Application_Module_Bootstrap
+{
+
+    protected function _initSwordModule()
+    {
+        Application_Modules::registerModule(new Sword_Model_SwordModule());
+    }
     
 }

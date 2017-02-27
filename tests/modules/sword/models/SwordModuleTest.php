@@ -24,38 +24,28 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Application_Security 
- * @author      Sascha Szott
- * @copyright   Copyright (c) 2016
+ * @category    Tests
+ * @package     Sword_Model
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2017
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Application_Security_BasicAuthProtection
-{
-    
-    static public function accessAllowed($request, $response)
-    {
-        $adapter = new Application_Security_HttpAuthAdapter(array(
-            'accept_schemes' => 'basic',
-            'realm' => 'opus-sword'            
-        ));
-        
-        $adapter->setBasicResolver(new Application_Security_HttpAuthResolver());
-        $adapter->setRequest($request);
-        $adapter->setResponse($response);
-        
-        $auth = Zend_Auth::getInstance();
-        $result = $auth->authenticate($adapter);
-        
-        if (!$result->isValid())
-        {
-            return false;
-        }
-        
-        $userName = $result->getIdentity()['username'];
-        $auth->clearIdentity();
 
-        return $userName;
+class Sword_Model_SwordModuleTest extends ControllerTestCase
+{
+
+    public function testConstruct() {
+        $module = new Sword_Model_SwordModule();
+
+        $this->assertEquals('sword', $module->getName());
+    }
+
+    public function testDescriptionTranslation()
+    {
+        $module = new Sword_Model_SwordModule();
+
+        $this->assertEquals('sword_module_description', $module->getDescription());
     }
 
 }
+

@@ -38,6 +38,7 @@ class Sword_DepositControllerMultipleDocsTest extends ControllerTestCase {
     public function setUp() {
         parent::setUp();
         $this->testHelper = new DepositTestHelper();
+        $this->testHelper->setupTmpDir();
     }
 
     public function testZipArchiveWith3Docs() {

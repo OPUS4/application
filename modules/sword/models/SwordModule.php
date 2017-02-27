@@ -25,37 +25,31 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Application_Security 
- * @author      Sascha Szott
- * @copyright   Copyright (c) 2016
+ * @package     Module_Sword
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2017
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Application_Security_BasicAuthProtection
-{
-    
-    static public function accessAllowed($request, $response)
-    {
-        $adapter = new Application_Security_HttpAuthAdapter(array(
-            'accept_schemes' => 'basic',
-            'realm' => 'opus-sword'            
-        ));
-        
-        $adapter->setBasicResolver(new Application_Security_HttpAuthResolver());
-        $adapter->setRequest($request);
-        $adapter->setResponse($response);
-        
-        $auth = Zend_Auth::getInstance();
-        $result = $auth->authenticate($adapter);
-        
-        if (!$result->isValid())
-        {
-            return false;
-        }
-        
-        $userName = $result->getIdentity()['username'];
-        $auth->clearIdentity();
 
-        return $userName;
+/**
+ * Descriptor for SWORD module.
+ */
+class Sword_Model_SwordModule extends Application_Configuration_Module
+{
+
+    public function __construct()
+    {
+        parent::__construct('sword');
+    }
+
+    public function getDescription()
+    {
+        return 'sword_module_description';
+    }
+
+    public function isConfigurable()
+    {
+        return false;
     }
 
 }
