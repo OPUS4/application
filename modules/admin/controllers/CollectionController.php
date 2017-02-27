@@ -42,6 +42,8 @@
  *
  * @category    Application
  * @package     Module_Admin
+ *
+ * TODO $this->_redirectToAndExit does not have return value, but is used with return here
  */
 class Admin_CollectionController extends Application_Controller_Action {
 
@@ -194,6 +196,12 @@ class Admin_CollectionController extends Application_Controller_Action {
         }
     }
 
+    /**
+     * Creates new collection.
+     * @throws Exception
+     * @throws Zend_Form_Exception
+     * TODO logic should be moved to model
+     */
     public function createAction() {
         if (!$this->getRequest()->isPost()) {
             return $this->_redirectToAndExit('index', '', 'collectionroles');
@@ -270,7 +278,7 @@ class Admin_CollectionController extends Application_Controller_Action {
                     );
             }
 
-            return $this->_redirectTo('show', $message, 'collection', 'admin', array('id' => $collection->getId()));
+            return $this->_redirectTo('show', $message, 'collection', 'admin', array('id' => $collection->getParentNodeId()));
         }
 
         // nur Änderungen
