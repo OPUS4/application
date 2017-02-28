@@ -85,7 +85,10 @@ class Application_Controller_Action extends Application_Controller_ModuleAccess 
      * @param  array  $params     Parameters for the redirect target action
      * @return void
      */
-    protected function _redirectTo($action, $message = null, $controller = null, $module = null, $params = array()) {
+    protected function _redirectTo(
+        $action, $message = null, $controller = null, $module = null, $params = array()
+    )
+    {
         $this->performRedirect($action, $message, $controller, $module, $params);
     }
 
@@ -116,8 +119,29 @@ class Application_Controller_Action extends Application_Controller_ModuleAccess 
         $this->performRedirect($action, $message, $controller, $module, $params, true);
     }
 
-    private function performRedirect($action, $message = null, $controller = null, $module = null, $params = array(),
-                                     $exit = false) {
+    /**
+     * Performs a redirect.
+     *
+     * There is a problem with the 'AndExit' functionality. A hard exit kills the unit testing process.
+     * The testing framework calls setExit(false) in order to prevent that. However if the OPUS code
+     * changes this again, the unit test process will be killed. The same is true if any 'andExit'
+     * function is called explicitly because then getExit will not be called first. This information is
+     * base on ZF 1.12.x sources, at least until 1.12.20.
+     *
+     * TODO because of problem described above 'AndExit' should never be used
+     *
+     * @param $action
+     * @param null $message
+     * @param null $controller
+     * @param null $module
+     * @param array $params
+     * @param bool $exit
+     * @throws Application_Exception
+     */
+    private function performRedirect(
+        $action, $message = null, $controller = null, $module = null, $params = array(), $exit = false
+    )
+    {
         if (!is_null($message)) {
             if (is_array($message) && count($message) !==  0) {
                 $keys = array_keys($message);
@@ -134,10 +158,18 @@ class Application_Controller_Action extends Application_Controller_ModuleAccess 
             }
         }
         $this->getLogger()->debug("redirect to module: $module controller: $controller action: $action");
-        $this->_redirector->gotoSimple($action, $controller, $module, $params);
-        $this->_redirector->setExit($exit);
 
-        return;
+        if (array_key_exists('anchor', $params)) {
+            $anchor = '#' . $params['anchor'];
+            unset($params['anchor']);
+            $gotoUrl = $this->_helper->url($action, $controller, $module, $params);
+            $this->_redirector->gotoUrl($gotoUrl . $anchor, array('prependBase' => false));
+        }
+        else
+        {
+            $this->_redirector->gotoSimple($action, $controller, $module, $params);
+            $this->_redirector->setExit($exit); // TODO does not do anything at this point
+        }
     }
 
     /**
