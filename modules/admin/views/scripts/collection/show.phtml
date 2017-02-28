@@ -105,7 +105,7 @@
         </td>
     </tr>
     <?php foreach ($this->collections as $i => $collection) : ?>
-    <tr class="<?= ($i % 2 == 0) ? 'even' : 'odd'?>">
+    <tr id="col<?= $collection->getId() ?>" class="<?= ($i % 2 == 0) ? 'even' : 'odd'?>">
         <th class="<?= ($collection->getVisible() === '1') ? 'visible' : 'invisible' ?>">
             <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'show', 'id' => $collection->getId()), null, true) ?>">
             <?= htmlspecialchars($collection->getNumberAndName()) ?>
