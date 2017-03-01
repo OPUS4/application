@@ -125,10 +125,11 @@ if($this->jQueryEnabled()) {
                             <?php endif ?>
 
                             <?php if (!is_null($result->getAsset('title'))) : ?>
-                                <a href="<?= $this->url($frontdoorUrl) ?>"><?= htmlspecialchars($result->getAsset('title')); ?></a>
+                                <a href="<?= $this->url($frontdoorUrl) ?>"><?= $this->documentTitle($document) ?></a>
                             <?php else: ?>
                                 <a href="<?= $this->url($frontdoorUrl) ?>" class="missing_title"><?= $this->translate('results_missingtitle') ?></a>
                             <?php endif ?>
+
                             <?php if ($result->getAsset( 'year' )) : ?>
                                 (<?= htmlspecialchars($result->getAsset( 'year' )); ?>)
                             <?php endif ?>
