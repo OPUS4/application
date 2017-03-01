@@ -145,7 +145,7 @@ if($this->jQueryEnabled()) {
                                 <?php endforeach ?>
                             </dt>
                         <?php endif ?>
-                        <dd class="abstractText" id="abstractText_<?= $document->getId() ?>"><?= htmlspecialchars($result->getAsset( 'abstract' )) ?></dd>
+                        <dd class="abstractText" id="abstractText_<?= $document->getId() ?>"><?= $this->documentAbstract($document) ?></dd>
                     </dl>
                 <?php endforeach ?>
             </div>

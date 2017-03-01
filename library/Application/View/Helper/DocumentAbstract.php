@@ -32,36 +32,27 @@
  */
 
 /**
- * Helper for printing the title of a OPUS document.
- *
- * Which title is used can vary depending on the configuration, the selected
- * language for the user interface and options used when calling the helper.
- *
- * The document could be stored in a view variable or it could be provides as
- * a parameter.
- *
- * The document could by of type Opus_Document or it could be a result object
- * of a Solr search.
+ * Helper for printing the abstract of a OPUS document.
  */
-class Application_View_Helper_DocumentTitle extends Application_View_Helper_Document_HelperAbstract
+class Application_View_Helper_DocumentAbstract extends Application_View_Helper_Document_HelperAbstract
 {
 
     /**
      * Prints escaped main title of document.
      * @return null|string
      */
-    public function documentTitle($document = null) {
+    public function documentAbstract($document = null) {
         if ($this->isPreferUserInterfaceLanguage())
         {
             $language = Opus_Language::getPart2tForPart1(Zend_Registry::get('Zend_Translate')->getLocale());
 
-            $title = $document->getMainTitle($language);
+            $abstract = $document->getMainAbstract($language);
         }
         else {
-            $title = $document->getMainTitle();
+            $abstract = $document->getMainAbstract();
         }
 
-        return htmlspecialchars($title->getValue());
+        return htmlspecialchars($abstract->getValue());
     }
 
 }

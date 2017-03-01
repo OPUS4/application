@@ -25,43 +25,55 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     View
+ * @package     View_Helper_Document_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
- * Helper for printing the title of a OPUS document.
- *
- * Which title is used can vary depending on the configuration, the selected
- * language for the user interface and options used when calling the helper.
- *
- * The document could be stored in a view variable or it could be provides as
- * a parameter.
- *
- * The document could by of type Opus_Document or it could be a result object
- * of a Solr search.
+ * Abstract base class for document focused view helpers.
  */
-class Application_View_Helper_DocumentTitle extends Application_View_Helper_Document_HelperAbstract
+abstract class Application_View_Helper_Document_HelperAbstract extends Application_View_Helper_Abstract
 {
 
     /**
-     * Prints escaped main title of document.
-     * @return null|string
+     * Determines if preferably the title matching the user interface language should be used.
+     * @var bool
      */
-    public function documentTitle($document = null) {
-        if ($this->isPreferUserInterfaceLanguage())
+    private $_preferUserInterfaceLanguage = null;
+
+    /**
+     * Returns if user interface language should be used.
+     * @return bool true if user interface language should be used
+     */
+    public function isPreferUserInterfaceLanguage() {
+        $config = $this->getConfig();
+
+        if (is_null($this->_preferUserInterfaceLanguage))
         {
-            $language = Opus_Language::getPart2tForPart1(Zend_Registry::get('Zend_Translate')->getLocale());
+            if (isset($config->search->result->display->preferUserInterfaceLanguage))
+            {
+                $value = trim($config->search->result->display->preferUserInterfaceLanguage);
 
-            $title = $document->getMainTitle($language);
-        }
-        else {
-            $title = $document->getMainTitle();
+                $this->_preferUserInterfaceLanguage = ($value == 1 || $value === 'true');
+            }
+            else {
+                $this->_preferUserInterfaceLanguage = false;
+            }
+
         }
 
-        return htmlspecialchars($title->getValue());
+        return $this->_preferUserInterfaceLanguage;
+    }
+
+    /**
+     * Set if user interface language should be used.
+     * @param $enabled bool
+     */
+    public function setPreferUserInterfaceLanguage($enabled)
+    {
+        $this->_preferUserInterfaceLanguage = ($enabled == 1 || $enabled === 'true');
     }
 
 }
