@@ -944,6 +944,9 @@ dl.result_box {
 .results_seriesnumber + .results_title {
         padding-right: 75px!important;
 }
+.results_title .missing_title {
+    color: #ff5a5a;
+}
 .result_box .results_seriesnumber {
         float: right;
         text-align: right;
