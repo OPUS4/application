@@ -47,7 +47,6 @@ class Application_View_Helper_DocumentTitleTest extends ControllerTestCase
         $this->_helper->setView(Zend_Registry::get('Opus_View'));
     }
 
-
     public function testDocumentTitle()
     {
         $doc = $this->createTestDocument();
@@ -79,5 +78,74 @@ class Application_View_Helper_DocumentTitleTest extends ControllerTestCase
 
         $this->assertEquals('&lt;b&gt;Deutsch&lt;/b&gt;', $this->_helper->documentTitle($doc));
     }
+
+    public function testDocumentTitleUserInterfaceLanguage()
+    {
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(
+            array('search' => array('result' => array('display' => array(
+                'preferUserInterfaceLanguage' => '1'
+            ))))
+        ));
+
+        $this->assertTrue($this->_helper->isPreferUserInterfaceLanguage());
+
+        $doc = $this->createTestDocument();
+        $doc->setLanguage('deu');
+
+        $title = $doc->addTitleMain();
+        $title->setValue('Deutsch');
+        $title->setLanguage('deu');
+
+        $title = $doc->addTitleMain();
+        $title->setValue('English');
+        $title->setLanguage('eng');
+
+        $doc->store();
+
+        $this->useEnglish();
+
+        $this->assertEquals('English', $this->_helper->documentTitle($doc));
+
+        $this->useGerman();
+
+        $this->assertEquals('Deutsch', $this->_helper->documentTitle($doc));
+    }
+
+    public function testIsPreferUserInterfaceLanguage()
+    {
+        $this->assertFalse($this->_helper->isPreferUserInterfaceLanguage());
+
+        $this->_helper->setPreferUserInterfaceLanguage(true);
+
+        $this->assertTrue($this->_helper->isPreferUserInterfaceLanguage());
+    }
+
+    public function testSetPreferUserInterfaceLanguage()
+    {
+        // true
+        $this->_helper->setPreferUserInterfaceLanguage(true);
+        $this->assertTrue($this->_helper->isPreferUserInterfaceLanguage());
+
+        $this->_helper->setPreferUserInterfaceLanguage('true');
+        $this->assertTrue($this->_helper->isPreferUserInterfaceLanguage());
+
+        $this->_helper->setPreferUserInterfaceLanguage(1);
+        $this->assertTrue($this->_helper->isPreferUserInterfaceLanguage());
+
+        $this->_helper->setPreferUserInterfaceLanguage('1');
+        $this->assertTrue($this->_helper->isPreferUserInterfaceLanguage());
+
+        // false
+        $this->_helper->setPreferUserInterfaceLanguage('bla');
+        $this->assertFalse($this->_helper->isPreferUserInterfaceLanguage());
+
+        $this->_helper->setPreferUserInterfaceLanguage(false);
+        $this->assertFalse($this->_helper->isPreferUserInterfaceLanguage());
+
+        $this->_helper->setPreferUserInterfaceLanguage(0);
+        $this->assertFalse($this->_helper->isPreferUserInterfaceLanguage());
+
+    }
+
 
 }

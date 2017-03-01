@@ -43,15 +43,64 @@
  * The document could by of type Opus_Document or it could be a result object
  * of a Solr search.
  */
-class Application_View_Helper_DocumentTitle extends Zend_View_Helper_Abstract {
+class Application_View_Helper_DocumentTitle extends Application_View_Helper_Abstract
+{
 
     /**
-     * @return $this
+     * Determines if preferably the title matching the user interface language should be used.
+     * @var bool
      */
-    public function documentTitle($document = null, $options = null) {
-        $title = $document->getMainTitle();
+    private $_preferUserInterfaceLanguage = null;
+
+    /**
+     * Prints escaped main title of document.
+     * @return null|string
+     */
+    public function documentTitle($document = null) {
+        if ($this->isPreferUserInterfaceLanguage())
+        {
+            $language = Opus_Language::getPart2tForPart1(Zend_Registry::get('Zend_Translate')->getLocale());
+
+            $title = $document->getMainTitle($language);
+        }
+        else {
+            $title = $document->getMainTitle();
+        }
 
         return htmlspecialchars($title->getValue());
+    }
+
+    /**
+     * Returns if user interface language should be used.
+     * @return bool true if user interface language should be used
+     */
+    public function isPreferUserInterfaceLanguage() {
+        $config = $this->getConfig();
+
+        if (is_null($this->_preferUserInterfaceLanguage))
+        {
+            if (isset($config->search->result->display->preferUserInterfaceLanguage))
+            {
+                $value = trim($config->search->result->display->preferUserInterfaceLanguage);
+
+                $this->_preferUserInterfaceLanguage = ($value == 1 || $value === 'true');
+            }
+            else {
+                $this->_preferUserInterfaceLanguage = false;
+            }
+
+        }
+
+        return $this->_preferUserInterfaceLanguage;
+    }
+
+    /**
+     * Set if user interface language should be used.
+     * @param $enabled bool
+     */
+    public function setPreferUserInterfaceLanguage($enabled)
+    {
+        $this->_preferUserInterfaceLanguage = ($enabled == 1 || $enabled === 'true');
     }
 
 }

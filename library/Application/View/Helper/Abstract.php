@@ -27,23 +27,50 @@
  * @category    Application
  * @package     Application_View_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
+ */
+
+/**
+ * Abstract base class for view helpers.
  */
 class Application_View_Helper_Abstract extends Zend_View_Helper_Abstract {
 
+    /**
+     * Logger for class.
+     * @var Zend_Log
+     */
     private $_logger;
 
-    public function getLogger() {
+    /**
+     * Return logger for class.
+     * @return null|Zend_Log
+     * @throws Zend_Exception
+     */
+    public function getLogger()
+    {
         if (is_null($this->_logger)) {
             $this->_logger = Zend_Registry::get('Zend_Log');
         }
         return $this->_logger;
     }
 
-    public function setLogger($logger) {
+    /**
+     * Set logger for class.
+     * @param $logger
+     */
+    public function setLogger($logger)
+    {
         $this->_logger = $logger;
+    }
+
+    /**
+     * Return configuration of application.
+     * @return Zend_Config
+     */
+    public function getConfig()
+    {
+        return Application_Configuration::getInstance()->getConfig();
     }
 
 }
