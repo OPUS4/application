@@ -2,6 +2,29 @@
 
 ---
 
+## Release 4.6 2017-04-
+
+OPUS 4 wurde um eine SWORD-Schnittstelle ergänzt. Damit können Pakete
+(ZIB/TAR) mit den Metadaten und Dateien von einem oder mehreren 
+Dokumenten gemäß der SWORD-Spezifikation importiert werden.
+
+### DINI
+
+### Nutzeroberfläche
+
+Es gibt nun die Möglichkeit Suchergebnisse in der gewählten Sprache der
+Nutzeroberfläche anzeigen zu lassen. Wird OPUS 4 also auf Englisch 
+verwendet, werden bevorzugt die englischen Titel angezeigt. Ist dieses
+Verhalten gewünscht, muss es in der Konfiguration aktiviert werden.
+Wird diese Funktion genutzt und sollen die Suchergebnisse nach dem 
+Titel sortiert werden, erfolgt die Sortierung weiterhin anhand des 
+Titels in der Sprache des Dokuments (Haupttitel), also nicht unbedingt 
+anhand des Titels in der Sprache der Oberfläche, der dann angezeigt 
+wird. Das kann zu einer unerwarteten Reihenfolge führen. Es ist geplant
+dieses Problem in einem kommenden Release zu beheben.
+
+---
+
 ## Release 4.5 2016-12-06
 
 Dieser Release enhält viele Fehlerkorrekturen und grundlegenden Arbeiten
