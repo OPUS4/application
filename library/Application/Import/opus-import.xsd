@@ -331,6 +331,7 @@
             <xsd:element name="collection" minOccurs="0" maxOccurs="unbounded">
                 <xsd:complexType>
                     <xsd:attribute name="id" type="xsd:integer" use="required"/>
+                    <xsd:attribute name="number" type="xsd:string" />
                 </xsd:complexType>
             </xsd:element>
         </xsd:sequence>
