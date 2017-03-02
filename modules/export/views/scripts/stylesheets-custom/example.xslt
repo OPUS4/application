@@ -29,9 +29,9 @@
  * @category    Application
  * @package     Module_Export
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2011, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2011-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 -->
 
@@ -197,6 +197,7 @@
         <xsl:if test="@Visible = '1'">
             <xsl:element name="collection">
                 <xsl:attribute name="role"><xsl:value-of select="@RoleName"/></xsl:attribute>
+                <xsl:attribute name="number"><xsl:value-of select="@Number" /></xsl:attribute>
                 <xsl:value-of select="@Name"/>
             </xsl:element>
         </xsl:if>
