@@ -50,18 +50,27 @@ class Application_View_Helper_DocumentTitle extends Application_View_Helper_Docu
      * Prints escaped main title of document.
      * @return null|string
      */
-    public function documentTitle($document = null) {
+    public function documentTitle($document = null)
+    {
         if ($this->isPreferUserInterfaceLanguage())
         {
             $language = Opus_Language::getPart2tForPart1(Zend_Registry::get('Zend_Translate')->getLocale());
 
             $title = $document->getMainTitle($language);
         }
-        else {
+        else
+        {
             $title = $document->getMainTitle();
         }
 
-        return htmlspecialchars($title->getValue());
+        if (!is_null($title))
+        {
+            return htmlspecialchars($title->getValue());
+        }
+        else
+        {
+            return null;
+        }
     }
 
 }

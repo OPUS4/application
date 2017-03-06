@@ -33,6 +33,8 @@
 
 /**
  * Helper for printing the abstract of a OPUS document.
+ *
+ * TODO unit tests
  */
 class Application_View_Helper_DocumentAbstract extends Application_View_Helper_Document_HelperAbstract
 {
@@ -41,7 +43,8 @@ class Application_View_Helper_DocumentAbstract extends Application_View_Helper_D
      * Prints escaped main title of document.
      * @return null|string
      */
-    public function documentAbstract($document = null) {
+    public function documentAbstract($document = null)
+    {
         if ($this->isPreferUserInterfaceLanguage())
         {
             $language = Opus_Language::getPart2tForPart1(Zend_Registry::get('Zend_Translate')->getLocale());
@@ -52,7 +55,14 @@ class Application_View_Helper_DocumentAbstract extends Application_View_Helper_D
             $abstract = $document->getMainAbstract();
         }
 
-        return htmlspecialchars($abstract->getValue());
+        if (!is_null($abstract))
+        {
+            return htmlspecialchars($abstract->getValue());
+        }
+        else
+        {
+            return null;
+        }
     }
 
 }

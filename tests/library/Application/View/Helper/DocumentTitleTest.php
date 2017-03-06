@@ -79,6 +79,14 @@ class Application_View_Helper_DocumentTitleTest extends ControllerTestCase
         $this->assertEquals('&lt;b&gt;Deutsch&lt;/b&gt;', $this->_helper->documentTitle($doc));
     }
 
+    public function testDocumentTitleNoTitle()
+    {
+        $doc = $this->createTestDocument();
+        $doc->store();
+
+        $this->assertNull($this->_helper->documentTitle($doc));
+    }
+
     public function testDocumentTitleUserInterfaceLanguage()
     {
         Zend_Registry::get('Zend_Config')->merge(new Zend_Config(
@@ -144,7 +152,6 @@ class Application_View_Helper_DocumentTitleTest extends ControllerTestCase
 
         $this->_helper->setPreferUserInterfaceLanguage(0);
         $this->assertFalse($this->_helper->isPreferUserInterfaceLanguage());
-
     }
 
 
