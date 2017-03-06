@@ -24,13 +24,34 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Ralf Claussnitzer (ralf.claussnitzer@slub-dresden.de)
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @category    Application Unit Test
+ * @package     Application_View_Helper
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-?>
+class Application_View_Helper_ViewFormMultiCheckboxTest extends ControllerTestCase {
 
-<?= $this->form ?>
+    public function testViewFormMultiCheckbox() {
+        $helper = new Application_View_Helper_ViewFormMultiCheckbox();
+        $helper->setView(new Zend_View());
+
+        $markup = $helper->viewFormMultiCheckbox(
+            'testName', array('Value1', 'Value2'), null, array('Value1', 'Value2', 'Value3')
+        );
+
+        $this->assertEquals('<div id="testName" class="field">Value1, Value2</div>', $markup);
+    }
+
+    public function testViewFormMultiCheckboxEscaping() {
+        $helper = new Application_View_Helper_ViewFormMultiCheckbox();
+        $helper->setView(new Zend_View());
+
+        $markup = $helper->viewFormMultiCheckbox(
+            'testName', '<h1>Value2</h1>', null, array('Value1', '<h1>Value2</h1>', 'Value3')
+        );
+
+        $this->assertEquals('<div id="testName" class="field">&lt;h1&gt;Value2&lt;/h1&gt;</div>', $markup);
+    }
+
+}

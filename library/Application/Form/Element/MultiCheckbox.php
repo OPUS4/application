@@ -53,4 +53,18 @@ class Application_Form_Element_MultiCheckbox extends Zend_Form_Element_MultiChec
         }
     }
 
+    /**
+     * Sorgt dafür, daß nur der Text ausgeben wird und kein INPUT-Tag.
+     */
+    public function prepareRenderingAsView() {
+        $viewHelper = $this->getDecorator('ViewHelper');
+        if ($viewHelper instanceof Application_Form_Decorator_ViewHelper) {
+            $viewHelper->setViewOnlyEnabled(true);
+        }
+    }
+
+    public function getStaticViewHelper() {
+        return 'viewFormMultiCheckbox';
+    }
+
 }

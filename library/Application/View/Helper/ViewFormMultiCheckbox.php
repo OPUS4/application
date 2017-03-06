@@ -23,32 +23,36 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+/**
+ * Gibt Select-Element als Ansicht aus (nur Wert).
  *
  * @category    Application
- * @package     Module_Licence
- * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
+ * @package     Application_View_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-?>
+class Application_View_Helper_ViewFormMultiCheckbox extends Zend_View_Helper_FormMultiCheckbox {
 
-<div>
-    <a href="<?= $this->url(array('action' => 'new')) ?>"><?= $this->translate('admin_iprange_new') ?></a>
-</div>
+    public function viewFormMultiCheckbox($name, $value = null, $attribs = null, $options = null, $listsep = "<br />\n")
+    {
+        $info = $this->_getInfo($name, $value, $attribs, $options, $listsep);
+        extract($info);
 
-<table>
-    <?PHP foreach($this->ipRanges as $id => $ipRange) : ?>
-    <tr>
-        <td>
-            <div><a href="<?= $this->url(array('action' => 'show', 'id' => $id)) ?>"><?= htmlspecialchars($ipRange->getName()) ?></a></div>
-            <div><?= $ipRange->getStartingip() ?> - <?= $ipRange->getEndingip() ?></div>
-        </td>
-        <td>
-            <a href="<?= $this->url(array('action' => 'edit', 'id' => $id)) ?>"><?= $this->translate('admin_form_action_edit') ?></a>
-            <a href="<?= $this->url(array('action' => 'delete', 'id' => $id)) ?>"><?= $this->translate('admin_form_action_delete') ?></a>
-        </td>
-    </tr>
-    <?PHP endforeach; ?>
-</table>
+        if (is_array($value))
+        {
+            $value = implode(', ', $value);
+        }
+
+        $markup = '<div'
+            . ' id="' . $this->view->escape($id) . '"'
+            . ' class="field">'
+            . $this->view->escape($value)
+            . '</div>';
+
+        return $markup;
+    }
+
+}
