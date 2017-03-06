@@ -85,18 +85,11 @@ class Application_Form_Element_Roles extends Application_Form_Element_MultiCheck
         {
             if (count($value) > 0 && $value[0] instanceof Opus_UserRole)
             {
-                $values = $this->getRoleNames($value);
-            }
-            else
-            {
-                $values = $value;
+                $value = $this->getRoleNames($value);
             }
         }
-        else
-        {
-            $values = array($value);
-        }
-        parent::setValue($values);
+
+        parent::setValue($value);
     }
 
     /**

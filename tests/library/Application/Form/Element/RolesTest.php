@@ -113,13 +113,24 @@ class Application_Form_Element_RolesTest extends FormElementTestCase {
         $this->assertEmpty($roles);
     }
 
-    public function isValid()
+    public function testIsValid()
     {
         $element = new Application_Form_Element_Roles('Roles');
 
+        $this->assertTrue($element->isValid(null));
+        $this->assertTrue($element->isValid(array()));
         $this->assertTrue($element->isValid(array('reviewer', 'docsadmin')));
 
         $this->assertFalse($element->isValid(array('unknown', 'docsadmin')));
+    }
+
+    public function testGetValueNull()
+    {
+        $element = new Application_Form_Element_Roles('Roles');
+
+        $element->setValue(null);
+
+        $this->assertNull($element->getValue());
     }
 
 }
