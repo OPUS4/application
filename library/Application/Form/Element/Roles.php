@@ -109,9 +109,12 @@ class Application_Form_Element_Roles extends Application_Form_Element_MultiCheck
 
         $roles = array();
 
-        foreach ($names as $name)
+        if (is_array($names))
         {
-            array_push($roles, Opus_UserRole::fetchByName($name));
+            foreach ($names as $name)
+            {
+                array_push($roles, Opus_UserRole::fetchByName($name));
+            }
         }
 
         return $roles;

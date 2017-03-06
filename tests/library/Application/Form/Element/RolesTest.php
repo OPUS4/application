@@ -102,6 +102,17 @@ class Application_Form_Element_RolesTest extends FormElementTestCase {
         $this->assertCount(0, $expectedRoles);
     }
 
+    public function testGetRolesForNull()
+    {
+        $element = new Application_Form_Element_Roles('Roles');
+
+        $roles = $element->getRoles();
+
+        $this->assertNotNull($roles);
+        $this->assertInternalType('array', $roles);
+        $this->assertEmpty($roles);
+    }
+
     public function isValid()
     {
         $element = new Application_Form_Element_Roles('Roles');
