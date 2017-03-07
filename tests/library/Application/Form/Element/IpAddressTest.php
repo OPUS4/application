@@ -24,13 +24,44 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Ralf Claussnitzer (ralf.claussnitzer@slub-dresden.de)
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @category    Application Unit Test
+ * @package     Form_Element
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-?>
+class Application_Form_Element_IpAddressTest extends FormElementTestCase
+{
 
-<?= $this->form ?>
+    public function setUp()
+    {
+        $this->_formElementClass = 'Application_Form_Element_IpAddress';
+        $this->_expectedDecoratorCount = 8;
+        $this->_expectedDecorators = array('ViewHelper', 'Placeholder', 'Description', 'ElementHint', 'Errors',
+            'ElementHtmlTag', 'LabelNotEmpty', 'dataWrapper');
+        $this->_staticViewHelper = 'viewFormDefault';
+        parent::setUp();
+    }
+
+    public function testTranslation()
+    {
+        $translator = $this->getElement()->getTranslator();
+
+        $this->assertTrue($translator->isTranslated('validation_error_ip_invalid'));
+        $this->assertTrue($translator->isTranslated('validation_error_ip_not_address'));
+    }
+
+    public function testIsValid()
+    {
+        $element = $this->getElement();
+
+        $this->assertTrue($element->isValid('127.0.0.1'));
+
+        $this->assertFalse($element->isValid('127.0.0'));
+        $this->assertFalse($element->isValid('127.0.O.1')); // 'O' instead of '0'
+        $this->assertFalse($element->isValid('www.example.org'));
+
+        $this->assertFalse($element->isValid('0000:0000:0000:0000:0000:0000:0000:0001'));
+    }
+
+}

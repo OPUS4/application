@@ -31,9 +31,8 @@
  * @category    Application
  * @package     Form_Element
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 class Application_Form_Element_Roles extends Application_Form_Element_MultiCheckbox {
 
@@ -59,6 +58,10 @@ class Application_Form_Element_Roles extends Application_Form_Element_MultiCheck
         }
     }
 
+    /**
+     * Create options for all roles.
+     * @return array
+     */
     public function getRolesMultiOptions() {
         $roles = Opus_UserRole::getAll();
 
@@ -70,6 +73,61 @@ class Application_Form_Element_Roles extends Application_Form_Element_MultiCheck
         }
 
         return $options;
+    }
+
+    /**
+     * Sets selected roles.
+     * @param mixed $value Role names or Opus_UserRole objects
+     */
+    public function setValue($value)
+    {
+        if (is_array($value))
+        {
+            if (count($value) > 0 && $value[0] instanceof Opus_UserRole)
+            {
+                $value = $this->getRoleNames($value);
+            }
+        }
+
+        parent::setValue($value);
+    }
+
+    /**
+     * Returns array of Opus_UserRole objects.
+     * @return array of Opus_UserRole
+     */
+    public function getRoles()
+    {
+        $names = $this->getValue();
+
+        $roles = array();
+
+        if (is_array($names))
+        {
+            foreach ($names as $name)
+            {
+                array_push($roles, Opus_UserRole::fetchByName($name));
+            }
+        }
+
+        return $roles;
+    }
+
+    /**
+     * Converts array with objects into array with role names.
+     * @param $roles array of Opus_UserRole objects
+     * @return array Role names
+     */
+    public function getRoleNames($roles)
+    {
+        $names = array();
+
+        foreach ($roles as $role)
+        {
+            array_push($names, $role->getName());
+        }
+
+        return $names;
     }
 
 }

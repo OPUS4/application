@@ -80,9 +80,14 @@ abstract class CrudControllerTestCase extends ControllerTestCase {
 
     private function deleteNewModels() {
         $models = $this->getModels();
-        foreach ($models as $model) {
-            if (!in_array($model->getId(), $this->oldModelIds)) {
-                $model->delete();
+        if (is_array($models))
+        {
+            foreach ($models as $model)
+            {
+                if (empty($this->oldModelIds) || !in_array($model->getId(), $this->oldModelIds))
+                {
+                    $model->delete();
+                }
             }
         }
     }
@@ -98,7 +103,10 @@ abstract class CrudControllerTestCase extends ControllerTestCase {
         $models = $this->getModels();;
 
         $this->assertQuery('a.add', 'Kein Add Button gefunden.');
-        $this->assertQuery('td.edit', count($models));
+        if (count($models) > 0)
+        {
+            $this->assertQuery('td.edit', count($models));
+        }
 
         foreach ($models as $model) {
             $this->assertQuery('th', $model->getDisplayName());

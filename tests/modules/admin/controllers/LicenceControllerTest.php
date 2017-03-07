@@ -95,7 +95,7 @@ class Admin_LicenceControllerTest extends CrudControllerTestCase {
         $this->assertQueryCount('div#LinkSign', 0);
         $this->assertNotQueryContentContains('div#content', 'TestLinkSign');
 
-        // TODO $this->validateXHTML();
+        $this->validateXHTML();
     }
 
     /**

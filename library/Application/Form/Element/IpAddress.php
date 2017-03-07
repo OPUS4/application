@@ -1,5 +1,5 @@
-<?php
-/**
+<?PHP
+/*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -25,30 +25,32 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_Licence
- * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
+ * @package     View
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-?>
 
-<div>
-    <a href="<?= $this->url(array('action' => 'new')) ?>"><?= $this->translate('admin_iprange_new') ?></a>
-</div>
+/**
+ * Form element for ip addresses.
+ *
+ * TODO Was wenn in den Optionen ein Label spezifiziert wurde? Aktuell wird es immer überschrieben.
+ */
+class Application_Form_Element_IpAddress extends Application_Form_Element_Text
+{
 
-<table>
-    <?PHP foreach($this->ipRanges as $id => $ipRange) : ?>
-    <tr>
-        <td>
-            <div><a href="<?= $this->url(array('action' => 'show', 'id' => $id)) ?>"><?= htmlspecialchars($ipRange->getName()) ?></a></div>
-            <div><?= $ipRange->getStartingip() ?> - <?= $ipRange->getEndingip() ?></div>
-        </td>
-        <td>
-            <a href="<?= $this->url(array('action' => 'edit', 'id' => $id)) ?>"><?= $this->translate('admin_form_action_edit') ?></a>
-            <a href="<?= $this->url(array('action' => 'delete', 'id' => $id)) ?>"><?= $this->translate('admin_form_action_delete') ?></a>
-        </td>
-    </tr>
-    <?PHP endforeach; ?>
-</table>
+    public function init()
+    {
+        parent::init();
+
+        $validator = new Zend_Validate_Ip(array('allowipv4' => true, 'allowipv6' => false));
+        $validator->setMessages(
+            array(
+                Zend_Validate_Ip::INVALID => 'validation_error_ip_invalid',
+                Zend_Validate_Ip::NOT_IP_ADDRESS => 'validation_error_ip_not_address',
+            )
+        );
+        $this->setValidators(array($validator));
+    }
+
+}
