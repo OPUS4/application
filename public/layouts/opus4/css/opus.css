@@ -263,23 +263,23 @@ table.result-data {
 }
 
 .frontdoor .frontdoor_pagination #pagination-previous a {
-      background: url(../img/theme/browse_item_prev.png) no-repeat;
+    background: url(../img/theme/browse_item_prev.png) no-repeat;
 }
 .frontdoor .frontdoor_pagination #pagination-previous a:hover  {
-      background: url(../img/theme/browse_item_prev_hover.png) no-repeat;
+    background: url(../img/theme/browse_item_prev_hover.png) no-repeat;
 }
 .frontdoor .frontdoor_pagination #pagination-previous div {
-      background: url(../img/theme/browse_item_prev_inactive.png) no-repeat;
+    background: url(../img/theme/browse_item_prev_inactive.png) no-repeat;
 }
 
 .frontdoor .frontdoor_pagination #pagination-next a {
-      background: url(../img/theme/browse_item_next.png) no-repeat;
+    background: url(../img/theme/browse_item_next.png) no-repeat;
 }
 .frontdoor .frontdoor_pagination #pagination-next a:hover  {
-      background: url(../img/theme/browse_item_next_hover.png) no-repeat;
+    background: url(../img/theme/browse_item_next_hover.png) no-repeat;
 }
 .frontdoor .frontdoor_pagination #pagination-next div {
-      background: url(../img/theme/browse_item_next_inactive.png) no-repeat;
+    background: url(../img/theme/browse_item_next_inactive.png) no-repeat;
 }
 
 .frontdoor .frontdoor_pagination #pagination-previous {
@@ -291,8 +291,73 @@ table.result-data {
      font-weight: bold;
 }
 
+/* Pagination controls for all pages */
 
+ul.paginationControl a.pagination-first,
+ul.paginationControl .pagination-first,
+ul.paginationControl a.pagination-prev,
+ul.paginationControl .pagination-prev,
+ul.paginationControl a.pagination-next,
+ul.paginationControl .pagination-next,
+ul.paginationControl a.pagination-last,
+ul.paginationControl .pagination-last
+{
+    Color: green;
+    display: block;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 12px;
+    height: 13px;
+    padding-left: 12px;
+}
 
+ul.paginationControl a.pagination-first {
+    background: url(../img/theme/browse_item_first.png) no-repeat;
+}
+
+ul.paginationControl a.pagination-first:hover {
+    background: url(../img/theme/browse_item_first_hover.png) no-repeat;
+}
+
+ul.paginationControl .pagination-first {
+    background: url(../img/theme/browse_item_first_inactive.png) no-repeat;
+}
+
+ul.paginationControl a.pagination-prev {
+    background: url(../img/theme/browse_item_prev.png) no-repeat;
+}
+
+ul.paginationControl a.pagination-prev:hover {
+    background: url(../img/theme/browse_item_prev_hover.png) no-repeat;
+}
+
+ul.paginationControl .pagination-prev {
+    background: url(../img/theme/browse_item_prev_inactive.png) no-repeat;
+}
+
+ul.paginationControl a.pagination-next {
+    background: url(../img/theme/browse_item_next.png) no-repeat;
+}
+
+ul.paginationControl a.pagination-next:hover {
+    background: url(../img/theme/browse_item_next_hover.png) no-repeat;
+}
+
+ul.paginationControl .pagination-next {
+    background: url(../img/theme/browse_item_next_inactive.png) no-repeat;
+}
+
+ul.paginationControl a.pagination-last {
+    background: url(../img/theme/browse_item_last.png) no-repeat;
+}
+
+ul.paginationControl a.pagination-last:hover {
+    background: url(../img/theme/browse_item_last_hover.png) no-repeat;
+}
+
+ul.paginationControl .pagination-last {
+    background: url(../img/theme/browse_item_last_inactive.png) no-repeat;
+}
 
 /* form styles
 ----------------------------------------------------------- */
@@ -847,26 +912,27 @@ body > #top-header{
 }
 .opus .breadcrumb_results h3,
 .opus .breadcrumb_results .info_small,
-.opus .breadcrumb_results .paginationControl li{
-	float: left;
+.opus .breadcrumb_results .paginationControl li {
+    float: left;
 	margin: 0;
 	font-weight: normal;
 	color: #333;
 	text-transform: none;
 }
-.breadcrumb_results h3{
+
+.breadcrumb_results h3 {
 	padding: 7px 20px 7px 10px;
 	background: url(../img/theme/breadcrumb_results.png) no-repeat right center;
 }
 .breadcrumb_results .info_small{
 	padding: 7px 0 7px 10px;
 }
-#searchbar .breadcrumb_results .paginationControl{
-	padding: 0 0 0 30px;
-	float: left;
-	background: url(../img/theme/breadcrumb_results.png) no-repeat left center;
+#searchbar .breadcrumb_results .results_pagination {
+	padding: 0 0 0 15px;
+    float: left;
 }
-.breadcrumb_results .paginationControl li{
+
+.breadcrumb_results .paginationControl li {
 	padding: 7px 10px 7px 0;
 }
 #search_options p.label{
