@@ -25,52 +25,55 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Application_View_Helper
+ * @package     View_Helper_Document_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
- * Abstract base class for view helpers.
+ * Abstract base class for document focused view helpers.
  */
-class Application_View_Helper_Abstract extends Zend_View_Helper_Abstract {
+abstract class Application_View_Helper_Document_HelperAbstract extends Application_View_Helper_Abstract
+{
 
     /**
-     * Logger for class.
-     * @var Zend_Log
+     * Determines if preferably the title matching the user interface language should be used.
+     * @var bool
      */
-    private $_logger;
+    private $_preferUserInterfaceLanguage = null;
 
     /**
-     * Return logger for class.
-     * @return null|Zend_Log
-     * @throws Zend_Exception
+     * Returns if user interface language should be used.
+     * @return bool true if user interface language should be used
      */
-    public function getLogger()
-    {
-        if (is_null($this->_logger)) {
-            $this->_logger = Zend_Registry::get('Zend_Log');
+    public function isPreferUserInterfaceLanguage() {
+        $config = $this->getConfig();
+
+        if (is_null($this->_preferUserInterfaceLanguage))
+        {
+            if (isset($config->search->result->display->preferUserInterfaceLanguage))
+            {
+                $value = trim($config->search->result->display->preferUserInterfaceLanguage);
+
+                $this->_preferUserInterfaceLanguage = ($value == 1 || $value === 'true');
+            }
+            else {
+                $this->_preferUserInterfaceLanguage = false;
+            }
+
         }
-        return $this->_logger;
+
+        return $this->_preferUserInterfaceLanguage;
     }
 
     /**
-     * Set logger for class.
-     * @param $logger
+     * Set if user interface language should be used.
+     * @param $enabled bool
      */
-    public function setLogger($logger)
+    public function setPreferUserInterfaceLanguage($enabled)
     {
-        $this->_logger = $logger;
-    }
-
-    /**
-     * Return configuration of application.
-     * @return Zend_Config
-     */
-    public function getConfig()
-    {
-        return Application_Configuration::getInstance()->getConfig();
+        $this->_preferUserInterfaceLanguage = ($enabled == 1 || $enabled === 'true');
     }
 
 }

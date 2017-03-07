@@ -57,6 +57,9 @@ searchengine.solr.default.service.extract.endpoint.localhost.host = @searchengin
 searchengine.solr.default.service.extract.endpoint.localhost.port = @searchengine.extract.port@
 searchengine.solr.default.service.extract.endpoint.localhost.path = @searchengine.extract.app@
 
+; Turn on to display document titles of search results in user interface language if possible
+search.result.display.preferUserInterfaceLanguage = 0
+
 ; SUPPORTED LANGUAGES
 ; Change the setting to 'de' or 'en' in order to disable language selection.
 ; supportedLanguages = de

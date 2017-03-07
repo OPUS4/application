@@ -29,9 +29,8 @@
  * @author      Julian Heise <heise@zib.de>
  * @author      Sascha Szott <szott@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 ?>
 
@@ -124,11 +123,13 @@ if($this->jQueryEnabled()) {
                                     <img src="<?= $this->layoutPath() ?>/img/theme/icon-on-off.png" alt="<?= $this->translate('results_hideabstract_alt') ?>" title="<?= $this->translate('results_hideabstract_title') ?>" onclick="$(function(){$('#abstractText_<?= $document->getId() ?>').toggle();});" />
                                 <?php endif ?>
                             <?php endif ?>
+
                             <?php if (!is_null($result->getAsset('title'))) : ?>
-                                <a href="<?= $this->url($frontdoorUrl) ?>"><?= htmlspecialchars($result->getAsset('title')); ?></a>
+                                <a href="<?= $this->url($frontdoorUrl) ?>"><?= $this->documentTitle($document) ?></a>
                             <?php else: ?>
-                                <a href="<?= $this->url($frontdoorUrl) ?>"><?= $this->translate('results_missingtitle') ?></a>
+                                <a href="<?= $this->url($frontdoorUrl) ?>" class="missing_title"><?= $this->translate('results_missingtitle') ?></a>
                             <?php endif ?>
+
                             <?php if ($result->getAsset( 'year' )) : ?>
                                 (<?= htmlspecialchars($result->getAsset( 'year' )); ?>)
                             <?php endif ?>
@@ -144,7 +145,7 @@ if($this->jQueryEnabled()) {
                                 <?php endforeach ?>
                             </dt>
                         <?php endif ?>
-                        <dd class="abstractText" id="abstractText_<?= $document->getId() ?>"><?= htmlspecialchars($result->getAsset( 'abstract' )) ?></dd>
+                        <dd class="abstractText" id="abstractText_<?= $document->getId() ?>"><?= $this->documentAbstract($document) ?></dd>
                     </dl>
                 <?php endforeach ?>
             </div>

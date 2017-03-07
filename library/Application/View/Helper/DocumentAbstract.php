@@ -25,52 +25,44 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Application_View_Helper
+ * @package     View
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
- * Abstract base class for view helpers.
+ * Helper for printing the abstract of a OPUS document.
+ *
+ * TODO unit tests
  */
-class Application_View_Helper_Abstract extends Zend_View_Helper_Abstract {
+class Application_View_Helper_DocumentAbstract extends Application_View_Helper_Document_HelperAbstract
+{
 
     /**
-     * Logger for class.
-     * @var Zend_Log
+     * Prints escaped main title of document.
+     * @return null|string
      */
-    private $_logger;
-
-    /**
-     * Return logger for class.
-     * @return null|Zend_Log
-     * @throws Zend_Exception
-     */
-    public function getLogger()
+    public function documentAbstract($document = null)
     {
-        if (is_null($this->_logger)) {
-            $this->_logger = Zend_Registry::get('Zend_Log');
+        if ($this->isPreferUserInterfaceLanguage())
+        {
+            $language = Opus_Language::getPart2tForPart1(Zend_Registry::get('Zend_Translate')->getLocale());
+
+            $abstract = $document->getMainAbstract($language);
         }
-        return $this->_logger;
-    }
+        else {
+            $abstract = $document->getMainAbstract();
+        }
 
-    /**
-     * Set logger for class.
-     * @param $logger
-     */
-    public function setLogger($logger)
-    {
-        $this->_logger = $logger;
-    }
-
-    /**
-     * Return configuration of application.
-     * @return Zend_Config
-     */
-    public function getConfig()
-    {
-        return Application_Configuration::getInstance()->getConfig();
+        if (!is_null($abstract))
+        {
+            return htmlspecialchars($abstract->getValue());
+        }
+        else
+        {
+            return null;
+        }
     }
 
 }
