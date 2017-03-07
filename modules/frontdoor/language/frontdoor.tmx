@@ -564,10 +564,10 @@
     
     <tu tuid="frontdoor_exportbibtex">
       <tuv xml:lang="en">
-        <seg>Export Bibtex</seg>
+        <seg>Export BibTeX</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Export nach Bibtex</seg>
+        <seg>Export nach BibTeX</seg>
       </tuv>
     </tu>
     
