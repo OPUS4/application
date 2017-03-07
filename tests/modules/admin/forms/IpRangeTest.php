@@ -36,145 +36,295 @@
  */
 class Admin_Form_IpRangeTest extends ControllerTestCase {
 
-    /**
-     * Test creating an IP range form.
-     */
-    public function testCreateForm() {
-        $form = new Admin_Form_IpRange();
-        $this->assertNotNull($form);
+    private $_modelId = null;
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        $model = new Opus_Iprange();
+        $model->setName('localhost');
+        $model->setStartingip('127.0.0.1');
+        $model->setEndingip('127.0.0.2');
+        $this->_modelId = $model->store();
     }
 
-    /**
-     * Test parsing selected roles from POST data.
-     */
-    public function testParseSelectedRoles() {
-        $postData = array();
-        $postData['roleadministrator'] = '1';
-        $postData['roleguest'] = '0';
+    public function tearDown()
+    {
+        if (!is_null($this->_modelId))
+        {
+            $range = new Opus_Iprange($this->_modelId);
+            $range->delete();
+        }
 
-        $roles = Admin_Form_IpRange::parseSelectedRoles($postData);
+        parent::tearDown();
+    }
+
+    public function testConstructForm()
+    {
+        $form = new Admin_Form_IpRange();
+
+        $this->assertEquals(7, count($form->getElements()));
+
+        $this->assertNotNull($form->getElement('Name'));
+        $this->assertNotNull($form->getElement('Startingip'));
+        $this->assertNotNull($form->getElement('Endingip'));
+        $this->assertNotNull($form->getElement('Roles'));
+
+        $this->assertNotNull($form->getElement('Id'));
+        $this->assertNotNull($form->getElement('Save'));
+        $this->assertNotNull($form->getElement('Cancel'));
+    }
+
+    public function testPopulateFromModel()
+    {
+        $form = new Admin_Form_IpRange();
+
+        $range = new Opus_Iprange();
+        $range->setName('localhost');
+        $range->setStartingip('127.0.0.1');
+        $range->setEndingip('127.0.0.100');
+        $range->setRole(array(
+            Opus_UserRole::fetchByName('docsadmin'),
+            Opus_UserRole::fetchByName('jobaccess')
+        ));
+
+        $form->populateFromModel($range);
+
+        $this->assertEquals('localhost', $form->getElement('Name')->getValue());
+        $this->assertEquals('127.0.0.1', $form->getElement('Startingip')->getValue());
+        $this->assertEquals('127.0.0.100', $form->getElement('Endingip')->getValue());
+
+        $roles = $form->getElement('Roles')->getValue();
 
         $this->assertNotNull($roles);
-        $this->assertEquals(1, count($roles));
-        $this->assertEquals('administrator', $roles[0]->getDisplayName());
+        $this->assertCount(2, $roles);
+        $this->assertContains('docsadmin', $roles);
+        $this->assertContains('jobaccess', $roles);
     }
 
-    /**
-     * Test setting selected roles.
-     */
-    public function testSetSelectedRoles() {
+    public function testPopulateFromModelWithIp()
+    {
         $form = new Admin_Form_IpRange();
 
-        $roles = array();
+        $model = new Opus_Iprange($this->_modelId);
 
-        $roles[] = Opus_UserRole::fetchByName('administrator');
+        $form->populateFromModel($model);
 
-        $form->setSelectedRoles($roles);
-
-        $this->assertEquals(1, $form->getElement('roleadministrator')->getValue());
-        // TODO 'guest' is always selected because of policy
-        $this->assertEquals(1, $form->getElement('roleguest')->getValue());
+        $this->assertEquals($this->_modelId, $form->getElement('Id')->getValue());
     }
 
-    public function testValidateValidIp() {
+    public function testUpdateModel()
+    {
+        $form = new Admin_Form_IpRange();
+
+        $form->getElement('Id')->setValue(99);
+        $form->getElement('Name')->setValue('localhost');
+        $form->getElement('Startingip')->setValue('127.0.0.1');
+        $form->getElement('Endingip')->setValue('127.0.0.3');
+
+        $model = new Opus_Iprange();
+
+        $form->updateModel($model);
+
+        $this->assertNull($model->getId()); // ID won't be set in update
+        $this->assertEquals('localhost', $model->getName());
+        $this->assertEquals('127.0.0.1', $model->getStartingip());
+        $this->assertEquals('127.0.0.3', $model->getEndingip());
+    }
+
+    public function testValidationEmptyPost()
+    {
+        $form = new Admin_Form_IpRange();
+
+        $this->assertFalse($form->isValid(array()));
+
+        $this->assertContains('isEmpty', $form->getErrors('Name'));
+        $this->assertContains('isEmpty', $form->getErrors('Startingip'));
+        $this->assertContains('ipInvalid', $form->getErrors('Startingip'));
+    }
+
+    public function testValidationEmptyFields()
+    {
+        $form = new Admin_Form_IpRange();
+
+        $this->assertFalse($form->isValid(array(
+            'Name' => '  ',
+            'Startingip' => '  '
+        )));
+
+        $this->assertContains('isEmpty', $form->getErrors('Name'));
+        $this->assertContains('isEmpty', $form->getErrors('Startingip'));
+    }
+
+    public function testValidationTrue() {
         $form = new Admin_Form_IpRange();
 
         $postData = array(
-            'name' => 'ValidIpTest',
-            'startingip' => '127.0.0.1',
-            'endingip' => '127.0.0.2');
+            'Name' => 'ValidIpTest',
+            'Startingip' => '127.0.0.1',
+            'Endingip' => '127.0.0.2',
+            'Roles' => array('docsadmin', 'reviewer')
+        );
 
         $this->assertTrue($form->isValid($postData));
 
-        $errors = $form->getElement('startingip')->getErrors();
-
-        $this->assertTrue(empty($errors));
-
-        $errors = $form->getElement('endingip')->getErrors();
-
-        $this->assertTrue(empty($errors));
+        $this->assertEmpty($form->getErrors('Name'));
+        $this->assertEmpty($form->getErrors('Startingip'));
+        $this->assertEmpty($form->getErrors('Endingip'));
     }
 
-    public function testValidateInvalidIpShortStartingIp() {
+    public function testValidationTrueWithoutOptionalFields()
+    {
         $form = new Admin_Form_IpRange();
 
         $postData = array(
-            'name' => 'ValidIpTest',
-            'startingip' => '127.0.1',
-            'endingip' => '127.0.0.2');
+            'Name' => 'ValidIpTest',
+            'Startingip' => '127.0.0.1'
+        );
 
-        $this->assertFalse($form->isValid($postData));
+        $this->assertTrue($form->isValid($postData));
 
-        $errors = $form->getElement('startingip')->getErrors();
-
-        $this->assertFalse(empty($errors));
-        $this->assertTrue($errors[0] === 'notIpAddress');
-
-        $errors = $form->getElement('endingip')->getErrors();
-
-        $this->assertTrue(empty($errors));
+        $this->assertEmpty($form->getErrors('Name'));
+        $this->assertEmpty($form->getErrors('Startingip'));
+        $this->assertEmpty($form->getErrors('Endingip'));
     }
 
-    public function testValidateInvalidIpShortEndingIp() {
+    public function testValidationInvalidName()
+    {
+        $form = new Admin_Form_IpRange();
+
+        $this->assertFalse($form->isValid(array(
+            'Name' => '0local',
+            'Startingip' => '127.0.0.1'
+        )));
+
+        $this->assertEmpty($form->getErrors('Startingip'));
+
+        $this->assertContains('regexNotMatch', $form->getErrors('Name'));
+    }
+
+    public function testValidationInvalidNameTooShort()
+    {
+        $form = new Admin_Form_IpRange();
+
+        $this->assertFalse($form->isValid(array(
+            'Name' => 'To',
+            'Startingip' => '127.0.0.1'
+        )));
+
+        $this->assertEmpty($form->getErrors('Startingip'));
+
+        $this->assertContains('stringLengthTooShort', $form->getErrors('Name'));
+    }
+
+    public function testValidationInvalidNameTooLong()
+    {
+        $form = new Admin_Form_IpRange();
+
+        $this->assertFalse($form->isValid(array(
+            'Name' => 'To12345678901234567890',
+            'Startingip' => '127.0.0.1'
+        )));
+
+        $this->assertEmpty($form->getErrors('Startingip'));
+
+        $this->assertContains('stringLengthTooLong', $form->getErrors('Name'));
+    }
+
+    public function testValidationInvalidIp()
+    {
         $form = new Admin_Form_IpRange();
 
         $postData = array(
-            'name' => 'ValidIpTest',
-            'startingip' => '127.0.0.1',
-            'endingip' => '127.0.2');
+            'Name' => 'ValidIpTest',
+            'Startingip' => '127.0.1',
+            'Endingip' => '127.0.0.2'
+        );
 
         $this->assertFalse($form->isValid($postData));
 
-        $errors = $form->getElement('startingip')->getErrors();
-
-        $this->assertTrue(empty($errors));
-
-        $errors = $form->getElement('endingip')->getErrors();
-
-        $this->assertFalse(empty($errors));
-        $this->assertTrue($errors[0] === 'notIpAddress');
+        $this->assertEmpty($form->getErrors('Name'));
+        $this->assertContains('notIpAddress', $form->getErrors('Startingip'));
+        $this->assertEmpty($form->getErrors('Endingip'));
     }
 
-    public function testValidateInvalidIpHostname() {
+    public function testValidationInvalidEndingIp() {
         $form = new Admin_Form_IpRange();
 
         $postData = array(
-            'name' => 'ValidIpTest',
-            'startingip' => 'opus4.kobv.de',
-            'endingip' => 'opus4.kobv.de');
+            'Name' => 'ValidIpTest',
+            'Startingip' => '127.0.0.1',
+            'Endingip' => '1a7.0.2.0'
+        );
 
         $this->assertFalse($form->isValid($postData));
 
-        $errors = $form->getElement('startingip')->getErrors();
-
-        $this->assertFalse(empty($errors));
-        $this->assertTrue($errors[0] === 'notIpAddress');
-
-        $errors = $form->getElement('endingip')->getErrors();
-
-        $this->assertFalse(empty($errors));
-        $this->assertTrue($errors[0] === 'notIpAddress');
+        $this->assertEmpty($form->getErrors('Name'));
+        $this->assertEmpty($form->getErrors('Startingip'));
+        $this->assertContains('notIpAddress', $form->getErrors('Endingip'));
     }
 
-    public function testValidateInvalidIpV6() {
+    public function testValidationInvalidIpHostname() {
         $form = new Admin_Form_IpRange();
 
         $postData = array(
-            'name' => 'ValidIpTest',
-            'startingip' => '2001:0db8:85a3:0000:0000:8a2e:0370:7334',
-            'endingip' => '2001:0db8:85a3:0000:0000:8a2e:0370:7334');
+            'Name' => 'ValidIpTest',
+            'Startingip' => 'opus4.kobv.de',
+            'Endingip' => 'opus4.kobv.de'
+        );
 
         $this->assertFalse($form->isValid($postData));
 
-        $errors = $form->getElement('startingip')->getErrors();
+        $this->assertEmpty($form->getErrors('Name'));
+        $this->assertContains('notIpAddress', $form->getErrors('Startingip'));
+        $this->assertContains('notIpAddress', $form->getErrors('Endingip'));
+    }
 
-        $this->assertFalse(empty($errors));
-        $this->assertTrue($errors[0] === 'notIpAddress');
+    public function testValidationInvalidIpV6() {
+        $form = new Admin_Form_IpRange();
 
-        $errors = $form->getElement('endingip')->getErrors();
+        $postData = array(
+            'Name' => 'ValidIpTest',
+            'Startingip' => '2001:0db8:85a3:0000:0000:8a2e:0370:7334',
+            'Endingip' => '2001:0db8:85a3:0000:0000:8a2e:0370:7334'
+        );
 
-        $this->assertFalse(empty($errors));
-        $this->assertTrue($errors[0] === 'notIpAddress');
+        $this->assertFalse($form->isValid($postData));
+
+        $this->assertEmpty($form->getErrors('Name'));
+        $this->assertContains('notIpAddress', $form->getErrors('Startingip'));
+        $this->assertContains('notIpAddress', $form->getErrors('Endingip'));
+    }
+
+    public function testValidationFalseUnknownRoles()
+    {
+        $form = new Admin_Form_IpRange();
+
+        $postData = array(
+            'Name' => 'ValidIpTest',
+            'Startingip' => '127.0.0.1',
+            'Endingip' => '127.0.0.2',
+            'Roles' => array('docsadmin', 'unknown')
+        );
+
+        $this->assertFalse($form->isValid($postData));
+
+        $this->assertEmpty($form->getErrors('Name'));
+        $this->assertEmpty($form->getErrors('Startingip'));
+        $this->assertEmpty($form->getErrors('Endingip'));
+        $this->assertContains('notInArray', $form->getErrors('Roles'));
+    }
+
+    public function testTranslation()
+    {
+        $form = new Admin_Form_IpRange();
+
+        $translator = $form->getTranslator();
+
+        $this->assertTrue($translator->isTranslated('validation_error_iprange_name_regexNotMatch'));
+        $this->assertTrue($translator->isTranslated('validation_error_stringLengthTooShort'));
+        $this->assertTrue($translator->isTranslated('validation_error_stringLengthTooLong'));
     }
 
 }

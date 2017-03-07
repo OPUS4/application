@@ -43,7 +43,16 @@
       </tuv>
     </tu>
 
-    <tu tuid="admin_iprange_label_description">
+      <tu tuid="admin_iprange_delete">
+          <tuv xml:lang="en">
+              <seg>Delete IP range</seg>
+          </tuv>
+          <tuv xml:lang="de">
+              <seg>IP Bereich löschen</seg>
+          </tuv>
+      </tu>
+
+    <tu tuid="admin_iprange_label_Name">
       <tuv xml:lang="en">
         <seg>Description:</seg>
       </tuv>
@@ -52,7 +61,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="admin_iprange_label_startingip">
+    <tu tuid="admin_iprange_label_Startingip">
       <tuv xml:lang="en">
         <seg>Starting IP:</seg>
       </tuv>
@@ -61,21 +70,21 @@
       </tuv>
     </tu>
 
-    <tu tuid="admin_iprange_label_endingip">
+    <tu tuid="admin_iprange_label_Endingip">
       <tuv xml:lang="en">
-        <seg>Endig IP:</seg>
+        <seg>Ending IP:</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>End IP:</seg>
       </tuv>
     </tu>
 
-    <tu tuid="admin_iprange_label_roles">
+    <tu tuid="admin_iprange_label_Roles">
       <tuv xml:lang="en">
         <seg>Roles:</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Rolen:</seg>
+        <seg>Rollen:</seg>
       </tuv>
     </tu>
 
@@ -87,6 +96,8 @@
         <seg>Keine IP Bereiche definiert.</seg>
       </tuv>
     </tu>
+
+
 
   </body>
   
