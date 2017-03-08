@@ -24,9 +24,9 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /* Page specific settings
@@ -125,7 +125,7 @@
 #export li{
 	display: inline;
     float: left;
-	margin-right: 5px;
+    margin-right: 2px;
 }
 #export::after {
     content: "";
@@ -133,12 +133,18 @@
     clear: both;
 }
 
+.search_export_xml a.export,
 #export a.export {
-	text-decoration: none;
-	font-size: 1.2em;
-	background: #8aa3bb;
-	color: white;
-	padding: 0.1em 0.3em;
+    text-decoration: none;
+    font-size: 1.2em;
+    background: #8aa3bb;
+    color: white;
+    padding: 0.1em 0.3em;
+    margin: 0px 2px;
+}
+
+.search_export_xml a.export {
+    float: right;
 }
 
 #services h3,
@@ -884,11 +890,12 @@ body > #top-header{
 	float: left;
 	width: 100%;
 }
-.search_export_xml{
+.search_export_xml {
     float: right;
     padding: 5px 0px 0px 0px;
     margin: 0;
 }
+
 .search_latest_export_xml {
     margin-top: 5px;
     float: right;
