@@ -1001,27 +1001,73 @@ body > #top-header{
 	float: left;
 	width: 100%;
 }
-.result_box dt{
-	background: #f3f6f8 no-repeat 24px 4px;
+
+#search_results .fulltext-logo.fulltext {
+    float: left;
+    background: url(../img/fulltext24.png) no-repeat;
+    height: 25px;
+    width: 18px;
+    top: 4px;
+    left: -4px;
+    position: relative;
+}
+
+.result_box {
+    border-top: 1px solid #e2e6e9;
+    background: #f3f6f8 no-repeat 24px 4px;
+    margin-bottom: 1em;
+    min-height: 29px;
+}
+
+.result_box .abstract-wrapper {
+    margin-top: 5px;
+    text-align: center;
+    /* background-color: #e4e7e9; */
+}
+
+.result_box a.abstract-toggle {
+    display: block;
+    text-align: center;
+    margin: 0 auto;
+    color: black;
+    height: 8px;
+    width: 100%;
+    background-color: #f3f6f8;
+    border-bottom: 1px dashed lightgray;
+}
+
+.result_box a.abstract-toggle:hover {
+    cursor: pointer;
+    background-color: #e8ebed;
+}
+
+.result_box .abstractText {
+    text-align: left;
+    background-color: white;
+}
+
+.result_box .results_title,
+.result_box .results_author {
+    background: #f3f6f8 no-repeat 24px 4px;
 	padding: 4px 8px 0 41px;
 }
-.results_title img{
+.results_title img {
 	float: left;
 	cursor: pointer;
 	margin: -14px 0 0 -50px;
 	vertical-align: bottom;
 }
-dl.result_box {
-    border-top: 1px solid #e2e6e9;
+
+.result_box.fulltext {
+    background: #f3f6f8 url(../img/fulltext24.png) no-repeat;
 }
-.result_box .results_title{
+.result_box .results_title {
 	background-image: url(../img/theme/icon-title.gif);
 }
 .results_title a{
 	font-weight: bold;
 }
 .result_box .results_author{
-	padding-bottom: 5px;
 	background-image: url(../img/theme/icon-author.gif);
 }
 .results_seriesnumber + .results_title {
@@ -1037,7 +1083,7 @@ dl.result_box {
         padding: 4px 8px 0px 12px;
         color: black;
 }
-.result_box dd{
+.result_box .abstractText {
 	padding: 3px 6px;
 	margin: 0;
 	line-height: 1.5em;
@@ -1098,7 +1144,7 @@ dl.result_box {
 	font-size: 1.2em;
 	padding: 10px 0 4px;
 }
-.section.answers dd{
+.section.answers dd {
 	line-height: 1.4em;
 	/*margin: 6px 0 0 0;*/
 }
