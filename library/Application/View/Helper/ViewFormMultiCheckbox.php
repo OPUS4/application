@@ -1,4 +1,4 @@
-<?PHP
+<?php
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -23,16 +23,36 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+/**
+ * Gibt Select-Element als Ansicht aus (nur Wert).
  *
  * @category    Application
- * @package     Module_Admin
- * @author      Ralf Claussnitzer (ralf.claussnitzer@slub-dresden.de)
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @package     Application_View_Helper
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-?>
+class Application_View_Helper_ViewFormMultiCheckbox extends Zend_View_Helper_FormMultiCheckbox {
 
-<a href="<?= $this->url(array('action' => 'new')) ?>"><?= $this->translate('admin_iprange_new') ?></a>
+    public function viewFormMultiCheckbox($name, $value = null, $attribs = null, $options = null, $listsep = "<br />\n")
+    {
+        $info = $this->_getInfo($name, $value, $attribs, $options, $listsep);
+        extract($info);
 
-<div><?= $this->translate('admin_iprange_none_defined') ?></div>
+        if (is_array($value))
+        {
+            $value = implode(', ', $value);
+        }
+
+        $markup = '<div'
+            . ' id="' . $this->view->escape($id) . '"'
+            . ' class="field">'
+            . $this->view->escape($value)
+            . '</div>';
+
+        return $markup;
+    }
+
+}

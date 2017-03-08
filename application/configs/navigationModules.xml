@@ -589,6 +589,14 @@
                                     <controller>iprange</controller>
                                     <action>update</action>
                                 </update>
+
+                                <delete>
+                                    <type>mvc</type>
+                                    <label>admin_iprange_delete</label>
+                                    <module>admin</module>
+                                    <controller>iprange</controller>
+                                    <action>delete</action>
+                                </delete>
                             </pages>
                         </ipranges>
                     </pages>

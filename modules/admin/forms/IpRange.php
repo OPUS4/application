@@ -27,57 +27,89 @@
  * @category    Application
  * @package     Module_Admin
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
  * Form for creating or editing IP ranges.
  */
-class Admin_Form_IpRange extends Admin_Form_RolesAbstract {
+class Admin_Form_IpRange extends Application_Form_Model_Abstract
+{
+
+    const ELEMENT_NAME = 'Name';
+
+    const ELEMENT_STARTING_IP = 'Startingip';
+
+    const ELEMENT_ENDING_IP = 'Endingip';
+
+    const ELEMENT_ROLES = 'Roles';
 
     /**
-     * Constructs empty form or populates it with values from Opus_Iprange($id).
-     * @param integer $id
+     * Pattern for valid names of ip ranges.
      */
-    public function __construct($id = null) {
-        $env = (empty($id)) ? 'new' : 'edit';
-
-        $config = new Zend_Config_Ini(
-            APPLICATION_PATH .
-            '/modules/admin/forms/iprange.ini', $env
-        );
-
-        parent::__construct($config->form->iprange);
-
-        if (!empty($id)) {
-            $ipRange = new Opus_Iprange($id);
-
-            $this->populateFromIpRange($ipRange);
-        }
-    }
+    const NAME_PATTERN = '/^[a-z]/i';
 
     /**
      * Initializes form and adds display group for roles.
      */
     public function init() {
         parent::init();
-        $this->_addRolesGroup();
+
+        $this->setUseNameAsLabel(true);
+        $this->setLabelPrefix('admin_iprange_label_');
+        $this->setModelClass('Opus_Iprange');
+
+        $name = $this->createElement('text', self::ELEMENT_NAME, array('required' => true));
+        $name->addValidator('regex', false, array('pattern' => self::NAME_PATTERN, 'messages' => array(
+            'regexNotMatch' => 'validation_error_iprange_name_regexNotMatch'
+        )));
+        $name->addValidator('stringLength', false, array('min' => 3, 'max' => 20, 'messages' => array(
+            'stringLengthTooShort' => 'validation_error_stringLengthTooShort',
+            'stringLengthTooLong' => 'validation_error_stringLengthTooLong'
+        )));
+        $this->addElement($name);
+
+        $this->addElement('ipAddress', self::ELEMENT_STARTING_IP, array('required' => true));
+        $this->addElement('ipAddress', self::ELEMENT_ENDING_IP);
+
+        $roles = $this->createElement('roles', self::ELEMENT_ROLES);
+        $roles->setAllowEmpty(true);
+        $this->addElement($roles);
     }
 
     /**
      * Populates form with values from Opus_Iprange instance.
      * @param Opus_Iprange $ipRange
      */
-    public function populateFromIpRange($ipRange) {
-        $this->getElement('name')->setValue($ipRange->getName());
-        $this->getElement('startingip')->setValue($ipRange->getStartingip());
-        $this->getElement('endingip')->setValue($ipRange->getEndingip());
+    public function populateFromModel($ipRange) {
+        $this->getElement(self::ELEMENT_MODEL_ID)->setValue($ipRange->getId());
+        $this->getElement(self::ELEMENT_NAME)->setValue($ipRange->getName());
+        $this->getElement(self::ELEMENT_STARTING_IP)->setValue($ipRange->getStartingip());
+        $this->getElement(self::ELEMENT_ENDING_IP)->setValue($ipRange->getEndingip());
+        $this->getElement(self::ELEMENT_ROLES)->setValue($ipRange->getRole());
+    }
 
-        $roles = $ipRange->getRole();
+    /**
+     * Updates object with values from form elements.
+     * @param $ipRange Opus_IpRange
+     */
+    public function updateModel($ipRange) {
+        $ipRange->setName($this->getElementValue(self::ELEMENT_NAME));
 
-        $this->setSelectedRoles($roles);
+        $startingIp = $this->getElementValue(self::ELEMENT_STARTING_IP);
+        $endingIp = $this->getElementValue(self::ELEMENT_ENDING_IP);
+
+        // starting and ending ip must be set in database
+        if (empty($endingIp))
+        {
+            $endingIp = $startingIp;
+        }
+
+        $ipRange->setStartingip($startingIp);
+        $ipRange->setEndingip($endingIp);
+
+        $ipRange->setRole($this->getElement(self::ELEMENT_ROLES)->getRoles());
     }
 
 }
