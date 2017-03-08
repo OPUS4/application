@@ -1179,14 +1179,14 @@ ul.links input:hover{
 .adminContainer .wrapper table.documents{
    margin: 0;
 }
-.paginationInfo ul,
+.adminContainer .paginationInfo ul,
 .itemCountLinks ul,
 .paginationControl ul{
    margin: 0;
    padding: 0;
    list-style: none;
 }
-.resultInfo,
+.adminContainer .resultInfo,
 .paginationControl li{
    float: left;
 }
@@ -1199,7 +1199,7 @@ ul.links input:hover{
 .itemCountLinks li{
    padding: 0 0.3em;
 }
-.paginationControl{
+.adminContainer .paginationControl{
    clear: both;
    background-color: #b7cde7;
    color: black;
@@ -1211,20 +1211,20 @@ ul.links input:hover{
 table + .paginationControl{
    margin-bottom: 2em;
 }
-.paginationControl ul{
+.adminContainer .paginationControl ul{
    display: inline-block;
    vertical-align: bottom;
 }
-.paginationControl li{
+.adminContainer .paginationControl li{
    padding: 0.4em 0.7em;
    border-left: 1px solid #dae5f3;
    font-size: 0.9em;
 }
-.paginationControl li.currentPage{
+.adminContainer .paginationControl li.currentPage{
    background-color: #2d6093;
    color: white;
 }
-.paginationControl li:first-child{
+.adminContainer .paginationControl li:first-child{
    border: none;
 }
 /* @end */
