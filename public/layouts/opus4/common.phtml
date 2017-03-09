@@ -57,6 +57,7 @@ $this->headLink()
     ->appendStylesheet($this->baseUrl() . '/' . $config->css->jqueryui->path, 'screen')
     ->appendStylesheet($this->layoutPath() . '/css/opus.css', 'screen,print')
     ->appendStylesheet($this->layoutPath() . '/css/admin.css', 'screen,print')
+    ->appendStylesheet($this->layoutPath() . '/css/custom.css')
     ->headLink(array(
         'rel' => 'shortcut icon',
         'type' => 'image/x-icon',
@@ -66,11 +67,6 @@ $this->headLink()
         'title' => 'OPUS 4 Search',
         'type' => 'application/opensearchdescription+xml',
         'href' => $this->serverUrl() . $this->baseUrl() . '/solrsearch/opensearch'));
-
-/*
-uncomment the following line if you want to enable your own layout changes
-$this->headLink()->appendStylesheet($this->layoutPath() . '/css/custom.css');
-*/
 
 $this->container = Zend_Registry::get('Opus_Navigation');
 
