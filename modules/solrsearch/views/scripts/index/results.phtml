@@ -149,8 +149,10 @@ if($this->jQueryEnabled()) {
                         <?php if ($this->jQueryEnabled()) : ?>
                             <div class="abstract-wrapper">
                             <?php if (!is_null($result->getAsset( 'abstract' ))) : ?>
-                                <a class="abstract-toggle" title="<?= $this->translate('results_hideabstract_title') ?>"
-                                   onclick="$(function(){$('#abstractText_<?= $document->getId() ?>').toggle();});"></a>
+                                <a id="abstractToggle_<?= $document->getId() ?>"
+                                   class="abstract-toggle collapsed"
+                                   title="<?= $this->translate('results_hideabstract_title') ?>"
+                                   onclick="return toggleAbstract(<?= $document->getId() ?>)"></a>
                             <?php endif ?>
                                 <div class="abstractText" id="abstractText_<?= $document->getId() ?>"><?= $this->documentAbstract($document) ?></div>
                             </div>
