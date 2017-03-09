@@ -624,16 +624,17 @@ a img{
 	float: right;
 }
 #logo{
-	margin: 0;
 	float: left;
 	height: 89px;
 	width: 185px;
-	padding: 0 10px 0 0;
-	background: white url(../img/theme/bg_logo.jpg) no-repeat right;
+	background: white url(../img/logo/logo.gif) no-repeat right;
 }
-#logo img{
+#logo a {
+    display: block;
 	vertical-align: bottom;
+    height: 100%;
 }
+
 #top-header{
 	background: #f4f6f8 url(../img/theme/bg_top-header.jpg) repeat-x bottom;
 	color: #26517d;
@@ -1248,3 +1249,4 @@ dl.result_box {
     font-size:120%;
     text-align: center
 }
+
