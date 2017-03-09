@@ -792,7 +792,7 @@ ul.links input:hover{
    margin-right: 0;
 }
 
-#content.adminContainer .data-wrapper .field .textarea{
+#content.adminContainer .data-wrapper .field .textarea {
    word-wrap: break-word;
    overflow-wrap: break-word;
    white-space: pre-line;
@@ -1351,12 +1351,17 @@ table + .paginationControl{
    color:  #dc143c;
    background-color: transparent;
 }
-.FileLink-data .field a{
-   background: url(../img/theme/admin/ic_file.png) no-repeat left center;
-   padding: 4px 0 4px 35px;
-   position: relative;
-   left: -35px;
-   font-weight: bold;
+.FileLink-data .field a {
+    background: url(../img/theme/admin/ic_file.png) no-repeat left top;
+    padding: 0 0 4px 35px;
+    position: relative;
+    left: -35px;
+    font-weight: bold;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: pre-line;
+    width: 545px;  /*break-word braucht eine fixe Breite*/
+    float: left;
 }
 .adminContainer #FileManager-Files-Add-element input{
    background-position: -14px -391px;
