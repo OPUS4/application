@@ -1032,8 +1032,7 @@ body > #top-header{
     color: black;
     height: 8px;
     width: 100%;
-    background-color: #f3f6f8;
-    border-bottom: 1px dashed lightgray;
+    background-color: #e8ebed;
 }
 
 .result_box a.abstract-toggle:hover {
