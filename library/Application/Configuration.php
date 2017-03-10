@@ -331,4 +331,14 @@ class Application_Configuration {
         self::$_instance = null;
     }
 
+    /**
+     * Returns Zend_Translate instance for application.
+     * @return Zend_Translate
+     * @throws Zend_Exception
+     */
+    public function getTranslate()
+    {
+        return Zend_Registry::get('Zend_Translate');
+    }
+
 }
