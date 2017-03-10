@@ -1030,9 +1030,17 @@ body > #top-header{
     text-align: center;
     margin: 0 auto;
     color: black;
-    height: 8px;
+    height: 10px;
     width: 100%;
-    background-color: #e8ebed;
+    background: #e8ebed;
+}
+
+.result_box a.abstract-toggle.collapsed {
+    background: #e8ebed url(../img/theme/bullet_arrow_down.png) no-repeat center center;
+}
+
+.result_box a.abstract-toggle.expanded {
+    background: #e8ebed url(../img/theme/bullet_arrow_up.png) no-repeat center center;
 }
 
 .result_box a.abstract-toggle:hover {
