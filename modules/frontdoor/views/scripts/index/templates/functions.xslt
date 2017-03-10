@@ -45,7 +45,7 @@
 
     <!-- Named template to translate a field's name. Needs no parameter. -->
     <xsl:template name="translateFieldname">
-        <xsl:value-of select="php:functionString('Frontdoor_IndexController::translate', name())" />
+        <xsl:value-of select="php:functionString('Application_Xslt::translate', name())" />
         <xsl:if test="normalize-space(@Language)">
             <!-- translation of language abbreviations  -->
             <xsl:text> (</xsl:text>
@@ -60,13 +60,13 @@
     <!-- Named template to translate an arbitrary string. Needs the translation key as a parameter. -->
     <xsl:template name="translateString">
         <xsl:param name="string" />
-        <xsl:value-of select="php:functionString('Frontdoor_IndexController::translate', $string)" />
+        <xsl:value-of select="php:functionString('Application_Xslt::translate', $string)" />
     </xsl:template>
 
     <xsl:template name="translateStringWithDefault">
         <xsl:param name="string" />
         <xsl:param name="default" />
-        <xsl:value-of select="php:functionString('Frontdoor_IndexController::translateWithDefault', $string, $default)" />
+        <xsl:value-of select="php:functionString('Application_Xslt::translateWithDefault', $string, $default)" />
     </xsl:template>
 
     <xsl:template name="replaceCharsInString">
@@ -92,6 +92,6 @@
         <xsl:param name="day"/>
         <xsl:param name="month"/>
         <xsl:param name="year"/>
-        <xsl:value-of select="php:functionString('Frontdoor_IndexController::formatDate', $day, $month, $year)" />
+        <xsl:value-of select="php:functionString('Application_Xslt::formatDate', $day, $month, $year)" />
     </xsl:template>
 </xsl:stylesheet>

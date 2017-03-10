@@ -63,7 +63,7 @@
 
           <xsl:variable name="flagIcon">
               <xsl:choose>
-                  <xsl:when test="php:functionString('Frontdoor_IndexController::checkLanguageFile', @Language)">
+                  <xsl:when test="php:functionString('Application_Xslt::languageImageExists', @Language)">
                       <img width="16" height="11">
                           <xsl:attribute name="src">
                               <xsl:value-of select="$baseUrl"/>
@@ -115,7 +115,7 @@
          </xsl:variable>
 
          <xsl:choose>
-            <xsl:when test="php:functionString('Frontdoor_IndexController::checkIfUserHasFileAccess', @Id)">
+            <xsl:when test="php:functionString('Application_Xslt::fileAccessAllowed', @Id)">
                <div class="accessible-file">
                   <xsl:attribute name="title">
                      <xsl:call-template name="translateString">
@@ -327,7 +327,7 @@
 
       <!--Xml-Export-->
       <xsl:choose>
-          <xsl:when test="php:functionString('Frontdoor_IndexController::getStylesheet') != '' ">
+          <xsl:when test="php:functionString('Application_Xslt::frontdoorStylesheet') != '' ">
               <li>
                   <xsl:element name="a">
                       <!--TODO: Use Zend Url-Helper to build href attribute-->
@@ -336,7 +336,7 @@
                           <xsl:text>/frontdoor/index/index/docId/</xsl:text>
                           <xsl:value-of select="@Id" />
                           <xsl:text>/export/xml/stylesheet/</xsl:text>
-                          <xsl:value-of select="php:functionString('Frontdoor_IndexController::getStylesheet')" />
+                          <xsl:value-of select="php:functionString('Application_Xslt::frontdoorStylesheet')" />
                       </xsl:attribute>
                       <xsl:attribute name="title">
                           <xsl:call-template name="translateString">
