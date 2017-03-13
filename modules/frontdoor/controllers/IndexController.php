@@ -152,14 +152,15 @@ class Frontdoor_IndexController extends Application_Controller_Action {
             'embargoHasPassed',
             'customFileSortingEnabled',
             'languageImageExists',
-            'frontdoorStylesheet'
+            'frontdoorStylesheet',
+            'shortenText'
         ));
         $proc->registerPHPFunctions('urlencode');
         $proc->importStyleSheet($xslt);
 
         $config = $this->getConfig();
         $layoutPath = 'layouts/' . (isset($config, $config->theme) ? $config->theme : '');
-        $numOfShortAbstractChars = isset($config, $config->frontdoor->numOfShortAbstractChars) ? $config->frontdoor->numOfShortAbstractChars : '0';
+        $numOfShortAbstractChars = $this->view->getHelper('shortenText')->getMaxLength();
 
         $proc->setParameter('', 'baseUrlServer', $this->view->fullUrl());
         $proc->setParameter('', 'baseUrl', $baseUrl);
