@@ -51,11 +51,11 @@
             <?= $this->group($this->groupTitleAbstract); ?>
             <?= $this->group($this->groupPersonAuthor); ?>
             <?= $this->element($this->CompletedYear); ?>
-			<?= $this->element($this->CompletedDate); ?>
+            <?= $this->element($this->CompletedDate); ?>
             <?= $this->element($this->ThesisDateAccepted); ?>
-			<?= $this->group($this->groupPersonAdvisor); ?>
+            <?= $this->group($this->groupPersonAdvisor); ?>
             <?= $this->group($this->groupPersonReferee); ?>
-			<?= $this->element($this->ThesisGrantor); ?>
+            <?= $this->element($this->ThesisGrantor); ?>
             <?= $this->group($this->groupThesisPublisher); ?>
             <?= $this->group($this->groupInstitute); ?>
             <?= $this->element($this->PublisherName); ?>
@@ -63,7 +63,8 @@
             <?= $this->element($this->PageNumber); ?>
             <?= $this->element($this->IdentifierIsbn); ?>
             <?= $this->group($this->groupPersonContributor); ?>
-            <?= $this->element($this->ContributingCorporation); ?>          
+            <?= $this->element($this->ContributingCorporation); ?> 
+            <?= $this->group($this->groupSubjectDDC); ?>
             <?= $this->group($this->groupSubjectUncontrolled); ?>
             <?= $this->element($this->Note); ?>
             <?= $this->element($this->Language); ?>
