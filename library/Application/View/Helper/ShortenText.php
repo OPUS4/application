@@ -42,6 +42,9 @@ class Application_View_Helper_ShortenText extends Application_View_Helper_Abstra
     /**
      * Shortens text while not cutting in the middle of words.
      *
+     * TODO the string '. ' should be handled like a space after the last word
+     * TODO how to handle opened HTML tags in shortened text
+     *
      * @param $text
      * @return string Shortened text
      */
