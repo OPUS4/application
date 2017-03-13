@@ -275,6 +275,58 @@
             </xsl:attribute>
             <xsl:value-of select="concat(@FirstName, ' ', @LastName)" />
         </xsl:element>
+      
+                  <xsl:if test="@IdentifierOrcid">
+                <xsl:text>  </xsl:text>
+                <xsl:element name="a">
+                    <xsl:attribute name="href">
+                        <xsl:text>https://orcid.org/</xsl:text>
+                        <xsl:value-of select="@IdentifierOrcid" />
+                    </xsl:attribute>
+                 <img alt="ORCID Logo">
+                    <xsl:attribute name="src">
+                        <xsl:text>/opus4/layouts/buw/img/theme/icon-orcid.gif</xsl:text>
+                    </xsl:attribute>
+                    <xsl:attribute name="title">
+                  <xsl:call-template name="translateString">
+                     <xsl:with-param name="string">frontdoor_orcid</xsl:with-param>
+                  </xsl:call-template>
+               </xsl:attribute>
+               <xsl:attribute name="alt">
+                  <xsl:call-template name="translateString">
+                     <xsl:with-param name="string">frontdoor_orcid</xsl:with-param>
+                  </xsl:call-template>
+               </xsl:attribute>
+                </img>
+                </xsl:element>
+            </xsl:if>
+
+            <xsl:if test="@IdentifierGnd">
+                <xsl:text>  </xsl:text>
+                <xsl:element name="a">
+                    <xsl:attribute name="href">
+                        <xsl:text>https://d-nb.info/gnd/</xsl:text>
+                        <xsl:value-of select="@IdentifierGnd" />
+                    </xsl:attribute>
+                 <img alt="ORCID Logo">
+                    <xsl:attribute name="src">
+                    <xsl:value-of select="$layoutPath"/>
+                        <xsl:text>/img/theme/icon-gnd.gif</xsl:text>
+                    </xsl:attribute>
+                    <xsl:attribute name="title">
+                  <xsl:call-template name="translateString">
+                     <xsl:with-param name="string">frontdoor_gnd</xsl:with-param>
+                  </xsl:call-template>
+               </xsl:attribute>
+               <xsl:attribute name="alt">
+                  <xsl:call-template name="translateString">
+                     <xsl:with-param name="string">frontdoor_gnd</xsl:with-param>
+                  </xsl:call-template>
+               </xsl:attribute>
+                </img>
+                </xsl:element>
+            </xsl:if>
+      
         <xsl:if test="position() != last()">, </xsl:if>
         <xsl:if test="position() = last()">
             <xsl:text disable-output-escaping="yes">&lt;/td&gt;</xsl:text>
