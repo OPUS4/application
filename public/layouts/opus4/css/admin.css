@@ -1668,3 +1668,7 @@ table + .paginationControl{
 .adminContainer .wrapper table td.module-options {
     text-align: right; /* TODO not working yet */
 }
+
+.adminContainer #fieldset-Files a.filelink {
+    word-break: break-all;
+}
