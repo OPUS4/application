@@ -47,6 +47,8 @@ class Publish_Model_DepositTest extends ControllerTestCase {
     }
 
     public function testValidDocumentData() {
+        $this->useEnglish();
+
         $document = $this->createTestDocument();
         $document->setServerState('temporary');
         $docId = $document->store();
@@ -127,12 +129,16 @@ class Publish_Model_DepositTest extends ControllerTestCase {
         $this->assertEquals('Hansmann', $personSubmitter->getLastName());
         $this->assertEquals('test@mail.com', $personSubmitter->getEmail());
         $this->assertEquals('Stadt', $personSubmitter->getPlaceOfBirth());
-        $this->assertEquals(new Opus_Date(new Zend_Date('1970/02/01')), $personSubmitter->getDateOfBirth());
+
+        $datesHelper = new Application_Controller_Action_Helper_Dates();
+
+        $this->assertEquals($datesHelper->getOpusDate('1970/02/01'), $personSubmitter->getDateOfBirth());
+
         $this->assertEquals('Dr.', $personSubmitter->getAcademicTitle());
         $this->assertEquals('0', $personSubmitter->getAllowEmailContact());
         
-        $this->assertEquals(new Opus_Date(new Zend_Date('2012/2/1')), $document->getCompletedDate());
-        
+        $this->assertEquals($datesHelper->getOpusDate('2012/2/1'), $document->getCompletedDate());
+
         $personAuthor1 = $document->getPersonAuthor(0);        
         $this->assertEquals('vorname', $personAuthor1->getFirstName());
         $this->assertEquals('nachname', $personAuthor1->getLastName());        

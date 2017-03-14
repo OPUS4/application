@@ -257,7 +257,8 @@ class Publish_Model_Deposit {
      * @return Opus_Date
      */
     public function castStringToOpusDate($date) {
-        return new Opus_Date(new Zend_Date($date));
+        $dates = new Application_Controller_Action_Helper_Dates();
+        return $dates->getOpusDate($date);
     }
 
     /**
