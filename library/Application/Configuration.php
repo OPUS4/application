@@ -288,6 +288,15 @@ class Application_Configuration {
     }
 
     /**
+     * Returns value for key in current configuration.
+     * @param $key Name of option
+     */
+    public function getValue($key)
+    {
+        return self::getValueFromConfig($this->getConfig(), $key);
+    }
+
+    /**
      * Updates a value in a Zend_Config object.
      *
      * @param Zend_Config $config

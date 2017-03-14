@@ -195,4 +195,37 @@ class Application_ConfigurationTest extends ControllerTestCase {
         $this->assertNotSame($config, $config2);
     }
 
+    public function testGetValue()
+    {
+        $config = Application_Configuration::getInstance();
+
+        $this->assertEquals('https://orcid.org/', $config->getValue('orcid.baseUrl'));
+    }
+
+    public function testGetValueForUnknownKey()
+    {
+        $config = Application_Configuration::getInstance();
+
+        $this->assertNull($config->getValue('unknownKey'));
+        $this->assertNull($config->getValue('unknownScope.unknownKey'));
+        $this->assertNull($config->getValue('unknownScope.unknownKey.thirdLevel'));
+    }
+
+    public function testGetValueForArray()
+    {
+        $config = Application_Configuration::getInstance();
+
+        $subconfig = $config->getValue('orcid');
+
+        $this->assertInstanceOf('Zend_Config', $subconfig);
+    }
+
+    public function testGetValueForNull()
+    {
+        $config = Application_Configuration::getInstance();
+
+        $this->assertNull($config->getValue(null));
+        $this->assertNull($config->getValue(''));
+    }
+
 }
