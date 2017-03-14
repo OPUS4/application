@@ -144,6 +144,8 @@ class Frontdoor_IndexController extends Application_Controller_Action {
 
         $proc = new XSLTProcessor;
         Application_Xslt::registerViewHelper($proc, array(
+            'optionEnabled',
+            'optionValue',
             'translate',
             'translateWithDefault',
             'formatDate',

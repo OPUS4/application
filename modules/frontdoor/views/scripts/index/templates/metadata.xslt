@@ -276,10 +276,10 @@
             <xsl:value-of select="concat(@FirstName, ' ', @LastName)" />
         </xsl:element>
 
-        <xsl:if test="@IdentifierOrcid">
+        <xsl:if test="@IdentifierOrcid and php:functionString('Application_Xslt::optionEnabled', 'linkAuthor.frontdoor', 'orcid')">
             <xsl:element name="a">
                 <xsl:attribute name="href">
-                    <xsl:text>https://orcid.org/</xsl:text>
+                    <xsl:value-of select="php:functionString('Application_Xslt::optionValue', 'baseUrl', 'orcid')"/>
                     <xsl:value-of select="@IdentifierOrcid"/>
                 </xsl:attribute>
                 <xsl:attribute name="class">
