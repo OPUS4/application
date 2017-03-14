@@ -79,7 +79,15 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         // specity the SWORD module as RESTful
         $restRoute = new Zend_Rest_Route($frontController, array(), array('sword'));
         $frontController->getRouter()->addRoute('rest', $restRoute);
-        
+
+        $documentRoute = new Application_Controller_Route_Redirect(
+            '^(\d+)/?$',
+            array('module' => 'frontdoor', 'controller' => 'index', 'controller' => 'index', 'docId' => 1),
+            array( 1 => 'docId'),
+            'document/%s'
+        );
+
+        $frontController->getRouter()->addRoute('document', $documentRoute);
     }
 
     /**
