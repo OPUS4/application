@@ -137,7 +137,7 @@ class Application_TranslateTest extends ControllerTestCase {
     public function testLoadLanguageDirectoryNoFiles() {
         $this->assertTrue($this->translate->loadLanguageDirectory(APPLICATION_PATH . '/modules'));
     }
-    
+
     /**
      * Für Unit Tests ist das Logging von Untranslated normalerweise eingeschaltet.
      */
@@ -224,5 +224,5 @@ class Application_TranslateTest extends ControllerTestCase {
         
         $config->log->untranslated = $logUntranslated;
     }
-    
+
 }
