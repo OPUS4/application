@@ -140,7 +140,7 @@
     background: #8aa3bb;
     color: white;
     padding: 0.1em 0.3em;
-    margin: 0px 2px;
+    margin: 0 2px;
 }
 
 .search_export_xml a.export {
@@ -213,7 +213,7 @@ table.result-data {
 }
 .frontdoor div#abstract ul {
     list-style-type: none;
-    padding-left: 0em;
+    padding-left: 0;
 }
 .frontdoor .abstract {
 	background: url(../img/theme/icon-abstract-frontdoor.gif) no-repeat 3px 0;
@@ -892,7 +892,7 @@ body > #top-header{
 }
 .search_export_xml {
     float: right;
-    padding: 5px 0px 0px 0px;
+    padding: 5px 0 0 0;
     margin: 0;
 }
 
@@ -1087,7 +1087,7 @@ body > #top-header{
         float: right;
         text-align: right;
         min-width: 50px;
-        padding: 4px 8px 0px 12px;
+        padding: 4px 8px 0 12px;
         color: black;
 }
 .result_box .abstractText {
@@ -1300,4 +1300,16 @@ body > #top-header{
     font-weight:bold;
     font-size:120%;
     text-align: center
+}
+
+a.orcid-link {
+    display: inline-block;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    height: 16px;
+    width: 16px;
+    margin-left: 3px;
+    vertical-align: top;
+    background: url(../../../img/orcid/orcid_16x16.png) no-repeat 0 0;
+    text-indent: -9999px;
 }
