@@ -290,6 +290,7 @@
                         <xsl:with-param name="string">frontdoor_orcid</xsl:with-param>
                     </xsl:call-template>
                 </xsl:attribute>
+                <xsl:text>ORCiD</xsl:text>
             </xsl:element>
         </xsl:if>
 
@@ -322,6 +323,7 @@
         -->
 
         <xsl:if test="position() != last()">, </xsl:if>
+
         <xsl:if test="position() = last()">
             <xsl:text disable-output-escaping="yes">&lt;/td&gt;</xsl:text>
             <xsl:text disable-output-escaping="yes">&lt;/tr&gt;</xsl:text>

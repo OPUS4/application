@@ -1311,4 +1311,5 @@ a.orcid-link {
     margin-left: 3px;
     vertical-align: top;
     background: url(../../../img/orcid/orcid_16x16.png) no-repeat 0 0;
+    text-indent: -9999px;
 }
