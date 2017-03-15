@@ -623,17 +623,20 @@ a img{
 .col-right{
 	float: right;
 }
-#logo{
-	margin: 0;
-	float: left;
-	height: 89px;
-	width: 185px;
-	padding: 0 10px 0 0;
-	background: white url(../img/theme/bg_logo.jpg) no-repeat right;
+#logo {
+    float: left;
 }
-#logo img{
+
+#logo a {
+    float: left;
+    display: block;
 	vertical-align: bottom;
+    height: 100%;
+    height: 89px;
+    width: 185px;
+    background: white url(../img/logo/logo.gif) no-repeat right;
 }
+
 #top-header{
 	background: #f4f6f8 url(../img/theme/bg_top-header.jpg) repeat-x bottom;
 	color: #26517d;
