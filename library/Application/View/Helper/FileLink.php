@@ -60,7 +60,7 @@ class Application_View_Helper_FileLink extends Zend_View_Helper_Abstract {
         $fileUrl = $this->view->serverUrl() . $this->view->baseUrl() . "/files/" . $file->getParentId() .
                 "/" . urlencode($file->getPathName());
 
-        return '<a href="' . $fileUrl . '">' .htmlspecialchars($fileName) . '</a>'
+        return '<a href="' . $fileUrl . '" class="filelink">' .htmlspecialchars($fileName) . '</a>'
             . $this->view->formHidden($name, $file->getId(), null);
     }
 
