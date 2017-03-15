@@ -29,26 +29,17 @@
  * @package     Module_Frontdoor
  * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
  * @author      Michael Lang <lang@zib.de>
+ * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
- *
- * TODO move XSLT functions into model class (makes unit tests easier)
  */
 class Frontdoor_IndexController extends Application_Controller_Action {
 
+    /**
+     * TODO should be defined in central model classes
+     */
     const SERVER_STATE_DELETED = 'deleted';
     const SERVER_STATE_UNPUBLISHED = 'unpublished';
-    // functions
-    const TRANSLATE_FUNCTION = 'Frontdoor_IndexController::translate';
-    const TRANSLATE_DEFAULT_FUNCTION = 'Frontdoor_IndexController::translateWithDefault';
-    const FILE_ACCESS_FUNCTION = 'Frontdoor_IndexController::checkIfUserHasFileAccess';
-    const FORMAT_DATE_FUNCTION = 'Frontdoor_IndexController::formatDate';
-    const EMBARGO_ACCESS_FUNCTION = 'Frontdoor_IndexController::checkIfFileEmbargoHasPassed';
-    const SORT_ORDER_FUNCTION = 'Frontdoor_IndexController::useCustomSortOrder';
-    const CHECK_LANGUAGE_FILE_FUNCTION = 'Frontdoor_IndexController::checkLanguageFile';
-    const GET_STYLESHEET_FUNCTION = 'Frontdoor_IndexController::getStylesheet';
-    const IS_DISPLAY_FIELD_FUNCTION = 'Frontdoor_IndexController::isDisplayField';
 
     /**
      * Displays the metadata of a document.
@@ -152,21 +143,26 @@ class Frontdoor_IndexController extends Application_Controller_Action {
         $xslt = $docBuilder->buildDomDocument($this->view->getScriptPath('index') . DIRECTORY_SEPARATOR . 'index');
 
         $proc = new XSLTProcessor;
-        $proc->registerPHPFunctions(self::TRANSLATE_FUNCTION);
-        $proc->registerPHPFunctions(self::TRANSLATE_DEFAULT_FUNCTION);
-        $proc->registerPHPFunctions(self::FILE_ACCESS_FUNCTION);
-        $proc->registerPHPFunctions(self::FORMAT_DATE_FUNCTION);
-        $proc->registerPHPFunctions(self::EMBARGO_ACCESS_FUNCTION);
-        $proc->registerPHPFunctions(self::SORT_ORDER_FUNCTION);
-        $proc->registerPHPFunctions(self::CHECK_LANGUAGE_FILE_FUNCTION);
-        $proc->registerPHPFunctions(self::GET_STYLESHEET_FUNCTION);
-        $proc->registerPHPFunctions(self::IS_DISPLAY_FIELD_FUNCTION);
+        Application_Xslt::registerViewHelper($proc, array(
+            'optionEnabled',
+            'optionValue',
+            'translate',
+            'translateWithDefault',
+            'formatDate',
+            'isDisplayField',
+            'fileAccessAllowed',
+            'embargoHasPassed',
+            'customFileSortingEnabled',
+            'languageImageExists',
+            'frontdoorStylesheet',
+            'shortenText'
+        ));
         $proc->registerPHPFunctions('urlencode');
         $proc->importStyleSheet($xslt);
 
         $config = $this->getConfig();
         $layoutPath = 'layouts/' . (isset($config, $config->theme) ? $config->theme : '');
-        $numOfShortAbstractChars = isset($config, $config->frontdoor->numOfShortAbstractChars) ? $config->frontdoor->numOfShortAbstractChars : '0';
+        $numOfShortAbstractChars = $this->view->getHelper('shortenText')->getMaxLength();
 
         $proc->setParameter('', 'baseUrlServer', $this->view->fullUrl());
         $proc->setParameter('', 'baseUrl', $baseUrl);
@@ -225,54 +221,9 @@ class Frontdoor_IndexController extends Application_Controller_Action {
         return count($authors->getContactableAuthors()) > 0;
     }
 
-    /**
-     * Static function to be called from XSLT script to check file permission.
-     *
-     * @param string|int $fileId
-     * @return boolean
-     */
-    public static function checkIfUserHasFileAccess($fileId = null) {
-        if (is_null($fileId)) {
-            return false;
-        }
 
-        $realm = Opus_Security_Realm::getInstance();
-        return $realm->checkFile($fileId);
-    }
 
-    /**
-     * Invokes Opus_Document::hasEmbargoPassed(); compares EmbargoDate with parameter or system time.
-     *
-     * @param Opus_Date $now
-     * @return bool true - if embargo date has passed; false - if not
-     *
-     * TODO another document instantiation (find more efficient way)
-     */
-    public static function checkIfFileEmbargoHasPassed($docId) {
-        $doc = new Opus_Document($docId);
-        return $doc->hasEmbargoPassed();
-    }
 
-    /**
-     * Checks existence of language sign for services.xslt
-     * @param $filename
-     * @return bool
-     */
-    public static function checkLanguageFile($language) {
-        if (file_exists(APPLICATION_PATH . '/public/img/lang/' . $language . '.png')) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * Use custom sorting according to the sort order field.
-     * if (false) -> use alphabetic order.
-     */
-    public static function useCustomSortOrder() {
-        return Zend_Registry::get('Zend_Config')->frontdoor->files->customSorting == '1';
-    }
 
     /**
      *
@@ -388,11 +339,11 @@ class Frontdoor_IndexController extends Application_Controller_Action {
             'DC.Identifier', $this->view->fullUrl() . '/frontdoor/index/index/docId/' . $document->getId()
         );
 
-        if (self::checkIfFileEmbargoHasPassed($document->getId())) {
+        if (Application_Xslt::embargoHasPassed($document)) {
             foreach ($document->getFile() AS $file) {
                 if (!$file->exists()
                         or ($file->getVisibleInFrontdoor() !== '1')
-                        or !self::checkIfUserHasFileAccess($file->getId())) {
+                        or !Application_Xslt::fileAccessAllowed($file->getId())) {
                     continue;
                 }
                 $metas[] = array('DC.Identifier', "$baseUrlFiles/" . $document->getId() . "/" . $file->getPathName());
@@ -449,72 +400,6 @@ class Frontdoor_IndexController extends Application_Controller_Action {
     public function mapopus3Action() {
         $docId = $this->getRequest()->getParam('oldId');
         $this->_redirectToAndExit('id', '', 'index', 'rewrite', array('type' => 'opus3-id', 'value' => $docId));
-    }
-
-    /**
-     * Gateway function to Zend's translation facilities.
-     *
-     * @param  string  $key The key of the string to translate.
-     * @return string  The translated string.
-     */
-    static public function translate($key) {
-        $registry = Zend_Registry::getInstance();
-        $translate = $registry->get('Zend_Translate');
-        return $translate->_($key);
-    }
-
-    /**
-     * Check if a field should be displayed in the frontdoor.
-     * @param string $name Name of field
-     * @return bool
-     */
-    static public function isDisplayField($name) {
-        $config = Zend_Registry::get('Zend_Config');
-
-        if (is_null($config)) {
-            return false;
-        }
-
-        if (isset($config->frontdoor->metadata->$name)) {
-            return $config->frontdoor->metadata->$name == 1;
-        }
-        else {
-            return false;
-        }
-    }
-
-    /**
-     * Gateway function to Zend's translation facilities.  Falls back to default
-     * if no translation exists.
-     *
-     * @param  string  $key     The key of the string to translate.
-     * @param  string  $default The default value of no translation exists
-     * @return string  The translated string *or* the default value
-     */
-    static public function translateWithDefault($key, $default = '') {
-        $translate = Zend_Registry::get('Zend_Translate');
-        /* @var $translate Zend_Translate_Adapter */
-        if ($translate->isTranslated($key)) {
-            return $translate->_($key);
-        }
-        return $default;
-    }
-
-    static public function formatDate($day, $month, $year) {
-        $date = new DateTime();
-        $date->setDate($year, $month, $day);
-        $session = new Zend_Session_Namespace();
-        // TODO aktuell werden nur zwei Sprachen unterstützt
-        $formatPattern = ($session->language == 'de') ? 'd.m.Y' : 'Y/m/d';
-        return date_format($date, $formatPattern);
-    }
-
-    public static function getStylesheet() {
-        $config = Zend_Registry::get('Zend_Config');
-        if (isset($config->export->stylesheet->frontdoor) && Opus_Security_Realm::getInstance()->checkModule('export')) {
-            return $config->export->stylesheet->frontdoor;
-        }
-        return '';
     }
 
 }

@@ -948,14 +948,16 @@ Beispieleingabe: "00A09" (für Popularization of mathematics)</seg>
 <!-- DDC **************************************************** -->
 <tu tuid="hint_groupSubjectDDC">
         <tuv xml:lang="en">
-            <seg>Please enter the DDC classes of the document. You may add more DDC classes by clicking on the button )or delete them).<br />
-See the overview at <a href="http://www.oclc.org/dewey/resources/summaries/default.htm" target="tab">http://www.oclc.org/dewey/resources/summaries/default.htm</a><br />
-Example input: "100" (for Philosophy and psychology) </seg>
+            <seg>Please enter the DDC class of your document. You can add or delete additional classifications by clicking on the button below. DDC classes follow a three-digit pattern. Using the dropdown box and the ‘down’ button, please set the DDC class for your document.<br />
+            Please click the following link for an overview (in German) of available DDC classes:<br />
+            <a href="http://www.dnb.de/Subsites/ddcdeutsch/DE/DDCprodukte/DDCuebersichten/DDCuebersichten_node.html" target="tab" > http://www.dnb.de/Subsites/ddcdeutsch/DE/DDCprodukte/DDCuebersichten/DDCuebersichten_node.html</a><br />
+            Example input: "100" (for "Philosophie und Psychologie")</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Tragen Sie hier bitte die DDC Klassen Ihres Dokumentes ein. Sie können durch Klicken auf den Button weitere Klassen hinzufügen (oder wieder löschen).<br />
-Eine Übersicht über verfügbare Klassen bekommen Sie unter: <a href="http://www.oclc.org/dewey/resources/summaries/default.htm" target="tab" >http://www.oclc.org/dewey/resources/summaries/default.htm</a><br />
-Beispieleingabe: "100" (für Philosophy and psychology)</seg>
+            <seg>Tragen Sie hier bitte die DDC Klassen Ihres Dokumentes ein. Sie können durch Klicken auf den Button weitere Klassen hinzufügen (oder wieder löschen). Die DDC Klasse ist 3-stellig anzugeben. Nutzen Sie dazu den Button "runter".<br />
+            Eine Übersicht über verfügbare Klassen bekommen Sie unter:<br />
+            <a href="http://www.dnb.de/Subsites/ddcdeutsch/DE/DDCprodukte/DDCuebersichten/DDCuebersichten_node.html" target="tab" > http://www.dnb.de/Subsites/ddcdeutsch/DE/DDCprodukte/DDCuebersichten/DDCuebersichten_node.html</a><br />
+            Beispieleingabe: "100" (für "Philosophie und Psychologie")</seg>
         </tuv>
     </tu>
 

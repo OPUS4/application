@@ -23,6 +23,24 @@ anhand des Titels in der Sprache der Oberfläche, der dann angezeigt
 wird. Das kann zu einer unerwarteten Reihenfolge führen. Es ist geplant
 dieses Problem in einem kommenden Release zu beheben.
 
+### Suche
+
+### Frontdoor
+
+Die PHP Funktionen die im XSLT verwendet wurden, sind jetzt als Zend
+View Helper implementiert und haben teilweise neue Namen. Das muss bei
+Repositorien berücksichtigt werden, die ihre Frontdoor angepasst haben.
+Die Änderung erlaubt einfachere Tests und Erweiterbarkeit.
+
+Anstelle von `Frontdoor_IndexController` wird jetzt `Application_Xslt`
+verwendet. Die folgenden Funktionen haben außerdem neue Namen bekommen.
+
+    checkIfFileEmbargoHasPassed -> embargoHasPassed
+    useCustomSortOrder          -> customFileSortingEnabled
+    checkIfUserHasFileAccess    -> fileAccessAllowed
+    checkLanguageFile           -> languageImageExists
+    getStylesheet               -> frontdoorStylesheet
+
 ---
 
 ## Release 4.5 2016-12-06

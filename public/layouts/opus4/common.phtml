@@ -189,8 +189,8 @@ if (isset($config->javascript->latex->mathjax)) {
 
                     <?php if (!empty($messages)) : ?>
                     <div class="messages">
-                        <?php foreach ($messages as $message) : ?>
-                            <div class="<?= $message['level'] ?>"><?= htmlspecialchars($this->translate($message['message'])) ?></div>
+                        <?php foreach ($messages as $message) : // TODO view helper ?>
+                            <div class="<?= array_key_exists('level', $message) ? $message['level'] : '' ?>"><?= htmlspecialchars($this->translate($message['message'])) ?></div>
                         <?php endforeach ?>
                     </div>
                     <?php endif ?>
@@ -207,10 +207,10 @@ if (isset($config->javascript->latex->mathjax)) {
                         <?= $this->adminform ?>
                     <?PHP endif ?>
 
-                    <?php if (!empty($messages)) : ?>
+                    <?php if (!empty($messages)) : // TODO view helper ?>
                     <div class="messages">
                         <?php foreach ($this->flashMessenger->getMessages() as $message) : ?>
-                            <div class="<?= $message['level'] ?>"><?= htmlspecialchars($this->translate($message['message'])) ?></div>
+                            <div class="<?= array_key_exists('level', $message) ? $message['level'] : '' ?>"><?= htmlspecialchars($this->translate($message['message'])) ?></div>
                         <?php endforeach ?>
                     </div>
                     <?php endif ?>
