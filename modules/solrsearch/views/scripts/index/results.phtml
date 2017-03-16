@@ -112,7 +112,7 @@ if($this->jQueryEnabled()) {
                     $frontdoorUrl = $this->url(array(
                         'module' => 'frontdoor', 'controller' => 'index', 'action' => 'index',
                         'docId' => $document->getId(),
-                        'start' => $this->start + ($rowCount - 1),
+                        'start' => $this->start + $rowCount,
                         'rows' => $this->rows,
                         'searchtype' => $this->searchType
                     ));

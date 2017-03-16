@@ -210,7 +210,9 @@ if (isset($config->javascript->latex->mathjax)) {
                     <?php if (!empty($messages)) : // TODO view helper ?>
                     <div class="messages">
                         <?php foreach ($this->flashMessenger->getMessages() as $message) : ?>
+                            <?PHP if (array_key_exists('message', $message)) : ?>
                             <div class="<?= array_key_exists('level', $message) ? $message['level'] : '' ?>"><?= htmlspecialchars($this->translate($message['message'])) ?></div>
+                            <?PHP endif ?>
                         <?php endforeach ?>
                     </div>
                     <?php endif ?>

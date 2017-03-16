@@ -30,7 +30,7 @@
  * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
  * @author      Michael Lang <lang@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2014-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 class Frontdoor_IndexController extends Application_Controller_Action {
@@ -48,50 +48,14 @@ class Frontdoor_IndexController extends Application_Controller_Action {
     public function indexAction() {
 
         $request = $this->getRequest();
-        $docId = $request->getParam('docId', '');
 
-        if ($request->has('searchtype') && $request->has('rows') && $request->has('start')) {
+        $docId = $this->handleSearchResultNavigation();
 
-            $listRows = $request->getParam('rows');
-            $start = $request->getParam('start');
-
-            $this->view->listRows = $listRows;
-
-            $request->setParam('rows', '1'); // make sure only 1 entry is displayed
-            $query = Application_Search_Navigation::getQueryUrl($request, $this->getLogger());
-            $searcher = new Opus_SolrSearch_Searcher();
-            $resultList = $searcher->search($query);
-            $queryResult = $resultList->getResults();
-            if (is_array($queryResult) && !empty($queryResult) && $queryResult[0] instanceof Opus_Search_Result_Match) {
-                $resultDocId = $queryResult[0]->getId();
-                $docIdDontMatch = !empty($docId) && $resultDocId != $docId;
-                if (!$request->has('docId') || $docIdDontMatch) {
-                    if ($docIdDontMatch) {
-                        $this->_helper->flashMessenger(array('notice' => $this->view->translate('frontdoor_pagination_list_changed')));
-                    }
-                    $this->redirect($this->view->url(array('docId' => $resultDocId)), array('prependBase' => false));
-                }
-                $docId = $resultDocId;
-            }
-            $messages = $this->_helper->flashMessenger->getMessages();
-            if (!empty($messages)) {
-                $this->view->messages = $messages[0];
-            }
-            $this->view->paginate = true;
-            $numHits = $resultList->getNumberOfHits();
-            if ($request->getParam('searchtype') == 'latest') {
-                $this->view->numOfHits = $numHits < $listRows ? $numHits : $listRows;
-            } else {
-                $this->view->numOfHits = $numHits;
-            }
-            $this->view->searchPosition = $start;
-            $this->view->firstEntry = 0;
-            $this->view->lastEntry = $this->view->numOfHits - 1;
-            $this->view->previousEntry = ($this->view->searchPosition - 1) < 0 ? 0 : $this->view->searchPosition - 1;
-            $this->view->nextEntry = ($this->view->searchPosition + 1) < $this->view->numOfHits - 1 ? $this->view->searchPosition + 1 : $this->view->numOfHits - 1;
+        if ($docId === false) {
+            return;
         }
-
-        if ($docId == '') {
+        else if ($docId == '') {
+            // TODO can this be reached?
             $this->printDocumentError("frontdoor_doc_id_missing", 404);
             return;
         }
@@ -220,10 +184,6 @@ class Frontdoor_IndexController extends Application_Controller_Action {
         $authors = new Frontdoor_Model_Authors($doc);
         return count($authors->getContactableAuthors()) > 0;
     }
-
-
-
-
 
     /**
      *
@@ -400,6 +360,84 @@ class Frontdoor_IndexController extends Application_Controller_Action {
     public function mapopus3Action() {
         $docId = $this->getRequest()->getParam('oldId');
         $this->_redirectToAndExit('id', '', 'index', 'rewrite', array('type' => 'opus3-id', 'value' => $docId));
+    }
+
+    /**
+     * Handles parameters for search result navigation.
+     *
+     * The parameters define a position in the search, like the 6. document. If a docId is provided that document is
+     * displayed in any case. However a search for the provided position is performed and compared if the IDs match.
+     * If they don't match the search result might have changed and a message is printed.
+     *
+     * If no docId is provided a redirect to the document found by the search is performed without a message.
+     *
+     * @return mixed
+     * @throws Application_Exception
+     */
+    protected function handleSearchResultNavigation()
+    {
+        $request = $this->getRequest();
+        $docId = $request->getParam('docId', '');
+
+        $messages = null;
+
+        if ($request->has('searchtype') && $request->has('rows') && $request->has('start'))
+        {
+            $listRows = $request->getParam('rows');
+
+            $start = $request->getParam('start');
+
+            $this->view->listRows = $listRows;
+
+            $request->setParam('rows', '1'); // make sure only 1 entry is displayed
+
+            $query = Application_Search_Navigation::getQueryUrl($request, $this->getLogger());
+
+            $searcher = new Opus_SolrSearch_Searcher();
+
+            $resultList = $searcher->search($query);
+
+            $queryResult = $resultList->getResults();
+
+            if (is_array($queryResult) && !empty($queryResult) && $queryResult[0] instanceof Opus_Search_Result_Match)
+            {
+                $resultDocId = $queryResult[0]->getId();
+
+                if ($request->has('docId'))
+                {
+                    if ($resultDocId != $docId)
+                    {
+                        $messages = array('notice' => $this->view->translate('frontdoor_pagination_list_changed'));
+                    }
+                }
+                else {
+                    $this->redirect($this->view->url(array('docId' => $resultDocId)), array('prependBase' => false));
+                    return false;
+                }
+            }
+
+            $this->view->messages = $messages;
+
+            $this->view->paginate = true;
+            $numHits = $resultList->getNumberOfHits();
+
+            if ($request->getParam('searchtype') == 'latest')
+            {
+                $this->view->numOfHits = $numHits < $listRows ? $numHits : $listRows;
+            }
+            else
+            {
+                $this->view->numOfHits = $numHits;
+            }
+
+            $this->view->searchPosition = $start;
+            $this->view->firstEntry = 0;
+            $this->view->lastEntry = $this->view->numOfHits - 1;
+            $this->view->previousEntry = ($this->view->searchPosition - 1) < 0 ? 0 : $this->view->searchPosition - 1;
+            $this->view->nextEntry = ($this->view->searchPosition + 1) < $this->view->numOfHits - 1 ? $this->view->searchPosition + 1 : $this->view->numOfHits - 1;
+        }
+
+        return $docId;
     }
 
 }
