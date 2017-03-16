@@ -1015,6 +1015,10 @@ body > #top-header{
     position: relative;
 }
 
+#search_results .fulltext-logo.fulltext.openaccess {
+    background: url(../img/fulltext24openaccess.png) no-repeat;
+}
+
 .result_box {
     border-top: 1px solid #e2e6e9;
     background: #f3f6f8 no-repeat 24px 4px;

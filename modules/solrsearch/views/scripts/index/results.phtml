@@ -118,7 +118,7 @@ if($this->jQueryEnabled()) {
                     ));
                     ?>
                     <div class="result_box <?= $rowCount++ % 2 === 0 ? 'even' : 'odd'; ?>">
-                        <div class="fulltext-logo <?= ($document->hasFulltext()) ? 'fulltext' : ''?>"></div>
+                        <div class="fulltext-logo <?= ($document->hasFulltext()) ? 'fulltext' : ''?> <?= ($document->isOpenAccess()) ? 'openaccess' : '' ?>"></div>
                         <?php if (isset($this->seriesId) && $this->seriesId && !is_null($result->getSeriesNumber( $this->seriesId ))) : ?>
                             <div class="results_seriesnumber"><?= htmlspecialchars($result->getSeriesNumber( $this->seriesId )); ?></div>
                         <?php endif ?>
