@@ -1039,15 +1039,17 @@ body > #top-header{
     color: black;
     height: 10px;
     width: 100%;
-    background: #e8ebed;
+    background: #e8eef7;
+    background-repeat: no-repeat;
+    background-position: center center;
 }
 
 .result_box a.abstract-toggle.collapsed {
-    background: #e8ebed url(../img/theme/bullet_arrow_down.png) no-repeat center center;
+    background-image: url(../img/theme/bullet_arrow_down.png);
 }
 
 .result_box a.abstract-toggle.expanded {
-    background: #e8ebed url(../img/theme/bullet_arrow_up.png) no-repeat center center;
+    background-image: url(../img/theme/bullet_arrow_up.png);
 }
 
 .result_box a.abstract-toggle:hover {
