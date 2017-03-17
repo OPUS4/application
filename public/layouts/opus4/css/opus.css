@@ -633,15 +633,13 @@ a img{
 	vertical-align: bottom;
     height: 70px;
     width: 169px;
-    background: url(../img/logo/opus-logo.png) no-repeat right;
-    background-position: center center;
+    background: url(../img/logo/opus-logo.png) no-repeat left;
     padding: 8px 8px 8px 0;
 }
 
 #logo .openaccess-logo {
     float: left;
     font-size: 20px;
-    padding-left: 8px;
     color: #26517c;
     height: 100%;
     padding-top: 58px;
