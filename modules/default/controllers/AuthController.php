@@ -237,18 +237,12 @@ class AuthController extends Application_Controller_Action {
             switch ($key) {
                 // ignore default parameters
                 case 'module' :
-                    break;
                 case 'controller' :
-                    break;
                 case 'action' :
-                    break;
                 // do not forward login credentials
                 case 'hash' :
-                    break;
                 case 'login' :
-                    break;
                 case 'password' :
-                    break;
                 case 'SubmitCredentials' :
                     break;
                 // find return module, controller, action and parameters
