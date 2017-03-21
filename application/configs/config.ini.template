@@ -69,6 +69,9 @@ search.result.display.preferUserInterfaceLanguage = 0
 ; mail.opus.port = 25 ; SMTP server port for sending email
 ; mail.opus.address = ; email address of administrator
 ; mail.opus.name = ; Name of administrator
+; mail.opus.replyTo = ; Reply-to address for messages
+; mail.opus.replyToName =
+; mail.opus.returnPath =
 
 ;NOTIFICATION SETTINGS
 ; comma separated list of email addresses that should receive a submission notification email
