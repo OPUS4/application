@@ -27,9 +27,11 @@
  * @category    Application
  * @package     Module_Publish
  * @author      Susanne Gottwald <gottwald@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
+ *
+ * TODO get logger from Application_Configuration if not provided
  */
 class Publish_Model_Deposit {
 
@@ -38,8 +40,17 @@ class Publish_Model_Deposit {
     private $_log;
     private $_docId;
 
-    public function __construct($docId, $log, $documentData = null) {
+    public function __construct($log = null) {
         $this->_log = $log;
+    }
+
+    public function storeDocument($docId, $log = null, $documentData = null)
+    {
+        if (!is_null($log))
+        {
+            $this->_log = $log;
+        }
+
         $this->_docId = $docId;
 
         try {
@@ -245,8 +256,9 @@ class Publish_Model_Deposit {
      * @param String $date
      * @return Opus_Date
      */
-    private function castStringToOpusDate($date) {
-        return new Opus_Date(new Zend_Date($date));
+    public function castStringToOpusDate($date) {
+        $dates = new Application_Controller_Action_Helper_Dates();
+        return $dates->getOpusDate($date);
     }
 
     /**
