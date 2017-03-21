@@ -171,9 +171,9 @@ abstract class Setup_Model_Abstract {
     public function getContent($filename = null) {
         $result = array();
         if (is_null($filename)) {
-            foreach ($this->_contentSources as $file) {
-                $this->verifyReadAccess($file);
-                $result[$filePath] = file_get_contents($file); // TODO bug
+            foreach ($this->_contentSources as $filePath) {
+                $this->verifyReadAccess($filePath);
+                $result[$filePath] = file_get_contents($filePath);
             }
         }
         else {

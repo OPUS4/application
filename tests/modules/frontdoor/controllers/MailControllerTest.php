@@ -47,6 +47,7 @@ class Frontdoor_MailControllerTest extends ControllerTestCase {
 
         $title = new Opus_Title();
         $title->setValue('foobartitle');
+        $title->setLanguage('deu');
         $document->setTitleMain($title);       
 
         $this->documentId = $document->store();
@@ -58,6 +59,7 @@ class Frontdoor_MailControllerTest extends ControllerTestCase {
 
         $title = new Opus_Title();
         $title->setValue('foobartitle');
+        $title->setLanguage('deu');
         $document->setTitleMain($title);
 
         $author = new Opus_Person();

@@ -304,7 +304,7 @@ class Application_Util_DocumentAdapter {
     }
 
     public function isBelongsToBibliography() {
-        return $this->document->getBelongsToBibliography();
+        return $this->document->getBelongsToBibliography() == 1;
     }
 
     /**

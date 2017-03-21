@@ -125,5 +125,4 @@ class ControllerTestCaseTest extends ControllerTestCase {
 
         $this->removeDocument($doc);
     }
-
 }

@@ -104,6 +104,7 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
         $this->deleteTestDocuments();
         $this->deleteTestFiles();
         $this->logger = null;
+        Application_Configuration::clearInstance(); // reset Application_Configuration
         parent::tearDown();
     }
 

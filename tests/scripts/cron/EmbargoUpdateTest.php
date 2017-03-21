@@ -42,35 +42,39 @@ class EmbargoUpdateTest extends CronTestCase
 
     public function testEmbargoUpdate()
     {
-        $yesterday = new Opus_Date();
-        $yesterday->setDateTime(new DateTime(date('Y-m-d H:i:s', strtotime('-1 day'))));
+        $twoDaysAgo = new Opus_Date();
+        $twoDaysAgo->setDateTime(new DateTime(date('Y-m-d H:i:s', strtotime('-2 day'))));
+
+        $yesterday = date('Y-m-d', strtotime('-1 day'));
 
         $today = date('Y-m-d', time());
-        $tomorrow = date('Y-m-d', time() + (60 * 60 * 24));
 
         $doc = new Opus_Document();
-        $doc->setEmbargoDate($today);
+        $doc->setEmbargoDate($yesterday);
         $expiredId = $doc->store();
 
         $doc = new Opus_Document();
         $noEmbargoId = $doc->store();
 
         $doc = new Opus_Document();
-        $doc->setEmbargoDate($tomorrow);
+        $doc->setEmbargoDate($today);
         $notExpiredId = $doc->store();
 
-        Opus_Document::setServerDateModifiedByIds($yesterday, array($expiredId, $noEmbargoId, $notExpiredId));
+        Opus_Document::setServerDateModifiedByIds($twoDaysAgo, array($expiredId, $noEmbargoId, $notExpiredId));
 
         $this->executeScript('cron-embargo-update.php');
 
+        // document embargo until yesterday -> therefore ServerDateModified got updated
         $doc = new Opus_Document($expiredId);
         $this->assertTrue($this->sameDay(new DateTime($today), $doc->getServerDateModified()->getDateTime()));
 
+        // document embargo until today -> therefore ServerDateModified not yet updated
         $doc = new Opus_Document($notExpiredId);
-        $this->assertTrue($this->sameDay($yesterday->getDateTime(), $doc->getServerDateModified()->getDateTime()));
+        $this->assertTrue($this->sameDay($twoDaysAgo->getDateTime(), $doc->getServerDateModified()->getDateTime()));
 
+        // no document embargo -> therefore ServerDateModified unchanged
         $doc = new Opus_Document($noEmbargoId);
-        $this->assertTrue($this->sameDay($yesterday->getDateTime(), $doc->getServerDateModified()->getDateTime()));
+        $this->assertTrue($this->sameDay($twoDaysAgo->getDateTime(), $doc->getServerDateModified()->getDateTime()));
     }
 
     private function sameDay($firstDate, $secondDate)

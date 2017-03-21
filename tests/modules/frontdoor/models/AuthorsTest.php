@@ -46,9 +46,11 @@ class Frontdoor_Model_AuthorsTest extends ControllerTestCase {
         $document = $this->createTestDocument();
         $document->setServerState('published');
         $document->setType('testtype');
+        $document->setLanguage('deu');
 
         $title = new Opus_Title();
         $title->setValue('testtitle');
+        $title->setLanguage('deu');
         $document->setTitleMain($title);
 
         $author1 = new Opus_Person();

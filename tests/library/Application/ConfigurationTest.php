@@ -150,6 +150,19 @@ class Application_ConfigurationTest extends ControllerTestCase {
         $this->assertEquals(APPLICATION_PATH . '/tests/workspace/tmp/', $this->config->getTempPath());
     }
 
+    public function testSetTempPath()
+    {
+        $newTempPath = $this->config->getTempPath() . 'subdir';
+
+        $this->config->setTempPath($newTempPath);
+
+        $this->assertEquals($newTempPath, $this->config->getTempPath());
+
+        $this->config->setTempPath(null);
+
+        $this->assertEquals(APPLICATION_PATH . '/tests/workspace/tmp/', $this->config->getTempPath());
+    }
+
     public function testGetInstance() {
         $config = Application_Configuration::getInstance();
         $this->assertNotNull($config);
@@ -167,6 +180,19 @@ class Application_ConfigurationTest extends ControllerTestCase {
         $zendConfig = Zend_Registry::get('Zend_Config');
         unset($zendConfig->name);
         $this->assertEquals('OPUS 4', $config->getName());
+    }
+
+    public function testClearInstance()
+    {
+        $config = Application_Configuration::getInstance();
+        $this->assertInstanceOf('Application_Configuration', $config);
+
+        Application_Configuration::clearInstance();
+
+        $config2 = Application_Configuration::getInstance();
+        $this->assertInstanceOf('Application_Configuration', $config2);
+
+        $this->assertNotSame($config, $config2);
     }
 
 }

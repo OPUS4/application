@@ -64,7 +64,8 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         $frontController->registerPlugin($moduleprepare);
 
         // Add security realm initialization
-        $realmSetupPlugin = new Application_Controller_Plugin_SecurityRealm();
+        // the SWORD module uses a different auth mechanism
+        $realmSetupPlugin = new Application_Controller_Plugin_SecurityRealm('sword');
         $frontController->registerPlugin($realmSetupPlugin);
 
         // Add navigation initialization plugin
@@ -74,6 +75,11 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         // Get Name of Module, Controller and Action for Use in View
         $viewSetup = new Application_Controller_Plugin_ViewSetup();
         $frontController->registerPlugin($viewSetup);
+
+        // specity the SWORD module as RESTful
+        $restRoute = new Zend_Rest_Route($frontController, array(), array('sword'));
+        $frontController->getRouter()->addRoute('rest', $restRoute);
+        
     }
 
     /**

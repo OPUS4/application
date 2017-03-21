@@ -3,12 +3,14 @@
   "description": "Application Environment for Opus 4",
   "license": "GPL-2.0+",
   "require": {
-    "zendframework/zendframework1": "1.12.18",
+    "zendframework/zendframework1": "1.12.20",
     "jpgraph/jpgraph": "dev-master",
     "solarium/solarium": "3.4.1",
-    "opus4-repo/framework": "dev-master",
-    "opus4-repo/search": "4.5.0-RC1",
-    "components/jquery": "1.9.*"
+    "opus4-repo/framework": "dev-4.6-dev",
+    "opus4-repo/search": "4.5",
+    "components/jquery": "1.12.4",
+    "components/jqueryui": "1.12.1",
+    "robloach/component-installer": "*"
   },
   "require-dev": {
     "phpunit/phpunit": "4.8.24",
@@ -31,6 +33,8 @@
       "@linkDbSchema"
     ],
     "linkDbSchema": "ln -svf -t db ../vendor/opus4-repo/framework/db/schema"
+  },
+  "config": {
+    "component-dir": "public/assets"
   }
 }
-
