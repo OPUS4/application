@@ -792,7 +792,7 @@ ul.links input:hover{
    margin-right: 0;
 }
 
-#content.adminContainer .data-wrapper .field .textarea{
+#content.adminContainer .data-wrapper .field .textarea {
    word-wrap: break-word;
    overflow-wrap: break-word;
    white-space: pre-line;
@@ -1179,14 +1179,14 @@ ul.links input:hover{
 .adminContainer .wrapper table.documents{
    margin: 0;
 }
-.paginationInfo ul,
+.adminContainer .paginationInfo ul,
 .itemCountLinks ul,
 .paginationControl ul{
    margin: 0;
    padding: 0;
    list-style: none;
 }
-.resultInfo,
+.adminContainer .resultInfo,
 .paginationControl li{
    float: left;
 }
@@ -1199,7 +1199,7 @@ ul.links input:hover{
 .itemCountLinks li{
    padding: 0 0.3em;
 }
-.paginationControl{
+.adminContainer .paginationControl{
    clear: both;
    background-color: #b7cde7;
    color: black;
@@ -1211,20 +1211,20 @@ ul.links input:hover{
 table + .paginationControl{
    margin-bottom: 2em;
 }
-.paginationControl ul{
+.adminContainer .paginationControl ul{
    display: inline-block;
    vertical-align: bottom;
 }
-.paginationControl li{
+.adminContainer .paginationControl li{
    padding: 0.4em 0.7em;
    border-left: 1px solid #dae5f3;
    font-size: 0.9em;
 }
-.paginationControl li.currentPage{
+.adminContainer .paginationControl li.currentPage{
    background-color: #2d6093;
    color: white;
 }
-.paginationControl li:first-child{
+.adminContainer .paginationControl li:first-child{
    border: none;
 }
 /* @end */
@@ -1351,12 +1351,17 @@ table + .paginationControl{
    color:  #dc143c;
    background-color: transparent;
 }
-.FileLink-data .field a{
-   background: url(../img/theme/admin/ic_file.png) no-repeat left center;
-   padding: 4px 0 4px 35px;
-   position: relative;
-   left: -35px;
-   font-weight: bold;
+.FileLink-data .field a {
+    background: url(../img/theme/admin/ic_file.png) no-repeat left top;
+    padding: 0 0 4px 35px;
+    position: relative;
+    left: -35px;
+    font-weight: bold;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: pre-line;
+    width: 545px;  /*break-word braucht eine fixe Breite*/
+    float: left;
 }
 .adminContainer #FileManager-Files-Add-element input{
    background-position: -14px -391px;
@@ -1662,4 +1667,12 @@ table + .paginationControl{
 
 .adminContainer .wrapper table td.module-options {
     text-align: right; /* TODO not working yet */
+}
+
+.adminContainer #fieldset-Files a.filelink {
+    word-break: break-all;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    -ms-word-break: break-all;
+    display: block;
 }

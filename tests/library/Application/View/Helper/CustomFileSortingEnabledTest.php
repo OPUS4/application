@@ -24,31 +24,27 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Licence
- * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
+ * @category    Application Unit Test
+ * @package     View_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-?>
 
-<div>
-    <a href="<?= $this->url(array('action' => 'new')) ?>"><?= $this->translate('admin_iprange_new') ?></a>
-</div>
+class Application_View_Helper_CustomFileSortingEnabledTest extends ControllerTestCase
+{
 
-<table>
-    <?PHP foreach($this->ipRanges as $id => $ipRange) : ?>
-    <tr>
-        <td>
-            <div><a href="<?= $this->url(array('action' => 'show', 'id' => $id)) ?>"><?= htmlspecialchars($ipRange->getName()) ?></a></div>
-            <div><?= $ipRange->getStartingip() ?> - <?= $ipRange->getEndingip() ?></div>
-        </td>
-        <td>
-            <a href="<?= $this->url(array('action' => 'edit', 'id' => $id)) ?>"><?= $this->translate('admin_form_action_edit') ?></a>
-            <a href="<?= $this->url(array('action' => 'delete', 'id' => $id)) ?>"><?= $this->translate('admin_form_action_delete') ?></a>
-        </td>
-    </tr>
-    <?PHP endforeach; ?>
-</table>
+    public function testCustomFileSortingEnabled()
+    {
+        $helper = new Application_View_Helper_CustomFileSortingEnabled();
+
+        $this->assertTrue($helper->customFileSortingEnabled());
+
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
+            'frontdoor' => array('files' => array('customSorting' => '0'))
+        )));
+
+        $this->assertFalse($helper->customFileSortingEnabled());
+    }
+
+}

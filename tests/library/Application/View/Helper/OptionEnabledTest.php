@@ -24,13 +24,37 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Ralf Claussnitzer (ralf.claussnitzer@slub-dresden.de)
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @category    Application Unit Test
+ * @package     Application_View_Helper
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-?>
 
-<?= $this->form ?>
+class Application_View_Helper_OptionEnabledTest extends ControllerTestCase
+{
+
+    public function testOptionEnabled()
+    {
+        $helper = new Application_View_Helper_OptionEnabled();
+
+        $this->assertTrue($helper->optionEnabled('orcid.linkAuthor.frontdoor'));
+        $this->assertTrue($helper->optionEnabled('linkAuthor.frontdoor', 'orcid'));
+
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
+            'orcid' => array('linkAuthor' => array('frontdoor' => '0'))
+        )));
+
+        $this->assertFalse($helper->optionEnabled('orcid.linkAuthor.frontdoor'));
+        $this->assertFalse($helper->optionEnabled('linkAuthor.frontdoor', 'orcid'));
+    }
+
+    public function testOptionEnabledForUnknownKey()
+    {
+        $helper = new Application_View_Helper_OptionEnabled();
+
+        $this->assertFalse($helper->optionEnabled('unknownKey'));
+        $this->assertFalse($helper->optionEnabled('unknownKey', 'unknownContext'));
+    }
+
+}

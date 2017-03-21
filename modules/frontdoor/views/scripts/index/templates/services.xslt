@@ -63,7 +63,7 @@
 
           <xsl:variable name="flagIcon">
               <xsl:choose>
-                  <xsl:when test="php:functionString('Frontdoor_IndexController::checkLanguageFile', @Language)">
+                  <xsl:when test="php:functionString('Application_Xslt::languageImageExists', @Language)">
                       <img width="16" height="11">
                           <xsl:attribute name="src">
                               <xsl:value-of select="$baseUrl"/>
@@ -115,7 +115,7 @@
          </xsl:variable>
 
          <xsl:choose>
-            <xsl:when test="php:functionString('Frontdoor_IndexController::checkIfUserHasFileAccess', @Id)">
+            <xsl:when test="php:functionString('Application_Xslt::fileAccessAllowed', @Id)">
                <div class="accessible-file">
                   <xsl:attribute name="title">
                      <xsl:call-template name="translateString">
@@ -295,30 +295,13 @@
                <xsl:value-of select="$baseUrl"/>
                <xsl:text>/citationExport/index/download/output/bibtex/docId/</xsl:text><xsl:value-of select="@Id" />
             </xsl:attribute>
-            <xsl:element name="img">
-               <xsl:attribute name="src">
-                  <xsl:value-of select="$layoutPath"/><xsl:text>/img/bibtex_w.png</xsl:text>
-               </xsl:attribute>
-               <xsl:attribute name="name">
-                  <xsl:text>bibtex</xsl:text>
-               </xsl:attribute>
-               <xsl:attribute name="onmouseover">
-                  <xsl:text>document.bibtex.src='</xsl:text><xsl:value-of select="$layoutPath"/><xsl:text>/img/bibtex_o.png';</xsl:text>
-               </xsl:attribute>
-               <xsl:attribute name="onmouseout">
-                  <xsl:text>document.bibtex.src='</xsl:text><xsl:value-of select="$layoutPath"/><xsl:text>/img/bibtex_w.png';</xsl:text>
-               </xsl:attribute>
-               <xsl:attribute name="title">
-                  <xsl:call-template name="translateString">
+             <xsl:attribute name="title">
+                 <xsl:call-template name="translateString">
                      <xsl:with-param name="string">frontdoor_exportbibtex</xsl:with-param>
-                  </xsl:call-template>
-               </xsl:attribute>
-               <xsl:attribute name="alt">
-                  <xsl:call-template name="translateString">
-                     <xsl:with-param name="string">frontdoor_exportbibtex</xsl:with-param>
-                  </xsl:call-template>
-               </xsl:attribute>
-            </xsl:element>
+                 </xsl:call-template>
+             </xsl:attribute>
+             <xsl:attribute name="class">export bibtex</xsl:attribute>
+             <xsl:text>BibTeX</xsl:text>
          </xsl:element>
       </li>
       <xsl:text> </xsl:text>
@@ -326,43 +309,25 @@
       <!--Ris-Export--> 
       <li>
          <xsl:element name="a">
-            <!--TODO: Use Zend Url-Helper to build href attribute--> 
-            <xsl:attribute name="href">
+             <!--TODO: Use Zend Url-Helper to build href attribute-->
+             <xsl:attribute name="href">
                <xsl:value-of select="$baseUrl"/>
                <xsl:text>/citationExport/index/download/output/ris/docId/</xsl:text>
                <xsl:value-of select="@Id" />
             </xsl:attribute>
-            <xsl:element name="img">
-               <xsl:attribute name="src">
-                  <xsl:value-of select="$layoutPath"/>
-                  <xsl:text>/img/ris_w.png</xsl:text>
-               </xsl:attribute>
-               <xsl:attribute name="name">
-                  <xsl:text>ris</xsl:text>
-               </xsl:attribute>
-               <xsl:attribute name="onmouseover">
-                  <xsl:text>document.ris.src='</xsl:text><xsl:value-of select="$layoutPath"/><xsl:text>/img/ris_o.png';</xsl:text>
-               </xsl:attribute>
-               <xsl:attribute name="onmouseout">
-                  <xsl:text>document.ris.src='</xsl:text><xsl:value-of select="$layoutPath"/><xsl:text>/img/ris_w.png';</xsl:text>
-               </xsl:attribute>
-               <xsl:attribute name="title">
-                  <xsl:call-template name="translateString">
+             <xsl:attribute name="title">
+                 <xsl:call-template name="translateString">
                      <xsl:with-param name="string">frontdoor_exportris</xsl:with-param>
-                  </xsl:call-template>
-               </xsl:attribute>
-               <xsl:attribute name="alt">
-                  <xsl:call-template name="translateString">
-                     <xsl:with-param name="string">frontdoor_exportris</xsl:with-param>
-                  </xsl:call-template>
-               </xsl:attribute>
-            </xsl:element>
+                 </xsl:call-template>
+             </xsl:attribute>
+             <xsl:attribute name="class">export ris</xsl:attribute>
+             <xsl:text>RIS</xsl:text>
          </xsl:element>
       </li>
 
       <!--Xml-Export-->
       <xsl:choose>
-          <xsl:when test="php:functionString('Frontdoor_IndexController::getStylesheet') != '' ">
+          <xsl:when test="php:functionString('Application_Xslt::frontdoorStylesheet') != '' ">
               <li>
                   <xsl:element name="a">
                       <!--TODO: Use Zend Url-Helper to build href attribute-->
@@ -371,33 +336,15 @@
                           <xsl:text>/frontdoor/index/index/docId/</xsl:text>
                           <xsl:value-of select="@Id" />
                           <xsl:text>/export/xml/stylesheet/</xsl:text>
-                          <xsl:value-of select="php:functionString('Frontdoor_IndexController::getStylesheet')" />
+                          <xsl:value-of select="php:functionString('Application_Xslt::frontdoorStylesheet')" />
                       </xsl:attribute>
-                      <xsl:element name="img">
-                          <xsl:attribute name="src">
-                              <xsl:value-of select="$layoutPath"/>
-                              <xsl:text>/img/xml_w.png</xsl:text>
-                          </xsl:attribute>
-                          <xsl:attribute name="name">
-                              <xsl:text>xml</xsl:text>
-                          </xsl:attribute>
-                          <xsl:attribute name="onmouseover">
-                              <xsl:text>document.xml.src='</xsl:text><xsl:value-of select="$layoutPath"/><xsl:text>/img/xml_o.png';</xsl:text>
-                          </xsl:attribute>
-                          <xsl:attribute name="onmouseout">
-                              <xsl:text>document.xml.src='</xsl:text><xsl:value-of select="$layoutPath"/><xsl:text>/img/xml_w.png';</xsl:text>
-                          </xsl:attribute>
-                          <xsl:attribute name="title">
-                              <xsl:call-template name="translateString">
-                                  <xsl:with-param name="string">frontdoor_export_xml</xsl:with-param>
-                              </xsl:call-template>
-                          </xsl:attribute>
-                          <xsl:attribute name="alt">
-                              <xsl:call-template name="translateString">
-                                  <xsl:with-param name="string">frontdoor_export_xml</xsl:with-param>
-                              </xsl:call-template>
-                          </xsl:attribute>
-                      </xsl:element>
+                      <xsl:attribute name="title">
+                          <xsl:call-template name="translateString">
+                              <xsl:with-param name="string">frontdoor_export_xml</xsl:with-param>
+                          </xsl:call-template>
+                      </xsl:attribute>
+                      <xsl:attribute name="class">export xml</xsl:attribute>
+                      <xsl:text>XML</xsl:text>
                   </xsl:element>
               </li>
           </xsl:when>

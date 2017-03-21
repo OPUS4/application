@@ -105,20 +105,21 @@ class Application_Translate extends Zend_Translate {
      * @return boolean
      */
     public function loadLanguageDirectory($directory) {
-        $directory = realpath($directory);
-        if (($directory === false) or (!is_dir($directory)) or (!is_readable($directory))) {
+        $path = realpath($directory);
+
+        if (($path === false) or (!is_dir($path)) or (!is_readable($path))) {
             $this->getLogger()->warn(__METHOD__ . " Directory '$directory' not found.");
             return false;
         }
 
-        $handle = opendir($directory);
+        $handle = opendir($path);
         if (!$handle) {
             return false;
         }
 
         while (false !== ($file = readdir($handle))) {
             // Ignore directories.
-            if (!is_file($directory . DIRECTORY_SEPARATOR . $file)) {
+            if (!is_file($path . DIRECTORY_SEPARATOR . $file)) {
                 continue;
             }
 
@@ -128,7 +129,7 @@ class Application_Translate extends Zend_Translate {
             }
             
             $options = array_merge(
-                array('content' => $directory . DIRECTORY_SEPARATOR . $file), 
+                array('content' => $path . DIRECTORY_SEPARATOR . $file),
                 $this->getOptions()
             );
 

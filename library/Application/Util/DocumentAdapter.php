@@ -38,6 +38,7 @@
  * TODO split off base class, URLs are controller specific
  * TODO move code to admin module (is used there as well and belongs there, or?)
  * TODO remove dependency on View (and update unit tests accordingly)
+ * TODO replace with view helpers
  */
 class Application_Util_DocumentAdapter {
 
@@ -129,22 +130,17 @@ class Application_Util_DocumentAdapter {
     /**
      * Returns title in document language.
      */
-    public function getMainTitle() {
-        $titles = $this->document->getTitleMain();
-        $language = $this->document->getLanguage();
-        if (count($titles) > 0) {
-            foreach ($titles as $title) {
-                if ($language === $title->getLanguage()) {
-                    return $title->getValue();
-                }
-            }
+    public function getMainTitle()
+    {
+        $title = $this->document->getMainTitle();
 
-            // if no title in document language ist found use first title
-            return $titles[0]->getValue();
+        if (is_null($title))
+        {
+            return $this->_view->translate('document_no_title') . " (id = '{$this->getDocId()}')";
         }
-        else {
-            return Zend_Registry::get('Zend_Translate')->translate('document_no_title') . '(id = ' . $this->getDocId()
-                . ')';
+        else
+        {
+            return $title->getValue();
         }
     }
 

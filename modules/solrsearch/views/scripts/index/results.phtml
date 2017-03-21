@@ -29,9 +29,8 @@
  * @author      Julian Heise <heise@zib.de>
  * @author      Sascha Szott <szott@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 ?>
 
@@ -94,47 +93,50 @@ if($this->jQueryEnabled()) {
                 <h3><span id="search-result-numofhits"><?= $this->numOfHits . '</span> ' . ($this->numOfHits === 1 ? $this->translate('results_title_single') : $this->translate('results_title')); ?></h3>
             <?php endif ?>
             <?php if (!$this->isSimpleList) include('pagination.phtml'); ?>
+            <?PHP if ($this->stylesheet != '') : ?>
+                <div class="search_export_xml">
+                    <a href="<?= $this->url(array('export' => 'xml', 'stylesheet' => $this->stylesheet)) ?>"
+                       title="<?= $this->translate('search_export_xml') ?>" class="export xml">XML</a>
+                </div>
+            <?PHP endif ?>
         </div>
         <?php if (!$this->isSimpleList) include('searchOptions.phtml'); ?>
         <?php if (!is_null($this->results)) : ?>
             <div id="search_results" class="search_results">
                 <?php $rowCount = 0; ?>
-                <?php foreach($this->results as $result) :?>
-                    <dl class="result_box <?= $rowCount++ % 2 === 0 ? 'even' : 'odd'; ?>">
-                        <?php
+                <?PHP foreach($this->results as $result) : ?>
+                    <?php
+                    $document = $result->getDocument();
 
-                            $document = $result->getDocument();
-
-                            $frontdoorUrl = array(
-                                'module' => 'frontdoor',
-                                'controller' => 'index',
-                                'action' => 'index',
-                                'docId' => $document->getId(),
-                                'start' => $this->start + ($rowCount - 1),
-                                'rows' => $this->rows,
-                                'searchtype' => $this->searchType
-                            );
-                        ?>
+                    // TODO this is ugly (parameter automatisch übernehmen?) - put it somewhere else (view helper)
+                    $frontdoorUrl = $this->url(array(
+                        'module' => 'frontdoor', 'controller' => 'index', 'action' => 'index',
+                        'docId' => $document->getId(),
+                        'start' => $this->start + $rowCount,
+                        'rows' => $this->rows,
+                        'searchtype' => $this->searchType
+                    ));
+                    ?>
+                    <div class="result_box <?= $rowCount++ % 2 === 0 ? 'even' : 'odd'; ?>">
+                        <div class="fulltext-logo <?= ($document->hasFulltext()) ? 'fulltext' : ''?>"></div>
                         <?php if (isset($this->seriesId) && $this->seriesId && !is_null($result->getSeriesNumber( $this->seriesId ))) : ?>
-                            <dt class="results_seriesnumber"><?= htmlspecialchars($result->getSeriesNumber( $this->seriesId )); ?></dt>
+                            <div class="results_seriesnumber"><?= htmlspecialchars($result->getSeriesNumber( $this->seriesId )); ?></div>
                         <?php endif ?>
-                        <dt class="results_title">
-                            <?php if ($this->jQueryEnabled()) : ?>
-                                <?php if (!is_null($result->getAsset( 'abstract' ))) : ?>
-                                    <img src="<?= $this->layoutPath() ?>/img/theme/icon-on-off.png" alt="<?= $this->translate('results_hideabstract_alt') ?>" title="<?= $this->translate('results_hideabstract_title') ?>" onclick="$(function(){$('#abstractText_<?= $document->getId() ?>').toggle();});" />
-                                <?php endif ?>
-                            <?php endif ?>
+
+                        <div class="results_title">
+
                             <?php if (!is_null($result->getAsset('title'))) : ?>
-                                <a href="<?= $this->url($frontdoorUrl) ?>"><?= htmlspecialchars($result->getAsset('title')); ?></a>
+                                <a href="<?= $frontdoorUrl ?>"><?= $this->documentTitle($document) ?></a>
                             <?php else: ?>
-                                <a href="<?= $this->url($frontdoorUrl) ?>"><?= $this->translate('results_missingtitle') ?></a>
+                                <a href="<?= $frontdoorUrl ?>" class="missing_title"><?= $this->translate('results_missingtitle') ?></a>
                             <?php endif ?>
+
                             <?php if ($result->getAsset( 'year' )) : ?>
                                 (<?= htmlspecialchars($result->getAsset( 'year' )); ?>)
                             <?php endif ?>
-                        </dt>
+                        </div>
                         <?php if (!is_null($result->getAsset( 'author' ))) : ?>
-                            <dt class="results_author">
+                            <div class="results_author">
                                 <?php foreach($result->getAsset( 'author' ) as $authorIndex => $author) :
                                     $authorSearch = $this->authorSearch;
                                     $authorSearch['author'] = '"'.$author.'"';
@@ -142,10 +144,20 @@ if($this->jQueryEnabled()) {
                                     <?PHP if ($authorIndex !== 0) : ?> ; <?PHP endif ?>
                                     <a href="<?= $this->url($authorSearch, null, true); ?>"><?= htmlspecialchars($author) ?></a>
                                 <?php endforeach ?>
-                            </dt>
+                            </div>
                         <?php endif ?>
-                        <dd class="abstractText" id="abstractText_<?= $document->getId() ?>"><?= htmlspecialchars($result->getAsset( 'abstract' )) ?></dd>
-                    </dl>
+                        <?php if ($this->jQueryEnabled()) : ?>
+                            <div class="abstract-wrapper">
+                            <?php if (!is_null($result->getAsset( 'abstract' ))) : ?>
+                                <a id="abstractToggle_<?= $document->getId() ?>"
+                                   class="abstract-toggle collapsed"
+                                   title="<?= $this->translate('results_hideabstract_title') ?>"
+                                   onclick="return toggleAbstract(<?= $document->getId() ?>)"></a>
+                            <?php endif ?>
+                                <div class="abstractText" id="abstractText_<?= $document->getId() ?>"><?= $this->documentAbstract($document) ?></div>
+                            </div>
+                        <?php endif ?>
+                    </div>
                 <?php endforeach ?>
             </div>
         <?php endif ?>

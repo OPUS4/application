@@ -1,4 +1,10 @@
 /* 
 to ensure compatibility with later OPUS 4 releases we recommend to insert custom layout changes here
 */
-
+/* CSS for standard logo - modify to change logo
+#logo {
+    height: 89px;
+    width: 185px;
+    background: white url(../img/logo/logo.gif) no-repeat right;
+}
+*/

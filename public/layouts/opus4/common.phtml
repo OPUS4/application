@@ -157,7 +157,7 @@ if (isset($config->javascript->latex->mathjax)) {
             <div id="header">
                 <div class="wrapper">
                     <h1 id="logo">
-                        <a href="<?= $this->url(array('module' => 'home', 'controller' => 'index', 'action' => 'index'), null, true) ?>"><img src="<?= $this->layoutPath() ?>/img/logo/logo.gif" alt="OPUS" title="Home" width="185" height="89" /></a>
+                        <a href="<?= $this->url(array('module' => 'home', 'controller' => 'index', 'action' => 'index'), null, true) ?>" title="Home"></a>
                     </h1>
                     <ul id="primary-nav" class="nav">
                     <?php foreach ($this->container as $page) : ?>
@@ -189,8 +189,8 @@ if (isset($config->javascript->latex->mathjax)) {
 
                     <?php if (!empty($messages)) : ?>
                     <div class="messages">
-                        <?php foreach ($messages as $message) : ?>
-                            <div class="<?= $message['level'] ?>"><?= htmlspecialchars($this->translate($message['message'])) ?></div>
+                        <?php foreach ($messages as $message) : // TODO view helper ?>
+                            <div class="<?= array_key_exists('level', $message) ? $message['level'] : '' ?>"><?= htmlspecialchars($this->translate($message['message'])) ?></div>
                         <?php endforeach ?>
                     </div>
                     <?php endif ?>
@@ -207,10 +207,12 @@ if (isset($config->javascript->latex->mathjax)) {
                         <?= $this->adminform ?>
                     <?PHP endif ?>
 
-                    <?php if (!empty($messages)) : ?>
+                    <?php if (!empty($messages)) : // TODO view helper ?>
                     <div class="messages">
                         <?php foreach ($this->flashMessenger->getMessages() as $message) : ?>
-                            <div class="<?= $message['level'] ?>"><?= htmlspecialchars($this->translate($message['message'])) ?></div>
+                            <?PHP if (array_key_exists('message', $message)) : ?>
+                            <div class="<?= array_key_exists('level', $message) ? $message['level'] : '' ?>"><?= htmlspecialchars($this->translate($message['message'])) ?></div>
+                            <?PHP endif ?>
                         <?php endforeach ?>
                     </div>
                     <?php endif ?>

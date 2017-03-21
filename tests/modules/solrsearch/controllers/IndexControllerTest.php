@@ -30,9 +30,8 @@
  * @author      Julian Heise <heise@zib.de>
  * @author      Sascha Szott <szott@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 class Solrsearch_IndexControllerTest extends ControllerTestCase {
 
@@ -303,9 +302,11 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
 
         $link = '/solrsearch/index/search/searchtype/simple/query/%2A%3A%2A/browsing/true/doctypefq/article';
 
+        $body = $this->getResponse()->getBody();
+
         // check four next/last page links are all the same
-        $this->assertTrue(4 == substr_count($this->getResponse()->getBody(), "$link/start/$startLast/rows/10\">"));
-        $this->assertNotContains("$link/start/19/rows/10\">", $this->getResponse()->getBody());
+        $this->assertTrue(4 == substr_count($body, "$link/start/$startLast/rows/10\""));
+        $this->assertNotContains("$link/start/19/rows/10\">", $body);
         $this->assertEquals($docCount, $this->getNumOfHits());
     }
 
@@ -314,8 +315,8 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
      */
     public function testLastPageUrlEqualsNextPageUrlDocTypeDoctoralThesis() {
         $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/query/*%3A*/browsing/true/doctypefq/doctoralthesis', null, null);
-        $this->assertTrue(4 == substr_count($this->getResponse()->getBody(), '/solrsearch/index/search/searchtype/simple/query/%2A%3A%2A/browsing/true/doctypefq/doctoralthesis/start/10/rows/10">'));
-        $this->assertNotContains('solrsearch/index/search/searchtype/simple/query/%2A%3A%2A/browsing/true/doctypefq/doctoralthesis/start/17/rows/10">', $this->getResponse()->getBody());
+        $this->assertTrue(4 == substr_count($this->getResponse()->getBody(), '/solrsearch/index/search/searchtype/simple/query/%2A%3A%2A/browsing/true/doctypefq/doctoralthesis/start/10/rows/10"'));
+        $this->assertNotContains('solrsearch/index/search/searchtype/simple/query/%2A%3A%2A/browsing/true/doctypefq/doctoralthesis/start/17/rows/10"', $this->getResponse()->getBody());
         $this->assertEquals(18, $this->getNumOfHits());
     }
 
@@ -472,7 +473,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         $this->assertContains('Lorem ipsum dolor sit amet,', $body);
 
         // pagination links
-        $this->assertTrue(substr_count($body, '/solrsearch/index/search/searchtype/series/id/5/start/10/rows/10">') == 4);
+        $this->assertTrue(substr_count($body, '/solrsearch/index/search/searchtype/series/id/5/start/10/rows/10"') == 4);
 
         // sorting links
         $this->assertContains('/solrsearch/index/search/searchtype/series/id/5/start/0/rows/10/sortfield/seriesnumber/sortorder/asc', $body);
@@ -502,7 +503,8 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         $this->assertContains('Lorem ipsum dolor sit amet,', $body);
 
         // pagination links
-        $this->assertTrue(substr_count($this->getResponse()->getBody(), '/solrsearch/index/search/searchtype/series/id/5/start/0/rows/10">') == 4);
+        $count = substr_count($body, '/solrsearch/index/search/searchtype/series/id/5/start/0/rows/10"');
+        $this->assertTrue($count == 4);
     }
 
     public function testSeriesSearchRespectsDefaultDocSortOrder() {

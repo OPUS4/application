@@ -288,6 +288,15 @@ class Application_Configuration {
     }
 
     /**
+     * Returns value for key in current configuration.
+     * @param $key Name of option
+     */
+    public function getValue($key)
+    {
+        return self::getValueFromConfig($this->getConfig(), $key);
+    }
+
+    /**
      * Updates a value in a Zend_Config object.
      *
      * @param Zend_Config $config
@@ -329,6 +338,16 @@ class Application_Configuration {
     public static function clearInstance()
     {
         self::$_instance = null;
+    }
+
+    /**
+     * Returns Zend_Translate instance for application.
+     * @return Zend_Translate
+     * @throws Zend_Exception
+     */
+    public function getTranslate()
+    {
+        return Zend_Registry::get('Zend_Translate');
     }
 
 }

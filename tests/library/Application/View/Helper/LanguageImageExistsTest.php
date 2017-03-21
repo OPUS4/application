@@ -1,4 +1,4 @@
-<?PHP
+<?php
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,15 +24,28 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Ralf Claussnitzer (ralf.claussnitzer@slub-dresden.de)
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @category    Application Unit Test
+ * @package     View_Helper
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-?>
 
-<a href="<?= $this->url(array('action' => 'new')) ?>"><?= $this->translate('admin_iprange_new') ?></a>
+class Application_View_Helper_LanguageImageExistsTest extends ControllerTestCase
+{
 
-<div><?= $this->translate('admin_iprange_none_defined') ?></div>
+    public function testLanguageImageExists()
+    {
+        $helper = new Application_View_Helper_LanguageImageExists();
+
+        $this->assertTrue($helper->languageImageExists('deu'));
+        $this->assertFalse($helper->languageImageExists('de'));
+        $this->assertFalse($helper->languageImageExists('ger'));
+
+        $this->assertTrue($helper->languageImageExists('eng'));
+        $this->assertFalse($helper->languageImageExists('en'));
+
+        $this->assertFalse($helper->languageImageExists('abc'));
+    }
+
+}
