@@ -22,7 +22,6 @@
                     <label>admin_title_documents</label>
                     <description>admin_title_documents_description</description>
                     <group>group-sky</group>
-                    <colclass>cols-one-half</colclass>
                     <module>admin</module>
                     <controller>documents</controller>
                     <action>index</action>
@@ -126,12 +125,22 @@
                     <label>review_menu_label</label>
                     <description>review_menu_label_description</description>
                     <group>group-sky</group>
-                    <colclass>cols-one-half</colclass>
                     <module>review</module>
                     <controller>index</controller>
                     <action>index</action>
                     <resource>reviewing</resource>
                 </review>
+
+                <persons>
+                    <type>mvc</type>
+                    <label>admin_title_persons</label>
+                    <description>admin_title_persons_description</description>
+                    <group>group-sky</group>
+                    <module>admin</module>
+                    <controller>person</controller>
+                    <action>index</action>
+                    <resource>persons</resource>
+                </persons>
 
                 <collections>
                     <type>mvc</type>

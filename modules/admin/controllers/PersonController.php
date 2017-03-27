@@ -55,6 +55,11 @@ class Admin_PersonController extends Application_Controller_Action {
         $this->_dates = $this->_helper->getHelper('Dates');
     }
 
+    public function indexAction()
+    {
+
+    }
+
     /**
      * Fuegt Person zu Dokument hinzu.
      *
