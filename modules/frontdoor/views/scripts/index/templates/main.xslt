@@ -68,14 +68,14 @@
 
     <xsl:template name="Title">
         <xsl:for-each select="TitleMain">
-            <xsl:if test="@Language = $docLang">
+            <xsl:if test="(@Language = $docLang) or (position() = 1 and not($docLang))">
                 <h2 class="titlemain">
                     <xsl:value-of select="@Value" />
                 </h2>
             </xsl:if>
         </xsl:for-each>
         <xsl:for-each select="TitleMain">
-            <xsl:if test="@Language != $docLang">
+            <xsl:if test="(@Language != $docLang) or not($docLang) and position() > 1">
                 <h3 class="titlemain">
                     <xsl:value-of select="@Value" />
                 </h3>
@@ -86,12 +86,12 @@
     <xsl:template name="SortedAbstracts">
         <ul>
         <xsl:for-each select="TitleAbstract">
-            <xsl:if test="@Language = $docLang">
+            <xsl:if test="(@Language = $docLang) or (position() = 1 and not($docLang))">
                 <xsl:call-template name="Abstract" />
             </xsl:if>
         </xsl:for-each>
         <xsl:for-each select="TitleAbstract">
-            <xsl:if test="@Language != $docLang">
+            <xsl:if test="(@Language != $docLang) or not($docLang) and position() > 1">
                 <xsl:call-template name="Abstract" />
             </xsl:if>
         </xsl:for-each>
