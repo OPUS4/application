@@ -182,6 +182,13 @@ class ErrorController extends Application_Controller_Action {
             $body .= "   message: " . $view->message . "\n";
         }
         $body .= "\n";
+        
+        $session = new Zend_Session_Namespace('Publish');
+        if (isset($session->documentId)) {
+            $body .= "User Session (Namespace Publish):\n";
+            $body .= "   Document ID: " . $session->documentId . "\n";
+        }
+        $body .= "\n";
 
         $body .= "Request:\n";
         $serverKeys = array('HTTP_USER_AGENT', 'SCRIPT_URI', 'HTTP_REFERER', 'REMOTE_ADDR');
