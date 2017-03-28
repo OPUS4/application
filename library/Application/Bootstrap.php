@@ -88,6 +88,14 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         );
 
         $frontController->getRouter()->addRoute('document', $documentRoute);
+
+        // Simplify access to sitelinks, since crawlers module does not have a IndexController
+        $crawlersRoute = new Zend_Controller_Router_Route(
+            'crawlers',
+            array('module' => 'crawlers', 'controller' => 'sitelinks', 'action' => 'index')
+        );
+
+        $frontController->getRouter()->addRoute('crawlers', $crawlersRoute);
     }
 
     /**
