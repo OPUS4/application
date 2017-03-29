@@ -937,4 +937,13 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
         $this->assertLessThanOrEqual(20, count($failedTranslations), $output);
     }
 
+    public function testRedirectToLogin()
+    {
+        $this->enableSecurity();
+
+        $this->dispatch('/admin/document/index/id/1');
+
+        $this->assertRedirectTo('/auth/index/rmodule/admin/rcontroller/document/raction/index/id/1');
+    }
+
 }

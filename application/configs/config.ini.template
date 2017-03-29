@@ -36,6 +36,12 @@
 ; The 'theme' setting can be used to select a different theme.
 ; theme = opus4
 
+; Name of OPUS 4 Repository
+name = 'OPUS 4'
+
+; Link for main logo
+logoLink = home
+
 ;DB SETTINGS
 ; Please insert the credential to connect to your mysql db.
 ; See also: http://php.net/manual/de/ref.pdo-mysql.connection.php
@@ -69,6 +75,9 @@ search.result.display.preferUserInterfaceLanguage = 0
 ; mail.opus.port = 25 ; SMTP server port for sending email
 ; mail.opus.address = ; email address of administrator
 ; mail.opus.name = ; Name of administrator
+; mail.opus.replyTo = ; Reply-to address for messages
+; mail.opus.replyToName =
+; mail.opus.returnPath =
 
 ;NOTIFICATION SETTINGS
 ; comma separated list of email addresses that should receive a submission notification email

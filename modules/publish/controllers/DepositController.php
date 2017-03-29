@@ -101,7 +101,8 @@ class Publish_DepositController extends Application_Controller_Action {
         }
 
         try {
-            $depositData = new Publish_Model_Deposit($this->session->documentId, $this->log, $this->depositData);
+            $depositData = new Publish_Model_Deposit();
+            $depositData->storeDocument($this->session->documentId, $this->log, $this->depositData);
         }
         catch (Publish_Model_Exception $e) {
             throw new Application_Exception('publish_error_unexpected');
