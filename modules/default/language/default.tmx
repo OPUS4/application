@@ -707,6 +707,16 @@
              <seg>Treffer</seg>
          </tuv>
      </tu>
+	 
+	 <tu tuid="logo_title">
+         <tuv xml:lang="en">
+             <seg>Put here the logo_title!</seg>
+         </tuv>
+         <tuv xml:lang="de">
+             <seg>Tragen Sie hier den Logo_Titel ein!</seg>
+         </tuv>
+     </tu>
+	 
 
      <tu tuid="opus.environment">
          <tuv xml:lang="en">
