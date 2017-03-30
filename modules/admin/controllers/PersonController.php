@@ -55,7 +55,42 @@ class Admin_PersonController extends Application_Controller_Action {
         $this->_dates = $this->_helper->getHelper('Dates');
     }
 
+    /**
+     * List persons.
+     */
     public function indexAction()
+    {
+        $persons = Opus_Person::getAllPersons();
+
+        $this->view->persons = $persons;
+    }
+
+    /**
+     * Listing documents for a person.
+     */
+    public function documentsAction()
+    {
+        $columns = array('last_name', 'first_name', 'identifier_orcid', 'identifier_gnd', 'identifier_misc');
+
+        $person = array();
+
+        foreach ($columns as $name)
+        {
+            if ($this->hasParam($name))
+            {
+                $person[$name] = $this->getParam($name);
+            }
+        }
+
+        $documents = Opus_Person::getPersonDocuments($person);
+
+        $this->view->documents = $documents;
+    }
+
+    /**
+     * Show edit form for a person.
+     */
+    public function editAction()
     {
 
     }

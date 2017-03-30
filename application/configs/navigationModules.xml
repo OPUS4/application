@@ -140,6 +140,23 @@
                     <controller>person</controller>
                     <action>index</action>
                     <resource>persons</resource>
+                    <pages>
+                        <index>
+                            <type>mvc</type>
+                            <label>admin_person_index</label>
+                            <module>admin</module>
+                            <controller>person</controller>
+                            <action>index</action>
+                        </index>
+
+                        <documents>
+                            <type>mvc</type>
+                            <label>admin_person_documents</label>
+                            <module>admin</module>
+                            <controller>person</controller>
+                            <action>documents</action>
+                        </documents>
+                    </pages>
                 </persons>
 
                 <collections>

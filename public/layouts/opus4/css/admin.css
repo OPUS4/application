@@ -1676,3 +1676,20 @@ table + .paginationControl{
     -ms-word-break: break-all;
     display: block;
 }
+
+.adminContainer .persons-table a.role {
+   display: block;
+   width: 7em;
+   background-color: lightgray;
+   margin: 2px;
+   padding: 2px;
+   font-size: 0.9em;
+}
+
+.adminContainer .persons-table a.role span {
+   float: right;
+}
+
+.adminContainer .persons-table a.role.author {
+   background-color: #afddb7;
+}

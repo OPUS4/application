@@ -6,7 +6,25 @@
  </header>
  
   <body>
-  
+
+    <tu tuid="admin_title_persons">
+      <tuv xml:lang="en">
+        <seg>Management of Persons</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Personenverwaltung</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_title_persons_description">
+      <tuv xml:lang="en">
+        <seg>Management of authors and other persons.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Verwaltung von Autoren und anderen Personen.</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="Person_Controller">
       <tuv xml:lang="en">
         <seg>Admin: Administration of persons</seg>
