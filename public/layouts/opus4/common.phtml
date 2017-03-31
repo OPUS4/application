@@ -87,12 +87,12 @@ else if (in_array($this->moduleName, array('publish'))) {
 }
 
 if ($this->jQueryEnabled()) {
+    foreach (array_reverse($jsFiles) as $filename) {
+         $this->headScript()->prependFile($this->layoutPath() . '/js/' . $filename);
+    }
+
     $this->headScript()->prependFile($this->baseUrl() . '/' . $config->javascript->jqueryui->path);
     $this->headScript()->prependFile($this->baseUrl() . '/' . $config->javascript->jquery->path);
-
-    foreach ($jsFiles as $filename) {
-         $this->headScript()->appendFile($this->layoutPath() . '/js/' . $filename);
-    }
 }
 
 $appConfig = new Application_Configuration();
