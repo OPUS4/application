@@ -34,6 +34,8 @@
 
 <?= $this->form ?>
 
+<div><?= $this->start ?> - <?= $this->end ?> of <?= $this->totalCount ?></div>
+
 <table class="persons-table">
     <tr>
         <th><?= $this->translate('LastName') ?></th>
@@ -41,16 +43,16 @@
         <th>Identifier</th>
         <th>Documents</th>
         <th>Roles</th>
-        <th>Actions</th>
+        <th></th>
     </tr>
 <?PHP foreach ($this->persons as $person) : ?>
     <tr>
         <td><?= $person['last_name'] ?></td>
         <td><?= $person['first_name'] ?></td>
-        <td><? /**
-            <?= $this->translate('IdentifierOrcid') ?>: <?= $person['identifier_orcid'] ?><br />
-            <?= $this->translate('IdentifierGnd') ?>: <?= $person['identifier_gnd'] ?><br />
-            <?= $this->translate('IdentifierMisc') ?>: <?= $person['identifier_misc'] ?> */?>
+        <td>
+            <div><?= $person['identifier_orcid'] ?><div>
+            <div><?= $person['identifier_gnd'] ?></div>
+            <div><?= $person['identifier_misc'] ?></div>
         </td>
         <td><a href="<?= $this->url(array_merge(array('module' => 'admin', 'controller' => 'person', 'action' => 'documents'), $person)) ?>"><?= count(Opus_Person::getPersonDocuments($person)) ?></a></td>
         <td>

@@ -63,9 +63,14 @@ class Admin_PersonController extends Application_Controller_Action {
     public function indexAction()
     {
         $role = $this->getParam('role', null);
-        $start = $this->getParam('start', 0);
+        $start = $this->getParam('start', 1);
         $limit = $this->getParam('limit', 50);
         $filter = $this->getParam('filter', null);
+
+        if ($start < 1)
+        {
+            $start = 1;
+        }
 
         $form = new Admin_Form_PersonListControl();
         $form->setMethod(Zend_Form::METHOD_GET);
@@ -76,10 +81,23 @@ class Admin_PersonController extends Application_Controller_Action {
         $form->populate($params);
 
         // TODO move into replaceable model class
-        $persons = Opus_Person::getAllPersons($role, $start, $limit, $filter);
+        $persons = Opus_Person::getAllPersons($role, $start - 1, $limit, $filter);
+
+        $personsTotal = Opus_Person::getAllPersonsCount($role, $filter);
 
         $this->view->headScript()->appendFile($this->view->layoutPath() . '/js/admin.js');
 
+        $end = $start + $limit - 1;
+
+        if ($end > $personsTotal)
+        {
+            $end = $personsTotal;
+        }
+
+
+        $this->view->start = $start;
+        $this->view->end = $end;
+        $this->view->totalCount = $personsTotal;
         $this->view->form = $form;
         $this->view->persons = $persons;
     }
