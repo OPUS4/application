@@ -49,8 +49,10 @@ class Admin_PersonController extends Application_Controller_Action {
     /**
      * Initializes controller.
      */
-    public function init() {
+    public function init()
+    {
         parent::init();
+
         $this->_documentsHelper = $this->_helper->getHelper('Documents');
         $this->_dates = $this->_helper->getHelper('Dates');
     }
@@ -60,8 +62,25 @@ class Admin_PersonController extends Application_Controller_Action {
      */
     public function indexAction()
     {
-        $persons = Opus_Person::getAllPersons();
+        $role = $this->getParam('role', null);
+        $start = $this->getParam('start', 0);
+        $limit = $this->getParam('limit', 50);
+        $filter = $this->getParam('filter', null);
 
+        $form = new Admin_Form_PersonListControl();
+        $form->setMethod(Zend_Form::METHOD_GET);
+        $form->setName('persons');
+        $form->setIsArray(false);
+
+        $params = $this->getRequest()->getParams();
+        $form->populate($params);
+
+        // TODO move into replaceable model class
+        $persons = Opus_Person::getAllPersons($role, $start, $limit, $filter);
+
+        $this->view->headScript()->appendFile($this->view->layoutPath() . '/js/admin.js');
+
+        $this->view->form = $form;
         $this->view->persons = $persons;
     }
 
@@ -102,7 +121,8 @@ class Admin_PersonController extends Application_Controller_Action {
      * - Dokument-ID (document)
      * - Rolle (role)
      */
-    public function assignAction() {
+    public function assignAction()
+    {
         $docId = $this->getRequest()->getParam('document');
 
         $document = $this->_documentsHelper->getDocumentForId($docId);
@@ -290,7 +310,8 @@ class Admin_PersonController extends Application_Controller_Action {
      * Führt Redirect zum Metadatenformular des Dokuments aus.
      * @param $docId Dokument-ID
      */
-    public function returnToMetadataForm($docId) {
+    public function returnToMetadataForm($docId)
+    {
         return $this->_redirectToAndExit(
             'edit', null, 'document', 'admin', array('id' => $docId,
             'continue' => 'true')

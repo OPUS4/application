@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -30,35 +30,36 @@
  * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-?>
 
-<?= $this->form ?>
+class Admin_Form_PersonListControl extends Application_Form_Abstract
+{
 
-<table class="persons-table">
-    <tr>
-        <th><?= $this->translate('LastName') ?></th>
-        <th><?= $this->translate('FirstName') ?></th>
-        <th>Identifier</th>
-        <th>Documents</th>
-        <th>Roles</th>
-        <th>Actions</th>
-    </tr>
-<?PHP foreach ($this->persons as $person) : ?>
-    <tr>
-        <td><?= $person['last_name'] ?></td>
-        <td><?= $person['first_name'] ?></td>
-        <td><? /**
-            <?= $this->translate('IdentifierOrcid') ?>: <?= $person['identifier_orcid'] ?><br />
-            <?= $this->translate('IdentifierGnd') ?>: <?= $person['identifier_gnd'] ?><br />
-            <?= $this->translate('IdentifierMisc') ?>: <?= $person['identifier_misc'] ?> */?>
-        </td>
-        <td><a href="<?= $this->url(array_merge(array('module' => 'admin', 'controller' => 'person', 'action' => 'documents'), $person)) ?>"><?= count(Opus_Person::getPersonDocuments($person)) ?></a></td>
-        <td>
-            <?PHP foreach (Opus_Person::getPersonRoles($person) as $role) : ?>
-            <a href="" class="role <?= $role['role'] ?>"><?= $role['role'] ?> <span class="count">(<?= $role['documents'] ?>)</span></a>
-            <?PHP endforeach ?>
-        </td>
-        <td>Edit</td>
-    </tr>
-<?PHP endforeach ?>
-</table>
+    const ELEMENT_ROLE = 'role';
+
+    const ELEMENT_FILTER = 'filter';
+
+    const ELEMENT_START = 'start';
+
+    const ELEMENT_LIMIT = 'limit';
+
+    public function init()
+    {
+        parent::init();
+
+        $this->addElement('hidden', self::ELEMENT_START);
+        $this->addElement('hidden', self::ELEMENT_LIMIT);
+        $this->addElement('PersonRole', self::ELEMENT_ROLE);
+        $this->addElement('Text', self::ELEMENT_FILTER);
+
+        $this->loadDefaultDecorators();
+        $this->addDecorator('Form');
+    }
+
+    public function populate(array $values)
+    {
+        $this->getElement(self::ELEMENT_START)->setValue(0);
+        $this->getElement(self::ELEMENT_LIMIT)->setValue(50);
+        parent::populate($values);
+    }
+
+}
