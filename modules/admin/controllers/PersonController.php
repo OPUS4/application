@@ -95,6 +95,7 @@ class Admin_PersonController extends Application_Controller_Action {
         }
 
 
+        $this->view->filter = $filter;
         $this->view->start = $start;
         $this->view->end = $end;
         $this->view->totalCount = $personsTotal;
