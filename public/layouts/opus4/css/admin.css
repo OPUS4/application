@@ -1199,23 +1199,28 @@ ul.links input:hover{
 .itemCountLinks li{
    padding: 0 0.3em;
 }
-.adminContainer .paginationControl{
-   clear: both;
-   background-color: #b7cde7;
-   color: black;
-   float: left;
-   width: 100%;
-   text-align: center;
-   margin: 0.4em 0;
+.adminContainer ul.paginationControl {
+    color: black;
+    text-align: center;
+    margin: 2px auto;
+    padding: 0;
+    display: inline-block;
+    height: 24px;
 }
-table + .paginationControl{
-   margin-bottom: 2em;
+
+.adminContainer .paginationControl-wrapper {
+    background-color: #b7cde7;
+    width: 100%;
+    height: 28px;
+    margin: 2px 0;
+    clear: both;
+    text-align: center;
 }
-.adminContainer .paginationControl ul{
-   display: inline-block;
+
+.adminContainer ul.paginationControl {
    vertical-align: bottom;
 }
-.adminContainer .paginationControl li{
+.adminContainer ul.paginationControl li {
    padding: 0.4em 0.7em;
    border-left: 1px solid #dae5f3;
    font-size: 0.9em;
@@ -1224,7 +1229,7 @@ table + .paginationControl{
    background-color: #2d6093;
    color: white;
 }
-.adminContainer .paginationControl li:first-child{
+.adminContainer .paginationControl li:first-child {
    border: none;
 }
 /* @end */
@@ -1677,6 +1682,11 @@ table + .paginationControl{
     display: block;
 }
 
+.adminContainer .persons-table td.firstname,
+.adminContainer .persons-table td.lastname {
+    font-size: 1.1em;
+}
+
 .adminContainer .persons-table a.role {
    display: block;
    width: 7em;
@@ -1691,5 +1701,10 @@ table + .paginationControl{
 }
 
 .adminContainer .persons-table a.role.author {
-   background-color: #afddb7;
+    background-color: #afddb7;
+}
+
+.adminContainer .persons-table b {
+    font-weight: normal;
+    background-color: #efe692;
 }

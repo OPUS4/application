@@ -243,6 +243,9 @@ table.result-data {
 }
 
 /* Pagination controls for all pages */
+ul.paginationControl {
+	list-style: none;
+}
 
 ul.paginationControl a.pagination-first,
 ul.paginationControl .pagination-first,
@@ -932,7 +935,7 @@ body > #top-header{
 }
 .opus .breadcrumb_results h3,
 .opus .breadcrumb_results .info_small,
-.opus .breadcrumb_results .paginationControl li {
+.paginationControl li {
     float: left;
 	margin: 0;
 	font-weight: normal;
