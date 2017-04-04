@@ -67,13 +67,38 @@ class Admin_PersonController extends Application_Controller_Action {
         $limit = $this->getParam('limit', 50);
         $filter = $this->getParam('filter', null);
 
+
+        if ($this->getRequest()->isPost())
+        {
+            $filterParams = array('role' => $role, 'start' => $start, 'limit' => $limit, 'filter' => $filter);
+
+            $this->_helper->getHelper('Redirector')->gotoSimple(
+                'index', 'person', 'admin', $filterParams
+            );
+            return;
+        }
+
+
         if ($start < 1)
         {
             $start = 1;
         }
 
+        if ($this->hasParam('page')) {
+            $page = $this->getParam('page', 1);
+            $start = ($page - 1) * $limit + 1;
+        }
+        else {
+            $page = 1;
+        }
+
+        if ($role === 'all') {
+            $role = null;
+        }
+
         $form = new Admin_Form_PersonListControl();
-        $form->setMethod(Zend_Form::METHOD_GET);
+        $form->setMethod(Zend_Form::METHOD_POST);
+        $form->setAction($this->view->url(array('module' => 'admin', 'controller' => 'person'), null, true) . '/index');
         $form->setName('persons');
         $form->setIsArray(false);
 
@@ -81,9 +106,20 @@ class Admin_PersonController extends Application_Controller_Action {
         $form->populate($params);
 
         // TODO move into replaceable model class
-        $persons = Opus_Person::getAllPersons($role, $start - 1, $limit, $filter);
-
         $personsTotal = Opus_Person::getAllPersonsCount($role, $filter);
+
+        if ($start > $personsTotal)
+        {
+            if ($personsTotal > 0)
+            {
+                $start = intdiv($personsTotal, $limit) * $limit;
+            }
+            else {
+                $start = 1;
+            }
+        }
+
+        $persons = Opus_Person::getAllPersons($role, $start - 1, $limit, $filter);
 
         $this->view->headScript()->appendFile($this->view->layoutPath() . '/js/admin.js');
 
@@ -94,8 +130,14 @@ class Admin_PersonController extends Application_Controller_Action {
             $end = $personsTotal;
         }
 
+        $paginator = Zend_Paginator::factory(( int )$personsTotal);
+        $paginator->setCurrentPageNumber($page);
+        $paginator->setItemCountPerPage($limit);
 
+        $this->view->paginator = $paginator;
+        $this->view->role = $role;
         $this->view->filter = $filter;
+        $this->view->limit = $limit;
         $this->view->start = $start;
         $this->view->end = $end;
         $this->view->totalCount = $personsTotal;

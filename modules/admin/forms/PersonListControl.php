@@ -48,7 +48,13 @@ class Admin_Form_PersonListControl extends Application_Form_Abstract
 
         $this->addElement('hidden', self::ELEMENT_START);
         $this->addElement('hidden', self::ELEMENT_LIMIT);
-        $this->addElement('PersonRole', self::ELEMENT_ROLE);
+
+        $role = $this->createElement('PersonRole', self::ELEMENT_ROLE);
+        $options = $role->getMultiOptions();
+        $options = array('all' => 'All') + $options;
+        $role->setMultiOptions($options);
+        $this->addElement($role);
+
         $this->addElement('Text', self::ELEMENT_FILTER);
 
         $this->loadDefaultDecorators();
