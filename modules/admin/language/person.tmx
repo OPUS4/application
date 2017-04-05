@@ -9,10 +9,10 @@
 
     <tu tuid="admin_title_persons">
       <tuv xml:lang="en">
-        <seg>Management of Persons</seg>
+        <seg>Persons</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Personenverwaltung</seg>
+        <seg>Personen</seg>
       </tuv>
     </tu>
 
