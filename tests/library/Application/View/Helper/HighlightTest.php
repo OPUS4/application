@@ -35,7 +35,8 @@ class Application_View_Helper_HighlightTest extends ControllerTestCase
 
     private $_helper;
 
-    public function setUp() {
+    public function setUp()
+    {
         parent::setUp();
 
         $this->_helper = new Application_View_Helper_Highlight();
@@ -61,8 +62,14 @@ class Application_View_Helper_HighlightTest extends ControllerTestCase
         $this->assertEquals('<i>Muster</i>mann', $this->_helper->highlight('Mustermann', 'muster', '<i>', '</i>'));
     }
 
-    public function testHighlightStringWithDelimiter() {
+    public function testHighlightStringWithDelimiter()
+    {
         $this->assertEquals('<b>Mus/ter</b>mann', $this->_helper->highlight('Mus/termann', 'mus/ter'));
+    }
+
+    public function testHighlightWithEmptyString()
+    {
+        $this->assertEquals('Ján', $this->_helper->highlight('Ján', null));
     }
 
 }

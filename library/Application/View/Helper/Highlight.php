@@ -40,6 +40,11 @@ class Application_View_Helper_Highlight extends Zend_View_Helper_Abstract
 
     public function highlight($subject, $needle, $prefix = null, $suffix = null)
     {
+        if (is_null($needle) || $needle === '')
+        {
+            return $subject;
+        }
+
         if (is_null($prefix))
         {
             $prefix = '<b>';
