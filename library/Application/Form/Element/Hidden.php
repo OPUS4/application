@@ -45,7 +45,8 @@ class Application_Form_Element_Hidden extends Zend_Form_Element_Hidden {
         if (!$this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
             $this->setDecorators(
                 array(
-                'ViewHelper'
+                    'ViewHelper',
+                    array('HtmlTag', array('tag' => 'div'))
                 )
             );
         }
