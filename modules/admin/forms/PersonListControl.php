@@ -38,16 +38,9 @@ class Admin_Form_PersonListControl extends Application_Form_Abstract
 
     const ELEMENT_FILTER = 'filter';
 
-    const ELEMENT_START = 'start';
-
-    const ELEMENT_LIMIT = 'limit';
-
     public function init()
     {
         parent::init();
-
-        $this->addElement('hidden', self::ELEMENT_START);
-        $this->addElement('hidden', self::ELEMENT_LIMIT);
 
         $role = $this->createElement('PersonRole', self::ELEMENT_ROLE);
         $options = $role->getMultiOptions();
@@ -57,15 +50,8 @@ class Admin_Form_PersonListControl extends Application_Form_Abstract
 
         $this->addElement('Text', self::ELEMENT_FILTER);
 
-        $this->loadDefaultDecorators();
+        $this->addDecorator('FormElements');
         $this->addDecorator('Form');
-    }
-
-    public function populate(array $values)
-    {
-        $this->getElement(self::ELEMENT_START)->setValue(0);
-        $this->getElement(self::ELEMENT_LIMIT)->setValue(50);
-        parent::populate($values);
     }
 
 }
