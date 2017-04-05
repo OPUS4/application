@@ -52,15 +52,15 @@
     </tr>
 <?PHP foreach ($this->persons as $person) : ?>
     <tr>
-        <td class="lastname"><?= str_ireplace($this->filter, "<b>{$this->filter}</b>", $person['last_name']) ?></td>
-        <td class="firstname"><?= str_ireplace($this->filter, "<b>{$this->filter}</b>", $person['first_name']) ?></td>
+        <td class="lastname"><?= $this->highlight(htmlspecialchars($person['last_name']), $this->filter) ?></td>
+        <td class="firstname"><?= $this->highlight(htmlspecialchars($person['first_name']), $this->filter) ?></td>
         <td>
-            <div><?= $person['identifier_orcid'] ?><div>
+            <div><?= $person['identifier_orcid'] ?></div>
             <div><?= $person['identifier_gnd'] ?></div>
             <div><?= $person['identifier_misc'] ?></div>
         </td>
-        <td><a href="<?= $this->url(array_merge(array('module' => 'admin', 'controller' => 'person', 'action' => 'documents'), $person)) ?>"><?= count(Opus_Person::getPersonDocuments($person)) ?></a></td>
-        <td>
+        <td class="documents"><a href="<?= $this->url(array_merge(array('module' => 'admin', 'controller' => 'person', 'action' => 'documents'), $person)) ?>"><?= count(Opus_Person::getPersonDocuments($person)) ?></a></td>
+        <td class="roles">
             <?PHP foreach (Opus_Person::getPersonRoles($person) as $role) : ?>
             <a href="" class="role <?= $role['role'] ?>"><?= $role['role'] ?> <span class="count">(<?= $role['documents'] ?>)</span></a>
             <?PHP endforeach ?>
