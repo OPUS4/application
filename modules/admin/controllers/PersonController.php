@@ -59,29 +59,69 @@ class Admin_PersonController extends Application_Controller_Action {
 
     /**
      * List persons.
+     *
+     * If a parameter has an invalid value, the parameter is removed and a redirect is used to clean up the URL.
+     *
+     * If a parameter is missing a default value is used.
      */
     public function indexAction()
     {
-        $role = $this->getParam('role', null);
-        $start = $this->getParam('start', 1);
-        $limit = $this->getParam('limit', 50);
-        $filter = $this->getParam('filter', null);
+        $redirect = false;
 
+        // check limit parameter
+        $limit = $this->getParam('limit');
 
-        if ($this->getRequest()->isPost())
+        if ((!ctype_digit($limit) || $limit <= 0) && !is_null($limit))
         {
-            $filterParams = array('role' => $role, 'start' => $start, 'limit' => $limit, 'filter' => $filter);
+            $limit = null;
+            $redirect = true;
+        }
+
+        // check start parameter
+        $start = $this->getParam('start');
+
+        if ((!ctype_digit($start) || $start <= 1) && !is_null($start))
+        {
+            $start = null;
+            $redirect = true;
+        }
+
+        // check role parameter
+        $role = $this->getParam('role');
+        $allowedRoles = array_merge(array('all'), Admin_Form_Document_Persons::getRoles());
+
+        if ((!ctype_alpha($role) || !in_array(strtolower($role), $allowedRoles)) && !is_null($role))
+        {
+            $role = null;
+            $redirect = true;
+        }
+
+        $filter = $this->getParam('filter');
+
+        // redirect to get Zend style URL for bookmarking or fixing bad parameters
+        if ($this->getRequest()->isPost() || $redirect)
+        {
+            $redirectParams = array('role' => $role, 'start' => $start, 'limit' => $limit, 'filter' => $filter);
+
+            $redirectParams = array_filter($redirectParams, function($value) {
+                return !is_null($value) && strlen(trim($value)) > 0;
+            });
 
             $this->_helper->getHelper('Redirector')->gotoSimple(
-                'index', 'person', 'admin', $filterParams
+                'index', 'person', 'admin', $redirectParams
             );
+
             return;
         }
 
-
-        if ($start < 1)
+        if (is_null($start) || $start < 1)
         {
             $start = 1;
+        }
+
+        if (is_null($limit) || $limit < 1)
+        {
+            $limit = 50;
         }
 
         if ($this->hasParam('page')) {
@@ -96,9 +136,16 @@ class Admin_PersonController extends Application_Controller_Action {
             $role = null;
         }
 
+        // TODO only include 'limit' and 'start' if provided as URL parameters (not defaults)
         $form = new Admin_Form_PersonListControl();
         $form->setMethod(Zend_Form::METHOD_POST);
-        $form->setAction($this->view->url(array('module' => 'admin', 'controller' => 'person'), null, true) . '/index');
+        $form->setAction($this->view->url(
+            array(
+                'module' => 'admin', 'controller' => 'person', 'action' => 'index',
+                'limit' => $limit,
+                'start' => $start
+            ), null, true
+        ));
         $form->setName('persons');
         $form->setIsArray(false);
 
