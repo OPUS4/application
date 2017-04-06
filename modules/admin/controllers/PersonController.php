@@ -90,6 +90,7 @@ class Admin_PersonController extends Application_Controller_Action {
         $role = $this->getParam('role');
         $allowedRoles = array_merge(array('all'), Admin_Form_Document_Persons::getRoles());
 
+        // TODO redirect for 'all' (since it is default)
         if ((!ctype_alpha($role) || !in_array(strtolower($role), $allowedRoles)) && !is_null($role))
         {
             $role = null;
@@ -114,14 +115,18 @@ class Admin_PersonController extends Application_Controller_Action {
             return;
         }
 
-        if (is_null($start) || $start < 1)
+        if (is_null($start))
         {
             $start = 1;
         }
 
-        if (is_null($limit) || $limit < 1)
+        if (is_null($limit))
         {
             $limit = 50;
+        }
+
+        if ($role === 'all') {
+            $role = null;
         }
 
         if ($this->hasParam('page')) {
@@ -129,16 +134,14 @@ class Admin_PersonController extends Application_Controller_Action {
             $start = ($page - 1) * $limit + 1;
         }
         else {
-            $page = 1;
+            $page = 1; // TODO higher if start has been specified
         }
 
-        if ($role === 'all') {
-            $role = null;
-        }
 
         // TODO only include 'limit' and 'start' if provided as URL parameters (not defaults)
         $form = new Admin_Form_PersonListControl();
         $form->setMethod(Zend_Form::METHOD_POST);
+        // TODO only include limit und start if not defaults
         $form->setAction($this->view->url(
             array(
                 'module' => 'admin', 'controller' => 'person', 'action' => 'index',
@@ -157,7 +160,7 @@ class Admin_PersonController extends Application_Controller_Action {
 
         if ($start > $personsTotal)
         {
-            if ($personsTotal > 0)
+            if ($personsTotal > 0 && ($personsTotal > $limit))
             {
                 $start = intdiv($personsTotal, $limit) * $limit;
             }
@@ -165,6 +168,8 @@ class Admin_PersonController extends Application_Controller_Action {
                 $start = 1;
             }
         }
+
+        $page = intdiv($start, $limit) + 1;
 
         $persons = Opus_Person::getAllPersons($role, $start - 1, $limit, $filter);
 

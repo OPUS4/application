@@ -418,4 +418,27 @@ class PersonControllerTest extends ControllerTestCase {
         $this->assertQueryContentContains('div.results_pagination/div', '21 - 40');
     }
 
+    public function testIndexStartLargerThanTotal()
+    {
+        $this->dispatch('/admin/person/index/start/1000');
+
+        $this->assertResponseCode(200);
+
+        // last page should be displayed
+        $this->assertQuery('div.pagination-next');
+        $this->assertQuery('div.pagination-last');
+    }
+
+    public function testIndexStartLargerThanTotalWithTotalSmallerThanLimit() {
+        $this->dispatch('/admin/person/index/filter/wally/start/1000/limit/1');
+
+        $this->assertResponseCode(200);
+        $this->assertNotQuery('ul.paginationControl');
+
+        $this->dispatch('/admin/person/index/filter/en/start/1000');
+
+        $this->assertResponseCode(200);
+        $this->assertNotQuery('ul.paginationControl');
+    }
+
 }
