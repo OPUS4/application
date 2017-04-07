@@ -81,7 +81,7 @@ class Application_Controller_Action_Helper_Documents extends Zend_Controller_Act
      *
      * TODO following could be handled inside a application model
      */
-    public function getSortedDocumentIds($sortOrder, $sortReverse = false, $state = null) {
+    public function getSortedDocumentIds($sortOrder = null, $sortReverse = true, $state = null) {
         $finder = new Opus_DocumentFinder();
 
         if (!is_null($state))
