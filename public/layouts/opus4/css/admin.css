@@ -1777,6 +1777,7 @@ ul.links input:hover{
     padding-left: 5px;
     padding-right: 5px;
     color: white;
+    font-weight: bold;
 }
 
 .adminContainer .facet ul {
