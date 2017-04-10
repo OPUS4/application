@@ -412,6 +412,8 @@ class PersonControllerTest extends ControllerTestCase {
         $this->assertResponseCode(200);
         $this->assertQueryContentContains('div.results_pagination/div', '1 - 20');
 
+        $this->resetRequest();
+
         $this->dispatch('/admin/person/index/page/2/limit/20');
 
         $this->assertResponseCode(200);
@@ -435,10 +437,49 @@ class PersonControllerTest extends ControllerTestCase {
         $this->assertResponseCode(200);
         $this->assertNotQuery('ul.paginationControl');
 
+        $this->resetRequest();
+
         $this->dispatch('/admin/person/index/filter/en/start/1000');
 
         $this->assertResponseCode(200);
         $this->assertNotQuery('ul.paginationControl');
+    }
+
+    public function testAdminMenuEntry()
+    {
+        $this->useEnglish();
+
+        $this->dispatch('/admin');
+
+        $this->assertResponseCode(200);
+        $this->assertQueryContentContains('li.group-sky/a/strong', 'Persons');
+        $this->assertXpath('//li/a[@href = "/admin/person"]');
+    }
+
+    public function testAccessControl()
+    {
+        $this->useEnglish();
+        $this->enableSecurity();
+        $this->loginUser('admin', 'adminadmin');
+
+        $this->dispatch('/admin');
+
+        $this->assertResponseCode(200);
+        $this->assertQueryContentContains('li.group-sky/a/strong', 'Persons');
+        $this->assertXpath('//li/a[@href = "/admin/person"]');
+
+        $this->loginUser('security2', 'security2pwd');
+
+        $this->dispatch('/admin');
+
+        $this->assertResponseCode(200);
+        $this->assertQueryContentContains('li.inactive/strong', 'Persons');
+    }
+
+    public function testAccessControlForPersonsResource()
+    {
+        // TODO create helper class for creating test accounts for general use in test (reduce fixed testdata)
+        $this->markTestIncomplete('create test account on the fly with access to persons resource');
     }
 
 }
