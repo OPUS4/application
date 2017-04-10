@@ -43,6 +43,7 @@
 
    <xsl:template match="File[@VisibleInFrontdoor='1']">
       <li>
+          <!-- TODO use single image file with flag sprites? -->
           <xsl:variable name="flagIcon">
               <xsl:choose>
                   <xsl:when test="php:functionString('Application_Xslt::languageImageExists', @Language)">
