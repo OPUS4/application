@@ -241,14 +241,12 @@ class PersonControllerTest extends ControllerTestCase {
             'limit zero' => ['limit/0', '/admin/person'],
             'limit not integer' => ['limit/infinity', '/admin/person'],
             // 'limit empty' => ['limit/', '/admin/person'],
-            'keep good parameters' => ['start/10/limit/-5', '/admin/person/index/start/10'],
-            'start invalid' => ['start/here', '/admin/person'],
-            // 'start empty' => ['start/', '/admin/person'],
-            'start eq 1' => ['start/1', '/admin/person'],
-            'start eq 0' => ['start/0', '/admin/person'],
-            'start eq -1' => ['start/-1', '/admin/person'],
+            'keep good parameters' => ['page/2/limit/-5', '/admin/person/index/page/2'],
             // 'role empty' => ['role/', '/admin/person'],
-            'role invalid' => ['role/unknown', '/admin/person']
+            'role invalid' => ['role/unknown', '/admin/person'],
+            'page invalid' => ['page/here', '/admin/person'],
+            'page zero' => ['page/0', '/admin/person'],
+            'page negative' => ['page/-1', '/admin/person']
         );
     }
 
@@ -337,13 +335,13 @@ class PersonControllerTest extends ControllerTestCase {
     public function testIndexRedirectPost()
     {
         $this->getRequest()->setPost(array(
-            'filter' => 'en', 'role' => 'author', 'limit' => '10', 'start' => '10'
+            'filter' => 'en', 'role' => 'author', 'limit' => '10',
         ))->setMethod('POST');
 
         $this->dispatch('/admin/person');
 
         $this->assertResponseCode(302);
-        $this->assertRedirectTo('/admin/person/index/role/author/start/10/limit/10/filter/en');
+        $this->assertRedirectTo('/admin/person/index/role/author/limit/10/filter/en');
     }
 
     public function testIndexPaginationFirstPage()
@@ -420,9 +418,9 @@ class PersonControllerTest extends ControllerTestCase {
         $this->assertQueryContentContains('div.results_pagination/div', '21 - 40');
     }
 
-    public function testIndexStartLargerThanTotal()
+    public function testIndexShowLastPageForPageParameterTooLarge()
     {
-        $this->dispatch('/admin/person/index/start/1000');
+        $this->dispatch('/admin/person/index/page/1000');
 
         $this->assertResponseCode(200);
 
@@ -431,15 +429,15 @@ class PersonControllerTest extends ControllerTestCase {
         $this->assertQuery('div.pagination-last');
     }
 
-    public function testIndexStartLargerThanTotalWithTotalSmallerThanLimit() {
-        $this->dispatch('/admin/person/index/filter/wally/start/1000/limit/1');
+    public function testIndexPageDoNotShowPaginationIfResultIsSmallerThanLimit() {
+        $this->dispatch('/admin/person/index/filter/wally/page/1000/limit/1');
 
         $this->assertResponseCode(200);
         $this->assertNotQuery('ul.paginationControl');
 
         $this->resetRequest();
 
-        $this->dispatch('/admin/person/index/filter/en/start/1000');
+        $this->dispatch('/admin/person/index/filter/en/page/100');
 
         $this->assertResponseCode(200);
         $this->assertNotQuery('ul.paginationControl');

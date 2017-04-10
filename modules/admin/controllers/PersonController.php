@@ -77,15 +77,6 @@ class Admin_PersonController extends Application_Controller_Action {
             $redirect = true;
         }
 
-        // check start parameter
-        $start = $this->getParam('start');
-
-        if ((!ctype_digit($start) || $start <= 1) && !is_null($start))
-        {
-            $start = null;
-            $redirect = true;
-        }
-
         // check role parameter
         $role = $this->getParam('role');
         $allowedRoles = array_merge(array('all'), Admin_Form_Document_Persons::getRoles());
@@ -97,12 +88,22 @@ class Admin_PersonController extends Application_Controller_Action {
             $redirect = true;
         }
 
+        // check page parameter
+        $page = $this->getParam('page');
+
+        if ((!ctype_digit($page) || $page <= 0) && !is_null($page))
+        {
+            $page = null;
+            $redirect = true;
+        }
+
+        // get filter parameter
         $filter = $this->getParam('filter');
 
         // redirect to get Zend style URL for bookmarking or fixing bad parameters
         if ($this->getRequest()->isPost() || $redirect)
         {
-            $redirectParams = array('role' => $role, 'start' => $start, 'limit' => $limit, 'filter' => $filter);
+            $redirectParams = array('role' => $role, 'limit' => $limit, 'filter' => $filter, 'page' => $page);
 
             $redirectParams = array_filter($redirectParams, function($value) {
                 return !is_null($value) && strlen(trim($value)) > 0;
@@ -115,11 +116,6 @@ class Admin_PersonController extends Application_Controller_Action {
             return;
         }
 
-        if (is_null($start))
-        {
-            $start = 1;
-        }
-
         if (is_null($limit))
         {
             $limit = 50;
@@ -129,24 +125,23 @@ class Admin_PersonController extends Application_Controller_Action {
             $role = null;
         }
 
-        if ($this->hasParam('page')) {
+        if (!is_null($page)) {
             $page = $this->getParam('page', 1);
             $start = ($page - 1) * $limit + 1;
         }
         else {
-            $page = 1; // TODO higher if start has been specified
+            $start = 1;
         }
 
 
         // TODO only include 'limit' and 'start' if provided as URL parameters (not defaults)
         $form = new Admin_Form_PersonListControl();
         $form->setMethod(Zend_Form::METHOD_POST);
-        // TODO only include limit und start if not defaults
+        // TODO only include limit if not default
         $form->setAction($this->view->url(
             array(
                 'module' => 'admin', 'controller' => 'person', 'action' => 'index',
-                'limit' => $limit,
-                'start' => $start
+                'limit' => $limit
             ), null, true
         ));
         $form->setName('persons');
