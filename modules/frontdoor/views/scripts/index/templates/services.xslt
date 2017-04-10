@@ -30,9 +30,9 @@
  * @package     Module_Frontdoor
  * @author      Edouard Simon <edouard.simon@zib.de>
  * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2009-2011, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2009-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 -->
 
@@ -43,48 +43,34 @@
 
    <xsl:template match="File[@VisibleInFrontdoor='1']">
       <li>
-         <xsl:variable name="fileIcon">
-            <img width="16" height="16" class="file-icon">
-               <xsl:attribute name="src">
-                  <xsl:value-of select="$layoutPath"/>
-                  <xsl:text>/img/filetype/</xsl:text>
-                  <xsl:call-template name="replaceCharsInString">
-                     <xsl:with-param name="stringIn" select="string(@MimeType)"/>
-                     <xsl:with-param name="charsIn" select="'/'"/>
-                     <xsl:with-param name="charsOut" select="'_'"/>
-                  </xsl:call-template>
-                  <xsl:text>.png</xsl:text>
-               </xsl:attribute>
-               <xsl:attribute name="alt">
-                  <xsl:value-of select="@MimeType"/>
-               </xsl:attribute>
-            </img>
-         </xsl:variable>
-
           <xsl:variable name="flagIcon">
               <xsl:choose>
                   <xsl:when test="php:functionString('Application_Xslt::languageImageExists', @Language)">
-                      <img width="16" height="11">
-                          <xsl:attribute name="src">
-                              <xsl:value-of select="$baseUrl"/>
-                              <xsl:text>/img/lang/</xsl:text>
-                              <xsl:call-template name="replaceCharsInString">
-                                  <xsl:with-param name="stringIn" select="string(@Language)"/>
-                                  <xsl:with-param name="charsIn" select="'/'"/>
-                                  <xsl:with-param name="charsOut" select="'_'"/>
-                              </xsl:call-template>
-                              <xsl:text>.png</xsl:text>
-                          </xsl:attribute>
-                          <xsl:attribute name="alt">
-                              <xsl:value-of select="@Language"/>
-                          </xsl:attribute>
-                      </img>
+                  <img width="16" height="11">
+                      <xsl:attribute name="src">
+                          <xsl:value-of select="$baseUrl"/>
+                          <xsl:text>/img/lang/</xsl:text>
+                          <xsl:call-template name="replaceCharsInString">
+                              <xsl:with-param name="stringIn" select="string(@Language)"/>
+                              <xsl:with-param name="charsIn" select="'/'"/>
+                              <xsl:with-param name="charsOut" select="'_'"/>
+                          </xsl:call-template>
+                          <xsl:text>.png</xsl:text>
+                      </xsl:attribute>
+                      <xsl:attribute name="class">
+                          <xsl:text>file-language </xsl:text>
+                          <xsl:value-of select="@Language" />
+                      </xsl:attribute>
+                      <xsl:attribute name="alt">
+                          <xsl:value-of select="@Language" />
+                      </xsl:attribute>
+                  </img>
                   </xsl:when>
                   <xsl:otherwise>
                       <span class="file-language">
-                      <xsl:text>(</xsl:text>
-                      <xsl:value-of select="@Language"/>
-                      <xsl:text>)</xsl:text>
+                          <xsl:text>(</xsl:text>
+                          <xsl:value-of select="@Language"/>
+                          <xsl:text>)</xsl:text>
                       </span>
                   </xsl:otherwise>
               </xsl:choose>
@@ -107,42 +93,38 @@
                   <xsl:value-of select="@PathName" />
                </xsl:otherwise>
             </xsl:choose>
-            <xsl:if test="@FileSize">
-               <xsl:text> (</xsl:text>
-               <xsl:value-of select="round(@FileSize div 1024)" />
-               <xsl:text> KB)</xsl:text>
-            </xsl:if>
          </xsl:variable>
 
          <xsl:choose>
             <xsl:when test="php:functionString('Application_Xslt::fileAccessAllowed', @Id)">
                <div class="accessible-file">
                   <xsl:attribute name="title">
-                     <xsl:call-template name="translateString">
-                        <xsl:with-param name="string">frontdoor_download_file</xsl:with-param>
-                     </xsl:call-template>
-                     <xsl:text> </xsl:text>
-                     <xsl:value-of select="@Label" />
-                     <xsl:text> (</xsl:text>
-                     <xsl:value-of select="@MimeType" />
-                     <xsl:text>)</xsl:text>
+                      <xsl:call-template name="translateString">
+                          <xsl:with-param name="string">frontdoor_download_file</xsl:with-param>
+                      </xsl:call-template>
+                      <xsl:text> </xsl:text>
+                      <xsl:value-of select="@Label" />
+                      <xsl:text> (</xsl:text>
+                      <xsl:value-of select="@MimeType" />
+                      <xsl:text>)</xsl:text>
                   </xsl:attribute>
-                  <a>
-                     <xsl:attribute name="href">
-                        <xsl:copy-of select="$fileLink" />
-                     </xsl:attribute>
-                     <xsl:copy-of select="$fileIcon" />
-                  </a>
-                  <xsl:text> </xsl:text>
-
                   <xsl:element name="a">
+                      <xsl:attribute name="class">
+                          <xsl:call-template name="replaceCharsInString">
+                              <xsl:with-param name="stringIn" select="string(@MimeType)"/>
+                              <xsl:with-param name="charsIn" select="'/'"/>
+                              <xsl:with-param name="charsOut" select="'_'"/>
+                          </xsl:call-template>
+                      </xsl:attribute>
                      <xsl:attribute name="href">
                         <xsl:copy-of select="$fileLink" />
                      </xsl:attribute>
                      <xsl:copy-of select="$fileLinkText" />
                   </xsl:element>
-                  <xsl:text> </xsl:text>
-                  <xsl:copy-of select="$flagIcon" />
+                   <xsl:copy-of select="$flagIcon" />
+                   <xsl:if test="@FileSize">
+                       <div class="file-size">(<xsl:value-of select="round(@FileSize div 1024)" />KB)</div>
+                   </xsl:if>
                </div>
             </xsl:when>
             <xsl:otherwise>
@@ -152,26 +134,19 @@
                         <xsl:with-param name="string">frontdoor_protected_file</xsl:with-param>
                      </xsl:call-template>
                   </xsl:attribute>
-                  <xsl:copy-of select="$fileIcon" />
-                  <xsl:text> </xsl:text>
                   <xsl:copy-of select="$fileLinkText" />
-                  <xsl:text> </xsl:text>
-                  <xsl:copy-of select="$flagIcon" />
                </div>
+               <xsl:copy-of select="$flagIcon" />
             </xsl:otherwise>
          </xsl:choose>
-
          <xsl:if test="@Comment">
-            <xsl:text> </xsl:text>
-            <p>
-               <xsl:value-of select="@Comment" />
-            </p>
+             <p>
+                 <xsl:value-of select="@Comment" />
+             </p>
          </xsl:if>
-
       </li>
    </xsl:template>
-   
-     
+
    <!--Named Templates for the service block (MailToAuthor, AdditionalServices, ExportFunctions).--> 
      
    <xsl:template name="MailToAuthor">
