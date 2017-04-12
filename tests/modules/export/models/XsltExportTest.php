@@ -27,43 +27,33 @@
  * @category    Application
  * @package     Module_Export
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
-/**
- * Export plugin for applying XSLT on XML before returning response.
- *
- *
- */
-class Export_Model_XsltExport extends Export_Model_XmlExport
+class Export_Model_XsltExportTest extends ControllerTestCase
 {
 
-    public function execute()
+    private $plugin;
+
+    public function setUp() {
+        parent::setUp();
+
+        $plugin = new Export_Model_XmlExport();
+        $plugin->setRequest($this->getRequest());
+        $plugin->setResponse($this->getResponse());
+        $plugin->init();
+
+        $this->plugin = $plugin;
+    }
+
+    public function testExecute()
     {
-        $config = $this->getConfig();
+        $doc = $this->createTestDocument();
+        $doc->setServerState('published');
+        $docId = $doc->store();
 
-        if (isset($config->stylesheet))
-        {
-            $stylesheet = $config->stylesheet;
-        }
-
-        $stylesheetDirectory = 'stylesheets';
-
-        if (isset($config->stylesheetDirectory))
-        {
-            $stylesheetDirectory = $config->stylesheetDirectory;
-        }
-
-        $this->loadStyleSheet(
-            $this->buildStylesheetPath(
-                $stylesheet,
-                $this->getView()->getScriptPath('') . $stylesheetDirectory
-            )
-        );
-
-        $this->prepareXml();
+        $this->markTestIncomplete('test rendering of example xslt');
     }
 
 }
