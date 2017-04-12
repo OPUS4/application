@@ -27,12 +27,37 @@
  * @category    Application
  * @package     Module_Export
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 class Export_Bootstrap extends Zend_Application_Module_Bootstrap {
-    
-}
 
+    protected function _initExport()
+    {
+        $config = Zend_Registry::get('Zend_Config');
+
+        // only add XML export if user has access and stylesheet is configured
+        if (isset($config->export->stylesheet->frontdoor))
+        {
+            $exporter = Zend_Registry::get('Opus_Exporter'); // TODO use a getExporter method?
+
+            $exporter->addFormats(array(
+                'xml' => array(
+                    'name' => 'XML',
+                    'description' => 'Export XML', // TODO frontdoor_export_xml
+                    'module' => 'export',
+                    'controller' => 'index',
+                    'action' => 'index',
+                    'params' => array(
+                        'export' => 'xml',
+                        'searchtype' => 'id',
+                        'stylesheet' => $config->export->stylesheet->frontdoor
+                    )
+                )
+            ));
+        }
+    }
+
+}

@@ -24,31 +24,22 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_CitationExport
- * @author      Sascha Szott <szott@zib.de>
+ * @category    Tests
+ * @package     Application_Export
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class CitationExport_Bootstrap extends Zend_Application_Module_Bootstrap {
+class Application_Export_ExporterTest extends ControllerTestCase
+{
 
-    /**
-     * Registers export formats supported by this module.
-     *
-     * - BibTeX
-     * - RIS
-     */
-    protected function _initExport()
+    public function testAddFormats()
     {
-        $exporter = Zend_Registry::get('Opus_Exporter');
+        // HACK to setup route for tests below
+        $this->dispatch('/home');
 
-        if (is_null($exporter))
-        {
-            Zend_Registry::get('Zend_Log')->err(__METHOD__ . ' exporter not found');
-            return;
-        }
+        $exporter = new Application_Export_Exporter();
 
         $exporter->addFormats(array(
             'bibtex' => array(
@@ -60,18 +51,31 @@ class CitationExport_Bootstrap extends Zend_Application_Module_Bootstrap {
                 'params' => array(
                     'output' => 'bibtex'
                 )
-            ),
-            'ris' => array(
-                'name' => 'RIS',
-                'description' => 'Export RIS',
-                'module' => 'citationExport',
-                'controller' => 'index',
-                'action' => 'download',
-                'params' => array(
-                    'output' => 'ris'
-                )
             )
         ));
+
+        $formats = $exporter->getFormats();
+
+        $this->assertInternalType('array', $formats);
+        $this->assertCount(1, $formats);
+        $this->assertArrayHasKey('bibtex', $formats);
+
+        $bibtex = $formats['bibtex'];
+
+        $this->assertInstanceOf('Zend_Navigation_Page_Mvc', $bibtex);
+        $this->assertEquals('/citationExport/index/download/output/bibtex', $bibtex->getHref());
+
+        $bibtex->setParam('docId', 146);
+
+        $this->assertEquals('/citationExport/index/download/output/bibtex/docId/146', $bibtex->getHref());
+    }
+
+    public function testGetFormats()
+    {
+        // HACK to setup route
+        $this->dispatch('/home');
+
+        $this->markTestIncomplete('more testing?');
     }
 
 }

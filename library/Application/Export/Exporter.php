@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -25,53 +25,40 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_CitationExport
- * @author      Sascha Szott <szott@zib.de>
+ * @package     Application_Export
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class CitationExport_Bootstrap extends Zend_Application_Module_Bootstrap {
+/**
+ * Class for registering and accessing export format handlers.
+ */
+class Application_Export_Exporter
+{
 
-    /**
-     * Registers export formats supported by this module.
-     *
-     * - BibTeX
-     * - RIS
-     */
-    protected function _initExport()
+    private $_formats = array();
+
+    public function addFormats($options)
     {
-        $exporter = Zend_Registry::get('Opus_Exporter');
-
-        if (is_null($exporter))
+        if (!is_array($options))
         {
-            Zend_Registry::get('Zend_Log')->err(__METHOD__ . ' exporter not found');
-            return;
+            throw new Exception('Invalid argument: should be array');
         }
 
-        $exporter->addFormats(array(
-            'bibtex' => array(
-                'name' => 'BibTeX',
-                'description' => 'Export BibTeX',
-                'module' => 'citationExport',
-                'controller' => 'index',
-                'action' => 'download',
-                'params' => array(
-                    'output' => 'bibtex'
-                )
-            ),
-            'ris' => array(
-                'name' => 'RIS',
-                'description' => 'Export RIS',
-                'module' => 'citationExport',
-                'controller' => 'index',
-                'action' => 'download',
-                'params' => array(
-                    'output' => 'ris'
-                )
-            )
-        ));
+        foreach ($options as $key => $option)
+        {
+            // TODO use addFormat function, get key from 'name' or use hash?
+            $format = new Zend_Navigation_Page_Mvc($option);
+
+            // TODO check if key is string
+            $this->_formats[$key] = $format;
+        }
+    }
+
+    public function getFormats()
+    {
+        return $this->_formats;
     }
 
 }

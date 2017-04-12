@@ -23,55 +23,60 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+/**
+ * Unit tests for view helper for rendering export links.
  *
  * @category    Application
- * @package     Module_CitationExport
- * @author      Sascha Szott <szott@zib.de>
+ * @package     Application_View_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class CitationExport_Bootstrap extends Zend_Application_Module_Bootstrap {
+class Application_View_Helper_ExportLinskTest extends ControllerTestCase
+{
 
-    /**
-     * Registers export formats supported by this module.
-     *
-     * - BibTeX
-     * - RIS
-     */
-    protected function _initExport()
+    public function testToString()
     {
-        $exporter = Zend_Registry::get('Opus_Exporter');
+        $this->dispatch('/home'); // HACK to setup default route
 
-        if (is_null($exporter))
-        {
-            Zend_Registry::get('Zend_Log')->err(__METHOD__ . ' exporter not found');
-            return;
-        }
+        $exportLink = new Application_View_Helper_ExportLinks();
 
-        $exporter->addFormats(array(
-            'bibtex' => array(
-                'name' => 'BibTeX',
-                'description' => 'Export BibTeX',
-                'module' => 'citationExport',
-                'controller' => 'index',
-                'action' => 'download',
-                'params' => array(
-                    'output' => 'bibtex'
-                )
+        $this->assertEquals(
+            '<ul><li><a href="/citationExport/index/download/output/bibtex" title="Export BibTeX" class="export bibtex">BibTeX</a></li><li><a href="/citationExport/index/download/output/ris" title="Export RIS" class="export ris">RIS</a></li></ul>',
+            $exportLink->__toString()
+        );
+    }
+
+    public function testRenderLink()
+    {
+        $this->dispatch('/home');
+
+        $page = new Zend_Navigation_Page_Mvc(array(
+            'name' => 'bibtex',
+            'description' => 'Export BibTeX',
+            'module' => 'citationExport',
+            'controller' => 'index',
+            'action' => 'download',
+            'params' => array(
+                'output' => 'bibtex'
             ),
-            'ris' => array(
-                'name' => 'RIS',
-                'description' => 'Export RIS',
-                'module' => 'citationExport',
-                'controller' => 'index',
-                'action' => 'download',
-                'params' => array(
-                    'output' => 'ris'
-                )
-            )
+            'frontdoor' => true
         ));
+
+        $page->setParam('docId', 150);
+
+        $exportLink = new Application_View_Helper_ExportLinks();
+
+        $this->assertEquals(
+            '<a href="/citationExport/index/download/output/bibtex/docId/150" title="Export BibTeX" class="export bibtex">bibtex</a>',
+            $exportLink->renderLink($page)
+        );
+
+
     }
 
 }
+

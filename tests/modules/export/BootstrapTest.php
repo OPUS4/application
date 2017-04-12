@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,54 +24,52 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_CitationExport
- * @author      Sascha Szott <szott@zib.de>
+ * @category    Tests
+ * @package     Export
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class CitationExport_Bootstrap extends Zend_Application_Module_Bootstrap {
+class Export_BootstrapTest extends ControllerTestCase
+{
 
-    /**
-     * Registers export formats supported by this module.
-     *
-     * - BibTeX
-     * - RIS
-     */
-    protected function _initExport()
+    public function testInitExport()
     {
-        $exporter = Zend_Registry::get('Opus_Exporter');
+        $this->dispatch('/frontdoor/index/index/docId/1');
 
-        if (is_null($exporter))
-        {
-            Zend_Registry::get('Zend_Log')->err(__METHOD__ . ' exporter not found');
-            return;
-        }
-
-        $exporter->addFormats(array(
-            'bibtex' => array(
-                'name' => 'BibTeX',
-                'description' => 'Export BibTeX',
-                'module' => 'citationExport',
-                'controller' => 'index',
-                'action' => 'download',
-                'params' => array(
-                    'output' => 'bibtex'
-                )
-            ),
-            'ris' => array(
-                'name' => 'RIS',
-                'description' => 'Export RIS',
-                'module' => 'citationExport',
-                'controller' => 'index',
-                'action' => 'download',
-                'params' => array(
-                    'output' => 'ris'
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
+            'export' => array(
+                'stylesheet' => array(
+                    'frontdoor' => null
                 )
             )
-        ));
+        )));
+
+        $this->assertResponseCode(200);
+        $this->assertQuery('a.export.bibtex');
+        $this->assertQuery('a.export.ris');
+        $this->assertNotQuery('a.export.xml');
+
+    }
+
+    public function testInitExportRegisterXML()
+    {
+        $this->markTestSkipped('configuration is read during bootstrap -> change here is too late');
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
+            'export' => array(
+                'stylesheet' => array(
+                    'frontdoor' => 'example'
+                )
+            )
+        )));
+
+        $this->dispatch('/frontdoor/index/index/docId/1');
+
+        $this->assertResponseCode(200);
+        $this->assertQuery('a.export.bibtex');
+        $this->assertQuery('a.export.ris');
+        $this->assertQuery('a.export.xml');
     }
 
 }
