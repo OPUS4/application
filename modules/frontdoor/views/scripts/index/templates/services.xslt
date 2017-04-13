@@ -287,7 +287,7 @@
     </xsl:template>
 
    <xsl:template name="ExportFunctions">
-        <xsl:value-of disable-output-escaping="yes" select="php:function('Application_Xslt::exportLinks', 'docId')" />
+        <xsl:value-of disable-output-escaping="yes" select="php:function('Application_Xslt::exportLinks', 'docId', 'frontdoor')" />
    </xsl:template>
     
    <xsl:template name="PrintOnDemand">

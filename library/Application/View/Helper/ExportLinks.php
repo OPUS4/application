@@ -44,11 +44,11 @@ class Application_View_Helper_ExportLinks extends Application_View_Helper_Abstra
      * @param null $keys Keys for parameters that should be include in export link
      * @return string HTML
      */
-    public function exportLinks($keys = null) {
-        return $this->toString($keys);
+    public function exportLinks($keys = null, $context = null) {
+        return $this->toString($keys, $context);
     }
 
-    public function toString($keys = null)
+    public function toString($keys = null, $context = null)
     {
         $exporter = Zend_Registry::get('Opus_Exporter'); // TODO use constant
 
@@ -58,6 +58,11 @@ class Application_View_Helper_ExportLinks extends Application_View_Helper_Abstra
 
         foreach ($formats as $format)
         {
+            // if context provided skip format if it has been set to false
+            if (!is_null($context) && $format->get($context) === false) {
+                continue;
+            }
+
             $module = $format->getModule();
 
             if (Opus_Security_Realm::getInstance()->checkModule($module))

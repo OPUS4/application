@@ -78,4 +78,38 @@ class Application_Export_ExporterTest extends ControllerTestCase
         $this->markTestIncomplete('more testing?');
     }
 
+    public function testContextProperties() {
+        $exporter = new Application_Export_Exporter();
+
+        $exporter->addFormats(array(
+            'bibtex' => array(
+                'name' => 'BibTeX',
+                'description' => 'Export BibTeX',
+                'module' => 'citationExport',
+                'controller' => 'index',
+                'action' => 'download',
+                'frontdoor' => true,
+                'search' => false,
+                'params' => array(
+                    'output' => 'bibtex'
+                )
+            )
+        ));
+
+        $formats = $exporter->getFormats();
+
+        $this->assertInternalType('array', $formats);
+        $this->assertCount(1, $formats);
+        $this->assertArrayHasKey('bibtex', $formats);
+
+        // Zend_Navigation_Page_Mvc
+        $bibtex = $formats['bibtex'];
+
+        $this->assertInstanceOf('Zend_Navigation_Page_Mvc', $bibtex);
+
+        $this->assertTrue($bibtex->get('frontdoor'));
+        $this->assertFalse($bibtex->get('search'));
+        $this->assertNull($bibtex->get('admin'));
+    }
+
 }

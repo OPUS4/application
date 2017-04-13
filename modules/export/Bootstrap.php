@@ -38,10 +38,11 @@ class Export_Bootstrap extends Zend_Application_Module_Bootstrap {
     {
         $config = Zend_Registry::get('Zend_Config');
 
+        $exporter = Zend_Registry::get('Opus_Exporter'); // TODO use a getExporter method?
+
         // only add XML export if user has access and stylesheet is configured
         if (isset($config->export->stylesheet->frontdoor))
         {
-            $exporter = Zend_Registry::get('Opus_Exporter'); // TODO use a getExporter method?
 
             $exporter->addFormats(array(
                 'xml' => array(
@@ -50,10 +51,29 @@ class Export_Bootstrap extends Zend_Application_Module_Bootstrap {
                     'module' => 'export',
                     'controller' => 'index',
                     'action' => 'index',
+                    'search' => false,
                     'params' => array(
                         'export' => 'xml',
                         'searchtype' => 'id',
                         'stylesheet' => $config->export->stylesheet->frontdoor
+                    )
+                )
+            ));
+        }
+
+        if (isset($config->export->stylesheet->search))
+        {
+            $exporter->addFormats(array(
+                'xml2' => array(
+                    'name' => 'XML',
+                    'description' => 'Export XML',
+                    'module' => 'export',
+                    'controller' => 'index',
+                    'action' => 'index',
+                    'frontdoor' => false,
+                    'params' => array(
+                        'export' => 'xml',
+                        'stylesheet' => $config->export->stylesheet->search
                     )
                 )
             ));
