@@ -80,6 +80,14 @@ class CitationExport_Bootstrap extends Zend_Application_Module_Bootstrap {
                 'params' => array(
                     'output' => 'ris'
                 )
+            ),
+            'ris_list' => array(
+                'name' => 'RIS',
+                'description' => 'Export RIS',
+                'module' => 'export',
+                'controller' => 'index',
+                'action' => 'ris',
+                'frontdoor' => false
             )
         ));
     }
