@@ -57,9 +57,18 @@ class CitationExport_Bootstrap extends Zend_Application_Module_Bootstrap {
                 'module' => 'citationExport',
                 'controller' => 'index',
                 'action' => 'download',
+                'search' => false,
                 'params' => array(
                     'output' => 'bibtex'
                 )
+            ),
+            'bibtex_list' => array(
+                'name' => 'BibTeX',
+                'description' => 'Export BibTeX',
+                'module' => 'export',
+                'controller' => 'index',
+                'action' => 'bibtex',
+                'frontdoor' => false
             ),
             'ris' => array(
                 'name' => 'RIS',
@@ -67,6 +76,7 @@ class CitationExport_Bootstrap extends Zend_Application_Module_Bootstrap {
                 'module' => 'citationExport',
                 'controller' => 'index',
                 'action' => 'download',
+                'search' => false,
                 'params' => array(
                     'output' => 'ris'
                 )
