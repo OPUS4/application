@@ -91,7 +91,21 @@ class Export_Model_XmlExport extends Export_Model_ExportPluginAbstract {
 
             // Send Xml response.
             $response->setHeader('Content-Type', "$contentType; charset=UTF-8", true);
-            $response->setHeader('Content-Disposition', "attachment; filename=$attachmentFilename", true);
+
+            $appConfig = Application_Configuration::getInstance()->getConfig();
+
+            $download = true;
+
+            if (isset($appConfig->export->download))
+            {
+                $value = $appConfig->export->download;
+                $download = $value !== 0 && $value !== false && $value !== '';
+            }
+
+            if ($download)
+            {
+                $response->setHeader('Content-Disposition', "attachment; filename=$attachmentFilename", true);
+            }
 
             if (false === is_null($this->_xslt)) {
                 $this->getResponse()->setBody($this->_proc->transformToXML($this->_xml));
