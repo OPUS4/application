@@ -48,23 +48,6 @@ if($this->jQueryEnabled()) {
     ));
 ?>
 
-<?PHP if ($this->searchType === 'latest' && $this->stylesheet != '') : ?>
-    <div class="search_latest_export_xml">
-        <a href="<?= $this->url(array(
-            'searchtype' => $this->searchType,
-            'rows' => $this->rows,
-            'export' => 'xml',
-            'stylesheet' => $this->stylesheet
-        )) ?>">
-            <img src="<?= $this->layoutPath() . '/img/xml_w.png' ?>" id="search_export_xml_pic" name="xml"
-                 onmouseover="this.src='<?=$this->layoutPath() .  '/img/xml_o.png'?>';"
-                 onmouseout="this.src='<?= $this->layoutPath() .  '/img/xml_w.png'?>';"
-                 title="<?= $this->translate('search_export_xml') ?>"
-                 alt="<?= $this->translate('search_export_xml') ?>"/>
-        </a>
-    </div>
-<?PHP endif ?>
-
 <?php if (isset($this->specialTitle)) : ?>
     <h2><?= htmlspecialchars($this->specialTitle) ?></h2>
 <?php endif ?>
