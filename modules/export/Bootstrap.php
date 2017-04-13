@@ -78,6 +78,17 @@ class Export_Bootstrap extends Zend_Application_Module_Bootstrap {
                 )
             ));
         }
+
+        $exporter->addFormats(array(
+            'csv' => array(
+                'name' => 'CSV',
+                'description' => 'Export CSV',
+                'module' => 'export',
+                'controller' => 'index',
+                'action' => 'csv',
+                'frontdoor' => false
+            )
+        ));
     }
 
 }
