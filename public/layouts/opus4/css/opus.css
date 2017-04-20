@@ -644,6 +644,7 @@ a img{
     height: 100%;
     padding-top: 58px;
     padding-right: 8px;
+    display: none; /* enable display in custom.css */
 }
 
 #top-header{
