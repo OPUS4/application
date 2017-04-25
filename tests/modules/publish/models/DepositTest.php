@@ -28,9 +28,8 @@
  * @category    Application
  * @package     Module_Publish Unit Test
  * @author      Susanne Gottwald <gottwald@zib.de>
- * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 class Publish_Model_DepositTest extends ControllerTestCase {
 
@@ -43,10 +42,13 @@ class Publish_Model_DepositTest extends ControllerTestCase {
         $documentId = $document->store();
 
         $log = Zend_Registry::get('Zend_Log');
-        new Publish_Model_Deposit($documentId, $log);
+        $deposit = new Publish_Model_Deposit($log);
+        $deposit->storeDocument($documentId);
     }
 
     public function testValidDocumentData() {
+        $this->useEnglish();
+
         $document = $this->createTestDocument();
         $document->setServerState('temporary');
         $docId = $document->store();
@@ -60,10 +62,10 @@ class Publish_Model_DepositTest extends ControllerTestCase {
             'PersonSubmitterLastName_1' => array('value' => 'Hansmann', 'datatype' => 'Person', 'subfield' => '1'),
             'PersonSubmitterEmail_1' => array('value' => 'test@mail.com', 'datatype' => 'Person', 'subfield' => '1'),
             'PersonSubmitterPlaceOfBirth_1' => array('value' => 'Stadt', 'datatype' => 'Person', 'subfield' => '1'),
-            'PersonSubmitterDateOfBirth_1' => array('value' => '1970/01/01', 'datatype' => 'Person', 'subfield' => '1'),
+            'PersonSubmitterDateOfBirth_1' => array('value' => '1970/02/01', 'datatype' => 'Person', 'subfield' => '1'),
             'PersonSubmitterAcademicTitle_1' => array('value' => 'Dr.', 'datatype' => 'Person', 'subfield' => '1'),
             'PersonSubmitterAllowEmailContact_1' => array('value' => '0', 'datatype' => 'Person', 'subfield' => '1'),
-            'CompletedDate' => array('value' => '2012/1/1', 'datatype' => 'Date', 'subfield' => '0'),
+            'CompletedDate' => array('value' => '2012/2/1', 'datatype' => 'Date', 'subfield' => '0'),
             'PersonAuthorFirstName_1' => array('value' => 'vorname', 'datatype' => 'Person', 'subfield' => '1'),
             'PersonAuthorLastName_1' => array('value' => 'nachname', 'datatype' => 'Person', 'subfield' => '0'),            
             'PersonAuthorLastName_2' => array('value' => 'nurNachname', 'datatype' => 'Person', 'subfield' => '0'),
@@ -115,7 +117,10 @@ class Publish_Model_DepositTest extends ControllerTestCase {
         );
 
         $log = Zend_Registry::get('Zend_Log');
-        $dep = new Publish_Model_Deposit($docId, $log, $data);
+
+        $dep = new Publish_Model_Deposit($log);
+        $dep->storeDocument($docId, null, $data);
+
         $document = $dep->getDocument();
         $document->store();                               
         
@@ -124,12 +129,16 @@ class Publish_Model_DepositTest extends ControllerTestCase {
         $this->assertEquals('Hansmann', $personSubmitter->getLastName());
         $this->assertEquals('test@mail.com', $personSubmitter->getEmail());
         $this->assertEquals('Stadt', $personSubmitter->getPlaceOfBirth());
-        $this->assertEquals(new Opus_Date(new Zend_Date('1970/01/01')), $personSubmitter->getDateOfBirth());
+
+        $datesHelper = new Application_Controller_Action_Helper_Dates();
+
+        $this->assertEquals($datesHelper->getOpusDate('1970/02/01'), $personSubmitter->getDateOfBirth());
+
         $this->assertEquals('Dr.', $personSubmitter->getAcademicTitle());
         $this->assertEquals('0', $personSubmitter->getAllowEmailContact());
         
-        $this->assertEquals(new Opus_Date(new Zend_Date('2012/1/1')), $document->getCompletedDate());
-        
+        $this->assertEquals($datesHelper->getOpusDate('2012/2/1'), $document->getCompletedDate());
+
         $personAuthor1 = $document->getPersonAuthor(0);        
         $this->assertEquals('vorname', $personAuthor1->getFirstName());
         $this->assertEquals('nachname', $personAuthor1->getLastName());        
@@ -204,6 +213,47 @@ class Publish_Model_DepositTest extends ControllerTestCase {
          
         $document->deletePermanent();
         Opus_EnrichmentKey::fetchbyName('Foo2Title')->delete();
+    }
+
+    /**
+     * OPUSVIER-3713
+     */
+    public function testCastStringToDate()
+    {
+        $this->useEnglish();
+
+        $deposit = new Publish_Model_Deposit(Application_Configuration::getInstance()->getLogger());
+
+        $date = $deposit->castStringToOpusDate('2017/03/12');
+
+        $this->assertInstanceOf('Opus_Date', $date);
+
+        $this->assertEquals('2017', $date->getYear());
+
+        $this->assertNotEquals('12', $date->getMonth());
+        $this->assertEquals('03', $date->getMonth());
+
+        $this->assertNotEquals('03', $date->getDay());
+        $this->assertEquals('12', $date->getDay());
+    }
+
+    public function testCastStringToDateGerman()
+    {
+        $this->useGerman();
+
+        $deposit = new Publish_Model_Deposit(Application_Configuration::getInstance()->getLogger());
+
+        $date = $deposit->castStringToOpusDate('12.03.2017');
+
+        $this->assertInstanceOf('Opus_Date', $date);
+
+        $this->assertEquals('2017', $date->getYear());
+
+        $this->assertNotEquals('12', $date->getMonth());
+        $this->assertEquals('03', $date->getMonth());
+
+        $this->assertNotEquals('03', $date->getDay());
+        $this->assertEquals('12', $date->getDay());
     }
 
 }

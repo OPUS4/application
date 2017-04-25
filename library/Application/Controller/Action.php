@@ -197,7 +197,10 @@ class Application_Controller_Action extends Application_Controller_ModuleAccess 
 
         // Forward to module auth
         $this->_flashMessenger->addMessage(array('level' => 'failure', 'message' => $errorcode));
-        $this->_redirector->gotoSimple('index', 'auth', 'default');
+
+        $returnParams = $this->_helper->returnParams();
+
+        $this->_redirector->gotoSimple('index', 'auth', 'default', $returnParams);
     }
 
     /**

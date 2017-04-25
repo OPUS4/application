@@ -72,7 +72,15 @@ class Application_Util_DocumentAdapter {
      * @param int $id
      */
     public function __construct($view, $value) {
-        $this->_view = $view;
+        if (is_null($view))
+        {
+            $this->_view = Zend_Registry::get('Opus_View');
+        }
+        else
+        {
+            $this->_view = $view;
+        }
+
         if ($value instanceof Opus_Document) {
             $this->document = $value;
             $this->docId = $this->document->getId();
