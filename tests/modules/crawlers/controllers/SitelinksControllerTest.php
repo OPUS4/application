@@ -27,11 +27,20 @@
  * @category    Application
  * @package     Tests
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class Crawlers_SitelinksControllerTest extends ControllerTestCase {
+class Crawlers_SitelinksControllerTest extends ControllerTestCase
+{
+
+    public function testRoute()
+    {
+        $this->dispatch('/crawlers');
+
+        $body = $this->getResponse()->getBody();
+        $this->assertNotContains('href="/crawlers"', $body);
+    }
+
 
     public function testIndexAction() {
         $this->markTestIncomplete('implement');
