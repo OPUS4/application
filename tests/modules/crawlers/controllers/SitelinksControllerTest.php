@@ -36,9 +36,7 @@ class Crawlers_SitelinksControllerTest extends ControllerTestCase
     public function testRoute()
     {
         $this->dispatch('/crawlers');
-
-        $body = $this->getResponse()->getBody();
-        $this->assertNotContains('href="/crawlers"', $body);
+        $this->assertRedirectTo('/crawlers/sitelinks');
     }
 
 
