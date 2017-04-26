@@ -85,7 +85,10 @@ class FullAndPartialAdminTest extends ControllerTestCase {
      */
     public function testNoAccessReviewModule() {
         $this->dispatch('/review');
-        $this->assertRedirectTo('/auth', 'redirect from review to auth not asserted');
+        $this->assertRedirectTo(
+            '/auth/index/rmodule/review/rcontroller/index/raction/index',
+            'redirect from review to auth not asserted'
+        );
     }
 
     /**

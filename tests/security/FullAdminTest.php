@@ -86,7 +86,10 @@ class FullAdminTest extends ControllerTestCase {
      */
     public function testNoAccessReviewModule() {
         $this->dispatch('/review');
-        $this->assertRedirectTo('/auth', 'redirect from review to auth not asserted');
+        $this->assertRedirectTo(
+            '/auth/index/rmodule/review/rcontroller/index/raction/index',
+            'redirect from review to auth not asserted'
+        );
     }
 
     /**
@@ -94,7 +97,10 @@ class FullAdminTest extends ControllerTestCase {
      */
     public function testNoAccessSetupModuleTranslations() {
         $this->dispatch('/setup/language');
-        $this->assertRedirectTo('/auth', 'redirect from setup/language to auth not asserted');
+        $this->assertRedirectTo(
+            '/auth/index/rmodule/setup/rcontroller/language/raction/index',
+            'redirect from setup/language to auth not asserted'
+        );
     }
 
     /**
@@ -102,7 +108,10 @@ class FullAdminTest extends ControllerTestCase {
      */
     public function testNoAccessSetupModuleStaticPage() {
         $this->dispatch('/setup/static-page');
-        $this->assertRedirectTo('/auth', 'redirect from setup/static-page to auth not asserted ');
+        $this->assertRedirectTo(
+            '/auth/index/rmodule/setup/rcontroller/static-page/raction/index',
+            'redirect from setup/static-page to auth not asserted '
+        );
     }
 
     /**
@@ -110,7 +119,10 @@ class FullAdminTest extends ControllerTestCase {
      */
     public function testNoAccessSetupModuleHelpPage() {
         $this->dispatch('/setup/help-page');
-        $this->assertRedirectTo('/auth', 'redirect from setup/help-page to auth not asserted');
+        $this->assertRedirectTo(
+            '/auth/index/rmodule/setup/rcontroller/help-page/raction/index',
+            'redirect from setup/help-page to auth not asserted'
+        );
     }
 
     /**

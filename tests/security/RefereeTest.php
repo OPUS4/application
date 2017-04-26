@@ -32,8 +32,21 @@
  */
 class RefereeTest extends ControllerTestCase {
 
+    private $_refereeAccount;
+
     public function setUp() {
         parent::setUp();
+
+        $userRole = Opus_UserRole::fetchByName('reviewer');
+
+        $account = new Opus_Account();
+        $account->setLogin('referee');
+        $account->setPassword('refereereferee');
+        $account->setRole(array($userRole));
+        $account->store();
+
+        $this->_refereeAccount = $account;
+
         $this->enableSecurity();
         $this->loginUser('referee', 'refereereferee');
     }
@@ -41,9 +54,14 @@ class RefereeTest extends ControllerTestCase {
     public function tearDown() {
         $this->logoutUser();
         $this->restoreSecuritySetting();
+
+        if (!is_null($this->_refereeAccount))
+        {
+            $this->_refereeAccount->delete();
+        }
+
         parent::tearDown();
     }
-
 
     public function testAccessReviewModule() {
         $this->useEnglish();

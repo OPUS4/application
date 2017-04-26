@@ -81,7 +81,10 @@ abstract class AccessModuleSetupAndAdminTest extends ControllerTestCase {
             $this->assertElement('//a[@href="/review"]', false);
         }
         else {
-            $this->assertRedirectTo('/auth', 'assert redirect from /admin to auth failed');
+            $this->assertRedirectTo(
+                '/auth/index/rmodule/admin/rcontroller/index/raction/index',
+                'assert redirect from /admin to auth failed'
+            );
         }
     }
 
@@ -96,7 +99,10 @@ abstract class AccessModuleSetupAndAdminTest extends ControllerTestCase {
             $this->assertQueryContentContains('//html/head/title', 'Admin Licences');
         }
         else {
-            $this->assertRedirectTo('/auth', 'assert redirect from /admin/licence to auth failed');
+            $this->assertRedirectTo(
+                '/auth/index/rmodule/admin/rcontroller/licence/raction/index',
+                'assert redirect from /admin/licence to auth failed'
+            );
         }
     }
 
@@ -110,7 +116,10 @@ abstract class AccessModuleSetupAndAdminTest extends ControllerTestCase {
             $this->assertQueryContentContains('//html/head/title', 'Administration of Documents');
         }
         else {
-            $this->assertRedirectTo('/auth', 'assert redirect from /admin/documents to auth failed');
+            $this->assertRedirectTo(
+                '/auth/index/rmodule/admin/rcontroller/documents/raction/index',
+                'assert redirect from /admin/documents to auth failed'
+            );
         }
     }
 
@@ -119,7 +128,10 @@ abstract class AccessModuleSetupAndAdminTest extends ControllerTestCase {
      */
     public function testNoAccessReviewModule() {
         $this->dispatch('/review');
-        $this->assertRedirectTo('/auth', 'assert redirect from /review to auth failed');
+        $this->assertRedirectTo(
+            '/auth/index/rmodule/review/rcontroller/index/raction/index',
+            'assert redirect from /review to auth failed'
+        );
     }
 
     /**
@@ -148,7 +160,10 @@ abstract class AccessModuleSetupAndAdminTest extends ControllerTestCase {
             $this->assertQueryContentContains('//html/head//title', 'Static Pages');
         }
         else {
-            $this->assertRedirectTo('/auth', 'assert redirect from /setup/static-page to auth failed');
+            $this->assertRedirectTo(
+                '/auth/index/rmodule/setup/rcontroller/static-page/raction/index',
+                'assert redirect from /setup/static-page to auth failed'
+            );
         }
     }
 
@@ -165,7 +180,10 @@ abstract class AccessModuleSetupAndAdminTest extends ControllerTestCase {
             $this->assertRedirectTo('/setup/help-page/error', 'setup/help-page not asserted');
         }
         else {
-            $this->assertRedirectTo('/auth', 'assert redirect from /setup/help-page to auth failed');
+            $this->assertRedirectTo(
+                '/auth/index/rmodule/setup/rcontroller/help-page/raction/index',
+                'assert redirect from /setup/help-page to auth failed'
+            );
         }
     }
 
@@ -183,7 +201,10 @@ abstract class AccessModuleSetupAndAdminTest extends ControllerTestCase {
             */
         }
         else {
-            $this->assertRedirectTo('/auth', 'assert redirect from /admin to auth failed');
+            $this->assertRedirectTo(
+                '/auth/index/rmodule/admin/rcontroller/index/raction/setup',
+                'assert redirect from /admin to auth failed'
+            );
         }
     }
 
