@@ -46,10 +46,10 @@
 
     <xsl:output method="text" encoding="ISO-8859-1" omit-xml-declaration="yes"/>
 
-    <xsl:include href="utils/replace_nonascii.xslt"/>
-    <xsl:include href="utils/bibtex_authors.xslt"/>
-    <xsl:include href="utils/bibtex_editors.xslt"/>
-	<!--xsl:include href="utils/csv_institutions.xslt"/-->
+    <xsl:include href="utils/csv_replace_nonascii.xslt"/>
+    <xsl:include href="utils/csv_authors.xslt"/>
+    <xsl:include href="utils/csv_editors.xslt"/>
+	<xsl:include href="utils/csv_institutions.xslt"/>
     <xsl:include href="utils/bibtex_pages.xslt"/>
     
     <xsl:template match="*" />
