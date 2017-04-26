@@ -42,6 +42,12 @@ class CitationExport_Bootstrap extends Zend_Application_Module_Bootstrap {
      */
     protected function _initExport()
     {
+        if (!Zend_Registry::isRegistered('Opus_Exporter'))
+        {
+            Zend_Registry::get('Zend_Log')->err(__METHOD__ . ' exporter not found');
+            return;
+        }
+
         $exporter = Zend_Registry::get('Opus_Exporter');
 
         if (is_null($exporter))
