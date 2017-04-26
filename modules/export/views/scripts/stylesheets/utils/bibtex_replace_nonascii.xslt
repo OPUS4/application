@@ -28,9 +28,10 @@
  *
  * @category    Application
  * @package     Module_CitationExport
- * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @author      Gunar Maiwald <maiwald@zib.de>
+ * @copyright   Copyright (c) 2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
+ * @version     $Id: replace_nonascii.xslt 8422 2011-05-27 16:53:31Z sszott $
  */
 -->
 
@@ -42,46 +43,32 @@
 
     <xsl:output method="text" omit-xml-declaration="yes" />
 
-    <!-- bibtex-style for authors  -->
-    <xsl:template match="PersonAuthor">
-      <xsl:param name="type" required="yes" />
-      <xsl:choose>
-          <xsl:when test="$type='author'">
-            <xsl:value-of select="concat(@LastName, ', ', @FirstName)" />
-            <xsl:choose>
-                <xsl:when test="position() = last()">
-                    <xsl:text></xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:text> and </xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
-           </xsl:when>
-           <xsl:when test="$type='identifier'">
-               <xsl:choose>
-                   <xsl:when test="position() = 1 or position() = 2 or position() = 3">
-                       <xsl:call-template name="replace_id_strings">
-                           <xsl:with-param name="input_text"><xsl:value-of select="@LastName" /></xsl:with-param>
-                       </xsl:call-template>
-                   </xsl:when>
-                   <xsl:when test="position() = 4">
-                           <xsl:text>etal.</xsl:text>
-                   </xsl:when>
-                   <xsl:otherwise>
-                          <xsl:text></xsl:text>
-                   </xsl:otherwise>
-               </xsl:choose>
-           </xsl:when>
-      </xsl:choose>
+    <!-- output field and value -->
+    <xsl:template name="outputFieldValue">
+        <xsl:param name="field" required="yes" />
+        <xsl:param name="value" required="yes" />
+        <xsl:param name="delimiter" required="no" />
+        <xsl:if test="string-length($field) > 0">
+            <xsl:if test="string-length($value) > 0">
+<xsl:text>  </xsl:text><xsl:value-of select="$field" /><xsl:text> = {</xsl:text>
+                <xsl:call-template name="replace_strings">
+                    <xsl:with-param name="input_text"><xsl:value-of select="normalize-space($value)" /></xsl:with-param>
+                </xsl:call-template><xsl:text>}</xsl:text>
+	  <xsl:if test="string-length($delimiter) > 0">
+		<xsl:value-of select="$delimiter" />
+	  </xsl:if>
+<xsl:text>
+</xsl:text>
+            </xsl:if>
+        </xsl:if>
     </xsl:template>
 
-
     <!-- Replace Special Characters -->
-    <xsl:template name="replace_id_strings">
+    <xsl:template name="replace_strings">
       <xsl:param name="input_text" />
-      <xsl:param name="search" select="document('identifier_characters.xml')/string_replacement/search" />
+      <xsl:param name="search" select="document('bibtex_special_characters.xml')/string_replacement/search" />
       <xsl:variable name="replaced_text">
-        <xsl:call-template name="replace_id_substring">
+        <xsl:call-template name="replace_substring">
           <xsl:with-param name="text" select="$input_text" />
           <xsl:with-param name="from" select="$search[1]/find" />
           <xsl:with-param name="to" select="$search[1]/replace" />
@@ -90,7 +77,7 @@
 
       <xsl:choose>
         <xsl:when test="$search[2]">
-          <xsl:call-template name="replace_id_strings">
+          <xsl:call-template name="replace_strings">
             <xsl:with-param name="input_text" select="$replaced_text" />
             <xsl:with-param name="search" select="$search[position() > 1]" />
           </xsl:call-template>
@@ -101,16 +88,16 @@
       </xsl:choose>
     </xsl:template>
 
-    <xsl:template name="replace_id_substring">
+    <xsl:template name="replace_substring">
         <xsl:param name="text" />
         <xsl:param name="from" />
         <xsl:param name="to" />
         <xsl:choose>
             <xsl:when test="contains($text, $from)">
-                <xsl:call-template name="replace_id_substring">
+            	<xsl:value-of select="substring-before($text, $from)" />
+                <xsl:value-of select="$to" />                        
+                <xsl:call-template name="replace_substring">
                     <xsl:with-param name="text">
-                        <xsl:value-of select="substring-before($text, $from)" />
-                        <xsl:value-of select="$to" />
                         <xsl:value-of select="substring-after($text, $from)" />
                     </xsl:with-param>
                     <xsl:with-param name="from">
@@ -128,3 +115,5 @@
     </xsl:template>
 
 </xsl:stylesheet>
+
+

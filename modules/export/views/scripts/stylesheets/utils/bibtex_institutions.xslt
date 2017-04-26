@@ -29,8 +29,9 @@
  * @category    Application
  * @package     Module_CitationExport
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
+ * @version     $Id: bibtex_editors.xslt 8422 2011-05-27 16:53:31Z sszott $
  */
 -->
 
@@ -42,21 +43,16 @@
 
     <xsl:output method="text" omit-xml-declaration="yes" />
 
-    <!-- bibtex-style for pages  -->
-    <xsl:template name="Pages">
-      <xsl:param name="first" />
-      <xsl:param name="last" />
-      <xsl:param name="number" />
+    <!-- bibtex-style for institutions  -->
+    <xsl:template match="Collection[@RoleName='institutes']">
+      <xsl:value-of select="@Name" />
       <xsl:choose>
-         <xsl:when test="string-length($first) > 0 and string-length($last) > 0">
-            <xsl:value-of select="$first" /><xsl:text> -- </xsl:text><xsl:value-of select="$last" />
+         <xsl:when test="position()=last()">
+            <xsl:text></xsl:text>
          </xsl:when>
-         <xsl:when test="string-length($first) > 0">
-            <xsl:value-of select="$first" />
-         </xsl:when>
-         <xsl:when test="string-length($number) > 0">
-            <xsl:value-of select="$number" />
-         </xsl:when>
+         <xsl:otherwise>
+            <xsl:text>; </xsl:text>
+         </xsl:otherwise>
       </xsl:choose>
     </xsl:template>
 

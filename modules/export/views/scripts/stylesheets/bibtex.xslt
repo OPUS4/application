@@ -44,10 +44,10 @@
 
     <xsl:output method="text"  omit-xml-declaration="yes"/>
 
-    <xsl:include href="utils/replace_nonascii.xslt"/>
+    <xsl:include href="utils/bibtex_replace_nonascii.xslt"/>
     <xsl:include href="utils/bibtex_authors.xslt"/>
     <xsl:include href="utils/bibtex_editors.xslt"/>
-	<!-- TODO add missing file xsl:include href="utils/bibtex_institutions.xslt"/-->
+	<xsl:include href="utils/bibtex_institutions.xslt"/>
     <xsl:include href="utils/bibtex_pages.xslt"/>
     
     <xsl:template match="*" />

@@ -29,9 +29,8 @@
  * @category    Application
  * @package     Module_CitationExport
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 -->
 
@@ -45,7 +44,7 @@
 
     <!-- bibtex-style for editors  -->
     <xsl:template match="PersonEditor">
-      <xsl:value-of select="concat(@FirstName, ' ', @LastName)" />
+      <xsl:value-of select="concat(@LastName, ', ', @FirstName)" />
       <xsl:choose>
          <xsl:when test="position()=last()">
             <xsl:text></xsl:text>
