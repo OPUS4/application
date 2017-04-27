@@ -97,7 +97,7 @@ class CitationExport_IndexController extends Application_Controller_Action {
         if (isset($config->export->download))
         {
             $value = $config->export->download;
-            $download = $value !== 0 && $value !== false && $value !== '';
+            $download = $value !== '0' && $value !== false && $value !== '';
         }
 
         if ($download)

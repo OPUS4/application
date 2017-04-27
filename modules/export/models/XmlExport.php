@@ -99,7 +99,7 @@ class Export_Model_XmlExport extends Export_Model_ExportPluginAbstract {
             if (isset($appConfig->export->download))
             {
                 $value = $appConfig->export->download;
-                $download = $value !== 0 && $value !== false && $value !== '';
+                $download = $value !== '0' && $value !== false && $value !== '';
             }
 
             if ($download)
