@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -23,66 +23,42 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- *
- * @category    Application
- * @package     Application_Export
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
- * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
- * Class for registering and accessing export format handlers.
+ * Unit tests for view helper for rendering export links.
+ *
+ * @category    Application
+ * @package     Application_View_Helper
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Application_Export_Exporter
+class Application_View_Helper_ExportLinksEnabledTest extends ControllerTestCase
 {
 
-    private $_formats = array();
+    private $_helper;
 
-    public function addFormats($options)
+    public function setUp()
     {
-        if (!is_array($options))
-        {
-            throw new Exception('Invalid argument: should be array');
-        }
+        parent::setUp();
 
-        foreach ($options as $key => $option)
-        {
-            // TODO use addFormat function, get key from 'name' or use hash?
-            $format = new Zend_Navigation_Page_Mvc($option);
-
-            // TODO check if key is string
-            $this->_formats[$key] = $format;
-        }
+        $this->_helper = new Application_View_Helper_ExportLinksEnabled();
     }
 
-    public function getFormats()
+    public function testExportLinksEnabled()
     {
-        return $this->_formats;
+        $this->assertTrue($this->_helper->exportLinksEnabled());
+
+        Zend_Registry::get('Opus_Exporter')->removeAll();
+
+        $this->assertFalse($this->_helper->exportLinksEnabled());
     }
 
-    public function removeAll()
+    public function testExportLinksEnabledForContext()
     {
-        $this->_formats = array();
-    }
-
-    public function getAllowedFormats()
-    {
-        $formats = $this->getFormats();
-
-        $allowed = array();
-
-        foreach ($formats as $format)
-        {
-            $module = $format->getModule();
-
-            if (Opus_Security_Realm::getInstance()->checkModule($module))
-            {
-                $allowed[] = $format;
-            }
-        }
-
-        return $allowed;
+        $this->assertTrue($this->_helper->exportLinksEnabled('search'));
+        $this->assertTrue($this->_helper->exportLinksEnabled('unknown'));
     }
 
 }

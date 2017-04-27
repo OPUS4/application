@@ -34,9 +34,40 @@
 class Application_Export_ExporterTest extends ControllerTestCase
 {
 
+    private $_guestExportEnabled;
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        $guest = Opus_UserRole::fetchByName('guest');
+        $modules = $guest->listAccessModules();
+
+        $this->_guestExportEnabled = in_array('export', $modules);
+    }
+
+
+    public function tearDown()
+    {
+        // restore guest access to export module
+        $guest = Opus_UserRole::fetchByName('guest');
+
+        if ($this->_guestExportEnabled)
+        {
+            $guest->appendAccessModule('export');
+        }
+        else {
+            $guest->removeAccessModule('export');
+        }
+
+        $guest->store();
+
+        parent::tearDown();
+    }
+
     public function testAddFormats()
     {
-        // HACK to setup route for tests below
+        // TODO remove HACK to setup route for tests below
         $this->dispatch('/home');
 
         $exporter = new Application_Export_Exporter();
@@ -72,7 +103,7 @@ class Application_Export_ExporterTest extends ControllerTestCase
 
     public function testGetFormats()
     {
-        // HACK to setup route
+        // TODO remove HACK to setup route
         $this->dispatch('/home');
 
         $this->markTestIncomplete('more testing?');
@@ -110,6 +141,45 @@ class Application_Export_ExporterTest extends ControllerTestCase
         $this->assertTrue($bibtex->get('frontdoor'));
         $this->assertFalse($bibtex->get('search'));
         $this->assertNull($bibtex->get('admin'));
+    }
+
+    public function testGetAllowedFormats()
+    {
+        $exporter = Zend_Registry::get('Opus_Exporter');
+
+        $formats = $exporter->getAllowedFormats();
+
+        $this->assertCount(5, $formats);
+
+        $this->enableSecurity();
+
+        $guest = Opus_UserRole::fetchByName('guest');
+        $guest->removeAccessModule('export');
+        $guest->store();
+
+        $formats = $exporter->getAllowedFormats();
+
+        $this->assertCount(2, $formats);
+    }
+
+    public function testGetAllowedFormatsForSearch()
+    {
+        $exporter = Zend_Registry::get('Opus_Exporter');
+
+        $formats = $exporter->getAllowedFormats('search');
+
+        $this->assertCount(5, $formats);
+
+        $this->enableSecurity();
+
+        $guest = Opus_UserRole::fetchByName('guest');
+        $guest->removeAccessModule('export');
+        $guest->store();
+
+        $formats = $exporter->getAllowedFormats('search');
+
+        $this->assertCount(2, $formats);
+
     }
 
 }

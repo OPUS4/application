@@ -76,10 +76,12 @@ if($this->jQueryEnabled()) {
                 <h3><span id="search-result-numofhits"><?= $this->numOfHits . '</span> ' . ($this->numOfHits === 1 ? $this->translate('results_title_single') : $this->translate('results_title')); ?></h3>
             <?php endif ?>
             <?php if (!$this->isSimpleList) include('pagination.phtml'); ?>
+            <?PHP if ($this->exportLinksEnabled('search')) : ?>
             <div class="export-links dropdown">
                 <button class="dropdown-button">Export</button>
                 <?= $this->exportLinks(null, 'search') ?>
             </div>
+            <?PHP endif ?>
         </div>
         <?php if (!$this->isSimpleList) include('searchOptions.phtml'); ?>
         <?php if (!is_null($this->results)) : ?>

@@ -27,89 +27,30 @@
  * @category    Application
  * @package     Application_Xslt
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-
-/**
- * View helper for rendering export links.
- *
- * TODO render link only if user has access to module
- */
-class Application_View_Helper_ExportLinks extends Application_View_Helper_Abstract
+class Application_View_Helper_ExportLinksEnabled extends Application_View_Helper_Abstract
 {
 
-    /**
-     * Returns HTMl for rendering export links.
-     * @param null $keys Keys for parameters that should be include in export link
-     * @return string HTML
-     */
-    public function exportLinks($keys = null, $context = null) {
-        return $this->toString($keys, $context);
-    }
-
-    public function toString($keys = null, $context = null)
+    public function exportLinksEnabled($context = null)
     {
         $exporter = Zend_Registry::get('Opus_Exporter'); // TODO use constant
 
         $formats = $exporter->getAllowedFormats();
 
-        $output = '<ul>';
+        $formatsInContext = array();
 
         foreach ($formats as $format)
         {
             // if context provided skip format if it has been set to false
-            if (!is_null($context) && $format->get($context) === false) {
-                continue;
-            }
-
-            $params = $format->getParams();
-
-            if (!is_null($keys))
+            if (is_null($context) || $format->get($context) !== false)
             {
-                if (!is_array($keys))
-                {
-                    $keys = array($keys);
-                }
-
-                foreach ($keys as $key)
-                {
-                    $params[$key] = $this->view->$key;
-                }
+                $formatsInContext[] = $format;
             }
-
-            $format->setParams($params);
-
-            $output .= '<li>';
-            $output .= $this->renderLink($format);
-            $output .= '</li>';
         }
 
-        $output .= '</ul>';
-
-        return $output;
-    }
-
-    public function __toString()
-    {
-        return $this->toString();
-    }
-
-    /**
-     * @param $format
-     * @return string
-     *
-     * TODO use translations (register module translation first)
-     * TODO add docId OR search parameters to link
-     */
-    public function renderLink($format)
-    {
-        $name = $format->get('name');
-        $description = $format->get('description');
-        $formatClass = strtolower($name);
-        $format->setResetParams(false);
-
-        return "<a href=\"{$format->getHref()}\" title=\"$description\" class=\"export $formatClass\">$name</a>";
+        return count($formatsInContext) > 0;
     }
 
 }
