@@ -35,9 +35,8 @@
  * @author      Simone Finkbeiner (simone.finkbeiner@ub.uni-stuttgart.de)
  * @author      Jens Schwidder <schwidder@zib.de>
  * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  *
  * TODO unit test bootstrap
  */
@@ -76,9 +75,14 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         $viewSetup = new Application_Controller_Plugin_ViewSetup();
         $frontController->registerPlugin($viewSetup);
 
+        $router = $frontController->getRouter();
+
+        // add default route for regular module/controller/action requests
+        $router->addDefaultRoutes();
+
         // specity the SWORD module as RESTful
         $restRoute = new Zend_Rest_Route($frontController, array(), array('sword'));
-        $frontController->getRouter()->addRoute('rest', $restRoute);
+        $router->addRoute('rest', $restRoute);
 
         $documentRoute = new Application_Controller_Route_Redirect(
             '^(\d+)/?$',
@@ -87,15 +91,15 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
             'document/%s'
         );
 
-        $frontController->getRouter()->addRoute('document', $documentRoute);
+        $router->addRoute('document', $documentRoute);
 
         // Simplify access to sitelinks, since crawlers module does not have a IndexController
-        $crawlersRoute = new Zend_Controller_Router_Route(
+        $crawlersRoute = new Application_Controller_Route_Redirect(
             'crawlers',
             array('module' => 'crawlers', 'controller' => 'sitelinks', 'action' => 'index')
         );
 
-        $frontController->getRouter()->addRoute('crawlers', $crawlersRoute);
+        $router->addRoute('crawlers', $crawlersRoute);
     }
 
     /**

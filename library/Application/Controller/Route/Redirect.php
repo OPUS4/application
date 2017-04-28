@@ -41,7 +41,8 @@ class Application_Controller_Route_Redirect extends Zend_Controller_Router_Route
     {
         if ($route = parent::match($path, $partial))
         {
-            $helper = new Zend_Controller_Action_Helper_Redirector();
+            $helper = Zend_Controller_Action_HelperBroker::getStaticHelper('redirector');
+            $helper->setCode(301);
             $helper->gotoRoute($route);
         }
     }

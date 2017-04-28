@@ -73,7 +73,9 @@ class SecurityAdminTest extends ControllerTestCase {
         $this->useEnglish();
         $this->dispatch('/admin/iprange');
         $this->assertQueryContentContains('//html/head/title', 'Manage IP Ranges');
-        $this->assertQueryContentContains('//html/body', 'Add IP range');
+        $this->assertQueryContentContains('//html/body', 'IP Range');
+        $this->assertQueryContentContains('//a.add', 'Add');
+        $this->assertXpath('//a[@href="/admin/iprange/new"]');
     }
 
     public function testAccessAccessController() {

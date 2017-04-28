@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,55 +24,54 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @category    Application
+ * @package     View_Helper
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class RefereeTest extends ControllerTestCase {
 
-    private $_refereeAccount;
+/**
+ * View helper for rendering the fulltext logo for documents in the search result list.
+ */
+class Application_View_Helper_FulltextLogo extends Application_View_Helper_Abstract
+{
 
-    public function setUp() {
-        parent::setUp();
-
-        $userRole = Opus_UserRole::fetchByName('reviewer');
-
-        $account = new Opus_Account();
-        $account->setLogin('referee');
-        $account->setPassword('refereereferee');
-        $account->setRole(array($userRole));
-        $account->store();
-
-        $this->_refereeAccount = $account;
-
-        $this->enableSecurity();
-        $this->loginUser('referee', 'refereereferee');
-    }
-
-    public function tearDown() {
-        $this->logoutUser();
-        $this->restoreSecuritySetting();
-
-        if (!is_null($this->_refereeAccount))
+    public function fulltextLogo($doc)
+    {
+        if (!$doc instanceof Opus_Document)
         {
-            $this->_refereeAccount->delete();
+            // TODO log
+            return;
         }
 
-        parent::tearDown();
-    }
+        $cssClass = "fulltext-logo";
+        $tooltip = null;
 
-    public function testAccessReviewModule() {
-        $this->useEnglish();
-        $this->dispatch('/review');
-        $this->assertQueryContentContains('//html/head/title', 'Review Documents');
-        $this->assertQueryContentContains('//html/body', 'Review Documents');
-    }
 
-    public function testPublishDocument() {
-        $this->markTestIncomplete('not tested');
-        // TODO
+        if ($doc->hasFulltext())
+        {
+            $cssClass .= ' fulltext';
+            $tooltip = 'fulltext-icon-tooltip';
+        }
+
+        if ($doc->isOpenAccess())
+        {
+            $cssClass .= ' openaccess';
+            $tooltip = 'fulltext-icon-oa-tooltip';
+        }
+
+        $output = "<div class=\"$cssClass\"";
+
+        if (!is_null($tooltip))
+        {
+            $tooltip = $this->view->translate(array($tooltip));
+            $output .= " title=\"$tooltip\"";
+        }
+
+        $output .= "></div>";
+
+        return $output;
     }
 
 }
