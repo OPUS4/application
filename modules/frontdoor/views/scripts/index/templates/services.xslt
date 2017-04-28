@@ -104,7 +104,14 @@
                           <xsl:with-param name="string">frontdoor_download_file</xsl:with-param>
                       </xsl:call-template>
                       <xsl:text> </xsl:text>
-                      <xsl:value-of select="@Label" />
+                      <xsl:choose>
+                          <xsl:when test="normalize-space(@Label)">
+                              <xsl:value-of select="@Label" />
+                          </xsl:when>  
+                          <xsl:otherwise>
+                              <xsl:value-of select="@PathName" />
+                          </xsl:otherwise>
+                      </xsl:choose>  
                       <xsl:text> (</xsl:text>
                       <xsl:value-of select="@MimeType" />
                       <xsl:text>)</xsl:text>
