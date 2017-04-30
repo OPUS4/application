@@ -1,3 +1,5 @@
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+
 INSERT INTO `documents` (`id`, `completed_date`, `completed_year`, `contributing_corporation`, `creating_corporation`, `thesis_date_accepted`, `type`, `edition`, `issue`, `language`, `page_first`, `page_last`, `page_number`, `publication_state`, `published_date`, `published_year`, `publisher_name`, `publisher_place`, `server_date_modified`, `server_date_published`, `server_state`, `volume`, `belongs_to_bibliography`) VALUES
 (170, NULL, 2013, NULL, NULL, NULL, 'preprint', NULL, NULL, 'deu', NULL, NULL, NULL, 'draft', NULL, 2013, '', NULL, '2013-09-13T12:00:00Z', '2013-09-13T12:00:00Z', 'unpublished', NULL, 0);
 

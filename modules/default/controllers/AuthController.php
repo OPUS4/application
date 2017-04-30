@@ -86,6 +86,12 @@ class AuthController extends Application_Controller_Action {
      * @return void
      */
     public function loginAction() {
+        // Redirect to start page if user is already logged in
+        $identity = Zend_Auth::getInstance()->getIdentity();
+        if (empty($identity) !== true) {
+            $this->_helper->_redirector('index', 'index', 'home', array());
+            return;
+        }
 
         // Initialize form.
         $form = $this->getLoginForm();
@@ -160,7 +166,6 @@ class AuthController extends Application_Controller_Action {
         $module = $this->_loginUrl['module'];
         $params = $this->_loginUrl['params'];
         $this->_helper->_redirector($action, $controller, $module, $params);
-
     }
 
     /**

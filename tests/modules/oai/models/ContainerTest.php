@@ -420,9 +420,7 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
         $this->assertFalse($doc->hasEmbargoPassed()); // not yet passed
 
         $container = new Oai_Model_Container($doc->getId());
-        $files = $container->getAccessibleFiles();
-
-        $this->assertCount(1, $files);
+        $container->getAccessibleFiles();
     }
 
 }

@@ -25,23 +25,17 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    TODO
+ * @category    Applicaton
  * @author      Thoralf Klein <thoralf.klein@zib.de>
- * @copyright   Copyright (c) 2011, OPUS 4 development team
+ * @copyright   Copyright (c) 2011-2016, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
-class Application_Controller_Action_Helper_SendFile extends Zend_Controller_Action_Helper_Abstract {
+class Application_Controller_Action_Helper_SendFile extends Application_Controller_Action_Helper_Abstract {
 
     const FPASSTHRU = 'fpassthru';
 
     const XSENDFILE = 'xsendfile';
-
-    /**
-     * @var Zend_Log
-     */
-    private $_logger = null;
 
     /**
      * This method to call when we use   $this->_helper->SendFile(...)   and
@@ -49,7 +43,8 @@ class Application_Controller_Action_Helper_SendFile extends Zend_Controller_Acti
      *
      * @see Application_Controller_Action_Helper_SendFile::sendFile
      */
-    public function direct($file, $method = self::FPASSTHRU, $mustResend = false) {
+    public function direct($file, $method = self::FPASSTHRU, $mustResend = false)
+    {
         return $this->sendFile($file, $method, $mustResend);
     }
 
@@ -61,8 +56,8 @@ class Application_Controller_Action_Helper_SendFile extends Zend_Controller_Acti
      * @param boolean $mustResend Ignore "if-modified-since" header, defaults to false.
      * @return void
      */
-    public function sendFile($file, $method = self::FPASSTHRU, $mustResend = false) {
-
+    public function sendFile($file, $method = self::FPASSTHRU, $mustResend = false)
+    {
         $response = $this->getResponse();
         if (!$response->canSendHeaders()) {
             throw new Exception("Cannot send headers");
@@ -109,7 +104,8 @@ class Application_Controller_Action_Helper_SendFile extends Zend_Controller_Acti
      *
      * @param string $file
      */
-    private function sendFileViaXSendfile($file) {
+    private function sendFileViaXSendfile($file)
+    {
         $response = $this->getResponse();
         $response->setHttpResponseCode(200);
         $response->setHeader('X-Sendfile', $file);
@@ -123,14 +119,17 @@ class Application_Controller_Action_Helper_SendFile extends Zend_Controller_Acti
      *
      * @SuppressWarnings(PHPMD.ExitExpression)
      */
-    private function sendFileViaFpassthru($file) {
+    private function sendFileViaFpassthru($file)
+    {
         $response = $this->getResponse();
         $response->setHttpResponseCode(200);
 
-        if (!is_null($this->_logger)) {
+        $logger = $this->getLogger();
+
+        if (!is_null($logger)) {
             $content = ob_get_contents();
-            if (!empty ($content)) {
-                $this->_logger->err($content);
+            if (!empty($content)) {
+                $logger->err($content);
             }
         }
 
@@ -153,15 +152,8 @@ class Application_Controller_Action_Helper_SendFile extends Zend_Controller_Acti
         }
 
         fclose($filePointer);
-        exit; // needed for preventing broken downloads (OPUSVIER-1806)
-    }
 
-    /**
-     *
-     * @param Zend_Log $logger
-     */
-    public function setLogger($logger) {
-        $this->_logger = $logger;
+        exit; // needed for preventing broken downloads (OPUSVIER-1806)
     }
 
 }

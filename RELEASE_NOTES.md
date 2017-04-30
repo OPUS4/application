@@ -2,6 +2,64 @@
 
 ---
 
+## Release 4.5 2016-12-06
+
+Dieser Release enhält viele Fehlerkorrekturen und grundlegenden Arbeiten
+um eine stabile und effektive Weiterentwicklung von OPUS 4 sicherzustellen.
+Eine Auflistung von Tickets findet sich in der Datei [CHANGES.md].
+ 
+Die aktuelle Release-Version von OPUS 4 befindet sich auf dem **master**
+Branch von https://github.com/opus4/application. Die Entwicklung wird
+auf dem Branch **4.6** weitergehen. Patches für kritische Bugs werden
+auch zwischen Releases zum **master** Branch hinzugefügt, um sie zügig
+den Repositorien zur Verfügung stellen zu können.
+
+Für diesen Release hat sich das Datenbankschema verändert. Nach der 
+Aktualisierung der Sourcen mit Git muss das Updateskript `bin/update.sh`
+ausgeführt werden, um das Datenbankschema auf den aktuellen Stand zu 
+bringen. Die Datenbank muss vor der Aktualisierung auf dem Stand von 
+OPUS 4.4.5, dem letzten Tarball-Release, sein.
+
+Bei den Abhängigkeiten (`composer.json`) ist jQuery-UI hinzugekommen.
+Beide Javascript-Bibliotheken, jQuery und jQuery-UI, werden nun von 
+Composer standardmässig installiert. Javascript wird vermehrt für neue 
+Funktionen im User Interface verwendet. Für eine Aktualisierung der 
+Abhängigkeiten das Skript `bin/install-composer.sh` ausführen, nach dem 
+die Sourcedateien mit Git auf den neuesten Stand gebracht wurden.
+
+Es gibt eine neue Konfigurationsdatei `console.ini`. In ihr stehen 
+Parameter, die nur für die lokal ausgeführten Skripte verwendet werden.
+
+Der Schlüssel 'name' in der `config.ini` kann verwendet werden, um den Namen 
+der Instanz zu definieren, z.B. 'OPUS 4 Demo'. Dieser Name wird z.B. im Titel
+von RSS Feeds eingesetzt, anstelle des bisherigen 'OPUS RSS Feed'. Dadurch
+lassen sich Feeds von mehreren Instanzen leichter unterscheiden.
+
+Die Anzeige und Sortierung von Autoren wurde umgedreht und findet jetzt 
+zuerst nach dem Nachnahmen und dann dem Vornamen statt. Dafür muss eine
+Neuindizierung aller Dokumente durchgeführt werden. Das Indexschema hat 
+sich mit diesem Release nicht verändert.
+
+Bei der Navigation von Suchergebnissen in der Frontdoor können jetzt auch
+die Cursor-Tasten, rechts bzw. links, für den Wechsel zum nächsten oder
+vorherigen Dokument verwendet werden.
+
+In der Administration werden bei der Eingabe von GND-Schlagwörtern jetzt 
+Vorschläge angeboten. Diese Vorschläge kommen von den bereits im Repository
+vorhandenen Schlagwörtern und nicht aus den GND Daten. Es handelt sich
+um ein User Interface Experiment. Hilfen bei der Eingabe sollen weiter 
+ausgebaut werden. 
+
+Für weitere Informationen schauen Sie auf der OPUS 4 Homepage vorbei.
+
+http://www.opus-repository.org
+
+bzw.
+
+https://opus4.github.io
+
+---
+
 ## Release 4.5-RC1 2016-04-25
 
 Dies ist der erste Release Candidate für OPUS 4.5. Er dient dazu den Release

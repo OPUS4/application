@@ -124,11 +124,16 @@ class Oai_ContainerControllerTest extends ControllerTestCase {
         Opus_Util_File::deleteDirectory($path);
         
         $this->assertResponseCode(500);
-        $this->assertContains('access denied on all files that are associated to the requested document', $this->getResponse()->getBody());        
+        $this->assertContains(
+            'access denied on all files that are associated to the requested document', $this->getResponse()->getBody()
+        );
     }
 
     public function testRequestPublishedDocWithAccessibleFile() {
-        $this->markTestIncomplete('build breaks when running this test on ci system -- it seems that phpunit does not allow to test for file downloads');
+        $this->markTestIncomplete(
+            'build breaks when running this test on ci system ' .
+            '-- it seems that phpunit does not allow to test for file downloads'
+        );
 
         // create test file test.pdf in file system
         $config = Zend_Registry::get('Zend_Config');

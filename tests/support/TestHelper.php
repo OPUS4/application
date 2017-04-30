@@ -53,13 +53,13 @@ class TestHelper extends Application_Bootstrap {
 
         $log = $this->getResource('Logging');
 
-        // Determine current schema revision from opus4current.sql
-        $sqlFile = dirname(dirname(__FILE__)) . '/db/schema/opus4current.sql';
+        // Determine current schema revision from opus4schema.sql
+        $sqlFile = dirname(dirname(__FILE__)) . '/db/schema/opus4schema.sql';
         if (false === is_file($sqlFile)) {
             $log->warn('Schema file ' . $sqlFile . ' not found.');
             return;
         }
-        
+
         // Scan for revision information
         $handle = @fopen($sqlFile, 'r');
         if (false === $handle) {
@@ -75,23 +75,23 @@ class TestHelper extends Application_Bootstrap {
             }
         }
         fclose($handle);
-        
+
         // Load revision from database
         $dba = Zend_Registry::get('db_adapter');
         try {
             $row = $dba->fetchRow($dba->select()->from('schema_version'));
             if (true === empty($row)) {
                 throw new Exception('No revision information available.');
-            } 
+            }
             $dbRev = $row['revision'];
         } catch (Exception $ex) {
             $log->warn('Cannot read schema information from database: ' . $ex->getMessage());
             return;
-        }           
-            
+        }
+
         // Compare revisions and throw exception if needed
         if (isset($sqlRev, $dbRev) && $sqlRev !== $dbRev) {
-            throw new Exception("Database schema revision mismatch. SQL file has '$sqlRev', DB has '$dbRev'. Consider rebuilding the database.\n");            
+            throw new Exception("Database schema revision mismatch. SQL file has '$sqlRev', DB has '$dbRev'. Consider rebuilding the database.\n");
         }
     }
 

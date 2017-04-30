@@ -53,17 +53,27 @@ class Home_IndexControllerTest extends ControllerTestCase {
     /**
      * Test help action.
      */
-    public function testHelpAction() {
+    public function testHelpActionEnglish() {
+        $this->useEnglish();
         $this->dispatch('/home/index/help');
         $this->assertResponseCode(200);
         $this->assertModule('home');
         $this->assertController('index');
         $this->assertAction('help');
-        // $this->validateXHTML(); TODO viele Anpassungen in Hilfedateien (DE, EN)
+        $this->validateXHTML();
+    }
+
+    public function testHelpActionGerman() {
+        $this->useGerman();
+        $this->dispatch('/home/index/help');
+        $this->assertResponseCode(200);
+        $this->assertModule('home');
+        $this->assertController('index');
+        $this->assertAction('help');
+        $this->validateXHTML();
     }
 
     public function testHelpActionSeparate() {
-        $this->markTestSkipped('Is *help.separate* parameter still supported?');
         $config = Zend_Registry::get('Zend_Config');
         $config->help->separate = true;
         $this->dispatch('/home/index/help');
@@ -71,6 +81,7 @@ class Home_IndexControllerTest extends ControllerTestCase {
         $this->assertModule('home');
         $this->assertController('index');
         $this->assertAction('help');
+        $this->validateXHTML();
     }
 
     /**
@@ -244,6 +255,36 @@ class Home_IndexControllerTest extends ControllerTestCase {
         // TODO $this->assertQuery('//html[@xml:lang="de"]');
 
         $this->assertXPath('//meta[@http-equiv="Content-Language" and @content="de"]');
+    }
+
+    /**
+     * Assumes that test are not run in 'production' environment.
+     */
+    public function testSignalNonProductionEnvironment() {
+        $this->useEnglish();
+
+        $this->dispatch('/home');
+
+        $this->assertQueryContentContains('//div#top-header', 'NON PRODUCTION ENVIRONMENT');
+    }
+
+    /**
+     * No way to change APPLICATION_ENV once it is set. It makes testing 'production' impossible,
+     * but that is a good thing because environment cannot be hidden by some other code.
+     */
+    public function testNoSignalingOfEnvironment() {
+        $this->useEnglish();
+
+        $this->dispatch('/home');
+
+        if (APPLICATION_ENV !== 'production') {
+            $this->assertQueryContentContains(
+                '//div#top-header', 'NON PRODUCTION ENVIRONMENT (' . APPLICATION_ENV . ')'
+            );
+        }
+        else {
+            $this->assertNotQueryContentContains('//div#top-header', 'NON PRODUCTION ENVIRONMENT');
+        }
     }
 
 }

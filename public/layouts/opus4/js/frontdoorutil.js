@@ -25,10 +25,9 @@
  *
  * @category    Application
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
- * 
  */
 
 $(function() {
@@ -50,5 +49,23 @@ $(function() {
     $('.abstractButton').click(toggleAbstract);
     $('.abstractThreeDots').click(toggleAbstract);
 
+    // add key handler for navigation
+    $('body').on('keydown', function (e) {
+            var event = window.event ? window.event : e;
 
+            if (event.keyCode == 37) {
+                var link = $('#frontdoor-link-prev');
+                if (link.length) {
+                    link[0].click();
+                }
+            }
+            else if (event.keyCode == 39) {
+                var link = $('#frontdoor-link-next');
+                if (link.length) {
+                    link[0].click();
+                }
+            }
+        }
+    );
 });
+

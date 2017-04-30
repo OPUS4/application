@@ -112,7 +112,9 @@ class Admin_Form_Document_Subject extends Admin_Form_AbstractModelSubForm {
         }
         $this->addElement($element);
         
-        $this->addElement('Text', self::ELEMENT_VALUE, array('required' => true, 'size' => 30));
+        $this->addElement('Text', self::ELEMENT_VALUE, array(
+            'required' => true, 'size' => 30, 'class' => 'subject ui-autocomplete-input'
+        ));
         $this->addElement('Text', self::ELEMENT_EXTERNAL_KEY);
     }
 

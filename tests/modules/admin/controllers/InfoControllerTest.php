@@ -33,14 +33,14 @@
  * @version     $Id$
  */
 class Admin_InfoControllerTest extends ControllerTestCase {
-    
+
     public function testIndexDisplayVersion() {
         $config = Zend_Registry::get('Zend_Config');
         $this->dispatch('admin/info');
-        $this->validateXHTML();
         $this->assertResponseCode(200);
         $this->assertQuery('dt#admin_info_version');
         $this->assertQueryContentContains("//dt[@id='admin_info_version']/following-sibling::dd", $config->version);
+        $this->validateXHTML();
     }
 
     /**

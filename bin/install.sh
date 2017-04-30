@@ -55,6 +55,7 @@ fi
 # Set defaults
 APACHE_CONF="${APACHE_CONF:-apache.conf}"
 OPUS_CONF="${OPUS_CONF:-config.ini}"
+OPUS_CONSOLE_CONF="${OPUS_CONSOLE_CONF:-console.ini}"
 
 SCRIPT_NAME="`basename "$0"`"
 SCRIPT_NAME_FULL="`readlink -f "$0"`"
@@ -105,6 +106,12 @@ then
 fi
 
 #
+# Prepare workspace
+#
+
+"$SCRIPT_PATH/prepare-workspace.sh"
+
+#
 # Install Composer and dependencies
 #
 
@@ -112,7 +119,12 @@ echo
 echo "Installing Composer and dependencies ..."
 echo
 
-"$SCRIPT_PATH/install-composer.sh" "$BASEDIR"
+if [[ $SUDO_ENABLED -eq 0 ]] ;
+then
+    "$SCRIPT_PATH/install-composer.sh" "$BASEDIR"
+else
+    sudo -u "$SUDO_USER" "$SCRIPT_PATH/install-composer.sh" "$BASEDIR"
+fi
 
 #
 # Prepare Apache2 configuration
@@ -274,6 +286,49 @@ sed -i -e "s!@db.user.name@!'$DB_USER_ESC'!" \
        -e "s!@db.user.password@!'$DB_USER_PASSWORD_ESC'!" \
        -e "s!@db.name@!'$DBNAME_ESC'!" "$OPUS_CONF"
 
+# Add admin credentials to configuration for command line scripts
+cp console.ini.template "$OPUS_CONSOLE_CONF"
+
+sed -i -e "s!@db.admin.name@!'$DB_ADMIN_ESC'!" \
+       -e "s!@db.admin.password@!'$DB_ADMIN_PASSWORD_ESC'!" "$OPUS_CONSOLE_CONF"
+
+#
+# Set file permissions
+#
+#
+
+cd "$BASEDIR"
+
+if [[ $SUDO_ENABLED -eq 1 ]] ;
+then
+    "$SCRIPT_PATH/set-file-permissions.sh" -g www-data
+else
+    cat <<LimitString
+Make sure read/write permissions for workspace folder are setup properly. You can use to set default permissions:
+
+sudo bin/set-file-permissions.sh
+LimitString
+fi
+
+#
+# Set password for administrator account
+#
+
+while [[ -z $ADMIN_PWD || "$ADMIN_PWD" != "$ADMIN_PWD_VERIFY" ]] ;
+do
+  echo
+  read -p "Please enter password for OPUS 'admin' account: " -s ADMIN_PWD
+  echo
+  read -p "Please enter password again: " -s ADMIN_PWD_VERIFY
+  echo
+  if [[ $ADMIN_PWD != $ADMIN_PWD_VERIFY ]] ;
+  then
+    echo "Passwords do not match. Please try again."
+  fi
+done
+
+php "$BASEDIR/scripts/change-password.php" admin "$ADMIN_PWD"
+
 #
 # Install and configure Solr search server
 #
@@ -339,13 +394,6 @@ CONFIG_INI="$BASEDIR/application/configs/$OPUS_CONF"
 "$SCRIPT_PATH/install-config-solr.sh" "$CONFIG_INI" \
     "${SOLR_SERVER_HOST}" "$SOLR_SERVER_PORT" "${SOLR_CONTEXT}" \
     "${SOLR_EXTRACT_SERVER_HOST}" "$SOLR_EXTRACT_SERVER_PORT" "${SOLR_EXTRACT_CONTEXT}"
-
-#
-# Prepare workspace
-#
-
-mkdir -p "$BASEDIR/workspace/files"
-mkdir -p "$BASEDIR/workspace/incoming"
 
 #
 # Import some test documents optionally
@@ -424,14 +472,6 @@ then
 fi
 
 cd "$BASEDIR"
-
-#
-# Set file permissions
-#
-# TODO make it possible to run without sudo
-#
-
-"$SCRIPT_PATH/set-file-permissions.sh" -g www-data
 
 #
 # Restart Apache2 (optionally)
