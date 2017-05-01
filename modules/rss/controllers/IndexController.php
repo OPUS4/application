@@ -60,7 +60,12 @@ class Rss_IndexController extends Application_Controller_Xml {
         }
         catch (Application_Util_QueryBuilderException $e) {
             $this->getLogger()->err(__METHOD__ . ' : ' . $e->getMessage());
-            throw new Application_Exception($e->getMessage());
+            $applicationException = new Application_Exception($e->getMessage());
+            $code = $e->getCode();
+            if ($code != 0) {
+                $applicationException->setHttpResponseCode($code);
+            }            
+            throw $applicationException;
         }
 
         // overwrite parameters in rss context
