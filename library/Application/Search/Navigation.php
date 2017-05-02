@@ -35,6 +35,8 @@
 
 /**
  * Class for navigation in search results.
+ *
+ * TODO should be implemented so that it is an optional component/aspect
  */
 class Application_Search_Navigation {
 
@@ -49,12 +51,14 @@ class Application_Search_Navigation {
 
         $queryBuilderInput = $queryBuilder->createQueryBuilderInputFromRequest($request);
 
+        $searchType = $request->getParam('searchtype');
+
         if (is_null($request->getParam('sortfield')) &&
-                ($request->getParam('browsing') === 'true' || $request->getParam('searchtype') === 'collection')) {
+                ($request->getParam('browsing') === 'true' || $searchType === 'collection')) {
             $queryBuilderInput['sortField'] = 'server_date_published';
         }
         
-        if ($request->getParam('searchtype') === Application_Util_Searchtypes::LATEST_SEARCH) {
+        if ($searchType === Application_Util_Searchtypes::LATEST_SEARCH) {
             return $queryBuilder->createSearchQuery(self::validateInput($queryBuilderInput, $logger, 10, 100));
         }
         
