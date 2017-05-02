@@ -57,7 +57,7 @@ class Admin_CollectionController extends Application_Controller_Action {
     }
 
     public function indexAction() {
-        $this->_redirectToAndExit('index', '', 'collectionroles');
+        $this->_helper->Redirector->redirectToAndExit('index', '', 'collectionroles');
     }
 
     /**
@@ -68,12 +68,16 @@ class Admin_CollectionController extends Application_Controller_Action {
     public function newAction() {
         $id = $this->getRequest()->getParam('id');
         if (is_null($id)) {
-            $this->_redirectToAndExit('index', array('failure' => 'id parameter is missing'), 'collectionroles');
+            $this->_helper->Redirector->redirectToAndExit(
+                'index', array('failure' => 'id parameter is missing'), 'collectionroles'
+            );
             return;
         }
         $type = $this->getRequest()->getParam('type');
         if (is_null($type)) {
-            $this->_redirectToAndExit('index', array('failure' => 'type parameter is missing'), 'collectionroles');
+            $this->_helper->Redirector->redirectToAndExit(
+                'index', array('failure' => 'type parameter is missing'), 'collectionroles'
+            );
             return;
         }
 
@@ -103,13 +107,15 @@ class Admin_CollectionController extends Application_Controller_Action {
         try {
             $collectionModel = new Admin_Model_Collection($this->getRequest()->getParam('id', ''));
             $parentId = $collectionModel->move($this->getRequest()->getParam('pos'));
-            $this->_redirectTo(
+            $this->_helper->Redirector->redirectTo(
                 'show', $this->view->translate('admin_collections_move', $collectionModel->getName()),
                 'collection', 'admin', array('id' => $parentId)
             );
         }
         catch (Admin_Model_Exception $e) {
-            $this->_redirectToAndExit('index', array('failure' => $e->getMessage()), 'collectionroles');
+            $this->_helper->Redirector->redirectToAndExit(
+                'index', array('failure' => $e->getMessage()), 'collectionroles'
+            );
         }
     }
 
@@ -117,7 +123,7 @@ class Admin_CollectionController extends Application_Controller_Action {
         try {
             $collectionModel = new Admin_Model_Collection($this->getRequest()->getParam('id', ''));
             $id = $collectionModel->setVisiblity($visibility);
-            $this->_redirectTo(
+            $this->_helper->Redirector->redirectTo(
                 'show', $this->view->translate(
                     'admin_collections_changevisibility',
                     $collectionModel->getName()
@@ -125,7 +131,9 @@ class Admin_CollectionController extends Application_Controller_Action {
             );
         }
         catch (Application_Exception $e) {
-            $this->_redirectToAndExit('index', array('failure' => $e->getMessage()), 'collectionroles');
+            $this->_helper->Redirector->redirectToAndExit(
+                'index', array('failure' => $e->getMessage()), 'collectionroles'
+            );
         }
     }
 
@@ -143,10 +151,12 @@ class Admin_CollectionController extends Application_Controller_Action {
             $name = $collectionModel->getName();
             $returnId = $collectionModel->delete();
             $message = $this->view->translate('admin_collections_delete', $name);
-            $this->_redirectTo('show', $message, 'collection', 'admin', array ('id' => $returnId));
+            $this->_helper->Redirector->redirectTo('show', $message, 'collection', 'admin', array ('id' => $returnId));
         }
         catch (Application_Exception $e) {
-            $this->_redirectToAndExit('index', array('failure' => $e->getMessage()), 'collectionroles');
+            $this->_helper->Redirector->redirectToAndExit(
+                'index', array('failure' => $e->getMessage()), 'collectionroles'
+            );
         }
     }
 
@@ -172,7 +182,9 @@ class Admin_CollectionController extends Application_Controller_Action {
             $collectionModel = new Admin_Model_Collection($id);
         }
         catch (Application_Exception $e) {
-            $this->_redirectToAndExit('index', array('failure' => $e->getMessage()), 'collectionroles');
+            $this->_helper->Redirector->redirectToAndExit(
+                'index', array('failure' => $e->getMessage()), 'collectionroles'
+            );
             return;
         }
 
@@ -204,7 +216,7 @@ class Admin_CollectionController extends Application_Controller_Action {
      */
     public function createAction() {
         if (!$this->getRequest()->isPost()) {
-            return $this->_redirectToAndExit('index', '', 'collectionroles');
+            return $this->_helper->Redirector->redirectToAndExit('index', '', 'collectionroles');
         }
 
         $data = $this->getRequest()->getPost();
@@ -242,7 +254,7 @@ class Admin_CollectionController extends Application_Controller_Action {
         if (true === $collection->isNewRecord()) {
             $id = $this->getRequest()->getParam('id');
             if (is_null($id)) {
-                return $this->_redirectToAndExit(
+                return $this->_helper->Redirector->redirectToAndExit(
                     'index', array('failure' => 'id parameter is missing'),
                     'collectionroles'
                 );
@@ -250,7 +262,7 @@ class Admin_CollectionController extends Application_Controller_Action {
 
             $type = $this->getRequest()->getParam('type');
             if (is_null($type)) {
-                return $this->_redirectToAndExit(
+                return $this->_helper->Redirector->redirectToAndExit(
                     'index', array('failure' => 'type parameter is missing'),
                     'collectionroles'
                 );
@@ -272,13 +284,13 @@ class Admin_CollectionController extends Application_Controller_Action {
                     break;
 
                 default:
-                    return $this->_redirectToAndExit(
+                    return $this->_helper->Redirector->redirectToAndExit(
                         'index', array('failure' => 'type paramter invalid'),
                         'collectionroles'
                     );
             }
 
-            $this->_redirectTo(
+            $this->_helper->Redirector->redirectTo(
                 'show', $message, 'collection', 'admin', array(
                     'id' => $collection->getParentNodeId(), 'anchor' => 'col' . $collection->getId()
                 )
@@ -293,9 +305,9 @@ class Admin_CollectionController extends Application_Controller_Action {
         $parents = $collection->getParents();
         if (count($parents) === 1) {
             // TODO when is this executed
-            return $this->_redirectTo('show', $message, 'collection', 'admin', array('id' => $collection->getRoleId()));
+            return $this->_helper->Redirector->redirectTo('show', $message, 'collection', 'admin', array('id' => $collection->getRoleId()));
         }
-        return $this->_redirectTo(
+        return $this->_helper->Redirector->redirectTo(
             'show', $message, 'collection', 'admin', array(
                 'id' => $parents[1]->getId(), 'anchor' => 'col' . $collection->getId()
             )
@@ -320,14 +332,14 @@ class Admin_CollectionController extends Application_Controller_Action {
         $order = $request->getParam('order');
 
         if (is_null($collectionId)) {
-            return $this->_redirectToAndExit(
+            return $this->_helper->Redirector->redirectToAndExit(
                 'index',
                 array('failure' => 'id parameter is missing'), 'collectionroles'
             );
         }
 
         if (!is_numeric($collectionId)) {
-            return $this->_redirectToAndExit(
+            return $this->_helper->Redirector->redirectToAndExit(
                 'index',
                 array('failure' => 'id parameter must be an integer'), 'collectionroles'
             );
@@ -337,7 +349,9 @@ class Admin_CollectionController extends Application_Controller_Action {
             $collection = new Opus_Collection($collectionId);
 
             if (is_null($sortBy)) {
-                return $this->_redirectToAndExit('show', null, 'collection', 'admin', array('id' => $collectionId));
+                return $this->_helper->Redirector->redirectToAndExit(
+                    'show', null, 'collection', 'admin', array('id' => $collectionId)
+                );
             }
 
             $reverse = (strtolower($order) == 'desc');
@@ -350,7 +364,7 @@ class Admin_CollectionController extends Application_Controller_Action {
                     $collection->sortChildrenByNumber($reverse);
                     break;
                 default:
-                    return $this->_redirectToAndExit(
+                    return $this->_helper->Redirector->redirectToAndExit(
                         'show',
                         array('failure' => 'parameter sortby must have value name or number'),
                         'collection', 'admin', array('id' => $collectionId)
@@ -359,13 +373,15 @@ class Admin_CollectionController extends Application_Controller_Action {
             }
         }
         catch (Opus_Model_NotFoundException $omnfe) {
-            return $this->_redirectToAndExit(
+            return $this->_helper->Redirector->redirectToAndExit(
                 'index',
                 array('failure' => "collection with id $collectionId not found"), 'collectionroles'
             );
         }
 
-        return $this->_redirectToAndExit('show', null, 'collection', 'admin', array('id' => $collectionId));
+        return $this->_helper->Redirector->redirectToAndExit(
+            'show', null, 'collection', 'admin', array('id' => $collectionId)
+        );
     }
 
     /**
@@ -378,7 +394,7 @@ class Admin_CollectionController extends Application_Controller_Action {
     public function assignAction() {
         $documentId = $this->getRequest()->getParam('document');
         if (is_null($documentId)) {
-            return $this->_redirectToAndExit(
+            return $this->_helper->Redirector->redirectToAndExit(
                 'index', array('failure' => 'document parameter missing'),
                 'collectionroles'
             );
@@ -395,14 +411,14 @@ class Admin_CollectionController extends Application_Controller_Action {
                 $collectionModel = new Admin_Model_Collection($colId);
                 $collectionModel->addDocument($documentId);
 
-                return $this->_redirectToAndExit(
+                return $this->_helper->Redirector->redirectToAndExit(
                     'edit',
                     $this->view->translate('admin_document_add_collection_success', $collectionModel->getName()),
                     'document', 'admin', array('id' => $documentId, 'section' => 'collections')
                 );
             }
             else {
-                return $this->_redirectToAndExit(
+                return $this->_helper->Redirector->redirectToAndExit(
                     'edit', null, 'document', 'admin', array('id' => $documentId,
                     'hash' => '123', 'continue' => 'addcol', 'colId' => $colId)
                 );
@@ -444,7 +460,7 @@ class Admin_CollectionController extends Application_Controller_Action {
         $children = $collection->getChildren();
         if (count($children) === 0) {
             // zurück zur Ausgangsansicht
-            $this->_redirectToAndExit(
+            $this->_helper->Redirector->redirectToAndExit(
                 'assign',
                 array('failure' => 'specified collection does not have any subcollections'), 'collection', 'admin',
                 array('document' => $documentId)

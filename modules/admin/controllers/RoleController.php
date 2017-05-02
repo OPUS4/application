@@ -96,7 +96,7 @@ class Admin_RoleController extends Application_Controller_Action {
             $postData = $this->getRequest()->getPost();
 
             if ($this->getRequest()->getPost('cancel')) {
-                return $this->_redirectTo('index');
+                return $this->_helper->Redirector->redirectTo('index');
             }
 
             $form = new Admin_Form_Role();
@@ -119,7 +119,7 @@ class Admin_RoleController extends Application_Controller_Action {
             }
         }
 
-        $this->_redirectTo('index');
+        $this->_helper->Redirector->redirectTo('index');
     }
 
     /**

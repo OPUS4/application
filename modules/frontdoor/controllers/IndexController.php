@@ -69,7 +69,7 @@ class Frontdoor_IndexController extends Application_Controller_Action {
             unset($params['start']);
             $params['searchtype'] = 'id';
 
-            return $this->_redirectToAndExit('index', null, 'index', 'export', $params);
+            return $this->_helper->Redirector->redirectToAndExit('index', null, 'index', 'export', $params);
         }
 
         $this->view->title = $this->view->translate('frontdoor_title');
@@ -359,7 +359,9 @@ class Frontdoor_IndexController extends Application_Controller_Action {
      */
     public function mapopus3Action() {
         $docId = $this->getRequest()->getParam('oldId');
-        $this->_redirectToAndExit('id', '', 'index', 'rewrite', array('type' => 'opus3-id', 'value' => $docId));
+        $this->_helper->Redirector->redirectToAndExit(
+            'id', '', 'index', 'rewrite', array('type' => 'opus3-id', 'value' => $docId)
+        );
     }
 
     /**

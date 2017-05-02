@@ -116,7 +116,7 @@ class Solrsearch_BrowseController extends Application_Controller_Action {
 
         if (count($visibleSeries) == 0)
         {
-            $this->_redirectToAndExit('index');
+            $this->_helper->Redirector->redirectToAndExit('index');
         }
 
         $this->view->series = $visibleSeries;

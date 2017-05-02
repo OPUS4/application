@@ -56,7 +56,9 @@ class Setup_LanguageController extends Application_Controller_SetupAbstract {
         $sortKey = $this->_request->getParam('sort', 'unit');
         $config = $this->getConfig()->toArray();
         if (!isset($config['setup']['translation']['modules']['allowed'])) {
-            $this->_redirectTo('error', array('failure' => 'setup_language_translation_modules_missing'));
+            $this->_helper->Redirector->redirectTo(
+                'error', array('failure' => 'setup_language_translation_modules_missing')
+            );
         }
 
 
