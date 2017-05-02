@@ -337,6 +337,7 @@ class Oai_IndexController extends Application_Controller_Xml {
 
         $sets = $oaiSets->getSets();
 
+
         foreach ($sets as $type => $name) {
             $opusDoc = $this->_xml->createElement('Opus_Sets');
             $typeAttr = $this->_xml->createAttribute('Type');
@@ -532,10 +533,13 @@ class Oai_IndexController extends Application_Controller_Xml {
                 if ($file->getField('VisibleInOai')->getValue() && $file->getField('VisibleInFrontdoor')->getValue()) {
                     $visible = 1;
                 }
+                else if ($file->getField('VisibleInFrontdoor')->getValue()) {
+                    $visible = 3;
+				}	
             }
         }
         else {
-            $visible = 1;
+            $visible = 0;
         }
         if (!$doc->hasEmbargoPassed()) {
             $visible = 2;
