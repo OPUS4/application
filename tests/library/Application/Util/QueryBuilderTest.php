@@ -27,15 +27,14 @@
  * @category    Application
  * @package     Util
  * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2014-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+class Application_Util_QueryBuilderTest extends ControllerTestCase
+{
 
-
-class Application_Util_QueryBuilderTest extends ControllerTestCase {
-
-    public function testCreateQueryBuilderInputFromRequest() {
+    public function testCreateQueryBuilderInputFromRequest()
+    {
         $request = $this->getRequest();
         $request->setParams(array('searchtype' => 'all',
             'start' => '0',
@@ -53,7 +52,8 @@ class Application_Util_QueryBuilderTest extends ControllerTestCase {
     /**
      * Test für OPUSVIER-2708.
      */
-    public function testGetRowsFromConfig() {
+    public function testGetRowsFromConfig()
+    {
         $config = Zend_Registry::get('Zend_Config');
         $oldParamRows = $config->searchengine->solr->numberOfDefaultSearchResults;
         $config->searchengine->solr->numberOfDefaultSearchResults = 1337;
@@ -68,4 +68,5 @@ class Application_Util_QueryBuilderTest extends ControllerTestCase {
 
         $this->assertEquals($result['rows'], 1337);
     }
+
 }
