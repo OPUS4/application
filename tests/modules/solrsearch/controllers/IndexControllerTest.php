@@ -451,16 +451,20 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         $this->dispatch('/solrsearch/index/search/searchtype/series/id/1');
         $this->assertResponseCode(200);
 
+        $body = $this->getResponse()->getBody();
+
         $docIds = array(146, 93, 92, 94, 91);
         foreach ($docIds as $docId) {
-            $this->assertContains('/frontdoor/index/index/searchtype/series/id/1/docId/' . $docId, $this->getResponse()->getBody());
+            $this->assertContains('/frontdoor/index/index/searchtype/series/id/1/docId/' . $docId, $body);
         }
+
         $seriesNumbers = array('5/5', '4/5', '3/5', '2/5', '1/5');
         foreach ($seriesNumbers as $seriesNumber) {
-            $this->assertContains('<dt class="results_seriesnumber">' . $seriesNumber . '</dt>', $this->getResponse()->getBody());
+            $this->assertContains('<div class="results_seriesnumber">' . $seriesNumber . '</div>', $body);
         }
-        $this->assertContains('/series_logos/1/300_150.png', $this->getResponse()->getBody());
-        $this->assertContains('Dies ist die Schriftenreihe <b>MySeries</b>', $this->getResponse()->getBody());
+
+        $this->assertContains('/series_logos/1/300_150.png', $body);
+        $this->assertContains('Dies ist die Schriftenreihe <b>MySeries</b>', $body);
     }
 
     public function testSeriesSearchPaginationAndSortingLinks() {
@@ -496,9 +500,9 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         $this->assertXpathCount('//a[contains(@href, "/docId/2") and contains(@href, "/frontdoor/index/index")]', 1);
         $this->assertXpathCount('//a[contains(@href, "/docId/1") and contains(@href, "/frontdoor/index/index")]', 1);
 
-        $this->assertContains('<dt class="results_seriesnumber">C</dt>', $body);
-        $this->assertContains('<dt class="results_seriesnumber">B</dt>', $body);
-        $this->assertContains('<dt class="results_seriesnumber">A</dt>', $body);
+        $this->assertContains('<div class="results_seriesnumber">C</div>', $body);
+        $this->assertContains('<div class="results_seriesnumber">B</div>', $body);
+        $this->assertContains('<div class="results_seriesnumber">A</div>', $body);
         $this->assertContains('/series_logos/5/400_100.png', $body);
         $this->assertContains('Lorem ipsum dolor sit amet,', $body);
 
