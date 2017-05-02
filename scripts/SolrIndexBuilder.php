@@ -165,7 +165,7 @@ class SolrIndexBuilder {
 
         $indexer = Opus_Search_Service::selectIndexingService( 'indexBuilder' );
 
-        if ( !$this->_deleteAllDocs ) {
+        if ($this->_deleteAllDocs) {
             $indexer->removeAllDocumentsFromIndex();
         }
 
