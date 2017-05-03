@@ -32,9 +32,11 @@
  * @author      Henning Gerhardt <henning.gerhardt@slub-dresden.de>
  * @author      Michael Lang <lang@zib.de>
  * @author      Thoralf Klein <thoralf.klein@zib.de>
- * @copyright   Copyright (c) 2009 - 2014, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2009 - 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
+ *
+ * TODO move all processing into model classes for testing and reuse
  */
 
 class Oai_IndexController extends Application_Controller_Xml {
@@ -61,6 +63,8 @@ class Oai_IndexController extends Application_Controller_Xml {
      */
     protected $_configuration = null;
 
+    private $_xmlFactory = null;
+
     /**
      * Gather configuration before action handling.
      *
@@ -72,6 +76,7 @@ class Oai_IndexController extends Application_Controller_Xml {
         $config = $this->getConfig();
 
         $this->_configuration = new Oai_Model_Configuration($config);
+        $this->_xmlFactory = new Oai_Model_XmlFactory();
     }
 
     /**
@@ -525,36 +530,16 @@ class Oai_IndexController extends Application_Controller_Xml {
         $document->appendChild($fileElement);
     }
 
-    private function _addAccessRights(DOMNode $domNode, Opus_Document $doc) {
-        $visible = 0;
-        $files = $doc->getFile();
-        if (count($files) > 0) {
-            foreach ($files as $file) {
-                if ($file->getField('VisibleInOai')->getValue() && $file->getField('VisibleInFrontdoor')->getValue()) {
-                    $visible = 1;
-                }
-                else if ($file->getField('VisibleInFrontdoor')->getValue()) {
-                    $visible = 3;
-				}	
-            }
-        }
-        else {
-            $visible = 0;
-        }
-        if (!$doc->hasEmbargoPassed()) {
-            $visible = 2;
-        }
+    /**
+     * Add rights element to output.
+     *
+     * @param DOMNode $domNode
+     * @param Opus_Document $doc
+     */
+    private function _addAccessRights(DOMNode $domNode, Opus_Document $doc)
+    {
         $fileElement = $domNode->ownerDocument->createElement('Rights');
-        switch ($visible) {
-            case 0: $fileElement->setAttribute('Value', 'info:eu-repo/semantics/closedAccess');
-                break;
-            case 1: $fileElement->setAttribute('Value', 'info:eu-repo/semantics/openAccess');
-                break;
-            case 2: $fileElement->setAttribute('Value', 'info:eu-repo/semantics/embargoedAccess');
-                break;
-            case 3: $fileElement->setAttribute('Value', 'info:eu-repo/semantics/restrictedAccess');
-                break;
-        }
+        $fileElement->setAttribute('Value', $this->_xmlFactory->getAccessRights($doc));
         $domNode->appendChild($fileElement);
     }
 
