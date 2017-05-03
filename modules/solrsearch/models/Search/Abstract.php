@@ -199,4 +199,29 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
         return null;
     }
 
+    /**
+     * @throws Application_Exception
+     * @throws Application_SearchException
+     *
+     * TODO facets optional (export search)
+     */
+    public function performSearch($query, $openFacets) {
+        $this->getLogger()->debug('performing search');
+
+        $resultList = null;
+
+        try {
+            $searcher = new Opus_SolrSearch_Searcher();
+            $searcher->setFacetArray($openFacets);
+            $resultList = $searcher->search($query);
+        }
+        catch (Opus_SolrSearch_Exception $e) {
+            $this->getLogger()->err(__METHOD__ . ' : ' . $e);
+            throw new Application_SearchException($e);
+        }
+
+        return $resultList;
+    }
+
+
 }

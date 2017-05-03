@@ -180,7 +180,7 @@ class Solrsearch_IndexController extends Application_Controller_Action
 
             $openFacets = $facetMenu->buildFacetArray( $this->getRequest()->getParams() );
 
-            $resultList = $search->performSearch($query, $openFacets);
+            $resultList = $searchPlugin->performSearch($query, $openFacets);
             $this->view->openFacets = $openFacets;
 
             $searchPlugin->setViewValues($request, $query, $resultList, $searchType);
