@@ -23,47 +23,60 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- *
- * @category    Application
- * @package     Module_Export
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
- * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
- * Export plugin for applying XSLT on XML before returning response.
+ * Unit tests for view helper for rendering export links.
  *
- *
+ * @category    Application
+ * @package     Application_View_Helper
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Export_Model_XsltExport extends Export_Model_XmlExport
+
+class Application_View_Helper_ExportLinskTest extends ControllerTestCase
 {
 
-    public function execute()
+    public function testToString()
     {
-        $config = $this->getConfig();
+        $this->dispatch('/home'); // HACK to setup default route
 
-        if (isset($config->stylesheet))
-        {
-            $stylesheet = $config->stylesheet;
-        }
+        $exportLink = new Application_View_Helper_ExportLinks();
 
-        $stylesheetDirectory = 'stylesheets';
+        $this->assertEquals(
+            '<ul><li><a href="/citationExport/index/download/output/bibtex" title="Export BibTeX" class="export bibtex">BibTeX</a></li><li><a href="/citationExport/index/download/output/ris" title="Export RIS" class="export ris">RIS</a></li></ul>',
+            $exportLink->__toString()
+        );
+    }
 
-        if (isset($config->stylesheetDirectory))
-        {
-            $stylesheetDirectory = $config->stylesheetDirectory;
-        }
+    public function testRenderLink()
+    {
+        $this->dispatch('/home');
 
-        $this->loadStyleSheet(
-            $this->buildStylesheetPath(
-                $stylesheet,
-                $this->getView()->getScriptPath('') . $stylesheetDirectory
-            )
+        $page = new Zend_Navigation_Page_Mvc(array(
+            'name' => 'bibtex',
+            'description' => 'Export BibTeX',
+            'module' => 'citationExport',
+            'controller' => 'index',
+            'action' => 'download',
+            'params' => array(
+                'output' => 'bibtex'
+            ),
+            'frontdoor' => true
+        ));
+
+        $page->setParam('docId', 150);
+
+        $exportLink = new Application_View_Helper_ExportLinks();
+
+        $this->assertEquals(
+            '<a href="/citationExport/index/download/output/bibtex/docId/150" title="Export BibTeX" class="export bibtex">bibtex</a>',
+            $exportLink->renderLink($page)
         );
 
-        $this->prepareXml();
+
     }
 
 }
+

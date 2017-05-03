@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -25,45 +25,64 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_Export
+ * @package     Application_Export
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
- * Export plugin for applying XSLT on XML before returning response.
- *
- *
+ * Class for registering and accessing export format handlers.
  */
-class Export_Model_XsltExport extends Export_Model_XmlExport
+class Application_Export_Exporter
 {
 
-    public function execute()
+    private $_formats = array();
+
+    public function addFormats($options)
     {
-        $config = $this->getConfig();
-
-        if (isset($config->stylesheet))
+        if (!is_array($options))
         {
-            $stylesheet = $config->stylesheet;
+            throw new Exception('Invalid argument: should be array');
         }
 
-        $stylesheetDirectory = 'stylesheets';
-
-        if (isset($config->stylesheetDirectory))
+        foreach ($options as $key => $option)
         {
-            $stylesheetDirectory = $config->stylesheetDirectory;
+            // TODO use addFormat function, get key from 'name' or use hash?
+            $format = new Zend_Navigation_Page_Mvc($option);
+
+            // TODO check if key is string
+            $this->_formats[$key] = $format;
+        }
+    }
+
+    public function getFormats()
+    {
+        return $this->_formats;
+    }
+
+    public function removeAll()
+    {
+        $this->_formats = array();
+    }
+
+    public function getAllowedFormats()
+    {
+        $formats = $this->getFormats();
+
+        $allowed = array();
+
+        foreach ($formats as $format)
+        {
+            $module = $format->getModule();
+
+            if (Opus_Security_Realm::getInstance()->checkModule($module))
+            {
+                $allowed[] = $format;
+            }
         }
 
-        $this->loadStyleSheet(
-            $this->buildStylesheetPath(
-                $stylesheet,
-                $this->getView()->getScriptPath('') . $stylesheetDirectory
-            )
-        );
-
-        $this->prepareXml();
+        return $allowed;
     }
 
 }

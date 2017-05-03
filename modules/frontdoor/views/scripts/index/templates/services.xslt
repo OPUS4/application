@@ -287,68 +287,7 @@
     </xsl:template>
 
    <xsl:template name="ExportFunctions">
-      <!--Bib-Export--> 
-      <li>
-         <xsl:element name="a">
-            <!--TODO: Use Zend Url-Helper to build href attribute--> 
-            <xsl:attribute name="href">
-               <xsl:value-of select="$baseUrl"/>
-               <xsl:text>/citationExport/index/download/output/bibtex/docId/</xsl:text><xsl:value-of select="@Id" />
-            </xsl:attribute>
-             <xsl:attribute name="title">
-                 <xsl:call-template name="translateString">
-                     <xsl:with-param name="string">frontdoor_exportbibtex</xsl:with-param>
-                 </xsl:call-template>
-             </xsl:attribute>
-             <xsl:attribute name="class">export bibtex</xsl:attribute>
-             <xsl:text>BibTeX</xsl:text>
-         </xsl:element>
-      </li>
-      <xsl:text> </xsl:text>
-
-      <!--Ris-Export--> 
-      <li>
-         <xsl:element name="a">
-             <!--TODO: Use Zend Url-Helper to build href attribute-->
-             <xsl:attribute name="href">
-               <xsl:value-of select="$baseUrl"/>
-               <xsl:text>/citationExport/index/download/output/ris/docId/</xsl:text>
-               <xsl:value-of select="@Id" />
-            </xsl:attribute>
-             <xsl:attribute name="title">
-                 <xsl:call-template name="translateString">
-                     <xsl:with-param name="string">frontdoor_exportris</xsl:with-param>
-                 </xsl:call-template>
-             </xsl:attribute>
-             <xsl:attribute name="class">export ris</xsl:attribute>
-             <xsl:text>RIS</xsl:text>
-         </xsl:element>
-      </li>
-
-      <!--Xml-Export-->
-      <xsl:choose>
-          <xsl:when test="php:functionString('Application_Xslt::frontdoorStylesheet') != '' ">
-              <li>
-                  <xsl:element name="a">
-                      <!--TODO: Use Zend Url-Helper to build href attribute-->
-                      <xsl:attribute name="href">
-                          <xsl:value-of select="$baseUrl"/>
-                          <xsl:text>/frontdoor/index/index/docId/</xsl:text>
-                          <xsl:value-of select="@Id" />
-                          <xsl:text>/export/xml/stylesheet/</xsl:text>
-                          <xsl:value-of select="php:functionString('Application_Xslt::frontdoorStylesheet')" />
-                      </xsl:attribute>
-                      <xsl:attribute name="title">
-                          <xsl:call-template name="translateString">
-                              <xsl:with-param name="string">frontdoor_export_xml</xsl:with-param>
-                          </xsl:call-template>
-                      </xsl:attribute>
-                      <xsl:attribute name="class">export xml</xsl:attribute>
-                      <xsl:text>XML</xsl:text>
-                  </xsl:element>
-              </li>
-          </xsl:when>
-      </xsl:choose>
+        <xsl:value-of disable-output-escaping="yes" select="php:function('Application_Xslt::exportLinks', 'docId', 'frontdoor')" />
    </xsl:template>
     
    <xsl:template name="PrintOnDemand">

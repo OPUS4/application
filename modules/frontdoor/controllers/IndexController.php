@@ -60,18 +60,6 @@ class Frontdoor_IndexController extends Application_Controller_Action {
             return;
         }
 
-        // call export index-action, if parameter is set
-        if (!is_null($this->getRequest()->getParam('export'))) {
-
-            $params = $this->getRequest()->getParams();
-            // export module ignores pagination parameters
-            unset($params['rows']);
-            unset($params['start']);
-            $params['searchtype'] = 'id';
-
-            return $this->_helper->Redirector->redirectToAndExit('index', null, 'index', 'export', $params);
-        }
-
         $this->view->title = $this->view->translate('frontdoor_title');
         $this->view->docId = $docId;
         $baseUrl = $request->getBaseUrl();
@@ -119,7 +107,8 @@ class Frontdoor_IndexController extends Application_Controller_Action {
             'customFileSortingEnabled',
             'languageImageExists',
             'frontdoorStylesheet',
-            'shortenText'
+            'shortenText',
+            'exportLinks'
         ));
         $proc->registerPHPFunctions('urlencode');
         $proc->importStyleSheet($xslt);

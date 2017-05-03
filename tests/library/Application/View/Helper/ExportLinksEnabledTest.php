@@ -23,47 +23,42 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- *
- * @category    Application
- * @package     Module_Export
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
- * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
- * Export plugin for applying XSLT on XML before returning response.
+ * Unit tests for view helper for rendering export links.
  *
- *
+ * @category    Application
+ * @package     Application_View_Helper
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Export_Model_XsltExport extends Export_Model_XmlExport
+class Application_View_Helper_ExportLinksEnabledTest extends ControllerTestCase
 {
 
-    public function execute()
+    private $_helper;
+
+    public function setUp()
     {
-        $config = $this->getConfig();
+        parent::setUp();
 
-        if (isset($config->stylesheet))
-        {
-            $stylesheet = $config->stylesheet;
-        }
+        $this->_helper = new Application_View_Helper_ExportLinksEnabled();
+    }
 
-        $stylesheetDirectory = 'stylesheets';
+    public function testExportLinksEnabled()
+    {
+        $this->assertTrue($this->_helper->exportLinksEnabled());
 
-        if (isset($config->stylesheetDirectory))
-        {
-            $stylesheetDirectory = $config->stylesheetDirectory;
-        }
+        Zend_Registry::get('Opus_Exporter')->removeAll();
 
-        $this->loadStyleSheet(
-            $this->buildStylesheetPath(
-                $stylesheet,
-                $this->getView()->getScriptPath('') . $stylesheetDirectory
-            )
-        );
+        $this->assertFalse($this->_helper->exportLinksEnabled());
+    }
 
-        $this->prepareXml();
+    public function testExportLinksEnabledForContext()
+    {
+        $this->assertTrue($this->_helper->exportLinksEnabled('search'));
+        $this->assertTrue($this->_helper->exportLinksEnabled('unknown'));
     }
 
 }

@@ -72,8 +72,42 @@ class Export_Model_XmlExport extends Export_Model_ExportPluginAbstract {
      */
     public function postDispatch() {
         if (!isset($this->getView()->errorMessage)) {
+            $config = $this->getConfig();
+
+            $contentType = 'text/xml';
+
+            if (isset($config->contentType))
+            {
+                $contentType = $config->contentType;
+            }
+
+            $attachmentFilename = 'export.xml';
+
+            if (isset($config->attachmentFilename))
+            {
+                $attachmentFilename = $config->attachmentFilename;
+            }
+
+            $response = $this->getResponse();
+
             // Send Xml response.
-            $this->getResponse()->setHeader('Content-Type', 'text/xml; charset=UTF-8', true);
+            $response->setHeader('Content-Type', "$contentType; charset=UTF-8", true);
+
+            $appConfig = Application_Configuration::getInstance()->getConfig();
+
+            $download = true;
+
+            if (isset($appConfig->export->download))
+            {
+                $value = $appConfig->export->download;
+                $download = $value !== '0' && $value !== false && $value !== '';
+            }
+
+            if ($download)
+            {
+                $response->setHeader('Content-Disposition', "attachment; filename=$attachmentFilename", true);
+            }
+
             if (false === is_null($this->_xslt)) {
                 $this->getResponse()->setBody($this->_proc->transformToXML($this->_xml));
             }
@@ -112,6 +146,9 @@ class Export_Model_XmlExport extends Export_Model_ExportPluginAbstract {
      * @throws Application_SearchException
      * @throws Exception
      * @throws Zend_View_Exception
+     *
+     * TODO exportParam is not needed anymore, but can be supported (exportParam = action)
+     * TODO stylesheet can be configured in plugin configuration rather than a parameter
      */
     public function execute() {
         $request = $this->getRequest();

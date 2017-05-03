@@ -1332,3 +1332,59 @@ a.orcid-link {
     background: url(../../../img/orcid/orcid_16x16.png) no-repeat 0 0;
     text-indent: -9999px;
 }
+
+.export-links.dropdown {
+    float: right;
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-button {
+    background-color: transparent;
+    color: gray;
+    padding: 4px 8px;
+    padding-right: 16px;
+    margin-top: 3px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    background: url(../img/theme/bullet_arrow_down.png) no-repeat right center;
+}
+
+/* dropdown-content */
+.export-links.dropdown ul {
+    display: none;
+    position: absolute;
+    background-color: whitesmoke;
+    /* min-width: 80px; */
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+    z-index: 1;
+    right: 0;
+}
+
+.export-links.dropdown ul li:hover {
+    background-color: white;
+}
+
+.export-links.dropdown ul li {
+    color: black;
+    padding: 0;
+    display: block;
+    text-align: right;
+}
+
+.export-links.dropdown ul li a {
+    text-decoration: none;
+    font-weight: bold;
+    display: block;
+    padding: 5px 10px;
+}
+
+.export-links.dropdown:hover ul {
+    display: block;
+}
+
+.export-links.dropdown:hover .dropdown-button {
+    background-color: lightgray;
+    color: black;
+}
