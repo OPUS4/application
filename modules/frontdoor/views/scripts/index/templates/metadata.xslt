@@ -421,10 +421,10 @@
             <td>
                 <xsl:element name="a">
                     <xsl:attribute name="href">
-                        <xsl:text>http://dx.doi.org/</xsl:text>
+                        <xsl:value-of select="php:functionString('Application_Xslt::optionValue', 'doi.resolverUrl')"/>
                         <xsl:value-of select="@Value" />
                     </xsl:attribute>
-                    <xsl:text>http://dx.doi.org/</xsl:text>
+                    <xsl:value-of select="php:functionString('Application_Xslt::optionValue', 'doi.resolverUrl')"/>
                     <xsl:value-of select="@Value" />
                 </xsl:element>
             </td>
