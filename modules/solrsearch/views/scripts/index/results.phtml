@@ -59,9 +59,6 @@ if($this->jQueryEnabled()) {
     else if (($this->searchType === 'advanced' || $this->searchType === 'authorsearch') && !$this->browsing) {
         echo $this->form;
     }
-    else if ($this->searchType === 'latest') {
-        echo $this->form;
-    }
     else if ($this->searchType === 'collection')
         include('browsecollection.phtml');
     else if ($this->searchType === 'series')
@@ -82,6 +79,10 @@ if($this->jQueryEnabled()) {
                 <?= $this->exportLinks(null, 'search') ?>
             </div>
             <?PHP endif ?>
+            <div class="option-links dropdown">
+                <button class="dropdown-button"><?= $this->rows ?></button>
+                <?= $this->resultsPerPageOptions() ?>
+            </div>
         </div>
         <?php if (!$this->isSimpleList) include('searchOptions.phtml'); ?>
         <?php if (!is_null($this->results)) : ?>

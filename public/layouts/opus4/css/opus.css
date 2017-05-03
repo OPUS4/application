@@ -1345,6 +1345,7 @@ a.orcid-link {
     padding: 4px 8px;
     padding-right: 16px;
     margin-top: 3px;
+	margin-left: 5px;
     border: none;
     cursor: pointer;
     font-weight: bold;
@@ -1468,4 +1469,49 @@ a.orcid-link {
 
 #download-fulltext a.image_application_octed-stream {
     background-image: url("../img/filetype/application_octet-stream.png");
+}
+
+/* TODO merge options-links CSS with export-links CSS */
+
+.option-links.dropdown {
+	float: right;
+	position: relative;
+	display: inline-block;
+}
+
+.option-links.dropdown ul {
+	display: none;
+	position: absolute;
+	background-color: whitesmoke;
+	/* min-width: 80px; */
+	box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+	z-index: 1;
+	right: 0;
+}
+
+.option-links.dropdown ul li:hover {
+	background-color: white;
+}
+
+.option-links.dropdown ul li {
+	color: black;
+	padding: 0;
+	display: block;
+	text-align: right;
+}
+
+.option-links.dropdown ul li a {
+	text-decoration: none;
+	font-weight: bold;
+	display: block;
+	padding: 5px 10px;
+}
+
+.option-links.dropdown:hover ul {
+	display: block;
+}
+
+.option-links.dropdown:hover .dropdown-button {
+	background-color: lightgray;
+	color: black;
 }
