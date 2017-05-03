@@ -109,18 +109,6 @@
 	padding: 0;
 	list-style: none;
 }
-#download-fulltext{
-    word-wrap: break-word;
-}
-
-#download-fulltext li img.file-icon {
-	margin-right: 0.5em;
-}
-
-#download-fulltext span.file-language {
-    font-style: italic;
-    color: gray;
-}
 
 #export li{
 	display: inline;
@@ -1333,6 +1321,7 @@ a.orcid-link {
     text-indent: -9999px;
 }
 
+<<<<<<< HEAD
 .export-links.dropdown {
     float: right;
     position: relative;
@@ -1388,3 +1377,85 @@ a.orcid-link {
     background-color: lightgray;
     color: black;
 }
+=======
+/* MIME type icons */
+
+#download-fulltext li {
+    margin-bottom: 1em;
+}
+
+#download-fulltext a,
+#download-fulltext .protected-file {
+    word-break: break-all;
+    word-wrap: break-word;
+    padding: 0 0 0 20px;
+    margin: 0;
+    display: inline-block;
+    text-indent: 0px;
+    line-height: 18px;
+    min-height: 20px;
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    vertical-align: top;
+    max-width: 78%;
+}
+
+#download-fulltext .file-size {
+    display: block;
+    padding: 0 0 0 20px;
+    font-size: 90%;
+    color: gray;
+}
+
+#download-fulltext .file-language {
+    position: relative;
+    float: right;
+    font-size: 90%;
+    color: gray;
+}
+
+#download-fulltext img.file-language {
+    top: 4px;
+}
+
+#download-fulltext p {
+    padding: 0 0 0 20px;
+    font-style: italic;
+}
+
+#download-fulltext a.application_pdf {
+    background-image: url("../img/filetype/application_pdf.png");
+}
+
+#download-fulltext a.application_postscript {
+    background-image: url("../img/filetype/application_postscript.png");
+}
+
+#download-fulltext a.application_xhtml\+xml {
+    background-image: url("../img/filetype/application_xhtml+xml.png");
+}
+
+#download-fulltext a.text_plain {
+    background-image: url("../img/filetype/text_plain.png");
+}
+
+#download-fulltext a.text_html {
+    background-image: url("../img/filetype/text_html.png");
+}
+
+#download-fulltext a.image_png {
+    background-image: url("../img/filetype/image_png.png");
+}
+
+#download-fulltext a.image_gif {
+    background-image: url("../img/filetype/image_gif.png");
+}
+
+#download-fulltext a.image_bmp {
+    background-image: url("../img/filetype/image_bmp.png");
+}
+
+#download-fulltext a.image_application_octed-stream {
+    background-image: url("../img/filetype/application_octet-stream.png");
+}
+>>>>>>> 4.6
