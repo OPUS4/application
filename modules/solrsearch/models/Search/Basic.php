@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,55 +24,18 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @category    Application
+ * @package     Solrsearch_Model_Search
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class RefereeTest extends ControllerTestCase {
 
-    private $_refereeAccount;
-
-    public function setUp() {
-        parent::setUp();
-
-        $userRole = Opus_UserRole::fetchByName('reviewer');
-
-        $account = new Opus_Account();
-        $account->setLogin('referee');
-        $account->setPassword('refereereferee');
-        $account->setRole(array($userRole));
-        $account->store();
-
-        $this->_refereeAccount = $account;
-
-        $this->enableSecurity();
-        $this->loginUser('referee', 'refereereferee');
-    }
-
-    public function tearDown() {
-        $this->logoutUser();
-        $this->restoreSecuritySetting();
-
-        if (!is_null($this->_refereeAccount))
-        {
-            $this->_refereeAccount->delete();
-        }
-
-        parent::tearDown();
-    }
-
-    public function testAccessReviewModule() {
-        $this->useEnglish();
-        $this->dispatch('/review');
-        $this->assertQueryContentContains('//html/head/title', 'Review Documents');
-        $this->assertQueryContentContains('//html/body', 'Review Documents');
-    }
-
-    public function testPublishDocument() {
-        $this->markTestIncomplete('not tested');
-        // TODO
-    }
-
+/**
+ * Search type for simple, basic searches.
+ *
+ * TODO move code from Solrsearch_Model_Search_Abstract?
+ */
+class Solrsearch_Model_Search_Basic extends Solrsearch_Model_Search_Abstract
+{
 }

@@ -348,7 +348,9 @@ class Frontdoor_IndexController extends Application_Controller_Action {
      */
     public function mapopus3Action() {
         $docId = $this->getRequest()->getParam('oldId');
-        $this->_redirectToAndExit('id', '', 'index', 'rewrite', array('type' => 'opus3-id', 'value' => $docId));
+        $this->_helper->Redirector->redirectToAndExit(
+            'id', '', 'index', 'rewrite', array('type' => 'opus3-id', 'value' => $docId)
+        );
     }
 
     /**

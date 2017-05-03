@@ -46,7 +46,7 @@
     <xsl:output method="text" omit-xml-declaration="yes"/>
 
     <xsl:template match="/">
-      <xsl:apply-templates select="Opus/Opus_Model_Filter" />
+      <xsl:apply-templates select="Opus/Opus_Document" />
     </xsl:template>
 
     <!-- Suppress spilling values with no corresponding templates -->
@@ -60,7 +60,7 @@
         if you wish new fields, you have to add a new line xsl:apply-templates...
         and a special template for each new field below, too
     -->
-    <xsl:template match="Opus_Model_Filter">
+    <xsl:template match="Opus_Document">
        <xsl:choose>
            <xsl:when test="@Type='book'">
                <xsl:text>TY  - BOOK</xsl:text>

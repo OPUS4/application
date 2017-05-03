@@ -56,7 +56,7 @@ class Publish_FormController extends Application_Controller_Action {
         $this->view->subtitle = $this->view->translate('publish_controller_index_sub');
 
         if ($this->getRequest()->isPost() !== true) {
-            return $this->_redirectTo('index', '', 'index');
+            return $this->_helper->Redirector->redirectTo('index', '', 'index');
         }
 
         //initializing
@@ -74,7 +74,9 @@ class Publish_FormController extends Application_Controller_Action {
                 'FormController: EXCEPTION during uploading. Possibly the upload_max_filesize in php.ini is lower than'
                 . ' the expected value in OPUS4 config.ini. Further information can be read in our documentation.'
             );
-            return $this->_redirectTo('index', $this->view->translate('error_empty_post_array'), 'index');
+            return $this->_helper->Redirector->redirectTo(
+                'index', $this->view->translate('error_empty_post_array'), 'index'
+            );
         }
 
         //don't allow MAX_FILE_SIZE to get overridden
@@ -136,7 +138,7 @@ class Publish_FormController extends Application_Controller_Action {
         }
         catch (Publish_Model_FormSessionTimeoutException $e) {
             // Session timed out.
-            return $this->_redirectTo('index', '', 'index');
+            return $this->_helper->Redirector->redirectTo('index', '', 'index');
         }
 
         $this->showTemplate($publishForm);
@@ -221,7 +223,7 @@ class Publish_FormController extends Application_Controller_Action {
                         );
                     }
                 }
-                return $this->_redirectTo('index', '', 'index');
+                return $this->_helper->Redirector->redirectTo('index', '', 'index');
             }
 
             //go back and change data
@@ -254,7 +256,7 @@ class Publish_FormController extends Application_Controller_Action {
                 }
                 catch (Publish_Model_FormSessionTimeoutException $e) {
                     // Session timed out.
-                    return $this->_redirectTo('index', '', 'index');
+                    return $this->_helper->Redirector->redirectTo('index', '', 'index');
                 }
 
                 $this->setViewValues('form', 'check', '#current', $form);
@@ -286,7 +288,7 @@ class Publish_FormController extends Application_Controller_Action {
             }
             catch (Publish_Model_FormSessionTimeoutException $e) {
                 // Session timed out.
-                return $this->_redirectTo('index', '', 'index');
+                return $this->_helper->Redirector->redirectTo('index', '', 'index');
             }
 
             if (!$form->isValid($postData)) {
@@ -301,7 +303,7 @@ class Publish_FormController extends Application_Controller_Action {
             return $this->showCheckPage($form);
         }
 
-        return $this->_redirectTo('upload');
+        return $this->_helper->Redirector->redirectTo('upload');
     }
 
     /**

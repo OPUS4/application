@@ -208,7 +208,21 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
         $config = Zend_Registry::get('Zend_Config');
         // TODO old config path still needed?
         // $config->searchengine->index->app = 'solr/corethatdoesnotexist';
-        $config->searchengine->solr->default->service->endpoint->localhost->path = '/solr/corethatdoesnotexist';
+        $config->merge(new Zend_Config(array(
+            'searchengine' => array(
+                'solr' => array(
+                    'default' => array(
+                        'service' => array(
+                            'endpoint' => array(
+                                'localhost' => array(
+                                    'path' => '/solr/corethatdoesnotexist'
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        )));
     }
 
     /**

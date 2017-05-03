@@ -72,7 +72,7 @@ class Admin_StatisticController extends Application_Controller_Action {
         $selectedYear =  $this->getRequest()->getParam('selectedYear', null);
 
         if (is_null($selectedYear) || !in_array($selectedYear, $this->_statisticsModel->getYears())) {
-            return $this->_redirectToAndExit('index');
+            return $this->_helper->Redirector->redirectToAndExit('index');
         }
 
         $this->view->languageSelectorDisabled = true;

@@ -81,7 +81,7 @@ class Admin_WorkflowController extends Application_Controller_Action {
 
         // Check if document identifier is valid
         if (!isset($document)) {
-            return $this->_redirectTo(
+            return $this->_helper->Redirector->redirectTo(
                 'index', array('failure' => $this->view->translate(
                     'admin_document_error_novalidid'
                 )), 'documents', 'admin'
@@ -90,7 +90,7 @@ class Admin_WorkflowController extends Application_Controller_Action {
 
         // Check if valid target state
         if (!$this->_workflowHelper->isValidState($targetState)) {
-            return $this->_redirectTo(
+            return $this->_helper->Redirector->redirectTo(
                 'index', array('failure' => $this->view->translate(
                     'admin_workflow_error_invalidstate'
                 )), 'document', 'admin', array('id' => $docId)
@@ -99,7 +99,7 @@ class Admin_WorkflowController extends Application_Controller_Action {
 
         // Check if allowed target state
         if (!$this->_workflowHelper->isTransitionAllowed($document, $targetState)) {
-            return $this->_redirectTo(
+            return $this->_helper->Redirector->redirectTo(
                 'index', array('failure' => $this->view->translate(
                     'admin_workflow_error_illegal_transition', $targetState
                 )), 'document', 'admin', array('id' => $docId)
@@ -113,7 +113,7 @@ class Admin_WorkflowController extends Application_Controller_Action {
             if (!$this->view->translate()->getTranslator()->isTranslated($key)) {
                 $key = 'admin_workflow_error_alreadyinstate';
             }
-            return $this->_redirectTo(
+            return $this->_helper->Redirector->redirectTo(
                 'index', array('failure' => $this->view->translate($key, $targetState)),
                 'document', 'admin', array('id' => $docId)
             );
@@ -126,7 +126,9 @@ class Admin_WorkflowController extends Application_Controller_Action {
                 if ($form->isValid($this->getRequest()->getPost()) && isset($sureyes) === true) {
                     return $this->_changeState($document, $targetState, $form);
                 }
-                return $this->_redirectTo('index', null, 'document', 'admin', array('id' => $docId));
+                return $this->_helper->Redirector->redirectTo(
+                    'index', null, 'document', 'admin', array('id' => $docId)
+                );
             }
 
             // show confirmation page
@@ -149,7 +151,9 @@ class Admin_WorkflowController extends Application_Controller_Action {
             }
         }
         catch (Exception $e) {
-            return $this->_redirectTo('index', array('failure' => $e->getMessage()), 'documents', 'admin');
+            return $this->_helper->Redirector->redirectTo(
+                'index', array('failure' => $e->getMessage()), 'documents', 'admin'
+            );
         }
 
         $key = 'admin_workflow_' . $targetState . '_success';
@@ -159,9 +163,11 @@ class Admin_WorkflowController extends Application_Controller_Action {
         $message = $this->view->translate($key, $document->getId(), $targetState);
 
         if ($targetState === 'removed') {
-            return $this->_redirectTo('index', $message, 'documents', 'admin');
+            return $this->_helper->Redirector->redirectTo('index', $message, 'documents', 'admin');
         }
-        return $this->_redirectTo('index', $message, 'document', 'admin', array('id' => $document->getId()));
+        return $this->_helper->Redirector->redirectTo(
+            'index', $message, 'document', 'admin', array('id' => $document->getId())
+        );
     }
 
     private function _sendNotification($document, $form = null) {

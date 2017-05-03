@@ -37,6 +37,7 @@
  * Export plugin for exporting documents as XML.
  *
  * TODO reduce to basic XML export (move XSLT into different class)
+ * TODO move database/cache access to documents to different layer
  */
 class Export_Model_XmlExport extends Export_Model_ExportPluginAbstract {
 
@@ -188,13 +189,24 @@ class Export_Model_XmlExport extends Export_Model_ExportPluginAbstract {
         $request = $this->getRequest();
 
         try {
-            if ($request->getParam('searchtype') == 'id') {
+            $searchType = $request->getParam('searchtype');
+
+            $resultList = null;
+
+            switch ($searchType)
+            {
+            case Application_Util_Searchtypes::ID_SEARCH:
+                // TODO handle ID search like any other search
                 $resultList = $this->buildResultListForIdSearch($request);
+                break;
+            default:
+                $searchFactory = new Solrsearch_Model_Search();
+                $search = $searchFactory->getSearchPlugin($searchType);
+                $query = $search->buildExportQuery($request);
+                $resultList = $search->performSearch($query);
+                break;
             }
-            else {
-	            $searcher = new Opus_SolrSearch_Searcher();
-                $resultList = $searcher->search($this->buildQuery($request));
-            }
+
             $this->handleResults($resultList->getResults(), $resultList->getNumberOfHits());
         }
         catch (Opus_SolrSearch_Exception $e) {
@@ -319,22 +331,6 @@ class Export_Model_XmlExport extends Export_Model_ExportPluginAbstract {
         return $documents;
     }
 
-    /**
-     * Sets up the xml query.
-     */
-    private function buildQuery($request) {
-        $queryBuilder = new Application_Util_QueryBuilder($this->getLogger(), true);
-        $queryBuilderInput = array();
-        try {
-            $queryBuilderInput = $queryBuilder->createQueryBuilderInputFromRequest($request);
-        }
-        catch (Application_Util_QueryBuilderException $e) {
-            $this->getLogger()->err(__METHOD__ . ' : ' . $e->getMessage());
-            throw new Application_Exception($e->getMessage());
-        }
-
-        return $queryBuilder->createSearchQuery($queryBuilderInput);
-    }
 
     /**
      * Searches for available stylesheets and builds the path of the selected stylesheet.

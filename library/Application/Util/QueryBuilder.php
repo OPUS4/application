@@ -82,13 +82,15 @@ class Application_Util_QueryBuilder {
             throw new Application_Util_QueryBuilderException('Unable to read request data. Search cannot be performed.');
         }
 
-        if (is_null($request->getParam('searchtype'))) {
+        $searchType = $request->getParam('searchtype');
+
+        if (is_null($searchType)) {
             throw new Application_Util_QueryBuilderException('Unspecified search type: unable to create query.');
         }
 
-        if (!Application_Util_Searchtypes::isSupported($request->getParam('searchtype'))) {
+        if (!Application_Util_Searchtypes::isSupported($searchType)) {
             throw new Application_Util_QueryBuilderException(
-                'Unsupported search type ' . $request->getParam('searchtype') . ' : unable to create query.'
+                "Unsupported search type '$searchType' : unable to create query."
             );
         }
 
@@ -101,7 +103,7 @@ class Application_Util_QueryBuilder {
 	    }
 
         $input = array(
-            'searchtype' => $request->getParam('searchtype'),
+            'searchtype' => $searchType,
             'start' => $request->getParam('start', Opus_Search_Query::getDefaultStart()),
             'rows' => $request->getParam('rows', Opus_Search_Query::getDefaultRows()),
             'sortField' => $sorting[0],
@@ -139,18 +141,16 @@ class Application_Util_QueryBuilder {
             $input[$param] = $request->getParam($param, '');
         }
 
-
-        if ($request->getParam('searchtype') === Application_Util_Searchtypes::COLLECTION_SEARCH
-                || $request->getParam('searchtype') === Application_Util_Searchtypes::SERIES_SEARCH) {
-            $searchParams = new Application_Util_BrowsingParams($request, $this->_logger);
-            switch ($request->getParam('searchtype')) {
-                case Application_Util_Searchtypes::COLLECTION_SEARCH:
-                    $input['collectionId'] = $searchParams->getCollectionId();
-                    break;
-                case Application_Util_Searchtypes::SERIES_SEARCH:
-                    $input['seriesId'] = $searchParams->getSeriesId();
-                    break;
-            }
+        switch ($searchType)
+        {
+        case Application_Util_Searchtypes::COLLECTION_SEARCH:
+             $searchParams = new Application_Util_BrowsingParams($request, $this->_logger);
+             $input['collectionId'] = $searchParams->getCollectionId();
+             break;
+        case Application_Util_Searchtypes::SERIES_SEARCH:
+             $searchParams = new Application_Util_BrowsingParams($request, $this->_logger);
+             $input['seriesId'] = $searchParams->getSeriesId();
+             break;
         }
 
         return $input;
@@ -193,27 +193,32 @@ class Application_Util_QueryBuilder {
      * @return Opus_SolrSearch_Query
      */
     public function createSearchQuery($input) {
-        if ($input['searchtype'] === Application_Util_Searchtypes::SIMPLE_SEARCH) {
-            return $this->createSimpleSearchQuery($input);
-        }
-        if ($input['searchtype'] === Application_Util_Searchtypes::ADVANCED_SEARCH
-                || $input['searchtype'] === Application_Util_Searchtypes::AUTHOR_SEARCH) {
-            return $this->createAdvancedSearchQuery($input);
-        }
-        if ($input['searchtype'] === Application_Util_Searchtypes::LATEST_SEARCH) {
-            return $this->createLatestSearchQuery($input);
-        }
-        if ($input['searchtype'] === Application_Util_Searchtypes::COLLECTION_SEARCH) {
-            return $this->createCollectionSearchQuery($input);
-        }
-        if ($input['searchtype'] === Application_Util_Searchtypes::SERIES_SEARCH) {
-            return $this->createSeriesSearchQuery($input);
-        }
-        if ($input['searchtype'] === Application_Util_Searchtypes::ALL_SEARCH) {
-            return $this->createAllSearchQuery($input);
-        }
-        if ($input['searchtype'] === Application_Util_Searchtypes::ID_SEARCH) {
-            return $this->createIdSearchQuery($input);
+        switch ($input['searchtype'])
+        {
+            case Application_Util_Searchtypes::SIMPLE_SEARCH:
+                return $this->createSimpleSearchQuery($input);
+
+            case Application_Util_Searchtypes::ADVANCED_SEARCH:
+            case Application_Util_Searchtypes::AUTHOR_SEARCH:
+                return $this->createAdvancedSearchQuery($input);
+
+            case Application_Util_Searchtypes::LATEST_SEARCH:
+                return $this->createLatestSearchQuery($input);
+
+            case Application_Util_Searchtypes::COLLECTION_SEARCH:
+                return $this->createCollectionSearchQuery($input);
+
+            case Application_Util_Searchtypes::SERIES_SEARCH:
+                return $this->createSeriesSearchQuery($input);
+
+            case Application_Util_Searchtypes::ALL_SEARCH:
+                return $this->createAllSearchQuery($input);
+
+            case Application_Util_Searchtypes::ID_SEARCH:
+                return $this->createIdSearchQuery($input);
+
+            default:
+                // TODO what to do?
         }
     }
 

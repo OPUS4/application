@@ -331,7 +331,7 @@ class Admin_AccountController extends Application_Controller_Action {
             $messages['failure'] = $this->view->translate($message);
         }
 
-        $this->_redirectTo('index', $messages);
+        $this->_helper->Redirector->redirectTo('index', $messages);
     }
 
 }
