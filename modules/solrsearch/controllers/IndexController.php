@@ -134,7 +134,6 @@ class Solrsearch_IndexController extends Application_Controller_Action
      * @throws Zend_Form_Exception
      */
     public function searchAction() {
-        // TODO OPUSVIER-3324 Mischform in der url entfernen
         // check if searchtype = latest and params parsed incorrect
         $searchType = $this->getParam('searchtype');
         $request = $this->getRequest();
