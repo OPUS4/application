@@ -71,6 +71,25 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
         }
     }
 
+    /**
+     * Sets up the xml query.
+     *
+     * TODO CRITICAL merge with regular buildQuery
+     */
+    public function buildExportQuery($request) {
+        $queryBuilder = new Application_Util_QueryBuilder($this->getLogger(), true);
+        $queryBuilderInput = array();
+        try {
+            $queryBuilderInput = $queryBuilder->createQueryBuilderInputFromRequest($request);
+        }
+        catch (Application_Util_QueryBuilderException $e) {
+            $this->getLogger()->err(__METHOD__ . ' : ' . $e->getMessage());
+            throw new Application_Exception($e->getMessage());
+        }
+
+        return $queryBuilder->createSearchQuery($queryBuilderInput);
+    }
+
     public function setViewValues($request, $query, $resultList, $searchType) {
         $this->setGeneralViewValues($request, $query, $resultList, $searchType);
 
@@ -205,14 +224,19 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
      *
      * TODO facets optional (export search)
      */
-    public function performSearch($query, $openFacets) {
+    public function performSearch($query, $openFacets = null) {
         $this->getLogger()->debug('performing search');
 
         $resultList = null;
 
         try {
             $searcher = new Opus_SolrSearch_Searcher();
-            $searcher->setFacetArray($openFacets);
+
+            if (!is_null($openFacets))
+            {
+                $searcher->setFacetArray($openFacets);
+            }
+
             $resultList = $searcher->search($query);
         }
         catch (Opus_SolrSearch_Exception $e) {
