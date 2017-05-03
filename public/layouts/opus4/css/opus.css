@@ -109,6 +109,18 @@
 	padding: 0;
 	list-style: none;
 }
+#download-fulltext{
+    word-wrap: break-word;
+}
+
+#download-fulltext li img.file-icon {
+	margin-right: 0.5em;
+}
+
+#download-fulltext span.file-language {
+    font-style: italic;
+    color: gray;
+}
 
 #export li{
 	display: inline;
@@ -1321,7 +1333,6 @@ a.orcid-link {
     text-indent: -9999px;
 }
 
-<<<<<<< HEAD
 .export-links.dropdown {
     float: right;
     position: relative;
@@ -1377,7 +1388,7 @@ a.orcid-link {
     background-color: lightgray;
     color: black;
 }
-=======
+
 /* MIME type icons */
 
 #download-fulltext li {
@@ -1458,4 +1469,3 @@ a.orcid-link {
 #download-fulltext a.image_application_octed-stream {
     background-image: url("../img/filetype/application_octet-stream.png");
 }
->>>>>>> 4.6
