@@ -33,22 +33,4 @@
 
 class Solrsearch_Model_Search_Latest extends Solrsearch_Model_Search_Basic
 {
-
-    public function createForm($request)
-    {
-        $form = new Solrsearch_Form_Options();
-
-        $form->setMethod(Zend_Form::METHOD_GET);
-
-        $view = $this->getView();
-
-        $form->setAction($view->url(array(
-            'module' => 'solrsearch', 'controller' => 'index', 'action' => 'search'
-        ), null, true));
-
-        $form->populate($request->getParams());
-
-        return $form;
-    }
-
 }
