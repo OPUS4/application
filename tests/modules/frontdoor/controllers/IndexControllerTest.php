@@ -325,9 +325,9 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
       $this->dispatch('/frontdoor/index/index/docId/1');
 
       $responseBody = $this->getResponse()->getBody();
-      $this->assertRegExp('/<a href="[^"]+\/1\/asis-hap.pdf"/', $responseBody);
-      $this->assertRegExp('/<a href="[^"]+\/1\/asis-hap_%27.pdf"/', $responseBody);
-      $this->assertNotRegExp('/<a href="[^"]+\/1\/asis-hap_\'.pdf"/', $responseBody);
+      $this->assertRegExp('/<a class="application_pdf" href="[^"]+\/1\/asis-hap.pdf"/', $responseBody);
+      $this->assertRegExp('/<a class="application_pdf" href="[^"]+\/1\/asis-hap_%27.pdf"/', $responseBody);
+      $this->assertNotRegExp('/<a class="application_pdf" href="[^"]+\/1\/asis-hap_\'.pdf"/', $responseBody);
    }
 
    /**
@@ -348,8 +348,8 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
       $this->dispatch('/frontdoor/index/index/docId/147');
 
       $responseBody = $this->getResponse()->getBody();
-      $this->assertRegExp('/<a href="[^"]+\/\d+\/special-chars-%25-%22-%23-%26.pdf">/', $responseBody);
-      $this->assertRegExp('/<a href="[^"]+\/\d+\/%27many%27\+\+-\+\+spaces\+\+and\+\+quotes.pdf">/', $responseBody);
+      $this->assertRegExp('/<a class="application_pdf" href="[^"]+\/\d+\/special-chars-%25-%22-%23-%26.pdf">/', $responseBody);
+      $this->assertRegExp('/<a class="application_pdf" href="[^"]+\/\d+\/%27many%27\+\+-\+\+spaces\+\+and\+\+quotes.pdf">/', $responseBody);
    }
 
    /**
@@ -841,9 +841,9 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         Zend_Registry::set('Zend_Config', $configBackup);
 
         $body = $this->getResponse()->getBody();
-        $positionFile1 = strpos($body, 'oai_invisible.txt (1 KB)');
-        $positionFile2 = strpos($body, 'test.txt (1 KB)');
-        $positionFile3 = strpos($body, 'test.pdf (7 KB)');
+        $positionFile1 = strpos($body, 'oai_invisible.txt');
+        $positionFile2 = strpos($body, 'test.txt');
+        $positionFile3 = strpos($body, 'test.pdf');
         $this->assertTrue($positionFile1 < $positionFile2);
         $this->assertTrue($positionFile1 < $positionFile3);
         $this->assertTrue($positionFile2 < $positionFile3);
@@ -861,9 +861,9 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         Zend_Registry::set('Zend_Config', $configBackup);
 
         $body = $this->getResponse()->getBody();
-        $positionFile1 = strpos($body, 'oai_invisible.txt (1 KB)');
-        $positionFile2 = strpos($body, 'test.pdf (7 KB)');
-        $positionFile3 = strpos($body, 'test.txt (1 KB)');
+        $positionFile1 = strpos($body, 'oai_invisible.txt');
+        $positionFile2 = strpos($body, 'test.pdf');
+        $positionFile3 = strpos($body, 'test.txt');
         $this->assertTrue($positionFile1 < $positionFile2);
         $this->assertTrue($positionFile1 < $positionFile3);
         $this->assertTrue($positionFile2 < $positionFile3);
@@ -995,11 +995,11 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
 
         $this->dispatch('/frontdoor/index/index/docId/' . $docId);
         $body = $this->getResponse()->getBody();
-        $this->assertContains('<img width="16" height="11" src="/img/lang/eng.png" alt="eng"/>', $body);
-        $this->assertContains('<img width="16" height="11" src="/img/lang/deu.png" alt="deu"/>', $body);
-        $this->assertContains('<img width="16" height="11" src="/img/lang/spa.png" alt="spa"/>', $body);
-        $this->assertContains('<img width="16" height="11" src="/img/lang/fra.png" alt="fra"/>', $body);
-        $this->assertContains('<img width="16" height="11" src="/img/lang/rus.png" alt="rus"/>', $body);
+        $this->assertContains('<img width="16" height="11" src="/img/lang/eng.png" class="file-language eng" alt="eng"/>', $body);
+        $this->assertContains('<img width="16" height="11" src="/img/lang/deu.png" class="file-language deu" alt="deu"/>', $body);
+        $this->assertContains('<img width="16" height="11" src="/img/lang/spa.png" class="file-language spa" alt="spa"/>', $body);
+        $this->assertContains('<img width="16" height="11" src="/img/lang/fra.png" class="file-language fra" alt="fra"/>', $body);
+        $this->assertContains('<img width="16" height="11" src="/img/lang/rus.png" class="file-language rus" alt="rus"/>', $body);
     }
 
     /**
