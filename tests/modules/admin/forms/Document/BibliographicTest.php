@@ -134,7 +134,7 @@ class Admin_Form_Document_BibliographicTest extends ControllerTestCase {
         $this->assertEquals('2010/04/21', $datesHelper->getDateString($model->getThesisDateAccepted()));
 
         $this->assertEquals('2010', $model->getThesisYearAccepted());
-        $this->assertTrue($model->getBelongsToBibliography());
+        $this->assertEquals(1, $model->getBelongsToBibliography());
 
         $form->getElement('BelongsToBibliography')->setValue(false);
 
