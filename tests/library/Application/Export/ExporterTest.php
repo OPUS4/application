@@ -149,7 +149,7 @@ class Application_Export_ExporterTest extends ControllerTestCase
 
         $formats = $exporter->getAllowedFormats();
 
-        $this->assertCount(5, $formats);
+        $this->assertCount(7, $formats);
 
         $this->enableSecurity();
 
@@ -160,26 +160,6 @@ class Application_Export_ExporterTest extends ControllerTestCase
         $formats = $exporter->getAllowedFormats();
 
         $this->assertCount(2, $formats);
-    }
-
-    public function testGetAllowedFormatsForSearch()
-    {
-        $exporter = Zend_Registry::get('Opus_Exporter');
-
-        $formats = $exporter->getAllowedFormats('search');
-
-        $this->assertCount(5, $formats);
-
-        $this->enableSecurity();
-
-        $guest = Opus_UserRole::fetchByName('guest');
-        $guest->removeAccessModule('export');
-        $guest->store();
-
-        $formats = $exporter->getAllowedFormats('search');
-
-        $this->assertCount(2, $formats);
-
     }
 
 }
