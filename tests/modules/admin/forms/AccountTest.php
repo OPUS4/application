@@ -33,6 +33,31 @@
 
 class Admin_Form_AccountTest extends ControllerTestCase {
 
+    private $_account;
+
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        $user = new Opus_Account();
+        $user->setLogin('user');
+        $user->setPassword('userpwd');
+        $user->store();
+
+        $this->_account = $user;
+    }
+
+    public function tearDown()
+    {
+        if (!is_null($this->_account))
+        {
+            $this->_account->delete();
+        }
+
+        parent::tearDown();
+    }
+
     public function testCreateForm() {
         $form = new Admin_Form_Account();
         $this->assertNotNull($form);
