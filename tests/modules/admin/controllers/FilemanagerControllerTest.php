@@ -257,7 +257,8 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase {
                         'FileLink' => $fileId,
                         'Language' => 'deu',
                         'Comment' => 'Testkommentar',
-                        'Roles' => array('administrator')
+                        'Roles' => array('administrator'),
+                        'SortOrder' => '0'
                     )
                 ),
                 'Save' => 'Speichern'
@@ -265,6 +266,7 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase {
         ));
 
         $this->dispatch('/admin/filemanager/index/id/' . $this->documentId);
+        $this->assertResponseCode(302);
         $this->assertRedirectTo('/admin/document/index/id/' . $this->documentId);
 
         $roleGuest = Opus_UserRole::fetchByName('guest');
