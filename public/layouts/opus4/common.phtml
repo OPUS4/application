@@ -238,14 +238,6 @@ if (isset($config->javascript->latex->mathjax)) {
             </div>
         </div>
 
-        <div id="appmode-<?= Zend_Controller_Front::getInstance()->getParam('bootstrap')->getEnvironment() ?>" class="debug revision">
-            <hr/>
-            <div class="wrapper">
-                <?php /* do not edit: revision number gets updated automatically */ ?>
-                <b>$Rev$</b>
-            </div>
-        </div>
-
         <?PHP include('debug.phtml') ?>
 
     </body>
