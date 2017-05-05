@@ -297,7 +297,10 @@ class Admin_DnbinstituteControllerTest extends CrudControllerTestCase {
 
         $this->dispatch('/admin/dnbinstitute/edit/id/1');
         $this->assertResponseCode(302);
-        $this->assertRedirectTo('/auth', 'User is able to edit dnb-institutes, although he has no rights');
+        $this->assertRedirectTo(
+            '/auth/index/rmodule/admin/rcontroller/dnbinstitute/raction/edit/id/1',
+            'User is able to edit dnb-institutes, although he has no rights'
+        );
     }
 
     /*
