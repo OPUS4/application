@@ -36,8 +36,11 @@ class Export_BootstrapTest extends ControllerTestCase
 
     public function testInitExport()
     {
+        $this->enableSecurity();
+
         $this->dispatch('/frontdoor/index/index/docId/1');
 
+        // TODO configuration change has no influence at this point
         Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
             'export' => array(
                 'stylesheet' => array(
@@ -49,20 +52,15 @@ class Export_BootstrapTest extends ControllerTestCase
         $this->assertResponseCode(200);
         $this->assertQuery('a.export.bibtex');
         $this->assertQuery('a.export.ris');
-        $this->assertNotQuery('a.export.xml');
+        $this->assertNotQuery('a.export.xml'); // not for 'guest' user
 
     }
 
     public function testInitExportRegisterXML()
     {
-        $this->markTestSkipped('configuration is read during bootstrap -> change here is too late');
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
-            'export' => array(
-                'stylesheet' => array(
-                    'frontdoor' => 'example'
-                )
-            )
-        )));
+        $this->enableSecurity();
+
+        $this->loginUser('admin', 'adminadmin');
 
         $this->dispatch('/frontdoor/index/index/docId/1');
 
