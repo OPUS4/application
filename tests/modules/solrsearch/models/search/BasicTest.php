@@ -24,39 +24,52 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
+ * @category    Tests
  * @package     Solrsearch_Model_Search
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-/**
- * Search type for simple, basic searches.
- *
- * TODO move code from Solrsearch_Model_Search_Abstract?
- */
-class Solrsearch_Model_Search_Basic extends Solrsearch_Model_Search_Abstract
+class Solrsearch_Model_Search_BasicTest extends ControllerTestCase
 {
 
-    public function createSearchQuery($input) {
-        $this->getLogger()->debug("Constructing query for simple search.");
+    public function testCreateQueryBuilderInputFromRequest()
+    {
+        $request = $this->getRequest();
+        $request->setParams(array('searchtype' => 'all',
+            'start' => '0',
+            'rows' => '1337',
+            'sortOrder' => 'desc'));
 
-        $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::SIMPLE);
-        $query->setStart($input['start']);
-        $query->setRows($input['rows']);
-        $query->setSortField($input['sortField']);
-        $query->setSortOrder($input['sortOrder']);
+        $queryBuilder = new Solrsearch_Model_Search_Basic();
 
-        $query->setCatchAll($input['query']);
-        $this->addFiltersToQuery($query, $input);
+        $result = $queryBuilder->createQueryBuilderInputFromRequest($request);
 
-        if ($this->getExport()) {
-            $query->setReturnIdsOnly(true);
-        }
+        $this->assertEquals($result['start'], 0);
+        $this->assertEquals($result['rows'], 1337);
+        $this->assertEquals($result['sortOrder'], 'desc');
+    }
 
-        $this->getLogger()->debug("Query $query complete");
-        return $query;
+    /**
+     * Test für OPUSVIER-2708.
+     */
+    public function testGetRowsFromConfig()
+    {
+        $config = Zend_Registry::get('Zend_Config');
+        $oldParamRows = $config->searchengine->solr->numberOfDefaultSearchResults;
+        $config->searchengine->solr->numberOfDefaultSearchResults = 1337;
+
+        $request = $this->getRequest();
+        $request->setParams(array('searchtype' => 'all'));
+
+        $queryBuilder = new Solrsearch_Model_Search_Basic();
+        $result = $queryBuilder->createQueryBuilderInputFromRequest($request);
+
+        //clean-up
+        $config->searchengine->solr->numberOfDefaultSearchResults = $oldParamRows;
+
+        $this->assertEquals($result['rows'], 1337);
     }
 
 }

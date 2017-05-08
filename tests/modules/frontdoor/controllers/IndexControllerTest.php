@@ -1171,7 +1171,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $config = Zend_Registry::get('Zend_Config');
         $config->merge(new Zend_Config(array('export' => array('stylesheet' => array('frontdoor' => 'example')))));
         $this->dispatch('/frontdoor/index/index/docId/305');
-        $this->assertQuery('//a[@href="/frontdoor/index/index/docId/305/export/xml/stylesheet/example"]');
+        $this->assertQuery('//a[@href="/export/index/index/docId/305/export/xml/searchtype/id/stylesheet/example"]');
     }
 
     /**

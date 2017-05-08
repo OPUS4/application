@@ -25,38 +25,17 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Solrsearch_Model_Search
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017, OPUS 4 development team
+ * @package     Util
+ * @author      Sascha Szott <szott@zib.de>
+ * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
+ * @version     $Id$
  */
 
 /**
- * Search type for simple, basic searches.
- *
- * TODO move code from Solrsearch_Model_Search_Abstract?
+ * TODO replace - QueryBuilder is not used anymore, right?
  */
-class Solrsearch_Model_Search_Basic extends Solrsearch_Model_Search_Abstract
-{
-
-    public function createSearchQuery($input) {
-        $this->getLogger()->debug("Constructing query for simple search.");
-
-        $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::SIMPLE);
-        $query->setStart($input['start']);
-        $query->setRows($input['rows']);
-        $query->setSortField($input['sortField']);
-        $query->setSortOrder($input['sortOrder']);
-
-        $query->setCatchAll($input['query']);
-        $this->addFiltersToQuery($query, $input);
-
-        if ($this->getExport()) {
-            $query->setReturnIdsOnly(true);
-        }
-
-        $this->getLogger()->debug("Query $query complete");
-        return $query;
-    }
+class Application_Search_QueryBuilderException extends Exception {
 
 }
+

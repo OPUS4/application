@@ -68,4 +68,41 @@ class Solrsearch_Model_Search_Series extends Solrsearch_Model_Search_Abstract
         return true;
     }
 
+    public function createSearchQuery($input) {
+        $this->getLogger()->debug("Constructing query for series search.");
+
+        $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::SIMPLE);
+        $query->setStart($input['start']);
+        $query->setRows($input['rows']);
+        if ($input['sortField'] === 'seriesnumber'
+            || $input['sortField'] === Opus_Search_Query::getDefaultSortingField()) {
+            $query->setSortField('doc_sort_order_for_seriesid_' . $input['seriesId']);
+        }
+        else {
+            $query->setSortField($input['sortField']);
+        }
+        $query->setSortOrder($input['sortOrder']);
+
+        $query->setCatchAll('*:*');
+        $query->addFilterQuery('series_ids', $input['seriesId']);
+        $this->addFiltersToQuery($query, $input);
+
+        if ($this->getExport()) {
+            $query->setReturnIdsOnly(true);
+        }
+
+        $this->getLogger()->debug("Query $query complete");
+        return $query;
+    }
+
+    public function createQueryBuilderInputFromRequest($request)
+    {
+        $input = parent::createQueryBuilderInputFromRequest($request);
+
+        $searchParams = new Application_Util_BrowsingParams($request, $this->getLogger());
+        $input['seriesId'] = $searchParams->getSeriesId();
+
+        return $input;
+    }
+
 }

@@ -382,7 +382,15 @@ class Frontdoor_IndexController extends Application_Controller_Action {
 
             $request->setParam('rows', '1'); // make sure only 1 entry is displayed
 
-            $query = Application_Search_Navigation::getQueryUrl($request, $this->getLogger());
+            $searchType = $request->getParam('searchtype');
+
+            $searchFactory = new Solrsearch_Model_Search();
+
+            $search = $searchFactory->getSearchPlugin($searchType);
+
+            $query = $search->getQueryUrl($request);
+
+            // TODO fix usage of search code - should be identical to search/export/rss - except just 1 row
 
             $searcher = new Opus_SolrSearch_Searcher();
 

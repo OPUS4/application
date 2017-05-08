@@ -95,4 +95,37 @@ class Solrsearch_Model_Search_Collection extends Solrsearch_Model_Search_Basic
         }
     }
 
+    public function createSearchQuery($input) {
+        $this->getLogger()->debug("Constructing query for collection search.");
+
+        $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::SIMPLE);
+        $query->setStart($input['start']);
+        $query->setRows($input['rows']);
+        $query->setSortField($input['sortField']);
+        $query->setSortOrder($input['sortOrder']);
+
+        $query->setCatchAll('*:*');
+        $query->addFilterQuery('collection_ids', $input['collectionId']);
+
+        $this->addFiltersToQuery($query, $input);
+
+        if ($this->getExport()) {
+            $query->setReturnIdsOnly(true);
+        }
+
+        $this->getLogger()->debug("Query $query complete");
+
+        return $query;
+    }
+
+    public function createQueryBuilderInputFromRequest($request)
+    {
+        $input = parent::createQueryBuilderInputFromRequest($request);
+
+        $searchParams = new Application_Util_BrowsingParams($request, $this->getLogger());
+        $input['collectionId'] = $searchParams->getCollectionId();
+
+        return $input;
+    }
+
 }

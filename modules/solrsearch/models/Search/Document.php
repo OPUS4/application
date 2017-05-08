@@ -31,31 +31,25 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-/**
- * Search type for simple, basic searches.
- *
- * TODO move code from Solrsearch_Model_Search_Abstract?
- */
-class Solrsearch_Model_Search_Basic extends Solrsearch_Model_Search_Abstract
+class Solrsearch_Model_Search_Document extends Solrsearch_Model_Search_Basic
 {
 
     public function createSearchQuery($input) {
-        $this->getLogger()->debug("Constructing query for simple search.");
+        $this->getLogger()->debug("Constructing query for id search.");
 
-        $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::SIMPLE);
-        $query->setStart($input['start']);
-        $query->setRows($input['rows']);
-        $query->setSortField($input['sortField']);
-        $query->setSortOrder($input['sortOrder']);
+        if (is_null($input['docId'])) {
+            throw new Application_Exception("No id provided.", 404);
+        }
 
-        $query->setCatchAll($input['query']);
-        $this->addFiltersToQuery($query, $input);
+        $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::DOC_ID);
+        $query->setField('id', $input['docId']);
 
         if ($this->getExport()) {
             $query->setReturnIdsOnly(true);
         }
 
         $this->getLogger()->debug("Query $query complete");
+
         return $query;
     }
 

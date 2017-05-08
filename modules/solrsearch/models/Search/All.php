@@ -31,24 +31,18 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-/**
- * Search type for simple, basic searches.
- *
- * TODO move code from Solrsearch_Model_Search_Abstract?
- */
-class Solrsearch_Model_Search_Basic extends Solrsearch_Model_Search_Abstract
+class Solrsearch_Model_Search_All extends Solrsearch_Model_Search_Basic
 {
 
     public function createSearchQuery($input) {
-        $this->getLogger()->debug("Constructing query for simple search.");
+        $this->getLogger()->debug("Constructing query for all search.");
 
-        $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::SIMPLE);
+        $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::ALL_DOCS);
         $query->setStart($input['start']);
         $query->setRows($input['rows']);
         $query->setSortField($input['sortField']);
         $query->setSortOrder($input['sortOrder']);
 
-        $query->setCatchAll($input['query']);
         $this->addFiltersToQuery($query, $input);
 
         if ($this->getExport()) {

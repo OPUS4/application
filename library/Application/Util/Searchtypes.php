@@ -81,11 +81,15 @@ class Application_Util_Searchtypes {
             case Application_Util_Searchtypes::AUTHOR_SEARCH:
                 $pluginClass = 'Solrsearch_Model_Search_Advanced';
                 break;
+            case Application_Util_Searchtypes::ALL_SEARCH:
+                $pluginClass = 'Solrsearch_Model_Search_All';
+                break;
             default:
                 $pluginClass = 'Solrsearch_Model_Search_Basic';
         }
 
         $plugin = new $pluginClass();
+        $plugin->setSearchType($searchType);
 
         return $plugin;
     }

@@ -35,25 +35,29 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Application_View_Helper_ExportLinskTest extends ControllerTestCase
+class Application_View_Helper_ExportLinksTest extends ControllerTestCase
 {
 
     public function testToString()
     {
-        $this->dispatch('/home'); // HACK to setup default route
-
         $exportLink = new Application_View_Helper_ExportLinks();
 
         $this->assertEquals(
-            '<ul><li><a href="/citationExport/index/download/output/bibtex" title="Export BibTeX" class="export bibtex">BibTeX</a></li><li><a href="/citationExport/index/download/output/ris" title="Export RIS" class="export ris">RIS</a></li></ul>',
+            '<ul>' .
+            '<li><a href="/citationExport/index/download/output/bibtex" title="Export BibTeX" class="export bibtex">BibTeX</a></li>' .
+            '<li><a href="/export/index/bibtex" title="Export BibTeX" class="export bibtex">BibTeX</a></li>' .
+            '<li><a href="/citationExport/index/download/output/ris" title="Export RIS" class="export ris">RIS</a></li>' .
+            '<li><a href="/export/index/ris" title="Export RIS" class="export ris">RIS</a></li>' .
+            '<li><a href="/export/index/index/export/xml/searchtype/id/stylesheet/example" title="Export XML" class="export xml">XML</a></li>' .
+            '<li><a href="/export/index/index/export/xml/stylesheet/example" title="Export XML" class="export xml">XML</a></li>' .
+            '<li><a href="/export/index/csv" title="Export CSV" class="export csv">CSV</a></li>' .
+            '</ul>',
             $exportLink->__toString()
         );
     }
 
     public function testRenderLink()
     {
-        $this->dispatch('/home');
-
         $page = new Zend_Navigation_Page_Mvc(array(
             'name' => 'bibtex',
             'description' => 'Export BibTeX',

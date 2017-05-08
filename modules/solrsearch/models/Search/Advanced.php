@@ -57,4 +57,36 @@ class Solrsearch_Model_Search_Advanced extends Solrsearch_Model_Search_Basic
         return $form;
     }
 
+    public function createSearchQuery($input) {
+        $this->getLogger()->debug("Constructing query for advanced search.");
+
+        $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::ADVANCED);
+        $query->setStart($input['start']);
+        $query->setRows($input['rows']);
+        $query->setSortField($input['sortField']);
+        $query->setSortOrder($input['sortOrder']);
+
+        foreach (array('author', 'title', 'persons', 'referee', 'abstract', 'fulltext', 'year') as $fieldname) {
+            if (!empty($input[$fieldname])) {
+                $query->setField($fieldname, $input[$fieldname], $input[$fieldname . 'modifier']);
+            }
+        }
+
+        $this->addFiltersToQuery($query, $input);
+
+        //im Falle einer Autorensuche werden Kommas und Semikolons aus dem Suchstring entfernt
+        if (!is_null($query->getField('author'))) {
+            $author = $query->getField('author');
+            $authormodifier = $query->getModifier('author');
+            $query->setField('author', str_replace(array(',', ';'), '', $author), $authormodifier);
+        }
+
+        if ($this->getExport()) {
+            $query->setReturnIdsOnly(true);
+        }
+
+        $this->getLogger()->debug("Query $query complete");
+        return $query;
+    }
+
 }

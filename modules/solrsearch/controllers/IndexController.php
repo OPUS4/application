@@ -79,6 +79,7 @@ class Solrsearch_IndexController extends Application_Controller_Action
 
     /**
      *
+     * TODO get rid of this action
      */
     public function invalidsearchtermAction() {
         $this->view->title = $this->view->translate('solrsearch_title_invalidsearchterm');
@@ -97,6 +98,8 @@ class Solrsearch_IndexController extends Application_Controller_Action
 
     /**
      * legacy OPUS 4.0.x action: externalized in Solrsearch_DispatchController.indexAction
+     *
+     * TODO remove?
      */
     public function searchdispatchAction() {
         $this->_forward('index', 'dispatch');
@@ -139,10 +142,13 @@ class Solrsearch_IndexController extends Application_Controller_Action
         $request = $this->getRequest();
 
         if (in_array($searchType, array('advanced', 'authorsearch')) && !is_null($this->getParam('Reset'))) {
+            // redirect to new advanced search form
+            // TODO find better way
             $this->_helper->Redirector->redirectTo('advanced', null, 'index', 'solrsearch');
             return;
         }
 
+        // TODO remove this export redirect
         if (strpos($searchType, 'latest/export') !== false) {
             $paramArray = explode('/', $searchType);
             $params = $request->getParams();

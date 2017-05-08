@@ -24,15 +24,19 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Util
- * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
+ * @category    Tests
+ * @package     Solrsearch_Model_Search
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
-class Application_Util_QueryBuilderException extends Exception {
+class Solrsearch_Model_Search_CollectionTest extends ControllerTestCase
+{
+
+    public function testPerformSearch()
+    {
+        $this->markTestIncomplete('TODO - do some testing');
+    }
 
 }
-

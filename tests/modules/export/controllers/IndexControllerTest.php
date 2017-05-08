@@ -313,10 +313,9 @@ class Export_IndexControllerTest extends ControllerTestCase {
         $body = $this->getResponse()->getBody();
 
         $docIds = array();
-        // perform cleanup before asserting anything
+
         foreach ($docs as $doc) {
             array_push($docIds, $doc->getId());
-            $doc->deletePermanent();
         }
 
         $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());

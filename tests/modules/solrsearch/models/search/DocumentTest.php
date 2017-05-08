@@ -24,39 +24,19 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
+ * @category    Tests
  * @package     Solrsearch_Model_Search
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-/**
- * Search type for simple, basic searches.
- *
- * TODO move code from Solrsearch_Model_Search_Abstract?
- */
-class Solrsearch_Model_Search_Basic extends Solrsearch_Model_Search_Abstract
+class Solrsearch_Model_Search_DocumentTest extends ControllerTestCase
 {
 
-    public function createSearchQuery($input) {
-        $this->getLogger()->debug("Constructing query for simple search.");
-
-        $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::SIMPLE);
-        $query->setStart($input['start']);
-        $query->setRows($input['rows']);
-        $query->setSortField($input['sortField']);
-        $query->setSortOrder($input['sortOrder']);
-
-        $query->setCatchAll($input['query']);
-        $this->addFiltersToQuery($query, $input);
-
-        if ($this->getExport()) {
-            $query->setReturnIdsOnly(true);
-        }
-
-        $this->getLogger()->debug("Query $query complete");
-        return $query;
+    public function testPerformSearch()
+    {
+        $this->markTestIncomplete('TODO - do some testing');
     }
 
 }
