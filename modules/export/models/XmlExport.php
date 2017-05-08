@@ -154,6 +154,7 @@ class Export_Model_XmlExport extends Export_Model_ExportPluginAbstract {
         $request = $this->getRequest();
 
         $exportParam = $request->getParam('export');
+
         if (is_null($exportParam)) {
             throw new Application_Exception('export format is not specified');
         }

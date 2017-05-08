@@ -55,7 +55,6 @@ class Export_Bootstrap extends Zend_Application_Module_Bootstrap {
         // only add XML export if user has access and stylesheet is configured
         if (isset($config->export->stylesheet->frontdoor))
         {
-
             $exporter->addFormats(array(
                 'xml' => array(
                     'name' => 'XML',
