@@ -103,9 +103,23 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
         $this->resetSearch();
         $this->deleteTestDocuments();
         $this->deleteTestFiles();
+        $this->checkDoc146();
         $this->logger = null;
         Application_Configuration::clearInstance(); // reset Application_Configuration
         parent::tearDown();
+    }
+
+    /**
+     * Used for debugging. Document 146 should never be modified in a test.
+     *
+     * In the past side effects because of bugs modified documents unintentionally.
+     */
+    protected function checkDoc146()
+    {
+        $doc = new Opus_Document(146);
+        $modified = $doc->getServerDateModified();
+
+        $this->assertEquals(2012, $modified->getYear());
     }
 
     /**
