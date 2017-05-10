@@ -29,9 +29,9 @@
  * @package     Tests
  * @author      Julian Heise <heise@zib.de>
  * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 class Frontdoor_IndexControllerTest extends ControllerTestCase {
 
@@ -58,6 +58,17 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
 
       $this->_document = $this->createTestDocument();
       $this->_document->setType("doctoral_thesis");
+
+      $title = new Opus_Title();
+      $title->setLanguage('deu');
+      $title->setValue('Titel');
+      $this->_document->addTitleMain($title);
+
+      $title = new Opus_Title();
+      $title->setLanguage('eng');
+      $title->setValue('Title');
+      $this->_document->addTitleMain($title);
+
       $this->_document->store();
 
       //setting server globals
@@ -191,44 +202,37 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
    /*
     * Regression test for OPUSVIER-2165
     */
+   public function testFrontdoorTitleRespectsDocumentLanguageDeu()
+   {
+       $docId = $this->_document->getId();
 
-   public function testFrontdoorTitleRespectsDocumentLanguageDeu() {
-      $d = new Opus_Document(146);
-      $lang = $d->getLanguage();
-      $d->setLanguage('deu');
-      $d->store();
+       $doc = new Opus_Document($docId);
+       $doc->setLanguage('deu');
+       $doc->setServerState('published');
+       $doc->store();
 
-      $this->dispatch('/frontdoor/index/index/docId/146');
+       $this->dispatch("/frontdoor/index/index/docId/$docId");
 
-      // restore language
-      $d = new Opus_Document(146);
-      $d->setLanguage($lang);
-      $d->store();
-
-
-      $this->assertNotContains('<title>OPUS 4 | COLN</title>', $this->getResponse()->getBody());
-      $this->assertContains('<title>OPUS 4 | KOBV</title>', $this->getResponse()->getBody());
+       $this->assertContains('<title>OPUS 4 | Titel</title>', $this->getResponse()->getBody());
+       $this->assertNotContains('<title>OPUS 4 | Title</title>', $this->getResponse()->getBody());
    }
 
    /**
     * Regression test for OPUSVIER-2165
     */
-   public function testFrontdoorTitleRespectsDocumentLanguageEng() {
-      $d = new Opus_Document(146);
-      $lang = $d->getLanguage();
-      $d->setLanguage('eng');
-      $d->store();
+   public function testFrontdoorTitleRespectsDocumentLanguageEng()
+   {
+       $docId = $this->_document->getId();
 
-      $this->dispatch('/frontdoor/index/index/docId/146');
+       $doc = new Opus_Document($docId);
+       $doc->setLanguage('eng');
+       $doc->setServerState('published');
+       $doc->store();
 
-      // restore language
-      $d = new Opus_Document(146);
-      $d->setLanguage($lang);
-      $d->store();
+       $this->dispatch("/frontdoor/index/index/docId/$docId");
 
-      $this->assertContains('<title>OPUS 4 | COLN</title>', $this->getResponse()->getBody());
-      $this->assertNotContains('<title>OPUS 4 | KOBV</title>', $this->getResponse()->getBody());
-
+       $this->assertContains('<title>OPUS 4 | Title</title>', $this->getResponse()->getBody());
+       $this->assertNotContains('<title>OPUS 4 | Titel</title>', $this->getResponse()->getBody());
    }
 
    /**
@@ -238,21 +242,19 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
     * the first title is used as page title
     *
     */
-   public function testFrontdoorTitleRespectsDocumentLanguageWithoutCorrespondingTitle() {
-      $d = new Opus_Document(146);
-      $lang = $d->getLanguage();
-      $d->setLanguage('fra');
-      $d->store();
+   public function testFrontdoorTitleRespectsDocumentLanguageWithoutCorrespondingTitle()
+   {
+       $docId = $this->_document->getId();
 
-      $this->dispatch('/frontdoor/index/index/docId/146');
+       $doc = new Opus_Document($docId);
+       $doc->setLanguage('fra');
+       $doc->setServerState('published');
+       $doc->store();
 
-      // restore language
-      $d = new Opus_Document(146);
-      $d->setLanguage($lang);
-      $d->store();
+       $this->dispatch("/frontdoor/index/index/docId/$docId");
 
-      $this->assertNotContains('<title>OPUS 4 | COLN</title>', $this->getResponse()->getBody());
-      $this->assertContains('<title>OPUS 4 | KOBV</title>', $this->getResponse()->getBody());
+       $this->assertNotContains('<title>OPUS 4 | Title</title>', $this->getResponse()->getBody());
+       $this->assertContains('<title>OPUS 4 | Titel</title>', $this->getResponse()->getBody());
    }
 
    /**
@@ -261,26 +263,21 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
     * if database contains more than one title in the document's language,
     * the first title is used as page title
     */
-   public function testFrontdoorTitleRespectsDocumentLanguageMultipleCandidates() {
-      $d = new Opus_Document(146);
-      $lang = $d->getLanguage();
-      $d->setLanguage('deu');
-      $titles = $d->getTitleMain();
-      $d->addTitleMain()->setValue('VBOK')->setLanguage('deu');
-      $d->store();
+   public function testFrontdoorTitleRespectsDocumentLanguageMultipleCandidates()
+   {
+       $docId = $this->_document->getId();
 
-      $this->dispatch('/frontdoor/index/index/docId/146');
+       $doc = new Opus_Document($docId);
+       $doc->setLanguage('deu');
+       $doc->setServerState('published');
+       $doc->addTitleMain()->setValue('Titel2')->setLanguage('deu');
+       $doc->store();
 
-      // restore language
-      // restore titles
-      $d = new Opus_Document(146);
-      $d->setLanguage($lang);
-      $d->setTitleMain($titles);
-      $d->store();
+       $this->dispatch("/frontdoor/index/index/docId/$docId");
 
-      $this->assertNotContains('<title>OPUS 4 | COLN</title>', $this->getResponse()->getBody());
-      $this->assertNotContains('<title>OPUS 4 | VBOK</title>', $this->getResponse()->getBody());
-      $this->assertContains('<title>OPUS 4 | KOBV</title>', $this->getResponse()->getBody());
+       $this->assertNotContains('<title>OPUS 4 | Title</title>', $this->getResponse()->getBody());
+       $this->assertNotContains('<title>OPUS 4 | Titel2</title>', $this->getResponse()->getBody());
+       $this->assertContains('<title>OPUS 4 | Titel</title>', $this->getResponse()->getBody());
    }
 
    /**
