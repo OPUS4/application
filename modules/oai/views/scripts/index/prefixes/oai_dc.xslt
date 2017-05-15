@@ -326,7 +326,7 @@
 
     <xsl:template match="Licence" mode="oai_dc">
         <dc:rights>
-            <xsl:value-of select="@NameLong" />
+            <xsl:value-of select="@LinkLicence" />
         </dc:rights>
     </xsl:template>
 
