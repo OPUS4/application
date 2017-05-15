@@ -80,8 +80,6 @@ class Export_BibtexExportTest extends ControllerTestCase
 
     /**
      * @throws Zend_Exception
-     *
-     * TODO should be 10
      */
     public function testExportLatestDocuments()
     {
@@ -96,6 +94,21 @@ class Export_BibtexExportTest extends ControllerTestCase
         $body = $this->getResponse()->getBody();
 
         $this->assertEquals(10, substr_count($body, '@misc{'));
+    }
+
+    public function testExportLatestDocumentsWithCustomRows()
+    {
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
+            'export' => array('download' => '0')
+        )));
+
+        $this->dispatch('/export/index/bibtex/searchtype/latest/rows/12');
+
+        $this->assertResponseCode(200);
+
+        $body = $this->getResponse()->getBody();
+
+        $this->assertEquals(12, substr_count($body, '@misc{'));
     }
 
 }

@@ -34,6 +34,25 @@
 class Solrsearch_Model_Search_Latest extends Solrsearch_Model_Search_Basic
 {
 
+    /**
+     * Latest search should return default number of rows if not specified.
+     *
+     * @param $request
+     * @return array
+     * @throws Application_Search_QueryBuilderException
+     */
+    public function createQueryBuilderInputFromRequest($request)
+    {
+        $input = parent::createQueryBuilderInputFromRequest($request);
+
+        if (!isset($request->rows))
+        {
+            $input['rows'] = Opus_Search_Query::getDefaultRows();
+        }
+
+        return $input;
+    }
+
     public function createSearchQuery($input) {
         $this->getLogger()->debug("Constructing query for latest search.");
 
