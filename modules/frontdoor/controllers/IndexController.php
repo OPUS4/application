@@ -325,12 +325,13 @@ class Frontdoor_IndexController extends Application_Controller_Action {
                 $metas[] = array("DC.Date", $yearPublished);
             }
         }
+
         $licences = $document->getLicence();
-        foreach ($licences as $docLicence) {
-                   $metas[] = array('DC.rights', $docLicence->getModel()->getLinkLicence() );
 
-            }
-
+        foreach ($licences as $docLicence)
+        {
+            $metas[] = array('DC.rights', $docLicence->getModel()->getLinkLicence() );
+        }
 
         return $metas;
     }
