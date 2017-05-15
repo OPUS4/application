@@ -897,7 +897,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $body = $this->getResponse()->getBody();
 
         $this->assertNotContains("oai::$docId", $body, 'Response should not contain embargoed document.');
-        $this->assertContains("oai::$visibleId", $body, 'Reponse should contain document without embargo.');
+        $this->assertContains("oai::$visibleId", $body, 'Response should contain document without embargo.');
     }
 
     /**

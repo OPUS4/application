@@ -28,12 +28,28 @@
  * @package     Tests
  * @author      Sascha Szott <szott@zib.de>
  * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
-class Export_IndexControllerTest extends ControllerTestCase {
+class Export_IndexControllerTest extends ControllerTestCase
+{
+
+    private $_removeExportFromGuest = false;
+
+
+    public function tearDown()
+    {
+        if ($this->_removeExportFromGuest)
+        {
+            $role = Opus_UserRole::fetchByName('guest');
+            $role->removeAccessModule('export');
+            $role->store();
+        }
+
+        parent::tearDown();
+    }
 
     /**
      * expectedException Application_Exception
@@ -150,8 +166,8 @@ class Export_IndexControllerTest extends ControllerTestCase {
         $r = Opus_UserRole::fetchByName('guest');
 
         $modules = $r->listAccessModules();
-        $addOaiModuleAccess = !in_array('export', $modules);
-        if ($addOaiModuleAccess) {
+        if (!in_array('export', $modules)) {
+            $this->_removeExportFromGuest = true;
             $r->appendAccessModule('export');
             $r->store();
         }
@@ -163,12 +179,6 @@ class Export_IndexControllerTest extends ControllerTestCase {
         Zend_Registry::set('Zend_Config', $config);
 
         $this->dispatch('/export/index/index/export/xml');
-
-        // restore security settings
-        if ($addOaiModuleAccess) {
-            $r->removeAccessModule('export');
-            $r->store();
-        }
 
         $config->security = $security;
         Zend_Registry::set('Zend_Config', $config);
@@ -189,8 +199,8 @@ class Export_IndexControllerTest extends ControllerTestCase {
         $r = Opus_UserRole::fetchByName('guest');
 
         $modules = $r->listAccessModules();
-        $addOaiModuleAccess = !in_array('export', $modules);
-        if ($addOaiModuleAccess) {
+        if (!in_array('export', $modules)) {
+            $this->_removeExportFromGuest = true;
             $r->appendAccessModule('export');
             $r->store();
         }
@@ -208,12 +218,6 @@ class Export_IndexControllerTest extends ControllerTestCase {
 
         $this->dispatch('/export/index/index/searchtype/all/export/xml/stylesheet/example');
         $body = $this->getResponse()->getBody();
-
-        // restore security settings
-        if ($addOaiModuleAccess) {
-            $r->removeAccessModule('export');
-            $r->store();
-        }
 
         // restore configuration
         $config = Zend_Registry::get('Zend_Config');
@@ -432,8 +436,10 @@ class Export_IndexControllerTest extends ControllerTestCase {
 
         $this->dispatch('/export/index/index/searchtype/simple/export/xml/start/0/rows/10/query/%22%5C%22%22');
 
-        $this->assertContains("exception 'Application_SearchException' with message 'search query is invalid -- check syntax'", $this->getResponse()->getBody());
-        $this->assertNotContains("exception 'Application_SearchException' with message 'search server is not responding -- try again later'", $this->getResponse()->getBody());
+        $response = $this->getResponse()->getBody();
+
+        $this->assertContains("The given search query is not supported.", $response);
+        $this->assertNotContains("exception 'Application_SearchException' with message 'search server is not responding -- try again later'", $response);
 
         $this->assertEquals(500, $this->getResponse()->getHttpResponseCode());
     }
