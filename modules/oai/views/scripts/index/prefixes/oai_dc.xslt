@@ -29,7 +29,7 @@
  * @package     Module_Oai
  * @author      Michael Lang <lang@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 -->
@@ -99,7 +99,7 @@
             <xsl:apply-templates select="File" mode="oai_dc" />
             <!-- dc:language -->
             <xsl:apply-templates select="@Language" mode="oai_dc" />
-             <!-- <xsl:apply-templates select="" /> -->
+            <!-- <xsl:apply-templates select="" /> -->
             <!-- dc:coverage -->
             <!-- <xsl:apply-templates select="" /> -->
             <!-- dc:rights -->
@@ -111,7 +111,7 @@
             <!-- <dc:type>info:eu-repo/semantics/publishedVersion</dc:type> -->
             <!-- dc:source -->
             <xsl:apply-templates select="TitleParent" mode="oai_dc" />
-			<!-- dc:source Enrichment'SourceTitle'-->
+            <!-- dc:source Enrichment'SourceTitle'-->
             <!-- <xsl:apply-templates select="Enrichment[@KeyName='SourceTitle']" mode="oai_dc" /> -->
             <xsl:call-template name="PublicationVersion" />
         </oai_dc:dc>
@@ -120,7 +120,7 @@
     <xsl:template name="OpusDate" >
         <dc:date>
             <xsl:choose>
-			    <xsl:when test="PublishedDate">
+	        <xsl:when test="PublishedDate">
                     <xsl:value-of select="PublishedDate/@Year"/>-<xsl:value-of select="format-number(PublishedDate/@Month,'00')"/>-<xsl:value-of select="format-number(PublishedDate/@Day,'00')"/>
                 </xsl:when>
                 <xsl:when test="CompletedDate">
@@ -198,7 +198,6 @@
             <xsl:text>ddc:</xsl:text><xsl:value-of select="@Number" />
         </dc:subject>
     </xsl:template>
-    
 	
     <xsl:template match="TitleAbstract" mode="oai_dc">
         <dc:description>
@@ -220,7 +219,6 @@
                 <dc:type>
                     <xsl:value-of select="." />
                 </dc:type>
-              
             </xsl:otherwise>
         </xsl:choose>
          <dc:type>  
@@ -349,9 +347,9 @@
 
     <xsl:template match="Enrichment[@KeyName='Relation']" mode="oai_dc">
         <dc:relation>
-         <xsl:if test="starts-with($oai_set,'openaire')">
+        <xsl:if test="starts-with($oai_set,'openaire')">
             <xsl:text>info:eu-repo/grantAgreement/EC/FP7/</xsl:text>
-         </xsl:if>   
+        </xsl:if>   
             <xsl:value-of select="@Value" />
         </dc:relation>
     </xsl:template>
