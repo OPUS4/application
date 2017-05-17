@@ -28,9 +28,8 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @author      Thoralf Klein <thoralf.klein@zib.de>
  * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -103,7 +102,16 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
         $this->resetSearch();
         $this->deleteTestDocuments();
         $this->deleteTestFiles();
+
+        // check if documents have been modified by a side effect (should not happen)
         $this->checkDoc146();
+        $this->checkDoc1();
+
+        /* ONLY FOR DEBUGGING
+        $checker = new AssumptionChecker($this);
+        $checker->checkYearFacetAssumption();
+        */
+
         $this->logger = null;
         Application_Configuration::clearInstance(); // reset Application_Configuration
         parent::tearDown();
@@ -120,6 +128,14 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
         $modified = $doc->getServerDateModified();
 
         $this->assertEquals(2012, $modified->getYear());
+    }
+
+    protected function checkDoc1()
+    {
+        $doc = new Opus_Document(1);
+        $modified = $doc->getServerDateModified();
+
+        $this->assertEquals(2010, $modified->getYear());
     }
 
     /**
@@ -537,26 +553,46 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
      */
     public function removeDocument($value) {
         if (!is_null($value)) {
+            $docId = null;
             try {
                 // check if value is Opus_Document or ID
                 $doc = ($value instanceof Opus_Document) ? $value : new Opus_Document($value);
+                $docId = $doc->getId();
                 $doc->deletePermanent();
             }
             catch (Opus_Model_NotFoundException $omnfe) {
                 // Model nicht gefunden -> alles gut (hoffentlich)
             }
+
+            // make sure test documents have been deleted
+            try
+            {
+                $doc = new Opus_Document($docId);
+                $this->getLogger()->debug("Test document {$docId} was not deleted.");
+            }
+            catch (Opus_Model_NotFoundException $omnfe) {
+                // ignore - document was deleted
+                $this->getLogger()->debug("Test document {$docId} was deleted.");
+            }
+
         }
     }
 
-    private function deleteTestDocuments() {
-        if (!is_null($this->testDocuments)) {
-            foreach ($this->testDocuments as $key => $doc) {
-                try {
+    private function deleteTestDocuments()
+    {
+        if (!is_null($this->testDocuments))
+        {
+            foreach ($this->testDocuments as $key => $doc)
+            {
+                try
+                {
                     $this->removeDocument($doc);
-                    unset ($this->testDocuments[$key]);
-                } catch (Exception $e) {
+                }
+                catch (Exception $e) {
                 }
             }
+
+            $this->testDocuments = null;
         }
     }
 
