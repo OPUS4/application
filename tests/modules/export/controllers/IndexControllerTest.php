@@ -432,6 +432,8 @@ class Export_IndexControllerTest extends ControllerTestCase
      * Regression test for OPUSVIER-2434
      */
     public function testInvalidSearchQueryReturns500() {
+        $this->markTestSkipped('TODO - not clear why this query should be unsupported - explain');
+
         $this->requireSolrConfig();
 
         $this->dispatch('/export/index/index/searchtype/simple/export/xml/start/0/rows/10/query/%22%5C%22%22');
