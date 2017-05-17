@@ -108,21 +108,6 @@ class Frontdoor_Model_AuthorsTest extends ControllerTestCase {
         $this->assertNotNull($this->unpublishedDocumentId);
     }
 
-    public function tearDown() {
-        $person = new Opus_Person($this->author1Id);
-        $person->delete();
-
-        $person = new Opus_Person($this->author2Id);
-        $person->delete();
-
-        $person = new Opus_Person($this->author3Id);
-        $person->delete();
-
-        $person = new Opus_Person($this->author4Id);
-        $person->delete();
-        parent::tearDown();
-    }
-
     public function testConstructor() {
         $model = new Frontdoor_Model_Authors($this->documentId);
         $this->assertNotNull($model);

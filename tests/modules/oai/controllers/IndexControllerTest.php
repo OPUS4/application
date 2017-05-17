@@ -30,7 +30,7 @@
  * @author      Thoralf Klein <thoralf.klein@zib.de>
  * @author      Sascha Szott <szott@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  *
  * TODO split specific protocol tests into separate classes
@@ -1413,10 +1413,6 @@ class Oai_IndexControllerTest extends ControllerTestCase {
       $this->docIds[] = $document->store();
 
       $this->dispatch('/oai?verb=GetRecord&metadataPrefix=xMetaDissPlus&identifier=oai::' . $document->getId());
-
-      $author->delete();
-      $advisor->delete();
-      $referee->delete();
 
       $this->assertResponseCode(200);
       $response = $this->getResponse();
