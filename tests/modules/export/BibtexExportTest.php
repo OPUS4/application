@@ -34,6 +34,15 @@
 class Export_BibtexExportTest extends ControllerTestCase
 {
 
+    public function setUp()
+    {
+        parent::setUp();
+
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
+            'searchengine' => array('solr' => array('numberOfDefaultSearchResults' => 10))
+        )));
+    }
+
     /**
      * @misc{Doe2009,
      * type      = {Master Thesis},
@@ -84,7 +93,8 @@ class Export_BibtexExportTest extends ControllerTestCase
     public function testExportLatestDocuments()
     {
         Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
-            'export' => array('download' => '0')
+            'export' => array('download' => '0'),
+            'searchengine' => array('solr' => array('numberOfDefaultSearchResults' => 10))
         )));
 
         $this->dispatch('/export/index/bibtex/searchtype/latest');
@@ -93,7 +103,7 @@ class Export_BibtexExportTest extends ControllerTestCase
 
         $body = $this->getResponse()->getBody();
 
-        $this->assertEquals(10, substr_count($body, '@misc{'));
+        $this->assertEquals(10, substr_count($body, '@'));
     }
 
     public function testExportLatestDocumentsWithCustomRows()
@@ -108,7 +118,7 @@ class Export_BibtexExportTest extends ControllerTestCase
 
         $body = $this->getResponse()->getBody();
 
-        $this->assertEquals(12, substr_count($body, '@misc{'));
+        $this->assertEquals(12, substr_count($body, '@'));
     }
 
 }
