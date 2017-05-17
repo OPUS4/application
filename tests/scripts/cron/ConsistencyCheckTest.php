@@ -67,7 +67,7 @@ class ConsistencyCheckTest extends CronTestCase {
             "Logfile opus_consistency-check.log does not contain 'checking ' . $publishedDocsCount
             . '...' [$contents].");
         $this->assertFalse(strpos($contents, 'No inconsistency was detected.') === false,
-            'Logfile opus_consistency-check.log does not contain "No inconsistency ...".');
+            'Logfile opus_consistency-check.log does not contain "No inconsistency ...". ' . $contents);
         $this->assertFalse(strpos($contents, 'Completed operation after') === false,
             'Logfile opus_consistency-check.log does not contain "Completed operation after".');
 
