@@ -185,35 +185,38 @@ class Export_Model_XmlExport extends Export_Model_ExportPluginAbstract {
 
     /**
      * Prepares xml export for solr search results.
+     *
+     * @throws Application_SearchException
      */
     public function prepareXml() {
         $request = $this->getRequest();
 
-        try {
-            $searchType = $request->getParam('searchtype');
+        $searchType = $request->getParam('searchtype');
 
-            $resultList = null;
-
-            switch ($searchType)
-            {
-            case Application_Util_Searchtypes::ID_SEARCH:
-                // TODO handle ID search like any other search
-                $resultList = $this->buildResultListForIdSearch($request);
-                break;
-            default:
-                $searchFactory = new Solrsearch_Model_Search();
-                $search = $searchFactory->getSearchPlugin($searchType);
-                $query = $search->buildExportQuery($request);
-                $resultList = $search->performSearch($query);
-                break;
-            }
-
-            $this->handleResults($resultList->getResults(), $resultList->getNumberOfHits());
+        if (is_null($searchType))
+        {
+            // TODO move/handle somewhere else (cleanup)
+            throw new Application_Search_QueryBuilderException('Unspecified search type: unable to create query');
         }
-        catch (Opus_SolrSearch_Exception $e) {
-            $this->getLogger()->err(__METHOD__ . ' : ' . $e);
-            throw new Application_SearchException($e, true);
+
+        $resultList = null;
+
+        switch ($searchType)
+        {
+        case Application_Util_Searchtypes::ID_SEARCH:
+            // TODO handle ID search like any other search
+            $resultList = $this->buildResultListForIdSearch($request);
+            break;
+        default:
+            $searchFactory = new Solrsearch_Model_Search();
+            $search = $searchFactory->getSearchPlugin($searchType);
+            $search->setExport(true);
+            $query = $search->buildExportQuery($request);
+            $resultList = $search->performSearch($query);
+            break;
         }
+
+        $this->handleResults($resultList->getResults(), $resultList->getNumberOfHits());
     }
 
     /**
