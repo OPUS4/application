@@ -173,7 +173,9 @@ class Admin_Form_File extends Admin_Form_AbstractModelSubForm {
         $file->setLanguage($this->getElementValue(self::ELEMENT_LANGUAGE));
         $file->setLabel($this->getElementValue(self::ELEMENT_LABEL));
         $file->setComment($this->getElementValue(self::ELEMENT_COMMENT));
-        $file->setSortOrder($this->getElementValue(self::ELEMENT_SORT_ORDER));
+
+        $sortOrder = $this->getElementValue(self::ELEMENT_SORT_ORDER);
+        $file->setSortOrder(!is_null($sortOrder) ? $sortOrder : 0);
 
         $visibility = $this->getElementValue(self::ELEMENT_VISIBILITY);
         $visibility = (is_array($visibility)) ? $visibility : array($visibility);

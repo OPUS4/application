@@ -27,9 +27,8 @@
  * @category    Application Unit Test
  * @package     Admin_Form
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 class Admin_Form_FileTest extends ControllerTestCase {
 
@@ -345,6 +344,33 @@ class Admin_Form_FileTest extends ControllerTestCase {
         $roles = $form->getRolesForFile($fileId);
 
         $this->assertEquals(0, count($roles));
+    }
+
+    public function testUpdateModelSortOrderNull() {
+        $form = new Admin_Form_File();
+
+        $form->getElement('Language')->setValue('fra');
+        $form->getElement('SortOrder')->setValue(1);
+
+        $document = $this->createTestDocument();
+
+        $file = $document->addFile();
+        $file->setPathName('test.pdf');
+
+        $document->store();
+
+        $form->updateModel($file);
+
+        $this->assertEquals('fra', $file->getLanguage());
+        $this->assertEquals(1, $file->getSortOrder());
+
+        $form->getElement('SortOrder')->setValue(null);
+
+        $form->updateModel($file);
+
+        $this->assertNotNull($file->getSortOrder());
+
+        $document->store(); // triggered exception before fix
     }
 
 }
