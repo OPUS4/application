@@ -106,19 +106,24 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
         );
 
         if ($this->getExport()) {
-            $maxRows = Opus_SolrSearch_Query::MAX_ROWS;
+            $maxNumber = Opus_SolrSearch_Query::MAX_ROWS;
             // pagination within export was introduced in OPUS 4.2.2
             $startParam = $request->getParam('start', 0);
-            $rowsParam = $request->getParam('rows', $maxRows);
+            $rowsParam = $request->getParam('rows', $maxNumber);
             $start = intval($startParam);
             $rows = intval($rowsParam);
+
             $input['start'] = $start > 0 ? $start : 0;
-            $input['rows'] = $rows > 0 || ($rows == 0 && $rowsParam == '0') ? $rows : $maxRows;
-            if ($input['start'] > $maxRows) {
-                $input['start'] = $maxRows;
+
+            $input['rows'] = $rows > 0 || ($rows == 0 && $rowsParam == '0') ? $rows : $maxNumber;
+
+            if ($input['start'] > $maxNumber)
+            {
+                $input['start'] = $maxNumber;
             }
-            if ($input['rows'] + $input['start'] > $maxRows) {
-                $input['rows'] = $maxRows - $start;
+            if ($input['rows'] + $input['start'] > $maxNumber)
+            {
+                $input['rows'] = $maxNumber - $input['start'];
             }
         }
 
