@@ -71,7 +71,7 @@ class Application_Controller_Action_Helper_Breadcrumbs extends Application_Contr
             $title = $this->getDocumentTitle($document);
             $page = $this->getNavigation()->findOneBy('label', 'admin_document_index');
             if (!is_null($page)) {
-                $page->setLabel($title . ' ('. $document->getId() . ')');
+                $page->setLabel($title);
                 $page->setParam(self::PARAM_DOCUMENT_ID, $document->getId());
             }
             else {
@@ -122,7 +122,7 @@ class Application_Controller_Action_Helper_Breadcrumbs extends Application_Contr
     }
 
     public function getDocumentTitle($document) {
-        $helper = new Application_Util_DocumentAdapter(null, $document); // TODO improve
+        $helper = new Application_Util_DocumentAdapter($this->getActionController()->view, $document);
         $title = $helper->getMainTitle();
         return (strlen($title) > self::TITLE_MAX_LENGTH) ? substr($title, 0, self::TITLE_MAX_LENGTH)
             . self::TITLE_SHORT_SUFFIX : $title;

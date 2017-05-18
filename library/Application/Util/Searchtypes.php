@@ -27,9 +27,11 @@
  * @category    Application
  * @package     Util
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
+ *
+ * TODO move to search package
  */
 
 class Application_Util_Searchtypes {
@@ -56,5 +58,41 @@ class Application_Util_Searchtypes {
         );
         return in_array($searchtype, $supportedTypes);
     }
+
+    /**
+     * @param $searchType
+     * @return mixed
+     *
+     * TODO eliminate switch and use configuration array instead
+     */
+    public static function getSearchPlugin($searchType)
+    {
+        switch ($searchType) {
+            case Application_Util_Searchtypes::SERIES_SEARCH:
+                $pluginClass = 'Solrsearch_Model_Search_Series';
+                break;
+            case Application_Util_Searchtypes::COLLECTION_SEARCH:
+                $pluginClass = 'Solrsearch_Model_Search_Collection';
+                break;
+            case Application_Util_Searchtypes::LATEST_SEARCH:
+                $pluginClass = 'Solrsearch_Model_Search_Latest';
+                break;
+            case Application_Util_Searchtypes::ADVANCED_SEARCH:
+            case Application_Util_Searchtypes::AUTHOR_SEARCH:
+                $pluginClass = 'Solrsearch_Model_Search_Advanced';
+                break;
+            case Application_Util_Searchtypes::ALL_SEARCH:
+                $pluginClass = 'Solrsearch_Model_Search_All';
+                break;
+            default:
+                $pluginClass = 'Solrsearch_Model_Search_Basic';
+        }
+
+        $plugin = new $pluginClass();
+        $plugin->setSearchType($searchType);
+
+        return $plugin;
+    }
+
 }
 

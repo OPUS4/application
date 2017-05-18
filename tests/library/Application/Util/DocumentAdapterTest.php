@@ -127,6 +127,8 @@ class Application_Util_DocumentAdapterTest extends ControllerTestCase {
     }
 
     public function testGetMainTitleForDocWithNoTitles() {
+        $this->useEnglish();
+
         $view = Zend_Registry::get('Opus_View');
 
         $doc = $this->createTestDocument();
@@ -134,7 +136,7 @@ class Application_Util_DocumentAdapterTest extends ControllerTestCase {
 
         $docAdapter = new Application_Util_DocumentAdapter($view, $doc);
 
-        $this->assertEquals("document_no_title (id = '$docId')", $docAdapter->getMainTitle());
+        $this->assertEquals("untitled document (id = '$docId')", $docAdapter->getMainTitle());
     }
 
     public function testGetMainTitleForDocWithNoLanguage() {

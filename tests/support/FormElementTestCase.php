@@ -111,8 +111,9 @@ abstract class FormElementTestCase extends ControllerTestCase {
             $this->assertEquals($this->_staticViewHelper, $element->getStaticViewHelper());
         }
         else {
-            $this->assertTrue(method_exists($element, 'getStaticViewHelper'),
-                'Need to configure \'_staticViewHelper\' in class ' . __CLASS__ . '.');
+            // if method exists _staticViewHelper should be configured for testing
+            $this->assertFalse(method_exists($element, 'getStaticViewHelper'),
+                'Need to configure \'_staticViewHelper\' for test in class ' . __CLASS__ . '.');
         }
     }
 

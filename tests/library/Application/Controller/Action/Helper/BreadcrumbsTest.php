@@ -75,7 +75,7 @@ class Application_Controller_Action_Helper_BreadcrumbsTest extends ControllerTes
 
         $this->helper->setDocumentBreadcrumb($document);
 
-        $this->assertEquals('KOBV (146)', $page->getLabel());
+        $this->assertEquals('KOBV', $page->getLabel());
         $this->assertEquals(146, $page->getParam('id'));
     }
 

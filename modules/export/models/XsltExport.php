@@ -35,7 +35,35 @@
 /**
  * Export plugin for applying XSLT on XML before returning response.
  *
- * TODO move XSLT functionality here
+ *
  */
-class Export_Model_XsltExport extends Export_Model_XmlExport {
+class Export_Model_XsltExport extends Export_Model_XmlExport
+{
+
+    public function execute()
+    {
+        $config = $this->getConfig();
+
+        if (isset($config->stylesheet))
+        {
+            $stylesheet = $config->stylesheet;
+        }
+
+        $stylesheetDirectory = 'stylesheets';
+
+        if (isset($config->stylesheetDirectory))
+        {
+            $stylesheetDirectory = $config->stylesheetDirectory;
+        }
+
+        $this->loadStyleSheet(
+            $this->buildStylesheetPath(
+                $stylesheet,
+                $this->getView()->getScriptPath('') . $stylesheetDirectory
+            )
+        );
+
+        $this->prepareXml();
+    }
+
 }

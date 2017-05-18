@@ -78,7 +78,7 @@ class Admin_DocumentController extends Application_Controller_Action {
         }
         else {
             // missing or bad parameter => go back to main page
-            return $this->_redirectTo(
+            return $this->_helper->Redirector->redirectTo(
                 'index', array('failure' =>
                 $this->view->translate('admin_document_error_novalidid')),
                 'documents', 'admin'
@@ -97,7 +97,7 @@ class Admin_DocumentController extends Application_Controller_Action {
         $document = $this->_documentsHelper->getDocumentForId($docId);
 
         if (!isset($document)) {
-            return $this->_redirectTo(
+            return $this->_helper->Redirector->redirectTo(
                 'index', array('failure' =>
                 $this->view->translate('admin_document_error_novalidid')),
                 'documents', 'admin'
@@ -132,7 +132,9 @@ class Admin_DocumentController extends Application_Controller_Action {
 
                                 // TODO redirect to Übersicht/Browsing/???
                                 $message = $this->view->translate('admin_document_update_success');
-                                return $this->_redirectTo('index', $message, 'document', 'admin', array('id' => $docId));
+                                return $this->_helper->Redirector->redirectTo(
+                                    'index', $message, 'document', 'admin', array('id' => $docId)
+                                );
                             }
                             catch (Exception $ex) {
                                 $message = $this->view->translate('admin_document_error_exception_storing');
@@ -162,7 +164,9 @@ class Admin_DocumentController extends Application_Controller_Action {
                     case Admin_Form_Document::RESULT_CANCEL:
                         // TODO redirect to origin page (Store in Session oder Form?)
                         // Possible Rücksprungziele: Frontdoor, Metadaten-Übersicht, Suchergebnisse (Documents, ?)
-                        return $this->_redirectTo('index', null, 'document', 'admin', array('id' => $docId));
+                        return $this->_helper->Redirector->redirectTo(
+                            'index', null, 'document', 'admin', array('id' => $docId)
+                        );
                         break;
 
                     case Admin_Form_Document::RESULT_SWITCH_TO:
@@ -178,7 +182,7 @@ class Admin_DocumentController extends Application_Controller_Action {
                         $module = $target['module'];
                         unset($target['module']);
 
-                        return $this->_redirectTo($action, null, $controller, $module, $target);
+                        return $this->_helper->Redirector->redirectTo($action, null, $controller, $module, $target);
                         break;
 
                     default:

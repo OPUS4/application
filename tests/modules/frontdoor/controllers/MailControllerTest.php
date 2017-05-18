@@ -76,13 +76,6 @@ class Frontdoor_MailControllerTest extends ControllerTestCase {
         $this->assertNotNull($this->authorDocumentId);
     }
 
-    protected function tearDown() {
-        $person = new Opus_Person($this->authorId);
-        $person->delete();
-        
-        parent::tearDown();
-    }
-
     public function testIndexActionNotSupported() {
         $this->dispatch('/frontdoor/mail/index/');
         $this->assertResponseCode(500);

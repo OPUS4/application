@@ -32,6 +32,6 @@
  * @version     $Id$
  */
 
-class Application_Util_BrowsingParamsException extends Application_Util_QueryBuilderException {
+class Application_Util_BrowsingParamsException extends Application_Search_QueryBuilderException {
 
 }

@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,48 +24,50 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Util
- * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2014, OPUS 4 development team
+ * @category    Tests
+ * @package     Export
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
+class Export_BootstrapTest extends ControllerTestCase
+{
 
-class Application_Util_QueryBuilderTest extends ControllerTestCase {
+    public function testInitExport()
+    {
+        $this->enableSecurity();
 
-    public function testCreateQueryBuilderInputFromRequest() {
-        $request = $this->getRequest();
-        $request->setParams(array('searchtype' => 'all',
-            'start' => '0',
-            'rows' => '1337',
-            'sortOrder' => 'desc'));
+        $this->dispatch('/frontdoor/index/index/docId/1');
 
-        $queryBuilder = new Application_Util_QueryBuilder(Zend_Registry::get('Zend_Log'));
-        $result = $queryBuilder->createQueryBuilderInputFromRequest($request);
+        // TODO configuration change has no influence at this point
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
+            'export' => array(
+                'stylesheet' => array(
+                    'frontdoor' => null
+                )
+            )
+        )));
 
-        $this->assertEquals($result['start'], 0);
-        $this->assertEquals($result['rows'], 1337);
-        $this->assertEquals($result['sortOrder'], 'desc');
+        $this->assertResponseCode(200);
+        $this->assertQuery('a.export.bibtex');
+        $this->assertQuery('a.export.ris');
+        $this->assertNotQuery('a.export.xml'); // not for 'guest' user
+
     }
 
-    /**
-     * Test für OPUSVIER-2708.
-     */
-    public function testGetRowsFromConfig() {
-        $config = Zend_Registry::get('Zend_Config');
-        $oldParamRows = $config->searchengine->solr->numberOfDefaultSearchResults;
-        $config->searchengine->solr->numberOfDefaultSearchResults = 1337;
+    public function testInitExportRegisterXML()
+    {
+        $this->enableSecurity();
 
-        $request = $this->getRequest();
-        $request->setParams(array('searchtype' => 'all'));
-        $queryBuilder = new Application_Util_QueryBuilder(Zend_Registry::get('Zend_Log'));
-        $result = $queryBuilder->createQueryBuilderInputFromRequest($request);
+        $this->loginUser('admin', 'adminadmin');
 
-        //clean-up
-        $config->searchengine->solr->numberOfDefaultSearchResults = $oldParamRows;
+        $this->dispatch('/frontdoor/index/index/docId/1');
 
-        $this->assertEquals($result['rows'], 1337);
+        $this->assertResponseCode(200);
+        $this->assertQuery('a.export.bibtex');
+        $this->assertQuery('a.export.ris');
+        $this->assertQuery('a.export.xml');
     }
+
 }

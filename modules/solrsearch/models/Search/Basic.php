@@ -25,33 +25,38 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Application_View_Helper
+ * @package     Solrsearch_Model_Search
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
- * Class Application_View_Helper_FrontdoorStylesheet
+ * Search type for simple, basic searches.
  *
- * TODO frontdoor supports multiple formats - what is special here?
+ * TODO move code from Solrsearch_Model_Search_Abstract?
  */
-class Application_View_Helper_FrontdoorStylesheet extends Zend_View_Helper_Abstract
+class Solrsearch_Model_Search_Basic extends Solrsearch_Model_Search_Abstract
 {
 
-    /**
-     * Returns stylesheet for frontdoor export if configured and user has access to export module.
-     * @return string
-     * @throws Zend_Exception
-     */
-    public function frontdoorStylesheet()
-    {
-        $config = Zend_Registry::get('Zend_Config');
-        if (isset($config->export->stylesheet->frontdoor) && Opus_Security_Realm::getInstance()->checkModule('export'))
-        {
-            return $config->export->stylesheet->frontdoor;
+    public function createSearchQuery($input) {
+        $this->getLogger()->debug("Constructing query for simple search.");
+
+        $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::SIMPLE);
+        $query->setStart($input['start']);
+        $query->setRows($input['rows']);
+        $query->setSortField($input['sortField']);
+        $query->setSortOrder($input['sortOrder']);
+
+        $query->setCatchAll($input['query']);
+        $this->addFiltersToQuery($query, $input);
+
+        if ($this->getExport()) {
+            $query->setReturnIdsOnly(true);
         }
-        return '';
+
+        $this->getLogger()->debug("Query $query complete");
+        return $query;
     }
 
 }

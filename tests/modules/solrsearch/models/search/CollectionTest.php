@@ -25,25 +25,18 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Tests
- * @package     Solrsearch_Form
+ * @package     Solrsearch_Model_Search
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2015, OPUS 4 development team
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
-class Solrsearch_Form_OptionsTest extends ControllerTestCase {
+class Solrsearch_Model_Search_CollectionTest extends ControllerTestCase
+{
 
-    public function testInit() {
-        $form = new Solrsearch_Form_Options();
-
-        $this->assertEquals(3, count($form->getElements()));
-
-        $this->assertNotNull($form->getElement('rows'));
-        $this->assertNotNull($form->getElement('searchtype'));
-        $this->assertNotNull($form->getElement('search'));
-
-        $this->assertEquals('latest', $form->getElement('searchtype')->getValue());
+    public function testPerformSearch()
+    {
+        $this->markTestIncomplete('TODO - do some testing');
     }
 
 }

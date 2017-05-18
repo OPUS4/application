@@ -68,7 +68,7 @@ class Admin_PersonController extends Application_Controller_Action {
         $document = $this->_documentsHelper->getDocumentForId($docId);
 
         if (!isset($document)) {
-            return $this->_redirectTo(
+            return $this->_helper->Redirector->redirectTo(
                 'index', array('failure' => 'admin_document_error_novalidid'),
                 'documents', 'admin'
             );
@@ -108,14 +108,14 @@ class Admin_PersonController extends Application_Controller_Action {
                             if ($editSession->getPersonCount() > 0) {
                                 // Link Informationen durch Session übermitteln
                                 $editSession->addPerson($linkProps);
-                                return $this->_redirectToAndExit(
+                                return $this->_helper->Redirector->redirectToAndExit(
                                     'edit', null, 'document', 'admin', array(
                                     'id' => $docId, 'continue' => 'addperson')
                                 );
                             }
                             else {
                                 // Link Informationen direkt als Parameter übergeben
-                                return $this->_redirectToAndExit(
+                                return $this->_helper->Redirector->redirectToAndExit(
                                     'edit', null, 'document', 'admin', array_merge(
                                         array(
                                         'id' => $docId, 'continue' => 'addperson'), $linkProps
@@ -139,7 +139,7 @@ class Admin_PersonController extends Application_Controller_Action {
                     break;
                 case Admin_Form_Document_PersonAdd::RESULT_CANCEL:
                     // Aktuelle Person nicht speichern, aber eventuell gemerkte Personen hinzufügen
-                    return $this->_redirectToAndExit(
+                    return $this->_helper->Redirector->redirectToAndExit(
                         'edit', null, 'document', 'admin', array(
                         'id' => $docId, 'continue' => 'addperson')
                     );
@@ -169,7 +169,7 @@ class Admin_PersonController extends Application_Controller_Action {
         $document = $this->_documentsHelper->getDocumentForId($docId);
 
         if (!isset($document)) {
-            return $this->_redirectTo(
+            return $this->_helper->Redirector->redirectTo(
                 'index', array('failure' => 'admin_document_error_novalidid'),
                 'documents', 'admin'
             );
@@ -216,7 +216,7 @@ class Admin_PersonController extends Application_Controller_Action {
                     if ($form->isValid($post)) {
                         $person = $form->getModel();
                         $person->store();
-                        return $this->_redirectToAndExit(
+                        return $this->_helper->Redirector->redirectToAndExit(
                             'edit', null, 'document', 'admin', array('id' => $docId,
                             'continue' => 'updateperson',
                             'person' => $person->getId()
@@ -251,7 +251,7 @@ class Admin_PersonController extends Application_Controller_Action {
      * @param $docId Dokument-ID
      */
     public function returnToMetadataForm($docId) {
-        return $this->_redirectToAndExit(
+        return $this->_helper->Redirector->redirectToAndExit(
             'edit', null, 'document', 'admin', array('id' => $docId,
             'continue' => 'true')
         );

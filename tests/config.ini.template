@@ -73,6 +73,10 @@ oai.max.listrecords = 10
 oai.max.listidentifiers = 10
 publish.maxfilesize = 1024000
 
+; EXPORT SETTINGS
+export.stylesheet.search = example
+export.stylesheet.frontdoor = example
+
 ; Log settings allow checking for "Unable to translate" messages in log
 log.level = DEBUG
 log.untranslated = true

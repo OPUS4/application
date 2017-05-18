@@ -66,11 +66,11 @@
       <div class="col col-2">
         <dl class="col">
           <dt><?= $this->translate('ServerDatePublished-short') . ':'?></dt>
-          <dd id="Document-ServerDatePublished-value"><?= $this->formatValue()->formatDate($document->getServerDatePublished()) ?></dd>
+          <dd id="Document-ServerDatePublished-value"><?= $this->formatDate()->formatOpusDate($document->getServerDatePublished(), false) ?></dd>
         </dl>
         <dl class="col">
           <dt><?= $this->translate('ServerDateModified-short') . ':'?></dt>
-          <dd id="Document-ServerDateModified-value"><?= $this->formatValue()->formatDate($document->getServerDateModified()) ?></dd>
+          <dd id="Document-ServerDateModified-value"><?= $this->formatDate()->formatOpusDate($document->getServerDateModified(), true) ?></dd>
         </dl>
         <?PHP if ($this->element->isNavigationEnabled()) : ?>
         <dl id="Document-Goto" class="col dropdown">
