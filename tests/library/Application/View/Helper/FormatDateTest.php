@@ -49,4 +49,48 @@ class Application_View_Helper_FormatDateTest extends ControllerTestCase
         $this->assertEquals('21.10.2017', $helper->formatDate(21, 10, 2017));
     }
 
+    public function testFormatOpusDate()
+    {
+        $helper = new Application_View_Helper_FormatDate();
+
+        $date = new Opus_Date(DateTime::createFromFormat('Y/m/d  H:i', '2017/03/10 14:51'));
+
+        $this->useEnglish();
+
+        $this->assertEquals('2017/03/10', $helper->formatOpusDate($date));
+
+        $this->useGerman();
+
+        $this->assertEquals('10.03.2017', $helper->formatOpusDate($date));
+    }
+
+    public function testFormatOpusDateWithTime()
+    {
+        $helper = new Application_View_Helper_FormatDate();
+
+        $date = new Opus_Date(DateTime::createFromFormat('Y/m/d  H:i', '2017/03/10 14:51'));
+
+        $this->useEnglish();
+
+        $this->assertEquals('2017/03/10 14:51', $helper->formatOpusDate($date, true));
+
+        $this->useGerman();
+
+        $this->assertEquals('10.03.2017 14:51', $helper->formatOpusDate($date, true));
+    }
+
+    public function testFormatDateWithoutParameters()
+    {
+        $helper = new Application_View_Helper_FormatDate();
+
+        $this->assertSame($helper, $helper->formatDate());
+    }
+
+    public function testFormatOpusDateWithNull()
+    {
+        $helper = new Application_View_Helper_FormatDate();
+
+        $this->assertEquals('', $helper->formatOpusDate(null));
+    }
+
 }
