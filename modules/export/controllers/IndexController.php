@@ -44,9 +44,11 @@
 class Export_IndexController extends Application_Controller_ModuleAccess {
 
     /**
-     * @var array containing export plugins
+     * Manages export plugins.
+     *
+     * @var Export_Model_ExportService
      */
-    private $_plugins;
+    private $_exportService;
 
     /**
      * Do some initialization on startup of every action
@@ -60,7 +62,8 @@ class Export_IndexController extends Application_Controller_ModuleAccess {
         $this->_helper->viewRenderer->setNoRender(true); // TODO there could be plugins requiring rendering
         $this->_helper->layout()->disableLayout();
 
-        $this->loadPlugins();
+        $this->_exportService = new Export_Model_ExportService();
+        $this->_exportService->loadPlugins();
     }
 
     /**
@@ -93,64 +96,19 @@ class Export_IndexController extends Application_Controller_ModuleAccess {
 
         $this->getLogger()->debug("Request to export plugin $actionName");
 
-        $plugin = $this->getPlugin($actionName);
+        $plugin = $this->_exportService->getPlugin($actionName);
 
         if (!is_null($plugin)) {
+            $plugin->setRequest($this->getRequest());
+            $plugin->setResponse($this->getResponse());
+            $plugin->setView($this->view);
+
             $plugin->init();
             $plugin->execute();
             $plugin->postDispatch();
         }
         else {
             throw new Application_Exception('Plugin ' . htmlspecialchars($actionName) . ' not found');
-        }
-    }
-
-    /**
-     * Returns plugin for action name.
-     *
-     * The plugin is setup for execution.
-     *
-     * @param $name Name of plugin/action.
-     * @return null|Export_Model_ExportPlugin
-     *
-     * TODO should the namespace for plugins be limited (security)?
-     */
-    protected function getPlugin($name) {
-        if (isset($this->_plugins[$name])) {
-            $pluginConfig = $this->_plugins[$name];
-            $pluginClass = $pluginConfig->class;
-
-            $plugin = new $pluginClass($name); // TODO good design?
-            $plugin->setConfig($pluginConfig);
-            $plugin->setRequest($this->getRequest());
-            $plugin->setResponse($this->getResponse());
-            $plugin->setView($this->view);
-
-            return $plugin;
-        }
-        else {
-            return null;
-        }
-    }
-
-    /**
-     * Loads export plugins.
-     *
-     * Der Plugin spezifische Teil der Konfiguation wird festgehalten und später verwendet.
-     */
-    protected function loadPlugins() {
-        $config = $this->getConfig();
-        if (isset($config->plugins->export)) {
-            $exportPlugins = $config->plugins->export->toArray();
-
-            $plugins = array();
-
-            foreach ($exportPlugins as $name => $plugin) {
-                $pluginName = ($name === 'default') ? 'index' : $name;
-                $plugins[$pluginName] = $config->plugins->export->$name;
-            }
-
-            $this->_plugins = $plugins;
         }
     }
 
