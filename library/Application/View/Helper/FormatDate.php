@@ -61,6 +61,11 @@ class Application_View_Helper_FormatDate extends Zend_View_Helper_Abstract
     }
 
     public function formatOpusDate($date, $showTime = false) {
+        if (is_null($date))
+        {
+            return '';
+        }
+
         $session = new Zend_Session_Namespace();
 
         // TODO aktuell werden nur zwei Sprachen unterstützt

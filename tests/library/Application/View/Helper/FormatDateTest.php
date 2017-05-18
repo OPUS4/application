@@ -86,4 +86,11 @@ class Application_View_Helper_FormatDateTest extends ControllerTestCase
         $this->assertSame($helper, $helper->formatDate());
     }
 
+    public function testFormatOpusDateWithNull()
+    {
+        $helper = new Application_View_Helper_FormatDate();
+
+        $this->assertEquals('', $helper->formatOpusDate(null));
+    }
+
 }
