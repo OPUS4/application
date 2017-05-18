@@ -73,10 +73,17 @@ class Export_Model_ExportServiceTest extends ControllerTestCase
     {
         $this->_service->loadPlugins();
 
-        $plugin = $this->_service->getPlugin('ris');
+        $plugin = $this->_service->getPlugin('index');
 
         $this->assertNotNull($plugin);
-        $this->assertInstanceOf('Export_Model_XsltExport', $plugin);
+        $this->assertInstanceOf('Export_Model_XmlExport', $plugin);
+
+        $pluginConfig = $plugin->getConfig();
+
+        $this->assertNotNull($pluginConfig);
+        $this->assertInstanceOf('Zend_Config', $pluginConfig);
+
+        $this->assertEquals(100, $pluginConfig->maxDocumentsGuest);
     }
 
 }

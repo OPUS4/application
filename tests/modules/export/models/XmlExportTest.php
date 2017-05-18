@@ -43,6 +43,11 @@ class Export_Model_XmlExportTest extends ControllerTestCase {
         $plugin->setRequest($this->getRequest());
         $plugin->setResponse($this->getResponse());
         $plugin->init();
+        $plugin->setConfig(new Zend_Config(array(
+            'class' => 'Export_Model_XmlExport',
+            'maxDocumentsGuest' => 100,
+            'maxDocumentsUser' => 500,
+        )));
 
         $this->plugin = $plugin;
     }
@@ -201,6 +206,23 @@ class Export_Model_XmlExportTest extends ControllerTestCase {
         $result = $xpath->query('//Opus_Document');
 
         $this->assertEquals(0, $result->length);
+    }
+
+    public function testGetMaxRows()
+    {
+        $this->assertEquals(Opus_SolrSearch_Query::MAX_ROWS, $this->plugin->getMaxRows());
+
+        $this->enableSecurity();
+
+        $this->assertEquals(100, $this->plugin->getMaxRows());
+
+        $this->loginUser('security7', 'security7pwd');
+
+        $this->assertEquals(500, $this->plugin->getMaxRows());
+
+        $this->loginUser('admin', 'adminadmin');
+
+        $this->assertEquals(Opus_SolrSearch_Query::MAX_ROWS, $this->plugin->getMaxRows());
     }
 
 }

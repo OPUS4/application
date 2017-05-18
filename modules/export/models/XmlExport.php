@@ -211,12 +211,48 @@ class Export_Model_XmlExport extends Export_Model_ExportPluginAbstract {
             $searchFactory = new Solrsearch_Model_Search();
             $search = $searchFactory->getSearchPlugin($searchType);
             $search->setExport(true);
+            $search->setMaxRows($this->getMaxRows());
             $query = $search->buildExportQuery($request);
             $resultList = $search->performSearch($query);
             break;
         }
 
         $this->handleResults($resultList->getResults(), $resultList->getNumberOfHits());
+    }
+
+    /**
+     * Returns maximum number of rows for export depending on autentication.
+     *
+     * @return int
+     */
+    public function getMaxRows()
+    {
+        $maxRows = Opus_SolrSearch_Query::MAX_ROWS;
+
+        $config = $this->getConfig();
+
+        if (!Opus_Security_Realm::getInstance()->skipSecurityChecks())
+        {
+            $identity = Zend_Auth::getInstance()->getIdentity();
+
+            if (empty($identity) === true)
+            {
+                if (isset($config->maxDocumentsGuest))
+                {
+                    $maxRows = $config->maxDocumentsGuest;
+                }
+
+            }
+            else
+            {
+                if (isset($config->maxDocumentsUser))
+                {
+                    $maxRows = $config->maxDocumentsUser;
+                }
+            }
+        }
+
+        return $maxRows;
     }
 
     /**
