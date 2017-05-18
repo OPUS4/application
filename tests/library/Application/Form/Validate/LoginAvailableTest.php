@@ -38,9 +38,27 @@ class Application_Form_Validate_LoginAvailableTest extends ControllerTestCase {
 
     private $validator;
 
+    private $_account;
+
     public function setUp() {
         parent::setUp();
         $this->validator = new Application_Form_Validate_LoginAvailable();
+
+        $user = new Opus_Account();
+        $user->setLogin('user');
+        $user->setPassword('userpwd');
+        $user->store();
+
+        $this->_account = $user;
+    }
+
+    public function tearDown() {
+        if (!is_null($this->_account))
+        {
+            $this->_account->delete();
+        }
+
+        parent::tearDown();
     }
 
     /**

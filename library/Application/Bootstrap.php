@@ -340,13 +340,29 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         // return $container;
     }
 
-    /*
+    /**
      * writes Opus-Version in html header
      */
     protected  function _initVersionInfo() {
         $this->bootstrap('View');
         $view = $this->getResource('View');
         $view->headMeta()->appendName('Opus-Version', Application_Configuration::getOpusVersion());
+    }
+
+    /**
+     * Creates exporter for registering export services.
+     *
+     * @return Application_Export_Exporter
+     */
+    protected function _initExporter()
+    {
+        $this->bootstrap('Configuration');
+
+        $exporter = new Application_Export_Exporter();
+
+        Zend_Registry::set('Opus_Exporter', $exporter);
+
+        return $exporter;
     }
 
 }

@@ -37,6 +37,7 @@
  * Export plugin for exporting documents as XML.
  *
  * TODO reduce to basic XML export (move XSLT into different class)
+ * TODO move database/cache access to documents to different layer
  */
 class Export_Model_XmlExport extends Export_Model_ExportPluginAbstract {
 
@@ -71,8 +72,42 @@ class Export_Model_XmlExport extends Export_Model_ExportPluginAbstract {
      */
     public function postDispatch() {
         if (!isset($this->getView()->errorMessage)) {
+            $config = $this->getConfig();
+
+            $contentType = 'text/xml';
+
+            if (isset($config->contentType))
+            {
+                $contentType = $config->contentType;
+            }
+
+            $attachmentFilename = 'export.xml';
+
+            if (isset($config->attachmentFilename))
+            {
+                $attachmentFilename = $config->attachmentFilename;
+            }
+
+            $response = $this->getResponse();
+
             // Send Xml response.
-            $this->getResponse()->setHeader('Content-Type', 'text/xml; charset=UTF-8', true);
+            $response->setHeader('Content-Type', "$contentType; charset=UTF-8", true);
+
+            $appConfig = Application_Configuration::getInstance()->getConfig();
+
+            $download = true;
+
+            if (isset($appConfig->export->download))
+            {
+                $value = $appConfig->export->download;
+                $download = $value !== '0' && $value !== false && $value !== '';
+            }
+
+            if ($download)
+            {
+                $response->setHeader('Content-Disposition', "attachment; filename=$attachmentFilename", true);
+            }
+
             if (false === is_null($this->_xslt)) {
                 $this->getResponse()->setBody($this->_proc->transformToXML($this->_xml));
             }
@@ -111,11 +146,15 @@ class Export_Model_XmlExport extends Export_Model_ExportPluginAbstract {
      * @throws Application_SearchException
      * @throws Exception
      * @throws Zend_View_Exception
+     *
+     * TODO exportParam is not needed anymore, but can be supported (exportParam = action)
+     * TODO stylesheet can be configured in plugin configuration rather than a parameter
      */
     public function execute() {
         $request = $this->getRequest();
 
         $exportParam = $request->getParam('export');
+
         if (is_null($exportParam)) {
             throw new Application_Exception('export format is not specified');
         }
@@ -146,24 +185,38 @@ class Export_Model_XmlExport extends Export_Model_ExportPluginAbstract {
 
     /**
      * Prepares xml export for solr search results.
+     *
+     * @throws Application_SearchException
      */
     public function prepareXml() {
         $request = $this->getRequest();
 
-        try {
-            if ($request->getParam('searchtype') == 'id') {
-                $resultList = $this->buildResultListForIdSearch($request);
-            }
-            else {
-	            $searcher = new Opus_SolrSearch_Searcher();
-                $resultList = $searcher->search($this->buildQuery($request));
-            }
-            $this->handleResults($resultList->getResults(), $resultList->getNumberOfHits());
+        $searchType = $request->getParam('searchtype');
+
+        if (is_null($searchType))
+        {
+            // TODO move/handle somewhere else (cleanup)
+            throw new Application_Search_QueryBuilderException('Unspecified search type: unable to create query');
         }
-        catch (Opus_SolrSearch_Exception $e) {
-            $this->getLogger()->err(__METHOD__ . ' : ' . $e);
-            throw new Application_SearchException($e, true);
+
+        $resultList = null;
+
+        switch ($searchType)
+        {
+        case Application_Util_Searchtypes::ID_SEARCH:
+            // TODO handle ID search like any other search
+            $resultList = $this->buildResultListForIdSearch($request);
+            break;
+        default:
+            $searchFactory = new Solrsearch_Model_Search();
+            $search = $searchFactory->getSearchPlugin($searchType);
+            $search->setExport(true);
+            $query = $search->buildExportQuery($request);
+            $resultList = $search->performSearch($query);
+            break;
         }
+
+        $this->handleResults($resultList->getResults(), $resultList->getNumberOfHits());
     }
 
     /**
@@ -282,22 +335,6 @@ class Export_Model_XmlExport extends Export_Model_ExportPluginAbstract {
         return $documents;
     }
 
-    /**
-     * Sets up the xml query.
-     */
-    private function buildQuery($request) {
-        $queryBuilder = new Application_Util_QueryBuilder($this->getLogger(), true);
-        $queryBuilderInput = array();
-        try {
-            $queryBuilderInput = $queryBuilder->createQueryBuilderInputFromRequest($request);
-        }
-        catch (Application_Util_QueryBuilderException $e) {
-            $this->getLogger()->err(__METHOD__ . ' : ' . $e->getMessage());
-            throw new Application_Exception($e->getMessage());
-        }
-
-        return $queryBuilder->createSearchQuery($queryBuilderInput);
-    }
 
     /**
      * Searches for available stylesheets and builds the path of the selected stylesheet.

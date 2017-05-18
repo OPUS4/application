@@ -210,7 +210,7 @@ class DocumentsAdminTest extends ControllerTestCase {
     public function testNoAccessToMetadatenFormular() {
         $this->loginUser('security9', 'security9pwd');
         $this->dispatch('/admin/document/edit/id/146');
-        $this->assertRedirectTo('/auth/index/rmodule/admin/rcontroller/document/raction/index/id/146');
+        $this->assertRedirectTo('/auth/index/rmodule/admin/rcontroller/document/raction/edit/id/146');
     }
 
 }

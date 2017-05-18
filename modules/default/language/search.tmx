@@ -22,5 +22,14 @@
             </tuv>
         </tu>
 
+        <tu tuid="results_missingtitle">
+            <tuv xml:lang="en">
+                <seg>untitled document</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>unbenanntes Dokument</seg>
+            </tuv>
+        </tu>
+
     </body>
 </tmx>

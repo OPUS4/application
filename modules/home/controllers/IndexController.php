@@ -132,7 +132,7 @@ class Home_IndexController extends Application_Controller_Action {
             $sessiondata = new Zend_Session_Namespace();
             $sessiondata->language = $language;
         }
-        $this->_redirectTo($action, '', $controller, $module, $params);
+        $this->_helper->Redirector->redirectTo($action, '', $controller, $module, $params);
     }
 
     public function indexAction() {
@@ -156,10 +156,10 @@ class Home_IndexController extends Application_Controller_Action {
             $content = $this->getRequest()->getParam('content');
             if (!is_null($content)) {
                 if ($content === 'contact') {
-                    $this->_redirectToAndExit('contact');
+                    $this->_helper->Redirector->redirectToAndExit('contact');
                 }
                 if ($content === 'imprint') {
-                    $this->_redirectToAndExit('imprint');
+                    $this->_helper->Redirector->redirectToAndExit('imprint');
                 }
 
                 $translation = $this->view->translate('help_content_' . $content);
@@ -185,16 +185,20 @@ class Home_IndexController extends Application_Controller_Action {
 
     /**
      * only for testing purposes to display a warning via Zend's FlashMessenger
+     *
+     * TODO remove
      */
     public function failureAction() {
-        $this->_redirectTo('index', array('failure' => 'This is a warning.'));
+        $this->_helper->Redirector->redirectTo('index', array('failure' => 'This is a warning.'));
     }
 
     /**
      * only for testing purposes to display a notice via Zend's FlashMessenger
+     *
+     * TODO remove
      */
     public function noticeAction() {
-        $this->_redirectTo('index', array('notice' => 'This is a notice.'));
+        $this->_helper->Redirector->redirectTo('index', array('notice' => 'This is a notice.'));
     }
 
     /**

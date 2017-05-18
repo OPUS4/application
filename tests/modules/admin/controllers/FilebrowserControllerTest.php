@@ -69,7 +69,7 @@ class Admin_FilebrowserControllerTest extends ControllerTestCase {
         $this->verifyBreadcrumbDefined();
         $this->assertQueryContentContains('//div.breadcrumbsContainer//a[@href="/admin/document/index/id/'
             . $this->documentId . '"]',
-            'Kein Titel angegeben für Dokument ID (i ... (' . $this->documentId . ')');
+            "unbenanntes Dokument (id = '{$this->documentId}')");
         $this->assertQueryContentContains('//div.breadcrumbsContainer//a[@href="/admin/filemanager/index/id/'
             . $this->documentId . '/continue/1"]',
             'Dateien');

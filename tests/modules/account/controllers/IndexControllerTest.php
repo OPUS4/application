@@ -85,7 +85,7 @@ class Account_IndexControllerTest extends ControllerTestCase {
 
         $this->loginUser('admin', 'adminadmin');
         $this->dispatch('/account');
-        $this->assertRedirectTo('/auth');
+        $this->assertRedirectTo('/auth/index/rmodule/account/rcontroller/index/raction/index');
     }
 
     /**
@@ -249,6 +249,6 @@ class Account_IndexControllerTest extends ControllerTestCase {
         $this->enableSecurity();
         $this->loginUser("security1", "security1pwd");
         $this->dispatch('/account');
-        $this->assertRedirectTo('/auth');
+        $this->assertRedirectTo('/auth/index/rmodule/account/rcontroller/index/raction/index');
     }
 }

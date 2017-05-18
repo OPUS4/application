@@ -82,6 +82,11 @@ class Application_Modules
         return self::$_moduleManager;
     }
 
+    static public function setInstance($modules)
+    {
+        self::$_moduleManager = $modules;
+    }
+
     /**
      * Register a module with the manager.
      * @param $module
@@ -98,7 +103,13 @@ class Application_Modules
      */
     public function isRegistered($name)
     {
-        return array_key_exists($name, $this->_registeredModules);
+        if (is_array($this->_registeredModules))
+        {
+            return array_key_exists($name, $this->_registeredModules);
+        }
+        else {
+            return false;
+        }
     }
 
     /**

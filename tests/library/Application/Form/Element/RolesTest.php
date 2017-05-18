@@ -40,6 +40,7 @@ class Application_Form_Element_RolesTest extends FormElementTestCase {
         $this->_formElementClass = 'Application_Form_Element_Roles';
         $this->_expectedDecoratorCount = 4;
         $this->_expectedDecorators = array('ViewHelper', 'ElementHtmlTag', 'LabelNotEmpty', 'dataWrapper');
+        $this->_staticViewHelper = 'viewFormMultiCheckbox';
         parent::setUp();
     }
 

@@ -65,7 +65,7 @@ class Admin_Form_PersonLinkTest extends ControllerTestCase {
         
         $this->assertEquals(310, $form->getElementValue('PersonId'));
         $this->assertEquals(5, $form->getElementValue('SortOrder'));
-        $this->assertTrue($form->getElementValue('AllowContact'));
+        $this->assertEquals(1, $form->getElementValue('AllowContact'));
         $this->assertEquals('advisor', $form->getElementValue('Role'));
     }
     
