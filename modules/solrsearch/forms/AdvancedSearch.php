@@ -160,8 +160,7 @@ class Solrsearch_Form_AdvancedSearch extends Application_Form_Abstract {
 
         $this->addDisplayGroup(
             $elements,
-            self::GROUP_SEARCHFIELDS,
-            array('legend' => 'advanced_search_form_search_fields')
+            self::GROUP_SEARCHFIELDS
         );
 
         $fieldGroup = $this->getDisplayGroup(self::GROUP_SEARCHFIELDS);
@@ -170,8 +169,7 @@ class Solrsearch_Form_AdvancedSearch extends Application_Form_Abstract {
 
         $fieldGroup->setDecorators(array(
             'FormElements',
-            array('HtmlTag', array('tag' => 'table')),
-            'Fieldset'
+            array('HtmlTag', array('tag' => 'table', 'class' => 'search-form-table'))
         ));
     }
 

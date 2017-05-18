@@ -55,8 +55,9 @@
 .opus.solrsearch #form-search{
 	padding: 25px 225px;
 }
-.solrsearch_advanced fieldset{
-	padding: 15px 235px;
+.solrsearch_search table.search-form-table,
+.solrsearch_advanced table.search-form-table {
+	padding: 0 15px 10px 15px;
 }
 /* frontdoor */
 #titlemain-wrapper{
