@@ -1620,7 +1620,6 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
         $docType = $xpath->query('//oai_dc:dc/dc:type');
         $this->assertEquals('doctoralthesis', $docType->item(0)->nodeValue);
-
     }
 
     public function testXMetaDissPlusDcsourceContainsTitleParent() {
@@ -1779,15 +1778,22 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
         // Language
         $queryResponse = $xpath->query("//oai_dc:dc[dc:identifier='http:///frontdoor/index/index/docId/146']/dc:language");
-        $this->assertEquals('deu', $queryResponse->item(0)->nodeValue);
+        $values = $this->nodeListToArray($queryResponse);
+        $this->assertContains('deu', $values);
+
         $queryResponse = $xpath->query("//oai_dc:dc[dc:identifier='http:///frontdoor/index/index/docId/145']/dc:language");
-        $this->assertEquals('deu', $queryResponse->item(0)->nodeValue);
+        $values = $this->nodeListToArray($queryResponse);
+        $this->assertContains('deu', $values);
 
         // Publication Version
         $queryResponse = $xpath->query("//oai_dc:dc[dc:identifier='http:///frontdoor/index/index/docId/146']/dc:type");
-        $this->assertEquals('info:eu-repo/semantics/publishedVersion', $queryResponse->item(1)->nodeValue);
+        $values = $this->nodeListToArray($queryResponse);
+        $this->assertContains('info:eu-repo/semantics/publishedVersion', $values);
+
         $queryResponse = $xpath->query("//oai_dc:dc[dc:identifier='http:///frontdoor/index/index/docId/145']/dc:type");
-        $this->assertEquals('info:eu-repo/semantics/publishedVersion', $queryResponse->item(1)->nodeValue);
+        $values = $this->nodeListToArray($queryResponse);
+        $this->assertContains('info:eu-repo/semantics/publishedVersion', $values);
+        $this->assertContains('info:eu-repo/semantics/workingPaper', $values);
 
         // Source (TitleParent ist nur bei 146 gesetzt
         $queryResponse = $xpath->query("//oai_dc:dc[dc:identifier='http:///frontdoor/index/index/docId/146']/dc:source");
@@ -1854,6 +1860,18 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $elements = $domDocument->getElementsByTagName('header');
 
         $this->assertEquals(10, $elements->length);
+    }
+
+    protected function nodeListToArray($nodeList)
+    {
+        $values = array();
+
+        foreach ($nodeList as $node)
+        {
+            $values[] = $node->nodeValue;
+        }
+
+        return $values;
     }
 
 }
