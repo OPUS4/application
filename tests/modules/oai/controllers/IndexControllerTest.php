@@ -1619,7 +1619,10 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $xpath = $this->prepareXpathFromResultString($response->getBody());
 
         $docType = $xpath->query('//oai_dc:dc/dc:type');
-        $this->assertEquals('doctoralthesis', $docType->item(0)->nodeValue);
+        $values = $this->nodeListToArray($docType);
+
+        $this->assertContains('doctoralthesis', $values);
+        $this->assertContains('doc-type:doctoralthesis', $values);
     }
 
     public function testXMetaDissPlusDcsourceContainsTitleParent() {
