@@ -62,6 +62,10 @@
     </target>
 
     <target name="prepare-dependencies">
+        <exec executable="php" dir="${basedir}">
+            <arg value="composer.phar" />
+            <arg value="update" />
+        </exec>
         <exec executable="${basedir}/bin/install-composer.sh" />
         <symlink link="${basedir}/db/schema" resource="${basedir}/vendor/opus4-repo/framework/db/schema"
                  failonerror="false" />
