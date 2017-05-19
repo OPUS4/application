@@ -286,13 +286,13 @@
      <xsl:template name="dcmiType" >
           <xsl:choose>
             <xsl:when test=". = 'diplthesis' or  . = 'diplom'">
-                <xsl:text>doc-type:masterthesis</xsl:text>
+                <xsl:text>doc-type:masterThesis</xsl:text>
             </xsl:when>
             <xsl:when test=". = 'habilitation' or . = 'doctoralthesis'">
-                <xsl:text>doc-type:doctoralthesis</xsl:text>
+                <xsl:text>doc-type:doctoralThesis</xsl:text>
             </xsl:when>
             <xsl:when test=". = 'bachelorthesis'">
-                <xsl:text>doc-type:bachelorthesis</xsl:text>
+                <xsl:text>doc-type:bachelorThesis</xsl:text>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:text>doc-type:</xsl:text>
