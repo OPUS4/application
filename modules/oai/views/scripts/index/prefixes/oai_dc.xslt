@@ -275,7 +275,7 @@
                 <xsl:text>info:eu-repo/semantics/report</xsl:text>
             </xsl:when>
             <xsl:when test=".='habilitation'" >
-                <xsl:text>info:eu-repo/semantics/doctoralthesis</xsl:text>
+                <xsl:text>info:eu-repo/semantics/doctoralThesis</xsl:text>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:text>info:eu-repo/semantics/other</xsl:text>
