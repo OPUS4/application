@@ -162,4 +162,20 @@ class Application_Export_ExporterTest extends ControllerTestCase
         $this->assertCount(2, $formats);
     }
 
+    public function testGetAllowedFormatsSorted()
+    {
+        $exporter = Zend_Registry::get('Opus_Exporter');
+
+        $formats = $exporter->getAllowedFormats();
+
+        $lastName = '';
+
+        foreach ($formats as $format)
+        {
+            $name = $format->get('name');
+            $this->assertGreaterThanOrEqual($lastName, $name);
+            $lastName = $name;
+        }
+    }
+
 }

@@ -82,6 +82,10 @@ class Application_Export_Exporter
             }
         }
 
+        usort($allowed, function($one, $two) {
+            return strcmp($one->get('name'), $two->get('name'));
+        });
+
         return $allowed;
     }
 
