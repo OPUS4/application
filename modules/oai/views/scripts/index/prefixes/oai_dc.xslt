@@ -216,14 +216,21 @@
                </dc:type>
             </xsl:when>
             <xsl:otherwise>
-                <dc:type>
-                    <xsl:value-of select="." />
-                </dc:type>
+            <dc:type>
+                <xsl:choose>
+                    <xsl:when test=".='habilitation'">
+                        <xsl:text>doctoralthesis</xsl:text>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="." />
+                    </xsl:otherwise>
+                </xsl:choose>
+            </dc:type>
             </xsl:otherwise>
         </xsl:choose>
-         <dc:type>  
-          <xsl:call-template name="dcmiType"/>
-         </dc:type>
+        <dc:type>
+            <xsl:call-template name="dcmiType"/>
+        </dc:type>
     </xsl:template>
 
     <xsl:template name="compareDocumentName" >
@@ -268,9 +275,7 @@
                 <xsl:text>info:eu-repo/semantics/report</xsl:text>
             </xsl:when>
             <xsl:when test=".='habilitation'" >
-                <dc:type>
-                    <xsl:text>info:eu-repo/semantics/doctoralthesis</xsl:text>
-                </dc:type>
+                <xsl:text>info:eu-repo/semantics/doctoralThesis</xsl:text>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:text>info:eu-repo/semantics/other</xsl:text>
