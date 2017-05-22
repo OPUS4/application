@@ -352,7 +352,7 @@
 
     <xsl:template match="Enrichment[@KeyName='Relation']" mode="oai_dc">
         <dc:relation>
-        <xsl:if test="starts-with($oai_set,'openaire')">
+        <xsl:if test="starts-with($oai_set,'openaire') and not(starts-with(@Value, 'info:eu-repo'))">
             <xsl:text>info:eu-repo/grantAgreement/EC/FP7/</xsl:text>
         </xsl:if>   
             <xsl:value-of select="@Value" />

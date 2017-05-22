@@ -1698,7 +1698,6 @@ class Oai_IndexControllerTest extends ControllerTestCase {
      * Test verb=ListRecords, metadataPrefix=oai_dc, set=openaire.
      */
     public function testListRecordsForOpenAireCompliance() {
-    //    $this->markTestSkipped('Oai-Ausgabe von open-aire sets vorübergehend deaktiviert');
         $this->dispatch('/oai?verb=ListRecords&metadataPrefix=oai_dc&set=openaire');
         $this->assertResponseCode(200);
 
@@ -1765,6 +1764,48 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $queryResponse = $xpath->query("//oai_dc:dc[dc:identifier='http:///frontdoor/index/index/docId/146']/dc:subject");
         $this->assertEquals('Berlin', $queryResponse->item(0)->nodeValue);
     }
+
+    public function testListRecordsForOpenAireRelation()
+    {
+        $doc = $this->createTestDocument();
+        $doc->setServerState('published');
+
+        $relation = new Opus_Enrichment();
+        $relation->setKeyName('Relation');
+        $relation->setValue('test-1234');
+        $doc->addEnrichment($relation);
+
+        $relation = new Opus_Enrichment();
+        $relation->setKeyName('Relation');
+        $relation->setValue('info:eu-repo/grantAgreement/EC/FP7/1234withPrefix');
+        $doc->addEnrichment($relation);
+
+        $role = Opus_CollectionRole::fetchByName('openaire');
+        $openaire = $role->getCollectionByOaiSubset('openaire');
+        $doc->addCollection($openaire);
+
+        $docId = $doc->store();
+
+        $this->dispatch('/oai?verb=ListRecords&metadataPrefix=oai_dc&set=openaire');
+        $this->assertResponseCode(200);
+
+        $responseBody = $this->getResponse()->getBody();
+        $badStrings = array("Exception", "Stacktrace", "badVerb");
+        $this->checkForCustomBadStringsInHtml($responseBody, $badStrings);
+
+        $this->assertContains('<setSpec>openaire</setSpec>', $responseBody, 'OpenAire requires set-name to be "openaire"');
+        $this->assertNotContains('<setSpec>doc-type:doctoralthesis</setSpec>', $responseBody);
+
+        $xpath = $this->prepareXpathFromResultString($responseBody);
+
+        $queryResponse = $xpath->query("//oai_dc:dc[dc:identifier='http:///frontdoor/index/index/docId/{$docId}']/dc:relation");
+
+        $values = $this->nodeListToArray($queryResponse);
+
+        $this->assertCount(2, $values);
+        $this->assertContains('info:eu-repo/grantAgreement/EC/FP7/test-1234', $values);
+        $this->assertContains('info:eu-repo/grantAgreement/EC/FP7/1234withPrefix', $values);
+   }
 
     /**
      * Testet die empfohlenen Felder für die OpenAireCompliance.
