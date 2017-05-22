@@ -1622,7 +1622,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $values = $this->nodeListToArray($docType);
 
         $this->assertContains('doctoralthesis', $values);
-        $this->assertContains('doc-type:doctoralthesis', $values);
+        $this->assertContains('doc-type:doctoralThesis', $values);
     }
 
     public function testXMetaDissPlusDcsourceContainsTitleParent() {
