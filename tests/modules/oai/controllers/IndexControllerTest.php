@@ -1803,7 +1803,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $values = $this->nodeListToArray($queryResponse);
 
         $this->assertCount(2, $values);
-        $this->assertContains('info:eu-repo/grantAgreement/EC/FP7/test-1234', $values);
+        $this->assertContains('test-1234', $values);
         $this->assertContains('info:eu-repo/grantAgreement/EC/FP7/1234withPrefix', $values);
    }
 
