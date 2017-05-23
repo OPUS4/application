@@ -58,7 +58,7 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase {
         // check breadcrumbs
         $this->verifyBreadcrumbDefined();
         $this->assertQueryContentContains('//div.breadcrumbsContainer//a[@href="/admin/document/index/id/91"]',
-            'This is a pdf test document (91)');
+            'This is a pdf test document');
 
         // TODO DocInfo
         /*
@@ -103,7 +103,7 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase {
         // check breadcrumbs
         $this->verifyBreadcrumbDefined();
         $this->assertQueryContentContains('//div.breadcrumbsContainer//a[@href="/admin/document/index/id/91"]',
-            'This is a pdf test document (91)');
+            'This is a pdf test document');
         $this->assertQueryContentContains('//div.breadcrumbsContainer//a[@href="/admin/filemanager/index/id/91"]',
             'Dateien');
     }
@@ -225,7 +225,7 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase {
         $this->validateXHTML();
         $this->verifyBreadcrumbDefined();
         $this->assertQueryContentContains('//div.breadcrumbsContainer//a[@href="/admin/document/index/id/91"]',
-            'This is a pdf test document (91)');
+            'This is a pdf test document');
     }
 
     public function testResetFormAction() {
@@ -257,7 +257,8 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase {
                         'FileLink' => $fileId,
                         'Language' => 'deu',
                         'Comment' => 'Testkommentar',
-                        'Roles' => array('administrator')
+                        'Roles' => array('administrator'),
+                        'SortOrder' => '0'
                     )
                 ),
                 'Save' => 'Speichern'
@@ -265,6 +266,7 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase {
         ));
 
         $this->dispatch('/admin/filemanager/index/id/' . $this->documentId);
+        $this->assertResponseCode(302);
         $this->assertRedirectTo('/admin/document/index/id/' . $this->documentId);
 
         $roleGuest = Opus_UserRole::fetchByName('guest');

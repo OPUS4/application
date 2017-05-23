@@ -251,7 +251,7 @@ class Application_Controller_ModuleAccess extends Zend_Controller_Action {
      */
     public function getConfig() {
         if (is_null($this->_config)) {
-            $this->_config = Zend_Registry::get('Zend_Config');
+            $this->_config = Application_Configuration::getInstance()->getConfig();
         }
         return $this->_config;
     }

@@ -54,7 +54,7 @@ class Solrsearch_DispatchController extends Application_Controller_Action {
         $searchType = $request->getParam('searchtype', 'invalid searchtype');
 
         if (in_array($searchType, array('advanced', 'authorsearch')) && !is_null($this->getParam('Reset'))) {
-            $this->_redirectTo('advanced', null, 'index', 'solrsearch');
+            $this->_helper->Redirector->redirectTo('advanced', null, 'index', 'solrsearch');
             return;
         }
 
@@ -82,7 +82,7 @@ class Solrsearch_DispatchController extends Application_Controller_Action {
             break;
         }
 
-        $this->_redirectToPermanentAndExit($action, null, 'index', null, $params);
+        $this->_helper->Redirector->redirectToPermanentAndExit($action, null, 'index', null, $params);
     }
 
 }

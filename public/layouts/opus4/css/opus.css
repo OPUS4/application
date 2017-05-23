@@ -55,8 +55,9 @@
 .opus.solrsearch #form-search{
 	padding: 25px 225px;
 }
-.solrsearch_advanced fieldset{
-	padding: 15px 235px;
+.solrsearch_search table.search-form-table,
+.solrsearch_advanced table.search-form-table {
+	padding: 0 15px 10px 15px;
 }
 /* frontdoor */
 #titlemain-wrapper{
@@ -634,10 +635,20 @@ a img{
     float: left;
     display: block;
 	vertical-align: bottom;
+    height: 70px;
+    width: 169px;
+    background: url(../img/logo/opus-logo.png) no-repeat left;
+    padding: 8px 8px 8px 0;
+}
+
+#logo .openaccess-logo {
+    float: left;
+    font-size: 20px;
+    color: #26517c;
     height: 100%;
-    height: 89px;
-    width: 185px;
-    background: white url(../img/logo/logo.gif) no-repeat right;
+    padding-top: 58px;
+    padding-right: 8px;
+    display: none; /* enable display in custom.css */
 }
 
 #top-header{
@@ -1018,6 +1029,10 @@ body > #top-header{
     position: relative;
 }
 
+#search_results .fulltext-logo.fulltext.openaccess {
+    background: url(../img/fulltext24openaccess.png) no-repeat;
+}
+
 .result_box {
     border-top: 1px solid #e2e6e9;
     background: #f3f6f8 no-repeat 24px 4px;
@@ -1038,15 +1053,17 @@ body > #top-header{
     color: black;
     height: 10px;
     width: 100%;
-    background: #e8ebed;
+    background: #e8eef7;
+    background-repeat: no-repeat;
+    background-position: center center;
 }
 
 .result_box a.abstract-toggle.collapsed {
-    background: #e8ebed url(../img/theme/bullet_arrow_down.png) no-repeat center center;
+    background-image: url(../img/theme/bullet_arrow_down.png);
 }
 
 .result_box a.abstract-toggle.expanded {
-    background: #e8ebed url(../img/theme/bullet_arrow_up.png) no-repeat center center;
+    background-image: url(../img/theme/bullet_arrow_up.png);
 }
 
 .result_box a.abstract-toggle:hover {
@@ -1318,4 +1335,187 @@ a.orcid-link {
     vertical-align: top;
     background: url(../../../img/orcid/orcid_16x16.png) no-repeat 0 0;
     text-indent: -9999px;
+}
+
+.export-links.dropdown {
+    float: right;
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-button {
+    background-color: transparent;
+    color: gray;
+    padding: 4px 8px;
+    padding-right: 16px;
+    margin-top: 3px;
+	margin-left: 5px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    background: url(../img/theme/bullet_arrow_down.png) no-repeat right center;
+}
+
+/* dropdown-content */
+.export-links.dropdown ul {
+    display: none;
+    position: absolute;
+    background-color: whitesmoke;
+    /* min-width: 80px; */
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+    z-index: 1;
+    right: 0;
+}
+
+.export-links.dropdown ul li:hover {
+    background-color: white;
+}
+
+.export-links.dropdown ul li {
+    color: black;
+    padding: 0;
+    display: block;
+    text-align: right;
+}
+
+.export-links.dropdown ul li a {
+    text-decoration: none;
+    font-weight: bold;
+    display: block;
+    padding: 5px 10px;
+}
+
+.export-links.dropdown:hover ul {
+    display: block;
+}
+
+.export-links.dropdown:hover .dropdown-button {
+    background-color: lightgray;
+    color: black;
+}
+
+/* MIME type icons */
+
+#download-fulltext li {
+    margin-bottom: 1em;
+}
+
+#download-fulltext a,
+#download-fulltext .protected-file {
+    word-break: break-all;
+    word-wrap: break-word;
+    padding: 0 0 0 20px;
+    margin: 0;
+    display: inline-block;
+    text-indent: 0px;
+    line-height: 18px;
+    min-height: 20px;
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    vertical-align: top;
+    max-width: 78%;
+}
+
+#download-fulltext .file-size {
+    display: block;
+    padding: 0 0 0 20px;
+    font-size: 90%;
+    color: gray;
+}
+
+#download-fulltext .file-language {
+    position: relative;
+    float: right;
+    font-size: 90%;
+    color: gray;
+}
+
+#download-fulltext img.file-language {
+    top: 4px;
+}
+
+#download-fulltext p {
+    padding: 0 0 0 20px;
+    font-style: italic;
+}
+
+#download-fulltext a.application_pdf {
+    background-image: url("../img/filetype/application_pdf.png");
+}
+
+#download-fulltext a.application_postscript {
+    background-image: url("../img/filetype/application_postscript.png");
+}
+
+#download-fulltext a.application_xhtml\+xml {
+    background-image: url("../img/filetype/application_xhtml+xml.png");
+}
+
+#download-fulltext a.text_plain {
+    background-image: url("../img/filetype/text_plain.png");
+}
+
+#download-fulltext a.text_html {
+    background-image: url("../img/filetype/text_html.png");
+}
+
+#download-fulltext a.image_png {
+    background-image: url("../img/filetype/image_png.png");
+}
+
+#download-fulltext a.image_gif {
+    background-image: url("../img/filetype/image_gif.png");
+}
+
+#download-fulltext a.image_bmp {
+    background-image: url("../img/filetype/image_bmp.png");
+}
+
+#download-fulltext a.image_application_octed-stream {
+    background-image: url("../img/filetype/application_octet-stream.png");
+}
+
+/* TODO merge options-links CSS with export-links CSS */
+
+.option-links.dropdown {
+	float: right;
+	position: relative;
+	display: inline-block;
+}
+
+.option-links.dropdown ul {
+	display: none;
+	position: absolute;
+	background-color: whitesmoke;
+	/* min-width: 80px; */
+	box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+	z-index: 1;
+	right: 0;
+}
+
+.option-links.dropdown ul li:hover {
+	background-color: white;
+}
+
+.option-links.dropdown ul li {
+	color: black;
+	padding: 0;
+	display: block;
+	text-align: right;
+}
+
+.option-links.dropdown ul li a {
+	text-decoration: none;
+	font-weight: bold;
+	display: block;
+	padding: 5px 10px;
+}
+
+.option-links.dropdown:hover ul {
+	display: block;
+}
+
+.option-links.dropdown:hover .dropdown-button {
+	background-color: lightgray;
+	color: black;
 }

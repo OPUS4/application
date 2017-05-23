@@ -69,107 +69,10 @@ class Application_Controller_Action extends Application_Controller_ModuleAccess 
         parent::init();
         $this->view->title = $this->_request->getModuleName() . '_' . $this->_request->getParam('controller') . '_'
             . $this->_request->getParam('action');
-        $this->_redirector = $this->_helper->getHelper('Redirector');
+        $this->_redirector = $this->_helper->getHelper('redirector');
         $this->_flashMessenger = $this->_helper->getHelper('FlashMessenger');
         $this->view->flashMessenger = $this->_flashMessenger;
         $this->_breadcrumbs = $this->_helper->getHelper('breadcrumbs');
-    }
-
-    /**
-     * Redirects to an action / controller / module, sets a message for the redirect target view.
-     *
-     * @param  string $action     The redirect target action
-     * @param  string $message    The message to be displayed
-     * @param  string $controller The redirect target controller
-     * @param  string $module     The redirect target model
-     * @param  array  $params     Parameters for the redirect target action
-     * @return void
-     */
-    protected function _redirectTo(
-        $action, $message = null, $controller = null, $module = null, $params = array()
-    )
-    {
-        $this->performRedirect($action, $message, $controller, $module, $params);
-    }
-
-    /**
-     *
-     * Performs a permanent (301) redirect.
-     *
-     * @param string $action        The target action.
-     * @param string $message       The message to be displayed.
-     * @param string $controller    The target controller.
-     * @param string $module        The target module.
-     * @param array $params         Optional request parameters.
-     */
-    protected function _redirectToPermanent($action, $message = null, $controller = null, $module = null,
-                                            $params = array()) {
-        $this->_redirector->setCode(301);
-        $this->performRedirect($action, $message, $controller, $module, $params);
-    }
-
-    protected function _redirectToAndExit($action, $message = null, $controller = null, $module = null,
-                                          $params = array()) {
-        $this->performRedirect($action, $message, $controller, $module, $params, true);
-    }
-
-    protected function _redirectToPermanentAndExit($action, $message = null, $controller = null, $module = null,
-                                                   $params = array()) {
-        $this->_redirector->setCode(301);
-        $this->performRedirect($action, $message, $controller, $module, $params, true);
-    }
-
-    /**
-     * Performs a redirect.
-     *
-     * There is a problem with the 'AndExit' functionality. A hard exit kills the unit testing process.
-     * The testing framework calls setExit(false) in order to prevent that. However if the OPUS code
-     * changes this again, the unit test process will be killed. The same is true if any 'andExit'
-     * function is called explicitly because then getExit will not be called first. This information is
-     * base on ZF 1.12.x sources, at least until 1.12.20.
-     *
-     * TODO because of problem described above 'AndExit' should never be used
-     *
-     * @param $action
-     * @param null $message
-     * @param null $controller
-     * @param null $module
-     * @param array $params
-     * @param bool $exit
-     * @throws Application_Exception
-     */
-    private function performRedirect(
-        $action, $message = null, $controller = null, $module = null, $params = array(), $exit = false
-    )
-    {
-        if (!is_null($message)) {
-            if (is_array($message) && count($message) !==  0) {
-                $keys = array_keys($message);
-                $key = $keys[0];
-                if ($key === 'failure' || $key === 'notice') {
-                    $this->_flashMessenger->addMessage(array ('level' => $key, 'message' => $message[$key]));
-                }
-                else {
-                    $this->_flashMessenger->addMessage(array ('level' => 'notice', 'message' => $message[$key]));
-                }
-            }
-            else if (is_string($message) && $message != '') {
-                $this->_flashMessenger->addMessage(array('level' => 'notice', 'message' => $message));
-            }
-        }
-        $this->getLogger()->debug("redirect to module: $module controller: $controller action: $action");
-
-        if (array_key_exists('anchor', $params)) {
-            $anchor = '#' . $params['anchor'];
-            unset($params['anchor']);
-            $gotoUrl = $this->_helper->url($action, $controller, $module, $params);
-            $this->_redirector->gotoUrl($gotoUrl . $anchor, array('prependBase' => false));
-        }
-        else
-        {
-            $this->_redirector->gotoSimple($action, $controller, $module, $params);
-            $this->_redirector->setExit($exit); // TODO does not do anything at this point
-        }
     }
 
     /**

@@ -68,7 +68,7 @@ class Admin_Form_LanguageTest extends ControllerTestCase {
 
         $form->populateFromModel($language);
 
-        $this->assertTrue($form->getElement('Active')->getValue());
+        $this->assertEquals(1, $form->getElement('Active')->getValue());
         $this->assertEquals('ger', $form->getElement('Part2B')->getValue());
         $this->assertEquals('deu', $form->getElement('Part2T')->getValue());
         $this->assertEquals('de', $form->getElement('Part1')->getValue());

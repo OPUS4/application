@@ -31,9 +31,8 @@
  * @category    Application
  * @package     Application_Controller_Action_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 abstract class Application_Controller_Action_Helper_Abstract extends Zend_Controller_Action_Helper_Abstract {
 
@@ -42,6 +41,8 @@ abstract class Application_Controller_Action_Helper_Abstract extends Zend_Contro
      * @var Zend_Log
      */
     private $_logger = null;
+
+    private $_view = null;
 
     /**
      * Returns logger.
@@ -60,6 +61,38 @@ abstract class Application_Controller_Action_Helper_Abstract extends Zend_Contro
      */
     public function setLogger($logger) {
         $this->_logger = $logger;
+    }
+
+    /**
+     * Returns view if it has been set or tries to retrieve view from action controller.
+     *
+     * NOTE: This helps with unit tests.
+     *
+     * @return null|Zend_View_Interface
+     */
+    public function getView()
+    {
+        if (is_null($this->_view))
+        {
+            $controller = $this->getActionController();
+            if (!is_null($controller))
+            {
+                $this->_view = $controller->view;
+            }
+        }
+        return $this->_view;
+    }
+
+    /**
+     * Allows manually setting the view.
+     *
+     * NOTE: This helps with unit tests.
+     *
+     * @param $view
+     */
+    public function setView($view)
+    {
+        $this->_view = $view;
     }
 
 }

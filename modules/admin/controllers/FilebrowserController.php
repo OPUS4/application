@@ -85,7 +85,7 @@ class Admin_FilebrowserController extends Application_Controller_Action {
         $post = $this->getRequest()->getPost();
 
         if (isset($post['Cancel'])) {
-            return $this->_redirectToAndExit(
+            return $this->_helper->Redirector->redirectToAndExit(
                 'index', null, 'filemanager', 'admin',
                 array(self::PARAM_DOCUMENT_ID => $docId, 'continue' => 'true')
             );
@@ -93,7 +93,7 @@ class Admin_FilebrowserController extends Application_Controller_Action {
 
         $files = $this->getRequest()->getPost('file');
         if (is_null($files) || is_array($files) && empty($files)) {
-            return $this->_redirectToAndExit(
+            return $this->_helper->Redirector->redirectToAndExit(
                 'index', null, 'filebrowser', 'admin',
                 array(self::PARAM_DOCUMENT_ID => $docId)
             );
@@ -105,7 +105,7 @@ class Admin_FilebrowserController extends Application_Controller_Action {
 
         $fileImportModel = new Admin_Model_FileImport();
         $fileImportModel->addFilesToDocument($docId, $files);
-        return $this->_redirectToAndExit(
+        return $this->_helper->Redirector->redirectToAndExit(
             'index', null, 'filemanager', 'admin',
             array(self::PARAM_DOCUMENT_ID => $docId, 'continue' => 'true')
         );

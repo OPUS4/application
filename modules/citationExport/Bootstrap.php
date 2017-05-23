@@ -27,12 +27,75 @@
  * @category    Application
  * @package     Module_CitationExport
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 class CitationExport_Bootstrap extends Zend_Application_Module_Bootstrap {
-    
-}
 
+    /**
+     * Registers export formats supported by this module.
+     *
+     * - BibTeX
+     * - RIS
+     */
+    protected function _initExport()
+    {
+        if (!Zend_Registry::isRegistered('Opus_Exporter'))
+        {
+            Zend_Registry::get('Zend_Log')->err(__METHOD__ . ' exporter not found');
+            return;
+        }
+
+        $exporter = Zend_Registry::get('Opus_Exporter');
+
+        if (is_null($exporter))
+        {
+            Zend_Registry::get('Zend_Log')->err(__METHOD__ . ' exporter not found');
+            return;
+        }
+
+        $exporter->addFormats(array(
+            'bibtex' => array(
+                'name' => 'BibTeX',
+                'description' => 'Export BibTeX',
+                'module' => 'citationExport',
+                'controller' => 'index',
+                'action' => 'download',
+                'search' => false,
+                'params' => array(
+                    'output' => 'bibtex'
+                )
+            ),
+            'bibtex_list' => array(
+                'name' => 'BibTeX',
+                'description' => 'Export BibTeX',
+                'module' => 'export',
+                'controller' => 'index',
+                'action' => 'bibtex',
+                'frontdoor' => false
+            ),
+            'ris' => array(
+                'name' => 'RIS',
+                'description' => 'Export RIS',
+                'module' => 'citationExport',
+                'controller' => 'index',
+                'action' => 'download',
+                'search' => false,
+                'params' => array(
+                    'output' => 'ris'
+                )
+            ),
+            'ris_list' => array(
+                'name' => 'RIS',
+                'description' => 'Export RIS',
+                'module' => 'export',
+                'controller' => 'index',
+                'action' => 'ris',
+                'frontdoor' => false
+            )
+        ));
+    }
+
+}

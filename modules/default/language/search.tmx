@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tmx SYSTEM "http://www.gala-global.org/oscarStandards/tmx/tmx14.dtd">
+<tmx version="1.4">
+    <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool" />
+    <body>
+
+        <tu tuid="fulltext-icon-tooltip">
+            <tuv xml:lang="en">
+                <seg>Fulltext available</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Volltext vorhanden</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="fulltext-icon-oa-tooltip">
+            <tuv xml:lang="en">
+                <seg>Open Access fulltext available</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Open-Access-Volltext vorhanden</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="results_missingtitle">
+            <tuv xml:lang="en">
+                <seg>untitled document</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>unbenanntes Dokument</seg>
+            </tuv>
+        </tu>
+
+    </body>
+</tmx>

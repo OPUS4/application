@@ -132,9 +132,7 @@
                   <xsl:with-param name="string">frontdoor_export_options</xsl:with-param>
                </xsl:call-template>
             </h3>
-            <ul>
-               <xsl:call-template name="ExportFunctions" />
-            </ul>
+            <xsl:call-template name="ExportFunctions" />
          </div>
 
          <xsl:if test="$printOnDemandEnabled and Licence[@PodAllowed='1']">

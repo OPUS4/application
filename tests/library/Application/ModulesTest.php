@@ -46,6 +46,8 @@ class Application_ModulesTest extends ControllerTestCase
 
     public function testRegisterModule()
     {
+        Application_Modules::setInstance(null);
+
         $module = new Application_Configuration_Module('frontdoor');
 
         $this->assertFalse(Application_Modules::getInstance()->isRegistered('frontdoor'));
@@ -53,8 +55,9 @@ class Application_ModulesTest extends ControllerTestCase
         Application_Modules::registerModule($module);
 
         $this->assertTrue(Application_Modules::getInstance()->isRegistered('frontdoor'));
-    }
 
+        Application_Modules::setInstance(null);
+    }
 
     public function testGetModulesPath()
     {

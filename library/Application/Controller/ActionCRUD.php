@@ -410,7 +410,7 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action {
             $messageKey = array_key_exists('message', $result) ? $result['message'] : null;
             $message = !is_null($messageKey) ? $this->getMessage($messageKey) : null;
 
-            $this->_redirectTo($action, $message, null, null, $params);
+            $this->_helper->Redirector->redirectTo($action, $message, null, null, $params);
         }
         else {
             // Ergebnis ist Formular
