@@ -211,12 +211,67 @@ class Export_Model_XmlExport extends Export_Model_ExportPluginAbstract {
             $searchFactory = new Solrsearch_Model_Search();
             $search = $searchFactory->getSearchPlugin($searchType);
             $search->setExport(true);
+            $search->setMaxRows($this->getMaxRows());
             $query = $search->buildExportQuery($request);
             $resultList = $search->performSearch($query);
             break;
         }
 
         $this->handleResults($resultList->getResults(), $resultList->getNumberOfHits());
+    }
+
+    /**
+     * Returns maximum number of rows for export depending on autentication.
+     *
+     * @return int
+     */
+    public function getMaxRows()
+    {
+        $maxRows = Opus_SolrSearch_Query::MAX_ROWS;
+
+        $config = $this->getConfig();
+
+        if (!Opus_Security_Realm::getInstance()->skipSecurityChecks())
+        {
+            $identity = Zend_Auth::getInstance()->getIdentity();
+
+            if (empty($identity) === true)
+            {
+                if (isset($config->maxDocumentsGuest))
+                {
+                    $maxRows = $this->getValueIfValid($config->maxDocumentsGuest, $maxRows);
+                }
+
+            }
+            else
+            {
+                if (isset($config->maxDocumentsUser))
+                {
+                    $maxRows = $this->getValueIfValid($config->maxDocumentsUser, $maxRows);
+                }
+            }
+        }
+
+        return $maxRows;
+    }
+
+    /**
+     * Returns value if it is a valid number, otherwise returns default.
+     *
+     * @param $value
+     * @param $default
+     * @return string
+     */
+    public function getValueIfValid($value, $default)
+    {
+        $value = trim($value);
+
+        if (ctype_digit($value) && $value > 0)
+        {
+            return $value;
+        }
+
+        return $default;
     }
 
     /**

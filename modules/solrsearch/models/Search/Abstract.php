@@ -50,6 +50,12 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
     private $_searchType;
 
     /**
+     * Maximum number of rows for search.
+     * @var int
+     */
+    private $_maxRows = Opus_SolrSearch_Query::MAX_ROWS;
+
+    /**
      *
      * TODO move out of constructor?
      */
@@ -106,7 +112,8 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
         );
 
         if ($this->getExport()) {
-            $maxNumber = Opus_SolrSearch_Query::MAX_ROWS;
+            $maxNumber = $this->getMaxRows();
+
             // pagination within export was introduced in OPUS 4.2.2
             $startParam = $request->getParam('start', 0);
             $rowsParam = $request->getParam('rows', $maxNumber);
@@ -464,6 +471,24 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
                 $query->addFilterQuery($filterField, $facetValue);
             }
         }
+    }
+
+    /**
+     * Returns maximum number of rows for search.
+     * @return int
+     */
+    public function getMaxRows()
+    {
+        return $this->_maxRows;
+    }
+
+    /**
+     * Sets maximum number of rows for search.
+     * @param $maxRows integer
+     */
+    public function setMaxRows($maxRows)
+    {
+        $this->_maxRows = $maxRows;
     }
 
 }
