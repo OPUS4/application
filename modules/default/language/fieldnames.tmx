@@ -1750,10 +1750,10 @@
 
         <tu tuid="EnrichmentRelation">
             <tuv xml:lang="en">
-                <seg>EU-Project Identifier</seg>
+                <seg>Relation (DC)</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>EU-Projekt Id</seg>
+                <seg>Relation (DC)</seg>
             </tuv>
         </tu>
 

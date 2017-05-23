@@ -589,15 +589,6 @@
             </tuv>
         </tu>
 
-        <tu tuid="results_missingtitle">
-            <tuv xml:lang="en">
-                <seg>untitled document</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>unbenanntes Dokument</seg>
-            </tuv>
-        </tu>
-
         <tu tuid="facetvalue_has_fulltext_true">
             <tuv xml:lang="en">
                 <seg>yes</seg>

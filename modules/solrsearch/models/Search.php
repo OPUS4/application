@@ -25,17 +25,30 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Admin_Model
+ * @package     Solrsearch_Model
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
  * Modelklasse fuer Suchfunktionalität, die von den Controllern verwendet wird.
  */
 class Solrsearch_Model_Search extends Application_Model_Abstract {
+
+
+
+    /**
+     * Factory function for search plugin.
+     * @param $searchType
+     * @return mixed
+     *
+     * TODO eliminate switch and use configuration array instead
+     */
+    public function getSearchPlugin($searchType)
+    {
+        return Application_Util_Searchtypes::getSearchPlugin($searchType);
+    }
 
     public function createSimpleSearchUrlParams($request) {
         $params = $this->createBasicSearchParams($request);
@@ -82,6 +95,29 @@ class Solrsearch_Model_Search extends Application_Model_Abstract {
             }
         }
         return false;
+    }
+
+    /**
+     * Creates an URL to execute a search. The URL will be mapped to:
+     * module=solrsearch, controller=index, action=search
+     */
+    public static function createSearchUrlArray($params = array(), $rss = false) {
+        $url = array(
+            'module' => $rss ? 'rss' : 'solrsearch',
+            'controller' => 'index',
+            'action' => $rss ? 'index' : 'search');
+        foreach ($params as $key => $value) {
+            $url[$key] = $value;
+        }
+        if ($rss) {
+            // some ignores some search related parameters
+            $url['rows'] = null;
+            $url['start'] = null;
+            $url['sortfield'] = null;
+            $url['sortorder'] = null;
+            $url['browsing'] = null;
+        }
+        return $url;
     }
 
 }

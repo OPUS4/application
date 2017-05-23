@@ -72,7 +72,15 @@ class Application_Util_DocumentAdapter {
      * @param int $id
      */
     public function __construct($view, $value) {
-        $this->_view = $view;
+        if (is_null($view))
+        {
+            $this->_view = Zend_Registry::get('Opus_View');
+        }
+        else
+        {
+            $this->_view = $view;
+        }
+
         if ($value instanceof Opus_Document) {
             $this->document = $value;
             $this->docId = $this->document->getId();
@@ -122,8 +130,7 @@ class Application_Util_DocumentAdapter {
             return $titles[0]->getValue();
         }
         else {
-            return Zend_Registry::get('Zend_Translate')->translate('document_no_title') . '(id = ' . $this->getDocId()
-                . ')';
+            return $this->_view->translate('results_missingtitle') . ' (id = ' . $this->getDocId() . ')';
         }
     }
 
@@ -136,7 +143,7 @@ class Application_Util_DocumentAdapter {
 
         if (is_null($title))
         {
-            return $this->_view->translate('document_no_title') . " (id = '{$this->getDocId()}')";
+            return $this->_view->translate('results_missingtitle') . " (id = '{$this->getDocId()}')";
         }
         else
         {

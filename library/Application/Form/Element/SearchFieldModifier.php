@@ -41,9 +41,9 @@ class Application_Form_Element_SearchFieldModifier extends Application_Form_Elem
         parent::init();
 
         $options = array(
-            Application_Util_QueryBuilder::SEARCH_MODIFIER_CONTAINS_ALL => 'advanced_search_form_modifier_all',
-            Application_Util_QueryBuilder::SEARCH_MODIFIER_CONTAINS_ANY => 'advanced_search_form_modifier_one',
-            Application_Util_QueryBuilder::SEARCH_MODIFIER_CONTAINS_NONE => 'advanced_search_form_modifier_none'
+            Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL => 'advanced_search_form_modifier_all',
+            Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ANY => 'advanced_search_form_modifier_one',
+            Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_NONE => 'advanced_search_form_modifier_none'
         );
 
         $this->addMultiOptions($options);

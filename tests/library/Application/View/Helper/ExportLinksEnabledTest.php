@@ -23,51 +23,42 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+/**
+ * Unit tests for view helper for rendering export links.
  *
- * @category    Application Unit Test
- * @package     View_Helper
+ * @category    Application
+ * @package     Application_View_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-
-class Application_View_Helper_FrontdoorStylesheetTest extends ControllerTestCase
+class Application_View_Helper_ExportLinksEnabledTest extends ControllerTestCase
 {
 
-    public function testFrontdoorStylesheet()
+    private $_helper;
+
+    public function setUp()
     {
-        $helper = new Application_View_Helper_FrontdoorStylesheet();
+        parent::setUp();
 
-        $this->assertEquals('', $helper->frontdoorStylesheet());
-
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
-            'export' => array('stylesheet' => array('frontdoor' => 'test.xslt'))
-        )));
-
-        $this->assertEquals('test.xslt', $helper->frontdoorStylesheet());
+        $this->_helper = new Application_View_Helper_ExportLinksEnabled();
     }
 
-    public function testFrontdoorStylesheetAccess()
+    public function testExportLinksEnabled()
     {
-        $this->enableSecurity();
+        $this->assertTrue($this->_helper->exportLinksEnabled());
 
-        $helper = new Application_View_Helper_FrontdoorStylesheet();
+        Zend_Registry::get('Opus_Exporter')->removeAll();
 
-        $this->assertEquals('', $helper->frontdoorStylesheet());
+        $this->assertFalse($this->_helper->exportLinksEnabled());
+    }
 
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
-            'export' => array('stylesheet' => array('frontdoor' => 'test.xslt'))
-        )));
-
-        $this->assertFalse(Opus_Security_Realm::getInstance()->checkModule('export'));
-
-        $this->assertEquals('', $helper->frontdoorStylesheet());
-
-        $this->loginUser('admin', 'adminadmin');
-
-        $this->assertTrue(Opus_Security_Realm::getInstance()->checkModule('export'));
-
-        $this->assertEquals('test.xslt', $helper->frontdoorStylesheet());
+    public function testExportLinksEnabledForContext()
+    {
+        $this->assertTrue($this->_helper->exportLinksEnabled('search'));
+        $this->assertTrue($this->_helper->exportLinksEnabled('unknown'));
     }
 
 }

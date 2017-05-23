@@ -220,7 +220,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
 
         // Prüfen, ob XHTML valid ist
         $this->validateXHTML($this->getResponse()->getBody());
-        $this->assertQueryContentContains('div.breadcrumbsContainer', 'KOBV (146)');
+        $this->assertQueryContentContains('div.breadcrumbsContainer', 'KOBV');
     }
 
     public function testIndexActionCollectionRolesTranslated() {

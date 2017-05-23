@@ -77,7 +77,7 @@ class Admin_Form_LicenceTest extends ControllerTestCase {
 
         $form->populateFromModel($licence);
 
-        $this->assertTrue($form->getElement('Active')->getValue());
+        $this->assertEquals(1, $form->getElement('Active')->getValue());
         $this->assertEquals('Test Internal Comment', $form->getElement('CommentInternal')->getValue());
         $this->assertEquals('<h1>Test Markup</h1>', $form->getElement('DescMarkup')->getValue());
         $this->assertEquals('Test Description', $form->getElement('DescText')->getValue());

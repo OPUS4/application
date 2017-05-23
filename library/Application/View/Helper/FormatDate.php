@@ -29,12 +29,27 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
+ *
+ * TODO clean up
  */
 
 class Application_View_Helper_FormatDate extends Zend_View_Helper_Abstract
 {
 
-    public function formatDate($day, $month, $year) {
+    /**
+     * @param null $day
+     * @param null $month
+     * @param null $year
+     * @return $this|bool|string
+     *
+     * TODO behaviour of function is not obvious - clean up
+     */
+    public function formatDate($day = null, $month = null, $year = null) {
+        if (func_num_args() == 0)
+        {
+            return $this;
+        }
+
         $date = new DateTime();
         $date->setDate($year, $month, $day);
         $session = new Zend_Session_Namespace();
@@ -43,6 +58,29 @@ class Application_View_Helper_FormatDate extends Zend_View_Helper_Abstract
         $formatPattern = ($session->language == 'de') ? 'd.m.Y' : 'Y/m/d';
 
         return date_format($date, $formatPattern);
+    }
+
+    public function formatOpusDate($date, $showTime = false) {
+        if (is_null($date))
+        {
+            return '';
+        }
+
+        $session = new Zend_Session_Namespace();
+
+        // TODO aktuell werden nur zwei Sprachen unterstützt
+        if ($showTime)
+        {
+            $formatPattern = ($session->language == 'de') ? 'd.m.Y H:i' : 'Y/m/d H:i';
+        }
+        else
+        {
+            $formatPattern = ($session->language == 'de') ? 'd.m.Y' : 'Y/m/d';
+        }
+
+        $dateTime = $date->getDateTime();
+
+        return $dateTime->format($formatPattern);
     }
 
 }

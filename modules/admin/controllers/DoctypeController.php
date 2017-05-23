@@ -58,9 +58,8 @@ class Admin_DoctypeController extends Application_Controller_Action {
     public function showAction() {
         $doctype = $this->getRequest()->getParam('doctype');
         if (!$this->_documentTypesHelper->isValid($doctype)) {
-            return $this->_redirectTo(
-                'index', array('failure' =>
-                    'admin_doctype_invalid'),
+            return $this->_helper->Redirector->redirectTo(
+                'index', array('failure' => 'admin_doctype_invalid'),
                 'doctype', 'admin'
             );
         }

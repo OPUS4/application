@@ -27,9 +27,8 @@
  * @category    Application
  * @package     Module_Admin
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -40,7 +39,8 @@
  *
  * TODO Erweitern um Personen in Datenbank zu verwalten (z.B. Deduplizieren) (OPUSVIER-nnnn, noch kein Ticket)
  */
-class Admin_PersonController extends Application_Controller_Action {
+class Admin_PersonController extends Application_Controller_Action
+{
 
     private $_documentsHelper;
 
@@ -236,7 +236,7 @@ class Admin_PersonController extends Application_Controller_Action {
         $document = $this->_documentsHelper->getDocumentForId($docId);
 
         if (!isset($document)) {
-            return $this->_redirectTo(
+            return $this->_helper->Redirector->redirectTo(
                 'index', array('failure' => 'admin_document_error_novalidid'),
                 'documents', 'admin'
             );
@@ -276,14 +276,14 @@ class Admin_PersonController extends Application_Controller_Action {
                             if ($editSession->getPersonCount() > 0) {
                                 // Link Informationen durch Session übermitteln
                                 $editSession->addPerson($linkProps);
-                                return $this->_redirectToAndExit(
+                                return $this->_helper->Redirector->redirectToAndExit(
                                     'edit', null, 'document', 'admin', array(
                                     'id' => $docId, 'continue' => 'addperson')
                                 );
                             }
                             else {
                                 // Link Informationen direkt als Parameter übergeben
-                                return $this->_redirectToAndExit(
+                                return $this->_helper->Redirector->redirectToAndExit(
                                     'edit', null, 'document', 'admin', array_merge(
                                         array(
                                         'id' => $docId, 'continue' => 'addperson'), $linkProps
@@ -307,7 +307,7 @@ class Admin_PersonController extends Application_Controller_Action {
                     break;
                 case Admin_Form_Document_PersonAdd::RESULT_CANCEL:
                     // Aktuelle Person nicht speichern, aber eventuell gemerkte Personen hinzufügen
-                    return $this->_redirectToAndExit(
+                    return $this->_helper->Redirector->redirectToAndExit(
                         'edit', null, 'document', 'admin', array(
                         'id' => $docId, 'continue' => 'addperson')
                     );
@@ -337,7 +337,7 @@ class Admin_PersonController extends Application_Controller_Action {
         $document = $this->_documentsHelper->getDocumentForId($docId);
 
         if (!isset($document)) {
-            return $this->_redirectTo(
+            return $this->_helper->Redirector->redirectTo(
                 'index', array('failure' => 'admin_document_error_novalidid'),
                 'documents', 'admin'
             );
@@ -384,7 +384,7 @@ class Admin_PersonController extends Application_Controller_Action {
                     if ($form->isValid($post)) {
                         $person = $form->getModel();
                         $person->store();
-                        return $this->_redirectToAndExit(
+                        return $this->_helper->Redirector->redirectToAndExit(
                             'edit', null, 'document', 'admin', array('id' => $docId,
                             'continue' => 'updateperson',
                             'person' => $person->getId()
@@ -420,7 +420,7 @@ class Admin_PersonController extends Application_Controller_Action {
      */
     public function returnToMetadataForm($docId)
     {
-        return $this->_redirectToAndExit(
+        return $this->_helper->Redirector->redirectToAndExit(
             'edit', null, 'document', 'admin', array('id' => $docId,
             'continue' => 'true')
         );

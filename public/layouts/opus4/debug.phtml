@@ -1,0 +1,42 @@
+<?php
+$dbprofiler = Zend_Registry::get('db_adapter')->getProfiler();
+$profiler_show_queries = (bool) $config->db->params->showqueries;
+$profiler_max_queries = (int) $config->db->params->maxqueries;
+if ($dbprofiler->getEnabled() === true) :
+    ?>
+    <div class="debug dbprofiler">
+        <div class="wrapper">
+            <h2>Profiling information<?php if (isset($GLOBALS['start_mtime'])) : ?> (execution time <?= microtime(true) - $GLOBALS['start_mtime'] ?>)<?php endif ?></h2>
+            <b>Total number of queries: </b><?= $dbprofiler->getTotalNumQueries() ?><br />
+            <b>Total query time (s): </b><?= $dbprofiler->getTotalElapsedSecs() ?><br />
+            <b>Current memory consumption: </b><?= memory_get_usage(true) ?><br />
+            <b>Peak memory consumption: </b><?= memory_get_peak_usage(true) ?><br />
+            <?php if ($profiler_show_queries === true and $profiler_query_profiles = $dbprofiler->getQueryProfiles()) : ?>
+                <b>Queries:</b><br />
+                <ul>
+                    <?php for ($i=1; ($i < $profiler_max_queries) and ($i < count($profiler_query_profiles)); $i++) : ?>
+                        <li><pre><?= htmlspecialchars($profiler_query_profiles[$i]->getQuery()) ?></pre></li>
+                    <?php endfor ?>
+                    <?php if ($i < count($profiler_query_profiles)) { echo "<li>...</li>"; } ?>
+                </ul>
+            <?php endif ?>
+        </div>
+    </div>
+<?php endif ?>
+
+<?php
+$identity = Zend_Auth::getInstance()->getIdentity();
+if (isset($config->debugSession) and ((bool)$config->debugSession === true) and !empty($identity)) :
+    ?>
+    <div class="debug session">
+        <div class="wrapper">
+            <h2>Session</h2>
+
+            <?php /* do not apply indentation here! */ ?>
+<pre>
+<?= Zend_Debug::dump($_SESSION, 'Session Data', false); ?>
+</pre>
+
+        </div>
+    </div>
+<?php endif ?>

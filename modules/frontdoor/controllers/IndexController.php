@@ -60,18 +60,6 @@ class Frontdoor_IndexController extends Application_Controller_Action {
             return;
         }
 
-        // call export index-action, if parameter is set
-        if (!is_null($this->getRequest()->getParam('export'))) {
-
-            $params = $this->getRequest()->getParams();
-            // export module ignores pagination parameters
-            unset($params['rows']);
-            unset($params['start']);
-            $params['searchtype'] = 'id';
-
-            return $this->_redirectToAndExit('index', null, 'index', 'export', $params);
-        }
-
         $this->view->title = $this->view->translate('frontdoor_title');
         $this->view->docId = $docId;
         $baseUrl = $request->getBaseUrl();
@@ -119,7 +107,8 @@ class Frontdoor_IndexController extends Application_Controller_Action {
             'customFileSortingEnabled',
             'languageImageExists',
             'frontdoorStylesheet',
-            'shortenText'
+            'shortenText',
+            'exportLinks'
         ));
         $proc->registerPHPFunctions('urlencode');
         $proc->importStyleSheet($xslt);
@@ -337,6 +326,13 @@ class Frontdoor_IndexController extends Application_Controller_Action {
             }
         }
 
+        $licences = $document->getLicence();
+
+        foreach ($licences as $docLicence)
+        {
+            $metas[] = array('DC.rights', $docLicence->getModel()->getLinkLicence() );
+        }
+
         return $metas;
     }
 
@@ -359,7 +355,9 @@ class Frontdoor_IndexController extends Application_Controller_Action {
      */
     public function mapopus3Action() {
         $docId = $this->getRequest()->getParam('oldId');
-        $this->_redirectToAndExit('id', '', 'index', 'rewrite', array('type' => 'opus3-id', 'value' => $docId));
+        $this->_helper->Redirector->redirectToAndExit(
+            'id', '', 'index', 'rewrite', array('type' => 'opus3-id', 'value' => $docId)
+        );
     }
 
     /**
@@ -391,7 +389,15 @@ class Frontdoor_IndexController extends Application_Controller_Action {
 
             $request->setParam('rows', '1'); // make sure only 1 entry is displayed
 
-            $query = Application_Search_Navigation::getQueryUrl($request, $this->getLogger());
+            $searchType = $request->getParam('searchtype');
+
+            $searchFactory = new Solrsearch_Model_Search();
+
+            $search = $searchFactory->getSearchPlugin($searchType);
+
+            $query = $search->getQueryUrl($request);
+
+            // TODO fix usage of search code - should be identical to search/export/rss - except just 1 row
 
             $searcher = new Opus_SolrSearch_Searcher();
 

@@ -76,6 +76,9 @@ class CollectionsAdminTest extends ControllerTestCase {
      */
     public function testNoAccessCollectionControllerAssignAction() {
         $this->dispatch('/admin/collection/assign/document/92');
-        $this->assertRedirectTo('/auth', 'redirect from admin/collection/assign/document/92 to auth not asserted');
+        $this->assertRedirectTo(
+            '/auth/index/rmodule/admin/rcontroller/collection/raction/assign/document/92',
+            'redirect from admin/collection/assign/document/92 to auth not asserted'
+        );
     }
 }

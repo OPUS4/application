@@ -27,12 +27,79 @@
  * @category    Application
  * @package     Module_Export
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 class Export_Bootstrap extends Zend_Application_Module_Bootstrap {
-    
-}
 
+    protected function _initExport()
+    {
+        $config = Zend_Registry::get('Zend_Config');
+
+        if (!Zend_Registry::isRegistered('Opus_Exporter'))
+        {
+            Zend_Registry::get('Zend_Log')->err(__METHOD__ . ' exporter not found');
+            return;
+        }
+
+        $exporter = Zend_Registry::get('Opus_Exporter');
+
+        if (is_null($exporter))
+        {
+            Zend_Registry::get('Zend_Log')->err(__METHOD__ . ' exporter not found');
+            return;
+        }
+
+        // only add XML export if user has access and stylesheet is configured
+        if (isset($config->export->stylesheet->frontdoor))
+        {
+            $exporter->addFormats(array(
+                'xml' => array(
+                    'name' => 'XML',
+                    'description' => 'Export XML', // TODO frontdoor_export_xml
+                    'module' => 'export',
+                    'controller' => 'index',
+                    'action' => 'index',
+                    'search' => false,
+                    'params' => array(
+                        'export' => 'xml',
+                        'searchtype' => 'id',
+                        'stylesheet' => $config->export->stylesheet->frontdoor
+                    )
+                )
+            ));
+        }
+
+        if (isset($config->export->stylesheet->search))
+        {
+            $exporter->addFormats(array(
+                'xml2' => array(
+                    'name' => 'XML',
+                    'description' => 'Export XML',
+                    'module' => 'export',
+                    'controller' => 'index',
+                    'action' => 'index',
+                    'frontdoor' => false,
+                    'params' => array(
+                        'export' => 'xml',
+                        'stylesheet' => $config->export->stylesheet->search
+                    )
+                )
+            ));
+        }
+
+        $exporter->addFormats(array(
+            'csv' => array(
+                'name' => 'CSV',
+                'description' => 'Export CSV',
+                'module' => 'export',
+                'controller' => 'index',
+                'action' => 'csv',
+                'frontdoor' => false
+            )
+        ));
+    }
+
+}

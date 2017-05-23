@@ -74,7 +74,7 @@ class Admin_Form_DnbInstituteTest extends ControllerTestCase {
         $this->assertEquals('TestCity', $form->getElement('City')->getValue());
         $this->assertEquals('TestPhone', $form->getElement('Phone')->getValue());
         $this->assertEquals('TestDnbContactId', $form->getElement('DnbContactId')->getValue());
-        $this->assertTrue($form->getElement('IsGrantor')->getValue());
+        $this->assertEquals(1, $form->getElement('IsGrantor')->getValue());
         $this->assertEquals('0', $form->getElement('IsPublisher')->getValue());
 
         $this->assertNull($form->getElement('Id')->getValue());
