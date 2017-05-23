@@ -225,5 +225,16 @@ class Export_Model_XmlExportTest extends ControllerTestCase {
         $this->assertEquals(Opus_SolrSearch_Query::MAX_ROWS, $this->plugin->getMaxRows());
     }
 
+    public function testGetValueIfValid()
+    {
+        $this->assertEquals(20, $this->plugin->getValueIfValid(20, 100));
+        $this->assertEquals(50, $this->plugin->getValueIfValid(' 50 ', 100));
+        $this->assertEquals(100, $this->plugin->getValueIfValid('0', 100));
+        $this->assertEquals(100, $this->plugin->getValueIfValid('-1', 100));
+        $this->assertEquals(100, $this->plugin->getValueIfValid('a', 100));
+        $this->assertEquals(100, $this->plugin->getValueIfValid(-1, 100));
+        $this->assertEquals(100, $this->plugin->getValueIfValid(0, 100));
+    }
+
 }
  

@@ -239,7 +239,7 @@ class Export_Model_XmlExport extends Export_Model_ExportPluginAbstract {
             {
                 if (isset($config->maxDocumentsGuest))
                 {
-                    $maxRows = $config->maxDocumentsGuest;
+                    $maxRows = $this->getValueIfValid($config->maxDocumentsGuest, $maxRows);
                 }
 
             }
@@ -247,12 +247,31 @@ class Export_Model_XmlExport extends Export_Model_ExportPluginAbstract {
             {
                 if (isset($config->maxDocumentsUser))
                 {
-                    $maxRows = $config->maxDocumentsUser;
+                    $maxRows = $this->getValueIfValid($config->maxDocumentsUser, $maxRows);
                 }
             }
         }
 
         return $maxRows;
+    }
+
+    /**
+     * Returns value if it is a valid number, otherwise returns default.
+     *
+     * @param $value
+     * @param $default
+     * @return string
+     */
+    public function getValueIfValid($value, $default)
+    {
+        $value = trim($value);
+
+        if (ctype_digit($value) && $value > 0)
+        {
+            return $value;
+        }
+
+        return $default;
     }
 
     /**
