@@ -52,7 +52,27 @@
         </delete>
     </target>
 
-    <target name="setup" depends="prepare-dependencies,prepare-javascript,prepare-config" />
+    <target name="setup" depends="prepare-workspace,prepare-test-workspace,prepare-dependencies,prepare-javascript,prepare-config" />
+
+    <target name="prepare-workspace">
+        <mkdir dir="${basedir}/workspace/cache" />
+        <mkdir dir="${basedir}/workspace/export" />
+        <mkdir dir="${basedir}/workspace/files" />
+        <mkdir dir="${basedir}/workspace/incoming" />
+        <mkdir dir="${basedir}/workspace/log" />
+        <mkdir dir="${basedir}/workspace/tmp" />
+        <mkdir dir="${basedir}/workspace/tmp/resumption" />
+    </target>
+
+    <target name="prepare-test-workspace">
+        <mkdir dir="${basedir}/tests/workspace/cache" />
+        <mkdir dir="${basedir}/tests/workspace/export" />
+        <mkdir dir="${basedir}/tests/workspace/files" />
+        <mkdir dir="${basedir}/tests/workspace/incoming" />
+        <mkdir dir="${basedir}/tests/workspace/log" />
+        <mkdir dir="${basedir}/tests/workspace/tmp" />
+        <mkdir dir="${basedir}/tests/workspace/tmp/resumption" />
+    </target>
 
     <target name="prepare" depends="clean,prepare-dependencies">
         <mkdir dir="${basedir}/build/logs" />
