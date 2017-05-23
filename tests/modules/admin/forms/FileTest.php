@@ -346,4 +346,31 @@ class Admin_Form_FileTest extends ControllerTestCase {
         $this->assertEquals(0, count($roles));
     }
 
+    public function testUpdateModelSortOrderNull() {
+        $form = new Admin_Form_File();
+
+        $form->getElement('Language')->setValue('fra');
+        $form->getElement('SortOrder')->setValue(1);
+
+        $document = $this->createTestDocument();
+
+        $file = $document->addFile();
+        $file->setPathName('test.pdf');
+
+        $document->store();
+
+        $form->updateModel($file);
+
+        $this->assertEquals('fra', $file->getLanguage());
+        $this->assertEquals(1, $file->getSortOrder());
+
+        $form->getElement('SortOrder')->setValue(null);
+
+        $form->updateModel($file);
+
+        $this->assertNotNull($file->getSortOrder());
+
+        $document->store(); // triggered exception before fix
+    }
+
 }
