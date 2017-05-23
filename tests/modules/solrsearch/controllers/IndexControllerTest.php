@@ -597,7 +597,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
 
         $body = $this->getResponse()->getBody();
         $this->assertNotContains("http://${host}:${port}/solr/corethatdoesnotexist", $body);
-        $this->assertContains("Application_SearchException: error_search_unavailable", $body);
+        $this->assertContains('The search service is currently not available.', $body);
         $this->assertResponseCode(503);
 
         // restore configuration
