@@ -24,19 +24,22 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Tests
+ * @category    Tests
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-// Define path to application directory
-defined('APPLICATION_PATH')
-|| define('APPLICATION_PATH', realpath(dirname(dirname(__FILE__))));
+/**
+ * Script for creating OPUS 4 database with optional name and version
+ * parameters.
+ */
 
-// Define application environment
+defined('APPLICATION_PATH')
+    || define('APPLICATION_PATH', realpath(dirname(dirname(__FILE__))));
+
 defined('APPLICATION_ENV')
-|| define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));
+    || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));
 
 // Configure include path.
 set_include_path(
@@ -53,16 +56,13 @@ set_include_path(
 
 require_once 'autoload.php';
 
-// environment initializiation
 $application = new Zend_Application(
     APPLICATION_ENV,
     array(
         "config"=>array(
             APPLICATION_PATH . '/application/configs/application.ini',
             APPLICATION_PATH . '/application/configs/config.ini',
-            APPLICATION_PATH . '/application/configs/console.ini',
-            APPLICATION_PATH . '/tests/config.ini',
-            APPLICATION_PATH . '/tests/tests.ini'
+            APPLICATION_PATH . '/application/configs/console.ini'
         )
     )
 );
@@ -72,27 +72,15 @@ Zend_Registry::set('opus.disableDatabaseVersionCheck', true);
 // Bootstrapping application
 $application->bootstrap('Backend');
 
-/**
- * Prepare database.
- */
+$options = getopt('v:n:');
 
 $database = new Opus_Database();
 
-$dbName = $database->getName();
-
-echo("Dropping database '$dbName' ... ");
 $database->drop();
-echo('done' . PHP_EOL);
-
-echo("Creating database '$dbName' ... ");
 $database->create();
-echo('done' . PHP_EOL);
-
-echo(PHP_EOL . "Importing database schema ... " . PHP_EOL);
 $database->importSchema();
 
-echo(PHP_EOL . 'Import master data ... ' . PHP_EOL);
-$database->import(APPLICATION_PATH . '/db/masterdata');
+$database->import(APPLICATION_PATH . '/db/masterdata'); // TODO only difference to createdb.php in framework
 
-echo(PHP_EOL . 'Import test data ... ' . PHP_EOL);
-$database->import(APPLICATION_PATH . '/tests/sql');
+
+
