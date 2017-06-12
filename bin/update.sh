@@ -12,7 +12,7 @@
 # GNU General Public License for more details.
 #
 # @author      Jens Schwidder <schwidder@zib.de>
-# @copyright   Copyright (c) 2010-2016, OPUS 4 development team
+# @copyright   Copyright (c) 2010-2017, OPUS 4 development team
 # @license     http://www.gnu.org/licenses/gpl.html General Public License
 #
 
@@ -24,4 +24,13 @@ SCRIPT_PATH="`dirname "$SCRIPT_NAME_FULL"`"
 
 BASEDIR="`dirname "$SCRIPT_PATH"`"
 
+# TODO update composer ?
+
+# Perform update steps
 php $BASEDIR/scripts/update/update.php
+
+# TODO clean cache ? In order to refresh translations.
+
+# TODO rebuild index ?
+
+# TODO restart webserver ?
