@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,68 +24,39 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
+ * @category    Application Unit Test
  * @package     Application_Update
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-/**
- * Base class for update plugins.
- */
-abstract class Application_Update_PluginAbstract extends Application_Model_Abstract
+class Application_Update_PluginAbstractTest extends ControllerTestCase
 {
 
-    private $_updateLogger = null;
-
-    /**
-     * Prints messages to console.
-     * @param $message
-     */
-    public function println($message)
+    public function testLogWithLogger()
     {
-        echo $message . PHP_EOL;
+        $stub = $this->getMockForAbstractClass(Application_Update_PluginAbstract::class);
+
+        $logger = new MockLogger();
+
+        $stub->setUpdateLogger($logger);
+
+        $stub->log('Test message.');
+
+        $messages = $logger->getMessages();
+
+        $this->assertCount(1, $messages);
+        $this->assertContains('Test message.', $messages);
     }
 
-    /**
-     * Writes message to log.
-     * @param $message
-     *
-     * TODO log to file
-     */
-    public function log($message)
+    public function testLogWithoutLogger()
     {
-        $logger = $this->getUpdateLogger();
+        $stub = $this->getMockForAbstractClass(Application_Update_PluginAbstract::class);
 
-        if (!is_null($logger))
-        {
-            $logger->info($message);
-        }
-        else
-        {
-            echo $message . PHP_EOL;
-        }
-    }
+        $this->expectOutputString('Test message.' . PHP_EOL);
 
-    /**
-     * Performs update operation.
-     * @return mixed
-     */
-    abstract public function run();
-
-    /**
-     * Set logger for logging update messages.
-     * @param $logger
-     */
-    public function setUpdateLogger($logger)
-    {
-        $this->_updateLogger = $logger;
-    }
-
-    public function getUpdateLogger()
-    {
-        return $this->_updateLogger;
+        $stub->log('Test message.');
     }
 
 }
