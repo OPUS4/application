@@ -97,7 +97,17 @@ class Application_Update extends Application_Update_PluginAbstract
 
         // Run all the other update scripts
         $this->log(PHP_EOL . 'Running update scripts ... ');
-        $this->runUpdateScripts();
+        try
+        {
+            $this->runUpdateScripts();
+        }
+        catch (Application_Update_Exception $aue)
+        {
+            // TODO figure out a way to log stderr output of update script
+            $this->log(PHP_EOL . 'ERROR - An error occured during updating!');
+            $this->log('Update aborted!');
+            return;
+        }
 
         // clear translation cache
         $this->log(PHP_EOL . 'Clearing translation cache ... ');
@@ -107,6 +117,8 @@ class Application_Update extends Application_Update_PluginAbstract
 
     /**
      * Runs all applicable update scripts.
+     *
+     * @throws Application_Update_Exception
      */
     public function runUpdateScripts()
     {
@@ -128,14 +140,32 @@ class Application_Update extends Application_Update_PluginAbstract
      * Execute update script.
      *
      * @param $script
+     *
+     * @throws Application_Update_Exception
      */
     public function runScript($script)
     {
+        if (!file_exists($script))
+        {
+            throw new Application_Update_Exception("Update script '$script' not found!");
+        }
+
+        if (!is_executable($script))
+        {
+            throw new Application_Update_Exception("Update script '$script' can not be executed!");
+        }
+
         $basename = basename($script);
 
         $this->log("Running '$basename' ... ");
 
-        $output = shell_exec($script);
+        exec($script, $output, $exitCode);
+
+        if ($exitCode !== 0) {
+            $message = "Error ($exitCode) running '$basename'!";
+            $this->log($message);
+            throw new Application_Update_Exception($message, $exitCode, $output);
+        }
     }
 
     /**
