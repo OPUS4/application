@@ -69,6 +69,16 @@ class Application_Update extends Application_Update_PluginAbstract
 
         $application = new Zend_Application(APPLICATION_ENV, array("config"=>$configFiles));
 
+        // setup logging for updates
+        $options = $application->mergeOptions($application->getOptions(), array(
+            'log' => array(
+                'filename' => 'update.log',
+                'level' => 'INFO'
+            )
+        ));
+
+        $application->setOptions($options);
+
         $application->bootstrap(array('Configuration', 'Logging'));
     }
 

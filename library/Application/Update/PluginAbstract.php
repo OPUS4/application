@@ -37,8 +37,6 @@
 abstract class Application_Update_PluginAbstract extends Application_Model_Abstract
 {
 
-    private $_updateLogger = null;
-
     /**
      * Prints messages to console.
      * @param $message
@@ -56,16 +54,15 @@ abstract class Application_Update_PluginAbstract extends Application_Model_Abstr
      */
     public function log($message)
     {
-        $logger = $this->getUpdateLogger();
+        $logger = $this->getLogger();
 
         if (!is_null($logger))
         {
             $logger->info($message);
         }
-        else
-        {
-            echo $message . PHP_EOL;
-        }
+
+        // TODO make output optional (quiet option)?
+        echo $message . PHP_EOL;
     }
 
     /**
@@ -73,19 +70,5 @@ abstract class Application_Update_PluginAbstract extends Application_Model_Abstr
      * @return mixed
      */
     abstract public function run();
-
-    /**
-     * Set logger for logging update messages.
-     * @param $logger
-     */
-    public function setUpdateLogger($logger)
-    {
-        $this->_updateLogger = $logger;
-    }
-
-    public function getUpdateLogger()
-    {
-        return $this->_updateLogger;
-    }
 
 }
