@@ -26,36 +26,33 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @author      Pascal-Nicolas Becker <becker@zib.de>
- * @author      Ralf Claussnitzer <ralf.claussnitzer@slub-dresden.de>
- * @author      Thoralf Klein <thoralf.klein@zib.de>
- * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
- * @copyright   Copyright (c) 2009-2010, OPUS 4 development team
+ * @package     scripts
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 // Configure include path.
 set_include_path(
     implode(
         PATH_SEPARATOR, array(
-        '.',
-        dirname(__FILE__),
-        dirname(dirname(dirname(__FILE__))) . '/library',
-        dirname(dirname(dirname(__FILE__))) . '/vendor',
-        get_include_path(),
+            '.',
+            dirname(__FILE__),
+            dirname(dirname(dirname(__FILE__))) . '/library',
+            dirname(dirname(dirname(__FILE__))) . '/vendor',
+            get_include_path(),
         )
     )
 );
 
 // Define path to application directory
 defined('APPLICATION_PATH')
-    || define('APPLICATION_PATH', realpath(dirname(dirname(dirname(__FILE__)))));
+|| define('APPLICATION_PATH', realpath(dirname(dirname(dirname(__FILE__)))));
 
 // Define application environment
 // TODO scripts using this might be executed with a different environment than requests to the application
 defined('APPLICATION_ENV')
-    || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));
+|| define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));
 
 require_once 'autoload.php';
 require_once 'opus-php-compatibility.php';
@@ -72,9 +69,15 @@ $application = new Zend_Application(
     )
 );
 
+// setup logging for updates
+$options = $application->mergeOptions($application->getOptions(), array(
+    'log' => array(
+        'filename' => 'update.log',
+        'level' => 'INFO'
+    )
+));
+
+$application->setOptions($options);
+
 // Bootstrapping application
 $application->bootstrap('Backend');
-
-// Bootstrapping modules
-$application->getBootstrap()->getPluginResource('modules')->init();
-

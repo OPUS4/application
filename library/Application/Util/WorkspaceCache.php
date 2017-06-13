@@ -25,28 +25,33 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Application_Update
+ * @package     Application_Util
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  *
- * Updates database.
+ * TODO maybe merge with a Workspace or Mainenance or "whatever" class
  */
-class Application_Update_Database extends Application_Update_PluginAbstract
+
+class Application_Util_WorkspaceCache
 {
 
     /**
-     * Performs database update.
+     * Remove all translation cache files.
      */
-    public function run()
+    public function clearTranslations()
     {
-        $this->log('Updating database ...');
+        $files = new DirectoryIterator(Application_Configuration::getInstance()->getWorkspacePath() . '/cache');
 
-        $database = new Opus_Database();
+        foreach ($files as $file)
+        {
+            $basename = $file->getBasename();
 
-        $database->update();
-
-        $this->log('Database update finished');
+            if (preg_match('/Zend_Translate/', $basename))
+            {
+                unlink($file->getRealPath());
+            }
+        }
     }
 
 }

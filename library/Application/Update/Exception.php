@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -27,26 +27,36 @@
  * @category    Application
  * @package     Application_Update
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- *
- * Updates database.
  */
-class Application_Update_Database extends Application_Update_PluginAbstract
+
+/**
+ * Exception class for problems during update.
+ */
+class Application_Update_Exception extends Exception
 {
 
-    /**
-     * Performs database update.
-     */
-    public function run()
+    private $_exitCode = null;
+
+    private $_output = null;
+
+    public function __construct($message, $exitCode = null, $output = null)
     {
-        $this->log('Updating database ...');
+        parent::__construct($message);
 
-        $database = new Opus_Database();
+        $this->_exitCode = $exitCode;
+        $this->_output = $output;
+    }
 
-        $database->update();
+    public function getExitCode()
+    {
+        return $this->_exitCode;
+    }
 
-        $this->log('Database update finished');
+    public function getOutput()
+    {
+        return $this->_output;
     }
 
 }

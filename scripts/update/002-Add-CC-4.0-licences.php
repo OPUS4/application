@@ -1,4 +1,6 @@
-<?php
+#!/usr/bin/env php
+
+<?PHP
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -25,28 +27,22 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Application_Update
+ * @package     Scripts
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- *
- * Updates database.
  */
-class Application_Update_Database extends Application_Update_PluginAbstract
-{
 
-    /**
-     * Performs database update.
-     */
-    public function run()
-    {
-        $this->log('Updating database ...');
+/**
+ * This update script adds the CC 4.0 licences to the database.
+ */
 
-        $database = new Opus_Database();
+require_once dirname(__FILE__) . '/../common/update.php';
 
-        $database->update();
+echo 'Add CC 4.0 licences'; // TODO write to logger
 
-        $this->log('Database update finished');
-    }
+$database = new Opus_Database();
 
-}
+$script = APPLICATION_PATH . '/db/masterdata/021-add-version-4-CC-licences.sql';
+
+$database->import($script);

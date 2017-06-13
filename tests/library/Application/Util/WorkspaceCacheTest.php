@@ -25,28 +25,31 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Application_Update
+ * @package     Tests
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- *
- * Updates database.
  */
-class Application_Update_Database extends Application_Update_PluginAbstract
+
+class Application_Util_WorkspaceCacheTest extends ControllerTestCase
 {
 
-    /**
-     * Performs database update.
-     */
-    public function run()
+    public function testClearTranslations()
     {
-        $this->log('Updating database ...');
+        $cache = new Application_Util_WorkspaceCache();
 
-        $database = new Opus_Database();
+        $file = APPLICATION_PATH . '/tests/workspace/cache/Test_Zend_Translate_File';
 
-        $database->update();
+        if (!file_exists($file))
+        {
+            touch($file);
+        }
 
-        $this->log('Database update finished');
+        $this->assertFileExists($file);
+
+        $cache->clearTranslations();
+
+        $this->assertFileNotExists($file);
     }
 
 }

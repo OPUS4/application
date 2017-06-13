@@ -24,29 +24,39 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
+ * @category    Application Unit Test
  * @package     Application_Update
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- *
- * Updates database.
  */
-class Application_Update_Database extends Application_Update_PluginAbstract
+
+class Application_Update_PluginAbstractTest extends ControllerTestCase
 {
 
-    /**
-     * Performs database update.
-     */
-    public function run()
+    public function testLogWithLogger()
     {
-        $this->log('Updating database ...');
+        $stub = $this->getMockForAbstractClass(Application_Update_PluginAbstract::class);
 
-        $database = new Opus_Database();
+        $logger = new MockLogger();
 
-        $database->update();
+        $stub->setUpdateLogger($logger);
 
-        $this->log('Database update finished');
+        $stub->log('Test message.');
+
+        $messages = $logger->getMessages();
+
+        $this->assertCount(1, $messages);
+        $this->assertContains('Test message.', $messages);
+    }
+
+    public function testLogWithoutLogger()
+    {
+        $stub = $this->getMockForAbstractClass(Application_Update_PluginAbstract::class);
+
+        $this->expectOutputString('Test message.' . PHP_EOL);
+
+        $stub->log('Test message.');
     }
 
 }
