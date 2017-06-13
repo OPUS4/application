@@ -34,7 +34,7 @@
 /**
  * Base class for update plugins.
  */
-abstract class Application_Update_PluginAbstract extends Application_Model_Abstract
+abstract class Application_Update_PluginAbstract extends Opus_Update_Plugin_Abstract
 {
 
     /**
@@ -45,30 +45,5 @@ abstract class Application_Update_PluginAbstract extends Application_Model_Abstr
     {
         echo $message . PHP_EOL;
     }
-
-    /**
-     * Writes message to log.
-     * @param $message
-     *
-     * TODO log to file
-     */
-    public function log($message)
-    {
-        $logger = $this->getLogger();
-
-        if (!is_null($logger))
-        {
-            $logger->info($message);
-        }
-
-        // TODO make output optional (quiet option)?
-        echo $message . PHP_EOL;
-    }
-
-    /**
-     * Performs update operation.
-     * @return mixed
-     */
-    abstract public function run();
 
 }
