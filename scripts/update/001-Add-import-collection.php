@@ -37,10 +37,9 @@
  * Create import collection for SWORD module.
  */
 
-require_once dirname(__FILE__) . '/../common/bootstrap.php';
-
-echo 'Add import collection';
+require_once dirname(__FILE__) . '/../common/update.php';
 
 $update = new Application_Update_AddImportCollection();
+$update->log('Add import collection');
 $update->run();
 

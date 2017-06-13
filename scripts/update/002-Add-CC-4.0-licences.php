@@ -37,9 +37,9 @@
  * This update script adds the CC 4.0 licences to the database.
  */
 
-require_once dirname(__FILE__) . '/../common/bootstrap.php';
+require_once dirname(__FILE__) . '/../common/update.php';
 
-echo 'Add CC 4.0 licences';
+echo 'Add CC 4.0 licences'; // TODO write to logger
 
 $database = new Opus_Database();
 
