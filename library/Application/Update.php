@@ -79,7 +79,7 @@ class Application_Update extends Application_Update_PluginAbstract
      */
     public function run()
     {
-        $this->log('Updating OPUS 4 ...');
+        $this->log('Updating OPUS 4 ...' . PHP_EOL);
 
         // Create console.ini if missing
         // TODO make this into a database dependent (preUpdate) update component?
@@ -89,12 +89,20 @@ class Application_Update extends Application_Update_PluginAbstract
         // Bootstrap again with console.ini containing admin credentials
         $this->bootstrap();
 
+        $this->log(''); // TODO better way for separating output?
+
         // Update database
         $database = new Application_Update_Database();
         $database->run();
 
         // Run all the other update scripts
+        $this->log(PHP_EOL . 'Running update scripts ... ');
         $this->runUpdateScripts();
+
+        // clear translation cache
+        $this->log(PHP_EOL . 'Clearing translation cache ... ');
+        $cache = new Application_Util_WorkspaceCache();
+        $cache->clearTranslations();
     }
 
     /**
