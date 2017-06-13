@@ -33,6 +33,8 @@
 
 /**
  * Base class for update plugins.
+ *
+ * TODO eliminate this class?
  */
 abstract class Application_Update_PluginAbstract extends Opus_Update_Plugin_Abstract
 {
