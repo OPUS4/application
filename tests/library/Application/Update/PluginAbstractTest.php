@@ -40,7 +40,7 @@ class Application_Update_PluginAbstractTest extends ControllerTestCase
 
         $logger = new MockLogger();
 
-        $stub->setUpdateLogger($logger);
+        $stub->setLogger($logger);
 
         $stub->log('Test message.');
 
