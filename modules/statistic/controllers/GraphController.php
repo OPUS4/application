@@ -48,8 +48,8 @@ class Statistic_GraphController extends Application_Controller_Action {
      *
      */
     public function yearAction() {
-        $this->_helper->viewRenderer->setNoRender();
-        $this->_helper->layout->disableLayout();
+        $this->disableViewRendering();
+
         $id = $this->getRequest()->getParam('id');
         if (isset($id) === FALSE) {
             //TODO: create own exception
@@ -91,8 +91,8 @@ class Statistic_GraphController extends Application_Controller_Action {
      *
      */
     public function monthAction() {
-        $this->_helper->viewRenderer->setNoRender();
-        $this->_helper->layout->disableLayout();
+        $this->disableViewRendering();
+
         $id = $this->getRequest()->getParam('id');
         if (isset($id) === FALSE) {
             //TODO: create own exception
@@ -132,8 +132,8 @@ class Statistic_GraphController extends Application_Controller_Action {
      *
      */
     public function thumbAction() {
-        $this->_helper->viewRenderer->setNoRender();
-        $this->_helper->layout->disableLayout();
+        $this->disableViewRendering();
+
         $id = $this->getRequest()->getParam('id');
         if (isset($id) === FALSE) {
             //TODO: create own exception

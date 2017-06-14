@@ -59,8 +59,7 @@ class Export_IndexController extends Application_Controller_ModuleAccess {
         parent::init();
 
         // Controller outputs plain Xml, so rendering and layout are disabled.
-        $this->_helper->viewRenderer->setNoRender(true); // TODO there could be plugins requiring rendering
-        $this->_helper->layout()->disableLayout();
+        $this->disableViewRendering(); // TODO there could be plugins requiring rendering
 
         $this->_exportService = new Export_Model_ExportService();
         $this->_exportService->loadPlugins();
