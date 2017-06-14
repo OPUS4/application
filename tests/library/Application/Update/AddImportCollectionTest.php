@@ -63,7 +63,7 @@ class Application_Update_AddImportCollectionTest extends ControllerTestCase
     public function testAddEnrichmentKey()
     {
         $update = new Application_Update_AddImportCollection();
-        $update->setUpdateLogger(new MockLogger());
+        $update->setLogger(new MockLogger());
 
         $keyName = 'opus.test.key';
 
@@ -85,7 +85,7 @@ class Application_Update_AddImportCollectionTest extends ControllerTestCase
     public function testAddCollection()
     {
         $update = new Application_Update_AddImportCollection();
-        $update->setUpdateLogger(new MockLogger());
+        $update->setLogger(new MockLogger());
 
         $collectionRole = Opus_CollectionRole::fetchByName('Import');
 
