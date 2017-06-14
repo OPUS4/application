@@ -94,12 +94,11 @@ class Application_UpdateTest extends ControllerTestCase
     {
         $update = new Application_Update();
 
-        $scripts = $update->getUpdateScripts(1, 3);
+        $scripts = $update->getUpdateScripts(1, 2);
 
-        $this->assertCount(2, $scripts);
+        $this->assertCount(1, $scripts);
 
         $this->assertContains( APPLICATION_PATH . '/scripts/update/002-Add-CC-4.0-licences.php', $scripts);
-        $this->assertContains( APPLICATION_PATH . '/scripts/update/003-Update-DDC-for-DNB.php', $scripts);
     }
 
     public function testGetVersion()
@@ -118,8 +117,6 @@ class Application_UpdateTest extends ControllerTestCase
         $update = new Application_Update();
 
         $version = $update->getVersion();
-
-        var_dump($version);
 
         $this->assertNotNull($version);
 
