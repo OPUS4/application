@@ -240,10 +240,13 @@ sword.generator = 'OPUS 4'
 sword.treatment = ''
 
 ; MIME-Types der Dateien, die importiert werden können
-filetypes.mimetypes.pdf = 'application/pdf'
-filetypes.mimetypes.txt = 'text/plain'
-filetypes.mimetypes.htm = 'text/html'
-filetypes.mimetypes.html = 'text/html'
+filetypes.pdf.mimeType = 'application/pdf'
+filetypes.txt.mimeType = 'text/plain'
+filetypes.htm.mimeType = 'text/html'
+filetypes.html.mimeType = 'text/html'
+
+; Allow displaying of PDF directly in browser (default for other types 'attachment')
+filetypes.pdf.contentDisposition = 'inline'
 
 ; The following is needed even if sections are empty.
 [staging : production]
