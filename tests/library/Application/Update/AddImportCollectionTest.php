@@ -64,6 +64,7 @@ class Application_Update_AddImportCollectionTest extends ControllerTestCase
     {
         $update = new Application_Update_AddImportCollection();
         $update->setLogger(new MockLogger());
+        $update->setQuietMode(true);
 
         $keyName = 'opus.test.key';
 
@@ -86,6 +87,7 @@ class Application_Update_AddImportCollectionTest extends ControllerTestCase
     {
         $update = new Application_Update_AddImportCollection();
         $update->setLogger(new MockLogger());
+        $update->setQuietMode(true);
 
         $collectionRole = Opus_CollectionRole::fetchByName('Import');
 
