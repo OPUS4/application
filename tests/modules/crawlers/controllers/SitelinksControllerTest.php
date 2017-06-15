@@ -39,17 +39,66 @@ class Crawlers_SitelinksControllerTest extends ControllerTestCase
         $this->assertRedirectTo('/crawlers/sitelinks');
     }
 
+    public function testIndexAction()
+    {
+        $this->dispatch('/crawlers/sitelinks');
+        $this->assertResponseCode(200);
 
-    public function testIndexAction() {
-        $this->markTestIncomplete('implement');
+        $this->assertQuery('#years');
+        $this->assertQueryContentContains('#years/a', '2010');
+        $this->assertNotQuery('#documents');
+        $this->assertQueryContentContains('//title', 'Sitelinks');
     }
 
-    public function testListAction() {
-        $this->markTestIncomplete('implement');
+    public function testListAction()
+    {
+        $this->useEnglish();
+
+        $this->dispatch('/crawlers/sitelinks/list/year/2010');
+        $this->assertResponseCode(200);
+
+        $this->assertQuery('#years');
+        $this->assertQueryContentContains('#years', '2010');
+        $this->assertNotQueryContentContains('#years/a', '2010');
+        $this->assertQuery('#documents');
+        $this->assertQueryContentContains('//title', 'Sitelinks - Year 2010');
     }
 
-    public function testGuestAccess() {
-        $this->markTestIncomplete('implement');
+    public function testListActionBadYearParameter()
+    {
+        $this->dispatch('/crawlers/sitelinks/list/year/notanumber');
+        $this->assertResponseCode(200);
+
+        $this->assertQuery('#years');
+        $this->assertNotQuery('#documents');
+    }
+
+    public function testListActionWithoutYear()
+    {
+        $this->dispatch('/crawlers/sitelinks/list');
+        $this->assertResponseCode(200);
+
+        $this->assertQuery('#years');
+        $this->assertNotQuery('#documents');
+        $this->assertQueryContentContains('//title', 'Sitelinks');
+    }
+
+    public function testListActionWithUnknownYear()
+    {
+        $this->dispatch('/crawlers/sitelinks/list/year/1000');
+        $this->assertResponseCode(200);
+
+        $this->assertQuery('#years');
+        $this->assertNotQueryContentContains('#years', 1000);
+        $this->assertNotQuery('#documents');
+        $this->assertQueryContentContains('//title', 'Sitelinks');
+    }
+
+    public function testGuestAccess()
+    {
+        $this->enableSecurity();
+        $this->dispatch('/crawlers/sitelinks');
+        $this->assertResponseCode(200);
     }
 
 }
