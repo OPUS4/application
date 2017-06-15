@@ -362,6 +362,11 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
 
         Zend_Registry::set('Opus_Exporter', $exporter);
 
+        $exportService = new Application_Export_ExportService();
+
+        // TODO merge ExportService with Exporter class (?)
+        Zend_Registry::set('Opus_ExportService', $exportService);
+
         return $exporter;
     }
 

@@ -31,7 +31,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Export_Model_ExportServiceTest extends ControllerTestCase
+class Application_Export_ExportServiceTest extends ControllerTestCase
 {
 
     private $_service;
@@ -40,7 +40,7 @@ class Export_Model_ExportServiceTest extends ControllerTestCase
     {
         parent::setUp();
 
-        $this->_service = new Export_Model_ExportService();
+        $this->_service = new Application_Export_ExportService();
     }
 
     public function testLoadPlugins()

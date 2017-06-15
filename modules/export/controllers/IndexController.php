@@ -38,15 +38,15 @@
 /**
  * Controller for export function.
  *
- * The export actions are separate classes implementing the interface Export_Model_ExportPlugin and are dynamically
- * mapped to controller functions.
+ * The export actions are separate classes implementing the interface Application_Export_ExportPlugin and are
+ * dynamically mapped to controller functions.
  */
 class Export_IndexController extends Application_Controller_ModuleAccess {
 
     /**
      * Manages export plugins.
      *
-     * @var Export_Model_ExportService
+     * @var Application_Export_ExportService
      */
     private $_exportService;
 
@@ -62,7 +62,7 @@ class Export_IndexController extends Application_Controller_ModuleAccess {
         $this->_helper->viewRenderer->setNoRender(true); // TODO there could be plugins requiring rendering
         $this->_helper->layout()->disableLayout();
 
-        $this->_exportService = new Export_Model_ExportService();
+        $this->_exportService = Zend_Registry::get('Opus_ExportService');
         $this->_exportService->loadPlugins();
     }
 

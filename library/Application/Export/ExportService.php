@@ -31,7 +31,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Export_Model_ExportService extends Application_Model_Abstract
+class Application_Export_ExportService extends Application_Model_Abstract
 {
 
     /**
@@ -45,7 +45,7 @@ class Export_Model_ExportService extends Application_Model_Abstract
      * The plugin is setup for execution.
      *
      * @param $name Name of plugin/action.
-     * @return null|Export_Model_ExportPlugin
+     * @return null|Application_Export_ExportPlugin
      *
      * TODO should the namespace for plugins be limited (security)?
      */
