@@ -85,6 +85,7 @@ class Application_Update_AddImportCollection extends Application_Update_PluginAb
             $collectionRole->setDisplayBrowsing('Number');
             $collectionRole->setDisplayFrontdoor('Number');
             $collectionRole->setVisibleOai(0);
+            $collectionRole->setPosition(Opus_CollectionRole::getLastPosition() + 1);
             $root = $collectionRole->addRootCollection();
             $collectionRole->store();
         }
