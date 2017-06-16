@@ -86,4 +86,47 @@ class Application_Export_ExportServiceTest extends ControllerTestCase
         $this->assertEquals(100, $pluginConfig->maxDocumentsGuest);
     }
 
+    public function testGetDefaults()
+    {
+        $defaults = $this->_service->getDefaults();
+
+        $this->assertNotNull($defaults);
+        $this->assertInstanceOf('Zend_Config', $defaults);
+
+        $this->assertEquals('Export_Model_XmlExport', $defaults->class);
+    }
+
+    public function testSetDefaults()
+    {
+        $this->_service->setDefaults(new Zend_Config(array(
+            'class' => 'Export_Model_XsltExport'
+        )));
+
+        $defaults = $this->_service->getDefaults();
+
+        $this->assertEquals('Export_Model_XsltExport', $defaults->class);
+    }
+
+    public function testAddPlugin()
+    {
+        $this->_service->addPlugin('marc', new Zend_Config(array(
+            'class' => 'Export_Model_XsltExport',
+            'stylesheet' => 'marc.xslt'
+        )));
+
+        $plugins = $this->_service->getAllPlugins();
+
+        $this->assertCount(1, $plugins);
+
+        $plugin = $this->_service->getPlugin('marc');
+
+        $this->assertNotNull($plugin);
+        $this->assertInstanceOf('Export_Model_XsltExport', $plugin);
+
+        $config = $plugin->getConfig();
+
+        $this->assertEquals(100, $config->maxDocumentsGuest);
+        $this->assertEquals('marc.xslt', $config->stylesheet);
+    }
+
 }
