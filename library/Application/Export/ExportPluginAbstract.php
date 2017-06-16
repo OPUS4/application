@@ -33,48 +33,103 @@
  */
 
 /**
- * Interface for export plugins.
- *
- * The plugins are dynamically registered as actions in the export controller.
- *
- * TODO The export mechanism should/could be separated from the request/response handling.
+ * Class Application_Export_ExportPluginAbstract
+ * TODO in the long run should not be a model and cannot extend Application_Model_Abstract
+ * TODO configuration should be limited to plugin (and not the global object)
  */
-interface Export_Model_ExportPlugin {
+abstract class Application_Export_ExportPluginAbstract extends Application_Model_Abstract
+    implements Application_Export_ExportPlugin {
 
     /**
-     * Returns name of plugin.
-     * @return mixed
+     * @var Name of plugin.
+     * TODO Im Augenblick nur von PublistExport verwendet, um im XSLT zwischen Instanzen unterscheiden zu können.
      */
-    public function getName();
+    private $_name;
 
     /**
-     * Sets the plugin configuration.
-     * @param Zend_Config $config
+     * @var Zend_Controller_Request_Http Current request.
      */
-    public function setConfig(Zend_Config $config);
+    private $_request;
 
     /**
-     * Sets the HTTP request being processed.
+     * @var Zend_Controller_Response_Http Response object.
+     */
+    private $_response;
+
+    /**
+     * @var Zend_View View object for rendering response.
+     */
+    private $_view;
+
+    /**
+     * Returns name of plugin instance.
+     * @return Name
+     */
+    public function getName() {
+        return $this->_name;
+    }
+
+    /**
+     * Sets name of plugin instance.
+     * @param $name
+     */
+    public function setName($name) {
+        $this->_name = $name;
+    }
+
+    /**
+     * Returns request object.
+     * @return Zend_Controller_Request_Http
+     */
+    public function getRequest() {
+        return $this->_request;
+    }
+
+    /**
+     * Sets request object.
      * @param Zend_Controller_Request_Http $request
      */
-    public function setRequest(Zend_Controller_Request_Http $request);
+    public function setRequest(Zend_Controller_Request_Http $request) {
+        $this->_request = $request;
+    }
 
     /**
-     * Sets the HTTP response.
+     * Returns response object.
+     * @return Zend_Controller_Response_Http
+     */
+    public function getResponse() {
+        return $this->_response;
+    }
+
+    /**
+     * Sets response object.
      * @param Zend_Controller_Response_Http $response
      */
-    public function setResponse(Zend_Controller_Response_Http $response);
+    public function setResponse(Zend_Controller_Response_Http $response) {
+        $this->_response = $response;
+    }
 
     /**
-     * Sets the view objekt for rendering the response.
+     * Returns view object.
+     * @return Zend_View
+     */
+    public function getView() {
+        return $this->_view;
+    }
+
+    /**
+     * Sets view object.
      * @param Zend_View $view
      */
-    public function setView(Zend_View $view);
+    public function setView(Zend_View $view) {
+        $this->_view = $view;
+    }
 
     /**
      * Main function performing export.
+     *
+     * Needs to be implemented by child classes.
      */
-    public function execute();
+    abstract public function execute();
 
 }
-

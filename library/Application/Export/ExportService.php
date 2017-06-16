@@ -29,15 +29,22 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
+ *
+ * TODO cleanup, especially "plugin config" vs. "plugin"
+ * TOOD merge with Application_Export_Exporter?
  */
-
-class Export_Model_ExportService extends Application_Model_Abstract
+class Application_Export_ExportService extends Application_Model_Abstract
 {
 
     /**
      * @var array containing export plugins
      */
-    private $_plugins;
+    private $_plugins = null;
+
+    /**
+     * @var array Default configuration for plugins
+     */
+    private $_defaults = null;
 
     /**
      * Returns plugin for action name.
@@ -45,13 +52,17 @@ class Export_Model_ExportService extends Application_Model_Abstract
      * The plugin is setup for execution.
      *
      * @param $name Name of plugin/action.
-     * @return null|Export_Model_ExportPlugin
+     * @return null|Application_Export_ExportPlugin
      *
      * TODO should the namespace for plugins be limited (security)?
      */
-    public function getPlugin($name) {
-        if (isset($this->_plugins[$name])) {
-            $pluginConfig = $this->_plugins[$name];
+    public function getPlugin($name)
+    {
+        $plugins = $this->getAllPlugins();
+
+        if (isset($plugins[$name]))
+        {
+            $pluginConfig = $plugins[$name];
             $pluginClass = $pluginConfig->class;
 
             $plugin = new $pluginClass($name); // TODO good design?
@@ -59,13 +70,26 @@ class Export_Model_ExportService extends Application_Model_Abstract
 
             return $plugin;
         }
-        else {
+        else
+        {
             return null;
         }
     }
 
+    /**
+     * Returns all plugin configurations.
+     *
+     * @return array
+     *
+     * TODO rename
+     */
     public function getAllPlugins()
     {
+        if (is_null($this->_plugins))
+        {
+            $this->loadPlugins();
+        }
+
         return $this->_plugins;
     }
 
@@ -73,27 +97,74 @@ class Export_Model_ExportService extends Application_Model_Abstract
      * Loads export plugins.
      *
      * Der Plugin spezifische Teil der Konfiguation wird festgehalten und später verwendet.
+     *
+     * TODO rename loadDefaultPlugins (resets loaded plugins back to configuration)
      */
-    public function loadPlugins() {
+    public function loadPlugins()
+    {
         $config = $this->getConfig();
-        if (isset($config->plugins->export)) {
+
+        if (isset($config->plugins->export))
+        {
             $exportPlugins = $config->plugins->export->toArray();
 
-            $plugins = array();
-
-            $defaultConfig = $config->plugins->export->default;
-
-            foreach ($exportPlugins as $name => $plugin) {
+            foreach ($exportPlugins as $name => $plugin)
+            {
                 $pluginName = ($name === 'default') ? 'index' : $name;
 
-                $pluginConfig = clone $defaultConfig;
-                $pluginConfig->merge($config->plugins->export->$name);
-
-                $plugins[$pluginName] = $pluginConfig;
+                $this->addPlugin($pluginName, $config->plugins->export->$name);
             }
-
-            $this->_plugins = $plugins;
         }
     }
+
+    /**
+     * Set default parameters for plugins.
+     * @param $config
+     */
+    public function setDefaults($config)
+    {
+        $this->_defaults = $config;
+    }
+
+    /**
+     * Returns default parameters for plugins.
+     *
+     * @return array|Zend_Config
+     */
+    public function getDefaults()
+    {
+        if (is_null($this->_defaults))
+        {
+            $config = $this->getConfig();
+
+            if (isset($config->plugins->export->default))
+            {
+                $this->_defaults = $config->plugins->export->default;
+            }
+            else {
+                $this->_defaults = new Zend_Config(array());
+            }
+        }
+
+        return $this->_defaults;
+    }
+
+    /**
+     * Adds a plugin configuration.
+     * @param $config array
+     */
+    public function addPlugin($name, $config)
+    {
+        if (is_null($this->_plugins))
+        {
+            $this->_plugins = array();
+        }
+
+        $defaults = $this->getDefaults();
+        $pluginConfig = clone $defaults;
+        $pluginConfig->merge($config);
+        $this->_plugins[$name] = $pluginConfig;
+    }
+
 
 }

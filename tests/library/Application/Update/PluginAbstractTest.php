@@ -41,6 +41,7 @@ class Application_Update_PluginAbstractTest extends ControllerTestCase
         $logger = new MockLogger();
 
         $stub->setLogger($logger);
+        $stub->setQuietMode(true);
 
         $stub->log('Test message.');
 
@@ -50,6 +51,9 @@ class Application_Update_PluginAbstractTest extends ControllerTestCase
         $this->assertContains('Test message.', $messages);
     }
 
+    /**
+     * @outputBuffering enabled
+     */
     public function testLogWithoutLogger()
     {
         $stub = $this->getMockForAbstractClass(Application_Update_PluginAbstract::class);
