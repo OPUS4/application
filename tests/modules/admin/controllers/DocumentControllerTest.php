@@ -27,9 +27,8 @@
  * @category    Unit Tests
  * @author      Jens Schwidder <schwidder@zib.de>
  * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -568,7 +567,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
 
         // Lizenzen
         $this->assertQueryContentContains('//fieldset[@id="fieldset-Licences"]/legend', 'Lizenzen');
-        $this->assertQueryContentContains('//*[@id="Document-Licences-licence4-label"]', 'Creative Commons - Namensnennung');
+        $this->assertQueryContentContains('//*[@id="Document-Licences-licence4-label"]', 'Creative Commons - CC BY-ND - Namensnennung');
 
         // Patents
         $this->assertQueryContentContains('//*[@id="Document-Patents-Patent0-Number"]', '1234');
@@ -805,7 +804,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
 
         // Lizenzen (Name der Lizenz nicht übersetzt)
         $this->assertQueryContentContains('//fieldset[@id="fieldset-Licences"]/legend', 'Licences');
-        $this->assertQueryContentContains('//*[@id="Document-Licences-licence4-label"]', 'Creative Commons - Namensnennung');
+        $this->assertQueryContentContains('//*[@id="Document-Licences-licence4-label"]', 'Creative Commons - CC BY-ND - Namensnennung');
 
         // Patents
         $this->assertQueryContentContains('//*[@id="Document-Patents-Patent0-Number"]', '1234');
