@@ -135,10 +135,10 @@
 
     <tu tuid="validation_error_person_gnd">
         <tuv xml:lang="en">
-            <seg>Please provide a valid GND identifier as plain number without separators.</seg>
+            <seg>Please provide a valid GND identifier as plain number without leading '0' and separators.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Bitte geben Sie eine valide GND-ID als Ziffernfolge ohne Trennzeichen an.</seg>
+            <seg>Bitte geben Sie eine valide GND-ID als Ziffernfolge ohne Trennzeichen und führende Nullen an.</seg>
         </tuv>
     </tu>
 
