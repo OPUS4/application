@@ -1,7 +1,5 @@
-#!/usr/bin/env php
-
-<?PHP
-/**
+<?php
+/*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -27,34 +25,35 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Scripts
+ * @package     Application_Update
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
- * This update script adds the CC 4.0 licences to the database.
+ * Helper class for common functions used in update scripts.
+ *
+ * This class extends Application_Update_PluginAbstract for the common logging and other functions, but
+ * it is not meant to be "run" like other update plugin classes.
  */
-
-require_once dirname(__FILE__) . '/../common/update.php';
-
-$helper = new Application_Update_Helper();
-
-$licence = Opus_Licence::fetchByName('CC BY 4.0');
-
-if (!is_null($licence))
+class Application_Update_Helper extends Application_Update_PluginAbstract
 {
-    $helper->log('Creative Commons 4.0 seem to be present in database.');
-}
 
-if ($helper->askYesNo('Add CC 4.0 licences to database [Y|n]? '))
-{
-    $helper->log('Add CC 4.0 licences ...');
+    public function run()
+    {
+        // do nothing
+    }
 
-    $database = new Opus_Database();
+    /**
+     * Asks the user a yes|no question during update.
+     * @param $question
+     */
+    public function askYesNo($question)
+    {
+        $response = trim(readline($question));
 
-    $script = APPLICATION_PATH . '/db/masterdata/021-add-version-4-CC-licences.sql';
+        return ($response == 'Y' || $response == 'y');
+    }
 
-    $database->import($script);
 }
