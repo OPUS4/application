@@ -27,9 +27,11 @@
  * @category    Application
  * @package     Module_Sword
  * @author      Sascha Szott
- * @copyright   Copyright (c) 2016
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2016-2017
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
+ *
+ * TODO use OPUS 4 base class?
  */
 class Sword_DepositController extends Zend_Rest_Controller {
 

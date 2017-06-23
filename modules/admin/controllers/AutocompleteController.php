@@ -42,8 +42,7 @@ class Admin_AutocompleteController extends Application_Controller_ModuleAccess
     public function init() {
         parent::init();
 
-        $this->_helper->viewRenderer->setNoRender(true);
-        $this->_helper->layout()->disableLayout();
+        $this->disableViewRendering();
     }
 
 
