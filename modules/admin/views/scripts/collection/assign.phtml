@@ -84,7 +84,6 @@
             <?php endif ?>
         </td>
         <td>
-            <!-- TODO check if root or leaves and settings for collection role -->
             <?PHP if ($this->assignCollectionAllowed($collection)) : ?>
             <form method="post" action="<?= $this->url(array('module' => 'admin', 'controller' => 'collection',
                 'action' => 'assign', 'id' => $collection['id'], 'document' => $this->documentId), null, true)?>">
