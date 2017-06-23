@@ -44,6 +44,7 @@
  * @package     Module_Admin
  *
  * TODO $this->_redirectToAndExit does not have return value, but is used with return here
+ * TODO refactor, move into model classes, etc.
  */
 class Admin_CollectionController extends Application_Controller_Action {
 
@@ -468,20 +469,26 @@ class Admin_CollectionController extends Application_Controller_Action {
             return;
         }
         $this->view->collections = array();
+
+        $role = $collection->getRole();
+
         foreach ($children as $child) {
             array_push(
                 $this->view->collections,
                 array(
-                        'id' => $child->getId(),
-                        'name' => $child->getNumberAndName(),
-                        'hasChildren' => $child->hasChildren(),
-                        'visible' => $child->getVisible()
-                    )
+                    'id' => $child->getId(),
+                    'name' => $child->getNumberAndName(),
+                    'hasChildren' => $child->hasChildren(),
+                    'visible' => $child->getVisible(),
+                    'isLeaf' => !$child->hasChildren(),
+                    'role' => $role
+                )
             );
         }
+
         $this->view->documentId = $documentId;
         $this->view->breadcrumb = array_reverse($collection->getParents());
-        $this->view->role_name = $collection->getRole()->getDisplayName();
+        $this->view->role_name = $role->getDisplayName();
     }
 
     private function getForm($collection, $id = null, $type = null) {
