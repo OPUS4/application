@@ -294,33 +294,23 @@
             </xsl:element>
         </xsl:if>
 
-        <!-- TODO find image for GND
-        <xsl:if test="@IdentifierGnd">
-            <xsl:text>  </xsl:text>
+        <xsl:if test="@IdentifierGnd and php:functionString('Application_Xslt::optionEnabled', 'linkAuthor.frontdoor', 'gnd')">
             <xsl:element name="a">
                 <xsl:attribute name="href">
-                    <xsl:text>https://d-nb.info/gnd/</xsl:text>
+                    <xsl:value-of select="php:functionString('Application_Xslt::optionValue', 'baseUrl', 'gnd')"/>
                     <xsl:value-of select="@IdentifierGnd"/>
                 </xsl:attribute>
-                <img alt="GND Logo">
-                    <xsl:attribute name="src">
-                        <xsl:value-of select="$layoutPath"/>
-                        <xsl:text>/img/theme/icon-gnd.gif</xsl:text>
-                    </xsl:attribute>
-                    <xsl:attribute name="title">
-                        <xsl:call-template name="translateString">
-                            <xsl:with-param name="string">frontdoor_gnd</xsl:with-param>
-                        </xsl:call-template>
-                    </xsl:attribute>
-                    <xsl:attribute name="alt">
-                        <xsl:call-template name="translateString">
-                            <xsl:with-param name="string">frontdoor_gnd</xsl:with-param>
-                        </xsl:call-template>
-                    </xsl:attribute>
-                </img>
+                <xsl:attribute name="class">
+                    <xsl:text>gnd-link</xsl:text>
+                </xsl:attribute>
+                <xsl:attribute name="title">
+                    <xsl:call-template name="translateString">
+                        <xsl:with-param name="string">frontdoor_gnd</xsl:with-param>
+                    </xsl:call-template>
+                </xsl:attribute>
+                <xsl:text>GND</xsl:text>
             </xsl:element>
         </xsl:if>
-        -->
 
         <xsl:if test="position() != last()">, </xsl:if>
 

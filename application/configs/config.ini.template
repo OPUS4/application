@@ -113,6 +113,9 @@ urn.nss = de:kobv:test-opus
 ; ORCiD SETTINGS
 orcid.linkAuthor.frontdoor = 1
 
+; GND SETTINGS
+gnd.linkAuthor.frontdoor = 1
+
 ;DOCUMENTTYPE SETTINGS
 ; You can define which document types should be shown in the publish module or
 ; which ones should be excluded (comma separated names of XML files without
