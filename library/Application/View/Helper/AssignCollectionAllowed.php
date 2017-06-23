@@ -39,8 +39,17 @@
 class Application_View_Helper_AssignCollectionAllowed extends Zend_View_Helper_Abstract
 {
 
-    public function assignCollectionAllowed($collection)
+    public function assignCollectionAllowed($collection, $docId = null)
     {
+        if (!is_null($docId) && isset($collection['collection']))
+        {
+            $colObj = $collection['collection'];
+            if ($colObj->holdsDocumentById($docId))
+            {
+                return false;
+            }
+        }
+
         $role = null;
 
         if (isset($collection['role']))

@@ -481,7 +481,8 @@ class Admin_CollectionController extends Application_Controller_Action {
                     'hasChildren' => $child->hasChildren(),
                     'visible' => $child->getVisible(),
                     'isLeaf' => !$child->hasChildren(),
-                    'role' => $role
+                    'role' => $role,
+                    'collection' => $child
                 )
             );
         }

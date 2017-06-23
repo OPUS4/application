@@ -56,7 +56,8 @@ class Admin_Model_Collections extends Application_Model_Abstract {
                         'hasChildren' => $rootCollection->hasChildren(),
                         'visible' => $collectionRole->getVisible(),
                         'isRoot' => true,
-                        'role' => $collectionRole
+                        'role' => $collectionRole,
+                        'collection' => $rootCollection
                     )
                 );
             }

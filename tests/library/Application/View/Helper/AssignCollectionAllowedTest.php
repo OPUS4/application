@@ -147,4 +147,29 @@ class Application_View_Helper_AssignCollectionAllowedTest extends ControllerTest
             'role' => $this->_role
         )));
     }
+
+    public function testNotAllowedIfAlreadyAssigned()
+    {
+        $this->_role->setAssignRoot(1);
+        $this->_role->setAssignLeavesOnly(0);
+        $root = $this->_role->addRootCollection();
+        $this->_role->store();
+
+        $document = $this->createTestDocument();
+        $docId = $document->store();
+
+        $this->assertTrue($this->_helper->assignCollectionAllowed(array(
+            'role' => $this->_role,
+            'collection' => $root
+        ), $docId));
+
+        $document->addCollection($root);
+        $docId = $document->store();
+
+        $this->assertFalse($this->_helper->assignCollectionAllowed(array(
+            'role' => $this->_role,
+            'collection' => $root
+        ), $docId));
+    }
+
 }
