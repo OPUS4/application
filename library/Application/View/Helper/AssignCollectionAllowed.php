@@ -41,14 +41,22 @@ class Application_View_Helper_AssignCollectionAllowed extends Zend_View_Helper_A
 
     public function assignCollectionAllowed($collection, $docId = null)
     {
-        if (!is_null($docId) && isset($collection['collection']))
+        if (!is_null($docId))
         {
-            $colObj = $collection['collection'];
-            if ($colObj->holdsDocumentById($docId))
+            if (isset($collection['assigned']) && $collection['assigned'])
             {
                 return false;
             }
+            else if (isset($collection['collection']))
+            {
+                $colObj = $collection['collection'];
+                if ($colObj->holdsDocumentById($docId))
+                {
+                    return false;
+                }
+            }
         }
+
 
         $role = null;
 

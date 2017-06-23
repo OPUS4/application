@@ -452,7 +452,7 @@ class Admin_CollectionController extends Application_Controller_Action {
     private function prepareAssignStartPage($documentId) {
         $helper = new Admin_Model_Collections($this->view);
         $helper->setView($this->view);
-        $this->view->collections = $helper->getCollectionRolesInfo();
+        $this->view->collections = $helper->getCollectionRolesInfo($documentId);
         $this->view->documentId = $documentId;
     }
 
@@ -482,7 +482,8 @@ class Admin_CollectionController extends Application_Controller_Action {
                     'visible' => $child->getVisible(),
                     'isLeaf' => !$child->hasChildren(),
                     'role' => $role,
-                    'collection' => $child
+                    'collection' => $child,
+                    'assigned' => $child->holdsDocumentById($documentId)
                 )
             );
         }

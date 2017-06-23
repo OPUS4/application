@@ -148,6 +148,9 @@ class Application_View_Helper_AssignCollectionAllowedTest extends ControllerTest
         )));
     }
 
+    /**
+     * TODO this method should be eliminated - one should be sufficient
+     */
     public function testNotAllowedIfAlreadyAssigned()
     {
         $this->_role->setAssignRoot(1);
@@ -169,6 +172,28 @@ class Application_View_Helper_AssignCollectionAllowedTest extends ControllerTest
         $this->assertFalse($this->_helper->assignCollectionAllowed(array(
             'role' => $this->_role,
             'collection' => $root
+        ), $docId));
+    }
+
+    public function testNotAllowedIfAlreadyAssignedUseAssignedOption()
+    {
+        $this->_role->setAssignRoot(1);
+        $this->_role->setAssignLeavesOnly(0);
+        $root = $this->_role->addRootCollection();
+        $this->_role->store();
+
+        $document = $this->createTestDocument();
+        $docId = $document->store();
+
+        $this->assertTrue($this->_helper->assignCollectionAllowed(array(
+            'assigned' => false
+        ), $docId));
+
+        $document->addCollection($root);
+        $docId = $document->store();
+
+        $this->assertFalse($this->_helper->assignCollectionAllowed(array(
+            'assigned' => true
         ), $docId));
     }
 

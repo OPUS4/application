@@ -41,7 +41,7 @@ class Admin_Model_Collections extends Application_Model_Abstract {
      *
      * TODO using view in action helper is not best design
      */
-    public function getCollectionRolesInfo() {
+    public function getCollectionRolesInfo($documentId) {
         $collections = array();
 
         $collectionRoles = Opus_CollectionRole::fetchAll();
@@ -57,7 +57,8 @@ class Admin_Model_Collections extends Application_Model_Abstract {
                         'visible' => $collectionRole->getVisible(),
                         'isRoot' => true,
                         'role' => $collectionRole,
-                        'collection' => $rootCollection
+                        'collection' => $rootCollection,
+                        'assigned' => $rootCollection->holdsDocumentById($documentId)
                     )
                 );
             }
