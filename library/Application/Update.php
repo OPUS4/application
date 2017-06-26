@@ -51,6 +51,12 @@ class Application_Update extends Application_Update_PluginAbstract
     private $_scriptsPath = '/scripts/update';
 
     /**
+     * Enables confirmation before an update step is executed.
+     * @var boolean
+     */
+    private $_confirmSteps = false;
+
+    /**
      * Bootstrap Zend_Application for update process.
      */
     public function bootstrap()
@@ -80,6 +86,18 @@ class Application_Update extends Application_Update_PluginAbstract
         $application->setOptions($options);
 
         $application->bootstrap(array('Configuration', 'Logging'));
+    }
+
+    /**
+     * Parses command line arguments and configures update.
+     * @param $arguments
+     */
+    public function processArguments($arguments)
+    {
+        if (array_search('--confirm-steps', $arguments))
+        {
+            $this->setConfirmSteps(true);
+        }
     }
 
     /**
@@ -138,12 +156,34 @@ class Application_Update extends Application_Update_PluginAbstract
 
         foreach ($scripts as $script)
         {
-            $this->runScript($script);
+            $basename = basename($script);
 
-            $number = ( int )substr(basename($script), 0, 3);
+            if (!$this->getConfirmSteps() || $this->confirmRunningScript($basename))
+            {
+                $this->runScript($script);
+            }
+
+
+            // even if a step is skipped the version is updated - scripts can be executed manually again
+            $number = ( int )substr($basename, 0, 3);
 
             $this->setVersion($number);
         }
+    }
+
+    /**
+     * Asks user if update script should be run.
+     *
+     * If not the script is skipped, but the version is updated anyway. This is meant as a way
+     * to skip update steps if necessary, while still updating to the current version.
+     *
+     * @param $script
+     */
+    public function confirmRunningScript($name)
+    {
+        $answer = readline("Run script '$name' [Y|n]?");
+
+        return strlen(trim($answer)) == 0 || $answer === 'Y' || $answer === 'y';
     }
 
     /**
@@ -282,6 +322,24 @@ class Application_Update extends Application_Update_PluginAbstract
         catch (PDOException $pdoex) {
 
         }
+    }
+
+    /**
+     * Sets if every update step should be confirmed before running.
+     * @param $enabled
+     */
+    public function setConfirmSteps($enabled)
+    {
+        $this->_confirmSteps = $enabled;
+    }
+
+    /**
+     * Returns current setting for confirming update steps.
+     * @return bool
+     */
+    public function getConfirmSteps()
+    {
+        return $this->_confirmSteps;
     }
 
 }

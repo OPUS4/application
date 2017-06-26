@@ -59,7 +59,7 @@ fi
 
 
 # Perform update steps
-php $BASEDIR/scripts/update/update.php
+php $BASEDIR/scripts/update/update.php "$@"
 
 # TODO rebuild index ? maybe just notifice or use two cores
 
