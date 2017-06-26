@@ -48,7 +48,6 @@
     <xsl:include href="prefixes/oai_dc.xslt"/>
     <xsl:include href="prefixes/oai_pp.xslt"/>
     <xsl:include href="prefixes/epicur.xslt"/>
-    <xsl:include href="prefixes/xMetaDiss.xslt"/>
     <xsl:include href="prefixes/XMetaDissPlus.xslt"/>
     <xsl:include href="prefixes/copy_xml.xslt"/>
 
@@ -195,11 +194,6 @@
             <metadataNamespace><xsl:text>urn:nbn:de:1111-2004033116</xsl:text></metadataNamespace>
           </metadataFormat>
           <metadataFormat>
-            <metadataPrefix><xsl:text>xMetaDiss</xsl:text></metadataPrefix>
-            <schema><xsl:text>http://www.d-nb.de/standards/xmetadiss/xmetadiss.xsd</xsl:text></schema>
-            <metadataNamespace><xsl:text>http://www.d-nb.de/standards/xMetaDiss/</xsl:text></metadataNamespace>
-          </metadataFormat>
-          <metadataFormat>
             <metadataPrefix><xsl:text>XMetaDissPlus</xsl:text></metadataPrefix>
             <schema><xsl:text>http://files.dnb.de/standards/xmetadissplus/xmetadissplus.xsd</xsl:text></schema>
             <metadataNamespace><xsl:text>http://www.d-nb.de/standards/xmetadissplus/</xsl:text></metadataNamespace>
@@ -331,9 +325,6 @@
                     </xsl:when>
                     <xsl:when test="$oai_metadataPrefix='xMetaDissPlus'">
                        <xsl:apply-templates select="." mode="xmetadissplus" />
-                    </xsl:when>
-                    <xsl:when test="$oai_metadataPrefix='xMetaDiss'">
-                       <xsl:apply-templates select="." mode="xmetadiss" />
                     </xsl:when>
                     <xsl:when test="$oai_metadataPrefix='epicur'">
                        <xsl:apply-templates select="." mode="epicur" />

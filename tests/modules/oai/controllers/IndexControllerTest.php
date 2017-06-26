@@ -153,7 +153,6 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     public function testGetRecordsFormats() {
         $formatTestDocuments = array(
-            'xMetaDiss' => 80,
             'xMetaDissPlus' => 41,
             'XMetaDissPlus' => 41,
             'oai_dc' => 91,
@@ -190,20 +189,6 @@ class Oai_IndexControllerTest extends ControllerTestCase {
             $this->assertEquals(1, $result->length,
                     'Expecting one <OAI-PMH>/<GetRecord>/<record> element');
         }
-    }
-
-    /**
-     * Test verb=GetRecord, prefix=xMetaDiss.
-     */
-    public function testGetRecordxMetaDiss() {
-        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=xMetaDiss&identifier=oai::80');
-        $this->assertResponseCode(200);
-
-        $response = $this->getResponse();
-        $this->checkForBadStringsInHtml($response->getBody());
-
-        $this->assertContains('oai::80', $response->getBody(),
-                "Response must contain 'oai::80'");
     }
 
     /**
@@ -1167,44 +1152,6 @@ class Oai_IndexControllerTest extends ControllerTestCase {
     }
 
     /**
-     * Regression test for OPUSVIER-2450
-     */
-    public function testDdbFileNumberForMultipleDocumentsForXMetaDiss() {
-        $collection = new Opus_Collection(112);
-
-        $doc1 = $this->createTestDocument();
-        $doc1->setServerState('published');
-        $doc1->setType('habilitation'); // xMetaDiss liefert nur Doktorarbeiten und Habilitationen aus
-        $file = new Opus_File();
-        $file->setVisibleInOai(true);
-        $file->setPathName('foo.pdf');
-        $doc1->addFile($file);
-        $file = new Opus_File();
-        $file->setVisibleInOai(true);
-        $file->setPathName('bar.pdf');
-        $doc1->addFile($file);
-        $doc1->addCollection($collection);
-        $this->docIds[] = $doc1->store();
-
-        $doc2 = $this->createTestDocument();
-        $doc2->setServerState('published');
-        $doc2->setType('doctoralthesis'); // xMetaDiss liefert nur Doktorarbeiten und Habilitationen aus
-        $file = new Opus_File();
-        $file->setVisibleInOai(true);
-        $file->setPathName('baz.pdf');
-        $doc2->addFile($file);
-        $doc2->addCollection($collection);
-        $this->docIds[] = $doc2->store();
-
-        $this->dispatch('/oai?verb=ListRecords&metadataPrefix=xMetaDiss&set=ddc:000');
-
-        $body = $this->getResponse()->getBody();
-        $this->assertContains('<ddb:fileNumber>2</ddb:fileNumber>', $body);
-        $this->assertContains('<ddb:fileNumber>1</ddb:fileNumber>', $body);
-        $this->assertNotContains('<ddb:fileNumber>3</ddb:fileNumber>', $body);
-    }
-
-    /**
      * Regression test for OPUSVIER-2508
      */
     public function testTransferUrlIsIOnlyGivenForDocsWithFulltext() {
@@ -1271,32 +1218,6 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->docIds[] = $doc->store();
 
         $this->dispatch('/oai?verb=ListRecords&metadataPrefix=xMetaDissPlus&set=ddc:000');
-
-        $body = $this->getResponse()->getBody();
-        $this->assertNotContains('<dc:subject xsi:type="dcterms:DDC">000</dc:subject>', $body);
-        $this->assertContains('<dc:subject xsi:type="xMetaDiss:DDC-SG">000</dc:subject>', $body);
-    }
-
-    /**
-     *  Regression Test for OPUSVIER-3072 (was Regression test for OPUSVIER-2509 and OPUSVIER-2510)
-     */
-    public function testForDDCSubjectTypeForXMetaDiss() {
-        $collection = new Opus_Collection(112);
-
-        $doc = $this->createTestDocument();
-        $doc->setServerState('published');
-        $doc->setType('doctoralthesis'); // xMetaDiss liefert nur Doktorarbeiten und Habilitationen aus
-        $doc->addCollection($collection);
-
-        // fixing test for OPUSVIER-3142
-        $visibleFile = new Opus_File();
-        $visibleFile->setPathName('visible_file.txt');
-        $visibleFile->setVisibleInOai(true);
-        $doc->addFile($visibleFile);
-
-        $this->docIds[] = $doc->store();
-
-        $this->dispatch('/oai?verb=ListRecords&metadataPrefix=xMetaDiss&set=ddc:000');
 
         $body = $this->getResponse()->getBody();
         $this->assertNotContains('<dc:subject xsi:type="dcterms:DDC">000</dc:subject>', $body);
