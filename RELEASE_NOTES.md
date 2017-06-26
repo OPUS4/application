@@ -40,6 +40,20 @@ verwendet. Die folgenden Funktionen haben außerdem neue Namen bekommen.
     checkIfUserHasFileAccess    -> fileAccessAllowed
     checkLanguageFile           -> languageImageExists
     getStylesheet               -> frontdoorStylesheet
+    
+### Lizenzen
+    
+Beim Update können die Creative Commons 4.0 Lizenzen hinzugefügt werden.
+Lizenzen besitzen jetzt das Feld **name** in dem die Kurzbezeichnungen
+wie "CC BY 4.0" gespeichert sind. Beim Update wird auch versucht, die 
+Kurzbezeichnungen für die alten "CC 3.0" Lizenzen hinzuzufügen. Wenn die
+Lizenzen lokal editiert wurden kann es dabei zu falschen Zuordnungen 
+kommen. Deshalb sollten die Lizenzen anschließend in der Administration
+überprüft werden.
+
+Das Feld **name** wird momentan noch nicht weiter verwendet. In Zukunft 
+soll es unter anderem für das Matching von Lizenzen beim Import verwendet
+werden.
 
 ---
 

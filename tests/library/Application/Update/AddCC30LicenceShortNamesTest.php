@@ -44,6 +44,11 @@ class Application_Update_AddCC30LicenceShotNamesTest extends ControllerTestCase
         $this->_update->setQuietMode(true);
     }
 
+    public function tearDown()
+    {
+
+    }
+
     public function licenceMatchProvider()
     {
         return [
@@ -57,6 +62,7 @@ class Application_Update_AddCC30LicenceShotNamesTest extends ControllerTestCase
             ['CC BY-NC-SA 3.0', 'Creative Commons - Namensnennung - Nicht kommerziell - Weitergabe unter gleichen Bedingungen'],
             ['CC BY-NC 3.0', 'Creative Commons - Namensnennung - Nicht kommerziell'],
             ['CC BY-ND 3.0', 'Creative Commons - Namensnennung - Keine Bearbeitung'],
+            ['CC BY-ND 3.0', 'Creative Commons - Namensnennung - KeineBearbeitung'],
             ['CC BY-SA 3.0', 'Creative Commons - Namensnennung - Weitergabe unter gleichen Bedingungen']
         ];
     }
@@ -144,6 +150,19 @@ class Application_Update_AddCC30LicenceShotNamesTest extends ControllerTestCase
         $licence->delete();
 
         $this->assertEquals('CC BY 5.0', $licence->getName());
+    }
+
+    public function testRemoveLicence()
+    {
+        $name = $this->_update->getShortName('Creative Commons - Namensnennung');
+
+        $this->assertEquals('CC BY 3.0', $name);
+
+        $this->_update->removeLicence($name);
+
+        $name = $this->_update->getShortName('Creative Commons - Namensnennung');
+
+        $this->assertNull($name);
     }
 
 }

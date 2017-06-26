@@ -46,12 +46,12 @@ class Application_Update_AddCC30LicenceShortNames extends Application_Update_Plu
      * @var array
      */
     private $licences = array(
-        '/(?:(Creative Commons)|(CC)).*Namensnennung.*Nicht kommerziell.*Keine Bearbeitung/' => 'CC BY-NC-ND 3.0',
-        '/(?:(Creative Commons)|(CC)).*Namensnennung.*Keine kommerzielle Nutzung.*Weitergabe unter gleichen Bedingungen/' => 'CC BY-NC-SA 3.0',
-        '/(?:(Creative Commons)|(CC)).*Namensnennung.*Nicht kommerziell.*Weitergabe unter gleichen Bedingungen/' => 'CC BY-NC-SA 3.0',
-        '/(?:(Creative Commons)|(CC)).*Namensnennung.*Nicht kommerziell/' => 'CC BY-NC 3.0',
-        '/(?:(Creative Commons)|(CC)).*Namensnennung.*Keine Bearbeitung/' => 'CC BY-ND 3.0',
-        '/(?:(Creative Commons)|(CC)).*Namensnennung.*Weitergabe unter gleichen Bedingungen/' => 'CC BY-SA 3.0',
+        '/(?:(Creative Commons)|(CC)).*Namensnennung.*Nicht.*kommerziell.*Keine.*Bearbeitung/' => 'CC BY-NC-ND 3.0',
+        '/(?:(Creative Commons)|(CC)).*Namensnennung.*Keine.*kommerzielle Nutzung.*Weitergabe.*unter.*gleichen.*Bedingungen/' => 'CC BY-NC-SA 3.0',
+        '/(?:(Creative Commons)|(CC)).*Namensnennung.*Nicht.*kommerziell.*Weitergabe.*unter.*gleichen.*Bedingungen/' => 'CC BY-NC-SA 3.0',
+        '/(?:(Creative Commons)|(CC)).*Namensnennung.*Nicht.*kommerziell/' => 'CC BY-NC 3.0',
+        '/(?:(Creative Commons)|(CC)).*Namensnennung.*Keine.*Bearbeitung/' => 'CC BY-ND 3.0',
+        '/(?:(Creative Commons)|(CC)).*Namensnennung.*Weitergabe.*unter.*gleichen.*Bedingungen/' => 'CC BY-SA 3.0',
         '/(?:(Creative Commons)|(CC)).*Namensnennung/' => 'CC BY 3.0'
     );
 
@@ -81,14 +81,26 @@ class Application_Update_AddCC30LicenceShortNames extends Application_Update_Plu
 
             if (!is_null($name))
             {
-                $licence->setName($name);
-                $licence->store();
+                // 'name' must be unique - check if already used
+                $existingLicence = Opus_Licence::fetchByName($name);
+
+                if (is_null($existingLicence))
+                {
+                    $licence->setName($name);
+                    $licence->store();
+
+                    $this->log("Setting label '$name' for licence '{$nameLong}'.");
+
+                    $this->removeLicence($name);
+                }
             }
             else
             {
                 $this->log("No label found for licence '$nameLong'");
             }
         }
+
+        $this->log('Please verify licence names in the administration.');
     }
 
     /**
@@ -107,6 +119,18 @@ class Application_Update_AddCC30LicenceShortNames extends Application_Update_Plu
         }
 
         return null;
+    }
+
+    /**
+     * Removes licence after it has been used.
+     * @param $name
+     */
+    public function removeLicence($name)
+    {
+        if (($key = array_search($name, $this->licences)) !== false)
+        {
+            unset($this->licences[$key]);
+        }
     }
 
 }
