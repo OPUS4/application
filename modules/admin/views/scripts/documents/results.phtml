@@ -34,6 +34,16 @@
 ?>
 
 <table class="documents">
+    <tr>
+        <th>ID</th>
+        <th><?= $this->translate('admin_documents_table_column_title') ?></th>
+        <th><?= $this->translate('admin_documents_table_column_type') ?></th>
+        <th><?= $this->translate('admin_documents_table_column_files') ?></th>
+        <th>Bibl.</th>
+        <th><?= $this->translate('admin_documents_table_column_updated') ?></th>
+        <th>&nbsp;</th>
+    </tr>
+
     <?PHP $index = 0; foreach ($this->paginator as $docId) : ?>
         <?PHP $document = new Application_Util_DocumentAdapter($this, $docId); ?>
         <tr class="<?= ($index++ % 2) ? 'even' : 'odd' ?>">
@@ -71,14 +81,17 @@
             </td>
             <td class="bibliography">
                 <?PHP if ($document->isBelongsToBibliography()) : ?>
-                    <span class="bibliography" title="<?= htmlspecialchars($this->translate('admin_documents_tooltip_belongsToBibliography_true')) ?>">
+                <span class="bibliography" title="<?= htmlspecialchars($this->translate('admin_documents_tooltip_belongsToBibliography_true')) ?>">
                 <?= htmlspecialchars($this->translate('Bibliography_Value_True')) ?>
-            </span>
+                </span>
                 <?PHP else : ?>
-                    <span class="bibliography" title="<?= htmlspecialchars($this->translate('admin_documents_tooltip_belongsToBibliography_false')) ?>">
+                <span class="bibliography" title="<?= htmlspecialchars($this->translate('admin_documents_tooltip_belongsToBibliography_false')) ?>">
                 <?= htmlspecialchars($this->translate('Bibliography_Value_False')) ?>
-            </span>
+                </span>
                 <?PHP endif; ?>
+            </td>
+            <td class="updated">
+                <?= $this->formatDate()->formatOpusDate($document->getDocument()->getServerDateModified(), true) ?>
             </td>
             <?PHP if (!empty($this->collection)) : ?>
                 <td class="">
