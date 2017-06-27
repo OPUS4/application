@@ -52,7 +52,7 @@ class Admin_DocumentsController extends Application_Controller_Action {
 
     protected $_sortingOptions = array('id', 'title', 'author', 'publicationDate', 'docType');
 
-    protected $_docOptions = array('unpublished', 'inprogress', 'audited', 'published', 'restricted', 'deleted');
+    protected $_docOptions = array('all', 'unpublished', 'inprogress', 'audited', 'published', 'restricted', 'deleted');
 
     private $_maxDocsDefault = 10;
     private $_stateOptionDefault = 'unpublished';
@@ -338,9 +338,7 @@ class Admin_DocumentsController extends Application_Controller_Action {
 
         foreach ($this->_docOptions as $name) {
             $params = array('module' => 'admin', 'controller'=>'documents', 'action'=>'index');
-            if ($name !== 'all') {
-                $params['state'] = $name;
-            }
+            $params['state'] = $name;
             $url = $this->view->url($params, null, true);
             $registers[$name] = $url;
         }
