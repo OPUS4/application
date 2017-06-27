@@ -37,10 +37,16 @@
     <tr>
         <th>ID</th>
         <th><?= $this->translate('admin_documents_table_column_title') ?></th>
+        <?PHP if (!empty($this->series)) : ?>
+        <th>&nbsp;</th>
+        <?PHP endif; ?>
         <th><?= $this->translate('admin_documents_table_column_type') ?></th>
         <th><?= $this->translate('admin_documents_table_column_files') ?></th>
         <th>Bibl.</th>
         <th><?= $this->translate('admin_documents_table_column_updated') ?></th>
+        <?PHP if (!empty($this->collection)) : ?>
+        <th>&nbsp;</th>
+        <?PHP endif; ?>
         <th>&nbsp;</th>
     </tr>
 
