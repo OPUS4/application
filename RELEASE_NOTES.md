@@ -2,11 +2,33 @@
 
 ---
 
-## Release 4.6 2017-04-
+## Release 4.6 2017-07-
 
 OPUS 4 wurde um eine SWORD-Schnittstelle ergänzt. Damit können Pakete
 (ZIB/TAR) mit den Metadaten und Dateien von einem oder mehreren 
 Dokumenten gemäß der SWORD-Spezifikation importiert werden.
+
+### Updates
+
+Für Updates müssen im Allgemeinen folgende Schritte ausgeführt werden. Das gilt
+für die Versionen 4.5-RC1 und neuer.
+
+* Source Code aktualisieren (git pull, gegebenenfalls Konflikte auflösen)
+* Pakete aktualsieren `php composer.phar update --no-dev --optimize-autoloader`
+* Updateskript `bin/update.sh` ausführen
+
+Das Updateskript aktualisiert zuerst die Datenbank und führt dann die weiteren
+notwendigen Schritte aus. 
+
+In der Datenbank werden die Schema-Version und eine OPUS Version gespeichert.
+Anhand dieser Versionen wird bestimmt welche Updateschritt auszuführen sind.
+Nach einem Update führt ein erneuter Aufruf von `bin/update.sh` zu keinen 
+Veränderungen.
+
+Für den Umstieg von OPUS 4.4.5 auf eine neuere Git-Version muss der Dokumentation
+im OPUS 4 Handbuch gefolgt werden.
+
+<http://www.opus-repository.org/userdoc/update/from445.html>
 
 ### DINI
 
@@ -40,6 +62,20 @@ verwendet. Die folgenden Funktionen haben außerdem neue Namen bekommen.
     checkIfUserHasFileAccess    -> fileAccessAllowed
     checkLanguageFile           -> languageImageExists
     getStylesheet               -> frontdoorStylesheet
+    
+### Lizenzen
+    
+Beim Update können die Creative Commons 4.0 Lizenzen hinzugefügt werden.
+Lizenzen besitzen jetzt das Feld **name** in dem die Kurzbezeichnungen
+wie "CC BY 4.0" gespeichert sind. Beim Update wird auch versucht, die 
+Kurzbezeichnungen für die alten "CC 3.0" Lizenzen hinzuzufügen. Wenn die
+Lizenzen lokal editiert wurden kann es dabei zu falschen Zuordnungen 
+kommen. Deshalb sollten die Lizenzen anschließend in der Administration
+überprüft werden.
+
+Das Feld **name** wird momentan noch nicht weiter verwendet. In Zukunft 
+soll es unter anderem für das Matching von Lizenzen beim Import verwendet
+werden.
 
 ---
 

@@ -237,7 +237,7 @@ class Publish_FormControllerTest extends ControllerTestCase {
 
         $this->assertContains('<b>Weitere Formulardaten:</b>', $this->getResponse()->getBody());
         $this->assertContains('<td>22.01.2011</td>', $this->getResponse()->getBody());
-        $this->assertContains('<td>Creative Commons - Namensnennung</td>', $this->getResponse()->getBody());
+        $this->assertContains('<td>Creative Commons - CC BY-ND - Namensnennung - Keine Bearbeitungen 4.0 International</td>', $this->getResponse()->getBody());
         $this->assertContains('<b>Es wurden keine Dateien hochgeladen. </b>', $this->getResponse()->getBody());
     }
 

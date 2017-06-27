@@ -31,9 +31,8 @@
  * @category    Application Unit Test
  * @package     Application_Form
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 class Application_Form_ConfirmationTest extends ControllerTestCase {
 
@@ -112,7 +111,7 @@ class Application_Form_ConfirmationTest extends ControllerTestCase {
     public function testGetModelDisplayName() {
         $form = new Application_Form_Confirmation('Opus_Licence');
         $form->setModel(new Opus_Licence(4));
-        $this->assertEquals('Creative Commons - Namensnennung', $form->getModelDisplayName());
+        $this->assertContains('Creative Commons - CC BY-ND - Namensnennung', $form->getModelDisplayName());
     }
 
     public function testGetModelDisplayNameNoModel() {
@@ -123,7 +122,7 @@ class Application_Form_ConfirmationTest extends ControllerTestCase {
     public function testSetGetModelDisplayName() {
         $form = new Application_Form_Confirmation('Opus_Licence');
         $form->setModel(new Opus_Licence(4));
-        $this->assertEquals('Creative Commons - Namensnennung', $form->getModelDisplayName());
+        $this->assertContains('Creative Commons - CC BY-ND - Namensnennung', $form->getModelDisplayName());
 
         $form->setModelDisplayName('custom display name');
 
@@ -131,7 +130,7 @@ class Application_Form_ConfirmationTest extends ControllerTestCase {
 
         $form->setModelDisplayName(null);
 
-        $this->assertEquals('Creative Commons - Namensnennung', $form->getModelDisplayName());
+        $this->assertContains('Creative Commons - CC BY-ND - Namensnennung', $form->getModelDisplayName());
     }
 
     public function testIsConfirmedYes() {
@@ -248,7 +247,7 @@ class Application_Form_ConfirmationTest extends ControllerTestCase {
 
         $this->form->setQuestion('Klasse: %1$s, Name: %2$s');
 
-        $this->assertEquals('Klasse: Licence, Name: <span class="displayname">Creative Commons - Namensnennung</span>',
+        $this->assertEquals('Klasse: Licence, Name: <span class="displayname">Creative Commons - CC BY-ND - Namensnennung - Keine Bearbeitungen 4.0 International</span>',
             $this->form->renderQuestion());
     }
 

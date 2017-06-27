@@ -33,8 +33,10 @@
 
 /**
  * Base class for update plugins.
+ *
+ * TODO eliminate this class?
  */
-abstract class Application_Update_PluginAbstract
+abstract class Application_Update_PluginAbstract extends Opus_Update_Plugin_Abstract
 {
 
     /**
@@ -43,24 +45,10 @@ abstract class Application_Update_PluginAbstract
      */
     public function println($message)
     {
-        echo $message . PHP_EOL;
+        if (!$this->getQuietMode())
+        {
+            echo $message . PHP_EOL;
+        }
     }
-
-    /**
-     * Writes message to log.
-     * @param $message
-     *
-     * TODO log to file
-     */
-    public function log($message)
-    {
-        echo $message . PHP_EOL;
-    }
-
-    /**
-     * Performs update operation.
-     * @return mixed
-     */
-    abstract public function run();
 
 }

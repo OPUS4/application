@@ -39,7 +39,7 @@
  * TODO reduce to basic XML export (move XSLT into different class)
  * TODO move database/cache access to documents to different layer
  */
-class Export_Model_XmlExport extends Export_Model_ExportPluginAbstract {
+class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract {
 
     /**
      * Holds xml representation of document information to be processed.

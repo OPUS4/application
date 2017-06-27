@@ -44,6 +44,8 @@ abstract class Application_Controller_Action_Helper_Abstract extends Zend_Contro
 
     private $_view = null;
 
+    private $_config = null;
+
     /**
      * Returns logger.
      * @return Zend_Log
@@ -93,6 +95,19 @@ abstract class Application_Controller_Action_Helper_Abstract extends Zend_Contro
     public function setView($view)
     {
         $this->_view = $view;
+    }
+
+    /**
+     * Returns application configuration.
+     */
+    public function getConfig()
+    {
+        if (is_null($this->_config))
+        {
+            $this->_config = Application_Configuration::getInstance()->getConfig();
+        }
+
+        return $this->_config;
     }
 
 }
