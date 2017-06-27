@@ -162,7 +162,10 @@ class Application_Update extends Application_Update_PluginAbstract
             {
                 $this->runScript($script);
             }
-
+            else
+            {
+                $this->log("Skipping script '$basename'");
+            }
 
             // even if a step is skipped the version is updated - scripts can be executed manually again
             $number = ( int )substr($basename, 0, 3);
