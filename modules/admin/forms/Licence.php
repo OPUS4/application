@@ -34,9 +34,8 @@
  * @category    Application
  * @package     Admin_Form
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 class Admin_Form_Licence extends Application_Form_Model_Abstract {
 
@@ -76,9 +75,19 @@ class Admin_Form_Licence extends Application_Form_Model_Abstract {
     const ELEMENT_LINK_LOGO = 'LinkLogo';
 
     /**
+     * Name of form element for link to contract document for licence.
+     */
+    const ELEMENT_LINK_SIGN = 'LinkSign';
+
+    /**
      * Name von Formularelement fuer Feld 'MimeType' von Opus_Licence.
      */
     const ELEMENT_MIME_TYPE = 'MimeType';
+
+    /**
+     * Name von Formularelement fuer Feld 'Name' von Opus_Licence.
+     */
+    const ELEMENT_NAME = 'Name';
 
     /**
      * Name von Formularelement fuer Feld 'NameLong' von Opus_Licence.
@@ -106,6 +115,7 @@ class Admin_Form_Licence extends Application_Form_Model_Abstract {
         $this->setModelClass('Opus_Licence');
 
         $this->addElement('checkbox', self::ELEMENT_ACTIVE);
+        $this->addElement('text', self::ELEMENT_NAME);
         $this->addElement('text', self::ELEMENT_NAME_LONG, array('required' => true, 'size' => 70));
         $this->addElement('Language', self::ELEMENT_LANGUAGE, array('required' => true));
         $this->addElement('text', self::ELEMENT_LINK_LICENCE, array('required' => true, 'size' => 70));
@@ -132,6 +142,7 @@ class Admin_Form_Licence extends Application_Form_Model_Abstract {
         $this->getElement(self::ELEMENT_LINK_LICENCE)->setValue($licence->getLinkLicence());
         $this->getElement(self::ELEMENT_LINK_LOGO)->setValue($licence->getLinkLogo());
         $this->getElement(self::ELEMENT_MIME_TYPE)->setValue($licence->getMimeType());
+        $this->getElement(self::ELEMENT_NAME)->setValue($licence->getName());
         $this->getElement(self::ELEMENT_NAME_LONG)->setValue($licence->getNameLong());
         $this->getElement(self::ELEMENT_SORT_ORDER)->setValue($licence->getSortOrder());
         $this->getElement(self::ELEMENT_POD_ALLOWED)->setValue($licence->getPodAllowed());
@@ -150,6 +161,7 @@ class Admin_Form_Licence extends Application_Form_Model_Abstract {
         $licence->setLinkLicence($this->getElementValue(self::ELEMENT_LINK_LICENCE));
         $licence->setLinkLogo($this->getElementValue(self::ELEMENT_LINK_LOGO));
         $licence->setMimeType($this->getElementValue(self::ELEMENT_MIME_TYPE));
+        $licence->setName($this->getElementValue(self::ELEMENT_NAME));
         $licence->setNameLong($this->getElementValue(self::ELEMENT_NAME_LONG));
         $licence->setSortOrder($this->getElementValue(self::ELEMENT_SORT_ORDER));
         $licence->setPodAllowed($this->getElementValue(self::ELEMENT_POD_ALLOWED));

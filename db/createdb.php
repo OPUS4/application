@@ -24,57 +24,63 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Export
+ * @category    Tests
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
- * Interface for export plugins.
- *
- * The plugins are dynamically registered as actions in the export controller.
- *
- * TODO The export mechanism should/could be separated from the request/response handling.
+ * Script for creating OPUS 4 database with optional name and version
+ * parameters.
  */
-interface Export_Model_ExportPlugin {
 
-    /**
-     * Returns name of plugin.
-     * @return mixed
-     */
-    public function getName();
+defined('APPLICATION_PATH')
+    || define('APPLICATION_PATH', realpath(dirname(dirname(__FILE__))));
 
-    /**
-     * Sets the plugin configuration.
-     * @param Zend_Config $config
-     */
-    public function setConfig(Zend_Config $config);
+defined('APPLICATION_ENV')
+    || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));
 
-    /**
-     * Sets the HTTP request being processed.
-     * @param Zend_Controller_Request_Http $request
-     */
-    public function setRequest(Zend_Controller_Request_Http $request);
+// Configure include path.
+set_include_path(
+    implode(
+        PATH_SEPARATOR, array(
+            '.',
+            dirname(__FILE__),
+            APPLICATION_PATH . '/library',
+            APPLICATION_PATH . '/vendor',
+            get_include_path(),
+        )
+    )
+);
 
-    /**
-     * Sets the HTTP response.
-     * @param Zend_Controller_Response_Http $response
-     */
-    public function setResponse(Zend_Controller_Response_Http $response);
+require_once 'autoload.php';
 
-    /**
-     * Sets the view objekt for rendering the response.
-     * @param Zend_View $view
-     */
-    public function setView(Zend_View $view);
+$application = new Zend_Application(
+    APPLICATION_ENV,
+    array(
+        "config"=>array(
+            APPLICATION_PATH . '/application/configs/application.ini',
+            APPLICATION_PATH . '/application/configs/config.ini',
+            APPLICATION_PATH . '/application/configs/console.ini'
+        )
+    )
+);
 
-    /**
-     * Main function performing export.
-     */
-    public function execute();
+Zend_Registry::set('opus.disableDatabaseVersionCheck', true);
 
-}
+// Bootstrapping application
+$application->bootstrap('Backend');
+
+$options = getopt('v:n:');
+
+$database = new Opus_Database();
+
+$database->drop();
+$database->create();
+$database->importSchema();
+
+$database->import(APPLICATION_PATH . '/db/masterdata'); // TODO only difference to createdb.php in framework
+
+
 

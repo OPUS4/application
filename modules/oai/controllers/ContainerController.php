@@ -62,8 +62,7 @@ class Oai_ContainerController extends Application_Controller_Action {
         }
 
         // prepare response
-        $this->_helper->layout->disableLayout();
-        $this->_helper->viewRenderer->setNoRender();
+        $this->disableViewRendering();
 
         $this->getResponse()
                 ->setHeader('Content-Type', $fileHandle->getMimeType(), true)

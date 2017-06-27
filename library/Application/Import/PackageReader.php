@@ -27,9 +27,9 @@
  * @category    Application
  * @package     Import
  * @author      Sascha Szott
- * @copyright   Copyright (c) 2016
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2016-2017
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 class Application_Import_PackageReader {
 
@@ -131,8 +131,10 @@ class Application_Import_PackageReader {
         $importer = new Application_Import_Importer($xml, false, $logger);
         $importer->enableSwordContext();        
         $importer->setImportDir($dirName);
+
+        $fileTypes = Zend_Controller_Action_HelperBroker::getStaticHelper('fileTypes');
         
-        $validMimeTypes = $this->getValidMimeTypes();
+        $validMimeTypes = $fileTypes->getValidMimeTypes();
         $importer->setValidMimeTypes($validMimeTypes); 
         
         $importer->setAdditionalEnrichments($this->additionalEnrichments);
@@ -141,11 +143,6 @@ class Application_Import_PackageReader {
                 
         $importer->run();
         return $importer->getStatusDoc();
-    }
-    
-    private function getValidMimeTypes() {
-        $config = Zend_Registry::get('Zend_Config');
-        return $config->filetypes->mimetypes->toArray();
     }
 
 }

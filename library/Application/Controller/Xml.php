@@ -69,8 +69,7 @@ class Application_Controller_Xml extends Application_Controller_ModuleAccess {
      */
     public function init() {
         // Controller outputs plain Xml, so rendering and layout are disabled.
-        $this->_helper->viewRenderer->setNoRender(true);
-        $this->_helper->layout()->disableLayout();
+        $this->disableViewRendering();
 
         // Initialize member variables.
         $this->_xml = new DomDocument;

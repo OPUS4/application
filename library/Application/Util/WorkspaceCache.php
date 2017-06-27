@@ -25,74 +25,32 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_Export
+ * @package     Application_Util
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
+ *
+ * TODO maybe merge with a Workspace or Mainenance or "whatever" class
  */
 
-class Export_Model_ExportService extends Application_Model_Abstract
+class Application_Util_WorkspaceCache
 {
 
     /**
-     * @var array containing export plugins
+     * Remove all translation cache files.
      */
-    private $_plugins;
-
-    /**
-     * Returns plugin for action name.
-     *
-     * The plugin is setup for execution.
-     *
-     * @param $name Name of plugin/action.
-     * @return null|Export_Model_ExportPlugin
-     *
-     * TODO should the namespace for plugins be limited (security)?
-     */
-    public function getPlugin($name) {
-        if (isset($this->_plugins[$name])) {
-            $pluginConfig = $this->_plugins[$name];
-            $pluginClass = $pluginConfig->class;
-
-            $plugin = new $pluginClass($name); // TODO good design?
-            $plugin->setConfig($pluginConfig);
-
-            return $plugin;
-        }
-        else {
-            return null;
-        }
-    }
-
-    public function getAllPlugins()
+    public function clearTranslations()
     {
-        return $this->_plugins;
-    }
+        $files = new DirectoryIterator(Application_Configuration::getInstance()->getWorkspacePath() . '/cache');
 
-    /**
-     * Loads export plugins.
-     *
-     * Der Plugin spezifische Teil der Konfiguation wird festgehalten und später verwendet.
-     */
-    public function loadPlugins() {
-        $config = $this->getConfig();
-        if (isset($config->plugins->export)) {
-            $exportPlugins = $config->plugins->export->toArray();
+        foreach ($files as $file)
+        {
+            $basename = $file->getBasename();
 
-            $plugins = array();
-
-            $defaultConfig = $config->plugins->export->default;
-
-            foreach ($exportPlugins as $name => $plugin) {
-                $pluginName = ($name === 'default') ? 'index' : $name;
-
-                $pluginConfig = clone $defaultConfig;
-                $pluginConfig->merge($config->plugins->export->$name);
-
-                $plugins[$pluginName] = $pluginConfig;
+            if (preg_match('/Zend_Translate/', $basename))
+            {
+                unlink($file->getRealPath());
             }
-
-            $this->_plugins = $plugins;
         }
     }
 

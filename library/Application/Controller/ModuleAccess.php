@@ -256,4 +256,13 @@ class Application_Controller_ModuleAccess extends Zend_Controller_Action {
         return $this->_config;
     }
 
+    /**
+     * TODO move to parent class (redundant code)
+     */
+    protected function disableViewRendering() {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender();
+    }
+
+
 }

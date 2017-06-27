@@ -78,8 +78,7 @@ class CitationExport_IndexController extends Application_Controller_Action {
             return;
         };
 
-        $this->_helper->viewRenderer->setNoRender(true);
-        $this->_helper->layout()->disableLayout();
+        $this->disableViewRendering();
 
         // Send plain text response.
         $response = $this->getResponse();

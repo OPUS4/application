@@ -113,6 +113,9 @@ urn.nss = de:kobv:test-opus
 ; ORCiD SETTINGS
 orcid.linkAuthor.frontdoor = 1
 
+; GND SETTINGS
+gnd.linkAuthor.frontdoor = 1
+
 ;DOCUMENTTYPE SETTINGS
 ; You can define which document types should be shown in the publish module or
 ; which ones should be excluded (comma separated names of XML files without
@@ -208,6 +211,45 @@ setup.translation.modules.allowed = default,publish
 ; plugins.export.publist.file.allow.mimetype[application/postscript]=PS
 ; plugins.export.publist.file.allow.mimetype[text/html]=HTML
 ; plugins.export.publist.file.allow.mimetype[application/xhtml+xml]=HTML
+
+; SWORD related configuration settings
+; ====================================
+
+; XML-Ausgabe der SWORD-Schnittstelle formattieren ("pretty printing")
+sword.prettyXml = false
+
+; Inhalt des Elements dcterms:abstract (im Service Document für die Default Collection)
+sword.collection.default.abstract = ''
+
+; Inhalt des Elements sword:collectionPolicy (im Service Document für die Default Collection)
+sword.collection.default.collectionPolicy = ''
+
+; Inhalt des Elements sword:treatment (im Service Document für die Default Collection)
+sword.collection.default.treatment = ''
+
+; Definition der Default OPUS Collection, der die via SWORD importierten Dokumente
+; zugeordnet werden
+; Dieser Parameter muss zwingend in der config.ini definiert werden, damit die
+; SWORD-Schnittstelle funktioniert
+; Hier muss die Nummer einer Collection innerhalb der Collection Role "Import"
+; angegeben werden
+; der Name dieser Collection erscheint im Service Document im Element sword:
+sword.collection.default.number = 'import'
+
+; contains the URI and version of the server software
+sword.generator = 'OPUS 4'
+; contains either a human-readable statement describing treatment the deposited
+; resource has received or a URI that dereferences to such a description.
+sword.treatment = ''
+
+; MIME-Types der Dateien, die importiert werden können
+filetypes.pdf.mimeType = 'application/pdf'
+filetypes.txt.mimeType = 'text/plain'
+filetypes.htm.mimeType = 'text/html'
+filetypes.html.mimeType = 'text/html'
+
+; Allow displaying of PDF directly in browser (default for other types 'attachment')
+filetypes.pdf.contentDisposition = 'inline'
 
 ; The following is needed even if sections are empty.
 [staging : production]

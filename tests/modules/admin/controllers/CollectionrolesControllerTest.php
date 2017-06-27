@@ -35,6 +35,7 @@
 class Admin_CollectionrolesControllerTest extends ControllerTestCase {
 
     private $emptyCollectionRole = null;
+
     private $nonEmptyCollectionRole = null;
 
     public function setUp() {

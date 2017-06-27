@@ -27,22 +27,28 @@
  * @category    Application
  * @package     Module_Default
  * @author      Thoralf Klein <thoralf.klein@zib.de>
- * @copyright   Copyright (c) 2011, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2011-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 ?>
 
 <h1>Sitelinks for Web Crawlers</h1>
 
-<span>
+<span id="years">
 <?php foreach ($this->years as $year) : ?>
-    <a title="documents published in year <?= $year ?>" href="<?= $this->url(array('module' => 'crawlers', 'controller' => 'sitelinks', 'action' => 'list', 'year' => $year)) ?>"><?= $year ?></a> 
+    <?PHP if ($year !== $this->listYear) : ?>
+        <a title="documents published in year <?= $year ?>" href="<?= $this->url(array('module' => 'crawlers', 'controller' => 'sitelinks', 'action' => 'list', 'year' => $year)) ?>"><?= $year ?></a>
+    <?PHP else : ?>
+        <?= $year ?>
+    <?PHP endif ?>
 <?php endforeach; ?>
 </span>
 
-<ol>
+<?PHP if (!is_null($this->ids)) : ?>
+<ol id="documents">
 <?php foreach ($this->ids as $id) : ?>
     <li><a href="<?= $this->url(array('module' => 'frontdoor', 'controller' => 'index', 'action' => 'index', 'docId' => $id)) ?>">document <?= $id ?></a></li>
 <?php endforeach; ?>
 </ol>
+<?PHP endif ?>

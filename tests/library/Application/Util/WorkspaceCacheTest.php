@@ -25,65 +25,31 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_Export
+ * @package     Tests
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Export_Model_ExportServiceTest extends ControllerTestCase
+class Application_Util_WorkspaceCacheTest extends ControllerTestCase
 {
 
-    private $_service;
-
-    public function setUp()
+    public function testClearTranslations()
     {
-        parent::setUp();
+        $cache = new Application_Util_WorkspaceCache();
 
-        $this->_service = new Export_Model_ExportService();
-    }
+        $file = APPLICATION_PATH . '/tests/workspace/cache/Test_Zend_Translate_File';
 
-    public function testLoadPlugins()
-    {
-        $this->_service->loadPlugins();
+        if (!file_exists($file))
+        {
+            touch($file);
+        }
 
-        $plugins = $this->_service->getAllPlugins();
+        $this->assertFileExists($file);
 
-        $this->assertInternalType('array', $plugins);
-        $this->assertCount(5, $plugins);
-        $this->assertArrayHasKey('index', $plugins);
-        $this->assertArrayHasKey('bibtex', $plugins);
-        $this->assertArrayHasKey('ris', $plugins);
-        $this->assertArrayHasKey('csv', $plugins);
-        $this->assertArrayHasKey('publist', $plugins);
+        $cache->clearTranslations();
 
-        $this->assertInstanceOf('Zend_Config', $plugins['index']);
-
-        $bibtexConfig = $plugins['bibtex'];
-
-        $this->assertEquals('Export_Model_XsltExport', $bibtexConfig->class);
-        $this->assertEquals('bibtex', $bibtexConfig->stylesheet);
-        $this->assertEquals('text/plain', $bibtexConfig->contentType);
-        $this->assertEquals('export.bib', $bibtexConfig->attachmentFilename);
-        $this->assertEquals(100, $bibtexConfig->maxDocumentsGuest);
-        $this->assertEquals(500, $bibtexConfig->maxDocumentsUser);
-    }
-
-    public function testGetPlugin()
-    {
-        $this->_service->loadPlugins();
-
-        $plugin = $this->_service->getPlugin('index');
-
-        $this->assertNotNull($plugin);
-        $this->assertInstanceOf('Export_Model_XmlExport', $plugin);
-
-        $pluginConfig = $plugin->getConfig();
-
-        $this->assertNotNull($pluginConfig);
-        $this->assertInstanceOf('Zend_Config', $pluginConfig);
-
-        $this->assertEquals(100, $pluginConfig->maxDocumentsGuest);
+        $this->assertFileNotExists($file);
     }
 
 }
