@@ -137,6 +137,7 @@ class Admin_PersonController extends Application_Controller_Action
         // TODO only include 'limit' and 'start' if provided as URL parameters (not defaults)
         $form = new Admin_Form_PersonListControl();
         $form->setMethod(Zend_Form::METHOD_POST);
+
         // TODO only include limit if not default
         $form->setAction($this->view->url(
             array(

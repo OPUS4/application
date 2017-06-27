@@ -30,9 +30,8 @@
  * @author      Henning Gerhardt (henning.gerhardt@slub-dresden.de)
  * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2009-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2009-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -40,17 +39,20 @@
  *
  * @category    Application
  * @package     Module_Admin
+ *
+ * TODO handle state as a facet
+ * TODO redirect to remove invalid parameters from URL
  */
 class Admin_DocumentsController extends Application_Controller_Action {
 
-    const PARAM_HITSPERPAGE = 'hitsperpage';
+    const PARAM_HITSPERPAGE = 'hitsperpage'; // TODO rename to 'limit'
     const PARAM_STATE = 'state';
-    const PARAM_SORT_BY = 'sort_order';
-    const PARAM_SORT_DIRECTION = 'sort_reverse';
+    const PARAM_SORT_BY = 'sort_order'; // TODO rename to 'sortby'
+    const PARAM_SORT_DIRECTION = 'sort_reverse'; // TODO rename to 'order'
 
     protected $_sortingOptions = array('id', 'title', 'author', 'publicationDate', 'docType');
 
-    protected $_docOptions = array('unpublished', 'inprogress', 'audited', 'published', 'restricted', 'deleted');
+    protected $_docOptions = array('all', 'unpublished', 'inprogress', 'audited', 'published', 'restricted', 'deleted');
 
     private $_maxDocsDefault = 10;
     private $_stateOptionDefault = 'unpublished';
@@ -90,6 +92,8 @@ class Admin_DocumentsController extends Application_Controller_Action {
      * Display documents (all or filtered by state)
      *
      * @return void
+     *
+     * TODO separate out collection and series mode (handle as facets?)
      */
     public function indexAction() {
         $this->view->title = 'admin_documents_index';
@@ -137,6 +141,7 @@ class Admin_DocumentsController extends Application_Controller_Action {
         $this->view->sort_order = $sortOrder;
 
         if (!empty($collectionId)) {
+            // TODO add as filter facet
             $collection = new Opus_Collection($collectionId);
             $result = $collection->getDocumentIds();
             $this->view->collection = $collection;
@@ -152,12 +157,13 @@ class Admin_DocumentsController extends Application_Controller_Action {
             }
         }
         else if (!empty($seriesId)) {
+            // TODO add as filter facet
             $series = new Opus_Series($seriesId);
             $this->view->series = $series;
             $result = $series->getDocumentIdsSortedBySortKey();
         }
         else {
-            $result = $this->_helper->documents($sortOrder, $sortReverse, $state);
+            $result = $this->_helper->documents($sortOrder, !$sortReverse, $state);
         }
 
         $paginator = Zend_Paginator::factory($result);
@@ -332,9 +338,7 @@ class Admin_DocumentsController extends Application_Controller_Action {
 
         foreach ($this->_docOptions as $name) {
             $params = array('module' => 'admin', 'controller'=>'documents', 'action'=>'index');
-            if ($name !== 'all') {
-                $params['state'] = $name;
-            }
+            $params['state'] = $name;
             $url = $this->view->url($params, null, true);
             $registers[$name] = $url;
         }

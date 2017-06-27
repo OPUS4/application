@@ -45,6 +45,10 @@ anhand des Titels in der Sprache der Oberfläche, der dann angezeigt
 wird. Das kann zu einer unerwarteten Reihenfolge führen. Es ist geplant
 dieses Problem in einem kommenden Release zu beheben.
 
+In der Administration wird nun die gesamte Breite des Browserfensters
+genutzt, um mehr Platz für Informationen bei der Auflistung von Dokumenten
+usw. zu haben.
+
 ### Suche
 
 ### Frontdoor

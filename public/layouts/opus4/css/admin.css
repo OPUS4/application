@@ -1176,6 +1176,48 @@ ul.links input:hover{
    font-size: 1.1em;
    cursor: pointer;
 }
+
+.no-js .document-id-form .placeholder {
+    position: absolute;
+    left: 0;
+    top: -2em;
+}
+
+.document-id-form {
+    margin: 1em auto;
+    border: 1px solid;
+    border-radius: 4px;
+    background-color: white;
+    line-height: 2.45em;
+    width: 10em;
+    position: relative;
+    height: 2.3em;
+}
+
+.document-id-form input[type="text"] {
+    border: none;
+    font-size: 1.2em;
+    padding: 2px 0 2px 10px;
+    width: 4em;
+}
+
+.document-id-form input[type="text"] {
+    outline-width: 0;
+}
+
+.document-id-form input[type="submit"] {
+    position: absolute;
+    right: 4px;
+    top: 4px;
+    background-color: #7D7E7A;
+    color: white;
+    border: 1px solid #7d7e7a;
+    border-radius: 4px;
+    padding: 2px 4px;
+    font-size: 1.1em;
+    cursor: pointer;
+}
+
 .adminContainer .wrapper table.documents{
    margin: 0;
 }
@@ -1190,8 +1232,13 @@ ul.links input:hover{
 .paginationControl li{
    float: left;
 }
-.itemCountLinks{
-   float: right;
+.itemCountLinks {
+    float: right;
+}
+
+.itemCountLinks {
+    margin: 0 0 0.8em 0;
+    display: block;
 }
 .itemCountLinks *{
    display: inline;
@@ -1213,7 +1260,6 @@ ul.links input:hover{
     width: 100%;
     height: 28px;
     margin: 2px 0;
-    clear: both;
     text-align: center;
 }
 
@@ -1376,10 +1422,10 @@ ul.links input:hover{
 
 /* @group adminMenuContainer */
 #adminMenuContainer ul{
-   margin: 0;
+   margin: 0 auto 0 auto;
    padding: 0;
    list-style: none;
-   max-width: 987px;
+   max-width: 960px;
 }
 #adminMenuContainer li{
    float: left;
@@ -1670,6 +1716,10 @@ ul.links input:hover{
     color: #ff5a5a;
 }
 
+.adminContainer .wrapper {
+   max-width: 95%;
+}
+
 .adminContainer .wrapper table td.module-options {
     text-align: right; /* TODO not working yet */
 }
@@ -1707,4 +1757,55 @@ ul.links input:hover{
 .adminContainer .persons-table b {
     font-weight: normal;
     background-color: #efe692;
+}
+
+.adminContainer #facetMenu {
+    float: left;
+}
+
+.adminContainer .facet {
+    background: none;
+    background-color: #edf2f9;
+    padding: 0px;
+    margin: 0;
+    width: 190px;
+}
+
+.adminContainer .facet h4 {
+    position: relative;
+    width: 180px;
+    padding: 0;
+    margin: 0;
+    border: none;
+    background: none;
+    background-color: #2d6093;
+    height: auto;
+    font-size: 1em;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    padding-left: 5px;
+    padding-right: 5px;
+    color: white;
+    font-weight: bold;
+}
+
+.adminContainer .facet ul {
+    list-style: none;
+    margin: 0;
+    padding: 2px 5px;
+    /* border: 1px solid #2d6093; */
+    border-top: none;
+}
+
+.left {
+    width: 200px;
+    float: left;
+}
+
+.right {
+    margin-left: 200px;
+}
+
+.clear {
+    clear: both;
 }
