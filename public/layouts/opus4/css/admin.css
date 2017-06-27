@@ -1232,8 +1232,13 @@ ul.links input:hover{
 .paginationControl li{
    float: left;
 }
-.itemCountLinks{
-   float: right;
+.itemCountLinks {
+    float: right;
+}
+
+.itemCountLinks {
+    margin: 0 0 0.8em 0;
+    display: block;
 }
 .itemCountLinks *{
    display: inline;
