@@ -212,12 +212,12 @@ class Application_Update extends Application_Update_PluginAbstract
 
         $this->log("Running '$basename' ... ");
 
-        exec($script, $output, $exitCode);
+        system($script, $exitCode);
 
         if ($exitCode !== 0) {
             $message = "Error ($exitCode) running '$basename'!";
             $this->log($message);
-            throw new Application_Update_Exception($message, $exitCode, $output);
+            throw new Application_Update_Exception($message, $exitCode);
         }
     }
 
