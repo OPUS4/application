@@ -23,39 +23,39 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- */
-
-/**
- * Controller für Verwaltung von Lizenzen.
  *
  * @category    Application
- * @package     Module_Admin
- * @author      Wolfgang Filter (wolfgang.filter@ub.uni-stuttgart.de)
- * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
+ * @package     Application_View_Scripts_Licence
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Admin_LicenceController extends Application_Controller_ActionCRUD {
+?>
 
-    /**
-     * Initialisiert den Controller.
-     *
-     * Setzt die Formularklasse fuer Lizenzen.
-     */
-    public function init() {
-        $this->setFormClass('Admin_Form_Licence');
-        parent::init();
-    }
-
-    /**
-     * Modifiziert Formular für Indextabelle, so daß angepasstes ViewScript verwendet wird.
-     * @return Application_Form_Model_Table
-     */
-    public function getIndexForm() {
-        $form = parent::getIndexForm();
-        $form->setViewScript('licence/modeltable.phtml');
-        return $form;
-    }
-
-}
+<table>
+    <thead>
+        <tr>
+            <th class="visible"><?= $this->translate($this->element->getColumnLabel(0)) ?>
+                <a class="add" href="<?= $this->url(array('action' => 'new')) ?>"><?=
+                    $this->translate('admin_button_add') ?></a></th>
+            <th>Name</th>
+            <th colspan="2">&nbsp;</th>
+        </tr>
+    </thead>
+    <?PHP foreach($this->element->getModels() as $model) : ?>
+        <tr>
+            <td><a href="<?= $this->url(array('action' => 'show', 'id' => $model->getId())) ?>"
+                class="displayname<?= (is_null($model->getField('Visible')) || $model->getVisible()) ? '' : ' invisible'?>"
+                    ><?= htmlspecialchars($model->getDisplayName()) ?></a></td>
+            <td><?= $model->getName()?></td>
+            <td class="edit">
+                <a href="<?= $this->url(array('action' => 'edit', 'id' => $model->getId())) ?>"
+                    ><?= $this->translate('admin_button_edit'); ?></a>
+            </td>
+            <td class="remove">
+                <a href="<?= $this->url(array('action' => 'delete', 'id' => $model->getId())) ?>"
+                    ><?= $this->translate('admin_button_remove'); ?></a>
+            </td>
+        </tr>
+    <?PHP endforeach; ?>
+</table>
