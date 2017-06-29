@@ -43,6 +43,15 @@ Mit dieser Option wird vor jedem Schritt gefragt, ob er ausgeführt werden soll.
 Damit lassen sich problematische Skript überspringen. Im Normalfall sollte das 
 nicht notwendig sein.
 
+#### Update auf 4.6
+
+Beim Update werden führende Nullen von GND-Nummern für Autoren entfernt, um eine
+korrekte Verlinkung in der Frontdoor zu ermöglichen. Führende Nullen werden bei 
+der Eingabe in der Administration nicht mehr akzeptiert.
+
+Im Verzeichnis `db` werden der Link zum Schema-Verzeichnis des OPUS 4 Frameworks
+und die Datei `createdb.sh` entfernt, da sie nicht länger benötigt werden.
+
 ### Imports mit SWORD
 
 Es wurde eine SWORD v1.3 Schnittstelle implementiert. Mit dieser Schnittstelle
@@ -52,9 +61,10 @@ Dokumente in ein OPUS 4 Repositorium hochladen möchten. Das Hochladen ist mit
 Hilfe von einfachen Skripten möglich. Mehr Informationen dazu sind in der OPUS 4
 Dokumentation zu finden.
 
-TODO link to SWORD documentation
-
-TODO kurze Beschreibung zu Einschränkungen (Metadaten)
+Es ist in dieser Version noch nicht ohne weiteres möglich sämtliche Metadaten,
+einschließlich von Verknüpfungen zu Sammlungen, Lizenzen usw. zu importieren. Zur 
+Zeit ist dafür die Kenntnis der internen Datenbank-IDs notwendig. In der weiteren
+Entwicklung wird der Metadaten-Import weiter ausgebaut und vereinfacht werden. 
 
 ### Export
 
@@ -140,7 +150,7 @@ permanente Idenfier wie URNs eingesetzt werden.
 
 TODO Verlinkung ORCID und GND.
     
-### Download von Dateien
+#### Download von Dateien
     
 Dateien werden normalerweise mit der `Content-Disposition: attachment` 
 ausgeliefert, so dass sie vom Browser als Dateien gespeichert und nicht 
@@ -256,17 +266,25 @@ Wenn eine URL geschützt ist, z.B. in der Administration wird der Nutzer
 zur Login-Seite umgeleitet. Nach dem erfolgreichen Login wird der Nutzer
 nun wieder zur ursprünglichen URL umgeleitet. 
 
-### Open Search Hinweise 
-
-TODO OPUSVIER-2167
-
 ### OAI 
 
-xMetaDiss wurde entfernt.
+Das Format **xMetaDiss** wurde von der OAI-Schnittstelle entfernt.
 
-TODO OPUSVIER-3660
-TODO OPUSVIER-3630
-TODO OPUSVIER-3763
+Für OAI-DC wurde die Ausgabe der Zugriffrechte überarbeitet. Mehr 
+Informationen dazu in der Dokumentatin (TODO, OPUSVIER-3660).
+
+Für Lizenzen wird nun der Link anstelle des langen Namens ausgegeben, um
+eine Erkennung in Systemen wie Base zu vereinfachen.
+
+Unbekannte 'identifier' für 'ListMetadataFormats' und doppelte Parameter 
+verursachen nun entsprechende Fehlermeldungen.
+
+#### OpenAire
+
+Im Enrichment 'relation' müssen Projekt-Identifier vollständig angegeben
+werden, also z.B. mit dem Prefix "info:eu-repo/grantAgreement/EC/FP7/". 
+Dieses Feld wird als `<dc:relation>` ausgegeben und kann auch für andere 
+Werte, die keine Projekte identifizieren verwendet werden. 
 
 ### Crawlers - Google Scholar
 
@@ -289,8 +307,6 @@ TODO OPUSVIER-3654
 
 OPUSVIER-3750
 OPUSVIER-3751
-
-Führende Nullen von GND werden entfernt.
 
 ---
 
