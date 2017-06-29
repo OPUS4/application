@@ -1676,3 +1676,7 @@ table + .paginationControl{
     -ms-word-break: break-all;
     display: block;
 }
+
+.adminContainer table.collections td.assigned {
+   font-weight: bold;
+}

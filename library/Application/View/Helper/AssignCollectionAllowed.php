@@ -25,50 +25,59 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_Admin
+ * @package     Application_View_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Admin_Model_Collections extends Application_Model_Abstract {
+/**
+ * Returns true if current collection can be assigned to a document.
+ *
+ * TODO cleanup in connection with refactoring of Admin_CollectionController
+ */
+class Application_View_Helper_AssignCollectionAllowed extends Zend_View_Helper_Abstract
+{
 
-    private $view;
-
-    /**
-     * Returns array with information about collection roles.
-     * @return array
-     *
-     * TODO using view in action helper is not best design
-     */
-    public function getCollectionRolesInfo($documentId) {
-        $collections = array();
-
-        $collectionRoles = Opus_CollectionRole::fetchAll();
-
-        foreach ($collectionRoles as $collectionRole) {
-            $rootCollection = $collectionRole->getRootCollection();
-            if (!is_null($rootCollection)) {
-                array_push(
-                    $collections, array(
-                        'id' => $rootCollection->getId(),
-                        'name' => $this->view->translate('default_collection_role_' . $collectionRole->getDisplayName()),
-                        'hasChildren' => $rootCollection->hasChildren(),
-                        'visible' => $collectionRole->getVisible(),
-                        'isRoot' => true,
-                        'role' => $collectionRole,
-                        'collection' => $rootCollection,
-                        'assigned' => $rootCollection->holdsDocumentById($documentId)
-                    )
-                );
+    public function assignCollectionAllowed($collection, $docId = null)
+    {
+        if (!is_null($docId))
+        {
+            if (isset($collection['assigned']) && $collection['assigned'])
+            {
+                return false;
+            }
+            else if (isset($collection['collection']))
+            {
+                $colObj = $collection['collection'];
+                if ($colObj->holdsDocumentById($docId))
+                {
+                    return false;
+                }
             }
         }
 
-        return $collections;
-    }
 
-    public function setView($view) {
-        $this->view = $view;
+        $role = null;
+
+        if (isset($collection['role']))
+        {
+            $role = $collection['role'];
+        }
+
+        if (isset($collection['isLeaf']) && !$collection['isLeaf'] && !is_null($role)
+            && $role->getAssignLeavesOnly() == 1)
+        {
+            return false;
+        }
+
+        if (isset($collection['isRoot']) && $collection['isRoot'] && !is_null($role)
+            && $role->getAssignRoot() == 0)
+        {
+            return false;
+        }
+
+        return true;
     }
 
 }
