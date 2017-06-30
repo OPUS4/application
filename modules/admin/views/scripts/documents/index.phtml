@@ -120,8 +120,33 @@
 <div class="left">
     <div id="filterMenu">
     </div>
+    <?PHP if (isset($this->person)) : ?>
+    <div id="filter">
+        <h4>Filter</h4>
+        <ul>
+            <li><?= $this->person['last_name'] ?><?PHP if (isset($this->person['first_name'])) : ?>,
+            <?= $this->person['first_name'] ?>
+            <?PHP endif ?>
+            </li>
+            <?PHP if (isset($this->person['identifier_orcid'])) : ?>
+                <li><?= $this->person['identifier_orcid'] ?></li>
+            <?PHP endif ?>
+            <?PHP if (isset($this->person['identifier_gnd'])) : ?>
+                <li><?= $this->person['identifier_orcid'] ?></li>
+            <?PHP endif ?>
+            <?PHP if (isset($this->person['identifier_misc'])) : ?>
+                <li><?= $this->person['identifier_orcid'] ?></li>
+            <?PHP endif ?>
+        </ul>
+    </div>
+    <?PHP endif ?>
     <div id="facetMenu">
-        <?PHP include('facet.phtml') ?>
+        <?PHP if (!isset($this->collectionName) && !isset($this->series)) : ?>
+            <?PHP include('facet.phtml') ?>
+        <?PHP endif ?>
+        <?PHP if (isset($this->person)) : ?>
+            <?PHP include 'facet-role.phtml' ?>
+        <?PHP endif ?>
     </div>
 </div>
 

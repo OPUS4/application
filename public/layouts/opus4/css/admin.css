@@ -1739,7 +1739,7 @@ ul.links input:hover{
 
 .adminContainer .persons-table a.role {
    display: block;
-   width: 7em;
+   width: 10em;
    background-color: lightgray;
    margin: 2px;
    padding: 2px;
@@ -1769,9 +1769,11 @@ ul.links input:hover{
     padding: 0px;
     margin: 0;
     width: 190px;
+    margin-bottom: 0.5em;
 }
 
-.adminContainer .facet h4 {
+.adminContainer .facet h4,
+#filter h4 {
     position: relative;
     width: 180px;
     padding: 0;
@@ -1797,6 +1799,10 @@ ul.links input:hover{
     border-top: none;
 }
 
+.adminContainer .facet ul li.active {
+    font-weight: bold;
+}
+
 .left {
     width: 200px;
     float: left;
@@ -1808,4 +1814,13 @@ ul.links input:hover{
 
 .clear {
     clear: both;
+}
+
+#filter ul {
+   list-style: none;
+   margin: 0 0 10px 0;
+   padding: 3px;
+}
+
+#filter h4 {
 }
