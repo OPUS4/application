@@ -43,16 +43,14 @@
         <th><?= $this->translate('admin_documents_table_column_type') ?></th>
         <th><?= $this->translate('admin_documents_table_column_files') ?></th>
         <th>Bibl.</th>
+        <th><?= $this->translate('admin_documents_table_column_state') ?></th>
         <th><?= $this->translate('admin_documents_table_column_updated') ?></th>
-        <?PHP if (!empty($this->collection)) : ?>
-        <th>&nbsp;</th>
-        <?PHP endif; ?>
         <th>&nbsp;</th>
     </tr>
 
     <?PHP $index = 0; foreach ($this->paginator as $docId) : ?>
         <?PHP $document = new Application_Util_DocumentAdapter($this, $docId); ?>
-        <tr class="<?= ($index++ % 2) ? 'even' : 'odd' ?>">
+        <tr class="<?= ($index++ % 2) ? 'even' : 'odd' ?> <?= $document->getState() ?>">
             <td class="id"><?= $docId ?></td>
             <td class="info">
                 <?PHP $authorsCount = count($document->getAuthors()) - 1; ?>
@@ -96,14 +94,12 @@
                 </span>
                 <?PHP endif; ?>
             </td>
+            <td class="state">
+                <?= $this->translate('admin_documents_state_' . $document->getDocState()) ?>
+            </td>
             <td class="updated">
                 <?= $this->formatDate()->formatOpusDate($document->getDocument()->getServerDateModified(), true) ?>
             </td>
-            <?PHP if (!empty($this->collection)) : ?>
-                <td class="">
-                    <span class=""><?= $document->getDocState() ?></span>
-                </td>
-            <?PHP endif; ?>
             <td class="edit">
                 <a href="<?= $this->documentUrl()->adminEdit($docId) ?>"><?= $this->translate('admin_button_edit') ?></a>
             </td>

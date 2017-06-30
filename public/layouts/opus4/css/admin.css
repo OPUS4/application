@@ -1221,6 +1221,19 @@ ul.links input:hover{
 .adminContainer .wrapper table.documents{
    margin: 0;
 }
+
+.adminContainer .wrapper table.documents tr.published {
+    background-color: #edffed;
+}
+
+.adminContainer .wrapper table.documents tr.restricted {
+    background-color: #ffd3cf;
+}
+
+.adminContainer .wrapper table.documents tr.deleted {
+    background-color: #dcdcdc;
+}
+
 .adminContainer .paginationInfo ul,
 .itemCountLinks ul,
 .paginationControl ul{

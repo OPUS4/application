@@ -313,6 +313,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_documents_table_column_state">
+      <tuv xml:lang="en">
+        <seg>State</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Status</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="admin_documents_table_column_updated">
       <tuv xml:lang="en">
         <seg>Updated</seg>
