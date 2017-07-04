@@ -198,6 +198,67 @@ class Admin_PersonController extends Application_Controller_Action
      */
     public function documentsAction()
     {
+        $person = $this->getPersonCrit();
+
+        $documents = Opus_Person::getPersonDocuments($person);
+
+        $this->view->documents = $documents;
+    }
+
+    /**
+     * Show edit form for a person.
+     */
+    public function editAction()
+    {
+        $request = $this->getRequest();
+
+        if ($request->isPost())
+        {
+            $form = new Admin_Form_Persons();
+
+            $data = $request->getPost();
+
+            $form->populate($data);
+
+            $result = $form->processPost($data, $data);
+
+            switch($result)
+            {
+                case Admin_Form_Persons::RESULT_SAVE:
+                    var_dump($data);
+                    // TODO validate form input
+                    // TODO apply changes (in model)
+                    break;
+                case Admin_Form_Persons::RESULT_CANCEL:
+                    $this->_helper->Redirector->redirectTo('index', null);
+                    return;
+                    break;
+            }
+
+            $this->view->form = $form;
+        }
+        else
+        {
+            $person = $this->getPersonCrit();
+
+            $values = Opus_Person::getPersonValues($person);
+
+            $form = new Admin_Form_Persons();
+
+            $form->populateFromModel($values);
+
+            $this->view->form = $form;
+        }
+    }
+
+    /**
+     * Builds an array for identifying person from parameters.
+     * @return array
+     *
+     * TODO move into model
+     */
+    public function getPersonCrit()
+    {
         $columns = array('last_name', 'first_name', 'identifier_orcid', 'identifier_gnd', 'identifier_misc');
 
         $person = array();
@@ -210,17 +271,7 @@ class Admin_PersonController extends Application_Controller_Action
             }
         }
 
-        $documents = Opus_Person::getPersonDocuments($person);
-
-        $this->view->documents = $documents;
-    }
-
-    /**
-     * Show edit form for a person.
-     */
-    public function editAction()
-    {
-
+        return $person;
     }
 
     /**

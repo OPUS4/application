@@ -75,7 +75,10 @@
                 ?> <span class="count">(<?= $role['documents'] ?>)</span></a>
             <?PHP endforeach ?>
         </td>
-        <td>Edit</td>
+        <td><a href="<?= $this->url(array_merge(array(
+                'module' => 'admin', 'controller' => 'person', 'action' => 'edit'),
+                $person
+            )) ?>"><?= $this->translate('admin_form_action_edit') ?></a></td>
     </tr>
 <?PHP endforeach ?>
 </table>

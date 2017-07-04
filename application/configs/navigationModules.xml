@@ -148,6 +148,13 @@
                             <controller>person</controller>
                             <action>documents</action>
                         </documents>
+                        <edit>
+                            <type>mvc</type>
+                            <label>admin_person_edit</label>
+                            <module>admin</module>
+                            <controller>person</controller>
+                            <action>edit</action>
+                        </edit>
                     </pages>
                 </persons>
 
