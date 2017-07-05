@@ -611,17 +611,6 @@
                     <controller>index</controller>
                     <action>setup</action>
                     <pages>
-                        <config>
-                            <type>mvc</type>
-                            <label>admin_title_config</label>
-                            <description>admin_title_config_description</description>
-                            <group>group-cafelatte</group>
-                            <module>admin</module>
-                            <controller>config</controller>
-                            <action>index</action>
-                            <resource>options</resource>
-                        </config>
-
                         <enrichmentKey>
                             <type>mvc</type>
                             <label>admin_title_enrichmentkey</label>
@@ -791,6 +780,17 @@
                     <controller>index</controller>
                     <action>config</action>
                     <pages>
+                        <config>
+                            <type>mvc</type>
+                            <label>admin_title_config</label>
+                            <description>admin_title_config_description</description>
+                            <group>group-cafelatte</group>
+                            <module>admin</module>
+                            <controller>config</controller>
+                            <action>index</action>
+                            <resource>options</resource>
+                        </config>
+
                         <modules>
                             <type>mvc</type>
                             <label>admin_title_module</label>
