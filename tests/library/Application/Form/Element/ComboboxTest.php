@@ -95,9 +95,36 @@ class Application_Form_Element_ComboboxTest extends FormElementTestCase
 
         $values = array('Berlin', 'München', 'Hamburg');
 
+        $element->setAutocompleteValues($values);
+
         $element->setValue('Bremen');
 
         $this->assertEquals('Bremen', $element->getValue());
+    }
+
+    public function testCustomValidation()
+    {
+        $this->useEnglish();
+
+        $element = $this->getElement();
+
+        $values = array('2010/05/23', '2012/08/03', '2017/04/29');
+
+        $element->setAutocompleteValues($element);
+        $element->addValidator(new Application_Form_Validate_Date());
+
+        $this->assertTrue($element->isValid('2015/04/11'));
+        $this->assertFalse($element->isValid('04.11.2015'));
+        $this->assertFalse($element->isValid('2016/14/11'));
+        $this->assertFalse($element->isValid('2016/11/32'));
+        $this->assertFalse($element->isValid('2016/02/30'));
+
+        $this->useGerman();
+
+        $element->setValidators(array(new Application_Form_Validate_Date()));
+
+        $this->assertTrue($element->isValid('04.11.2015'));
+        $this->assertFalse($element->isValid('2015/04/11'));
     }
 
 }
