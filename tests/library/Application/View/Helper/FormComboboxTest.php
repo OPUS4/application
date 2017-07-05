@@ -43,7 +43,6 @@ class Application_View_Helper_FormComboboxTest extends ControllerTestCase
         $this->_helper = new Application_View_Helper_FormCombobox();
     }
 
-
     public function testFormComboboxWithoutValues()
     {
         $output = $this->_helper->formCombobox('email');
@@ -54,9 +53,39 @@ class Application_View_Helper_FormComboboxTest extends ControllerTestCase
         );
     }
 
-    public function testFormComboboxWithValues()
+    public function testFormComboboxWithOptions()
     {
-        $this->markTestIncomplete('TODO - not implemented yet');
+        $output = $this->_helper->formCombobox(
+            'city', null, null,
+            array('Berlin' => 'Berlin', 'Hamburg' => 'Hamburg')
+        );
+
+        $this->assertContains('<option value="Berlin">Berlin</option>', $output);
+        $this->assertContains('<option value="Hamburg">Hamburg</option>', $output);
+    }
+
+    public function testFormComboboxWithValue()
+    {
+        $output = $this->_helper->formCombobox(
+            'city', 'Bremen', null,
+            array('Berlin' => 'Berlin', 'Hamburg' => 'Hamburg')
+        );
+
+        $this->assertContains('<option value="Bremen">Bremen</option>', $output);
+        $this->assertContains('<option value="Berlin">Berlin</option>', $output);
+        $this->assertContains('<option value="Hamburg">Hamburg</option>', $output);
+    }
+
+    public function testFormComboboxWithValueMatchingOption()
+    {
+        $output = $this->_helper->formCombobox(
+            'city', 'Hamburg', null,
+            array('Berlin' => 'Berlin', 'Hamburg' => 'Hamburg')
+        );
+
+        $this->assertEquals(1, substr_count($output, '<option value="Hamburg"'));
+        $this->assertContains('<option value="Berlin">Berlin</option>', $output);
+        $this->assertContains('<option value="Hamburg" selected="selected">Hamburg</option>', $output);
     }
 
 }

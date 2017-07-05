@@ -37,6 +37,8 @@
  * The rendering could be done using jQuery-UI.
  *
  * TODO or maybe the "datalist" feature of HTML 5.
+ *
+ * A combobox has options like a select element, but it can also have a value that does not match any of the options.
  */
 class Application_Form_Element_Combobox extends Zend_Form_Element_Multi
 {
@@ -47,6 +49,9 @@ class Application_Form_Element_Combobox extends Zend_Form_Element_Multi
 
     public function init()
     {
+        $this->setAutoInsertNotEmptyValidator(false);
+        $this->setRegisterInArrayValidator(false);
+
         parent::init();
 
         $this->addPrefixPath('Application_Form_Decorator', 'Application/Form/Decorator', Zend_Form::DECORATOR);
@@ -78,6 +83,7 @@ class Application_Form_Element_Combobox extends Zend_Form_Element_Multi
             if (is_array($values))
             {
                 $options = array_combine($values, $values);
+                $options = array_diff($options, array(null)); // remove options with null value
             }
             else
             {

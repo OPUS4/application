@@ -57,4 +57,47 @@ class Application_Form_Element_ComboboxTest extends FormElementTestCase
         $this->assertEquals(array('Berlin' => 'Berlin', 'München' => 'München', 'Hamburg' => 'Hamburg'), $options);
     }
 
+    public function testSetAutocompleteValuesWithNullValueInArray()
+    {
+        $element = $this->getElement();
+
+        $values = array('Berlin', 'München', null, 'Hamburg');
+
+        $element->setAutocompleteValues($values);
+
+        $options = $element->getMultiOptions();
+
+        $this->assertEquals(array('Berlin' => 'Berlin', 'München' => 'München', 'Hamburg' => 'Hamburg'), $options);
+    }
+
+    public function testIsValid()
+    {
+        $element = $this->getElement();
+
+        $values = array('Berlin', 'München', 'Hamburg');
+
+        $element->setAutocompleteValues($values);
+
+        $this->assertTrue($element->isValid('Berlin'));
+
+        // combo box should accept new values
+        $this->assertTrue($element->isValid('Bremen'));
+
+        // combo box should accept empty values
+        $this->assertTrue($element->isValid(null));
+        $this->assertTrue($element->isValid(''));
+        $this->assertTrue($element->isValid('  '));
+    }
+
+    public function testSetValue()
+    {
+        $element = $this->getElement();
+
+        $values = array('Berlin', 'München', 'Hamburg');
+
+        $element->setValue('Bremen');
+
+        $this->assertEquals('Bremen', $element->getValue());
+    }
+
 }

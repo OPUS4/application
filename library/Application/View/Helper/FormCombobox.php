@@ -42,15 +42,23 @@ class Application_View_Helper_FormCombobox extends Zend_View_Helper_FormElement
         $info = $this->_getInfo($name, $value, $attribs, $options, $listsep);
         extract($info);
 
-        $value = array_map('strval', (array) $value);
-
         $xhtml = "<div class=\"ui-widget\">\n    ";
 
         $xhtml .= "<select name=\"$name\" class=\"combobox\">\n";
 
+        if (!is_null($value) && strlen(trim($value)) > 0 && !in_array($value, $options))
+        {
+            $xhtml .= "<option value=\"$value\">$value</option>\n";
+        }
+
         foreach ((array) $options as $optionValue => $optionLabel)
         {
-            $xhtml .= "<option value=\"$optionValue\">$optionLabel</option>\n";
+            $xhtml .= "<option value=\"$optionValue\"";
+            if ($optionValue === $value)
+            {
+                $xhtml .= ' selected="selected"';
+            }
+            $xhtml .= ">$optionLabel</option>\n";
         }
 
         $xhtml .= "</select>\n";
