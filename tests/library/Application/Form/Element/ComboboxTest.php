@@ -110,7 +110,7 @@ class Application_Form_Element_ComboboxTest extends FormElementTestCase
 
         $values = array('2010/05/23', '2012/08/03', '2017/04/29');
 
-        $element->setAutocompleteValues($element);
+        $element->setAutocompleteValues($values);
         $element->addValidator(new Application_Form_Validate_Date());
 
         $this->assertTrue($element->isValid('2015/04/11'));
@@ -125,6 +125,17 @@ class Application_Form_Element_ComboboxTest extends FormElementTestCase
 
         $this->assertTrue($element->isValid('04.11.2015'));
         $this->assertFalse($element->isValid('2015/04/11'));
+    }
+
+    public function testSetSingleValue()
+    {
+        $element = $this->getElement();
+
+        $element->setAutocompleteValues('Berlin');
+
+        $options = $element->getMultiOptions();
+
+        $this->assertEquals(array('Berlin' => 'Berlin'), $options);
     }
 
 }

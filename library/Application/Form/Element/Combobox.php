@@ -87,7 +87,7 @@ class Application_Form_Element_Combobox extends Zend_Form_Element_Multi
             }
             else
             {
-                $options = array($values);
+                $options = array($values => $values);
             }
 
             $this->setMultiOptions($options);
