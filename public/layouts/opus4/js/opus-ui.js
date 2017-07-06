@@ -21,7 +21,7 @@ $( function() {
             this.input = $( "<input>" )
                 .appendTo( this.wrapper )
                 .val( value )
-                .attr( "title", "bla" )
+                .attr( "title", "" )
                 .attr( "name", elemName )
                 .attr( "id", elemId )
                 .addClass( "custom-combobox-input ui-widget ui-widget-content ui-state-default ui-corner-left" )

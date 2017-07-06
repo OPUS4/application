@@ -1582,3 +1582,12 @@ a.gnd-link {
 .admin_person_edit .ui-widget-content {
     background-color: white;
 }
+
+.admin_person_edit .data-wrapper {
+    margin-bottom: 0.75em;
+}
+
+.update-field-wrapper {
+    padding-bottom: 0.5em;
+    font-size: 1em;
+}

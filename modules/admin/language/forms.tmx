@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tmx SYSTEM "http://www.gala-global.org/oscarStandards/tmx/tmx14.dtd">
+<tmx version="1.4">
+
+<header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
+</header>
+
+<body>
+
+    <tu tuid="admin_form_update_field">
+      <tuv xml:lang="en">
+        <seg>Update field</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Feld aktualisieren</seg>
+      </tuv>
+    </tu>
+
+</body>
+
+</tmx>
