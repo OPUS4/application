@@ -38,6 +38,10 @@
  *
  * This form can show multiple values per field. The values are available for selection or a new value can be provided.
  * Each field is paired with a checkbox to enable or disable it for the update.
+ *
+ * The form renders additional checkbox inputs for each field. When populating the form those values are used to set
+ * the attribute 'active' for each element. That attribute is used to determine if the field should be updated in all
+ * matching objects when the form is saved.
  */
 class Admin_Form_Persons extends Application_Form_Model_Abstract
 {
@@ -128,6 +132,71 @@ class Admin_Form_Persons extends Application_Form_Model_Abstract
 
         $this->getElement(self::ELEMENT_IDENTIFIER_GND)->addValidator(new Application_Form_Validate_Gnd());
         $this->getElement(self::ELEMENT_IDENTIFIER_ORCID)->addValidator(new Application_Form_Validate_Orcid());
+
+        $this->removeElement(self::ELEMENT_MODEL_ID); // form represents multiple objects (ids)
+
+        $this->addUpdateFieldDecorator();
+    }
+
+    /**
+     * Set decorators for all input elements to add 'UpdateField'.
+     *
+     * Decorator 'UpdateField' will render a checkbox for a element. The checkbox can be used to enable or disable the
+     * updating of the database for this field.
+     */
+    public function addUpdateFieldDecorator()
+    {
+        $elements = $this->getElements();
+
+        foreach ($elements as $key => $element)
+        {
+            $decorators = $element->getDecorators();
+            $index = array_search('Zend_Form_Decorator_Errors', array_keys($decorators));
+
+            // array_splice($decorators, $index + 1, 0, array('UpdateField' => 'Test'));
+
+            if ($index !== false)
+            {
+                $element->setDecorators(array(
+                    'ViewHelper',
+                    'Description',
+                    'Errors',
+                    'UpdateField',
+                    'ElementHtmlTag',
+                    array('LabelNotEmpty', array('tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend')),
+                    array(array('dataWrapper' => 'HtmlTagWithId'), array('tag' => 'div', 'class' => 'data-wrapper'))
+                ));
+
+            }
+        }
+    }
+
+    /**
+     * Looks at UpdateEnabled values to set active attribute of elements.
+     *
+     * @param array $post
+     */
+    public function populate(array $values)
+    {
+        parent::populate($values);
+
+        foreach ($values as $key => $value)
+        {
+            if (strpos($key, 'UpdateEnabled'))
+            {
+                if (strtolower($value) == 'on')
+                {
+                    $elemName = preg_filter('/(.*)UpdateEnabled/', '$1', $key);
+
+                    $element = $this->getElement($elemName);
+
+                    if (!is_null($element))
+                    {
+                        $element->setAttrib('active', true);
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -148,8 +217,19 @@ class Admin_Form_Persons extends Application_Form_Model_Abstract
         $this->getElement(self::ELEMENT_ACADEMIC_TITLE)->setAutocompleteValues($values['academic_title']);
         $this->getElement(self::ELEMENT_EMAIL)->setAutocompleteValues($values['email']);
 
-        // TODO formatting of dates
-        $this->getElement(self::ELEMENT_DATE_OF_BIRTH)->setAutocompleteValues($values['date_of_birth']);
+        $dates = $values['date_of_birth'];
+
+        $formattedDates = array();
+
+        $datesHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('dates');
+
+        foreach ($dates as $date)
+        {
+            $opusDate = new Opus_Date($date);
+            array_push($formattedDates, $datesHelper->getDateString($opusDate));
+        }
+
+        $this->getElement(self::ELEMENT_DATE_OF_BIRTH)->setAutocompleteValues($formattedDates);
     }
 
     /**

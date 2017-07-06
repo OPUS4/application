@@ -1591,3 +1591,8 @@ a.gnd-link {
     padding-bottom: 0.5em;
     font-size: 1em;
 }
+
+.admin_person_edit .data-wrapper label {
+    font-size: 1.1em;
+}
+

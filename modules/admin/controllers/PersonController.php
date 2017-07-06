@@ -212,6 +212,8 @@ class Admin_PersonController extends Application_Controller_Action
     {
         $request = $this->getRequest();
 
+        $person = $this->getPersonCrit();
+
         if ($request->isPost())
         {
             $form = new Admin_Form_Persons();
@@ -225,7 +227,6 @@ class Admin_PersonController extends Application_Controller_Action
             switch($result)
             {
                 case Admin_Form_Persons::RESULT_SAVE:
-                    var_dump($data);
                     // TODO validate form input
                     // TODO apply changes (in model)
                     break;
@@ -235,20 +236,20 @@ class Admin_PersonController extends Application_Controller_Action
                     break;
             }
 
-            $this->view->form = $form;
+            // TODO current values need to be added to form (select)
         }
         else
         {
-            $person = $this->getPersonCrit();
-
-            $values = Opus_Person::getPersonValues($person);
-
             $form = new Admin_Form_Persons();
-
-            $form->populateFromModel($values);
-
-            $this->view->form = $form;
+            $data = array();
         }
+
+        $values = Opus_Person::getPersonValues($person);
+
+        $form->populateFromModel($values);
+        $form->populate($data);
+
+        $this->view->form = $form;
     }
 
     /**
