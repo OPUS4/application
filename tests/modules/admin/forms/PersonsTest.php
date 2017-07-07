@@ -73,6 +73,30 @@ class Admin_Form_PersonsTest extends ControllerTestCase
         }
     }
 
+    public function testPopulateFromModelEmptyValues()
+    {
+        $values = array(
+            'last_name' => 'Smith',
+            'first_name' => null,
+            'identifier_orcid' => null,
+            'identifier_gnd' => null,
+            'identifier_misc' => null,
+            'place_of_birth' => null,
+            'date_of_birth' => null,
+            'email' => null,
+            'academic_title' => null
+        );
+
+        $form = new Admin_Form_Persons();
+
+        $form->populateFromModel($values);
+
+        $this->assertEmpty($form->getElement('Email')->getMultiOptions());
+        $this->assertEmpty($form->getElement('PlaceOfBirth')->getMultiOptions());
+        $this->assertEmpty($form->getElement('DateOfBirth')->getMultiOptions());
+        $this->assertEmpty($form->getElement('AcademicTitle')->getMultiOptions());
+    }
+
     public function testPopulateFromModel()
     {
         $this->useEnglish();
@@ -161,17 +185,166 @@ class Admin_Form_PersonsTest extends ControllerTestCase
 
     public function testPopulateFromPost()
     {
+        $post = array(
+            'LastName' => 'Smith',
+            'FirstName' => 'John',
+            'FirstNameUpdateEnabled' => 'on',
+            'Email' => 'test@example.org',
+            'PlaceOfBirth' => 'Berlin',
+            'DateOfBirth' => '20.03.2003',
+            'IdentifierOrcid' => '0000-0000-1234-5678',
+            'IdentifierOrcidUpdateEnabled' => 'on',
+            'IdentifierGnd' => '123456789',
+            'IdentifierMisc' => 'id1234',
+            'AcademicTitle' => 'PhD',
+        );
 
+        $form = new Admin_Form_Persons();
+
+        $form->populate($post);
+
+        $this->assertEquals('Smith', $form->getElement('LastName')->getValue());
+        $this->assertEquals('John', $form->getElement('FirstName')->getValue());
+        $this->assertEquals('test@example.org', $form->getElement('Email')->getValue());
+        $this->assertEquals('Berlin', $form->getElement('PlaceOfBirth')->getValue());
+        $this->assertEquals('20.03.2003', $form->getElement('DateOfBirth')->getValue());
+        $this->assertEquals('0000-0000-1234-5678', $form->getElement('IdentifierOrcid')->getValue());
+        $this->assertEquals('123456789', $form->getElement('IdentifierGnd')->getValue());
+        $this->assertEquals('id1234', $form->getElement('IdentifierMisc')->getValue());
+        $this->assertEquals('PhD', $form->getElement('AcademicTitle')->getValue());
+
+        $this->assertNull($form->getElement('LastName')->getAttrib('active'));
+        $this->assertTrue($form->getElement('FirstName')->getAttrib('active'));
+        $this->assertTrue($form->getElement('IdentifierOrcid')->getAttrib('active'));
+        $this->assertNull($form->getElement('IdentifierGnd')->getAttrib('active'));
+        $this->assertNull($form->getElement('IdentifierMisc')->getAttrib('active'));
+        $this->assertNull($form->getElement('Email')->getAttrib('active'));
+        $this->assertNull($form->getElement('PlaceOfBirth')->getAttrib('active'));
+        $this->assertNull($form->getElement('DateOfBirth')->getAttrib('active'));
+        $this->assertNull($form->getElement('AcademicTitle')->getAttrib('active'));
     }
 
-    public function testValidationTrue()
+    public function testValidationRequired()
     {
+        $form = new Admin_Form_Persons();
 
+        $this->assertTrue($form->isValid(array('LastName' => 'Smith')));
+
+        $this->assertFalse($form->isValid(array()));
+        $this->assertContains('isEmpty', $form->getErrors('LastName'));
+
+        $this->assertFalse($form->isValid(array('LastName' => '   ')));
+        $this->assertContains('isEmpty', $form->getErrors('LastName'));
     }
 
-    public function testValidationFalse()
+    public function testValidateDates()
     {
+        $this->useEnglish();
 
+        $form = new Admin_Form_Persons();
+
+        $this->assertTrue($form->isValid(array(
+            'LastName' => 'Smith',
+            'DateOfBirth' => '2017/07/23'
+        )));
+
+        $this->assertFalse($form->isValid(array(
+            'LastName' => 'Smith',
+            'DateOfBirth' => '2017'
+        )));
+
+        $this->assertFalse($form->isValid(array(
+            'LastName' => 'Smith',
+            'DateOfBirth' => '23.07.2017'
+        )));
+
+        $this->assertFalse($form->isValid(array(
+            'LastName' => 'Smith',
+            'DateOfBirth' => '2017/02/29'
+        )));
+
+        $this->assertTrue($form->isValid(array(
+            'LastName' => 'Smith',
+            'DateOfBirth' => '2016/02/29'
+        )));
+    }
+
+    public function testValidateDatesGerman()
+    {
+        $this->useGerman();
+
+        $form = new Admin_Form_Persons();
+
+        $this->assertTrue($form->isValid(array(
+            'LastName' => 'Schmidt',
+            'DateOfBirth' => '23.07.2017'
+        )));
+
+        $this->assertFalse($form->isValid(array(
+            'LastName' => 'Schmidt',
+            'DateOfBirth' => '2017'
+        )));
+
+        $this->assertFalse($form->isValid(array(
+            'LastName' => 'Schmidt',
+            'DateOfBirth' => '2017/07/23'
+        )));
+    }
+
+
+    public function testValidateEmail()
+    {
+        $form = new Admin_Form_Persons();
+
+        $this->assertTrue($form->isValid(array(
+            'LastName' => 'Smith',
+            'Email' => 'test@example.org'
+        )));
+
+        $this->assertFalse($form->isValid(array(
+            'LastName' => 'Smith',
+            'Email' => 'test(at)example.org'
+        )));
+
+        $this->assertFalse($form->isValid(array(
+            'LastName' => 'Smith',
+            'Email' => 'test@'
+        )));
+
+        $this->assertFalse($form->isValid(array(
+            'LastName' => 'Smith',
+            'Email' => 'example.org'
+        )));
+    }
+
+    public function testValidateIdentifierOrcid()
+    {
+        $form = new Admin_Form_Persons();
+
+        $this->assertTrue($form->isValid(array(
+            'LastName' => 'Smith',
+            'IdentifierOrcid' => '0000-0002-1825-0097'
+        )));
+
+        $this->assertFalse($form->isValid(array(
+            'LastName' => 'Smith',
+            'IdentifierOrcid' => '0000000218250097'
+        )));
+    }
+
+    public function testValidateIdentifierGnd()
+    {
+        $form = new Admin_Form_Persons();
+
+        $this->assertTrue($form->isValid(array(
+            'LastName' => 'Smith',
+            'IdentifierGnd' => '118768581'
+        )));
+
+        $this->assertFalse($form->isValid(array(
+            'LastName' => 'Smith',
+            'IdentifierGnd' => '0118768581'
+        )));
     }
 
     public function testGetChanges()
@@ -179,19 +352,49 @@ class Admin_Form_PersonsTest extends ControllerTestCase
         $form = new Admin_Form_Persons();
 
         $form->getElement('Email')->setValue('test@example.org')->setAttrib('active', true);
+        $form->getElement('IdentifierMisc')->setValue('id1234');
+        $form->getElement('PlaceOfBirth')->setAttrib('active', true);
 
         $changes = $form->getChanges();
 
-        $this->assertCount(1, $changes);
-        $this->assertEquals(array('Email' => 'test@example.org'), $changes);
+        $this->assertNotNull($changes);
+        $this->assertInternalType('array', $changes);
+        $this->assertCount(2, $changes);
+
+        $this->assertArrayHasKey('Email', $changes);
+        $this->assertEquals('test@example.org', $changes['Email']);
+
+        $this->assertArrayHasKey('PlaceOfBirth', $changes);
+        $this->assertNull($changes['PlaceOfBirth']);
     }
 
     /**
-     * If validation fails and the form is displayed again, manually enter values of comboboxes
+     * If validation fails and the form is displayed again, manually entered values of comboboxes
      * should be kept.
      */
-    public function testKeepPostValues() {
+    public function testKeepPostValues()
+    {
+        $form = new Admin_Form_Persons();
 
+        $form->populateFromModel(array(
+            'first_name' => 'John',
+            'last_name' => 'Smith',
+            'identifier_orcid' => '',
+            'identifier_gnd' => '',
+            'identifier_misc' => '',
+            'email' => '',
+            'place_of_birth' => array('Berlin', 'München'),
+            'date_of_birth' => null,
+            'academic_title' => ''
+        ));
+
+        $form->getElement('PlaceOfBirth')->setValue('Köln');
+
+        $output = $form->render(Zend_Registry::get('Opus_View'));
+
+        $this->assertContains('<option value="Köln">Köln</option>', $output);
+        $this->assertContains('<option value="Berlin">Berlin</option>', $output);
+        $this->assertContains('<option value="München">München</option>', $output);
     }
 
 }

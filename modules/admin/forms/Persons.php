@@ -119,12 +119,15 @@ class Admin_Form_Persons extends Application_Form_Model_Abstract
         );
         $this->addElement('text', self::ELEMENT_FIRST_NAME, array('label' => 'FirstName', 'size' => 50));
 
-        // TODO add validation for email
-        $this->addElement('combobox', self::ELEMENT_EMAIL, array('label' => 'Email'));
+        $email = $this->createElement('combobox', self::ELEMENT_EMAIL, array('label' => 'Email'));
+        $email->addValidator('EmailAddress');
+        $this->addElement($email);
+
         $this->addElement('combobox', self::ELEMENT_PLACE_OF_BIRTH, array('label' => 'PlaceOfBirth', 'size' => 40));
 
-        // TODO add validation for date
-        $this->addElement('combobox', self::ELEMENT_DATE_OF_BIRTH, array('label' => 'DateOfBirth'));
+        $dateOfBirth = $this->createElement('combobox', self::ELEMENT_DATE_OF_BIRTH, array('label' => 'DateOfBirth'));
+        $dateOfBirth->addValidator(new Application_Form_Validate_Date());
+        $this->addElement($dateOfBirth);
 
         $this->addElement('text', self::ELEMENT_IDENTIFIER_GND, array('label' => 'IdentifierGnd', 'size' => 40));
         $this->addElement('text', self::ELEMENT_IDENTIFIER_ORCID, array('label' => 'IdentifierOrcid', 'size' => 40));
@@ -136,6 +139,9 @@ class Admin_Form_Persons extends Application_Form_Model_Abstract
         $this->removeElement(self::ELEMENT_MODEL_ID); // form represents multiple objects (ids)
 
         $this->addUpdateFieldDecorator();
+
+        $save = $this->getElement('Save');
+        $save->setLabel('form_button_next');
     }
 
     /**
@@ -219,17 +225,24 @@ class Admin_Form_Persons extends Application_Form_Model_Abstract
 
         $dates = $values['date_of_birth'];
 
-        $formattedDates = array();
-
-        $datesHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('dates');
-
-        foreach ($dates as $date)
+        if (!is_null($dates) && is_array($dates))
         {
-            $opusDate = new Opus_Date($date);
-            array_push($formattedDates, $datesHelper->getDateString($opusDate));
-        }
+            $formattedDates = array();
 
-        $this->getElement(self::ELEMENT_DATE_OF_BIRTH)->setAutocompleteValues($formattedDates);
+            $datesHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('dates');
+
+            foreach ($dates as $date)
+            {
+                $opusDate = new Opus_Date($date);
+                array_push($formattedDates, $datesHelper->getDateString($opusDate));
+            }
+
+            $this->getElement(self::ELEMENT_DATE_OF_BIRTH)->setAutocompleteValues($formattedDates);
+        }
+        else
+        {
+            $this->getElement(self::ELEMENT_DATE_OF_BIRTH)->setValue($dates);
+        }
     }
 
     /**
@@ -261,7 +274,26 @@ class Admin_Form_Persons extends Application_Form_Model_Abstract
      */
     public function getChanges()
     {
-        return null;
+        $elements = $this->getElements();
+
+        $changes = array();
+
+        foreach ($elements as $element)
+        {
+            if ($element->getAttrib('active'))
+            {
+                $value = $element->getValue();
+
+                if (strlen(trim($value)) == 0)
+                {
+                    $value = null;
+                }
+
+                $changes[$element->getName()] = $value;
+            }
+        }
+
+        return $changes;
     }
 
     /**
