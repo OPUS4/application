@@ -120,7 +120,7 @@ class Admin_Form_Persons extends Application_Form_Model_Abstract
         $this->addElement('text', self::ELEMENT_FIRST_NAME, array('label' => 'FirstName', 'size' => 50));
 
         $email = $this->createElement('combobox', self::ELEMENT_EMAIL, array('label' => 'Email'));
-        $email->addValidator('EmailAddress');
+        $email->addValidator(new Application_Form_Validate_EmailAddress());
         $this->addElement($email);
 
         $this->addElement('combobox', self::ELEMENT_PLACE_OF_BIRTH, array('label' => 'PlaceOfBirth', 'size' => 40));
