@@ -227,16 +227,18 @@ class Admin_PersonController extends Application_Controller_Action
             switch($result)
             {
                 case Admin_Form_Persons::RESULT_SAVE:
-                    // TODO validate form input
-                    // TODO apply changes (in model)
+                    if ($form->isValid($data))
+                    {
+                        $changes = $form->getChanges();
+                        Opus_Person::updateAll($person, $changes);
+                        $this->_helper->Redirector->redirectTo('index', null);
+                    }
                     break;
                 case Admin_Form_Persons::RESULT_CANCEL:
                     $this->_helper->Redirector->redirectTo('index', null);
                     return;
                     break;
             }
-
-            // TODO current values need to be added to form (select)
         }
         else
         {
