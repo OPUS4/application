@@ -74,7 +74,7 @@
 <table class="collections">
     <?php foreach($this->collections as $i => $collection) : ?>
     <tr class="<?= ($i %2 == 0) ? 'even' : 'odd'?>">
-        <td class="<?= ($collection['visible'] === '1') ? 'visible' : 'invisible' ?>">
+        <td class="<?= ($collection['visible'] === '1') ? 'visible' : 'invisible' ?><?=($collection['assigned']) ? ' assigned' : '' ?>">
             <?php if ($collection['hasChildren']) : ?>
                 <a href="<?=$this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'assign',
                     'id' => $collection['id'], 'document' => $this->documentId), null, true)?>"><?=
@@ -84,10 +84,12 @@
             <?php endif ?>
         </td>
         <td>
+            <?PHP if ($this->assignCollectionAllowed($collection, $this->documentId)) : ?>
             <form method="post" action="<?= $this->url(array('module' => 'admin', 'controller' => 'collection',
                 'action' => 'assign', 'id' => $collection['id'], 'document' => $this->documentId), null, true)?>">
                 <input type="submit" value="<?=$this->translate('admin_collections_collection_assign_here')?>" />
             </form>
+            <?PHP endif ?>
         </td>
     </tr>
     <?PHP endforeach; ?>

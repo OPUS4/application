@@ -1837,3 +1837,7 @@ ul.links input:hover{
 
 #filter h4 {
 }
+
+.adminContainer table.collections td.assigned {
+   font-weight: bold;
+}

@@ -1,5 +1,7 @@
-<?php
-/*
+#!/usr/bin/env php
+
+<?PHP
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -25,37 +27,44 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Application_Update
+ * @package     Scripts
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
- * Helper class for common functions used in update scripts.
+ * Remove files for database handling that are not needed anymore.
  *
- * This class extends Application_Update_PluginAbstract for the common logging and other functions, but
- * it is not meant to be "run" like other update plugin classes.
+ * TODO not sure if this should be moved into class
  */
-class Application_Update_Helper extends Application_Update_PluginAbstract
+
+require_once dirname(__FILE__) . '/../common/update.php';
+
+$helper = new Application_Update_Helper();
+
+$helper->log('Removing database schema link and createdb.sh script ...');
+
+$schemaLink = APPLICATION_PATH . '/db/schema';
+
+if (is_link($schemaLink))
 {
+    unlink($schemaLink);
+    $helper->log("Deleted link '$schemaLink'");
+}
+else
+{
+    $helper->log("Link '$schemaLink' not found");
+}
 
-    public function run()
-    {
-        // do nothing
-    }
+$createdbScript = APPLICATION_PATH . '/db/createdb.sh';
 
-    /**
-     * Asks the user a yes|no question during update.
-     * @param $question
-     */
-    public function askYesNo($question)
-    {
-        print($question);
-
-        $response = trim(readline());
-
-        return ($response == 'Y' || $response == 'y');
-    }
-
+if (is_file($createdbScript))
+{
+    unlink($createdbScript);
+    $helper->log("Deleted file '$createdbScript'");
+}
+else
+{
+    $helper->log("File '$createdbScript' not found");
 }

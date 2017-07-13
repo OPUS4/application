@@ -8,10 +8,15 @@ OPUS 4 wurde um eine SWORD-Schnittstelle ergänzt. Damit können Pakete
 (ZIB/TAR) mit den Metadaten und Dateien von einem oder mehreren 
 Dokumenten gemäß der SWORD-Spezifikation importiert werden.
 
+Die Dokumentation ist nun unter <http://www.opus-repository.org> zu finden.
+
+Es wurden eine Menge kleiner und großer Bugs gefixt. Eine Auflistung der 
+Tickets findet sich in CHANGES.md.
+
 ### Updates
 
-Für Updates müssen im Allgemeinen folgende Schritte ausgeführt werden. Das gilt
-für die Versionen 4.5-RC1 und neuer.
+Für Updates müssen im Allgemeinen folgende Schritte ausgeführt werden. Das 
+gilt für die Versionen 4.5-RC1 und neuer.
 
 * Source Code aktualisieren (git pull, gegebenenfalls Konflikte auflösen)
 * Pakete aktualsieren `php composer.phar update --no-dev --optimize-autoloader`
@@ -25,12 +30,59 @@ Anhand dieser Versionen wird bestimmt welche Updateschritt auszuführen sind.
 Nach einem Update führt ein erneuter Aufruf von `bin/update.sh` zu keinen 
 Veränderungen.
 
-Für den Umstieg von OPUS 4.4.5 auf eine neuere Git-Version muss der Dokumentation
-im OPUS 4 Handbuch gefolgt werden.
+Für den Umstieg von OPUS 4.4.5 auf eine neuere Git-Version muss der 
+Dokumentation im OPUS 4 Handbuch gefolgt werden.
 
 <http://www.opus-repository.org/userdoc/update/from445.html>
 
+Beim Update kann jeder optional jeder Updateschritt vom Nutzer bestätigt werden.
+
+    $ bin/update.sh --confirm-steps
+    
+Mit dieser Option wird vor jedem Schritt gefragt, ob er ausgeführt werden soll. 
+Damit lassen sich problematische Skript überspringen. Im Normalfall sollte das 
+nicht notwendig sein.
+
+#### Update auf 4.6
+
+Beim Update werden führende Nullen von GND-Nummern für Autoren entfernt, um eine
+korrekte Verlinkung in der Frontdoor zu ermöglichen. Führende Nullen werden bei 
+der Eingabe in der Administration nicht mehr akzeptiert.
+
+Im Verzeichnis `db` werden der Link zum Schema-Verzeichnis des OPUS 4 Frameworks
+und die Datei `createdb.sh` entfernt, da sie nicht länger benötigt werden.
+
+### Imports mit SWORD
+
+Es wurde eine SWORD v1.3 Schnittstelle implementiert. Mit dieser Schnittstelle
+können Metadaten und Volltexte automatisch importiert werden. Die Schnittstelle
+ist für andere Systeme wie DeepGreen (<https://deepgreen.kobv.de>) gedacht, die 
+Dokumente in ein OPUS 4 Repositorium hochladen möchten. Das Hochladen ist mit 
+Hilfe von einfachen Skripten möglich. Mehr Informationen dazu sind in der OPUS 4
+Dokumentation zu finden.
+
+Es ist in dieser Version noch nicht ohne weiteres möglich sämtliche Metadaten,
+einschließlich von Verknüpfungen zu Sammlungen, Lizenzen usw. zu importieren. Zur 
+Zeit ist dafür die Kenntnis der internen Datenbank-IDs notwendig. In der weiteren
+Entwicklung wird der Metadaten-Import weiter ausgebaut und vereinfacht werden. 
+
+### Export
+
+Suchergebnisse können in verschiedenen Formaten exportiert werden. 
+Unangemeldete Nutzer könnten maximal 100 Dokument auf einmal exportieren. Für
+angemeldete Nutzer liegt die Grenze bei 500 und Administratoren haben keine 
+Beschränkung. Die Grenzen können konfiguriert werden.
+         
+Die unterstützten Formate sind BibTeX, RIS, CSV, und XML. Für den XML-Export 
+muss wie bisher ein XSLT-Stylesheet konfiguriert werden.
+
+Die Export-Links werden nur angezeigt, wenn der Nutzer zugriff auf das Export-
+Modul hat. 
+
 ### DINI
+
+Die MetaTags für die Frontdoor wurden ergänzt, um dei Rechtesituation der 
+Dokument maschinenlesbar zu machen.
 
 ### Nutzeroberfläche
 
@@ -51,7 +103,27 @@ usw. zu haben.
 
 ### Suche
 
+Das Symbol für Zusammenfassungen an den Suchergebnissen wurde durch ein 
+Symbol für Volltexte ersetzt. Die Zusammenfassungen können nun durch eine 
+graue Leiste unterhalb der Anzeige eines Suchergebnisses auf- und zugeklappt 
+werden.
+
+Für Open-Access-Volltexte wird das Volltextsymbol mit einem Open-Access-
+Zeichen angezeigt.
+
+Die Links für die Navigation zwischen mehreren Seiten mit Dokumenten
+wurden durch Icons ersetzt. Die Anzahl der angezeigten Dokumente kann
+über ein DropDown-Menü ausgewählt werden.
+
+### Browsing
+
+Es gibt jetzt ein Browsing nach dem Jahr der Veröffentlichung. Die Anzeige
+richtet sich nach der Suchfacette "year".
+  
 ### Frontdoor
+
+TODO OPUSVIER-3401
+TODO 
 
 Die PHP Funktionen die im XSLT verwendet wurden, sind jetzt als Zend
 View Helper implementiert und haben teilweise neue Namen. Das muss bei
@@ -67,6 +139,33 @@ verwendet. Die folgenden Funktionen haben außerdem neue Namen bekommen.
     checkLanguageFile           -> languageImageExists
     getStylesheet               -> frontdoorStylesheet
     
+Zusammenfassungen werden nicht mehr mitten im Wort abgeschnitten, wenn 
+sie gekürzt angezeigt werden.
+
+Die Frontdoor für ein Dokument kann jetzt mit einer kurzen URL aufgerufen
+werden, indem die ID des Dokuments direkt nach der URL für die Instanz
+angegeben wird.
+
+<https://opu4web.zib.de/opus4-demo/92>
+
+WARNUNG: Diese URLs sind nicht zum Zitieren gedacht. Dafür sollten 
+permanente Idenfier wie URNs eingesetzt werden.
+
+TODO Verlinkung ORCID und GND.
+    
+#### Download von Dateien
+    
+Dateien werden normalerweise mit der `Content-Disposition: attachment` 
+ausgeliefert, so dass sie vom Browser als Dateien gespeichert und nicht 
+im Browser angezeigt werden. Das lässt sich nun konfigurieren und ist
+für PDF-Dateien im Standard abgeschaltet, so dass PDF-Dateien direkt im
+Browser angezeigt werden.
+
+WARNUNG: Es wird nicht empfohlen XHTML, Javascript und ähnliche Inhalte
+direkt im Browser anzeigen zu lassen, da damit beträchtliche Sicherheits-
+risiken entstehen, wenn z.B. ein Administrator eine solche Datei aufrufen 
+sollte.
+    
 ### Lizenzen
     
 Beim Update können die Creative Commons 4.0 Lizenzen hinzugefügt werden.
@@ -75,11 +174,142 @@ wie "CC BY 4.0" gespeichert sind. Beim Update wird auch versucht, die
 Kurzbezeichnungen für die alten "CC 3.0" Lizenzen hinzuzufügen. Wenn die
 Lizenzen lokal editiert wurden kann es dabei zu falschen Zuordnungen 
 kommen. Deshalb sollten die Lizenzen anschließend in der Administration
-überprüft werden.
+überprüft werden.j
 
-Das Feld **name** wird momentan noch nicht weiter verwendet. In Zukunft 
-soll es unter anderem für das Matching von Lizenzen beim Import verwendet
-werden.
+Das Feld **name** wird in der Übersicht mit allen Lizenzen in der Spalte 
+**Label** angezeigt. Ansonsten wird es momentan noch nicht verwendet. In 
+Zukunft soll es unter anderem für das Matching von Lizenzen beim Import 
+zum Einsatz kommen.
+
+### Anpassungen
+
+Die Datei `custom.css` wird nun immer benutzt, ohne Anpassungen an 
+`common.phtml` vornehmen zu müssen. Dort kann mit Hilfe von CSS das 
+Aussehen von OPUS 4 verändert werden.
+
+Das Logo für das Repositorium und die Bilder für viele Icons können
+nun über CSS ausgewählt werden, so dass Änderungen in `custom.css`
+vorgenommen werden können.
+
+Der Link für das Logo kann in der Konfiguration durch den Parameter 
+`logoLink` bestimmt werden. Der Übersetzungschlüssel `logo_title` 
+bestimmt den Inhalt des **title**-Attributs.
+
+### Datenbank
+
+TODO 
+
+### Solr
+
+Der Volltextcache wird nun wieder genutzt. Einmal extrahierte Volltexte 
+werden im Verzeichnis `workspace/cache` gespeichert, um eine erneute
+Extraktion bei der nächsten Indizierung zu vermeiden.
+
+TODO Hinweis
+
+### Administration
+
+In der Administration wird für die Anzeige jetzt die gesamte Breite des
+Browserfensters genutzt.
+
+In der Administration sind die Bereiche "Einstellungen" und "Personen"
+hinzugekommen.
+
+Unter "Einstellungen" werden in den kommenden Releases immer mehr Seiten
+zusammengefasst werden, die Veränderungen an der Konfiguration von OPUS 4 
+ermöglichen. Es gibt hier auch die neue Seite "Module". Dort werden die 
+vorhandenen Module mit dem Zugriffstatus für "guest"-Nutzer aufgelistet. 
+Die Seite soll in kommenden Releases weiter ausgebaut werden, um die 
+Konfiguration von Modulen zu ermöglichen.
+
+Im Bereich "Personen" gibt es erste einfache Möglichkeiten die Personen
+in einem Repository zu editieren. Damit ist es zum Beispiel möglich sich 
+die Dokumente eines Autoren anzeigen zu lassen. Es gibt die Möglichkeit
+Personen über alle Dokumente hinweg zu editeren, um zum Beispiel eine
+ORCID zu einem Autoren hinzuzufügen. Diese Funktionen dienen auch dazu,
+um Feedback von Nutzern sammeln zu können.
+
+TODO Feedback - Wie?
+
+#### Dokumente
+
+Das Datum der letzten Änderung wird nun bei den aufgelisteten Dokumenten 
+mit angezeigt.
+
+TODO neues Layout
+TODO alle Dokumente anzeigen
+
+TODO OPUSVIER-3739
+
+#### Sammlungen
+
+Beim Hinzufügen einer neuen Sammlung wird nicht mehr automatisch in die
+Sammlung gewechselt, sondern die Anzeige bleibt auf der selben Ebene. So
+lassen sich mehrere Sammlungen auf der selben Ebene schneller hinzufügen.
+
+Beim Zuweisen von Sammlungen zu einem Dokument, werden bereits zugewiesene 
+Sammlungen hervorgehoben und die Buttons versteckt. 
+
+Abhängig von der Einstellung "TODO" für die CollectionRole können Sammlungen auf 
+der obersten Ebene (Root-Collection) nicht mehr zugewiesen werden. Die 
+Einstellung "TODO" beschränkt Zuweisungen auf die unterste Ebene, die Leaf-Nodes
+der Sammlung.
+
+#### Personen
+
+
+
+### Konfiguration
+ 
+TODO INI-Dateien
+
+### Weiteres
+
+Wenn eine URL geschützt ist, z.B. in der Administration wird der Nutzer
+zur Login-Seite umgeleitet. Nach dem erfolgreichen Login wird der Nutzer
+nun wieder zur ursprünglichen URL umgeleitet. 
+
+### OAI 
+
+Das Format **xMetaDiss** wurde von der OAI-Schnittstelle entfernt.
+
+Für OAI-DC wurde die Ausgabe der Zugriffrechte überarbeitet. Mehr 
+Informationen dazu in der Dokumentatin (TODO, OPUSVIER-3660).
+
+Für Lizenzen wird nun der Link anstelle des langen Namens ausgegeben, um
+eine Erkennung in Systemen wie Base zu vereinfachen.
+
+Unbekannte 'identifier' für 'ListMetadataFormats' und doppelte Parameter 
+verursachen nun entsprechende Fehlermeldungen.
+
+#### OpenAire
+
+Im Enrichment 'relation' müssen Projekt-Identifier vollständig angegeben
+werden, also z.B. mit dem Prefix "info:eu-repo/grantAgreement/EC/FP7/". 
+Dieses Feld wird als `<dc:relation>` ausgegeben und kann auch für andere 
+Werte, die keine Projekte identifizieren verwendet werden. 
+
+### Crawlers - Google Scholar
+
+TODO explain
+TODO link to robots docu
+
+### DDC-Klassifikation
+
+TODO
+
+### Notifikationen
+
+TODO OPUSVIER-3572
+
+### Dokumenttypen
+
+TODO OPUSVIER-3654
+
+### TODO
+
+OPUSVIER-3750
+OPUSVIER-3751
 
 ---
 

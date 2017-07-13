@@ -41,6 +41,14 @@ class Application_Update_Exception extends Exception
 
     private $_output = null;
 
+    /**
+     * Application_Update_Exception constructor.
+     * @param string $message
+     * @param null $exitCode
+     * @param null $output
+     *
+     * TODO $output needed? Not used right now.
+     */
     public function __construct($message, $exitCode = null, $output = null)
     {
         parent::__construct($message);

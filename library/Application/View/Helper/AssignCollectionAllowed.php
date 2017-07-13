@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -25,37 +25,59 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Application_Update
+ * @package     Application_View_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
- * Helper class for common functions used in update scripts.
+ * Returns true if current collection can be assigned to a document.
  *
- * This class extends Application_Update_PluginAbstract for the common logging and other functions, but
- * it is not meant to be "run" like other update plugin classes.
+ * TODO cleanup in connection with refactoring of Admin_CollectionController
  */
-class Application_Update_Helper extends Application_Update_PluginAbstract
+class Application_View_Helper_AssignCollectionAllowed extends Zend_View_Helper_Abstract
 {
 
-    public function run()
+    public function assignCollectionAllowed($collection, $docId = null)
     {
-        // do nothing
-    }
+        if (!is_null($docId))
+        {
+            if (isset($collection['assigned']) && $collection['assigned'])
+            {
+                return false;
+            }
+            else if (isset($collection['collection']))
+            {
+                $colObj = $collection['collection'];
+                if ($colObj->holdsDocumentById($docId))
+                {
+                    return false;
+                }
+            }
+        }
 
-    /**
-     * Asks the user a yes|no question during update.
-     * @param $question
-     */
-    public function askYesNo($question)
-    {
-        print($question);
 
-        $response = trim(readline());
+        $role = null;
 
-        return ($response == 'Y' || $response == 'y');
+        if (isset($collection['role']))
+        {
+            $role = $collection['role'];
+        }
+
+        if (isset($collection['isLeaf']) && !$collection['isLeaf'] && !is_null($role)
+            && $role->getAssignLeavesOnly() == 1)
+        {
+            return false;
+        }
+
+        if (isset($collection['isRoot']) && $collection['isRoot'] && !is_null($role)
+            && $role->getAssignRoot() == 0)
+        {
+            return false;
+        }
+
+        return true;
     }
 
 }

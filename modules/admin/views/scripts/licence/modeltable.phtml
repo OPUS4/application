@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -25,37 +25,37 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Application_Update
+ * @package     Application_View_Scripts_Licence
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+?>
 
-/**
- * Helper class for common functions used in update scripts.
- *
- * This class extends Application_Update_PluginAbstract for the common logging and other functions, but
- * it is not meant to be "run" like other update plugin classes.
- */
-class Application_Update_Helper extends Application_Update_PluginAbstract
-{
-
-    public function run()
-    {
-        // do nothing
-    }
-
-    /**
-     * Asks the user a yes|no question during update.
-     * @param $question
-     */
-    public function askYesNo($question)
-    {
-        print($question);
-
-        $response = trim(readline());
-
-        return ($response == 'Y' || $response == 'y');
-    }
-
-}
+<table>
+    <thead>
+        <tr>
+            <th class="visible"><?= $this->translate($this->element->getColumnLabel(0)) ?>
+                <a class="add" href="<?= $this->url(array('action' => 'new')) ?>"><?=
+                    $this->translate('admin_button_add') ?></a></th>
+            <th>Name</th>
+            <th colspan="2">&nbsp;</th>
+        </tr>
+    </thead>
+    <?PHP foreach($this->element->getModels() as $model) : ?>
+        <tr>
+            <td><a href="<?= $this->url(array('action' => 'show', 'id' => $model->getId())) ?>"
+                class="displayname<?= (is_null($model->getField('Visible')) || $model->getVisible()) ? '' : ' invisible'?>"
+                    ><?= htmlspecialchars($model->getDisplayName()) ?></a></td>
+            <td><?= $model->getName()?></td>
+            <td class="edit">
+                <a href="<?= $this->url(array('action' => 'edit', 'id' => $model->getId())) ?>"
+                    ><?= $this->translate('admin_button_edit'); ?></a>
+            </td>
+            <td class="remove">
+                <a href="<?= $this->url(array('action' => 'delete', 'id' => $model->getId())) ?>"
+                    ><?= $this->translate('admin_button_remove'); ?></a>
+            </td>
+        </tr>
+    <?PHP endforeach; ?>
+</table>

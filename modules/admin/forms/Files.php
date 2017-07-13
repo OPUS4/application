@@ -32,9 +32,8 @@
  * @package     Admin_Form
  * @author      Michael Lang <lang@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 class Admin_Form_Files extends Admin_Form_Document_MultiSubForm {
 
@@ -118,14 +117,19 @@ class Admin_Form_Files extends Admin_Form_Document_MultiSubForm {
 
         if (is_array($post)) {
             foreach ($post as $file) {
-                $fileId = $file['Id'];
-                $subform = $this->getSubFormForId($fileId);
-                if (!is_null($subform)) {
-                    if ($fileId != $removedFileId) {
-                        $subform->populate($file);
-                    }
-                    else {
-                        $this->removeSubForm($subform->getName());
+                if (isset($file['Id']))
+                {
+                    $fileId = $file['Id'];
+                    $subform = $this->getSubFormForId($fileId);
+                    if (!is_null($subform))
+                    {
+                        if ($fileId != $removedFileId)
+                        {
+                            $subform->populate($file);
+                        } else
+                        {
+                            $this->removeSubForm($subform->getName());
+                        }
                     }
                 }
             }
