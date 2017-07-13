@@ -314,19 +314,19 @@
 
          <tu tuid="search_titles_resultlist">
           <tuv xml:lang="en">
-            <seg>Query returned <b>%1$s</b> hits.</seg>
+            <seg><![CDATA[Query returned <b>%1$s</b> hits.]]></seg>
           </tuv>
           <tuv xml:lang="de">
-            <seg>Die Suche ergab <b>%1$s</b> Treffer.</seg>
+            <seg><![CDATA[Die Suche ergab <b>%1$s</b> Treffer.]]></seg>
           </tuv>
         </tu>
 
          <tu tuid="search_results_from_to">
           <tuv xml:lang="en">
-            <seg>Showing results <b>%1$s</b> to <b>%2$s</b></seg>
+            <seg><![CDATA[Showing results <b>%1$s</b> to <b>%2$s</b>]]></seg>
           </tuv>
           <tuv xml:lang="de">
-            <seg>Ergebnisse <b>%1$s</b> bis <b>%2$s</b></seg>
+            <seg><![CDATA[Ergebnisse <b>%1$s</b> bis <b>%2$s</b>]]></seg>
           </tuv>
         </tu>
 
@@ -391,6 +391,15 @@
           <tuv xml:lang="de">
             <seg>Speichern</seg>
           </tuv>
+        </tu>
+
+        <tu tuid="form_button_next">
+            <tuv xml:lang="en">
+                <seg>Next</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Weiter</seg>
+            </tuv>
         </tu>
 
         <tu tuid="Cancel">

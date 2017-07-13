@@ -42,19 +42,28 @@ class LanguageTest extends ControllerTestCase {
         $this->verifyCommandAvailable('xmllint');
     }
 
-    public function testAllTmxFiles() {
-        $this->markTestIncomplete('Die Datei "frontdoor/language/messages.tmx" enthält Tags in den Strings. '
-            . 'Das wird als Fehler gemeldet. Daher kann dieser Unit Test noch nicht eingesetzt werden.');
+    public function getTmxFiles() {
         $dir = APPLICATION_PATH . '/modules';
         $DirIter = new RecursiveDirectoryIterator($dir);
         $Iterator = new RecursiveIteratorIterator($DirIter);
         $Regex = new RegexIterator($Iterator, '/^.+\.tmx$/i', RecursiveRegexIterator::GET_MATCH);
+
+        $files = array();
         foreach ($Regex as $file) {
-            $filePath = $file[0];
-            $xmllintCall = "xmllint --valid --noout {$filePath}";
-            exec(escapeshellcmd($xmllintCall), $xmllintOutput, $xmllintFeedback);
-            $this->assertEquals('0', $xmllintFeedback, "File '$filePath' not valid. (Check with 'xmllint'!)");
+            $files[] = array($file[0]);
         }
+
+        return $files;
+    }
+
+    /**
+     * @dataProvider getTmxFiles
+     */
+    public function testTmxFileValid($filePath)
+    {
+        $xmllintCall = "xmllint --valid --noout {$filePath}";
+        exec(escapeshellcmd($xmllintCall), $xmllintOutput, $xmllintFeedback);
+        $this->assertEquals('0', $xmllintFeedback, "File '$filePath' not valid. (Check with 'xmllint'!)");
     }
     
     /**

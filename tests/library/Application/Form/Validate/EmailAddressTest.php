@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,37 +24,57 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
+ * @category    Tests
+ * @package     Application_Form_Validate
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-// Provide boolval function for PHP <5.5
-if (!function_exists('boolval')) {
-    function boolval($value) {
-        return (bool) $value;
-    }
-}
-
-
-// mb_strlen is required to get the total number of bytes in a given string
-// fall back to strlen even if we retrieve the number of characters instead of bytes
-// in PHP installation with multibyte character support
-if (!function_exists('mb_strlen')) {
-    function mb_strlen($str, $encoding) {
-        return strlen($str);
-    }
-}
-
-/**
- * Function for dividing integers used in PersonController.
- */
-if (!function_exists('intdiv'))
+class Application_Form_Validate_EmailAddressTest extends ControllerTestCase
 {
-    function intdiv($divided, $divisor)
-    {
-        return ($divided - $divided % $divisor) / $divisor;
-    }
-}
 
+    private $_validator;
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->_validator = new Application_Form_Validate_EmailAddress();
+    }
+
+    public function validEmails()
+    {
+        return array(
+            ['test@example.org']
+        );
+    }
+
+    public function badEmails()
+    {
+        return array(
+            ['testexample.org'],
+            ['test@example'],
+            ['example.org'],
+            ['test'],
+            [' ']
+        );
+    }
+
+    /**
+     * @dataProvider validEmails
+     */
+    public function testValidTrue($address)
+    {
+        $this->assertTrue($this->_validator->isValid($address));
+    }
+
+    /**
+     * @dataProvider badEmails
+     */
+    public function testValidFalse($address)
+    {
+        $this->assertFalse($this->_validator->isValid($address));
+    }
+
+}

@@ -244,6 +244,9 @@ table.result-data {
 }
 
 /* Pagination controls for all pages */
+ul.paginationControl {
+	list-style: none;
+}
 
 ul.paginationControl a.pagination-first,
 ul.paginationControl .pagination-first,
@@ -943,7 +946,7 @@ body > #top-header{
 }
 .opus .breadcrumb_results h3,
 .opus .breadcrumb_results .info_small,
-.opus .breadcrumb_results .paginationControl li {
+.paginationControl li {
     float: left;
 	margin: 0;
 	font-weight: normal;
@@ -1529,3 +1532,67 @@ a.gnd-link {
 	background-color: lightgray;
 	color: black;
 }
+
+/* Combobox using jQuery styling */
+
+.custom-combobox {
+	position: relative;
+	display: inline-block;
+}
+.custom-combobox-toggle {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	margin-left: -1px;
+	padding: 0;
+}
+.custom-combobox-input {
+	margin: 0;
+	padding: 5px 10px;
+}
+
+.form-help {
+    padding: 0.5em;
+    padding-bottom: 0;
+    margin: 1em 0.5em 1em 0.5em;
+    background-color: whitesmoke;
+    border: 1px solid lightgrey;
+    border-radius: 3px;
+    font-size: 1em;
+}
+
+.form-help blockquote {
+    font-style: italic;
+}
+
+/* TODO use same styling for all pages */
+.admin_person_edit input {
+    padding: 5px 10px;
+    font-size: 1em;
+    border: 1px solid #c5c5c5;
+    border-radius: 3px;
+}
+
+/* remove radius applied to right side for combo boxes */
+.admin_person_edit input.custom-combobox-input {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.admin_person_edit .ui-widget-content {
+    background-color: white;
+}
+
+.admin_person_edit .data-wrapper {
+    margin-bottom: 0.75em;
+}
+
+.update-field-wrapper {
+    padding-bottom: 0.5em;
+    font-size: 1em;
+}
+
+.admin_person_edit .data-wrapper label {
+    font-size: 1.1em;
+}
+

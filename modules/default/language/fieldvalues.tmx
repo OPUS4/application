@@ -121,12 +121,21 @@
             field for class Opus_Model_Dependent_Link_DocumentPerson.
         -->
 
+        <tu tuid="Opus_Person_Role_Value_All">
+            <tuv xml:lang="en">
+                <seg>All</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Alle</seg>
+            </tuv>
+        </tu>
+
         <tu tuid="Opus_Person_Role_Value_Author">
             <tuv xml:lang="en">
                 <seg>Author</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>Verfasserangaben</seg>
+                <seg>Autor</seg>
             </tuv>
         </tu>
 

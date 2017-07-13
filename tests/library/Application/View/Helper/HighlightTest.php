@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,37 +24,52 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
+ * @category    Application Unit Tests
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-// Provide boolval function for PHP <5.5
-if (!function_exists('boolval')) {
-    function boolval($value) {
-        return (bool) $value;
-    }
-}
-
-
-// mb_strlen is required to get the total number of bytes in a given string
-// fall back to strlen even if we retrieve the number of characters instead of bytes
-// in PHP installation with multibyte character support
-if (!function_exists('mb_strlen')) {
-    function mb_strlen($str, $encoding) {
-        return strlen($str);
-    }
-}
-
-/**
- * Function for dividing integers used in PersonController.
- */
-if (!function_exists('intdiv'))
+class Application_View_Helper_HighlightTest extends ControllerTestCase
 {
-    function intdiv($divided, $divisor)
-    {
-        return ($divided - $divided % $divisor) / $divisor;
-    }
-}
 
+    private $_helper;
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->_helper = new Application_View_Helper_Highlight();
+    }
+
+    public function testHighlight()
+    {
+        $this->assertEquals('Muster<b>mann</b>', $this->_helper->highlight('Mustermann', 'mann'));
+    }
+
+    public function testHighlightCaseInsensitive()
+    {
+        $this->assertEquals('Muster<b>mann</b>', $this->_helper->highlight('Mustermann', 'MaNn'));
+    }
+
+    public function testHighlightMultiple()
+    {
+        $this->assertEquals('<b>Man</b>n <b>man</b>n', $this->_helper->highlight('Mann mann', 'man'));
+    }
+
+    public function testCustomWrapping()
+    {
+        $this->assertEquals('<i>Muster</i>mann', $this->_helper->highlight('Mustermann', 'muster', '<i>', '</i>'));
+    }
+
+    public function testHighlightStringWithDelimiter()
+    {
+        $this->assertEquals('<b>Mus/ter</b>mann', $this->_helper->highlight('Mus/termann', 'mus/ter'));
+    }
+
+    public function testHighlightWithEmptyString()
+    {
+        $this->assertEquals('Ján', $this->_helper->highlight('Ján', null));
+    }
+
+}

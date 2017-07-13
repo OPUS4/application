@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -25,36 +25,23 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
+ * @package     Application_Form_Validate
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-// Provide boolval function for PHP <5.5
-if (!function_exists('boolval')) {
-    function boolval($value) {
-        return (bool) $value;
-    }
-}
-
-
-// mb_strlen is required to get the total number of bytes in a given string
-// fall back to strlen even if we retrieve the number of characters instead of bytes
-// in PHP installation with multibyte character support
-if (!function_exists('mb_strlen')) {
-    function mb_strlen($str, $encoding) {
-        return strlen($str);
-    }
-}
-
 /**
- * Function for dividing integers used in PersonController.
+ * Email validator with custom messages.
  */
-if (!function_exists('intdiv'))
+class Application_Form_Validate_EmailAddress extends Zend_Validate_EmailAddress
 {
-    function intdiv($divided, $divisor)
-    {
-        return ($divided - $divided % $divisor) / $divisor;
-    }
-}
 
+    public function __construct($options = array())
+    {
+        parent::__construct($options);
+
+        $this->setMessage('admin_validate_error_email');
+    }
+
+}

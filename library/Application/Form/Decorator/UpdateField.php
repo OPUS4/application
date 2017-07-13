@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -25,36 +25,51 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
+ * @package     View
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-// Provide boolval function for PHP <5.5
-if (!function_exists('boolval')) {
-    function boolval($value) {
-        return (bool) $value;
-    }
-}
-
-
-// mb_strlen is required to get the total number of bytes in a given string
-// fall back to strlen even if we retrieve the number of characters instead of bytes
-// in PHP installation with multibyte character support
-if (!function_exists('mb_strlen')) {
-    function mb_strlen($str, $encoding) {
-        return strlen($str);
-    }
-}
-
 /**
- * Function for dividing integers used in PersonController.
+ * Decorator renders checkbox for field to allow enabling/disabling updates for that field.
+ *
+ * TODO rename?
  */
-if (!function_exists('intdiv'))
+class Application_Form_Decorator_UpdateField extends Zend_Form_Decorator_Abstract
 {
-    function intdiv($divided, $divisor)
-    {
-        return ($divided - $divided % $divisor) / $divisor;
-    }
-}
 
+    public function render($content)
+    {
+        $element = $this->getElement();
+        $active = $element->getAttrib('active');
+        $name = $element->getName() . 'UpdateEnabled';
+        $elemId = $name;
+
+        $output = "<div class=\"update-field-wrapper\">";
+        $output .= "<input class=\"field-update-checkbox\" name=\"$name\" id=\"$elemId\" type=\"checkbox\"";
+
+        if ($active)
+        {
+            $output .= " checked=\"checked\" ";
+        }
+
+        if ($element->hasTranslator())
+        {
+            $translator = $element->getTranslator();
+            $text = $translator->translate('admin_form_update_field');
+        }
+        else
+        {
+            $text = 'Update field';
+        }
+
+        $output .= "/> $text";
+        $output .= "</div>";
+
+        $output .= $content;
+
+        return $output;
+    }
+
+}

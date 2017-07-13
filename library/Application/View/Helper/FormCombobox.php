@@ -25,36 +25,46 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
+ * @package     Application_View_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-// Provide boolval function for PHP <5.5
-if (!function_exists('boolval')) {
-    function boolval($value) {
-        return (bool) $value;
-    }
-}
-
-
-// mb_strlen is required to get the total number of bytes in a given string
-// fall back to strlen even if we retrieve the number of characters instead of bytes
-// in PHP installation with multibyte character support
-if (!function_exists('mb_strlen')) {
-    function mb_strlen($str, $encoding) {
-        return strlen($str);
-    }
-}
-
 /**
- * Function for dividing integers used in PersonController.
+ * View helper for rendering a combobox (text input + select).
  */
-if (!function_exists('intdiv'))
+class Application_View_Helper_FormCombobox extends Zend_View_Helper_FormElement
 {
-    function intdiv($divided, $divisor)
-    {
-        return ($divided - $divided % $divisor) / $divisor;
-    }
-}
 
+    public function formCombobox($name, $value = null, $attribs = null, $options = null, $listsep = "<br />\n")
+    {
+        $info = $this->_getInfo($name, $value, $attribs, $options, $listsep);
+        extract($info);
+
+        $xhtml = "<div class=\"ui-widget\">\n    ";
+
+        $xhtml .= "<select name=\"$name\" class=\"combobox\">\n";
+
+        if (!is_null($value) && strlen(trim($value)) > 0 && !in_array($value, $options))
+        {
+            $xhtml .= "<option value=\"$value\">$value</option>\n";
+        }
+
+        foreach ((array) $options as $optionValue => $optionLabel)
+        {
+            $xhtml .= "<option value=\"$optionValue\"";
+            if ($optionValue === $value)
+            {
+                $xhtml .= ' selected="selected"';
+            }
+            $xhtml .= ">$optionLabel</option>\n";
+        }
+
+        $xhtml .= "</select>\n";
+        $xhtml .= "</div>\n";
+
+        return $xhtml;
+    }
+
+}

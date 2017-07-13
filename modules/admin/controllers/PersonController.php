@@ -27,9 +27,8 @@
  * @category    Application
  * @package     Module_Admin
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -40,7 +39,8 @@
  *
  * TODO Erweitern um Personen in Datenbank zu verwalten (z.B. Deduplizieren) (OPUSVIER-nnnn, noch kein Ticket)
  */
-class Admin_PersonController extends Application_Controller_Action {
+class Admin_PersonController extends Application_Controller_Action
+{
 
     private $_documentsHelper;
 
@@ -49,10 +49,232 @@ class Admin_PersonController extends Application_Controller_Action {
     /**
      * Initializes controller.
      */
-    public function init() {
+    public function init()
+    {
         parent::init();
+
         $this->_documentsHelper = $this->_helper->getHelper('Documents');
         $this->_dates = $this->_helper->getHelper('Dates');
+    }
+
+    /**
+     * List persons.
+     *
+     * If a parameter has an invalid value, the parameter is removed and a redirect is used to clean up the URL.
+     *
+     * If a parameter is missing a default value is used.
+     */
+    public function indexAction()
+    {
+        $redirect = false;
+
+        // check limit parameter
+        $limit = $this->getParam('limit');
+
+        if ((!ctype_digit($limit) || $limit <= 0) && !is_null($limit))
+        {
+            $limit = null;
+            $redirect = true;
+        }
+
+        // check role parameter
+        $role = $this->getParam('role');
+        $allowedRoles = array_merge(array('all'), Admin_Form_Document_Persons::getRoles());
+
+        // TODO redirect for 'all' (since it is default)
+        if ((!ctype_alpha($role) || !in_array(strtolower($role), $allowedRoles)) && !is_null($role))
+        {
+            $role = null;
+            $redirect = true;
+        }
+
+        // check page parameter
+        $page = $this->getParam('page');
+
+        if ((!ctype_digit($page) || $page <= 0) && !is_null($page))
+        {
+            $page = null;
+            $redirect = true;
+        }
+
+        // get filter parameter
+        $filter = $this->getParam('filter');
+
+        // redirect to get Zend style URL for bookmarking or fixing bad parameters
+        if ($this->getRequest()->isPost() || $redirect)
+        {
+            $redirectParams = array('role' => $role, 'limit' => $limit, 'filter' => $filter, 'page' => $page);
+
+            $redirectParams = array_filter($redirectParams, function($value) {
+                return !is_null($value) && strlen(trim($value)) > 0;
+            });
+
+            $this->_helper->getHelper('Redirector')->gotoSimple(
+                'index', 'person', 'admin', $redirectParams
+            );
+
+            return;
+        }
+
+        if (is_null($limit))
+        {
+            $limit = 50;
+        }
+
+        if ($role === 'all') {
+            $role = null;
+        }
+
+        if (!is_null($page)) {
+            $page = $this->getParam('page', 1);
+            $start = ($page - 1) * $limit + 1;
+        }
+        else {
+            $start = 1;
+        }
+
+
+        // TODO only include 'limit' and 'start' if provided as URL parameters (not defaults)
+        $form = new Admin_Form_PersonListControl();
+        $form->setMethod(Zend_Form::METHOD_POST);
+
+        // TODO only include limit if not default
+        $form->setAction($this->view->url(
+            array(
+                'module' => 'admin', 'controller' => 'person', 'action' => 'index',
+                'limit' => $limit
+            ), null, true
+        ));
+        $form->setName('persons');
+        $form->setIsArray(false);
+
+        $params = $this->getRequest()->getParams();
+        $form->populate($params);
+
+        // TODO move into replaceable model class
+        $personsTotal = Opus_Person::getAllPersonsCount($role, $filter);
+
+        if ($start > $personsTotal)
+        {
+            if ($personsTotal > 0 && ($personsTotal > $limit))
+            {
+                $start = intdiv($personsTotal, $limit) * $limit;
+            }
+            else {
+                $start = 1;
+            }
+        }
+
+        $page = intdiv($start, $limit) + 1;
+
+        $persons = Opus_Person::getAllPersons($role, $start - 1, $limit, $filter);
+
+        $this->view->headScript()->appendFile($this->view->layoutPath() . '/js/admin.js');
+
+        $end = $start + $limit - 1;
+
+        if ($end > $personsTotal)
+        {
+            $end = $personsTotal;
+        }
+
+        $paginator = Zend_Paginator::factory(( int )$personsTotal);
+        $paginator->setCurrentPageNumber($page);
+        $paginator->setItemCountPerPage($limit);
+
+        $this->view->paginator = $paginator;
+        $this->view->role = $role;
+        $this->view->filter = $filter;
+        $this->view->limit = $limit;
+        $this->view->start = $start;
+        $this->view->end = $end;
+        $this->view->totalCount = $personsTotal;
+        $this->view->form = $form;
+        $this->view->persons = $persons;
+    }
+
+    /**
+     * Listing documents for a person.
+     */
+    public function documentsAction()
+    {
+        $person = $this->getPersonCrit();
+
+        $documents = Opus_Person::getPersonDocuments($person);
+
+        $this->view->documents = $documents;
+    }
+
+    /**
+     * Show edit form for a person.
+     */
+    public function editAction()
+    {
+        $request = $this->getRequest();
+
+        $person = $this->getPersonCrit();
+
+        if ($request->isPost())
+        {
+            $form = new Admin_Form_Persons();
+
+            $data = $request->getPost();
+
+            $form->populate($data);
+
+            $result = $form->processPost($data, $data);
+
+            switch($result)
+            {
+                case Admin_Form_Persons::RESULT_SAVE:
+                    if ($form->isValid($data))
+                    {
+                        $changes = $form->getChanges();
+                        Opus_Person::updateAll($person, $changes);
+                        $this->_helper->Redirector->redirectTo('index', null);
+                    }
+                    break;
+                case Admin_Form_Persons::RESULT_CANCEL:
+                    $this->_helper->Redirector->redirectTo('index', null);
+                    return;
+                    break;
+            }
+        }
+        else
+        {
+            $form = new Admin_Form_Persons();
+            $data = array();
+        }
+
+        $values = Opus_Person::getPersonValues($person);
+
+        $form->populateFromModel($values);
+        $form->populate($data);
+
+        $this->view->form = $form;
+    }
+
+    /**
+     * Builds an array for identifying person from parameters.
+     * @return array
+     *
+     * TODO move into model
+     */
+    public function getPersonCrit()
+    {
+        $columns = array('last_name', 'first_name', 'identifier_orcid', 'identifier_gnd', 'identifier_misc');
+
+        $person = array();
+
+        foreach ($columns as $name)
+        {
+            if ($this->hasParam($name))
+            {
+                $person[$name] = $this->getParam($name);
+            }
+        }
+
+        return $person;
     }
 
     /**
@@ -62,7 +284,8 @@ class Admin_PersonController extends Application_Controller_Action {
      * - Dokument-ID (document)
      * - Rolle (role)
      */
-    public function assignAction() {
+    public function assignAction()
+    {
         $docId = $this->getRequest()->getParam('document');
 
         $document = $this->_documentsHelper->getDocumentForId($docId);
@@ -250,7 +473,8 @@ class Admin_PersonController extends Application_Controller_Action {
      * Führt Redirect zum Metadatenformular des Dokuments aus.
      * @param $docId Dokument-ID
      */
-    public function returnToMetadataForm($docId) {
+    public function returnToMetadataForm($docId)
+    {
         return $this->_helper->Redirector->redirectToAndExit(
             'edit', null, 'document', 'admin', array('id' => $docId,
             'continue' => 'true')
