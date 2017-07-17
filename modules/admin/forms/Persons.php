@@ -25,12 +25,11 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_Admin
+ * @package     Admin
  * @author      Jens Schwidder <schwidder@zib.de>
  * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -104,9 +103,9 @@ class Admin_Form_Persons extends Application_Form_Model_Abstract
 
         $this->setDecorators(
             array(
+            array('FormErrors', array('onlyCustomFormErrors' => true, 'ignoreSubForms' => true)),
             'FormElements',
             'Fieldset',
-            array(array('divWrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'subform')),
             'Form'
             )
         );
@@ -301,6 +300,29 @@ class Admin_Form_Persons extends Application_Form_Model_Abstract
      * @return \Opus_Person
      */
     public function getModel() {
+    }
+
+    public function isValid($data, $context = null)
+    {
+        $result = parent::isValid($data, $context);
+
+        $update = false;
+
+        foreach ($data as $fieldName => $value)
+        {
+            if (strpos($fieldName, 'UpdateEnabled') !== false && stripos($value, 'on') !== false)
+            {
+                $update = true;
+                break;
+            }
+        }
+
+        if (!$update)
+        {
+            $this->addErrorMessage('admin_person_error_no_update');
+        }
+
+        return $result && $update;
     }
 
 }

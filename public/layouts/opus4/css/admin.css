@@ -162,6 +162,17 @@
    background-color: #FFD4D4;
    color: #A40000;
 }
+
+.adminContainer .wrapper ul.form-errors {
+    background-color: #FFD4D4;
+    color: #A40000;
+    margin: 0 0 0.5em 0;
+    list-style: none;
+    padding: 0.5em 2.2em;
+    font-size: 1em;
+    background-position: 0.4em 0.4em;
+}
+
 .adminContainer .wrapper div.form-errors ul,
 .adminContainer .wrapper div.form-errors p{
    margin: 0;
@@ -1841,3 +1852,82 @@ ul.links input:hover{
 .adminContainer table.collections td.assigned {
    font-weight: bold;
 }
+
+.documents .document-checkbox {
+   float: left;
+}
+
+.documents .document-info {
+   padding-left: 3em;
+}
+
+.documents .document-info .document-title {
+   font-size: 1.3em;
+}
+
+.document .document-info .modified {
+    /*background-color: lightgrey; */
+    color: red;
+    font-weight: bold;
+    padding: 0 3px;
+}
+
+.document .document-id {
+    float: right;
+}
+
+.documents .document {
+   border-top: 1px dotted grey;
+   padding-top: 0.5em;
+   padding-bottom: 0.5em;
+}
+
+.documents .document:first-child {
+   border-top: none;
+}
+
+.documents .document .document-changes {
+    margin-top: 5px;
+    margin-bottom: 0.5em;
+}
+
+.documents .document .document-change {
+    vertical-align: top;
+    clear: both;
+}
+
+.documents .document span.role {
+    float: left;
+    min-width: 10em;
+    max-width: 10em;
+    background-color: #f3f6f8;
+    margin-bottom: 1px;
+    padding: 2px;
+}
+
+.documents .document span.person {
+}
+
+/* TODO limit to persons confirmation form */
+
+form.persons-confirm ul.form-action {
+    width: 100%;
+}
+
+form.persons-confirm ul.form-action li {
+    float: right;
+}
+
+form.persons-confirm ul.form-action li.back-element {
+    float: left;
+    margin-left: 0;
+    padding: 0;
+}
+
+form.persons-confirm #Documents-element {
+    width: 95%;
+    display: block;
+    margin: 0 auto;
+    float: none;
+}
+
