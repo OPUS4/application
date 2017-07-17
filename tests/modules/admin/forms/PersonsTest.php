@@ -419,7 +419,23 @@ class Admin_Form_PersonsTest extends ControllerTestCase
 
         $this->assertFalse($form->isValid(array('LastName' => 'Test')));
 
-        $errors = $form->getErrors();
+        $messages = $form->getErrorMessages();
+
+        $this->assertNotNull($messages);
+        $this->assertInternalType('array', $messages);
+        $this->assertCount(1, $messages);
+        $this->assertContains('admin_person_error_no_update', $messages);
+    }
+
+    public function testValidWithOneFieldSelectedForUpdate()
+    {
+        $form = new Admin_Form_Persons();
+
+        $this->assertTrue($form->isValid(array('LastName' => 'Test', 'LastNameUpdateEnabled' => 'on')));
+
+        $messages = $form->getErrorMessages();
+
+        $this->assertEmpty($messages);
     }
 
 }
