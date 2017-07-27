@@ -96,6 +96,11 @@ class Admin_Form_Persons extends Application_Form_Model_Abstract
     const ELEMENT_IDENTIFIER_MISC = 'IdentifierMisc';
 
     /**
+     * @var array Identity values for person
+     */
+    private $_person;
+
+    /**
      * Erzeugt die Formularelemente.
      */
     public function init() {
@@ -165,6 +170,7 @@ class Admin_Form_Persons extends Application_Form_Model_Abstract
                 $element->setDecorators(array(
                     'ViewHelper',
                     'Description',
+                    'ElementHint',
                     'Errors',
                     'UpdateField',
                     'ElementHtmlTag',
@@ -204,18 +210,37 @@ class Admin_Form_Persons extends Application_Form_Model_Abstract
         }
     }
 
+    public function setPerson($person)
+    {
+        $this->_person = $person;
+    }
+
+    public function getPerson()
+    {
+        return $this->_person;
+    }
+
     /**
      * Setzt die Werte der Formularelmente entsprechend der uebergebenen Opus_Person Instanz.
      * @param Opus_Person $model
      */
     public function populateFromModel($values) {
-        // set elements with single values
+        // make sure all keys exist
+        $validNames = array(
+            'first_name', 'last_name', 'identifier_gnd', 'identifier_orcid', 'identifier_misc',
+            'place_of_birth', 'date_of_birth', 'academic_title', 'email'
+        );
+
+        $defaults = array_fill_keys($validNames, null);
+        $values = array_merge($defaults, $values);
+
+        // set elements with single values (normally)
         // TODO will change for first and last name (once only IDs count)
-        $this->getElement(self::ELEMENT_FIRST_NAME)->setValue($values['first_name']);
-        $this->getElement(self::ELEMENT_LAST_NAME)->setValue($values['last_name']);
-        $this->getElement(self::ELEMENT_IDENTIFIER_GND)->setValue($values['identifier_gnd']);
-        $this->getElement(self::ELEMENT_IDENTIFIER_ORCID)->setValue($values['identifier_orcid']);
-        $this->getElement(self::ELEMENT_IDENTIFIER_MISC)->setValue($values['identifier_misc']);
+        $this->setIdentityValue($this->getElement(self::ELEMENT_FIRST_NAME), $values['first_name']);
+        $this->setIdentityValue($this->getElement(self::ELEMENT_LAST_NAME), $values['last_name']);
+        $this->setIdentityValue($this->getElement(self::ELEMENT_IDENTIFIER_GND), $values['identifier_gnd']);
+        $this->setIdentityValue($this->getElement(self::ELEMENT_IDENTIFIER_ORCID), $values['identifier_orcid']);
+        $this->setIdentityValue($this->getElement(self::ELEMENT_IDENTIFIER_MISC), $values['identifier_misc']);
 
         // set elements that can have multiple values
         $this->getElement(self::ELEMENT_PLACE_OF_BIRTH)->setAutocompleteValues($values['place_of_birth']);
@@ -224,8 +249,13 @@ class Admin_Form_Persons extends Application_Form_Model_Abstract
 
         $dates = $values['date_of_birth'];
 
-        if (!is_null($dates) && is_array($dates))
+        if (!is_null($dates))
         {
+            if (!is_array($dates))
+            {
+                $dates = array($dates);
+            }
+
             $formattedDates = array();
 
             $datesHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('dates');
@@ -238,10 +268,39 @@ class Admin_Form_Persons extends Application_Form_Model_Abstract
 
             $this->getElement(self::ELEMENT_DATE_OF_BIRTH)->setAutocompleteValues($formattedDates);
         }
+    }
+
+    /**
+     * Sets value for identity field, adding a note if multiple values are present.
+     * @param $element
+     * @param $value
+     *
+     * TODO handle $value !== $person[] - can it happen?
+     */
+    public function setIdentityValue($element, $value)
+    {
+        if (is_array($value))
+        {
+            $element->setHint($this->getTranslator()->translate('admin_persons_values_not_trimmed'));
+            $displayValue = $value[0];
+        }
         else
         {
-            $this->getElement(self::ELEMENT_DATE_OF_BIRTH)->setValue($dates);
+            $displayValue = $value;
         }
+
+        $person = $this->getPerson();
+
+        if (!is_null($person))
+        {
+            $columnName = Opus_Person::convertFieldnameToColumn($element->getName());
+            if (array_key_exists($columnName, $person))
+            {
+                $displayValue = $person[$columnName];
+            }
+        }
+
+        $element->setValue($displayValue);
     }
 
     /**
