@@ -1553,7 +1553,6 @@ a.gnd-link {
 
 .form-help {
     padding: 0.5em;
-    padding-bottom: 0;
     margin: 1em 0.5em 1em 0.5em;
     background-color: whitesmoke;
     border: 1px solid lightgrey;
@@ -1563,6 +1562,8 @@ a.gnd-link {
 
 .form-help blockquote {
     font-style: italic;
+	padding: 0.2em;
+	margin: 1em 2em 1em 2em;
 }
 
 /* TODO use same styling for all pages */

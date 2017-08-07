@@ -163,6 +163,20 @@ If there are 10 documents with an author "John Smith" and "John" is changed to "
       </tuv>
   </tu>
 
+    <tu tuid="admin_person_edit_confirm_help">
+      <tuv xml:lang="en">
+        <seg><![CDATA[
+Die folgenden Änderungen werden an passenden Personenobjekten vorgenommen. Einzelne Dokumente können von den
+Änderungen ausgeschlossen werden. Nach dem Speichern werden die ausgewählten Dokumente geändert und das Datum der
+letzten Änderung wird aktualisiert.
+]]></seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg><![CDATA[
+]]></seg>
+      </tuv>
+    </tu>
+
     <tu tuid="admin_person_error_no_update">
       <tuv xml:lang="en">
         <seg>Please select at least one field for updating.</seg>
