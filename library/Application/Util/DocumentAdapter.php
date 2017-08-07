@@ -241,37 +241,34 @@ class Application_Util_DocumentAdapter {
      * Return list of authors.
      * @return array
      */
-    public function getAuthors() {
+    public function getAuthors()
+    {
         if ($this->_authors) {
             return $this->_authors;
         }
 
-        try {
-            $c = count($this->document->getPersonAuthor());
-        }
-        catch (Exception $e) {
-            $c = 0;
-        }
+        $authorsInfo = array();
 
-        $authors = array();
+        $authors = $this->document->getPersonAuthor();
 
-        for ($counter = 0; $counter < $c; $counter++) {
-
-            $name = $this->document->getPersonAuthor($counter)->getName();
-            $firstName = $this->document->getPersonAuthor($counter)->getFirstName();
-            $lastName = $this->document->getPersonAuthor($counter)->getLastName();
+        foreach ($authors as $person)
+        {
+            $name = $person->getName();
+            $firstName = $person->getFirstName();
+            $lastName = $person->getLastName();
 
             $author = array();
 
             $author['name'] = htmlspecialchars($name);
             $author['url'] = $this->getAuthorUrl($firstName . ' ' . $lastName);
+            $author['person'] = $person;
 
-            $authors[$counter] = $author;
+            $authorsInfo[] = $author;
         }
 
-        $this->_authors = $authors;
+        $this->_authors = $authorsInfo;
 
-        return $authors;
+        return $authorsInfo;
     }
 
     /**
