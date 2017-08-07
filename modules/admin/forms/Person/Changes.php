@@ -35,6 +35,7 @@
  * Class Admin_Form_Person_Changes
  *
  * TODO merge old values and changes array (only set/getChanges with all values)?
+ * TODO make generic to be usable with any model (incl. excluded fields)
  */
 class Admin_Form_Person_Changes extends Application_Form_Abstract
 {
