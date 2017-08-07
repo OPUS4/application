@@ -108,10 +108,11 @@ class Admin_Form_Persons extends Application_Form_Model_Abstract
 
         $this->setDecorators(
             array(
-            array('FormErrors', array('onlyCustomFormErrors' => true, 'ignoreSubForms' => true)),
-            'FormElements',
-            'Fieldset',
-            'Form'
+                array('FormErrors', array('onlyCustomFormErrors' => true, 'ignoreSubForms' => true)),
+                'FormElements',
+                'Fieldset',
+                'Form',
+                array('FormHelp', array('message' => 'admin_person_edit_help'))
             )
         );
 
