@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -25,31 +25,50 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Application_View_Partial
+ * @package     Application_View_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-?>
 
-<div class="changes-table-wrapper">
-<table class="changes-table">
-    <thead>
-        <tr>
-            <th><?= $this->translate('admin_change_fieldname') ?></th>
-            <th><?= $this->translate('admin_change_old_value') ?></th>
-            <th><?= $this->translate('admin_change_new_value') ?></th>
-        </tr>
-    </thead>
-    <tbody>
-    <?PHP foreach ($this->element->getPreparedChanges() as $name => $values) : ?>
-        <tr class="<?= $values['action'] ?>">
-            <td class="fieldname"><?= $this->translate($name) ?></td>
-            <td class="old-value"><?= $this->htmlList($this->escapeValue($values['old'], true), false, false, false) ?></td>
-            <td class="new-value"><?= $this->htmlList($this->escapeValue($values['new'], true), false, false, false) ?></td>
-        </tr>
+/**
+ * View helper for escaping values including entire arrays.
+ */
+class Application_View_Helper_EscapeValue extends Application_View_Helper_Abstract
+{
 
-    <?PHP endforeach ?>
-    </tbody>
-</table>
-</div>
+    public function escapeValue($value, $highlightNull = false)
+    {
+        if (is_array($value))
+        {
+            return array_map(function($value) use ($highlightNull)
+            {
+                if (is_array($value))
+                {
+                    return $this->escapeValue($value);
+                }
+                else
+                {
+                    return $this->escape($value, $highlightNull);
+                }
+            }, $value);
+        }
+        else
+        {
+            return $this->escape($value, $highlightNull);
+        }
+    }
+
+    public function escape($value, $highlightNull = false)
+    {
+        if (is_null($value) && $highlightNull)
+        {
+            return '<span class="null">' . $this->view->translate('Value_Null') . '</span>';
+        }
+        else {
+            return $this->view->escape($value);
+        }
+    }
+
+
+}

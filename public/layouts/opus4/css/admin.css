@@ -2274,4 +2274,7 @@ form.persons-confirm legend {
 .adminContainer .wrapper table.changes-table tr td.old-value {
 }
 
+.adminContainer span.null {
+    color: dodgerblue;
+}
 

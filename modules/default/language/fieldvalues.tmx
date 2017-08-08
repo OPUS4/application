@@ -707,6 +707,15 @@
             </tuv>
         </tu>
 
+        <tu tuid="Value_Null">
+            <tuv xml:lang="en">
+                <seg>NULL</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>LEER</seg>
+            </tuv>
+        </tu>
+
     </body>
 
 </tmx>
