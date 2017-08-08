@@ -186,6 +186,24 @@ letzten Änderung wird aktualisiert.
       </tuv>
     </tu>
 
+    <tu tuid="admin_person_bulk_update_success">
+      <tuv xml:lang="en">
+        <seg>Person objects successfully updated.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Personenobjekte erfolgreich aktualisiert.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_person_bulk_update_failure">
+      <tuv xml:lang="en">
+        <seg>Error updating multiple person objects.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Fehler beim Ändern von mehreren Personenobjekten.</seg>
+      </tuv>
+    </tu>
+
   </body>
   
 </tmx>

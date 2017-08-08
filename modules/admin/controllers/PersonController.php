@@ -350,12 +350,12 @@ class Admin_PersonController extends Application_Controller_Action
 
                             Opus_Person::updateAll($person, $changes, $documents);
 
-                            $message = 'TODO success';
+                            $message = 'admin_person_bulk_update_success';
                         }
                     }
                     else
                     {
-                        $message = 'TODO session failure';
+                        $message = 'admin_person_bulk_update_failure';
                     }
 
                     // TODO success or failure message
