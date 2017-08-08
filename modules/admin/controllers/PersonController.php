@@ -214,6 +214,8 @@ class Admin_PersonController extends Application_Controller_Action
      */
     public function editAction()
     {
+        $this->view->languageSelectorDisabled = true;
+
         $request = $this->getRequest();
 
         $person = $this->getPersonCrit();
@@ -306,6 +308,8 @@ class Admin_PersonController extends Application_Controller_Action
 
     public function updateAction()
     {
+        $this->view->languageSelectorDisabled = true;
+
         $request = $this->getRequest();
 
         $person = $this->getPersonCrit();
