@@ -63,6 +63,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $domDocument->loadXML($resultString);
 
         $xpath = new DOMXPath($domDocument);
+
         $xpath->registerNamespace('oai', "http://www.openarchives.org/OAI/2.0/");
         $xpath->registerNamespace('oai_dc', "http://www.openarchives.org/OAI/2.0/oai_dc/");
         $xpath->registerNamespace('cc', "http://www.d-nb.de/standards/cc/");
@@ -73,6 +74,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $xpath->registerNamespace('epicur', "urn:nbn:de:1111-2004033116");
         $xpath->registerNamespace('dcterms', "http://purl.org/dc/terms/");
         $xpath->registerNamespace('thesis', "http://www.ndltd.org/standards/metadata/etdms/1.0/");
+
         return $xpath;
     }
 
@@ -1837,6 +1839,82 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         }
 
         return $values;
+    }
+
+    public function testErrorForRepeatedParameters()
+    {
+        $this->dispatch('/oai?verb=ListIdentifiers&metadataPrefix=oai_dc&metadataPrefix=oai_dc');
+
+        $this->assertResponseCode(200);
+
+        $body = $this->getResponse()->getBody();
+
+        $xpath = $this->prepareXpathFromResultString($body);
+
+        $elements = $xpath->query('//oai:error');
+        $this->assertEquals(1, $elements->length);
+
+        $error = $elements->item(0);
+        $this->assertEquals('badArgument', $error->getAttribute('code'));
+    }
+
+    public function testErrorForUnknownId()
+    {
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=oai_dc&identifier=oai:opus4.demo:9999');
+
+        $this->assertResponseCode(200);
+
+        $body = $this->getResponse()->getBody();
+
+        $xpath = $this->prepareXpathFromResultString($body);
+
+        $elements = $xpath->query('//oai:error');
+        $this->assertEquals(1, $elements->length);
+
+        $error = $elements->item(0);
+        $this->assertEquals('idDoesNotExist', $error->getAttribute('code'));
+    }
+
+    public function testErrorForListMetadataFormatsWithBadIdentifierParameter()
+    {
+        $this->dispatch('/oai?verb=ListMetadataFormats&identifier=really_wrong_id');
+
+        $this->assertResponseCode(200);
+
+        $body = $this->getResponse()->getBody();
+
+        $xpath = $this->prepareXpathFromResultString($body);
+
+        $elements = $xpath->query('//oai:error');
+        $this->assertEquals(2, $elements->length);
+
+        $errorCodes = array(
+            $elements->item(0)->getAttribute('code'),
+            $elements->item(1)->getAttribute('code')
+        );
+
+        $this->assertContains('badArgument', $errorCodes);
+        $this->assertContains('idDoesNotExist', $errorCodes);
+    }
+
+    public function testGetUsingXpathInTests()
+    {
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=oai_dc&identifier=oai:opus4.demo:146');
+
+        $this->assertResponseCode(200);
+
+        $body = $this->getResponse()->getBody();
+
+        $xpath = $this->prepareXpathFromResultString($body);
+
+        $elements = $xpath->query('//dc:title');
+        $this->assertEquals(2, $elements->length);
+
+        $elements = $xpath->query('//oai:setSpec');
+        $this->assertEquals(12, $elements->length);
+
+        $elements = $xpath->query('//oai:request');
+        $this->assertEquals(1, $elements->length);
     }
 
 }

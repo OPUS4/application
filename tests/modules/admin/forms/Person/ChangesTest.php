@@ -142,8 +142,6 @@ class Admin_Form_Person_ChangesTest extends ControllerTestCase
         $this->assertInternalType('array', $prepared);
         $this->assertCount(3, $miscId);
 
-        var_dump($prepared);
-
         $this->assertArrayHasKey('old', $miscId);
         $this->assertCount(0, $miscId['old']);
 

@@ -73,6 +73,8 @@
     <xsl:param name="oai_identifier" />
     <xsl:param name="oai_error_code" />
     <xsl:param name="oai_error_message" />
+    <xsl:param name="oai_error_code2" />
+    <xsl:param name="oai_error_message2" />
     <xsl:param name="oai_base_url" />
 
     <!--
@@ -115,12 +117,19 @@
                 </xsl:if>
                 <xsl:value-of select="$oai_base_url" />
             </request>
+            <!-- TODO find solution where iterating over any number of errors is possible -->
             <xsl:if test="$oai_error_code!=''">
                 <error>
                     <xsl:attribute name="code"><xsl:value-of select="$oai_error_code" /></xsl:attribute>
                     <xsl:value-of select="$oai_error_message" />
                 </error>
             </xsl:if>
+            <xsl:if test="$oai_error_code2!=''">
+                <error>
+                    <xsl:attribute name="code"><xsl:value-of select="$oai_error_code2" /></xsl:attribute>
+                    <xsl:value-of select="$oai_error_message2" />
+                </error>
+            </xsl:if>"
 
     <!--create the rest of oai response depending on oai_verb -->
         <xsl:choose>
