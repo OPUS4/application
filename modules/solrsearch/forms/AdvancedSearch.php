@@ -165,8 +165,6 @@ class Solrsearch_Form_AdvancedSearch extends Application_Form_Abstract {
 
         $fieldGroup = $this->getDisplayGroup(self::GROUP_SEARCHFIELDS);
 
-        // var_dump($fieldGroup->getDecorators());
-
         $fieldGroup->setDecorators(array(
             'FormElements',
             array('HtmlTag', array('tag' => 'table', 'class' => 'search-form-table'))
