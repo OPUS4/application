@@ -96,6 +96,11 @@ class Admin_Form_Persons extends Application_Form_Model_Abstract
     const ELEMENT_IDENTIFIER_MISC = 'IdentifierMisc';
 
     /**
+     * Konstante für Hash, der Formular identifiziert
+     */
+    const ELEMENT_FORM_ID = 'FormId';
+
+    /**
      * @var array Identity values for person
      */
     private $_person;
@@ -147,6 +152,10 @@ class Admin_Form_Persons extends Application_Form_Model_Abstract
 
         $save = $this->getElement('Save');
         $save->setLabel('form_button_next');
+
+        $formId = $this->createElement('hidden', self::ELEMENT_FORM_ID);
+        $formId->setValue(uniqid());
+        $this->addElement($formId);
     }
 
     /**

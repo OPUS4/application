@@ -239,12 +239,15 @@ class Admin_PersonController extends Application_Controller_Action
         }
         elseif ($request->getParam('step') === 'Back')
         {
+            $formId = $this->getParam('formId');
+
             // check if the request is coming from the 'Back' button of the confirmation form
             $session = new Zend_Session_Namespace(self::SESSION_NAMESPACE);
 
-            if (isset($session->formData))
+            if (isset($session->{$formId}))
             {
-                $data = $session->formData;
+                $data = $session->{$formId};
+                unset($session->{$formId});
             }
         }
 
@@ -265,13 +268,16 @@ class Admin_PersonController extends Application_Controller_Action
                     case Admin_Form_Persons::RESULT_SAVE:
                         if ($form->isValid($data))
                         {
+                            $formId = $form->getElement(Admin_Form_Persons::ELEMENT_FORM_ID)->getValue();
+
                             // TODO store data in session for back button
                             $personNamespace = new Zend_Session_Namespace(self::SESSION_NAMESPACE);
-                            $personNamespace->formData = $data;
+                            $personNamespace->{$formId} = $data;
 
                             $changes = $form->getChanges();
 
                             $confirmForm = new Admin_Form_PersonsConfirm();
+                            $confirmForm->getElement(Admin_Form_PersonsConfirm::ELEMENT_FORM_ID)->setValue($formId);
                             $confirmForm->setOldValues(
                                 Opus_Person::convertToFieldNames(Opus_Person::getPersonValues($person))
                             );
@@ -329,17 +335,23 @@ class Admin_PersonController extends Application_Controller_Action
             {
                 case Admin_Form_PersonsConfirm::RESULT_BACK:
                     // redirect back to edit form (it will get the form data from the session)
+                    $formId = $form->getElementValue(Admin_Form_PersonsConfirm::ELEMENT_FORM_ID);
                     $this->_helper->Redirector->redirectTo(
-                        'edit', null, 'person', 'admin', array_merge($person, array('step' => 'Back'))
+                        'edit', null, 'person', 'admin', array_merge($person, array(
+                            'step' => 'Back', 'formId' => $formId
+                        ))
                     );
                     break;
                 case Admin_Form_PersonsConfirm::RESULT_SAVE:
+                    $formId = $form->getElementValue(Admin_Form_PersonsConfirm::ELEMENT_FORM_ID);
+
                     // make changes in database and redirect to list of persons with success message
                     $session = new Zend_Session_Namespace(self::SESSION_NAMESPACE);
 
-                    if (isset($session->formData))
+                    if (isset($session->{$formId}))
                     {
-                        $formData = $session->formData;
+                        $formData = $session->{$formId};
+                        unset($session->{$formId});
 
                         if (!empty($formData))
                         {

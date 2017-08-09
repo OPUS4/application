@@ -47,6 +47,8 @@ class Admin_Form_PersonsConfirm extends Application_Form_Model_Abstract
 
     const RESULT_BACK = 'Back';
 
+    const ELEMENT_FORM_ID = 'FormId';
+
     public function init()
     {
         parent::init();
@@ -84,6 +86,10 @@ class Admin_Form_PersonsConfirm extends Application_Form_Model_Abstract
         $actions->addElements(array($back, $elements[self::ELEMENT_CANCEL], $elements[self::ELEMENT_SAVE]));
 
         $this->setAttrib('class', 'persons-confirm');
+
+        $formId = $this->createElement('hidden', self::ELEMENT_FORM_ID);
+        $formId->setValue(uniqid());
+        $this->addElement($formId);
     }
 
     public function setOldValues($oldValues)
