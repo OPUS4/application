@@ -27,45 +27,24 @@
  * @category    Application
  * @package     Application_Form_Element
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Application_Form_Element_MultiCheckbox extends Zend_Form_Element_MultiCheckbox {
+
+/**
+ * Form element that presents a list of documents with checkboxes for selection.
+ *
+ * The rendering of the documents should use a partial for custom layout.
+ *
+ * TODO add select all/none functionality to element
+ */
+class Application_Form_Element_Documents extends Application_Form_Element_MultiCheckbox
+{
+
+    public $helper = 'formDocuments';
 
     public function init() {
         parent::init();
-
-        $this->addPrefixPath(
-            'Application_Form_Decorator', 'Application/Form/Decorator', Zend_Form::DECORATOR
-        );
-    }
-
-    public function loadDefaultDecorators() {
-        if (!$this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
-            $this->setDecorators(
-                array(
-                'ViewHelper',
-                'ElementHtmlTag',
-                array('LabelNotEmpty', array('tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend',
-                    'disableFor' => true)),
-                array(array('dataWrapper' => 'HtmlTagWithId'), array('tag' => 'div', 'class' => 'data-wrapper'))
-                )
-            );
-        }
-    }
-
-    /**
-     * Sorgt dafür, daß nur der Text ausgeben wird und kein INPUT-Tag.
-     */
-    public function prepareRenderingAsView() {
-        $viewHelper = $this->getDecorator('ViewHelper');
-        if ($viewHelper instanceof Application_Form_Decorator_ViewHelper) {
-            $viewHelper->setViewOnlyEnabled(true);
-        }
-    }
-
-    public function getStaticViewHelper() {
-        return 'viewFormMultiCheckbox';
     }
 
 }

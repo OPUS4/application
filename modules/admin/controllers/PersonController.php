@@ -42,6 +42,8 @@
 class Admin_PersonController extends Application_Controller_Action
 {
 
+    const SESSION_NAMESPACE = 'Person';
+
     private $_documentsHelper;
 
     private $_dates;
@@ -207,37 +209,87 @@ class Admin_PersonController extends Application_Controller_Action
 
     /**
      * Show edit form for a person.
+     *
+     * TODO clean up the workflow logic (should be expandable to multiple steps)
      */
     public function editAction()
     {
+        $this->view->languageSelectorDisabled = true;
+
         $request = $this->getRequest();
 
         $person = $this->getPersonCrit();
 
+        // check if parameters identifying person are provided
+        if (empty($person))
+        {
+            $this->_helper->Redirector->redirectTo(
+                'index', null // array('failure' => 'parameters missing (TODO translate)')
+            );
+        }
+
+        $data = null;
+
+        $processForm = false;
+
         if ($request->isPost())
         {
-            $form = new Admin_Form_Persons();
-
             $data = $request->getPost();
+            $processForm = true;
+        }
+        elseif ($request->getParam('step') === 'Back')
+        {
+            // check if the request is coming from the 'Back' button of the confirmation form
+            $session = new Zend_Session_Namespace(self::SESSION_NAMESPACE);
+
+            if (isset($session->formData))
+            {
+                $data = $session->formData;
+            }
+        }
+
+        if (!is_null($data))
+        {
+            $form = new Admin_Form_Persons();
+            $form->setPerson($person);
 
             $form->populate($data);
 
-            $result = $form->processPost($data, $data);
-
-            switch($result)
+            if ($processForm)
             {
-                case Admin_Form_Persons::RESULT_SAVE:
-                    if ($form->isValid($data))
-                    {
-                        $changes = $form->getChanges();
-                        Opus_Person::updateAll($person, $changes);
+
+                $result = $form->processPost($data, $data);
+
+                switch ($result)
+                {
+                    case Admin_Form_Persons::RESULT_SAVE:
+                        if ($form->isValid($data))
+                        {
+                            // TODO store data in session for back button
+                            $personNamespace = new Zend_Session_Namespace(self::SESSION_NAMESPACE);
+                            $personNamespace->formData = $data;
+
+                            $changes = $form->getChanges();
+
+                            $confirmForm = new Admin_Form_PersonsConfirm();
+                            $confirmForm->setOldValues(
+                                Opus_Person::convertToFieldNames(Opus_Person::getPersonValues($person))
+                            );
+                            $confirmForm->populateFromModel($person);
+                            $confirmForm->setChanges(Opus_Person::convertToFieldNames($changes));
+                            $confirmForm->setAction($this->view->url(array(
+                                'module' => 'admin', 'controller' => 'person', 'action' => 'update'
+                            ), null, false));
+
+                            $this->renderForm($confirmForm);
+                            return;
+                        }
+                        break;
+                    case Admin_Form_Persons::RESULT_CANCEL:
                         $this->_helper->Redirector->redirectTo('index', null);
-                    }
-                    break;
-                case Admin_Form_Persons::RESULT_CANCEL:
-                    $this->_helper->Redirector->redirectTo('index', null);
-                    return;
-                    break;
+                        return;
+                        break;
+                }
             }
         }
         else
@@ -251,7 +303,71 @@ class Admin_PersonController extends Application_Controller_Action
         $form->populateFromModel($values);
         $form->populate($data);
 
-        $this->view->form = $form;
+        $this->renderForm($form);
+    }
+
+    public function updateAction()
+    {
+        $this->view->languageSelectorDisabled = true;
+
+        $request = $this->getRequest();
+
+        $person = $this->getPersonCrit();
+
+        if ($request->isPost())
+        {
+            $form = new Admin_Form_PersonsConfirm();
+            $form->populateFromModel($person); // TODO setPerson instead (rename)?
+
+            $data = $request->getPost();
+
+            $form->populate($data);
+
+            $result = $form->processPost($data, $data);
+
+            switch ($result)
+            {
+                case Admin_Form_PersonsConfirm::RESULT_BACK:
+                    // redirect back to edit form (it will get the form data from the session)
+                    $this->_helper->Redirector->redirectTo(
+                        'edit', null, 'person', 'admin', array_merge($person, array('step' => 'Back'))
+                    );
+                    break;
+                case Admin_Form_PersonsConfirm::RESULT_SAVE:
+                    // make changes in database and redirect to list of persons with success message
+                    $session = new Zend_Session_Namespace(self::SESSION_NAMESPACE);
+
+                    if (isset($session->formData))
+                    {
+                        $formData = $session->formData;
+
+                        if (!empty($formData))
+                        {
+                            $personForm = new Admin_Form_Persons();
+                            $personForm->populate($formData);
+                            $changes = $personForm->getChanges();
+                            $documents = $form->getDocuments();
+
+                            Opus_Person::updateAll($person, $changes, $documents);
+
+                            $message = 'admin_person_bulk_update_success';
+                        }
+                    }
+                    else
+                    {
+                        $message = 'admin_person_bulk_update_failure';
+                    }
+
+                    // TODO success or failure message
+                    // TODO do another validation here?
+                    $this->_helper->Redirector->redirectTo('index', $message);
+                    break;
+                case Admin_Form_PersonsConfirm::RESULT_CANCEL:
+                    // go back to list of persons
+                    $this->_helper->Redirector->redirectTo('index', null);
+                    break;
+            }
+        }
     }
 
     /**

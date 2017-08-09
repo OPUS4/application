@@ -163,6 +163,47 @@ If there are 10 documents with an author "John Smith" and "John" is changed to "
       </tuv>
   </tu>
 
+    <tu tuid="admin_person_edit_confirm_help">
+      <tuv xml:lang="en">
+        <seg><![CDATA[
+Die folgenden Änderungen werden an passenden Personenobjekten vorgenommen. Einzelne Dokumente können von den
+Änderungen ausgeschlossen werden. Nach dem Speichern werden die ausgewählten Dokumente geändert und das Datum der
+letzten Änderung wird aktualisiert.
+]]></seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg><![CDATA[
+]]></seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_person_error_no_update">
+      <tuv xml:lang="en">
+        <seg>Please select at least one field for updating.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bitte wählen Sie mindestens ein Feld zur Änderung.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_person_bulk_update_success">
+      <tuv xml:lang="en">
+        <seg>Person objects successfully updated.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Personenobjekte erfolgreich aktualisiert.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_person_bulk_update_failure">
+      <tuv xml:lang="en">
+        <seg>Error updating multiple person objects.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Fehler beim Ändern von mehreren Personenobjekten.</seg>
+      </tuv>
+    </tu>
+
   </body>
   
 </tmx>

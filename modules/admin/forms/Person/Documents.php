@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -25,47 +25,61 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Application_Form_Element
+ * @package     Admin
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Application_Form_Element_MultiCheckbox extends Zend_Form_Element_MultiCheckbox {
 
-    public function init() {
+/**
+ * TODO Move documents element code into this subform? (use smaller single document element)
+ */
+class Admin_Form_Person_Documents extends Application_Form_Abstract
+{
+
+    const ELEMENT_DOCUMENTS = 'Documents';
+
+    public function init()
+    {
         parent::init();
 
-        $this->addPrefixPath(
-            'Application_Form_Decorator', 'Application/Form/Decorator', Zend_Form::DECORATOR
-        );
+        $documents = $this->createElement('documents', self::ELEMENT_DOCUMENTS);
+        $this->addElement($documents);
     }
 
-    public function loadDefaultDecorators() {
-        if (!$this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
-            $this->setDecorators(
-                array(
-                'ViewHelper',
-                'ElementHtmlTag',
-                array('LabelNotEmpty', array('tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend',
-                    'disableFor' => true)),
-                array(array('dataWrapper' => 'HtmlTagWithId'), array('tag' => 'div', 'class' => 'data-wrapper'))
-                )
-            );
+    public function setDocuments($documentIds, $person = null)
+    {
+        if (is_null($documentIds))
+        {
+            // TODO do some logging
+            return;
+        }
+
+        if (!is_array($documentIds))
+        {
+            $documentIds = array($documentIds);
+        }
+
+        $options = array();
+
+        foreach ($documentIds as $docId)
+        {
+            $options[$docId] = new Opus_Document($docId);
+        }
+
+        $documents = $this->getElement(self::ELEMENT_DOCUMENTS);
+        $documents->setMultiOptions($options);
+        $documents->setValue($documentIds);
+
+        if (!is_null($person))
+        {
+            $documents->setAttrib('person', Opus_Person::convertToFieldNames($person));
         }
     }
 
-    /**
-     * Sorgt dafür, daß nur der Text ausgeben wird und kein INPUT-Tag.
-     */
-    public function prepareRenderingAsView() {
-        $viewHelper = $this->getDecorator('ViewHelper');
-        if ($viewHelper instanceof Application_Form_Decorator_ViewHelper) {
-            $viewHelper->setViewOnlyEnabled(true);
-        }
-    }
-
-    public function getStaticViewHelper() {
-        return 'viewFormMultiCheckbox';
+    public function getSelectedDocuments()
+    {
+        return $this->getElement(self::ELEMENT_DOCUMENTS)->getValue();
     }
 
 }

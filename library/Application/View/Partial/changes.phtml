@@ -25,47 +25,31 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Application_Form_Element
+ * @package     Application_View_Partial
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Application_Form_Element_MultiCheckbox extends Zend_Form_Element_MultiCheckbox {
+?>
 
-    public function init() {
-        parent::init();
+<div class="changes-table-wrapper">
+<table class="changes-table">
+    <thead>
+        <tr>
+            <th><?= $this->translate('admin_change_fieldname') ?></th>
+            <th><?= $this->translate('admin_change_old_value') ?></th>
+            <th><?= $this->translate('admin_change_new_value') ?></th>
+        </tr>
+    </thead>
+    <tbody>
+    <?PHP foreach ($this->element->getPreparedChanges() as $name => $values) : ?>
+        <tr class="<?= $values['action'] ?>">
+            <td class="fieldname"><?= $this->translate($name) ?></td>
+            <td class="old-value"><?= $this->htmlList($this->escapeValue($values['old'], true), false, false, false) ?></td>
+            <td class="new-value"><?= $this->htmlList($this->escapeValue($values['new'], true), false, false, false) ?></td>
+        </tr>
 
-        $this->addPrefixPath(
-            'Application_Form_Decorator', 'Application/Form/Decorator', Zend_Form::DECORATOR
-        );
-    }
-
-    public function loadDefaultDecorators() {
-        if (!$this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
-            $this->setDecorators(
-                array(
-                'ViewHelper',
-                'ElementHtmlTag',
-                array('LabelNotEmpty', array('tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend',
-                    'disableFor' => true)),
-                array(array('dataWrapper' => 'HtmlTagWithId'), array('tag' => 'div', 'class' => 'data-wrapper'))
-                )
-            );
-        }
-    }
-
-    /**
-     * Sorgt dafür, daß nur der Text ausgeben wird und kein INPUT-Tag.
-     */
-    public function prepareRenderingAsView() {
-        $viewHelper = $this->getDecorator('ViewHelper');
-        if ($viewHelper instanceof Application_Form_Decorator_ViewHelper) {
-            $viewHelper->setViewOnlyEnabled(true);
-        }
-    }
-
-    public function getStaticViewHelper() {
-        return 'viewFormMultiCheckbox';
-    }
-
-}
+    <?PHP endforeach ?>
+    </tbody>
+</table>
+</div>

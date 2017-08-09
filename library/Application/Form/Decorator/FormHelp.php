@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -25,47 +25,89 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Application_Form_Element
+ * @package     View
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Application_Form_Element_MultiCheckbox extends Zend_Form_Element_MultiCheckbox {
 
-    public function init() {
-        parent::init();
+/**
+ * Decorator that renders a text block in a form.
+ *
+ * The text block can be used for static information to help users with the form.
+ *
+ * TODO make tag more configurable
+ */
+class Application_Form_Decorator_FormHelp extends Zend_Form_Decorator_Abstract
+{
 
-        $this->addPrefixPath(
-            'Application_Form_Decorator', 'Application/Form/Decorator', Zend_Form::DECORATOR
-        );
-    }
+    protected $_placement = 'PREPEND';
 
-    public function loadDefaultDecorators() {
-        if (!$this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
-            $this->setDecorators(
-                array(
-                'ViewHelper',
-                'ElementHtmlTag',
-                array('LabelNotEmpty', array('tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend',
-                    'disableFor' => true)),
-                array(array('dataWrapper' => 'HtmlTagWithId'), array('tag' => 'div', 'class' => 'data-wrapper'))
-                )
-            );
-        }
-    }
+    protected $_cssClass = 'form-help';
 
     /**
-     * Sorgt dafür, daß nur der Text ausgeben wird und kein INPUT-Tag.
+     * @param string $content
+     * @return string
+     *
      */
-    public function prepareRenderingAsView() {
-        $viewHelper = $this->getDecorator('ViewHelper');
-        if ($viewHelper instanceof Application_Form_Decorator_ViewHelper) {
-            $viewHelper->setViewOnlyEnabled(true);
+    public function render($content)
+    {
+        $xhtml = $this->renderMessage();
+
+        if ($this->getPlacement() === self::APPEND)
+        {
+            $xhtml = $content . $xhtml;
         }
+        else
+        {
+            $xhtml .= $content;
+        }
+
+        return $xhtml;
     }
 
-    public function getStaticViewHelper() {
-        return 'viewFormMultiCheckbox';
+    public function renderMessage()
+    {
+        $message = $this->getOption('message');
+
+        $xhtml = '';
+
+        if (!is_null($message))
+        {
+            $translator = $this->getElement()->getTranslator();
+
+            $cssClass = $this->getClass();
+
+            $xhtml = "<div class=\"$cssClass\">";
+
+            if (!is_null($translator))
+            {
+                $xhtml .= $translator->translate($message);
+            }
+            else
+            {
+                $xhtml .= $message;
+            }
+
+            $xhtml .= '</div>';
+        }
+
+        return $xhtml;
+    }
+
+    public function getClass()
+    {
+        $cssClass = $this->_cssClass;
+
+        if (!is_null($classOption = $this->getOption('class')))
+        {
+             $cssClass = $classOption;
+             $this->removeOption('class');
+        }
+
+        $this->_cssClass = $cssClass;
+
+        return $cssClass;
     }
 
 }

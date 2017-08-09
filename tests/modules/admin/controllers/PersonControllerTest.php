@@ -480,4 +480,21 @@ class PersonControllerTest extends ControllerTestCase {
         $this->markTestIncomplete('create test account on the fly with access to persons resource');
     }
 
+    public function testDisplaySelectUpdateErrorMessage()
+    {
+        $this->useEnglish();
+
+        $this->getRequest()->setMethod('POST')->setPost(array(
+            'LastName' => 'Test',
+            'DateOfBirth' => '1970-01-01',
+            'Save' => 'Weiter'
+        ));
+
+        $this->dispatch('/admin/person/edit/last_name/Author/first_name/One');
+
+        $this->assertQueryContentContains('ul.form-errors', 'at least one field');
+        $this->assertNotQueryContentContains('ul.form-errors', 'Date of Birth');
+
+    }
+
 }

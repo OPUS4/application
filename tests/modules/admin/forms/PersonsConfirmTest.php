@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,48 +24,70 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Application_Form_Element
+ * @category    Tests
+ * @package     Admin_Form
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Application_Form_Element_MultiCheckbox extends Zend_Form_Element_MultiCheckbox {
 
-    public function init() {
-        parent::init();
+class Admin_Form_PersonsConfirmTest extends ControllerTestCase
+{
 
-        $this->addPrefixPath(
-            'Application_Form_Decorator', 'Application/Form/Decorator', Zend_Form::DECORATOR
+    private $_form;
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->_form = new Admin_Form_PersonsConfirm();
+    }
+
+    public function testConstruct()
+    {
+        $form = $this->_form;
+
+        $subforms = $form->getSubforms();
+
+        $this->assertCount(2, $subforms);
+        $this->assertArrayHasKey('Changes', $subforms);
+        $this->assertArrayHasKey('Documents', $subforms);
+
+        $elements = $form->getElements();
+
+        $this->assertCount(3, $elements);
+        $this->assertArrayHasKey('Back', $elements);
+        $this->assertArrayHasKey('Save', $elements);
+        $this->assertArrayHasKey('Cancel', $elements);
+
+        $this->assertEquals('persons-confirm', $form->getAttrib('class'));
+    }
+
+    public function testProcessPostBack()
+    {
+        $form = $this->_form;
+
+        $result = $form->processPost(array('Back' => 'Zurück'), null);
+
+        $this->assertEquals(Admin_Form_PersonsConfirm::RESULT_BACK, $result);
+    }
+
+    public function testPopulateFromModel()
+    {
+        $form = $this->_form;
+
+        $person = array(
+            'last_name' => 'Doe',
+            'first_name' => 'Jane'
         );
-    }
 
-    public function loadDefaultDecorators() {
-        if (!$this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
-            $this->setDecorators(
-                array(
-                'ViewHelper',
-                'ElementHtmlTag',
-                array('LabelNotEmpty', array('tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend',
-                    'disableFor' => true)),
-                array(array('dataWrapper' => 'HtmlTagWithId'), array('tag' => 'div', 'class' => 'data-wrapper'))
-                )
-            );
-        }
-    }
+        $form->populateFromModel($person);
 
-    /**
-     * Sorgt dafür, daß nur der Text ausgeben wird und kein INPUT-Tag.
-     */
-    public function prepareRenderingAsView() {
-        $viewHelper = $this->getDecorator('ViewHelper');
-        if ($viewHelper instanceof Application_Form_Decorator_ViewHelper) {
-            $viewHelper->setViewOnlyEnabled(true);
-        }
-    }
+        $docsForm = $form->getSubform('Documents');
 
-    public function getStaticViewHelper() {
-        return 'viewFormMultiCheckbox';
+        $legend = $docsForm->getDecorator('fieldset')->getLegend();
+
+        $this->assertEquals('admin_title_documents (8)', $legend);
     }
 
 }

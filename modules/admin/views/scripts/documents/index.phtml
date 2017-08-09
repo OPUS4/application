@@ -129,13 +129,13 @@
             <?PHP endif ?>
             </li>
             <?PHP if (isset($this->person['identifier_orcid'])) : ?>
-                <li><?= $this->person['identifier_orcid'] ?></li>
+                <li class="identifier_orcid"><?= $this->person['identifier_orcid'] ?></li>
             <?PHP endif ?>
             <?PHP if (isset($this->person['identifier_gnd'])) : ?>
-                <li><?= $this->person['identifier_orcid'] ?></li>
+                <li class="identifier_gnd"><?= $this->person['identifier_gnd'] ?></li>
             <?PHP endif ?>
             <?PHP if (isset($this->person['identifier_misc'])) : ?>
-                <li><?= $this->person['identifier_orcid'] ?></li>
+                <li class="identifier_misc"><?= $this->person['identifier_misc'] ?></li>
             <?PHP endif ?>
         </ul>
     </div>

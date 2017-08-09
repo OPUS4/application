@@ -24,48 +24,40 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Application_Form_Element
+ * @category    Tests
+ * @package     Application_View_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Application_Form_Element_MultiCheckbox extends Zend_Form_Element_MultiCheckbox {
 
-    public function init() {
-        parent::init();
+class Application_View_Helper_FormDocumentsTest extends ControllerTestCase
+{
 
-        $this->addPrefixPath(
-            'Application_Form_Decorator', 'Application/Form/Decorator', Zend_Form::DECORATOR
-        );
+    private $_helper;
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->_helper = new Application_View_Helper_FormDocuments();
     }
 
-    public function loadDefaultDecorators() {
-        if (!$this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
-            $this->setDecorators(
-                array(
-                'ViewHelper',
-                'ElementHtmlTag',
-                array('LabelNotEmpty', array('tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend',
-                    'disableFor' => true)),
-                array(array('dataWrapper' => 'HtmlTagWithId'), array('tag' => 'div', 'class' => 'data-wrapper'))
-                )
-            );
-        }
+    public function testFormDocumentsWithoutDocuments()
+    {
+        $output = $this->_helper->formDocuments('Documents');
+
+        $this->assertEquals('', $output);
     }
 
-    /**
-     * Sorgt dafür, daß nur der Text ausgeben wird und kein INPUT-Tag.
-     */
-    public function prepareRenderingAsView() {
-        $viewHelper = $this->getDecorator('ViewHelper');
-        if ($viewHelper instanceof Application_Form_Decorator_ViewHelper) {
-            $viewHelper->setViewOnlyEnabled(true);
-        }
-    }
+    public function testFormDocuments()
+    {
+        $output = $this->_helper->formDocuments('Documents', null, null, array(
+            1 => new Opus_Document(1)
+        ));
 
-    public function getStaticViewHelper() {
-        return 'viewFormMultiCheckbox';
+        $this->assertContains('<div class="documents">', $output);
+        $this->assertContains('<div class="document-authors"><span class="author">Hapke, Thomas</span></div>', $output);
     }
 
 }
