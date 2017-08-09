@@ -55,10 +55,11 @@ class Admin_Form_PersonsConfirmTest extends ControllerTestCase
 
         $elements = $form->getElements();
 
-        $this->assertCount(3, $elements);
+        $this->assertCount(4, $elements);
         $this->assertArrayHasKey('Back', $elements);
         $this->assertArrayHasKey('Save', $elements);
         $this->assertArrayHasKey('Cancel', $elements);
+        $this->assertArrayHasKey('FormId', $elements);
 
         $this->assertEquals('persons-confirm', $form->getAttrib('class'));
     }

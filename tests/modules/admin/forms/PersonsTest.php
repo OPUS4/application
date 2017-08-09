@@ -36,7 +36,7 @@ class Admin_Form_PersonsTest extends ControllerTestCase
 
     private $_elementNames = array(
         'LastName', 'FirstName', 'IdentifierGnd', 'IdentifierOrcid', 'IdentifierMisc',
-        'Email', 'PlaceOfBirth', 'DateOfBirth', 'AcademicTitle', 'Save', 'Cancel'
+        'Email', 'PlaceOfBirth', 'DateOfBirth', 'AcademicTitle', 'Save', 'Cancel', 'FormId'
     );
 
     public function testCreateForm()
@@ -45,7 +45,7 @@ class Admin_Form_PersonsTest extends ControllerTestCase
 
         $elements = $form->getElements();
 
-        $this->assertCount(11, $elements);
+        $this->assertCount(12, $elements);
 
         foreach ($this->_elementNames as $name)
         {
@@ -59,6 +59,7 @@ class Admin_Form_PersonsTest extends ControllerTestCase
 
         $elementNames = $this->_elementNames;
 
+        array_pop($elementNames); // do not check 'FormId'
         array_pop($elementNames); // do not check 'Cancel'
         array_pop($elementNames); // do not check 'Save'
 
