@@ -204,6 +204,15 @@ letzten Änderung wird aktualisiert.
       </tuv>
     </tu>
 
+    <tu tuid="admin_person_error_not_found">
+      <tuv xml:lang="en">
+        <seg>No matching person was found.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Keine passende Person gefunden.</seg>
+      </tuv>
+    </tu>
+
   </body>
   
 </tmx>

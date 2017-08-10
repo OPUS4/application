@@ -224,7 +224,16 @@ class Admin_PersonController extends Application_Controller_Action
         if (empty($person))
         {
             $this->_helper->Redirector->redirectTo(
-                'index', null // array('failure' => 'parameters missing (TODO translate)')
+                'index', null // TODO array('failure' => 'parameters missing (TODO translate)')
+            );
+        }
+
+        $personValues = Opus_Person::getPersonValues($person);
+
+        if (is_null($personValues))
+        {
+            $this->_helper->Redirector->redirectTo(
+                'index', array('failure' => 'admin_person_error_not_found')
             );
         }
 
@@ -278,9 +287,7 @@ class Admin_PersonController extends Application_Controller_Action
 
                             $confirmForm = new Admin_Form_PersonsConfirm();
                             $confirmForm->getElement(Admin_Form_PersonsConfirm::ELEMENT_FORM_ID)->setValue($formId);
-                            $confirmForm->setOldValues(
-                                Opus_Person::convertToFieldNames(Opus_Person::getPersonValues($person))
-                            );
+                            $confirmForm->setOldValues(Opus_Person::convertToFieldNames($personValues));
                             $confirmForm->populateFromModel($person);
                             $confirmForm->setChanges(Opus_Person::convertToFieldNames($changes));
                             $confirmForm->setAction($this->view->url(array(
@@ -304,9 +311,7 @@ class Admin_PersonController extends Application_Controller_Action
             $data = array();
         }
 
-        $values = Opus_Person::getPersonValues($person);
-
-        $form->populateFromModel($values);
+        $form->populateFromModel($personValues);
         $form->populate($data);
 
         $this->renderForm($form);
