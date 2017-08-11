@@ -390,6 +390,28 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract {
         return $documents;
     }
 
+    /**
+     * Sets up the xml query.
+     * TODO not used anymore (from PR75 - merge with new code)
+     */
+    private function buildQuery($request) {
+        $queryBuilder = new Application_Util_QueryBuilder($this->getLogger(), true);
+        $queryBuilderInput = array();
+        try {
+            $queryBuilderInput = $queryBuilder->createQueryBuilderInputFromRequest($request);
+        }
+        catch (Application_Util_QueryBuilderException $e) {
+            $this->getLogger()->err(__METHOD__ . ' : ' . $e->getMessage());
+            $applicationException = new Application_Exception($e->getMessage());
+            $code = $e->getCode();
+            if ($code != 0) {
+                $applicationException->setHttpResponseCode($code);
+            }
+            throw $applicationException;
+        }
+
+        return $queryBuilder->createSearchQuery($queryBuilderInput);
+    }
 
     /**
      * Searches for available stylesheets and builds the path of the selected stylesheet.
