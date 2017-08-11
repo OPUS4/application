@@ -390,7 +390,6 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract {
         return $documents;
     }
 
-
     /**
      * Searches for available stylesheets and builds the path of the selected stylesheet.
      */
