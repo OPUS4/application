@@ -28,13 +28,14 @@
  * @category    Application
  * @package     Tests
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 class Admin_CollectionrolesControllerTest extends ControllerTestCase {
 
     private $emptyCollectionRole = null;
+
     private $nonEmptyCollectionRole = null;
 
     public function setUp() {
@@ -89,10 +90,10 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase {
         $this->assertController('collectionroles');
         $this->assertAction('index');
 
-        $this->assertXpathCount('//td[@class="edit"]', 21); // 19 in Testdaten, +2 in setUp
+        $this->assertXpathCount('//td[@class="edit"]', 22); // 19 in Testdaten, +2 in setUp
         $this->assertXpathContentContains('//td[@class="hide invisible"]/a', 'Unhide');
-        $this->assertXpathCount('//td[@class="hide invisible"]/a', 4); // 3 in Testdaten, +2 in setUp
-        $this->assertXpathCount('//th[@class="invisible"]/a', 4); // 3 in Testdaten, +2 in setUp
+        $this->assertXpathCount('//td[@class="hide invisible"]/a', 3); // 3 in Testdaten, +2 in setUp
+        $this->assertXpathCount('//th[@class="invisible"]/a', 3); // 3 in Testdaten, +2 in setUp
     }
 
     public function testEditAction() {
@@ -248,7 +249,7 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase {
 
         $roles = Opus_CollectionRole::fetchAll();
 
-        $this->assertEquals(21, count($roles));
+        $this->assertEquals(22, count($roles));
 
         $roleIds = array();
 

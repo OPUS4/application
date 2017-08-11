@@ -275,7 +275,45 @@
             </xsl:attribute>
             <xsl:value-of select="concat(@FirstName, ' ', @LastName)" />
         </xsl:element>
+
+        <xsl:if test="@IdentifierOrcid and php:functionString('Application_Xslt::optionEnabled', 'linkAuthor.frontdoor', 'orcid')">
+            <xsl:element name="a">
+                <xsl:attribute name="href">
+                    <xsl:value-of select="php:functionString('Application_Xslt::optionValue', 'baseUrl', 'orcid')"/>
+                    <xsl:value-of select="@IdentifierOrcid"/>
+                </xsl:attribute>
+                <xsl:attribute name="class">
+                    <xsl:text>orcid-link</xsl:text>
+                </xsl:attribute>
+                <xsl:attribute name="title">
+                    <xsl:call-template name="translateString">
+                        <xsl:with-param name="string">frontdoor_orcid</xsl:with-param>
+                    </xsl:call-template>
+                </xsl:attribute>
+                <xsl:text>ORCiD</xsl:text>
+            </xsl:element>
+        </xsl:if>
+
+        <xsl:if test="@IdentifierGnd and php:functionString('Application_Xslt::optionEnabled', 'linkAuthor.frontdoor', 'gnd')">
+            <xsl:element name="a">
+                <xsl:attribute name="href">
+                    <xsl:value-of select="php:functionString('Application_Xslt::optionValue', 'baseUrl', 'gnd')"/>
+                    <xsl:value-of select="@IdentifierGnd"/>
+                </xsl:attribute>
+                <xsl:attribute name="class">
+                    <xsl:text>gnd-link</xsl:text>
+                </xsl:attribute>
+                <xsl:attribute name="title">
+                    <xsl:call-template name="translateString">
+                        <xsl:with-param name="string">frontdoor_gnd</xsl:with-param>
+                    </xsl:call-template>
+                </xsl:attribute>
+                <xsl:text>GND</xsl:text>
+            </xsl:element>
+        </xsl:if>
+
         <xsl:if test="position() != last()">, </xsl:if>
+
         <xsl:if test="position() = last()">
             <xsl:text disable-output-escaping="yes">&lt;/td&gt;</xsl:text>
             <xsl:text disable-output-escaping="yes">&lt;/tr&gt;</xsl:text>
@@ -373,10 +411,10 @@
             <td>
                 <xsl:element name="a">
                     <xsl:attribute name="href">
-                        <xsl:text>http://dx.doi.org/</xsl:text>
+                        <xsl:value-of select="php:functionString('Application_Xslt::optionValue', 'doi.resolverUrl')"/>
                         <xsl:value-of select="@Value" />
                     </xsl:attribute>
-                    <xsl:text>http://dx.doi.org/</xsl:text>
+                    <xsl:value-of select="php:functionString('Application_Xslt::optionValue', 'doi.resolverUrl')"/>
                     <xsl:value-of select="@Value" />
                 </xsl:element>
             </td>

@@ -22,7 +22,6 @@
                     <label>admin_title_documents</label>
                     <description>admin_title_documents_description</description>
                     <group>group-sky</group>
-                    <colclass>cols-one-half</colclass>
                     <module>admin</module>
                     <controller>documents</controller>
                     <action>index</action>
@@ -126,12 +125,38 @@
                     <label>review_menu_label</label>
                     <description>review_menu_label_description</description>
                     <group>group-sky</group>
-                    <colclass>cols-one-half</colclass>
                     <module>review</module>
                     <controller>index</controller>
                     <action>index</action>
                     <resource>reviewing</resource>
                 </review>
+
+                <persons>
+                    <type>mvc</type>
+                    <label>admin_title_persons</label>
+                    <description>admin_title_persons_description</description>
+                    <group>group-sky</group>
+                    <module>admin</module>
+                    <controller>person</controller>
+                    <action>index</action>
+                    <resource>persons</resource>
+                    <pages>
+                        <documents>
+                            <type>mvc</type>
+                            <label>admin_person_documents</label>
+                            <module>admin</module>
+                            <controller>person</controller>
+                            <action>documents</action>
+                        </documents>
+                        <edit>
+                            <type>mvc</type>
+                            <label>admin_person_edit</label>
+                            <module>admin</module>
+                            <controller>person</controller>
+                            <action>edit</action>
+                        </edit>
+                    </pages>
+                </persons>
 
                 <collections>
                     <type>mvc</type>
@@ -589,6 +614,14 @@
                                     <controller>iprange</controller>
                                     <action>update</action>
                                 </update>
+
+                                <delete>
+                                    <type>mvc</type>
+                                    <label>admin_iprange_delete</label>
+                                    <module>admin</module>
+                                    <controller>iprange</controller>
+                                    <action>delete</action>
+                                </delete>
                             </pages>
                         </ipranges>
                     </pages>
@@ -603,17 +636,6 @@
                     <controller>index</controller>
                     <action>setup</action>
                     <pages>
-                        <config>
-                            <type>mvc</type>
-                            <label>admin_title_config</label>
-                            <description>admin_title_config_description</description>
-                            <group>group-cafelatte</group>
-                            <module>admin</module>
-                            <controller>config</controller>
-                            <action>index</action>
-                            <resource>options</resource>
-                        </config>
-
                         <enrichmentKey>
                             <type>mvc</type>
                             <label>admin_title_enrichmentkey</label>
@@ -774,6 +796,39 @@
                     </pages>
                 </setup>
 
+                <settings>
+                    <type>mvc</type>
+                    <label>admin_title_settings</label>
+                    <description>admin_title_settings_description</description>
+                    <group>group-caffelatte</group>
+                    <module>admin</module>
+                    <controller>index</controller>
+                    <action>config</action>
+                    <pages>
+                        <config>
+                            <type>mvc</type>
+                            <label>admin_title_config</label>
+                            <description>admin_title_config_description</description>
+                            <group>group-cafelatte</group>
+                            <module>admin</module>
+                            <controller>config</controller>
+                            <action>index</action>
+                            <resource>options</resource>
+                        </config>
+
+                        <modules>
+                            <type>mvc</type>
+                            <label>admin_title_module</label>
+                            <description>admin_title_module_description</description>
+                            <group>group-caffelatte</group>
+                            <module>admin</module>
+                            <controller>module</controller>
+                            <action>index</action>
+                            <resource>options</resource> <!-- TODO -->
+                        </modules>
+                    </pages>
+                </settings>
+
                 <info>
                     <type>mvc</type>
                     <label>admin_title_info</label>
@@ -887,6 +942,7 @@
                         </doctype>
                     </pages>
                 </info>
+
             </pages>
         </administration>
     </nav>

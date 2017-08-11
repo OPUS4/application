@@ -204,13 +204,16 @@ class Publish_DepositControllerTest extends ControllerTestCase {
     /**
      * @expectedException Publish_Model_FormDocumentNotFoundException
      */
-    public function testStoreExistingDocument() {
+    public function testStoreExistingDocument()
+    {
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
         $doc->setType('preprint');
 
         $log = Zend_Registry::get('Zend_Log');
-        new Publish_Model_Deposit($doc->store(), $log);
+        $deposit = new Publish_Model_Deposit($log);
+        $deposit->storeDocument($doc->store());
     }
+
 }
 

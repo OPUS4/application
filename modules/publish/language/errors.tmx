@@ -10,10 +10,10 @@
 
     <tu tuid="error_empty_post_array">
         <tuv xml:lang="en">
-            <seg>Error: No files uploaded or data submitted. This error can possibly be caused by files that enlarge the allowed upload size in php.ini. The administrator will be informed.<br />Please retry publishing a document using a smaller file. </seg>
+            <seg><![CDATA[Error: No files uploaded or data submitted. This error can possibly be caused by files that enlarge the allowed upload size in php.ini. The administrator will be informed.<br />Please retry publishing a document using a smaller file. ]]></seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Fehler: es wurden keine Dateien hochgeladen oder Daten übermittelt. Eine mögliche Ursache sind zu große Dateien, die die erlaubte Upload Größe in php.ini übersteigen. Der Administrator wird darüber informiert.<br /> Bitte versuchen Sie erneut ein Dokument mit einer kleineren Datei zu veröffentlichen.</seg>
+            <seg><![CDATA[Fehler: es wurden keine Dateien hochgeladen oder Daten übermittelt. Eine mögliche Ursache sind zu große Dateien, die die erlaubte Upload Größe in php.ini übersteigen. Der Administrator wird darüber informiert.<br /> Bitte versuchen Sie erneut ein Dokument mit einer kleineren Datei zu veröffentlichen.]]></seg>
         </tuv>
     </tu>
 
@@ -118,10 +118,10 @@
 
     <tu tuid="publish_controller_form_template1">
         <tuv xml:lang="en">
-            <seg>Error: document type fields <b>are missing</b> in the template. Please compare template with document type and complete it.</seg>
+            <seg><![CDATA[Error: document type fields <b>are missing</b> in the template. Please compare template with document type and complete it.]]></seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Fehler: es <b>fehlen</b> Dokumenttyp-Felder innerhalb des Templates. Bitte vergleichen und ergänzen Sie. </seg>
+            <seg><![CDATA[Fehler: es <b>fehlen</b> Dokumenttyp-Felder innerhalb des Templates. Bitte vergleichen und ergänzen Sie. ]]></seg>
         </tuv>
     </tu>
 
@@ -130,7 +130,7 @@
             <seg>Error: there are too many document type fields in the template. Please compare template with document type and delete.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Fehler: es gibt <b>zu viele</b> Dokumenttyp-Felder innerhalb des Templates. Bitte vergleichen und löschen Sie.</seg>
+            <seg><![CDATA[Fehler: es gibt <b>zu viele</b> Dokumenttyp-Felder innerhalb des Templates. Bitte vergleichen und löschen Sie.]]></seg>
         </tuv>
     </tu>
 

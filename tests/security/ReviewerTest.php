@@ -58,7 +58,10 @@ class ReviewerTest extends ControllerTestCase {
      */
     public function testNoAccessAdminMenu() {
         $this->dispatch('/admin');
-        $this->assertRedirectTo('/auth', 'redirect to /auth from /admin not asserted');
+        $this->assertRedirectTo(
+            '/auth/index/rmodule/admin/rcontroller/index/raction/index',
+            'redirect to /auth from /admin not asserted'
+        );
     }
 
     /**
@@ -75,7 +78,10 @@ class ReviewerTest extends ControllerTestCase {
      */
     public function testNoAccessDocumentsController() {
         $this->dispatch('/admin/documents');
-        $this->assertRedirectTo('/auth', 'redirect to /auth from /admin/documents not asserted');
+        $this->assertRedirectTo(
+            '/auth/index/rmodule/admin/rcontroller/documents/raction/index',
+            'redirect to /auth from /admin/documents not asserted'
+        );
     }
 
 }

@@ -29,9 +29,9 @@
  * @package     Module_Publish Unit Test
  * @author      Susanne Gottwald <gottwald@zib.de>
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 class Publish_FormControllerTest extends ControllerTestCase {
 
@@ -237,7 +237,7 @@ class Publish_FormControllerTest extends ControllerTestCase {
 
         $this->assertContains('<b>Weitere Formulardaten:</b>', $this->getResponse()->getBody());
         $this->assertContains('<td>22.01.2011</td>', $this->getResponse()->getBody());
-        $this->assertContains('<td>Creative Commons - Namensnennung</td>', $this->getResponse()->getBody());
+        $this->assertContains('<td>Creative Commons - CC BY-ND - Namensnennung - Keine Bearbeitungen 4.0 International</td>', $this->getResponse()->getBody());
         $this->assertContains('<b>Es wurden keine Dateien hochgeladen. </b>', $this->getResponse()->getBody());
     }
 
@@ -609,9 +609,9 @@ class Publish_FormControllerTest extends ControllerTestCase {
             ->setMethod('POST')
             ->setPost($data);
         $this->dispatch('/publish/form/check');
-        $this->assertEquals('200', $this->getResponse()->getHttpResponseCode());
+        $this->assertResponseCode(200);
 
-        $this->assertEquals(3, count($session->additionalFields));
+        $this->assertEquals(5, count($session->additionalFields));
         $this->assertEquals('2', $session->additionalFields['TitleMain']);
         $this->assertEquals(1, $session->additionalFields['stepInstitute_1']);
         $this->assertEquals('1', $session->additionalFields['collId0Institute_1']);
@@ -665,7 +665,7 @@ class Publish_FormControllerTest extends ControllerTestCase {
         $this->dispatch('/publish/form/check');
         $this->assertEquals('200', $this->getResponse()->getHttpResponseCode());
 
-        $this->assertEquals(3, count($session->additionalFields));
+        $this->assertEquals(5, count($session->additionalFields));
         $this->assertEquals(1, $session->additionalFields['TitleMain']);
         $this->assertEquals(1, $session->additionalFields['stepInstitute_1']);
         $this->assertEquals('1', $session->additionalFields['collId0Institute_1']);
@@ -719,7 +719,7 @@ class Publish_FormControllerTest extends ControllerTestCase {
         $this->dispatch('/publish/form/check');
         $this->assertEquals('200', $this->getResponse()->getHttpResponseCode());
 
-        $this->assertEquals(4, count($session->additionalFields));
+        $this->assertEquals(6, count($session->additionalFields));
         $this->assertEquals('15994', $session->additionalFields['collId1Institute_1']);
         $this->assertEquals(2, $session->additionalFields['stepInstitute_1']);
         $this->assertEquals('1', $session->additionalFields['Institute']);
@@ -775,7 +775,7 @@ class Publish_FormControllerTest extends ControllerTestCase {
         $this->dispatch('/publish/form/check');
         $this->assertEquals('200', $this->getResponse()->getHttpResponseCode());
 
-        $this->assertEquals(4, count($session->additionalFields));
+        $this->assertEquals(6, count($session->additionalFields));
         $this->assertEquals(1, $session->additionalFields['stepInstitute_1']);
         $this->assertEquals('1', $session->additionalFields['Institute']);
         $this->assertEquals('15994', $session->additionalFields['collId1Institute_1']);

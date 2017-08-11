@@ -55,7 +55,7 @@ class Publish_DepositController extends Application_Controller_Action {
     public function depositAction() {
 
         if ($this->getRequest()->isPost() !== true) {
-            return $this->_redirectTo('index', '', 'index');
+            return $this->_helper->Redirector->redirectTo('index', '', 'index');
         }
 
         //post content is just checked for buttons
@@ -75,7 +75,7 @@ class Publish_DepositController extends Application_Controller_Action {
                     );
                 }
             }
-            return $this->_redirectTo('index', '', 'index');
+            return $this->_helper->Redirector->redirectTo('index', '', 'index');
         }
 
         $this->view->title = 'publish_controller_index';
@@ -101,7 +101,8 @@ class Publish_DepositController extends Application_Controller_Action {
         }
 
         try {
-            $depositData = new Publish_Model_Deposit($this->session->documentId, $this->log, $this->depositData);
+            $depositData = new Publish_Model_Deposit();
+            $depositData->storeDocument($this->session->documentId, $this->log, $this->depositData);
         }
         catch (Publish_Model_Exception $e) {
             throw new Application_Exception('publish_error_unexpected');
@@ -147,9 +148,11 @@ class Publish_DepositController extends Application_Controller_Action {
             null,
             true
         );
-        $notification->prepareMail($this->document, Application_Util_Notification::SUBMISSION, $this->view->serverUrl() . $url);
+        $notification->prepareMail(
+            $this->document, Application_Util_Notification::SUBMISSION, $this->view->serverUrl() . $url
+        );
 
-        return $this->_redirectToAndExit($targetAction, null, $targetController, $targetModule);
+        return $this->_helper->Redirector->redirectToAndExit($targetAction, null, $targetController, $targetModule);
     }
 
     /**
@@ -159,7 +162,7 @@ class Publish_DepositController extends Application_Controller_Action {
     public function confirmAction() {
         // redirecting if action is called directly
         if (is_null($this->session->depositConfirmDocumentId)) {
-            return $this->_redirectToAndExit('index', null, 'index');
+            return $this->_helper->Redirector->redirectToAndExit('index', null, 'index');
         }
         $this->view->docId = $this->session->depositConfirmDocumentId;
 

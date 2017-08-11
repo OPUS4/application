@@ -172,10 +172,7 @@ class CitationExport_Model_Helper extends Application_Model_Abstract {
      * @return string document in the given output format as plain text
      */
     public function getPlainOutput($document, $template) {
-        // Set up filter and get XML-Representation of filtered document.
-        $filter = new Opus_Model_Filter;
-        $filter->setModel($document);
-        $xml = $filter->toXml();
+        $xml = $document->toXml();
 
         // Set up XSLT-Stylesheet
         $xslt = new DomDocument;

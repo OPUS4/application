@@ -28,15 +28,15 @@
  * @category    Application
  * @author      Susanne Gottwald<gottwald@zib.de>
  * @author      Doreen Thiede <thiede@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id: book.xml 8423 2011-05-27 16:58:20Z sszott $
  */
  -->
 <documenttype name="periodical"
-    xmlns="http://schemas.opus.org/documenttype"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://schemas.opus.org/documenttype https://svn.zib.de/opus4dev/framework/trunk/library/Opus/Document/documenttype.xsd">
+              xmlns="http://www.opus-repository.org/schema/documenttype"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://www.opus-repository.org/schema/documenttype http://www.opus-repository.org/schema/documenttype.xsd">
 
 <!-- required fields -->
     <field name="PersonSubmitter" required="yes" formelement="Text" datatype="Person" multiplicity="1">
@@ -53,8 +53,8 @@
     <field name="CompletedDate" required="yes" formelement="Text" datatype="Date" multiplicity="1">
         <default value="today" edit="yes" public="yes" />
     </field>
-	<field name="ThesisPublisher" required="yes" formelement="Select" datatype="ThesisPublisher" multiplicity="*"/>
-	<field name="Series" required="yes" formelement="Select" datatype="Series" multiplicity="1"/>
+    <field name="ThesisPublisher" required="yes" formelement="Select" datatype="ThesisPublisher" multiplicity="*"/>
+    <field name="Series" required="yes" formelement="Select" datatype="Series" multiplicity="1"/>
     
 <!-- unrequired fields -->
     <field name="PersonContributor" required="no" formelement="Text" datatype="Person" multiplicity="*" />
@@ -62,6 +62,7 @@
     <field name="PublisherName" required="no" formelement="Text" datatype="Text" multiplicity="1" />
     <field name="PublisherPlace" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
     <field name="PageNumber" required="no" formelement="Text" datatype="Text" multiplicity="1" />   
+    <field name="SubjectDDC" required="no" formelement="Select" datatype="CollectionLeaf" root="ddc" multiplicity="*"/>	
     <field name="SubjectSwd" required="no" formelement="Text" datatype="Subject" multiplicity="5" />
     <field name="SubjectUncontrolled" required="no" formelement="Text" datatype="Subject" multiplicity="5" />
     <field name="Institute" required="no" formelement="Select" datatype="Collection" root="institutes" multiplicity="1"/>

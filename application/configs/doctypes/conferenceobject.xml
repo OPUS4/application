@@ -28,15 +28,15 @@
  * @category    Application
  * @author      Susanne Gottwald <gottwald@zib.de>
  * @author      Doreen Thiede <thiede@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
  -->
 <documenttype name="conferenceobject"
-    xmlns="http://schemas.opus.org/documenttype"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://schemas.opus.org/documenttype https://svn.zib.de/opus4dev/framework/trunk/library/Opus/Document/documenttype.xsd">
+              xmlns="http://www.opus-repository.org/schema/documenttype"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://www.opus-repository.org/schema/documenttype http://www.opus-repository.org/schema/documenttype.xsd">
 
 <!-- required fields -->
     <field name="PersonSubmitter" required="yes" formelement="Text" datatype="Person" multiplicity="1">
@@ -53,7 +53,7 @@
     <field name="CompletedDate" required="yes" formelement="Text" datatype="Date" multiplicity="1">
         <default value="today" edit="yes" public="yes" />
     </field>
-	<field name="ThesisPublisher" required="yes" formelement="Select" datatype="ThesisPublisher" multiplicity="*"/>
+    <field name="ThesisPublisher" required="yes" formelement="Select" datatype="ThesisPublisher" multiplicity="*"/>
 
 <!-- unrequired fields -->
     <field name="TitleParent" required="no" formelement="Text" datatype="Title" multiplicity="1" />
@@ -74,6 +74,7 @@
     <field name="PageNumber" required="no" formelement="Text" datatype="Text" multiplicity="1" />
     <field name="PageFirst" required="no" formelement="Text" datatype="Text" multiplicity="1" />
     <field name="PageLast" required="no" formelement="Text" datatype="Text" multiplicity="1" />   
+    <field name="SubjectDDC" required="no" formelement="Select" datatype="CollectionLeaf" root="ddc" multiplicity="*"/>	
     <field name="SubjectUncontrolled" required="no" formelement="Text" datatype="Subject" multiplicity="5" />
     <field name="Institute" required="no" formelement="Select" datatype="Collection" root="institutes" multiplicity="1"/>
     <field name="PublishedDate" required="no" formelement="Text" datatype="Date" multiplicity="1" />

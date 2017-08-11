@@ -29,7 +29,7 @@
  * @package     Module_Oai
  * @author      Michael Lang <lang@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 -->
@@ -75,6 +75,7 @@
             <!-- dc:subject -->
             <xsl:apply-templates select="Subject[@Type='swd']" mode="oai_dc" />
             <xsl:apply-templates select="Collection[@RoleName='ddc' and @Visible=1]" mode="oai_dc" />
+           
             <!-- dc:description -->
             <xsl:apply-templates select="TitleAbstract" mode="oai_dc" />
             <!-- dc:publisher -->
@@ -96,23 +97,22 @@
             <xsl:apply-templates select="IdentifierUrn" mode="oai_dc" />
             <xsl:apply-templates select="IdentifierIsbn" mode="oai_dc" />
             <xsl:apply-templates select="File" mode="oai_dc" />
-            <!-- dc:source -->
-            <!-- <xsl:apply-templates select="" /> -->
             <!-- dc:language -->
             <xsl:apply-templates select="@Language" mode="oai_dc" />
-            <!-- dc:relation -->
             <!-- <xsl:apply-templates select="" /> -->
             <!-- dc:coverage -->
             <!-- <xsl:apply-templates select="" /> -->
             <!-- dc:rights -->
             <xsl:apply-templates select="Licence" mode="oai_dc" />
-            <!-- open aire -->
-            <xsl:apply-templates select="Enrichment" mode="oai_dc" />
+            <!-- open aire  dc:relation -->
+            <xsl:apply-templates select="Enrichment[@KeyName='Relation']" mode="oai_dc" />
             <xsl:apply-templates select="Rights" mode="oai_dc" />
             <!-- dc:type -->
             <!-- <dc:type>info:eu-repo/semantics/publishedVersion</dc:type> -->
             <!-- dc:source -->
             <xsl:apply-templates select="TitleParent" mode="oai_dc" />
+            <!-- dc:source Enrichment'SourceTitle'-->
+            <!-- <xsl:apply-templates select="Enrichment[@KeyName='SourceTitle']" mode="oai_dc" /> -->
             <xsl:call-template name="PublicationVersion" />
         </oai_dc:dc>
     </xsl:template>
@@ -120,7 +120,7 @@
     <xsl:template name="OpusDate" >
         <dc:date>
             <xsl:choose>
-                <xsl:when test="PublishedDate">
+	        <xsl:when test="PublishedDate">
                     <xsl:value-of select="PublishedDate/@Year"/>-<xsl:value-of select="format-number(PublishedDate/@Month,'00')"/>-<xsl:value-of select="format-number(PublishedDate/@Day,'00')"/>
                 </xsl:when>
                 <xsl:when test="CompletedDate">
@@ -145,7 +145,7 @@
                 <xsl:value-of select="php:functionString('Oai_Model_Language::getLanguageCode', @Language, 'part1')" />
             </xsl:attribute>
             <xsl:value-of select="@Value" />
-            <xsl:if test="$oai_set='openaire' and ../TitleSub/@Value != ''">
+            <xsl:if test="starts-with($oai_set,'openaire')  and ../TitleSub/@Value != ''">
                 <xsl:text>:</xsl:text>
                 <xsl:value-of select="../TitleSub/@Value" />
             </xsl:if>
@@ -198,7 +198,7 @@
             <xsl:text>ddc:</xsl:text><xsl:value-of select="@Number" />
         </dc:subject>
     </xsl:template>
-
+	
     <xsl:template match="TitleAbstract" mode="oai_dc">
         <dc:description>
             <xsl:attribute name="xml:lang">
@@ -210,28 +210,27 @@
 
     <xsl:template match="@Type" mode="oai_dc">
         <xsl:choose>
-            <xsl:when test="$oai_set='openaire'">
+            <xsl:when test="starts-with($oai_set,'openaire')">
                 <dc:type>
-                    <xsl:call-template name="compareDocumentName" />
-                </dc:type>
-            </xsl:when>
-            <xsl:when test=".='habilitation'" >
-                <dc:type>
-                    <xsl:text>doctoralthesis</xsl:text>
-                </dc:type>
-                <dc:type>
-                    <xsl:text>doc-type:doctoralthesis</xsl:text>
-                </dc:type>
+                    <xsl:call-template name="compareDocumentName" />     
+               </dc:type>
             </xsl:when>
             <xsl:otherwise>
-                <dc:type>
-                    <xsl:value-of select="." />
-                </dc:type>
-                <dc:type>
-                    <xsl:text>doc-type:</xsl:text><xsl:value-of select="." />
-                </dc:type>
+            <dc:type>
+                <xsl:choose>
+                    <xsl:when test=".='habilitation'">
+                        <xsl:text>doctoralthesis</xsl:text>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="." />
+                    </xsl:otherwise>
+                </xsl:choose>
+            </dc:type>
             </xsl:otherwise>
         </xsl:choose>
+        <dc:type>
+            <xsl:call-template name="dcmiType"/>
+        </dc:type>
     </xsl:template>
 
     <xsl:template name="compareDocumentName" >
@@ -275,8 +274,29 @@
             <xsl:when test=". = 'report'">
                 <xsl:text>info:eu-repo/semantics/report</xsl:text>
             </xsl:when>
+            <xsl:when test=".='habilitation'" >
+                <xsl:text>info:eu-repo/semantics/doctoralThesis</xsl:text>
+            </xsl:when>
             <xsl:otherwise>
                 <xsl:text>info:eu-repo/semantics/other</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+     </xsl:template>
+	
+     <xsl:template name="dcmiType" >
+          <xsl:choose>
+            <xsl:when test=". = 'diplthesis' or  . = 'diplom'">
+                <xsl:text>doc-type:masterThesis</xsl:text>
+            </xsl:when>
+            <xsl:when test=". = 'habilitation' or . = 'doctoralthesis'">
+                <xsl:text>doc-type:doctoralThesis</xsl:text>
+            </xsl:when>
+            <xsl:when test=". = 'bachelorthesis'">
+                <xsl:text>doc-type:bachelorThesis</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>doc-type:</xsl:text>
+                <xsl:value-of select="."/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
@@ -301,7 +321,7 @@
 
     <xsl:template match="IdentifierIsbn" mode="oai_dc">
         <dc:identifier>
-            <xsl:if test="$oai_set='openaire'">
+            <xsl:if test="starts-with($oai_set,'openaire')">
                 <xsl:text>urn:isbn:</xsl:text>
             </xsl:if>
             <xsl:value-of select="@Value" />
@@ -326,7 +346,7 @@
 
     <xsl:template match="Licence" mode="oai_dc">
         <dc:rights>
-            <xsl:value-of select="@NameLong" />
+           <xsl:value-of select="@LinkLicence" />
         </dc:rights>
     </xsl:template>
 
@@ -343,7 +363,7 @@
     </xsl:template>
 
     <xsl:template match="EmbargoDate" mode="oai_dc">
-        <xsl:if test="$oai_set='openaire'">
+         <xsl:if test="starts-with($oai_set,'openaire')">
             <xsl:choose>
                 <xsl:when test="following-sibling::Rights/@Value='info:eu-repo/semantics/embargoedAccess'">
                     <dc:date>
@@ -356,7 +376,7 @@
     </xsl:template>
 
     <xsl:template match="TitleParent" mode="oai_dc">
-        <xsl:if test="$oai_set='openaire'">
+         <xsl:if test="starts-with($oai_set,'openaire')">
             <dc:source>
                 <xsl:attribute name="xml:lang">
                     <xsl:value-of select="php:functionString('Oai_Model_Language::getLanguageCode', @Language, 'part1')" />
@@ -377,7 +397,7 @@
     -->
 
     <xsl:template name="PublicationVersion">
-        <xsl:if test="$oai_set='openaire'">
+        <xsl:if test="starts-with($oai_set,'openaire')">
             <dc:type>
                 <xsl:text>info:eu-repo/semantics/publishedVersion</xsl:text>
             </dc:type>

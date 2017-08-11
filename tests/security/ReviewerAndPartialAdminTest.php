@@ -96,7 +96,10 @@ class ReviewerAndPartialAdminTest extends ControllerTestCase {
      */
     public function testNoAccessDocumentsController() {
         $this->dispatch('/admin/documents');
-        $this->assertRedirectTo('/auth', 'redirect from /admin/documents to /auth not asserted');
+        $this->assertRedirectTo(
+            '/auth/index/rmodule/admin/rcontroller/documents/raction/index',
+            'redirect from /admin/documents to /auth not asserted'
+        );
     }
 
 }

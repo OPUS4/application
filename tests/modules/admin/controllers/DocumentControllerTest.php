@@ -27,9 +27,8 @@
  * @category    Unit Tests
  * @author      Jens Schwidder <schwidder@zib.de>
  * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -220,7 +219,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
 
         // Prüfen, ob XHTML valid ist
         $this->validateXHTML($this->getResponse()->getBody());
-        $this->assertQueryContentContains('div.breadcrumbsContainer', 'KOBV (146)');
+        $this->assertQueryContentContains('div.breadcrumbsContainer', 'KOBV');
     }
 
     public function testIndexActionCollectionRolesTranslated() {
@@ -568,7 +567,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
 
         // Lizenzen
         $this->assertQueryContentContains('//fieldset[@id="fieldset-Licences"]/legend', 'Lizenzen');
-        $this->assertQueryContentContains('//*[@id="Document-Licences-licence4-label"]', 'Creative Commons - Namensnennung');
+        $this->assertQueryContentContains('//*[@id="Document-Licences-licence4-label"]', 'Creative Commons - CC BY-ND - Namensnennung');
 
         // Patents
         $this->assertQueryContentContains('//*[@id="Document-Patents-Patent0-Number"]', '1234');
@@ -805,7 +804,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
 
         // Lizenzen (Name der Lizenz nicht übersetzt)
         $this->assertQueryContentContains('//fieldset[@id="fieldset-Licences"]/legend', 'Licences');
-        $this->assertQueryContentContains('//*[@id="Document-Licences-licence4-label"]', 'Creative Commons - Namensnennung');
+        $this->assertQueryContentContains('//*[@id="Document-Licences-licence4-label"]', 'Creative Commons - CC BY-ND - Namensnennung');
 
         // Patents
         $this->assertQueryContentContains('//*[@id="Document-Patents-Patent0-Number"]', '1234');
@@ -935,6 +934,15 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
 
         // until all messages can be prevented less than 20 is good enough
         $this->assertLessThanOrEqual(20, count($failedTranslations), $output);
+    }
+
+    public function testRedirectToLogin()
+    {
+        $this->enableSecurity();
+
+        $this->dispatch('/admin/document/index/id/1');
+
+        $this->assertRedirectTo('/auth/index/rmodule/admin/rcontroller/document/raction/index/id/1');
     }
 
 }

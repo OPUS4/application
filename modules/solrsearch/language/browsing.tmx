@@ -22,6 +22,15 @@
         </tuv>
     </tu>
 
+    <tu tuid="solrsearch_browse_years">
+        <tuv xml:lang="en">
+            <seg>Browse documents by year</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Dokumente im Jahr</seg>
+        </tuv>
+    </tu>
+
     <tu tuid="solrsearch_browse_series">
         <tuv xml:lang="en">
             <seg>Browse series</seg>
@@ -47,6 +56,15 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>Dokumenttypen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="search_index_year_browsing">
+      <tuv xml:lang="en">
+        <seg>Years</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Jahre</seg>
       </tuv>
     </tu>
 
@@ -92,6 +110,24 @@
         </tuv>
         <tuv xml:lang="de">
             <seg>Bitte klicken Sie auf einen der unten angezeigten Dokumenttypen um alle dazugehörigen Dokumente anzuzeigen.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="browse_year_title">
+        <tuv xml:lang="en">
+            <seg>Browse documents by year</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Übersicht der Jahre</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="browse_year_message">
+        <tuv xml:lang="en">
+            <seg>Please click below to view all documents of a year.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Bitte klicken Sie unten, um alle Dokumente eines Jahres anzuzeigen.</seg>
         </tuv>
     </tu>
 

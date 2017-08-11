@@ -10,20 +10,20 @@
 
     <tu tuid="hint_LegalNotices">
         <tuv xml:lang="en">
-            <seg>Please confirm that you read and commit to the legal notices and <a href="home/index/help#policies">policies</a> of our document server.</seg>
+            <seg><![CDATA[Please confirm that you read and commit to the legal notices and <a href="home/index/help#policies">policies</a> of our document server.]]></seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Bitte bestätigen Sie, dass Sie die rechtlichen Hinweise sowie die <a href="home/index/help#policies">Leitlinien</a> unseres Dokumentenservers gelesen haben und damit einverstanden sind. </seg>
+            <seg><![CDATA[Bitte bestätigen Sie, dass Sie die rechtlichen Hinweise sowie die <a href="home/index/help#policies">Leitlinien</a> unseres Dokumentenservers gelesen haben und damit einverstanden sind.]]></seg>
         </tuv>
     </tu>
 
     <tu tuid="publish_controller_required_hint">
         <!-- Hint for the required sign -->
         <tuv xml:lang="en">
-            <seg>Fields that are marked with <span class="required" title="This field has to be filled.">*</span> have to be filled. </seg>
+            <seg><![CDATA[Fields that are marked with <span class="required" title="This field has to be filled.">*</span> have to be filled.]]></seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Felder, die mit einem <span class="required" title="Dieses Feld muss ausgefüllt werden">*</span> markiert sind, müssen ausgefüllt werden. </seg>
+            <seg><![CDATA[Felder, die mit einem <span class="required" title="Dieses Feld muss ausgefüllt werden">*</span> markiert sind, müssen ausgefüllt werden.]]></seg>
         </tuv>
     </tu>
 
@@ -925,14 +925,14 @@
 <!-- MSC ************************************************ -->
     <tu tuid="hint_groupSubjectMSC">
         <tuv xml:lang="en">
-            <seg>Please enter the MSC classes of the document. You may add more MSC classes by clicking on the button (or delete them).<br />
+            <seg><![CDATA[Please enter the MSC classes of the document. You may add more MSC classes by clicking on the button (or delete them).<br />
 See the manual at <a href="http://www.ams.org/mathscinet/msc/msc2010.html" target="tab" >http://www.ams.org/mathscinet/msc/msc2010.html</a>.<br />
-Example input: "00A09" (for Popularization of mathematics)</seg>
+Example input: "00A09" (for Popularization of mathematics)]]></seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Tragen Sie hier bitte die MSC Klassen Ihres Dokumentes ein. Sie können durch Klicken auf den Button weitere Klassen hinzufügen (oder wieder löschen).<br />
+            <seg><![CDATA[Tragen Sie hier bitte die MSC Klassen Ihres Dokumentes ein. Sie können durch Klicken auf den Button weitere Klassen hinzufügen (oder wieder löschen).<br />
 Hilfe zur Klassifikation bekommen Sie unter: <a href="http://www.ams.org/mathscinet/msc/msc2010.html" target="tab" >http://www.ams.org/mathscinet/msc/msc2010.html</a><br />
-Beispieleingabe: "00A09" (für Popularization of mathematics)</seg>
+Beispieleingabe: "00A09" (für Popularization of mathematics)]]></seg>
         </tuv>
     </tu>
 
@@ -948,14 +948,16 @@ Beispieleingabe: "00A09" (für Popularization of mathematics)</seg>
 <!-- DDC **************************************************** -->
 <tu tuid="hint_groupSubjectDDC">
         <tuv xml:lang="en">
-            <seg>Please enter the DDC classes of the document. You may add more DDC classes by clicking on the button )or delete them).<br />
-See the overview at <a href="http://www.oclc.org/dewey/resources/summaries/default.htm" target="tab">http://www.oclc.org/dewey/resources/summaries/default.htm</a><br />
-Example input: "100" (for Philosophy and psychology) </seg>
+            <seg><![CDATA[Please enter the DDC class of your document. You can add or delete additional classifications by clicking on the button below. DDC classes follow a three-digit pattern. Using the dropdown box and the ‘down’ button, please set the DDC class for your document.<br />
+            Please click the following link for an overview (in German) of available DDC classes:<br />
+            <a href="http://www.dnb.de/Subsites/ddcdeutsch/DE/DDCprodukte/DDCuebersichten/DDCuebersichten_node.html" target="tab" > http://www.dnb.de/Subsites/ddcdeutsch/DE/DDCprodukte/DDCuebersichten/DDCuebersichten_node.html</a><br />
+            Example input: "100" (for "Philosophie und Psychologie")]]></seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Tragen Sie hier bitte die DDC Klassen Ihres Dokumentes ein. Sie können durch Klicken auf den Button weitere Klassen hinzufügen (oder wieder löschen).<br />
-Eine Übersicht über verfügbare Klassen bekommen Sie unter: <a href="http://www.oclc.org/dewey/resources/summaries/default.htm" target="tab" >http://www.oclc.org/dewey/resources/summaries/default.htm</a><br />
-Beispieleingabe: "100" (für Philosophy and psychology)</seg>
+            <seg><![CDATA[Tragen Sie hier bitte die DDC Klassen Ihres Dokumentes ein. Sie können durch Klicken auf den Button weitere Klassen hinzufügen (oder wieder löschen). Die DDC Klasse ist 3-stellig anzugeben. Nutzen Sie dazu den Button "runter".<br />
+            Eine Übersicht über verfügbare Klassen bekommen Sie unter:<br />
+            <a href="http://www.dnb.de/Subsites/ddcdeutsch/DE/DDCprodukte/DDCuebersichten/DDCuebersichten_node.html" target="tab" > http://www.dnb.de/Subsites/ddcdeutsch/DE/DDCprodukte/DDCuebersichten/DDCuebersichten_node.html</a><br />
+            Beispieleingabe: "100" (für "Philosophie und Psychologie")]]></seg>
         </tuv>
     </tu>
 
@@ -990,12 +992,12 @@ Beispieleingabe: "100" (für Philosophy and psychology)</seg>
 <!-- JEL **************************************************** -->
 <tu tuid="hint_groupSubjectJEL">
         <tuv xml:lang="en">
-            <seg>Please enter the JEL classes of the document. You may add more JEL classes by clicking on the button (or delete them).<br />
-See the overview at <a href="http://www.aeaweb.org/jel/jel_class_system.php" target="tab">http://www.aeaweb.org/jel/jel_class_system.php</a></seg>
+            <seg><![CDATA[Please enter the JEL classes of the document. You may add more JEL classes by clicking on the button (or delete them).<br />
+See the overview at <a href="http://www.aeaweb.org/jel/jel_class_system.php" target="tab">http://www.aeaweb.org/jel/jel_class_system.php</a>]]></seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Tragen Sie hier bitte die JEL Klassen Ihres Dokumentes ein. Sie können durch Klicken auf den Button weitere Klassen hinzufügen (oder wieder löschen).<br />
-Eine Übersicht über verfügbare Klassen bekommen Sie unter: <a href="http://www.aeaweb.org/jel/jel_class_system.php" target="tab" >http://www.aeaweb.org/jel/jel_class_system.php</a></seg>
+            <seg><![CDATA[Tragen Sie hier bitte die JEL Klassen Ihres Dokumentes ein. Sie können durch Klicken auf den Button weitere Klassen hinzufügen (oder wieder löschen).<br />
+Eine Übersicht über verfügbare Klassen bekommen Sie unter: <a href="http://www.aeaweb.org/jel/jel_class_system.php" target="tab" >http://www.aeaweb.org/jel/jel_class_system.php</a>]]></seg>
         </tuv>
     </tu>
 
@@ -1011,14 +1013,14 @@ Eine Übersicht über verfügbare Klassen bekommen Sie unter: <a href="http://ww
 <!-- CCS ****************************************************** -->
 <tu tuid="hint_groupSubjectCCS">
         <tuv xml:lang="en">
-            <seg>Please enter the CCS classes of the document. You may add more CCS classes by clicking on the button (or delete them).<br />
+            <seg><![CDATA[Please enter the CCS classes of the document. You may add more CCS classes by clicking on the button (or delete them).<br />
 See the overview at <a href="http://portal.acm.org/ccs.cfm" target="tab" >http://portal.acm.org/ccs.cfm</a>.<br />
-Example input: "C.1" (for Processor Architectures)</seg>
+Example input: "C.1" (for Processor Architectures)]]></seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Tragen Sie hier bitte die CCS Klassen Ihres Dokumentes ein. Sie können durch Klicken auf den Button weitere Klassen hinzufügen (oder wieder löschen).<br />
+            <seg><![CDATA[Tragen Sie hier bitte die CCS Klassen Ihres Dokumentes ein. Sie können durch Klicken auf den Button weitere Klassen hinzufügen (oder wieder löschen).<br />
 Eine Übersicht über verfügbare Klassen bekommen Sie unter: <a href="http://portal.acm.org/ccs.cfm" target="tab" >http://portal.acm.org/ccs.cfm</a><br />
-Beispieleingabe: "C.1" (für Processor Architectures)</seg>
+Beispieleingabe: "C.1" (für Processor Architectures)]]></seg>
         </tuv>
     </tu>
 
@@ -1034,14 +1036,14 @@ Beispieleingabe: "C.1" (für Processor Architectures)</seg>
 <!-- PACS ****************************************************** -->
 <tu tuid="hint_groupSubjectPACS">
         <tuv xml:lang="en">
-            <seg>Please enter the PACS classes of the document. You may add more PACS classes by clicking on the button (or delete them).<br />
+            <seg><![CDATA[Please enter the PACS classes of the document. You may add more PACS classes by clicking on the button (or delete them).<br />
 See the overview at <a href="http://www.aip.org/publishing/pacs/pacs-2010-regular-edition" target="tab" >http://www.aip.org/publishing/pacs/pacs-2010-regular-edition</a>.<br />
-Example input: "11.15.Bt" (for General properties of perturbation theory )</seg>
+Example input: "11.15.Bt" (for General properties of perturbation theory )]]></seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Tragen Sie hier bitte die PACS Klassen Ihres Dokumentes ein. Sie können durch Klicken auf den Button weitere Klassen hinzufügen (oder wieder löschen).<br />
+            <seg><![CDATA[Tragen Sie hier bitte die PACS Klassen Ihres Dokumentes ein. Sie können durch Klicken auf den Button weitere Klassen hinzufügen (oder wieder löschen).<br />
 Eine Übersicht über verfügbare Klassen bekommen Sie unter: <a href="http://www.aip.org/publishing/pacs/pacs-2010-regular-edition" target="tab" >http://www.aip.org/publishing/pacs/pacs-2010-regular-edition</a><br />
-Beispieleingabe: "11.15.Bt" (für General properties of perturbation theory )</seg>
+Beispieleingabe: "11.15.Bt" (für General properties of perturbation theory )]]></seg>
         </tuv>
     </tu>
 
@@ -1057,14 +1059,14 @@ Beispieleingabe: "11.15.Bt" (für General properties of perturbation theory )</s
 	<!-- BKL ****************************************************** -->
 <tu tuid="hint_groupSubjectBKL">
         <tuv xml:lang="en">
-            <seg>Please enter the BKL classes of the document. You may add more BKL classes by clicking on the button (or delete them).<br />
+            <seg><![CDATA[Please enter the BKL classes of the document. You may add more BKL classes by clicking on the button (or delete them).<br />
 See the overview at <a href="http://www.gbv.de/vgm/info/mitglieder/02Verbund/01Erschliessung/02Richtlinien/05Basisklassifikation/index" target="tab" >http://www.gbv.de/vgm/info/mitglieder/02Verbund/01Erschliessung/02Richtlinien/05Basisklassifikation/index</a>.<br />
-Example input: "17.08" (for Semiotik)</seg>
+Example input: "17.08" (for Semiotik)]]></seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Tragen Sie hier bitte die BKL Klassen Ihres Dokumentes ein. Sie können durch Klicken auf den Button weitere Klassen hinzufügen (oder wieder löschen).<br />
+            <seg><![CDATA[Tragen Sie hier bitte die BKL Klassen Ihres Dokumentes ein. Sie können durch Klicken auf den Button weitere Klassen hinzufügen (oder wieder löschen).<br />
 Eine Übersicht über verfügbare Klassen bekommen Sie unter: <a href="http://www.gbv.de/vgm/info/mitglieder/02Verbund/01Erschliessung/02Richtlinien/05Basisklassifikation/index" target="tab" >http://www.gbv.de/vgm/info/mitglieder/02Verbund/01Erschliessung/02Richtlinien/05Basisklassifikation/index</a><br />
-Beispieleingabe: "17.08" (für Semiotik)</seg>
+Beispieleingabe: "17.08" (für Semiotik)]]></seg>
         </tuv>
     </tu>
 
@@ -1111,8 +1113,8 @@ Beispieleingabe: "17.08" (für Semiotik)</seg>
             <seg>Please enter GND keywords of the document. You may add more keywords by clicking on the button (or delete them).</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Tragen Sie hier bitte GND-Schlagwörter zu Ihrem Dokument ein. Sie können durch Klicken auf den Button weitere Schlagwörter hinzufügen (oder wieder löschen).
-			Hilfe zur Auswahl bekommen Sie in der OGND des BSZ: <a href="http://swb.bsz-bw.de/DB=2.104/" target="tab" >http://swb.bsz-bw.de/DB=2.104/</a></seg>
+            <seg><![CDATA[Tragen Sie hier bitte GND-Schlagwörter zu Ihrem Dokument ein. Sie können durch Klicken auf den Button weitere Schlagwörter hinzufügen (oder wieder löschen).
+			Hilfe zur Auswahl bekommen Sie in der OGND des BSZ: <a href="http://swb.bsz-bw.de/DB=2.104/" target="tab" >http://swb.bsz-bw.de/DB=2.104/</a>]]></seg>
         </tuv>
     </tu>
 

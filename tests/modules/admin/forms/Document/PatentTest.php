@@ -179,7 +179,8 @@ class Admin_Form_Document_PatentTest extends ControllerTestCase {
     }
 
 
-    public function testValidation() {
+    public function testValidationFalse()
+    {
         $this->useEnglish();
 
         $form = new Admin_Form_Document_Patent();
@@ -194,7 +195,8 @@ class Admin_Form_Document_PatentTest extends ControllerTestCase {
         $this->assertContains('isEmpty', $form->getErrors('Number'));
         $this->assertContains('notInt', $form->getErrors('YearApplied'));
         $this->assertContains('dateInvalidDate', $form->getErrors('DateGranted'));
-
+        $this->assertContains('isEmpty', $form->getErrors('Countries'));
+        $this->assertContains('isEmpty', $form->getErrors('Application'));
 
         $post = array(
             'Number' => '1',
@@ -203,6 +205,13 @@ class Admin_Form_Document_PatentTest extends ControllerTestCase {
 
         $this->assertFalse($form->isValid($post));
         $this->assertContains('notGreaterThan', $form->getErrors('YearApplied'));
+    }
+
+    public function testValidationTrue()
+    {
+        $this->useEnglish();
+
+        $form = new Admin_Form_Document_Patent();
 
         $post = array(
             'Number' => '1',
@@ -222,6 +231,8 @@ class Admin_Form_Document_PatentTest extends ControllerTestCase {
 
         $form->getElement('Number')->setValue('323');
         $form->getElement('YearApplied')->setValue(''); // Leeres Feld
+        $form->getElement('Countries')->setValue('Germany');
+        $form->getElement('Application')->setValue('description');
 
         $patent = new Opus_Patent();
 

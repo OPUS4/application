@@ -26,9 +26,8 @@
  *
  * @category    Application Unit Tests
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -36,7 +35,7 @@
  *
  * TODO $view not used at the moment, refactor or add tests
  */
-class Applicatin_Util_DocumentAdapterTest extends ControllerTestCase {
+class Application_Util_DocumentAdapterTest extends ControllerTestCase {
 
     public function testHasFilesTrue() {
         $view = Zend_Registry::get('Opus_View');
@@ -128,13 +127,16 @@ class Applicatin_Util_DocumentAdapterTest extends ControllerTestCase {
     }
 
     public function testGetMainTitleForDocWithNoTitles() {
+        $this->useEnglish();
+
         $view = Zend_Registry::get('Opus_View');
 
         $doc = $this->createTestDocument();
+        $docId = $doc->store();
 
         $docAdapter = new Application_Util_DocumentAdapter($view, $doc);
 
-        $this->assertEquals($docAdapter->getMainTitle(), 'document_no_title(id = )');
+        $this->assertEquals("untitled document (id = '$docId')", $docAdapter->getMainTitle());
     }
 
     public function testGetMainTitleForDocWithNoLanguage() {
@@ -286,6 +288,17 @@ class Applicatin_Util_DocumentAdapterTest extends ControllerTestCase {
 
         $this->assertEquals('2012', $adapter->getCompletedDate(true));
         $this->assertEquals('2012', $adapter->getCompletedDate(false));
+    }
+
+    public function testGetYear() {
+        $this->markTestIncomplete('not working yet');
+
+        $doc = new Opus_Document(1);
+
+        $adapter = new Application_Util_DocumentAdapter(null, $doc);
+
+        $this->assertNotEquals('0000', $adapter->getYear());
+        $this->assertEquals(1999, $adapter->getYear());
     }
 
 }

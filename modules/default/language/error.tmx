@@ -100,6 +100,16 @@
         </tuv>
     </tu>
 
+      <!-- TODO move to TMX file for field hints? -->
+      <tu tuid="admin_persons_values_not_trimmed">
+          <tuv xml:lang="en">
+              <seg>Some values have additional leading or trailing spaces. Please select update to trim values when saving.</seg>
+          </tuv>
+          <tuv xml:lang="de">
+              <seg>Einige Werte haben zusätzliche Leerzeichen. Bitte Update auswählen für eine Bereinigung beim Speichern.</seg>
+          </tuv>
+      </tu>
+
   </body>
 
 </tmx>

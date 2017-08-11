@@ -285,7 +285,52 @@
         <seg>Alle</seg>
       </tuv>
     </tu>
-    
+
+    <tu tuid="admin_documents_table_column_title">
+      <tuv xml:lang="en">
+        <seg>Title/Authors</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Titel/Autoren</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_documents_table_column_type">
+      <tuv xml:lang="en">
+        <seg>Type</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Typ</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_documents_table_column_files">
+      <tuv xml:lang="en">
+        <seg>Files</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dateien</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_documents_table_column_state">
+      <tuv xml:lang="en">
+        <seg>State</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Status</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_documents_table_column_updated">
+      <tuv xml:lang="en">
+        <seg>Updated</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Geändert</seg>
+      </tuv>
+    </tu>
+
   </body>
 
 </tmx>

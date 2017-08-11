@@ -184,5 +184,27 @@ class Admin_DocumentsControllerTest extends ControllerTestCase {
         $this->assertQuery("//a[@href='/admin/documents/index/state/published']");
         $this->assertQuery("//a[@href='/admin/documents/index/state/audited']");
     }
+
+    public function testShowAuthorFilter()
+    {
+        $person = new Opus_Person();
+        $person->setLastName('Test');
+        $person->setFirstName('Justa');
+        $person->setIdentifierOrcid('0000-0000-0000-0001');
+        $person->setIdentifierGnd('123456789');
+        $person->setIdentifierMisc('ID1234');
+        $person->store();
+
+        $this->dispatch(
+            '/admin/documents/index/state/all/role/author/last_name/Test/first_name/Justa' .
+            '/identifier_orcid/0000-0000-0000-0001/identifier_gnd/123456789/identifier_misc/ID1234'
+        );
+
+        $this->assertQueryContentContains('li.identifier_orcid', '0000-0000-0000-0001');
+        $this->assertQueryContentContains('li.identifier_gnd', '123456789');
+        $this->assertQueryContentContains('li.identifier_misc', 'ID1234');
+
+    }
+
 }
 

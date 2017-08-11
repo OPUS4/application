@@ -135,10 +135,10 @@
 
     <tu tuid="validation_error_person_gnd">
         <tuv xml:lang="en">
-            <seg>Please provide a valid GND identifier as plain number without separators.</seg>
+            <seg>Please provide a valid GND identifier as plain number without leading '0' and separators.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Bitte geben Sie eine valide GND-ID als Ziffernfolge ohne Trennzeichen an.</seg>
+            <seg>Bitte geben Sie eine valide GND-ID als Ziffernfolge ohne Trennzeichen und führende Nullen an.</seg>
         </tuv>
     </tu>
 
@@ -150,6 +150,51 @@
             <seg>Die Prüfziffer stimmt nicht. Bitte geben Sie eine valide GND-ID als Ziffernfolge ohne Trennzeichen an.</seg>
         </tuv>
     </tu>
+
+      <tu tuid="validation_error_ip_invalid">
+          <tuv xml:lang="en">
+              <seg>Invalid type given. String expected.</seg>
+          </tuv>
+          <tuv xml:lang="de">
+              <seg>Ungültiger Typ. Ein String wird erwartet.</seg>
+          </tuv>
+      </tu>
+
+      <tu tuid="validation_error_ip_not_address">
+          <tuv xml:lang="en">
+              <seg>The value does not appear to be a valid IP address.</seg>
+          </tuv>
+          <tuv xml:lang="de">
+              <seg>Die IP Adresse scheint ungültig zu sein.</seg>
+          </tuv>
+      </tu>
+
+      <tu tuid="validation_error_iprange_name_regexNotMatch">
+          <tuv xml:lang="en">
+              <seg>The description must start with a letter.</seg>
+          </tuv>
+          <tuv xml:lang="de">
+              <seg>Die Beschreibung muss mit einem Buchstaben anfangen.</seg>
+          </tuv>
+      </tu>
+
+      <tu tuid="validation_error_stringLengthTooShort">
+          <tuv xml:lang="en">
+              <seg>'%value%' is less than %min% characters long</seg>
+          </tuv>
+          <tuv xml:lang="de">
+              <seg>'%value%' ist weniger als %min% Zeichen lang</seg>
+          </tuv>
+      </tu>
+
+      <tu tuid="validation_error_stringLengthTooLong">
+          <tuv xml:lang="en">
+              <seg>'%value%' is more than %min% characters long</seg>
+          </tuv>
+          <tuv xml:lang="de">
+              <seg>'%value%' is länger als %min% Zeichen</seg>
+          </tuv>
+      </tu>
 
   </body>
 

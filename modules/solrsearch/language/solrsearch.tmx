@@ -585,16 +585,7 @@
                 <seg>Click here to expand or collapse the abstract text.</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>Klicken Sie auf das Icon, um den Abstract anzuzeigen bzw. zu verbergen.</seg>
-            </tuv>
-        </tu>
-
-        <tu tuid="results_missingtitle">
-            <tuv xml:lang="en">
-                <seg>untitled document</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>unbenanntes Dokument</seg>
+                <seg>Klicken Sie hier, um die Zusammenfassung anzuzeigen bzw. zu verbergen.</seg>
             </tuv>
         </tu>
 

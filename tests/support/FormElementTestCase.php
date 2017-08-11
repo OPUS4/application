@@ -27,9 +27,8 @@
  * @category    Application Unit Test
  * @package     Test_Support
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 abstract class FormElementTestCase extends ControllerTestCase {
 
@@ -112,8 +111,9 @@ abstract class FormElementTestCase extends ControllerTestCase {
             $this->assertEquals($this->_staticViewHelper, $element->getStaticViewHelper());
         }
         else {
+            // if method exists _staticViewHelper should be configured for testing
             $this->assertFalse(method_exists($element, 'getStaticViewHelper'),
-                'Need to configure \'_staticViewHelper\' in class ' . __CLASS__ . '.');
+                'Need to configure \'_staticViewHelper\' for test in class ' . __CLASS__ . '.');
         }
     }
 

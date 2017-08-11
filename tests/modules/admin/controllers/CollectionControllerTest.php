@@ -371,5 +371,21 @@ class Admin_CollectionControllerTest extends ControllerTestCase {
 
         $this->dispatch('/admin/collection/create/id/16216/type/sibling');
     }
+
+    public function testCreateCollectionRedirect() {
+        $this->markTestIncomplete('TODO implement test');
+
+        $post = array(
+            'Name' => 'TestCol',
+            'Number' => 'TestCol',
+            'Visible' => 1,
+            'VisiblePublish' => 1,
+            'Save' => 'Speichern'
+        );
+
+        $this->dispatch('/admin/collection/create/id/type/child');
+
+        $this->assertRedirectTo('');
+    }
         
 }

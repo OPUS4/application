@@ -30,9 +30,8 @@
  * @author      Thoralf Klein <thoralf.klein@zib.de>
  * @author      Michael Lang <lang@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -180,6 +179,14 @@ class ErrorController extends Application_Controller_Action {
         }
         if (isset($view->message)) {
             $body .= "   message: " . $view->message . "\n";
+        }
+        $body .= "\n";
+        
+        // Add document ID for errors occuring during publish process
+        $session = new Zend_Session_Namespace('Publish');
+        if (isset($session->documentId)) {
+            $body .= "User Session (Namespace Publish):\n";
+            $body .= "   Document ID: " . $session->documentId . "\n";
         }
         $body .= "\n";
 

@@ -78,8 +78,7 @@ class CitationExport_IndexController extends Application_Controller_Action {
             return;
         };
 
-        $this->_helper->viewRenderer->setNoRender(true);
-        $this->_helper->layout()->disableLayout();
+        $this->disableViewRendering();
 
         // Send plain text response.
         $response = $this->getResponse();
@@ -90,11 +89,24 @@ class CitationExport_IndexController extends Application_Controller_Action {
 
         $extension = $this->_exportHelper->getExtension($outputFormat);
 
-        $response->setHeader(
-            'Content-Disposition',
-            'attachment; filename=' . $outputFormat . '-' . $request->getParam('docId') . '.' . $extension,
-            true
-        );
+        $config = $this->getConfig();
+
+        $download = true;
+
+        if (isset($config->export->download))
+        {
+            $value = $config->export->download;
+            $download = $value !== '0' && $value !== false && $value !== '';
+        }
+
+        if ($download)
+        {
+            $response->setHeader(
+                'Content-Disposition',
+                'attachment; filename=' . $outputFormat . '-' . $request->getParam('docId') . '.' . $extension,
+                true
+            );
+        }
 
         $response->setBody($this->view->output);
     }

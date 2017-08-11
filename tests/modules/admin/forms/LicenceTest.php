@@ -40,7 +40,7 @@ class Admin_Form_LicenceTest extends ControllerTestCase {
     public function testConstructForm() {
         $form = new Admin_Form_Licence();
 
-        $this->assertEquals(14, count($form->getElements()));
+        $this->assertEquals(15, count($form->getElements()));
 
         $this->assertNotNull($form->getElement('Active'));
         $this->assertNotNull($form->getElement('CommentInternal'));
@@ -50,6 +50,7 @@ class Admin_Form_LicenceTest extends ControllerTestCase {
         $this->assertNotNull($form->getElement('LinkLicence'));
         $this->assertNotNull($form->getElement('LinkLogo'));
         $this->assertNotNull($form->getElement('MimeType'));
+        $this->assertNotNull($form->getElement('Name'));
         $this->assertNotNull($form->getElement('NameLong'));
         $this->assertNotNull($form->getElement('SortOrder'));
         $this->assertNotNull($form->getElement('PodAllowed'));
@@ -71,13 +72,14 @@ class Admin_Form_LicenceTest extends ControllerTestCase {
         $licence->setLinkLicence('http://www.example.org/licence');
         $licence->setLinkLogo('http://www.example.org/logo');
         $licence->setMimeType('text/plain');
+        $licence->setName('TL');
         $licence->setNameLong('Test Licence');
         $licence->setSortOrder(3);
         $licence->setPodAllowed(false);
 
         $form->populateFromModel($licence);
 
-        $this->assertTrue($form->getElement('Active')->getValue());
+        $this->assertEquals(1, $form->getElement('Active')->getValue());
         $this->assertEquals('Test Internal Comment', $form->getElement('CommentInternal')->getValue());
         $this->assertEquals('<h1>Test Markup</h1>', $form->getElement('DescMarkup')->getValue());
         $this->assertEquals('Test Description', $form->getElement('DescText')->getValue());
@@ -85,6 +87,7 @@ class Admin_Form_LicenceTest extends ControllerTestCase {
         $this->assertEquals('http://www.example.org/licence', $form->getElement('LinkLicence')->getValue());
         $this->assertEquals('http://www.example.org/logo', $form->getElement('LinkLogo')->getValue());
         $this->assertEquals('text/plain', $form->getElement('MimeType')->getValue());
+        $this->assertEquals('TL', $form->getElement('Name')->getValue());
         $this->assertEquals('Test Licence', $form->getElement('NameLong')->getValue());
         $this->assertEquals(3, $form->getElement('SortOrder')->getValue());
         $this->assertEquals(0, $form->getElement('PodAllowed')->getValue());
@@ -112,6 +115,7 @@ class Admin_Form_LicenceTest extends ControllerTestCase {
         $form->getElement('LinkLicence')->setValue('http://www.example.org/licence');
         $form->getElement('LinkLogo')->setValue('http://www.example.org/logo');
         $form->getElement('MimeType')->setValue('text/plain');
+        $form->getElement('Name')->setValue('TL');
         $form->getElement('NameLong')->setValue('Test Licence');
         $form->getElement('SortOrder')->setValue(5);
         $form->getElement('PodAllowed')->setChecked(true);
@@ -129,6 +133,7 @@ class Admin_Form_LicenceTest extends ControllerTestCase {
         $this->assertEquals('http://www.example.org/licence', $licence->getLinkLicence());
         $this->assertEquals('http://www.example.org/logo', $licence->getLinkLogo());
         $this->assertEquals('text/plain', $licence->getMimeType());
+        $this->assertEquals('TL', $licence->getName());
         $this->assertEquals('Test Licence', $licence->getNameLong());
         $this->assertEquals(5, $licence->getSortOrder());
         $this->assertEquals(1, $licence->getPodAllowed());

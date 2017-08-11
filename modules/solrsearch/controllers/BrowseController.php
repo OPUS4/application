@@ -32,6 +32,13 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+/**
+ * Class Solrsearch_BrowseController
+ *
+ * TODO move list handling into model
+ * TODO use one action for different lists, so that a list can be added without changes
+ * TODO eliminate standard list rendering PHTML
+ */
 class Solrsearch_BrowseController extends Application_Controller_Action {
 
     /**
@@ -56,7 +63,7 @@ class Solrsearch_BrowseController extends Application_Controller_Action {
         $facetname = 'doctype';
         $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::FACET_ONLY);
         $query->setFacetField($facetname);
-        $facets = array();
+
         try {
             $searcher = new Opus_SolrSearch_Searcher();
             $facets = $searcher->search($query)->getFacets();
@@ -76,6 +83,31 @@ class Solrsearch_BrowseController extends Application_Controller_Action {
         $this->view->title = $this->view->translate('solrsearch_browse_doctypes');
     }
 
+    public function yearsAction() {
+        $facetname = 'year';
+
+        $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::FACET_ONLY);
+        $query->setFacetField($facetname);
+
+        try
+        {
+            $searcher = new Opus_SolrSearch_Searcher();
+            $facets = $searcher->search($query)->getFacets();
+        }
+        catch (Opus_SolrSearch_Exception $ose)
+        {
+            $this->getLogger()->err(__METHOD__ . ' : ' . $ose);
+            throw new Application_SearchException($ose);
+        }
+
+        $years = $facets[$facetname];
+
+        krsort($years);
+
+        $this->view->facetitems = $years;
+        $this->view->title = 'solrsearch_browse_years';
+    }
+
     /**
      * Lists all visible series with at least on document.
      */
@@ -84,7 +116,7 @@ class Solrsearch_BrowseController extends Application_Controller_Action {
 
         if (count($visibleSeries) == 0)
         {
-            $this->_redirectToAndExit('index');
+            $this->_helper->Redirector->redirectToAndExit('index');
         }
 
         $this->view->series = $visibleSeries;

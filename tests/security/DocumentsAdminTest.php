@@ -128,7 +128,10 @@ class DocumentsAdminTest extends ControllerTestCase {
     public function testNoAccessCollectionControllerShowAction() {
         $this->loginUser("security8", "security8pwd");
         $this->dispatch('/admin/collection/show/id/4');
-        $this->assertRedirectTo('/auth', 'redirection from /admin/collection/show/id/4 to /auth not asserted');
+        $this->assertRedirectTo(
+            '/auth/index/rmodule/admin/rcontroller/collection/raction/show/id/4',
+            'redirection from /admin/collection/show/id/4 to /auth not asserted'
+        );
     }
 
     public function testStateChangeLinks() {
@@ -201,13 +204,13 @@ class DocumentsAdminTest extends ControllerTestCase {
     public function testNoAccessToMetadatenOverview() {
         $this->loginUser('security9', 'security9pwd');
         $this->dispatch('/admin/document/index/id/146');
-        $this->assertRedirectTo('/auth');
+        $this->assertRedirectTo('/auth/index/rmodule/admin/rcontroller/document/raction/index/id/146');
     }
 
     public function testNoAccessToMetadatenFormular() {
         $this->loginUser('security9', 'security9pwd');
         $this->dispatch('/admin/document/edit/id/146');
-        $this->assertRedirectTo('/auth');
+        $this->assertRedirectTo('/auth/index/rmodule/admin/rcontroller/document/raction/edit/id/146');
     }
 
 }
