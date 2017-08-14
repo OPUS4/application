@@ -35,9 +35,8 @@
  * @author      Simone Finkbeiner (simone.finkbeiner@ub.uni-stuttgart.de)
  * @author      Jens Schwidder <schwidder@zib.de>
  * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  *
  * TODO unit test bootstrap
  */
@@ -64,7 +63,8 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         $frontController->registerPlugin($moduleprepare);
 
         // Add security realm initialization
-        $realmSetupPlugin = new Application_Controller_Plugin_SecurityRealm();
+        // the SWORD module uses a different auth mechanism
+        $realmSetupPlugin = new Application_Controller_Plugin_SecurityRealm('sword');
         $frontController->registerPlugin($realmSetupPlugin);
 
         // Add navigation initialization plugin
@@ -74,6 +74,32 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         // Get Name of Module, Controller and Action for Use in View
         $viewSetup = new Application_Controller_Plugin_ViewSetup();
         $frontController->registerPlugin($viewSetup);
+
+        $router = $frontController->getRouter();
+
+        // add default route for regular module/controller/action requests
+        $router->addDefaultRoutes();
+
+        // specity the SWORD module as RESTful
+        $restRoute = new Zend_Rest_Route($frontController, array(), array('sword'));
+        $router->addRoute('rest', $restRoute);
+
+        $documentRoute = new Application_Controller_Route_Redirect(
+            '^(\d+)/?$',
+            array('module' => 'frontdoor', 'controller' => 'index', 'controller' => 'index', 'docId' => 1),
+            array( 1 => 'docId'),
+            'document/%s'
+        );
+
+        $router->addRoute('document', $documentRoute);
+
+        // Simplify access to sitelinks, since crawlers module does not have a IndexController
+        $crawlersRoute = new Application_Controller_Route_Redirect(
+            'crawlers',
+            array('module' => 'crawlers', 'controller' => 'sitelinks', 'action' => 'index')
+        );
+
+        $router->addRoute('crawlers', $crawlersRoute);
     }
 
     /**
@@ -314,13 +340,34 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         // return $container;
     }
 
-    /*
+    /**
      * writes Opus-Version in html header
      */
     protected  function _initVersionInfo() {
         $this->bootstrap('View');
         $view = $this->getResource('View');
         $view->headMeta()->appendName('Opus-Version', Application_Configuration::getOpusVersion());
+    }
+
+    /**
+     * Creates exporter for registering export services.
+     *
+     * @return Application_Export_Exporter
+     */
+    protected function _initExporter()
+    {
+        $this->bootstrap('Configuration');
+
+        $exporter = new Application_Export_Exporter();
+
+        Zend_Registry::set('Opus_Exporter', $exporter);
+
+        $exportService = new Application_Export_ExportService();
+
+        // TODO merge ExportService with Exporter class (?)
+        Zend_Registry::set('Opus_ExportService', $exportService);
+
+        return $exporter;
     }
 
 }

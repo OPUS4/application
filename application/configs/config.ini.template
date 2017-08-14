@@ -27,14 +27,19 @@
 ; @author      Thoralf Klein <thoralf.klein@zib.de>
 ; @author      Pascal-Nicolas Becker <becker@zib.de>
 ; @author      Jens Schwidder <schwidder@zib.de>
-; @copyright   Copyright (c) 2008-2016, OPUS 4 development team
+; @copyright   Copyright (c) 2008-2017, OPUS 4 development team
 ; @license     http://www.gnu.org/licenses/gpl.html General Public License
-; @version     $Id$
 
 [production]
 
 ; The 'theme' setting can be used to select a different theme.
 ; theme = opus4
+
+; Name of OPUS 4 Repository
+name = 'OPUS 4'
+
+; Link for main logo
+logoLink = home
 
 ;DB SETTINGS
 ; Please insert the credential to connect to your mysql db.
@@ -57,6 +62,9 @@ searchengine.solr.default.service.extract.endpoint.localhost.host = @searchengin
 searchengine.solr.default.service.extract.endpoint.localhost.port = @searchengine.extract.port@
 searchengine.solr.default.service.extract.endpoint.localhost.path = @searchengine.extract.app@
 
+; Turn on to display document titles of search results in user interface language if possible
+search.result.display.preferUserInterfaceLanguage = 0
+
 ; SUPPORTED LANGUAGES
 ; Change the setting to 'de' or 'en' in order to disable language selection.
 ; supportedLanguages = de
@@ -66,6 +74,9 @@ searchengine.solr.default.service.extract.endpoint.localhost.path = @searchengin
 ; mail.opus.port = 25 ; SMTP server port for sending email
 ; mail.opus.address = ; email address of administrator
 ; mail.opus.name = ; Name of administrator
+; mail.opus.replyTo = ; Reply-to address for messages
+; mail.opus.replyToName =
+; mail.opus.returnPath =
 
 ;NOTIFICATION SETTINGS
 ; comma separated list of email addresses that should receive a submission notification email
@@ -98,6 +109,12 @@ searchengine.solr.default.service.extract.endpoint.localhost.path = @searchengin
 urn.autoCreate = 0
 urn.nid = nbn
 urn.nss = de:kobv:test-opus
+
+; ORCiD SETTINGS
+orcid.linkAuthor.frontdoor = 1
+
+; GND SETTINGS
+gnd.linkAuthor.frontdoor = 1
 
 ;DOCUMENTTYPE SETTINGS
 ; You can define which document types should be shown in the publish module or
@@ -194,6 +211,45 @@ setup.translation.modules.allowed = default,publish
 ; plugins.export.publist.file.allow.mimetype[application/postscript]=PS
 ; plugins.export.publist.file.allow.mimetype[text/html]=HTML
 ; plugins.export.publist.file.allow.mimetype[application/xhtml+xml]=HTML
+
+; SWORD related configuration settings
+; ====================================
+
+; XML-Ausgabe der SWORD-Schnittstelle formattieren ("pretty printing")
+sword.prettyXml = false
+
+; Inhalt des Elements dcterms:abstract (im Service Document für die Default Collection)
+sword.collection.default.abstract = ''
+
+; Inhalt des Elements sword:collectionPolicy (im Service Document für die Default Collection)
+sword.collection.default.collectionPolicy = ''
+
+; Inhalt des Elements sword:treatment (im Service Document für die Default Collection)
+sword.collection.default.treatment = ''
+
+; Definition der Default OPUS Collection, der die via SWORD importierten Dokumente
+; zugeordnet werden
+; Dieser Parameter muss zwingend in der config.ini definiert werden, damit die
+; SWORD-Schnittstelle funktioniert
+; Hier muss die Nummer einer Collection innerhalb der Collection Role "Import"
+; angegeben werden
+; der Name dieser Collection erscheint im Service Document im Element sword:
+sword.collection.default.number = 'import'
+
+; contains the URI and version of the server software
+sword.generator = 'OPUS 4'
+; contains either a human-readable statement describing treatment the deposited
+; resource has received or a URI that dereferences to such a description.
+sword.treatment = ''
+
+; MIME-Types der Dateien, die importiert werden können
+filetypes.pdf.mimeType = 'application/pdf'
+filetypes.txt.mimeType = 'text/plain'
+filetypes.htm.mimeType = 'text/html'
+filetypes.html.mimeType = 'text/html'
+
+; Allow displaying of PDF directly in browser (default for other types 'attachment')
+filetypes.pdf.contentDisposition = 'inline'
 
 ; The following is needed even if sections are empty.
 [staging : production]

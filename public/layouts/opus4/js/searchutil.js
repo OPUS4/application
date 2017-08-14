@@ -26,9 +26,8 @@
  * @category    Application
  * @author      Julian Heise <heise@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -61,5 +60,16 @@ function resetComboBox(id) {
     var comboBox = document.getElementById(id);
     if (comboBox != null) {
         comboBox.selectedIndex = 0;
+    }
+}
+
+function toggleAbstract($docId) {
+    $('#abstractText_' + $docId).toggle();
+    $toggle = $('#abstractToggle_' + $docId);
+    if ($toggle.hasClass('collapsed')) {
+        $toggle.addClass('expanded').removeClass('collapsed');
+    }
+    else {
+        $toggle.addClass('collapsed').removeClass('expanded');
     }
 }

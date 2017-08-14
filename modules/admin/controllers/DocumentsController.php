@@ -30,9 +30,8 @@
  * @author      Henning Gerhardt (henning.gerhardt@slub-dresden.de)
  * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2009-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2009-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -40,17 +39,20 @@
  *
  * @category    Application
  * @package     Module_Admin
+ *
+ * TODO handle state as a facet
+ * TODO redirect to remove invalid parameters from URL
  */
 class Admin_DocumentsController extends Application_Controller_Action {
 
-    const PARAM_HITSPERPAGE = 'hitsperpage';
+    const PARAM_HITSPERPAGE = 'hitsperpage'; // TODO rename to 'limit'
     const PARAM_STATE = 'state';
-    const PARAM_SORT_BY = 'sort_order';
-    const PARAM_SORT_DIRECTION = 'sort_reverse';
+    const PARAM_SORT_BY = 'sort_order'; // TODO rename to 'sortby'
+    const PARAM_SORT_DIRECTION = 'sort_reverse'; // TODO rename to 'order'
 
     protected $_sortingOptions = array('id', 'title', 'author', 'publicationDate', 'docType');
 
-    protected $_docOptions = array('unpublished', 'inprogress', 'audited', 'published', 'restricted', 'deleted');
+    protected $_docOptions = array('all', 'unpublished', 'inprogress', 'audited', 'published', 'restricted', 'deleted');
 
     private $_maxDocsDefault = 10;
     private $_stateOptionDefault = 'unpublished';
@@ -90,25 +92,16 @@ class Admin_DocumentsController extends Application_Controller_Action {
      * Display documents (all or filtered by state)
      *
      * @return void
+     *
+     * TODO separate out collection and series mode (handle as facets?)
+     * TODO cleanup
      */
     public function indexAction() {
         $this->view->title = 'admin_documents_index';
 
-        $this->prepareDocStateLinks();
-
-        $urlCallId = array(
-            'module' => 'admin',
-            'controller' => 'document',
-            'action' => 'index'
-        );
-        $this->view->url_call_id = $this->view->url($urlCallId, 'default', true);
-
-        $this->prepareSortingLinks();
-
         $data = $this->_request->getParams();
+
         $filter = $this->_getParam("filter");
-        $this->view->filter = $filter;
-        $data = $this->_request->getParams();
 
         $page = 1;
         if (array_key_exists('page', $data)) {
@@ -127,16 +120,11 @@ class Admin_DocumentsController extends Application_Controller_Action {
         }
 
         $sortReverse = $this->getSortingDirection($data);
-        $this->view->sort_reverse = $sortReverse;
-        $this->view->sortDirection = ($sortReverse) ? 'descending' : 'ascending';
-
         $state = $this->getStateOption($data);
-        $this->view->state = $state;
-
         $sortOrder = $this->getSortingOption($data);
-        $this->view->sort_order = $sortOrder;
 
         if (!empty($collectionId)) {
+            // TODO add as filter facet
             $collection = new Opus_Collection($collectionId);
             $result = $collection->getDocumentIds();
             $this->view->collection = $collection;
@@ -152,13 +140,73 @@ class Admin_DocumentsController extends Application_Controller_Action {
             }
         }
         else if (!empty($seriesId)) {
+            // TODO add as filter facet
             $series = new Opus_Series($seriesId);
             $this->view->series = $series;
             $result = $series->getDocumentIdsSortedBySortKey();
         }
         else {
-            $result = $this->_helper->documents($sortOrder, $sortReverse, $state);
+            if (array_key_exists('last_name', $data))
+            {
+                $person = array();
+                $person['last_name'] = $data['last_name'];
+
+                if (array_key_exists('first_name', $data))
+                {
+                    $person['first_name'] = $data['first_name'];
+                }
+
+                if (array_key_exists('identifier_orcid', $data))
+                {
+                    $person['identifier_orcid'] = $data['identifier_orcid'];
+                }
+
+                if (array_key_exists('identifier_gnd', $data))
+                {
+                    $person['identifier_gnd'] = $data['identifier_gnd'];
+                }
+
+                if (array_key_exists('identifier_misc', $data))
+                {
+                    $person['identifier_misc'] = $data['identifier_misc'];
+                }
+
+                if (is_null($state))
+                {
+                    $state = 'all';
+                }
+
+                $role = $this->getParam('role', 'all');
+
+                $result = Opus_Person::getPersonDocuments($person, $state, $role, $sortOrder, !$sortReverse);
+
+                $this->view->person = $person;
+
+                $this->preparePersonRoleLinks();
+                $this->view->role = $role;
+            }
+            else
+            {
+                $result = $this->_helper->documents($sortOrder, !$sortReverse, $state);
+            }
         }
+
+        $this->view->sort_reverse = $sortReverse;
+        $this->view->sortDirection = ($sortReverse) ? 'descending' : 'ascending';
+        $this->view->sort_order = $sortOrder;
+        $this->view->state = $state;
+        $this->view->filter = $filter;
+
+        $this->prepareDocStateLinks();
+
+        $urlCallId = array(
+            'module' => 'admin',
+            'controller' => 'document',
+            'action' => 'index'
+        );
+        $this->view->url_call_id = $this->view->url($urlCallId, 'default', true);
+
+        $this->prepareSortingLinks();
 
         $paginator = Zend_Paginator::factory($result);
         $page = 1;
@@ -332,10 +380,8 @@ class Admin_DocumentsController extends Application_Controller_Action {
 
         foreach ($this->_docOptions as $name) {
             $params = array('module' => 'admin', 'controller'=>'documents', 'action'=>'index');
-            if ($name !== 'all') {
-                $params['state'] = $name;
-            }
-            $url = $this->view->url($params, null, true);
+            $params['state'] = $name;
+            $url = $this->view->url($params, null, false);
             $registers[$name] = $url;
         }
 
@@ -367,6 +413,27 @@ class Admin_DocumentsController extends Application_Controller_Action {
         $directionLinks['descending'] = $this->view->url(array('sort_reverse' => '1'), 'default', false);
 
         $this->view->directionLinks = $directionLinks;
+    }
+
+    protected function preparePersonRoleLinks()
+    {
+        $roles = array('all', 'author', 'editor', 'contributor', 'referee', 'other', 'translator', 'submitter', 'advisor');
+
+        $personRoles = array();
+
+        foreach ($roles as $role)
+        {
+            $params = array(
+                'module' => 'admin',
+                'controller' => 'documents',
+                'action' => 'index',
+                'role' => $role
+            );
+            $roleUrl = $this->view->url($params, 'default', false);
+            $personRoles[$role] = $roleUrl;
+        }
+
+        $this->view->personRoles = $personRoles;
     }
 
 }

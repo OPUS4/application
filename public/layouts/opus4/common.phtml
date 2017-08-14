@@ -29,9 +29,8 @@
  * @author      Thoralf Klein <thoralf.klein@zib.de>
  * @author      Sascha Szott <szott@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2010-2015, OPUS 4 development team
+ * @copyright   Copyright (c) 2010-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 $config = Zend_Registry::get('Zend_Config');
@@ -50,13 +49,21 @@ if (isset($config->instance_name)) {
 }
 
 if (isset($this->title)) {
-    $this->headTitle($this->translate($this->title));
+    if ($this->moduleName !== 'frontdoor')
+    {
+        $this->headTitle($this->translate($this->title));
+    }
+    else
+    { // do not translate for frontdoor, because the document title is used
+        $this->headTitle(htmlspecialchars($this->title));
+    }
 }
 
 $this->headLink()
     ->appendStylesheet($this->baseUrl() . '/' . $config->css->jqueryui->path, 'screen')
     ->appendStylesheet($this->layoutPath() . '/css/opus.css', 'screen,print')
     ->appendStylesheet($this->layoutPath() . '/css/admin.css', 'screen,print')
+    ->appendStylesheet($this->layoutPath() . '/css/custom.css')
     ->headLink(array(
         'rel' => 'shortcut icon',
         'type' => 'image/x-icon',
@@ -67,11 +74,6 @@ $this->headLink()
         'type' => 'application/opensearchdescription+xml',
         'href' => $this->serverUrl() . $this->baseUrl() . '/solrsearch/opensearch'));
 
-/*
-uncomment the following line if you want to enable your own layout changes
-$this->headLink()->appendStylesheet($this->layoutPath() . '/css/custom.css');
-*/
-
 $this->container = Zend_Registry::get('Opus_Navigation');
 
 $jsFiles = array('searchutil.js', 'frontdoorutil.js', 'submit.js');
@@ -79,18 +81,19 @@ $jsFiles = array('searchutil.js', 'frontdoorutil.js', 'submit.js');
 if (in_array($this->moduleName, array('admin', 'review', 'setup', 'account'))) {
     $jsFiles[] = 'theme.js';
     $jsFiles[] = 'theme_lic.js';
+    $jsFiles[] = 'opus-ui.js';
 }
 else if (in_array($this->moduleName, array('publish'))) {
     $jsFiles[] = 'filetypes.js';
 }
 
 if ($this->jQueryEnabled()) {
+    foreach (array_reverse($jsFiles) as $filename) {
+         $this->headScript()->prependFile($this->layoutPath() . '/js/' . $filename);
+    }
+
     $this->headScript()->prependFile($this->baseUrl() . '/' . $config->javascript->jqueryui->path);
     $this->headScript()->prependFile($this->baseUrl() . '/' . $config->javascript->jquery->path);
-
-    foreach ($jsFiles as $filename) {
-         $this->headScript()->appendFile($this->layoutPath() . '/js/' . $filename);
-    }
 }
 
 $appConfig = new Application_Configuration();
@@ -157,7 +160,8 @@ if (isset($config->javascript->latex->mathjax)) {
             <div id="header">
                 <div class="wrapper">
                     <h1 id="logo">
-                        <a href="<?= $this->url(array('module' => 'home', 'controller' => 'index', 'action' => 'index'), null, true) ?>"><img src="<?= $this->layoutPath() ?>/img/logo/logo.gif" alt="OPUS" title="Home" width="185" height="89" /></a>
+                        <a href="<?= $this->optionUrl('logoLink') ?>" title="<?= $this->translate('logo_title') ?>"></a>
+                        <span class="openaccess-logo">Open Access</span>
                     </h1>
                     <ul id="primary-nav" class="nav">
                     <?php foreach ($this->container as $page) : ?>
@@ -189,8 +193,8 @@ if (isset($config->javascript->latex->mathjax)) {
 
                     <?php if (!empty($messages)) : ?>
                     <div class="messages">
-                        <?php foreach ($messages as $message) : ?>
-                            <div class="<?= $message['level'] ?>"><?= htmlspecialchars($this->translate($message['message'])) ?></div>
+                        <?php foreach ($messages as $message) : // TODO view helper ?>
+                            <div class="<?= array_key_exists('level', $message) ? $message['level'] : '' ?>"><?= htmlspecialchars($this->translate($message['message'])) ?></div>
                         <?php endforeach ?>
                     </div>
                     <?php endif ?>
@@ -207,10 +211,12 @@ if (isset($config->javascript->latex->mathjax)) {
                         <?= $this->adminform ?>
                     <?PHP endif ?>
 
-                    <?php if (!empty($messages)) : ?>
+                    <?php if (!empty($messages)) : // TODO view helper ?>
                     <div class="messages">
                         <?php foreach ($this->flashMessenger->getMessages() as $message) : ?>
-                            <div class="<?= $message['level'] ?>"><?= htmlspecialchars($this->translate($message['message'])) ?></div>
+                            <?PHP if (array_key_exists('message', $message)) : ?>
+                            <div class="<?= array_key_exists('level', $message) ? $message['level'] : '' ?>"><?= htmlspecialchars($this->translate($message['message'])) ?></div>
+                            <?PHP endif ?>
                         <?php endforeach ?>
                     </div>
                     <?php endif ?>
@@ -233,56 +239,7 @@ if (isset($config->javascript->latex->mathjax)) {
             </div>
         </div>
 
-        <div id="appmode-<?= Zend_Controller_Front::getInstance()->getParam('bootstrap')->getEnvironment() ?>" class="debug revision">
-            <hr/>
-            <div class="wrapper">
-                <?php /* do not edit: revision number gets updated automatically */ ?>
-                <b>$Rev$</b>
-            </div>
-        </div>
-
-        <?php
-            $dbprofiler = Zend_Registry::get('db_adapter')->getProfiler();
-            $profiler_show_queries = (bool) $config->db->params->showqueries;
-            $profiler_max_queries = (int) $config->db->params->maxqueries;
-            if ($dbprofiler->getEnabled() === true) :
-        ?>
-        <div class="debug dbprofiler">
-            <div class="wrapper">
-                <h2>Profiling information<?php if (isset($GLOBALS['start_mtime'])) : ?> (execution time <?= microtime(true) - $GLOBALS['start_mtime'] ?>)<?php endif ?></h2>
-                <b>Total number of queries: </b><?= $dbprofiler->getTotalNumQueries() ?><br />
-                <b>Total query time (s): </b><?= $dbprofiler->getTotalElapsedSecs() ?><br />
-                <b>Current memory consumption: </b><?= memory_get_usage(true) ?><br />
-                <b>Peak memory consumption: </b><?= memory_get_peak_usage(true) ?><br />
-                <?php if ($profiler_show_queries === true and $profiler_query_profiles = $dbprofiler->getQueryProfiles()) : ?>
-                    <b>Queries:</b><br />
-                    <ul>
-                    <?php for ($i=1; ($i < $profiler_max_queries) and ($i < count($profiler_query_profiles)); $i++) : ?>
-                        <li><pre><?= htmlspecialchars($profiler_query_profiles[$i]->getQuery()) ?></pre></li>
-                    <?php endfor ?>
-                    <?php if ($i < count($profiler_query_profiles)) { echo "<li>...</li>"; } ?>
-                    </ul>
-                <?php endif ?>
-            </div>
-        </div>
-        <?php endif ?>
-
-        <?php
-            $identity = Zend_Auth::getInstance()->getIdentity();
-            if (isset($config->debugSession) and ((bool)$config->debugSession === true) and !empty($identity)) :
-        ?>
-        <div class="debug session">
-            <div class="wrapper">
-                <h2>Session</h2>
-
-<?php /* do not apply indentation here! */ ?>
-<pre>
-<?= Zend_Debug::dump($_SESSION, 'Session Data', false); ?>
-</pre>
-
-            </div>
-        </div>
-        <?php endif ?>
+        <?PHP include('debug.phtml') ?>
 
     </body>
 </html>

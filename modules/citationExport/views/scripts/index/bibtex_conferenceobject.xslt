@@ -50,13 +50,13 @@
     <xsl:include href="utils/bibtex_pages.xslt"/>
 
     <xsl:template match="/">
-      <xsl:apply-templates select="Opus/Opus_Model_Filter" />
+      <xsl:apply-templates select="Opus/Opus_Document" />
     </xsl:template>
 
     <!-- Suppress spilling values with no corresponding templates -->
     <xsl:template match="@*|node()" />
 
-    <xsl:template match="Opus_Model_Filter">
+    <xsl:template match="Opus_Document">
 
         <!-- Preprocessing: some variables will be defined -->
         <xsl:variable name="year">

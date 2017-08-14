@@ -42,6 +42,7 @@ class Application_Form_Element_SupportedLanguagesTest extends FormElementTestCas
         $this->_expectedDecorators = array(
             'ViewHelper', 'Description', 'Errors', 'ElementHtmlTag', 'LabelNotEmpty', 'dataWrapper'
         );
+        $this->_staticViewHelper = 'viewFormMultiCheckbox';
         parent::setUp();
     }
 

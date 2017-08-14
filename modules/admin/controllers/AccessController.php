@@ -103,16 +103,13 @@ class Admin_AccessController extends Application_Controller_Action {
             }
         }
 
-        $moduleDirectory = dirname($this->getFrontController()->getModuleDirectory());
-        $modulesModel = new Application_Util_Modules($moduleDirectory);
-
         $transitions = Application_Controller_Action_Helper_Workflow::getWorkflowResources();
 
         $this->view->loginNames = $role->getAllAccountNames();
         $this->view->roleId = $role->getId();
         $this->view->roleName = $role->getName();
         $this->view->modules = $roleModules;
-        $this->view->allModules = $modulesModel->getAll();
+        $this->view->allModules = array_keys(Application_Modules::getInstance()->getModules());
         $this->view->allResources = $this->getAllResources();
         $this->view->allWorkflow = $transitions;
     }

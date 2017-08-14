@@ -27,52 +27,55 @@
  * @category    Application
  * @package     Module_Solrsearch
  * @author      Julian Heise <heise@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 ?>
 
 <div class="results_pagination">
-    <p class="info_small">
-        <?= ($this->numOfHits === 1 ? $this->translate('results_title_single') : $this->translate('results_title')); ?> <strong><?= (int)($this->start)+1 ?></strong> <?= $this->translate('pagination_to') ?> <strong><?php if(((int)($this->start) + (int)($this->rows)) > $this->numOfHits) echo $this->numOfHits; else echo (int)($this->start) + (int)($this->rows); ?></strong>
-    </p>
-    <?PHP if ($this->stylesheet != '') : ?>
-    <div class="search_export_xml">
-        <a href="<?= $this->url(array('export' => 'xml', 'stylesheet' => $this->stylesheet)) ?>">
-            <img src="<?= $this->layoutPath() . '/img/xml_w.png' ?>" id="search_export_xml_pic" name="xml"
-                 onmouseover="this.src='<?=$this->layoutPath() .  '/img/xml_o.png'?>';"
-                 onmouseout="this.src='<?= $this->layoutPath() .  '/img/xml_w.png'?>';"
-                 title="<?= $this->translate('search_export_xml') ?>" alt="<?= $this->translate('search_export_xml') ?>"/>
-        </a>
-    </div>
-    <?PHP endif ?>
 
     <ul class="paginationControl">
-        <?php if($this->start >= $this->rows) : ?>
         <li>
-            <a href="<?= $this->url($this->firstPage); ?>">
-                <?= $this->translate('pagination_first_page') ?>
+            <?PHP if ($this->start >= $this->rows) : ?>
+            <a class="pagination-first" href="<?= $this->url($this->firstPage); ?>"
+                title="<?= $this->translate('pagination_first_page') ?>">
             </a>
+            <?PHP else : ?>
+            <div class="pagination-first"></div>
+            <?PHP endif ?>
         </li>
-        <li>
-            <a href="<?= $this->url($this->prevPage); ?>">
-                <?= $this->translate('pagination_previous_page') ?>
-            </a>
-        </li>
-        <?php endif ?>
 
-        <?php if($this->start < ((int)($this->numOfHits) - (int)($this->rows))) : ?>
         <li>
-            <a href="<?= $this->url($this->nextPage); ?>">
-                <?= $this->translate('pagination_next_page') ?>
-            </a>
+            <?PHP if ($this->start >= $this->rows) : ?>
+            <a class="pagination-prev" href="<?= $this->url($this->prevPage); ?>"
+                title="<?= $this->translate('pagination_previous_page') ?>"></a>
+                <?PHP else : ?>
+                <div class="pagination-prev"></div>
+            <?php endif ?>
         </li>
+
         <li>
-            <a href="<?= $this->url($this->lastPage); ?>">
-                <?= $this->translate('pagination_last_page') ?>
-            </a>
+            <strong><?= (int)($this->start)+1 ?></strong> <?= $this->translate('pagination_to') ?>
+            <strong><?php if(((int)($this->start) + (int)($this->rows)) > $this->numOfHits) echo $this->numOfHits; else echo (int)($this->start) + (int)($this->rows); ?></strong>
         </li>
-        <?php endif ?>
+
+        <li>
+            <?php if($this->start < ((int)($this->numOfHits) - (int)($this->rows))) : ?>
+            <a class="pagination-next" href="<?= $this->url($this->nextPage); ?>"
+                title="<?= $this->translate('pagination_next_page') ?>"></a>
+                <?PHP else : ?>
+                <div class="pagination-next"></div>
+            <?PHP endif ?>
+        </li>
+
+        <li>
+            <?php if($this->start < ((int)($this->numOfHits) - (int)($this->rows))) : ?>
+            <a class="pagination-last" href="<?= $this->url($this->lastPage); ?>"
+                title="<?= $this->translate('pagination_last_page') ?>"></a>
+                <?PHP else : ?>
+                <div class="pagination-last"></div>
+            <?php endif ?>
+        </li>
     </ul>
 </div>

@@ -31,9 +31,8 @@
  * @category    Application Unit Test
  * @package     Admin
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 class Admin_LicenceControllerTest extends CrudControllerTestCase {
 
@@ -95,7 +94,7 @@ class Admin_LicenceControllerTest extends CrudControllerTestCase {
         $this->assertQueryCount('div#LinkSign', 0);
         $this->assertNotQueryContentContains('div#content', 'TestLinkSign');
 
-        // TODO $this->validateXHTML();
+        $this->validateXHTML();
     }
 
     /**
@@ -189,7 +188,7 @@ class Admin_LicenceControllerTest extends CrudControllerTestCase {
         $this->assertController('licence');
         $this->assertAction('edit');
 
-        $this->assertQueryContentContains('div#NameLong-element', 'Creative Commons - Namensnennung');
+        $this->assertQueryContentContains('div#NameLong-element', 'Creative Commons - CC BY-ND - Namensnennung');
         $this->assertQuery('li.save-element');
         $this->assertQuery('li.cancel-element');
         $this->assertQueryCount(1, 'input#Id');
@@ -274,7 +273,7 @@ class Admin_LicenceControllerTest extends CrudControllerTestCase {
         $this->dispatch('/admin/licence/delete/id/4');
 
         $this->assertQueryContentContains('legend', 'Delete Licence');
-        $this->assertQueryContentContains('span.displayname', 'Creative Commons - Namensnennung');
+        $this->assertQueryContentContains('span.displayname', 'Creative Commons - CC BY-ND - Namensnennung');
         $this->assertQuery('input#ConfirmYes');
         $this->assertQuery('input#ConfirmNo');
     }

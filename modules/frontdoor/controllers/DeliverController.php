@@ -28,13 +28,17 @@
  * @category    Application
  * @package     Module_Frontdoor
  * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  *
+ * Controller for handling file downloads in the frontdoor.
  */
 class Frontdoor_DeliverController extends Application_Controller_Action {
 
+    /**
+     * Handles file downloads.
+     */
     public function indexAction() {
 
         $docId = $this->_getParam('docId', null);
@@ -73,10 +77,13 @@ class Frontdoor_DeliverController extends Application_Controller_Action {
 
         $this->disableViewRendering();
 
+        $mimeType = $fileObject->getMimeType();
+        $contentDisposition = $this->_helper->fileTypes->getContentDisposition($mimeType);
+
         $this->getResponse()
                 ->clearAllHeaders()
-                ->setHeader('Content-Disposition', 'attachment; filename="'.$baseFilename.'"', true)
-                ->setHeader('Content-type', $fileObject->getMimeType(), true)
+                ->setHeader('Content-Disposition', "$contentDisposition; filename=\"$baseFilename\"", true)
+                ->setHeader('Content-type', $mimeType, true)
                 ->setHeader('Cache-Control', 'private', true)
                 ->setHeader('Pragma', 'cache', true);
 
@@ -103,6 +110,8 @@ class Frontdoor_DeliverController extends Application_Controller_Action {
      *
      * @param  string $filename
      * @return string quoted/mime-encoded
+     *
+     * TODO move to model class - unit test
      */
     public static function quoteFileName($filename) {
         if (preg_match('/[^A-Za-z0-9_., -]/', $filename)) {
@@ -120,8 +129,4 @@ class Frontdoor_DeliverController extends Application_Controller_Action {
         $this->render('error');
     }
 
-    private function disableViewRendering() {
-        $this->_helper->layout->disableLayout();
-        $this->_helper->viewRenderer->setNoRender();
-    }
 }

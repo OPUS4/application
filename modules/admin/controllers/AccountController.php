@@ -72,9 +72,7 @@ class Admin_AccountController extends Application_Controller_Action {
             $this->_helper->redirector('index');
         }
 
-        $moduleDirectory = dirname($this->getFrontController()->getModuleDirectory());
-        $modulesModel = new Application_Util_Modules($moduleDirectory);
-        $this->view->allModules = $modulesModel->getAll();
+        $this->view->allModules = array_keys(Application_Modules::getInstance()->getModules());
 
         $account = new Opus_Account($id);
         $this->view->account = $account;
@@ -333,7 +331,7 @@ class Admin_AccountController extends Application_Controller_Action {
             $messages['failure'] = $this->view->translate($message);
         }
 
-        $this->_redirectTo('index', $messages);
+        $this->_helper->Redirector->redirectTo('index', $messages);
     }
 
 }

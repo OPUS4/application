@@ -1,6 +1,8 @@
 # Rollen anlegen
 # beachte, dass Werte des Attributs 'name' nur Ziffern und Buchstaben enthalten dürfen
-INSERT INTO `user_roles` (`id`, `name`) VALUES 
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+
+INSERT INTO `user_roles` (`id`, `name`) VALUES
 (10, 'fulladmin'),
 (11, 'licenceadmin'),
 (12, 'testuserrole'),
@@ -13,7 +15,8 @@ INSERT INTO `user_roles` (`id`, `name`) VALUES
 (19, 'staticpagecontrolleraccess'),
 (20, 'translationcontrolleraccess'),
 (21, 'indexmaintenanceaccess'),
-(22, 'jobaccess');
+(22, 'jobaccess'),
+(23, 'sworduser');
 
 # Rollen mit Rechten verknüpfen
 INSERT INTO `access_modules` (`role_id`, `module_name`) VALUES 
@@ -45,7 +48,8 @@ INSERT INTO `access_modules` (`role_id`, `module_name`) VALUES
 (21, 'admin'),
 (21, 'resource_indexmaintenance'),
 (22, 'admin'),
-(22, 'resource_job');
+(22, 'resource_job'),
+(23, 'sword');
 
 # Accounts anlegen
 INSERT INTO `accounts` (`id`, `login`,`password`,`email`,`first_name`,`last_name`) VALUES
@@ -68,8 +72,8 @@ INSERT INTO `accounts` (`id`, `login`,`password`,`email`,`first_name`,`last_name
 (26, 'security17', sha1('security17pwd'), 'security17@example.org', 'security17', 'Zugriff auf Controller StaticPage im Setup Modul und Admin Modul'),
 (27, 'security18', sha1('security18pwd'), 'security18@example.org', 'security18', 'Zugriff auf Controller Language im Setup Modul und Admin Modul'),
 (28, 'security19', sha1('security19pwd'), 'security19@example.org', 'security19', 'Zugriff auf Solr-Verwaltung'),
-(29, 'security20', sha1('security20pwd'), 'security20@example.org', 'security20', 'Zugriff auf Jobverwaltung');
-
+(29, 'security20', sha1('security20pwd'), 'security20@example.org', 'security20', 'Zugriff auf Jobverwaltung'),
+(30, 'sworduser', sha1('sworduserpwd'), 'sworduser@example.org', 'sworduser', 'Test user for sword access');
 
 # Accounts und Rollen verknüpfen
 INSERT INTO `link_accounts_roles` (`account_id`, `role_id`) VALUES
@@ -99,7 +103,8 @@ INSERT INTO `link_accounts_roles` (`account_id`, `role_id`) VALUES
 (27, 20),
 (27, 10),
 (28, 21),
-(29, 22);
+(29, 22),
+(30, 23);
 
 # Dokument fuer Workflow Test anlegen
 INSERT INTO `documents` (`id`, `completed_date`, `completed_year`, `contributing_corporation`, `creating_corporation`, `thesis_date_accepted`, `type`, `edition`, `issue`, `language`, `page_first`, `page_last`, `page_number`, `publication_state`, `published_date`, `published_year`, `publisher_name`, `publisher_place`, `server_date_modified`, `server_date_published`, `server_state`, `volume`, `belongs_to_bibliography`) VALUES

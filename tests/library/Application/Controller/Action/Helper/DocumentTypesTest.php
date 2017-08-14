@@ -24,11 +24,10 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    TODO
+ * @category    Tests
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -83,10 +82,10 @@ class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerT
         $this->docTypeHelper->validate('demo_invalid');
         $errors = $this->docTypeHelper->getErrors();
         $demoInvalidErrors = $errors['demo_invalid'];
-        $this->assertEquals($demoInvalidErrors[0]->message, "Element '{http://schemas.opus.org/documenttype}field', ".
-            "attribute 'dataType': The attribute 'dataType' is not allowed.\n");
-        $this->assertEquals($demoInvalidErrors[1]->message, "Element '{http://schemas.opus.org/documenttype}default', ".
-            "attribute 'Value': The attribute 'Value' is not allowed.\n");
+        $this->assertEquals("Element '{http://www.opus-repository.org/schema/documenttype}field', ".
+            "attribute 'dataType': The attribute 'dataType' is not allowed.\n", $demoInvalidErrors[0]->message);
+        $this->assertEquals("Element '{http://www.opus-repository.org/schema/documenttype}default', ".
+            "attribute 'Value': The attribute 'Value' is not allowed.\n", $demoInvalidErrors[1]->message);
     }
 
     /**

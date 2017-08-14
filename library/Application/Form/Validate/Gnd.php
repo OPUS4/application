@@ -27,9 +27,8 @@
  * @category    Application
  * @author      Michael Lang <lang@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 class Application_Form_Validate_Gnd extends Zend_Validate_Abstract {
 
@@ -46,7 +45,7 @@ class Application_Form_Validate_Gnd extends Zend_Validate_Abstract {
     /**
      * Pattern for format checking.
      */
-    const PATTERN = '/\d{7,11}[0-9X]/';
+    const PATTERN = '/^[1-9]\d{6,10}[0-9X]/';
 
     /**
      * Translation keys for validation errors.

@@ -138,10 +138,7 @@ echo
 
 #
 # Prompt for database parameters
-#
-# TODO Support using existing database
-# TODO Support using existing users
-#
+##
 
 echo
 echo "Database configuration"
@@ -209,6 +206,34 @@ MYSQLPORT="${MYSQLPORT:-3306}"
 MYSQLHOST_ESC="${MYSQLHOST//\!/\\\!}"
 MYSQLPORT_ESC="${MYSQLPORT//\!/\\\!}"
 
+#
+# Create config.ini and set database related parameters.
+#
+# TODO overwrite existing file?
+#
+
+cd "$BASEDIR/application/configs"
+cp config.ini.template "$OPUS_CONF"
+if [ localhost != "$MYSQLHOST" ]; then
+  sed -i -e "s!^; db.params.host = localhost!db.params.host = '$MYSQLHOST_ESC'!" "$OPUS_CONF"
+fi
+if [ 3306 != "$MYSQLPORT" ]; then
+  sed -i -e "s!^; db.params.port = 3306!db.params.port = '$MYSQLPORT_ESC'!" "$OPUS_CONF"
+fi
+sed -i -e "s!@db.user.name@!'$DB_USER_ESC'!" \
+       -e "s!@db.user.password@!'$DB_USER_PASSWORD_ESC'!" \
+       -e "s!@db.name@!'$DBNAME_ESC'!" "$OPUS_CONF"
+
+# Add admin credentials to configuration for command line scripts
+cp console.ini.template "$OPUS_CONSOLE_CONF"
+
+sed -i -e "s!@db.admin.name@!'$DB_ADMIN_ESC'!" \
+       -e "s!@db.admin.password@!'$DB_ADMIN_PASSWORD_ESC'!" "$OPUS_CONSOLE_CONF"
+
+#
+# Optionally initialize database.
+#
+
 [[ -z $CREATE_DATABASE ]] && read -p "Create database and users [Y]? " CREATE_DATABASE
 
 if [[ -z "$CREATE_DATABASE" || "$CREATE_DATABASE" == Y || "$CREATE_DATABASE" == y ]] ;
@@ -245,56 +270,15 @@ FLUSH PRIVILEGES;
 LimitString
 
     #
-    # Create createdb.sh and set database related parameters
-    #
-    # TODO overwrite existing file?
+    # Create database schema
     #
 
-    cd "$BASEDIR/db"
-    if [ ! -e createdb.sh ]; then
-      cp createdb.sh.template createdb.sh
-      if [ localhost != "$MYSQLHOST" ]; then
-        sed -i -e "s!^# host=localhost!host='$MYSQLHOST_ESC'!" createdb.sh
-      fi
-      if [ 3306 != "$MYSQLPORT" ]; then
-        sed -i -e "s!^# port=3306!port='$MYSQLPORT_ESC'!" createdb.sh
-      fi
-      sed -i -e "s!@db.admin.name@!'$DB_ADMIN_ESC'!" \
-             -e "s!@db.admin.password@!'$DB_ADMIN_PASSWORD_ESC'!" \
-             -e "s!@db.name@!'$DBNAME_ESC'!" createdb.sh
-
-      bash createdb.sh || rm createdb.sh
-    fi
+    php "$BASEDIR/db/createdb.php"
 
 fi
-
-#
-# Create config.ini and set database related parameters.
-#
-# TODO overwrite existing file?
-#
-
-cd "$BASEDIR/application/configs"
-cp config.ini.template "$OPUS_CONF"
-if [ localhost != "$MYSQLHOST" ]; then
-  sed -i -e "s!^; db.params.host = localhost!db.params.host = '$MYSQLHOST_ESC'!" "$OPUS_CONF"
-fi
-if [ 3306 != "$MYSQLPORT" ]; then
-  sed -i -e "s!^; db.params.port = 3306!db.params.port = '$MYSQLPORT_ESC'!" "$OPUS_CONF"
-fi
-sed -i -e "s!@db.user.name@!'$DB_USER_ESC'!" \
-       -e "s!@db.user.password@!'$DB_USER_PASSWORD_ESC'!" \
-       -e "s!@db.name@!'$DBNAME_ESC'!" "$OPUS_CONF"
-
-# Add admin credentials to configuration for command line scripts
-cp console.ini.template "$OPUS_CONSOLE_CONF"
-
-sed -i -e "s!@db.admin.name@!'$DB_ADMIN_ESC'!" \
-       -e "s!@db.admin.password@!'$DB_ADMIN_PASSWORD_ESC'!" "$OPUS_CONSOLE_CONF"
 
 #
 # Set file permissions
-#
 #
 
 cd "$BASEDIR"

@@ -3,7 +3,7 @@
 <!-- stylesheet used by create_doctype-phtml_from_xml.php -->
 
 <xsl:stylesheet version="1.0" 
-                xmlns:opus="http://schemas.opus.org/documenttype" 
+                xmlns:opus="http://www.opus-repository.org/schema/documenttype"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 >
     <xsl:output method="text" />

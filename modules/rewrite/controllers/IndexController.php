@@ -43,17 +43,25 @@ class Rewrite_IndexController extends Application_Controller_Action {
         $type = $this->getRequest()->getParam('type');
         $value = $this->getRequest()->getParam('value');
         if (empty($type) || empty($value)) {
-            return $this->_redirectToAndExit('index', array('failure' => 'missing argument'), 'index', 'home');
+            return $this->_helper->Redirector->redirectToAndExit(
+                'index', array('failure' => 'missing argument'), 'index', 'home'
+            );
         }
         $f = new Opus_DocumentFinder();
         $ids = $f->setIdentifierTypeValue($type, $value)->ids();
         if (count($ids) < 1) {
-            return $this->_redirectToAndExit('index', array('failure' => 'given id is unknown'), 'index', 'home');
+            return $this->_helper->Redirector->redirectToAndExit(
+                'index', array('failure' => 'given id is unknown'), 'index', 'home'
+            );
         }
         if (count($ids) > 1) {
-            return $this->_redirectToAndExit('index', array('failure' => 'given id is not unique'), 'index', 'home');
+            return $this->_helper->Redirector->redirectToAndExit(
+                'index', array('failure' => 'given id is not unique'), 'index', 'home'
+            );
         }
-        return $this->_redirectToAndExit('index', '', 'index', 'frontdoor', array('docId' => $ids[0]));
+        return $this->_helper->Redirector->redirectToAndExit(
+            'index', '', 'index', 'frontdoor', array('docId' => $ids[0])
+        );
     }
 
     /**
@@ -64,15 +72,19 @@ class Rewrite_IndexController extends Application_Controller_Action {
         $docid = $this->getRequest()->getParam('opus3id');
         $filename = $this->getRequest()->getParam('filename');
         if (empty($docid) || empty($filename)) {
-            return $this->_redirectToAndExit('index', array('failure' => 'missing argument'), 'index', 'home');
+            return $this->_helper->Redirector->redirectToAndExit(
+                'index', array('failure' => 'missing argument'), 'index', 'home'
+            );
         }
         $f = new Opus_DocumentFinder();
         $ids = $f->setIdentifierTypeValue('opus3-id', $docid)->ids();
         if (count($ids) < 1) {
-            return $this->_redirectToAndExit('index', array('failure' => 'given opus3id is unknown'), 'index', 'home');
+            return $this->_helper->Redirector->redirectToAndExit(
+                'index', array('failure' => 'given opus3id is unknown'), 'index', 'home'
+            );
         }
         if (count($ids) > 1) {
-            return $this->_redirectToAndExit(
+            return $this->_helper->Redirector->redirectToAndExit(
                 'index', array('failure' => 'given opus3id is not unique'), 'index', 'home'
             );
         }

@@ -32,9 +32,12 @@
  * @author      Henning Gerhardt <henning.gerhardt@slub-dresden.de>
  * @author      Michael Lang <lang@zib.de>
  * @author      Thoralf Klein <thoralf.klein@zib.de>
- * @copyright   Copyright (c) 2009 - 2014, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2009 - 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
+ *
+ * TODO move all processing into model classes for testing and reuse
+ * TODO refactor code for returning multiple errors
  */
 
 class Oai_IndexController extends Application_Controller_Xml {
@@ -61,6 +64,8 @@ class Oai_IndexController extends Application_Controller_Xml {
      */
     protected $_configuration = null;
 
+    private $_xmlFactory = null;
+
     /**
      * Gather configuration before action handling.
      *
@@ -72,6 +77,7 @@ class Oai_IndexController extends Application_Controller_Xml {
         $config = $this->getConfig();
 
         $this->_configuration = new Oai_Model_Configuration($config);
+        $this->_xmlFactory = new Oai_Model_XmlFactory();
     }
 
     /**
@@ -90,7 +96,8 @@ class Oai_IndexController extends Application_Controller_Xml {
         }
 
         try {
-            $this->__handleRequest($oaiRequest);
+            // handle request
+            $this->__handleRequest($oaiRequest, $this->getRequest()->getRequestUri());
             return;
         }
         catch (Oai_Model_Exception $e) {
@@ -141,7 +148,7 @@ class Oai_IndexController extends Application_Controller_Xml {
      * @throws Oai_Model_Exception Thrown if the request could not be handled.
      * @return void
      */
-    private function __handleRequest(array $oaiRequest) {
+    private function __handleRequest(array $oaiRequest, $requestUri) {
         // Setup stylesheet
         $this->loadStyleSheet($this->view->getScriptPath('index') . '/oai-pmh.xslt');
 
@@ -162,6 +169,18 @@ class Oai_IndexController extends Application_Controller_Xml {
         $request = new Oai_Model_Request();
         $request->setPathToMetadataPrefixFiles($metadataPrefixPath);
         $request->setResumptionPath($resumptionPath);
+
+        // check for duplicate parameters
+        foreach ($oaiRequest as $name => $value)
+        {
+            if (substr_count($requestUri, "&$name") > 1)
+            {
+                throw new Oai_Model_Exception(
+                    'Parameters must not occur more than once.',
+                    Oai_Model_Error::BADARGUMENT
+                );
+            }
+        }
 
         if (true !== $request->validate($oaiRequest)) {
             throw new Oai_Model_Exception($request->getErrorMessage(), $request->getErrorCode());
@@ -186,7 +205,7 @@ class Oai_IndexController extends Application_Controller_Xml {
                 break;
 
             case 'ListMetadataFormats':
-                $this->__handleListMetadataFormats();
+                $this->__handleListMetadataFormats($oaiRequest);
                 break;
 
             case 'ListRecords':
@@ -288,11 +307,10 @@ class Oai_IndexController extends Application_Controller_Xml {
      * @param  array &$oaiRequest Contains full request information
      * @return void
      */
-    private function __handleListIdentifiers(array &$oaiRequest) {
-
+    private function __handleListIdentifiers(array &$oaiRequest)
+    {
         $maxIdentifier = $this->_configuration->getMaxListIdentifiers();
         $this->_handlingOfLists($oaiRequest, $maxIdentifier);
-
     }
 
     /**
@@ -301,9 +319,31 @@ class Oai_IndexController extends Application_Controller_Xml {
      * @param  array &$oaiRequest Contains full request information
      * @return void
      */
-    private function __handleListMetadataFormats() {
-        $this->_xml->appendChild($this->_xml->createElement('Documents'));
+    private function __handleListMetadataFormats($oaiRequest)
+    {
+        if (isset($oaiRequest['identifier']))
+        {
+            try
+            {
+                // check for document identifier, but ignore because all documents have same list of formats
+                $docId = $this->getDocumentIdByIdentifier($oaiRequest['identifier']);
+            }
+            catch (Oai_Model_Exception $ome)
+            {
+                // set second error so 'badArgument' and 'idDoesNotExist' are reported back
+                $this->_proc->setParameter(
+                    '', 'oai_error_code2',
+                    Oai_Model_Error::mapCode(Oai_Model_Error::IDDOESNOTEXIST)
+                );
+                $this->_proc->setParameter(
+                    '', 'oai_error_message2',
+                    'Identifier is invalid and does not exist.'
+                );
+                throw $ome;
+            }
+        }
 
+        $this->_xml->appendChild($this->_xml->createElement('Documents'));
     }
 
     /**
@@ -336,6 +376,7 @@ class Oai_IndexController extends Application_Controller_Xml {
         $oaiSets = new Oai_Model_Sets();
 
         $sets = $oaiSets->getSets();
+
 
         foreach ($sets as $type => $name) {
             $opusDoc = $this->_xml->createElement('Opus_Sets');
@@ -524,33 +565,16 @@ class Oai_IndexController extends Application_Controller_Xml {
         $document->appendChild($fileElement);
     }
 
-    private function _addAccessRights(DOMNode $domNode, Opus_Document $doc) {
-        $visible = 0;
-        $files = $doc->getFile();
-        if (count($files) > 0) {
-            foreach ($files as $file) {
-                if ($file->getField('VisibleInOai')->getValue() && $file->getField('VisibleInFrontdoor')->getValue()) {
-                    $visible = 1;
-                }
-            }
-        }
-        else {
-            $visible = 1;
-        }
-        if (!$doc->hasEmbargoPassed()) {
-            $visible = 2;
-        }
+    /**
+     * Add rights element to output.
+     *
+     * @param DOMNode $domNode
+     * @param Opus_Document $doc
+     */
+    private function _addAccessRights(DOMNode $domNode, Opus_Document $doc)
+    {
         $fileElement = $domNode->ownerDocument->createElement('Rights');
-        switch ($visible) {
-            case 0: $fileElement->setAttribute('Value', 'info:eu-repo/semantics/closedAccess');
-                break;
-            case 1: $fileElement->setAttribute('Value', 'info:eu-repo/semantics/openAccess');
-                break;
-            case 2: $fileElement->setAttribute('Value', 'info:eu-repo/semantics/embargoedAccess');
-                break;
-            case 3: $fileElement->setAttribute('Value', 'info:eu-repo/semantics/restrictedAccess');
-                break;
-        }
+        $fileElement->setAttribute('Value', $this->_xmlFactory->getAccessRights($doc));
         $domNode->appendChild($fileElement);
     }
 

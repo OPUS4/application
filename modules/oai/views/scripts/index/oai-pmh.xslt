@@ -48,7 +48,6 @@
     <xsl:include href="prefixes/oai_dc.xslt"/>
     <xsl:include href="prefixes/oai_pp.xslt"/>
     <xsl:include href="prefixes/epicur.xslt"/>
-    <xsl:include href="prefixes/xMetaDiss.xslt"/>
     <xsl:include href="prefixes/XMetaDissPlus.xslt"/>
     <xsl:include href="prefixes/copy_xml.xslt"/>
 
@@ -74,6 +73,8 @@
     <xsl:param name="oai_identifier" />
     <xsl:param name="oai_error_code" />
     <xsl:param name="oai_error_message" />
+    <xsl:param name="oai_error_code2" />
+    <xsl:param name="oai_error_message2" />
     <xsl:param name="oai_base_url" />
 
     <!--
@@ -116,12 +117,19 @@
                 </xsl:if>
                 <xsl:value-of select="$oai_base_url" />
             </request>
+            <!-- TODO find solution where iterating over any number of errors is possible -->
             <xsl:if test="$oai_error_code!=''">
                 <error>
                     <xsl:attribute name="code"><xsl:value-of select="$oai_error_code" /></xsl:attribute>
                     <xsl:value-of select="$oai_error_message" />
                 </error>
             </xsl:if>
+            <xsl:if test="$oai_error_code2!=''">
+                <error>
+                    <xsl:attribute name="code"><xsl:value-of select="$oai_error_code2" /></xsl:attribute>
+                    <xsl:value-of select="$oai_error_message2" />
+                </error>
+            </xsl:if>"
 
     <!--create the rest of oai response depending on oai_verb -->
         <xsl:choose>
@@ -193,11 +201,6 @@
             <metadataPrefix><xsl:text>epicur</xsl:text></metadataPrefix>
             <schema><xsl:text>http://www.persistent-identifier.de/xepicur/version1.0/xepicur.xsd</xsl:text></schema>
             <metadataNamespace><xsl:text>urn:nbn:de:1111-2004033116</xsl:text></metadataNamespace>
-          </metadataFormat>
-          <metadataFormat>
-            <metadataPrefix><xsl:text>xMetaDiss</xsl:text></metadataPrefix>
-            <schema><xsl:text>http://www.d-nb.de/standards/xmetadiss/xmetadiss.xsd</xsl:text></schema>
-            <metadataNamespace><xsl:text>http://www.d-nb.de/standards/xMetaDiss/</xsl:text></metadataNamespace>
           </metadataFormat>
           <metadataFormat>
             <metadataPrefix><xsl:text>XMetaDissPlus</xsl:text></metadataPrefix>
@@ -331,9 +334,6 @@
                     </xsl:when>
                     <xsl:when test="$oai_metadataPrefix='xMetaDissPlus'">
                        <xsl:apply-templates select="." mode="xmetadissplus" />
-                    </xsl:when>
-                    <xsl:when test="$oai_metadataPrefix='xMetaDiss'">
-                       <xsl:apply-templates select="." mode="xmetadiss" />
                     </xsl:when>
                     <xsl:when test="$oai_metadataPrefix='epicur'">
                        <xsl:apply-templates select="." mode="epicur" />

@@ -28,9 +28,8 @@
  * @package     Application_Controller_Action_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
  * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 class Application_Controller_Action_Helper_BreadcrumbsTest extends ControllerTestCase {
 
@@ -44,6 +43,7 @@ class Application_Controller_Action_Helper_BreadcrumbsTest extends ControllerTes
         $this->helper = Zend_Controller_Action_HelperBroker::getStaticHelper('breadcrumbs');
         $this->navigation = Zend_Registry::get('Opus_View')->navigation();
         $this->helper->setNavigation($this->navigation);
+        $this->helper->setView(Zend_Registry::get('Opus_View'));
     }
 
     private function getPage($label) {
@@ -75,7 +75,7 @@ class Application_Controller_Action_Helper_BreadcrumbsTest extends ControllerTes
 
         $this->helper->setDocumentBreadcrumb($document);
 
-        $this->assertEquals('KOBV (146)', $page->getLabel());
+        $this->assertEquals('KOBV', $page->getLabel());
         $this->assertEquals(146, $page->getParam('id'));
     }
 

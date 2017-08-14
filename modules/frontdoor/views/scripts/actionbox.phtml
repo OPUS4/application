@@ -69,12 +69,12 @@
         <dl id="Document-ServerDatePublished" class="col">
           <dt><?= $this->translate('ServerDatePublished-short') . ':'?></dt>
           <dd id="Document-ServerDatePublished"
-              ><?= $this->formatValue()->formatDate($document->getServerDatePublished()) ?></dd>
+              ><?= $this->formatDate()->formatOpusDate($document->getServerDatePublished(), false) ?></dd>
         </dl>
         <dl id="Document-ServerDateModified" class="col">
           <dt><?= $this->translate('ServerDateModified-short') . ':'?></dt>
           <dd id="Document-ServerDateModified"
-              ><?= $this->formatValue()->formatDate($document->getServerDateModified()) ?></dd>
+              ><?= $this->formatDate()->formatOpusDate($document->getServerDateModified(), true) ?></dd>
         </dl>
       </div>
       <div class="col col-3">

@@ -180,19 +180,19 @@
 
     <tu tuid="notBelongsToBibliographie">
       <tuv xml:lang="en">
-        <seg>Document will <b>not</b> be added to bibliography.</seg>
+        <seg><![CDATA[Document will <b>not</b> be added to bibliography.]]></seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Dokument wird <b>nicht</b> zur Bibliographie hinzugefügt.</seg>
+        <seg><![CDATA[Dokument wird <b>nicht</b> zur Bibliographie hinzugefügt.]]></seg>
       </tuv>
     </tu> 
 
     <tu tuid="belongsToBibliographie">
       <tuv xml:lang="en">
-        <seg>Document will be <b>added</b> to bibliography.</seg>
+        <seg><![CDATA[Document will be <b>added</b> to bibliography.]]></seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Dokument wird zur Bibliographie <b>hinzugefügt</b>.</seg>
+        <seg><![CDATA[Dokument wird zur Bibliographie <b>hinzugefügt</b>.]]></seg>
       </tuv>
     </tu>
 

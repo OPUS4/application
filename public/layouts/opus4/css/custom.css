@@ -2,3 +2,19 @@
 to ensure compatibility with later OPUS 4 releases we recommend to insert custom layout changes here
 */
 
+/* CSS for standard logo - modify to change logo */
+/*
+#logo a {
+    height: 89px;
+    width: 185px;
+    background: white url(../img/logo/opus-logo.png) no-repeat;
+}
+*/
+
+/* Use the following CSS to activate the "Open Access" text in the header. */
+/*
+#logo .openaccess-logo {
+    display: inline-block;
+}
+*/
+

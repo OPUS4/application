@@ -564,10 +564,10 @@
     
     <tu tuid="frontdoor_exportbibtex">
       <tuv xml:lang="en">
-        <seg>Export Bibtex</seg>
+        <seg>Export BibTeX</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Export nach Bibtex</seg>
+        <seg>Export nach BibTeX</seg>
       </tuv>
     </tu>
     
@@ -723,6 +723,25 @@
             <seg>Zurück zur Trefferliste</seg>
         </tuv>
     </tu>
+    
+    <tu tuid="frontdoor_orcid">
+      <tuv xml:lang="en">
+        <seg>ORCID record</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>ORCID Record</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="frontdoor_gnd">
+      <tuv xml:lang="en">
+        <seg>GND record</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>GND Record</seg>
+      </tuv>
+    </tu>
+
 
   </body>
 </tmx>

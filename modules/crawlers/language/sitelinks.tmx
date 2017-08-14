@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tmx SYSTEM "http://www.gala-global.org/oscarStandards/tmx/tmx14.dtd">
+<tmx version="1.4">
+
+    <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
+    </header>
+
+    <body>
+
+        <tu tuid="crawlers_sitelinks_index">
+            <tuv xml:lang="en">
+                <seg>Sitelinks</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Sitelinks</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="crawlers_sitelinks_list">
+            <tuv xml:lang="en">
+                <seg>Sitelinks - Year %d</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Sitelinks - Jahr %d</seg>
+            </tuv>
+        </tu>
+
+    </body>
+
+</tmx>

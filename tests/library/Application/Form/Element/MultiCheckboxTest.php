@@ -37,7 +37,7 @@ class Application_Form_Element_MultiCheckboxTest extends FormElementTestCase {
         $this->_formElementClass = 'Application_Form_Element_MultiCheckbox';
         $this->_expectedDecoratorCount = 4;
         $this->_expectedDecorators = array('ViewHelper', 'ElementHtmlTag', 'LabelNotEmpty', 'dataWrapper');
-
+        $this->_staticViewHelper = 'viewFormMultiCheckbox';
         parent::setUp();
     }
 

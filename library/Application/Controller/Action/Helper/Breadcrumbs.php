@@ -32,9 +32,8 @@
  * @package     Application_Controller_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
  * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 class Application_Controller_Action_Helper_Breadcrumbs extends Application_Controller_Action_Helper_Abstract {
 
@@ -71,7 +70,7 @@ class Application_Controller_Action_Helper_Breadcrumbs extends Application_Contr
             $title = $this->getDocumentTitle($document);
             $page = $this->getNavigation()->findOneBy('label', 'admin_document_index');
             if (!is_null($page)) {
-                $page->setLabel($title . ' ('. $document->getId() . ')');
+                $page->setLabel($title);
                 $page->setParam(self::PARAM_DOCUMENT_ID, $document->getId());
             }
             else {
@@ -122,7 +121,7 @@ class Application_Controller_Action_Helper_Breadcrumbs extends Application_Contr
     }
 
     public function getDocumentTitle($document) {
-        $helper = new Application_Util_DocumentAdapter(null, $document); // TODO improve
+        $helper = new Application_Util_DocumentAdapter($this->getView(), $document);
         $title = $helper->getMainTitle();
         return (strlen($title) > self::TITLE_MAX_LENGTH) ? substr($title, 0, self::TITLE_MAX_LENGTH)
             . self::TITLE_SHORT_SUFFIX : $title;

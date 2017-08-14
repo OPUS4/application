@@ -1,0 +1,84 @@
+<?php
+/**
+ * This file is part of OPUS. The software OPUS has been originally developed
+ * at the University of Stuttgart with funding from the German Research Net,
+ * the Federal Department of Higher Education and Research and the Ministry
+ * of Science, Research and the Arts of the State of Baden-Wuerttemberg.
+ *
+ * OPUS 4 is a complete rewrite of the original OPUS software and was developed
+ * by the Stuttgart University Library, the Library Service Center
+ * Baden-Wuerttemberg, the Cooperative Library Network Berlin-Brandenburg,
+ * the Saarland University and State Library, the Saxon State Library -
+ * Dresden State and University Library, the Bielefeld University Library and
+ * the University Library of Hamburg University of Technology with funding from
+ * the German Research Foundation and the European Regional Development Fund.
+ *
+ * LICENCE
+ * OPUS is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the Licence, or any later version.
+ * OPUS is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details. You should have received a copy of the GNU General Public License
+ * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
+ * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * @category    Application
+ * @package     Module_Admin
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
+ *
+ * TODO use view helper to clean up this page
+ * TODO fix translations of column headers (use appropriate keys)
+ */
+?>
+
+<?= $this->form ?>
+
+<div class="results_pagination">
+    <div><?= $this->start ?> - <?= $this->end ?> of <?= $this->totalCount ?></div>
+    <?= $this->paginationControl($this->paginator, 'Sliding', 'pagination_control.phtml') ?>
+</div>
+
+<table class="persons-table">
+    <tr>
+        <th><?= $this->translate('LastName') ?></th>
+        <th><?= $this->translate('FirstName') ?></th>
+        <th><?= $this->translate('Identifier') ?></th>
+        <th><?= $this->translate('admin_title_documents') ?></th>
+        <th><?= $this->translate('admin_account_column_roles') ?></th>
+        <th></th>
+    </tr>
+<?PHP foreach ($this->persons as $person) : ?>
+    <tr>
+        <td class="lastname"><?= $this->highlight(htmlspecialchars($person['last_name']), $this->filter) ?></td>
+        <td class="firstname"><?= $this->highlight(htmlspecialchars($person['first_name']), $this->filter) ?></td>
+        <td>
+            <div><?= $person['identifier_orcid'] ?></div>
+            <div><?= $person['identifier_gnd'] ?></div>
+            <div><?= $person['identifier_misc'] ?></div>
+        </td>
+        <td class="documents"><a href="<?= $this->url(array_merge(
+                array(
+                    'module' => 'admin', 'controller' => 'documents', 'action' => 'index', 'state' => 'all'),
+                    $person
+            )) ?>"><?= count(Opus_Person::getPersonDocuments($person)) ?></a></td>
+        <td class="roles">
+            <?PHP foreach (Opus_Person::getPersonRoles($person) as $role) : ?>
+            <a href="<?= $this->url(array_merge(array(
+                    'module' => 'admin', 'controller' => 'documents', 'action' => 'index', 'state' => 'all', 'role' => $role['role']),
+                    $person
+            )) ?>" class="role <?= $role['role'] ?>"><?=
+                $this->translate('Opus_Person_Role_Value_' . ucfirst($role['role']))
+                ?> <span class="count">(<?= $role['documents'] ?>)</span></a>
+            <?PHP endforeach ?>
+        </td>
+        <td><a href="<?= $this->url(array_merge(array(
+                'module' => 'admin', 'controller' => 'person', 'action' => 'edit'),
+                $person
+            )) ?>"><?= $this->translate('admin_form_action_edit') ?></a></td>
+    </tr>
+<?PHP endforeach ?>
+</table>

@@ -30,7 +30,7 @@
  * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Application_Update_ConsoleIniTest extends ConstrollerTestCase
+class Application_Update_ConsoleIniTest extends ControllerTestCase
 {
 
     public function testRun() {

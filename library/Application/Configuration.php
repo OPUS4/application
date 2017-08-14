@@ -61,6 +61,12 @@ class Application_Configuration {
     private $_languageSelectionEnabled = null;
 
     /**
+     * Path to folder for temporary files.
+     * @var string
+     */
+    private $_tempPath = null;
+
+    /**
      * @var Application_Configuration
      */
     private static $_instance;
@@ -204,8 +210,23 @@ class Application_Configuration {
      * @return string Path for temporary files.
      * @throws Application_Exception
      */
-    public function getTempPath() {
-        return $this->getWorkspacePath() . 'tmp' . DIRECTORY_SEPARATOR;
+    public function getTempPath()
+    {
+        if (is_null($this->_tempPath))
+        {
+            $this->_tempPath = trim($this->getWorkspacePath() . 'tmp' . DIRECTORY_SEPARATOR);
+        }
+
+        return $this->_tempPath;
+    }
+
+    /**
+     * Set path to folder for temporary files.
+     * @param $tempPath
+     */
+    public function setTempPath($tempPath)
+    {
+        $this->_tempPath = $tempPath;
     }
 
     /**
@@ -267,6 +288,15 @@ class Application_Configuration {
     }
 
     /**
+     * Returns value for key in current configuration.
+     * @param $key Name of option
+     */
+    public function getValue($key)
+    {
+        return self::getValueFromConfig($this->getConfig(), $key);
+    }
+
+    /**
      * Updates a value in a Zend_Config object.
      *
      * @param Zend_Config $config
@@ -298,6 +328,26 @@ class Application_Configuration {
                 eval('$subconfig->' . $key . ' = $value;');
             }
         }
+    }
+
+    /**
+     * Removes instance.
+     *
+     * This is used to reset the configuration to defaults in ini files.
+     */
+    public static function clearInstance()
+    {
+        self::$_instance = null;
+    }
+
+    /**
+     * Returns Zend_Translate instance for application.
+     * @return Zend_Translate
+     * @throws Zend_Exception
+     */
+    public function getTranslate()
+    {
+        return Zend_Registry::get('Zend_Translate');
     }
 
 }

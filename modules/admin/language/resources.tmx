@@ -177,7 +177,25 @@
         <seg>Übersetzungsressourcen verwalten</seg>
       </tuv>
     </tu>
-                            
+
+    <tu tuid="acl_resource_persons">
+      <tuv xml:lang="en">
+        <seg>View and edit persons</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Personenverwaltung</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="acl_resource_options">
+      <tuv xml:lang="en">
+        <seg>Settings</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Einstellungen</seg>
+      </tuv>
+    </tu>
+
   </body>
 
 </tmx>

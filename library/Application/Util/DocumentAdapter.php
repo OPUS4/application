@@ -38,6 +38,7 @@
  * TODO split off base class, URLs are controller specific
  * TODO move code to admin module (is used there as well and belongs there, or?)
  * TODO remove dependency on View (and update unit tests accordingly)
+ * TODO replace with view helpers
  */
 class Application_Util_DocumentAdapter {
 
@@ -71,7 +72,15 @@ class Application_Util_DocumentAdapter {
      * @param int $id
      */
     public function __construct($view, $value) {
-        $this->_view = $view;
+        if (is_null($view))
+        {
+            $this->_view = Zend_Registry::get('Opus_View');
+        }
+        else
+        {
+            $this->_view = $view;
+        }
+
         if ($value instanceof Opus_Document) {
             $this->document = $value;
             $this->docId = $this->document->getId();
@@ -121,30 +130,24 @@ class Application_Util_DocumentAdapter {
             return $titles[0]->getValue();
         }
         else {
-            return Zend_Registry::get('Zend_Translate')->translate('document_no_title') . '(id = ' . $this->getDocId()
-                . ')';
+            return $this->_view->translate('results_missingtitle') . ' (id = ' . $this->getDocId() . ')';
         }
     }
 
     /**
      * Returns title in document language.
      */
-    public function getMainTitle() {
-        $titles = $this->document->getTitleMain();
-        $language = $this->document->getLanguage();
-        if (count($titles) > 0) {
-            foreach ($titles as $title) {
-                if ($language === $title->getLanguage()) {
-                    return $title->getValue();
-                }
-            }
+    public function getMainTitle()
+    {
+        $title = $this->document->getMainTitle();
 
-            // if no title in document language ist found use first title
-            return $titles[0]->getValue();
+        if (is_null($title))
+        {
+            return $this->_view->translate('results_missingtitle') . " (id = '{$this->getDocId()}')";
         }
-        else {
-            return Zend_Registry::get('Zend_Translate')->translate('document_no_title') . '(id = ' . $this->getDocId()
-                . ')';
+        else
+        {
+            return $title->getValue();
         }
     }
 
@@ -238,37 +241,34 @@ class Application_Util_DocumentAdapter {
      * Return list of authors.
      * @return array
      */
-    public function getAuthors() {
+    public function getAuthors()
+    {
         if ($this->_authors) {
             return $this->_authors;
         }
 
-        try {
-            $c = count($this->document->getPersonAuthor());
-        }
-        catch (Exception $e) {
-            $c = 0;
-        }
+        $authorsInfo = array();
 
-        $authors = array();
+        $authors = $this->document->getPersonAuthor();
 
-        for ($counter = 0; $counter < $c; $counter++) {
-
-            $name = $this->document->getPersonAuthor($counter)->getName();
-            $firstName = $this->document->getPersonAuthor($counter)->getFirstName();
-            $lastName = $this->document->getPersonAuthor($counter)->getLastName();
+        foreach ($authors as $person)
+        {
+            $name = $person->getName();
+            $firstName = $person->getFirstName();
+            $lastName = $person->getLastName();
 
             $author = array();
 
             $author['name'] = htmlspecialchars($name);
             $author['url'] = $this->getAuthorUrl($firstName . ' ' . $lastName);
+            $author['person'] = $person;
 
-            $authors[$counter] = $author;
+            $authorsInfo[] = $author;
         }
 
-        $this->_authors = $authors;
+        $this->_authors = $authorsInfo;
 
-        return $authors;
+        return $authorsInfo;
     }
 
     /**
@@ -304,7 +304,7 @@ class Application_Util_DocumentAdapter {
     }
 
     public function isBelongsToBibliography() {
-        return $this->document->getBelongsToBibliography();
+        return $this->document->getBelongsToBibliography() == 1;
     }
 
     /**

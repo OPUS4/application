@@ -36,145 +36,131 @@
  */
 ?>
 
-<div class="documentOptions">
-    <?PHP if (!empty($this->collection)) : ?>
-        <?=$this->translate('admin_documents_label_collection')?>: <b><?=htmlspecialchars($this->collectionName)?></b>
-    <?PHP elseif (!empty($this->series)) : ?>
-        <?= $this->translate('Opus_Series') ?>: <b><?=htmlspecialchars($this->series->getTitle())?></b>
-    <?PHP else : ?>
-    <div class="docstateMenu">
-        <dl class="dropdown" id="stateOption">
-            <dt><a><?= $this->translate('admin_documents_show_docs') ?></a></dt>
-            <dd>
-                <ul>
-                    <li class="active"><?= $this->translate('admin_documents_state_' . $this->state) ?></li>
-                    <?PHP foreach ($this->registers as $state => $link) : ?>
-                        <?PHP if ($this->state !== $state) : ?>
-                            <li><a href="<?= $link ?>"><?= $this->translate('admin_documents_state_' . $state) ?></a></li>
-                        <?PHP endif; ?>
-                    <?PHP endforeach; ?>
-                </ul>
-            </dd>
-        </dl>
-        <dl class="dropdown" id="sortByOption">
-            <dt><a><?= $this->translate('docs_sortorder') ?></a></dt>
-            <dd>
-                <ul>
-                    <li class="active"><?= $this->translate('admin_documents_sortby_' . $this->sort_order) ?></li>
-                    <?PHP foreach ($this->sortingLinks as $key => $link) : ?>
-                    <?PHP if ($this->sort_order !== $key) : ?>
-                        <li><a href="<?= $link ?>"><?= $this->translate('admin_documents_sortby_' . $key) ?></a></li>
-                    <?PHP endif; ?>
-                    <?PHP endforeach; ?>
-                </ul>
-            </dd>
-        </dl>
-        <dl class="dropdown" id="sortDownOption">
-            <dt><a><?= $this->translate('docs_sortorder') ?></a></dt>
-            <dd>
-                <ul>
-                    <li class="active"><?= $this->translate('admin_documents_sort_' . $this->sortDirection) ?></a></li>
-                    <?PHP foreach ($this->directionLinks as $key => $link) : ?>
-                        <?PHP if ($key !== $this->sortDirection) : ?>
-                    <li><a href="<?= $link ?>"><?= $this->translate('admin_documents_sort_' . $key) ?></a></li>
-                        <?PHP endif; ?>
-                    <?PHP endforeach; ?>
-                </ul>
-            </dd>
-        </dl>
-    </div>
+<div id="top">
 
-    <div class="crud-wrapper">
+<div class="left" style="max-width: 190px">
+    <div class="document-id-form">
         <form action="<?= $this->url_call_id ?>" method="post" class="crud">
             <div>
-                <input type="text" name="id" size="5" placeholder="<?= $this->translate('docs_call_id_placeholder') ?>"/>
+                <input type="text" name="id" size="5" placeholder="<?= $this->translate('docs_call_id_placeholder') ?>" accesskey="i" />
                 <i class="placeholder"><?= $this->translate('docs_call_id_label') ?></i>
                 <input type="submit" value="<?= $this->translate('docs_call_id') ?>" />
             </div>
         </form>
     </div>
-    <?PHP endif; ?>
 </div>
 
-<div class ="paginationInfo">
-    <?= $this->paginationControl($this->paginator, NULL, 'itemCount_pagination.phtml') ?>
-</div>
+<div class="right">
 
-<div class="itemCountLinks">
-    <p><?= $this->translate('admin_documents_maxhitsperpage') ?></p>
-    <ul>
-<?PHP foreach ($this->itemCountLinks as $link) : ?>
-<?PHP if ($link['label'] != $this->maxHitsPerPage && ($link['label'] !== 'all' || $this->maxHitsPerPage != 0)) : ?>
-        <li><a href="<?= $link['url'] ?>"><?PHP if ($link['label'] === 'all') : ?>
-<?= $this->translate('admin_documents_maxhitsperpage_all') ?><?PHP else : ?><?= $link['label'] ?>
-<?PHP endif; ?></a><?PHP else : ?>
-<?PHP if ($link['label'] === 'all') : ?><?= $this->translate('admin_documents_maxhitsperpage_all') ?>
-<?PHP else : ?>
-        <li class="current"><?= $link['label'] ?>
-<?PHP endif; ?>
-<?PHP endif; ?></li>
-<?PHP endforeach; ?>
-    </ul>
-</div>
-<?= $this->paginationControl($this->paginator, 'Sliding', 'pagination_control.phtml') ?>
-
-<table class="documents">
-    <?PHP $index = 0; foreach ($this->paginator as $docId) : ?>
-    <?PHP $document = new Application_Util_DocumentAdapter($this, $docId); ?>
-    <tr class="<?= ($index++ % 2) ? 'even' : 'odd' ?>">
-        <td class="id"><?= $docId ?></td>
-        <td class="info">
-            <?PHP $authorsCount = count($document->getAuthors()) - 1; ?>
-            <?PHP foreach($document->getAuthors() as $count => $author) : ?>
-            <span class="author">
-                <?PHP if ($this->linkToAuthorSearch) : ?>
-                    <a href="<?= $author['url'] ?>"><?= $author['name'] ?></a>
-                <?PHP else : ?>
-                    <?= $author['name'] ?>
-                <?PHP endif; ?>
-            </span>
-                <?= ($count < $authorsCount) ? '; ' : ': '?>
-            <?PHP endforeach; ?>
-            <span class="title"><a href="<?=$this->documentUrl()->adminShow($docId) ?>"
-                title="<?= $this->translate('admin_documents_tooltip_show') ?>"
-                                   ><?= htmlspecialchars($document->getDocTitle()) ?></a></span>
-            (<span class="pubDate"><?= $document->getYear() ?></span>)
-        </td>
-        <?PHP if (!empty($this->series)) : ?>
-        <td>
-            <span><?= $this->seriesNumber($document->getDocument(), $this->series) ?></span>
-        </td>
-        <?PHP endif; ?>
-        <td class="doctype">
-            <span class="doctype"><?=htmlspecialchars($this->translate($document->getDocType())) ?></span>
-        </td>
-        <td class="files">
-            <span class="files">
-                <a href="<?=$this->documentUrl()->adminFilemanager($docId)?>"
-                   title="<?=$this->translate("admin_documents_link_filemanager")?>"><?=$document->getFileCount() ?></a>
-            </span>
-        </td>
-        <td class="bibliography">
-            <?PHP if ($document->isBelongsToBibliography()) : ?>
-            <span class="bibliography" title="<?= htmlspecialchars($this->translate('admin_documents_tooltip_belongsToBibliography_true')) ?>">
-                <?= htmlspecialchars($this->translate('Bibliography_Value_True')) ?>
-            </span>
-            <?PHP else : ?>
-            <span class="bibliography" title="<?= htmlspecialchars($this->translate('admin_documents_tooltip_belongsToBibliography_false')) ?>">
-                <?= htmlspecialchars($this->translate('Bibliography_Value_False')) ?>
-            </span>
-            <?PHP endif; ?>
-        </td>
+    <div class="documentOptions">
         <?PHP if (!empty($this->collection)) : ?>
-        <td class="">
-            <span class=""><?= $document->getDocState() ?></span>
-        </td>
+            <?=$this->translate('admin_documents_label_collection')?>: <b><?=htmlspecialchars($this->collectionName)?></b>
+        <?PHP elseif (!empty($this->series)) : ?>
+            <?= $this->translate('Opus_Series') ?>: <b><?=htmlspecialchars($this->series->getTitle())?></b>
+        <?PHP else : ?>
+            <div class="docstateMenu">
+                <dl class="dropdown" id="sortByOption">
+                    <dt><a><?= $this->translate('docs_sortorder') ?></a></dt>
+                    <dd>
+                        <ul>
+                            <li class="active"><?= $this->translate('admin_documents_sortby_' . $this->sort_order) ?></li>
+                            <?PHP foreach ($this->sortingLinks as $key => $link) : ?>
+                                <?PHP if ($this->sort_order !== $key) : ?>
+                                    <li><a href="<?= $link ?>"><?= $this->translate('admin_documents_sortby_' . $key) ?></a></li>
+                                <?PHP endif; ?>
+                            <?PHP endforeach; ?>
+                        </ul>
+                    </dd>
+                </dl>
+                <dl class="dropdown" id="sortDownOption">
+                    <dt><a><?= $this->translate('docs_sortorder') ?></a></dt>
+                    <dd>
+                        <ul>
+                            <li class="active"><?= $this->translate('admin_documents_sort_' . $this->sortDirection) ?></a></li>
+                            <?PHP foreach ($this->directionLinks as $key => $link) : ?>
+                                <?PHP if ($key !== $this->sortDirection) : ?>
+                                    <li><a href="<?= $link ?>"><?= $this->translate('admin_documents_sort_' . $key) ?></a></li>
+                                <?PHP endif; ?>
+                            <?PHP endforeach; ?>
+                        </ul>
+                    </dd>
+                </dl>
+            </div>
+
         <?PHP endif; ?>
-        <td class="edit">
-            <a href="<?= $this->documentUrl()->adminEdit($docId) ?>"><?= $this->translate('admin_button_edit') ?></a>
-        </td>
-    </tr>
-    <?PHP endforeach; ?>
-</table>
+    </div>
+
+    <div class ="paginationInfo">
+        <?= $this->paginationControl($this->paginator, NULL, 'itemCount_pagination.phtml') ?>
+    </div>
+
+    <div class="itemCountLinks">
+        <p><?= $this->translate('admin_documents_maxhitsperpage') ?></p>
+        <ul>
+            <?PHP foreach ($this->itemCountLinks as $link) : ?>
+                <?PHP if ($link['label'] != $this->maxHitsPerPage && ($link['label'] !== 'all' || $this->maxHitsPerPage != 0)) : ?>
+                    <li><a href="<?= $link['url'] ?>"><?PHP if ($link['label'] === 'all') : ?>
+                        <?= $this->translate('admin_documents_maxhitsperpage_all') ?><?PHP else : ?><?= $link['label'] ?>
+                    <?PHP endif; ?></a><?PHP else : ?>
+                    <?PHP if ($link['label'] === 'all') : ?><?= $this->translate('admin_documents_maxhitsperpage_all') ?>
+                    <?PHP else : ?>
+                        <li class="current"><?= $link['label'] ?>
+                    <?PHP endif; ?>
+                <?PHP endif; ?></li>
+            <?PHP endforeach; ?>
+        </ul>
+    </div>
+
+</div>
+
+</div>
+
+<div class="clear">
+
+<div class="left">
+    <div id="filterMenu">
+    </div>
+    <?PHP if (isset($this->person)) : ?>
+    <div id="filter">
+        <h4>Filter</h4>
+        <ul>
+            <li><?= $this->person['last_name'] ?><?PHP if (isset($this->person['first_name'])) : ?>,
+            <?= $this->person['first_name'] ?>
+            <?PHP endif ?>
+            </li>
+            <?PHP if (isset($this->person['identifier_orcid'])) : ?>
+                <li class="identifier_orcid"><?= $this->person['identifier_orcid'] ?></li>
+            <?PHP endif ?>
+            <?PHP if (isset($this->person['identifier_gnd'])) : ?>
+                <li class="identifier_gnd"><?= $this->person['identifier_gnd'] ?></li>
+            <?PHP endif ?>
+            <?PHP if (isset($this->person['identifier_misc'])) : ?>
+                <li class="identifier_misc"><?= $this->person['identifier_misc'] ?></li>
+            <?PHP endif ?>
+        </ul>
+    </div>
+    <?PHP endif ?>
+    <div id="facetMenu">
+        <?PHP if (!isset($this->collectionName) && !isset($this->series)) : ?>
+            <?PHP include('facet.phtml') ?>
+        <?PHP endif ?>
+        <?PHP if (isset($this->person)) : ?>
+            <?PHP include 'facet-role.phtml' ?>
+        <?PHP endif ?>
+    </div>
+</div>
+
+<div class="right">
+
+<div>
 
 <?= $this->paginationControl($this->paginator, 'Sliding', 'pagination_control.phtml') ?>
+
+<?PHP include('results.phtml') ?>
+
+<?= $this->paginationControl($this->paginator, 'Sliding', 'pagination_control.phtml') ?>
+    </div>
+</div>
+</div>
+
+</div>

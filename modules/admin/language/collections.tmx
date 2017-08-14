@@ -346,6 +346,24 @@
 			</tuv>
         </tu>
 
+        <tu tuid="AssignRoot">
+            <tuv xml:lang="en">
+                <seg>Documents can be assign to root collection</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Sammlung kann Dokumenten auf der obersten Ebene zugewiesen werden</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="AssignLeavesOnly">
+            <tuv xml:lang="en">
+                <seg>Documents can only be assigned to leaf nodes</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Dokumente können nur der untersten Ebene zugewiesen werden.</seg>
+            </tuv>
+        </tu>
+
         <tu tuid="CollectionsContentSchema">
 			<tuv xml:lang="en">
 				<seg>Metadata fields of collections</seg>
