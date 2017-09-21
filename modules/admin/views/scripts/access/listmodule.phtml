@@ -79,7 +79,7 @@
                 <?= in_array($resource, $this->modules) ? ' checked="checked" ' : '' ?>
                 <?= in_array($resource, array('default')) ? ' disabled="disabled" ' : '' ?>
             /> <?= $this->translate('acl_' . $resource); ?>
-            <?PHP if (isset($this->guestModules) && in_array($module, $this->guestModules)) : ?>
+            <?PHP if (isset($this->guestModules) && in_array($resource, $this->guestModules)) : ?>
                 <span style="font-style: italic; color: gray; padding-left: 0.5em"><?= $this->translate('admin_access_checked_in_guest'); ?></span>
             <?PHP endif; ?>
           </li>
@@ -101,7 +101,7 @@
             <?PHP $state = $this->translate('Opus_Document_ServerState_Value_' . ucfirst($states[1]) ); ?>
             <?PHP $targetState = $this->translate('Opus_Document_ServerState_Value_' . ucfirst($states[2])); ?>
             <?= $this->translate('acl_resource_workflow_generic', array($state, $targetState)); ?> 
-            <?PHP if (isset($this->guestModules) && in_array($module, $this->guestModules)) : ?>
+            <?PHP if (isset($this->guestModules) && in_array($resource, $this->guestModules)) : ?>
                 <span style="font-style: italic; color: gray; padding-left: 0.5em"><?= $this->translate('admin_access_checked_in_guest'); ?></span>
             <?PHP endif; ?>
           </li>

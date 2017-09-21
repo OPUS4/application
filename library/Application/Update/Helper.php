@@ -51,7 +51,9 @@ class Application_Update_Helper extends Application_Update_PluginAbstract
      */
     public function askYesNo($question)
     {
-        $response = trim(readline($question));
+        print($question);
+
+        $response = trim(readline());
 
         return ($response == 'Y' || $response == 'y');
     }

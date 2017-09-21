@@ -27,46 +27,48 @@
  * @category    Application
  * @package     Module_Review
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
+ *
+ * TODO remove display decision from script
+ * TODO on/off switch for numbered pages
  */
 ?>
 
-<?php if ($this->pageCount > 1): ?>
-    <div class="paginationControl">
-        <ul>
+<?PHP if ($this->pageCount > 1) : ?>
+<div class="paginationControl-wrapper">
+    <ul class="paginationControl">
 
-    <!-- First and previous page link -->
-    <?php if (isset($this->previous)) : ?>
-        <li><a href="<?= $this->url(array('page' => $this->first)); ?>">
-            &lt;&lt; <?= $this->translate('pagination_first') ?></a></li>
-        <li><a href="<?= $this->url(array('page' => $this->previous)); ?>">
-            &lt; <?= $this->translate('pagination_previous') ?></a></li>
-    <?php else : ?>
-        <li class="disabled">&lt;&lt; <?= $this->translate('pagination_first') ?></li>
-        <li class="disabled">&lt; <?= $this->translate('pagination_previous') ?></li>
-    <?php endif; ?>
+        <!-- First and previous page link -->
+        <?php if (isset($this->previous)) : ?>
+            <li><a class="pagination-first" href="<?= $this->url(array('page' => $this->first)) ?>"
+                   title="<?= $this->translate('pagination_first') ?>"></a></li>
+            <li><a class="pagination-prev" href="<?= $this->url(array('page' => $this->previous)) ?>"
+                   title="<?= $this->translate('pagination_previous') ?>"></a></li>
+        <?php else : ?>
+            <li><div class="pagination-first"></div></li>
+            <li><div class="pagination-prev"></div></li>
+        <?php endif ?>
 
-    <!-- Numbered page links -->
-    <?php foreach ($this->pagesInRange as $page) : ?>
-        <?php if ($page != $this->current) : ?>
-            <li><a href="<?= $this->url(array('page' => $page)) ?>"><?= $page; ?></a></li>
-        <?php else: ?>
-            <li class="currentPage"><?= $page; ?></li>
-        <?php endif; ?>
-    <?php endforeach; ?>
+        <!-- Numbered page links -->
+        <?php foreach ($this->pagesInRange as $page) : ?>
+            <?php if ($page != $this->current) : ?>
+                <li><a href="<?= $this->url(array('page' => $page)) ?>"><?= $page ?></a></li>
+            <?php else : ?>
+                <li class="currentPage"><?= $page ?></li>
+            <?php endif ?>
+        <?php endforeach ?>
 
-    <!-- Next and last page link -->
-    <?php if (isset($this->next)) : ?>
-        <li><a href="<?= $this->url(array('page' => $this->next)); ?>">
-            <?= $this->translate('pagination_next') ?> &gt;</a></li>
-        <li><a href="<?= $this->url(array('page' => $this->last)); ?>">
-            <?= $this->translate('pagination_last') ?> &gt;&gt;</a></li>
-    <?php else : ?>
-        <li class="disabled"><?= $this->translate('pagination_next') ?> &gt;</li>
-        <li class="disabled"><?= $this->translate('pagination_last') ?> &gt;&gt;</li>
-    <?php endif; ?>
+        <!-- Next and last page link -->
+        <?php if (isset($this->next)) : ?>
+            <li><a class="pagination-next" href="<?= $this->url(array('page' => $this->next)) ?>"
+                   title="<?= $this->translate('pagination_next') ?>"></a></li>
+            <li><a class="pagination-last" href="<?= $this->url(array('page' => $this->last)) ?>"
+                   title="<?= $this->translate('pagination_last') ?>"></a></li>
+        <?php else : ?>
+            <li><div class="pagination-next"></div></li>
+            <li><div class="pagination-last"></div></li>
+        <?php endif ?>
     </ul>
 </div>
-<?php endif; ?>
+<?PHP endif ?>

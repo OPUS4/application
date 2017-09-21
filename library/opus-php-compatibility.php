@@ -47,3 +47,14 @@ if (!function_exists('mb_strlen')) {
     }
 }
 
+/**
+ * Function for dividing integers used in PersonController.
+ */
+if (!function_exists('intdiv'))
+{
+    function intdiv($divided, $divisor)
+    {
+        return ($divided - $divided % $divisor) / $divisor;
+    }
+}
+

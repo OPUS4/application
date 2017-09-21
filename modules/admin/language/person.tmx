@@ -6,7 +6,25 @@
  </header>
  
   <body>
-  
+
+    <tu tuid="admin_title_persons">
+      <tuv xml:lang="en">
+        <seg>Persons</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Personen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_title_persons_description">
+      <tuv xml:lang="en">
+        <seg>Management of authors and other persons.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Verwaltung von Autoren und anderen Personen.</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="Person_Controller">
       <tuv xml:lang="en">
         <seg>Admin: Administration of persons</seg>
@@ -114,7 +132,90 @@
           <seg>Dokument Optionen</seg>
       </tuv>
     </tu>
-    
+
+    <tu tuid="admin_person_edit_help">
+      <tuv xml:lang="en">
+        <seg><![CDATA[
+<p>This form can be used to edit a person across all associated documents, for instance to add an ID like ORCiD to that
+person.</p>
+<p>Persons are identified by <b>name</b>, <b>first name</b> and identifiers like <b>ORCiD</b>, <b>GND</b> and
+<b>Misc</b>. If you change the last name, it will be changed for all person objects matching the original values.</p>
+<blockquote>
+If there are 10 documents with an author "John Smith" and "John" is changed to "Jeff", then after saving the form, all
+10 documents will have an author "Jeff Smith" instead.
+</blockquote>
+]]></seg>
+      </tuv>
+      <tuv xml:lang="de">
+          <seg><![CDATA[
+<p>
+  In diesem Formular können Änderungen an Personen über mehrere Dokumente hinweg vorgenommen werden. Die Personen werden
+  durch den <b>Namen</b>, <b>Vornamen</b> und die Identifikationen (<b>ORCiD</b>, <b>GND</b>, <b>Misc</b>) bestimmt.
+</p>
+<p>
+  In den anderen Felder kann einer der vorhandenen Werte ausgesucht oder ein neuer Wert eingegeben werden.
+</p>
+<p>
+  Beim Speichern werden die geänderten Werten für alle betroffenen Objekte gesetzt. Die Metadaten von mehreren
+  Dokumenten werden verändert.
+</p>
+      ]]></seg>
+      </tuv>
+  </tu>
+
+    <tu tuid="admin_person_edit_confirm_help">
+      <tuv xml:lang="en">
+        <seg><![CDATA[
+The following changes will be made to matching person objects in the database. You can remove the selection from
+documents to exclude them from the changes. Saving this form will change the selected documents and the time of
+the last change will be updated (ServerDateModified).
+]]></seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg><![CDATA[
+Die folgenden Änderungen werden an passenden Personenobjekten vorgenommen. Einzelne Dokumente können von den
+Änderungen ausgeschlossen werden. Nach dem Speichern werden die ausgewählten Dokumente geändert und das Datum der
+letzten Änderung wird aktualisiert.
+]]></seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_person_error_no_update">
+      <tuv xml:lang="en">
+        <seg>Please select at least one field for updating.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bitte wählen Sie mindestens ein Feld zur Änderung.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_person_bulk_update_success">
+      <tuv xml:lang="en">
+        <seg>Person objects successfully updated.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Personenobjekte erfolgreich aktualisiert.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_person_bulk_update_failure">
+      <tuv xml:lang="en">
+        <seg>Error updating multiple person objects.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Fehler beim Ändern von mehreren Personenobjekten.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_person_error_not_found">
+      <tuv xml:lang="en">
+        <seg>No matching person was found.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Keine passende Person gefunden.</seg>
+      </tuv>
+    </tu>
+
   </body>
   
 </tmx>

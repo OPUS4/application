@@ -59,5 +59,6 @@ $autoloader->suppressNotFoundWarnings(false);
 $autoloader->setFallbackAutoloader(true);
 
 $update = new Application_Update();
+$update->processArguments($argv);
 $update->bootstrap();
 $update->run();

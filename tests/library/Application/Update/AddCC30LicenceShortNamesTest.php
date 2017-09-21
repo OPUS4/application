@@ -165,4 +165,46 @@ class Application_Update_AddCC30LicenceShotNamesTest extends ControllerTestCase
         $this->assertNull($name);
     }
 
+    public function testDoNotUpdateServerDateModified()
+    {
+        $licence = new Opus_Licence();
+        $licence->setNameLong('Creative Commons - Namensnennung');
+        $licence->setLanguage('deu');
+        $licence->setLinkLicence('http://opus4.kobv.org/test-licence');
+        $licenceId = $licence->store();
+
+        $doc = $this->createTestDocument();
+
+        $doc->addLicence($licence);
+        $docId = $doc->store();
+
+        $cache = new Opus_Model_Xml_Cache();
+
+        $this->assertNotNull($cache->getData($docId, '1.0'));
+
+        $doc = new Opus_Document($docId);
+
+        $dateModified = $doc->getServerDateModified();
+
+        sleep(2);
+
+        $licence = new Opus_Licence($licenceId);
+        $this->assertNull($licence->getName());
+
+        $this->_update->run();
+
+        $doc = new Opus_Document($docId);
+
+        $cacheResult = $cache->getData($docId, '1.0');
+
+        // clean up licence first
+        $licence = new Opus_Licence($licenceId);
+        $licence->delete();
+
+        $this->assertNull($cacheResult);
+        $this->assertEquals($dateModified->getUnixTimestamp(), $doc->getServerDateModified()->getUnixTimestamp());
+        $this->assertEquals('CC BY 3.0', $licence->getName());
+
+    }
+
 }

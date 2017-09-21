@@ -57,6 +57,8 @@ class Application_Update_AddCC30LicenceShortNames extends Application_Update_Plu
 
     public function run()
     {
+        $cache = new Opus_Model_Xml_Cache();
+
         $licences = Opus_Licence::getAll();
 
         foreach ($licences as $licence)
@@ -87,7 +89,15 @@ class Application_Update_AddCC30LicenceShortNames extends Application_Update_Plu
                 if (is_null($existingLicence))
                 {
                     $licence->setName($name);
+
+                    // prevent updates to ServerDateModified
+                    // TODO cache should be transparent - updating ServerDateModified is important
+                    $licence->unregisterPlugin('Opus_Model_Plugin_InvalidateDocumentCache');
+
                     $licence->store();
+
+                    // since cache updates were prevented a manual refresh is necessary
+                    $cache->removeAllEntriesForDependentModel($licence);
 
                     $this->log("Setting label '$name' for licence '{$nameLong}'.");
 

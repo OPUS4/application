@@ -37,6 +37,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  *
  * TODO move all processing into model classes for testing and reuse
+ * TODO refactor code for returning multiple errors
  */
 
 class Oai_IndexController extends Application_Controller_Xml {
@@ -95,7 +96,8 @@ class Oai_IndexController extends Application_Controller_Xml {
         }
 
         try {
-            $this->__handleRequest($oaiRequest);
+            // handle request
+            $this->__handleRequest($oaiRequest, $this->getRequest()->getRequestUri());
             return;
         }
         catch (Oai_Model_Exception $e) {
@@ -146,7 +148,7 @@ class Oai_IndexController extends Application_Controller_Xml {
      * @throws Oai_Model_Exception Thrown if the request could not be handled.
      * @return void
      */
-    private function __handleRequest(array $oaiRequest) {
+    private function __handleRequest(array $oaiRequest, $requestUri) {
         // Setup stylesheet
         $this->loadStyleSheet($this->view->getScriptPath('index') . '/oai-pmh.xslt');
 
@@ -167,6 +169,18 @@ class Oai_IndexController extends Application_Controller_Xml {
         $request = new Oai_Model_Request();
         $request->setPathToMetadataPrefixFiles($metadataPrefixPath);
         $request->setResumptionPath($resumptionPath);
+
+        // check for duplicate parameters
+        foreach ($oaiRequest as $name => $value)
+        {
+            if (substr_count($requestUri, "&$name") > 1)
+            {
+                throw new Oai_Model_Exception(
+                    'Parameters must not occur more than once.',
+                    Oai_Model_Error::BADARGUMENT
+                );
+            }
+        }
 
         if (true !== $request->validate($oaiRequest)) {
             throw new Oai_Model_Exception($request->getErrorMessage(), $request->getErrorCode());
@@ -191,7 +205,7 @@ class Oai_IndexController extends Application_Controller_Xml {
                 break;
 
             case 'ListMetadataFormats':
-                $this->__handleListMetadataFormats();
+                $this->__handleListMetadataFormats($oaiRequest);
                 break;
 
             case 'ListRecords':
@@ -293,11 +307,10 @@ class Oai_IndexController extends Application_Controller_Xml {
      * @param  array &$oaiRequest Contains full request information
      * @return void
      */
-    private function __handleListIdentifiers(array &$oaiRequest) {
-
+    private function __handleListIdentifiers(array &$oaiRequest)
+    {
         $maxIdentifier = $this->_configuration->getMaxListIdentifiers();
         $this->_handlingOfLists($oaiRequest, $maxIdentifier);
-
     }
 
     /**
@@ -306,9 +319,31 @@ class Oai_IndexController extends Application_Controller_Xml {
      * @param  array &$oaiRequest Contains full request information
      * @return void
      */
-    private function __handleListMetadataFormats() {
-        $this->_xml->appendChild($this->_xml->createElement('Documents'));
+    private function __handleListMetadataFormats($oaiRequest)
+    {
+        if (isset($oaiRequest['identifier']))
+        {
+            try
+            {
+                // check for document identifier, but ignore because all documents have same list of formats
+                $docId = $this->getDocumentIdByIdentifier($oaiRequest['identifier']);
+            }
+            catch (Oai_Model_Exception $ome)
+            {
+                // set second error so 'badArgument' and 'idDoesNotExist' are reported back
+                $this->_proc->setParameter(
+                    '', 'oai_error_code2',
+                    Oai_Model_Error::mapCode(Oai_Model_Error::IDDOESNOTEXIST)
+                );
+                $this->_proc->setParameter(
+                    '', 'oai_error_message2',
+                    'Identifier is invalid and does not exist.'
+                );
+                throw $ome;
+            }
+        }
 
+        $this->_xml->appendChild($this->_xml->createElement('Documents'));
     }
 
     /**

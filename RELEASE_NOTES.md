@@ -2,29 +2,142 @@
 
 ---
 
-## Release 4.6 2017-04-
+## Release 4.6 2017-08-14
 
-OPUS 4 wurde um eine SWORD-Schnittstelle ergänzt. Damit können Pakete
-(ZIB/TAR) mit den Metadaten und Dateien von einem oder mehreren 
-Dokumenten gemäß der SWORD-Spezifikation importiert werden.
+Im folgenden werden die wichtigsten Änderungen und Neuheiten für OPUS 4.6
+beschrieben.
+
+Es wurden eine Menge kleiner und großer Bugs gefixt. Eine Auflistung der 
+Tickets findet sich in der Datei `CHANGES.md`.
+
+### Imports mit SWORD
+
+Es wurde eine SWORD v1.3 Schnittstelle implementiert. Mit dieser Schnittstelle
+können Metadaten und Volltexte automatisch importiert werden. Die Schnittstelle
+ist für andere Systeme wie DeepGreen (<https://deepgreen.kobv.de>) gedacht, die 
+Dokumente in ein OPUS 4 Repositorium hochladen möchten. Das Hochladen ist mit 
+Hilfe von einfachen Skripten möglich.
+
+Mit der SWORD-Schnittstelle von OPUS können Pakete (ZIB/TAR) mit den Metadaten 
+und Dateien von einem Dokumenten gemäß der SWORD-Spezifikation importiert werden.
+Die Schnittstelle ist aber auch in der Lage Pakete mit mehreren Dokumenten in 
+einem Request zu verarbeiten.
+
+Die Dokumentation zur SWORD-Schnittstelle ist noch nicht fertig und wird unter
+<http://www.opus-repository.org> zu finden sein.
+
+Es ist in dieser Version noch nicht ohne weiteres möglich sämtliche Metadaten,
+einschließlich von Verknüpfungen zu Sammlungen, Lizenzen usw. zu importieren. Zur 
+Zeit ist dafür die Kenntnis der internen Datenbank-IDs notwendig. In der weiteren
+Entwicklung wird der Metadaten-Import weiter ausgebaut und vereinfacht werden. 
+
+### Updates
+
+Für Updates müssen im Allgemeinen folgende Schritte ausgeführt werden. Das 
+gilt für die Versionen 4.5-RC1 und neuer.
+
+1. Source Code aktualisieren (git pull, gegebenenfalls Konflikte auflösen)
+2. Composer Pakete aktualisieren 
+
+    ```
+    $ php composer.phar update --no-dev --optimize-autoloader
+    ```
+3. Updateskriptausführen
+
+    ```
+    $ bin/update.sh
+    ```
+
+Das Updateskript aktualisiert zuerst die Datenbank und führt dann die weiteren
+notwendigen Schritte aus. 
+
+In der Datenbank werden die Schema-Version und eine OPUS Version gespeichert.
+Anhand dieser Versionen wird bestimmt welche Updateschritt auszuführen sind.
+Nach einem Update werden daher bei einem erneuten Aufruf von `bin/update.sh`,
+die bereits ausgeführten Update-Schritte übersprungen.
+
+Für den Umstieg von älteren OPUS-Versionen, wie 4.4.5, auf die aktuelle Version
+mit Git, muss der Dokumentation im OPUS 4 Handbuch gefolgt werden.
+
+<http://www.opus-repository.org/userdoc/update/from445.html>
+
+Beim Update kann wahlweise jeder Updateschritt vom Nutzer vor der Ausführung 
+bestätigt werden.
+
+    $ bin/update.sh --confirm-steps
+    
+Mit dieser Option wird vor jedem Schritt gefragt, ob er ausgeführt werden soll. 
+Damit lassen sich problematische Skript überspringen. Im Normalfall sollte das 
+nicht notwendig sein.
+
+#### Update auf 4.6
+
+Beim Update werden führende Nullen von GND-Nummern für Autoren entfernt, um eine
+korrekte Verlinkung in der Frontdoor zu ermöglichen. Führende Nullen werden bei 
+der Eingabe in der Administration nicht mehr akzeptiert.
+
+Im Verzeichnis `db` werden der Link zum Schema-Verzeichnis des OPUS 4 Frameworks
+und die Datei `createdb.sh` entfernt, da sie nicht länger benötigt werden. Die
+Schema-Dateien werden nur noch indirekt über die Klassen des Frameworks 
+verwendet.
+
+### Export
+
+Suchergebnisse können in verschiedenen Formaten exportiert werden.
+Unangemeldete Nutzer könnten maximal 100 Dokument auf einmal exportieren. Für
+angemeldete Nutzer liegt die Grenze bei 500 und Administratoren haben keine 
+Beschränkung. Die Grenzen können konfiguriert werden. 
+
+Der Export aller Dokumente erfolgt auch für Administratoren nicht automatisch.
+Das Limit lässt sich aber über URL Parameter steuern, in dem z.B.  `/rows/all`
+angegeben wird.
+         
+Die unterstützten Formate sind BibTeX, RIS, CSV, und XML. Für den XML-Export 
+muss wie bisher ein XSLT-Stylesheet konfiguriert werden. Nur Administratoren
+haben Zugriff auf das interne OPUS-XML-Format.
+
+Die Export-Links werden nur angezeigt, wenn der Nutzer zugriff auf das Export-
+Modul hat. 
 
 ### DINI
 
-### Nutzeroberfläche
+Die MetaTags für die Frontdoor wurden ergänzt, um die Zugriffsrechte der 
+Dokumente maschinenlesbar zu machen.
+
+### Suche
 
 Es gibt nun die Möglichkeit Suchergebnisse in der gewählten Sprache der
 Nutzeroberfläche anzeigen zu lassen. Wird OPUS 4 also auf Englisch 
-verwendet, werden bevorzugt die englischen Titel angezeigt. Ist dieses
+verwendet, werden dann bevorzugt die englischen Titel angezeigt. Ist dieses
 Verhalten gewünscht, muss es in der Konfiguration aktiviert werden.
+
+    search.result.display.preferUserInterfaceLanguage = 1
+
 Wird diese Funktion genutzt und sollen die Suchergebnisse nach dem 
 Titel sortiert werden, erfolgt die Sortierung weiterhin anhand des 
 Titels in der Sprache des Dokuments (Haupttitel), also nicht unbedingt 
 anhand des Titels in der Sprache der Oberfläche, der dann angezeigt 
 wird. Das kann zu einer unerwarteten Reihenfolge führen. Es ist geplant
-dieses Problem in einem kommenden Release zu beheben.
+dieses Problem in einem kommenden Release durch Änderungen am Index zu beheben.
 
-### Suche
+Das Symbol für Zusammenfassungen an den Suchergebnissen wurde durch ein 
+Symbol für Volltexte ersetzt. Die Zusammenfassungen können nun durch eine 
+graue Leiste unterhalb der Anzeige eines Suchergebnisses auf- und zugeklappt 
+werden.
 
+Für Open-Access-Volltexte wird das Volltextsymbol mit einem Open-Access-
+Zeichen angezeigt. Ob ein Dokument Open-Access ist, wird weiterhin über die 
+Sammlung "open_access" bestimmt.
+
+Die Links für die Navigation zwischen mehreren Seiten mit Dokumenten
+wurden durch Icons ersetzt. Die Anzahl der angezeigten Dokumente kann
+über ein DropDown-Menü ausgewählt werden.
+
+### Browsing
+
+Es gibt jetzt ein Browsing nach dem Jahr der Veröffentlichung. Die Anzeige
+richtet sich nach der Suchfacette "year".
+  
 ### Frontdoor
 
 Die PHP Funktionen die im XSLT verwendet wurden, sind jetzt als Zend
@@ -41,19 +154,285 @@ verwendet. Die folgenden Funktionen haben außerdem neue Namen bekommen.
     checkLanguageFile           -> languageImageExists
     getStylesheet               -> frontdoorStylesheet
     
+Zusammenfassungen werden nicht mehr mitten im Wort abgeschnitten, wenn 
+sie gekürzt angezeigt werden.
+
+Die Frontdoor für ein Dokument kann jetzt mit einer kurzen URL aufgerufen
+werden, indem die ID des Dokuments direkt nach der URL für die Instanz
+angegeben wird.
+
+<https://opu4web.zib.de/opus4-demo/92>
+
+WARNUNG: Diese URLs sind nicht zum Zitieren gedacht. Dafür sollten 
+permanente Idenfier wie URNs eingesetzt werden.
+
+Wenn ein Dokument keine Sprache hat wird der erste Titel als Haupttitel 
+angezeigt. 
+
+Ist eine ORCID- oder eine GND Nummer vorhanden, wird sie für Autoren 
+verlinkt angezeigt. 
+    
+#### Download von Dateien
+    
+Dateien werden normalerweise mit dem HTTP-Header 
+    
+    Content-Disposition: attachment 
+
+ausgeliefert, so dass sie vom Browser als Dateien gespeichert und nicht 
+im Browser angezeigt werden. Das lässt sich nun konfigurieren und ist
+für PDF-Dateien im Standard abgeschaltet, so dass PDF-Dateien direkt im
+Browser angezeigt werden.
+
+WARNUNG: Es wird nicht empfohlen XHTML, Javascript und ähnliche Inhalte
+direkt im Browser anzeigen zu lassen, da damit beträchtliche Sicherheits-
+risiken entstehen, wenn z.B. ein Administrator eine solche Datei aufrufen 
+sollte.
+    
 ### Lizenzen
     
 Beim Update können die Creative Commons 4.0 Lizenzen hinzugefügt werden.
-Lizenzen besitzen jetzt das Feld **name** in dem die Kurzbezeichnungen
-wie "CC BY 4.0" gespeichert sind. Beim Update wird auch versucht, die 
+Lizenzen besitzen jetzt das Feld **name** in dem Kurzbezeichnungen wie 
+"CC BY 4.0" gespeichert sind. Beim Update wird auch versucht, die 
 Kurzbezeichnungen für die alten "CC 3.0" Lizenzen hinzuzufügen. Wenn die
 Lizenzen lokal editiert wurden kann es dabei zu falschen Zuordnungen 
 kommen. Deshalb sollten die Lizenzen anschließend in der Administration
 überprüft werden.
 
-Das Feld **name** wird momentan noch nicht weiter verwendet. In Zukunft 
-soll es unter anderem für das Matching von Lizenzen beim Import verwendet
-werden.
+Das Feld **name** wird in der Übersicht aller Lizenzen in der Spalte 
+**Label** angezeigt. Ansonsten wird es momentan noch nicht verwendet. In 
+Zukunft soll es unter anderem für das Matching von Lizenzen beim Import 
+zum Einsatz kommen.
+
+### Anpassungen
+
+Die Datei `custom.css` wird nun immer benutzt, ohne Anpassungen an 
+`common.phtml` vornehmen zu müssen. Dort kann mit Hilfe von CSS das 
+Aussehen von OPUS 4 verändert werden.
+
+Das Logo für das Repositorium und die Bilder für viele Icons können
+nun über CSS ausgewählt werden, so dass Änderungen in `custom.css` 
+vorgenommen werden können.
+
+Der Link für das Logo kann in der Konfiguration durch den Parameter 
+`logoLink` bestimmt werden. Der Übersetzungschlüssel `logo_title` 
+bestimmt den Inhalt des **title**-Attributs.
+
+Es geht darum, Änderungen an `common.phtml` in den meisten Fällen
+unnötig zu machen, um Updates noch weiter zu vereinfachen. Die Datei
+wird sich in kommenden Releases weiter verändern.
+
+### Datenbank
+
+Es wurden einige Änderungen am Datenbank-Schema vorgenommen, unter anderem,
+um Kompatibilität mit strikteren MySQL Konfigurationen herzustellen, wie sie
+in aktuellen Linux-Distributionen, z.B. Ubuntu 16, üblich sind.
+
+Beim Speichern von Werten werden jetzt führende und nachfolgende Leerzeichen
+immer entfernt. Eine automatische Bereinigung der gesamten Datenbank beim 
+Update findet für OPUS 4.6 nicht statt.
+
+### Solr
+
+Der Volltextcache wird nun wieder genutzt. Einmal extrahierte Volltexte 
+werden im Verzeichnis `workspace/cache` gespeichert, um eine erneute
+Extraktion bei der nächsten Indizierung zu vermeiden.
+
+OPUS 4.6 sollte mit den Solr-Schema von OPUS 4.5 weiterhin funktionieren.
+Für OPUS 4.7 sind umfangreiche Änderungen am Schema geplant.
+
+### Administration
+
+In der Administration wird für die Anzeige jetzt die gesamte Breite des
+Browserfensters genutzt. Es sind die neuen Bereiche "Einstellungen" und 
+"Personen" hinzugekommen.
+
+#### Einstellungen
+
+Unter "Einstellungen" werden in den kommenden Releases immer mehr Seiten
+zusammengefasst werden, die Veränderungen an der Konfiguration von OPUS 4 
+ermöglichen. 
+
+Es gibt hier auch die neue Seite "Module". Dort werden die vorhandenen 
+Module mit dem Zugriffstatus für "guest"-Nutzer aufgelistet. Die Seite 
+soll in kommenden Releases weiter ausgebaut werden, um die Konfiguration 
+von Modulen zu ermöglichen.
+
+#### Personen
+
+Im Bereich "Personen" gibt es erste einfache Möglichkeiten die Personen
+in einem Repositorium zu verwalten. Es ist zum Beispiel möglich sich 
+die Dokumente eines Autoren anzeigen zu lassen und Personen können über 
+mehrere Dokumente hinweg editiert werden. Das kann z.B. genutzt werden, 
+um die Metadaten einer Person um eine ORCID zu ergänzen.
+
+Eine "Person" wird in OPUS bisher durch viele Personen-Objekte verknüpft
+mit einzelnen Dokumenten repräsentiert. Um eine Person zu identifizieren 
+werden folgende Attribute verwendet.
+
+* Vorname (FirstName)
+* Nachname (LastName)
+* ORCID (IdentifierOrcid)
+* GND-Nummer (IdentifierGnd)
+* IdentifierMisc (Interne ID)
+
+Personen-Objekte in der Datenbank, bei denen diese fünf Felder identisch 
+sind, werden in der Personenverwaltung zusammengefasst angezeigt. Es wird
+angezeigt wieviele Dokumente mit der "Person" verknüpft sind und diese können
+aufgelistet werden. Es werden auch die Rollen in denen eine Person auftritt
+angezeigt. 
+
+Die Liste der Personen wird auf mehrere Seiten verteilt, mit 50 Personen pro
+Seite. Die Liste kann anhand eines Strings oder einer Rolle gefiltert werden,
+so dass z.B. nur alle "Betreuer" mit dem Namen "John" angezeigt werden.
+
+Jede Person kann editiert werden. Wenn eine Person im Kontext eines Dokuments 
+editiert wird, werden nur die Metadaten für dieses Dokument verändert. In dem 
+neuen Formular werden die passenden Personen-Objekte (der "Person") über 
+mehrere bzw. alle Dokumente hinweg verändert.
+
+Im Edit-Formular für Personen müssen die Felder, die geändert werden sollen,
+explizit ausgewählt werden. Gibt es bei Feldern, wie z.B. der E-Mail Adresse
+unterschiedliche Werte in den Personen-Objekten für die Person, werden diese 
+aufgelistet und können ausgewählt werden, um die Daten zu vereinheitlichen. 
+
+Auf einer Bestätigungsseite werden die Änderungen und die betroffenen Dokumente
+angezeigt bevor sie in die Datenbank geschrieben werden. Durch die Änderungen
+wird auch das Datum der letzten Änderung (ServerDateModified) für die Dokumente 
+aktualisiert. Im Bestätigungsformular werden leere Werte als "NULL" oder "LEER"
+angezeigt. Das bedeutet, dass ein Teil der Personen-Objekte keinen Wert für 
+dieses Feld haben. Wenn keines der Personen-Objekte für ein Feld einen Wert hat,
+wird das nicht weiter hervorgehoben.
+
+Es handelt sich bei diesen Funktionen noch nicht, um eine richtige Verwaltung
+von Personen. Es gibt kein "Master"-Objekt, das eine Person darstellt und als
+Referenz bei der Eingabe verwendet werden kann. Mit diesen ersten Funktionen 
+können Administratoren aber jetzt schon erste Erfahrungen sammeln und evlt. 
+Feedback für die weitere Entwicklung geben. Die abschließende Umsetzung der 
+Personenverwaltung ist für OPUS 4.8 geplant, mit OPUS 4.7 für weitere wichtige 
+Entwicklungsschritte auf dem Weg dorthin.  
+
+User-Mailingliste @opus-tester
+http://listserv.zib.de/mailman/listinfo/kobv-opus-tester
+
+oder auch direkt an 
+
+opus4[at]kobv.de
+
+#### Dokumente
+
+Das Layout der Dokumentverwaltung wurde verändert als Vorbereitung für eine
+Umstellung auf eine Suche mit Facetten. Die Änderungen werden in den nächsten 
+Version noch weiter fortgesetzt werden.  
+
+In einer zusätzlichen Spalte wird jetzt für jedes Dokument der Zeitpunkt 
+der letzten Änderung angezeigt.
+
+Es ist jetzt möglich sich alle Dokumente anzeigen zu lassen und nicht nur
+immer die Dokumente mit einem bestimmten Status. Der Status wird jetzt in der
+Tabelle mit angezeigt und farblich hervorgehoben.
+
+Für das ID-Eingabefeld wurde jetzt "i" als Access-Key definiert, um mit
+einem Knopfdruck dorthin springen zu können, z.B. mit "ALT + i". Welche 
+Tasten für Access-Keys verwendet werden ist abhängig vom Browser und 
+Betriebssystem. 
+
+https://en.wikipedia.org/wiki/Access_key
+
+Wird die Dokumentverwaltung von der Personenverwaltung aus aufgerufen, werden
+unter Filter die Identifikationsparameter für die Person angezeigt. Die Liste
+der Dokumente kann dann nach der Rolle der Person gefiltert werden.
+
+#### Sammlungen
+
+Beim Hinzufügen einer neuen Sammlung wird nicht mehr automatisch in die
+Sammlung gewechselt, sondern die Anzeige bleibt auf der selben Ebene. So
+lassen sich mehrere Sammlungen auf der selben Ebene schneller hinzufügen.
+
+Beim Zuweisen von Sammlungen zu einem Dokument, werden bereits zugewiesene 
+Sammlungen hervorgehoben und die Buttons versteckt. 
+
+Mit zwei neuen Konfigurationsoptionen für Sammlungen können Einschränkungen 
+beim Zuweisen von Sammlungen wie sie im Publish-Formular möglich sind, nun 
+auch in der Administration berücksichtigt werden. Langfristig werden diese 
+Parameter auch im Publish-Modul berücksichtigt werden, so dass keine explizite 
+Konfiguration im Dokumenttyp mehr notwendig ist.
+
+Abhängig von der Einstellung "Sammlung kann Dokumenten der obersten Ebene
+zugewiesen werden" für die CollectionRole können Sammlungen auf 
+der obersten Ebene (Root-Collection) nicht mehr zugewiesen werden. 
+
+Die Einstellung "Dokumente können nur der untersten Ebene zugewiesen werden" 
+beschränkt Zuweisungen auf die unterste Ebene, die Leaf-Nodes der Sammlung.
+
+### Konfiguration
+ 
+Zusätzlich zu den Dateien `application.ini` und `config.ini` gibt es jetzt auch 
+noch die Konfigurationsdatei `console.ini`. Letztere wird nur verwendet, wenn 
+OPUS-Skripte direkt auf dem Server-System ausgeführt werden.
+
+In der Datei `console.ini` werden Optionen gespeichert, die für den normalen 
+Betrieb nicht notwendig sind, sondern z.B. nur für die Ausführung von Updates. 
+
+Die Resolving-URL wurde zu "<https://doi.org>" geändert und wird jetzt in der 
+Konfiguration festgelegt (`doi.resolverUrl`). Der Defaultwert steht in der Datei 
+`application.ini`. Die URN-Resolver-URL wird ebenfalls in der Konfiguration 
+definiert (`urn.resolverUrl`). 
+
+### Weiteres
+
+Wenn eine URL geschützt ist, z.B. in der Administration wird der Nutzer
+zur Login-Seite umgeleitet. Nach dem erfolgreichen Login wird der Nutzer
+nun wieder zur ursprünglichen URL umgeleitet. 
+
+### OAI 
+
+Das Format **xMetaDiss** wurde von der OAI-Schnittstelle entfernt.
+
+Für OAI-DC wurde die Ausgabe der Zugriffrechte überarbeitet, um in den 
+Metadaten deutlich zu machen, ob es sich um eine Dokument mit folgendem
+Status handelt.
+
+* openAccess - uneingeschränkter Zugriff
+* closedAccess - keine (sichtbaren) Dateien
+* embargoedAccess - zeitlich begrenzte Einschränkung des Zugriffs 
+* restrictedAccess - Zugriffsbeschränkungen 
+
+Für Lizenzen wird nun der Link anstelle des langen Namens ausgegeben, um
+eine Erkennung in Systemen wie Base zu vereinfachen.
+
+Unbekannte 'identifier' für 'ListMetadataFormats' und doppelte Parameter 
+verursachen nun entsprechende Fehlermeldungen.
+
+#### OpenAire
+
+Im Enrichment 'relation' müssen Projekt-Identifier vollständig angegeben
+werden, also z.B. mit dem Prefix "info:eu-repo/grantAgreement/EC/FP7/". 
+Dieses Feld wird als `<dc:relation>` ausgegeben und kann auch für andere 
+Werte, die keine Projekte identifizieren verwendet werden. 
+
+### Crawlers - Google Scholar
+
+Der Aufruf der Sitelinks für Crawlers wie Google, wurde vereinfacht, so
+das jetzt ein Aufruf mit dem Pfad `../crawlers` genügt.
+
+http://www.opus-repository.org/userdoc/configext/crawler.html
+
+### Notifikationen
+
+Für Benachrichtungsemails können nun auch die folgenden drei Parameter
+konfiguriert werden.
+
+* mail.opus.replyTo
+* mail.opus.replyToName
+* mail.opus.returnPath
+
+### Dokumenttypen
+
+Die Dokumententypen wurden so angepasst, dass die DDC-Klassifikation nur 
+noch auf der untersten Ebene, also mit 3-stelligem Code zugewiesen kann.
+
+Die Art und Weise der Zuordnung von Klassifikationen im Publish-Formular
+wird sich mit den nächsten Releases weiter vereinfachen.
 
 ---
 

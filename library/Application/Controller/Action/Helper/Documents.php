@@ -81,19 +81,34 @@ class Application_Controller_Action_Helper_Documents extends Zend_Controller_Act
      *
      * TODO following could be handled inside a application model
      */
-    public function getSortedDocumentIds($sortOrder, $sortReverse, $state = 'published') {
-        switch ($sortOrder) {
-            case 'author':
-                return Opus_Document::getAllDocumentsByAuthorsByState($state, $sortReverse);
-            case 'publicationDate':
-                return Opus_Document::getAllDocumentsByPubDateByState($state, $sortReverse);
-            case 'docType':
-                return Opus_Document::getAllDocumentsByDoctypeByState($state, $sortReverse);
-            case 'title':
-                return Opus_Document::getAllDocumentsByTitlesByState($state, $sortReverse);
-            default:
-                return Opus_Document::getAllIdsByState($state, $sortReverse);
+    public function getSortedDocumentIds($sortOrder = null, $sortReverse = true, $state = null) {
+        $finder = new Opus_DocumentFinder();
+
+        if (!is_null($state) && $state !== 'all')
+        {
+            $finder->setServerState($state);
         }
+
+        switch ($sortOrder)
+        {
+            case 'author':
+                $finder->orderByAuthorLastname($sortReverse);
+                break;
+            case 'publicationDate':
+                $finder->orderByServerDatePublished($sortReverse);
+                break;
+            case 'docType':
+                $finder->orderByType($sortReverse);
+                break;
+            case 'title':
+                $finder->orderByTitleMain($sortReverse);
+                break;
+            default:
+                $finder->orderById($sortReverse);
+                break;
+        }
+
+        return $finder->ids();
     }
 
 }

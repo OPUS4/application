@@ -1,7 +1,5 @@
-#!/usr/bin/env php
-
-<?PHP
-/**
+<?php
+/*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -27,16 +25,50 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Scripts
+ * @package     Application_View_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
- * Update DDC to conform to DNB requirements.
+ * View helper for escaping values including entire arrays.
  */
+class Application_View_Helper_EscapeValue extends Application_View_Helper_Abstract
+{
 
-require_once dirname(__FILE__) . '/../common/update.php';
+    public function escapeValue($value, $highlightNull = false)
+    {
+        if (is_array($value))
+        {
+            return array_map(function($value) use ($highlightNull)
+            {
+                if (is_array($value))
+                {
+                    return $this->escapeValue($value);
+                }
+                else
+                {
+                    return $this->escape($value, $highlightNull);
+                }
+            }, $value);
+        }
+        else
+        {
+            return $this->escape($value, $highlightNull);
+        }
+    }
 
-echo 'Update DDC entries for DNB';
+    public function escape($value, $highlightNull = false)
+    {
+        if (is_null($value) && $highlightNull)
+        {
+            return '<span class="null">' . $this->view->translate('Value_Null') . '</span>';
+        }
+        else {
+            return $this->view->escape($value);
+        }
+    }
+
+
+}

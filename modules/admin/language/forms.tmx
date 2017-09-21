@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tmx SYSTEM "http://www.gala-global.org/oscarStandards/tmx/tmx14.dtd">
+<tmx version="1.4">
+
+<header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
+</header>
+
+<body>
+
+    <tu tuid="admin_form_update_field">
+      <tuv xml:lang="en">
+        <seg>Update field</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Feld aktualisieren</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_change_title">
+        <tuv xml:lang="en">
+            <seg>Updating persons in multiple documents</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Personen in mehreren Dokumenten ändern</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="admin_change_fieldname">
+        <tuv xml:lang="en">
+            <seg>Field</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Feld</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="admin_change_old_value">
+        <tuv xml:lang="en">
+            <seg>Old</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Vorher</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="admin_change_new_value">
+        <tuv xml:lang="en">
+            <seg>New</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Nachher</seg>
+        </tuv>
+    </tu>
+
+</body>
+
+</tmx>

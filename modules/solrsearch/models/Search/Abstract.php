@@ -293,7 +293,12 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
         }
         catch (Application_Search_QueryBuilderException $e) {
             $this->getLogger()->err(__METHOD__ . ' : ' . $e->getMessage());
-            throw new Application_Exception($e->getMessage());
+            $applicationException = new Application_Exception($e->getMessage());
+            $code = $e->getCode();
+            if ($code != 0) {
+                $applicationException->setHttpResponseCode($code);
+            }
+            throw $applicationException;
         }
 
         return $this->createSearchQuery($queryBuilderInput);

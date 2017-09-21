@@ -25,9 +25,9 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_Admin
+ * @package     Admin_Model
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -41,7 +41,7 @@ class Admin_Model_Collections extends Application_Model_Abstract {
      *
      * TODO using view in action helper is not best design
      */
-    public function getCollectionRolesInfo() {
+    public function getCollectionRolesInfo($documentId = null) {
         $collections = array();
 
         $collectionRoles = Opus_CollectionRole::fetchAll();
@@ -49,14 +49,25 @@ class Admin_Model_Collections extends Application_Model_Abstract {
         foreach ($collectionRoles as $collectionRole) {
             $rootCollection = $collectionRole->getRootCollection();
             if (!is_null($rootCollection)) {
-                array_push(
-                    $collections, array(
-                        'id' => $rootCollection->getId(),
-                        'name' => $this->view->translate('default_collection_role_' . $collectionRole->getDisplayName()),
-                        'hasChildren' => $rootCollection->hasChildren(),
-                        'visible' => $collectionRole->getVisible()
-                    )
+                $collection = array(
+                    'id' => $rootCollection->getId(),
+                    'name' => $this->view->translate('default_collection_role_' . $collectionRole->getDisplayName()),
+                    'hasChildren' => $rootCollection->hasChildren(),
+                    'visible' => $collectionRole->getVisible(),
+                    'isRoot' => true,
+                    'role' => $collectionRole,
+                    'collection' => $rootCollection
                 );
+
+                if (!is_null($documentId))
+                {
+                    $collection['assigned'] = $rootCollection->holdsDocumentById($documentId);
+                }
+                else {
+                    $collection['assigned'] = false;
+                }
+
+                array_push($collections, $collection);
             }
         }
 

@@ -135,7 +135,10 @@ class Application_Controller_Action_Helper_Redirector extends Zend_Controller_Ac
 
             $urlHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('url');
 
-            $gotoUrl = $urlHelper->url($action, $controller, $module, $params);
+            $gotoUrl = $urlHelper->url(array_merge(array(
+                'action' => $action, 'controller' => $controller, 'module' => $module
+            ), $params));
+
             $this->gotoUrl($gotoUrl . $anchor, array('prependBase' => false));
         }
         else
