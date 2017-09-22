@@ -73,3 +73,11 @@ function toggleAbstract($docId) {
         $toggle.addClass('collapsed').removeClass('expanded');
     }
 }
+
+$( document).ready(function() {
+    $('a.export').click(function() {
+        if (!confirm('Attention:\nThe export may take\n several seconds. Continue?')) {
+            return false;
+        };
+    })
+});
