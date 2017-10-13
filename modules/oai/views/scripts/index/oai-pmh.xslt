@@ -129,7 +129,7 @@
                     <xsl:attribute name="code"><xsl:value-of select="$oai_error_code2" /></xsl:attribute>
                     <xsl:value-of select="$oai_error_message2" />
                 </error>
-            </xsl:if>"
+            </xsl:if>
 
     <!--create the rest of oai response depending on oai_verb -->
         <xsl:choose>

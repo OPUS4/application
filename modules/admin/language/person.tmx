@@ -166,13 +166,16 @@ If there are 10 documents with an author "John Smith" and "John" is changed to "
     <tu tuid="admin_person_edit_confirm_help">
       <tuv xml:lang="en">
         <seg><![CDATA[
-Die folgenden Änderungen werden an passenden Personenobjekten vorgenommen. Einzelne Dokumente können von den
-Änderungen ausgeschlossen werden. Nach dem Speichern werden die ausgewählten Dokumente geändert und das Datum der
-letzten Änderung wird aktualisiert.
+The following changes will be made to matching person objects in the database. You can remove the selection from
+documents to exclude them from the changes. Saving this form will change the selected documents and the time of
+the last change will be updated (ServerDateModified).
 ]]></seg>
       </tuv>
       <tuv xml:lang="de">
         <seg><![CDATA[
+Die folgenden Änderungen werden an passenden Personenobjekten vorgenommen. Einzelne Dokumente können von den
+Änderungen ausgeschlossen werden. Nach dem Speichern werden die ausgewählten Dokumente geändert und das Datum der
+letzten Änderung wird aktualisiert.
 ]]></seg>
       </tuv>
     </tu>
