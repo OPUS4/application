@@ -49,12 +49,12 @@ class Application_Form_Validate_IdentifierValidate extends Zend_Validate_Abstrac
         $value = (string)$value;
         $this->_setValue($value);
 
-        switch(strtoupper($this->_element->getValue())) {
+        switch (strtoupper($this->_element->getValue())) {
 
             case "ISBN":
-               $validateISBN = new Opus_Validate_Isbn();
-               $result = $validateISBN->isValid($value);
-               $this->_messageTemplates = $validateISBN->getMessageTemplates();
+                $validateISBN = new Opus_Validate_Isbn();
+                $result = $validateISBN->isValid($value);
+                $this->_messageTemplates = $validateISBN->getMessageTemplates();
                 if ($result === false) {
                     foreach ($validateISBN->getErrors() as $error) {
                         $this->_error($error);
@@ -64,14 +64,15 @@ class Application_Form_Validate_IdentifierValidate extends Zend_Validate_Abstrac
                 break;
 
             default:
-                if(empty($value)) {
-                     $result = false;
-                } else{$result = true;}
+                if (empty($value)) {
+                    $result = false;
+                } else {
+                    $result = true;
+                }
 
                 return $result;
 
         }
-
 
 
     }
