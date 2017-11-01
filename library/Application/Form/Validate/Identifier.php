@@ -24,51 +24,73 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
+ * @category    Application
  * @author      Maximilian Salomon <salomon@zib.de>
  * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Application_Form_Validate_IdentifierValidateTest extends ControllerTestCase
+/**
+ * Class for delegate validator for identifier in Admin-Form.
+ */
+class Application_Form_Validate_Identifier extends Zend_Validate_Abstract
 {
+    /**
+     * declaration-area
+     */
 
-    private $_validator;
     private $_element;
 
-    public function setUp()
+    /**
+     * Application_Form_Validate_Identifier constructor.
+     * @param Opus_Identifier $element
+     */
+    public function __construct($element)
     {
-        parent::setUp();
-        $this->_element = new Application_Form_Element_Identifier("Element");
-        $this->_element->setValue("ISBN");
-        $this->_validator = new Application_Form_Validate_IdentifierValidate($this->_element);
+        if ($element === null) {
+            throw new InvalidArgumentException('Argument must not be NULL');
+        }
+        else {
+            $this->_element = $element;
+        }
     }
 
-    public function testIsValidFalseArgument() {
-        $this->assertFalse($this->_validator->isValid('123test'));
+    /**
+     * @param mixed $value Element
+     * @return bool
+     * Check which type the identifier-element has and delegate at the validator of the type or return true, if the validator
+     * is not checked and not empty.
+     */
+    public function isValid($value)
+    {
+
+        $value = (string)$value;
+        $this->_setValue($value);
+
+        switch (strtoupper($this->_element->getValue())) {
+
+            case 'ISBN':
+                $validateISBN = new Opus_Validate_Isbn();
+                $result = $validateISBN->isValid($value);
+                $this->_messageTemplates = $validateISBN->getMessageTemplates();
+                if ($result === false) {
+                    foreach ($validateISBN->getErrors() as $error) {
+                        $this->_error($error);
+                    }
+                }
+                return $result;
+                break;
+            default:
+                if (empty($value)) {
+                    return false;
+                } else {
+                    return true;
+                }
+
+        }
+
+
     }
 
-    public function testIsValidEmptyArgument() {
-        $this->assertFalse($this->_validator->isValid(''));
-    }
 
-    public function testIsValidTrueArgument() {
-        $this->assertTrue($this->_validator->isValid('978-3-86680-192-9'));
-    }
-
-    public function testIsValidWrongISBN() {
-        $this->assertFalse($this->_validator->isValid('978-3-86680-192-13'));
-    }
-
-    public function testIsValidEmpty() {
-        $this->_element->setValue("DOI");
-        $this->_validator = new Application_Form_Validate_IdentifierValidate($this->_element);
-        $this->assertFalse($this->_validator->isValid(''));
-    }
-
-    public function testIsValidDOI() {
-        $this->_element->setValue("DOI");
-        $this->_validator = new Application_Form_Validate_IdentifierValidate($this->_element);
-        $this->assertTrue($this->_validator->isValid('23356'));
-    }
 }
