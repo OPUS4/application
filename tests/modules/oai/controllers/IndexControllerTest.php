@@ -1917,4 +1917,26 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->assertEquals(1, $elements->length);
     }
 
+    public function testXmlValidOpusvier3846()
+    {
+        $this->dispatch('/oai?verb=GetRecord&identifier=oai:opus4.demo:146&metadataPrefix=xMetaDissPlus');
+
+        libxml_use_internal_errors(true);
+
+        $xpath = $this->prepareXpathFromResultString($this->getResponse()->getBody());
+        $xMetaDissNode = $xpath->query('//xMetaDiss:xMetaDiss')->item(0);
+        $metadataDocument = new DOMDocument();
+        $importedNode = $metadataDocument->importNode($xMetaDissNode, true);
+        $metadataDocument->appendChild($importedNode);
+
+        $valid = $metadataDocument->schemaValidate(
+            APPLICATION_PATH . '/tests/resources/xmetadissplus/xmetadissplus.xsd'
+        );
+
+        $this->assertTrue($valid, 'XML Schema validation failed for XMetaDissPlus');
+
+        // Schema validation does not detect problem
+        $this->assertNotContains('>"', $this->getResponse()->getBody());
+    }
+
 }
