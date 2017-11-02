@@ -1936,7 +1936,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->assertTrue($valid, 'XML Schema validation failed for XMetaDissPlus');
 
         // Schema validation does not detect problem
-        $this->assertNotContains('>"', $this->getResponse()->getBody());
+        $this->assertNotContains('>"', $this->getResponse()->getBody(), 'XML contains \'"\' after an element.');
     }
 
 }
