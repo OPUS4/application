@@ -36,6 +36,8 @@
  * TODO split specific protocol tests into separate classes
  * TODO unit tests transformations directly without "dispatch"
  * TODO create plugins for formats/protocols/standards
+ *
+ * @coversDefaultClass Oai_IndexController
  */
 class Oai_IndexControllerTest extends ControllerTestCase {
 
@@ -80,6 +82,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Basic test for invalid verbs.
+     *
+     * @covers ::indexAction
      */
     public function testInvalidVerb() {
         $this->dispatch('/oai?verb=InvalidVerb');
@@ -92,6 +96,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Basic test for requests without verb.
+     *
+     * @covers ::indexAction
      */
     public function testNoVerb() {
         $this->dispatch('/oai');
@@ -104,6 +110,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Test verb=Identify.
+     *
+     * @covers ::indexAction
      */
     public function testIdentify() {
         $this->dispatch('/oai?verb=Identify');
@@ -115,6 +123,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Test verb=ListMetadataFormats.
+     *
+     * @covers ::indexAction
      */
     public function testListMetadataFormats() {
         $this->dispatch('/oai?verb=ListMetadataFormats');
@@ -126,6 +136,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Test verb=ListSets.
+     *
+     * @covers ::indexAction
      */
     public function testListSets() {
         $this->dispatch('/oai?verb=ListSets');
@@ -153,6 +165,9 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         }
     }
 
+    /**
+     * @covers ::indexAction
+     */
     public function testGetRecordsFormats() {
         $formatTestDocuments = array(
             'xMetaDissPlus' => 41,
@@ -195,6 +210,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Test verb=GetRecord, prefix=oai_dc.
+     *
+     * @covers ::indexAction
      */
     public function testGetRecordOaiDc() {
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=oai_dc&identifier=oai::35');
@@ -206,6 +223,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Test verb=GetRecord, prefix=XMetaDissPlus.
+     *
+     * @covers ::indexAction
      */
     public function testGetRecordXMetaDissPlus() {
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=XMetaDissPlus&identifier=oai::41');
@@ -222,6 +241,10 @@ class Oai_IndexControllerTest extends ControllerTestCase {
                 "Response must contain 'xMetaDiss'");
     }
 
+    /**
+     *
+     * @covers ::indexAction
+     */
     public function testGetRecordXMetaDissPlusOnlyIfNotInEmbargo() {
         $today = date('Y-m-d', time());
 
@@ -245,6 +268,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Test verb=GetRecord, prefix=xMetaDissPlus.
+     *
+     * @covers ::indexAction
      */
     public function testGetRecordXMetaDissPlusAlternativeSpelling() {
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=xMetaDissPlus&identifier=oai::41');
@@ -263,6 +288,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Test verb=GetRecord, prefix=XMetaDissPlus.
+     *
+     * @covers ::indexAction
      */
     public function testGetRecordXMetaDissPlusContentDoc41() {
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=XMetaDissPlus&identifier=oai::41');
@@ -283,6 +310,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Test verb=GetRecord, prefix=XMetaDissPlus.
+     *
+     * @covers ::indexAction
      */
     public function testGetRecordXMetaDissPlusContentDoc91() {
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=XMetaDissPlus&identifier=oai::91');
@@ -309,6 +338,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Test verb=GetRecord, prefix=XMetaDissPlus.
+     *
+     * @covers ::indexAction
      */
     public function testGetRecordXMetaDissPlusNamespacesDoc91() {
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=XMetaDissPlus&identifier=oai::91');
@@ -333,6 +364,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Regression test for OPUSVIER-2193
+     *
+     * @covers ::indexAction
      */
     public function testGetRecordXMetaDissPlusDoc91Dcterms() {
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=XMetaDissPlus&identifier=oai::91');
@@ -360,6 +393,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Regression test for OPUSVIER-2068
+     *
+     * @covers ::indexAction
      */
     public function testGetRecordXMetaDissPlusDoc91CheckThesisYearAccepted() {
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=XMetaDissPlus&identifier=oai::91');
@@ -383,6 +418,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Regression test for OPUSVIER-1788
+     *
+     * @covers ::indexAction
      */
     public function testGetRecordXMetaDissPlusDoc146SubjectDDC() {
         $doc = new Opus_Document(146);
@@ -417,6 +454,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Regression test for OPUSVIER-2068
+     *
+     * @covers ::indexAction
      */
     public function testGetRecordXMetaDissPlusDoc148CheckThesisYearAccepted() {
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=XMetaDissPlus&identifier=oai::148');
@@ -440,6 +479,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Regression test for OPUSVIER-2448
+     *
+     * @covers ::indexAction
      */
     public function testGetRecordXMetaDissPlusDoc1DdbIdentifier() {
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=XMetaDissPlus&identifier=oai::1');
@@ -459,6 +500,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Regression test for OPUSVIER-2452
+     *
+     * @covers ::indexAction
      */
     public function testGetRecordXMetaDissPlusDoc132EmptyThesisGrantor() {
         $doc = new Opus_Document(132);
@@ -482,6 +525,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Regression test for OPUSVIER-2523
+     *
+     * @covers ::indexAction
      */
     public function testGetRecordXMetaDissPlusDoc132EmptyThesisPublisher() {
         $doc = new Opus_Document(132);
@@ -505,6 +550,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Regression tests on document 93
+     *
+     * @covers ::indexAction
      */
     public function testGetRecordXMetaDissPlusDoc93() {
         $doc = new Opus_Document(93);
@@ -531,6 +578,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Regression test for existing thesis:* and ddb:* elements
+     *
+     * @covers ::indexAction
      */
     public function testGetRecordXMetaDissPlusDoc146ThesisAndDdb() {
         $doc = new Opus_Document(146);
@@ -569,6 +618,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
     /**
      * Testet, ob die neuangelegten Dokumenttypen als thesislevel ausgegeben werden.
      * Opusvier-3341
+     *
+     * @covers ::indexAction
      */
     public function testThesisLevelForXMetaDissPlus() {
         $thesisLevel = array('diplom' => 'Diplom', 'magister' => 'M.A.', 'examen' => 'other');
@@ -592,6 +643,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Regression test for OPUSVIER-2379
+     *
+     * @covers ::indexAction
      */
     public function testGetRecordOaiDcDoc91DocType() {
         $doc = new Opus_Document(91);
@@ -614,6 +667,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Regression tests on document 146
+     *
+     * @covers ::indexAction
      */
     public function testGetRecordOaiDcDoc146() {
 
@@ -643,6 +698,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Regression tests on document 91
+     * @covers ::indexAction
      */
     public function testGetRecordOaiDcDoc91() {
 
@@ -680,6 +736,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Regression test for OPUSVIER-2380 and OPUSVIER-2378
+     * @covers ::indexAction
      */
     public function testGetRecordOaiDcDoc10SubjectDdcAndDate() {
         $doc = new Opus_Document(10);
@@ -718,6 +775,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Regression test for OPUSVIER-2378
+     * @covers ::indexAction
      */
     public function testGetRecordOaiDcDoc114DcDate() {
         $doc = new Opus_Document(114);
@@ -746,6 +804,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Regression test for OPUSVIER-2454
+     * @covers ::indexAction
      */
     public function testGetRecordOaiDcDoc1ByIdentifierPrefixOai() {
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=oai_dc&identifier=oai::1');
@@ -764,6 +823,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Regression test for OPUSVIER-2454
+     * @covers ::indexAction
      */
     public function testGetRecordOaiDcDoc1ByIdentifierPrefixUrn() {
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=oai_dc&identifier=urn:nbn:de:gbv:830-opus-225');
@@ -782,6 +842,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Regression test for OPUSVIER-2535
+     * @covers ::indexAction
      */
     public function testGetRecordWithNonExistingDocumentId() {
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=oai_dc&identifier=oai::12345678');
@@ -797,6 +858,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Regression test for OPUSVIER-2454
+     * @covers ::indexAction
      */
     public function testGetRecordWithInvalidIdentifierPrefix() {
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=oai_dc&identifier=foo::1');
@@ -812,6 +874,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Test verb=ListIdentifiers.
+     * @covers ::indexAction
      */
     public function testListIdentifiers() {
         $this->dispatch('/oai?verb=ListIdentifiers&metadataPrefix=oai_dc');
@@ -823,6 +886,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Test verb=ListRecords, metadataPrefix=oai_dc.
+     * @covers ::indexAction
      */
     public function testListRecords() {
         $this->dispatch('/oai?verb=ListRecords&metadataPrefix=oai_dc&from=2006-01-01');
@@ -840,6 +904,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Regression Test for OPUSVIER-3142
+     * @covers ::indexAction
      */
     public function testListRecordsXMetaDissPlusDocumentsWithFilesOnly()
     {
@@ -861,6 +926,9 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         "Response must not contain records without files");
     }
 
+    /**
+     * @covers ::indexAction
+     */
     public function testListRecordsXMetaDissPlusDocumentsNotInEmbargoOnly()
     {
         $tomorrow = date('Y-m-d', strtotime('tomorrow'));
@@ -889,6 +957,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Regression test for OPUSVIER-3501
+     * @covers ::indexAction
      */
     public function testListRecordsXMetaDissPlusSetAndUntilAttributesSetCorrectly() {
         $this->dispatch('/oai?verb=ListRecords&metadataPrefix=xMetaDissPlus&from=2010-01-01&until=2011-01-01'
@@ -911,6 +980,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Test that proves the bugfix for OPUSVIER-1710 is working as intended.
+     * @covers ::indexAction
      */
     public function testGetDeletedDocumentReturnsStatusDeleted() {
         $this->enableSecurity();
@@ -926,6 +996,9 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->assertNotContains('<error code="unknown">An internal error occured.</error>', $this->getResponse()->getBody());
     }
 
+    /**
+     * @covers ::indexAction
+     */
     public function testTransferUrlIsPresent() {
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
@@ -942,6 +1015,9 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->assertContains($this->getRequest()->getBaseUrl() . '/oai/container/index/docId/' . $doc->getId() . '</ddb:transfer>', $this->getResponse()->getBody());
     }
 
+    /**
+     * @covers ::indexAction
+     */
     public function testTransferUrlIsNotPresent() {
         $doc = $this->createTestDocument();
         $doc->setServerState("published");
@@ -954,6 +1030,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Test verb=GetRecord, prefix=epicur.
+     *
+     * @covers ::indexAction
      */
     public function testGetRecordEpicurUrlEncoding() {
         $expectedFileNames = array("'many'  -  spaces  and  quotes.pdf", 'special-chars-%-"-#-&.pdf');
@@ -989,6 +1067,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Test if the flag "VisibileInOai" affects all files of a document
+     *
+     * @covers ::indexAction
      */
     public function testDifferentFilesVisibilityOfOneDoc() {
 
@@ -1019,6 +1099,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * request for metadataPrefix=copy_xml is denied for non-administrative people
+     *
+     * @covers ::indexAction
      */
     public function testRequestForMetadataPrefixCopyxmlAndVerbGetRecordIsDenied() {
         $this->enableSecurity();
@@ -1028,6 +1110,9 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->resetSecurity();
     }
 
+    /**
+     * @covers ::indexAction
+     */
     public function testRequestForMetadataPrefixCopyxmlAndVerbListRecordIsDenied() {
         $this->enableSecurity();
         $this->dispatch('/oai?verb=ListRecords&metadataPrefix=copy_xml&from=2100-01-01');
@@ -1036,6 +1121,9 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->resetSecurity();
     }
 
+    /**
+     * @covers ::indexAction
+     */
     public function testRequestForMetadataPrefixCopyxmlAndVerbListIdentifiersIsDenied() {
         $this->enableSecurity();
         $this->dispatch('/oai?verb=ListIdentifiers&metadataPrefix=copy_xml');
@@ -1077,6 +1165,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Regression test for OPUSVIER-2450
+     *
+     * @covers ::indexAction
      */
     public function testDdbFileNumberForSingleDocumentAndSingleFile() {
         $doc = $this->createTestDocument();
@@ -1096,6 +1186,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Regression test for OPUSVIER-2450
+     *
+     * @covers ::indexAction
      */
     public function testDdbFileNumberForSingleDocumentAndMultipleFiles() {
         $doc = $this->createTestDocument();
@@ -1119,6 +1211,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Regression test for OPUSVIER-2450
+     *
+     * @covers ::indexAction
      */
     public function testDdbFileNumberForMultipleDocumentsForXMetaDissPlus() {
         $collection = new Opus_Collection(112);
@@ -1155,6 +1249,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Regression test for OPUSVIER-2508
+     *
+     * @covers ::indexAction
      */
     public function testTransferUrlIsIOnlyGivenForDocsWithFulltext() {
         $collection = new Opus_Collection(112);
@@ -1203,6 +1299,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      *  Regression Test for OPUSVIER-3072 (was Regression test for OPUSVIER-2509)
+     *
+     * @covers ::indexAction
      */
     public function testForDDCSubjectTypeForXMetaDissPlus() {
         $collection = new Opus_Collection(112);
@@ -1228,6 +1326,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Regression test for OPUSVIER-2564
+     *
+     * @covers ::indexAction
      */
     public function testForInvalidSetSpecsInListRecords() {
         $collectionRole = Opus_CollectionRole::fetchByOaiName('pacs');
@@ -1248,6 +1348,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Regression test for OPUSVIER-2564
+     *
+     * @covers ::indexAction
      */
     public function testForInvalidSetSpecsInListIdentifiers() {
         $collectionRole = Opus_CollectionRole::fetchByOaiName('pacs');
@@ -1268,6 +1370,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Regression test for OPUSVIER-2564
+     *
+     * @covers ::indexAction
      */
     public function testForInvalidSetSpecsInGetRecord79() {
         $collectionRole = Opus_CollectionRole::fetchByOaiName('pacs');
@@ -1286,6 +1390,9 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->assertNotContains('<setSpec>pacs:85.85.', $body);
     }
 
+    /**
+     * @covers ::indexAction
+     */
     public function testListRecordsForEmptySet() {
         $this->dispatch('/oai?verb=ListRecords&metadataPrefix=oai_dc&set=open_access');
 
@@ -1296,6 +1403,9 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->assertContains('<error code="noRecordsMatch">', $body);
     }
 
+    /**
+     * @covers ::indexAction
+     */
     public function testListRecordsForEmptySubset() {
         $this->dispatch('/oai?verb=ListRecords&metadataPrefix=oai_dc&set=open_access:open_access');
 
@@ -1306,6 +1416,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Regression test for OPUSVIER-2607
+     *
+     * @covers ::indexAction
      */
     public function testXMetaDissPlusOmitPersonSurnameIfEmpty() {
 
@@ -1364,10 +1476,10 @@ class Oai_IndexControllerTest extends ControllerTestCase {
    }
 
     /**
-     *
-     *
      * Regression Test for OPUSVIER-3041
      * (was Regression Test for OPUSVIER-2599, but departments are revived now)
+     *
+     * @covers ::indexAction
      */
     public function testShowThesisGrantorDepartmentName() {
 
@@ -1389,6 +1501,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Regression Test for OPUSVIER-3162
+     *
+     * @covers ::indexAction
      */
     public function testXMetaDissPlusOutputLanguageCode() {
 
@@ -1400,6 +1514,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * XMetaDissPlus Schema validation (see OPUSVIER-3165)
+     *
+     * @covers ::indexAction
      */
     public function testXMetaDissPlusIsSchemaValid() {
         $xmlCatalog = getenv('XML_CATALOG_FILES');
@@ -1422,6 +1538,9 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->assertTrue($valid, 'XML Schema validation failed for XMetaDissPlus');
     }
 
+    /**
+     * @covers ::indexAction
+     */
     public function testListRecordsWithResumptionToken() {
         $max_records = 2;
 
@@ -1464,6 +1583,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Regression Test for OPUSVIER-2762
+     *
+     * @covers ::indexAction
      */
     public function testDcCreatorIsAuthorIfExists() {
 
@@ -1479,6 +1600,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Regression Test for OPUSVIER-2762
+     *
+     * @covers ::indexAction
      */
     public function testDcCreatorIsEditorIfAuthorNotExists() {
 
@@ -1494,6 +1617,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Regression Test for OPUSVIER-2762
+     *
+     * @covers ::indexAction
      */
     public function testDcCreatorIsCreatingCorporationIfAuthorAndEditorNotExist() {
 
@@ -1509,6 +1634,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Regression Test for OPUSVIER-2762
+     *
+     * @covers ::indexAction
      */
     public function testDcCreatorIsOmittedIfNoValidEntrySupplied() {
 
@@ -1521,6 +1648,9 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->assertEquals(0, $dcCreator->length);
     }
 
+    /**
+     * @covers ::indexAction
+     */
     public function testDcLangUsesShortest639Code() {
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=oai_dc&identifier=oai::305');
 
@@ -1533,6 +1663,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Regression Test for OPUSVIER-2762
+     *
+     * @covers ::indexAction
      */
     public function testHabilitationIsDcTypeDoctoralthesis() {
 
@@ -1548,6 +1680,9 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->assertContains('doc-type:doctoralThesis', $values);
     }
 
+    /**
+     * @covers ::indexAction
+     */
     public function testXMetaDissPlusDcsourceContainsTitleParent() {
         $doc = new Opus_Document(146);
         $parentTitle = $doc->getTitleParent();
@@ -1568,6 +1703,9 @@ class Oai_IndexControllerTest extends ControllerTestCase {
                             'S. ' . $doc->getPageFirst() . '-' . $doc->getPageLast(), $dcSource->item(0)->nodeValue);
     }
 
+    /**
+     * @covers ::indexAction
+     */
     public function testXMetaDissPlusDcsourceContainsTitleParentPageNumber() {
         $doc = $this->createTestDocument();
 
@@ -1601,6 +1739,9 @@ class Oai_IndexControllerTest extends ControllerTestCase {
             $doc->getPageNumber() . ' S.', $dcSource->item(0)->nodeValue);
     }
 
+    /**
+     * @covers ::indexAction
+     */
     public function testXMetaDissPlusDctermsispartofContainsSeriesTitleAndNumber() {
         $doc = new Opus_Document(146);
         $series = $doc->getSeries();
@@ -1619,6 +1760,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
      * Mindestanforderungstest für OpenAire 3.0.
      * Document 145 und 146
      * Test verb=ListRecords, metadataPrefix=oai_dc, set=openaire.
+     *
+     * @covers ::indexAction
      */
     public function testListRecordsForOpenAireCompliance() {
         $this->dispatch('/oai?verb=ListRecords&metadataPrefix=oai_dc&set=openaire');
@@ -1688,6 +1831,10 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->assertEquals('Berlin', $queryResponse->item(0)->nodeValue);
     }
 
+    /**
+     *
+     * @covers ::indexAction
+     */
     public function testListRecordsForOpenAireRelation()
     {
         $doc = $this->createTestDocument();
@@ -1732,6 +1879,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Testet die empfohlenen Felder für die OpenAireCompliance.
+     * @covers ::indexAction
      */
     public function testListRecordsForOpenAireComplianceForRecommendedFields() {
         $this->dispatch('/oai?verb=ListRecords&metadataPrefix=oai_dc&set=openaire');
@@ -1769,6 +1917,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Testet die korrekte Anzeige eines Dokuments vom Typ Periodical Parts.
+     *
+     * @covers ::indexAction
      */
     public function testXMetaDissPlusForPeriodicalParts() {
         $doc = $this->createTestDocument();
@@ -1787,6 +1937,9 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->assertEquals($elements->item(0)->nodeValue, '1337', 'data contains wrong series number; expected number: 1337');
     }
 
+    /**
+     * @covers ::indexAction
+     */
     public function testGetRecordXMetaDissPlusLanguageCodes() {
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
@@ -1815,6 +1968,9 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->assertEquals(1, $elements->length);
     }
 
+    /**
+     * @covers ::indexAction
+     */
     public function testExampleLinkListIdentifiers()
     {
         $this->dispatch('/oai?verb=ListIdentifiers&metadataPrefix=oai_dc');
@@ -1841,6 +1997,9 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         return $values;
     }
 
+    /**
+     * @covers ::indexAction
+     */
     public function testErrorForRepeatedParameters()
     {
         $this->dispatch('/oai?verb=ListIdentifiers&metadataPrefix=oai_dc&metadataPrefix=oai_dc');
@@ -1858,6 +2017,9 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->assertEquals('badArgument', $error->getAttribute('code'));
     }
 
+    /**
+     * @covers ::indexAction
+     */
     public function testErrorForUnknownId()
     {
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=oai_dc&identifier=oai:opus4.demo:9999');
@@ -1875,6 +2037,9 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->assertEquals('idDoesNotExist', $error->getAttribute('code'));
     }
 
+    /**
+     * @covers ::indexAction
+     */
     public function testErrorForListMetadataFormatsWithBadIdentifierParameter()
     {
         $this->dispatch('/oai?verb=ListMetadataFormats&identifier=really_wrong_id');
@@ -1897,6 +2062,9 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->assertContains('idDoesNotExist', $errorCodes);
     }
 
+    /**
+     * @covers ::indexAction
+     */
     public function testGetUsingXpathInTests()
     {
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=oai_dc&identifier=oai:opus4.demo:146');
@@ -1917,6 +2085,9 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->assertEquals(1, $elements->length);
     }
 
+    /**
+     * @covers ::indexAction
+     */
     public function testXmlValidOpusvier3846()
     {
         $this->dispatch('/oai?verb=GetRecord&identifier=oai:opus4.demo:146&metadataPrefix=xMetaDissPlus');
