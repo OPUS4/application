@@ -32,6 +32,9 @@
  * @version     $Id$
  */
 
+/**
+ * @coversNothing
+ */
 class TranslationKeyDuplicatesTest extends ControllerTestCase {
 
     public function testDetectDuplicateKeys() {

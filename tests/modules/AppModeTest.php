@@ -31,6 +31,9 @@
  * @version     $Id$
  */
 
+/**
+ * @coversNothing
+ */
 class AppModeTest extends ControllerTestCase {
 
     public function testProductionMode() {
