@@ -61,9 +61,9 @@ class Application_Form_Validate_Identifier extends Zend_Validate_Abstract
     }
 
     /**
-     * @param mixed $value
-     * @return bool
      * Delegate the validation.
+     * @param mixed $value inserted text
+     * @return bool
      */
     public function isValid($value)
     {
@@ -87,13 +87,12 @@ class Application_Form_Validate_Identifier extends Zend_Validate_Abstract
                     }
                 }
                 return $result;
-                break;
             default:
-                if (empty($value)) {
-                    return false;
-                } else {
+                if (!empty($value)) {
                     return true;
-                 }
+                }
         }
+        return false;
+
     }
 }

@@ -57,16 +57,6 @@ class Application_Form_Validate_IdentifierTest extends ControllerTestCase
     }
 
     /**
-     * Test for an false argument in an ISBN-identifier.
-     * @covers ::isValid
-     */
-
-    public function testIsValidFalse()
-    {
-        $this->assertFalse($this->_validator->isValid('123test'));
-    }
-
-    /**
      * Test for an empty argument in an ISBN-identifier.
      * @covers ::isValid
      */
@@ -77,23 +67,44 @@ class Application_Form_Validate_IdentifierTest extends ControllerTestCase
     }
 
     /**
-     * Test for an true argument in an ISBN-identifier.
+     * Test for an true ISBN.
      * @covers ::isValid
      */
 
     public function testIsValidTrue()
     {
         $this->assertTrue($this->_validator->isValid('978-3-86680-192-9'));
+        $this->assertTrue($this->_validator->isValid('978 3 86680 192 9'));
+        $this->assertTrue($this->_validator->isValid('978-0-13235-088-4'));
+        $this->assertTrue($this->_validator->isValid('0 13235 088 2'));
+        $this->assertTrue($this->_validator->isValid('0-13235-088-2'));
     }
 
     /**
-     * Test for an wrong ISBN in an ISBN-identifier.
+     * Test for an wrong ISBN-checksum in an ISBN-identifier.
      * @covers ::isValid
      */
 
-    public function testIsValidWrongIsbn()
+    public function testIsValidWrongIsbnchecksum()
     {
         $this->assertFalse($this->_validator->isValid('978-3-86680-192-13'));
+        $this->assertFalse($this->_validator->isValid('978-3-86680-192-34'));
+    }
+
+    /**
+     * Test for an wrong ISBN-form in an ISBN-identifier.
+     * @covers ::isValid
+     */
+
+    public function testIsValidWrongIsbnform()
+    {
+        $this->assertFalse($this->_validator->isValid('978-3-86680-192'));
+        $this->assertFalse($this->_validator->isValid('978-3-8668X-192'));
+        $this->assertFalse($this->_validator->isValid('978-3-866800-1942-34'));
+        $this->assertFalse($this->_validator->isValid('9748-3-866800-1942-34'));
+        $this->assertFalse($this->_validator->isValid('978-378-866800-1942'));
+        $this->assertFalse($this->_validator->isValid('978386680192'));
+        $this->assertFalse($this->_validator->isValid('978-0 13235 088 4'));
     }
 
     /**
@@ -128,12 +139,16 @@ class Application_Form_Validate_IdentifierTest extends ControllerTestCase
         $this->_element->setValue('DOI');
         $this->_validator = new Application_Form_Validate_Identifier($this->_element);
         $this->assertTrue($this->_validator->isValid('23356'));
+        $this->assertTrue($this->_validator->isValid('233dfsfsf'));
+        $this->assertTrue($this->_validator->isValid('23fdt45356'));
+        $this->assertTrue($this->_validator->isValid('233_:()$&56'));
+        $this->assertTrue($this->_validator->isValid('23!"356'));
     }
 
     /**
+     * Test for null as element.
      * @expectedException InvalidArgumentException
      * @expectedExceptionMessage Argument must not be NULL
-     * Test for null as element.
      * @covers ::isValid
      */
 
