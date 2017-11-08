@@ -27,9 +27,9 @@
  * @category    Application
  * @package     Module_Admin
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @author      Maximilian Salomon <salomon@zib.de>
+ * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -63,13 +63,16 @@ class Admin_Form_Document_Identifier extends Admin_Form_AbstractModelSubForm
     public function init()
     {
         parent::init();
+        
         $typeElement = $this->createElement('Identifier', self::ELEMENT_TYPE, array('required' => true));
         $this->addElement($typeElement);
+        
         $valueElement = $this->createElement('text', self::ELEMENT_VALUE, array(
             'required' => true, 'size' => '80'
         ));
         $valueElement->addValidator(new Application_Form_Validate_Identifier($typeElement));
         $this->addElement($valueElement);
+
         $this->addElement('hidden', self::ELEMENT_ID);
     }
 
