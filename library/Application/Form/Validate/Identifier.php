@@ -70,7 +70,7 @@ class Application_Form_Validate_Identifier extends Zend_Validate_Abstract
         $this->_setValue($value);
 
         /**
-         * At this point, we check the type of element. If this is maybe ISBN, we delegate the validation to the
+         * At this point, we check the type of an identifier. If this is maybe ISBN, we delegate the validation to the
          * ISBN-Validator. If the ISBN is not valid in this case, we take the Errormessages of the ISBN-Class and
          * give them out. This is important, to make the code variable.
          */

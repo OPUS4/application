@@ -38,11 +38,13 @@ class Application_Form_Validate_IdentifierTest extends ControllerTestCase
 {
     /**
      * Represents an validator-object for identifier-elements.
+     * @var Zend_Validate_Abstract
      */
     private $_validator;
 
     /**
      * Represents an Zend_Form_Element for identifier with type ISBN.
+     * @var Zend_Form_Element
      */
     private $_element;
 
@@ -61,7 +63,6 @@ class Application_Form_Validate_IdentifierTest extends ControllerTestCase
      * Test for an empty argument in an ISBN-identifier.
      * @covers ::isValid
      */
-
     public function testIsValidEmpty()
     {
         $this->assertFalse($this->_validator->isValid(''));
@@ -71,7 +72,6 @@ class Application_Form_Validate_IdentifierTest extends ControllerTestCase
      * Test for an true ISBN.
      * @covers ::isValid
      */
-
     public function testIsValidTrue()
     {
         $this->assertTrue($this->_validator->isValid('978-3-86680-192-9'));
@@ -88,21 +88,21 @@ class Application_Form_Validate_IdentifierTest extends ControllerTestCase
 
     public function testIsValidWrongIsbnchecksum()
     {
-        $this->assertFalse($this->_validator->isValid('978-3-86680-192-13'));
-        $this->assertFalse($this->_validator->isValid('978-3-86680-192-34'));
+        $this->assertFalse($this->_validator->isValid('978-3-86680-192-3'));
+        $this->assertFalse($this->_validator->isValid('978-0-13235-088-8'));
     }
 
     /**
      * Test for an wrong ISBN-form in an ISBN-identifier.
      * @covers ::isValid
      */
-
     public function testIsValidWrongIsbnform()
     {
         $this->assertFalse($this->_validator->isValid('978-3-86680-192'));
         $this->assertFalse($this->_validator->isValid('978-3-8668X-192'));
         $this->assertFalse($this->_validator->isValid('978-3-866800-1942-34'));
         $this->assertFalse($this->_validator->isValid('9748-3-866800-1942-34'));
+        $this->assertFalse($this->_validator->isValid('978-3-86680-19X-9'));
         $this->assertFalse($this->_validator->isValid('978-378-866800-1942'));
         $this->assertFalse($this->_validator->isValid('978386680192'));
         $this->assertFalse($this->_validator->isValid('978-0 13235 088 4'));
@@ -112,7 +112,6 @@ class Application_Form_Validate_IdentifierTest extends ControllerTestCase
      * Test for an NULL argument in an ISBN-identifier.
      * @covers ::isValid
      */
-
     public function testIsValidIsbnNull()
     {
         $this->assertFalse($this->_validator->isValid(null));
@@ -122,7 +121,6 @@ class Application_Form_Validate_IdentifierTest extends ControllerTestCase
      * Test for an empty argument in an DOI-identifier -> identifier without validation.
      * @covers ::isValid
      */
-
     public function testIsValidDoiEmpty()
     {
         $this->_element->setValue('DOI');
@@ -134,7 +132,6 @@ class Application_Form_Validate_IdentifierTest extends ControllerTestCase
      * Test for an argument in an DOI-identifier -> identifier without validation.
      * @covers ::isValid
      */
-
     public function testIsValidDoi()
     {
         $this->_element->setValue('DOI');
@@ -152,7 +149,6 @@ class Application_Form_Validate_IdentifierTest extends ControllerTestCase
      * @expectedExceptionMessage Argument must not be NULL
      * @covers ::isValid
      */
-
     public function testIsValidElementNull()
     {
         $this->_validator = new Application_Form_Validate_Identifier(null);
@@ -162,7 +158,6 @@ class Application_Form_Validate_IdentifierTest extends ControllerTestCase
      * Test for an NULL argument in an DOI-identifier-> identifier without validation.
      * @covers ::isValid
      */
-
     public function testIsValidDoiNull()
     {
         $this->_element->setValue('DOI');
@@ -174,11 +169,43 @@ class Application_Form_Validate_IdentifierTest extends ControllerTestCase
      * Test for an unknown type as identifier -> same result as empty in type without validation.
      * @covers ::isValid
      */
-
     public function testIsValidUnknownType()
     {
         $this->_element->setValue('unknown');
         $this->_validator = new Application_Form_Validate_Identifier($this->_element);
         $this->assertFalse($this->_validator->isValid(''));
     }
+
+    /**
+     * Test for an unknown type as identifier -> same result as empty in type without validation.
+     * @covers ::isValid
+     */
+    public function testErrorMessageChecksum()
+    {
+        $this->assertFalse($this->_validator->isValid('978-3-86680-192-3'));
+        $this->assertContains('checkdigit', $this->_validator->getErrors());
+
+        $this->assertFalse($this->_validator->isValid('978-3-86680-192-7'));
+        $this->assertContains("The check digit of '978-3-86680-192-7' is not valid", $this->_validator->getMessages());
+    }
+
+    /**
+     * Test the error-messages for an invalid ISBN-form.
+     * @covers ::isValid
+     */
+    public function testErrorMessageForm()
+    {
+        $this->assertFalse($this->_validator->isValid('978-3-866800-1942-34'));
+        $this->assertContains('form', $this->_validator->getErrors());
+        $this->assertContains("'978-3-866800-1942-34' is malformed", $this->_validator->getMessages());
+
+        $this->assertFalse($this->_validator->isValid('978386680192'));
+        $this->assertContains('form', $this->_validator->getErrors());
+        $this->assertContains("'978386680192' is malformed", $this->_validator->getMessages());
+
+        $this->assertFalse($this->_validator->isValid('978-3-86680-1X2-9'));
+        $this->assertContains('form', $this->_validator->getErrors());
+        $this->assertContains("'978-3-86680-1X2-9' is malformed", $this->_validator->getMessages());
+    }
+
 }
