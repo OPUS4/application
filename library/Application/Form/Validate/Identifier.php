@@ -35,10 +35,11 @@
  */
 class Application_Form_Validate_Identifier extends Zend_Validate_Abstract
 {
-    /**
-     * _element represent the identifier Form_Element
-     */
 
+    /**
+     * Represent the identifier Form_Element.
+     * @var Zend_Form_Element
+     */
     private $_element;
 
     /**
@@ -50,13 +51,11 @@ class Application_Form_Validate_Identifier extends Zend_Validate_Abstract
         if ($element === null) {
             throw new InvalidArgumentException('Argument must not be NULL');
         }
+        elseif ($element instanceof Zend_Form_Element) {
+            $this->_element = $element;
+        }
         else {
-            if ($element instanceof Application_Form_Element_Identifier) {
-                $this->_element = $element;
-            }
-            else{
-                throw new InvalidArgumentException('Object must be Application_Form_Element_Identifier');
-            }
+            throw new InvalidArgumentException('Object must be Zend_Form_Element');
         }
     }
 
@@ -67,9 +66,9 @@ class Application_Form_Validate_Identifier extends Zend_Validate_Abstract
      */
     public function isValid($value)
     {
-
         $value = (string)$value;
         $this->_setValue($value);
+
         /**
          * At this point, we check the type of element. If this is maybe ISBN, we delegate the validation to the
          * ISBN-Validator. If the ISBN is not valid in this case, we take the Errormessages of the ISBN-Class and
@@ -87,12 +86,14 @@ class Application_Form_Validate_Identifier extends Zend_Validate_Abstract
                     }
                 }
                 return $result;
+
             default:
                 if (!empty($value)) {
                     return true;
                 }
         }
-        return false;
 
+        return false;
     }
+
 }
