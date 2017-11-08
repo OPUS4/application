@@ -43,7 +43,7 @@ class Application_Form_Validate_IdentifierTest extends ControllerTestCase
     private $_validator;
 
     /**
-     * Represents an Zend_Form_Element for identifier with type ISBN.
+     * Form element providing type of identifier.
      * @var Zend_Form_Element
      */
     private $_element;
@@ -86,7 +86,7 @@ class Application_Form_Validate_IdentifierTest extends ControllerTestCase
      * @covers ::isValid
      */
 
-    public function testIsValidWrongIsbnchecksum()
+    public function testIsValidWrongIsbnChecksum()
     {
         $this->assertFalse($this->_validator->isValid('978-3-86680-192-3'));
         $this->assertFalse($this->_validator->isValid('978-0-13235-088-8'));
@@ -96,7 +96,7 @@ class Application_Form_Validate_IdentifierTest extends ControllerTestCase
      * Test for an wrong ISBN-form in an ISBN-identifier.
      * @covers ::isValid
      */
-    public function testIsValidWrongIsbnform()
+    public function testIsValidWrongIsbnForm()
     {
         $this->assertFalse($this->_validator->isValid('978-3-86680-192'));
         $this->assertFalse($this->_validator->isValid('978-3-8668X-192'));
