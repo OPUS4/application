@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="opus4server" default="build">
+<project name="opus4server" default="build" xmlns:if="ant:if" xmlns:unless="ant:unless">
 
     <property environment="env" />
     <property name="configfile" location="${basedir}/../opus-config.properties" />
@@ -7,6 +7,7 @@
     <property name="codingstandard" location="${basedir}/vendor/opus4-repo/codesniffer/ruleset.xml" />
     <property name="adminPassword" value="AdminAdmin" />
     <property name="bindir" value="${basedir}/vendor/bin" />
+    <property name="verbose" value="" />
 
     <target name="analyse-code" depends="phpcs,phpmd,phpcpd,phploc" />
 
@@ -204,7 +205,9 @@
     </target>
 
     <target name="rebuild-database">
-        <exec executable="./rebuilding_database.sh" dir="${basedir}/tests" failonerror="on" />
+        <exec executable="./rebuilding_database.sh" dir="${basedir}/tests" failonerror="on">
+            <arg line="-v" unless:blank="${verbose}"/>
+        </exec>
     </target>
 
     <target name="rebuild-index">
