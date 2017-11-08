@@ -36,14 +36,14 @@
 class Application_Form_Validate_Identifier extends Zend_Validate_Abstract
 {
     /**
-     * declaration-area
+     * _element represent the identifier Form_Element
      */
 
     private $_element;
 
     /**
      * Application_Form_Validate_Identifier constructor.
-     * @param Opus_Identifier $element
+     * @param Zend_Form_Element $element
      */
     public function __construct($element)
     {
@@ -51,24 +51,32 @@ class Application_Form_Validate_Identifier extends Zend_Validate_Abstract
             throw new InvalidArgumentException('Argument must not be NULL');
         }
         else {
-            $this->_element = $element;
+            if ($element instanceof Application_Form_Element_Identifier) {
+                $this->_element = $element;
+            }
+            else{
+                throw new InvalidArgumentException('Object must be Application_Form_Element_Identifier');
+            }
         }
     }
 
     /**
-     * @param mixed $value Element
+     * Delegate the validation.
+     * @param mixed $value inserted text
      * @return bool
-     * Check which type the identifier-element has and delegate at the validator of the type or return true, if the validator
-     * is not checked and not empty.
      */
     public function isValid($value)
     {
 
         $value = (string)$value;
         $this->_setValue($value);
-
-        switch (strtoupper($this->_element->getValue())) {
-
+        /**
+         * At this point, we check the type of element. If this is maybe ISBN, we delegate the validation to the
+         * ISBN-Validator. If the ISBN is not valid in this case, we take the Errormessages of the ISBN-Class and
+         * give them out. This is important, to make the code variable.
+         */
+        switch (strtoupper($this->_element->getValue()))
+        {
             case 'ISBN':
                 $validateISBN = new Opus_Validate_Isbn();
                 $result = $validateISBN->isValid($value);
@@ -79,18 +87,12 @@ class Application_Form_Validate_Identifier extends Zend_Validate_Abstract
                     }
                 }
                 return $result;
-                break;
             default:
-                if (empty($value)) {
-                    return false;
-                } else {
+                if (!empty($value)) {
                     return true;
                 }
-
         }
-
+        return false;
 
     }
-
-
 }

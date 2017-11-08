@@ -32,18 +32,22 @@
 
 /**
  * Unittests for  Class Application_Form_Validate_IdentifierTest
+ * @coversDefaultClass Application_Form_Validate_Identifier
  */
 class Application_Form_Validate_IdentifierTest extends ControllerTestCase
 {
     /**
-     * declaration area
+     *_validator represents an validator-object for identifier-elements.
+     *_element represents an Zend_Form_Element for identifier with type ISBN.
      */
+
     private $_validator;
     private $_element;
 
     /**
-     * set up variables
+     * set up variables.
      */
+
     public function setUp()
     {
         parent::setUp();
@@ -53,72 +57,125 @@ class Application_Form_Validate_IdentifierTest extends ControllerTestCase
     }
 
     /**
-     * Test for an false argument in an ISBN-identifier
+     * Test for an empty argument in an ISBN-identifier.
+     * @covers ::isValid
      */
-    public function testIsValidFalseArgument() {
-        $this->assertFalse($this->_validator->isValid('123test'));
-    }
-    /**
-     * Test for an empty argument in an ISBN-identifier
-     */
-    public function testIsValidEmptyArgument() {
+
+    public function testIsValidEmpty()
+    {
         $this->assertFalse($this->_validator->isValid(''));
-    }
-    /**
-     * Test for an true argument in an ISBN-identifier
-     */
-    public function testIsValidTrueArgument() {
-        $this->assertTrue($this->_validator->isValid('978-3-86680-192-9'));
-    }
-    /**
-     * Test for an wrong ISBN in an ISBN-identifier
-     */
-    public function testIsValidWrongISBN() {
-        $this->assertFalse($this->_validator->isValid('978-3-86680-192-13'));
-    }
-    /**
-     * Test for an NULL argument in an ISBN-identifier
-     */
-    public function testIsValidISBNNULL() {
-        $this->assertFalse($this->_validator->isValid(null));
-    }
-    /**
-     * Test for an empty argument in an DOI-identifier -> identifier without validation
-     */
-    public function testIsValidDOIEmpty() {
-        $this->_element->setValue('DOI');
-        $this->_validator = new Application_Form_Validate_Identifier($this->_element);
-        $this->assertFalse($this->_validator->isValid(''));
-    }
-    /**
-     * Test for an argument in an DOI-identifier -> identifier without validation
-     */
-    public function testIsValidDOI() {
-        $this->_element->setValue('DOI');
-        $this->_validator = new Application_Form_Validate_Identifier($this->_element);
-        $this->assertTrue($this->_validator->isValid('23356'));
     }
 
     /**
+     * Test for an true ISBN.
+     * @covers ::isValid
+     */
+
+    public function testIsValidTrue()
+    {
+        $this->assertTrue($this->_validator->isValid('978-3-86680-192-9'));
+        $this->assertTrue($this->_validator->isValid('978 3 86680 192 9'));
+        $this->assertTrue($this->_validator->isValid('978-0-13235-088-4'));
+        $this->assertTrue($this->_validator->isValid('0 13235 088 2'));
+        $this->assertTrue($this->_validator->isValid('0-13235-088-2'));
+    }
+
+    /**
+     * Test for an wrong ISBN-checksum in an ISBN-identifier.
+     * @covers ::isValid
+     */
+
+    public function testIsValidWrongIsbnchecksum()
+    {
+        $this->assertFalse($this->_validator->isValid('978-3-86680-192-13'));
+        $this->assertFalse($this->_validator->isValid('978-3-86680-192-34'));
+    }
+
+    /**
+     * Test for an wrong ISBN-form in an ISBN-identifier.
+     * @covers ::isValid
+     */
+
+    public function testIsValidWrongIsbnform()
+    {
+        $this->assertFalse($this->_validator->isValid('978-3-86680-192'));
+        $this->assertFalse($this->_validator->isValid('978-3-8668X-192'));
+        $this->assertFalse($this->_validator->isValid('978-3-866800-1942-34'));
+        $this->assertFalse($this->_validator->isValid('9748-3-866800-1942-34'));
+        $this->assertFalse($this->_validator->isValid('978-378-866800-1942'));
+        $this->assertFalse($this->_validator->isValid('978386680192'));
+        $this->assertFalse($this->_validator->isValid('978-0 13235 088 4'));
+    }
+
+    /**
+     * Test for an NULL argument in an ISBN-identifier.
+     * @covers ::isValid
+     */
+
+    public function testIsValidIsbnNull()
+    {
+        $this->assertFalse($this->_validator->isValid(null));
+    }
+
+    /**
+     * Test for an empty argument in an DOI-identifier -> identifier without validation.
+     * @covers ::isValid
+     */
+
+    public function testIsValidDoiEmpty()
+    {
+        $this->_element->setValue('DOI');
+        $this->_validator = new Application_Form_Validate_Identifier($this->_element);
+        $this->assertFalse($this->_validator->isValid(''));
+    }
+
+    /**
+     * Test for an argument in an DOI-identifier -> identifier without validation.
+     * @covers ::isValid
+     */
+
+    public function testIsValidDoi()
+    {
+        $this->_element->setValue('DOI');
+        $this->_validator = new Application_Form_Validate_Identifier($this->_element);
+        $this->assertTrue($this->_validator->isValid('23356'));
+        $this->assertTrue($this->_validator->isValid('233dfsfsf'));
+        $this->assertTrue($this->_validator->isValid('23fdt45356'));
+        $this->assertTrue($this->_validator->isValid('233_:()$&56'));
+        $this->assertTrue($this->_validator->isValid('23!"356'));
+    }
+
+    /**
+     * Test for null as element.
      * @expectedException InvalidArgumentException
      * @expectedExceptionMessage Argument must not be NULL
-     * Test for null as element
+     * @covers ::isValid
      */
-    public function testIsValidElementNULL() {
+
+    public function testIsValidElementNull()
+    {
         $this->_validator = new Application_Form_Validate_Identifier(null);
     }
+
     /**
-     * Test for an NULL argument in an DOI-identifier-> identifier without validation
+     * Test for an NULL argument in an DOI-identifier-> identifier without validation.
+     * @covers ::isValid
      */
-    public function testIsValidDOINULL() {
+
+    public function testIsValidDoiNull()
+    {
         $this->_element->setValue('DOI');
         $this->_validator = new Application_Form_Validate_Identifier($this->_element);
         $this->assertFalse($this->_validator->isValid(null));
     }
+
     /**
-     * Test for an unknown type as identifier -> same result as empty in type without validation
+     * Test for an unknown type as identifier -> same result as empty in type without validation.
+     * @covers ::isValid
      */
-    public function testIsValidUnknownType() {
+
+    public function testIsValidUnknownType()
+    {
         $this->_element->setValue('unknown');
         $this->_validator = new Application_Form_Validate_Identifier($this->_element);
         $this->assertFalse($this->_validator->isValid(''));
