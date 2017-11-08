@@ -208,4 +208,27 @@ class Application_Form_Validate_IdentifierTest extends ControllerTestCase
         $this->assertContains("'978-3-86680-1X2-9' is malformed", $this->_validator->getMessages());
     }
 
+    /**
+     * Test the error-messages for an text as delivery for the Application_Form_Validate_Identifier-Object.
+     * @expectedException InvalidArgumentException
+     * @expectedExceptionMessage Object must be Zend_Form_Element
+     * @covers ::isValid
+     */
+    public function testStringDelivery()
+    {
+        $this->_validator = new Application_Form_Validate_Identifier("zhui");
+    }
+
+    /**
+     * Test the error-messages for an wrong Element as delivery for the Application_Form_Validate_Identifier-Object.
+     * @expectedException InvalidArgumentException
+     * @expectedExceptionMessage Object must be Zend_Form_Element
+     * @covers ::isValid
+     */
+    public function testWrongElement()
+    {
+        $this->_element = new Application_Form_Validate_EmailAddress('Element');
+        $this->_validator = new Application_Form_Validate_Identifier($this->_element);
+    }
+
 }
