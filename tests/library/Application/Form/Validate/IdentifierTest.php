@@ -37,17 +37,18 @@
 class Application_Form_Validate_IdentifierTest extends ControllerTestCase
 {
     /**
-     *_validator represents an validator-object for identifier-elements.
-     *_element represents an Zend_Form_Element for identifier with type ISBN.
+     * Represents an validator-object for identifier-elements.
      */
-
     private $_validator;
+
+    /**
+     * Represents an Zend_Form_Element for identifier with type ISBN.
+     */
     private $_element;
 
     /**
      * set up variables.
      */
-
     public function setUp()
     {
         parent::setUp();
