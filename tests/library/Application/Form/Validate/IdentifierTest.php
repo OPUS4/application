@@ -216,19 +216,19 @@ class Application_Form_Validate_IdentifierTest extends ControllerTestCase
      */
     public function testInvalidConstructorArgument()
     {
-        $this->_validator = new Application_Form_Validate_Identifier("zhui");
+        new Application_Form_Validate_Identifier("zhui");
     }
 
     /**
-     * Test the error-messages for an wrong Element as delivery for the Application_Form_Validate_Identifier-Object.
+     * Invalid object type as constructor argument should throw exception. 
+     * 
      * @expectedException InvalidArgumentException
      * @expectedExceptionMessage Object must be Zend_Form_Element
      * @covers ::__construct
      */
-    public function testWrongElement()
+    public function testInvalidConsructorArgumentWrongObjectType()
     {
-        $this->_element = new Application_Form_Validate_EmailAddress('Element');
-        $this->_validator = new Application_Form_Validate_Identifier($this->_element);
+        new Application_Form_Validate_Identifier(new Application_Form_Validate_EmailAddress('Element'));
     }
 
 }
