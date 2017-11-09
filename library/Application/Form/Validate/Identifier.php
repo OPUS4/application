@@ -31,13 +31,15 @@
  */
 
 /**
- * Class for delegate validator for identifier in Admin-Form.
+ * Validator that delegates validation of identifiers depending on the type.
+ *
+ * This validator is used in the document metadate form.
  */
 class Application_Form_Validate_Identifier extends Zend_Validate_Abstract
 {
 
     /**
-     * Represent the identifier Form_Element.
+     * Form element for the type of identifier.
      * @var Zend_Form_Element
      */
     private $_element;
@@ -70,9 +72,9 @@ class Application_Form_Validate_Identifier extends Zend_Validate_Abstract
         $this->_setValue($value);
 
         /**
-         * At this point, we check the type of an identifier. If this is maybe ISBN, we delegate the validation to the
-         * ISBN-Validator. If the ISBN is not valid in this case, we take the Errormessages of the ISBN-Class and
-         * give them out. This is important, to make the code variable.
+         * At this point, we check the type of an identifier. If it is ISBN, we delegate the validation to the
+         * ISBN validator. If the ISBN is not valid, we use the error messages of the ISBN validator and copy
+         * errors from the actual validator to this object.
          */
         switch (strtoupper($this->_element->getValue()))
         {
@@ -80,8 +82,10 @@ class Application_Form_Validate_Identifier extends Zend_Validate_Abstract
                 $validateISBN = new Opus_Validate_Isbn();
                 $result = $validateISBN->isValid($value);
                 $this->_messageTemplates = $validateISBN->getMessageTemplates();
-                if ($result === false) {
-                    foreach ($validateISBN->getErrors() as $error) {
+                if ($result === false) 
+                {
+                    foreach ($validateISBN->getErrors() as $error) 
+                    {
                         $this->_error($error);
                     }
                 }
