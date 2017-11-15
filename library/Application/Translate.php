@@ -89,8 +89,8 @@ class Application_Translate extends Zend_Translate {
     public function loadModule($name) {
         if (!in_array($name, $this->_loadedModules)) {
             $moduleDir = APPLICATION_PATH . '/modules/' . $name;
-            $this->loadLanguageDirectory("$moduleDir/language/");
-            $this->loadLanguageDirectory("$moduleDir/language_custom/");
+            $this->loadLanguageDirectory("$moduleDir/language/", false);
+            $this->loadLanguageDirectory("$moduleDir/language_custom/", false);
             $this->_loadedModules[] = $name;
         }
         else {
@@ -102,13 +102,19 @@ class Application_Translate extends Zend_Translate {
      * Lädt TMX Dateien aus einem Verzeichnis.
      *
      * @param string $directory Pfad zum Verzeichnis
+     * @param string $warnIfMissing Optionally warn in log file if folder is missing
      * @return boolean
+     *
+     * TODO better than supressing the warning would be for each module to register language directories in bootstrap
      */
-    public function loadLanguageDirectory($directory) {
+    public function loadLanguageDirectory($directory, $warnIfMissing = true) {
         $path = realpath($directory);
 
         if (($path === false) or (!is_dir($path)) or (!is_readable($path))) {
-            $this->getLogger()->warn(__METHOD__ . " Directory '$directory' not found.");
+            if ($warnIfMissing)
+            {
+                $this->getLogger()->warn(__METHOD__ . " Directory '$directory' not found.");
+            }
             return false;
         }
 
