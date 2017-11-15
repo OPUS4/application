@@ -231,4 +231,17 @@ class Application_Form_Validate_IdentifierTest extends ControllerTestCase
         $this->_validator = new Application_Form_Validate_Identifier($this->_element);
     }
 
+    /**
+     * Tests, if the validators, which are set in the config-file, exists.
+     */
+    public function testClassesExists()
+    {
+        $config = Application_Configuration::getInstance()->getConfig();
+        $types = $config->identifier->validation->toArray();
+        foreach($types as $key=>$val)
+        {
+            $this->assertTrue(class_exists($types[$key]));
+        }
+    }
+
 }
