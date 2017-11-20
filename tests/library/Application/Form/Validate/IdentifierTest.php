@@ -238,7 +238,7 @@ class Application_Form_Validate_IdentifierTest extends ControllerTestCase
     {
         $config = Application_Configuration::getInstance()->getConfig();
         $types = $config->identifier->validation->toArray();
-        foreach($types as $key=>$val)
+        foreach ($types as $key => $val)
         {
             $this->assertTrue(class_exists($types[$key]));
         }
