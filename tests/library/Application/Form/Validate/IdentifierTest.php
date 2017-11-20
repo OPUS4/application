@@ -57,6 +57,7 @@ class Application_Form_Validate_IdentifierTest extends ControllerTestCase
         $this->_element = new Application_Form_Element_Identifier('Element');
         $this->_element->setValue('ISBN');
         $this->_validator = new Application_Form_Validate_Identifier($this->_element);
+        $this->useEnglish();
     }
 
     /**
@@ -240,7 +241,7 @@ class Application_Form_Validate_IdentifierTest extends ControllerTestCase
         $types = $config->identifier->validation->toArray();
         foreach($types as $key=>$val)
         {
-            $this->assertTrue(class_exists($types[$key]));
+            $this->assertTrue(class_exists($types[$key]['class']));
         }
     }
 

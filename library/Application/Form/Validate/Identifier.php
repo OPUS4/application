@@ -61,6 +61,12 @@ class Application_Form_Validate_Identifier extends Zend_Validate_Abstract
 
     /**
      * Uses the config-file to delegate the validation of identifier.
+     *
+     * If there is a validator set for the chosen identifier, delegate at the class, which is linked in the config.
+     * Check the identifier with isValid of the class and if its wrong, get the error-messages and set the right
+     * message. If there is no validator for the chosen identifier and the insert is not empty, the return is true.
+     * The message can be set in the config-file.
+     *
      * @param mixed $value inserted text
      * @return bool
      */
@@ -69,28 +75,25 @@ class Application_Form_Validate_Identifier extends Zend_Validate_Abstract
         $value = (string)$value;
         $this->_setValue($value);
 
-        /**
-         * @var $type type of the chosen identifier in the Element (e.g. "isbn")
-         * @var $config config-file
-         */
         $type = strtolower($this->_element->getValue());
         $config = Application_Configuration::getInstance()->getConfig();
 
-        /**
-         * If there is a validator set for the chosen identifier, delegate at the class, which is linked in the config.
-         * Check the identifier with isValid of the class and if its wrong, get the error-messages and set the right
-         * message. If there is no validator for the chosen identifier and the insert is not empty, the return is true.
-         */
         if (isset($config->identifier->validation->$type))
         {
-            $validatorClass = $config->identifier->validation->$type;
+            $validatorClass = $config->identifier->validation->$type->class;
             $validator = new $validatorClass;
             $result = $validator->isValid($value);
             if ($result === false)
             {
-                $this->_messageTemplates = $validator->getMessageTemplates();
-                foreach ($validator->getErrors() as $error)
+                if (isset($config->identifier->validation->$type->messages))
                 {
+                    $this->_messageTemplates = $config->identifier->validation->$type->messages->toArray();
+                }
+                else
+                {
+                    $this->_messageTemplates = $validator->getMessageTemplates();
+                }
+                foreach ($validator->getErrors() as $error) {
                     $this->_error($error);
                 }
             }
