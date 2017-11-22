@@ -31,13 +31,15 @@
  */
 
 /**
- * Class for delegate validator for identifier in Admin-Form.
+ * Validator that delegates validation of identifiers depending on the type.
+ *
+ * This validator is used in the document metadate form.
  */
 class Application_Form_Validate_Identifier extends Zend_Validate_Abstract
 {
 
     /**
-     * Represent the identifier Form_Element.
+     * Form element for the type of identifier.
      * @var Zend_Form_Element
      */
     private $_element;
@@ -64,8 +66,7 @@ class Application_Form_Validate_Identifier extends Zend_Validate_Abstract
      *
      * If there is a validator set for the chosen identifier, delegate at the class, which is linked in the config.
      * Check the identifier with isValid of the class and if its wrong, get the error-messages and set the right
-     * message. If there is no validator for the chosen identifier and the insert is not empty, the return is true.
-     * The message can be set in the config-file.
+     * message. If there is no validator for the chosen identifier and the value is not empty, the return is true.
      *
      * @param mixed $value inserted text
      * @return bool
@@ -76,7 +77,7 @@ class Application_Form_Validate_Identifier extends Zend_Validate_Abstract
         $this->_setValue($value);
 
         $type = strtolower($this->_element->getValue());
-        $config = Application_Configuration::getInstance()->getConfig();
+        $config = Application_Configuration::getInstance()->getConfig(); 
 
         if (isset($config->identifier->validation->$type))
         {
