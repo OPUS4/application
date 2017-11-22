@@ -187,7 +187,7 @@ class Application_Form_Validate_IdentifierTest extends ControllerTestCase
         $this->assertContains('checkdigit', $this->_validator->getErrors());
 
         $this->assertFalse($this->_validator->isValid('978-3-86680-192-7'));
-        $this->assertContains("The check digit of '978-3-86680-192-7' is not valid", $this->_validator->getMessages());
+        $this->assertContains("The check digit of '978-3-86680-192-7' is not valid.", $this->_validator->getMessages());
     }
 
     /**
@@ -198,15 +198,15 @@ class Application_Form_Validate_IdentifierTest extends ControllerTestCase
     {
         $this->assertFalse($this->_validator->isValid('978-3-866800-1942-34'));
         $this->assertContains('form', $this->_validator->getErrors());
-        $this->assertContains("'978-3-866800-1942-34' is malformed", $this->_validator->getMessages());
+        $this->assertContains("'978-3-866800-1942-34' is malformed.", $this->_validator->getMessages());
 
         $this->assertFalse($this->_validator->isValid('978386680192'));
         $this->assertContains('form', $this->_validator->getErrors());
-        $this->assertContains("'978386680192' is malformed", $this->_validator->getMessages());
+        $this->assertContains("'978386680192' is malformed.", $this->_validator->getMessages());
 
         $this->assertFalse($this->_validator->isValid('978-3-86680-1X2-9'));
         $this->assertContains('form', $this->_validator->getErrors());
-        $this->assertContains("'978-3-86680-1X2-9' is malformed", $this->_validator->getMessages());
+        $this->assertContains("'978-3-86680-1X2-9' is malformed.", $this->_validator->getMessages());
     }
 
     /**

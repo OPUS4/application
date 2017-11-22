@@ -85,9 +85,9 @@ class Application_Form_Validate_Identifier extends Zend_Validate_Abstract
             $result = $validator->isValid($value);
             if ($result === false)
             {
-                if (isset($config->identifier->validation->$type->messages))
+                if (isset($config->identifier->validation->$type->messageTemplate))
                 {
-                    $this->_messageTemplates = $config->identifier->validation->$type->messages->toArray();
+                    $this->_messageTemplates = $config->identifier->validation->$type->messageTemplate->toArray();
                 }
                 else
                 {
