@@ -148,7 +148,7 @@ class Application_Form_Validate_IdentifierTest extends ControllerTestCase
      * Test for null as element.
      * @expectedException InvalidArgumentException
      * @expectedExceptionMessage Argument must not be NULL
-     * @covers ::isValid
+     * @covers ::__construct
      */
     public function testIsValidElementNull()
     {
@@ -213,23 +213,23 @@ class Application_Form_Validate_IdentifierTest extends ControllerTestCase
      * Test the error-messages for an text as delivery for the Application_Form_Validate_Identifier-Object.
      * @expectedException InvalidArgumentException
      * @expectedExceptionMessage Object must be Zend_Form_Element
-     * @covers ::isValid
+     * @covers ::__construct
      */
-    public function testStringDelivery()
+    public function testInvalidConstructorArgument()
     {
-        $this->_validator = new Application_Form_Validate_Identifier("zhui");
+        new Application_Form_Validate_Identifier("zhui");
     }
 
     /**
-     * Test the error-messages for an wrong Element as delivery for the Application_Form_Validate_Identifier-Object.
+     * Invalid object type as constructor argument should throw exception. 
+     * 
      * @expectedException InvalidArgumentException
      * @expectedExceptionMessage Object must be Zend_Form_Element
-     * @covers ::isValid
+     * @covers ::__construct
      */
-    public function testWrongElement()
+    public function testInvalidConsructorArgumentWrongObjectType()
     {
-        $this->_element = new Application_Form_Validate_EmailAddress('Element');
-        $this->_validator = new Application_Form_Validate_Identifier($this->_element);
+        new Application_Form_Validate_Identifier(new Application_Form_Validate_EmailAddress('Element'));
     }
 
     /**
@@ -239,7 +239,7 @@ class Application_Form_Validate_IdentifierTest extends ControllerTestCase
     {
         $config = Application_Configuration::getInstance()->getConfig();
         $types = $config->identifier->validation->toArray();
-        foreach($types as $key=>$val)
+        foreach ($types as $key => $val)
         {
             $this->assertTrue(class_exists($types[$key]['class']));
         }
