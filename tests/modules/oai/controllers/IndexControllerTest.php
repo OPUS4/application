@@ -45,6 +45,22 @@ class Oai_IndexControllerTest extends ControllerTestCase {
     private $_addOaiModuleAccess;
     private $docIds = array();
 
+    private $xpathNamespaces = [
+        'oai' => "http://www.openarchives.org/OAI/2.0/",
+        'oai_dc' => "http://www.openarchives.org/OAI/2.0/oai_dc/",
+        'cc' => "http://www.d-nb.de/standards/cc/",
+        'dc' => "http://purl.org/dc/elements/1.1/",
+        'ddb' => "http://www.d-nb.de/standards/ddb/",
+        'pc' => "http://www.d-nb.de/standards/pc/",
+        'xMetaDiss' => "http://www.d-nb.de/standards/xmetadissplus/",
+        'epicur' => "urn:nbn:de:1111-2004033116",
+        'dcterms' => "http://purl.org/dc/terms/",
+        'thesis' => "http://www.ndltd.org/standards/metadata/etdms/1.0/",
+        'eprints' => 'http://www.openarchives.org/OAI/1.1/eprints',
+        'oaiid' => 'http://www.openarchives.org/OAI/2.0/oai-identifier'
+        ];
+
+
     /**
      * Method to check response for "bad" strings.
      */
@@ -66,16 +82,10 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
         $xpath = new DOMXPath($domDocument);
 
-        $xpath->registerNamespace('oai', "http://www.openarchives.org/OAI/2.0/");
-        $xpath->registerNamespace('oai_dc', "http://www.openarchives.org/OAI/2.0/oai_dc/");
-        $xpath->registerNamespace('cc', "http://www.d-nb.de/standards/cc/");
-        $xpath->registerNamespace('dc', "http://purl.org/dc/elements/1.1/");
-        $xpath->registerNamespace('ddb', "http://www.d-nb.de/standards/ddb/");
-        $xpath->registerNamespace('pc', "http://www.d-nb.de/standards/pc/");
-        $xpath->registerNamespace('xMetaDiss', "http://www.d-nb.de/standards/xmetadissplus/");
-        $xpath->registerNamespace('epicur', "urn:nbn:de:1111-2004033116");
-        $xpath->registerNamespace('dcterms', "http://purl.org/dc/terms/");
-        $xpath->registerNamespace('thesis', "http://www.ndltd.org/standards/metadata/etdms/1.0/");
+        foreach ($this->xpathNamespaces as $prefix => $namespaceUri)
+        {
+            $xpath->registerNamespace($prefix, $namespaceUri);
+        }
 
         return $xpath;
     }
@@ -114,11 +124,111 @@ class Oai_IndexControllerTest extends ControllerTestCase {
      * @covers ::indexAction
      */
     public function testIdentify() {
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
+            'oai' => array('repository' => array('name' => 'test-repo-name'))
+        )));
+
         $this->dispatch('/oai?verb=Identify');
         $this->assertResponseCode(200);
 
         $response = $this->getResponse();
         $this->checkForBadStringsInHtml($response->getBody());
+
+        $this->registerXpathNamespaces($this->xpathNamespaces);
+
+        $this->assertXpath('//oai:Identify');
+        $this->assertXpathContentContains('//oai:Identify/oai:repositoryName', 'test-repo-name');
+        $this->assertXpathContentContains('//oai:Identify/oai:baseURL', 'http:///oai');
+        $this->assertXpathContentContains('//oai:Identify/oai:protocolVersion', '2.0');
+        $this->assertXpathContentContains('//oai:Identify/oai:adminEmail', 'opus4ci@example.org');
+        $this->assertXpathContentContains('//oai:Identify/oai:earliestDatestamp', '2002-04-29');
+        $this->assertXpathContentContains('//oai:Identify/oai:deletedRecord', 'persistent');
+        $this->assertXpathContentContains('//oai:Identify/oai:granularity', 'YYYY-MM-DD');
+    }
+
+    public function testIdentifyDescriptionEprintsBasic()
+    {
+        $this->dispatch('/oai?verb=Identify');
+        $this->assertResponseCode(200);
+
+        $this->registerXpathNamespaces($this->xpathNamespaces);
+
+        $this->assertXpathCount('//oai:description', 2);
+        $this->assertXpathCount('//oai:description/eprints:eprints', 1);
+        $this->assertNotXpath('//eprints:content/eprints:URL');
+        $this->assertXpathContentContains(
+            '//oai:description/eprints:eprints/eprints:content/eprints:text',
+            'OPUS 4 repository containing document metadata and fulltexts.'
+        );
+
+        $this->assertXpath('//eprints:metadataPolicy');
+        $this->assertNotXpath('//eprints:metadataPolicy/eprints:URL');
+        $this->assertNotXpath('//eprints:metadataPolicy/eprints:text');
+
+        $this->assertXpath('//eprints:dataPolicy');
+        $this->assertNotXpath('//eprints:dataPolicy/eprints:URL');
+        $this->assertNotXpath('//eprints:dataPolicy/eprints:text');
+
+        $this->assertNotXpath('//eprints:submissionPolicy');
+        $this->assertNotXpath('//eprints:comment');
+    }
+
+    public function testIdentifyDescriptionEprintsConfigured()
+    {
+        $values = array(
+            'content' => array('url' => 'test-content-url', 'text' => 'test-content-text'),
+            'metadataPolicy' => array('url' => 'test-metadata-url', 'text' => 'test-metadata-text'),
+            'dataPolicy' => array('url' => 'test-data-url', 'text' => 'test-data-text'),
+            'submissionPolicy' => array('url' => 'test-submission-url', 'text' => 'test-submission-text'),
+            'comment' => array('url' => 'test-comment-url', 'text' => 'test-comment-text')
+        );
+
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
+            'oai' => array('description' => array('eprints' => $values))
+        )));
+
+        $this->dispatch('/oai?verb=Identify');
+        $this->assertResponseCode(200);
+
+        $this->registerXpathNamespaces($this->xpathNamespaces);
+
+        $this->assertXpathCount('//oai:description', 2);
+        $this->assertXpathCount('//oai:description/eprints:eprints', 1);
+
+        foreach ($values as $element => $content) {
+            $this->assertXpathContentContains(
+                "//oai:description/eprints:eprints/eprints:$element/eprints:URL",
+                $content['url']
+            );
+            $this->assertXpathContentContains(
+                "//oai:description/eprints:eprints/eprints:$element/eprints:text",
+                $content['text']
+            );
+        }
+    }
+
+    public function testIdentifyDescriptionOaiIdentifier()
+    {
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
+            'oai' => array('repository' => array('identifier' => 'test-repo-identifier'),
+                'sample' => array('identifier' => 'test-sample-identifier'))
+        )));
+
+        $this->dispatch('/oai?verb=Identify');
+        $this->assertResponseCode(200);
+
+        $this->registerXpathNamespaces($this->xpathNamespaces);
+
+        $this->assertXpathCount('//oai:description', 2);
+        $this->assertXpathCount('//oai:description/oaiid:oai-identifier', 1);
+        $this->assertXpathContentContains('//oai:description/oaiid:oai-identifier/oaiid:scheme', 'oai');
+        $this->assertXpathContentContains(
+            '//oai:description/oaiid:oai-identifier/oaiid:repositoryIdentifier', 'test-repo-identifier'
+        );
+        $this->assertXpathContentContains('//oai:description/oaiid:oai-identifier/oaiid:delimiter', ':');
+        $this->assertXpathContentContains(
+            '//oai:description/oaiid:oai-identifier/oaiid:sampleIdentifier', 'test-sample-identifier'
+        );
     }
 
     /**
