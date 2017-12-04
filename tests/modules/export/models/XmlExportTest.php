@@ -27,13 +27,21 @@
  * @category    Application
  * @package     Module_Export
  * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
+/**
+ * Class Export_Model_XmlExportTest
+ *
+ * @covers \Export_Model_XmlExport
+ */
 class Export_Model_XmlExportTest extends ControllerTestCase {
 
+    /**
+     * @var \Export_Model_XmlExport
+     */
     private $plugin;
 
     public function setUp() {
@@ -234,6 +242,101 @@ class Export_Model_XmlExportTest extends ControllerTestCase {
         $this->assertEquals(100, $this->plugin->getValueIfValid('a', 100));
         $this->assertEquals(100, $this->plugin->getValueIfValid(-1, 100));
         $this->assertEquals(100, $this->plugin->getValueIfValid(0, 100));
+    }
+
+    public function testIsDownloadEnabled()
+    {
+        $plugin = $this->plugin;
+
+        $this->assertTrue($plugin->isDownloadEnabled());
+
+        $plugin->setDownloadEnabled(false);
+
+        $this->assertFalse($plugin->isDownloadEnabled());
+
+        $plugin->setDownloadEnabled(null);
+
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
+            'export' => array('download' => '0')
+        )));
+
+        $this->assertFalse($plugin->isDownloadEnabled());
+    }
+
+    public function setDownloadEnabledInvalidArgumentProvider()
+    {
+        return [
+            ['on'],
+            [123],
+            [1]
+        ];
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     * @dataProvider setDownloadEnabledInvalidArgumentProvider
+     */
+    public function testSetDownloadEnabledInvalidArgument($argument)
+    {
+        $this->plugin->setDownloadEnabled($argument);
+    }
+
+    public function testGetContentTypeFromConfiguration()
+    {
+        $plugin = $this->plugin;
+
+        $this->assertEquals('text/xml', $plugin->getContentType());
+
+        $config = new Zend_Config(array('contentType' => 'text/plain'));
+
+        $plugin->setContentType(null); // clear cached content type
+
+        $plugin->setConfig($config);
+
+        $this->assertEquals('text/plain', $plugin->getContentType());
+
+    }
+
+    public function testGetContentTypeFallback()
+    {
+        $plugin = $this->plugin;
+
+        $plugin->setContentType(null);
+
+        $plugin->setConfig(new Zend_Config(array()));
+
+        $this->assertEquals('text/xml', $plugin->getContentType());
+    }
+
+    public function testSetContentType()
+    {
+        $plugin = $this->plugin;
+
+        $plugin->setContentType('text/html');
+
+        $this->assertEquals('text/html', $plugin->getContentType());
+    }
+
+    public function testGetAttachmentFilename()
+    {
+        $plugin = $this->plugin;
+
+        $this->assertEquals('export.xml', $plugin->getAttachmentFilename());
+
+        $plugin->setAttachmentFilename(null); // clear cached name
+
+        $plugin->setConfig(new Zend_Config(array('attachmentFilename' => 'article.pdf')));
+
+        $this->assertEquals('article.pdf', $plugin->getAttachmentFilename());
+    }
+
+    public function testSetAttachmentFilename()
+    {
+        $plugin = $this->plugin;
+
+        $plugin->setAttachmentFilename('fulltext.pdf');
+
+        $this->assertEquals('fulltext.pdf', $plugin->getAttachmentFilename());
     }
 
 }
