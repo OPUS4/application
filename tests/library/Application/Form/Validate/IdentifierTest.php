@@ -245,4 +245,61 @@ class Application_Form_Validate_IdentifierTest extends ControllerTestCase
         }
     }
 
+    /**
+     * Tests, if the message-keys, which are set in the config-files, exists in the validator-files.
+     */
+    public function testMessagesEqual()
+    {
+        $config = Application_Configuration::getInstance()->getConfig();
+        $validators=$config->identifier->validation->toArray();
+        foreach($validators as $key=>$val)
+        {
+            $validatorClass = $config->identifier->validation->$key->class;
+            $validator = new $validatorClass;
+            $messageConfig = $this->_messageTemplates = $config->identifier->validation->$key
+                ->messageTemplate;
+            if($messageConfig === NULL)
+            {
+                break;
+            }
+            else
+            {
+                $messageConfig = $this->_messageTemplates = $config->identifier->validation->$key
+                    ->messageTemplate->toArray();
+            }
+            $messageValidator=$validator->getMessageTemplates();
+            ksort($messageValidator);
+            ksort($messageConfig);
+            $messageValidatorNew=[];
+            $messageConfigNew=[];
+            foreach($messageValidator as $key=>$val)
+            {
+                array_push($messageValidatorNew, $key);
+            }
+            foreach($messageConfig as $key=>$val)
+            {
+                array_push($messageConfigNew, $key);
+            }
+            $this->assertEquals($messageValidatorNew,$messageConfigNew);
+        }
+    }
+
+    /**
+     * Tests if all set message-templates(error-codes) are translated.
+     */
+    public function testTranslationExists()
+    {
+        $translate = new Application_Translate(array(
+            'content' => APPLICATION_PATH . '/modules/default/language/validation.tmx',
+        ));
+        $config = Application_Configuration::getInstance()->getConfig();
+        $validators=$config->identifier->validation->toArray();
+        foreach($validators as $key=>$val) {
+            $messageConfig = $this->_messageTemplates = $config->identifier->validation->$key
+                ->messageTemplate->toArray();
+            foreach ($messageConfig as $key => $val) {
+                $this->assertTrue($translate->isTranslated($val));
+            }
+        }
+    }
 }
