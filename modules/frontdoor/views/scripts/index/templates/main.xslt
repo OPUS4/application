@@ -99,7 +99,7 @@
     </xsl:template>
 
     <xsl:template name="Abstract">
-            <li class="abstract preserve-spaces">
+            <li class="abstract preserve-spaces" lang="en">
                 <xsl:choose>
                     <xsl:when test="$numOfShortAbstractChars = '0' or string-length(@Value) &lt; $numOfShortAbstractChars">
                        <xsl:value-of select="@Value" />
