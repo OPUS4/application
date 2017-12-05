@@ -65,7 +65,7 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase {
         $form = new Admin_Form_Document_Enrichment();
         
         $enrichment = new Opus_Enrichment();
-        $keyNames = $enrichment->getField('KeyName')->getDefault();
+        $keyNames = Opus_EnrichmentKey::getAll();
         $keyName = $keyNames[1]->getName(); // Geht davon aus, dass mindestens 2 Enrichment Keys existieren
         
         $form->getElement('KeyName')->setValue($keyName);
@@ -84,7 +84,7 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase {
         $enrichments = $document->getEnrichment();
         $enrichment = $enrichments[0];
         
-        $keyNames = $enrichment->getField('KeyName')->getDefault();
+        $keyNames = Opus_EnrichmentKey::getAll();
         $keyName = $keyNames[1]->getName(); // Geht davon aus, dass mindestens 2 Enrichment Keys existieren
         
         $form->getElement('Id')->setValue($enrichment->getId());
@@ -102,7 +102,7 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase {
         $form = new Admin_Form_Document_Enrichment();
 
         $enrichment = new Opus_Enrichment();
-        $keyNames = $enrichment->getField('KeyName')->getDefault();
+        $keyNames = Opus_EnrichmentKey::getAll();
         $keyName = $keyNames[1]->getName(); // Geht davon aus, dass mindestens 2 Enrichment Keys existieren
         
         $form->getElement('KeyName')->setValue($keyName);
@@ -119,7 +119,7 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase {
         $form = new Admin_Form_Document_Enrichment();
 
         $enrichment = new Opus_Enrichment();
-        $keyNames = $enrichment->getField('KeyName')->getDefault();
+        $keyNames = Opus_EnrichmentKey::getAll();
         $keyName = $keyNames[1]->getName(); // Geht davon aus, dass mindestens 2 Enrichment Keys existieren
 
         $logger = new MockLogger();
@@ -145,7 +145,7 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase {
         $form = new Admin_Form_Document_Enrichment();
 
         $enrichment = new Opus_Enrichment();
-        $keyNames = $enrichment->getField('KeyName')->getDefault();
+        $keyNames = Opus_EnrichmentKey::getAll();
         $keyName = $keyNames[1]->getName(); // Geht davon aus, dass mindestens 2 Enrichment Keys existieren
 
         $form->getElement('Id')->setValue('bad');
