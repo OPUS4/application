@@ -82,13 +82,14 @@ class Application_Form_Validate_Identifier extends Zend_Validate_Abstract
         if (isset($config->identifier->validation->$type->class)) {
             $validatorClass = $config->identifier->validation->$type->class;
             $validator = new $validatorClass;
-            $messageTemplates = $config->identifier->validation->$type->messageTemplates;
+            $configMessageTemplates = $config->identifier->validation->$type->messageTemplates;
             $result = $validator->isValid($value);
-            $this->_messageTemplates = $validator->getMessageTemplates();
+            $validatorMessageTemplates = $validator->getMessageTemplates();
+            $this->_messageTemplates = $validatorMessageTemplates;
             if ($result === false) {
-                if (isset($messageTemplates)) {
-                    $messageTemplatesArray = $messageTemplates->toArray();
-                    $this->_messageTemplates = array_merge($validator->getMessageTemplates(), $messageTemplatesArray);
+                if (isset($configMessageTemplates)) {
+                    $configMessageArray = $configMessageTemplates->toArray();
+                    $this->_messageTemplates = array_merge($validatorMessageTemplates, $configMessageArray);
                 }
                 foreach ($validator->getErrors() as $error) {
                     $this->_error($error);

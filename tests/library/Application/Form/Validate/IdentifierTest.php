@@ -240,6 +240,7 @@ class Application_Form_Validate_IdentifierTest extends ControllerTestCase
         $config = Application_Configuration::getInstance()->getConfig();
         $types = $config->identifier->validation->toArray();
         foreach ($types as $key => $val) {
+            $this->assertArrayHasKey('class', $val);
             $this->assertTrue(class_exists($val['class']));
         }
     }
@@ -253,13 +254,14 @@ class Application_Form_Validate_IdentifierTest extends ControllerTestCase
         $validators = $config->identifier->validation->toArray();
 
         foreach ($validators as $key => $val) {
-            $validatorClass = $config->identifier->validation->$key->class;
+            $validatorClass = $val['class'];
             $validator = new $validatorClass;
             $messageValidator = $validator->getMessageTemplates();
-            $messageConfig = $config->identifier->validation->$key
-                ->messageTemplates->toArray();
-            foreach ($messageConfig as $key => $val) {
-                $this->assertTrue(array_key_exists($key, $messageValidator));
+            if(array_key_exists('messageTemplates',$val)){
+                $messageConfig = $val['messageTemplates'];
+                foreach ($messageConfig as $key => $val) {
+                    $this->assertArrayHasKey($key, $messageValidator);
+                }
             }
         }
     }
@@ -273,10 +275,11 @@ class Application_Form_Validate_IdentifierTest extends ControllerTestCase
         $config = Application_Configuration::getInstance()->getConfig();
         $validators = $config->identifier->validation->toArray();
         foreach ($validators as $key => $val) {
-            $messageConfig = $config->identifier->validation->$key
-                ->messageTemplates->toArray();
-            foreach ($messageConfig as $key => $val) {
-                $this->assertTrue($translate->isTranslated($val));
+            if(array_key_exists('messageTemplates',$val)) {
+                $messageConfig = $val['messageTemplates'];
+                foreach ($messageConfig as $key => $val) {
+                    $this->assertTrue($translate->isTranslated($val));
+                }
             }
         }
     }
