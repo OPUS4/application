@@ -77,19 +77,16 @@ class Application_Form_Validate_Identifier extends Zend_Validate_Abstract
         $this->_setValue($value);
 
         $type = strtolower($this->_element->getValue());
-        $config = Application_Configuration::getInstance()->getConfig(); 
+        $config = Application_Configuration::getInstance()->getConfig();
 
-        if (isset($config->identifier->validation->$type->class))
-        {
+        if (isset($config->identifier->validation->$type->class)) {
             $validatorClass = $config->identifier->validation->$type->class;
             $validator = new $validatorClass;
             $messageTemplates = $config->identifier->validation->$type->messageTemplates;
             $result = $validator->isValid($value);
             $this->_messageTemplates = $validator->getMessageTemplates();
-            if ($result === false)
-            {
-                if (isset($messageTemplates))
-                {
+            if ($result === false) {
+                if (isset($messageTemplates)) {
                     $messageTemplatesArray = $messageTemplates->toArray();
                     $this->_messageTemplates = array_merge($validator->getMessageTemplates(), $messageTemplatesArray);
                 }
@@ -100,10 +97,8 @@ class Application_Form_Validate_Identifier extends Zend_Validate_Abstract
 
             return $result;
         }
-        else
-        {
-            if (!empty($value))
-            {
+        else {
+            if (!empty($value)) {
                 return true;
             }
         }

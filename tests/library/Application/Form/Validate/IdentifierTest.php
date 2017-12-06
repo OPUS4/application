@@ -221,8 +221,8 @@ class Application_Form_Validate_IdentifierTest extends ControllerTestCase
     }
 
     /**
-     * Invalid object type as constructor argument should throw exception. 
-     * 
+     * Invalid object type as constructor argument should throw exception.
+     *
      * @expectedException InvalidArgumentException
      * @expectedExceptionMessage Object must be Zend_Form_Element
      * @covers ::__construct
@@ -239,48 +239,28 @@ class Application_Form_Validate_IdentifierTest extends ControllerTestCase
     {
         $config = Application_Configuration::getInstance()->getConfig();
         $types = $config->identifier->validation->toArray();
-        foreach ($types as $key => $val)
-        {
+        foreach ($types as $key => $val) {
             $this->assertTrue(class_exists($val['class']));
         }
     }
 
     /**
-     * Tests, if the message-keys, which are set in the config-files, exists in the validator-files.
+     * Tests, if keys for message-templates, which are set in the config-files, exists in the validator-files.
      */
-    public function testMessagesEqual()
+    public function testMessagesKeyValid()
     {
         $config = Application_Configuration::getInstance()->getConfig();
-        $validators=$config->identifier->validation->toArray();
-        foreach($validators as $key=>$val)
-        {
+        $validators = $config->identifier->validation->toArray();
+
+        foreach ($validators as $key => $val) {
             $validatorClass = $config->identifier->validation->$key->class;
             $validator = new $validatorClass;
+            $messageValidator = $validator->getMessageTemplates();
             $messageConfig = $config->identifier->validation->$key
-                ->messageTemplate;
-            if($messageConfig === NULL)
-            {
-                break;
+                ->messageTemplates->toArray();
+            foreach ($messageConfig as $key => $val) {
+                $this->assertTrue(array_key_exists($key, $messageValidator));
             }
-            else
-            {
-                $messageConfig = $config->identifier->validation->$key
-                    ->messageTemplate->toArray();
-            }
-            $messageValidator=$validator->getMessageTemplates();
-            ksort($messageValidator);
-            ksort($messageConfig);
-            $messageValidatorNew=[];
-            $messageConfigNew=[];
-            foreach($messageValidator as $key=>$val)
-            {
-                array_push($messageValidatorNew, $key);
-            }
-            foreach($messageConfig as $key=>$val)
-            {
-                array_push($messageConfigNew, $key);
-            }
-            $this->assertEquals($messageValidatorNew,$messageConfigNew);
         }
     }
 
@@ -291,8 +271,8 @@ class Application_Form_Validate_IdentifierTest extends ControllerTestCase
     {
         $translate = Zend_Registry::get('Zend_Translate');
         $config = Application_Configuration::getInstance()->getConfig();
-        $validators=$config->identifier->validation->toArray();
-        foreach($validators as $key=>$val) {
+        $validators = $config->identifier->validation->toArray();
+        foreach ($validators as $key => $val) {
             $messageConfig = $config->identifier->validation->$key
                 ->messageTemplates->toArray();
             foreach ($messageConfig as $key => $val) {
@@ -300,4 +280,5 @@ class Application_Form_Validate_IdentifierTest extends ControllerTestCase
             }
         }
     }
+
 }
