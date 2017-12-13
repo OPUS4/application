@@ -32,18 +32,32 @@
  */
 
 /**
- * View helper for tranform long language form in short language form.
+ * View helper for tranform long language form in short language form (Part2 in Part1).
  */
-class Application_View_Helper_LanguageWebform extends Zend_View_Helper_Abstract
+class Application_View_Helper_LanguageWebForm extends Zend_View_Helper_Abstract
 {
     /**
-     * @param $value long language form
+     * Array with transformed language-attributes. So they don't have been computed twice.
+     *
+     * @var array
+     */
+    private $_langcache = array();
+
+    /**
+     * An language-object will be transformed form Part2-form in the Part1-form
+     * this is necessary for the browser, to identify the language of an abstract or an title.
+     * Input is an 3-char form of an language (e.g. deu, eng, fra, ita, ...)
+     * Output is an 2-char form of an language (e.g. de, en, ...)
+     *
+     * @param $value String
      * @return short language form
      */
-    public function languageWebform($value)
+    public function languageWebForm($value)
     {
-        $lan = Opus_Language::getPropertiesByPart2T($value);
-
-        return $lan['part1'];
+        if (!array_key_exists($value, $this->_langcache)) {
+            $lang = Opus_Language::getPropertiesByPart2T($value);
+            $this->_langcache[$value] = $lang['part1'];
+        }
+        return $this->_langcache[$value];
     }
 }

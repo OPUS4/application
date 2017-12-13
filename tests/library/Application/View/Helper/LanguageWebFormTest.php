@@ -30,18 +30,18 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Application_View_Helper_LanguageTransformTest extends ControllerTestCase
+class Application_View_Helper_LanguageWebFormTest extends ControllerTestCase
 {
     /**
-     * @var Object as Application_View_Helper_LanguageWebform()
+     * @var Application_View_Helper_LanguageWebForm
      */
-    private $_transform;
+    private $_helper;
 
     public function setUp()
     {
         parent::setUp();
         $this->useEnglish();
-        $this->_transform = new Application_View_Helper_LanguageWebform();
+        $this->_helper = new Application_View_Helper_LanguageWebForm();
     }
 
     /**
@@ -64,9 +64,9 @@ class Application_View_Helper_LanguageTransformTest extends ControllerTestCase
      * @covers ::languageWebform
      * @dataProvider langProvider
      */
-    public function testLanguageWebform($long, $short)
+    public function testLanguageWebForm($long, $short)
     {
-        $this->assertEquals($this->_transform->LanguageWebform($long),$short);
+        $this->assertEquals($this->_helper->LanguageWebform($long), $short);
     }
 
 }
