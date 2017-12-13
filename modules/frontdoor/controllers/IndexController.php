@@ -33,8 +33,7 @@
  * @copyright   Copyright (c) 2014-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Frontdoor_IndexController extends Application_Controller_Action
-{
+class Frontdoor_IndexController extends Application_Controller_Action {
 
     /**
      * TODO should be defined in central model classes
@@ -46,8 +45,7 @@ class Frontdoor_IndexController extends Application_Controller_Action
      * Displays the metadata of a document.
      * @return void
      */
-    public function indexAction()
-    {
+    public function indexAction() {
 
         $request = $this->getRequest();
 
@@ -55,7 +53,8 @@ class Frontdoor_IndexController extends Application_Controller_Action
 
         if ($docId === false) {
             return;
-        } else if ($docId == '') {
+        }
+        else if ($docId == '') {
             // TODO can this be reached?
             $this->printDocumentError("frontdoor_doc_id_missing", 404);
             return;
@@ -142,13 +141,13 @@ class Frontdoor_IndexController extends Application_Controller_Action
         $this->view->frontdoor = $frontdoorContent;
         $this->view->baseUrl = $baseUrl;
         $this->view->doctype(
-            '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN" "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">'
+                '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN" "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">'
         );
 
         $dateModified = $document->getServerDateModified();
         if (!is_null($dateModified)) {
             $this->view->headMeta()
-                ->appendHttpEquiv('Last-Modified', $dateModified->getDateTime()->format(DateTime::RFC1123));
+                    ->appendHttpEquiv('Last-Modified', $dateModified->getDateTime()->format(DateTime::RFC1123));
         }
         $this->addMetaTagsForDocument($document);
         $this->view->title = $this->getFrontdoorTitle($document);
@@ -161,8 +160,7 @@ class Frontdoor_IndexController extends Application_Controller_Action
         $this->view->adminform = $actionbox;
     }
 
-    private function printDocumentError($message, $code)
-    {
+    private function printDocumentError($message, $code) {
         $this->view->errorMessage = $message;
         $this->getResponse()->setHttpResponseCode($code);
         $this->render('document-error');
@@ -172,8 +170,7 @@ class Frontdoor_IndexController extends Application_Controller_Action
      *
      * @param Opus_Document $doc
      */
-    private function isMailPossible($doc)
-    {
+    private function isMailPossible($doc) {
         $authors = new Frontdoor_Model_Authors($doc);
         return count($authors->getContactableAuthors()) > 0;
     }
@@ -183,8 +180,7 @@ class Frontdoor_IndexController extends Application_Controller_Action
      * @param Opus_Document $document
      * @return string
      */
-    private function getFrontdoorTitle($document)
-    {
+    private function getFrontdoorTitle($document) {
         $titlesMain = $document->getTitleMain();
         if (count($titlesMain) == 0) {
             return '';
@@ -213,8 +209,7 @@ class Frontdoor_IndexController extends Application_Controller_Action
         return $firstNonEmptyTitle;
     }
 
-    private function addMetaTagsForDocument($document)
-    {
+    private function addMetaTagsForDocument($document) {
         foreach ($this->createMetaTagsForDocument($document) AS $pair) {
             $this->view->headMeta($pair[1], $pair[0]);
         }
@@ -225,11 +220,10 @@ class Frontdoor_IndexController extends Application_Controller_Action
      * @return array
      * TODO separate different tags into function/plugins ???
      */
-    private function createMetaTagsForDocument($document)
-    {
+    private function createMetaTagsForDocument($document) {
         $config = $this->getConfig();
         $baseUrlFiles = $this->view->fullUrl()
-            . (isset($config, $config->deliver->url->prefix) ? $config->deliver->url->prefix : '/files');
+                . (isset($config, $config->deliver->url->prefix) ? $config->deliver->url->prefix : '/files');
 
         $metas = array();
 
@@ -298,8 +292,8 @@ class Frontdoor_IndexController extends Application_Controller_Action
         if (Application_Xslt::embargoHasPassed($document)) {
             foreach ($document->getFile() AS $file) {
                 if (!$file->exists()
-                    or ($file->getVisibleInFrontdoor() !== '1')
-                    or !Application_Xslt::fileAccessAllowed($file->getId())) {
+                        or ($file->getVisibleInFrontdoor() !== '1')
+                        or !Application_Xslt::fileAccessAllowed($file->getId())) {
                     continue;
                 }
                 $metas[] = array('DC.Identifier', "$baseUrlFiles/" . $document->getId() . "/" . $file->getPathName());
@@ -308,7 +302,8 @@ class Frontdoor_IndexController extends Application_Controller_Action
                     $metas[] = array(
                         'citation_pdf_url', "$baseUrlFiles/" . $document->getId() . "/" . $file->getPathName()
                     );
-                } else if ($file->getMimeType() == 'application/postscript') {
+                }
+                else if ($file->getMimeType() == 'application/postscript') {
                     $metas[] = array(
                         'citation_ps_url', "$baseUrlFiles/" . $document->getId() . "/" . $file->getPathName()
                     );
@@ -334,15 +329,15 @@ class Frontdoor_IndexController extends Application_Controller_Action
 
         $licences = $document->getLicence();
 
-        foreach ($licences as $docLicence) {
-            $metas[] = array('DC.rights', $docLicence->getModel()->getLinkLicence());
+        foreach ($licences as $docLicence)
+        {
+            $metas[] = array('DC.rights', $docLicence->getModel()->getLinkLicence() );
         }
 
         return $metas;
     }
 
-    private function incrementStatisticsCounter($docId)
-    {
+    private function incrementStatisticsCounter($docId) {
         try {
             $statistics = Opus_Statistic_LocalCounter::getInstance();
             $statistics->countFrontdoor($docId);
@@ -359,8 +354,7 @@ class Frontdoor_IndexController extends Application_Controller_Action
      *
      * @return void
      */
-    public function mapopus3Action()
-    {
+    public function mapopus3Action() {
         $docId = $this->getRequest()->getParam('oldId');
         $this->_helper->Redirector->redirectToAndExit(
             'id', '', 'index', 'rewrite', array('type' => 'opus3-id', 'value' => $docId)
@@ -386,7 +380,8 @@ class Frontdoor_IndexController extends Application_Controller_Action
 
         $messages = null;
 
-        if ($request->has('searchtype') && $request->has('rows') && $request->has('start')) {
+        if ($request->has('searchtype') && $request->has('rows') && $request->has('start'))
+        {
             $listRows = $request->getParam('rows');
 
             $start = $request->getParam('start');
@@ -411,14 +406,18 @@ class Frontdoor_IndexController extends Application_Controller_Action
 
             $queryResult = $resultList->getResults();
 
-            if (is_array($queryResult) && !empty($queryResult) && $queryResult[0] instanceof Opus_Search_Result_Match) {
+            if (is_array($queryResult) && !empty($queryResult) && $queryResult[0] instanceof Opus_Search_Result_Match)
+            {
                 $resultDocId = $queryResult[0]->getId();
 
-                if ($request->has('docId')) {
-                    if ($resultDocId != $docId) {
+                if ($request->has('docId'))
+                {
+                    if ($resultDocId != $docId)
+                    {
                         $messages = array('notice' => $this->view->translate('frontdoor_pagination_list_changed'));
                     }
-                } else {
+                }
+                else {
                     $this->redirect($this->view->url(array('docId' => $resultDocId)), array('prependBase' => false));
                     return false;
                 }
@@ -429,9 +428,12 @@ class Frontdoor_IndexController extends Application_Controller_Action
             $this->view->paginate = true;
             $numHits = $resultList->getNumberOfHits();
 
-            if ($request->getParam('searchtype') == 'latest') {
+            if ($request->getParam('searchtype') == 'latest')
+            {
                 $this->view->numOfHits = $numHits < $listRows ? $numHits : $listRows;
-            } else {
+            }
+            else
+            {
                 $this->view->numOfHits = $numHits;
             }
 
