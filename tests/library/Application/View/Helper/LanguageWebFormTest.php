@@ -60,13 +60,13 @@ class Application_View_Helper_LanguageWebFormTest extends ControllerTestCase
     }
 
     /**
-     * Unittest for LanguageWebform.
+     * Unittest for languageWebform.
      * @covers ::languageWebform
      * @dataProvider langProvider
      */
     public function testLanguageWebForm($long, $short)
     {
-        $this->assertEquals($this->_helper->LanguageWebform($long), $short);
+        $this->assertEquals($this->_helper->languageWebForm($long), $short);
     }
 
 }
