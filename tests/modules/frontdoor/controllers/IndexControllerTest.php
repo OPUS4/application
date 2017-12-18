@@ -545,8 +545,8 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
 
         $this->dispatch('/frontdoor/index/index/docId/' . $doc->getId());
 
-        $this->assertContains('<li class="abstract preserve-spaces">' . "foo\nbar\n\nbaz</li>",
-            $this->getResponse()->getBody());
+        $this->assertXpathContentContains('//li[contains(@class = "abstract preserve-spaces", @lang="en")]',
+            "foo\nbar\n\nbaz", $this->getResponse()->getBody());
     }
 
     public function testNotePerserveSpace() {
