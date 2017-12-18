@@ -455,7 +455,8 @@
                 <th class="name">
                     <xsl:call-template name="translateFieldname"/>
                 </th>
-                <td class="title">
+                <td>
+                    <xsl:attribute name="class"><xsl:text>title</xsl:text><xsl:value-of select="@Type"/></xsl:attribute>
                     <xsl:attribute name="lang"><xsl:value-of
                             select="php:functionString('Application_Xslt::languageWebForm', @Language)"/></xsl:attribute>
                     <xsl:value-of select="@Value" />
@@ -470,7 +471,8 @@
             <th class="name">
                 <xsl:call-template name="translateFieldname"/>
             </th>
-            <td class="title">
+            <td>
+                <xsl:attribute name="class"><xsl:text>title</xsl:text><xsl:value-of select="@Type"/></xsl:attribute>
                 <xsl:attribute name="lang"><xsl:value-of
                         select="php:functionString('Application_Xslt::languageWebForm', @Language)"/></xsl:attribute>
                 <xsl:value-of select="@Value" />

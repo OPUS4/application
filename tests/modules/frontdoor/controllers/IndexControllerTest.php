@@ -1290,8 +1290,8 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
      */
     public function testMetaCorrectTitleLangAttribute(){
         $this->dispatch('/frontdoor/index/index/docId/146');
-        $this->assertXpath('//td[contains(@class = "title", @lang = "de")]');
-        $this->assertXpath('//td[contains(@class = "title", @lang = "en")]');
+        $this->assertXpath('//td[contains(@class = "titleparent", @lang = "de")]');
+        $this->assertXpath('//td[contains(@class = "titlesub", @lang = "en")]');
     }
 
     /**
@@ -1299,9 +1299,9 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
      */
     public function testMetaCorrectTitleContentLang(){
         $this->dispatch('/frontdoor/index/index/docId/146');
-        $this->assertXpathContentContains('//td[contains(@class = "title", @lang = "en")]',
+        $this->assertXpathContentContains('//td[contains(@class = "titlesub", @lang = "en")]',
             "Service Center");
-        $this->assertXpathContentContains('//td[contains(@class = "title", @lang = "de")]',
+        $this->assertXpathContentContains('//td[contains(@class = "titlesub", @lang = "de")]',
             "Service-Zentrale");
     }
 }
