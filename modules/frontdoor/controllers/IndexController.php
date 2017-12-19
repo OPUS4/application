@@ -108,7 +108,8 @@ class Frontdoor_IndexController extends Application_Controller_Action {
             'languageImageExists',
             'frontdoorStylesheet',
             'shortenText',
-            'exportLinks'
+            'exportLinks',
+            'languageWebForm'
         ));
         $proc->registerPHPFunctions('urlencode');
         $proc->importStyleSheet($xslt);
