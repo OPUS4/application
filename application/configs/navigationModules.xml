@@ -865,6 +865,16 @@
                             </pages>
                         </sysinfo>
 
+                        <checker>
+                            <type>mvc</type>
+                            <label>admin_title_system_status</label>
+                            <description>admin_title_system_status_description</description>
+                            <group>group-chocolate</group>
+                            <module>admin</module>
+                            <controller>systemstatus</controller>
+                            <action>index</action>
+                        </checker>
+
                         <oailink>
                             <type>mvc</type>
                             <label>admin_title_oailink</label>

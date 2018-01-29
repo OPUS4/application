@@ -241,6 +241,15 @@ Dokumentstatus ändern und Dateien (Volltexte) verwalten.</seg>
         <seg>Systeminformationen</seg>
       </tuv>
     </tu>
+
+    <tu tuid="admin_title_system_status">
+      <tuv xml:lang="en">
+        <seg>System Status</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Systemstatus</seg>
+      </tuv>
+    </tu>
     
     <tu tuid="admin_title_system_info">
       <tuv xml:lang="en">
