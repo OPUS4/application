@@ -2236,15 +2236,16 @@ form.persons-confirm legend {
     border: none;
 }
 
-.adminContainer .wrapper table.changes-table tbody tr {
+.adminContainer .wrapper table.changes-table td:first-child, .adminContainer .wrapper table.changes-table th:first-child {
+    border: none;
 }
+
 
 .adminContainer .wrapper table.changes-table tr:hover {
     background-color: transparent;
 }
 
-.adminContainer .wrapper table.changes-table tr td {
-    padding: 0.5em;
+.adminContainer .wrapper table.changes-table tr {
 }
 
 .changes-table tr.modified td {
@@ -2263,18 +2264,44 @@ form.persons-confirm legend {
     background-color: #beedc6;
 }
 
-.adminContainer .wrapper table.changes-table tr td.fieldname {
+.changes-table tr.notmodified td {
+    color: #424242;
+    text-align: center;
+    background-color: #ebebeb;
+}
+
+.changes-table td.not-set {
+    display: none;
+}
+
+.adminContainer .wrapper table.changes-table td.fieldname {
     background-color: transparent;
     font-weight: bold;
     color: darkslategray;
     text-align: right;
     padding-right: 1em;
+    width: 20%
 }
 
 .adminContainer .wrapper table.changes-table tr td.old-value {
+    width: 38%;
+}
+
+.adminContainer .wrapper table.changes-table tr td.new-value {
+    width: 38%;
 }
 
 .adminContainer span.null {
     color: dodgerblue;
+}
+
+.adminContainer .wrapper table.changes-table td.change-arrow {
+    padding: 0;
+    margin: 0;
+    text-align: center;
+    vertical-align: middle;
+    width: 4%;
+    background-color: transparent;
+    border-bottom: none;
 }
 
