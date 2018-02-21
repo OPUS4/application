@@ -1182,13 +1182,24 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $this->assertNotQuery('//a[@href="/frontdoor/index/index/docId/305/export/xml/stylesheet/example"]');
     }
 
-    public function testGoogleScholarLink() {
+    public function testGoogleScholarLink()
+    {
+        $this->useGerman();
         $this->dispatch('/frontdoor/index/index/docId/146');
         $this->assertResponseCode(200);
         $body = $this->getResponse()->getBody();
         $this->assertContains('http://scholar.google.de/scholar?hl=de&amp;q=&quot;KOBV&quot;&amp;as_sauthors=John+Doe' .
             '&amp;as_ylo=2007&amp;as_yhi=2007', $body);
+    }
 
+    public function testGoogleScholarLinkEnglish()
+    {
+        $this->useEnglish();
+        $this->dispatch('/frontdoor/index/index/docId/146');
+        $this->assertResponseCode(200);
+        $body = $this->getResponse()->getBody();
+        $this->assertContains('http://scholar.google.de/scholar?hl=en&amp;q=&quot;KOBV&quot;&amp;as_sauthors=John+Doe' .
+            '&amp;as_ylo=2007&amp;as_yhi=2007', $body);
     }
 
     public function testShowDocumentWithFileWithoutLanguage() {
