@@ -25,19 +25,19 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Tests
+ * @category    Tests
+ * @package     Oai
  * @author      Thoralf Klein <thoralf.klein@zib.de>
  * @author      Sascha Szott <szott@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  *
  * TODO split specific protocol tests into separate classes
  * TODO unit tests transformations directly without "dispatch"
  * TODO create plugins for formats/protocols/standards
  *
- * @coversDefaultClass Oai_IndexController
+ * @covers Oai_IndexController
  */
 class Oai_IndexControllerTest extends ControllerTestCase {
 
