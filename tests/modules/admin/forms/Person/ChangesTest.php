@@ -72,7 +72,7 @@ class Admin_Form_Person_ChangesTest extends ControllerTestCase
 
         $this->assertArrayHasKey('action', $lastName);
         $this->assertInternalType('string', $lastName['action']);
-        $this->assertEquals('', $lastName['action']);
+        $this->assertEquals('notmodified', $lastName['action']);
     }
 
     public function testGetPreparedChangesModified()
