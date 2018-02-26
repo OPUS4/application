@@ -40,6 +40,7 @@
  *
  * @group RequireTest
  *
+ * @coversNothing
  */
 class RequireTest extends PHPUnit_Framework_TestCase {
 

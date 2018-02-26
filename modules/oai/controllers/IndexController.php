@@ -153,6 +153,7 @@ class Oai_IndexController extends Application_Controller_Xml {
         $this->loadStyleSheet($this->view->getScriptPath('index') . '/oai-pmh.xslt');
 
         $this->_proc->registerPHPFunctions('Oai_Model_Language::getLanguageCode');
+        Application_Xslt::registerViewHelper($this->_proc, array('optionValue'));
         $this->_proc->setParameter('', 'urnResolverUrl', $this->getConfig()->urn->resolverUrl);
 
         // Set response time

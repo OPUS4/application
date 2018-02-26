@@ -33,6 +33,8 @@
 
 /**
  * Basic unit tests for the Admin_AccountController class.
+ *
+ * @covers Admin_AccountController
  */
 class Admin_AccountControllerTest extends ControllerTestCase {
 

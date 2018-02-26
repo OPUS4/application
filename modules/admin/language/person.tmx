@@ -216,6 +216,49 @@ letzten Änderung wird aktualisiert.
       </tuv>
     </tu>
 
-  </body>
+    <tu tuid="admin_person_edit_change_tooltip_added">
+      <tuv xml:lang="en">
+        <seg>The new value will be added.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Der neue Wert wird hinzugefügt werden.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_person_edit_change_tooltip_merged">
+      <tuv xml:lang="en">
+        <seg>Multiple old values will be replaced by the new one.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Mehrere alte Werte werden durch den neuen ersetzt.</seg>
+      </tuv>
+    </tu>
+    <tu tuid="admin_person_edit_change_tooltip_removed">
+      <tuv xml:lang="en">
+        <seg>The old value will be deleted.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Das Feld wird gelöscht werden.</seg>
+      </tuv>
+    </tu>
+    <tu tuid="admin_person_edit_change_tooltip_modified">
+      <tuv xml:lang="en">
+        <seg>The old value will be replaced by the new one.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Der neue Wert wird den alten ersetzen.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_person_edit_change_tooltip_notmodified">
+      <tuv xml:lang="en">
+        <seg>This field will not be modified.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dieses Feld wird nicht verändert.</seg>
+      </tuv>
+    </tu>
+
+</body>
   
 </tmx>

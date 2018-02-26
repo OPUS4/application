@@ -24,37 +24,40 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @package     Module_Setup
- * @author      Edouard Simon (edouard.simon@zib.de)
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @category    Application
+ * @package     View_Helper
+ * @author      Maximilian Salomon <salomon@zib.de>
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
- * @covers Setup_LanguageController
+ * View helper for tranform long language form in short language form (Part2 in Part1).
  */
-class Setup_LanguageControllerTest extends ControllerTestCase {
+class Application_View_Helper_LanguageWebForm extends Zend_View_Helper_Abstract
+{
+    /**
+     * Array with transformed language-attributes. So they don't have been computed twice.
+     *
+     * @var array
+     */
+    private $_langCache = array();
 
     /**
-     * Regression Test for OPUSVIER-2971
+     * An language-object will be transformed form Part2-form in the Part1-form
+     * this is necessary for the browser, to identify the language of an abstract or an title.
+     * Input is an 3-char form of an language (e.g. deu, eng, fra, ita, ...)
+     * Output is an 2-char form of an language (e.g. de, en, ...)
+     *
+     * @param $value String
+     * @return short language form
      */
-    public function testMissingConfigMessageIsDisplayedRed() {
-        $config = Zend_Registry::get('Zend_Config');
-        $config->merge(new Zend_Config(array('setup' => array('translation' => array('modules' => array('allowed' => null))))));
-
-        $this->getRequest()->setPost(array('Anzeigen' => 'Anzeigen', 'search' => 'test', 'sort' => 'unit'));
-        $this->dispatch('/setup/language/show');
-        
-        $this->assertAction('show');
-        $this->assertController('language');
-        $this->assertModule('setup');
-        
-        $this->assertResponseCode(302);
-        
-        $this->assertRedirectTo('/setup/language/error');
-
-        $this->verifyFlashMessage('setup_language_translation_modules_missing');
+    public function languageWebForm($value)
+    {
+        if (!array_key_exists($value, $this->_langCache)) {
+            $lang = Opus_Language::getPropertiesByPart2T($value);
+            $this->_langCache[$value] = $lang['part1'];
+        }
+        return $this->_langCache[$value];
     }
-
 }
