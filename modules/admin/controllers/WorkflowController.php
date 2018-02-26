@@ -28,15 +28,18 @@
  * @package     Module_Admin
  * @author      Jens Schwidder <schwidder@zib.de>
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
+ *
+ * TODO fix processing of notification selection
+ * TODO verify previous checkbox results
  */
 
 /**
  * Controller handles transitions of documents between states.
  */
-class Admin_WorkflowController extends Application_Controller_Action {
+class Admin_WorkflowController extends Application_Controller_Action
+{
 
     /**
      * Helper for verifying document IDs.
@@ -213,7 +216,7 @@ class Admin_WorkflowController extends Application_Controller_Action {
      * @return Admin_Form_YesNoForm
      */
     private function _getConfirmationForm($document, $targetState) {
-        $form = new Admin_Form_YesNoForm();
+        $form = new Admin_Form_WorkflowNotification();
         $form->setAction(
             $this->view->url(
                 array('controller' => 'workflow', 'action' => 'changestate', 'targetState' => $targetState)
@@ -221,87 +224,16 @@ class Admin_WorkflowController extends Application_Controller_Action {
         );
         $form->setMethod('post');
 
-        $idElement = new Zend_Form_Element_Hidden('id');
-        $idElement->setValue($document->getId());
-        $form->addElement($idElement);
+        $form->getElement(Admin_Form_WorkflowNotification::ELEMENT_ID)->setValue($document->getId());
 
-        $config = Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
+
         if ($targetState == 'published' && isset($config->notification->document->published->enabled)
             && $config->notification->document->published->enabled == 1) {
-            $this->_addPublishNotificationSelection($document, $form);
+            $form->addPublishNotificationSelection($document);
         }
+
         return $form;
-    }
-
-    /**
-     * add a checkbox for each PersonSubmitter and PersonAuthor (used to select
-     * recipients for publish notification email)
-     *
-     * @param Opus_Document $document
-     * @param Zend_Form $form
-     *
-     */
-    private function _addPublishNotificationSelection($document, $form) {
-        $form->addElement(
-            'hidden', 'plaintext',
-            array(
-                'description' => '<br/><p><strong>' . $this->view->translate('admin_workflow_notification_headline')
-                    . '</strong></p>'
-                    . '<p>' . $this->view->translate('admin_workflow_notification_description') . '</p>',
-                'ignore' => true,
-                'decorators' => array(array('Description', array('escape' => false, 'tag' => '')))
-            )
-        );
-
-        $submitters = $document->getPersonSubmitter();
-        if (!is_null($submitters) && count($submitters) > 0) {
-            $label = $this->view->translate('admin_workflow_notification_submitter') . ' '
-                . trim($submitters[0]->getLastName()) . ", " . trim($submitters[0]->getFirstName());
-            $element = null;
-            if (trim($submitters[0]->getEmail()) == '') {
-                // email notification is not possible since no email address is specified for submitter
-                $label .= ' (' . $this->view->translate('admin_workflow_notification_noemail') . ')';
-                $element = new Zend_Form_Element_Checkbox(
-                    'submitter', array('checked' => false, 'disabled' => true,
-                    'label' => $label)
-                );
-                $element->getDecorator('Label')->setOption('class', 'notification-option option-not-available');
-            }
-            else {
-                $label .= ' (' . trim($submitters[0]->getEmail()) . ')';
-                $element = new Zend_Form_Element_Checkbox('submitter', array('checked' => true, 'label' => $label));
-                $element->getDecorator('Label')->setOption('class', 'notification-option');
-            }
-            $form->addElement($element);
-        }
-
-        $authors = $document->getPersonAuthor();
-        if (!is_null($authors)) {
-            $index = 1;
-            foreach ($authors as $author) {
-                $id = 'author_' . $index;
-                $label = $index . '. ' . $this->view->translate('admin_workflow_notification_author') . ' '
-                    . trim($author->getLastName()) . ", " . trim($author->getFirstName());
-                $element = null;
-                if (trim($author->getEmail()) == '') {
-                    // email notification is not possible since no email address is specified for author
-                    $label .= ' (' . $this->view->translate('admin_workflow_notification_noemail') . ')';
-                    $element = new Zend_Form_Element_Checkbox(
-                        $id, array('checked' => false, 'disabled' => true, 'label' => $label)
-                    );
-                    $element->getDecorator('Label')->setOption('class', 'notification-option option-not-available');
-                }
-                else {
-                    $label .= ' (' . trim($author->getEmail()) . ')';
-                    $element = new Zend_Form_Element_Checkbox(
-                        $id, array('checked' => true, 'label' => 'foo', 'label' => $label)
-                    );
-                    $element->getDecorator('Label')->setOption('class', 'notification-option');
-                }
-                $form->addElement($element);
-                $index++;
-            }
-        }
     }
 
 }

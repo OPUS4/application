@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,28 +24,22 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
- * @copyright   Copyright (c) 2009, OPUS 4 development team
+ * @category    Tests
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Admin_Form_YesNoForm extends Zend_Form
-{
 
-    /**
-     * Build easy form for yes/no questions.
-     *
-     * @return void
-     */
-    public function init() {
-        $sureyes = new Zend_Form_Element_Submit('sureyes');
-        $sureyes->setLabel('answer_yes');
+class Admin_Form_NotificationTest extends ControllerTestCase {
 
-        $sureno = new Zend_Form_Element_Submit('sureno');
-        $sureno->setLabel('answer_no');
+    public function testGetRows() {
+        $form = new Admin_Form_Notification();
 
-        $this->addElements(array($sureyes, $sureno));
+        $form->addPublishNotificationSelection(new Opus_Document(146));
+
+        $rows = $form->getRows();
+
+        $this->assertCount(2, $rows);
     }
 
 }

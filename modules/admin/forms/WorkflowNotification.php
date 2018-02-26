@@ -26,26 +26,35 @@
  *
  * @category    Application
  * @package     Module_Admin
- * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
- * @copyright   Copyright (c) 2009, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Admin_Form_YesNoForm extends Zend_Form
+class Admin_Form_WorkflowNotification extends Admin_Form_YesNoForm
 {
 
+    const ELEMENT_ID = 'id';
+
+    public function init()
+    {
+        parent::init();
+
+        $this->addElement('hidden', self::ELEMENT_ID);
+    }
+
     /**
-     * Build easy form for yes/no questions.
+     * add a checkbox for each PersonSubmitter and PersonAuthor (used to select
+     * recipients for publish notification email)
      *
-     * @return void
+     * @param Opus_Document $document
+     * @param Zend_Form $form
+     *
      */
-    public function init() {
-        $sureyes = new Zend_Form_Element_Submit('sureyes');
-        $sureyes->setLabel('answer_yes');
+    public function addPublishNotificationSelection($document) {
+        $subform = new Admin_Form_Notification();
+        $subform->addPublishNotificationSelection($document);
 
-        $sureno = new Zend_Form_Element_Submit('sureno');
-        $sureno->setLabel('answer_no');
-
-        $this->addElements(array($sureyes, $sureno));
+        $this->addSubForm($subform, 'notification');
     }
 
 }
