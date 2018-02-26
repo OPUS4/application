@@ -97,7 +97,7 @@ class Admin_Form_Person_Changes extends Application_Form_Abstract
 
             $preparedChanges[$field]['old'] = $this->forceArray($values);
 
-            $action = '';
+            $action = 'notmodified';
 
             if (array_key_exists($field, $changes))
             {

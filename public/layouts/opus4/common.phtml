@@ -60,9 +60,11 @@ if (isset($this->title)) {
 }
 
 $this->headLink()
+    ->appendStylesheet('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
     ->appendStylesheet($this->baseUrl() . '/' . $config->css->jqueryui->path, 'screen')
     ->appendStylesheet($this->layoutPath() . '/css/opus.css', 'screen,print')
     ->appendStylesheet($this->layoutPath() . '/css/admin.css', 'screen,print')
+    ->appendStylesheet($this->layoutPath() . '/css/print.css', 'print')
     ->appendStylesheet($this->layoutPath() . '/css/custom.css')
     ->headLink(array(
         'rel' => 'shortcut icon',

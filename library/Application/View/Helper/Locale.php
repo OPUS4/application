@@ -25,41 +25,24 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Application_View_Partial
+ * @package     Application_View_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-?>
 
-<div class="changes-table-wrapper">
-<table class="changes-table">
-    <thead>
-        <tr>
-            <th><?= $this->translate('admin_change_fieldname') ?></th>
-            <th><?= $this->translate('admin_change_old_value') ?></th>
-            <th></th>
-            <th><?= $this->translate('admin_change_new_value') ?></th>
-        </tr>
-    </thead>
-    <tbody>
-    <?PHP foreach ($this->element->getPreparedChanges() as $name => $values) : ?>
-        <tr class="<?= $values['action'] ?>" title="<?= $this->translate("admin_person_edit_change_tooltip_{$values['action']}") ?>">
-            <td class="fieldname"><?= $this->translate($name) ?></td>
-            <?PHP if ($values['action'] != 'notmodified') : ?>
-                <td class="old-value"><?= $this->htmlList($this->escapeValue($values['old'], true), false, false, false) ?></td>
-                <td class="change-arrow"><div class="fa fa-chevron-right"></div></td>
-                <td class="new-value"><?= $this->htmlList($this->escapeValue($values['new'], true), false, false, false) ?></td>
-            <?PHP else : ?>
-                <?PHP if (!empty($values['old']) or (!is_array($values['old']) && strlen($values['old'] == 0))) : ?>
-                    <td class="old-value" colspan="3"><?= $this->htmlList($this->escapeValue($values['old'], true), false, false, false) ?></td>
-                <?PHP else : ?>
-                    <td class="not-set" colspan="3"></td>
-                <?PHP endif ?>
-            <?PHP endif ?>
-        </tr>
+/**
+ * View helper for returning current locale.
+ */
+class Application_View_Helper_Locale extends Application_View_Helper_Abstract
+{
 
-    <?PHP endforeach ?>
-    </tbody>
-</table>
-</div>
+    /**
+     * Returns string for current locale.
+     */
+    public function locale()
+    {
+        return Zend_Registry::get('Zend_Translate')->getLocale();
+    }
+
+}
