@@ -34,7 +34,18 @@
 /**
  * Unit Test fuer Unterformular fuer ein Enrichment im Metadaten-Formular.
  */
-class Admin_Form_Document_EnrichmentTest extends ControllerTestCase {
+class Admin_Form_Document_EnrichmentTest extends ControllerTestCase
+{
+
+    private $_keyName;
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        $allKeys = Opus_EnrichmentKey::getAll();
+        $this->_keyName = $allKeys[0]->getName();
+    }
     
     public function testCreateForm() {
         $form = new Admin_Form_Document_Enrichment();
@@ -63,11 +74,11 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase {
     
     public function testUpdateModel() {
         $form = new Admin_Form_Document_Enrichment();
-        
+
+        $keyName = $this->_keyName;
+
         $enrichment = new Opus_Enrichment();
-        $keyNames = $enrichment->getField('KeyName')->getDefault();
-        $keyName = $keyNames[1]->getName(); // Geht davon aus, dass mindestens 2 Enrichment Keys existieren
-        
+
         $form->getElement('KeyName')->setValue($keyName);
         $form->getElement('Value')->setValue('Test Enrichment Value');
         
@@ -83,9 +94,8 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase {
         $document = new Opus_Document(146);
         $enrichments = $document->getEnrichment();
         $enrichment = $enrichments[0];
-        
-        $keyNames = $enrichment->getField('KeyName')->getDefault();
-        $keyName = $keyNames[1]->getName(); // Geht davon aus, dass mindestens 2 Enrichment Keys existieren
+
+        $keyName = $this->_keyName;
         
         $form->getElement('Id')->setValue($enrichment->getId());
         $form->getElement('KeyName')->setValue($keyName);
@@ -101,9 +111,7 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase {
     public function testGetNewModel() {
         $form = new Admin_Form_Document_Enrichment();
 
-        $enrichment = new Opus_Enrichment();
-        $keyNames = $enrichment->getField('KeyName')->getDefault();
-        $keyName = $keyNames[1]->getName(); // Geht davon aus, dass mindestens 2 Enrichment Keys existieren
+        $keyName = $this->_keyName;
         
         $form->getElement('KeyName')->setValue($keyName);
         $form->getElement('Value')->setValue('Test Enrichment Value');
@@ -118,9 +126,7 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase {
     public function testGetModelUnknownId() {
         $form = new Admin_Form_Document_Enrichment();
 
-        $enrichment = new Opus_Enrichment();
-        $keyNames = $enrichment->getField('KeyName')->getDefault();
-        $keyName = $keyNames[1]->getName(); // Geht davon aus, dass mindestens 2 Enrichment Keys existieren
+        $keyName = $this->_keyName;
 
         $logger = new MockLogger();
 
@@ -144,9 +150,7 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase {
     public function testGetModelBadId() {
         $form = new Admin_Form_Document_Enrichment();
 
-        $enrichment = new Opus_Enrichment();
-        $keyNames = $enrichment->getField('KeyName')->getDefault();
-        $keyName = $keyNames[1]->getName(); // Geht davon aus, dass mindestens 2 Enrichment Keys existieren
+        $keyName = $this->_keyName;
 
         $form->getElement('Id')->setValue('bad');
         $form->getElement('KeyName')->setValue($keyName);
