@@ -137,8 +137,10 @@
                     <xsl:element name="field">
                         <xsl:attribute name="name">author</xsl:attribute>
                         <xsl:value-of select="@LastName" />
-                        <xsl:text>, </xsl:text>
-                        <xsl:value-of select="@FirstName" />
+                        <xsl:if test="@FirstName">
+                            <xsl:text>, </xsl:text>
+                            <xsl:value-of select="@FirstName" />
+                        </xsl:if>
                     </xsl:element>
                 </xsl:for-each>
 
