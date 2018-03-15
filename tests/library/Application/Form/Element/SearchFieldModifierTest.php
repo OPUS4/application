@@ -41,17 +41,17 @@ class Application_Form_Element_SearchFieldModifierTest extends ControllerTestCas
 
         $this->assertCount(3, $options);
 
-        $this->assertNotNull($element->getMultiOption(Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL));
-        $this->assertNotNull($element->getMultiOption(Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ANY));
-        $this->assertNotNull($element->getMultiOption(Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_NONE));
+        $this->assertNotNull($element->getMultiOption(Opus_Search_Util_Query::SEARCH_MODIFIER_CONTAINS_ALL));
+        $this->assertNotNull($element->getMultiOption(Opus_Search_Util_Query::SEARCH_MODIFIER_CONTAINS_ANY));
+        $this->assertNotNull($element->getMultiOption(Opus_Search_Util_Query::SEARCH_MODIFIER_CONTAINS_NONE));
     }
 
     public function testValidationTrue() {
         $element = new Application_Form_Element_SearchFieldModifier('modifier');
 
-        $this->assertTrue($element->isValid(Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL));
-        $this->assertTrue($element->isValid(Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ANY));
-        $this->assertTrue($element->isValid(Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_NONE));
+        $this->assertTrue($element->isValid(Opus_Search_Util_Query::SEARCH_MODIFIER_CONTAINS_ALL));
+        $this->assertTrue($element->isValid(Opus_Search_Util_Query::SEARCH_MODIFIER_CONTAINS_ANY));
+        $this->assertTrue($element->isValid(Opus_Search_Util_Query::SEARCH_MODIFIER_CONTAINS_NONE));
     }
 
     public function testValidationFalse() {

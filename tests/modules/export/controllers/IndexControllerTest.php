@@ -259,9 +259,9 @@ class Export_IndexControllerTest extends ControllerTestCase
         $doc2->store();
         $docId2 = $doc2->getId();
 
-        $indexer = new Opus_SolrSearch_Index_Indexer();
+        $indexer = new Opus_Search_Util_Indexer();
 
-        $class = new ReflectionClass('Opus_SolrSearch_Index_Indexer');
+        $class = new ReflectionClass('Opus_Search_Util_Indexer');
         $methodGetSolrXmlDocument = $class->getMethod('getSolrXmlDocument');
         $methodGetSolrXmlDocument->setAccessible(true);
         $solrXml = $methodGetSolrXmlDocument->invoke($indexer, $doc2);

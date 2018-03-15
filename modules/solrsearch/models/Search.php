@@ -66,7 +66,7 @@ class Solrsearch_Model_Search extends Application_Model_Abstract {
             if ($fieldvalue !== '') {
                 $params[$fieldname] = $fieldvalue;
                 $params[$fieldname . 'modifier'] = $request->getParam(
-                    $fieldname . 'modifier', Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL
+                    $fieldname . 'modifier', Opus_Search_Util_Query::SEARCH_MODIFIER_CONTAINS_ALL
                 );
             }
         }
@@ -76,7 +76,7 @@ class Solrsearch_Model_Search extends Application_Model_Abstract {
     public function createBasicSearchParams($request) {
         return array(
             'start' => $request->getParam('start', '0'),
-            'rows' => $request->getParam('rows', Opus_SolrSearch_Query::getDefaultRows()),
+            'rows' => $request->getParam('rows', Opus_Search_Util_Query::getDefaultRows()),
             'sortfield' => $request->getParam('sortfield', 'score'),
             'sortorder' => $request->getParam('sortorder', 'desc')
         );
