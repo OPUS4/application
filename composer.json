@@ -31,15 +31,5 @@
   "prefer-stable": true,
   "config": {
     "component-dir": "public/assets"
-  },
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "./framework"
-    },
-    {
-      "type": "vcs",
-      "url": "./opus4-doi"
-    }
-  ]
+  }
 }
