@@ -1,5 +1,7 @@
-<?php
-/*
+#!/usr/bin/env php
+
+<?PHP
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -25,52 +27,43 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Form_Element
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @package     Scripts
+ * @author      Sascha Szott <szott@zib.de>
+ * @copyright   Copyright (c) 2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
- * Formularelement für die Auswahl eines EnrichmentKeys.
+ * Set registration status of all existing DOIs to "registered".
+ * Only documents with server state "published" are considered.
+ *
  */
-class Application_Form_Element_EnrichmentKey extends Application_Form_Element_Select {
 
-    public function init() {
-        parent::init();
+require_once dirname(__FILE__) . '/../common/update.php';
 
-        $options = Opus_EnrichmentKey::getAll();
+$helper = new Application_Update_Helper();
+$helper->log('Set registration status of all DOIs to "registered"');
 
-        $values = array();
+$docFinder = new Opus_DocumentFinder();
+$docFinder->setIdentifierTypeExists('doi');
+$docFinder->setServerState('published');
+$ids = $docFinder->ids();
 
-        $translator = $this->getTranslator();
+$helper->log('number of published documents with identifier of type DOI: ' . count($ids));
 
-        $this->setDisableTranslator(true); // keys are translated below if possible
+$numOfModifiedDocs = 0;
 
-        foreach ($options as $index => $option) {
-            $keyName = $option->getName();
-
-            // die folgenden beiden Enrichments sollen indirekt über Checkboxen im Abschnitt DOI / URN verwaltet werden
-            if ($keyName == 'opus.doi.autoCreate' || $keyName == 'opus.urn.autoCreate') {
-                continue;
-            }
-
-            $values[] = $keyName;
-
-            $translationKey = 'Enrichment' . $keyName;
-
-            if (!is_null($translator) && ($translator->isTranslated($translationKey))) {
-                $this->addMultiOption($keyName, $translator->translate($translationKey));
-            }
-            else {
-                $this->addMultiOption($keyName, $keyName);
-            }
-        }
-
-        $validator = new Zend_Validate_InArray($values);
-        $validator->setMessage('validation_error_unknown_enrichmentkey');
-        $this->addValidator($validator);
+foreach ($ids as $id) {
+    $doc = new Opus_Document($id);
+    $dois = $doc->getIdentifierDoi();
+    foreach ($dois as $doi) {
+        $doi->setStatus('registered');
     }
-
+    if (count($dois) > 1) {
+        $helper->log('document ' . $id . ' has more than one DOI but only one DOI is expected: consider a cleanup');
+    }
+    $doc->store();
+    $numOfModifiedDocs++;
 }
+
+$helper->log($numOfModifiedDocs . ' published documents were modified successfully');

@@ -25,52 +25,50 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Form_Element
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @author      Sascha Szott <szott@zib.de>
+ * @copyright   Copyright (c) 2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
-/**
- * Formularelement für die Auswahl eines EnrichmentKeys.
- */
-class Application_Form_Element_EnrichmentKey extends Application_Form_Element_Select {
+class Application_Form_Validate_DOI extends Zend_Validate_Abstract {
 
-    public function init() {
-        parent::init();
+    const NOT_UNIQUE = 'notUnique';
 
-        $options = Opus_EnrichmentKey::getAll();
+    const NOT_VALID = 'notValid';
 
-        $values = array();
+    /**
+     * Translation keys for validation messages.
+     * @var array
+     */
+    protected $_messageTemplates = array(
+        self::NOT_UNIQUE => 'admin_validation_error_localdoi_not_unique',
+        self::NOT_VALID => 'admin_validation_error_localdoi_invalid',
+    );
 
-        $translator = $this->getTranslator();
+    public function isValid($value, $context = null) {
+        $currentDocId = $context[Admin_Form_Document_IdentifierSpecific::ELEMENT_DOC_ID];
 
-        $this->setDisableTranslator(true); // keys are translated below if possible
+        $doi = new Opus_Identifier();
+        $doi->setType('doi');
+        $doi->setValue($value);
 
-        foreach ($options as $index => $option) {
-            $keyName = $option->getName();
-
-            // die folgenden beiden Enrichments sollen indirekt über Checkboxen im Abschnitt DOI / URN verwaltet werden
-            if ($keyName == 'opus.doi.autoCreate' || $keyName == 'opus.urn.autoCreate') {
-                continue;
-            }
-
-            $values[] = $keyName;
-
-            $translationKey = 'Enrichment' . $keyName;
-
-            if (!is_null($translator) && ($translator->isTranslated($translationKey))) {
-                $this->addMultiOption($keyName, $translator->translate($translationKey));
-            }
-            else {
-                $this->addMultiOption($keyName, $keyName);
-            }
+        if (!$doi->isLocalDoi()) {
+            return true; // keine Prüfung für nicht lokale-DOIs: nicht-lokale DOIs können ohne Prüfung gespeichert werden
         }
 
-        $validator = new Zend_Validate_InArray($values);
-        $validator->setMessage('validation_error_unknown_enrichmentkey');
-        $this->addValidator($validator);
+        if (!$doi->isDoiUnique($currentDocId)) {
+            $this->_error(self::NOT_UNIQUE);
+            return false; // Formular kann nicht gespeichert werden, weil eine lokale DOI eingegeben wurde, die bereits existiert
+        }
+
+        if (!$doi->isValidDoi()) {
+            $this->_error(self::NOT_VALID);
+            return false; // lokale DOI enthält unerlaubte Zeichen
+        }
+
+        return true; // DOI kann gespeichert werden
+
     }
 
 }

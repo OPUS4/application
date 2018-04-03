@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -25,52 +25,41 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Form_Element
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @package     Module_Admin
+ * @author      Sascha Szott <szott@zib.de>
+ * @copyright   Copyright (c) 2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
-/**
- * Formularelement für die Auswahl eines EnrichmentKeys.
- */
-class Application_Form_Element_EnrichmentKey extends Application_Form_Element_Select {
+class Admin_Form_Document_MultiEnrichmentSubForm extends Admin_Form_Document_MultiSubForm {
 
-    public function init() {
-        parent::init();
+    public function getFieldValues($document) {
+        $value = parent::getFieldValues($document);
+        if (!is_null($value)) {
+            $value = $this->filterEnrichments($value);
+        }
+        return $value;
+    }
 
-        $options = Opus_EnrichmentKey::getAll();
-
-        $values = array();
-
-        $translator = $this->getTranslator();
-
-        $this->setDisableTranslator(true); // keys are translated below if possible
-
-        foreach ($options as $index => $option) {
-            $keyName = $option->getName();
-
-            // die folgenden beiden Enrichments sollen indirekt über Checkboxen im Abschnitt DOI / URN verwaltet werden
+    /**
+     * Besondere Behandlung der beiden AutoCreate-Enrichments für DOIs und URNs
+     * diese Enrichments sollen indirekt über Checkboxen im Abschnitt DOI / URN verwaltet werden und nicht bei den
+     * herkömmlichen Enrichments angezeigt werden (somit werden auch konfligierende Eintragungen zwischen Enrichment-
+     * Wert und Checkbox-Zustand vermieden)
+     *
+     * @param $enrichments
+     * @return array
+     */
+    private function filterEnrichments($enrichments) {
+        $result = array();
+        foreach ($enrichments as $enrichment) {
+            $keyName = $enrichment->getKeyName();
             if ($keyName == 'opus.doi.autoCreate' || $keyName == 'opus.urn.autoCreate') {
                 continue;
             }
-
-            $values[] = $keyName;
-
-            $translationKey = 'Enrichment' . $keyName;
-
-            if (!is_null($translator) && ($translator->isTranslated($translationKey))) {
-                $this->addMultiOption($keyName, $translator->translate($translationKey));
-            }
-            else {
-                $this->addMultiOption($keyName, $keyName);
-            }
+            $result[] = $enrichment;
         }
-
-        $validator = new Zend_Validate_InArray($values);
-        $validator->setMessage('validation_error_unknown_enrichmentkey');
-        $this->addValidator($validator);
+        return $result;
     }
-
 }
+

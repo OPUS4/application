@@ -638,6 +638,7 @@ ul.links input:hover {
 .adminContainer .Add-data input:hover,
 .adminContainer .Import-data input:hover,
 .adminContainer .Remove-data input:hover,
+.adminContainer .Generate-data input:hover,
 .adminContainer .Sort-data input:hover {
     text-decoration: underline;
     cursor: pointer;
@@ -806,7 +807,8 @@ ul.links input:hover {
     width: 85%;
 }
 
-.adminContainer .multiple-wrapper .data-wrapper.Remove-data {
+.adminContainer .multiple-wrapper .data-wrapper.Remove-data,
+.adminContainer .multiple-wrapper .data-wrapper.Generate-data {
     max-width: 15%;
     width: auto;
     position: absolute;
@@ -1016,6 +1018,21 @@ ul.links input:hover {
     border: 1px solid;
 }
 
+.adminContainer .Generate-data input {
+    padding: 3px 5px 3px 5px;
+    border-radius: 4px;
+    border-color: #dcd7cf;
+    background-color: white;
+    color: #3E3E3C;
+    border: 1px solid;
+}
+
+.adminContainer .Generate-data input:disabled {
+    background-color: darkgrey;
+    text-decoration: none;
+    cursor: not-allowed;
+}
+
 .adminContainer .Add-data input {
     background-position: -14px -16px;
 }
@@ -1072,7 +1089,8 @@ ul.links input:hover {
 /* @end */
 
 /* @group Metadata table style */
-.adminContainer .wrapper td.Remove-data {
+.adminContainer .wrapper td.Remove-data,
+.adminContainer .wrapper td.Generate-data {
     text-align: right;
     min-width: 15%;
 }
@@ -2278,3 +2296,36 @@ form.persons-confirm legend {
     color: dodgerblue;
 }
 
+.adminContainer .identifierStatus .unregistered {
+    color: darkgrey;
+}
+
+.adminContainer td.registrationState span.registered,
+.adminContainer .identifierStatus .registered {
+    color: darkorange;
+}
+
+.adminContainer td.registrationState span.verified,
+.adminContainer .identifierStatus .verified {
+    color: limegreen;
+    font-weight: bold;
+}
+
+.adminContainer .identifierStatus {
+    padding: 8px;
+    font-size: 0.857em;
+}
+
+.adminContainer .identifierStatus .warning {
+    color: red;
+    font-weight: bold;
+}
+
+.adminContainer .formElementInline {
+    margin-top: 2em;
+    margin-bottom: 2em;
+}
+
+.adminContainer .formElementInline form {
+    display: inline;
+}

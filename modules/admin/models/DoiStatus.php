@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -25,52 +25,47 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Form_Element
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @package     Module_Admin
+ * @author      Sascha Szott <szott@zib.de>
+ * @copyright   Copyright (c) 2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+class Admin_Model_DoiStatus {
 
-/**
- * Formularelement für die Auswahl eines EnrichmentKeys.
- */
-class Application_Form_Element_EnrichmentKey extends Application_Form_Element_Select {
+    private $docId;
 
-    public function init() {
-        parent::init();
+    private $doi;
 
-        $options = Opus_EnrichmentKey::getAll();
+    private $published;
 
-        $values = array();
+    private $doiStatus;
 
-        $translator = $this->getTranslator();
+    /**
+     * Admin_Model_DoiStatus constructor.
+     *
+     * @param Opus_Document $doc
+     */
+    public function __construct($doc, $doi) {
+        $this->docId = $doc->getId();
+        $this->published = ($doc->getServerState() == 'published');
+        $this->doi = $doi->getValue();
+        $this->doiStatus = $doi->getStatus();
+    }
 
-        $this->setDisableTranslator(true); // keys are translated below if possible
+    public function getDocId() {
+        return $this->docId;
+    }
 
-        foreach ($options as $index => $option) {
-            $keyName = $option->getName();
+    public function getDoi() {
+        return $this->doi;
+    }
 
-            // die folgenden beiden Enrichments sollen indirekt über Checkboxen im Abschnitt DOI / URN verwaltet werden
-            if ($keyName == 'opus.doi.autoCreate' || $keyName == 'opus.urn.autoCreate') {
-                continue;
-            }
+    public function isPublished() {
+        return $this->published;
+    }
 
-            $values[] = $keyName;
-
-            $translationKey = 'Enrichment' . $keyName;
-
-            if (!is_null($translator) && ($translator->isTranslated($translationKey))) {
-                $this->addMultiOption($keyName, $translator->translate($translationKey));
-            }
-            else {
-                $this->addMultiOption($keyName, $keyName);
-            }
-        }
-
-        $validator = new Zend_Validate_InArray($values);
-        $validator->setMessage('validation_error_unknown_enrichmentkey');
-        $this->addValidator($validator);
+    public function getDoiStatus() {
+        return $this->doiStatus;
     }
 
 }

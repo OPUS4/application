@@ -137,7 +137,7 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
         );
 
         $this->addSubForm(
-            new Admin_Form_Document_MultiSubForm(
+            new Admin_Form_Document_MultiEnrichmentSubForm(
                 'Admin_Form_Document_Enrichment', 'Enrichment', null,
                 array('columns' => array(
                     array('label' => 'KeyName'),
@@ -165,18 +165,7 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
         $this->addSubForm($subform, 'Content');
 
         // Weiteres Allgemeines
-        $this->addSubForm(
-            new Admin_Form_Document_MultiSubForm(
-                'Admin_Form_Document_Identifier', 'Identifier',
-                new Application_Form_Validate_MultiSubForm_RepeatedValues(
-                    'Value',
-                    'admin_document_error_repeated_identifier', 'Type'
-                ),
-                array('columns' => array(
-                array('label' => 'Opus_Identifier_Type'), array('label' => 'Text')
-                ))
-            ), 'Identifiers'
-        );
+        $this->addSubForm(new Admin_Form_Document_Identifiers(), 'IdentifiersAll');
         $this->addSubForm(new Admin_Form_Document_Licences(), 'Licences');
         $this->addSubForm(new Admin_Form_Document_MultiSubForm('Admin_Form_Document_Patent', 'Patent'), 'Patents');
         $this->addSubForm(new Admin_Form_Document_MultiSubForm('Admin_Form_Document_Note', 'Note'), 'Notes');
