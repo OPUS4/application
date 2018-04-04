@@ -145,22 +145,6 @@ abstract class Application_Form_Abstract extends Zend_Form_SubForm
     }
 
     /**
-     * TODO Verwendung entfernen und dann löschen
-     * @deprecated wir sollten einheitlich get/setLogger verwenden
-     */
-    public function getLog() {
-        return $this->getLogger();
-    }
-
-    /**
-     * TODO Verwendung entfernen und dann löschen
-     * @deprecated wir sollten einheitlich get/setLogger verwenden
-     */
-    public function setLog($logger) {
-        $this->setLogger($logger);
-    }
-
-    /**
      * Meldet, ob Element-Namen als Label verwendet werden.
      * @return bool TRUE - Element Namen werden als Label verwendet; FALSE - keine automatischen Label
      */

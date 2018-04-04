@@ -132,7 +132,7 @@ class Admin_Form_PersonTest extends ControllerTestCase {
         
         $logger = new MockLogger();
         
-        $form->setLog($logger);
+        $form->setLogger($logger);
         
         $form->updateModel($this->createTestDocument());
         
