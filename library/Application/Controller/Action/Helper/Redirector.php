@@ -27,12 +27,14 @@
  * @category    Application
  * @package     Solrsearch_Model_Search
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2017-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 class Application_Controller_Action_Helper_Redirector extends Zend_Controller_Action_Helper_Redirector
 {
+
+    use \Opus\LoggingTrait;
 
     private $_flashMessenger;
 
@@ -146,14 +148,6 @@ class Application_Controller_Action_Helper_Redirector extends Zend_Controller_Ac
             $this->gotoSimple($action, $controller, $module, $params);
             $this->setExit($exit); // TODO does not do anything at this point
         }
-    }
-
-    /**
-     * @return Zend_Log
-     */
-    public function getLogger()
-    {
-        return Application_Configuration::getInstance()->getLogger();
     }
 
 }
