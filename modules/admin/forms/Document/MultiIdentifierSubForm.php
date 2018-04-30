@@ -208,13 +208,11 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
 
         // Status der Checkbox aus Enrichment bestimmen (Checkbox aktiv oder nicht aktiv),
         // wenn Enrichment für vorliegendes Dokument gesetzt ist
-        $enrichments = $document->getEnrichment();
         $enrichmentKeyName = $this->getEnrichmentKeyName();
-        foreach ($enrichments as $enrichment) {
-            if ($enrichment->getKeyName() == $enrichmentKeyName) {
-                $autoGenerateCheckbox->setChecked($enrichment->getValue() == 'true');
-                return; // Enrichment gefunden: Methode verlassen
-            }
+        $enrichment = $document->getEnrichment($enrichmentKeyName);
+        if (!is_null($enrichment)) {
+            $autoGenerateCheckbox->setChecked($enrichment->getValue() == 'true');
+            return; // Enrichment gefunden: Methode verlassen
         }
 
         // Enrichment wurde nicht gefunden: Status der Checkbox bestimmt sich aus der Konfiguration
