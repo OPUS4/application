@@ -40,11 +40,11 @@ node {
     checkout scm
 
     stage "prepare"
-    docker.image('mysql:5').withRun('-e "MYSQL_ROOT_PASSWORD=root" -p 3308:3306') { c ->
+    docker.image('mysql:5').withRun('-e "MYSQL_ROOT_PASSWORD=root"') { c ->
         docker.image('mysql:5').inside("--link ${c.id}:db"){
             sh 'while ! mysqladmin ping -h0.0.0.0 --silent; do sleep 1; done'
         }
-        docker.image('solr:7').withRun('-p 8988:8983').inside("--link ${c.id}:db"){
+        docker.image('solr:7').inside("--link ${c.id}:db"){
 
             stage "build"
             sh 'ant setup prepare lint'
