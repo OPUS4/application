@@ -5,7 +5,7 @@ node {
             /* Wait until mysql service is up */
             sh 'while ! mysqladmin ping -hdb --silent; do sleep 1; done'
         }
-        docker.image('solr:7').withRun('-p 8987:8983').inside("--link ${c.id}:db") {
+        docker.image('solr:7').inside("--link ${c.id}:db") {
             /*
              * Run some tests which require MySQL, and assume that it is
              * available on the host name `db`
