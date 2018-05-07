@@ -44,7 +44,7 @@ node {
         docker.image('mysql:5').inside("--link ${c.id}:db"){
             sh 'while ! mysqladmin ping -h0.0.0.0 --silent; do sleep 1; done'
         }
-        docker.image('solr:7').withRun('-p 8988:8983'){
+        docker.image('solr:7').withRun('-p 8988:8983').inside("--link ${c.id}:db"){
 
             stage "build"
             sh 'ant setup prepare lint'
