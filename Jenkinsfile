@@ -1,3 +1,4 @@
+#!groovy
 node {
     checkout scm
     docker.image('mysql:5').withRun('-e "MYSQL_ROOT_PASSWORD=root" -p 3309:3306') { c ->
@@ -10,7 +11,9 @@ node {
              * Run some tests which require MySQL, and assume that it is
              * available on the host name `db`
              */
-            sh 'ant setup prepare lint'
+
+             stage "build"
+             sh 'ant setup prepare lint'
         }
     }
 }
