@@ -20,10 +20,10 @@ node {
         docker.image('mysql:5').inside("--link ${c.id}:db") {
             sh 'while ! mysqladmin ping -h0.0.0.0 --silent; do sleep 1; done'
         }
-                docker.image('solr').inside("--link ${c.id}:db") {
+        docker.image('solr').inside("--link ${c.id}:db") {
 
         stage "build"
         sh 'ant setup prepare lint'
-
+        }
     }
 }
