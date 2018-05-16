@@ -16,7 +16,7 @@ node {
     checkout scm
 
     stage "prepare"
-    docker.image('mysql:5').withRun('-e "MYSQL_ROOT_PASSWORD=root" -p 3306:3306') { c ->
+    docker.image('mysql:5').withRun('-e "MYSQL_ROOT_PASSWORD=root" -p 3309:3306') { c ->
         sh 'while ! mysqladmin ping -h0.0.0.0 --silent; do sleep 1; done'
 
         stage "build"
