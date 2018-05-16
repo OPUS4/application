@@ -18,7 +18,7 @@ node {
     stage "prepare"
     docker.image('mysql:5').withRun('-e "MYSQL_ROOT_PASSWORD=root" -p 3309:3306') { c ->
         docker.image('mysql:5').inside("--link ${c.id}:db") {
-            sh 'while ! mysqladmin ping -h0.0.0.0 --silent; do sleep 1; done'
+            sh 'while ! mysqladmin ping -hdb --silent; do sleep 1; done'
         }
         docker.image('solr').inside("--link ${c.id}:db") {
 
