@@ -281,7 +281,52 @@
         <seg>Identifiers</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Identifier</seg>
+        <seg>Identifikatoren</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="admin_document_section_identifier_other">
+      <tuv xml:lang="en">
+        <seg>Other Identifiers</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Andere Identifikatoren</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="admin_document_section_identifierdoi">
+      <tuv xml:lang="en">
+        <seg>DOI</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>DOI</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_document_section_identifierurn">
+      <tuv xml:lang="en">
+        <seg>URN</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>URN</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_document_autoidentifierdoi">
+      <tuv xml:lang="en">
+        <seg>Generate DOI when publishing document</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>DOI beim Veröffentlichen generieren</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_document_autoidentifierurn">
+      <tuv xml:lang="en">
+        <seg>Generate URN when publishing document</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>URN beim Veröffentlichen generieren</seg>
       </tuv>
     </tu>
 
@@ -797,7 +842,7 @@
               <seg>An unexpected exception occurred while saving the document ("$1%s").</seg>
           </tuv>
           <tuv xml:lang="de">
-              <seg>Eine unerwarteter Fehler ist beim Speichern aufgetreten ("$1%s").</seg>
+              <seg>Ein unerwarteter Fehler ist beim Speichern aufgetreten ("$1%s").</seg>
           </tuv>
       </tu>
 
@@ -987,6 +1032,42 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>oder Person</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_document_identifier_doi_donotedit">
+      <tuv xml:lang="en">
+        <seg>This DOI is already registered. We recommend to leave it untouched!</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Diese DOI wurde bereits registriert. Sie sollte nicht mehr geändert werden!</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_document_identifier_doi_unregistered">
+      <tuv xml:lang="en">
+        <seg>This local DOI has not been registered yet.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Diese lokale DOI wurde noch nicht registriert.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_document_identifier_doi_registered">
+      <tuv xml:lang="en">
+        <seg>This local DOI was already registered. A successful verification is still pending.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Diese lokale DOI wurde bereits registriert. Eine erfolgreiche Prüfung steht aber noch aus.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_document_identifier_doi_verified">
+      <tuv xml:lang="en">
+        <seg>This local DOI was already registered. It was verified successfully.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Diese lokale DOI wurde bereits registriert. Sie wurde erfolgreich geprüft.</seg>
       </tuv>
     </tu>
 

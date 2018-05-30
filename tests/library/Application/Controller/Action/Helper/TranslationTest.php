@@ -192,6 +192,10 @@ class Application_Controller_Action_Helper_TranslationTest extends ControllerTes
         $fieldNames = $model->describe();
 
         foreach($fieldNames as $name) {
+            if ($name == 'Status' || $name == 'RegistrationTs') {
+                // do not provide translations for DOI specific fields
+                continue;
+            }
             $key = $this->helper->getKeyForField('Opus_Identifier', $name);
             $this->assertTrue($this->translate->isTranslated($key),
                     'Translation key \'' . $key . '\' is missing.');

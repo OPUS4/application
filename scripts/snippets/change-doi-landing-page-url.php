@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -25,52 +25,34 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Form_Element
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @author      Sascha Szott <szott@zib.de>
+ * @copyright   Copyright (c) 2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
-/**
- * Formularelement für die Auswahl eines EnrichmentKeys.
- */
-class Application_Form_Element_EnrichmentKey extends Application_Form_Element_Select {
+if (basename(__FILE__) !== basename($argv[0])) {
+    echo "script must be executed directy (not via opus-console)\n";
+    exit;
+}
 
-    public function init() {
-        parent::init();
+if ($argc < 3) {
+    echo "Usage: {$argv[0]} doiValue landingPageURL\n";
+    exit;
+}
 
-        $options = Opus_EnrichmentKey::getAll();
+require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
-        $values = array();
+$doiValue = $argv[1];
+$landingPageURL = $argv[2];
 
-        $translator = $this->getTranslator();
+echo 'Change URL of landing page of DOI ' . $doiValue . ' to ' . $landingPageURL . "\n";
 
-        $this->setDisableTranslator(true); // keys are translated below if possible
-
-        foreach ($options as $index => $option) {
-            $keyName = $option->getName();
-
-            // die folgenden beiden Enrichments sollen indirekt über Checkboxen im Abschnitt DOI / URN verwaltet werden
-            if ($keyName == 'opus.doi.autoCreate' || $keyName == 'opus.urn.autoCreate') {
-                continue;
-            }
-
-            $values[] = $keyName;
-
-            $translationKey = 'Enrichment' . $keyName;
-
-            if (!is_null($translator) && ($translator->isTranslated($translationKey))) {
-                $this->addMultiOption($keyName, $translator->translate($translationKey));
-            }
-            else {
-                $this->addMultiOption($keyName, $keyName);
-            }
-        }
-
-        $validator = new Zend_Validate_InArray($values);
-        $validator->setMessage('validation_error_unknown_enrichmentkey');
-        $this->addValidator($validator);
-    }
-
+$config = Zend_Registry::get('Zend_Config');
+try {
+    $doiManager = new Opus_Doi_DoiManager();
+    $doiManager->updateLandingPageUrlOfDoi($doiValue, $landingPageURL);
+    echo "Operation completed successfully\n";
+}
+catch (Opus_Doi_DoiException $e) {
+    echo 'Could not successfully change landing page URL of DOI ' . $doiValue . ' : ' . $e->getMessage() . "\n";
 }

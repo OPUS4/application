@@ -135,6 +135,33 @@
             </tuv>
         </tu>
 
+        <tu tuid="admin_validation_error_localdoi_invalid">
+            <tuv xml:lang="en">
+                <seg>local DOI contains invalid characters.</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>lokale DOI enthält unerlaubte Zeichen.</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="admin_validation_error_localdoi_not_unique">
+            <tuv xml:lang="en">
+                <seg>Local DOI value is already used.</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Lokale DOI ist bereits vergeben.</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="admin_validation_error_localurn_not_unique">
+            <tuv xml:lang="en">
+                <seg>URN value is already used.</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>URN ist bereits vergeben.</seg>
+            </tuv>
+        </tu>
+
     </body>
 
 </tmx>
