@@ -1596,4 +1596,6 @@ a.gnd-link {
 .admin_person_edit .data-wrapper label {
     font-size: 1.1em;
 }
-
+table.search-form-table select{
+    min-width: 100%;
+}

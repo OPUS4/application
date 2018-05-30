@@ -1,5 +1,36 @@
 # OPUS 4 Change Log
 
+## Release 4.6.1 2018-02-26
+
+### Bugs
+
+* [OPUSVIER-3841] - Editieren von Personen ohne Dokumente produziert Fehler
+* [OPUSVIER-3846] - Fehlerhaftes XML bei der OAI-Schnittstelle
+
+## Aufgaben
+
+* [OPUSVIER-2034] - Datenbank-Felder, die als NOT NULL definiert sind, haben z.T. NULL als Defaultwert
+* [OPUSVIER-2385] - Validierung von ISBNs vornehmen
+* [OPUSVIER-2386] - Validierung von ISSNs vornehmen
+* [OPUSVIER-2494] - getAll-Abfragen im Zusammenhang mit dem Aufruf von setDefault-Methoden verhindern
+* [OPUSVIER-3479] - Einschränkung der Coverage für Controller Testklassen
+* [OPUSVIER-3480] - Zusammenfassungen, Titel, usw. mit Sprachattribut in Frontdoor HTML markieren
+* [OPUSVIER-3483] - DINI Zertifikat: OAI-Anfrage Identify soll Beschreibung des Dienstes (Element description) in englischer Sprache liefern
+* [OPUSVIER-3540] - MathJax über Composer installieren
+* [OPUSVIER-3580] - Schriftenreihen im Dokumentenformular der Administration alphabetisch sortieren
+* [OPUSVIER-3801] - Verbose Ausgabe beim Neuaufbau der Testdaten optional
+* [OPUSVIER-3839] - Unveränderte Felder bei der Bestätigung des Bulk-Editing nur einmal mittig anzeigen
+* [OPUSVIER-3842] - Gleiche Breite für alle DropDown-Felder in der erweiterten Suche
+* [OPUSVIER-3844] - Package für OPUS 4 API und Core anlegen
+* [OPUSVIER-3848] - Übersetzungen für ISBN/ISSN Validatoren
+* [OPUSVIER-3849] - Handhabung von Export Parameter wie Content-Disposition erweitern
+* [OPUSVIER-3856] - Sprache für Google Scholar Link soll OPUS-UI entsprechen
+* [OPUSVIER-3858] - CSS @import von print.css entfernen und Meta-Tag verwenden
+
+## Dokumentation
+
+* [OPUSVIER-3013] - Dokumentieren wie XHTML DTD mit Hilfe von xmlcatalog lokal gecached werden kann
+
 ---
 
 ## Release 4.6 2017-08-14

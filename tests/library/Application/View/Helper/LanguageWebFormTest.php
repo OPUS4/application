@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,37 +24,49 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @package     Module_Setup
- * @author      Edouard Simon (edouard.simon@zib.de)
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @category    Application Unit Tests
+ * @author      Maximilian Salomon <salomon@zib.de>
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-/**
- * @covers Setup_LanguageController
- */
-class Setup_LanguageControllerTest extends ControllerTestCase {
+class Application_View_Helper_LanguageWebFormTest extends ControllerTestCase
+{
+    /**
+     * @var Application_View_Helper_LanguageWebForm
+     */
+    private $_helper;
+
+    public function setUp()
+    {
+        parent::setUp();
+        $this->useEnglish();
+        $this->_helper = new Application_View_Helper_LanguageWebForm();
+    }
 
     /**
-     * Regression Test for OPUSVIER-2971
+     * @return data-provider with long and short language form.
      */
-    public function testMissingConfigMessageIsDisplayedRed() {
-        $config = Zend_Registry::get('Zend_Config');
-        $config->merge(new Zend_Config(array('setup' => array('translation' => array('modules' => array('allowed' => null))))));
+    public function langProvider()
+    {
+        return array(
+            array('deu', 'de'),
+            array('eng', 'en'),
+            array('spa', 'es'),
+            array('ita', 'it'),
+            array('fra', 'fr'),
+            array('rus', 'ru')
+        );
+    }
 
-        $this->getRequest()->setPost(array('Anzeigen' => 'Anzeigen', 'search' => 'test', 'sort' => 'unit'));
-        $this->dispatch('/setup/language/show');
-        
-        $this->assertAction('show');
-        $this->assertController('language');
-        $this->assertModule('setup');
-        
-        $this->assertResponseCode(302);
-        
-        $this->assertRedirectTo('/setup/language/error');
-
-        $this->verifyFlashMessage('setup_language_translation_modules_missing');
+    /**
+     * Unittest for languageWebform.
+     * @covers ::languageWebform
+     * @dataProvider langProvider
+     */
+    public function testLanguageWebForm($long, $short)
+    {
+        $this->assertEquals($this->_helper->languageWebForm($long), $short);
     }
 
 }
