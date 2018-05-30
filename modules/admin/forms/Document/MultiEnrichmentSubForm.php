@@ -24,52 +24,42 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @package     Form_Element
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @category    Application
+ * @package     Module_Admin
+ * @author      Sascha Szott <szott@zib.de>
+ * @copyright   Copyright (c) 2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class Application_Form_Element_IdentifierTest extends FormElementTestCase {
 
-    public function setUp() {
-        $this->_formElementClass = 'Application_Form_Element_Identifier';
-        $this->_expectedDecoratorCount = 6;
-        $this->_expectedDecorators = array('ViewHelper', 'Errors', 'Description', 'ElementHtmlTag', 'LabelNotEmpty',
-            'dataWrapper');
-        $this->_staticViewHelper = 'viewFormSelect';
-        parent::setUp();
-    }
+class Admin_Form_Document_MultiEnrichmentSubForm extends Admin_Form_Document_MultiSubForm {
 
-    public function testOptions() {
-        $element = $this->getElement();
-
-        $translator = $element->getTranslator();
-
-        $identifier = new Opus_Identifier();
-
-        $types = $identifier->getField('Type')->getDefault();
-
-        // URNs und DOIs werden gesondert behandelt
-        $this->assertEquals(count($types) - 2, count($element->getMultiOptions()));
-
-        foreach ($element->getMultiOptions() as $type => $label) {
-            $this->assertContains($type, $types);
-            $translationKey = 'Opus_Identifier_Type_Value_' . ucfirst($type);
-            $this->assertTrue($translator->isTranslated($translationKey));
-            $this->assertEquals($translator->translate($translationKey), $label);
+    public function getFieldValues($document) {
+        $value = parent::getFieldValues($document);
+        if (!is_null($value)) {
+            $value = $this->filterEnrichments($value);
         }
+        return $value;
     }
 
     /**
-     * TODO fehlender, leerer Wert wird nicht geprüft
+     * Besondere Behandlung der beiden AutoCreate-Enrichments für DOIs und URNs
+     * diese Enrichments sollen indirekt über Checkboxen im Abschnitt DOI / URN verwaltet werden und nicht bei den
+     * herkömmlichen Enrichments angezeigt werden (somit werden auch konfligierende Eintragungen zwischen Enrichment-
+     * Wert und Checkbox-Zustand vermieden)
+     *
+     * @param $enrichments
+     * @return array
      */
-    public function testValidation() {
-        $element = $this->getElement();
-
-        $this->assertFalse($element->isValid('unknowntype'));
-        $this->assertTrue($element->isValid('issn'));
+    private function filterEnrichments($enrichments) {
+        $result = array();
+        foreach ($enrichments as $enrichment) {
+            $keyName = $enrichment->getKeyName();
+            if ($keyName == 'opus.doi.autoCreate' || $keyName == 'opus.urn.autoCreate') {
+                continue;
+            }
+            $result[] = $enrichment;
+        }
+        return $result;
     }
-
 }
+

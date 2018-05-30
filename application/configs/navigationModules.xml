@@ -940,9 +940,16 @@
                                 </detail>
                             </pages>
                         </doctype>
+                        <doireport>
+                            <type>mvc</type>
+                            <label>admin_title_doireport</label>
+                            <group>group-chocolate</group>
+                            <module>admin</module>
+                            <controller>report</controller>
+                            <action>doi</action>
+                        </doireport>
                     </pages>
                 </info>
-
             </pages>
         </administration>
     </nav>

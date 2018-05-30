@@ -77,6 +77,15 @@
         <seg>Editieren</seg>
       </tuv>
     </tu>
+    
+    <tu tuid="admin_button_generate">
+      <tuv xml:lang="en">
+        <seg>Generate now</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sofort Generieren</seg>
+      </tuv>
+    </tu>
 
     <tu tuid="admin_button_move_first">
       <tuv xml:lang="en">
