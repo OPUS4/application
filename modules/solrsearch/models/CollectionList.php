@@ -40,7 +40,7 @@ class Solrsearch_Model_CollectionList {
 
     public function __construct($collectionId) {
         if (is_null($collectionId)) {
-            throw new Solrsearch_Model_Exception('Could not browse collection due to missing id parameter.');
+            throw new Solrsearch_Model_Exception('Could not browse collection due to missing id parameter.', 400);
         }
 
         $collection = null;
@@ -48,13 +48,13 @@ class Solrsearch_Model_CollectionList {
             $collection = new Opus_Collection((int) $collectionId);
         }
         catch (Opus_Model_NotFoundException $e) {
-            throw new Solrsearch_Model_Exception("Collection with id '" . $collectionId . "' does not exist.");
+            throw new Solrsearch_Model_Exception("Collection with id '" . $collectionId . "' does not exist.", 404);
         }
 
         // check if an unvisible collection exists along the path to the root collection
         foreach ($collection->getParents() as $parent) {
             if (!$parent->isRoot() && $parent->getVisible() !== '1') {
-                throw new Solrsearch_Model_Exception("Collection with id '" . $collectionId . "' is not visible.");
+                throw new Solrsearch_Model_Exception("Collection with id '" . $collectionId . "' is not visible.", 404);
             }
         }
         

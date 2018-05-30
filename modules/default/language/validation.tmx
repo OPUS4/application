@@ -196,6 +196,24 @@
           </tuv>
       </tu>
 
+      <tu tuid="validation_error_checkdigit">
+          <tuv xml:lang="en">
+              <seg>The check digit of '%value%' is not valid.</seg>
+          </tuv>
+          <tuv xml:lang="de">
+              <seg>Die Prüfziffer '%value%' ist nicht korrekt.</seg>
+          </tuv>
+      </tu>
+
+      <tu tuid="validation_error_form">
+          <tuv xml:lang="en">
+              <seg>'%value%' is malformed.</seg>
+          </tuv>
+          <tuv xml:lang="de">
+              <seg>'%value%' hat nicht die korrekte Form.</seg>
+          </tuv>
+      </tu>
+
   </body>
 
 </tmx>

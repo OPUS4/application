@@ -96,6 +96,7 @@ class Frontdoor_IndexController extends Application_Controller_Action {
 
         $proc = new XSLTProcessor;
         Application_Xslt::registerViewHelper($proc, array(
+            'locale',
             'optionEnabled',
             'optionValue',
             'translate',
@@ -108,7 +109,8 @@ class Frontdoor_IndexController extends Application_Controller_Action {
             'languageImageExists',
             'frontdoorStylesheet',
             'shortenText',
-            'exportLinks'
+            'exportLinks',
+            'languageWebForm'
         ));
         $proc->registerPHPFunctions('urlencode');
         $proc->importStyleSheet($xslt);

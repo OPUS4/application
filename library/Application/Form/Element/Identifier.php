@@ -34,6 +34,8 @@
 
 /**
  * Select Element für Identifier Type.
+ *
+ * TODO should be Application_Form_Element_IdentifierType
  */
 class Application_Form_Element_Identifier extends Application_Form_Element_Select {
 

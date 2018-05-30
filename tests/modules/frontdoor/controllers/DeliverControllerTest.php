@@ -24,14 +24,18 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Tests
+ * @category    Tests
+ * @package     Frontdoor
  * @author      Thoralf Klein <thoralf.klein@zib.de>
- * @copyright   Copyright (c) 2012, OPUS 4 development team
+ * @copyright   Copyright (c) 2012-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
+/**
+ * Class Frontdoor_DeliverControllerTest.
+ *
+ * @covers Frontdoor_DeliverController
+ */
 class Frontdoor_DeliverControllerTest extends ControllerTestCase {
 
     /**

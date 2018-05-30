@@ -38,7 +38,7 @@ class Solrsearch_Model_Series {
 
     public function  __construct($seriesId) {
         if (is_null($seriesId)) {
-            throw new Solrsearch_Model_Exception('Could not browse series due to missing id parameter.');
+            throw new Solrsearch_Model_Exception('Could not browse series due to missing id parameter.', 400);
         }
 
         $s = null;
@@ -46,17 +46,16 @@ class Solrsearch_Model_Series {
             $s = new Opus_Series($seriesId);
         }
         catch (Opus_Model_NotFoundException $e) {
-            throw new Solrsearch_Model_Exception("Series with id '" . $seriesId . "' does not exist.");
+            throw new Solrsearch_Model_Exception("Series with id '" . $seriesId . "' does not exist.", 404);
         }
 
         if ($s->getVisible() !== '1') {
-            throw new Solrsearch_Model_Exception("Series with id '" . $seriesId . "' is not visible.");
+            throw new Solrsearch_Model_Exception("Series with id '" . $seriesId . "' is not visible.", 404);
         }
 
         if ($s->getNumOfAssociatedPublishedDocuments() === 0) {
             throw new Solrsearch_Model_Exception(
-                "Series with id '" . $seriesId . "' does not have any published documents."
-            );
+                "Series with id '" . $seriesId . "' does not have any published documents.", 404);
         }
         $this->_series = $s;
     }

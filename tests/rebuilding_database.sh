@@ -28,6 +28,15 @@ set -e
 
 script_dir=$(cd `dirname $0` && pwd)
 
+VERBOSE=0
+
+while getopts "v" opt; do
+  case $opt in
+    v) VERBOSE=1
+    ;;
+  esac
+done
+
 #
 # Application Workspace Directories
 #
@@ -113,8 +122,16 @@ mkdir -p $workspace_test_dir/log
 # Copy test fulltexts to workspace
 #
 
-rsync -rv $fulltext_dir/ $workspace_files_dir
-rsync -rv $fulltext_dir/ $workspace_test_dir/files
+echo -e "\n Copying default fulltext files ...\n"
+
+if [[ $VERBOSE -eq 1 ]] ; then
+    rsync -rv $fulltext_dir/ $workspace_files_dir
+    rsync -rv $fulltext_dir/ $workspace_test_dir/files
+else
+    rsync -r $fulltext_dir/ $workspace_files_dir
+    rsync -r $fulltext_dir/ $workspace_test_dir/files
+fi
+
 
 #
 # Restore log files
@@ -129,4 +146,10 @@ chmod -R o+w,g+w {$workspace_files_dir,$workspace_log_dir}
 # Copy test series logos to public/series_logos
 #
 
-rsync -rv --exclude=.svn $test_series_logos_dir/ $series_logos_dir
+echo -e "\n Copying default series logo files ...\n"
+
+if [[ $VERBOSE -eq 1 ]] ; then
+    rsync -rv --exclude=.svn $test_series_logos_dir/ $series_logos_dir
+else
+    rsync -r --exclude=.svn $test_series_logos_dir/ $series_logos_dir
+fi

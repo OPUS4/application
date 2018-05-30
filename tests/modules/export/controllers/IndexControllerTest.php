@@ -24,15 +24,20 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Tests
+ * @category    Tests
+ * @package     Export
  * @author      Sascha Szott <szott@zib.de>
  * @author      Michael Lang <lang@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+/**
+ * Class Export_IndexControllerTest.
+ *
+ * @covers Export_IndexController
+ */
 class Export_IndexControllerTest extends ControllerTestCase
 {
 
@@ -110,19 +115,19 @@ class Export_IndexControllerTest extends ControllerTestCase
 
     public function testIndexActionInvalidCollectionSearch_MissingIdParam() {
         $this->dispatch('/export/index/index/searchtype/collection/export/xml/stylesheet/example');
-        $this->assertResponseCode(500);
+        $this->assertResponseCode(400);
         $this->assertContains("Could not browse collection due to missing id parameter.", $this->getResponse()->getBody());
     }
 
     public function testIndexActionInvalidCollectionSearch_UnknownId() {
         $this->dispatch('/export/index/index/searchtype/collection/id/-1/export/xml/stylesheet/example');
-        $this->assertResponseCode(500);
+        $this->assertResponseCode(404);
         $this->assertContains("Collection with id '-1' does not exist.", $this->getResponse()->getBody());
     }
 
     public function testIndexActionInvalidCollectionSearch_Unvisible() {
         $this->dispatch('/export/index/index/searchtype/collection/id/23/export/xml/stylesheet/example');
-        $this->assertResponseCode(500);
+        $this->assertResponseCode(404);
         $this->assertContains("Collection with id '23' is not visible.", $this->getResponse()->getBody());
     }
 
@@ -137,25 +142,25 @@ class Export_IndexControllerTest extends ControllerTestCase
 
     public function testIndexActionInvalidSeriesSearch_MissingIdParam() {
         $this->dispatch('/export/index/index/searchtype/series/export/xml/stylesheet/example');
-        $this->assertResponseCode(500);
+        $this->assertResponseCode(400);
         $this->assertContains("Could not browse series due to missing id parameter.", $this->getResponse()->getBody());
     }
 
     public function testIndexActionInvalidSeriesSearch_UnknownId() {
         $this->dispatch('/export/index/index/searchtype/series/id/999999/export/xml/stylesheet/example');
-        $this->assertResponseCode(500);
+        $this->assertResponseCode(404);
         $this->assertContains("Series with id '999999' does not exist.", $this->getResponse()->getBody());
     }
 
     public function testIndexActionInvalidSeriesSearch_Unvisible() {
         $this->dispatch('/export/index/index/searchtype/series/id/3/export/xml/stylesheet/example');
-        $this->assertResponseCode(500);
+        $this->assertResponseCode(404);
         $this->assertContains("Series with id '3' is not visible.", $this->getResponse()->getBody());
     }
 
     public function testIndexActionInvalidSeriesSearch_NoDocuments() {
         $this->dispatch('/export/index/index/searchtype/series/id/8/export/xml/stylesheet/example');
-        $this->assertResponseCode(500);
+        $this->assertResponseCode(404);
         $this->assertContains("Series with id '8' does not have any published documents.", $this->getResponse()->getBody());
     }
 

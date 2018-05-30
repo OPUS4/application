@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,37 +24,27 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @package     Module_Setup
- * @author      Edouard Simon (edouard.simon@zib.de)
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @category    Application Unit Tests
+ * @package     Application_View_Helper
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-/**
- * @covers Setup_LanguageController
- */
-class Setup_LanguageControllerTest extends ControllerTestCase {
+class Application_View_Helper_LocaleTest extends ControllerTestCase
+{
 
-    /**
-     * Regression Test for OPUSVIER-2971
-     */
-    public function testMissingConfigMessageIsDisplayedRed() {
-        $config = Zend_Registry::get('Zend_Config');
-        $config->merge(new Zend_Config(array('setup' => array('translation' => array('modules' => array('allowed' => null))))));
+    public function testLocale()
+    {
+        $this->useEnglish();
 
-        $this->getRequest()->setPost(array('Anzeigen' => 'Anzeigen', 'search' => 'test', 'sort' => 'unit'));
-        $this->dispatch('/setup/language/show');
-        
-        $this->assertAction('show');
-        $this->assertController('language');
-        $this->assertModule('setup');
-        
-        $this->assertResponseCode(302);
-        
-        $this->assertRedirectTo('/setup/language/error');
+        $helper = new Application_View_Helper_Locale();
 
-        $this->verifyFlashMessage('setup_language_translation_modules_missing');
+        $this->assertEquals('en', $helper->locale());
+
+        $this->useGerman();
+
+        $this->assertEquals('de', $helper->locale());
     }
 
 }
