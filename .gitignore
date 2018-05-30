@@ -10,6 +10,7 @@ vendor
 
 # ignore composer runtime
 composer.phar
+composer.lock
 
 # ignore all workspace files
 workspace/**/*
@@ -28,6 +29,7 @@ build/
 tests/build/
 tests/config.ini
 tests/workspace/**/*
+cache.properties
 
 downloads
 components
