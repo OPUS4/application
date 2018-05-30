@@ -228,6 +228,7 @@
             <arg line="--log-junit ${basedir}/build/logs/phpunit.xml" />
             <arg line="--configuration phpunit.xml" />
             <arg line="${testpath}" />
+            <redirector output="build/testresult-${DSTAMP}-${TSTAMP}.txt" alwayslog="true" />
         </exec>
     </target>
 
