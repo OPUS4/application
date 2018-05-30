@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,52 +24,51 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @package     Form_Element
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @category    Application
+ * @author      Sascha Szott <szott@zib.de>
+ * @copyright   Copyright (c) 2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Application_Form_Element_IdentifierTest extends FormElementTestCase {
 
-    public function setUp() {
-        $this->_formElementClass = 'Application_Form_Element_Identifier';
-        $this->_expectedDecoratorCount = 6;
-        $this->_expectedDecorators = array('ViewHelper', 'Errors', 'Description', 'ElementHtmlTag', 'LabelNotEmpty',
-            'dataWrapper');
-        $this->_staticViewHelper = 'viewFormSelect';
-        parent::setUp();
-    }
+class Application_Form_Validate_DOI extends Zend_Validate_Abstract {
 
-    public function testOptions() {
-        $element = $this->getElement();
+    const NOT_UNIQUE = 'notUnique';
 
-        $translator = $element->getTranslator();
-
-        $identifier = new Opus_Identifier();
-
-        $types = $identifier->getField('Type')->getDefault();
-
-        // URNs und DOIs werden gesondert behandelt
-        $this->assertEquals(count($types) - 2, count($element->getMultiOptions()));
-
-        foreach ($element->getMultiOptions() as $type => $label) {
-            $this->assertContains($type, $types);
-            $translationKey = 'Opus_Identifier_Type_Value_' . ucfirst($type);
-            $this->assertTrue($translator->isTranslated($translationKey));
-            $this->assertEquals($translator->translate($translationKey), $label);
-        }
-    }
+    const NOT_VALID = 'notValid';
 
     /**
-     * TODO fehlender, leerer Wert wird nicht geprüft
+     * Translation keys for validation messages.
+     * @var array
      */
-    public function testValidation() {
-        $element = $this->getElement();
+    protected $_messageTemplates = array(
+        self::NOT_UNIQUE => 'admin_validation_error_localdoi_not_unique',
+        self::NOT_VALID => 'admin_validation_error_localdoi_invalid',
+    );
 
-        $this->assertFalse($element->isValid('unknowntype'));
-        $this->assertTrue($element->isValid('issn'));
+    public function isValid($value, $context = null) {
+        $currentDocId = $context[Admin_Form_Document_IdentifierSpecific::ELEMENT_DOC_ID];
+
+        $doi = new Opus_Identifier();
+        $doi->setType('doi');
+        $doi->setValue($value);
+
+        if (!$doi->isLocalDoi()) {
+            return true; // keine Prüfung für nicht lokale-DOIs: nicht-lokale DOIs können ohne Prüfung gespeichert werden
+        }
+
+        if (!$doi->isDoiUnique($currentDocId)) {
+            $this->_error(self::NOT_UNIQUE);
+            return false; // Formular kann nicht gespeichert werden, weil eine lokale DOI eingegeben wurde, die bereits existiert
+        }
+
+        if (!$doi->isValidDoi()) {
+            $this->_error(self::NOT_VALID);
+            return false; // lokale DOI enthält unerlaubte Zeichen
+        }
+
+        return true; // DOI kann gespeichert werden
+
     }
 
 }

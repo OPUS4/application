@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -25,31 +25,34 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Form_Element
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @author      Sascha Szott <szott@zib.de>
+ * @copyright   Copyright (c) 2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
-/**
- * Select Element für Identifier Type.
- *
- * TODO should be Application_Form_Element_IdentifierType
- */
-class Application_Form_Element_Identifier extends Application_Form_Element_Select {
+if (basename(__FILE__) !== basename($argv[0])) {
+    echo "script must be executed directy (not via opus-console)\n";
+    exit;
+}
 
-    public function init() {
-        parent::init();
+if ($argc < 3) {
+    echo "Usage: {$argv[0]} doiValue landingPageURL\n";
+    exit;
+}
 
-        $identifier = new Opus_Identifier();
-        $types = $identifier->getField('Type')->getDefault();
+require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
-        foreach ($types as $type) {
-            if ($type != 'urn' && $type != 'doi') {
-                $this->addMultiOption($type, 'Opus_Identifier_Type_Value_' . ucfirst($type));                
-            }           
-        }
-    }
+$doiValue = $argv[1];
+$landingPageURL = $argv[2];
 
+echo 'Change URL of landing page of DOI ' . $doiValue . ' to ' . $landingPageURL . "\n";
+
+$config = Zend_Registry::get('Zend_Config');
+try {
+    $doiManager = new Opus_Doi_DoiManager();
+    $doiManager->updateLandingPageUrlOfDoi($doiValue, $landingPageURL);
+    echo "Operation completed successfully\n";
+}
+catch (Opus_Doi_DoiException $e) {
+    echo 'Could not successfully change landing page URL of DOI ' . $doiValue . ' : ' . $e->getMessage() . "\n";
 }
