@@ -73,7 +73,7 @@ class Admin_Form_InfoBox extends Admin_Form_AbstractDocumentSubForm {
         }
         else {
             $objclass = ($document !== null) ? get_class($document) : 'null'; 
-            $this->getLog()->err(__METHOD__ . " Called with instance of '$objclass'.");
+            $this->getLogger()->err(__METHOD__ . " Called with instance of '$objclass'.");
         }
     }
     
@@ -88,7 +88,7 @@ class Admin_Form_InfoBox extends Admin_Form_AbstractDocumentSubForm {
         }
         else {
             $objclass = ($document !== null) ? get_class($document) : 'null'; 
-            $this->getLog()->err(__METHOD__ . " Called with instance of '$objclass'.");
+            $this->getLogger()->err(__METHOD__ . " Called with instance of '$objclass'.");
         }
     }
     

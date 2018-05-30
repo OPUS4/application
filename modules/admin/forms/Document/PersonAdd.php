@@ -109,7 +109,7 @@ class Admin_Form_Document_PersonAdd extends Admin_Form_Person {
      */
     public function setSelectedRole($role) {
         if (!in_array($role, Admin_Form_Document_Persons::getRoles())) {
-            $this->getLog()->err(__METHOD__ . " Called with unknown role '$role'.");
+            $this->getLogger()->err(__METHOD__ . " Called with unknown role '$role'.");
             $role = 'author';
         }
         

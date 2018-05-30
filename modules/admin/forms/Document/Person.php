@@ -111,7 +111,7 @@ class Admin_Form_Document_Person extends Admin_Form_PersonLink {
         $personLink->setRole($role);
         
         if (Zend_Registry::get('LOG_LEVEL') >= Zend_Log::DEBUG) {
-            $log = $this->getLog();
+            $log = $this->getLogger();
             $log->debug(Zend_Debug::dump($personLink->getId(), 'DocumentPerson-ID', false));
             $log->debug(Zend_Debug::dump($personLink->getRole(), 'DocumentPerson-Role', false));
             $log->debug(Zend_Debug::dump($personLink->getSortOrder(), 'DocumentPerson-SortOrder', false));

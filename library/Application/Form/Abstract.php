@@ -31,24 +31,19 @@
  * @category    Application
  * @package     Application_Form
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-abstract class Application_Form_Abstract extends Zend_Form_SubForm {
+abstract class Application_Form_Abstract extends Zend_Form_SubForm
+{
+
+    use \Opus\LoggingTrait;
 
     /**
      * Konfiguration Objekt für Applikation.
      * @var Zend_Config
      */
     private $_config;
-
-
-    /**
-     * Logger für Formularklasse.
-     * @var Zend_Log
-     */
-    private $_logger;
 
     /**
      * Option für die automatische Verwendung der Element-Namen als Labels.
@@ -150,45 +145,6 @@ abstract class Application_Form_Abstract extends Zend_Form_SubForm {
     }
 
     /**
-     * TODO Verwendung entfernen und dann löschen
-     * @deprecated wir sollten einheitlich get/setLogger verwenden
-     */
-    public function getLog() {
-        return $this->getLogger();
-    }
-
-    /**
-     * TODO Verwendung entfernen und dann löschen
-     * @deprecated wir sollten einheitlich get/setLogger verwenden
-     */
-    public function setLog($logger) {
-        $this->setLogger($logger);
-    }
-
-    /**
-     * Liefert den Logger für diese Klasse.
-     *
-     * Wenn für die Klasse kein Logger gesetzt wurde, wird der Wert von 'Zend_Log' in Zend_Registry zurueck geliefert.
-     *
-     * @return Zend_Log
-     */
-    public function getLogger() {
-        if (is_null($this->_logger)) {
-            $this->_logger = Zend_Registry::get('Zend_Log');
-        }
-
-        return $this->_logger;
-    }
-
-    /**
-     * Setzt den Logger für diese Klasse
-     * @param $logger
-     */
-    public function setLogger($logger) {
-        $this->_logger = $logger;
-    }
-
-    /**
      * Meldet, ob Element-Namen als Label verwendet werden.
      * @return bool TRUE - Element Namen werden als Label verwendet; FALSE - keine automatischen Label
      */
@@ -240,5 +196,4 @@ abstract class Application_Form_Abstract extends Zend_Form_SubForm {
     public function setApplicationConfig($config) {
         $this->_config = $config;
     }
-
 }

@@ -27,9 +27,8 @@
  * @category    Application
  * @package     Application_Security
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -39,7 +38,10 @@
  * Konfigurationsdatei gibt. Diese wird gegebenenfalls geladen und für die Konstruktion der ACLs verwendet.
  * Gibt es keine Datei hat der Nutzer keine Einschränkungen beim Zugriff.
  */
-class Application_Security_AclProvider {
+class Application_Security_AclProvider
+{
+
+    use \Opus\LoggingTrait;
 
     /**
      * Name der Role, die für ACL Prüfungen verwendet wird.
@@ -47,8 +49,6 @@ class Application_Security_AclProvider {
      * Dieser Name wird anstatt des eigentlich Nutzernamens verwendet.
      */
     const ACTIVE_ROLE = '_user';
-
-    private $_logger;
 
     /**
      * Ressourcen, die in Datei application/configs/navigationModules.xml referenziert werden.
@@ -199,16 +199,4 @@ class Application_Security_AclProvider {
             $roleConfig->applyPermissions($acl);
         }
     }
-
-    public function getLogger() {
-        if (is_null($this->_logger)) {
-            $this->_logger = Zend_Registry::get('Zend_Log');
-        }
-        return $this->_logger;
-    }
-
-    public function setLogger($logger) {
-        $this->_logger = $logger;
-    }
-
 }
