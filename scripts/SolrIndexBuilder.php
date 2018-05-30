@@ -234,7 +234,7 @@ EOT;
             $timeStart = microtime(true);
 
             if ($this->_clearCache) {
-                $cache->removeAllEntriesWhereDocumentId($docId);
+                $cache->remove($docId);
             }
 
             $doc = new Opus_Document($docId);
