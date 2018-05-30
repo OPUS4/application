@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,29 +24,40 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @category    Application
+ * @package     View_Helper
+ * @author      Maximilian Salomon <salomon@zib.de>
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
- * @coversNothing
+ * View helper for tranform long language form in short language form (Part2 in Part1).
  */
-class AppModeTest extends ControllerTestCase {
+class Application_View_Helper_LanguageWebForm extends Zend_View_Helper_Abstract
+{
+    /**
+     * Array with transformed language-attributes. So they don't have been computed twice.
+     *
+     * @var array
+     */
+    private $_langCache = array();
 
-    public function testProductionMode() {
-        $this->markTestSkipped('TODO common.phtml uses APPLICATION_ENV directly');
-        parent::setUpWithEnv('production');
-        $this->dispatch('/home');
-        $this->assertNotContains('NON PRODUCTION ENVIRONMENT', $this->getResponse()->getBody());
+    /**
+     * An language-object will be transformed form Part2-form in the Part1-form
+     * this is necessary for the browser, to identify the language of an abstract or an title.
+     * Input is an 3-char form of an language (e.g. deu, eng, fra, ita, ...)
+     * Output is an 2-char form of an language (e.g. de, en, ...)
+     *
+     * @param $value String
+     * @return short language form
+     */
+    public function languageWebForm($value)
+    {
+        if (!array_key_exists($value, $this->_langCache)) {
+            $lang = Opus_Language::getPropertiesByPart2T($value);
+            $this->_langCache[$value] = $lang['part1'];
+        }
+        return $this->_langCache[$value];
     }
-
-    public function testTestingMode() {
-        parent::setUpWithEnv('testing');
-        $this->dispatch('/home');
-        $this->assertContains('NON PRODUCTION ENVIRONMENT (testing)', $this->getResponse()->getBody());
-    }
-
 }

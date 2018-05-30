@@ -24,29 +24,49 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @category    Application Unit Tests
+ * @author      Maximilian Salomon <salomon@zib.de>
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
-/**
- * @coversNothing
- */
-class AppModeTest extends ControllerTestCase {
+class Application_View_Helper_LanguageWebFormTest extends ControllerTestCase
+{
+    /**
+     * @var Application_View_Helper_LanguageWebForm
+     */
+    private $_helper;
 
-    public function testProductionMode() {
-        $this->markTestSkipped('TODO common.phtml uses APPLICATION_ENV directly');
-        parent::setUpWithEnv('production');
-        $this->dispatch('/home');
-        $this->assertNotContains('NON PRODUCTION ENVIRONMENT', $this->getResponse()->getBody());
+    public function setUp()
+    {
+        parent::setUp();
+        $this->useEnglish();
+        $this->_helper = new Application_View_Helper_LanguageWebForm();
     }
 
-    public function testTestingMode() {
-        parent::setUpWithEnv('testing');
-        $this->dispatch('/home');
-        $this->assertContains('NON PRODUCTION ENVIRONMENT (testing)', $this->getResponse()->getBody());
+    /**
+     * @return data-provider with long and short language form.
+     */
+    public function langProvider()
+    {
+        return array(
+            array('deu', 'de'),
+            array('eng', 'en'),
+            array('spa', 'es'),
+            array('ita', 'it'),
+            array('fra', 'fr'),
+            array('rus', 'ru')
+        );
+    }
+
+    /**
+     * Unittest for languageWebform.
+     * @covers ::languageWebform
+     * @dataProvider langProvider
+     */
+    public function testLanguageWebForm($long, $short)
+    {
+        $this->assertEquals($this->_helper->languageWebForm($long), $short);
     }
 
 }

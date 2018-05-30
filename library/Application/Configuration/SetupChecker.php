@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,29 +24,74 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @category    Application
+ * @package     Application_Configuration
+ * @author      Maximilian Salomon
+ * @copyright   Copyright (c) 2018
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
-/**
- * @coversNothing
- */
-class AppModeTest extends ControllerTestCase {
+class Application_Configuration_SetupChecker
+{
+    private $_Files;
+    public $_messages;
+    private $_names = [];
+    private $_objects = [];
 
-    public function testProductionMode() {
-        $this->markTestSkipped('TODO common.phtml uses APPLICATION_ENV directly');
-        parent::setUpWithEnv('production');
-        $this->dispatch('/home');
-        $this->assertNotContains('NON PRODUCTION ENVIRONMENT', $this->getResponse()->getBody());
+    public function __construct()
+    {
+        $this->_Files = scandir(APPLICATION_PATH . '/library/Application/Configuration/Check');
+        unset($this->_Files[0]);
+        unset($this->_Files[1]);
+        foreach ($this->_Files as $values) {
+            $value = substr($values, 0, -4);
+            array_push($this->_names, 'Application_Configuration_Check_' . $value);
+        }
+        foreach ($this->_names as $value) {
+            $temp = new $value;
+            array_push($this->_objects, $temp);
+        }
+
     }
 
-    public function testTestingMode() {
-        parent::setUpWithEnv('testing');
-        $this->dispatch('/home');
-        $this->assertContains('NON PRODUCTION ENVIRONMENT (testing)', $this->getResponse()->getBody());
+    public function check()
+    {
+        foreach ($this->_objects as $values) {
+            $values->check();
+            $key = $values->getErrors();
+            foreach ($key as $value) {
+                $this->_messages[] = $values->getMessage($value);
+            }
+            if ($values == FALSE) {
+                return FALSE;
+            }
+            return TRUE;
+        }
     }
 
+    public function getMessages()
+    {
+        return $this->_messages;
+    }
+
+    public function getObjects()
+    {
+        return $this->_objects;
+    }
+
+    public function getName()
+    {
+        return $this->_names;
+    }
+
+    public function setName($arg)
+    {
+        $this->_name = $arg;
+    }
+
+    public function setObjects($arg)
+    {
+        $this->_objects = $arg;
+    }
 }
