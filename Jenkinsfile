@@ -25,7 +25,8 @@ environment{
     if(projectName.contains('night')){
         properties([
             parameters([
-                string(name: 'Short_Build', defaultValue: 'FALSE')
+                string(name: 'Short_Build', defaultValue: 'FALSE'),
+                string(name: 'XML_CATALOG_FILES', defaultValue: "${WORKSPACE}/tests/resources/opus4-catalog.xml")
             ]),
             pipelineTriggers([
                 cron('0 3 * * *')
@@ -36,7 +37,8 @@ environment{
     else{
         properties([
             parameters([
-                string(name: 'Short_Build', defaultValue: 'TRUE')
+                string(name: 'Short_Build', defaultValue: 'TRUE'),
+                string(name: 'XML_CATALOG_FILES', defaultValue: "${WORKSPACE}/tests/resources/opus4-catalog.xml")
             ]),
             pipelineTriggers([
                 cron('0 0 * * *')
