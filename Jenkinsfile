@@ -53,8 +53,8 @@ environment{
         sh 'while ! mysqladmin ping -h0.0.0.0 --silent; do sleep 1; done'
 
         stage "build"
-        sh 'ant setup prepare lint prepare-config'
         sh 'echo ${XML_CATALOG_FILES}'
+        sh 'ant setup prepare lint prepare-config'
 
         if ('${params.Short_Build}' == 'TRUE')
         {
