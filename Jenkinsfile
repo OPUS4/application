@@ -16,12 +16,10 @@
 
 def jobNameParts = JOB_NAME.tokenize('/') as String[]
 def projectName = jobNameParts[0]
-
+XML_CATALOG_FILES="${WORKSPACE}/tests/resources/opus4-catalog.xml"
 
 node {
-environment{
-    XML_CATALOG_FILES="${WORKSPACE}/tests/resources/opus4-catalog.xml"
-}
+
     if(projectName.contains('night')){
         properties([
             parameters([
