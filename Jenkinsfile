@@ -20,7 +20,7 @@ def projectName = jobNameParts[0]
 
 node {
 environment{
-    def XML_CATALOG_FILES=${WORKSPACE}/tests/resources/opus4-catalog.xml
+    def XML_CATALOG_FILES="${WORKSPACE}/tests/resources/opus4-catalog.xml"
 }
     if(projectName.contains('night')){
         properties([
