@@ -54,6 +54,7 @@ environment{
 
         stage "build"
         sh 'ant setup prepare lint prepare-config'
+        sh 'echo XML_CATALOG_FILES'
 
         if ('${params.Short_Build}' == 'TRUE')
         {
