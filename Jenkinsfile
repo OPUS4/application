@@ -25,8 +25,7 @@ environment{
     if(projectName.contains('night')){
         properties([
             parameters([
-                string(name: 'Short_Build', defaultValue: 'FALSE'),
-                string(name: 'XML_CATALOG_FILES', defaultValue: "${WORKSPACE}/tests/resources/opus4-catalog.xml")
+                string(name: 'Short_Build', defaultValue: 'FALSE')
             ]),
             pipelineTriggers([
                 cron('0 3 * * *')
@@ -37,8 +36,7 @@ environment{
     else{
         properties([
             parameters([
-                string(name: 'Short_Build', defaultValue: 'TRUE'),
-                string(name: 'XML_CATALOG_FILES', defaultValue: "${WORKSPACE}/tests/resources/opus4-catalog.xml")
+                string(name: 'Short_Build', defaultValue: 'TRUE')
             ]),
             pipelineTriggers([
                 cron('0 0 * * *')
@@ -56,7 +54,7 @@ environment{
 
         stage "build"
         sh 'ant setup prepare lint prepare-config'
-        sh 'echo XML_CATALOG_FILES'
+        sh 'echo "XML_CATALOG_FILES"'
 
         if ('${params.Short_Build}' == 'TRUE')
         {
