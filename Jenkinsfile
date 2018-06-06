@@ -16,7 +16,7 @@
 
 def jobNameParts = JOB_NAME.tokenize('/') as String[]
 def projectName = jobNameParts[0]
-def XML_CATALOG_FILES="${WORKSPACE}/tests/resources/opus4-catalog.xml"
+#def XML_CATALOG_FILES="${WORKSPACE}/tests/resources/opus4-catalog.xml"
 
 node {
 
@@ -62,7 +62,8 @@ node {
         else
         {
             stage "Test"
-            sh 'ant phpunit-fast'
+            withEnv(["XML_CATALOG_FILES=${WORKSPACE}/tests/resources/opus4-catalog.xml"]){
+            sh 'ant phpunit-fast'}
         }
 
         stage "analyse"
