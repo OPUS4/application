@@ -1,4 +1,4 @@
-<?php
+<?PHP
 /*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -25,31 +25,30 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Form_Element
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @author      Sascha Szott <szott@zib.de>
+ * @copyright   Copyright (c) 2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+?>
 
-/**
- * Select Element für Identifier Type.
- *
- * TODO should be Application_Form_Element_IdentifierType
- */
-class Application_Form_Element_Identifier extends Application_Form_Element_Select {
-
-    public function init() {
-        parent::init();
-
-        $identifier = new Opus_Identifier();
-        $types = $identifier->getField('Type')->getDefault();
-
-        foreach ($types as $type) {
-            if ($type != 'urn' && $type != 'doi') {
-                $this->addMultiOption($type, 'Opus_Identifier_Type_Value_' . ucfirst($type));                
-            }           
-        }
+<?php
+    $identifier = $this->element->getIdentifier();
+    if (!is_null($identifier)) {
+        $identifierStatus = $identifier->getStatus();
+        $viewMode = $this->element->isViewModeEnabled();
     }
+?>
 
-}
+<?php if (!is_null($identifier) && $identifierStatus != ''): ?>
+    <div class="identifierStatus">
+        <?php if ($viewMode): ?>
+            <div class="<?= is_null($identifierStatus) ? 'unregistered' : $identifierStatus ?>">
+                <?= is_null($identifierStatus) ? htmlspecialchars($this->translate('admin_document_identifier_doi_unregistered')) : htmlspecialchars($this->translate('admin_document_identifier_doi_' . $identifierStatus)) ?>
+            </div>
+        <?php else: ?>
+            <?php if (!is_null($identifierStatus)): ?>
+            <div class="warning"><?= htmlspecialchars($this->translate('admin_document_identifier_doi_donotedit')) ?></div>
+            <?php endif; ?>
+        <?php endif; ?>
+    </div>
+<?php endif; ?>

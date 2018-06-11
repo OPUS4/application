@@ -51,6 +51,11 @@ class Application_Form_Element_EnrichmentKey extends Application_Form_Element_Se
         foreach ($options as $index => $option) {
             $keyName = $option->getName();
 
+            // die folgenden beiden Enrichments sollen indirekt über Checkboxen im Abschnitt DOI / URN verwaltet werden
+            if ($keyName == 'opus.doi.autoCreate' || $keyName == 'opus.urn.autoCreate') {
+                continue;
+            }
+
             $values[] = $keyName;
 
             $translationKey = 'Enrichment' . $keyName;

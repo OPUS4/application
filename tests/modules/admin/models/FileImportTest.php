@@ -31,7 +31,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Admin_Model_FileImportTest extends ControllerTestCase {           #
+class Admin_Model_FileImportTest extends ControllerTestCase {
 
     private $model;
     

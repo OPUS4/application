@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -25,31 +25,47 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Form_Element
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @package     Module_Admin
+ * @author      Sascha Szott <szott@zib.de>
+ * @copyright   Copyright (c) 2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+class Admin_Model_DoiStatus {
 
-/**
- * Select Element für Identifier Type.
- *
- * TODO should be Application_Form_Element_IdentifierType
- */
-class Application_Form_Element_Identifier extends Application_Form_Element_Select {
+    private $docId;
 
-    public function init() {
-        parent::init();
+    private $doi;
 
-        $identifier = new Opus_Identifier();
-        $types = $identifier->getField('Type')->getDefault();
+    private $published;
 
-        foreach ($types as $type) {
-            if ($type != 'urn' && $type != 'doi') {
-                $this->addMultiOption($type, 'Opus_Identifier_Type_Value_' . ucfirst($type));                
-            }           
-        }
+    private $doiStatus;
+
+    /**
+     * Admin_Model_DoiStatus constructor.
+     *
+     * @param Opus_Document $doc
+     */
+    public function __construct($doc, $doi) {
+        $this->docId = $doc->getId();
+        $this->published = ($doc->getServerState() == 'published');
+        $this->doi = $doi->getValue();
+        $this->doiStatus = $doi->getStatus();
+    }
+
+    public function getDocId() {
+        return $this->docId;
+    }
+
+    public function getDoi() {
+        return $this->doi;
+    }
+
+    public function isPublished() {
+        return $this->published;
+    }
+
+    public function getDoiStatus() {
+        return $this->doiStatus;
     }
 
 }

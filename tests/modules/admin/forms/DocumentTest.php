@@ -52,7 +52,7 @@ class Admin_Form_DocumentTest extends ControllerTestCase {
             'Enrichments',
             'Collections',
             'Content',
-            'Identifiers',
+            'IdentifiersAll',
             'Licences',
             'Patents',
             'Notes',
@@ -73,7 +73,10 @@ class Admin_Form_DocumentTest extends ControllerTestCase {
         $form->populateFromModel($document);
 
         $this->assertEquals(1, count($form->getSubForm('Persons')->getSubForm('author')->getSubForms()));
-        $this->assertEquals(16, count($form->getSubForm('Identifiers')->getSubForms()));
+        $this->assertEquals(3, count($form->getSubForm('IdentifiersAll')->getSubForms()));
+        $this->assertEquals(1, count($form->getSubForm('IdentifiersAll')->getSubForm('IdentifiersDOI')->getSubForms()));
+        $this->assertEquals(1, count($form->getSubForm('IdentifiersAll')->getSubForm('IdentifiersURN')->getSubForms()));
+        $this->assertEquals(14, count($form->getSubForm('IdentifiersAll')->getSubForm('Identifiers')->getSubForms()));
         $this->assertEquals(8, count($form->getSubForm('Collections')->getSubForms()));
     }
 
@@ -316,7 +319,7 @@ class Admin_Form_DocumentTest extends ControllerTestCase {
             'Enrichments',
             'Collections',
             'Content',
-            'Identifiers',
+            'IdentifiersAll',
             'Licences',
             'Patents',
             'Notes',
@@ -336,8 +339,8 @@ class Admin_Form_DocumentTest extends ControllerTestCase {
     }
 
     /**
-     * Für ein leeres Dokument werden fast alle Unterformulare entfernt. Weiterhin angezeigt werden die ActionBox, und
-     * die InfoBox,
+     * Für ein leeres Dokument werden fast alle Unterformulare entfernt.
+     * Weiterhin angezeigt werden die ActionBox, und die InfoBox,
      */
     public function testPrepareRenderingAsViewForEmptyDocument() {
         $form = new Admin_Form_Document();
@@ -347,7 +350,7 @@ class Admin_Form_DocumentTest extends ControllerTestCase {
         $form->populateFromModel($document);
         $form->prepareRenderingAsView();
 
-        $this->verifySubForms($form, array('ActionBox', 'InfoBox', 'Bibliographic'));
+        $this->verifySubForms($form, array('ActionBox', 'InfoBox', 'Bibliographic', 'IdentifiersAll'));
     }
 
     protected function verifySubForms($form, $names) {

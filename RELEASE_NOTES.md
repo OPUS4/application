@@ -2,6 +2,20 @@
 
 ---
 
+## Release 4.6.2 2018-06-11
+
+Mit diesem Release wird der neue DOI-Support veröffentlicht. 
+
+Die Dokumentation für den DOI-Support findet sich hier:
+<http://www.opus-repository.org/userdoc/configext/doi.html>
+
+Nach der Aktualisierung der Dateien (`git pull`) sollten die Composer-Abhängigkeiten 
+aktualisiert werden (`composer update` bzw. `php composer.phar update`). Anschließend 
+muss das Update-Skript ausgeführt werden (`bin/update.sh`), um die Datenbank für den 
+erweiterten DOI-Support anzupassen.
+
+---
+
 ## Release 4.6.1 2018-02-26
 
 In diesem Release wurden Fehler behoben und einige kleinere Verbesserungen 

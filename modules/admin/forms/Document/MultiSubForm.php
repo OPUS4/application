@@ -62,13 +62,13 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
      * Klasse für Unterformulare.
      * @var type
      */
-    private $_subFormClass;
+    protected $_subFormClass;
 
     /**
      * Opus_Document Feldname für Unterformulare.
      * @var type
      */
-    private $_fieldName;
+    protected $_fieldName;
 
     /**
      * Validierungsextension für die Unterformulare.
@@ -84,7 +84,7 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
      * Konstruiert Instanz von Fomular.
      *
      * @param string $subFormClass Name der Klasse für Unterformulare
-     * @param string $fieldName Name des Opus_Document Feldes, dass angezeigt werden soll
+     * @param string $fieldName Name des Opus_Document Feldes, das angezeigt werden soll
      * @param string $validator Object für Validierungen über Unterformulare hinweg
      * @param multi $options
      */
@@ -121,12 +121,20 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
             $this->_renderAsTableEnabled = true;
             $this->setDecorators(
                 array(
-                'FormElements',
-                'TableHeader',
-                'TableWrapper',
-                array(array('fieldsWrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'fields-wrapper')),
-                array('FieldsetWithButtons', array('legendButtons' => self::ELEMENT_ADD)),
-                array(array('divWrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'subform'))
+                    'FormElements', // Zend decorator
+                    'TableHeader',
+                    'TableWrapper',
+                    array(
+                        array('fieldsWrapper' => 'HtmlTag'), 
+                        array('tag' => 'div', 'class' => 'fields-wrapper')
+                    ),
+                    array(
+                        'FieldsetWithButtons', array('legendButtons' => self::ELEMENT_ADD)
+                    ),
+                    array(
+                        array('divWrapper' => 'HtmlTag'), 
+                        array('tag' => 'div', 'class' => 'subform')
+                    )
                 )
             );
         }
