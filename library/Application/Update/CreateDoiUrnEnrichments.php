@@ -1,6 +1,4 @@
-#!/usr/bin/env php
-
-<?PHP
+<?php
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -28,43 +26,37 @@
  *
  * @category    Application
  * @package     Scripts
- * @author      Sascha Szott <szott@zib.de>
+ * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
- * Set registration status of all existing DOIs to "registered".
- * Only documents with server state "published" are considered.
- *
- * TODO move code to class for easier unit testing
+ * Update step creates enrichment key supporting handling of DOI and URN identifiers.
  */
+class Application_Update_CreateDoiUrnEnrichments extends Application_Update_PluginAbstract
+{
 
-require_once dirname(__FILE__) . '/../common/update.php';
+    private $keyNames = [
+        'opus.doi.autoCreate',
+        'opus.urn.autoCreate'
+    ];
 
-$helper = new Application_Update_Helper();
-$helper->log('Set registration status of all DOIs to "registered"');
 
-$docFinder = new Opus_DocumentFinder();
-$docFinder->setIdentifierTypeExists('doi');
-$docFinder->setServerState('published');
-$ids = $docFinder->ids();
+    public function run()
+    {
+        foreach($this->keyNames as $name) {
+            $enrichmentKey = Opus_EnrichmentKey::fetchByName($name);
 
-$helper->log('number of published documents with identifier of type DOI: ' . count($ids));
-
-$numOfModifiedDocs = 0;
-
-foreach ($ids as $id) {
-    $doc = new Opus_Document($id);
-    $dois = $doc->getIdentifierDoi();
-    foreach ($dois as $doi) {
-        $doi->setStatus('registered');
+            if (is_null($enrichmentKey)) {
+                $this->log("Creating enrichment key '$name' ...");
+                $enrichmentKey = new Opus_EnrichmentKey();
+                $enrichmentKey->setName($name);
+                $enrichmentKey->store();
+                $this->getLogger()->info("Enrichment key '$name' created.");
+            } else {
+                $this->getLogger()->info("Enrichment key '$name' already exists!");
+            }
+        }
     }
-    if (count($dois) > 1) {
-        $helper->log('document ' . $id . ' has more than one DOI but only one DOI is expected: consider a cleanup');
-    }
-    $doc->store();
-    $numOfModifiedDocs++;
 }
-
-$helper->log($numOfModifiedDocs . ' published documents were modified successfully');
