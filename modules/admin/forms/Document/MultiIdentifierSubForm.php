@@ -31,7 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_MultiSubForm {
+class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_MultiSubForm
+{
 
     /**
      * Name des Buttons zum Entfernen eines Unterformulars (z.B. Identifier).
@@ -65,7 +66,8 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
      *
      * @param string $subFormClass Name der Klasse für Unterformulare
      */
-    public function __construct($subFormClass) {
+    public function __construct($subFormClass)
+    {
         // Typ aus Klassennamen ableiten (Suffix nach dem letzten Unterstrich)
         $this->_type = substr($subFormClass, strrpos($subFormClass, '_') + 1);
         $this->_typeShort = strtolower(substr($this->_type, -3));
@@ -77,7 +79,8 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
      *
      * init-Methode wird von ZF nach dem Aufruf des Konstruktors aufgerufen
      */
-    public function init() {
+    public function init()
+    {
         parent::init();
 
         // mehrere DOIs / URNs pro Dokument werden nicht unterstützt, so dass der Add-Button obsolet ist
@@ -108,7 +111,12 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
         $this->setRemoveEmptyCheckbox(false);
     }
 
-    private function addCheckbox() {
+    /**
+     * Adds a checkbox for controlling auto generation of identifier.
+     * @throws Zend_Form_Exception
+     */
+    private function addCheckbox()
+    {
         $name = self::ELEMENT_CHK_AUTO . $this->_type;
         $this->addElement(
             'checkbox',
@@ -125,7 +133,8 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
      *
      * @param Opus_Document $document
      */
-    public function populateFromModel($document) {
+    public function populateFromModel($document)
+    {
 
         // muss die Checkbox entfernt werden?
         $removeCheckbox = $this->removeCheckboxForPublishedDocs($document);
@@ -166,7 +175,8 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
      *
      * @return _subFormClass
      */
-    protected function _addSubForm($position, $disableGenerateButton = null) {
+    protected function _addSubForm($position, $disableGenerateButton = null)
+    {
         $subForm = $this->createSubForm();
 
         if (is_null($disableGenerateButton)) {
@@ -198,8 +208,8 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
      * und auch die Anzeige der Checkbox (aktiviert oder nicht aktiviert)
      *
      */
-    private function addGenerateAtPublishCheckbox($document) {
-
+    private function addGenerateAtPublishCheckbox($document)
+    {
         $autoGenerateCheckbox = $this->getElement(self::ELEMENT_CHK_AUTO . $this->_type);
 
         if (is_null($autoGenerateCheckbox)) {
@@ -226,15 +236,16 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
                 break;
         }
     }
-    
+
     /**
      * bei bereits veröffentlichten Dokumenten soll die Checkbox zum automatischen
      * Setzen der ID nicht angezeigt werden
-     * 
+     *
      * @param Opus_Document $document das zu editierende Dokument
      * @return liefert true zurück, wenn die Checkbox entfernt wurde
      */
-    private function removeCheckboxForPublishedDocs($document) {
+    private function removeCheckboxForPublishedDocs($document)
+    {
         if ($document->getServerState() == 'published'){
             $this->removeElement(self::ELEMENT_CHK_AUTO . $this->_type);
             return true;
@@ -248,7 +259,8 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
      * @param array $identifiers Liste mit Elementen vom Typ Opus_Identifier
      * @return array mit Elementen vom Typ Opus_Identifier (nach der Filterung auf Basis des Typs)
      */
-    private function filterIdentifier($identifiers) {
+    private function filterIdentifier($identifiers)
+    {
         $result = array();
         foreach ($identifiers as $identifier) {
             $type = $identifier->getType();
@@ -256,7 +268,7 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
                 $result[] = $identifier;
             }
         }
-        return $result;        
+        return $result;
     }
 
     /**
@@ -264,7 +276,8 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
      *
      * TODO was passiert wenn ein invalides Formular auftaucht beim anschließenden $form->populate()?
      */
-    public function constructFromPost($post, $document = null) {
+    public function constructFromPost($post, $document = null)
+    {
         $keys = array_keys($post);
 
         $removeCheckbox = $this->removeCheckboxForPublishedDocs($document);
@@ -310,8 +323,8 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
      * @param array $context POST Daten für gesamtes Formular
      * @return string Ergebnis der Verarbeitung
      */
-    public function processPost($data, $context) {
-
+    public function processPost($data, $context)
+    {
         foreach ($data as $subFormName => $subdata) {
             $subform = $this->getSubForm($subFormName);
             if (!is_null($subform)) {
@@ -358,7 +371,8 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
         return null;
     }
 
-    protected function processPostGenerate($subform, $docId) {
+    protected function processPostGenerate($subform, $docId)
+    {
         switch ($this->_subFormClass) {
             case 'Admin_Form_Document_IdentifierDOI':
                 try {
@@ -405,7 +419,8 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
      *
      * @param Opus_Document $document
      */
-    public function updateModel($document) {
+    public function updateModel($document)
+    {
         // Array von Opus_Identifier Objekten eines Typs
         $values = $this->getSubFormModels($document);
 
@@ -458,7 +473,8 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
      *
      * @param $document
      */
-    private function handleEnrichment($document) {
+    private function handleEnrichment($document)
+    {
         $autoGenerateCheckbox = $this->getElement(self::ELEMENT_CHK_AUTO . $this->_type);
         if (!is_null($autoGenerateCheckbox)) {
             // Null-Check wichtig, da Checkbox nur bei nicht veröffentlichten Dokumenten angezeigt wird
@@ -539,7 +555,8 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
      *
      * @param type $subform
      */
-    protected function prepareSubFormDecorators($subform) {
+    protected function prepareSubFormDecorators($subform)
+    {
         $subform->addDecorator(array('tableRowWrapper' => 'HtmlTag'), array('tag' => 'tr'));
         $this->applyDecoratorsToElements($subform->getElements());
     }
@@ -547,7 +564,8 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
     /**
      * Erzeugt den Button für das Entfernen des 2. bis n-ten Identifiers des Typs.
      */
-    protected function addRemoveButton($subform) {
+    protected function addRemoveButton($subform)
+    {
         $button = $this->createElement(
             'submit',
             self::ELEMENT_REMOVE,
@@ -558,7 +576,11 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
         $subform->addElement($button);
     }
 
-    public function isEmpty() {
+    /**
+     * @return bool
+     */
+    public function isEmpty()
+    {
         return false;
     }
 
@@ -571,7 +593,8 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
      *
      * @param string $name Name des Unterformulars das entfernt werden sollte
      */
-    protected function _removeSubForm($name) {
+    protected function _removeSubForm($name)
+    {
         $order = $this->getSubForm($name)->getOrder();
         $this->removeSubForm($name);
         return $order;
@@ -580,7 +603,8 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
     /**
      * Methode wurde überschrieben, da Spezialbehandlung durch die Checkbox erforderlich ist
      */
-    protected function _removeGapsInSubFormOrder() {
+    protected function _removeGapsInSubFormOrder()
+    {
         $subforms = $this->getSubForms();
 
         $renamedSubforms = array();
@@ -599,8 +623,8 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
         $this->setSubForms($renamedSubforms);
     }
 
-    private function getEnrichmentKeyName() {
+    private function getEnrichmentKeyName()
+    {
         return 'opus.' .  $this->_typeShort . '.autoCreate';
     }
-
 }

@@ -31,13 +31,14 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Admin_Form_Document_IdentifierSpecific extends Admin_Form_AbstractModelSubForm {
+class Admin_Form_Document_IdentifierSpecific extends Admin_Form_AbstractModelSubForm
+{
 
     /**
      * Name für Formularelement Input-Field Identifier-Wert
      */
     const ELEMENT_VALUE = 'Value';
-    
+
     /**
      * Name für Formularelement Input-Field Identifier-Id
      */
@@ -48,12 +49,16 @@ class Admin_Form_Document_IdentifierSpecific extends Admin_Form_AbstractModelSub
      */
     const ELEMENT_DOC_ID = 'DocId';
 
-    protected $type;
+    /**
+     * @var string Type of identifier
+     */
+    private $type;
 
     /**
      * Erzeugt Elemente für Identifier Formular.
      */
-    public function init() {
+    public function init()
+    {
         parent::init();
 
         $this->addElement('text', self::ELEMENT_VALUE,
@@ -65,19 +70,21 @@ class Admin_Form_Document_IdentifierSpecific extends Admin_Form_AbstractModelSub
         $this->addElement('hidden', self::ELEMENT_ID);
         $this->addElement('hidden', self::ELEMENT_DOC_ID);
     }
-    
+
     /**
      * Befüllt Formularelemente aus Opus_Identifier Instanz.
      *
      * @param Opus_Identifier $identifier
      */
-    public function populateFromModel($identifier) {
+    public function populateFromModel($identifier)
+    {
         $this->getElement(self::ELEMENT_VALUE)->setValue($identifier->getValue());
         $this->getElement(self::ELEMENT_ID)->setValue($identifier->getId());
         $this->getElement(self::ELEMENT_DOC_ID)->setValue($identifier->getParentId());
     }
-    
-    public function setValue($value) {
+
+    public function setValue($value)
+    {
         $this->getElement(self::ELEMENT_VALUE)->setValue($value);
     }
 
@@ -86,16 +93,18 @@ class Admin_Form_Document_IdentifierSpecific extends Admin_Form_AbstractModelSub
      *
      * @param Opus_Identifier $identifier
      */
-    public function updateModel($identifier) {
+    public function updateModel($identifier)
+    {
         $value = $this->getElement(self::ELEMENT_VALUE)->getValue();
         $identifier->setValue($value);
     }
 
-    public function getModel() {
+    public function getModel()
+    {
         $modelId = $this->getElement(self::ELEMENT_ID)->getValue();
 
         $identifier = null;
-                
+
         if (strlen(trim($modelId)) > 0) {
             try {
                 $identifier = new Opus_Identifier($modelId);
@@ -109,14 +118,14 @@ class Admin_Form_Document_IdentifierSpecific extends Admin_Form_AbstractModelSub
             $identifier = new Opus_Identifier();
             $identifier->setType($this->type);
         }
-        
+
         $this->updateModel($identifier);
-                
+
         return $identifier;
     }
 
-    public function getType() {
+    public function getType()
+    {
         return $this->type;
     }
-
 }

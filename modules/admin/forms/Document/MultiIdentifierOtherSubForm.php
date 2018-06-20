@@ -31,14 +31,17 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Admin_Form_Document_MultiIdentifierOtherSubForm extends Admin_Form_Document_MultiSubForm {
+class Admin_Form_Document_MultiIdentifierOtherSubForm extends Admin_Form_Document_MultiSubForm
+{
 
-    public function init() {
+    public function init()
+    {
         parent::init();
         $this->setLegend('admin_document_section_identifier_other');
     }
 
-    public function getFieldValues($document) {
+    public function getFieldValues($document)
+    {
         $value = parent::getFieldValues($document);
         if (!is_null($value)) {
             $value = $this->filterIdentifier($value);
@@ -53,7 +56,8 @@ class Admin_Form_Document_MultiIdentifierOtherSubForm extends Admin_Form_Documen
      * @param $identifiers
      * @return array
      */
-    private function filterIdentifier($identifiers) {
+    private function filterIdentifier($identifiers)
+    {
         $result = array();
         foreach ($identifiers as $identifier) {
             if ($identifier->getType() == 'doi' || $identifier->getType() == 'urn') {
@@ -71,7 +75,8 @@ class Admin_Form_Document_MultiIdentifierOtherSubForm extends Admin_Form_Documen
      *
      * @param Opus_Document $document
      */
-    public function updateModel($document) {
+    public function updateModel($document)
+    {
         $values = $this->getSubFormModels($document);
         $identifiers = $document->getIdentifier();
 
