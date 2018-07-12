@@ -37,7 +37,7 @@
 
     <ul class="paginationControl">
         <li>
-            <?PHP if ($this->start >= $this->rows) : ?>
+            <?PHP if ($this->start > 0) : ?>
             <a class="pagination-first" href="<?= $this->url($this->firstPage); ?>"
                 title="<?= $this->translate('pagination_first_page') ?>">
             </a>
@@ -47,7 +47,7 @@
         </li>
 
         <li>
-            <?PHP if ($this->start >= $this->rows) : ?>
+            <?PHP if ($this->start > 0) : ?>
             <a class="pagination-prev" href="<?= $this->url($this->prevPage); ?>"
                 title="<?= $this->translate('pagination_previous_page') ?>"></a>
                 <?PHP else : ?>
