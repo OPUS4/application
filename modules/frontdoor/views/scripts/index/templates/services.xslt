@@ -188,6 +188,11 @@
             <xsl:text disable-output-escaping="yes">http://twitter.com/share?url=</xsl:text><xsl:value-of select="$baseUrlServer"/><xsl:text>/frontdoor/index/index/docId/</xsl:text>
             <xsl:value-of select="@Id" />
          </xsl:attribute>
+          <xsl:if test="php:functionString('Application_Xslt::optionEnabled', 'twitter.openInNewWindow')">
+              <xsl:attribute name="target">
+                  <xsl:text>_blank</xsl:text>
+              </xsl:attribute>
+          </xsl:if>
          <img>
             <xsl:attribute name="src">
                <xsl:value-of select="$layoutPath"/>

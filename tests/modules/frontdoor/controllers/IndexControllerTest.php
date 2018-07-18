@@ -1240,6 +1240,28 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $this->dispatch("/frontdoor/index/index/docId/$docId");
     }
 
+    public function testTwitterOpenInNewWindowEnabled()
+    {
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
+            'twitter' => array('openInNewWindow' => 1)
+        )));
+        $this->dispatch('/frontdoor/index/index/docId/146');
+        $this->assertResponseCode(200);
+        $this->assertXpathCount('//a[contains(@href, "twitter.com") and @target = "_blank"]', 1);
+        $this->assertXpathCount('//a[contains(@href, "twitter.com") and not(@target)]', 0);
+    }
+
+    public function testTwitterOpenInNewWindowDisabled()
+    {
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
+            'twitter' => array('openInNewWindow' => 0)
+        )));
+        $this->dispatch('/frontdoor/index/index/docId/146');
+        $this->assertResponseCode(200);
+        $this->assertXpathCount('//a[contains(@href, "twitter.com") and @target = "_blank"]', 0);
+        $this->assertXpathCount('//a[contains(@href, "twitter.com") and not(@target)]', 1);
+    }
+
     public function testUnableToTranslate() {
         $filter = new LogFilter();
 
