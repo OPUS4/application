@@ -211,9 +211,11 @@
          <xsl:element name="a">
             <!--TODO: Use Zend Url-Helper to build href attribute--> 
             <xsl:attribute name="href">
-               <xsl:text disable-output-escaping="yes">http://scholar.google.de/scholar?hl=de&amp;q="</xsl:text>
+                <xsl:text disable-output-escaping="yes">http://scholar.google.de/scholar?hl=</xsl:text>
+                <xsl:value-of select="php:functionString('Application_Xslt::locale')" />
+                <xsl:text disable-output-escaping="yes">&amp;q="</xsl:text>
                 <xsl:value-of select="TitleMain/@Value"/>       <!-- q: Titelsuchfeld -->
-               <xsl:text>"</xsl:text>
+                <xsl:text>"</xsl:text>
                 <xsl:call-template name="AuthorUrl" />       <!-- as_sauthors: Suchfeld für Autor -->
                 <xsl:text>&amp;as_ylo=</xsl:text>       <!-- as_ylo: gibt die untere Grenze des Suchzeitraums an -->
                 <xsl:call-template name="DateUrl" />

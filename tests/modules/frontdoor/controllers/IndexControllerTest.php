@@ -25,13 +25,19 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Tests
+ * @category    Tests
+ * @package     Frontdoor
  * @author      Julian Heise <heise@zib.de>
  * @author      Michael Lang <lang@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
+ */
+
+/**
+ * Class Frontdoor_IndexControllerTest.
+ *
+ * @covers Frontdoor_IndexController
  */
 class Frontdoor_IndexControllerTest extends ControllerTestCase {
 
@@ -1182,13 +1188,24 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $this->assertNotQuery('//a[@href="/frontdoor/index/index/docId/305/export/xml/stylesheet/example"]');
     }
 
-    public function testGoogleScholarLink() {
+    public function testGoogleScholarLink()
+    {
+        $this->useGerman();
         $this->dispatch('/frontdoor/index/index/docId/146');
         $this->assertResponseCode(200);
         $body = $this->getResponse()->getBody();
         $this->assertContains('http://scholar.google.de/scholar?hl=de&amp;q=&quot;KOBV&quot;&amp;as_sauthors=John+Doe' .
             '&amp;as_ylo=2007&amp;as_yhi=2007', $body);
+    }
 
+    public function testGoogleScholarLinkEnglish()
+    {
+        $this->useEnglish();
+        $this->dispatch('/frontdoor/index/index/docId/146');
+        $this->assertResponseCode(200);
+        $body = $this->getResponse()->getBody();
+        $this->assertContains('http://scholar.google.de/scholar?hl=en&amp;q=&quot;KOBV&quot;&amp;as_sauthors=John+Doe' .
+            '&amp;as_ylo=2007&amp;as_yhi=2007', $body);
     }
 
     public function testShowDocumentWithFileWithoutLanguage() {

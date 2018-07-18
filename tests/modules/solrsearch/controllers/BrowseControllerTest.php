@@ -29,11 +29,15 @@
  * @author      Sascha Szott <szott@zib.de>
  * @author      Michael Lang <lang@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
+/**
+ * Class Solrsearch_BrowseControllerTest.
+ *
+ * @covers Solrsearch_BrowseController
+ */
 class Solrsearch_BrowseControllerTest extends ControllerTestCase {
 
     public function setUp() {

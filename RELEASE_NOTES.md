@@ -2,6 +2,45 @@
 
 ---
 
+## Release 4.6.2 2018-06-11
+
+Mit diesem Release wird der neue DOI-Support veröffentlicht. 
+
+Die Dokumentation für den DOI-Support findet sich hier:
+<http://www.opus-repository.org/userdoc/configext/doi.html>
+
+Nach der Aktualisierung der Dateien (`git pull`) sollten die Composer-Abhängigkeiten 
+aktualisiert werden (`composer update` bzw. `php composer.phar update`). Anschließend 
+muss das Update-Skript ausgeführt werden (`bin/update.sh`), um die Datenbank für den 
+erweiterten DOI-Support anzupassen.
+
+---
+
+## Release 4.6.1 2018-02-26
+
+In diesem Release wurden Fehler behoben und einige kleinere Verbesserungen 
+umgesetzt. Die genaue Liste der Tickets befindet sich in der Datei `changes.md`.
+Fragen zu einzelnen Tickets können gerne über die OPUS 4 Tester Mailingliste
+gestellt werden (kobv-opus-tester@zib.de).
+
+<https://listserv.zib.de/mailman/listinfo/kobv-opus-tester>
+
+### Sortierung von Schriftenreihen
+
+Mit der neuen Konfigurationsoption "series.sortByTitle = 1" kann dafür gesorgt
+werden, dass Schriftenreihen unabhängig vom `SortOrder` Feld immer alphabetisch
+sortiert angezeigt werden. Eine alphabetische Sortierung mit manuellen Ausnahmen
+ist nicht möglich. 
+
+### Validierung ISBN und ISSN
+
+ISBN und ISSN werden in der Administration nun validiert. Ist momentan ein 
+ungültiger in einem Dokument gespeichert, kann es beim nächsten Editieren dazu 
+kommen, dass die ungültige ISBN oder ISSN erst korrigiert werden muss bevor
+das Dokument gespeichert werden kann.
+
+---
+
 ## Release 4.6 2017-08-14
 
 Im folgenden werden die wichtigsten Änderungen und Neuheiten für OPUS 4.6

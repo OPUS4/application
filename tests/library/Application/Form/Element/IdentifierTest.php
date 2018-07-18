@@ -51,7 +51,8 @@ class Application_Form_Element_IdentifierTest extends FormElementTestCase {
 
         $types = $identifier->getField('Type')->getDefault();
 
-        $this->assertEquals(count($types), count($element->getMultiOptions()));
+        // URNs und DOIs werden gesondert behandelt
+        $this->assertEquals(count($types) - 2, count($element->getMultiOptions()));
 
         foreach ($element->getMultiOptions() as $type => $label) {
             $this->assertContains($type, $types);

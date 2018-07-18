@@ -24,17 +24,17 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Unit Tests
+ * @category    Tests
  * @author      Jens Schwidder <schwidder@zib.de>
  * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
  * Unit tests for Admin_DocumentController.
  *
- * @coversDefaultClass Admin_DocumentController
+ * @covers Admin_DocumentController
  */
 class Admin_DocumentControllerTest extends ControllerTestCase {
 
@@ -53,7 +53,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
             '#fieldset-Enrichments' => 'Benutzerdefinierte Felder (Enrichments)',
             '#fieldset-Collections' => 'Sammlungen, Klassifikationen',
             '#fieldset-Content' => 'Inhaltliche Erschließung',
-            '#fieldset-Identifiers' => 'Identifier',
+            '#fieldset-IdentifiersAll' => 'Identifikatoren',
             '#fieldset-Licences' => 'Lizenzen',
             '#fieldset-Patents' => 'Patente',
             '#fieldset-Notes' => 'Bemerkungen',
@@ -304,7 +304,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
             'input#Document-Content-Subjects-Psyndex-Add',
             'input#Document-Content-Subjects-Uncontrolled-Add',
 
-            'input#Document-Identifiers-Add',
+            'input#Document-IdentifiersAll-Identifiers-Add',
             'input#Document-Patents-Add',
             'input#Document-Notes-Add',
         );
@@ -517,53 +517,51 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
         $this->assertQueryContentContains('//*[@id="Document-Content-Subjects-Uncontrolled-Subject0-Value"]', 'Palmöl');
 
         // Identifier
-        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier0-Type"]', 'alter Identifier');
-        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier0-Value"]', '123');
+        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-IdentifiersDOI-IdentifierDOI0-Value"]', '123');
 
-        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier1-Type"]', 'Sequenznummer');
-        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier1-Value"]', '123');
+        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-IdentifiersURN-IdentifierURN0-Value"]', 'urn:nbn:op:123');
 
-        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier2-Type"]', 'Uuid');
-        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier2-Value"]', '123');
+        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-Identifiers-Identifier0-Type"]', 'alter Identifier');
+        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-Identifiers-Identifier0-Value"]', '123');
 
-        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier3-Type"]', 'ISBN');
-        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier3-Value"]', '123');
+        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-Identifiers-Identifier1-Type"]', 'Sequenznummer');
+        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-Identifiers-Identifier1-Value"]', '123');
 
-        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier4-Type"]', 'URN');
-        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier4-Value"]', 'urn:nbn:op:123');
+        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-Identifiers-Identifier2-Type"]', 'Uuid');
+        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-Identifiers-Identifier2-Value"]', '123');
 
-        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier5-Type"]', 'DOI');
-        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier5-Value"]', '123');
+        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-Identifiers-Identifier3-Type"]', 'ISBN');
+        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-Identifiers-Identifier3-Value"]', '123');
 
-        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier6-Type"]', 'Handle');
-        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier6-Value"]', '123');
+        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-Identifiers-Identifier4-Type"]', 'Handle');
+        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-Identifiers-Identifier4-Value"]', '123');
 
-        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier7-Type"]', 'URL');
-        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier7-Value"]', '123');
+        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-Identifiers-Identifier5-Type"]', 'URL');
+        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-Identifiers-Identifier5-Value"]', '123');
 
-        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier8-Type"]', 'ISSN');
-        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier8-Value"]', '123');
+        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-Identifiers-Identifier6-Type"]', 'ISSN');
+        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-Identifiers-Identifier6-Value"]', '123');
 
-        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier9-Type"]', 'STD-DOI');
-        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier9-Value"]', '123');
+        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-Identifiers-Identifier7-Type"]', 'STD-DOI');
+        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-Identifiers-Identifier7-Value"]', '123');
 
-        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier10-Type"]', 'CRIS-Link');
-        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier10-Value"]', '123');
+        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-Identifiers-Identifier8-Type"]', 'CRIS-Link');
+        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-Identifiers-Identifier8-Value"]', '123');
 
-        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier11-Type"]', 'SplashURL');
-        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier11-Value"]', '123');
+        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-Identifiers-Identifier9-Type"]', 'SplashURL');
+        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-Identifiers-Identifier9-Value"]', '123');
 
-        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier12-Type"]', 'OPUS 3 Id');
-        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier12-Value"]', '123');
+        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-Identifiers-Identifier10-Type"]', 'OPUS 3 Id');
+        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-Identifiers-Identifier10-Value"]', '123');
 
-        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier13-Type"]', 'Opac Id');
-        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier13-Value"]', '123');
+        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-Identifiers-Identifier11-Type"]', 'Opac Id');
+        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-Identifiers-Identifier11-Value"]', '123');
 
-        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier14-Type"]', 'Pubmed-Id');
-        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier14-Value"]', '123');
+        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-Identifiers-Identifier12-Type"]', 'Pubmed-Id');
+        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-Identifiers-Identifier12-Value"]', '123');
 
-        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier15-Type"]', 'ArXiv-Id');
-        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier15-Value"]', '123');
+        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-Identifiers-Identifier13-Type"]', 'ArXiv-Id');
+        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-Identifiers-Identifier13-Value"]', '123');
 
         // Lizenzen
         $this->assertQueryContentContains('//fieldset[@id="fieldset-Licences"]/legend', 'Lizenzen');
@@ -754,53 +752,51 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
         $this->assertQueryContentContains('//*[@id="Document-Content-Subjects-Uncontrolled-Subject0-Value"]', 'Palmöl');
 
         // Identifier
-        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier0-Type"]', 'old Identifier');
-        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier0-Value"]', '123');
+        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-IdentifiersDOI-IdentifierDOI0-Value"]', '123');
 
-        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier1-Type"]', 'Serial Number');
-        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier1-Value"]', '123');
+        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-IdentifiersURN-IdentifierURN0-Value"]', 'urn:nbn:op:123');
 
-        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier2-Type"]', 'Uuid');
-        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier2-Value"]', '123');
+        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-Identifiers-Identifier0-Type"]', 'old Identifier');
+        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-Identifiers-Identifier0-Value"]', '123');
 
-        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier3-Type"]', 'ISBN');
-        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier3-Value"]', '123');
+        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-Identifiers-Identifier1-Type"]', 'Serial Number');
+        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-Identifiers-Identifier1-Value"]', '123');
 
-        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier4-Type"]', 'URN');
-        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier4-Value"]', 'urn:nbn:op:123');
+        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-Identifiers-Identifier2-Type"]', 'Uuid');
+        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-Identifiers-Identifier2-Value"]', '123');
 
-        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier5-Type"]', 'DOI');
-        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier5-Value"]', '123');
+        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-Identifiers-Identifier3-Type"]', 'ISBN');
+        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-Identifiers-Identifier3-Value"]', '123');
 
-        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier6-Type"]', 'Handle');
-        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier6-Value"]', '123');
+        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-Identifiers-Identifier4-Type"]', 'Handle');
+        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-Identifiers-Identifier4-Value"]', '123');
 
-        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier7-Type"]', 'URL');
-        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier7-Value"]', '123');
+        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-Identifiers-Identifier5-Type"]', 'URL');
+        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-Identifiers-Identifier5-Value"]', '123');
 
-        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier8-Type"]', 'ISSN');
-        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier8-Value"]', '123');
+        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-Identifiers-Identifier6-Type"]', 'ISSN');
+        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-Identifiers-Identifier6-Value"]', '123');
 
-        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier9-Type"]', 'STD-DO');
-        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier9-Value"]', '123');
+        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-Identifiers-Identifier7-Type"]', 'STD-DO');
+        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-Identifiers-Identifier7-Value"]', '123');
 
-        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier10-Type"]', 'CRIS-Link');
-        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier10-Value"]', '123');
+        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-Identifiers-Identifier8-Type"]', 'CRIS-Link');
+        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-Identifiers-Identifier8-Value"]', '123');
 
-        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier11-Type"]', 'SplashURL');
-        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier11-Value"]', '123');
+        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-Identifiers-Identifier9-Type"]', 'SplashURL');
+        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-Identifiers-Identifier9-Value"]', '123');
 
-        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier12-Type"]', 'Opus3 Id');
-        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier12-Value"]', '123');
+        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-Identifiers-Identifier10-Type"]', 'Opus3 Id');
+        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-Identifiers-Identifier10-Value"]', '123');
 
-        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier13-Type"]', 'Opac Id');
-        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier13-Value"]', '123');
+        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-Identifiers-Identifier11-Type"]', 'Opac Id');
+        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-Identifiers-Identifier11-Value"]', '123');
 
-        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier14-Type"]', 'Pubmed Id');
-        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier14-Value"]', '123');
+        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-Identifiers-Identifier12-Type"]', 'Pubmed Id');
+        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-Identifiers-Identifier12-Value"]', '123');
 
-        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier15-Type"]', 'ArXiv Id');
-        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier15-Value"]', '123');
+        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-Identifiers-Identifier13-Type"]', 'ArXiv Id');
+        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-Identifiers-Identifier13-Value"]', '123');
 
         // Lizenzen (Name der Lizenz nicht übersetzt)
         $this->assertQueryContentContains('//fieldset[@id="fieldset-Licences"]/legend', 'Licences');

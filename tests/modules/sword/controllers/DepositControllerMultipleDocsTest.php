@@ -24,12 +24,13 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Tests
+ * @category    Tests
+ * @package     Sword
  * @author      Sascha Szott
- * @copyright   Copyright (c) 2016
+ * @copyright   Copyright (c) 2016-2018
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
+ *
+ * @covers Sword_DepositController
  */
 class Sword_DepositControllerMultipleDocsTest extends ControllerTestCase {
 
