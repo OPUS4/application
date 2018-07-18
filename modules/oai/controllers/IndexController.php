@@ -33,7 +33,7 @@
  * @author      Michael Lang <lang@zib.de>
  * @author      Thoralf Klein <thoralf.klein@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2009 - 2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2009 - 2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  *
  * TODO move all processing into model classes for testing and reuse
@@ -48,7 +48,8 @@ class Oai_IndexController extends Application_Controller_ModuleAccess
      *
      * @return void
      */
-    public function init() {
+    public function init()
+    {
         // Controller outputs plain Xml, so rendering and layout are disabled.
         $this->disableViewRendering();
     }
@@ -56,7 +57,8 @@ class Oai_IndexController extends Application_Controller_ModuleAccess
     /**
      * Method called when access to module has been denied.
      */
-    public function moduleAccessDeniedAction() {
+    public function moduleAccessDeniedAction()
+    {
         $response = $this->getResponse();
         $response->setHttpResponseCode(401);
 
@@ -79,7 +81,7 @@ class Oai_IndexController extends Application_Controller_ModuleAccess
         $oaiRequest = $this->getRequest()->getParams();
 
         // remove parameters which are "safe" to remove
-        $safeRemoveParameters = array('module', 'controller', 'action', 'role');
+        $safeRemoveParameters = ['module', 'controller', 'action', 'role'];
 
         foreach ($safeRemoveParameters as $parameter) {
             unset($oaiRequest[$parameter]);
@@ -93,5 +95,4 @@ class Oai_IndexController extends Application_Controller_ModuleAccess
         $this->getResponse()->setBody($server->handleRequest($oaiRequest, $this->getRequest()->getRequestUri()));
         $this->getResponse()->setHeader('Content-Type', 'text/xml; charset=UTF-8', true);
     }
-
 }
