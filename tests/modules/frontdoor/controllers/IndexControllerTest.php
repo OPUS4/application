@@ -1208,6 +1208,28 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
             '&amp;as_ylo=2007&amp;as_yhi=2007', $body);
     }
 
+    public function testGoogleScholarOpenInNewWindowEnabled()
+    {
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
+            'googleScholar' => array('openInNewWindow' => 1)
+        )));
+        $this->dispatch('/frontdoor/index/index/docId/146');
+        $this->assertResponseCode(200);
+        $this->assertXpathCount('//a[contains(@href, "scholar.google.de") and @target = "_blank"]', 1);
+        $this->assertXpathCount('//a[contains(@href, "scholar.google.de") and not(@target)]', 0);
+    }
+
+    public function testGoogleScholarOpenInNewWindowDisabled()
+    {
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
+            'googleScholar' => array('openInNewWindow' => 0)
+        )));
+        $this->dispatch('/frontdoor/index/index/docId/146');
+        $this->assertResponseCode(200);
+        $this->assertXpathCount('//a[contains(@href, "scholar.google.de") and @target = "_blank"]', 0);
+        $this->assertXpathCount('//a[contains(@href, "scholar.google.de") and not(@target)]', 1);
+    }
+
     public function testShowDocumentWithFileWithoutLanguage() {
         $this->markTestIncomplete('OPUSVIER-3401');
         $doc = $this->createTestDocument();
