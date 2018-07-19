@@ -150,6 +150,7 @@ class Oai_Model_Server extends Application_Model_Abstract
         $this->_proc->registerPHPFunctions('Oai_Model_Language::getLanguageCode');
         Application_Xslt::registerViewHelper($this->_proc, array('optionValue'));
         $this->_proc->setParameter('', 'urnResolverUrl', $this->getConfig()->urn->resolverUrl);
+        $this->_proc->setParameter('', 'doiResolverUrl', $this->getConfig()->doi->resolverUrl);
 
         // Set response time
         $this->_proc->setParameter(

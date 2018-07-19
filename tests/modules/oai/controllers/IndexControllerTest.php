@@ -2274,4 +2274,21 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->assertNotContains('>"', $this->getResponse()->getBody(), 'XML contains \'"\' after an element.');
     }
 
+    public function testGetRecordOaiDcContainsDoi()
+    {
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=oai_dc&identifier=oai::146');
+
+        $this->registerXpathNamespaces($this->xpathNamespaces);
+
+        $this->assertXpathContentContains('//oai_dc:dc/dc:identifier','123');
+    }
+
+    public function testGetRecordXMetaDissPlusContainsDoi()
+    {
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=XMetaDissPlus&identifier=oai::146');
+
+        $this->registerXpathNamespaces($this->xpathNamespaces);
+
+        $this->assertXpathContentContains('//xMetaDiss:xMetaDiss/dc:identifier','123');
+    }
 }

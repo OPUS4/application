@@ -209,6 +209,7 @@
 
             <!-- dc:identifier -->
             <xsl:apply-templates select="IdentifierUrn" mode="xmetadissplus" />
+            <xsl:apply-templates select="IdentifierDoi" mode="xmetadissplus" />
 
             <!-- weird DNB constraint: dcterms:medium must appear after dc:identifier -->
             <xsl:for-each select="File[not(@MimeType = preceding-sibling::File/@MimeType)]/@MimeType">
@@ -507,6 +508,12 @@
 
     <xsl:template match="IdentifierUrn" mode="xmetadissplus">
         <dc:identifier xsi:type="urn:nbn">
+            <xsl:value-of select="@Value" />
+        </dc:identifier>
+    </xsl:template>
+
+    <xsl:template match="IdentifierDoi" mode="xmetadissplus">
+        <dc:identifier xsi:type="doi:doi">
             <xsl:value-of select="@Value" />
         </dc:identifier>
     </xsl:template>

@@ -75,7 +75,7 @@
             <!-- dc:subject -->
             <xsl:apply-templates select="Subject[@Type='swd']" mode="oai_dc" />
             <xsl:apply-templates select="Collection[@RoleName='ddc' and @Visible=1]" mode="oai_dc" />
-           
+
             <!-- dc:description -->
             <xsl:apply-templates select="TitleAbstract" mode="oai_dc" />
             <!-- dc:publisher -->
@@ -96,6 +96,7 @@
             </dc:identifier>
             <xsl:apply-templates select="IdentifierUrn" mode="oai_dc" />
             <xsl:apply-templates select="IdentifierIsbn" mode="oai_dc" />
+            <xsl:apply-templates select="IdentifierDoi" mode="oai_dc" />
             <xsl:apply-templates select="File" mode="oai_dc" />
             <!-- dc:language -->
             <xsl:apply-templates select="@Language" mode="oai_dc" />
@@ -198,7 +199,7 @@
             <xsl:text>ddc:</xsl:text><xsl:value-of select="@Number" />
         </dc:subject>
     </xsl:template>
-	
+
     <xsl:template match="TitleAbstract" mode="oai_dc">
         <dc:description>
             <xsl:attribute name="xml:lang">
@@ -212,7 +213,7 @@
         <xsl:choose>
             <xsl:when test="starts-with($oai_set,'openaire')">
                 <dc:type>
-                    <xsl:call-template name="compareDocumentName" />     
+                    <xsl:call-template name="compareDocumentName" />
                </dc:type>
             </xsl:when>
             <xsl:otherwise>
@@ -282,7 +283,7 @@
             </xsl:otherwise>
         </xsl:choose>
      </xsl:template>
-	
+
      <xsl:template name="dcmiType" >
           <xsl:choose>
             <xsl:when test=". = 'diplthesis' or  . = 'diplom'">
@@ -334,6 +335,13 @@
         </dc:identifier>
         <dc:identifier>
             <xsl:value-of select="$urnResolverUrl" />
+            <xsl:value-of select="@Value" />
+        </dc:identifier>
+    </xsl:template>
+
+    <xsl:template match="IdentifierDoi" mode="oai_dc">
+        <dc:identifier>
+            <xsl:value-of select="$doiResolverUrl" />
             <xsl:value-of select="@Value" />
         </dc:identifier>
     </xsl:template>

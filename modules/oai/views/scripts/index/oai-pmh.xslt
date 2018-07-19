@@ -44,6 +44,7 @@
     exclude-result-prefixes="php">
 
     <xsl:param name="urnResolverUrl" />
+    <xsl:param name="doiResolverUrl" />
 
     <!-- add include here for each new metadata format    -->
 
