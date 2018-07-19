@@ -140,7 +140,8 @@ class Oai_Model_Server extends Application_Model_Abstract
      * @throws Oai_Model_Exception Thrown if the request could not be handled.
      * @return void
      */
-    protected function handleRequestIntern(array $oaiRequest, $requestUri) {
+    protected function handleRequestIntern(array $oaiRequest, $requestUri)
+    {
         $this->init();
 
         // Setup stylesheet
@@ -225,8 +226,8 @@ class Oai_Model_Server extends Application_Model_Abstract
      * @param  array &$oaiRequest Contains full request information
      * @return void
      */
-    protected function _handleGetRecord(array &$oaiRequest) {
-
+    protected function _handleGetRecord(array &$oaiRequest)
+    {
         // Identifier references metadata Urn, not plain Id!
         // Currently implemented as 'oai:foo.bar.de:{docId}' or 'urn:nbn...-123'
         $docId = $this->getDocumentIdByIdentifier($oaiRequest['identifier']);
@@ -273,8 +274,8 @@ class Oai_Model_Server extends Application_Model_Abstract
      * @param  array &$oaiRequest Contains full request information
      * @return void
      */
-    protected function _handleIdentify() {
-
+    protected function _handleIdentify()
+    {
         $email = $this->_configuration->getEmailContact();
         $repName = $this->_configuration->getRepositoryName();
         $repIdentifier = $this->_configuration->getRepositoryIdentifier();
@@ -362,7 +363,8 @@ class Oai_Model_Server extends Application_Model_Abstract
      * @param  array &$oaiRequest Contains full request information
      * @return void
      */
-    protected function _handleListSets() {
+    protected function _handleListSets()
+    {
         $logger = $this->getLogger();
 
         $repIdentifier = $this->_configuration->getRepositoryIdentifier();
@@ -396,8 +398,8 @@ class Oai_Model_Server extends Application_Model_Abstract
      * @param mixed $maxRecords
      * @return void
      */
-    private function _handlingOfLists(array &$oaiRequest, $maxRecords) {
-
+    private function _handlingOfLists(array &$oaiRequest, $maxRecords)
+    {
         if (true === empty($maxRecords)) {
             $maxRecords = 100;
         }
@@ -407,11 +409,12 @@ class Oai_Model_Server extends Application_Model_Abstract
 
         $this->_proc->setParameter('', 'repIdentifier', $repIdentifier);
         $this->_xml->appendChild($this->_xml->createElement('Documents'));
+
         // do some initialisation
         $cursor = 0;
         $totalIds = 0;
         $start = $maxRecords + 1;
-        $reldocIds = array();
+        $restIds = array();
 
         $metadataPrefix = null;
         if (true === array_key_exists('metadataPrefix', $oaiRequest)) {
@@ -421,9 +424,10 @@ class Oai_Model_Server extends Application_Model_Abstract
         $tokenWorker = new Oai_Model_Resumptiontokens;
         $tokenWorker->setResumptionPath($tempPath);
 
-        // parameter resumptionToken is given
-        if (false === empty($oaiRequest['resumptionToken'])) {
+        $resumed = false;
 
+        if (false === empty($oaiRequest['resumptionToken'])) {
+            // parameter resumptionToken is given
             $resParam = $oaiRequest['resumptionToken'];
             $token = $tokenWorker->getResumptionToken($resParam);
 
@@ -434,23 +438,23 @@ class Oai_Model_Server extends Application_Model_Abstract
             $cursor = $token->getStartPosition() - 1;
             $start = $token->getStartPosition() + $maxRecords;
             $totalIds = $token->getTotalIds();
-            $reldocIds = $token->getDocumentIds();
+            $restIds = $token->getDocumentIds();
             $metadataPrefix = $token->getMetadataPrefix();
-            $this->_proc->setParameter('', 'oai_metadataPrefix', $metadataPrefix);
 
+            $this->_proc->setParameter('', 'oai_metadataPrefix', $metadataPrefix);
+            $resumed = true;
+        } else {
             // no resumptionToken is given
-        }
-        else {
             $docListModel = new Oai_Model_DocumentList();
             $docListModel->deliveringDocumentStates = $this->_deliveringDocumentStates;
             $docListModel->xMetaDissRestriction = $this->_xMetaDissRestriction;
-            $reldocIds = $docListModel->query($oaiRequest);
-            $totalIds = count($reldocIds);
+            $restIds = $docListModel->query($oaiRequest);
+            $totalIds = count($restIds);
         }
 
         // handling of document ids
-        $restIds = $reldocIds;
         $workIds = array_splice($restIds, 0, $maxRecords);
+
         foreach ($workIds as $docId) {
             $document = new Opus_Document($docId);
             $this->createXmlRecord($document);
@@ -465,9 +469,9 @@ class Oai_Model_Server extends Application_Model_Abstract
 
         // store the further Ids in a resumption-file
         $countRestIds = count($restIds);
-        if ($countRestIds > 0) {
 
-            $token = new Oai_Model_Resumptiontoken;
+        if ($countRestIds > 0) {
+            $token = new Oai_Model_Resumptiontoken();
             $token->setStartPosition($start);
             $token->setTotalIds($totalIds);
             $token->setDocumentIds($restIds);
@@ -477,7 +481,12 @@ class Oai_Model_Server extends Application_Model_Abstract
 
             // set parameters for the resumptionToken-node
             $res = $token->getResumptionId();
+
             $this->setParamResumption($res, $cursor, $totalIds);
+        }
+        else if ($resumed) {
+            // generate empty resumptionToken element for last block of records
+            $this->setParamResumption('', null, $totalIds);
         }
     }
 
@@ -488,8 +497,8 @@ class Oai_Model_Server extends Application_Model_Abstract
      * @param  int     $cursor value of the cursor
      * @param  int     $totalIds value of the total Ids
      */
-    private function setParamResumption($res, $cursor, $totalIds) {
-
+    private function setParamResumption($res, $cursor, $totalIds)
+    {
         $tomorrow = str_replace('+00:00', 'Z', Zend_Date::now()->addDay(1)->setTimeZone('UTC')->getIso());
         $this->_proc->setParameter('', 'dateDelete', $tomorrow);
         $this->_proc->setParameter('', 'res', $res);
