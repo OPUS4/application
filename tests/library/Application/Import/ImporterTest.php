@@ -31,7 +31,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Application_Import_XmlValidationTest extends ControllerTestCase
+class Application_Import_ImporterTest extends ControllerTestCase
 {
 
     public function testImportEnrichmentWithoutValue()
