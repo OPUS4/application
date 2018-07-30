@@ -89,5 +89,4 @@ class Application_Import_XmlValidationTest extends ControllerTestCase
 
         $this->assertTrue($validator->validate($xml), "Import XML file '$name' not valid.");
     }
-
 }
