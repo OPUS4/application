@@ -44,8 +44,6 @@ class Application_Import_Importer
     // variables used in SWORD context
     private $swordContext = false;
     private $importDir = null;
-    private $validMimeTypes;
-
 
     private $statusDoc = null;
 
@@ -99,11 +97,6 @@ class Application_Import_Importer
         if (substr($this->importDir, -1) !== DIRECTORY_SEPARATOR) {
             $this->importDir .= DIRECTORY_SEPARATOR;
         }
-    }
-
-    public function setValidMimeTypes($validMimeTypes)
-    {
-        $this->validMimeTypes = $validMimeTypes;
     }
 
     public function setAdditionalEnrichments($additionalEnrichments)
@@ -910,17 +903,18 @@ class Application_Import_Importer
      * Dazu gibt es in der Konfiguration die Schlüssel filetypes.mimetypes.*
      *
      * @param type $fullPath
+     *
+     * TODO move check to file types helper?
      */
     private function validMimeType($fullPath)
     {
         $extension = pathinfo($fullPath, PATHINFO_EXTENSION);
-        if (!array_key_exists($extension, $this->validMimeTypes)) {
-            return false;
-        }
-        $mimeType = $this->validMimeTypes[$extension];
         $finfo = new finfo(FILEINFO_MIME_TYPE);
         $mimeTypeFound = $finfo->file($fullPath);
-        return $mimeType == $mimeTypeFound;
+
+        $fileTypes = Zend_Controller_Action_HelperBroker::getStaticHelper('fileTypes');
+
+        return $fileTypes->isValidMimeType($mimeTypeFound, $extension);
     }
 
     /**

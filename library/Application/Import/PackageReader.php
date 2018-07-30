@@ -94,11 +94,6 @@ abstract class Application_Import_PackageReader
         $importer->enableSwordContext();
         $importer->setImportDir($dirName);
 
-        $fileTypes = Zend_Controller_Action_HelperBroker::getStaticHelper('fileTypes');
-
-        $validMimeTypes = $fileTypes->getValidMimeTypes();
-        $importer->setValidMimeTypes($validMimeTypes);
-
         $importer->setAdditionalEnrichments($this->additionalEnrichments);
         $importCollection = new Sword_Model_ImportCollection();
         $importer->setImportCollection($importCollection->getCollection());
