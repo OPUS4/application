@@ -84,7 +84,7 @@ class Publish_Model_ExtendedValidation
         $result = $this->_validateSeriesNumber() && $result;
         $result = $this->_validateSeries() && $result;
         $result = $this->_validateURN() && $result;
-        $result = $this->_validateDoi() && result;
+        $result = $this->_validateDoi() && $result;
         return $result;
     }
 
