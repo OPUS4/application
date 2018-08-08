@@ -27,9 +27,8 @@
  * @category    Application
  * @package     Module_Admin
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -38,7 +37,8 @@
  * @category    Application
  * @package     Module_Admin
  */
-class Admin_DocumentController extends Application_Controller_Action {
+class Admin_DocumentController extends Application_Controller_Action
+{
 
     /**
      * Helper for verifying document IDs.
@@ -49,7 +49,8 @@ class Admin_DocumentController extends Application_Controller_Action {
     /**
      * Initializes controller.
      */
-    public function init() {
+    public function init()
+    {
         parent::init();
         $this->_documentsHelper = $this->_helper->getHelper('Documents');
     }
@@ -58,7 +59,8 @@ class Admin_DocumentController extends Application_Controller_Action {
      * Produces metadata overview page of a document.
      * @return Opus_Document
      */
-    public function indexAction() {
+    public function indexAction()
+    {
         $docId = $this->getRequest()->getParam('id');
 
         $document = $this->_documentsHelper->getDocumentForId($docId);
@@ -91,7 +93,8 @@ class Admin_DocumentController extends Application_Controller_Action {
      *
      * TODO prüfen ob Form DocID mit URL DocID übereinstimmt
      */
-    public function editAction() {
+    public function editAction()
+    {
         $docId = $this->getRequest()->getParam('id');
 
         $document = $this->_documentsHelper->getDocumentForId($docId);
@@ -230,4 +233,19 @@ class Admin_DocumentController extends Application_Controller_Action {
         $this->renderForm($this->view->form);
     }
 
+    /**
+     * Creates a new document and opens it in the edit formular.
+     *
+     * TODO move creating of new document to model (maybe additional operations later)
+     */
+    public function createAction()
+    {
+        $doc = new Opus_Document();
+
+        $docId = $doc->store();
+
+        return $this->_helper->Redirector->redirectTo(
+            'edit', 'admin_document_created', 'document', 'admin', ['id' => $docId]
+        );
+    }
 }
