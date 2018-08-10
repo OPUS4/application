@@ -26,6 +26,7 @@
  *
  * @category    Unit Tests
  * @author      Sascha Szott <szott@zib.de>
+ * @author      Maximilian Salomon <salomon@zib.de>
  * @copyright   Copyright (c) 2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
