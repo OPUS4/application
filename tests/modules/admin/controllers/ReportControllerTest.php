@@ -83,6 +83,7 @@ class Admin_ReportControllerTest extends ControllerTestCase {
     }
 
     public function testDoiActionWithEmptyResult() {
+        $this->useEnglish();
         $this->dispatch('/admin/report/doi');
         $this->assertResponseCode(200);
         $this->assertModule('admin');

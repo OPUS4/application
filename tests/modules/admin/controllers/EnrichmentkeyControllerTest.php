@@ -123,6 +123,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase {
     }
 
     public function testNewActionSaveForExistingEnrichment() {
+        $this->useEnglish();
         $this->createsModels = true;
 
         $post = array(

@@ -197,6 +197,7 @@ class Admin_Form_Person_ChangesTest extends ControllerTestCase
 
     public function testRender()
     {
+        $this->useEnglish();
         $form = new Admin_Form_Person_Changes();
 
         $form->setOldValues(array(

@@ -45,6 +45,7 @@ class AppModeTest extends ControllerTestCase {
 
     public function testTestingMode() {
         parent::setUpWithEnv('testing');
+        $this->useEnglish();
         $this->dispatch('/home');
         $this->assertContains('NON PRODUCTION ENVIRONMENT (testing)', $this->getResponse()->getBody());
     }

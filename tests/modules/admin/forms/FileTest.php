@@ -48,6 +48,7 @@ class Admin_Form_FileTest extends ControllerTestCase {
     }
 
     public function testPopulateFromModel() {
+        $this->useEnglish();
         $form = new Admin_Form_File();
 
         $file = new Opus_File(126); // hängt an Testdokument 146

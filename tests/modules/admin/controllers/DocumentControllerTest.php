@@ -266,6 +266,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
     }
 
     public function testEditActionValidXHTML() {
+        $this->useEnglish();
         $this->dispatch('/admin/document/edit/id/146');
         $this->assertResponseCode(200);
         $this->assertModule('admin');

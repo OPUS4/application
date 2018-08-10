@@ -66,6 +66,7 @@ class Application_XsltTest extends ControllerTestCase
 
     public function testCallStatic()
     {
+        $this->useEnglish();
         $this->assertEquals('Yes', Application_Xslt::translate('answer_yes'));
     }
 

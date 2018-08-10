@@ -101,6 +101,7 @@ class Application_Form_Decorator_FileHashTest extends ControllerTestCase {
     }
 
     public function testRenderWithMissingFile() {
+        $this->useEnglish();
         $element = new Application_Form_Element_FileHash('name');
 
         $file = new Opus_File(123);
@@ -127,6 +128,7 @@ class Application_Form_Decorator_FileHashTest extends ControllerTestCase {
     }
 
     public function testRenderWithFileTooBig() {
+        $this->useEnglish();
         $config = Zend_Registry::get('Zend_Config');
         $config->merge(new Zend_Config(array('checksum' => array('maxVerificationSize' => '0'))));
 

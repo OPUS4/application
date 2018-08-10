@@ -587,6 +587,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
     }
 
     public function testUnavailableSolrServerReturns503() {
+        $this->useEnglish();
         $this->requireSolrConfig();
 
         // manipulate solr configuration

@@ -62,6 +62,7 @@ class Admin_StatisticControllerTest extends ControllerTestCase {
      * Fragt ab, ob bei einem falschen Jahr die Indexseite angezeigt wird
      */
     public function testIndexActionWithWrongYear() {
+        $this->useEnglish();
         $this->request
             ->setMethod('POST')
             ->setPost(array('selectedYear' => '1337'));
