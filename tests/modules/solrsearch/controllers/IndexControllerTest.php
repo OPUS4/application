@@ -29,6 +29,7 @@
  * @author      Julian Heise <heise@zib.de>
  * @author      Sascha Szott <szott@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
+ * @author      Maximilian Salomon <salomon@zib.de>
  * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
@@ -587,6 +588,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
     }
 
     public function testUnavailableSolrServerReturns503() {
+        $this->useEnglish();
         $this->requireSolrConfig();
 
         // manipulate solr configuration
