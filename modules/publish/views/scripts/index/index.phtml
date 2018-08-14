@@ -34,12 +34,20 @@
 ?>
 
 <?PHP if ($this->jQueryEnabled() && !empty($this->extensions)) : ?>
+    <?PHP $tranlationKeys = [
+        'invalidFileTypeMessage' => 'fileExtensionFalse',
+        'invalidFileSizeMessage' => 'fileUploadErrorFormSize',
+        'anotherFileMessage' => 'chooseAnotherFile'
+    ];
+    ?>
 <script>
     $(function() {
         var extensions = '<?= $this->extensions ?>';
         var fileElem = $("input:file")[0];
         fileElem.validFileExtensions = extensions.split(',');
-        fileElem.invalidFileMessage = "<?= htmlspecialchars($this->translate('fileExtensionFalse')) ?>";
+        <?PHP foreach($tranlationKeys as $key => $message) : ?>
+        fileElem.errorMessages["<?= $key ?>"] = "<?= htmlspecialchars($this->translate($message)) ?>";
+        <?PHP endforeach ?>
     });
 </script>
 <?PHP endif ?>

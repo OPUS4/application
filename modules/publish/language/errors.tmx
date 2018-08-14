@@ -145,23 +145,30 @@
 
     <tu tuid="fileUploadErrorFormSize">
         <tuv xml:lang="en">
-            <seg>Your file exceeds the defined size.</seg>
+            <seg>Your file '%name%' exceeds the defined size. The allowed size is '%size%' Byte.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Ihre Datei übersteigt die erlaubte Größe.</seg>
+            <seg>Ihre Datei '%name%' übersteigt die erlaubte Größe. Die erlaubte Größe liegt bei '%size%' Byte.</seg>
         </tuv>
     </tu>
 
     <tu tuid="fileExtensionFalse">
         <tuv xml:lang="en">
-            <seg>File '%value%' has a forbidden extension. Please choose another file.</seg>
+            <seg>File '%name%' has a forbidden extension.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Die Datei '%value%' hat eine unerlaubte Dateiendung. Bitte wählen Sie eine andere Datei.</seg>
+            <seg>Die Datei '%name%' hat eine unerlaubte Dateiendung.</seg>
         </tuv>
     </tu>
 
-
+    <tu tuid="chooseAnotherFile">
+        <tuv xml:lang="en">
+            <seg>Please choose another File.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Bitte wählen Sie eine andere Datei.</seg>
+        </tuv>
+    </tu>
 
 <!-- **************Errors for Person names and file names****************** -->
     <tu tuid="publish_validation_error_person_invalid">
