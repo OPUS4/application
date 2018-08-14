@@ -37,8 +37,9 @@ $(function () {
     if (typeof fileElem !== "undefined") {
         fileElem.validFileExtensions = null; // nichts erlaubt, wird auf Publishseite überschrieben
         fileElem.errorMessages = {
-            invalidFileTypeMessage: "The extension of file \'%name%\' is not allowed.",
-            invalidFileSizeMessage: "The size of file \'%name%\' is not allowed. Choose a file with less then \'%size%\' byte.",
+            fileNameErrorMessage : "The file \'%name%\' has the following errors:",
+            invalidFileTypeMessage: "The extension of file is not allowed.",
+            invalidFileSizeMessage: "The size of file is not allowed. Choose a file with less then \'%size%\' byte.",
             anotherFileMessage: "Please choose another file."
         };
 
@@ -50,14 +51,15 @@ $(function () {
 
             var ext = filename.match(/\.([^\.]+)$/);
             if (fileElem.validFileExtensions != null && (ext == null || $.inArray(ext[1], this.validFileExtensions) === -1)) {
-                errors.push(fileElem.errorMessages["invalidFileTypeMessage"].replace("%name%", filename));
+                errors.push(fileElem.errorMessages["invalidFileTypeMessage"]);
             }
 
             if (fileSize > maxFileSize) {
-                errors.push(fileElem.errorMessages["invalidFileSizeMessage"].replace("%name%", filename).replace("%size%", maxFileSize));
+                errors.push(fileElem.errorMessages["invalidFileSizeMessage"].replace("%size%", maxFileSize));
             }
 
             if (errors.length !== 0) {
+                errors.unshift(fileElem.errorMessages["fileNameErrorMessage"].replace("%name%", filename));
                 errors.push(fileElem.errorMessages["anotherFileMessage"]);
                 alert(errors.join("\n"));
                 this.value = null;
