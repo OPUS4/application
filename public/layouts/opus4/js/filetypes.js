@@ -25,22 +25,43 @@
  *
  * @category    Application
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
+ * @author      Maximilian Salomon <salomon@zib.de>
+ * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-$(function() {
+$(function () {
     var fileElem = $("input:file")[0];
+    var maxFileSize = $("input[name=MAX_FILE_SIZE]").val();
 
-    if (! typeof fileElem === "undefined") {
+    if (typeof fileElem !== "undefined") {
         fileElem.validFileExtensions = null; // nichts erlaubt, wird auf Publishseite überschrieben
-        fileElem.invalidFileMessage = 'The extension of file \'%value%\' is not allowed.';
-        fileElem.onchange = function() {
+        fileElem.errorMessages = {
+            fileNameErrorMessage : "The file \'%name%\' has the following errors:",
+            invalidFileTypeMessage: "The extension of file is not allowed.",
+            invalidFileSizeMessage: "The size of file is not allowed. Choose a file with less then \'%size%\' byte.",
+            anotherFileMessage: "Please choose another file."
+        };
+
+
+        fileElem.onchange = function () {
             var filename = this.value;
+            var fileSize = this.files[0].size;
+            var errors = [];
+
             var ext = filename.match(/\.([^\.]+)$/);
-            if (fileElem.validFileExtensions != null && (ext == null || $.inArray(ext[1], this.validFileExtensions) == -1)) {
-                $message = fileElem.invalidFileMessage;
-                alert($message.replace('%value%', filename));
+            if (fileElem.validFileExtensions != null && (ext == null || $.inArray(ext[1], this.validFileExtensions) === -1)) {
+                errors.push(fileElem.errorMessages["invalidFileTypeMessage"]);
+            }
+
+            if (fileSize > maxFileSize) {
+                errors.push(fileElem.errorMessages["invalidFileSizeMessage"].replace("%size%", maxFileSize));
+            }
+
+            if (errors.length !== 0) {
+                errors.unshift(fileElem.errorMessages["fileNameErrorMessage"].replace("%name%", filename));
+                errors.push(fileElem.errorMessages["anotherFileMessage"]);
+                alert(errors.join("\n"));
                 this.value = null;
             }
         };
