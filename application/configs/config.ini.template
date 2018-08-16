@@ -134,6 +134,8 @@ gnd.linkAuthor.frontdoor = 1
 ;publish.maxfilesize = 10240000
 ; publish.filetypes.allowed defines which filetypes can be uploaded.
 ;publish.filetypes.allowed = pdf,txt,html,htm ; filetypes that are accepted in publication form
+;publish.maxFileNameLength = 50
+;publish.allowedFilenameCharset = "^[a-zA-Z0-9][a-zA-Z0-9_.-]+$"
 
 ; CHECKSUM SETTINGS
 ; Maximum filesize in MB (default 50 MB) for calculating MD5 and SHA512 hashes
