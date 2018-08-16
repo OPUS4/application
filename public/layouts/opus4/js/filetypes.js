@@ -63,10 +63,6 @@ $(function () {
                 errors.push(fileElem.errorMessages["invalidFileSizeMessage"].replace("%size%", maxFileSize));
             }
 
-            if (fileSize > maxFileSize) {
-                errors.push(fileElem.errorMessages["invalidFileSizeMessage"].replace("%size%", maxFileSize));
-            }
-
             if (pattern.test(filename) === false) {
                 errors.push(fileElem.errorMessages["invalidFilenameCharsetMessage"]);
             }
@@ -79,15 +75,7 @@ $(function () {
                 errors.unshift(fileElem.errorMessages["fileNameErrorMessage"].replace("%name%", filename));
                 errors.push(fileElem.errorMessages["anotherFileMessage"]);
 
-                var div = document.createElement("div");
-                div.className += "form-hint form-errors";
-                var element = document.getElementsByClassName("'form-multiple odd'")[0];
-                element.insert(div);
-                var para = document.createElement("p");
-                var node = document.createTextNode(errors.join("\n"));
-                para.appendChild(node);
-                div.appendChild(para);
-
+                alert(errors.join("\n"));
                 this.value = null;
             }
         };
