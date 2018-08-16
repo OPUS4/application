@@ -40,13 +40,18 @@ $(function () {
             fileNameErrorMessage : "The file \'%name%\' has the following errors:",
             invalidFileTypeMessage: "The extension of file is not allowed.",
             invalidFileSizeMessage: "The size of file is not allowed. Choose a file with less then \'%size%\' byte.",
+            invalidFilenameLengthMessage: "The length of your filename is too long. Your filename should have less then \'%size%\' characters.",
+            invalidFilenameCharsetMessage: "Your filename has wrong characters or a wrong form.",
             anotherFileMessage: "Please choose another file."
         };
 
 
         fileElem.onchange = function () {
-            var filename = this.value;
+            var filepath = this.value.split("\\");
+            var filename = filepath[filepath.length - 1];
             var fileSize = this.files[0].size;
+            var pattern = new RegExp($("input[name=allowedFilenameCharset]").val());
+            var maxFileNameSize = $("input[name=maxFileNameLength]").val();
             var errors = [];
 
             var ext = filename.match(/\.([^\.]+)$/);
@@ -58,10 +63,34 @@ $(function () {
                 errors.push(fileElem.errorMessages["invalidFileSizeMessage"].replace("%size%", maxFileSize));
             }
 
+            if (fileSize > maxFileSize) {
+                errors.push(fileElem.errorMessages["invalidFileSizeMessage"].replace("%size%", maxFileSize));
+            }
+
+            if (pattern.test(filename) === false) {
+                errors.push(fileElem.errorMessages["invalidFilenameCharsetMessage"]);
+            }
+
+            if (filename.length > maxFileNameSize && maxFileNameSize > 0) {
+                errors.push(fileElem.errorMessages["invalidFilenameLengthMessage"].replace("%size%", maxFileNameSize));
+            }
+
             if (errors.length !== 0) {
+                if (typeof document.getElementsByClassName("form-hint form-errors")[0] !== "undefined") {
+                    document.getElementsByClassName("form-hint form-errors")[0].remove();
+                }
                 errors.unshift(fileElem.errorMessages["fileNameErrorMessage"].replace("%name%", filename));
                 errors.push(fileElem.errorMessages["anotherFileMessage"]);
-                alert(errors.join("\n"));
+
+                var div = document.createElement("div");
+                div.className += "form-hint form-errors";
+                var element = document.getElementsByClassName("document-type")[0];
+                element.appendChild(div);
+                var para = document.createElement("p");
+                var node = document.createTextNode(errors.join("\n"));
+                para.appendChild(node);
+                div.appendChild(para);
+
                 this.value = null;
             }
         };

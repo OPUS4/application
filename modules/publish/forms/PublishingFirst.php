@@ -28,7 +28,8 @@
  * @category    Application
  * @package     Module_Publish
  * @author      Susanne Gottwald <gottwald@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @author      Maximilian Salomon <salomon@zib.de>
+ * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -261,6 +262,8 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
 
             $this->view->documentUpload = $group;
             $this->view->MAX_FILE_SIZE = $this->_config->publish->maxfilesize;
+            $this->view->maxFileNameLength = $this->_config->publish->maxFileNameLength;
+            $this->view->allowedFilenameCharset = $this->_config->publish->allowedFilenameCharset;
         }
     }
 
