@@ -37,11 +37,11 @@ $(function () {
     if (typeof fileElem !== "undefined") {
         fileElem.validFileExtensions = null; // nichts erlaubt, wird auf Publishseite überschrieben
         fileElem.errorMessages = {
-            fileNameErrorMessage : "The file \'%name%\' has the following errors:",
-            invalidFileTypeMessage: "The extension of file is not allowed.",
-            invalidFileSizeMessage: "The size of file is not allowed. Choose a file with less then \'%size%\' byte.",
-            invalidFilenameLengthMessage: "The length of your filename is too long. Your filename should have less then \'%size%\' characters.",
-            invalidFilenameCharsetMessage: "Your filename has wrong characters or a wrong form.",
+            fileNameError : "The file \'%name%\' has the following errors:",
+            invalidFileType: "The extension of file is not allowed.",
+            invalidFileSize: "The size of file is not allowed. Choose a file with less then \'%size%\' byte.",
+            invalidFilenameLength: "The length of your filename is too long. Your filename should have less then \'%size%\' characters.",
+            invalidFilenameFormat: "Your filename has wrong characters or a wrong form.",
             anotherFileMessage: "Please choose another file."
         };
 

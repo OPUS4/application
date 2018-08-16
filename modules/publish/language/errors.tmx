@@ -188,7 +188,7 @@
             </tuv>
         </tu>
 
-    <tu tuid="filenameLenthError">
+    <tu tuid="filenameLengthError">
             <tuv xml:lang="en">
                 <seg>The length of your filename is too long. Your filename should have less then '%size%' characters. </seg>
             </tuv>
@@ -197,7 +197,7 @@
             </tuv>
         </tu>
 
-    <tu tuid="filenameCharError">
+    <tu tuid="filenameFormatError">
             <tuv xml:lang="en">
                 <seg>Your filename has not allowed characters or a wrong form. </seg>
             </tuv>
