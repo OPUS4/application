@@ -76,16 +76,13 @@ $(function () {
             }
 
             if (errors.length !== 0) {
-                if (typeof document.getElementsByClassName("form-hint form-errors")[0] !== "undefined") {
-                    document.getElementsByClassName("form-hint form-errors")[0].remove();
-                }
                 errors.unshift(fileElem.errorMessages["fileNameErrorMessage"].replace("%name%", filename));
                 errors.push(fileElem.errorMessages["anotherFileMessage"]);
 
                 var div = document.createElement("div");
                 div.className += "form-hint form-errors";
-                var element = document.getElementsByClassName("document-type")[0];
-                element.appendChild(div);
+                var element = document.getElementsByClassName("'form-multiple odd'")[0];
+                element.insert(div);
                 var para = document.createElement("p");
                 var node = document.createTextNode(errors.join("\n"));
                 para.appendChild(node);
