@@ -31,7 +31,6 @@
  * @author      Maximilian Salomon <salomon@zib.de>
  * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -165,6 +164,12 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
             $requireUpload = 0;
         }
 
+        //initialization of filename-validator
+        $filenameMaxLength = $this->_config->publish->filenameMaxLength;
+        $filenameFormat = $this->_config->publish->filenameFormat;
+        $filenameOptions = [$filenameMaxLength, $filenameFormat];
+        $filenameValidator = new Application_Form_Validate_Filename($filenameOptions);
+
         //file upload field(s)
         $fileupload = new Zend_Form_Element_File('fileupload');
         $fileupload
@@ -175,6 +180,7 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
                 ->setMaxFileSize($maxFileSize)
                 ->addValidator('Extension', false, $filetypes)  // allowed filetypes by extension
                 ->setValueDisabled(true)
+                ->addValidator($filenameValidator, false)       // filename-format
                 ->setAttrib('enctype', 'multipart/form-data');
 
         if (1 == $requireUpload) {

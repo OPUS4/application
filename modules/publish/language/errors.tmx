@@ -180,31 +180,31 @@
     </tu>
 
     <tu tuid="uploadedFileHasErrorMessage">
-            <tuv xml:lang="en">
-                <seg>The file '%name%' has the following errors: </seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Die Datei '%name%' hat folgende Fehler: </seg>
-            </tuv>
-        </tu>
+        <tuv xml:lang="en">
+            <seg>The file '%name%' has the following errors: </seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Die Datei '%name%' hat folgende Fehler: </seg>
+        </tuv>
+    </tu>
 
     <tu tuid="filenameLengthError">
-            <tuv xml:lang="en">
-                <seg>The length of your filename is too long. Your filename should have less then '%size%' characters. </seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Der Dateiname hat zu viele Zeichen. Die maximal erlaubte Zeichenzahl beträgt '%size%' Zeichen. </seg>
-            </tuv>
-        </tu>
+        <tuv xml:lang="en">
+            <seg>The length of your filename is too long. Your filename should have less then '%size%' characters. </seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Der Dateiname hat zu viele Zeichen. Die maximal erlaubte Zeichenzahl beträgt '%size%' Zeichen. </seg>
+        </tuv>
+    </tu>
 
     <tu tuid="filenameFormatError">
-            <tuv xml:lang="en">
-                <seg>Your filename has not allowed characters or a wrong form. </seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Der Dateiname enthält nicht zugelassene Zeichen oder hat eine falsche Form.</seg>
-            </tuv>
-        </tu>
+        <tuv xml:lang="en">
+            <seg>Your filename has not allowed characters or a wrong form. </seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Der Dateiname enthält nicht zugelassene Zeichen oder hat eine falsche Form.</seg>
+        </tuv>
+    </tu>
 
 
 <!-- **************Errors for Person names and file names****************** -->

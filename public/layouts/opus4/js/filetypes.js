@@ -41,7 +41,7 @@ $(function () {
             invalidFileType: "The extension of file is not allowed.",
             invalidFileSize: "The size of file is not allowed. Choose a file with less then \'%size%\' byte.",
             invalidFilenameLength: "The length of your filename is too long. Your filename should have less then \'%size%\' characters.",
-            invalidFilenameFormat: "Your filename has wrong characters or a wrong form.",
+            invalidFilenameFormat: "Your filename has not allowed characters or a wrong form.",
             anotherFileMessage: "Please choose another file."
         };
 
