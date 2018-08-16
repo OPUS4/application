@@ -167,7 +167,10 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
         //initialization of filename-validator
         $filenameMaxLength = $this->_config->publish->filenameMaxLength;
         $filenameFormat = $this->_config->publish->filenameFormat;
-        $filenameOptions = [$filenameMaxLength, $filenameFormat];
+        $filenameOptions = [
+            'filenameMaxLength' => $filenameMaxLength,
+            'filenameFormat' => $filenameFormat
+        ];
         $filenameValidator = new Application_Form_Validate_Filename($filenameOptions);
 
         //file upload field(s)

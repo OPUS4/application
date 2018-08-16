@@ -36,8 +36,8 @@
  */
 class Application_Form_Validate_Filename extends Zend_Validate_Abstract
 {
-    protected $filenameMaxLength = '';
-    protected $filenameFormat = '';
+    protected $_filenameMaxLength = '';
+    protected $_filenameFormat = '';
 
     /**
      * Error message key for invalid filename length
@@ -72,8 +72,8 @@ class Application_Form_Validate_Filename extends Zend_Validate_Abstract
      */
     public function __construct($options)
     {
-        $this->_filenameMaxLength = $options[0];
-        $this->_filenameFormat = '/' . $options[1] . '/';
+        $this->_filenameMaxLength = $options['filenameMaxLength'];
+        $this->_filenameFormat = '/' . $options['filenameFormat'] . '/';
     }
 
     /**
