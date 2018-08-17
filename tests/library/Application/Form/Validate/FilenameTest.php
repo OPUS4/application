@@ -63,6 +63,9 @@ class Application_Form_Validate_FilenameTest extends ControllerTestCase {
             array('_test.txt', 'Malformed string not rejected.'),
             array(true, 'Boolean not rejected'),
             array('-Opus4.pdf',          'Malformed string not rejected.'),
+            array('Töst.pdf',          'Malformed string not rejected.'),
+            array('!Töst.pdf',          'Malformed string not rejected.'),
+            array('Töst?.pdf',          'Malformed string not rejected.'),
             array('testtesttesttesttesttesttesttesttesttesttesttesttesttesttest.pdf',  'String too long')
         );
     }
