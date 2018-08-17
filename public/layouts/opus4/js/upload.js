@@ -42,7 +42,7 @@ $(function () {
             invalidFileSize: "The size of file is not allowed. Choose a file with less then \'%size%\' byte.",
             invalidFilenameLength: "The length of your filename is too long. Your filename should have less then \'%size%\' characters.",
             invalidFilenameFormat: "Your filename has not allowed characters or a wrong form.",
-            anotherFileMessage: "Please choose another file."
+            anotherFile: "Please choose another file."
         };
 
 
@@ -50,30 +50,30 @@ $(function () {
             var filepath = this.value.split("\\");
             var filename = filepath[filepath.length - 1];
             var fileSize = this.files[0].size;
-            var pattern = new RegExp($("input[name=allowedFilenameCharset]").val());
-            var maxFileNameSize = $("input[name=maxFileNameLength]").val();
+            var pattern = new RegExp($("input[name=filenameFormat]").val());
+            var maxFileNameSize = $("input[name=filenameMaxLength]").val();
             var errors = [];
 
             var ext = filename.match(/\.([^\.]+)$/);
             if (fileElem.validFileExtensions != null && (ext == null || $.inArray(ext[1], this.validFileExtensions) === -1)) {
-                errors.push(fileElem.errorMessages["invalidFileTypeMessage"]);
+                errors.push(fileElem.errorMessages["invalidFileType"]);
             }
 
             if (fileSize > maxFileSize) {
-                errors.push(fileElem.errorMessages["invalidFileSizeMessage"].replace("%size%", maxFileSize));
+                errors.push(fileElem.errorMessages["invalidFileSize"].replace("%size%", maxFileSize));
             }
 
             if (pattern.test(filename) === false) {
-                errors.push(fileElem.errorMessages["invalidFilenameCharsetMessage"]);
+                errors.push(fileElem.errorMessages["invalidFilenameFormat"]);
             }
 
             if (filename.length > maxFileNameSize && maxFileNameSize > 0) {
-                errors.push(fileElem.errorMessages["invalidFilenameLengthMessage"].replace("%size%", maxFileNameSize));
+                errors.push(fileElem.errorMessages["invalidFilenameLength"].replace("%size%", maxFileNameSize));
             }
 
             if (errors.length !== 0) {
-                errors.unshift(fileElem.errorMessages["fileNameErrorMessage"].replace("%name%", filename));
-                errors.push(fileElem.errorMessages["anotherFileMessage"]);
+                errors.unshift(fileElem.errorMessages["fileNameError"].replace("%name%", filename));
+                errors.push(fileElem.errorMessages["anotherFile"]);
 
                 alert(errors.join("\n"));
                 this.value = null;

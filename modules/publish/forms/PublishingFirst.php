@@ -271,8 +271,8 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
 
             $this->view->documentUpload = $group;
             $this->view->MAX_FILE_SIZE = $this->_config->publish->maxfilesize;
-            $this->view->maxFileNameLength = $this->_config->publish->maxFileNameLength;
-            $this->view->allowedFilenameCharset = $this->_config->publish->allowedFilenameCharset;
+            $this->view->filenameMaxLength = $this->_config->publish->filenameMaxLength;
+            $this->view->filenameFormat = $this->_config->publish->filenameFormat;
         }
     }
 

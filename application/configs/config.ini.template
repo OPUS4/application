@@ -135,6 +135,8 @@ gnd.linkAuthor.frontdoor = 1
 ; publish.filetypes.allowed defines which filetypes can be uploaded.
 ;publish.filetypes.allowed = pdf,txt,html,htm ; filetypes that are accepted in publication form
 ;publish.filenameMaxLength = 50
+;This is an regular expression which allows an alphanumerical filename. It is allowed to use _, - and . but not at beginning.
+;Please use an expression without the typical starting and ending backslash, this is automatically added.
 ;publish.filenameFormat = "^[a-zA-Z0-9][a-zA-Z0-9_.-]+$"
 
 ; CHECKSUM SETTINGS

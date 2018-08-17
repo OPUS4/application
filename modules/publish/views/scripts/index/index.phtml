@@ -30,7 +30,6 @@
  * @author      Maximilian Salomon <salomon@zib.de>
  * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 ?>
 
@@ -41,7 +40,7 @@
         'invalidFileSize' => 'fileUploadErrorSize',
         'invalidFilenameLength' => 'filenameLengthError',
         'invalidFilenameFormat' => 'filenameFormatError',
-        'anotherFileMessage' => 'chooseAnotherFile'
+        'anotherFile' => 'chooseAnotherFile'
     ];
     ?>
 <script>
@@ -70,8 +69,8 @@
 
                 <?php if ($this->enableUpload) : ?>
                     <?= $this->element($this->MAX_FILE_SIZE, null, 'hidden', 'MAX_FILE_SIZE'); ?>
-                    <?= $this->element($this->maxFileNameLength, null, 'hidden', 'maxFileNameLength'); ?>
-                    <?= $this->element($this->allowedFilenameCharset, null, 'hidden', 'allowedFilenameCharset'); ?>
+                    <?= $this->element($this->filenameMaxLength, null, 'hidden', 'filenameMaxLength'); ?>
+                    <?= $this->element($this->filenameFormat, null, 'hidden', 'filenameFormat'); ?>
                     <?= $this->group($this->documentUpload); ?>
                     <?= $this->fileOverview(); ?>
                 <?php endif; ?>

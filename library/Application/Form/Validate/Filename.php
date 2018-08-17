@@ -36,8 +36,15 @@
  */
 class Application_Form_Validate_Filename extends Zend_Validate_Abstract
 {
-    protected $_filenameMaxLength = '';
-    protected $_filenameFormat = '';
+    /**
+     * @var int maximal filename length
+     */
+    protected $filenameMaxLength = 0;
+
+    /**
+     * @var string the format is a empty string. If this is used as regex, it matches always.
+     */
+    protected $filenameFormat = '';
 
     /**
      * Error message key for invalid filename length
@@ -63,7 +70,7 @@ class Application_Form_Validate_Filename extends Zend_Validate_Abstract
      * @var array
      */
     protected $_messageVariables = array(
-        'size' => '_filenameMaxLength',
+        'size' => 'filenameMaxLength',
     );
 
     /**
@@ -72,8 +79,24 @@ class Application_Form_Validate_Filename extends Zend_Validate_Abstract
      */
     public function __construct($options)
     {
-        $this->_filenameMaxLength = $options['filenameMaxLength'];
-        $this->_filenameFormat = '/' . $options['filenameFormat'] . '/';
+        self::setFilenameMaxLength($options['filenameMaxLength']);
+        self::setFilenameFormat('/' . $options['filenameFormat'] . '/');
+    }
+
+    public function getFilenameMaxLength(){
+        return $this->filenameMaxLength;
+    }
+
+    public function getFilenameFormat(){
+        return $this->filenameFormat;
+    }
+
+    public function setFilenameMaxLength($value){
+        $this->filenameMaxLength = $value;
+    }
+
+    public function setFilenameFormat($value){
+        $this->filenameFormat = $value;
     }
 
     /**
@@ -91,22 +114,20 @@ class Application_Form_Validate_Filename extends Zend_Validate_Abstract
         } else {
             $data = pathinfo($value);
             if (!array_key_exists('filename', $data)) {
-
                 return false;
             }
         }
 
-        if (strlen($data['filename']) > $this->_filenameMaxLength) {
+        if (strlen($data['filename']) > $this->filenameMaxLength) {
             $this->_error(self::MSG_NAME_LENGTH);
             return false;
         }
 
-        if (preg_match($this->_filenameFormat, $data['filename']) === 0) {
+        if (preg_match($this->filenameFormat, $data['filename']) === 0) {
             $this->_error(self::MSG_NAME_FORMAT);
             return false;
         }
 
         return true;
     }
-
 }

@@ -34,7 +34,8 @@
 //namespace library\Application\Form\Validate;
 
 
-class Application_Form_Validate_FilenameTest extends ControllerTestCase {
+class Application_Form_Validate_FilenameTest extends ControllerTestCase
+{
 
     /**
      * Data provider for valid arguments.
@@ -42,13 +43,13 @@ class Application_Form_Validate_FilenameTest extends ControllerTestCase {
      * @return array Array of invalid arguments.
      */
     public function validDataProvider() {
-        return array(
-            array('Test.txt'),
-            array('Big_data.pdf'),
-            array('Python-Code.pdf'),
-            array('Opus4.txt'),
-            array('4.7_Handbuch_Opus-4.pdf')
-        );
+        return [
+            ['Test.txt'],
+            ['Big_data.pdf'],
+            ['Python-Code.pdf'],
+            ['Opus4.txt'],
+            ['4.7_Handbuch_Opus-4.pdf']
+        ];
     }
 
     /**
@@ -57,17 +58,17 @@ class Application_Form_Validate_FilenameTest extends ControllerTestCase {
      * @return array Array of invalid arguments and a message.
      */
     public function invalidDataProvider() {
-        return array(
-            array(null, 'Null value not rejected'),
-            array('',   'Empty string not rejected'),
-            array('_test.txt', 'Malformed string not rejected.'),
-            array(true, 'Boolean not rejected'),
-            array('-Opus4.pdf',          'Malformed string not rejected.'),
-            array('Töst.pdf',          'Malformed string not rejected.'),
-            array('!Töst.pdf',          'Malformed string not rejected.'),
-            array('Töst?.pdf',          'Malformed string not rejected.'),
-            array('testtesttesttesttesttesttesttesttesttesttesttesttesttesttest.pdf',  'String too long')
-        );
+        return [
+            [null, 'Null value not rejected'],
+            ['',   'Empty string not rejected'],
+            ['_test.txt', 'Malformed string not rejected.'],
+            [true, 'Boolean not rejected'],
+            ['-Opus4.pdf',          'Malformed string not rejected.'],
+            ['Töst.pdf',          'Malformed string not rejected.'],
+            ['!Töst.pdf',          'Malformed string not rejected.'],
+            ['Töst?.pdf',          'Malformed string not rejected.'],
+            ['testtesttesttesttesttesttesttesttesttesttesttesttesttesttest.pdf',  'String too long']
+        ];
     }
 
     /**
