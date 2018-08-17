@@ -42,7 +42,8 @@ class Application_Form_Validate_FilenameTest extends ControllerTestCase
      *
      * @return array Array of invalid arguments.
      */
-    public function validDataProvider() {
+    public function validDataProvider()
+    {
         return [
             ['Test.txt'],
             ['Big_data.pdf'],
@@ -57,7 +58,8 @@ class Application_Form_Validate_FilenameTest extends ControllerTestCase
      *
      * @return array Array of invalid arguments and a message.
      */
-    public function invalidDataProvider() {
+    public function invalidDataProvider()
+    {
         return [
             [null, 'Null value not rejected'],
             ['',   'Empty string not rejected'],
@@ -80,7 +82,8 @@ class Application_Form_Validate_FilenameTest extends ControllerTestCase
      *
      * @dataProvider invalidDataProvider
      */
-    public function testInvalidArguments($arg, $msg) {
+    public function testInvalidArguments($arg, $msg)
+    {
         $config = Application_Configuration::getInstance()->getConfig();
         $filenameMaxLength = $config->publish->filenameMaxLength;
         $filenameFormat = $config->publish->filenameFormat;
