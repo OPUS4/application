@@ -80,7 +80,7 @@ class Application_Form_Validate_Filename extends Zend_Validate_Abstract
     public function __construct($options)
     {
         self::setFilenameMaxLength($options['filenameMaxLength']);
-        self::setFilenameFormat( '<'.$options['filenameFormat'].'>');
+        self::setFilenameFormat('<' . $options['filenameFormat'] . '>');
     }
 
     public function getFilenameMaxLength()
@@ -112,7 +112,7 @@ class Application_Form_Validate_Filename extends Zend_Validate_Abstract
     {
         $config = Application_Configuration::getInstance();
         $logger = $config->getLogger();
-        if (@preg_match($value, 0) === false) {
+        if (@preg_match($value, null) === false) {
             $logger->warn('Your regular expression for your filename-validation is not valid.');
             return false;
         }
