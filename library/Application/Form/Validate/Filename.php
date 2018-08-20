@@ -79,8 +79,8 @@ class Application_Form_Validate_Filename extends Zend_Validate_Abstract
      */
     public function __construct($options)
     {
-        self::setFilenameMaxLength($options['filenameMaxLength']);
-        self::setFilenameFormat('<' . $options['filenameFormat'] . '>');
+        $this->setFilenameMaxLength($options['filenameMaxLength']);
+        $this->setFilenameFormat($options['filenameFormat']);
     }
 
     public function getFilenameMaxLength()
@@ -100,18 +100,21 @@ class Application_Form_Validate_Filename extends Zend_Validate_Abstract
 
     public function setFilenameFormat($value)
     {
-        if (self::validateFilenameFormatKey($value) == false) {
+        if ($this->validateFilenameFormat($value) == false) {
             $this->filenameFormat = '<' . null . '>';
         } else {
             $this->filenameFormat = $value;
         }
     }
 
-    //TODO: Change for Log-Trait
-    public function validateFilenameFormatKey($value)
+    /**
+     * Verifies that the regular expression is generally valid.
+     * TODO Use LoggingTriat (introduced in OPUS 4.7)
+     */ 
+    public function validateFilenameFormat($value)
     {
-        $config = Application_Configuration::getInstance();
-        $logger = $config->getLogger();
+        $logger = Application_Configuration::getInstance()->getLogger();
+       
         if (@preg_match($value, null) === false) {
             $logger->warn('Your regular expression for your filename-validation is not valid.');
             return false;
@@ -130,6 +133,7 @@ class Application_Form_Validate_Filename extends Zend_Validate_Abstract
     public function isValid($value, $file = null)
     {
         $this->_setValue($value);
+        
         if ($file !== null) {
             $data['filename'] = $file['name'];
         } else {
