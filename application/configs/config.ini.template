@@ -137,6 +137,7 @@ gnd.linkAuthor.frontdoor = 1
 ;publish.filenameMaxLength = 50
 ;This is an regular expression which allows an alphanumerical filename. It is allowed to use _, - and . but not at beginning.
 ;Please use an expression without the typical starting and ending backslash, this is automatically added.
+;Die RegEx wird in JS und PHP benutzt.
 ;publish.filenameFormat = "^[a-zA-Z0-9][a-zA-Z0-9_.-]+$"
 
 ; CHECKSUM SETTINGS

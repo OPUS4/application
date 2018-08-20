@@ -27,12 +27,12 @@
  * @category    Application
  * @package     Form_Validate
  * @author      Maximilian Salomon <salomon@zib.de>
- * @copyright   Copyright (c) 2017-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
- * Class Application_Form_Validate_uploadFilenameCheck validates the filename of an fileupload.
+ * Class Application_Form_Validate_uploadFilenameCheck validates the filename.
  */
 class Application_Form_Validate_Filename extends Zend_Validate_Abstract
 {
@@ -83,20 +83,32 @@ class Application_Form_Validate_Filename extends Zend_Validate_Abstract
         self::setFilenameFormat('/' . $options['filenameFormat'] . '/');
     }
 
-    public function getFilenameMaxLength(){
+    public function getFilenameMaxLength()
+    {
         return $this->filenameMaxLength;
     }
 
-    public function getFilenameFormat(){
+    public function getFilenameFormat()
+    {
         return $this->filenameFormat;
     }
 
-    public function setFilenameMaxLength($value){
+    public function setFilenameMaxLength($value)
+    {
         $this->filenameMaxLength = $value;
     }
 
-    public function setFilenameFormat($value){
-        $this->filenameFormat = $value;
+    public function setFilenameFormat($value)
+    {
+        //TODO: Change for Log-Trade
+        $config = Application_Configuration::getInstance();
+        $logger = $config->getLogger();
+        if (@preg_match($value, 0) === false) {
+            $logger->warn('Your regular expression for your filename-validation is not valid.');
+            $this->filenameFormat = '/' . null . '/';
+        } else {
+            $this->filenameFormat = $value;
+        }
     }
 
     /**

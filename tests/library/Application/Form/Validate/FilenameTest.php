@@ -27,7 +27,7 @@
  * @category    Application Unit Test
  * @package     Form_Validate
  * @author      Maximilian Salomon <salomon@zib.de>
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -36,6 +36,14 @@
 
 class Application_Form_Validate_FilenameTest extends ControllerTestCase
 {
+
+    private $config;
+
+    public function setUp()
+    {
+        parent::setUp();
+        $this->config = Application_Configuration::getInstance();
+    }
 
     /**
      * Data provider for valid arguments.
@@ -62,21 +70,40 @@ class Application_Form_Validate_FilenameTest extends ControllerTestCase
     {
         return [
             [null, 'Null value not rejected'],
-            ['',   'Empty string not rejected'],
+            ['', 'Empty string not rejected'],
             ['_test.txt', 'Malformed string not rejected.'],
             [true, 'Boolean not rejected'],
-            ['-Opus4.pdf',          'Malformed string not rejected.'],
-            ['Töst.pdf',          'Malformed string not rejected.'],
-            ['!Töst.pdf',          'Malformed string not rejected.'],
-            ['Töst?.pdf',          'Malformed string not rejected.'],
-            ['testtesttesttesttesttesttesttesttesttesttesttesttesttesttest.pdf',  'String too long']
+            ['-Opus4.pdf', 'Malformed string not rejected.'],
+            ['Töst.pdf', 'Malformed string not rejected.'],
+            ['!Töst.pdf', 'Malformed string not rejected.'],
+            ['Töst?.pdf', 'Malformed string not rejected.'],
+            ['testtesttesttesttesttesttesttesttesttesttesttesttesttesttest.pdf', 'String too long']
+        ];
+    }
+
+    public function nullDataProvider()
+    {
+        return [
+            ['Test.txt'],
+            ['Big_data.pdf'],
+            ['Python-Code.pdf'],
+            ['Opus4.txt'],
+            ['4.7_Handbuch_Opus-4.pdf'],
+            [null, 'Null value not rejected'],
+            ['', 'Empty string not rejected'],
+            ['_test.txt', 'Malformed string not rejected.'],
+            [true, 'Boolean not rejected'],
+            ['-Opus4.pdf', 'Malformed string not rejected.'],
+            ['Töst.pdf', 'Malformed string not rejected.'],
+            ['!Töst.pdf', 'Malformed string not rejected.'],
+            ['Töst?.pdf', 'Malformed string not rejected.'],
         ];
     }
 
     /**
      * Test validation of incorrect arguments.
      *
-     * @param mixed  $arg Invalid value to check given by the data provider.
+     * @param mixed $arg Invalid value to check given by the data provider.
      * @param string $msg Error message.
      * @return void
      *
@@ -84,9 +111,8 @@ class Application_Form_Validate_FilenameTest extends ControllerTestCase
      */
     public function testInvalidArguments($arg, $msg)
     {
-        $config = Application_Configuration::getInstance()->getConfig();
-        $filenameMaxLength = $config->publish->filenameMaxLength;
-        $filenameFormat = $config->publish->filenameFormat;
+        $filenameMaxLength = 50;
+        $filenameFormat = "^[a-zA-Z0-9][a-zA-Z0-9_.-]+$";
         $filenameOptions = [
             'filenameMaxLength' => $filenameMaxLength,
             'filenameFormat' => $filenameFormat
@@ -105,9 +131,8 @@ class Application_Form_Validate_FilenameTest extends ControllerTestCase
      */
     public function testValidArguments($arg)
     {
-        $config = Application_Configuration::getInstance()->getConfig();
-        $filenameMaxLength = $config->publish->filenameMaxLength;
-        $filenameFormat = $config->publish->filenameFormat;
+        $filenameMaxLength = 50;
+        $filenameFormat = "^[a-zA-Z0-9][a-zA-Z0-9_.-]+$";
         $filenameOptions = [
             'filenameMaxLength' => $filenameMaxLength,
             'filenameFormat' => $filenameFormat
@@ -117,8 +142,72 @@ class Application_Form_Validate_FilenameTest extends ControllerTestCase
         $result = $validator->isValid($arg);
 
         $codes = $validator->getErrors();
-        $msgs  = $validator->getMessages();
-        $err   = '';
+        $msgs = $validator->getMessages();
+        $err = '';
+        foreach ($codes as $code) {
+            $err .= '(' . $msgs[$code] . ') ';
+        }
+
+        $this->assertTrue($result, $arg . ' should pass validation but validator says: ' . $err);
+    }
+
+    /**
+     * Test validation of zero arguments.
+     *
+     * @param mixed $arg Value to check given by the data provider.
+     * @return void
+     *
+     * @dataProvider nullDataProvider
+     */
+    public function testZeroFormat($arg)
+    {
+        $filenameMaxLength = 50;
+        $filenameFormat = null;
+        $filenameOptions = [
+            'filenameMaxLength' => $filenameMaxLength,
+            'filenameFormat' => $filenameFormat
+        ];
+        $validator = new Application_Form_Validate_Filename($filenameOptions);
+
+        $result = $validator->isValid($arg);
+
+        $codes = $validator->getErrors();
+        $msgs = $validator->getMessages();
+        $err = '';
+        foreach ($codes as $code) {
+            $err .= '(' . $msgs[$code] . ') ';
+        }
+
+        $this->assertTrue($result, $arg . ' should pass validation but validator says: ' . $err);
+    }
+
+    /**
+     * Test the logging of an wrong filenameFormat-key
+     * @dataProvider nullDataProvider
+     */
+    public function testInvalidFormatKey($arg)
+    {
+        //TODO: Change for Log-Trade
+        $logger = new MockLogger();
+        $this->config->setLogger($logger);
+
+        $filenameMaxLength = 50;
+        $filenameFormat = 'se/\ ';
+        $filenameOptions = [
+            'filenameMaxLength' => $filenameMaxLength,
+            'filenameFormat' => $filenameFormat
+        ];
+        $validator = new Application_Form_Validate_Filename($filenameOptions);
+
+        $messages = $logger->getMessages();
+        $this->assertEquals(1, count($messages));
+        $this->assertContains('Your regular expression for your filename-validation is not valid.', $messages[0]);
+
+        $result = $validator->isValid($arg);
+
+        $codes = $validator->getErrors();
+        $msgs = $validator->getMessages();
+        $err = '';
         foreach ($codes as $code) {
             $err .= '(' . $msgs[$code] . ') ';
         }
