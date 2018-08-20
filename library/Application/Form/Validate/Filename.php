@@ -80,7 +80,7 @@ class Application_Form_Validate_Filename extends Zend_Validate_Abstract
     public function __construct($options)
     {
         self::setFilenameMaxLength($options['filenameMaxLength']);
-        self::setFilenameFormat('/' . $options['filenameFormat'] . '/');
+        self::setFilenameFormat( '<'.$options['filenameFormat'].'>');
     }
 
     public function getFilenameMaxLength()
@@ -100,15 +100,24 @@ class Application_Form_Validate_Filename extends Zend_Validate_Abstract
 
     public function setFilenameFormat($value)
     {
-        //TODO: Change for Log-Trade
+        if (self::validateFilenameFormatKey($value) == false) {
+            $this->filenameFormat = '<' . null . '>';
+        } else {
+            $this->filenameFormat = $value;
+        }
+    }
+
+    //TODO: Change for Log-Trait
+    public function validateFilenameFormatKey($value)
+    {
         $config = Application_Configuration::getInstance();
         $logger = $config->getLogger();
         if (@preg_match($value, 0) === false) {
             $logger->warn('Your regular expression for your filename-validation is not valid.');
-            $this->filenameFormat = '/' . null . '/';
-        } else {
-            $this->filenameFormat = $value;
+            return false;
         }
+
+        return true;
     }
 
     /**
@@ -130,7 +139,7 @@ class Application_Form_Validate_Filename extends Zend_Validate_Abstract
             }
         }
 
-        if (strlen($data['filename']) > $this->filenameMaxLength) {
+        if (strlen($data['filename']) > $this->filenameMaxLength and $this->filenameMaxLength != 0) {
             $this->_error(self::MSG_NAME_LENGTH);
             return false;
         }
