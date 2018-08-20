@@ -49,7 +49,7 @@ class Application_Form_Validate_Filename extends Zend_Validate_Abstract
     /**
      * Error message key for invalid filename length
      */
-    const MSG_NAME_LENGTH = 'namelength';
+    const MSG_NAME_LENGTH = 'nameLength';
 
     /**
      * Error message key for malformed filename
