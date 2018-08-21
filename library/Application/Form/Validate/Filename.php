@@ -109,11 +109,11 @@ class Application_Form_Validate_Filename extends Zend_Validate_Abstract
     }
 
     /**
-     * TODO: Use LoggingTriat (introduced in OPUS 4.7)
+     * TODO: Use Logging-Trait (introduced in OPUS 4.7)
      *
      * Verifies that the regular expression is generally valid.
      *
-     * @param $value is a regular expression, which is validated here.
+     * @param $value -> a regular expression, which is validated here.
      * @return bool
      */
     public function validateFilenameFormat($value)
