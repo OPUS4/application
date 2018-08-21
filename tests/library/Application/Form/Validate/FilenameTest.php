@@ -185,7 +185,7 @@ class Application_Form_Validate_FilenameTest extends ControllerTestCase
     }
 
     /**
-     * Test the validation of an wrong filenameFormat-key
+     * Test the validation of an wrong filenameFormat-regular expression
      */
     public function testValidateFilenameFormatFalse()
     {
@@ -194,7 +194,7 @@ class Application_Form_Validate_FilenameTest extends ControllerTestCase
         $this->appConfig->setLogger($logger);
         $validator = new Application_Form_Validate_Filename();
 
-        $this->assertFalse($validator->validateFilenameFormatKey('+^[a-zA-Z0-9][a-zA-Z0-9_.-]+$+'));
+        $this->assertFalse($validator->validateFilenameFormat('+^[a-zA-Z0-9][a-zA-Z0-9_.-]+$+'));
 
         $messages = $logger->getMessages();
         $this->assertEquals(1, count($messages));
@@ -203,7 +203,7 @@ class Application_Form_Validate_FilenameTest extends ControllerTestCase
     }
 
     /**
-     * Test the validation of an wrong filenameFormat-key
+     * Test the validation of an wrong filenameFormat-regular expression
      *
      * @dataProvider validFilenameFormatProvider
      */
@@ -213,7 +213,7 @@ class Application_Form_Validate_FilenameTest extends ControllerTestCase
         $this->appConfig->setLogger($logger);
 
         $validator = new Application_Form_Validate_Filename();
-        $this->assertTrue($validator->validateFilenameFormatKey($arg));
+        $this->assertTrue($validator->validateFilenameFormat($arg));
 
         $messages = $logger->getMessages();
         $this->assertEquals(0, count($messages));

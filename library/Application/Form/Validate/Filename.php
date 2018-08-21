@@ -116,7 +116,7 @@ class Application_Form_Validate_Filename extends Zend_Validate_Abstract
      * @param $value is a regular expression, which is validated here.
      * @return bool
      */
-    public function validateFilenameFormatKey($value)
+    public function validateFilenameFormat($value)
     {
         $logger = Application_Configuration::getInstance()->getLogger();
 
