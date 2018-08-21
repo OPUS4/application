@@ -57,7 +57,7 @@ class Application_Form_Validate_Filename extends Zend_Validate_Abstract
     const MSG_NAME_FORMAT = 'format';
 
     /**
-     * Errormessage Templates
+     * Error message Templates
      * @var array
      */
     protected $_messageTemplates = [
@@ -77,7 +77,7 @@ class Application_Form_Validate_Filename extends Zend_Validate_Abstract
      * Application_Form_Validate_Filename constructor.
      * @param $options
      */
-    public function __construct($options)
+    public function __construct($options = ['filenameMaxLength' => null, 'filenameFormat' => null])
     {
         $this->setFilenameMaxLength($options['filenameMaxLength']);
         $this->setFilenameFormat($options['filenameFormat']);
@@ -100,6 +100,7 @@ class Application_Form_Validate_Filename extends Zend_Validate_Abstract
 
     public function setFilenameFormat($value)
     {
+        $value = '<' . $value . '>';
         if ($this->validateFilenameFormat($value) == false) {
             $this->filenameFormat = '<' . null . '>';
         } else {
@@ -108,13 +109,17 @@ class Application_Form_Validate_Filename extends Zend_Validate_Abstract
     }
 
     /**
+     * TODO: Use Logging-Trait (introduced in OPUS 4.7)
+     *
      * Verifies that the regular expression is generally valid.
-     * TODO Use LoggingTriat (introduced in OPUS 4.7)
-     */ 
+     *
+     * @param $value -> a regular expression, which is validated here.
+     * @return bool
+     */
     public function validateFilenameFormat($value)
     {
         $logger = Application_Configuration::getInstance()->getLogger();
-       
+
         if (@preg_match($value, null) === false) {
             $logger->warn('Your regular expression for your filename-validation is not valid.');
             return false;
@@ -133,7 +138,7 @@ class Application_Form_Validate_Filename extends Zend_Validate_Abstract
     public function isValid($value, $file = null)
     {
         $this->_setValue($value);
-        
+
         if ($file !== null) {
             $data['filename'] = $file['name'];
         } else {
