@@ -108,7 +108,7 @@ class Application_Form_Validate_FilenameTest extends ControllerTestCase
     }
 
     /**
-     * Test validation of incorrect arguments.
+     * Test validation of incorrect arguments with typical parameters.
      *
      * @param mixed $arg Invalid value to check given by the data provider.
      * @param string $msg Error message.
@@ -129,7 +129,7 @@ class Application_Form_Validate_FilenameTest extends ControllerTestCase
     }
 
     /**
-     * Test validation of correct arguments.
+     * Test validation of correct arguments with typical parameters.
      *
      * @param mixed $arg Value to check given by the data provider.
      * @return void
@@ -160,6 +160,8 @@ class Application_Form_Validate_FilenameTest extends ControllerTestCase
 
     /**
      * Test deactivated Validation with combination of valid and invalid DataProvider, to test, that everything is accepted.
+     * Use default-values of constructors (null) -> deactivated (If application.ini is used, it is not deactivated)
+     * See testDefaultConfigValid and testDefaultConfigInvalid
      *
      * @param mixed $arg Value to check given by the data provider.
      * @return void
@@ -168,13 +170,7 @@ class Application_Form_Validate_FilenameTest extends ControllerTestCase
      */
     public function testDeactivatedValidation($arg)
     {
-        $filenameMaxLength = 0;
-        $filenameFormat = null;
-        $filenameOptions = [
-            'filenameMaxLength' => $filenameMaxLength,
-            'filenameFormat' => $filenameFormat
-        ];
-        $validator = new Application_Form_Validate_Filename($filenameOptions);
+        $validator = new Application_Form_Validate_Filename();
 
         $result = $validator->isValid($arg);
 
@@ -196,14 +192,9 @@ class Application_Form_Validate_FilenameTest extends ControllerTestCase
         //TODO: Change for Log-Trait
         $logger = new MockLogger();
         $this->appConfig->setLogger($logger);
+        $validator = new Application_Form_Validate_Filename();
 
-        $filenameMaxLength = 0;
-        $filenameFormat = '+^[a-zA-Z0-9][a-zA-Z0-9_.-]+$+';
-        $filenameOptions = [
-            'filenameMaxLength' => $filenameMaxLength,
-            'filenameFormat' => $filenameFormat
-        ];
-        $validator = new Application_Form_Validate_Filename($filenameOptions);
+        $this->assertFalse($validator->validateFilenameFormatKey('+^[a-zA-Z0-9][a-zA-Z0-9_.-]+$+'));
 
         $messages = $logger->getMessages();
         $this->assertEquals(1, count($messages));
@@ -221,17 +212,11 @@ class Application_Form_Validate_FilenameTest extends ControllerTestCase
         $logger = new MockLogger();
         $this->appConfig->setLogger($logger);
 
-        $filenameMaxLength = 0;
-        $filenameFormat = $arg;
-        $filenameOptions = [
-            'filenameMaxLength' => $filenameMaxLength,
-            'filenameFormat' => $filenameFormat
-        ];
-        $validator = new Application_Form_Validate_Filename($filenameOptions);
+        $validator = new Application_Form_Validate_Filename();
+        $this->assertTrue($validator->validateFilenameFormatKey($arg));
 
         $messages = $logger->getMessages();
         $this->assertEquals(0, count($messages));
-        $this->assertEquals($validator->getFilenameFormat(), '<' . $arg . '>');
         $logger->clear();
     }
 
@@ -269,6 +254,7 @@ class Application_Form_Validate_FilenameTest extends ControllerTestCase
      * Test validation of incorrect arguments in Combination with default-configuration.
      *
      * @param mixed $arg Value to check given by the data provider.
+     * @param mixed $msg are the error-messages
      * @return void
      *
      * @dataProvider invalidDataProvider
@@ -303,9 +289,9 @@ class Application_Form_Validate_FilenameTest extends ControllerTestCase
     }
 
     /**
-     * test the constructor
+     * test the constructor with given parameters
      */
-    public function testConstructor()
+    public function testConstructorGivenParameters()
     {
         $filenameMaxLength = 0;
         $filenameFormat = '^[a-zA-Z0-9][a-zA-Z0-9_.-]+$';
@@ -316,6 +302,16 @@ class Application_Form_Validate_FilenameTest extends ControllerTestCase
         $validator = new Application_Form_Validate_Filename($filenameOptions);
         $this->assertEquals(0, $validator->getFilenameMaxLength());
         $this->assertEquals('<^[a-zA-Z0-9][a-zA-Z0-9_.-]+$>', $validator->getFilenameFormat());
+    }
+
+    /**
+     * test the constructor with given parameters
+     */
+    public function testConstructorDefaultParameters()
+    {
+        $validator = new Application_Form_Validate_Filename();
+        $this->assertEquals(null, $validator->getFilenameMaxLength());
+        $this->assertEquals('<>', $validator->getFilenameFormat());
     }
 
     /**
@@ -338,13 +334,7 @@ class Application_Form_Validate_FilenameTest extends ControllerTestCase
      */
     public function testSetFilenameMaxLength()
     {
-        $filenameMaxLength = 0;
-        $filenameFormat = '^[a-zA-Z0-9][a-zA-Z0-9_.-]+$';
-        $filenameOptions = [
-            'filenameMaxLength' => $filenameMaxLength,
-            'filenameFormat' => $filenameFormat
-        ];
-        $validator = new Application_Form_Validate_Filename($filenameOptions);
+        $validator = new Application_Form_Validate_Filename();
         $validator->setFilenameMaxLength(123);
         $this->assertEquals(123, $validator->getFilenameMaxLength());
     }
@@ -369,14 +359,8 @@ class Application_Form_Validate_FilenameTest extends ControllerTestCase
      */
     public function testSetFilenameFormat()
     {
-        $filenameMaxLength = 0;
-        $filenameFormat = '^[a-zA-Z0-9][a-zA-Z0-9_.-]+$';
-        $filenameOptions = [
-            'filenameMaxLength' => $filenameMaxLength,
-            'filenameFormat' => $filenameFormat
-        ];
-        $validator = new Application_Form_Validate_Filename($filenameOptions);
+        $validator = new Application_Form_Validate_Filename();
         $validator->setFilenameFormat('<3134123>');
-        $this->assertEquals('<3134123>', $validator->getFilenameFormat());
+        $this->assertEquals('<<3134123>>', $validator->getFilenameFormat());
     }
 }

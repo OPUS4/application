@@ -57,7 +57,7 @@ class Application_Form_Validate_Filename extends Zend_Validate_Abstract
     const MSG_NAME_FORMAT = 'format';
 
     /**
-     * Errormessage Templates
+     * Error message Templates
      * @var array
      */
     protected $_messageTemplates = [
@@ -77,10 +77,10 @@ class Application_Form_Validate_Filename extends Zend_Validate_Abstract
      * Application_Form_Validate_Filename constructor.
      * @param $options
      */
-    public function __construct($options)
+    public function __construct($options = ['filenameMaxLength' => null, 'filenameFormat' => null])
     {
         self::setFilenameMaxLength($options['filenameMaxLength']);
-        self::setFilenameFormat('<' . $options['filenameFormat'] . '>');
+        self::setFilenameFormat($options['filenameFormat']);
     }
 
     public function getFilenameMaxLength()
@@ -100,6 +100,7 @@ class Application_Form_Validate_Filename extends Zend_Validate_Abstract
 
     public function setFilenameFormat($value)
     {
+        $value = '<' . $value . '>';
         if (self::validateFilenameFormatKey($value) == false) {
             $this->filenameFormat = '<' . null . '>';
         } else {
@@ -107,7 +108,12 @@ class Application_Form_Validate_Filename extends Zend_Validate_Abstract
         }
     }
 
-    //TODO: Change for Log-Trait
+    /**
+     * TODO: Change for Log-Trait
+     *
+     * @param $value is a regular expression, which is validated here.
+     * @return bool
+     */
     public function validateFilenameFormatKey($value)
     {
         $config = Application_Configuration::getInstance();
