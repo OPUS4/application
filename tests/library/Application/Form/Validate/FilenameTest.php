@@ -164,7 +164,8 @@ class Application_Form_Validate_FilenameTest extends ControllerTestCase
     }
 
     /**
-     * Test deactivated validation with combination of valid and invalid DataProvider, to test, that everything is accepted.
+     * Test deactivated validation with combination of valid and invalid DataProvider, to test, that everything is
+     * accepted.
      * Use default-values of constructors (null) -> deactivated (If application.ini is used, it is not deactivated)
      * See testDefaultConfigValid and testDefaultConfigInvalid
      *
@@ -204,7 +205,7 @@ class Application_Form_Validate_FilenameTest extends ControllerTestCase
         $messages = $logger->getMessages();
         $this->assertEquals(1, count($messages));
         $this->assertContains('Your regular expression for your filename-validation is not valid.', $messages[0]);
-        $this->assertEquals($validator->getFilenameFormat(), '<>');
+        $this->assertEquals('', $validator->getFilenameFormat());
     }
 
     /**
@@ -281,7 +282,8 @@ class Application_Form_Validate_FilenameTest extends ControllerTestCase
     }
 
     /**
-     * test if default filenameFormat is valid. If it is valid, 'preg_match' gives the match else it returns false. The match is in this case null.
+     * Test if default filenameFormat is valid. If it is valid, 'preg_match' gives the match else it returns false.
+     * The match is in this case null.
      */
     public function testDefaultFilenameFormatIsValid()
     {
@@ -293,7 +295,7 @@ class Application_Form_Validate_FilenameTest extends ControllerTestCase
         ];
         $validator = new Application_Form_Validate_Filename($filenameOptions);
 
-        $this->assertEquals(null, preg_match($validator->getFilenameFormat(), null));
+        $this->assertEquals(null, preg_match("<{$validator->getFilenameFormat()}>", null));
     }
 
     /**
@@ -309,7 +311,7 @@ class Application_Form_Validate_FilenameTest extends ControllerTestCase
         ];
         $validator = new Application_Form_Validate_Filename($filenameOptions);
         $this->assertEquals(0, $validator->getFilenameMaxLength());
-        $this->assertEquals('<^[a-zA-Z0-9][a-zA-Z0-9_.-]+$>', $validator->getFilenameFormat());
+        $this->assertEquals('^[a-zA-Z0-9][a-zA-Z0-9_.-]+$', $validator->getFilenameFormat());
     }
 
     /**
@@ -319,7 +321,7 @@ class Application_Form_Validate_FilenameTest extends ControllerTestCase
     {
         $validator = new Application_Form_Validate_Filename();
         $this->assertEquals(null, $validator->getFilenameMaxLength());
-        $this->assertEquals('<>', $validator->getFilenameFormat());
+        $this->assertEquals('', $validator->getFilenameFormat());
     }
 
     /**
@@ -354,12 +356,13 @@ class Application_Form_Validate_FilenameTest extends ControllerTestCase
     {
         $filenameMaxLength = 0;
         $filenameFormat = '^[a-zA-Z0-9][a-zA-Z0-9_.-]+$';
-        $filenameOptions = [
+
+        $validator = new Application_Form_Validate_Filename([
             'filenameMaxLength' => $filenameMaxLength,
             'filenameFormat' => $filenameFormat
-        ];
-        $validator = new Application_Form_Validate_Filename($filenameOptions);
-        $this->assertEquals('<^[a-zA-Z0-9][a-zA-Z0-9_.-]+$>', $validator->getFilenameFormat());
+        ]);
+
+        $this->assertEquals('^[a-zA-Z0-9][a-zA-Z0-9_.-]+$', $validator->getFilenameFormat());
     }
 
     /**
@@ -369,6 +372,7 @@ class Application_Form_Validate_FilenameTest extends ControllerTestCase
     {
         $validator = new Application_Form_Validate_Filename();
         $validator->setFilenameFormat('<3134123>');
-        $this->assertEquals('<<3134123>>', $validator->getFilenameFormat());
+        $this->assertEquals('<3134123>', $validator->getFilenameFormat());
+        $this->assertTrue($validator->isValid('<3134123>'));
     }
 }
