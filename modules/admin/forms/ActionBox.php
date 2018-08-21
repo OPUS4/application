@@ -151,30 +151,37 @@ class Admin_Form_ActionBox extends Admin_Form_AbstractDocumentSubForm
 
     public function getViewActionLinks()
     {
-        $actions = array();
+        $actions = [];
 
         $docId = $this->_document->getId();
 
-        $actions['edit'] = array(
+        $actions['edit'] = [
             'module' => 'admin',
             'controller' => 'document',
             'action' => 'edit',
             'id' => $docId
-        );
+        ];
 
-        $actions['files'] = array(
+        $actions['files'] = [
             'module'     => 'admin',
             'controller' => 'filemanager',
             'action'     => 'index',
             'id'         => $docId,
-        );
+        ];
 
-        $actions['frontdoor'] = array(
+        $actions['copy'] = [
+            'module' => 'admin',
+            'controller' => 'document',
+            'action' => 'copy',
+            'id'=> $docId
+        ];
+
+        $actions['frontdoor'] = [
             'module'     => 'frontdoor',
             'controller' => 'index',
             'action'     => 'index',
             'docId'         => $docId,
-        );
+        ];
 
         return $actions;
     }
