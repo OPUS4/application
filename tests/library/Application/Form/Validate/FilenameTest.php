@@ -275,7 +275,7 @@ class Application_Form_Validate_FilenameTest extends ControllerTestCase
     /**
      * test if default filenameFormat is valid. If it is valid, preq_match gives the match else it returns false. The match is in this case null.
      */
-    public function testDefaultFilenameFormatIsVaild()
+    public function testDefaultFilenameFormatIsValid()
     {
         $filenameMaxLength = $this->config->publish->filenameMaxLength;
         $filenameFormat = $this->config->publish->filenameFormat;
