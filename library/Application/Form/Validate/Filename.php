@@ -49,7 +49,7 @@ class Application_Form_Validate_Filename extends Zend_Validate_Abstract
     /**
      * Error message key for invalid filename length
      */
-    const MSG_NAME_LENGTH = 'namelength';
+    const MSG_NAME_LENGTH = 'nameLength';
 
     /**
      * Error message key for malformed filename
@@ -79,8 +79,8 @@ class Application_Form_Validate_Filename extends Zend_Validate_Abstract
      */
     public function __construct($options = ['filenameMaxLength' => null, 'filenameFormat' => null])
     {
-        self::setFilenameMaxLength($options['filenameMaxLength']);
-        self::setFilenameFormat($options['filenameFormat']);
+        $this->setFilenameMaxLength($options['filenameMaxLength']);
+        $this->setFilenameFormat($options['filenameFormat']);
     }
 
     public function getFilenameMaxLength()
@@ -101,7 +101,7 @@ class Application_Form_Validate_Filename extends Zend_Validate_Abstract
     public function setFilenameFormat($value)
     {
         $value = '<' . $value . '>';
-        if (self::validateFilenameFormatKey($value) == false) {
+        if ($this->validateFilenameFormat($value) == false) {
             $this->filenameFormat = '<' . null . '>';
         } else {
             $this->filenameFormat = $value;
@@ -109,15 +109,17 @@ class Application_Form_Validate_Filename extends Zend_Validate_Abstract
     }
 
     /**
-     * TODO: Change for Log-Trait
+     * TODO: Use LoggingTriat (introduced in OPUS 4.7)
+     *
+     * Verifies that the regular expression is generally valid.
      *
      * @param $value is a regular expression, which is validated here.
      * @return bool
      */
     public function validateFilenameFormatKey($value)
     {
-        $config = Application_Configuration::getInstance();
-        $logger = $config->getLogger();
+        $logger = Application_Configuration::getInstance()->getLogger();
+
         if (@preg_match($value, null) === false) {
             $logger->warn('Your regular expression for your filename-validation is not valid.');
             return false;
@@ -136,6 +138,7 @@ class Application_Form_Validate_Filename extends Zend_Validate_Abstract
     public function isValid($value, $file = null)
     {
         $this->_setValue($value);
+
         if ($file !== null) {
             $data['filename'] = $file['name'];
         } else {

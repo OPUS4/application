@@ -187,7 +187,7 @@ class Application_Form_Validate_FilenameTest extends ControllerTestCase
     /**
      * Test the validation of an wrong filenameFormat-key
      */
-    public function testValidateFilenameFormatKeyFalse()
+    public function testValidateFilenameFormatFalse()
     {
         //TODO: Change for Log-Trait
         $logger = new MockLogger();
@@ -207,7 +207,7 @@ class Application_Form_Validate_FilenameTest extends ControllerTestCase
      *
      * @dataProvider validFilenameFormatProvider
      */
-    public function testValidateFilenameFormatKeyTrue($arg)
+    public function testValidateFilenameFormatTrue($arg)
     {
         $logger = new MockLogger();
         $this->appConfig->setLogger($logger);
