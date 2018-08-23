@@ -155,7 +155,7 @@ class Frontdoor_IndexController extends Application_Controller_Action {
 
         $this->incrementStatisticsCounter($docId);
 
-        $actionbox = new Admin_Form_ActionBox();
+        $actionbox = new Frontdoor_Form_FrontdoorActionBox();
         $actionbox->prepareRenderingAsView();
         $actionbox->populateFromModel($document);
         $this->view->adminform = $actionbox;

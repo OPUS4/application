@@ -26,6 +26,7 @@
  *
  * @category    Tests
  * @author      Jens Schwidder <schwidder@zib.de>
+ * @author      Maximilian Salomon <salomon@zib.de>
  * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
@@ -62,6 +63,7 @@ class Admin_StatisticControllerTest extends ControllerTestCase {
      * Fragt ab, ob bei einem falschen Jahr die Indexseite angezeigt wird
      */
     public function testIndexActionWithWrongYear() {
+        $this->useEnglish();
         $this->request
             ->setMethod('POST')
             ->setPost(array('selectedYear' => '1337'));

@@ -24,31 +24,32 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @author      Sascha Szott <szott@zib.de>
- * @author      Maximilian Salomon <salomon@zib.de>
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @category    Application
+ * @package     Module_Admin
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
- * @coversNothing
+ * Modifies ActionBox for frontdoor to replace frontdoor link with link to administration.
  */
-class AppModeTest extends ControllerTestCase {
+class Frontdoor_Form_FrontdoorActionBox extends Admin_Form_ActionBox
+{
 
-    public function testProductionMode() {
-        $this->markTestSkipped('TODO common.phtml uses APPLICATION_ENV directly');
-        parent::setUpWithEnv('production');
-        $this->dispatch('/home');
-        $this->assertNotContains('NON PRODUCTION ENVIRONMENT', $this->getResponse()->getBody());
+    public function getViewActionLinks()
+    {
+        $actions = parent::getViewActionLinks();
+
+        unset($actions['frontdoor']);
+
+        $actions['view'] = array(
+            'module'     => 'admin',
+            'controller' => 'document',
+            'action'     => 'index',
+            'id'         => $this->getDocument()->getId()
+        );
+
+        return $actions;
     }
-
-    public function testTestingMode() {
-        parent::setUpWithEnv('testing');
-        $this->useEnglish();
-        $this->dispatch('/home');
-        $this->assertContains('NON PRODUCTION ENVIRONMENT (testing)', $this->getResponse()->getBody());
-    }
-
 }

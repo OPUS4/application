@@ -33,6 +33,11 @@
 
 /**
  * Class Application_Form_Validate_uploadFilenameCheck validates the filename.
+ *
+ * The regular expression used to validate a filename must be specified without the usual delimiters. Bracket style
+ * delimiters '<>' will be added automatically.
+ *
+ * TODO don't add delimiter internally - just accept a complete regular expression
  */
 class Application_Form_Validate_Filename extends Zend_Validate_Abstract
 {
@@ -77,10 +82,14 @@ class Application_Form_Validate_Filename extends Zend_Validate_Abstract
      * Application_Form_Validate_Filename constructor.
      * @param $options
      */
-    public function __construct($options = ['filenameMaxLength' => null, 'filenameFormat' => null])
+    public function __construct($options = null)
     {
-        $this->setFilenameMaxLength($options['filenameMaxLength']);
-        $this->setFilenameFormat($options['filenameFormat']);
+        if (isset($options['filenameMaxLength'])) {
+            $this->setFilenameMaxLength($options['filenameMaxLength']);
+        }
+        if (isset($options['filenameFormat'])) {
+            $this->setFilenameFormat($options['filenameFormat']);
+        }
     }
 
     public function getFilenameMaxLength()
@@ -100,9 +109,8 @@ class Application_Form_Validate_Filename extends Zend_Validate_Abstract
 
     public function setFilenameFormat($value)
     {
-        $value = '<' . $value . '>';
-        if ($this->validateFilenameFormat($value) == false) {
-            $this->filenameFormat = '<' . null . '>';
+        if ($this->validateFilenameFormat("<$value>") == false) {
+            $this->filenameFormat = null;
         } else {
             $this->filenameFormat = $value;
         }
@@ -153,7 +161,9 @@ class Application_Form_Validate_Filename extends Zend_Validate_Abstract
             return false;
         }
 
-        if (preg_match($this->filenameFormat, $data['filename']) === 0) {
+        $pattern = "<$this->filenameFormat>";
+
+        if (preg_match($pattern, $data['filename']) === 0) {
             $this->_error(self::MSG_NAME_FORMAT);
             return false;
         }

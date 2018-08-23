@@ -23,8 +23,8 @@
       <tuv xml:lang="de">
         <seg>Metadaten hinzufügen</seg>
       </tuv>
-    </tu>    
-    
+    </tu>
+
     <tu tuid="admin_document_update">
       <tuv xml:lang="en">
         <seg>Edit Metadata</seg>
@@ -51,7 +51,7 @@
         <seg>Zuweisung(en) ändern</seg>
       </tuv>
     </tu>
-	
+
 	<tu tuid="admin_document_edit_section_licences">
       <tuv xml:lang="en">
         <seg>Edit assignment(s)</seg>
@@ -60,7 +60,7 @@
         <seg>Zuweisung(en) ändern</seg>
       </tuv>
     </tu>
-	
+
 	<tu tuid="admin_document_edit_section_collections">
       <tuv xml:lang="en">
         <seg>Edit assignment(s)</seg>
@@ -69,7 +69,7 @@
         <seg>Zuweisung(en) ändern</seg>
       </tuv>
     </tu>
-	
+
     <tu tuid="admin_document_add_section">
       <tuv xml:lang="en">
         <seg>Add New</seg>
@@ -87,7 +87,7 @@
         <seg>Neue Zuweisung hinzufügen</seg>
       </tuv>
     </tu>
-	
+
 	<tu tuid="admin_document_add_section_licences">
       <tuv xml:lang="en">
         <seg>Add new Assignment</seg>
@@ -96,7 +96,7 @@
         <seg>Neue Zuweisung hinzufügen</seg>
       </tuv>
     </tu>
-	
+
     <tu tuid="admin_document_section_general">
       <tuv xml:lang="en">
         <seg>General</seg>
@@ -123,7 +123,7 @@
         <seg>Zusammenfassungen</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_document_section_titlemain">
       <tuv xml:lang="en">
         <seg>Titles</seg>
@@ -132,7 +132,7 @@
         <seg>Titel</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_document_section_titleadditional">
       <tuv xml:lang="en">
         <seg>Translated Titles</seg>
@@ -141,7 +141,7 @@
         <seg>Übersetzte Titel</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_document_section_titleparent">
       <tuv xml:lang="en">
         <seg>Parent Titles</seg>
@@ -150,7 +150,7 @@
         <seg>Titel übergeordneter Werke</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_document_section_titlesub">
       <tuv xml:lang="en">
         <seg>Subtitles</seg>
@@ -159,7 +159,7 @@
         <seg>Untertitel</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_document_section_persons">
       <tuv xml:lang="en">
         <seg>Persons</seg>
@@ -168,7 +168,7 @@
         <seg>Personen</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_document_section_personauthor">
       <tuv xml:lang="en">
         <seg>Authors</seg>
@@ -177,7 +177,7 @@
         <seg>Autoren</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_document_section_personeditor">
       <tuv xml:lang="en">
         <seg>Editors</seg>
@@ -195,7 +195,7 @@
         <seg>Betreuer</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_document_section_personcontributor">
       <tuv xml:lang="en">
         <seg>Contributors</seg>
@@ -213,7 +213,7 @@
         <seg>Gutachter</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_document_section_persontranslator">
       <tuv xml:lang="en">
         <seg>Translators</seg>
@@ -221,8 +221,8 @@
       <tuv xml:lang="de">
         <seg>Übersetzer</seg>
       </tuv>
-    </tu>        
-    
+    </tu>
+
     <tu tuid="admin_document_section_personother">
       <tuv xml:lang="en">
         <seg>Other Persons</seg>
@@ -231,7 +231,7 @@
         <seg>Weitere Personen</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_document_section_personsubmitter">
       <tuv xml:lang="en">
         <seg>Submitter</seg>
@@ -240,7 +240,7 @@
         <seg>Einsteller</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_document_section_subjects">
       <tuv xml:lang="en">
         <seg>Subjects</seg>
@@ -257,7 +257,7 @@
         <seg>GND-Schlagwörter</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_document_section_subjectpsyndex">
       <tuv xml:lang="en">
         <seg>PSyndex Keywords</seg>
@@ -266,7 +266,7 @@
         <seg>PSyndex Schlagwörter</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_document_section_subjectuncontrolled">
       <tuv xml:lang="en">
         <seg>Tags</seg>
@@ -284,7 +284,7 @@
         <seg>Identifikatoren</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_document_section_identifier_other">
       <tuv xml:lang="en">
         <seg>Other Identifiers</seg>
@@ -293,7 +293,7 @@
         <seg>Andere Identifikatoren</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_document_section_identifierdoi">
       <tuv xml:lang="en">
         <seg>DOI</seg>
@@ -340,7 +340,7 @@
     </tu>
 
     <!-- TODO review -->
-    <tu tuid="admin_document_section_thesis"> 
+    <tu tuid="admin_document_section_thesis">
       <tuv xml:lang="en">
         <seg>Thesis statement, DNB</seg>
       </tuv>
@@ -358,7 +358,7 @@
         <seg>Sammlungen, Klassifikationen</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_document_section_content">
       <tuv xml:lang="en">
         <seg>Abstracts and Subjects</seg>
@@ -367,7 +367,7 @@
         <seg>Inhaltliche Erschließung</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_document_section_thesispublisher">
       <tuv xml:lang="en">
         <seg>Publishing Intitutions</seg>
@@ -376,7 +376,7 @@
         <seg>Veröffentlichende Institutionen</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_document_section_thesisgrantor">
       <tuv xml:lang="en">
         <seg>Granting Institutions</seg>
@@ -385,7 +385,7 @@
         <seg>Titel verleihende Institutionen</seg>
       </tuv>
     </tu>
-    
+
 
     <tu tuid="admin_document_section_series">
       <tuv xml:lang="en">
@@ -431,7 +431,7 @@
         <seg>Patente</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_document_section_bibliographic">
       <tuv xml:lang="en">
         <seg>Bibliographic Information</seg>
@@ -827,7 +827,7 @@
         <seg>Die Dokument-ID existiert nicht.</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_document_error_validation">
       <tuv xml:lang="en">
         <seg>Document cannot be saved, because some input is not valid.</seg>
@@ -854,7 +854,7 @@
         <seg>Ein Titel in der Dokumentensprache '%1$s' ist notwendig.</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_document_error_MoreThanOneTitleInLanguage">
       <tuv xml:lang="en">
         <seg>Languages can only be used once.</seg>
@@ -900,14 +900,6 @@
           </tuv>
       </tu>
 
-    <tu tuid="admin_document_create">
-      <tuv xml:lang="en">
-        <seg>Add metadata</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Metadaten hinzufügen</seg>
-      </tuv>
-    </tu>
 
     <tu tuid="admin_document_form_error_is_empty">
       <tuv xml:lang="en">
@@ -998,7 +990,7 @@
         <seg>Fehler beim Entfernen.</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_document_person_move_label">
       <tuv xml:lang="en">
         <seg>Move</seg>
@@ -1007,7 +999,7 @@
         <seg>Verschieben</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_document_person_actions_label">
       <tuv xml:lang="en">
         <seg>Actions</seg>
@@ -1016,7 +1008,7 @@
         <seg>Aktionen</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_document_person_roles_label">
       <tuv xml:lang="en">
         <seg>Change role</seg>
@@ -1025,7 +1017,7 @@
         <seg>Rolle ändern</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_document_person_remove_label">
       <tuv xml:lang="en">
         <seg>or</seg>
@@ -1068,6 +1060,15 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>Diese lokale DOI wurde bereits registriert. Sie wurde erfolgreich geprüft.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_document_created">
+      <tuv xml:lang="en">
+        <seg>New document created and opened for editing.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+          <seg>Neues Dokument erzeugt und zum Editieren geöffnet.</seg>
       </tuv>
     </tu>
 
