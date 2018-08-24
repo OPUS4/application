@@ -177,3 +177,50 @@ function splitISBN(value) {
 
     return digits;
 }
+
+
+$(document).ready(function () {
+    var selectors = [];
+    var result;
+
+    var identifier = $("#fieldset-Identifiers tbody tr td.Value-data");
+    var identifierText = $("#fieldset-Identifiers tbody tr :text");
+    var identifierSelector = $("#fieldset-Identifiers tbody tr select");
+
+    $.each(identifier, function (index, value) {
+        var para = document.createElement("p");
+        para.classList.add("datahint");
+        para.setAttribute("style", "display : none");
+        value.appendChild(para);
+    });
+
+    $.each(identifierSelector, function (index, value) {
+        selectors[index] = value.value;
+        value.onchange = function () {
+            selectors[index] = value.value;
+        };
+    });
+
+
+    $.each(identifierText, function (index, value) {
+        var ident = selectors[index];
+
+        value.onchange = function () {
+            if (ident === "isbn") {
+                result = validateISBN(value.value);
+            }
+            else if (ident === "issn") {
+
+                result = validateISSN(value.value);
+            }
+            else {
+                result = true;
+            }
+            if (result !== true) {
+                $(identifier[index]).find("p")[0].innerHTML = result;
+                $(identifier[index]).find("p").removeAttr("style");
+            }
+        };
+    });
+
+});
