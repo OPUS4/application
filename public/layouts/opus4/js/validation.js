@@ -73,3 +73,107 @@ function calculateCheckDigitISSN(value) {
 
     return checkdigit;
 }
+
+function validateISBN(value) {
+    // var messages = {
+    //     invalidCheckdigit: "The check digit of \'%value%\' is not valid",
+    //     invalidFormat: "\'%value%\' is malformed"
+    // };
+
+    var isbnDigits = splitISBN(value);
+
+    if (isbnDigits.length === 10) {
+        return validateISBN10(value);
+    }
+    else if (isbnDigits.length === 13) {
+        return validateISBN13(value);
+    }
+    else {
+        //alert(messages.invalidFormat.replace("%value%", value));
+        return false;
+    }
+}
+
+function validateISBN10(value) {
+    // var messages = {
+    //     invalidCheckdigit: "The check digit of \'%value%\' is not valid",
+    //     invalidFormat: "\'%value%\' is malformed"
+    // };
+
+    if (value.length !== 10 && value.length !== 13) {
+        return false;
+    }
+
+    if (value.match(/^[\d]*((-|\s)?[\d]*){2}((-|\s)?[\dX])$/g) === null) {
+        //alert(messages.invalidFormat.replace("%value%", value));
+        return false;
+    }
+
+    if (value.match(/-/) !== null && value.match(/\s/) !== null) {
+        //alert(messages.invalidFormat.replace("%value%", value));
+        return false;
+    }
+
+    var isbnDigits = splitISBN(value);
+    return calculateCheckDigitISBN10(isbnDigits);
+}
+
+function validateISBN13(value) {
+    // var messages = {
+    //     invalidCheckdigit: "The check digit of \'%value%\' is not valid",
+    //     invalidFormat: "\'%value%\' is malformed"
+    // };
+
+    if (value.length !== 13 && value.length !== 17) {
+        return false;
+    }
+
+    if (value.match(/^(978|979)((-|\s)?[\d]*){4}$/g) === null) {
+        //alert(messages.invalidFormat.replace("%value%", value));
+        return false;
+    }
+
+    if (value.match(/-/) !== null && value.match(/\s/) !== null) {
+        //alert(messages.invalidFormat.replace("%value%", value));
+        return false;
+    }
+
+    var isbnDigits = splitISBN(value);
+    return calculateCheckDigitISBN13(isbnDigits);
+}
+
+function calculateCheckDigitISBN10(value) {
+    var z = value;
+
+    if (z[9] === "X") {
+        z[9] = 10;
+    }
+    z = z.map(Number);
+    var check = 10 * z[0] + 9 * z[1] + 8 * z[2] + 7 * z[3] + 6 * z[4] + 5 * z[5] + 4 * z[6] + 3 * z[7] + 2 * z[8] + 1 * z[9];
+
+    return (check % 11 === 0);
+}
+
+function calculateCheckDigitISBN13(value) {
+    var z = value.map(Number);
+
+    var check = (z[0] + z[2] + z[4] + z[6] + z[8] + z[10] + z[12]) + 3 * (z[1] + z[3] + z[5] + z[7] + z[9] + z[11]);
+    return (check % 10 === 0);
+}
+
+
+function splitISBN(value) {
+    var isbn = value.split(/(-|\s)/);
+    var digits = [];
+    isbn.forEach(function (isbn) {
+        if (isbn.match((/(-|\s)/))) {
+            return true;
+        }
+        var isbn_parts = isbn.split("");
+        isbn_parts.forEach(function (isbn_parts) {
+            digits.push(isbn_parts);
+        });
+    });
+
+    return digits;
+}
