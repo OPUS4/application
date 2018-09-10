@@ -174,6 +174,7 @@ function splitISBN(value) {
 $(document).ready(function () {
     var selectors = [];
     var result;
+    var ident;
 
     var identifier = $("#fieldset-Identifiers tbody tr td.Value-data");
     var identifierText = $("#fieldset-Identifiers tbody tr :text");
@@ -190,12 +191,12 @@ $(document).ready(function () {
         selectors[index] = value.value;
         value.onchange = function () {
             selectors[index] = value.value;
+            ident = selectors[index];
         };
     });
 
 
     $.each(identifierText, function (index, value) {
-        var ident = selectors[index];
 
         value.onchange = function () {
             if (ident === "isbn") {
@@ -211,6 +212,9 @@ $(document).ready(function () {
             if (result !== true) {
                 $(identifier[index]).find("p")[0].innerHTML = result;
                 $(identifier[index]).find("p").removeAttr("style");
+            }
+            else {
+                $(identifier[index]).find("p").attr("style", "display : none");
             }
         };
     });
