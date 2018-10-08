@@ -26,17 +26,18 @@
  *
  * @category    Application Unit Tests
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class Admin_Model_CollectionRoleTest extends ControllerTestCase {
+class Admin_Model_CollectionRoleTest extends ControllerTestCase
+{
 
     private $collectionRoleId;
 
     private $moveTestColId = null;
 
-    public function setUp() {
+    public function setUp()
+    {
         parent::setUp();
 
         $collectionRole = new Opus_CollectionRole();
@@ -48,13 +49,13 @@ class Admin_Model_CollectionRoleTest extends ControllerTestCase {
         $collectionRole->setVisibleOai(1);
         $collectionRole->setDisplayBrowsing('Number');
         $collectionRole->setDisplayFrontdoor('Name');
-        $collectionRole->setDisplayOai('NumberName');
         $collectionRole->setPosition(99);
 
         $this->collectionRoleId = $collectionRole->store();
     }
 
-    public function tearDown() {
+    public function tearDown()
+    {
         $collectionRole = new Opus_CollectionRole($this->collectionRoleId);
         $collectionRole->delete();
 
@@ -66,7 +67,8 @@ class Admin_Model_CollectionRoleTest extends ControllerTestCase {
         parent::tearDown();
     }
 
-    public function testConstructModel() {
+    public function testConstructModel()
+    {
         $model = new Admin_Model_CollectionRole($this->collectionRoleId);
 
         $collectionRole = $model->getObject();
@@ -74,7 +76,8 @@ class Admin_Model_CollectionRoleTest extends ControllerTestCase {
         $this->assertEquals($this->collectionRoleId, $collectionRole->getId());
     }
 
-    public function testConstructModelWithNull() {
+    public function testConstructModelWithNull()
+    {
         $model = new Admin_Model_CollectionRole();
         $collectionRole = $model->getObject();
         $this->assertEquals(1, $collectionRole->getVisible());
@@ -87,7 +90,8 @@ class Admin_Model_CollectionRoleTest extends ControllerTestCase {
      * @expectedException Admin_Model_Exception
      * @expectedExceptionMessage missing parameter roleid
      */
-    public function testConstructModelWithEmptyParameter() {
+    public function testConstructModelWithEmptyParameter()
+    {
         $model = new Admin_Model_CollectionRole('');
     }
 
@@ -95,7 +99,8 @@ class Admin_Model_CollectionRoleTest extends ControllerTestCase {
      * @expectedException Admin_Model_Exception
      * @expectedExceptionMessage roleid parameter value unknown
      */
-    public function testConstructModelWithUnknownId() {
+    public function testConstructModelWithUnknownId()
+    {
         $model = new Admin_Model_CollectionRole(2222);
     }
 
@@ -103,11 +108,13 @@ class Admin_Model_CollectionRoleTest extends ControllerTestCase {
      * @expectedException Admin_Model_Exception
      * @expectedExceptionMessage roleid parameter value unknown
      */
-    public function testContructModelWithBadParameter() {
+    public function testContructModelWithBadParameter()
+    {
         $model = new Admin_Model_CollectionRole('noId');
     }
 
-    public function testGetObject() {
+    public function testGetObject()
+    {
         $model = new Admin_Model_CollectionRole($this->collectionRoleId);
 
         $collectionRole = $model->getObject();
@@ -115,7 +122,8 @@ class Admin_Model_CollectionRoleTest extends ControllerTestCase {
         $this->assertEquals($this->collectionRoleId, $collectionRole->getId());
     }
 
-    public function testSetVisibilityTrue() {
+    public function testSetVisibilityTrue()
+    {
         $model = new Admin_Model_CollectionRole($this->collectionRoleId);
 
         $collectionRole = $model->getObject();
@@ -130,7 +138,8 @@ class Admin_Model_CollectionRoleTest extends ControllerTestCase {
         $this->assertEquals(1, $collectionRole->getVisible());
     }
 
-    public function testSetVisibilityFalse() {
+    public function testSetVisibilityFalse()
+    {
         $model = new Admin_Model_CollectionRole($this->collectionRoleId);
 
         $collectionRole = $model->getObject();
@@ -144,7 +153,8 @@ class Admin_Model_CollectionRoleTest extends ControllerTestCase {
         $this->assertEquals(0, $collectionRole->getVisible());
     }
 
-    public function testMove() {
+    public function testMove()
+    {
         $colRole = new Opus_CollectionRole();
         $colRole->setName('MoveTestColRole-Name');
         $colRole->setOaiName('MoveTestColRole-OaiName');
@@ -172,6 +182,4 @@ class Admin_Model_CollectionRoleTest extends ControllerTestCase {
         $this->assertEquals($this->collectionRoleId, $colRoles[$colRolesCount - 1]->getId());
         $this->assertEquals($this->moveTestColId, $colRoles[$colRolesCount - 2]->getId());
     }
-
 }
- 
