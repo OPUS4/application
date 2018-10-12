@@ -34,6 +34,7 @@
  */
 
 // TODO move some of the processing into model or controller
+// TODO do this as a Zend_Form
 ?>
 
 <h1><?= $this->translate('access_select_module', $this->roleName) ?></h1>
@@ -52,8 +53,8 @@
 
         <?PHP // Liste mit allen Modulen ?>
         <h2><?= $this->translate('access_module_changes') ?></h2>
-        
-        <ul>
+
+        <ul class="permissions-list">
         <?php foreach($this->allModules as $module) : ?>
             <li>
             <input type="hidden" name="<?= 'list_'.$module ?>" value="list" />
@@ -67,11 +68,11 @@
           </li>
         <?php endforeach ?>
         </ul>
-        
+
         <?PHP // Liste mit allen Ressourcen ?>
         <h2><?= $this->translate('access_resource_changes') ?></h2>
-        
-        <ul>
+
+        <ul class="permissions-list">
         <?php foreach($this->allResources as $resource) : ?>
             <li>
             <input type="hidden" name="<?= 'list_'.$resource ?>" value="list" />
@@ -85,22 +86,22 @@
           </li>
         <?php endforeach ?>
         </ul>
-        
+
         <?PHP // Liste mit allen Workflow Übergängen ?>
         <h2><?= $this->translate('access_workflow_changes') ?></h2>
-        
-        <ul>
+
+        <ul class="permissions-list">
         <?php foreach($this->allWorkflow as $resource) : ?>
             <li>
             <input type="hidden" name="<?= 'list_'.$resource ?>" value="list" />
             <input name="<?= 'set_'.$resource ?>" type="checkbox" value="set"
                 <?= in_array($resource, $this->modules) ? ' checked="checked" ' : '' ?>
                 <?= in_array($resource, array('default')) ? ' disabled="disabled" ' : '' ?>
-            /> 
+            />
             <?PHP $states = explode('_', $resource, 3); ?>
             <?PHP $state = $this->translate('Opus_Document_ServerState_Value_' . ucfirst($states[1]) ); ?>
             <?PHP $targetState = $this->translate('Opus_Document_ServerState_Value_' . ucfirst($states[2])); ?>
-            <?= $this->translate('acl_resource_workflow_generic', array($state, $targetState)); ?> 
+            <?= $this->translate('acl_resource_workflow_generic', array($state, $targetState)); ?>
             <?PHP if (isset($this->guestModules) && in_array($resource, $this->guestModules)) : ?>
                 <span style="font-style: italic; color: gray; padding-left: 0.5em"><?= $this->translate('admin_access_checked_in_guest'); ?></span>
             <?PHP endif; ?>
