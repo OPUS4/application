@@ -27,9 +27,8 @@
  * @category    Application
  * @package     Controller
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -37,7 +36,8 @@
  *
  * Implementiert den Workflow ohne Einschränkungen durch Rollen.
  */
-class Application_Controller_Action_Helper_Workflow extends Zend_Controller_Action_Helper_Abstract {
+class Application_Controller_Action_Helper_Workflow extends Zend_Controller_Action_Helper_Abstract
+{
 
     /**
      * Basic workflow configuration.
@@ -52,7 +52,8 @@ class Application_Controller_Action_Helper_Workflow extends Zend_Controller_Acti
      * @param Opus_Document $document
      * @return array of strings - Allowed target states for document
      */
-    public function direct($document) {
+    public function direct($document)
+    {
         return $this->getAllowedTargetStatesForDocument($document);
     }
 
@@ -61,7 +62,8 @@ class Application_Controller_Action_Helper_Workflow extends Zend_Controller_Acti
      * @param string $state
      * @return boolean TRUE - only if the state string exists
      */
-    public function isValidState($state) {
+    public function isValidState($state)
+    {
         $states = self::getAllStates();
 
         return in_array($state, $states);
@@ -73,7 +75,8 @@ class Application_Controller_Action_Helper_Workflow extends Zend_Controller_Acti
      * @param string $targetState
      * @return boolean - True only if transition is allowed
      */
-    public function isTransitionAllowed($document, $targetState) {
+    public function isTransitionAllowed($document, $targetState)
+    {
         $allowedStates = $this->getAllowedTargetStatesForDocument($document);
 
         return in_array($targetState, $allowedStates);
@@ -84,7 +87,8 @@ class Application_Controller_Action_Helper_Workflow extends Zend_Controller_Acti
      * @param Opus_Document $document
      * @return array of strings - Possible target states for document
      */
-    public function getAllowedTargetStatesForDocument($document) {
+    public function getAllowedTargetStatesForDocument($document)
+    {
         $logger = Zend_Registry::get('Zend_Log');
 
         $currentState = $document->getServerState();
@@ -97,7 +101,7 @@ class Application_Controller_Action_Helper_Workflow extends Zend_Controller_Acti
             $logger->debug("ACL: got instance");
 
             if (!is_null($acl)) {
-                $allowedTargetStates = array();
+                $allowedTargetStates = [];
 
                 foreach ($targetStates as $targetState) {
                     $resource = 'workflow_' . $currentState . '_' . $targetState;
@@ -105,8 +109,7 @@ class Application_Controller_Action_Helper_Workflow extends Zend_Controller_Acti
                         Application_Security_AclProvider::ACTIVE_ROLE, $resource
                     )) {
                         $allowedTargetStates[] = $targetState;
-                    }
-                    else {
+                    } else {
                         $logger->debug("ACL: $resource not allowed");
                     }
                 }
@@ -123,10 +126,11 @@ class Application_Controller_Action_Helper_Workflow extends Zend_Controller_Acti
      * @param string $currentState All lowercase name of current state
      * @return array of strings - Possible target states for document
      */
-    public static function getTargetStates($currentState) {
+    public static function getTargetStates($currentState)
+    {
         // special code to handle 'removed' state
         if ($currentState === 'removed') {
-            return array();
+            return [];
         }
 
         $workflow = self::getWorkflowConfig();
@@ -135,8 +139,7 @@ class Application_Controller_Action_Helper_Workflow extends Zend_Controller_Acti
 
         if (!empty($targetStates)) {
             return $targetStates->toArray();
-        }
-        else {
+        } else {
             return array();
         }
     }
@@ -148,7 +151,8 @@ class Application_Controller_Action_Helper_Workflow extends Zend_Controller_Acti
      *
      * TODO enforcing permissions and throwing exceptions (OPUSVIER-1959)
      */
-    public function changeState($document, $targetState) {
+    public function changeState($document, $targetState)
+    {
         switch ($targetState) {
             case 'deleted':
                 $document->delete();
@@ -167,7 +171,8 @@ class Application_Controller_Action_Helper_Workflow extends Zend_Controller_Acti
      * Returns all defined states of workflow model.
      * @return array of string Names of defined states
      */
-    public static function getAllStates() {
+    public static function getAllStates()
+    {
         $workflow = self::getWorkflowConfig();
 
         return array_keys($workflow->toArray());
@@ -177,8 +182,9 @@ class Application_Controller_Action_Helper_Workflow extends Zend_Controller_Acti
      * Returns an array with resource names for all possible transitions.
      * @return array of strings
      */
-    public static function getWorkflowResources() {
-        $transitions = array();
+    public static function getWorkflowResources()
+    {
+        $transitions = [];
 
         $allStates = self::getAllStates();
 
@@ -197,7 +203,8 @@ class Application_Controller_Action_Helper_Workflow extends Zend_Controller_Acti
      * Returns configuration for basic workflow model.
      * @return Zend_Config_Ini
      */
-    public static function getWorkflowConfig() {
+    public static function getWorkflowConfig()
+    {
         if (empty(Application_Controller_Action_Helper_Workflow::$_workflowConfig)) {
             Application_Controller_Action_Helper_Workflow::$_workflowConfig = new Zend_Config_Ini(
                 APPLICATION_PATH . '/modules/admin/models/workflow.ini'
@@ -211,15 +218,16 @@ class Application_Controller_Action_Helper_Workflow extends Zend_Controller_Acti
      * Returns the Zend_Acl object or null.
      * @return Zend_Acl
      */
-    public function getAcl() {
+    public function getAcl()
+    {
         if (is_null($this->_acl)) {
             $this->_acl = Zend_Registry::isRegistered('Opus_Acl') ? Zend_Registry::get('Opus_Acl') : null;
         }
         return $this->_acl;
     }
 
-    public function setAcl($acl) {
+    public function setAcl($acl)
+    {
         $this->_acl = $acl;
     }
-
 }
