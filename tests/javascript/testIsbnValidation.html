@@ -92,10 +92,10 @@
                 var expectation = rows[1];
                 var actual = rows[2];
                 var result = rows[3];
-                if (validateISBN13(ISBN) === false) {
-                    actual.innerHTML = "False";
-                } else {
+                if (validateISBN13(ISBN) === true) {
                     actual.innerHTML = "True";
+                } else {
+                    actual.innerHTML = "False";
                 }
                 if (actual.innerHTML === expectation.innerHTML) {
                     result.innerHTML = 'Passed';
@@ -114,10 +114,10 @@
                 var expectation = rows[1];
                 var actual = rows[2];
                 var result = rows[3];
-                if (validateISBN10(ISBN) === false) {
-                    actual.innerHTML = "False";
-                } else {
+                if (validateISBN10(ISBN) === true) {
                     actual.innerHTML = "True";
+                } else {
+                    actual.innerHTML = "False";
                 }
                 if (actual.innerHTML === expectation.innerHTML) {
                     result.innerHTML = 'Passed';
@@ -136,10 +136,10 @@
                 var expectation = rows[1];
                 var actual = rows[2];
                 var result = rows[3];
-                if (validateISBN(ISBN) === false) {
-                    actual.innerHTML = "False";
-                } else {
+                if (validateISBN(ISBN) === true) {
                     actual.innerHTML = "True";
+                } else {
+                    actual.innerHTML = "False";
                 }
                 if (actual.innerHTML === expectation.innerHTML) {
                     result.innerHTML = 'Passed';

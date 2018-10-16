@@ -92,10 +92,10 @@
                 let expectation = rows[1];
                 let actual = rows[2];
                 let result = rows[3];
-                if (validateISSN(ISSN) === false) {
-                    actual.innerHTML = "False";
-                } else {
+                if (validateISSN(ISSN) === true) {
                     actual.innerHTML = "True";
+                } else {
+                    actual.innerHTML = "False";
                 }
                 if (actual.innerHTML === expectation.innerHTML) {
                     result.innerHTML = 'Passed';
