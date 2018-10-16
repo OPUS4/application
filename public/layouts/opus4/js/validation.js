@@ -101,7 +101,11 @@ function validateISBN10(value) {
     }
 
     var isbnDigits = splitISBN(value);
-    return calculateCheckDigitISBN10(isbnDigits);
+    if (calculateCheckDigitISBN10(isbnDigits) === false) {
+        return messages.identifierInvalidCheckdigit.replace("%value%", value);
+    }
+
+    return true;
 }
 
 function validateISBN13(value) {
@@ -119,7 +123,11 @@ function validateISBN13(value) {
     }
 
     var isbnDigits = splitISBN(value);
-    return calculateCheckDigitISBN13(isbnDigits);
+    if (calculateCheckDigitISBN13(isbnDigits) === false) {
+        return messages.identifierInvalidCheckdigit.replace("%value%", value);
+    }
+
+    return true;
 }
 
 function calculateCheckDigitISBN10(value) {
