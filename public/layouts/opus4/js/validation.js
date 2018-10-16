@@ -29,21 +29,21 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+var messages = {
+    identifierInvalidCheckdigit: "The check digit of \'%value%\' is not valid",
+    identifierInvalidFormat: "\'%value%\' is malformed"
+};
 
 function validateISSN(value) {
-    var messages = {
-        invalidCheckdigit: "The check digit of \'%value%\' is not valid",
-        invalidFormat: "\'%value%\' is malformed"
-    };
 
     // check length
     if (value.length !== 9) {
-        return messages.invalidFormat.replace("%value%", value);
+        return messages.identifierInvalidFormat.replace("%value%", value);
     }
 
     // check form
     if (value.match(/^[0-9]{4}[-][0-9]{3}[0-9X]$/g) === null) {
-        return messages.invalidFormat.replace("%value%", value);
+        return messages.identifierInvalidFormat.replace("%value%", value);
     }
 
     // Split ISSN into its parts
@@ -52,7 +52,7 @@ function validateISSN(value) {
     // Calculate and compare check digit
     var checkdigit = calculateCheckDigitISSN(issn);
     if (checkdigit != issn[8]) {
-        return messages.invalidCheckdigit.replace("%value%", value);
+        return messages.identifierInvalidCheckdigit.replace("%value%", value);
     }
 
     return true;
@@ -72,10 +72,6 @@ function calculateCheckDigitISSN(value) {
 }
 
 function validateISBN(value) {
-    var messages = {
-        invalidCheckdigit: "The check digit of \'%value%\' is not valid",
-        invalidFormat: "\'%value%\' is malformed"
-    };
 
     var isbnDigits = splitISBN(value);
 
@@ -86,26 +82,22 @@ function validateISBN(value) {
         return validateISBN13(value);
     }
     else {
-        return messages.invalidFormat.replace("%value%", value);
+        return messages.identifierInvalidFormat.replace("%value%", value);
     }
 }
 
 function validateISBN10(value) {
-    var messages = {
-        invalidCheckdigit: "The check digit of \'%value%\' is not valid",
-        invalidFormat: "\'%value%\' is malformed"
-    };
 
     if (value.length !== 10 && value.length !== 13) {
-        return messages.invalidFormat.replace("%value%", value);
+        return messages.identifierInvalidFormat.replace("%value%", value);
     }
 
     if (value.match(/^[\d]*((-|\s)?[\d]*){2}((-|\s)?[\dX])$/g) === null) {
-        return messages.invalidFormat.replace("%value%", value);
+        return messages.identifierInvalidFormat.replace("%value%", value);
     }
 
     if (value.match(/-/) !== null && value.match(/\s/) !== null) {
-        return messages.invalidFormat.replace("%value%", value);
+        return messages.identifierInvalidFormat.replace("%value%", value);
     }
 
     var isbnDigits = splitISBN(value);
@@ -113,21 +105,17 @@ function validateISBN10(value) {
 }
 
 function validateISBN13(value) {
-    var messages = {
-        invalidCheckdigit: "The check digit of \'%value%\' is not valid",
-        invalidFormat: "\'%value%\' is malformed"
-    };
 
     if (value.length !== 13 && value.length !== 17) {
-        return messages.invalidFormat.replace("%value%", value);
+        return messages.identifierInvalidFormat.replace("%value%", value);
     }
 
     if (value.match(/^(978|979)((-|\s)?[\d]*){4}$/g) === null) {
-        return messages.invalidFormat.replace("%value%", value);
+        return messages.identifierInvalidFormat.replace("%value%", value);
     }
 
     if (value.match(/-/) !== null && value.match(/\s/) !== null) {
-        return messages.invalidFormat.replace("%value%", value);
+        return messages.identifierInvalidFormat.replace("%value%", value);
     }
 
     var isbnDigits = splitISBN(value);

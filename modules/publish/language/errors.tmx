@@ -170,6 +170,7 @@
         </tuv>
     </tu>
 
+<<<<<<< HEAD
     <tu tuid="chooseAnotherFile">
         <tuv xml:lang="en">
             <seg>Please choose another File.</seg>
