@@ -170,7 +170,6 @@ function splitISBN(value) {
 $(document).ready(function () {
     var selectors = [];
     var result;
-    var ident;
 
     var identifier = $("#fieldset-Identifiers tbody tr td.Value-data");
     var identifierText = $("#fieldset-Identifiers tbody tr :text");
@@ -187,7 +186,6 @@ $(document).ready(function () {
         selectors[index] = value.value;
         value.onchange = function () {
             selectors[index] = value.value;
-            ident = selectors[index];
         };
     });
 
@@ -195,10 +193,10 @@ $(document).ready(function () {
     $.each(identifierText, function (index, value) {
 
         value.onchange = function () {
-            if (ident === "isbn") {
+            if (selectors[index] === "isbn") {
                 result = validateISBN(value.value);
             }
-            else if (ident === "issn") {
+            else if (selectors[index] === "issn") {
 
                 result = validateISSN(value.value);
             }
