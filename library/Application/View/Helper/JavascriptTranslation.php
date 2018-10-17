@@ -33,29 +33,36 @@
 
 class Application_View_Helper_JavascriptTranslation extends Application_View_Helper_Abstract
 {
-
-    protected $messages = '';
+    protected $translations = [];
 
     public function javascriptTranslation()
     {
-
         $output = '<script type="text/javascript">' . "\n";
-        $output .= $this->messages;
-        $output .= "\t" . "\t" . "</script>";
+        foreach ($this->translations as $key => $message) {
+            $output .= "            " . "messages.$key = \"" . htmlspecialchars($message) . "\";" . "\n";
+        }
+        $output .= "        " . "</script>";
 
         return $output;
     }
 
-    public function addJavascriptTranslations($key, $message = null)
+    public function addTranslation($key, $message = null)
     {
-
         if ($message != null) {
-            $this->messages .= "\t" . "\t" . "\t" . "messages.$key = \"" . htmlspecialchars($message) . "\";" . "\n";
+            $this->translations[$key] = $message;
         } else {
             $message = $this->view->translate($key);
-            $this->messages .= "\t" . "\t" . "\t" . "messages.$key = \"" . htmlspecialchars($message) . "\";" . "\n";
+            $this->translations[$key] = $message;
         }
-
     }
 
+    public function getTranslations()
+    {
+        return $this->translations;
+    }
+
+    public function setTranslations($value)
+    {
+        $this->translations = $value;
+    }
 }

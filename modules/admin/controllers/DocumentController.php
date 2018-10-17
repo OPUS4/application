@@ -233,8 +233,8 @@ class Admin_DocumentController extends Application_Controller_Action
         $this->renderForm($this->view->form);
 
         $javascriptTranslations = $this->view->getHelper('javascriptTranslation');
-        $javascriptTranslations->addJavascriptTranslations('identifierInvalidFormat');
-        $javascriptTranslations->addJavascriptTranslations('identifierInvalidCheckdigit');
+        $javascriptTranslations->addTranslation('identifierInvalidFormat');
+        $javascriptTranslations->addTranslation('identifierInvalidCheckdigit');
     }
 
     /**
