@@ -35,7 +35,6 @@ var messages = {
 };
 
 function validateISSN(value) {
-
     // check length
     if (value.length !== 9) {
         return messages.identifierInvalidFormat.replace("%value%", value);
@@ -72,7 +71,6 @@ function calculateCheckDigitISSN(value) {
 }
 
 function validateISBN(value) {
-
     var isbnDigits = splitISBN(value);
 
     if (isbnDigits.length === 10) {
@@ -87,7 +85,6 @@ function validateISBN(value) {
 }
 
 function validateISBN10(value) {
-
     if (value.length !== 10 && value.length !== 13) {
         return messages.identifierInvalidFormat.replace("%value%", value);
     }
@@ -109,7 +106,6 @@ function validateISBN10(value) {
 }
 
 function validateISBN13(value) {
-
     if (value.length !== 13 && value.length !== 17) {
         return messages.identifierInvalidFormat.replace("%value%", value);
     }
@@ -149,7 +145,6 @@ function calculateCheckDigitISBN13(value) {
     return (check % 10 === 0);
 }
 
-
 function splitISBN(value) {
     var isbn = value.split(/(-|\s)/);
     var digits = [];
@@ -165,7 +160,6 @@ function splitISBN(value) {
 
     return digits;
 }
-
 
 $(document).ready(function () {
     var selectors = [];
@@ -189,9 +183,7 @@ $(document).ready(function () {
         };
     });
 
-
     $.each(identifierText, function (index, value) {
-
         value.onchange = function () {
             if (selectors[index] === "isbn") {
                 result = validateISBN(value.value);
