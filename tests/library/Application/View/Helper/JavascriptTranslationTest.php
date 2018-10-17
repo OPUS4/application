@@ -33,7 +33,6 @@
 
 class Application_View_Helper_JavascriptTranslationTest extends ControllerTestCase
 {
-
     private $_helper;
 
     public function setUp()
