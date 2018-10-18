@@ -27,18 +27,21 @@
  * @category    Application
  * @package     Module_Admin
  * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
- * @copyright   Copyright (c) 2009, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2009-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
-class Admin_Form_YesNoForm extends Zend_Form {
+class Admin_Form_YesNoForm extends Zend_Form
+{
+
     /**
      * Build easy form
      *
      * @return void
      */
-    public function init() {
+    public function init()
+    {
         $sureyes = new Zend_Form_Element_Submit('sureyes');
         $sureyes->setLabel('answer_yes');
 
@@ -46,7 +49,7 @@ class Admin_Form_YesNoForm extends Zend_Form {
         $sureno->setLabel('answer_no');
 
         #$id = new Zend_Form_Element_Hidden('id');
-        
-        $this->addElements(array($sureyes, $sureno));
+
+        $this->addElements([$sureyes, $sureno]);
     }
 }
