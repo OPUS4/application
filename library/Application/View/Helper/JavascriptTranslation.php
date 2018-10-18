@@ -33,15 +33,15 @@
 
 class Application_View_Helper_JavascriptTranslation extends Application_View_Helper_Abstract
 {
-    protected $translations = [];
+    private $translations = [];
 
     public function javascriptTranslation()
     {
         $output = '<script type="text/javascript">' . "\n";
         foreach ($this->translations as $key => $message) {
-            $output .= "            " . "messages.$key = \"" . htmlspecialchars($message) . "\";" . "\n";
+            $output .= "            " . "messages[\"$key\"] = \"" . htmlspecialchars($message) . "\";" . "\n";
         }
-        $output .= "        " . "</script>";
+        $output .= "        " . "</script>" . "\n";
 
         return $output;
     }
