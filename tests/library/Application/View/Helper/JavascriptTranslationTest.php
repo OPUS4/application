@@ -33,7 +33,7 @@
 
 class Application_View_Helper_JavascriptTranslationTest extends ControllerTestCase
 {
-    private $_helper;
+    private $helper;
 
     public function setUp()
     {
@@ -41,9 +41,9 @@ class Application_View_Helper_JavascriptTranslationTest extends ControllerTestCa
 
         $this->useEnglish();
 
-        $this->_helper = new Application_View_Helper_JavascriptTranslation();
+        $this->helper = new Application_View_Helper_JavascriptTranslation();
 
-        $this->_helper->setView(Zend_Registry::get('Opus_View'));
+        $this->helper->setView(Zend_Registry::get('Opus_View'));
     }
 
     public function testJavascriptTranslation()
@@ -52,22 +52,22 @@ class Application_View_Helper_JavascriptTranslationTest extends ControllerTestCa
             'key1' => 'message1',
             'key2' => 'message2'
         ];
-        $this->_helper->setTranslations($translations);
+        $this->helper->setTranslations($translations);
 
         $expectation = '<script type="text/javascript">' . "\n"
             . '            messages.key1 = "message1";' . "\n"
             . '            messages.key2 = "message2";' . "\n"
             . '        </script>';
 
-        $reality = $this->_helper->javascriptTranslation();
+        $reality = $this->helper->javascriptTranslation();
         $this->assertEquals($expectation, $reality);
     }
 
     public function testAddTranslation()
     {
-        $this->_helper->addTranslation('key1', 'message1');
-        $this->_helper->addTranslation('identifierInvalidFormat');
-        $this->_helper->addTranslation('testkey');
+        $this->helper->addTranslation('key1', 'message1');
+        $this->helper->addTranslation('identifierInvalidFormat');
+        $this->helper->addTranslation('testkey');
 
         $translations = [
             'key1' => 'message1',
@@ -75,7 +75,7 @@ class Application_View_Helper_JavascriptTranslationTest extends ControllerTestCa
             'testkey' => 'testkey'
         ];
 
-        $this->assertEquals($translations, $this->_helper->getTranslations());
+        $this->assertEquals($translations, $this->helper->getTranslations());
     }
 
     public function testSetTranslations()
@@ -84,12 +84,12 @@ class Application_View_Helper_JavascriptTranslationTest extends ControllerTestCa
             'key1' => 'message1',
             'key2' => 'message2'
         ];
-        $this->_helper->setTranslations($translations);
-        $this->assertEquals($translations, $this->_helper->getTranslations());
+        $this->helper->setTranslations($translations);
+        $this->assertEquals($translations, $this->helper->getTranslations());
     }
 
     public function testGetTranslations()
     {
-        $this->assertEquals([], $this->_helper->getTranslations());
+        $this->assertEquals([], $this->helper->getTranslations());
     }
 }
