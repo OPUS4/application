@@ -35,6 +35,10 @@
 class Admin_Form_YesNoForm extends Zend_Form
 {
 
+    const ELEMENT_YES = 'sureyes';
+
+    const ELEMENT_NO = 'sureno';
+
     /**
      * Build easy form for yes/no questions.
      *
@@ -42,13 +46,11 @@ class Admin_Form_YesNoForm extends Zend_Form
      */
     public function init()
     {
-        $sureyes = new Zend_Form_Element_Submit('sureyes');
+        $sureyes = new Zend_Form_Element_Submit(self::ELEMENT_YES);
         $sureyes->setLabel('answer_yes');
 
-        $sureno = new Zend_Form_Element_Submit('sureno');
+        $sureno = new Zend_Form_Element_Submit(self::ELEMENT_NO);
         $sureno->setLabel('answer_no');
-
-        #$id = new Zend_Form_Element_Hidden('id');
 
         $this->addElements([$sureyes, $sureno]);
     }
