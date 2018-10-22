@@ -28,8 +28,11 @@
  * @package     Module_Admin
  * @author      Jens Schwidder <schwidder@zib.de>
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
+ *
+ * TODO fix processing of notification selection
+ * TODO verify previous checkbox results
  */
 
 /**

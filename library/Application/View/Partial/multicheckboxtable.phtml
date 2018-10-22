@@ -1,0 +1,12 @@
+<table>
+
+    <?PHP foreach ($this->element->getRows() as $row) : ?>
+    <tr>
+        <td><?= $row['type'] ?></td>
+        <td><input type="checkbox" value="<?= $row['value'] ?>" <?= ($row['disabled']) ? 'disabled="disabled"' : '' ?> /></td>
+        <td><?= $row['name'] ?></td>
+        <td><?= $row['email'] ?></td>
+    </tr>
+    <?PHP endforeach ?>
+
+</table>
