@@ -37,6 +37,8 @@
 
 /**
  * Controller handles transitions of documents between states.
+ *
+ * TODO use id instead of docId like DocumentController
  */
 class Admin_WorkflowController extends Application_Controller_Action
 {
@@ -175,9 +177,13 @@ class Admin_WorkflowController extends Application_Controller_Action
         );
     }
 
+    /**
+     * @param $document
+     * @param null $form
+     */
     private function _sendNotification($document, $form = null)
     {
-        $notification = new Application_Util_Notification();
+        $notification = new Application_Util_PublicationNotification();
         $url = $this->view->url([
                 "module" => "frontdoor",
                 "controller" => "index",
@@ -203,7 +209,6 @@ class Admin_WorkflowController extends Application_Controller_Action
 
         $notification->prepareMail(
             $document,
-            Application_Util_Notification::PUBLICATION,
             $this->view->serverUrl() . $url,
             $notifySubmitter,
             $authorsBitmask
@@ -219,7 +224,7 @@ class Admin_WorkflowController extends Application_Controller_Action
      */
     private function _getConfirmationForm($document, $targetState)
     {
-        $form = new Admin_Form_DocumentStateChange($targetState);
+        $form = new Admin_Form_WorkflowNotification($targetState);
 
         $form->populateFromModel($document);
 

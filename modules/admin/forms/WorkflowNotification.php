@@ -35,11 +35,37 @@ class Admin_Form_WorkflowNotification extends Admin_Form_YesNoForm
 
     const ELEMENT_ID = 'id';
 
+    private $targetState;
+
+    public function __construct($targetState, $options = null)
+    {
+        parent::__construct($options);
+        $this->setTargetState($targetState);
+    }
+
     public function init()
     {
         parent::init();
 
         $this->addElement('hidden', self::ELEMENT_ID);
+    }
+
+    public function setTargetState($targetState)
+    {
+        $this->targetState = $targetState;
+    }
+
+    public function getTargetState()
+    {
+        return $this->targetState;
+    }
+
+    public function isNotificationEnabled()
+    {
+        $config = Zend_Registry::get('Zend_Config');
+
+        return ((isset($config->notification->document->published->enabled)
+            && $config->notification->document->published->enabled == 1));
     }
 
     /**
@@ -50,11 +76,79 @@ class Admin_Form_WorkflowNotification extends Admin_Form_YesNoForm
      * @param Zend_Form $form
      *
      */
-    public function addPublishNotificationSelection($document) {
-        $subform = new Admin_Form_Notification();
-        $subform->addPublishNotificationSelection($document);
+    public function populateFromModel($document)
+    {
+        $this->getElement(self::ELEMENT_ID)->setValue($document->getId());
 
-        $this->addSubForm($subform, 'notification');
+        if ($this->getTargetState() == 'published' && $this->isNotificationEnabled()) {
+            $subform = new Admin_Form_Notification();
+            $subform->addPublishNotificationSelection($document);
+            $this->addSubForm($subform, 'notification');
+        }
     }
 
+    /**
+     * Returns list of recipients for document state change notifications.
+     *
+     * For each recipient name, email and role(s) are returned.
+     *
+     * Ignore persons without email.
+     *
+     * @param $document
+     * TODO should not be part of the form class (encapsulate in different class)
+     */
+    public function getRecipients($document) {
+        $recipients = [];
+
+        $authors = $document->getPersonAuthor();
+        $this->addPersons($recipients, $authors);
+
+        $submitters = $document->getPersonSubmitter();
+        $this->addPersons($recipients, $submitters, 'submitter');
+
+        return $recipients;
+    }
+
+    protected function addPersons(&$recipients, $persons, $role = 'author')
+    {
+        foreach ($persons as $person) {
+            $fullname = $person->getDisplayName();
+            $email = $person->getEmail();
+            if (strlen(trim($email)) > 0) {
+                if (array_key_exists($email, $recipients)) {
+                    $entry = $recipients[$email];
+                    $names = $entry['name'];
+
+                    if (!is_array($names) && $names !== $fullname ||
+                        is_array($names) && !in_array($fullname, $names)) {
+                        if (!is_array($names)) {
+                            $names = [$names];
+                        }
+
+                        $names[] = $fullname;
+                        $entry['name'] = $names;
+                    }
+
+                    $roles = $entry['role'];
+
+                    if (!is_array($roles) && $roles !== $role ||
+                        is_array($roles) && !in_array($role, $roles)) {
+                        if (!is_array($roles)) {
+                            $roles = [$roles];
+
+                            $roles[] = $role;
+                            $entry['role'] = $roles;
+                        }
+                    }
+
+                    $recipients[$email] = $entry;
+                } else {
+                    $recipients[$email] = [
+                        'name' => $fullname,
+                        'role' => $role
+                    ];
+                }
+            }
+        }
+    }
 }
