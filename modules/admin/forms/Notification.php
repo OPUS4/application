@@ -47,15 +47,15 @@ class Admin_Form_Notification extends Admin_Form_AbstractDocumentSubForm
 
         $translator = $this->getTranslator();
 
-        $this->addElement('note', 'description', array(
+        $this->addElement('note', 'description', [
             'value' => "<p>{$translator->translate('admin_workflow_notification_description')}</p>"
-        ));
+        ]);
 
-        $this->setDecorators(array(
+        $this->setDecorators([
             'FormElements',
-            array('ViewScript', array('viewScript' => 'multicheckboxtable.phtml')),
-            array('Fieldset', array('class' => 'headline')),
-        ));
+            ['ViewScript', ['viewScript' => 'multicheckboxtable.phtml']],
+            ['Fieldset', ['class' => 'headline']],
+        ]);
     }
 
     /**
@@ -131,13 +131,12 @@ class Admin_Form_Notification extends Admin_Form_AbstractDocumentSubForm
             $disabled = true;
         }
 
-        $option = array(
+        $option = [
             'name' => $person->getDisplayName(),
             'email' => $email,
             'disabled' => $disabled
-        );
+        ];
 
         return $option;
     }
-
 }
