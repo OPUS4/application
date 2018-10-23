@@ -46,6 +46,9 @@ class Application_View_Helper_JavascriptTranslationTest extends ControllerTestCa
         $this->helper->setView(Zend_Registry::get('Opus_View'));
     }
 
+    /**
+     * Tests, if the correct code-snippet for the translation will be generated.
+     */
     public function testJavascriptTranslation()
     {
         $translations = [
@@ -63,6 +66,9 @@ class Application_View_Helper_JavascriptTranslationTest extends ControllerTestCa
         $this->assertEquals($expectation, $reality);
     }
 
+    /**
+     * Tests, if the addTranslation-function translates in the correct way and deliver the correct key-message pairs.
+     */
     public function testAddTranslation()
     {
         $this->helper->addTranslation('key1', 'message1');
@@ -86,6 +92,19 @@ class Application_View_Helper_JavascriptTranslationTest extends ControllerTestCa
         ];
         $this->helper->setTranslations($translations);
         $this->assertEquals($translations, $this->helper->getTranslations());
+    }
+
+    /**
+     * If the translations are empty or set to null, the code snippet for the translation without any key-message pairs
+     * should be delivered. This is tested here.
+     */
+    public function testSetNullTranslations()
+    {
+        $this->helper->setTranslations(null);
+        $reality = $this->helper->javascriptTranslation();
+        $expectation = '<script type="text/javascript">' . "\n"
+            . '        </script>' . "\n";
+        $this->assertEquals($expectation, $reality);
     }
 
     public function testGetTranslations()
