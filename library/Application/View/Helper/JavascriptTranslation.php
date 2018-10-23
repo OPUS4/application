@@ -31,6 +31,12 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+/**
+ * Class Application_View_Helper_JavascriptTranslation
+ * This view-helper creates a code snippet, what is able to deliver the translations for javascript files.
+ * With addTranslation, there is an possibility to add an translation-key to the code snippet.
+ * The key will be translated and the message will be delivered. It is also possible to insert your own key-message pair.
+ */
 class Application_View_Helper_JavascriptTranslation extends Application_View_Helper_Abstract
 {
     private $translations = [];
@@ -38,8 +44,10 @@ class Application_View_Helper_JavascriptTranslation extends Application_View_Hel
     public function javascriptTranslation()
     {
         $output = '<script type="text/javascript">' . "\n";
-        foreach ($this->translations as $key => $message) {
-            $output .= "            " . "messages[\"$key\"] = \"" . htmlspecialchars($message) . "\";" . "\n";
+        if ($this->translations != null) {
+            foreach ($this->translations as $key => $message) {
+                $output .= "            " . "messages[\"$key\"] = \"" . htmlspecialchars($message) . "\";" . "\n";
+            }
         }
         $output .= "        " . "</script>" . "\n";
 
