@@ -84,15 +84,10 @@ if (in_array($this->moduleName, array('admin', 'review', 'setup', 'account'))) {
     $jsFiles[] = 'theme.js';
     $jsFiles[] = 'theme_lic.js';
     $jsFiles[] = 'opus-ui.js';
-}
-
-else if (in_array($this->moduleName, array('publish'))) {
+} else if (in_array($this->moduleName, array('publish'))) {
     $jsFiles[] = 'upload.js';
 } else if (in_array($this->moduleName, array('admin'))) {
     $jsFiles[] = 'validation.js';
-} else if (in_array($this->moduleName, array('publish'))) {
-    $jsFiles[] = 'filetypes.js';
-
 }
 
 if ($this->jQueryEnabled()) {

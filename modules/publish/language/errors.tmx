@@ -170,7 +170,6 @@
         </tuv>
     </tu>
 
-<<<<<<< HEAD
     <tu tuid="chooseAnotherFile">
         <tuv xml:lang="en">
             <seg>Please choose another File.</seg>
@@ -206,7 +205,6 @@
             <seg>Der Dateiname enthält nicht zugelassene Zeichen oder hat eine falsche Form.</seg>
         </tuv>
     </tu>
-
 
 <!-- **************Errors for Person names and file names****************** -->
     <tu tuid="publish_validation_error_person_invalid">
