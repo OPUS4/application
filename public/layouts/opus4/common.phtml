@@ -86,7 +86,8 @@ if (in_array($this->moduleName, array('admin', 'review', 'setup', 'account'))) {
     $jsFiles[] = 'opus-ui.js';
 } else if (in_array($this->moduleName, array('publish'))) {
     $jsFiles[] = 'upload.js';
-} else if (in_array($this->moduleName, array('admin'))) {
+}
+if (in_array($this->moduleName, array('admin'))) {
     $jsFiles[] = 'validation.js';
 }
 

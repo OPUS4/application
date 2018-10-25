@@ -29,15 +29,20 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+/**
+ * Array with messages for the client-sided validation.
+ * @type {Array}
+ */
 var opus4Messages = [];
 opus4Messages["identifierInvalidCheckdigit"] = "The check digit of \'%value%\' is not valid";
 opus4Messages["identifierInvalidFormat"] = "\'%value%\' is malformed";
 
+// This class contains all necessary functions for ISBN-validation on client side.
+var IsbnValidation = function () {};
 
-var IsbnValidation = function () {
-};
-
-IsbnValidation.prototype.validateISBN = function (value) {
+// This function is the main-function for ISBN-validation and uses the specific validation for ISBN10 and ISBN13.
+IsbnValidation.prototype.validateISBN = function (value)
+{
     var isbnDigits = this.splitIsbn(value);
 
     if (isbnDigits.length === 10) {
@@ -51,7 +56,8 @@ IsbnValidation.prototype.validateISBN = function (value) {
     }
 };
 
-IsbnValidation.prototype.validateISBN13 = function (value) {
+IsbnValidation.prototype.validateISBN13 = function (value)
+{
     if (value.length !== 13 && value.length !== 17) {
         return opus4Messages["identifierInvalidFormat"].replace("%value%", value);
     }
@@ -72,7 +78,8 @@ IsbnValidation.prototype.validateISBN13 = function (value) {
     return true;
 };
 
-IsbnValidation.prototype.validateISBN10 = function (value) {
+IsbnValidation.prototype.validateISBN10 = function (value)
+{
     if (value.length !== 10 && value.length !== 13) {
         return opus4Messages["identifierInvalidFormat"].replace("%value%", value);
     }
@@ -93,7 +100,9 @@ IsbnValidation.prototype.validateISBN10 = function (value) {
     return true;
 };
 
-IsbnValidation.prototype.splitIsbn = function (value) {
+// This function is used, to split the ISBN in its digits.
+IsbnValidation.prototype.splitIsbn = function (value)
+{
     var isbn = value.split(/(-|\s)/);
     var digits = [];
     isbn.forEach(function (isbn) {
@@ -109,7 +118,9 @@ IsbnValidation.prototype.splitIsbn = function (value) {
     return digits;
 };
 
-IsbnValidation.prototype.calculateCheckDigitISBN10 = function (value) {
+// The following two functions, calculates the checkdigits for ISBN10 and ISBN13.
+IsbnValidation.prototype.calculateCheckDigitISBN10 = function (value)
+{
     var z = value;
 
     if (z[9] === "X") {
@@ -121,17 +132,20 @@ IsbnValidation.prototype.calculateCheckDigitISBN10 = function (value) {
     return (check % 11 === 0);
 };
 
-IsbnValidation.prototype.calculateCheckDigitISBN13 = function (value) {
+IsbnValidation.prototype.calculateCheckDigitISBN13 = function (value)
+{
     var z = value.map(Number);
-
+    
     var check = (z[0] + z[2] + z[4] + z[6] + z[8] + z[10] + z[12]) + 3 * (z[1] + z[3] + z[5] + z[7] + z[9] + z[11]);
+
     return (check % 10 === 0);
 };
 
-var IssnValidation = function () {
-};
+var IssnValidation = function () {};
 
-IssnValidation.prototype.validateISSN = function (value) {
+// This class ist used for ISSN-validation on client side.
+IssnValidation.prototype.validateISSN = function (value)
+{
     // check length
     if (value.length !== 9) {
         return opus4Messages["identifierInvalidFormat"].replace("%value%", value);
@@ -154,7 +168,9 @@ IssnValidation.prototype.validateISSN = function (value) {
     return true;
 };
 
-IssnValidation.prototype.calculateCheckDigitISSN = function (value) {
+// This function calculates the checkdigit for a ISSN.
+IssnValidation.prototype.calculateCheckDigitISSN = function (value)
+{
     var z = value;
     var checkdigit = 0;
     var check = (8 * z[0] + 7 * z[1] + 6 * z[2] + 5 * z[3] + 4 * z[5] + 3 * z[6] + 2 * z[7]);
@@ -167,7 +183,11 @@ IssnValidation.prototype.calculateCheckDigitISSN = function (value) {
     return checkdigit;
 };
 
-$(document).ready(function () {
+/**
+ * This function is add to a document-formulary. It looks for all added identifier and adds the validation function to it.
+ */
+$(document).ready(function ()
+{
     var selectors = [];
     var result;
 
