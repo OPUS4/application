@@ -27,6 +27,10 @@
 * @author      Maximilian Salomon <salomon@zib.de>
 * @copyright   Copyright (c) 2018, OPUS 4 development team
 * @license     http://www.gnu.org/licenses/gpl.html General Public License
+*
+* Test of public/layouts/opus4/js/validation.js
+* In this file, the ISBN-validation with JS is tested. To see the test-results, you have to open this file in a browser.
+* This tests the validateISSN() function.
 -->
 
 <!DOCTYPE html>
@@ -85,14 +89,19 @@
     <script type="text/javascript" src="../../vendor/components/jquery/jquery.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
+            let issnValidator = new IssnValidation();
             let tableRows = document.getElementById('ISSN').getElementsByTagName('tbody')[0].rows;
             $.each(tableRows, function (index, value) {
-                let rows = value.getElementsByTagName('td');
-                let ISSN = rows[0].innerHTML;
-                let expectation = rows[1];
-                let actual = rows[2];
-                let result = rows[3];
-                if (validateISSN(ISSN) === true) {
+                let newCellActual = document.createElement('td');
+                value.appendChild(newCellActual);
+                let newCellResult = document.createElement('td');
+                value.appendChild(newCellResult);
+                let cells = value.getElementsByTagName('td');
+                let ISSN = cells[0].innerHTML;
+                let expectation = cells[1];
+                let actual = cells[2];
+                let result = cells[3];
+                if (issnValidator.validateISSN(ISSN) === true) {
                     actual.innerHTML = "True";
                 } else {
                     actual.innerHTML = "False";
@@ -126,80 +135,54 @@
         <tr>
             <td>1050-124X</td>
             <td>True</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td>0001-3218</td>
             <td>True</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td>0025-5858</td>
             <td>True</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td>1062-5127</td>
             <td>True</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td>0317-8471</td>
             <td>True</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td>12345478</td>
             <td>False</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td>null</td>
             <td>False</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td>true</td>
             <td>False</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td>12456-65478</td>
             <td>False</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td>123456789</td>
             <td>False</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td>1050 124X</td>
             <td>False</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td>1050_124X</td>
             <td>False</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td>1050-1242</td>
             <td>False</td>
-            <td></td>
-            <td></td>
         </tr>
         </tbody>
     </table>

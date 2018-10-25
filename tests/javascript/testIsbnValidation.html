@@ -27,6 +27,11 @@
 * @author      Maximilian Salomon <salomon@zib.de>
 * @copyright   Copyright (c) 2018, OPUS 4 development team
 * @license     http://www.gnu.org/licenses/gpl.html General Public License
+*
+* Test of public/layouts/opus4/js/validation.js
+* In this file, the ISBN-validation with JS is tested. To see the test-results, you have to open this file in a browser.
+* This tests the validateISBN(), validateISBN10 and validateISBN13() functions.
+* The results are shown in three different tables.
 -->
 
 <!DOCTYPE html>
@@ -85,14 +90,19 @@
     <script type="text/javascript" src="../../vendor/components/jquery/jquery.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
-            var tableRows = document.getElementById('ISBN13').getElementsByTagName('tbody')[0].rows;
+            let isbnValidator = new IsbnValidation();
+            let tableRows = document.getElementById('ISBN13').getElementsByTagName('tbody')[0].rows;
             $.each(tableRows, function (index, value) {
-                var rows = value.getElementsByTagName('td');
-                var ISBN = rows[0].innerHTML;
-                var expectation = rows[1];
-                var actual = rows[2];
-                var result = rows[3];
-                if (validateISBN13(ISBN) === true) {
+                let newCellActual = document.createElement('td');
+                value.appendChild(newCellActual);
+                let newCellResult = document.createElement('td');
+                value.appendChild(newCellResult);
+                let cells = value.getElementsByTagName('td');
+                let ISBN = cells[0].innerHTML;
+                let expectation = cells[1];
+                let actual = cells[2];
+                let result = cells[3];
+                if (isbnValidator.validateISBN13(ISBN) === true) {
                     actual.innerHTML = "True";
                 } else {
                     actual.innerHTML = "False";
@@ -109,12 +119,16 @@
 
             tableRows = document.getElementById('ISBN10').getElementsByTagName('tbody')[0].rows;
             $.each(tableRows, function (index, value) {
-                var rows = value.getElementsByTagName('td');
-                var ISBN = rows[0].innerHTML;
-                var expectation = rows[1];
-                var actual = rows[2];
-                var result = rows[3];
-                if (validateISBN10(ISBN) === true) {
+                let newCellActual = document.createElement('td');
+                value.appendChild(newCellActual);
+                let newCellResult = document.createElement('td');
+                value.appendChild(newCellResult);
+                let cells = value.getElementsByTagName('td');
+                let ISBN = cells[0].innerHTML;
+                let expectation = cells[1];
+                let actual = cells[2];
+                let result = cells[3];
+                if (isbnValidator.validateISBN10(ISBN) === true) {
                     actual.innerHTML = "True";
                 } else {
                     actual.innerHTML = "False";
@@ -131,12 +145,16 @@
 
             tableRows = document.getElementById('ISBNComplete').getElementsByTagName('tbody')[0].rows;
             $.each(tableRows, function (index, value) {
-                var rows = value.getElementsByTagName('td');
-                var ISBN = rows[0].innerHTML;
-                var expectation = rows[1];
-                var actual = rows[2];
-                var result = rows[3];
-                if (validateISBN(ISBN) === true) {
+                let newCellActual = document.createElement('td');
+                value.appendChild(newCellActual);
+                let newCellResult = document.createElement('td');
+                value.appendChild(newCellResult);
+                let cells = value.getElementsByTagName('td');
+                let ISBN = cells[0].innerHTML;
+                let expectation = cells[1];
+                let actual = cells[2];
+                let result = cells[3];
+                if (isbnValidator.validateISBN(ISBN) === true) {
                     actual.innerHTML = "True";
                 } else {
                     actual.innerHTML = "False";
@@ -172,188 +190,126 @@
         <tr>
             <td>3-935024-10-X</td>
             <td>True</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td>393502410X</td>
             <td>True</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td>3-86680-192-0</td>
             <td>True</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td>3-937602-69-0</td>
             <td>True</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td>3 86680 192 0</td>
             <td>True</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td>3 937602 69 0</td>
             <td>True</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td>978-3-86680-192-9</td>
             <td>True</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td>3-937602-69-0</td>
             <td>True</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td>978-5-7931-8163-1</td>
             <td>True</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td>978-979-3182-63-6</td>
             <td>True</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td>978 3 86680 192 9</td>
             <td>True</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td>978 5 7931 8163 1</td>
             <td>True</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td>978 979 3182 63 6</td>
             <td>True</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td>978-3-86680-192-9</td>
             <td>True</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td>9789793182636</td>
             <td>True</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td>null</td>
             <td>False</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td></td>
             <td>False</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td>4711</td>
             <td>False</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td>true</td>
             <td>False</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td>4711-0815</td>
             <td>False</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td>980-3-86680-192-9</td>
             <td>False</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td>978-3-86680-192-5</td>
             <td>False</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td>978 3 86680-192-9</td>
             <td>False</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td>null</td>
             <td>False</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td></td>
             <td>False</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td>4711</td>
             <td>False</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td>true</td>
             <td>False</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td>4711-0815</td>
             <td>False</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td>3-86680-192-5</td>
             <td>False</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td>3 86680 192-0</td>
             <td>False</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td>3-86680-1902-0</td>
             <td>False</td>
-            <td></td>
-            <td></td>
         </tr>
     </table>
 
@@ -371,98 +327,66 @@
         <tr>
             <td>3-935024-10-X</td>
             <td>True</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td>393502410X</td>
             <td>True</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td>3-86680-192-0</td>
             <td>True</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td>3-937602-69-0</td>
             <td>True</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td>3 86680 192 0</td>
             <td>True</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td>3 937602 69 0</td>
             <td>True</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td>39376026940</td>
             <td>False</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td>null</td>
             <td>False</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td></td>
             <td>False</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td>4711</td>
             <td>False</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td>true</td>
             <td>False</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td>4711-0815</td>
             <td>False</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td>978-3-86680-192-9</td>
             <td>False</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td>3-86680-192-5</td>
             <td>False</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td>3 86680 192-0</td>
             <td>False</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td>3-86680-1902-0</td>
             <td>False</td>
-            <td></td>
-            <td></td>
         </tr>
     </table>
 
@@ -480,98 +404,66 @@
         <tr>
             <td>978-3-86680-192-9</td>
             <td>True</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td>978-5-7931-8163-1</td>
             <td>True</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td>978-979-3182-63-6</td>
             <td>True</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td>978 3 86680 192 9</td>
             <td>True</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td>978 5 7931 8163 1</td>
             <td>True</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td>978 979 3182 63 6</td>
             <td>True</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td>9789793182636</td>
             <td>True</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td>null</td>
             <td>False</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td></td>
             <td>False</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td>4711</td>
             <td>False</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td>true</td>
             <td>False</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td>4711-0815</td>
             <td>False</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td>980-3-86680-192-9</td>
             <td>False</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td>978-3-86680-192-5</td>
             <td>False</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td>978 3 86680-192-9</td>
             <td>False</td>
-            <td></td>
-            <td></td>
         </tr>
         <tr>
             <td>3-937602-69-0</td>
             <td>False</td>
-            <td></td>
-            <td></td>
         </tr>
     </table>
 </div>
