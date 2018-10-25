@@ -32,21 +32,24 @@
  */
 
 /**
- * Class Application_View_Helper_JavascriptTranslation
+ * Class Application_View_Helper_JavascriptMessages
  * This view-helper creates a code snippet, what is able to deliver the translations for javascript files.
  * With addTranslation, there is an possibility to add an translation-key to the code snippet.
  * The key will be translated and the message will be delivered. It is also possible to insert your own key-message pair.
  */
-class Application_View_Helper_JavascriptTranslation extends Application_View_Helper_Abstract
+class Application_View_Helper_JavascriptMessages extends Application_View_Helper_Abstract
 {
-    private $translations = [];
+    /**
+     * @var array contains the messages with translation for javascript-files
+     */
+    private $javascriptMessages = [];
 
-    public function javascriptTranslation()
+    public function javascriptMessages()
     {
         $output = '<script type="text/javascript">' . "\n";
-        if ($this->translations != null) {
-            foreach ($this->translations as $key => $message) {
-                $output .= "            " . "messages[\"$key\"] = \"" . htmlspecialchars($message) . "\";" . "\n";
+        if ($this->javascriptMessages != null) {
+            foreach ($this->javascriptMessages as $key => $message) {
+                $output .= "            " . "opus4Messages[\"$key\"] = \"" . htmlspecialchars($message) . "\";" . "\n";
             }
         }
         $output .= "        " . "</script>" . "\n";
@@ -54,23 +57,29 @@ class Application_View_Helper_JavascriptTranslation extends Application_View_Hel
         return $output;
     }
 
-    public function addTranslation($key, $message = null)
+    /**
+     * @param $key
+     * @param null $message contains an optional message
+     *
+     * Adds an Message to the viewHelper. If no message is handed, the function tries to translate the handed key.
+     */
+    public function addMessage($key, $message = null)
     {
         if ($message != null) {
-            $this->translations[$key] = $message;
+            $this->javascriptMessages [$key] = $message;
         } else {
             $message = $this->view->translate($key);
-            $this->translations[$key] = $message;
+            $this->javascriptMessages [$key] = $message;
         }
     }
 
-    public function getTranslations()
+    public function getMessages()
     {
-        return $this->translations;
+        return $this->javascriptMessages;
     }
 
-    public function setTranslations($value)
+    public function setMessages($value)
     {
-        $this->translations = $value;
+        $this->javascriptMessages = $value;
     }
 }
