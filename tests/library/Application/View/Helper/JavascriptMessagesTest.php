@@ -31,7 +31,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Application_View_Helper_JavascriptTranslationTest extends ControllerTestCase
+class Application_View_Helper_JavascriptMessagesTest extends ControllerTestCase
 {
     private $helper;
 
@@ -41,74 +41,74 @@ class Application_View_Helper_JavascriptTranslationTest extends ControllerTestCa
 
         $this->useEnglish();
 
-        $this->helper = new Application_View_Helper_JavascriptTranslation();
+        $this->helper = new Application_View_Helper_JavascriptMessages();
 
         $this->helper->setView(Zend_Registry::get('Opus_View'));
     }
 
     /**
-     * Tests, if the correct code-snippet for the translation will be generated.
+     * Tests, if the correct code-snippet for the Messages will be generated.
      */
-    public function testJavascriptTranslation()
+    public function testJavascriptMessages()
     {
-        $translations = [
+        $Messages = [
             'key1' => 'message1',
             'key2' => 'message2'
         ];
-        $this->helper->setTranslations($translations);
+        $this->helper->setMessages($Messages);
 
         $expectation = '<script type="text/javascript">' . "\n"
-            . '            messages.key1 = "message1";' . "\n"
-            . '            messages.key2 = "message2";' . "\n"
-            . '        </script>';
+            . '            opus4Messages["key1"] = "message1";' . "\n"
+            . '            opus4Messages["key2"] = "message2";' . "\n"
+            . '        </script>' . "\n";
 
-        $reality = $this->helper->javascriptTranslation();
+        $reality = $this->helper->javascriptMessages();
         $this->assertEquals($expectation, $reality);
     }
 
     /**
-     * Tests, if the addTranslation-function translates in the correct way and deliver the correct key-message pairs.
+     * Tests, if the addMessage-function translates in the correct way and deliver the correct key-message pairs.
      */
-    public function testAddTranslation()
+    public function testAddMessage()
     {
-        $this->helper->addTranslation('key1', 'message1');
-        $this->helper->addTranslation('identifierInvalidFormat');
-        $this->helper->addTranslation('testkey');
+        $this->helper->addMessage('key1', 'message1');
+        $this->helper->addMessage('identifierInvalidFormat');
+        $this->helper->addMessage('testkey');
 
-        $translations = [
+        $Messages = [
             'key1' => 'message1',
             'identifierInvalidFormat' => "'%value%' is malformed.",
             'testkey' => 'testkey'
         ];
 
-        $this->assertEquals($translations, $this->helper->getTranslations());
+        $this->assertEquals($Messages, $this->helper->getMessages());
     }
 
-    public function testSetTranslations()
+    public function testSetMessages()
     {
-        $translations = [
+        $Messages = [
             'key1' => 'message1',
             'key2' => 'message2'
         ];
-        $this->helper->setTranslations($translations);
-        $this->assertEquals($translations, $this->helper->getTranslations());
+        $this->helper->setMessages($Messages);
+        $this->assertEquals($Messages, $this->helper->getMessages());
     }
 
     /**
-     * If the translations are empty or set to null, the code snippet for the translation without any key-message pairs
+     * If the Messages are empty or set to null, the code snippet for the Messages without any key-message pairs
      * should be delivered. This is tested here.
      */
-    public function testSetNullTranslations()
+    public function testSetNullMessages()
     {
-        $this->helper->setTranslations(null);
-        $reality = $this->helper->javascriptTranslation();
+        $this->helper->setMessages(null);
+        $reality = $this->helper->javascriptMessages();
         $expectation = '<script type="text/javascript">' . "\n"
             . '        </script>' . "\n";
         $this->assertEquals($expectation, $reality);
     }
 
-    public function testGetTranslations()
+    public function testGetMessages()
     {
-        $this->assertEquals([], $this->helper->getTranslations());
+        $this->assertEquals([], $this->helper->getMessages());
     }
 }

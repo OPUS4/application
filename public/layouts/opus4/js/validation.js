@@ -29,9 +29,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-var messages = [];
-messages["identifierInvalidCheckdigit"] = "The check digit of \'%value%\' is not valid";
-messages["identifierInvalidFormat"] = "\'%value%\' is malformed";
+var opus4Messages = [];
+opus4Messages["identifierInvalidCheckdigit"] = "The check digit of \'%value%\' is not valid";
+opus4Messages["identifierInvalidFormat"] = "\'%value%\' is malformed";
 
 
 var IsbnValidation = function () {
@@ -47,26 +47,26 @@ IsbnValidation.prototype.validateISBN = function (value) {
         return this.validateISBN13(value);
     }
     else {
-        return messages["identifierInvalidFormat"].replace("%value%", value);
+        return opus4Messages["identifierInvalidFormat"].replace("%value%", value);
     }
 };
 
 IsbnValidation.prototype.validateISBN13 = function (value) {
     if (value.length !== 13 && value.length !== 17) {
-        return messages["identifierInvalidFormat"].replace("%value%", value);
+        return opus4Messages["identifierInvalidFormat"].replace("%value%", value);
     }
 
     if (value.match(/^(978|979)((-|\s)?[\d]*){4}$/g) === null) {
-        return messages["identifierInvalidFormat"].replace("%value%", value);
+        return opus4Messages["identifierInvalidFormat"].replace("%value%", value);
     }
 
     if (value.match(/-/) !== null && value.match(/\s/) !== null) {
-        return messages["identifierInvalidFormat"].replace("%value%", value);
+        return opus4Messages["identifierInvalidFormat"].replace("%value%", value);
     }
 
     var isbnDigits = this.splitIsbn(value);
     if (this.calculateCheckDigitISBN13(isbnDigits) === false) {
-        return messages["identifierInvalidCheckdigit"].replace("%value%", value);
+        return opus4Messages["identifierInvalidCheckdigit"].replace("%value%", value);
     }
 
     return true;
@@ -74,20 +74,20 @@ IsbnValidation.prototype.validateISBN13 = function (value) {
 
 IsbnValidation.prototype.validateISBN10 = function (value) {
     if (value.length !== 10 && value.length !== 13) {
-        return messages["identifierInvalidFormat"].replace("%value%", value);
+        return opus4Messages["identifierInvalidFormat"].replace("%value%", value);
     }
 
     if (value.match(/^[\d]*((-|\s)?[\d]*){2}((-|\s)?[\dX])$/g) === null) {
-        return messages["identifierInvalidFormat"].replace("%value%", value);
+        return opus4Messages["identifierInvalidFormat"].replace("%value%", value);
     }
 
     if (value.match(/-/) !== null && value.match(/\s/) !== null) {
-        return messages["identifierInvalidFormat"].replace("%value%", value);
+        return opus4Messages["identifierInvalidFormat"].replace("%value%", value);
     }
 
     var isbnDigits = this.splitIsbn(value);
     if (this.calculateCheckDigitISBN10(isbnDigits) === false) {
-        return messages["identifierInvalidCheckdigit"].replace("%value%", value);
+        return opus4Messages["identifierInvalidCheckdigit"].replace("%value%", value);
     }
 
     return true;
@@ -134,12 +134,12 @@ var IssnValidation = function () {
 IssnValidation.prototype.validateISSN = function (value) {
     // check length
     if (value.length !== 9) {
-        return messages["identifierInvalidFormat"].replace("%value%", value);
+        return opus4Messages["identifierInvalidFormat"].replace("%value%", value);
     }
 
     // check form
     if (value.match(/^[0-9]{4}[-][0-9]{3}[0-9X]$/g) === null) {
-        return messages["identifierInvalidFormat"].replace("%value%", value);
+        return opus4Messages["identifierInvalidFormat"].replace("%value%", value);
     }
 
     // Split ISSN into its parts
@@ -148,7 +148,7 @@ IssnValidation.prototype.validateISSN = function (value) {
     // Calculate and compare check digit
     var checkdigit = this.calculateCheckDigitISSN(issn);
     if (checkdigit != issn[8]) {
-        return messages["identifierInvalidCheckdigit"].replace("%value%", value);
+        return opus4Messages["identifierInvalidCheckdigit"].replace("%value%", value);
     }
 
     return true;
