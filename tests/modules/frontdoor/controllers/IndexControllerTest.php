@@ -363,6 +363,26 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
       $this->assertContains('/solrsearch/index/search/searchtype/series/id/1" ', $this->getResponse()->getBody());
    }
 
+   public function testSubjectSortOrder()
+   {
+       $this->dispatch('/frontdoor/index/index/docId/1');
+       $this->assertContains('Informationssystem; Geschichte; Ostwald, Wilhelm', $this->getResponse()->getBody());
+   }
+
+    public function testSubjectSortOrderAlphabetical()
+    {
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'frontdoor' => ['subjects' => ['alphabeticalSorting' => '1']]
+        ]));
+
+        // frontdoor.subjects.alphabeticalSorting
+
+        $this->dispatch('/frontdoor/index/index/docId/1');
+        $this->assertContains(
+            'Geschichte; Informations- und Dokumentationswissenschaft; Informationssystem',
+            $this->getResponse()->getBody()
+        );
+    }
    /**
     * Regression test for OPUSVIER-2232
     */
