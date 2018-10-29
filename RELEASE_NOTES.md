@@ -2,6 +2,14 @@
 
 ---
 
+## Release 4.6.3 2018-11
+
+Die GND-Schlagwörter werden nicht länger automatisch alphabetisch sortiert. Mit dem 
+Eintrag `frontdoor.subjects.alphabeticalSorting = 1` in der Datei `config.ini` kann 
+die Sortierung wieder aktiviert werden.
+
+---
+
 ## Release 4.6.2 2018-06-11
 
 Mit diesem Release wird der neue DOI-Support veröffentlicht. 
