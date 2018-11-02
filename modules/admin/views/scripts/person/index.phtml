@@ -35,11 +35,12 @@
  */
 ?>
 
-<?= $this->form ?>
-
-<div class="results_pagination">
-    <div><?= $this->start ?> - <?= $this->end ?> of <?= $this->totalCount ?></div>
-    <?= $this->paginationControl($this->paginator, 'Sliding', 'pagination_control.phtml') ?>
+<div id="personsMenu" class="fixedMenubar">
+    <?= $this->form ?>
+    <div class="results_pagination">
+        <?= $this->paginationControl($this->paginator, 'Sliding', 'pagination_control.phtml') ?>
+        <div style="float: left"><?= $this->start ?> - <?= $this->end ?> of <?= $this->totalCount ?></div>
+    </div>
 </div>
 
 <table class="persons-table">

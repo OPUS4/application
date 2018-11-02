@@ -321,6 +321,12 @@ ul.form-action {
     z-index: 100;
 }
 
+.fixedMenubar.fixed {
+    position: fixed;
+    top: 0;
+    z-index: 100;
+}
+
 #actionboxContainer .col {
     float: left;
 
@@ -2380,4 +2386,9 @@ ul.permissions-list li:nth-child(even) {
 
 ul.permissions-list input[type=checkbox] {
     margin-right: 1em;
+}
+
+#personsMenu {
+    background-color: #0b93d5;
+    border: 1px solid red;
 }

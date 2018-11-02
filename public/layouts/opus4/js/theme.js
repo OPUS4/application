@@ -1,3 +1,9 @@
+/**
+ * This function is executed when the page has been loaded completely and prepares some rendering for the
+ * administration pages.
+ *
+ * TODO separate into independent functions (consider performance)
+ */
 $(document).ready(function() {
 	// JavaScript detection
 	$("html").removeClass("no-js").addClass("js");
@@ -10,15 +16,20 @@ $(document).ready(function() {
 
 	// normalize box-heights
     var max = 0;
-        $('#adminMenuContainer ul > li > *').each(function(){  
-			if($(this).height() > max){  
-			max = $(this).height();  
+        $('#adminMenuContainer ul > li > *').each(function(){
+			if($(this).height() > max){
+			max = $(this).height();
         }
-    });    
+    });
     $('#adminMenuContainer ul > li > *').height(max);
 
-	// ActionBox
-	var $actionbox = $('#actionboxContainer');
+    /*
+     * ActionBox
+     *
+     * The code here fixes a menu bar at the top of the screen when the user scrolls down, in order to keep the functions
+     * always accessible.
+     */
+	var $actionbox = $('.fixedMenubar');
 	var $actionboxSpacer = $('<div />', {
 		"class": "actionbox-spacer",
 		"height": $actionbox.outerHeight()
@@ -32,7 +43,7 @@ $(document).ready(function() {
 				$actionbox.before($actionboxSpacer);
 				$actionbox.addClass("fixed");
 			}
-			else if ($actionbox.hasClass('fixed')  && $(window).scrollTop() < $actionboxSpacer.offset().top)
+			else if ($actionbox.hasClass('fixed') && $(window).scrollTop() < $actionboxSpacer.offset().top)
 			{
 				$actionbox.removeClass("fixed");
 				$actionboxSpacer.remove();
@@ -40,7 +51,7 @@ $(document).ready(function() {
 		});
 		$(window).trigger("scroll");
 	}
-	
+
 	// DropDown behaviour
 	$(".dropdown > dt > a").click(function(event) {
 		$(this).closest(".dropdown").toggleClass("dropdown-open");
