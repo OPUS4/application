@@ -27,6 +27,7 @@
  * @category    Application
  * @package     Module_Admin
  * @author      Jens Schwidder <schwidder@zib.de>
+ * @author      Maximilian Salomon <salomon@zib.de>
  * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
@@ -232,7 +233,7 @@ class Admin_DocumentController extends Application_Controller_Action
 
         $this->renderForm($this->view->form);
 
-        // Adds translated messages for javascript files
+        // Add translations for Javascript code
         $javascriptTranslations = $this->view->getHelper('javascriptMessages');
         $javascriptTranslations->addMessage('identifierInvalidFormat');
         $javascriptTranslations->addMessage('identifierInvalidCheckdigit');
