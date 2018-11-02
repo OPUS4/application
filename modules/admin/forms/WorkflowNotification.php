@@ -29,6 +29,8 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
+ *
+ * TODO use getRecipients
  */
 class Admin_Form_WorkflowNotification extends Admin_Form_YesNoForm
 {

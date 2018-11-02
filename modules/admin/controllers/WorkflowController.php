@@ -180,6 +180,9 @@ class Admin_WorkflowController extends Application_Controller_Action
     /**
      * @param $document
      * @param null $form
+     *
+     * TODO get recipients from form
+     * TODO dryrun mode for notifications for testing
      */
     private function _sendNotification($document, $form = null)
     {
