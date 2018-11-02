@@ -25,51 +25,56 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     View_Helper_Document_Helper
+ * @package     Application_View_Helper
  * @author      Maximilian Salomon <salomon@zib.de>
+ * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
- * Class Application_View_Helper_JavascriptMessages
- * This view-helper creates a code snippet, what is able to deliver the translations for javascript files.
- * With addTranslation, there is an possibility to add an translation-key to the code snippet.
- * The key will be translated and the message will be delivered. It is also possible to insert your own key-message pair.
+ * Helper for generating Javascript providing translated messages.
+ *
+ * This view-helper creates a code snippet, that is able to deliver translations for javascript files. This is used
+ * to provide translated message strings to Javascript code in order to display English or German messages depending
+ * on the language selected by the user.
  */
 class Application_View_Helper_JavascriptMessages extends Application_View_Helper_Abstract
 {
+
     /**
      * @var array contains the messages with translation for javascript-files
      */
     private $javascriptMessages = [];
 
+    /**
+     * Indentation of generated script code.
+     * @var int Integer
+     */
+    private $indent = 8;
+
+    /**
+     * TODO can this function be used for more?
+     */
     public function javascriptMessages()
     {
-        $output = '<script type="text/javascript">' . "\n";
-        if ($this->javascriptMessages != null) {
-            foreach ($this->javascriptMessages as $key => $message) {
-                $output .= "            " . "opus4Messages[\"$key\"] = \"" . htmlspecialchars($message) . "\";" . "\n";
-            }
-        }
-        $output .= "        " . "</script>" . "\n";
-
-        return $output;
+        return $this;
     }
 
     /**
-     * @param $key
-     * @param null $message contains an optional message
+     * Adds a translation.
      *
-     * Adds an Message to the viewHelper. If no message is handed, the function tries to translate the handed key.
+     * If no message provided, the function tries to translate the handed key.
+     *
+     * @param string $key Message key
+     * @param null|string $message contains an optional message
      */
     public function addMessage($key, $message = null)
     {
         if ($message != null) {
-            $this->javascriptMessages [$key] = $message;
+            $this->javascriptMessages[$key] = $message;
         } else {
-            $message = $this->view->translate($key);
-            $this->javascriptMessages [$key] = $message;
+            $this->javascriptMessages[$key] = $this->view->translate($key);
         }
     }
 
@@ -81,5 +86,43 @@ class Application_View_Helper_JavascriptMessages extends Application_View_Helper
     public function setMessages($value)
     {
         $this->javascriptMessages = $value;
+    }
+
+    public function getIndent()
+    {
+        return $this->indent;
+    }
+
+    public function setIndent($indent)
+    {
+        if (is_int($indent) && $indent >= 0) {
+            $this->indent = $indent;
+        } else {
+            $this->indent = 0;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Renders Javascript for providing translated messages.
+     * @return string Javascript snippet
+     */
+    public function toString() {
+        $indent = str_repeat(' ', $this->getIndent());
+
+        $output = $indent . '<script type="text/javascript">' . "\n";
+        if ($this->javascriptMessages != null) {
+            foreach ($this->javascriptMessages as $key => $message) {
+                $output .= "$indent    opus4Messages[\"$key\"] = \"" . htmlspecialchars($message) . "\";\n";
+            }
+        }
+        $output .= "$indent</script>\n";
+
+        return $output;
+    }
+
+    public function __toString() {
+        return $this->toString();
     }
 }

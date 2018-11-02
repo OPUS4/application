@@ -24,15 +24,17 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @package     View_Helper
+ * @category    Tests
+ * @package     Application_View_Helper
  * @author      Maximilian Salomon <salomon@zib.de>
+ * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 class Application_View_Helper_JavascriptMessagesTest extends ControllerTestCase
 {
+
     private $helper;
 
     public function setUp()
@@ -57,7 +59,7 @@ class Application_View_Helper_JavascriptMessagesTest extends ControllerTestCase
         ];
         $this->helper->setMessages($Messages);
 
-        $expectation = '<script type="text/javascript">' . "\n"
+        $expectation = '        <script type="text/javascript">' . "\n"
             . '            opus4Messages["key1"] = "message1";' . "\n"
             . '            opus4Messages["key2"] = "message2";' . "\n"
             . '        </script>' . "\n";
@@ -102,7 +104,7 @@ class Application_View_Helper_JavascriptMessagesTest extends ControllerTestCase
     {
         $this->helper->setMessages(null);
         $reality = $this->helper->javascriptMessages();
-        $expectation = '<script type="text/javascript">' . "\n"
+        $expectation = '        <script type="text/javascript">' . "\n"
             . '        </script>' . "\n";
         $this->assertEquals($expectation, $reality);
     }
