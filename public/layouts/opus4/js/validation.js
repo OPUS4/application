@@ -39,6 +39,8 @@ opus4Messages["identifierInvalidFormat"] = "\'%value%\' is malformed";
 
 /**
  * Class for ISBN validation.
+ *
+ * TODO Validation and message generation are mixed. No function that simply tells me valid or not.
  */
 
 var IsbnValidation = function () {
@@ -225,10 +227,12 @@ $(document).ready(function () {
      */
     $.each(identifierText, function (index, value) {
         value.identifierTypeSelect = identifierSelector[index];
+        value.messageElement = $(identifier[index]).find("p");
         value.onkeyup = function () {
             var result;
 
             var type = this.identifierTypeSelect.value;
+
             switch (type) {
                 case "isbn":
                     var isbnValidator = new IsbnValidation();
@@ -242,12 +246,16 @@ $(document).ready(function () {
                     result = true;
             }
 
+            var elem = this.messageElement;
+
             if (result !== true) {
-                $(identifier[index]).find("p")[0].innerHTML = result;
-                $(identifier[index]).find("p").removeAttr("style");
+                elem[0].innerHTML = result;
+                elem.removeAttr("style");
+                $(value).addClass("invalid");
             }
             else {
-                $(identifier[index]).find("p").attr("style", "display : none");
+                elem.attr("style", "display : none");
+                $(value).removeClass("invalid");
             }
         };
     });
