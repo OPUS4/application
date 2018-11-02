@@ -25,14 +25,21 @@
  *
  * @category    Application
  * @author      Maximilian Salomon <salomon@zib.de>
+ * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+/**
+ * Defaults for messages.
+ */
 var opus4Messages = [];
 opus4Messages["identifierInvalidCheckdigit"] = "The check digit of \'%value%\' is not valid";
 opus4Messages["identifierInvalidFormat"] = "\'%value%\' is malformed";
 
+/**
+ * Class for ISBN validation.
+ */
 
 var IsbnValidation = function () {
 };
@@ -47,26 +54,26 @@ IsbnValidation.prototype.validateISBN = function (value) {
         return this.validateISBN13(value);
     }
     else {
-        return opus4Messages["identifierInvalidFormat"].replace("%value%", value);
+        return this.getMessage("identifierInvalidFormat", value);
     }
 };
 
 IsbnValidation.prototype.validateISBN13 = function (value) {
     if (value.length !== 13 && value.length !== 17) {
-        return opus4Messages["identifierInvalidFormat"].replace("%value%", value);
+        return this.getMessage("identifierInvalidFormat", value);
     }
 
     if (value.match(/^(978|979)((-|\s)?[\d]*){4}$/g) === null) {
-        return opus4Messages["identifierInvalidFormat"].replace("%value%", value);
+        return this.getMessage("identifierInvalidFormat", value);
     }
 
     if (value.match(/-/) !== null && value.match(/\s/) !== null) {
-        return opus4Messages["identifierInvalidFormat"].replace("%value%", value);
+        return this.getMessage("identifierInvalidFormat", value);
     }
 
     var isbnDigits = this.splitIsbn(value);
     if (this.calculateCheckDigitISBN13(isbnDigits) === false) {
-        return opus4Messages["identifierInvalidCheckdigit"].replace("%value%", value);
+        return this.getMessage("identifierInvalidCheckdigit", value);
     }
 
     return true;
@@ -74,20 +81,20 @@ IsbnValidation.prototype.validateISBN13 = function (value) {
 
 IsbnValidation.prototype.validateISBN10 = function (value) {
     if (value.length !== 10 && value.length !== 13) {
-        return opus4Messages["identifierInvalidFormat"].replace("%value%", value);
+        return this.getMessage("identifierInvalidFormat", value);
     }
 
     if (value.match(/^[\d]*((-|\s)?[\d]*){2}((-|\s)?[\dX])$/g) === null) {
-        return opus4Messages["identifierInvalidFormat"].replace("%value%", value);
+        return this.getMessage("identifierInvalidFormat", value);
     }
 
     if (value.match(/-/) !== null && value.match(/\s/) !== null) {
-        return opus4Messages["identifierInvalidFormat"].replace("%value%", value);
+        return this.getMessage("identifierInvalidFormat", value);
     }
 
     var isbnDigits = this.splitIsbn(value);
     if (this.calculateCheckDigitISBN10(isbnDigits) === false) {
-        return opus4Messages["identifierInvalidCheckdigit"].replace("%value%", value);
+        return this.getMessage("identifierInvalidCheckdigit", value);
     }
 
     return true;
@@ -128,18 +135,26 @@ IsbnValidation.prototype.calculateCheckDigitISBN13 = function (value) {
     return (check % 10 === 0);
 };
 
+IsbnValidation.prototype.getMessage = function($key, value) {
+    return opus4Messages[$key].replace("%value%", value);
+}
+
+/**
+ * Class for ISSN validation.
+ */
+
 var IssnValidation = function () {
 };
 
 IssnValidation.prototype.validateISSN = function (value) {
     // check length
     if (value.length !== 9) {
-        return opus4Messages["identifierInvalidFormat"].replace("%value%", value);
+        return this.getMessage("identifierInvalidFormat", value);
     }
 
     // check form
     if (value.match(/^[0-9]{4}[-][0-9]{3}[0-9X]$/g) === null) {
-        return opus4Messages["identifierInvalidFormat"].replace("%value%", value);
+        return this.getMessage("identifierInvalidFormat", value);
     }
 
     // Split ISSN into its parts
@@ -148,7 +163,7 @@ IssnValidation.prototype.validateISSN = function (value) {
     // Calculate and compare check digit
     var checkdigit = this.calculateCheckDigitISSN(issn);
     if (checkdigit != issn[8]) {
-        return opus4Messages["identifierInvalidCheckdigit"].replace("%value%", value);
+        return this.getMessage("identifierInvalidCheckdigit", value);
     }
 
     return true;
@@ -167,14 +182,27 @@ IssnValidation.prototype.calculateCheckDigitISSN = function (value) {
     return checkdigit;
 };
 
-$(document).ready(function () {
-    var selectors = [];
-    var result;
+IssnValidation.prototype.getMessage = function($key, value) {
+    return opus4Messages[$key].replace("%value%", value);
+}
 
+/**
+ * Add validation functions to input fields for identifiers.
+ */
+
+$(document).ready(function () {
     var identifier = $("#fieldset-Identifiers tbody tr td.Value-data");
     var identifierText = $("#fieldset-Identifiers tbody tr :text");
     var identifierSelector = $("#fieldset-Identifiers tbody tr select");
 
+    /**
+     * Add paragraph for displaying informationen to every identifier input.
+     *
+     * TODO give paragraph a CSS-class
+     * TODO handle visiblity using CSS-class
+     * TODO check if paragraph with class already exists
+     * TODO add invalid CSS-class to identifier field for styling
+     */
     $.each(identifier, function (index, value) {
         var para = document.createElement("p");
         para.classList.add("datahint");
@@ -182,26 +210,38 @@ $(document).ready(function () {
         value.appendChild(para);
     });
 
+    /**
+     * Add function to every identifier type select to capture changes.
+     */
     $.each(identifierSelector, function (index, value) {
-        selectors[index] = value.value;
+        value.identifierValue = identifierText[index];
         value.onchange = function () {
-            selectors[index] = value.value;
+            this.identifierValue.onkeyup(); // TODO is this a good idea
         };
     });
 
+    /**
+     *
+     */
     $.each(identifierText, function (index, value) {
-        value.onchange = function () {
-            if (selectors[index] === "isbn") {
-                var isbnValidator = new IsbnValidation();
-                result = isbnValidator.validateISBN(value.value);
+        value.identifierTypeSelect = identifierSelector[index];
+        value.onkeyup = function () {
+            var result;
+
+            var type = this.identifierTypeSelect.value;
+            switch (type) {
+                case "isbn":
+                    var isbnValidator = new IsbnValidation();
+                    result = isbnValidator.validateISBN(value.value);
+                    break;
+                case "issn":
+                    var issnValidator = new IssnValidation();
+                    result = issnValidator.validateISSN(value.value);
+                    break;
+                default:
+                    result = true;
             }
-            else if (selectors[index] === "issn") {
-                var issnValidator = new IssnValidation();
-                result = issnValidator.validateISSN(value.value);
-            }
-            else {
-                result = true;
-            }
+
             if (result !== true) {
                 $(identifier[index]).find("p")[0].innerHTML = result;
                 $(identifier[index]).find("p").removeAttr("style");
