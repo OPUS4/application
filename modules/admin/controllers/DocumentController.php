@@ -231,6 +231,11 @@ class Admin_DocumentController extends Application_Controller_Action
         $this->_helper->breadcrumbs()->setDocumentBreadcrumb($document);
 
         $this->renderForm($this->view->form);
+
+        // Adds translated messages for javascript files
+        $javascriptTranslations = $this->view->getHelper('javascriptMessages');
+        $javascriptTranslations->addMessage('identifierInvalidFormat');
+        $javascriptTranslations->addMessage('identifierInvalidCheckdigit');
     }
 
     /**
