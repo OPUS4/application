@@ -30,6 +30,10 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+/**
+ * Array with messages for the client-sided validation.
+ * @type {Array}
+ */
 var opus4Messages = [];
 opus4Messages["uploadedFileHasErrorMessage"] = "The file '%name%' has the following errors:";
 opus4Messages["fileExtensionFalse"] = "The extension of file is not allowed.";
