@@ -187,6 +187,7 @@ class Admin_WorkflowController extends Application_Controller_Action
     private function _sendNotification($document, $form = null)
     {
         $notification = new Application_Util_PublicationNotification();
+
         $url = $this->view->url([
                 "module" => "frontdoor",
                 "controller" => "index",
@@ -197,24 +198,12 @@ class Admin_WorkflowController extends Application_Controller_Action
             true
         );
 
-        $authorsBitmask = [];
-        $notifySubmitter = true;
-
-        if (!is_null($form)) {
-            foreach ($form->getValues() as $key => $val) {
-                $pos = strpos($key, 'author_');
-                if ($pos !== false && $pos === 0) {
-                    array_push($authorsBitmask, $val == '1');
-                }
-            }
-            $notifySubmitter = $form->getValue('submitter') == '1';
-        }
+        $recipients = $form->getSelectedRecipients($document, $this->getRequest()->getPost());
 
         $notification->prepareMail(
             $document,
             $this->view->serverUrl() . $url,
-            $notifySubmitter,
-            $authorsBitmask
+            $recipients
         );
     }
 

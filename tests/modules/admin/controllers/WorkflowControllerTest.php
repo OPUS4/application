@@ -304,10 +304,7 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
 
         $this->assertContains('submitter@localhost.de', $body);
         $this->assertContains('author@localhost.de', $body);
-        $this->assertContains(
-            '<input type="checkbox" name="submitter" id="submitter" value="1" checked="checked"',
-            $body
-        );
+        $this->assertXpath('//input[@type="checkbox" and @id="submitter" and @name="submitter" and @value="1" and @checked="checked"]');
     }
 
     public function testAuthorNotificationIsAvailable()
@@ -322,10 +319,7 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
 
         $this->assertContains('submitter@localhost.de', $body);
         $this->assertContains('author@localhost.de', $body);
-        $this->assertContains(
-            '<input type="checkbox" name="author_1" id="author_1" value="1" checked="checked"',
-            $body
-        );
+        $this->assertXpath('//input[@type="checkbox" and @id="author_0" and @name="author_0" and @value="1" and @checked="checked"]');
     }
 
     public function testSubmitterNotificationIsNotAvailable()
@@ -339,14 +333,8 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
 
         $this->assertNotContains('submitter@localhost.de', $body);
         $this->assertContains('author@localhost.de', $body);
-        $this->assertContains(
-            '<input type="checkbox" name="submitter" id="submitter" value="1" disabled="1"',
-            $body
-        );
-        $this->assertContains(
-            '<input type="checkbox" name="author_1" id="author_1" value="1" checked="checked"',
-            $body
-        );
+        $this->assertXpath('//input[@type="checkbox" and @id="submitter" and @name="submitter" and @value="1" and @disabled="disabled"]');
+        $this->assertXpath('//input[@type="checkbox" and @id="author_0" and @name="author_0" and @value="1" and @checked="checked"]');
     }
 
     public function testAuthorNotificationIsNotAvailable()
@@ -360,14 +348,8 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
 
         $this->assertContains('submitter@localhost.de', $body);
         $this->assertNotContains('author@localhost.de', $body);
-        $this->assertContains(
-            '<input type="checkbox" name="submitter" id="submitter" value="1" checked="checked"',
-            $body
-        );
-        $this->assertContains(
-            '<input type="checkbox" name="author_1" id="author_1" value="1" disabled="1"',
-            $body
-        );
+        $this->assertXpath('//input[@type="checkbox" and @id="submitter" and @name="submitter" and @value="1" and @checked="checked"]');
+        $this->assertXpath('//input[@type="checkbox" and @id="author_0" and @name="author_0" and @value="1" and @disabled="disabled"]');
     }
 
     public function testAuthorNotificationForMultipleAuthors()
@@ -405,21 +387,11 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
         $this->assertContains('A@localhost.de', $body);
         $this->assertContains('C@localhost.de', $body);
 
-        $this->assertContains(
-            '<input type="checkbox" name="submitter" id="submitter" value="1" checked="checked"', $body
-        );
-        $this->assertContains(
-            '<input type="checkbox" name="author_1" id="author_1" value="1" checked="checked"', $body
-        );
-        $this->assertContains(
-            '<input type="checkbox" name="author_2" id="author_2" value="1" checked="checked"', $body
-        );
-        $this->assertContains(
-            '<input type="checkbox" name="author_3" id="author_3" value="1" disabled="1"', $body
-        );
-        $this->assertContains(
-            '<input type="checkbox" name="author_4" id="author_4" value="1" checked="checked"', $body
-        );
+        $this->assertXpath('//input[@type="checkbox" and @id="submitter" and @name="submitter" and @value="1" and @checked="checked"]');
+        $this->assertXpath('//input[@type="checkbox" and @id="author_0" and @name="author_0" and @value="1" and @checked="checked"]');
+        $this->assertXpath('//input[@type="checkbox" and @id="author_1" and @name="author_1" and @value="1" and @checked="checked"]');
+        $this->assertXpath('//input[@type="checkbox" and @id="author_2" and @name="author_2" and @value="1" and @disabled="disabled"]');
+        $this->assertXpath('//input[@type="checkbox" and @id="author_3" and @name="author_3" and @value="1" and @checked="checked"]');
     }
 
     public function testShowDocInfoOnConfirmationPage()

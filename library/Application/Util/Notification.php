@@ -48,6 +48,8 @@ class Application_Util_Notification extends Application_Model_Abstract
      * @param boolean $notifySubmitter Wenn false, wird der Submitter nicht notifiziert
      * @param array $notifyAuthors Bitmaske, die für jeden Autor (über den Index referenziert) angibt, ob ihm/ihr eine
      *                             E-Mail gesendet werden kann (wenn false, dann wird keine Notifizierung versendet)
+     *
+     * TODO this class should not collect recipients on its own -> recipients should be provided
      */
     public function prepareMail($document, $url, $notifySubmitter = true, $notifyAuthors = [])
     {
@@ -56,20 +58,7 @@ class Application_Util_Notification extends Application_Model_Abstract
         $logger->info("prepare notification email for document id " . $document->getId());
 
         $authorAddresses = [];
-        $authors = [];
-
-        $personAuthors = $document->getPersonAuthor();
-        if (!empty($personAuthors)) {
-            $index = 0;
-            foreach ($personAuthors as $author) {
-                // TODO Komma nur wenn FirstName present
-                $name = trim($author->getLastName() . ", " . $author->getFirstName());
-                array_push($authors, $name);
-
-                $index++;
-            }
-        }
-
+        $authors = $this->getAuthors($document);
         $title = $document->getMainTitle();
 
         $this->scheduleNotification(
@@ -79,6 +68,64 @@ class Application_Util_Notification extends Application_Model_Abstract
         );
 
         $logger->info("notification mail creation was completed successfully");
+    }
+
+    /**
+     * @param $document
+     * @param $url
+     * @param $recipients
+     *
+     * TODO this function is only used for PublicatioNotification at the moment - cleanup!
+     */
+    public function prepareMailFor($document, $url, $recipients)
+    {
+        $logger = $this->getLogger();
+
+        $logger->info("prepare notification email for document id " . $document->getId());
+
+        $authors = $this->getAuthors($document);
+
+        $title = $document->getMainTitle();
+
+        // TODO currently we need to convert between the old and new array structure
+        // TODO the components and interfaces involved need to be defined clearly
+
+        $converted = [];
+
+        foreach ($recipients as $address => $recipient) {
+            $entry = [];
+            $entry['address'] = $address;
+
+            if (is_array($recipient['name'])) {
+                $entry['name'] = $recipient['name'][0]; // TODO only use name of first address occurence
+            } else {
+                $entry['name'] = $recipient['name'];
+            }
+        }
+
+        $this->scheduleNotification(
+            $this->getMailSubject($document->getId(), $authors, $title),
+            $this->getMailBody($document->getId(), $authors, $title, $url),
+            $converted
+        );
+
+        $logger->info("notification mail creation was completed successfully");
+    }
+
+    public function getAuthors($document)
+    {
+        $authors = [];
+
+        $personAuthors = $document->getPersonAuthor();
+        if (!empty($personAuthors)) {
+            foreach ($personAuthors as $author) {
+                // TODO Komma nur wenn FirstName present
+                $name = trim($author->getLastName() . ", " . $author->getFirstName());
+                array_push($authors, $name);
+            }
+        }
+
+        return $authors;
     }
 
     private function getMailSubject($docId, $authors, $title)

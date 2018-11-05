@@ -89,7 +89,9 @@ class Admin_Form_Notification extends Admin_Form_AbstractDocumentSubForm
             $option = $this->personToArray($submitters[0]);
             $option['value'] = 'submitter';
             $option['type'] = $translator->translate('admin_workflow_notification_submitter');
+            $option['checked'] = 1;
             $options['submitter'] = $option;
+
         }
 
         $authors = $document->getPersonAuthor();
@@ -110,6 +112,7 @@ class Admin_Form_Notification extends Admin_Form_AbstractDocumentSubForm
                     $option['value'] = 'author_' . $index;
                     $pos = $index + 1;
                     $option['type'] = "$pos. {$translator->translate('admin_workflow_notification_author')}";
+                    $option['checked'] = ($pos = 1) ? '1' : '0';
                     $options[] = $option;
                 }
             }

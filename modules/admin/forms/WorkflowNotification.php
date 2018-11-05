@@ -88,7 +88,6 @@ class Admin_Form_WorkflowNotification extends Admin_Form_YesNoForm
             $this->addSubForm($subform, 'notification');
         }
     }
-
     /**
      * Returns list of recipients for document state change notifications.
      *
@@ -113,7 +112,7 @@ class Admin_Form_WorkflowNotification extends Admin_Form_YesNoForm
 
     protected function addPersons(&$recipients, $persons, $role = 'author')
     {
-        foreach ($persons as $person) {
+        foreach ($persons as $index => $person) {
             $fullname = $person->getDisplayName();
             $email = $person->getEmail();
             if (strlen(trim($email)) > 0) {
@@ -152,5 +151,37 @@ class Admin_Form_WorkflowNotification extends Admin_Form_YesNoForm
                 }
             }
         }
+    }
+
+    /**
+     * Returns the recipients that have been selected in the form.
+     * @return
+     */
+    public function getSelectedRecipients($document, $post)
+    {
+        $recipients = [];
+
+        $authors = $document->getPersonAuthor();
+
+        $selected = [];
+
+        // TODO $post = $this->getValues();
+
+        foreach ($authors as $index => $author) {
+            $key = "author_$index";
+            if (isset($post[$key]) && $post[$key] == '1') {
+                $selected[] = $authors[$index];
+            }
+        }
+
+        if (count($selected) > 0) {
+            $this->addPersons($recipients, $selected, 'author');
+        }
+
+        if (isset($post['submitter']) && $post['submitter'] == '1') {
+            $this->addPersons($recipients, [$document->getPersonSubmitter(0)], 'submitter');
+        }
+
+        return $recipients;
     }
 }
