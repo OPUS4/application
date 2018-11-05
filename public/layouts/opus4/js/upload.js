@@ -30,21 +30,24 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+/**
+ * Array with messages for the client-sided validation.
+ * @type {Array}
+ */
+var opus4Messages = [];
+opus4Messages["uploadedFileHasErrorMessage"] = "The file '%name%' has the following errors:";
+opus4Messages["fileExtensionFalse"] = "The extension of file is not allowed.";
+opus4Messages["fileUploadErrorSize"] = "The size of file is not allowed. Choose a file with less then \'%size%\' byte.";
+opus4Messages["filenameLengthError"] = "The length of your filename is too long. Your filename should have less then \'%size%\' characters.";
+opus4Messages["filenameFormatError"] = "Your filename has not allowed characters or a wrong form.";
+opus4Messages["chooseAnotherFile"] = "Please choose another file.";
+
 $(function () {
     var fileElem = $("input:file")[0];
     var maxFileSize = $("input[name=MAX_FILE_SIZE]").val();
 
     if (typeof fileElem !== "undefined") {
         fileElem.validFileExtensions = null; // nichts erlaubt, wird auf Publishseite überschrieben
-        fileElem.errorMessages = {
-            fileNameError : "The file \'%name%\' has the following errors:",
-            invalidFileType: "The extension of file is not allowed.",
-            invalidFileSize: "The size of file is not allowed. Choose a file with less then \'%size%\' byte.",
-            invalidFilenameLength: "The length of your filename is too long. Your filename should have less then \'%size%\' characters.",
-            invalidFilenameFormat: "Your filename has not allowed characters or a wrong form.",
-            anotherFile: "Please choose another file."
-        };
-
 
         fileElem.onchange = function () {
             var filepath = this.value.split("\\");
@@ -56,24 +59,24 @@ $(function () {
 
             var ext = filename.match(/\.([^\.]+)$/);
             if (fileElem.validFileExtensions != null && (ext == null || $.inArray(ext[1], this.validFileExtensions) === -1)) {
-                errors.push(fileElem.errorMessages["invalidFileType"]);
+                errors.push(opus4Messages["fileExtensionFalse"]);
             }
 
             if (fileSize > maxFileSize) {
-                errors.push(fileElem.errorMessages["invalidFileSize"].replace("%size%", maxFileSize));
+                errors.push(opus4Messages["fileUploadErrorSize"].replace("%size%", maxFileSize));
             }
 
             if (pattern.test(filename) === false) {
-                errors.push(fileElem.errorMessages["invalidFilenameFormat"]);
+                errors.push(opus4Messages["filenameFormatError"]);
             }
 
             if (filename.length > maxFileNameSize && maxFileNameSize > 0) {
-                errors.push(fileElem.errorMessages["invalidFilenameLength"].replace("%size%", maxFileNameSize));
+                errors.push(opus4Messages["filenameLengthError"].replace("%size%", maxFileNameSize));
             }
 
             if (errors.length !== 0) {
-                errors.unshift(fileElem.errorMessages["fileNameError"].replace("%name%", filename));
-                errors.push(fileElem.errorMessages["anotherFile"]);
+                errors.unshift(opus4Messages["uploadedFileHasErrorMessage"].replace("%name%", filename));
+                errors.push(opus4Messages["chooseAnotherFile"]);
 
                 alert(errors.join("\n"));
                 this.value = null;

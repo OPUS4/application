@@ -107,9 +107,9 @@
                 var actual = cells[2];
                 var result = cells[3];
                 if (isbnValidator.validateISBN13(ISBN) === true) {
-                    actual.innerHTML = "True";
+                    actual.innerHTML = "Valid";
                 } else {
-                    actual.innerHTML = "False";
+                    actual.innerHTML = "Invalid";
                 }
                 if (actual.innerHTML === expectation.innerHTML) {
                     result.innerHTML = 'Passed';
@@ -133,9 +133,9 @@
                 var actual = cells[2];
                 var result = cells[3];
                 if (isbnValidator.validateISBN10(ISBN) === true) {
-                    actual.innerHTML = "True";
+                    actual.innerHTML = "Valid";
                 } else {
-                    actual.innerHTML = "False";
+                    actual.innerHTML = "Invalid";
                 }
                 if (actual.innerHTML === expectation.innerHTML) {
                     result.innerHTML = 'Passed';
@@ -159,9 +159,9 @@
                 var actual = cells[2];
                 var result = cells[3];
                 if (isbnValidator.validateISBN(ISBN) === true) {
-                    actual.innerHTML = "True";
+                    actual.innerHTML = "Valid";
                 } else {
-                    actual.innerHTML = "False";
+                    actual.innerHTML = "Invalid";
                 }
                 if (actual.innerHTML === expectation.innerHTML) {
                     result.innerHTML = 'Passed';
@@ -185,7 +185,7 @@
         <thead>
         <tr>
             <th>ISBN</th>
-            <th>Valid</th>
+            <th>Expectation</th>
             <th>Actual</th>
             <th>Result</th>
         </tr>
@@ -193,127 +193,123 @@
         <tbody>
         <tr>
             <td>3-935024-10-X</td>
-            <td>True</td>
+            <td>Valid</td>
         </tr>
         <tr>
             <td>393502410X</td>
-            <td>True</td>
+            <td>Valid</td>
         </tr>
         <tr>
             <td>3-86680-192-0</td>
-            <td>True</td>
+            <td>Valid</td>
         </tr>
         <tr>
             <td>3-937602-69-0</td>
-            <td>True</td>
+            <td>Valid</td>
         </tr>
         <tr>
             <td>3 86680 192 0</td>
-            <td>True</td>
+            <td>Valid</td>
         </tr>
         <tr>
             <td>3 937602 69 0</td>
-            <td>True</td>
+            <td>Valid</td>
         </tr>
         <tr>
             <td>978-3-86680-192-9</td>
-            <td>True</td>
+            <td>Valid</td>
         </tr>
         <tr>
             <td>3-937602-69-0</td>
-            <td>True</td>
+            <td>Valid</td>
         </tr>
         <tr>
             <td>978-5-7931-8163-1</td>
-            <td>True</td>
+            <td>Valid</td>
         </tr>
         <tr>
             <td>978-979-3182-63-6</td>
-            <td>True</td>
+            <td>Valid</td>
         </tr>
         <tr>
             <td>978 3 86680 192 9</td>
-            <td>True</td>
+            <td>Valid</td>
         </tr>
         <tr>
             <td>978 5 7931 8163 1</td>
-            <td>True</td>
+            <td>Valid</td>
         </tr>
         <tr>
             <td>978 979 3182 63 6</td>
-            <td>True</td>
+            <td>Valid</td>
         </tr>
         <tr>
             <td>978-3-86680-192-9</td>
-            <td>True</td>
+            <td>Valid</td>
         </tr>
         <tr>
             <td>9789793182636</td>
-            <td>True</td>
+            <td>Valid</td>
         </tr>
         <tr>
             <td>null</td>
-            <td>False</td>
+            <td>Invalid</td>
         </tr>
         <tr>
             <td></td>
-            <td>False</td>
+            <td>Invalid</td>
         </tr>
         <tr>
             <td>4711</td>
-            <td>False</td>
+            <td>Invalid</td>
         </tr>
         <tr>
             <td>true</td>
-            <td>False</td>
+            <td>Invalid</td>
         </tr>
         <tr>
             <td>4711-0815</td>
-            <td>False</td>
+            <td>Invalid</td>
         </tr>
         <tr>
             <td>980-3-86680-192-9</td>
-            <td>False</td>
+            <td>Invalid</td>
         </tr>
         <tr>
             <td>978-3-86680-192-5</td>
-            <td>False</td>
+            <td>Invalid</td>
         </tr>
         <tr>
             <td>978 3 86680-192-9</td>
-            <td>False</td>
+            <td>Invalid</td>
         </tr>
         <tr>
             <td>null</td>
-            <td>False</td>
+            <td>Invalid</td>
         </tr>
         <tr>
             <td></td>
-            <td>False</td>
+            <td>Invalid</td>
         </tr>
         <tr>
             <td>4711</td>
-            <td>False</td>
-        </tr>
-        <tr>
-            <td>true</td>
-            <td>False</td>
+            <td>Invalid</td>
         </tr>
         <tr>
             <td>4711-0815</td>
-            <td>False</td>
+            <td>Invalid</td>
         </tr>
         <tr>
             <td>3-86680-192-5</td>
-            <td>False</td>
+            <td>Invalid</td>
         </tr>
         <tr>
             <td>3 86680 192-0</td>
-            <td>False</td>
+            <td>Invalid</td>
         </tr>
         <tr>
             <td>3-86680-1902-0</td>
-            <td>False</td>
+            <td>Invalid</td>
         </tr>
     </table>
 
@@ -330,67 +326,67 @@
         <tbody>
         <tr>
             <td>3-935024-10-X</td>
-            <td>True</td>
+            <td>Valid</td>
         </tr>
         <tr>
             <td>393502410X</td>
-            <td>True</td>
+            <td>Valid</td>
         </tr>
         <tr>
             <td>3-86680-192-0</td>
-            <td>True</td>
+            <td>Valid</td>
         </tr>
         <tr>
             <td>3-937602-69-0</td>
-            <td>True</td>
+            <td>Valid</td>
         </tr>
         <tr>
             <td>3 86680 192 0</td>
-            <td>True</td>
+            <td>Valid</td>
         </tr>
         <tr>
             <td>3 937602 69 0</td>
-            <td>True</td>
+            <td>Valid</td>
         </tr>
         <tr>
             <td>39376026940</td>
-            <td>False</td>
+            <td>Invalid</td>
         </tr>
         <tr>
             <td>null</td>
-            <td>False</td>
+            <td>Invalid</td>
         </tr>
         <tr>
             <td></td>
-            <td>False</td>
+            <td>Invalid</td>
         </tr>
         <tr>
             <td>4711</td>
-            <td>False</td>
+            <td>Invalid</td>
         </tr>
         <tr>
             <td>true</td>
-            <td>False</td>
+            <td>Invalid</td>
         </tr>
         <tr>
             <td>4711-0815</td>
-            <td>False</td>
+            <td>Invalid</td>
         </tr>
         <tr>
             <td>978-3-86680-192-9</td>
-            <td>False</td>
+            <td>Invalid</td>
         </tr>
         <tr>
             <td>3-86680-192-5</td>
-            <td>False</td>
+            <td>Invalid</td>
         </tr>
         <tr>
             <td>3 86680 192-0</td>
-            <td>False</td>
+            <td>Invalid</td>
         </tr>
         <tr>
             <td>3-86680-1902-0</td>
-            <td>False</td>
+            <td>Invalid</td>
         </tr>
     </table>
 
@@ -407,67 +403,67 @@
         <tbody>
         <tr>
             <td>978-3-86680-192-9</td>
-            <td>True</td>
+            <td>Valid</td>
         </tr>
         <tr>
             <td>978-5-7931-8163-1</td>
-            <td>True</td>
+            <td>Valid</td>
         </tr>
         <tr>
             <td>978-979-3182-63-6</td>
-            <td>True</td>
+            <td>Valid</td>
         </tr>
         <tr>
             <td>978 3 86680 192 9</td>
-            <td>True</td>
+            <td>Valid</td>
         </tr>
         <tr>
             <td>978 5 7931 8163 1</td>
-            <td>True</td>
+            <td>Valid</td>
         </tr>
         <tr>
             <td>978 979 3182 63 6</td>
-            <td>True</td>
+            <td>Valid</td>
         </tr>
         <tr>
             <td>9789793182636</td>
-            <td>True</td>
+            <td>Valid</td>
         </tr>
         <tr>
             <td>null</td>
-            <td>False</td>
+            <td>Invalid</td>
         </tr>
         <tr>
             <td></td>
-            <td>False</td>
+            <td>Invalid</td>
         </tr>
         <tr>
             <td>4711</td>
-            <td>False</td>
+            <td>Invalid</td>
         </tr>
         <tr>
             <td>true</td>
-            <td>False</td>
+            <td>Invalid</td>
         </tr>
         <tr>
             <td>4711-0815</td>
-            <td>False</td>
+            <td>Invalid</td>
         </tr>
         <tr>
             <td>980-3-86680-192-9</td>
-            <td>False</td>
+            <td>Invalid</td>
         </tr>
         <tr>
             <td>978-3-86680-192-5</td>
-            <td>False</td>
+            <td>Invalid</td>
         </tr>
         <tr>
             <td>978 3 86680-192-9</td>
-            <td>False</td>
+            <td>Invalid</td>
         </tr>
         <tr>
             <td>3-937602-69-0</td>
-            <td>False</td>
+            <td>Invalid</td>
         </tr>
     </table>
 </div>
