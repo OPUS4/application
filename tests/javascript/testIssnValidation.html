@@ -33,7 +33,6 @@
  * In this file, the ISBN-validation with JS is tested. To see the test-results, you have to open this file in a browser.
  * This tests the validateISSN() function.
  *
- * TODO Verständlichere Ausgaben bzw. Hinweis (true = valid, false = invalid)
  */
 -->
 
@@ -106,9 +105,9 @@
                 var actual = cells[2];
                 var result = cells[3];
                 if (issnValidator.validateISSN(ISSN) === true) {
-                    actual.innerHTML = "True";
+                    actual.innerHTML = "Valid";
                 } else {
-                    actual.innerHTML = "False";
+                    actual.innerHTML = "Invalid";
                 }
                 if (actual.innerHTML === expectation.innerHTML) {
                     result.innerHTML = 'Passed';
@@ -132,61 +131,61 @@
             <th>Test-ISSN</th>
             <th>Expectation</th>
             <th>Actual</th>
-            <th>Test-Result</th>
+            <th>Result</th>
         </tr>
         </thead>
         <tbody>
         <tr>
             <td>1050-124X</td>
-            <td>True</td>
+            <td>Valid</td>
         </tr>
         <tr>
             <td>0001-3218</td>
-            <td>True</td>
+            <td>Valid</td>
         </tr>
         <tr>
             <td>0025-5858</td>
-            <td>True</td>
+            <td>Valid</td>
         </tr>
         <tr>
             <td>1062-5127</td>
-            <td>True</td>
+            <td>Valid</td>
         </tr>
         <tr>
             <td>0317-8471</td>
-            <td>True</td>
+            <td>Valid</td>
         </tr>
         <tr>
             <td>12345478</td>
-            <td>False</td>
+            <td>Invalid</td>
         </tr>
         <tr>
             <td>null</td>
-            <td>False</td>
+            <td>Invalid</td>
         </tr>
         <tr>
             <td>true</td>
-            <td>False</td>
+            <td>Invalid</td>
         </tr>
         <tr>
             <td>12456-65478</td>
-            <td>False</td>
+            <td>Invalid</td>
         </tr>
         <tr>
             <td>123456789</td>
-            <td>False</td>
+            <td>Invalid</td>
         </tr>
         <tr>
             <td>1050 124X</td>
-            <td>False</td>
+            <td>Invalid</td>
         </tr>
         <tr>
             <td>1050_124X</td>
-            <td>False</td>
+            <td>Invalid</td>
         </tr>
         <tr>
             <td>1050-1242</td>
-            <td>False</td>
+            <td>Invalid</td>
         </tr>
         </tbody>
     </table>
