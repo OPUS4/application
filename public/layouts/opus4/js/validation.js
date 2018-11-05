@@ -31,14 +31,15 @@
  */
 
 /**
- * Defaults for messages.
+ * Array with messages for the client-sided validation.
+ * @type {Array}
  */
 var opus4Messages = [];
 opus4Messages["identifierInvalidCheckdigit"] = "The check digit of \'%value%\' is not valid";
 opus4Messages["identifierInvalidFormat"] = "\'%value%\' is malformed";
 
 /**
- * Class for ISBN validation.
+ * This function is the main-function for ISBN-validation and uses the specific validation for ISBN10 and ISBN13.
  *
  * TODO Validation and message generation are mixed. No function that simply tells me valid or not.
  */
@@ -102,6 +103,9 @@ IsbnValidation.prototype.validateISBN10 = function (value) {
     return true;
 };
 
+/**
+ * This function is used, to split the ISBN in its digits.
+ */
 IsbnValidation.prototype.splitIsbn = function (value) {
     var isbn = value.split(/(-|\s)/);
     var digits = [];
@@ -118,6 +122,9 @@ IsbnValidation.prototype.splitIsbn = function (value) {
     return digits;
 };
 
+/**
+ * The following two functions, calculates the checkdigits for ISBN10 and ISBN13.
+ */
 IsbnValidation.prototype.calculateCheckDigitISBN10 = function (value) {
     var z = value;
 
@@ -139,12 +146,11 @@ IsbnValidation.prototype.calculateCheckDigitISBN13 = function (value) {
 
 IsbnValidation.prototype.getMessage = function($key, value) {
     return opus4Messages[$key].replace("%value%", value);
-}
+};
 
 /**
  * Class for ISSN validation.
  */
-
 var IssnValidation = function () {
 };
 
@@ -171,6 +177,9 @@ IssnValidation.prototype.validateISSN = function (value) {
     return true;
 };
 
+/**
+ * This function calculates the checkdigit for a ISSN.
+ */
 IssnValidation.prototype.calculateCheckDigitISSN = function (value) {
     var z = value;
     var checkdigit = 0;
@@ -186,7 +195,7 @@ IssnValidation.prototype.calculateCheckDigitISSN = function (value) {
 
 IssnValidation.prototype.getMessage = function($key, value) {
     return opus4Messages[$key].replace("%value%", value);
-}
+};
 
 /**
  * Add validation functions to input fields for identifiers.
