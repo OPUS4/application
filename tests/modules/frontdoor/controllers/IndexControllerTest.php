@@ -363,6 +363,26 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
       $this->assertContains('/solrsearch/index/search/searchtype/series/id/1" ', $this->getResponse()->getBody());
    }
 
+   public function testSubjectSortOrder()
+   {
+       $this->dispatch('/frontdoor/index/index/docId/1');
+       $this->assertContains('Informationssystem; Geschichte; Ostwald, Wilhelm', $this->getResponse()->getBody());
+   }
+
+    public function testSubjectSortOrderAlphabetical()
+    {
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'frontdoor' => ['subjects' => ['alphabeticalSorting' => '1']]
+        ]));
+
+        // frontdoor.subjects.alphabeticalSorting
+
+        $this->dispatch('/frontdoor/index/index/docId/1');
+        $this->assertContains(
+            'Geschichte; Informations- und Dokumentationswissenschaft; Informationssystem',
+            $this->getResponse()->getBody()
+        );
+    }
    /**
     * Regression test for OPUSVIER-2232
     */
@@ -1208,6 +1228,28 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
             '&amp;as_ylo=2007&amp;as_yhi=2007', $body);
     }
 
+    public function testGoogleScholarOpenInNewWindowEnabled()
+    {
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
+            'googleScholar' => array('openInNewWindow' => 1)
+        )));
+        $this->dispatch('/frontdoor/index/index/docId/146');
+        $this->assertResponseCode(200);
+        $this->assertXpathCount('//a[contains(@href, "scholar.google.de") and @target = "_blank"]', 1);
+        $this->assertXpathCount('//a[contains(@href, "scholar.google.de") and not(@target)]', 0);
+    }
+
+    public function testGoogleScholarOpenInNewWindowDisabled()
+    {
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
+            'googleScholar' => array('openInNewWindow' => 0)
+        )));
+        $this->dispatch('/frontdoor/index/index/docId/146');
+        $this->assertResponseCode(200);
+        $this->assertXpathCount('//a[contains(@href, "scholar.google.de") and @target = "_blank"]', 0);
+        $this->assertXpathCount('//a[contains(@href, "scholar.google.de") and not(@target)]', 1);
+    }
+
     public function testShowDocumentWithFileWithoutLanguage() {
         $this->markTestIncomplete('OPUSVIER-3401');
         $doc = $this->createTestDocument();
@@ -1216,6 +1258,28 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $docId = $doc->store();
 
         $this->dispatch("/frontdoor/index/index/docId/$docId");
+    }
+
+    public function testTwitterOpenInNewWindowEnabled()
+    {
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
+            'twitter' => array('openInNewWindow' => 1)
+        )));
+        $this->dispatch('/frontdoor/index/index/docId/146');
+        $this->assertResponseCode(200);
+        $this->assertXpathCount('//a[contains(@href, "twitter.com") and @target = "_blank"]', 1);
+        $this->assertXpathCount('//a[contains(@href, "twitter.com") and not(@target)]', 0);
+    }
+
+    public function testTwitterOpenInNewWindowDisabled()
+    {
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
+            'twitter' => array('openInNewWindow' => 0)
+        )));
+        $this->dispatch('/frontdoor/index/index/docId/146');
+        $this->assertResponseCode(200);
+        $this->assertXpathCount('//a[contains(@href, "twitter.com") and @target = "_blank"]', 0);
+        $this->assertXpathCount('//a[contains(@href, "twitter.com") and not(@target)]', 1);
     }
 
     public function testUnableToTranslate() {

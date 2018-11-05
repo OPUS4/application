@@ -269,6 +269,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_workflow_notification_submitter_and_author">
+      <tuv xml:lang="en">
+        <seg>Submitter and %1$s. author</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Einsteller und %1$s. Autor</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="admin_workflow_notification_author">
       <tuv xml:lang="en">
         <seg>Author</seg>

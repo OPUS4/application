@@ -27,7 +27,7 @@
  * @category    Application
  * @package     Application_Configuration
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017
+ * @copyright   Copyright (c) 2017-2018
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  *
  * Class for handling file type configuration.
@@ -48,7 +48,8 @@ class Application_Controller_Action_Helper_FileTypes extends Application_Control
      *
      * @return mixed
      */
-    public function getValidMimeTypes() {
+    public function getValidMimeTypes()
+    {
         if (is_null($this->_validMimeTypes))
         {
 
@@ -70,6 +71,50 @@ class Application_Controller_Action_Helper_FileTypes extends Application_Control
         }
 
         return $this->_validMimeTypes;
+    }
+
+    /**
+     * Checks if a MIME-type is allowed for OPUS 4 files.
+     *
+     * @param $mimeType
+     * @return bool
+     *
+     * TODO more efficient method to check?
+     * TODO differentiate between extension/mime type not allowed or mime type does not match extension
+     */
+    public function isValidMimeType($mimeType, $extension = null)
+    {
+        $mimeTypes = $this->getValidMimeTypes();
+
+        if (!is_null($extension)) {
+            if (isset($mimeTypes[$extension])) {
+                $mimeTypes = $mimeTypes[$extension];
+            }
+            else {
+                // unknown extension
+                return false;
+            }
+
+            if (is_array($mimeTypes)) {
+                return in_array($mimeType, $mimeTypes);
+            }
+            else {
+                return $mimeType === $mimeTypes;
+            }
+        }
+        else {
+            if (in_array($mimeType, $mimeTypes)) {
+                return true;
+            } else {
+                foreach ($mimeTypes as $extension => $types) {
+                    if (is_array($types) && in_array($mimeType, $types)) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -98,5 +143,4 @@ class Application_Controller_Action_Helper_FileTypes extends Application_Control
 
         return $contentDisposition;
     }
-
 }

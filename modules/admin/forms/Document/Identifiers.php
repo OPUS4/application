@@ -31,9 +31,11 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Admin_Form_Document_Identifiers extends Admin_Form_Document_Section {
+class Admin_Form_Document_Identifiers extends Admin_Form_Document_Section
+{
 
-    public function init() {
+    public function init()
+    {
         parent::init();
 
         // visueller Balken, der den Anfang des Identifier-Blocks markiert
@@ -69,9 +71,6 @@ class Admin_Form_Document_Identifiers extends Admin_Form_Document_Section {
                 )
             ),
             'Identifiers'
-        );     
+        );
     }
-
-
-
 }

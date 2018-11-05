@@ -107,11 +107,11 @@
                       <xsl:choose>
                           <xsl:when test="normalize-space(@Label)">
                               <xsl:value-of select="@Label" />
-                          </xsl:when>  
+                          </xsl:when>
                           <xsl:otherwise>
                               <xsl:value-of select="@PathName" />
                           </xsl:otherwise>
-                      </xsl:choose>  
+                      </xsl:choose>
                       <xsl:text> (</xsl:text>
                       <xsl:value-of select="@MimeType" />
                       <xsl:text>)</xsl:text>
@@ -155,13 +155,13 @@
       </li>
    </xsl:template>
 
-   <!--Named Templates for the service block (MailToAuthor, AdditionalServices, ExportFunctions).--> 
-     
+   <!--Named Templates for the service block (MailToAuthor, AdditionalServices, ExportFunctions).-->
+
    <xsl:template name="MailToAuthor">
       <xsl:if test ="$isMailPossible">
          <xsl:element name="br"/>
          <xsl:element name="a">
-            <!--TODO: Use Zend Url-Helper to build href attribute--> 
+            <!--TODO: Use Zend Url-Helper to build href attribute-->
             <xsl:attribute name="href">
                <xsl:value-of select="$baseUrl"/>
                <xsl:text>/frontdoor/mail/toauthor/docId/</xsl:text>
@@ -174,9 +174,9 @@
       </xsl:if>
    </xsl:template>
 
-   <!--Named template for services-buttons--> 
+   <!--Named template for services-buttons-->
    <xsl:template name="AdditionalServices">
-      <!--Twitter--> 
+      <!--Twitter-->
       <xsl:variable name="frontdoor_share_twitter">
          <xsl:call-template name="translateString">
             <xsl:with-param name="string">frontdoor_share_twitter</xsl:with-param>
@@ -188,6 +188,11 @@
             <xsl:text disable-output-escaping="yes">http://twitter.com/share?url=</xsl:text><xsl:value-of select="$baseUrlServer"/><xsl:text>/frontdoor/index/index/docId/</xsl:text>
             <xsl:value-of select="@Id" />
          </xsl:attribute>
+          <xsl:if test="php:functionString('Application_Xslt::optionEnabled', 'twitter.openInNewWindow')">
+              <xsl:attribute name="target">
+                  <xsl:text>_blank</xsl:text>
+              </xsl:attribute>
+          </xsl:if>
          <img>
             <xsl:attribute name="src">
                <xsl:value-of select="$layoutPath"/>
@@ -209,7 +214,7 @@
       <!--google-scholar-->
       <xsl:if test="normalize-space(TitleMain/@Value)">
          <xsl:element name="a">
-            <!--TODO: Use Zend Url-Helper to build href attribute--> 
+            <!--TODO: Use Zend Url-Helper to build href attribute-->
             <xsl:attribute name="href">
                 <xsl:text disable-output-escaping="yes">http://scholar.google.de/scholar?hl=</xsl:text>
                 <xsl:value-of select="php:functionString('Application_Xslt::locale')" />
@@ -222,6 +227,11 @@
                 <xsl:text>&amp;as_yhi=</xsl:text>       <!-- as_yhi: gibt die obere Grenze des Suchzeitraums an-->
                 <xsl:call-template name="DateUrl" />
             </xsl:attribute>
+             <xsl:if test="php:functionString('Application_Xslt::optionEnabled', 'googleScholar.openInNewWindow')">
+                 <xsl:attribute name="target">
+                     <xsl:text>_blank</xsl:text>
+                 </xsl:attribute>
+             </xsl:if>
             <xsl:element name="img">
                <xsl:attribute name="src">
                   <xsl:value-of select="$layoutPath"/><xsl:text>/img/google_scholar.jpg</xsl:text>
@@ -274,7 +284,7 @@
    <xsl:template name="ExportFunctions">
         <xsl:value-of disable-output-escaping="yes" select="php:function('Application_Xslt::exportLinks', 'docId', 'frontdoor')" />
    </xsl:template>
-    
+
    <xsl:template name="PrintOnDemand">
       <a>
          <xsl:attribute name="href">

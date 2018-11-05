@@ -67,6 +67,11 @@ class Application_Configuration {
     private $_tempPath = null;
 
     /**
+     * @var string
+     */
+    private $defaultLanguage = null;
+
+    /**
      * @var Application_Configuration
      */
     private static $_instance;
@@ -162,13 +167,27 @@ class Application_Configuration {
      * @return string
      */
     public function getDefaultLanguage() {
-        if ($this->isLanguageSelectionEnabled()) {
-            return self::DEFAULT_LANGUAGE;
-        }
-        else {
+        if (is_null($this->defaultLanguage)) {
             $languages = $this->getSupportedLanguages();
-            return $languages[0];
+            $this->defaultLanguage = $languages[0];
+
+            if ($this->isLanguageSelectionEnabled()) {
+                $locale = new Zend_Locale();
+                $language = $locale->getDefault();
+                if (is_array($language) and count($language) > 0) {
+                    reset($language);
+                    $language = key($language);
+                } else {
+                    $language = self::DEFAULT_LANGUAGE;
+                }
+
+                if ($this->isLanguageSupported($language)) {
+                    $this->defaultLanguage = $language;
+                }
+            }
         }
+
+        return $this->defaultLanguage;
     }
 
     /**

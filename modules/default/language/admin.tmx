@@ -23,7 +23,7 @@
         <seg>Dateien</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_document_frontdoor">
       <tuv xml:lang="en">
         <seg>Frontdoor</seg>
@@ -41,7 +41,7 @@
         <seg>Administration</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_title_setup">
       <tuv xml:lang="en">
         <seg>Setup</seg>
@@ -50,7 +50,7 @@
         <seg>Oberflächenanpassungen</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_button_add">
       <tuv xml:lang="en">
         <seg>Add</seg>
@@ -59,7 +59,7 @@
         <seg>Hinzufügen</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_button_remove">
       <tuv xml:lang="en">
         <seg>Remove</seg>
@@ -68,7 +68,7 @@
         <seg>Entfernen</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_button_edit">
       <tuv xml:lang="en">
         <seg>Edit</seg>
@@ -77,7 +77,7 @@
         <seg>Editieren</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_button_generate">
       <tuv xml:lang="en">
         <seg>Generate now</seg>
@@ -95,7 +95,7 @@
         <seg>Erster</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_button_move_up">
       <tuv xml:lang="en">
         <seg>Up</seg>
@@ -104,7 +104,7 @@
         <seg>Hoch</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_button_move_down">
       <tuv xml:lang="en">
         <seg>Down</seg>
@@ -113,7 +113,7 @@
         <seg>Runter</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_button_move_last">
       <tuv xml:lang="en">
         <seg>Last</seg>
@@ -122,7 +122,7 @@
         <seg>Letzter</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_button_sort">
       <tuv xml:lang="en">
         <seg>Accept Sort Order</seg>
@@ -168,6 +168,33 @@
             </tuv>
         </tu>
 
-  </body>
+        <tu tuid="admin_document_create">
+            <tuv xml:lang="en">
+                <seg>Create</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Neu</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="admin_document_create_tooltip">
+            <tuv xml:lang="en">
+                <seg>Create new document and open it for editing.</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Neues document erzeugen und zum Editieren öffnen.</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="admin_document_copy">
+            <tuv xml:lang="en">
+                <seg>Duplicate</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Duplizieren</seg>
+            </tuv>
+        </tu>
+
+    </body>
 
 </tmx>

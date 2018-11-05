@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -28,73 +27,79 @@
  * @category    Application
  * @package     Module_Publish Unit Test
  * @author      Susanne Gottwald <gottwald@zib.de>
- * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
-class Publish_Model_ValidationTest extends ControllerTestCase{
+class Publish_Model_ValidationTest extends ControllerTestCase
+{
 
     private $session;
 
-    public function setUp() {
+    public function setUp()
+    {
         parent::setUp();
         $this->session = new Zend_Session_Namespace();
     }
 
-    public function testValidationWithInvalidDatatype() {
+    public function testValidationWithInvalidDatatype()
+    {
         $val = new Publish_Model_Validation('Irgendwas', $this->session);
         $val->validate();
 
         $this->assertInternalType('array', $val->validator);
     }
 
-    public function testValidationWithCollectionWithoutCollectionRole() {
+    public function testValidationWithCollectionWithoutCollectionRole()
+    {
         $val = new Publish_Model_Validation('Collection', $this->session);
         $val->validate();
         $validator = $val->validator[0];
 
         $this->assertNull($validator);
-
     }
 
-    public function testValidationWithDateDatatype() {
+    public function testValidationWithDateDatatype()
+    {
         $val = new Publish_Model_Validation('Date', $this->session);
         $val->validate();
         $validator = $val->validator[0];
 
         $this->assertInstanceOf('Zend_Validate_Date', $validator);
-
     }
 
-    public function testValidationWithEmailDatatype() {
+    public function testValidationWithEmailDatatype()
+    {
         $val = new Publish_Model_Validation('Email', $this->session);
         $val->validate();
         $validator = $val->validator[0];
 
         $this->assertInstanceOf('Zend_Validate_EmailAddress', $validator);
-
     }
 
-    public function testValidationWithEnrichmentDatatype() {
+    /**
+     * TODO fix unused variable - What is this test doing?
+     */
+    public function testValidationWithEnrichmentDatatype()
+    {
         $val = new Publish_Model_Validation('Enrichment', $this->session);
         $val->validate();
         $validator = $val->validator[0];
 
         $this->assertNull($val->validator);
-
     }
 
-    public function testValidationWithIntegerDatatype() {
+    public function testValidationWithIntegerDatatype()
+    {
         $val = new Publish_Model_Validation('Integer', $this->session);
         $val->validate();
         $validator = $val->validator[0];
 
         $this->assertInstanceOf('Zend_Validate_Int', $validator);
-
     }
 
-    public function testValidationWithLanguageDatatype() {
+    public function testValidationWithLanguageDatatype()
+    {
         $val = new Publish_Model_Validation('Language', $this->session);
         $val->validate();
         $validator = $val->validator[0];
@@ -102,7 +107,8 @@ class Publish_Model_ValidationTest extends ControllerTestCase{
         $this->assertInstanceOf('Zend_Validate_InArray', $validator);
     }
 
-    public function testValidationWithLicenceDatatype() {
+    public function testValidationWithLicenceDatatype()
+    {
         $val = new Publish_Model_Validation('Licence', $this->session);
         $val->validate();
         $validator = $val->validator[0];
@@ -110,8 +116,9 @@ class Publish_Model_ValidationTest extends ControllerTestCase{
         $this->assertInstanceOf('Zend_Validate_InArray', $validator);
     }
 
-    public function testValidationWithListDatatype() {
-        $options = array();
+    public function testValidationWithListDatatype()
+    {
+        $options = [];
         $options['eins'] = 'eins';
         $options['zwei'] = 'zwei';
 
@@ -122,14 +129,16 @@ class Publish_Model_ValidationTest extends ControllerTestCase{
         $this->assertInstanceOf('Zend_Validate_InArray', $validator);
     }
 
-    public function testValidationWithTextDatatype() {
+    public function testValidationWithTextDatatype()
+    {
         $val = new Publish_Model_Validation('Text', $this->session);
         $val->validate();
 
         $this->assertNull($val->validator);
     }
 
-    public function testValidationWithThesisGrantorDatatype() {
+    public function testValidationWithThesisGrantorDatatype()
+    {
         $val = new Publish_Model_Validation('ThesisGrantor', $this->session);
         $val->validate();
         $validator = $val->validator[0];
@@ -137,7 +146,8 @@ class Publish_Model_ValidationTest extends ControllerTestCase{
         $this->assertInstanceOf('Zend_Validate_InArray', $validator);
     }
 
-    public function testValidationWithThesisPublisherDatatype() {
+    public function testValidationWithThesisPublisherDatatype()
+    {
         $val = new Publish_Model_Validation('ThesisPublisher', $this->session);
         $val->validate();
         $validator = $val->validator[0];
@@ -145,14 +155,16 @@ class Publish_Model_ValidationTest extends ControllerTestCase{
         $this->assertInstanceOf('Zend_Validate_InArray', $validator);
     }
 
-    public function testValidationWithTitleDatatype() {
+    public function testValidationWithTitleDatatype()
+    {
         $val = new Publish_Model_Validation('Title', $this->session);
         $val->validate();
 
         $this->assertNull($val->validator);
     }
 
-    public function testValidationWithYearDatatype() {
+    public function testValidationWithYearDatatype()
+    {
         $val = new Publish_Model_Validation('Year', $this->session);
         $val->validate();
         $validator = $val->validator[0];
@@ -160,31 +172,32 @@ class Publish_Model_ValidationTest extends ControllerTestCase{
         $this->assertInstanceOf('Zend_Validate_GreaterThan', $validator);
     }
 
-    public function testSelectOptionsForInvalidDatatype() {
+    public function testSelectOptionsForInvalidDatatype()
+    {
         $val = new Publish_Model_Validation('Irgendwas', $this->session);
         $children = $val->selectOptions();
 
         $this->assertInternalType('array', $val->validator);
-
     }
 
-    public function testSelectOptionsForCollection() {
+    public function testSelectOptionsForCollection()
+    {
         $val = new Publish_Model_Validation('Collection', $this->session, 'jel');
         $children = $val->selectOptions('Collection');
 
         $this->assertArrayHasKey('6720', $children);
-
     }
 
-    public function testSelectOptionsForLanguage() {
+    public function testSelectOptionsForLanguage()
+    {
         $val = new Publish_Model_Validation('Language', $this->session);
         $children = $val->selectOptions();
 
         $this->assertArrayHasKey('deu', $children);
-
     }
 
-    public function testSelectOptionsForLicence() {
+    public function testSelectOptionsForLicence()
+    {
         $val = new Publish_Model_Validation('Licence', $this->session);
         $children = $val->selectOptions();
 
@@ -195,10 +208,11 @@ class Publish_Model_ValidationTest extends ControllerTestCase{
      * Tests that the sort order of the licences in the publish form matches
      * the sort order provided from the database.
      */
-    public function testSortOrderOfSelectOptionForLicence() {
+    public function testSortOrderOfSelectOptionForLicence()
+    {
         $licences = Opus_Licence::getAll();
 
-        $activeLicences = array();
+        $activeLicences = [];
 
         foreach($licences as $licence) {
             if ($licence->getActive() == '1') {
@@ -219,8 +233,9 @@ class Publish_Model_ValidationTest extends ControllerTestCase{
         }
     }
 
-    public function testSelectOptionsForList() {
-        $options = array();
+    public function testSelectOptionsForList()
+    {
+        $options = [];
         $options['eins'] = 'eins';
         $options['zwei'] = 'zwei';
 
@@ -230,89 +245,94 @@ class Publish_Model_ValidationTest extends ControllerTestCase{
         $this->assertArrayHasKey('eins', $children);
     }
 
-     public function testSelectOptionsForThesisGrantor() {
+     public function testSelectOptionsForThesisGrantor()
+     {
         $val = new Publish_Model_Validation('ThesisGrantor', $this->session);
         $children = $val->selectOptions();
 
         $this->assertArrayHasKey('1', $children);
-
     }
 
-    public function testSelectOptionsForThesisPublisher() {
+    public function testSelectOptionsForThesisPublisher()
+    {
         $val = new Publish_Model_Validation('ThesisPublisher', $this->session);
         $children = $val->selectOptions();
 
         $this->assertArrayHasKey('2', $children);
-
     }
-    
-    public function testInvisibleCollectionRoleDDC() {
+
+    public function testInvisibleCollectionRoleDDC()
+    {
         $val = new Publish_Model_Validation('Collection', $this->session, 'ddc');
-        
+
         $collectionRole = Opus_CollectionRole::fetchByName($val->collectionRole);
         $visibleFlag = $collectionRole->getVisible();
         $collectionRole->setVisible(0);
         $collectionRole->store();
-        
-        $children = $val->selectOptions('Collection');        
+
+        $children = $val->selectOptions('Collection');
         $this->assertNull($children);
-        
+
         $collectionRole->setVisible($visibleFlag);
         $collectionRole->store();
-        
     }
-    
-    public function testVisibleCollectionRoleDDC() {
+
+    public function testVisibleCollectionRoleDDC()
+    {
         $val = new Publish_Model_Validation('Collection', $this->session, 'ddc');
-        
+
         $collectionRole = Opus_CollectionRole::fetchByName($val->collectionRole);
         $visibleFlag = $collectionRole->getVisible();
         $collectionRole->setVisible(1);
         $collectionRole->store();
-        
-        $children = $val->selectOptions('Collection');        
-        $this->assertInternalType('array', $children);                       
+
+        $children = $val->selectOptions('Collection');
+        $this->assertInternalType('array', $children);
         $this->assertArrayHasKey('3', $children);
-        
+
         $collectionRole->setVisible($visibleFlag);
         $collectionRole->store();
     }
-    
+
     /**
-     * Regression Test for Ticket https://wiki.kobv.de/jira/browse/OPUSVIER-2209           
-     */     
-    public function testNonExistingCollectionRole() {
+     * Regression Test for Ticket https://wiki.kobv.de/jira/browse/OPUSVIER-2209
+     */
+    public function testNonExistingCollectionRole()
+    {
         $collRole = 'irgendwas';
         $val = new Publish_Model_Validation('Collection', $this->session, $collRole);
-        
+
         $this->assertNull($val->selectOptions());
     }
-    
-    public function testVisibleSeries() {
+
+    public function testVisibleSeries()
+    {
         $val = new Publish_Model_Validation('Series', $this->session);
-        
-        $children = $val->selectOptions('Series');        
-        $this->assertInternalType('array', $children);                       
+
+        $children = $val->selectOptions('Series');
+        $this->assertInternalType('array', $children);
         $this->assertArrayHasKey('4', $children);
-        //series with title: Visible Series                
+        //series with title: Visible Series
     }
-    
-     public function testInvisibleSeries() {
+
+    public function testInvisibleSeries()
+    {
         $val = new Publish_Model_Validation('Series', $this->session);
-        
-        $children = $val->selectOptions('Series');        
-        $this->assertInternalType('array', $children);                       
+
+        $children = $val->selectOptions('Series');
+        $this->assertInternalType('array', $children);
         $this->assertArrayNotHasKey('3', $children);
-        //series with title: Invisible Series                
+        //series with title: Invisible Series
     }
-    
-    public function testSortOrderOfSeries() {
+
+    public function testSortOrderOfSeries()
+    {
         $val = new Publish_Model_Validation('Series', $this->session);
         $values = $val->selectOptions();
-                
+
         $series = Opus_Series::getAllSortedBySortKey();
 
-        $visibleSeries = array();
+        $visibleSeries = [];
 
         foreach($series as $serie) {
             if ($serie->getVisible() == '1') {
@@ -327,19 +347,18 @@ class Publish_Model_ValidationTest extends ControllerTestCase{
             $this->assertEquals($name, $visibleSeries[$index]);
             $index++;
         }
-                    
     }
 
     /**
      * Testet, ob eine Collection, bei der visiblePublish=false gesetzt ist, im Publish-Modul ausgegeben wird.
      */
-    public function testCollectionFieldVisiblePublish() {
+    public function testCollectionFieldVisiblePublish()
+    {
         $collectionRole = new Opus_CollectionRole();
         $collectionRole->setName("test");
         $collectionRole->setOaiName("test");
         $collectionRole->setDisplayBrowsing("Name");
         $collectionRole->setDisplayFrontdoor("Name");
-        $collectionRole->setDisplayOai("Name");
         $collectionRole->setPosition(101);
         $collectionRole->setVisible(true);
         $collectionRole->store();
@@ -385,13 +404,13 @@ class Publish_Model_ValidationTest extends ControllerTestCase{
      * Wenn eine übergeordnete Collection (z.B. die Root-Collection) für das Attribut visiblePublish = false gesetzt ist,
      * sollen die Kinder auch unsichtbar sein im Publish-Modul.
      */
-    public function testRootCollectionFieldVisiblePublish() {
+    public function testRootCollectionFieldVisiblePublish()
+    {
         $collectionRole = new Opus_CollectionRole();
         $collectionRole->setName("test");
         $collectionRole->setOaiName("test");
         $collectionRole->setDisplayBrowsing("Name");
         $collectionRole->setDisplayFrontdoor("Name");
-        $collectionRole->setDisplayOai("Name");
         $collectionRole->setPosition(101);
         $collectionRole->setVisible(true);
         $collectionRole->store();
@@ -434,6 +453,4 @@ class Publish_Model_ValidationTest extends ControllerTestCase{
 
         $this->assertEquals(0, count($children), "root collection should be invisible in publish");
     }
-
 }
-

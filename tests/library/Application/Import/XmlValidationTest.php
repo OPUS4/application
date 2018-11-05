@@ -27,16 +27,18 @@
  * @category    Application Unit Tests
  * @package     Application
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Application_Import_XmlValidationTest extends ControllerTestCase {
+class Application_Import_XmlValidationTest extends ControllerTestCase
+{
 
     /**
      * Check if all 'import*.xml' files are valid.
      */
-    public function testValidation() {
+    public function testValidation()
+    {
         foreach (new DirectoryIterator(APPLICATION_PATH . '/tests/resources/import') as $fileInfo) {
             if ($fileInfo->getExtension() !== 'xsd' && !$fileInfo->isDot()
                     && strpos($fileInfo->getBasename(), 'import') === 0) {
@@ -46,7 +48,8 @@ class Application_Import_XmlValidationTest extends ControllerTestCase {
         }
     }
 
-    public function testValidation2() {
+    public function testValidation2()
+    {
         $xml = file_get_contents(APPLICATION_PATH . '/tests/resources/import/import2.xml');
         $this->_checkValid($xml, 'import2.xml');
     }
@@ -54,7 +57,8 @@ class Application_Import_XmlValidationTest extends ControllerTestCase {
     /**
      * TODO Check if all 'invalid-import*.xml' files are invalid.
      */
-    public function testInvalid() {
+    public function testInvalid()
+    {
         $validator = new Application_Import_XmlValidation();
 
         $xml = file_get_contents(APPLICATION_PATH . '/tests/resources/import/invalid-import1.xml');
@@ -66,10 +70,23 @@ class Application_Import_XmlValidationTest extends ControllerTestCase {
         $this->assertCount(1, $errors);
     }
 
-    private function _checkValid($xml, $name) {
+    public function testEnrichmentWithoutValueValid()
+    {
+        $validator = new Application_Import_XmlValidation();
+
+        $xml = file_get_contents(APPLICATION_PATH . '/tests/resources/import/enrichment-without-value.xml');
+
+        $this->assertTrue($validator->validate($xml));
+
+        $errors = $validator->getErrors();
+
+        $this->assertCount(0, $errors);
+    }
+
+    private function _checkValid($xml, $name)
+    {
         $validator = new Application_Import_XmlValidation();
 
         $this->assertTrue($validator->validate($xml), "Import XML file '$name' not valid.");
     }
-
 }

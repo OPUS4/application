@@ -25,88 +25,39 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Import
+ * @package     Application_Import
  * @author      Sascha Szott
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2016-2017
+ * @copyright   Copyright (c) 2016-2018
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
+ *
+ * Reads an OPUS import package containing one or more documents and imports
+ * the documents.
+ *
+ * Currently ZIP and TAR files are supported by extending classes.
  */
-class Application_Import_PackageReader {
+abstract class Application_Import_PackageReader
+{
 
     const METADATA_FILENAME = 'opus.xml';
-    
+
     private $additionalEnrichments;
-    
-    function __construct($additionalEnrichments) {
+
+    /**
+     * Sets additional enrichments that will be added to every imported document.
+     * @param $additionalEnrichments
+     */
+    public function setAdditionalEnrichments($additionalEnrichments)
+    {
         $this->additionalEnrichments = $additionalEnrichments;
     }
-    
-    public function readTarPackage($filename) {
-        $logger = Zend_Registry::get('Zend_Log');
-        if (!is_readable($filename)) {
-            $errMsg = 'TAR archive ' . $filename . ' is not readable!';
-            $logger->err($errMsg);
-            throw new Exception($errMsg);
-        }
-        
-        $xmlFile = 'phar://' . $filename . '/' . self::METADATA_FILENAME;
-        if (!file_exists($xmlFile)) {
-            return null;            
-        }
-        
-        $content = file_get_contents($xmlFile);
-        if (!$content || trim($content) == '') {
-            return null;
-        }
-        
-        $dirName = $this->createExtractionDir($filename, '.tar');
-        $phar = new PharData($filename);
-        $phar->extractTo($dirName);
-        
-        try {
-            $statusDoc = $this->processOpusXML($content, $dirName);
-        } finally {
-            $this->removeExtractionDir($dirName);
-        }
-        return $statusDoc;
-    }
 
-    public function readZipPackage($filename) {
-        $logger = Zend_Registry::get('Zend_Log');
-        $logger->info('processing zip package ' . $filename);
-        
-        if (!is_readable($filename)) {
-            $errMsg = 'ZIP archive ' . $filename . ' is not readable!';
-            $logger->err($errMsg);
-            throw new Exception($errMsg);
-        }
-                
-        $zip = new ZipArchive();
-        $zip->open($filename);
-        $stat = $zip->statName(self::METADATA_FILENAME);
-        $handle = $zip->getStream(self::METADATA_FILENAME);
-        if ($handle == false || $stat['size'] == 0) {
-            return null;
-        }
-        $content = fread($handle, $stat['size']);
-        if (trim($content) == '') {
-            return null;
-        }
-        
-        $dirName = $this->createExtractionDir($filename, '.zip');
-        $zip->extractTo($dirName);        
-        $zip->close();
-        
-        try {
-            $statusDoc = $this->processOpusXML($content, $dirName);
-        }
-        finally {
-            $this->removeExtractionDir($dirName);
-        }
-        return $statusDoc;
-    }
-    
-    private function removeExtractionDir($dirName) {
+    /**
+     * Removes the directory used for the extracted OPUS import package.
+     * @param $dirName
+     */
+    protected function removeExtractionDir($dirName)
+    {
         $files = array_diff(scandir($dirName), array('.','..'));
         foreach ($files as $file) {
             if (is_dir($dirName . DIRECTORY_SEPARATOR . $file)) {
@@ -117,32 +68,43 @@ class Application_Import_PackageReader {
             }
         }
         rmdir($dirName);
-  } 
-    
-    private function createExtractionDir($filename, $packageType) {
-        $dirName = dirname($filename) . DIRECTORY_SEPARATOR . basename($filename, $packageType);
+    }
+
+    /**
+     * Creates directory for extracting content of OPUS 4 import package.
+     * @param $filename
+     * @param $packageType
+     * @return string
+     * @throws Application_Exception
+     */
+    protected function createExtractionDir($filename, $packageType)
+    {
+        $tempPath = Application_Configuration::getInstance()->getTempPath();
+
+        $dirName = $tempPath . uniqid() . '-import-' . basename($filename, $packageType);
         mkdir($dirName);
         return $dirName;
     }
 
-    private function processOpusXML($xml, $dirName) {
-        $logger = Zend_Registry::get('Zend_Log');        
+    protected function processOpusXML($xml, $dirName)
+    {
+        $logger = Zend_Registry::get('Zend_Log');
 
         $importer = new Application_Import_Importer($xml, false, $logger);
-        $importer->enableSwordContext();        
+        $importer->enableSwordContext();
         $importer->setImportDir($dirName);
 
-        $fileTypes = Zend_Controller_Action_HelperBroker::getStaticHelper('fileTypes');
-        
-        $validMimeTypes = $fileTypes->getValidMimeTypes();
-        $importer->setValidMimeTypes($validMimeTypes); 
-        
         $importer->setAdditionalEnrichments($this->additionalEnrichments);
         $importCollection = new Sword_Model_ImportCollection();
         $importer->setImportCollection($importCollection->getCollection());
-                
+
         $importer->run();
         return $importer->getStatusDoc();
     }
 
+    abstract public function readPackage($filename);
+
+    public function getLogger() {
+        return Zend_Registry::get('Zend_Log');
+    }
 }

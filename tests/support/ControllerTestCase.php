@@ -601,12 +601,20 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
     }
 
     protected function createTestDocument() {
+        $doc = new Opus_Document();
+        $this->addTestDocument($doc);
+        return $doc;
+    }
+
+    /**
+     * Adds a document to the cleanup queue.
+     */
+    protected function addTestDocument($document)
+    {
         if (is_null($this->testDocuments)) {
             $this->testDocuments = array();
         }
-        $doc = new Opus_Document ();
-        array_push($this->testDocuments, $doc);
-        return $doc;
+        array_push($this->testDocuments, $document);
     }
 
     protected function createTestFile($filename) {

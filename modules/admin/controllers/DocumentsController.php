@@ -219,6 +219,12 @@ class Admin_DocumentsController extends Application_Controller_Action {
         $paginator->setCurrentPageNumber($page);
         $this->view->paginator = $paginator;
         $this->prepareItemCountLinks();
+
+        $this->view->createLink = $this->view->url(
+            ['module' => 'admin', 'controller' => 'document', 'action' => 'create'],
+            'default',
+            true
+        );
     }
 
     /**

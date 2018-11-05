@@ -51,7 +51,7 @@ interface Application_Export_ExportPlugin {
      * Sets the plugin configuration.
      * @param Zend_Config $config
      */
-    public function setConfig(Zend_Config $config);
+    public function setConfig(Zend_Config $config = null);
 
     /**
      * Sets the HTTP request being processed.

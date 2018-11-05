@@ -1599,3 +1599,21 @@ a.gnd-link {
 table.search-form-table select{
     min-width: 100%;
 }
+
+
+#documentUpload .description {
+	white-space: pre-line;
+}
+
+#actionboxContainer li.edit a {
+	background: url(../img/theme/admin/sprite_icons.png) no-repeat;
+}
+
+#actionboxContainer li.edit a {
+	background-position: -20px -256px;
+	padding-left: 16px;
+}
+
+input[type='text'].invalid {
+	background-color: #ffd4d4;
+}

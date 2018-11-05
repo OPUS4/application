@@ -27,7 +27,7 @@
  * @category    Application Unit Test
  * @package     Application_Controller_Action_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2017-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  *
  */
@@ -60,10 +60,76 @@ class Application_Controller_Action_Helper_FileTypesTest extends ControllerTestC
         $this->assertArrayNotHasKey('default', $types);
     }
 
+    public function testMimeTypeAddedToBaseConfigurationFromApplicationIni()
+    {
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
+            'filetypes' => array('xml' => array('mimeType' => array(
+                'text/xml', 'application/xml'
+            )))
+        )));
+
+        $types = $this->_helper->getValidMimeTypes();
+
+        $this->assertNotNull($types);
+        $this->assertCount(5, $types);
+        $this->assertArrayHasKey('xml', $types);
+
+        $xmlTypes = $types['xml'];
+
+        $this->assertCount(2, $xmlTypes);
+        $this->assertContains('application/xml', $xmlTypes);
+        $this->assertContains('text/xml', $xmlTypes);
+    }
+
     public function testGetContentDisposition()
     {
         $this->assertEquals('attachment', $this->_helper->getContentDisposition('text/plain'));
         $this->assertEquals('inline', $this->_helper->getContentDisposition('application/pdf'));
     }
 
+    public function testIsValidMimeType()
+    {
+        $this->assertTrue($this->_helper->isValidMimeType('text/plain'));
+        $this->assertTrue($this->_helper->isValidMimeType('text/html'));
+
+        $this->assertFalse($this->_helper->isValidMimeType('text/xslt'));
+        $this->assertFalse($this->_helper->isValidMimeType('application/doc'));
+    }
+
+    public function testIsValidMimeTypeForExtensionWithMultipleTypes()
+    {
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
+            'filetypes' => array('xml' => array('mimeType' => array(
+                'text/xml', 'application/xml'
+            )))
+        )));
+
+        $this->assertTrue($this->_helper->isValidMimeType('application/xml'));
+        $this->assertTrue($this->_helper->isValidMimeType('text/xml'));
+    }
+
+    public function testIsValidMimeTypeForExtension()
+    {
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
+            'filetypes' => array('xml' => array('mimeType' => array(
+                'text/xml', 'application/xml'
+            )))
+        )));
+
+        $this->assertTrue($this->_helper->isValidMimeType('application/xml', 'xml'));
+        $this->assertTrue($this->_helper->isValidMimeType('text/xml', 'xml'));
+        $this->assertTrue($this->_helper->isValidMimeType('text/plain', 'txt'));
+        $this->assertTrue($this->_helper->isValidMimeType('application/pdf', 'pdf'));
+
+        $this->assertFalse($this->_helper->isValidMimeType('text/plain', 'xml'));
+        $this->assertFalse($this->_helper->isValidMimeType('application/pdf', 'doc'));
+        $this->assertFalse($this->_helper->isValidMimeType('image/jpeg', 'jpeg'));
+        $this->assertFalse($this->_helper->isValidMimeType('audio/mpeg', 'txt'));
+    }
+
+    public function testIsValidMimeTypeForNull()
+    {
+        $this->assertFalse($this->_helper->isValidMimeType(null));
+        $this->assertFalse($this->_helper->isValidMimeType(null, 'txt'));
+    }
 }

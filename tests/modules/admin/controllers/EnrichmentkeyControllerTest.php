@@ -26,6 +26,7 @@
  *
  * @category    Tests
  * @author      Gunar Maiwald <maiwald@zib.de>
+ * @author      Maximilian Salomon <salomon@zib.de>
  * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
@@ -123,6 +124,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase {
     }
 
     public function testNewActionSaveForExistingEnrichment() {
+        $this->useEnglish();
         $this->createsModels = true;
 
         $post = array(
@@ -149,7 +151,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase {
         $this->assertQueryContentContains('div#Name-element', 'Name');
         $this->assertQuery('li.save-element');
         $this->assertQuery('li.cancel-element');
-        $this->assertQueryCount(1, 'input#Id');
+        $this->assertQueryCount('input#Id', 1);
     }
 
     public function testEditActionShowFormForProtectedEnrichment() {

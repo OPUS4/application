@@ -75,7 +75,7 @@ class Publish_FormController extends Application_Controller_Action {
                 . ' the expected value in OPUS4 config.ini. Further information can be read in our documentation.'
             );
             return $this->_helper->Redirector->redirectTo(
-                'index', $this->view->translate('error_empty_post_array'), 'index'
+                'index', ['failure' => 'error_empty_post_array'], 'index'
             );
         }
 
