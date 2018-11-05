@@ -31,25 +31,29 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Sword_Model_PackageHandler {
-    
+class Sword_Model_PackageHandler
+{
+
     private $additionalEnrichments;
-    
+
     private $packageType;
-    
+
     const PACKAGE_TYPE_ZIP = 'zip';
-    
+
     const PACKAGE_TYPE_TAR = 'tar';
-    
-    public function __construct($contentType) {
+
+    public function __construct($contentType)
+    {
         $this->setPackageType($contentType);
     }
-    
-    public function setAdditionalEnrichments($additionalEnrichments) {
+
+    public function setAdditionalEnrichments($additionalEnrichments)
+    {
         $this->additionalEnrichments = $additionalEnrichments;
     }
 
-    private function setPackageType($contentType) {
+    private function setPackageType($contentType)
+    {
         if (is_null($contentType) || $contentType === false) {
             throw new Exception('Content-Type header is required');
         }
@@ -66,36 +70,51 @@ class Sword_Model_PackageHandler {
         }
     }
 
-    public function handlePackage($payload) {        
+    public function handlePackage($payload)
+    {
         $tmpFileName = $this->getTmpFileName($payload);
         $this->savePackage($payload, $tmpFileName);
-        $packageReader = $this->getPackageReader();
+        $packageReader = $this->getPackageReader($this->packageType);
         try {
-            switch ($this->packageType) {
-                case self::PACKAGE_TYPE_ZIP:
-                    $statusDoc = $packageReader->readZipPackage($tmpFileName);
-                    break;
-                case self::PACKAGE_TYPE_TAR:
-                    $statusDoc = $packageReader->readTarPackage($tmpFileName);
-                    break;
-            }
+            $statusDoc = $packageReader->readPackage($tmpFileName);
         } finally {
             unlink($tmpFileName);
         }
-                
-        return $statusDoc;        
+
+        return $statusDoc;
     }
-    
-    private function getPackageReader() {        
-        $packageReader = new Application_Import_PackageReader($this->additionalEnrichments);
+
+    /**
+     * @param $packageType
+     * @return null
+     *
+     * TODO make types configurable and remove explicit TAR/ZIP declarations in this class (use factory class?)
+     */
+    private function getPackageReader($packageType)
+    {
+        $packageReader = null;
+        switch ($packageType) {
+            case self::PACKAGE_TYPE_ZIP:
+                $packageReader = new Application_Import_ZipPackageReader();
+                break;
+            case self::PACKAGE_TYPE_TAR:
+                $packageReader = new Application_Import_TarPackageReader();
+                break;
+            default:
+                // TODO do some error handling
+                break;
+        }
+        $packageReader->setAdditionalEnrichments($this->additionalEnrichments);
         return $packageReader;
-    }    
-    
-    private function savePackage($payload, $tmpFileName) {        
-        file_put_contents($tmpFileName, $payload);        
     }
-    
-    private function getTmpFileName($payload) {
+
+    private function savePackage($payload, $tmpFileName)
+    {
+        file_put_contents($tmpFileName, $payload);
+    }
+
+    private function getTmpFileName($payload)
+    {
         $dirName = Application_Configuration::getInstance()->getTempPath();
         $fileName = md5($payload) . '-' . time() . '-' . rand(10000, 99999) . '.' . $this->packageType;
         $tmpFileName = $dirName . $fileName;
@@ -107,5 +126,4 @@ class Sword_Model_PackageHandler {
         }
         return $tmpFileName;
     }
-    
 }

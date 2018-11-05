@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<import xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="opus_import.xsd">
+
+  <opusDocument language="deu" type="doctoralthesis" serverState="unpublished">
+
+    <titlesMain>
+      <titleMain language="deu">KOBV</titleMain>
+    </titlesMain>
+
+    <enrichments>
+      <enrichment key="City">Berlin</enrichment>
+      <enrichment key="validtestkey" />
+    </enrichments>
+
+  </opusDocument>
+
+</import>

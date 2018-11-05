@@ -31,6 +31,15 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+/**
+ * Form for editing enrichments.
+ *
+ * This form filters enrichments, so that some values cannot be edited directly.
+ *
+ * TODO rename to Enrichments
+ * TODO generic mechanism for excluding enrichments from editing
+ * TODO use custom elements/subforms for different enrichment types
+ */
 class Admin_Form_Document_MultiEnrichmentSubForm extends Admin_Form_Document_MultiSubForm {
 
     public function getFieldValues($document) {

@@ -31,14 +31,15 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Admin_Form_Document_IdentifierDOI extends Admin_Form_Document_IdentifierSpecific {
-    
+class Admin_Form_Document_IdentifierDOI extends Admin_Form_Document_IdentifierSpecific
+{
+
     protected $type = 'doi';
 
-    public function init() {
+    public function init()
+    {
         parent::init();
 
         $this->getElement(self::ELEMENT_VALUE)->addValidator(new Application_Form_Validate_DOI());
     }
-
 }

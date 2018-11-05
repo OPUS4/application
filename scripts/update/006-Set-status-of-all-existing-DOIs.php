@@ -37,6 +37,7 @@
  * Set registration status of all existing DOIs to "registered".
  * Only documents with server state "published" are considered.
  *
+ * TODO move code to class for easier unit testing
  */
 
 require_once dirname(__FILE__) . '/../common/update.php';

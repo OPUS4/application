@@ -142,7 +142,7 @@ abstract class CrudControllerTestCase extends ControllerTestCase {
 
         $this->assertQuery('li.save-element');
         $this->assertQuery('li.cancel-element');
-        $this->assertQueryCount(1, 'input#Id');
+        $this->assertQueryCount('input#Id', 1);
     }
 
     public function testEditActionBadId() {

@@ -43,12 +43,15 @@ class Application_Form_Element_EnrichmentKeyTest extends FormElementTestCase {
         parent::setUp();
     }
 
+    /**
+     * TODO 2 keys are being excluded - needs formal framework for that with configuration
+     */
     public function testOptions() {
         $element = $this->getElement();
 
         $allOptions = Opus_EnrichmentKey::getAll();
 
-        $this->assertEquals(count($allOptions), count($element->getMultiOptions()));
+        $this->assertEquals(count($allOptions) - 2, count($element->getMultiOptions()));
     }
 
     public function testValidation() {

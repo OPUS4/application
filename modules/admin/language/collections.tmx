@@ -427,15 +427,6 @@
 			</tuv>
         </tu>
 
-        <tu tuid="DisplayOai">
-			<tuv xml:lang="en">
-				<seg>Shown metadata fields in OAI set.</seg>
-			</tuv>
-			<tuv xml:lang="de">
-				<seg>Auszugebende Metadaten-Felder im OAI-Set.</seg>
-			</tuv>
-        </tu>
-
         <tu tuid="breadcrumb_title">
 			<tuv xml:lang="en">
 				<seg>Your current position:</seg>

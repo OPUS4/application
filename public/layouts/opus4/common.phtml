@@ -84,9 +84,12 @@ if (in_array($this->moduleName, array('admin', 'review', 'setup', 'account'))) {
     $jsFiles[] = 'theme.js';
     $jsFiles[] = 'theme_lic.js';
     $jsFiles[] = 'opus-ui.js';
+} else if (in_array($this->moduleName, array('publish'))) {
+    $jsFiles[] = 'upload.js';
 }
-else if (in_array($this->moduleName, array('publish'))) {
-    $jsFiles[] = 'filetypes.js';
+
+if (in_array($this->moduleName, array('admin'))) {
+    $jsFiles[] = 'validation.js';
 }
 
 if ($this->jQueryEnabled()) {
@@ -139,6 +142,7 @@ if (isset($config->javascript->latex->mathjax)) {
         <!--[if lt IE 9]>
         <link rel="stylesheet" type="text/css" href="<?= $this->layoutPath() ?>/css/opus-ie-7.css" />
         <![endif]-->
+<?= $this->javascriptMessages()->setIndent(8) ?>
     </head>
 
     <body>
@@ -186,20 +190,12 @@ if (isset($config->javascript->latex->mathjax)) {
 
             <div id="content" class="opus <?= (in_array($this->moduleName, array('admin', 'review', 'setup', 'account'))) ? 'adminContainer' : ''?> <?= $this->moduleName ?><?php if ($this->moduleName === 'publish') : ?>"><?php else : ?><?= ($this->controllerName === 'index' ? '' : '_'.$this->controllerName)?><?= ($this->actionName === 'index' ? '' : '_'.$this->actionName)?><?= ($this->searchType === 'collection' || $this->searchType === 'latest' ? ' '.$this->searchType : '') ?>"><?php  endif; ?>
 
-                <?PHP $messages = !is_null($this->flashMessenger) ? $this->flashMessenger->getMessages() : null ?>
-
                 <?PHP if (in_array($this->moduleName, array('admin', 'review', 'setup'))) : ?>
                     <?PHP if ($this->breadcrumbsDisabled !== true) : ?>
                         <?= $this->navigation()->breadcrumbs() ?>
                     <?PHP endif; ?>
 
-                    <?php if (!empty($messages)) : ?>
-                    <div class="messages">
-                        <?php foreach ($messages as $message) : // TODO view helper ?>
-                            <div class="<?= array_key_exists('level', $message) ? $message['level'] : '' ?>"><?= htmlspecialchars($this->translate($message['message'])) ?></div>
-                        <?php endforeach ?>
-                    </div>
-                    <?php endif ?>
+                    <?= $this->messages() ?>
 
                     <?PHP if ($this->contentWrapperDisabled !== true && $this->breadcrumbsDisabled !== true) : ?>
                     <div class="wrapper">
@@ -213,15 +209,7 @@ if (isset($config->javascript->latex->mathjax)) {
                         <?= $this->adminform ?>
                     <?PHP endif ?>
 
-                    <?php if (!empty($messages)) : // TODO view helper ?>
-                    <div class="messages">
-                        <?php foreach ($this->flashMessenger->getMessages() as $message) : ?>
-                            <?PHP if (array_key_exists('message', $message)) : ?>
-                            <div class="<?= array_key_exists('level', $message) ? $message['level'] : '' ?>"><?= htmlspecialchars($this->translate($message['message'])) ?></div>
-                            <?PHP endif ?>
-                        <?php endforeach ?>
-                    </div>
-                    <?php endif ?>
+                    <?= $this->messages() ?>
 
                     <div class="wrapper">
                         <?= $this->layout()->content ?>

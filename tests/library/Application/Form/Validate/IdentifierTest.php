@@ -54,6 +54,18 @@ class Application_Form_Validate_IdentifierTest extends ControllerTestCase
     public function setUp()
     {
         parent::setUp();
+
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'identifier' => ['validation' => [
+                'isbn' => [
+                    'class' => 'Opus_Validate_Isbn'
+                ],
+                'issn' => [
+                    'class' => 'Opus_Validate_Issn'
+                ]
+            ]]
+        ]));
+
         $this->_element = new Application_Form_Element_Identifier('Element');
         $this->_element->setValue('ISBN');
         $this->_validator = new Application_Form_Validate_Identifier($this->_element);

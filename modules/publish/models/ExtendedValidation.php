@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -29,12 +28,13 @@
  * @package     Module_Publish
  * @author      Susanne Gottwald <gottwald@zib.de>
  * @author      Doreen Thiede <thiede@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
-class Publish_Model_ExtendedValidation {
+class Publish_Model_ExtendedValidation
+{
 
     public $form;
     public $data;
@@ -75,7 +75,7 @@ class Publish_Model_ExtendedValidation {
         else {
             $this->documentLanguage = null;
         }
-        
+
         $result = $this->_validatePersons();
         $result = $this->_validateTitles() && $result;
         $result = $this->_validateCheckboxes() && $result;
@@ -84,6 +84,7 @@ class Publish_Model_ExtendedValidation {
         $result = $this->_validateSeriesNumber() && $result;
         $result = $this->_validateSeries() && $result;
         $result = $this->_validateURN() && $result;
+        $result = $this->_validateDoi() && $result;
         return $result;
     }
 
@@ -212,7 +213,7 @@ class Publish_Model_ExtendedValidation {
         foreach ($this->extendedData as $name => $entry) {
 
             if ($entry['datatype'] == 'Person' && $entry['subfield'] == true && strstr($name, 'First')) {
-                $firstNames[$name] = $entry['value']; 
+                $firstNames[$name] = $entry['value'];
             }
         }
 
@@ -225,7 +226,7 @@ class Publish_Model_ExtendedValidation {
         foreach ($this->extendedData as $name => $entry) {
             if ($entry['datatype'] == 'Person' && $entry['subfield'] == true && strstr($name, 'Email')
                 && !strstr($name, 'Allow')) {
-                $emails[$name] = $entry['value']; 
+                $emails[$name] = $entry['value'];
             }
         }
 
@@ -237,7 +238,7 @@ class Publish_Model_ExtendedValidation {
 
         foreach ($this->extendedData as $name => $entry) {
             if ($entry['datatype'] == 'Person' && $entry['subfield'] == true && strstr($name, 'AllowEmailContact')) {
-                $emails[$name] = $entry['value']; 
+                $emails[$name] = $entry['value'];
             }
         }
 
@@ -248,7 +249,7 @@ class Publish_Model_ExtendedValidation {
      * Validate all given titles with different constraint checks.
      * @return <Bool> true, if all checks were positive, else false
      */
-    private function _validateTitles() {        
+    private function _validateTitles() {
         //1) validate language Fields
         $validTitleLang = $this->_validateTitleLanguages();
 
@@ -378,17 +379,17 @@ class Publish_Model_ExtendedValidation {
         $titles = $this->_getTitleMainFields();
         $languages = $this->_getTitleMainLanguageFields();
         if (array_key_exists('Language', $this->data) && $this->data['Language'] !== "") {
-            $docLanguage = $this->data['Language']; 
+            $docLanguage = $this->data['Language'];
         }
         else {
-            return true; 
+            return true;
         }
 
         $i = 0;
 
         foreach ($languages AS $title => $lang) {
             if ($lang == $docLanguage) {
-                $i++; 
+                $i++;
             }
         }
 
@@ -412,7 +413,7 @@ class Publish_Model_ExtendedValidation {
 
         foreach ($this->extendedData as $name => $entry) {
             if ($entry['datatype'] == 'Title' && $entry['subfield'] == '1' && strstr($name, 'anguage')) {
-                $languages[$name] = $entry['value']; 
+                $languages[$name] = $entry['value'];
             }
         }
 
@@ -428,7 +429,7 @@ class Publish_Model_ExtendedValidation {
 
         foreach ($this->extendedData as $name => $entry) {
             if ($entry['datatype'] == 'Title' && $entry['subfield'] == '0') {
-                $titles[$name] = $entry['value']; 
+                $titles[$name] = $entry['value'];
             }
         }
 
@@ -445,7 +446,7 @@ class Publish_Model_ExtendedValidation {
             //find only TitleMain fields: datatype=Title, no subfield, 'main' must be present in name
             $fieldname = strtolower($name);
             if ($entry['datatype'] == 'Title' && $entry['subfield'] == false && strstr($fieldname, 'main')) {
-                $titles[$name] = $entry['value']; 
+                $titles[$name] = $entry['value'];
             }
         }
 
@@ -464,7 +465,7 @@ class Publish_Model_ExtendedValidation {
             //find only TitleMainLanguage fields: datatype=Language, subfield, 'main' must be present in name
             if ($entry['datatype'] == 'Language' && $entry['subfield'] == true && strstr($fieldname, 'main')) {
                 if (empty($entry['value'])) {
-                    $entry['value'] = $this->documentLanguage; 
+                    $entry['value'] = $this->documentLanguage;
                 }
                 $titles[$name] = $entry['value'];
             }
@@ -512,18 +513,18 @@ class Publish_Model_ExtendedValidation {
      */
     private function _getCounterOrType($dataKey, $method = 'counter') {
         if (!strstr($dataKey, '_')) {
-            return; 
+            return;
         }
 
         $array = explode('_', $dataKey);
         $i = count($array);
 
         if ($method == 'counter') {
-            return $array[$i - 1]; 
+            return $array[$i - 1];
         }
 
         if ($method == 'type') {
-            return $array[0]; 
+            return $array[0];
         }
     }
 
@@ -547,7 +548,7 @@ class Publish_Model_ExtendedValidation {
 
         foreach ($this->extendedData as $name => $entry) {
             if ($entry['datatype'] == 'Subject' && $entry['subfield'] == '0' && strstr($name, 'ncontrolled')) {
-                $titles[$name] = $entry['value']; 
+                $titles[$name] = $entry['value'];
             }
         }
 
@@ -576,7 +577,7 @@ class Publish_Model_ExtendedValidation {
 
         foreach ($this->form->getElements() as $element) {
             if ($element->getType() === 'Zend_Form_Element_Checkbox' && $element->isRequired()) {
-                $boxes[] = $element->getName(); 
+                $boxes[] = $element->getName();
             }
         }
 
@@ -614,7 +615,7 @@ class Publish_Model_ExtendedValidation {
 
             if (isset($collId)) {
                 $coll = null;
-                try {                    
+                try {
                     $coll = new Opus_Collection($collId);
                 }
                 catch (Opus_Model_Exception $e) {
@@ -645,13 +646,13 @@ class Publish_Model_ExtendedValidation {
                 $seriesWithoutDefaults[$key] = $value;
             }
         }
-        
+
         if (count($seriesWithoutDefaults) == 0) {
             return true; // es wurden keine Schriftenreihen / Bandnummern ausgewählt / eingegeben
         }
-        
+
         // prüfe, ob zu jedem Series-Select eine zugehörige Bandnummer existiert und umgekehrt
-        foreach ($seriesWithoutDefaults as $seriesElement => $value) {            
+        foreach ($seriesWithoutDefaults as $seriesElement => $value) {
             if (strpos($seriesElement, 'Series_') === 0) {
                 // Schriftenreihe gefunden: zugehörige Bandnummer erwartet
                 $key = str_replace('Series_', 'SeriesNumber_', $seriesElement);
@@ -659,13 +660,13 @@ class Publish_Model_ExtendedValidation {
             }
             else if (strpos($seriesElement, 'SeriesNumber_') === 0) {
                 // Bandnummer gefunden: zugehörige Schriftenreihe erwartet
-                $key = str_replace('SeriesNumber_', 'Series_', $seriesElement);                
+                $key = str_replace('SeriesNumber_', 'Series_', $seriesElement);
                 $errorMsgPrefix = 'seriesselect';
             }
             else {
                 $this->log->warn(__METHOD__ . " unbekanntes Schriftenreihen-Formularfeld: " . $seriesElement);
                 continue;
-            }            
+            }
 
             if (!array_key_exists($key, $seriesWithoutDefaults)) {
                 // Mismatch gefunden: Validierungsfehlermeldung ausgeben
@@ -711,7 +712,7 @@ class Publish_Model_ExtendedValidation {
                         }
                         $validSeries = false;
                     }
-                }                
+                }
             }
         }
 
@@ -786,6 +787,40 @@ class Publish_Model_ExtendedValidation {
     }
 
     /**
+     * Prevent DOI collisions.
+     * @return bool
+     */
+    private function _validateDoi()
+    {
+        if (!array_key_exists('IdentifierDoi', $this->extendedData)) {
+            return true;
+        }
+
+        $doi = $this->extendedData['IdentifierDoi'];
+        $value = $doi['value'];
+
+        if (trim($value) == '') {
+            return true;
+        }
+
+        $finder = new Opus_DocumentFinder();
+        $finder->setIdentifierTypeValue('doi', $value);
+
+        if ($finder->count() == 0) {
+            return true;
+        }
+
+        $element = $this->form->getElement('IdentifierDoi');
+
+        if (!is_null($element)) {
+            $element->clearErrorMessages();
+            $element->addError($this->translate('publish_error_doi_collision'));
+        }
+
+        return false;
+    }
+
+    /**
      * Fetch the transmitted series numbers or the series selection fields.
      * @return type Array of series numbers
      */
@@ -794,11 +829,11 @@ class Publish_Model_ExtendedValidation {
 
         foreach ($this->extendedData as $name => $entry) {
             if ($entry['datatype'] == 'SeriesNumber' && $fetchNumbers) {
-                $series[$name] = $entry['value']; 
+                $series[$name] = $entry['value'];
             }
             else {
                 if ($entry['datatype'] == 'Series') {
-                    $series[$name] = $entry['value']; 
+                    $series[$name] = $entry['value'];
                 }
             }
         }

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -34,13 +33,15 @@
  *
  * @covers Admin_CollectionrolesController
  */
-class Admin_CollectionrolesControllerTest extends ControllerTestCase {
+class Admin_CollectionrolesControllerTest extends ControllerTestCase
+{
 
     private $emptyCollectionRole = null;
 
     private $nonEmptyCollectionRole = null;
 
-    public function setUp() {
+    public function setUp()
+    {
         parent::setUp();
 
         $this->emptyCollectionRole = new Opus_CollectionRole();
@@ -48,7 +49,6 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase {
         $this->emptyCollectionRole->setOaiName("test1role");
         $this->emptyCollectionRole->setDisplayBrowsing("Name");
         $this->emptyCollectionRole->setDisplayFrontdoor("Name");
-        $this->emptyCollectionRole->setDisplayOai("Name");
         $this->emptyCollectionRole->setPosition(100);
         $this->emptyCollectionRole->store();
 
@@ -57,7 +57,6 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase {
         $this->nonEmptyCollectionRole->setOaiName("test2role");
         $this->nonEmptyCollectionRole->setDisplayBrowsing("Name");
         $this->nonEmptyCollectionRole->setDisplayFrontdoor("Name");
-        $this->nonEmptyCollectionRole->setDisplayOai("Name");
         $this->nonEmptyCollectionRole->setPosition(101);
         $this->nonEmptyCollectionRole->store();
 
@@ -65,7 +64,8 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase {
         $rootCollection->store();
     }
 
-    public function tearDown() {
+    public function tearDown()
+    {
         if (!is_null($this->nonEmptyCollectionRole) && !is_null($this->nonEmptyCollectionRole->getId())) {
             $this->nonEmptyCollectionRole->delete();
         }
@@ -75,7 +75,8 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase {
         parent::tearDown();
     }
 
-    public function testIndexAction() {
+    public function testIndexAction()
+    {
         $this->dispatch('/admin/collectionroles');
         $this->assertResponseCode(200);
         $this->assertModule('admin');
@@ -83,7 +84,8 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase {
         $this->assertAction('index');
     }
 
-    public function testIndexActionInvisibleCssClass() {
+    public function testIndexActionInvisibleCssClass()
+    {
         $this->useEnglish();
 
         $this->dispatch('/admin/collectionroles');
@@ -98,7 +100,8 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase {
         $this->assertXpathCount('//th[@class="invisible"]/a', 3); // 3 in Testdaten, +2 in setUp
     }
 
-    public function testEditAction() {
+    public function testEditAction()
+    {
         $this->dispatch('/admin/collectionroles/edit/roleid/' . $this->nonEmptyCollectionRole->getId());
         $this->assertResponseCode(200);
         $this->assertModule('admin');
@@ -106,31 +109,36 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase {
         $this->assertAction('edit');
     }
 
-    public function testDeleteAction() {
+    public function testDeleteAction()
+    {
         $this->dispatch('/admin/collectionroles/delete/roleid/' . $this->nonEmptyCollectionRole->getId());
         $this->assertRedirect();
         $this->assertResponseLocationHeader($this->getResponse(), '/admin/collectionroles');
     }
 
-    public function testDeleteActionWithMissingParam() {
+    public function testDeleteActionWithMissingParam()
+    {
         $this->dispatch('/admin/collectionroles/delete');
         $this->assertRedirect();
         $this->assertResponseLocationHeader($this->getResponse(), '/admin/collectionroles');
     }
 
-    public function testMoveAction() {
+    public function testMoveAction()
+    {
         $this->dispatch('/admin/collectionroles/move/pos/1/roleid/' . $this->emptyCollectionRole->getId());
         $this->assertRedirect();
         $this->assertResponseLocationHeader($this->getResponse(), '/admin/collectionroles');
     }
 
-    public function testMoveActionWithMissingParam() {
+    public function testMoveActionWithMissingParam()
+    {
         $this->dispatch('/admin/collectionroles/move');
         $this->assertRedirect();
         $this->assertResponseLocationHeader($this->getResponse(), '/admin/collectionroles');
     }
 
-    public function testNewAction() {
+    public function testNewAction()
+    {
         $this->dispatch('/admin/collectionroles/new');
         $this->assertResponseCode(200);
         $this->assertModule('admin');
@@ -138,25 +146,29 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase {
         $this->assertAction('new');
     }
 
-    public function testHideAction() {
+    public function testHideAction()
+    {
         $this->dispatch('/admin/collectionroles/hide/roleid/' . $this->nonEmptyCollectionRole->getId());
         $this->assertRedirect();
         $this->assertResponseLocationHeader($this->getResponse(), '/admin/collectionroles');
     }
 
-    public function testHideActionWithMissingParam() {
+    public function testHideActionWithMissingParam()
+    {
         $this->dispatch('/admin/collectionroles/hide');
         $this->assertRedirect();
         $this->assertResponseLocationHeader($this->getResponse(), '/admin/collectionroles');
     }
 
-    public function testUnhideAction() {
+    public function testUnhideAction()
+    {
         $this->dispatch('/admin/collectionroles/unhide/roleid/' . $this->nonEmptyCollectionRole->getId());
         $this->assertRedirect();
         $this->assertResponseLocationHeader($this->getResponse(), '/admin/collectionroles');
     }
 
-    public function testUnhideActionWithMissingParam() {
+    public function testUnhideActionWithMissingParam()
+    {
         $this->dispatch('/admin/collectionroles/unhide');
         $this->assertRedirect();
         $this->assertResponseLocationHeader($this->getResponse(), '/admin/collectionroles');
@@ -165,7 +177,8 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase {
     /**
      * Regression Test for OPUSVIER-2638
      */
-    public function testOPUSVIER2638() {
+    public function testOPUSVIER2638()
+    {
         $this->dispatch('/admin/collectionroles/edit/roleid/' . $this->nonEmptyCollectionRole->getId());
         $this->assertResponseCode(200);
         $this->assertModule('admin');
@@ -177,7 +190,8 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase {
         $this->assertTrue($containsGermanTitle || $containsEnglishTitle);
     }
 
-    public function testRegression3109CollectionRoleAddBreadcrumb() {
+    public function testRegression3109CollectionRoleAddBreadcrumb()
+    {
         $this->useGerman();
 
         $this->dispatch('/admin/collectionroles/new');
@@ -193,7 +207,8 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase {
         $this->assertQueryContentContains('//div.breadcrumbsContainer', 'Eine neue Sammlung anlegen');
     }
 
-    public function testRegression3109CollectionRoleEditBreadcrumb() {
+    public function testRegression3109CollectionRoleEditBreadcrumb()
+    {
         $this->useGerman();
 
         $this->dispatch('/admin/collectionroles/edit/roleid/2');
@@ -212,8 +227,8 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase {
     /**
      * Regression Test for OPUSVIER-3051
      */
-    public function testDocumentServerDateModifiedNotUpdatedWhenCollectionSortOrderChanged() {
-
+    public function testDocumentServerDateModifiedNotUpdatedWhenCollectionSortOrderChanged()
+    {
         // check for expected test data
 
         $collectionRole1 = new Opus_CollectionRole(1);
@@ -241,25 +256,27 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase {
         $this->assertEquals((string) $docBefore->getServerDateModified(), (string) $docAfter->getServerDateModified());
     }
 
-    public function testCreateActionGetRequest() {
+    public function testCreateActionGetRequest()
+    {
         $this->dispatch('/admin/collectionroles/create');
         $this->assertRedirectTo('/admin/collectionroles');
     }
 
-    public function testCreateAction() {
+    public function testCreateAction()
+    {
         $this->useEnglish();
 
         $roles = Opus_CollectionRole::fetchAll();
 
         $this->assertEquals(22, count($roles));
 
-        $roleIds = array();
+        $roleIds = [];
 
         foreach ($roles as $role) {
             $roleIds[] = $role->getId();
         }
 
-        $post = array(
+        $post = [
             'Name' => 'CreateTestColName',
             'OaiName' => 'CreateTestColOaiName',
             'DisplayBrowsing' => 'Name',
@@ -270,7 +287,7 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase {
             'VisibleOai' => '0',
             'Position' => '20',
             'Save' => 'Speichern'
-        );
+        ];
 
         $this->getRequest()->setMethod('POST')->setPost($post);
 
@@ -306,7 +323,8 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase {
             self::MESSAGE_LEVEL_NOTICE);
     }
 
-    public function testCreateActionForEdit() {
+    public function testCreateActionForEdit()
+    {
         $this->useEnglish();
 
         $roles = Opus_CollectionRole::fetchAll();
@@ -324,7 +342,7 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase {
 
         $roleId = $role->store();
 
-        $post = array(
+        $post = [
             'oid' => $roleId,
             'Name' => 'ModifiedName',
             'OaiName' => 'ModifiedOaiName',
@@ -336,7 +354,7 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase {
             'VisibleOai' => '1',
             'Position' => '19',
             'Save' => 'Speichern'
-        );
+        ];
 
         $this->getRequest()->setMethod('POST')->setPost($post);
 
@@ -362,5 +380,4 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase {
         $this->verifyFlashMessage('Collection role \'ModifiedName\' was edited successfully.',
             self::MESSAGE_LEVEL_NOTICE);
     }
-
 }

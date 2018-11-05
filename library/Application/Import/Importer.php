@@ -27,68 +27,90 @@
  * @category    Application
  * @package     Import
  * @author      Sascha Szott
- * @copyright   Copyright (c) 2016
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2016-2018
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class Application_Import_Importer {
+class Application_Import_Importer
+{
 
     private $logfile;
     private $logger;
     private $xml;
     private $xmlFile;
     private $xmlString;
-    private $fieldsToKeepOnUpdate = array();
-    
+    private $fieldsToKeepOnUpdate = [];
+
     // variables used in SWORD context
     private $swordContext = false;
     private $importDir = null;
-    private $validMimeTypes;
+
     private $statusDoc = null;
+
+    /**
+     * Additional enrichments that will be added to each imported document.
+     *
+     * This could be for instance a timestamp and other information about the import.
+     *
+     * @var array
+     */
     private $additionalEnrichments = null;
+
     private $importCollection = null;
     private $singleDocImport = false;
 
-    public function __construct($xml, $isFile = false, $logger = null, $logfile = null) {
+    /**
+     * Last imported document.
+     *
+     * Contains the document object if the import was successful.
+     *
+     * @var Opus_Document
+     */
+    private $document;
+
+    public function __construct($xml, $isFile = false, $logger = null, $logfile = null)
+    {
         $this->logger = $logger;
-        $this->logfile = $logfile;        
+        $this->logfile = $logfile;
         if ($isFile) {
             $this->xmlFile = $xml;
         } else {
             $this->xmlString = $xml;
         }
     }
-    
-    public function getStatusDoc() {
+
+    public function getStatusDoc()
+    {
         return $this->statusDoc;
     }
-    
-    public function enableSwordContext() {
+
+    public function enableSwordContext()
+    {
         $this->swordContext = true;
         $this->statusDoc = new Application_Import_ImportStatusDocument();
-    }      
-    
-    public function setImportDir($imporDir) {
+    }
+
+    public function setImportDir($imporDir)
+    {
         $this->importDir = trim($imporDir);
-        // always ensure that importDir ends with a directory separator        
+        // always ensure that importDir ends with a directory separator
         if (substr($this->importDir, -1) !== DIRECTORY_SEPARATOR) {
             $this->importDir .= DIRECTORY_SEPARATOR;
         }
     }
-    
-    public function setValidMimeTypes($validMimeTypes) {
-        $this->validMimeTypes = $validMimeTypes;
-    }
-    
-    public function setAdditionalEnrichments($additionalEnrichments) {
+
+    public function setAdditionalEnrichments($additionalEnrichments)
+    {
         $this->additionalEnrichments = $additionalEnrichments;
     }
-    
-    public function setImportCollection($importCollection) {
+
+    public function setImportCollection($importCollection)
+    {
         $this->importCollection = $importCollection;
     }
 
-    private function initDocument() {
+    private function initDocument()
+    {
         $doc = new Opus_Document();
         // since OPUS 4.5 attribute serverState is optional: if no attribute
         // value is given we set server state to unpublished
@@ -96,20 +118,27 @@ class Application_Import_Importer {
         return $doc;
     }
 
-    public function run() {     
-        $this->setXml();                
+    /**
+     * @throws Application_Import_MetadataImportInvalidXmlException
+     * @throws Application_Import_MetadataImportSkippedDocumentsException
+     * @throws Opus_Model_Exception
+     * @throws Opus_Security_Exception
+     */
+    public function run()
+    {
+        $this->setXml();
         $this->validateXml();
 
         $numOfDocsImported = 0;
         $numOfSkippedDocs = 0;
 
         $opusDocuments = $this->xml->getElementsByTagName('opusDocument');
-        
-        // in case of a single document deposit (via SWORD) we allow to omit 
+
+        // in case of a single document deposit (via SWORD) we allow to omit
         // the explicit declaration of file elements (within <files>..</files>)
         // and automatically import all files in the root level of the SWORD package
         $this->singleDocImport = $opusDocuments->length == 1;
-        
+
         foreach ($opusDocuments as $opusDocumentElement) {
 
             // save oldId for later referencing of the record under consideration
@@ -120,7 +149,7 @@ class Application_Import_Importer {
                 $opusDocumentElement->removeAttribute('oldId');
                 $this->log("Start processing of record #" . $oldId . " ...");
             }
-            
+
             /*
              * @var Opus_Document
              */
@@ -148,11 +177,11 @@ class Application_Import_Importer {
                         continue;
                     }
 
-                    $this->resetDocument($doc);                    
+                    $this->resetDocument($doc);
                 }
             } else {
                 // create a new OPUS document and populate it with data
-                $doc = $this->initDocument();                
+                $doc = $this->initDocument();
             }
 
             try {
@@ -169,23 +198,24 @@ class Application_Import_Importer {
                 $numOfSkippedDocs++;
                 continue;
             }
-            
+
             if (!is_null($this->additionalEnrichments)) {
                 $enrichments = $this->additionalEnrichments->getEnrichments();
                 foreach ($enrichments as $key => $value) {
                     $this->addEnrichment($doc, $key, $value);
                 }
             }
-            
+
             if (!is_null($this->importCollection)) {
                 $doc->addCollection($this->importCollection);
             }
 
             try {
                 $doc->store();
+                $this->document = $doc;
                 if (!is_null($this->statusDoc)) {
                     $this->statusDoc->addDoc($doc);
-                }             
+                }
             } catch (Exception $e) {
                 $this->log('Error while saving imported document #' . $oldId . ' to database: ' . $e->getMessage());
                 $this->appendDocIdToRejectList($oldId);
@@ -206,41 +236,44 @@ class Application_Import_Importer {
             }
         }
     }
-    
-    private function log($message) {
+
+    private function log($message)
+    {
         if (is_null($this->logger)) {
             return;
         }
         $this->logger->debug($message);
     }
 
-    private function setXml() {
+    private function setXml()
+    {
         // Enable user error handling while validating input
         libxml_clear_errors();
         libxml_use_internal_errors(true);
-        
+
         $this->log("Load XML ...");
         $xml = null;
 
-        if (!is_null($this->xmlFile)) {            
+        if (!is_null($this->xmlFile)) {
             $xml = new DOMDocument();
             $xml->load($this->xmlFile);
             if (!$xml) {
                 throw new Application_Import_MetadataImportInvalidXmlException('XML is not well-formed.');
             }
-        } else {                        
+        } else {
             $xml = new DOMDocument();
             $xml->loadXML($this->xmlString);
-            if (!$xml) {                
+            if (!$xml) {
                 throw new Application_Import_MetadataImportInvalidXmlException('XML is not well-formed.');
             }
         }
-        
+
         $this->log('Loading Result: OK');
         $this->xml = $xml;
     }
 
-    private function validateXml() {
+    private function validateXml()
+    {
         $this->log("Validate XML ...");
 
         $validation = new Application_Import_XmlValidation($this->xml);
@@ -253,7 +286,8 @@ class Application_Import_Importer {
         throw new Application_Import_MetadataImportInvalidXmlException();
     }
 
-    private function appendDocIdToRejectList($docId) {
+    private function appendDocIdToRejectList($docId)
+    {
         $this->log('... SKIPPED');
         if (is_null($this->logfile)) {
             return;
@@ -265,7 +299,8 @@ class Application_Import_Importer {
      * Allows certain fields to be kept on update.
      * @param array $fields DescriptionArray of fields to keep on update
      */
-    public function keepFieldsOnUpdate($fields) {
+    public function keepFieldsOnUpdate($fields)
+    {
         $this->fieldsToKeepOnUpdate = $fields;
     }
 
@@ -273,8 +308,9 @@ class Application_Import_Importer {
      *
      * @param Opus_Document $doc
      */
-    private function resetDocument($doc) {
-        $fieldsToDelete = array_diff(array(
+    private function resetDocument($doc)
+    {
+        $fieldsToDelete = array_diff([
             'TitleMain',
             'TitleAbstract',
             'TitleParent',
@@ -313,7 +349,7 @@ class Application_Import_Importer {
             'ServerDateCreated',
             'ServerDateModified',
             'ServerDatePublished',
-            'ServerDateDeleted'), 
+            'ServerDateDeleted'],
             $this->fieldsToKeepOnUpdate);
 
         $doc->deleteFields($fieldsToDelete);
@@ -324,7 +360,8 @@ class Application_Import_Importer {
      * @param DOMNamedNodeMap $attributes
      * @param Opus_Document $doc
      */
-    private function processAttributes($attributes, $doc) {
+    private function processAttributes($attributes, $doc)
+    {
         foreach ($attributes as $attribute) {
             $method = 'set' . ucfirst($attribute->name);
             $value = trim($attribute->value);
@@ -343,14 +380,15 @@ class Application_Import_Importer {
      *
      * @param DOMNodeList $elements
      * @param Opus_Document $doc
-     * 
+     *
      * @return boolean returns true if the import XML definition of the
      *                 currently processed document contains the first level
      *                 element files
      */
-    private function processElements($elements, $doc) {
+    private function processElements($elements, $doc)
+    {
         $filesElementPresent = false;
-        
+
         foreach ($elements as $node) {
             if ($node instanceof DOMElement) {
                 switch ($node->tagName) {
@@ -397,7 +435,7 @@ class Application_Import_Importer {
                         $filesElementPresent = true;
                         if (!is_null($this->importDir)) {
                             $baseDir = trim($node->getAttribute('basedir'));
-                            $this->handleFiles($node, $doc, $baseDir);                            
+                            $this->handleFiles($node, $doc, $baseDir);
                         }
                         break;
                     default:
@@ -413,7 +451,8 @@ class Application_Import_Importer {
      * @param DOMNode $node
      * @param Opus_Document $doc
      */
-    private function handleTitleMain($node, $doc) {
+    private function handleTitleMain($node, $doc)
+    {
         foreach ($node->childNodes as $childNode) {
             if ($childNode instanceof DOMElement) {
                 $t = $doc->addTitleMain();
@@ -428,7 +467,8 @@ class Application_Import_Importer {
      * @param DOMNode $node
      * @param Opus_Document $doc
      */
-    private function handleTitles($node, $doc) {
+    private function handleTitles($node, $doc)
+    {
         foreach ($node->childNodes as $childNode) {
             if ($childNode instanceof DOMElement) {
                 $method = 'addTitle' . ucfirst($childNode->getAttribute('type'));
@@ -444,7 +484,8 @@ class Application_Import_Importer {
      * @param DOMNode $node
      * @param Opus_Document $doc
      */
-    private function handleAbstracts($node, $doc) {
+    private function handleAbstracts($node, $doc)
+    {
         foreach ($node->childNodes as $childNode) {
             if ($childNode instanceof DOMElement) {
                 $t = $doc->addTitleAbstract();
@@ -459,7 +500,8 @@ class Application_Import_Importer {
      * @param DOMNode $node
      * @param Opus_Document $doc
      */
-    private function handlePersons($node, $doc) {
+    private function handlePersons($node, $doc)
+    {
         foreach ($node->childNodes as $childNode) {
             if ($childNode instanceof DOMElement) {
                 $p = new Opus_Person();
@@ -469,7 +511,7 @@ class Application_Import_Importer {
                 $p->setLastName(trim($childNode->getAttribute('lastName')));
 
                 // optional fields
-                $optionalFields = array('academicTitle', 'email', 'placeOfBirth', 'dateOfBirth');
+                $optionalFields = ['academicTitle', 'email', 'placeOfBirth', 'dateOfBirth'];
                 foreach ($optionalFields as $optionalField) {
                     if ($childNode->hasAttribute($optionalField)) {
                         $method = 'set' . ucfirst($optionalField);
@@ -483,7 +525,7 @@ class Application_Import_Importer {
                 if ($childNode->hasAttribute('allowEmailContact') && ($childNode->getAttribute('allowEmailContact') === 'true' || $childNode->getAttribute('allowEmailContact') === '1')) {
                     $link->setAllowEmailContact(true);
                 }
-                
+
                 // handling of person identifiers was introduced with OPUS 4.6
                 // it is allowed to specify multiple identifiers (of different type) per person
                 if ($childNode->hasChildNodes()) {
@@ -497,15 +539,16 @@ class Application_Import_Importer {
             }
         }
     }
-    
+
     /**
-     * 
+     *
      * @param DOMNodeList $identifiers
      * @param Opus_Person $person
      */
-    private function handlePersonIdentifiers($identifiers, $person) {        
+    private function handlePersonIdentifiers($identifiers, $person)
+    {
         $identifiers = $identifiers->childNodes;
-        $idTypesFound = array(); // print log message if an identifier type is used more than once
+        $idTypesFound = []; // print log message if an identifier type is used more than once
         foreach ($identifiers as $identifier) {
             if ($identifier instanceof DOMElement && $identifier->tagName == 'identifier') {
                 $idType = $identifier->getAttribute('type');
@@ -516,9 +559,9 @@ class Application_Import_Importer {
                     $this->log('could not save more than one identifier of type ' . $idType . ' for person ' . $person->getId());
                     continue; // ignore current identifier
                 }
-                $idValue = trim($identifier->textContent);                
+                $idValue = trim($identifier->textContent);
                 $methodName = 'setIdentifier' . ucfirst($idType);
-                $person->$methodName($idValue);   
+                $person->$methodName($idValue);
                 $idTypesFound[$idType] = true; // do not allow further values for this identifier type
             }
         }
@@ -529,7 +572,8 @@ class Application_Import_Importer {
      * @param DOMNode $node
      * @param Opus_Document $doc
      */
-    private function handleKeywords($node, $doc) {
+    private function handleKeywords($node, $doc)
+    {
         foreach ($node->childNodes as $childNode) {
             if ($childNode instanceof DOMElement) {
                 $s = new Opus_Subject();
@@ -546,7 +590,8 @@ class Application_Import_Importer {
      * @param DOMNode $node
      * @param Opus_Document $doc
      */
-    private function handleDnbInstitutions($node, $doc) {
+    private function handleDnbInstitutions($node, $doc)
+    {
         foreach ($node->childNodes as $childNode) {
             if ($childNode instanceof DOMElement) {
 
@@ -581,7 +626,8 @@ class Application_Import_Importer {
      * @param DOMNode $node
      * @param Opus_Document $doc
      */
-    private function handleIdentifiers($node, $doc) {
+    private function handleIdentifiers($node, $doc)
+    {
         foreach ($node->childNodes as $childNode) {
             if ($childNode instanceof DOMElement) {
                 $i = $doc->addIdentifier();
@@ -596,7 +642,8 @@ class Application_Import_Importer {
      * @param DOMNode $node
      * @param Opus_Document $doc
      */
-    private function handleNotes($node, $doc) {
+    private function handleNotes($node, $doc)
+    {
         foreach ($node->childNodes as $childNode) {
             if ($childNode instanceof DOMElement) {
                 $n = $doc->addNote();
@@ -611,7 +658,8 @@ class Application_Import_Importer {
      * @param DOMNode $node
      * @param Opus_Document $doc
      */
-    private function handleCollections($node, $doc) {
+    private function handleCollections($node, $doc)
+    {
         foreach ($node->childNodes as $childNode) {
             if ($childNode instanceof DOMElement) {
 
@@ -637,7 +685,8 @@ class Application_Import_Importer {
      * @param DOMNode $node
      * @param Opus_Document $doc
      */
-    private function handleSeries($node, $doc) {
+    private function handleSeries($node, $doc)
+    {
         foreach ($node->childNodes as $childNode) {
             if ($childNode instanceof DOMElement) {
 
@@ -660,11 +709,13 @@ class Application_Import_Importer {
     }
 
     /**
+     * Processes the enrichments in the document xml.
      *
      * @param DOMNode $node
      * @param Opus_Document $doc
      */
-    private function handleEnrichments($node, $doc) {
+    private function handleEnrichments($node, $doc)
+    {
         foreach ($node->childNodes as $childNode) {
             if ($childNode instanceof DOMElement) {
 
@@ -685,11 +736,23 @@ class Application_Import_Importer {
             }
         }
     }
-    
-    private function addEnrichment($doc, $key, $value) {
-        $e = $doc->addEnrichment();
-        $e->setKeyName($key);
-        $e->setValue(trim($value));        
+
+    /**
+     * Adds an enrichment to the document.
+     * @param $doc Opus_Document
+     * @param $key Name of enrichment
+     * @param $value Value of enrichment
+     */
+    private function addEnrichment($doc, $key, $value)
+    {
+        if ($value == null || strlen(trim($value)) == 0) {
+            // enrichment must have a value
+            // TODO log? how to identify the document before storing? improve import for easier monitoring
+            return;
+        }
+        $enrichment = $doc->addEnrichment();
+        $enrichment->setKeyName($key);
+        $enrichment->setValue(trim($value));
     }
 
     /**
@@ -697,7 +760,8 @@ class Application_Import_Importer {
      * @param DOMNode $node
      * @param Opus_Document $doc
      */
-    private function handleLicences($node, $doc) {
+    private function handleLicences($node, $doc)
+    {
         foreach ($node->childNodes as $childNode) {
             if ($childNode instanceof DOMElement) {
 
@@ -722,7 +786,8 @@ class Application_Import_Importer {
      * @param DOMNode $node
      * @param Opus_Document $doc
      */
-    private function handleDates($node, $doc) {
+    private function handleDates($node, $doc)
+    {
         foreach ($node->childNodes as $childNode) {
             if ($childNode instanceof DOMElement) {
                 $method = '';
@@ -748,66 +813,68 @@ class Application_Import_Importer {
             }
         }
     }
-    
+
     /**
      * Handling of files was introduced with OPUS 4.6.
-     * 
+     *
      * @param DOMNode $node
      * @param Opus_Document $doc
      * @param string $baseDir
      */
-    private function handleFiles($node, $doc, $baseDir) {                        
+    private function handleFiles($node, $doc, $baseDir)
+    {
         foreach ($node->childNodes as $childNode) {
-            if ($childNode instanceof DOMElement) {        
-                
+            if ($childNode instanceof DOMElement) {
+
                 $name = trim($childNode->getAttribute('name'));
                 $path = trim($childNode->getAttribute('path'));
                 if ($name == '' && $path == '') {
                     $this->log('At least one of the file attributes name or path must be defined!');
                     continue;
                 }
-                                
+
                 $this->addSingleFile($doc, $name, $baseDir, $path, $childNode);
             }
         }
     }
-    
+
     /**
-     * 
+     *
      * Add a single file to the given Opus_Document.
-     * 
+     *
      * @param Opus_Document $doc the given document
      * @param type $name name of the file that should be imported (relative to baseDir)
      * @param string $baseDir (optional) path of the file that should be imported (relative to the import directory)
      * @param string $path (optional) path (and name) of the file that should be imported (relative to baseDir)
      * @param DOMNodeList $childNode (optional) additional metadata of the file (taken from import XML)
      */
-    private function addSingleFile($doc, $name, $baseDir = '', $path = '', $childNode = null) {
+    private function addSingleFile($doc, $name, $baseDir = '', $path = '', $childNode = null)
+    {
         $fullPath = $this->importDir;
         if ($baseDir != '') {
             $fullPath .= $baseDir . DIRECTORY_SEPARATOR;
-        }                
-        $fullPath .= ($path != '') ? $path : $name;                                                
+        }
+        $fullPath .= ($path != '') ? $path : $name;
 
         if (!is_readable($fullPath)) {
             $this->log('Cannot read file ' . $fullPath . ': make sure that it is contained in import package');
             return;
-        }                
+        }
 
         if (!$this->validMimeType($fullPath)) {
             $this->log('MIME type of file ' . $fullPath . ' is not allowed for import');
             return;
-        }                
+        }
 
         if (!is_null($childNode) && !$this->checksumValidation($childNode, $fullPath)) {
             $this->log('Checksum validation of file ' . $fullPath . ' was not successful: check import package');
             return;
-        }                
-                
+        }
+
         $file = new Opus_File();
         if (!is_null($childNode)) {
-            $this->handleFileAttributes($childNode, $file);                                
-        }        
+            $this->handleFileAttributes($childNode, $file);
+        }
         if (is_null($file->getLanguage())) {
             $file->setLanguage($doc->getLanguage());
         }
@@ -825,65 +892,70 @@ class Application_Import_Importer {
             if ($comments->length == 1) {
                 $comment = $comments->item(0);
                 $file->setComment(trim($comment->textContent));
-            }            
+            }
         }
 
-        $doc->addFile($file);        
+        $doc->addFile($file);
     }
-    
+
     /**
      * Prüft, ob die übergebene Datei überhaupt importiert werden darf.
      * Dazu gibt es in der Konfiguration die Schlüssel filetypes.mimetypes.*
-     * 
+     *
      * @param type $fullPath
+     *
+     * TODO move check to file types helper?
      */
-    private function validMimeType($fullPath) {
+    private function validMimeType($fullPath)
+    {
         $extension = pathinfo($fullPath, PATHINFO_EXTENSION);
-        if (!array_key_exists($extension, $this->validMimeTypes)) {
-            return false;
-        }
-        $mimeType = $this->validMimeTypes[$extension];
         $finfo = new finfo(FILEINFO_MIME_TYPE);
         $mimeTypeFound = $finfo->file($fullPath);
-        return $mimeType == $mimeTypeFound;
+
+        $fileTypes = Zend_Controller_Action_HelperBroker::getStaticHelper('fileTypes');
+
+        return $fileTypes->isValidMimeType($mimeTypeFound, $extension);
     }
-    
+
     /**
      * Prüft, ob die im Element checksum angegebene Prüfsumme mit der Prüfsumme
      * der zu importierenden Datei übereinstimmt. Liefert das Ergebnis des
      * Vergleichs zurück.
-     * 
+     *
      * Wurde im Import-XML keine Prüfsumme für die Datei angegeben, so liefert
      * die Methode ebenfalls true zurück.
-     * 
+     *
      * @param DOMElement $childNode
      * @param string $fullPath
      */
-    private function checksumValidation($childNode, $fullPath) {
+    private function checksumValidation($childNode, $fullPath)
+    {
         $checksums = $childNode->getElementsByTagName('checksum');
         if ($checksums->length == 0) {
             return true;
         }
-        
-        $checksumElement = $checksums->item(0);        
+
+        $checksumElement = $checksums->item(0);
         $checksumVal = trim($checksumElement->textContent);
-        $checksumAlgo = $checksumElement->getAttribute('type');        
-        $hashValue = hash_file($checksumAlgo, $fullPath);        
+        $checksumAlgo = $checksumElement->getAttribute('type');
+        $hashValue = hash_file($checksumAlgo, $fullPath);
         return strcasecmp($checksumVal, $hashValue) == 0;
     }
-    
+
     /**
-     * 
+     *
      * @param DOMElement $node
      * @param Opus_File $file
      */
-    private function handleFileAttributes($node, $file) {
-        $attrsToConsider = array(
+    private function handleFileAttributes($node, $file)
+    {
+        $attrsToConsider = [
             'language',
             'displayName',
-            'visibleInOai', 
-            'visibleInFrontdoor', 
-            'sortOrder');        
+            'visibleInOai',
+            'visibleInFrontdoor',
+            'sortOrder'
+        ];
         foreach ($attrsToConsider as $attribute) {
             $value = trim($node->getAttribute($attribute));
             if ($value != '') {
@@ -906,18 +978,27 @@ class Application_Import_Importer {
             }
         }
     }
-    
+
     /**
      * Add all files in the root level of the import package to the given
      * document.
-     * 
+     *
      * @param Opus_Document $doc document
      */
-    private function importFilesDirectly($doc) {
-        $files = array_diff(scandir($this->importDir), array('..', '.', 'opus.xml'));
+    private function importFilesDirectly($doc)
+    {
+        $files = array_diff(scandir($this->importDir), ['..', '.', 'opus.xml']);
         foreach ($files as $file) {
             $this->addSingleFile($doc, $file);
         }
     }
 
+    /**
+     * Returns the imported document.
+     * @return Opus_Document
+     */
+    public function getDocument()
+    {
+        return $this->document;
+    }
 }
