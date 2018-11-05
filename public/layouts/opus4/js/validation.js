@@ -39,7 +39,7 @@ opus4Messages["identifierInvalidCheckdigit"] = "The check digit of \'%value%\' i
 opus4Messages["identifierInvalidFormat"] = "\'%value%\' is malformed";
 
 /**
- * This function is the main-function for ISBN-validation and uses the specific validation for ISBN10 and ISBN13.
+ * Class for ISBN validation.
  *
  * TODO Validation and message generation are mixed. No function that simply tells me valid or not.
  */
@@ -47,6 +47,9 @@ opus4Messages["identifierInvalidFormat"] = "\'%value%\' is malformed";
 var IsbnValidation = function () {
 };
 
+/**
+ * This function is the main-function for ISBN-validation and uses the specific validation for ISBN10 and ISBN13.
+ */
 IsbnValidation.prototype.validateISBN = function (value) {
     var isbnDigits = this.splitIsbn(value);
 
