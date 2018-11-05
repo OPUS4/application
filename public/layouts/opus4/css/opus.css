@@ -1613,3 +1613,7 @@ table.search-form-table select{
 	background-position: -20px -256px;
 	padding-left: 16px;
 }
+
+input[type='text'].invalid {
+	background-color: #ffd4d4;
+}

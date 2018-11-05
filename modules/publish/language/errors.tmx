@@ -206,7 +206,6 @@
         </tuv>
     </tu>
 
-
 <!-- **************Errors for Person names and file names****************** -->
     <tu tuid="publish_validation_error_person_invalid">
         <tuv xml:lang="en">
