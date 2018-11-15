@@ -27,23 +27,27 @@
  * @category    Application Unit Test
  * @package     Form_Element
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
-class Application_Form_Element_TextTest extends FormElementTestCase {
+class Application_Form_Element_TextTest extends FormElementTestCase
+{
 
-    public function setUp() {
+    public function setUp()
+    {
         $this->_formElementClass = 'Application_Form_Element_Text';
         $this->_expectedDecoratorCount = 8;
-        $this->_expectedDecorators = array('ViewHelper', 'Placeholder', 'Description', 'ElementHint', 'Errors',
-            'ElementHtmlTag', 'LabelNotEmpty', 'dataWrapper');
+        $this->_expectedDecorators = [
+            'ViewHelper', 'Placeholder', 'Description', 'ElementHint', 'Errors',
+            'ElementHtmlTag', 'LabelNotEmpty', 'dataWrapper'
+        ];
         $this->_staticViewHelper = 'viewFormDefault';
         parent::setUp();
     }
 
-    public function testSetGetHint() {
+    public function testSetGetHint()
+    {
         $element = new Application_Form_Element_Text('text');
 
         $this->assertNull($element->getHint());
@@ -53,12 +57,12 @@ class Application_Form_Element_TextTest extends FormElementTestCase {
         $this->assertEquals('Hinweis', $element->getHint());
     }
 
-    public function testPrepareRenderingAsViewRemovePlaceholder() {
+    public function testPrepareRenderingAsViewRemovePlaceholder()
+    {
         $element = $this->getElement();
 
         $element->prepareRenderingAsView();
 
         $this->assertFalse($element->getDecorator('Placeholder'));
     }
-
 }

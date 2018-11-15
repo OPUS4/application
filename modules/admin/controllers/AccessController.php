@@ -29,9 +29,8 @@
  * @package     Module_Admin
  * @author      Julian Heise <heise@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -39,12 +38,14 @@
  *
  *
  */
-class Admin_AccessController extends Application_Controller_Action {
+class Admin_AccessController extends Application_Controller_Action
+{
 
     /**
      *
      */
-    public function listroleAction() {
+    public function listroleAction()
+    {
         $id = $this->getRequest()->getParam('docid');
         $roles = Opus_UserRole::getAll();
         $this->view->docId = $id;
@@ -59,8 +60,9 @@ class Admin_AccessController extends Application_Controller_Action {
      * @param type $roles
      * @return array
      */
-    private function getCheckedRoles($id, $roles) {
-        $items = array();
+    private function getCheckedRoles($id, $roles)
+    {
+        $items = [];
         foreach ($roles as $role) {
             $docs = $role->listAccessDocuments();
 
@@ -71,15 +73,17 @@ class Admin_AccessController extends Application_Controller_Action {
         return $items;
     }
 
-
     /**
      * Action for showing list of modules and permissions.
      *
      * @throws Exception
      */
-    public function listmoduleAction() {
+    public function listmoduleAction()
+    {
+        $security = new Admin_Model_AccessManager();
 
         $id = $this->getRequest()->getParam('roleid');
+
         if ($id == null) {
             throw new Exception('Role ID missing');
         }
@@ -103,43 +107,44 @@ class Admin_AccessController extends Application_Controller_Action {
             }
         }
 
-        $transitions = Application_Controller_Action_Helper_Workflow::getWorkflowResources();
+        $transitions = $security->getWorkflowResources();
 
         $this->view->loginNames = $role->getAllAccountNames();
+
         $this->view->roleId = $role->getId();
         $this->view->roleName = $role->getName();
         $this->view->modules = $roleModules;
+
         $this->view->allModules = array_keys(Application_Modules::getInstance()->getModules());
-        $this->view->allResources = $this->getAllResources();
+        $this->view->allResources = $security->getAllResources();
         $this->view->allWorkflow = $transitions;
     }
 
     /**
      * Action for saving selected permissions for role.
-     *
      */
-    public function storeAction() {
+    public function storeAction()
+    {
         $save = $this->getRequest()->getParam('save_button');
         $id = $this->getRequest()->getParam('roleid');
         $docId = $this->getRequest()->getParam('docid');
+
         if (!empty($id)) {
             $accessMode = $this->getRequest()->getParam('access_mode');
 
             $this->storeModules($this->getRequest());
 
-            $this->view->redirect = array('module'=>'admin','controller'=>'role','action'=>'show','id'=>$id);
-        }
-        elseif (!empty($docId)) {
+            $this->view->redirect = ['module'=>'admin','controller'=>'role','action'=>'show','id'=>$id];
+        } elseif (!empty($docId)) {
             $this->storeRoles($this->getRequest());
 
-            $this->view->redirect = array('module'=>'admin','controller'=>'document','action'=>'index','id'=>$docId);
+            $this->view->redirect = ['module'=>'admin','controller'=>'document','action'=>'index','id'=>$docId];
         }
 
         if ($save != null) {
             $this->view->submit = 'access_submit_save';
             $this->view->message = 'access_save_message';
-        }
-        else {
+        } else {
             $this->view->submit = 'access_submit_cancel';
             $this->view->message = 'access_cancel_message';
         }
@@ -152,7 +157,8 @@ class Admin_AccessController extends Application_Controller_Action {
      *
      * TODO secure against missing parameters
      */
-    private function storeModules($request) {
+    private function storeModules($request)
+    {
         $id = $request->getParam('roleid');
 
         $role = new Opus_UserRole($id);
@@ -167,7 +173,8 @@ class Admin_AccessController extends Application_Controller_Action {
         $params = $request->getParams();
 
         foreach ($params as $name=>$value) {
-            if ($this->string_begins_with($name, 'set_')) {
+            $startsWith = 'set_';
+            if (substr($name, 0, strlen($startsWith)) === $startsWith) {
                 $module = explode("_", $name, 2);
                 $module = $module[1];
                 $role->appendAccessModule($module);
@@ -184,7 +191,8 @@ class Admin_AccessController extends Application_Controller_Action {
      *
      * TODO Is it a problem if document is append twice?
      */
-    private function storeRoles($request) {
+    private function storeRoles($request)
+    {
         $docId = $request->getParam('docid');
 
         $roles = Opus_UserRole::getAll();
@@ -202,37 +210,5 @@ class Admin_AccessController extends Application_Controller_Action {
             }
         }
     }
-
-    /**
-     * Checks whether a given string has the supplied prefix.
-     *
-     * @param $string
-     * @param $prefix
-     * @return boolean
-     */
-    private function string_begins_with($string, $prefix) {
-        return (strncmp($string, $prefix, strlen($prefix)) == 0);
-    }
-
-    /**
-     * Liefert Liste mit Ressourcen für die Rechteverwaltung.
-     *
-     * Ressourcen für die Rechte vergeben können. Module und Workflow-Übergänge werden separat behandelt.
-     *
-     * @return array of strings
-     */
-    private function getAllResources() {
-        $allResources = array();
-
-        $aclProvider = new Application_Security_AclProvider();
-
-        $resources = $aclProvider->getAllResources();
-
-        foreach ($resources as $resource) {
-            $allResources[] = 'resource_' . $resource;
-        }
-
-        return $allResources;
-    }
-
 }
+

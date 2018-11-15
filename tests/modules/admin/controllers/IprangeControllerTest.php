@@ -27,12 +27,15 @@
  * @category    Tests
  * @package     Admin
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @author      Maximilian Salomon <salomon@zib.de>
+ * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
  * Basic unit tests for IP range controller in admin module.
+ *
+ * @covers Admin_IprangeController
  */
 class Admin_IprangeControllerTest extends CrudControllerTestCase {
 
@@ -162,7 +165,7 @@ class Admin_IprangeControllerTest extends CrudControllerTestCase {
         $this->assertQueryContentContains('div#Endingip-element', '127.0.0.2');
         $this->assertQuery('li.save-element');
         $this->assertQuery('li.cancel-element');
-        $this->assertQueryCount(1, 'input#Id');
+        $this->assertQueryCount('input#Id', 1);
     }
 
     public function testEditActionSave()

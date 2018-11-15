@@ -27,9 +27,8 @@
  * @category    Application
  * @package     Controller_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -40,11 +39,13 @@
  * TODO weiter ausbauen und mit Opus_Security_IRealm konsolidieren (Framework vs. Application Security)
  */
 class Application_Controller_Action_Helper_AccessControl extends Zend_Controller_Action_Helper_Abstract
-    implements Application_Security_AccessControl {
+    implements Application_Security_AccessControl
+{
 
     private $_acl;
 
-    public function direct($resource) {
+    public function direct($resource)
+    {
         return $this->accessAllowed($resource);
     }
 
@@ -59,7 +60,8 @@ class Application_Controller_Action_Helper_AccessControl extends Zend_Controller
      * @param $resource
      * @return bool
      */
-    public function accessAllowed($resource) {
+    public function accessAllowed($resource)
+    {
         $acl = $this->getAcl();
 
         if (strlen(trim($resource)) == 0) {
@@ -78,15 +80,16 @@ class Application_Controller_Action_Helper_AccessControl extends Zend_Controller
      * Returns the Zend_Acl object or null.
      * @return Zend_Acl
      */
-    protected function getAcl() {
+    protected function getAcl()
+    {
         if (is_null($this->_acl)) {
             $this->_acl = Zend_Registry::isRegistered('Opus_Acl') ? Zend_Registry::get('Opus_Acl') : null;
         }
         return $this->_acl;
     }
 
-    public function setAcl($acl) {
+    public function setAcl($acl)
+    {
         $this->_acl = $acl;
     }
-
 }

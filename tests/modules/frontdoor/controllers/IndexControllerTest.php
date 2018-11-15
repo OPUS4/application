@@ -25,13 +25,19 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Tests
+ * @category    Tests
+ * @package     Frontdoor
  * @author      Julian Heise <heise@zib.de>
  * @author      Michael Lang <lang@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
+ */
+
+/**
+ * Class Frontdoor_IndexControllerTest.
+ *
+ * @covers Frontdoor_IndexController
  */
 class Frontdoor_IndexControllerTest extends ControllerTestCase {
 
@@ -357,6 +363,26 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
       $this->assertContains('/solrsearch/index/search/searchtype/series/id/1" ', $this->getResponse()->getBody());
    }
 
+   public function testSubjectSortOrder()
+   {
+       $this->dispatch('/frontdoor/index/index/docId/1');
+       $this->assertContains('Informationssystem; Geschichte; Ostwald, Wilhelm', $this->getResponse()->getBody());
+   }
+
+    public function testSubjectSortOrderAlphabetical()
+    {
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'frontdoor' => ['subjects' => ['alphabeticalSorting' => '1']]
+        ]));
+
+        // frontdoor.subjects.alphabeticalSorting
+
+        $this->dispatch('/frontdoor/index/index/docId/1');
+        $this->assertContains(
+            'Geschichte; Informations- und Dokumentationswissenschaft; Informationssystem',
+            $this->getResponse()->getBody()
+        );
+    }
    /**
     * Regression test for OPUSVIER-2232
     */
@@ -545,8 +571,8 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
 
         $this->dispatch('/frontdoor/index/index/docId/' . $doc->getId());
 
-        $this->assertContains('<li class="abstract preserve-spaces">' . "foo\nbar\n\nbaz</li>",
-            $this->getResponse()->getBody());
+        $this->assertXpathContentContains('//li[contains(@class = "abstract preserve-spaces", @lang="en")]',
+            "foo\nbar\n\nbaz", $this->getResponse()->getBody());
     }
 
     public function testNotePerserveSpace() {
@@ -1182,13 +1208,46 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $this->assertNotQuery('//a[@href="/frontdoor/index/index/docId/305/export/xml/stylesheet/example"]');
     }
 
-    public function testGoogleScholarLink() {
+    public function testGoogleScholarLink()
+    {
+        $this->useGerman();
         $this->dispatch('/frontdoor/index/index/docId/146');
         $this->assertResponseCode(200);
         $body = $this->getResponse()->getBody();
         $this->assertContains('http://scholar.google.de/scholar?hl=de&amp;q=&quot;KOBV&quot;&amp;as_sauthors=John+Doe' .
             '&amp;as_ylo=2007&amp;as_yhi=2007', $body);
+    }
 
+    public function testGoogleScholarLinkEnglish()
+    {
+        $this->useEnglish();
+        $this->dispatch('/frontdoor/index/index/docId/146');
+        $this->assertResponseCode(200);
+        $body = $this->getResponse()->getBody();
+        $this->assertContains('http://scholar.google.de/scholar?hl=en&amp;q=&quot;KOBV&quot;&amp;as_sauthors=John+Doe' .
+            '&amp;as_ylo=2007&amp;as_yhi=2007', $body);
+    }
+
+    public function testGoogleScholarOpenInNewWindowEnabled()
+    {
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
+            'googleScholar' => array('openInNewWindow' => 1)
+        )));
+        $this->dispatch('/frontdoor/index/index/docId/146');
+        $this->assertResponseCode(200);
+        $this->assertXpathCount('//a[contains(@href, "scholar.google.de") and @target = "_blank"]', 1);
+        $this->assertXpathCount('//a[contains(@href, "scholar.google.de") and not(@target)]', 0);
+    }
+
+    public function testGoogleScholarOpenInNewWindowDisabled()
+    {
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
+            'googleScholar' => array('openInNewWindow' => 0)
+        )));
+        $this->dispatch('/frontdoor/index/index/docId/146');
+        $this->assertResponseCode(200);
+        $this->assertXpathCount('//a[contains(@href, "scholar.google.de") and @target = "_blank"]', 0);
+        $this->assertXpathCount('//a[contains(@href, "scholar.google.de") and not(@target)]', 1);
     }
 
     public function testShowDocumentWithFileWithoutLanguage() {
@@ -1199,6 +1258,28 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $docId = $doc->store();
 
         $this->dispatch("/frontdoor/index/index/docId/$docId");
+    }
+
+    public function testTwitterOpenInNewWindowEnabled()
+    {
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
+            'twitter' => array('openInNewWindow' => 1)
+        )));
+        $this->dispatch('/frontdoor/index/index/docId/146');
+        $this->assertResponseCode(200);
+        $this->assertXpathCount('//a[contains(@href, "twitter.com") and @target = "_blank"]', 1);
+        $this->assertXpathCount('//a[contains(@href, "twitter.com") and not(@target)]', 0);
+    }
+
+    public function testTwitterOpenInNewWindowDisabled()
+    {
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
+            'twitter' => array('openInNewWindow' => 0)
+        )));
+        $this->dispatch('/frontdoor/index/index/docId/146');
+        $this->assertResponseCode(200);
+        $this->assertXpathCount('//a[contains(@href, "twitter.com") and @target = "_blank"]', 0);
+        $this->assertXpathCount('//a[contains(@href, "twitter.com") and not(@target)]', 1);
     }
 
     public function testUnableToTranslate() {
@@ -1259,4 +1340,49 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $this->assertNotXpath('//td[contains(@class, "BelongsToBibliography")]');
     }
 
+    /**
+     * Tests, if the XSLT has the correct language-attribute for main-title and abstract for the browser
+     */
+    public function testExistsCorrectLangAttribute(){
+        $this->dispatch('/frontdoor/index/index/docId/146');
+        $this->assertXpath('//li[contains(@class = "abstract preserve-spaces", @lang = "de")]');
+        $this->assertXpath('//li[contains(@class = "abstract preserve-spaces", @lang = "en")]');
+        $this->assertXpath('//h2[contains(@class = "titlemain", @lang = "de")]');
+        $this->assertXpath('//h3[contains(@class = "titlemain", @lang = "en")]');
+    }
+
+    /**
+     * Tests, if the sbstract and main-title with marked language has the correct content-language
+     */
+    public function testCorrectContentLanguage(){
+        $this->dispatch('/frontdoor/index/index/docId/146');
+        $this->assertXpathContentContains('//li[contains(@class = "abstract preserve-spaces", @lang = "en")]',
+            'Lorem');
+        $this->assertXpathContentContains('//li[contains(@class = "abstract preserve-spaces", @lang = "de")]',
+            'Berlin-Dahlem');
+        $this->assertXpathContentContains('//h3[contains(@class = "titlemain", @lang = "en")]',
+            'COLN');
+        $this->assertXpathContentContains('//h2[contains(@class = "titlemain", @lang = "de")]',
+            'KOBV');
+    }
+
+    /**
+     * Tests, if the XSLT has the correct language-attribute for title in the metadata-table for the browser
+     */
+    public function testMetaCorrectTitleLangAttribute(){
+        $this->dispatch('/frontdoor/index/index/docId/146');
+        $this->assertXpath('//td[contains(@class = "titleparent", @lang = "de")]');
+        $this->assertXpath('//td[contains(@class = "titlesub", @lang = "en")]');
+    }
+
+    /**
+     * Tests, if the several titles in the metadata-table with marked language has the correct content-language
+     */
+    public function testMetaCorrectTitleContentLang(){
+        $this->dispatch('/frontdoor/index/index/docId/146');
+        $this->assertXpathContentContains('//td[contains(@class = "titlesub", @lang = "en")]',
+            "Service Center");
+        $this->assertXpathContentContains('//td[contains(@class = "titlesub", @lang = "de")]',
+            "Service-Zentrale");
+    }
 }

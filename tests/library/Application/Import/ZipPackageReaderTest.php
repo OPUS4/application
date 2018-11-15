@@ -1,3 +1,4 @@
+<?php
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -23,26 +24,37 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
+ * @category    Application Unit Tests
+ * @package     Application
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
+ * @copyright   Copyright (c) 2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-$(function() {
-    var fileElem = $("input:file")[0];
+class Application_Import_ZipPackageReaderTest extends ControllerTestCase
+{
 
-    if (! typeof fileElem === "undefined") {
-        fileElem.validFileExtensions = null; // nichts erlaubt, wird auf Publishseite überschrieben
-        fileElem.invalidFileMessage = 'The extension of file \'%value%\' is not allowed.';
-        fileElem.onchange = function() {
-            var filename = this.value;
-            var ext = filename.match(/\.([^\.]+)$/);
-            if (fileElem.validFileExtensions != null && (ext == null || $.inArray(ext[1], this.validFileExtensions) == -1)) {
-                $message = fileElem.invalidFileMessage;
-                alert($message.replace('%value%', filename));
-                this.value = null;
-            }
-        };
+    public function testReadPackageWithXmlFile()
+    {
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
+            'filetypes' => array('xml' => array('mimeType' => array(
+                'text/xml', 'application/xml'
+            )))
+        )));
+
+        $reader = new Application_Import_ZipPackageReader();
+
+        $status = $reader->readPackage(APPLICATION_PATH . '/tests/resources/sword-packages/single-doc-pdf-xml.zip');
+
+        $this->assertFalse($status->noDocImported());
+        $this->assertCount(1, $status->getDocs());
+
+        $document = $status->getDocs()[0];
+
+        $this->addTestDocument($document); // for cleanup
+
+        $files = $document->getFile();
+
+        $this->assertCount(2, $files);
     }
-});
+}

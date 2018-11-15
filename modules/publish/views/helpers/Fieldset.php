@@ -246,7 +246,7 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract {
      * @return <type>
      */
     function getFieldsetHint($name) {
-        return "<div class='description hint'><p>" . $this->view->translate('hint_' . $name) . "</div></p>";
+        return "<div class='description hint'><p>" . $this->view->translate('hint_' . $name) . "</p></div>";
     }
 
     function getLabelFor($name, $label, $required) {

@@ -72,6 +72,13 @@ class Application_TranslateTest extends ControllerTestCase {
 
         $messages = $logger->getMessages();
 
+        $this->assertEquals(0, count($messages)); // warning normally suppressed
+
+        $this->translate->loadLanguageDirectory(APPLICATION_PATH . '/modules/rewrite/language');
+        $this->translate->loadLanguageDirectory(APPLICATION_PATH . '/modules/rewrite/language_custom');
+
+        $messages = $logger->getMessages();
+
         $this->assertEquals(2, count($messages));
         $this->assertContains('not found', $messages[0]);
         $this->assertContains('not found', $messages[1]);

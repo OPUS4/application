@@ -24,11 +24,14 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Unit Tests
- * @package     Admin_Controllers
+ * @category    Tests
+ * @package     Admin
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @author      Maximilian Salomon <salomon@zib.de>
+ * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
+ *
+ * @covers Admin_PersonController
  */
 class PersonControllerTest extends ControllerTestCase {
 
@@ -269,7 +272,7 @@ class PersonControllerTest extends ControllerTestCase {
         $this->dispatch('/admin/person/index/filter/Walruss');
 
         $this->assertResponseCode(200);
-        $this->assertQueryCount(1, 'td.lastname');
+        $this->assertQueryCount('td.lastname', 1);
         $this->assertQueryContentContains('td.lastname', 'Walruss');
         $this->assertQueryContentContains('td.firstname', 'Wally');
         $this->assertQueryContentContains('td.documents', 8);
@@ -280,7 +283,7 @@ class PersonControllerTest extends ControllerTestCase {
         $this->dispatch('/admin/person/index/filter/wAlRuSs');
 
         $this->assertResponseCode(200);
-        $this->assertQueryCount(1, 'td.lastname');
+        $this->assertQueryCount('td.lastname', 1);
         $this->assertNotQueryContentContains('td.lastname', 'wAlRuSs');
         $this->assertQueryContentContains('td.lastname', 'Walruss');
         $this->assertQueryContentContains('td.firstname', 'Wally');

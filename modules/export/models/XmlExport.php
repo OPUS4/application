@@ -28,9 +28,8 @@
  * @package     Module_Export
  * @author      Michael Lang <lang@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -64,57 +63,140 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract {
     protected $_proc = null;
 
     /**
+     * Enables/disables content-disposition attachment.
+     * @var null|boolean
+     */
+    protected $_downloadEnabled = null;
+
+    /**
+     * Content type for response.
+     * @var null|string
+     */
+    protected $_contentType = null;
+
+    /**
+     * Name of attached file.
+     * @var null|string
+     */
+    protected $_attachmentFilename = null;
+
+    /**
      * Deliver the (transformed) Xml content
      *
      * @return void
      *
      * TODO adapt
      */
-    public function postDispatch() {
-        if (!isset($this->getView()->errorMessage)) {
-            $config = $this->getConfig();
-
-            $contentType = 'text/xml';
-
-            if (isset($config->contentType))
-            {
-                $contentType = $config->contentType;
-            }
-
-            $attachmentFilename = 'export.xml';
-
-            if (isset($config->attachmentFilename))
-            {
-                $attachmentFilename = $config->attachmentFilename;
-            }
+    public function postDispatch()
+    {
+        if (!isset($this->getView()->errorMessage))
+        {
+            $contentType = $this->getContentType();
+            $attachmentFilename = $this->getAttachmentFilename();
 
             $response = $this->getResponse();
 
             // Send Xml response.
             $response->setHeader('Content-Type', "$contentType; charset=UTF-8", true);
 
-            $appConfig = Application_Configuration::getInstance()->getConfig();
-
-            $download = true;
-
-            if (isset($appConfig->export->download))
-            {
-                $value = $appConfig->export->download;
-                $download = $value !== '0' && $value !== false && $value !== '';
-            }
-
-            if ($download)
+            if ($this->isDownloadEnabled())
             {
                 $response->setHeader('Content-Disposition', "attachment; filename=$attachmentFilename", true);
             }
 
-            if (false === is_null($this->_xslt)) {
+            if (false === is_null($this->_xslt))
+            {
                 $this->getResponse()->setBody($this->_proc->transformToXML($this->_xml));
             }
-            else {
+            else
+            {
                 $this->getResponse()->setBody($this->_xml->saveXml());
             }
         }
+    }
+
+    /**
+     * Returns content type for response.
+     * @return string
+     */
+    public function getContentType()
+    {
+        if (is_null($this->_contentType))
+        {
+            $config = $this->getConfig();
+
+            if (isset($config->contentType))
+            {
+                $this->_contentType = $config->contentType;
+            }
+            else {
+                $this->_contentType = 'text/xml';
+            }
+        }
+
+        return $this->_contentType;
+    }
+
+    /**
+     * Sets mime type for response.
+     * @param $mimeType Mime type for response
+     */
+    public function setContentType($mimeType)
+    {
+        $this->_contentType = $mimeType;
+    }
+
+    public function getAttachmentFilename()
+    {
+        if (is_null($this->_attachmentFilename))
+        {
+            $config = $this->getConfig();
+
+            if (isset($config->attachmentFilename))
+            {
+                $this->_attachmentFilename = $config->attachmentFilename;
+            }
+            else {
+                $this->_attachmentFilename = 'export.xml';
+            }
+        }
+
+        return $this->_attachmentFilename;
+    }
+
+    public function setAttachmentFilename($filename)
+    {
+        $this->_attachmentFilename = $filename;
+    }
+
+    public function isDownloadEnabled()
+    {
+        if (is_null($this->_downloadEnabled))
+        {
+            $appConfig = Application_Configuration::getInstance()->getConfig();
+
+            if (isset($appConfig->export->download))
+            {
+                $value = $appConfig->export->download;
+                $this->_downloadEnabled = $value !== '0' && $value !== false && $value !== '';
+            }
+            else
+            {
+                $this->_downloadEnabled = true;
+            }
+        }
+
+        return $this->_downloadEnabled;
+    }
+
+    public function setDownloadEnabled($enabled)
+    {
+        if (!is_bool($enabled) && !is_null($enabled))
+        {
+            throw new InvalidArgumentException('Argument must be boolean or null.');
+        }
+
+        $this->_downloadEnabled = $enabled;
     }
 
     public function init() {
