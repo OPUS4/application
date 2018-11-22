@@ -2,6 +2,19 @@
 
 ---
 
+## Release 4.6.4 2018-12-x
+
+Um sämtliche Zeichen speichern zu können, verwendet die Datenbank jetzt den 
+Zeichensatz `utf8mb4` und die Collation `utf8mb4_unicode_ci`. Das Update-Skript 
+führt automatisch die Konvertierung durch. Wie immer ist dringend geraten vorher
+ein Backup der Datenbank anzulegen. Neue Instanzen verwenden automatisch den 
+neuen Zeichensatz. Nach der Konvertierung der Datenbank sollten *Repair* und
+*Optimize* für die Datenbank durchgeführt werden, zum Beispiel wie folgt:
+
+    $ mysqlcheck -u root -p --auto-repair --optimize opusdb    
+
+---
+
 ## Release 4.6.3 2018-11-05
 
 Mit diesem Release wurden eine Reihe von Fehlern behoben und kleinere Verbesserungen
