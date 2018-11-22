@@ -1,5 +1,4 @@
-#!/usr/bin/env php
-<?PHP
+<?php
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -27,7 +26,6 @@
  *
  * @category    Application
  * @package     Scripts
- * @author      Sascha Szott <szott@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
@@ -37,8 +35,38 @@
  * Set registration status of all existing DOIs to "registered".
  * Only documents with server state "published" are considered.
  */
+class Application_Update_SetStatusOfExistingDoi extends Application_Update_PluginAbstract
+{
 
-require_once dirname(__FILE__) . '/../common/update.php';
+    public function run()
+    {
+        $this->log('Set registration status of all DOIs to "registered"');
 
-$helper = new Application_Update_SetStatusOfExistingDoi();
-$helper->run();
+        $docFinder = new Opus_DocumentFinder();
+        $docFinder->setIdentifierTypeExists('doi');
+        $docFinder->setServerState('published');
+        $ids = $docFinder->ids();
+
+        $this->log('number of published documents with identifier of type DOI: ' . count($ids));
+
+        $numOfModifiedDocs = 0;
+
+        foreach ($ids as $id) {
+            $doc = new Opus_Document($id);
+
+            $dois = $doc->getIdentifierDoi();
+            foreach ($dois as $doi) {
+                $doi->setStatus('registered');
+                $doi->store(); // storing identifier and not document prevents update of ServerDateModified
+            }
+
+            if (count($dois) > 1) {
+                $this->log("document $id has more than one DOI but only one DOI is expected: consider a cleanup");
+            }
+
+            $numOfModifiedDocs++;
+        }
+
+        $this->log("$numOfModifiedDocs published documents were modified successfully");
+    }
+}
