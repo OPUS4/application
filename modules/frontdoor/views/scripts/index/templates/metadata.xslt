@@ -95,7 +95,7 @@
                 <xsl:call-template name="translateFieldname" />
             </th>
             <td>
-                <xsl:call-template name="translateString">
+                <xsl:call-template name="translateLanguage">
                     <xsl:with-param name="string">
                         <xsl:value-of select="." />
                     </xsl:with-param>
