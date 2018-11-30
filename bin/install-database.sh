@@ -24,6 +24,8 @@
 #
 # Parameters can be used to specify a different database name and other information.
 #
+# TODO move to framework (SQL for creating database defined twice in framework and here)
+#
 
 set -e
 
