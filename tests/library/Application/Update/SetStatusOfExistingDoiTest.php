@@ -31,7 +31,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Application_Update_CreateDoiUrnEnrichmentsTest extends ControllerTestCase
+class Application_Update_SetStatusOfExistingDoiTest extends ControllerTestCase
 {
 
     /**
@@ -56,6 +56,9 @@ class Application_Update_CreateDoiUrnEnrichmentsTest extends ControllerTestCase
         sleep(2);
 
         $update = new Application_Update_SetStatusOfExistingDoi();
+        $update->setLogger(new MockLogger());
+        $update->setQuietMode(true);
+
         $update->run();
 
         $doc = new Opus_Document($docId);
