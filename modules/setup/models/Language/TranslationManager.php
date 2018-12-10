@@ -70,7 +70,7 @@ class Setup_Model_Language_TranslationManager
     /**
      * array holding modules to include
      */
-    protected $_modules = array();
+    protected $_modules = [];
 
     /**
      * string used to filter translation units
@@ -111,39 +111,45 @@ class Setup_Model_Language_TranslationManager
     public function getTranslations($sortKey = self::SORT_UNIT, $sortOrder = SORT_ASC)
     {
         $fileData = $this->getFiles();
-        $translations = array();
-        $sortArray = array();
+
+        $translations = [];
+
+        $sortArray = [];
+
         foreach ($fileData as $module => $files) {
             foreach ($files as $dir => $filenames) {
                 foreach ($filenames as $fileName) {
                     $relativeFilePath = "$module/$dir/$fileName";
                     $filePath = APPLICATION_PATH . "/modules/$relativeFilePath";
                     $tmxFile = new Application_Translate_TmxFile();
+
                     if ($tmxFile->load($filePath)) {
                         $translationUnits = $tmxFile->toArray();
                         foreach ($translationUnits as $key => $values) {
                             if (empty($this->_filter) || strpos($key, $this->_filter) !== false) {
                                 foreach ($values as $lang => $value) {
-                                    $row = array(
+                                    $row = [
                                         'unit' => $key,
                                         'module' => $module,
                                         'directory' => $dir,
                                         'filename' => $fileName,
                                         'language' => $lang,
-                                        'variant' => $value);
+                                        'variant' => $value
+                                    ];
                                     $translations[] = $row;
                                     $sortArray[] = $row[$sortKey];
                                 }
                             }
                         }
-                    }
-                    else {
+                    } else {
                         throw new Setup_Model_FileNotReadableException($filePath);
                     }
                 }
             }
         }
+
         array_multisort($sortArray, $sortOrder, SORT_STRING, $translations);
+
         return $translations;
     }
 
@@ -153,13 +159,18 @@ class Setup_Model_Language_TranslationManager
      */
     public function getFiles()
     {
-        $modules = array();
-        $languageDirs = array('language', 'language_custom');
+        $modules = [];
+
+        $languageDirs = ['language', 'language_custom'];
+
         foreach ($this->_modules as $moduleName) {
-            $moduleFiles = array();
+
+            $moduleFiles = [];
+
             $moduleSubDirs = new RecursiveDirectoryIterator(
                 realpath(APPLICATION_PATH . "/modules/$moduleName"), FilesystemIterator::CURRENT_AS_SELF
             );
+
             foreach ($moduleSubDirs as $moduleSubDir) {
                 if ($moduleSubDir->isDir()) {
                     $dirName = $moduleSubDir->getFilename();
@@ -174,10 +185,12 @@ class Setup_Model_Language_TranslationManager
                     }
                 }
             }
+
             if (!empty($moduleFiles)) {
                 $modules[$moduleName] = $moduleFiles;
             }
         }
+
         return $modules;
     }
 }

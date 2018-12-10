@@ -59,9 +59,12 @@ class Setup_Model_Language_TranslationManagerTest extends ControllerTestCase
     public function testGetFiles()
     {
         $files = $this->object->getFiles();
+
         $this->assertEquals([], $files, 'Expected empty result with no modules set');
+
         $this->object->setModules(['default']);
         $files = $this->object->getFiles();
+
         $this->assertNotEquals([], $files, 'Expected non empty result with module set');
     }
 
