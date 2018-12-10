@@ -59,6 +59,15 @@
                 <seg>Model kann nicht modifiziert werden.</seg>
             </tuv>
         </tu>
+
+        <tu tuid="controller_crud_model_cannot_delete">
+            <tuv xml:lang="en">
+                <seg>Model cannot be deleted.</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Model kann nicht gelöscht werden.</seg>
+            </tuv>
+        </tu>
   </body>
 
 </tmx>

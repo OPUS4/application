@@ -1,5 +1,4 @@
-#!/usr/bin/env php
-<?PHP
+<?php
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -25,20 +24,46 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Scripts
- * @author      Sascha Szott <szott@zib.de>
+ * @category    Application Unit Test
+ * @package     Application_Update
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-/**
- * Set registration status of all existing DOIs to "registered".
- * Only documents with server state "published" are considered.
- */
+class Application_Update_SetStatusOfExistingDoiTest extends ControllerTestCase
+{
 
-require_once dirname(__FILE__) . '/../common/update.php';
+    /**
+     * @throws Opus_Model_Exception
+     *
+     * TODO test sets Status of all DOI identifier of published documents to 'registered' (side effect)
+     */
+    public function testRunDoesNotModifyServerDateModified()
+    {
+        $doc = $this->createTestDocument();
+        $doc->setServerState('published');
 
-$helper = new Application_Update_SetStatusOfExistingDoi();
-$helper->run();
+        $doi = new Opus_Identifier();
+        $doi->setType('doi');
+        $doi->setValue('testdoi');
+
+        $doc->addIdentifier($doi);
+        $docId = $doc->store();
+
+        $modified = $doc->getServerDateModified();
+
+        sleep(2);
+
+        $update = new Application_Update_SetStatusOfExistingDoi();
+        $update->setLogger(new MockLogger());
+        $update->setQuietMode(true);
+
+        $update->run();
+
+        $doc = new Opus_Document($docId);
+
+        $this->assertEquals(0, $doc->getServerDateModified()->compare($modified));
+        $this->assertEquals('registered', $doc->getIdentifierDoi(0)->getStatus());
+    }
+}

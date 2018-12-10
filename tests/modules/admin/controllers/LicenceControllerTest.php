@@ -37,22 +37,26 @@
  *
  * @covers Admin_LicenceController
  */
-class Admin_LicenceControllerTest extends CrudControllerTestCase {
+class Admin_LicenceControllerTest extends CrudControllerTestCase
+{
 
-    public function setUp() {
+    public function setUp()
+    {
         $this->setController('licence');
 
         parent::setUp();
     }
 
-    public function getModels() {
+    public function getModels()
+    {
         return Opus_Licence::getAll();
     }
 
     /**
      * Tests 'show' action.
      */
-    public function testShowAction() {
+    public function testShowAction()
+    {
         $this->createsModels = true;
 
         $licence = new Opus_Licence();
@@ -103,7 +107,8 @@ class Admin_LicenceControllerTest extends CrudControllerTestCase {
     /**
      * Test, ob Active Status für Wert false (0) angezeigt wird.
      */
-    public function testShowActiveValueForInactiveLicence() {
+    public function testShowActiveValueForInactiveLicence()
+    {
         $this->dispatch('/admin/licence/show/id/20');
         $this->assertResponseCode(200);
         $this->assertController('licence');
@@ -112,10 +117,11 @@ class Admin_LicenceControllerTest extends CrudControllerTestCase {
         $this->assertQueryContentRegex('div#Active', '/No|Nein/');
     }
 
-    public function testNewActionSave() {
+    public function testNewActionSave()
+    {
         $this->createsModels = true;
 
-        $post = array(
+        $post = [
             'Active' => '1',
             'NameLong' => 'TestNameLong',
             'Language' => 'eng',
@@ -128,7 +134,7 @@ class Admin_LicenceControllerTest extends CrudControllerTestCase {
             'PodAllowed' => '0',
             'SortOrder' => '100',
             'Save' => 'Speichern'
-        );
+        ];
 
         $this->getRequest()->setPost($post)->setMethod('POST');
 
@@ -160,17 +166,18 @@ class Admin_LicenceControllerTest extends CrudControllerTestCase {
         $this->assertQueryContentContains('div#SortOrder', '100');
     }
 
-    public function testNewActionCancel() {
+    public function testNewActionCancel()
+    {
         $this->createsModels = true;
 
         $modelCount = count($this->getModels());
 
-        $post = array(
+        $post = [
             'NameLong' => 'TestNameLong',
             'Language' => 'eng',
             'LinkLicence' => 'www.example.org/licence',
             'Cancel' => 'Abbrechen'
-        );
+        ];
 
         $this->getRequest()->setPost($post)->setMethod('POST');
 
@@ -185,7 +192,8 @@ class Admin_LicenceControllerTest extends CrudControllerTestCase {
     /**
      * Tests 'edit' action.
      */
-    public function testEditActionShowForm() {
+    public function testEditActionShowForm()
+    {
         $this->dispatch('/admin/licence/edit/id/4');
         $this->assertResponseCode(200);
         $this->assertController('licence');
@@ -197,7 +205,8 @@ class Admin_LicenceControllerTest extends CrudControllerTestCase {
         $this->assertQueryCount('input#Id', 1);
     }
 
-    public function testEditActionSave() {
+    public function testEditActionSave()
+    {
         $this->createsModels = true;
 
         $licence = new Opus_Licence();
@@ -208,7 +217,7 @@ class Admin_LicenceControllerTest extends CrudControllerTestCase {
 
         $licenceId = $licence->store();
 
-        $this->getRequest()->setMethod('POST')->setPost(array(
+        $this->getRequest()->setMethod('POST')->setPost([
             'Id' => $licenceId,
             'Active' => '1',
             'NameLong' => 'NameLongModified',
@@ -222,7 +231,7 @@ class Admin_LicenceControllerTest extends CrudControllerTestCase {
             'PodAllowed' => '1',
             'SortOrder' => '5',
             'Save' => 'Abspeichern'
-        ));
+        ]);
 
         $this->dispatch('/admin/licence/edit');
         $this->assertRedirectTo('/admin/licence/show/id/' . $licenceId);
@@ -243,7 +252,8 @@ class Admin_LicenceControllerTest extends CrudControllerTestCase {
         $this->assertEquals(5, $licence->getSortOrder());
     }
 
-    public function testEditActionCancel() {
+    public function testEditActionCancel()
+    {
         $this->createsModels = true;
 
         $licence = new Opus_Licence();
@@ -254,13 +264,13 @@ class Admin_LicenceControllerTest extends CrudControllerTestCase {
 
         $licenceId = $licence->store();
 
-        $this->getRequest()->setMethod('POST')->setPost(array(
+        $this->getRequest()->setMethod('POST')->setPost([
             'Id' => $licenceId,
             'NameLong' => 'NameLongModified',
             'Language' => 'eng',
             'LinkLicence' => 'LinkLicenceModified',
             'Cancel' => 'Cancel'
-        ));
+        ]);
 
         $this->dispatch('/admin/licence/edit');
         $this->assertRedirectTo('/admin/licence');
@@ -270,18 +280,31 @@ class Admin_LicenceControllerTest extends CrudControllerTestCase {
         $this->assertEquals('NameLong', $licence->getNameLong());
     }
 
-    public function testDeleteActionShowForm() {
+    public function testDeleteActionShowForm()
+    {
         $this->useEnglish();
 
-        $this->dispatch('/admin/licence/delete/id/4');
+        $this->dispatch('/admin/licence/delete/id/1');
 
         $this->assertQueryContentContains('legend', 'Delete Licence');
-        $this->assertQueryContentContains('span.displayname', 'Creative Commons - CC BY-ND - Namensnennung');
+        $this->assertQueryContentContains('span.displayname', 'Creative Commons - CC BY - Namensnennung 4.0 International');
         $this->assertQuery('input#ConfirmYes');
         $this->assertQuery('input#ConfirmNo');
     }
 
-    public function createNewModel() {
+    public function testDeleteActionUsedLicence()
+    {
+        $this->useEnglish();
+
+        $this->dispatch('/admin/licence/delete/id/4');
+
+        $this->assertRedirect('Should be a redirect to index action.');
+        $this->assertRedirectRegex('/^\/admin\/licence/'); // Regex weil danach noch '/id/xxx' kommt
+        $this->verifyFlashMessage('controller_crud_model_cannot_delete', self::MESSAGE_LEVEL_FAILURE);
+    }
+
+    public function createNewModel()
+    {
         $licence = new Opus_Licence();
 
         $licence->setNameLong('Test Licence (LicenceControllerTest::testDeleteAction)');
@@ -291,9 +314,8 @@ class Admin_LicenceControllerTest extends CrudControllerTestCase {
         return $licence->store();
     }
 
-    public function getModel($identifier) {
+    public function getModel($identifier)
+    {
         return new Opus_Licence($identifier);
     }
-
 }
-
