@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -28,19 +27,19 @@
  * @category    Application
  * @package     Module_Setup
  * @author      Edouard Simon (edouard.simon@zib.de)
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
  *
  */
-class Setup_Model_Language_TranslationManager {
+class Setup_Model_Language_TranslationManager
+{
     /**
      * sort by translation unit
      */
-
     const SORT_UNIT = 'unit';
 
     /**
@@ -84,7 +83,8 @@ class Setup_Model_Language_TranslationManager {
      * @param array $modules Modules to include
      *
      */
-    public function setModules($array) {
+    public function setModules($array)
+    {
         $this->_modules = $array;
     }
 
@@ -94,7 +94,8 @@ class Setup_Model_Language_TranslationManager {
      *
      *
      */
-    public function setFilter($string) {
+    public function setFilter($string)
+    {
         $this->_filter = $string;
     }
 
@@ -107,7 +108,8 @@ class Setup_Model_Language_TranslationManager {
      * @param int $sortOrder    Sort order as expected by @see array_multisort()
      * @throw Setup_Model_FileNotReadableException Thrown if loading tmx file(s) fails.
      */
-    public function getTranslations($sortKey = self::SORT_UNIT, $sortOrder = SORT_ASC) {
+    public function getTranslations($sortKey = self::SORT_UNIT, $sortOrder = SORT_ASC)
+    {
         $fileData = $this->getFiles();
         $translations = array();
         $sortArray = array();
@@ -116,7 +118,7 @@ class Setup_Model_Language_TranslationManager {
                 foreach ($filenames as $fileName) {
                     $relativeFilePath = "$module/$dir/$fileName";
                     $filePath = APPLICATION_PATH . "/modules/$relativeFilePath";
-                    $tmxFile = new Application_Util_TmxFile();
+                    $tmxFile = new Application_Translate_TmxFile();
                     if ($tmxFile->load($filePath)) {
                         $translationUnits = $tmxFile->toArray();
                         foreach ($translationUnits as $key => $values) {
@@ -149,7 +151,8 @@ class Setup_Model_Language_TranslationManager {
      * returns an array containing all translation files found for all modules
      * set via @see setModules()
      */
-    public function getFiles() {
+    public function getFiles()
+    {
         $modules = array();
         $languageDirs = array('language', 'language_custom');
         foreach ($this->_modules as $moduleName) {
@@ -177,5 +180,4 @@ class Setup_Model_Language_TranslationManager {
         }
         return $modules;
     }
-
 }

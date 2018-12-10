@@ -28,47 +28,53 @@
  * @category    Application
  * @package     Module_Setup
  * @author      Edouard Simon <edouard.simon@zib.de>
- * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2013-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class Setup_Model_AbstractTest extends ControllerTestCase {
+class Setup_Model_AbstractTest extends ControllerTestCase
+{
 
     protected $object;
+
     protected $testFile;
 
-    public function setUp() {
+    public function setUp()
+    {
         parent::setUp();
         $this->object = $this->getMockForAbstractClass("Setup_Model_Abstract");
         $this->object->expects($this->any())
                 ->method('toArray')
-                ->will($this->returnValue(array()));
+                ->will($this->returnValue([]));
         $this->object->expects($this->any())
-                ->method('fromArray')
-                ->will($this->returnValue(true));
+            ->method('fromArray')
+            ->will($this->returnValue(true));
         $this->testFile = APPLICATION_PATH . '/tests/workspace/tmp/setuptest.txt';
         $touched = touch($this->testFile);
         $this->assertTrue($touched, "Failed creating test file '{$this->testFile}'");
     }
 
-    public function tearDown() {
+    public function tearDown()
+    {
         parent::tearDown();
         unlink($this->testFile);
     }
 
-    public function testSetConfigWithInvalidParams() {
+    public function testSetConfigWithInvalidParams()
+    {
         $this->setExpectedException('Setup_Model_Exception');
-        $this->object->setConfig(array('bogusConfigOption' => 'Invalid Config Value'));
+        $this->object->setConfig(['bogusConfigOption' => 'Invalid Config Value']);
     }
 
-    public function testSetConfigWithValidParams() {
+    public function testSetConfigWithValidParams()
+    {
         chmod($this->testFile, 0600);
         file_put_contents($this->testFile, "Test Data");
-        $this->object->setConfig(array('contentSources' => array($this->testFile)));
+        $this->object->setConfig(['contentSources' => [$this->testFile]]);
         $this->assertEquals("Test Data", $this->object->getContent($this->testFile));
     }
 
-    public function testVerifyReadAccess() {
+    public function testVerifyReadAccess()
+    {
         chmod($this->testFile, 0400);
         try {
             $this->object->verifyReadAccess($this->testFile);
@@ -80,11 +86,12 @@ class Setup_Model_AbstractTest extends ControllerTestCase {
             $this->object->verifyReadAccess($this->testFile);
             $this->fail('Expected Setup_Model_FileNotReadableException');
         } catch (Setup_Model_FileNotReadableException $exc) {
-            
+
         }
     }
 
-    public function testVerifyWriteAccess() {
+    public function testVerifyWriteAccess()
+    {
         chmod($this->testFile, 0200);
         try {
             $this->object->verifyWriteAccess($this->testFile);
@@ -96,11 +103,12 @@ class Setup_Model_AbstractTest extends ControllerTestCase {
             $this->object->verifyReadAccess($this->testFile);
             $this->fail('Expected Setup_Model_FileNotWriteableException');
         } catch (Setup_Model_FileNotReadableException $exc) {
-            
+
         }
     }
 
-    public function testWriteData() {
+    public function testWriteData()
+    {
         chmod($this->testFile, 0600);
         $this->object->addContentSource($this->testFile);
         $this->object->setContent(array($this->testFile => "Test Data"));
@@ -108,14 +116,15 @@ class Setup_Model_AbstractTest extends ControllerTestCase {
         $this->assertEquals('Test Data', file_get_contents($this->testFile));
     }
 
-    public function testReadWriteTmx() {
+    public function testReadWriteTmx()
+    {
         $tmxSourceFile = APPLICATION_PATH . "/tests/test.tmx";
         $tmxTargetFile = APPLICATION_PATH . "/tests/workspace/tmp/test.tmx";
         $this->object->setTranslationSources(array($tmxSourceFile));
         $this->object->setTranslationTarget($tmxTargetFile);
         $translationArray = $this->object->getTranslation();
         $this->assertEquals(array('home_index_contact_pagetitle', 'home_index_contact_title'), array_keys($translationArray));
-        $translationArray['test_key'] = array('de' => 'Test (deutsch)', 'en' => 'Test (english)');
+        $translationArray['test_key'] = ['de' => 'Test (deutsch)', 'en' => 'Test (english)'];
         $this->object->setTranslation($translationArray, false);
         $this->object->store();
         $this->assertFileExists($tmxTargetFile);
@@ -129,37 +138,31 @@ class Setup_Model_AbstractTest extends ControllerTestCase {
         unlink($tmxTargetFile);
     }
 
-    public function testGetTranslationDiff() {
+    public function testGetTranslationDiff()
+    {
         $tmxSourceFile = APPLICATION_PATH . "/tests/test.tmx";
         $tmxTargetFile = APPLICATION_PATH . "/tests/workspace/tmp/test.tmx";
-        $this->object->setTranslationSources(array($tmxSourceFile));
+        $this->object->setTranslationSources([$tmxSourceFile]);
         $this->object->setTranslationTarget($tmxTargetFile);
 
 
-        $changedTranslation = array('home_index_contact_pagetitle' => array(
-                'de' => 'Kontaktaufnahme',
-                ));
+        $changedTranslation = ['home_index_contact_pagetitle' => ['de' => 'Kontaktaufnahme']];
 
-        $expectedChangeDiff = array(
-            'home_index_contact_pagetitle' =>
-            array(
-                'en' => 'Contact',
-                'de' => 'Kontaktaufnahme',
-                ));
+        $expectedChangeDiff = ['home_index_contact_pagetitle' => [
+            'en' => 'Contact',
+            'de' => 'Kontaktaufnahme',
+        ]];
 
         $this->assertEquals($expectedChangeDiff, $this->object->getTranslationDiff($changedTranslation));
 
-
-
-        $expectedAddDiff = $addedTranslation = array('test_unit' =>
-            array('de' => 'testen'),
-            array('en' => 'to test')
-        );
+        $expectedAddDiff = $addedTranslation = ['test_unit' =>
+            ['de' => 'testen'],
+            ['en' => 'to test']
+        ];
 
         $this->assertEquals($expectedAddDiff, $this->object->getTranslationDiff($addedTranslation));
 
 //        var_export($this->object->getTranslationDiff($changed));
 //        var_export($this->object->getTranslationDiff(array('test_unit' => array('de' => 'fritz'))));
     }
-
 }

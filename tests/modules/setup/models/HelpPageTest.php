@@ -27,20 +27,20 @@
  * @category    Application
  * @package     Module_Setup
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2016, OPUS 4 development team
+ * @copyright   Copyright (c) 2016-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
  * TODO expand tests
  */
-class Setup_Model_HelpPageTest extends ControllerTestCase {
+class Setup_Model_HelpPageTest extends ControllerTestCase
+{
 
-    public function testFromArrayEmptyArray() {
+    public function testFromArrayEmptyArray()
+    {
         $model = new Setup_Model_HelpPage();
 
-        $model->fromArray(array());
+        $model->fromArray([]);
     }
-
-
 }

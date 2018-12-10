@@ -28,15 +28,15 @@
  * @package     Module_Setup
  * @author      Edouard Simon <edouard.simon@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
  * Simple class for reading, modifiying and writing tmx files.
  */
-class Application_Util_TmxFile {
+class Application_Translate_TmxFile
+{
     /**
      * template for new tmx files
      */
@@ -52,7 +52,7 @@ class Application_Util_TmxFile {
     /**
      * Internal representation of the file
      */
-    protected $_data = array();
+    protected $_data = [];
 
     /**
      *
@@ -60,7 +60,8 @@ class Application_Util_TmxFile {
      *                        if no source is provided, an empty file is created.
      *
      */
-    public function __construct($source = null) {
+    public function __construct($source = null)
+    {
         if (is_string($source)) {
             $this->load($source);
         }
@@ -71,7 +72,8 @@ class Application_Util_TmxFile {
      *
      * @return DomDocument
      */
-    public function toDomDocument() {
+    public function toDomDocument()
+    {
         return $this->_arrayToDom($this->_data);
     }
 
@@ -80,7 +82,8 @@ class Application_Util_TmxFile {
      *
      * @return array
      */
-    public function toArray() {
+    public function toArray()
+    {
         return $this->_data;
     }
 
@@ -104,7 +107,8 @@ class Application_Util_TmxFile {
      * @param $fileName full path of file to load
      * @return bool true on success or false on failure
      */
-    public function load($fileName) {
+    public function load($fileName)
+    {
         $dom = new DOMDocument();
         $dom->substituteEntities = false;
         $result = @$dom->load($fileName); // supress warning since return value is checked
@@ -121,7 +125,8 @@ class Application_Util_TmxFile {
      * @param $fileName full path of file to save
      * @return bool true on success or false on failure
      */
-    public function save($fileName) {
+    public function save($fileName)
+    {
         $domDocument = $this->_arrayToDom($this->_data);
         return ($domDocument->save($fileName) !== false);
     }
@@ -136,23 +141,25 @@ class Application_Util_TmxFile {
      *
      * @return self fluent Interface
      */
-    public function setVariantSegment($unitName, $language, $text) {
+    public function setVariantSegment($unitName, $language, $text)
+    {
         $tmxArray = $this->toArray();
         if (!isset($tmxArray[$unitName])) {
-            $tmxArray[$unitName] = array();
+            $tmxArray[$unitName] = [];
         }
         $tmxArray[$unitName][$language] = $text;
         $this->fromArray($tmxArray);
         return $this;
     }
 
-    protected function _domToArray($domDocument) {
+    protected function _domToArray($domDocument)
+    {
         $xPath = new DOMXPath($domDocument);
         $tuElements = $domDocument->getElementsByTagName('tu');
-        $translationUnits = array();
+        $translationUnits = [];
         foreach ($tuElements as $tu) {
             $key = $tu->attributes->getNamedItem('tuid')->textContent;
-            $translationUnits[$key] = array();
+            $translationUnits[$key] = [];
             foreach ($tu->getElementsByTagName('tuv') as $child) {
                 $translationUnits[$key][$child->attributes->getNamedItem('lang')->nodeValue] =
                     $child->getElementsByTagName('seg')->item(0)->nodeValue;
@@ -161,7 +168,8 @@ class Application_Util_TmxFile {
         return $translationUnits;
     }
 
-    protected function _arrayToDom($array) {
+    protected function _arrayToDom($array)
+    {
         $dom = new DOMDocument();
         $dom->preserveWhiteSpace = false;
         $dom->formatOutput = true;
@@ -184,5 +192,4 @@ class Application_Util_TmxFile {
         }
         return $dom;
     }
-
 }
