@@ -174,7 +174,7 @@ class Setup_Model_StaticPage extends Setup_Model_Abstract
                         break;
                     case 'key':
                         foreach ($val as $translationUnit => $variant) {
-                            $resultTmx->setVariantSegment($translationUnit, $language, $variant);
+                            $resultTmx->setTranslation($translationUnit, $language, $variant);
                         }
                         break;
                     default:

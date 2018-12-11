@@ -76,8 +76,8 @@ class Setup_Model_StaticPageTest extends ControllerTestCase
     public function testToArray()
     {
         $tmxFile = new Application_Translate_TmxFile();
-        $tmxFile->setVariantSegment('test_translation_unit', 'de', 'Testübersetzung');
-        $tmxFile->setVariantSegment('test_translation_unit', 'en', 'Test translation');
+        $tmxFile->setTranslation('test_translation_unit', 'de', 'Testübersetzung');
+        $tmxFile->setTranslation('test_translation_unit', 'en', 'Test translation');
         $tmxFile->save(APPLICATION_PATH . DIRECTORY_SEPARATOR . $this->tmxTarget);
 
         foreach ($this->contentFiles as $contentFile) {

@@ -123,7 +123,7 @@ class Setup_Model_HelpPage extends Setup_Model_Abstract
                     $resultData[$filePath] = $contents['contents'];
                     $contents = $contents['filename'];
                 }
-                $resultTmx->setVariantSegment($translationUnit, $language, $contents);
+                $resultTmx->setTranslation($translationUnit, $language, $contents);
             }
         }
         $this->setContent($resultData);

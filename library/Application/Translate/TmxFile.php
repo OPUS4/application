@@ -33,7 +33,12 @@
  */
 
 /**
- * Simple class for reading, modifiying and writing tmx files.
+ * Simple class for reading, modifying and writing tmx files.
+ *
+ * TODO functions to add/remove/update translations directly in a more direct way (not just passing in arrays)
+ * TODO detect duplicate keys in file
+ * TODO load should not add to existing keys - object should not represent multiple files
+ *
  */
 class Application_Translate_TmxFile
 {
@@ -52,13 +57,13 @@ class Application_Translate_TmxFile
     /**
      * Internal representation of the file
      */
-    protected $_data = [];
+    private $data = [];
 
     /**
+     * Construct and optionally load TMX file.
      *
      * @param string $source (optional) full path of file to load
      *                        if no source is provided, an empty file is created.
-     *
      */
     public function __construct($source = null)
     {
@@ -74,7 +79,7 @@ class Application_Translate_TmxFile
      */
     public function toDomDocument()
     {
-        return $this->_arrayToDom($this->_data);
+        return $this->arrayToDom($this->data);
     }
 
     /**
@@ -84,18 +89,21 @@ class Application_Translate_TmxFile
      */
     public function toArray()
     {
-        return $this->_data;
+        return $this->data;
     }
 
     /**
-     * Import from array. This method may be called
-     * multiple times. If keys exist in more than
-     * one array, the last key overwrites the previously imported.
+     * Import translation entries from array.
+     *
+     * This method may be called multiple times. If keys exist in more than one array, the last key overwrites the
+     * previously imported.
+     *
      * @param array $array
      * @return self Fluid Interface
      */
-    public function fromArray($array) {
-        $this->_data = array_replace_recursive($this->_data, $array);
+    public function fromArray($array)
+    {
+        $this->data = array_replace_recursive($this->data, $array);
         return $this;
     }
 
@@ -113,8 +121,8 @@ class Application_Translate_TmxFile
         $dom->substituteEntities = false;
         $result = @$dom->load($fileName); // supress warning since return value is checked
         if ($result) {
-            $newData = $this->_domToArray($dom);
-            $this->_data = array_replace_recursive($this->_data, $newData);
+            $newData = $this->domToArray($dom);
+            $this->data = array_replace_recursive($this->data, $newData);
         }
         return $result;
     }
@@ -127,7 +135,7 @@ class Application_Translate_TmxFile
      */
     public function save($fileName)
     {
-        $domDocument = $this->_arrayToDom($this->_data);
+        $domDocument = $this->arrayToDom($this->data);
         return ($domDocument->save($fileName) !== false);
     }
 
@@ -135,28 +143,64 @@ class Application_Translate_TmxFile
      * Set a segment value for the given translation unit variant.
      * If either the unit or the variant is not yet set, it will be added.
      *
-     * @param string $unitName identifier of translation unit
+     * @param string $key identifier of translation unit
      * @param string $language identifier of variant
      * @param string $text Segment value to set for translation unit variant
      *
      * @return self fluent Interface
      */
-    public function setVariantSegment($unitName, $language, $text)
+    public function setTranslation($key, $language, $text)
     {
         $tmxArray = $this->toArray();
-        if (!isset($tmxArray[$unitName])) {
-            $tmxArray[$unitName] = [];
+
+        if (!isset($tmxArray[$key])) {
+            $tmxArray[$key] = [];
         }
-        $tmxArray[$unitName][$language] = $text;
+
+        $tmxArray[$key][$language] = $text;
+
         $this->fromArray($tmxArray);
+
         return $this;
     }
 
-    protected function _domToArray($domDocument)
+    /**
+     * Checks if a translation exists.
+     *
+     * @param $key Translation key
+     * @param null $language Optionally what language to look for
+     * @return bool
+     */
+    public function hasTranslation($key, $language = null)
     {
-        $xPath = new DOMXPath($domDocument);
+        if (is_null($language)) {
+            return isset($this->data[$key]);
+        } else {
+            return isset($this->data[$key][$language]);
+        }
+    }
+
+    /**
+     * Removes entry from translation file.
+     *
+     * @param $key string Translation key
+     */
+    public function removeTranslation($key) {
+        unset($this->data[$key]);
+    }
+
+    /**
+     * Converts TMX DOM document to array structure.
+     *
+     * @param $domDocument
+     * @return array
+     */
+    protected function domToArray($domDocument)
+    {
         $tuElements = $domDocument->getElementsByTagName('tu');
+
         $translationUnits = [];
+
         foreach ($tuElements as $tu) {
             $key = $tu->attributes->getNamedItem('tuid')->textContent;
             $translationUnits[$key] = [];
@@ -168,13 +212,22 @@ class Application_Translate_TmxFile
         return $translationUnits;
     }
 
-    protected function _arrayToDom($array)
+    /**
+     * Converts array structure to TMX DOM document.
+     *
+     * @param $array
+     * @return DOMDocument
+     */
+    protected function arrayToDom($array)
     {
         $dom = new DOMDocument();
+
         $dom->preserveWhiteSpace = false;
         $dom->formatOutput = true;
         $dom->substituteEntities = false;
+
         $dom->loadXML(self::template);
+
         foreach ($array as $unitName => $variants) {
             $tuElement = $dom->createElement('tu');
             $tuElement->setAttribute('tuid', $unitName);
