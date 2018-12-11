@@ -118,7 +118,7 @@ class Setup_Model_AbstractTest extends ControllerTestCase
 
     public function testReadWriteTmx()
     {
-        $tmxSourceFile = APPLICATION_PATH . "/tests/test.tmx";
+        $tmxSourceFile = APPLICATION_PATH . "/tests/resources/tmx/test.tmx";
         $tmxTargetFile = APPLICATION_PATH . "/tests/workspace/tmp/test.tmx";
         $this->object->setTranslationSources(array($tmxSourceFile));
         $this->object->setTranslationTarget($tmxTargetFile);
@@ -140,7 +140,7 @@ class Setup_Model_AbstractTest extends ControllerTestCase
 
     public function testGetTranslationDiff()
     {
-        $tmxSourceFile = APPLICATION_PATH . "/tests/test.tmx";
+        $tmxSourceFile = APPLICATION_PATH . "/tests/resources/tmx/test.tmx";
         $tmxTargetFile = APPLICATION_PATH . "/tests/workspace/tmp/test.tmx";
         $this->object->setTranslationSources([$tmxSourceFile]);
         $this->object->setTranslationTarget($tmxTargetFile);
