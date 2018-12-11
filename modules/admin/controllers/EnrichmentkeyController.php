@@ -28,9 +28,8 @@
  * @package     Module_Admin
  * @author      Gunar Maiwald <maiwald@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id: EnrichmentkeyController.php 9368 2011-12-13 09:05:15Z gmaiwald $
  */
 
 /**
@@ -49,7 +48,8 @@
  *
  * TODO show protected/referenced in list of keys
  */
-class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD {
+class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD
+{
 
     /**
      * Model for handling enrichment keys.
@@ -61,7 +61,8 @@ class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD {
      * Initializes and configures controller.
      * @throws Application_Exception
      */
-    public function init() {
+    public function init()
+    {
         $this->_enrichmentKeys = new Admin_Model_EnrichmentKeys();
         $this->setVerifyModelIdIsNumeric(false);
         $this->setShowActionEnabled(false);
@@ -74,9 +75,9 @@ class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD {
      * @param $model Opus_EnrichmentKey
      * @return bool true if model can be edited and deleted, false if model is protected
      */
-    public function isModifiable($model) {
+    public function isModifiable($model)
+    {
         $protectedKeys = $this->_enrichmentKeys->getProtectedEnrichmentKeys();
         return !in_array($model->getId(), array_merge($protectedKeys, Opus_EnrichmentKey::getAllReferenced()));
     }
-
 }

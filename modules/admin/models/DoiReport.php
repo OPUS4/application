@@ -27,17 +27,20 @@
  * @category    Application
  * @package     Module_Admin
  * @author      Sascha Szott <szott@zib.de>
+ * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Admin_Model_DoiReport {
+class Admin_Model_DoiReport
+{
 
     private $filter;
 
     /**
      * Admin_Model_DoiReport constructor.
      */
-    public function __construct($filter) {
+    public function __construct($filter)
+    {
         $this->filter = $filter;
     }
 
@@ -47,8 +50,9 @@ class Admin_Model_DoiReport {
      *
      * @return array von Elementen vom Typ Admin_Model_DoiStatus
      */
-    public function getDocList() {
-        $result = array();
+    public function getDocList()
+    {
+        $result = [];
 
         $doiManager = new Opus_Doi_DoiManager();
         $docs = $doiManager->getAll($this->filter);
@@ -72,7 +76,8 @@ class Admin_Model_DoiReport {
      * Die Methode gibt hierzu die Anzahl der lokalen DOIs zurück, die noch nicht registriert wurden.
      *
      */
-    public function getNumDoisForBulkRegistration() {
+    public function getNumDoisForBulkRegistration()
+    {
         $result = 0;
 
         $docFinder = new Opus_DocumentFinder();
@@ -100,12 +105,14 @@ class Admin_Model_DoiReport {
      * Die Methode gibt die Anzahl der registrierten, aber noch nicht geprüften DOIs zurück.
      *
      */
-    public function getNumDoisForBulkVerification() {
+    public function getNumDoisForBulkVerification()
+    {
         $result = 0;
 
         $docFinder = new Opus_DocumentFinder();
         $docFinder->setServerState('published');
         $docFinder->setIdentifierTypeExists('doi');
+
         foreach ($docFinder->ids() as $docId) {
             $doc = new Opus_Document($docId);
             $dois = $doc->getIdentifierDoi();
@@ -118,7 +125,7 @@ class Admin_Model_DoiReport {
                 }
             }
         }
+
         return $result;
     }
-
 }
