@@ -41,12 +41,10 @@ class Application_View_Helper_TranslateWithDefault extends Zend_View_Helper_Abst
     {
         $translator = Application_Configuration::getInstance()->getTranslate();
 
-        if ($translator->isTranslated($messageId))
-        {
+        if ($translator->isTranslated($messageId)) {
             return $translator->translate($messageId);
         }
 
         return $default;
     }
-
 }

@@ -25,34 +25,34 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Controller
- * @author      Ralf Claussnitzer (ralf.claussnitzer@slub-dresden.de)
- * @author      Thoralf Klein <thoralf.klein@zib.de>
+ * @package     View
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
- * Loads languages from modules.  When registered as FrontController plugin
- * it hooks into dispatchLoopStartup().
+ * View helper for translations modifying behaviour of base class.
  */
-class Application_Controller_Plugin_LoadTranslation extends Zend_Controller_Plugin_Abstract
+class Application_View_Helper_TranslateLanguage extends Zend_View_Helper_Translate
 {
 
     /**
-     * Hooks into preDispatch to setup include path for every request.
+     * Changes default behaviour of translate function to return empty string for null values.
      *
-     * @param Zend_Controller_Request_Abstract $request The request passed to the FrontController.
-     * @return void
+     * The default value for $messageid is changed to distinguish between null values and no
+     * parameter at all. This way translate() can still be used to obtain the translation object,
+     * which is the default behavior.
+     *
+     * Also makes sure, that first option is never interpreted as a locale. This avoids the problem
+     * of a placeholder value that matches a locale, for instance a collection with the name 'de'.
+     * (for more information see OPUSVIER-2546)
+     *
+     * TODO review if the behaviour changes are worth it - is there a better way?
      */
-    public function preDispatch(Zend_Controller_Request_Abstract $request)
+    public function translateLanguage($langId)
     {
-        $currentModule = $request->getModuleName();
-
-        // Add translation
-        if ($currentModule !== 'default' && Zend_Registry::isRegistered(Application_Translate::REGISTRY_KEY)) {
-            Zend_Registry::get(Application_Translate::REGISTRY_KEY)->loadModule($currentModule);
-        }
+        $translator = Zend_Registry::get(Application_Translate::REGISTRY_KEY);
+        return $translator->translateLanguage($langId);
     }
 }
