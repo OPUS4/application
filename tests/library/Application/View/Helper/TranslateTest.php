@@ -27,16 +27,17 @@
  * @category    Application Unit Test
  * @package     Application_View_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Application_View_Helper_TranslateTest extends ControllerTestCase {
-                                                         #
+class Application_View_Helper_TranslateTest extends ControllerTestCase
+{
     /**
      * Return empty string for 'null' values.
      */
-    public function testTranslateNull() {
+    public function testTranslateNull()
+    {
         $model = new Application_View_Helper_Translate();
 
         $this->assertEquals('', $model->translate(null));
@@ -45,27 +46,31 @@ class Application_View_Helper_TranslateTest extends ControllerTestCase {
     /**
      * Return $this for no value (default behaviour).
      */
-    public function testTranslateWithoutParameter() {
+    public function testTranslateWithoutParameter()
+    {
         $model = new Application_View_Helper_Translate();
 
         $this->assertEquals($model, $model->translate());
     }
 
-    public function testTranslateUnknownKey() {
+    public function testTranslateUnknownKey()
+    {
         $model = new Application_View_Helper_Translate();
 
         $this->assertEquals('key123', $model->translate('key123'));
     }
 
-    public function testTranslateKnownKey() {
+    public function testTranslateKnownKey()
+    {
         $this->useGerman();
 
         $model = new Application_View_Helper_Translate();
 
-        $this->assertEquals('Deutsch', $model->translate('deu'));
+        $this->assertEquals('Signatur', $model->translate('SignatureValue'));
     }
 
-    public function testTranslateWithParameters() {
+    public function testTranslateWithParameters()
+    {
         $this->useEnglish();
 
         Zend_Registry::get('Zend_Translate')->loadModule('admin');
@@ -78,7 +83,8 @@ class Application_View_Helper_TranslateTest extends ControllerTestCase {
         );
     }
 
-    public function testTranslateWithParameterArray() {
+    public function testTranslateWithParameterArray()
+    {
         $this->useEnglish();
 
         Zend_Registry::get('Zend_Translate')->loadModule('admin');
@@ -144,7 +150,4 @@ class Application_View_Helper_TranslateTest extends ControllerTestCase {
 
         $this->assertEquals('Showing results <b>1</b> to <b>10</b>', $result);
     }
-
-
-
 }

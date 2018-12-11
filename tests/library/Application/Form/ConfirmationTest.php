@@ -31,20 +31,23 @@
  * @category    Application Unit Test
  * @package     Application_Form
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Application_Form_ConfirmationTest extends ControllerTestCase {
+class Application_Form_ConfirmationTest extends ControllerTestCase
+{
 
     private $form;
 
-    public function setUp() {
+    public function setUp()
+    {
         parent::setUp();
 
         $this->form = $this->getForm();
     }
 
-    private function getForm() {
+    private function getForm()
+    {
         return new Application_Form_Confirmation('Opus_Licence');
     }
 
@@ -52,7 +55,8 @@ class Application_Form_ConfirmationTest extends ControllerTestCase {
      * @covers Application_Form_Confirmation::__construct
      * @covers Application_Form_Confirmation::init
      */
-    public function testConstructForm() {
+    public function testConstructForm()
+    {
         $form = new Application_Form_Confirmation('Opus_Licence');
 
         $this->assertEquals('Opus_Licence', $form->getModelClass());
@@ -74,7 +78,8 @@ class Application_Form_ConfirmationTest extends ControllerTestCase {
      * @expectedException Application_Exception
      * @expectedExceptionMessage construct without parameter
      */
-    public function testConstructFormNull() {
+    public function testConstructFormNull()
+    {
         new Application_Form_Confirmation(null);
     }
 
@@ -82,11 +87,13 @@ class Application_Form_ConfirmationTest extends ControllerTestCase {
      * @expectedException Application_Exception
      * @expectedExceptionMessage construct without parameter
      */
-    public function testConstructFormEmpty() {
+    public function testConstructFormEmpty()
+    {
         new Application_Form_Confirmation('   ');
     }
 
-    public function testGetFormLegend() {
+    public function testGetFormLegend()
+    {
         $this->useEnglish();
         $form = new Application_Form_Confirmation('Opus_Language');
 
@@ -95,31 +102,36 @@ class Application_Form_ConfirmationTest extends ControllerTestCase {
         $this->assertEquals('Delete Language', $legend);
     }
 
-    public function testGetModelClass() {
+    public function testGetModelClass()
+    {
         $form = new Application_Form_Confirmation('Opus_Language');
 
         $this->assertEquals('Opus_Language', $form->getModelClass());
     }
 
-    public function testGetModelClassName() {
+    public function testGetModelClassName()
+    {
         $this->useEnglish();
         $form = new Application_Form_Confirmation('Opus_DnbInstitute');
 
         $this->assertEquals('Institute', $form->getModelClassName());
     }
 
-    public function testGetModelDisplayName() {
+    public function testGetModelDisplayName()
+    {
         $form = new Application_Form_Confirmation('Opus_Licence');
         $form->setModel(new Opus_Licence(4));
         $this->assertContains('Creative Commons - CC BY-ND - Namensnennung', $form->getModelDisplayName());
     }
 
-    public function testGetModelDisplayNameNoModel() {
+    public function testGetModelDisplayNameNoModel()
+    {
         $form = new Application_Form_Confirmation('Opus_Licence');
         $this->assertEquals('', $form->getModelDisplayName());
     }
 
-    public function testSetGetModelDisplayName() {
+    public function testSetGetModelDisplayName()
+    {
         $form = new Application_Form_Confirmation('Opus_Licence');
         $form->setModel(new Opus_Licence(4));
         $this->assertContains('Creative Commons - CC BY-ND - Namensnennung', $form->getModelDisplayName());
@@ -133,77 +145,85 @@ class Application_Form_ConfirmationTest extends ControllerTestCase {
         $this->assertContains('Creative Commons - CC BY-ND - Namensnennung', $form->getModelDisplayName());
     }
 
-    public function testIsConfirmedYes() {
+    public function testIsConfirmedYes()
+    {
         $form = new Application_Form_Confirmation('Opus_Language');
 
-        $post = array(
+        $post = [
             'Id' => '100',
             'ConfirmYes' => 'Ja'
-        );
+        ];
 
         $this->assertTrue($form->isConfirmed($post));
     }
 
-    public function testIsConfirmedNo() {
+    public function testIsConfirmedNo()
+    {
         $form = new Application_Form_Confirmation('Opus_Language');
 
-        $post = array(
+        $post = [
             'Id' => '100',
             'ConfirmNo' => 'Nein'
-        );
+        ];
 
         $this->assertFalse($form->isConfirmed($post));
     }
 
-    public function testIsConfirmedNoInvalidForm() {
+    public function testIsConfirmedNoInvalidForm()
+    {
         $form = new Application_Form_Confirmation('Opus_Language');
 
-        $post = array(
+        $post = [
             'Id' => '',
             'ConfirmYes' => 'Ja'
-        );
+        ];
 
         $this->assertFalse($form->isConfirmed($post));
         $this->assertEquals(1, count($form->getErrors()));
     }
 
-    public function testProcessPostYes() {
+    public function testProcessPostYes()
+    {
         $form = new Application_Form_Confirmation('Opus_Language');
 
-        $post = array(
+        $post = [
             'Id' => '100',
             'ConfirmYes' => 'Ja'
-        );
+        ];
 
         $this->assertEquals(Application_Form_Confirmation::RESULT_YES, $form->processPost($post));
     }
 
-    public function testProcessPostNo() {
+    public function testProcessPostNo()
+    {
         $form = new Application_Form_Confirmation('Opus_Language');
 
-        $post = array(
+        $post = [
             'Id' => '100',
             'ConfirmNo' => 'Nein'
-        );
+        ];
 
         $this->assertEquals(Application_Form_Confirmation::RESULT_NO, $form->processPost($post));
     }
 
-    public function testValidation() {
-        $this->assertTrue($this->form->isValid(array('Id' => '100')));
-        $this->assertFalse($this->form->isValid(array('Id' => ' ')));
-        $this->assertFalse($this->form->isValid(array('Id' => 'abc')));
-        $this->assertFalse($this->form->isValid(array('Id' => '')));
-        $this->assertFalse($this->form->isValid(array()));
+    public function testValidation()
+    {
+        $this->assertTrue($this->form->isValid(['Id' => '100']));
+        $this->assertFalse($this->form->isValid(['Id' => ' ']));
+        $this->assertFalse($this->form->isValid(['Id' => 'abc']));
+        $this->assertFalse($this->form->isValid(['Id' => '']));
+        $this->assertFalse($this->form->isValid([]));
     }
 
-    public function testGetQuestion() {
+    public function testGetQuestion()
+    {
         $form = new Application_Form_Confirmation('Opus_Licence');
 
         $this->assertEquals('confirmation_question_default', $form->getQuestion());
     }
 
-    public function testSetQuestion() {
+    public function testSetQuestion()
+    {
         $form = new Application_Form_Confirmation('Opus_Licence');
 
         $form->setQuestion('Wollen Sie wirklich das Internet löschen?');
@@ -211,7 +231,8 @@ class Application_Form_ConfirmationTest extends ControllerTestCase {
         $this->assertEquals('Wollen Sie wirklich das Internet löschen?', $form->getQuestion());
     }
 
-    public function testSetModel() {
+    public function testSetModel()
+    {
         $this->form->setModel(new Opus_Licence(2));
         $this->assertEquals(2, $this->form->getModelId());
     }
@@ -220,7 +241,8 @@ class Application_Form_ConfirmationTest extends ControllerTestCase {
      * @expectedException Application_Exception
      * @expectedExceptionMessage must be Opus_Model_AbstractDb
      */
-    public function testSetModelNull() {
+    public function testSetModelNull()
+    {
         $this->form->setModel(null);
     }
 
@@ -228,7 +250,8 @@ class Application_Form_ConfirmationTest extends ControllerTestCase {
      * @expectedException Application_Exception
      * @expectedExceptionMessage must be Opus_Model_AbstractDb
      */
-    public function testSetModelNotObject() {
+    public function testSetModelNotObject()
+    {
         $this->form->setModel('notamodel');
     }
 
@@ -236,11 +259,13 @@ class Application_Form_ConfirmationTest extends ControllerTestCase {
      * @expectedException Application_Exception
      * @expectedExceptionMessage not instance of
      */
-    public function testSetModelBadModel() {
+    public function testSetModelBadModel()
+    {
         $this->form->setModel(new Opus_Date());
     }
 
-    public function testRenderQuestion() {
+    public function testRenderQuestion()
+    {
         $this->useEnglish();
 
         $this->form->setModel(new Opus_Licence(4));
@@ -251,17 +276,19 @@ class Application_Form_ConfirmationTest extends ControllerTestCase {
             $this->form->renderQuestion());
     }
 
-    public function testRenderQuestionTranslated() {
+    public function testRenderQuestionTranslated()
+    {
         $this->useEnglish();
 
         $this->form->setModel(new Opus_Licence(1));
 
-        $this->form->setQuestion('deu'); // belieber Schlüssel, es geht nur um die Übersetzung
+        $this->form->setQuestion('SignatureValue'); // belieber Schlüssel, es geht nur um die Übersetzung
 
-        $this->assertEquals('German', $this->form->renderQuestion());
+        $this->assertEquals('Signature', $this->form->renderQuestion());
     }
 
-    public function testRenderQuestionEscaped() {
+    public function testRenderQuestionEscaped()
+    {
         $licence = new Opus_Licence();
 
         $licence->setNameLong('<h1>Name mit Tags</h1>');
@@ -271,5 +298,4 @@ class Application_Form_ConfirmationTest extends ControllerTestCase {
         $this->assertNotContains('<h1>Name mit Tags</h1>', $this->form->renderQuestion());
         $this->assertContains('&lt;h1&gt;Name mit Tags&lt;/h1&gt;', $this->form->renderQuestion());
     }
-
 }
