@@ -27,43 +27,43 @@
  * @category    Application
  * @package     Application
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
  * Erweiterung von Zend_Translate, um Übersetzungsressourcen für Module zu laden.
- * 
+ *
  * Zend_Translate wid in den Zend Komponenten verwendet und in der Zend_Registry normalerweise unter 'Zend_Translate'
  * gespeichert. Mit den Erweiterungen können an beliebigen Stellen problemlos weitere Übersetzungsdateien geladen
  * werden.
  */
-class Application_Translate extends Zend_Translate {
+class Application_Translate extends Zend_Translate
+{
 
     /**
      * Schlüssel für Zend_Translate in Zend_Registry.
      */
     const REGISTRY_KEY = 'Zend_Translate';
-    
+
     /**
      * Array mit bereits geladenen Modulen.
      * @var array
      */
-    private $_loadedModules = array();
-    
+    private $_loadedModules = [];
+
     /**
      * Logger.
      * @var Zend_Log
      */
     private $_logger;
-    
+
     /**
      * Optionen für Zend_Translate.
      *
      * @var array
      */
-   private $_options = array(
+   private $_options = [
         'logMessage' => "Unable to translate key '%message%' into locale '%locale%'",
         'logPriority' => Zend_Log::DEBUG,
         'adapter' => Zend_Translate::AN_TMX,
@@ -72,28 +72,29 @@ class Application_Translate extends Zend_Translate {
         'scan' => Zend_Translate::LOCALE_FILENAME,
         'ignore' => '.',
         'disableNotices' => true
-    );    
-      
+    ];
+
     /**
      * Konstruiert Klasse für Übersetzungen in OPUS Applikation.
      */
-    public function __construct($options = null) {
+    public function __construct($options = null)
+    {
         $options = (!is_null($options)) ?  array_merge($this->getOptions(), $options) : $this->getOptions();
         parent::__construct($options);
     }
-    
+
     /**
      * Lädt die Übersetzungen für ein Modul.
      * @param $name
      */
-    public function loadModule($name) {
+    public function loadModule($name)
+    {
         if (!in_array($name, $this->_loadedModules)) {
             $moduleDir = APPLICATION_PATH . '/modules/' . $name;
             $this->loadLanguageDirectory("$moduleDir/language/", false);
             $this->loadLanguageDirectory("$moduleDir/language_custom/", false);
             $this->_loadedModules[] = $name;
-        }
-        else {
+        } else {
             $this->getLogger()->notice("Already loaded translations for module '$name'.");
         }
     }
@@ -107,12 +108,12 @@ class Application_Translate extends Zend_Translate {
      *
      * TODO better than supressing the warning would be for each module to register language directories in bootstrap
      */
-    public function loadLanguageDirectory($directory, $warnIfMissing = true) {
+    public function loadLanguageDirectory($directory, $warnIfMissing = true)
+    {
         $path = realpath($directory);
 
         if (($path === false) or (!is_dir($path)) or (!is_readable($path))) {
-            if ($warnIfMissing)
-            {
+            if ($warnIfMissing) {
                 $this->getLogger()->warn(__METHOD__ . " Directory '$directory' not found.");
             }
             return false;
@@ -133,23 +134,24 @@ class Application_Translate extends Zend_Translate {
             if (preg_match('/^[^.].*\.tmx$/', $file) === 0) {
                 continue;
             }
-            
+
             $options = array_merge(
-                array('content' => $path . DIRECTORY_SEPARATOR . $file),
+                ['content' => $path . DIRECTORY_SEPARATOR . $file],
                 $this->getOptions()
             );
 
             $this->addTranslation($options);
         }
-        
+
         return true;
     }
-    
+
     /**
      * Liefert den Logger für diese Klasse.
      * @return Zend_Log
      */
-    public function getLogger() {
+    public function getLogger()
+    {
         if (is_null($this->_logger)) {
             $this->_logger = Zend_Registry::get('Zend_Log');
         }
@@ -160,31 +162,41 @@ class Application_Translate extends Zend_Translate {
     /**
      * Setzt den Logger für diese Klasse.
      */
-    public function setLogger($logger) {
+    public function setLogger($logger)
+    {
         $this->_logger = $logger;
     }
-    
+
     /**
      * Liefert die Optionen für Zend_Translate.
      * @return array
      */
-    public function getOptions() {
-        $options = array_merge(
-            $this->_options, array(
+    public function getOptions()
+    {
+        $options = array_merge($this->_options, [
             'log' => $this->getLogger(),
-            'logUntranslated' => $this->isLogUntranslatedEnabled()    
-            )
-        );
+            'logUntranslated' => $this->isLogUntranslatedEnabled()
+        ]);
         return $options;
     }
-    
+
     /**
-     * 
+     *
      * @return type
      */
-    public function isLogUntranslatedEnabled() {
+    public function isLogUntranslatedEnabled()
+    {
         $config = Zend_Registry::get('Zend_Config');
-        return (isset($config->log->untranslated)) ? (bool)$config->log->untranslated : false; 
+        return (isset($config->log->untranslated)) ? (bool)$config->log->untranslated : false;
     }
-    
+
+    public function translateLanguage($langId)
+    {
+        if ($this->isTranslated($langId)) {
+            $language = $this->translate($langId);
+        } else {
+            $language = Locale::getDisplayLanguage($langId, $this->getLocale());
+        }
+        return $language;
+    }
 }
