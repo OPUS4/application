@@ -35,7 +35,7 @@
 /**
  *
  */
-class Setup_Model_Language_TranslationManager
+class Application_Translate_TranslationManager
 {
     /**
      * sort by translation unit

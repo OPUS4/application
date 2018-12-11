@@ -64,7 +64,7 @@ class Setup_LanguageController extends Application_Controller_SetupAbstract {
 
         $moduleNames = explode(',', $config['setup']['translation']['modules']['allowed']);
 
-        $translationManager = new Setup_Model_Language_TranslationManager();
+        $translationManager = new Application_Translate_TranslationManager();
         $translationManager->setModules($moduleNames);
         if (!empty($searchTerm)) {
             $translationManager->setFilter($searchTerm);

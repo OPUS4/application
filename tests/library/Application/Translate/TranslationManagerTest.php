@@ -35,7 +35,7 @@
 /**
  * Test class for Setup_Model_Language_TranslationManager.
  */
-class Setup_Model_Language_TranslationManagerTest extends ControllerTestCase
+class Application_Translate_TranslationManagerTest extends ControllerTestCase
 {
 
     /**
@@ -50,7 +50,7 @@ class Setup_Model_Language_TranslationManagerTest extends ControllerTestCase
     public function setUp()
     {
         parent::setUp();
-        $this->object = new Setup_Model_Language_TranslationManager;
+        $this->object = new Application_Translate_TranslationManager();
     }
 
     /**
