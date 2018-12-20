@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -229,7 +228,7 @@ class Publish_FormControllerTest extends ControllerTestCase {
         $this->assertNotContains("<div class='form-errors'>", $this->getResponse()->getBody());
 
         $this->assertContains('Bitte überprüfen Sie Ihre Eingaben.', $this->getResponse()->getBody());
-        $this->assertContains('<b>Kontaktdaten des Einstellers</b>', $this->getResponse()->getBody());
+        $this->assertContains('<b>Kontaktdaten der Einstellerin/des Einstellers</b>', $this->getResponse()->getBody());
         $this->assertContains('<td>Doe</td>', $this->getResponse()->getBody());
         $this->assertContains('<td>doe@example.org</td>', $this->getResponse()->getBody());
 
@@ -237,7 +236,7 @@ class Publish_FormControllerTest extends ControllerTestCase {
         $this->assertContains('<td>Entenhausen</td>', $this->getResponse()->getBody());
         $this->assertQueryContentRegex('td', '/German|Deutsch/');
 
-        $this->assertContains('<b>Autor(en)</b>', $this->getResponse()->getBody());
+        $this->assertContains('<b>Autor*innen</b>', $this->getResponse()->getBody());
         $this->assertContains('<td>AuthorLastName</td>', $this->getResponse()->getBody());
         $this->assertContains('<td>Nein</td>', $this->getResponse()->getBody());
 

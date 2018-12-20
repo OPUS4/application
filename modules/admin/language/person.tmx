@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE tmx SYSTEM "http://www.gala-global.org/oscarStandards/tmx/tmx14.dtd">
 <tmx version="1.4">
- 
+
  <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
  </header>
- 
+
   <body>
 
     <tu tuid="admin_title_persons">
@@ -21,7 +21,7 @@
         <seg>Management of authors and other persons.</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Verwaltung von Autoren und anderen Personen.</seg>
+        <seg>Verwaltung von Autor*innen und anderen Personen.</seg>
       </tuv>
     </tu>
 
@@ -33,7 +33,7 @@
         <seg>Admin: Personenverwaltung</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="Person_Id">
       <tuv xml:lang="en">
         <seg>Person Id:</seg>
@@ -51,7 +51,7 @@
         <seg>Personendaten sind nicht korrekt.</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="stored">
       <tuv xml:lang="en">
         <seg>person data are updated.</seg>
@@ -60,7 +60,7 @@
         <seg>Personendaten sind geändert.</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="notstored">
       <tuv xml:lang="en">
         <seg>Person data not updated!</seg>
@@ -69,7 +69,7 @@
         <seg>Personendaten konnten nicht geändert werden.</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="transmit_index">
       <tuv xml:lang="en">
         <seg>show person data</seg>
@@ -78,7 +78,7 @@
         <seg>Personendaten anzeigen</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_person_assign_document">
       <tuv xml:lang="en">
         <seg>Add Person to Document</seg>
@@ -87,7 +87,7 @@
         <seg>Person zum Dokument hinzufügen</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_person_born">
       <tuv xml:lang="en">
         <seg>Born</seg>
@@ -96,7 +96,7 @@
         <seg>Geboren</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_person_born_in">
       <tuv xml:lang="en">
           <seg>in</seg>
@@ -105,7 +105,7 @@
           <seg>in</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_person_assign">
       <tuv xml:lang="en">
           <seg>Add Person</seg>
@@ -114,7 +114,7 @@
           <seg>Person hinzufügen</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_person_editlinked">
       <tuv xml:lang="en">
           <seg>Edit Person</seg>
@@ -123,7 +123,7 @@
           <seg>Person editieren</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_person_assign_document_options">
       <tuv xml:lang="en">
           <seg>Document Options</seg>
@@ -260,5 +260,5 @@ letzten Änderung wird aktualisiert.
     </tu>
 
 </body>
-  
+
 </tmx>
