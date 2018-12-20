@@ -33,7 +33,17 @@
  */
 
 /**
+ * Manages translations across OPUS 4 modules.
  *
+ * The translation manager does not automatically cover all modules, but only those allowed by the the configuration.
+ *
+ * TODO easy way to cover all modules (for development purposes)
+ * TODO maybe development mode where original files can be edited
+ * TODO detect duplicate keys and values
+ *
+ * TODO add logic where translations are automatically stored in language_custom and
+ *      distinguish between DEFAULT and CUSTOM values in order to display them together in the user interface
+ * TODO reset to default functionality
  */
 class Application_Translate_TranslationManager
 {

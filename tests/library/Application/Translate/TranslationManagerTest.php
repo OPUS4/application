@@ -39,7 +39,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
 {
 
     /**
-     * @var Setup_Model_Language_TranslationManager
+     * @var Application_Translate_TranslationManager
      */
     protected $object;
 
@@ -54,7 +54,6 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
     }
 
     /**
-     * @todo Implement testGetFiles().
      */
     public function testGetFiles()
     {
