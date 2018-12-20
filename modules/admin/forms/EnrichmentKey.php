@@ -28,9 +28,8 @@
  * @package     Module_Admin
  * @author      Gunar Maiwald <maiwald@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id: Enrichmentkey.php 9260 2011-12-20 10:44:39Z gmaiwald $
  */
 
 /**
@@ -39,7 +38,8 @@
  * @category    Application
  * @package     Module_Admin
  */
-class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract {
+class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
+{
 
     /**
      * Form element name for enrichment key name.
@@ -57,7 +57,8 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract {
      * Initialize form elements.
      * @throws Zend_Form_Exception
      */
-    public function init() {
+    public function init()
+    {
         parent::init();
 
         $this->setLabelPrefix('Opus_EnrichmentKey');
@@ -65,20 +66,28 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract {
         $this->setModelClass('Opus_EnrichmentKey');
         $this->setVerifyModelIdIsNumeric(false);
 
-        $name = $this->createElement('text', self::ELEMENT_NAME, array(
+        $name = $this->createElement('text', self::ELEMENT_NAME, [
             'required' => true, 'label' => 'admin_enrichmentkey_label_name'
-        ));
-        $name->addValidator('regex', false, array('pattern' => self::PATTERN));
-        $name->addValidator('StringLength', false, array('min' => 1, 'max' => 255));
+        ]);
+        $name->addValidator('regex', false, ['pattern' => self::PATTERN]);
+        $name->addValidator('StringLength', false, ['min' => 1, 'max' => 255]);
         $name->addValidator(new Application_Form_Validate_EnrichmentKeyAvailable());
         $this->addElement($name);
+
+        $translations = new Admin_Form_TranslationSet();
+
+        $translations->addKey('TranslationLabel');
+        $translations->addKey('TranslationDescription');
+
+        $this->addSubForm($translations, 'Translations');
     }
 
     /**
      * Initialisiert das Formular mit Werten einer Model-Instanz.
      * @param $model Opus_Enrichmentkey
      */
-    public function populateFromModel($enrichmentKey) {
+    public function populateFromModel($enrichmentKey)
+    {
         $this->getElement(self::ELEMENT_MODEL_ID)->setValue($enrichmentKey->getName());
         $this->getElement(self::ELEMENT_NAME)->setValue($enrichmentKey->getName());
     }
@@ -87,8 +96,8 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract {
      * Aktualsiert Model-Instanz mit Werten im Formular.
      * @param $model Opus_Enrichmentkey
      */
-    public function updateModel($enrichmentKey) {
+    public function updateModel($enrichmentKey)
+    {
         $enrichmentKey->setName($this->getElementValue(self::ELEMENT_NAME));
     }
-
 }
