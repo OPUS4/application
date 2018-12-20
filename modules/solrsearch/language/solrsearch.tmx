@@ -441,7 +441,7 @@
                 <seg>Author(s)</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>Autor(en)</seg>
+                <seg>Autor*innen</seg>
             </tuv>
         </tu>
 
@@ -468,7 +468,7 @@
                 <seg>Referee(s)</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>Gutachter</seg>
+                <seg>Gutachter*innen</seg>
             </tuv>
         </tu>
 
