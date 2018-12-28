@@ -84,14 +84,19 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
             foreach ($sortKeys as $sortKey) {
                 $actualValues = [];
                 $translations = $this->object->getTranslations($sortKey, $sortOrder);
+
                 foreach ($translations as $translation) {
                     $actualValues[] = $translation[$sortKey];
                 }
+
                 $sortedValues = $actualValues;
-                if ($sortOrder == SORT_ASC)
+
+                if ($sortOrder == SORT_ASC) {
                     sort($sortedValues, SORT_STRING);
-                elseif ($sortOrder == SORT_DESC)
+                } elseif ($sortOrder == SORT_DESC) {
                     rsort($sortedValues, SORT_STRING);
+                }
+
                 $this->assertEquals($sortedValues, $actualValues);
             }
         }
@@ -175,6 +180,12 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
 
     public function testFilterByValue()
     {
+        $this->object->setModules(['default']);
 
+        $result = $this->object->findTranslations('embargo');
+
+        $this->assertInternalType('array', $result);
+        $this->assertCount(1, $result);
+        $this->assertEquals('EmbargoDate', $result[0]['unit']);
     }
 }

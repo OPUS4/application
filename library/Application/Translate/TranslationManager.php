@@ -158,6 +158,29 @@ class Application_Translate_TranslationManager
     }
 
     /**
+     * Returns translations that contain a specified string.
+     * @param $needle
+     * @return array
+     * @throws Setup_Model_FileNotReadableException
+     *
+     * TODO integrate into getTranslations? performance? How will it be used? Maybe use Zend_Cache?
+     */
+    public function findTranslations($needle)
+    {
+        $translations = $this->getTranslations();
+
+        $result = [];
+
+        foreach ($translations as $translation) {
+            if (stripos($translation['unit'], $needle) !== false) {
+                $result[] = $translation;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
      * returns an array containing all translation files found for all modules
      * set via @see setModules()
      */
