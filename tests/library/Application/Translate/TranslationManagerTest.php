@@ -74,10 +74,8 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
         $sortKeys = [
             Application_Translate_TranslationManager::SORT_DIRECTORY,
             Application_Translate_TranslationManager::SORT_FILENAME,
-            Application_Translate_TranslationManager::SORT_LANGUAGE,
             Application_Translate_TranslationManager::SORT_MODULE,
-            Application_Translate_TranslationManager::SORT_UNIT,
-            Application_Translate_TranslationManager::SORT_VARIANT
+            Application_Translate_TranslationManager::SORT_UNIT
         ];
 
         $this->object->setModules(['default']);
@@ -139,7 +137,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
         }
     }
 
-    public function testLoadAllModules()
+    public function testDuplicateKeys()
     {
         $modules = Application_Modules::getInstance()->getModules();
 
@@ -160,6 +158,23 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
             }
         }
 
-        $this->markTestIncomplete('Used for experiments. What could be tested?');
+        $keys = [];
+
+        foreach ($all as $entry) {
+            $keys[] = $entry['unit'];
+        }
+
+        $keyCount = array_count_values($keys);
+
+        $duplicateKeys = array_filter($keyCount, function($value) {
+            return $value > 1;
+        });
+
+        $this->assertCount(0, $duplicateKeys);
+    }
+
+    public function testFilterByValue()
+    {
+
     }
 }
