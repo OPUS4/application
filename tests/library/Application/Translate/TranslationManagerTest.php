@@ -72,12 +72,12 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
     public function testGetTranslations()
     {
         $sortKeys = [
-            Setup_Model_Language_TranslationManager::SORT_DIRECTORY,
-            Setup_Model_Language_TranslationManager::SORT_FILENAME,
-            Setup_Model_Language_TranslationManager::SORT_LANGUAGE,
-            Setup_Model_Language_TranslationManager::SORT_MODULE,
-            Setup_Model_Language_TranslationManager::SORT_UNIT,
-            Setup_Model_Language_TranslationManager::SORT_VARIANT
+            Application_Translate_TranslationManager::SORT_DIRECTORY,
+            Application_Translate_TranslationManager::SORT_FILENAME,
+            Application_Translate_TranslationManager::SORT_LANGUAGE,
+            Application_Translate_TranslationManager::SORT_MODULE,
+            Application_Translate_TranslationManager::SORT_UNIT,
+            Application_Translate_TranslationManager::SORT_VARIANT
         ];
 
         $this->object->setModules(['default']);
