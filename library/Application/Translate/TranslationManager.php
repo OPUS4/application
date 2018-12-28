@@ -68,16 +68,6 @@ class Application_Translate_TranslationManager
     const SORT_FILENAME = 'filename';
 
     /**
-     * sort by language
-     */
-    const SORT_LANGUAGE = 'language';
-
-    /**
-     * sort by translation unit variant
-     */
-    const SORT_VARIANT = 'variant';
-
-    /**
      * array holding modules to include
      */
     protected $_modules = [];
@@ -135,22 +125,26 @@ class Application_Translate_TranslationManager
 
                     if ($tmxFile->load($filePath)) {
                         $translationUnits = $tmxFile->toArray();
+
                         foreach ($translationUnits as $key => $values) {
                             if (empty($this->_filter) || strpos($key, $this->_filter) !== false) {
+                                $row = [
+                                    'unit' => $key,
+                                    'module' => $module,
+                                    'directory' => $dir,
+                                    'filename' => $fileName,
+                                    'translations' => []
+                                ];
+
                                 foreach ($values as $lang => $value) {
-                                    $row = [
-                                        'unit' => $key,
-                                        'module' => $module,
-                                        'directory' => $dir,
-                                        'filename' => $fileName,
-                                        'language' => $lang,
-                                        'variant' => $value
-                                    ];
-                                    $translations[] = $row;
-                                    $sortArray[] = $row[$sortKey];
+                                    $row['translations'][$lang] = $value;
                                 }
+
+                                $translations[] = $row;
+                                $sortArray[] = $row[$sortKey];
                             }
                         }
+
                     } else {
                         throw new Setup_Model_FileNotReadableException($filePath);
                     }
