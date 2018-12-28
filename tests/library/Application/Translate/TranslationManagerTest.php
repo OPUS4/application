@@ -138,4 +138,28 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
             );
         }
     }
+
+    public function testLoadAllModules()
+    {
+        $modules = Application_Modules::getInstance()->getModules();
+
+        $modules['default'] = 'default';
+
+        $translations = $this->object;
+
+        $translations->setModules(array_keys($modules));
+        $all = $translations->getTranslations();
+
+        $maxLength = 0;
+
+        foreach($all as $entry) {
+            $text = $entry['unit'];
+            $length = strlen($text);
+            if ($length > $maxLength) {
+                $maxLength = $length;
+            }
+        }
+
+        $this->markTestIncomplete('Used for experiments. What could be tested?');
+    }
 }
