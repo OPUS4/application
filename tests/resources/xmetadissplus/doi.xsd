@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- DOI: complexType zu The Digital Object Identifier System siehe http://www.doi.org-->
+<!-- DOI: complexType zu The Digital Object Identifier System siehe https://doi.org-->
 <!-- Copyright 2010  Deutsche Nationalbibliothek -->
 <!-- Version xMetaDissPlus 2.1 -->
 <xs:schema targetNamespace="http://www.d-nb.de/standards/doi/" elementFormDefault="qualified"

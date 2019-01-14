@@ -267,7 +267,7 @@
     </xsl:template>
 	
 	<xsl:template match="IdentifierDoi">
-        <xsl:text>U6  - http://dx.doi.org/</xsl:text>
+        <xsl:text>U6  - https://doi.org/</xsl:text>
         <xsl:value-of select="@Value" />
         <xsl:text>&#10;</xsl:text>
     </xsl:template>
