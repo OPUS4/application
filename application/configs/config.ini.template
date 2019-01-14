@@ -65,10 +65,6 @@ searchengine.solr.default.service.extract.endpoint.localhost.path = @searchengin
 ; Turn on to display document titles of search results in user interface language if possible
 search.result.display.preferUserInterfaceLanguage = 0
 
-; SUPPORTED LANGUAGES
-; Change the setting to 'de' or 'en' in order to disable language selection.
-; supportedLanguages = de
-
 ;MAIL SETTINGS
 ; mail.opus.smtp = localhost; SMTP server for sending email
 ; mail.opus.port = 25 ; SMTP server port for sending email

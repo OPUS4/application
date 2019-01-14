@@ -103,5 +103,13 @@
         </tuv>
     </tu>
 
+    <tu tuid="setup_language_index">
+        <tuv xml:lang="en">
+            <seg>Translations</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Übersetzungen</seg>
+        </tuv>
+    </tu>
   </body>
 </tmx>

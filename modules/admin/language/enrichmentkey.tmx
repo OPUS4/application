@@ -88,6 +88,24 @@
       </tuv>
     </tu>
 
+    <tu tuid="enrichmentkey_label_description">
+      <tuv xml:lang="en">
+        <seg>Translations for label used when showing the enrichment key.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Anzeige des Enrichment-Labels in den unterstützten Sprachen. </seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="enrichmentkey_description_description">
+      <tuv xml:lang="en">
+        <seg>Short description of the purpose and usage of this enrichment.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Beschreibung und Hinweise zur Nutzung des Enrichments.</seg>
+      </tuv>
+    </tu>
+
   </body>
 
 </tmx>

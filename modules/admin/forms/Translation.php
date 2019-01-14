@@ -25,22 +25,59 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_Setup
+ * @package     Module_Admin
+ * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2016-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2009-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
- * TODO expand tests
+ * Subform for editing translations for a single translation key.
+ *
+ * This form is used for the editing of the translation of enrichment keys.
+ *
+ * The form shows the default translations, if available, and provides input boxes for all supported languages.
+ *
+ * TODO display existing values (probably outside this class)
+ * TODO display default values
+ * TODO description for value
+ * TODO option for textarea instead of input (i.e. field hints and other longer texts)
+ * TODO less distance between label and input - bigger input
  */
-class Setup_Model_HelpPageTest extends ControllerTestCase
+class Admin_Form_Translation extends Application_Form_Abstract
 {
 
-    public function testFromArrayEmptyArray()
+    public function init()
     {
-        $model = new Setup_Model_HelpPage();
+        parent::init();
 
-        $model->fromArray([]);
+        $configHelper = Application_Configuration::getInstance();
+
+        $this->setLegend('Enrichment Name');
+
+        $this->setDescription('Hello, world!');
+
+        $languages = $configHelper->getSupportedLanguages();
+        $translate = $configHelper->getTranslate();
+
+        /*
+        $text = new Zend_Form_Element_Note('description');
+        $text->setValue('Hello, world! This is a slightly longer description in order to test how it is displayed on the page.');
+        $this->addElement($text);
+        */
+
+        foreach ($languages as $language) {
+            $this->addElement('text', $language, [
+                'label' => $translate->translateLanguage($language),
+                'size' => 60
+            ]);
+        }
     }
+
+    public function setKey($key)
+    {
+        $this->setLegend($key);
+    }
+
 }

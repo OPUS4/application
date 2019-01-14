@@ -85,7 +85,12 @@ class Application_Util_Notification extends Application_Model_Abstract
 
         $authors = $this->getAuthors($document);
 
-        $title = $document->getMainTitle();
+        // TODO refactor getting main title value
+        $titleObj = $document->getMainTitle();
+
+        if (!is_null($titleObj)) {
+            $title = $titleObj->getValue();
+        }
 
         // TODO currently we need to convert between the old and new array structure
         // TODO the components and interfaces involved need to be defined clearly
@@ -104,7 +109,7 @@ class Application_Util_Notification extends Application_Model_Abstract
         }
 
         $this->scheduleNotification(
-            $this->getMailSubject($document->getId(), $authors, $title),
+            $this->getMailSubject($document, $authors, $title),
             $this->getMailBody($document->getId(), $authors, $title, $url),
             $converted
         );
@@ -128,22 +133,33 @@ class Application_Util_Notification extends Application_Model_Abstract
         return $authors;
     }
 
-    private function getMailSubject($docId, $authors, $title)
+    /**
+     * @param $docId
+     * @param $authors
+     * @param $title
+     * @return string
+     *
+     * TODO refactor for single document parameter?
+     */
+    public function getMailSubject($docId, $authors, $title)
     {
         $logger = $this->getLogger();
 
-        $authorString = "";
+        $authorString = '';
+
         for ($i = 0; $i < count($authors); $i++) {
             if ($i > 0) {
-                $authorString .= " ; ";
+                $authorString .= ' ; ';
             }
             $authorString .= $authors[$i];
         }
-        if ($authorString == "") {
-            $authorString = "n/a";
+
+        if ($authorString == '') {
+            $authorString = 'n/a';
         }
-        if ($title == "") {
-            $title = "n/a";
+
+        if ($title == '') {
+            $title = 'n/a';
         }
 
         $subjectTemplate = $this->getSubjectTemplate();
