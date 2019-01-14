@@ -254,4 +254,29 @@ class Application_Util_NotificationTest extends ControllerTestCase
         $method->setAccessible(true);
         return $method;
     }
+
+    public function testGetSubjectTemplate()
+    {
+        $template = $this->notification->getSubjectTemplate();
+        $this->assertNotNull($template);
+        $this->assertNotEmpty($template);
+    }
+
+    public function testGetMailSubject()
+    {
+        $document = $this->createTestDocument();
+        $document->setLanguage('deu');
+
+        $title = $document->addTitleMain();
+        $title->setLanguage('deu');
+        $title->setValue('Testdokument');
+
+        $docId = $document->store();
+
+        $subject = $this->notification->getMailSubject($docId, [], 'Testdokument');
+
+        $this->assertNotContains($title->__toString(), $subject);
+        $this->assertContains('Testdokument', $subject);
+        $this->assertContains($docId, $subject);
+    }
 }
