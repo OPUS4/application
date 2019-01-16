@@ -75,7 +75,7 @@
             <!-- dc:subject -->
             <xsl:apply-templates select="Subject[@Type='swd']" mode="oai_dc" />
             <xsl:apply-templates select="Collection[@RoleName='ddc' and @Visible=1]" mode="oai_dc" />
-           
+
             <!-- dc:description -->
             <xsl:apply-templates select="TitleAbstract" mode="oai_dc" />
             <!-- dc:publisher -->
@@ -142,7 +142,7 @@
     <xsl:template match="TitleMain" mode="oai_dc">
         <dc:title>
             <xsl:attribute name="xml:lang">
-                <xsl:value-of select="php:functionString('Oai_Model_Language::getLanguageCode', @Language, 'part1')" />
+                <xsl:value-of select="php:functionString('Opus_Language::getLanguageCode', @Language, 'part1')" />
             </xsl:attribute>
             <xsl:value-of select="@Value" />
             <xsl:if test="starts-with($oai_set,'openaire')  and ../TitleSub/@Value != ''">
@@ -186,7 +186,7 @@
         <dc:subject>
             <xsl:if test="@language != ''">
                 <xsl:attribute name="xml:lang">
-                    <xsl:value-of select="php:functionString('Oai_Model_Language::getLanguageCode', @Language, 'part1')" />
+                    <xsl:value-of select="php:functionString('Opus_Language::getLanguageCode', @Language, 'part1')" />
                 </xsl:attribute>
             </xsl:if>
             <xsl:value-of select="@Value" />
@@ -198,11 +198,11 @@
             <xsl:text>ddc:</xsl:text><xsl:value-of select="@Number" />
         </dc:subject>
     </xsl:template>
-	
+
     <xsl:template match="TitleAbstract" mode="oai_dc">
         <dc:description>
             <xsl:attribute name="xml:lang">
-                <xsl:value-of select="php:functionString('Oai_Model_Language::getLanguageCode', @Language, 'part1')" />
+                <xsl:value-of select="php:functionString('Opus_Language::getLanguageCode', @Language, 'part1')" />
             </xsl:attribute>
             <xsl:value-of select="@Value" />
         </dc:description>
@@ -212,7 +212,7 @@
         <xsl:choose>
             <xsl:when test="starts-with($oai_set,'openaire')">
                 <dc:type>
-                    <xsl:call-template name="compareDocumentName" />     
+                    <xsl:call-template name="compareDocumentName" />
                </dc:type>
             </xsl:when>
             <xsl:otherwise>
@@ -282,7 +282,7 @@
             </xsl:otherwise>
         </xsl:choose>
      </xsl:template>
-	
+
      <xsl:template name="dcmiType" >
           <xsl:choose>
             <xsl:when test=". = 'diplthesis' or  . = 'diplom'">
@@ -379,7 +379,7 @@
          <xsl:if test="starts-with($oai_set,'openaire')">
             <dc:source>
                 <xsl:attribute name="xml:lang">
-                    <xsl:value-of select="php:functionString('Oai_Model_Language::getLanguageCode', @Language, 'part1')" />
+                    <xsl:value-of select="php:functionString('Opus_Language::getLanguageCode', @Language, 'part1')" />
                 </xsl:attribute>
                 <xsl:value-of select="@Value" />
             </dc:source>
