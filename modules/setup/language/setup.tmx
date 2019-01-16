@@ -41,15 +41,6 @@
         </tuv>
     </tu>
 
-    <tu tuid="setup_language_index">
-        <tuv xml:lang="en">
-            <seg>Translations</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Übersetzungen</seg>
-        </tuv>
-    </tu>
-
     <tu tuid="setup_error_retry">
         <tuv xml:lang="en">
             <seg>Retry</seg>
@@ -267,7 +258,7 @@
     </tu>
 
     <!-- contact page -->
-    
+
     <tu tuid="setup_home_index_contact_pagetitle">
         <tuv xml:lang="en">
             <seg>Title in the web browser's page / tab</seg>
@@ -285,12 +276,12 @@
             <seg>Titel auf der Seite</seg>
         </tuv>
     </tu>
-    
+
 
     <!-- translation of language names -->
     <!-- NOTE: This must be updated according to the languages used -->
-    
-    
+
+
     <tu tuid="setup_language_de">
         <tuv xml:lang="en">
             <seg>german translation</seg>

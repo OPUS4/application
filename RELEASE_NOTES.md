@@ -1,5 +1,10 @@
 # OPUS 4 Release Notes
 
+Die Übersetzung von Sprachen, z.B. 'deu' => 'German', erfolgt nun mit Hilfe von PHP 
+Funktionen. Die Datei 'modules/default/language/languages.tmx' wurde gelöscht. 
+Übersetzungen von Sprachen in angepassten TMX-Dateien werden immer noch verwendet, 
+sollten aber nicht mehr notwendig sein. 
+
 ---
 
 ## Release 4.6.3 2018-11-05
