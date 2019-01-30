@@ -4,7 +4,7 @@ php:
   - 7.0
 services:
   - mysql
-before_install:
+addons:
   apt:
     packages:
       - ant
