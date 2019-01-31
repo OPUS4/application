@@ -22,8 +22,8 @@ script:
   - wget https://archive.apache.org/dist/lucene/solr/5.5.5/solr-5.5.5.tgz
   - tar xfz solr-5.5.5.tgz
   - cd solr-5.5.5
-  - ./bin/solr start -p 8983
-  - ./bin/solr create -c opus4 -p 8983
+  - ./bin/solr start
+  - ./bin/solr create -c opus4
   - cd server/solr/opus4/conf
   - rm -f managed-schema schema.xml solrconfig.xml
   - ln -s ../../../../../vendor/opus4-repo/search/schema-5.xml schema.xml
