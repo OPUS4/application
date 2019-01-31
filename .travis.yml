@@ -16,7 +16,7 @@ script:
   - mysql --version
   - java -version
   - ant -version
-  - ant prepare-test-workspace prepare-config -DdbUserName=root -DdbAdminName=root
+  - ant prepare-test-workspace prepare-workspace prepare-config -DdbUserName=root -DdbAdminName=root
   - mysql opusdb -u root --password='' -e 'SELECT * FROM schema_version'
   - php db/createdb.php
   - wget https://archive.apache.org/dist/lucene/solr/5.5.5/solr-5.5.5.tgz
