@@ -8,7 +8,28 @@ addons:
   apt:
     packages:
       - ant
+cache:
+  directories:
+    - $HOME/vendor
+    - composer.lock
+before_script: composer install
 script:
   - mysql --version
   - java -version
   - ant -version
+  - ant prepare-test-workspace prepare-config -DdbUserName=root -DdbAdminName=root
+  - mysql opusdb -u root --password='' -e 'SELECT * FROM schema_version'
+  - php db/createdb.php
+  - wget https://archive.apache.org/dist/lucene/solr/5.5.5/solr-5.5.5.tgz
+  - tar xfz solr-5.5.5.tgz
+  - cd solr-5.5.5
+  - ./bin/solr start
+  - ./bin/solr create -c opus4
+  - cd server/solr/opus4/conf
+  - rm -f managed-schema schema.xml solrconfig.xml
+  - ln -s ../../../../../vendor/opus4-repo/search/schema-5.xml schema.xml
+  - ln -s ../../../../../vendor/opus4-repo/search/solrconfig-5.xml solrconfig.xml
+  - cd ../../../../
+  - ./bin/solr restart
+  - cd ..
+  - ./vendor/bin/phpunit --configuration ./tests/phpunit.xml
