@@ -10,8 +10,7 @@ addons:
       - ant
 cache:
   directories:
-    - $HOME/vendor
-    - composer.lock
+    - $HOME/.composer/cache
 before_script: composer install
 script:
   - mysql --version
