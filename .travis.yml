@@ -13,6 +13,8 @@ addons:
 cache:
   directories:
     - $HOME/.composer/cache
+before_install:
+  - jdk_switcher use openjdk8
 before_script: composer install
 script:
   - mysql --version
