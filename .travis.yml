@@ -36,4 +36,4 @@ script:
   - cd ../../../../
   - ./bin/solr restart
   - cd ..
-  - ./vendor/bin/phpunit --configuration ./tests/phpunit.xml
+  - ./vendor/bin/phpunit --configuration ./tests/phpunit.xml ./tests/library/Application/ConfigurationTest.php
