@@ -37,4 +37,4 @@ script:
   - ./bin/solr restart
   - cd ..
   - ant reset-testdata
-  - ./vendor/bin/phpunit --configuration ./tests/phpunit.xml ./tests/library/Application/ConfigurationTest.php
+  - ./vendor/bin/phpunit --configuration ./tests/phpunit.xml
