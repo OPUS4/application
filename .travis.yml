@@ -3,7 +3,7 @@ language: php
 php:
   - 7.0
 jdk:
-  - oraclejdk8
+  - openjdk8
 services:
   - mysql
 addons:
