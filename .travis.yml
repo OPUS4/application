@@ -11,6 +11,7 @@ addons:
   apt:
     packages:
       - ant
+      - libxml2-utils
 cache:
   directories:
     - $HOME/.composer/cache
