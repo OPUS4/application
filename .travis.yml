@@ -14,6 +14,7 @@ addons:
 cache:
   directories:
     - $HOME/.composer/cache
+    - $HOME/downloads
 before_install:
   - jdk_switcher use openjdk8
 install:
@@ -26,8 +27,7 @@ script:
   - ant prepare-test-workspace prepare-workspace prepare-config -DdbUserName=root -DdbAdminName=root
   - php db/createdb.php
   - mysql opusdb -u root --password='' -e 'SELECT * FROM schema_version'
-  - wget https://archive.apache.org/dist/lucene/solr/5.5.5/solr-5.5.5.tgz
-  - tar xfz solr-5.5.5.tgz
+  - ant download-solr -DsolrVersion=5.5.5
   - cd solr-5.5.5
   - ./bin/solr start
   - ./bin/solr create -c opus4
@@ -39,4 +39,4 @@ script:
   - ./bin/solr restart
   - cd ..
   - ant reset-testdata
-  - ./vendor/bin/phpunit --configuration ./tests/phpunit.xml
+  - ./vendor/bin/phpunit --configuration ./tests/phpunit.xml ./tests/modules
