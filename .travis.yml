@@ -20,7 +20,7 @@ before_install:
   - jdk_switcher use openjdk8
 install:
   - phpenv config-add travis.php.ini
-before_script: composer install
+before_script: composer update
 script:
   - mysql --version
   - java -version
