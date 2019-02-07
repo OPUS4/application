@@ -27,6 +27,7 @@
  * @category    Tests
  * @author      Gunar Maiwald <maiwald@zib.de>
  * @author      Maximilian Salomon <salomon@zib.de>
+ * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
@@ -36,32 +37,38 @@
  *
  * @covers Admin_EnrichmentkeyController
  */
-class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase {
+class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
+{
 
-    public function setUp() {
+    public function setUp()
+    {
         $this->setController('enrichmentkey');
         parent::setUp();
     }
 
-    public function getModels() {
+    public function getModels()
+    {
         return Opus_EnrichmentKey::getAll();
     }
 
-    public function createNewModel() {
+    public function createNewModel()
+    {
         $model = new Opus_EnrichmentKey();
         $model->setName('TestEnrichmentKey');
 
         return $model->store();
     }
 
-    public function getModel($identifier) {
+    public function getModel($identifier)
+    {
         return new Opus_EnrichmentKey($identifier);
     }
 
     /**
      * Show action is disabled for enrichment keys.
      */
-    public function testShowActionBadId() {
+    public function testShowActionBadId()
+    {
         $this->dispatch($this->getControllerPath() . '/show/id/123');
         $this->assertRedirectTo($this->getControllerPath());
     }
@@ -69,7 +76,8 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase {
     /**
      * Show action is disabled for enrichment keys.
      */
-    public function testShowActionBadUnknownId() {
+    public function testShowActionBadUnknownId()
+    {
         $this->dispatch($this->getControllerPath() . '/show/id/City2');
         $this->assertRedirectTo($this->getControllerPath());
     }
@@ -77,18 +85,20 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase {
     /**
      * Show action is disabled for enrichment keys.
      */
-    public function testShowActionNoId() {
+    public function testShowActionNoId()
+    {
         $this->dispatch($this->getControllerPath() . '/show');
         $this->assertRedirectTo($this->getControllerPath());
     }
 
-    public function testNewActionSave() {
+    public function testNewActionSave()
+    {
         $this->createsModels = true;
 
-        $post = array(
+        $post = [
             'Name' => 'MyTestEnrichment',
             'Save' => 'Speichern'
-        );
+        ];
 
         $this->getRequest()->setPost($post)->setMethod('POST');
 
@@ -104,15 +114,16 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase {
         $this->assertEquals('MyTestEnrichment', $enrichment->getName());
     }
 
-    public function testNewActionCancel() {
+    public function testNewActionCancel()
+    {
         $this->createsModels = true;
 
         $modelCount = count($this->getModels());
 
-        $post = array(
+        $post = [
             'Name' => 'MyTestEnrichment',
             'Cancel' => 'Abbrechen'
-        );
+        ];
 
         $this->getRequest()->setPost($post)->setMethod('POST');
 
@@ -123,14 +134,15 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase {
         $this->assertEquals($modelCount, count(Opus_EnrichmentKey::getAll()), 'There should be no new enrichment.');
     }
 
-    public function testNewActionSaveForExistingEnrichment() {
+    public function testNewActionSaveForExistingEnrichment()
+    {
         $this->useEnglish();
         $this->createsModels = true;
 
-        $post = array(
+        $post = [
             'Name' => 'City',
             'Save' => 'Speichern'
-        );
+        ];
 
         $this->getRequest()->setPost($post)->setMethod('POST');
 
@@ -142,7 +154,8 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase {
         $this->assertQueryContentContains('div#Name-element', 'Enrichmentkey already exists.');
     }
 
-    public function testEditActionShowForm() {
+    public function testEditActionShowForm()
+    {
         $this->dispatch($this->getControllerPath() . '/edit/id/BibtexRecord');
         $this->assertResponseCode(200);
         $this->assertController('enrichmentkey');
@@ -154,7 +167,8 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase {
         $this->assertQueryCount('input#Id', 1);
     }
 
-    public function testEditActionShowFormForProtectedEnrichment() {
+    public function testEditActionShowFormForProtectedEnrichment()
+    {
         $this->dispatch($this->getControllerPath() . '/edit/id/City');
 
         $this->assertRedirect();
@@ -171,18 +185,19 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase {
      * @expectedException Opus_Model_NotFoundException
      * @expectedExceptionMessage No Opus_Db_EnrichmentKeys with id MyTestEnrichment in database.
      */
-    public function testEditActionSave() {
+    public function testEditActionSave()
+    {
         $this->createsModels = true;
 
         $enrichmentKey = new Opus_EnrichmentKey();
         $enrichmentKey->setName('MyTestEnrichment');
         $enrichmentKey->store();
 
-        $this->getRequest()->setMethod('POST')->setPost(array(
+        $this->getRequest()->setMethod('POST')->setPost([
             'Id' => 'MyTestEnrichment',
             'Name' => 'MyTestEnrichmentModified',
             'Save' => 'Speichern'
-        ));
+        ]);
 
         $this->dispatch($this->getControllerPath() . '/edit');
         $this->assertRedirectTo($this->getControllerPath());
@@ -202,18 +217,19 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase {
      * @expectedException Opus_Model_NotFoundException
      * @expectedExceptionMessage No Opus_Db_EnrichmentKeys with id CityModified in database.
      */
-    public function testEditActionSaveForProtectedEnrichment() {
+    public function testEditActionSaveForProtectedEnrichment()
+    {
         $this->createsModels = true;
 
         $enrichmentKey = new Opus_EnrichmentKey();
         $enrichmentKey->setName('MyTestEnrichment');
         $enrichmentKey->store();
 
-        $this->getRequest()->setMethod('POST')->setPost(array(
+        $this->getRequest()->setMethod('POST')->setPost([
             'Id' => 'City',
             'Name' => 'CityModified',
             'Save' => 'Speichern'
-        ));
+        ]);
 
         $this->dispatch($this->getControllerPath() . '/edit');
         $this->assertRedirectTo($this->getControllerPath());
@@ -233,18 +249,19 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase {
      * @expectedException Opus_Model_NotFoundException
      * @expectedExceptionMessage No Opus_Db_EnrichmentKeys with id MyTestEnrichmentModified in database.
      */
-    public function testEditActionCancel() {
+    public function testEditActionCancel()
+    {
         $this->createsModels = true;
 
         $enrichmentKey = new Opus_EnrichmentKey();
         $enrichmentKey->setName('MyTestEnrichment');
         $enrichmentKey->store();
 
-        $this->getRequest()->setMethod('POST')->setPost(array(
+        $this->getRequest()->setMethod('POST')->setPost([
             'Id' => 'MyTestEnrichment',
             'Name' => 'MyTestEnrichmentModified',
             'Cancel' => 'Abbrechen'
-        ));
+        ]);
 
         $this->dispatch($this->getControllerPath() . '/edit');
         $this->assertRedirectTo($this->getControllerPath());
@@ -263,18 +280,19 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase {
      * @expectedException Opus_Model_NotFoundException
      * @expectedExceptionMessage No Opus_Db_EnrichmentKeys with id CityModified in database.
      */
-    public function testEditActionCancelForProtectedEnrichment() {
+    public function testEditActionCancelForProtectedEnrichment()
+    {
         $this->createsModels = true;
 
         $enrichmentKey = new Opus_EnrichmentKey();
         $enrichmentKey->setName('MyTestEnrichment');
         $enrichmentKey->store();
 
-        $this->getRequest()->setMethod('POST')->setPost(array(
+        $this->getRequest()->setMethod('POST')->setPost([
             'Id' => 'City',
             'Name' => 'CityModified',
             'Cancel' => 'Abbrechen'
-        ));
+        ]);
 
         $this->dispatch($this->getControllerPath() . '/edit');
         $this->assertRedirectTo($this->getControllerPath());
@@ -289,7 +307,8 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase {
         $this->fail('Previous statement should have thrown exception.');
     }
 
-    public function testDeleteActionShowForm() {
+    public function testDeleteActionShowForm()
+    {
         $this->useEnglish();
 
         $this->dispatch($this->getControllerPath() . '/delete/id/BibtexRecord');
@@ -305,19 +324,19 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase {
         $this->assertEquals('BibtexRecord', $enrichmentKey->getName());
     }
 
-    public function testDeleteActionShowFormForProtectedEnrichment() {
+    public function testDeleteActionShowFormForProtectedEnrichment()
+    {
         $this->useEnglish();
 
         $this->dispatch($this->getControllerPath() . '/delete/id/City');
 
         $this->assertRedirect();
         $this->assertRedirectTo($this->getControllerPath());
-        $this->verifyFlashMessage('controller_crud_model_not_modifiable', self::MESSAGE_LEVEL_FAILURE);
+        $this->verifyFlashMessage('controller_crud_model_cannot_delete', self::MESSAGE_LEVEL_FAILURE);
 
         $enrichmentKey = new Opus_EnrichmentKey('City');
 
         $this->assertNotNull($enrichmentKey);
         $this->assertEquals('City', $enrichmentKey->getName());
     }
-
 }

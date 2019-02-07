@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -28,19 +27,29 @@
  * @category    Application
  * @package     Module_Setup
  * @author      Edouard Simon (edouard.simon@zib.de)
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
+ * Manages translations across OPUS 4 modules.
  *
+ * The translation manager does not automatically cover all modules, but only those allowed by the the configuration.
+ *
+ * TODO easy way to cover all modules (for development purposes)
+ * TODO maybe development mode where original files can be edited
+ * TODO detect duplicate keys and values
+ *
+ * TODO add logic where translations are automatically stored in language_custom and
+ *      distinguish between DEFAULT and CUSTOM values in order to display them together in the user interface
+ * TODO reset to default functionality
  */
-class Setup_Model_Language_TranslationManager {
+class Application_Translate_TranslationManager
+{
     /**
      * sort by translation unit
      */
-
     const SORT_UNIT = 'unit';
 
     /**
@@ -59,19 +68,9 @@ class Setup_Model_Language_TranslationManager {
     const SORT_FILENAME = 'filename';
 
     /**
-     * sort by language
-     */
-    const SORT_LANGUAGE = 'language';
-
-    /**
-     * sort by translation unit variant
-     */
-    const SORT_VARIANT = 'variant';
-
-    /**
      * array holding modules to include
      */
-    protected $_modules = array();
+    protected $_modules = [];
 
     /**
      * string used to filter translation units
@@ -84,7 +83,8 @@ class Setup_Model_Language_TranslationManager {
      * @param array $modules Modules to include
      *
      */
-    public function setModules($array) {
+    public function setModules($array)
+    {
         $this->_modules = $array;
     }
 
@@ -94,7 +94,8 @@ class Setup_Model_Language_TranslationManager {
      *
      *
      */
-    public function setFilter($string) {
+    public function setFilter($string)
+    {
         $this->_filter = $string;
     }
 
@@ -107,56 +108,96 @@ class Setup_Model_Language_TranslationManager {
      * @param int $sortOrder    Sort order as expected by @see array_multisort()
      * @throw Setup_Model_FileNotReadableException Thrown if loading tmx file(s) fails.
      */
-    public function getTranslations($sortKey = self::SORT_UNIT, $sortOrder = SORT_ASC) {
+    public function getTranslations($sortKey = self::SORT_UNIT, $sortOrder = SORT_ASC)
+    {
         $fileData = $this->getFiles();
-        $translations = array();
-        $sortArray = array();
+
+        $translations = [];
+
+        $sortArray = [];
+
         foreach ($fileData as $module => $files) {
             foreach ($files as $dir => $filenames) {
                 foreach ($filenames as $fileName) {
                     $relativeFilePath = "$module/$dir/$fileName";
                     $filePath = APPLICATION_PATH . "/modules/$relativeFilePath";
-                    $tmxFile = new Application_Util_TmxFile();
+                    $tmxFile = new Application_Translate_TmxFile();
+
                     if ($tmxFile->load($filePath)) {
                         $translationUnits = $tmxFile->toArray();
+
                         foreach ($translationUnits as $key => $values) {
                             if (empty($this->_filter) || strpos($key, $this->_filter) !== false) {
+                                $row = [
+                                    'unit' => $key,
+                                    'module' => $module,
+                                    'directory' => $dir,
+                                    'filename' => $fileName,
+                                    'translations' => []
+                                ];
+
                                 foreach ($values as $lang => $value) {
-                                    $row = array(
-                                        'unit' => $key,
-                                        'module' => $module,
-                                        'directory' => $dir,
-                                        'filename' => $fileName,
-                                        'language' => $lang,
-                                        'variant' => $value);
-                                    $translations[] = $row;
-                                    $sortArray[] = $row[$sortKey];
+                                    $row['translations'][$lang] = $value;
                                 }
+
+                                $translations[] = $row;
+                                $sortArray[] = $row[$sortKey];
                             }
                         }
-                    }
-                    else {
+
+                    } else {
                         throw new Setup_Model_FileNotReadableException($filePath);
                     }
                 }
             }
         }
+
         array_multisort($sortArray, $sortOrder, SORT_STRING, $translations);
+
         return $translations;
+    }
+
+    /**
+     * Returns translations that contain a specified string.
+     * @param $needle
+     * @return array
+     * @throws Setup_Model_FileNotReadableException
+     *
+     * TODO integrate into getTranslations? performance? How will it be used? Maybe use Zend_Cache?
+     */
+    public function findTranslations($needle)
+    {
+        $translations = $this->getTranslations();
+
+        $result = [];
+
+        foreach ($translations as $translation) {
+            if (stripos($translation['unit'], $needle) !== false) {
+                $result[] = $translation;
+            }
+        }
+
+        return $result;
     }
 
     /**
      * returns an array containing all translation files found for all modules
      * set via @see setModules()
      */
-    public function getFiles() {
-        $modules = array();
-        $languageDirs = array('language', 'language_custom');
+    public function getFiles()
+    {
+        $modules = [];
+
+        $languageDirs = ['language', 'language_custom'];
+
         foreach ($this->_modules as $moduleName) {
-            $moduleFiles = array();
+
+            $moduleFiles = [];
+
             $moduleSubDirs = new RecursiveDirectoryIterator(
                 realpath(APPLICATION_PATH . "/modules/$moduleName"), FilesystemIterator::CURRENT_AS_SELF
             );
+
             foreach ($moduleSubDirs as $moduleSubDir) {
                 if ($moduleSubDir->isDir()) {
                     $dirName = $moduleSubDir->getFilename();
@@ -171,11 +212,12 @@ class Setup_Model_Language_TranslationManager {
                     }
                 }
             }
+
             if (!empty($moduleFiles)) {
                 $modules[$moduleName] = $moduleFiles;
             }
         }
+
         return $modules;
     }
-
 }

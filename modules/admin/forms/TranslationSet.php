@@ -25,37 +25,27 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_Oai
+ * @package     Module_Admin
+ * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
+ * @copyright   Copyright (c) 2009-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Oai_Model_Language extends Application_Model_Abstract {
 
-    /**
-     * Returns language code for internal language identifier.
-     * @param $language string Internal language identifier (e.g. 'deu')
-     * @param null $part string Field to use for language code
-     * @return string language code
-     */
-    public static function getLanguageCode($language, $part = null) {
-        $result = Opus_Language::getPropertiesByPart2T($language);
+class Admin_Form_TranslationSet extends Application_Form_Abstract
+{
 
-        if (empty($result)) {
-            return $language;
-        }
+    public function init()
+    {
+        parent::init();
 
-        $code = null;
-
-        if (!is_null($part) && isset($result[$part])) {
-            $code = $result[$part];
-        }
-        else {
-            $code = $result['part2_b'];
-        }
-
-        return empty($code) ? $language : $code;
+        $this->setLegend('setup_language_index');
     }
 
+    public function addKey($key)
+    {
+        $translation = new Admin_Form_Translation();
+        $translation->setKey($key);
+        $this->addSubForm($translation, $key);
+    }
 }
-

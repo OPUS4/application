@@ -136,7 +136,8 @@ class Application_Configuration {
      * Liefert die Sprachen, die von OPUS unterstützt werden.
      * @return array
      */
-    public function getSupportedLanguages() {
+    public function getSupportedLanguages()
+    {
         if (is_null($this->_supportedLanguages)) {
             $config = $this->getConfig();
             if (isset($config->supportedLanguages)) {

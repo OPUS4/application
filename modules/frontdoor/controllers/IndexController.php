@@ -30,10 +30,11 @@
  * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
  * @author      Michael Lang <lang@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2014-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2014-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Frontdoor_IndexController extends Application_Controller_Action {
+class Frontdoor_IndexController extends Application_Controller_Action
+{
 
     /**
      * TODO should be defined in central model classes
@@ -45,8 +46,8 @@ class Frontdoor_IndexController extends Application_Controller_Action {
      * Displays the metadata of a document.
      * @return void
      */
-    public function indexAction() {
-
+    public function indexAction()
+    {
         $request = $this->getRequest();
 
         $docId = $this->handleSearchResultNavigation();
@@ -100,6 +101,7 @@ class Frontdoor_IndexController extends Application_Controller_Action {
             'optionEnabled',
             'optionValue',
             'translate',
+            'translateLanguage',
             'translateWithDefault',
             'formatDate',
             'isDisplayField',

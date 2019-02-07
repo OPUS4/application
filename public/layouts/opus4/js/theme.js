@@ -10,11 +10,11 @@ $(document).ready(function() {
 
 	// normalize box-heights
     var max = 0;
-        $('#adminMenuContainer ul > li > *').each(function(){  
-			if($(this).height() > max){  
-			max = $(this).height();  
+        $('#adminMenuContainer ul > li > *').each(function(){
+			if($(this).height() > max){
+			max = $(this).height();
         }
-    });    
+    });
     $('#adminMenuContainer ul > li > *').height(max);
 
 	// ActionBox
@@ -40,7 +40,7 @@ $(document).ready(function() {
 		});
 		$(window).trigger("scroll");
 	}
-	
+
 	// DropDown behaviour
 	$(".dropdown > dt > a").click(function(event) {
 		$(this).closest(".dropdown").toggleClass("dropdown-open");
@@ -71,16 +71,19 @@ $(document).ready(function() {
 		}
 	});
 
-    // add autocomplete to GND subject input
+    // Add autocomplete to GND subject input
+	// Response can contain: 'value', 'extkey' and 'label'
     $( '.subject' ).autocomplete({
         source: window.opusBaseUrl + "/admin/autocomplete/subject",
         minLength: 2,
         select: function(event, ui) {
-            // automaticaly set external key field
-            if (typeof ui.item.extkey !== 'undefinded') {
-                var elemId = "#" + this.id.replace('Value', 'ExternalKey');
+            // automaticaly set external key field or clear value
+			var elemId = "#" + this.id.replace('Value', 'ExternalKey');
+            if (typeof ui.item.extkey !== 'undefined' && ui.item.extkey) {
                 $(elemId).val(ui.item.extkey);
-            }
+            } else {
+				$(elemId).val(null);
+			}
         }
     });
 });
