@@ -65,9 +65,10 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract {
         $this->setModelClass('Opus_EnrichmentKey');
         $this->setVerifyModelIdIsNumeric(false);
 
-        $name = $this->createElement('text', self::ELEMENT_NAME, array(
-            'required' => true, 'label' => 'admin_enrichmentkey_label_name'
-        ));
+        $name = $this->createElement('text', self::ELEMENT_NAME, [
+            'required' => true, 'label' => 'admin_enrichmentkey_label_name',
+            'maxlength' => Opus_EnrichmentKey::getFieldMaxLength('KeyName')
+        ]);
         $name->addValidator('regex', false, array('pattern' => self::PATTERN));
         $name->addValidator('StringLength', false, array('min' => 1, 'max' => 255));
         $name->addValidator(new Application_Form_Validate_EnrichmentKeyAvailable());
