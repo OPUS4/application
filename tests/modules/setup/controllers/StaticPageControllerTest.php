@@ -36,69 +36,81 @@
  *
  * @covers Setup_StaticPageController
  */
-class Setup_StaticPageControllerTest extends SetupControllerTestCase {
+class Setup_StaticPageControllerTest extends SetupControllerTestCase
+{
 
     /**
      * original file modes, needed for restoring after test
      */
-    protected $origFileModes = array();
+    protected $origFileModes = [];
+
     protected $configSection = 'static-page';
 
-    public function testEditHomeSucceedsWithAccessPermissions() {
+    public function testEditHomeSucceedsWithAccessPermissions()
+    {
         $this->setPermissions('0700', '0700', '0700');
         $this->dispatch('/setup/static-page/edit/page/home');
         $this->assertResponseCode(200);
     }
 
-    public function testEditHomeFailsWithoutWritePermissions() {
+    public function testEditHomeFailsWithoutWritePermissions()
+    {
         $this->setPermissions('0500', '0400', '0000');
         $this->dispatch('/setup/static-page/edit/page/home');
         $this->assertResponseCode(302);
     }
 
-    public function testEditHomeFailsWithoutDataReadPermissions() {
+    public function testEditHomeFailsWithoutDataReadPermissions()
+    {
         $this->setPermissions('0000', '0400', '0000');
         $this->dispatch('/setup/static-page/edit/page/home');
         $this->assertResponseCode(302);
     }
 
-    public function testEditContactSucceedsWithAccessPermissions() {
+    public function testEditContactSucceedsWithAccessPermissions()
+    {
         $this->setPermissions('0700', '0700', '0700');
         $this->dispatch('/setup/static-page/edit/page/contact');
         $this->assertResponseCode(200);
     }
 
-    public function testEditContactFailsWithoutWritePermissions() {
+    public function testEditContactFailsWithoutWritePermissions()
+    {
         $this->setPermissions('0500', '0400', '0000');
         $this->dispatch('/setup/static-page/edit/page/contact');
         $this->assertResponseCode(302);
     }
 
-    public function testEditContactFailsWithoutDataReadPermissions() {
+    public function testEditContactFailsWithoutDataReadPermissions()
+    {
         $this->setPermissions('0000', '0400', '0000');
         $this->dispatch('/setup/static-page/edit/page/contact');
         $this->assertResponseCode(302);
     }
-    
-    public function testEditImprintSucceedsWithAccessPermissions() {
+
+    public function testEditImprintSucceedsWithAccessPermissions()
+    {
         $this->setPermissions('0700', '0700', '0700');
         $this->dispatch('/setup/static-page/edit/page/imprint');
         $this->assertResponseCode(200);
     }
 
-    public function testEditImprintFailsWithoutWritePermissions() {
+    public function testEditImprintFailsWithoutWritePermissions()
+    {
         $this->setPermissions('0500', '0400', '0000');
         $this->dispatch('/setup/static-page/edit/page/imprint');
         $this->assertResponseCode(302);
     }
 
-    public function testEditImprintFailsWithoutDataReadPermissions() {
+    public function testEditImprintFailsWithoutDataReadPermissions()
+    {
         $this->setPermissions('0000', '0400', '0000');
         $this->dispatch('/setup/static-page/edit/page/imprint');
         $this->assertResponseCode(302);
     }
 
-    public function testExceptionThrownWithoutTmxReadPermissions() {
+    public function testExceptionThrownWithoutTmxReadPermissions()
+    {
         $this->markTestSkipped('test results in false negative, needs debugging.');
         $this->setPermissions('0500', '0000', '0300');
         $this->dispatch('/setup/static-page/edit/page/home');
@@ -111,7 +123,8 @@ class Setup_StaticPageControllerTest extends SetupControllerTestCase {
     /**
      * Set permissions for data base dir, translations source dirs and translation target dir
      */
-    protected function setPermissions($contentBasepathPerms, $translationSourcesPerms, $translationTargetPerms) {
+    protected function setPermissions($contentBasepathPerms, $translationSourcesPerms, $translationTargetPerms)
+    {
         $this->changeFileMode($this->config->contentBasepath, "$contentBasepathPerms");
         foreach ($this->config->translationSourcePaths->toArray() as $tmxSource) {
             if(is_dir($tmxSource))
@@ -121,5 +134,4 @@ class Setup_StaticPageControllerTest extends SetupControllerTestCase {
         $this->assertFileExists($this->config->translationTargetPath);
         $this->changeFileMode($this->config->translationTargetPath, "$translationTargetPerms");
     }
-
 }

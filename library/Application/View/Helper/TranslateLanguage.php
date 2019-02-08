@@ -25,22 +25,34 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_Setup
+ * @package     View
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2016-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
- * TODO expand tests
+ * View helper for translations modifying behaviour of base class.
  */
-class Setup_Model_HelpPageTest extends ControllerTestCase
+class Application_View_Helper_TranslateLanguage extends Zend_View_Helper_Translate
 {
 
-    public function testFromArrayEmptyArray()
+    /**
+     * Changes default behaviour of translate function to return empty string for null values.
+     *
+     * The default value for $messageid is changed to distinguish between null values and no
+     * parameter at all. This way translate() can still be used to obtain the translation object,
+     * which is the default behavior.
+     *
+     * Also makes sure, that first option is never interpreted as a locale. This avoids the problem
+     * of a placeholder value that matches a locale, for instance a collection with the name 'de'.
+     * (for more information see OPUSVIER-2546)
+     *
+     * TODO review if the behaviour changes are worth it - is there a better way?
+     */
+    public function translateLanguage($langId)
     {
-        $model = new Setup_Model_HelpPage();
-
-        $model->fromArray([]);
+        $translator = Zend_Registry::get(Application_Translate::REGISTRY_KEY);
+        return $translator->translateLanguage($langId);
     }
 }

@@ -38,7 +38,8 @@
  * @category    Application
  * @package     Module_Admin
  */
-class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract {
+class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
+{
 
     /**
      * Form element name for enrichment key name.
@@ -56,31 +57,42 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract {
      * Initialize form elements.
      * @throws Zend_Form_Exception
      */
-    public function init() {
+    public function init()
+    {
         parent::init();
 
         $this->setLabelPrefix('Opus_EnrichmentKey');
         $this->setUseNameAsLabel(true);
         $this->setModelClass('Opus_EnrichmentKey');
         $this->setVerifyModelIdIsNumeric(false);
+      
+        $nameMaxLength = Opus_EnrichmentKey::getFieldMaxLength('Name');
 
         $name = $this->createElement('text', self::ELEMENT_NAME, [
             'required' => true, 'label' => 'admin_enrichmentkey_label_name',
-            'maxlength' => Opus_EnrichmentKey::getFieldMaxLength('Name')
+            'maxlength' => $nameMaxLength
         ]);
-        $name->addValidator('regex', false, array('pattern' => self::PATTERN));
+        $name->addValidator('regex', false, ['pattern' => self::PATTERN]);
         $name->addValidator('StringLength', false, [
-            'min' => 1, 'max' => Opus_EnrichmentKey::getFieldMaxLength('Name')
+            'min' => 1, 'max' => $nameMaxLength
         ]);
         $name->addValidator(new Application_Form_Validate_EnrichmentKeyAvailable());
         $this->addElement($name);
+
+        $translations = new Admin_Form_TranslationSet();
+
+        $translations->addKey('TranslationLabel');
+        $translations->addKey('TranslationDescription');
+
+        $this->addSubForm($translations, 'Translations');
     }
 
     /**
      * Initialisiert das Formular mit Werten einer Model-Instanz.
      * @param $model Opus_Enrichmentkey
      */
-    public function populateFromModel($enrichmentKey) {
+    public function populateFromModel($enrichmentKey)
+    {
         $this->getElement(self::ELEMENT_MODEL_ID)->setValue($enrichmentKey->getName());
         $this->getElement(self::ELEMENT_NAME)->setValue($enrichmentKey->getName());
     }
@@ -89,8 +101,8 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract {
      * Aktualsiert Model-Instanz mit Werten im Formular.
      * @param $model Opus_Enrichmentkey
      */
-    public function updateModel($enrichmentKey) {
+    public function updateModel($enrichmentKey)
+    {
         $enrichmentKey->setName($this->getElementValue(self::ELEMENT_NAME));
     }
-
 }
