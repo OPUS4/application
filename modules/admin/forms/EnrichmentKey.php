@@ -28,9 +28,8 @@
  * @package     Module_Admin
  * @author      Gunar Maiwald <maiwald@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id: Enrichmentkey.php 9260 2011-12-20 10:44:39Z gmaiwald $
  */
 
 /**
@@ -67,10 +66,12 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract {
 
         $name = $this->createElement('text', self::ELEMENT_NAME, [
             'required' => true, 'label' => 'admin_enrichmentkey_label_name',
-            'maxlength' => Opus_EnrichmentKey::getFieldMaxLength('KeyName')
+            'maxlength' => Opus_EnrichmentKey::getFieldMaxLength('Name')
         ]);
         $name->addValidator('regex', false, array('pattern' => self::PATTERN));
-        $name->addValidator('StringLength', false, array('min' => 1, 'max' => 255));
+        $name->addValidator('StringLength', false, [
+            'min' => 1, 'max' => Opus_EnrichmentKey::getFieldMaxLength('Name')
+        ]);
         $name->addValidator(new Application_Form_Validate_EnrichmentKeyAvailable());
         $this->addElement($name);
     }

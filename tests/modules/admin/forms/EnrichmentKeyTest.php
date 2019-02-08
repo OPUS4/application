@@ -27,9 +27,8 @@
  * @category    Application Unit Test
  * @package     Admin_Form
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -82,7 +81,9 @@ class Admin_Form_EnrichmentKeyTest extends ControllerTestCase {
 
         $this->assertTrue($form->isValid(array('Name' => 'City2')));
         $this->assertTrue($form->isValid(array('Name' => 'Test')));
-        $this->assertTrue($form->isValid(array('Name' => str_pad('Long', 255, 'g'))));
+        $this->assertTrue($form->isValid([
+            'Name' => str_pad('Long', Opus_EnrichmentKey::getFieldMaxLength('Name'), 'g')
+        ]));
         $this->assertTrue($form->isValid(array('Name' => 'small_value59.dot')));
     }
 
@@ -92,7 +93,9 @@ class Admin_Form_EnrichmentKeyTest extends ControllerTestCase {
         $this->assertFalse($form->isValid(array()));
         $this->assertFalse($form->isValid(array('Name' => 'City')));
         $this->assertFalse($form->isValid(array('Name' => ' ')));
-        $this->assertFalse($form->isValid(array('Name' => str_pad('toolong', 256, 'g'))));
+        $this->assertFalse($form->isValid([
+            'Name' => str_pad('toolong', Opus_EnrichmentKey::getFieldMaxLength('Name') + 1, 'g')
+        ]));
         $this->assertFalse($form->isValid(array('Name' => '5zig')));
         $this->assertFalse($form->isValid(array('Name' => '_Value')));
     }
