@@ -78,29 +78,44 @@ class Application_Util_NotificationTest extends ControllerTestCase
 
     public function testGetSubmissionMailSubjectWithEmptyAuthorsAndEmptyTitle()
     {
+        $document = $this->createTestDocument();
+        $docId = $document->store();
+
         $method = $this->getMethod('getMailSubject');
-        $subject = $method->invokeArgs($this->notification, ["123", [], ""]);
-        $this->assertEquals("Dokument #123 eingestellt: n/a : n/a", $subject);
+        $subject = $method->invokeArgs($this->notification, [$document, []]);
+        $this->assertEquals("Dokument #$docId eingestellt: n/a : n/a", $subject);
     }
 
     public function testGetSubmissionMailSubjectWithOneAuthor()
     {
+        $document = $this->createTestDocument();
+        $title = $document->addTitleMain();
+        $title->setLanguage('deu');
+        $title->setValue('Test Document');
+        $docId = $document->store();
+
         $method = $this->getMethod('getMailSubject');
         $subject = $method->invokeArgs(
             $this->notification,
-            ["123", ["Doe, John"], "Test Document"]
+            [$document, ["Doe, John"]]
         );
-        $this->assertEquals("Dokument #123 eingestellt: Doe, John : Test Document", $subject);
+        $this->assertEquals("Dokument #$docId eingestellt: Doe, John : Test Document", $subject);
     }
 
     public function testGetSubmissionMailSubjectWithTwoAuthors()
     {
+        $document = $this->createTestDocument();
+        $title = $document->addTitleMain();
+        $title->setLanguage('deu');
+        $title->setValue('Test Document');
+        $docId = $document->store();
+
         $method = $this->getMethod('getMailSubject');
         $subject = $method->invokeArgs(
             $this->notification,
-            ["123", ["Doe, John", "Doe, Jane"], "Test Document"]
+            [$document, ["Doe, John", "Doe, Jane"]]
         );
-        $this->assertEquals("Dokument #123 eingestellt: Doe, John ; Doe, Jane : Test Document", $subject);
+        $this->assertEquals("Dokument #$docId eingestellt: Doe, John ; Doe, Jane : Test Document", $subject);
     }
 
     public function testGetSubmissionMailBodyWithEmptyAuthorsAndEmptyTitle()
@@ -253,5 +268,30 @@ class Application_Util_NotificationTest extends ControllerTestCase
         $method = $class->getMethod($methodName);
         $method->setAccessible(true);
         return $method;
+    }
+
+    public function testGetSubjectTemplate()
+    {
+        $template = $this->notification->getSubjectTemplate();
+        $this->assertNotNull($template);
+        $this->assertNotEmpty($template);
+    }
+
+    public function testGetMailSubject()
+    {
+        $document = $this->createTestDocument();
+        $document->setLanguage('deu');
+
+        $title = $document->addTitleMain();
+        $title->setLanguage('deu');
+        $title->setValue('Testdokument');
+
+        $docId = $document->store();
+
+        $subject = $this->notification->getMailSubject($document, []);
+
+        $this->assertNotContains($title->__toString(), $subject);
+        $this->assertContains('Testdokument', $subject);
+        $this->assertContains($docId, $subject);
     }
 }

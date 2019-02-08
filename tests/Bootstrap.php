@@ -52,6 +52,11 @@ set_include_path(implode(PATH_SEPARATOR, array(
     get_include_path()
 )));
 
+$catalogPath = APPLICATION_PATH . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR .
+    'resources' . DIRECTORY_SEPARATOR . 'opus4-catalog.xml';
+
+putenv("XML_CATALOG_FILES=$catalogPath");
+
 require_once 'autoload.php';
 
 // enable fallback autoloader for testing

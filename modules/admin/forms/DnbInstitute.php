@@ -51,8 +51,12 @@ class Admin_Form_DnbInstitute extends Application_Form_Model_Abstract {
         $this->setUseNameAsLabel(true);
         $this->setModelClass('Opus_DnbInstitute');
 
-        $this->addElement('text', self::ELEMENT_NAME, array('required' => true, 'size' => 70));
-        $this->addElement('text', self::ELEMENT_DEPARTMENT, array('size' => 70));
+        $this->addElement('text', self::ELEMENT_NAME, [
+            'required' => true, 'size' => 70, 'maxlength' => Opus_DnbInstitute::getFieldMaxLength('Name')
+        ]);
+        $this->addElement('text', self::ELEMENT_DEPARTMENT, [
+            'size' => 70, 'maxlength' => Opus_DnbInstitute::getFieldMaxLength('Department')
+        ]);
         $this->addElement('textarea', self::ELEMENT_ADDRESS);
         $this->addElement('text', self::ELEMENT_CITY, array('required' => true, 'size' => 50));
         $this->addElement('text', self::ELEMENT_PHONE);
