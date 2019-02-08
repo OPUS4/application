@@ -124,8 +124,10 @@ class Admin_Form_Persons extends Application_Form_Model_Abstract
         $this->addElement('combobox', self::ELEMENT_ACADEMIC_TITLE, array('label' => 'AcademicTitle'));
 
         $this->addElement(
-            'text', self::ELEMENT_LAST_NAME,
-            array('label' => 'LastName', 'required' => true, 'size' => 50)
+            'text', self::ELEMENT_LAST_NAME, [
+                'label' => 'LastName', 'required' => true, 'size' => 50,
+                'maxlength' => Opus_Person::getFieldMaxLength('LastName')
+            ]
         );
         $this->addElement('text', self::ELEMENT_FIRST_NAME, array('label' => 'FirstName', 'size' => 50));
 
