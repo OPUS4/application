@@ -2395,3 +2395,7 @@ ul.permissions-list input[type=checkbox] {
 #fieldset-Translations .field {
     width: 80%;
 }
+
+.adminContainer #fieldset-Enrichments td {
+    vertical-align: top;
+}
