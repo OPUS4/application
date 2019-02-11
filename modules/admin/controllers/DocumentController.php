@@ -109,8 +109,11 @@ class Admin_DocumentController extends Application_Controller_Action
         }
         else {
             $editSession = new Admin_Model_DocumentEditSession($docId);
+            $form = null;
 
             if ($this->getRequest()->isPost()) {
+                // handle form submission (save button, add/remove element)
+
                 $data = $this->getRequest()->getPost();
                 $data = $data['Document']; // 'Document' Form wraps actual metadata form
 
@@ -127,8 +130,9 @@ class Admin_DocumentController extends Application_Controller_Action
 
                 switch ($result) {
                     case Admin_Form_Document::RESULT_SAVE:
-                        if ($form->isValid($data)) {
-                            // Formular ist korrekt; aktualisiere Dokument
+                        $validationResult = $form->isValid($data);
+                        if ($validationResult) {
+                            // alle Formularwerte ist gültig; aktualisiere Dokument in Datenbank
                             $form->updateModel($document);
 
                             try {
@@ -137,7 +141,7 @@ class Admin_DocumentController extends Application_Controller_Action
                                 // TODO redirect to Übersicht/Browsing/???
                                 $message = $this->view->translate('admin_document_update_success');
                                 return $this->_helper->Redirector->redirectTo(
-                                    'index', $message, 'document', 'admin', array('id' => $docId)
+                                    'index', $message, 'document', 'admin', array('id' => $document->getId())
                                 );
                             }
                             catch (Exception $ex) {
@@ -169,15 +173,15 @@ class Admin_DocumentController extends Application_Controller_Action
                         // TODO redirect to origin page (Store in Session oder Form?)
                         // Possible Rücksprungziele: Frontdoor, Metadaten-Übersicht, Suchergebnisse (Documents, ?)
                         return $this->_helper->Redirector->redirectTo(
-                            'index', null, 'document', 'admin', array('id' => $docId)
+                            'index', null, 'document', 'admin', array('id' => $document->getId())
                         );
                         break;
 
                     case Admin_Form_Document::RESULT_SWITCH_TO:
-                        $editSession->storePost($data, $docId);
+                        $editSession->storePost($data, $document->getId());
 
                         // TODO Parameter in Unterarray 'params' => array() verlagern?
-                        $target['document'] = $docId;
+                        $target['document'] = $document->getId();
 
                         $action = $target['action'];
                         unset($target['action']);
@@ -196,26 +200,7 @@ class Admin_DocumentController extends Application_Controller_Action
             }
             else {
                 // GET zeige neues oder gespeichertes Formular an
-
-                // Hole gespeicherten POST aus Session
-                $post = $editSession->retrievePost($docId);
-
-                $continue = $this->getRequest()->getParam('continue', null);
-
-                if ($post && !is_null($continue)) {
-                    // Initialisiere Formular vom gespeicherten POST
-                    $form = Admin_Form_Document::getInstanceFromPost($post, $document);
-                    $form->populate($post);
-
-                    // Führe Rücksprung aus
-                    $form->continueEdit($this->getRequest(), $editSession);
-                }
-                else {
-                    // Initialisiere Formular vom Dokument
-                    $form = new Admin_Form_Document();
-                    $form->populateFromModel($document);
-                }
-
+                $form = $this->handleGet($document, $editSession);
             }
 
             $wrappedForm = new Admin_Form_Wrapper($form);
@@ -237,6 +222,40 @@ class Admin_DocumentController extends Application_Controller_Action
         $javascriptTranslations = $this->view->getHelper('javascriptMessages');
         $javascriptTranslations->addMessage('identifierInvalidFormat');
         $javascriptTranslations->addMessage('identifierInvalidCheckdigit');
+    }
+
+    /**
+     * Liefert ein Formular, dessen Elemente mit den Werten des übergebenen Dokuments
+     * initialisiert sind.
+     *
+     * @param $document Opus_Document
+     * @param $editSession Admin_Model_DocumentEditSession
+     *
+     * @return Admin_Form_Document|null
+     */
+    private function handleGet($document, $editSession) {
+        $form = null;
+
+        // Hole gespeicherten POST aus Session, sofern verfügbar
+        $post = $editSession->retrievePost($document->getId());
+
+        $continue = $this->getRequest()->getParam('continue', null);
+
+        if ($post && !is_null($continue)) {
+            // Initialisiere Formular vom gespeicherten POST
+            $form = Admin_Form_Document::getInstanceFromPost($post, $document);
+            $form->populate($post);
+
+            // Führe Rücksprung aus
+            $form->continueEdit($this->getRequest(), $editSession);
+        }
+        else {
+            // Initialisiere Formular vom Dokument
+            $form = new Admin_Form_Document();
+            $form->populateFromModel($document);
+        }
+
+        return $form;
     }
 
     /**

@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -28,7 +28,8 @@
  * @author      Gunar Maiwald <maiwald@zib.de>
  * @author      Maximilian Salomon <salomon@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @author      Sascha Szott <opus-development@saschaszott.de>
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -55,7 +56,6 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
     {
         $model = new Opus_EnrichmentKey();
         $model->setName('TestEnrichmentKey');
-
         return $model->store();
     }
 
@@ -97,6 +97,8 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
 
         $post = [
             'Name' => 'MyTestEnrichment',
+            'Type' => 'TextType',
+            'Options' => '',
             'Save' => 'Speichern'
         ];
 
@@ -108,10 +110,75 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $this->assertRedirectRegex('/^\/admin\/enrichmentkey/');
         $this->verifyFlashMessage('controller_crud_save_success', self::MESSAGE_LEVEL_NOTICE);
 
-        $enrichment = new Opus_EnrichmentKey('MyTestEnrichment');
+        $enrichmentKey = new Opus_EnrichmentKey('MyTestEnrichment');
+        $this->assertNotNull($enrichmentKey);
+        $this->assertEquals('MyTestEnrichment', $enrichmentKey->getName());
+    }
 
-        $this->assertNotNull($enrichment);
-        $this->assertEquals('MyTestEnrichment', $enrichment->getName());
+    public function testNewActionSaveEnrichmentKeyWithTypeOptions()
+    {
+        $this->createsModels = true;
+
+        $post = [
+            'Name' => 'MyTestEnrichment',
+            'Type' => 'RegexType',
+            'Options' => '^.*$',
+            'Save' => 'Speichern'
+        ];
+
+        $this->getRequest()->setPost($post)->setMethod('POST');
+
+        $this->dispatch($this->getControllerPath() . '/new');
+
+        $this->assertRedirect();
+        $this->assertRedirectRegex('/^\/admin\/enrichmentkey/');
+        $this->verifyFlashMessage('controller_crud_save_success', self::MESSAGE_LEVEL_NOTICE);
+
+        $enrichmentKey = new Opus_EnrichmentKey('MyTestEnrichment');
+        $this->assertNotNull($enrichmentKey);
+        $this->assertEquals('MyTestEnrichment', $enrichmentKey->getName());
+        $this->assertEquals('RegexType', $enrichmentKey->getType());
+        $this->assertEquals(json_encode(array("regex" => "^.*$")), $enrichmentKey->getOptions());
+    }
+
+    public function testNewActionSaveMissingEnrichmentType()
+    {
+        $this->createsModels = true;
+
+        $post = [
+            'Name' => 'MyTestEnrichment',
+            'Save' => 'Speichern'
+        ];
+
+        $this->getRequest()->setPost($post)->setMethod('POST');
+
+        $this->dispatch($this->getControllerPath() . '/new');
+
+        $this->assertResponseCode(200);
+        $this->assertXpath("//form/div[2]/div[2]/ul[@class='errors']", $this->getResponse()->getBody());
+
+        $this->assertNull(Opus_EnrichmentKey::fetchByName('MyTestEnrichment'));
+    }
+
+    public function testNewActionSaveUnknownEnrichmentType()
+    {
+        $this->createsModels = true;
+
+        $post = [
+            'Name' => 'MyTestEnrichment',
+            'Type' => 'FooBarType',
+            'Options' => '',
+            'Save' => 'Speichern'
+        ];
+
+        $this->getRequest()->setPost($post)->setMethod('POST');
+
+        $this->dispatch($this->getControllerPath() . '/new');
+
+        $this->assertResponseCode(200);
+        $this->assertXpath("//form/div[2]/div[2]/ul[@class='errors']", $this->getResponse()->getBody());
+
+        $this->assertNull(Opus_EnrichmentKey::fetchByName('MyTestEnrichment'));
     }
 
     public function testNewActionCancel()
@@ -191,11 +258,14 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
 
         $enrichmentKey = new Opus_EnrichmentKey();
         $enrichmentKey->setName('MyTestEnrichment');
+        $enrichmentKey->setType('TextType');
         $enrichmentKey->store();
 
         $this->getRequest()->setMethod('POST')->setPost([
             'Id' => 'MyTestEnrichment',
             'Name' => 'MyTestEnrichmentModified',
+            'Type' => 'RegexType',
+            'Options' => '^.*$',
             'Save' => 'Speichern'
         ]);
 
@@ -204,9 +274,10 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $this->verifyFlashMessage('controller_crud_save_success', self::MESSAGE_LEVEL_NOTICE);
 
         $enrichmentKey = new Opus_EnrichmentKey('MyTestEnrichmentModified');
-
         $this->assertNotNull($enrichmentKey);
-        $this->assertEquals('MyTestEnrichmentModified', $enrichmentKey);
+        $this->assertEquals('MyTestEnrichmentModified', $enrichmentKey->getName());
+        $this->assertEquals('RegexType', $enrichmentKey->getType());
+        $this->assertEquals(json_encode(array("regex" => "^.*$")), $enrichmentKey->getOptions());
 
         new Opus_EnrichmentKey('MyTestEnrichment');
 
@@ -228,6 +299,8 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $this->getRequest()->setMethod('POST')->setPost([
             'Id' => 'City',
             'Name' => 'CityModified',
+            'Type' => 'TextType',
+            'Options' => '',
             'Save' => 'Speichern'
         ]);
 
@@ -245,11 +318,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $this->fail('Previous statement should have thrown exception.');
     }
 
-    /**
-     * @expectedException Opus_Model_NotFoundException
-     * @expectedExceptionMessage No Opus_Db_EnrichmentKeys with id MyTestEnrichmentModified in database.
-     */
-    public function testEditActionCancel()
+    public function testEditActionSaveWithoutEnrichmentType()
     {
         $this->createsModels = true;
 
@@ -260,6 +329,56 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $this->getRequest()->setMethod('POST')->setPost([
             'Id' => 'MyTestEnrichment',
             'Name' => 'MyTestEnrichmentModified',
+            'Save' => 'Speichern'
+        ]);
+
+        $this->dispatch($this->getControllerPath() . '/edit');
+        $this->assertResponseCode(200);
+
+        $this->assertNull(Opus_EnrichmentKey::fetchByName('MyTestEnrichmentModified'));
+        $this->assertNotNull(Opus_EnrichmentKey::fetchByName('MyTestEnrichment'));
+    }
+
+    public function testEditActionSaveWithUnknownEnrichmentType()
+    {
+        $this->createsModels = true;
+
+        $enrichmentKey = new Opus_EnrichmentKey();
+        $enrichmentKey->setName('MyTestEnrichment');
+        $enrichmentKey->store();
+
+        $this->getRequest()->setMethod('POST')->setPost([
+            'Id' => 'MyTestEnrichment',
+            'Name' => 'MyTestEnrichmentModified',
+            'Type' => 'FooBarType',
+            'Save' => 'Speichern'
+        ]);
+
+        $this->dispatch($this->getControllerPath() . '/edit');
+        $this->assertResponseCode(200);
+
+        $this->assertNull(Opus_EnrichmentKey::fetchByName('MyTestEnrichmentModified'));
+        $this->assertNotNull(Opus_EnrichmentKey::fetchByName('MyTestEnrichment'));
+    }
+
+    /**
+     * @expectedException Opus_Model_NotFoundException
+     * @expectedExceptionMessage No Opus_Db_EnrichmentKeys with id MyTestEnrichmentModified in database.
+     */
+    public function testEditActionCancel()
+    {
+        $this->createsModels = true;
+
+        $enrichmentKey = new Opus_EnrichmentKey();
+        $enrichmentKey->setName('MyTestEnrichment');
+        $enrichmentKey->setType('TextType');
+        $enrichmentKey->store();
+
+        $this->getRequest()->setMethod('POST')->setPost([
+            'Id' => 'MyTestEnrichment',
+            'Name' => 'MyTestEnrichmentModified',
+            'Type' => 'RegexType',
+            'Options' => '^.*$',
             'Cancel' => 'Abbrechen'
         ]);
 
@@ -270,6 +389,8 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
 
         $this->assertNotNull($enrichmentKey);
         $this->assertEquals('MyTestEnrichment', $enrichmentKey->getName());
+        $this->assertEquals('TextType', $enrichmentKey->getType());
+        $this->assertNull($enrichmentKey->getOptions());
 
         new Opus_EnrichmentKey('MyTestEnrichmentModified');
 
@@ -338,5 +459,125 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
 
         $this->assertNotNull($enrichmentKey);
         $this->assertEquals('City', $enrichmentKey->getName());
+    }
+
+    public function testEnrichmentTypeHandlingRoundTrip()
+    {
+        $enrichmentKeyName = 'RegexTypeEnrichmentKey';
+
+        $this->createsModels = true;
+
+        // neuen Enrichmentkey mit Typ und Optionen anlegen
+        $post = [
+            'Name' => $enrichmentKeyName,
+            'Type' => 'RegexType',
+            'Options' => '^abc$',
+            'Save' => 'Speichern'
+        ];
+
+        $this->getRequest()->setPost($post)->setMethod('POST');
+        $this->dispatch($this->getControllerPath() . '/new');
+
+
+        // prüfe, dass Enrichmentkey erfolgreich in Datenbank gespeichert wurde
+        $this->assertRedirect();
+        $this->assertRedirectRegex('/^\/admin\/enrichmentkey/');
+        $this->verifyFlashMessage('controller_crud_save_success', self::MESSAGE_LEVEL_NOTICE);
+
+        $enrichmentKey = new Opus_EnrichmentKey($enrichmentKeyName);
+        $this->assertNotNull($enrichmentKey);
+        $this->assertEquals($enrichmentKeyName, $enrichmentKey->getName());
+        $this->assertEquals($post['Type'], $enrichmentKey->getType());
+        $this->assertEquals($post['Options'], $enrichmentKey->getOptionsPrintable());
+
+
+        // Enrichmentkey-Übersichtseite sollte nun den Typnamen und einen Tooltip anzeigen
+        $this->resetRequest();
+        $this->resetResponse();
+        $this->getRequest()->setMethod('GET');
+        $this->dispatch($this->getControllerPath());
+
+        $this->assertResponseCode(200);
+        $this->assertController('enrichmentkey');
+        $this->assertAction('index');
+
+        $this->assertContains($post['Type'], $this->getResponse()->getBody());
+        $this->assertXpathCount('//i[@class="fa fa-info-circle" and @title="' . $post['Options'] . '"]', 1);
+
+
+        // prüfe, dass Edit-Formular Typnamen und Optionen anzeigt
+        $this->resetRequest();
+        $this->resetResponse();
+        $this->getRequest()->setMethod('GET');
+        $this->dispatch($this->getControllerPath() . '/edit/id/' . $enrichmentKeyName);
+
+        $this->assertResponseCode(200);
+        $this->assertController('enrichmentkey');
+        $this->assertAction('edit');
+
+        $this->assertXpathContentContains('//*[@id="Name"]/@value', $enrichmentKeyName);
+        $this->assertXpathContentContains('//*[@id="admin_enrichmentkey_type"]/option[@selected="selected"]/@value', $post['Type']);
+        $this->assertXpathContentContains('//*[@id="admin_enrichmentkey_options"]/text()', $post['Options']);
+
+        // Cleanup-Schritt
+        $enrichmentKey->delete();
+    }
+
+    public function testEnrichmentTypeWithInvalidOptions()
+    {
+        $enrichmentKeyName = 'MySelectEnrichmentKey';
+
+        $this->createsModels = true;
+
+        $post = [
+            'Name' => $enrichmentKeyName,
+            'Type' => 'RegexType',
+            'Options' => '[', // dieser Regex ist ungültig
+            'Save' => 'Speichern'
+        ];
+
+        $this->getRequest()->setPost($post)->setMethod('POST');
+        $this->dispatch($this->getControllerPath() . '/new');
+
+        $this->assertRedirect();
+        $this->assertRedirectRegex('/^\/admin\/enrichmentkey/');
+        $this->verifyFlashMessage('controller_crud_save_success', self::MESSAGE_LEVEL_NOTICE);
+
+        $enrichmentKey = new Opus_EnrichmentKey($enrichmentKeyName);
+        $this->assertNotNull($enrichmentKey);
+        $this->assertEquals($enrichmentKeyName, $enrichmentKey->getName());
+
+        $this->resetRequest();
+        $this->resetResponse();
+
+        $this->getRequest()->setMethod('GET');
+        $this->dispatch($this->getControllerPath() . '/edit/id/' . $enrichmentKeyName);
+
+        $this->assertResponseCode(200);
+        $this->assertController('enrichmentkey');
+        $this->assertAction('edit');
+
+        // prüfe, dass die Formularfelder korrekt initialisiert wurden
+        $this->assertXpathContentContains('//*[@id="Name"]/@value', $enrichmentKeyName);
+        $this->assertXpathContentContains('//*[@id="admin_enrichmentkey_type"]/option[@selected="selected"]/@value', $post['Type']);
+        $this->assertNotXpath('//*[@id="admin_enrichmentkey_options"]/text()'); // invalider Regex sollte nicht übernommen worden sein
+
+        $enrichmentKey->delete();
+    }
+
+    public function testAllEnrichmentTypesAreAvailableInEditForm()
+    {
+        $this->getRequest()->setMethod('GET');
+        $this->dispatch($this->getControllerPath() . '/new');
+
+        $allEnrichmentTypes = Opus_Enrichment_AbstractType::getAllEnrichmentTypes(false);
+        $this->assertXpathCount('//select/option', 1 + count($allEnrichmentTypes)); // +1, weil Standardauswahl leer ist
+
+        $this->assertXpathContentRegex('//select/option[1]', "//");
+        $index = 2;
+        foreach ($allEnrichmentTypes as $enrichmentType) {
+            $this->assertXpathContentContains('//select/option[' . $index . ']', $enrichmentType);
+            $index++;
+        }
     }
 }
