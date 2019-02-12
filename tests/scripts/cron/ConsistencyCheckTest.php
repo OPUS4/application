@@ -27,16 +27,17 @@
  * @category    Cronjob
  * @package     Tests
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 require_once('CronTestCase.php');
 
-class ConsistencyCheckTest extends CronTestCase {
+class ConsistencyCheckTest extends CronTestCase
+{
 
-    private function getPublishedDocumentCount() {
+    private function getPublishedDocumentCount()
+    {
         $finder = new Opus_DocumentFinder();
         $finder->setServerState('published');
         return count($finder->ids());
@@ -45,14 +46,15 @@ class ConsistencyCheckTest extends CronTestCase {
     /**
      * TODO fix for Solr update
      */
-    public function testJobSuccess() {
+    public function testJobSuccess()
+    {
         $this->createJob(Opus_Job_Worker_ConsistencyCheck::LABEL);
         $this->executeScript('cron-check-consistency.php');
 
-        $allJobs = Opus_Job::getByLabels(array(Opus_Job_Worker_ConsistencyCheck::LABEL), null, Opus_Job::STATE_UNDEFINED);
+        $allJobs = Opus_Job::getByLabels([Opus_Job_Worker_ConsistencyCheck::LABEL], null, Opus_Job::STATE_UNDEFINED);
         $this->assertTrue(empty($allJobs), 'Expected no more jobs in queue: found ' . count($allJobs) . ' jobs');
 
-        $failedJobs = Opus_Job::getByLabels(array(Opus_Job_Worker_ConsistencyCheck::LABEL), null, Opus_Job::STATE_FAILED);
+        $failedJobs = Opus_Job::getByLabels([Opus_Job_Worker_ConsistencyCheck::LABEL], null, Opus_Job::STATE_FAILED);
         $this->assertTrue(empty($failedJobs), 'Expected no failed jobs in queue: found ' . count($failedJobs) . ' jobs');
 
         $logPath = parent::$scriptPath . '/../../workspace/log/';
@@ -77,17 +79,18 @@ class ConsistencyCheckTest extends CronTestCase {
     /**
      * TODO fix for Solr Update
      */
-    public function testJobSuccessWithInconsistency() {
+    public function testJobSuccessWithInconsistency()
+    {
         $service = Opus_Search_Service::selectIndexingService( null, 'solr' );
         $service->removeAllDocumentsFromIndex();
 
         $this->createJob(Opus_Job_Worker_ConsistencyCheck::LABEL);
         $this->executeScript('cron-check-consistency.php');
 
-        $allJobs = Opus_Job::getByLabels(array(Opus_Job_Worker_ConsistencyCheck::LABEL), null, Opus_Job::STATE_UNDEFINED);
+        $allJobs = Opus_Job::getByLabels([Opus_Job_Worker_ConsistencyCheck::LABEL], null, Opus_Job::STATE_UNDEFINED);
         $this->assertTrue(empty($allJobs), 'Expected no more jobs in queue: found ' . count($allJobs) . ' jobs');
 
-        $failedJobs = Opus_Job::getByLabels(array(Opus_Job_Worker_ConsistencyCheck::LABEL), null, Opus_Job::STATE_FAILED);
+        $failedJobs = Opus_Job::getByLabels([Opus_Job_Worker_ConsistencyCheck::LABEL], null, Opus_Job::STATE_FAILED);
         $this->assertTrue(empty($failedJobs), 'Expected no failed jobs in queue: found ' . count($failedJobs) . ' jobs');
 
         $logPath = parent::$scriptPath . '/../../workspace/log/';
