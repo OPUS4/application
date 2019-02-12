@@ -82,9 +82,11 @@ class Application_Form_Element_EnrichmentKeyTest extends FormElementTestCase {
      * TODO 2 keys are being excluded - needs formal framework for that with configuration
      */
     public function testOptions() {
-        $element = $this->getElement();
 
+        // NOTE: This also refreshes the cache for enrichment keys. Static state can carry over between tests.
         $allOptions = Opus_EnrichmentKey::getAll();
+
+        $element = $this->getElement(); // creates form element for enrichment keys using cached keys
 
         $this->assertEquals(count($allOptions) - 2, count($element->getMultiOptions()));
     }
