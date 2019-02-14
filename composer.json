@@ -3,6 +3,8 @@
   "description": "Application Environment for Opus 4",
   "license": "GPL-2.0+",
   "require": {
+    "php": ">=5.6",
+    "ext-intl": "*",
     "zendframework/zendframework1": "1.12.*",
     "jpgraph/jpgraph": "dev-master",
     "solarium/solarium": "3.4.1",
