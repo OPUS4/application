@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<ruleset name="OPUS 4 coding standard">
+    <rule ref="./vendor/zendframework/zend-coding-standard/ruleset.xml" />
+    <file>library</file>
+    <file>modules</file>
+    <file>tests/library</file>
+    <file>tests/modules</file>
+</ruleset>

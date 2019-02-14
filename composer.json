@@ -25,11 +25,15 @@
     "sebastian/phpcpd": "*",
     "mayflower/php-codebrowser": "~1.1",
     "squizlabs/php_codesniffer": "2.*",
-    "opus4-repo/codesniffer": "dev-master"
+    "opus4-repo/codesniffer": "dev-master",
+    "zendframework/zend-coding-standard": "~1.0.0"
   },
   "minimum-stability": "dev",
   "prefer-stable": true,
   "config": {
     "component-dir": "public/assets"
+  },
+  "scripts": {
+    "cs-check": "phpcs -n"
   }
 }
