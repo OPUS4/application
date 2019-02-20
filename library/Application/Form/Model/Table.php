@@ -205,4 +205,22 @@ class Application_Form_Model_Table extends Application_Form_Abstract {
             return true;
         }
     }
+
+    public function isUsed($model)
+    {
+        if (!is_null($this->_controller)) {
+            return $this->_controller->isUsed($model);
+        } else {
+            return false;
+        }
+    }
+
+    public function isProtected($model)
+    {
+        if (!is_null($this->_controller)) {
+            return $this->_controller->isProtected($model);
+        } else {
+            return false;
+        }
+    }
 }

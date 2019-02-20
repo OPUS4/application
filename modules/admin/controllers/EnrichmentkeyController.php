@@ -109,4 +109,13 @@ class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD
         return !in_array($model->getId(), $this->unmodifyableEnrichmentKeys);
     }
 
+    public function isProtected($model)
+    {
+        return in_array($model->getId(), $this->_enrichmentKeys->getProtectedEnrichmentKeys());
+    }
+
+    public function isUsed($model)
+    {
+        return in_array($model->getId(), Opus_EnrichmentKey::getAllReferenced());
+    }
 }

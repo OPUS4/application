@@ -42,7 +42,7 @@
     </tr>
     </thead>
     <?PHP foreach($this->element->getModels() as $model) : ?>
-        <tr>
+        <tr <?PHP if ($this->element->isProtected($model)) : ?>class="protected"<?PHP elseif ($this->element->isUsed($model)) : ?>class="used"<?PHP endif ?>>
             <td>
                 <?PHP if ($this->element->isRenderShowActionLink($model)) : ?>
                     <a href="<?= $this->url(array('action' => 'show', 'id' => $model->getId())) ?>"
