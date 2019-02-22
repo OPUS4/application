@@ -34,10 +34,76 @@
 class Application_Update_ImportCustomTranslationsTest extends ControllerTestCase
 {
 
+    private $testPath;
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        $path = APPLICATION_PATH . '/modules/default/language_custom';
+
+        if (!is_dir($path)) {
+            mkdir($path);
+        }
+
+        $this->testPath = $path;
+
+        $database = new Opus_Translate_Dao();
+        $database->removeAll();
+    }
+
+    public function tearDown()
+    {
+        parent::tearDown();
+    }
+
     public function testRunImportCustomTranslation()
     {
+        // Setup file and folder for import test
+        $tmxFile = new Application_Translate_TmxFile();
+        $tmxFile->fromArray([
+            'test_admin_title' => [
+                'de' => 'Deutscher Titel',
+                'en' => 'English Title'
+            ],
+            'test_description' => [
+                'de' => 'Beschreibung',
+                'en' => 'Description'
+            ]
+        ]);
+
+        $filePath = $this->testPath . '/test.tmx';
+
+        $tmxFile->save($filePath);
+
+        $database = new Opus_Translate_Dao();
+
+        // Check translations not in database
+        $this->assertNull($database->getTranslation('test_admin_title'));
+        $this->assertNull($database->getTranslation('test_description'));
+
+        // Perform import operation
         $update = new Application_Update_ImportCustomTranslations();
         $update->setQuietMode(true);
         $update->run();
+
+        // Check file and folder removed
+        $this->assertFileNotExists($filePath);
+        $this->assertFileNotExists($this->testPath);
+
+        // Check translations in database
+        $translation = $database->getTranslation('test_admin_title');
+
+        $this->assertEquals([
+            'de' => 'Deutscher Titel',
+            'en' => 'English Title'
+        ], $translation);
+
+        $translation = $database->getTranslation('test_description');
+
+        $this->assertEquals([
+            'de' => 'Beschreibung',
+            'en' => 'Description'
+        ], $translation);
     }
 }
