@@ -580,4 +580,31 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
             $index++;
         }
     }
+
+    public function testIsProtected()
+    {
+        $enrichmentKeys = new Admin_Model_EnrichmentKeys();
+        $protectedKeys = $enrichmentKeys->getProtectedEnrichmentKeys();
+        $this->dispatch($this->getControllerPath());
+        $response = $this->getResponse();
+        $this->checkForBadStringsInHtml($response->getBody());
+        foreach ($protectedKeys as &$value) {
+            if (strpos($response->getBody(), $value) !== false) {
+                $this->assertXpathContentContains('//table[1]//*[contains(@class,\'protected\')]', $value);
+            }
+        }
+    }
+
+    public function testIsUsed()
+    {
+        $usedKeys =  Opus_EnrichmentKey::getAllReferenced();
+        $this->dispatch($this->getControllerPath());
+        $response = $this->getResponse();
+        $this->checkForBadStringsInHtml($response->getBody());
+        foreach ($usedKeys as &$value) {
+            if (strpos($response->getBody(), $value) !== false) {
+                $this->assertXpathContentContains('//table[1]//*[contains(@class,\'used\')]', $value);
+            }
+        }
+    }
 }
