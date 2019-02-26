@@ -2399,3 +2399,7 @@ ul.permissions-list input[type=checkbox] {
 .adminContainer #fieldset-Enrichments td {
     vertical-align: top;
 }
+
+.protected{
+    color: grey;
+}
