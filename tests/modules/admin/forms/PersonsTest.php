@@ -27,17 +27,17 @@
  * @category    Tests
  * @package     Admin_Form
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2017-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 class Admin_Form_PersonsTest extends ControllerTestCase
 {
 
-    private $_elementNames = array(
+    private $_elementNames = [
         'LastName', 'FirstName', 'IdentifierGnd', 'IdentifierOrcid', 'IdentifierMisc',
         'Email', 'PlaceOfBirth', 'DateOfBirth', 'AcademicTitle', 'Save', 'Cancel', 'FormId'
-    );
+    ];
 
     public function testCreateForm()
     {
@@ -47,8 +47,7 @@ class Admin_Form_PersonsTest extends ControllerTestCase
 
         $this->assertCount(12, $elements);
 
-        foreach ($this->_elementNames as $name)
-        {
+        foreach ($this->_elementNames as $name) {
             $this->assertArrayHasKey($name, $elements);
         }
     }
@@ -63,8 +62,7 @@ class Admin_Form_PersonsTest extends ControllerTestCase
         array_pop($elementNames); // do not check 'Cancel'
         array_pop($elementNames); // do not check 'Save'
 
-        foreach ($elementNames as $name)
-        {
+        foreach ($elementNames as $name) {
             $element = $form->getElement($name);
 
             $decorator = $element->getDecorator('UpdateField');
@@ -76,7 +74,7 @@ class Admin_Form_PersonsTest extends ControllerTestCase
 
     public function testPopulateFromModelEmptyValues()
     {
-        $values = array(
+        $values = [
             'last_name' => 'Smith',
             'first_name' => null,
             'identifier_orcid' => null,
@@ -86,7 +84,7 @@ class Admin_Form_PersonsTest extends ControllerTestCase
             'date_of_birth' => null,
             'email' => null,
             'academic_title' => null
-        );
+        ];
 
         $form = new Admin_Form_Persons();
 
@@ -102,17 +100,17 @@ class Admin_Form_PersonsTest extends ControllerTestCase
     {
         $this->useEnglish();
 
-        $values = array(
+        $values = [
             'last_name' => 'Smith',
             'first_name' => 'John',
             'identifier_orcid' => '0000-0000-1234-5678',
             'identifier_gnd' => '123456789',
             'identifier_misc' => 'id1234',
-            'place_of_birth' => array('Berlin', 'Hamburg'),
-            'date_of_birth' => array('2017-06-14', '2017-03-27', '2017-11-09'),
+            'place_of_birth' => ['Berlin', 'Hamburg'],
+            'date_of_birth' => ['2017-06-14', '2017-03-27', '2017-11-09'],
             'email' => 'test@example.org',
-            'academic_title' => array('PhD', 'Dr.')
-        );
+            'academic_title' => ['PhD', 'Dr.']
+        ];
 
         $form = new Admin_Form_Persons();
 
@@ -160,17 +158,17 @@ class Admin_Form_PersonsTest extends ControllerTestCase
 
         $form = new Admin_Form_Persons();
 
-        $values = array(
+        $values = [
             'last_name' => 'Smith',
             'first_name' => 'John',
             'identifier_orcid' => '0000-0000-1234-5678',
             'identifier_gnd' => '123456789',
             'identifier_misc' => 'id1234',
-            'place_of_birth' => array('Berlin', 'Hamburg'),
-            'date_of_birth' => array('2017-06-14', '2017-03-27', '2017-11-09'),
+            'place_of_birth' => ['Berlin', 'Hamburg'],
+            'date_of_birth' => ['2017-06-14', '2017-03-27', '2017-11-09'],
             'email' => 'test@example.org',
-            'academic_title' => array('PhD', 'Dr.')
-        );
+            'academic_title' => ['PhD', 'Dr.']
+        ];
 
         $form->populateFromModel($values);
 
@@ -190,17 +188,17 @@ class Admin_Form_PersonsTest extends ControllerTestCase
 
         $form = new Admin_Form_Persons();
 
-        $values = array(
+        $values = [
             'last_name' => 'Smith',
             'first_name' => 'John',
             'identifier_orcid' => '0000-0000-1234-5678',
             'identifier_gnd' => '123456789',
             'identifier_misc' => 'id1234',
-            'place_of_birth' => array('Berlin', 'Hamburg'),
+            'place_of_birth' => ['Berlin', 'Hamburg'],
             'date_of_birth' => '2017-06-14',
             'email' => 'test@example.org',
-            'academic_title' => array('PhD', 'Dr.')
-        );
+            'academic_title' => ['PhD', 'Dr.']
+        ];
 
         $form->populateFromModel($values);
 
@@ -219,17 +217,17 @@ class Admin_Form_PersonsTest extends ControllerTestCase
 
         $form = new Admin_Form_Persons();
 
-        $values = array(
-            'last_name' => array('Smith', ' Smith ', 'Smith  '),
-            'first_name' => array('John', '  John', ' John '),
-            'identifier_orcid' => array('0000-0000-1234-5678', '  0000-0000-1234-5678  '),
-            'identifier_gnd' => array('123456789', ' 123456789 '),
-            'identifier_misc' => array('id1234', 'id1234  ')
-        );
+        $values = [
+            'last_name' => ['Smith', ' Smith ', 'Smith  '],
+            'first_name' => ['John', '  John', ' John '],
+            'identifier_orcid' => ['0000-0000-1234-5678', '  0000-0000-1234-5678  '],
+            'identifier_gnd' => ['123456789', ' 123456789 '],
+            'identifier_misc' => ['id1234', 'id1234  ']
+        ];
 
         $form->populateFromModel($values);
 
-        $checkElements = array('LastName', 'FirstName', 'IdentifierOrcid', 'IdentifierGnd', 'IdentifierMisc');
+        $checkElements = ['LastName', 'FirstName', 'IdentifierOrcid', 'IdentifierGnd', 'IdentifierMisc'];
 
         foreach ($checkElements as $name)
         {
@@ -248,10 +246,10 @@ class Admin_Form_PersonsTest extends ControllerTestCase
 
         $form = new Admin_Form_Persons();
 
-        $values = array(
-            'last_name' => array('smith', ' Smith ', 'Smith  '),
-            'first_name' => array('john', '  John', ' John ')
-        );
+        $values = [
+            'last_name' => ['smith', ' Smith ', 'Smith  '],
+            'first_name' => ['john', '  John', ' John ']
+        ];
 
         $form->populateFromModel($values);
 
@@ -261,7 +259,7 @@ class Admin_Form_PersonsTest extends ControllerTestCase
         $this->assertEquals('smith', $lastName);
         $this->assertEquals('john', $firstName);
 
-        $form->setPerson(array('last_name' => 'Smith', 'first_name' => 'John'));
+        $form->setPerson(['last_name' => 'Smith', 'first_name' => 'John']);
         $form->populateFromModel($values);
 
         $lastName = $form->getElementValue('LastName');
@@ -273,7 +271,7 @@ class Admin_Form_PersonsTest extends ControllerTestCase
 
     public function testPopulateFromPost()
     {
-        $post = array(
+        $post = [
             'LastName' => 'Smith',
             'FirstName' => 'John',
             'FirstNameUpdateEnabled' => 'on',
@@ -285,7 +283,7 @@ class Admin_Form_PersonsTest extends ControllerTestCase
             'IdentifierGnd' => '123456789',
             'IdentifierMisc' => 'id1234',
             'AcademicTitle' => 'PhD',
-        );
+        ];
 
         $form = new Admin_Form_Persons();
 
@@ -316,12 +314,12 @@ class Admin_Form_PersonsTest extends ControllerTestCase
     {
         $form = new Admin_Form_Persons();
 
-        $this->assertTrue($form->isValid(array('LastName' => 'Smith', 'LastNameUpdateEnabled' => 'on')));
+        $this->assertTrue($form->isValid(['LastName' => 'Smith', 'LastNameUpdateEnabled' => 'on']));
 
-        $this->assertFalse($form->isValid(array()));
+        $this->assertFalse($form->isValid([]));
         $this->assertContains('isEmpty', $form->getErrors('LastName'));
 
-        $this->assertFalse($form->isValid(array('LastName' => '   ')));
+        $this->assertFalse($form->isValid(['LastName' => '   ']));
         $this->assertContains('isEmpty', $form->getErrors('LastName'));
     }
 
@@ -331,35 +329,35 @@ class Admin_Form_PersonsTest extends ControllerTestCase
 
         $form = new Admin_Form_Persons();
 
-        $this->assertTrue($form->isValid(array(
+        $this->assertTrue($form->isValid([
             'LastName' => 'Smith',
             'DateOfBirth' => '2017/07/23',
             'LastNameUpdateEnabled' => 'on'
-        )));
+        ]));
 
-        $this->assertFalse($form->isValid(array(
+        $this->assertFalse($form->isValid([
             'LastName' => 'Smith',
             'DateOfBirth' => '2017',
             'LastNameUpdateEnabled' => 'on'
-        )));
+        ]));
 
-        $this->assertFalse($form->isValid(array(
+        $this->assertFalse($form->isValid([
             'LastName' => 'Smith',
             'DateOfBirth' => '23.07.2017',
             'LastNameUpdateEnabled' => 'on'
-        )));
+        ]));
 
-        $this->assertFalse($form->isValid(array(
+        $this->assertFalse($form->isValid([
             'LastName' => 'Smith',
             'DateOfBirth' => '2017/02/29',
             'LastNameUpdateEnabled' => 'on'
-        )));
+        ]));
 
-        $this->assertTrue($form->isValid(array(
+        $this->assertTrue($form->isValid([
             'LastName' => 'Smith',
             'DateOfBirth' => '2016/02/29',
             'LastNameUpdateEnabled' => 'on'
-        )));
+        ]));
     }
 
     public function testValidateDatesGerman()
@@ -368,23 +366,23 @@ class Admin_Form_PersonsTest extends ControllerTestCase
 
         $form = new Admin_Form_Persons();
 
-        $this->assertTrue($form->isValid(array(
+        $this->assertTrue($form->isValid([
             'LastName' => 'Schmidt',
             'DateOfBirth' => '23.07.2017',
             'LastNameUpdateEnabled' => 'on'
-        )));
+        ]));
 
-        $this->assertFalse($form->isValid(array(
+        $this->assertFalse($form->isValid([
             'LastName' => 'Schmidt',
             'DateOfBirth' => '2017',
             'LastNameUpdateEnabled' => 'on'
-        )));
+        ]));
 
-        $this->assertFalse($form->isValid(array(
+        $this->assertFalse($form->isValid([
             'LastName' => 'Schmidt',
             'DateOfBirth' => '2017/07/23',
             'LastNameUpdateEnabled' => 'on'
-        )));
+        ]));
     }
 
 
@@ -392,63 +390,63 @@ class Admin_Form_PersonsTest extends ControllerTestCase
     {
         $form = new Admin_Form_Persons();
 
-        $this->assertTrue($form->isValid(array(
+        $this->assertTrue($form->isValid([
             'LastName' => 'Smith',
             'Email' => 'test@example.org',
             'LastNameUpdateEnabled' => 'on'
-        )));
+        ]));
 
-        $this->assertFalse($form->isValid(array(
+        $this->assertFalse($form->isValid([
             'LastName' => 'Smith',
             'Email' => 'test(at)example.org',
             'LastNameUpdateEnabled' => 'on'
-        )));
+        ]));
 
-        $this->assertFalse($form->isValid(array(
+        $this->assertFalse($form->isValid([
             'LastName' => 'Smith',
             'Email' => 'test@',
             'LastNameUpdateEnabled' => 'on'
-        )));
+        ]));
 
-        $this->assertFalse($form->isValid(array(
+        $this->assertFalse($form->isValid([
             'LastName' => 'Smith',
             'Email' => 'example.org',
             'LastNameUpdateEnabled' => 'on'
-        )));
+        ]));
     }
 
     public function testValidateIdentifierOrcid()
     {
         $form = new Admin_Form_Persons();
 
-        $this->assertTrue($form->isValid(array(
+        $this->assertTrue($form->isValid([
             'LastName' => 'Smith',
             'IdentifierOrcid' => '0000-0002-1825-0097',
             'LastNameUpdateEnabled' => 'on'
-        )));
+        ]));
 
-        $this->assertFalse($form->isValid(array(
+        $this->assertFalse($form->isValid([
             'LastName' => 'Smith',
             'IdentifierOrcid' => '0000000218250097',
             'LastNameUpdateEnabled' => 'on'
-        )));
+        ]));
     }
 
     public function testValidateIdentifierGnd()
     {
         $form = new Admin_Form_Persons();
 
-        $this->assertTrue($form->isValid(array(
+        $this->assertTrue($form->isValid([
             'LastName' => 'Smith',
             'IdentifierGnd' => '118768581',
             'LastNameUpdateEnabled' => 'on'
-        )));
+        ]));
 
-        $this->assertFalse($form->isValid(array(
+        $this->assertFalse($form->isValid([
             'LastName' => 'Smith',
             'IdentifierGnd' => '0118768581',
             'LastNameUpdateEnabled' => 'on'
-        )));
+        ]));
     }
 
     public function testGetChanges()
@@ -472,6 +470,24 @@ class Admin_Form_PersonsTest extends ControllerTestCase
         $this->assertNull($changes['PlaceOfBirth']);
     }
 
+    public function testGetChangesForDateOfBirth()
+    {
+        $this->useEnglish();
+
+        $form = new Admin_Form_Persons();
+
+        $form->getElement('DateOfBirth')->setValue('1968/10/23')->setAttrib('active', true);
+
+        $changes = $form->getChanges();
+
+        $this->assertNotNull($changes);
+        $this->assertInternalType('array', $changes);
+        $this->assertCount(1, $changes);
+
+        $this->assertArrayHasKey('DateOfBirth', $changes);
+        $this->assertEquals('1968-10-23', $changes['DateOfBirth']);
+    }
+
     /**
      * If validation fails and the form is displayed again, manually entered values of comboboxes
      * should be kept.
@@ -480,17 +496,17 @@ class Admin_Form_PersonsTest extends ControllerTestCase
     {
         $form = new Admin_Form_Persons();
 
-        $form->populateFromModel(array(
+        $form->populateFromModel([
             'first_name' => 'John',
             'last_name' => 'Smith',
             'identifier_orcid' => '',
             'identifier_gnd' => '',
             'identifier_misc' => '',
             'email' => '',
-            'place_of_birth' => array('Berlin', 'München'),
+            'place_of_birth' => ['Berlin', 'München'],
             'date_of_birth' => null,
             'academic_title' => ''
-        ));
+        ]);
 
         $form->getElement('PlaceOfBirth')->setValue('Köln');
 
@@ -505,7 +521,7 @@ class Admin_Form_PersonsTest extends ControllerTestCase
     {
         $form = new Admin_Form_Persons();
 
-        $this->assertFalse($form->isValid(array('LastName' => 'Test')));
+        $this->assertFalse($form->isValid(['LastName' => 'Test']));
 
         $messages = $form->getErrorMessages();
 
@@ -519,11 +535,10 @@ class Admin_Form_PersonsTest extends ControllerTestCase
     {
         $form = new Admin_Form_Persons();
 
-        $this->assertTrue($form->isValid(array('LastName' => 'Test', 'LastNameUpdateEnabled' => 'on')));
+        $this->assertTrue($form->isValid(['LastName' => 'Test', 'LastNameUpdateEnabled' => 'on']));
 
         $messages = $form->getErrorMessages();
 
         $this->assertEmpty($messages);
     }
-
 }
