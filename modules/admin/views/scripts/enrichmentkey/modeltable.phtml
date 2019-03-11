@@ -45,14 +45,18 @@
         <tr <?PHP if ($this->element->isProtected($model) and $this->element->isUsed($model)) :
             ?>class="protected used"<?PHP elseif ($this->element->isProtected($model)) :
             ?>class="protected"<?PHP elseif ($this->element->isUsed($model)) :
-            ?>class="used"<?PHP endif ?>>
+            ?>class="used"<?elseif (!$this->element->isUsed($model)) :
+            ?>class="unused"<?PHP endif ?>>
             <td>
                 <?PHP if ($this->element->isRenderShowActionLink($model)) : ?>
                     <a href="<?= $this->url(array('action' => 'show', 'id' => $model->getId())) ?>"
-                       class="displayname<?= (is_null($model->getField('Active')) || $model->getActive()) ? '' : ' invisible'?>"
+                       class="displayname <?= (is_null($model->getField('Active')) || $model->getActive()) ? '' : ' invisible'?>"
                     ><?= htmlspecialchars($model->getDisplayName()) ?></a>
                 <?PHP else : ?>
                     <?= htmlspecialchars($model->getDisplayName()) ?>
+                <?PHP endif ?>
+                <?PHP if ($this->element->isProtected($model)) : ?>
+                <i class="fa fa-lock" title="<?= htmlspecialchars($this->translate('admin_enrichmentkey_protected_lockicon')); ?>" aria-hidden="true"></i>
                 <?PHP endif ?>
             </td>
             <td>

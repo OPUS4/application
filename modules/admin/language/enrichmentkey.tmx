@@ -178,6 +178,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_enrichmentkey_protected_lockicon">
+      <tuv xml:lang="en">
+        <seg>This enrichmentkey is protected.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dieser Enrichmentkey ist geschützt.</seg>
+      </tuv>
+    </tu>
+
   </body>
 
 </tmx>
