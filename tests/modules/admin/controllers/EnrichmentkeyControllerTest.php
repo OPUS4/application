@@ -36,15 +36,22 @@
 /**
  * Basic unit tests for Admin_EnrichmentkeyController class.
  *
- * @covers Admin_EnrichmentkeyController
+ * @coversDefaultClass Admin_EnrichmentkeyController
  */
 class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
 {
+    /**
+     * @var all enrichment keys
+     */
+    private $allEnrichmentKeys = array();
 
     public function setUp()
     {
         $this->setController('enrichmentkey');
         parent::setUp();
+        foreach (Opus_EnrichmentKey::getAll() as $value) {
+            array_push($this->allEnrichmentKeys, $value->getDisplayName());
+        }
     }
 
     public function getModels()
@@ -581,7 +588,12 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         }
     }
 
-    public function testIsProtected()
+    /**
+     * Integration test, tests the function isProtected() of EnrichmentKeyController which is used to add a CSS-class
+     * via testing, if the class is added on the protected keys.
+     * @covers ::isProtected
+     */
+    public function testIsProtectedTrue()
     {
         $enrichmentKeys = new Admin_Model_EnrichmentKeys();
         $protectedKeys = $enrichmentKeys->getProtectedEnrichmentKeys();
@@ -595,7 +607,12 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         }
     }
 
-    public function testIsUsed()
+    /**
+     * Integration test, tests the function isProtected() of EnrichmentKeyController which is used to add a CSS-class
+     * via testing, if the class is added on the used keys.
+     * @covers ::isUsed
+     */
+    public function testIsUsedTrue()
     {
         $usedKeys =  Opus_EnrichmentKey::getAllReferenced();
         $this->dispatch($this->getControllerPath());
@@ -604,6 +621,43 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         foreach ($usedKeys as &$value) {
             if (strpos($response->getBody(), $value) !== false) {
                 $this->assertXpathContentContains('//table[1]//*[contains(@class,\'used\')]', $value);
+            }
+        }
+    }
+
+    /**
+     * Integration test, tests the function isProtected() of EnrichmentKeyController which is used to add a CSS-class
+     * via testing, if the class is not added on the unprotected keys.
+     * @covers ::isProtected
+     */
+    public function testIsProtectedFalse()
+    {
+        $enrichmentKeys = new Admin_Model_EnrichmentKeys();
+        $unprotectedKeys = array_diff($this->allEnrichmentKeys, $enrichmentKeys->getProtectedEnrichmentKeys());
+        $this->dispatch($this->getControllerPath());
+        $response = $this->getResponse();
+        $this->checkForBadStringsInHtml($response->getBody());
+        foreach ($unprotectedKeys as &$value) {
+            if (strpos($response->getBody(), $value) !== false) {
+                $this->assertNotXpathContentContains('//table[1]//*[contains(@class,\'protected\')]', $value);
+            }
+        }
+    }
+
+    /**
+     * Integration test, tests the function isProtected() of EnrichmentKeyController which is used to add a CSS-class
+     * via testing, if the class is not added on the unused keys.
+     * @covers ::isUsed
+     */
+    public function testIsUsedFalse()
+    {
+        $unusedKeys = array_diff($this->allEnrichmentKeys, Opus_EnrichmentKey::getAllReferenced());
+        $this->dispatch($this->getControllerPath());
+        $response = $this->getResponse();
+        $this->checkForBadStringsInHtml($response->getBody());
+        foreach ($unusedKeys as &$value) {
+            if (strpos($response->getBody(), $value) !== false) {
+                $this->assertNotXpathContentContains('//table[1]//*[contains(@class,\'used\')]', $value);
             }
         }
     }
