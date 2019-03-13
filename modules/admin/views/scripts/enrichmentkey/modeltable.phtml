@@ -43,9 +43,10 @@
     </thead>
     <?PHP foreach($this->element->getModels() as $model) : ?>
         <tr <?PHP if ($this->element->isProtected($model) and $this->element->isUsed($model)) :
-            ?>class="protected used"<?PHP elseif ($this->element->isProtected($model)) :
-            ?>class="protected"<?PHP elseif ($this->element->isUsed($model)) :
-            ?>class="used"<?elseif (!$this->element->isUsed($model)) :
+            ?>class="protected used"<?PHP elseif (!$this->element->isUsed($model) and $this->element->isProtected($model)) :
+            ?>class="protected unused"<?PHP elseif ($this->element->isUsed($model)) :
+            ?>class="used"<?PHP elseif ($this->element->isProtected($model)) :
+            ?>class="protected"<?PHP elseif (!$this->element->isUsed($model)) :
             ?>class="unused"<?PHP endif ?>>
             <td>
                 <?PHP if ($this->element->isRenderShowActionLink($model)) : ?>
