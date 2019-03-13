@@ -488,6 +488,23 @@ class Admin_Form_PersonsTest extends ControllerTestCase
         $this->assertEquals('1968-10-23', $changes['DateOfBirth']);
     }
 
+    public function testGetChangesNoDateOfBirth()
+    {
+        $this->useEnglish();
+
+        $form = new Admin_Form_Persons();
+        $form->getElement('DateOfBirth')->setValue('')->setAttrib('active', true);
+
+        $changes = $form->getChanges();
+
+        $this->assertNotNull($changes);
+        $this->assertInternalType('array', $changes);
+        $this->assertCount(1, $changes);
+
+        $this->assertArrayHasKey('DateOfBirth', $changes);
+        $this->assertEquals(null, $changes['DateOfBirth']);
+    }
+
     /**
      * If validation fails and the form is displayed again, manually entered values of comboboxes
      * should be kept.
