@@ -26,12 +26,18 @@ Genauere Informationen finden sich in der Solr Dokumentation.
 <http://lucene.apache.org/solr/guide/7_7/taking-solr-to-production.html>
 
 Anschließend müssen gegebenenfalls in der Konfigurationsdatei `config.ini` die 
-Solr-Parameter, z.B. für einen neuen Port aktualisiert werden. Mit dem Skript
+Solr-Parameter, z.B. für einen neuen Port aktualisiert werden.
+
+Für die richtige Funktion der Suche muss Solr mit OPUS 4 Konfigurationsdateien
+betrieben werden. Auf der folgenden Seite findet sich eine einfache Anleitung,
+wie man diese in Solr einbinden kann.
+
+<http://www.opus-repository.org/devdoc/installation/solrsetupmanuell.html> 
+
+Zum Abschluss muss mit dem SolrIndexBuilder-Skript der Index neu aufgebaut werden.
 
     $ php scripts/SolrIndexBuilder.php
     
-muss der Index dann zum Abschluss wieder neu aufgebaut werden.    
-
 ---
 
 ## Release 4.6.3 2018-11-05
