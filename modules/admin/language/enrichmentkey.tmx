@@ -187,6 +187,24 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_enrichmentkey_unused_lockicon">
+          <tuv xml:lang="en">
+            <seg>This enrichmentkey is not used.</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Dieser Enrichmentkey wird aktuell nicht benutzt.</seg>
+          </tuv>
+        </tu>
+
+    <tu tuid="admin_enrichmentkey_used_lockicon">
+          <tuv xml:lang="en">
+            <seg>This enrichmentkey is already used and can not modified.</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Dieser Enrichmentkey wird aktuell benutzt und kann daher nicht modifiziert werden.</seg>
+          </tuv>
+        </tu>
+
   </body>
 
 </tmx>

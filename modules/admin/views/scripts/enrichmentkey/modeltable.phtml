@@ -43,11 +43,11 @@
     </thead>
     <?PHP foreach($this->element->getModels() as $model) : ?>
         <tr <?PHP if ($this->element->isProtected($model) and $this->element->isUsed($model)) :
-            ?>class="protected used"<?PHP elseif (!$this->element->isUsed($model) and $this->element->isProtected($model)) :
-            ?>class="protected unused"<?PHP elseif ($this->element->isUsed($model)) :
-            ?>class="used"<?PHP elseif ($this->element->isProtected($model)) :
+            ?>class="protected used" title="<?= htmlspecialchars($this->translate('admin_enrichmentkey_used_lockicon')); ?>"<?PHP elseif (!$this->element->isUsed($model) and $this->element->isProtected($model)) :
+            ?>class="protected unused" title="<?= htmlspecialchars($this->translate('admin_enrichmentkey_unused_lockicon')); ?>"<?PHP elseif ($this->element->isUsed($model)) :
+            ?>class="used" title="<?= htmlspecialchars($this->translate('admin_enrichmentkey_used_lockicon')); ?>"<?PHP elseif ($this->element->isProtected($model)) :
             ?>class="protected"<?PHP elseif (!$this->element->isUsed($model)) :
-            ?>class="unused"<?PHP endif ?>>
+            ?>class="unused" title="<?= htmlspecialchars($this->translate('admin_enrichmentkey_unused_lockicon')); ?>"<?PHP endif ?>>
             <td>
                 <?PHP if ($this->element->isRenderShowActionLink($model)) : ?>
                     <a href="<?= $this->url(array('action' => 'show', 'id' => $model->getId())) ?>"
