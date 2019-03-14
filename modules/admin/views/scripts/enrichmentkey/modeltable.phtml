@@ -45,18 +45,18 @@
         <tr
             <?PHP if ($this->element->isProtected($model) and $this->element->isUsed($model)) : ?>
                 class="protected used"
-                title="<?= htmlspecialchars($this->translate('admin_enrichmentkey_used_lockicon')); ?>"
+                title="<?= htmlspecialchars($this->translate('admin_enrichmentkey_used_tooltip')); ?>"
             <?PHP elseif (!$this->element->isUsed($model) and $this->element->isProtected($model)) :?>
                 class="protected unused"
-                title="<?= htmlspecialchars($this->translate('admin_enrichmentkey_unused_lockicon')); ?>"
+                title="<?= htmlspecialchars($this->translate('admin_enrichmentkey_unused_tooltip')); ?>"
             <?PHP elseif ($this->element->isUsed($model)) : ?>
                 class="used"
-                title="<?= htmlspecialchars($this->translate('admin_enrichmentkey_used_lockicon')); ?>"
+                title="<?= htmlspecialchars($this->translate('admin_enrichmentkey_used_tooltip')); ?>"
             <?PHP elseif ($this->element->isProtected($model)) :?>
                 class="protected"
             <?PHP elseif (!$this->element->isUsed($model)) :?>
                 class="unused"
-                title="<?= htmlspecialchars($this->translate('admin_enrichmentkey_unused_lockicon')); ?>"
+                title="<?= htmlspecialchars($this->translate('admin_enrichmentkey_unused_tooltip')); ?>"
             <?PHP endif ?>
         >
             <td>
@@ -69,7 +69,7 @@
                 <?PHP endif ?>
                 <?PHP if ($this->element->isProtected($model)) : ?>
                 <i class="fa fa-lock"
-                   title="<?= htmlspecialchars($this->translate('admin_enrichmentkey_protected_lockicon')); ?>"
+                   title="<?= htmlspecialchars($this->translate('admin_enrichmentkey_protected_tooltip')); ?>"
                    aria-hidden="true"></i>
                 <?PHP endif ?>
             </td>

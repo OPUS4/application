@@ -178,30 +178,30 @@
       </tuv>
     </tu>
 
-    <tu tuid="admin_enrichmentkey_protected_lockicon">
+    <tu tuid="admin_enrichmentkey_protected_tooltip">
       <tuv xml:lang="en">
-        <seg>This enrichmentkey is protected.</seg>
+        <seg>This is a system-key and can not be modified.</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Dieser Enrichmentkey ist geschützt.</seg>
+        <seg>Dies ist ein Systemkey, welcher nicht modifiziert werden kann.</seg>
       </tuv>
     </tu>
 
-    <tu tuid="admin_enrichmentkey_unused_lockicon">
+    <tu tuid="admin_enrichmentkey_unused_tooltip">
           <tuv xml:lang="en">
-            <seg>This enrichmentkey is not used.</seg>
+            <seg>This is an unused enrichmentkey, which can be modified.</seg>
           </tuv>
           <tuv xml:lang="de">
-            <seg>Dieser Enrichmentkey wird aktuell nicht benutzt.</seg>
+            <seg>Dieser Enrichmentkey wird nicht benutzt und kann modifiziert werden.</seg>
           </tuv>
         </tu>
 
-    <tu tuid="admin_enrichmentkey_used_lockicon">
+    <tu tuid="admin_enrichmentkey_used_tooltip">
           <tuv xml:lang="en">
-            <seg>This enrichmentkey is already used and can not modified.</seg>
+            <seg>This enrichmentkey is used and can not modified.</seg>
           </tuv>
           <tuv xml:lang="de">
-            <seg>Dieser Enrichmentkey wird aktuell benutzt und kann daher nicht modifiziert werden.</seg>
+            <seg>Dieser Enrichmentkey wird benutzt und kann nicht modifiziert werden.</seg>
           </tuv>
         </tu>
 
