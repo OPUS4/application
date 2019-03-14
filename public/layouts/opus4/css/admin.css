@@ -2400,10 +2400,10 @@ ul.permissions-list input[type=checkbox] {
     vertical-align: top;
 }
 
-.unused{
+.unused {
     color: grey;
 }
 
-.used{
+.used {
     color: black;
 }

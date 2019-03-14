@@ -42,12 +42,23 @@
     </tr>
     </thead>
     <?PHP foreach($this->element->getModels() as $model) : ?>
-        <tr <?PHP if ($this->element->isProtected($model) and $this->element->isUsed($model)) :
-            ?>class="protected used" title="<?= htmlspecialchars($this->translate('admin_enrichmentkey_used_lockicon')); ?>"<?PHP elseif (!$this->element->isUsed($model) and $this->element->isProtected($model)) :
-            ?>class="protected unused" title="<?= htmlspecialchars($this->translate('admin_enrichmentkey_unused_lockicon')); ?>"<?PHP elseif ($this->element->isUsed($model)) :
-            ?>class="used" title="<?= htmlspecialchars($this->translate('admin_enrichmentkey_used_lockicon')); ?>"<?PHP elseif ($this->element->isProtected($model)) :
-            ?>class="protected"<?PHP elseif (!$this->element->isUsed($model)) :
-            ?>class="unused" title="<?= htmlspecialchars($this->translate('admin_enrichmentkey_unused_lockicon')); ?>"<?PHP endif ?>>
+        <tr
+            <?PHP if ($this->element->isProtected($model) and $this->element->isUsed($model)) : ?>
+                class="protected used"
+                title="<?= htmlspecialchars($this->translate('admin_enrichmentkey_used_lockicon')); ?>"
+            <?PHP elseif (!$this->element->isUsed($model) and $this->element->isProtected($model)) :?>
+                class="protected unused"
+                title="<?= htmlspecialchars($this->translate('admin_enrichmentkey_unused_lockicon')); ?>"
+            <?PHP elseif ($this->element->isUsed($model)) : ?>
+                class="used"
+                title="<?= htmlspecialchars($this->translate('admin_enrichmentkey_used_lockicon')); ?>"
+            <?PHP elseif ($this->element->isProtected($model)) :?>
+                class="protected"
+            <?PHP elseif (!$this->element->isUsed($model)) :?>
+                class="unused"
+                title="<?= htmlspecialchars($this->translate('admin_enrichmentkey_unused_lockicon')); ?>"
+            <?PHP endif ?>
+        >
             <td>
                 <?PHP if ($this->element->isRenderShowActionLink($model)) : ?>
                     <a href="<?= $this->url(array('action' => 'show', 'id' => $model->getId())) ?>"
@@ -57,7 +68,9 @@
                     <?= htmlspecialchars($model->getDisplayName()) ?>
                 <?PHP endif ?>
                 <?PHP if ($this->element->isProtected($model)) : ?>
-                <i class="fa fa-lock" title="<?= htmlspecialchars($this->translate('admin_enrichmentkey_protected_lockicon')); ?>" aria-hidden="true"></i>
+                <i class="fa fa-lock"
+                   title="<?= htmlspecialchars($this->translate('admin_enrichmentkey_protected_lockicon')); ?>"
+                   aria-hidden="true"></i>
                 <?PHP endif ?>
             </td>
             <td>
