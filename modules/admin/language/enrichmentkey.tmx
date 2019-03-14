@@ -198,7 +198,7 @@
 
     <tu tuid="admin_enrichmentkey_used_tooltip">
           <tuv xml:lang="en">
-            <seg>This enrichmentkey is used and can not modified.</seg>
+            <seg>This enrichmentkey is used and can not be modified.</seg>
           </tuv>
           <tuv xml:lang="de">
             <seg>Dieser Enrichmentkey wird benutzt und kann nicht modifiziert werden.</seg>
