@@ -1,25 +1,23 @@
-#!groovy
-
 pipeline {
-    agent any
+    agent { dockerfile {args "-u root -v /var/run/docker.sock:/var/run/docker.sock"}}
+    environment {XML_CATALOG_FILES = "${WORKSPACE}/tests/resources/opus4-catalog.xml"}
 
     stages {
-        stage('prepare') {
+        stage('Build') {
             steps {
-                echo 'TODO - Configure database'
-                echo 'TODO - Configure Solr core'
+                sh 'sudo service solr start'
+                sh 'sudo chown -R mysql:mysql /var/lib/mysql /var/run/mysqld'
+                sh 'sudo service mysql start'
+                sh 'composer install'
+                sh 'ant setup prepare lint prepare-config reset-testdata'
+                sh 'php ${WORKSPACE}/scripts/opus-smtp-dumpserver.php 2>&1 >> ${WORKSPACE}/tests/workspace/log/opus-smtp-dumpserver.log &'
+                sh 'chown -R opus4:opus4 .'
             }
         }
 
-        stage('build') {
+        stage('Test') {
             steps {
-                echo 'TODO - Run unit tests'
-            }
-        }
-
-        stage('publish') {
-            steps {
-                echo 'TODO - Publish results'
+            sh 'sudo -E -u opus4 ant phpunit'
             }
         }
     }
