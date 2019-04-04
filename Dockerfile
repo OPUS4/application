@@ -1,14 +1,11 @@
 FROM ubuntu:16.04
 
-# Update Ubuntu
+# Install PHP, Apache, Git, Composer and all other necessary packages -> extension if necessary
 RUN apt-get update \
     && apt-get install -y apt-utils\
     debconf-utils\
-    openjdk-8-jdk
-
-# Install PHP, Apache, git and Composer
-Run apt-get update \
-    && apt-get install -y php\
+    openjdk-8-jdk\
+    php\
     php-cli\
     php-common\
     php-curl\
@@ -41,11 +38,11 @@ RUN echo "mysql-server-5.5 mysql-server/root_password password root" | debconf-s
 
 # Download and unzip
 Run cd \
-    && wget https://www.apache.org/dist/lucene/solr/5.5.5/solr-5.5.5.zip \
-    && unzip solr-5.5.5.zip -d . \
-    && cp -a solr-5.5.5/. /opt/solr
+    && wget https://www.apache.org/dist/lucene/solr/7.7.1/solr-7.7.1.zip \
+    && unzip solr-7.7.1.zip -d . \
+    && cp -a solr-7.7.1/. /opt/solr
 
-# Download Reprositorium
+# Download OPUS4 and install dependencies
 Run cd \
     && git clone https://github.com/OPUS4/application.git \
     && cd application \
@@ -60,12 +57,11 @@ Run cd \
     && chmod a+x /etc/init.d/solr \
     && update-rc.d solr defaults \
     && service solr start \
-
     && mkdir /var/solr && mkdir /var/solr/data && mkdir /var/solr/data/opus4 \
     && cp /opt/solr/server/solr/solr.xml /var/solr/data \
     && cp ~/application/vendor/opus4-repo/search/core.properties /var/solr/data/opus4 \
-    && cp ~/application/vendor/opus4-repo/search/schema-5.xml /var/solr/data/opus4 && mv /var/solr/data/opus4/schema-5.xml /var/solr/data/opus4/schema.xml \
-    && cp ~/application/vendor/opus4-repo/search/solrconfig-5.xml /var/solr/data/opus4 && mv /var/solr/data/opus4/solrconfig-5.xml /var/solr/data/opus4/solrconfig.xml \
+    && cp ~/application/vendor/opus4-repo/search/schema.xml /var/solr/data/opus4 && mv /var/solr/data/opus4/schema.xml /var/solr/data/opus4/schema.xml \
+    && cp ~/application/vendor/opus4-repo/search/solrconfig.xml /var/solr/data/opus4 && mv /var/solr/data/opus4/solrconfig.xml /var/solr/data/opus4/solrconfig.xml \
     && chown solr:solr -R /var/solr
 
 Run echo "SOLR_PID_DIR="/var/solr"" >> /etc/default/solr.in.sh \
