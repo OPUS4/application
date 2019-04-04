@@ -11,7 +11,7 @@ pipeline {
                 sh 'composer install'
                 sh 'ant setup prepare lint prepare-config reset-testdata -dbUserPassword=root -DdbAdminPassword=root'
                 sh 'php db/createdb.php'
-                sh  mysql opusdb -u root --password='root' -e 'SELECT * FROM schema_version'
+                sh  'mysql opusdb -u root --password='root' -e 'SELECT * FROM schema_version''
                 sh 'php ${WORKSPACE}/scripts/opus-smtp-dumpserver.php 2>&1 >> ${WORKSPACE}/tests/workspace/log/opus-smtp-dumpserver.log &'
                 sh 'chown -R opus4:opus4 .'
             }
