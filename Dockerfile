@@ -31,26 +31,23 @@ RUN apt-get update \
 # Install MySQL
 RUN echo "mysql-server-5.5 mysql-server/root_password password root" | debconf-set-selections \
     && echo "mysql-server-5.5 mysql-server/root_password_again password root" | debconf-set-selections \
-    && apt-get -y install mysql-server \
-    && service mysql start \
-    && export MYSQL_PWD=root \
-    && mysql --default-character-set=utf8mb4 -h 'localhost' -P '3306' -u 'root' -v -e "CREATE DATABASE IF NOT EXISTS opusdb DEFAULT CHARACTER SET = UTF8 DEFAULT COLLATE = UTF8_GENERAL_CI; GRANT ALL PRIVILEGES ON opusdb.* TO 'opus4'@'localhost' IDENTIFIED BY 'root'; GRANT SELECT,INSERT,UPDATE,DELETE ON opusdb.* TO 'opus4admin'@'localhost' IDENTIFIED BY 'root'; FLUSH PRIVILEGES;"
+    && apt-get -y install mysql-server
 
-# Download and unzip
-Run cd \
+# Download Solr and unzip
+RUN cd \
     && wget https://www.apache.org/dist/lucene/solr/7.7.1/solr-7.7.1.zip \
     && unzip solr-7.7.1.zip -d . \
     && cp -a solr-7.7.1/. /opt/solr
 
 # Download OPUS4 and install dependencies
-Run cd \
+RUN cd \
     && git clone https://github.com/OPUS4/application.git \
     && cd application \
     && composer install \
     && useradd opus4
 
-# Set Solr-Core
-Run cd \
+# Setup Solr-Core
+RUN cd \
     && useradd -d /opt/solr solr \
     && cp /opt/solr/bin/init.d/solr /etc/init.d/ && mv /opt/solr/bin/solr.in.sh /etc/default/ \
     && chown solr:solr -R /opt/solr \
@@ -64,7 +61,7 @@ Run cd \
     && cp ~/application/vendor/opus4-repo/search/config/solrconfig.xml /var/solr/data/opus4 && mv /var/solr/data/opus4/solrconfig.xml /var/solr/data/opus4/solrconfig.xml \
     && chown solr:solr -R /var/solr
 
-Run echo "SOLR_PID_DIR="/var/solr"" >> /etc/default/solr.in.sh \
+RUN echo "SOLR_PID_DIR="/var/solr"" >> /etc/default/solr.in.sh \
     && echo "SOLR_HOME="/var/solr/data"" >> /etc/default/solr.in.sh \
     && echo "LOG4J_PROPS="/var/solr/log4j.properties"" >> /etc/default/solr.in.sh \
     && echo "SOLR_LOGS_DIR="/var/solr/logs"" >> /etc/default/solr.in.sh \
