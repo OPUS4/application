@@ -38,4 +38,4 @@ script:
   - ./bin/solr restart
   - cd ..
   - ant reset-testdata
-  - ./vendor/bin/phpunit --configuration ./tests/phpunit.xml ./tests/modules
+  - ./vendor/bin/phpunit --configuration ./tests/phpunit.xml --no-coverage ./tests/modules
