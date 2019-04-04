@@ -52,6 +52,8 @@ class Application_Form_Element_DocumentType extends Application_Form_Element_Sel
         foreach ($options as $index => $type) {
             $this->addMultiOption($index, $index);
         }
+
+        $this->setDisableTranslator(true);
     }
 
     /**
@@ -60,8 +62,16 @@ class Application_Form_Element_DocumentType extends Application_Form_Element_Sel
     {
         $option = $this->getMultiOption($value);
 
+        $translator = Zend_Registry::get('Zend_Translate');
+
+        if (!is_null($translator)) {
+            $label = $translator->translate($value);
+        } else {
+            $label = $value;
+        }
+
         if (is_null($option)) {
-            $this->addMultiOption($value, $value);
+            $this->addMultiOption($value, $label);
         }
 
         parent::setValue($value);

@@ -944,5 +944,4 @@ class Admin_DocumentControllerTest extends ControllerTestCase
 
         $this->assertRedirectTo('/auth/index/rmodule/admin/rcontroller/document/raction/index/id/1');
     }
-
 }
