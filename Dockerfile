@@ -34,7 +34,7 @@ RUN echo "mysql-server-5.5 mysql-server/root_password password root" | debconf-s
     && apt-get -y install mysql-server \
     && service mysql start \
     && export MYSQL_PWD=root \
-    && mysql --default-character-set=utf8 -h 'localhost' -P '3306' -u 'root' -v -e "CREATE DATABASE IF NOT EXISTS opusdb DEFAULT CHARACTER SET = UTF8 DEFAULT COLLATE = UTF8_GENERAL_CI; GRANT ALL PRIVILEGES ON opusdb.* TO 'opus4'@'localhost' IDENTIFIED BY 'root'; GRANT SELECT,INSERT,UPDATE,DELETE ON opusdb.* TO 'opus4admin'@'localhost' IDENTIFIED BY 'root'; FLUSH PRIVILEGES;"
+    && mysql --default-character-set=utf8mb4 -h 'localhost' -P '3306' -u 'root' -v -e "CREATE DATABASE IF NOT EXISTS opusdb DEFAULT CHARACTER SET = UTF8 DEFAULT COLLATE = UTF8_GENERAL_CI; GRANT ALL PRIVILEGES ON opusdb.* TO 'opus4'@'localhost' IDENTIFIED BY 'root'; GRANT SELECT,INSERT,UPDATE,DELETE ON opusdb.* TO 'opus4admin'@'localhost' IDENTIFIED BY 'root'; FLUSH PRIVILEGES;"
 
 # Download and unzip
 Run cd \
@@ -60,8 +60,8 @@ Run cd \
     && mkdir /var/solr && mkdir /var/solr/data && mkdir /var/solr/data/opus4 \
     && cp /opt/solr/server/solr/solr.xml /var/solr/data \
     && cp ~/application/vendor/opus4-repo/search/core.properties /var/solr/data/opus4 \
-    && cp ~/application/vendor/opus4-repo/search/schema.xml /var/solr/data/opus4 && mv /var/solr/data/opus4/schema.xml /var/solr/data/opus4/schema.xml \
-    && cp ~/application/vendor/opus4-repo/search/solrconfig.xml /var/solr/data/opus4 && mv /var/solr/data/opus4/solrconfig.xml /var/solr/data/opus4/solrconfig.xml \
+    && cp ~/application/vendor/opus4-repo/search/config/schema.xml /var/solr/data/opus4 && mv /var/solr/data/opus4/schema.xml /var/solr/data/opus4/schema.xml \
+    && cp ~/application/vendor/opus4-repo/search/config/solrconfig.xml /var/solr/data/opus4 && mv /var/solr/data/opus4/solrconfig.xml /var/solr/data/opus4/solrconfig.xml \
     && chown solr:solr -R /var/solr
 
 Run echo "SOLR_PID_DIR="/var/solr"" >> /etc/default/solr.in.sh \
