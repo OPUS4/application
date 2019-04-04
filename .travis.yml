@@ -1,5 +1,5 @@
 sudo: required
-dist: trusty
+dist: xenial
 language: php
 php:
   - 7.0
@@ -16,8 +16,6 @@ cache:
   directories:
     - $HOME/.composer/cache
     - $HOME/downloads
-before_install:
-  - jdk_switcher use openjdk8
 install:
   - phpenv config-add travis.php.ini
 before_script: composer install
