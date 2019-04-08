@@ -24,20 +24,21 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Frontdoor
- * @author      Julian Heise <heise@zib.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @category    Test
+ * @package     Frontdoor_Model
+ * @author      Jens Schwidder
+ * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Frontdoor_Model_FileNotFoundException extends Frontdoor_Model_FrontdoorDeliveryException
+class Frontdoor_Model_FrontdoorDeliveryExceptionTest extends ControllerTestCase
 {
 
-    public function  __construct()
+    public function testConstructWithCode()
     {
-        $this->translateKey = 'frontdoor_file_not_found';
-        parent::__construct($this->translateKey, 404);
+        $exception = new Frontdoor_Model_FrontdoorDeliveryException('message', 403);
+
+        $this->assertEquals('message', $exception->getTranslateKey());
+        $this->assertEquals(403, $exception->getCode());
     }
 }
