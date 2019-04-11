@@ -37,7 +37,8 @@
  *
  * @covers Admin_DocumentController
  */
-class Admin_DocumentControllerTest extends ControllerTestCase {
+class Admin_DocumentControllerTest extends ControllerTestCase
+{
 
     private $expectedNavigationLinks;
 
@@ -45,7 +46,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
         parent::setUp();
 
         // Die Links werden aus den Fieldset Legenden der Unterformulare generiert (nur 1. Ebene)
-        $this->expectedNavigationLinks = array(
+        $this->expectedNavigationLinks = [
             '#fieldset-General' => 'Allgemeines',
             '#fieldset-Persons' => 'Personen',
             '#fieldset-Titles' => 'Titelinformationen',
@@ -59,13 +60,14 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
             '#fieldset-Patents' => 'Patente',
             '#fieldset-Notes' => 'Bemerkungen',
             '#fieldset-Files' => 'Dateien',
-        );
+        ];
     }
 
     /**
      * Regression test for OPUSVIER-1757
      */
-    public function testEditLinkForEmptySectionIsNotDisplayed() {
+    public function testEditLinkForEmptySectionIsNotDisplayed()
+    {
         $this->dispatch('/admin/document/index/id/92');
         $this->assertResponseCode(200);
         $this->assertModule('admin');
@@ -942,5 +944,4 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
 
         $this->assertRedirectTo('/auth/index/rmodule/admin/rcontroller/document/raction/index/id/1');
     }
-
 }

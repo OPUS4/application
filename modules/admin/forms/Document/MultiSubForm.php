@@ -29,7 +29,6 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -233,27 +232,26 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
         if (array_key_exists(self::ELEMENT_ADD, $data)) {
             return $this->processPostAdd();
         }
-        else {
-            // Prüfen ob in einem Unterformular "Entfernen" geklickt wurde
-            foreach ($data as $subFormName => $subdata) {
-                $subform = $this->getSubForm($subFormName);
-                if (!is_null($subform)) {
-                    if (array_key_exists(self::ELEMENT_REMOVE, $subdata)) {
-                        return $this->processPostRemove($subFormName, $subdata);
-                    }
-                    else {
-                        $result = $subform->processPost($subdata, $context);
-                        if (!is_null($result)) {
-                            if (is_array($result)) {
-                                $result['subformName'] = $subFormName;
-                            }
-                            return $result;
-                        }
-                    }
+
+        // Prüfen ob in einem Unterformular "Entfernen" geklickt wurde
+        foreach ($data as $subFormName => $subdata) {
+            $subform = $this->getSubForm($subFormName);
+            if (!is_null($subform)) {
+                if (array_key_exists(self::ELEMENT_REMOVE, $subdata)) {
+                    return $this->processPostRemove($subFormName, $subdata);
                 }
                 else {
-                    $this->getLogger()->err(__METHOD__ . ': Subform with name ' . $subFormName . ' does not exits.');
+                    $result = $subform->processPost($subdata, $context);
+                    if (!is_null($result)) {
+                        if (is_array($result)) {
+                            $result['subformName'] = $subFormName;
+                        }
+                        return $result;
+                    }
                 }
+            }
+            else {
+                $this->getLogger()->err(__METHOD__ . ': Subform with name ' . $subFormName . ' does not exits.');
             }
         }
 

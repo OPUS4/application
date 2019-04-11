@@ -660,6 +660,15 @@ class Export_IndexControllerTest extends ControllerTestCase
         $this->assertXpathContentContains('//a[starts-with(@href, "' . $urnResolverUrl . '")]', 'URN');
     }
 
+    public function testPublistActionDoiResolverUrlCorrect()
+    {
+        $this->dispatch('/export/index/publist/role/ddc/number/51'); // contains test document 146
+
+        $doiResolverUrl = Zend_Registry::get('Zend_Config')->doi->resolverUrl;
+
+        $this->assertXpathContentContains('//a[starts-with(@href, "' . $doiResolverUrl . '")]', 'DOI');
+    }
+
     /**
      * TODO: Fix manipulation of Zend_Config:
      * 1. $oldConfig and $config are references to the same object

@@ -299,7 +299,7 @@
             <seg>Author</seg>
           </tuv>
           <tuv xml:lang="de">
-            <seg>Autor</seg>
+            <seg>Autor*in</seg>
           </tuv>
         </tu>
 
@@ -716,7 +716,7 @@
              <seg>Treffer</seg>
          </tuv>
      </tu>
-	 
+
 	 <tu tuid="logo_title">
          <tuv xml:lang="en">
              <seg>Home</seg>
@@ -725,7 +725,7 @@
              <seg>Home</seg>
          </tuv>
      </tu>
-	 
+
 
      <tu tuid="opus.environment">
          <tuv xml:lang="en">

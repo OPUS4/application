@@ -25,37 +25,48 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_Oai
+ * @package     Scripts
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
+ * @copyright   Copyright (c) 2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Oai_Model_Language extends Application_Model_Abstract {
 
-    /**
-     * Returns language code for internal language identifier.
-     * @param $language string Internal language identifier (e.g. 'deu')
-     * @param null $part string Field to use for language code
-     * @return string language code
-     */
-    public static function getLanguageCode($language, $part = null) {
-        $result = Opus_Language::getPropertiesByPart2T($language);
+/**
+ * Set registration status of all existing DOIs to "registered".
+ * Only documents with server state "published" are considered.
+ */
+class Application_Update_SetStatusOfExistingDoi extends Application_Update_PluginAbstract
+{
 
-        if (empty($result)) {
-            return $language;
+    public function run()
+    {
+        $this->log('Set registration status of all DOIs to "registered"');
+
+        $docFinder = new Opus_DocumentFinder();
+        $docFinder->setIdentifierTypeExists('doi');
+        $docFinder->setServerState('published');
+        $ids = $docFinder->ids();
+
+        $this->log('number of published documents with identifier of type DOI: ' . count($ids));
+
+        $numOfModifiedDocs = 0;
+
+        foreach ($ids as $id) {
+            $doc = new Opus_Document($id);
+
+            $dois = $doc->getIdentifierDoi();
+            foreach ($dois as $doi) {
+                $doi->setStatus('registered');
+                $doi->store(); // storing identifier and not document prevents update of ServerDateModified
+            }
+
+            if (count($dois) > 1) {
+                $this->log("document $id has more than one DOI but only one DOI is expected: consider a cleanup");
+            }
+
+            $numOfModifiedDocs++;
         }
 
-        $code = null;
-
-        if (!is_null($part) && isset($result[$part])) {
-            $code = $result[$part];
-        }
-        else {
-            $code = $result['part2_b'];
-        }
-
-        return empty($code) ? $language : $code;
+        $this->log("$numOfModifiedDocs published documents were modified successfully");
     }
-
 }
-

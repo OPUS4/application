@@ -31,7 +31,7 @@
  * @category    Application
  * @package     Application
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  *
  * TODO is this the right package?
@@ -66,7 +66,8 @@ class Application_Modules
     /**
      * Prevent direct instantiation of class.
      */
-    private function __construct() {
+    private function __construct()
+    {
     }
 
     /**
@@ -74,8 +75,7 @@ class Application_Modules
      */
     static public function getInstance()
     {
-        if (is_null(self::$_moduleManager))
-        {
+        if (is_null(self::$_moduleManager)) {
             self::$_moduleManager = new Application_Modules();
         }
 
@@ -103,11 +103,9 @@ class Application_Modules
      */
     public function isRegistered($name)
     {
-        if (is_array($this->_registeredModules))
-        {
+        if (is_array($this->_registeredModules)) {
             return array_key_exists($name, $this->_registeredModules);
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -119,10 +117,11 @@ class Application_Modules
      */
     public function getModules()
     {
-        if (is_null($this->_modules))
-        {
+        if (is_null($this->_modules)) {
             $this->_modules = array_merge($this->findModules(), $this->_registeredModules);
         }
+
+        ksort($this->_modules);
 
         return $this->_modules;
     }
@@ -132,8 +131,7 @@ class Application_Modules
      */
     public function getModulesPath()
     {
-        if (is_null($this->_modulesPath))
-        {
+        if (is_null($this->_modulesPath)) {
             $this->_modulesPath = APPLICATION_PATH . DIRECTORY_SEPARATOR . 'modules';
         }
 
@@ -150,10 +148,9 @@ class Application_Modules
     public function findModules() {
         $modulesPath = $this->getModulesPath();
 
-        $modules = array();
+        $modules = [];
 
-        foreach (new DirectoryIterator($modulesPath) as $fileInfo)
-        {
+        foreach (new DirectoryIterator($modulesPath) as $fileInfo) {
             if ($fileInfo->isDot()) continue; // ignore '.' and '..'
             if ($fileInfo->isFile()) continue; // ignore files
 
@@ -166,8 +163,7 @@ class Application_Modules
             if (!is_dir($controllersPath)) continue;
 
             // filter 'default' ?
-            if ($name !== 'default')
-            {
+            if ($name !== 'default') {
                 $modules[$name] = new Application_Configuration_Module($name);
             }
         }
@@ -182,12 +178,10 @@ class Application_Modules
      */
     protected function _addModule($module)
     {
-        if (is_null($this->_registeredModules))
-        {
-            $this->_registeredModules = array();
+        if (is_null($this->_registeredModules)) {
+            $this->_registeredModules = [];
         }
 
         $this->_registeredModules[$module->getName()] = $module;
     }
-
 }

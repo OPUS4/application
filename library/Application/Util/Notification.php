@@ -59,15 +59,27 @@ class Application_Util_Notification extends Application_Model_Abstract
 
         $authorAddresses = [];
         $authors = $this->getAuthors($document);
-        $title = $document->getMainTitle();
+        $title = $this->getMainTitle($document);
 
         $this->scheduleNotification(
-            $this->getMailSubject($document->getId(), $authors, $title),
+            $this->getMailSubject($document, $authors),
             $this->getMailBody($document->getId(), $authors, $title, $url),
             $this->getRecipients($authorAddresses, $document, $notifySubmitter)
         );
 
         $logger->info("notification mail creation was completed successfully");
+    }
+
+    public function getMainTitle($document)
+    {
+        // TODO refactor getting main title value
+        $titleObj = $document->getMainTitle();
+
+        if (!is_null($titleObj)) {
+            return $titleObj->getValue();
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -85,7 +97,7 @@ class Application_Util_Notification extends Application_Model_Abstract
 
         $authors = $this->getAuthors($document);
 
-        $title = $document->getMainTitle();
+        $title = $this->getMainTitle($document);
 
         // TODO currently we need to convert between the old and new array structure
         // TODO the components and interfaces involved need to be defined clearly
@@ -104,7 +116,7 @@ class Application_Util_Notification extends Application_Model_Abstract
         }
 
         $this->scheduleNotification(
-            $this->getMailSubject($document->getId(), $authors, $title),
+            $this->getMailSubject($document, $authors),
             $this->getMailBody($document->getId(), $authors, $title, $url),
             $converted
         );
@@ -128,28 +140,41 @@ class Application_Util_Notification extends Application_Model_Abstract
         return $authors;
     }
 
-    private function getMailSubject($docId, $authors, $title)
+    /**
+     * @param $docId
+     * @param $authors
+     * @param $title
+     * @return string
+     *
+     * TODO refactor for single document parameter?
+     */
+    public function getMailSubject($document, $authors)
     {
         $logger = $this->getLogger();
 
-        $authorString = "";
+        $title = $this->getMainTitle($document);
+
+        $authorString = '';
+
         for ($i = 0; $i < count($authors); $i++) {
             if ($i > 0) {
-                $authorString .= " ; ";
+                $authorString .= ' ; ';
             }
             $authorString .= $authors[$i];
         }
-        if ($authorString == "") {
-            $authorString = "n/a";
+
+        if ($authorString == '') {
+            $authorString = 'n/a';
         }
-        if ($title == "") {
-            $title = "n/a";
+
+        if ($title == '') {
+            $title = 'n/a';
         }
 
         $subjectTemplate = $this->getSubjectTemplate();
 
         if (strlen(trim($subjectTemplate)) > 0) {
-            return sprintf($subjectTemplate, $docId, $authorString, $title);
+            return sprintf($subjectTemplate, $document->getId(), $authorString, $title);
         } else {
             $logger->err("could not construct mail subject based on application configuration");
             return '';
