@@ -1,4 +1,6 @@
-<?php
+#!/usr/bin/env php
+
+<?PHP
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -25,29 +27,19 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Application_View_Helper
+ * @package     Scripts
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class Application_View_Helper_ViewFormDefault extends Zend_View_Helper_FormElement {
 
-    public function viewFormDefault($name, $value = null, $attribs = null) {
-        $info = $this->_getInfo($name, $value, $attribs);
-        extract($info);
+require_once dirname(__FILE__) . '/../common/update.php';
 
-        $markup = '<div'
-            . ' id="' . $this->view->escape($id) . '"'
-            . ' class="' . $this->getElementClass() . '">'
-            . htmlspecialchars($value, ENT_DISALLOWED)
-            . '</div>';
+/**
+ * Convert database to utf8mb4 in order to store additional characters.
+ *
+ * TODO direct dependency on framework internals - possibly a problem in the future
+ */
 
-        return $markup;
-    }
-
-    public function getElementClass() {
-        return 'field';
-    }
-
-}
+$update = new Opus_Update_Plugin_DatabaseCharset();
+$update->run();
