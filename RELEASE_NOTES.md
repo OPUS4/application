@@ -11,24 +11,23 @@ sollten aber nicht mehr notwendig sein.
 
 Mit diesem Release wechselt OPUS 4 zu Apache Solr 7.7.1. Der Umstieg muss manuell
 durchgeführt werden. Apache Solr ist gut dokumentiert und die Installationsskripte 
-funktionieren nach unserer Erfahrung zuverlässig. Es macht keinen Sinn das noch 
-einmal extra zu verpacken. 
+funktionieren nach unserer Erfahrung zuverlässig. 
 
 <http://lucene.apache.org/solr/>
 
-Wir empfehlen Solr als Service auf dem OPUS 4 Server zu installieren. Dazu kann 
-nach dem Download und Auspacken von Solr folgendes Skript verwenden.
+Wir empfehlen, Solr als Service auf dem OPUS 4-Server zu installieren. Dazu kann 
+man nach dem Download und Auspacken von Solr folgendes Skript verwenden.
 
     solr-7.7.1/bin/install_solr_service.sh PATH_TO_DOWNLOADED_SOLR_TAR 
     
-Genauere Informationen finden sich in der Solr Dokumentation. 
+Genauere Informationen finden sich in der Solr-Dokumentation. 
 
 <http://lucene.apache.org/solr/guide/7_7/taking-solr-to-production.html>
 
 Anschließend müssen gegebenenfalls in der Konfigurationsdatei `config.ini` die 
 Solr-Parameter, z.B. für einen neuen Port aktualisiert werden.
 
-Für die richtige Funktion der Suche muss Solr mit OPUS 4 Konfigurationsdateien
+Für die richtige Funktion der Suche muss Solr mit OPUS 4-Konfigurationsdateien
 betrieben werden. Auf der folgenden Seite findet sich eine einfache Anleitung,
 wie man diese in Solr einbinden kann.
 
