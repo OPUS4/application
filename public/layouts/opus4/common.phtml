@@ -29,13 +29,21 @@
  * @author      Thoralf Klein <thoralf.klein@zib.de>
  * @author      Sascha Szott <szott@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2010-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2010-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 $config = Zend_Registry::get('Zend_Config');
 
 $pageLanguage = Zend_Registry::get('Zend_Translate')->getLocale();
+
+/**
+ * Prevent indexing and following of links by web crawlers. Dynamic search pages should not be indexed, since their
+ * content might change, e.g. "Latest documents".
+ */
+if (isset($this->robots)) {
+    $this->headMeta($this->robots, 'robots');
+}
 
 $this->headMeta()
     ->prependHttpEquiv('Content-Type', 'text/html; charset=UTF-8')

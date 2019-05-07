@@ -42,6 +42,13 @@
  */
 class AuthController extends Application_Controller_Action {
 
+    public function init()
+    {
+        parent::init();
+
+        $this->view->robots = 'noindex, nofollow';
+    }
+
     /**
      * Always allow access to this controller; Override check in parent method.
      */
