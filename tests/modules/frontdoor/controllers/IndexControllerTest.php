@@ -1508,4 +1508,11 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
         $this->assertXpathContentContains('//td[contains(@class = "titlesub", @lang = "de")]',
             "Service-Zentrale");
     }
+
+    public function testDuplicateDocIdParameter() {
+        $this->dispatch('/frontdoor/index/index/docId/147/docId/146');
+
+        $this->assertXpathContentContains('//h2[@class="titlemain"]', 'KOBV');
+        $this->assertNotXpathContentContains('//h2[@class="titlemain"]', 'Sonderzeichen');
+    }
 }
