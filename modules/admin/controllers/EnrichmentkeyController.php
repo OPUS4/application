@@ -83,11 +83,14 @@ class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD
 
     /**
      * Modifiziert Formular für Indextabelle, so dass angepasstes ViewScript verwendet wird.
-     * @return Application_Form_Model_Table
+     * @return Admin_Form_EnrichmentTable
      */
     public function getIndexForm()
     {
-        $form = parent::getIndexForm();
+        $form = new Admin_Form_EnrichmentTable();
+        $form->setModels($this->getAllModels());
+        $form->setColumns(array(array('label' => $this->getModelClass())));
+        $form->setController($this);
         $form->setViewScript('enrichmentkey/modeltable.phtml');
         return $form;
     }

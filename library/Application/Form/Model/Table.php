@@ -223,4 +223,14 @@ class Application_Form_Model_Table extends Application_Form_Abstract {
             return false;
         }
     }
+
+    public function getRowCssClass($model)
+    {
+        return "";
+    }
+
+    public function getRowTooltip($model)
+    {
+        return "";
+    }
 }

@@ -42,22 +42,8 @@
     </tr>
     </thead>
     <?PHP foreach($this->element->getModels() as $model) : ?>
-        <tr
-            <?PHP if ($this->element->isProtected($model) and $this->element->isUsed($model)) : ?>
-                class="protected used"
-                title="<?= htmlspecialchars($this->translate('admin_enrichmentkey_used_tooltip')); ?>"
-            <?PHP elseif (!$this->element->isUsed($model) and $this->element->isProtected($model)) :?>
-                class="protected unused"
-                title="<?= htmlspecialchars($this->translate('admin_enrichmentkey_unused_tooltip')); ?>"
-            <?PHP elseif ($this->element->isUsed($model)) : ?>
-                class="used"
-                title="<?= htmlspecialchars($this->translate('admin_enrichmentkey_used_tooltip')); ?>"
-            <?PHP elseif ($this->element->isProtected($model)) :?>
-                class="protected"
-            <?PHP elseif (!$this->element->isUsed($model)) :?>
-                class="unused"
-                title="<?= htmlspecialchars($this->translate('admin_enrichmentkey_unused_tooltip')); ?>"
-            <?PHP endif ?>
+        <tr class="<?= $this->element->getRowCssClass($model)?>"
+            title="<?= htmlspecialchars($this->translate($this->element->getRowTooltip($model))) ?>"
         >
             <td>
                 <?PHP if ($this->element->isRenderShowActionLink($model)) : ?>

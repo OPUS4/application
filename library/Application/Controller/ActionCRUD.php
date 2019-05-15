@@ -728,25 +728,4 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action
         return $this->isModifiable($model);
     }
 
-    /**
-     * Determines if a model is protected.
-     *
-     * @param $model Object
-     * @return bool true if object is protected; false if not
-     */
-    public function isProtected($model)
-    {
-        return False;
-    }
-
-    /**
-     * Determines if a model is used.
-     *
-     * @param $model Object
-     * @return bool true if object is protected; false if not
-     */
-    public function isUsed($model)
-    {
-        return False;
-    }
 }
