@@ -30,6 +30,17 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
+
+/**
+ * This script is used to render the ActionBox with important functions for administrators.
+ *
+ * The box is used in the Frontdoor and in the Administration when looking at a document.
+ * When editing a document the box is used as a static header with some key information and
+ * buttons for saving or cancelling the editing.
+ *
+ * If Javascript is enabled the box will remain at the top of the window even when scrolling
+ * further down the page to make the functions always easily available to an administrator.
+ */
 ?>
 
 <?PHP
@@ -43,20 +54,22 @@
 <div id="actionboxContainer">
   <div class="wrapper">
       <div class="col col-1">
-        <?PHP if (!$this->element->isViewModeEnabled() || count($stateLinks) == 0) : ?>  
+        <?PHP if (!$this->element->isViewModeEnabled() || count($stateLinks) == 0) : ?>
         <dl id="Document-ServerState">
           <dt id="Document-ServerState-label"><?= htmlspecialchars($this->translate('ServerState-short')) . ':'?></dt>
-          <dd id="Document-ServerState-value"><?= htmlspecialchars($this->translate('Opus_Document_ServerState_Value_' . ucfirst($document->getServerState()))) ?></dd>
+          <dd id="Document-ServerState-value"><?= htmlspecialchars($this->translate('Opus_Document_ServerState_Value_'
+                  . ucfirst($currentState))) ?></dd>
         </dl>
         <?PHP else : ?>
           <dl id="Document-ServerState" class="dropdown">
               <dt><a><?= htmlspecialchars($this->translate('ServerState-short')) . ':'?></a></dt>
               <dd>
                 <ul>
-                    <li class="active"><?= htmlspecialchars($this->translate('Opus_Document_ServerState_Value_' . ucfirst($currentState))) ?></li>
+                    <li class="active"><?= htmlspecialchars($this->translate('Opus_Document_ServerState_Value_'
+                            . ucfirst($currentState))) ?></li>
                     <?PHP foreach ($stateLinks as $targetState => $params) : ?>
                     <li><a id="State-Link-<?= $targetState ?>" href="<?= $this->url($params) ?>"
-                           ><?= htmlspecialchars($this->translate('admin_workflow_' . $targetState)) ?></a></li>
+                            ><?= htmlspecialchars($this->translate('admin_workflow_' . $targetState)) ?></a></li>
                     <?PHP endforeach; ?>
                 </ul>
               </dd>
@@ -64,13 +77,15 @@
         <?PHP endif; ?>
       </div>
       <div class="col col-2">
-        <dl class="col">
+        <dl id="Document-ServerDatePublished" class="col">
           <dt><?= $this->translate('ServerDatePublished-short') . ':'?></dt>
-          <dd id="Document-ServerDatePublished-value"><?= $this->formatDate()->formatOpusDate($document->getServerDatePublished(), false) ?></dd>
+          <dd id="Document-ServerDatePublished-value"
+              ><?= $this->formatDate()->formatOpusDate($document->getServerDatePublished(), false) ?></dd>
         </dl>
-        <dl class="col">
+        <dl id="Document-ServerDateModified" class="col">
           <dt><?= $this->translate('ServerDateModified-short') . ':'?></dt>
-          <dd id="Document-ServerDateModified-value"><?= $this->formatDate()->formatOpusDate($document->getServerDateModified(), true) ?></dd>
+          <dd id="Document-ServerDateModified-value"
+              ><?= $this->formatDate()->formatOpusDate($document->getServerDateModified(), true) ?></dd>
         </dl>
         <?PHP if ($this->element->isNavigationEnabled()) : ?>
         <dl id="Document-Goto" class="col dropdown">
@@ -89,20 +104,20 @@
           <?PHP else : ?>
           <?PHP foreach ($actionLinks as $action => $params) : ?>
           <li class="<?= $action ?>"><a href="<?= $this->url($params, null, true) ?>"
-                                        ><?= htmlspecialchars($this->translate('admin_document_' .$action)) ?></a></li>
+              ><?= htmlspecialchars($this->translate('admin_document_' .$action)) ?></a></li>
           <?PHP endforeach; ?>
           <?PHP endif; ?>
         </ul>
       </div>
   </div>
-  <?PHP $message = $this->element->getMessage() ?> 
+  <?PHP $message = $this->element->getMessage() ?>
   <?PHP if (!is_null($message)) : ?>
   <div class="messagesContainer">
     <div class="messages"><?= $this->escape($message) ?></div>
-  </div>      
+  </div>
   <?PHP endif; ?>
 </div>
 <?PHP else : ?>
-<?PHP Zend_Registry::get('Zend_Log')->err('Use of partial \'docstatus.phtml\' without document = null.'); ?>
+<?PHP Zend_Registry::get('Zend_Log')->err('Use of partial \'actionbox.phtml\' without document.'); ?>
 <?PHP endif; ?>
 

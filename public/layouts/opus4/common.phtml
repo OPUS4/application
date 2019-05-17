@@ -29,13 +29,21 @@
  * @author      Thoralf Klein <thoralf.klein@zib.de>
  * @author      Sascha Szott <szott@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2010-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2010-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 $config = Zend_Registry::get('Zend_Config');
 
 $pageLanguage = Zend_Registry::get('Zend_Translate')->getLocale();
+
+/**
+ * Prevent indexing and following of links by web crawlers. Dynamic search pages should not be indexed, since their
+ * content might change, e.g. "Latest documents".
+ */
+if (isset($this->robots)) {
+    $this->headMeta($this->robots, 'robots');
+}
 
 $this->headMeta()
     ->prependHttpEquiv('Content-Type', 'text/html; charset=UTF-8')
@@ -66,27 +74,31 @@ $this->headLink()
     ->appendStylesheet($this->layoutPath() . '/css/admin.css', 'screen,print')
     ->appendStylesheet($this->layoutPath() . '/css/print.css', 'print')
     ->appendStylesheet($this->layoutPath() . '/css/custom.css')
-    ->headLink(array(
+    ->headLink([
         'rel' => 'shortcut icon',
         'type' => 'image/x-icon',
-        'href' => $this->layoutPath() . '/img/logo/favicon.ico'))
-    ->headLink(array(
+        'href' => $this->layoutPath() . '/img/logo/favicon.ico'
+    ])->headLink([
         'rel' => 'search',
         'title' => 'OPUS 4 Search',
         'type' => 'application/opensearchdescription+xml',
-        'href' => $this->serverUrl() . $this->baseUrl() . '/solrsearch/opensearch'));
+        'href' => $this->serverUrl() . $this->baseUrl() . '/solrsearch/opensearch'
+    ]);
 
 $this->container = Zend_Registry::get('Opus_Navigation');
 
-$jsFiles = array('searchutil.js', 'frontdoorutil.js', 'submit.js');
+$jsFiles = ['searchutil.js', 'frontdoorutil.js', 'submit.js'];
 
-if (in_array($this->moduleName, array('admin', 'review', 'setup', 'account'))) {
+if (in_array($this->moduleName, ['admin', 'review', 'setup', 'account'])) {
     $jsFiles[] = 'theme.js';
     $jsFiles[] = 'theme_lic.js';
     $jsFiles[] = 'opus-ui.js';
+} else if (in_array($this->moduleName, ['publish'])) {
+    $jsFiles[] = 'upload.js';
 }
-else if (in_array($this->moduleName, array('publish'))) {
-    $jsFiles[] = 'filetypes.js';
+
+if (in_array($this->moduleName, ['admin'])) {
+    $jsFiles[] = 'validation.js';
 }
 
 if ($this->jQueryEnabled()) {
@@ -139,6 +151,7 @@ if (isset($config->javascript->latex->mathjax)) {
         <!--[if lt IE 9]>
         <link rel="stylesheet" type="text/css" href="<?= $this->layoutPath() ?>/css/opus-ie-7.css" />
         <![endif]-->
+<?= $this->javascriptMessages()->setIndent(8) ?>
     </head>
 
     <body>
@@ -184,22 +197,14 @@ if (isset($config->javascript->latex->mathjax)) {
                 </div>
             </div>
 
-            <div id="content" class="opus <?= (in_array($this->moduleName, array('admin', 'review', 'setup', 'account'))) ? 'adminContainer' : ''?> <?= $this->moduleName ?><?php if ($this->moduleName === 'publish') : ?>"><?php else : ?><?= ($this->controllerName === 'index' ? '' : '_'.$this->controllerName)?><?= ($this->actionName === 'index' ? '' : '_'.$this->actionName)?><?= ($this->searchType === 'collection' || $this->searchType === 'latest' ? ' '.$this->searchType : '') ?>"><?php  endif; ?>
+            <div id="content" class="opus <?= (in_array($this->moduleName, ['admin', 'review', 'setup', 'account'])) ? 'adminContainer' : ''?> <?= $this->moduleName ?><?php if ($this->moduleName === 'publish') : ?>"><?php else : ?><?= ($this->controllerName === 'index' ? '' : '_'.$this->controllerName)?><?= ($this->actionName === 'index' ? '' : '_'.$this->actionName)?><?= ($this->searchType === 'collection' || $this->searchType === 'latest' ? ' '.$this->searchType : '') ?>"><?php  endif; ?>
 
-                <?PHP $messages = !is_null($this->flashMessenger) ? $this->flashMessenger->getMessages() : null ?>
-
-                <?PHP if (in_array($this->moduleName, array('admin', 'review', 'setup'))) : ?>
+                <?PHP if (in_array($this->moduleName, ['admin', 'review', 'setup'])) : ?>
                     <?PHP if ($this->breadcrumbsDisabled !== true) : ?>
                         <?= $this->navigation()->breadcrumbs() ?>
                     <?PHP endif; ?>
 
-                    <?php if (!empty($messages)) : ?>
-                    <div class="messages">
-                        <?php foreach ($messages as $message) : // TODO view helper ?>
-                            <div class="<?= array_key_exists('level', $message) ? $message['level'] : '' ?>"><?= htmlspecialchars($this->translate($message['message'])) ?></div>
-                        <?php endforeach ?>
-                    </div>
-                    <?php endif ?>
+                    <?= $this->messages() ?>
 
                     <?PHP if ($this->contentWrapperDisabled !== true && $this->breadcrumbsDisabled !== true) : ?>
                     <div class="wrapper">
@@ -213,15 +218,7 @@ if (isset($config->javascript->latex->mathjax)) {
                         <?= $this->adminform ?>
                     <?PHP endif ?>
 
-                    <?php if (!empty($messages)) : // TODO view helper ?>
-                    <div class="messages">
-                        <?php foreach ($this->flashMessenger->getMessages() as $message) : ?>
-                            <?PHP if (array_key_exists('message', $message)) : ?>
-                            <div class="<?= array_key_exists('level', $message) ? $message['level'] : '' ?>"><?= htmlspecialchars($this->translate($message['message'])) ?></div>
-                            <?PHP endif ?>
-                        <?php endforeach ?>
-                    </div>
-                    <?php endif ?>
+                    <?= $this->messages() ?>
 
                     <div class="wrapper">
                         <?= $this->layout()->content ?>

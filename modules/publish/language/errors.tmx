@@ -10,10 +10,10 @@
 
     <tu tuid="error_empty_post_array">
         <tuv xml:lang="en">
-            <seg><![CDATA[Error: No files uploaded or data submitted. This error can possibly be caused by files that enlarge the allowed upload size in php.ini. The administrator will be informed.<br />Please retry publishing a document using a smaller file. ]]></seg>
+            <seg><![CDATA[Error: No files uploaded or data submitted. This error can possibly be caused by files that enlarge the allowed upload size in php.ini. The administrator will be informed. Please retry publishing a document using a smaller file. ]]></seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg><![CDATA[Fehler: es wurden keine Dateien hochgeladen oder Daten übermittelt. Eine mögliche Ursache sind zu große Dateien, die die erlaubte Upload Größe in php.ini übersteigen. Der Administrator wird darüber informiert.<br /> Bitte versuchen Sie erneut ein Dokument mit einer kleineren Datei zu veröffentlichen.]]></seg>
+            <seg><![CDATA[Fehler: es wurden keine Dateien hochgeladen oder Daten übermittelt. Eine mögliche Ursache sind zu große Dateien, die die erlaubte Upload Größe in php.ini übersteigen. Der Administrator wird darüber informiert. Bitte versuchen Sie erneut ein Dokument mit einer kleineren Datei zu veröffentlichen.]]></seg>
         </tuv>
     </tu>
 
@@ -152,16 +152,59 @@
         </tuv>
     </tu>
 
-    <tu tuid="fileExtensionFalse">
+    <tu tuid="fileUploadErrorSize">
         <tuv xml:lang="en">
-            <seg>File '%value%' has a forbidden extension. Please choose another file.</seg>
+            <seg>Your file exceeds the defined size. The allowed size is '%size%' Byte.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Die Datei '%value%' hat eine unerlaubte Dateiendung. Bitte wählen Sie eine andere Datei.</seg>
+            <seg>Ihre Datei übersteigt die erlaubte Größe. Die erlaubte Größe liegt bei '%size%' Byte.</seg>
         </tuv>
     </tu>
 
+    <tu tuid="fileExtensionFalse">
+        <tuv xml:lang="en">
+            <seg>File has a forbidden extension.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Die Datei hat eine unerlaubte Dateiendung.</seg>
+        </tuv>
+    </tu>
 
+    <tu tuid="chooseAnotherFile">
+        <tuv xml:lang="en">
+            <seg>Please choose another File.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Bitte wählen Sie eine andere Datei.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="uploadedFileHasErrorMessage">
+        <tuv xml:lang="en">
+            <seg>The file '%name%' has the following errors: </seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Die Datei '%name%' hat folgende Fehler: </seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="filenameLengthError">
+        <tuv xml:lang="en">
+            <seg>The length of your filename is too long. Your filename should have less then '%size%' characters. </seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Der Dateiname hat zu viele Zeichen. Die maximal erlaubte Zeichenzahl beträgt '%size%' Zeichen. </seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="filenameFormatError">
+        <tuv xml:lang="en">
+            <seg>Your filename has not allowed characters or a wrong form. </seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Der Dateiname enthält nicht zugelassene Zeichen oder hat eine falsche Form.</seg>
+        </tuv>
+    </tu>
 
 <!-- **************Errors for Person names and file names****************** -->
     <tu tuid="publish_validation_error_person_invalid">
@@ -460,6 +503,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="publish_error_doi_collision">
+        <tuv xml:lang="en">
+            <seg>The given DOI already exists, please choose another one.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Die eingegebene DOI existiert bereits. Bitte wählen Sie eine andere DOI.</seg>
+        </tuv>
+    </tu>
+
     <tu tuid="publish_error_unexpected">
       <tuv xml:lang="en">
         <seg>An unexpected error occurred: your input is lost. Please try again or contact the administrator.</seg>
@@ -468,6 +520,6 @@
         <seg>Es ist ein unerwarteter Fehler aufgetreten. Ihre Eingaben sind gelöscht. Bitte versuchen Sie es erneut oder wenden Sie sich an den Administrator.</seg>
       </tuv>
     </tu>
-	
+
     </body>
 </tmx>

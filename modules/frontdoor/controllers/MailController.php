@@ -155,6 +155,9 @@ class Frontdoor_MailController extends Application_Controller_Action {
         if (is_null($docId)) {
             throw new Application_Exception('missing parameter docId');
         }
+        if (is_Array($docId)) {
+            $docId = end($docId);
+        }
 
         $authorsModel = null;
         try {

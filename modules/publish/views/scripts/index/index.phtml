@@ -27,9 +27,9 @@
  * @category    Application
  * @author      Susanne Gottwald <gottwald@zib.de>
  * @author      Doreen Thiede <thiede@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @author      Maximilian Salomon <salomon@zib.de>
+ * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 ?>
 
@@ -39,7 +39,6 @@
         var extensions = '<?= $this->extensions ?>';
         var fileElem = $("input:file")[0];
         fileElem.validFileExtensions = extensions.split(',');
-        fileElem.invalidFileMessage = "<?= htmlspecialchars($this->translate('fileExtensionFalse')) ?>";
     });
 </script>
 <?PHP endif ?>
@@ -58,6 +57,8 @@
 
                 <?php if ($this->enableUpload) : ?>
                     <?= $this->element($this->MAX_FILE_SIZE, null, 'hidden', 'MAX_FILE_SIZE'); ?>
+                    <?= $this->element($this->filenameMaxLength, null, 'hidden', 'filenameMaxLength'); ?>
+                    <?= $this->element($this->filenameFormat, null, 'hidden', 'filenameFormat'); ?>
                     <?= $this->group($this->documentUpload); ?>
                     <?= $this->fileOverview(); ?>
                 <?php endif; ?>

@@ -65,10 +65,6 @@ searchengine.solr.default.service.extract.endpoint.localhost.path = @searchengin
 ; Turn on to display document titles of search results in user interface language if possible
 search.result.display.preferUserInterfaceLanguage = 0
 
-; SUPPORTED LANGUAGES
-; Change the setting to 'de' or 'en' in order to disable language selection.
-; supportedLanguages = de
-
 ;MAIL SETTINGS
 ; mail.opus.smtp = localhost; SMTP server for sending email
 ; mail.opus.port = 25 ; SMTP server port for sending email
@@ -132,8 +128,16 @@ gnd.linkAuthor.frontdoor = 1
 ; This does not changes any values of your Apache or php.ini. Please assure
 ; the values in your Apache or php settings are big enough.
 ;publish.maxfilesize = 10240000
+
 ; publish.filetypes.allowed defines which filetypes can be uploaded.
 ;publish.filetypes.allowed = pdf,txt,html,htm ; filetypes that are accepted in publication form
+
+; Set an limited length for an filename. Use 0 to deactivate.
+;publish.filenameMaxLength = 50
+
+; This is an regular expression which allows an alphanumerical filename. It is allowed to use _, - and . but not at beginning.
+; Please use an expression without the typical starting and ending backslash, this is automatically added. The RegEx is used in JS and PHP. To deactivate choose "".
+;publish.filenameFormat = "^[a-zA-Z0-9][a-zA-Z0-9_.-]+$"
 
 ; CHECKSUM SETTINGS
 ; Maximum filesize in MB (default 50 MB) for calculating MD5 and SHA512 hashes

@@ -24,25 +24,37 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Tests
+ * @category    Application Unit Tests
+ * @package     Application
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2016, OPUS 4 development team
+ * @copyright   Copyright (c) 2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Oai_Model_LanguageTest extends ControllerTestCase {
 
-    public function testGetLanguageCode() {
-        $this->assertEquals('ger', Oai_Model_Language::getLanguageCode('ger'));
-        $this->assertEquals('ger', Oai_Model_Language::getLanguageCode('deu'));
-        $this->assertEquals('fre', Oai_Model_Language::getLanguageCode('fre'));
-        $this->assertEquals('fre', Oai_Model_Language::getLanguageCode('fra'));
+class Application_Import_ZipPackageReaderTest extends ControllerTestCase
+{
+
+    public function testReadPackageWithXmlFile()
+    {
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
+            'filetypes' => array('xml' => array('mimeType' => array(
+                'text/xml', 'application/xml'
+            )))
+        )));
+
+        $reader = new Application_Import_ZipPackageReader();
+
+        $status = $reader->readPackage(APPLICATION_PATH . '/tests/resources/sword-packages/single-doc-pdf-xml.zip');
+
+        $this->assertFalse($status->noDocImported());
+        $this->assertCount(1, $status->getDocs());
+
+        $document = $status->getDocs()[0];
+
+        $this->addTestDocument($document); // for cleanup
+
+        $files = $document->getFile();
+
+        $this->assertCount(2, $files);
     }
-
-    public function testGetLanguageCodeFromPart1() {
-        $this->assertEquals('de', Oai_Model_Language::getLanguageCode('deu', 'part1'));
-        $this->assertEquals('fr', Oai_Model_Language::getLanguageCode('fra', 'part1'));
-        $this->assertEquals('en', Oai_Model_Language::getLanguageCode('eng', 'part1'));
-    }
-
 }

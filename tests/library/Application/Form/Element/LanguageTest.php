@@ -27,36 +27,41 @@
  * @category    Application Unit Test
  * @package     Form_Element
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class Application_Form_Element_LanguageTest extends FormElementTestCase {
+class Application_Form_Element_LanguageTest extends FormElementTestCase
+{
 
-    public function setUp() {
+    public function setUp()
+    {
         $this->_formElementClass = 'Application_Form_Element_Language';
         $this->_expectedDecoratorCount = 6;
-        $this->_expectedDecorators = array('ViewHelper', 'Errors', 'Description', 'ElementHtmlTag', 'LabelNotEmpty',
-            'dataWrapper');
+        $this->_expectedDecorators = [
+            'ViewHelper', 'Errors', 'Description', 'ElementHtmlTag', 'LabelNotEmpty', 'dataWrapper'
+        ];
         $this->_staticViewHelper = 'viewFormSelect';
         parent::setUp();
     }
 
-    public function testGetLanguageList() {
+    public function testGetLanguageList()
+    {
         $this->useEnglish();
 
         $languages = Application_Form_Element_Language::getLanguageList();
 
-        $this->assertEquals(array(
+        $this->assertEquals([
             'deu' => 'German',
             'eng' => 'English',
             'fra' => 'French',
             'rus' => 'Russian',
             'spa' => 'Spanish',
-            'mul' => 'Multiple languages'), $languages);
+            'mul' => 'Multiple Languages'
+        ], $languages);
     }
 
-    public function testOptions() {
+    public function testOptions()
+    {
         $element = $this->getElement();
 
         $languages = Application_Form_Element_Language::getLanguageList();
@@ -71,11 +76,14 @@ class Application_Form_Element_LanguageTest extends FormElementTestCase {
     /**
      * TODO fehlender, leerer Wert wird nicht geprüft
      */
-    public function testValidation() {
+    public function testValidation()
+    {
         $element = $this->getElement();
 
         $this->assertFalse($element->isValid('unknownlang'));
         $this->assertTrue($element->isValid('deu'));
     }
 
+    public function testUnknownLanguage() {
+    }
 }

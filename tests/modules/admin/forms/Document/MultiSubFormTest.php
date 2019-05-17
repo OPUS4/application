@@ -28,7 +28,6 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -122,7 +121,7 @@ class Admin_Form_Document_MultiSubFormTest extends ControllerTestCase {
                 'Language' => 'eng',
                 'Value' => 'Titel 2'
             ),
-            'TitleParen2' => array(
+            'TitleParent2' => array(
                 'Language' => 'fra',
                 'Value' => 'Titel 3'
             )

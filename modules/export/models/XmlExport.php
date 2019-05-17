@@ -368,6 +368,10 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract {
         $proc->setParameter('', 'docCount', count($results));
         $proc->setParameter('', 'queryhits', $numOfHits);
 
+        Application_Xslt::registerViewHelper($proc, [
+            'optionValue'
+        ]);
+
         $xml->appendChild($xml->createElement('Documents'));
 
         $resultIds = array();

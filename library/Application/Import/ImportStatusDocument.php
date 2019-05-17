@@ -27,23 +27,30 @@
  * @category    Application
  * @package     Import
  * @author      Sascha Szott
- * @copyright   Copyright (c) 2016
+ * @copyright   Copyright (c) 2016-2018
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class Application_Import_ImportStatusDocument {
-    
+
+/**
+ * Contains document objects during import.
+ */
+class Application_Import_ImportStatusDocument
+{
+
     private $docs = array();
-    
-    public function addDoc($doc) {
+
+    public function addDoc($doc)
+    {
         $this->docs[] = $doc;
     }
 
-    public function getDocs() {
+    public function getDocs()
+    {
         return $this->docs;
     }
-    
-    public function noDocImported() {
+
+    public function noDocImported()
+    {
         return empty($this->docs);
     }
 }

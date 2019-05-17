@@ -1,4 +1,6 @@
-<?php
+#!/usr/bin/env php
+
+<?PHP
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -25,37 +27,17 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_Oai
+ * @package     Scripts
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
+ * @copyright   Copyright (c) 2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Oai_Model_Language extends Application_Model_Abstract {
 
-    /**
-     * Returns language code for internal language identifier.
-     * @param $language string Internal language identifier (e.g. 'deu')
-     * @param null $part string Field to use for language code
-     * @return string language code
-     */
-    public static function getLanguageCode($language, $part = null) {
-        $result = Opus_Language::getPropertiesByPart2T($language);
+require_once dirname(__FILE__) . '/../common/update.php';
 
-        if (empty($result)) {
-            return $language;
-        }
+/**
+ * Create enrichments that are required for the handling of DOI/URN generation.
+ */
 
-        $code = null;
-
-        if (!is_null($part) && isset($result[$part])) {
-            $code = $result[$part];
-        }
-        else {
-            $code = $result['part2_b'];
-        }
-
-        return empty($code) ? $language : $code;
-    }
-
-}
-
+$helper = new Application_Update_CreateDoiUrnEnrichments();
+$helper->run();

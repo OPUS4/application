@@ -30,9 +30,9 @@
  * @package     Module_CitationExport
  * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
  * @author      Gunar Maiwald <maiwald@zib.de>
- * @copyright   Copyright (c) 2010, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2010-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 -->
 
@@ -44,7 +44,7 @@
 
     <xsl:output method="text" omit-xml-declaration="yes" />
 
-    <xsl:include href="utils/replace_nonascii.xslt"/>
+    <xsl:include href="utils/bibtex_replace_nonascii.xslt"/>
     <xsl:include href="utils/bibtex_authors.xslt"/>
     <xsl:include href="utils/bibtex_editors.xslt"/>
     <xsl:include href="utils/bibtex_pages.xslt"/>
@@ -148,8 +148,8 @@
             <xsl:with-param name="delimiter">,</xsl:with-param>
         </xsl:call-template>
         <xsl:call-template name="outputFieldValue">
-            <xsl:with-param name="field">note     </xsl:with-param>             
-            <xsl:with-param name="value"><xsl:value-of select="Enrichment[@KeyName=$enrichment_note]/@Value" /></xsl:with-param>         
+            <xsl:with-param name="field">note     </xsl:with-param>
+            <xsl:with-param name="value"><xsl:value-of select="Enrichment[@KeyName=$enrichment_note]/@Value" /></xsl:with-param>
         </xsl:call-template>
 <xsl:text>}</xsl:text>
      </xsl:template>

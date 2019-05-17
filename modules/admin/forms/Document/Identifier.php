@@ -63,10 +63,10 @@ class Admin_Form_Document_Identifier extends Admin_Form_AbstractModelSubForm
     public function init()
     {
         parent::init();
-        
+
         $typeElement = $this->createElement('Identifier', self::ELEMENT_TYPE, array('required' => true));
         $this->addElement($typeElement);
-        
+
         $valueElement = $this->createElement('text', self::ELEMENT_VALUE, array(
             'required' => true, 'size' => '80'
         ));

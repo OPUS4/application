@@ -256,10 +256,17 @@
                     </td>
                 </tr>
             </xsl:if>
-            <xsl:apply-templates select="Subject[@Type='swd']">
-                <xsl:sort select="@Value"/>
-            </xsl:apply-templates>
-            <xsl:apply-templates select="Subject[@Type='psyndex']">
+            <xsl:choose>
+                <xsl:when test="php:functionString('Application_Xslt::optionEnabled', 'frontdoor.subjects.alphabeticalSorting')">
+                    <xsl:apply-templates select="Subject[@Type='swd']">
+                        <xsl:sort select="@Value"/>
+                    </xsl:apply-templates>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:apply-templates select="Subject[@Type='swd']" />
+                </xsl:otherwise>
+            </xsl:choose>
+           <xsl:apply-templates select="Subject[@Type='psyndex']">
                 <xsl:sort select="@Value"/>
             </xsl:apply-templates>
             <!-- End Subjects -->

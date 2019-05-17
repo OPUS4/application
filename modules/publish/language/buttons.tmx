@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE tmx SYSTEM "http://www.gala-global.org/oscarStandards/tmx/tmx14.dtd">
 <tmx version="1.4">
- 
+
  <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
  </header>
-  
+
   <body>
 <!-- This language file contains all texts concerning button labels. -->
 
@@ -86,7 +86,7 @@
             <seg>Add one more author</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Einen weiteren Autor hinzufügen</seg>
+            <seg>Weitere(n) Autor*in hinzufügen</seg>
         </tuv>
     </tu>
 
@@ -95,7 +95,7 @@
             <seg>Delete the last author</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Den letzten Autor löschen</seg>
+            <seg>Den/die letzte(n) Autor*in löschen</seg>
         </tuv>
     </tu>
 
@@ -225,7 +225,7 @@
             <seg>Die letzte DDC Klasse löschen</seg>
         </tuv>
     </tu>
-	
+
     <tu tuid="button_label_add_one_moreddc_dnb">
         <tuv xml:lang="en">
             <seg>Add one more DDC subject category</seg>
@@ -279,7 +279,7 @@
             <seg>Die letzte JEL Klasse löschen</seg>
         </tuv>
     </tu>
-	
+
 	<tu tuid="button_label_add_one_moreSubjectBKL">
         <tuv xml:lang="en">
             <seg>Add one more BKL term group</seg>
@@ -315,13 +315,13 @@
             <seg>Das letzte Schlagwort löschen</seg>
         </tuv>
     </tu>
-	
+
 	<tu tuid="button_label_add_one_morePersonReferee">
         <tuv xml:lang="en">
             <seg>Add one more Referee</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Einen weiteren Gutachter hinzufügen</seg>
+            <seg>Eine(n) weitere(n) Gutachter*in hinzufügen</seg>
         </tuv>
     </tu>
 
@@ -330,16 +330,16 @@
             <seg>Delete the last Referee</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Den letzten Gutachter löschen</seg>
+            <seg>Den/die letzte(n) Gutachter*in löschen</seg>
         </tuv>
     </tu>
-	
+
 	<tu tuid="button_label_add_one_morePersonEditor">
         <tuv xml:lang="en">
             <seg>Add one more Editor</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Einen weiteren Herausgeber hinzufügen</seg>
+            <seg>Eine(n) weitere(n) Herausgeber*in hinzufügen</seg>
         </tuv>
     </tu>
 
@@ -348,7 +348,7 @@
             <seg>Delete the last Editor</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Den letzten Herausgeber löschen</seg>
+            <seg>Den/die letzte(n) Herausgeber*in löschen</seg>
         </tuv>
     </tu>
 
@@ -357,7 +357,7 @@
             <seg>Add one more Advisor</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Einen weiteren Betreuer hinzufügen</seg>
+            <seg>Eine(n) weitere(n) Betreuer*in hinzufügen</seg>
         </tuv>
     </tu>
 
@@ -366,10 +366,10 @@
             <seg>Delete the last Advisor</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Den letzten Betreuer löschen</seg>
+            <seg>Den/die letzte(n) Betreuer*in löschen</seg>
         </tuv>
     </tu>
-	
+
 	<tu tuid="button_label_add_one_moreThesisPublisher">
         <tuv xml:lang="en">
             <seg>Add one more publishing Institution</seg>
@@ -378,7 +378,7 @@
             <seg>Eine weitere Veröffentlichende Institution hinzufügen</seg>
         </tuv>
     </tu>
-	
+
 	<tu tuid="button_label_deleteThesisPublisher">
         <tuv xml:lang="en">
             <seg>Delete the last publishing Institution</seg>
@@ -387,7 +387,7 @@
             <seg>Die letzte Veröffentlichende Institution löschen</seg>
         </tuv>
     </tu>
-	
+
 	<tu tuid="button_label_add_one_moreThesisGrantor">
         <tuv xml:lang="en">
             <seg>Add one more granting Institution</seg>
@@ -396,7 +396,7 @@
             <seg>Eine weitere Titel verleihende Institution hinzufügen</seg>
         </tuv>
     </tu>
-	
+
 	<tu tuid="button_label_deleteThesisGrantor">
         <tuv xml:lang="en">
             <seg>Delete the last granting Institution</seg>
@@ -405,13 +405,13 @@
             <seg>Die letzte Titel verleihende Institution löschen</seg>
         </tuv>
     </tu>
-	
+
 	<tu tuid="button_label_add_one_morePersonTranslator">
         <tuv xml:lang="en">
             <seg>Add one more Translator</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Einen weiteren Übersetzer hinzufügen</seg>
+            <seg>Eine(n) weitere(n) Übersetzer*in hinzufügen</seg>
         </tuv>
     </tu>
 
@@ -420,10 +420,10 @@
             <seg>Delete the last Translator</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Den letzten Übersetzer löschen</seg>
+            <seg>Den/die letzte(n) Übersetzer*in löschen</seg>
         </tuv>
     </tu>
-	
+
 	<tu tuid="button_label_add_one_morePersonContributor">
         <tuv xml:lang="en">
             <seg>Add one more Contributor</seg>
@@ -441,7 +441,7 @@
             <seg>Die letzte beteiligte Person löschen</seg>
         </tuv>
     </tu>
-	
+
 	<tu tuid="button_label_add_one_moreCreatingCorporation">
         <tuv xml:lang="en">
             <seg>Add one more Creating Corporation</seg>
@@ -459,7 +459,7 @@
             <seg>Die letzte urhebende Körperschaft löschen</seg>
         </tuv>
     </tu>
-	
+
 	<tu tuid="button_label_add_one_moreContributingCorporation">
         <tuv xml:lang="en">
             <seg>Add one more Contributing Corporation</seg>
@@ -477,7 +477,7 @@
             <seg>Die letzte beteiligte Körperschaft löschen</seg>
         </tuv>
     </tu>
-	
+
 	<tu tuid="button_label_add_one_moreSubjectSwd">
         <tuv xml:lang="en">
             <seg>Add one more GND Keyword</seg>
@@ -493,7 +493,7 @@
         </tuv>
         <tuv xml:lang="de">
             <seg>Das letzte GND-Schlagwort löschen</seg>
-        </tuv>	
+        </tuv>
 	</tu>
 
     <tu tuid="button_label_collection">
@@ -552,7 +552,7 @@
 
 <!-- BEGIN OF COMMENT
     Language keys can be used after the corresponding Enrichment keys
-    were created in administration -> Enrichments. 
+    were created in administration -> Enrichments.
 
     <tu tuid="button_label_add_one_moreEnrichmentNeuesSelect">
         <tuv xml:lang="en">
@@ -607,7 +607,7 @@ END of COMMENT -->
         <tuv xml:lang="de">
             <seg>hoch</seg>
         </tuv>
-    </tu>	
+    </tu>
 
     <tu tuid="button_label_add_one_moreSeries">
         <tuv xml:lang="en">

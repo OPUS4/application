@@ -112,11 +112,21 @@ class Application_ConfigurationTest extends ControllerTestCase {
     }
 
     public function testGetDefaultLanguage() {
-        $this->assertEquals('en', $this->config->getDefaultLanguage());
+        $this->assertEquals('de', $this->config->getDefaultLanguage());
     }
 
     public function testGetDefaultLanguageIfOnlyOneIsSupported() {
         Zend_Registry::get('Zend_Config')->supportedLanguages = 'de';
+        $this->assertEquals('de', $this->config->getDefaultLanguage());
+    }
+
+    public function testGetDefaultLanguageUnsupportedConfigured() {
+        // because bootstrapping already happened locale needs to be manipulated directly
+        $locale = new Zend_Locale();
+        $locale->setDefault('fr');
+        $this->assertEquals('de', $this->config->getDefaultLanguage());
+
+        $locale->setDefault('de');
         $this->assertEquals('de', $this->config->getDefaultLanguage());
     }
 
@@ -228,4 +238,15 @@ class Application_ConfigurationTest extends ControllerTestCase {
         $this->assertNull($config->getValue(''));
     }
 
+    public function testDocumentPlugins()
+    {
+        $document = new Opus_Document();
+
+        $this->assertEquals([
+            'Opus_Document_Plugin_Index',
+            'Opus_Document_Plugin_XmlCache',
+            'Opus_Document_Plugin_IdentifierUrn',
+            'Opus_Document_Plugin_IdentifierDoi'
+        ], $document->getDefaultPlugins());
+    }
 }

@@ -149,7 +149,7 @@ class Publish_DepositController extends Application_Controller_Action {
             true
         );
         $notification->prepareMail(
-            $this->document, Application_Util_Notification::SUBMISSION, $this->view->serverUrl() . $url
+            $this->document,  $this->view->serverUrl() . $url
         );
 
         return $this->_helper->Redirector->redirectToAndExit($targetAction, null, $targetController, $targetModule);
