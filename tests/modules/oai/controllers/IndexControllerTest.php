@@ -2264,7 +2264,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $importedNode = $metadataDocument->importNode($xMetaDissNode, true);
         $metadataDocument->appendChild($importedNode);
 
-        // libxml_use_internal_errors(true);
+        // TODO libxml_use_internal_errors(true);
         $valid = $metadataDocument->schemaValidate(
             APPLICATION_PATH . '/tests/resources/xmetadissplus/xmetadissplus.xsd'
         );
