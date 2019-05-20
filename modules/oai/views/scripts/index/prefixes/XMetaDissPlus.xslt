@@ -313,6 +313,8 @@
                <xsl:value-of select="@frontdoorurl" />
             </ddb:identifier>
 
+            <xsl:apply-templates select="IdentifierDoi" mode="xmetadissplus" />
+
             <ddb:rights ddb:kind="free" />
 
         </xMetaDiss:xMetaDiss>
@@ -509,6 +511,12 @@
         <dc:identifier xsi:type="urn:nbn">
             <xsl:value-of select="@Value" />
         </dc:identifier>
+    </xsl:template>
+
+    <xsl:template match="IdentifierDoi" mode="xmetadissplus">
+        <ddb:identifier ddb:type="DOI">
+            <xsl:value-of select="@Value" />
+        </ddb:identifier>
     </xsl:template>
 
     <xsl:template match="Licence" mode="xmetadissplus">
