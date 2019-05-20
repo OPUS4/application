@@ -2264,9 +2264,16 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $importedNode = $metadataDocument->importNode($xMetaDissNode, true);
         $metadataDocument->appendChild($importedNode);
 
+        // libxml_use_internal_errors(true);
         $valid = $metadataDocument->schemaValidate(
             APPLICATION_PATH . '/tests/resources/xmetadissplus/xmetadissplus.xsd'
         );
+
+        /* TODO provide functionality for all tests
+        $errors = libxml_get_errors();
+        foreach($errors as $error) {
+            var_dump($error);
+        }*/
 
         $this->assertTrue($valid, 'XML Schema validation failed for XMetaDissPlus');
 
