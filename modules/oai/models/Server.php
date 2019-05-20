@@ -103,7 +103,6 @@ class Oai_Model_Server extends Application_Model_Abstract
 
     public function handleRequest(array $oaiRequest, $requestUri)
     {
-        var_dump('got here');
         // TODO move error handling into Oai_Model_Server
         try {
             // handle request
