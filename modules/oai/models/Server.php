@@ -85,6 +85,8 @@ class Oai_Model_Server extends Application_Model_Abstract
 
     private $_baseUri;
 
+    private $response; // TODO temporary hack
+
     /**
      * Gather configuration before action handling.
      *
@@ -101,6 +103,7 @@ class Oai_Model_Server extends Application_Model_Abstract
 
     public function handleRequest(array $oaiRequest, $requestUri)
     {
+        var_dump('got here');
         // TODO move error handling into Oai_Model_Server
         try {
             // handle request
@@ -147,7 +150,7 @@ class Oai_Model_Server extends Application_Model_Abstract
         // Setup stylesheet
         $this->loadStyleSheet($this->getScriptPath() . '/oai-pmh.xslt');
 
-        $this->_proc->registerPHPFunctions('Oai_Model_Language::getLanguageCode');
+        $this->_proc->registerPHPFunctions('Opus_Language::getLanguageCode');
         Application_Xslt::registerViewHelper($this->_proc, array('optionValue'));
         $this->_proc->setParameter('', 'urnResolverUrl', $this->getConfig()->urn->resolverUrl);
         $this->_proc->setParameter('', 'doiResolverUrl', $this->getConfig()->doi->resolverUrl);
@@ -764,4 +767,13 @@ class Oai_Model_Server extends Application_Model_Abstract
         $this->_baseUri = $baseUri;
     }
 
+    public function setResponse($response)
+    {
+        $this->response = $response;
+    }
+
+    public function getResponse()
+    {
+        return $this->response;
+    }
 }

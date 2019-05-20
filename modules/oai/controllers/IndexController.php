@@ -91,6 +91,7 @@ class Oai_IndexController extends Application_Controller_ModuleAccess
         $server->setScriptPath($this->view->getScriptPath('index'));
         $server->setBaseUrl($this->view->fullUrl());
         $server->setBaseUri($this->getRequest()->getBaseUrl());
+        $server->setResponse($this->getResponse()); // TODO temporary hack
 
         $this->getResponse()->setBody($server->handleRequest($oaiRequest, $this->getRequest()->getRequestUri()));
         $this->getResponse()->setHeader('Content-Type', 'text/xml; charset=UTF-8', true);
