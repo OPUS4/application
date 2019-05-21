@@ -727,5 +727,4 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action
     {
         return $this->isModifiable($model);
     }
-
 }

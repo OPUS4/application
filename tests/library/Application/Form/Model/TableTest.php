@@ -130,4 +130,27 @@ class Application_Form_Model_TableTest extends ControllerTestCase {
         $this->assertTrue($form->isModifiable(null));
     }
 
+    public function testIsUsedDefault() {
+        $form = new Application_Form_Model_Table();
+
+        $this->assertFalse($form->isUsed(null));
+    }
+
+    public function testIsProtectedDefault() {
+        $form = new Application_Form_Model_Table();
+
+        $this->assertFalse($form->isUsed(null));
+    }
+
+    public function testGetRowCssClass() {
+        $form = new Application_Form_Model_Table();
+
+        $this->assertNull($form->getRowCssClass(null));
+    }
+
+    public function testGetRowTooltip() {
+        $form = new Application_Form_Model_Table();
+
+        $this->assertNull($form->getRowTooltip(null));
+    }
 }

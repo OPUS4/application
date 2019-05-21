@@ -226,11 +226,19 @@ class Application_Form_Model_Table extends Application_Form_Abstract {
 
     public function getRowCssClass($model)
     {
-        return "";
+        if (!is_null($this->_controller)) {
+            return $this->_controller->getRowCssClass($model);
+        } else {
+            return null;
+        }
     }
 
     public function getRowTooltip($model)
     {
-        return "";
+        if (!is_null($this->_controller)) {
+            return $this->_controller->getRowTooltip($model);
+        } else {
+            return null;
+        }
     }
 }
