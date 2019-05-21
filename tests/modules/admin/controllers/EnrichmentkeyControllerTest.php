@@ -589,8 +589,8 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
     }
 
     /**
-     * Integration test, tests the function isProtected() of EnrichmentKeyController which is used to add a CSS-class
-     * via testing, if the class is added on the protected keys.
+     * Tests the function isProtected()
+     *
      * @covers ::isProtected
      */
     public function testSetProtectedCssClassTrue()
@@ -602,6 +602,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $this->checkForBadStringsInHtml($response->getBody());
         foreach ($protectedKeys as &$value) {
             if (strpos($response->getBody(), $value) !== false) {
+                // Xpath looks, if value has an protected css-class in enrichmentkeyTable
                 $this->assertXpathContentContains('//table[@id="enrichmentkeyTable"]
                 //*[contains(@class,\'protected\')]', $value);
             }
@@ -609,8 +610,8 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
     }
 
     /**
-     * Integration test, tests the function isUsed() of EnrichmentKeyController which is used to add a CSS-class
-     * via testing, if the class is added on the used keys.
+     * Tests the function isUsed()
+     *
      * @covers ::isUsed
      */
     public function testSetUsedCssClassTrue()
@@ -621,6 +622,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $this->checkForBadStringsInHtml($response->getBody());
         foreach ($usedKeys as &$value) {
             if (strpos($response->getBody(), $value) !== false) {
+                // Xpath looks, if value has an used css-class in enrichmentkeyTable
                 $this->assertXpathContentContains('//table[@id="enrichmentkeyTable"]
                 //*[contains(@class,\'used\')]', $value);
             }
@@ -628,8 +630,8 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
     }
 
     /**
-     * Integration test, tests the function isProtected() of EnrichmentKeyController which is used to add a CSS-class
-     * via testing, if the class is not added on the unprotected keys.
+     * Tests the function isProtected()
+     *
      * @covers ::isProtected
      */
     public function testSetProtectedCssClassFalse()
@@ -641,6 +643,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $this->checkForBadStringsInHtml($response->getBody());
         foreach ($unprotectedKeys as &$value) {
             if (strpos($response->getBody(), $value) !== false) {
+                // Xpath looks, if value has an protected css-class in enrichmentkeyTable
                 $this->assertNotXpathContentContains('//table[@id="enrichmentkeyTable"]
                 //*[contains(@class,\'protected\')]', $value);
             }
@@ -648,8 +651,8 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
     }
 
     /**
-     * Integration test, tests the function isUsed() of EnrichmentKeyController which is used to add a CSS-class
-     * via testing, if the class is not added on the unused keys.
+     * Tests the function isUsed()
+     *
      * @covers ::isUsed
      */
     public function testSetUsedCssClassFalse()
@@ -660,6 +663,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $this->checkForBadStringsInHtml($response->getBody());
         foreach ($unusedKeys as &$value) {
             if (strpos($response->getBody(), $value) !== false) {
+                // Xpath looks, if value has an unused css-class in enrichmentkeyTable
                 $this->assertXpathContentContains('//table[@id="enrichmentkeyTable"]
                 //*[contains(@class,\'unused\')]', $value);
             }
