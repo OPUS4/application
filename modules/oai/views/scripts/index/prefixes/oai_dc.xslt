@@ -96,6 +96,7 @@
             </dc:identifier>
             <xsl:apply-templates select="IdentifierUrn" mode="oai_dc" />
             <xsl:apply-templates select="IdentifierIsbn" mode="oai_dc" />
+            <xsl:apply-templates select="IdentifierDoi" mode="oai_dc" />
             <xsl:apply-templates select="File" mode="oai_dc" />
             <!-- dc:language -->
             <xsl:apply-templates select="@Language" mode="oai_dc" />
@@ -334,6 +335,12 @@
         </dc:identifier>
         <dc:identifier>
             <xsl:value-of select="$urnResolverUrl" />
+            <xsl:value-of select="@Value" />
+        </dc:identifier>
+    </xsl:template>
+
+    <xsl:template match="IdentifierDoi" mode="oai_dc">
+        <dc:identifier>
             <xsl:value-of select="@Value" />
         </dc:identifier>
     </xsl:template>
