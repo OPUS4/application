@@ -2273,7 +2273,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $errors = libxml_get_errors();
         foreach($errors as $error) {
             var_dump($error);
-        }*/
+        } */
 
         $this->assertTrue($valid, 'XML Schema validation failed for XMetaDissPlus');
 
@@ -2297,5 +2297,6 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->registerXpathNamespaces($this->xpathNamespaces);
 
         $this->assertXpathContentContains('//xMetaDiss:xMetaDiss/dc:identifier','123');
+        $this->assertXpathContentContains('//xMetaDiss:xMetaDiss/ddb:identifier','10.1007/978-3-540-76406-9');
     }
 }
