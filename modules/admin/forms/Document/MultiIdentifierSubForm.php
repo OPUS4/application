@@ -410,7 +410,7 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
                 throw new Exception('Generate action is not supported for ' . $this->_type);
         }
 
-        $this->_addAnker($this);
+        $this->_addAnchor($this);
         return Admin_Form_Document::RESULT_SHOW;
     }
 

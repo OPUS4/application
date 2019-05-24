@@ -262,14 +262,14 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
         // TODO separate function for getting position?
         $position = $this->_removeSubForm($subFormName);
 
-        $this->_addAnker($this->determineSubFormForAnker($position));
+        $this->_addAnchor($this->determineSubFormForAnchor($position));
 
         return Admin_Form_Document::RESULT_SHOW;
     }
 
     protected function processPostAdd() {
         $subform = $this->appendSubForm();
-        $this->_addAnker($subform);
+        $this->_addAnchor($subform);
         return Admin_Form_Document::RESULT_SHOW;
     }
 
@@ -514,7 +514,7 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
      * @param type $removedPosition
      * @return \Admin_Form_Document_MultiSubForm
      */
-    public function determineSubFormForAnker($removedPosition) {
+    public function determineSubFormForAnchor($removedPosition) {
         $subforms = $this->getSubForms();
 
         $subformCount = count($subforms);
@@ -540,9 +540,9 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
      *
      * @param Zend_Form $subform
      */
-    protected function _addAnker($subform) {
+    protected function _addAnchor($subform) {
         $subform->addDecorator(
-            array('currentAnker' => 'HtmlTag'),
+            array('currentAnchor' => 'HtmlTag'),
             array('tag' => 'a', 'placement' => 'prepend', 'name' => 'current')
         );
     }
