@@ -144,7 +144,7 @@ $doc->addIdentifierOpac()->setValue('OPAC-ID 001 1237890654');
 $arxiv = $doc->addIdentifierArxiv();
 $arxiv->setValue('arXiv:0706.0001');
 
-// Valid DOI Identifier from DOI Homepage: http://www.doi.org/
+// Valid DOI Identifier from DOI Homepage: https://doi.org/
 $doi = $doc->addIdentifierDoi();
 $doi->setValue('10.1000/182');
 

@@ -238,4 +238,15 @@ class Application_ConfigurationTest extends ControllerTestCase {
         $this->assertNull($config->getValue(''));
     }
 
+    public function testDocumentPlugins()
+    {
+        $document = new Opus_Document();
+
+        $this->assertEquals([
+            'Opus_Document_Plugin_Index',
+            'Opus_Document_Plugin_XmlCache',
+            'Opus_Document_Plugin_IdentifierUrn',
+            'Opus_Document_Plugin_IdentifierDoi'
+        ], $document->getDefaultPlugins());
+    }
 }

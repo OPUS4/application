@@ -30,7 +30,7 @@
  * @author      Sascha Szott <szott@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
  * @author      Maximilian Salomon <salomon@zib.de>
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -42,7 +42,8 @@
 class Solrsearch_IndexControllerTest extends ControllerTestCase
 {
 
-    private function doStandardControllerTest($url, $controller, $action) {
+    private function doStandardControllerTest($url, $controller, $action)
+    {
         $this->dispatch($url);
 
         $this->assertResponseCode(200);
@@ -57,42 +58,48 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
         $this->assertNotEquals('', trim($this->getResponse()->getBody()), 'HTTP Response Body is empty');
     }
 
-    public function testIndexAction() {
+    public function testIndexAction()
+    {
         $this->doStandardControllerTest('/solrsearch', 'index', 'index');
     }
 
-
-    public function testAdvancedAction() {
+    public function testAdvancedAction()
+    {
         $this->doStandardControllerTest('/solrsearch/index/advanced', 'index', 'advanced');
         $response = $this->getResponse();
         $this->checkForBadStringsInHtml($response->getBody());
     }
 
-    public function testEmptySearch() {
+    public function testEmptySearch()
+    {
         $this->dispatch('/solrsearch/index/search/searchtype/simple/start/0/rows/10/query/thissearchtermdoesnotexist/sortfield/score/sortorder/desc');
         $this->assertNotContains('result_box', $this->getResponse()->getBody());
         $this->assertNotContains('search_results', $this->getResponse()->getBody());
     }
 
-    public function testLatestAction() {
+    public function testLatestAction()
+    {
         $this->doStandardControllerTest('/solrsearch/index/search/searchtype/latest', 'index', 'search');
         $this->checkForBadStringsInHtml($this->getResponse()->getBody());
         $this->assertTrue(substr_count($this->getResponse()->getBody(), 'result_box') == 10);
     }
 
-    public function testLatestActionWith20Hits() {
+    public function testLatestActionWith20Hits()
+    {
         $this->doStandardControllerTest('/solrsearch/index/search/rows/20/searchtype/latest', 'index', 'search');
         $this->checkForBadStringsInHtml($this->getResponse()->getBody());
         $this->assertTrue(substr_count($this->getResponse()->getBody(), 'result_box') == 20);
     }
 
-    public function testLatestActionWithNegativeNumberOfHits() {
+    public function testLatestActionWithNegativeNumberOfHits()
+    {
         $this->doStandardControllerTest('/solrsearch/index/search/rows/-1/searchtype/latest', 'index', 'search');
         $this->checkForBadStringsInHtml($this->getResponse()->getBody());
         $this->assertTrue(substr_count($this->getResponse()->getBody(), 'result_box') == 10);
     }
 
-    public function testLatestActionWithTooLargeNumberOfHits() {
+    public function testLatestActionWithTooLargeNumberOfHits()
+    {
         $this->doStandardControllerTest('/solrsearch/index/search/rows/1000/searchtype/latest', 'index', 'search');
         // we need to mask 'fehler' in metadata (otherwise checkForBadStringsInHtml will assume an error has occurred)
         $this->checkForBadStringsInHtml(str_replace('IMU–Sensorfehler', 'IMU–Sensorxxxxxx', $this->getResponse()->getBody()));
@@ -703,26 +710,32 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
         $doc->store();
 
         // search for document based on persons
-        $persons = array(
+        $persons = [
             'personauthor-opusvier-2484',
             'personadvisor-opusvier-2484',
             'personcontributor-opusvier-2484',
             'personeditor-opusvier-2484',
             'personreferee-opusvier-2484',
             'personother-opusvier-2484',
-            'persontranslator-opusvier-2484',
-        );
+            'persontranslator-opusvier-2484'
+        ];
+
         foreach ($persons as $person) {
             $this->dispatch('/solrsearch/index/search/searchtype/simple/query/' . $person);
 
-            $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());
-            $this->assertContains('test document for OPUSVIER-2484', $this->getResponse()->getBody());
-            $this->assertContains($person, $this->getResponse()->getBody());
+            $this->assertResponseCode(200);
+
+            $body = $this->getResponse()->getBody();
+
+            $this->assertContains($person, $body);
+            $this->assertContains('test document for OPUSVIER-2484', $body);
 
             $this->getResponse()->clearAllHeaders();
             $this->getResponse()->clearBody();
+            $this->resetResponse();
         }
 
+        // check that submitter is not considered in search result
         $this->dispatch('/solrsearch/index/search/searchtype/simple/query/personsubmitter-opusvier-2484');
 
         $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());
@@ -1279,4 +1292,31 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
             '(0)');
     }
 
+    public function robotsTestProvider()
+    {
+        return [
+            ['/solrsearch'],
+            ['/solrsearch/index/index/searchtype/all'],
+            ['/solrsearch/index/search/searchtype/latest'],
+            ['/solrsearch/browse'],
+            ['/solrsearch/browse/doctypes'],
+            ['/home', null],
+            ['/publish'],
+            ['/auth/login']
+        ];
+    }
+
+    /**
+     * @dataProvider robotsTestProvider
+     */
+    public function testIndexRobotsNoindexNofollow($uri, $result = 'noindex, nofollow')
+    {
+        $this->dispatch($uri);
+
+        if (!is_null($result)) {
+            $this->assertXpath("//meta[@name='robots' and @content='$result']");
+        } else {
+            $this->assertNotXpath('//meta[@name="robots"]');
+        }
+    }
 }

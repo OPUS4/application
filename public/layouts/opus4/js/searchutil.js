@@ -73,3 +73,12 @@ function toggleAbstract($docId) {
         $toggle.addClass('collapsed').removeClass('expanded');
     }
 }
+
+/* TODO OPUSVIER-3742 Translate message and perhaps make message dynamic depending on export size.
+$( document).ready(function() {
+    $('a.export').click(function() {
+        if (!confirm('Attention:\nThe export may take\n several seconds. Continue?')) {
+            return false;
+        };
+    })
+});*/

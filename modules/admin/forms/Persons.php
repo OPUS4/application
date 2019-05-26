@@ -124,8 +124,10 @@ class Admin_Form_Persons extends Application_Form_Model_Abstract
         $this->addElement('combobox', self::ELEMENT_ACADEMIC_TITLE, array('label' => 'AcademicTitle'));
 
         $this->addElement(
-            'text', self::ELEMENT_LAST_NAME,
-            array('label' => 'LastName', 'required' => true, 'size' => 50)
+            'text', self::ELEMENT_LAST_NAME, [
+                'label' => 'LastName', 'required' => true, 'size' => 50,
+                'maxlength' => Opus_Person::getFieldMaxLength('LastName')
+            ]
         );
         $this->addElement('text', self::ELEMENT_FIRST_NAME, array('label' => 'FirstName', 'size' => 50));
 
@@ -351,8 +353,13 @@ class Admin_Form_Persons extends Application_Form_Model_Abstract
                     // TODO this date conversion stuff is still too complicated
                     $dateHelper = new Application_Controller_Action_Helper_Dates();
                     $date = $dateHelper->getOpusDate($value); // get a date with time
-                    $date->setDateOnly($date->getDateTime()); // remove time
-                    $value = $date->__toString(); // get properly formatted string
+                    if ($date !== null) {
+                        $date->setDateOnly($date->getDateTime()); // remove time
+                        $value = $date->__toString(); // get properly formatted string
+                    }
+                    else {
+                        $value = null;
+                    }
                 }
 
                 if (strlen(trim($value)) == 0) {

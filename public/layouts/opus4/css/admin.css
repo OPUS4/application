@@ -2381,3 +2381,21 @@ ul.permissions-list li:nth-child(even) {
 ul.permissions-list input[type=checkbox] {
     margin-right: 1em;
 }
+
+#fieldset-Translations dl {
+    padding-left: 1em;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+#fieldset-Translations .label {
+    width: 8em;
+}
+
+#fieldset-Translations .field {
+    width: 80%;
+}
+
+.adminContainer #fieldset-Enrichments td {
+    vertical-align: top;
+}

@@ -27,7 +27,7 @@
  * @category    Tests
  * @author      Jens Schwidder <schwidder@zib.de>
  * @author      Maximilian Salomon <salomon@zib.de>
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -41,6 +41,8 @@ class Admin_DnbinstituteControllerTest extends CrudControllerTestCase {
     private $roleId;
     private $userId;
 
+    private $testModels = [];
+
     public function setUp() {
         $this->setController('dnbinstitute');
         parent::setUp();
@@ -53,6 +55,11 @@ class Admin_DnbinstituteControllerTest extends CrudControllerTestCase {
             $userAccount = new Opus_Account($this->userId);
             $userAccount->delete();
         }
+
+        foreach($this->testModels as $model) {
+            $model->delete();
+        }
+
         parent::tearDown();
     }
 
@@ -240,21 +247,32 @@ class Admin_DnbinstituteControllerTest extends CrudControllerTestCase {
      * Testet, ob der Benutzer auf DNB-Institute zugreifen kann, wenn ihm keine Rechte dazu verliehen wurden.
      */
 
-    public function testDeleteActionShowForm() {
+    public function testDeleteActionShowForm()
+    {
         $this->useEnglish();
 
-        $this->dispatch('/admin/dnbinstitute/delete/id/1');
+        $institute = new Opus_DnbInstitute();
+
+        $institute->updateFromArray([
+            'Name' => 'Delete Test Institute',
+            'City' => 'Berlin'
+        ]);
+
+        $instituteId = $institute->store();
+
+        $this->testModels[] = $institute;
+
+        $this->dispatch("/admin/dnbinstitute/delete/id/$instituteId");
 
         $this->assertQueryContentContains('legend', 'Delete Institute');
-        $this->assertQueryContentContains('span.displayname', 'Foobar Universität, Testwissenschaftliche Fakultät');
+        $this->assertQueryContentContains('span.displayname', 'Delete Test Institute');
         $this->assertQuery('input#ConfirmYes');
         $this->assertQuery('input#ConfirmNo');
     }
+
     /*
      * Testet, ob der Benutzer auf DNB-Institute zugreifen kann, wenn ihm Rechte dazu verliehen wurden.
      */
-
-
     public function testUserAccessToInstituteWithInstituteRights() {
         $testRole = new Opus_UserRole();
         $testRole->setName('TestRole');
@@ -278,7 +296,6 @@ class Admin_DnbinstituteControllerTest extends CrudControllerTestCase {
         $this->assertQueryContentContains('//label', 'Department', 'User is not able to edit dnb-institutions, '.
             'although he has the right to do it');
     }
-
 
     /*
      * Testet, ob der Benutzer auf DNB-Institute zugreifen kann, wenn ihm keine Rechte dazu verliehen wurden.
@@ -336,6 +353,5 @@ class Admin_DnbinstituteControllerTest extends CrudControllerTestCase {
         $this->assertQueryContentContains('//label', 'Department', 'User is not able to edit dnb-institutions, '.
             'although he has the right to do it');
     }
-
 }
 

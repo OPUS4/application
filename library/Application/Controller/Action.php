@@ -109,9 +109,9 @@ class Application_Controller_Action extends Application_Controller_ModuleAccess 
     /**
      * Gibt das Formular aus wenn kein ViewScript vorhanden ist.
      *
-     * Durch diese Funktion können die ganzen View Scripte, die nur ein Formular ausgeben eingespart werden. Der
-     * Controller ruft einfach diese Funktion auf, wenn ein Formular ausgegeben werde sollte. Wenn doch ein View
-     * Skript für die Action existiert, dann wird das Formular in der View Variable 'form' gespeichert und kann
+     * Durch diese Funktion können die ganzen View Scripte, die nur ein Formular ausgeben, eingespart werden. Der
+     * Controller ruft einfach diese Funktion auf, wenn ein Formular ausgegeben werden sollte. Wenn doch ein View
+     * Script für die Action existiert, dann wird das Formular in der View Variable 'form' gespeichert und kann
      * im View Script verwendet werden.
      *
      * @param $form

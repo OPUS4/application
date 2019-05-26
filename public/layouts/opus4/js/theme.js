@@ -10,11 +10,11 @@ $(document).ready(function() {
 
 	// normalize box-heights
     var max = 0;
-        $('#adminMenuContainer ul > li > *').each(function(){  
-			if($(this).height() > max){  
-			max = $(this).height();  
+        $('#adminMenuContainer ul > li > *').each(function(){
+			if($(this).height() > max){
+			max = $(this).height();
         }
-    });    
+    });
     $('#adminMenuContainer ul > li > *').height(max);
 
 	// ActionBox
@@ -40,7 +40,7 @@ $(document).ready(function() {
 		});
 		$(window).trigger("scroll");
 	}
-	
+
 	// DropDown behaviour
 	$(".dropdown > dt > a").click(function(event) {
 		$(this).closest(".dropdown").toggleClass("dropdown-open");
@@ -71,16 +71,65 @@ $(document).ready(function() {
 		}
 	});
 
-    // add autocomplete to GND subject input
+    // Add autocomplete to GND subject input
+	// Response can contain: 'value', 'extkey' and 'label'
     $( '.subject' ).autocomplete({
         source: window.opusBaseUrl + "/admin/autocomplete/subject",
         minLength: 2,
         select: function(event, ui) {
-            // automaticaly set external key field
-            if (typeof ui.item.extkey !== 'undefinded') {
-                var elemId = "#" + this.id.replace('Value', 'ExternalKey');
+            // automaticaly set external key field or clear value
+			var elemId = "#" + this.id.replace('Value', 'ExternalKey');
+            if (typeof ui.item.extkey !== 'undefined' && ui.item.extkey) {
                 $(elemId).val(ui.item.extkey);
-            }
+            } else {
+				$(elemId).val(null);
+			}
         }
     });
+
+    // handle change of enrichment type in enrichment key create / edit form
+    $("#admin_enrichmentkey_type").change(function() {
+    	var optionsElement = $("#admin_enrichmentkey_options");
+    	if (optionsElement) {
+			// Konfigurationseinstellung für Enrichment Type löschen
+			optionsElement.val("");
+
+			var enrichmentTypeSelected = $(this).val();
+			if (enrichmentTypeSelected === "") {
+				// bei Auswahl der Defaultauswahl wird keine Beschreibung angezeigt
+				optionsElement.next(".hint").html("");
+			}
+			else {
+				// hole die Beschreibung für den ausgewählten Enrichment Type vom Server
+				$.get(window.opusBaseUrl + "/admin/autocomplete/enrichmentTypeDescription", { typeName: enrichmentTypeSelected }, function(data) {
+					var optionsElement = $("#admin_enrichmentkey_options");
+					if (optionsElement) {
+						optionsElement.next(".hint").html(data.typeName);
+					}
+				});
+			}
+		}
+	});
+
+    // handle change of enrichment key in document metadata form
+    $("select.enrichmentKeyName").change(function () {
+		var that = $(this);
+
+		var name = that.attr("id");
+		var inputElement = $("#" + name.replace("KeyName", "Value"));
+		if (inputElement) {
+			// Wert des Formularfelds löschen, so dass beim Umschalten des EnrichmentKeys kein Wert erscheint
+			inputElement.val("");
+		}
+
+		var form = that.closest("form");
+		// add input element to support currentAnchor mechanism
+		var input = $("<input>")
+			.attr("type", "hidden")
+			.attr("name", "Document[Enrichments][SelectionChanged]");
+		form.append(input);
+
+		form.submit();
+	});
+
 });
