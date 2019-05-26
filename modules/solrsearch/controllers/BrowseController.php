@@ -50,6 +50,7 @@ class Solrsearch_BrowseController extends Application_Controller_Action {
         parent::init();
         $this->_helper->mainMenu('browsing');
         $this->seriesUtil = new Solrsearch_Model_SeriesUtil();
+        $this->view->robots = 'noindex, nofollow';
     }
 
     public function indexAction() {

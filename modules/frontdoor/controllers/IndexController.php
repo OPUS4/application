@@ -381,6 +381,10 @@ class Frontdoor_IndexController extends Application_Controller_Action
         $request = $this->getRequest();
         $docId = $request->getParam('docId', '');
 
+        if (is_array($docId)) {
+            $docId = end($docId);
+        }
+
         $messages = null;
 
         if ($request->has('searchtype') && $request->has('rows') && $request->has('start'))

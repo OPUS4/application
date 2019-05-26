@@ -39,7 +39,7 @@
 class Frontdoor_MailControllerTest extends ControllerTestCase {
 
     private $documentId;
-    
+
     private $authorDocumentId;
     private $authorId;
 
@@ -52,7 +52,7 @@ class Frontdoor_MailControllerTest extends ControllerTestCase {
         $title = new Opus_Title();
         $title->setValue('foobartitle');
         $title->setLanguage('deu');
-        $document->setTitleMain($title);       
+        $document->setTitleMain($title);
 
         $this->documentId = $document->store();
         $this->assertNotNull($this->documentId);
@@ -124,6 +124,14 @@ class Frontdoor_MailControllerTest extends ControllerTestCase {
 
     public function testToauthorActionWithValidPost() {
         $this->markTestIncomplete('TODO');
+    }
+
+    public function testToauthorDuplicateDocIdParameter()
+    {
+        $this->dispatch('/frontdoor/mail/toauthor/docId/147/docId/146');
+        $this->assertResponseCode(200);
+        $this->assertContains('<b>KOBV</b>', $this->getResponse()->getBody());
+
     }
 
 }

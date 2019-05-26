@@ -1292,4 +1292,31 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
             '(0)');
     }
 
+    public function robotsTestProvider()
+    {
+        return [
+            ['/solrsearch'],
+            ['/solrsearch/index/index/searchtype/all'],
+            ['/solrsearch/index/search/searchtype/latest'],
+            ['/solrsearch/browse'],
+            ['/solrsearch/browse/doctypes'],
+            ['/home', null],
+            ['/publish'],
+            ['/auth/login']
+        ];
+    }
+
+    /**
+     * @dataProvider robotsTestProvider
+     */
+    public function testIndexRobotsNoindexNofollow($uri, $result = 'noindex, nofollow')
+    {
+        $this->dispatch($uri);
+
+        if (!is_null($result)) {
+            $this->assertXpath("//meta[@name='robots' and @content='$result']");
+        } else {
+            $this->assertNotXpath('//meta[@name="robots"]');
+        }
+    }
 }

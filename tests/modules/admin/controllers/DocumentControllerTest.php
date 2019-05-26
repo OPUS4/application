@@ -521,7 +521,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase
         $this->assertQueryContentContains('//*[@id="Document-Content-Subjects-Uncontrolled-Subject0-Value"]', 'Palmöl');
 
         // Identifier
-        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-IdentifiersDOI-IdentifierDOI0-Value"]', '123');
+        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-IdentifiersDOI-IdentifierDOI0-Value"]', '10.1007/978-3-540-76406-9');
 
         $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-IdentifiersURN-IdentifierURN0-Value"]', 'urn:nbn:op:123');
 
@@ -756,7 +756,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase
         $this->assertQueryContentContains('//*[@id="Document-Content-Subjects-Uncontrolled-Subject0-Value"]', 'Palmöl');
 
         // Identifier
-        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-IdentifiersDOI-IdentifierDOI0-Value"]', '123');
+        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-IdentifiersDOI-IdentifierDOI0-Value"]', '10.1007/978-3-540-76406-9');
 
         $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-IdentifiersURN-IdentifierURN0-Value"]', 'urn:nbn:op:123');
 
