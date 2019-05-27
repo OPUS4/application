@@ -139,7 +139,7 @@ class Admin_Form_Document_MultiEnrichmentSubForm extends Admin_Form_Document_Mul
             $subForm = reset($subForms);
             // das erste Unterformular auswählen als Sprungziel nach dem Neuladen
             // des Metadatenformulars
-            $this->_addAnker($subForm);
+            $this->_addAnchor($subForm);
         }
     }
 
