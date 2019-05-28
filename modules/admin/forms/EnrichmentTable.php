@@ -37,6 +37,24 @@
 
 class Admin_Form_EnrichmentTable extends Application_Form_Model_Table
 {
+    private $enrichmentKeys;
+
+    public function init()
+    {
+        $this->enrichmentKeys = new Admin_Model_EnrichmentKeys();
+        parent::init();
+    }
+
+    public function isProtected($model)
+    {
+        return in_array($model->getId(), $this->enrichmentKeys->getProtectedEnrichmentKeys());
+    }
+
+    public function isUsed($model)
+    {
+        return in_array($model->getId(), Opus_EnrichmentKey::getAllReferenced());
+    }
+
     public function getRowCssClass($model)
     {
         if ($this->isProtected($model) and $this->isUsed($model)) {
