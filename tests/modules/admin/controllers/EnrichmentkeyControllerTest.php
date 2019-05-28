@@ -593,7 +593,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
      *
      * @covers ::isProtected
      */
-    public function testSetProtectedCssClassTrue()
+    public function testProtectedCssClassIsset()
     {
         $enrichmentKeys = new Admin_Model_EnrichmentKeys();
         $protectedKeys = $enrichmentKeys->getProtectedEnrichmentKeys();
@@ -604,7 +604,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
             if (strpos($response->getBody(), $value) !== false) {
                 // Xpath looks, if value has an protected css-class in enrichmentkeyTable
                 $this->assertXpathContentContains('//table[@id="enrichmentkeyTable"]
-                //*[contains(@class,\'protected\')]', $value);
+                //tr[contains(@class,\'protected\')]', $value);
             }
         }
     }
@@ -614,7 +614,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
      *
      * @covers ::isUsed
      */
-    public function testSetUsedCssClassTrue()
+    public function testUsedCssClassIsset()
     {
         $usedKeys =  Opus_EnrichmentKey::getAllReferenced();
         $this->dispatch($this->getControllerPath());
@@ -624,7 +624,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
             if (strpos($response->getBody(), $value) !== false) {
                 // Xpath looks, if value has an used css-class in enrichmentkeyTable
                 $this->assertXpathContentContains('//table[@id="enrichmentkeyTable"]
-                //*[contains(@class,\'used\')]', $value);
+                //tr[contains(@class,\'used\')]', $value);
             }
         }
     }
@@ -634,7 +634,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
      *
      * @covers ::isProtected
      */
-    public function testSetProtectedCssClassFalse()
+    public function testProtectedCssClassIsNotSet()
     {
         $enrichmentKeys = new Admin_Model_EnrichmentKeys();
         $unprotectedKeys = array_diff($this->allEnrichmentKeys, $enrichmentKeys->getProtectedEnrichmentKeys());
@@ -645,7 +645,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
             if (strpos($response->getBody(), $value) !== false) {
                 // Xpath looks, if value has an protected css-class in enrichmentkeyTable
                 $this->assertNotXpathContentContains('//table[@id="enrichmentkeyTable"]
-                //*[contains(@class,\'protected\')]', $value);
+                //tr[contains(@class,\'protected\')]', $value);
             }
         }
     }
@@ -655,7 +655,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
      *
      * @covers ::isUsed
      */
-    public function testSetUsedCssClassFalse()
+    public function testUsedCssClassIsNotSet()
     {
         $unusedKeys = array_diff($this->allEnrichmentKeys, Opus_EnrichmentKey::getAllReferenced());
         $this->dispatch($this->getControllerPath());
@@ -665,7 +665,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
             if (strpos($response->getBody(), $value) !== false) {
                 // Xpath looks, if value has an unused css-class in enrichmentkeyTable
                 $this->assertXpathContentContains('//table[@id="enrichmentkeyTable"]
-                //*[contains(@class,\'unused\')]', $value);
+                //tr[contains(@class,\'unused\')]', $value);
             }
         }
     }
