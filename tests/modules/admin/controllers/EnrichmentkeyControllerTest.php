@@ -36,15 +36,22 @@
 /**
  * Basic unit tests for Admin_EnrichmentkeyController class.
  *
- * @covers Admin_EnrichmentkeyController
+ * @coversDefaultClass Admin_EnrichmentkeyController
  */
 class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
 {
+    /**
+     * @var all enrichment keys
+     */
+    private $allEnrichmentKeys = array();
 
     public function setUp()
     {
         $this->setController('enrichmentkey');
         parent::setUp();
+        foreach (Opus_EnrichmentKey::getAll() as $value) {
+            array_push($this->allEnrichmentKeys, $value->getDisplayName());
+        }
     }
 
     public function getModels()
@@ -578,6 +585,88 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         foreach ($allEnrichmentTypes as $enrichmentType) {
             $this->assertXpathContentContains('//select/option[' . $index . ']', $enrichmentType);
             $index++;
+        }
+    }
+
+    /**
+     * Tests the function isProtected()
+     *
+     * @covers ::isProtected
+     */
+    public function testProtectedCssClassIsset()
+    {
+        $enrichmentKeys = new Admin_Model_EnrichmentKeys();
+        $protectedKeys = $enrichmentKeys->getProtectedEnrichmentKeys();
+        $this->dispatch($this->getControllerPath());
+        $response = $this->getResponse();
+        $this->checkForBadStringsInHtml($response->getBody());
+        foreach ($protectedKeys as &$value) {
+            if (strpos($response->getBody(), $value) !== false) {
+                // Xpath looks, if value has an protected css-class in enrichmentkeyTable
+                $this->assertXpathContentContains('//table[@id="enrichmentkeyTable"]
+                //tr[contains(@class,\'protected\')]', $value);
+            }
+        }
+    }
+
+    /**
+     * Tests the function isUsed()
+     *
+     * @covers ::isUsed
+     */
+    public function testUsedCssClassIsset()
+    {
+        $usedKeys =  Opus_EnrichmentKey::getAllReferenced();
+        $this->dispatch($this->getControllerPath());
+        $response = $this->getResponse();
+        $this->checkForBadStringsInHtml($response->getBody());
+        foreach ($usedKeys as &$value) {
+            if (strpos($response->getBody(), $value) !== false) {
+                // Xpath looks, if value has an used css-class in enrichmentkeyTable
+                $this->assertXpathContentContains('//table[@id="enrichmentkeyTable"]
+                //tr[contains(@class,\'used\')]', $value);
+            }
+        }
+    }
+
+    /**
+     * Tests the function isProtected()
+     *
+     * @covers ::isProtected
+     */
+    public function testProtectedCssClassIsNotSet()
+    {
+        $enrichmentKeys = new Admin_Model_EnrichmentKeys();
+        $unprotectedKeys = array_diff($this->allEnrichmentKeys, $enrichmentKeys->getProtectedEnrichmentKeys());
+        $this->dispatch($this->getControllerPath());
+        $response = $this->getResponse();
+        $this->checkForBadStringsInHtml($response->getBody());
+        foreach ($unprotectedKeys as &$value) {
+            if (strpos($response->getBody(), $value) !== false) {
+                // Xpath looks, if value has an protected css-class in enrichmentkeyTable
+                $this->assertNotXpathContentContains('//table[@id="enrichmentkeyTable"]
+                //tr[contains(@class,\'protected\')]', $value);
+            }
+        }
+    }
+
+    /**
+     * Tests the function isUsed()
+     *
+     * @covers ::isUsed
+     */
+    public function testUsedCssClassIsNotSet()
+    {
+        $unusedKeys = array_diff($this->allEnrichmentKeys, Opus_EnrichmentKey::getAllReferenced());
+        $this->dispatch($this->getControllerPath());
+        $response = $this->getResponse();
+        $this->checkForBadStringsInHtml($response->getBody());
+        foreach ($unusedKeys as &$value) {
+            if (strpos($response->getBody(), $value) !== false) {
+                // Xpath looks, if value has an unused css-class in enrichmentkeyTable
+                $this->assertXpathContentContains('//table[@id="enrichmentkeyTable"]
+                //tr[contains(@class,\'unused\')]', $value);
+            }
         }
     }
 }

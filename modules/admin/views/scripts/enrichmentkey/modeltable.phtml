@@ -32,7 +32,7 @@
  */
 ?>
 
-<table>
+<table id="enrichmentkeyTable">
     <thead>
     <tr>
         <th class="visible"><?= $this->translate($this->element->getColumnLabel(0)) ?>
@@ -42,14 +42,21 @@
     </tr>
     </thead>
     <?PHP foreach($this->element->getModels() as $model) : ?>
-        <tr>
+        <tr class="<?= $this->element->getRowCssClass($model)?>"
+            title="<?= htmlspecialchars($this->translate($this->element->getRowTooltip($model))) ?>"
+        >
             <td>
                 <?PHP if ($this->element->isRenderShowActionLink($model)) : ?>
                     <a href="<?= $this->url(array('action' => 'show', 'id' => $model->getId())) ?>"
-                       class="displayname<?= (is_null($model->getField('Active')) || $model->getActive()) ? '' : ' invisible'?>"
+                       class="displayname <?= (is_null($model->getField('Active')) || $model->getActive()) ? '' : ' invisible'?>"
                     ><?= htmlspecialchars($model->getDisplayName()) ?></a>
                 <?PHP else : ?>
                     <?= htmlspecialchars($model->getDisplayName()) ?>
+                <?PHP endif ?>
+                <?PHP if ($this->element->isProtected($model)) : ?>
+                <i class="fa fa-lock"
+                   title="<?= htmlspecialchars($this->translate('admin_enrichmentkey_protected_tooltip')); ?>"
+                   aria-hidden="true"></i>
                 <?PHP endif ?>
             </td>
             <td>
