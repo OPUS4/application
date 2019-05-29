@@ -169,9 +169,14 @@ class Application_Form_Model_Table extends Application_Form_Abstract {
      * @param $model Model object
      * @return bool true - link should be rendered
      */
-    public function isRenderShowActionLink($model) {
+    public function isRenderShowActionLink($model)
+    {
         if (!is_null($this->_controller)) {
-            return $this->_controller->getShowActionEnabled();
+            if (!method_exists($this->_controller, 'getShowActionEnabled')) {
+                throw new InvalidArgumentException('The used controller does not have the method getShowActionEnabled.');
+            } else {
+                return $this->_controller->getShowActionEnabled();
+            }
         }
         else {
             return true;
@@ -186,7 +191,11 @@ class Application_Form_Model_Table extends Application_Form_Abstract {
     public function isModifiable($model)
     {
         if (!is_null($this->_controller)) {
-            return $this->_controller->isModifiable($model);
+            if (!method_exists($this->_controller, 'isModifiable')) {
+                throw new InvalidArgumentException('The used controller does not have the method isModifiable.');
+            } else {
+                return $this->_controller->isModifiable($model);
+            }
         } else {
             return true;
         }
@@ -200,7 +209,11 @@ class Application_Form_Model_Table extends Application_Form_Abstract {
     public function isDeletable($model)
     {
         if (!is_null($this->_controller)) {
-            return $this->_controller->isDeletable($model);
+            if (!method_exists($this->_controller, 'isDeletable')) {
+                throw new InvalidArgumentException('The used controller does not have the method isDeletable.');
+            } else {
+                return $this->_controller->isDeletable($model);
+            }
         } else {
             return true;
         }
@@ -209,7 +222,11 @@ class Application_Form_Model_Table extends Application_Form_Abstract {
     public function isUsed($model)
     {
         if (!is_null($this->_controller)) {
-            return $this->_controller->isUsed($model);
+            if (!method_exists($this->_controller, 'isUsed')) {
+                throw new InvalidArgumentException('The used controller does not have the method isUsed.');
+            } else {
+                return $this->_controller->isUsed($model);
+            }
         } else {
             return false;
         }
@@ -218,7 +235,11 @@ class Application_Form_Model_Table extends Application_Form_Abstract {
     public function isProtected($model)
     {
         if (!is_null($this->_controller)) {
-            return $this->_controller->isProtected($model);
+            if (!method_exists($this->_controller, 'isProtected')) {
+                throw new InvalidArgumentException('The used controller does not have the method isProtected.');
+            } else {
+                return $this->_controller->isProtected($model);
+            }
         } else {
             return false;
         }
@@ -227,7 +248,11 @@ class Application_Form_Model_Table extends Application_Form_Abstract {
     public function getRowCssClass($model)
     {
         if (!is_null($this->_controller)) {
-            return $this->_controller->getRowCssClass($model);
+            if (!method_exists($this->_controller, 'getRowCssClass')) {
+                throw new InvalidArgumentException('The used controller does not have the method getRowCssClass.');
+            } else {
+                return $this->_controller->getRowCssClass($model);
+            }
         } else {
             return null;
         }
@@ -236,7 +261,11 @@ class Application_Form_Model_Table extends Application_Form_Abstract {
     public function getRowTooltip($model)
     {
         if (!is_null($this->_controller)) {
-            return $this->_controller->getRowTooltip($model);
+            if (!method_exists($this->_controller, 'getRowTooltip')) {
+                throw new InvalidArgumentException('The used controller does not have the method getRowTooltip.');
+            } else {
+                return $this->_controller->getRowTooltip($model);
+            }
         } else {
             return null;
         }

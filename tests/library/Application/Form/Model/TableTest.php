@@ -169,4 +169,81 @@ class Application_Form_Model_TableTest extends ControllerTestCase
 
         $this->assertNull($form->getRowTooltip(null));
     }
+
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testIsRenderShowActionLinkException()
+    {
+        $form = new Application_Form_Model_Table();
+        $mock = $this->getMockBuilder(Zend_Controller_Action_Interface::class)->getMock();
+        $form->setController($mock);
+        $form->isRenderShowActionLink(null);
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testIsModifiableException()
+    {
+        $form = new Application_Form_Model_Table();
+        $mock = $this->getMockBuilder(Zend_Controller_Action_Interface::class)->getMock();
+        $form->setController($mock);
+        $form->isModifiable(null);
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testIsDeletableException()
+    {
+        $form = new Application_Form_Model_Table();
+        $mock = $this->getMockBuilder(Zend_Controller_Action_Interface::class)->getMock();
+        $form->setController($mock);
+        $form->isDeletable(null);
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testIsUsedException()
+    {
+        $form = new Application_Form_Model_Table();
+        $mock = $this->getMockBuilder(Zend_Controller_Action_Interface::class)->getMock();
+        $form->setController($mock);
+        $form->isUsed(null);
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testIsProtectedException()
+    {
+        $form = new Application_Form_Model_Table();
+        $mock = $this->getMockBuilder(Zend_Controller_Action_Interface::class)->getMock();
+        $form->setController($mock);
+        $form->isProtected(null);
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testGetRowCssClassException()
+    {
+        $form = new Application_Form_Model_Table();
+        $mock = $this->getMockBuilder(Zend_Controller_Action_Interface::class)->getMock();
+        $form->setController($mock);
+        $form->getRowCssClass(null);
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testGetRowTooltipException()
+    {
+        $form = new Application_Form_Model_Table();
+        $mock = $this->getMockBuilder(Zend_Controller_Action_Interface::class)->getMock();
+        $form->setController($mock);
+        $form->getRowTooltip(null);
+    }
 }
