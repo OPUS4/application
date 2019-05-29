@@ -42,7 +42,7 @@
         <seg>Sprachen verwalten</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="acl_resource_licences">
       <tuv xml:lang="en">
         <seg>Manage licences</seg>
@@ -159,7 +159,7 @@
         <seg>FAQ-Seiten verwalten</seg>
       </tuv>
     </tu>
-                
+
     <tu tuid="acl_resource_staticpages">
       <tuv xml:lang="en">
           <seg>Manage Static Pages</seg>
@@ -177,7 +177,34 @@
         <seg>Übersetzungsressourcen verwalten</seg>
       </tuv>
     </tu>
-                            
+
+    <tu tuid="acl_resource_persons">
+      <tuv xml:lang="en">
+        <seg>View and edit persons</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Personenverwaltung</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="acl_resource_options">
+      <tuv xml:lang="en">
+        <seg>Settings</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Einstellungen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="acl_resource_doi_notification">
+      <tuv xml:lang="en">
+        <seg>DOI Notifications</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>DOI Benachrichtigungen</seg>
+      </tuv>
+    </tu>
+
   </body>
 
 </tmx>

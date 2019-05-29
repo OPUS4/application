@@ -27,14 +27,15 @@
  * @category    Application
  * @package     View
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2016, OPUS 4 development team
+ * @copyright   Copyright (c) 2016-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
  * View helper for translations modifying behaviour of base class.
  */
-class Application_View_Helper_Translate extends Zend_View_Helper_Translate {
+class Application_View_Helper_Translate extends Zend_View_Helper_Translate
+{
 
     /**
      * Changes default behaviour of translate function to return empty string for null values.
@@ -49,41 +50,41 @@ class Application_View_Helper_Translate extends Zend_View_Helper_Translate {
      *
      * TODO replace parent function entirely? Doing basically same things twice is not very efficient.
      * TODO really try to get rid of this
+     * TODO review if the behaviour changes are worth it - is there a better way?
      */
-    public function translate($messageid = -1.1) {
+    public function translate($messageid = -1.1)
+    {
         if (is_null($messageid)) {
             return '';
-        }
-        else if ($messageid === -1.1) {
-            $messageid = null;
+        } else if ($messageid === -1.1) {
+            return $this;
         }
 
         $options = func_get_args();
         array_shift($options);
 
+        $optCount = count($options);
+
         $locale = null;
 
-        $count = count($options);
-
-        if ($count > 1)
-        {
-            if (Zend_Locale::isLocale($options[($count - 1)], null, false) !== false) {
+        if (($optCount === 1) and (is_array($options[0]) === true)) {
+            $options = $options[0];
+        } else if ($optCount > 1) {
+            if (Zend_Locale::isLocale($options[$optCount - 1])) {
                 $locale = array_pop($options);
             }
         }
 
-        if ((count($options) === 1) and (is_array($options[0]) === true)) {
-            $options = $options[0];
+        $translate = $this->getTranslator();
+
+        if ($translate !== null) {
+            $messageid = $translate->translate($messageid, $locale);
         }
 
-        if (is_null($locale))
-        {
-            return parent::translate($messageid, $options);
+        if (count($options) === 0) {
+            return $messageid;
         }
-        else
-        {
-            return parent::translate($messageid, $options, $locale);
-        }
+
+        return vsprintf($messageid, $options);
     }
-
 }

@@ -26,7 +26,7 @@
  *
  * @category    Application Tests
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -72,10 +72,6 @@ Zend_Registry::set('opus.disableDatabaseVersionCheck', true);
 // Bootstrapping application
 $application->bootstrap('Backend');
 
-$config = Zend_Registry::get('Zend_Config');
-
-$config = $config->merge(new Zend_Config_Ini(dirname(__FILE__) . '/config.ini'));
-
 /**
  * Prepare database.
  */
@@ -93,8 +89,7 @@ $database->create();
 echo('done' . PHP_EOL);
 
 echo(PHP_EOL . "Importing database schema ... " . PHP_EOL);
-// TODO move into $database->create()?
-$database->import(APPLICATION_PATH . '/db/schema/opus4schema.sql');
+$database->importSchema();
 
 echo(PHP_EOL . 'Import master data ... ' . PHP_EOL);
 $database->import(APPLICATION_PATH . '/db/masterdata');

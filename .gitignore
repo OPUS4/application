@@ -10,6 +10,7 @@ vendor
 
 # ignore composer runtime
 composer.phar
+composer.lock
 
 # ignore all workspace files
 workspace/**/*
@@ -19,8 +20,7 @@ apacheconf/apache.conf
 application/configs/config.ini
 application/configs/config.xml
 application/configs/console.ini
-db/createdb.sh
-public/.htaccess
+
 public/js
 public/series_logos
 public/assets
@@ -29,6 +29,7 @@ build/
 tests/build/
 tests/config.ini
 tests/workspace/**/*
+cache.properties
 
 downloads
 components
@@ -39,3 +40,4 @@ opus4-solr-jetty.conf
 # IDE files
 .idea
 *.iml
+nbproject

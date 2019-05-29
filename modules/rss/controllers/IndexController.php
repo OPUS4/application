@@ -29,7 +29,7 @@
  * @author      Sascha Szott <szott@zib.de>
  * @author      Michael Lang <lang@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  *
  * TODO context spezifische Titel für RSS feed (latest, collections, ...)
@@ -39,28 +39,39 @@
 class Rss_IndexController extends Application_Controller_Xml {
 
     const NUM_OF_ITEMS_PER_FEED = '25';
+
     const RSS_SORT_FIELD = 'server_date_published';
+
     const RSS_SORT_ORDER = 'desc';
 
     public function init() {
         parent::init();
     }
 
+    /**
+     * @throws Application_Exception
+     *
+     * TODO function should only call performSearch instead of doing the search steps separately
+     */
     public function indexAction() {
-        $queryBuilder = new Application_Util_QueryBuilder($this->getLogger(), true);
-
         // support backward compatibility: interpret missing parameter searchtype as latest search
-        if (is_null($this->getRequest()->getParam('searchtype', null))) {
-            $this->getRequest()->setParam('searchtype', Application_Util_Searchtypes::LATEST_SEARCH);
-        }
+        $searchType = $this->getRequest()->getParam('searchtype', Application_Util_Searchtypes::LATEST_SEARCH);
+
+        $search = Application_Util_Searchtypes::getSearchPlugin($searchType);
 
         $params = array();
+
         try {
-            $params = $queryBuilder->createQueryBuilderInputFromRequest($this->getRequest());
+            $params = $search->createQueryBuilderInputFromRequest($this->getRequest());
         }
-        catch (Application_Util_QueryBuilderException $e) {
+        catch (Application_Search_QueryBuilderException $e) {
             $this->getLogger()->err(__METHOD__ . ' : ' . $e->getMessage());
-            throw new Application_Exception($e->getMessage());
+            $applicationException = new Application_Exception($e->getMessage());
+            $code = $e->getCode();
+            if ($code != 0) {
+                $applicationException->setHttpResponseCode($code);
+            }            
+            throw $applicationException;
         }
 
         // overwrite parameters in rss context
@@ -74,7 +85,7 @@ class Rss_IndexController extends Application_Controller_Xml {
         $resultList = array();
         try {
             $searcher = new Opus_SolrSearch_Searcher();
-            $resultList = $searcher->search($queryBuilder->createSearchQuery($params));
+            $resultList = $searcher->search($search->createSearchQuery($params));
         }
         catch (Opus_SolrSearch_Exception $exception) {
             $this->handleSolrError($exception);

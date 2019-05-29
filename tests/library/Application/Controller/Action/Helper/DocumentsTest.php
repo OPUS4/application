@@ -25,10 +25,10 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application Unit Tests
+ * @package     Application_Controller_Action_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 class Application_Controller_Action_Helper_DocumentsTest extends ControllerTestCase {
@@ -72,6 +72,72 @@ class Application_Controller_Action_Helper_DocumentsTest extends ControllerTestC
         $docId = -1;
 
         $this->assertNull($this->documents->getDocumentForId($docId));
+    }
+
+    public function testGetSortedDocumentIds()
+    {
+        $documents = $this->documents->getSortedDocumentIds();
+
+        $this->assertNotNull($documents);
+        $this->assertInternalType('array', $documents);
+
+        $lastId = 0;
+
+        foreach ($documents as $value) {
+            $this->assertTrue(ctype_digit($value));
+            $this->assertGreaterThan($lastId, $value); // check ascending order
+            $lastId = $value;
+        }
+    }
+
+    public function testGetSortedDocumentIdsDescending()
+    {
+        $documents = $this->documents->getSortedDocumentIds(null, false);
+
+        $this->assertNotNull($documents);
+        $this->assertInternalType('array', $documents);
+
+        $lastId = max($documents) + 1; // start with something greater than the greatest ID
+
+        foreach ($documents as $value) {
+            $this->assertTrue(ctype_digit($value));
+            $this->assertLessThan($lastId, $value); // check descending order
+            $lastId = $value;
+        }
+    }
+
+    public function stateProvider()
+    {
+        return array(
+            'published' => ['published'],
+            'restricted' => ['restricted'],
+            'unpublished' => ['unpublished'],
+            'deleted' => ['deleted'],
+            'inprogress' => ['inprogress'],
+            'audited' => ['audited']
+        );
+    }
+
+    /**
+     * @param $state
+     * @dataProvider stateProvider
+     */
+    public function testGetSortedDocumentIdsForState($state)
+    {
+        $documents = $this->documents->getSortedDocumentIds(null, null, $state);
+
+        $this->assertNotNull($documents);
+        $this->assertInternalType('array', $documents);
+        // $this->assertGreaterThan(0, count($documents));
+
+        if (count($documents) > 0)
+        {
+            foreach ($documents as $docId)
+            {
+                $document = new Opus_Document($docId);
+                $this->assertEquals($state, $document->getServerState());
+            }
+        }
     }
 
 }

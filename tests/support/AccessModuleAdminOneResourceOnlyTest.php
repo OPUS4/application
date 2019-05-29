@@ -83,7 +83,10 @@ abstract class AccessModuleAdminOneResourceOnlyTest extends ControllerTestCase {
      */
     public function testAccessLicenceController() {
         $this->dispatch('/admin/licence');
-        $this->assertRedirectTo('/auth', 'assert redirect from /admin/licence to auth failed');
+        $this->assertRedirectTo(
+            '/auth/index/rmodule/admin/rcontroller/licence/raction/index',
+            'assert redirect from /admin/licence to auth failed'
+        );
     }
 
     /**
@@ -91,7 +94,10 @@ abstract class AccessModuleAdminOneResourceOnlyTest extends ControllerTestCase {
      */
     public function testAccessDocumentsController() {
         $this->dispatch('/admin/documents');
-        $this->assertRedirectTo('/auth', 'assert redirect from /admin/documents to auth failed');
+        $this->assertRedirectTo(
+            '/auth/index/rmodule/admin/rcontroller/documents/raction/index',
+            'assert redirect from /admin/documents to auth failed'
+        );
     }
 
     /**
@@ -99,7 +105,10 @@ abstract class AccessModuleAdminOneResourceOnlyTest extends ControllerTestCase {
      */
     public function testNoAccessReviewModule() {
         $this->dispatch('/review');
-        $this->assertRedirectTo('/auth', 'assert redirect from /review to auth failed');
+        $this->assertRedirectTo(
+            '/auth/index/rmodule/review/rcontroller/index/raction/index',
+            'assert redirect from /review to auth failed'
+        );
     }
 
     /**
@@ -138,7 +147,10 @@ abstract class AccessModuleAdminOneResourceOnlyTest extends ControllerTestCase {
             $this->assertQueryContentContains('//div', 'This feature is currently disabled.');
         }
         else {
-            $this->assertRedirectTo('/auth', 'assert redirect from  to auth failed');
+            $this->assertRedirectTo(
+                '/auth/index/rmodule/admin/rcontroller/indexmaintenance/raction/index',
+                'assert redirect from  to auth failed'
+            );
         }
     }
 
@@ -150,7 +162,10 @@ abstract class AccessModuleAdminOneResourceOnlyTest extends ControllerTestCase {
             $this->assertQueryContentContains('//div', 'Asynchronous Job Processing is disabled');
         }
         else {
-            $this->assertRedirectTo('/auth', 'assert redirect from /admin/job to auth failed');
+            $this->assertRedirectTo(
+                '/auth/index/rmodule/admin/rcontroller/job/raction/index',
+                'assert redirect from /admin/job to auth failed'
+            );
         }
     }
 

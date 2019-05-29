@@ -26,9 +26,8 @@
  * @category    Application
  * @author      Julian Heise <heise@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -63,3 +62,23 @@ function resetComboBox(id) {
         comboBox.selectedIndex = 0;
     }
 }
+
+function toggleAbstract($docId) {
+    $('#abstractText_' + $docId).toggle();
+    $toggle = $('#abstractToggle_' + $docId);
+    if ($toggle.hasClass('collapsed')) {
+        $toggle.addClass('expanded').removeClass('collapsed');
+    }
+    else {
+        $toggle.addClass('collapsed').removeClass('expanded');
+    }
+}
+
+/* TODO OPUSVIER-3742 Translate message and perhaps make message dynamic depending on export size.
+$( document).ready(function() {
+    $('a.export').click(function() {
+        if (!confirm('Attention:\nThe export may take\n several seconds. Continue?')) {
+            return false;
+        };
+    })
+});*/

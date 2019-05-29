@@ -28,17 +28,17 @@
  * @package     Module_Export
  * @author      Michael Lang <lang@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
  * Export plugin for exporting documents as XML.
  *
  * TODO reduce to basic XML export (move XSLT into different class)
+ * TODO move database/cache access to documents to different layer
  */
-class Export_Model_XmlExport extends Export_Model_ExportPluginAbstract {
+class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract {
 
     /**
      * Holds xml representation of document information to be processed.
@@ -63,23 +63,140 @@ class Export_Model_XmlExport extends Export_Model_ExportPluginAbstract {
     protected $_proc = null;
 
     /**
+     * Enables/disables content-disposition attachment.
+     * @var null|boolean
+     */
+    protected $_downloadEnabled = null;
+
+    /**
+     * Content type for response.
+     * @var null|string
+     */
+    protected $_contentType = null;
+
+    /**
+     * Name of attached file.
+     * @var null|string
+     */
+    protected $_attachmentFilename = null;
+
+    /**
      * Deliver the (transformed) Xml content
      *
      * @return void
      *
      * TODO adapt
      */
-    public function postDispatch() {
-        if (!isset($this->getView()->errorMessage)) {
+    public function postDispatch()
+    {
+        if (!isset($this->getView()->errorMessage))
+        {
+            $contentType = $this->getContentType();
+            $attachmentFilename = $this->getAttachmentFilename();
+
+            $response = $this->getResponse();
+
             // Send Xml response.
-            $this->getResponse()->setHeader('Content-Type', 'text/xml; charset=UTF-8', true);
-            if (false === is_null($this->_xslt)) {
+            $response->setHeader('Content-Type', "$contentType; charset=UTF-8", true);
+
+            if ($this->isDownloadEnabled())
+            {
+                $response->setHeader('Content-Disposition', "attachment; filename=$attachmentFilename", true);
+            }
+
+            if (false === is_null($this->_xslt))
+            {
                 $this->getResponse()->setBody($this->_proc->transformToXML($this->_xml));
             }
-            else {
+            else
+            {
                 $this->getResponse()->setBody($this->_xml->saveXml());
             }
         }
+    }
+
+    /**
+     * Returns content type for response.
+     * @return string
+     */
+    public function getContentType()
+    {
+        if (is_null($this->_contentType))
+        {
+            $config = $this->getConfig();
+
+            if (isset($config->contentType))
+            {
+                $this->_contentType = $config->contentType;
+            }
+            else {
+                $this->_contentType = 'text/xml';
+            }
+        }
+
+        return $this->_contentType;
+    }
+
+    /**
+     * Sets mime type for response.
+     * @param $mimeType Mime type for response
+     */
+    public function setContentType($mimeType)
+    {
+        $this->_contentType = $mimeType;
+    }
+
+    public function getAttachmentFilename()
+    {
+        if (is_null($this->_attachmentFilename))
+        {
+            $config = $this->getConfig();
+
+            if (isset($config->attachmentFilename))
+            {
+                $this->_attachmentFilename = $config->attachmentFilename;
+            }
+            else {
+                $this->_attachmentFilename = 'export.xml';
+            }
+        }
+
+        return $this->_attachmentFilename;
+    }
+
+    public function setAttachmentFilename($filename)
+    {
+        $this->_attachmentFilename = $filename;
+    }
+
+    public function isDownloadEnabled()
+    {
+        if (is_null($this->_downloadEnabled))
+        {
+            $appConfig = Application_Configuration::getInstance()->getConfig();
+
+            if (isset($appConfig->export->download))
+            {
+                $value = $appConfig->export->download;
+                $this->_downloadEnabled = $value !== '0' && $value !== false && $value !== '';
+            }
+            else
+            {
+                $this->_downloadEnabled = true;
+            }
+        }
+
+        return $this->_downloadEnabled;
+    }
+
+    public function setDownloadEnabled($enabled)
+    {
+        if (!is_bool($enabled) && !is_null($enabled))
+        {
+            throw new InvalidArgumentException('Argument must be boolean or null.');
+        }
+
+        $this->_downloadEnabled = $enabled;
     }
 
     public function init() {
@@ -111,11 +228,15 @@ class Export_Model_XmlExport extends Export_Model_ExportPluginAbstract {
      * @throws Application_SearchException
      * @throws Exception
      * @throws Zend_View_Exception
+     *
+     * TODO exportParam is not needed anymore, but can be supported (exportParam = action)
+     * TODO stylesheet can be configured in plugin configuration rather than a parameter
      */
     public function execute() {
         $request = $this->getRequest();
 
         $exportParam = $request->getParam('export');
+
         if (is_null($exportParam)) {
             throw new Application_Exception('export format is not specified');
         }
@@ -146,24 +267,93 @@ class Export_Model_XmlExport extends Export_Model_ExportPluginAbstract {
 
     /**
      * Prepares xml export for solr search results.
+     *
+     * @throws Application_SearchException
      */
     public function prepareXml() {
         $request = $this->getRequest();
 
-        try {
-            if ($request->getParam('searchtype') == 'id') {
-                $resultList = $this->buildResultListForIdSearch($request);
-            }
-            else {
-	            $searcher = new Opus_SolrSearch_Searcher();
-                $resultList = $searcher->search($this->buildQuery($request));
-            }
-            $this->handleResults($resultList->getResults(), $resultList->getNumberOfHits());
+        $searchType = $request->getParam('searchtype');
+
+        if (is_null($searchType))
+        {
+            // TODO move/handle somewhere else (cleanup)
+            throw new Application_Search_QueryBuilderException('Unspecified search type: unable to create query');
         }
-        catch (Opus_SolrSearch_Exception $e) {
-            $this->getLogger()->err(__METHOD__ . ' : ' . $e);
-            throw new Application_SearchException($e, true);
+
+        $resultList = null;
+
+        switch ($searchType)
+        {
+        case Application_Util_Searchtypes::ID_SEARCH:
+            // TODO handle ID search like any other search
+            $resultList = $this->buildResultListForIdSearch($request);
+            break;
+        default:
+            $searchFactory = new Solrsearch_Model_Search();
+            $search = $searchFactory->getSearchPlugin($searchType);
+            $search->setExport(true);
+            $search->setMaxRows($this->getMaxRows());
+            $query = $search->buildExportQuery($request);
+            $resultList = $search->performSearch($query);
+            break;
         }
+
+        $this->handleResults($resultList->getResults(), $resultList->getNumberOfHits());
+    }
+
+    /**
+     * Returns maximum number of rows for export depending on autentication.
+     *
+     * @return int
+     */
+    public function getMaxRows()
+    {
+        $maxRows = Opus_SolrSearch_Query::MAX_ROWS;
+
+        $config = $this->getConfig();
+
+        if (!Opus_Security_Realm::getInstance()->skipSecurityChecks())
+        {
+            $identity = Zend_Auth::getInstance()->getIdentity();
+
+            if (empty($identity) === true)
+            {
+                if (isset($config->maxDocumentsGuest))
+                {
+                    $maxRows = $this->getValueIfValid($config->maxDocumentsGuest, $maxRows);
+                }
+
+            }
+            else
+            {
+                if (isset($config->maxDocumentsUser))
+                {
+                    $maxRows = $this->getValueIfValid($config->maxDocumentsUser, $maxRows);
+                }
+            }
+        }
+
+        return $maxRows;
+    }
+
+    /**
+     * Returns value if it is a valid number, otherwise returns default.
+     *
+     * @param $value
+     * @param $default
+     * @return string
+     */
+    public function getValueIfValid($value, $default)
+    {
+        $value = trim($value);
+
+        if (ctype_digit($value) && $value > 0)
+        {
+            return $value;
+        }
+
+        return $default;
     }
 
     /**
@@ -177,6 +367,10 @@ class Export_Model_XmlExport extends Export_Model_ExportPluginAbstract {
         $proc->setParameter('', 'timestamp', str_replace('+00:00', 'Z', Zend_Date::now()->setTimeZone('UTC')->getIso()));
         $proc->setParameter('', 'docCount', count($results));
         $proc->setParameter('', 'queryhits', $numOfHits);
+
+        Application_Xslt::registerViewHelper($proc, [
+            'optionValue'
+        ]);
 
         $xml->appendChild($xml->createElement('Documents'));
 
@@ -280,23 +474,6 @@ class Export_Model_XmlExport extends Export_Model_ExportPluginAbstract {
         }
 
         return $documents;
-    }
-
-    /**
-     * Sets up the xml query.
-     */
-    private function buildQuery($request) {
-        $queryBuilder = new Application_Util_QueryBuilder($this->getLogger(), true);
-        $queryBuilderInput = array();
-        try {
-            $queryBuilderInput = $queryBuilder->createQueryBuilderInputFromRequest($request);
-        }
-        catch (Application_Util_QueryBuilderException $e) {
-            $this->getLogger()->err(__METHOD__ . ' : ' . $e->getMessage());
-            throw new Application_Exception($e->getMessage());
-        }
-
-        return $queryBuilder->createSearchQuery($queryBuilderInput);
     }
 
     /**

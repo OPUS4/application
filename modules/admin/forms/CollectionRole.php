@@ -42,6 +42,8 @@ class Admin_Form_CollectionRole extends Application_Form_Model_Abstract {
     const ELEMENT_VISIBLE_OAI = 'VisibleOai';
     const ELEMENT_DISPLAY_BROWSING = 'DisplayBrowsing';
     const ELEMENT_DISPLAY_FRONTDOOR = 'DisplayFrontdoor';
+    const ELEMENT_ASSIGN_ROOT = 'AssignRoot';
+    const ELEMENT_ASSIGN_LEAVES_ONLY = 'AssignLeavesOnly';
 
     public function init() {
         parent::init();
@@ -49,10 +51,14 @@ class Admin_Form_CollectionRole extends Application_Form_Model_Abstract {
         $this->setRemoveEmptyCheckbox(false);
         $this->setUseNameAsLabel(true);
 
-        $this->addElement('text', self::ELEMENT_NAME, array('required' => true, 'size' => 70));
+        $this->addElement('text', self::ELEMENT_NAME, [
+            'required' => true, 'size' => 70, 'maxlength' => Opus_CollectionRole::getFieldMaxLength('Name')
+        ]);
         $this->getElement(self::ELEMENT_NAME)->addValidator(new Application_Form_Validate_CollectionRoleNameUnique());
 
-        $this->addElement('text', self::ELEMENT_OAI_NAME, array('required' => true, 'size' => 30));
+        $this->addElement('text', self::ELEMENT_OAI_NAME, [
+            'required' => true, 'size' => 30, 'maxlength' => Opus_CollectionRole::getFieldMaxLength('OaiName')
+        ]);
         $this->getElement(self::ELEMENT_OAI_NAME)->addValidator(
             new Application_Form_Validate_CollectionRoleOaiNameUnique()
         );
@@ -64,6 +70,8 @@ class Admin_Form_CollectionRole extends Application_Form_Model_Abstract {
         $this->addElement('checkbox', self::ELEMENT_VISIBLE_OAI);
         $this->addElement('CollectionDisplayFormat', self::ELEMENT_DISPLAY_BROWSING, array('required' => true));
         $this->addElement('CollectionDisplayFormat', self::ELEMENT_DISPLAY_FRONTDOOR, array('required' => true));
+        $this->addElement('checkbox', self::ELEMENT_ASSIGN_ROOT);
+        $this->addElement('checkbox', self::ELEMENT_ASSIGN_LEAVES_ONLY);
 
         $this->removeElement('Cancel');
     }
@@ -79,6 +87,8 @@ class Admin_Form_CollectionRole extends Application_Form_Model_Abstract {
         $this->getElement(self::ELEMENT_VISIBLE_FRONTDOOR)->setValue($collectionRole->getVisibleFrontdoor());
         $this->getElement(self::ELEMENT_DISPLAY_BROWSING)->setValue($collectionRole->getDisplayBrowsing());
         $this->getElement(self::ELEMENT_DISPLAY_FRONTDOOR)->setValue($collectionRole->getDisplayFrontdoor());
+        $this->getElement(self::ELEMENT_ASSIGN_ROOT)->setValue($collectionRole->getAssignRoot());
+        $this->getElement(self::ELEMENT_ASSIGN_LEAVES_ONLY)->setValue($collectionRole->getAssignLeavesOnly());
     }
 
     public function updateModel($collectionRole) {
@@ -91,6 +101,8 @@ class Admin_Form_CollectionRole extends Application_Form_Model_Abstract {
         $collectionRole->setVisibleOai($this->getElementValue(self::ELEMENT_VISIBLE_OAI));
         $collectionRole->setDisplayBrowsing($this->getElementValue(self::ELEMENT_DISPLAY_BROWSING));
         $collectionRole->setDisplayFrontdoor($this->getElementValue(self::ELEMENT_DISPLAY_FRONTDOOR));
+        $collectionRole->setAssignRoot($this->getElementValue(self::ELEMENT_ASSIGN_ROOT));
+        $collectionRole->setAssignLeavesOnly($this->getElementValue(self::ELEMENT_ASSIGN_LEAVES_ONLY));
     }
 
 }

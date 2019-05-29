@@ -68,15 +68,19 @@
 
     <xsl:template name="Title">
         <xsl:for-each select="TitleMain">
-            <xsl:if test="@Language = $docLang">
+            <xsl:if test="(@Language = $docLang) or (position() = 1 and not($docLang))">
                 <h2 class="titlemain">
+                    <xsl:attribute name="lang"><xsl:value-of
+                            select="php:functionString('Application_Xslt::languageWebForm', @Language)"/></xsl:attribute>
                     <xsl:value-of select="@Value" />
                 </h2>
             </xsl:if>
         </xsl:for-each>
         <xsl:for-each select="TitleMain">
-            <xsl:if test="@Language != $docLang">
+            <xsl:if test="(@Language != $docLang) or not($docLang) and position() > 1">
                 <h3 class="titlemain">
+                    <xsl:attribute name="lang"><xsl:value-of
+                            select="php:functionString('Application_Xslt::languageWebForm', @Language)"/></xsl:attribute>
                     <xsl:value-of select="@Value" />
                 </h3>
             </xsl:if>
@@ -86,12 +90,12 @@
     <xsl:template name="SortedAbstracts">
         <ul>
         <xsl:for-each select="TitleAbstract">
-            <xsl:if test="@Language = $docLang">
+            <xsl:if test="(@Language = $docLang) or (position() = 1 and not($docLang))">
                 <xsl:call-template name="Abstract" />
             </xsl:if>
         </xsl:for-each>
         <xsl:for-each select="TitleAbstract">
-            <xsl:if test="@Language != $docLang">
+            <xsl:if test="(@Language != $docLang) or not($docLang) and position() > 1">
                 <xsl:call-template name="Abstract" />
             </xsl:if>
         </xsl:for-each>
@@ -100,6 +104,8 @@
 
     <xsl:template name="Abstract">
             <li class="abstract preserve-spaces">
+                <xsl:attribute name="lang"><xsl:value-of
+                        select="php:functionString('Application_Xslt::languageWebForm', @Language)"/></xsl:attribute>
                 <xsl:choose>
                     <xsl:when test="$numOfShortAbstractChars = '0' or string-length(@Value) &lt; $numOfShortAbstractChars">
                        <xsl:value-of select="@Value" />
@@ -109,7 +115,7 @@
                             <xsl:attribute name="id">abstractShort_<xsl:value-of select="@Id"/>
                             </xsl:attribute>
                             <xsl:attribute name="class">abstractShort</xsl:attribute>
-                            <xsl:value-of select="substring(@Value, 1, $numOfShortAbstractChars)"/>
+                            <xsl:value-of select="php:functionString('Application_Xslt::shortenText', @Value)"/>
                         </span>
                         <span>
                             <xsl:attribute name="id">abstractFull_<xsl:value-of select="@Id"/>

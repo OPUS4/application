@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -25,13 +24,19 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Publish Unit Test
+ * @category    Tests
+ * @package     Publish
  * @author      Susanne Gottwald <gottwald@zib.de>
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
+ */
+
+/**
+ * Class Publish_FormControllerTest.
+ *
+ * @covers Publish_FormController
  */
 class Publish_FormControllerTest extends ControllerTestCase {
 
@@ -39,7 +44,7 @@ class Publish_FormControllerTest extends ControllerTestCase {
         parent::setUp();
         $this->useGerman();
     }
-    
+
     /**
      * Test GET on upload action
      */
@@ -79,7 +84,7 @@ class Publish_FormControllerTest extends ControllerTestCase {
         $this->assertResponseCode(200);
         $this->assertController('form');
         $this->assertAction('upload');
-        
+
         $body = $this->getResponse()->getBody();
 
         $this->assertContains('Es sind Fehler aufgetreten. Bitte beachten Sie die Fehlermeldungen an den Formularfeldern.', $body);
@@ -130,7 +135,7 @@ class Publish_FormControllerTest extends ControllerTestCase {
         $this->assertAction('check');
 
         $body = $this->getResponse()->getBody();
-        
+
         $this->assertContains('TitleMain_1', $body);
         $this->assertContains('TitleMainLanguage_1', $body);
         $this->assertContains('TitleMain_2', $body);
@@ -223,7 +228,7 @@ class Publish_FormControllerTest extends ControllerTestCase {
         $this->assertNotContains("<div class='form-errors'>", $this->getResponse()->getBody());
 
         $this->assertContains('Bitte überprüfen Sie Ihre Eingaben.', $this->getResponse()->getBody());
-        $this->assertContains('<b>Kontaktdaten des Einstellers</b>', $this->getResponse()->getBody());
+        $this->assertContains('<b>Kontaktdaten der Einstellerin/des Einstellers</b>', $this->getResponse()->getBody());
         $this->assertContains('<td>Doe</td>', $this->getResponse()->getBody());
         $this->assertContains('<td>doe@example.org</td>', $this->getResponse()->getBody());
 
@@ -231,13 +236,13 @@ class Publish_FormControllerTest extends ControllerTestCase {
         $this->assertContains('<td>Entenhausen</td>', $this->getResponse()->getBody());
         $this->assertQueryContentRegex('td', '/German|Deutsch/');
 
-        $this->assertContains('<b>Autor(en)</b>', $this->getResponse()->getBody());
+        $this->assertContains('<b>Autor*innen</b>', $this->getResponse()->getBody());
         $this->assertContains('<td>AuthorLastName</td>', $this->getResponse()->getBody());
         $this->assertContains('<td>Nein</td>', $this->getResponse()->getBody());
 
         $this->assertContains('<b>Weitere Formulardaten:</b>', $this->getResponse()->getBody());
         $this->assertContains('<td>22.01.2011</td>', $this->getResponse()->getBody());
-        $this->assertContains('<td>Creative Commons - Namensnennung</td>', $this->getResponse()->getBody());
+        $this->assertContains('<td>Creative Commons - CC BY-ND - Namensnennung - Keine Bearbeitungen 4.0 International</td>', $this->getResponse()->getBody());
         $this->assertContains('<b>Es wurden keine Dateien hochgeladen. </b>', $this->getResponse()->getBody());
     }
 
@@ -439,14 +444,14 @@ class Publish_FormControllerTest extends ControllerTestCase {
         } else {
             $config->form->first->bibliographie = $oldval;
         }
-        
+
         $doc = new Opus_Document($session->documentId);
         $belongsToBibliography = $doc->getBelongsToBibliography();
         $doc->deletePermanent();
 
         $this->assertResponseCode(200);
         $this->assertNotContains("Es sind Fehler aufgetreten.", $this->response->getBody());
-        $this->assertFalse((boolean) $belongsToBibliography, 'Expected that document does not belong to bibliography');        
+        $this->assertFalse((boolean) $belongsToBibliography, 'Expected that document does not belong to bibliography');
     }
 
     /**
@@ -559,7 +564,7 @@ class Publish_FormControllerTest extends ControllerTestCase {
         }
     }
 
-    private function addTestDocument($session, $documentType) {
+    private function addTemporaryTestDocument($session, $documentType) {
         $doc = $this->createTemporaryDoc();
 
         $session->documentType = $documentType;
@@ -572,7 +577,7 @@ class Publish_FormControllerTest extends ControllerTestCase {
      */
     public function testCheckActionWithAddButton() {
         $session = new Zend_Session_Namespace('Publish');
-        $this->addTestDocument($session, 'preprint');
+        $this->addTemporaryTestDocument($session, 'preprint');
         $data = array(
             'PersonSubmitterFirstName_1' => '',
             'PersonSubmitterLastName_1' => '',
@@ -609,9 +614,9 @@ class Publish_FormControllerTest extends ControllerTestCase {
             ->setMethod('POST')
             ->setPost($data);
         $this->dispatch('/publish/form/check');
-        $this->assertEquals('200', $this->getResponse()->getHttpResponseCode());
+        $this->assertResponseCode(200);
 
-        $this->assertEquals(3, count($session->additionalFields));
+        $this->assertEquals(5, count($session->additionalFields));
         $this->assertEquals('2', $session->additionalFields['TitleMain']);
         $this->assertEquals(1, $session->additionalFields['stepInstitute_1']);
         $this->assertEquals('1', $session->additionalFields['collId0Institute_1']);
@@ -622,7 +627,7 @@ class Publish_FormControllerTest extends ControllerTestCase {
      */
     public function testCheckActionWithDeleteButton() {
         $session = new Zend_Session_Namespace('Publish');
-        $this->addTestDocument($session, 'preprint');
+        $this->addTemporaryTestDocument($session, 'preprint');
         $session->additionalFields['TitleMain'] = '2';
 
         $data = array(
@@ -665,7 +670,7 @@ class Publish_FormControllerTest extends ControllerTestCase {
         $this->dispatch('/publish/form/check');
         $this->assertEquals('200', $this->getResponse()->getHttpResponseCode());
 
-        $this->assertEquals(3, count($session->additionalFields));
+        $this->assertEquals(5, count($session->additionalFields));
         $this->assertEquals(1, $session->additionalFields['TitleMain']);
         $this->assertEquals(1, $session->additionalFields['stepInstitute_1']);
         $this->assertEquals('1', $session->additionalFields['collId0Institute_1']);
@@ -676,7 +681,7 @@ class Publish_FormControllerTest extends ControllerTestCase {
      */
     public function testCheckActionWithBrowseDownButton() {
         $session = new Zend_Session_Namespace('Publish');
-        $this->addTestDocument($session, 'preprint');
+        $this->addTemporaryTestDocument($session, 'preprint');
         $session->additionalFields['Institute'] = '1';
         $session->additionalFields['collId0Institute_1'] = '1';
         $session->additionalFields['stepInstitute_1'] = '1';
@@ -719,7 +724,7 @@ class Publish_FormControllerTest extends ControllerTestCase {
         $this->dispatch('/publish/form/check');
         $this->assertEquals('200', $this->getResponse()->getHttpResponseCode());
 
-        $this->assertEquals(4, count($session->additionalFields));
+        $this->assertEquals(6, count($session->additionalFields));
         $this->assertEquals('15994', $session->additionalFields['collId1Institute_1']);
         $this->assertEquals(2, $session->additionalFields['stepInstitute_1']);
         $this->assertEquals('1', $session->additionalFields['Institute']);
@@ -731,7 +736,7 @@ class Publish_FormControllerTest extends ControllerTestCase {
      */
     public function testCheckActionWithBrowseUpButton() {
         $session = new Zend_Session_Namespace('Publish');
-        $this->addTestDocument($session, 'preprint');
+        $this->addTemporaryTestDocument($session, 'preprint');
         $session->additionalFields['Institute'] = '1';
         $session->additionalFields['collId0Institute_1'] = '1';
         $session->additionalFields['collId1Institute_1'] = '15994';
@@ -775,7 +780,7 @@ class Publish_FormControllerTest extends ControllerTestCase {
         $this->dispatch('/publish/form/check');
         $this->assertEquals('200', $this->getResponse()->getHttpResponseCode());
 
-        $this->assertEquals(4, count($session->additionalFields));
+        $this->assertEquals(6, count($session->additionalFields));
         $this->assertEquals(1, $session->additionalFields['stepInstitute_1']);
         $this->assertEquals('1', $session->additionalFields['Institute']);
         $this->assertEquals('15994', $session->additionalFields['collId1Institute_1']);
@@ -787,7 +792,7 @@ class Publish_FormControllerTest extends ControllerTestCase {
      */
     public function testCheckActionWithMissingButton() {
         $session = new Zend_Session_Namespace('Publish');
-        $this->addTestDocument($session, 'preprint');
+        $this->addTemporaryTestDocument($session, 'preprint');
         $session->additionalFields['PersonSubmitter'] = '1';
         $session->additionalFields['TitleMain'] = '1';
         $session->additionalFields['TitleAbstract'] = '1';
@@ -864,7 +869,7 @@ class Publish_FormControllerTest extends ControllerTestCase {
                 ->setPost(array(
                     'PersonSubmitterLastName_1' => 'Doe',
                     'PersonSubmitterEmail_1' => 'doe@example.org',
-                    'TitleMain_1' => 'Entenhausen',                    
+                    'TitleMain_1' => 'Entenhausen',
                     'PersonAuthorLastName_1' => 'AuthorLastName',
                     'CompletedDate' => '22.01.2011',
                     'Language' => 'deu',
@@ -912,7 +917,7 @@ class Publish_FormControllerTest extends ControllerTestCase {
         $this->assertController('form');
         $this->assertAction('check');
 
-        $this->assertNotContains('Undefined index: TitleAbstractLanguage_1', $this->getResponse()->getBody());        
+        $this->assertNotContains('Undefined index: TitleAbstractLanguage_1', $this->getResponse()->getBody());
     }
 
     public function testManipulatePostMissingTitleParentLanguage() {
@@ -1015,7 +1020,7 @@ class Publish_FormControllerTest extends ControllerTestCase {
 
         $this->dispatch('/publish/form/check');
 
-        $respBody = $this->getResponse()->getBody();        
+        $respBody = $this->getResponse()->getBody();
         $this->assertContains("<label for='Language'>", $respBody);
         $this->assertContains('>foobar</h3>', $respBody);
     }
@@ -1025,16 +1030,16 @@ class Publish_FormControllerTest extends ControllerTestCase {
         $session->documentType = 'barbaz';
         $doc = $this->createTemporaryDoc();
         $session->documentId = $doc->getId();
-        $session->fulltext = '0';        
+        $session->fulltext = '0';
         $session->additionalFields = array('browseUpInstitute' => 'hoch',);
 
         $this->request->setMethod('POST');
-        
+
         $this->dispatch('/publish/form/check');
-        
+
         $this->assertResponseCode(500);
         $this->assertContains('Application_Exception', $this->getResponse()->getBody());
-        $this->assertContains('invalid configuration: template file barbaz.phtml is not readable or does not exist', $this->getResponse()->getBody());        
+        $this->assertContains('invalid configuration: template file barbaz.phtml is not readable or does not exist', $this->getResponse()->getBody());
     }
 
     public function testApplicationErrorForDoctypeBazbar() {
@@ -1042,13 +1047,13 @@ class Publish_FormControllerTest extends ControllerTestCase {
         $session->documentType = 'bazbar';
         $doc = $this->createTemporaryDoc();
         $session->documentId = $doc->getId();
-        $session->fulltext = '0';        
+        $session->fulltext = '0';
         $session->additionalFields = array('browseUpInstitute' => 'hoch',);
 
         $this->request->setMethod('POST');
-        
+
         $this->dispatch('/publish/form/check');
-        
+
         $this->assertResponseCode(500);
         $this->assertContains('Application_Exception', $this->getResponse()->getBody());
         $this->assertContains('invalid configuration: template file barbaz.phtml is not readable or does not exist', $this->getResponse()->getBody());

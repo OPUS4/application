@@ -31,9 +31,8 @@
  * @category    Application
  * @package     View
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2013-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 class Application_Form_Element_Hidden extends Zend_Form_Element_Hidden {
 
@@ -45,7 +44,8 @@ class Application_Form_Element_Hidden extends Zend_Form_Element_Hidden {
         if (!$this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
             $this->setDecorators(
                 array(
-                'ViewHelper'
+                    'ViewHelper',
+                    array('HtmlTag', array('tag' => 'div'))
                 )
             );
         }

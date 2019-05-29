@@ -56,6 +56,14 @@ class AssumptionChecker {
     public function checkYearFacetAssumption() {
         $this->testCase->resetRequest();
         $this->testCase->resetResponse();
+
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(
+            array('searchengine' => array('solr' => array(
+                'facetlimit' => array('year' => 10, 'year_inverted' => 10),
+                'facets' => 'year,doctype,author_facet,language,has_fulltext,belongs_to_bibliography,subject,institute'
+            )))
+        ));
+
         $this->testCase->dispatch('/solrsearch/index/search/searchtype/all');
 
         $searchStrings = array(

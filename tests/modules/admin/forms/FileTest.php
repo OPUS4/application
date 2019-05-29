@@ -27,9 +27,9 @@
  * @category    Application Unit Test
  * @package     Admin_Form
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @author      Maximilian Salomon <salomon@zib.de>
+ * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 class Admin_Form_FileTest extends ControllerTestCase {
 
@@ -49,6 +49,7 @@ class Admin_Form_FileTest extends ControllerTestCase {
     }
 
     public function testPopulateFromModel() {
+        $this->useEnglish();
         $form = new Admin_Form_File();
 
         $file = new Opus_File(126); // hängt an Testdokument 146
@@ -110,8 +111,8 @@ class Admin_Form_FileTest extends ControllerTestCase {
         $this->assertEquals('fra', $file->getLanguage());
         $this->assertEquals('Testlabel', $file->getLabel());
         $this->assertEquals('Testkommentar', $file->getComment());
-        $this->assertTrue($file->getVisibleInFrontdoor());
-        $this->assertTrue($file->getVisibleInOai());
+        $this->assertEquals(1, $file->getVisibleInFrontdoor());
+        $this->assertEquals(1, $file->getVisibleInOai());
 
         $roles = $form->getRolesForFile($file->getId());
 
@@ -124,8 +125,8 @@ class Admin_Form_FileTest extends ControllerTestCase {
 
         $form->updateModel($file);
 
-        $this->assertFalse($file->getVisibleInFrontdoor());
-        $this->assertTrue($file->getVisibleInOai());
+        $this->assertEquals(0, $file->getVisibleInFrontdoor());
+        $this->assertEquals(1, $file->getVisibleInOai());
 
         $roles = $form->getRolesForFile($file->getId());
 
@@ -149,8 +150,8 @@ class Admin_Form_FileTest extends ControllerTestCase {
 
         $form->updateModel($file);
 
-        $this->assertTrue($file->getVisibleInFrontdoor());
-        $this->assertFalse($file->getVisibleInOai());
+        $this->assertEquals(1, $file->getVisibleInFrontdoor());
+        $this->assertEquals(0, $file->getVisibleInOai());
 
         $roles = $form->getRolesForFile($file->getId());
 
@@ -345,6 +346,33 @@ class Admin_Form_FileTest extends ControllerTestCase {
         $roles = $form->getRolesForFile($fileId);
 
         $this->assertEquals(0, count($roles));
+    }
+
+    public function testUpdateModelSortOrderNull() {
+        $form = new Admin_Form_File();
+
+        $form->getElement('Language')->setValue('fra');
+        $form->getElement('SortOrder')->setValue(1);
+
+        $document = $this->createTestDocument();
+
+        $file = $document->addFile();
+        $file->setPathName('test.pdf');
+
+        $document->store();
+
+        $form->updateModel($file);
+
+        $this->assertEquals('fra', $file->getLanguage());
+        $this->assertEquals(1, $file->getSortOrder());
+
+        $form->getElement('SortOrder')->setValue(null);
+
+        $form->updateModel($file);
+
+        $this->assertNotNull($file->getSortOrder());
+
+        $document->store(); // triggered exception before fix
     }
 
 }

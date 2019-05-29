@@ -33,7 +33,6 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 abstract class Admin_Form_AbstractDocumentSubForm extends Application_Form_AbstractViewable {
 
@@ -43,10 +42,16 @@ abstract class Admin_Form_AbstractDocumentSubForm extends Application_Form_Abstr
         $this->setDisableLoadDefaultDecorators(true);
         $this->setDecorators(
             array(
-            'FormElements',
-            array(array('fieldsWrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'fields-wrapper')),
-            'FieldsetWithButtons',
-            array(array('divWrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'subform'))
+                'FormElements',
+                array(
+                    array('fieldsWrapper' => 'HtmlTag'), 
+                    array('tag' => 'div', 'class' => 'fields-wrapper')
+                ),
+                'FieldsetWithButtons',
+                array(
+                    array('divWrapper' => 'HtmlTag'), 
+                    array('tag' => 'div', 'class' => 'subform')
+                )
             )
         );
     }
@@ -79,6 +84,8 @@ abstract class Admin_Form_AbstractDocumentSubForm extends Application_Form_Abstr
      * @param $context POST Daten vom gesamten Request
      *
      * TODO Modifiziere zu $context = null um context optional zu machen?
+     *
+     * FIXME Verwendung eines Result Objects (statt null, string oder array)
      */
     public function processPost($data, $context) {
         $subforms = $this->getSubForms();

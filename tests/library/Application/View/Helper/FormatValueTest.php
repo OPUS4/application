@@ -26,35 +26,39 @@
  *
  * @category    Application Unit Tests
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
  * Unit tests for FormatValue view helper.
  */
-class Application_View_Helper_FormatValueTest extends ControllerTestCase {
+class Application_View_Helper_FormatValueTest extends ControllerTestCase
+{
 
     private $__helper;
 
-    public function setUp() {
+    public function setUp()
+    {
         parent::setUp();
         $this->__helper = new Application_View_Helper_FormatValue();
         $this->__helper->setView(Zend_Registry::get('Opus_View'));
     }
 
-    public function testViewHelperReturnsItself() {
+    public function testViewHelperReturnsItself()
+    {
         $this->assertEquals($this->__helper, $this->__helper->formatValue());
     }
 
-    public function testFormatValueForNull() {
+    public function testFormatValueForNull()
+    {
         $ouput = $this->__helper->format(null);
 
         $this->assertTrue(empty($output));
     }
 
-    public function testFormatValueForString() {
+    public function testFormatValueForString()
+    {
         $value = "Test";
 
         $output = $this->__helper->format($value);
@@ -62,7 +66,8 @@ class Application_View_Helper_FormatValueTest extends ControllerTestCase {
         $this->assertEquals($value, $output);
     }
 
-    public function testFormatValueForSelectField() {
+    public function testFormatValueForSelectField()
+    {
         $doc = $this->createTestDocument();
 
         $field = $doc->getField('Language');
@@ -74,7 +79,8 @@ class Application_View_Helper_FormatValueTest extends ControllerTestCase {
         $this->assertTrue(in_array($output, array('German', 'Deutsch')));
     }
 
-    public function testFormatValueForYear() {
+    public function testFormatValueForYear()
+    {
         $doc = $this->createTestDocument();
 
         $field = $doc->getField('PublishedYear');
@@ -92,7 +98,8 @@ class Application_View_Helper_FormatValueTest extends ControllerTestCase {
      *
      * TODO figure out unit test that checks all locales
      */
-    public function testFormatValueForDate() {
+    public function testFormatValueForDate()
+    {
         $doc = new Opus_Document(3);
 
         $field = $doc->getField('ThesisDateAccepted');
@@ -102,7 +109,8 @@ class Application_View_Helper_FormatValueTest extends ControllerTestCase {
         $this->assertTrue(in_array($output, array('2002/06/17', '17.06.2002')));
     }
 
-    public function testFormatValueForInvalidDate() {
+    public function testFormatValueForInvalidDate()
+    {
         $doc = $this->createTestDocument();
 
         $doc->setPublishedDate(new Opus_Date('2005'));
@@ -114,8 +122,8 @@ class Application_View_Helper_FormatValueTest extends ControllerTestCase {
         $this->assertEquals(null, $output);
     }
 
-    public function testFormatValueForPublicationState() {
-
+    public function testFormatValueForPublicationState()
+    {
         $doc = new Opus_Document(3);
 
         $field = $doc->getField('PublicationState');
@@ -125,6 +133,4 @@ class Application_View_Helper_FormatValueTest extends ControllerTestCase {
         // PublicationState is not translated right now
         $this->assertEquals('draft', $output);
     }
-
 }
-

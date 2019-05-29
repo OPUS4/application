@@ -24,18 +24,22 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Tests
+ * @category    Tests
+ * @package     Frontdoor
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
+/**
+ * Class Frontdoor_MailControllerTest.
+ *
+ * @covers Frontdoor_MailController
+ */
 class Frontdoor_MailControllerTest extends ControllerTestCase {
 
     private $documentId;
-    
+
     private $authorDocumentId;
     private $authorId;
 
@@ -48,7 +52,7 @@ class Frontdoor_MailControllerTest extends ControllerTestCase {
         $title = new Opus_Title();
         $title->setValue('foobartitle');
         $title->setLanguage('deu');
-        $document->setTitleMain($title);       
+        $document->setTitleMain($title);
 
         $this->documentId = $document->store();
         $this->assertNotNull($this->documentId);
@@ -74,13 +78,6 @@ class Frontdoor_MailControllerTest extends ControllerTestCase {
 
         $this->authorDocumentId = $document->store();
         $this->assertNotNull($this->authorDocumentId);
-    }
-
-    protected function tearDown() {
-        $person = new Opus_Person($this->authorId);
-        $person->delete();
-        
-        parent::tearDown();
     }
 
     public function testIndexActionNotSupported() {
@@ -127,6 +124,14 @@ class Frontdoor_MailControllerTest extends ControllerTestCase {
 
     public function testToauthorActionWithValidPost() {
         $this->markTestIncomplete('TODO');
+    }
+
+    public function testToauthorDuplicateDocIdParameter()
+    {
+        $this->dispatch('/frontdoor/mail/toauthor/docId/147/docId/146');
+        $this->assertResponseCode(200);
+        $this->assertContains('<b>KOBV</b>', $this->getResponse()->getBody());
+
     }
 
 }

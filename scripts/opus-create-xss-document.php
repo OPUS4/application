@@ -26,9 +26,9 @@
  *
  * @category    Application
  * @author      Thoralf Klein <thoralf.klein@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 // Bootstrapping
@@ -158,7 +158,6 @@ $institutesRole->setName('institutes'.randString($counter++).rand())
                    ->setVisibleFrontdoor(1)
                    ->setDisplayFrontdoor('Name')
                    ->setVisibleOai('Name')
-                   ->setDisplayOai('Name')
                    ->store();
 
 $instituteName='Institut für empirische Forschung ' . randString($counter++);

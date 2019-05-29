@@ -26,13 +26,14 @@
  *
  * @category    Application Unit Test
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class ControllerTestCaseTest extends ControllerTestCase {
+class ControllerTestCaseTest extends ControllerTestCase
+{
 
-    public function tearDown() {
+    public function tearDown()
+    {
         $this->restoreSecuritySetting();
         parent::tearDown();
     }
@@ -42,12 +43,15 @@ class ControllerTestCaseTest extends ControllerTestCase {
      *
      * Dient der Vorbereitung von Test "testTearDownDidLogout".
      */
-    public function testLoginAdmin() {
+    public function testLoginAdmin()
+    {
         $this->enableSecurity();
         $this->loginUser('admin', 'adminadmin');
         $realm = Opus_Security_Realm::getInstance();
 
-        $this->assertContains('administrator', $realm->getRoles(), Zend_Debug::dump($realm->getRoles(), null, false));
+        $this->assertContains(
+            'administrator', $realm->getRoles(), Zend_Debug::dump($realm->getRoles(), null, false)
+        );
     }
 
     /**
@@ -55,13 +59,15 @@ class ControllerTestCaseTest extends ControllerTestCase {
      *
      * Regression Test für OPUSVIER-3283
      */
-    public function testTearDownDidLogout() {
+    public function testTearDownDidLogout()
+    {
         $this->enableSecurity();
         $realm = Opus_Security_Realm::getInstance();
         $this->assertNotContains('administrator', $realm->getRoles());
     }
 
-    public function testSetHostname() {
+    public function testSetHostname()
+    {
         $view = Zend_Registry::get('Opus_View');
 
         $this->assertEquals('http://', $view->serverUrl());
@@ -71,7 +77,8 @@ class ControllerTestCaseTest extends ControllerTestCase {
         $this->assertEquals('http://localhost', $view->serverUrl());
     }
 
-    public function testSetBaseUrlNotSet() {
+    public function testSetBaseUrlNotSet()
+    {
         $view = Zend_Registry::get('Opus_View');
 
         $this->assertEquals('', $view->baseUrl());
@@ -81,7 +88,8 @@ class ControllerTestCaseTest extends ControllerTestCase {
         $this->assertEquals('', $view->baseUrl());
     }
 
-    public function testSetBaseUrlSet() {
+    public function testSetBaseUrlSet()
+    {
         $view = Zend_Registry::get('Opus_View');
 
         $this->setBaseUrl('opus4');
@@ -94,13 +102,14 @@ class ControllerTestCaseTest extends ControllerTestCase {
      *
      * @expectedException Opus_Model_NotFoundException
      */
-    public function testRemoveDocumentById() {
+    public function testRemoveDocumentById()
+    {
         $doc = new Opus_Document();
         $docId = $doc->store();
 
         $this->removeDocument($docId);
 
-        $doc = new Opus_Document($docId);
+        new Opus_Document($docId);
     }
 
     /**
@@ -108,22 +117,40 @@ class ControllerTestCaseTest extends ControllerTestCase {
      *
      * @expectedException Opus_Model_NotFoundException
      */
-    public function testRemoveDocument() {
+    public function testRemoveDocument()
+    {
         $doc = new Opus_Document();
         $docId = $doc->store();
 
         $this->removeDocument($doc);
 
-        $doc = new Opus_Document($docId);
+        new Opus_Document($docId);
     }
 
     /**
      * Test removing document that has not been stored.
      */
-    public function testRemoveDocumentNotStored() {
+    public function testRemoveDocumentNotStored()
+    {
         $doc = new Opus_Document();
 
         $this->removeDocument($doc);
     }
 
+    public function testGetTempFile() {
+        $tempFile = $this->getTempFile();
+
+        $this->assertFileExists($tempFile);
+
+        $tempFile2 = $this->getTempFile();
+
+        $this->assertFileExists($tempFile2);
+
+        $this->assertNotEquals($tempFile, $tempFile2);
+
+        $this->deleteTempFiles();
+
+        $this->assertFileNotExists($tempFile);
+        $this->assertFileNotExists($tempFile2);
+    }
 }

@@ -2,6 +2,289 @@
 
 ---
 
+## Release 4.6.3 2018-11-05
+
+### Feature Request
+
+* [OPUSVIER-2940] - Möglichkeit Dokumente direkt in der Administration zu erstellen
+* [OPUSVIER-3582] - OAI-Schnittstelle erweitern um Ausgabe von DOI
+* [OPUSVIER-3901] - DataCite-XML zum Debugging oder als Backup zwischenspeichern
+* [OPUSVIER-3902] - Unterstützung von Microsoft Edge
+* [OPUSVIER-3904] - Aufruf von Google Scholar aus der Frontdoor in einem eigenen Browserfenster
+* [OPUSVIER-3906] - Datei datacite.xslt für DOI-Registrierung konfigurierbar machen
+* [OPUSVIER-3908] - Prüfung von Dateinamen und deren Länge
+* [OPUSVIER-3919] - Adressaten von DOI Benachrichtigungen über Accounts konfigurieren
+* [OPUSVIER-3949] - GND-Schlagwörter in Frontdoor nicht alphabetisch sortieren
+
+### Bugs
+
+* [OPUSVIER-3892] - XML-Dateien werden bei Upload über SWORD ignoriert
+* [OPUSVIER-3896] - Neue Enrichments  <opus.doi.autoCreate> und <opus.urn.autoCreate> beim Update anlegen
+* [OPUSVIER-3897] - Haken bei Checkbox "URN beim Veröffentlichen generieren" im Metadatenformular funktioniert nicht
+* [OPUSVIER-3899] - Speichern von ungültigen Werten, z.B. ISBN, ermöglichen
+* [OPUSVIER-3900] - DOIs werden nicht als lokal erkannt
+* [OPUSVIER-3903] - Anzeigefehler wenn Englisch nicht als Übersetzungssprache vorhanden ist
+* [OPUSVIER-3905] - Landing Page nicht korrekt
+* [OPUSVIER-3907] - Bug in der Navigation in der Kurztrefferansicht
+* [OPUSVIER-3909] - Enrichments ohne Wert im Import-XML sollten ohne Fehler ignoriert werden
+* [OPUSVIER-3910] - Irreführende Fehlermeldung: plugin Opus_Document_Plugin_IdentifierDoi is not applicable for documents with server state ...
+* [OPUSVIER-3911] - fehlendes "resumptionToken"
+* [OPUSVIER-3912] - Aufruf von Twitter in neuem Browser-Fenster
+* [OPUSVIER-3915] - Publish-Formular: Eingabe einer bereits im System vorhandenen DOI muss abgefangen werden
+* [OPUSVIER-3916] - E-Mail-Text zum "Statusbericht über DOI-Registrierung" und "Statusbericht über DOI-Prüfung" ändern
+* [OPUSVIER-3925] - assertQueryCount - Path und Count Parameter vertauscht
+* [OPUSVIER-3931] - Fehler in Publish-Formular-Meldung bei zu großer Datei
+* [OPUSVIER-3933] - DataCite Registrierung schlägt fehl bei fehlendem PublishedYear/CompletedYear
+* [OPUSVIER-3950] - Ausgabe einer DOI mit "_" ist fehlerhaft im BibTeX CitationExport
+
+### Aufgaben
+
+* [OPUSVIER-2155] - CollectionRole-Feld "display_oai" aus Datenbank-Schema und Model entfernen
+* [OPUSVIER-2294] - URN-Vergabe für bereits vorhandene Dokumente deaktivieren
+* [OPUSVIER-3913] - ZIP und TAR Handhabung in PackageReader auf zwei Klassen aufteilen
+* [OPUSVIER-3918] - View Helper für Ausgabe von Nachrichten
+* [OPUSVIER-3920] - ActionBox Code vereinheitlichen
+* [OPUSVIER-3921] - DOI Support Cron-Jobs lauffähig für OPUS-User (ohne sudo)
+* [OPUSVIER-3922] - Aufruf Skript "Änderung der URL von Landing-Pages für lokale DOIs" klären und ggf. Handbuch anpassen
+* [OPUSVIER-3923] - Testing OPUS 4 mit Ubuntu 18.04 LTS
+* [OPUSVIER-3929] - Opus_Date-Objekte mit updateFromArray initialisieren
+* [OPUSVIER-3934] - Vergleichen von Opus_Date und anderen Objekten
+* [OPUSVIER-3939] - FromArray-Funktionen für Personen-Objekte
+* [OPUSVIER-3945] - Erlaubnis für DOI-Notifikationen zur Zugriffskontrolle hinzufügen
+* [OPUSVIER-3946] - Funktion, um alle Nutzer mit Zugriffsrecht zu ermitteln
+* [OPUSVIER-3947] - Übersetzungsmechanik für Javascript
+* [OPUSVIER-3948] - Funktion, um alle Jobs zu löschen
+
+---
+
+## Release 4.6.2 2018-06-11
+
+### Feature Request
+
+* [OPUSVIER-2942] - DOI-Vergabe implementieren
+
+### Bugs
+
+* [OPUSVIER-3893] - config.ini-Parameter <searchengine.solr.facetlimit.year_inverted> funktioniert nicht mehr richtig
+
+### Aufgaben
+
+* [OPUSVIER-3884] - Funktion, um Enrichment-Wert direkt abzufragen
+* [OPUSVIER-3894] - OPUS 4.6.2 Release vorbereiten
+* [OPUSVIER-1361] - URN sollen in der Administration zu Dokumenten hinzugefügt werden können
+* [OPUSVIER-3830] - DataCite Client Library implementieren
+
+### Dokumentation
+
+* [OPUSVIER-3889] - Ergänzung der Dokumentation zum Thema Datenschutz
+
+---
+
+## Release 4.6.1 2018-02-26
+
+### Bugs
+
+* [OPUSVIER-3841] - Editieren von Personen ohne Dokumente produziert Fehler
+* [OPUSVIER-3846] - Fehlerhaftes XML bei der OAI-Schnittstelle
+
+## Aufgaben
+
+* [OPUSVIER-2034] - Datenbank-Felder, die als NOT NULL definiert sind, haben z.T. NULL als Defaultwert
+* [OPUSVIER-2385] - Validierung von ISBNs vornehmen
+* [OPUSVIER-2386] - Validierung von ISSNs vornehmen
+* [OPUSVIER-2494] - getAll-Abfragen im Zusammenhang mit dem Aufruf von setDefault-Methoden verhindern
+* [OPUSVIER-3479] - Einschränkung der Coverage für Controller Testklassen
+* [OPUSVIER-3480] - Zusammenfassungen, Titel, usw. mit Sprachattribut in Frontdoor HTML markieren
+* [OPUSVIER-3483] - DINI Zertifikat: OAI-Anfrage Identify soll Beschreibung des Dienstes (Element description) in englischer Sprache liefern
+* [OPUSVIER-3540] - MathJax über Composer installieren
+* [OPUSVIER-3580] - Schriftenreihen im Dokumentenformular der Administration alphabetisch sortieren
+* [OPUSVIER-3801] - Verbose Ausgabe beim Neuaufbau der Testdaten optional
+* [OPUSVIER-3839] - Unveränderte Felder bei der Bestätigung des Bulk-Editing nur einmal mittig anzeigen
+* [OPUSVIER-3842] - Gleiche Breite für alle DropDown-Felder in der erweiterten Suche
+* [OPUSVIER-3844] - Package für OPUS 4 API und Core anlegen
+* [OPUSVIER-3848] - Übersetzungen für ISBN/ISSN Validatoren
+* [OPUSVIER-3849] - Handhabung von Export Parameter wie Content-Disposition erweitern
+* [OPUSVIER-3856] - Sprache für Google Scholar Link soll OPUS-UI entsprechen
+* [OPUSVIER-3858] - CSS @import von print.css entfernen und Meta-Tag verwenden
+
+## Dokumentation
+
+* [OPUSVIER-3013] - Dokumentieren wie XHTML DTD mit Hilfe von xmlcatalog lokal gecached werden kann
+
+---
+
+## Release 4.6 2017-08-14
+
+### Bugs
+
+* [OPUSVIER-1745] - im Browser darstellbare Dateitypen werden stets mit Content-Disposition=attachment ausgeliefert
+* [OPUSVIER-2110] - Klasse Opus_View in library/View/View.php verhindert kein XSS
+* [OPUSVIER-2112] - Frontdoor versucht Felder wie Abstract, Titel, etc. zu übersetzen
+* [OPUSVIER-2167] - Open Search: Chrome erkennt nicht den OSDD
+* [OPUSVIER-2195] - Collection-Zuweisungsformular in der Administration zeigt nicht bereits die mit dem Dokument verknüpften Collections an und erlaubt das dopplete Zuweisen
+* [OPUSVIER-2246] - Reload des Publish-Formulars im zweiten Formularschritt wirft eine Exception
+* [OPUSVIER-2522] - Opus_Document::delete() löscht eigenmächtig Dokument aus dem Index -- sollte eigentlich vom Plugin Opus_Document_Plugin_Index ausgeführt werden, sofern es aktiviert ist
+* [OPUSVIER-2546] - Platzhalter-Mechanismus in Übersetzungsressourcen greift nicht auf Eingabe da
+* [OPUSVIER-2562] - Suchanfragen mit zwei oder mehr escapten Zeichen werden nicht akzeptiert
+* [OPUSVIER-2943] - Plugin-Methode preDelete wird für nicht gespeicherte Objekte ausgeführt
+* [OPUSVIER-3115] - Klärung, welche DDC-Klassifikation in der Distribution ausgeliefert werden soll
+* [OPUSVIER-3188] - Fehlermeldungen im Formular: Neuer IP-Bereich sind englisch
+* [OPUSVIER-3401] - Frontdoor zeigt keinen Titel oder Abstrakt, wenn Dokument keine Sprache hat
+* [OPUSVIER-3424] - Bug in Setup_Model_Abstract::getContent
+* [OPUSVIER-3629] - Tippfehler im BibTeX-Icon
+* [OPUSVIER-3667] - Namespace für Dokumenttyp Schema verwendet falsche Domain
+* [OPUSVIER-3670] - Build Probleme mit OPUS 4.6 auf dem CI-System fixen
+* [OPUSVIER-3671] - Funktion getMatchingSubjects nicht kompatible zu SQL-Mode ONLY_FULL_GROUP_BY
+* [OPUSVIER-3675] - Option mergeFactor in Solr Config deprecated
+* [OPUSVIER-3676] - Solr Option unlockOnStartup produziert Warnung
+* [OPUSVIER-3681] - Optionale Patent-Felder sind als NOT NULL in Datenbank definiert
+* [OPUSVIER-3682] - Testdokument 300 wird nicht angelegt
+* [OPUSVIER-3685] - Unit Tests für Fehler bei Volltextindizierung unzuverlässig
+* [OPUSVIER-3686] - Volltextcache wird nicht genutzt
+* [OPUSVIER-3687] - Hash-Values für Dateien werden immer wieder berechnet
+* [OPUSVIER-3689] - Speichern eines Dokuments löst drei Indizierungen aus
+* [OPUSVIER-3696] - SolrIndexBuilder-Skript mit Angabe einer oder mehrerer OPUS-IDs löscht alle anderen Dokumente aus dem Solr-Index
+* [OPUSVIER-3697] - SolrIndexBuilder interpretiert Start (und End) ID falsch wenn Option -c verwendet wird
+* [OPUSVIER-3702] - Volltextcache schreibt noch nicht extrahierte Dateien als Fehler ins Log
+* [OPUSVIER-3710] - Lange Dateinamen werden im Dateimanager nicht umgebrochen
+* [OPUSVIER-3713] - Datumsangabe aus dem Publishformular wird bei englischer Oberfläche falsch abgespeichert
+* [OPUSVIER-3716] - Klick auf Suchergebnis öffnet falsches Dokument in Frontdoor
+* [OPUSVIER-3725] - Nach Aufruf von opus4/crawlers kann nicht mehr im OPUS navigiert werden
+* [OPUSVIER-3753] - Verwendung des Optionen-Formulars bricht Export Links
+* [OPUSVIER-3754] - Exception beim Speichern im FileManager ohne SortOrder Wert
+* [OPUSVIER-3755] - Breadcrumb für Dokumente ohne Breadcrumb sieht seltsam aus
+* [OPUSVIER-3756] - DisplayBrowsing-Änderung für Sammlungen ändert ServerDateModified
+* [OPUSVIER-3757] - DisplayFrontdoor-Änderung führt zu ServerDateModified Aktualisierung
+* [OPUSVIER-3758] - Plugin InvalidateDocumentCache liest Filter-Konfiguration immer wieder ein
+* [OPUSVIER-3761] - Sichtbarkeits-Einstellungen für Sammlungen ändern ServerDateModified
+* [OPUSVIER-3762] - Feld Visible von Schriftenreihen führt zu ServerDateModified Änderung
+* [OPUSVIER-3763] - OAI Error Code
+* [OPUSVIER-3765] - Feld Visible von Opus_Collection sollte ServerDateModified nicht ändern
+* [OPUSVIER-3802] - Frage zur Installation der 4.0 Lizenzen wird beim Update nicht angezeigt
+* [OPUSVIER-3823] - Nutzerrolle "guest" mit Zugriff auf Modul "export" zeigt bei allen anderen Rollen Administrationsrechte an
+* [OPUSVIER-3824] - Überprüfen des Warnhinweises beim Speichern einer Datei im Adminbereich
+* [OPUSVIER-3826] - Update-Script ändert "server_date_modified" für alle Dokumente, auch wenn sich diese nicht geändert haben
+* [OPUSVIER-3829] - Übersetzungen mit HTML-Tags müssen in CDATA eingefasst werden
+* [OPUSVIER-3831] - Namen mit führenden Leerzeichen werden nicht zusammengefasst
+* [OPUSVIER-3836] - Anwendungsfehler beim Anlegen einer neuen Sammlung
+* [OPUSVIER-3837] - Personen Bulk-Formular nur öffnen wenn Person gefunden wird
+
+### Feature Requests
+
+* [OPUSVIER-2415] - Browsing-URLs sind nicht Google-Scholar-Freundlich
+* [OPUSVIER-2768] - Export von Ergebnislisten in Bibtex
+* [OPUSVIER-2933] - Anzeige von eingeklappten Abstracts auf der Frontdoor: Wörter nicht abschneiden und "..." direkt hinter dem Text
+* [OPUSVIER-3071] - Wunsch nach kurzen URLs für die Frontdoor
+* [OPUSVIER-3246] - Zurückspringen an die Stelle in einer Sammlung, an der ein Eintrag hinzugefügt wurde.
+* [OPUSVIER-3496] - Suchtrefferanzeige soll in Abhängigkeit der englischen Oberfläche bevorzugt englische Titel und Abstracts anzeigen (konfigurierbar)
+* [OPUSVIER-3504] - Datum der letzten Änderung in der Dokumentenliste im Admin anzeigen
+* [OPUSVIER-3505] - Anzeige aller Dokumente unabhängig vom Dokumentstatus im Adminbereich
+* [OPUSVIER-3572] - Konfigurationsmöglichkeit für Reply-To und des Return-Path bei E-Mails aus Opus
+* [OPUSVIER-3573] - Version 4 der CC-Lizenzen in OPUS aufnehmen
+* [OPUSVIER-3622] - Redirect auf vorherige Seite nach Login
+* [OPUSVIER-3630] - Ausgabe Lizenzen über OAI
+* [OPUSVIER-3654] - Veröffentlichungsformulare ergänzen um SubjectDDC (3-stellig durch Definition "CollectionLeaf")
+* [OPUSVIER-3655] - Grafische Sichtbarkeit von Open-Access-Publikationen in Trefferlisten
+* [OPUSVIER-3680] - Verlinkung zu ORCID für Autoren in Frontdoor
+
+### Aufgaben
+
+* [OPUSVIER-152] - Batch Processing von zu indexierenden Dokumenten
+* [OPUSVIER-157] - Unschöne URLs
+* [OPUSVIER-766] - "Allgemeine Suchoptionen" sollen auch nach der einfachen Suche zur Verfügung stehen
+* [OPUSVIER-918] - Ingest-Schnittstelle für Dokumente
+* [OPUSVIER-1108] - Browsing nach dem Jahr der Veröffentlichung
+* [OPUSVIER-1292] - Citation-Export: Aufruf von Opus_Model_Filter ersetzen
+* [OPUSVIER-1662] - Matheon-spezifische Felder in solr.xslt und schema.xml entfernen
+* [OPUSVIER-1760] - Symbol für Volltexte bei der Suchanzeige anbieten
+* [OPUSVIER-1813] - Lizenzen überarbeiten
+* [OPUSVIER-1828] - Änderung des Environment für die Skripte
+* [OPUSVIER-1870] - Import von Metadaten
+* [OPUSVIER-1952] - Request Parameter von abgelehnten Zugriffen ans Login-Formular weiterreichen
+* [OPUSVIER-2039] - Unit-Test für Abhängigkeiten von UnixTimestamp schreiben
+* [OPUSVIER-2293] - xMetaDiss aus der Auslieferung entfernen
+* [OPUSVIER-2588] - Prüfen ob TMX Dateien valide sind (xmllint)
+* [OPUSVIER-2743] - Verknüpfung mit Sammlungen (CollectionRole) überarbeiten
+* [OPUSVIER-3068] - Definition der Datenbankparameter an einer einzigen Stelle
+* [OPUSVIER-3154] - DDC-Notation für Elemente der ersten und zweiten Ebene bei der XMetaDissPlus-Ausgabe
+* [OPUSVIER-3324] - Beim Anhängen der Export-Parameter in der SolrSearch entsteht eine url-Mischform
+* [OPUSVIER-3411] - Export Plugins ermöglichen
+* [OPUSVIER-3412] - Modul Crawlers mit Unit Tests abdecken und dokumentieren
+* [OPUSVIER-3418] - OpenAire - Project-Identifier-Ausgabe in OAI-DC klären
+* [OPUSVIER-3463] - Erweitertes Suchformular auf Zend_Form umstellen
+* [OPUSVIER-3484] - OAI Anfrage Identify muss adminEmail Element mit gültigem Wert enthalten
+* [OPUSVIER-3485] - DINI Zertifikat: Maschinenlesbare Angaben zur Rechtesituation in den Metadaten der veröffentlichten Dokumente (Frontdoor und OAI)
+* [OPUSVIER-3516] - PHP Version von createdb.sh Skript
+* [OPUSVIER-3529] - Webpräsenz von OPUS 4 überprüfen
+* [OPUSVIER-3577] - Skript für notwendige Schritte nach Git-Update
+* [OPUSVIER-3592] - Funktionen für XSLT aus Frontdoor Controller in Modelklasse verschieben
+* [OPUSVIER-3660] - Ausgabe der Zugriffsinformationen auf den Volltext über OAI_DC
+* [OPUSVIER-3664] - Export von Ergebnislisten im CSV-Format
+* [OPUSVIER-3665] - Export von Ergebnislisten im RIS-Format
+* [OPUSVIER-3691] - Leere Elemente wie "abstracts" im Import XML sollten toleriert werden
+* [OPUSVIER-3704] - Module Management Seite in der Administration
+* [OPUSVIER-3705] - SWORD Authentifizierung mit Account Management integrieren
+* [OPUSVIER-3706] - Links für Seitennavigation durch Icons ersetzen
+* [OPUSVIER-3708] - Export Links in Frontdoor dynamisch erzeugen
+* [OPUSVIER-3709] - Verwendung von custom.css ohne Änderungen an common.phtml
+* [OPUSVIER-3711] - OPUS Logo durch CSS bestimmen
+* [OPUSVIER-3714] - Home (Logo) Link konfigurierbar
+* [OPUSVIER-3717] - Auswahl der Icons für die Dateien in der Frontdoor mit CSS
+* [OPUSVIER-3720] - Home (Logo) LinkTitle konfigurierbar
+* [OPUSVIER-3722] - Neuer Personenbereich in der Administration mit eingeschränktem Zugriff
+* [OPUSVIER-3723] - Datenbankabfrage für Autoren (Personen)
+* [OPUSVIER-3724] - Auflistung der Personen in der Administration
+* [OPUSVIER-3726] - Filterung der Personen nach Rollen
+* [OPUSVIER-3727] - Anzeige der Dokumente für eine Person
+* [OPUSVIER-3728] - Filterung der Personen nach dem Namen
+* [OPUSVIER-3729] - Editieren von Personen für alle verknüpften Dokumente
+* [OPUSVIER-3730] - Anzeige der Rollen einer Person
+* [OPUSVIER-3731] - Hervorheben des Filter-Strings in den Namen
+* [OPUSVIER-3739] - Anzeige der Uhrzeit der letzten Änderung in der Metadatenübersicht
+* [OPUSVIER-3741] - Registrierung von Export-Plugins im Bootstrap von Modulen
+* [OPUSVIER-3743] - Flexible Updates der Datenbank für 4.6
+* [OPUSVIER-3748] - Export Pulldown für Suchergebnisse nur anzeigen wenn Exports möglich
+* [OPUSVIER-3749] - Export von Suchen muss selben Code verwenden wie Suche
+* [OPUSVIER-3750] - Änderung der DOI-Resolving-URL
+* [OPUSVIER-3751] - Änderung des URN-Resolver-Links
+* [OPUSVIER-3752] - Redirect Funktionen in angepasste Redirector-Klasse verschieben
+* [OPUSVIER-3766] - Export begrenzen für normale Nutzer
+* [OPUSVIER-3767] - Export Formate alphabetisch sortieren
+* [OPUSVIER-3768] - Multibranch-Pipeline Build für Nutzerdokumentation
+* [OPUSVIER-3769] - Multibranch-Pipeline Build für Entwicklerdokumentation
+* [OPUSVIER-3770] - Multibranch-Pipeline Build für OPUS 4 Homepage auf GitHub
+* [OPUSVIER-3775] - Tabelle "schema_version" vereinfachen
+* [OPUSVIER-3776] - Explizite Verwendung von SQL Schema Datei in Applikation entfernen
+* [OPUSVIER-3777] - Administrationsbereich "Einstellungen" hinzufügen
+* [OPUSVIER-3778] - Verlinkung zur GND von Autoren in der Frontdoor
+* [OPUSVIER-3791] - Feld "name" für kurze Lizenzbezeichnungen hinzufügen
+* [OPUSVIER-3792] - Entfernen der führenden Nullen der GND-IDs
+* [OPUSVIER-3794] - Kurznamen von Lizenzen in Übersicht anzeigen
+* [OPUSVIER-3795] - Option, um Update-Schritte einzeln bestätigen zu lassen (außer Datenbank)
+* [OPUSVIER-3796] - Unit Test für die korrekten Versionen der Datenbank im Framework
+* [OPUSVIER-3797] - Vorbereitungen für OPUS 4.6 Release
+* [OPUSVIER-3798] - Setzen der OPUS Version in Masterdaten in eigene Datei auslagern
+* [OPUSVIER-3799] - Gesamte Breite des Browsers in Administration nutzen
+* [OPUSVIER-3804] - Link zum "schema" Verzeichnis und "createdb.sh" entfernen
+* [OPUSVIER-3806] - Opus_Person um interne ID erweitern
+* [OPUSVIER-3811] - Status von Dokumenten in Liste anzeigen
+* [OPUSVIER-3814] - Keyboard Shortcut für ID Feld in Dokumenten-Verwaltung
+* [OPUSVIER-3815] - Funktion "intdiv" für PHP 5
+* [OPUSVIER-3825] - Formularelement "Combobox" um Werte auswählen und eingeben zu können
+* [OPUSVIER-3827] - Datenbank Update-Funktion für mehrere Personen
+* [OPUSVIER-3828] - Übersicht und Bestätigung der Änderungen beim Bulk-Editing von Personen
+* [OPUSVIER-3832] - Führende und nachfolgende Leerzeichen beim Speichern entfernen
+* [OPUSVIER-3835] - Verhindern, dass mehrere Personen-Formulare sich beeinflussen
+* [OPUSVIER-3838] - Fehlermeldungen für Suche nach Schriftenreihen und Sammlungen verbessern
+
+### Dokumentation
+
+* [OPUSVIER-2181] - Spezifikation der DefaultField-Types in der Dokumenttypdefinition
+* [OPUSVIER-2214] - Datentyp opus:validfieldname existiert nicht mehr in documenttype.xsd
+* [OPUSVIER-2416] - Verwendung von robots.txt dokumentieren
+
+---
+
 ## Release 4.5 2016-12-06
 
 ### Bugs
@@ -100,7 +383,7 @@
 * [OPUSVIER-3096] - Selenium Tests auf neuem CI-System fixen
 * [OPUSVIER-3097] - OPUS 4 Testserver von opus4mig nach opus4web umziehen
 * [OPUSVIER-3366] - Umstellung auf Solr-4.8
-* [OPUSVIER-3495] - Update Solr Schnittstelle 
+* [OPUSVIER-3495] - Update Solr Schnittstelle
 * [OPUSVIER-3517] - Update Solr auf opus4web zu Version 4.8 oder neuer
 * [OPUSVIER-3519] - Version von Schema in Datenbank speichern
 * [OPUSVIER-3524] - Update Selenium Instanz von GitHub Sourcen
@@ -119,7 +402,7 @@
 * [OPUSVIER-3648] - Konfigurationsdatei console.ini hinzufügen
 * [OPUSVIER-3650] - Datenbank Update für 4.5 Schema
 * [OPUSVIER-3658] - Workspace Verzeichnisse für Tests bei der Installation anlegen
-* [OPUSVIER-3659] - Fehlermeldungen bei der Ausführung von SQL Skripten 
+* [OPUSVIER-3659] - Fehlermeldungen bei der Ausführung von SQL Skripten
 * [OPUSVIER-3662] - Composer Installation ohne SUDO ausführen
 
 ### Dokumentation
@@ -893,7 +1176,7 @@
 * [OPUSVIER-2832] - Spezialsortierkriterium für Facette year umsetzen, so dass absteigende Sortierung (mit dem neuesten Jahr zuerst) möglich ist
 * [OPUSVIER-2833] - Konfiguration des Sortierkriteriums für die Facette year dokumentieren
 * [OPUSVIER-2834] - Verwendung des Opus_Document-Cache aktivieren
-* [OPUSVIER-2844] - Zusätzlichen Kommandozeilen-Parameter des Migrationsskriptes in die Doku aufnehmen. 
+* [OPUSVIER-2844] - Zusätzlichen Kommandozeilen-Parameter des Migrationsskriptes in die Doku aufnehmen.
 * [OPUSVIER-2847] - Beim Neuanlegen eines Cache-Eintrags für ein Dokument gleichzeitig eine Reindexierung für das Dokument anfordern
 * [OPUSVIER-2849] - Neuaufbau von fehlenden Cache-Einträgen im Hintergrund über Cronjob auslösen
 * [OPUSVIER-2851] - Bereitstellung des MetadatenImports im Framework
@@ -955,13 +1238,13 @@
 * [OPUSVIER-2827] - Implementierung eines MetadatenImport-Workers
 * [OPUSVIER-2840] - Anzeige der Opus_Job-Queue in der Administration
 * [OPUSVIER-2841] - Integration des Setup-Moduls in die Navigation
-* [OPUSVIER-2866] - Auswahl des Stylesheets um Config-Parameter erweiteren 
-* [OPUSVIER-2867] - Gruppierung der Dokumente einer Publikationsliste konfigurierbar machen 
-* [OPUSVIER-2883] - Implementierung von Unit-Tests für den BibTeX-Import-Controller 
+* [OPUSVIER-2866] - Auswahl des Stylesheets um Config-Parameter erweiteren
+* [OPUSVIER-2867] - Gruppierung der Dokumente einer Publikationsliste konfigurierbar machen
+* [OPUSVIER-2883] - Implementierung von Unit-Tests für den BibTeX-Import-Controller
 * [OPUSVIER-2888] - Absolute Urls statt relativer Urls im Default-Layout
 * [OPUSVIER-2889] - Prefix für attribute 'id' und 'class' sowie die Anker im Default-Layout einführen
 * [OPUSVIER-2892] - Unterbindung von Namespaces im Default-Layout
-* [OPUSVIER-2896] - Verschiebung der Job-Erzeugung beim BibTeX-Import vom Controller in das Modell 
+* [OPUSVIER-2896] - Verschiebung der Job-Erzeugung beim BibTeX-Import vom Controller in das Modell
 * [OPUSVIER-2900] - Import von BibTeX-Dateien mit deutschen Umlauten
 * [OPUSVIER-2912] - Selenium Tests für neues HTML gefixt
 * [OPUSVIER-2918] - Util-Klasse implementieren, die einen Konsistenzcheck bezüglich Datenbank und Suchindex durchführt und Inkonsistenzen auflöst
@@ -980,7 +1263,7 @@
 * [OPUSVIER-2735] - Direktverlinkungen in den FAQ
 * [OPUSVIER-2829] - Cronjob zur Cache-Revalidierung
 * [OPUSVIER-2830] - Bearbeitung von Übersetzungsressourcen und statischen Inhalten
-* [OPUSVIER-2898] - Verzeichnisbaum in der Dokumentation in Kap. 5.1 aktualisieren 
+* [OPUSVIER-2898] - Verzeichnisbaum in der Dokumentation in Kap. 5.1 aktualisieren
 
 ### Spezifikation
 

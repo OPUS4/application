@@ -92,9 +92,11 @@ class Admin_Form_Document_Patent extends Admin_Form_AbstractModelSubForm {
         
         $this->addElement('hidden', self::ELEMENT_ID);
         $this->addElement('text', self::ELEMENT_NUMBER, array('required' => true, 'label' => 'Number'));
-        $this->addElement('text', self::ELEMENT_COUNTRIES, array('label' => 'Countries'));
+        $this->addElement('text', self::ELEMENT_COUNTRIES, array('required' => true, 'label' => 'Countries'));
         $this->addElement('Year', self::ELEMENT_YEAR_APPLIED);
-        $this->addElement('text', self::ELEMENT_APPLICATION, array('label' => 'Application', 'size' => 60));
+        $this->addElement('text', self::ELEMENT_APPLICATION,
+            array('required' => true, 'label' => 'Application', 'size' => 60)
+        );
         $this->addElement('Date', self::ELEMENT_DATE_GRANTED);
     }
 

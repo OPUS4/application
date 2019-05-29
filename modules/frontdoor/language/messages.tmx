@@ -8,10 +8,10 @@
 
     <tu tuid="frontdoor_doc_id_missing">
       <tuv xml:lang="en">
-        <seg>Missing value for <em>docId</em> URL parameter</seg>
+        <seg><![CDATA[Missing value for <em>docId</em> URL parameter]]></seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Fehlender Wert für URL-Parameter <em>docId</em></seg>
+        <seg><![CDATA[Fehlender Wert für URL-Parameter <em>docId</em>]]></seg>
       </tuv>
     </tu>
    

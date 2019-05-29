@@ -25,23 +25,41 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Tests
+ * @category    Tests
+ * @package     Oai
  * @author      Thoralf Klein <thoralf.klein@zib.de>
  * @author      Sascha Szott <szott@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  *
  * TODO split specific protocol tests into separate classes
  * TODO unit tests transformations directly without "dispatch"
  * TODO create plugins for formats/protocols/standards
+ *
+ * @covers Oai_IndexController
  */
 class Oai_IndexControllerTest extends ControllerTestCase {
 
     private $_security;
     private $_addOaiModuleAccess;
     private $docIds = array();
+
+    private $xpathNamespaces = [
+        'oai' => "http://www.openarchives.org/OAI/2.0/",
+        'oai_dc' => "http://www.openarchives.org/OAI/2.0/oai_dc/",
+        'cc' => "http://www.d-nb.de/standards/cc/",
+        'dc' => "http://purl.org/dc/elements/1.1/",
+        'ddb' => "http://www.d-nb.de/standards/ddb/",
+        'pc' => "http://www.d-nb.de/standards/pc/",
+        'xMetaDiss' => "http://www.d-nb.de/standards/xmetadissplus/",
+        'epicur' => "urn:nbn:de:1111-2004033116",
+        'dcterms' => "http://purl.org/dc/terms/",
+        'thesis' => "http://www.ndltd.org/standards/metadata/etdms/1.0/",
+        'eprints' => 'http://www.openarchives.org/OAI/1.1/eprints',
+        'oaiid' => 'http://www.openarchives.org/OAI/2.0/oai-identifier'
+        ];
+
 
     /**
      * Method to check response for "bad" strings.
@@ -63,21 +81,19 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $domDocument->loadXML($resultString);
 
         $xpath = new DOMXPath($domDocument);
-        $xpath->registerNamespace('oai', "http://www.openarchives.org/OAI/2.0/");
-        $xpath->registerNamespace('oai_dc', "http://www.openarchives.org/OAI/2.0/oai_dc/");
-        $xpath->registerNamespace('cc', "http://www.d-nb.de/standards/cc/");
-        $xpath->registerNamespace('dc', "http://purl.org/dc/elements/1.1/");
-        $xpath->registerNamespace('ddb', "http://www.d-nb.de/standards/ddb/");
-        $xpath->registerNamespace('pc', "http://www.d-nb.de/standards/pc/");
-        $xpath->registerNamespace('xMetaDiss', "http://www.d-nb.de/standards/xmetadissplus/");
-        $xpath->registerNamespace('epicur', "urn:nbn:de:1111-2004033116");
-        $xpath->registerNamespace('dcterms', "http://purl.org/dc/terms/");
-        $xpath->registerNamespace('thesis', "http://www.ndltd.org/standards/metadata/etdms/1.0/");
+
+        foreach ($this->xpathNamespaces as $prefix => $namespaceUri)
+        {
+            $xpath->registerNamespace($prefix, $namespaceUri);
+        }
+
         return $xpath;
     }
 
     /**
      * Basic test for invalid verbs.
+     *
+     * @covers ::indexAction
      */
     public function testInvalidVerb() {
         $this->dispatch('/oai?verb=InvalidVerb');
@@ -90,6 +106,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Basic test for requests without verb.
+     *
+     * @covers ::indexAction
      */
     public function testNoVerb() {
         $this->dispatch('/oai');
@@ -102,17 +120,121 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Test verb=Identify.
+     *
+     * @covers ::indexAction
      */
     public function testIdentify() {
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
+            'oai' => array('repository' => array('name' => 'test-repo-name'))
+        )));
+
         $this->dispatch('/oai?verb=Identify');
         $this->assertResponseCode(200);
 
         $response = $this->getResponse();
         $this->checkForBadStringsInHtml($response->getBody());
+
+        $this->registerXpathNamespaces($this->xpathNamespaces);
+
+        $this->assertXpath('//oai:Identify');
+        $this->assertXpathContentContains('//oai:Identify/oai:repositoryName', 'test-repo-name');
+        $this->assertXpathContentContains('//oai:Identify/oai:baseURL', 'http:///oai');
+        $this->assertXpathContentContains('//oai:Identify/oai:protocolVersion', '2.0');
+        $this->assertXpathContentContains('//oai:Identify/oai:adminEmail', 'opus4ci@example.org');
+        $this->assertXpathContentContains('//oai:Identify/oai:earliestDatestamp', '2002-04-29');
+        $this->assertXpathContentContains('//oai:Identify/oai:deletedRecord', 'persistent');
+        $this->assertXpathContentContains('//oai:Identify/oai:granularity', 'YYYY-MM-DD');
+    }
+
+    public function testIdentifyDescriptionEprintsBasic()
+    {
+        $this->dispatch('/oai?verb=Identify');
+        $this->assertResponseCode(200);
+
+        $this->registerXpathNamespaces($this->xpathNamespaces);
+
+        $this->assertXpathCount('//oai:description', 2);
+        $this->assertXpathCount('//oai:description/eprints:eprints', 1);
+        $this->assertNotXpath('//eprints:content/eprints:URL');
+        $this->assertXpathContentContains(
+            '//oai:description/eprints:eprints/eprints:content/eprints:text',
+            'OPUS 4 repository containing document metadata and fulltexts.'
+        );
+
+        $this->assertXpath('//eprints:metadataPolicy');
+        $this->assertNotXpath('//eprints:metadataPolicy/eprints:URL');
+        $this->assertNotXpath('//eprints:metadataPolicy/eprints:text');
+
+        $this->assertXpath('//eprints:dataPolicy');
+        $this->assertNotXpath('//eprints:dataPolicy/eprints:URL');
+        $this->assertNotXpath('//eprints:dataPolicy/eprints:text');
+
+        $this->assertNotXpath('//eprints:submissionPolicy');
+        $this->assertNotXpath('//eprints:comment');
+    }
+
+    public function testIdentifyDescriptionEprintsConfigured()
+    {
+        $values = array(
+            'content' => array('url' => 'test-content-url', 'text' => 'test-content-text'),
+            'metadataPolicy' => array('url' => 'test-metadata-url', 'text' => 'test-metadata-text'),
+            'dataPolicy' => array('url' => 'test-data-url', 'text' => 'test-data-text'),
+            'submissionPolicy' => array('url' => 'test-submission-url', 'text' => 'test-submission-text'),
+            'comment' => array('url' => 'test-comment-url', 'text' => 'test-comment-text')
+        );
+
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
+            'oai' => array('description' => array('eprints' => $values))
+        )));
+
+        $this->dispatch('/oai?verb=Identify');
+        $this->assertResponseCode(200);
+
+        $this->registerXpathNamespaces($this->xpathNamespaces);
+
+        $this->assertXpathCount('//oai:description', 2);
+        $this->assertXpathCount('//oai:description/eprints:eprints', 1);
+
+        foreach ($values as $element => $content) {
+            $this->assertXpathContentContains(
+                "//oai:description/eprints:eprints/eprints:$element/eprints:URL",
+                $content['url']
+            );
+            $this->assertXpathContentContains(
+                "//oai:description/eprints:eprints/eprints:$element/eprints:text",
+                $content['text']
+            );
+        }
+    }
+
+    public function testIdentifyDescriptionOaiIdentifier()
+    {
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
+            'oai' => array('repository' => array('identifier' => 'test-repo-identifier'),
+                'sample' => array('identifier' => 'test-sample-identifier'))
+        )));
+
+        $this->dispatch('/oai?verb=Identify');
+        $this->assertResponseCode(200);
+
+        $this->registerXpathNamespaces($this->xpathNamespaces);
+
+        $this->assertXpathCount('//oai:description', 2);
+        $this->assertXpathCount('//oai:description/oaiid:oai-identifier', 1);
+        $this->assertXpathContentContains('//oai:description/oaiid:oai-identifier/oaiid:scheme', 'oai');
+        $this->assertXpathContentContains(
+            '//oai:description/oaiid:oai-identifier/oaiid:repositoryIdentifier', 'test-repo-identifier'
+        );
+        $this->assertXpathContentContains('//oai:description/oaiid:oai-identifier/oaiid:delimiter', ':');
+        $this->assertXpathContentContains(
+            '//oai:description/oaiid:oai-identifier/oaiid:sampleIdentifier', 'test-sample-identifier'
+        );
     }
 
     /**
      * Test verb=ListMetadataFormats.
+     *
+     * @covers ::indexAction
      */
     public function testListMetadataFormats() {
         $this->dispatch('/oai?verb=ListMetadataFormats');
@@ -124,6 +246,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Test verb=ListSets.
+     *
+     * @covers ::indexAction
      */
     public function testListSets() {
         $this->dispatch('/oai?verb=ListSets');
@@ -151,9 +275,11 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         }
     }
 
+    /**
+     * @covers ::indexAction
+     */
     public function testGetRecordsFormats() {
         $formatTestDocuments = array(
-            'xMetaDiss' => 80,
             'xMetaDissPlus' => 41,
             'XMetaDissPlus' => 41,
             'oai_dc' => 91,
@@ -193,21 +319,9 @@ class Oai_IndexControllerTest extends ControllerTestCase {
     }
 
     /**
-     * Test verb=GetRecord, prefix=xMetaDiss.
-     */
-    public function testGetRecordxMetaDiss() {
-        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=xMetaDiss&identifier=oai::80');
-        $this->assertResponseCode(200);
-
-        $response = $this->getResponse();
-        $this->checkForBadStringsInHtml($response->getBody());
-
-        $this->assertContains('oai::80', $response->getBody(),
-                "Response must contain 'oai::80'");
-    }
-
-    /**
      * Test verb=GetRecord, prefix=oai_dc.
+     *
+     * @covers ::indexAction
      */
     public function testGetRecordOaiDc() {
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=oai_dc&identifier=oai::35');
@@ -219,6 +333,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Test verb=GetRecord, prefix=XMetaDissPlus.
+     *
+     * @covers ::indexAction
      */
     public function testGetRecordXMetaDissPlus() {
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=XMetaDissPlus&identifier=oai::41');
@@ -235,6 +351,10 @@ class Oai_IndexControllerTest extends ControllerTestCase {
                 "Response must contain 'xMetaDiss'");
     }
 
+    /**
+     *
+     * @covers ::indexAction
+     */
     public function testGetRecordXMetaDissPlusOnlyIfNotInEmbargo() {
         $today = date('Y-m-d', time());
 
@@ -258,6 +378,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Test verb=GetRecord, prefix=xMetaDissPlus.
+     *
+     * @covers ::indexAction
      */
     public function testGetRecordXMetaDissPlusAlternativeSpelling() {
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=xMetaDissPlus&identifier=oai::41');
@@ -276,6 +398,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Test verb=GetRecord, prefix=XMetaDissPlus.
+     *
+     * @covers ::indexAction
      */
     public function testGetRecordXMetaDissPlusContentDoc41() {
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=XMetaDissPlus&identifier=oai::41');
@@ -296,6 +420,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Test verb=GetRecord, prefix=XMetaDissPlus.
+     *
+     * @covers ::indexAction
      */
     public function testGetRecordXMetaDissPlusContentDoc91() {
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=XMetaDissPlus&identifier=oai::91');
@@ -322,6 +448,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Test verb=GetRecord, prefix=XMetaDissPlus.
+     *
+     * @covers ::indexAction
      */
     public function testGetRecordXMetaDissPlusNamespacesDoc91() {
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=XMetaDissPlus&identifier=oai::91');
@@ -346,6 +474,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Regression test for OPUSVIER-2193
+     *
+     * @covers ::indexAction
      */
     public function testGetRecordXMetaDissPlusDoc91Dcterms() {
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=XMetaDissPlus&identifier=oai::91');
@@ -373,6 +503,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Regression test for OPUSVIER-2068
+     *
+     * @covers ::indexAction
      */
     public function testGetRecordXMetaDissPlusDoc91CheckThesisYearAccepted() {
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=XMetaDissPlus&identifier=oai::91');
@@ -396,6 +528,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Regression test for OPUSVIER-1788
+     *
+     * @covers ::indexAction
      */
     public function testGetRecordXMetaDissPlusDoc146SubjectDDC() {
         $doc = new Opus_Document(146);
@@ -430,6 +564,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Regression test for OPUSVIER-2068
+     *
+     * @covers ::indexAction
      */
     public function testGetRecordXMetaDissPlusDoc148CheckThesisYearAccepted() {
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=XMetaDissPlus&identifier=oai::148');
@@ -453,6 +589,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Regression test for OPUSVIER-2448
+     *
+     * @covers ::indexAction
      */
     public function testGetRecordXMetaDissPlusDoc1DdbIdentifier() {
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=XMetaDissPlus&identifier=oai::1');
@@ -472,6 +610,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Regression test for OPUSVIER-2452
+     *
+     * @covers ::indexAction
      */
     public function testGetRecordXMetaDissPlusDoc132EmptyThesisGrantor() {
         $doc = new Opus_Document(132);
@@ -495,6 +635,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Regression test for OPUSVIER-2523
+     *
+     * @covers ::indexAction
      */
     public function testGetRecordXMetaDissPlusDoc132EmptyThesisPublisher() {
         $doc = new Opus_Document(132);
@@ -518,6 +660,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Regression tests on document 93
+     *
+     * @covers ::indexAction
      */
     public function testGetRecordXMetaDissPlusDoc93() {
         $doc = new Opus_Document(93);
@@ -544,6 +688,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Regression test for existing thesis:* and ddb:* elements
+     *
+     * @covers ::indexAction
      */
     public function testGetRecordXMetaDissPlusDoc146ThesisAndDdb() {
         $doc = new Opus_Document(146);
@@ -582,6 +728,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
     /**
      * Testet, ob die neuangelegten Dokumenttypen als thesislevel ausgegeben werden.
      * Opusvier-3341
+     *
+     * @covers ::indexAction
      */
     public function testThesisLevelForXMetaDissPlus() {
         $thesisLevel = array('diplom' => 'Diplom', 'magister' => 'M.A.', 'examen' => 'other');
@@ -605,6 +753,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Regression test for OPUSVIER-2379
+     *
+     * @covers ::indexAction
      */
     public function testGetRecordOaiDcDoc91DocType() {
         $doc = new Opus_Document(91);
@@ -627,6 +777,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Regression tests on document 146
+     *
+     * @covers ::indexAction
      */
     public function testGetRecordOaiDcDoc146() {
 
@@ -656,6 +808,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Regression tests on document 91
+     * @covers ::indexAction
      */
     public function testGetRecordOaiDcDoc91() {
 
@@ -693,6 +846,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Regression test for OPUSVIER-2380 and OPUSVIER-2378
+     * @covers ::indexAction
      */
     public function testGetRecordOaiDcDoc10SubjectDdcAndDate() {
         $doc = new Opus_Document(10);
@@ -731,6 +885,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Regression test for OPUSVIER-2378
+     * @covers ::indexAction
      */
     public function testGetRecordOaiDcDoc114DcDate() {
         $doc = new Opus_Document(114);
@@ -759,6 +914,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Regression test for OPUSVIER-2454
+     * @covers ::indexAction
      */
     public function testGetRecordOaiDcDoc1ByIdentifierPrefixOai() {
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=oai_dc&identifier=oai::1');
@@ -777,6 +933,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Regression test for OPUSVIER-2454
+     * @covers ::indexAction
      */
     public function testGetRecordOaiDcDoc1ByIdentifierPrefixUrn() {
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=oai_dc&identifier=urn:nbn:de:gbv:830-opus-225');
@@ -795,6 +952,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Regression test for OPUSVIER-2535
+     * @covers ::indexAction
      */
     public function testGetRecordWithNonExistingDocumentId() {
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=oai_dc&identifier=oai::12345678');
@@ -810,6 +968,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Regression test for OPUSVIER-2454
+     * @covers ::indexAction
      */
     public function testGetRecordWithInvalidIdentifierPrefix() {
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=oai_dc&identifier=foo::1');
@@ -825,6 +984,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Test verb=ListIdentifiers.
+     * @covers ::indexAction
      */
     public function testListIdentifiers() {
         $this->dispatch('/oai?verb=ListIdentifiers&metadataPrefix=oai_dc');
@@ -836,6 +996,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Test verb=ListRecords, metadataPrefix=oai_dc.
+     * @covers ::indexAction
      */
     public function testListRecords() {
         $this->dispatch('/oai?verb=ListRecords&metadataPrefix=oai_dc&from=2006-01-01');
@@ -853,6 +1014,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Regression Test for OPUSVIER-3142
+     * @covers ::indexAction
      */
     public function testListRecordsXMetaDissPlusDocumentsWithFilesOnly()
     {
@@ -874,6 +1036,9 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         "Response must not contain records without files");
     }
 
+    /**
+     * @covers ::indexAction
+     */
     public function testListRecordsXMetaDissPlusDocumentsNotInEmbargoOnly()
     {
         $tomorrow = date('Y-m-d', strtotime('tomorrow'));
@@ -897,11 +1062,12 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $body = $this->getResponse()->getBody();
 
         $this->assertNotContains("oai::$docId", $body, 'Response should not contain embargoed document.');
-        $this->assertContains("oai::$visibleId", $body, 'Reponse should contain document without embargo.');
+        $this->assertContains("oai::$visibleId", $body, 'Response should contain document without embargo.');
     }
 
     /**
      * Regression test for OPUSVIER-3501
+     * @covers ::indexAction
      */
     public function testListRecordsXMetaDissPlusSetAndUntilAttributesSetCorrectly() {
         $this->dispatch('/oai?verb=ListRecords&metadataPrefix=xMetaDissPlus&from=2010-01-01&until=2011-01-01'
@@ -924,6 +1090,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Test that proves the bugfix for OPUSVIER-1710 is working as intended.
+     * @covers ::indexAction
      */
     public function testGetDeletedDocumentReturnsStatusDeleted() {
         $this->enableSecurity();
@@ -939,6 +1106,9 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->assertNotContains('<error code="unknown">An internal error occured.</error>', $this->getResponse()->getBody());
     }
 
+    /**
+     * @covers ::indexAction
+     */
     public function testTransferUrlIsPresent() {
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
@@ -955,6 +1125,9 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->assertContains($this->getRequest()->getBaseUrl() . '/oai/container/index/docId/' . $doc->getId() . '</ddb:transfer>', $this->getResponse()->getBody());
     }
 
+    /**
+     * @covers ::indexAction
+     */
     public function testTransferUrlIsNotPresent() {
         $doc = $this->createTestDocument();
         $doc->setServerState("published");
@@ -967,6 +1140,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Test verb=GetRecord, prefix=epicur.
+     *
+     * @covers ::indexAction
      */
     public function testGetRecordEpicurUrlEncoding() {
         $expectedFileNames = array("'many'  -  spaces  and  quotes.pdf", 'special-chars-%-"-#-&.pdf');
@@ -1002,6 +1177,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Test if the flag "VisibileInOai" affects all files of a document
+     *
+     * @covers ::indexAction
      */
     public function testDifferentFilesVisibilityOfOneDoc() {
 
@@ -1032,6 +1209,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * request for metadataPrefix=copy_xml is denied for non-administrative people
+     *
+     * @covers ::indexAction
      */
     public function testRequestForMetadataPrefixCopyxmlAndVerbGetRecordIsDenied() {
         $this->enableSecurity();
@@ -1041,6 +1220,9 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->resetSecurity();
     }
 
+    /**
+     * @covers ::indexAction
+     */
     public function testRequestForMetadataPrefixCopyxmlAndVerbListRecordIsDenied() {
         $this->enableSecurity();
         $this->dispatch('/oai?verb=ListRecords&metadataPrefix=copy_xml&from=2100-01-01');
@@ -1049,6 +1231,9 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->resetSecurity();
     }
 
+    /**
+     * @covers ::indexAction
+     */
     public function testRequestForMetadataPrefixCopyxmlAndVerbListIdentifiersIsDenied() {
         $this->enableSecurity();
         $this->dispatch('/oai?verb=ListIdentifiers&metadataPrefix=copy_xml');
@@ -1090,6 +1275,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Regression test for OPUSVIER-2450
+     *
+     * @covers ::indexAction
      */
     public function testDdbFileNumberForSingleDocumentAndSingleFile() {
         $doc = $this->createTestDocument();
@@ -1109,6 +1296,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Regression test for OPUSVIER-2450
+     *
+     * @covers ::indexAction
      */
     public function testDdbFileNumberForSingleDocumentAndMultipleFiles() {
         $doc = $this->createTestDocument();
@@ -1132,6 +1321,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Regression test for OPUSVIER-2450
+     *
+     * @covers ::indexAction
      */
     public function testDdbFileNumberForMultipleDocumentsForXMetaDissPlus() {
         $collection = new Opus_Collection(112);
@@ -1167,45 +1358,9 @@ class Oai_IndexControllerTest extends ControllerTestCase {
     }
 
     /**
-     * Regression test for OPUSVIER-2450
-     */
-    public function testDdbFileNumberForMultipleDocumentsForXMetaDiss() {
-        $collection = new Opus_Collection(112);
-
-        $doc1 = $this->createTestDocument();
-        $doc1->setServerState('published');
-        $doc1->setType('habilitation'); // xMetaDiss liefert nur Doktorarbeiten und Habilitationen aus
-        $file = new Opus_File();
-        $file->setVisibleInOai(true);
-        $file->setPathName('foo.pdf');
-        $doc1->addFile($file);
-        $file = new Opus_File();
-        $file->setVisibleInOai(true);
-        $file->setPathName('bar.pdf');
-        $doc1->addFile($file);
-        $doc1->addCollection($collection);
-        $this->docIds[] = $doc1->store();
-
-        $doc2 = $this->createTestDocument();
-        $doc2->setServerState('published');
-        $doc2->setType('doctoralthesis'); // xMetaDiss liefert nur Doktorarbeiten und Habilitationen aus
-        $file = new Opus_File();
-        $file->setVisibleInOai(true);
-        $file->setPathName('baz.pdf');
-        $doc2->addFile($file);
-        $doc2->addCollection($collection);
-        $this->docIds[] = $doc2->store();
-
-        $this->dispatch('/oai?verb=ListRecords&metadataPrefix=xMetaDiss&set=ddc:000');
-
-        $body = $this->getResponse()->getBody();
-        $this->assertContains('<ddb:fileNumber>2</ddb:fileNumber>', $body);
-        $this->assertContains('<ddb:fileNumber>1</ddb:fileNumber>', $body);
-        $this->assertNotContains('<ddb:fileNumber>3</ddb:fileNumber>', $body);
-    }
-
-    /**
      * Regression test for OPUSVIER-2508
+     *
+     * @covers ::indexAction
      */
     public function testTransferUrlIsIOnlyGivenForDocsWithFulltext() {
         $collection = new Opus_Collection(112);
@@ -1254,6 +1409,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      *  Regression Test for OPUSVIER-3072 (was Regression test for OPUSVIER-2509)
+     *
+     * @covers ::indexAction
      */
     public function testForDDCSubjectTypeForXMetaDissPlus() {
         $collection = new Opus_Collection(112);
@@ -1278,33 +1435,9 @@ class Oai_IndexControllerTest extends ControllerTestCase {
     }
 
     /**
-     *  Regression Test for OPUSVIER-3072 (was Regression test for OPUSVIER-2509 and OPUSVIER-2510)
-     */
-    public function testForDDCSubjectTypeForXMetaDiss() {
-        $collection = new Opus_Collection(112);
-
-        $doc = $this->createTestDocument();
-        $doc->setServerState('published');
-        $doc->setType('doctoralthesis'); // xMetaDiss liefert nur Doktorarbeiten und Habilitationen aus
-        $doc->addCollection($collection);
-
-        // fixing test for OPUSVIER-3142
-        $visibleFile = new Opus_File();
-        $visibleFile->setPathName('visible_file.txt');
-        $visibleFile->setVisibleInOai(true);
-        $doc->addFile($visibleFile);
-
-        $this->docIds[] = $doc->store();
-
-        $this->dispatch('/oai?verb=ListRecords&metadataPrefix=xMetaDiss&set=ddc:000');
-
-        $body = $this->getResponse()->getBody();
-        $this->assertNotContains('<dc:subject xsi:type="dcterms:DDC">000</dc:subject>', $body);
-        $this->assertContains('<dc:subject xsi:type="xMetaDiss:DDC-SG">000</dc:subject>', $body);
-    }
-
-    /**
      * Regression test for OPUSVIER-2564
+     *
+     * @covers ::indexAction
      */
     public function testForInvalidSetSpecsInListRecords() {
         $collectionRole = Opus_CollectionRole::fetchByOaiName('pacs');
@@ -1325,6 +1458,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Regression test for OPUSVIER-2564
+     *
+     * @covers ::indexAction
      */
     public function testForInvalidSetSpecsInListIdentifiers() {
         $collectionRole = Opus_CollectionRole::fetchByOaiName('pacs');
@@ -1345,6 +1480,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Regression test for OPUSVIER-2564
+     *
+     * @covers ::indexAction
      */
     public function testForInvalidSetSpecsInGetRecord79() {
         $collectionRole = Opus_CollectionRole::fetchByOaiName('pacs');
@@ -1363,6 +1500,9 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->assertNotContains('<setSpec>pacs:85.85.', $body);
     }
 
+    /**
+     * @covers ::indexAction
+     */
     public function testListRecordsForEmptySet() {
         $this->dispatch('/oai?verb=ListRecords&metadataPrefix=oai_dc&set=open_access');
 
@@ -1373,6 +1513,9 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->assertContains('<error code="noRecordsMatch">', $body);
     }
 
+    /**
+     * @covers ::indexAction
+     */
     public function testListRecordsForEmptySubset() {
         $this->dispatch('/oai?verb=ListRecords&metadataPrefix=oai_dc&set=open_access:open_access');
 
@@ -1383,6 +1526,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Regression test for OPUSVIER-2607
+     *
+     * @covers ::indexAction
      */
     public function testXMetaDissPlusOmitPersonSurnameIfEmpty() {
 
@@ -1414,10 +1559,6 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
       $this->dispatch('/oai?verb=GetRecord&metadataPrefix=xMetaDissPlus&identifier=oai::' . $document->getId());
 
-      $author->delete();
-      $advisor->delete();
-      $referee->delete();
-
       $this->assertResponseCode(200);
       $response = $this->getResponse();
       $xpath = $this->prepareXpathFromResultString($response->getBody());
@@ -1445,10 +1586,10 @@ class Oai_IndexControllerTest extends ControllerTestCase {
    }
 
     /**
-     *
-     *
      * Regression Test for OPUSVIER-3041
      * (was Regression Test for OPUSVIER-2599, but departments are revived now)
+     *
+     * @covers ::indexAction
      */
     public function testShowThesisGrantorDepartmentName() {
 
@@ -1470,6 +1611,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Regression Test for OPUSVIER-3162
+     *
+     * @covers ::indexAction
      */
     public function testXMetaDissPlusOutputLanguageCode() {
 
@@ -1481,6 +1624,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * XMetaDissPlus Schema validation (see OPUSVIER-3165)
+     *
+     * @covers ::indexAction
      */
     public function testXMetaDissPlusIsSchemaValid() {
         $xmlCatalog = getenv('XML_CATALOG_FILES');
@@ -1503,6 +1648,9 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->assertTrue($valid, 'XML Schema validation failed for XMetaDissPlus');
     }
 
+    /**
+     * @covers ::indexAction
+     */
     public function testListRecordsWithResumptionToken() {
         $max_records = 2;
 
@@ -1544,7 +1692,63 @@ class Oai_IndexControllerTest extends ControllerTestCase {
     }
 
     /**
+     * TODO test requires less than 200 documents in response
+     * TODO create test documents on the fly
+     */
+    public function testListRecordsWithEmptyResumptionTokenForLastBlock()
+    {
+        $max_records = 100;
+
+        $config = Zend_Registry::get('Zend_Config');
+        $config->oai->max->listrecords = $max_records;
+
+        // first request: fetch documents list and expect resumption code
+        $this->dispatch("/oai?verb=ListRecords&metadataPrefix=oai_dc");
+        $this->assertResponseCode(200);
+
+        $response = $this->getResponse();
+        $badStrings = array("Exception", "badArgument", "Stacktrace", "badVerb");
+        $this->checkForCustomBadStringsInHtml($response->getBody(), $badStrings);
+
+        $xpath = $this->prepareXpathFromResultString($response->getBody());
+        $recordElements = $xpath->query('//oai:ListRecords/oai:record');
+        $this->assertEquals($max_records, $recordElements->length);
+
+        $rsTokenElement = $xpath->query('//oai:ListRecords/oai:resumptionToken[@cursor="0"]');
+        $this->assertEquals(1, $rsTokenElement->length, 'foobar');
+        $rsToken = $rsTokenElement->item(0)->textContent;
+        $this->assertNotEmpty($rsToken);
+
+        $this->registerXpathNamespaces($this->xpathNamespaces);
+
+        $this->assertXpathCount('//oai:ListRecords/oai:resumptionToken', 1);
+        $this->assertXpathCount('//oai:ListRecords/oai:resumptionToken[node()]', 1);
+
+
+        // next request: continue document list with resumption token
+        $this->resetRequest();
+        $this->dispatch("/oai?verb=ListRecords&resumptionToken=$rsToken");
+        $this->assertResponseCode(200);
+
+        $response = $this->getResponse();
+        $badStrings = array("Exception", "Stacktrace", "badVerb", "badArgument");
+        $this->checkForCustomBadStringsInHtml($response->getBody(), $badStrings);
+
+        $xpath = $this->prepareXpathFromResultString($response->getBody());
+        $recordElements = $xpath->query('//oai:ListRecords/oai:record');
+        $this->assertLessThan($max_records, $recordElements->length);
+
+        $this->registerXpathNamespaces($this->xpathNamespaces);
+
+        $this->assertXpathCount('//oai:ListRecords/oai:resumptionToken', 1);
+        $this->assertXpathCount('//oai:ListRecords/oai:resumptionToken[not(node())]', 1); // no token
+        $this->assertXpathCount('//oai:ListRecords/oai:resumptionToken[not(@*)]', 1); // no attributes
+    }
+
+    /**
      * Regression Test for OPUSVIER-2762
+     *
+     * @covers ::indexAction
      */
     public function testDcCreatorIsAuthorIfExists() {
 
@@ -1560,6 +1764,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Regression Test for OPUSVIER-2762
+     *
+     * @covers ::indexAction
      */
     public function testDcCreatorIsEditorIfAuthorNotExists() {
 
@@ -1575,6 +1781,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Regression Test for OPUSVIER-2762
+     *
+     * @covers ::indexAction
      */
     public function testDcCreatorIsCreatingCorporationIfAuthorAndEditorNotExist() {
 
@@ -1590,6 +1798,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Regression Test for OPUSVIER-2762
+     *
+     * @covers ::indexAction
      */
     public function testDcCreatorIsOmittedIfNoValidEntrySupplied() {
 
@@ -1602,6 +1812,9 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->assertEquals(0, $dcCreator->length);
     }
 
+    /**
+     * @covers ::indexAction
+     */
     public function testDcLangUsesShortest639Code() {
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=oai_dc&identifier=oai::305');
 
@@ -1614,6 +1827,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Regression Test for OPUSVIER-2762
+     *
+     * @covers ::indexAction
      */
     public function testHabilitationIsDcTypeDoctoralthesis() {
 
@@ -1623,10 +1838,15 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $xpath = $this->prepareXpathFromResultString($response->getBody());
 
         $docType = $xpath->query('//oai_dc:dc/dc:type');
-        $this->assertEquals('doctoralthesis', $docType->item(0)->nodeValue);
+        $values = $this->nodeListToArray($docType);
 
+        $this->assertContains('doctoralthesis', $values);
+        $this->assertContains('doc-type:doctoralThesis', $values);
     }
 
+    /**
+     * @covers ::indexAction
+     */
     public function testXMetaDissPlusDcsourceContainsTitleParent() {
         $doc = new Opus_Document(146);
         $parentTitle = $doc->getTitleParent();
@@ -1647,6 +1867,9 @@ class Oai_IndexControllerTest extends ControllerTestCase {
                             'S. ' . $doc->getPageFirst() . '-' . $doc->getPageLast(), $dcSource->item(0)->nodeValue);
     }
 
+    /**
+     * @covers ::indexAction
+     */
     public function testXMetaDissPlusDcsourceContainsTitleParentPageNumber() {
         $doc = $this->createTestDocument();
 
@@ -1680,6 +1903,9 @@ class Oai_IndexControllerTest extends ControllerTestCase {
             $doc->getPageNumber() . ' S.', $dcSource->item(0)->nodeValue);
     }
 
+    /**
+     * @covers ::indexAction
+     */
     public function testXMetaDissPlusDctermsispartofContainsSeriesTitleAndNumber() {
         $doc = new Opus_Document(146);
         $series = $doc->getSeries();
@@ -1698,9 +1924,10 @@ class Oai_IndexControllerTest extends ControllerTestCase {
      * Mindestanforderungstest für OpenAire 3.0.
      * Document 145 und 146
      * Test verb=ListRecords, metadataPrefix=oai_dc, set=openaire.
+     *
+     * @covers ::indexAction
      */
     public function testListRecordsForOpenAireCompliance() {
-    //    $this->markTestSkipped('Oai-Ausgabe von open-aire sets vorübergehend deaktiviert');
         $this->dispatch('/oai?verb=ListRecords&metadataPrefix=oai_dc&set=openaire');
         $this->assertResponseCode(200);
 
@@ -1769,7 +1996,54 @@ class Oai_IndexControllerTest extends ControllerTestCase {
     }
 
     /**
+     *
+     * @covers ::indexAction
+     */
+    public function testListRecordsForOpenAireRelation()
+    {
+        $doc = $this->createTestDocument();
+        $doc->setServerState('published');
+
+        $relation = new Opus_Enrichment();
+        $relation->setKeyName('Relation');
+        $relation->setValue('test-1234');
+        $doc->addEnrichment($relation);
+
+        $relation = new Opus_Enrichment();
+        $relation->setKeyName('Relation');
+        $relation->setValue('info:eu-repo/grantAgreement/EC/FP7/1234withPrefix');
+        $doc->addEnrichment($relation);
+
+        $role = Opus_CollectionRole::fetchByName('openaire');
+        $openaire = $role->getCollectionByOaiSubset('openaire');
+        $doc->addCollection($openaire);
+
+        $docId = $doc->store();
+
+        $this->dispatch('/oai?verb=ListRecords&metadataPrefix=oai_dc&set=openaire');
+        $this->assertResponseCode(200);
+
+        $responseBody = $this->getResponse()->getBody();
+        $badStrings = array("Exception", "Stacktrace", "badVerb");
+        $this->checkForCustomBadStringsInHtml($responseBody, $badStrings);
+
+        $this->assertContains('<setSpec>openaire</setSpec>', $responseBody, 'OpenAire requires set-name to be "openaire"');
+        $this->assertNotContains('<setSpec>doc-type:doctoralthesis</setSpec>', $responseBody);
+
+        $xpath = $this->prepareXpathFromResultString($responseBody);
+
+        $queryResponse = $xpath->query("//oai_dc:dc[dc:identifier='http:///frontdoor/index/index/docId/{$docId}']/dc:relation");
+
+        $values = $this->nodeListToArray($queryResponse);
+
+        $this->assertCount(2, $values);
+        $this->assertContains('test-1234', $values);
+        $this->assertContains('info:eu-repo/grantAgreement/EC/FP7/1234withPrefix', $values);
+   }
+
+    /**
      * Testet die empfohlenen Felder für die OpenAireCompliance.
+     * @covers ::indexAction
      */
     public function testListRecordsForOpenAireComplianceForRecommendedFields() {
         $this->dispatch('/oai?verb=ListRecords&metadataPrefix=oai_dc&set=openaire');
@@ -1783,15 +2057,22 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
         // Language
         $queryResponse = $xpath->query("//oai_dc:dc[dc:identifier='http:///frontdoor/index/index/docId/146']/dc:language");
-        $this->assertEquals('deu', $queryResponse->item(0)->nodeValue);
+        $values = $this->nodeListToArray($queryResponse);
+        $this->assertContains('deu', $values);
+
         $queryResponse = $xpath->query("//oai_dc:dc[dc:identifier='http:///frontdoor/index/index/docId/145']/dc:language");
-        $this->assertEquals('deu', $queryResponse->item(0)->nodeValue);
+        $values = $this->nodeListToArray($queryResponse);
+        $this->assertContains('deu', $values);
 
         // Publication Version
         $queryResponse = $xpath->query("//oai_dc:dc[dc:identifier='http:///frontdoor/index/index/docId/146']/dc:type");
-        $this->assertEquals('info:eu-repo/semantics/publishedVersion', $queryResponse->item(1)->nodeValue);
+        $values = $this->nodeListToArray($queryResponse);
+        $this->assertContains('info:eu-repo/semantics/publishedVersion', $values);
+
         $queryResponse = $xpath->query("//oai_dc:dc[dc:identifier='http:///frontdoor/index/index/docId/145']/dc:type");
-        $this->assertEquals('info:eu-repo/semantics/publishedVersion', $queryResponse->item(1)->nodeValue);
+        $values = $this->nodeListToArray($queryResponse);
+        $this->assertContains('info:eu-repo/semantics/publishedVersion', $values);
+        $this->assertContains('info:eu-repo/semantics/workingPaper', $values);
 
         // Source (TitleParent ist nur bei 146 gesetzt
         $queryResponse = $xpath->query("//oai_dc:dc[dc:identifier='http:///frontdoor/index/index/docId/146']/dc:source");
@@ -1800,6 +2081,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Testet die korrekte Anzeige eines Dokuments vom Typ Periodical Parts.
+     *
+     * @covers ::indexAction
      */
     public function testXMetaDissPlusForPeriodicalParts() {
         $doc = $this->createTestDocument();
@@ -1818,6 +2101,9 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->assertEquals($elements->item(0)->nodeValue, '1337', 'data contains wrong series number; expected number: 1337');
     }
 
+    /**
+     * @covers ::indexAction
+     */
     public function testGetRecordXMetaDissPlusLanguageCodes() {
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
@@ -1846,6 +2132,9 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->assertEquals(1, $elements->length);
     }
 
+    /**
+     * @covers ::indexAction
+     */
     public function testExampleLinkListIdentifiers()
     {
         $this->dispatch('/oai?verb=ListIdentifiers&metadataPrefix=oai_dc');
@@ -1860,4 +2149,154 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->assertEquals(10, $elements->length);
     }
 
+    protected function nodeListToArray($nodeList)
+    {
+        $values = array();
+
+        foreach ($nodeList as $node)
+        {
+            $values[] = $node->nodeValue;
+        }
+
+        return $values;
+    }
+
+    /**
+     * @covers ::indexAction
+     */
+    public function testErrorForRepeatedParameters()
+    {
+        $this->dispatch('/oai?verb=ListIdentifiers&metadataPrefix=oai_dc&metadataPrefix=oai_dc');
+
+        $this->assertResponseCode(200);
+
+        $body = $this->getResponse()->getBody();
+
+        $xpath = $this->prepareXpathFromResultString($body);
+
+        $elements = $xpath->query('//oai:error');
+        $this->assertEquals(1, $elements->length);
+
+        $error = $elements->item(0);
+        $this->assertEquals('badArgument', $error->getAttribute('code'));
+    }
+
+    /**
+     * @covers ::indexAction
+     */
+    public function testErrorForUnknownId()
+    {
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=oai_dc&identifier=oai:opus4.demo:9999');
+
+        $this->assertResponseCode(200);
+
+        $body = $this->getResponse()->getBody();
+
+        $xpath = $this->prepareXpathFromResultString($body);
+
+        $elements = $xpath->query('//oai:error');
+        $this->assertEquals(1, $elements->length);
+
+        $error = $elements->item(0);
+        $this->assertEquals('idDoesNotExist', $error->getAttribute('code'));
+    }
+
+    /**
+     * @covers ::indexAction
+     */
+    public function testErrorForListMetadataFormatsWithBadIdentifierParameter()
+    {
+        $this->dispatch('/oai?verb=ListMetadataFormats&identifier=really_wrong_id');
+
+        $this->assertResponseCode(200);
+
+        $body = $this->getResponse()->getBody();
+
+        $xpath = $this->prepareXpathFromResultString($body);
+
+        $elements = $xpath->query('//oai:error');
+        $this->assertEquals(2, $elements->length);
+
+        $errorCodes = array(
+            $elements->item(0)->getAttribute('code'),
+            $elements->item(1)->getAttribute('code')
+        );
+
+        $this->assertContains('badArgument', $errorCodes);
+        $this->assertContains('idDoesNotExist', $errorCodes);
+    }
+
+    /**
+     * @covers ::indexAction
+     */
+    public function testGetUsingXpathInTests()
+    {
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=oai_dc&identifier=oai:opus4.demo:146');
+
+        $this->assertResponseCode(200);
+
+        $body = $this->getResponse()->getBody();
+
+        $xpath = $this->prepareXpathFromResultString($body);
+
+        $elements = $xpath->query('//dc:title');
+        $this->assertEquals(2, $elements->length);
+
+        $elements = $xpath->query('//oai:setSpec');
+        $this->assertEquals(12, $elements->length);
+
+        $elements = $xpath->query('//oai:request');
+        $this->assertEquals(1, $elements->length);
+    }
+
+    /**
+     * @covers ::indexAction
+     */
+    public function testXmlValidOpusvier3846()
+    {
+        $this->dispatch('/oai?verb=GetRecord&identifier=oai:opus4.demo:146&metadataPrefix=xMetaDissPlus');
+
+        libxml_use_internal_errors(true);
+
+        $xpath = $this->prepareXpathFromResultString($this->getResponse()->getBody());
+        $xMetaDissNode = $xpath->query('//xMetaDiss:xMetaDiss')->item(0);
+        $metadataDocument = new DOMDocument();
+        $importedNode = $metadataDocument->importNode($xMetaDissNode, true);
+        $metadataDocument->appendChild($importedNode);
+
+        // TODO libxml_use_internal_errors(true);
+        $valid = $metadataDocument->schemaValidate(
+            APPLICATION_PATH . '/tests/resources/xmetadissplus/xmetadissplus.xsd'
+        );
+
+        /* TODO provide functionality for all tests
+        $errors = libxml_get_errors();
+        foreach($errors as $error) {
+            var_dump($error);
+        } */
+
+        $this->assertTrue($valid, 'XML Schema validation failed for XMetaDissPlus');
+
+        // Schema validation does not detect problem
+        $this->assertNotContains('>"', $this->getResponse()->getBody(), 'XML contains \'"\' after an element.');
+    }
+
+    public function testGetRecordOaiDcContainsDoi()
+    {
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=oai_dc&identifier=oai::146');
+
+        $this->registerXpathNamespaces($this->xpathNamespaces);
+
+        $this->assertXpathContentContains('//oai_dc:dc/dc:identifier','123');
+    }
+
+    public function testGetRecordXMetaDissPlusContainsDoi()
+    {
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=XMetaDissPlus&identifier=oai::146');
+
+        $this->registerXpathNamespaces($this->xpathNamespaces);
+
+        $this->assertXpathContentContains('//xMetaDiss:xMetaDiss/dc:identifier','123');
+        $this->assertXpathContentContains('//xMetaDiss:xMetaDiss/ddb:identifier','10.1007/978-3-540-76406-9');
+    }
 }

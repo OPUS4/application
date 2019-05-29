@@ -34,6 +34,13 @@
  */
 class Publish_IndexController extends Application_Controller_Action {
 
+    public function init()
+    {
+        parent::init();
+
+        $this->view->robots = 'noindex, nofollow';
+    }
+
     /**
      * Renders the first form:
      * a list of available document types (that can be configured in config.ini
@@ -80,5 +87,14 @@ class Publish_IndexController extends Application_Controller_Action {
         if ($translate->isTranslated('tooltip_documentType')) {
             $this->view->documentType['hint'] = 'tooltip_documentType';
         }
+
+        // Adds translated messages for javascript files
+        $javascriptTranslations = $this->view->getHelper('javascriptMessages');
+        $javascriptTranslations->addMessage('uploadedFileHasErrorMessage');
+        $javascriptTranslations->addMessage('fileExtensionFalse');
+        $javascriptTranslations->addMessage('fileUploadErrorSize');
+        $javascriptTranslations->addMessage('filenameLengthError');
+        $javascriptTranslations->addMessage('filenameFormatError');
+        $javascriptTranslations->addMessage('chooseAnotherFile');
     }
 }

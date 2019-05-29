@@ -28,15 +28,20 @@
  * @category    Application
  * @package     Module_Frontdoor
  * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  *
+ * Controller for handling file downloads in the frontdoor.
  */
-class Frontdoor_DeliverController extends Application_Controller_Action {
+class Frontdoor_DeliverController extends Application_Controller_Action
+{
 
-    public function indexAction() {
-
+    /**
+     * Handles file downloads.
+     */
+    public function indexAction()
+    {
         $docId = $this->_getParam('docId', null);
         $path = $this->_getParam('file', null);
 
@@ -46,8 +51,7 @@ class Frontdoor_DeliverController extends Application_Controller_Action {
 
         try {
             $fileModel = new Frontdoor_Model_File($docId, $path);
-        }
-        catch (Frontdoor_Model_FrontdoorDeliveryException $e) {
+        } catch (Frontdoor_Model_FrontdoorDeliveryException $e) {
             $this->handleDeliveryError($e);
             return;
         }
@@ -56,8 +60,7 @@ class Frontdoor_DeliverController extends Application_Controller_Action {
 
         try {
             $fileObject = $fileModel->getFileObject($realm);
-        }
-        catch(Frontdoor_Model_FrontdoorDeliveryException $e) {
+        } catch(Frontdoor_Model_FrontdoorDeliveryException $e) {
             $this->handleDeliveryError($e);
             return;
         }
@@ -73,18 +76,20 @@ class Frontdoor_DeliverController extends Application_Controller_Action {
 
         $this->disableViewRendering();
 
+        $mimeType = $fileObject->getMimeType();
+        $contentDisposition = $this->_helper->fileTypes->getContentDisposition($mimeType);
+
         $this->getResponse()
                 ->clearAllHeaders()
-                ->setHeader('Content-Disposition', 'attachment; filename="'.$baseFilename.'"', true)
-                ->setHeader('Content-type', $fileObject->getMimeType(), true)
+                ->setHeader('Content-Disposition', "$contentDisposition; filename=\"$baseFilename\"", true)
+                ->setHeader('Content-type', $mimeType, true)
                 ->setHeader('Cache-Control', 'private', true)
                 ->setHeader('Pragma', 'cache', true);
 
         $this->_helper->SendFile->setLogger($this->getLogger());
         try {
             $this->_helper->SendFile($fullFilename);
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->logError($e);
             $response = $this->getResponse();
             $response->clearAllHeaders();
@@ -103,25 +108,26 @@ class Frontdoor_DeliverController extends Application_Controller_Action {
      *
      * @param  string $filename
      * @return string quoted/mime-encoded
+     *
+     * TODO move to model class - unit test
      */
-    public static function quoteFileName($filename) {
+    public static function quoteFileName($filename)
+    {
         if (preg_match('/[^A-Za-z0-9_., -]/', $filename)) {
             return '=?UTF-8?B?'.base64_encode($filename).'?=';
         }
         return $filename;
     }
 
-    private function logError($exception) {
+    private function logError($exception)
+    {
         $this->getLogger()->err($exception);
     }
 
-    private function handleDeliveryError($exception) {
+    private function handleDeliveryError($exception)
+    {
+        $this->getResponse()->setHttpResponseCode($exception->getCode());
         $this->view->translateKey = $exception->getTranslateKey();
         $this->render('error');
-    }
-
-    private function disableViewRendering() {
-        $this->_helper->layout->disableLayout();
-        $this->_helper->viewRenderer->setNoRender();
     }
 }

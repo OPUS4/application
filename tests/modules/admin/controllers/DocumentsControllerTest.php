@@ -24,15 +24,16 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Tests
+ * @category    Tests
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
  * Basic unit test for the documents controller in the admin module.
+ *
+ * @covers Admin_DocumentsController
  */
 class Admin_DocumentsControllerTest extends ControllerTestCase {
 
@@ -184,5 +185,27 @@ class Admin_DocumentsControllerTest extends ControllerTestCase {
         $this->assertQuery("//a[@href='/admin/documents/index/state/published']");
         $this->assertQuery("//a[@href='/admin/documents/index/state/audited']");
     }
+
+    public function testShowAuthorFilter()
+    {
+        $person = new Opus_Person();
+        $person->setLastName('Test');
+        $person->setFirstName('Justa');
+        $person->setIdentifierOrcid('0000-0000-0000-0001');
+        $person->setIdentifierGnd('123456789');
+        $person->setIdentifierMisc('ID1234');
+        $person->store();
+
+        $this->dispatch(
+            '/admin/documents/index/state/all/role/author/last_name/Test/first_name/Justa' .
+            '/identifier_orcid/0000-0000-0000-0001/identifier_gnd/123456789/identifier_misc/ID1234'
+        );
+
+        $this->assertQueryContentContains('li.identifier_orcid', '0000-0000-0000-0001');
+        $this->assertQueryContentContains('li.identifier_gnd', '123456789');
+        $this->assertQueryContentContains('li.identifier_misc', 'ID1234');
+
+    }
+
 }
 

@@ -24,14 +24,14 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Tests
+ * @category    Tests
+ * @package     Admin
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
+ *
+ * @covers Admin_FilebrowserController
  */
-
 class Admin_FilebrowserControllerTest extends ControllerTestCase {
     
     private $documentId;
@@ -69,7 +69,7 @@ class Admin_FilebrowserControllerTest extends ControllerTestCase {
         $this->verifyBreadcrumbDefined();
         $this->assertQueryContentContains('//div.breadcrumbsContainer//a[@href="/admin/document/index/id/'
             . $this->documentId . '"]',
-            'Kein Titel angegeben für Dokument ID (i ... (' . $this->documentId . ')');
+            "unbenanntes Dokument (id = '{$this->documentId}')");
         $this->assertQueryContentContains('//div.breadcrumbsContainer//a[@href="/admin/filemanager/index/id/'
             . $this->documentId . '/continue/1"]',
             'Dateien');

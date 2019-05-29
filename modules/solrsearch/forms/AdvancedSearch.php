@@ -49,11 +49,6 @@ class Solrsearch_Form_AdvancedSearch extends Application_Form_Abstract {
     const GROUP_SEARCHFIELDS = 'searchfields';
 
     /**
-     * Name of display group for generic search options.
-     */
-    const GROUP_OPTIONS = 'options';
-
-    /**
      * Name of element for selecting maximum number of search results per page.
      */
     const ELEMENT_HITS_PER_PAGE = 'rows';
@@ -127,10 +122,6 @@ class Solrsearch_Form_AdvancedSearch extends Application_Form_Abstract {
 
         $this->setAttrib('class', 'opus_form'); // TODO with underline, change?
 
-        if ($this->searchMode !== 'authorsearch') {
-            $this->addSearchOptions();
-        }
-
         $searchFields = array(
             'author', 'title', 'persons', 'referee', 'abstract', 'fulltext'
         );
@@ -169,18 +160,14 @@ class Solrsearch_Form_AdvancedSearch extends Application_Form_Abstract {
 
         $this->addDisplayGroup(
             $elements,
-            self::GROUP_SEARCHFIELDS,
-            array('legend' => 'advanced_search_form_search_fields')
+            self::GROUP_SEARCHFIELDS
         );
 
         $fieldGroup = $this->getDisplayGroup(self::GROUP_SEARCHFIELDS);
 
-        // var_dump($fieldGroup->getDecorators());
-
         $fieldGroup->setDecorators(array(
             'FormElements',
-            array('HtmlTag', array('tag' => 'table')),
-            'Fieldset'
+            array('HtmlTag', array('tag' => 'table', 'class' => 'search-form-table'))
         ));
     }
 
@@ -273,23 +260,6 @@ class Solrsearch_Form_AdvancedSearch extends Application_Form_Abstract {
         ));
 
         return $button;
-    }
-
-    /**
-     * Adds a fieldset with search options to form.
-     * @throws Zend_Form_Exception
-     */
-    public function addSearchOptions() {
-        $this->addElement('HitsPerPage', self::ELEMENT_HITS_PER_PAGE);
-
-        $this->addDisplayGroup(
-            array(self::ELEMENT_HITS_PER_PAGE),
-            self::GROUP_OPTIONS,
-            array('legend' => 'advanced_search_form_general_search_options')
-        );
-
-        $this->getDisplayGroup(self::GROUP_OPTIONS)->removeDecorator('HtmlTag');
-        $this->getDisplayGroup(self::GROUP_OPTIONS)->removeDecorator('DtDdWrapper');
     }
 
 }

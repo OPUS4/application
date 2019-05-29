@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tmx SYSTEM "http://www.gala-global.org/oscarStandards/tmx/tmx14.dtd">
+<tmx version="1.4">
+
+ <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
+ </header>
+
+  <body>
+
+    <tu tuid="admin_module_index">
+      <tuv xml:lang="en">
+        <seg>Modules</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Module</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_title_module">
+      <tuv xml:lang="en">
+        <seg>Modules</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Module</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_title_module_description">
+      <tuv xml:lang="en">
+        <seg></seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg></seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_module_table_module">
+      <tuv xml:lang="en">
+        <seg>Module</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Modul</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_module_table_access">
+      <tuv xml:lang="en">
+        <seg>Access</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Zugriff</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_module_table_options">
+      <tuv xml:lang="en">
+        <seg>Options</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Einstellungen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_module_access_closed">
+      <tuv xml:lang="en">
+        <seg>closed</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>geschützt</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_module_access_public">
+      <tuv xml:lang="en">
+        <seg>public</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>offen</seg>
+      </tuv>
+    </tu>
+
+  </body>
+
+</tmx>

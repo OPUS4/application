@@ -2,8 +2,8 @@
 <!DOCTYPE tmx SYSTEM "http://www.gala-global.org/oscarStandards/tmx/tmx14.dtd">
 <tmx version="1.4">
 
- <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
- </header>
+  <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
+  </header>
 
   <body>
 
@@ -99,6 +99,34 @@
             <seg>Sie haben keine Datei ausgewählt.</seg>
         </tuv>
     </tu>
+
+      <!-- TODO move to TMX file for field hints? -->
+      <tu tuid="admin_persons_values_not_trimmed">
+          <tuv xml:lang="en">
+              <seg>Some values have additional leading or trailing spaces. Please select update to trim values when saving.</seg>
+          </tuv>
+          <tuv xml:lang="de">
+              <seg>Einige Werte haben zusätzliche Leerzeichen. Bitte Update auswählen für eine Bereinigung beim Speichern.</seg>
+          </tuv>
+      </tu>
+
+      <tu tuid="identifierInvalidFormat">
+          <tuv xml:lang="en">
+              <seg>'%value%' is malformed.</seg>
+          </tuv>
+          <tuv xml:lang="de">
+              <seg>'%value%' hat eine unerlaubte Form.</seg>
+          </tuv>
+      </tu>
+
+      <tu tuid="identifierInvalidCheckdigit">
+          <tuv xml:lang="en">
+               <seg>The check digit of '%value%' is not valid.</seg>
+          </tuv>
+          <tuv xml:lang="de">
+                <seg>Die Prüfziffer für '%value%' ist nicht korrekt.</seg>
+          </tuv>
+      </tu>
 
   </body>
 

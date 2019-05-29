@@ -40,13 +40,13 @@ class Application_Update_Database extends Application_Update_PluginAbstract
      */
     public function run()
     {
-        $this->println('Updating database ...');
+        $this->log('Updating database ...');
 
         $database = new Opus_Database();
 
         $database->update();
 
-        $this->println('Database update finished');
+        $this->log('Database update finished');
     }
 
 }

@@ -29,7 +29,6 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -40,7 +39,8 @@ class Application_Form_Element_EnrichmentKey extends Application_Form_Element_Se
     public function init() {
         parent::init();
 
-        $options = Opus_EnrichmentKey::getAll();
+        // load enrichment keys only once in order to save database queries
+        $options = Opus_EnrichmentKey::getAll(false);
 
         $values = array();
 
@@ -50,6 +50,12 @@ class Application_Form_Element_EnrichmentKey extends Application_Form_Element_Se
 
         foreach ($options as $index => $option) {
             $keyName = $option->getName();
+
+            // die folgenden beiden Enrichments sollen indirekt über Checkboxen
+            // im Abschnitt DOI / URN verwaltet werden
+            if ($keyName == 'opus.doi.autoCreate' || $keyName == 'opus.urn.autoCreate') {
+                continue;
+            }
 
             $values[] = $keyName;
 

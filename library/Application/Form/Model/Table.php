@@ -183,14 +183,62 @@ class Application_Form_Model_Table extends Application_Form_Abstract {
      * @param $model Model object
      * @return bool true - model can be modified and links should be rendered
      */
-    public function isModifiable($model) {
+    public function isModifiable($model)
+    {
         if (!is_null($this->_controller)) {
             return $this->_controller->isModifiable($model);
-        }
-        else {
+        } else {
             return true;
         }
     }
 
-}
+    /**
+     * Determines if an object can be deleted and a link for removing it should be rendered.
+     * @param $model Model object
+     * @return bool true - model can be deleted and link should be rendered
+     */
+    public function isDeletable($model)
+    {
+        if (!is_null($this->_controller)) {
+            return $this->_controller->isDeletable($model);
+        } else {
+            return true;
+        }
+    }
 
+    public function isUsed($model)
+    {
+        if (!is_null($this->_controller)) {
+            return $this->_controller->isUsed($model);
+        } else {
+            return false;
+        }
+    }
+
+    public function isProtected($model)
+    {
+        if (!is_null($this->_controller)) {
+            return $this->_controller->isProtected($model);
+        } else {
+            return false;
+        }
+    }
+
+    public function getRowCssClass($model)
+    {
+        if (!is_null($this->_controller)) {
+            return $this->_controller->getRowCssClass($model);
+        } else {
+            return null;
+        }
+    }
+
+    public function getRowTooltip($model)
+    {
+        if (!is_null($this->_controller)) {
+            return $this->_controller->getRowTooltip($model);
+        } else {
+            return null;
+        }
+    }
+}

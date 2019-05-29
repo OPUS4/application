@@ -24,17 +24,18 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Tests
+ * @category    Tests
+ * @package     Home
  * @author      Jens Schwidder <schwidder@zib.de>
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
  * Basic unit test for inded controller of home module.
+ *
+ * @covers Home_IndexController
  */
 class Home_IndexControllerTest extends ControllerTestCase {
 
@@ -287,4 +288,52 @@ class Home_IndexControllerTest extends ControllerTestCase {
         }
     }
 
+    public function testWrongModuleNameCase() {
+        $this->markTestSkipped('Revisit with ZF3.');
+        $this->dispatch('/hoMe');
+        $this->assertResponseCode(404);
+    }
+
+    public function testWrongModuleName() {
+        $this->dispatch('/home2');
+        $this->assertResponseCode(404);
+    }
+
+    public function testAllCapitalModuleName() {
+        $this->markTestSkipped('Revisit with ZF3.');
+        $this->dispatch('/HOME');
+        $this->assertResponseCode(404);
+    }
+
+    public function testWrongControllerName() {
+        $this->dispatch('/home/index2');
+        $this->assertResponseCode(404);
+    }
+
+    public function testWrongControllerNameCase() {
+        $this->markTestSkipped('Revisit with ZF3.');
+        $this->dispatch('/home/inDex');
+        $this->assertResponseCode(404);
+    }
+
+    public function testAllCapitalControllerName() {
+        $this->dispatch('/home/INDEX');
+        $this->assertResponseCode(200); // TODO should be '404'?
+    }
+
+    public function testWrongActionName() {
+        $this->dispatch('/home/index/help2');
+        $this->assertResponseCode(404);
+    }
+
+    public function testWrongActionNameCase() {
+        $this->markTestSkipped('Revisit with ZF3.');
+        $this->dispatch('/home/index/heLp');
+        $this->assertResponseCode(404);
+    }
+
+    public function testAllCapitalActionName() {
+        $this->dispatch('/home/index/HELP');
+        $this->assertResponseCode(200); // TODO should be '404'?
+    }
 }

@@ -31,9 +31,8 @@
  * @category    Application Unit Test
  * @package     Form_Element
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 class Application_Form_Element_RolesTest extends FormElementTestCase {
 
@@ -41,6 +40,7 @@ class Application_Form_Element_RolesTest extends FormElementTestCase {
         $this->_formElementClass = 'Application_Form_Element_Roles';
         $this->_expectedDecoratorCount = 4;
         $this->_expectedDecorators = array('ViewHelper', 'ElementHtmlTag', 'LabelNotEmpty', 'dataWrapper');
+        $this->_staticViewHelper = 'viewFormMultiCheckbox';
         parent::setUp();
     }
 
@@ -54,6 +54,84 @@ class Application_Form_Element_RolesTest extends FormElementTestCase {
         foreach ($options as $value => $label) {
             $this->assertEquals($value, $label);
         }
+    }
+
+    public function testSetValue()
+    {
+        $element = new Application_Form_Element_Roles('Roles');
+
+        $element->setValue(array('guest', 'reviewer', 'sworduser'));
+
+        $this->assertEquals(array('guest', 'reviewer', 'sworduser'), $element->getValue());
+    }
+
+    public function testSetValueWithRoles()
+    {
+        $element = new Application_Form_Element_Roles('Roles');
+
+        $element->setValue(array(
+            Opus_UserRole::fetchByName('docsadmin'),
+            Opus_UserRole::fetchByName('reviewer'),
+        ));
+
+        $this->assertEquals(array('docsadmin', 'reviewer'), $element->getValue());
+    }
+
+    public function testGetRoles()
+    {
+        $element = new Application_Form_Element_Roles('Roles');
+
+        $element->setValue(array('reviewer', 'docsadmin', 'sworduser'));
+
+        $this->assertEquals(array('reviewer', 'docsadmin', 'sworduser'), $element->getValue());
+
+        $roles = $element->getRoles();
+
+        $expectedRoles = array('reviewer', 'docsadmin', 'sworduser');
+
+        $this->assertCount(count($expectedRoles), $roles);
+
+        foreach ($roles as $role)
+        {
+            $this->assertInstanceOf('Opus_UserRole', $role);
+            $this->assertContains($role->getName(), $expectedRoles);
+
+            // removed already checked roles from expectation
+            $expectedRoles = array_diff($expectedRoles, array($role->getName()));
+        }
+
+        $this->assertCount(0, $expectedRoles);
+    }
+
+    public function testGetRolesForNull()
+    {
+        $element = new Application_Form_Element_Roles('Roles');
+
+        $roles = $element->getRoles();
+
+        $this->assertNotNull($roles);
+        $this->assertInternalType('array', $roles);
+        $this->assertEmpty($roles);
+    }
+
+    public function testIsValid()
+    {
+        $element = new Application_Form_Element_Roles('Roles');
+
+        $this->assertTrue($element->isValid(null));
+        $this->assertTrue($element->isValid(array()));
+        $this->assertTrue($element->isValid(array('reviewer', 'docsadmin')));
+
+        $this->assertFalse($element->isValid(array('unknown', 'docsadmin')));
+    }
+
+    public function testGetValueNull()
+    {
+        $element = new Application_Form_Element_Roles('Roles');
+
+        $element->setValue(null);
+
+        $this->assertNull($element->getValue());
     }
 
 }

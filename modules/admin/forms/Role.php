@@ -62,7 +62,9 @@ class Admin_Form_Role extends Zend_Form {
     public function init() {
         parent::init();
 
-        $this->getElement('name')->addValidator(new Application_Form_Validate_RoleAvailable());
+        $this->getElement('name')
+            ->addValidator(new Application_Form_Validate_RoleAvailable())
+            ->setAttrib('maxlength', Opus_UserRole::getFieldMaxLength('Name'));
     }
 
     public function populateFromRole($role) {

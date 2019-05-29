@@ -34,6 +34,8 @@
 
 /**
  * Select Element für Identifier Type.
+ *
+ * TODO should be Application_Form_Element_IdentifierType
  */
 class Application_Form_Element_Identifier extends Application_Form_Element_Select {
 
@@ -44,7 +46,9 @@ class Application_Form_Element_Identifier extends Application_Form_Element_Selec
         $types = $identifier->getField('Type')->getDefault();
 
         foreach ($types as $type) {
-            $this->addMultiOption($type, 'Opus_Identifier_Type_Value_' . ucfirst($type));
+            if ($type != 'urn' && $type != 'doi') {
+                $this->addMultiOption($type, 'Opus_Identifier_Type_Value_' . ucfirst($type));                
+            }           
         }
     }
 

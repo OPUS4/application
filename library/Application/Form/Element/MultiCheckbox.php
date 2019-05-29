@@ -25,18 +25,19 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Form_Element
+ * @package     Application_Form_Element
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 class Application_Form_Element_MultiCheckbox extends Zend_Form_Element_MultiCheckbox {
 
     public function init() {
         parent::init();
 
-        $this->addPrefixPath('Application_Form_Decorator', 'Application/Form/Decorator', Zend_Form::DECORATOR);
+        $this->addPrefixPath(
+            'Application_Form_Decorator', 'Application/Form/Decorator', Zend_Form::DECORATOR
+        );
     }
 
     public function loadDefaultDecorators() {
@@ -51,6 +52,20 @@ class Application_Form_Element_MultiCheckbox extends Zend_Form_Element_MultiChec
                 )
             );
         }
+    }
+
+    /**
+     * Sorgt dafür, daß nur der Text ausgeben wird und kein INPUT-Tag.
+     */
+    public function prepareRenderingAsView() {
+        $viewHelper = $this->getDecorator('ViewHelper');
+        if ($viewHelper instanceof Application_Form_Decorator_ViewHelper) {
+            $viewHelper->setViewOnlyEnabled(true);
+        }
+    }
+
+    public function getStaticViewHelper() {
+        return 'viewFormMultiCheckbox';
     }
 
 }

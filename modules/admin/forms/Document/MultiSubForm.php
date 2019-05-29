@@ -29,7 +29,6 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -62,13 +61,13 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
      * Klasse für Unterformulare.
      * @var type
      */
-    private $_subFormClass;
+    protected $_subFormClass;
 
     /**
      * Opus_Document Feldname für Unterformulare.
      * @var type
      */
-    private $_fieldName;
+    protected $_fieldName;
 
     /**
      * Validierungsextension für die Unterformulare.
@@ -84,7 +83,7 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
      * Konstruiert Instanz von Fomular.
      *
      * @param string $subFormClass Name der Klasse für Unterformulare
-     * @param string $fieldName Name des Opus_Document Feldes, dass angezeigt werden soll
+     * @param string $fieldName Name des Opus_Document Feldes, das angezeigt werden soll
      * @param string $validator Object für Validierungen über Unterformulare hinweg
      * @param multi $options
      */
@@ -121,12 +120,20 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
             $this->_renderAsTableEnabled = true;
             $this->setDecorators(
                 array(
-                'FormElements',
-                'TableHeader',
-                'TableWrapper',
-                array(array('fieldsWrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'fields-wrapper')),
-                array('FieldsetWithButtons', array('legendButtons' => self::ELEMENT_ADD)),
-                array(array('divWrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'subform'))
+                    'FormElements', // Zend decorator
+                    'TableHeader',
+                    'TableWrapper',
+                    array(
+                        array('fieldsWrapper' => 'HtmlTag'), 
+                        array('tag' => 'div', 'class' => 'fields-wrapper')
+                    ),
+                    array(
+                        'FieldsetWithButtons', array('legendButtons' => self::ELEMENT_ADD)
+                    ),
+                    array(
+                        array('divWrapper' => 'HtmlTag'), 
+                        array('tag' => 'div', 'class' => 'subform')
+                    )
                 )
             );
         }
@@ -225,27 +232,26 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
         if (array_key_exists(self::ELEMENT_ADD, $data)) {
             return $this->processPostAdd();
         }
-        else {
-            // Prüfen ob in einem Unterformular "Entfernen" geklickt wurde
-            foreach ($data as $subFormName => $subdata) {
-                $subform = $this->getSubForm($subFormName);
-                if (!is_null($subform)) {
-                    if (array_key_exists(self::ELEMENT_REMOVE, $subdata)) {
-                        return $this->processPostRemove($subFormName, $subdata);
-                    }
-                    else {
-                        $result = $subform->processPost($subdata, $context);
-                        if (!is_null($result)) {
-                            if (is_array($result)) {
-                                $result['subformName'] = $subFormName;
-                            }
-                            return $result;
-                        }
-                    }
+
+        // Prüfen ob in einem Unterformular "Entfernen" geklickt wurde
+        foreach ($data as $subFormName => $subdata) {
+            $subform = $this->getSubForm($subFormName);
+            if (!is_null($subform)) {
+                if (array_key_exists(self::ELEMENT_REMOVE, $subdata)) {
+                    return $this->processPostRemove($subFormName, $subdata);
                 }
                 else {
-                    $this->getLogger()->err(__METHOD__ . ': Subform with name ' . $subFormName . ' does not exits.');
+                    $result = $subform->processPost($subdata, $context);
+                    if (!is_null($result)) {
+                        if (is_array($result)) {
+                            $result['subformName'] = $subFormName;
+                        }
+                        return $result;
+                    }
                 }
+            }
+            else {
+                $this->getLogger()->err(__METHOD__ . ': Subform with name ' . $subFormName . ' does not exits.');
             }
         }
 
@@ -256,14 +262,14 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
         // TODO separate function for getting position?
         $position = $this->_removeSubForm($subFormName);
 
-        $this->_addAnker($this->determineSubFormForAnker($position));
+        $this->_addAnchor($this->determineSubFormForAnchor($position));
 
         return Admin_Form_Document::RESULT_SHOW;
     }
 
     protected function processPostAdd() {
         $subform = $this->appendSubForm();
-        $this->_addAnker($subform);
+        $this->_addAnchor($subform);
         return Admin_Form_Document::RESULT_SHOW;
     }
 
@@ -508,7 +514,7 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
      * @param type $removedPosition
      * @return \Admin_Form_Document_MultiSubForm
      */
-    public function determineSubFormForAnker($removedPosition) {
+    public function determineSubFormForAnchor($removedPosition) {
         $subforms = $this->getSubForms();
 
         $subformCount = count($subforms);
@@ -534,9 +540,9 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
      *
      * @param Zend_Form $subform
      */
-    protected function _addAnker($subform) {
+    protected function _addAnchor($subform) {
         $subform->addDecorator(
-            array('currentAnker' => 'HtmlTag'),
+            array('currentAnchor' => 'HtmlTag'),
             array('tag' => 'a', 'placement' => 'prepend', 'name' => 'current')
         );
     }

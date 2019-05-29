@@ -50,6 +50,7 @@ class Solrsearch_BrowseController extends Application_Controller_Action {
         parent::init();
         $this->_helper->mainMenu('browsing');
         $this->seriesUtil = new Solrsearch_Model_SeriesUtil();
+        $this->view->robots = 'noindex, nofollow';
     }
 
     public function indexAction() {
@@ -116,7 +117,7 @@ class Solrsearch_BrowseController extends Application_Controller_Action {
 
         if (count($visibleSeries) == 0)
         {
-            $this->_redirectToAndExit('index');
+            $this->_helper->Redirector->redirectToAndExit('index');
         }
 
         $this->view->series = $visibleSeries;

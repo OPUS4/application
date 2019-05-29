@@ -26,9 +26,12 @@
  *
  * @category    Application
  * @author      Pascal-Nicolas Becker <becker@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
+ *
+ * TODO use fromArray functionality to create document
+ * TODO create test that verifies completeness (compare with describe function)
  */
 
 $doc = new Opus_Document();
@@ -93,7 +96,6 @@ if (is_null($institutesRole) === true) {
                    ->setVisibleFrontdoor(1)
                    ->setDisplayFrontdoor('Name')
                    ->setVisibleOai('Name')
-                   ->setDisplayOai('Name')
                    ->store();
 }
 $instituteCollections = Opus_Collection::fetchCollectionsByRoleName($institutesRole->getId(), $instituteName);
@@ -142,7 +144,7 @@ $doc->addIdentifierOpac()->setValue('OPAC-ID 001 1237890654');
 $arxiv = $doc->addIdentifierArxiv();
 $arxiv->setValue('arXiv:0706.0001');
 
-// Valid DOI Identifier from DOI Homepage: http://www.doi.org/
+// Valid DOI Identifier from DOI Homepage: https://doi.org/
 $doi = $doc->addIdentifierDoi();
 $doi->setValue('10.1000/182');
 

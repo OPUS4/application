@@ -100,6 +100,10 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract {
         }
         $fieldset .= '>' . "\n\t\t\t\t\t";
 
+        if($options !== null) {
+            $field['options'] = $options;
+        }
+
         foreach ($field['options'] AS $key => $option) {
             $fieldset .= '<option value="' . htmlspecialchars($key, ENT_QUOTES) . '" label="'
                 . htmlspecialchars($option, ENT_QUOTES) . '"';
@@ -246,7 +250,7 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract {
      * @return <type>
      */
     function getFieldsetHint($name) {
-        return "<div class='description hint'><p>" . $this->view->translate('hint_' . $name) . "</div></p>";
+        return "<div class='description hint'><p>" . $this->view->translate('hint_' . $name) . "</p></div>";
     }
 
     function getLabelFor($name, $label, $required) {

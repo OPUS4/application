@@ -24,32 +24,37 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Unit Test
+ * @category    Tests
+ * @package     Admin
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
  * Basic unit tests for the Admin_AccountController class.
+ *
+ * @covers Admin_ConfigController
  */
 class Admin_ConfigControllerTest extends ControllerTestCase {
 
     /**
      * Tests routing to and successfull execution of 'index' action.
      */
-    public function testIndexAction() {
+    public function testIndexAction()
+    {
         $this->dispatch('/admin/config');
         $this->assertResponseCode(200);
     }
 
-    public function testIndexActionCancel() {
+    public function testIndexActionCancel()
+    {
         $this->getRequest()->setMethod('POST')->setPost(array(
             'Cancel' => 'Cancel'
         ));
 
         $this->dispatch('/admin/config');
-        $this->assertRedirectTo('/admin/index/setup');
+        $this->assertRedirectTo('/admin/index/config');
     }
 
 }

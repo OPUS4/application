@@ -21,7 +21,7 @@
     </header>
 
     <body>
-        
+
         <!-- Hier ist das Datumsformat definiert. TODO überall verwenden -->
         <tu tuid="date_format">
             <tuv xml:lang="en">
@@ -31,7 +31,7 @@
                 <seg>TT.MM.JJJJ</seg>
             </tuv>
         </tu>
-        
+
         <!-- Hier ist das Jahresformat definiert. TODO überall verwenden -->
         <tu tuid="year_format">
             <tuv xml:lang="en">
@@ -41,7 +41,7 @@
                 <seg>JJJJ</seg>
             </tuv>
         </tu>
-        
+
         <tu tuid="email_format">
             <tuv xml:lang="en">
                 <seg>local-part@hostname</seg>
@@ -50,7 +50,7 @@
                 <seg>name@servername</seg>
             </tuv>
         </tu>
-        
+
 
         <tu tuid="Opus_Document_ServerState_Value_Unpublished">
             <tuv xml:lang="en">
@@ -105,7 +105,7 @@
                 <seg>Geprüft</seg>
             </tuv>
         </tu>
-        
+
         <!-- Übersetzung wird für Workflow Rechte benötigt. -->
         <tu tuid="Opus_Document_ServerState_Value_Removed">
             <tuv xml:lang="en">
@@ -121,12 +121,21 @@
             field for class Opus_Model_Dependent_Link_DocumentPerson.
         -->
 
+        <tu tuid="Opus_Person_Role_Value_All">
+            <tuv xml:lang="en">
+                <seg>All</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Alle</seg>
+            </tuv>
+        </tu>
+
         <tu tuid="Opus_Person_Role_Value_Author">
             <tuv xml:lang="en">
                 <seg>Author</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>Verfasserangaben</seg>
+                <seg>Autor*in</seg>
             </tuv>
         </tu>
 
@@ -135,7 +144,7 @@
                 <seg>Editor</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>Herausgeber</seg>
+                <seg>Herausgeber*in</seg>
             </tuv>
         </tu>
 
@@ -144,7 +153,7 @@
                 <seg>Advisor</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>Betreuer</seg>
+                <seg>Betreuer*in</seg>
             </tuv>
         </tu>
 
@@ -162,7 +171,7 @@
                 <seg>Referee</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>Gutachter</seg>
+                <seg>Gutachter*in</seg>
             </tuv>
         </tu>
 
@@ -171,7 +180,7 @@
                 <seg>Translator</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>Übersetzer</seg>
+                <seg>Übersetzer*in</seg>
             </tuv>
         </tu>
 
@@ -189,7 +198,7 @@
                 <seg>Submitter</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>Einsteller</seg>
+                <seg>Einsteller*in</seg>
             </tuv>
         </tu>
 
@@ -695,6 +704,15 @@
             </tuv>
             <tuv xml:lang="de">
                 <seg>Spezial</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Value_Null">
+            <tuv xml:lang="en">
+                <seg>NULL</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>LEER</seg>
             </tuv>
         </tu>
 

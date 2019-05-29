@@ -28,12 +28,13 @@
  * @category    Application
  * @package     Module_Admin
  * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
-class Admin_RoleController extends Application_Controller_Action {
+class Admin_RoleController extends Application_Controller_Action
+{
 
     private static $_protectedRoles = array('guest', 'administrator');
 
@@ -96,7 +97,7 @@ class Admin_RoleController extends Application_Controller_Action {
             $postData = $this->getRequest()->getPost();
 
             if ($this->getRequest()->getPost('cancel')) {
-                return $this->_redirectTo('index');
+                return $this->_helper->Redirector->redirectTo('index');
             }
 
             $form = new Admin_Form_Role();
@@ -119,7 +120,7 @@ class Admin_RoleController extends Application_Controller_Action {
             }
         }
 
-        $this->_redirectTo('index');
+        $this->_helper->Redirector->redirectTo('index');
     }
 
     /**

@@ -80,13 +80,16 @@ class Admin_IndexmaintenanceController extends Application_Controller_Action {
         if (!$this->_model->getFeatureDisabled() && $this->getRequest()->isPost()) {
             $jobId = $this->_model->createJob();
             if (!is_null($jobId)) {
-                return $this->_redirectToAndExit(
+                return $this->_helper->Redirector->redirectToAndExit(
                     'index',
-                    $this->view->translate('admin_indexmaintenance_jobsumitted', array($jobId))
+                    $this->view->translate(
+                        'admin_indexmaintenance_jobsumitted',
+                        array($jobId)
+                    )
                 );
             }
         }
-        return $this->_redirectToAndExit('index');
+        return $this->_helper->Redirector->redirectToAndExit('index');
     }
 
     /**
@@ -97,7 +100,7 @@ class Admin_IndexmaintenanceController extends Application_Controller_Action {
         if (!$this->_model->getFeatureDisabled() && $this->getRequest()->isPost()) {
             // add a job
         }
-        return $this->_redirectToAndExit('index');
+        return $this->_helper->Redirector->redirectToAndExit('index');
     }
 
     /**
@@ -108,7 +111,7 @@ class Admin_IndexmaintenanceController extends Application_Controller_Action {
         if (!$this->_model->getFeatureDisabled() && $this->getRequest()->isPost()) {
             // add a job
         }
-        return $this->_redirectToAndExit('index');
+        return $this->_helper->Redirector->redirectToAndExit('index');
     }
 
 }

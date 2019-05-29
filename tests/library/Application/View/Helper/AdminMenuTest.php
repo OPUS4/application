@@ -24,12 +24,11 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Tests
- * @package     View_Helper
+ * @category    Tests
+ * @package     Application_View_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 class Application_View_Helper_AdminMenuTest extends ControllerTestCase {
@@ -74,7 +73,7 @@ class Application_View_Helper_AdminMenuTest extends ControllerTestCase {
         $acl = Zend_Registry::get('Opus_Acl');
         $acl->allow(Application_Security_AclProvider::ACTIVE_ROLE, 'options');
 
-        $page = $this->getPageByLabel('admin_title_setup');
+        $page = $this->getPageByLabel('admin_title_config');
         $this->assertTrue($this->_helper->hasAllowedChildren($page));
     }
 

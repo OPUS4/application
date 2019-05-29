@@ -53,7 +53,7 @@ class Admin_ConfigController extends Application_Controller_Action {
                         break;
                     }
                 case Admin_Form_Configuration::RESULT_CANCEL:
-                    $this->_redirectTo('setup', null, 'index', 'admin');
+                    $this->_helper->Redirector->redirectTo('config', null, 'index', 'admin');
                     break;
                 default:
                     break;

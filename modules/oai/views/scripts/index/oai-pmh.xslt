@@ -39,16 +39,18 @@
 <xsl:stylesheet version="1.0"
     xmlns="http://www.openarchives.org/OAI/2.0/"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:php="http://php.net/xsl"
+    exclude-result-prefixes="php">
 
     <xsl:param name="urnResolverUrl" />
+    <xsl:param name="doiResolverUrl" />
 
     <!-- add include here for each new metadata format    -->
 
     <xsl:include href="prefixes/oai_dc.xslt"/>
     <xsl:include href="prefixes/oai_pp.xslt"/>
     <xsl:include href="prefixes/epicur.xslt"/>
-    <xsl:include href="prefixes/xMetaDiss.xslt"/>
     <xsl:include href="prefixes/XMetaDissPlus.xslt"/>
     <xsl:include href="prefixes/copy_xml.xslt"/>
 
@@ -74,6 +76,8 @@
     <xsl:param name="oai_identifier" />
     <xsl:param name="oai_error_code" />
     <xsl:param name="oai_error_message" />
+    <xsl:param name="oai_error_code2" />
+    <xsl:param name="oai_error_message2" />
     <xsl:param name="oai_base_url" />
 
     <!--
@@ -116,10 +120,17 @@
                 </xsl:if>
                 <xsl:value-of select="$oai_base_url" />
             </request>
+            <!-- TODO find solution where iterating over any number of errors is possible -->
             <xsl:if test="$oai_error_code!=''">
                 <error>
                     <xsl:attribute name="code"><xsl:value-of select="$oai_error_code" /></xsl:attribute>
                     <xsl:value-of select="$oai_error_message" />
+                </error>
+            </xsl:if>
+            <xsl:if test="$oai_error_code2!=''">
+                <error>
+                    <xsl:attribute name="code"><xsl:value-of select="$oai_error_code2" /></xsl:attribute>
+                    <xsl:value-of select="$oai_error_message2" />
                 </error>
             </xsl:if>
 
@@ -170,12 +181,65 @@
            <granularity><xsl:text>YYYY-MM-DD</xsl:text></granularity>
            <description>
                <oai-identifier xmlns="http://www.openarchives.org/OAI/2.0/oai-identifier"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai-identifier http://www.openarchives.org/OAI/2.0/oai-identifier.xsd">
                   <scheme><xsl:text>oai</xsl:text></scheme>
                   <repositoryIdentifier><xsl:value-of select="$repIdentifier"/></repositoryIdentifier>
                   <delimiter><xsl:text>:</xsl:text></delimiter>
                   <sampleIdentifier><xsl:value-of select="$sampleIdentifier"/></sampleIdentifier>
                </oai-identifier>
+           </description>
+           <description>
+               <eprints xmlns="http://www.openarchives.org/OAI/1.1/eprints"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://www.openarchives.org/OAI/1.1/eprints http://www.openarchives.org/OAI/1.1/eprints.xsd">
+                 <xsl:if test="php:functionString('Application_Xslt::optionValue', 'url', 'oai.description.eprints.content') != '' or php:functionString('Application_Xslt::optionValue', 'text', 'oai.description.eprints.content') != ''">
+                 <content>
+                     <xsl:if test="php:functionString('Application_Xslt::optionValue', 'url', 'oai.description.eprints.content') != ''">
+                     <URL><xsl:value-of select="php:functionString('Application_Xslt::optionValue', 'url', 'oai.description.eprints.content')" /></URL>
+                     </xsl:if>
+                     <xsl:if test="php:functionString('Application_Xslt::optionValue', 'text', 'oai.description.eprints.content') != ''">
+                     <text><xsl:value-of select="php:functionString('Application_Xslt::optionValue', 'text', 'oai.description.eprints.content')" /></text>
+                     </xsl:if>
+                 </content>
+                 </xsl:if>
+                 <metadataPolicy>
+                     <xsl:if test="php:functionString('Application_Xslt::optionValue', 'url', 'oai.description.eprints.metadataPolicy') != ''">
+                         <URL><xsl:value-of select="php:functionString('Application_Xslt::optionValue', 'url', 'oai.description.eprints.metadataPolicy')" /></URL>
+                     </xsl:if>
+                     <xsl:if test="php:functionString('Application_Xslt::optionValue', 'text', 'oai.description.eprints.metadataPolicy') != ''">
+                         <text><xsl:value-of select="php:functionString('Application_Xslt::optionValue', 'text', 'oai.description.eprints.metadataPolicy')" /></text>
+                     </xsl:if>
+                 </metadataPolicy>
+                 <dataPolicy>
+                     <xsl:if test="php:functionString('Application_Xslt::optionValue', 'url', 'oai.description.eprints.dataPolicy') != ''">
+                         <URL><xsl:value-of select="php:functionString('Application_Xslt::optionValue', 'url', 'oai.description.eprints.dataPolicy')" /></URL>
+                     </xsl:if>
+                     <xsl:if test="php:functionString('Application_Xslt::optionValue', 'text', 'oai.description.eprints.dataPolicy') != ''">
+                         <text><xsl:value-of select="php:functionString('Application_Xslt::optionValue', 'text', 'oai.description.eprints.dataPolicy')" /></text>
+                     </xsl:if>
+                 </dataPolicy>
+                   <xsl:if test="php:functionString('Application_Xslt::optionValue', 'url', 'oai.description.eprints.submissionPolicy') != '' or php:functionString('Application_Xslt::optionValue', 'text', 'oai.description.eprints.submissionPolicy') != ''">
+                   <submissionPolicy>
+                       <xsl:if test="php:functionString('Application_Xslt::optionValue', 'url', 'oai.description.eprints.submissionPolicy') != ''">
+                           <URL><xsl:value-of select="php:functionString('Application_Xslt::optionValue', 'url', 'oai.description.eprints.submissionPolicy')" /></URL>
+                       </xsl:if>
+                       <xsl:if test="php:functionString('Application_Xslt::optionValue', 'text', 'oai.description.eprints.submissionPolicy') != ''">
+                           <text><xsl:value-of select="php:functionString('Application_Xslt::optionValue', 'text', 'oai.description.eprints.submissionPolicy')" /></text>
+                       </xsl:if>
+                   </submissionPolicy>
+                   </xsl:if>
+                   <xsl:if test="php:functionString('Application_Xslt::optionValue', 'url', 'oai.description.eprints.comment') != '' or php:functionString('Application_Xslt::optionValue', 'text', 'oai.description.eprints.comment') != ''">
+                   <comment>
+                       <xsl:if test="php:functionString('Application_Xslt::optionValue', 'url', 'oai.description.eprints.comment') != ''">
+                           <URL><xsl:value-of select="php:functionString('Application_Xslt::optionValue', 'url', 'oai.description.eprints.comment')" /></URL>
+                       </xsl:if>
+                       <xsl:if test="php:functionString('Application_Xslt::optionValue', 'text', 'oai.description.eprints.comment') != ''">
+                           <text><xsl:value-of select="php:functionString('Application_Xslt::optionValue', 'text', 'oai.description.eprints.comment')" /></text>
+                       </xsl:if>
+                   </comment>
+                   </xsl:if>
+               </eprints>
            </description>
         </Identify>
     </xsl:template>
@@ -195,11 +259,6 @@
             <metadataNamespace><xsl:text>urn:nbn:de:1111-2004033116</xsl:text></metadataNamespace>
           </metadataFormat>
           <metadataFormat>
-            <metadataPrefix><xsl:text>xMetaDiss</xsl:text></metadataPrefix>
-            <schema><xsl:text>http://www.d-nb.de/standards/xmetadiss/xmetadiss.xsd</xsl:text></schema>
-            <metadataNamespace><xsl:text>http://www.d-nb.de/standards/xMetaDiss/</xsl:text></metadataNamespace>
-          </metadataFormat>
-          <metadataFormat>
             <metadataPrefix><xsl:text>XMetaDissPlus</xsl:text></metadataPrefix>
             <schema><xsl:text>http://files.dnb.de/standards/xmetadissplus/xmetadissplus.xsd</xsl:text></schema>
             <metadataNamespace><xsl:text>http://www.d-nb.de/standards/xmetadissplus/</xsl:text></metadataNamespace>
@@ -216,14 +275,20 @@
         <xsl:if test="count(Opus_Document) > 0">
             <ListIdentifiers>
                 <xsl:apply-templates select="Opus_Document" />
-                <xsl:if test="$totalIds > 0">
-                    <resumptionToken>
-                        <xsl:attribute name="expirationDate"><xsl:value-of select="$dateDelete"/></xsl:attribute>
-                        <xsl:attribute name="completeListSize"><xsl:value-of select="$totalIds"/></xsl:attribute>
-                        <xsl:attribute name="cursor"><xsl:value-of select="$cursor"/></xsl:attribute>
-                        <xsl:value-of select="$res"/>
-                    </resumptionToken>
-                </xsl:if>
+                <xsl:choose>
+                    <xsl:when test="$totalIds > 0 and $res != ''">
+                        <resumptionToken>
+                            <xsl:attribute name="expirationDate"><xsl:value-of select="$dateDelete"/></xsl:attribute>
+                            <xsl:attribute name="completeListSize"><xsl:value-of select="$totalIds"/></xsl:attribute>
+                            <xsl:attribute name="cursor"><xsl:value-of select="$cursor"/></xsl:attribute>
+                            <xsl:value-of select="$res"/>
+                        </resumptionToken>
+                    </xsl:when>
+                    <xsl:when test="$totalIds > 0 and $res = ''">
+                        <resumptionToken />
+                    </xsl:when>
+                    <xsl:otherwise></xsl:otherwise>
+                </xsl:choose>
             </ListIdentifiers>
         </xsl:if>
     </xsl:template>
@@ -238,14 +303,20 @@
         <xsl:if test="count(Opus_Document) > 0">
             <ListRecords>
             <xsl:apply-templates select="Opus_Document" />
-                <xsl:if test="$totalIds > 0">
-                    <resumptionToken>
-                        <xsl:attribute name="expirationDate"><xsl:value-of select="$dateDelete"/></xsl:attribute>
-                        <xsl:attribute name="completeListSize"><xsl:value-of select="$totalIds"/></xsl:attribute>
-                        <xsl:attribute name="cursor"><xsl:value-of select="$cursor"/></xsl:attribute>
-                        <xsl:value-of select="$res"/>
-                    </resumptionToken>
-                </xsl:if>
+                <xsl:choose>
+                    <xsl:when test="$totalIds > 0 and $res != ''">
+                        <resumptionToken>
+                            <xsl:attribute name="expirationDate"><xsl:value-of select="$dateDelete"/></xsl:attribute>
+                            <xsl:attribute name="completeListSize"><xsl:value-of select="$totalIds"/></xsl:attribute>
+                            <xsl:attribute name="cursor"><xsl:value-of select="$cursor"/></xsl:attribute>
+                            <xsl:value-of select="$res"/>
+                        </resumptionToken>
+                    </xsl:when>
+                    <xsl:when test="$totalIds > 0 and $res = ''">
+                        <resumptionToken />
+                    </xsl:when>
+                    <xsl:otherwise></xsl:otherwise>
+                </xsl:choose>
             </ListRecords>
         </xsl:if>
     </xsl:template>
@@ -331,9 +402,6 @@
                     </xsl:when>
                     <xsl:when test="$oai_metadataPrefix='xMetaDissPlus'">
                        <xsl:apply-templates select="." mode="xmetadissplus" />
-                    </xsl:when>
-                    <xsl:when test="$oai_metadataPrefix='xMetaDiss'">
-                       <xsl:apply-templates select="." mode="xmetadiss" />
                     </xsl:when>
                     <xsl:when test="$oai_metadataPrefix='epicur'">
                        <xsl:apply-templates select="." mode="epicur" />

@@ -67,6 +67,14 @@ class Application_Form_Validate_Date extends Zend_Validate_Date {
         // automatically set date format used by Opus
         $this->setFormat($this->getDateFormat());
         $this->setInputPattern($this->getDatePattern());
+
+        $this->setMessages(
+            array(
+                Zend_Validate_Date::INVALID => 'validation_error_date_invalid',
+                Zend_Validate_Date::INVALID_DATE => 'validation_error_date_invaliddate',
+                Zend_Validate_Date::FALSEFORMAT => 'validation_error_date_falseformat'
+            )
+        );
     }
 
     /**

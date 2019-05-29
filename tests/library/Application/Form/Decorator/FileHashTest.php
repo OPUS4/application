@@ -27,7 +27,8 @@
  * @category    Application Unit Test
  * @package     Application_Form_Decorator
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @author      Maximilian Salomon <salomon@zib.de>
+ * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -101,6 +102,7 @@ class Application_Form_Decorator_FileHashTest extends ControllerTestCase {
     }
 
     public function testRenderWithMissingFile() {
+        $this->useEnglish();
         $element = new Application_Form_Element_FileHash('name');
 
         $file = new Opus_File(123);
@@ -127,6 +129,7 @@ class Application_Form_Decorator_FileHashTest extends ControllerTestCase {
     }
 
     public function testRenderWithFileTooBig() {
+        $this->useEnglish();
         $config = Zend_Registry::get('Zend_Config');
         $config->merge(new Zend_Config(array('checksum' => array('maxVerificationSize' => '0'))));
 

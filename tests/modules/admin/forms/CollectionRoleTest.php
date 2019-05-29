@@ -37,7 +37,7 @@ class Admin_Form_CollectionRoleTest extends ControllerTestCase {
     public function testConstructForm() {
         $form = new Admin_Form_CollectionRole();
 
-        $this->assertEquals(11, count($form->getElements()));
+        $this->assertEquals(13, count($form->getElements()));
 
         $this->assertNotNull($form->getElement('Name'));
         $this->assertNotNull($form->getElement('OaiName'));
@@ -48,6 +48,8 @@ class Admin_Form_CollectionRoleTest extends ControllerTestCase {
         $this->assertNotNull($form->getElement('VisibleOai'));
         $this->assertNotNull($form->getElement('DisplayBrowsing'));
         $this->assertNotNull($form->getElement('DisplayFrontdoor'));
+        $this->assertNotNull($form->getElement('AssignRoot'));
+        $this->assertNotNull($form->getElement('AssignLeavesOnly'));
 
         $this->assertNotNull($form->getElement('Save'));
         $this->assertNull($form->getElement('Cancel'));
@@ -68,6 +70,8 @@ class Admin_Form_CollectionRoleTest extends ControllerTestCase {
         $model->setVisibleOai(1);
         $model->setDisplayBrowsing('Name');
         $model->setDisplayFrontdoor('Number,Name');
+        $model->setAssignRoot(1);
+        $model->setAssignLeavesOnly(1);
 
         $form->populateFromModel($model);
 
@@ -80,6 +84,8 @@ class Admin_Form_CollectionRoleTest extends ControllerTestCase {
         $this->assertEquals(1, $form->getElement('VisibleOai')->getValue());
         $this->assertEquals('Name', $form->getElement('DisplayBrowsing')->getValue());
         $this->assertEquals('Number,Name', $form->getElement('DisplayFrontdoor')->getValue());
+        $this->assertEquals(1, $form->getElement('AssignRoot')->getValue());
+        $this->assertEquals(1, $form->getElement('AssignLeavesOnly')->getValue());
     }
 
     public function testPopulateFromModelWithId() {
@@ -106,6 +112,8 @@ class Admin_Form_CollectionRoleTest extends ControllerTestCase {
         $form->getElement('VisibleOai')->setValue(1);
         $form->getElement('DisplayBrowsing')->setValue('Number,Name');
         $form->getElement('DisplayFrontdoor')->setValue('Name,Number');
+        $form->getElement('AssignRoot')->setValue(1);
+        $form->getElement('AssignLeavesOnly')->setValue(1);
 
         $model = new Opus_CollectionRole();
 
@@ -121,6 +129,8 @@ class Admin_Form_CollectionRoleTest extends ControllerTestCase {
         $this->assertEquals(1, $model->getVisibleOai());
         $this->assertEquals('Number,Name', $model->getDisplayBrowsing());
         $this->assertEquals('Name,Number', $model->getDisplayFrontdoor());
+        $this->assertEquals(1, $model->getAssignRoot());
+        $this->assertEquals(1, $model->getAssignLeavesOnly());
     }
 
     public function testValidationEmptyPost() {

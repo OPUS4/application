@@ -27,9 +27,8 @@
  * @category    Application
  * @package     View
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2013-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -37,7 +36,8 @@
  *
  * Zur Zeit nur vom Metadaten-Formular genutzt.
  */
-class Application_Form_Element_Text extends Zend_Form_Element_Text implements Application_Form_IElement {
+class Application_Form_Element_Text extends Zend_Form_Element_Text implements Application_Form_IElement
+{
 
     /**
      * Hinweis, der mit dem Feld angezeigt werden sollte.
@@ -59,29 +59,31 @@ class Application_Form_Element_Text extends Zend_Form_Element_Text implements Ap
      *
      * Fügt PrefixPath für angepasste OPUS Dekoratoren hinzu.
      */
-    public function init() {
+    public function init()
+    {
         parent::init();
 
-        $this->addPrefixPath('Application_Form_Decorator', 'Application/Form/Decorator', Zend_Form::DECORATOR);
+        $this->addPrefixPath(
+            'Application_Form_Decorator', 'Application/Form/Decorator', Zend_Form::DECORATOR
+        );
     }
 
     /**
      * Lädt die Defaultdekoratoren für ein Textelement.
      */
-    public function loadDefaultDecorators() {
+    public function loadDefaultDecorators()
+    {
         if (!$this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
-            $this->setDecorators(
-                array(
+            $this->setDecorators([
                 'ViewHelper',
                 'Placeholder',
                 'Description',
                 'ElementHint',
                 'Errors',
                 'ElementHtmlTag',
-                array('LabelNotEmpty', array('tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend')),
-                array(array('dataWrapper' => 'HtmlTagWithId'), array('tag' => 'div', 'class' => 'data-wrapper'))
-                )
-            );
+                ['LabelNotEmpty', ['tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend']],
+                [['dataWrapper' => 'HtmlTagWithId'], ['tag' => 'div', 'class' => 'data-wrapper']]
+            ]);
         }
     }
 
@@ -89,7 +91,8 @@ class Application_Form_Element_Text extends Zend_Form_Element_Text implements Ap
      * Setzt den Hinweis für das Formularelement.
      * @param $hint Hinweis
      */
-    public function setHint($hint) {
+    public function setHint($hint)
+    {
         $this->_hint = $hint;
     }
 
@@ -97,14 +100,16 @@ class Application_Form_Element_Text extends Zend_Form_Element_Text implements Ap
      * Liefert den Hinweis für das Formularelement.
      * @return string
      */
-    public function getHint() {
+    public function getHint()
+    {
         return $this->_hint;
     }
 
     /**
      * Sorgt dafür, daß nur der Text ausgeben wird und kein INPUT-Tag.
      */
-    public function prepareRenderingAsView() {
+    public function prepareRenderingAsView()
+    {
         $viewHelper = $this->getDecorator('ViewHelper');
         if ($viewHelper instanceof Application_Form_Decorator_ViewHelper) {
             $viewHelper->setViewOnlyEnabled(true);
@@ -112,12 +117,13 @@ class Application_Form_Element_Text extends Zend_Form_Element_Text implements Ap
         $this->removeDecorator('Placeholder');
     }
 
-    public function getStaticViewHelper() {
+    public function getStaticViewHelper()
+    {
         return $this->_staticViewHelper;
     }
 
-    public function setStaticViewHelper($viewHelper) {
+    public function setStaticViewHelper($viewHelper)
+    {
         $this->_staticViewHelper = $viewHelper;
     }
-
 }

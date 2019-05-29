@@ -47,7 +47,7 @@ class Application_View_Helper_FileLinkTest extends ControllerTestCase {
 
         $file = new Opus_File(126);
 
-        $this->assertEquals('<a href="http:///files/146/test.pdf">foo-pdf</a>'
+        $this->assertEquals('<a href="http:///files/146/test.pdf" class="filelink">foo-pdf</a>'
             . '<input type="hidden" name="" value="126" id="" />', $helper->fileLink(null, $file,
             array('useFileLabel' => true)));
     }
@@ -60,7 +60,7 @@ class Application_View_Helper_FileLinkTest extends ControllerTestCase {
         $file = new Opus_File(130);
 
         $this->assertEquals(
-            '<a href="http:///files/147/special-chars-%25-%22-%23-%26.pdf">Dateiname-mit-Sonderzeichen.pdf</a>'
+            '<a href="http:///files/147/special-chars-%25-%22-%23-%26.pdf" class="filelink">Dateiname-mit-Sonderzeichen.pdf</a>'
             . '<input type="hidden" name="" value="130" id="" />',
             $helper->fileLink(null, $file, array('useFileLabel' => true)));
     }
@@ -73,7 +73,7 @@ class Application_View_Helper_FileLinkTest extends ControllerTestCase {
         $file = new Opus_File(131);
 
         $this->assertEquals(
-            '<a href="http:///files/147/%27many%27++-++spaces++and++quotes.pdf">'
+            '<a href="http:///files/147/%27many%27++-++spaces++and++quotes.pdf" class="filelink">'
             . 'Dateiname-mit-vielen-Spaces-und-Quotes.pdf</a>' . '<input type="hidden" name="" value="131" id="" />',
             $helper->fileLink(null, $file, array('useFileLabel' => true)));
     }
@@ -86,7 +86,7 @@ class Application_View_Helper_FileLinkTest extends ControllerTestCase {
         $file = new Opus_File(126);
         $file->setLabel(null);
 
-        $this->assertEquals('<a href="http:///files/146/test.pdf">test.pdf</a>'
+        $this->assertEquals('<a href="http:///files/146/test.pdf" class="filelink">test.pdf</a>'
             . '<input type="hidden" name="" value="126" id="" />',
             $helper->fileLink(null, $file, array('useFileLabel' => true)));
     }
@@ -105,7 +105,7 @@ class Application_View_Helper_FileLinkTest extends ControllerTestCase {
 
         $file = new Opus_File(126);
 
-        $this->assertEquals('<a href="http:///testbase/files/146/test.pdf">foo-pdf</a>'
+        $this->assertEquals('<a href="http:///testbase/files/146/test.pdf" class="filelink">foo-pdf</a>'
         . '<input type="hidden" name="" value="126" id="" />', $helper->fileLink(null, $file,
             array('useFileLabel' => true)));
     }

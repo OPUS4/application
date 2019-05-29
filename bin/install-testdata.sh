@@ -19,8 +19,6 @@
 # Adds testdata to database and rebuilds the index.
 #
 # TODO verify waiting for Solr works for local and remote setup
-# TODO requires DB_ADMIN_PASSWORD DB_ADMIN DB_NAME (get from config.ini?)
-#
 #
 
 set -e
