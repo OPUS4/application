@@ -37,7 +37,8 @@
  *
  * TODO class is tied to Application_Controller_ActionCRUD - resolve
  */
-class Application_Form_Model_Table extends Application_Form_Abstract {
+class Application_Form_Model_Table extends Application_Form_Abstract
+{
 
     /**
      * Modelle die angezeigt werden sollen.
@@ -67,7 +68,8 @@ class Application_Form_Model_Table extends Application_Form_Abstract {
      *
      * Setzt Decorators so, daß das Rendering in einem View Script erfolgt.
      */
-    public function init() {
+    public function init()
+    {
         parent::init();
         $this->initDecorators();
     }
@@ -75,11 +77,12 @@ class Application_Form_Model_Table extends Application_Form_Abstract {
     /**
      * Initialisiert die Decorators für die Tabelle.
      */
-    public function initDecorators() {
+    public function initDecorators()
+    {
         $this->setDecorators(
             array(
-            'PrepareElements',
-            array('ViewScript', array('viewScript' => $this->getViewScript()))
+                'PrepareElements',
+                array('ViewScript', array('viewScript' => $this->getViewScript()))
             )
         );
     }
@@ -88,7 +91,8 @@ class Application_Form_Model_Table extends Application_Form_Abstract {
      * Liefert die Spaltenkonfiguration.
      * @return array|null
      */
-    public function getColumns() {
+    public function getColumns()
+    {
         return $this->_columns;
     }
 
@@ -96,7 +100,8 @@ class Application_Form_Model_Table extends Application_Form_Abstract {
      * Setzt die Spaltenkonfiguration.
      * @param $columns
      */
-    public function setColumns($columns) {
+    public function setColumns($columns)
+    {
         $this->_columns = $columns;
     }
 
@@ -105,11 +110,11 @@ class Application_Form_Model_Table extends Application_Form_Abstract {
      * @param $index Index der Spalte angefangen bei 0
      * @return string|null
      */
-    public function getColumnLabel($index) {
+    public function getColumnLabel($index)
+    {
         if (isset($this->_columns[$index]['label'])) {
             return $this->_columns[$index]['label'];
-        }
-        else {
+        } else {
             return null;
         }
     }
@@ -118,7 +123,8 @@ class Application_Form_Model_Table extends Application_Form_Abstract {
      * Liefert gesetzte Modelle.
      * @return array|null
      */
-    public function getModels() {
+    public function getModels()
+    {
         return $this->_models;
     }
 
@@ -126,7 +132,8 @@ class Application_Form_Model_Table extends Application_Form_Abstract {
      * Setzt Modelle für Anzeige.
      * @param $models
      */
-    public function setModels($models) {
+    public function setModels($models)
+    {
         if (!is_null($models) && !is_array($models)) {
             throw new Application_Exception(__METHOD__ . 'Parameter must be array.');
         }
@@ -137,11 +144,11 @@ class Application_Form_Model_Table extends Application_Form_Abstract {
      * Setzt ViewScript für die Ausgabe der Modeltabelle.
      * @param $name
      */
-    public function setViewScript($name) {
+    public function setViewScript($name)
+    {
         if (!is_null($name)) {
             $this->_viewScript = $name;
-        }
-        else {
+        } else {
             $this->_viewScript = 'modeltable.phtml';
         }
         $this->initDecorators();
@@ -150,7 +157,8 @@ class Application_Form_Model_Table extends Application_Form_Abstract {
     /**
      * Liefert Namen des ViewScripts für die Ausgabe der Modeltabelle.
      */
-    public function getViewScript() {
+    public function getViewScript()
+    {
         return $this->_viewScript;
     }
 
@@ -160,7 +168,8 @@ class Application_Form_Model_Table extends Application_Form_Abstract {
      *
      * TODO make independent from controller class
      */
-    public function setController($controller) {
+    public function setController($controller)
+    {
         $this->_controller = $controller;
     }
 
@@ -177,8 +186,7 @@ class Application_Form_Model_Table extends Application_Form_Abstract {
             } else {
                 return $this->_controller->getShowActionEnabled();
             }
-        }
-        else {
+        } else {
             return true;
         }
     }
