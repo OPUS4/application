@@ -593,7 +593,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
      *
      * @covers ::isProtected
      */
-    public function testProtectedCssClassIsset()
+    public function testProtectedCssClassIsSet()
     {
         $enrichmentKeys = new Admin_Model_EnrichmentKeys();
         $protectedKeys = $enrichmentKeys->getProtectedEnrichmentKeys();
@@ -614,7 +614,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
      *
      * @covers ::isUsed
      */
-    public function testUsedCssClassIsset()
+    public function testUsedCssClassIsSet()
     {
         $usedKeys =  Opus_EnrichmentKey::getAllReferenced();
         $this->dispatch($this->getControllerPath());
