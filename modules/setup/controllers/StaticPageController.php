@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -28,36 +27,41 @@
  * @category    Application
  * @package     Module_Setup
  * @author      Edouard Simon <edouard.simon@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
  *
  */
-class Setup_StaticPageController extends Application_Controller_SetupAbstract {
+class Setup_StaticPageController extends Application_Controller_SetupAbstract
+{
 
-    protected $_config;
+    protected $config;
 
-    public function init() {
+    public function init()
+    {
         parent::init();
-        $this->_config = new Zend_Config_Ini(APPLICATION_PATH . '/modules/setup/setup.ini', 'static-page');
+        $this->config = new Zend_Config_Ini(APPLICATION_PATH . '/modules/setup/setup.ini', 'static-page');
         $this->getHelper('MainMenu')->setActive('admin');
     }
 
-    public function indexAction() {
-        $this->view->pageNames = $this->_config->pageNames;
+    public function indexAction()
+    {
+        $this->view->pageNames = $this->config->pageNames;
     }
 
-    protected function getModel() {
+    protected function getModel()
+    {
         $pageName = $this->getRequest()->getParam('page');
-        $config = $this->_config->toArray();
+        $config = $this->config->toArray();
         $config['useContentFile'] = ($pageName != 'home');
         return new Setup_Model_StaticPage($pageName, $config);
     }
 
-    protected function getForm() {
+    protected function getForm()
+    {
         $pageName = $this->getRequest()->getParam('page');
 
         switch($pageName) {
@@ -67,8 +71,7 @@ class Setup_StaticPageController extends Application_Controller_SetupAbstract {
             default:
                 $form = new Setup_Form_StaticPage();
         }
+
         return $form;
     }
-
 }
-
