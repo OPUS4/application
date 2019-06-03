@@ -82,7 +82,7 @@ class Admin_CollectionrolesController extends Application_Controller_Action {
             return $this->_helper->Redirector->redirectTo(
                 'index', $this->view->translate(
                     'admin_collectionroles_move',
-                    $collectionRoleModel->getObject()->getName()
+                    array($collectionRoleModel->getObject()->getName())
                 )
             );
         }
@@ -102,7 +102,7 @@ class Admin_CollectionrolesController extends Application_Controller_Action {
             return $this->_helper->Redirector->redirectTo(
                 'index', $this->view->translate(
                     'admin_collectionroles_changevisibility',
-                    $collectionRoleModel->getObject()->getName()
+                    array($collectionRoleModel->getObject()->getName())
                 )
             );
         }
@@ -175,8 +175,8 @@ class Admin_CollectionrolesController extends Application_Controller_Action {
         $collectionRole->store();
 
         return $this->_helper->Redirector->redirectTo(
-            'index', $this->view->translate($messageKey, $collectionRole->getName())
-        );
+            'index', $this->view->translate($messageKey, array($collectionRole->getName())
+        ));
     }
 
     /**
@@ -231,7 +231,7 @@ class Admin_CollectionrolesController extends Application_Controller_Action {
             $collectionRoleModel->getObject()->getDisplayName();
             $message = $this->view->translate(
                 'admin_collectionroles_delete',
-                $collectionRoleModel->getObject()->getName()
+                array($collectionRoleModel->getObject()->getName())
             );
             return $this->_helper->Redirector->redirectTo('index', $message);
         }

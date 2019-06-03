@@ -108,7 +108,7 @@ class Admin_WorkflowController extends Application_Controller_Action
         if (!$this->_workflowHelper->isTransitionAllowed($document, $targetState)) {
             return $this->_helper->Redirector->redirectTo(
                 'index', ['failure' => $this->view->translate(
-                    'admin_workflow_error_illegal_transition', $targetState
+                    'admin_workflow_error_illegal_transition', array($targetState)
                 )], 'document', 'admin', ['id' => $docId]
             );
         }
@@ -121,7 +121,7 @@ class Admin_WorkflowController extends Application_Controller_Action
                 $key = 'admin_workflow_error_alreadyinstate';
             }
             return $this->_helper->Redirector->redirectTo(
-                'index', ['failure' => $this->view->translate($key, $targetState)],
+                'index', ['failure' => $this->view->translate($key, [$targetState])],
                 'document', 'admin', ['id' => $docId]
             );
         }
@@ -141,7 +141,7 @@ class Admin_WorkflowController extends Application_Controller_Action
             // show confirmation page
             $this->view->documentAdapter = new Application_Util_DocumentAdapter($this->view, $document);
             $this->view->title = $this->view->translate('admin_workflow_' . $targetState);
-            $this->view->text = $this->view->translate('admin_workflow_' . $targetState . '_sure', $docId);
+            $this->view->text = $this->view->translate('admin_workflow_' . $targetState . '_sure', array($docId));
             $this->view->form = $this->_getConfirmationForm($document, $targetState);
         } else {
             return $this->_changeState($document, $targetState);
@@ -167,7 +167,7 @@ class Admin_WorkflowController extends Application_Controller_Action
         if (!$this->view->translate()->getTranslator()->isTranslated($key)) {
             $key = 'admin_workflow_success';
         }
-        $message = $this->view->translate($key, $document->getId(), $targetState);
+        $message = $this->view->translate($key, $document->getId(), array($targetState));
 
         if ($targetState === 'removed') {
             return $this->_helper->Redirector->redirectTo('index', $message, 'documents', 'admin');

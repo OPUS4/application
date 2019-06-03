@@ -33,10 +33,10 @@
  */
 ?>
 
-<h2><?= $this->translate('publish_success', $this->docId) ?></h2>
+<h2><?= $this->translate('publish_success', array($this->docId)) ?></h2>
 
 <div class="content">
-    <?= $this->translate('publish_success', $this->docId) ?>
+    <?= $this->translate('publish_success', array($this->docId)) ?>
 
     <?php if ($this->showFrontdoor) : ?>
        <a href="<?= $this->url(array('module' => 'frontdoor', 'controller' => 'index', 'action' => 'index',

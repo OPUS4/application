@@ -48,6 +48,8 @@ class Application_View_Helper_Translate extends Zend_View_Helper_Translate
      * of a placeholder value that matches a locale, for instance a collection with the name 'de'.
      * (for more information see OPUSVIER-2546)
      *
+     * TODO replace parent function entirely? Doing basically same things twice is not very efficient.
+     * TODO really try to get rid of this
      * TODO review if the behaviour changes are worth it - is there a better way?
      */
     public function translate($messageid = -1.1)

@@ -93,7 +93,7 @@
                     <td><?= $translation ?></td>
                     <td>
                         <a href="<?= $this->url(['action' => 'edit', 'file' => urlencode($file), 'key' => $key, 'search' => $this->searchTerm, 'sort' => $this->currentSortKey]) ?>"
-                           title="<?= $this->translate('setup_language_edit_hint', $key, $row['module'] . DIRECTORY_SEPARATOR . 'language_custom' . DIRECTORY_SEPARATOR . $row['filename']) ?>"><?= ($writeable) ? 'bearbeiten' : 'übernehmen' ?></a>
+                           title="<?= $this->translate('setup_language_edit_hint', [$key, $row['module'] . DIRECTORY_SEPARATOR . 'language_custom' . DIRECTORY_SEPARATOR . $row['filename']]) ?>"><?= ($writeable) ? 'bearbeiten' : 'übernehmen' ?></a>
                     </td>
                     <?PHP $index++ ?>
                 <?PHP endforeach ?>
