@@ -85,19 +85,19 @@ abstract class Application_Controller_SetupAbstract extends Application_Controll
         catch (Setup_Model_FileNotReadableException $exc) {
             $this->_helper->Redirector->redirectTo(
                 'error',
-                array('failure' => $this->view->translate('setup_message_error_read-access', $exc->getMessage()))
+                array('failure' => $this->view->translate('setup_message_error_read-access', array($exc->getMessage())))
             );
         }
         catch (Setup_Model_FileNotWriteableException $exc) {
             $this->_helper->Redirector->redirectTo(
                 'error',
-                array('failure' => $this->view->translate('setup_message_error_write-access', $exc->getMessage()))
+                array('failure' => $this->view->translate('setup_message_error_write-access', array($exc->getMessage())))
             );
         }
         catch (Setup_Model_FileNotFoundException $exc) {
             $this->_helper->Redirector->redirectTo(
                 'error',
-                array('failure' => $this->view->translate('setup_message_error_filenotfound', $exc->getMessage()))
+                array('failure' => $this->view->translate('setup_message_error_filenotfound', array($exc->getMessage())))
             );
         }
         $this->render('edit', null, true);

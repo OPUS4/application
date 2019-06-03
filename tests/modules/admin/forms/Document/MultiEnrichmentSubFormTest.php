@@ -253,7 +253,7 @@ class Admin_Form_Document_MultiEnrichmentSubFormTest extends ControllerTestCase
     {
         $form = $this->createTestPostDataAndConstructForm(self::$firstEnrichmentKeyName, 'value', Admin_Form_Document_MultiEnrichmentSubForm::ELEMENT_SELECTION_CHANGED);
         $subform = $form->getSubForm('Enrichment0');
-        $this->assertTrue(array_key_exists('currentAnker', $subform->getDecorators()));
+        $this->assertTrue(array_key_exists('currentAnchor', $subform->getDecorators()));
     }
 
     public function testProcessPostRemove()

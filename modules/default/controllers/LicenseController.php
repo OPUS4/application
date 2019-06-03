@@ -56,7 +56,7 @@ class LicenseController extends Application_Controller_Action {
             $this->view->license = $license;
         }
         catch (Opus_Model_NotFoundException $e) {
-            throw new Exception($this->view->translate('license_id_not_found', $licId));
+            throw new Exception($this->view->translate('license_id_not_found', array($licId)));
         }
     }
 

@@ -178,6 +178,33 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_enrichmentkey_protected_tooltip">
+      <tuv xml:lang="en">
+        <seg>This is a system-key and can not be modified.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dies ist ein Systemkey, welcher nicht modifiziert werden kann.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_enrichmentkey_unused_tooltip">
+      <tuv xml:lang="en">
+        <seg>This is an unused enrichmentkey, which can be modified.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dieser Enrichmentkey wird nicht benutzt und kann modifiziert werden.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_enrichmentkey_used_tooltip">
+      <tuv xml:lang="en">
+        <seg>This enrichmentkey is used and can not be modified.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dieser Enrichmentkey wird benutzt und kann nicht modifiziert werden.</seg>
+      </tuv>
+    </tu>
+
   </body>
 
 </tmx>

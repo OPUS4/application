@@ -23,54 +23,74 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+/**
+ * Formular für die Anzeige der Enrichment-Tabelle.
  *
  * @category    Application
- * @package     Module_Setup
- * @author      Edouard Simon (edouard.simon@zib.de)
- * @author      Jens Schwidder <schwidder@zib.de>
+ * @package     Application_Form_Model
+ * @author      Maximilian Salomon <salomon@zib.de>
  * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-/**
- * TODO use languages actually defined as supported
- */
-class Setup_Form_HomePage extends Zend_Form_SubForm
+class Admin_Form_EnrichmentTable extends Application_Form_Model_Table
 {
+    private $enrichmentKeys;
 
     public function init()
     {
-        foreach (['de', 'en'] as $lang) {
-            $langForm = new Zend_Form_SubForm();
-            $langForm->setLegend("setup_language_$lang");
-            $keyForm = new Zend_Form_SubForm();
+        $this->enrichmentKeys = new Admin_Model_EnrichmentKeys();
+        parent::init();
+    }
 
-            $keyForm->addElement(
-                'text', 'home_index_index_pagetitle', [
-                    'label' => 'setup_home_index_index_pagetitle',
-                    'attribs' => ['size' => 90]
-                ]
-            );
-            $keyForm->addElement(
-                'text', 'home_index_index_title', [
-                    'label' => 'setup_home_index_index_title',
-                    'attribs' => ['size' => 90]
-                ]
-            );
-            $keyForm->addElement(
-                'textarea', 'home_index_index_welcome', [
-                    'label' => 'setup_home_index_index_welcome',
-                    'attribs' => ['size' => 90]
-                ]
-            );
-            $keyForm->addElement(
-                'textarea', 'home_index_index_instructions', [
-                    'label' => 'setup_home_index_index_instructions',
-                    'attribs' => ['size' => 90]
-                ]
-            );
-            $langForm->addSubForm($keyForm, 'key');
-            $this->addSubForm($langForm, $lang);
+    public function isProtected($model)
+    {
+        return in_array($model->getId(), $this->enrichmentKeys->getProtectedEnrichmentKeys());
+    }
+
+    public function isUsed($model)
+    {
+        return in_array($model->getId(), Opus_EnrichmentKey::getAllReferenced());
+    }
+
+    public function getRowCssClass($model)
+    {
+        if ($this->isProtected($model) and $this->isUsed($model)) {
+            return "protected used";
         }
+        elseif (!$this->isUsed($model) and $this->isProtected($model)) {
+            return "protected unused";
+        }
+        elseif ($this->isUsed($model)) {
+            return "used";
+        }
+        elseif ($this->isProtected($model)) {
+            return "protected";
+        }
+        elseif (!$this->isUsed($model)) {
+            return "unused";
+        }
+
+        return "";
+    }
+
+    public function getRowTooltip($model)
+    {
+        if ($this->isProtected($model) and $this->isUsed($model)) {
+            return 'admin_enrichmentkey_used_tooltip';
+        }
+        elseif (!$this->isUsed($model) and $this->isProtected($model)) {
+            return 'admin_enrichmentkey_unused_tooltip';
+        }
+        elseif ($this->isUsed($model)) {
+            return 'admin_enrichmentkey_used_tooltip';
+        }
+        elseif (!$this->isUsed($model)) {
+            return 'admin_enrichmentkey_unused_tooltip';
+        }
+
+        return "";
     }
 }
