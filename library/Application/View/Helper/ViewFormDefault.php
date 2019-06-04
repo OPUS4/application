@@ -40,7 +40,7 @@ class Application_View_Helper_ViewFormDefault extends Zend_View_Helper_FormEleme
         $markup = '<div'
             . ' id="' . $this->view->escape($id) . '"'
             . ' class="' . $this->getElementClass() . '">'
-            . $this->view->escape($value)
+            . htmlspecialchars($value, ENT_DISALLOWED)
             . '</div>';
 
         return $markup;

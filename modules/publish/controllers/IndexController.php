@@ -34,6 +34,13 @@
  */
 class Publish_IndexController extends Application_Controller_Action {
 
+    public function init()
+    {
+        parent::init();
+
+        $this->view->robots = 'noindex, nofollow';
+    }
+
     /**
      * Renders the first form:
      * a list of available document types (that can be configured in config.ini

@@ -51,10 +51,14 @@ class Admin_Form_CollectionRole extends Application_Form_Model_Abstract {
         $this->setRemoveEmptyCheckbox(false);
         $this->setUseNameAsLabel(true);
 
-        $this->addElement('text', self::ELEMENT_NAME, array('required' => true, 'size' => 70));
+        $this->addElement('text', self::ELEMENT_NAME, [
+            'required' => true, 'size' => 70, 'maxlength' => Opus_CollectionRole::getFieldMaxLength('Name')
+        ]);
         $this->getElement(self::ELEMENT_NAME)->addValidator(new Application_Form_Validate_CollectionRoleNameUnique());
 
-        $this->addElement('text', self::ELEMENT_OAI_NAME, array('required' => true, 'size' => 30));
+        $this->addElement('text', self::ELEMENT_OAI_NAME, [
+            'required' => true, 'size' => 30, 'maxlength' => Opus_CollectionRole::getFieldMaxLength('OaiName')
+        ]);
         $this->getElement(self::ELEMENT_OAI_NAME)->addValidator(
             new Application_Form_Validate_CollectionRoleOaiNameUnique()
         );

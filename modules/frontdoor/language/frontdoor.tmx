@@ -101,7 +101,7 @@
             <seg>Search for other publications by this author</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Nach weiteren Publikationen dieses Autors suchen</seg>
+            <seg>Nach weiteren Publikationen dieser Autorin/dieses Autors suchen</seg>
         </tuv>
     </tu>
 
@@ -110,7 +110,7 @@
             <seg>Search for other publications by this referee</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Nach weiteren Publikationen dieses Gutachters suchen</seg>
+            <seg>Nach weiteren Publikationen dieser Gutachterin/dieses Gutachters suchen</seg>
         </tuv>
     </tu>
 
@@ -201,7 +201,7 @@
             <seg>In Administration anzeigen</seg>
         </tuv>
     </tu>
-    
+
     <tu tuid="frontdoor_edit_document">
         <tuv xml:lang="en">
             <seg>Edit Document</seg>
@@ -210,7 +210,7 @@
             <seg>Dokument bearbeiten</seg>
         </tuv>
     </tu>
-    
+
     <tu tuid="frontdoor_edit_docfiles">
         <tuv xml:lang="en">
             <seg>Manage Files</seg>
@@ -282,7 +282,7 @@
         <seg>Für dieses Dokument liegen keine Dateien vor!</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="frontdoor_filenumber">
       <tuv xml:lang="en">
         <seg>Number of files available for this document</seg>
@@ -309,7 +309,7 @@
         <seg>Dokumentempfehlung</seg>
       </tuv>
     </tu>
-        
+
     <tu tuid="frontdoor_recommendationtext">
       <tuv xml:lang="en">
         <seg>Please fill out this form to mail the URL of this document and a short message. Please note: Your name and your email address are helpful to jugde the reliability of this email. All marked fields are mandatory.</seg>
@@ -318,16 +318,16 @@
         <seg>Um die Adresse (URL) dieses Dokuments und eine kurze Mitteilung zu versenden, füllen Sie bitte die untenstehenden Felder aus. Bitte beachten Sie: Die Angabe Ihres Namens und Ihrer E-Mail-Adresse helfen dem Empfänger die Seriösität dieser E-Mail einzuschätzen. Bitte beachten Sie: Die markierten Felder müssen ausgefüllt werden.</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="frontdoor_toauthortext">
       <tuv xml:lang="en">
         <seg>Please indicate your contact information and select, which author you want to contact.</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Bitte geben Sie Ihre Kontaktdaten an, und wählen Sie aus, welchen der Autoren sie kontaktieren wollen.</seg>
+        <seg>Bitte geben Sie Ihre Kontaktdaten an, und wählen Sie aus, welchen der Autor*innen sie kontaktieren wollen.</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="frontdoor_sendrecommendation">
       <tuv xml:lang="en">
         <seg>Send recommendation</seg>
@@ -336,7 +336,7 @@
         <seg>Empfehlung absenden</seg>
       </tuv>
     </tu>
-       
+
     <tu tuid="frontdoor_mail_ok">
       <tuv xml:lang="en">
         <seg>Email was send.</seg>
@@ -345,7 +345,7 @@
         <seg>E-Mail wurde verschickt.</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="frontdoor_mail_notok">
       <tuv xml:lang="en">
         <seg>Email could not be send.</seg>
@@ -354,7 +354,7 @@
         <seg>E-Mail konnte nicht versendet werden.</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="frontdoor_recipientname">
       <tuv xml:lang="en">
         <seg>Name of recipient</seg>
@@ -363,7 +363,7 @@
         <seg>Name des Empfängers</seg>
       </tuv>
     </tu>
-          
+
     <tu tuid="frontdoor_recipientmail">
       <tuv xml:lang="en">
         <seg>Mail adress of recipient</seg>
@@ -372,7 +372,7 @@
         <seg>Mailadresse des Empfängers</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="frontdoor_sendername">
       <tuv xml:lang="en">
         <seg>Name of sender</seg>
@@ -381,7 +381,7 @@
         <seg>Name des Absenders</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="frontdoor_sendermail">
       <tuv xml:lang="en">
         <seg>Mail adress of sender</seg>
@@ -390,7 +390,7 @@
         <seg>Mailadresse des Absenders</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="frontdoor_messagetext">
       <tuv xml:lang="en">
         <seg>Message</seg>
@@ -399,7 +399,7 @@
         <seg>Nachricht</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="frontdoor_message">
       <tuv xml:lang="en">
         <seg>Your message</seg>
@@ -408,7 +408,7 @@
         <seg>Ihre Mitteilung</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="frontdoor_sendmail">
       <tuv xml:lang="en">
         <seg>Send mail</seg>
@@ -417,7 +417,7 @@
         <seg>Mail versenden</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="frontdoor_sendmailbody1">
       <tuv xml:lang="en">
         <seg>a visitor to the repository Opus recommends this document to you</seg>
@@ -426,7 +426,7 @@
         <seg>ein Besucher des Volltextservers Opus empfiehlt Ihnen dieses Dokument</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="frontdoor_sendmailbody2">
       <tuv xml:lang="en">
         <seg>The URL of the document is</seg>
@@ -435,7 +435,7 @@
         <seg>Die URL des Dokuments lautet</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="frontdoor_sendmailmsg">
       <tuv xml:lang="en">
         <seg>Senders message</seg>
@@ -444,7 +444,7 @@
         <seg>Mitteilung des Absenders</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="frontdoor_sendersmail">
       <tuv xml:lang="en">
         <seg>Senders email address</seg>
@@ -453,7 +453,7 @@
         <seg>E-Mail-Adresse des Absenders</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="frontdoor_sendersname">
       <tuv xml:lang="en">
         <seg>Senders name</seg>
@@ -462,7 +462,7 @@
         <seg>Name des Absenders</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="frontdoor_sendmailsubject">
       <tuv xml:lang="en">
         <seg>Document Recommendation</seg>
@@ -471,7 +471,7 @@
         <seg>Dokumentempfehlung</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="frontdoor_sendmailtitle">
       <tuv xml:lang="en">
         <seg>Send recommendation</seg>
@@ -480,7 +480,7 @@
         <seg>Empfehlung versenden</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="frontdoor_sendmailtext">
       <tuv xml:lang="en">
         <seg>You have recommended this document</seg>
@@ -489,16 +489,16 @@
         <seg>Sie haben dieses Dokument empfohlen</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="frontdoor_toauthortitle">
       <tuv xml:lang="en">
         <seg>Send mail to Author</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Mail an Autor</seg>
+        <seg>Mail an Autor*in</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="frontdoor_integrity">
       <tuv xml:lang="en">
         <seg>Integrity</seg>
@@ -507,7 +507,7 @@
         <seg>Integrität</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="frontdoor_statistics">
       <tuv xml:lang="en">
         <seg>Statistics</seg>
@@ -516,7 +516,7 @@
         <seg>Statistik</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="frontdoor_bookmarkbibsonomy">
       <tuv xml:lang="en">
         <seg>BibSonomy bookmark</seg>
@@ -525,7 +525,7 @@
         <seg>Lesezeichen bei BibSonomy</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="frontdoor_bookmarkconnotea">
       <tuv xml:lang="en">
         <seg>Connotea bookmark</seg>
@@ -534,7 +534,7 @@
         <seg>Lesezeichen bei Connotea</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="frontdoor_bookmarkdelicious">
       <tuv xml:lang="en">
         <seg>Delicious bookmark</seg>
@@ -543,7 +543,7 @@
         <seg>Lesezeichen bei Delicious</seg>
       </tuv>
     </tu>
-  
+
     <tu tuid="frontdoor_searchgoogle">
       <tuv xml:lang="en">
         <seg>Search Google Scholar</seg>
@@ -552,7 +552,7 @@
         <seg>Suche bei Google Scholar</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="frontdoor_share_twitter">
       <tuv xml:lang="en">
         <seg>Share in Twitter</seg>
@@ -561,7 +561,7 @@
         <seg>Teilen auf Twitter</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="frontdoor_exportbibtex">
       <tuv xml:lang="en">
         <seg>Export BibTeX</seg>
@@ -570,7 +570,7 @@
         <seg>Export nach BibTeX</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="frontdoor_exportris">
       <tuv xml:lang="en">
         <seg>Export RIS</seg>
@@ -597,7 +597,7 @@
         <seg>GND-Schlagwort</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="subject_frontdoor_msc">
       <tuv xml:lang="en">
         <seg>MSC-Classfication</seg>
@@ -624,7 +624,7 @@
         <seg>Freies Schlagwort / Tag</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="subject_frontdoor_psyndex">
       <tuv xml:lang="en">
         <seg>Psyndex Keyword</seg>
@@ -639,10 +639,10 @@
         <seg>Send a mail to the author of this document</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Mail an den Autor des Dokuments verfassen</seg>
+        <seg>Mail an die/den Autor*in des Dokuments verfassen</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="frontdoor_send_mailtoauthor">
       <tuv xml:lang="en">
         <seg>Send mail.</seg>
@@ -651,7 +651,7 @@
         <seg>Mail abschicken.</seg>
       </tuv>
     </tu>
- 
+
     <tu tuid="frontdoor_mailform_notallowed">
       <tuv xml:lang="en">
         <seg>Email contact not allowed</seg>
@@ -723,7 +723,7 @@
             <seg>Zurück zur Trefferliste</seg>
         </tuv>
     </tu>
-    
+
     <tu tuid="frontdoor_orcid">
       <tuv xml:lang="en">
         <seg>ORCID record</seg>

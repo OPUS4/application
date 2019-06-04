@@ -300,31 +300,46 @@ class Application_Util_PublicationNotificationTest extends ControllerTestCase
 
     public function testGetPublicationMailSubjectWithEmptyAuthorsAndEmptyTitle()
     {
+        $document = $this->createTestDocument();
+        $docId = $document->store();
+
         $method = $this->getMethod('getMailSubject');
         $subject = $method->invokeArgs(
             $this->notification,
-            ["123", [], ""]
+            [$document, []]
         );
-        $this->assertEquals("Dokument #123 veröffentlicht: n/a : n/a", $subject);
+        $this->assertEquals("Dokument #$docId veröffentlicht: n/a : n/a", $subject);
     }
 
     public function testGetPublicationMailSubjectWithOneAuthor()
     {
+        $document = $this->createTestDocument();
+        $title = $document->addTitleMain();
+        $title->setLanguage('deu');
+        $title->setValue('Test Document');
+        $docId = $document->store();
+
         $method = $this->getMethod('getMailSubject');
         $subject = $method->invokeArgs(
             $this->notification,
-            ["123", ["Doe, John"], "Test Document"]
+            [$document, ["Doe, John"]]
         );
-        $this->assertEquals("Dokument #123 veröffentlicht: Doe, John : Test Document", $subject);
+        $this->assertEquals("Dokument #$docId veröffentlicht: Doe, John : Test Document", $subject);
     }
 
     public function testGetPublicationMailSubjectWithTwoAuthors()
     {
+        $document = $this->createTestDocument();
+        $title = $document->addTitleMain();
+        $title->setLanguage('deu');
+        $title->setValue('Test Document');
+        $docId = $document->store();
+
         $method = $this->getMethod('getMailSubject');
         $subject = $method->invokeArgs(
             $this->notification,
-            ["123", ["Doe, John", "Doe, Jane"], "Test Document"]
+            [$document, ["Doe, John", "Doe, Jane"]]
         );
-        $this->assertEquals("Dokument #123 veröffentlicht: Doe, John ; Doe, Jane : Test Document", $subject);
+        $this->assertEquals("Dokument #$docId veröffentlicht: Doe, John ; Doe, Jane : Test Document", $subject);
     }
 }

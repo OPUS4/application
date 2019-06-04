@@ -150,4 +150,27 @@ class Application_View_Helper_TranslateTest extends ControllerTestCase
 
         $this->assertEquals('Showing results <b>1</b> to <b>10</b>', $result);
     }
+
+    public function testTranslationWithTwoPlaceholders()
+    {
+        $this->useEnglish();
+
+        $helper = new Application_View_Helper_Translate();
+
+        $this->assertEquals(
+            'Showing results <b>1</b> to <b>5</b>', $helper->translate('search_results_from_to', array(1, 5))
+        );
+
+        $this->assertEquals(
+            'Ergebnisse <b>1</b> bis <b>5</b>', $helper->translate('search_results_from_to', 1, 5, 'de')
+        );
+
+        $this->assertEquals(
+            'Ergebnisse <b>1</b> bis <b>5</b>', $helper->translate('search_results_from_to', array(1, 5), 'de')
+        );
+
+        $this->assertEquals(
+            'Showing results <b>1</b> to <b>5</b>', $helper->translate('search_results_from_to', 1, 5)
+        );
+    }
 }

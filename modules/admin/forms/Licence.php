@@ -115,7 +115,9 @@ class Admin_Form_Licence extends Application_Form_Model_Abstract {
         $this->setModelClass('Opus_Licence');
 
         $this->addElement('checkbox', self::ELEMENT_ACTIVE);
-        $this->addElement('text', self::ELEMENT_NAME);
+        $this->addElement('text', self::ELEMENT_NAME, [
+            'maxlength' => Opus_Licence::getFieldMaxLength('Name')
+        ]);
         $this->addElement('text', self::ELEMENT_NAME_LONG, array('required' => true, 'size' => 70));
         $this->addElement('Language', self::ELEMENT_LANGUAGE, array('required' => true));
         $this->addElement('text', self::ELEMENT_LINK_LICENCE, array('required' => true, 'size' => 70));

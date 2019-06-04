@@ -27,9 +27,9 @@
  * @category    Tests
  * @package     Application
  * @author      Thoralf Klein <thoralf.klein@zib.de>
- * @copyright   Copyright (c) 2010, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2010-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -42,7 +42,8 @@
  *
  * @coversNothing
  */
-class RequireTest extends PHPUnit_Framework_TestCase {
+class RequireTest extends Zend_Test_PHPUnit_ControllerTestCase
+{
 
     /**
      * Overwrite standard setUp method, no database connection needed.  Will
@@ -51,22 +52,18 @@ class RequireTest extends PHPUnit_Framework_TestCase {
      * @return void
      */
     public function setUp() {
-        require_once 'Zend/Application.php';
-
-        set_include_path('../modules'
-                . PATH_SEPARATOR . get_include_path());
-
-        // Do test environment initializiation.
-        $application = new Zend_Application(
-                        APPLICATION_ENV,
-                        array(
-                            "config" => array(
-                                APPLICATION_PATH . '/application/configs/application.ini',
-                                APPLICATION_PATH . '/tests/config.ini'
-                            )
-                        )
+        $this->bootstrap = new Zend_Application(
+            APPLICATION_ENV,
+            array(
+                "config" => array(
+                    APPLICATION_PATH . '/application/configs/application.ini',
+                    APPLICATION_PATH . '/tests/tests.ini',
+                    APPLICATION_PATH . '/tests/config.ini'
+                )
+            )
         );
-        $application->bootstrap();
+
+        parent::setUp();
     }
 
     /**
@@ -74,7 +71,8 @@ class RequireTest extends PHPUnit_Framework_TestCase {
      *
      * @return void
      */
-    public function tearDown() {
+    public function tearDown()
+    {
     }
 
     /**
@@ -82,19 +80,32 @@ class RequireTest extends PHPUnit_Framework_TestCase {
      *
      * @return array
      */
-    public static function serverClassesDataProvider() {
-        $cmd = 'find ../modules -type f -iname "*php" |cut -d/ -f3-';
-        $classFiles = array();
+    public static function serverClassesDataProvider()
+    {
+        $modulesPath = APPLICATION_PATH . DIRECTORY_SEPARATOR . 'modules';
+
+        $cmd = "find $modulesPath -type f -iname \"*php\"";
+        $classFiles = [];
         exec($cmd, $classFiles);
+
+        $blacklist = [
+            'statistic/models/StatisticGraph',
+            'statistic/models/StatisticGraphThumb'
+        ];
 
         $checkClassFiles = array();
         foreach ($classFiles AS $file) {
-            if (strstr($file, 'statistic/models/StatisticGraph')
-                    or strstr($file, '/views/') ) {
-                continue;
+            foreach ($blacklist as $excluded) {
+                if (strstr($file, $excluded)) {
+                    $file = null;
+                    continue;
+                }
             }
-            $checkClassFiles[] = array($file);
+            if (!is_null($file)) {
+                $checkClassFiles[] = [$file];
+            }
         }
+
         return $checkClassFiles;
     }
 
@@ -105,7 +116,8 @@ class RequireTest extends PHPUnit_Framework_TestCase {
      *
      * @dataProvider serverClassesDataProvider
      */
-    public function testRequire($file) {
+    public function testRequire($file)
+    {
         require_once($file);
     }
 }
