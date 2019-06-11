@@ -80,10 +80,12 @@ class Application_Form_Model_Table extends Application_Form_Abstract
     public function initDecorators()
     {
         $this->setDecorators(
-            array(
-                'PrepareElements',
-                array('ViewScript', array('viewScript' => $this->getViewScript()))
-            )
+            ['PrepareElements',
+                ['ViewScript',
+                    ['viewScript' => $this->getViewScript()
+                    ]
+                ]
+            ]
         );
     }
 
@@ -182,7 +184,7 @@ class Application_Form_Model_Table extends Application_Form_Abstract
     {
         if (!is_null($this->_controller)) {
             if (!method_exists($this->_controller, 'getShowActionEnabled')) {
-                throw new InvalidArgumentException('The used controller does not have the method getShowActionEnabled.');
+                $this->getLogger()->debug('The used controller does not have the method getShowActionEnabled.');
             } else {
                 return $this->_controller->getShowActionEnabled();
             }
@@ -200,7 +202,7 @@ class Application_Form_Model_Table extends Application_Form_Abstract
     {
         if (!is_null($this->_controller)) {
             if (!method_exists($this->_controller, 'isModifiable')) {
-                throw new InvalidArgumentException('The used controller does not have the method isModifiable.');
+                $this->getLogger()->debug('The used controller does not have the method isModifiable.');
             } else {
                 return $this->_controller->isModifiable($model);
             }
@@ -218,7 +220,7 @@ class Application_Form_Model_Table extends Application_Form_Abstract
     {
         if (!is_null($this->_controller)) {
             if (!method_exists($this->_controller, 'isDeletable')) {
-                throw new InvalidArgumentException('The used controller does not have the method isDeletable.');
+                $this->getLogger()->debug('The used controller does not have the method isDeletable.');
             } else {
                 return $this->_controller->isDeletable($model);
             }
@@ -231,7 +233,7 @@ class Application_Form_Model_Table extends Application_Form_Abstract
     {
         if (!is_null($this->_controller)) {
             if (!method_exists($this->_controller, 'isUsed')) {
-                throw new InvalidArgumentException('The used controller does not have the method isUsed.');
+                $this->getLogger()->debug('The used controller does not have the method isUsed.');
             } else {
                 return $this->_controller->isUsed($model);
             }
@@ -244,7 +246,7 @@ class Application_Form_Model_Table extends Application_Form_Abstract
     {
         if (!is_null($this->_controller)) {
             if (!method_exists($this->_controller, 'isProtected')) {
-                throw new InvalidArgumentException('The used controller does not have the method isProtected.');
+                $this->getLogger()->debug('The used controller does not have the method isProtected.');
             } else {
                 return $this->_controller->isProtected($model);
             }
@@ -257,7 +259,7 @@ class Application_Form_Model_Table extends Application_Form_Abstract
     {
         if (!is_null($this->_controller)) {
             if (!method_exists($this->_controller, 'getRowCssClass')) {
-                throw new InvalidArgumentException('The used controller does not have the method getRowCssClass.');
+                $this->getLogger()->debug('The used controller does not have the method getRowCssClass.');
             } else {
                 return $this->_controller->getRowCssClass($model);
             }
@@ -270,7 +272,7 @@ class Application_Form_Model_Table extends Application_Form_Abstract
     {
         if (!is_null($this->_controller)) {
             if (!method_exists($this->_controller, 'getRowTooltip')) {
-                throw new InvalidArgumentException('The used controller does not have the method getRowTooltip.');
+                $this->getLogger()->debug('The used controller does not have the method getRowTooltip.');
             } else {
                 return $this->_controller->getRowTooltip($model);
             }
