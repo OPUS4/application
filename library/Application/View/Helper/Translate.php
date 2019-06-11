@@ -67,12 +67,12 @@ class Application_View_Helper_Translate extends Zend_View_Helper_Translate
 
         $locale = null;
 
-        if (($optCount === 1) and (is_array($options[0]) === true)) {
+        if (($optCount > 1) and Zend_Locale::isLocale($options[$optCount - 1])) {
+            $locale = array_pop($options);
+        }
+
+        if (($optCount > 0) and is_array($options[0]) === true) {
             $options = $options[0];
-        } else if ($optCount > 1) {
-            if (Zend_Locale::isLocale($options[$optCount - 1])) {
-                $locale = array_pop($options);
-            }
         }
 
         $translate = $this->getTranslator();
