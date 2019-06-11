@@ -27,6 +27,7 @@
  * @category    Application
  * @package     Module_Export
  * @author      Jens Schwidder <schwidder@zib.de>
+ * @author      Sascha Szott <opus-development@saschaszott.de>
  * @copyright   Copyright (c) 2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
@@ -44,29 +45,52 @@ class Export_Model_DataciteExport extends Application_Export_ExportPluginAbstrac
     /**
      * Generates DataCite-XML for document.
      *
-     * TODO error handling
+     * @return bool wurde (valides oder invalides) XML erzeugt, so gibt die Methode den Rückgabewert true zurück
+     * @throws Application_Exception wenn kein Dokument mit der übergebenen ID gefunden werden konnte
      */
     public function execute()
     {
         $docId = $this->getRequest()->getParam('docId');
+        try {
+            $document = new Opus_Document($docId);
+        }
+        catch (Opus_Model_Exception $e) {
+            throw new Application_Exception('could not retrieve document with given ID from OPUS database');
+        }
 
-        $document = new Opus_Document($docId);
+        // wenn URL-Parameter validate auf no gesetzt, dann erfolgt keine Validierung des generierten XML
+        $validate = $this->getRequest()->getParam('validate');
+        $skipValidation = (! is_null($validate) && $validate === 'no');
 
-        $response = $this->getResponse();
-
-        $response->setHeader('Content-Type', 'text/xml; charset=UTF-8', true);
-        // TODO Content-Disposition
-
+        $requiredFieldsStatus = [];
         $generator = new Opus_Doi_DataCiteXmlGenerator();
+        if (! $skipValidation) {
+            // prüfe, ob das Dokument $document alle erforderlichen Pflichtfelder besitzt
+            $requiredFieldsStatus = $generator->checkRequiredFields($document, false);
+        }
 
-        $output = $generator->getXml($document);
-        /* try {
-        } catch (Opus_Doi_DataCiteXmlGenerationException $gex) {
-            // TODO handle exception
-            $output = '';
-        }*/
+        $output = null;
+        $errors = [];
+        try {
+            // generiere DataCite-XML, wobei Pflichtfeld-Überprüfung nicht erneut durchgeführt werden soll
+            $output = $generator->getXml($document, $skipValidation, true);
+        }
+        catch (Opus_Doi_DataCiteXmlGenerationException $e) {
+            $errors = $e->getXmlErrors();
+        }
 
-        $response->setBody($output);
+        if (empty($errors) && ! is_null($output)) {
+            // erzeugtes DataCite-XML zurückgeben (kann valide oder nicht valide sein)
+            $response = $this->getResponse();
+            $response->setHeader('Content-Type', 'text/xml; charset=UTF-8', true);
+            // TODO Content-Disposition
+            $response->setBody($output);
+            return true;
+        }
+
+        // HTML-Statusseite mit Fehlermeldungen zurückgeben
+        $this->prepareView($document, $requiredFieldsStatus, $errors);
+        return false;
     }
 
     /**
@@ -74,5 +98,21 @@ class Export_Model_DataciteExport extends Application_Export_ExportPluginAbstrac
      */
     public function postDispatch()
     {
+    }
+
+    /**
+     * Setzt die View-Objekte für die Generierung der HTML-Statusseite mit den Fehlermeldungen der XML-Generierung.
+     *
+     * @param $document das aktuell verarbeitete Dokument
+     * @param $requiredFieldsStatus der Status (Existenz bzw. Nichtexistenz) der einzelnen Pflichtfelder
+     * @param $errors die bei der DataCite-XML Generierung gefundenen Fehler
+     */
+    private function prepareView($document, $requiredFieldsStatus, $errors)
+    {
+        $view = $this->getView();
+        $view->requiredFieldsStatus = $requiredFieldsStatus;
+        $view->errors = $errors;
+        $view->docId = $document->getId();
+        $view->docServerState = $document->getServerState();
     }
 }
