@@ -108,6 +108,7 @@ class Export_DataCiteExportTest extends ControllerTestCase
         $doc->setServerState('published');
         $docId = $doc->store();
 
+        $this->useGerman();
         $this->dispatch('/export/index/datacite/docId/' . $docId);
 
         $this->assertResponseCode(200);
