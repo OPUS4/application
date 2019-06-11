@@ -846,4 +846,84 @@ class Export_IndexControllerTest extends ControllerTestCase
         $server = $this->getRequest()->getBasePath();
         $this->assertXpathContentContains('//file', 'https://' . $host . $server . '/files/146/test.pdf');
     }
+
+    public function testExportOfValidDataCiteXML()
+    {
+        // DOI Präfix setzen
+        $oldConfig = Zend_Registry::get('Zend_Config');
+
+        Zend_Registry::set('Zend_Config', Zend_Registry::get('Zend_Config')->merge(
+            new Zend_Config([
+                'doi' => [
+                    'prefix' => '10.2345',
+                    'localPrefix' => 'opustest'
+                ]
+            ])
+        ));
+
+        // Testdokument mit allen Pflichtfeldern anlegen
+        $doc = new Opus_Document();
+        $doc->setType('all');
+        $doc->setServerState('published');
+        $doc->setPublisherName('Foo Publishing Corp.');
+        $doc->setLanguage('deu');
+        $docId = $doc->store();
+
+        $doi = new Opus_Identifier();
+        $doi->setType('doi');
+        $doi->setValue('10.2345/opustest-' . $docId);
+        $doc->setIdentifier([$doi]);
+
+        $author = new Opus_Person();
+        $author->setFirstName('John');
+        $author->setLastName('Doe');
+        $doc->setPersonAuthor([$author]);
+
+        $title = new Opus_Title();
+        $title->setValue('Meaningless title');
+        $title->setLanguage('deu');
+        $doc->setTitleMain([$title]);
+
+        $doc->store();
+
+        $this->dispatch('/export/index/datacite/docId/' . $docId);
+
+        // Testdokument wieder löschen
+        $doc->deletePermanent();
+        // Änderungen an Konfiguration zurücksetzen
+        Zend_Registry::set('Zend_Config', $oldConfig);
+
+        $this->assertResponseCode(200);
+        $this->assertHeaderContains('Content-Type', 'text/xml; charset=UTF-8');
+        $this->assertNotEmpty($this->getResponse()->getBody());
+    }
+
+    public function testExportOfInvalidDataCiteXML()
+    {
+        // Testdokument mit fehlenden Pflichtfeldern
+        $doc = new Opus_Document();
+        $doc->setServerState('published');
+        $docId = $doc->store();
+
+        $this->dispatch('/export/index/datacite/docId/' . $docId . '/validate/no');
+
+        $doc->deletePermanent();
+
+        $this->assertResponseCode(200);
+        $this->assertHeaderContains('Content-Type', 'text/xml; charset=UTF-8');
+        $this->assertNotEmpty($this->getResponse()->getBody());
+    }
+
+    public function testExportOfDataCiteXmlStatusPage()
+    {
+        // Testdokument mit fehlenden Pflichtfeldern
+        $doc = new Opus_Document();
+        $doc->setServerState('published');
+        $docId = $doc->store();
+
+        $this->dispatch('/export/index/datacite/docId/' . $docId);
+
+        $this->assertResponseCode(200);
+        $this->assertContains("DataCite XML of document $docId is not valid", $this->getResponse()->getBody());
+    }
 }

@@ -51,6 +51,10 @@ class Export_Model_DataciteExport extends Application_Export_ExportPluginAbstrac
     public function execute()
     {
         $docId = $this->getRequest()->getParam('docId');
+        if (is_null($docId)) {
+            throw new Application_Exception('missing request parameter docId');
+        }
+
         try {
             $document = new Opus_Document($docId);
         }
