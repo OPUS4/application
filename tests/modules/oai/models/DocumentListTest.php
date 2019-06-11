@@ -64,52 +64,59 @@ class Oai_Model_DocumentListTest extends ControllerTestCase {
      * Test list document ids, metadataPrefix=XMetaDissPlus, different intervals
      * list possible intervals containing "2010-06-05"
      */
-    public function testIntervalOAIPMHQueries() {
+    public function testIntervalOAIPMHQueries()
+    {
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
+        $file = $this->createTestFile('article.txt');
+        $file->setVisibleInOai(1);
+        $doc->addFile($file);
         $this->docId = $doc->store();
-        
-        $doc = new Opus_Document($this->docId);        
+
+        $doc = new Opus_Document($this->docId);
         $serverDateModified = $doc->getServerDateModified();
-        
+
         $today = new DateTime();
         $today->setDate(
                 $serverDateModified->getYear(),
                 $serverDateModified->getMonth(),
                 $serverDateModified->getDay());
-        
+
         $yesterday = clone $today;
         $yesterday->modify('-1 day');
-        
+
         $tomorrow = clone $today;
         $tomorrow->modify('+1 day');
-        
+
         $todayStr = date_format($today, 'Y-m-d');
         $yesterdayStr = date_format($yesterday, 'Y-m-d');
-        $tomorrowStr = date_format($tomorrow, 'Y-m-d');         
+        $tomorrowStr = date_format($tomorrow, 'Y-m-d');
 
-        $intervals = array(
-            array(),
-            array('from' => $todayStr),
-            array('until' => $todayStr),
-            array('from' => $yesterdayStr),
-            array('until' => $tomorrowStr),
-            array('from' => $todayStr, 'until' => $todayStr),
-            array('from' => $yesterdayStr, 'until' => $todayStr),
-            array('from' => $todayStr, 'until' => $tomorrowStr),
-            array('from' => $yesterdayStr, 'until' => $tomorrowStr),
-        );
+        $intervals = [
+            [],
+            ['from' => $todayStr],
+            ['until' => $todayStr],
+            ['from' => $yesterdayStr],
+            ['until' => $tomorrowStr],
+            ['from' => $todayStr, 'until' => $todayStr],
+            ['from' => $yesterdayStr, 'until' => $todayStr],
+            ['from' => $todayStr, 'until' => $tomorrowStr],
+            ['from' => $yesterdayStr, 'until' => $tomorrowStr],
+        ];
 
         foreach ($intervals AS $interval) {
-            $oaiRequest = array('verb' => 'ListRecords', 'metadataPrefix' => 'XMetaDissPlus');
+            $oaiRequest = ['verb' => 'ListRecords', 'metadataPrefix' => 'XMetaDissPlus'];
             $oaiRequest = array_merge($interval, $oaiRequest);
 
             $docListModel = new Oai_Model_DocumentList();
-            $docListModel->deliveringDocumentStates = array('published', 'deleted');
-            $docListModel->xMetaDissRestriction = array();
+            $docListModel->deliveringDocumentStates = ['published', 'deleted'];
+            $docListModel->xMetaDissRestriction = [];
             $docIds = $docListModel->query($oaiRequest);
 
-            $this->assertTrue(in_array($this->docId, $docIds), "Response must contain document id $this->docId: " . var_export($interval, true));
+            $this->assertTrue(
+                in_array($this->docId, $docIds),
+                "Response must contain document id $this->docId: " . var_export($interval, true)
+            );
         }
     }
 
@@ -121,33 +128,33 @@ class Oai_Model_DocumentListTest extends ControllerTestCase {
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
         $this->docId = $doc->store();
-        
-        $doc = new Opus_Document($this->docId);        
+
+        $doc = new Opus_Document($this->docId);
         $serverDateModified = $doc->getServerDateModified();
-        
+
         $today = new DateTime();
         $today->setDate(
                 $serverDateModified->getYear(),
                 $serverDateModified->getMonth(),
                 $serverDateModified->getDay());
-        
+
         $yesterday = clone $today;
         $yesterday->modify('-1 day');
-        
+
         $dayBeforeYesterday = clone $yesterday;
         $dayBeforeYesterday->modify('-1 day');
-        
+
         $tomorrow = clone $today;
         $tomorrow->modify('+1 day');
-        
+
         $dayAfterTomorrow = clone $tomorrow;
-        $dayAfterTomorrow->modify('+1 day');        
-        
+        $dayAfterTomorrow->modify('+1 day');
+
         $yesterdayStr = date_format($yesterday, 'Y-m-d');
         $dayBeforeYesterdayStr = date_format($dayBeforeYesterday, 'Y-m-d');
-        $tomorrowStr = date_format($tomorrow, 'Y-m-d');        
+        $tomorrowStr = date_format($tomorrow, 'Y-m-d');
         $dayAfterTomorrowStr = date_format($dayAfterTomorrow, 'Y-m-d');
-        
+
         $intervals = array(
             array('from' => $tomorrowStr),
             array('until' => $yesterdayStr),
@@ -168,4 +175,55 @@ class Oai_Model_DocumentListTest extends ControllerTestCase {
         }
     }
 
+    public function testOnlyFilesVisibleInOaiIncludedForXMetaDissPlus()
+    {
+        $doc = $this->createTestDocument();
+        $doc->setServerState('published');
+        $file = $this->createTestFile('article.txt');
+        $file->setVisibleInOai(1);
+        $doc->addFile($file);
+        $docIdIncluded = $doc->store();
+
+        $doc = $this->createTestDocument();
+        $doc->setServerState('published');
+        $file = $this->createTestFile('fulltext.txt');
+        $file->setVisibleInOai(0);
+        $doc->addFile($file);
+        $docIdNotIncluded = $doc->store();
+
+        $oaiRequest = ['verb' => 'ListRecords', 'metadataPrefix' => 'XMetaDissPlus'];
+
+        $docListModel = new Oai_Model_DocumentList();
+        $docListModel->deliveringDocumentStates = ['published', 'deleted'];
+        $docListModel->xMetaDissRestriction = [];
+        $docIds = $docListModel->query($oaiRequest);
+
+        $this->assertTrue(
+            in_array($docIdIncluded, $docIds),
+            "Response must contain document id $docIdIncluded"
+        );
+
+        $this->assertFalse(
+            in_array($docIdNotIncluded, $docIds),
+            "Response must not contain document id $docIdIncluded"
+        );
+        // test "xMetaDissPlus"
+
+        $oaiRequest = ['verb' => 'ListRecords', 'metadataPrefix' => 'xMetaDissPlus'];
+
+        $docListModel = new Oai_Model_DocumentList();
+        $docListModel->deliveringDocumentStates = ['published', 'deleted'];
+        $docListModel->xMetaDissRestriction = [];
+        $docIds = $docListModel->query($oaiRequest);
+
+        $this->assertTrue(
+            in_array($docIdIncluded, $docIds),
+            "Response must contain document id $docIdIncluded"
+        );
+
+        $this->assertFalse(
+            in_array($docIdNotIncluded, $docIds),
+            "Response must not contain document id $docIdIncluded"
+        );
+    }
 }
