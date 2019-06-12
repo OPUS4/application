@@ -44,6 +44,7 @@ class Admin_Form_CollectionRole extends Application_Form_Model_Abstract {
     const ELEMENT_DISPLAY_FRONTDOOR = 'DisplayFrontdoor';
     const ELEMENT_ASSIGN_ROOT = 'AssignRoot';
     const ELEMENT_ASSIGN_LEAVES_ONLY = 'AssignLeavesOnly';
+    const ELEMENT_HIDE_EMPTY_COLLECTIONS = 'HideEmptyCollections';
 
     public function init() {
         parent::init();
@@ -72,10 +73,14 @@ class Admin_Form_CollectionRole extends Application_Form_Model_Abstract {
         $this->addElement('CollectionDisplayFormat', self::ELEMENT_DISPLAY_FRONTDOOR, array('required' => true));
         $this->addElement('checkbox', self::ELEMENT_ASSIGN_ROOT);
         $this->addElement('checkbox', self::ELEMENT_ASSIGN_LEAVES_ONLY);
+        $this->addElement('checkbox', self::ELEMENT_HIDE_EMPTY_COLLECTIONS);
 
         $this->removeElement('Cancel');
     }
 
+    /**
+     * @param $collectionRole Opus_CollectionRole
+     */
     public function populateFromModel($collectionRole) {
         $this->getElement(self::ELEMENT_MODEL_ID)->setValue($collectionRole->getId());
         $this->getElement(self::ELEMENT_NAME)->setValue($collectionRole->getName());
@@ -89,8 +94,12 @@ class Admin_Form_CollectionRole extends Application_Form_Model_Abstract {
         $this->getElement(self::ELEMENT_DISPLAY_FRONTDOOR)->setValue($collectionRole->getDisplayFrontdoor());
         $this->getElement(self::ELEMENT_ASSIGN_ROOT)->setValue($collectionRole->getAssignRoot());
         $this->getElement(self::ELEMENT_ASSIGN_LEAVES_ONLY)->setValue($collectionRole->getAssignLeavesOnly());
+        $this->getElement(self::ELEMENT_HIDE_EMPTY_COLLECTIONS)->setValue($collectionRole->getHideEmptyCollections());
     }
 
+    /**
+     * @param $collectionRole Opus_CollectionRole
+     */
     public function updateModel($collectionRole) {
         $collectionRole->setName($this->getElementValue(self::ELEMENT_NAME));
         $collectionRole->setOaiName($this->getElementValue(self::ELEMENT_OAI_NAME));
@@ -103,6 +112,7 @@ class Admin_Form_CollectionRole extends Application_Form_Model_Abstract {
         $collectionRole->setDisplayFrontdoor($this->getElementValue(self::ELEMENT_DISPLAY_FRONTDOOR));
         $collectionRole->setAssignRoot($this->getElementValue(self::ELEMENT_ASSIGN_ROOT));
         $collectionRole->setAssignLeavesOnly($this->getElementValue(self::ELEMENT_ASSIGN_LEAVES_ONLY));
+        $collectionRole->setHideEmptyCollections($this->getElementValue(self::ELEMENT_HIDE_EMPTY_COLLECTIONS));
     }
 
 }
