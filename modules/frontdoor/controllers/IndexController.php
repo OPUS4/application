@@ -242,7 +242,7 @@ class Frontdoor_IndexController extends Application_Controller_Action
                 $name .= ", " . $firstname;
             }
 
-            $metas[] = array('DC.Creator', $name);
+            $metas[] = array('DC.creator', $name);
             $metas[] = array('author', $name);
             $metas[] = array('citation_author', $name);
         }
@@ -262,7 +262,7 @@ class Frontdoor_IndexController extends Application_Controller_Action
             if (empty($abstractValue)) {
                 continue;
             }
-            $metas[] = array('DC.Description', $abstractValue);
+            $metas[] = array('DC.description', $abstractValue);
             $metas[] = array('description', $abstractValue);
         }
 
@@ -285,11 +285,11 @@ class Frontdoor_IndexController extends Application_Controller_Action
             if (empty($identifierValue)) {
                 continue;
             }
-            $metas[] = array('DC.Identifier', $identifierValue);
-            $metas[] = array('DC.Identifier', $config->urn->resolverUrl . $identifierValue);
+            $metas[] = array('DC.identifier', $identifierValue);
+            $metas[] = array('DC.identifier', $config->urn->resolverUrl . $identifierValue);
         }
         $metas[] = array(
-            'DC.Identifier', $this->view->fullUrl() . '/frontdoor/index/index/docId/' . $document->getId()
+            'DC.identifier', $this->view->fullUrl() . '/frontdoor/index/index/docId/' . $document->getId()
         );
 
         if (Application_Xslt::embargoHasPassed($document)) {
@@ -299,7 +299,7 @@ class Frontdoor_IndexController extends Application_Controller_Action
                         or !Application_Xslt::fileAccessAllowed($file->getId())) {
                     continue;
                 }
-                $metas[] = array('DC.Identifier', "$baseUrlFiles/" . $document->getId() . "/" . $file->getPathName());
+                $metas[] = array('DC.identifier', "$baseUrlFiles/" . $document->getId() . "/" . $file->getPathName());
 
                 if ($file->getMimeType() == 'application/pdf') {
                     $metas[] = array(
@@ -320,13 +320,13 @@ class Frontdoor_IndexController extends Application_Controller_Action
             $dateString = $datePublished->getZendDate()->get('yyyy-MM-dd');
 
             $metas[] = array("citation_date", $dateString);
-            $metas[] = array("DC.Date", $dateString);
+            $metas[] = array("DC.date", $dateString);
         } else {
             $yearPublished = $document->getPublishedYear();
             if (!is_null($yearPublished)) {
 
                 $metas[] = array("citation_date", $yearPublished);
-                $metas[] = array("DC.Date", $yearPublished);
+                $metas[] = array("DC.date", $yearPublished);
             }
         }
 
