@@ -148,7 +148,7 @@ copyConfigFile "solrconfig.xml" "${BASEDIR}/vendor/opus4-repo/search" "${SOLR_CO
 
 # provide logging properties
 # TODO check integration of logging.properties with recent versions of solr
-ln -sf "$BASEDIR/vendor/opus4-repo/search/logging.properties" opus4/logging.properties
+ln -sf "$BASEDIR/vendor/opus4-repo/search/config/logging.properties" opus4/logging.properties
 
 # detect URL prefix to use
 case "$SOLR_MAJOR" in
