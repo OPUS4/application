@@ -46,7 +46,7 @@ class Application_Form_Model_TableTest extends ControllerTestCase
     {
         $form = new Application_Form_Model_Table();
 
-        $form->setColumns(array(array('label' => 'Opus_Licence')));
+        $form->setColumns([['label' => 'Opus_Licence']]);
 
         $this->assertEquals('Opus_Licence', $form->getColumnLabel(0));
     }
@@ -55,7 +55,7 @@ class Application_Form_Model_TableTest extends ControllerTestCase
     {
         $form = new Application_Form_Model_Table();
 
-        $form->setColumns(array(array('label' => 'Opus_Licence')));
+        $form->setColumns([['label' => 'Opus_Licence']]);
 
         $this->assertNull($form->getColumnLabel(1));
     }
@@ -101,7 +101,7 @@ class Application_Form_Model_TableTest extends ControllerTestCase
     {
         $form = new Application_Form_Model_Table();
 
-        $columns = array(array('label' => 'col1'));
+        $columns = [['label' => 'col1']];
 
         $form->setColumns($columns);
 
@@ -156,17 +156,115 @@ class Application_Form_Model_TableTest extends ControllerTestCase
         $this->assertFalse($form->isUsed(null));
     }
 
-    public function testGetRowCssClass()
+    public function testGetRowCssClassDefault()
     {
         $form = new Application_Form_Model_Table();
 
         $this->assertNull($form->getRowCssClass(null));
     }
 
-    public function testGetRowTooltip()
+    public function testGetRowTooltipDefault()
     {
         $form = new Application_Form_Model_Table();
 
         $this->assertNull($form->getRowTooltip(null));
+    }
+
+    public function testIsRenderShowActionLinkLog()
+    {
+        $logger = new MockLogger();
+        $form = new Application_Form_Model_Table();
+
+        $form->setLogger($logger);
+
+        $mock = $this->getMockBuilder(Zend_Controller_Action_Interface::class)->getMock();
+        $form->setController($mock);
+        $form->isRenderShowActionLink(null);
+
+        $this->assertEquals('The used controller does not have the method getShowActionEnabled.', $logger->getMessages()[0]);
+    }
+
+    public function testIsModifiableLog()
+    {
+        $logger = new MockLogger();
+        $form = new Application_Form_Model_Table();
+
+        $form->setLogger($logger);
+
+        $mock = $this->getMockBuilder(Zend_Controller_Action_Interface::class)->getMock();
+        $form->setController($mock);
+        $form->isModifiable(null);
+
+        $this->assertEquals('The used controller does not have the method isModifiable.', $logger->getMessages()[0]);
+    }
+
+    public function testIsDeletableLog()
+    {
+        $logger = new MockLogger();
+        $form = new Application_Form_Model_Table();
+
+        $form->setLogger($logger);
+
+        $mock = $this->getMockBuilder(Zend_Controller_Action_Interface::class)->getMock();
+        $form->setController($mock);
+        $form->isDeletable(null);
+
+        $this->assertEquals('The used controller does not have the method isDeletable.', $logger->getMessages()[0]);
+    }
+
+    public function testIsUsedLog()
+    {
+        $logger = new MockLogger();
+        $form = new Application_Form_Model_Table();
+
+        $form->setLogger($logger);
+
+        $mock = $this->getMockBuilder(Zend_Controller_Action_Interface::class)->getMock();
+        $form->setController($mock);
+        $form->isUsed(null);
+
+        $this->assertEquals('The used controller does not have the method isUsed.', $logger->getMessages()[0]);
+    }
+
+    public function testIsProtectedLog()
+    {
+        $logger = new MockLogger();
+        $form = new Application_Form_Model_Table();
+
+        $form->setLogger($logger);
+
+        $mock = $this->getMockBuilder(Zend_Controller_Action_Interface::class)->getMock();
+        $form->setController($mock);
+        $form->isProtected(null);
+
+        $this->assertEquals('The used controller does not have the method isProtected.', $logger->getMessages()[0]);
+    }
+
+    public function testGetRowCssClassLog()
+    {
+        $logger = new MockLogger();
+        $form = new Application_Form_Model_Table();
+
+        $form->setLogger($logger);
+
+        $mock = $this->getMockBuilder(Zend_Controller_Action_Interface::class)->getMock();
+        $form->setController($mock);
+        $form->getRowCssClass(null);
+
+        $this->assertEquals('The used controller does not have the method getRowCssClass.', $logger->getMessages()[0]);
+    }
+
+    public function testGetRowTooltipLog()
+    {
+        $logger = new MockLogger();
+        $form = new Application_Form_Model_Table();
+
+        $form->setLogger($logger);
+
+        $mock = $this->getMockBuilder(Zend_Controller_Action_Interface::class)->getMock();
+        $form->setController($mock);
+        $form->getRowTooltip(null);
+
+        $this->assertEquals('The used controller does not have the method getRowTooltip.', $logger->getMessages()[0]);
     }
 }
