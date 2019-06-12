@@ -143,8 +143,8 @@ DST="${3}"
 # put configuration and schema files
 ln -sf  "$BASEDIR/vendor/opus4-repo/search/core.properties" "${SOLR_CORE_DIR}/data/solr"
 
-copyConfigFile "schema.xml" "${BASEDIR}/vendor/opus4-repo/search" "${SOLR_CORE_DIR}/data/solr/conf"
-copyConfigFile "solrconfig.xml" "${BASEDIR}/vendor/opus4-repo/search" "${SOLR_CORE_DIR}/data/solr/conf"
+copyConfigFile "schema.xml" "${BASEDIR}/vendor/opus4-repo/search/config" "${SOLR_CORE_DIR}/data/solr/conf"
+copyConfigFile "solrconfig.xml" "${BASEDIR}/vendor/opus4-repo/search/config" "${SOLR_CORE_DIR}/data/solr/conf"
 
 # provide logging properties
 # TODO check integration of logging.properties with recent versions of solr
