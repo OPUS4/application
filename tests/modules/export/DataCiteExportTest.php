@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,38 +24,17 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Export
+ * @category    Tests
+ * @package     Export
  * @author      Sascha Szott <opus-development@saschaszott.de>
  * @copyright   Copyright (c) 2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Export_Model_DataciteExportTest extends ControllerTestCase
+
+class Export_DataCiteExportTest extends ControllerTestCase
 {
 
-    public function testExecuteWithMissingDocId()
-    {
-        $plugin = new Export_Model_DataciteExport();
-        $plugin->setRequest($this->getRequest());
-        $plugin->setResponse($this->getResponse());
-
-        $this->setExpectedException('Application_Exception');
-        $plugin->execute();
-    }
-
-    public function testExecuteWithUnknownDocId()
-    {
-        $plugin = new Export_Model_DataciteExport();
-        $request = $this->getRequest();
-        $request->setParam('docId', -1);
-        $plugin->setRequest($request);
-        $plugin->setResponse($this->getResponse());
-
-        $this->setExpectedException('Application_Exception');
-        $plugin->execute();
-    }
-
-    public function testExecuteWithValidDoc()
+    public function testExportOfValidDataCiteXML()
     {
         // DOI Präfix setzen
         $oldConfig = Zend_Registry::get('Zend_Config');
@@ -94,95 +73,46 @@ class Export_Model_DataciteExportTest extends ControllerTestCase
 
         $doc->store();
 
-        $plugin = new Export_Model_DataciteExport();
-        $request = $this->getRequest();
-        $request->setParam('docId', $docId);
-        $plugin->setRequest($request);
-        $plugin->setResponse($this->getResponse());
-
-        $result = $plugin->execute();
+        $this->dispatch('/export/index/datacite/docId/' . $docId);
 
         // Testdokument wieder löschen
         $doc->deletePermanent();
         // Änderungen an Konfiguration zurücksetzen
         Zend_Registry::set('Zend_Config', $oldConfig);
 
-        $this->assertTrue($result);
+        $this->assertResponseCode(200);
         $this->assertHeaderContains('Content-Type', 'text/xml; charset=UTF-8');
+        $this->assertNotEmpty($this->getResponse()->getBody());
     }
 
-    public function testExecuteWithInvalidDoc()
+    public function testExportOfInvalidDataCiteXML()
     {
-        // Testdokument mit fehlenden Pflichtfeldern anlegen
+        // Testdokument mit fehlenden Pflichtfeldern
         $doc = new Opus_Document();
         $doc->setServerState('published');
         $docId = $doc->store();
 
-        $plugin = new Export_Model_DataciteExport();
-        $request = $this->getRequest();
-        $request->setParam('docId', $docId);
-        $plugin->setRequest($request);
-        $plugin->setResponse($this->getResponse());
-        $view = new Zend_View();
-        $plugin->setView($view);
+        $this->dispatch('/export/index/datacite/docId/' . $docId . '/validate/no');
 
-        $result = $plugin->execute();
-
-        // Testdokument wieder löschen
         $doc->deletePermanent();
 
-        $this->assertFalse($result);
-        $this->assertTrue(is_array($view->requiredFieldsStatus));
-        $this->assertTrue(is_array($view->errors));
-    }
-
-    public function testExecuteWithInvalidDocAndInvalidValidateParamValue()
-    {
-        // Testdokument mit fehlenden Pflichtfeldern anlegen
-        $doc = new Opus_Document();
-        $doc->setServerState('published');
-        $docId = $doc->store();
-
-        $plugin = new Export_Model_DataciteExport();
-        $request = $this->getRequest();
-        $request->setParam('docId', $docId);
-        $request->setParam('validate', 'false');
-        $plugin->setRequest($request);
-        $plugin->setResponse($this->getResponse());
-
-        $view = new Zend_View();
-        $plugin->setView($view);
-
-        $result = $plugin->execute();
-
-        // Testdokument wieder löschen
-        $doc->deletePermanent();
-
-        $this->assertFalse($result);
-        $this->assertTrue(is_array($view->requiredFieldsStatus));
-        $this->assertTrue(is_array($view->errors));
-    }
-
-    public function testExecuteWithInvalidDocSkipValidation()
-    {
-        $doc = new Opus_Document();
-        $doc->setServerState('published');
-        $docId = $doc->store();
-
-        $plugin = new Export_Model_DataciteExport();
-        $request = $this->getRequest();
-        $request->setParam('docId', $docId);
-        $request->setParam('validate', 'no');
-        $plugin->setRequest($request);
-        $plugin->setResponse($this->getResponse());
-
-        $result = $plugin->execute();
-
-        // Testdokument wieder löschen
-        $doc->deletePermanent();
-
-        // XML wird in jedem Fall generiert, auch wenn das DataCite-XML nicht valide ist
-        $this->assertTrue($result);
+        $this->assertResponseCode(200);
         $this->assertHeaderContains('Content-Type', 'text/xml; charset=UTF-8');
+        $this->assertNotEmpty($this->getResponse()->getBody());
+    }
+
+    public function testExportOfDataCiteXmlStatusPage()
+    {
+        // Testdokument mit fehlenden Pflichtfeldern
+        $doc = new Opus_Document();
+        $doc->setServerState('published');
+        $docId = $doc->store();
+
+        $this->useGerman();
+        $this->dispatch('/export/index/datacite/docId/' . $docId);
+
+        $this->assertResponseCode(200);
+        $this->assertContains("DataCite XML von Dokument $docId ist nicht gültig", $this->getResponse()->getBody());
+        $this->assertContains("<h3>Fehler bei der XML-Validierung</h3>", $this->getResponse()->getBody());
     }
 }
