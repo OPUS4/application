@@ -111,6 +111,8 @@ class Export_DataCiteExportTest extends ControllerTestCase
         $this->useGerman();
         $this->dispatch('/export/index/datacite/docId/' . $docId);
 
+        $doc->deletePermanent();
+
         $this->assertResponseCode(200);
         $this->assertContains("DataCite XML von Dokument $docId ist nicht gültig", $this->getResponse()->getBody());
         $this->assertContains("<h3>Fehler bei der XML-Validierung</h3>", $this->getResponse()->getBody());
