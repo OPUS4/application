@@ -429,10 +429,10 @@
 
         <tu tuid="HideEmptyCollections">
             <tuv xml:lang="en">
-                <seg>Hide empty collections in collection browsing</seg>
+                <seg>Hide empty collections in browsing</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>Leere Sammlungen beim Sammlungs-Browsen ausblenden</seg>
+                <seg>Leere Sammlungen beim Browsen ausblenden</seg>
             </tuv>
         </tu>
 
