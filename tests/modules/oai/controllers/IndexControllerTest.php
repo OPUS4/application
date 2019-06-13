@@ -43,7 +43,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     private $_security;
     private $_addOaiModuleAccess;
-    private $docIds = array();
+    private $docIds = [];
 
     private $xpathNamespaces = [
         'oai' => "http://www.openarchives.org/OAI/2.0/",
@@ -58,15 +58,16 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         'thesis' => "http://www.ndltd.org/standards/metadata/etdms/1.0/",
         'eprints' => 'http://www.openarchives.org/OAI/1.1/eprints',
         'oaiid' => 'http://www.openarchives.org/OAI/2.0/oai-identifier'
-        ];
-
+    ];
 
     /**
      * Method to check response for "bad" strings.
      */
-    protected function checkForBadStringsInHtml($body) {
-        $badStrings = array("Exception", "Fehler", "Stacktrace", "badVerb",
-            "unauthorized", "internal error", "<error", "</error>");
+    protected function checkForBadStringsInHtml($body)
+    {
+        $badStrings = [
+            "Exception", "Fehler", "Stacktrace", "badVerb", "unauthorized", "internal error", "<error", "</error>"
+        ];
         $this->checkForCustomBadStringsInHtml($body, $badStrings);
     }
 
@@ -76,14 +77,14 @@ class Oai_IndexControllerTest extends ControllerTestCase {
      * @param string $resultString XML
      * @return DOMXPath Resulting Xpath object with registered namespaces
      */
-    protected function prepareXpathFromResultString($resultString) {
+    protected function prepareXpathFromResultString($resultString)
+    {
         $domDocument = new DOMDocument();
         $domDocument->loadXML($resultString);
 
         $xpath = new DOMXPath($domDocument);
 
-        foreach ($this->xpathNamespaces as $prefix => $namespaceUri)
-        {
+        foreach ($this->xpathNamespaces as $prefix => $namespaceUri) {
             $xpath->registerNamespace($prefix, $namespaceUri);
         }
 
@@ -95,13 +96,13 @@ class Oai_IndexControllerTest extends ControllerTestCase {
      *
      * @covers ::indexAction
      */
-    public function testInvalidVerb() {
+    public function testInvalidVerb()
+    {
         $this->dispatch('/oai?verb=InvalidVerb');
         $this->assertResponseCode(200);
 
         $response = $this->getResponse();
-        $this->assertContains('badVerb', $response->getBody(),
-                "Response must contain 'badVerb'");
+        $this->assertContains('badVerb', $response->getBody(),"Response must contain 'badVerb'");
     }
 
     /**
@@ -109,13 +110,13 @@ class Oai_IndexControllerTest extends ControllerTestCase {
      *
      * @covers ::indexAction
      */
-    public function testNoVerb() {
+    public function testNoVerb()
+    {
         $this->dispatch('/oai');
         $this->assertResponseCode(200);
 
         $response = $this->getResponse();
-        $this->assertContains('badVerb', $response->getBody(),
-                "Response must contain 'badVerb'");
+        $this->assertContains('badVerb', $response->getBody(),"Response must contain 'badVerb'");
     }
 
     /**
@@ -123,10 +124,11 @@ class Oai_IndexControllerTest extends ControllerTestCase {
      *
      * @covers ::indexAction
      */
-    public function testIdentify() {
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
-            'oai' => array('repository' => array('name' => 'test-repo-name'))
-        )));
+    public function testIdentify()
+    {
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'oai' => ['repository' => ['name' => 'test-repo-name']]
+        ]));
 
         $this->dispatch('/oai?verb=Identify');
         $this->assertResponseCode(200);
@@ -175,17 +177,17 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     public function testIdentifyDescriptionEprintsConfigured()
     {
-        $values = array(
-            'content' => array('url' => 'test-content-url', 'text' => 'test-content-text'),
-            'metadataPolicy' => array('url' => 'test-metadata-url', 'text' => 'test-metadata-text'),
-            'dataPolicy' => array('url' => 'test-data-url', 'text' => 'test-data-text'),
-            'submissionPolicy' => array('url' => 'test-submission-url', 'text' => 'test-submission-text'),
-            'comment' => array('url' => 'test-comment-url', 'text' => 'test-comment-text')
-        );
+        $values = [
+            'content' => ['url' => 'test-content-url', 'text' => 'test-content-text'],
+            'metadataPolicy' => ['url' => 'test-metadata-url', 'text' => 'test-metadata-text'],
+            'dataPolicy' => ['url' => 'test-data-url', 'text' => 'test-data-text'],
+            'submissionPolicy' => ['url' => 'test-submission-url', 'text' => 'test-submission-text'],
+            'comment' => ['url' => 'test-comment-url', 'text' => 'test-comment-text']
+        ];
 
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
-            'oai' => array('description' => array('eprints' => $values))
-        )));
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'oai' => ['description' => ['eprints' => $values]]
+        ]));
 
         $this->dispatch('/oai?verb=Identify');
         $this->assertResponseCode(200);
@@ -236,7 +238,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
      *
      * @covers ::indexAction
      */
-    public function testListMetadataFormats() {
+    public function testListMetadataFormats()
+    {
         $this->dispatch('/oai?verb=ListMetadataFormats');
         $this->assertResponseCode(200);
 

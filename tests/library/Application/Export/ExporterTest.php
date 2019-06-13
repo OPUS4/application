@@ -27,7 +27,7 @@
  * @category    Tests
  * @package     Application_Export
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2017-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -46,7 +46,6 @@ class Application_Export_ExporterTest extends ControllerTestCase
         $this->_guestExportEnabled = in_array('export', $modules);
     }
 
-
     public function tearDown()
     {
         // restore guest access to export module
@@ -55,8 +54,7 @@ class Application_Export_ExporterTest extends ControllerTestCase
         if ($this->_guestExportEnabled)
         {
             $guest->appendAccessModule('export');
-        }
-        else {
+        } else {
             $guest->removeAccessModule('export');
         }
 
@@ -72,18 +70,18 @@ class Application_Export_ExporterTest extends ControllerTestCase
 
         $exporter = new Application_Export_Exporter();
 
-        $exporter->addFormats(array(
-            'bibtex' => array(
+        $exporter->addFormats([
+            'bibtex' => [
                 'name' => 'BibTeX',
                 'description' => 'Export BibTeX',
                 'module' => 'citationExport',
                 'controller' => 'index',
                 'action' => 'download',
-                'params' => array(
+                'params' => [
                     'output' => 'bibtex'
-                )
-            )
-        ));
+                ]
+            ]
+        ]);
 
         $formats = $exporter->getFormats();
 
@@ -112,8 +110,8 @@ class Application_Export_ExporterTest extends ControllerTestCase
     public function testContextProperties() {
         $exporter = new Application_Export_Exporter();
 
-        $exporter->addFormats(array(
-            'bibtex' => array(
+        $exporter->addFormats([
+            'bibtex' => [
                 'name' => 'BibTeX',
                 'description' => 'Export BibTeX',
                 'module' => 'citationExport',
@@ -121,11 +119,11 @@ class Application_Export_ExporterTest extends ControllerTestCase
                 'action' => 'download',
                 'frontdoor' => true,
                 'search' => false,
-                'params' => array(
+                'params' => [
                     'output' => 'bibtex'
-                )
-            )
-        ));
+                ]
+            ]
+        ]);
 
         $formats = $exporter->getFormats();
 
@@ -149,7 +147,7 @@ class Application_Export_ExporterTest extends ControllerTestCase
 
         $formats = $exporter->getAllowedFormats();
 
-        $this->assertCount(7, $formats);
+        $this->assertCount(8, $formats);
 
         $this->enableSecurity();
 
@@ -177,5 +175,4 @@ class Application_Export_ExporterTest extends ControllerTestCase
             $lastName = $name;
         }
     }
-
 }
