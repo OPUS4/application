@@ -49,7 +49,7 @@ class Export_DataCiteExportTest extends ControllerTestCase
         ));
 
         // Testdokument mit allen Pflichtfeldern anlegen
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
         $doc->setType('all');
         $doc->setServerState('published');
         $doc->setPublisherName('Foo Publishing Corp.');
@@ -75,8 +75,6 @@ class Export_DataCiteExportTest extends ControllerTestCase
 
         $this->dispatch('/export/index/datacite/docId/' . $docId);
 
-        // Testdokument wieder löschen
-        $doc->deletePermanent();
         // Änderungen an Konfiguration zurücksetzen
         Zend_Registry::set('Zend_Config', $oldConfig);
 
@@ -88,13 +86,11 @@ class Export_DataCiteExportTest extends ControllerTestCase
     public function testExportOfInvalidDataCiteXML()
     {
         // Testdokument mit fehlenden Pflichtfeldern
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
         $doc->setServerState('published');
         $docId = $doc->store();
 
         $this->dispatch('/export/index/datacite/docId/' . $docId . '/validate/no');
-
-        $doc->deletePermanent();
 
         $this->assertResponseCode(200);
         $this->assertHeaderContains('Content-Type', 'text/xml; charset=UTF-8');
@@ -104,14 +100,12 @@ class Export_DataCiteExportTest extends ControllerTestCase
     public function testExportOfDataCiteXmlStatusPage()
     {
         // Testdokument mit fehlenden Pflichtfeldern
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
         $doc->setServerState('published');
         $docId = $doc->store();
 
         $this->useGerman();
         $this->dispatch('/export/index/datacite/docId/' . $docId);
-
-        $doc->deletePermanent();
 
         $this->assertResponseCode(200);
         $this->assertContains("DataCite XML von Dokument $docId ist nicht gültig", $this->getResponse()->getBody());
