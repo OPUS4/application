@@ -50,13 +50,17 @@ class Application_Form_Element_LanguageTest extends FormElementTestCase
 
         $languages = Application_Form_Element_Language::getLanguageList();
 
+        // check "Multiple languages" separately because on some systems "Multiple Languages" is returned
+        $this->assertArrayHasKey('mul', $languages);
+        $this->assertEquals('multiple languages', strtolower($languages['mul']));
+        unset($languages['mul']);
+
         $this->assertEquals([
             'deu' => 'German',
             'eng' => 'English',
             'fra' => 'French',
             'rus' => 'Russian',
-            'spa' => 'Spanish',
-            'mul' => 'Multiple Languages'
+            'spa' => 'Spanish'
         ], $languages);
     }
 
