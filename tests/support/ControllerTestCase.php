@@ -657,7 +657,14 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase
         }
     }
 
-    protected function createTestFile($filename)
+    /**
+     * @param string $filename
+     * @param string $filepath
+     * @return Opus_File
+     * @throws Opus_Model_Exception
+     * @throws Zend_Exception
+     */
+    protected function createTestFile($filename, $filepath = null)
     {
         if (is_null($this->testFiles)) {
             $this->testFiles = array();
@@ -667,10 +674,13 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase
             throw new Exception("config key 'workspacePath' not defined in config file");
         }
 
-        $path = $config->workspacePath . DIRECTORY_SEPARATOR . uniqid();
-        mkdir($path, 0777, true);
-        $filepath = $path . DIRECTORY_SEPARATOR . $filename;
-        touch($filepath);
+        if (is_null($filepath)) {
+            $path = $config->workspacePath . DIRECTORY_SEPARATOR . uniqid();
+            mkdir($path, 0777, true);
+            $filepath = $path . DIRECTORY_SEPARATOR . $filename;
+            touch($filepath);
+        }
+
         $this->assertTrue(is_readable($filepath));
         $file = new Opus_File();
         $file->setPathName(basename($filepath));
