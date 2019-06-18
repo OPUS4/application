@@ -1266,7 +1266,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
         $this->assertNotQuery('//a[@href="/solrsearch/index/search/searchtype/all/export/xml/stylesheet/example"]');
     }
 
-    public function testDisableEmptyCollectionTrue() {
+    public function testDisableEmptyCollectionsTrue() {
         Zend_Registry::get('Zend_Config')->merge(
             new Zend_Config(array('browsing' => array('disableEmptyCollections' => 1)))
         );
@@ -1290,6 +1290,38 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
             'Sozialwissenschaften');
         $this->assertQueryContentContains('//a[@href="/solrsearch/index/search/searchtype/collection/id/6"]/..',
             '(0)');
+    }
+
+    public function testEnableHideEmptyCollectionsForCollectionRoleMSC()
+    {
+        $collRole = Opus_CollectionRole::fetchByName('msc');
+        $hideEmptyCollections = $collRole->getHideEmptyCollections();
+        $collRole->setHideEmptyCollections(1);
+        $collRole->store();
+
+        $this->dispatch('/solrsearch/index/search/searchtype/collection/id/7652');
+
+        // restore old value
+        $collRole->setHideEmptyCollections($hideEmptyCollections);
+        $collRole->store();
+
+        $this->assertNotContains('06-XX ORDER, LATTICES, ORDERED ALGEBRAIC STRUCTURES', $this->getResponse()->getBody());
+    }
+
+    public function testDisableHideEmptyCollectionsForCollectionRoleMSC()
+    {
+        $collRole = Opus_CollectionRole::fetchByName('msc');
+        $hideEmptyCollections = $collRole->getHideEmptyCollections();
+        $collRole->setHideEmptyCollections(0);
+        $collRole->store();
+
+        $this->dispatch('/solrsearch/index/search/searchtype/collection/id/7652');
+
+        // restore old value
+        $collRole->setHideEmptyCollections($hideEmptyCollections);
+        $collRole->store();
+
+        $this->assertContains('06-XX ORDER, LATTICES, ORDERED ALGEBRAIC STRUCTURES', $this->getResponse()->getBody());
     }
 
     public function robotsTestProvider()

@@ -51,7 +51,7 @@ class Solrsearch_Model_CollectionList {
             throw new Solrsearch_Model_Exception("Collection with id '" . $collectionId . "' does not exist.", 404);
         }
 
-        // check if an unvisible collection exists along the path to the root collection
+        // check if an invisible collection exists along the path to the root collection
         foreach ($collection->getParents() as $parent) {
             if (!$parent->isRoot() && $parent->getVisible() !== '1') {
                 throw new Solrsearch_Model_Exception("Collection with id '" . $collectionId . "' is not visible.", 404);
@@ -119,7 +119,16 @@ class Solrsearch_Model_CollectionList {
      * @return array of Opus_Collection
      */
     public function getChildren() {
-        return $this->_collection->getVisibleChildren();
+        $children = $this->_collection->getVisibleChildren();
+
+        if ($this->_collectionRole->getHideEmptyCollections()) {
+            // Collection ausblenden, wenn ihr selbst und den Kind-Collections keine Dokumente zugeordnet
+            $children = array_filter($children, function (Opus_Collection $collection) {
+                return $collection->getNumSubtreeEntries() > 0;
+            });
+        }
+
+        return $children;
     }
 
     public function getTitle() {

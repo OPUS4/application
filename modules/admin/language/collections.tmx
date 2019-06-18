@@ -427,6 +427,15 @@
 			</tuv>
         </tu>
 
+        <tu tuid="HideEmptyCollections">
+            <tuv xml:lang="en">
+                <seg>Hide empty collections in browsing</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Leere Sammlungen beim Browsen ausblenden</seg>
+            </tuv>
+        </tu>
+
         <tu tuid="breadcrumb_title">
 			<tuv xml:lang="en">
 				<seg>Your current position:</seg>

@@ -286,6 +286,7 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase
             'VisibleFrontdoor' => '0',
             'VisibleOai' => '0',
             'Position' => '20',
+            'HideEmptyCollections' => '1',
             'Save' => 'Speichern'
         ];
 
@@ -312,6 +313,7 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase
                 $this->assertEquals(0, $role->getVisibleFrontdoor());
                 $this->assertEquals(0, $role->getVisibleOai());
                 $this->assertEquals(20, $role->getPosition());
+                $this->assertEquals(1, $role->getHideEmptyCollections());
 
                 $newColFound = true;
             }
@@ -339,6 +341,7 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase
         $role->setVisibleFrontdoor(0);
         $role->setVisibleOai(0);
         $role->setPosition(20);
+        $role->setHideEmptyCollections(1);
 
         $roleId = $role->store();
 
@@ -353,6 +356,7 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase
             'VisibleFrontdoor' => '1',
             'VisibleOai' => '1',
             'Position' => '19',
+            'HideEmptyCollections' => '0',
             'Save' => 'Speichern'
         ];
 
@@ -375,6 +379,7 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase
         $this->assertEquals(1, $role->getVisibleFrontdoor());
         $this->assertEquals(1, $role->getVisibleOai());
         $this->assertEquals(19, $role->getPosition());
+        $this->assertEquals(0, $role->getHideEmptyCollections());
 
         $this->assertRedirectTo('/admin/collectionroles');
         $this->verifyFlashMessage('Collection role \'ModifiedName\' was edited successfully.',
