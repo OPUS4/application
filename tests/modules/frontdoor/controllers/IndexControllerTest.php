@@ -1428,8 +1428,8 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
 
         $urnResolverUrl = Zend_Registry::get('Zend_Config')->urn->resolverUrl;
 
-        $this->assertXpath('//meta[@name="DC.Identifier" and @content="urn:nbn:op:123"]');
-        $this->assertXpath('//meta[@name="DC.Identifier" and @content="' . $urnResolverUrl . 'urn:nbn:op:123"]');
+        $this->assertXpath('//meta[@name="DC.identifier" and @content="urn:nbn:op:123"]');
+        $this->assertXpath('//meta[@name="DC.identifier" and @content="' . $urnResolverUrl . 'urn:nbn:op:123"]');
     }
 
     public function testBelongsToBibliographyTurnedOn() {
