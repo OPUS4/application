@@ -41,10 +41,10 @@
 
         <tu tuid="export_datacite_non_published_doc_notice">
             <tuv xml:lang="en">
-                <seg>As this document is not published, do not apply DOI registration!</seg>
+                <seg>As this document is not published, do not apply DOI registration manually!</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>Da dieses Dokument nicht veröffentlicht ist, sollten Sie keine DOI-Registrierung durchführen!</seg>
+                <seg>Da dieses Dokument nicht veröffentlicht ist, sollten Sie keine manuelle DOI-Registrierung durchführen!</seg>
             </tuv>
         </tu>
 
