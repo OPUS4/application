@@ -580,6 +580,15 @@
             </tuv>
         </tu>
 
+        <tu tuid="admin_collectionroles_error_name_contains_invalid_char">
+            <tuv xml:lang="en">
+                <seg>Only letters, digits, hyphen and underscore are permitted.</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Es sind nur Buchstaben, Zahlen, Binde- und Unterstrich zulässig.</seg>
+            </tuv>
+        </tu>
+
         <tu tuid="admin_collections_actions">
             <tuv xml:lang="en">
                 <seg>Sort Collections</seg>

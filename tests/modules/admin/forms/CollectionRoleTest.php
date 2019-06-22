@@ -186,4 +186,34 @@ class Admin_Form_CollectionRoleTest extends ControllerTestCase {
         )));
     }
 
+    public function testValidationWithoutInvalidCharInCollectionRoleName()
+    {
+        $form = new Admin_Form_CollectionRole();
+
+        $this->assertTrue($form->isValid(array(
+            'Name' => 'foobar',
+            'OaiName' => 'foobar',
+            'DisplayBrowsing' => 'Name',
+            'DisplayFrontdoor' => 'Name,Number'
+        )));
+
+        $this->assertNotContains('containsInvalidChar', $form->getErrors('Name'));
+        $this->assertNotContains('containsInvalidChar', $form->getErrors('OaiName'));
+    }
+
+    public function testValidationWithInvalidCharInCollectionRoleName()
+    {
+        $form = new Admin_Form_CollectionRole();
+
+        $this->assertFalse($form->isValid(array(
+            'Name' => 'foo bar',
+            'OaiName' => 'foo bar',
+            'DisplayBrowsing' => 'Name',
+            'DisplayFrontdoor' => 'Name,Number'
+        )));
+
+        $this->assertContains('containsInvalidChar', $form->getErrors('Name'));
+        $this->assertNotContains('containsInvalidChar', $form->getErrors('OaiName'));
+    }
+
 }

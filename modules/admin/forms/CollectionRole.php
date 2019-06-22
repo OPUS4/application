@@ -55,7 +55,10 @@ class Admin_Form_CollectionRole extends Application_Form_Model_Abstract {
         $this->addElement('text', self::ELEMENT_NAME, [
             'required' => true, 'size' => 70, 'maxlength' => Opus_CollectionRole::getFieldMaxLength('Name')
         ]);
-        $this->getElement(self::ELEMENT_NAME)->addValidator(new Application_Form_Validate_CollectionRoleNameUnique());
+        $this->getElement(self::ELEMENT_NAME)->addValidators([
+                new Application_Form_Validate_CollectionRoleNameUnique(),
+                new Application_Form_Validate_CollectionRoleName()
+        ]);
 
         $this->addElement('text', self::ELEMENT_OAI_NAME, [
             'required' => true, 'size' => 30, 'maxlength' => Opus_CollectionRole::getFieldMaxLength('OaiName')
