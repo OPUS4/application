@@ -1351,4 +1351,14 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
             $this->assertNotXpath('//meta[@name="robots"]');
         }
     }
+
+    /**
+     * Test für OPUSVIER-4059: Collection Role Name im class-Attribut des ul-Elements ausgeben
+     */
+    public function testElementUlContainsCollectionRoleName()
+    {
+        $this->dispatch('/solrsearch/index/search/searchtype/collection/id/2');
+        $this->assertXpath("//ul[@class='nav browsing col-list role-ddc']");
+    }
+
 }
