@@ -39,7 +39,7 @@ class Admin_Form_Collection extends Application_Form_Model_Abstract {
     const ELEMENT_VISIBLE = 'Visible';
     const ELEMENT_VISIBLE_PUBLISH = 'VisiblePublish';
     const ELEMENT_OAI_SUBSET = 'OaiSubset';
-    const ELEMENT_THEME = 'Theme';
+    //const ELEMENT_THEME = 'Theme';
 
     public function init() {
         parent::init();
@@ -59,7 +59,7 @@ class Admin_Form_Collection extends Application_Form_Model_Abstract {
         $this->addElement('checkbox', self::ELEMENT_VISIBLE);
         $this->addElement('checkbox', self::ELEMENT_VISIBLE_PUBLISH);
         $this->addElement('text', self::ELEMENT_OAI_SUBSET, array('size' => 50));
-        $this->addElement('Theme', self::ELEMENT_THEME);
+        //$this->addElement('Theme', self::ELEMENT_THEME);
 
         $this->removeElement('Cancel');
     }
@@ -71,7 +71,7 @@ class Admin_Form_Collection extends Application_Form_Model_Abstract {
         $this->getElement(self::ELEMENT_VISIBLE)->setValue($collection->getVisible());
         $this->getElement(self::ELEMENT_VISIBLE_PUBLISH)->setValue($collection->getVisiblePublish());
         $this->getElement(self::ELEMENT_OAI_SUBSET)->setValue($collection->getOaiSubset());
-        $this->getElement(self::ELEMENT_THEME)->setValue($collection->getTheme());
+        //$this->getElement(self::ELEMENT_THEME)->setValue($collection->getTheme());
     }
 
     public function updateModel($collection) {
@@ -80,7 +80,7 @@ class Admin_Form_Collection extends Application_Form_Model_Abstract {
         $collection->setVisible($this->getElementValue(self::ELEMENT_VISIBLE));
         $collection->setVisiblePublish($this->getElementValue(self::ELEMENT_VISIBLE_PUBLISH));
         $collection->setOaiSubset($this->getElementValue(self::ELEMENT_OAI_SUBSET));
-        $collection->setTheme($this->getElementValue(self::ELEMENT_THEME));
+        //$collection->setTheme($this->getElementValue(self::ELEMENT_THEME));
     }
 
 }
