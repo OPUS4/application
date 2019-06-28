@@ -45,6 +45,6 @@ class Application_View_Helper_MimeTypeAsCssClassTest extends ControllerTestCase
         $helper = new Application_View_Helper_MimeTypeAsCssClass();
 
         $this->assertEquals('text_html', $helper->mimeTypeAsCssClass('text/html'));
-        $this->assertEquals('text_html', $helper->mimeTypeAsCssClass('text_html; charset=iso-8859-1'));
+        $this->assertEquals('text_html', $helper->mimeTypeAsCssClass('text/html; charset=iso-8859-1'));
     }
 }
