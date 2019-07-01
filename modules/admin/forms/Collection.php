@@ -34,8 +34,8 @@
 
 /**
  * Class Admin_Form_Collection.
- * OPUSVIER-4071 Comment out the element Theme
- * Currently unused Future
+ *
+ * OPUSVIER-4071 Element 'Theme' is disabled, because it is currently unused.
  */
 class Admin_Form_Collection extends Application_Form_Model_Abstract
 {
@@ -86,5 +86,4 @@ class Admin_Form_Collection extends Application_Form_Model_Abstract
         $collection->setOaiSubset($this->getElementValue(self::ELEMENT_OAI_SUBSET));
         // $collection->setTheme($this->getElementValue(self::ELEMENT_THEME));
     }
-
 }
