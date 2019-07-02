@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
+<?php
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -26,16 +25,38 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @package     Form_Validate
+ * @author      Sascha Szott <opus-development@saschaszott.de>
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
- -->
-<documenttype name="single_level_collection"
-			  xmlns="http://www.opus-repository.org/schema/documenttype"
-			  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-			  xsi:schemaLocation="http://www.opus-repository.org/schema/documenttype http://www.opus-repository.org/schema/documenttype.xsd">
+class Application_Form_Validate_CollectionRoleName extends Opus_Validate_CollectionRoleName
+{
 
-    <field name="SLC" required="no" formelement="Select" datatype="Collection" root="single-level-collection" multiplicity="5"/>
-    
-</documenttype>
+    const NAME_CONTAINS_INVALID_CHAR = 'containsInvalidChar';
+
+    protected $_messageTemplates = array(
+        self::NAME_CONTAINS_INVALID_CHAR => 'admin_collectionroles_error_name_contains_invalid_char'
+    );
+
+    /**
+     * Returns true if and only if $value meets the validation requirements
+     *
+     * If $value fails validation, then this method returns false, and
+     * getMessages() will return an array of messages that explain why the
+     * validation failed.
+     *
+     * @param mixed $value
+     * @return boolean
+     * @throws Zend_Validate_Exception If validation of $value is impossible
+     */
+    public function isValid($value)
+    {
+        $valid = parent::isValid($value);
+        if (! $valid) {
+            $this->_error(self::NAME_CONTAINS_INVALID_CHAR);
+        }
+        return $valid;
+    }
+}
+
