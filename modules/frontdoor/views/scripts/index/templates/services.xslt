@@ -118,11 +118,7 @@
                   </xsl:attribute>
                   <xsl:element name="a">
                       <xsl:attribute name="class">
-                          <xsl:call-template name="replaceCharsInString">
-                              <xsl:with-param name="stringIn" select="string(@MimeType)"/>
-                              <xsl:with-param name="charsIn" select="'/'"/>
-                              <xsl:with-param name="charsOut" select="'_'"/>
-                          </xsl:call-template>
+                         <xsl:value-of select="php:functionString('Application_Xslt::mimeTypeAsCssClass', @MimeType)" />
                       </xsl:attribute>
                      <xsl:attribute name="href">
                         <xsl:copy-of select="$fileLink" />

@@ -96,7 +96,7 @@ class Frontdoor_IndexController extends Application_Controller_Action
         $xslt = $docBuilder->buildDomDocument($this->view->getScriptPath('index') . DIRECTORY_SEPARATOR . 'index');
 
         $proc = new XSLTProcessor;
-        Application_Xslt::registerViewHelper($proc, array(
+        Application_Xslt::registerViewHelper($proc, [
             'locale',
             'optionEnabled',
             'optionValue',
@@ -112,8 +112,9 @@ class Frontdoor_IndexController extends Application_Controller_Action
             'frontdoorStylesheet',
             'shortenText',
             'exportLinks',
-            'languageWebForm'
-        ));
+            'languageWebForm',
+            'mimeTypeAsCssClass'
+        ]);
         $proc->registerPHPFunctions('urlencode');
         $proc->importStyleSheet($xslt);
 

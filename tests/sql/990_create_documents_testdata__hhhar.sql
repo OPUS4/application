@@ -119,7 +119,7 @@ INSERT INTO `document_files` (`id`, `document_id`, `path_name`, `label`, `mime_t
 (4, 3, 'sell.pdf', 'sell.pdf', 'application/pdf', 'eng', 5333333, 1, 1),
 (5, 4, 'jungfer.pdf', 'jungfer.pdf', 'application/pdf', 'deu', 2031157, 1, 1),
 (6, 5, 'DissHoeft.pdf', 'DissHoeft.pdf', 'application/pdf', 'deu', 3212785, 1, 1),
-(7, 6, '0_Diss_Kay_Wiehler_Inhalt.htm', '0_Diss_Kay_Wiehler_Inhalt.htm', 'text/html charset=iso-8859-1', 'deu', 12686, 1, 1),
+(7, 6, '0_Diss_Kay_Wiehler_Inhalt.htm', '0_Diss_Kay_Wiehler_Inhalt.htm', 'text/html; charset=iso-8859-1', 'deu', 12686, 1, 1),
 (8, 6, 'a10_Ausblick.pdf', 'a10_Ausblick.pdf', 'application/pdf', 'deu', 224297, 1, 1),
 (9, 6, 'Anhang.pdf', 'Anhang.pdf', 'application/pdf', 'deu', 340177, 1, 1),
 (10, 6, '8_Potenzial.pdf', '8_Potenzial.pdf', 'application/pdf', 'deu', 239014, 1, 1),
