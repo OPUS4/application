@@ -38,8 +38,10 @@ class Application_Form_Element_PasswordTest extends FormElementTestCase
     {
         $this->_formElementClass = 'Application_Form_Element_Password';
         $this->_expectedDecoratorCount = 8;
-        $this->_expectedDecorators = array('ViewHelper', 'Placeholder', 'Description', 'ElementHint', 'Errors',
-            'ElementHtmlTag', 'LabelNotEmpty', 'dataWrapper');
+        $this->_expectedDecorators = [
+            'ViewHelper', 'Placeholder', 'Description', 'ElementHint', 'Errors',
+            'ElementHtmlTag', 'LabelNotEmpty', 'dataWrapper'
+        ];
         parent::setUp();
     }
 

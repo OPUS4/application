@@ -223,6 +223,15 @@
           </tuv>
       </tu>
 
+      <tu tuid="validation_error_login_regexNotMatch">
+          <tuv xml:lang="en">
+              <seg>Login can contain letters, numbers and the following characters, '@._-'.</seg>
+          </tuv>
+          <tuv xml:lang="de">
+              <seg>Benutzernamen dürfen Buchstaben, Zahlen und folgende Zeichen enthalten, '@._-'.</seg>
+          </tuv>
+      </tu>
+
   </body>
 
 </tmx>
