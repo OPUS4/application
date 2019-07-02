@@ -111,5 +111,4 @@ class Admin_Form_IpRange extends Application_Form_Model_Abstract
 
         $ipRange->setRole($this->getElement(self::ELEMENT_ROLES)->getRoles());
     }
-
 }

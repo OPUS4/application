@@ -486,7 +486,7 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action
      */
     public function getAllModels()
     {
-        return call_user_func(array($this->getModelClass(), $this->_functionNameForGettingModels));
+        return call_user_func([$this->getModelClass(), $this->_functionNameForGettingModels]);
     }
 
     /**
