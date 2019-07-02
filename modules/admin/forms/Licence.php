@@ -168,5 +168,4 @@ class Admin_Form_Licence extends Application_Form_Model_Abstract {
         $licence->setSortOrder($this->getElementValue(self::ELEMENT_SORT_ORDER));
         $licence->setPodAllowed($this->getElementValue(self::ELEMENT_POD_ALLOWED));
     }
-
 }

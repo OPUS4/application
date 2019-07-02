@@ -27,9 +27,8 @@
  * @category    Application
  * @package     Application_Form_Element
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013-2015, OPUS 4 development team
+ * @copyright   Copyright (c) 2013-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -40,12 +39,14 @@
  * TODO reconsider the pattern for login names
  * TODO depends on framework right now
  */
-class Application_Form_Element_Login extends Application_Form_Element_Text {
+class Application_Form_Element_Login extends Application_Form_Element_Text
+{
 
     /**
      * Initialises the form element.
      */
-    public function init() {
+    public function init()
+    {
         parent::init();
         $this->setLabel('admin_account_label_login');
 
@@ -54,6 +55,15 @@ class Application_Form_Element_Login extends Application_Form_Element_Text {
 
         $this->addValidator('stringLength', false, array('min' => 3, 'max' => 50));
         $this->setRequired(true);
-    }
 
+        $this->getValidator('regex')->setMessages([
+            'regexNotMatch' => 'validation_error_login_regexNotMatch'
+        ]);
+
+        $this->getValidator('stringLength')->setMessages([
+            'stringLengthInvalid' => 'validation_error_stringLengthInvalid',
+            'stringLengthTooShort' => 'validation_error_stringLengthTooShort',
+            'stringLengthTooLong' => 'validation_error_stringLengthTooLong'
+        ]);
+    }
 }

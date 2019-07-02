@@ -178,21 +178,30 @@
           </tuv>
       </tu>
 
-      <tu tuid="validation_error_stringLengthTooShort">
+      <tu tuid="validation_error_stringLengthInvalid">
           <tuv xml:lang="en">
-              <seg>'%value%' is less than %min% characters long</seg>
+              <seg>Invalid type given. String expected.</seg>
           </tuv>
           <tuv xml:lang="de">
-              <seg>'%value%' ist weniger als %min% Zeichen lang</seg>
+              <seg>Ungültiger Typ. String erwartet.</seg>
+          </tuv>
+      </tu>
+
+      <tu tuid="validation_error_stringLengthTooShort">
+          <tuv xml:lang="en">
+              <seg>'%value%' is less than %min% characters long.</seg>
+          </tuv>
+          <tuv xml:lang="de">
+              <seg>'%value%' ist weniger als %min% Zeichen lang.</seg>
           </tuv>
       </tu>
 
       <tu tuid="validation_error_stringLengthTooLong">
           <tuv xml:lang="en">
-              <seg>'%value%' is more than %min% characters long</seg>
+              <seg>'%value%' is more than %min% characters long.</seg>
           </tuv>
           <tuv xml:lang="de">
-              <seg>'%value%' is länger als %min% Zeichen</seg>
+              <seg>'%value%' is länger als %min% Zeichen.</seg>
           </tuv>
       </tu>
 
@@ -211,6 +220,15 @@
           </tuv>
           <tuv xml:lang="de">
               <seg>'%value%' hat nicht die korrekte Form.</seg>
+          </tuv>
+      </tu>
+
+      <tu tuid="validation_error_login_regexNotMatch">
+          <tuv xml:lang="en">
+              <seg>Login can contain letters, numbers and the following characters, '@._-'.</seg>
+          </tuv>
+          <tuv xml:lang="de">
+              <seg>Benutzernamen dürfen Buchstaben, Zahlen und folgende Zeichen enthalten, '@._-'.</seg>
           </tuv>
       </tu>
 
