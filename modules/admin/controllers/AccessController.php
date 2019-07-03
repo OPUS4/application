@@ -133,7 +133,7 @@ class Admin_AccessController extends Application_Controller_Action
 
             $this->storeModules($this->getRequest());
 
-            $this->view->redirect = ['module'=>'admin','controller'=>'role','action'=>'show','id'=>$id];
+            $this->view->redirect = ['module'=>'admin','controller'=>'role','action'=>'index'];
         } elseif (!empty($docId)) {
             $this->storeRoles($this->getRequest());
 
