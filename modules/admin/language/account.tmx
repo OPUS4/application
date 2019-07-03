@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE tmx SYSTEM "http://www.gala-global.org/oscarStandards/tmx/tmx14.dtd">
 <tmx version="1.4">
- 
+
  <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
  </header>
- 
+
   <body>
 
     <tu tuid="admin_account_index">
@@ -68,7 +68,7 @@
       <tuv xml:lang="de">
         <seg>Löschen</seg>
       </tuv>
-    </tu> 
+    </tu>
 
     <tu tuid="admin_account_label_roles">
       <tuv xml:lang="en">
@@ -159,16 +159,16 @@
         <seg>Keine ID für Nutzerkonto angegeben.</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_account_column_account">
       <tuv xml:lang="en">
         <seg>Account</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Account</seg>
+        <seg>Konto</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_account_column_name">
       <tuv xml:lang="en">
         <seg>Lastname, Firstname</seg>
@@ -177,7 +177,7 @@
         <seg>Nachname, Vorname</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_account_column_email">
       <tuv xml:lang="en">
         <seg>Email</seg>
@@ -186,7 +186,7 @@
         <seg>E-Mail</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_account_column_roles">
       <tuv xml:lang="en">
         <seg>Roles</seg>
@@ -197,5 +197,5 @@
     </tu>
 
   </body>
-  
+
 </tmx>
