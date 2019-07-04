@@ -109,7 +109,7 @@ class Admin_CollectionController extends Application_Controller_Action {
             $collectionModel = new Admin_Model_Collection($this->getRequest()->getParam('id', ''));
             $parentId = $collectionModel->move($this->getRequest()->getParam('pos'));
             $this->_helper->Redirector->redirectTo(
-                'show', $this->view->translate('admin_collections_move', $collectionModel->getName()),
+                'show', $this->view->translate('admin_collections_move', array($collectionModel->getName())),
                 'collection', 'admin', array('id' => $parentId)
             );
         }
@@ -127,7 +127,7 @@ class Admin_CollectionController extends Application_Controller_Action {
             $this->_helper->Redirector->redirectTo(
                 'show', $this->view->translate(
                     'admin_collections_changevisibility',
-                    $collectionModel->getName()
+                    array($collectionModel->getName())
                 ), 'collection', 'admin', array('id' => $id)
             );
         }
@@ -151,7 +151,7 @@ class Admin_CollectionController extends Application_Controller_Action {
             $collectionModel = new Admin_Model_Collection($this->getRequest()->getParam('id', ''));
             $name = $collectionModel->getName();
             $returnId = $collectionModel->delete();
-            $message = $this->view->translate('admin_collections_delete', $name);
+            $message = $this->view->translate('admin_collections_delete', array($name));
             $this->_helper->Redirector->redirectTo('show', $message, 'collection', 'admin', array ('id' => $returnId));
         }
         catch (Application_Exception $e) {
@@ -274,14 +274,14 @@ class Admin_CollectionController extends Application_Controller_Action {
                     $refCollection = new Opus_Collection($id);
                     $refCollection->addFirstChild($collection);
                     $refCollection->store();
-                    $message = $this->view->translate('admin_collections_add', $collectionModel->getName());
+                    $message = $this->view->translate('admin_collections_add', array($collectionModel->getName()));
                     break;
 
                 case 'sibling':
                     $refCollection = new Opus_Collection($id);
                     $refCollection->addNextSibling($collection);
                     $refCollection->store();
-                    $message = $this->view->translate('admin_collections_add', $collectionModel->getName());
+                    $message = $this->view->translate('admin_collections_add', array($collectionModel->getName()));
                     break;
 
                 default:
@@ -302,7 +302,7 @@ class Admin_CollectionController extends Application_Controller_Action {
 
         // nur Änderungen
         $collection->store();
-        $message = $this->view->translate('admin_collections_edit', $collectionModel->getName());
+        $message = $this->view->translate('admin_collections_edit', array($collectionModel->getName()));
         $parents = $collection->getParents();
         if (count($parents) === 1) {
             // TODO when is this executed
@@ -414,7 +414,7 @@ class Admin_CollectionController extends Application_Controller_Action {
 
                 return $this->_helper->Redirector->redirectToAndExit(
                     'edit',
-                    $this->view->translate('admin_document_add_collection_success', $collectionModel->getName()),
+                    $this->view->translate('admin_document_add_collection_success', array($collectionModel->getName())),
                     'document', 'admin', array('id' => $documentId, 'section' => 'collections')
                 );
             }

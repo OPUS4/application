@@ -2395,3 +2395,45 @@ ul.permissions-list input[type=checkbox] {
 #fieldset-Translations .field {
     width: 80%;
 }
+
+.adminContainer #fieldset-Enrichments td {
+    vertical-align: top;
+}
+
+.unused {
+    color: grey;
+}
+
+.used {
+    color: black;
+}
+
+table.module-access-table {
+    font-size: 1.1em;
+}
+
+table.module-access-table tr.access {
+    background-color: #bafbab;
+}
+
+table.module-access-table tr.access td.column-module {
+    font-weight: bold;
+}
+
+table.module-access-table tr.noaccess {
+     background-color: #ffb1ae;
+}
+
+.admin_account_show .label {
+    display: inline-block;
+    width: 32%;
+    margin-bottom: 0.8em;
+}
+
+.admin_account_show .value {
+    display: inline;
+}
+
+.admin_account_show .account-info {
+    margin-bottom: 1em;
+}

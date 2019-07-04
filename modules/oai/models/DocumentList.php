@@ -71,7 +71,7 @@ class Oai_Model_DocumentList {
         $finder->setServerStateInList($this->deliveringDocumentStates);
 
         $metadataPrefix = $oaiRequest['metadataPrefix'];
-        if ('xMetaDissPlus' === $metadataPrefix 
+        if (strcasecmp('xMetaDissPlus', $metadataPrefix) === 0
             || 'xMetaDiss' === $metadataPrefix) {
             $finder->setFilesVisibleInOai();
             $finder->setNotEmbargoedOn($today);

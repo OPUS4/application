@@ -27,29 +27,33 @@
  * @category    Application
  * @package     View
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2013-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
  * Eingabefeld für Datumsangaben.
  *
  * TODO Was wenn in den Optionen ein Label spezifiziert wurde? Aktuell wird es immer überschrieben.
+ *
+ * The value needs to be formatted for display. Conversion into a value for storing in the database happens outside.
+ *
+ * TODO should conversion of value from/to database format happen here?
  */
-class Application_Form_Element_Date extends Application_Form_Element_Text {
+class Application_Form_Element_Date extends Application_Form_Element_Text
+{
 
-    public function init() {
+    public function init()
+    {
         parent::init();
 
         $this->setLabel($this->getName());
 
         $validator = new Application_Form_Validate_Date();
-        $this->setValidators(array($validator));
+        $this->setValidators([$validator]);
 
         $this->setAttrib('placeholder', $this->getTranslator()->translate('date_format'));
         $this->setAttrib('size', 12);
         $this->setAttrib('maxlength', 10);
     }
-
 }

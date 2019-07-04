@@ -1428,8 +1428,8 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
 
         $urnResolverUrl = Zend_Registry::get('Zend_Config')->urn->resolverUrl;
 
-        $this->assertXpath('//meta[@name="DC.Identifier" and @content="urn:nbn:op:123"]');
-        $this->assertXpath('//meta[@name="DC.Identifier" and @content="' . $urnResolverUrl . 'urn:nbn:op:123"]');
+        $this->assertXpath('//meta[@name="DC.identifier" and @content="urn:nbn:op:123"]');
+        $this->assertXpath('//meta[@name="DC.identifier" and @content="' . $urnResolverUrl . 'urn:nbn:op:123"]');
     }
 
     public function testBelongsToBibliographyTurnedOn() {
@@ -1507,5 +1507,12 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
             "Service Center");
         $this->assertXpathContentContains('//td[contains(@class = "titlesub", @lang = "de")]',
             "Service-Zentrale");
+    }
+
+    public function testDuplicateDocIdParameter() {
+        $this->dispatch('/frontdoor/index/index/docId/147/docId/146');
+
+        $this->assertXpathContentContains('//h2[@class="titlemain"]', 'KOBV');
+        $this->assertNotXpathContentContains('//h2[@class="titlemain"]', 'Sonderzeichen');
     }
 }

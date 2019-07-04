@@ -54,8 +54,10 @@ class Export_IndexController extends Application_Controller_ModuleAccess {
      * Do some initialization on startup of every action
      *
      * @return void
+     * @throws Zend_Exception
      */
-    public function init() {
+    public function init()
+    {
         parent::init();
 
         // Controller outputs plain Xml, so rendering and layout are disabled.
@@ -68,7 +70,8 @@ class Export_IndexController extends Application_Controller_ModuleAccess {
     /**
      * Returns small XML error message if access to module has been denied.
      */
-    public function moduleAccessDeniedAction() {
+    public function moduleAccessDeniedAction()
+    {
         $response = $this->getResponse();
         $response->setHttpResponseCode(401);
 
@@ -80,11 +83,14 @@ class Export_IndexController extends Application_Controller_ModuleAccess {
     /**
      * Maps action calls to export plugins or returns an error message.
      *
-     * @param  string $action     The name of the action that was called.
-     * @param  array  $parameters The parameters passed to the action.
+     * @param string $action The name of the action that was called.
+     * @param array $parameters The parameters passed to the action.
      * @return void
+     * @throws Zend_Controller_Action_Exception
+     * @throws Application_Exception wenn keine zugehöriges Plugin-Klasse gefunden werden kann
      */
-    public function __call($action, $parameters) {
+    public function __call($action, $parameters)
+    {
         // TODO what does this code do
         if (!'Action' == substr($action, -6)) {
             $this->getLogger()->info(__METHOD__ . ' undefined method: ' . $action);
@@ -103,7 +109,13 @@ class Export_IndexController extends Application_Controller_ModuleAccess {
             $plugin->setView($this->view);
 
             $plugin->init();
-            $plugin->execute();
+            $success = $plugin->execute();
+            if (is_bool($success) && ! $success) {
+                // nur im Fehlerfall wird eine HTML-Statusseite an den Client zurückgegeben
+                $this->_helper->layout->enableLayout();
+                $this->_helper->viewRenderer->setNoRender(false);
+            }
+
             $plugin->postDispatch();
         }
         else {

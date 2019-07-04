@@ -61,7 +61,7 @@
                                         <td><?= $this->translate('no'); ?></td>
                                     <?php endif ?>
                                 <?php else : ?>
-                                    <td><?= htmlspecialchars($element->getValue()) ?></td>
+                                    <td><?= htmlspecialchars($element->getValue(), ENT_DISALLOWED) ?></td>
                                 <?php endif ?> <!--checkbox-->
                             <?php endif ?> <!--select-->
                             </tr>
@@ -86,7 +86,7 @@
                                     <td><?= $this->translate('no'); ?></td>
                                 <?php endif ?>
                             <?php else : ?>
-                                <td><?= htmlspecialchars($elem->getValue()) ?></td>
+                                <td><?= htmlspecialchars($elem->getValue(), ENT_DISALLOWED) ?></td>
                             <?php endif ?>
                         <?php endif ?>
                     </tr>
@@ -100,7 +100,7 @@
         <?= $this->fileOverview(); ?>
         <?= $this->bibliographieOverview(); ?>
     </div>
-    
+
     <form enctype="application/x-www-form-urlencoded" action="<?= $this->action_url; ?>" method="post">
         <div class="button-wrapper">
             <?= $this->element('button_label_abort', "class='form-button abort-button'", "Submit", "abort"); ?>

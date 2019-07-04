@@ -133,6 +133,7 @@ class Application_Update extends Application_Update_PluginAbstract
         {
             // TODO figure out a way to log stderr output of update script
             $this->log(PHP_EOL . 'ERROR - An error occured during updating!');
+            $this->log($aue->getMessage());
             $this->log('Update aborted!');
             return;
         }

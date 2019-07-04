@@ -27,7 +27,7 @@
  * @category    Application
  * @package     Admin
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2017-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -36,6 +36,7 @@
  *
  * TODO merge old values and changes array (only set/getChanges with all values)?
  * TODO make generic to be usable with any model (incl. excluded fields)
+ * TODO work with model objects like Opus_Date for fields that use them
  */
 class Admin_Form_Person_Changes extends Application_Form_Abstract
 {
@@ -48,10 +49,10 @@ class Admin_Form_Person_Changes extends Application_Form_Abstract
     {
         parent::init();
 
-        $this->setDecorators(array(
+        $this->setDecorators([
             'PrepareElements',
-            array('ViewScript', array('viewScript' => 'changes.phtml'))
-        ));
+            ['ViewScript', ['viewScript' => 'changes.phtml']]
+        ]);
     }
 
     public function setChanges($changes)
@@ -87,43 +88,46 @@ class Admin_Form_Person_Changes extends Application_Form_Abstract
 
         $preparedChanges = array();
 
-        foreach($oldValues as $field => $values)
-        {
+        $helper = new Application_Controller_Action_Helper_Dates();
+
+        foreach ($oldValues as $field => $values) {
             // TODO Opus_Person specific code that needs to be removed later
-            if (in_array($field, array('Id', 'OpusId')))
-            {
+            if (in_array($field, ['Id', 'OpusId'])) {
                 continue;
             }
 
-            $preparedChanges[$field]['old'] = $this->forceArray($values);
+            if (stripos($field, 'date') !== false) {
+                $preparedChanges[$field]['old'] = $this->forceArray($helper->getDateString(new Opus_Date($values)));
+            } else {
+                $preparedChanges[$field]['old'] = $this->forceArray($values);
+            }
 
             $action = 'notmodified';
 
-            if (array_key_exists($field, $changes))
-            {
-                $preparedChanges[$field]['new'] = $this->forceArray($changes[$field]);
-                if (is_null($values))
-                {
-                    $action = 'added';
+            if (array_key_exists($field, $changes)) {
+
+                if (stripos($field, 'date') !== false) {
+                    $preparedChanges[$field]['new'] = $this->forceArray($helper->getDateString(
+                        new Opus_Date($changes[$field])
+                    ));
+                } else {
+                    $preparedChanges[$field]['new'] = $this->forceArray($changes[$field]);
                 }
-                else
-                {
-                    if (is_array($values))
-                    {
+
+                if (is_null($values)) {
+                    $action = 'added';
+                } else {
+                    if (is_array($values)) {
                         $action = 'merged';
-                    }
-                    else
-                    {
+                    } else {
                         $action = 'modified';
                     }
 
-                    if (is_null($changes[$field]))
-                    {
+                    if (is_null($changes[$field])) {
                         $action .= ' removed';
                     }
                 }
-            }
-            else {
+            } else {
                 $preparedChanges[$field]['new'] = $this->forceArray($values);
             }
 
@@ -133,20 +137,20 @@ class Admin_Form_Person_Changes extends Application_Form_Abstract
         return $preparedChanges;
     }
 
+    /**
+     * Wraps value in array if necessary.
+     * @param $values
+     * @return array
+     */
     public function forceArray($values)
     {
-        if (is_null($values))
-        {
-            return array();
+        if (is_null($values)) {
+            return [];
         }
-        if (is_array($values))
-        {
+        if (is_array($values)) {
             return $values;
-        }
-        else
-        {
-            return array($values);
+        } else {
+            return [$values];
         }
     }
-
 }

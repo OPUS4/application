@@ -29,7 +29,7 @@
  * @package     Module_Admin
  * @author      Julian Heise <heise@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -99,8 +99,7 @@ class Admin_AccessController extends Application_Controller_Action
                 $guestModules[] = 'default';
             }
             $this->view->guestModules = $guestModules;
-        }
-        else {
+        } else {
             // Role 'guest' has alreays access to 'default' module
             if (!in_array('default', $roleModules)) {
                 $roleModules[] = 'default';
@@ -134,7 +133,7 @@ class Admin_AccessController extends Application_Controller_Action
 
             $this->storeModules($this->getRequest());
 
-            $this->view->redirect = ['module'=>'admin','controller'=>'role','action'=>'show','id'=>$id];
+            $this->view->redirect = ['module'=>'admin','controller'=>'role','action'=>'index'];
         } elseif (!empty($docId)) {
             $this->storeRoles($this->getRequest());
 
@@ -203,12 +202,10 @@ class Admin_AccessController extends Application_Controller_Action
             if ($checked) {
                 $role->appendAccessDocument($docId);
                 $role->store();
-            }
-            else {
+            } else {
                 $role->removeAccessDocument($docId);
                 $role->store();
             }
         }
     }
 }
-

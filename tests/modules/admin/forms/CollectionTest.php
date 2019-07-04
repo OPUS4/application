@@ -37,15 +37,13 @@ class Admin_Form_CollectionTest extends ControllerTestCase {
     public function testConstructForm() {
         $form = new Admin_Form_Collection();
 
-        $this->assertEquals('8', count($form->getElements()));
-
+        $this->assertEquals('7', count($form->getElements()));
         $this->assertNotNull($form->getElement('Name'));
         $this->assertNotNull($form->getElement('Number'));
         $this->assertNotNull($form->getElement('Visible'));
         $this->assertNotNull($form->getElement('VisiblePublish'));
         $this->assertNotNull($form->getElement('OaiSubset'));
-        $this->assertNotNull($form->getElement('Theme'));
-
+        //$this->assertNotNull($form->getElement('Theme'));
         $this->assertNotNull($form->getElement('Save'));
         $this->assertNull($form->getElement('Cancel'));
         $this->assertNotNull($form->getElement('Id'));
@@ -61,16 +59,14 @@ class Admin_Form_CollectionTest extends ControllerTestCase {
         $model->setVisible(1);
         $model->setVisiblePublish(1);
         $model->setOaiSubset('TestSubset');
-        $model->setTheme('plain');
-
+        // $model->setTheme('plain');
         $form->populateFromModel($model);
-
         $this->assertEquals('TestName', $form->getElement('Name')->getValue());
         $this->assertEquals(50, $form->getElement('Number')->getValue());
         $this->assertEquals(1, $form->getElement('Visible')->getValue());
         $this->assertEquals(1, $form->getElement('VisiblePublish')->getValue());
         $this->assertEquals('TestSubset', $form->getElement('OaiSubset')->getValue());
-        $this->assertEquals('plain', $form->getElement('Theme')->getValue());
+        // $this->assertEquals('plain', $form->getElement('Theme')->getValue());
     }
 
     public function testHandlingOfNullValue() {
@@ -108,7 +104,7 @@ class Admin_Form_CollectionTest extends ControllerTestCase {
         $form->getElement('Visible')->setValue('1');
         $form->getElement('VisiblePublish')->setValue('1');
         $form->getElement('OaiSubset')->setValue('TestSubset');
-        $form->getElement('Theme')->setValue('plain');
+        // $form->getElement('Theme')->setValue('plain');
 
         $model = new Opus_Collection();
 
@@ -120,7 +116,7 @@ class Admin_Form_CollectionTest extends ControllerTestCase {
         $this->assertEquals('1', $model->getVisible());
         $this->assertEquals('1', $model->getVisiblePublish());
         $this->assertEquals('TestSubset', $model->getOaiSubset());
-        $this->assertEquals('plain', $model->getTheme());
+        //$this->assertEquals('plain', $model->getTheme());
     }
 
     public function testValidationSuccess() {

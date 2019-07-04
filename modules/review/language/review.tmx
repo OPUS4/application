@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE tmx SYSTEM "http://www.gala-global.org/oscarStandards/tmx/tmx14.dtd">
 <tmx version="1.4">
- 
+
  <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
  </header>
-  
+
   <body>
 
     <tu tuid="review_index_index">
@@ -48,7 +48,7 @@
         <seg>Author</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Autor</seg>
+        <seg>Autor*in</seg>
       </tuv>
     </tu>
 

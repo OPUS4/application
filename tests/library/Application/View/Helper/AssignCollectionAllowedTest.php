@@ -45,7 +45,7 @@ class Application_View_Helper_AssignCollectionAllowedTest extends ControllerTest
         $this->_helper = new Application_View_Helper_AssignCollectionAllowed();
 
         $role = new Opus_CollectionRole();
-        $role->setName('Test CollectionRole');
+        $role->setName('TestCollectionRole');
         $role->setOaiName('test');
         $role->setDisplayBrowsing('Number');
         $role->setDisplayFrontdoor('Name');

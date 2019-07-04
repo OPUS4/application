@@ -70,10 +70,13 @@
 
 <h2><?= htmlspecialchars($this->title) ?></h2>
 
-<?PHP $this->disableEmptyCollections = Zend_Registry::get('Zend_Config')->browsing->disableEmptyCollections; ?>
+<?php
+    $this->disableEmptyCollections = Zend_Registry::get('Zend_Config')->browsing->disableEmptyCollections;
+    $collRoleName = htmlspecialchars($this->collectionRole->getName(), ENT_QUOTES);
+?>
 
 <div class="content">
-    <ul class="nav browsing">
+    <ul class="nav browsing col-list role-<?= $collRoleName ?>">
     <?php foreach ($this->children as $child) : ?>
         <?php $documentCount = $child->getNumSubtreeEntries(); ?>
             <?php if ($documentCount === 0 && $this->disableEmptyCollections) : ?>

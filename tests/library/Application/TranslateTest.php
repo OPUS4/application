@@ -258,7 +258,7 @@ class Application_TranslateTest extends ControllerTestCase
             ['spa', 'Spanish'],
             ['ita', 'Italian'],
             ['por', 'Portuguese'],
-            ['mul', 'Multiple Languages']
+            ['mul', 'Multiple languages']
         ];
     }
 
@@ -283,7 +283,7 @@ class Application_TranslateTest extends ControllerTestCase
     {
         $this->translate->setLocale('en');
         $this->translate->loadModule('default');
-        $this->assertEquals($translation, $this->translate->translateLanguage($langId));
+        $this->assertEquals(strtolower($translation), strtolower($this->translate->translateLanguage($langId)));
     }
 
     /**

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -28,48 +27,50 @@
  * @category    Application
  * @package     Module_Setup
  * @author      Edouard Simon (edouard.simon@zib.de)
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
- * 
+ * TODO use languages actually defined as supported
  */
-class Setup_Form_HomePage extends Zend_Form_SubForm {
+class Setup_Form_HomePage extends Zend_Form_SubForm
+{
 
-    public function init() {
-
-        $translator = $this->getTranslator();
-
-        foreach (array('de', 'en') as $lang) {
+    public function init()
+    {
+        foreach (['de', 'en'] as $lang) {
             $langForm = new Zend_Form_SubForm();
-            $langForm->setLegend($translator->translate("setup_language_$lang"));
+            $langForm->setLegend("setup_language_$lang");
             $keyForm = new Zend_Form_SubForm();
 
             $keyForm->addElement(
-                'text', 'home_index_index_pagetitle',
-                array('label' => $translator->translate('setup_home_index_index_pagetitle'),
-                    'attribs' => array('size' => 90))
+                'text', 'home_index_index_pagetitle', [
+                    'label' => 'setup_home_index_index_pagetitle',
+                    'attribs' => ['size' => 90]
+                ]
             );
             $keyForm->addElement(
-                'text', 'home_index_index_title',
-                array('label' => $translator->translate('setup_home_index_index_title'),
-                    'attribs' => array('size' => 90))
+                'text', 'home_index_index_title', [
+                    'label' => 'setup_home_index_index_title',
+                    'attribs' => ['size' => 90]
+                ]
             );
             $keyForm->addElement(
-                'textarea', 'home_index_index_welcome',
-                array('label' => $translator->translate('setup_home_index_index_welcome'),
-                    'attribs' => array('size' => 90))
+                'textarea', 'home_index_index_welcome', [
+                    'label' => 'setup_home_index_index_welcome',
+                    'attribs' => ['size' => 90]
+                ]
             );
             $keyForm->addElement(
-                'textarea', 'home_index_index_instructions',
-                array('label' => $translator->translate('setup_home_index_index_instructions'),
-                    'attribs' => array('size' => 90))
+                'textarea', 'home_index_index_instructions', [
+                    'label' => 'setup_home_index_index_instructions',
+                    'attribs' => ['size' => 90]
+                ]
             );
             $langForm->addSubForm($keyForm, 'key');
             $this->addSubForm($langForm, $lang);
         }
     }
-
 }

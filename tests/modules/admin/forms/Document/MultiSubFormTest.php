@@ -28,7 +28,6 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -122,7 +121,7 @@ class Admin_Form_Document_MultiSubFormTest extends ControllerTestCase {
                 'Language' => 'eng',
                 'Value' => 'Titel 2'
             ),
-            'TitleParen2' => array(
+            'TitleParent2' => array(
                 'Language' => 'fra',
                 'Value' => 'Titel 3'
             )
@@ -188,8 +187,8 @@ class Admin_Form_Document_MultiSubFormTest extends ControllerTestCase {
         $this->assertEquals(1, count($form->getSubForms()));
         $this->assertNotNull($form->getSubForm('TitleSub0'), 'Formular TitleSub0 fehlt.'); // TitleSub1 wird TitleSub0
         $this->assertEquals('Service Center', $form->getSubForm('TitleSub0')->getElementValue('Value'));
-        $this->assertNotNull($form->getSubForm('TitleSub0')->getDecorator('CurrentAnker'),
-                'Dekorator \'CurrentAnker\' fehlt.');
+        $this->assertNotNull($form->getSubForm('TitleSub0')->getDecorator('CurrentAnchor'),
+                'Dekorator \'CurrentAnchor\' fehlt.');
     }
 
     public function testUpdateModel() {
@@ -267,19 +266,19 @@ class Admin_Form_Document_MultiSubFormTest extends ControllerTestCase {
      * Bei diesem Test geht es nur um die Ermittlung des richtigen Unterformulars für den Anker. Beim Test werden keine
      * Unterformulare entfernt.
      */
-    public function testDetermineSubFormForAnker() {
+    public function testDetermineSubFormForAnchor() {
         $form = new Admin_Form_Document_MultiSubForm('Admin_Form_Document_Title', 'TitleSub',
                 new Application_Form_Validate_MultiSubForm_RepeatedLanguages());
 
         $document = new Opus_Document(146);
 
-        $this->assertEquals($form, $form->determineSubFormForAnker(0));
+        $this->assertEquals($form, $form->determineSubFormForAnchor(0));
 
         $form->populateFromModel($document);
 
-        $this->assertEquals('TitleSub0', $form->determineSubFormForAnker(0)->getName());
-        $this->assertEquals('TitleSub1', $form->determineSubFormForAnker(1)->getName());
-        $this->assertEquals('TitleSub1', $form->determineSubFormForAnker(2)->getName()); // letztes Subform entfernt
+        $this->assertEquals('TitleSub0', $form->determineSubFormForAnchor(0)->getName());
+        $this->assertEquals('TitleSub1', $form->determineSubFormForAnchor(1)->getName());
+        $this->assertEquals('TitleSub1', $form->determineSubFormForAnchor(2)->getName()); // letztes Subform entfernt
     }
 
     public function testIsValidTrue() {

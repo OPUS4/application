@@ -27,29 +27,66 @@
  * @category    Application Unit Test
  * @package     Form_Element
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @author      Sascha Szott <opus-development@saschaszott.de>
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 class Application_Form_Element_EnrichmentKeyTest extends FormElementTestCase {
 
+    /**
+     * @var integer ID des zu Testzwecken angelegten Enrichment Keys
+     */
+    private $enrichmentKeyId = null;
+
+    /**
+     * @var string Name des Enrichment-Keys, der für Testzwecke angelegt wird
+     */
+    private static $testEnrichmentKeyName = 'TestEnrichmentKey';
+
     public function setUp() {
         $this->_formElementClass = 'Application_Form_Element_EnrichmentKey';
         $this->_expectedDecoratorCount = 6;
-        $this->_expectedDecorators = array('ViewHelper', 'Errors', 'Description', 'ElementHtmlTag', 'LabelNotEmpty',
-            'dataWrapper');
+        $this->_expectedDecorators = array(
+            'ViewHelper',
+            'Errors',
+            'Description',
+            'ElementHtmlTag',
+            'LabelNotEmpty',
+            'dataWrapper'
+        );
         $this->_staticViewHelper = 'viewFormSelect';
         parent::setUp();
+
+        // create a new enrichment key with an untranslated name
+        $enrichmentKey = new Opus_EnrichmentKey();
+        $enrichmentKey->setName(self::$testEnrichmentKeyName);
+        $this->enrichmentKeyId = $enrichmentKey->store();
+    }
+
+    public function tearDown()
+    {
+        parent::tearDown();
+
+        // remove previously created enrichment key
+        if (!is_null($this->enrichmentKeyId)) {
+            $enrichmentKey = new Opus_EnrichmentKey($this->enrichmentKeyId);
+            $this->enrichmentKeyId = null;
+            if (!is_null($enrichmentKey)) {
+                $enrichmentKey->delete();
+            }
+        }
     }
 
     /**
      * TODO 2 keys are being excluded - needs formal framework for that with configuration
      */
     public function testOptions() {
-        $element = $this->getElement();
 
+        // NOTE: This also refreshes the cache for enrichment keys. Static state can carry over between tests.
         $allOptions = Opus_EnrichmentKey::getAll();
+
+        $element = $this->getElement(); // creates form element for enrichment keys using cached keys
 
         $this->assertEquals(count($allOptions) - 2, count($element->getMultiOptions()));
     }
@@ -58,8 +95,6 @@ class Application_Form_Element_EnrichmentKeyTest extends FormElementTestCase {
         $element = $this->getElement();
 
         $this->assertTrue($element->getValidator('InArray') !== false);
-
-        $validator = $element->getValidator('InArray');
 
         $this->assertTrue($element->isValid('City'));
         $this->assertFalse($element->isValid('UnknownEnrichmentKey'));
@@ -83,24 +118,50 @@ class Application_Form_Element_EnrichmentKeyTest extends FormElementTestCase {
     }
 
     /**
-     * Wenn es keine Übersetzung für den Schlüssel gibt, soll kein Prefix hinzugefügt werden.
+     * Wenn es keine Übersetzung für den Schlüssel gibt, soll kein Präfix hinzugefügt werden.
      */
-    public function testKeysWithoutTranlationNotPrefixed() {
-        $enrichmentKey = new Opus_EnrichmentKey();
-        $enrichmentKey->setName('TestEnrichmentKey');
-        $enrichmentKey->store();
-
+    public function testKeysWithoutTranslationNotPrefixed() {
         $this->useEnglish();
 
         $element = $this->getElement();
 
         $options = $element->getMultiOptions();
 
-        $enrichmentKey->delete(); // cleanup
-
-        $this->assertContains('TestEnrichmentKey', array_keys($options));
-        $this->assertNotEquals('EnrichmentTestEnrichmentKey', $options['TestEnrichmentKey']);
-        $this->assertEquals('TestEnrichmentKey', $options['TestEnrichmentKey']);
+        $this->assertContains(self::$testEnrichmentKeyName, array_keys($options));
+        $this->assertNotEquals('EnrichmentTestEnrichmentKey', $options[self::$testEnrichmentKeyName]);
+        $this->assertEquals(self::$testEnrichmentKeyName, $options[self::$testEnrichmentKeyName]);
     }
 
+    /**
+     * Durch die Einführung eines internen Caches sollen Datenbankanfragen
+     * eingespart werden. Damit ein neu hinzugefügter Enrichment-Key im
+     * Formularelement berücksichtigt wird, muss der Cache im Test explizit
+     * zurückgesetzt werden.
+     *
+     * @throws Opus_Model_Exception
+     */
+    public function testNewEnrichmentKeyIsAvailableAsOption() {
+        $element = $this->getElement();
+        $options = $element->getMultiOptions();
+
+        $enrichmentKey = new Opus_EnrichmentKey();
+        $enrichmentKey->setName('thisnamedoesnotexist');
+        $enrichmentKey->store();
+
+        $element = $this->getElement();
+        $optionsAfterInsertOfNewEnrichmentKey = $element->getMultiOptions();
+
+        $this->assertEquals(count($options), count($optionsAfterInsertOfNewEnrichmentKey));
+
+        // Cache zurücksetzen, so dass der neu angelegte Enrichment-Key berücksichtigt wird
+        Opus_EnrichmentKey::getAll(true);
+
+        $element = $this->getElement();
+        $optionsAfterInsertOfNewEnrichmentKey = $element->getMultiOptions();
+
+        // jetzt sollte der neu eingefügte Enrichment-Key für das Formularelement sichtbar sein
+        $this->assertEquals(count($options) + 1, count($optionsAfterInsertOfNewEnrichmentKey));
+
+        $enrichmentKey->delete();
+    }
 }

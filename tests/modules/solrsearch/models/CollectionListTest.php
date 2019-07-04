@@ -207,6 +207,33 @@ class Solrsearch_Model_CollectionListTest extends ControllerTestCase {
         $collectionList->getCollectionRoleTitle();
     }
 
+    /**
+     * Teste das Ausblenden von leeren Sammlungen am Beispiel der MSC.
+     *
+     * @throws Opus_Model_Exception
+     * @throws Solrsearch_Model_Exception
+     */
+    public function testGetChildrenWithoutEmptyCollections()
+    {
+        $collRole = Opus_CollectionRole::fetchByName('msc');
+        $hideEmptyCollections = $collRole->getHideEmptyCollections();
+        $collRole->setHideEmptyCollections(1);
+        $collRole->store();
+
+        $collList = new Solrsearch_Model_CollectionList($collRole->getRootCollection()->getId());
+        $this->assertCount(2, $collList->getChildren());
+
+        $collRole->setHideEmptyCollections(0);
+        $collRole->store();
+
+        $collList = new Solrsearch_Model_CollectionList($collRole->getRootCollection()->getId());
+        $this->assertTrue(count($collList->getChildren()) > 2);
+
+        // ursprünglichen Wert wiederherstellen
+        $collRole->setHideEmptyCollections($hideEmptyCollections);
+        $collRole->store();
+    }
+
     private function getCollectionRole($collectionRoleId) {
         $collectionRole = new Opus_CollectionRole($collectionRoleId);
         $this->assertNotNull($collectionRole);
@@ -230,5 +257,6 @@ class Solrsearch_Model_CollectionListTest extends ControllerTestCase {
         }
         return $children[0];
     }
+
 }
 
