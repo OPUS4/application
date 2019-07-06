@@ -243,7 +243,7 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract {
 
         // currently only xml is supported here
         if ($exportParam !== 'xml') {
-            throw new Application_Exception('export format is not supported' . $exportParam);
+            throw new Application_Exception('export format is not supported: ' . $exportParam);
         }
 
         // parameter stylesheet is mandatory (only administrator is able to see raw output)
@@ -369,7 +369,10 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract {
         $proc->setParameter('', 'queryhits', $numOfHits);
 
         Application_Xslt::registerViewHelper($proc, [
-            'optionValue'
+            'optionValue',
+            'fileUrl',
+            'frontdoorUrl',
+            'transferUrl'
         ]);
 
         $xml->appendChild($xml->createElement('Documents'));
