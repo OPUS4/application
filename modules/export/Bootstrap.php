@@ -109,5 +109,19 @@ class Export_Bootstrap extends Zend_Application_Module_Bootstrap
                 'search' => false
             ]
         ]);
+
+        $exporter->addFormats([
+            'marc21' => [
+                'name' => 'MARC21-XML',
+                'description' => 'Export MARC21-XML',
+                'module' => 'export',
+                'controller' => 'index',
+                'action' => 'marc21',
+                'search' => false,
+                'params' => [
+                    'searchtype' => 'id'
+                ]
+            ]
+        ]);
     }
 }
