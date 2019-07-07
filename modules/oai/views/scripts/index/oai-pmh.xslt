@@ -53,6 +53,7 @@
     <xsl:include href="prefixes/epicur.xslt"/>
     <xsl:include href="prefixes/XMetaDissPlus.xslt"/>
     <xsl:include href="prefixes/copy_xml.xslt"/>
+    <xsl:include href="prefixes/marc21.xslt"/>
 
     <xsl:output method="xml" indent="yes" encoding="utf-8" />
 
@@ -268,6 +269,11 @@
             <schema><xsl:text>http://files.dnb.de/standards/xmetadissplus/xmetadissplus.xsd</xsl:text></schema>
             <metadataNamespace><xsl:text>http://www.d-nb.de/standards/xmetadissplus/</xsl:text></metadataNamespace>
           </metadataFormat>
+            <metadataFormat>
+                <metadataPrefix><xsl:text>MARC21</xsl:text></metadataPrefix>
+                <schema><xsl:text>https://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd</xsl:text></schema>
+                <metadataNamespace><xsl:text>http://www.loc.gov/MARC21/slim</xsl:text></metadataNamespace>
+            </metadataFormat>
         </ListMetadataFormats>
     </xsl:template>
 
@@ -415,6 +421,9 @@
                     <xsl:when test="$oai_metadataPrefix='copy_xml'">
                        <xsl:apply-templates select="." mode="copy_xml" />
                     </xsl:when>
+                     <xsl:when test="$oai_metadataPrefix='marc21'">
+                         <xsl:apply-templates select="." mode="marc21" />
+                     </xsl:when>
                  </xsl:choose>
                  </metadata>
 
