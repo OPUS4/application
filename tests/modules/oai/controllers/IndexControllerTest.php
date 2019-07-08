@@ -57,7 +57,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         'dcterms' => "http://purl.org/dc/terms/",
         'thesis' => "http://www.ndltd.org/standards/metadata/etdms/1.0/",
         'eprints' => 'http://www.openarchives.org/OAI/1.1/eprints',
-        'oaiid' => 'http://www.openarchives.org/OAI/2.0/oai-identifier'
+        'oaiid' => 'http://www.openarchives.org/OAI/2.0/oai-identifier',
+        'marc' => 'http://www.loc.gov/MARC21/slim'
     ];
 
     /**
@@ -288,7 +289,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
             'oai_dc' => 91,
             'oai_pp' => 91,
             'copy_xml' => 91,
-            'epicur' => 91);
+            'epicur' => 91,
+            'marc21' => 91);
 
         foreach ($formatTestDocuments AS $format => $docId) {
             $this->dispatch("/oai?verb=GetRecord&metadataPrefix=$format&identifier=oai::$docId");
@@ -2301,5 +2303,161 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
         $this->assertXpathContentContains('//xMetaDiss:xMetaDiss/dc:identifier','123');
         $this->assertXpathContentContains('//xMetaDiss:xMetaDiss/ddb:identifier','10.1007/978-3-540-76406-9');
+    }
+
+    public function testGetRecordMarc21OfDocId91()
+    {
+        // manipulate configuration
+        $config = Zend_Registry::get('Zend_Config');
+
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'marc21' => [
+                'isil' => 'DE-9999',
+                'publisherName' => 'Foobar Publishing Corp.',
+                'publisherCity' => 'Berlin',
+            ]
+        ]));
+
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=marc21&identifier=oai::91');
+
+        // revert changes in configuration
+        Zend_Registry::set('Zend_Config', $config);
+
+        $this->assertResponseCode(200);
+
+        $response = $this->getResponse();
+        $badStrings = array("Exception", "Error", "Stacktrace", "badVerb");
+        $this->checkForCustomBadStringsInHtml($response->getBody(), $badStrings);
+
+        $this->registerXpathNamespaces($this->xpathNamespaces);
+
+        $this->assertXpathContentContains('//marc:leader','00000nam a22000005  4500');
+        $this->assertXpathContentContains('//marc:controlfield[@tag="001"]','docId-91');
+        $this->assertXpathContentContains('//marc:controlfield[@tag="003"]','DE-9999');
+        $this->assertXpathContentContains('//marc:datafield[@tag="041"]/marc:subfield[@code="a"]','eng');
+        $this->assertXpathContentContains('//marc:datafield[@tag="100"]/marc:subfield[@code="a"]','Doe, John');
+        $this->assertXpathContentContains('//marc:datafield[@tag="245"]/marc:subfield[@code="a"]','This is a pdf test document');
+        $this->assertXpathContentContains('//marc:datafield[@tag="264"]/marc:subfield[@code="a"]','Berlin');
+        $this->assertXpathContentContains('//marc:datafield[@tag="264"]/marc:subfield[@code="b"]','Foobar Publishing Corp.');
+        $this->assertXpathContentContains('//marc:datafield[@tag="264"]/marc:subfield[@code="c"]','2010');
+        $this->assertXpathContentContains('//marc:datafield[@tag="490"]/marc:subfield[@code="a"]','MySeries');
+        $this->assertXpathContentContains('//marc:datafield[@tag="490"]/marc:subfield[@code="v"]','1/5');
+        $this->assertXpathContentContains('//marc:datafield[@tag="520"]/marc:subfield[@code="a"]','This is a pdf test document');
+        $this->assertXpathContentContains('//marc:datafield[@tag="653"]/marc:subfield[@code="a"]','Informationssystem');
+        $this->assertXpathContentContains('//marc:datafield[@tag="653"]/marc:subfield[@code="a"]','eBook');
+        $this->assertXpathContentContains('//marc:datafield[@tag="655"]/marc:subfield[@code="a"]','report');
+        $this->assertXpathContentContains('//marc:datafield[@tag="700"]/marc:subfield[@code="a"]','Zufall, Rainer');
+        $this->assertXpathContentContains('//marc:datafield[@tag="700"]/marc:subfield[@code="a"]','Fall, Klara');
+        $this->assertXpathContentContains('//marc:datafield[@tag="773"]/marc:subfield[@code="t"]','This is a parent title');
+        $this->assertXpathContentContains('//marc:datafield[@tag="856"]/marc:subfield[@code="u"]','http:///frontdoor/index/index/docId/91');
+        $this->assertXpathContentContains('//marc:datafield[@tag="856"]/marc:subfield[@code="u"]','http:///oai/container/index/docId/91');
+        $this->assertXpathContentContains('//marc:datafield[@tag="856"]/marc:subfield[@code="u"]','http:///files/91/test.pdf');
+        $this->assertXpathContentContains('//marc:datafield[@tag="856"]/marc:subfield[@code="u"]','http:///files/91/test.txt');
+        $this->assertXpathContentContains('//marc:datafield[@tag="856"]/marc:subfield[@code="u"]','http:///files/91/frontdoor_invisible.txt');
+        $this->assertNotXpathContentContains('//marc:datafield[@tag="856"]/marc:subfield[@code="u"]','http:///files/91/oai_invisible.txt');
+    }
+
+    public function testGetRecordMarc21OfTestDocOfUnknownType()
+    {
+        $doc = new Opus_Document();
+        $doc->setType('unknown');
+        $doc->setServerState('published'); // nur freigeschaltete Dokumente können per OAI-PMH abgerufen werden
+        $doc->setPublishedYear(2048);
+        $doc->setLanguage('deu');
+        $doc->setIssue('issue');
+        $doc->setVolume('volume');
+        $doc->setPageFirst('10');
+        $doc->setPageLast('19');
+        $doc->setPageNumber('10');
+        $doc->setCreatingCorporation('Foo Creating Corp.');
+
+        $identifierUrn = new Opus_Identifier();
+        $identifierUrn->setType('urn');
+        $identifierUrn->setValue('urn:nbn:de:foo:opus-4711');
+        $identifierIssn = new Opus_Identifier();
+        $identifierIssn->setType('issn');
+        $identifierIssn->setValue('0953-4563');
+        $doc->setIdentifier([$identifierUrn, $identifierIssn]);
+
+        $ddc33x = new Opus_Collection(45); // sichtbar
+        $ddc334 = new Opus_Collection(402); // unsichtbar
+        $ddc34x = new Opus_Collection(46); // sichtbar
+        $doc->setCollection([$ddc33x, $ddc334, $ddc34x]);
+
+        $titleMainDeu = new Opus_TitleAbstract();
+        $titleMainDeu->setLanguage('deu');
+        $titleMainDeu->setType('main');
+        $titleMainDeu->setValue('TitleMainInDocumentLanguage');
+        $titleMainEng = new Opus_TitleAbstract();
+        $titleMainEng->setLanguage('eng');
+        $titleMainEng->setType('main');
+        $titleMainEng->setValue('TitleMainInOtherLanguage');
+        $doc->setTitleMain([$titleMainDeu, $titleMainEng]);
+
+        $titleSubDeu = new Opus_TitleAbstract();
+        $titleSubDeu->setLanguage('deu');
+        $titleSubDeu->setType('sub');
+        $titleSubDeu->setValue('TitleSubInDocumentLanguage');
+        $titleSubEng = new Opus_TitleAbstract();
+        $titleSubEng->setLanguage('eng');
+        $titleSubEng->setType('sub');
+        $titleSubEng->setValue('TitleSubInOtherLanguage');
+        $doc->setTitleSub([$titleSubDeu, $titleSubEng]);
+
+        $titleParent = new Opus_TitleAbstract();
+        $titleParent->setLanguage('deu');
+        $titleParent->setType('parent');
+        $titleParent->setValue('TitleParentInDocumentLanguage');
+        $doc->setTitleParent([$titleParent]);
+
+        $dnbInstitute = new Opus_DnbInstitute(2);
+        $doc->setThesisPublisher([$dnbInstitute]);
+
+        $editor = new Opus_Person();
+        $editor->setFirstName('John');
+        $editor->setLastName('Doe');
+        $doc->addPersonEditor($editor);
+
+        $docId = $doc->store();
+
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=marc21&identifier=oai::' . $docId);
+
+        $doc = new Opus_Document($docId);
+        $doc->deletePermanent();
+
+        $this->assertResponseCode(200);
+
+        $response = $this->getResponse();
+        $badStrings = array("Exception", "Error", "Stacktrace", "badVerb");
+        $this->checkForCustomBadStringsInHtml($response->getBody(), $badStrings);
+
+        $this->registerXpathNamespaces($this->xpathNamespaces);
+
+        // FIXME: other in Leader-Feld durch genau einen Buchstaben ersetzen
+        $this->assertXpathContentContains('//marc:leader','00000notherother a22000005  4500');
+        $this->assertXpathContentContains('//marc:controlfield[@tag="001"]','docId-' . $docId);
+        $this->assertNotXpath('//marc:controlfield[@tag="003"]');
+        $this->assertXpathContentContains('//marc:datafield[@tag="024"]/marc:subfield[@code="a"]', 'urn:nbn:de:foo:opus-4711');
+        $this->assertXpathContentContains('//marc:datafield[@tag="041"]/marc:subfield[@code="a"]', 'ger');
+        $this->assertXpathContentContains('//marc:datafield[@tag="082"]/marc:subfield[@code="a"]', '33');
+        $this->assertXpathContentContains('//marc:datafield[@tag="082"]/marc:subfield[@code="a"]', '34');
+        $this->assertNotXpathContentContains('//marc:datafield[@tag="082"]/marc:subfield[@code="a"]', '334');
+        $this->assertXpathContentContains('//marc:datafield[@tag="110"]/marc:subfield[@code="a"]', 'Foo Creating Corp.');
+        $this->assertXpathContentContains('//marc:datafield[@tag="245"]/marc:subfield[@code="a"]', 'TitleMainInDocumentLanguage');
+        $this->assertXpathContentContains('//marc:datafield[@tag="245"]/marc:subfield[@code="b"]', 'TitleSubInDocumentLanguage');
+        $this->assertXpathContentContains('//marc:datafield[@tag="246"]/marc:subfield[@code="a"]', 'TitleMainInOtherLanguage');
+        $this->assertXpathContentContains('//marc:datafield[@tag="246"]/marc:subfield[@code="b"]', 'TitleSubInOtherLanguage');
+        $this->assertXpathContentContains('//marc:datafield[@tag="264"]/marc:subfield[@code="a"]', 'Musterstadt');
+        $this->assertXpathContentContains('//marc:datafield[@tag="264"]/marc:subfield[@code="b"]', 'Foobar Universitätsbibliothek');
+        $this->assertXpathContentContains('//marc:datafield[@tag="264"]/marc:subfield[@code="c"]', '2048');
+        $this->assertXpathContentContains('//marc:datafield[@tag="300"]/marc:subfield[@code="a"]', '10');
+        $this->assertXpathContentContains('//marc:datafield[@tag="655"]/marc:subfield[@code="a"]', 'other');
+        $this->assertXpathContentContains('//marc:datafield[@tag="700"]/marc:subfield[@code="a"]', 'Doe, John');
+        $this->assertXpathContentContains('//marc:datafield[@tag="700"]/marc:subfield[@code="4"]', 'edt');
+        $this->assertXpathContentContains('//marc:datafield[@tag="773"]/marc:subfield[@code="t"]', 'TitleParentInDocumentLanguage');
+        $this->assertXpathContentContains('//marc:datafield[@tag="773"]/marc:subfield[@code="x"]', '0953-4563');
+        $this->assertXpathContentContains('//marc:datafield[@tag="773"]/marc:subfield[@code="g"]', 'Jahrgang volume, Heft issue, Seiten 10-19');
+        $this->assertXpathContentContains('//marc:datafield[@tag="856"]/marc:subfield[@code="u"]', 'https://nbn-resolving.org/urn:nbn:de:foo:opus-4711');
+        $this->assertXpathContentContains('//marc:datafield[@tag="856"]/marc:subfield[@code="u"]', 'http:///frontdoor/index/index/docId/' . $docId);
     }
 }

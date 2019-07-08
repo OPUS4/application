@@ -846,4 +846,77 @@ class Export_IndexControllerTest extends ControllerTestCase
         $server = $this->getRequest()->getBasePath();
         $this->assertXpathContentContains('//file', 'https://' . $host . $server . '/files/146/test.pdf');
     }
+
+    /**
+     * Standardmäßig kann der MARC21-XML-Export auch für Dokumente, die nicht freigeschaltet sind,
+     * abgerufen werden.
+     *
+     * @throws Opus_Model_Exception
+     */
+    public function testMarc21XmlExportWithUnpublishedDoc()
+    {
+        $doc = new Opus_Document();
+        $doc->setServerState('unpublished');
+        $doc->setType('article');
+        $doc->setLanguage('eng');
+        $docId = $doc->store();
+
+        $this->dispatch("/export/index/marc21/docId/${docId}/searchtype/id");
+
+        $doc = new Opus_Document($docId);
+        $doc->deletePermanent();
+
+        $this->assertResponseCode(200);
+
+        $this->assertXpathContentContains('//marc:leader', '00000naa a22000005  4500');
+        $this->assertXpathContentContains('//marc:controlfield[@tag="001"]', 'docId-' . $docId);
+        $this->assertXpathContentContains('//marc:controlfield[@tag="007"]', 'cr uuu---uunan');
+        $this->assertXpathContentContains('//marc:datafield[@tag="041"]/marc:subfield[@code="a"]', 'eng');
+        $this->assertXpathContentContains('//marc:datafield[@tag="655"]/marc:subfield[@code="a"]', 'article');
+        $this->assertXpathContentContains('//marc:datafield[@tag="856"]/marc:subfield[@code="u"]', 'http:///frontdoor/index/index/docId/' . $docId);
+
+        $this->assertNotXpath('//marc:datafield[@tag="245"]');
+        $this->assertNotXpath('//marc:datafield[@tag="264"]');
+    }
+
+    /**
+     * Wenn die Konfigurationseinstellung plugins.export.marc21.restrictExportToPublishedDocuments
+     * den Wert true hat, so kann ein Dokument nur dann im Format MARC21-XML exportiert werden,
+     * wenn das Dokument freigeschaltet wurde.
+     *
+     * @throws Opus_Model_Exception
+     * @throws Zend_Exception
+     */
+    public function testMarc21XmlExportWithUnpublishedDocAndRestrictedOptionEnabled()
+    {
+        $config = Zend_Registry::get('Zend_Config');
+
+        Zend_Registry::get('Zend_Config')->merge(
+            new Zend_Config(
+                ['plugins' =>
+                    ['export' =>
+                        ['marc21' => ['restrictExportToPublishedDocuments' => 'true']]
+                    ]
+                ]
+            )
+        );
+
+        $doc = new Opus_Document();
+        $doc->setServerState('unpublished');
+        $doc->setType('article');
+        $doc->setLanguage('eng');
+        $docId = $doc->store();
+
+        $this->dispatch("/export/index/marc21/docId/${docId}/searchtype/id");
+
+        // revert configuration changes
+        Zend_Registry::set('Zend_Config', $config);
+
+        // remove test document
+        $doc = new Opus_Document($docId);
+        $doc->deletePermanent();
+
+        $this->assertResponseCode(200);
+        $this->assertEmpty($this->getResponse()->getBody());
+    }
 }
