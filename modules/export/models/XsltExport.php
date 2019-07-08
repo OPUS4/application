@@ -44,6 +44,7 @@ class Export_Model_XsltExport extends Export_Model_XmlExport
     {
         $config = $this->getConfig();
 
+        $stylesheet = null;
         if (isset($config->stylesheet))
         {
             $stylesheet = $config->stylesheet;
@@ -63,7 +64,17 @@ class Export_Model_XsltExport extends Export_Model_XmlExport
             )
         );
 
-        $this->prepareXml();
+        $restrictExportToPublishedDocuments = true;
+        if (isset($config->restrictExportToPublishedDocuments)) {
+            // weil das Zend_Config Objekt in Application_Export_ExportService.loadPlugins
+            // mit toArray() behandelt wird, wird der boolesche Wert false in den Leerstring umgewandelt
+            if ($config->restrictExportToPublishedDocuments === '' ||
+                $config->restrictExportToPublishedDocuments === '0' ||
+                $config->restrictExportToPublishedDocuments === 'false') {
+                $restrictExportToPublishedDocuments = false;
+            }
+        }
+        $this->prepareXml($restrictExportToPublishedDocuments);
     }
 
 }

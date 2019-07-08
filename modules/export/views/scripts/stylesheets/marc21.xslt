@@ -168,14 +168,16 @@
                     <xsl:text>cr uuu---uunan</xsl:text>
                 </marc:controlfield>
 
-                <marc:datafield ind1="7" ind2=" " tag="024">
-                    <marc:subfield code="a">
-                        <xsl:value-of select="./IdentifierUrn/@Value"/>
-                    </marc:subfield>
-                    <marc:subfield code="2">
-                        <xsl:text>urn</xsl:text>
-                    </marc:subfield>
-                </marc:datafield>
+                <xsl:if test="./IdentifierUrn">
+                    <marc:datafield ind1="7" ind2=" " tag="024">
+                        <marc:subfield code="a">
+                            <xsl:value-of select="./IdentifierUrn/@Value"/>
+                        </marc:subfield>
+                        <marc:subfield code="2">
+                            <xsl:text>urn</xsl:text>
+                        </marc:subfield>
+                    </marc:datafield>
+                </xsl:if>
 
                 <marc:datafield ind1=" " ind2=" " tag="041">
                     <marc:subfield code="a">
@@ -231,16 +233,18 @@
                 </xsl:if>
 
                 <!-- TitleMain in Dokumentsprache-->
-                <marc:datafield ind1="0" ind2="0" tag="245">
-                    <marc:subfield code="a">
-                        <xsl:value-of select="./TitleMain[@Language = ../@Language]/@Value"/>
-                    </marc:subfield>
-                    <xsl:if test="./TitleSub[@Language = ../@Language]">
-                        <marc:subfield code="b">
-                            <xsl:value-of select="./TitleSub[@Language = ../@Language]/@Value"/>
+                <xsl:if test="./TitleMain[@Language = ../@Language]">
+                    <marc:datafield ind1="0" ind2="0" tag="245">
+                        <marc:subfield code="a">
+                            <xsl:value-of select="./TitleMain[@Language = ../@Language]/@Value"/>
                         </marc:subfield>
-                    </xsl:if>
-                </marc:datafield>
+                        <xsl:if test="./TitleSub[@Language = ../@Language]">
+                            <marc:subfield code="b">
+                                <xsl:value-of select="./TitleSub[@Language = ../@Language]/@Value"/>
+                            </marc:subfield>
+                        </xsl:if>
+                    </marc:datafield>
+                </xsl:if>
 
                 <!-- Berücksichtigung aller TitleMain, die nicht in Dokumentsprache vorliegen -->
                 <xsl:if test="count(./TitleMain) &gt; 1">
@@ -269,46 +273,48 @@
                 </xsl:variable>
 
                 <!-- OPUSVIER-4081 -->
-                <marc:datafield ind1=" " ind2="1" tag="264"> <!-- Das Feld 260 wird mit der Einführung von RDA nicht mehr gebildet -->
-                    <xsl:choose>
-                        <xsl:when test="./ThesisPublisher">
-                            <marc:subfield code="a">
-                                <xsl:value-of select="./ThesisPublisher/@City"/>
-                            </marc:subfield>
-                            <marc:subfield code="b">
-                                <xsl:value-of select="./ThesisPublisher/@Name"/>
-                            </marc:subfield>
-                        </xsl:when>
-                        <xsl:when test="./@PublisherName">
-                            <xsl:if test="./@PublisherPlace">
+                <xsl:if test="./ThesisPublisher or ./@PublisherName or $publisherName != '' or $publisherCity != '' or $year != ''">
+                    <marc:datafield ind1=" " ind2="1" tag="264"> <!-- Das Feld 260 wird mit der Einführung von RDA nicht mehr gebildet -->
+                        <xsl:choose>
+                            <xsl:when test="./ThesisPublisher">
                                 <marc:subfield code="a">
-                                    <xsl:value-of select="./@PublisherPlace"/>
+                                    <xsl:value-of select="./ThesisPublisher/@City"/>
                                 </marc:subfield>
-                            </xsl:if>
-                            <marc:subfield code="b">
-                                <xsl:value-of select="./@PublisherName"/>
-                            </marc:subfield>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:if test="$publisherCity != ''">
-                                <marc:subfield code="a">
-                                    <xsl:value-of select="$publisherCity"/>
-                                </marc:subfield>
-                            </xsl:if>
-                            <xsl:if test="$publisherName != ''">
                                 <marc:subfield code="b">
-                                    <xsl:value-of select="$publisherName"/>
+                                    <xsl:value-of select="./ThesisPublisher/@Name"/>
                                 </marc:subfield>
-                            </xsl:if>
-                        </xsl:otherwise>
-                    </xsl:choose>
+                            </xsl:when>
+                            <xsl:when test="./@PublisherName">
+                                <xsl:if test="./@PublisherPlace">
+                                    <marc:subfield code="a">
+                                        <xsl:value-of select="./@PublisherPlace"/>
+                                    </marc:subfield>
+                                </xsl:if>
+                                <marc:subfield code="b">
+                                    <xsl:value-of select="./@PublisherName"/>
+                                </marc:subfield>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:if test="$publisherCity != ''">
+                                    <marc:subfield code="a">
+                                        <xsl:value-of select="$publisherCity"/>
+                                    </marc:subfield>
+                                </xsl:if>
+                                <xsl:if test="$publisherName != ''">
+                                    <marc:subfield code="b">
+                                        <xsl:value-of select="$publisherName"/>
+                                    </marc:subfield>
+                                </xsl:if>
+                            </xsl:otherwise>
+                        </xsl:choose>
 
-                    <xsl:if test="$year != ''">
-                        <marc:subfield code="c">
-                            <xsl:value-of select="$year"/>
-                        </marc:subfield>
-                    </xsl:if>
-                </marc:datafield>
+                        <xsl:if test="$year != ''">
+                            <marc:subfield code="c">
+                                <xsl:value-of select="$year"/>
+                            </marc:subfield>
+                        </xsl:if>
+                    </marc:datafield>
+                </xsl:if>
 
                 <!-- Seitenanzahl -->
                 <xsl:if test="./@PageNumber">
