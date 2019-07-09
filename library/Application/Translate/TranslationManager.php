@@ -78,6 +78,12 @@ class Application_Translate_TranslationManager
     protected $_filter;
 
     /**
+     * Names of folders containing TMX files.
+     * @var array
+     */
+    private $folders = ['language'];
+
+    /**
      * Set Modules to include
      *
      * @param array $modules Modules to include
@@ -188,7 +194,7 @@ class Application_Translate_TranslationManager
     {
         $modules = [];
 
-        $languageDirs = ['language', 'language_custom'];
+        $languageDirs = $this->getFolderNames();
 
         foreach ($this->_modules as $moduleName) {
 
@@ -219,5 +225,31 @@ class Application_Translate_TranslationManager
         }
 
         return $modules;
+    }
+
+    public function getFolderNames()
+    {
+        if (! is_array($this->folders)) {
+            $this->folders = [];
+        }
+        return $this->folders;
+    }
+
+    public function setFolderNames($names)
+    {
+        if (! is_array($names)) {
+            $names = [$names];
+        }
+        $this->folders = $names;
+    }
+
+    public function addFolderName($name)
+    {
+        $names = $this->getFolderNames();
+
+        if (! in_array($name, $names)) {
+            $names[] = $name;
+            $this->setFolderNames($names);
+        }
     }
 }

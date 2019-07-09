@@ -295,4 +295,48 @@ class Application_TranslateTest extends ControllerTestCase
         $this->translate->loadModule('default');
         $this->assertEquals($translation, $this->translate->translateLanguage($langId));
     }
+
+    public function testMixedTranslations()
+    {
+        $key = 'admin_title_configuration';
+
+        // clear custom translations from database
+        $database = new Opus_Translate_Dao();
+        $database->removeAll();
+
+        $translate = Zend_Registry::get('Zend_Translate');
+
+        // clear translation cache
+        $translate->clearCache();
+
+        $translate->loadModule('admin');
+
+        $result = $translate->translate($key, 'de');
+
+        $this->assertNotEquals($key, $result);
+        $this->assertEquals('Konfiguration', $result);
+
+        $result = $translate->translate($key, 'en');
+
+        $this->assertNotEquals($key, $result);
+        $this->assertEquals('Configure', $result);
+
+        // clear cache again before modifying translations in database
+        $translate->clearCache();
+
+        // add database to translation mix
+        $database->setTranslation($key, [
+            'en' => 'Configuration',
+            'de' => 'Einstellungen'
+        ], 'admin');
+
+        // load module again with changes in database
+        $translate->loadModule('admin', true);
+
+        $result = $translate->translate($key, 'en');
+        $this->assertEquals('Configuration', $result);
+
+        $result = $translate->translate($key, 'de');
+        $this->assertEquals('Einstellungen', $result);
+    }
 }

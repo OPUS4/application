@@ -27,7 +27,7 @@
  * @category    Application
  * @package     Application
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -66,7 +66,7 @@ class Application_Translate extends Zend_Translate
    private $_options = [
         'logMessage' => "Unable to translate key '%message%' into locale '%locale%'",
         'logPriority' => Zend_Log::DEBUG,
-        'adapter' => Zend_Translate::AN_TMX,
+        'adapter' => 'Opus_Translate_DefaultAdapter',
         'locale' => 'auto',
         'clear' => false,
         'scan' => Zend_Translate::LOCALE_FILENAME,
@@ -87,12 +87,23 @@ class Application_Translate extends Zend_Translate
      * Lädt die Übersetzungen für ein Modul.
      * @param $name
      */
-    public function loadModule($name)
+    public function loadModule($name, $reload = false)
     {
-        if (!in_array($name, $this->_loadedModules)) {
+        if (!in_array($name, $this->_loadedModules) or $reload === true) {
             $moduleDir = APPLICATION_PATH . '/modules/' . $name;
             $this->loadLanguageDirectory("$moduleDir/language/", false);
-            $this->loadLanguageDirectory("$moduleDir/language_custom/", false);
+
+            $options = array_merge(
+                ['content' => ['module' => $name]],
+                $this->getOptions()
+            );
+
+            if ($reload) {
+                $options['reload'] = true;
+            }
+
+            $this->addTranslation($options);
+
             $this->_loadedModules[] = $name;
         } else {
             $this->getLogger()->notice("Already loaded translations for module '$name'.");
@@ -135,8 +146,10 @@ class Application_Translate extends Zend_Translate
                 continue;
             }
 
+            // 'reload' is always set, because this code should only be executed if the module has not been loaded yet
+            // Otherwise there is a mechanism preventing repeated loading in the parent class.
             $options = array_merge(
-                ['content' => $path . DIRECTORY_SEPARATOR . $file],
+                ['content' => $path . DIRECTORY_SEPARATOR . $file, 'reload' => true],
                 $this->getOptions()
             );
 

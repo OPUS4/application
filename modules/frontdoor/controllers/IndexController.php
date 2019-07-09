@@ -113,7 +113,8 @@ class Frontdoor_IndexController extends Application_Controller_Action
             'shortenText',
             'exportLinks',
             'languageWebForm',
-            'mimeTypeAsCssClass'
+            'mimeTypeAsCssClass',
+            'accessAllowed'
         ]);
         $proc->registerPHPFunctions('urlencode');
         $proc->importStyleSheet($xslt);
