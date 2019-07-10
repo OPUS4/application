@@ -11,6 +11,7 @@ RUN apt-get update \
     php-curl\
     php-dev\
     php-gd\
+    php-mbstring \
     php-mcrypt\
     php-mysql\
     php-uuid\
