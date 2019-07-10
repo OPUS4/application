@@ -65,8 +65,8 @@ RUN cd \
     && mkdir /var/solr && mkdir /var/solr/data && mkdir /var/solr/data/opus4 \
     && cp /opt/solr/server/solr/solr.xml /var/solr/data \
     && cp ~/application/vendor/opus4-repo/search/core.properties /var/solr/data/opus4 \
-    && cp ~/application/schema-7.xml /var/solr/data/opus4/schema-7.xml && mv /var/solr/data/opus4/schema-7.xml /var/solr/data/opus4/schema.xml\
-    && cp ~/application/solrconfig-7.xml /var/solr/data/opus4/schema-7.xml && mv /var/solr/data/opus4/schema-7.xml /var/solr/data/opus4/solrconfig.xml\
+    && cp ~/application/vendor/opus4-repo/search/config/schema.xml /var/solr/data/opus4/schema.xml \
+    && cp ~/application/vendor/opus4-repo/search/config/solrconfig.xml /var/solr/data/opus4/solrconfig.xml \
     && chown solr:solr -R /var/solr
 
 RUN echo "SOLR_PID_DIR="/var/solr"" >> /etc/default/solr.in.sh \
