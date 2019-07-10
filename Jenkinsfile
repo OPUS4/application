@@ -9,7 +9,7 @@ pipeline {
                 sh 'sudo chown -R mysql:mysql /var/lib/mysql /var/run/mysqld'
                 sh 'sudo service mysql start'
                 sh 'composer install'
-                sh 'ant setup prepare lint prepare-config -DdbUserPassword=root -DdbAdminPassword=root'
+                sh 'ant prepare-workspace prepare-config lint -DdbUserPassword=root -DdbAdminPassword=root'
                 sh 'cat application/configs/config.ini'
                 sh 'cat tests/config.ini'
                 sh 'php db/createdb.php'
