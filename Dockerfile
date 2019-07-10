@@ -47,9 +47,9 @@ RUN cd \
 
 # Download OPUS4 and install dependencies
 RUN cd \
-    && git clone https://github.com/BioFreak95/application.git \
+    && git clone https://github.com/OPUS4/application.git \
     && cd application \
-    && git checkout origin/OPUSVIER-3772 \
+    && git checkout origin/4.6.4 \
     && composer install \
     && composer update \
     && useradd opus4 \
