@@ -99,7 +99,7 @@ class Application_Form_Element_Translation extends Zend_Form_Element_Multi
         $translations = $translate->getTranslations($key);
 
         if (is_array($translations)) {
-            $this->setMultiOptions($translations);
+            $this->setValue($translations);
         }
     }
 

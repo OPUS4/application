@@ -27,14 +27,18 @@
  * @category    Application
  * @package     Admin_Form
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
+ *
+ * TODO OaiName could be optional since it is usually the same as Name (which could be used as default)
+ *
  */
-class Admin_Form_CollectionRole extends Application_Form_Model_Abstract {
+class Admin_Form_CollectionRole extends Application_Form_Model_Abstract
+{
 
     const ELEMENT_NAME = 'Name';
     const ELEMENT_OAI_NAME = 'OaiName';
+    const ELEMENT_DISPLAYNAME = 'DisplayName';
     const ELEMENT_POSITION = 'Position';
     const ELEMENT_VISIBLE = 'Visible';
     const ELEMENT_VISIBLE_BROWSING_START = 'VisibleBrowsingStart';
@@ -46,7 +50,8 @@ class Admin_Form_CollectionRole extends Application_Form_Model_Abstract {
     const ELEMENT_ASSIGN_LEAVES_ONLY = 'AssignLeavesOnly';
     const ELEMENT_HIDE_EMPTY_COLLECTIONS = 'HideEmptyCollections';
 
-    public function init() {
+    public function init()
+    {
         parent::init();
 
         $this->setRemoveEmptyCheckbox(false);
@@ -58,6 +63,10 @@ class Admin_Form_CollectionRole extends Application_Form_Model_Abstract {
         $this->getElement(self::ELEMENT_NAME)->addValidators([
                 new Application_Form_Validate_CollectionRoleNameUnique(),
                 new Application_Form_Validate_CollectionRoleName()
+        ]);
+
+        $this->addElement('translation', self::ELEMENT_DISPLAYNAME, [
+            'required' => false, 'size' => 70
         ]);
 
         $this->addElement('text', self::ELEMENT_OAI_NAME, [
@@ -84,9 +93,15 @@ class Admin_Form_CollectionRole extends Application_Form_Model_Abstract {
     /**
      * @param $collectionRole Opus_CollectionRole
      */
-    public function populateFromModel($collectionRole) {
+    public function populateFromModel($collectionRole)
+    {
+        $name = $collectionRole->getName();
+        $this->getElement(self::ELEMENT_DISPLAYNAME)->populateFromTranslations(
+            'default_collection_role_' . $name
+        );
+
         $this->getElement(self::ELEMENT_MODEL_ID)->setValue($collectionRole->getId());
-        $this->getElement(self::ELEMENT_NAME)->setValue($collectionRole->getName());
+        $this->getElement(self::ELEMENT_NAME)->setValue($name);
         $this->getElement(self::ELEMENT_OAI_NAME)->setValue($collectionRole->getOaiName());
         $this->getElement(self::ELEMENT_POSITION)->setValue($collectionRole->getPosition());
         $this->getElement(self::ELEMENT_VISIBLE)->setValue($collectionRole->getVisible());
@@ -103,7 +118,8 @@ class Admin_Form_CollectionRole extends Application_Form_Model_Abstract {
     /**
      * @param $collectionRole Opus_CollectionRole
      */
-    public function updateModel($collectionRole) {
+    public function updateModel($collectionRole)
+    {
         $collectionRole->setName($this->getElementValue(self::ELEMENT_NAME));
         $collectionRole->setOaiName($this->getElementValue(self::ELEMENT_OAI_NAME));
         $collectionRole->setPosition($this->getElementValue(self::ELEMENT_POSITION));
@@ -117,5 +133,4 @@ class Admin_Form_CollectionRole extends Application_Form_Model_Abstract {
         $collectionRole->setAssignLeavesOnly($this->getElementValue(self::ELEMENT_ASSIGN_LEAVES_ONLY));
         $collectionRole->setHideEmptyCollections($this->getElementValue(self::ELEMENT_HIDE_EMPTY_COLLECTIONS));
     }
-
 }
