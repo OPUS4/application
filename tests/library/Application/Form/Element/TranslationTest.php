@@ -89,6 +89,28 @@ class Application_Form_Element_TranslationTest extends ControllerTestCase
         $this->assertEquals($data, $dao->getTranslation('testkey'));
     }
 
+    public function testUpdateTranslationsOnlyIfChanged()
+    {
+        $key = 'default_collection_role_ddc';
+
+        $element = new Application_Form_Element_Translation('DisplayName');
+
+        $translate = Zend_Registry::get('Zend_Translate');
+        $dao = new Opus_Translate_Dao();
+
+        $dao->remove($key);
+
+        $this->assertNull($dao->getTranslation($key));
+
+        $translations = $translate->getTranslations($key);
+
+        $element->setValue($translations);
+        $element->updateTranslations($key);
+
+        // translations should not be stored in database because values did not change
+        $this->assertNull($dao->getTranslation($key));
+    }
+
     public function testIsValidTrue()
     {
         $element = new Application_Form_Element_Translation('DisplayName');
