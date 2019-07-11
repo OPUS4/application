@@ -339,4 +339,65 @@ class Application_TranslateTest extends ControllerTestCase
         $result = $translate->translate($key, 'de');
         $this->assertEquals('Einstellungen', $result);
     }
+
+    public function testGetTranslations()
+    {
+        $translate = Zend_Registry::get('Zend_Translate');
+
+        $key = 'default_collection_role_ddc';
+
+        $translations = $translate->getTranslations($key);
+
+        $this->assertEquals([
+            'de' => 'DDC-Klassifikation',
+            'en' => 'Dewey Decimal Classification'
+        ], $translations);
+
+        $database = new Opus_Translate_Dao();
+
+        $custom = [
+            'de' => 'DDC-Sachgruppen',
+            'en' => 'DDC'
+        ];
+
+        $database->setTranslation($key, $custom, 'default');
+
+        $translate->clearCache();
+
+        // new object necessary, because translation have already been loaded
+        $translate = new Application_Translate();
+        $translate->clearCache();
+        $translate->loadModule('default', true);
+
+        $translations = $translate->getTranslations($key);
+
+        $this->assertEquals($custom, $translations);
+    }
+
+    public function testGetTranslationsUnknownKey()
+    {
+        $translate = Zend_Registry::get('Zend_Translate');
+
+        $this->assertNull($translate->getTranslations('unknownkey9999'));
+    }
+
+    public function testSetTranslations()
+    {
+        $dao = new Opus_Translate_Dao();
+
+        $dao->remove('testkey');
+
+        $this->assertNull($dao->getTranslation('testkey'));
+
+        $translate = Zend_Registry::get('Zend_Translate');
+
+        $data = [
+            'en' => 'test key',
+            'de' => 'Testschüssel'
+        ];
+
+        $translate->setTranslations('testkey', $data);
+
+        $this->assertEquals($data, $dao->getTranslation('testkey'));
+    }
 }
