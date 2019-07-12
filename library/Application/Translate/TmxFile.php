@@ -130,7 +130,7 @@ class Application_Translate_TmxFile
     /**
      * Save to file
      *
-     * @param $fileName full path of file to save
+     * @param $fileName string Full path of file to save
      * @return bool true on success or false on failure
      */
     public function save($fileName)
