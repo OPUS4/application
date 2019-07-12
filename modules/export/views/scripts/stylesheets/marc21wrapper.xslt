@@ -35,6 +35,7 @@
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
+    <!-- TODO Abhängigkeit zwischen Modulen auflösen (hier wird Datei aus oai-Module genutzt) -->
     <xsl:include href="../../../../oai/views/scripts/index/prefixes/marc21.xslt"/>
 
     <xsl:template match="Opus_Document">
