@@ -123,11 +123,12 @@
     color: gray;
 }
 
-#export li{
-	display: inline;
-    float: left;
-    margin-right: 2px;
+#export li {
+	display: inline-block;
+    margin-right: 0.4em;
+	height: 2em;
 }
+
 #export::after {
     content: "";
     display: block;
@@ -141,7 +142,7 @@
     background: #8aa3bb;
     color: white;
     padding: 0.1em 0.3em;
-    margin: 0 2px;
+    margin: 0;
 }
 
 .search_export_xml a.export {
