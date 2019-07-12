@@ -24,7 +24,7 @@
     "robloach/component-installer": "*"
   },
   "require-dev": {
-    "phpunit/phpunit": "4.8.*",
+    "phpunit/phpunit": "4.8.36",
     "phpunit/dbunit": "~1.3",
     "phpunit/phpunit-story": "~1.0",
     "phpunit/phpunit-selenium": "~1.4",
