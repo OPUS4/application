@@ -26,24 +26,49 @@
  */
 
 /**
- * Formularelement für Auswahl von Rollen über Checkboxen.
+ * Form element for editing translations.
+ *
+ * The form element provides input fields for all supported languages, normally English and German.
+ *
+ * This is a special form element. Most forms
  *
  * @category    Application
  * @package     Form_Element
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
+ *
+ * TODO get value (?)
+ * TODO validation
+ * TODO storing in database
+ * TODO should translation functions be added at model level (in framework)?
  */
-class Application_Form_Element_Roles extends Application_Form_Element_MultiCheckbox
+class Application_Form_Element_Translation extends Zend_Form_Element_Multi
 {
+
+    public $helper = 'formTranslation';
+
+    protected $_isArray = false;
 
     public function init()
     {
         parent::init();
-
         $this->addPrefixPath('Application_Form_Decorator', 'Application/Form/Decorator', Zend_Form::DECORATOR);
+        $this->setRegisterInArrayValidator(false);
+        $this->loadDefaultOptions();
+    }
 
-        $this->setMultiOptions($this->getRolesMultiOptions());
+    public function loadDefaultOptions()
+    {
+        $languages = Application_Configuration::getInstance()->getSupportedLanguages();
+
+        $options = [];
+
+        foreach ($languages as $language) {
+            $options[$language] = null;
+        }
+
+        $this->setMultiOptions($options);
     }
 
     public function loadDefaultDecorators()
@@ -51,83 +76,50 @@ class Application_Form_Element_Roles extends Application_Form_Element_MultiCheck
         if (!$this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
             $this->setDecorators([
                 'ViewHelper',
-                'ElementHtmlTag', [
+                'ElementHtmlTag',
+                [
                     'LabelNotEmpty', [
-                        'tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend', 'disableFor' => true
+                        'tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend',
+                        'disableFor' => true
                     ]
-                ], [
-                    ['dataWrapper' => 'HtmlTagWithId'],
-                    ['tag' => 'div', 'class' => 'data-wrapper']
+                ],
+                [
+                    ['dataWrapper' => 'HtmlTagWithId'], [
+                        'tag' => 'div', 'class' => 'data-wrapper'
+                    ]
                 ]
             ]);
         }
     }
 
-    /**
-     * Create options for all roles.
-     * @return array
-     */
-    public function getRolesMultiOptions()
+    public function populateFromTranslations($key)
     {
-        $roles = Opus_UserRole::getAll();
+        $translate = Zend_Registry::get('Zend_Translate');
 
-        $options = [];
+        $translations = $translate->getTranslations($key);
 
-        foreach ($roles as $role) {
-            $roleName = $role->getDisplayName();
-            $options[$roleName] = $roleName;
+        if (is_array($translations)) {
+            $this->setValue($translations);
         }
-
-        return $options;
     }
 
-    /**
-     * Sets selected roles.
-     * @param mixed $value Role names or Opus_UserRole objects
-     */
+    public function updateTranslations($key = null)
+    {
+        $translate = Zend_Registry::get('Zend_Translate');
+
+        $old = $translate->getTranslations($key);
+        $translations = $this->getValue();
+
+        if ($translations != $old) {
+            $translate->setTranslations($key, $translations);
+        }
+    }
+
     public function setValue($value)
     {
-        if (is_array($value)) {
-            if (count($value) > 0 && $value[0] instanceof Opus_UserRole) {
-                $value = $this->getRoleNames($value);
-            }
-        }
-
         parent::setValue($value);
-    }
-
-    /**
-     * Returns array of Opus_UserRole objects.
-     * @return array of Opus_UserRole
-     */
-    public function getRoles()
-    {
-        $names = $this->getValue();
-
-        $roles = [];
-
-        if (is_array($names)) {
-            foreach ($names as $name) {
-                array_push($roles, Opus_UserRole::fetchByName($name));
-            }
+        if (is_array($value)) {
+            $this->setMultiOptions($value);
         }
-
-        return $roles;
-    }
-
-    /**
-     * Converts array with objects into array with role names.
-     * @param $roles array of Opus_UserRole objects
-     * @return array Role names
-     */
-    public function getRoleNames($roles)
-    {
-        $names = [];
-
-        foreach ($roles as $role) {
-            array_push($names, $role->getName());
-        }
-
-        return $names;
     }
 }

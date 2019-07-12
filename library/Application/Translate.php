@@ -203,6 +203,12 @@ class Application_Translate extends Zend_Translate
         return (isset($config->log->untranslated)) ? (bool)$config->log->untranslated : false;
     }
 
+    /**
+     * Translates language names utilizing PHP functions.
+     *
+     * @param $langId
+     * @return string
+     */
     public function translateLanguage($langId)
     {
         if ($this->isTranslated($langId)) {
@@ -211,5 +217,41 @@ class Application_Translate extends Zend_Translate
             $language = Locale::getDisplayLanguage($langId, $this->getLocale());
         }
         return $language;
+    }
+
+    /**
+     * Returns translations for a key from TMX or database source.
+     * @param $key
+     *
+     * TODO can this be done without knowing the sources?
+     */
+    public function getTranslations($key)
+    {
+        if (! $this->isTranslated($key)) {
+            return null;
+        }
+
+        $languages = Application_Configuration::getInstance()->getSupportedLanguages();
+
+        $translations = [];
+
+        foreach ($languages as $language) {
+            $translation = $this->translate($key, $language);
+            $translations[$language] = $translation;
+        }
+
+        return $translations;
+    }
+
+    /**
+     * Stores custom translations for a key.
+     * @param $key
+     * @param $translations
+     */
+    public function setTranslations($key, $translations)
+    {
+        $database = new Opus_Translate_Dao();
+
+        $database->setTranslation($key, $translations);
     }
 }
