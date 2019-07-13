@@ -143,7 +143,7 @@ abstract class Application_Export_ExportPluginAbstract extends Application_Model
     {
         $adminOnlyAccess = $this->getConfig()->get('adminOnly', null);
         if (! is_null($adminOnlyAccess)) {
-            if (($adminOnlyAccess === true || $adminOnlyAccess === "1" || $adminOnlyAccess === 'true')) {
+            if (($adminOnlyAccess === true || $adminOnlyAccess === 1 || $adminOnlyAccess === 'true')) {
                 return ! Opus_Security_Realm::getInstance()->checkModule('admin');
             }
         }
