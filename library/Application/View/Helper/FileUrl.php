@@ -27,11 +27,14 @@
  * @category    Application
  * @package     View
  * @author      Sascha Szott <opus-development@saschaszott.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Application_View_Helper_FileUrl extends Application_View_Helper_DocumentUrl
+/**
+ * Gibt die URL für den Zugriff auf eine spezifische Datei eines Dokuments zurück.
+ */
+class Application_View_Helper_FileUrl extends Zend_View_Helper_Abstract
 {
 
     public function fileUrl($docId, $pathName)
