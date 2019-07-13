@@ -27,11 +27,15 @@
  * @category    Application
  * @package     View
  * @author      Sascha Szott <opus-development@saschaszott.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Application_View_Helper_TransferUrl extends Application_View_Helper_DocumentUrl
+/**
+ * Generiert die Transfer-URL für den OAI-Container (Archivdatei), in der alle
+ * verfügbaren Dateien des Dokuments zusammengefasst werden.
+ */
+class Application_View_Helper_TransferUrl extends Zend_View_Helper_Abstract
 {
 
     public function transferUrl($docId)
