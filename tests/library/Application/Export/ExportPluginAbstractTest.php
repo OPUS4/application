@@ -81,12 +81,12 @@ class Application_Export_ExportPluginAbstractTest extends ControllerTestCase
 
     public function enabledOptions()
     {
-        return [[true], [1], ['true']];
+        return [[true], [1], ['true'], ["1"]];
     }
 
     public function disabledOptions()
     {
-        return [[false], [0], ['false']];
+        return [[false], [0], ['false'], ["0"]];
     }
 
 }

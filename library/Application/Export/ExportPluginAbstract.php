@@ -141,9 +141,12 @@ abstract class Application_Export_ExportPluginAbstract extends Application_Model
      */
     public function isAccessRestricted()
     {
+        // der Konfigurationswert kann in unterschiedlichen Varianten angegeben werden
+        $enabledOptions = [true, 'true', 1, '1'];
+
         $adminOnlyAccess = $this->getConfig()->get('adminOnly', null);
         if (! is_null($adminOnlyAccess)) {
-            if (($adminOnlyAccess === true || $adminOnlyAccess === 1 || $adminOnlyAccess === 'true')) {
+            if (in_array($adminOnlyAccess, $enabledOptions, true)) {
                 return ! Opus_Security_Realm::getInstance()->checkModule('admin');
             }
         }
