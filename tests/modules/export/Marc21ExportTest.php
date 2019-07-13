@@ -27,7 +27,7 @@
  * @category    Tests
  * @package     Export
  * @author      Sascha Szott <opus-development@saschaszott.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -42,16 +42,13 @@ class Export_Marc21ExportTest extends ControllerTestCase
      */
     public function testMarc21XmlExportWithUnpublishedDoc()
     {
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
         $doc->setServerState('unpublished');
         $doc->setType('article');
         $doc->setLanguage('eng');
         $docId = $doc->store();
 
         $this->dispatch("/export/index/marc21/docId/${docId}/searchtype/id");
-
-        $doc = new Opus_Document($docId);
-        $doc->deletePermanent();
 
         $this->assertResponseCode(200);
 
@@ -88,7 +85,7 @@ class Export_Marc21ExportTest extends ControllerTestCase
             )
         );
 
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
         $doc->setServerState('unpublished');
         $doc->setType('article');
         $doc->setLanguage('eng');
@@ -98,10 +95,6 @@ class Export_Marc21ExportTest extends ControllerTestCase
 
         // revert configuration changes
         Zend_Registry::set('Zend_Config', $config);
-
-        // remove test document
-        $doc = new Opus_Document($docId);
-        $doc->deletePermanent();
 
         $this->assertResponseCode(200);
         $this->assertEmpty($this->getResponse()->getBody());
