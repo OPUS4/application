@@ -2359,7 +2359,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     public function testGetRecordMarc21OfTestDocOfUnknownType()
     {
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
         $doc->setType('unknown');
         $doc->setServerState('published'); // nur freigeschaltete Dokumente können per OAI-PMH abgerufen werden
         $doc->setPublishedYear(2048);
@@ -2421,9 +2421,6 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $docId = $doc->store();
 
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=marc21&identifier=oai::' . $docId);
-
-        $doc = new Opus_Document($docId);
-        $doc->deletePermanent();
 
         $this->assertResponseCode(200);
 
