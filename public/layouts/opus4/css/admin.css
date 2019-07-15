@@ -2450,3 +2450,10 @@ table.module-access-table tr.noaccess {
     margin-right: 0.5em;
     margin-bottom: 0.5em;
 }
+
+#content.setup_static-page > .wrapper a {
+    display: block;
+    margin-left: 2em;
+    padding: 0.5em;
+    font-size: 1.2em;
+}
