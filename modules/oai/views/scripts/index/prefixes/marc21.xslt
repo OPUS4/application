@@ -519,8 +519,7 @@
         </marc:collection>
     </xsl:template>
 
-    <!-- OPUSVIER-4079 Gutachter ausgeben? -->
-    <xsl:template match="PersonAuthor|PersonEditor|PersonAdvisor|PersonContributor|PersonReferee" mode="marc21">
+    <xsl:template match="PersonAuthor|PersonEditor|PersonAdvisor|PersonContributor" mode="marc21">
         <xsl:param name="tag"/>
         <xsl:param name="role"/>
         <marc:datafield ind1="1" ind2=" " tag='{$tag}'>
