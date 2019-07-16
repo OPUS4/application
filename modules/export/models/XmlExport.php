@@ -423,7 +423,7 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract {
                 }
             }
             catch (Exception $e) {
-                // do nothing; return result with empty array
+                // do nothing: return empty array
             }
         }
 
