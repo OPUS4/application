@@ -2410,6 +2410,16 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $titleParent->setValue('TitleParentInDocumentLanguage');
         $doc->setTitleParent([$titleParent]);
 
+        $abstractDeu = new Opus_TitleAbstract();
+        $abstractDeu->setLanguage('deu');
+        $abstractDeu->setType('abstract');
+        $abstractDeu->setValue('TitleAbstractInDocumentLanguage');
+        $abstractEng = new Opus_TitleAbstract();
+        $abstractEng->setLanguage('eng');
+        $abstractEng->setType('abstract');
+        $abstractEng->setValue('TitleAbstractInOtherLanguage');
+        $doc->setTitleAbstract([$abstractEng, $abstractDeu]);
+
         $doc->setThesisPublisher([new Opus_DnbInstitute(2), new Opus_DnbInstitute(4)]);
 
         $editor = new Opus_Person();
@@ -2449,6 +2459,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->assertXpathContentContains('(//marc:datafield[@tag="264"])[2]/marc:subfield[@code="b"]', 'School of Life');
         $this->assertNotXpath('(//marc:datafield[@tag="264"])[2]/marc:subfield[@code="c"]'); // Jahresangabe nur beim ersten ThesisPublisher
         $this->assertXpathContentContains('//marc:datafield[@tag="300"]/marc:subfield[@code="a"]', '10');
+        $this->assertXpathContentContains('(//marc:datafield[@tag="520"])[1]/marc:subfield[@code="a"]', 'TitleAbstractInDocumentLanguage');
+        $this->assertXpathContentContains('(//marc:datafield[@tag="520"])[2]/marc:subfield[@code="a"]', 'TitleAbstractInOtherLanguage');
         $this->assertXpathContentContains('//marc:datafield[@tag="655"]/marc:subfield[@code="a"]', 'other');
         $this->assertXpathContentContains('//marc:datafield[@tag="700"]/marc:subfield[@code="a"]', 'Doe, John');
         $this->assertXpathContentContains('//marc:datafield[@tag="700"]/marc:subfield[@code="4"]', 'edt');

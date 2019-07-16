@@ -356,15 +356,23 @@
                     </marc:datafield>
                 </xsl:if>
 
-                <!-- TitleAbstract -->
-                <!-- FIXME in Klärung OPUSVIER-4078 -->
-                <xsl:if test="./TitleAbstract">
+                <!-- TitleAbstract in Dokumentsprache zuerst ausgeben -->
+                <xsl:if test="./TitleAbstract[@Language = ../@Language]">
                     <marc:datafield ind1=" " ind2=" " tag="520">
                         <marc:subfield code="a">
-                            <xsl:value-of select="./TitleAbstract/@Value"/>
+                            <xsl:value-of select="./TitleAbstract[@Language = ../@Language]/@Value"/>
                         </marc:subfield>
                     </marc:datafield>
                 </xsl:if>
+
+                <!-- Behandlung von allen weiteren TitleAbstracs -->
+                <xsl:for-each select="./TitleAbstract[@Language != ../@Language]">
+                    <marc:datafield ind1=" " ind2=" " tag="520">
+                        <marc:subfield code="a">
+                            <xsl:value-of select="./@Value"/>
+                        </marc:subfield>
+                    </marc:datafield>
+                </xsl:for-each>
 
                 <!-- Schlagworte -->
                 <xsl:for-each select="Subject[@Type='uncontrolled' or @Type='swd']">
