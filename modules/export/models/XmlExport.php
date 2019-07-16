@@ -287,8 +287,7 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract {
 
         switch ($searchType) {
             case Application_Util_Searchtypes::ID_SEARCH:
-                // TODO handle ID search like any other search
-                $resultIds = $this->buildResultListForIdSearch($request, $restrictExportToPublishedDocuments);
+                $resultIds = $this->getAndValidateDocId($request, $restrictExportToPublishedDocuments);
                 $numberOfHits = count($resultIds);
                 break;
             default:
@@ -399,28 +398,33 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract {
     }
 
     /**
-     * Returns result for ID search of a single document.
+     * Checks for existence of a document with the ID given in request parameter docId.
+     * Additionally, if $restrictExportToPublishedDocuments is set to true, restrict
+     * search to documents with serverState published only, otherwise all documents are
+     * considered.
+     *
+     * Returns an empty array, if ID is not present in request, is unknown or the corresponding
+     * document is not in serverState published. Otherwise returns a one-element array with docId.
      *
      * @param $request HTTP request object
      * @param bool $restrictExportToPublishedDocuments if true, restrict search to published documents only
-     * @return array An array of document IDs.
-     * @throws Application_Exception if docId parameter is not present in request
+     * @return array empty array or one-element array with docId.
      */
-    private function buildResultListForIdSearch($request, $restrictExportToPublishedDocuments = true) {
+    private function getAndValidateDocId($request, $restrictExportToPublishedDocuments = true) {
         $docId = $request->getParam('docId');
-        if (is_null($docId)) {
-            throw new Application_Exception();
-        }
 
         $result = [];
-        try {
-            $doc = new Opus_Document($docId);
-            if (! $restrictExportToPublishedDocuments || $doc->getServerState() == 'published') {
-                $result[] = $doc->getId();
+
+        if (! is_null($docId)) {
+            try {
+                $doc = new Opus_Document($docId);
+                if (! $restrictExportToPublishedDocuments || $doc->getServerState() == 'published') {
+                    $result[] = $doc->getId();
+                }
             }
-        }
-        catch (Exception $e) {
-            // do nothing; return result with empty array
+            catch (Exception $e) {
+                // do nothing; return result with empty array
+            }
         }
 
         return $result;
