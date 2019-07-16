@@ -75,20 +75,19 @@
                         <xsl:when test="./@Type='studythesis'">              <xsl:value-of select="'a'"/></xsl:when>
                         <xsl:when test="./@Type='workingpaper'">             <xsl:value-of select="'a'"/></xsl:when>
                         <xsl:otherwise>
-                            <!-- FIXME sinnvollen Defaultwert definieren oder aus Konfiguration ziehen? -->
-                            <xsl:text>other</xsl:text>
+                            <xsl:text>a</xsl:text>
                         </xsl:otherwise>
                     </xsl:choose>
                 </xsl:variable>
 
                 <xsl:variable name="bibliographischesLevel">
                     <xsl:choose>
-                        <xsl:when test="./@Type='article'">                  <xsl:value-of select="'a'"/></xsl:when>
+                        <xsl:when test="./@Type='article'">                  <xsl:value-of select="'b'"/></xsl:when>
                         <xsl:when test="./@Type='bachelorthesis'">           <xsl:value-of select="'m'"/></xsl:when>
                         <xsl:when test="./@Type='book'">                     <xsl:value-of select="'m'"/></xsl:when>
                         <xsl:when test="./@Type='bookpart'">                 <xsl:value-of select="'a'"/></xsl:when>
                         <xsl:when test="./@Type='conferenceobject'">         <xsl:value-of select="'a'"/></xsl:when>
-                        <xsl:when test="./@Type='contributiontoperiodical'"> <xsl:value-of select="'a'"/></xsl:when>
+                        <xsl:when test="./@Type='contributiontoperiodical'"> <xsl:value-of select="'b'"/></xsl:when>
                         <xsl:when test="./@Type='coursematerial'">           <xsl:value-of select="'m'"/></xsl:when>
                         <xsl:when test="./@Type='diplom'">                   <xsl:value-of select="'m'"/></xsl:when>
                         <xsl:when test="./@Type='doctoralthesis'">           <xsl:value-of select="'m'"/></xsl:when>
@@ -101,7 +100,7 @@
                         <xsl:when test="./@Type='movingimage'">              <xsl:value-of select="'m'"/></xsl:when>
                         <xsl:when test="./@Type='other'">                    <xsl:value-of select="'m'"/></xsl:when>
                         <xsl:when test="./@Type='periodical'">               <xsl:value-of select="'s'"/></xsl:when>
-                        <xsl:when test="./@Type='periodicalpart'">           <xsl:value-of select="'a'"/></xsl:when>
+                        <xsl:when test="./@Type='periodicalpart'">           <xsl:value-of select="'b'"/></xsl:when>
                         <xsl:when test="./@Type='preprint'">                 <xsl:value-of select="'m'"/></xsl:when>
                         <xsl:when test="./@Type='report'">                   <xsl:value-of select="'m'"/></xsl:when>
                         <xsl:when test="./@Type='review'">                   <xsl:value-of select="'m'"/></xsl:when>
@@ -109,8 +108,7 @@
                         <xsl:when test="./@Type='studythesis'">              <xsl:value-of select="'m'"/></xsl:when>
                         <xsl:when test="./@Type='workingpaper'">             <xsl:value-of select="'m'"/></xsl:when>
                         <xsl:otherwise>
-                            <!-- FIXME sinnvollen Defaultwert definieren oder aus Konfiguration ziehen? -->
-                            <xsl:text>other</xsl:text>
+                            <xsl:text> </xsl:text><!-- soll leer bleiben -->
                         </xsl:otherwise>
                     </xsl:choose>
                 </xsl:variable>

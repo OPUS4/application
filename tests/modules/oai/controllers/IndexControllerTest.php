@@ -2430,8 +2430,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
         $this->registerXpathNamespaces($this->xpathNamespaces);
 
-        // FIXME: other in Leader-Feld durch genau einen Buchstaben ersetzen
-        $this->assertXpathContentContains('//marc:leader','00000notherother a22000005  4500');
+        $this->assertXpathContentContains('//marc:leader','00000na  a22000005  4500');
         $this->assertXpathContentContains('//marc:controlfield[@tag="001"]','docId-' . $docId);
         $this->assertNotXpath('//marc:controlfield[@tag="003"]');
         $this->assertXpathContentContains('//marc:datafield[@tag="024"]/marc:subfield[@code="a"]', 'urn:nbn:de:foo:opus-4711');
