@@ -344,17 +344,18 @@
                 </xsl:if>
 
                 <!-- Schriftenreihen -->
-                <!-- FIXME OPUSVIER-4077 -->
-                <xsl:if test="./Series">
-                    <marc:datafield ind1="1" ind2=" " tag="490">
-                        <marc:subfield code="a">
-                            <xsl:value-of select="./Series/@Title"/>
-                        </marc:subfield>
-                        <marc:subfield code="v">
-                            <xsl:value-of select="./Series/@Number"/>
-                        </marc:subfield>
-                    </marc:datafield>
-                </xsl:if>
+                <xsl:for-each select="./Series">
+                    <xsl:if test="./@Visible = 1">
+                        <marc:datafield ind1="1" ind2=" " tag="490">
+                            <marc:subfield code="a">
+                                <xsl:value-of select="./@Title"/>
+                            </marc:subfield>
+                            <marc:subfield code="v">
+                                <xsl:value-of select="./@Number"/>
+                            </marc:subfield>
+                        </marc:datafield>
+                    </xsl:if>
+                </xsl:for-each>
 
                 <!-- TitleAbstract in Dokumentsprache zuerst ausgeben -->
                 <xsl:if test="./TitleAbstract[@Language = ../@Language]">

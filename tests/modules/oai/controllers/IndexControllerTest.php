@@ -2427,6 +2427,10 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $editor->setLastName('Doe');
         $doc->addPersonEditor($editor);
 
+        $doc->addSeries(new Opus_Series(1))->setNumber(1);
+        $doc->addSeries(new Opus_Series(2))->setNumber(2);
+        $doc->addSeries(new Opus_Series(3))->setNumber(3);
+
         $docId = $doc->store();
 
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=marc21&identifier=oai::' . $docId);
@@ -2459,6 +2463,12 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->assertXpathContentContains('(//marc:datafield[@tag="264"])[2]/marc:subfield[@code="b"]', 'School of Life');
         $this->assertNotXpath('(//marc:datafield[@tag="264"])[2]/marc:subfield[@code="c"]'); // Jahresangabe nur beim ersten ThesisPublisher
         $this->assertXpathContentContains('//marc:datafield[@tag="300"]/marc:subfield[@code="a"]', '10');
+        $this->assertXpathContentContains('//marc:datafield[@tag="490"]/marc:subfield[@code="a"]', 'MySeries');
+        $this->assertXpathContentContains('//marc:datafield[@tag="490"]/marc:subfield[@code="v"]', '1');
+        $this->assertXpathContentContains('//marc:datafield[@tag="490"]/marc:subfield[@code="a"]', 'Foobar Series');
+        $this->assertXpathContentContains('//marc:datafield[@tag="490"]/marc:subfield[@code="v"]', '2');
+        $this->assertNotXpathContentContains('//marc:datafield[@tag="490"]/marc:subfield[@code="a"]', 'Invisible Series');
+        $this->assertNotXpathContentContains('//marc:datafield[@tag="490"]/marc:subfield[@code="v"]', '3');
         $this->assertXpathContentContains('(//marc:datafield[@tag="520"])[1]/marc:subfield[@code="a"]', 'TitleAbstractInDocumentLanguage');
         $this->assertXpathContentContains('(//marc:datafield[@tag="520"])[2]/marc:subfield[@code="a"]', 'TitleAbstractInOtherLanguage');
         $this->assertXpathContentContains('//marc:datafield[@tag="655"]/marc:subfield[@code="a"]', 'other');
