@@ -2313,8 +2313,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
             'marc21' => [
                 'isil' => 'DE-9999',
-                'publisherName' => 'Foobar Publishing Corp.',
-                'publisherCity' => 'Berlin',
+                'publisherName' => 'publisherNameFromConfig',
+                'publisherCity' => 'publisherCityFromConfig',
             ]
         ]));
 
@@ -2337,8 +2337,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->assertXpathContentContains('//marc:datafield[@tag="041"]/marc:subfield[@code="a"]','eng');
         $this->assertXpathContentContains('//marc:datafield[@tag="100"]/marc:subfield[@code="a"]','Doe, John');
         $this->assertXpathContentContains('//marc:datafield[@tag="245"]/marc:subfield[@code="a"]','This is a pdf test document');
-        $this->assertXpathContentContains('//marc:datafield[@tag="264"]/marc:subfield[@code="a"]','Berlin');
-        $this->assertXpathContentContains('//marc:datafield[@tag="264"]/marc:subfield[@code="b"]','Foobar Publishing Corp.');
+        $this->assertXpathContentContains('//marc:datafield[@tag="264"]/marc:subfield[@code="a"]','publisherCityFromConfig');
+        $this->assertXpathContentContains('//marc:datafield[@tag="264"]/marc:subfield[@code="b"]','publisherNameFromConfig');
         $this->assertXpathContentContains('//marc:datafield[@tag="264"]/marc:subfield[@code="c"]','2010');
         $this->assertXpathContentContains('//marc:datafield[@tag="490"]/marc:subfield[@code="a"]','MySeries');
         $this->assertXpathContentContains('//marc:datafield[@tag="490"]/marc:subfield[@code="v"]','1/5');
@@ -2410,8 +2410,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $titleParent->setValue('TitleParentInDocumentLanguage');
         $doc->setTitleParent([$titleParent]);
 
-        $dnbInstitute = new Opus_DnbInstitute(2);
-        $doc->setThesisPublisher([$dnbInstitute]);
+        $doc->setThesisPublisher([new Opus_DnbInstitute(2), new Opus_DnbInstitute(4)]);
 
         $editor = new Opus_Person();
         $editor->setFirstName('John');
@@ -2443,9 +2442,12 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->assertXpathContentContains('//marc:datafield[@tag="245"]/marc:subfield[@code="b"]', 'TitleSubInDocumentLanguage');
         $this->assertXpathContentContains('//marc:datafield[@tag="246"]/marc:subfield[@code="a"]', 'TitleMainInOtherLanguage');
         $this->assertXpathContentContains('//marc:datafield[@tag="246"]/marc:subfield[@code="b"]', 'TitleSubInOtherLanguage');
-        $this->assertXpathContentContains('//marc:datafield[@tag="264"]/marc:subfield[@code="a"]', 'Musterstadt');
-        $this->assertXpathContentContains('//marc:datafield[@tag="264"]/marc:subfield[@code="b"]', 'Foobar Universitätsbibliothek');
-        $this->assertXpathContentContains('//marc:datafield[@tag="264"]/marc:subfield[@code="c"]', '2048');
+        $this->assertXpathContentContains('(//marc:datafield[@tag="264"])[1]/marc:subfield[@code="a"]', 'Musterstadt');
+        $this->assertXpathContentContains('(//marc:datafield[@tag="264"])[1]/marc:subfield[@code="b"]', 'Foobar Universitätsbibliothek');
+        $this->assertXpathContentContains('(//marc:datafield[@tag="264"])[1]/marc:subfield[@code="c"]', '2048');
+        $this->assertXpathContentContains('(//marc:datafield[@tag="264"])[2]/marc:subfield[@code="a"]', 'Universe');
+        $this->assertXpathContentContains('(//marc:datafield[@tag="264"])[2]/marc:subfield[@code="b"]', 'School of Life');
+        $this->assertNotXpath('(//marc:datafield[@tag="264"])[2]/marc:subfield[@code="c"]'); // Jahresangabe nur beim ersten ThesisPublisher
         $this->assertXpathContentContains('//marc:datafield[@tag="300"]/marc:subfield[@code="a"]', '10');
         $this->assertXpathContentContains('//marc:datafield[@tag="655"]/marc:subfield[@code="a"]', 'other');
         $this->assertXpathContentContains('//marc:datafield[@tag="700"]/marc:subfield[@code="a"]', 'Doe, John');
@@ -2455,5 +2457,58 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->assertXpathContentContains('//marc:datafield[@tag="773"]/marc:subfield[@code="g"]', 'Jahrgang volume, Heft issue, Seiten 10-19');
         $this->assertXpathContentContains('//marc:datafield[@tag="856"]/marc:subfield[@code="u"]', 'https://nbn-resolving.org/urn:nbn:de:foo:opus-4711');
         $this->assertXpathContentContains('//marc:datafield[@tag="856"]/marc:subfield[@code="u"]', 'http:///frontdoor/index/index/docId/' . $docId);
+    }
+
+    public function testGenerationOfField265YearOnly()
+    {
+        $doc = $this->createTestDocument();
+        $doc->setServerState('published');
+        $docId = $doc->store();
+
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=marc21&identifier=oai::' . $docId);
+
+        $this->assertResponseCode(200);
+
+        $this->registerXpathNamespaces($this->xpathNamespaces);
+
+        $this->assertNotXpath('//marc:datafield[@tag="264"]/marc:subfield[@code="a"]');
+        $this->assertNotXpath('//marc:datafield[@tag="264"]/marc:subfield[@code="b"]');
+        $this->assertXpath('//marc:datafield[@tag="264"]/marc:subfield[@code="c"]');
+    }
+
+    public function testGenerationOfField264PublisherNameAndYearOnly()
+    {
+        $doc = $this->createTestDocument();
+        $doc->setServerState('published');
+        $doc->setPublisherName('publisherName');
+        $docId = $doc->store();
+
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=marc21&identifier=oai::' . $docId);
+
+        $this->assertResponseCode(200);
+
+        $this->registerXpathNamespaces($this->xpathNamespaces);
+
+        $this->assertNotXpath('//marc:datafield[@tag="264"]/marc:subfield[@code="a"]');
+        $this->assertXpathContentContains('//marc:datafield[@tag="264"]/marc:subfield[@code="b"]', 'publisherName');
+        $this->assertXpath('//marc:datafield[@tag="264"]/marc:subfield[@code="c"]');
+    }
+
+    public function testGenerationOfField264PublisherPlaceAndYearOnly()
+    {
+        $doc = $this->createTestDocument();
+        $doc->setServerState('published');
+        $doc->setPublisherPlace('publisherPlace');
+        $docId = $doc->store();
+
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=marc21&identifier=oai::' . $docId);
+
+        $this->assertResponseCode(200);
+
+        $this->registerXpathNamespaces($this->xpathNamespaces);
+
+        $this->assertXpathContentContains('//marc:datafield[@tag="264"]/marc:subfield[@code="a"]', 'publisherPlace');
+        $this->assertNotXpath('//marc:datafield[@tag="264"]/marc:subfield[@code="b"]');
+        $this->assertXpath('//marc:datafield[@tag="264"]/marc:subfield[@code="c"]');
     }
 }

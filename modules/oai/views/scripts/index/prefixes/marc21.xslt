@@ -270,29 +270,32 @@
                     <xsl:value-of select="php:functionString('Application_Xslt::optionValue', 'publisherCity', 'marc21')"/>
                 </xsl:variable>
 
-                <!-- OPUSVIER-4081 -->
-                <xsl:if test="./ThesisPublisher or ./@PublisherName or $publisherName != '' or $publisherCity != '' or $year != ''">
+                <!-- Jahr nur beim ersten ThesisPublisher ausgeben -->
+                <xsl:if test="./ThesisPublisher or ./@PublisherName or ./@PublisherPlace or $publisherName != '' or $publisherCity != '' or $year != ''">
                     <marc:datafield ind1=" " ind2="1" tag="264"> <!-- Das Feld 260 wird mit der Einführung von RDA nicht mehr gebildet -->
                         <xsl:choose>
-                            <xsl:when test="./ThesisPublisher">
+                            <xsl:when test="./ThesisPublisher"><!-- City und Name sind Pflichtfelder, daher kein zusätzlicher Test -->
                                 <marc:subfield code="a">
-                                    <xsl:value-of select="./ThesisPublisher/@City"/>
+                                    <xsl:value-of select="./ThesisPublisher[1]/@City"/>
                                 </marc:subfield>
                                 <marc:subfield code="b">
-                                    <xsl:value-of select="./ThesisPublisher/@Name"/>
+                                    <xsl:value-of select="./ThesisPublisher[1]/@Name"/>
                                 </marc:subfield>
                             </xsl:when>
-                            <xsl:when test="./@PublisherName">
+                            <xsl:when test="./@PublisherName or ./@PublisherPlace">
                                 <xsl:if test="./@PublisherPlace">
                                     <marc:subfield code="a">
                                         <xsl:value-of select="./@PublisherPlace"/>
                                     </marc:subfield>
                                 </xsl:if>
-                                <marc:subfield code="b">
-                                    <xsl:value-of select="./@PublisherName"/>
-                                </marc:subfield>
+                                <xsl:if test="./@PublisherName">
+                                    <marc:subfield code="b">
+                                        <xsl:value-of select="./@PublisherName"/>
+                                    </marc:subfield>
+                                </xsl:if>
                             </xsl:when>
                             <xsl:otherwise>
+                                <!-- Fallback nur dann verwenden, wenn bislang kein Wert für Subfield a oder b erzeugt werden konnte -->
                                 <xsl:if test="$publisherCity != ''">
                                     <marc:subfield code="a">
                                         <xsl:value-of select="$publisherCity"/>
@@ -312,6 +315,23 @@
                             </marc:subfield>
                         </xsl:if>
                     </marc:datafield>
+                </xsl:if>
+
+                <!-- ab dem 2. ThesisPublisher keine Jahresangabe in 264c ausgeben -->
+                <xsl:if test="count(./ThesisPublisher) &gt; 1">
+                    <xsl:for-each select="./ThesisPublisher">
+                        <xsl:if test="position() != 1">
+                            <marc:datafield ind1=" " ind2="1" tag="264">
+                                <!-- City und Name sind Pflichtfelder, daher kein zusätzlicher Test -->
+                                <marc:subfield code="a">
+                                    <xsl:value-of select="@City"/>
+                                </marc:subfield>
+                                <marc:subfield code="b">
+                                    <xsl:value-of select="@Name"/>
+                                </marc:subfield>
+                            </marc:datafield>
+                        </xsl:if>
+                    </xsl:for-each>
                 </xsl:if>
 
                 <!-- Seitenanzahl -->
