@@ -413,7 +413,7 @@
                             <xsl:when test="./@Type='studythesis'">              <xsl:text>studyThesis</xsl:text></xsl:when>
                             <xsl:when test="./@Type='workingpaper'">             <xsl:text>workingPaper</xsl:text></xsl:when>
                             <xsl:otherwise>
-                                <!-- FIXME ist das ein sinnvoller Defaultwert? -->
+                                <!-- FIXME OPUSVIER-4107 ist das ein sinnvoller Defaultwert? -->
                                 <xsl:text>other</xsl:text>
                             </xsl:otherwise>
                         </xsl:choose>
