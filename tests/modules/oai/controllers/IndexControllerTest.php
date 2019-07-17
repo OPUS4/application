@@ -2355,6 +2355,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->assertXpathContentContains('//marc:datafield[@tag="856"]/marc:subfield[@code="u"]','http:///files/91/test.txt');
         $this->assertXpathContentContains('//marc:datafield[@tag="856"]/marc:subfield[@code="u"]','http:///files/91/frontdoor_invisible.txt');
         $this->assertNotXpathContentContains('//marc:datafield[@tag="856"]/marc:subfield[@code="u"]','http:///files/91/oai_invisible.txt');
+        $this->assertNotXpath('//marc:datafield[@tag="856"]/marc:subfield[@code="z"]');
     }
 
     public function testGetRecordMarc21OfTestDocOfUnknownType()
@@ -2532,5 +2533,75 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->assertXpathContentContains('//marc:datafield[@tag="264"]/marc:subfield[@code="a"]', 'publisherPlace');
         $this->assertNotXpath('//marc:datafield[@tag="264"]/marc:subfield[@code="b"]');
         $this->assertXpath('//marc:datafield[@tag="264"]/marc:subfield[@code="c"]');
+    }
+
+    public function testGenerationOfField856WithInvisibleInOaiFile()
+    {
+        $doc = $this->createTestDocument();
+        $doc->setServerState('published');
+        $doc->setPublisherPlace('publisherPlace');
+
+        $f1 = new Opus_File();
+        $f1->setPathName('invisible-in-oai.pdf');
+        $f1->setVisibleInOai(false);
+        $doc->addFile($f1);
+
+        $licencePresent = new Opus_Licence(1);
+        $doc->addLicence($licencePresent);
+
+        $licenceMissing = new Opus_Licence(2);
+        $doc->addLicence($licenceMissing);
+
+        $docId = $doc->store();
+
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=marc21&identifier=oai::' . $docId);
+
+        $this->assertResponseCode(200);
+
+        $this->registerXpathNamespaces($this->xpathNamespaces);
+
+        $this->assertNotXpathContentContains('//marc:datafield[@tag="856"]/marc:subfield[@code="x"]', 'Transfer-URL');
+        $this->assertNotXpathContentContains('//marc:datafield[@tag="856"]/marc:subfield[@code="u"]', 'invisible-in-oai.pdf');
+        $this->assertNotXpathContentContains('//marc:datafield[@tag="856"]/marc:subfield[@code="z"]', $licenceMissing->getNameLong());
+        $this->assertNotXpathContentContains('//marc:datafield[@tag="856"]/marc:subfield[@code="z"]', $licencePresent->getNameLong());
+    }
+
+    public function testGenerationOfField856With2VisibleInOaiFiles()
+    {
+        $doc = $this->createTestDocument();
+        $doc->setServerState('published');
+        $doc->setPublisherPlace('publisherPlace');
+
+        $f1 = new Opus_File();
+        $f1->setPathName('visible-in-oai.pdf');
+        $f1->setVisibleInOai(true);
+        $doc->addFile($f1);
+
+        $f2 = new Opus_File();
+        $f2->setPathName('visible-in-oai.txt');
+        $f2->setVisibleInOai(true);
+        $doc->addFile($f2);
+
+        $licencePresent = new Opus_Licence(1);
+        $doc->addLicence($licencePresent);
+
+        $licenceMissing = new Opus_Licence(2);
+        $doc->addLicence($licenceMissing);
+
+        $docId = $doc->store();
+
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=marc21&identifier=oai::' . $docId);
+
+        $this->assertResponseCode(200);
+
+        $this->registerXpathNamespaces($this->xpathNamespaces);
+
+        $this->assertXpathContentContains('(//marc:datafield[@tag="856"])[3]/marc:subfield[@code="x"]', 'Transfer-URL');
+        $this->assertXpathContentContains('(//marc:datafield[@tag="856"])[4]/marc:subfield[@code="u"]', 'visible-in-oai.pdf');
+        $this->assertXpathContentContains('(//marc:datafield[@tag="856"])[4]/marc:subfield[@code="z"]', $licencePresent->getNameLong());
+        $this->assertXpathContentContains('(//marc:datafield[@tag="856"])[5]/marc:subfield[@code="u"]', 'visible-in-oai.txt');
+        $this->assertXpathContentContains('(//marc:datafield[@tag="856"])[5]/marc:subfield[@code="z"]', $licencePresent->getNameLong());
+
+        $this->assertNotXpathContentContains('//marc:datafield[@tag="856"]/marc:subfield[@code="z"]', $licenceMissing->getNameLong());
     }
 }

@@ -206,7 +206,7 @@
                 </marc:datafield>
 
                 <!-- DDC -->
-                <xsl:for-each select="./Collection[@RoleName='ddc' and @Visible=1]">
+                <xsl:for-each select="./Collection[@RoleName='ddc' and @Visible = 1]">
                     <marc:datafield ind1="0" ind2="4" tag="082">
                         <!-- alternativ bei DDC-Sachgruppen der DNB: <marc:datafield ind1="7" ind2="4" tag="082"> -->
                         <marc:subfield code="a">
@@ -515,8 +515,8 @@
                     </marc:subfield>
                 </marc:datafield>
 
-                <!-- wenn mindestens eine Datei vorhanden ist, erzeuge Transfer-URL für den OAI-Container -->
-                <xsl:if test="./File">
+                <!-- wenn mindestens eine Datei (mit visibleInOai = 1) vorhanden ist, erzeuge Transfer-URL für den OAI-Container -->
+                <xsl:if test="./File[@VisibleInOai = 1]">
                     <marc:datafield ind1="4" ind2="0" tag="856">
                         <marc:subfield code="u">
                             <xsl:value-of select="php:functionString('Application_Xslt::transferUrl', ./@Id)"/>
@@ -527,19 +527,21 @@
                     </marc:datafield>
                 </xsl:if>
 
-                <!-- FIXME Einschränkung nach Sichtbarkeit siehe OPUSVIER-4076 -->
-                <xsl:for-each select="./File">
+                <xsl:for-each select="./File[@VisibleInOai = 1]">
                     <marc:datafield ind1="4" ind2="0" tag="856">
                         <marc:subfield code="u">
                             <xsl:value-of select="php:functionString('Application_Xslt::fileUrl', ../@Id, ./@PathName)"/>
                         </marc:subfield>
-                        <marc:subfield code="q">
-                            <xsl:value-of select="./@MimeType"/>
-                        </marc:subfield>
-                        <marc:subfield code="z">
-                            <!-- FIXME OPUSVIER-4076 -->
-                            <xsl:value-of select="../Licence/@NameLong"/>
-                        </marc:subfield>
+                        <xsl:if test="./@MimeType">
+                            <marc:subfield code="q">
+                                <xsl:value-of select="./@MimeType"/>
+                            </marc:subfield>
+                        </xsl:if>
+                        <xsl:if test="../Licence">
+                            <marc:subfield code="z">
+                                <xsl:value-of select="../Licence[1]/@NameLong"/>
+                            </marc:subfield>
+                        </xsl:if>
                     </marc:datafield>
                 </xsl:for-each>
             </marc:record>
