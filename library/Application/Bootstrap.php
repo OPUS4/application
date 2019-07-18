@@ -59,9 +59,6 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
          * Add a custom front controller plugin for setting up an appropriate
          * include path to the form classes of modules.
          */
-        $moduleprepare = new Application_Controller_Plugin_LoadTranslation();
-        $frontController->registerPlugin($moduleprepare);
-
         // Add security realm initialization
         // the SWORD module uses a different auth mechanism
         $realmSetupPlugin = new Application_Controller_Plugin_SecurityRealm('sword');
@@ -245,7 +242,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         $logger->debug("Language set to '$language'.");
         $session->language = $language;
         $translate->setLocale($language);
-        $translate->loadModules();
+        $translate->loadTranslations();
 
         return $translate;
     }

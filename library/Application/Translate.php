@@ -72,7 +72,7 @@ class Application_Translate extends Zend_Translate
    private $_options = [
         'logMessage' => "Unable to translate key '%message%' into locale '%locale%'",
         'logPriority' => Zend_Log::DEBUG,
-        'adapter' => 'Opus_Translate_DefaultAdapter',
+        'adapter' => 'tmx',
         'locale' => 'auto',
         'clear' => false,
         'scan' => Zend_Translate::LOCALE_FILENAME,
@@ -99,17 +99,6 @@ class Application_Translate extends Zend_Translate
             $moduleDir = APPLICATION_PATH . '/modules/' . $name;
             $this->loadLanguageDirectory("$moduleDir/language/", false);
 
-            $options = array_merge(
-                ['content' => ['module' => $name]],
-                $this->getOptions()
-            );
-
-            if ($reload) {
-                $options['reload'] = true;
-            }
-
-            $this->addTranslation($options);
-
             $this->_loadedModules[] = $name;
         } else {
             $this->getLogger()->notice("Already loaded translations for module '$name'.");
@@ -126,6 +115,26 @@ class Application_Translate extends Zend_Translate
         foreach ($modules as $name => $module) {
             $this->loadModule($name);
         }
+    }
+
+    public function loadDatabase()
+    {
+        $translate = new Zend_Translate([
+            'adapter' => 'Opus_Translate_DatabaseAdapter',
+            'content' => 'all',
+            'locale' => 'auto',
+            'disableNotices' => true
+        ]);
+
+        $this->addTranslation([
+            'content' => $translate
+        ]);
+    }
+
+    public function loadTranslations()
+    {
+        $this->loadModules();
+        $this->loadDatabase();
     }
 
     /**
@@ -266,10 +275,10 @@ class Application_Translate extends Zend_Translate
      * @param $key
      * @param $translations
      */
-    public function setTranslations($key, $translations)
+    public function setTranslations($key, $translations, $module = 'default')
     {
         $database = new Opus_Translate_Dao();
 
-        $database->setTranslation($key, $translations);
+        $database->setTranslation($key, $translations, $module);
     }
 }
