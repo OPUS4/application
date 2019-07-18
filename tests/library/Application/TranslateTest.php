@@ -110,6 +110,19 @@ class Application_TranslateTest extends ControllerTestCase
         $this->assertEquals('Already loaded translations for module \'admin\'.', $messages[0]);
     }
 
+    public function testLoadModules()
+    {
+        $this->assertFalse($this->translate->isTranslated('home_menu_label')); // 'default' module
+        $this->assertFalse($this->translate->isTranslated('home_index_contact_pagetitle')); // 'home' module
+        $this->assertFalse($this->translate->isTranslated('admin_index_title')); // 'admin' module
+
+        $this->translate->loadModules();
+
+        $this->assertTrue($this->translate->isTranslated('home_menu_label')); // 'default' module
+        $this->assertTrue($this->translate->isTranslated('home_index_contact_pagetitle')); // 'home' module
+        $this->assertTrue($this->translate->isTranslated('admin_index_title')); // 'admin' module
+    }
+
     public function testGetLogger()
     {
         $logger = $this->translate->getLogger();

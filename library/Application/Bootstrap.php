@@ -215,8 +215,9 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      *
      * @return Zend_Translate
      */
-    protected function _initTranslation() {
-        $this->bootstrap(array('Configuration', 'Session', 'Logging', 'ZendCache'));
+    protected function _initTranslation()
+    {
+        $this->bootstrap(['Configuration', 'Session', 'Logging', 'ZendCache']);
 
         $logger = $this->getResource('Logging');
 
@@ -244,7 +245,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         $logger->debug("Language set to '$language'.");
         $session->language = $language;
         $translate->setLocale($language);
-        $translate->loadModule('default'); // immer die Übersetzungen aus Default-Modul laden
+        $translate->loadModules();
 
         return $translate;
     }

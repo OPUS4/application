@@ -37,6 +37,12 @@
  * Zend_Translate wid in den Zend Komponenten verwendet und in der Zend_Registry normalerweise unter 'Zend_Translate'
  * gespeichert. Mit den Erweiterungen können an beliebigen Stellen problemlos weitere Übersetzungsdateien geladen
  * werden.
+ *
+ * Normally all translations from all modules should be loaded at startup, because modules can use classes from other
+ * modules. Loading the translations for a module only when a request is directed at that module might not load all the
+ * necessary translations if this module uses resources from another module that has not been loaded.
+ *
+ * TODO loading from database should not happen for every module, but just once
  */
 class Application_Translate extends Zend_Translate
 {
@@ -107,6 +113,18 @@ class Application_Translate extends Zend_Translate
             $this->_loadedModules[] = $name;
         } else {
             $this->getLogger()->notice("Already loaded translations for module '$name'.");
+        }
+    }
+
+    /**
+     * Loads all modules.
+     */
+    public function loadModules()
+    {
+        $modules = Application_Modules::getInstance()->getModules();
+
+        foreach ($modules as $name => $module) {
+            $this->loadModule($name);
         }
     }
 
