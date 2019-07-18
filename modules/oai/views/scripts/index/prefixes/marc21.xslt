@@ -398,23 +398,22 @@
                             <xsl:when test="./@Type='doctoralthesis'">           <xsl:text>doctoralThesis</xsl:text></xsl:when>
                             <xsl:when test="./@Type='examen'">                   <xsl:text>masterThesis</xsl:text></xsl:when>
                             <xsl:when test="./@Type='habilitation'">             <xsl:text>doctoralThesis</xsl:text></xsl:when>
-                            <xsl:when test="./@Type='image'">                    <xsl:text>image</xsl:text></xsl:when>
+                            <xsl:when test="./@Type='image'">                    <xsl:text>Image</xsl:text></xsl:when>
                             <xsl:when test="./@Type='lecture'">                  <xsl:text>lecture</xsl:text></xsl:when>
                             <xsl:when test="./@Type='magister'">                 <xsl:text>masterThesis</xsl:text></xsl:when>
                             <xsl:when test="./@Type='masterthesis'">             <xsl:text>masterThesis</xsl:text></xsl:when>
-                            <xsl:when test="./@Type='movingimage'">              <xsl:text>movingImage</xsl:text></xsl:when>
-                            <xsl:when test="./@Type='other'">                    <xsl:text>other</xsl:text></xsl:when>
-                            <xsl:when test="./@Type='periodical'">               <xsl:text>periodical</xsl:text></xsl:when>
-                            <xsl:when test="./@Type='periodicalpart'">           <xsl:text>periodicalPart</xsl:text></xsl:when>
+                            <xsl:when test="./@Type='movingimage'">              <xsl:text>MovingImage</xsl:text></xsl:when>
+                            <xsl:when test="./@Type='other'">                    <xsl:text>Other</xsl:text></xsl:when>
+                            <xsl:when test="./@Type='periodical'">               <xsl:text>Periodical</xsl:text></xsl:when>
+                            <xsl:when test="./@Type='periodicalpart'">           <xsl:text>PeriodicalPart</xsl:text></xsl:when>
                             <xsl:when test="./@Type='preprint'">                 <xsl:text>preprint</xsl:text></xsl:when>
                             <xsl:when test="./@Type='report'">                   <xsl:text>report</xsl:text></xsl:when>
                             <xsl:when test="./@Type='review'">                   <xsl:text>review</xsl:text></xsl:when>
-                            <xsl:when test="./@Type='sound'">                    <xsl:text>sound</xsl:text></xsl:when>
-                            <xsl:when test="./@Type='studythesis'">              <xsl:text>studyThesis</xsl:text></xsl:when>
+                            <xsl:when test="./@Type='sound'">                    <xsl:text>Sound</xsl:text></xsl:when>
+                            <xsl:when test="./@Type='studythesis'">              <xsl:text>StudyThesis</xsl:text></xsl:when>
                             <xsl:when test="./@Type='workingpaper'">             <xsl:text>workingPaper</xsl:text></xsl:when>
                             <xsl:otherwise>
-                                <!-- FIXME OPUSVIER-4107 ist das ein sinnvoller Defaultwert? -->
-                                <xsl:text>other</xsl:text>
+                                <xsl:text>Other</xsl:text>
                             </xsl:otherwise>
                         </xsl:choose>
                     </marc:subfield>

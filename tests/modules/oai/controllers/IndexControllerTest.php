@@ -2472,7 +2472,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->assertNotXpathContentContains('//marc:datafield[@tag="490"]/marc:subfield[@code="v"]', '3');
         $this->assertXpathContentContains('(//marc:datafield[@tag="520"])[1]/marc:subfield[@code="a"]', 'TitleAbstractInDocumentLanguage');
         $this->assertXpathContentContains('(//marc:datafield[@tag="520"])[2]/marc:subfield[@code="a"]', 'TitleAbstractInOtherLanguage');
-        $this->assertXpathContentContains('//marc:datafield[@tag="655"]/marc:subfield[@code="a"]', 'other');
+        $this->assertXpathContentContains('//marc:datafield[@tag="655"]/marc:subfield[@code="a"]', 'Other');
         $this->assertXpathContentContains('//marc:datafield[@tag="700"]/marc:subfield[@code="a"]', 'Doe, John');
         $this->assertXpathContentContains('//marc:datafield[@tag="700"]/marc:subfield[@code="4"]', 'edt');
         $this->assertXpathContentContains('//marc:datafield[@tag="773"]/marc:subfield[@code="t"]', 'TitleParentInDocumentLanguage');
