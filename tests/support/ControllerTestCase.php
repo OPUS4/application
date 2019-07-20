@@ -112,8 +112,10 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase
         $this->deleteTempFiles();
 
         // check if documents have been modified by a side effect (should not happen)
+        /* TODO disabled test integrity checks for better performance (make these checks unnecessary)
         $this->checkDoc146();
         $this->checkDoc1();
+        */
 
         /* ONLY FOR DEBUGGING
         $checker = new AssumptionChecker($this);
