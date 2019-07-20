@@ -28,7 +28,7 @@ script:
   - ant prepare-test-workspace prepare-workspace prepare-config -DdbUserName=root -DdbAdminName=root
   - php db/createdb.php
   - mysql opusdb -u root --password='' -e 'SELECT * FROM schema_version'
-  - mysql opusdb -u root --password='' -e 'SET GLOBAL sql_mode = \'\''
+  - mysql opusdb -u root --password='' -e "SET GLOBAL sql_mode = ''"
   - ant download-solr -DsolrVersion=7.7.1 -DdownloadDir=$HOME/downloads
   - cd solr-7.7.1
   - ./bin/solr start
