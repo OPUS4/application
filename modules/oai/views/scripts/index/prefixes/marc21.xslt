@@ -523,6 +523,11 @@
                         <marc:subfield code="x">
                             <xsl:text>Transfer-URL</xsl:text>
                         </marc:subfield>
+                        <xsl:if test="./Licence">
+                            <marc:subfield code="z">
+                                <xsl:value-of select="./Licence[1]/@NameLong"/>
+                            </marc:subfield>
+                        </xsl:if>
                     </marc:datafield>
                 </xsl:if>
 

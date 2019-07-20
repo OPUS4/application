@@ -2597,6 +2597,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->registerXpathNamespaces($this->xpathNamespaces);
 
         $this->assertXpathContentContains('(//marc:datafield[@tag="856"])[3]/marc:subfield[@code="x"]', 'Transfer-URL');
+        $this->assertXpathContentContains('(//marc:datafield[@tag="856"])[3]/marc:subfield[@code="z"]', $licencePresent->getNameLong());
         $this->assertXpathContentContains('(//marc:datafield[@tag="856"])[4]/marc:subfield[@code="u"]', 'visible-in-oai.pdf');
         $this->assertXpathContentContains('(//marc:datafield[@tag="856"])[4]/marc:subfield[@code="z"]', $licencePresent->getNameLong());
         $this->assertXpathContentContains('(//marc:datafield[@tag="856"])[5]/marc:subfield[@code="u"]', 'visible-in-oai.txt');
