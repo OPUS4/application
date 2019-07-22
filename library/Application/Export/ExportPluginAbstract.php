@@ -142,7 +142,7 @@ abstract class Application_Export_ExportPluginAbstract extends Application_Model
     public function isAccessRestricted()
     {
         // der Konfigurationswert kann in unterschiedlichen Varianten angegeben werden
-        $enabledOptions = [true, 'true', 1, '1'];
+        $enabledOptions = [true, 1];
 
         $adminOnlyAccess = $this->getConfig()->get('adminOnly', null);
         if (! is_null($adminOnlyAccess)) {

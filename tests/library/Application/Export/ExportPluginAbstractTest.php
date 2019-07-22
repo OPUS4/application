@@ -50,8 +50,7 @@ class Application_Export_ExportPluginAbstractTest extends ControllerTestCase
 
         $stub = $this->getMockForAbstractClass('Application_Export_ExportPluginAbstract');
 
-        $newConfig = Zend_Registry::get('Zend_Config')->merge(new Zend_Config(['adminOnly' => $optionValue]));
-        $stub->setConfig($newConfig);
+        $this->setAdminOnly($optionValue);
 
         $this->assertTrue($stub->isAccessRestricted());
     }
@@ -65,20 +64,25 @@ class Application_Export_ExportPluginAbstractTest extends ControllerTestCase
 
         $stub = $this->getMockForAbstractClass('Application_Export_ExportPluginAbstract');
 
-        $newConfig = Zend_Registry::get('Zend_Config')->merge(new Zend_Config(['adminOnly' => $optionValue]));
-        $stub->setConfig($newConfig);
+        $this->setAdminOnly($optionValue);
 
         $this->assertFalse($stub->isAccessRestricted());
     }
 
     public function enabledOptions()
     {
-        return [[true], [1], ['true'], ["1"]];
+        return [[true], [1]];
     }
 
     public function disabledOptions()
     {
-        return [[false], [0], ['false'], ["0"]];
+        return [[false], [0]];
+    }
+
+    private function setAdminOnly($optionValue)
+    {
+        Zend_Registry::set('Zend_Config',
+            new Zend_Config(['adminOnly' => $optionValue]));
     }
 
 }
