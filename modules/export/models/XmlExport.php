@@ -415,6 +415,8 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract {
 
         $result = [];
 
+        // TODO hier bessere Differenzierung zwischen unterschiedlichen Fehlerzuständen (docId Parameter
+        // TODO fehlt im Request, hat falschen Typ, zugehöriges Dokument existiert nicht bzw. ist nicht publiziert)
         if (! is_null($docId)) {
             try {
                 $doc = new Opus_Document($docId);
