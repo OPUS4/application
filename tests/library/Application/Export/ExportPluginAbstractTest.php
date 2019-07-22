@@ -49,13 +49,9 @@ class Application_Export_ExportPluginAbstractTest extends ControllerTestCase
         $this->enableSecurity();
 
         $stub = $this->getMockForAbstractClass('Application_Export_ExportPluginAbstract');
-        $config = Zend_Registry::get('Zend_Config');
 
         $newConfig = Zend_Registry::get('Zend_Config')->merge(new Zend_Config(['adminOnly' => $optionValue]));
         $stub->setConfig($newConfig);
-
-        // revert config changes
-        Zend_Registry::set('Zend_Config', $config);
 
         $this->assertTrue($stub->isAccessRestricted());
     }
@@ -68,13 +64,9 @@ class Application_Export_ExportPluginAbstractTest extends ControllerTestCase
         $this->enableSecurity();
 
         $stub = $this->getMockForAbstractClass('Application_Export_ExportPluginAbstract');
-        $config = Zend_Registry::get('Zend_Config');
 
         $newConfig = Zend_Registry::get('Zend_Config')->merge(new Zend_Config(['adminOnly' => $optionValue]));
         $stub->setConfig($newConfig);
-
-        // revert config changes
-        Zend_Registry::set('Zend_Config', $config);
 
         $this->assertFalse($stub->isAccessRestricted());
     }
