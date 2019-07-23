@@ -96,83 +96,83 @@ class Admin_DocumentsControllerTest extends ControllerTestCase {
         $displayBrowsing = $role->getDisplayBrowsing();
         $role->setDisplayBrowsing('Name');
         $role->store();
-        
+
         $this->dispatch('/admin/documents/index/collectionid/15028');
 
-        // undo changes
+        // undo changes TODO undo only happens if dispatch does not fail with exception/error
         $role->setDisplayBrowsing($displayBrowsing);
         $role->store();
 
         $this->assertContains('<b>52.00 Maschinenbau, Energietechnik, Fertigungstechnik: Allgemeines</b>', $this->getResponse()->getBody());
         $this->assertNotContains('<b>Maschinenbau, Energietechnik, Fertigungstechnik: Allgemeines</b>', $this->getResponse()->getBody());
     }
-    
+
     public function testShowHitsPerPageLinks() {
         $this->dispatch('/admin/documents');
         $this->assertQueryCount('div.itemCountLinks//li', 4);
         $this->assertQueryCount('div.itemCountLinks//a', 3); // einer ist aktiv und kein Link
     }
-    
+
     public function testShowHitsPerPageOptionAsLink() {
         $this->dispatch('/admin/documents/index/hitsperpage/10');
-        
+
         $this->assertQueryContentContains("div.itemCountLinks//a", '50');
         $this->assertQueryContentContains('div.itemCountLinks//a', '100');
     }
-    
+
     public function testShowSelectedHitsPerPageOptionNotAsLink() {
         $this->dispatch('/admin/documents/index/hitsperpage/10');
-        
+
         $this->assertQueryCount("a[@href='" . $this->getRequest()->getBaseUrl() . "/admin/documents/index/hitsperpage/10']", 0);
     }
-    
+
     public function testSelectHitsPerPage() {
         $this->dispatch('/admin/documents/index/state/unpublished/hitsperpage/8');
         $this->assertQueryCount('span.title', 8);
     }
-    
+
     public function testShowAllHits() {
         $docFinder = new Opus_DocumentFinder();
         $docFinder->setServerState('unpublished');
-        
+
         $unpublishedDocs = $docFinder->count();
-        
+
         $this->dispatch('/admin/documents/index/state/unpublished/hitsperpage/all');
         $this->assertQueryCount('span.title', $unpublishedDocs);
     }
-    
+
     public function testHitsPerPageBadParameter() {
         $docFinder = new Opus_DocumentFinder();
 
         $this->dispatch('/admin/documents/index/state/unpublished/hitsperpage/dummy');
         $this->assertQueryCount('span.title', 10); // default
     }
-    
+
     public function testConfigureDefaultHitsPerPage() {
         $config = Zend_Registry::get('Zend_Config');
         $config->admin->documents->maxDocsDefault = 7;
-        
+
         $this->dispatch('/admin/documents');
         $this->assertQueryCount('span.title', 7);
     }
-    
+
     public function testConfigureHitsPerPageOptions() {
         $config = Zend_Registry::get('Zend_Config');
         $config->admin->documents->maxDocsOptions = "20,60,all";
-        
+
         $this->dispatch('/admin/documents');
         $this->assertQueryContentContains("div.itemCountLinks//a", '20');
         $this->assertQueryContentContains('div.itemCountLinks//a', '60');
         $this->assertQueryCount("a[@href='" . $this->getRequest()->getBaseUrl() . "/admin/documents/index/hitsperpage/all']", 1);
     }
-    
+
     public function testShowEditLink() {
         $this->dispatch('/admin/documents');
         $this->assertResponseCode(200);
         $this->assertModule('admin');
         $this->assertController('documents');
         $this->assertAction('index');
-        
+
         $this->assertQueryCount("td.edit/a", 10);
         $this->assertXpathCount('//a[contains(@href, "/admin/document/edit/id/")]', 10);
     }
