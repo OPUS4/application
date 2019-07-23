@@ -42,6 +42,14 @@ class Application_TranslateTest extends ControllerTestCase
         $this->translate = new Application_Translate();
     }
 
+    public function tearDown()
+    {
+        $dao = new Opus_Translate_Dao();
+        $dao->removeAll();
+        Zend_Translate::clearCache();
+        parent::tearDown();
+    }
+
     public function testConstruct()
     {
         $translate = new Application_Translate([
@@ -86,28 +94,6 @@ class Application_TranslateTest extends ControllerTestCase
         $this->assertEquals(2, count($messages));
         $this->assertContains('not found', $messages[0]);
         $this->assertContains('not found', $messages[1]);
-    }
-
-    public function testLoadModuleTwice()
-    {
-        $this->assertFalse($this->translate->isTranslated('admin_document_index'));
-
-        $logger = new MockLogger();
-
-        $this->translate->setLogger($logger);
-        $this->translate->loadModule('admin');
-
-        $this->assertTrue($this->translate->isTranslated('admin_document_index'));
-        $this->assertEquals(0, count($logger->getMessages()));
-
-        $logger->clear();
-
-        $this->translate->loadModule('admin'); // wird nicht noch einmal geladen
-
-        $messages = $logger->getMessages();
-
-        $this->assertEquals(1, count($messages));
-        $this->assertEquals('Already loaded translations for module \'admin\'.', $messages[0]);
     }
 
     public function testLoadModules()
@@ -318,19 +304,14 @@ class Application_TranslateTest extends ControllerTestCase
         $database->removeAll();
 
         $translate = Zend_Registry::get('Zend_Translate');
-
-        // clear translation cache
         $translate->clearCache();
-
-        $translate->loadModule('admin');
+        $translate->loadTranslations();
 
         $result = $translate->translate($key, 'de');
-
         $this->assertNotEquals($key, $result);
         $this->assertEquals('Konfiguration', $result);
 
         $result = $translate->translate($key, 'en');
-
         $this->assertNotEquals($key, $result);
         $this->assertEquals('Configure', $result);
 
@@ -344,7 +325,10 @@ class Application_TranslateTest extends ControllerTestCase
         ], 'admin');
 
         // load module again with changes in database
-        $translate->loadModule('admin', true);
+        Zend_Translate::clearCache();
+
+        $translate = new Application_Translate();
+        $translate->loadTranslations();
 
         $result = $translate->translate($key, 'en');
         $this->assertEquals('Configuration', $result);
@@ -355,7 +339,13 @@ class Application_TranslateTest extends ControllerTestCase
 
     public function testGetTranslations()
     {
+        $database = new Opus_Translate_Dao();
+        $database->removeAll();
+
+        Zend_Translate::clearCache();
+
         $translate = Zend_Registry::get('Zend_Translate');
+        $translate->loadTranslations(true);
 
         $key = 'default_collection_role_ddc';
 
@@ -366,8 +356,6 @@ class Application_TranslateTest extends ControllerTestCase
             'en' => 'Dewey Decimal Classification'
         ], $translations);
 
-        $database = new Opus_Translate_Dao();
-
         $custom = [
             'de' => 'DDC-Sachgruppen',
             'en' => 'DDC'
@@ -375,12 +363,9 @@ class Application_TranslateTest extends ControllerTestCase
 
         $database->setTranslation($key, $custom, 'default');
 
-        $translate->clearCache();
-
         // new object necessary, because translation have already been loaded
-        $translate = new Application_Translate();
-        $translate->clearCache();
-        $translate->loadModule('default', true);
+        Zend_Translate::clearCache();
+        $translate->loadDatabase();
 
         $translations = $translate->getTranslations($key);
 
@@ -412,5 +397,17 @@ class Application_TranslateTest extends ControllerTestCase
         $translate->setTranslations('testkey', $data);
 
         $this->assertEquals($data, $dao->getTranslation('testkey'));
+    }
+
+    public function testLoadingPerformance()
+    {
+        $this->markTestSkipped('Used for manual performance testing.');
+
+        $translate = new Application_Translate();
+
+        for ($i = 0; $i < 1000; $i++) {
+            Zend_Translate::clearCache();
+            $translate->loadTranslations();
+        }
     }
 }
