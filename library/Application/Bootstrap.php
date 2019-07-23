@@ -241,8 +241,8 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
 
         $logger->debug("Language set to '$language'.");
         $session->language = $language;
-        $translate->setLocale($language);
         $translate->loadTranslations();
+        $translate->setLocale($language); // setting locale must happen after loading translations
 
         return $translate;
     }
