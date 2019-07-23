@@ -137,7 +137,8 @@ class ControllerTestCaseTest extends ControllerTestCase
         $this->removeDocument($doc);
     }
 
-    public function testGetTempFile() {
+    public function testGetTempFile()
+    {
         $tempFile = $this->getTempFile();
 
         $this->assertFileExists($tempFile);
@@ -152,5 +153,23 @@ class ControllerTestCaseTest extends ControllerTestCase
 
         $this->assertFileNotExists($tempFile);
         $this->assertFileNotExists($tempFile2);
+    }
+
+    public function testDisableEnableTranslation()
+    {
+        $defaultTranslator = Zend_Registry::get('Zend_Translate');
+        $this->assertTrue($defaultTranslator->isTranslated('LastName'));
+
+        $this->disableTranslation();
+
+        $translator = Zend_Registry::get('Zend_Translate');
+        $this->assertFalse($translator->isTranslated('LastName'));
+
+        $this->enableTranslation();
+
+        $translator = Zend_Registry::get('Zend_Translate');
+        $this->assertTrue($translator->isTranslated('LastName'));
+
+        $this->assertSame($defaultTranslator, $translator);
     }
 }

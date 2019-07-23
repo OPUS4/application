@@ -75,6 +75,8 @@ class Admin_Form_PersonsConfirmTest extends ControllerTestCase
 
     public function testPopulateFromModel()
     {
+        $this->disableTranslation();
+
         $form = $this->_form;
 
         $person = array(

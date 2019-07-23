@@ -100,8 +100,6 @@ class Application_Translate extends Zend_Translate
             $this->loadLanguageDirectory("$moduleDir/language/", false);
 
             $this->_loadedModules[] = $name;
-        } else {
-            $this->getLogger()->notice("Already loaded translations for module '$name'.");
         }
     }
 
@@ -117,24 +115,35 @@ class Application_Translate extends Zend_Translate
         }
     }
 
-    public function loadDatabase()
+    /**
+     * @param bool $reload
+     * @throws Zend_Translate_Exception
+     *
+     * TODO Is there a way to add both locales in one steps?
+     */
+    public function loadDatabase($reload = false)
     {
         $translate = new Zend_Translate([
             'adapter' => 'Opus_Translate_DatabaseAdapter',
             'content' => 'all',
-            'locale' => 'auto',
+            'locale' => 'en',
             'disableNotices' => true
         ]);
 
-        $this->addTranslation([
-            'content' => $translate
-        ]);
+        $locales = Application_Configuration::getInstance()->getSupportedLanguages();
+
+        foreach ($locales as $locale) {
+            $this->addTranslation([
+                'content' => $translate,
+                'locale' => $locale
+            ]);
+        }
     }
 
-    public function loadTranslations()
+    public function loadTranslations($reload = false)
     {
-        $this->loadModules();
-        $this->loadDatabase();
+        $this->loadModules($reload);
+        $this->loadDatabase($reload);
     }
 
     /**

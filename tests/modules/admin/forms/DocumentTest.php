@@ -26,9 +26,8 @@
  *
  * @category    Application Unit Test
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2013-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -171,7 +170,9 @@ class Admin_Form_DocumentTest extends ControllerTestCase {
     /**
      * Die Validierung schlägt fehl, weil der Titel einen leeren Wert hat.
      */
-    public function testIsValidFalse() {
+    public function testIsValidFalse()
+    {
+        $this->disableTranslation();
         $form = new Admin_Form_Document();
 
         $document = $this->createTestDocument();
@@ -179,23 +180,23 @@ class Admin_Form_DocumentTest extends ControllerTestCase {
 
         $form->populateFromModel($document);
 
-        $post = array(
-            'General' => array(
+        $post = [
+            'General' => [
                 'Language' => 'deu',
                 'Type' => 'all'
-            ),
-            'Titles' => array(
-                'Main' => array(
-                    'TitleMain0' => array(
+            ],
+            'Titles' => [
+                'Main' => [
+                    'TitleMain0' => [
                         'Language' => 'deu',
                         'Value' => ''
-                    )
-                )
-            ),
-            'Actions' => array(
+                    ]
+                ]
+            ],
+            'Actions' => [
                 'OpusHash' => $this->getHash($form)
-            )
-        );
+            ]
+        ];
 
         $result = $form->isValid($post, $post);
 
@@ -209,7 +210,9 @@ class Admin_Form_DocumentTest extends ControllerTestCase {
      * Die Validierung schlägt fehl, weil die Dokumentensprache 'deu' ist und kein deutscher Titel vorliegt. Diese
      * Prüfung wird intern über die Funktion isDependenciesValid durchgeführt.
      */
-    public function testIsValidFalseDependency() {
+    public function testIsValidFalseDependency()
+    {
+        $this->disableTranslation();
         $form = new Admin_Form_Document();
 
         $document = $this->createTestDocument();
@@ -217,23 +220,23 @@ class Admin_Form_DocumentTest extends ControllerTestCase {
 
         $form->populateFromModel($document);
 
-        $post = array(
-            'General' => array(
+        $post = [
+            'General' => [
                 'Language' => 'deu',
                 'Type' => 'all'
-            ),
-            'Titles' => array(
-                'Main' => array(
-                    'TitleMain0' => array(
+            ],
+            'Titles' => [
+                'Main' => [
+                    'TitleMain0' => [
                         'Language' => 'eng',
                         'Value' => 'English Title'
-                    )
-                )
-            ),
-            'Actions' => array(
+                    ]
+                ]
+            ],
+            'Actions' => [
                 'OpusHash' => $this->getHash($form)
-            )
-        );
+            ]
+        ];
 
         $result = $form->isValid($post, $post);
 
@@ -247,7 +250,9 @@ class Admin_Form_DocumentTest extends ControllerTestCase {
     /**
      * Prüft ob Dependency Validierung ausgeführt wird, wenn normale Validierung fehlschlägt.
      */
-    public function testIsValidFalseDependency2() {
+    public function testIsValidFalseDependency2()
+    {
+        $this->disableTranslation();
         $form = new Admin_Form_Document();
 
         $document = $this->createTestDocument();
@@ -256,27 +261,27 @@ class Admin_Form_DocumentTest extends ControllerTestCase {
 
         $form->populateFromModel($document);
 
-        $post = array(
-            'General' => array(
+        $post = [
+            'General' => [
                 'Language' => 'deu',
                 'Type' => 'all'
-            ),
-            'Titles' => array(
-                'Main' => array(
-                    'TitleMain0' => array(
+            ],
+            'Titles' => [
+                'Main' => [
+                    'TitleMain0' => [
                         'Language' => 'eng',
                         'Value' => 'English Title'
-                    ),
-                    'TitleMain1' => array(
+                    ],
+                    'TitleMain1' => [
                         'Language' => 'rus',
                         'Value' => ''
-                    )
-                )
-            ),
-            'Actions' => array(
+                    ]
+                ]
+            ],
+            'Actions' => [
                 'OpusHash' => $this->getHash($form)
-            )
-        );
+            ]
+        ];
 
         $result = $form->isValid($post, $post);
 

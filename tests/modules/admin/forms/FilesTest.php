@@ -31,13 +31,14 @@
  * @category    Application Unit Test
  * @package     Admin_Form
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class Admin_Form_FilesTest extends ControllerTestCase {
+class Admin_Form_FilesTest extends ControllerTestCase
+{
 
     public function testConstructForm() {
+        $this->disableTranslation();
         $form = new Admin_Form_Files();
 
         $this->assertEquals('admin_document_section_files', $form->getLegend());

@@ -52,6 +52,8 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase
 
     private $logger = null;
 
+    private $translatorBackup = null;
+
     /**
      * Method to initialize Zend_Application for each test.
      */
@@ -752,5 +754,38 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase
     public function setBaseUrl($baseUrl)
     {
         Zend_Controller_Front::getInstance()->setBaseUrl($baseUrl);
+    }
+
+    /**
+     * Disables translation until the next bootstrapping.
+     *
+     * This can be used to check for translation keys instead of translated strings for instance when testing forms.
+     * Otherwise you have to specify the language for the test first, so you get the expected translation.
+     *
+     * Stores the original translation object only the first time the function is called.
+     */
+    public function disableTranslation()
+    {
+        if (is_null($this->translatorBackup)) {
+            $this->translatorBackup = Zend_Registry::get('Zend_Translate');
+        }
+
+        Zend_Registry::set('Zend_Translate', new Application_Translate([
+            'adapter' => 'array',
+            'content' => [],
+            'locale' => 'auto'
+        ]));
+    }
+
+    /**
+     * Resets translations with original (bootstrap) translation object.
+     *
+     * This function restores translation if disableTranslation has been called before.
+     */
+    public function enableTranslation()
+    {
+        if (! is_null($this->translatorBackup)) {
+            Zend_Registry::set('Zend_Translate', $this->translatorBackup);
+        }
     }
 }

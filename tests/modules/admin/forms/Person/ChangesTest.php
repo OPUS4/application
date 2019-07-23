@@ -198,7 +198,7 @@ class Admin_Form_Person_ChangesTest extends ControllerTestCase
 
     public function testRender()
     {
-        $this->useEnglish();
+        $this->disableTranslation();
         $form = new Admin_Form_Person_Changes();
 
         $form->setOldValues(array(
@@ -217,7 +217,7 @@ class Admin_Form_Person_ChangesTest extends ControllerTestCase
         $this->assertXpathContentContains('//th', 'admin_change_old_value');
         $this->assertXpathContentContains('//th', 'admin_change_new_value');
 
-        $this->assertXpathContentContains('//td[@class = "fieldname"]', 'Last Name');
+        $this->assertXpathContentContains('//td[@class = "fieldname"]', 'LastName');
         $this->assertXpathContentContains('//td[@class = "old-value"]', 'Muller');
         $this->assertXpathContentContains('//td[@class = "old-value"]', 'Mueller');
 
