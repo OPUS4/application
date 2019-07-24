@@ -41,9 +41,15 @@
  * @group RequireTest
  *
  * @coversNothing
+ *
+ * TODO following annotations necessary/desired?
+ * @runTestsInSeparateProcess
+ * @preserveGlobalState disabled
  */
 class RequireTest extends Zend_Test_PHPUnit_ControllerTestCase
 {
+
+    public $application;
 
     /**
      * Overwrite standard setUp method, no database connection needed.  Will
@@ -53,22 +59,62 @@ class RequireTest extends Zend_Test_PHPUnit_ControllerTestCase
      */
     public function setUp()
     {
-        $this->bootstrap = new Zend_Application(
+        $this->closeLogfile();
+        $this->resetAutoloader();
+
+        $this->application = new Zend_Application(
             APPLICATION_ENV,
             ["config" => [
                 APPLICATION_PATH . '/tests/simple.ini'
             ]]
         );
+        $this->bootstrap = [$this, 'appBootstrap'];
 
         parent::setUp();
     }
 
-    public function tearDown()
+    /**
+     * TODO specifying which resources to initalize leads to modules autoloading not being setup
+     */
+    public function appBootstrap()
     {
-        $this->bootstrap = null;
-        parent::tearDown();
+        $this->application->bootstrap();
     }
 
+    public function resetAutoloader()
+    {
+        // Reset autoloader to fix huge memory/cpu-time leak
+        Zend_Loader_Autoloader::resetInstance();
+        $autoloader = Zend_Loader_Autoloader::getInstance();
+        $autoloader->suppressNotFoundWarnings(false);
+        $autoloader->setFallbackAutoloader(true);
+    }
+
+    /**
+     * Close logfile to prevent plenty of open logfiles.
+     */
+    protected function closeLogfile()
+    {
+        if (!Zend_Registry::isRegistered('Zend_Log')) {
+            return;
+        }
+
+        $log = Zend_Registry::get('Zend_Log');
+        if (isset($log)) {
+            $log->__destruct();
+            Zend_Registry::set('Zend_Log', null);
+        }
+
+        Opus_Log::drop();
+    }
+
+    public function tearDown()
+    {
+        $this->application = null;
+
+        parent::tearDown();
+        // DEBUG echo 'memory usage ' . ( memory_get_usage() / 1024 / 1024 ) . PHP_EOL;
+    }
 
     /**
      * Data provider for all classes which should be loadable.
