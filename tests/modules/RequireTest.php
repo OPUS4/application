@@ -51,29 +51,24 @@ class RequireTest extends Zend_Test_PHPUnit_ControllerTestCase
      *
      * @return void
      */
-    public function setUp() {
+    public function setUp()
+    {
         $this->bootstrap = new Zend_Application(
             APPLICATION_ENV,
-            array(
-                "config" => array(
-                    APPLICATION_PATH . '/application/configs/application.ini',
-                    APPLICATION_PATH . '/tests/tests.ini',
-                    APPLICATION_PATH . '/tests/config.ini'
-                )
-            )
+            ["config" => [
+                APPLICATION_PATH . '/tests/simple.ini'
+            ]]
         );
 
         parent::setUp();
     }
 
-    /**
-     * Overwrite standard tearDown method, no cleanup needed.
-     *
-     * @return void
-     */
     public function tearDown()
     {
+        $this->bootstrap = null;
+        parent::tearDown();
     }
+
 
     /**
      * Data provider for all classes which should be loadable.
