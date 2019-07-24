@@ -59,28 +59,7 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase
      */
     public function setUpWithEnv($applicationEnv)
     {
-        // Reducing memory footprint by forcing garbage collection runs
-        // WARNING: Did not work on CI-System (PHP 5.3.14, PHPnit 3.5.13)
-        // gc_collect_cycles();
-
-        $this->closeLogfile();
-
-        $this->closeDatabaseConnection();
-
-        // Resetting singletons or other kinds of persistent objects.
-        Opus_Db_TableGateway::clearInstances();
-
-        // FIXME Does it help with the mystery bug?
-        Zend_Registry::_unsetInstance();
-
-        // Reset autoloader to fix huge memory/cpu-time leak
-        Zend_Loader_Autoloader::resetInstance();
-        $autoloader = Zend_Loader_Autoloader::getInstance();
-        $autoloader->suppressNotFoundWarnings(false);
-        $autoloader->setFallbackAutoloader(true);
-
-        // Clean-up possible artifacts in $_SERVER of previous test.
-        unset($_SERVER['REMOTE_ADDR']);
+        $this->cleanup();
 
         $this->bootstrap = new Zend_Application(
             $applicationEnv, ["config" => [
@@ -100,6 +79,37 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase
     public function setUp()
     {
         $this->setUpWithEnv(APPLICATION_ENV);
+    }
+
+    public function cleanup()
+    {
+        // Reducing memory footprint by forcing garbage collection runs
+        // WARNING: Did not work on CI-System (PHP 5.3.14, PHPnit 3.5.13)
+        // gc_collect_cycles();
+
+        $this->closeLogfile();
+
+        $this->closeDatabaseConnection();
+
+        // Resetting singletons or other kinds of persistent objects.
+        Opus_Db_TableGateway::clearInstances();
+
+        // FIXME Does it help with the mystery bug?
+        Zend_Registry::_unsetInstance();
+
+        $this->resetAutoloader();
+
+        // Clean-up possible artifacts in $_SERVER of previous test.
+        unset($_SERVER['REMOTE_ADDR']);
+    }
+
+    public function resetAutoloader()
+    {
+        // Reset autoloader to fix huge memory/cpu-time leak
+        Zend_Loader_Autoloader::resetInstance();
+        $autoloader = Zend_Loader_Autoloader::getInstance();
+        $autoloader->suppressNotFoundWarnings(false);
+        $autoloader->setFallbackAutoloader(true);
     }
 
     /**
@@ -125,6 +135,9 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase
         $this->logger = null;
         Application_Configuration::clearInstance(); // reset Application_Configuration
         parent::tearDown();
+
+        $this->bootstrap = null;
+        // DEBUG echo PHP_EOL . 'memory usage: ' . (memory_get_usage() / 1024 / 1024) . PHP_EOL;
     }
 
     /**
