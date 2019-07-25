@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -28,19 +29,23 @@
  * @package     Application_Form_Decorator
  * @author      Jens Schwidder <schwidder@zib.de>
  * @author      Maximilian Salomon <salomon@zib.de>
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class Application_Form_Decorator_FileHashTest extends ControllerTestCase {
+class Application_Form_Decorator_FileHashTest extends ControllerTestCase
+{
 
-    public function testRenderWithoutElement() {
+    protected $additionalResources = ['view', 'translation'];
+
+    public function testRenderWithoutElement()
+    {
         $decorator = new Application_Form_Decorator_FileHash();
 
         $this->assertEquals('content', $decorator->render('content'));
     }
 
-    public function testRenderWithWrongElement() {
+    public function testRenderWithWrongElement()
+    {
         $decorator = new Application_Form_Decorator_FileHash();
 
         $decorator->setElement(new Zend_Form_Element_Text('text'));
@@ -48,7 +53,8 @@ class Application_Form_Decorator_FileHashTest extends ControllerTestCase {
         $this->assertEquals('content', $decorator->render('content'));
     }
 
-    public function testRender() {
+    public function testRender()
+    {
         $element = new Application_Form_Element_FileHash('name');
 
         $file = new Opus_File(116);
@@ -72,7 +78,8 @@ class Application_Form_Decorator_FileHashTest extends ControllerTestCase {
             $output);
     }
 
-    public function testRenderWithIst() {
+    public function testRenderWithIst()
+    {
         $this->useEnglish();
         $element = new Application_Form_Element_FileHash('name');
 
@@ -101,7 +108,8 @@ class Application_Form_Decorator_FileHashTest extends ControllerTestCase {
             , $output);
     }
 
-    public function testRenderWithMissingFile() {
+    public function testRenderWithMissingFile()
+    {
         $this->useEnglish();
         $element = new Application_Form_Element_FileHash('name');
 
@@ -128,7 +136,8 @@ class Application_Form_Decorator_FileHashTest extends ControllerTestCase {
             , $output);
     }
 
-    public function testRenderWithFileTooBig() {
+    public function testRenderWithFileTooBig()
+    {
         $this->useEnglish();
         $config = Zend_Registry::get('Zend_Config');
         $config->merge(new Zend_Config(array('checksum' => array('maxVerificationSize' => '0'))));
@@ -157,5 +166,4 @@ class Application_Form_Decorator_FileHashTest extends ControllerTestCase {
             . '</div>'
             , $output);
     }
-
 }

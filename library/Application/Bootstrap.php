@@ -354,7 +354,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      */
     protected function _initExporter()
     {
-        $this->bootstrap('Configuration');
+        $this->bootstrap('Configuration', 'modules');
 
         $exporter = new Application_Export_Exporter();
 

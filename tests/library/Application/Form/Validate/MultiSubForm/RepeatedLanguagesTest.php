@@ -26,29 +26,34 @@
  *
  * @category    Unit Tests
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2013-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
  * Unit Tests für Klasse, die Unterformular auf Prüfung für wiederholte Sprachen vorbereitet.
  */
-class Application_Form_Validate_MultiSubForm_RepeatedLanguagesTest extends ControllerTestCase {
+class Application_Form_Validate_MultiSubForm_RepeatedLanguagesTest extends ControllerTestCase
+{
 
-    public function testImplementsInterface() {
+    protected $additionalResources = ['view', 'translation'];
+
+    public function testImplementsInterface()
+    {
         $instance = new Application_Form_Validate_MultiSubForm_RepeatedLanguages();
 
         $this->assertTrue($instance instanceof Application_Form_Validate_IMultiSubForm);
     }
 
-    public function testIsValidReturnsTrue() {
+    public function testIsValidReturnsTrue()
+    {
         $instance = new Application_Form_Validate_MultiSubForm_RepeatedLanguages();
 
         $this->assertTrue($instance->isValid(null));
     }
 
-    public function testGetSelectedLanguages() {
+    public function testGetSelectedLanguages()
+    {
         $post = array(
             'TitleMain0' => array(
                 'Id' => '1',
@@ -81,7 +86,8 @@ class Application_Form_Validate_MultiSubForm_RepeatedLanguagesTest extends Contr
      * Jedem Language-Element in den Unterformularen wird ein Validator hinzugefügt. Formulare ohne Language-Element
      * werden ignoriert.
      */
-    public function testPrepareValidation() {
+    public function testPrepareValidation()
+    {
         $form = new Zend_Form();
 
         $titleCount = 3;

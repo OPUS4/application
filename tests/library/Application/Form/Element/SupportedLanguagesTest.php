@@ -31,12 +31,16 @@
  * @category    Application Unit Test
  * @package     Form_Element
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Application_Form_Element_SupportedLanguagesTest extends FormElementTestCase {
+class Application_Form_Element_SupportedLanguagesTest extends FormElementTestCase
+{
 
-    public function setUp() {
+    protected $additionalResources = 'translation';
+
+    public function setUp()
+    {
         $this->_formElementClass = 'Application_Form_Element_SupportedLanguages';
         $this->_expectedDecoratorCount = 6;
         $this->_expectedDecorators = array(
@@ -46,7 +50,8 @@ class Application_Form_Element_SupportedLanguagesTest extends FormElementTestCas
         parent::setUp();
     }
 
-    public function testGetValue() {
+    public function testGetValue()
+    {
         $element = $this->getElement();
 
         $element->setValue(array('en', 'de'));
@@ -54,7 +59,8 @@ class Application_Form_Element_SupportedLanguagesTest extends FormElementTestCas
         $this->assertEquals(array('en', 'de'), $element->getValue());
     }
 
-    public function testSetValue() {
+    public function testSetValue()
+    {
         $element = $this->getElement();
 
         $element->setValue('en,de');
@@ -62,7 +68,8 @@ class Application_Form_Element_SupportedLanguagesTest extends FormElementTestCas
         $this->assertEquals(array('en', 'de'), $element->getValue());
     }
 
-    public function testSetValueWithSpaces() {
+    public function testSetValueWithSpaces()
+    {
         $element = $this->getElement();
 
         $element->setValue(' en , de ');
@@ -70,7 +77,8 @@ class Application_Form_Element_SupportedLanguagesTest extends FormElementTestCas
         $this->assertEquals(array('en', 'de'), $element->getValue());
     }
 
-    public function testGetLanguageOptionsInGerman() {
+    public function testGetLanguageOptionsInGerman()
+    {
         $this->useGerman();
 
         $element = $this->getElement();
@@ -84,7 +92,8 @@ class Application_Form_Element_SupportedLanguagesTest extends FormElementTestCas
         ), $options);
     }
 
-    public function testGetLanguageOptionsInEnglish() {
+    public function testGetLanguageOptionsInEnglish()
+    {
         $this->useEnglish();
 
         $element = $this->getElement();
@@ -98,7 +107,8 @@ class Application_Form_Element_SupportedLanguagesTest extends FormElementTestCas
         ), $options);
     }
 
-    public function testValidation() {
+    public function testValidation()
+    {
         $element = $this->getElement();
 
         $this->assertTrue($element->isValid(array('de', 'en')));

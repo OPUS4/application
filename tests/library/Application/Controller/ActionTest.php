@@ -31,18 +31,19 @@
  * @category    Application Unit Test
  * @package     Controller
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class Application_Controller_ActionTest extends ControllerTestCase {
+class Application_Controller_ActionTest extends TestCase
+{
 
-    public function getController() {
+    public function getController()
+    {
         return new Application_Controller_Action($this->getRequest(), $this->getResponse());
     }
 
-    public function testInit() {
+    public function testInit()
+    {
         $this->markTestIncomplete("not implemented");
     }
-
 }

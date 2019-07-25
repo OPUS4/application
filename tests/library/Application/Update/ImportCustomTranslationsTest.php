@@ -34,6 +34,8 @@
 class Application_Update_ImportCustomTranslationsTest extends ControllerTestCase
 {
 
+    protected $additionalResources = 'database';
+
     private $testPath;
 
     public function setUp()

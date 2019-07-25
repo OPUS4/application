@@ -34,6 +34,8 @@
 class Application_Form_Element_PasswordTest extends FormElementTestCase
 {
 
+    protected $additionalResources = 'translation';
+
     public function setUp()
     {
         $this->_formElementClass = 'Application_Form_Element_Password';

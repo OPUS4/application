@@ -27,21 +27,24 @@
  * @category    Tests
  * @author      Michael Lang <lang@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Application_Form_Validate_GndTest extends ControllerTestCase {
+class Application_Form_Validate_GndTest extends TestCase
+{
 
     private $_validator;
 
-    public function setUp() {
+    public function setUp()
+    {
         $this->_validator = new Application_Form_Validate_Gnd();
 
         parent::setUp();
     }
 
-    public function testIsValidFalseFormat() {
+    public function testIsValidFalseFormat()
+    {
         $this->assertFalse($this->_validator->isValid(''));
         $this->assertFalse($this->_validator->isValid('Hallo'));
         $this->assertFalse($this->_validator->isValid('12345AB--6789012'));
@@ -53,14 +56,16 @@ class Application_Form_Validate_GndTest extends ControllerTestCase {
         $this->assertCount(1, $this->_validator->getMessages());
     }
 
-    public function testIsValidFalseChecksum() {
+    public function testIsValidFalseChecksum()
+    {
         $this->assertFalse($this->_validator->isValid('118768582'));
         $this->assertFalse($this->_validator->isValid('959804798'));
         $this->assertArrayHasKey('notValidChecksum', $this->_validator->getMessages());
         $this->assertCount(1, $this->_validator->getMessages());
     }
 
-    public function testIsValidTrue() {
+    public function testIsValidTrue()
+    {
         $this->assertTrue($this->_validator->isValid('118768581'));
         $this->assertTrue($this->_validator->isValid('95980479X'));
         $this->assertTrue($this->_validator->isValid('40303187'));
@@ -68,12 +73,14 @@ class Application_Form_Validate_GndTest extends ControllerTestCase {
         $this->assertTrue($this->_validator->isValid('136704425')); // Süselbeck, Kirsten
     }
 
-    public function testIsValidTrueForShortNumber() {
+    public function testIsValidTrueForShortNumber()
+    {
         $this->assertTrue($this->_validator->isValid('136307396'));
         $this->assertTrue($this->_validator->isValid('40303187'));
     }
 
-    public function testGenerateCheckDigit() {
+    public function testGenerateCheckDigit()
+    {
         $digit = Application_Form_Validate_Gnd::generateCheckDigit('0095980479');
         $this->assertEquals('X', $digit);
 
@@ -87,5 +94,4 @@ class Application_Form_Validate_GndTest extends ControllerTestCase {
         $this->assertFalse($this->_validator->isValid('0095980479X'));
         $this->assertFalse($this->_validator->isValid('00040303187'));
     }
-
 }
