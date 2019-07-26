@@ -31,9 +31,10 @@
  * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-
 class Frontdoor_Model_FileTest extends ControllerTestCase
 {
+
+    protected $additionalResources = ['database', 'authz'];
 
     const FILENAME = 'test.xhtml';
     const FILENAME_DELETED_DOC = 'foo.html';

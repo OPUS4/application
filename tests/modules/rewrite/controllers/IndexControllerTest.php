@@ -27,7 +27,7 @@
  * @category    Tests
  * @package     Rewrite
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -36,74 +36,91 @@
  *
  * @covers Rewrite_IndexController
  */
-class Rewrite_IndexControllerTest extends ControllerTestCase {
+class Rewrite_IndexControllerTest extends ControllerTestCase
+{
 
-    public function testIdActionWithMissingArgs() {
+    protected $additionalResources = 'all';
+
+    public function testIdActionWithMissingArgs()
+    {
         $this->dispatch('/rewrite/index/id');
         $this->assertRedirect();
     }
 
-    public function testIdActionWithMissingType() {
+    public function testIdActionWithMissingType()
+    {
         $this->dispatch('/rewrite/index/id/value/rewritetest-foo');
         $this->assertRedirect();
     }
 
-    public function testIdActionWithMissingValue() {
+    public function testIdActionWithMissingValue()
+    {
         $this->dispatch('/rewrite/index/id/type/opus3-id');
         $this->assertRedirect();
     }
 
-    public function testIdActionWithUnknownType() {
+    public function testIdActionWithUnknownType()
+    {
         $this->dispatch('/rewrite/index/id/type/unknowntype/value/foo');
         $this->assertRedirect();
     }
 
-    public function testIdActionWithUnknownId() {
+    public function testIdActionWithUnknownId()
+    {
         $this->dispatch('/rewrite/index/id/type/opus3-id/value/rewritetest-bar');
         $this->assertRedirect();
     }
 
-    public function testIdActionWithNonUniqueId() {
+    public function testIdActionWithNonUniqueId()
+    {
         $this->dispatch('/rewrite/index/id/type/opus3-id/value/rewritetest-foo');
         $this->assertRedirect();
     }
 
-    public function testIdAction() {
+    public function testIdAction()
+    {
         $this->dispatch('/rewrite/index/id/type/opus3-id/value/rewritetest-baz');
         $this->assertRedirect('/frontdoor/index/index/docId/92');
     }
 
-    public function testOpus3fileActionWithMissingArgs() {
+    public function testOpus3fileActionWithMissingArgs()
+    {
         $this->dispatch('/rewrite/index/opus3file');
         $this->assertRedirect();
     }
 
-    public function testOpus3fileActionWithMissingOpus3Id() {
+    public function testOpus3fileActionWithMissingOpus3Id()
+    {
         $this->dispatch('/rewrite/index/opus3file/filename/foo.bar');
         $this->assertRedirect();
     }
 
-    public function testOpus3fileActionWithMissingFilename() {
+    public function testOpus3fileActionWithMissingFilename()
+    {
         $this->dispatch('/rewrite/index/opus3file/opus3id/rewritetest-foo');
         $this->assertRedirect();
     }
 
-    public function testOpus3fileActionWithUnknownOpus3Id() {
+    public function testOpus3fileActionWithUnknownOpus3Id()
+    {
         $this->dispatch('/rewrite/index/opus3file/opus3id/rewritetest-bar/filename/foo.bar');
         $this->assertRedirect();
     }
 
-    public function testOpus3fileActionWithNonUniqueOpus3Id() {
+    public function testOpus3fileActionWithNonUniqueOpus3Id()
+    {
         $this->dispatch('/rewrite/index/opus3file/opus3id/rewritetest-foo/filename/foo.bar');
         $this->assertRedirect();
     }
 
-    public function testOpus3fileAction() {
+    public function testOpus3fileAction()
+    {
         $this->dispatch('/rewrite/index/opus3file/opus3id/rewritetest-baz/filename/test.xhtml');
         $this->assertRedirect('/92/test.xhtml', 301);
     }
 
-    public function assertRedirect($path = '/home', $httpCode = 302) {
+    public function assertRedirect($path = '/home', $httpCode = 302)
+    {
         $response = $this->getResponse();
         $headers = $response->getHeaders();
 
@@ -112,4 +129,3 @@ class Rewrite_IndexControllerTest extends ControllerTestCase {
         $this->assertEquals($httpCode, $response->getHttpResponseCode());
     }
 }
-

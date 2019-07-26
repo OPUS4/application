@@ -1129,6 +1129,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
      */
     public function testFlagsWithoutFile()
     {
+        $this->markTestSkipped('Refactor test for more direct testing.');
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
         $file = $this->createTestFile('eng');

@@ -27,20 +27,24 @@
  * @category    Application
  * @package     Tests
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
-class Solrsearch_Model_CollectionRolesTest extends ControllerTestCase {
+class Solrsearch_Model_CollectionRolesTest extends ControllerTestCase
+{
 
-    public function testGetAllVisible() {
+    protected $additionalResources = ['database'];
+
+    public function testGetAllVisible()
+    {
         $collectionRoles = new Solrsearch_Model_CollectionRoles();
         $visibleRoles = $collectionRoles->getAllVisible();
         $this->assertEquals(14, count($visibleRoles));
     }
 
-    public function testHasVisibleChildrenForEmptyCollectionRole() {
+    public function testHasVisibleChildrenForEmptyCollectionRole()
+    {
         $collectionRoles = new Solrsearch_Model_CollectionRoles();
 
         $class = new ReflectionClass('Solrsearch_Model_CollectionRoles');
@@ -51,7 +55,8 @@ class Solrsearch_Model_CollectionRolesTest extends ControllerTestCase {
         $this->assertFalse($hasChildren);
     }
 
-    public function testHasVisibleChildrenForNonEmptyCollectionRole() {
+    public function testHasVisibleChildrenForNonEmptyCollectionRole()
+    {
         $collectionRoles = new Solrsearch_Model_CollectionRoles();
 
         $class = new ReflectionClass('Solrsearch_Model_CollectionRoles');
@@ -62,7 +67,8 @@ class Solrsearch_Model_CollectionRolesTest extends ControllerTestCase {
         $this->assertTrue($hasChildren);
     }
 
-    public function testHasPublishedDocsForEmptyCollectionRole() {
+    public function testHasPublishedDocsForEmptyCollectionRole()
+    {
         $collectionRoles = new Solrsearch_Model_CollectionRoles();
 
         $class = new ReflectionClass('Solrsearch_Model_CollectionRoles');
@@ -73,7 +79,8 @@ class Solrsearch_Model_CollectionRolesTest extends ControllerTestCase {
         $this->assertFalse($hasChildren);
     }
 
-    public function testHasPublishedDocsForNonEmptyCollectionRoleWithoutPublishedDocs() {
+    public function testHasPublishedDocsForNonEmptyCollectionRoleWithoutPublishedDocs()
+    {
         $collectionRoles = new Solrsearch_Model_CollectionRoles();
 
         $class = new ReflectionClass('Solrsearch_Model_CollectionRoles');
@@ -84,7 +91,8 @@ class Solrsearch_Model_CollectionRolesTest extends ControllerTestCase {
         $this->assertFalse($hasChildren);
     }
 
-    public function testHasPublishedDocsForNonEmptyCollectionRoleWithPublishedDocs() {
+    public function testHasPublishedDocsForNonEmptyCollectionRoleWithPublishedDocs()
+    {
         $collectionRoles = new Solrsearch_Model_CollectionRoles();
 
         $class = new ReflectionClass('Solrsearch_Model_CollectionRoles');

@@ -37,6 +37,10 @@
 class Setup_LanguageControllerTest extends ControllerTestCase
 {
 
+    protected $configModifiable = true;
+
+    protected $additionalResources = 'all';
+
     /**
      * Regression Test for OPUSVIER-2971
      */

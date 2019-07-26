@@ -26,7 +26,7 @@
  *
  * @category    Tests
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -35,15 +35,17 @@
  *
  * @covers ErrorController
  */
-class ErrorControllerTest extends ControllerTestCase {
+class ErrorControllerTest extends ControllerTestCase
+{
 
-    public function testWrongRoute() {
+    protected $additionalResources = ['view', 'mainMenu', 'translation'];
+
+    public function testWrongRoute()
+    {
         $this->dispatch('/home/dummy/index');
         $this->assertResponseCode(404);
         $this->assertModule('default');
         $this->assertController('error');
         $this->assertAction('error');
     }
-
 }
-

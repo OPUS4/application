@@ -34,6 +34,10 @@
 class Export_BibtexExportTest extends ControllerTestCase
 {
 
+    protected $configModifiable = true;
+
+    protected $additionalResources = 'all';
+
     public function setUp()
     {
         parent::setUp();

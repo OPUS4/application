@@ -32,6 +32,8 @@
 class ControllerTestCaseTest extends ControllerTestCase
 {
 
+    protected $additionalResources = ['view', 'translation'];
+
     protected $configModifiable = true;
 
     public function tearDown()

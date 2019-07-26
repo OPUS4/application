@@ -41,6 +41,6 @@ script:
   - cd ..
   - ant reset-testdata
   - ./vendor/bin/phpunit --configuration ./tests/phpunit.xml --no-coverage ./tests/library
-  - ./vendor/bin/phpunit --configuration ./tests/phpunit.xml --no-coverage ./tests/modules/admin
+  - ./vendor/bin/phpunit --configuration ./tests/phpunit.xml --no-coverage ./tests/modules
   - ./vendor/bin/phpunit --configuration ./tests/phpunit.xml --no-coverage ./tests/security
   - ./vendor/bin/phpunit --configuration ./tests/phpunit.xml --no-coverage ./tests/scripts

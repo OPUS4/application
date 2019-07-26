@@ -33,6 +33,8 @@
 class JavascriptTest extends ControllerTestCase
 {
 
+    protected $additionalResources = ['view', 'mainMenu', 'translation'];
+
     public function setUp()
     {
         parent::setUp();
