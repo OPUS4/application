@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -69,5 +68,4 @@ class Application_View_Helper_AccessAllowedTest extends ControllerTestCase
         $allowedAccount = $this->__helper->accessAllowed('accounts');
         $this->assertTrue($allowedAccount, "expected access allowed to module 'account'");
     }
-
 }

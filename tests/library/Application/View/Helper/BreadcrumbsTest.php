@@ -33,11 +33,12 @@
 
 /**
  * Class BreadcrumbsTest.
+ *
  */
 class Application_View_Helper_BreadcrumbsTest extends ControllerTestCase
 {
 
-    protected $additionalResources = ['view', 'navigation', 'mainMenu', 'translation'];
+    protected $additionalResources = ['authz', 'view', 'mainMenu', 'navigation', 'translation'];
 
     private $page = null;
 
@@ -57,6 +58,10 @@ class Application_View_Helper_BreadcrumbsTest extends ControllerTestCase
         $this->page = $navigation->findOneByLabel('admin_title_documents');
     }
 
+    /**
+     * TODO without 'authz' resource this test fails - however not like something is missing - authz seems to carry
+     *      over between tests
+     */
     public function testHelpLinkPresent()
     {
         $this->page->helpUrl = 'http://opus4.kobv.de';
@@ -108,5 +113,4 @@ class Application_View_Helper_BreadcrumbsTest extends ControllerTestCase
             . '<div class="wrapper">Administration (Extra Stuff)</div></div>',
             $this->breadcrumbs->renderStraight());
     }
-
 }
