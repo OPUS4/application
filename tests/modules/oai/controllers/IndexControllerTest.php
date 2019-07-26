@@ -2644,7 +2644,6 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=marc21&identifier=oai::' . $docId);
 
         $this->assertResponseCode(200);
-        echo $this->getResponse()->getBody();
 
         $this->registerXpathNamespaces($this->xpathNamespaces);
 
