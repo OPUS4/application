@@ -29,16 +29,20 @@
  * @package     Tests
  * @author      Thoralf Klein <thoralf.klein@zib.de>
  * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2014, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2014-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class Oai_Model_DocumentListTest extends ControllerTestCase {
+class Oai_Model_DocumentListTest extends ControllerTestCase
+{
+
+    protected $additionalResources = 'database';
 
     /**
      * Testet, ob beim MetaDataPrefix "epicur" nur Dokumente mit URN ausgegeben werden.
      */
-    public function testDocumentOutputUrn() {
+    public function testDocumentOutputUrn()
+    {
         $docWithUrn = $this->createTestDocument();
         $docWithUrn->setServerState('published');
         $identifier = new Opus_Identifier();
@@ -78,9 +82,9 @@ class Oai_Model_DocumentListTest extends ControllerTestCase {
 
         $today = new DateTime();
         $today->setDate(
-                $serverDateModified->getYear(),
-                $serverDateModified->getMonth(),
-                $serverDateModified->getDay());
+            $serverDateModified->getYear(),
+            $serverDateModified->getMonth(),
+            $serverDateModified->getDay());
 
         $yesterday = clone $today;
         $yesterday->modify('-1 day');
@@ -124,7 +128,8 @@ class Oai_Model_DocumentListTest extends ControllerTestCase {
      * Test list document ids, metadataPrefix=XMetaDissPlus, different intervals
      * list possible intervals *NOT* containing "2010-06-05"
      */
-    public function testIntervalOAIPMHQueryWithoutTestDoc() {
+    public function testIntervalOAIPMHQueryWithoutTestDoc()
+    {
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
         $this->docId = $doc->store();
@@ -134,9 +139,9 @@ class Oai_Model_DocumentListTest extends ControllerTestCase {
 
         $today = new DateTime();
         $today->setDate(
-                $serverDateModified->getYear(),
-                $serverDateModified->getMonth(),
-                $serverDateModified->getDay());
+            $serverDateModified->getYear(),
+            $serverDateModified->getMonth(),
+            $serverDateModified->getDay());
 
         $yesterday = clone $today;
         $yesterday->modify('-1 day');
