@@ -36,7 +36,9 @@
  */
 class Admin_Form_Document_EnrichmentTest extends ControllerTestCase
 {
-    
+
+    protected $additionalResources = ['database'];
+
     public function testCreateForm()
     {
         $form = new Admin_Form_Document_Enrichment();
@@ -208,7 +210,7 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase
 
         $enrichment = new Opus_Enrichment();
         $form->updateModel($enrichment);
-        
+
         $this->assertEquals($keyName, $enrichment->getKeyName());
         $this->assertEquals('Test Enrichment Value', $enrichment->getValue());
     }
@@ -239,7 +241,7 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase
         $document = new Opus_Document(146);
         $enrichments = $document->getEnrichment();
         $enrichment = $enrichments[0];
-        
+
         $keyNames = Opus_EnrichmentKey::getAll();
         $keyName = $keyNames[1]->getName(); // Geht davon aus, dass mindestens 2 Enrichment Keys existieren
 
@@ -248,14 +250,14 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase
         $form->getElement('Id')->setValue($enrichment->getId());
         $form->getElement('KeyName')->setValue($keyName);
         $form->getElement('Value')->setValue('Test Enrichment Value');
-        
+
         $model = $form->getModel();
-        
+
         $this->assertEquals($enrichment->getId(), $model->getId());
         $this->assertEquals($keyName, $model->getKeyName());
         $this->assertEquals('Test Enrichment Value', $model->getValue());
     }
-    
+
     public function testGetNewModel()
     {
         $keyNames = Opus_EnrichmentKey::getAll();
@@ -266,7 +268,7 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase
 
         $form->getElement('KeyName')->setValue($keyName);
         $form->getElement('Value')->setValue('Test Enrichment Value');
-        
+
         $model = $form->getModel();
 
         $this->assertNull($model->getId());
@@ -327,12 +329,12 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase
 
         $form = new Admin_Form_Document_Enrichment();
         $form->initEnrichmentValueElement($keyName);
-        
+
         $post = array(
             'KeyName' => ' ',
             'Value' => ''
         );
-        
+
         $this->assertFalse($form->isValid($post));
 
         $this->assertCount(2, $form->getErrors('KeyName'));

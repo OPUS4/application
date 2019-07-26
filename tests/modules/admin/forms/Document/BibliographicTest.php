@@ -36,6 +36,8 @@
 class Admin_Form_Document_BibliographicTest extends ControllerTestCase
 {
 
+    protected $additionalResources = ['translation'];
+
     public function testCreateForm()
     {
         $this->disableTranslation();

@@ -36,6 +36,8 @@
 class Admin_Form_Document_SubjectTypeTest extends ControllerTestCase
 {
 
+    protected $additionalResources = ['view', 'translation'];
+
     public function testCreateForm()
     {
         $form = new Admin_Form_Document_SubjectType('swd');

@@ -34,6 +34,8 @@
 class Admin_Form_UserRolesTest extends ControllerTestCase
 {
 
+    protected $additionalResources = ['database'];
+
     public function testConstruct()
     {
         $form = new Admin_Form_UserRoles();
@@ -43,7 +45,6 @@ class Admin_Form_UserRolesTest extends ControllerTestCase
         $elements = $form->getElements();
 
         $this->assertEquals(count($roles), count($elements));
-
     }
 
     public function testPopulateFromModel()

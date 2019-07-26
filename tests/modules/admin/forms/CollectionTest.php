@@ -27,14 +27,17 @@
  * @category    Application Unit Test
  * @package     Admin_Form
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
-class Admin_Form_CollectionTest extends ControllerTestCase {
+class Admin_Form_CollectionTest extends ControllerTestCase
+{
 
-    public function testConstructForm() {
+    protected $additionalResources = ['database'];
+
+    public function testConstructForm()
+    {
         $form = new Admin_Form_Collection();
 
         $this->assertEquals('7', count($form->getElements()));
@@ -49,7 +52,8 @@ class Admin_Form_CollectionTest extends ControllerTestCase {
         $this->assertNotNull($form->getElement('Id'));
     }
 
-    public function testPopulateFromModel() {
+    public function testPopulateFromModel()
+    {
         $form = new Admin_Form_Collection();
 
         $model = new Opus_Collection();
@@ -69,7 +73,8 @@ class Admin_Form_CollectionTest extends ControllerTestCase {
         // $this->assertEquals('plain', $form->getElement('Theme')->getValue());
     }
 
-    public function testHandlingOfNullValue() {
+    public function testHandlingOfNullValue()
+    {
         $form = new Admin_Form_Collection();
 
         $model = new Opus_Collection();
@@ -85,7 +90,8 @@ class Admin_Form_CollectionTest extends ControllerTestCase {
         $this->assertNull($form->getElement('OaiSubset')->getValue());
     }
 
-    public function testPopulateFromModelWithId() {
+    public function testPopulateFromModelWithId()
+    {
         $form = new Admin_Form_Collection();
 
         $model = new Opus_Collection(3);
@@ -95,7 +101,8 @@ class Admin_Form_CollectionTest extends ControllerTestCase {
         $this->assertEquals(3, $form->getElement('Id')->getValue());
     }
 
-    public function testUpdateModel() {
+    public function testUpdateModel()
+    {
         $form = new Admin_Form_Collection();
 
         $form->getElement('Id')->setValue(99);
@@ -119,7 +126,8 @@ class Admin_Form_CollectionTest extends ControllerTestCase {
         //$this->assertEquals('plain', $model->getTheme());
     }
 
-    public function testValidationSuccess() {
+    public function testValidationSuccess()
+    {
         $form = new Admin_Form_Collection();
 
         $this->assertTrue($form->isValid(array(
@@ -136,7 +144,8 @@ class Admin_Form_CollectionTest extends ControllerTestCase {
         )));
     }
 
-    public function testValidationFailure() {
+    public function testValidationFailure()
+    {
         $form = new Admin_Form_Collection();
 
         $this->assertFalse($form->isValid(array()));

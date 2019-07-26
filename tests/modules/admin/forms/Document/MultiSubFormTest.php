@@ -36,6 +36,8 @@
 class Admin_Form_Document_MultiSubFormTest extends ControllerTestCase
 {
 
+    protected $additionalResources = ['view', 'translation'];
+
     public function testConstructForm()
     {
         $this->disableTranslation();
@@ -281,7 +283,8 @@ class Admin_Form_Document_MultiSubFormTest extends ControllerTestCase
         $this->assertNull($titles[2]->getId()); // Neuer Titel noch nicht gespeichert (ohne ID)
     }
 
-    public function testCreateSubForm() {
+    public function testCreateSubForm()
+    {
         $form = new Admin_Form_Document_MultiSubForm(
             'Admin_Form_Document_Title',
             'TitleSub',
@@ -648,7 +651,7 @@ class Admin_Form_Document_MultiSubFormTest extends ControllerTestCase
 
         $index = 0;
 
-        foreach($form->getSubForms() as $name => $subform) {
+        foreach ($form->getSubForms() as $name => $subform) {
             $this->assertEquals($identifiers[$index]->getId(), $subform->getElement('Id')->getValue(),
                 "Subform $name should habe been at position $index.");
             $index++;

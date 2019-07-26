@@ -33,6 +33,8 @@
 class Admin_Form_AccountTest extends ControllerTestCase
 {
 
+    protected $additionalResources = ['database', 'translation'];
+
     private $_account;
 
     public function setUp()

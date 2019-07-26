@@ -33,9 +33,13 @@
 /**
  * Unit Tests für Metadaten-Formular Klasse.
  */
-class Admin_Form_DocumentTest extends ControllerTestCase {
+class Admin_Form_DocumentTest extends ControllerTestCase
+{
 
-    public function testConstructForm() {
+    protected $additionalResources = ['view', 'translation'];
+
+    public function testConstructForm()
+    {
         $form = new Admin_Form_Document();
 
         $this->assertEquals(0, count($form->getElements()));
@@ -64,7 +68,8 @@ class Admin_Form_DocumentTest extends ControllerTestCase {
     /**
      * Prüft ob populateFromModel an Unterformulare weitergereicht wird.
      */
-    public function testPopulateFromModel() {
+    public function testPopulateFromModel()
+    {
         $form = new Admin_Form_Document();
 
         $document = new Opus_Document(146);
@@ -79,7 +84,8 @@ class Admin_Form_DocumentTest extends ControllerTestCase {
         $this->assertEquals(8, count($form->getSubForm('Collections')->getSubForms()));
     }
 
-    public function testGetInstanceFromPost() {
+    public function testGetInstanceFromPost()
+    {
         $document = new Opus_Document(146);
 
         $post = array();
@@ -90,13 +96,15 @@ class Admin_Form_DocumentTest extends ControllerTestCase {
         $this->assertInstanceOf('Admin_Form_Document', $form);
     }
 
-    public function testProcessPostEmpty() {
+    public function testProcessPostEmpty()
+    {
         $form = new Admin_Form_Document();
 
         $this->assertNull($form->processPost(array(), array()));
     }
 
-    public function testProcessPostSave() {
+    public function testProcessPostSave()
+    {
         $form = new Admin_Form_Document();
 
         $post = array(
@@ -108,7 +116,8 @@ class Admin_Form_DocumentTest extends ControllerTestCase {
         $this->assertEquals(Admin_Form_Document::RESULT_SAVE, $form->processPost($post, $post));
     }
 
-    public function testContinueEdit() {
+    public function testContinueEdit()
+    {
         $form = new Admin_Form_Document();
 
         $request = $this->getRequest();
@@ -136,7 +145,8 @@ class Admin_Form_DocumentTest extends ControllerTestCase {
         $this->assertEquals(0, $subform->getElementValue('AllowContact'));
     }
 
-    public function testIsValidTrue() {
+    public function testIsValidTrue()
+    {
         $form = new Admin_Form_Document();
 
         $document = $this->createTestDocument();
@@ -295,7 +305,8 @@ class Admin_Form_DocumentTest extends ControllerTestCase {
         $this->assertContains('admin_document_error_NoTitleInDocumentLanguage', $subform->getErrorMessages());
     }
 
-    public function testSetGetMessage() {
+    public function testSetGetMessage()
+    {
         $form = new Admin_Form_Document();
 
         $this->assertNull($form->getMessage());
@@ -305,7 +316,8 @@ class Admin_Form_DocumentTest extends ControllerTestCase {
         $this->assertEquals('Test Nachricht', $form->getMessage());
     }
 
-    public function testPrepareRenderingAsViewFullDocument() {
+    public function testPrepareRenderingAsViewFullDocument()
+    {
         $form = new Admin_Form_Document();
 
         $document = new Opus_Document(146);
@@ -332,7 +344,8 @@ class Admin_Form_DocumentTest extends ControllerTestCase {
         ));
     }
 
-    public function testPrepareRenderingAsViewDocumentWithoutFiles() {
+    public function testPrepareRenderingAsViewDocumentWithoutFiles()
+    {
         $form = new Admin_Form_Document();
 
         $document = new Opus_Document(200);
@@ -347,7 +360,8 @@ class Admin_Form_DocumentTest extends ControllerTestCase {
      * Für ein leeres Dokument werden fast alle Unterformulare entfernt.
      * Weiterhin angezeigt werden die ActionBox, und die InfoBox,
      */
-    public function testPrepareRenderingAsViewForEmptyDocument() {
+    public function testPrepareRenderingAsViewForEmptyDocument()
+    {
         $form = new Admin_Form_Document();
 
         $document = $this->createTestDocument();
@@ -358,7 +372,8 @@ class Admin_Form_DocumentTest extends ControllerTestCase {
         $this->verifySubForms($form, array('ActionBox', 'InfoBox', 'Bibliographic', 'IdentifiersAll'));
     }
 
-    protected function verifySubForms($form, $names) {
+    protected function verifySubForms($form, $names)
+    {
         $this->assertEquals(count($names), count($form->getSubForms()));
 
         foreach ($names as $name) {
@@ -366,7 +381,8 @@ class Admin_Form_DocumentTest extends ControllerTestCase {
         }
     }
 
-    protected function getHash($form) {
+    protected function getHash($form)
+    {
         $session = new Zend_Session_Namespace('testing');
 
         $hashElement = $form->getSubForm('Actions')->getElement('OpusHash');
