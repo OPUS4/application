@@ -946,6 +946,10 @@ class Export_IndexControllerTest extends ControllerTestCase
         $exportAccessProvided = $this->addAccessOnModuleExportForGuest();
         $this->enableSecurity();
 
+        Zend_Registry::get('Zend_Config')->merge(
+            new Zend_Config(
+                ['plugins' => ['export' => ['marc21' => ['adminOnly' => true]]]]));
+
         $this->dispatch("/export/index/marc21/docId/146/searchtype/id");
 
         if ($exportAccessProvided) {
@@ -965,6 +969,10 @@ class Export_IndexControllerTest extends ControllerTestCase
     {
         $exportAccessProvided = $this->addAccessOnModuleExportForGuest();
         $this->enableSecurity();
+
+        Zend_Registry::get('Zend_Config')->merge(
+            new Zend_Config(
+                ['plugins' => ['export' => ['datacite' => ['adminOnly' => true]]]]));
 
         $this->dispatch('/export/index/datacite/docId/146');
 
