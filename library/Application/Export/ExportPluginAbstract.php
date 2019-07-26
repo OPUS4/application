@@ -142,6 +142,7 @@ abstract class Application_Export_ExportPluginAbstract extends Application_Model
     public function isAccessRestricted()
     {
         // der Konfigurationswert kann in unterschiedlichen Varianten angegeben werden
+        // TODO OPUSVIER-4112 move handling of boolean configuration parameters to base helper class
         $enabledOptions = [true, 1];
 
         $adminOnlyAccess = $this->getConfig()->get('adminOnly', null);
