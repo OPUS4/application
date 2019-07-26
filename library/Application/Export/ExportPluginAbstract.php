@@ -141,15 +141,10 @@ abstract class Application_Export_ExportPluginAbstract extends Application_Model
      */
     public function isAccessRestricted()
     {
-        // der Konfigurationswert kann in unterschiedlichen Varianten angegeben werden
+        $adminOnlyAccess = $this->getConfig()->adminOnly;
         // TODO OPUSVIER-4112 move handling of boolean configuration parameters to base helper class
-        $enabledOptions = [true, 1];
-
-        $adminOnlyAccess = $this->getConfig()->get('adminOnly', null);
-        if (! is_null($adminOnlyAccess)) {
-            if (in_array($adminOnlyAccess, $enabledOptions, true)) {
-                return ! Opus_Security_Realm::getInstance()->checkModule('admin');
-            }
+        if (isset($adminOnlyAccess) && $adminOnlyAccess == '1') {
+            return ! Opus_Security_Realm::getInstance()->checkModule('admin');
         }
         return false; // keine Einschränkung des Zugriffs
     }

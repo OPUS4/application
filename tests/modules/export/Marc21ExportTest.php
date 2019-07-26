@@ -79,7 +79,7 @@ class Export_Marc21ExportTest extends ControllerTestCase
             new Zend_Config(
                 ['plugins' =>
                     ['export' =>
-                        ['marc21' => ['restrictExportToPublishedDocuments' => 'true']]
+                        ['marc21' => ['restrictExportToPublishedDocuments' => '1']]
                     ]
                 ]
             )
