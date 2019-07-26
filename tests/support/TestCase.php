@@ -31,7 +31,7 @@
  */
 
 /**
- * Base class for controller tests.
+ * Base class for application tests.
  *
  * TODO any effect vvv ?
  * @preserveGlobalState disabled
@@ -59,7 +59,7 @@ class TestCase extends Zend_Test_PHPUnit_ControllerTestCase
      */
     public function setUp()
     {
-        $this->cleanup();
+        $this->cleanupBefore();
 
         $this->application = $this->getApplication();
         $this->bootstrap = [$this, 'appBootstrap'];
@@ -69,6 +69,24 @@ class TestCase extends Zend_Test_PHPUnit_ControllerTestCase
         if ($this->configModifiable) {
             $this->makeConfigurationModifiable();
         }
+    }
+
+    public function tearDown()
+    {
+        $this->application = null; // IMPORTANT: this helps reduce memory usage when running lots of tests
+
+        parent::tearDown();
+        // echo PHP_EOL . 'memory usage ' . ( memory_get_usage() / 1024 / 1024 ) . PHP_EOL;
+
+        $this->closeLogfile();
+    }
+
+    public function cleanupBefore()
+    {
+        // FIXME Does it help with the mystery bug?
+        Zend_Registry::_unsetInstance();
+
+        $this->resetAutoloader();
     }
 
     public function getApplication()
@@ -102,15 +120,11 @@ class TestCase extends Zend_Test_PHPUnit_ControllerTestCase
         $this->application->bootstrap($resources);
     }
 
-    public function cleanup()
-    {
-        $this->closeLogfile();
-        $this->resetAutoloader();
-    }
-
+    /**
+     * Reset autoloader to fix huge memory/cpu-time leak.
+     */
     public function resetAutoloader()
     {
-        // Reset autoloader to fix huge memory/cpu-time leak
         Zend_Loader_Autoloader::resetInstance();
         $autoloader = Zend_Loader_Autoloader::getInstance();
         $autoloader->suppressNotFoundWarnings(false);
@@ -135,18 +149,9 @@ class TestCase extends Zend_Test_PHPUnit_ControllerTestCase
         Opus_Log::drop();
     }
 
-    public function tearDown()
-    {
-        $this->application = null;
-
-        parent::tearDown();
-        // echo PHP_EOL . 'memory usage ' . ( memory_get_usage() / 1024 / 1024 ) . PHP_EOL;
-    }
-
     public function makeConfigurationModifiable()
     {
         $config = new Zend_Config([], true);
         Zend_Registry::set('Zend_Config', $config->merge(Zend_Registry::get('Zend_Config')));
     }
-
 }

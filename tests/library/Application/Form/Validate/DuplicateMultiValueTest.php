@@ -31,7 +31,10 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class DuplicateMultiValueTest extends TestCase
+/**
+ * Class Application_Form_Validate_DuplicateMultiValueTest.
+ */
+class Application_Form_Validate_DuplicateMultiValueTest extends TestCase
 {
 
     public function testIsValidTrue()
@@ -70,3 +73,4 @@ class DuplicateMultiValueTest extends TestCase
         $this->assertFalse($validator->isValid('Tag 1', $context));
     }
 }
+

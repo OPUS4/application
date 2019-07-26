@@ -75,37 +75,6 @@ class ControllerTestCase extends TestCase
         $this->setUpWithEnv(APPLICATION_ENV);
     }
 
-    public function getApplication()
-    {
-        return new Zend_Application(
-            $this->applicationEnv, ["config" => [
-                APPLICATION_PATH . '/application/configs/application.ini',
-                APPLICATION_PATH . '/tests/tests.ini',
-                APPLICATION_PATH . '/tests/config.ini'
-            ]]
-        );
-    }
-
-    public function cleanup()
-    {
-        // Reducing memory footprint by forcing garbage collection runs
-        // WARNING: Did not work on CI-System (PHP 5.3.14, PHPnit 3.5.13)
-        // gc_collect_cycles();
-
-        $this->closeDatabaseConnection();
-
-        // Resetting singletons or other kinds of persistent objects.
-        Opus_Db_TableGateway::clearInstances();
-
-        // FIXME Does it help with the mystery bug?
-        Zend_Registry::_unsetInstance();
-
-        // Clean-up possible artifacts in $_SERVER of previous test.
-        unset($_SERVER['REMOTE_ADDR']);
-
-        parent::cleanup();
-    }
-
     /**
      * Clean up database instances.
      */
@@ -125,6 +94,34 @@ class ControllerTestCase extends TestCase
         Application_Configuration::clearInstance(); // reset Application_Configuration
 
         parent::tearDown();
+    }
+
+    public function getApplication()
+    {
+        return new Zend_Application(
+            $this->applicationEnv, ["config" => [
+                APPLICATION_PATH . '/application/configs/application.ini',
+                APPLICATION_PATH . '/tests/tests.ini',
+                APPLICATION_PATH . '/tests/config.ini'
+            ]]
+        );
+    }
+
+    public function cleanupBefore()
+    {
+        // Reducing memory footprint by forcing garbage collection runs
+        // WARNING: Did not work on CI-System (PHP 5.3.14, PHPnit 3.5.13)
+        // gc_collect_cycles();
+
+        $this->closeDatabaseConnection();
+
+        // Resetting singletons or other kinds of persistent objects.
+        Opus_Db_TableGateway::clearInstances();
+
+        // Clean-up possible artifacts in $_SERVER of previous test.
+        unset($_SERVER['REMOTE_ADDR']);
+
+        parent::cleanupBefore();
     }
 
     public function cleanupDatabase()
