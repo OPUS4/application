@@ -67,6 +67,8 @@ class Export_Model_XsltExport extends Export_Model_XmlExport
         if (isset($config->restrictExportToPublishedDocuments)) {
             // weil das Zend_Config Objekt in Application_Export_ExportService.loadPlugins
             // mit toArray() behandelt wird, wird der boolesche Wert false in den Leerstring umgewandelt
+            // TODO OPUSVIER-4116
+            // TODO OPUSVIER-4412
             if ($config->restrictExportToPublishedDocuments === '' ||
                 $config->restrictExportToPublishedDocuments === '0' ||
                 $config->restrictExportToPublishedDocuments === 'false') {

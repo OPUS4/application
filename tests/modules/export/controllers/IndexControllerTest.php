@@ -940,15 +940,13 @@ class Export_IndexControllerTest extends ControllerTestCase
      * auch wenn das Zugriffsrecht auf das Module export vorhanden ist.
      *
      * @throws Opus_Model_Exception
+     *
+     * FIXME OPUSVIER-4116
      */
     public function testNonAdminAccessOnRestrictedMarc21ExportForbidden()
     {
         $exportAccessProvided = $this->addAccessOnModuleExportForGuest();
         $this->enableSecurity();
-
-        Zend_Registry::get('Zend_Config')->merge(
-            new Zend_Config(
-                ['plugins' => ['export' => ['marc21' => ['adminOnly' => true]]]]));
 
         $this->dispatch("/export/index/marc21/docId/146/searchtype/id");
 
@@ -963,16 +961,14 @@ class Export_IndexControllerTest extends ControllerTestCase
      * Zugriff auf DataCite Export standardmäßig nur für Administratoren freigegeben,
      * auch wenn das Zugriffsrecht auf das Module export vorhanden ist.
      *
+     * FIXME OPUSVIER-4116
+     *
      * @throws Opus_Model_Exception
      */
     public function testNonAdminAccessOnRestrictedDataCiteExportForbidden()
     {
         $exportAccessProvided = $this->addAccessOnModuleExportForGuest();
         $this->enableSecurity();
-
-        Zend_Registry::get('Zend_Config')->merge(
-            new Zend_Config(
-                ['plugins' => ['export' => ['datacite' => ['adminOnly' => true]]]]));
 
         $this->dispatch('/export/index/datacite/docId/146');
 
