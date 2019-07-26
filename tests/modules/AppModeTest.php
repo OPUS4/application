@@ -27,28 +27,31 @@
  * @category    Application Unit Test
  * @author      Sascha Szott <szott@zib.de>
  * @author      Maximilian Salomon <salomon@zib.de>
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
  * @coversNothing
  */
-class AppModeTest extends ControllerTestCase {
+class AppModeTest extends ControllerTestCase
+{
 
-    public function testProductionMode() {
+    protected $additionalResources = ['view', 'mainMenu', 'translation'];
+
+    public function testProductionMode()
+    {
         $this->markTestSkipped('TODO common.phtml uses APPLICATION_ENV directly');
         parent::setUpWithEnv('production');
         $this->dispatch('/home');
         $this->assertNotContains('NON PRODUCTION ENVIRONMENT', $this->getResponse()->getBody());
     }
 
-    public function testTestingMode() {
+    public function testTestingMode()
+    {
         parent::setUpWithEnv('testing');
         $this->useEnglish();
         $this->dispatch('/home');
         $this->assertContains('NON PRODUCTION ENVIRONMENT (testing)', $this->getResponse()->getBody());
     }
-
 }
