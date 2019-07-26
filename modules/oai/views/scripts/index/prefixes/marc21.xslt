@@ -166,6 +166,26 @@
                     <xsl:text>cr uuu---uunan</xsl:text>
                 </marc:controlfield>
 
+                <xsl:if test="not(./TitleParent) and ./IdentifierIsbn">
+                    <xsl:for-each select="./IdentifierIsbn">
+                        <marc:datafield ind1=" " ind2=" " tag="020">
+                            <marc:subfield code="a">
+                                <xsl:value-of select="./@Value"/>
+                            </marc:subfield>
+                        </marc:datafield>
+                    </xsl:for-each>
+                </xsl:if>
+
+                <xsl:if test="not(./TitleParent) and ./IdentifierIssn">
+                    <xsl:for-each select="./IdentifierIssn">
+                        <marc:datafield ind1=" " ind2=" " tag="022">
+                            <marc:subfield code="a">
+                                <xsl:value-of select="./@Value"/>
+                            </marc:subfield>
+                        </marc:datafield>
+                    </xsl:for-each>
+                </xsl:if>
+
                 <xsl:if test="./IdentifierUrn">
                     <marc:datafield ind1="7" ind2=" " tag="024">
                         <marc:subfield code="a">
@@ -443,53 +463,75 @@
                     <xsl:with-param name="role">cont</xsl:with-param>
                 </xsl:apply-templates>
 
-                <!-- TitleParent -->
-                <!-- FIXME OPUSVIER-4080 -->
-                <xsl:if test="./TitleParent">
+                <xsl:if test="((not(./TitleParent) or count(TitleParent) &gt; 1)) and (./@Volume or ./@Issue or (./@PageFirst or ./@PageLast))">
+                    <marc:datafield ind1="0" ind2=" " tag="773">
+                        <xsl:call-template name="subfieldG">
+                            <xsl:with-param name="volume" select="./@Volume"/>
+                            <xsl:with-param name="issue" select="./@Issue"/>
+                            <xsl:with-param name="pageFirst" select="./@PageFirst"/>
+                            <xsl:with-param name="pageLast" select="./@PageLast"/>
+                        </xsl:call-template>
+                    </marc:datafield>
+                </xsl:if>
+
+                <!-- Behandlung von TitleParent (genau ein TitleParent): TitleParent und Volume, Issue, Pages in gemeinsames 773-Feld -->
+                <xsl:if test="count(./TitleParent) = 1">
                     <marc:datafield ind1="0" ind2=" " tag="773">
                         <marc:subfield code="t">
                             <xsl:value-of select="./TitleParent/@Value"/>
                         </marc:subfield>
-                        <xsl:if test="./IdentifierIssn/@Value">
+                        <xsl:call-template name="subfieldG">
+                            <xsl:with-param name="volume" select="./@Volume"/>
+                            <xsl:with-param name="issue" select="./@Issue"/>
+                            <xsl:with-param name="pageFirst" select="./@PageFirst"/>
+                            <xsl:with-param name="pageLast" select="./@PageLast"/>
+                        </xsl:call-template>
+                        <xsl:if test="(count(./IdentifierIssn) = 1) and not(./IdentifierIsbn)">
                             <marc:subfield code="x">
                                 <xsl:value-of select="./IdentifierIssn/@Value"/>
                             </marc:subfield>
                         </xsl:if>
-                        <xsl:choose>
-                            <xsl:when test="(./@Volume) and (./@Issue) and (./@PageFirst) and (./@PageLast)">
-                                <marc:subfield code="g">
-                                    <xsl:text>Jahrgang </xsl:text>
-                                    <xsl:value-of select="./@Volume"/>
-                                    <xsl:text>, Heft </xsl:text>
-                                    <xsl:value-of select="./@Issue"/>
-                                    <xsl:text>, Seiten </xsl:text>
-                                    <xsl:value-of select="./@PageFirst"/>
-                                    <xsl:text>-</xsl:text>
-                                    <xsl:value-of select="./@PageLast"/>
-                                </marc:subfield>
-                            </xsl:when>
-                            <xsl:when test="(./@Volume) and (./@Issue)">
-                                <marc:subfield code="g">
-                                    <xsl:text>Jahrgang </xsl:text>
-                                    <xsl:value-of select="./@Volume"/>
-                                    <xsl:text>, Heft </xsl:text>
-                                    <xsl:value-of select="./@Issue"/>
-                                </marc:subfield>
-                            </xsl:when>
-                            <xsl:when test="./@Issue">
-                                <marc:subfield code="g">
-                                    <xsl:text>Heft </xsl:text>
-                                    <xsl:value-of select="./@Issue"/>
-                                </marc:subfield>
-                            </xsl:when>
-                            <xsl:when test="./@Volume">
-                                <marc:subfield code="g">
-                                    <xsl:text>Jahrgang </xsl:text>
-                                    <xsl:value-of select="./@Volume"/>
-                                </marc:subfield>
-                            </xsl:when>
-                        </xsl:choose>
+                        <xsl:if test="(count(./IdentifierIsbn) = 1) and not (./IdentifierIssn)">
+                            <marc:subfield code="z">
+                                <xsl:value-of select="./IdentifierIsbn/@Value"/>
+                            </marc:subfield>
+                        </xsl:if>
                     </marc:datafield>
+                </xsl:if>
+
+                <!-- Behandlung von TitleParent (mehr als ein TitleParent): jeder TitleParent in ein eigenes 773-Feld -->
+                <xsl:if test="count(./TitleParent) &gt; 1">
+                    <xsl:for-each select="./TitleParent">
+                        <marc:datafield ind1="0" ind2=" " tag="773">
+                            <marc:subfield code="t">
+                                <xsl:value-of select="./@Value"/>
+                            </marc:subfield>
+                        </marc:datafield>
+                    </xsl:for-each>
+                </xsl:if>
+
+                <!-- beim Vorhandensein mindestens eines TitleParent: ISSNs werden einzeln ausgegeben,
+                     wenn es mehr als eine gibt oder mehr als einen TitleParent oder gleichzeitig eine ISBN existiert -->
+                <xsl:if test="./TitleParent and not((count(./TitleParent) = 1) and (count(./IdentifierIssn) = 1) and not(./IdentifierIsbn))">
+                    <xsl:for-each select="./IdentifierIssn">
+                        <marc:datafield ind1="0" ind2=" " tag="773">
+                            <marc:subfield code="x">
+                                <xsl:value-of select="./@Value"/>
+                            </marc:subfield>
+                        </marc:datafield>
+                    </xsl:for-each>
+                </xsl:if>
+
+                <!-- beim Vorhandensein mindestens eines TitleParent: ISBNs werden einzeln ausgegeben,
+                     wenn es mehr als eine gibt oder mehr als einen TitleParent oder gleichzeitig eine ISSN existiert -->
+                <xsl:if test="./TitleParent and not((count(./TitleParent) = 1) and (count(./IdentifierIsbn) = 1) and not(./IdentifierIssn))">
+                    <xsl:for-each select="./IdentifierIsbn">
+                        <marc:datafield ind1="0" ind2=" " tag="773">
+                            <marc:subfield code="z">
+                                <xsl:value-of select="./@Value"/>
+                            </marc:subfield>
+                        </marc:datafield>
+                    </xsl:for-each>
                 </xsl:if>
 
                 <xsl:if test="./IdentifierUrn">
@@ -568,4 +610,36 @@
             </marc:subfield>
         </marc:datafield>
     </xsl:template>
+
+    <xsl:template name="subfieldG">
+        <xsl:param name="volume"/>
+        <xsl:param name="issue"/>
+        <xsl:param name="pageFirst"/>
+        <xsl:param name="pageLast"/>
+        <xsl:if test="$volume or $issue or ($pageFirst and $pageLast)">
+            <marc:subfield code="g">
+                <xsl:if test="$volume">
+                    <xsl:text>Jahrgang </xsl:text>
+                    <xsl:value-of select="$volume"/>
+                    <xsl:if test="($issue) or (not($issue) and ($pageFirst and $pageLast))">
+                        <xsl:text>, </xsl:text>
+                    </xsl:if>
+                </xsl:if>
+                <xsl:if test="$issue">
+                    <xsl:text>Heft </xsl:text>
+                    <xsl:value-of select="$issue"/>
+                    <xsl:if test="$pageFirst and $pageLast">
+                        <xsl:text>, </xsl:text>
+                    </xsl:if>
+                </xsl:if>
+                <xsl:if test="$pageFirst and $pageLast">
+                    <xsl:text>Seiten </xsl:text>
+                    <xsl:value-of select="$pageFirst"/>
+                    <xsl:text>-</xsl:text>
+                    <xsl:value-of select="$pageLast"/>
+                </xsl:if>
+            </marc:subfield>
+        </xsl:if>
+    </xsl:template>
+
 </xsl:stylesheet>
