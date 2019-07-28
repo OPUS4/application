@@ -40,7 +40,8 @@ script:
   - ./bin/solr restart
   - cd ..
   - ant reset-testdata
-  - ./vendor/bin/phpunit --configuration ./tests/phpunit.xml --no-coverage ./tests/library
-  - ./vendor/bin/phpunit --configuration ./tests/phpunit.xml --no-coverage ./tests/modules
-  - ./vendor/bin/phpunit --configuration ./tests/phpunit.xml --no-coverage ./tests/security
-  - ./vendor/bin/phpunit --configuration ./tests/phpunit.xml --no-coverage ./tests/scripts
+  - ./vendor/bin/phpunit --configuration ./tests/phpunit.xml --no-coverage --testsuite library
+  - ./vendor/bin/phpunit --configuration ./tests/phpunit.xml --no-coverage --testsuite modules
+  - ./vendor/bin/phpunit --configuration ./tests/phpunit.xml --no-coverage --testsuite admin
+  - ./vendor/bin/phpunit --configuration ./tests/phpunit.xml --no-coverage --testsuite security
+  - ./vendor/bin/phpunit --configuration ./tests/phpunit.xml --no-coverage --testsuite scripts

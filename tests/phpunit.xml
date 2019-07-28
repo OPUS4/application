@@ -9,10 +9,24 @@
          processIsolation="false"
          syntaxCheck="true">
 
-    <testsuite name="ServerTests">
+    <testsuite name="scripts">
         <directory>./scripts</directory>
+    </testsuite>
+
+    <testsuite name="library">
         <directory>./library</directory>
+    </testsuite>
+
+    <testsuite name="modules">
         <directory>./modules</directory>
+        <exclude>./modules/admin</exclude>
+    </testsuite>
+
+    <testsuite name="admin">
+        <directory>./modules/admin</directory>
+    </testsuite>
+
+    <testsuite name="security">
         <directory>./security</directory>
     </testsuite>
 
