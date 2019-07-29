@@ -137,7 +137,7 @@ gnd.linkAuthor.frontdoor = 1
 
 ; This is an regular expression which allows an alphanumerical filename. It is allowed to use _, - and . but not at beginning.
 ; Please use an expression without the typical starting and ending backslash, this is automatically added. The RegEx is used in JS and PHP. To deactivate choose "".
-;publish.filenameFormat = "^[a-zA-Z0-9][a-zA-Z0-9_.-]+$"
+;files.filenameFormat = "^[a-zA-Z0-9][a-zA-Z0-9_.-]+$"
 
 ; CHECKSUM SETTINGS
 ; Maximum filesize in MB (default 50 MB) for calculating MD5 and SHA512 hashes
