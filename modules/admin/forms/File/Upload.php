@@ -73,7 +73,17 @@ class Admin_Form_File_Upload extends Application_Form_Model_Abstract {
             'label' => 'admin_filemanager_element_file',
             )
         );
+
+        $config = Application_Configuration::getInstance()->getConfig();
+
+        $filenameOptions = [
+            'filenameMaxLength' => $config->files->filenameMaxLength
+        ];
+        $filenameValidator = new Application_Form_Validate_Filename($filenameOptions);
+
+        $element->addValidator($filenameValidator, false);
         $element->addValidator('Count', false, 1); // ensure only 1 file
+
         $this->addElement($element);
 
         $this->addElement('Language', self::ELEMENT_LANGUAGE, array('label' => 'Language', 'required' => true));

@@ -239,7 +239,7 @@ class Application_Form_Validate_FilenameTest extends ControllerTestCase
      */
     public function testDefaultConfigValid($arg)
     {
-        $filenameMaxLength = $this->config->publish->filenameMaxLength;
+        $filenameMaxLength = $this->config->files->filenameMaxLength;
         $filenameFormat = $this->config->publish->filenameFormat;
         $filenameOptions = [
             'filenameMaxLength' => $filenameMaxLength,
@@ -270,7 +270,7 @@ class Application_Form_Validate_FilenameTest extends ControllerTestCase
      */
     public function testDefaultConfigInvalid($arg, $msg)
     {
-        $filenameMaxLength = $this->config->publish->filenameMaxLength;
+        $filenameMaxLength = $this->config->files->filenameMaxLength;
         $filenameFormat = $this->config->publish->filenameFormat;
         $filenameOptions = [
             'filenameMaxLength' => $filenameMaxLength,
@@ -287,7 +287,7 @@ class Application_Form_Validate_FilenameTest extends ControllerTestCase
      */
     public function testDefaultFilenameFormatIsValid()
     {
-        $filenameMaxLength = $this->config->publish->filenameMaxLength;
+        $filenameMaxLength = $this->config->files->filenameMaxLength;
         $filenameFormat = $this->config->publish->filenameFormat;
         $filenameOptions = [
             'filenameMaxLength' => $filenameMaxLength,
