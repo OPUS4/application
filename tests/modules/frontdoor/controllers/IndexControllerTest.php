@@ -629,7 +629,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/frontdoor/index/index/docId/89');
 
         // undo changes
-        $role->setDisplayBrowsing($displayFrontdoor);
+        $role->setDisplayFrontdoor($displayFrontdoor);
         $role->store();
 
         $this->assertQueryContentContains(
@@ -651,7 +651,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/frontdoor/index/index/docId/89');
 
         // undo changes
-        $role->setDisplayBrowsing($displayFrontdoor);
+        $role->setDisplayFrontdoor($displayFrontdoor);
         $role->store();
 
         $this->assertQueryContentContains(
@@ -673,7 +673,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/frontdoor/index/index/docId/89');
 
         // undo changes
-        $role->setDisplayBrowsing($displayFrontdoor);
+        $role->setDisplayFrontdoor($displayFrontdoor);
         $role->store();
 
         $this->assertNotQueryContentContains('td', '52.00', $this->getResponse()->getBody());
@@ -696,7 +696,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/frontdoor/index/index/docId/89');
 
         // undo changes
-        $role->setDisplayBrowsing($displayFrontdoor);
+        $role->setDisplayFrontdoor($displayFrontdoor);
         $role->store();
 
         $this->assertQueryContentContains('td', '52.00', $this->getResponse()->getBody());

@@ -34,7 +34,7 @@
  *
  * @covers Admin_PersonController
  */
-class PersonControllerTest extends ControllerTestCase
+class Admin_PersonControllerTest extends ControllerTestCase
 {
 
     protected $additionalResources = 'all';
@@ -386,6 +386,10 @@ class PersonControllerTest extends ControllerTestCase
         $this->assertQueryCount('ul.paginationControl/li', 14);
     }
 
+    /**
+     * TODO test is affected by other tests creating Opus_Person objects, because deleting test documents does not
+     *      delete linked persons
+     */
     public function testIndexPaginationLastPage()
     {
         // use 5 because it is larger than max page number (with current test data)
@@ -397,11 +401,15 @@ class PersonControllerTest extends ControllerTestCase
         $this->assertQuery('div.pagination-next');
         $this->assertQuery('div.pagination-last');
 
-        $this->assertQueryContentContains('li.currentPage', 3); // with current test data
+        $personsCount = Opus_Person::getAllPersonsCount();
+
+        $pages = ceil($personsCount / 50);
+
+        $this->assertQueryContentContains('li.currentPage', $pages); // with current test data
         $this->assertNotQuery('li.currentPage/a'); // no link for current page
         $this->assertQueryContentContains('li/a', 1);
         $this->assertQueryContentContains('li/a', 2);
-        $this->assertQueryCount('ul.paginationControl/li', 7); // 3 pages + 4 nav links
+        $this->assertQueryCount('ul.paginationControl/li', $pages + 4); // 3 pages + 4 nav links
     }
 
     public function testIndexPagination()
