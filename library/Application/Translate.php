@@ -52,6 +52,82 @@ class Application_Translate extends Zend_Translate
      */
     const REGISTRY_KEY = 'Zend_Translate';
 
+
+    private $files = [
+        'account/account.tmx',
+        'admin/access.tmx',
+        'admin/account.tmx',
+        'admin/admin.tmx',
+        'admin/collections.tmx',
+        'admin/config.tmx',
+        'admin/dnbinstitute.tmx',
+        'admin/doctype.tmx',
+        'admin/document.tmx',
+        'admin/documents.tmx',
+        'admin/enrichmentkey.tmx',
+        'admin/filebrowser.tmx',
+        'admin/filemanager.tmx',
+        'admin/files.tmx',
+        'admin/forms.tmx',
+        'admin/indexmaintenance.tmx',
+        'admin/info.tmx',
+        'admin/iprange.tmx',
+        'admin/job.tmx',
+        'admin/language.tmx',
+        'admin/licence.tmx',
+        'admin/module.tmx',
+        'admin/oailink.tmx',
+        'admin/person.tmx',
+        'admin/report.tmx',
+        'admin/resources.tmx',
+        'admin/role.tmx',
+        'admin/security.tmx',
+        'admin/series.tmx',
+        'admin/settings.tmx',
+        'admin/statistic.tmx',
+        'admin/validation.tmx',
+        'citationExport/citationExport.tmx',
+        'crawlers/sitelinks.tmx',
+        'default/account.tmx',
+        'default/admin.tmx',
+        'default/auth.tmx',
+        'default/collectionroles.tmx',
+        'default/crud.tmx',
+        'default/default.tmx',
+        'default/doctypes.tmx',
+        'default/error.tmx',
+        'default/fieldnames.tmx',
+        'default/fieldvalues.tmx',
+        'default/modelnames.tmx',
+        'default/rss.tmx',
+        'default/search.tmx',
+        'default/security.tmx',
+        'default/setup.tmx',
+        'default/validation.tmx',
+        'default/workflow.tmx',
+        'export/export.tmx',
+        'frontdoor/frontdoor.tmx',
+        'frontdoor/messages.tmx',
+        'home/contact.tmx',
+        'home/help.tmx',
+        'home/home.tmx',
+        'home/imprint.tmx',
+        'oai/error.tmx',
+        'publish/buttons.tmx',
+        'publish/errors.tmx',
+        'publish/field_headers.tmx',
+        'publish/field_hints.tmx',
+        'publish/fieldnames.tmx',
+        'publish/publish.tmx',
+        'review/review.tmx',
+        'setup/language.tmx',
+        'setup/setup.tmx',
+        'solrsearch/browsing.tmx',
+        'solrsearch/solrsearch.tmx',
+        'statistic/statistic.tmx',
+        'sword/sword.tmx'
+    ];
+
     /**
      * Array mit bereits geladenen Modulen.
      * @var array
@@ -64,16 +140,18 @@ class Application_Translate extends Zend_Translate
      */
     private $_logger;
 
+    static private $instance;
+
     /**
      * Optionen für Zend_Translate.
      *
      * @var array
      */
-   private $_options = [
+    private $_options = [
         'logMessage' => "Unable to translate key '%message%' into locale '%locale%'",
         'logPriority' => Zend_Log::DEBUG,
         'adapter' => 'tmx',
-        'locale' => 'auto',
+        'locale' => 'en',
         'clear' => false,
         'scan' => Zend_Translate::LOCALE_FILENAME,
         'ignore' => '.',
@@ -87,6 +165,15 @@ class Application_Translate extends Zend_Translate
     {
         $options = (!is_null($options)) ?  array_merge($this->getOptions(), $options) : $this->getOptions();
         parent::__construct($options);
+    }
+
+    static public function getInstance()
+    {
+        if (is_null(self::$instance)) {
+            self::$instance = new Application_Translate();
+        }
+
+        return self::$instance;
     }
 
     /**
@@ -106,12 +193,12 @@ class Application_Translate extends Zend_Translate
     /**
      * Loads all modules.
      */
-    public function loadModules()
+    public function loadModules($reload = false)
     {
         $modules = Application_Modules::getInstance()->getModules();
 
         foreach ($modules as $name => $module) {
-            $this->loadModule($name);
+            $this->loadModule($name, $reload);
         }
     }
 
@@ -123,6 +210,7 @@ class Application_Translate extends Zend_Translate
      */
     public function loadDatabase($reload = false)
     {
+        // TODO use cache
         $translate = new Zend_Translate([
             'adapter' => 'Opus_Translate_DatabaseAdapter',
             'content' => 'all',
@@ -138,6 +226,8 @@ class Application_Translate extends Zend_Translate
                 'locale' => $locale
             ]);
         }
+
+        unset($translate); // TODO Garbage collection? Does it work?
     }
 
     public function loadTranslations($reload = false)
@@ -184,10 +274,10 @@ class Application_Translate extends Zend_Translate
 
             // 'reload' is always set, because this code should only be executed if the module has not been loaded yet
             // Otherwise there is a mechanism preventing repeated loading in the parent class.
-            $options = array_merge(
-                ['content' => $path . DIRECTORY_SEPARATOR . $file, 'reload' => true],
-                $this->getOptions()
-            );
+            $options = array_merge([
+                'content' => $path . DIRECTORY_SEPARATOR . $file,
+                'reload' => true
+            ], $this->getOptions());
 
             $this->addTranslation($options);
         }
@@ -289,5 +379,30 @@ class Application_Translate extends Zend_Translate
         $database = new Opus_Translate_Dao();
 
         $database->setTranslation($key, $translations, $module);
+    }
+
+    /**
+     * @throws Zend_Translate_Exception
+     *
+     * TODO does not work as intended - messes up some other tests
+     */
+    public function clear()
+    {
+        $translate = new Zend_Translate([
+            'adapter' => 'array',
+            'content' => ['en' => [], 'de' => []],
+            'locale' => 'en',
+            'disableNotices' => true,
+            'clear' => true
+        ]);
+
+        $this->addTranslation($translate);
+
+        $translate = null;
+    }
+
+    public function getTmxFiles()
+    {
+        return $this->files;
     }
 }

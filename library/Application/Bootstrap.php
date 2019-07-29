@@ -218,7 +218,10 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
 
         $logger = $this->getResource('Logging');
 
-        $translate = new Application_Translate();
+        $translate = Application_Translate::getInstance();
+        $translate->setOptions([
+            'log' => $logger
+        ]);
 
         Zend_Registry::set(Application_Translate::REGISTRY_KEY, $translate);
 

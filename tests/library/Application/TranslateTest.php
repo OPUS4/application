@@ -50,6 +50,15 @@ class Application_TranslateTest extends ControllerTestCase
         $dao->removeAll();
         Zend_Translate::clearCache();
         parent::tearDown();
+
+    }
+
+    static public function tearDownAfterClass()
+    {
+        $translate =Zend_Registry::get('Zend_Translate');
+        $translate->loadTranslations(true);
+
+        parent::tearDownAfterClass();
     }
 
     public function testConstruct()
@@ -283,7 +292,6 @@ class Application_TranslateTest extends ControllerTestCase
     public function testTranslateLanguageEnglish($langId, $translation)
     {
         $this->translate->setLocale('en');
-        $this->translate->loadModule('default');
         $this->assertEquals(strtolower($translation), strtolower($this->translate->translateLanguage($langId)));
     }
 
@@ -293,7 +301,6 @@ class Application_TranslateTest extends ControllerTestCase
     public function testTranslateLanguageGerman($langId, $translation)
     {
         $this->translate->setLocale('de');
-        $this->translate->loadModule('default');
         $this->assertEquals($translation, $this->translate->translateLanguage($langId));
     }
 
@@ -411,5 +418,12 @@ class Application_TranslateTest extends ControllerTestCase
             Zend_Translate::clearCache();
             $translate->loadTranslations();
         }
+    }
+
+    public function testGetTmxFiles()
+    {
+        $translate = new Application_Translate();
+
+        $this->assertCount(72, $translate->getTmxFiles());
     }
 }
