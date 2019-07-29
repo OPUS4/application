@@ -43,9 +43,9 @@ class Application_Form_Element_SupportedLanguagesTest extends FormElementTestCas
     {
         $this->_formElementClass = 'Application_Form_Element_SupportedLanguages';
         $this->_expectedDecoratorCount = 6;
-        $this->_expectedDecorators = array(
+        $this->_expectedDecorators = [
             'ViewHelper', 'Description', 'Errors', 'ElementHtmlTag', 'LabelNotEmpty', 'dataWrapper'
-        );
+        ];
         $this->_staticViewHelper = 'viewFormMultiCheckbox';
         parent::setUp();
     }
@@ -54,9 +54,9 @@ class Application_Form_Element_SupportedLanguagesTest extends FormElementTestCas
     {
         $element = $this->getElement();
 
-        $element->setValue(array('en', 'de'));
+        $element->setValue(['en', 'de']);
 
-        $this->assertEquals(array('en', 'de'), $element->getValue());
+        $this->assertEquals(['en', 'de'], $element->getValue());
     }
 
     public function testSetValue()
@@ -65,7 +65,7 @@ class Application_Form_Element_SupportedLanguagesTest extends FormElementTestCas
 
         $element->setValue('en,de');
 
-        $this->assertEquals(array('en', 'de'), $element->getValue());
+        $this->assertEquals(['en', 'de'], $element->getValue());
     }
 
     public function testSetValueWithSpaces()
@@ -74,7 +74,7 @@ class Application_Form_Element_SupportedLanguagesTest extends FormElementTestCas
 
         $element->setValue(' en , de ');
 
-        $this->assertEquals(array('en', 'de'), $element->getValue());
+        $this->assertEquals(['en', 'de'], $element->getValue());
     }
 
     public function testGetLanguageOptionsInGerman()
@@ -87,9 +87,9 @@ class Application_Form_Element_SupportedLanguagesTest extends FormElementTestCas
 
         $this->assertNotNull($options);
         $this->assertInternalType('array', $options);
-        $this->assertEquals(array(
+        $this->assertEquals([
             'en' => 'Englisch', 'de' => 'Deutsch'
-        ), $options);
+        ], $options);
     }
 
     public function testGetLanguageOptionsInEnglish()
@@ -102,21 +102,20 @@ class Application_Form_Element_SupportedLanguagesTest extends FormElementTestCas
 
         $this->assertNotNull($options);
         $this->assertInternalType('array', $options);
-        $this->assertEquals(array(
+        $this->assertEquals([
             'en' => 'English', 'de' => 'German'
-        ), $options);
+        ], $options);
     }
 
     public function testValidation()
     {
         $element = $this->getElement();
 
-        $this->assertTrue($element->isValid(array('de', 'en')));
-        $this->assertTrue($element->isValid(array('en', 'de')));
-        $this->assertTrue($element->isValid(array('de')));
-        $this->assertTrue($element->isValid(array('en')));
-        $this->assertFalse($element->isValid(array()));
-        $this->assertFalse($element->isValid(array('ru')));
+        $this->assertTrue($element->isValid(['de', 'en']));
+        $this->assertTrue($element->isValid(['en', 'de']));
+        $this->assertTrue($element->isValid(['de']));
+        $this->assertTrue($element->isValid(['en']));
+        $this->assertFalse($element->isValid([]));
+        $this->assertFalse($element->isValid(['ru']));
     }
-
 }
