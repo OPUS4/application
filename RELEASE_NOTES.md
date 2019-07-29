@@ -4,6 +4,14 @@ Die Übersetzung von Sprachen, z.B. 'deu' => 'German', erfolgt nun mit Hilfe von
 Funktionen. Die Datei 'modules/default/language/languages.tmx' wurde gelöscht. 
 Übersetzungen von Sprachen in angepassten TMX-Dateien werden immer noch verwendet, 
 sollten aber nicht mehr notwendig sein. 
+---
+
+## Release 4.6.4 2019-29-07
+Es wurden eine Änderung an der Konfiguration vorgenommen.
+Ändern Sie in Ihrer 'config.ini' bitte folgende Zeilen:
+
+    publish.filenameMaxLength -> files.filenameMaxLength (Z. 137)
+    publish.filenameFormat -> files.filenameFormat (Z. 141)
 
 ---
 
