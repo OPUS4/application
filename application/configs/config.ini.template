@@ -133,7 +133,7 @@ gnd.linkAuthor.frontdoor = 1
 ;publish.filetypes.allowed = pdf,txt,html,htm ; filetypes that are accepted in publication form
 
 ; Set an limited length for an filename. Use 0 to deactivate.
-;publish.filenameMaxLength = 50
+;files.filenameMaxLength = 50
 
 ; This is an regular expression which allows an alphanumerical filename. It is allowed to use _, - and . but not at beginning.
 ; Please use an expression without the typical starting and ending backslash, this is automatically added. The RegEx is used in JS and PHP. To deactivate choose "".
