@@ -34,7 +34,7 @@
 class Export_Marc21ExportTest extends ControllerTestCase
 {
 
-    protected $additionalResources = ['database', 'view', 'mainMenu'];
+    protected $additionalResources = 'all';
 
     /**
      * Standardmäßig kann der MARC21-XML-Export auch für Dokumente, die nicht freigeschaltet sind,
