@@ -52,7 +52,7 @@ class Application_Export_ExportServiceTest extends ControllerTestCase
         $plugins = $this->_service->getAllPlugins();
 
         $this->assertInternalType('array', $plugins);
-        $this->assertCount(6, $plugins);
+        $this->assertCount(7, $plugins);
         $this->assertArrayHasKey('index', $plugins);
         $this->assertArrayHasKey('bibtex', $plugins);
         $this->assertArrayHasKey('ris', $plugins);
