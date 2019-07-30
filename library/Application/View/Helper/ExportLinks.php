@@ -111,5 +111,4 @@ class Application_View_Helper_ExportLinks extends Application_View_Helper_Abstra
 
         return "<a href=\"{$format->getHref()}\" title=\"$description\" class=\"export $formatClass\">$name</a>";
     }
-
 }

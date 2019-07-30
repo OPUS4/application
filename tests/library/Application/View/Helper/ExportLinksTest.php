@@ -63,6 +63,7 @@ class Application_View_Helper_ExportLinksTest extends ControllerTestCase
             '<ul>' .
             '<li><a href="/citationExport/index/download/output/bibtex" title="Export BibTeX" class="export bibtex">BibTeX</a></li>' .
             '<li><a href="/export/index/datacite" title="Export DataCite-XML" class="export datacite">DataCite</a></li>' .
+            '<li><a href="/export/index/marc21/searchtype/id" title="Export MARC21-XML" class="export marc21-xml">MARC21-XML</a></li>' .
             '<li><a href="/citationExport/index/download/output/ris" title="Export RIS" class="export ris">RIS</a></li>' .
             '<li><a href="/export/index/index/export/xml/searchtype/id/stylesheet/example" title="Export XML" class="export xml">XML</a></li>' .
             '</ul>',
