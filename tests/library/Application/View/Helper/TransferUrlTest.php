@@ -24,61 +24,23 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Export
- * @author      Jens Schwidder <schwidder@zib.de>
+ * @category    Application Unit Test
+ * @package     Application_View_Helper
+ * @author      Sascha Szott <opus-repository@saschaszott.de>
  * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-/**
- * Interface for export plugins.
- *
- * The plugins are dynamically registered as actions in the export controller.
- *
- * TODO The export mechanism should/could be separated from the request/response handling.
- */
-interface Application_Export_ExportPlugin {
+class Application_View_Helper_TransferUrlTest extends ControllerTestCase
+{
 
-    /**
-     * Returns name of plugin.
-     * @return mixed
-     */
-    public function getName();
+    public function testTransferUrl()
+    {
+        $helper = new Application_View_Helper_TransferUrl();
+        $helper->setView(Zend_Registry::get('Opus_View'));
 
-    /**
-     * Sets the plugin configuration.
-     * @param Zend_Config $config
-     */
-    public function setConfig(Zend_Config $config = null);
-
-    /**
-     * Sets the HTTP request being processed.
-     * @param Zend_Controller_Request_Http $request
-     */
-    public function setRequest(Zend_Controller_Request_Http $request);
-
-    /**
-     * Sets the HTTP response.
-     * @param Zend_Controller_Response_Http $response
-     */
-    public function setResponse(Zend_Controller_Response_Http $response);
-
-    /**
-     * Sets the view objekt for rendering the response.
-     * @param Zend_View $view
-     */
-    public function setView(Zend_View $view);
-
-    /**
-     * Main function performing export.
-     */
-    public function execute();
-
-    /**
-     * @return bool returns true if plugin access is restricted to administrators
-     */
-    public function isAccessRestricted();
+        $transferUrl = $helper->transferUrl('123');
+        $this->assertEquals('http:///oai/container/index/docId/123', $transferUrl);
+    }
 
 }
-

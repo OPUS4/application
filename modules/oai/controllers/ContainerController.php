@@ -34,7 +34,7 @@
  */
 
 /**
- * Class Oai_ContainerController deliveres files of a document for OAI clients.
+ * Class Oai_ContainerController delivers files of a document for OAI clients.
  *
  * If a document has only one file it is returned.
  *

@@ -111,12 +111,10 @@ class Export_Model_XmlExportTest extends ControllerTestCase
         $this->assertEquals('Deutscher Titel', $result->item(--$count)->childNodes->item(3)->attributes->item(2)->nodeValue);
     }
 
-    public function testXmlPreparationForFrontdoorWithWrongId()
+    public function testXmlPreparationForFrontdoorWithWrongDocId() 
     {
-        $docId = 199293;
-
         $this->getRequest()->setMethod('POST')->setPost(array(
-            'docId' => ++$docId,
+            'docId' => 'docId',
             'searchtype' => 'id'
         ));
 
@@ -126,14 +124,15 @@ class Export_Model_XmlExportTest extends ControllerTestCase
         $this->assertEquals(0, $result->length);
     }
 
-    public function testXmlPreparationForFrontdoorWithoutId()
+    public function testXmlPreparationForFrontdoorWithMissingDocId() 
     {
         $this->getRequest()->setMethod('POST')->setPost(array(
             'searchtype' => 'id'
         ));
-
-        $this->setExpectedException('Application_Exception');
         $this->plugin->prepareXml();
+        $xpath = new DOMXPath($this->plugin->getXml());
+        $result = $xpath->query('//Opus_Document');
+        $this->assertEquals(0, $result->length);
     }
 
     public function testXmlSortOrder()
@@ -349,5 +348,4 @@ class Export_Model_XmlExportTest extends ControllerTestCase
 
         $this->assertEquals('fulltext.pdf', $plugin->getAttachmentFilename());
     }
-
 }

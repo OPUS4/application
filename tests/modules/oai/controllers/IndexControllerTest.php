@@ -62,7 +62,8 @@ class Oai_IndexControllerTest extends ControllerTestCase
         'dcterms' => "http://purl.org/dc/terms/",
         'thesis' => "http://www.ndltd.org/standards/metadata/etdms/1.0/",
         'eprints' => 'http://www.openarchives.org/OAI/1.1/eprints',
-        'oaiid' => 'http://www.openarchives.org/OAI/2.0/oai-identifier'
+        'oaiid' => 'http://www.openarchives.org/OAI/2.0/oai-identifier',
+        'marc' => 'http://www.loc.gov/MARC21/slim'
     ];
 
     /**
@@ -295,7 +296,8 @@ class Oai_IndexControllerTest extends ControllerTestCase
             'oai_dc' => 91,
             'oai_pp' => 91,
             'copy_xml' => 91,
-            'epicur' => 91);
+            'epicur' => 91,
+            'marc21' => 91);
 
         foreach ($formatTestDocuments AS $format => $docId) {
             $this->dispatch("/oai?verb=GetRecord&metadataPrefix=$format&identifier=oai::$docId");
@@ -2377,4 +2379,1012 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $this->assertXpathContentContains('//xMetaDiss:xMetaDiss/dc:identifier', '123');
         $this->assertXpathContentContains('//xMetaDiss:xMetaDiss/ddb:identifier', '10.1007/978-3-540-76406-9');
     }
+
+    public function testGetRecordMarc21OfDocId91()
+    {
+        // manipulate configuration
+        $config = Zend_Registry::get('Zend_Config');
+
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'marc21' => [
+                'isil' => 'DE-9999',
+                'publisherName' => 'publisherNameFromConfig',
+                'publisherCity' => 'publisherCityFromConfig',
+            ]
+        ]));
+
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=marc21&identifier=oai::91');
+
+        // revert changes in configuration
+        Zend_Registry::set('Zend_Config', $config);
+
+        $this->assertResponseCode(200);
+
+        $response = $this->getResponse();
+        $badStrings = array("Exception", "Error", "Stacktrace", "badVerb");
+        $this->checkForCustomBadStringsInHtml($response->getBody(), $badStrings);
+
+        $this->registerXpathNamespaces($this->xpathNamespaces);
+
+        $this->assertXpathContentContains('//marc:leader','00000nam a22000005  4500');
+        $this->assertXpathContentContains('//marc:controlfield[@tag="001"]','docId-91');
+        $this->assertXpathContentContains('//marc:controlfield[@tag="003"]','DE-9999');
+        $this->assertXpathContentContains('//marc:datafield[@tag="041"]/marc:subfield[@code="a"]','eng');
+        $this->assertXpathContentContains('//marc:datafield[@tag="100"]/marc:subfield[@code="a"]','Doe, John');
+        $this->assertXpathContentContains('//marc:datafield[@tag="245"]/marc:subfield[@code="a"]','This is a pdf test document');
+        $this->assertXpathContentContains('//marc:datafield[@tag="264"]/marc:subfield[@code="a"]','publisherCityFromConfig');
+        $this->assertXpathContentContains('//marc:datafield[@tag="264"]/marc:subfield[@code="b"]','publisherNameFromConfig');
+        $this->assertXpathContentContains('//marc:datafield[@tag="264"]/marc:subfield[@code="c"]','2010');
+        $this->assertXpathContentContains('//marc:datafield[@tag="490"]/marc:subfield[@code="a"]','MySeries');
+        $this->assertXpathContentContains('//marc:datafield[@tag="490"]/marc:subfield[@code="v"]','1/5');
+        $this->assertXpathContentContains('//marc:datafield[@tag="520"]/marc:subfield[@code="a"]','This is a pdf test document');
+        $this->assertXpathContentContains('//marc:datafield[@tag="653"]/marc:subfield[@code="a"]','Informationssystem');
+        $this->assertXpathContentContains('//marc:datafield[@tag="653"]/marc:subfield[@code="a"]','eBook');
+        $this->assertXpathContentContains('//marc:datafield[@tag="655"]/marc:subfield[@code="a"]','report');
+        $this->assertXpathContentContains('//marc:datafield[@tag="700"]/marc:subfield[@code="a"]','Zufall, Rainer');
+        $this->assertXpathContentContains('//marc:datafield[@tag="700"]/marc:subfield[@code="a"]','Fall, Klara');
+        $this->assertXpathContentContains('//marc:datafield[@tag="773"]/marc:subfield[@code="t"]','This is a parent title');
+        $this->assertXpathContentContains('//marc:datafield[@tag="856"]/marc:subfield[@code="u"]','http:///frontdoor/index/index/docId/91');
+        $this->assertXpathContentContains('//marc:datafield[@tag="856"]/marc:subfield[@code="u"]','http:///oai/container/index/docId/91');
+        $this->assertXpathContentContains('//marc:datafield[@tag="856"]/marc:subfield[@code="u"]','http:///files/91/test.pdf');
+        $this->assertXpathContentContains('//marc:datafield[@tag="856"]/marc:subfield[@code="u"]','http:///files/91/test.txt');
+        $this->assertXpathContentContains('//marc:datafield[@tag="856"]/marc:subfield[@code="u"]','http:///files/91/frontdoor_invisible.txt');
+        $this->assertNotXpathContentContains('//marc:datafield[@tag="856"]/marc:subfield[@code="u"]','http:///files/91/oai_invisible.txt');
+        $this->assertNotXpath('//marc:datafield[@tag="856"]/marc:subfield[@code="z"]');
+    }
+
+    public function testGetRecordMarc21OfTestDocOfUnknownType()
+    {
+        $doc = $this->createTestDocument();
+        $doc->setType('unknown');
+        $doc->setServerState('published'); // nur freigeschaltete Dokumente können per OAI-PMH abgerufen werden
+        $doc->setPublishedYear(2048);
+        $doc->setLanguage('deu');
+        $doc->setIssue('issue');
+        $doc->setVolume('volume');
+        $doc->setPageFirst('10');
+        $doc->setPageLast('19');
+        $doc->setPageNumber('10');
+        $doc->setCreatingCorporation('Foo Creating Corp.');
+
+        $identifierUrn = new Opus_Identifier();
+        $identifierUrn->setType('urn');
+        $identifierUrn->setValue('urn:nbn:de:foo:opus-4711');
+        $identifierIssn = new Opus_Identifier();
+        $identifierIssn->setType('issn');
+        $identifierIssn->setValue('0953-4563');
+        $doc->setIdentifier([$identifierUrn, $identifierIssn]);
+
+        $ddc33x = new Opus_Collection(45); // sichtbar
+        $ddc334 = new Opus_Collection(402); // unsichtbar
+        $ddc34x = new Opus_Collection(46); // sichtbar
+        $doc->setCollection([$ddc33x, $ddc334, $ddc34x]);
+
+        $titleMainDeu = new Opus_TitleAbstract();
+        $titleMainDeu->setLanguage('deu');
+        $titleMainDeu->setType('main');
+        $titleMainDeu->setValue('TitleMainInDocumentLanguage');
+        $titleMainEng = new Opus_TitleAbstract();
+        $titleMainEng->setLanguage('eng');
+        $titleMainEng->setType('main');
+        $titleMainEng->setValue('TitleMainInOtherLanguage');
+        $doc->setTitleMain([$titleMainDeu, $titleMainEng]);
+
+        $titleSubDeu = new Opus_TitleAbstract();
+        $titleSubDeu->setLanguage('deu');
+        $titleSubDeu->setType('sub');
+        $titleSubDeu->setValue('TitleSubInDocumentLanguage');
+        $titleSubEng = new Opus_TitleAbstract();
+        $titleSubEng->setLanguage('eng');
+        $titleSubEng->setType('sub');
+        $titleSubEng->setValue('TitleSubInOtherLanguage');
+        $doc->setTitleSub([$titleSubDeu, $titleSubEng]);
+
+        $titleParent = new Opus_TitleAbstract();
+        $titleParent->setLanguage('deu');
+        $titleParent->setType('parent');
+        $titleParent->setValue('TitleParentInDocumentLanguage');
+        $doc->setTitleParent([$titleParent]);
+
+        $abstractDeu = new Opus_TitleAbstract();
+        $abstractDeu->setLanguage('deu');
+        $abstractDeu->setType('abstract');
+        $abstractDeu->setValue('TitleAbstractInDocumentLanguage');
+        $abstractEng = new Opus_TitleAbstract();
+        $abstractEng->setLanguage('eng');
+        $abstractEng->setType('abstract');
+        $abstractEng->setValue('TitleAbstractInOtherLanguage');
+        $doc->setTitleAbstract([$abstractEng, $abstractDeu]);
+
+        $doc->setThesisPublisher([new Opus_DnbInstitute(2), new Opus_DnbInstitute(4)]);
+
+        $editor = new Opus_Person();
+        $editor->setFirstName('John');
+        $editor->setLastName('Doe');
+        $doc->addPersonEditor($editor);
+
+        $doc->addSeries(new Opus_Series(1))->setNumber(1);
+        $doc->addSeries(new Opus_Series(2))->setNumber(2);
+        $doc->addSeries(new Opus_Series(3))->setNumber(3);
+
+        $docId = $doc->store();
+
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=marc21&identifier=oai::' . $docId);
+
+        $this->assertResponseCode(200);
+
+        $response = $this->getResponse();
+        $badStrings = array("Exception", "Error", "Stacktrace", "badVerb");
+        $this->checkForCustomBadStringsInHtml($response->getBody(), $badStrings);
+
+        $this->registerXpathNamespaces($this->xpathNamespaces);
+
+        $this->assertXpathContentContains('//marc:leader','00000na  a22000005  4500');
+        $this->assertXpathContentContains('//marc:controlfield[@tag="001"]','docId-' . $docId);
+        $this->assertNotXpath('//marc:controlfield[@tag="003"]');
+        $this->assertXpathContentContains('//marc:datafield[@tag="024"]/marc:subfield[@code="a"]', 'urn:nbn:de:foo:opus-4711');
+        $this->assertXpathContentContains('//marc:datafield[@tag="041"]/marc:subfield[@code="a"]', 'ger');
+        $this->assertXpathContentContains('//marc:datafield[@tag="082"]/marc:subfield[@code="a"]', '33');
+        $this->assertXpathContentContains('//marc:datafield[@tag="082"]/marc:subfield[@code="a"]', '34');
+        $this->assertNotXpathContentContains('//marc:datafield[@tag="082"]/marc:subfield[@code="a"]', '334');
+        $this->assertXpathContentContains('//marc:datafield[@tag="110"]/marc:subfield[@code="a"]', 'Foo Creating Corp.');
+        $this->assertXpathContentContains('//marc:datafield[@tag="245"]/marc:subfield[@code="a"]', 'TitleMainInDocumentLanguage');
+        $this->assertXpathContentContains('//marc:datafield[@tag="245"]/marc:subfield[@code="b"]', 'TitleSubInDocumentLanguage');
+        $this->assertXpathContentContains('//marc:datafield[@tag="246"]/marc:subfield[@code="a"]', 'TitleMainInOtherLanguage');
+        $this->assertXpathContentContains('//marc:datafield[@tag="246"]/marc:subfield[@code="b"]', 'TitleSubInOtherLanguage');
+        $this->assertXpathContentContains('(//marc:datafield[@tag="264"])[1]/marc:subfield[@code="a"]', 'Musterstadt');
+        $this->assertXpathContentContains('(//marc:datafield[@tag="264"])[1]/marc:subfield[@code="b"]', 'Foobar Universitätsbibliothek');
+        $this->assertXpathContentContains('(//marc:datafield[@tag="264"])[1]/marc:subfield[@code="c"]', '2048');
+        $this->assertXpathContentContains('(//marc:datafield[@tag="264"])[2]/marc:subfield[@code="a"]', 'Universe');
+        $this->assertXpathContentContains('(//marc:datafield[@tag="264"])[2]/marc:subfield[@code="b"]', 'School of Life');
+        $this->assertNotXpath('(//marc:datafield[@tag="264"])[2]/marc:subfield[@code="c"]'); // Jahresangabe nur beim ersten ThesisPublisher
+        $this->assertXpathContentContains('//marc:datafield[@tag="300"]/marc:subfield[@code="a"]', '10');
+        $this->assertXpathContentContains('//marc:datafield[@tag="490"]/marc:subfield[@code="a"]', 'MySeries');
+        $this->assertXpathContentContains('//marc:datafield[@tag="490"]/marc:subfield[@code="v"]', '1');
+        $this->assertXpathContentContains('//marc:datafield[@tag="490"]/marc:subfield[@code="a"]', 'Foobar Series');
+        $this->assertXpathContentContains('//marc:datafield[@tag="490"]/marc:subfield[@code="v"]', '2');
+        $this->assertNotXpathContentContains('//marc:datafield[@tag="490"]/marc:subfield[@code="a"]', 'Invisible Series');
+        $this->assertNotXpathContentContains('//marc:datafield[@tag="490"]/marc:subfield[@code="v"]', '3');
+        $this->assertXpathContentContains('(//marc:datafield[@tag="520"])[1]/marc:subfield[@code="a"]', 'TitleAbstractInDocumentLanguage');
+        $this->assertXpathContentContains('(//marc:datafield[@tag="520"])[2]/marc:subfield[@code="a"]', 'TitleAbstractInOtherLanguage');
+        $this->assertXpathContentContains('//marc:datafield[@tag="655"]/marc:subfield[@code="a"]', 'Other');
+        $this->assertXpathContentContains('//marc:datafield[@tag="700"]/marc:subfield[@code="a"]', 'Doe, John');
+        $this->assertXpathContentContains('//marc:datafield[@tag="700"]/marc:subfield[@code="4"]', 'edt');
+        $this->assertXpathContentContains('//marc:datafield[@tag="773"]/marc:subfield[@code="t"]', 'TitleParentInDocumentLanguage');
+        $this->assertXpathContentContains('//marc:datafield[@tag="773"]/marc:subfield[@code="x"]', '0953-4563');
+        $this->assertXpathContentContains('//marc:datafield[@tag="773"]/marc:subfield[@code="g"]', 'Jahrgang volume, Heft issue, Seiten 10-19');
+        $this->assertXpathContentContains('//marc:datafield[@tag="856"]/marc:subfield[@code="u"]', 'https://nbn-resolving.org/urn:nbn:de:foo:opus-4711');
+        $this->assertXpathContentContains('//marc:datafield[@tag="856"]/marc:subfield[@code="u"]', 'http:///frontdoor/index/index/docId/' . $docId);
+    }
+
+    public function testGenerationOfField265YearOnly()
+    {
+        $doc = $this->createTestDocument();
+        $doc->setServerState('published');
+        $docId = $doc->store();
+
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=marc21&identifier=oai::' . $docId);
+
+        $this->assertResponseCode(200);
+
+        $this->registerXpathNamespaces($this->xpathNamespaces);
+
+        $this->assertNotXpath('//marc:datafield[@tag="264"]/marc:subfield[@code="a"]');
+        $this->assertNotXpath('//marc:datafield[@tag="264"]/marc:subfield[@code="b"]');
+        $this->assertXpath('//marc:datafield[@tag="264"]/marc:subfield[@code="c"]');
+    }
+
+    public function testGenerationOfField264PublisherNameAndYearOnly()
+    {
+        $doc = $this->createTestDocument();
+        $doc->setServerState('published');
+        $doc->setPublisherName('publisherName');
+        $docId = $doc->store();
+
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=marc21&identifier=oai::' . $docId);
+
+        $this->assertResponseCode(200);
+
+        $this->registerXpathNamespaces($this->xpathNamespaces);
+
+        $this->assertNotXpath('//marc:datafield[@tag="264"]/marc:subfield[@code="a"]');
+        $this->assertXpathContentContains('//marc:datafield[@tag="264"]/marc:subfield[@code="b"]', 'publisherName');
+        $this->assertXpath('//marc:datafield[@tag="264"]/marc:subfield[@code="c"]');
+    }
+
+    public function testGenerationOfField264PublisherPlaceAndYearOnly()
+    {
+        $doc = $this->createTestDocument();
+        $doc->setServerState('published');
+        $doc->setPublisherPlace('publisherPlace');
+        $docId = $doc->store();
+
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=marc21&identifier=oai::' . $docId);
+
+        $this->assertResponseCode(200);
+
+        $this->registerXpathNamespaces($this->xpathNamespaces);
+
+        $this->assertXpathContentContains('//marc:datafield[@tag="264"]/marc:subfield[@code="a"]', 'publisherPlace');
+        $this->assertNotXpath('//marc:datafield[@tag="264"]/marc:subfield[@code="b"]');
+        $this->assertXpath('//marc:datafield[@tag="264"]/marc:subfield[@code="c"]');
+    }
+
+    public function testGenerationOfField856WithInvisibleInOaiFile()
+    {
+        $doc = $this->createTestDocument();
+        $doc->setServerState('published');
+        $doc->setPublisherPlace('publisherPlace');
+
+        $f1 = new Opus_File();
+        $f1->setPathName('invisible-in-oai.pdf');
+        $f1->setVisibleInOai(false);
+        $doc->addFile($f1);
+
+        $licencePresent = new Opus_Licence(1);
+        $doc->addLicence($licencePresent);
+
+        $licenceMissing = new Opus_Licence(2);
+        $doc->addLicence($licenceMissing);
+
+        $docId = $doc->store();
+
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=marc21&identifier=oai::' . $docId);
+
+        $this->assertResponseCode(200);
+
+        $this->registerXpathNamespaces($this->xpathNamespaces);
+
+        $this->assertNotXpathContentContains('//marc:datafield[@tag="856"]/marc:subfield[@code="x"]', 'Transfer-URL');
+        $this->assertNotXpathContentContains('//marc:datafield[@tag="856"]/marc:subfield[@code="u"]', 'invisible-in-oai.pdf');
+        $this->assertNotXpathContentContains('//marc:datafield[@tag="856"]/marc:subfield[@code="z"]', $licenceMissing->getNameLong());
+        $this->assertNotXpathContentContains('//marc:datafield[@tag="856"]/marc:subfield[@code="z"]', $licencePresent->getNameLong());
+    }
+
+    public function testGenerationOfField856With2VisibleInOaiFiles()
+    {
+        $doc = $this->createTestDocument();
+        $doc->setServerState('published');
+        $doc->setPublisherPlace('publisherPlace');
+
+        $f1 = new Opus_File();
+        $f1->setPathName('visible-in-oai.pdf');
+        $f1->setVisibleInOai(true);
+        $doc->addFile($f1);
+
+        $f2 = new Opus_File();
+        $f2->setPathName('visible-in-oai.txt');
+        $f2->setVisibleInOai(true);
+        $doc->addFile($f2);
+
+        $licencePresent = new Opus_Licence(1);
+        $doc->addLicence($licencePresent);
+
+        $licenceMissing = new Opus_Licence(2);
+        $doc->addLicence($licenceMissing);
+
+        $docId = $doc->store();
+
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=marc21&identifier=oai::' . $docId);
+
+        $this->assertResponseCode(200);
+
+        $this->registerXpathNamespaces($this->xpathNamespaces);
+
+        $this->assertXpathContentContains('(//marc:datafield[@tag="856"])[3]/marc:subfield[@code="x"]', 'Transfer-URL');
+        $this->assertXpathContentContains('(//marc:datafield[@tag="856"])[3]/marc:subfield[@code="z"]', $licencePresent->getNameLong());
+        $this->assertXpathContentContains('(//marc:datafield[@tag="856"])[4]/marc:subfield[@code="u"]', 'visible-in-oai.pdf');
+        $this->assertXpathContentContains('(//marc:datafield[@tag="856"])[4]/marc:subfield[@code="z"]', $licencePresent->getNameLong());
+        $this->assertXpathContentContains('(//marc:datafield[@tag="856"])[5]/marc:subfield[@code="u"]', 'visible-in-oai.txt');
+        $this->assertXpathContentContains('(//marc:datafield[@tag="856"])[5]/marc:subfield[@code="z"]', $licencePresent->getNameLong());
+
+        $this->assertNotXpathContentContains('//marc:datafield[@tag="856"]/marc:subfield[@code="z"]', $licenceMissing->getNameLong());
+    }
+
+    public function testGenerationOfField773WithSingleTitleParent()
+    {
+        $doc = $this->createTestDocument();
+        $doc->setLanguage('deu');
+        $doc->setServerState('published');
+
+        $this->addTitleParent($doc, 'deu', 'TitleParent');
+        $docId = $doc->store();
+
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=marc21&identifier=oai::' . $docId);
+
+        $this->assertResponseCode(200);
+
+        $this->registerXpathNamespaces($this->xpathNamespaces);
+
+        $this->assertNotXpath('//marc:datafield[@tag="020"]');
+        $this->assertNotXpath('//marc:datafield[@tag="022"]');
+
+        $this->assertXpathContentContains('//marc:datafield[@tag="773"]/marc:subfield[@code="t"]', 'TitleParent');
+        $this->assertNotXpath('//marc:datafield[@tag="773"]/marc:subfield[@code="g"]');
+        $this->assertNotXpath('//marc:datafield[@tag="773"]/marc:subfield[@code="x"]');
+        $this->assertNotXpath('//marc:datafield[@tag="773"]/marc:subfield[@code="z"]');
+        $this->assertXpathCount('//marc:datafield[@tag="773"]', 1);
+    }
+
+    public function testGenerationOfField773WithSingleTitleParentAndVolume()
+    {
+        $doc = $this->createTestDocument();
+        $doc->setLanguage('deu');
+        $doc->setServerState('published');
+        $doc->setVolume('volume1');
+
+        $this->addTitleParent($doc, 'deu', 'TitleParent');
+        $docId = $doc->store();
+
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=marc21&identifier=oai::' . $docId);
+
+        $this->assertResponseCode(200);
+
+        $this->registerXpathNamespaces($this->xpathNamespaces);
+
+        $this->assertNotXpath('//marc:datafield[@tag="020"]');
+        $this->assertNotXpath('//marc:datafield[@tag="022"]');
+
+        $this->assertXpathContentContains('//marc:datafield[@tag="773"]/marc:subfield[@code="t"]', 'TitleParent');
+        $this->assertXpathContentContains('//marc:datafield[@tag="773"]/marc:subfield[@code="g"]', 'Jahrgang volume');
+        $this->assertNotXpath('//marc:datafield[@tag="773"]/marc:subfield[@code="x"]');
+        $this->assertNotXpath('//marc:datafield[@tag="773"]/marc:subfield[@code="z"]');
+        $this->assertXpathCount('//marc:datafield[@tag="773"]', 1);
+    }
+
+    public function testGenerationOfField773WithSingleTitleParentAndVolumeAndIssue()
+    {
+        $doc = $this->createTestDocument();
+        $doc->setLanguage('deu');
+        $doc->setServerState('published');
+        $doc->setVolume('volume');
+        $doc->setIssue('issue');
+
+        $this->addTitleParent($doc, 'deu', 'TitleParent');
+        $docId = $doc->store();
+
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=marc21&identifier=oai::' . $docId);
+
+        $this->assertResponseCode(200);
+
+        $this->registerXpathNamespaces($this->xpathNamespaces);
+
+        $this->assertNotXpath('//marc:datafield[@tag="020"]');
+        $this->assertNotXpath('//marc:datafield[@tag="022"]');
+
+        $this->assertXpathContentContains('//marc:datafield[@tag="773"]/marc:subfield[@code="t"]', 'TitleParent');
+        $this->assertXpathContentContains('//marc:datafield[@tag="773"]/marc:subfield[@code="g"]', 'Jahrgang volume, Heft issue');
+        $this->assertNotXpath('//marc:datafield[@tag="773"]/marc:subfield[@code="x"]');
+        $this->assertNotXpath('//marc:datafield[@tag="773"]/marc:subfield[@code="z"]');
+        $this->assertXpathCount('//marc:datafield[@tag="773"]', 1);
+    }
+
+
+    public function testGenerationOfField773WithSingleTitleParentAndVolumeAndPages()
+    {
+        $doc = $this->createTestDocument();
+        $doc->setLanguage('deu');
+        $doc->setServerState('published');
+        $doc->setVolume('volume');
+        $doc->setPageFirst('1');
+        $doc->setPageLast('2');
+
+        $this->addTitleParent($doc, 'deu', 'TitleParent');
+        $docId = $doc->store();
+
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=marc21&identifier=oai::' . $docId);
+
+        $this->assertResponseCode(200);
+
+        $this->registerXpathNamespaces($this->xpathNamespaces);
+
+        $this->assertNotXpath('//marc:datafield[@tag="020"]');
+        $this->assertNotXpath('//marc:datafield[@tag="022"]');
+
+        $this->assertXpathContentContains('//marc:datafield[@tag="773"]/marc:subfield[@code="t"]', 'TitleParent');
+        $this->assertXpathContentContains('//marc:datafield[@tag="773"]/marc:subfield[@code="g"]', 'Jahrgang volume, Seiten 1-2');
+        $this->assertNotXpath('//marc:datafield[@tag="773"]/marc:subfield[@code="x"]');
+        $this->assertNotXpath('//marc:datafield[@tag="773"]/marc:subfield[@code="z"]');
+        $this->assertXpathCount('//marc:datafield[@tag="773"]', 1);
+    }
+
+    public function testGenerationOfField773WithSingleTitleParentAndVolumeAndIssueAndPages()
+    {
+        $doc = $this->createTestDocument();
+        $doc->setLanguage('deu');
+        $doc->setServerState('published');
+        $doc->setVolume('volume');
+        $doc->setIssue('issue');
+        $doc->setPageFirst('1');
+        $doc->setPageLast('2');
+
+        $this->addTitleParent($doc, 'deu', 'TitleParent');
+        $docId = $doc->store();
+
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=marc21&identifier=oai::' . $docId);
+
+        $this->assertResponseCode(200);
+
+        $this->registerXpathNamespaces($this->xpathNamespaces);
+
+        $this->assertNotXpath('//marc:datafield[@tag="020"]');
+        $this->assertNotXpath('//marc:datafield[@tag="022"]');
+
+        $this->assertXpathContentContains('//marc:datafield[@tag="773"]/marc:subfield[@code="t"]', 'TitleParent');
+        $this->assertXpathContentContains('//marc:datafield[@tag="773"]/marc:subfield[@code="g"]', 'Jahrgang volume, Heft issue, Seiten 1-2');
+        $this->assertNotXpath('//marc:datafield[@tag="773"]/marc:subfield[@code="x"]');
+        $this->assertNotXpath('//marc:datafield[@tag="773"]/marc:subfield[@code="z"]');
+        $this->assertXpathCount('//marc:datafield[@tag="773"]', 1);
+    }
+
+    public function testGenerationOfField773WithSingleTitleParentAndIssue()
+    {
+        $doc = $this->createTestDocument();
+        $doc->setLanguage('deu');
+        $doc->setServerState('published');
+        $doc->setIssue('issue');
+
+        $this->addTitleParent($doc, 'deu', 'TitleParent');
+        $docId = $doc->store();
+
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=marc21&identifier=oai::' . $docId);
+
+        $this->assertResponseCode(200);
+
+        $this->registerXpathNamespaces($this->xpathNamespaces);
+
+        $this->assertNotXpath('//marc:datafield[@tag="020"]');
+        $this->assertNotXpath('//marc:datafield[@tag="022"]');
+
+        $this->assertXpathContentContains('//marc:datafield[@tag="773"]/marc:subfield[@code="t"]', 'TitleParent');
+        $this->assertXpathContentContains('//marc:datafield[@tag="773"]/marc:subfield[@code="g"]', 'Heft issue');
+        $this->assertNotXpath('//marc:datafield[@tag="773"]/marc:subfield[@code="x"]');
+        $this->assertNotXpath('//marc:datafield[@tag="773"]/marc:subfield[@code="z"]');
+        $this->assertXpathCount('//marc:datafield[@tag="773"]', 1);
+    }
+
+    public function testGenerationOfField773WithSingleTitleParentAndIssueAndPages()
+    {
+        $doc = $this->createTestDocument();
+        $doc->setLanguage('deu');
+        $doc->setServerState('published');
+        $doc->setIssue('issue');
+        $doc->setPageFirst('1');
+        $doc->setPageLast('2');
+
+        $this->addTitleParent($doc, 'deu', 'TitleParent');
+        $docId = $doc->store();
+
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=marc21&identifier=oai::' . $docId);
+
+        $this->assertResponseCode(200);
+
+        $this->registerXpathNamespaces($this->xpathNamespaces);
+
+        $this->assertNotXpath('//marc:datafield[@tag="020"]');
+        $this->assertNotXpath('//marc:datafield[@tag="022"]');
+
+        $this->assertXpathContentContains('//marc:datafield[@tag="773"]/marc:subfield[@code="t"]', 'TitleParent');
+        $this->assertXpathContentContains('//marc:datafield[@tag="773"]/marc:subfield[@code="g"]', 'Heft issue, Seiten 1-2');
+        $this->assertNotXpath('//marc:datafield[@tag="773"]/marc:subfield[@code="x"]');
+        $this->assertNotXpath('//marc:datafield[@tag="773"]/marc:subfield[@code="z"]');
+        $this->assertXpathCount('//marc:datafield[@tag="773"]', 1);
+    }
+
+    public function testGenerationOfField773WithSingleTitleParentAndPages()
+    {
+        $doc = $this->createTestDocument();
+        $doc->setLanguage('deu');
+        $doc->setServerState('published');
+        $doc->setPageFirst('1');
+        $doc->setPageLast('2');
+
+        $this->addTitleParent($doc, 'deu', 'TitleParent');
+        $docId = $doc->store();
+
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=marc21&identifier=oai::' . $docId);
+
+        $this->assertResponseCode(200);
+
+        $this->registerXpathNamespaces($this->xpathNamespaces);
+
+        $this->assertNotXpath('//marc:datafield[@tag="020"]');
+        $this->assertNotXpath('//marc:datafield[@tag="022"]');
+
+        $this->assertXpathContentContains('//marc:datafield[@tag="773"]/marc:subfield[@code="t"]', 'TitleParent');
+        $this->assertXpathContentContains('//marc:datafield[@tag="773"]/marc:subfield[@code="g"]', 'Seiten 1-2');
+        $this->assertNotXpath('//marc:datafield[@tag="773"]/marc:subfield[@code="x"]');
+        $this->assertNotXpath('//marc:datafield[@tag="773"]/marc:subfield[@code="z"]');
+        $this->assertXpathCount('//marc:datafield[@tag="773"]', 1);
+    }
+
+    public function testGenerationOfField773WithSingleTitleParentAndPageFirst()
+    {
+        $doc = $this->createTestDocument();
+        $doc->setLanguage('deu');
+        $doc->setServerState('published');
+        $doc->setPageFirst('1');
+
+        $this->addTitleParent($doc, 'deu', 'TitleParent');
+        $docId = $doc->store();
+
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=marc21&identifier=oai::' . $docId);
+
+        $this->assertResponseCode(200);
+
+        $this->registerXpathNamespaces($this->xpathNamespaces);
+
+        $this->assertNotXpath('//marc:datafield[@tag="020"]');
+        $this->assertNotXpath('//marc:datafield[@tag="022"]');
+
+        $this->assertXpathContentContains('//marc:datafield[@tag="773"]/marc:subfield[@code="t"]', 'TitleParent');
+        $this->assertNotXpath('//marc:datafield[@tag="773"]/marc:subfield[@code="g"]');
+        $this->assertNotXpath('//marc:datafield[@tag="773"]/marc:subfield[@code="x"]');
+        $this->assertNotXpath('//marc:datafield[@tag="773"]/marc:subfield[@code="z"]');
+        $this->assertXpathCount('//marc:datafield[@tag="773"]', 1);
+    }
+
+    public function testGenerationOfField773WithSingleTitleParentAndPageLast()
+    {
+        $doc = $this->createTestDocument();
+        $doc->setLanguage('deu');
+        $doc->setServerState('published');
+        $doc->setPageLast('2');
+
+        $this->addTitleParent($doc, 'deu', 'TitleParent');
+        $docId = $doc->store();
+
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=marc21&identifier=oai::' . $docId);
+
+        $this->assertResponseCode(200);
+
+        $this->registerXpathNamespaces($this->xpathNamespaces);
+
+        $this->assertNotXpath('//marc:datafield[@tag="020"]');
+        $this->assertNotXpath('//marc:datafield[@tag="022"]');
+
+        $this->assertXpathContentContains('//marc:datafield[@tag="773"]/marc:subfield[@code="t"]', 'TitleParent');
+        $this->assertNotXpath('//marc:datafield[@tag="773"]/marc:subfield[@code="g"]');
+        $this->assertNotXpath('//marc:datafield[@tag="773"]/marc:subfield[@code="x"]');
+        $this->assertNotXpath('//marc:datafield[@tag="773"]/marc:subfield[@code="z"]');
+        $this->assertXpathCount('//marc:datafield[@tag="773"]', 1);
+    }
+
+    public function testGenerationOfField022WithSingleIssn()
+    {
+        $doc = $this->createTestDocument();
+        $doc->setLanguage('deu');
+        $doc->setServerState('published');
+
+        $this->addIdentifier($doc, '1234-5678', 'issn');
+        $docId = $doc->store();
+
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=marc21&identifier=oai::' . $docId);
+
+        $this->assertResponseCode(200);
+
+        $this->registerXpathNamespaces($this->xpathNamespaces);
+
+        $this->assertXpathContentContains('//marc:datafield[@tag="022"]/marc:subfield[@code="a"]', '1234-5678');
+        $this->assertXpathCount('//marc:datafield[@tag="022"]', 1);
+
+        $this->assertNotXpath('//marc:datafield[@tag="020"]');
+        $this->assertNotXpath('//marc:datafield[@tag="773"]');
+    }
+
+    public function testGenerationOfField022WithMultipleIssns()
+    {
+        $doc = $this->createTestDocument();
+        $doc->setLanguage('deu');
+        $doc->setServerState('published');
+
+        $this->addIdentifier($doc, '1234-5678', 'issn');
+        $this->addIdentifier($doc, '1234-6789', 'issn');
+        $this->addIdentifier($doc, '1234-7890', 'issn');
+        $docId = $doc->store();
+
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=marc21&identifier=oai::' . $docId);
+
+        $this->assertResponseCode(200);
+
+        $this->registerXpathNamespaces($this->xpathNamespaces);
+
+        $this->assertXpathContentContains('(//marc:datafield[@tag="022"])[1]/marc:subfield[@code="a"]', '1234-5678');
+        $this->assertXpathContentContains('(//marc:datafield[@tag="022"])[2]/marc:subfield[@code="a"]', '1234-6789');
+        $this->assertXpathContentContains('(//marc:datafield[@tag="022"])[3]/marc:subfield[@code="a"]', '1234-7890');
+        $this->assertXpathCount('//marc:datafield[@tag="022"]', 3);
+
+        $this->assertNotXpath('//marc:datafield[@tag="020"]');
+        $this->assertNotXpath('//marc:datafield[@tag="773"]');
+    }
+
+    public function testGenerationOfField020WithSingleIsbn()
+    {
+        $doc = $this->createTestDocument();
+        $doc->setLanguage('deu');
+        $doc->setServerState('published');
+
+        $this->addIdentifier($doc, '978-3-012345678', 'isbn');
+        $docId = $doc->store();
+
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=marc21&identifier=oai::' . $docId);
+
+        $this->assertResponseCode(200);
+
+        $this->registerXpathNamespaces($this->xpathNamespaces);
+
+        $this->assertXpathContentContains('//marc:datafield[@tag="020"]/marc:subfield[@code="a"]', '978-3-012345678');
+        $this->assertXpathCount('//marc:datafield[@tag="020"]', 1);
+
+        $this->assertNotXpath('//marc:datafield[@tag="022"]');
+        $this->assertNotXpath('//marc:datafield[@tag="773"]');
+    }
+
+    public function testGenerationOfField020WithMultipleIsbns()
+    {
+        $doc = $this->createTestDocument();
+        $doc->setLanguage('deu');
+        $doc->setServerState('published');
+
+        $this->addIdentifier($doc, '978-3-012345678', 'isbn');
+        $this->addIdentifier($doc, '978-3-123456789', 'isbn');
+        $this->addIdentifier($doc, '978-3-234567890', 'isbn');
+        $docId = $doc->store();
+
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=marc21&identifier=oai::' . $docId);
+
+        $this->assertResponseCode(200);
+
+        $this->registerXpathNamespaces($this->xpathNamespaces);
+
+        $this->assertXpathContentContains('(//marc:datafield[@tag="020"])[1]/marc:subfield[@code="a"]', '978-3-012345678');
+        $this->assertXpathContentContains('(//marc:datafield[@tag="020"])[2]/marc:subfield[@code="a"]', '978-3-123456789');
+        $this->assertXpathContentContains('(//marc:datafield[@tag="020"])[3]/marc:subfield[@code="a"]', '978-3-234567890');
+        $this->assertXpathCount('//marc:datafield[@tag="020"]', 3);
+
+        $this->assertNotXpath('//marc:datafield[@tag="022"]');
+        $this->assertNotXpath('//marc:datafield[@tag="773"]');
+    }
+
+    public function testGenerationOfField773WithVolumeIssuePages() {
+        $doc = $this->createTestDocument();
+        $doc->setLanguage('deu');
+        $doc->setServerState('published');
+        $doc->setVolume('volume');
+        $doc->setIssue('issue');
+        $doc->setPageFirst('1');
+        $doc->setPageLast('2');
+
+        $docId = $doc->store();
+
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=marc21&identifier=oai::' . $docId);
+
+        $this->assertResponseCode(200);
+
+        $this->registerXpathNamespaces($this->xpathNamespaces);
+
+        $this->assertNotXpath('//marc:datafield[@tag="020"]');
+        $this->assertNotXpath('//marc:datafield[@tag="022"]');
+
+        $this->assertNotXpath('//marc:datafield[@tag="773"]/marc:subfield[@code="t"]');
+        $this->assertNotXpath('//marc:datafield[@tag="773"]/marc:subfield[@code="x"]');
+        $this->assertNotXpath('//marc:datafield[@tag="773"]/marc:subfield[@code="z"]');
+        $this->assertXpathContentContains('//marc:datafield[@tag="773"]/marc:subfield[@code="g"]', 'Jahrgang volume, Heft issue, Seiten 1-2');
+        $this->assertXpathCount('//marc:datafield[@tag="773"]', 1);
+    }
+
+    public function testGenerationOfField773WithMultipleTitleParentAndVolumeIssuePagesAndIssnAndIsbn()
+    {
+        $doc = $this->createTestDocument();
+        $doc->setLanguage('deu');
+        $doc->setServerState('published');
+        $doc->addVolume('volume');
+        $doc->addIssue('issue');
+        $doc->setPageFirst('1');
+        $doc->setPageLast('2');
+
+        $this->addTitleParent($doc, 'deu', 'TitleParentDeu');
+        $this->addTitleParent($doc, 'eng', 'TitleParentEng');
+
+        $this->addIdentifier($doc, '1234-5678', 'issn');
+        $this->addIdentifier($doc, '1234-6789', 'issn');
+        $this->addIdentifier($doc, '978-3-012345678', 'isbn');
+        $this->addIdentifier($doc, '978-3-123456789', 'isbn');
+
+        $docId = $doc->store();
+
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=marc21&identifier=oai::' . $docId);
+
+        $this->assertResponseCode(200);
+
+        $this->registerXpathNamespaces($this->xpathNamespaces);
+
+        $this->assertNotXpath('//marc:datafield[@tag="020"]');
+        $this->assertNotXpath('//marc:datafield[@tag="022"]');
+
+        $this->assertXpathCount('//marc:datafield[@tag="773"]', 7);
+        $this->assertXpathContentContains('(//marc:datafield[@tag="773"])[1]/marc:subfield[@code="g"]', 'Jahrgang volume, Heft issue, Seiten 1-2');
+        $this->assertXpathContentContains('(//marc:datafield[@tag="773"])[2]/marc:subfield[@code="t"]', 'TitleParentDeu');
+        $this->assertXpathContentContains('(//marc:datafield[@tag="773"])[3]/marc:subfield[@code="t"]', 'TitleParentEng');
+        $this->assertXpathContentContains('(//marc:datafield[@tag="773"])[4]/marc:subfield[@code="x"]', '1234-5678');
+        $this->assertXpathContentContains('(//marc:datafield[@tag="773"])[5]/marc:subfield[@code="x"]', '1234-6789');
+        $this->assertXpathContentContains('(//marc:datafield[@tag="773"])[6]/marc:subfield[@code="z"]', '978-3-012345678');
+        $this->assertXpathContentContains('(//marc:datafield[@tag="773"])[7]/marc:subfield[@code="z"]', '978-3-123456789');
+    }
+
+    /**
+     * In diesem Fall wird genau ein 773-Feld erzeugt.
+     */
+    public function testGenerationOfField773WithSingleTitleParentAndVolumeIssuePagesAndIssn()
+    {
+        $doc = $this->createTestDocument();
+        $doc->setLanguage('deu');
+        $doc->setServerState('published');
+        $doc->addVolume('volume');
+        $doc->addIssue('issue');
+        $doc->setPageFirst('1');
+        $doc->setPageLast('2');
+
+        $this->addTitleParent($doc, 'deu', 'TitleParentDeu');
+
+        $this->addIdentifier($doc, '1234-5678', 'issn');
+
+        $docId = $doc->store();
+
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=marc21&identifier=oai::' . $docId);
+
+        $this->assertResponseCode(200);
+
+        $this->registerXpathNamespaces($this->xpathNamespaces);
+
+        $this->assertNotXpath('//marc:datafield[@tag="020"]');
+        $this->assertNotXpath('//marc:datafield[@tag="022"]');
+
+        $this->assertXpathCount('//marc:datafield[@tag="773"]', 1);
+
+        $this->assertXpathContentContains('//marc:datafield[@tag="773"]/marc:subfield[@code="g"]', 'Jahrgang volume, Heft issue, Seiten 1-2');
+        $this->assertXpathContentContains('//marc:datafield[@tag="773"]/marc:subfield[@code="t"]', 'TitleParentDeu');
+        $this->assertXpathContentContains('//marc:datafield[@tag="773"]/marc:subfield[@code="x"]', '1234-5678');
+        $this->assertNotXpath('//marc:datafield[@tag="773"]/marc:subfield[@code="z"]');
+    }
+
+    /**
+     * In diesem Fall wird jede ISSN in ein eigenes 773-Feld geschrieben.
+     */
+    public function testGenerationOfField773WithSingleTitleParentAndVolumeIssuePagesAndMultipleIssns()
+    {
+        $doc = $this->createTestDocument();
+        $doc->setLanguage('deu');
+        $doc->setServerState('published');
+        $doc->addVolume('volume');
+        $doc->addIssue('issue');
+        $doc->setPageFirst('1');
+        $doc->setPageLast('2');
+
+        $this->addTitleParent($doc, 'deu', 'TitleParentDeu');
+
+        $this->addIdentifier($doc, '1234-5678', 'issn');
+        $this->addIdentifier($doc, '1234-6789', 'issn');
+
+        $docId = $doc->store();
+
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=marc21&identifier=oai::' . $docId);
+
+        $this->assertResponseCode(200);
+
+        $this->registerXpathNamespaces($this->xpathNamespaces);
+
+        $this->assertNotXpath('//marc:datafield[@tag="020"]');
+        $this->assertNotXpath('//marc:datafield[@tag="022"]');
+
+        $this->assertXpathCount('//marc:datafield[@tag="773"]', 3);
+
+        $this->assertXpathContentContains('(//marc:datafield[@tag="773"])[1]/marc:subfield[@code="g"]', 'Jahrgang volume, Heft issue, Seiten 1-2');
+        $this->assertXpathContentContains('(//marc:datafield[@tag="773"])[1]/marc:subfield[@code="t"]', 'TitleParentDeu');
+        $this->assertNotXpath('(//marc:datafield[@tag="773"])[1]/marc:subfield[@code="x"]');
+        $this->assertNotXpath('(//marc:datafield[@tag="773"])[1]/marc:subfield[@code="z"]');
+        $this->assertXpathContentContains('(//marc:datafield[@tag="773"])[2]/marc:subfield[@code="x"]', '1234-5678');
+        $this->assertXpathContentContains('(//marc:datafield[@tag="773"])[3]/marc:subfield[@code="x"]', '1234-6789');
+    }
+
+    /**
+     * In diesem Fall wird genau ein 773-Feld erzeugt.
+     */
+    public function testGenerationOfField773WithSingleTitleParentAndVolumeIssuePagesAndIsbn()
+    {
+        $doc = $this->createTestDocument();
+        $doc->setLanguage('deu');
+        $doc->setServerState('published');
+        $doc->addVolume('volume');
+        $doc->addIssue('issue');
+        $doc->setPageFirst('1');
+        $doc->setPageLast('2');
+
+        $this->addTitleParent($doc, 'deu', 'TitleParentDeu');
+
+        $this->addIdentifier($doc, '978-3-012345678', 'isbn');
+
+        $docId = $doc->store();
+
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=marc21&identifier=oai::' . $docId);
+
+        $this->assertResponseCode(200);
+
+        $this->registerXpathNamespaces($this->xpathNamespaces);
+
+        $this->assertNotXpath('//marc:datafield[@tag="020"]');
+        $this->assertNotXpath('//marc:datafield[@tag="022"]');
+
+        $this->assertXpathCount('//marc:datafield[@tag="773"]', 1);
+
+        $this->assertXpathContentContains('//marc:datafield[@tag="773"]/marc:subfield[@code="g"]', 'Jahrgang volume, Heft issue, Seiten 1-2');
+        $this->assertXpathContentContains('//marc:datafield[@tag="773"]/marc:subfield[@code="t"]', 'TitleParentDeu');
+        $this->assertXpathContentContains('//marc:datafield[@tag="773"]/marc:subfield[@code="z"]', '978-3-012345678');
+        $this->assertNotXpath('//marc:datafield[@tag="773"]/marc:subfield[@code="x"]');
+    }
+
+    /**
+     * In diesem Fall wird jede ISBN in ein eigenes 773-Feld geschrieben.
+     */
+    public function testGenerationOfField773WithSingleTitleParentAndVolumeIssuePagesAndMultipleIsbns()
+    {
+        $doc = $this->createTestDocument();
+        $doc->setLanguage('deu');
+        $doc->setServerState('published');
+        $doc->addVolume('volume');
+        $doc->addIssue('issue');
+        $doc->setPageFirst('1');
+        $doc->setPageLast('2');
+
+        $this->addTitleParent($doc, 'deu', 'TitleParentDeu');
+
+        $this->addIdentifier($doc, '978-3-012345678', 'isbn');
+        $this->addIdentifier($doc, '978-3-123456789', 'isbn');
+
+        $docId = $doc->store();
+
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=marc21&identifier=oai::' . $docId);
+
+        $this->assertResponseCode(200);
+
+        $this->registerXpathNamespaces($this->xpathNamespaces);
+
+        $this->assertNotXpath('//marc:datafield[@tag="020"]');
+        $this->assertNotXpath('//marc:datafield[@tag="022"]');
+
+        $this->assertXpathCount('//marc:datafield[@tag="773"]', 3);
+
+        $this->assertXpathContentContains('(//marc:datafield[@tag="773"])[1]/marc:subfield[@code="g"]', 'Jahrgang volume, Heft issue, Seiten 1-2');
+        $this->assertXpathContentContains('(//marc:datafield[@tag="773"])[1]/marc:subfield[@code="t"]', 'TitleParentDeu');
+        $this->assertNotXpath('(//marc:datafield[@tag="773"])[1]/marc:subfield[@code="x"]');
+        $this->assertNotXpath('(//marc:datafield[@tag="773"])[1]/marc:subfield[@code="z"]');
+        $this->assertXpathContentContains('(//marc:datafield[@tag="773"])[2]/marc:subfield[@code="z"]', '978-3-012345678');
+        $this->assertXpathContentContains('(//marc:datafield[@tag="773"])[3]/marc:subfield[@code="z"]', '978-3-123456789');
+    }
+
+    /**
+     * In diesem Fall sollen ISSN und ISBN jeweils in ein eigenes 773-Feld. TitleParent und Volume, Issue, Pages
+     * sollen dagegen zusammen in ein 773-Feld.
+     */
+    public function testGenerationOfField773WithSingleTitleParentAndVolumeIssuePagesAndIssnAndIsbn()
+    {
+        $doc = $this->createTestDocument();
+        $doc->setLanguage('deu');
+        $doc->setServerState('published');
+        $doc->addVolume('volume');
+        $doc->addIssue('issue');
+        $doc->setPageFirst('1');
+        $doc->setPageLast('2');
+
+        $this->addTitleParent($doc, 'deu', 'TitleParentDeu');
+
+        $this->addIdentifier($doc, '1234-5678', 'issn');
+        $this->addIdentifier($doc, '978-3-012345678', 'isbn');
+
+        $docId = $doc->store();
+
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=marc21&identifier=oai::' . $docId);
+
+        $this->assertResponseCode(200);
+
+        $this->registerXpathNamespaces($this->xpathNamespaces);
+
+        $this->assertNotXpath('//marc:datafield[@tag="020"]');
+        $this->assertNotXpath('//marc:datafield[@tag="022"]');
+
+        $this->assertXpathCount('//marc:datafield[@tag="773"]', 3);
+
+        $this->assertXpathContentContains('(//marc:datafield[@tag="773"])[1]/marc:subfield[@code="g"]', 'Jahrgang volume, Heft issue, Seiten 1-2');
+        $this->assertXpathContentContains('(//marc:datafield[@tag="773"])[1]/marc:subfield[@code="t"]', 'TitleParentDeu');
+        $this->assertNotXpath('(//marc:datafield[@tag="773"])[1]/marc:subfield[@code="x"]');
+        $this->assertNotXpath('(//marc:datafield[@tag="773"])[1]/marc:subfield[@code="z"]');
+        $this->assertXpathContentContains('(//marc:datafield[@tag="773"])[2]/marc:subfield[@code="x"]', '1234-5678');
+        $this->assertXpathContentContains('(//marc:datafield[@tag="773"])[3]/marc:subfield[@code="z"]', '978-3-012345678');
+    }
+
+    /**
+     * kein TitleParent: ISSN soll in Feld 022; Volume in Feld 773
+     */
+    public function testGenerationOfField773WithVolumeAndIssn()
+    {
+        $doc = $this->createTestDocument();
+        $doc->setLanguage('deu');
+        $doc->setServerState('published');
+        $doc->addVolume('volume');
+
+        $this->addIdentifier($doc, '1234-5678', 'issn');
+
+        $docId = $doc->store();
+
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=marc21&identifier=oai::' . $docId);
+
+        $this->assertResponseCode(200);
+
+        $this->registerXpathNamespaces($this->xpathNamespaces);
+
+        $this->assertXpathContentContains('//marc:datafield[@tag="022"]//marc:subfield[@code="a"]', '1234-5678');
+        $this->assertNotXpath('//marc:datafield[@tag="020"]');
+        $this->assertXpathCount('//marc:datafield[@tag="773"]', 1);
+        $this->assertXpathContentContains('//marc:datafield[@tag="773"]/marc:subfield[@code="g"]', 'Jahrgang volume');
+    }
+
+    /**
+     * kein TitleParent: ISBN soll in Feld 020; Volume in Feld 773
+     */
+    public function testGenerationOfField773WithVolumeAndIsbn()
+    {
+        $doc = $this->createTestDocument();
+        $doc->setLanguage('deu');
+        $doc->setServerState('published');
+        $doc->addVolume('volume');
+
+        $this->addIdentifier($doc, '978-3-012345678', 'isbn');
+
+        $docId = $doc->store();
+
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=marc21&identifier=oai::' . $docId);
+
+        $this->assertResponseCode(200);
+
+        $this->registerXpathNamespaces($this->xpathNamespaces);
+
+        $this->assertXpathContentContains('//marc:datafield[@tag="020"]//marc:subfield[@code="a"]', '978-3-012345678');
+        $this->assertNotXpath('//marc:datafield[@tag="022"]');
+        $this->assertXpathCount('//marc:datafield[@tag="773"]', 1);
+        $this->assertXpathContentContains('//marc:datafield[@tag="773"]/marc:subfield[@code="g"]', 'Jahrgang volume');
+    }
+
+    /**
+     * Helper function for adding title parent to given document.
+     *
+     * @param $doc Opus_Document
+     * @param $language string
+     * @param $value string
+     */
+    private function addTitleParent($doc, $language, $value)
+    {
+        $titleParent = new Opus_TitleAbstract();
+        $titleParent->setType('parent');
+        $titleParent->setLanguage($language);
+        $titleParent->setValue($value);
+
+        $doc->addTitleParent($titleParent);
+    }
+
+    /**
+     * Helper function for adding identifier of given type to given document.
+     *
+     * @param $doc Opus_Document
+     * @param $value string
+     * @param $type string
+     */
+    private function addIdentifier($doc, $value, $type)
+    {
+        $identifier = new Opus_Identifier();
+        $identifier->setType($type);
+        $identifier->setValue($value);
+
+        $doc->addIdentifier($identifier);
+    }
+
 }
