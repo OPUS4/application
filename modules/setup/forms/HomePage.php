@@ -33,44 +33,20 @@
  */
 
 /**
- * TODO use languages actually defined as supported
+ * TODO rename to Homepage
  */
-class Setup_Form_HomePage extends Zend_Form_SubForm
+class Setup_Form_HomePage extends Application_Form_Translations
 {
 
     public function init()
     {
-        foreach (['de', 'en'] as $lang) {
-            $langForm = new Zend_Form_SubForm();
-            $langForm->setLegend("setup_language_$lang");
-            $keyForm = new Zend_Form_SubForm();
+        parent::init();
 
-            $keyForm->addElement(
-                'text', 'home_index_index_pagetitle', [
-                    'label' => 'setup_home_index_index_pagetitle',
-                    'attribs' => ['size' => 90]
-                ]
-            );
-            $keyForm->addElement(
-                'text', 'home_index_index_title', [
-                    'label' => 'setup_home_index_index_title',
-                    'attribs' => ['size' => 90]
-                ]
-            );
-            $keyForm->addElement(
-                'textarea', 'home_index_index_welcome', [
-                    'label' => 'setup_home_index_index_welcome',
-                    'attribs' => ['size' => 90]
-                ]
-            );
-            $keyForm->addElement(
-                'textarea', 'home_index_index_instructions', [
-                    'label' => 'setup_home_index_index_instructions',
-                    'attribs' => ['size' => 90]
-                ]
-            );
-            $langForm->addSubForm($keyForm, 'key');
-            $this->addSubForm($langForm, $lang);
-        }
+        $this->addKey('home_index_index_pagetitle');
+        $this->addKey('home_index_index_title');
+        $this->addKey('home_index_index_welcome', true);
+        $this->addKey('home_index_index_instructions', true);
+
+        $this->populateFromTranslations();
     }
 }

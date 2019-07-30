@@ -281,8 +281,48 @@
         <exec executable="${bindir}/phpunit" dir="${basedir}/tests" failonerror="true">
             <arg line="--log-junit ${basedir}/build/logs/phpunit.xml" />
             <arg line="--configuration phpunit.xml" />
+            <!--arg line="-debug" /-->
             <arg line="${testpath}" />
             <redirector output="build/testresult-${DSTAMP}-${TSTAMP}.txt" alwayslog="true" />
+        </exec>
+    </target>
+
+    <target name="test" depends="rebuild-database,rebuild-index" description="Runs all tests in blocks.">
+        <tstamp />
+        <echo message="${line.separator}Running 'library' tests ..." />
+        <exec executable="${bindir}/phpunit" dir="${basedir}/tests" failonerror="false">
+            <arg line="--log-junit ${basedir}/build/logs/phpunit.xml" />
+            <arg line="--configuration phpunit.xml" />
+            <arg line="--testsuite library" />
+            <redirector output="build/testresult-${DSTAMP}-${TSTAMP}.txt" alwayslog="true" append="true" />
+        </exec>
+        <echo message="${line.separator}Running 'modules' tests (without 'admin') ..." />
+        <exec executable="${bindir}/phpunit" dir="${basedir}/tests" failonerror="false">
+            <arg line="--log-junit ${basedir}/build/logs/phpunit.xml" />
+            <arg line="--configuration phpunit.xml" />
+            <arg line="--testsuite modules" />
+            <redirector output="build/testresult-${DSTAMP}-${TSTAMP}.txt" alwayslog="true" append="true" />
+        </exec>
+        <echo message="${line.separator}Running 'admin' module tests ..." />
+        <exec executable="${bindir}/phpunit" dir="${basedir}/tests" failonerror="false">
+            <arg line="--log-junit ${basedir}/build/logs/phpunit.xml" />
+            <arg line="--configuration phpunit.xml" />
+            <arg line="--testsuite admin" />
+            <redirector output="build/testresult-${DSTAMP}-${TSTAMP}.txt" alwayslog="true" append="true" />
+        </exec>
+        <echo message="${line.separator}Running 'scripts' tests ..." />
+        <exec executable="${bindir}/phpunit" dir="${basedir}/tests" failonerror="false">
+            <arg line="--log-junit ${basedir}/build/logs/phpunit.xml" />
+            <arg line="--configuration phpunit.xml" />
+            <arg line="--testsuite scripts" />
+            <redirector output="build/testresult-${DSTAMP}-${TSTAMP}.txt" alwayslog="true" append="true" />
+        </exec>
+        <echo message="${line.separator}Running 'security' tests ..." />
+        <exec executable="${bindir}/phpunit" dir="${basedir}/tests" failonerror="false">
+            <arg line="--log-junit ${basedir}/build/logs/phpunit.xml" />
+            <arg line="--configuration phpunit.xml" />
+            <arg line="--testsuite security" />
+            <redirector output="build/testresult-${DSTAMP}-${TSTAMP}.txt" alwayslog="true" append="true" />
         </exec>
     </target>
 

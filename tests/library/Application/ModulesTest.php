@@ -27,7 +27,7 @@
  * @category    Application Unit Test
  * @package     Application
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -70,24 +70,14 @@ class Application_ModulesTest extends ControllerTestCase
     {
         $modules = Application_Modules::getInstance()->getModules();
 
-        $this->assertCount(16, $modules);
+        $this->assertCount(17, $modules);
 
-        $expectedModules = array('admin', 'frontdoor');
+        // some expected modules
+        $expectedModules = ['admin', 'frontdoor', 'default', 'export', 'publish', 'solrsearch'];
 
-        foreach ($expectedModules as $name)
-        {
+        foreach ($expectedModules as $name) {
             $this->assertArrayHasKey($name, $modules, "Module [$name] is missing");
             $this->assertInstanceOf('Application_Configuration_Module', $modules[$name]);
         }
     }
-
-    public function testGetModulesDefaultNotIncluded()
-    {
-        $modules = Application_Modules::getInstance()->getModules();
-
-        $this->assertNotNull($modules);
-        $this->assertInternalType('array', $modules);
-        $this->assertArrayNotHasKey('default', $modules);
-    }
-
 }

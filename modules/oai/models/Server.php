@@ -150,7 +150,14 @@ class Oai_Model_Server extends Application_Model_Abstract
         $this->loadStyleSheet($this->getScriptPath() . '/oai-pmh.xslt');
 
         $this->_proc->registerPHPFunctions('Opus_Language::getLanguageCode');
-        Application_Xslt::registerViewHelper($this->_proc, array('optionValue'));
+        Application_Xslt::registerViewHelper($this->_proc,
+            [
+                'optionValue',
+                'fileUrl',
+                'frontdoorUrl',
+                'transferUrl'
+            ]
+        );
         $this->_proc->setParameter('', 'urnResolverUrl', $this->getConfig()->urn->resolverUrl);
         $this->_proc->setParameter('', 'doiResolverUrl', $this->getConfig()->doi->resolverUrl);
 

@@ -28,24 +28,25 @@
  * @package     Admin_Model
  * @author      Sascha Szott <szott@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2018-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
+ *
+ * TODO test-performance
  */
 class Admin_Model_DoiReportTest extends ControllerTestCase
 {
+
+    protected $configModifiable = true;
+
+    protected $additionalResources = ['database'];
 
     /**
      * @var array
      */
     private $docIds;
 
-    private $config;
-
     public function tearDown()
     {
-        // restore config
-        Zend_Registry::set('Zend_Config', $this->config);
-
         if (!is_null($this->docIds)) {
             // removed previously created test documents from database
             foreach ($this->docIds as $docId) {
@@ -59,9 +60,6 @@ class Admin_Model_DoiReportTest extends ControllerTestCase
     public function setUp()
     {
         parent::setUp();
-
-        // backup config
-        $this->config = Zend_Registry::get('Zend_Config');
 
         $config = Zend_Registry::get('Zend_Config');
         $config->merge(new Zend_Config([

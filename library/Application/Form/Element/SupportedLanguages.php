@@ -98,7 +98,7 @@ class Application_Form_Element_SupportedLanguages extends Application_Form_Eleme
 
         $translations = $translator->getList();
 
-        $options = array();
+        $options = [];
 
         foreach ($translations as $language) {
             $options[$language] = $currentLocale->getTranslation($language, 'language', $currentLocale->getLanguage());

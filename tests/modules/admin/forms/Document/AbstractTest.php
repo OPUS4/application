@@ -26,17 +26,20 @@
  *
  * @category    Application Unit Test
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2013-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
  * Unit Tests fuer Unterformular fuer Zusammenfassungen.
  */
-class Admin_Form_Document_AbstractTest extends ControllerTestCase {
-    
-    public function testCreateForm() {
+class Admin_Form_Document_AbstractTest extends ControllerTestCase
+{
+
+    protected $additionalResources = ['view', 'translation'];
+
+    public function testCreateForm()
+    {
         $form = new Admin_Form_Document_Abstract();
 
         $this->assertEquals(3, count($form->getElements()));
@@ -44,72 +47,77 @@ class Admin_Form_Document_AbstractTest extends ControllerTestCase {
         $this->assertNotNull($form->getElement('Language'));
         $this->assertNotNull($form->getElement('Value'));
     }
-    
-    public function testPopulateFromModel() {
+
+    public function testPopulateFromModel()
+    {
         $form = new Admin_Form_Document_Abstract();
-        
+
         $doc = new Opus_Document(146);
-        
+
         $abstracts = $doc->getTitleAbstract();
-        
+
         $abstract = $abstracts[0];
 
         $form->populateFromModel($abstract);
-        
+
         $this->assertEquals($abstract->getId(), $form->getElement('Id')->getValue());
         $this->assertEquals($abstract->getLanguage(), $form->getElement('Language')->getValue());
         $this->assertEquals($abstract->getValue(), $form->getElement('Value')->getValue());
 
         $this->assertFalse($form->getDecorator('Fieldset'));
     }
-    
-    public function testUpdateModel() {
+
+    public function testUpdateModel()
+    {
         $form = new Admin_Form_Document_Abstract();
-        
+
         $form->getElement('Language')->setValue('eng');
         $form->getElement('Value')->setValue('Test Zusammenfassung!');
-        
+
         $abstract = new Opus_TitleAbstract();
-        
+
         $form->updateModel($abstract);
-        
+
         $this->assertEquals('eng', $abstract->getLanguage());
         $this->assertEquals('Test Zusammenfassung!', $abstract->getValue());
     }
-    
-    public function testGetModel() {
+
+    public function testGetModel()
+    {
         $form = new Admin_Form_Document_Abstract();
-        
+
         $doc = new Opus_Document(146);
-        
+
         $abstracts = $doc->getTitleAbstract();
-        
+
         $abstract = $abstracts[0];
 
         $form->getElement('Id')->setValue($abstract->getId());
         $form->getElement('Language')->setValue('eng');
         $form->getElement('Value')->setValue('Test Zusammenfassung!');
-        
+
         $model = $form->getModel();
-        
+
         $this->assertEquals($abstract->getId(), $model->getId());
         $this->assertEquals('eng', $model->getLanguage());
         $this->assertEquals('Test Zusammenfassung!', $model->getValue());
     }
-    
-    public function testGetNewModel() {
+
+    public function testGetNewModel()
+    {
         $form = new Admin_Form_Document_Abstract();
         $form->getElement('Language')->setValue('eng');
         $form->getElement('Value')->setValue('Test Zusammenfassung!');
-        
+
         $model = $form->getModel();
-        
+
         $this->assertNull($model->getId());
         $this->assertEquals('eng', $model->getLanguage());
         $this->assertEquals('Test Zusammenfassung!', $model->getValue());
     }
 
-    public function testGetModelBadId() {
+    public function testGetModelBadId()
+    {
         $form = new Admin_Form_Document_Abstract();
         $form->getElement('Id')->setValue('bad');
         $form->getElement('Language')->setValue('eng');
@@ -122,7 +130,8 @@ class Admin_Form_Document_AbstractTest extends ControllerTestCase {
         $this->assertEquals('Test Zusammenfassung!', $model->getValue());
     }
 
-    public function testGetModelUnknownId() {
+    public function testGetModelUnknownId()
+    {
         $form = new Admin_Form_Document_Abstract();
 
         $logger = new MockLogger();
@@ -144,17 +153,17 @@ class Admin_Form_Document_AbstractTest extends ControllerTestCase {
         $this->assertContains('Unknown ID = \'9999\'', $messages[0]);
     }
 
-    public function testValidation() {
+    public function testValidation()
+    {
         $form = new Admin_Form_Document_Abstract();
-        
-        $post = array(
+
+        $post = [
             'Language' => 'rus',
             'Value' => ' '
-        );
-        
+        ];
+
         $this->assertFalse($form->isValid($post));
-        
+
         $this->assertContains('isEmpty', $form->getErrors('Value'));
     }
-
 }

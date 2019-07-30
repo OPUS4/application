@@ -26,87 +26,94 @@
  *
  * @category    Application Unit Test
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2013-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
  * Unit Test fuer Unterformular fuer einen Titel.
  */
-class Admin_Form_Document_TitleTest extends ControllerTestCase {
-    
-    public function testCreateForm() {
+class Admin_Form_Document_TitleTest extends ControllerTestCase
+{
+
+    protected $additionalResources = ['view', 'translation'];
+
+    public function testCreateForm()
+    {
         $form = new Admin_Form_Document_Title();
-        
+
         $this->assertNotNull($form->getElement('Id'));
         $this->assertNotNull($form->getElement('Type'));
         $this->assertNotNull($form->getElement('Language'));
         $this->assertNotNull($form->getElement('Value'));
     }
-    
-    public function testPopulateFromModel() {
+
+    public function testPopulateFromModel()
+    {
         $form = new Admin_Form_Document_Title();
-        
+
         $doc = new Opus_Document(146);
-        
+
         $titles = $doc->getTitleMain();
-        
+
         $title = $titles[0];
-        
+
         $form->populateFromModel($title);
-        
+
         $this->assertEquals($title->getId(), $form->getElement('Id')->getValue());
         $this->assertEquals($title->getType(), $form->getElement('Type')->getValue());
         $this->assertEquals($title->getLanguage(), $form->getElement('Language')->getValue());
         $this->assertEquals($title->getValue(), $form->getElement('Value')->getValue());
     }
-    
-    public function testUpdateModel() {
+
+    public function testUpdateModel()
+    {
         $form = new Admin_Form_Document_Title();
-        
+
         $form->getElement('Type')->setValue('main');
         $form->getElement('Language')->setValue('rus');
         $form->getElement('Value')->setValue('Test Title');
-        
+
         $title = new Opus_Title();
-        
+
         $form->updateModel($title);
-        
+
         $this->assertEquals('main', $title->getType());
         $this->assertEquals('rus', $title->getLanguage());
         $this->assertEquals('Test Title', $title->getValue());
     }
-    
-    public function testGetModel() {
+
+    public function testGetModel()
+    {
         $form = new Admin_Form_Document_Title();
-        
+
         $doc = new Opus_Document(146);
-        
+
         $titles = $doc->getTitleMain();
-        
+
         $title = $titles[0];
-        
+
         $form->getElement('Id')->setValue($title->getId());
         $form->getElement('Type')->setValue('parent');
         $form->getElement('Language')->setValue('rus');
         $form->getElement('Value')->setValue('Test Title');
-        
+
         $model = $form->getModel();
-        
+
         $this->assertEquals($title->getId(), $model->getId());
         $this->assertEquals('parent', $model->getType());
         $this->assertEquals('rus', $model->getLanguage());
         $this->assertEquals('Test Title', $model->getValue());
     }
-    
-    public function testGetNewModel() {
+
+    public function testGetNewModel()
+    {
         $form = new Admin_Form_Document_Title();
-        
+
         $form->getElement('Type')->setValue('parent');
         $form->getElement('Language')->setValue('rus');
         $form->getElement('Value')->setValue('Test Title');
-        
+
         $model = $form->getModel();
 
         $this->assertNull($model->getId());
@@ -114,22 +121,24 @@ class Admin_Form_Document_TitleTest extends ControllerTestCase {
         $this->assertEquals('rus', $model->getLanguage());
         $this->assertEquals('Test Title', $model->getValue());
     }
-    
+
     /**
      * TODO Validierung ausbauen (Type, Language)
      */
-    public function testValidation() {
+    public function testValidation()
+    {
+        $this->disableTranslation();
+
         $form = new Admin_Form_Document_Title();
-        
-        $post = array(
+
+        $post = [
             'Type' => 'parent',
             'Language' => 'rus',
             'Value' => ''
-        );
-        
+        ];
+
         $this->assertFalse($form->isValid($post));
-        
+
         $this->assertContains('admin_validate_error_notempty', $form->getErrors('Value'));
     }
-    
 }

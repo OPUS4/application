@@ -34,6 +34,8 @@
 class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
 {
 
+    protected $additionalResources = ['database', 'view'];
+
     /**
      * @var Frontdoor_Model_HtmlMetaTags
      */

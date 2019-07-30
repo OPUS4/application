@@ -27,12 +27,14 @@
  * @category    Tests
  * @package     Application_Form_Decorator
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2017-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 class Application_Form_Decorator_UpdateFieldTest extends ControllerTestCase
 {
+
+    protected $additionalResources = 'translation';
 
     public function testRender()
     {
@@ -104,7 +106,6 @@ class Application_Form_Decorator_UpdateFieldTest extends ControllerTestCase
         $decorator = new Application_Form_Decorator_UpdateField();
 
         $translator = Zend_Registry::get('Zend_Translate');
-        $translator->loadModule('admin'); // translation only automatically loaded for 'default'
 
         $element = new Zend_Form_Element_Text('city');
         $element->setTranslator($translator);
@@ -115,5 +116,4 @@ class Application_Form_Decorator_UpdateFieldTest extends ControllerTestCase
 
         $this->assertContains('Feld aktualisieren', $output);
     }
-
 }

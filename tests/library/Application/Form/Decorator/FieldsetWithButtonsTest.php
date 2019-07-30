@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -27,17 +28,20 @@
  * @category    Application Unit Test
  * @package     Application_Form_Decorator
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class Application_Form_Decorator_FieldsetWithButtonsTest extends ControllerTestCase {
+class Application_Form_Decorator_FieldsetWithButtonsTest extends ControllerTestCase
+{
+
+    protected $additionalResources = 'view';
 
     private $decorator = null;
 
     private $form = null;
 
-    public function setUp() {
+    public function setUp()
+    {
         parent::setUp();
 
         $this->form = new Zend_Form_SubForm();
@@ -48,12 +52,14 @@ class Application_Form_Decorator_FieldsetWithButtonsTest extends ControllerTestC
         $this->decorator->setElement($this->form);
     }
 
-    public function testRender() {
+    public function testRender()
+    {
         $this->assertEquals('<fieldset><legend>Test</legend>' . PHP_EOL . 'content</fieldset>',
             $this->decorator->render('content'));
     }
 
-    public function testRenderWithButton() {
+    public function testRenderWithButton()
+    {
         $this->form->addElement('submit', 'Add');
 
         $this->decorator->setLegendButtons('Add');
@@ -66,7 +72,8 @@ class Application_Form_Decorator_FieldsetWithButtonsTest extends ControllerTestC
             $this->decorator->render('content'));
     }
 
-    public function testRenderWithTwoButtons() {
+    public function testRenderWithTwoButtons()
+    {
         $this->form->addElement('submit', 'Add');
         $this->form->addElement('submit', 'Import');
 
@@ -82,5 +89,4 @@ class Application_Form_Decorator_FieldsetWithButtonsTest extends ControllerTestC
             . '</span></legend>' . PHP_EOL . 'content</fieldset>',
             $this->decorator->render('content'));
     }
-
 }

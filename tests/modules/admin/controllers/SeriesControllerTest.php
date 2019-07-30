@@ -40,6 +40,8 @@
  */
 class Admin_SeriesControllerTest extends CrudControllerTestCase {
 
+    protected $additionalResources = 'all';
+
     public function setUp() {
         $this->setController('series');
         parent::setUp();

@@ -28,15 +28,19 @@
  * @category    Application
  * @package     Module_Publish Unit Test
  * @author      Susanne Gottwald <gottwald@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Publish_Model_DepositTest extends ControllerTestCase {
+class Publish_Model_DepositTest extends ControllerTestCase
+{
+
+    protected $additionalResources = ['database', 'translation'];
 
     /**
      * @expectedException Publish_Model_FormDocumentNotFoundException
      */
-    public function testInvalidDocumentState() {
+    public function testInvalidDocumentState()
+    {
         $document = $this->createTestDocument();
         $document->setServerState('published');
         $documentId = $document->store();
@@ -46,13 +50,14 @@ class Publish_Model_DepositTest extends ControllerTestCase {
         $deposit->storeDocument($documentId);
     }
 
-    public function testValidDocumentData() {
+    public function testValidDocumentData()
+    {
         $this->useEnglish();
 
         $document = $this->createTestDocument();
         $document->setServerState('temporary');
         $docId = $document->store();
-        
+
         $enrichment = new Opus_EnrichmentKey();
         $enrichment->setName('Foo2Title');
         $enrichment->store();
@@ -67,7 +72,7 @@ class Publish_Model_DepositTest extends ControllerTestCase {
             'PersonSubmitterAllowEmailContact_1' => array('value' => '0', 'datatype' => 'Person', 'subfield' => '1'),
             'CompletedDate' => array('value' => '2012/2/1', 'datatype' => 'Date', 'subfield' => '0'),
             'PersonAuthorFirstName_1' => array('value' => 'vorname', 'datatype' => 'Person', 'subfield' => '1'),
-            'PersonAuthorLastName_1' => array('value' => 'nachname', 'datatype' => 'Person', 'subfield' => '0'),            
+            'PersonAuthorLastName_1' => array('value' => 'nachname', 'datatype' => 'Person', 'subfield' => '0'),
             'PersonAuthorLastName_2' => array('value' => 'nurNachname', 'datatype' => 'Person', 'subfield' => '0'),
             'TitleMain_1' => array('value' => 'Entenhausen', 'datatype' => 'Title', 'subfield' => '0'),
             'TitleMainLanguage_1' => array('value' => 'deu', 'datatype' => 'Language', 'subfield' => '1'),
@@ -122,9 +127,9 @@ class Publish_Model_DepositTest extends ControllerTestCase {
         $dep->storeDocument($docId, null, $data);
 
         $document = $dep->getDocument();
-        $document->store();                               
-        
-        $personSubmitter = $document->getPersonSubmitter(0);        
+        $document->store();
+
+        $personSubmitter = $document->getPersonSubmitter(0);
         $this->assertEquals('Hans', $personSubmitter->getFirstName());
         $this->assertEquals('Hansmann', $personSubmitter->getLastName());
         $this->assertEquals('test@mail.com', $personSubmitter->getEmail());
@@ -136,15 +141,15 @@ class Publish_Model_DepositTest extends ControllerTestCase {
 
         $this->assertEquals('Dr.', $personSubmitter->getAcademicTitle());
         $this->assertEquals('0', $personSubmitter->getAllowEmailContact());
-        
+
         $this->assertEquals($datesHelper->getOpusDate('2012/2/1'), $document->getCompletedDate());
 
-        $personAuthor1 = $document->getPersonAuthor(0);        
+        $personAuthor1 = $document->getPersonAuthor(0);
         $this->assertEquals('vorname', $personAuthor1->getFirstName());
-        $this->assertEquals('nachname', $personAuthor1->getLastName());        
-        $personAuthor2 = $document->getPersonAuthor(1);                
+        $this->assertEquals('nachname', $personAuthor1->getLastName());
+        $personAuthor2 = $document->getPersonAuthor(1);
         $this->assertEquals('nurNachname', $personAuthor2->getLastName());
-        
+
         $titleMains = $document->getTitleMain();
         $titleMain1 = $titleMains[0];
         $this->assertEquals('Entenhausen', $titleMain1->getValue());
@@ -152,65 +157,65 @@ class Publish_Model_DepositTest extends ControllerTestCase {
         $titleMain2 = $titleMains[1];
         $this->assertEquals('Irgendwas sonst', $titleMain2->getValue());
         $this->assertEquals('eng', $titleMain2->getLanguage());
-        
+
         $this->assertEquals('deu', $document->getLanguage());
-        
+
         $this->assertEquals('Dies ist ein Kommentar', $document->getNote(0)->getMessage());
-                        
+
         $this->assertEquals(3, $document->getLicence(0)->getModel()->getId());
-          
+
         $this->assertEquals(1, $document->getThesisGrantor(0)->getModel()->getId());
         $this->assertEquals(2, $document->getThesisPublisher(0)->getModel()->getId());
-        
+
         $this->assertEquals('2009', $document->getThesisYearAccepted());
-                
+
         $this->assertEquals('hallo098', $document->getSubject(0)->getValue());
         $this->assertEquals('Keyword', $document->getSubject(1)->getValue());
         $this->assertEquals('deu', $document->getSubject(1)->getLanguage());
-        
+
         $this->assertEquals(8030, $document->getCollection(0)->getId());
         $this->assertEquals(6740, $document->getCollection(1)->getId());
         $this->assertEquals(2878, $document->getCollection(2)->getId());
         $this->assertEquals(13874, $document->getCollection(3)->getId());
-        
+
         $this->assertEquals('Publish_Model_DepositTest_old', $document->getIdentifier(0)->getValue());
-        $this->assertEquals('old', $document->getIdentifier(0)->getType());        
+        $this->assertEquals('old', $document->getIdentifier(0)->getType());
         $this->assertEquals('Publish_Model_DepositTest_serial', $document->getIdentifier(1)->getValue());
-        $this->assertEquals('serial', $document->getIdentifier(1)->getType());        
+        $this->assertEquals('serial', $document->getIdentifier(1)->getType());
         $this->assertEquals('Publish_Model_DepositTest_uuid', $document->getIdentifier(2)->getValue());
-        $this->assertEquals('uuid', $document->getIdentifier(2)->getType());        
+        $this->assertEquals('uuid', $document->getIdentifier(2)->getType());
         $this->assertEquals('Publish_Model_DepositTest_isbn', $document->getIdentifier(3)->getValue());
-        $this->assertEquals('isbn', $document->getIdentifier(3)->getType());        
+        $this->assertEquals('isbn', $document->getIdentifier(3)->getType());
         $this->assertEquals('Publish_Model_DepositTest_urn', $document->getIdentifier(4)->getValue());
-        $this->assertEquals('urn', $document->getIdentifier(4)->getType());        
+        $this->assertEquals('urn', $document->getIdentifier(4)->getType());
         $this->assertEquals('Publish_Model_DepositTest_doi', $document->getIdentifier(5)->getValue());
-        $this->assertEquals('doi', $document->getIdentifier(5)->getType());        
+        $this->assertEquals('doi', $document->getIdentifier(5)->getType());
         $this->assertEquals('Publish_Model_DepositTest_handle', $document->getIdentifier(6)->getValue());
-        $this->assertEquals('handle', $document->getIdentifier(6)->getType());   
+        $this->assertEquals('handle', $document->getIdentifier(6)->getType());
         $this->assertEquals('Publish_Model_DepositTest_url', $document->getIdentifier(7)->getValue());
-        $this->assertEquals('url', $document->getIdentifier(7)->getType());        
+        $this->assertEquals('url', $document->getIdentifier(7)->getType());
         $this->assertEquals('Publish_Model_DepositTest_issn', $document->getIdentifier(8)->getValue());
-        $this->assertEquals('issn', $document->getIdentifier(8)->getType());        
+        $this->assertEquals('issn', $document->getIdentifier(8)->getType());
         $this->assertEquals('Publish_Model_DepositTest_stddoi', $document->getIdentifier(9)->getValue());
         $this->assertEquals('std-doi', $document->getIdentifier(9)->getType());
         $this->assertEquals('Publish_Model_DepositTest_crislink', $document->getIdentifier(10)->getValue());
         $this->assertEquals('cris-link', $document->getIdentifier(10)->getType());
         $this->assertEquals('Publish_Model_DepositTest_splashurl', $document->getIdentifier(11)->getValue());
-        $this->assertEquals('splash-url', $document->getIdentifier(11)->getType());        
+        $this->assertEquals('splash-url', $document->getIdentifier(11)->getType());
         $this->assertEquals('Publish_Model_DepositTest_opus3', $document->getIdentifier(12)->getValue());
-        $this->assertEquals('opus3-id', $document->getIdentifier(12)->getType());        
+        $this->assertEquals('opus3-id', $document->getIdentifier(12)->getType());
         $this->assertEquals('Publish_Model_DepositTest_opac', $document->getIdentifier(13)->getValue());
         $this->assertEquals('opac-id', $document->getIdentifier(13)->getType());
         $this->assertEquals('Publish_Model_DepositTest_arxiv', $document->getIdentifier(14)->getValue());
-        $this->assertEquals('arxiv', $document->getIdentifier(14)->getType());        
+        $this->assertEquals('arxiv', $document->getIdentifier(14)->getType());
         $this->assertEquals('Publish_Model_DepositTest_pubmed', $document->getIdentifier(15)->getValue());
         $this->assertEquals('pmid', $document->getIdentifier(15)->getType());
-                
+
         $this->assertEquals(5, $document->getSeries(0)->getNumber());
         $this->assertEquals(4, $document->getSeries(0)->getModel()->getId());
-        
+
         $this->assertEquals('title as enrichment', $document->getEnrichment(0)->getValue());
-         
+
         $document->deletePermanent();
         Opus_EnrichmentKey::fetchbyName('Foo2Title')->delete();
     }

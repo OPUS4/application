@@ -34,6 +34,10 @@
 class Export_DataCiteExportTest extends ControllerTestCase
 {
 
+    protected $configModifiable = true;
+
+    protected $additionalResources = 'all';
+
     public function testExportOfValidDataCiteXML()
     {
         // DOI Präfix setzen

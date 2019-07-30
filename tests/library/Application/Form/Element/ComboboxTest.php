@@ -27,12 +27,14 @@
  * @category    Tests
  * @package     Application_Form_Element
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2017-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 class Application_Form_Element_ComboboxTest extends FormElementTestCase
 {
+
+    protected $additionalResources = 'translation';
 
     public function setUp()
     {

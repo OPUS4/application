@@ -40,6 +40,8 @@
 class Frontdoor_DeliverControllerTest extends ControllerTestCase
 {
 
+    protected $additionalResources = ['database', 'authz', 'view', 'mainMenu', 'translation'];
+
     public function setUp()
     {
         parent::setUpWithEnv('production');

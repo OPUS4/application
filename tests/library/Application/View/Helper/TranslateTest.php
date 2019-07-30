@@ -27,12 +27,15 @@
  * @category    Application Unit Test
  * @package     Application_View_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 class Application_View_Helper_TranslateTest extends ControllerTestCase
 {
+
+    protected $additionalResources = 'translation';
+
     /**
      * Return empty string for 'null' values.
      */
@@ -73,8 +76,6 @@ class Application_View_Helper_TranslateTest extends ControllerTestCase
     {
         $this->useEnglish();
 
-        Zend_Registry::get('Zend_Translate')->loadModule('admin');
-
         $model = new Application_View_Helper_Translate();
 
         $this->assertEquals(
@@ -86,8 +87,6 @@ class Application_View_Helper_TranslateTest extends ControllerTestCase
     public function testTranslateWithParameterArray()
     {
         $this->useEnglish();
-
-        Zend_Registry::get('Zend_Translate')->loadModule('admin');
 
         $model = new Application_View_Helper_Translate();
 
@@ -103,8 +102,6 @@ class Application_View_Helper_TranslateTest extends ControllerTestCase
     public function testTranslateWithPlaceholderValueMatchingLocale()
     {
         $this->useEnglish();
-
-        Zend_Registry::get('Zend_Translate')->loadModule('admin');
 
         $helper = new Application_View_Helper_Translate();
 
@@ -125,8 +122,6 @@ class Application_View_Helper_TranslateTest extends ControllerTestCase
     {
         $this->useEnglish();
 
-        Zend_Registry::get('Zend_Translate')->loadModule('admin');
-
         $helper = new Application_View_Helper_Translate();
 
         $this->assertEquals(
@@ -141,8 +136,6 @@ class Application_View_Helper_TranslateTest extends ControllerTestCase
     public function testTranslationMultipleParameters()
     {
         $this->useEnglish();
-
-        Zend_Registry::get('Zend_Translate')->loadModule('admin');
 
         $helper = new Application_View_Helper_Translate();
 

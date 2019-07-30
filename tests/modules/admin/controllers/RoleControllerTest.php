@@ -38,6 +38,9 @@
 class Admin_RoleControllerTest extends ControllerTestCase
 {
 
+    protected $additionalResources = 'all';
+
+
     /**
      * Test showing index page.
      */

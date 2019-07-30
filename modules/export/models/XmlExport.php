@@ -243,7 +243,7 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract {
 
         // currently only xml is supported here
         if ($exportParam !== 'xml') {
-            throw new Application_Exception('export format is not supported' . $exportParam);
+            throw new Application_Exception('export format is not supported: ' . $exportParam);
         }
 
         // parameter stylesheet is mandatory (only administrator is able to see raw output)
@@ -268,9 +268,11 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract {
     /**
      * Prepares xml export for solr search results.
      *
+     * @param bool $restrictExportToPublishedDocuments wenn true, dann können nur freigeschaltete Dokumente exportiert werden
+     *
      * @throws Application_SearchException
      */
-    public function prepareXml() {
+    public function prepareXml($restrictExportToPublishedDocuments = true) {
         $request = $this->getRequest();
 
         $searchType = $request->getParam('searchtype');
@@ -281,25 +283,28 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract {
             throw new Application_Search_QueryBuilderException('Unspecified search type: unable to create query');
         }
 
-        $resultList = null;
+        $resultIds = [];
 
-        switch ($searchType)
-        {
-        case Application_Util_Searchtypes::ID_SEARCH:
-            // TODO handle ID search like any other search
-            $resultList = $this->buildResultListForIdSearch($request);
-            break;
-        default:
-            $searchFactory = new Solrsearch_Model_Search();
-            $search = $searchFactory->getSearchPlugin($searchType);
-            $search->setExport(true);
-            $search->setMaxRows($this->getMaxRows());
-            $query = $search->buildExportQuery($request);
-            $resultList = $search->performSearch($query);
-            break;
+        switch ($searchType) {
+            case Application_Util_Searchtypes::ID_SEARCH:
+                $resultIds = $this->getAndValidateDocId($request, $restrictExportToPublishedDocuments);
+                $numberOfHits = count($resultIds);
+                break;
+            default:
+                $searchFactory = new Solrsearch_Model_Search();
+                $search = $searchFactory->getSearchPlugin($searchType);
+                $search->setExport(true);
+                $search->setMaxRows($this->getMaxRows());
+                $query = $search->buildExportQuery($request);
+                $resultList = $search->performSearch($query);
+                foreach ($resultList->getResults() as $result) {
+                    $resultIds[] = $result->getId();
+                }
+                $numberOfHits = $resultList->getNumberOfHits();
+                break;
         }
 
-        $this->handleResults($resultList->getResults(), $resultList->getNumberOfHits());
+        $this->handleResults($resultIds, $numberOfHits);
     }
 
     /**
@@ -358,27 +363,25 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract {
 
     /**
      * Sets up an xml document out of the result list.
-     * @param array $results An array of Opus_SolrSearch_Result objects.
+     * @param array $resultIds An array of document IDs.
+     * @param int $numOfHits total number of hits.
      */
-    private function handleResults($results, $numOfHits) {
+    private function handleResults($resultIds, $numOfHits) {
         $proc = $this->_proc;
         $xml = $this->_xml;
 
         $proc->setParameter('', 'timestamp', str_replace('+00:00', 'Z', Zend_Date::now()->setTimeZone('UTC')->getIso()));
-        $proc->setParameter('', 'docCount', count($results));
+        $proc->setParameter('', 'docCount', count($resultIds));
         $proc->setParameter('', 'queryhits', $numOfHits);
 
         Application_Xslt::registerViewHelper($proc, [
-            'optionValue'
+            'optionValue',
+            'fileUrl',
+            'frontdoorUrl',
+            'transferUrl'
         ]);
 
         $xml->appendChild($xml->createElement('Documents'));
-
-        $resultIds = array();
-
-        foreach ($results as $result) {
-            $resultIds[] = $result->getId();
-        }
 
         if (!empty($resultIds)) {
             $documents = $this->getDocumentsXml($resultIds);
@@ -395,27 +398,38 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract {
     }
 
     /**
-     * Returns result for ID search of a single document.
+     * Checks for existence of a document with the ID given in request parameter docId.
+     * Additionally, if $restrictExportToPublishedDocuments is set to true, restrict
+     * search to documents with serverState published only, otherwise all documents are
+     * considered.
+     *
+     * Returns an empty array, if ID is not present in request, is unknown or the corresponding
+     * document is not in serverState published. Otherwise returns a one-element array with docId.
+     *
      * @param $request HTTP request object
-     * @return Opus_SolrSearch_ResultList
+     * @param bool $restrictExportToPublishedDocuments if true, restrict search to published documents only
+     * @return array empty array or one-element array with docId.
      */
-    private function buildResultListForIdSearch($request) {
+    private function getAndValidateDocId($request, $restrictExportToPublishedDocuments = true) {
         $docId = $request->getParam('docId');
-        if (is_null($docId)) {
-            throw new Application_Exception();
-        }
-        $result = array();
-        try {
-            $doc = new Opus_Document($docId);
-            // SOLR index currently only contains published documents
-            if ($doc->getServerState() == 'published') {
-                $result[] = $doc;
+
+        $result = [];
+
+        // TODO hier bessere Differenzierung zwischen unterschiedlichen Fehlerzuständen (docId Parameter
+        // TODO fehlt im Request, hat falschen Typ, zugehöriges Dokument existiert nicht bzw. ist nicht publiziert)
+        if (! is_null($docId)) {
+            try {
+                $doc = new Opus_Document($docId);
+                if (! $restrictExportToPublishedDocuments || $doc->getServerState() == 'published') {
+                    $result[] = $doc->getId();
+                }
+            }
+            catch (Exception $e) {
+                // do nothing: return empty array
             }
         }
-        catch (Exception $e) {
-            // do nothing; return result with empty array
-        }
-        return new Opus_SolrSearch_ResultList($result);
+
+        return $result;
     }
 
     /**

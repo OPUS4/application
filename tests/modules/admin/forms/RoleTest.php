@@ -33,6 +33,8 @@
 class Admin_Form_RoleTest extends ControllerTestCase
 {
 
+    protected $additionalResources = ['database'];
+
     public function testCreateForm()
     {
         $form = new Admin_Form_Role();
@@ -99,7 +101,7 @@ class Admin_Form_RoleTest extends ControllerTestCase
 
     public function testValidationTranslated()
     {
-        Zend_Registry::get('Zend_Translate')->loadModule('admin'); //
+        $this->application->bootstrap('translation');
 
         $form = new Admin_Form_Role();
 

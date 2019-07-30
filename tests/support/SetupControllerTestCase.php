@@ -28,9 +28,8 @@
  * @category    Application
  * @package     Module_Setup
  * @author      Edouard Simon <edouard.simon@zib.de>
- * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2013-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 abstract class SetupControllerTestCase extends ControllerTestCase {
 
@@ -41,7 +40,7 @@ abstract class SetupControllerTestCase extends ControllerTestCase {
     protected $config;
 
     protected $configSection;
-    
+
     public function setUp() {
         parent::setUp();
         $this->assertTrue(!empty($this->configSection), 'Incomplete test class. Property configSection must be declared with non-empty value');

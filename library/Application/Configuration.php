@@ -142,12 +142,13 @@ class Application_Configuration {
             $config = $this->getConfig();
             if (isset($config->supportedLanguages)) {
                 $this->_supportedLanguages = explode(",", $config->supportedLanguages);
+                /* TODO only used for debugging - remove?
                 $this->getLogger()->debug(
                     Zend_Debug::dump(
                         $this->_supportedLanguages, 'Supported languages ('
                         . count($this->_supportedLanguages) . ')', false
                     )
-                );
+                );*/
             }
         }
         return $this->_supportedLanguages;

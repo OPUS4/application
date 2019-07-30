@@ -27,7 +27,7 @@
  * @category    Tests
  * @author      Jens Schwidder <schwidder@zib.de>
  * @author      Maximilian Salomon <salomon@zib.de>
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -36,18 +36,24 @@
  *
  * @covers Admin_LanguageController
  */
-class Admin_LanguageControllerTest extends CrudControllerTestCase {
+class Admin_LanguageControllerTest extends CrudControllerTestCase
+{
 
-    public function setUp() {
+    protected $additionalResources = 'all';
+
+    public function setUp()
+    {
         $this->setController('language');
         parent::setUp();
     }
 
-    public function getModels() {
+    public function getModels()
+    {
         return Opus_Language::getAll();
     }
 
-    public function testShowAction() {
+    public function testShowAction()
+    {
         $this->createsModels = true;
 
         $language = new Opus_Language();
@@ -87,7 +93,8 @@ class Admin_LanguageControllerTest extends CrudControllerTestCase {
     /**
      * Test, ob Active Status für Wert false (0) angezeigt wird.
      */
-    public function testShowActiveValueForInactiveLicence() {
+    public function testShowActiveValueForInactiveLicence()
+    {
         $this->dispatch('/admin/language/show/id/3'); // Italian (3) is disabled
         $this->assertResponseCode(200);
         $this->assertController('language');
@@ -96,7 +103,8 @@ class Admin_LanguageControllerTest extends CrudControllerTestCase {
         $this->assertQueryContentRegex('div#Active', '/No|Nein/');
     }
 
-    public function testNewActionSave() {
+    public function testNewActionSave()
+    {
         $this->createsModels = true;
 
         $post = array(
@@ -138,7 +146,8 @@ class Admin_LanguageControllerTest extends CrudControllerTestCase {
         $this->assertQueryContentContains('div#Comment', 'test comment');
     }
 
-    public function testNewActionCancel() {
+    public function testNewActionCancel()
+    {
         $this->createsModels = true;
 
         $modelCount = count($this->getModels());
@@ -163,7 +172,8 @@ class Admin_LanguageControllerTest extends CrudControllerTestCase {
     /**
      * Tests 'edit' action.
      */
-    public function testEditActionShowForm() {
+    public function testEditActionShowForm()
+    {
         $this->dispatch('/admin/language/edit/id/3');
         $this->assertResponseCode(200);
         $this->assertController('language');
@@ -175,7 +185,8 @@ class Admin_LanguageControllerTest extends CrudControllerTestCase {
         $this->assertQueryCount('input#Id', 1);
     }
 
-    public function testEditActionSave() {
+    public function testEditActionSave()
+    {
         $this->createsModels = true;
 
         $model = new Opus_Language();
@@ -214,7 +225,8 @@ class Admin_LanguageControllerTest extends CrudControllerTestCase {
         $this->assertEquals('test comment', $model->getComment());
     }
 
-    public function testEditActionCancel() {
+    public function testEditActionCancel()
+    {
         $this->createsModels = true;
 
         $model = new Opus_Language();
@@ -239,7 +251,8 @@ class Admin_LanguageControllerTest extends CrudControllerTestCase {
         $this->assertEquals('Test', $model->getRefName());
     }
 
-    public function testDeleteActionShowForm() {
+    public function testDeleteActionShowForm()
+    {
         $this->useEnglish();
 
         $this->dispatch('/admin/language/delete/id/3');
@@ -250,7 +263,8 @@ class Admin_LanguageControllerTest extends CrudControllerTestCase {
         $this->assertQuery('input#ConfirmNo');
     }
 
-    public function createNewModel() {
+    public function createNewModel()
+    {
         $model = new Opus_Language();
 
         $model->setRefName('TestLang');
@@ -259,7 +273,8 @@ class Admin_LanguageControllerTest extends CrudControllerTestCase {
         return $model->store();
     }
 
-    public function getModel($identifier) {
+    public function getModel($identifier)
+    {
         return new Opus_Language($identifier);
     }
 

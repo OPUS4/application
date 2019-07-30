@@ -34,7 +34,7 @@
 /**
  *
  */
-class Setup_Model_HelpPage extends Setup_Model_Abstract
+class Setup_Model_HelpPage
 {
 
     /**
@@ -90,7 +90,7 @@ class Setup_Model_HelpPage extends Setup_Model_Abstract
         // load translations in order specified in help.ini
         $helpConfig = new Zend_Config_Ini(APPLICATION_PATH . '/application/configs/help/help.ini');
         $helpConfigArray = $helpConfig->toArray();
-        $tmxData = parent::getTranslation();
+        $tmxData = []; // TODO parent::getTranslation();
         $filteredTmxData = [];
         foreach ($helpConfigArray as $helpKey => $helpContents) {
             if (isset($tmxData[$helpKey])) {
@@ -126,7 +126,7 @@ class Setup_Model_HelpPage extends Setup_Model_Abstract
                 $resultTmx->setTranslation($translationUnit, $language, $contents);
             }
         }
-        $this->setContent($resultData);
-        $this->setTranslation($resultTmx->toArray());
+        // $this->setContent($resultData);
+        // $this->setTranslation($resultTmx->toArray());
     }
 }

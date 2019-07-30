@@ -114,7 +114,10 @@ class Admin_AccessController extends Application_Controller_Action
         $this->view->roleName = $role->getName();
         $this->view->modules = $roleModules;
 
-        $this->view->allModules = array_keys(Application_Modules::getInstance()->getModules());
+        $modules = array_keys(Application_Modules::getInstance()->getModules());
+        unset($modules['default']);
+
+        $this->view->allModules = $modules;
         $this->view->allResources = $security->getAllResources();
         $this->view->allWorkflow = $transitions;
     }

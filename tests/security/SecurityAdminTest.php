@@ -33,6 +33,10 @@
 class SecurityAdminTest extends ControllerTestCase
 {
 
+    protected $configModifiable = true;
+
+    protected $additionalResources = ['authz', 'view', 'navigation', 'mainMenu', 'database', 'translation'];
+
     public function setUp()
     {
         parent::setUp();

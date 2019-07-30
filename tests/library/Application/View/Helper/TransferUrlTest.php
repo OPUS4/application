@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,18 +24,23 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Setup
- * @author      Edouard Simon (edouard.simon@zib.de)
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @category    Application Unit Test
+ * @package     Application_View_Helper
+ * @author      Sascha Szott <opus-repository@saschaszott.de>
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-?>
 
-<div id="adminMenuContainer">
-    <h3><?= $this->translate('setup_static-page_choose_page') ?></h3>
-    <?PHP foreach ($this->pageNames as $pagename): ?>
-    <div><a href="<?= $this->url(array('action' => 'edit', 'page' => $pagename)) ?>"><?= $this->translate('setup_static-page_edit_'.$pagename) ?></a></div>
-    <?PHP endforeach ?>
-</div>
+class Application_View_Helper_TransferUrlTest extends ControllerTestCase
+{
+
+    public function testTransferUrl()
+    {
+        $helper = new Application_View_Helper_TransferUrl();
+        $helper->setView(Zend_Registry::get('Opus_View'));
+
+        $transferUrl = $helper->transferUrl('123');
+        $this->assertEquals('http:///oai/container/index/docId/123', $transferUrl);
+    }
+
+}

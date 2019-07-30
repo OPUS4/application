@@ -40,7 +40,6 @@
  *
  * TODO get value (?)
  * TODO validation
- * TODO storing in database
  * TODO should translation functions be added at model level (in framework)?
  */
 class Application_Form_Element_Translation extends Zend_Form_Element_Multi

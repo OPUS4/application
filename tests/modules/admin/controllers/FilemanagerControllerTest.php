@@ -27,7 +27,7 @@
  * @category    Tests
  * @author      Jens Schwidder <schwidder@zib.de>
  * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  *
  * TODO einiges durch Selenium abgedeckt; Unit Tests vielleicht möglich
@@ -36,11 +36,15 @@
 /**
  * @covers Admin_FilemanagerController
  */
-class Admin_FilemanagerControllerTest extends ControllerTestCase {
+class Admin_FilemanagerControllerTest extends ControllerTestCase
+{
+
+    protected $additionalResources = 'all';
 
     private $documentId;
 
-    public function tearDown() {
+    public function tearDown()
+    {
         $this->removeDocument($this->documentId);
         parent::tearDown();
     }
@@ -48,7 +52,8 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase {
     /**
      * Basic unit test checks that error controller is not called.
      */
-    public function testIndexAction() {
+    public function testIndexAction()
+    {
         $this->dispatch('/admin/filemanager/index/id/91');
         $this->assertResponseCode(200);
         $this->assertModule('admin');
@@ -73,25 +78,29 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase {
 
     }
 
-    public function testIndexActionBadId() {
+    public function testIndexActionBadId()
+    {
         $this->dispatch('/admin/filemanager/index/id/bla');
         $this->assertRedirectTo('/admin/documents');
         $this->verifyFlashMessage('admin_document_error_novalidid');
     }
 
-    public function testIndexActionUnknownId() {
+    public function testIndexActionUnknownId()
+    {
         $this->dispatch('/admin/filemanager/index/id/1000');
         $this->assertRedirectTo('/admin/documents');
         $this->verifyFlashMessage('admin_document_error_novalidid');
     }
 
-    public function testIndexActionNoId() {
+    public function testIndexActionNoId()
+    {
         $this->dispatch('/admin/filemanager/index');
         $this->assertRedirectTo('/admin/documents');
         $this->verifyFlashMessage('admin_document_error_novalidid');
     }
 
-    public function testUploadAction() {
+    public function testUploadAction()
+    {
         $this->useGerman();
 
         $this->dispatch('/admin/filemanager/upload/id/91');
@@ -110,25 +119,29 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase {
             'Dateien');
     }
 
-    public function testUploadActionBadId() {
+    public function testUploadActionBadId()
+    {
         $this->dispatch('/admin/filemanager/upload/id/bla');
         $this->assertRedirectTo('/admin/documents');
         $this->verifyFlashMessage('admin_document_error_novalidid');
     }
 
-    public function testUploadActionUnknownId() {
+    public function testUploadActionUnknownId()
+    {
         $this->dispatch('/admin/filemanager/upload/id/1000');
         $this->assertRedirectTo('/admin/documents');
         $this->verifyFlashMessage('admin_document_error_novalidid');
     }
 
-    public function testUploadActionNoId() {
+    public function testUploadActionNoId()
+    {
         $this->dispatch('/admin/filemanager/upload');
         $this->assertRedirectTo('/admin/documents');
         $this->verifyFlashMessage('admin_document_error_novalidid');
     }
 
-    public function testMd5HashValuesPresent() {
+    public function testMd5HashValuesPresent()
+    {
         $hash = '1ba50dc8abc619cea3ba39f77c75c0fe';
         $this->dispatch('/admin/filemanager/index/id/91');
         $this->assertResponseCode(200);
@@ -140,7 +153,8 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase {
         $this->assertNotQuery('//div.hashist');
     }
 
-    public function testSha512HashValuesPresent() {
+    public function testSha512HashValuesPresent()
+    {
         $hash = '24bb2209810bacb3f9c05e08a08aec9ead4ac606fdc7c9d6c5fadffcf66f1e56396fdf46424cf52ef916f9e51f8178fb618c787f952d35aaf6d9079bbc9a50ad';
         $this->dispatch('/admin/filemanager/index/id/91');
         $this->assertResponseCode(200);
@@ -155,7 +169,8 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase {
     /**
      * Wenn beim Hash Fehler auftreten, werden Soll und Ist mit Labeln angezeigt.
      */
-    public function testHashErrorShown() {
+    public function testHashErrorShown()
+    {
         $this->dispatch('/admin/filemanager/index/id/121');
         $this->assertResponseCode(200);
         $this->assertModule('admin');
@@ -168,7 +183,8 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase {
         $this->assertQuery('//div.Hash1-data//div.hashist/span.hash-label');
     }
 
-    public function testShowMissingFileError() {
+    public function testShowMissingFileError()
+    {
         $this->useEnglish();
 
         $this->dispatch('/admin/filemanager/index/id/122'); // Datei 123 fuer Dokument 122 fehlt in Testdaten
@@ -181,7 +197,8 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase {
             'File does not exist!');
     }
 
-    public function testDontShowMissingFileError() {
+    public function testDontShowMissingFileError()
+    {
         $this->dispatch('/admin/filemanager/index/id/121');
         $this->assertResponseCode(200);
         $this->assertModule('admin');
@@ -191,37 +208,43 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase {
         $this->assertNotQuery('//div#FileManager-Files-File0-FileLink-element//ul[@class="errors"]');
     }
 
-    public function testDeleteActionBadDocIdErrorMessage() {
+    public function testDeleteActionBadDocIdErrorMessage()
+    {
         $this->dispatch('/admin/filemanager/delete/id/9999/fileId/125');
 
         $this->verifyFlashMessage('admin_document_error_novalidid');
     }
 
-    public function testDeleteActionSyntaxInvalidDocIdErrorMessage() {
+    public function testDeleteActionSyntaxInvalidDocIdErrorMessage()
+    {
         $this->dispatch('/admin/filemanager/delete/id/foo/fileId/125');
 
         $this->verifyFlashMessage('admin_document_error_novalidid');
     }
 
-    public function testDeleteActionBadFileIdErrorMessage() {
+    public function testDeleteActionBadFileIdErrorMessage()
+    {
         $this->dispatch('/admin/filemanager/delete/id/124/fileId/400');
 
         $this->verifyFlashMessage('admin_filemanager_error_novalidid');
     }
 
-    public function testDeleteActionSyntaxInvalidFileIdErrorMessage() {
+    public function testDeleteActionSyntaxInvalidFileIdErrorMessage()
+    {
         $this->dispatch('/admin/filemanager/delete/id/124/fileId/foo');
 
         $this->verifyFlashMessage('admin_filemanager_error_novalidid');
     }
 
-    public function testDeleteActionFileDoesNotBelongToDocErrorMessage() {
+    public function testDeleteActionFileDoesNotBelongToDocErrorMessage()
+    {
         $this->dispatch('/admin/filemanager/delete/id/146/fileId/125');
 
         $this->verifyFlashMessage('admin_filemanager_error_filenotlinkedtodoc');
     }
 
-    public function testDeleteAction() {
+    public function testDeleteAction()
+    {
         $this->dispatch('/admin/filemanager/delete/id/91/fileId/116');
 
         $this->validateXHTML();
@@ -230,14 +253,16 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase {
             'This is a pdf test document');
     }
 
-    public function testResetFormAction() {
+    public function testResetFormAction()
+    {
         $this->dispatch('/admin/filemanager/index/id/91/continue/1');
 
         $this->assertNotQuery('//form[@action="/admin/filemanager/index/id/91/continue/1"]');
         $this->assertQuery('//form[@action="/admin/filemanager/index/id/91"]');
     }
 
-    public function testRemoveGuestAccess() {
+    public function testRemoveGuestAccess()
+    {
         $document = $this->createTestDocument();
         $file = $document->addFile();
         $file->setPathName('testdatei.txt');
@@ -276,13 +301,15 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase {
         $this->assertNotContains($fileId, $files);
     }
 
-    public function testBadDocIdNotDisplayedOnPage() {
+    public function testBadDocIdNotDisplayedOnPage()
+    {
         $this->dispatch('/admin/filemanager/delete/id/dummyDocId/fileId/125');
         $this->assertRedirectTo('/admin/documents');
         $this->verifyNotFlashMessageContains('dummyDocId');
     }
 
-    public function testBadFileIdNotDisplayedOnPage() {
+    public function testBadFileIdNotDisplayedOnPage()
+    {
         $this->dispatch('/admin/filemanager/delete/id/124/fileId/dummyFileId');
         $this->assertRedirectTo('/admin/filemanager/index/id/124');
         $this->verifyNotFlashMessageContains('dummyFieldId');
@@ -291,7 +318,8 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase {
     /**
      * Prüft ob das Upload-Datum der Datei bei der Erstellung gesetzt wird.
      */
-    public function testFileUploadDate() {
+    public function testFileUploadDate()
+    {
         $this->useGerman();
         $file = $this->createTestFile('foo.pdf');
         $file->setVisibleInOai(false);
@@ -307,13 +335,14 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase {
 
         $this->dispatch('admin/filemanager/index/id/' . $docId);
         $this->assertQueryContentContains('//label', 'Datum des Hochladens');
-        $this->assertQueryContentContains('//div', $dateNow->getDay() . '.'. $dateNow->getMonth() . '.' . $dateNow->getYear());
+        $this->assertQueryContentContains('//div', $dateNow->getDay() . '.' . $dateNow->getMonth() . '.' . $dateNow->getYear());
     }
 
     /**
      * Nach einer Änderung in der Datei soll das ursprüngliche Upload-Datum gesetzt bleiben.
      */
-    public function testFileUploadDateAfterModification() {
+    public function testFileUploadDateAfterModification()
+    {
         $this->useGerman();
         $doc = new Opus_Document(305);
 
@@ -328,7 +357,8 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase {
     /**
      * Asserts that document files are displayed up in the correct order, if the sort order field is set.
      */
-    public function testFileSortOrder() {
+    public function testFileSortOrder()
+    {
         $this->dispatch('/admin/filemanager/index/id/155');
         $body = $this->_response->getBody();
         $positionFile1 = strpos($body, 'oai_invisible.txt');
@@ -343,7 +373,8 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase {
     /**
      * Asserts that document files are displayed up in the correct order, if the sort order field is NOT set.
      */
-    public function testDocumentFilesWithoutSortOrder() {
+    public function testDocumentFilesWithoutSortOrder()
+    {
         $this->dispatch('/admin/filemanager/index/id/92');
         $body = $this->_response->getBody();
         $positionFile1 = strpos($body, 'test.xhtml');

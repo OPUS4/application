@@ -61,7 +61,7 @@ class Application_Modules
      * Descriptors for explicitly registered modules.
      * @var array
      */
-    private $_registeredModules;
+    private $_registeredModules = [];
 
     /**
      * Prevent direct instantiation of class.
@@ -141,8 +141,6 @@ class Application_Modules
     /**
      * Iterates over module directories and returns all module names
      *
-     * 'default' gets filtered - it must always be present and accessible
-     *
      * @return array List of module names
      */
     public function findModules() {
@@ -162,10 +160,7 @@ class Application_Modules
             $controllersPath = $fileInfo->getRealPath() . DIRECTORY_SEPARATOR . 'controllers';
             if (!is_dir($controllersPath)) continue;
 
-            // filter 'default' ?
-            if ($name !== 'default') {
-                $modules[$name] = new Application_Configuration_Module($name);
-            }
+            $modules[$name] = new Application_Configuration_Module($name);
         }
 
         return $modules;

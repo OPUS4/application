@@ -56,7 +56,6 @@ class Admin_ModuleController extends Application_Controller_Action
         {
             if ($descriptor->isRegistered())
             {
-                Zend_Registry::get('Zend_Translate')->loadModule($descriptor->getName());
             }
         }
     }

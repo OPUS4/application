@@ -134,6 +134,22 @@ abstract class Application_Export_ExportPluginAbstract extends Application_Model
     }
 
     /**
+     * Checks if access is restricted to adminstrators.
+     *
+     * @return bool true if access is restricted, otherwise false
+     * @throws Zend_Exception
+     */
+    public function isAccessRestricted()
+    {
+        $adminOnlyAccess = $this->getConfig()->adminOnly;
+        // TODO OPUSVIER-4112 move handling of boolean configuration parameters to base helper class
+        if (isset($adminOnlyAccess) && $adminOnlyAccess == '1') {
+            return ! Opus_Security_Realm::getInstance()->checkModule('admin');
+        }
+        return false; // keine Einschränkung des Zugriffs
+    }
+
+    /**
      * Main function performing export.
      *
      * Needs to be implemented by child classes.

@@ -27,22 +27,25 @@
  * @category    Application
  * @package     Tests
  * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2014-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 
-class Solrsearch_Model_FacetMenuTest extends ControllerTestCase {
+class Solrsearch_Model_FacetMenuTest extends ControllerTestCase
+{
 
-    public function testGetFacetLimitsFromConfig() {
+    protected $configModifiable = true;
+
+    public function testGetFacetLimitsFromConfig()
+    {
         $model = new Solrsearch_Model_FacetMenu();
         $config = Zend_Registry::get('Zend_Config');
         $config->merge(new Zend_Config(array('searchengine' =>
             array('solr' =>
                 array('facetlimit' =>
                     array('author_facet' => 3,
-                          'year'         => 15))))));
+                        'year' => 15))))));
 
         $facetLimits = Opus_Search_Config::getFacetLimits();
 
@@ -55,13 +58,13 @@ class Solrsearch_Model_FacetMenuTest extends ControllerTestCase {
         $this->assertEquals(10, $facetLimits['institute']);
     }
 
-    public function testGetFacetLimitsFromConfigWithYearInverted() {
+    public function testGetFacetLimitsFromConfigWithYearInverted()
+    {
         $model = new Solrsearch_Model_FacetMenu();
         $config = Zend_Registry::get('Zend_Config');
         if (isset($config->searchengine->solr->facets)) {
             $config->searchengine->solr->facets = 'year_inverted,doctype,author_facet,language,has_fulltext,belongs_to_bibliography,subject,institute';
-        }
-        else {
+        } else {
             $testConfig = new Zend_Config(array(
                 'searchengine' => array(
                     'solr' => array(
@@ -72,8 +75,8 @@ class Solrsearch_Model_FacetMenuTest extends ControllerTestCase {
         $config->merge(new Zend_Config(array('searchengine' =>
             array('solr' =>
                 array('facetlimit' =>
-                    array('author_facet'  => 3,
-                          'year_inverted' => 15))))));
+                    array('author_facet' => 3,
+                        'year_inverted' => 15))))));
 
         $facetLimits = Opus_Search_Config::getFacetLimits();
 
@@ -86,7 +89,8 @@ class Solrsearch_Model_FacetMenuTest extends ControllerTestCase {
         $this->assertEquals(10, $facetLimits['institute']);
     }
 
-    public function testBuildFacetArray() {
+    public function testBuildFacetArray()
+    {
         $model = new Solrsearch_Model_FacetMenu();
         $paramSet = array(
             'facetNumber_author_facet' => 'all',
@@ -107,13 +111,13 @@ class Solrsearch_Model_FacetMenuTest extends ControllerTestCase {
      * If 'year_inverted' is set in config, buildFacetArray should contain both entries ('year' & 'year_inverted'), because,
      * in framework, 'year_inverted' is expected and changed to 'year'. Hence, as result from framework 'year' is expected.
      */
-    public function testBuildFacetArrayWithYearInverted() {
+    public function testBuildFacetArrayWithYearInverted()
+    {
         $model = new Solrsearch_Model_FacetMenu();
         $config = Zend_Registry::get('Zend_Config');
         if (isset($config->searchengine->solr->facets)) {
             $config->searchengine->solr->facets = 'year_inverted,doctype,author_facet,language,has_fulltext,belongs_to_bibliography,subject,institute';
-        }
-        else {
+        } else {
             $testConfig = new Zend_Config(array(
                 'searchengine' => array(
                     'solr' => array(
@@ -127,7 +131,8 @@ class Solrsearch_Model_FacetMenuTest extends ControllerTestCase {
         $this->assertEquals(10000, $facetArray['year_inverted']);
     }
 
-    public function testBuildEmptyFacetArray() {
+    public function testBuildEmptyFacetArray()
+    {
         $model = new Solrsearch_Model_FacetMenu();
         $this->assertNull($model->buildFacetArray(array()));
     }

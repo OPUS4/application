@@ -34,6 +34,8 @@
 class Oai_Model_XmlFactoryTest extends ControllerTestCase
 {
 
+    protected $additionalResources = 'database';
+
     private $_xmlFactory;
 
     public function setUp()

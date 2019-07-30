@@ -33,9 +33,9 @@
  */
 
 /**
- *
+ * TODO remove camel case from controller name
  */
-class Setup_HelpPageController extends Application_Controller_SetupAbstract
+class Setup_HelpPageController extends Application_Controller_Action
 {
 
     public function init()
@@ -47,7 +47,7 @@ class Setup_HelpPageController extends Application_Controller_SetupAbstract
 
     public function indexAction()
     {
-        $this->forward('edit');
+        // TODO fix $this->forward('edit');
     }
 
     protected function getForm()

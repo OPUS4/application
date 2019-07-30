@@ -36,6 +36,8 @@ require_once('CronTestCase.php');
 class ConsistencyCheckTest extends CronTestCase
 {
 
+    protected $additionalResources = 'database';
+
     private function getPublishedDocumentCount()
     {
         $finder = new Opus_DocumentFinder();

@@ -25,53 +25,23 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_Setup
- * @author      Edouard Simon <edouard.simon@zib.de>
+ * @package     Setup_Form
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-/**
- *
- */
-class Setup_StaticPageController extends Application_Controller_SetupAbstract
+class Setup_Form_ImprintPage extends Application_Form_Translations
 {
-
-    protected $config;
 
     public function init()
     {
         parent::init();
-        $this->config = new Zend_Config_Ini(APPLICATION_PATH . '/modules/setup/setup.ini', 'static-page');
-        $this->getHelper('MainMenu')->setActive('admin');
-    }
 
-    public function indexAction()
-    {
-        $this->view->pageNames = $this->config->pageNames;
-    }
+        $this->addKey('home_index_imprint_pagetitle');
+        $this->addKey('home_index_imprint_title');
+        $this->addKey('home_index_imprint_content', true, ['label' => 'setup_page_content']);
 
-    protected function getModel()
-    {
-        $pageName = $this->getRequest()->getParam('page');
-        $config = $this->config->toArray();
-        $config['useContentFile'] = ($pageName != 'home');
-        return new Setup_Model_StaticPage($pageName, $config);
-    }
-
-    protected function getForm()
-    {
-        $pageName = $this->getRequest()->getParam('page');
-
-        switch($pageName) {
-            case 'home':
-                $form = new Setup_Form_HomePage();
-                break;
-            default:
-                $form = new Setup_Form_StaticPage();
-        }
-
-        return $form;
+        $this->populateFromTranslations();
     }
 }

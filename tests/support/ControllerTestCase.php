@@ -28,14 +28,16 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @author      Thoralf Klein <thoralf.klein@zib.de>
  * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
  * Base class for controller tests.
+ *
+ * @preserveGlobalState disabled
  */
-class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase
+class ControllerTestCase extends TestCase
 {
 
     const MESSAGE_LEVEL_NOTICE = 'notice';
@@ -52,41 +54,14 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase
 
     private $logger = null;
 
+    private $translatorBackup = null;
+
     /**
      * Method to initialize Zend_Application for each test.
      */
     public function setUpWithEnv($applicationEnv)
     {
-        // Reducing memory footprint by forcing garbage collection runs
-        // WARNING: Did not work on CI-System (PHP 5.3.14, PHPnit 3.5.13)
-        // gc_collect_cycles();
-
-        $this->closeLogfile();
-
-        $this->closeDatabaseConnection();
-
-        // Resetting singletons or other kinds of persistent objects.
-        Opus_Db_TableGateway::clearInstances();
-
-        // FIXME Does it help with the mystery bug?
-        Zend_Registry::_unsetInstance();
-
-        // Reset autoloader to fix huge memory/cpu-time leak
-        Zend_Loader_Autoloader::resetInstance();
-        $autoloader = Zend_Loader_Autoloader::getInstance();
-        $autoloader->suppressNotFoundWarnings(false);
-        $autoloader->setFallbackAutoloader(true);
-
-        // Clean-up possible artifacts in $_SERVER of previous test.
-        unset($_SERVER['REMOTE_ADDR']);
-
-        $this->bootstrap = new Zend_Application(
-            $applicationEnv, ["config" => [
-                APPLICATION_PATH . '/application/configs/application.ini',
-                APPLICATION_PATH . '/tests/tests.ini',
-                APPLICATION_PATH . '/tests/config.ini'
-            ]]
-        );
+        $this->applicationEnv = $applicationEnv;
 
         // added to ensure that application log messages are written to opus.log when running unit tests
         // if not set messages are written to opus-console.log
@@ -103,26 +78,69 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase
     /**
      * Clean up database instances.
      */
-    protected function tearDown()
+    public function tearDown()
     {
         $this->logoutUser();
         $this->resetSearch();
-        $this->deleteTestDocuments();
+
+        $this->cleanupDatabase();
         $this->deleteTestFiles();
         $this->deleteTempFiles();
 
-        // check if documents have been modified by a side effect (should not happen)
-        $this->checkDoc146();
-        $this->checkDoc1();
+        $this->additionalChecks();
 
+        $this->logger = null;
+
+        Application_Configuration::clearInstance(); // reset Application_Configuration
+
+        parent::tearDown();
+    }
+
+    public function getApplication()
+    {
+        return new Zend_Application(
+            $this->applicationEnv, ["config" => [
+                APPLICATION_PATH . '/application/configs/application.ini',
+                APPLICATION_PATH . '/tests/tests.ini',
+                APPLICATION_PATH . '/tests/config.ini'
+            ]]
+        );
+    }
+
+    public function cleanupBefore()
+    {
+        // Reducing memory footprint by forcing garbage collection runs
+        // WARNING: Did not work on CI-System (PHP 5.3.14, PHPnit 3.5.13)
+        // gc_collect_cycles();
+
+        $this->closeDatabaseConnection();
+
+        // Resetting singletons or other kinds of persistent objects.
+        Opus_Db_TableGateway::clearInstances();
+
+        // Clean-up possible artifacts in $_SERVER of previous test.
+        unset($_SERVER['REMOTE_ADDR']);
+
+        parent::cleanupBefore();
+    }
+
+    public function cleanupDatabase()
+    {
+        if (! is_null(Zend_Db_Table::getDefaultAdapter())) {
+            $this->deleteTestDocuments();
+
+            // data integrity checks TODO should be made unnecessary
+            $this->checkDoc146();
+            $this->checkDoc1();
+        }
+    }
+
+    public function additionalChecks()
+    {
         /* ONLY FOR DEBUGGING
         $checker = new AssumptionChecker($this);
         $checker->checkYearFacetAssumption();
         */
-
-        $this->logger = null;
-        Application_Configuration::clearInstance(); // reset Application_Configuration
-        parent::tearDown();
     }
 
     /**
@@ -146,24 +164,6 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase
         $this->assertEquals(2010, $modified->getYear());
     }
 
-    /**
-     * Close logfile to prevent plenty of open logfiles.
-     */
-    protected function closeLogfile()
-    {
-        if (!Zend_Registry::isRegistered('Zend_Log')) {
-            return;
-        }
-
-        $log = Zend_Registry::get('Zend_Log');
-        if (isset($log)) {
-            $log->__destruct();
-            Zend_Registry::set('Zend_Log', null);
-        }
-
-        Opus_Log::drop();
-    }
-
     protected function closeDatabaseConnection()
     {
         $adapter = Zend_Db_Table::getDefaultAdapter();
@@ -181,11 +181,12 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase
     protected function checkForCustomBadStringsInHtml($body, array $badStrings)
     {
         $bodyLowerCase = strtolower($body);
-        foreach ($badStrings AS $badString)
+        foreach ($badStrings AS $badString) {
             $this->assertNotContains(
                 strtolower($badString),
                 $bodyLowerCase,
                 "Response must not contain '$badString'");
+        }
     }
 
     /**
@@ -195,7 +196,7 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase
      */
     protected function checkForBadStringsInHtml($body)
     {
-        $badStrings = array("Exception", "Error", "Fehler", "Stacktrace", "badVerb");
+        $badStrings = ["Exception", "Error", "Fehler", "Stacktrace", "badVerb"];
         $this->checkForCustomBadStringsInHtml($body, $badStrings);
     }
 
@@ -551,7 +552,6 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase
                     $breadcrumbDefined = true;
 
                     $translate = Zend_Registry::get('Zend_Translate');
-                    $translate->loadModule($module);
 
                     $label = $page->getLabel();
 
@@ -752,5 +752,38 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase
     public function setBaseUrl($baseUrl)
     {
         Zend_Controller_Front::getInstance()->setBaseUrl($baseUrl);
+    }
+
+    /**
+     * Disables translation until the next bootstrapping.
+     *
+     * This can be used to check for translation keys instead of translated strings for instance when testing forms.
+     * Otherwise you have to specify the language for the test first, so you get the expected translation.
+     *
+     * Stores the original translation object only the first time the function is called.
+     */
+    public function disableTranslation()
+    {
+        if (is_null($this->translatorBackup)) {
+            $this->translatorBackup = Zend_Registry::get('Zend_Translate');
+        }
+
+        Zend_Registry::set('Zend_Translate', new Application_Translate([
+            'adapter' => 'array',
+            'content' => [],
+            'locale' => 'auto'
+        ]));
+    }
+
+    /**
+     * Resets translations with original (bootstrap) translation object.
+     *
+     * This function restores translation if disableTranslation has been called before.
+     */
+    public function enableTranslation()
+    {
+        if (! is_null($this->translatorBackup)) {
+            Zend_Registry::set('Zend_Translate', $this->translatorBackup);
+        }
     }
 }

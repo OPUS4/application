@@ -59,9 +59,6 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
          * Add a custom front controller plugin for setting up an appropriate
          * include path to the form classes of modules.
          */
-        $moduleprepare = new Application_Controller_Plugin_LoadTranslation();
-        $frontController->registerPlugin($moduleprepare);
-
         // Add security realm initialization
         // the SWORD module uses a different auth mechanism
         $realmSetupPlugin = new Application_Controller_Plugin_SecurityRealm('sword');
@@ -215,12 +212,16 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      *
      * @return Zend_Translate
      */
-    protected function _initTranslation() {
-        $this->bootstrap(array('Configuration', 'Session', 'Logging', 'ZendCache'));
+    protected function _initTranslation()
+    {
+        $this->bootstrap(['Configuration', 'Session', 'Logging', 'ZendCache']);
 
         $logger = $this->getResource('Logging');
 
-        $translate = new Application_Translate();
+        $translate = Application_Translate::getInstance();
+        $translate->setOptions([
+            'log' => $logger
+        ]);
 
         Zend_Registry::set(Application_Translate::REGISTRY_KEY, $translate);
 
@@ -243,8 +244,8 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
 
         $logger->debug("Language set to '$language'.");
         $session->language = $language;
-        $translate->setLocale($language);
-        $translate->loadModule('default'); // immer die Übersetzungen aus Default-Modul laden
+        $translate->loadTranslations();
+        $translate->setLocale($language); // setting locale must happen after loading translations
 
         return $translate;
     }
@@ -356,7 +357,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      */
     protected function _initExporter()
     {
-        $this->bootstrap('Configuration');
+        $this->bootstrap('Configuration', 'modules');
 
         $exporter = new Application_Export_Exporter();
 

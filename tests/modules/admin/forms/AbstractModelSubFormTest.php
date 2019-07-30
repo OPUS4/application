@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -27,21 +28,21 @@
  * @category    Application Unit Test
  * @package     Admin_Form
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class Admin_Form_AbstractModelSubFormTest extends ControllerTestCase {
+class Admin_Form_AbstractModelSubFormTest extends ControllerTestCase
+{
 
-      public function testConstructForm() {
-          $form = $this->getMockForAbstractClass('Admin_Form_AbstractModelSubForm');
+    public function testConstructForm()
+    {
+        $form = $this->getMockForAbstractClass('Admin_Form_AbstractModelSubForm');
 
-          $this->assertInstanceOf('Zend_Form', $form);
+        $this->assertInstanceOf('Zend_Form', $form);
 
-          $this->assertEquals(0, count($form->getElements()));
-          $this->assertEquals(0, count($form->getSubForms()));
-          $this->assertEquals(1, count($form->getDecorators()));
-          $this->assertNotNull($form->getDecorator('FormElements'));
-      }
-
+        $this->assertEquals(0, count($form->getElements()));
+        $this->assertEquals(0, count($form->getSubForms()));
+        $this->assertEquals(1, count($form->getDecorators()));
+        $this->assertNotNull($form->getDecorator('FormElements'));
+    }
 }

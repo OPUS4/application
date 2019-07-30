@@ -38,6 +38,8 @@
  */
 class Admin_ReportControllerTest extends ControllerTestCase {
 
+    protected $additionalResources = 'all';
+
     private $config;
 
     private $docIds;

@@ -26,12 +26,15 @@
  *
  * @category    Application Unit Tests
  * @author      Maximilian Salomon <salomon@zib.de>
- * @copyright   Copyright (c) 2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2017-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 class Application_View_Helper_LanguageWebFormTest extends ControllerTestCase
 {
+
+    protected $additionalResources = 'translation';
+
     /**
      * @var Application_View_Helper_LanguageWebForm
      */
@@ -49,14 +52,14 @@ class Application_View_Helper_LanguageWebFormTest extends ControllerTestCase
      */
     public function langProvider()
     {
-        return array(
-            array('deu', 'de'),
-            array('eng', 'en'),
-            array('spa', 'es'),
-            array('ita', 'it'),
-            array('fra', 'fr'),
-            array('rus', 'ru')
-        );
+        return [
+            ['deu', 'de'],
+            ['eng', 'en'],
+            ['spa', 'es'],
+            ['ita', 'it'],
+            ['fra', 'fr'],
+            ['rus', 'ru']
+        ];
     }
 
     /**
@@ -68,5 +71,4 @@ class Application_View_Helper_LanguageWebFormTest extends ControllerTestCase
     {
         $this->assertEquals($this->_helper->languageWebForm($long), $short);
     }
-
 }

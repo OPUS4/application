@@ -26,11 +26,15 @@
  *
  * @category    Application Unit Test
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 class ControllerTestCaseTest extends ControllerTestCase
 {
+
+    protected $additionalResources = ['view', 'translation'];
+
+    protected $configModifiable = true;
 
     public function tearDown()
     {
@@ -137,7 +141,8 @@ class ControllerTestCaseTest extends ControllerTestCase
         $this->removeDocument($doc);
     }
 
-    public function testGetTempFile() {
+    public function testGetTempFile()
+    {
         $tempFile = $this->getTempFile();
 
         $this->assertFileExists($tempFile);
@@ -152,5 +157,23 @@ class ControllerTestCaseTest extends ControllerTestCase
 
         $this->assertFileNotExists($tempFile);
         $this->assertFileNotExists($tempFile2);
+    }
+
+    public function testDisableEnableTranslation()
+    {
+        $defaultTranslator = Zend_Registry::get('Zend_Translate');
+        $this->assertTrue($defaultTranslator->isTranslated('LastName'));
+
+        $this->disableTranslation();
+
+        $translator = Zend_Registry::get('Zend_Translate');
+        $this->assertFalse($translator->isTranslated('LastName'));
+
+        $this->enableTranslation();
+
+        $translator = Zend_Registry::get('Zend_Translate');
+        $this->assertTrue($translator->isTranslated('LastName'));
+
+        $this->assertSame($defaultTranslator, $translator);
     }
 }

@@ -97,6 +97,14 @@ search.result.display.preferUserInterfaceLanguage = 0
 ; export.stylesheet.frontdoor = example
 ; export.stylesheet.search = example
 
+; MARC21 XML EXPORT
+; used to set MARC field 003
+marc21.isil=
+; default value used to set subfield a of MARC field 264
+marc21.publisherCity=
+; default value used to set subfield b of MARC field 264
+marc21.publisherName=
+
 ;ERROR CONTROLLER SETTINGS - who should receive error mails?
 ; errorController.mailTo.name = root
 ; errorController.mailTo.address = root@localhost

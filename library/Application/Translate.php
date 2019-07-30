@@ -37,6 +37,12 @@
  * Zend_Translate wid in den Zend Komponenten verwendet und in der Zend_Registry normalerweise unter 'Zend_Translate'
  * gespeichert. Mit den Erweiterungen können an beliebigen Stellen problemlos weitere Übersetzungsdateien geladen
  * werden.
+ *
+ * Normally all translations from all modules should be loaded at startup, because modules can use classes from other
+ * modules. Loading the translations for a module only when a request is directed at that module might not load all the
+ * necessary translations if this module uses resources from another module that has not been loaded.
+ *
+ * TODO loading from database should not happen for every module, but just once
  */
 class Application_Translate extends Zend_Translate
 {
@@ -46,11 +52,7 @@ class Application_Translate extends Zend_Translate
      */
     const REGISTRY_KEY = 'Zend_Translate';
 
-    /**
-     * Array mit bereits geladenen Modulen.
-     * @var array
-     */
-    private $_loadedModules = [];
+    private $loaded = false;
 
     /**
      * Logger.
@@ -58,16 +60,18 @@ class Application_Translate extends Zend_Translate
      */
     private $_logger;
 
+    static private $instance;
+
     /**
      * Optionen für Zend_Translate.
      *
      * @var array
      */
-   private $_options = [
+    private $_options = [
         'logMessage' => "Unable to translate key '%message%' into locale '%locale%'",
         'logPriority' => Zend_Log::DEBUG,
-        'adapter' => 'Opus_Translate_DefaultAdapter',
-        'locale' => 'auto',
+        'adapter' => 'tmx',
+        'locale' => 'en',
         'clear' => false,
         'scan' => Zend_Translate::LOCALE_FILENAME,
         'ignore' => '.',
@@ -83,31 +87,65 @@ class Application_Translate extends Zend_Translate
         parent::__construct($options);
     }
 
-    /**
-     * Lädt die Übersetzungen für ein Modul.
-     * @param $name
-     */
-    public function loadModule($name, $reload = false)
+    static public function getInstance()
     {
-        if (!in_array($name, $this->_loadedModules) or $reload === true) {
-            $moduleDir = APPLICATION_PATH . '/modules/' . $name;
-            $this->loadLanguageDirectory("$moduleDir/language/", false);
-
-            $options = array_merge(
-                ['content' => ['module' => $name]],
-                $this->getOptions()
-            );
-
-            if ($reload) {
-                $options['reload'] = true;
-            }
-
-            $this->addTranslation($options);
-
-            $this->_loadedModules[] = $name;
-        } else {
-            $this->getLogger()->notice("Already loaded translations for module '$name'.");
+        if (is_null(self::$instance)) {
+            self::$instance = new Application_Translate();
         }
+
+        return self::$instance;
+    }
+
+    /**
+     * Loads all modules.
+     */
+    public function loadModules($reload = false)
+    {
+        if (! $this->loaded or $reload) {
+            $modules = Application_Modules::getInstance()->getModules();
+
+            foreach ($modules as $name => $module) {
+                $moduleDir = APPLICATION_PATH . '/modules/' . $name;
+                $this->loadLanguageDirectory("$moduleDir/language/", false, $reload);
+            }
+        }
+
+        $this->loaded = true;
+    }
+
+    /**
+     * @param bool $reload
+     * @throws Zend_Translate_Exception
+     *
+     * TODO Is there a way to add both locales in one steps?
+     */
+    public function loadDatabase($reload = false)
+    {
+        // TODO use cache
+        $translate = new Zend_Translate([
+            'adapter' => 'Opus_Translate_DatabaseAdapter',
+            'content' => 'all',
+            'locale' => 'en',
+            'disableNotices' => true,
+            'reload' => $reload
+        ]);
+
+        $locales = Application_Configuration::getInstance()->getSupportedLanguages();
+
+        foreach ($locales as $locale) {
+            $this->addTranslation([
+                'content' => $translate,
+                'locale' => $locale
+            ]);
+        }
+
+        unset($translate); // TODO Garbage collection? Does it work?
+    }
+
+    public function loadTranslations($reload = false)
+    {
+        $this->loadModules($reload);
+        $this->loadDatabase($reload);
     }
 
     /**
@@ -119,7 +157,7 @@ class Application_Translate extends Zend_Translate
      *
      * TODO better than supressing the warning would be for each module to register language directories in bootstrap
      */
-    public function loadLanguageDirectory($directory, $warnIfMissing = true)
+    public function loadLanguageDirectory($directory, $warnIfMissing = true, $reload = false)
     {
         $path = realpath($directory);
 
@@ -148,10 +186,10 @@ class Application_Translate extends Zend_Translate
 
             // 'reload' is always set, because this code should only be executed if the module has not been loaded yet
             // Otherwise there is a mechanism preventing repeated loading in the parent class.
-            $options = array_merge(
-                ['content' => $path . DIRECTORY_SEPARATOR . $file, 'reload' => true],
-                $this->getOptions()
-            );
+            $options = array_merge([
+                'content' => $path . DIRECTORY_SEPARATOR . $file,
+                'reload' => $reload
+            ], $this->getOptions());
 
             $this->addTranslation($options);
         }
@@ -248,10 +286,35 @@ class Application_Translate extends Zend_Translate
      * @param $key
      * @param $translations
      */
-    public function setTranslations($key, $translations)
+    public function setTranslations($key, $translations, $module = 'default')
     {
         $database = new Opus_Translate_Dao();
 
-        $database->setTranslation($key, $translations);
+        $database->setTranslation($key, $translations, $module);
+    }
+
+    /**
+     * @throws Zend_Translate_Exception
+     *
+     * TODO does not work as intended - messes up some other tests
+     */
+    public function clear()
+    {
+        $translate = new Zend_Translate([
+            'adapter' => 'array',
+            'content' => ['en' => [], 'de' => []],
+            'locale' => 'en',
+            'disableNotices' => true,
+            'clear' => true
+        ]);
+
+        $this->addTranslation($translate);
+
+        $translate = null;
+    }
+
+    public function getTmxFiles()
+    {
+        return $this->files;
     }
 }

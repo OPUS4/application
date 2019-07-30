@@ -28,7 +28,7 @@
  * @package     Admin
  * @author      Jens Schwidder <schwidder@zib.de>
  * @author      Maximilian Salomon <salomon@zib.de>
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -37,7 +37,10 @@
  *
  * @covers Admin_IprangeController
  */
-class Admin_IprangeControllerTest extends CrudControllerTestCase {
+class Admin_IprangeControllerTest extends CrudControllerTestCase
+{
+
+    protected $additionalResources = 'all';
 
     public function setUp()
     {
@@ -236,8 +239,7 @@ class Admin_IprangeControllerTest extends CrudControllerTestCase {
     {
         $this->assertCount(count($expectedRoles), $roles);
 
-        foreach ($roles as $role)
-        {
+        foreach ($roles as $role) {
             $name = $role->getName();
             $this->assertContains($name, $expectedRoles);
             $expectedRoles = array_diff($expectedRoles, array($name));
