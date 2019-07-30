@@ -1,11 +1,15 @@
 # OPUS 4 Release Notes
 
+## Release 4.6.4 2019-09-x
+
+### Übersetzungen
+
 Die Übersetzung von Sprachen, z.B. 'deu' => 'German', erfolgt nun mit Hilfe von PHP 
 Funktionen. Die Datei 'modules/default/language/languages.tmx' wurde gelöscht. 
 Übersetzungen von Sprachen in angepassten TMX-Dateien werden immer noch verwendet, 
 sollten aber nicht mehr notwendig sein. 
 
-## Release 4.6.4 2019-04-01
+### Apache-Solr Update
 
 Mit diesem Release wechselt OPUS 4 zu Apache Solr 7.7.1. Der Umstieg muss manuell
 durchgeführt werden. Apache Solr ist gut dokumentiert und die Installationsskripte 
@@ -35,13 +39,13 @@ Zum Abschluss muss mit dem SolrIndexBuilder-Skript der Index neu aufgebaut werde
 
     $ php scripts/SolrIndexBuilder.php
     
-Außerdem werden Dateinamen beim Upload ab jetzt auch in der Administration geprüft. 
-(Vorher nur im Publish-Modul)
+### Administration    
     
----
+Dateinamen werden beim Upload in der Administration nun wie im Publish-Modul auf
+Länge und Zeichensatz geprüft. 
 
-## Release 4.6.4 2018-12-x
-
+### MySQL Zeichensatz aktualisiert
+    
 Um sämtliche Zeichen speichern zu können, verwendet die Datenbank jetzt den 
 Zeichensatz `utf8mb4` und die Collation `utf8mb4_unicode_ci`. Das Update-Skript 
 führt automatisch die Konvertierung durch. Wie immer ist dringend geraten vorher
