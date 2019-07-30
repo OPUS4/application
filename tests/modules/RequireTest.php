@@ -46,7 +46,7 @@
  * @runTestsInSeparateProcess
  * @preserveGlobalState disabled
  */
-class RequireTest extends TestCase
+class RequireTest extends ControllerTestCase
 {
 
     /**
