@@ -79,14 +79,6 @@
 
 
 
-        <tu tuid="home_modulename">
-          <tuv xml:lang="en">
-            <seg>Home</seg>
-          </tuv>
-          <tuv xml:lang="de">
-            <seg>Einstieg</seg>
-          </tuv>
-        </tu>
         <tu tuid="search_modulename">
           <tuv xml:lang="en">
             <seg>Search and browse</seg>
@@ -113,15 +105,6 @@
         </tu>
 
 
-
-        <tu tuid="home_index_index_actionname">
-          <tuv xml:lang="en">
-            <seg>Home</seg>
-          </tuv>
-          <tuv xml:lang="de">
-            <seg>Einstieg</seg>
-          </tuv>
-        </tu>
 
         <tu tuid="home_index_help_actionname">
           <tuv xml:lang="en">

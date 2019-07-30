@@ -27,18 +27,18 @@
  * @category    Application Unit Test
  * @package     Application_Controller_Action_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2017-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Application_Controller_Action_Helper_ReturnParamsTest extends ControllerTestCase
+class Application_Controller_Action_Helper_ReturnParamsTest extends TestCase
 {
 
     public function testReturnParams()
     {
-        $this->getRequest()->setParams(array(
+        $this->getRequest()->setParams([
             'id' => 50
-        ));
+        ]);
 
         $helper = new Application_Controller_Action_Helper_ReturnParams();
 
@@ -48,5 +48,4 @@ class Application_Controller_Action_Helper_ReturnParamsTest extends ControllerTe
         $this->assertArrayHasKey('id', $params);
         $this->assertEquals(50, $params['id']);
     }
-
 }

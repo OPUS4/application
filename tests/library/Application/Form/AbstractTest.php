@@ -31,25 +31,28 @@
  * @category    Application Unit Test
  * @package     Application_Form
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class Application_Form_AbstractTest extends ControllerTestCase {
+class Application_Form_AbstractTest extends ControllerTestCase
+{
 
     private $form;
 
-    public function setUp() {
+    public function setUp()
+    {
         parent::setUp();
 
         $this->form = $this->getForm();
     }
 
-    private function getForm() {
+    private function getForm()
+    {
         return $this->getMockForAbstractClass('Application_Form_Abstract');
     }
 
-    public function testInit() {
+    public function testInit()
+    {
         $this->form->init();
 
         $paths = $this->form->getPluginLoader(Zend_Form::DECORATOR)->getPaths();
@@ -61,7 +64,8 @@ class Application_Form_AbstractTest extends ControllerTestCase {
         $this->assertContains('Application/Form/Element/', $paths['Application_Form_Element_']);
     }
 
-    public function testSetLogger() {
+    public function testSetLogger()
+    {
         $logger = new MockLogger();
 
         $this->form->setLog($logger);
@@ -69,12 +73,14 @@ class Application_Form_AbstractTest extends ControllerTestCase {
         $this->assertEquals($logger, $this->form->getLogger());
     }
 
-    public function testGetLogger() {
+    public function testGetLogger()
+    {
         $this->assertNotNull($this->form->getLogger());
         $this->assertInstanceOf('Zend_Log', $this->form->getLogger());
     }
 
-    public function testGetElementValue() {
+    public function testGetElementValue()
+    {
         $form = $this->form;
 
         $elementText = new Zend_Form_Element_Text('text');
@@ -99,7 +105,8 @@ class Application_Form_AbstractTest extends ControllerTestCase {
         $this->assertEquals('0', $form->getElementValue('checkbox'));
     }
 
-    public function testGetElementValueUnknownElement() {
+    public function testGetElementValueUnknownElement()
+    {
         $logger = new MockLogger();
         $this->form->setLogger($logger);
         $this->form->setName('Abstract');
@@ -112,28 +119,32 @@ class Application_Form_AbstractTest extends ControllerTestCase {
         $this->assertEquals('Element \'unknownelement\' in form \'Abstract\' not found.', $messages[0]);
     }
 
-    public function testAddElement() {
-        $this->form->addElement('text', 'test', array('label' => 'TestLabel'));
+    public function testAddElement()
+    {
+        $this->form->addElement('text', 'test', ['label' => 'TestLabel']);
 
         $this->assertNotNull($this->form->getElement('test'));
         $this->assertEquals('TestLabel', $this->form->getElement('test')->getLabel());
     }
 
-    public function testAddElementAutomaticLabelOn() {
+    public function testAddElementAutomaticLabelOn()
+    {
         $this->form->setUseNameAsLabel(true);
         $this->form->addElement('text', 'textelement');
         $this->assertNotNull($this->form->getElement('textelement'));
         $this->assertEquals('textelement', $this->form->getElement('textelement')->getLabel());
     }
 
-    public function testAddElementAutomaticLabelOnWithCustomLabel() {
+    public function testAddElementAutomaticLabelOnWithCustomLabel()
+    {
         $this->form->setUseNameAsLabel(true);
-        $this->form->addElement('text', 'textelement', array('label' => 'customlabel'));
+        $this->form->addElement('text', 'textelement', ['label' => 'customlabel']);
         $this->assertNotNull($this->form->getElement('textelement'));
         $this->assertEquals('customlabel', $this->form->getElement('textelement')->getLabel());
     }
 
-    public function testAddElementAutomaticLabelOnWithPrefix() {
+    public function testAddElementAutomaticLabelOnWithPrefix()
+    {
         $this->form->setUseNameAsLabel(true);
         $this->form->setLabelPrefix('Opus_Model_');
         $this->form->addElement('text', 'textelement');
@@ -141,15 +152,17 @@ class Application_Form_AbstractTest extends ControllerTestCase {
         $this->assertEquals('Opus_Model_textelement', $this->form->getElement('textelement')->getLabel());
     }
 
-    public function testAddElementAutomaticLabelOff() {
+    public function testAddElementAutomaticLabelOff()
+    {
         $this->form->setUseNameAsLabel(false);
         $this->form->addElement('text', 'textelement');
         $this->assertNotNull($this->form->getElement('textelement'));
         $this->assertNull($this->form->getElement('textelement')->getLabel());
     }
 
-    public function testAddElementRequiredMessage() {
-        $this->form->addElement('text', 'test', array('required' => true));
+    public function testAddElementRequiredMessage()
+    {
+        $this->form->addElement('text', 'test', ['required' => true]);
 
         $element = $this->form->getElement('test');
 
@@ -164,7 +177,8 @@ class Application_Form_AbstractTest extends ControllerTestCase {
         $this->assertEquals('admin_validate_error_notempty', $messages['notEmptyInvalid']);
     }
 
-    public function testAddElementNotRequired() {
+    public function testAddElementNotRequired()
+    {
         $this->form->addElement('text', 'test');
 
         $element = $this->form->getElement('test');
@@ -177,9 +191,12 @@ class Application_Form_AbstractTest extends ControllerTestCase {
      * Wenn das Formularelement bereits mit einem notEmpty Validator erzeugt wird, soll dessen Konfiguration nicht
      * mehr überschrieben werden.
      */
-    public function testAddElementRequiredExistingValidatorMessages() {
-        $this->form->addElement('text', 'test', array('required' => true,
-            'validators' => array('notEmpty')));
+    public function testAddElementRequiredExistingValidatorMessages()
+    {
+        $this->form->addElement('text', 'test', [
+            'required' => true,
+            'validators' => ['notEmpty']
+        ]);
 
         $element = $this->form->getElement('test');
 
@@ -195,8 +212,9 @@ class Application_Form_AbstractTest extends ControllerTestCase {
         $this->assertNotEquals('admin_validate_error_notempty', $messages['notEmptyInvalid']);
     }
 
-    public function testAddElementRequiredAutoAddingDisabled() {
-        $this->form->addElement('text', 'test', array('required' => true, 'autoInsertNotEmptyValidator' => false));
+    public function testAddElementRequiredAutoAddingDisabled()
+    {
+        $this->form->addElement('text', 'test', ['required' => true, 'autoInsertNotEmptyValidator' => false]);
 
         $element = $this->form->getElement('test');
 
@@ -209,7 +227,8 @@ class Application_Form_AbstractTest extends ControllerTestCase {
      * @covers Application_Form_Abstract::isUseNameAsLabel
      * @covers Application_Form_Abstract::setUseNameAsLabel
      */
-    public function testUseNameAsLabelSetting() {
+    public function testUseNameAsLabelSetting()
+    {
         $this->form->setUseNameAsLabel(true);
 
         $this->assertTrue($this->form->isUseNameAsLabel());
@@ -219,13 +238,15 @@ class Application_Form_AbstractTest extends ControllerTestCase {
         $this->assertFalse($this->form->isUseNameAsLabel());
     }
 
-    public function testLabelPrefixSetting() {
+    public function testLabelPrefixSetting()
+    {
         $this->assertNull($this->form->getLabelPrefix());
         $this->form->setLabelPrefix('Opus_File_');
         $this->assertEquals('Opus_File_', $this->form->getLabelPrefix());
     }
 
-    public function testGetApplicationConfig() {
+    public function testGetApplicationConfig()
+    {
         $config = $this->form->getApplicationConfig();
 
         $this->assertNotNull($config);
@@ -233,8 +254,9 @@ class Application_Form_AbstractTest extends ControllerTestCase {
         $this->assertSame($config, Zend_Registry::get('Zend_Config'));
     }
 
-    public function testSetApplicationConfig() {
-        $config = new Zend_Config(array('test' => true));
+    public function testSetApplicationConfig()
+    {
+        $config = new Zend_Config(['test' => true]);
 
         $this->form->setApplicationConfig($config);
 
@@ -248,5 +270,4 @@ class Application_Form_AbstractTest extends ControllerTestCase {
 
         $this->assertSame(Zend_Registry::get('Zend_Config'), $returnedConfig);
     }
-
 }

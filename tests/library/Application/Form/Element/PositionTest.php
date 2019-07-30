@@ -27,22 +27,27 @@
  * @category    Application Unit Test
  * @package     Form_Element
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class Application_Form_Element_PositionTest extends FormElementTestCase {
+class Application_Form_Element_PositionTest extends FormElementTestCase
+{
 
-    public function setUp() {
+    protected $additionalResources = ['database', 'translation'];
+
+    public function setUp()
+    {
         $this->_formElementClass = 'Application_Form_Element_Position';
         $this->_expectedDecoratorCount = 6;
-        $this->_expectedDecorators = array('ViewHelper', 'Errors', 'Description', 'ElementHtmlTag', 'LabelNotEmpty',
-            'dataWrapper');
+        $this->_expectedDecorators = [
+            'ViewHelper', 'Errors', 'Description', 'ElementHtmlTag', 'LabelNotEmpty', 'dataWrapper'
+        ];
         $this->_staticViewHelper = 'viewFormSelect';
         parent::setUp();
     }
 
-    public function testOptions() {
+    public function testOptions()
+    {
         $element = $this->getElement();
 
         $options = $element->getMultiOptions();
@@ -51,7 +56,6 @@ class Application_Form_Element_PositionTest extends FormElementTestCase {
 
         // One additional option for last position
         $this->assertEquals(count($collectionRoles) + 1, count($options));
-        $this->assertEquals('admin_collectionroles_last_position', array_pop($options));
+        $this->assertEquals('Last', array_pop($options));
     }
-
 }

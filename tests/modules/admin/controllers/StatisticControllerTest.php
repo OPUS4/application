@@ -38,6 +38,8 @@
  */
 class Admin_StatisticControllerTest extends ControllerTestCase {
 
+    protected $additionalResources = 'all';
+
     public function testIndexAction() {
         $this->dispatch('/admin/statistic');
         $this->assertResponseCode(200);

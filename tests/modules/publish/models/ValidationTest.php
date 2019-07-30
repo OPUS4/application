@@ -27,12 +27,14 @@
  * @category    Application
  * @package     Module_Publish Unit Test
  * @author      Susanne Gottwald <gottwald@zib.de>
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 class Publish_Model_ValidationTest extends ControllerTestCase
 {
+
+    protected $additionalResources = ['translation'];
 
     private $session;
 

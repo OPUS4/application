@@ -42,6 +42,8 @@
 class Solrsearch_IndexControllerTest extends ControllerTestCase
 {
 
+    protected $additionalResources = 'all';
+
     private function doStandardControllerTest($url, $controller, $action)
     {
         $this->dispatch($url);

@@ -38,6 +38,8 @@
 class Admin_AutocompleteControllerTest extends ControllerTestCase
 {
 
+    protected $additionalResources = 'all';
+
     public function testAutocompleteGndSubjectUnknown()
     {
         $this->dispatch( 'admin/autocomplete/subject?term=foo');

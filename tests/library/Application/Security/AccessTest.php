@@ -28,14 +28,23 @@
  * @category    Application
  * @package     Tests
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
-class Application_Security_AccessTest extends ControllerTestCase {
+class Application_Security_AccessTest extends ControllerTestCase
+{
 
-    public function testLicenceAdminMenuFiltering() {
+    protected $additionalResources = 'all';
+
+    public function setUp()
+    {
+        parent::setUp();
+        $this->makeConfigurationModifiable();
+    }
+
+    public function testLicenceAdminMenuFiltering()
+    {
         $this->enableSecurity();
         $this->loginUser('security2', 'security2pwd');
 
@@ -56,5 +65,4 @@ class Application_Security_AccessTest extends ControllerTestCase {
         $this->assertNotQuery('//a[@href="/admin/index/security"]');
         $this->assertNotQuery('//a[@href="/admin/dnbinstitute"]');
     }
-
 }

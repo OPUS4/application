@@ -24,52 +24,29 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @package     Application_Controller_Plugin
+ * @category    Application
+ * @package     Setup_Form
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Application_Controller_Plugin_LoadTranslationTest extends ControllerTestCase
+/**
+ * Form for editing translations for contact page.
+ *
+ * TODO simplify HTML
+ */
+class Setup_Form_ContactPage extends Application_Form_Translations
 {
 
-    public function testPreDispatch()
+    public function init()
     {
-        $plugin = new Application_Controller_Plugin_LoadTranslation();
+        parent::init();
 
-        $translate = Zend_Registry::get('Zend_Translate');
+        $this->addKey('home_index_contact_pagetitle');
+        $this->addKey('home_index_contact_title');
+        $this->addKey('home_index_contact_content', true, ['label' => 'setup_page_content']);
 
-        $this->assertTrue($translate->isTranslated('SignatureValue'));
-        $this->assertFalse($translate->isTranslated('admin_document_index'));
-
-        $request = $this->getRequest();
-        $request->setModuleName('admin');
-
-        $plugin->preDispatch($request);
-
-        $this->assertTrue($translate->isTranslated('SignatureValue'));
-        $this->assertTrue($translate->isTranslated('admin_document_index'));
-    }
-
-    /**
-     * Das default-Modul wird schon im Bootstrap geladen.
-     */
-    public function testPreDispatchDefault()
-    {
-        $plugin = new Application_Controller_Plugin_LoadTranslation();
-
-        $translate = new Application_Translate();
-
-        Zend_Registry::set('Zend_Translate', $translate);
-
-        $this->assertFalse($translate->isTranslated('SignatureValue'));
-
-        $request = $this->getRequest();
-        $request->setModuleName('default');
-
-        $plugin->preDispatch($request);
-
-        $this->assertFalse($translate->isTranslated('SignatureValue'));
+        $this->populateFromTranslations();
     }
 }

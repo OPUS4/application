@@ -34,6 +34,8 @@
 class Application_Export_ExporterTest extends ControllerTestCase
 {
 
+    protected $additionalResources = 'all';
+
     private $_guestExportEnabled;
 
     public function setUp()

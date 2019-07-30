@@ -27,14 +27,17 @@
  * @category    Application Unit Test
  * @package     Admin_Form
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
-class Admin_Form_CollectionRoleTest extends ControllerTestCase {
+class Admin_Form_CollectionRoleTest extends ControllerTestCase
+{
 
-    public function testConstructForm() {
+    protected $additionalResources = ['database', 'translation'];
+
+    public function testConstructForm()
+    {
         $form = new Admin_Form_CollectionRole();
 
         $this->assertEquals(15, count($form->getElements()));
@@ -58,7 +61,8 @@ class Admin_Form_CollectionRoleTest extends ControllerTestCase {
         $this->assertNotNull($form->getElement('Id'));
     }
 
-    public function testPopulateFromModel() {
+    public function testPopulateFromModel()
+    {
         $form = new Admin_Form_CollectionRole();
 
         $model = new Opus_CollectionRole();
@@ -95,7 +99,8 @@ class Admin_Form_CollectionRoleTest extends ControllerTestCase {
         $this->assertNull($form->getElement('DisplayName')->getValue());
     }
 
-    public function testPopulateFromModelWithId() {
+    public function testPopulateFromModelWithId()
+    {
         $form = new Admin_Form_CollectionRole();
 
         $model = new Opus_CollectionRole(2);
@@ -112,7 +117,8 @@ class Admin_Form_CollectionRoleTest extends ControllerTestCase {
         ], $form->getElement('DisplayName')->getValue());
     }
 
-    public function testUpdateModel() {
+    public function testUpdateModel()
+    {
         $form = new Admin_Form_CollectionRole();
 
         $form->getElement('Id')->setValue(99);
@@ -148,7 +154,8 @@ class Admin_Form_CollectionRoleTest extends ControllerTestCase {
         $this->assertEquals(1, $model->getHideEmptyCollections());
     }
 
-    public function testValidationEmptyPost() {
+    public function testValidationEmptyPost()
+    {
         $form = new Admin_Form_CollectionRole();
 
         $this->assertFalse($form->isValid(array()));
@@ -159,7 +166,8 @@ class Admin_Form_CollectionRoleTest extends ControllerTestCase {
         $this->assertContains('isEmpty', $form->getErrors('DisplayFrontdoor'));
     }
 
-    public function testValidationSuccess() {
+    public function testValidationSuccess()
+    {
         $form = new Admin_Form_CollectionRole();
 
         $this->assertTrue($form->isValid(array(
@@ -170,7 +178,8 @@ class Admin_Form_CollectionRoleTest extends ControllerTestCase {
         )));
     }
 
-    public function testValidationFailureBecauseOfConflict() {
+    public function testValidationFailureBecauseOfConflict()
+    {
         $form = new Admin_Form_CollectionRole();
 
         $this->assertFalse($form->isValid(array(
@@ -184,7 +193,8 @@ class Admin_Form_CollectionRoleTest extends ControllerTestCase {
         $this->assertContains('notUnique', $form->getErrors('OaiName'));
     }
 
-    public function testValidationTrueForEditing() {
+    public function testValidationTrueForEditing()
+    {
         $form = new Admin_Form_CollectionRole();
 
         $this->assertTrue($form->isValid(array(

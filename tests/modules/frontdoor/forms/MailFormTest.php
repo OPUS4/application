@@ -26,17 +26,15 @@
  *
  * @category    Application Unit Tests
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+class Frontdoor_Form_MailFormTest extends ControllerTestCase
+{
 
-class Frontdoor_Form_MailFormTest extends ControllerTestCase {
-
-    public function testCreateForm() {
+    public function testCreateForm()
+    {
         $form = new Frontdoor_Form_MailForm();
         $form->init();
     }
-
 }
-

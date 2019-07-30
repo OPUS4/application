@@ -27,19 +27,22 @@
  * @category    Application Unit Test
  * @package     Controller_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
  * Unit Tests für Controller Helper für Zugriffsprüfungen.
  */
-class Application_Controller_Action_Helper_AccessControlTest extends ControllerTestCase {
+class Application_Controller_Action_Helper_AccessControlTest extends ControllerTestCase
+{
+
+    protected $additionalResources = ['database', 'authz'];
 
     private $accessControl;
 
-    public function setUp() {
+    public function setUp()
+    {
         parent::setUpWithEnv('production');
         $this->assertSecurityConfigured();
         $acl = Zend_Registry::get('Opus_Acl');
@@ -47,13 +50,15 @@ class Application_Controller_Action_Helper_AccessControlTest extends ControllerT
         $this->accessControl = new Application_Controller_Action_Helper_AccessControl();
     }
 
-    public function tearDown() {
+    public function tearDown()
+    {
         $acl = Zend_Registry::get('Opus_Acl');
         $acl->deny('guest', 'accounts');
         parent::tearDown();
     }
 
-    public function testAccessAllowed() {
+    public function testAccessAllowed()
+    {
         $user = Zend_Auth::getInstance()->getIdentity();
         $this->assertEquals('', $user, "expected no user to be set (should use default 'guest' as default)");
 
@@ -68,7 +73,8 @@ class Application_Controller_Action_Helper_AccessControlTest extends ControllerT
      * @expectedException Application_Exception
      * @expectedExceptionMessage #1 argument must not be empty|null
      */
-    public function testAccessAllowedForEmptyResource() {
+    public function testAccessAllowedForEmptyResource()
+    {
         $this->accessControl->accessAllowed('  ');
     }
 
@@ -76,7 +82,8 @@ class Application_Controller_Action_Helper_AccessControlTest extends ControllerT
      * @expectedException Application_Exception
      * @expectedExceptionMessage #1 argument must not be empty|null
      */
-    public function testAccessAllowedForNullResource() {
+    public function testAccessAllowedForNullResource()
+    {
         $this->accessControl->accessAllowed(null);
     }
 
@@ -84,8 +91,8 @@ class Application_Controller_Action_Helper_AccessControlTest extends ControllerT
      * @expectedException Zend_Acl_Exception
      * @expectedExceptionMessage Resource 'unknown' not found
      */
-    public function testAccessAllowedForUnknownResource() {
+    public function testAccessAllowedForUnknownResource()
+    {
         $this->assertFalse($this->accessControl->accessAllowed('unknown'));
     }
-
 }

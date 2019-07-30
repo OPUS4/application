@@ -34,6 +34,8 @@
 class Admin_Form_Document_CollectionsTest extends ControllerTestCase
 {
 
+    protected $additionalResources = ['database', 'view'];
+
     public function testConstructForm()
     {
         $form = new Admin_Form_Document_Collections();

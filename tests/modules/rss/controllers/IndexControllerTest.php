@@ -27,7 +27,7 @@
  * @category    Tests
  * @package     Rss
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -38,9 +38,13 @@
  *
  * @covers Rss_IndexController
  */
-class Rss_IndexControllerTest extends ControllerTestCase {
+class Rss_IndexControllerTest extends ControllerTestCase
+{
 
-    public function testIndexAction() {
+    protected $additionalResources = 'all';
+
+    public function testIndexAction()
+    {
         $this->dispatch('/rss/index/index');
         $this->assertResponseCode(200, $this->getResponse()->getBody());
         $response = $this->getResponse();
@@ -51,7 +55,8 @@ class Rss_IndexControllerTest extends ControllerTestCase {
     /**
      * Regression test for OPUSVIER-2337
      */
-    public function testUnavailableSolrServerReturns503() {
+    public function testUnavailableSolrServerReturns503()
+    {
         $this->markTestSkipped('configuration of Solr has changed - fix');
 
         $this->requireSolrConfig();
@@ -84,7 +89,8 @@ class Rss_IndexControllerTest extends ControllerTestCase {
     /**
      * Regression test for OPUSVIER-1726
      */
-    public function testSolrIndexIsNotUpToDate() {
+    public function testSolrIndexIsNotUpToDate()
+    {
         $this->markTestSkipped('disabling indexing does not work - fix');
 
         // add a document to the search index that is not stored in database
@@ -103,7 +109,7 @@ class Rss_IndexControllerTest extends ControllerTestCase {
         $date = new Zend_Date($doc1->getServerDatePublished());
         $dateValue1 = $date->get(Zend_Date::RFC_2822);
 
-        $indexer = Opus_Search_Service::selectIndexingService( null, 'solr' );
+        $indexer = Opus_Search_Service::selectIndexingService(null, 'solr');
 
         $indexer->addDocumentsToIndex($doc1);
 
@@ -148,7 +154,8 @@ class Rss_IndexControllerTest extends ControllerTestCase {
     /**
      * Regression test for OPUSVIER-2434
      */
-    public function testInvalidSearchQueryReturn500() {
+    public function testInvalidSearchQueryReturn500()
+    {
         $this->markTestSkipped('TODO - not clear how the request should be handled - why is it invalid?');
 
         $this->requireSolrConfig();
@@ -164,7 +171,8 @@ class Rss_IndexControllerTest extends ControllerTestCase {
     /**
      * Regression test for OPUSVIER-2534
      */
-    public function testOutputWithEmptySearchResult() {
+    public function testOutputWithEmptySearchResult()
+    {
         $this->requireSolrConfig();
 
         $this->dispatch('/rss/index/index/searchtype/simple/start/0/rows/10/query/asearchquerywithoutanyhits');
@@ -180,7 +188,8 @@ class Rss_IndexControllerTest extends ControllerTestCase {
      * Im PhpUnit-Test ist der Host leer, deswegen wird er hier im Test nicht mit berücksichtigt.
      * TODO: insert host in test-url
      */
-    public function testRssLink() {
+    public function testRssLink()
+    {
         Zend_Controller_Front::getInstance()->setBaseUrl('opus4dev');
         $this->dispatch('/rss/index/index');
         $this->assertXpathContentContains('//link', 'http://opus4dev/frontdoor/index/index/docId/147');

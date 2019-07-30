@@ -27,16 +27,19 @@
  * @category    Application Unit Test
  * @package     Form_Element
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
-class Application_Form_Element_LanguageScopeTest extends FormElementTestCase {
+class Application_Form_Element_LanguageScopeTest extends FormElementTestCase
+{
+
+    protected $additionalResources = 'translation';
 
     private $keys = null;
 
-    public function setUp() {
+    public function setUp()
+    {
         $this->keys = array('Null', 'I', 'M', 'S');
 
         $this->_formElementClass = 'Application_Form_Element_LanguageScope';
@@ -47,19 +50,21 @@ class Application_Form_Element_LanguageScopeTest extends FormElementTestCase {
         parent::setUp();
     }
 
-    public function testOptions() {
+    public function testOptions()
+    {
         $element = $this->getElement();
 
         $options = $element->getMultiOptions();
 
         $this->assertEquals(count($this->keys), count($options));
 
-        foreach($this->keys as $key) {
+        foreach ($this->keys as $key) {
             $this->assertTrue(array_key_exists($key, $options), "Key '$key' is missing.");
         }
     }
 
-    public function testOptionsTranslated() {
+    public function testOptionsTranslated()
+    {
         $translator = Zend_Registry::get('Zend_Translate');
 
         foreach ($this->keys as $key) {

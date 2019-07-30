@@ -27,7 +27,7 @@
  * @category    Tests
  * @package     Oai
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -36,30 +36,37 @@
  *
  * @covers Oai_ContainerController
  */
-class Oai_ContainerControllerTest extends ControllerTestCase {
+class Oai_ContainerControllerTest extends ControllerTestCase
+{
 
-    public function testRequestWithoutDocId() {
+    protected $additionalResources = 'all';
+
+    public function testRequestWithoutDocId()
+    {
         $this->dispatch('/oai/container/index');
         $this->assertResponseCode(500);
         $this->assertContains('missing parameter docId',
-                $this->getResponse()->getBody());
+            $this->getResponse()->getBody());
     }
 
-    public function testRequestInvalidDocId() {
+    public function testRequestInvalidDocId()
+    {
         $this->dispatch('/oai/container/index/docId/foobar');
         $this->assertResponseCode(500);
         $this->assertContains('invalid value for parameter docId',
-                $this->getResponse()->getBody());
+            $this->getResponse()->getBody());
     }
 
-    public function testRequestUnknownDocId() {
+    public function testRequestUnknownDocId()
+    {
         $this->dispatch('/oai/container/index/docId/123456789');
         $this->assertResponseCode(500);
         $this->assertContains('requested docId does not exist',
-                $this->getResponse()->getBody());
+            $this->getResponse()->getBody());
     }
 
-    public function testRequestUnpublishedDoc() {
+    public function testRequestUnpublishedDoc()
+    {
         $r = Opus_UserRole::fetchByName('guest');
 
         $modules = $r->listAccessModules();
@@ -88,22 +95,24 @@ class Oai_ContainerControllerTest extends ControllerTestCase {
         // restore security settings
         $config->security = $security;
         Zend_Registry::set('Zend_Config', $config);
-        
+
         $this->assertResponseCode(500);
-        $this->assertContains('access to requested document is forbidden', $this->getResponse()->getBody());        
+        $this->assertContains('access to requested document is forbidden', $this->getResponse()->getBody());
     }
 
-    public function testRequestPublishedDocWithoutAssociatedFiles() {
+    public function testRequestPublishedDocWithoutAssociatedFiles()
+    {
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
         $doc->store();
         $this->dispatch('/oai/container/index/docId/' . $doc->getId());
-        
+
         $this->assertResponseCode(500);
-        $this->assertContains('requested document does not have any associated readable files', $this->getResponse()->getBody());        
+        $this->assertContains('requested document does not have any associated readable files', $this->getResponse()->getBody());
     }
 
-    public function testRequestPublishedDocWithInaccessibleFile() {
+    public function testRequestPublishedDocWithInaccessibleFile()
+    {
         // create test file test.pdf in file system
         $config = Zend_Registry::get('Zend_Config');
         $path = $config->workspacePath . DIRECTORY_SEPARATOR . uniqid();
@@ -112,7 +121,7 @@ class Oai_ContainerControllerTest extends ControllerTestCase {
         touch($filepath);
 
         $doc = $this->createTestDocument();
-        $doc->setServerState('published');        
+        $doc->setServerState('published');
 
         $file = new Opus_File();
         $file->setVisibleInOai(false);
@@ -126,14 +135,15 @@ class Oai_ContainerControllerTest extends ControllerTestCase {
         // cleanup
         $file->delete();
         Opus_Util_File::deleteDirectory($path);
-        
+
         $this->assertResponseCode(500);
         $this->assertContains(
             'access denied on all files that are associated to the requested document', $this->getResponse()->getBody()
         );
     }
 
-    public function testRequestPublishedDocWithAccessibleFile() {
+    public function testRequestPublishedDocWithAccessibleFile()
+    {
         $this->markTestIncomplete(
             'build breaks when running this test on ci system ' .
             '-- it seems that phpunit does not allow to test for file downloads'
@@ -156,12 +166,12 @@ class Oai_ContainerControllerTest extends ControllerTestCase {
         $doc->addFile($file);
         $doc->store();
 
-        $this->dispatch('/oai/container/index/docId/' . $doc->getId());        
+        $this->dispatch('/oai/container/index/docId/' . $doc->getId());
 
         // cleanup
         $file->delete();
         Opus_Util_File::deleteDirectory($path);
-        
+
         $this->assertResponseCode(200);
     }
 }

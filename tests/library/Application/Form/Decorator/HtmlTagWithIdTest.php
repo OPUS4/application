@@ -27,20 +27,22 @@
  * @category    Application Unit Test
  * @package     Application_Form_Decorator
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
-class Application_Form_Decorator_HtmlTagWithIdTest extends ControllerTestCase {
+class Application_Form_Decorator_HtmlTagWithIdTest extends TestCase
+{
 
-    public function testRenderWithoutElement() {
+    public function testRenderWithoutElement()
+    {
         $decorator = new Application_Form_Decorator_HtmlTagWithId();
 
         $this->assertEquals('<div>content</div>', $decorator->render('content'));
     }
 
-    public function testRender() {
+    public function testRender()
+    {
         $decorator = new Application_Form_Decorator_HtmlTagWithId();
 
         $element = new Zend_Form_Element_Text('Value');
@@ -49,7 +51,8 @@ class Application_Form_Decorator_HtmlTagWithIdTest extends ControllerTestCase {
         $this->assertEquals('<div class="Value-data">content</div>', $decorator->render('content'));
     }
 
-    public function testRenderWithClass() {
+    public function testRenderWithClass()
+    {
         $decorator = new Application_Form_Decorator_HtmlTagWithId();
         $decorator->setOption('class', 'wrapper');
 
@@ -58,5 +61,4 @@ class Application_Form_Decorator_HtmlTagWithIdTest extends ControllerTestCase {
 
         $this->assertEquals('<div class="wrapper Value-data">content</div>', $decorator->render('content'));
     }
-
 }

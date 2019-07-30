@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -26,28 +27,36 @@
  *
  * @category    Application Unit Test
  * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class FullAndPartialAdminTest extends ControllerTestCase {
 
-    public function setUp() {
+class FullAndPartialAdminTest extends ControllerTestCase
+{
+
+    protected $configModifiable = true;
+
+    protected $additionalResources = 'all';
+
+    public function setUp()
+    {
         parent::setUp();
         $this->enableSecurity();
         $this->loginUser('security6', 'security6pwd');
     }
 
-    public function tearDown() {
+    public function tearDown()
+    {
         $this->logoutUser();
         $this->restoreSecuritySetting();
         parent::tearDown();
     }
-    
+
     /**
      * Prüft, ob nur die erlaubten Einträge im Admin Menu angezeigt werden.
      */
-    public function testAdminMenuFiltering() {
+    public function testAdminMenuFiltering()
+    {
         $this->useEnglish();
         $this->dispatch('/admin');
         $this->assertQuery('//a[@href="/admin/licence"]');
@@ -65,7 +74,8 @@ class FullAndPartialAdminTest extends ControllerTestCase {
     /**
      * Prüft, ob auf die Seite zur Verwaltung von Lizenzen zugegriffen werden kann.
      */
-    public function testAccessCollectionRolesController() {
+    public function testAccessCollectionRolesController()
+    {
         $this->useEnglish();
         $this->dispatch('/admin/collectionroles');
         $this->assertQueryContentContains('//html/head/title', 'Manage Collections', 'manage collections not asserted');
@@ -74,7 +84,8 @@ class FullAndPartialAdminTest extends ControllerTestCase {
     /**
      * Prüft, das auf die Seite zur Verwaltung von Dokumenten zugegriffen werden kann.
      */
-    public function testAccessAccountController() {
+    public function testAccessAccountController()
+    {
         $this->useEnglish();
         $this->dispatch('/admin/account');
         $this->assertQueryContentContains('//html/head/title', 'Accounts', 'admin/accounts not asserted');
@@ -83,7 +94,8 @@ class FullAndPartialAdminTest extends ControllerTestCase {
     /**
      * Voller Zugriff auf Admin Modul schließt nicht Zugriff auf Review Modul mit ein.
      */
-    public function testNoAccessReviewModule() {
+    public function testNoAccessReviewModule()
+    {
         $this->dispatch('/review');
         $this->assertRedirectTo(
             '/auth/index/rmodule/review/rcontroller/index/raction/index',
@@ -94,7 +106,8 @@ class FullAndPartialAdminTest extends ControllerTestCase {
     /**
      * Prüft, ob fuer Nutzer mit vollem Zugriff auf Admin Modul der Edit Link in der Frontdoor angezeigt wird.
      */
-    public function testEditLinkInFrontdoorPresent() {
+    public function testEditLinkInFrontdoorPresent()
+    {
         $this->dispatch('/frontdoor/index/index/docId/92');
         $this->assertQuery('//div[@id="actionboxContainer"]', 'actionboxContainer not asserted');
     }

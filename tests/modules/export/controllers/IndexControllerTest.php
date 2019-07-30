@@ -41,6 +41,8 @@
 class Export_IndexControllerTest extends ControllerTestCase
 {
 
+    protected $additionalResources = 'all';
+
     private $_removeExportFromGuest = false;
 
     public function tearDown()

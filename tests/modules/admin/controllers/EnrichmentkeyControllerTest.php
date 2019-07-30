@@ -40,6 +40,9 @@
  */
 class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
 {
+
+    protected $additionalResources = 'all';
+
     /**
      * @var all enrichment keys
      */

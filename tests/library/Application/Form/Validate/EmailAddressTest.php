@@ -27,11 +27,11 @@
  * @category    Tests
  * @package     Application_Form_Validate
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2017-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Application_Form_Validate_EmailAddressTest extends ControllerTestCase
+class Application_Form_Validate_EmailAddressTest extends TestCase
 {
 
     private $_validator;
@@ -45,20 +45,20 @@ class Application_Form_Validate_EmailAddressTest extends ControllerTestCase
 
     public function validEmails()
     {
-        return array(
+        return [
             ['test@example.org']
-        );
+        ];
     }
 
     public function badEmails()
     {
-        return array(
+        return [
             ['testexample.org'],
             ['test@example'],
             ['example.org'],
             ['test'],
             [' ']
-        );
+        ];
     }
 
     /**
@@ -76,5 +76,4 @@ class Application_Form_Validate_EmailAddressTest extends ControllerTestCase
     {
         $this->assertFalse($this->_validator->isValid($address));
     }
-
 }

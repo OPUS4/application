@@ -28,7 +28,7 @@
  * @package     Module_Export
  * @author      Michael Lang <lang@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -37,14 +37,18 @@
  *
  * @covers \Export_Model_XmlExport
  */
-class Export_Model_XmlExportTest extends ControllerTestCase {
+class Export_Model_XmlExportTest extends ControllerTestCase
+{
+
+    protected $additionalResources = ['database'];
 
     /**
      * @var \Export_Model_XmlExport
      */
     private $plugin;
 
-    public function setUp() {
+    public function setUp()
+    {
         parent::setUp();
 
         $plugin = new Export_Model_XmlExport();
@@ -60,7 +64,8 @@ class Export_Model_XmlExportTest extends ControllerTestCase {
         $this->plugin = $plugin;
     }
 
-    public function testXmlPreparation() {
+    public function testXmlPreparation()
+    {
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
         $title = new Opus_Title();
@@ -82,7 +87,8 @@ class Export_Model_XmlExportTest extends ControllerTestCase {
         $this->assertEquals('Deutscher Titel', $result->item(0)->childNodes->item(3)->attributes->item(2)->nodeValue);
     }
 
-    public function testXmlPreparationForFrontdoor() {
+    public function testXmlPreparationForFrontdoor()
+    {
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
         $title = new Opus_Title();
@@ -105,7 +111,8 @@ class Export_Model_XmlExportTest extends ControllerTestCase {
         $this->assertEquals('Deutscher Titel', $result->item(--$count)->childNodes->item(3)->attributes->item(2)->nodeValue);
     }
 
-    public function testXmlPreparationForFrontdoorWithWrongDocId() {
+    public function testXmlPreparationForFrontdoorWithWrongDocId() 
+    {
         $this->getRequest()->setMethod('POST')->setPost(array(
             'docId' => 'docId',
             'searchtype' => 'id'
@@ -117,7 +124,8 @@ class Export_Model_XmlExportTest extends ControllerTestCase {
         $this->assertEquals(0, $result->length);
     }
 
-    public function testXmlPreparationForFrontdoorWithMissingDocId() {
+    public function testXmlPreparationForFrontdoorWithMissingDocId() 
+    {
         $this->getRequest()->setMethod('POST')->setPost(array(
             'searchtype' => 'id'
         ));
@@ -127,7 +135,8 @@ class Export_Model_XmlExportTest extends ControllerTestCase {
         $this->assertEquals(0, $result->length);
     }
 
-    public function testXmlSortOrder() {
+    public function testXmlSortOrder()
+    {
         $firstDoc = $this->createTestDocument();
         $firstDoc->setPublishedYear(9999);
         $firstDoc->setServerState('published');
@@ -177,7 +186,8 @@ class Export_Model_XmlExportTest extends ControllerTestCase {
      * If only one document is exported, searchtype 'id' is used. It is not necessary the invoke solr search, because
      * the document can be constructed in XmlExport.
      */
-    public function testXmlExportForSearchtypeId() {
+    public function testXmlExportForSearchtypeId()
+    {
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
         $docId = $doc->store();
@@ -198,7 +208,8 @@ class Export_Model_XmlExportTest extends ControllerTestCase {
     /**
      * Only published documents should be exported.
      */
-    public function testXmlExportForSearchtypeIdWithUnpublishedDocument() {
+    public function testXmlExportForSearchtypeIdWithUnpublishedDocument()
+    {
         $doc = $this->createTestDocument();
         $docId = $doc->store();
 
@@ -337,6 +348,4 @@ class Export_Model_XmlExportTest extends ControllerTestCase {
 
         $this->assertEquals('fulltext.pdf', $plugin->getAttachmentFilename());
     }
-
 }
- 

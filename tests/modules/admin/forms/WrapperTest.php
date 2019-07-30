@@ -26,20 +26,22 @@
  *
  * @category    Application Unit Test
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2013-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
  * Unit Tests für Klasse um Unterformulare als Zend_From zu verwenden.
  */
-class Admin_Form_WrapperTest extends ControllerTestCase {
+class Admin_Form_WrapperTest extends ControllerTestCase
+{
 
-    public function testGetWrappedForm() {
+    protected $additionalResources = ['view', 'translation'];
+
+    public function testGetWrappedForm()
+    {
         $form = new Admin_Form_Wrapper(new Admin_Form_Document());
-        
+
         $this->assertNotNull($form->getWrappedForm());
     }
-    
 }

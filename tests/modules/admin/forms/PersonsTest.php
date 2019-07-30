@@ -34,6 +34,8 @@
 class Admin_Form_PersonsTest extends ControllerTestCase
 {
 
+    protected $additionalResources = ['database', 'view', 'translation'];
+
     private $_elementNames = [
         'LastName', 'FirstName', 'IdentifierGnd', 'IdentifierOrcid', 'IdentifierMisc',
         'Email', 'PlaceOfBirth', 'DateOfBirth', 'AcademicTitle', 'Save', 'Cancel', 'FormId'

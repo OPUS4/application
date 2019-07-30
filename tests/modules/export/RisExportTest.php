@@ -34,6 +34,10 @@
 class Export_RisExportTest extends ControllerTestCase
 {
 
+    protected $configModifiable = true;
+
+    protected $additionalResources = 'all';
+
     public function testDoiUrlRendered()
     {
         $document = $this->createTestDocument();

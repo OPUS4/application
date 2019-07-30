@@ -27,12 +27,14 @@
  * @category    Tests
  * @package     Admin_Form
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2017-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 class Admin_Form_PersonsConfirmTest extends ControllerTestCase
 {
+
+    protected $additionalResources = 'translation';
 
     private $_form;
 
@@ -75,6 +77,8 @@ class Admin_Form_PersonsConfirmTest extends ControllerTestCase
 
     public function testPopulateFromModel()
     {
+        $this->disableTranslation();
+
         $form = $this->_form;
 
         $person = array(

@@ -68,6 +68,11 @@ class Application_View_Helper_FormTranslation extends Zend_View_Helper_FormRadio
             }
         }
 
+        if (isset($attribs['textarea']) and $attribs['textarea']) {
+            $this->_inputType = 'textarea';
+        }
+        unset($attribs['textarea']);
+
         $list = [];
 
         $pattern = @preg_match('/\pL/u', 'a')
@@ -84,6 +89,10 @@ class Application_View_Helper_FormTranslation extends Zend_View_Helper_FormRadio
             $options = [];
         }
 
+        if (isset($textarea) && $textarea) {
+            $this->_inputType = 'textarea';
+        }
+
         foreach ($options as $label => $value) {
             $disabled = null;
 
@@ -98,15 +107,27 @@ class Application_View_Helper_FormTranslation extends Zend_View_Helper_FormRadio
             }
 
             $item = '<label' . $this->_htmlAttribs($labelAttribs) . '>'
-                . "<span>{$translate->translateLanguage($label)}</span>"
-                . "<input type=\"{$this->_inputType}\""
-                . " name=\"{$name}[$label]\""
-                . " id=\"$optId\""
-                . " value=\"{$this->view->escape($value)}\""
-                . $disabled
-                . $this->_htmlAttribs($attribs)
-                . $this->getClosingBracket()
-                . '</label>';
+                . "<span>{$translate->translateLanguage($label)}</span>";
+
+            if ($this->_inputType !== 'textarea') {
+                $item .= "<input type=\"{$this->_inputType}\""
+                    . " name=\"{$name}[$label]\""
+                    . " id=\"$optId\""
+                    . " value=\"{$this->view->escape($value)}\""
+                    . $disabled
+                    . $this->_htmlAttribs($attribs)
+                    . $this->getClosingBracket();
+            } else {
+                $item .= '<textarea'
+                    . " name=\"{$name}[$label]\""
+                    . " id=\"$optId\""
+                    . $disabled
+                    . $this->_htmlAttribs($attribs) . '>'
+                    . $value
+                    . '</textarea>';
+            }
+
+            $item .= '</label>';
 
             $list[] = $item;
         }

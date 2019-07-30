@@ -26,17 +26,20 @@
  *
  * @category    Application Unit Test
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
  * Unit Tests fuer Admin_Form_Document_Patent.
  */
-class Admin_Form_Document_PatentTest extends ControllerTestCase {
+class Admin_Form_Document_PatentTest extends ControllerTestCase
+{
 
-    public function testCreateForm() {
+    protected $additionalResources = ['translation'];
+
+    public function testCreateForm()
+    {
         $form = new Admin_Form_Document_Patent();
 
         $this->assertEquals(6, count($form->getElements()));
@@ -50,7 +53,8 @@ class Admin_Form_Document_PatentTest extends ControllerTestCase {
         $this->assertNotNull($form->getElement('DateGranted'));
     }
 
-    public function testPopulateFromModel() {
+    public function testPopulateFromModel()
+    {
         $this->useEnglish();
 
         $form = new Admin_Form_Document_Patent();
@@ -72,7 +76,8 @@ class Admin_Form_Document_PatentTest extends ControllerTestCase {
         $this->assertEquals('1970/01/01', $form->getElement('DateGranted')->getValue());
     }
 
-    public function testUpdateModel() {
+    public function testUpdateModel()
+    {
         $this->useEnglish();
 
         $form = new Admin_Form_Document_Patent();
@@ -96,7 +101,8 @@ class Admin_Form_Document_PatentTest extends ControllerTestCase {
         $this->assertEquals('2008/03/20', $datesHelper->getDateString($patent->getDateGranted()));
     }
 
-    public function testGetModelNew() {
+    public function testGetModelNew()
+    {
         $this->useEnglish();
 
         $form = new Admin_Form_Document_Patent();
@@ -119,7 +125,8 @@ class Admin_Form_Document_PatentTest extends ControllerTestCase {
         $this->assertEquals('2008/03/20', $datesHelper->getDateString($patent->getDateGranted()));
     }
 
-    public function testGetModel() {
+    public function testGetModel()
+    {
         $this->useEnglish();
 
         $document = new Opus_Document(146);
@@ -152,7 +159,8 @@ class Admin_Form_Document_PatentTest extends ControllerTestCase {
      *
      * Ungültige IDs werden ignoriert und Patent wie ein neues behandelt.
      */
-    public function testGetModelInvalidId() {
+    public function testGetModelInvalidId()
+    {
         $this->useEnglish();
 
         $form = new Admin_Form_Document_Patent();
@@ -224,7 +232,8 @@ class Admin_Form_Document_PatentTest extends ControllerTestCase {
         $this->assertTrue($form->isValid($post));
     }
 
-    public function testRegressionOpusvier2824() {
+    public function testRegressionOpusvier2824()
+    {
         $this->useEnglish();
 
         $form = new Admin_Form_Document_Patent();

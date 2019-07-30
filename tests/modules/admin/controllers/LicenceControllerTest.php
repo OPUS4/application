@@ -32,13 +32,15 @@
  * @package     Admin
  * @author      Jens Schwidder <schwidder@zib.de>
  * @author      Maximilian Salomon <salomon@zib.de>
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  *
  * @covers Admin_LicenceController
  */
 class Admin_LicenceControllerTest extends CrudControllerTestCase
 {
+
+    protected $additionalResources = 'all';
 
     public function setUp()
     {

@@ -31,13 +31,16 @@
  * @category    Application Unit Test
  * @package     Admin_Form
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class Admin_Form_FileManagerTest extends ControllerTestCase {
+class Admin_Form_FileManagerTest extends ControllerTestCase
+{
 
-    public function testConstructForm() {
+    protected $additionalResources = ['database', 'view', 'translation'];
+
+    public function testConstructForm()
+    {
         $form = new Admin_Form_FileManager();
 
         $this->assertEquals(3, count($form->getElements()));
@@ -58,7 +61,8 @@ class Admin_Form_FileManagerTest extends ControllerTestCase {
         $this->assertEquals('FileManager', $form->getName());
     }
 
-    public function testPopulateFromModel() {
+    public function testPopulateFromModel()
+    {
         $form = new Admin_Form_FileManager();
 
         $document = new Opus_Document(92);
@@ -83,7 +87,8 @@ class Admin_Form_FileManagerTest extends ControllerTestCase {
     /**
      * TODO Test sollte nur prüfen, ob Funktionen in Unterformular aufgerufen wird (verwende Mock-Objekt)
      */
-    public function testUpdateModel() {
+    public function testUpdateModel()
+    {
         $form = new Admin_Form_FileManager();
 
         $document = new Opus_Document(92);
@@ -109,7 +114,8 @@ class Admin_Form_FileManagerTest extends ControllerTestCase {
         $this->assertEquals('Testkommentar', $files[0]->getComment());
     }
 
-    public function testProcessPost() {
+    public function testProcessPost()
+    {
         $form = new Admin_Form_FileManager();
 
         $this->assertNull($form->processPost(array(), null));
@@ -145,7 +151,8 @@ class Admin_Form_FileManagerTest extends ControllerTestCase {
         // alles weitere wird in den Unterformularen getestet
     }
 
-    public function testConstructFromPostEmptyAndNoDocument() {
+    public function testConstructFromPostEmptyAndNoDocument()
+    {
         $form = new Admin_Form_FileManager();
 
         $form->constructFromPost(array(), null);
@@ -153,7 +160,8 @@ class Admin_Form_FileManagerTest extends ControllerTestCase {
         $this->assertEquals(0, count($form->getSubForm('Files')->getSubForms()));
     }
 
-    public function testConstructFromPost() {
+    public function testConstructFromPost()
+    {
         $document = new Opus_Document(146);
 
         $post = array(
@@ -180,11 +188,13 @@ class Admin_Form_FileManagerTest extends ControllerTestCase {
         $this->assertNull($fileForm->getElementValue('Id')); // Formular noch nicht befüllt
     }
 
-    public function testContinueEdit() {
+    public function testContinueEdit()
+    {
         $this->markTestIncomplete('Use Mocking Framework to make sure subform function is called.');
     }
 
-    public function testSetGetMessage() {
+    public function testSetGetMessage()
+    {
         $form = new Admin_Form_FileManager();
 
         $this->assertNull($form->getMessage());
@@ -194,7 +204,8 @@ class Admin_Form_FileManagerTest extends ControllerTestCase {
         $this->assertEquals('Test', $form->getMessage());
     }
 
-    public function testGetInstanceFromPost() {
+    public function testGetInstanceFromPost()
+    {
         $document = new Opus_Document(146);
 
         $post = array(

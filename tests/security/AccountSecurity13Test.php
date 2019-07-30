@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -26,20 +27,22 @@
  *
  * @category    Application Unit Test
  * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class AccountSecurity13Test extends AccessModuleSetupAndAdminTest {
 
-    public function setUp() {
+class AccountSecurity13Test extends AccessModuleSetupAndAdminTest
+{
+
+    public function setUp()
+    {
         parent::setUp();
-        parent::setUpTests('security13', 'security13pwd', array(
+        parent::setUpTests('security13', 'security13pwd', [
             'module_admin' => false,
             'module_setup' => false,
             'controller_staticpage' => false,
             'controller_helppage' => true,
             'controller_language' => false
-        ));
+        ]);
     }
 }

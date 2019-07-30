@@ -27,14 +27,17 @@
  * @category    Tests
  * @package     Solrsearch_Form
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2015, OPUS 4 development team
+ * @copyright   Copyright (c) 2015-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
-class Solrsearch_Form_AdvancedSearchTest extends ControllerTestCase {
+class Solrsearch_Form_AdvancedSearchTest extends ControllerTestCase
+{
 
-    public function testConstruct() {
+    protected $additionalResources = ['translation'];
+
+    public function testConstruct()
+    {
         $form = new Solrsearch_Form_AdvancedSearch();
 
         $this->assertEquals(20, count($form->getElements()));
@@ -55,7 +58,8 @@ class Solrsearch_Form_AdvancedSearchTest extends ControllerTestCase {
         }
     }
 
-    public function testConstructForAuthorSearch() {
+    public function testConstructForAuthorSearch()
+    {
         $form = new Solrsearch_Form_AdvancedSearch('authorsearch');
 
         $this->assertEquals(18, count($form->getElements()));

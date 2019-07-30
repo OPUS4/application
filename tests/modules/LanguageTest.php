@@ -74,6 +74,8 @@ class LanguageTest extends ControllerTestCase
      */
     public function testSetLanguage()
     {
+        $this->application->bootstrap('translation');
+
         $translator = Zend_Registry::get('Zend_Translate');
 
         $this->useGerman();

@@ -33,6 +33,8 @@
 class Application_View_Helper_Form_TranslationTest extends ControllerTestCase
 {
 
+    protected $additionalResources = ['view', 'translation'];
+
     public function testRenderingMinimal()
     {
         $helper = new Application_View_Helper_FormTranslation();

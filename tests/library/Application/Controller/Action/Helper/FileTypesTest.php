@@ -27,7 +27,7 @@
  * @category    Application Unit Test
  * @package     Application_Controller_Action_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2017-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  *
  */
@@ -40,7 +40,7 @@ class Application_Controller_Action_Helper_FileTypesTest extends ControllerTestC
     public function setUp()
     {
         parent::setUp();
-
+        $this->makeConfigurationModifiable();
         $this->_helper = new Application_Controller_Action_Helper_FileTypes();
     }
 
@@ -62,11 +62,11 @@ class Application_Controller_Action_Helper_FileTypesTest extends ControllerTestC
 
     public function testMimeTypeAddedToBaseConfigurationFromApplicationIni()
     {
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
-            'filetypes' => array('xml' => array('mimeType' => array(
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'filetypes' => ['xml' => ['mimeType' => [
                 'text/xml', 'application/xml'
-            )))
-        )));
+            ]]]
+        ]));
 
         $types = $this->_helper->getValidMimeTypes();
 
@@ -98,11 +98,11 @@ class Application_Controller_Action_Helper_FileTypesTest extends ControllerTestC
 
     public function testIsValidMimeTypeForExtensionWithMultipleTypes()
     {
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
-            'filetypes' => array('xml' => array('mimeType' => array(
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'filetypes' => ['xml' => ['mimeType' => [
                 'text/xml', 'application/xml'
-            )))
-        )));
+            ]]]
+        ]));
 
         $this->assertTrue($this->_helper->isValidMimeType('application/xml'));
         $this->assertTrue($this->_helper->isValidMimeType('text/xml'));
@@ -110,11 +110,11 @@ class Application_Controller_Action_Helper_FileTypesTest extends ControllerTestC
 
     public function testIsValidMimeTypeForExtension()
     {
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
-            'filetypes' => array('xml' => array('mimeType' => array(
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'filetypes' => ['xml' => ['mimeType' => [
                 'text/xml', 'application/xml'
-            )))
-        )));
+            ]]]
+        ]));
 
         $this->assertTrue($this->_helper->isValidMimeType('application/xml', 'xml'));
         $this->assertTrue($this->_helper->isValidMimeType('text/xml', 'xml'));

@@ -31,25 +31,28 @@
  * @category    Application Unit Test
  * @package     Application_Form
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class Application_Form_AbstractViewableTest extends ControllerTestCase {
+class Application_Form_AbstractViewableTest extends TestCase
+{
 
     private $form;
 
-    public function setUp() {
+    public function setUp()
+    {
         parent::setUp();
 
         $this->form = $this->getForm();
     }
 
-    private function getForm() {
+    private function getForm()
+    {
         return $this->getMockForAbstractClass('Application_Form_AbstractViewable');
     }
 
-    public function testPrepareRenderingAsView() {
+    public function testPrepareRenderingAsView()
+    {
         $form = $this->form;
 
         // Elemente hinzufügen, ein leeres, ein nicht leeres
@@ -118,13 +121,15 @@ class Application_Form_AbstractViewableTest extends ControllerTestCase {
         $this->assertTrue($form->getElement('select')->getDecorator('ViewHelper')->isViewOnlyEnabled());
     }
 
-    public function testIsEmptyTrue() {
+    public function testIsEmptyTrue()
+    {
         $form = $this->getForm();
 
         $this->assertTrue($form->isEmpty());
     }
 
-    public function testIsEmptyFalse() {
+    public function testIsEmptyFalse()
+    {
         $form = $this->getForm();
 
         $form->addElement(new Zend_Form_Element_Text('text'));
@@ -144,7 +149,8 @@ class Application_Form_AbstractViewableTest extends ControllerTestCase {
         $this->assertTrue($form->isEmpty()); // Bonusassert
     }
 
-    public function testRemoveEmptyElementsYes() {
+    public function testRemoveEmptyElementsYes()
+    {
         $form = $this->getForm();
 
         $form->addElement('text', 'test');
@@ -156,7 +162,8 @@ class Application_Form_AbstractViewableTest extends ControllerTestCase {
         $this->assertNull($form->getElement('test'));
     }
 
-    public function testRemoveEmptyElementsNo() {
+    public function testRemoveEmptyElementsNo()
+    {
         $form = $this->getForm();
 
         $form->setRemoveEmptyElements(false);
@@ -170,7 +177,8 @@ class Application_Form_AbstractViewableTest extends ControllerTestCase {
         $this->assertNotNull($form->getElement('test'));
     }
 
-    public function testIsRemoveEmptyElements() {
+    public function testIsRemoveEmptyElements()
+    {
         $form = $this->getForm();
 
         $form->setRemoveEmptyElements(true);
@@ -180,7 +188,8 @@ class Application_Form_AbstractViewableTest extends ControllerTestCase {
         $this->assertFalse($form->isRemoveEmptyElements());
     }
 
-    public function testRemoveEmptyCheckboxYes() {
+    public function testRemoveEmptyCheckboxYes()
+    {
         $form = $this->getForm();
 
         $form->addElement('checkbox', 'test');
@@ -192,7 +201,8 @@ class Application_Form_AbstractViewableTest extends ControllerTestCase {
         $this->assertNull($form->getElement('test'));
     }
 
-    public function testRemoveEmptyCheckboxNo() {
+    public function testRemoveEmptyCheckboxNo()
+    {
         $form = $this->getForm();
 
         $form->setRemoveEmptyCheckbox(false);
@@ -206,7 +216,8 @@ class Application_Form_AbstractViewableTest extends ControllerTestCase {
         $this->assertNotNull($form->getElement('test'));
     }
 
-    public function testIsRemoveEmptyCheckbox() {
+    public function testIsRemoveEmptyCheckbox()
+    {
         $form = $this->getForm();
 
         $form->setRemoveEmptyCheckbox(true);
@@ -215,5 +226,4 @@ class Application_Form_AbstractViewableTest extends ControllerTestCase {
         $form->setRemoveEmptyCheckbox(false);
         $this->assertFalse($form->isRemoveEmptyCheckbox());
     }
-
 }

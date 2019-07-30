@@ -35,6 +35,10 @@
 class Application_Util_NotificationTest extends ControllerTestCase
 {
 
+    protected $configModifiable = true;
+
+    protected $additionalResources = 'database';
+
     protected $notification;
 
     protected $logger;

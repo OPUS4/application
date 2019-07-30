@@ -103,7 +103,10 @@ class Admin_AccountController extends Application_Controller_ActionCRUD
             $this->_helper->redirector('index');
         }
 
-        $this->view->allModules = array_keys(Application_Modules::getInstance()->getModules());
+        $modules = array_keys(Application_Modules::getInstance()->getModules());
+        unset($modules['default']);
+
+        $this->view->allModules = $modules;
 
         $account = new Opus_Account($id);
         $this->view->account = $account;

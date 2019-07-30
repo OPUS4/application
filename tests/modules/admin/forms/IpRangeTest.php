@@ -24,17 +24,19 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    TODO
+ * @category    Test
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
  * Basic unit tests for IP range form.
  */
-class Admin_Form_IpRangeTest extends ControllerTestCase {
+class Admin_Form_IpRangeTest extends ControllerTestCase
+{
+
+    protected $additionalResources = ['database'];
 
     private $_modelId = null;
 
@@ -51,8 +53,7 @@ class Admin_Form_IpRangeTest extends ControllerTestCase {
 
     public function tearDown()
     {
-        if (!is_null($this->_modelId))
-        {
+        if (!is_null($this->_modelId)) {
             $range = new Opus_Iprange($this->_modelId);
             $range->delete();
         }
@@ -157,7 +158,8 @@ class Admin_Form_IpRangeTest extends ControllerTestCase {
         $this->assertContains('isEmpty', $form->getErrors('Startingip'));
     }
 
-    public function testValidationTrue() {
+    public function testValidationTrue()
+    {
         $form = new Admin_Form_IpRange();
 
         $postData = array(
@@ -249,7 +251,8 @@ class Admin_Form_IpRangeTest extends ControllerTestCase {
         $this->assertEmpty($form->getErrors('Endingip'));
     }
 
-    public function testValidationInvalidEndingIp() {
+    public function testValidationInvalidEndingIp()
+    {
         $form = new Admin_Form_IpRange();
 
         $postData = array(
@@ -265,7 +268,8 @@ class Admin_Form_IpRangeTest extends ControllerTestCase {
         $this->assertContains('notIpAddress', $form->getErrors('Endingip'));
     }
 
-    public function testValidationInvalidIpHostname() {
+    public function testValidationInvalidIpHostname()
+    {
         $form = new Admin_Form_IpRange();
 
         $postData = array(
@@ -281,7 +285,8 @@ class Admin_Form_IpRangeTest extends ControllerTestCase {
         $this->assertContains('notIpAddress', $form->getErrors('Endingip'));
     }
 
-    public function testValidationInvalidIpV6() {
+    public function testValidationInvalidIpV6()
+    {
         $form = new Admin_Form_IpRange();
 
         $postData = array(
@@ -318,6 +323,8 @@ class Admin_Form_IpRangeTest extends ControllerTestCase {
 
     public function testTranslation()
     {
+        $this->application->bootstrap('translation');
+
         $form = new Admin_Form_IpRange();
 
         $translator = $form->getTranslator();
@@ -326,6 +333,4 @@ class Admin_Form_IpRangeTest extends ControllerTestCase {
         $this->assertTrue($translator->isTranslated('validation_error_stringLengthTooShort'));
         $this->assertTrue($translator->isTranslated('validation_error_stringLengthTooLong'));
     }
-
 }
-

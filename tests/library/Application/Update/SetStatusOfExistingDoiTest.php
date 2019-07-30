@@ -27,12 +27,14 @@
  * @category    Application Unit Test
  * @package     Application_Update
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2018-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 class Application_Update_SetStatusOfExistingDoiTest extends ControllerTestCase
 {
+
+    protected $additionalResources = 'database';
 
     /**
      * @throws Opus_Model_Exception

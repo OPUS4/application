@@ -36,6 +36,8 @@
 class Admin_CollectionrolesControllerTest extends ControllerTestCase
 {
 
+    protected $additionalResources = 'all';
+
     private $emptyCollectionRole = null;
 
     private $nonEmptyCollectionRole = null;

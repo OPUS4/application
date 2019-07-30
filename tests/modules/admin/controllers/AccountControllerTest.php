@@ -38,6 +38,8 @@
 class Admin_AccountControllerTest extends ControllerTestCase
 {
 
+    protected $additionalResources = 'all';
+
     public static function tearDownAfterClass()
     {
         // even if something fails, the created test account won't be left in database

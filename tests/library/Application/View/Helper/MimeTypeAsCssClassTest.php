@@ -40,7 +40,7 @@ class Application_View_Helper_MimeTypeAsCssClassTest extends ControllerTestCase
     /**
      * Keine serverUrl und keine baseUrl in Unit Tests, daher "http:///files/...".
      */
-    public function testFileLink()
+    public function testMimeTypeAsCssClass()
     {
         $helper = new Application_View_Helper_MimeTypeAsCssClass();
 

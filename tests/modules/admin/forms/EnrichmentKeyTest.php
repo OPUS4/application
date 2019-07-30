@@ -41,6 +41,8 @@
 class Admin_Form_EnrichmentKeyTest extends ControllerTestCase
 {
 
+    protected $additionalResources = ['database', 'translation'];
+
     public function testConstructForm()
     {
         $form = new Admin_Form_EnrichmentKey();

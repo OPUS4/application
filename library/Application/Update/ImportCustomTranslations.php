@@ -41,7 +41,6 @@ class Application_Update_ImportCustomTranslations extends Application_Update_Plu
     public function run()
     {
         $modules = array_keys(Application_Modules::getInstance()->getModules());
-        $modules[] = 'default';
 
         $manager = new Application_Translate_TranslationManager();
         $manager->setFolderNames('language_custom');

@@ -27,7 +27,7 @@
  * @category    Tests
  * @package     Crawlers
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -38,6 +38,8 @@
  */
 class Crawlers_SitelinksControllerTest extends ControllerTestCase
 {
+
+    protected $additionalResources = ['view', 'mainMenu', 'translation'];
 
     public function testRoute()
     {
@@ -106,5 +108,4 @@ class Crawlers_SitelinksControllerTest extends ControllerTestCase
         $this->dispatch('/crawlers/sitelinks');
         $this->assertResponseCode(200);
     }
-
 }

@@ -37,6 +37,8 @@
 class Application_Form_Element_TranslationTest extends ControllerTestCase
 {
 
+    protected $additionalResources = 'translation';
+
     public function testConstruct()
     {
         $element = new Application_Form_Element_Translation('DisplayName');

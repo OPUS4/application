@@ -40,6 +40,8 @@ class Application_Export_ExportServiceTest extends ControllerTestCase
     {
         parent::setUp();
 
+        $this->makeConfigurationModifiable();
+
         $this->_service = new Application_Export_ExportService();
     }
 

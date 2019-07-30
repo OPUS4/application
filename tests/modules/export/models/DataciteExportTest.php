@@ -33,6 +33,8 @@
 class Export_Model_DataciteExportTest extends ControllerTestCase
 {
 
+    protected $additionalResources = ['database'];
+
     public function testExecuteWithMissingDocId()
     {
         $plugin = new Export_Model_DataciteExport();

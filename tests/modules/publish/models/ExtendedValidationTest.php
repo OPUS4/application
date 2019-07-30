@@ -28,21 +28,25 @@
  * @category    Application
  * @package     Module_Publish Unit Test
  * @author      Susanne Gottwald <gottwald@zib.de>
- * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class Publish_Model_ExtendedValidationTest extends ControllerTestCase {
+class Publish_Model_ExtendedValidationTest extends ControllerTestCase
+{
+
+    protected $additionalResources = ['view', 'translation'];
 
     protected $_logger;
 
-    public function setUp() {
+    public function setUp()
+    {
         $writer = new Zend_Log_Writer_Null;
         $this->_logger = new Zend_Log($writer);
         parent::setUp();
     }
 
-    public function testPersonsFirstNamesWithInvalidData() {
+    public function testPersonsFirstNamesWithInvalidData()
+    {
         $session = new Zend_Session_Namespace('Publish');
         $session->documentType = 'all';
         $form = new Publish_Form_PublishingSecond($this->_logger);
@@ -65,7 +69,8 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase {
         $this->assertFalse($result);
     }
 
-    public function testPersonsEmailWithInvalidData() {
+    public function testPersonsEmailWithInvalidData()
+    {
         $session = new Zend_Session_Namespace('Publish');
         $session->documentType = 'all';
         $form = new Publish_Form_PublishingSecond($this->_logger);
@@ -88,7 +93,8 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase {
         $this->assertFalse($result);
     }
 
-    public function testPersonsEmailNotificationWithValidData() {
+    public function testPersonsEmailNotificationWithValidData()
+    {
         $config = Zend_Registry::get('Zend_Config');
         $config->documentTypes->include = 'all,preprint,article,demo,workingpaper';
         $session = new Zend_Session_Namespace('Publish');
@@ -113,7 +119,8 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase {
         $this->assertTrue($result);
     }
 
-    public function testPersonsEmailNotificationWithInvalidData() {
+    public function testPersonsEmailNotificationWithInvalidData()
+    {
         $config = Zend_Registry::get('Zend_Config');
         $config->documentTypes->include = 'all,preprint,article,demo,workingpaper';
         $session = new Zend_Session_Namespace('Publish');
@@ -141,7 +148,8 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase {
     /**
      * Test, if validation fails if Language is deu and TitleMainLanguage is eng
      */
-    public function testMainTitleWithWrongDocLanguage() {
+    public function testMainTitleWithWrongDocLanguage()
+    {
         $config = Zend_Registry::get('Zend_Config');
         $config->documentTypes->include = 'all,preprint,article,demo,workingpaper';
         $session = new Zend_Session_Namespace('Publish');
@@ -169,7 +177,8 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase {
     /**
      * Test, if validation is successful if title main language is empty - "Sprache der Veröffentlichung übernehmen"
      */
-    public function testEmptyMainTitleLanguage() {
+    public function testEmptyMainTitleLanguage()
+    {
         $config = Zend_Registry::get('Zend_Config');
         $config->documentTypes->include = 'all,preprint,article,demo,workingpaper';
         $session = new Zend_Session_Namespace('Publish');
@@ -193,20 +202,21 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase {
         $result = $val->validate();
         $this->assertTrue($result);
     }
-    
+
     /**
      * Test, if validation is successful for several title main languages
      * Last title main has the document language (deu)
      */
-    public function testSeveralMainTitleLanguages() {
+    public function testSeveralMainTitleLanguages()
+    {
         $this->markTestSkipped('Method getExtendedForm removed from Form class: moved to FormController class as manipulateSession');
-        
+
         $config = Zend_Registry::get('Zend_Config');
         $config->documentTypes->include = 'all,preprint,article,demo,workingpaper';
         $session = new Zend_Session_Namespace('Publish');
         $session->documentType = 'workingpaper';
         $session->additionalFields = array();
-        $session->additionalFields['TitleMain'] = '4';          
+        $session->additionalFields['TitleMain'] = '4';
         $form = new Publish_Form_PublishingSecond($this->_logger);
         $data = array(
             'PersonSubmitterFirstName_1' => 'John',
@@ -225,7 +235,7 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase {
             'PersonAuthorAllowEmailContact_1' => '0',
             'CompletedDate' => '14.06.2012',
             'Language' => 'deu',
-            'Licence' => '4'            
+            'Licence' => '4'
         );
 
         $form->getExtendedForm($data, false); // method does not exist!
@@ -233,12 +243,13 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase {
         $result = $val->validate();
         $this->assertTrue($result);
     }
-    
+
     /**
      * Test, if validation is successful for diferent types of title languages
      * Only main title may be validated with document language (deu), the languages of the other titles must be ignored
      */
-    public function testSeveralTitleTypeLanguages() {
+    public function testSeveralTitleTypeLanguages()
+    {
         $config = Zend_Registry::get('Zend_Config');
         $config->documentTypes->include = 'all,preprint,article,demo,workingpaper';
         $session = new Zend_Session_Namespace('Publish');
@@ -272,7 +283,8 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase {
     /**
      * Regression test for OPUSVIER-2635
      */
-    public function testSeriesNumberValidationWithUnknownSeries() {
+    public function testSeriesNumberValidationWithUnknownSeries()
+    {
         $config = Zend_Registry::get('Zend_Config');
         $config->documentTypes->include = 'all';
         $session = new Zend_Session_Namespace('Publish');
@@ -297,7 +309,8 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase {
     /**
      * Regression test for OPUSVIER-2635
      */
-    public function testSeriesNumberValidationWithMissingSeriesField() {
+    public function testSeriesNumberValidationWithMissingSeriesField()
+    {
         $config = Zend_Registry::get('Zend_Config');
         $config->documentTypes->include = 'all';
         $session = new Zend_Session_Namespace('Publish');

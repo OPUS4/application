@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -28,16 +29,20 @@
  * @package     Application_Controller_Action_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
  * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Application_Controller_Action_Helper_BreadcrumbsTest extends ControllerTestCase {
+class Application_Controller_Action_Helper_BreadcrumbsTest extends ControllerTestCase
+{
+
+    protected $additionalResources = ['view', 'database', 'navigation'];
 
     private $helper = null;
 
     private $navigation = null;
 
-    public function setUp() {
+    public function setUp()
+    {
         parent::setUp();
 
         $this->helper = Zend_Controller_Action_HelperBroker::getStaticHelper('breadcrumbs');
@@ -46,19 +51,22 @@ class Application_Controller_Action_Helper_BreadcrumbsTest extends ControllerTes
         $this->helper->setView(Zend_Registry::get('Opus_View'));
     }
 
-    private function getPage($label) {
+    private function getPage($label)
+    {
         return $this->navigation->findOneBy('label', $label);
     }
 
-    public function testAvailable() {
+    public function testAvailable()
+    {
         $this->assertNotNull($this->helper);
         $this->assertInstanceOf('Application_Controller_Action_Helper_Breadcrumbs', $this->helper);
     }
 
-    public function testDirect() {
+    public function testDirect()
+    {
         $this->assertEquals($this->helper, $this->helper->direct());
 
-        $this->helper->setParameters('admin_filemanager_index', array('id' => 146, 'test' => 'true'));
+        $this->helper->setParameters('admin_filemanager_index', ['id' => 146, 'test' => 'true']);
 
         $page = $this->getPage('admin_filemanager_index');
 
@@ -67,7 +75,8 @@ class Application_Controller_Action_Helper_BreadcrumbsTest extends ControllerTes
         $this->assertEquals('true', $page->getParam('test'));
     }
 
-    public function testSetDocumentBreadcrumb() {
+    public function testSetDocumentBreadcrumb()
+    {
         $document = new Opus_Document(146);
 
         // Seite zuerst holen, da das Label nach dem Aufruf von setDocumentBreadcrumb nicht mehr stimmt
@@ -79,8 +88,9 @@ class Application_Controller_Action_Helper_BreadcrumbsTest extends ControllerTes
         $this->assertEquals(146, $page->getParam('id'));
     }
 
-    public function testSetParameters() {
-        $this->helper->setParameters('admin_filemanager_index', array('id' => 146, 'test' => 'true'));
+    public function testSetParameters()
+    {
+        $this->helper->setParameters('admin_filemanager_index', ['id' => 146, 'test' => 'true']);
 
         $page = $this->getPage('admin_filemanager_index');
 
@@ -89,15 +99,17 @@ class Application_Controller_Action_Helper_BreadcrumbsTest extends ControllerTes
         $this->assertEquals('true', $page->getParam('test'));
     }
 
-    public function testSetGetNavigation() {
+    public function testSetGetNavigation()
+    {
         $navigation = new Zend_Navigation();
 
         $this->helper->setNavigation($navigation);
         $this->assertEquals($navigation, $this->helper->getNavigation());
     }
 
-    public function testSetDocumentBreadcrumbNoDocument() {
-        $logger  = new MockLogger();
+    public function testSetDocumentBreadcrumbNoDocument()
+    {
+        $logger = new MockLogger();
 
         $this->helper->setLogger($logger);
         $this->helper->setDocumentBreadcrumb(null);
@@ -108,11 +120,12 @@ class Application_Controller_Action_Helper_BreadcrumbsTest extends ControllerTes
         $this->assertContains('No document provided.', $messages[0]);
     }
 
-    public function testSetParametersPageNotFound() {
-        $logger  = new MockLogger();
+    public function testSetParametersPageNotFound()
+    {
+        $logger = new MockLogger();
 
         $this->helper->setLogger($logger);
-        $this->helper->setParameters('admin_filemanager_index2', array());
+        $this->helper->setParameters('admin_filemanager_index2', []);
 
         $messages = $logger->getMessages();
 
@@ -120,7 +133,8 @@ class Application_Controller_Action_Helper_BreadcrumbsTest extends ControllerTes
         $this->assertContains('Page with label \'admin_filemanager_index2\' not found.', $messages[0]);
     }
 
-    public function testGetDocumentTitle() {
+    public function testGetDocumentTitle()
+    {
         $document = $this->createTestDocument();
 
         $document->setLanguage('deu');
@@ -137,7 +151,8 @@ class Application_Controller_Action_Helper_BreadcrumbsTest extends ControllerTes
     /**
      * Testet die Funktion Application_Controller_Action_Helper_Breadcrumbs::setLabelFor().
      */
-    public function testSetLabelFor() {
+    public function testSetLabelFor()
+    {
         $page = $this->getPage('admin_doctype_show');
         $this->assertEquals('admin_doctype_show', $page->getLabel());
 
@@ -146,5 +161,4 @@ class Application_Controller_Action_Helper_BreadcrumbsTest extends ControllerTes
         $this->assertNotNull($page);
         $this->assertEquals('hallo', $page->getLabel());
     }
-
 }
