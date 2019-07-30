@@ -100,6 +100,24 @@
         </tuv>
     </tu>
 
+    <tu tuid="filenameLengthError">
+        <tuv xml:lang="en">
+            <seg>The length of your filename is too long. Your filename should have less then '%size%' characters. </seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Der Dateiname hat zu viele Zeichen. Die maximal erlaubte Zeichenzahl beträgt '%size%' Zeichen. </seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="filenameFormatError">
+        <tuv xml:lang="en">
+            <seg>Your filename has not allowed characters or a wrong form. </seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Der Dateiname enthält nicht zugelassene Zeichen oder hat eine falsche Form.</seg>
+        </tuv>
+    </tu>
+
       <!-- TODO move to TMX file for field hints? -->
       <tu tuid="admin_persons_values_not_trimmed">
           <tuv xml:lang="en">

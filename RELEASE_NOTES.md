@@ -5,8 +5,6 @@ Funktionen. Die Datei 'modules/default/language/languages.tmx' wurde gelöscht.
 Übersetzungen von Sprachen in angepassten TMX-Dateien werden immer noch verwendet, 
 sollten aber nicht mehr notwendig sein. 
 
----
-
 ## Release 4.6.4 2019-04-01
 
 Mit diesem Release wechselt OPUS 4 zu Apache Solr 7.7.1. Der Umstieg muss manuell
@@ -36,6 +34,9 @@ wie man diese in Solr einbinden kann.
 Zum Abschluss muss mit dem SolrIndexBuilder-Skript der Index neu aufgebaut werden.
 
     $ php scripts/SolrIndexBuilder.php
+    
+Außerdem werden Dateinamen beim Upload ab jetzt auch in der Administration geprüft. 
+(Vorher nur im Publish-Modul)
     
 ---
 
