@@ -77,8 +77,8 @@ class Admin_Form_File_Upload extends Application_Form_Model_Abstract {
         $config = $this->getApplicationConfig();
 
         $filenameOptions = [
-            'filenameMaxLength' => $config->files->filenameMaxLength,
-            'filenameFormat' => $config->files->filenameFormat
+            'filenameMaxLength' => $config->publish->filenameMaxLength,
+            'filenameFormat' => $config->publish->filenameFormat
         ];
         $filenameValidator = new Application_Form_Validate_Filename($filenameOptions);
 

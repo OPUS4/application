@@ -165,8 +165,8 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
         }
 
         //initialization of filename-validator
-        $filenameMaxLength = $this->_config->files->filenameMaxLength;
-        $filenameFormat = $this->_config->files->filenameFormat;
+        $filenameMaxLength = $this->_config->publish->filenameMaxLength;
+        $filenameFormat = $this->_config->publish->filenameFormat;
         $filenameOptions = [
             'filenameMaxLength' => $filenameMaxLength,
             'filenameFormat' => $filenameFormat
@@ -271,8 +271,8 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
 
             $this->view->documentUpload = $group;
             $this->view->MAX_FILE_SIZE = $this->_config->publish->maxfilesize;
-            $this->view->filenameMaxLength = $this->_config->files->filenameMaxLength;
-            $this->view->filenameFormat = $this->_config->files->filenameFormat;
+            $this->view->filenameMaxLength = $this->_config->publish->filenameMaxLength;
+            $this->view->filenameFormat = $this->_config->publish->filenameFormat;
         }
     }
 

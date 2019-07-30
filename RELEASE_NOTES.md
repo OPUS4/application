@@ -4,16 +4,6 @@ Die Übersetzung von Sprachen, z.B. 'deu' => 'German', erfolgt nun mit Hilfe von
 Funktionen. Die Datei 'modules/default/language/languages.tmx' wurde gelöscht. 
 Übersetzungen von Sprachen in angepassten TMX-Dateien werden immer noch verwendet, 
 sollten aber nicht mehr notwendig sein. 
----
-
-## Release 4.6.4 2019-29-07
-Es wurden eine Änderung an der Konfiguration vorgenommen.
-Ändern Sie in Ihrer 'config.ini' bitte folgende Zeilen:
-
-    publish.filenameMaxLength -> files.filenameMaxLength (Z. 137)
-    publish.filenameFormat -> files.filenameFormat (Z. 141)
-
----
 
 ## Release 4.6.4 2019-04-01
 
@@ -44,6 +34,9 @@ wie man diese in Solr einbinden kann.
 Zum Abschluss muss mit dem SolrIndexBuilder-Skript der Index neu aufgebaut werden.
 
     $ php scripts/SolrIndexBuilder.php
+    
+Außerdem werden Dateinamen beim Upload ab jetzt auch in der Administration geprüft. 
+(Vorher nur im Publish-Modul)
     
 ---
 
