@@ -39,7 +39,9 @@ script:
   - cd ../../../../
   - ./bin/solr restart
   - cd ..
+  - travis_fold start "Preparing_test_data"
   - ant reset-testdata
+  - travis_fold end "Preparing_test_data"
   - ./vendor/bin/phpunit --configuration ./tests/phpunit.xml --no-coverage --testsuite library
   - ./vendor/bin/phpunit --configuration ./tests/phpunit.xml --no-coverage --testsuite modules
   - ./vendor/bin/phpunit --configuration ./tests/phpunit.xml --no-coverage --testsuite admin
