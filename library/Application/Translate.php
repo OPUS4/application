@@ -52,87 +52,7 @@ class Application_Translate extends Zend_Translate
      */
     const REGISTRY_KEY = 'Zend_Translate';
 
-
-    private $files = [
-        'account/account.tmx',
-        'admin/access.tmx',
-        'admin/account.tmx',
-        'admin/admin.tmx',
-        'admin/collections.tmx',
-        'admin/config.tmx',
-        'admin/dnbinstitute.tmx',
-        'admin/doctype.tmx',
-        'admin/document.tmx',
-        'admin/documents.tmx',
-        'admin/enrichmentkey.tmx',
-        'admin/filebrowser.tmx',
-        'admin/filemanager.tmx',
-        'admin/files.tmx',
-        'admin/forms.tmx',
-        'admin/indexmaintenance.tmx',
-        'admin/info.tmx',
-        'admin/iprange.tmx',
-        'admin/job.tmx',
-        'admin/language.tmx',
-        'admin/licence.tmx',
-        'admin/module.tmx',
-        'admin/oailink.tmx',
-        'admin/person.tmx',
-        'admin/report.tmx',
-        'admin/resources.tmx',
-        'admin/role.tmx',
-        'admin/security.tmx',
-        'admin/series.tmx',
-        'admin/settings.tmx',
-        'admin/statistic.tmx',
-        'admin/validation.tmx',
-        'citationExport/citationExport.tmx',
-        'crawlers/sitelinks.tmx',
-        'default/account.tmx',
-        'default/admin.tmx',
-        'default/auth.tmx',
-        'default/collectionroles.tmx',
-        'default/crud.tmx',
-        'default/default.tmx',
-        'default/doctypes.tmx',
-        'default/error.tmx',
-        'default/fieldnames.tmx',
-        'default/fieldvalues.tmx',
-        'default/modelnames.tmx',
-        'default/rss.tmx',
-        'default/search.tmx',
-        'default/security.tmx',
-        'default/setup.tmx',
-        'default/validation.tmx',
-        'default/workflow.tmx',
-        'export/export.tmx',
-        'frontdoor/frontdoor.tmx',
-        'frontdoor/messages.tmx',
-        'home/contact.tmx',
-        'home/help.tmx',
-        'home/home.tmx',
-        'home/imprint.tmx',
-        'oai/error.tmx',
-        'publish/buttons.tmx',
-        'publish/errors.tmx',
-        'publish/field_headers.tmx',
-        'publish/field_hints.tmx',
-        'publish/fieldnames.tmx',
-        'publish/publish.tmx',
-        'review/review.tmx',
-        'setup/language.tmx',
-        'setup/setup.tmx',
-        'solrsearch/browsing.tmx',
-        'solrsearch/solrsearch.tmx',
-        'statistic/statistic.tmx',
-        'sword/sword.tmx'
-    ];
-
-    /**
-     * Array mit bereits geladenen Modulen.
-     * @var array
-     */
-    private $_loadedModules = [];
+    private $loaded = false;
 
     /**
      * Logger.
@@ -177,29 +97,20 @@ class Application_Translate extends Zend_Translate
     }
 
     /**
-     * Lädt die Übersetzungen für ein Modul.
-     * @param $name
-     */
-    public function loadModule($name, $reload = false)
-    {
-        if (!in_array($name, $this->_loadedModules) or $reload === true) {
-            $moduleDir = APPLICATION_PATH . '/modules/' . $name;
-            $this->loadLanguageDirectory("$moduleDir/language/", false);
-
-            $this->_loadedModules[] = $name;
-        }
-    }
-
-    /**
      * Loads all modules.
      */
     public function loadModules($reload = false)
     {
-        $modules = Application_Modules::getInstance()->getModules();
+        if (! $this->loaded or $reload) {
+            $modules = Application_Modules::getInstance()->getModules();
 
-        foreach ($modules as $name => $module) {
-            $this->loadModule($name, $reload);
+            foreach ($modules as $name => $module) {
+                $moduleDir = APPLICATION_PATH . '/modules/' . $name;
+                $this->loadLanguageDirectory("$moduleDir/language/", false, $reload);
+            }
         }
+
+        $this->loaded = true;
     }
 
     /**
@@ -245,7 +156,7 @@ class Application_Translate extends Zend_Translate
      *
      * TODO better than supressing the warning would be for each module to register language directories in bootstrap
      */
-    public function loadLanguageDirectory($directory, $warnIfMissing = true)
+    public function loadLanguageDirectory($directory, $warnIfMissing = true, $reload = false)
     {
         $path = realpath($directory);
 
@@ -276,7 +187,7 @@ class Application_Translate extends Zend_Translate
             // Otherwise there is a mechanism preventing repeated loading in the parent class.
             $options = array_merge([
                 'content' => $path . DIRECTORY_SEPARATOR . $file,
-                'reload' => true
+                'reload' => $reload
             ], $this->getOptions());
 
             $this->addTranslation($options);

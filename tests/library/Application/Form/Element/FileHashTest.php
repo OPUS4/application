@@ -48,7 +48,6 @@ class Application_Form_Element_FileHashTest extends FormElementTestCase
     public function testGetLabel()
     {
         $this->useEnglish();
-        Zend_Registry::get('Zend_Translate')->loadModule('admin');
 
         $element = new Application_Form_Element_FileHash('filehash');
 

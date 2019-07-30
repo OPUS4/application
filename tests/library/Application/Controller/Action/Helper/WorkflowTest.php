@@ -211,8 +211,6 @@ class Application_Controller_Action_Helper_WorkflowTest extends ControllerTestCa
     {
         $states = Application_Controller_Action_Helper_Workflow::getAllStates();
 
-        Zend_Registry::get('Zend_Translate')->loadModule('admin');
-
         $translate = Zend_Registry::get('Zend_Translate');
 
         foreach ($states as $state) {

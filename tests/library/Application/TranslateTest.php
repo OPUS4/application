@@ -70,43 +70,6 @@ class Application_TranslateTest extends ControllerTestCase
         $this->assertTrue($translate->isTranslated('home_menu_label'));
     }
 
-    public function testLoadModule()
-    {
-        $this->assertFalse($this->translate->isTranslated('home_menu_label'));
-
-        $this->translate->loadModule('default');
-
-        $this->assertTrue($this->translate->isTranslated('home_menu_label')); // default immer noch geladen
-    }
-
-    public function testLoadModuleUnknown()
-    {
-        $logger = new MockLogger();
-
-        $this->translate->setLogger($logger);
-
-        $this->translate->loadModule('default');
-
-        $this->assertTrue($this->translate->isTranslated('home_menu_label'));
-
-        $this->translate->loadModule('unknown');
-
-        $this->assertTrue($this->translate->isTranslated('home_menu_label')); // default immer noch geladen
-
-        $messages = $logger->getMessages();
-
-        $this->assertEquals(0, count($messages)); // warning normally suppressed
-
-        $this->translate->loadLanguageDirectory(APPLICATION_PATH . '/modules/rewrite/language');
-        $this->translate->loadLanguageDirectory(APPLICATION_PATH . '/modules/rewrite/language_custom');
-
-        $messages = $logger->getMessages();
-
-        $this->assertEquals(2, count($messages));
-        $this->assertContains('not found', $messages[0]);
-        $this->assertContains('not found', $messages[1]);
-    }
-
     public function testLoadModules()
     {
         $this->assertFalse($this->translate->isTranslated('home_menu_label')); // 'default' module
@@ -226,7 +189,7 @@ class Application_TranslateTest extends ControllerTestCase
         $logger = new MockLogger();
 
         $translate = new Application_Translate(['log' => $logger]);
-        $translate->loadModule('default');
+        $translate->loadModules();
 
         $this->assertFalse($translate->isTranslated('nottranslated123'));
         $this->assertEquals('nottranslated123', $translate->translate('nottranslated123'));
@@ -247,7 +210,7 @@ class Application_TranslateTest extends ControllerTestCase
         $logger = new MockLogger();
 
         $translate = new Application_Translate(['log' => $logger]);
-        $translate->loadModule('admin');
+        $translate->loadModules();
 
         $this->assertFalse($translate->isTranslated('nottranslated123'));
         $this->assertEquals('nottranslated123', $translate->translate('nottranslated123'));
@@ -418,12 +381,5 @@ class Application_TranslateTest extends ControllerTestCase
             Zend_Translate::clearCache();
             $translate->loadTranslations();
         }
-    }
-
-    public function testGetTmxFiles()
-    {
-        $translate = new Application_Translate();
-
-        $this->assertCount(72, $translate->getTmxFiles());
     }
 }

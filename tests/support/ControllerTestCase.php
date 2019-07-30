@@ -552,7 +552,6 @@ class ControllerTestCase extends TestCase
                     $breadcrumbDefined = true;
 
                     $translate = Zend_Registry::get('Zend_Translate');
-                    $translate->loadModule($module);
 
                     $label = $page->getLabel();
 

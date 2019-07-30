@@ -79,8 +79,6 @@ class Application_Form_Validate_SeriesNumberAvailableTest extends ControllerTest
     {
         $translator = Zend_Registry::get('Zend_Translate');
 
-        $translator->loadModule('admin');
-
         $this->assertTrue($translator->isTranslated('admin_series_error_number_exists'));
     }
 

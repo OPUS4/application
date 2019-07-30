@@ -76,8 +76,6 @@ class Application_View_Helper_TranslateTest extends ControllerTestCase
     {
         $this->useEnglish();
 
-        Zend_Registry::get('Zend_Translate')->loadModule('admin');
-
         $model = new Application_View_Helper_Translate();
 
         $this->assertEquals(
@@ -89,8 +87,6 @@ class Application_View_Helper_TranslateTest extends ControllerTestCase
     public function testTranslateWithParameterArray()
     {
         $this->useEnglish();
-
-        Zend_Registry::get('Zend_Translate')->loadModule('admin');
 
         $model = new Application_View_Helper_Translate();
 
@@ -106,8 +102,6 @@ class Application_View_Helper_TranslateTest extends ControllerTestCase
     public function testTranslateWithPlaceholderValueMatchingLocale()
     {
         $this->useEnglish();
-
-        Zend_Registry::get('Zend_Translate')->loadModule('admin');
 
         $helper = new Application_View_Helper_Translate();
 
@@ -128,8 +122,6 @@ class Application_View_Helper_TranslateTest extends ControllerTestCase
     {
         $this->useEnglish();
 
-        Zend_Registry::get('Zend_Translate')->loadModule('admin');
-
         $helper = new Application_View_Helper_Translate();
 
         $this->assertEquals(
@@ -144,8 +136,6 @@ class Application_View_Helper_TranslateTest extends ControllerTestCase
     public function testTranslationMultipleParameters()
     {
         $this->useEnglish();
-
-        Zend_Registry::get('Zend_Translate')->loadModule('admin');
 
         $helper = new Application_View_Helper_Translate();
 

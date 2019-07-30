@@ -87,8 +87,6 @@ class Application_View_Helper_AdminMenuTest extends ControllerTestCase
 
     public function testIsRenderDescription()
     {
-        Zend_Registry::get('Zend_Translate')->loadModule('admin');
-
         // show description if attribute is set and translation exists
         $page = $this->getPageByLabel('admin_title_documents');
         $this->assertTrue($this->_helper->isRenderDescription($page));

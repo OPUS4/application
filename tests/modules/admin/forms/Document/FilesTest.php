@@ -85,8 +85,6 @@ class Admin_Form_Document_FilesTest extends ControllerTestCase
 
         $translate = Zend_Registry::get('Zend_Translate');
 
-        $translate->loadModule('admin');
-
         foreach ($header as $column) {
             if (isset($column['label']) && !is_null($column['label'])) {
                 $label = $column['label'];
