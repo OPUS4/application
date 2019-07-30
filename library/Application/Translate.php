@@ -126,7 +126,8 @@ class Application_Translate extends Zend_Translate
             'adapter' => 'Opus_Translate_DatabaseAdapter',
             'content' => 'all',
             'locale' => 'en',
-            'disableNotices' => true
+            'disableNotices' => true,
+            'reload' => $reload
         ]);
 
         $locales = Application_Configuration::getInstance()->getSupportedLanguages();
