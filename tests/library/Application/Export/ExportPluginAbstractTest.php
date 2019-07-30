@@ -24,61 +24,65 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Export
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @category    Tests
+ * @package     Application_Export
+ * @author      Sascha Szott <opus-development@saschaszott.de>
+ * @copyright   Copyright (c) 2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-/**
- * Interface for export plugins.
- *
- * The plugins are dynamically registered as actions in the export controller.
- *
- * TODO The export mechanism should/could be separated from the request/response handling.
- */
-interface Application_Export_ExportPlugin {
+class Application_Export_ExportPluginAbstractTest extends ControllerTestCase
+{
+
+    public function testIsAccessRestrictedDefaultDisabled()
+    {
+        $stub = $this->getMockForAbstractClass('Application_Export_ExportPluginAbstract');
+        $stub->setConfig(new Zend_Config([]));
+        $this->assertFalse($stub->isAccessRestricted());
+    }
 
     /**
-     * Returns name of plugin.
-     * @return mixed
+     * @dataProvider enabledOptions
      */
-    public function getName();
+    public function testIsAccessRestrictedEnabled($optionValue)
+    {
+        $this->enableSecurity();
+
+        $stub = $this->getMockForAbstractClass('Application_Export_ExportPluginAbstract');
+
+        $this->setAdminOnly($optionValue);
+
+        $this->assertTrue($stub->isAccessRestricted());
+    }
 
     /**
-     * Sets the plugin configuration.
-     * @param Zend_Config $config
+     * @dataProvider disabledOptions
      */
-    public function setConfig(Zend_Config $config = null);
+    public function testIsAccessRestrictedDisabled($optionValue)
+    {
+        $this->enableSecurity();
 
-    /**
-     * Sets the HTTP request being processed.
-     * @param Zend_Controller_Request_Http $request
-     */
-    public function setRequest(Zend_Controller_Request_Http $request);
+        $stub = $this->getMockForAbstractClass('Application_Export_ExportPluginAbstract');
 
-    /**
-     * Sets the HTTP response.
-     * @param Zend_Controller_Response_Http $response
-     */
-    public function setResponse(Zend_Controller_Response_Http $response);
+        $this->setAdminOnly($optionValue);
 
-    /**
-     * Sets the view objekt for rendering the response.
-     * @param Zend_View $view
-     */
-    public function setView(Zend_View $view);
+        $this->assertFalse($stub->isAccessRestricted());
+    }
 
-    /**
-     * Main function performing export.
-     */
-    public function execute();
+    public function enabledOptions()
+    {
+        return [[true], [1]];
+    }
 
-    /**
-     * @return bool returns true if plugin access is restricted to administrators
-     */
-    public function isAccessRestricted();
+    public function disabledOptions()
+    {
+        return [[false], [0]];
+    }
+
+    private function setAdminOnly($optionValue)
+    {
+        Zend_Registry::set('Zend_Config',
+            new Zend_Config(['adminOnly' => $optionValue]));
+    }
 
 }
-
