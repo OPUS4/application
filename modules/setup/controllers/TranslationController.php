@@ -33,32 +33,62 @@
  */
 
 /**
- * TODO remove camel case from controller name
+ *
+ * TODO refactor camel case in controller name; leads to static-page in translation keys and URLs
  */
-class Setup_HelpPageController extends Application_Controller_Action
+class Setup_TranslationController extends Application_Controller_Action
 {
+
+    private $validPages = [
+        'home' => 'Setup_Form_HomePage',
+        'contact' => 'Setup_Form_ContactPage',
+        'imprint' => 'Setup_Form_ImprintPage'
+    ];
+
+    private $config;
 
     public function init()
     {
         parent::init();
-
+        $this->config = new Zend_Config_Ini(APPLICATION_PATH . '/modules/setup/setup.ini', 'static-page');
         $this->getHelper('MainMenu')->setActive('admin');
     }
 
     public function indexAction()
     {
-        // TODO fix $this->forward('edit');
+        $this->view->pageNames = array_keys($this->validPages);
     }
 
-    protected function getForm()
+    public function editAction()
     {
-        return new Setup_Form_HelpPage();
-    }
+        $page = $this->getParam('page');
 
-    protected function getModel()
-    {
-        return new Setup_Model_HelpPage(
-            new Zend_Config_Ini(APPLICATION_PATH . '/modules/setup/setup.ini', 'help')
-        );
+        if (in_array($page, array_keys($this->validPages))) {
+            $formClass = $this->validPages[$page];
+            $form = new $formClass;
+
+            $request = $this->getRequest();
+
+            if ($request->isPost()) {
+                $data = $request->getPost();
+                $form->populate($data);
+                switch ($form->processPost($data, $data)) {
+                    case Application_Form_Translations::RESULT_SAVE:
+                        $form->updateTranslations();
+                        $this->_helper->Redirector->redirectTo('index', 'setup_message_write-success');
+                        break;
+                    case Application_Form_Translations::RESULT_CANCEL:
+                        $this->_helper->Redirector->redirectTo('index');
+                        break;
+                    default:
+                        break;
+                }
+            } else {
+                $this->_helper->viewRenderer->setNoRender(true);
+                echo $form;
+            }
+        } else {
+            // TODO redirect with error message
+        }
     }
 }

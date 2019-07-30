@@ -24,29 +24,32 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
+ * @category    Tests
  * @package     Module_Setup
- * @author      Edouard Simon (edouard.simon@zib.de)
+ * @author      Edouard Simon <edouard.simon@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2013-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
- * TODO rename to Homepage
+ * Class Setup_StaticPageControllerTest.
+ *
+ * @covers Setup_StaticPageController
+ *
+ * TODO review SetupControllerTestCase
  */
-class Setup_Form_HomePage extends Application_Form_Translations
+class Setup_TranslationControllerTest extends SetupControllerTestCase
 {
 
-    public function init()
-    {
-        parent::init();
+    /**
+     * original file modes, needed for restoring after test
+     */
+    protected $origFileModes = [];
 
-        $this->addKey('home_index_index_pagetitle');
-        $this->addKey('home_index_index_title');
-        $this->addKey('home_index_index_welcome', true);
-        $this->addKey('home_index_index_instructions', true);
+    protected $configSection = 'static-page';
 
-        $this->populateFromTranslations();
+    public function testSomething() {
+        $this->markTestIncomplete('implement testing');
     }
 }

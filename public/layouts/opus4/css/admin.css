@@ -2451,9 +2451,13 @@ table.module-access-table tr.noaccess {
     margin-bottom: 0.5em;
 }
 
-#content.setup_static-page > .wrapper a {
+#content.setup_translation > .wrapper a {
     display: block;
     margin-left: 2em;
     padding: 0.5em;
     font-size: 1.2em;
+}
+
+#content.setup_translation_edit textarea {
+    resize: vertical;
 }
