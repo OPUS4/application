@@ -40,6 +40,8 @@ class Application_Update_SetStatusOfExistingDoiTest extends ControllerTestCase
      * @throws Opus_Model_Exception
      *
      * TODO test sets Status of all DOI identifier of published documents to 'registered' (side effect)
+     * TODO this test has failed once (date got modified or compare didn't work) on Travis and worked in the next run
+     *      without changes - Why?
      */
     public function testRunDoesNotModifyServerDateModified()
     {

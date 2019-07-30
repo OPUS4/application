@@ -39,12 +39,22 @@ script:
   - cd ../../../../
   - ./bin/solr restart
   - cd ..
-  - travis_fold start "Preparing_test_data"
+  - travis_fold start "prepare_test_data"
   - ant reset-testdata
-  - travis_fold end "Preparing_test_data"
+  - travis_fold end "prepare_test_data"
+  - travis_fold start "library_tests"
   - ./vendor/bin/phpunit --configuration ./tests/phpunit.xml --no-coverage --testsuite library
+  - travis_fold end "library_tests"
+  - travis_fold start "modules_tests"
   - ./vendor/bin/phpunit --configuration ./tests/phpunit.xml --no-coverage --testsuite modules
+  - travis_fold end "modules_tests"
+  - travis_fold start "admin_tests"
   - ./vendor/bin/phpunit --configuration ./tests/phpunit.xml --no-coverage --testsuite admin
+  - travis_fold end "admin_tests"
+  - travis_fold start "security_tests"
   - ./vendor/bin/phpunit --configuration ./tests/phpunit.xml --no-coverage --testsuite security
+  - travis_fold end "security_tests"
+  - travis_fold start "scripts_tests"
   - php ./scripts/opus-smtp-dumpserver.php 2>&1 >>./opus-smtp-dumpserver.log &
   - ./vendor/bin/phpunit --configuration ./tests/phpunit.xml --no-coverage --testsuite scripts
+  - travis_fold end "scripts_tests"
