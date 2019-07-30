@@ -34,6 +34,8 @@
 class Application_Export_ExportPluginAbstractTest extends ControllerTestCase
 {
 
+    protected $configModifiable = true;
+
     public function testIsAccessRestrictedDefaultDisabled()
     {
         $stub = $this->getMockForAbstractClass('Application_Export_ExportPluginAbstract');

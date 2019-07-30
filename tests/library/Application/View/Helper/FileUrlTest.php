@@ -34,6 +34,8 @@
 class Application_View_Helper_FileUrlTest extends ControllerTestCase
 {
 
+    protected $additionalResources = 'view';
+
     public function testFileUrl()
     {
         $helper = new Application_View_Helper_FileUrl();

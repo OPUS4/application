@@ -34,6 +34,8 @@
 class Application_View_Helper_FrontdoorUrlTest extends ControllerTestCase
 {
 
+    protected $additionalResources = 'view';
+
     public function testFrontdoorUrl()
     {
         $helper = new Application_View_Helper_FrontdoorUrl();
