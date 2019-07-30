@@ -44,4 +44,5 @@ script:
   - ./vendor/bin/phpunit --configuration ./tests/phpunit.xml --no-coverage --testsuite modules
   - ./vendor/bin/phpunit --configuration ./tests/phpunit.xml --no-coverage --testsuite admin
   - ./vendor/bin/phpunit --configuration ./tests/phpunit.xml --no-coverage --testsuite security
+  - php ./scripts/opus-smtp-dumpserver.php 2>&1 >>./opus-smtp-dumpserver.log &
   - ./vendor/bin/phpunit --configuration ./tests/phpunit.xml --no-coverage --testsuite scripts
