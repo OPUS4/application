@@ -25,9 +25,8 @@ script:
   - mysql --version
   - java -version
   - ant -version
+  - travis_fold start "prepare_dependencies"
   - ant prepare-test-workspace prepare-workspace prepare-config -DdbUserName=root -DdbAdminName=root
-  - php db/createdb.php
-  - mysql opusdb -u root --password='' -e 'SELECT * FROM schema_version'
   - ant download-solr -DsolrVersion=7.7.1 -DdownloadDir=$HOME/downloads
   - cd solr-7.7.1
   - ./bin/solr start
@@ -39,22 +38,14 @@ script:
   - cd ../../../../
   - ./bin/solr restart
   - cd ..
-  - travis_fold start "prepare_test_data"
+  - travis_fold end "prepare_dependencies"
+  - travis_fold start "prepare_testing"
   - ant reset-testdata
-  - travis_fold end "prepare_test_data"
-  - travis_fold start "library_tests"
+  - travis_fold end "prepare_testing"
+  - mysql opusdb -u root --password='' -e 'SELECT * FROM schema_version'
   - ./vendor/bin/phpunit --configuration ./tests/phpunit.xml --no-coverage --testsuite library
-  - travis_fold end "library_tests"
-  - travis_fold start "modules_tests"
   - ./vendor/bin/phpunit --configuration ./tests/phpunit.xml --no-coverage --testsuite modules
-  - travis_fold end "modules_tests"
-  - travis_fold start "admin_tests"
   - ./vendor/bin/phpunit --configuration ./tests/phpunit.xml --no-coverage --testsuite admin
-  - travis_fold end "admin_tests"
-  - travis_fold start "security_tests"
   - ./vendor/bin/phpunit --configuration ./tests/phpunit.xml --no-coverage --testsuite security
-  - travis_fold end "security_tests"
-  - travis_fold start "scripts_tests"
   - php ./scripts/opus-smtp-dumpserver.php 2>&1 >>./opus-smtp-dumpserver.log &
   - ./vendor/bin/phpunit --configuration ./tests/phpunit.xml --no-coverage --testsuite scripts
-  - travis_fold end "scripts_tests"
