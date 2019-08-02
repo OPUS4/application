@@ -32,6 +32,6 @@
  * @version     $Id$
  */
 
-class Crawlers_Bootstrap extends Zend_Application_Module_Bootstrap {
+class Crawlers_Bootstrap extends Zend_Application_Module_Bootstrap
+{
 }
-
