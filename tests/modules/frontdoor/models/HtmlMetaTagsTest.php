@@ -310,6 +310,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
 
     /**
      * @param array $tags
+     * @param int $docId
      */
     private function assertCommonIdentifiers($tags, $docId)
     {
@@ -341,6 +342,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
 
     /**
      * @param array $tags
+     * @param int $docId
      */
     private function assertUrn($tags, $docId)
     {
