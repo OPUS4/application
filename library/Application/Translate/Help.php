@@ -25,15 +25,49 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_Home
+ * @package     Application_Translate
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-/**
- * Empty class seems to be necessary to setup autoloading for modules.
- */
-class Home_Bootstrap extends Zend_Application_Module_Bootstrap
+abstract class Application_Translate_Help
 {
+
+    static private $instance;
+
+    private $config;
+
+    static public function getInstance()
+    {
+        if (is_null(self::$instance)) {
+            self::$instance = new Home_Model_HelpFiles();
+        }
+
+        return self::$instance;
+    }
+
+    public function getConfig()
+    {
+        if (is_null($this->config)) {
+            $this->config = Zend_Registry::get('Zend_Config');
+        }
+        return $this->config;
+    }
+
+    public function getSeparateViewEnabled()
+    {
+        $config = $this->getConfig();
+
+        if (isset($config->help->separate)) {
+            return filter_var($config->help->separate, FILTER_VALIDATE_BOOLEAN);
+        } else {
+            return false;
+        }
+    }
+
+    abstract public function getHelpEntries();
+
+    abstract public function getContent($key);
+
 }
