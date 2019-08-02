@@ -67,7 +67,7 @@ class Publish_FormControllerTest extends ControllerTestCase
     {
         $this->request
             ->setMethod('POST')
-            ->setPost(array());
+            ->setPost([]);
 
         $this->dispatch('/publish/form/upload');
         $this->assertResponseCode(302);
@@ -82,9 +82,9 @@ class Publish_FormControllerTest extends ControllerTestCase
     {
         $this->request
             ->setMethod('POST')
-            ->setPost(array(
+            ->setPost([
                 'foo' => 'bar',
-            ));
+            ]);
 
         $this->dispatch('/publish/form/upload');
 
@@ -121,11 +121,11 @@ class Publish_FormControllerTest extends ControllerTestCase
         $session->documentType = 'preprint';
         $session->documentId = $doc->getId();
         $session->fulltext = '0';
-        $session->additionalFields = array();
+        $session->additionalFields = [];
 
         $this->request
             ->setMethod('POST')
-            ->setPost(array(
+            ->setPost([
                 'PersonSubmitterLastName_1' => 'Doe',
                 'PersonSubmitterEmail_1' => 'doe@example.org',
                 'TitleMain_1' => 'Entenhausen',
@@ -135,7 +135,7 @@ class Publish_FormControllerTest extends ControllerTestCase
                 'Language' => 'deu',
                 'Licence' => '4',
                 'addMoreTitleMain' => 'Add one more title main'
-            ));
+            ]);
 
         $this->dispatch('/publish/form/check');
 
@@ -160,9 +160,9 @@ class Publish_FormControllerTest extends ControllerTestCase
     {
         $this->request
             ->setMethod('POST')
-            ->setPost(array(
+            ->setPost([
                 'abort' => '',
-            ));
+            ]);
 
         $this->dispatch('/publish/form/check');
         $this->assertResponseCode(302);
@@ -181,11 +181,11 @@ class Publish_FormControllerTest extends ControllerTestCase
         $session->documentType = 'preprint';
         $session->documentId = $doc->getId();
         $session->fulltext = '0';
-        $session->additionalFields = array();
+        $session->additionalFields = [];
 
         $this->request
             ->setMethod('POST')
-            ->setPost(array(
+            ->setPost([
                 'PersonSubmitterLastName_1' => 'Doe',
                 'PersonSubmitterEmail_1' => 'doe@example.org',
                 'TitleMain_1' => 'Entenhausen',
@@ -194,7 +194,7 @@ class Publish_FormControllerTest extends ControllerTestCase
                 'Language' => 'deu',
                 'Licence' => '4',
                 'send' => 'Weiter zum nächsten Schritt'
-            ));
+            ]);
 
         $this->dispatch('/publish/form/check');
 
@@ -213,11 +213,11 @@ class Publish_FormControllerTest extends ControllerTestCase
         $session->documentType = 'preprint';
         $session->documentId = $doc->getId();
         $session->fulltext = '0';
-        $session->additionalFields = array();
+        $session->additionalFields = [];
 
         $this->request
             ->setMethod('POST')
-            ->setPost(array(
+            ->setPost([
                 'PersonSubmitterLastName_1' => 'Doe',
                 'PersonSubmitterEmail_1' => 'doe@example.org',
                 'TitleMain_1' => 'Entenhausen',
@@ -228,7 +228,7 @@ class Publish_FormControllerTest extends ControllerTestCase
                 'Licence' => '4',
                 'ThesisPublisher_1' => '2',
                 'send' => 'Weiter zum nächsten Schritt'
-            ));
+            ]);
 
         $this->dispatch('/publish/form/check');
 
@@ -276,15 +276,15 @@ class Publish_FormControllerTest extends ControllerTestCase
         $session->documentType = 'demo';
         $session->documentId = $doc->getId();
         $session->fulltext = '0';
-        $session->additionalFields = array();
+        $session->additionalFields = [];
 
         $this->request
             ->setMethod('POST')
-            ->setPost(array(
+            ->setPost([
                 'PersonSubmitterFirstName_1' => 'John',
                 'PersonSubmitterLastName_1' => 'Doe',
                 'send' => 'Weiter zum nächsten Schritt'
-            ));
+            ]);
 
         $this->dispatch('/publish/form/check');
 
@@ -318,15 +318,15 @@ class Publish_FormControllerTest extends ControllerTestCase
         $session->documentType = 'demo';
         $session->documentId = $doc->getId();
         $session->fulltext = '0';
-        $session->additionalFields = array();
+        $session->additionalFields = [];
 
         $this->request
             ->setMethod('POST')
-            ->setPost(array(
+            ->setPost([
                 'PersonSubmitterFirstName_1' => 'John',
                 'PersonSubmitterLastName_1' => 'Doe',
                 'send' => 'Weiter zum nächsten Schritt'
-            ));
+            ]);
 
         $this->dispatch('/publish/form/check');
 
@@ -360,15 +360,15 @@ class Publish_FormControllerTest extends ControllerTestCase
         $session->documentType = 'demo';
         $session->documentId = $doc->getId();
         $session->fulltext = '0';
-        $session->additionalFields = array();
+        $session->additionalFields = [];
 
         $this->request
             ->setMethod('POST')
-            ->setPost(array(
+            ->setPost([
                 'PersonSubmitterFirstName_1' => 'John',
                 'PersonSubmitterLastName_1' => 'Doe',
                 'send' => 'Weiter zum nächsten Schritt'
-            ));
+            ]);
 
         $this->dispatch('/publish/form/check');
 
@@ -403,15 +403,15 @@ class Publish_FormControllerTest extends ControllerTestCase
         $session->documentType = 'demo';
         $session->documentId = $doc->getId();
         $session->fulltext = '0';
-        $session->additionalFields = array();
+        $session->additionalFields = [];
 
         $this->request
             ->setMethod('POST')
-            ->setPost(array(
+            ->setPost([
                 'PersonSubmitterFirstName_1' => 'John',
                 'PersonSubmitterLastName_1' => 'Doe',
                 'send' => 'Weiter zum nächsten Schritt'
-            ));
+            ]);
 
         $this->dispatch('/publish/form/check');
 
@@ -443,7 +443,7 @@ class Publish_FormControllerTest extends ControllerTestCase
 
         $this->request
             ->setMethod('POST')
-            ->setPost(array(
+            ->setPost([
                 'documentType' => 'demo',
                 'MAX_FILE_SIZE' => '10240000',
                 'fileupload' => '',
@@ -451,7 +451,7 @@ class Publish_FormControllerTest extends ControllerTestCase
                 'bibliographie' => '1',
                 'rights' => '1',
                 'send' => 'Weiter zum nächsten Schritt',
-            ));
+            ]);
         $this->dispatch('/publish/form/upload');
         $session = new Zend_Session_Namespace('Publish');
 
@@ -535,15 +535,15 @@ class Publish_FormControllerTest extends ControllerTestCase
         $session->documentType = 'demo';
         $session->documentId = $doc->getId();
         $session->fulltext = '0';
-        $session->additionalFields = array();
+        $session->additionalFields = [];
 
         $this->request
             ->setMethod('POST')
-            ->setPost(array(
+            ->setPost([
                 'PersonSubmitterFirstName_1' => 'John',
                 'PersonSubmitterLastName_1' => 'Doe',
                 'send' => 'Weiter zum nächsten Schritt'
-            ));
+            ]);
 
         $this->dispatch('/publish/form/check');
 
@@ -570,13 +570,13 @@ class Publish_FormControllerTest extends ControllerTestCase
         $session->documentType = 'all';
         $session->documentId = $doc->getId();
         $session->fulltext = '0';
-        $session->additionalFields = array();
+        $session->additionalFields = [];
 
         $this->request
             ->setMethod('POST')
-            ->setPost(array(
+            ->setPost([
                 'addMoreTitleMain' => 'Add one more title main'
-            ));
+            ]);
 
         $this->dispatch('/publish/form/check');
 
@@ -594,7 +594,7 @@ class Publish_FormControllerTest extends ControllerTestCase
 
         $session->documentType = $documentType;
         $session->documentId = $doc->getId();
-        $session->additionalFields = array();
+        $session->additionalFields = [];
     }
 
     /**
@@ -604,7 +604,7 @@ class Publish_FormControllerTest extends ControllerTestCase
     {
         $session = new Zend_Session_Namespace('Publish');
         $this->addTemporaryTestDocument($session, 'preprint');
-        $data = array(
+        $data = [
             'PersonSubmitterFirstName_1' => '',
             'PersonSubmitterLastName_1' => '',
             'PersonSubmitterEmail_1' => '',
@@ -634,7 +634,7 @@ class Publish_FormControllerTest extends ControllerTestCase
 
             // Add Button wurde gedrückt
             'addMoreTitleMain' => 'Einen+weiteren+Titel+hinzufügen',
-        );
+        ];
 
         $this->request
             ->setMethod('POST')
@@ -657,7 +657,7 @@ class Publish_FormControllerTest extends ControllerTestCase
         $this->addTemporaryTestDocument($session, 'preprint');
         $session->additionalFields['TitleMain'] = '2';
 
-        $data = array(
+        $data = [
             'PersonSubmitterFirstName_1' => '',
             'PersonSubmitterLastName_1' => '',
             'PersonSubmitterEmail_1' => '',
@@ -689,7 +689,7 @@ class Publish_FormControllerTest extends ControllerTestCase
 
             // Delete Button wurde gedrückt
             'deleteMoreTitleMain' => 'Den+letzten+Titel+löschen',
-        );
+        ];
 
         $this->request
             ->setMethod('POST')
@@ -714,7 +714,7 @@ class Publish_FormControllerTest extends ControllerTestCase
         $session->additionalFields['collId0Institute_1'] = '1';
         $session->additionalFields['stepInstitute_1'] = '1';
 
-        $data = array(
+        $data = [
             'PersonSubmitterFirstName_1' => '',
             'PersonSubmitterLastName_1' => '',
             'PersonSubmitterEmail_1' => '',
@@ -744,7 +744,7 @@ class Publish_FormControllerTest extends ControllerTestCase
 
             // Browse Down Button wurde gedrückt
             'browseDownInstitute' => 'runter',
-        );
+        ];
 
         $this->request
             ->setMethod('POST')
@@ -771,7 +771,7 @@ class Publish_FormControllerTest extends ControllerTestCase
         $session->additionalFields['collId1Institute_1'] = '15994';
         $session->additionalFields['stepInstitute_1'] = '2';
 
-        $data = array(
+        $data = [
             'PersonSubmitterFirstName_1' => '',
             'PersonSubmitterLastName_1' => '',
             'PersonSubmitterEmail_1' => '',
@@ -801,7 +801,7 @@ class Publish_FormControllerTest extends ControllerTestCase
 
             // Browse Up Button wurde gedrückt
             'browseUpInstitute' => 'hoch',
-        );
+        ];
 
         $this->request
             ->setMethod('POST')
@@ -833,7 +833,7 @@ class Publish_FormControllerTest extends ControllerTestCase
         $session->additionalFields['Institute'] = '1';
         $session->additionalFields['Series'] = '1';
 
-        $data = array(
+        $data = [
             'PersonSubmitterFirstName_1' => '',
             'PersonSubmitterLastName_1' => '',
             'PersonSubmitterEmail_1' => '',
@@ -861,7 +861,7 @@ class Publish_FormControllerTest extends ControllerTestCase
             'SeriesNumber_1' => '',
             'Series_1' => ''
             // kein Button wurde gedrückt
-        );
+        ];
 
         $this->request
             ->setMethod('POST')
@@ -893,11 +893,11 @@ class Publish_FormControllerTest extends ControllerTestCase
         $session->documentType = 'preprint';
         $session->documentId = $doc->getId();
         $session->fulltext = '0';
-        $session->additionalFields = array();
+        $session->additionalFields = [];
 
         $this->request
             ->setMethod('POST')
-            ->setPost(array(
+            ->setPost([
                 'PersonSubmitterLastName_1' => 'Doe',
                 'PersonSubmitterEmail_1' => 'doe@example.org',
                 'TitleMain_1' => 'Entenhausen',
@@ -906,7 +906,7 @@ class Publish_FormControllerTest extends ControllerTestCase
                 'Language' => 'deu',
                 'Licence' => '4',
                 'send' => 'Weiter zum nächsten Schritt'
-            ));
+            ]);
 
         $this->dispatch('/publish/form/check');
 
@@ -926,11 +926,11 @@ class Publish_FormControllerTest extends ControllerTestCase
         $session->documentType = 'preprint';
         $session->documentId = $doc->getId();
         $session->fulltext = '0';
-        $session->additionalFields = array();
+        $session->additionalFields = [];
 
         $this->request
             ->setMethod('POST')
-            ->setPost(array(
+            ->setPost([
                 'PersonSubmitterLastName_1' => 'Doe',
                 'PersonSubmitterEmail_1' => 'doe@example.org',
                 'TitleMain_1' => 'Entenhausen',
@@ -941,7 +941,7 @@ class Publish_FormControllerTest extends ControllerTestCase
                 'Language' => 'deu',
                 'Licence' => '4',
                 'send' => 'Weiter zum nächsten Schritt'
-            ));
+            ]);
 
         $this->dispatch('/publish/form/check');
 
@@ -960,11 +960,11 @@ class Publish_FormControllerTest extends ControllerTestCase
         $session->documentType = 'all';
         $session->documentId = $doc->getId();
         $session->fulltext = '0';
-        $session->additionalFields = array();
+        $session->additionalFields = [];
 
         $this->request
             ->setMethod('POST')
-            ->setPost(array(
+            ->setPost([
                 'PersonSubmitterLastName_1' => 'Doe',
                 'PersonSubmitterEmail_1' => 'doe@example.org',
                 'TitleMain_1' => 'Entenhausen',
@@ -975,7 +975,7 @@ class Publish_FormControllerTest extends ControllerTestCase
                 'Language' => 'deu',
                 'Licence' => '4',
                 'send' => 'Weiter zum nächsten Schritt'
-            ));
+            ]);
 
         $this->dispatch('/publish/form/check');
 
@@ -990,11 +990,11 @@ class Publish_FormControllerTest extends ControllerTestCase
         $session->documentType = 'all';
         $session->documentId = $doc->getId();
         $session->fulltext = '0';
-        $session->additionalFields = array();
+        $session->additionalFields = [];
 
         $this->request
             ->setMethod('POST')
-            ->setPost(array(
+            ->setPost([
                 'PersonSubmitterLastName_1' => 'Doe',
                 'PersonSubmitterEmail_1' => 'doe@example.org',
                 'TitleMain_1' => 'Entenhausen',
@@ -1005,7 +1005,7 @@ class Publish_FormControllerTest extends ControllerTestCase
                 'Language' => 'deu',
                 'Licence' => '4',
                 'send' => 'Weiter zum nächsten Schritt'
-            ));
+            ]);
 
         $this->dispatch('/publish/form/check');
 
@@ -1020,11 +1020,11 @@ class Publish_FormControllerTest extends ControllerTestCase
         $session->documentType = 'all';
         $session->documentId = $doc->getId();
         $session->fulltext = '0';
-        $session->additionalFields = array();
+        $session->additionalFields = [];
 
         $this->request
             ->setMethod('POST')
-            ->setPost(array(
+            ->setPost([
                 'PersonSubmitterLastName_1' => 'Doe',
                 'PersonSubmitterEmail_1' => 'doe@example.org',
                 'TitleMain_1' => 'Entenhausen',
@@ -1035,7 +1035,7 @@ class Publish_FormControllerTest extends ControllerTestCase
                 'Language' => 'deu',
                 'Licence' => '4',
                 'send' => 'Weiter zum nächsten Schritt'
-            ));
+            ]);
 
         $this->dispatch('/publish/form/check');
 
@@ -1049,10 +1049,10 @@ class Publish_FormControllerTest extends ControllerTestCase
         $doc = $this->createTemporaryDoc();
         $session->documentId = $doc->getId();
         $session->fulltext = '0';
-        $session->additionalFields = array();
+        $session->additionalFields = [];
 
         $this->request->setMethod('POST');
-        $this->request->setPost(array('browseUpInstitute' => 'ignore'));
+        $this->request->setPost(['browseUpInstitute' => 'ignore']);
 
         $this->dispatch('/publish/form/check');
 
@@ -1068,7 +1068,7 @@ class Publish_FormControllerTest extends ControllerTestCase
         $doc = $this->createTemporaryDoc();
         $session->documentId = $doc->getId();
         $session->fulltext = '0';
-        $session->additionalFields = array('browseUpInstitute' => 'hoch',);
+        $session->additionalFields = ['browseUpInstitute' => 'hoch',];
 
         $this->request->setMethod('POST');
 
@@ -1086,7 +1086,7 @@ class Publish_FormControllerTest extends ControllerTestCase
         $doc = $this->createTemporaryDoc();
         $session->documentId = $doc->getId();
         $session->fulltext = '0';
-        $session->additionalFields = array('browseUpInstitute' => 'hoch',);
+        $session->additionalFields = ['browseUpInstitute' => 'hoch',];
 
         $this->request->setMethod('POST');
 
@@ -1096,6 +1096,4 @@ class Publish_FormControllerTest extends ControllerTestCase
         $this->assertContains('Application_Exception', $this->getResponse()->getBody());
         $this->assertContains('invalid configuration: template file barbaz.phtml is not readable or does not exist', $this->getResponse()->getBody());
     }
-
 }
-

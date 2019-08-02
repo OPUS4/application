@@ -27,22 +27,23 @@
  * @category    Application
  * @package     Module_Publish
  * @author      Susanne Gottwald <gottwald@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class Publish_View_Helper_Element extends Publish_View_Helper_Fieldset {
-    
+class Publish_View_Helper_Element extends Publish_View_Helper_Fieldset
+{
+
     /**
      * method to render specific elements of a form
      * @param <type> $value value of element or Zend_Form_Element
      * @param <type> $options TODO
-     * @param <type> $type element type that has to rendered     
+     * @param <type> $type element type that has to rendered
      * @param <type> $name name of possible hidden element
-     * 
+     *
      * @return element to render in view
      */
-    public function element($value, $options = null, $type = null, $name = null) {
+    public function element($value, $options = null, $type = null, $name = null)
+    {
         $this->view->count++;
         if ($name == null && $value == null) {
             $errorMessage = $this->view->translate('template_error_unknown_field');
@@ -56,19 +57,20 @@ class Publish_View_Helper_Element extends Publish_View_Helper_Fieldset {
         return $this->_renderElement($value, $options, $name);
     }
 
-    function _renderElement($field, $options = null, $name = null) {
+    protected function _renderElement($field, $options = null, $name = null)
+    {
         $fieldset = "<fieldset class='left-labels'>";
         $fieldset .= $this->getLegendFor($field['header']);
         $fieldset .= $this->getFieldsetHint($field['id']);
-        $fieldset .= "<div class='form-item'>";        
+        $fieldset .= "<div class='form-item'>";
         $fieldset .= $this->getLabelFor($field['id'], $field['label'], $field['req']);
-        
+
         switch ($field['type']) {
-            case "Zend_Form_Element_Textarea" :
-               $fieldset .= $this->renderHtmlTextarea($field, $options);
+            case "Zend_Form_Element_Textarea":
+                $fieldset .= $this->renderHtmlTextarea($field, $options);
                 break;
 
-            case "Zend_Form_Element_Text" :
+            case "Zend_Form_Element_Text":
                 $fieldset .= $this->renderHtmlText($field, $options);
                 break;
 
@@ -76,21 +78,21 @@ class Publish_View_Helper_Element extends Publish_View_Helper_Fieldset {
                 $fieldset .= $this->renderHtmlSelect($field, $options);
                 break;
 
-            case 'Zend_Form_Element_Checkbox' :
+            case 'Zend_Form_Element_Checkbox':
                 $fieldset .= $this->renderHtmlCheckbox($field, $options);
                 break;
 
-            case "Zend_Form_Element_File" :
+            case "Zend_Form_Element_File":
                 $fieldset .= $this->renderHtmlFile($field, $options);
                 break;
-            
+
             default:
                 break;
         }
 
         $fieldset .= $this->renderFieldsetErrors($field['error']);
         $fieldset .= "</div></fieldset>\n\n";
-        
+
         return $fieldset;
     }
 }

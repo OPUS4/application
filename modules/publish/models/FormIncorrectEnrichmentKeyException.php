@@ -33,14 +33,15 @@
  * @version     $Id$
  */
 
-class Publish_Model_FormIncorrectEnrichmentKeyException extends Publish_Model_FormException {
-    
-    public $enrichmentKey; 
-    
-    public function  __construct($enrichment) {
+class Publish_Model_FormIncorrectEnrichmentKeyException extends Publish_Model_FormException
+{
+
+    public $enrichmentKey;
+
+    public function __construct($enrichment)
+    {
         $this->_translateKey = 'publish_incorrect_enrichment_name';
         $this->code = 404;
         $this->enrichmentKey = $enrichment;
     }
 }
-

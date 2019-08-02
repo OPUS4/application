@@ -31,9 +31,11 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Publish_Model_ValidationEmail extends Zend_Validate_EmailAddress {
+class Publish_Model_ValidationEmail extends Zend_Validate_EmailAddress
+{
 
-    public function getMessages() {
+    public function getMessages()
+    {
         $messages = array_values($this->_messages);
         return (array)$messages[0]; //Return only the first error for each time
     }

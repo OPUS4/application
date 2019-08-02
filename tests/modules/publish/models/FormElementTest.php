@@ -61,12 +61,11 @@ class Publish_Model_FormElementTest extends ControllerTestCase
         $element->initGroup();
         $subformElements = $element->getSubFormElements();
 
-        foreach ($subformElements AS $sub) {
+        foreach ($subformElements as $sub) {
             /* @var $sub Zend_Form_Element */
-            if ($sub->getName() == 'PersonAuthorFirstName')
+            if ($sub->getName() == 'PersonAuthorFirstName') {
                 $this->assertFalse($sub->isRequired());
+            }
         }
     }
-
 }
-

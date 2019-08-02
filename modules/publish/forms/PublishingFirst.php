@@ -37,7 +37,8 @@
  * Builds the fist page of an upload form for one file
  *
  */
-class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
+class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract
+{
 
     public $bibliographie;
 
@@ -48,11 +49,13 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
      */
     public $enableUpload = false;
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
     }
 
-    public function isValid($data) {
+    public function isValid($data)
+    {
         $valid = parent::isValid($data);
 
         if ($this->_config->form->first->show_rights_checkbox == 1) {
@@ -74,7 +77,8 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
      *
      * @return void
      */
-    public function init() {
+    public function init()
+    {
         parent::init();
 
         $this->setDisableTranslator(true);
@@ -92,13 +96,13 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
 
         //create and add bibliographie
         $bibliographie = $this->_createBibliographyField();
-        if (!is_null($bibliographie)) {
+        if (! is_null($bibliographie)) {
             $this->addElement($bibliographie);
         }
 
         //create and add rights checkbox
         $rights = $this->_createRightsCheckBox();
-        if (!is_null($rights)) {
+        if (! is_null($rights)) {
             $this->addElement($rights);
         }
 
@@ -116,8 +120,9 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
      *
      * @return <Zend_Element>
      */
-    private function _createDocumentTypeField() {
-        $optionsSorted = array();
+    private function _createDocumentTypeField()
+    {
+        $optionsSorted = [];
         foreach ($this->_documentTypesHelper->getDocumentTypes() as $value => $path) {
             $optionsSorted[$value] = $this->view->translate($value);
         }
@@ -127,10 +132,10 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
         $doctypes->setDisableTranslator(true)
                 ->setLabel('selecttype')
                 ->setMultiOptions(
-                    array_merge(array('' => $this->view->translate('choose_valid_doctype')), $optionsSorted)
+                    array_merge(['' => $this->view->translate('choose_valid_doctype')], $optionsSorted)
                 )
                 ->setRequired(true)
-                ->setErrorMessages(array($this->view->translate('publish_error_missing_doctype')));
+                ->setErrorMessages([$this->view->translate('publish_error_missing_doctype')]);
 
         return $doctypes;
     }
@@ -139,7 +144,8 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
      * Method shows the fields for file uploads by looking in config file
      * @return <Zend_Element>
      */
-    private function _createFileuploadField() {
+    private function _createFileuploadField()
+    {
         // get path to store files
         $tempPath = $this->_config->form->first->temp;
         if (true === empty($tempPath)) {
@@ -187,11 +193,10 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
                 ->setAttrib('enctype', 'multipart/form-data');
 
         if (1 == $requireUpload) {
-            if (!isset($this->_session->fulltext) || $this->_session->fulltext == '0') {
+            if (! isset($this->_session->fulltext) || $this->_session->fulltext == '0') {
                 $fileupload->setRequired(true);
             }
-        }
-        else {
+        } else {
             $fileupload->setRequired(false);
         }
 
@@ -204,7 +209,7 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
         $comment->setLabel('uploadComment');
         $this->addElement($comment);
 
-        $group = array($fileupload->getName(), 'addAnotherFile', $comment->getName());
+        $group = [$fileupload->getName(), 'addAnotherFile', $comment->getName()];
 
         return $group;
     }
@@ -213,7 +218,8 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
      * Method shows bibliography field by looking in config file
      * @return <Zend_Element>
      */
-    private function _createBibliographyField() {
+    private function _createBibliographyField()
+    {
         $bib = $this->_config->form->first->bibliographie;
         if (true === empty($bib)) {
             $bib = 0;
@@ -232,7 +238,8 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
         return $bibliographie;
     }
 
-    private function _createRightsCheckBox() {
+    private function _createRightsCheckBox()
+    {
         $showRights = $this->_config->form->first->show_rights_checkbox;
         if (true === empty($showRights)) {
             $showRights = 0;
@@ -257,8 +264,9 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
     /**
      * Method sets the different variables and arrays for the view and the templates in the first form
      */
-    public function setViewValues() {
-        foreach ($this->getElements() AS $currentElement => $value) {
+    public function setViewValues()
+    {
+        foreach ($this->getElements() as $currentElement => $value) {
             $this->view->$currentElement = $this->getElementAttributes($currentElement);
         }
 
@@ -275,5 +283,4 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
             $this->view->filenameFormat = $this->_config->publish->filenameFormat;
         }
     }
-
 }

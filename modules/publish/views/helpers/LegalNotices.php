@@ -32,7 +32,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Publish_View_Helper_LegalNotices extends Zend_View_Helper_Abstract {
+class Publish_View_Helper_LegalNotices extends Zend_View_Helper_Abstract
+{
 
     public $view;
 
@@ -41,23 +42,24 @@ class Publish_View_Helper_LegalNotices extends Zend_View_Helper_Abstract {
      * The view helper can be used anywhere in the publish process: on index, specific form or check page.
      * @return String (html output)
      */
-    public function legalNotices($form) {
+    public function legalNotices($form)
+    {
         $session = new Zend_Session_Namespace('Publish');
-        
-        if (!is_null($form->getElement('LegalNotices'))) {
+
+        if (! is_null($form->getElement('LegalNotices'))) {
             $fieldset = new Publish_View_Helper_Element();
             $fieldset->view = $this->view;
             $elementData = $form->getElementAttributes('LegalNotices');
             return $fieldset->element($elementData);
-        }            
-        
+        }
+
         $element = $form->createElement('checkbox', 'LegalNotices');
-        $element->setRequired(true)                
+        $element->setRequired(true)
                 ->setChecked(false)
                 ->setDisableTranslator(true);
         $form->addElement($element);
-        
-        $elementData = array(
+
+        $elementData = [
             'id' => 'LegalNotices',
             'label' => 'LegalNotices',
             'req' => 'required',
@@ -67,16 +69,14 @@ class Publish_View_Helper_LegalNotices extends Zend_View_Helper_Abstract {
             'value' => '1',
             'check' => '',
             'disabled' => '0',
-            'error' => array(),
-            'DT_external' => true            
-            );
+            'error' => [],
+            'DT_external' => true
+            ];
 
         $session->DT_externals['LegalNotices'] = $elementData;
-        
+
         $fieldset = new Publish_View_Helper_Element();
         $fieldset->view = $this->view;
         return $fieldset->element($elementData);
     }
-
 }
-

@@ -32,6 +32,6 @@
  * @version     $Id$
  */
 
-class Publish_Bootstrap extends Zend_Application_Module_Bootstrap {
+class Publish_Bootstrap extends Zend_Application_Module_Bootstrap
+{
 }
-

@@ -50,7 +50,7 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase
         $session = new Zend_Session_Namespace('Publish');
         $session->documentType = 'all';
         $form = new Publish_Form_PublishingSecond($this->_logger);
-        $data = array(
+        $data = [
             'PersonSubmitterFirstName__1' => '',
             'PersonSubmitterLastName_1' => 'Doe',
             'TitleMain_1' => 'Entenhausen',
@@ -62,7 +62,7 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase
             'CompletedDate' => '12.06.2012',
             'Language' => 'deu',
             'Licence' => '4'
-        );
+        ];
 
         $val = new Publish_Model_ExtendedValidation($form, $data, $this->_logger, $session);
         $result = $val->validate();
@@ -74,7 +74,7 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase
         $session = new Zend_Session_Namespace('Publish');
         $session->documentType = 'all';
         $form = new Publish_Form_PublishingSecond($this->_logger);
-        $data = array(
+        $data = [
             'PersonSubmitterFirstName__1' => 'John',
             'PersonSubmitterLastName_1' => 'Doe',
             'TitleMain_1' => 'Entenhausen',
@@ -86,7 +86,7 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase
             'CompletedDate' => '06.09.2011',
             'Language' => 'deu',
             'Licence' => '4'
-        );
+        ];
 
         $val = new Publish_Model_ExtendedValidation($form, $data, $this->_logger, $session);
         $result = $val->validate();
@@ -100,7 +100,7 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase
         $session = new Zend_Session_Namespace('Publish');
         $session->documentType = 'workingpaper';
         $form = new Publish_Form_PublishingSecond($this->_logger);
-        $data = array(
+        $data = [
             'PersonSubmitterFirstName_1' => 'John',
             'PersonSubmitterLastName_1' => 'Doe',
             'TitleMain_1' => 'Entenhausen',
@@ -112,7 +112,7 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase
             'CompletedDate' => '06.09.2011',
             'Language' => 'deu',
             'Licence' => '4'
-        );
+        ];
 
         $val = new Publish_Model_ExtendedValidation($form, $data, $this->_logger, $session);
         $result = $val->validate();
@@ -126,7 +126,7 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase
         $session = new Zend_Session_Namespace('Publish');
         $session->documentType = 'workingpaper';
         $form = new Publish_Form_PublishingSecond($this->_logger);
-        $data = array(
+        $data = [
             'PersonSubmitterFirstName_1' => 'John',
             'PersonSubmitterLastName_1' => 'Doe',
             'TitleMain_1' => 'Entenhausen',
@@ -138,7 +138,7 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase
             'CompletedDate' => '06.09.2011',
             'Language' => 'deu',
             'Licence' => '4'
-        );
+        ];
 
         $val = new Publish_Model_ExtendedValidation($form, $data, $this->_logger, $session);
         $result = $val->validate();
@@ -155,7 +155,7 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase
         $session = new Zend_Session_Namespace('Publish');
         $session->documentType = 'workingpaper';
         $form = new Publish_Form_PublishingSecond($this->_logger);
-        $data = array(
+        $data = [
             'PersonSubmitterFirstName_1' => 'John',
             'PersonSubmitterLastName_1' => 'Doe',
             'TitleMain_1' => 'Entenhausen',
@@ -167,7 +167,7 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase
             'CompletedDate' => '11.06.2012',
             'Language' => 'deu',
             'Licence' => '4'
-        );
+        ];
 
         $val = new Publish_Model_ExtendedValidation($form, $data, $this->_logger, $session);
         $result = $val->validate();
@@ -184,7 +184,7 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase
         $session = new Zend_Session_Namespace('Publish');
         $session->documentType = 'workingpaper';
         $form = new Publish_Form_PublishingSecond($this->_logger);
-        $data = array(
+        $data = [
             'PersonSubmitterFirstName_1' => 'John',
             'PersonSubmitterLastName_1' => 'Doe',
             'TitleMain_1' => 'Entenhausen',
@@ -196,7 +196,7 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase
             'CompletedDate' => '11.06.2012',
             'Language' => 'deu',
             'Licence' => '4'
-        );
+        ];
 
         $val = new Publish_Model_ExtendedValidation($form, $data, $this->_logger, $session);
         $result = $val->validate();
@@ -215,10 +215,10 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase
         $config->documentTypes->include = 'all,preprint,article,demo,workingpaper';
         $session = new Zend_Session_Namespace('Publish');
         $session->documentType = 'workingpaper';
-        $session->additionalFields = array();
+        $session->additionalFields = [];
         $session->additionalFields['TitleMain'] = '4';
         $form = new Publish_Form_PublishingSecond($this->_logger);
-        $data = array(
+        $data = [
             'PersonSubmitterFirstName_1' => 'John',
             'PersonSubmitterLastName_1' => 'Doe',
             'TitleMain_1' => 'Entenhausen',
@@ -236,7 +236,7 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase
             'CompletedDate' => '14.06.2012',
             'Language' => 'deu',
             'Licence' => '4'
-        );
+        ];
 
         $form->getExtendedForm($data, false); // method does not exist!
         $val = new Publish_Model_ExtendedValidation($form, $data, $this->_logger, $session);
@@ -255,7 +255,7 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase
         $session = new Zend_Session_Namespace('Publish');
         $session->documentType = 'workingpaper';
         $form = new Publish_Form_PublishingSecond($this->_logger);
-        $data = array(
+        $data = [
             'PersonSubmitterFirstName_1' => 'John',
             'PersonSubmitterLastName_1' => 'Doe',
             'TitleMain_1' => 'Entenhausen',
@@ -273,7 +273,7 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase
             'CompletedDate' => '11.06.2012',
             'Language' => 'deu',
             'Licence' => '4'
-        );
+        ];
 
         $val = new Publish_Model_ExtendedValidation($form, $data, $this->_logger, $session);
         $result = $val->validate();
@@ -290,7 +290,7 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase
         $session = new Zend_Session_Namespace('Publish');
         $session->documentType = 'all';
         $form = new Publish_Form_PublishingSecond($this->_logger);
-        $data = array(
+        $data = [
             'PersonSubmitterFirstName_1' => 'John',
             'PersonSubmitterLastName_1' => 'Doe',
             'TitleMain_1' => 'Entenhausen',
@@ -298,7 +298,7 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase
             'Licence' => '4',
             'Series_1' => '123456-doesnotexist',
             'SeriesNumber_1' => '123'
-        );
+        ];
 
         $val = new Publish_Model_ExtendedValidation($form, $data, $this->_logger, $session);
         $result = $val->validate();
@@ -316,18 +316,17 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase
         $session = new Zend_Session_Namespace('Publish');
         $session->documentType = 'all';
         $form = new Publish_Form_PublishingSecond($this->_logger);
-        $data = array(
+        $data = [
             'PersonSubmitterFirstName_1' => 'John',
             'PersonSubmitterLastName_1' => 'Doe',
             'TitleMain_1' => 'Entenhausen',
             'TitleMainLanguage_1' => 'deu',
             'Licence' => '4',
             'SeriesNumber_1' => '123'
-        );
+        ];
 
         $val = new Publish_Model_ExtendedValidation($form, $data, $this->_logger, $session);
         $result = $val->validate();
         $this->assertFalse($result);
     }
 }
-
