@@ -84,7 +84,7 @@
             </tuv>
         </tu>
 
-        <tu tuid="help_index_misc_documentation">
+        <tu tuid="help_content_documentation">
             <tuv xml:lang="en">
                 <seg><![CDATA[This document server is based on the repository software OPUS4 OPUS is documented here:
 <a href="http://www.opus-repository.org/" target="_blank">https://www.opus-repository.org/</a>.]]></seg>
@@ -95,7 +95,7 @@
             </tuv>
         </tu>
 
-        <tu tuid="help_index_misc_policies">
+        <tu tuid="help_content_policies">
             <tuv xml:lang="en">
                 <seg><![CDATA[Placeholder for the policy guidelines of the maintaining institution.]]></seg>
             </tuv>
@@ -104,7 +104,7 @@
             </tuv>
         </tu>
 
-        <tu tuid="help_index_legal_licence">
+        <tu tuid="help_content_legal_licence">
             <tuv xml:lang="en">
                 <seg><![CDATA[Authors can choose which terms of use must be regarded for their publication. These terms are defined
 in a license. This repository supports different licenses, from which you can choose one
@@ -117,7 +117,7 @@ wählen (z. B. <a href="http://creativecommons.org/license/" target="_blank">Cre
             </tuv>
         </tu>
 
-        <tu tuid="help_index_legal_parallel">
+        <tu tuid="help_content_legal_parallel">
             <tuv xml:lang="en">
                 <seg><![CDATA[In most cases this is no problem. <b>Please ensure in any case, if your publisher allows a parallel
 publication!</b> To do that you can use the
@@ -131,7 +131,7 @@ gestattet!</b> Dies können Sie zum Beispiel mit Hilfe der
             </tuv>
         </tu>
 
-        <tu tuid="help_index_publicationprocess">
+        <tu tuid="help_content_publicationprocess">
             <tuv xml:lang="en">
                 <seg><![CDATA[Please click on the publication link on the start page.<br/>
 First you are requested to choose a document type. Right beneath that you can upload your document files. Having done
@@ -194,7 +194,7 @@ Cookies müssen im Webbrowser eingeschaltet sein, um Dokumente über das Veröff
             </tuv>
         </tu>
 
-        <tu tuid="help_index_metadata">
+        <tu tuid="help_content_metadata">
             <tuv xml:lang="en">
                 <seg><![CDATA[Metadata can be defined as
 
@@ -242,7 +242,7 @@ Einführung.</p>
             </tuv>
         </tu>
 
-        <tu tuid="help_index_general_searchtipps">
+        <tu tuid="help_content_searchtipps">
             <tuv xml:lang="en">
                 <seg><![CDATA[<h4>Boolean Operators <b>AND</b>, <b>OR</b>, <b>NOT</b></h4>
 

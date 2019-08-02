@@ -27,9 +27,8 @@
  * @category    Application
  * @package     Module_Home
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -71,14 +70,18 @@ class Home_Model_HelpFiles extends Application_Translate_Help
         $translationKey = "help_content_$key";
         $translation = $translate->translate($translationKey);
 
-        $file = $key . '.' . $translate->getLocale() . '.txt';
-        $helpFilesAvailable = $this->getFiles();
-        $pos = array_search($file, $helpFilesAvailable);
+        $pos = false;
 
-        // TODO fallback if function is called with complete file name - necessary? remove?
-        if ($pos === false) {
-            $file = $key;
+        if ($this->getUseFiles()) {
+            $file = $key . '.' . $translate->getLocale() . '.txt';
+            $helpFilesAvailable = $this->getFiles();
             $pos = array_search($file, $helpFilesAvailable);
+
+            // TODO fallback if function is called with complete file name - necessary? remove?
+            if ($pos === false) {
+                $file = $key;
+                $pos = array_search($file, $helpFilesAvailable);
+            }
         }
 
         if ($pos !== false) {
@@ -89,7 +92,7 @@ class Home_Model_HelpFiles extends Application_Translate_Help
                 return null;
             }
         } else if ($translation !== $translationKey) {
-            return $key;
+            return $translation;
         }
 
         return null;
@@ -152,5 +155,12 @@ class Home_Model_HelpFiles extends Application_Translate_Help
         }
 
         return $this->helpConfig;
+    }
+
+    public function getUseFiles()
+    {
+        $config = $this->getConfig();
+
+        return (! isset($config->help->useFiles) || filter_var($config->help->useFiles, FILTER_VALIDATE_BOOLEAN));
     }
 }

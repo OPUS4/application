@@ -39,6 +39,8 @@ class Home_Model_HelpFilesTest extends ControllerTestCase
 
     protected $additionalResources = 'translation';
 
+    protected $configModifiable = true;
+
     private $help;
 
     public function setUp()
@@ -60,6 +62,12 @@ class Home_Model_HelpFilesTest extends ControllerTestCase
 
     public function testGetFileContent()
     {
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'help' => [
+                'useFiles' => true
+            ]
+        ]));
+
         $content = $this->help->getContent('contact.de.txt');
 
         $this->assertNotEmpty($content);
@@ -82,6 +90,12 @@ class Home_Model_HelpFilesTest extends ControllerTestCase
 
     public function testGetFileContentForAllFiles()
     {
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'help' => [
+                'useFiles' => true
+            ]
+        ]));
+
         $helpFiles = $this->help->getFiles();
 
         foreach ($helpFiles as $file) {

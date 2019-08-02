@@ -33,9 +33,8 @@
  */
 
 /**
- * TODO remove camel case from controller name
  */
-class Setup_HelpPageController extends Application_Controller_Action
+class Setup_HelppageController extends Application_Controller_Action
 {
 
     public function init()

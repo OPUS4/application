@@ -5,7 +5,7 @@
  <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
  </header>
   <body>
-    <tu tuid="setup_help-page_index">
+    <tu tuid="setup_helppage_index">
         <tuv xml:lang="en">
             <seg>Edit FAQ</seg>
         </tuv>
@@ -68,7 +68,7 @@
         </tuv>
     </tu>
 
-    <tu tuid="setup_help-page_error">
+    <tu tuid="setup_helppage_error">
         <tuv xml:lang="en">
             <seg>Error</seg>
         </tuv>
