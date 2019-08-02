@@ -33,7 +33,8 @@
  * @version     $Id$
  */
 
-class Default_Bootstrap extends Zend_Application_Module_Bootstrap {
+class Default_Bootstrap extends Zend_Application_Module_Bootstrap
+{
 
     /**
      * Add prefix for custom controller helper.
@@ -41,13 +42,13 @@ class Default_Bootstrap extends Zend_Application_Module_Bootstrap {
      * This method is called for all modules. The application bootstrap process
      * bundles all the init methods from the different module bootstraps.
      */
-    public function _initControllerHelpers() {
+    public function _initControllerHelpers()
+    {
         Zend_Controller_Action_HelperBroker::addPrefix('Application_Controller_Action_Helper');
     }
 
-    public function _initValidationNamespaces() {
+    public function _initValidationNamespaces()
+    {
         Zend_Validate::addDefaultNamespaces('Form_Validate');
     }
-
 }
-

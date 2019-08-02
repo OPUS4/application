@@ -59,6 +59,4 @@ class LicenseControllerTest extends ControllerTestCase
         $this->assertController('error');
         $this->assertAction('error');
     }
-
 }
-
