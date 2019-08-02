@@ -46,11 +46,6 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
      */
     private $currDate;
 
-    /**
-     * @var Opus_Document
-     */
-    private $testDoc;
-
     public function setUp()
     {
         parent::setUp();
@@ -62,21 +57,18 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
 
     public function tearDown()
     {
-        if (! is_null($this->testDoc)) {
-            $this->testDoc->deletePermanent();
-        }
         $this->deleteTempFiles();
         parent::tearDown();
     }
 
     public function testCreateTagsForMinimalDocument()
     {
-        $this->testDoc = new Opus_Document();
-        $this->testDoc->setLanguage('deu');
-        $this->testDoc->setPublishedYear('2048');
-        $docId = $this->testDoc->store();
+        $doc = $this->createTestDocument();
+        $doc->setLanguage('deu');
+        $doc->setPublishedYear('2048');
+        $docId = $doc->store();
 
-        $result = $this->htmlMetaTags->createTags($this->testDoc);
+        $result = $this->htmlMetaTags->createTags($doc);
 
         $this->assertCount(8, $result);
         $this->assertContains(['DC.date', '2048'], $result);
@@ -91,10 +83,10 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
 
     public function testCreateTagsForJournalPaper()
     {
-        $this->testDoc = $this->createJournalPaper();
-        $docId = $this->testDoc->getId();
+        $doc = $this->createJournalPaper();
+        $docId = $doc->getId();
 
-        $result = $this->htmlMetaTags->createTags($this->testDoc);
+        $result = $this->htmlMetaTags->createTags($doc);
 
         $this->assertCount(59, $result);
         $this->assertCommonMetaTags($result, $docId);
@@ -106,10 +98,10 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
 
     public function testCreateTagsForConferencePaper()
     {
-        $this->testDoc = $this->createConferencePaper();
-        $docId = $this->testDoc->getId();
+        $doc = $this->createConferencePaper();
+        $docId = $doc->getId();
 
-        $result = $this->htmlMetaTags->createTags($this->testDoc);
+        $result = $this->htmlMetaTags->createTags($doc);
 
         $this->assertCount(59, $result);
         $this->assertCommonMetaTags($result, $docId);
@@ -121,23 +113,23 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
 
     public function testCreateTagsForThesis()
     {
-        $this->testDoc = $this->createThesis();
-        $docId = $this->testDoc->getId();
+        $doc = $this->createThesis();
+        $docId = $doc->getId();
 
-        $result = $this->htmlMetaTags->createTags($this->testDoc);
+        $result = $this->htmlMetaTags->createTags($doc);
 
         $this->assertCount(50, $result);
         $this->assertCommonMetaTags($result, $docId);
-        $this->assertThesisPublisher($result);
+        $this->assertThesisPublisher($doc, $result);
         $this->assertDocumentType($result);
     }
 
     public function testCreateTagsForWorkingPaper()
     {
-        $this->testDoc = $this->createWorkingPaper();
-        $docId = $this->testDoc->getId();
+        $doc = $this->createWorkingPaper();
+        $docId = $doc->getId();
 
-        $result = $this->htmlMetaTags->createTags($this->testDoc);
+        $result = $this->htmlMetaTags->createTags($doc);
 
         $this->assertCount(55, $result);
         $this->assertCommonMetaTags($result, $docId);
@@ -148,11 +140,11 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
 
     public function testCreateTagsForWorkingPaperWithContributingCorporation()
     {
-        $this->testDoc = $this->createWorkingPaper();
-        $this->testDoc->setCreatingCorporation('');
-        $this->testDoc->store();
+        $doc = $this->createWorkingPaper();
+        $doc->setCreatingCorporation('');
+        $doc->store();
 
-        $result = $this->htmlMetaTags->createTags($this->testDoc);
+        $result = $this->htmlMetaTags->createTags($doc);
 
         // prüft nur, ob citation_technical_report_institution richtig gesetzt
         $this->assertInstitution($result, 'contributingCorporation');
@@ -160,12 +152,12 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
 
     public function testCreateTagsForWorkingPaperWithPublisher()
     {
-        $this->testDoc = $this->createWorkingPaper();
-        $this->testDoc->setCreatingCorporation('');
-        $this->testDoc->setContributingCorporation('');
-        $this->testDoc->store();
+        $doc = $this->createWorkingPaper();
+        $doc->setCreatingCorporation('');
+        $doc->setContributingCorporation('');
+        $doc->store();
 
-        $result = $this->htmlMetaTags->createTags($this->testDoc);
+        $result = $this->htmlMetaTags->createTags($doc);
 
         // prüft nur, ob citation_technical_report_institution richtig gesetzt
         $this->assertInstitution($result, 'publisherName');
@@ -173,10 +165,10 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
 
     public function testCreateTagsForBook()
     {
-        $this->testDoc = $this->createBook();
-        $docId = $this->testDoc->getId();
+        $doc = $this->createBook();
+        $docId = $doc->getId();
 
-        $result = $this->htmlMetaTags->createTags($this->testDoc);
+        $result = $this->htmlMetaTags->createTags($doc);
 
         $this->assertCount(49, $result);
         $this->assertCommonMetaTags($result, $docId);
@@ -185,10 +177,10 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
 
     public function testCreateTagsForBookPart()
     {
-        $this->testDoc = $this->createBookPart();
-        $docId = $this->testDoc->getId();
+        $doc = $this->createBookPart();
+        $docId = $doc->getId();
 
-        $result = $this->htmlMetaTags->createTags($this->testDoc);
+        $result = $this->htmlMetaTags->createTags($doc);
 
         $this->assertCount(53, $result);
         $this->assertCommonMetaTags($result, $docId);
@@ -198,10 +190,10 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
 
     public function testCreateTagsForOther()
     {
-        $this->testDoc = $this->createOther();
-        $docId = $this->testDoc->getId();
+        $doc = $this->createOther();
+        $docId = $doc->getId();
 
-        $result = $this->htmlMetaTags->createTags($this->testDoc);
+        $result = $this->htmlMetaTags->createTags($doc);
 
         $this->assertCount(49, $result);
         $this->assertCommonMetaTags($result, $docId);
@@ -218,13 +210,13 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
         $this->assertDates($tags);
         $this->assertMainTitles($tags);
         $this->assertPublisher($tags);
-        $this->assertCommonIdentifiers($tags);
+        $this->assertCommonIdentifiers($tags, $docId);
         $this->assertSubjects($tags);
         $this->assertLanguage($tags);
         $this->assertFile($tags, $docId);
         $this->assertFrontdoorUrl($tags, $docId);
         $this->assertAbstract($tags);
-        $this->assertUrn($tags);
+        $this->assertUrn($tags, $docId);
         $this->assertLicenceLink($tags);
     }
 
@@ -319,10 +311,10 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     /**
      * @param array $tags
      */
-    private function assertCommonIdentifiers($tags)
+    private function assertCommonIdentifiers($tags, $docId)
     {
-        $this->assertContains(['DC.identifier', 'doi'], $tags);
-        $this->assertContains(['citation_doi', 'doi'], $tags);
+        $this->assertContains(['DC.identifier', 'doi' . $docId], $tags);
+        $this->assertContains(['citation_doi', 'doi' . $docId], $tags);
 
         $this->assertContains(['DC.identifier', 'isbn'], $tags);
         $this->assertContains(['citation_isbn', 'isbn'], $tags);
@@ -350,10 +342,10 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     /**
      * @param array $tags
      */
-    private function assertUrn($tags)
+    private function assertUrn($tags, $docId)
     {
-        $this->assertContains(['DC.identifier', 'urn'], $tags);
-        $this->assertContains(['DC.identifier', 'https://nbn-resolving.org/urn'], $tags);
+        $this->assertContains(['DC.identifier', 'urn' . $docId], $tags);
+        $this->assertContains(['DC.identifier', 'https://nbn-resolving.org/urn' . $docId], $tags);
     }
 
     /**
@@ -419,11 +411,12 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     }
 
     /**
+     * @param Opus_Document $doc
      * @param array $tags
      */
-    private function assertThesisPublisher($tags)
+    private function assertThesisPublisher($doc, $tags)
     {
-        $thesisPublisher = $this->testDoc->getThesisPublisher();
+        $thesisPublisher = $doc->getThesisPublisher();
         $publisherName = $thesisPublisher[0]->getModel()->getName();
         $this->assertContains(['DC.publisher', $publisherName], $tags);
         $this->assertContains(['citation_dissertation_institution', $publisherName], $tags);
@@ -490,7 +483,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
      */
     private function createTestDoc($docType)
     {
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
         $doc->setType($docType);
         $doc->setLanguage('deu');
         $doc->setPublisherName('publisherName');
@@ -502,6 +495,8 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
         $doc->setContributingCorporation('contributingCorporation');
         $doc->setPublishedDate($this->currDate);
         $doc->setServerState('published');
+        // hier bereits store aufrufen, weil wir die DocId für URN und DOI brauchen
+        $docId = $doc->store();
 
         $this->addAuthors($doc, 3);
         $this->addTitles($doc);
@@ -511,8 +506,8 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
         $this->addFile($doc);
         $this->addThesisPublisher($doc);
         $this->addLicence($doc);
+        $doc->store();
 
-        $docId = $doc->store();
         return new Opus_Document($docId);
     }
 
@@ -608,12 +603,12 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
 
         $identifer = new Opus_Identifier();
         $identifer->setType('doi');
-        $identifer->setValue('doi');
+        $identifer->setValue('doi' . $doc->getId());
         $identifers[] = $identifer;
 
         $identifer = new Opus_Identifier();
         $identifer->setType('urn');
-        $identifer->setValue('urn');
+        $identifer->setValue('urn' . $doc->getId());
         $identifers[] = $identifer;
 
         $identifer = new Opus_Identifier();
