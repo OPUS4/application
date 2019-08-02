@@ -36,7 +36,7 @@
  *
  * @covers Setup_HelpPageController
  */
-class Setup_HelpPageControllerTest extends SetupControllerTestCase
+class Setup_HelppageControllerTest extends SetupControllerTestCase
 {
     /**
      * original file modes, needed for restoring after test
@@ -45,7 +45,8 @@ class Setup_HelpPageControllerTest extends SetupControllerTestCase
 
     protected $configSection = 'static-page';
 
-    public function testSomething() {
+    public function testSomething()
+    {
         $this->markTestIncomplete('implement testing');
     }
 }

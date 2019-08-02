@@ -28,7 +28,7 @@
  * @package     Module_Setup
  * @author      Edouard Simon <edouard.simon@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2013-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -80,7 +80,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
 
         $this->object->setModules(['default']);
 
-        foreach (array(SORT_ASC, SORT_DESC) as $sortOrder) {
+        foreach ([SORT_ASC, SORT_DESC] as $sortOrder) {
             foreach ($sortKeys as $sortKey) {
                 $actualValues = [];
                 $translations = $this->object->getTranslations($sortKey, $sortOrder);
@@ -130,7 +130,8 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
         $filteredTranlsations = $this->object->getTranslations();
 
         $this->assertLessThan(
-            count($allTranlsations), count($filteredTranlsations),
+            count($allTranlsations),
+            count($filteredTranlsations),
             'Expected count of filtered subset of translations to be less than all translations'
         );
 
@@ -155,7 +156,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
 
         $maxLength = 0;
 
-        foreach($all as $entry) {
+        foreach ($all as $entry) {
             $text = $entry['unit'];
             $length = strlen($text);
             if ($length > $maxLength) {
@@ -171,7 +172,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
 
         $keyCount = array_count_values($keys);
 
-        $duplicateKeys = array_filter($keyCount, function($value) {
+        $duplicateKeys = array_filter($keyCount, function ($value) {
             return $value > 1;
         });
 

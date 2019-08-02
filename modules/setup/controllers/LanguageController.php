@@ -60,9 +60,10 @@ class Setup_LanguageController extends Application_Controller_Action
         $sortKey = $this->_request->getParam('sort', 'unit');
         $config = $this->getConfig()->toArray();
 
-        if (!isset($config['setup']['translation']['modules']['allowed'])) {
+        if (! isset($config['setup']['translation']['modules']['allowed'])) {
             $this->_helper->Redirector->redirectTo(
-                'error', ['failure' => 'setup_language_translation_modules_missing']
+                'error',
+                ['failure' => 'setup_language_translation_modules_missing']
             );
         }
 
@@ -71,7 +72,7 @@ class Setup_LanguageController extends Application_Controller_Action
         $translationManager = new Application_Translate_TranslationManager();
         $translationManager->setModules($moduleNames);
 
-        if (!empty($searchTerm)) {
+        if (! empty($searchTerm)) {
             $translationManager->setFilter($searchTerm);
         }
 
@@ -148,10 +149,10 @@ class Setup_LanguageController extends Application_Controller_Action
 
         $form->setAction($this->view->url(['action' => 'show']));
 
-        if (!empty($searchTerm)) {
+        if (! empty($searchTerm)) {
             $form->search->setValue($searchTerm);
         }
-        if (!empty($sortKey)) {
+        if (! empty($sortKey)) {
             $form->sort->setValue($sortKey);
         }
 

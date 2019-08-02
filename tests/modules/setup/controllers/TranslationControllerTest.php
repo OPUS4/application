@@ -49,7 +49,8 @@ class Setup_TranslationControllerTest extends SetupControllerTestCase
 
     protected $configSection = 'static-page';
 
-    public function testSomething() {
+    public function testSomething()
+    {
         $this->markTestIncomplete('implement testing');
     }
 }

@@ -91,7 +91,7 @@ class Home_Model_HelpFiles extends Application_Translate_Help
             } else {
                 return null;
             }
-        } else if ($translation !== $translationKey) {
+        } elseif ($translation !== $translationKey) {
             return $translation;
         }
 

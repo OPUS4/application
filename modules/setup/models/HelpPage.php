@@ -73,8 +73,7 @@ class Setup_Model_HelpPage
                     $resultArray[$translationUnit][$language]['contents'] = $this->getContent(
                         $this->_contentBasepath . DIRECTORY_SEPARATOR . $text
                     );
-                }
-                else {
+                } else {
                     $resultArray[$translationUnit][$language] = $text;
                 }
             }

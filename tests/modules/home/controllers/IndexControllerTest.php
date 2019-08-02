@@ -187,10 +187,9 @@ class Home_IndexControllerTest extends ControllerTestCase
         // und Suchindex (das sollte im Rahmen der Tests eigentlich nicht auftreten)
 
         if ($numOfDbDocs != $numOfIndexDocs) {
-
             // ermittle die Doc-IDs, die im Index, aber nicht in der DB existieren
             // bzw. die in der DB, aber nicht im Index existieren
-            $idsIndex = array();
+            $idsIndex = [];
             $results = $docsInIndex->getResults();
             foreach ($results as $result) {
                 array_push($idsIndex, $result->getId());
@@ -206,8 +205,11 @@ class Home_IndexControllerTest extends ControllerTestCase
             $this->assertEquals(0, count($idsDbOnly), 'Document IDs in database, but not in search index: '
                 . var_export($idsDbOnly, true));
 
-            $this->assertEquals($numOfDbDocs, $numOfIndexDocs,
-                "number of docs in database ($numOfDbDocs) and search index ($numOfIndexDocs) differ from each other");
+            $this->assertEquals(
+                $numOfDbDocs,
+                $numOfIndexDocs,
+                "number of docs in database ($numOfDbDocs) and search index ($numOfIndexDocs) differ from each other"
+            );
         }
 
         $this->assertEquals($numOfDocs, $numOfHits);
@@ -302,7 +304,8 @@ class Home_IndexControllerTest extends ControllerTestCase
 
         if (APPLICATION_ENV !== 'production') {
             $this->assertQueryContentContains(
-                '//div#top-header', 'NON PRODUCTION ENVIRONMENT (' . APPLICATION_ENV . ')'
+                '//div#top-header',
+                'NON PRODUCTION ENVIRONMENT (' . APPLICATION_ENV . ')'
             );
         } else {
             $this->assertNotQueryContentContains('//div#top-header', 'NON PRODUCTION ENVIRONMENT');
