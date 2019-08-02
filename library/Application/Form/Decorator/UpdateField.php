@@ -27,7 +27,7 @@
  * @category    Application
  * @package     View
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2017-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -49,18 +49,14 @@ class Application_Form_Decorator_UpdateField extends Zend_Form_Decorator_Abstrac
         $output = "<div class=\"update-field-wrapper\">";
         $output .= "<input class=\"field-update-checkbox\" name=\"$name\" id=\"$elemId\" type=\"checkbox\"";
 
-        if ($active)
-        {
+        if ($active) {
             $output .= " checked=\"checked\" ";
         }
 
-        if ($element->hasTranslator())
-        {
+        if ($element->hasTranslator()) {
             $translator = $element->getTranslator();
             $text = $translator->translate('admin_form_update_field');
-        }
-        else
-        {
+        } else {
             $text = 'Update field';
         }
 
@@ -71,5 +67,4 @@ class Application_Form_Decorator_UpdateField extends Zend_Form_Decorator_Abstrac
 
         return $output;
     }
-
 }
