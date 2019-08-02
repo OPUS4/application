@@ -28,7 +28,7 @@
  * @package     Module_Setup
  * @author      Edouard Simon (edouard.simon@zib.de)
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -150,7 +150,6 @@ class Application_Translate_TranslationManager
                                 $sortArray[] = $row[$sortKey];
                             }
                         }
-
                     } else {
                         throw new Setup_Model_FileNotReadableException($filePath);
                     }
@@ -197,11 +196,11 @@ class Application_Translate_TranslationManager
         $languageDirs = $this->getFolderNames();
 
         foreach ($this->_modules as $moduleName) {
-
             $moduleFiles = [];
 
             $moduleSubDirs = new RecursiveDirectoryIterator(
-                realpath(APPLICATION_PATH . "/modules/$moduleName"), FilesystemIterator::CURRENT_AS_SELF
+                realpath(APPLICATION_PATH . "/modules/$moduleName"),
+                FilesystemIterator::CURRENT_AS_SELF
             );
 
             foreach ($moduleSubDirs as $moduleSubDir) {
@@ -219,7 +218,7 @@ class Application_Translate_TranslationManager
                 }
             }
 
-            if (!empty($moduleFiles)) {
+            if (! empty($moduleFiles)) {
                 $modules[$moduleName] = $moduleFiles;
             }
         }

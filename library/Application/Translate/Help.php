@@ -38,7 +38,7 @@ abstract class Application_Translate_Help
 
     private $config;
 
-    static public function getInstance()
+    public static function getInstance()
     {
         if (is_null(self::$instance)) {
             self::$instance = new Home_Model_HelpFiles();
@@ -69,5 +69,4 @@ abstract class Application_Translate_Help
     abstract public function getHelpEntries();
 
     abstract public function getContent($key);
-
 }
