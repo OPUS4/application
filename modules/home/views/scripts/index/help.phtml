@@ -87,7 +87,7 @@
                 <?php foreach ($entries as $entry) : ?>
                     <dt id="<?= $entry ?>"><?= $this->translate("help_title_$entry") ?></dt>
                     <dd>
-                        <div><?= $this->help->getContent("help_content_$entry") ?></div>
+                        <div><?= $this->help->getContent($entry) ?></div>
                         <p class="backlink"><a href="#section-help"><?= $this->translate('help_index_up') ?></a></p>
                     </dd>
                 <?php endforeach; ?>

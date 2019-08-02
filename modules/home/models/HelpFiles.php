@@ -68,19 +68,27 @@ class Home_Model_HelpFiles extends Application_Translate_Help
     {
         $translate = Zend_Registry::get('Zend_Translate');
 
-        $translation = $translate->translate($key);
+        $translationKey = "help_content_$key";
+        $translation = $translate->translate($translationKey);
 
+        $file = $key . '.' . $translate->getLocale() . '.txt';
         $helpFilesAvailable = $this->getFiles();
-        $pos = array_search($translation, $helpFilesAvailable);
+        $pos = array_search($file, $helpFilesAvailable);
+
+        // TODO fallback if function is called with complete file name - necessary? remove?
+        if ($pos === false) {
+            $file = $key;
+            $pos = array_search($file, $helpFilesAvailable);
+        }
 
         if ($pos !== false) {
-            $path = $this->getHelpPath() . $translation;
-            if (! is_null($translation) && file_exists($path) && is_readable($path)) {
+            $path = $this->getHelpPath() . $file;
+            if (file_exists($path) && is_readable($path)) {
                 return file_get_contents($path);
             } else {
                 return null;
             }
-        } else if ($translation !== $key) {
+        } else if ($translation !== $translationKey) {
             return $key;
         }
 

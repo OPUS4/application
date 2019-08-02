@@ -39,13 +39,6 @@
           </tuv>
         </tu>
 
-
-
-        <!--
-
-            headlines help sections
-
-        -->
         <tu tuid="help_index_general">
             <tuv xml:lang="en">
                 <seg>Using this publication server</seg>
@@ -325,26 +318,12 @@ Beginn eines Suchbegriffes zu verwenden.</p>
             </tuv>
         </tu>
 
-        <!--
-
-            headlines help sections
-
-        -->
-
         <tu tuid="help_title_searchtipps">
             <tuv xml:lang="en">
                 <seg>Hints for searching</seg>
             </tuv>
             <tuv xml:lang="de">
                 <seg>Tipps für die Suche</seg>
-            </tuv>
-        </tu>
-        <tu tuid="help_content_searchtipps">
-            <tuv xml:lang="en">
-                <seg>searchtipps.en.txt</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>searchtipps.de.txt</seg>
             </tuv>
         </tu>
 
@@ -356,14 +335,6 @@ Beginn eines Suchbegriffes zu verwenden.</p>
                 <seg>An wen kann ich mich bei Fragen wenden?</seg>
             </tuv>
         </tu>
-        <tu tuid="help_content_contact">
-          <tuv xml:lang="en">
-            <seg>contact.en.txt</seg>
-          </tuv>
-          <tuv xml:lang="de">
-            <seg>contact.de.txt</seg>
-          </tuv>
-        </tu>
 
         <tu tuid="help_title_publicationprocess">
             <tuv xml:lang="en">
@@ -371,14 +342,6 @@ Beginn eines Suchbegriffes zu verwenden.</p>
             </tuv>
             <tuv xml:lang="de">
                 <seg>Wie geht der Veröffentlichungsvorgang vor sich?</seg>
-            </tuv>
-        </tu>
-		<tu tuid="help_content_publicationprocess">
-            <tuv xml:lang="en">
-                <seg>publicationprocess.en.txt</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>publicationprocess.de.txt</seg>
             </tuv>
         </tu>
 
@@ -390,14 +353,6 @@ Beginn eines Suchbegriffes zu verwenden.</p>
                 <seg>Was sind Metadaten?</seg>
             </tuv>
         </tu>
-        <tu tuid="help_content_metadata">
-            <tuv xml:lang="en">
-                <seg>metadata.en.txt</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>metadata.de.txt</seg>
-            </tuv>
-        </tu>
 
         <tu tuid="help_title_legal_parallel">
             <tuv xml:lang="en">
@@ -405,14 +360,6 @@ Beginn eines Suchbegriffes zu verwenden.</p>
             </tuv>
             <tuv xml:lang="de">
                 <seg>Was ist, wenn ich meine Publikation bei einem Verlag veröffentlichen lasse oder dies plane?</seg>
-            </tuv>
-        </tu>
-        <tu tuid="help_content_legal_parallel">
-            <tuv xml:lang="en">
-                <seg>legal_parallel.en.txt</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>legal_parallel.de.txt</seg>
             </tuv>
         </tu>
 
@@ -424,14 +371,6 @@ Beginn eines Suchbegriffes zu verwenden.</p>
                 <seg>Wie sieht es mit Lizenzen für mein Werk aus?</seg>
             </tuv>
         </tu>
-        <tu tuid="help_content_legal_license">
-            <tuv xml:lang="en">
-                <seg>legal_license.en.txt</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>legal_license.de.txt</seg>
-            </tuv>
-        </tu>
 
         <tu tuid="help_title_policies">
             <tuv xml:lang="en">
@@ -439,14 +378,6 @@ Beginn eines Suchbegriffes zu verwenden.</p>
             </tuv>
             <tuv xml:lang="de">
                 <seg>Leitlinien</seg>
-            </tuv>
-        </tu>
-        <tu tuid="help_content_policies">
-            <tuv xml:lang="en">
-                <seg>policies.en.txt</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>policies.de.txt</seg>
             </tuv>
         </tu>
 
@@ -458,14 +389,6 @@ Beginn eines Suchbegriffes zu verwenden.</p>
                 <seg>Dokumentation</seg>
             </tuv>
         </tu>
-        <tu tuid="help_content_documentation">
-            <tuv xml:lang="en">
-                <seg>documentation.en.txt</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>documentation.de.txt</seg>
-            </tuv>
-        </tu>
 
         <tu tuid="help_title_imprint">
             <tuv xml:lang="en">
@@ -474,14 +397,6 @@ Beginn eines Suchbegriffes zu verwenden.</p>
             <tuv xml:lang="de">
                 <seg>Impressum</seg>
             </tuv>
-        </tu>
-        <tu tuid="help_content_imprint">
-          <tuv xml:lang="en">
-            <seg>imprint.en.txt</seg>
-          </tuv>
-          <tuv xml:lang="de">
-            <seg>imprint.de.txt</seg>
-          </tuv>
         </tu>
 
     </body>

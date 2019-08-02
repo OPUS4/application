@@ -77,7 +77,7 @@ class Home_IndexController extends Application_Controller_Action
 
         $help = Application_Translate_Help::getInstance();
 
-        $this->view->text = $help->getContent('help_content_' . $actionName);
+        $this->view->text = $help->getContent($actionName);
     }
 
     /**
@@ -158,7 +158,7 @@ class Home_IndexController extends Application_Controller_Action
                 }
 
                 $this->view->contenttitle = "help_title_$content";
-                $this->view->content = $help->getContent("help_content_$content");
+                $this->view->content = $help->getContent($content);
             }
         }
 
