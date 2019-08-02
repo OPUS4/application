@@ -84,12 +84,28 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     public function testCreateTagsForJournalPaper()
     {
         $doc = $this->createJournalPaper();
-        $docId = $doc->getId();
+        $this->handleJournalPaper($doc);
+    }
 
+    public function testCreateTagsForCustomTypeJournalPaper()
+    {
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(
+            ['metatags' => ['mapping' => ['journal_paper' => ['customdoctype']]]]
+        ));
+
+        $doc = $this->createTestDoc('customdoctype');
+        $this->handleJournalPaper($doc);
+    }
+
+    /**
+     * @param Opus_Document $doc
+     */
+    private function handleJournalPaper($doc)
+    {
         $result = $this->htmlMetaTags->createTags($doc);
 
         $this->assertCount(59, $result);
-        $this->assertCommonMetaTags($result, $docId);
+        $this->assertCommonMetaTags($result, $doc->getId());
         $this->assertParentTitle($result, 'journal');
         $this->assertVolumeAndIssue($result);
         $this->assertPages($result);
@@ -99,12 +115,28 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     public function testCreateTagsForConferencePaper()
     {
         $doc = $this->createConferencePaper();
-        $docId = $doc->getId();
+        $this->handleConferencePaper($doc);
+    }
 
+    public function testCreateTagsForCustomTypeConferencePaper()
+    {
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(
+            ['metatags' => ['mapping' => ['conference_paper' => ['customdoctype']]]]
+        ));
+
+        $doc = $this->createTestDoc('customdoctype');
+        $this->handleConferencePaper($doc);
+    }
+
+    /**
+     * @param Opus_Document $doc
+     */
+    private function handleConferencePaper($doc)
+    {
         $result = $this->htmlMetaTags->createTags($doc);
 
         $this->assertCount(59, $result);
-        $this->assertCommonMetaTags($result, $docId);
+        $this->assertCommonMetaTags($result, $doc->getId());
         $this->assertParentTitle($result, 'conference');
         $this->assertVolumeAndIssue($result);
         $this->assertPages($result);
@@ -114,25 +146,56 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     public function testCreateTagsForThesis()
     {
         $doc = $this->createThesis();
-        $docId = $doc->getId();
+        $this->handleThesis($doc);
+    }
 
+    public function testCreateTagsForCustomTypeThesis()
+    {
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(
+            ['metatags' => ['mapping' => ['thesis' => ['customdoctype']]]]
+        ));
+
+        $doc = $this->createTestDoc('customdoctype');
+        $this->handleThesis($doc);
+    }
+
+    /**
+     * @param Opus_Document $doc
+     */
+    private function handleThesis($doc) {
         $result = $this->htmlMetaTags->createTags($doc);
 
         $this->assertCount(50, $result);
-        $this->assertCommonMetaTags($result, $docId);
+        $this->assertCommonMetaTags($result, $doc->getId());
         $this->assertThesisPublisher($doc, $result);
-        $this->assertDocumentType($result);
+        $this->assertDocumentType($result, $doc->getType());
     }
 
     public function testCreateTagsForWorkingPaper()
     {
         $doc = $this->createWorkingPaper();
-        $docId = $doc->getId();
+        $this->handleWorkingPaper($doc);
+    }
 
+    public function testCreateTagsForCustomTypeWorkingPaper()
+    {
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(
+            ['metatags' => ['mapping' => ['working_paper' => ['customdoctype']]]]
+        ));
+
+        $doc = $this->createTestDoc('customdoctype');
+        $this->handleWorkingPaper($doc);
+    }
+
+    /**
+     * @param Opus_Document $doc
+     */
+    private function handleWorkingPaper($doc)
+    {
         $result = $this->htmlMetaTags->createTags($doc);
 
         $this->assertCount(55, $result);
-        $this->assertCommonMetaTags($result, $docId);
+        $this->assertCommonMetaTags($result, $doc->getId());
         $this->assertVolumeAndIssue($result);
         $this->assertIssn($result);
         $this->assertInstitution($result, 'creatingCorporation');
@@ -144,6 +207,27 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
         $doc->setCreatingCorporation('');
         $doc->store();
 
+        $this->handleWorkingPaperWithContributingCorporation($doc);
+    }
+
+    public function testCreateTagsForCustomTypeWorkingPaperWithContributingCorporation()
+    {
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(
+            ['metatags' => ['mapping' => ['working_paper' => ['customdoctype']]]]
+        ));
+
+        $doc = $this->createTestDoc('customdoctype');
+        $doc->setCreatingCorporation('');
+        $doc->store();
+
+        $this->handleWorkingPaperWithContributingCorporation($doc);
+    }
+
+    /**
+     * @param Opus_Document $doc
+     */
+    private function handleWorkingPaperWithContributingCorporation($doc)
+    {
         $result = $this->htmlMetaTags->createTags($doc);
 
         // prüft nur, ob citation_technical_report_institution richtig gesetzt
@@ -157,6 +241,28 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
         $doc->setContributingCorporation('');
         $doc->store();
 
+        $this->handleWorkingPaperWithPublisher($doc);
+    }
+
+    public function testCreateTagsForCustomTypeWorkingPaperWithPublisher()
+    {
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(
+            ['metatags' => ['mapping' => ['working_paper' => ['customdoctype']]]]
+        ));
+
+        $doc = $this->createTestDoc('customdoctype');
+        $doc->setCreatingCorporation('');
+        $doc->setContributingCorporation('');
+        $doc->store();
+
+        $this->handleWorkingPaperWithPublisher($doc);
+    }
+
+    /**
+     * @param Opus_Document $doc
+     */
+    private function handleWorkingPaperWithPublisher($doc)
+    {
         $result = $this->htmlMetaTags->createTags($doc);
 
         // prüft nur, ob citation_technical_report_institution richtig gesetzt
@@ -166,24 +272,56 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     public function testCreateTagsForBook()
     {
         $doc = $this->createBook();
-        $docId = $doc->getId();
+        $this->handleBook($doc);
+    }
 
+    public function testCreateTagsForCustomTypeBook()
+    {
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(
+            ['metatags' => ['mapping' => ['book' => ['customdoctype']]]]
+        ));
+
+        $doc = $this->createTestDoc('customdoctype');
+        $this->handleBook($doc);
+    }
+
+    /**
+     * @param Opus_Document $doc
+     */
+    private function handleBook($doc)
+    {
         $result = $this->htmlMetaTags->createTags($doc);
 
         $this->assertCount(49, $result);
-        $this->assertCommonMetaTags($result, $docId);
+        $this->assertCommonMetaTags($result, $doc->getId());
         $this->assertParentTitle($result, 'inbook');
     }
 
     public function testCreateTagsForBookPart()
     {
         $doc = $this->createBookPart();
-        $docId = $doc->getId();
+        $this->handleBookPart($doc);
+    }
 
+    public function testCreateTagsForCustomTypeBookPart()
+    {
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(
+            ['metatags' => ['mapping' => ['book_part' => ['customdoctype']]]]
+        ));
+
+        $doc = $this->createTestDoc('customdoctype');
+        $this->handleBookPart($doc);
+    }
+
+    /**
+     * @param Opus_Document $doc
+     */
+    private function handleBookPart($doc)
+    {
         $result = $this->htmlMetaTags->createTags($doc);
 
         $this->assertCount(53, $result);
-        $this->assertCommonMetaTags($result, $docId);
+        $this->assertCommonMetaTags($result, $doc->getId());
         $this->assertPages($result);
         $this->assertParentTitle($result, 'inbook');
     }
@@ -426,10 +564,11 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
 
     /**
      * @param array $tags
+     * @param string $docType
      */
-    private function assertDocumentType($tags)
+    private function assertDocumentType($tags, $docType)
     {
-        $this->assertContains(['citation_dissertation_name', 'bachelorthesis'], $tags);
+        $this->assertContains(['citation_dissertation_name', $docType], $tags);
     }
 
     /**
