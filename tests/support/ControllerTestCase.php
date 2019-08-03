@@ -576,44 +576,58 @@ class ControllerTestCase extends TestCase
 
     /**
      * Removes a test document from the database.
+     *
      * @param $value Opus_Document|int
+     * @throws Opus_Model_Exception
      */
     public function removeDocument($value)
     {
-        if (!is_null($value)) {
-            $docId = null;
-            try {
-                // check if value is Opus_Document or ID
-                $doc = ($value instanceof Opus_Document) ? $value : new Opus_Document($value);
-                $docId = $doc->getId();
-                $doc->deletePermanent();
-            } catch (Opus_Model_NotFoundException $omnfe) {
-                // Model nicht gefunden -> alles gut (hoffentlich)
-            }
+        if (is_null($value)) {
+            return;
+        }
 
-            // make sure test documents have been deleted
+        $doc = $value;
+        if (! ($value instanceof Opus_Document)) {
             try {
-                $doc = new Opus_Document($docId);
-                $this->getLogger()->debug("Test document {$docId} was not deleted.");
-            } catch (Opus_Model_NotFoundException $omnfe) {
-                // ignore - document was deleted
-                $this->getLogger()->debug("Test document {$docId} was deleted.");
+                $doc = new Opus_Document($value);
+            } catch (Opus_Model_NotFoundException $e) {
+                // could not find document -> no cleanup operation required: exit silently
+                return;
             }
+        }
+        $docId = $doc->getId();
+
+        try {
+            $doc->deletePermanent();
+        } catch (Opus_Model_NotFoundException $omnfe) {
+            // Model nicht gefunden -> alles gut (hoffentlich)
+        }
+        catch (Exception $ex) {
+            $this->getLogger()->err('unexpected exception while cleaning document ' . $docId . ': ' . $ex);
+            throw $ex;
+        }
+
+        // make sure test documents have been deleted
+        try {
+            new Opus_Document($docId);
+            $this->getLogger()->debug("Test document {$docId} was not deleted.");
+        } catch (Opus_Model_NotFoundException $omnfe) {
+            // ignore - document was deleted successfully
+            $this->getLogger()->debug("Test document {$docId} was deleted successfully.");
         }
     }
 
     private function deleteTestDocuments()
     {
-        if (!is_null($this->testDocuments)) {
-            foreach ($this->testDocuments as $key => $doc) {
-                try {
-                    $this->removeDocument($doc);
-                } catch (Exception $e) {
-                }
-            }
-
-            $this->testDocuments = null;
+        if (is_null($this->testDocuments)) {
+            return;
         }
+
+        foreach ($this->testDocuments as $key => $doc) {
+            $this->removeDocument($doc);
+        }
+
+        $this->testDocuments = null;
     }
 
     protected function getDocument($docId)
