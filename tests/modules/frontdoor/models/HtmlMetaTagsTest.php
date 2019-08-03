@@ -639,6 +639,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
         // hier bereits store aufrufen, weil wir die DocId für URN und DOI brauchen
         $docId = $doc->store();
 
+        $doc = new Opus_Document($docId);
         $this->addAuthors($doc, 3);
         $this->addTitles($doc);
         $this->addAbstracts($doc);
