@@ -55,12 +55,6 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
         $this->currDate = new Opus_Date(new Zend_Date());
     }
 
-    public function tearDown()
-    {
-        $this->deleteTempFiles();
-        parent::tearDown();
-    }
-
     public function testCreateTagsForMinimalDocument()
     {
         $doc = $this->createTestDocument();
@@ -198,7 +192,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
         $this->assertCommonMetaTags($result, $doc->getId());
         $this->assertVolumeAndIssue($result);
         $this->assertIssn($result);
-        $this->assertInstitution($result, 'creatingCorporation');
+        $this->assertInstitution($result, 'crea');
     }
 
     public function testCreateTagsForWorkingPaperWithContributingCorporation()
@@ -231,7 +225,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
         $result = $this->htmlMetaTags->createTags($doc);
 
         // prüft nur, ob citation_technical_report_institution richtig gesetzt
-        $this->assertInstitution($result, 'contributingCorporation');
+        $this->assertInstitution($result, 'cont');
     }
 
     public function testCreateTagsForWorkingPaperWithPublisher()
@@ -621,6 +615,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     /**
      * @param string $docType
      * @return Opus_Document
+     * @throws Opus_Model_Exception
      */
     private function createTestDoc($docType)
     {
@@ -632,8 +627,8 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
         $doc->setIssue('issue');
         $doc->setPageFirst('pageFirst');
         $doc->setPageLast('pageLast');
-        $doc->setCreatingCorporation('creatingCorporation');
-        $doc->setContributingCorporation('contributingCorporation');
+        $doc->setCreatingCorporation('crea');
+        $doc->setContributingCorporation('cont');
         $doc->setPublishedDate($this->currDate);
         $doc->setServerState('published');
         // hier bereits store aufrufen, weil wir die DocId für URN und DOI brauchen
