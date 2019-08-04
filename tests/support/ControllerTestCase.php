@@ -595,7 +595,12 @@ class ControllerTestCase extends TestCase
                 return;
             }
         }
+
         $docId = $doc->getId();
+        if (is_null($docId)) {
+            // Dokument wurde (noch) nicht in DB persistiert
+            return;
+        }
 
         try {
             $doc->deletePermanent();
