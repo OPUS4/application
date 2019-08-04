@@ -98,13 +98,6 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
         $this->_document_col->store();
     }
 
-    public function tearDown()
-    {
-        $this->removeDocument($this->_document);
-        $this->removeDocument($this->_document_col);
-        parent::tearDown();
-    }
-
     public function testIndexActionOnPublished()
     {
         $this->_document->setServerState('published')->store();
