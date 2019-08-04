@@ -41,14 +41,6 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase
 
     protected $additionalResources = 'all';
 
-    private $documentId;
-
-    public function tearDown()
-    {
-        $this->removeDocument($this->documentId);
-        parent::tearDown();
-    }
-
     /**
      * Basic unit test checks that error controller is not called.
      */
@@ -266,9 +258,9 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase
         $document = $this->createTestDocument();
         $file = $document->addFile();
         $file->setPathName('testdatei.txt');
-        $this->documentId = $document->store();
+        $documentId = $document->store();
 
-        $document = new Opus_Document($this->documentId);
+        $document = new Opus_Document($documentId);
 
         $fileId = $document->getFile(0)->getId();
 
@@ -292,9 +284,9 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase
             )
         ));
 
-        $this->dispatch('/admin/filemanager/index/id/' . $this->documentId);
+        $this->dispatch('/admin/filemanager/index/id/' . $documentId);
         $this->assertResponseCode(302);
-        $this->assertRedirectTo('/admin/document/index/id/' . $this->documentId);
+        $this->assertRedirectTo('/admin/document/index/id/' . $documentId);
 
         $roleGuest = Opus_UserRole::fetchByName('guest');
         $files = $roleGuest->listAccessFiles();
