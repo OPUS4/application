@@ -640,10 +640,23 @@ class ControllerTestCase extends TestCase
         return new Opus_Document($docId);
     }
 
-    protected function createTestDocument()
+    /**
+     * Erzeugt ein Testdokument, das nach der Testausführung automatisch aufgeräumt wird.
+     * Falls das Aufräumen nicht gewünscht ist, kann dieser Umstand durch Setzen des
+     * Parameters $cleanup auf false angezeigt werden. Dann muss sich der aufrufende Test Case
+     * bzw. der im Test verwendete Code um das Cleanup kümmern! Dieser Fall sollte nur sehr
+     * selten vorkommen.
+     *
+     * @param bool $cleanup wenn false, dann erfolgt kein automatischer Cleanup beim tearDown
+     * @return Opus_Document
+     * @throws Opus_Model_Exception
+     */
+    protected function createTestDocument($cleanup = true)
     {
         $doc = new Opus_Document();
-        $this->addTestDocument($doc);
+        if ($cleanup) {
+            $this->addTestDocument($doc);
+        }
         return $doc;
     }
 

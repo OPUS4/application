@@ -216,7 +216,6 @@ class Publish_Model_DepositTest extends ControllerTestCase
 
         $this->assertEquals('title as enrichment', $document->getEnrichment(0)->getValue());
 
-        $document->deletePermanent();
         Opus_EnrichmentKey::fetchbyName('Foo2Title')->delete();
     }
 
