@@ -478,9 +478,16 @@ class Frontdoor_Model_HtmlMetaTags
      */
     private function isJournalPaper($document)
     {
+        if (isset($this->config, $this->config->metatags->defaultMapping->journal_paper)) {
+            if (in_array($document->getType(), $this->config->metatags->defaultMapping->journal_paper->toArray())) {
+                return true;
+            }
+        }
+        // Hinzufügen von Nicht-Standard-Dokumenttypen zum Mapping in config.ini
         if (isset($this->config, $this->config->metatags->mapping->journal_paper)) {
             return in_array($document->getType(), $this->config->metatags->mapping->journal_paper->toArray());
         }
+
         return false;
     }
 
@@ -490,6 +497,12 @@ class Frontdoor_Model_HtmlMetaTags
      */
     private function isConferencePaper($document)
     {
+        if (isset($this->config, $this->config->metatags->defaultMapping->conference_paper)) {
+            if (in_array($document->getType(), $this->config->metatags->defaultMapping->conference_paper->toArray())) {
+                return true;
+            }
+        }
+        // Hinzufügen von Nicht-Standard-Dokumenttypen zum Mapping in config.ini
         if (isset($this->config, $this->config->metatags->mapping->conference_paper)) {
             return in_array($document->getType(), $this->config->metatags->mapping->conference_paper->toArray());
         }
@@ -502,6 +515,12 @@ class Frontdoor_Model_HtmlMetaTags
      */
     private function isThesis($document)
     {
+        if (isset($this->config, $this->config->metatags->defaultMapping->thesis)) {
+            if (in_array($document->getType(), $this->config->metatags->defaultMapping->thesis->toArray())) {
+                return true;
+            }
+        }
+        // Hinzufügen von Nicht-Standard-Dokumenttypen zum Mapping in config.ini
         if (isset($this->config, $this->config->metatags->mapping->thesis)) {
             return in_array($document->getType(), $this->config->metatags->mapping->thesis->toArray());
         }
@@ -514,6 +533,12 @@ class Frontdoor_Model_HtmlMetaTags
      */
     private function isWorkingPaper($document)
     {
+        if (isset($this->config, $this->config->metatags->defaultMapping->working_paper)) {
+            if (in_array($document->getType(), $this->config->metatags->defaultMapping->working_paper->toArray())) {
+                return true;
+            }
+        }
+        // Hinzufügen von Nicht-Standard-Dokumenttypen zum Mapping in config.ini
         if (isset($this->config, $this->config->metatags->mapping->working_paper)) {
             return in_array($document->getType(), $this->config->metatags->mapping->working_paper->toArray());
         }
@@ -526,6 +551,12 @@ class Frontdoor_Model_HtmlMetaTags
      */
     private function isBook($document)
     {
+        if (isset($this->config, $this->config->metatags->defaultMapping->book)) {
+            if (in_array($document->getType(), $this->config->metatags->defaultMapping->book->toArray())) {
+                return true;
+            }
+        }
+        // Hinzufügen von Nicht-Standard-Dokumenttypen zum Mapping in config.ini
         if (isset($this->config, $this->config->metatags->mapping->book)) {
             return in_array($document->getType(), $this->config->metatags->mapping->book->toArray());
         }
@@ -538,6 +569,12 @@ class Frontdoor_Model_HtmlMetaTags
      */
     private function isBookPart($document)
     {
+        if (isset($this->config, $this->config->metatags->defaultMapping->book_part)) {
+            if (in_array($document->getType(), $this->config->metatags->defaultMapping->book_part->toArray())) {
+                return true;
+            }
+        }
+        // Hinzufügen von Nicht-Standard-Dokumenttypen zum Mapping in config.ini
         if (isset($this->config, $this->config->metatags->mapping->book_part)) {
             return in_array($document->getType(), $this->config->metatags->mapping->book_part->toArray());
         }
