@@ -50,7 +50,8 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     {
         parent::setUp();
         $this->htmlMetaTags = new Frontdoor_Model_HtmlMetaTags(
-            Zend_Registry::get('Zend_Config'), 'http://localhost/opus');
+            Zend_Registry::get('Zend_Config'), 'http://localhost/opus'
+        );
 
         $this->currDate = new Opus_Date(new Zend_Date());
     }
@@ -830,4 +831,58 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
         $doc->setThesisPublisher($institute);
     }
 
+    public function testGetMetatagsType()
+    {
+        $metaTags = $this->htmlMetaTags;
+
+        $document = new Opus_Document(146);
+        $book = $this->createBook();
+
+        $metaTags->getMetatagsType($document);
+
+        $this->assertEquals('thesis', $metaTags->getMetatagsType($document));
+        $this->assertEquals('book', $metaTags->getMetatagsType($book));
+    }
+
+    public function testGetMappingConfig()
+    {
+        $metaTags = $this->htmlMetaTags;
+
+        $config = $metaTags->getMappingConfig();
+
+        $this->assertCount(16, $config);
+        $this->assertCount(6, array_unique($config));
+
+        // a sample check
+        $this->assertArrayHasKey('article', $config);
+        $this->assertEquals('journal_paper', $config['article']);
+    }
+
+    public function testGetMappingConfigCustomDocumentType()
+    {
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'metatags' => ['mapping' => ['book' => ['mybooktype']]]
+        ]));
+
+        $metaTags = $this->htmlMetaTags;
+
+        $config = $metaTags->getMappingConfig();
+
+        $this->assertArrayHasKey('mybooktype', $config);
+        $this->assertEquals('book', $config['mybooktype']);
+    }
+
+    public function testGetMappingConfigDefaultOverride()
+    {
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'metatags' => ['mapping' => ['book' => ['article']]]
+        ]));
+
+        $metaTags = $this->htmlMetaTags;
+
+        $config = $metaTags->getMappingConfig();
+
+        $this->assertArrayHasKey('article', $config);
+        $this->assertEquals('book', $config['article']);
+    }
 }
