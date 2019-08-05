@@ -1,6 +1,10 @@
 <?xml version="1.0"?>
 <ruleset name="OPUS 4 coding standard">
-    <rule ref="./vendor/zendframework/zend-coding-standard/ruleset.xml" />
+    <rule ref="./vendor/zendframework/zend-coding-standard/ruleset.xml">
+        <!-- TODO remove excludes after switch to ZF3 -->
+        <exclude name="PSR1.Classes.ClassDeclaration.MissingNamespace" />
+        <exclude name="Squiz.Classes.ValidClassName.NotCamelCaps" />
+    </rule>
     <file>library</file>
     <file>modules</file>
     <file>tests/library</file>
