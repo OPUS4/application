@@ -28,7 +28,7 @@
  * @package     Application_Import
  * @author      Sascha Szott <opus-development@saschaszott.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2019
+ * @copyright   Copyright (c) 2016-2019
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  *
  * Reads an OPUS import package containing one or more documents and imports
@@ -113,7 +113,8 @@ abstract class Application_Import_PackageReader
         return $this->processPackage($extractDir);
     }
 
-    public function getLogger() {
+    public function getLogger()
+    {
         return Zend_Registry::get('Zend_Log');
     }
 
@@ -129,7 +130,7 @@ abstract class Application_Import_PackageReader
     private function processPackage($extractDir)
     {
         $metadataFile = $extractDir . DIRECTORY_SEPARATOR . self::METADATA_FILENAME;
-        if (!is_readable($metadataFile)) {
+        if (! is_readable($metadataFile)) {
             $this->getLogger()->err('missing metadata file ' . $metadataFile);
             return null;
         }

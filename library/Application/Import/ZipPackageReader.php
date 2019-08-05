@@ -28,7 +28,7 @@
  * @package     Application_Import
  * @author      Sascha Szott <opus-development@saschaszott.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2019
+ * @copyright   Copyright (c) 2018-2019
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 

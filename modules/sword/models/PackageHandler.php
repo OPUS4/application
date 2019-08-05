@@ -27,7 +27,7 @@
  * @category    Application
  * @package     Module_Sword
  * @author      Sascha Szott <opus-development@saschaszott.de>
- * @copyright   Copyright (c) 2019
+ * @copyright   Copyright (c) 2016-2019
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 class Sword_Model_PackageHandler

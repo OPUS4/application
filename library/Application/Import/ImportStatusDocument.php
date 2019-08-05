@@ -37,7 +37,7 @@
 class Application_Import_ImportStatusDocument
 {
 
-    private $docs = array();
+    private $docs = [];
 
     public function addDoc($doc)
     {
