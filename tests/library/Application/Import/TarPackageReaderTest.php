@@ -24,28 +24,55 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Application_Import
+ * @category    Application Unit Tests
+ * @package     Application
  * @author      Sascha Szott <opus-development@saschaszott.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2019
+ * @copyright   Copyright (c) 2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Application_Import_TarPackageReader extends Application_Import_PackageReader
+class Application_Import_TarPackageReaderTest extends ControllerTestCase
 {
-    protected function extractPackage($dirName)
+
+    protected $additionalResources = 'database';
+
+    public function setUp()
     {
-        $filename = $dirName . DIRECTORY_SEPARATOR . 'package.tar';
-        $this->getLogger()->info('processing TAR package in file system ' . $filename);
+        parent::setUp();
+        $this->makeConfigurationModifiable();
+    }
 
-        if (! is_readable($filename)) {
-            $errMsg = 'TAR package ' . $filename . ' is not readable!';
-            $this->getLogger()->err($errMsg);
-            throw new Exception($errMsg);
-        }
+    public function testReadPackageWithXmlFile()
+    {
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
+            'filetypes' => array('xml' => array('mimeType' => array(
+                'text/xml', 'application/xml'
+            )))
+        )));
 
-        $phar = new PharData($filename);
-        $phar->extractTo($dirName . DIRECTORY_SEPARATOR . self::EXTRACTION_DIR_NAME);
+        $reader = new Application_Import_TarPackageReader();
+
+        $tmpDir = APPLICATION_PATH . '/tests/workspace/tmp/TarPackageReaderTest_ReadPackageWithXmlFile';
+        mkdir($tmpDir);
+
+        copy(
+            APPLICATION_PATH . '/tests/resources/sword-packages/single-doc-pdf-xml.tar',
+            $tmpDir . DIRECTORY_SEPARATOR . 'package.tar'
+        );
+
+        $status = $reader->readPackage($tmpDir);
+
+        $this->assertFalse($status->noDocImported());
+        $this->assertCount(1, $status->getDocs());
+
+        $document = $status->getDocs()[0];
+
+        $this->addTestDocument($document); // for cleanup
+
+        $files = $document->getFile();
+
+        $this->assertCount(2, $files);
+
+        Application_Import_PackageReaderTest::cleanupTmpDir($tmpDir);
     }
 }

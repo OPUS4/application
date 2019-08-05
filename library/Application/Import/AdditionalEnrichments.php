@@ -29,8 +29,7 @@
  * @author      Sascha Szott
  * @copyright   Copyright (c) 2016
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
- * 
+ *
  * This class holds OPUS specific enrichments that are associated with every
  * document that is imported via SWORD API.
  * 
