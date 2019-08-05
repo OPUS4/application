@@ -39,15 +39,6 @@ class Admin_PersonControllerTest extends ControllerTestCase
 
     protected $additionalResources = 'all';
 
-    private $documentId;
-
-    public function tearDown()
-    {
-        $this->removeDocument($this->documentId);
-
-        parent::tearDown();
-    }
-
     public function testAssignAction()
     {
         $this->dispatch('/admin/person/assign/document/146');
@@ -101,7 +92,7 @@ class Admin_PersonControllerTest extends ControllerTestCase
     {
         $document = $this->createTestDocument();
 
-        $this->documentId = $document->store();
+        $documentId = $document->store();
 
         $this->getRequest()->setMethod('POST')->setPost(array(
             'LastName' => 'Testy-AssignAction',
@@ -111,7 +102,7 @@ class Admin_PersonControllerTest extends ControllerTestCase
             'Save' => 'Speichern'
         ));
 
-        $this->dispatch('/admin/person/assign/document/' . $this->documentId . '/role/translator');
+        $this->dispatch('/admin/person/assign/document/' . $documentId . '/role/translator');
 
         $location = $this->getLocation();
 
@@ -126,7 +117,7 @@ class Admin_PersonControllerTest extends ControllerTestCase
         $person->delete();
 
         $this->assertTrue(strpos($location, '/admin/document/edit/id/'
-                . $this->documentId . '/continue/addperson') === 0);
+                . $documentId . '/continue/addperson') === 0);
 
         $this->assertEquals('Testy-AssignAction', $lastName);
     }
@@ -207,7 +198,7 @@ class Admin_PersonControllerTest extends ControllerTestCase
 
         $person = $document->addPersonTranslator($person);
 
-        $this->documentId = $document->store();
+        $documentId = $document->store();
 
         $personId = $person->getModel()->getId();
 
@@ -222,9 +213,9 @@ class Admin_PersonControllerTest extends ControllerTestCase
         ));
 
         $this->dispatch('/admin/person/editlinked/personId/' . $personId . '/role/translator/document/'
-            . $this->documentId);
+            . $documentId);
 
-        $this->assertRedirectTo('/admin/document/edit/id/' . $this->documentId
+        $this->assertRedirectTo('/admin/document/edit/id/' . $documentId
             . '/continue/updateperson/person/' . $personId);
 
         $person = new Opus_Person($personId);

@@ -576,44 +576,63 @@ class ControllerTestCase extends TestCase
 
     /**
      * Removes a test document from the database.
+     *
      * @param $value Opus_Document|int
+     * @throws Opus_Model_Exception
      */
     public function removeDocument($value)
     {
-        if (!is_null($value)) {
-            $docId = null;
-            try {
-                // check if value is Opus_Document or ID
-                $doc = ($value instanceof Opus_Document) ? $value : new Opus_Document($value);
-                $docId = $doc->getId();
-                $doc->deletePermanent();
-            } catch (Opus_Model_NotFoundException $omnfe) {
-                // Model nicht gefunden -> alles gut (hoffentlich)
-            }
+        if (is_null($value)) {
+            return;
+        }
 
-            // make sure test documents have been deleted
+        $doc = $value;
+        if (! ($value instanceof Opus_Document)) {
             try {
-                $doc = new Opus_Document($docId);
-                $this->getLogger()->debug("Test document {$docId} was not deleted.");
-            } catch (Opus_Model_NotFoundException $omnfe) {
-                // ignore - document was deleted
-                $this->getLogger()->debug("Test document {$docId} was deleted.");
+                $doc = new Opus_Document($value);
+            } catch (Opus_Model_NotFoundException $e) {
+                // could not find document -> no cleanup operation required: exit silently
+                return;
             }
+        }
+
+        $docId = $doc->getId();
+        if (is_null($docId)) {
+            // Dokument wurde (noch) nicht in DB persistiert
+            return;
+        }
+
+        try {
+            $doc->deletePermanent();
+        } catch (Opus_Model_NotFoundException $omnfe) {
+            // Model nicht gefunden -> alles gut (hoffentlich)
+        }
+        catch (Exception $ex) {
+            $this->getLogger()->err('unexpected exception while cleaning document ' . $docId . ': ' . $ex);
+            throw $ex;
+        }
+
+        // make sure test documents have been deleted
+        try {
+            new Opus_Document($docId);
+            $this->getLogger()->debug("Test document {$docId} was not deleted.");
+        } catch (Opus_Model_NotFoundException $omnfe) {
+            // ignore - document was deleted successfully
+            $this->getLogger()->debug("Test document {$docId} was deleted successfully.");
         }
     }
 
     private function deleteTestDocuments()
     {
-        if (!is_null($this->testDocuments)) {
-            foreach ($this->testDocuments as $key => $doc) {
-                try {
-                    $this->removeDocument($doc);
-                } catch (Exception $e) {
-                }
-            }
-
-            $this->testDocuments = null;
+        if (is_null($this->testDocuments)) {
+            return;
         }
+
+        foreach ($this->testDocuments as $key => $doc) {
+            $this->removeDocument($doc);
+        }
+
+        $this->testDocuments = null;
     }
 
     protected function getDocument($docId)
@@ -621,10 +640,23 @@ class ControllerTestCase extends TestCase
         return new Opus_Document($docId);
     }
 
-    protected function createTestDocument()
+    /**
+     * Erzeugt ein Testdokument, das nach der Testausführung automatisch aufgeräumt wird.
+     * Falls das Aufräumen nicht gewünscht ist, kann dieser Umstand durch Setzen des
+     * Parameters $cleanup auf false angezeigt werden. Dann muss sich der aufrufende Test Case
+     * bzw. der im Test verwendete Code um das Cleanup kümmern! Dieser Fall sollte nur sehr
+     * selten vorkommen.
+     *
+     * @param bool $cleanup wenn false, dann erfolgt kein automatischer Cleanup beim tearDown
+     * @return Opus_Document
+     * @throws Opus_Model_Exception
+     */
+    protected function createTestDocument($cleanup = true)
     {
         $doc = new Opus_Document();
-        $this->addTestDocument($doc);
+        if ($cleanup) {
+            $this->addTestDocument($doc);
+        }
         return $doc;
     }
 
