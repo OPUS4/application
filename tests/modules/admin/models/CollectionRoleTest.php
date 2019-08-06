@@ -61,7 +61,7 @@ class Admin_Model_CollectionRoleTest extends ControllerTestCase
         $collectionRole = new Opus_CollectionRole($this->collectionRoleId);
         $collectionRole->delete();
 
-        if (!is_null($this->moveTestColId)) {
+        if (! is_null($this->moveTestColId)) {
             $collectionRole = new Opus_CollectionRole($this->moveTestColId);
             $collectionRole->delete();
         }

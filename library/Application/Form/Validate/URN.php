@@ -31,7 +31,8 @@
  * @version     $Id$
  */
 
-class Application_Form_Validate_URN extends Zend_Validate_Abstract {
+class Application_Form_Validate_URN extends Zend_Validate_Abstract
+{
 
     const NOT_UNIQUE = 'notUnique';
 
@@ -41,24 +42,23 @@ class Application_Form_Validate_URN extends Zend_Validate_Abstract {
      * Translation keys for validation messages.
      * @var array
      */
-    protected $_messageTemplates = array(
+    protected $_messageTemplates = [
         self::NOT_UNIQUE => 'admin_validation_error_localurn_not_unique',
         self::NOT_VALID => 'admin_validation_error_localurn_invalid',
-    );
+    ];
 
-    public function isValid($value, $context = null) {
+    public function isValid($value, $context = null)
+    {
         $currentDocId = $context[Admin_Form_Document_IdentifierSpecific::ELEMENT_DOC_ID];
 
         $urn = new Opus_Identifier();
         $urn->setValue($value);
 
-        if (!($urn->isUrnUnique($currentDocId))) {
+        if (! ($urn->isUrnUnique($currentDocId))) {
             $this->_error(self::NOT_UNIQUE);
             return false; // Formular kann nicht gespeichert werden (URN wurde bereits verwendet)
         }
 
         return true; // URN kann gespeichert werden
-
     }
-
 }

@@ -37,9 +37,11 @@
  *
  * TODO should be Application_Form_Element_IdentifierType
  */
-class Application_Form_Element_Identifier extends Application_Form_Element_Select {
+class Application_Form_Element_Identifier extends Application_Form_Element_Select
+{
 
-    public function init() {
+    public function init()
+    {
         parent::init();
 
         $identifier = new Opus_Identifier();
@@ -47,9 +49,8 @@ class Application_Form_Element_Identifier extends Application_Form_Element_Selec
 
         foreach ($types as $type) {
             if ($type != 'urn' && $type != 'doi') {
-                $this->addMultiOption($type, 'Opus_Identifier_Type_Value_' . ucfirst($type));                
-            }           
+                $this->addMultiOption($type, 'Opus_Identifier_Type_Value_' . ucfirst($type));
+            }
         }
     }
-
 }

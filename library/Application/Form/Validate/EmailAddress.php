@@ -37,11 +37,10 @@
 class Application_Form_Validate_EmailAddress extends Zend_Validate_EmailAddress
 {
 
-    public function __construct($options = array())
+    public function __construct($options = [])
     {
         parent::__construct($options);
 
         $this->setMessage('admin_validate_error_email');
     }
-
 }

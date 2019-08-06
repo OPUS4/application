@@ -32,6 +32,6 @@
  * @version     $Id$
  */
 
-class CitationExport_Model_Exception extends Application_Exception {
+class CitationExport_Model_Exception extends Application_Exception
+{
 }
-

@@ -74,9 +74,9 @@ class Application_Form_Validate_Filename extends Zend_Validate_Abstract
      * variables for messageTemplates
      * @var array
      */
-    protected $_messageVariables = array(
+    protected $_messageVariables = [
         'size' => 'filenameMaxLength',
-    );
+    ];
 
     /**
      * Application_Form_Validate_Filename constructor.
@@ -151,7 +151,7 @@ class Application_Form_Validate_Filename extends Zend_Validate_Abstract
             $data['filename'] = $file['name'];
         } else {
             $data = pathinfo($value);
-            if (!array_key_exists('filename', $data)) {
+            if (! array_key_exists('filename', $data)) {
                 return false;
             }
         }

@@ -30,7 +30,8 @@
  * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Application_Form_Validate_Gnd extends Zend_Validate_Abstract {
+class Application_Form_Validate_Gnd extends Zend_Validate_Abstract
+{
 
     /**
      * Error message for numbers that are too long.
@@ -52,10 +53,10 @@ class Application_Form_Validate_Gnd extends Zend_Validate_Abstract {
      *
      * @var array
      */
-    protected $_messageTemplates = array(
+    protected $_messageTemplates = [
         self::NOT_VALID_FORMAT => 'validation_error_person_gnd',
         self::NOT_VALID_CHECKSUM => 'validation_error_person_gnd_checksum'
-    );
+    ];
 
     /**
      * Returns true if the gnd identifier can be validated.
@@ -64,8 +65,9 @@ class Application_Form_Validate_Gnd extends Zend_Validate_Abstract {
      * @return boolean
      * @throws Zend_Validate_Exception If validation of $value is impossible
      */
-    public function isValid($value) {
-        if (strlen($value) > 11 || strlen($value) < 8 || !preg_match(self::PATTERN, $value)) {
+    public function isValid($value)
+    {
+        if (strlen($value) > 11 || strlen($value) < 8 || ! preg_match(self::PATTERN, $value)) {
             $this->_error(self::NOT_VALID_FORMAT);
             return false;
         }
@@ -81,7 +83,8 @@ class Application_Form_Validate_Gnd extends Zend_Validate_Abstract {
     /**
      * Calculates the GND check digit.
      */
-    public static function generateCheckDigit($number) {
+    public static function generateCheckDigit($number)
+    {
         $total = 0;
         $weight = 11 - (10 - strlen($number));
         for ($i = 0; $i < strlen($number); $i++) {
@@ -93,5 +96,4 @@ class Application_Form_Validate_Gnd extends Zend_Validate_Abstract {
         $result = (11 - $remainder) % 11;
         return $result == 10 ? "X" : (string) $result;
     }
-
 }

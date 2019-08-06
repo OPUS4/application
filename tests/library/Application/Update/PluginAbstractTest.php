@@ -62,5 +62,4 @@ class Application_Update_PluginAbstractTest extends ControllerTestCase
 
         $stub->log('Test message.');
     }
-
 }

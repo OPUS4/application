@@ -36,7 +36,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-interface Application_Form_IModel {
+interface Application_Form_IModel
+{
 
     /**
      * Erzeugt Model-Instanz fuer Formular, entweder neue oder existierende.
@@ -74,5 +75,4 @@ interface Application_Form_IModel {
      * Bereitet das Formular fuer die Anzeige als View vor.
      */
     public function prepareRenderingAsView();
-    
 }

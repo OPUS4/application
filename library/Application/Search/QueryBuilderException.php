@@ -35,7 +35,7 @@
 /**
  * TODO replace - QueryBuilder is not used anymore, right?
  */
-class Application_Search_QueryBuilderException extends Exception {
+class Application_Search_QueryBuilderException extends Exception
+{
 
 }
-

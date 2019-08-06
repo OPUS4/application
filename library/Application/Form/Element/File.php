@@ -35,27 +35,28 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Application_Form_Element_File extends Zend_Form_Element_File {
+class Application_Form_Element_File extends Zend_Form_Element_File
+{
 
-    public function init() {
+    public function init()
+    {
         parent::init();
 
         $this->addPrefixPath('Application_Form_Decorator', 'Application/Form/Decorator', Zend_Form::DECORATOR);
     }
 
-    public function loadDefaultDecorators() {
-        if (!$this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
+    public function loadDefaultDecorators()
+    {
+        if (! $this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
             $this->setDecorators(
-                array(
+                [
                 'File',
                 'Errors',
                 'ElementHtmlTag',
-                array('LabelNotEmpty', array('tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend')),
-                array(array('dataWrapper' => 'HtmlTagWithId'), array('tag' => 'div', 'class' => 'data-wrapper'))
-                )
+                ['LabelNotEmpty', ['tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend']],
+                [['dataWrapper' => 'HtmlTagWithId'], ['tag' => 'div', 'class' => 'data-wrapper']]
+                ]
             );
         }
     }
-
 }
-

@@ -224,7 +224,10 @@ class Application_Util_NotificationTest extends ControllerTestCase
 
         $doc->store();
         $this->notification->prepareMail(
-            $doc, 'http://localhost/foo/1', false, [false, true]
+            $doc,
+            'http://localhost/foo/1',
+            false,
+            [false, true]
         );
     }
 
@@ -233,8 +236,8 @@ class Application_Util_NotificationTest extends ControllerTestCase
         // TODO use Opus_Job::deleteAll() - requires opus4admin permissions !
         $jobs = Opus_Job::getAll();
 
-        if(!empty($jobs)) {
-            foreach($jobs as $job) {
+        if (! empty($jobs)) {
+            foreach ($jobs as $job) {
                 $job->delete();
             }
         }
@@ -259,8 +262,8 @@ class Application_Util_NotificationTest extends ControllerTestCase
 
         $jobs = Opus_Job::getAll();
 
-        if(!empty($jobs)) {
-            foreach($jobs as $job) {
+        if (! empty($jobs)) {
+            foreach ($jobs as $job) {
                 $job->delete();
             }
         }

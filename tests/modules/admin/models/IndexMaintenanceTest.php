@@ -40,7 +40,7 @@ class Admin_Model_IndexMaintenanceTest extends ControllerTestCase
 
     public function tearDown()
     {
-        if (!is_null($this->config)) {
+        if (! is_null($this->config)) {
             Zend_Registry::set('Zend_Config', $this->config);
         }
 
@@ -285,7 +285,7 @@ class Admin_Model_IndexMaintenanceTest extends ControllerTestCase
         } else {
             $filename = $config->workspacePath . DIRECTORY_SEPARATOR . 'log' . DIRECTORY_SEPARATOR . 'opus_consistency-check.log';
         }
-        if (!file_exists($filename)) {
+        if (! file_exists($filename)) {
             touch($filename);
         }
     }

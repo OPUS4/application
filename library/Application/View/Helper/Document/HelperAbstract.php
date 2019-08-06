@@ -47,21 +47,18 @@ abstract class Application_View_Helper_Document_HelperAbstract extends Applicati
      * Returns if user interface language should be used.
      * @return bool true if user interface language should be used
      */
-    public function isPreferUserInterfaceLanguage() {
+    public function isPreferUserInterfaceLanguage()
+    {
         $config = $this->getConfig();
 
-        if (is_null($this->_preferUserInterfaceLanguage))
-        {
-            if (isset($config->search->result->display->preferUserInterfaceLanguage))
-            {
+        if (is_null($this->_preferUserInterfaceLanguage)) {
+            if (isset($config->search->result->display->preferUserInterfaceLanguage)) {
                 $value = trim($config->search->result->display->preferUserInterfaceLanguage);
 
                 $this->_preferUserInterfaceLanguage = ($value == 1 || $value === 'true');
-            }
-            else {
+            } else {
                 $this->_preferUserInterfaceLanguage = false;
             }
-
         }
 
         return $this->_preferUserInterfaceLanguage;
@@ -75,5 +72,4 @@ abstract class Application_View_Helper_Document_HelperAbstract extends Applicati
     {
         $this->_preferUserInterfaceLanguage = ($enabled == 1 || $enabled === 'true');
     }
-
 }

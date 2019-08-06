@@ -35,11 +35,13 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class AssumptionChecker {
+class AssumptionChecker
+{
 
     private $testCase;
 
-    public function __construct($testCase) {
+    public function __construct($testCase)
+    {
         $this->testCase = $testCase;
     }
 
@@ -53,20 +55,21 @@ class AssumptionChecker {
      * $assumption = new AssumptionChecker($this);
      * $assumption->checkYearFacetAssumption();
      */
-    public function checkYearFacetAssumption() {
+    public function checkYearFacetAssumption()
+    {
         $this->testCase->resetRequest();
         $this->testCase->resetResponse();
 
         Zend_Registry::get('Zend_Config')->merge(new Zend_Config(
-            array('searchengine' => array('solr' => array(
-                'facetlimit' => array('year' => 10, 'year_inverted' => 10),
+            ['searchengine' => ['solr' => [
+                'facetlimit' => ['year' => 10, 'year_inverted' => 10],
                 'facets' => 'year,doctype,author_facet,language,has_fulltext,belongs_to_bibliography,subject,institute'
-            )))
+            ]]]
         ));
 
         $this->testCase->dispatch('/solrsearch/index/search/searchtype/all');
 
-        $searchStrings = array(
+        $searchStrings = [
             '2011',
             '2009',
             '2010',
@@ -76,7 +79,7 @@ class AssumptionChecker {
             '1979',
             '1962',
             '1963',
-            '1975');
+            '1975'];
 
         $response = $this->testCase->getResponse()->getBody();
         $startString = 'id="year_facet"';
@@ -98,6 +101,4 @@ class AssumptionChecker {
         }
         $this->testCase->assertTrue($loopComplete);
     }
-
 }
-

@@ -123,5 +123,4 @@ class Application_Configuration_Module implements Application_Configuration_Modu
     {
         return false;
     }
-
 }

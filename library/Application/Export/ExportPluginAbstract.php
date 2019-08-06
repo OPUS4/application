@@ -36,8 +36,7 @@
  * TODO in the long run should not be a model and cannot extend Application_Model_Abstract
  * TODO configuration should be limited to plugin (and not the global object)
  */
-abstract class Application_Export_ExportPluginAbstract extends Application_Model_Abstract
-    implements Application_Export_ExportPlugin
+abstract class Application_Export_ExportPluginAbstract extends Application_Model_Abstract implements Application_Export_ExportPlugin
 {
 
     /**

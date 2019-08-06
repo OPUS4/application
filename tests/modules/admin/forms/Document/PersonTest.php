@@ -56,7 +56,7 @@ class Admin_Form_Document_PersonTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Person();
 
-        $this->assertNull($form->processPost(array(), null));
+        $this->assertNull($form->processPost([], null));
     }
 
     public function testProcessPostEdit()
@@ -65,9 +65,9 @@ class Admin_Form_Document_PersonTest extends ControllerTestCase
 
         $form->getElement('PersonId')->setValue('1234');
 
-        $post = array(
+        $post = [
             'Edit' => 'Editieren'
-        );
+        ];
 
         $result = $form->processPost($post, null);
 
@@ -149,5 +149,4 @@ class Admin_Form_Document_PersonTest extends ControllerTestCase
         $this->assertEquals(5, $form->getOrder());
         $this->assertEquals(6, $form->getElementValue('SortOrder'));
     }
-
 }

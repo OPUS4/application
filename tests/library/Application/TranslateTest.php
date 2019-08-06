@@ -50,12 +50,11 @@ class Application_TranslateTest extends ControllerTestCase
         $dao->removeAll();
         Zend_Translate::clearCache();
         parent::tearDown();
-
     }
 
-    static public function tearDownAfterClass()
+    public static function tearDownAfterClass()
     {
-        $translate =Zend_Registry::get('Zend_Translate');
+        $translate = Zend_Registry::get('Zend_Translate');
         $translate->loadTranslations(true);
 
         parent::tearDownAfterClass();

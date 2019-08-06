@@ -52,7 +52,6 @@ try {
     $doiManager = new Opus_Doi_DoiManager();
     $doiManager->updateLandingPageUrlOfDoi($doiValue, $landingPageURL);
     echo "Operation completed successfully\n";
-}
-catch (Opus_Doi_DoiException $e) {
+} catch (Opus_Doi_DoiException $e) {
     echo 'Could not successfully change landing page URL of DOI ' . $doiValue . ' : ' . $e->getMessage() . "\n";
 }

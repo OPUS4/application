@@ -57,7 +57,7 @@ class Application_Form_Validate_LoginAvailableTest extends ControllerTestCase
 
     public function tearDown()
     {
-        if (!is_null($this->_account)) {
+        if (! is_null($this->_account)) {
             $this->_account->delete();
         }
 
@@ -89,13 +89,13 @@ class Application_Form_Validate_LoginAvailableTest extends ControllerTestCase
 
     public function testAccountAvailableInEditMode()
     {
-        $validator = new Application_Form_Validate_LoginAvailable(array('ignoreCase' => true));
+        $validator = new Application_Form_Validate_LoginAvailable(['ignoreCase' => true]);
         $this->assertTrue($validator->isValid('newuser'));
     }
 
     public function testAccountNotAvailableInEditMode()
     {
-        $validator = new Application_Form_Validate_LoginAvailable(array('ignoreCase' => true));
+        $validator = new Application_Form_Validate_LoginAvailable(['ignoreCase' => true]);
         $this->assertFalse($validator->isValid('admin'));
     }
 
@@ -106,9 +106,9 @@ class Application_Form_Validate_LoginAvailableTest extends ControllerTestCase
      */
     public function testIgnoreCaseChangesForEditMode()
     {
-        $validator = new Application_Form_Validate_LoginAvailable(array('ignoreCase' => true));
+        $validator = new Application_Form_Validate_LoginAvailable(['ignoreCase' => true]);
 
-        $context = array('oldLogin' => 'admin');
+        $context = ['oldLogin' => 'admin'];
 
         $this->assertTrue($validator->isValid('ADMIN', $context));
         $this->assertTrue($validator->isValid('aDmin', $context));
@@ -116,12 +116,10 @@ class Application_Form_Validate_LoginAvailableTest extends ControllerTestCase
 
     public function testNotAvailableForEditMode()
     {
-        $validator = new Application_Form_Validate_LoginAvailable(array('ignoreCase' => true));
+        $validator = new Application_Form_Validate_LoginAvailable(['ignoreCase' => true]);
 
-        $context = array('oldLogin' => 'admin');
+        $context = ['oldLogin' => 'admin'];
 
         $this->assertFalse($validator->isValid('user', $context));
     }
-
 }
-

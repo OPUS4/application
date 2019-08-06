@@ -31,9 +31,10 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Application_View_Helper_FileSize extends Zend_View_Helper_Abstract {
+class Application_View_Helper_FileSize extends Zend_View_Helper_Abstract
+{
 
-    private $_labels = array("Byte", "KB", "MB", "GB");
+    private $_labels = ["Byte", "KB", "MB", "GB"];
 
     /**
      * Formats file size for output.
@@ -42,7 +43,8 @@ class Application_View_Helper_FileSize extends Zend_View_Helper_Abstract {
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter) // Variables part of interface
      */
-    public function fileSize($name, $value = 0, $options = null) {
+    public function fileSize($name, $value = 0, $options = null)
+    {
         $labelIndex = 0;
         $maxIndex = count($this->_labels) - 1;
 
@@ -53,6 +55,4 @@ class Application_View_Helper_FileSize extends Zend_View_Helper_Abstract {
 
         return sprintf('%1$s %2$s', round($value, 2), $this->_labels[$labelIndex]);
     }
-
 }
-

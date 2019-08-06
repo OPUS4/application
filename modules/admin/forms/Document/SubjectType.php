@@ -41,7 +41,8 @@
  * @category    Application
  * @package     Module_Admin
  */
-class Admin_Form_Document_SubjectType extends Admin_Form_Document_MultiSubForm {
+class Admin_Form_Document_SubjectType extends Admin_Form_Document_MultiSubForm
+{
 
     /**
      * Der Schlagworttyp für den dieses Unterformular verwendet wird.
@@ -54,7 +55,8 @@ class Admin_Form_Document_SubjectType extends Admin_Form_Document_MultiSubForm {
      * @param string $type Schlagworttyp (z.B. 'swd', 'psyndex' usw.)
      * @param mixed $options
      */
-    public function __construct($type, $options = null) {
+    public function __construct($type, $options = null)
+    {
         $this->_subjectType = $type;
 
         $validator = null;
@@ -69,7 +71,8 @@ class Admin_Form_Document_SubjectType extends Admin_Form_Document_MultiSubForm {
             default:
                 $validator = new Application_Form_Validate_MultiSubForm_RepeatedValues(
                     'Value',
-                    'admin_document_error_repeated_subject', 'Language'
+                    'admin_document_error_repeated_subject',
+                    'Language'
                 );
                 break;
         }
@@ -82,7 +85,8 @@ class Admin_Form_Document_SubjectType extends Admin_Form_Document_MultiSubForm {
      *
      * Setzt die Legende für das Unterformular.
      */
-    public function init() {
+    public function init()
+    {
         parent::init();
 
         $this->setLegend('admin_document_section_subject' . $this->_subjectType);
@@ -92,7 +96,8 @@ class Admin_Form_Document_SubjectType extends Admin_Form_Document_MultiSubForm {
      * Liefert den Schlagworttyp für das Formular zurück.
      * @return string Schlagworttyp
      */
-    public function getSubjectType() {
+    public function getSubjectType()
+    {
         return $this->_subjectType;
     }
 
@@ -105,7 +110,8 @@ class Admin_Form_Document_SubjectType extends Admin_Form_Document_MultiSubForm {
      *
      * @param Opus_Document $document
      */
-    public function updateModel($document) {
+    public function updateModel($document)
+    {
         // hier darf nichts passieren
     }
 
@@ -113,11 +119,11 @@ class Admin_Form_Document_SubjectType extends Admin_Form_Document_MultiSubForm {
      * Erzeugt neues Unterformular Instanz fuer den entsprechenden Schlagworttyp.
      * @return \Admin_Form_Document_Subject
      */
-    public function createNewSubFormInstance() {
+    public function createNewSubFormInstance()
+    {
         if ($this->_subjectType == 'swd') {
             return new Admin_Form_Document_Subject('swd', 'deu');
-        }
-        else {
+        } else {
             return new Admin_Form_Document_Subject($this->_subjectType);
         }
     }
@@ -128,10 +134,11 @@ class Admin_Form_Document_SubjectType extends Admin_Form_Document_MultiSubForm {
      * @param Opus_Document $document
      * @return array
      */
-    public function getFieldValues($document) {
+    public function getFieldValues($document)
+    {
         $values = parent::getFieldValues($document);
 
-        $subjects = array();
+        $subjects = [];
 
         foreach ($values as $value) {
             if ($value->getType() == $this->_subjectType) {
@@ -141,5 +148,4 @@ class Admin_Form_Document_SubjectType extends Admin_Form_Document_MultiSubForm {
 
         return $subjects;
     }
-
 }

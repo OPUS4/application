@@ -71,8 +71,10 @@ class Application_Configuration_MaxUploadSizeTest extends TestCase
             // The 'G' modifier is available since PHP 5.1.0
             case 'g':
                 $valInt *= 1024;
+                // fall through is intended
             case 'm':
                 $valInt *= 1024;
+                // fall through is intended
             case 'k':
                 // do nothing
                 break;
@@ -82,5 +84,4 @@ class Application_Configuration_MaxUploadSizeTest extends TestCase
 
         return $valInt;
     }
-
 }

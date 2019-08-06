@@ -38,8 +38,8 @@
  */
 
 $xml = '';
-while (FALSE !== ($line = fgets(STDIN))) {
-   $xml .= $line;
+while (false !== ($line = fgets(STDIN))) {
+    $xml .= $line;
 }
 
 $xmlModel = new Opus_Model_Xml();

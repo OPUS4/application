@@ -41,13 +41,15 @@
  *
  * TODO add handling of language (English/German) to this class
  */
-class Home_Model_HelpFiles {
+class Home_Model_HelpFiles
+{
 
     /**
      * Returns the path to the help files.
      * @return string Path to help files
      */
-    public static function getHelpPath() {
+    public static function getHelpPath()
+    {
         return APPLICATION_PATH . '/application/configs/help/';
     }
 
@@ -56,12 +58,12 @@ class Home_Model_HelpFiles {
      * @param string $file File basename
      * @return string Content of file
      */
-    public static function getFileContent($file) {
+    public static function getFileContent($file)
+    {
         $path = Home_Model_HelpFiles::getHelpPath() . $file;
-        if (!is_null($file) && file_exists($path) && is_readable($path)) {
+        if (! is_null($file) && file_exists($path) && is_readable($path)) {
             return file_get_contents($path);
-        }
-        else {
+        } else {
             return null;
         }
     }
@@ -70,8 +72,9 @@ class Home_Model_HelpFiles {
      * Returns available help files.
      * @return array Basenames of help files
      */
-    public static function getFiles() {
-        $helpFilesAvailable = array();
+    public static function getFiles()
+    {
+        $helpFilesAvailable = [];
         $dir = new DirectoryIterator(Home_Model_HelpFiles::getHelpPath());
         foreach ($dir as $file) {
             if ($file->isFile() && $file->getFilename() != '.' && $file->getFilename() != '..' && $file->isReadable()
@@ -82,7 +85,8 @@ class Home_Model_HelpFiles {
         return $helpFilesAvailable;
     }
 
-    public static function getHelpEntries() {
+    public static function getHelpEntries()
+    {
         $config = Home_Model_HelpFiles::getHelpConfig();
 
         $data = $config->toArray();
@@ -100,7 +104,8 @@ class Home_Model_HelpFiles {
      * Loads help configuration.
      * @return Zend_Config_Ini
      */
-    private static function getHelpConfig() {
+    private static function getHelpConfig()
+    {
         if (empty(Home_Model_HelpFiles::$_helpConfig)) {
             $config = null;
 
@@ -109,18 +114,17 @@ class Home_Model_HelpFiles {
             if (file_exists($filePath)) {
                 try {
                     $config = new Zend_Config_Ini($filePath);
-                }
-                catch (Zend_Config_Exception $zce) {
+                } catch (Zend_Config_Exception $zce) {
                     // TODO einfachere Lösung?
                     $logger = Zend_Registry::get('Zend_Log');
-                    if (!is_null($logger)) {
+                    if (! is_null($logger)) {
                         $logger->err("could not load help configuration", $zce);
                     }
                 }
             }
 
             if (is_null($config)) {
-                $config = new Zend_Config(array());
+                $config = new Zend_Config([]);
             }
 
             Home_Model_HelpFiles::$_helpConfig = $config;
@@ -128,5 +132,4 @@ class Home_Model_HelpFiles {
 
         return Home_Model_HelpFiles::$_helpConfig;
     }
-
 }

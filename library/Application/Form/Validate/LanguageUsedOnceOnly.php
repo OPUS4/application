@@ -41,7 +41,8 @@
  *
  * TODO Redundanz mit DuplicateValue eliminieren
  */
-class Application_Form_Validate_LanguageUsedOnceOnly extends Zend_Validate_Abstract {
+class Application_Form_Validate_LanguageUsedOnceOnly extends Zend_Validate_Abstract
+{
 
     /**
      * Error constant for language ID that does not exist.
@@ -63,9 +64,9 @@ class Application_Form_Validate_LanguageUsedOnceOnly extends Zend_Validate_Abstr
     /**
      * Definition der Fehlermeldungen.
      */
-    protected $_messageTemplates = array(
+    protected $_messageTemplates = [
         self::NOT_VALID => 'admin_document_error_MoreThanOneTitleInLanguage'
-    );
+    ];
 
     /**
      * Konstruiert Validator der prüft, ob Sprache bereits genutzt wurde.
@@ -76,7 +77,8 @@ class Application_Form_Validate_LanguageUsedOnceOnly extends Zend_Validate_Abstr
      * @param array $languages Ausgewählte Sprachen in den Unterformularen (Titeln gleichen Typs)
      * @param int $position Position des Unterformulars im Context
      */
-    public function __construct($languages, $position) {
+    public function __construct($languages, $position)
+    {
         $this->_languages = $languages;
         $this->_position = $position;
         $this->setTranslator(Zend_Registry::get(Application_Translate::REGISTRY_KEY));
@@ -89,25 +91,25 @@ class Application_Form_Validate_LanguageUsedOnceOnly extends Zend_Validate_Abstr
      * @param array $context POST Daten für gesamtes Unterformular
      * @return boolean true - wenn die Sprache noch nicht verwendet wurde; ansonten false
      */
-    public function isValid($value, $context = null) {
+    public function isValid($value, $context = null)
+    {
         $value = (string) $value;
         $this->_setValue($value);
 
         $langCount = count($this->_languages);
 
-        if (!($this->_position < $langCount)) {
+        if (! ($this->_position < $langCount)) {
             Zend_Registry::get('Zend_Log')->err(__CLASS__ . ' mit Position > count(Languages) konstruiert.');
         }
 
-        if (!is_null($this->_languages)) {
+        if (! is_null($this->_languages)) {
             for ($index = 0; $index < $this->_position && $index < $langCount; $index++) {
                 if ($value == $this->_languages[$index]) {
                     $this->_error(self::NOT_VALID);
                     return false;
                 }
             }
-        }
-        else {
+        } else {
             Zend_Registry::get('Zend_Log')->err(__CLASS__ . ' mit Languages = NULL konstruiert.');
         }
 
@@ -118,7 +120,8 @@ class Application_Form_Validate_LanguageUsedOnceOnly extends Zend_Validate_Abstr
      * Liefert Position für Validator.
      * @return int
      */
-    public function getPosition() {
+    public function getPosition()
+    {
         return $this->_position;
     }
 
@@ -126,7 +129,8 @@ class Application_Form_Validate_LanguageUsedOnceOnly extends Zend_Validate_Abstr
      * Liefert Array mit ausgewählten Sprachen aller Unterformulare.
      * @return array
      */
-    public function getLanguages() {
+    public function getLanguages()
+    {
         return $this->_languages;
     }
 
@@ -134,8 +138,8 @@ class Application_Form_Validate_LanguageUsedOnceOnly extends Zend_Validate_Abstr
      * Translation is required for error messages, even if validated element is not translated (e.g. Languages).
      * @return bool
      */
-    public function translatorIsDisabled() {
+    public function translatorIsDisabled()
+    {
         return false;
     }
-
 }

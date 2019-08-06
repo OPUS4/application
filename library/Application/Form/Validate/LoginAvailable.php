@@ -34,7 +34,8 @@
 /**
  * Checks if a login already exists.
  */
-class Application_Form_Validate_LoginAvailable extends Zend_Validate_Abstract {
+class Application_Form_Validate_LoginAvailable extends Zend_Validate_Abstract
+{
 
     /**
      * Constant for login is not available anymore.
@@ -50,7 +51,8 @@ class Application_Form_Validate_LoginAvailable extends Zend_Validate_Abstract {
      */
     private $_ignoreCase = false;
 
-    public function __construct($options = null) {
+    public function __construct($options = null)
+    {
         if (isset($options['ignoreCase'])) {
             $this->_ignoreCase = $options['ignoreCase'];
         }
@@ -59,9 +61,9 @@ class Application_Form_Validate_LoginAvailable extends Zend_Validate_Abstract {
     /**
      * Error messages.
      */
-    protected $_messageTemplates = array(
+    protected $_messageTemplates = [
         self::NOT_AVAILABLE => 'admin_account_error_login_used'
-    );
+    ];
 
     /**
      * Checks if a login already exists.
@@ -75,7 +77,8 @@ class Application_Form_Validate_LoginAvailable extends Zend_Validate_Abstract {
      * @param mixed $context
      * @return boolean
      */
-    public function isValid($value, $context = null) {
+    public function isValid($value, $context = null)
+    {
         $value = (string) $value;
 
         $this->_setValue($value);
@@ -86,8 +89,7 @@ class Application_Form_Validate_LoginAvailable extends Zend_Validate_Abstract {
             if (isset($context['oldLogin'])) {
                 $oldLogin = $context['oldLogin'];
             }
-        }
-        elseif (is_string($context)) {
+        } elseif (is_string($context)) {
             $oldLogin = $context;
         }
 
@@ -109,7 +111,8 @@ class Application_Form_Validate_LoginAvailable extends Zend_Validate_Abstract {
      * @param string $login
      * @return boolean
      */
-    protected function _isLoginUsed($login) {
+    protected function _isLoginUsed($login)
+    {
         try {
             $account = new Opus_Account(null, null, $login);
         } catch (Exception $ex) {
@@ -117,6 +120,4 @@ class Application_Form_Validate_LoginAvailable extends Zend_Validate_Abstract {
         }
         return true;
     }
-
 }
-

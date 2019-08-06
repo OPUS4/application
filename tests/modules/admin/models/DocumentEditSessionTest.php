@@ -52,12 +52,12 @@ class Admin_Model_DocumentEditSessionTest extends ControllerTestCase
     {
         $model = new Admin_Model_DocumentEditSession(146);
 
-        $props = array(
+        $props = [
             'person' => 310,
             'role' => 'author',
             'order' => 2,
             'contact' => 1
-        );
+        ];
 
         $this->assertEquals(0, $model->getPersonCount());
 
@@ -72,12 +72,12 @@ class Admin_Model_DocumentEditSessionTest extends ControllerTestCase
 
         $this->assertEmpty($model->retrievePersons());
 
-        $props = array(
+        $props = [
             'person' => 310,
             'role' => 'author',
             'order' => 2,
             'contact' => 1
-        );
+        ];
 
         $model->addPerson($props);
 
@@ -91,14 +91,14 @@ class Admin_Model_DocumentEditSessionTest extends ControllerTestCase
     {
         $model = new Admin_Model_DocumentEditSession(146);
 
-        $post = array(
+        $post = [
             'key1' => 'value1',
             'key2' => 'value2',
-            'subform1' => array(
+            'subform1' => [
                 'key1' => 'value1',
                 'key2' => 'value2'
-            )
-        );
+            ]
+        ];
 
         $model->storePost($post);
 
@@ -112,14 +112,14 @@ class Admin_Model_DocumentEditSessionTest extends ControllerTestCase
     {
         $model = new Admin_Model_DocumentEditSession(146);
 
-        $post = array(
+        $post = [
             'key1' => 'value1',
             'key2' => 'value2',
-            'subform1' => array(
+            'subform1' => [
                 'key1' => 'value1',
                 'key2' => 'value2'
-            )
-        );
+            ]
+        ];
 
         $model->storePost($post, 'files');
 
@@ -168,7 +168,7 @@ class Admin_Model_DocumentEditSessionTest extends ControllerTestCase
 
         $this->assertNotEquals($namespace1, $namespace2);
 
-        $model1->addPerson(array('person' => 310));
+        $model1->addPerson(['person' => 310]);
 
         $this->assertEquals(1, $model1->getPersonCount());
         $this->assertEquals(0, $model2->getPersonCount());

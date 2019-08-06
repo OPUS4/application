@@ -36,7 +36,8 @@
 /**
  * class to built the mail form for mail contact to author
  */
-class Frontdoor_Form_ToauthorForm extends Zend_Form {
+class Frontdoor_Form_ToauthorForm extends Zend_Form
+{
 
     /**
      * hold author information (name, mail)
@@ -49,14 +50,15 @@ class Frontdoor_Form_ToauthorForm extends Zend_Form {
      *
      * @return void
      */
-    public function init() {
+    public function init()
+    {
         $atLeastOne = new Frontdoor_Form_AtLeastOneValidator();
         $authorSub = new Zend_Form_SubForm('a');
 
-        if (!is_null($this->_authors)) {
+        if (! is_null($this->_authors)) {
             $authCheck = null;
             foreach ($this->_authors as $author) {
-                $options = array('checked' => true);
+                $options = ['checked' => true];
                 if (count($this->_authors) == 1) {
                     $options['disabled'] = true;
                 }
@@ -69,7 +71,7 @@ class Frontdoor_Form_ToauthorForm extends Zend_Form {
                     $authCheck->setUncheckedValue(1);
                 }
             }
-            
+
             $authCheck->addValidator($atLeastOne);
             $this->addSubForm($authorSub, 'authors');
         }
@@ -88,28 +90,30 @@ class Frontdoor_Form_ToauthorForm extends Zend_Form {
         $message->setLabel('frontdoor_messagetext');
 
         $captcha = new Zend_Form_Element_Captcha(
-            'foo', array(
+            'foo',
+            [
             'label' => 'label_captcha',
-            'captcha' => array(
+            'captcha' => [
                 'captcha' => 'Figlet',
                 'wordLen' => 6,
                 'timeout' => 300,
-            ))
+            ]]
         );
 
         $submit = new Zend_Form_Element_Submit('frontdoor_send_mailtoauthor');
         $submit->setLabel('frontdoor_send_mailtoauthor');
 
-        $this->addElements(array($sender, $senderMail, $message, $captcha, $submit));
+        $this->addElements([$sender, $senderMail, $message, $captcha, $submit]);
     }
 
-    public function setAuthors($authors) {
+    public function setAuthors($authors)
+    {
         $this->_authors = $authors;
         return $this;
     }
 
-    public function isValid($data) {
+    public function isValid($data)
+    {
         return parent::isValid($data);
     }
-
 }

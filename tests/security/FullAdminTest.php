@@ -79,5 +79,4 @@ class FullAdminTest extends ControllerTestCase
         $this->dispatch('/admin/licence');
         $this->assertQueryContentContains('//html/head/title', 'Admin Licences', 'admin licences not asserted');
     }
-
 }

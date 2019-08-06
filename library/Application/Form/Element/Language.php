@@ -69,7 +69,7 @@ class Application_Form_Element_Language extends Application_Form_Element_Select
     public static function initLanguageList()
     {
         $translate = Zend_Registry::get(Application_Translate::REGISTRY_KEY);
-        $languages = array();
+        $languages = [];
         foreach (Opus_Language::getAllActiveTable() as $languageRow) {
             $langId = $languageRow['part2_t'];
             $languages[$langId] = $translate->translateLanguage($langId);

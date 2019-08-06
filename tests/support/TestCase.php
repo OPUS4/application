@@ -136,7 +136,7 @@ class TestCase extends Zend_Test_PHPUnit_ControllerTestCase
      */
     protected function closeLogfile()
     {
-        if (!Zend_Registry::isRegistered('Zend_Log')) {
+        if (! Zend_Registry::isRegistered('Zend_Log')) {
             return;
         }
 

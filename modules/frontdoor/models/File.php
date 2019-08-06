@@ -87,7 +87,7 @@ class Frontdoor_Model_File
 
     public function checkDocumentApplicableForFileDownload($realm)
     {
-        if (!$this->isDocumentAccessAllowed($this->_doc->getId(), $realm)) {
+        if (! $this->isDocumentAccessAllowed($this->_doc->getId(), $realm)) {
             switch ($this->_doc->getServerState()) {
                 case self::SERVER_STATE_DELETED:
                     throw new Frontdoor_Model_DocumentDeletedException();
@@ -110,7 +110,7 @@ class Frontdoor_Model_File
             throw new Frontdoor_Model_FileNotFoundException();
         }
 
-        if (!$this->isFileAccessAllowed($targetFile, $realm)) {
+        if (! $this->isFileAccessAllowed($targetFile, $realm)) {
             throw new Frontdoor_Model_FileAccessNotAllowedException();
         }
 
@@ -119,7 +119,7 @@ class Frontdoor_Model_File
 
     private function isDocumentAccessAllowed($docId, $realm)
     {
-        if (!($realm instanceof Opus_Security_IRealm)) {
+        if (! ($realm instanceof Opus_Security_IRealm)) {
             return false;
         }
         return $realm->checkDocument($docId) || $this->getAclHelper()->accessAllowed('documents');
@@ -127,7 +127,7 @@ class Frontdoor_Model_File
 
     private function isFileAccessAllowed($file, $realm)
     {
-        if (is_null($file) or !($realm instanceof Opus_Security_IRealm)) {
+        if (is_null($file) or ! ($realm instanceof Opus_Security_IRealm)) {
             return false;
         }
 

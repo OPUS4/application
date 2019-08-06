@@ -34,12 +34,13 @@
  */
 
 /**
- * 
+ *
  * This helper class defines only one method fullUrl() to retrieve the
  * application base url for absolute urls in views.
  *
  */
-class Application_View_Helper_FullUrl extends Zend_View_Helper_Abstract {
+class Application_View_Helper_FullUrl extends Zend_View_Helper_Abstract
+{
 
     /**
      * Return the full url (server name followed by base URL).
@@ -48,8 +49,8 @@ class Application_View_Helper_FullUrl extends Zend_View_Helper_Abstract {
      * @param Zend_View $view instance of Zend_View
      * @return Full url string.
      */
-    public function fullUrl() {
+    public function fullUrl()
+    {
         return $this->view->serverUrl() . $this->view->baseUrl();
     }
-
 }

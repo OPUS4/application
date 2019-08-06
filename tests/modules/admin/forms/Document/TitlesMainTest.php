@@ -65,7 +65,7 @@ class Admin_Form_Document_TitlesMainTest extends ControllerTestCase
 
         $this->assertEquals(2, count($form->getSubForms()));
 
-        $globalContext = array('General' => array('Language' => 'deu')); // es gibt einen Titel in 'deu'
+        $globalContext = ['General' => ['Language' => 'deu']]; // es gibt einen Titel in 'deu'
 
         $post = $this->getPostData();
 
@@ -82,7 +82,7 @@ class Admin_Form_Document_TitlesMainTest extends ControllerTestCase
 
         $this->assertEquals(2, count($form->getSubForms()));
 
-        $globalContext = array('General' => array('Language' => 'rus')); // es gibt keinen Titel in 'rus'
+        $globalContext = ['General' => ['Language' => 'rus']]; // es gibt keinen Titel in 'rus'
 
         $post = $this->getPostData();
 
@@ -103,21 +103,20 @@ class Admin_Form_Document_TitlesMainTest extends ControllerTestCase
         $title2->setLanguage('eng');
         $title2->setValue('English Title');
 
-        $document->setTitleMain(array($title1, $title2));
+        $document->setTitleMain([$title1, $title2]);
 
         return $document;
     }
 
     protected function getPostData()
     {
-        return array(
-            'TitleMain0' => array(
+        return [
+            'TitleMain0' => [
                 'Language' => 'eng'
-            ),
-            'TitleMain1' => array(
+            ],
+            'TitleMain1' => [
                 'Language' => 'deu'
-            )
-        );
+            ]
+        ];
     }
-
 }

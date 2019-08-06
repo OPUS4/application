@@ -32,7 +32,8 @@
  * @version     $Id$
  */
 
-class Application_Util_Document {
+class Application_Util_Document
+{
 
     /**
      *
@@ -45,9 +46,10 @@ class Application_Util_Document {
      * @param Opus_Document $document
      * @throws Application_Exception
      */
-    public function  __construct($document) {
+    public function __construct($document)
+    {
         $this->_document = $document;
-        if (!$this->checkPermission()) {
+        if (! $this->checkPermission()) {
             throw new Application_Exception('document access for id ' . $this->_document->getId() . ' not allowed');
         }
     }
@@ -55,7 +57,8 @@ class Application_Util_Document {
     /**
      * @return boolean
      */
-    private function checkPermission() {
+    private function checkPermission()
+    {
         if ($this->_document->getServerState() === 'published') {
             return true;
         }
@@ -68,7 +71,8 @@ class Application_Util_Document {
      * @param boolean $useCache
      * @return DOMNode Opus_Document node
      */
-    public function getNode($useCache = true) {
+    public function getNode($useCache = true)
+    {
         $xmlModel = new Opus_Model_Xml();
         $xmlModel->setModel($this->_document);
         $xmlModel->excludeEmptyFields(); // needed for preventing handling errors
@@ -79,5 +83,4 @@ class Application_Util_Document {
         $result = $xmlModel->getDomDocument();
         return $result->getElementsByTagName('Opus_Document')->item(0);
     }
-
 }

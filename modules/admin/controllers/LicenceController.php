@@ -68,6 +68,6 @@ class Admin_LicenceController extends Application_Controller_ActionCRUD
      */
     public function isDeletable($licence)
     {
-        return !$licence->isUsed();
+        return ! $licence->isUsed();
     }
 }

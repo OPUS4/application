@@ -37,18 +37,18 @@
  *
  * TODO customizable class
  */
-class Application_Form_Decorator_ElementHint extends Zend_Form_Decorator_Abstract {
+class Application_Form_Decorator_ElementHint extends Zend_Form_Decorator_Abstract
+{
 
-    public function render($content) {
+    public function render($content)
+    {
         $element = $this->getElement();
 
         if ($element instanceof Application_Form_IElement) {
             $hint = $element->getHint();
-            return (!is_null($hint)) ? $content . '<p class="datahint">' . $hint . '</p>' : $content;
-        }
-        else {
+            return (! is_null($hint)) ? $content . '<p class="datahint">' . $hint . '</p>' : $content;
+        } else {
             return $content;
         }
     }
-
 }

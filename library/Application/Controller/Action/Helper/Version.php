@@ -36,18 +36,21 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Application_Controller_Action_Helper_Version extends Application_Controller_Action_Helper_Abstract {
+class Application_Controller_Action_Helper_Version extends Application_Controller_Action_Helper_Abstract
+{
 
     /**
      * Version of latest OPUS 4 Release.
      */
     private $_version;
 
-    public function direct() {
+    public function direct()
+    {
         return $this->getVersion();
     }
 
-    public function getVersion() {
+    public function getVersion()
+    {
         if (is_null($this->_version)) {
             $this->_version = $this->getLatestReleaseFromServer();
         }
@@ -55,7 +58,8 @@ class Application_Controller_Action_Helper_Version extends Application_Controlle
         return $this->_version;
     }
 
-    public function setVersion($version) {
+    public function setVersion($version)
+    {
         $this->_version = $version;
     }
 
@@ -65,7 +69,8 @@ class Application_Controller_Action_Helper_Version extends Application_Controlle
      *
      * TODO Exception handling for connection problems (e.g. not found)
      */
-    public function getLatestReleaseFromServer() {
+    public function getLatestReleaseFromServer()
+    {
         $latestUrl = Zend_Registry::get('Zend_Config')->update->latestVersionCheckUrl;
 
         $ch = curl_init();
@@ -77,7 +82,7 @@ class Application_Controller_Action_Helper_Version extends Application_Controlle
         $response = curl_exec($ch);
         curl_close($ch);
 
-        if (!$response) {
+        if (! $response) {
             // TODO no response
             return "online check failed";
         }
@@ -85,11 +90,9 @@ class Application_Controller_Action_Helper_Version extends Application_Controlle
         $data = json_decode($response);
         if (isset($data->tag_name)) {
             $version = $data->tag_name;
-        }
-        else {
+        } else {
             $version = 'unknown';
         }
         return $version;
     }
-
 }

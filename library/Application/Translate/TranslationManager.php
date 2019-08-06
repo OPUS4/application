@@ -150,7 +150,6 @@ class Application_Translate_TranslationManager
                                 $sortArray[] = $row[$sortKey];
                             }
                         }
-
                     } else {
                         throw new Setup_Model_FileNotReadableException($filePath);
                     }
@@ -197,11 +196,11 @@ class Application_Translate_TranslationManager
         $languageDirs = $this->getFolderNames();
 
         foreach ($this->_modules as $moduleName) {
-
             $moduleFiles = [];
 
             $moduleSubDirs = new RecursiveDirectoryIterator(
-                realpath(APPLICATION_PATH . "/modules/$moduleName"), FilesystemIterator::CURRENT_AS_SELF
+                realpath(APPLICATION_PATH . "/modules/$moduleName"),
+                FilesystemIterator::CURRENT_AS_SELF
             );
 
             foreach ($moduleSubDirs as $moduleSubDir) {
@@ -219,7 +218,7 @@ class Application_Translate_TranslationManager
                 }
             }
 
-            if (!empty($moduleFiles)) {
+            if (! empty($moduleFiles)) {
                 $modules[$moduleName] = $moduleFiles;
             }
         }

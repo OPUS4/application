@@ -75,7 +75,7 @@ class Application_Util_Notification extends Application_Model_Abstract
         // TODO refactor getting main title value
         $titleObj = $document->getMainTitle();
 
-        if (!is_null($titleObj)) {
+        if (! is_null($titleObj)) {
             return $titleObj->getValue();
         } else {
             return null;
@@ -129,7 +129,7 @@ class Application_Util_Notification extends Application_Model_Abstract
         $authors = [];
 
         $personAuthors = $document->getPersonAuthor();
-        if (!empty($personAuthors)) {
+        if (! empty($personAuthors)) {
             foreach ($personAuthors as $author) {
                 // TODO Komma nur wenn FirstName present
                 $name = trim($author->getLastName() . ", " . $author->getFirstName());
@@ -196,8 +196,11 @@ class Application_Util_Notification extends Application_Model_Abstract
 
         if (isset($config->notification->document->submitted->template)) {
             return $this->getTemplate(
-                $config->notification->document->submitted->template, $docId, $authors,
-                $title, $url
+                $config->notification->document->submitted->template,
+                $docId,
+                $authors,
+                $title,
+                $url
             );
         }
     }
@@ -205,7 +208,7 @@ class Application_Util_Notification extends Application_Model_Abstract
     public function getTemplate($template, $docId, $authors, $title, $url)
     {
         $templateFileName = APPLICATION_PATH . '/application/configs/mail_templates/' . $template;
-        if (!is_file($templateFileName)) {
+        if (! is_file($templateFileName)) {
             $this->getLogger()->err(
                 "could not find mail template based on application configuration: '$templateFileName'"
                 . ' does not exist or is not readable'
@@ -214,12 +217,12 @@ class Application_Util_Notification extends Application_Model_Abstract
         }
         ob_start();
         extract(
-            array(
+            [
             "authors" => $authors,
             "title" => $title,
             "docId" => $docId,
             "url" => $url
-            )
+            ]
         );
         require($templateFileName);
         $body = ob_get_contents();
@@ -291,7 +294,7 @@ class Application_Util_Notification extends Application_Model_Abstract
 
         foreach ($recipients as $recipient) {
             // only send if email address has not been used before
-            if (!in_array($recipient['address'], $addressesUsed)) {
+            if (! in_array($recipient['address'], $addressesUsed)) {
                 $job = new Opus_Job();
                 $job->setLabel(Opus_Job_Worker_MailNotification::LABEL);
                 $job->setData([
@@ -313,8 +316,7 @@ class Application_Util_Notification extends Application_Model_Abstract
                     try {
                         $mail = new Opus_Job_Worker_MailNotification($this->getLogger(), false);
                         $mail->work($job);
-                    }
-                    catch (Exception $exc) {
+                    } catch (Exception $exc) {
                         $this->getLogger()->err("Email notification failed: " . $exc);
                     }
                 }

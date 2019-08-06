@@ -50,8 +50,7 @@ $status = $doiManager->registerPending();
 
 if ($status->isNoDocsToProcess()) {
     echo "could not find matching documents for DOI registration\n";
-}
-else {
+} else {
     echo count($status->getDocsWithDoiStatus()) . " documents have been processed\n";
 
     if ($printErrors) {
@@ -62,5 +61,3 @@ else {
         }
     }
 }
-
-

@@ -129,10 +129,10 @@ class Admin_Form_Document_NoteTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Note();
 
-        $post = array(
+        $post = [
             'Visibility' => '0',
             'Message' => ''
-        );
+        ];
 
         $this->assertFalse($form->isValid($post));
 
@@ -153,5 +153,4 @@ class Admin_Form_Document_NoteTest extends ControllerTestCase
 
         $this->assertFalse($form->getElement('Visibility')->getDecorator('Label'));
     }
-
 }

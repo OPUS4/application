@@ -32,7 +32,8 @@
  * @version     $Id$
  */
 
-class Solrsearch_Model_CollectionRoles {
+class Solrsearch_Model_CollectionRoles
+{
 
     private $_collectionRoles = null;
 
@@ -43,12 +44,11 @@ class Solrsearch_Model_CollectionRoles {
     public function getAllVisible()
     {
         if (is_null($this->_collectionRoles)) {
-            $this->_collectionRoles = array();
+            $this->_collectionRoles = [];
             foreach (Opus_CollectionRole::fetchAll() as $collectionRole) {
                 if ($this->isVisible($collectionRole)
                     && ($this->hasVisibleChildren($collectionRole)
-                    || $this->hasPublishedDocs($collectionRole)))
-                {
+                    || $this->hasPublishedDocs($collectionRole))) {
                     array_push($this->_collectionRoles, $collectionRole);
                 }
             }
@@ -60,7 +60,7 @@ class Solrsearch_Model_CollectionRoles {
     /**
      * Return true if the given collection role has at least one
      * first-level collection that is visible.
-     * 
+     *
      * @param Opus_CollectionRole $collectionRole
      * @return bool
      */
@@ -87,7 +87,7 @@ class Solrsearch_Model_CollectionRoles {
             return false;
         }
         $publishedDocIDs = $rootCollection->getPublishedDocumentIds();
-        return is_array($publishedDocIDs) && !empty($publishedDocIDs);
+        return is_array($publishedDocIDs) && ! empty($publishedDocIDs);
     }
 
     /**
@@ -99,6 +99,4 @@ class Solrsearch_Model_CollectionRoles {
     {
         return $collectionRole->getVisible() === '1' and $collectionRole->getVisibleBrowsingStart() === '1';
     }
-
 }
-

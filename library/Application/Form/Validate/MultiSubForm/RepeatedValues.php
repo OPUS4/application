@@ -33,7 +33,8 @@
  */
 
 
-class Application_Form_Validate_MultiSubForm_RepeatedValues implements Application_Form_Validate_IMultiSubForm {
+class Application_Form_Validate_MultiSubForm_RepeatedValues implements Application_Form_Validate_IMultiSubForm
+{
 
     private $_elementName;
 
@@ -41,7 +42,8 @@ class Application_Form_Validate_MultiSubForm_RepeatedValues implements Applicati
 
     private $_otherElements;
 
-    public function __construct($elementName, $message, $otherElements = null) {
+    public function __construct($elementName, $message, $otherElements = null)
+    {
         if (is_null($elementName) || strlen(trim($elementName)) == 0) {
             throw new Application_Exception(__METHOD__ . ' #1 argument must not be null or empty.');
         }
@@ -50,8 +52,8 @@ class Application_Form_Validate_MultiSubForm_RepeatedValues implements Applicati
             throw new Application_Exception(__METHOD__ . ' #2 argument must not be null or empty.');
         }
 
-        if (!is_null($otherElements) && !is_array($otherElements)) {
-            $otherElements = array($otherElements);
+        if (! is_null($otherElements) && ! is_array($otherElements)) {
+            $otherElements = [$otherElements];
         }
 
         $this->_elementName = $elementName;
@@ -61,17 +63,18 @@ class Application_Form_Validate_MultiSubForm_RepeatedValues implements Applicati
 
         if ($translator->isTranslated($message)) {
             $this->_message = $translator->translate($message);
-        }
-        else {
+        } else {
             $this->_message = $message;
         }
     }
 
-    public function isValid($data, $context = null) {
+    public function isValid($data, $context = null)
+    {
         return true;
     }
 
-    public function prepareValidation($form, $data, $context = null) {
+    public function prepareValidation($form, $data, $context = null)
+    {
         $position = 0;
 
         $values = $this->getValues($this->_elementName, $data);
@@ -79,20 +82,22 @@ class Application_Form_Validate_MultiSubForm_RepeatedValues implements Applicati
         foreach ($form->getSubForms() as $name => $subform) {
             if (array_key_exists($name, $data)) {
                 $element = $subform->getElement($this->_elementName);
-                if (!is_null($element)) {
+                if (! is_null($element)) {
                     if (is_null($this->_otherElements)) {
                         $element->addValidator(
                             new Application_Form_Validate_DuplicateValue(
-                                $values, $position++,
+                                $values,
+                                $position++,
                                 $this->_message
                             )
                         );
-                    }
-                    else {
+                    } else {
                         $element->addValidator(
                             new Application_Form_Validate_DuplicateMultiValue(
-                                $values, $position++,
-                                $this->_message, $this->_otherElements
+                                $values,
+                                $position++,
+                                $this->_message,
+                                $this->_otherElements
                             )
                         );
                     }
@@ -101,8 +106,9 @@ class Application_Form_Validate_MultiSubForm_RepeatedValues implements Applicati
         }
     }
 
-    public function getValues($name, $context) {
-        $values = array();
+    public function getValues($name, $context)
+    {
+        $values = [];
 
         foreach ($context as $index => $subform) {
             $value = null;
@@ -112,10 +118,9 @@ class Application_Form_Validate_MultiSubForm_RepeatedValues implements Applicati
                 if (isset($subform[$name])) {
                     $value = $subform[$name];
                 }
-            }
-            else {
+            } else {
                 // komplexe Werte aus mehreren Feldern
-                $value = array();
+                $value = [];
 
                 foreach ($this->_otherElements as $element) {
                     if (isset($subform[$element])) {
@@ -128,7 +133,7 @@ class Application_Form_Validate_MultiSubForm_RepeatedValues implements Applicati
                 }
             }
 
-            if (!is_null($value)) {
+            if (! is_null($value)) {
                 $values[] = $value;
             }
         }
@@ -136,16 +141,18 @@ class Application_Form_Validate_MultiSubForm_RepeatedValues implements Applicati
         return $values;
     }
 
-    public function getElementName() {
+    public function getElementName()
+    {
         return $this->_elementName;
     }
 
-    public function getMessage() {
+    public function getMessage()
+    {
         return $this->_message;
     }
 
-    public function getOtherElements() {
+    public function getOtherElements()
+    {
         return $this->_otherElements;
     }
-
 }

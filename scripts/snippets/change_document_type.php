@@ -34,7 +34,7 @@
  * @version     $Id: update-thesispublisher.php 11775 2013-06-25 14:28:41Z tklein $
  */
 /**
- * 
+ *
  */
 if (basename(__FILE__) !== basename($argv[0])) {
     echo "script must be executed directy (not via opus-console)\n";
@@ -43,11 +43,11 @@ if (basename(__FILE__) !== basename($argv[0])) {
 
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
-$options = getopt('', array('dryrun', 'from:', 'to:'));
+$options = getopt('', ['dryrun', 'from:', 'to:']);
 
 $dryrun = isset($options['dryrun']);
 
-if (!isset($options['from']) || empty($options['from']) || !isset($options['to']) || empty($options['to'])) {
+if (! isset($options['from']) || empty($options['from']) || ! isset($options['to']) || empty($options['to'])) {
     echo "Usage: {$argv[0]} --from <current doc type> --to <target doc type> (--dryrun)\n";
     echo "--from and --to must be provided.\n";
     exit;
@@ -57,7 +57,7 @@ $from = $options['from'];
 $to = $options['to'];
 
 if ($dryrun) {
-    _log("TEST RUN: NO DATA WILL BE MODIFIED"); 
+    _log("TEST RUN: NO DATA WILL BE MODIFIED");
 }
 
 $docFinder = new Opus_DocumentFinder();
@@ -68,13 +68,13 @@ _log(count($docIds) . " documents found");
 foreach ($docIds as $docId) {
     $doc = new Opus_Document($docId);
     $doc->setType($to);
-    if (!$dryrun) {
-        $doc->store(); 
+    if (! $dryrun) {
+        $doc->store();
     }
     _log("Document #$docId changed from '$from' to '$to'");
 }
 
-function _log($message) {
+function _log($message)
+{
     echo "$message\n";
 }
-

@@ -42,9 +42,9 @@ class Application_View_Helper_CustomFileSortingEnabledTest extends ControllerTes
 
         $this->assertTrue($helper->customFileSortingEnabled());
 
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
-            'frontdoor' => array('files' => array('customSorting' => '0'))
-        )));
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'frontdoor' => ['files' => ['customSorting' => '0']]
+        ]));
 
         $this->assertFalse($helper->customFileSortingEnabled());
     }

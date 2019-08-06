@@ -51,31 +51,28 @@ class Application_Form_Element_Number extends Application_Form_Element_Text
         $validator->setMessage('validation_error_int');
         $this->addValidator($validator);
 
-        $options = array();
+        $options = [];
 
         $min = $this->getAttrib('min');
         if (is_null($min)) {
             $min = 0;
-        }
-        else {
+        } else {
             $this->setAttrib('min', null); // remove from rendered attributes
         }
         $options['min'] = $min;
 
         $max = $this->getAttrib('max');
         if (is_null($max)) {
-            $validator = new Zend_Validate_GreaterThan(array('min' => $min - 1)); // inclusive not supported in ZF1
+            $validator = new Zend_Validate_GreaterThan(['min' => $min - 1]); // inclusive not supported in ZF1
             $validator->setMessage('validation_error_number_tooSmall');
-        }
-        else {
+        } else {
             $this->setAttrib('max', null); // remove from rendered attributes
             $options['max'] = $max;
 
-            $validator = new Zend_Validate_Between(array('min' => $min, 'max' => $max));
+            $validator = new Zend_Validate_Between(['min' => $min, 'max' => $max]);
             $validator->setMessage('validation_error_number_notBetween');
         }
 
         $this->addValidator($validator);
     }
-
 }

@@ -30,26 +30,31 @@
  * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Application_Form_Element_MultiCheckbox extends Zend_Form_Element_MultiCheckbox {
+class Application_Form_Element_MultiCheckbox extends Zend_Form_Element_MultiCheckbox
+{
 
-    public function init() {
+    public function init()
+    {
         parent::init();
 
         $this->addPrefixPath(
-            'Application_Form_Decorator', 'Application/Form/Decorator', Zend_Form::DECORATOR
+            'Application_Form_Decorator',
+            'Application/Form/Decorator',
+            Zend_Form::DECORATOR
         );
     }
 
-    public function loadDefaultDecorators() {
-        if (!$this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
+    public function loadDefaultDecorators()
+    {
+        if (! $this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
             $this->setDecorators(
-                array(
+                [
                 'ViewHelper',
                 'ElementHtmlTag',
-                array('LabelNotEmpty', array('tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend',
-                    'disableFor' => true)),
-                array(array('dataWrapper' => 'HtmlTagWithId'), array('tag' => 'div', 'class' => 'data-wrapper'))
-                )
+                ['LabelNotEmpty', ['tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend',
+                    'disableFor' => true]],
+                [['dataWrapper' => 'HtmlTagWithId'], ['tag' => 'div', 'class' => 'data-wrapper']]
+                ]
             );
         }
     }
@@ -57,15 +62,16 @@ class Application_Form_Element_MultiCheckbox extends Zend_Form_Element_MultiChec
     /**
      * Sorgt dafür, daß nur der Text ausgeben wird und kein INPUT-Tag.
      */
-    public function prepareRenderingAsView() {
+    public function prepareRenderingAsView()
+    {
         $viewHelper = $this->getDecorator('ViewHelper');
         if ($viewHelper instanceof Application_Form_Decorator_ViewHelper) {
             $viewHelper->setViewOnlyEnabled(true);
         }
     }
 
-    public function getStaticViewHelper() {
+    public function getStaticViewHelper()
+    {
         return 'viewFormMultiCheckbox';
     }
-
 }

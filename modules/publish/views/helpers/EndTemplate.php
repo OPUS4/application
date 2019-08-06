@@ -39,36 +39,36 @@
  *
  * @author Susanne Gottwald
  */
-class Publish_View_Helper_EndTemplate extends Zend_View_Helper_Abstract {
+class Publish_View_Helper_EndTemplate extends Zend_View_Helper_Abstract
+{
 
-    public function endTemplate(Publish_Form_PublishingSecond $form, $elementCounter) {                             
+    public function endTemplate(Publish_Form_PublishingSecond $form, $elementCounter)
+    {
         $formCount = 0;
         $elements = $form->getElements();
         $numberOfElements = count($elements);
-        
+
         $groups = $form->getDisplayGroups();
-        $formCount = count($groups);        
+        $formCount = count($groups);
         $groupCount = 0;
 
-        foreach ($groups AS $group) {
+        foreach ($groups as $group) {
             $groupElements = $group->getElements();
             $groupCount = $groupCount + count($groupElements);
         }
-        
+
         $formCount = $formCount + $numberOfElements - $groupCount;
 
         if ($formCount === $elementCounter) {
-            return ""; 
+            return "";
         }
 
         if ($formCount > $elementCounter) {
-            return $this->view->translate('publish_controller_form_template1'); 
-        }            
+            return $this->view->translate('publish_controller_form_template1');
+        }
 
         if ($formCount < $elementCounter) {
-            return $this->view->translate('publish_controller_form_template2'); 
+            return $this->view->translate('publish_controller_form_template2');
         }
     }
-
 }
-

@@ -64,12 +64,12 @@ class Admin_Form_Document_Identifier extends Admin_Form_AbstractModelSubForm
     {
         parent::init();
 
-        $typeElement = $this->createElement('Identifier', self::ELEMENT_TYPE, array('required' => true));
+        $typeElement = $this->createElement('Identifier', self::ELEMENT_TYPE, ['required' => true]);
         $this->addElement($typeElement);
 
-        $valueElement = $this->createElement('text', self::ELEMENT_VALUE, array(
+        $valueElement = $this->createElement('text', self::ELEMENT_VALUE, [
             'required' => true, 'size' => '80'
-        ));
+        ]);
         $valueElement->addValidator(new Application_Form_Validate_Identifier($typeElement));
         $this->addElement($valueElement);
 
@@ -129,5 +129,4 @@ class Admin_Form_Document_Identifier extends Admin_Form_AbstractModelSubForm
 
         $this->removeDecorator('Fieldset');
     }
-
 }

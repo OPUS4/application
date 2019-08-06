@@ -50,7 +50,8 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     {
         parent::setUp();
         $this->htmlMetaTags = new Frontdoor_Model_HtmlMetaTags(
-            Zend_Registry::get('Zend_Config'), 'http://localhost/opus'
+            Zend_Registry::get('Zend_Config'),
+            'http://localhost/opus'
         );
 
         $this->currDate = new Opus_Date(new Zend_Date());
@@ -157,7 +158,8 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     /**
      * @param Opus_Document $doc
      */
-    private function handleThesis($doc) {
+    private function handleThesis($doc)
+    {
         $result = $this->htmlMetaTags->createTags($doc);
 
         $this->assertCount(50, $result);
@@ -656,8 +658,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     private function addAuthors($doc, $num)
     {
         $authors = [];
-        for ($i = 0; $i < $num; $i++)
-        {
+        for ($i = 0; $i < $num; $i++) {
             $author = new Opus_Person();
             $author->setLastName('lastName-' . $i);
             if ($i % 2 == 0) {
@@ -814,7 +815,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     private function createFile($path, $fileName, $header)
     {
         $filepath = $path . DIRECTORY_SEPARATOR . $fileName;
-        $fp = fopen($filepath,"wb");
+        $fp = fopen($filepath, "wb");
         fwrite($fp, $header);
         fclose($fp);
 

@@ -38,18 +38,19 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Application_Form_Decorator_ViewHelper extends Zend_Form_Decorator_ViewHelper {
+class Application_Form_Decorator_ViewHelper extends Zend_Form_Decorator_ViewHelper
+{
 
     private $_viewOnlyEnabled = false;
 
-    public function getHelper() {
+    public function getHelper()
+    {
         if ($this->isViewOnlyEnabled()) {
             $element = $this->getElement();
 
             if (method_exists($element, 'getStaticViewHelper')) {
                 $helper = $element->getStaticViewHelper();
-            }
-            else {
+            } else {
                 $type = $element->getType();
                 if ($pos = strrpos($type, '_')) {
                     $type = substr($type, $pos + 1);
@@ -57,33 +58,32 @@ class Application_Form_Decorator_ViewHelper extends Zend_Form_Decorator_ViewHelp
                 $helper = 'viewForm' . ucfirst($type);
                 try {
                     $element->getView()->getHelper($helper);
-                }
-                catch (Zend_Loader_PluginLoader_Exception $zlpe) {
+                } catch (Zend_Loader_PluginLoader_Exception $zlpe) {
                     $helper = 'viewFormDefault';
                 }
             }
             $this->setHelper($helper);
             return $this->_helper;
-        }
-        else {
+        } else {
             return parent::getHelper();
         }
     }
 
-    public function setViewOnlyEnabled($enabled) {
+    public function setViewOnlyEnabled($enabled)
+    {
         $this->_viewOnlyEnabled = $enabled;
         return $this;
     }
 
-    public function isViewOnlyEnabled() {
+    public function isViewOnlyEnabled()
+    {
         $enabled = $this->getOption('viewOnlyEnabled');
 
-        if (!is_null($enabled)) {
+        if (! is_null($enabled)) {
             $this->removeOption('viewOnlyEnabled');
             $this->_viewOnlyEnabled = $enabled;
         }
 
         return $this->_viewOnlyEnabled;
     }
-
 }

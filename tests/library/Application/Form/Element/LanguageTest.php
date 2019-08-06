@@ -90,6 +90,7 @@ class Application_Form_Element_LanguageTest extends FormElementTestCase
         $this->assertTrue($element->isValid('deu'));
     }
 
-    public function testUnknownLanguage() {
+    public function testUnknownLanguage()
+    {
     }
 }

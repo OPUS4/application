@@ -32,20 +32,22 @@
  * @version     $Id$
  */
 
-class Oai_Model_SingleFile extends Oai_Model_AbstractFile {    
+class Oai_Model_SingleFile extends Oai_Model_AbstractFile
+{
 
-    public function __construct($docId, $fileToInclude, $filesPath, $tempPath, $logger = null) {
+    public function __construct($docId, $fileToInclude, $filesPath, $tempPath, $logger = null)
+    {
         $this->setLogger($logger);
         $numberOfFiles = count($fileToInclude);
         if ($numberOfFiles != 1) {
             $this->logErrorMessage("unexpected number of files to process: $numberOfFiles");
             throw new Oai_Model_Exception('unexpected number of files to include: only one file was expected');
-        }        
-        $file = $fileToInclude[0];        
+        }
+        $file = $fileToInclude[0];
         $filePath = $filesPath . $docId . DIRECTORY_SEPARATOR . $file->getPathName();
         $extension = '.' . pathinfo($filePath, PATHINFO_EXTENSION);
         $outputFile = $tempPath . uniqid($docId, true) . $extension;
-        if (!copy($filePath, $outputFile)) {
+        if (! copy($filePath, $outputFile)) {
             $this->logErrorMessage("error while performing copy operation from '$filePath' to '$outputFile'");
             throw new Oai_Model_Exception('error while copying file');
         }
@@ -53,5 +55,4 @@ class Oai_Model_SingleFile extends Oai_Model_AbstractFile {
         $this->_mimeType = $file->getMimeType();
         $this->_extension = $extension;
     }
-
 }

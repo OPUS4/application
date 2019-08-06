@@ -50,15 +50,12 @@ class Application_Security_HttpAuthResolver implements Zend_Auth_Adapter_Http_Re
     {
         $user = Opus_Account::fetchAccountByLogin($username);
 
-        if (!is_null($user))
-        {
-            if (Opus_Security_Realm::checkModuleForUser('sword', $username))
-            {
+        if (! is_null($user)) {
+            if (Opus_Security_Realm::checkModuleForUser('sword', $username)) {
                 return $user->getPassword();
             }
         }
 
         return false;
     }
-
 }

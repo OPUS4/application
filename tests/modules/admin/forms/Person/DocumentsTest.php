@@ -48,11 +48,11 @@ class Admin_Form_Person_DocumentsTest extends ControllerTestCase
     {
         $form = new Admin_Form_Person_Documents();
 
-        $form->setDocuments(array(1, 2));
+        $form->setDocuments([1, 2]);
 
-        $data = array(
-            'Documents' => array(2)
-        );
+        $data = [
+            'Documents' => [2]
+        ];
 
         $form->populate($data);
 
@@ -68,7 +68,7 @@ class Admin_Form_Person_DocumentsTest extends ControllerTestCase
     {
         $form = new Admin_Form_Person_Documents();
 
-        $form->setDocuments(array(1, 2, 5));
+        $form->setDocuments([1, 2, 5]);
 
         $element = $form->getElement('Documents');
 
@@ -80,8 +80,7 @@ class Admin_Form_Person_DocumentsTest extends ControllerTestCase
         $this->assertArrayHasKey(2, $options);
         $this->assertArrayHasKey(5, $options);
 
-        foreach ($options as $docId => $doc)
-        {
+        foreach ($options as $docId => $doc) {
             $this->assertInstanceOf('Opus_Document', $doc);
             $this->assertEquals($docId, $doc->getId());
         }
@@ -91,16 +90,15 @@ class Admin_Form_Person_DocumentsTest extends ControllerTestCase
     {
         $form = new Admin_Form_Person_Documents();
 
-        $person = array(
+        $person = [
             'last_name' => 'Tester',
             'first_name' => 'John'
-        );
+        ];
 
-        $form->setDocuments(array(2, 6), $person);
+        $form->setDocuments([2, 6], $person);
 
         $element = $form->getElement('Documents');
 
-        $this->assertEquals(array('LastName' => 'Tester', 'FirstName' => 'John'), $element->getAttrib('person'));
+        $this->assertEquals(['LastName' => 'Tester', 'FirstName' => 'John'], $element->getAttrib('person'));
     }
-
 }

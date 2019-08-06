@@ -89,7 +89,7 @@ class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD
     {
         $form = new Admin_Form_EnrichmentTable();
         $form->setModels($this->getAllModels());
-        $form->setColumns(array(array('label' => $this->getModelClass())));
+        $form->setColumns([['label' => $this->getModelClass()]]);
         $form->setController($this);
         $form->setViewScript('enrichmentkey/modeltable.phtml');
         return $form;
@@ -102,13 +102,13 @@ class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD
      */
     public function isModifiable($model)
     {
-        if (!isset($this->unmodifyableEnrichmentKeys)) {
+        if (! isset($this->unmodifyableEnrichmentKeys)) {
             $protectedKeys = $this->_enrichmentKeys->getProtectedEnrichmentKeys();
             $this->unmodifyableEnrichmentKeys = array_merge($protectedKeys, Opus_EnrichmentKey::getAllReferenced());
         }
 
         // hier kann $model->getId() statt $model->getName() verwendet werden,
         // weil die Tabelle enrichmentkeys keine Spalte mit dem Namen 'id' besitzt
-        return !in_array($model->getId(), $this->unmodifyableEnrichmentKeys);
+        return ! in_array($model->getId(), $this->unmodifyableEnrichmentKeys);
     }
 }

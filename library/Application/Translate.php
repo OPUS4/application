@@ -83,11 +83,11 @@ class Application_Translate extends Zend_Translate
      */
     public function __construct($options = null)
     {
-        $options = (!is_null($options)) ?  array_merge($this->getOptions(), $options) : $this->getOptions();
+        $options = (! is_null($options)) ? array_merge($this->getOptions(), $options) : $this->getOptions();
         parent::__construct($options);
     }
 
-    static public function getInstance()
+    public static function getInstance()
     {
         if (is_null(self::$instance)) {
             self::$instance = new Application_Translate();
@@ -161,7 +161,7 @@ class Application_Translate extends Zend_Translate
     {
         $path = realpath($directory);
 
-        if (($path === false) or (!is_dir($path)) or (!is_readable($path))) {
+        if (($path === false) or (! is_dir($path)) or (! is_readable($path))) {
             if ($warnIfMissing) {
                 $this->getLogger()->warn(__METHOD__ . " Directory '$directory' not found.");
             }
@@ -169,13 +169,13 @@ class Application_Translate extends Zend_Translate
         }
 
         $handle = opendir($path);
-        if (!$handle) {
+        if (! $handle) {
             return false;
         }
 
         while (false !== ($file = readdir($handle))) {
             // Ignore directories.
-            if (!is_file($path . DIRECTORY_SEPARATOR . $file)) {
+            if (! is_file($path . DIRECTORY_SEPARATOR . $file)) {
                 continue;
             }
 

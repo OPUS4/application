@@ -38,12 +38,14 @@
  * Creating, editing, deleting of Opus_Series models. Changing the order
  * of Opus_Series models.
  */
-class Admin_SeriesController extends Application_Controller_ActionCRUD {
+class Admin_SeriesController extends Application_Controller_ActionCRUD
+{
 
     /**
      * Konfiguriere Formularklasse für den Controller.
      */
-    public function init() {
+    public function init()
+    {
         $this->setFormClass('Admin_Form_Series');
         $this->setFunctionNameForGettingModels('getAllSortedBySortKey');
         parent::init();
@@ -53,7 +55,8 @@ class Admin_SeriesController extends Application_Controller_ActionCRUD {
      * Setzt Defaultwerte für das Formular.
      * @return Opus_Series
      */
-    public function getNewModel() {
+    public function getNewModel()
+    {
         $series = parent::getNewModel();
         $series->setVisible(1);
         $series->setSortOrder(Opus_Series::getMaxSortKey() + 1);
@@ -64,10 +67,10 @@ class Admin_SeriesController extends Application_Controller_ActionCRUD {
      * Modifiziert Formular für Indextabelle, so daß angepasstes ViewScript verwendet wird.
      * @return Application_Form_Model_Table
      */
-    public function getIndexForm() {
+    public function getIndexForm()
+    {
         $form = parent::getIndexForm();
         $form->setViewScript('series/modeltable.phtml');
         return $form;
     }
-
 }

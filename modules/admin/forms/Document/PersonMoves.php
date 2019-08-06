@@ -35,120 +35,127 @@
 /**
  * Unterformular fuer die Buttons, um die Rolle einer Person zu ändern.
  */
-class Admin_Form_Document_PersonMoves extends Admin_Form_AbstractDocumentSubForm {
-    
+class Admin_Form_Document_PersonMoves extends Admin_Form_AbstractDocumentSubForm
+{
+
     /**
      * Konstante für Person an erster Stelle.
      */
     const POSITION_FIRST = 'first';
-    
+
     /**
      * Konstante für Person an letzter Stelle.
      */
     const POSITION_LAST = 'last';
-    
+
     /**
      * Konstante für Person in mittlerer Position.
      */
     const POSITION_DEFAULT = null;
-    
+
     /**
      * Konstante für POST Ergebnis das signalisiert, daß Person verschoben werden soll.
      */
     const RESULT_MOVE = 'move';
-    
+
     /**
      * Mögliche Rollen für eine Person.
      * @var array
-     * 
+     *
      * TODO centralize
      */
     private $_moves;
-    
+
     /**
      * Flag für spezielle Position, erste oder letzte Stelle.
      * @var string
      */
     private $_position;
-    
+
     /**
      * Konstruiert Formular.
      * @param string $position Parameter für besondere Position, z.B. erste oder letzte Stelle
      * @param mixed $options
      */
-    public function __construct($position = null, $options = null) {
+    public function __construct($position = null, $options = null)
+    {
         $this->_position = $position;
         parent::__construct($options);
     }
-    
+
     /**
      * Erzeugt Buttons für sämtliche Rollen und kümmert sich um Dekoratoren.
      */
-    public function init() {
+    public function init()
+    {
         parent::init();
-        
+
         $this->setDecorators(
-            array(
+            [
             'FormElements',
-            array('HtmlTag', array('tag' => 'ul', 'class' => 'links'))
-            )
+            ['HtmlTag', ['tag' => 'ul', 'class' => 'links']]
+            ]
         );
-        
+
         $this->createButtons();
     }
-    
-    private function createButtons() {
+
+    private function createButtons()
+    {
         switch ($this->_position) {
             case self::POSITION_FIRST:
-                $this->_moves = array('Down', 'Last');
+                $this->_moves = ['Down', 'Last'];
                 break;
             case self::POSITION_LAST:
-                $this->_moves = array('First', 'Up');
+                $this->_moves = ['First', 'Up'];
                 break;
             default:
-                $this->_moves = array('First', 'Up', 'Down', 'Last');
+                $this->_moves = ['First', 'Up', 'Down', 'Last'];
                 break;
         }
-        
+
         foreach ($this->_moves as $move) {
             $lower = strtolower($move);
             $this->addElement(
-                'submit', $move, array(
-                'decorators' => array('ViewHelper',
-                    array('HtmlTag', array('tag' => 'li', 'class' => 'move-' . $lower))),
+                'submit',
+                $move,
+                [
+                'decorators' => ['ViewHelper',
+                    ['HtmlTag', ['tag' => 'li', 'class' => 'move-' . $lower]]],
                 'label' => 'admin_button_move_' . $lower
-                )
+                ]
             );
         }
     }
-    
-    public function changePosition($position) {
+
+    public function changePosition($position)
+    {
         if ($this->_position !== $position) {
             $this->_position = $position;
-            
+
             $this->clearElements();
             $this->createButtons();
-        }    
+        }
     }
-    
+
     /**
      * Prüft ob in einem POST einer der Rollen-Buttons geklickt wurde.
      * @param array $post POST Daten für Formular
      * @param array $context POST Daten für gesamtes Formular
      * @return array
      */
-    public function processPost($post, $context) {
+    public function processPost($post, $context)
+    {
         // Prüfen, ob Button für Rollenänderung ausgewählt wurde
         foreach ($this->_moves as $move) {
             if (array_key_exists($move, $post)) {
-                return array(
+                return [
                     'result' => self::RESULT_MOVE,
                     'move' => $move
-                );
+                ];
             }
         }
-        
+
         return null;
     }
-
 }

@@ -149,7 +149,7 @@ class Admin_Form_LicenceTest extends ControllerTestCase
     {
         $form = new Admin_Form_Licence();
 
-        $this->assertFalse($form->isValid(array()));
+        $this->assertFalse($form->isValid([]));
 
         $this->assertContains('isEmpty', $form->getErrors('NameLong'));
         $this->assertContains('isEmpty', $form->getErrors('Language'));
@@ -161,11 +161,11 @@ class Admin_Form_LicenceTest extends ControllerTestCase
     {
         $form = new Admin_Form_Licence();
 
-        $this->assertFalse($form->isValid(array(
+        $this->assertFalse($form->isValid([
             'NameLong' => '  ',
             'Language' => 'abc',
             'LinkLicence' => '  '
-        )));
+        ]));
 
         $this->assertContains('isEmpty', $form->getErrors('NameLong'));
         $this->assertContains('notInArray', $form->getErrors('Language'));
@@ -176,11 +176,11 @@ class Admin_Form_LicenceTest extends ControllerTestCase
     {
         $form = new Admin_Form_Licence();
 
-        $this->assertFalse($form->isValid(array(
+        $this->assertFalse($form->isValid([
             'NameLong' => 'Name',
             'Language' => 'abc',
             'LinkLicence' => 'Link'
-        )));
+        ]));
 
         $this->assertContains('notInArray', $form->getErrors('Language'));
     }
@@ -189,11 +189,10 @@ class Admin_Form_LicenceTest extends ControllerTestCase
     {
         $form = new Admin_Form_Licence();
 
-        $this->assertTrue($form->isValid(array(
+        $this->assertTrue($form->isValid([
             'NameLong' => 'New Test Licence',
             'Language' => 'deu',
             'LinkLicence' => 'link'
-        )));
+        ]));
     }
-
 }

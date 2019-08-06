@@ -94,7 +94,7 @@ class Admin_Form_Document_LicencesTest extends ControllerTestCase
 
         $this->assertEquals(2, count($licences));
 
-        $licenceIds = array();
+        $licenceIds = [];
 
         $licenceIds[] = $licences[0]->getModel()->getId();
         $licenceIds[] = $licences[1]->getModel()->getId();
@@ -158,5 +158,4 @@ class Admin_Form_Document_LicencesTest extends ControllerTestCase
         $this->assertFalse($element->getDecorator('ElementHtmlTag'));
         $this->assertTrue($element->getDecorator('Label')->getOption('disableFor'));
     }
-
 }

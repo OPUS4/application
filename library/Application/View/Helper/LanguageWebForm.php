@@ -41,7 +41,7 @@ class Application_View_Helper_LanguageWebForm extends Zend_View_Helper_Abstract
      *
      * @var array
      */
-    private $_langCache = array();
+    private $_langCache = [];
 
     /**
      * An language-object will be transformed form Part2-form in the Part1-form
@@ -54,7 +54,7 @@ class Application_View_Helper_LanguageWebForm extends Zend_View_Helper_Abstract
      */
     public function languageWebForm($value)
     {
-        if (!array_key_exists($value, $this->_langCache)) {
+        if (! array_key_exists($value, $this->_langCache)) {
             $lang = Opus_Language::getPropertiesByPart2T($value);
             $this->_langCache[$value] = $lang['part1'];
         }

@@ -39,5 +39,4 @@ class Sword_Bootstrap extends Zend_Application_Module_Bootstrap
     {
         Application_Modules::registerModule(new Sword_Model_SwordModule());
     }
-    
 }

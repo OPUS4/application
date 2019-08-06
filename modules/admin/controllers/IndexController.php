@@ -40,29 +40,35 @@
  * @category    Application
  * @package     Module_Admin
  */
-class Admin_IndexController extends Application_Controller_Action {
+class Admin_IndexController extends Application_Controller_Action
+{
 
     /**
      * Shows main menu.
      */
-    public function indexAction() {
+    public function indexAction()
+    {
         $this->view->title = 'admin_index_title';
         $this->view->navigation()->breadcrumbs()->setMinDepth(0);
     }
 
-    public function setupAction() {
+    public function setupAction()
+    {
         $this->renderSubmenu('admin_title_setup');
     }
 
-    public function securityAction() {
+    public function securityAction()
+    {
         $this->renderSubmenu('admin_title_security');
     }
 
-    public function infoAction() {
+    public function infoAction()
+    {
         $this->renderSubmenu('admin_title_info');
     }
 
-    public function configAction() {
+    public function configAction()
+    {
         $this->renderSubmenu('admin_title_settings');
     }
 
@@ -71,5 +77,4 @@ class Admin_IndexController extends Application_Controller_Action {
         $this->view->title = $this->view->translate($title);
         $this->renderScript('index/submenu.phtml');
     }
-
 }

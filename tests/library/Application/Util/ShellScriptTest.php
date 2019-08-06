@@ -36,13 +36,15 @@ class Application_Util_ShellScriptTest extends ControllerTestCase
 
     private $scriptPath;
 
-    public function setUp() {
+    public function setUp()
+    {
         parent::setUp();
 
         $this->scriptPath = APPLICATION_PATH . '/tests/resources/shellscript.txt';
     }
 
-    public function testGetPropertiesFromScript() {
+    public function testGetPropertiesFromScript()
+    {
         $properties = Application_Util_ShellScript::getPropertiesFromScript($this->scriptPath);
 
         $this->assertCount(8, $properties);
@@ -71,5 +73,4 @@ class Application_Util_ShellScriptTest extends ControllerTestCase
         $this->assertArrayHasKey('mysql', $properties);
         $this->assertEquals('${mysql} --password=`printf %q "${password}"`', $properties['mysql']);
     }
-
 }

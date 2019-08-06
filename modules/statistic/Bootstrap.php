@@ -32,6 +32,6 @@
  * @version     $Id$
  */
 
-class Statistic_Bootstrap extends Zend_Application_Module_Bootstrap {
+class Statistic_Bootstrap extends Zend_Application_Module_Bootstrap
+{
 }
-

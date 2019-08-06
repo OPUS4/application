@@ -40,23 +40,21 @@ $docFinder = new Opus_DocumentFinder();
 $docFinder->setServerState('unpublished');
 
 foreach ($docFinder->ids() as $id) {
-
     $d = null;
     try {
         $d = new Opus_Document($id);
-    }
-    catch (Opus_Model_NotFoundException $e) {
+    } catch (Opus_Model_NotFoundException $e) {
         // document with id $id does not exist
         continue;
     }
 
-    if (!is_null($d)) {
-    $date = new Opus_Date();
-    $date->setNow();
-    $d->setServerState('published');
-    $d->setServerDatePublished($date);
-    $d->store();
-    echo "publishing of document with id $id was successful\n"; 
+    if (! is_null($d)) {
+        $date = new Opus_Date();
+        $date->setNow();
+        $d->setServerState('published');
+        $d->setServerDatePublished($date);
+        $d->store();
+        echo "publishing of document with id $id was successful\n";
     }
 }
 

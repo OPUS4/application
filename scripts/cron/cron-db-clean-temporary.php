@@ -22,8 +22,8 @@
  * OPUS is distributed in the hope that it will be useful, but WITHOUT ANY
  * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details. You should have received a copy of the GNU General Public License 
- * along with OPUS; if not, write to the Free Software Foundation, Inc., 51 
+ * details. You should have received a copy of the GNU General Public License
+ * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
@@ -42,13 +42,12 @@ $f = new Opus_DocumentFinder();
 $f->setServerState('temporary')
   ->setServerDateModifiedBefore($dateString);
 
-foreach ($f->ids() AS $id) {
+foreach ($f->ids() as $id) {
     $d = new Opus_Document($id);
     if ($d->getServerState() == 'temporary') {
         echo "deleting document: $id\n";
         $d->deletePermanent();
-    }
-    else {
+    } else {
         echo "NOT deleting document: $id because it has server state ".$d->getServerState();
     }
 }

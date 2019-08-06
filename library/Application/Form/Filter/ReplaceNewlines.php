@@ -38,7 +38,8 @@
  * This filter is used for document titles that are entered using a textarea,
  * since the titles can be rather long.
  */
-class Application_Form_Filter_ReplaceNewlines implements Zend_Filter_Interface {
+class Application_Form_Filter_ReplaceNewlines implements Zend_Filter_Interface
+{
 
     /**
      * Returns value with newline characters replaced by whitespaces.
@@ -49,9 +50,9 @@ class Application_Form_Filter_ReplaceNewlines implements Zend_Filter_Interface {
      * @param string $value Value that should be filtered
      * @return Filtered string (newlines => whitespaces)
      */
-    public function filter($value) {
-        $newValue = str_replace(array("\r\n"), ' ', $value);
-        return str_replace(array("\r", "\n"), ' ', $newValue);
+    public function filter($value)
+    {
+        $newValue = str_replace(["\r\n"], ' ', $value);
+        return str_replace(["\r", "\n"], ' ', $newValue);
     }
-
 }

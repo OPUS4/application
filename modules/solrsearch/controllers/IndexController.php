@@ -119,7 +119,7 @@ class Solrsearch_IndexController extends Application_Controller_Action
         if ($params['searchtype'] != 'latest') {
             unset($params['rows']);
         } else {
-            if (!array_key_exists('rows', $params)) {
+            if (! array_key_exists('rows', $params)) {
                 $params['rows'] = 10;
             }
         }
@@ -144,7 +144,7 @@ class Solrsearch_IndexController extends Application_Controller_Action
         $searchType = $this->getParam('searchtype');
         $request = $this->getRequest();
 
-        if (in_array($searchType, ['advanced', 'authorsearch']) && !is_null($this->getParam('Reset'))) {
+        if (in_array($searchType, ['advanced', 'authorsearch']) && ! is_null($this->getParam('Reset'))) {
             // redirect to new advanced search form
             // TODO find better way
             $this->_helper->Redirector->redirectTo('advanced', null, 'index', 'solrsearch');
@@ -162,7 +162,7 @@ class Solrsearch_IndexController extends Application_Controller_Action
             return;
         }
 
-        if (!is_null($request->getParam('export'))) {
+        if (! is_null($request->getParam('export'))) {
             $params = $request->getParams();
             // export module ignores pagination parameters
             $this->redirectToExport($params);
@@ -183,10 +183,10 @@ class Solrsearch_IndexController extends Application_Controller_Action
         $query = $searchPlugin->buildQuery($request);
 
         // if query is null, redirect has already been set
-        if (!is_null($query)) {
+        if (! is_null($query)) {
             $facetMenu = new Solrsearch_Model_FacetMenu();
 
-            $openFacets = $facetMenu->buildFacetArray( $this->getRequest()->getParams() );
+            $openFacets = $facetMenu->buildFacetArray($this->getRequest()->getParams());
 
             $resultList = $searchPlugin->performSearch($query, $openFacets);
             $this->view->openFacets = $openFacets;

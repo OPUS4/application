@@ -46,7 +46,7 @@ class Oai_Model_ContainerTest extends ControllerTestCase
     {
         parent::setUp();
         $config = Zend_Registry::get('Zend_Config');
-        if (!isset($config->workspacePath)) {
+        if (! isset($config->workspacePath)) {
             throw new Exception("config key 'workspacePath' not defined in config file");
         }
         $this->workspacePath = $config->workspacePath;
@@ -54,11 +54,11 @@ class Oai_Model_ContainerTest extends ControllerTestCase
 
     public function tearDown()
     {
-        if (!is_null($this->roleId)) {
+        if (! is_null($this->roleId)) {
             $testRole = new Opus_UserRole($this->roleId);
             $testRole->delete();
         }
-        if (!is_null($this->userId)) {
+        if (! is_null($this->userId)) {
             $userAccount = new Opus_Account($this->userId);
             $userAccount->delete();
         }
@@ -103,7 +103,7 @@ class Oai_Model_ContainerTest extends ControllerTestCase
         $r = Opus_UserRole::fetchByName('guest');
 
         $modules = $r->listAccessModules();
-        $addOaiModuleAccess = !in_array('oai', $modules);
+        $addOaiModuleAccess = ! in_array('oai', $modules);
         if ($addOaiModuleAccess) {
             $r->appendAccessModule('oai');
             $r->store();

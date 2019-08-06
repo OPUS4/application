@@ -54,23 +54,23 @@ class Application_Form_Validate_MultiSubForm_RepeatedLanguagesTest extends Contr
 
     public function testGetSelectedLanguages()
     {
-        $post = array(
-            'TitleMain0' => array(
+        $post = [
+            'TitleMain0' => [
                 'Id' => '1',
                 'Language' => 'deu',
                 'Value' => 'Titel 1'
-            ),
-            'TitleMain1' => array(
+            ],
+            'TitleMain1' => [
                 'Id' => '2',
                 'Language' => 'fra',
                 'Value' => 'Titel 2'
-            ),
-            'TitleMain2' => array(
+            ],
+            'TitleMain2' => [
                 'Id' => '3',
                 'Language' => 'rus',
                 'Value' => 'Titel 3'
-            )
-        );
+            ]
+        ];
 
         $instance = new Application_Form_Validate_MultiSubForm_RepeatedLanguages();
 
@@ -104,26 +104,26 @@ class Application_Form_Validate_MultiSubForm_RepeatedLanguagesTest extends Contr
 
         $instance = new Application_Form_Validate_MultiSubForm_RepeatedLanguages();
 
-        $post = array(
-            'Title0' => array(
+        $post = [
+            'Title0' => [
                 'Id' => '1',
                 'Language' => 'deu',
                 'Value' => 'Titel 1'
-            ),
-            'Title1' => array(
+            ],
+            'Title1' => [
                 'Id' => '2',
                 'Language' => 'fra',
                 'Value' => 'Titel 2'
-            ),
-            'Title2' => array(
+            ],
+            'Title2' => [
                 'Id' => '3',
                 'Language' => 'rus',
                 'Value' => 'Titel 3'
-            ),
-            'Actions' => array(
+            ],
+            'Actions' => [
                 'Add' => 'Add'
-            )
-        );
+            ]
+        ];
 
         $instance->prepareValidation($form, $post);
 
@@ -134,8 +134,7 @@ class Application_Form_Validate_MultiSubForm_RepeatedLanguagesTest extends Contr
             );
             $this->assertNotNull($validator);
             $this->assertEquals($index, $validator->getPosition());
-            $this->assertEquals(array('deu', 'fra', 'rus'), $validator->getLanguages());
+            $this->assertEquals(['deu', 'fra', 'rus'], $validator->getLanguages());
         }
     }
-
 }

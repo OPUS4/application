@@ -99,5 +99,4 @@ class Application_View_Helper_FulltextLogoTest extends ControllerTestCase
 
         $this->assertEquals('<div class="fulltext-logo fulltext openaccess" title="Open Access fulltext available"></div>', $this->_helper->fulltextLogo($doc));
     }
-
 }

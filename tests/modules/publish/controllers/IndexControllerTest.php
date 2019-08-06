@@ -215,5 +215,4 @@ class Publish_IndexControllerTest extends ControllerTestCase
         $this->assertTrue($doctypeWorkingpaper < $doctypeArticlePos);
         $this->assertTrue($doctypeArticlePos < $doctypeDemodemo);
     }
-
 }

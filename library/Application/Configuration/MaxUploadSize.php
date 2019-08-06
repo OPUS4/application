@@ -27,24 +27,26 @@
  * @category    Application
  * @package     Application_Configuration
  * @author      Sascha Szott
- * @copyright   Copyright (c) 2016
+ * @copyright   Copyright (c) 2016-2019
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class Application_Configuration_MaxUploadSize {
-    
+class Application_Configuration_MaxUploadSize
+{
+
     /**
-     * The element sword:maxUploadSize indicates the maximum size (in kB) of 
+     * The element sword:maxUploadSize indicates the maximum size (in kB) of
      * a package that can be uploaded to the SWORD service.
-     * 
+     *
      * @return int maximum upload size in kilobyte
      */
-    public function getMaxUploadSizeInKB() {
+    public function getMaxUploadSizeInKB()
+    {
         $minSize = $this->getMaxUploadSizeInByte();
         return floor($minSize / 1024);
     }
-    
-    public function getMaxUploadSizeInByte() {
+
+    public function getMaxUploadSizeInByte()
+    {
         $logger = Zend_Registry::get('Zend_Log');
 
         $config = Zend_Registry::get('Zend_Config');
@@ -60,12 +62,13 @@ class Application_Configuration_MaxUploadSize {
         $logger->debug('upload_max_filesize (Byte) = ' . $uploadMaxFilesizeInt);
         if ($uploadMaxFilesizeInt < $minSize) {
             $minSize = $uploadMaxFilesizeInt;
-        }        
-        
+        }
+
         return $minSize;
     }
 
-    private function convertToBytes($val) {        
+    private function convertToBytes($val)
+    {
         $valTrim = trim($val);
         $valInt = intval($valTrim);
         $last = strtolower($valTrim[strlen($valTrim) - 1]);
@@ -73,13 +76,15 @@ class Application_Configuration_MaxUploadSize {
             // The 'G' modifier is available since PHP 5.1.0
             case 'g':
                 $valInt *= 1024;
+                // fall through is intended
             case 'm':
                 $valInt *= 1024;
+                // fall through is intended
             case 'k':
                 $valInt *= 1024;
+                // fall through is intended
         }
 
         return $valInt;
     }
-    
 }

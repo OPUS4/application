@@ -81,8 +81,8 @@ class Admin_Form_CollectionRole extends Application_Form_Model_Abstract
         $this->addElement('checkbox', self::ELEMENT_VISIBLE_BROWSING_START);
         $this->addElement('checkbox', self::ELEMENT_VISIBLE_FRONTDOOR);
         $this->addElement('checkbox', self::ELEMENT_VISIBLE_OAI);
-        $this->addElement('CollectionDisplayFormat', self::ELEMENT_DISPLAY_BROWSING, array('required' => true));
-        $this->addElement('CollectionDisplayFormat', self::ELEMENT_DISPLAY_FRONTDOOR, array('required' => true));
+        $this->addElement('CollectionDisplayFormat', self::ELEMENT_DISPLAY_BROWSING, ['required' => true]);
+        $this->addElement('CollectionDisplayFormat', self::ELEMENT_DISPLAY_FRONTDOOR, ['required' => true]);
         $this->addElement('checkbox', self::ELEMENT_ASSIGN_ROOT);
         $this->addElement('checkbox', self::ELEMENT_ASSIGN_LEAVES_ONLY);
         $this->addElement('checkbox', self::ELEMENT_HIDE_EMPTY_COLLECTIONS);

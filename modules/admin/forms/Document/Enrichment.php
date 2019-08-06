@@ -70,7 +70,7 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
         $this->addElement(
             'EnrichmentKey',
             self::ELEMENT_KEY_NAME,
-            array('required' => true, 'class' => 'enrichmentKeyName')
+            ['required' => true, 'class' => 'enrichmentKeyName']
         );
     }
 
@@ -87,7 +87,7 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
         $this->getElement(self::ELEMENT_KEY_NAME)->setValue($enrichment->getKeyName());
 
         $enrichmentKey = $enrichment->getEnrichmentKey();
-        if (!is_null($enrichmentKey)) {
+        if (! is_null($enrichmentKey)) {
             $this->setEnrichmentValueFormElement($enrichmentKey, $enrichment->getValue());
         } else {
             $this->getLogger()->err('Enrichment ' . $enrichment->getId() . ' does not provide key object - unknown enrichment key');
@@ -138,12 +138,12 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
 
         $enrichmentValue = $this->getElementValue(self::ELEMENT_VALUE);
 
-        if (!is_null($enrichmentKey)) {
+        if (! is_null($enrichmentKey)) {
             // Enrichment-Key existiert tatsächlich
             $enrichment->setKeyName($enrichmentKeyName);
 
             $enrichmentType = $enrichmentKey->getEnrichmentType();
-            if (!is_null($enrichmentType) && $enrichmentType->getFormElementName() === 'Select') {
+            if (! is_null($enrichmentType) && $enrichmentType->getFormElementName() === 'Select') {
                 // bei Select-Feldern wird im POST nicht der ausgewählte Wert übergeben,
                 // sondern der Index des Wertes in der Werteliste (beginnend mit 0)
                 // daher ist hier ein zusätzlicher Mapping-Schritt erforderlich
@@ -163,7 +163,7 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
     {
         $enrichmentId = $this->getElement(self::ELEMENT_ID)->getValue();
 
-        if (empty($enrichmentId) && !is_numeric($enrichmentId)) {
+        if (empty($enrichmentId) && ! is_numeric($enrichmentId)) {
             $enrichmentId = null;
         }
 
@@ -171,7 +171,8 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
             $enrichment = new Opus_Enrichment($enrichmentId);
         } catch (Opus_Model_NotFoundException $omnfe) {
             $this->getLogger()->err(
-                __METHOD__ . " Unknown enrichment ID = '$enrichmentId' (" . $omnfe->getMessage() . ').');
+                __METHOD__ . " Unknown enrichment ID = '$enrichmentId' (" . $omnfe->getMessage() . ').'
+            );
             $enrichment = new Opus_Enrichment();
         }
 
@@ -207,7 +208,7 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
         if (is_null($enrichmentKeyName)) {
             $enrichmentKeyElement = $this->getElement(self::ELEMENT_KEY_NAME);
             $allEnrichmentKeys = $enrichmentKeyElement->getMultiOptions();
-            if (!empty($allEnrichmentKeys)) {
+            if (! empty($allEnrichmentKeys)) {
                 // der erste Enrichment-Key der in der Auswahlliste steht, bestimmt das Eingabefeld
                 reset($allEnrichmentKeys);
                 $enrichmentKeyName = key($allEnrichmentKeys);
@@ -215,14 +216,13 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
         }
 
         $enrichmentKey = Opus_EnrichmentKey::fetchByName($enrichmentKeyName);
-        if (!is_null($enrichmentKey)) {
+        if (! is_null($enrichmentKey)) {
             // hier braucht erstmal nur das Formularelement für die Eingabe des
             // Enrichment-Wertes erzeugt und in das bestehende Formular eingebunden
             // werden - der konkrete Wert wird später durch einen andere Methode
             // gesetzt
             $this->setEnrichmentValueFormElement($enrichmentKey);
-        }
-        else {
+        } else {
             $this->getLogger()->err('could not find enrichment key with name ' . $enrichmentKey);
         }
     }
@@ -237,5 +237,4 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
         $this->setRemoveEmptyCheckbox(false);
         parent::prepareRenderingAsView();
     }
-
 }

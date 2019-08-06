@@ -114,7 +114,7 @@ class Admin_Form_Document_GeneralTest extends ControllerTestCase
 
         $form = new Admin_Form_Document_General();
 
-        $post = array(
+        $post = [
             'Language' => '',
             'Type' => '',
             'PublishedDate' => 'date1', // muss Datum sein
@@ -122,7 +122,7 @@ class Admin_Form_Document_GeneralTest extends ControllerTestCase
             'CompletedDate' => '2008/02/31', // muss korrektes Datum sein
             'CompletedYear' => '-1', // muss groesser als 0 sein
             'EmbargoDate' => '2008/02/31', // muss korrektes Datum sein
-        );
+        ];
 
         $this->assertFalse($form->isValid($post));
 
@@ -141,19 +141,19 @@ class Admin_Form_Document_GeneralTest extends ControllerTestCase
 
         $form = new Admin_Form_Document_General();
 
-        $post = array(
+        $post = [
             'Language' => 'deu',
             'Type' => 'demo',
             'CompletedDate' => '30.01.2010', // korrektes Datum
-        );
+        ];
 
         $this->assertTrue($form->isValid($post));
 
-        $post = array(
+        $post = [
             'Language' => 'bla', // ungültige Sprache
             'Type' => 'unknown', // ungültiger Typ
             'CompletedDate' => '30.02.2010', // ungültiges Datum
-        );
+        ];
 
         $this->assertFalse($form->isValid($post));
         $this->assertContains('notInArray', $form->getErrors('Language'));
@@ -176,6 +176,4 @@ class Admin_Form_Document_GeneralTest extends ControllerTestCase
         $element = $form->getElement(Admin_Form_Document_General::ELEMENT_TYPE);
         $this->assertEquals("Dokumentart", $element->getLabel());
     }
-
 }
-

@@ -33,7 +33,8 @@
  * @version    $Id$
  */
 
-class Oai_Model_DocumentList {
+class Oai_Model_DocumentList
+{
 
     /**
      * Holds information about which document state aka server_state
@@ -62,7 +63,8 @@ class Oai_Model_DocumentList {
      *
      * TODO function contains metadataPrefix specifische criteria for generating document list (refactor!)
      */
-    public function query(array $oaiRequest) {
+    public function query(array $oaiRequest)
+    {
         $today = date('Y-m-d', time());
 
         $finder = new Opus_DocumentFinder();
@@ -86,35 +88,32 @@ class Oai_Model_DocumentList {
 
         if (array_key_exists('set', $oaiRequest)) {
             $setarray = explode(':', $oaiRequest['set']);
-            if (!isset($setarray[0])) {
-                return array();
+            if (! isset($setarray[0])) {
+                return [];
             }
 
             if ($setarray[0] == 'doc-type') {
-                if (count($setarray) === 2 and !empty($setarray[1])) {
+                if (count($setarray) === 2 and ! empty($setarray[1])) {
                     $finder->setType($setarray[1]);
+                } else {
+                    return [];
                 }
-                else {
-                    return array();
-                }
-            }
-            else if ($setarray[0] == 'bibliography') {
+            } elseif ($setarray[0] == 'bibliography') {
                 if (count($setarray) !== 2 or empty($setarray[1])) {
-                    return array();
+                    return [];
                 }
                 $setValue = $setarray[1];
 
-                $bibliographyMap = array(
+                $bibliographyMap = [
                     "true"  => 1,
                     "false" => 0,
-                );
+                ];
                 if (false === isset($setValue, $bibliographyMap[$setValue])) {
-                    return array();
+                    return [];
                 }
 
                 $finder->setBelongsToBibliography($bibliographyMap[$setValue]);
-            }
-            else {
+            } else {
                 if (count($setarray) < 1 or count($setarray) > 2) {
                     $msg = "Invalid SetSpec: Must be in format 'set:subset'.";
                     throw new Oai_Model_Exception($msg);
@@ -132,7 +131,8 @@ class Oai_Model_DocumentList {
                 if (count($setarray) == 2) {
                     $subsetName = $setarray[1];
                     $foundSubsets = array_filter(
-                        $role->getOaiSetNames(), function ($s) use ($subsetName) {
+                        $role->getOaiSetNames(),
+                        function ($s) use ($subsetName) {
                                 return $s['oai_subset'] === $subsetName;
                         }
                     );
@@ -143,15 +143,14 @@ class Oai_Model_DocumentList {
                         });
 
                         if (count($emptySubsets) === 1) {
-                            return array();
-                        }
-                        else {
+                            return [];
+                        } else {
                             $msg = "Invalid SetSpec: Subset does not exist.";
                             throw new Oai_Model_Exception($msg);
                         }
                     }
 
-                    foreach ($foundSubsets AS $subset) {
+                    foreach ($foundSubsets as $subset) {
                         if ($subset['oai_subset'] !== $subsetName) {
                             $msg = "Invalid SetSpec: Internal error.";
                             throw new Oai_Model_Exception($msg);
@@ -160,10 +159,9 @@ class Oai_Model_DocumentList {
                     }
                 }
             }
-
         }
 
-        if (array_key_exists('from', $oaiRequest) and !empty($oaiRequest['from'])) {
+        if (array_key_exists('from', $oaiRequest) and ! empty($oaiRequest['from'])) {
             $from = DateTime::createFromFormat('Y-m-d', $oaiRequest['from']);
             $finder->setServerDateModifiedAfter($from->format('Y-m-d'));
         }

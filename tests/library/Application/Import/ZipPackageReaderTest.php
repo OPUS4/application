@@ -44,11 +44,11 @@ class Application_Import_ZipPackageReaderTest extends ControllerTestCase
 
     public function testReadPackageWithXmlFile()
     {
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
-            'filetypes' => array('xml' => array('mimeType' => array(
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'filetypes' => ['xml' => ['mimeType' => [
                 'text/xml', 'application/xml'
-            )))
-        )));
+            ]]]
+        ]));
 
         $reader = new Application_Import_ZipPackageReader();
 

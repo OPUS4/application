@@ -45,19 +45,18 @@ class Export_BootstrapTest extends ControllerTestCase
         $this->dispatch('/frontdoor/index/index/docId/1');
 
         // TODO configuration change has no influence at this point
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
-            'export' => array(
-                'stylesheet' => array(
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'export' => [
+                'stylesheet' => [
                     'frontdoor' => null
-                )
-            )
-        )));
+                ]
+            ]
+        ]));
 
         $this->assertResponseCode(200);
         $this->assertQuery('a.export.bibtex');
         $this->assertQuery('a.export.ris');
         $this->assertNotQuery('a.export.xml'); // not for 'guest' user
-
     }
 
     public function testInitExportRegisterXML()
@@ -73,5 +72,4 @@ class Export_BootstrapTest extends ControllerTestCase
         $this->assertQuery('a.export.ris');
         $this->assertQuery('a.export.xml');
     }
-
 }

@@ -63,9 +63,5 @@ class Application_Security_RoleConfigTest extends ControllerTestCase
         $roleConfig = new Application_Security_RoleConfig('guest');
         $roleConfig->applyPermissions($acl);
         $this->assertTrue($acl->isAllowed($this->guestRole, 'documents'), "Expected role 'guest' can access resource 'documents'");
-
     }
-
 }
-
-?>

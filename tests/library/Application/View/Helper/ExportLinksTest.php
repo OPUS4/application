@@ -73,17 +73,17 @@ class Application_View_Helper_ExportLinksTest extends ControllerTestCase
 
     public function testRenderLink()
     {
-        $page = new Zend_Navigation_Page_Mvc(array(
+        $page = new Zend_Navigation_Page_Mvc([
             'name' => 'bibtex',
             'description' => 'Export BibTeX',
             'module' => 'citationExport',
             'controller' => 'index',
             'action' => 'download',
-            'params' => array(
+            'params' => [
                 'output' => 'bibtex'
-            ),
+            ],
             'frontdoor' => true
-        ));
+        ]);
 
         $page->setParam('docId', 150);
 
@@ -93,9 +93,5 @@ class Application_View_Helper_ExportLinksTest extends ControllerTestCase
             '<a href="/citationExport/index/download/output/bibtex/docId/150" title="Export BibTeX" class="export bibtex">bibtex</a>',
             $exportLink->renderLink($page)
         );
-
-
     }
-
 }
-

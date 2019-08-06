@@ -21,8 +21,8 @@
  * OPUS is distributed in the hope that it will be useful, but WITHOUT ANY
  * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details. You should have received a copy of the GNU General Public License 
- * along with OPUS; if not, write to the Free Software Foundation, Inc., 51 
+ * details. You should have received a copy of the GNU General Public License
+ * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
@@ -39,7 +39,8 @@
  * @category    Application
  * @package     Scripts
  */
-class FakeSMTP {
+class FakeSMTP
+{
 
     /**
      * The servers ip address.
@@ -66,7 +67,8 @@ class FakeSMTP {
      * Configures php environment, creates and binds network socket.
      *
      */
-    public function __construct() {
+    public function __construct()
+    {
         set_time_limit(0);
         error_reporting(E_ERROR);
         $this->_socket = socket_create(AF_INET, SOCK_STREAM, 0);
@@ -78,7 +80,8 @@ class FakeSMTP {
      *
      * @return void
      */
-    public function waitForConnections() {
+    public function waitForConnections()
+    {
         socket_listen($this->_socket, 3);
         do {
             $client = socket_accept($this->_socket);
@@ -94,7 +97,8 @@ class FakeSMTP {
      *
      * @return void
      */
-    protected function _sendSMTPResponse($socket, $response) {
+    protected function _sendSMTPResponse($socket, $response)
+    {
         $response .= "\n";
         socket_write($socket, $response, strlen($response));
         echo "> $response";
@@ -107,7 +111,8 @@ class FakeSMTP {
      * @param string   $request Incoming request.
      * @return boolean $exit True if the request terminates a connection.
      */
-    protected function _handleSMTPRequest($socket, $request) {
+    protected function _handleSMTPRequest($socket, $request)
+    {
         $cont = true;
         switch (substr($request, 0, 4)) {
             case 'HELO':
@@ -139,10 +144,10 @@ class FakeSMTP {
                 $this->_sendSMTPResponse($socket, $response);
                 $cont = false;
                 break;
-        case 'RSET':
-        $response = '250 Ok';
-        $this->_sendSMTPResponse($socket, $response);
-            break;
+            case 'RSET':
+                $response = '250 Ok';
+                $this->_sendSMTPResponse($socket, $response);
+                break;
             default:
                 $response = '500 Command not recognized: Syntax error.';
                 $this->_sendSMTPResponse($socket, $response);
@@ -157,7 +162,8 @@ class FakeSMTP {
      * @param $client The client network socket.
      * @return void
      */
-    protected function _startSMTPSession($client) {
+    protected function _startSMTPSession($client)
+    {
         $this->_sendSMTPResponse($client, "220 $host SMTP rabooF Mailserver"); // TODO bug $host
         do {
             $exit = false;
@@ -165,17 +171,15 @@ class FakeSMTP {
             if ($input = socket_read($client, 1024, 1)) {
                 if (trim($input) !== '') {
                     echo "< $input\n";
-                    $exit = !$this->_handleSMTPRequest($client, $input);
+                    $exit = ! $this->_handleSMTPRequest($client, $input);
                 }
-            }
-            else {
+            } else {
                 $exit = true;
             }
-        } while (!$exit);
+        } while (! $exit);
         echo "Connection terminated.\n\n";
         socket_close($client);
     }
-
 }
 
 // Start fake SMTP server

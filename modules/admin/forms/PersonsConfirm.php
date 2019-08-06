@@ -55,23 +55,23 @@ class Admin_Form_PersonsConfirm extends Application_Form_Model_Abstract
 
         $this->removeElement(self::ELEMENT_MODEL_ID);
 
-        $this->addDecorator('FormHelp', array('message' => 'admin_person_edit_confirm_help'));
+        $this->addDecorator('FormHelp', ['message' => 'admin_person_edit_confirm_help']);
 
         $changes = new Admin_Form_Person_Changes();
         $this->addSubForm($changes, self::SUBFORM_CHANGES);
 
         $documents = new Admin_Form_Person_Documents();
-        $documents->addDecorator('fieldset', array('legend' => 'admin_title_documents'));
+        $documents->addDecorator('fieldset', ['legend' => 'admin_title_documents']);
         // TODO add decorator for hint
         $this->addSubForm($documents, self::SUBFORM_DOCUMENTS);
 
         // TODO render back button in button area on the left side
-        $back = $this->createElement('submit', self::ELEMENT_BACK, array(
-            'decorators' => array(
+        $back = $this->createElement('submit', self::ELEMENT_BACK, [
+            'decorators' => [
                 'ViewHelper',
-                array(array('liWrapper' => 'HtmlTag'), array('tag' => 'li', 'class' => 'back-element'))
-            )
-        ));
+                [['liWrapper' => 'HtmlTag'], ['tag' => 'li', 'class' => 'back-element']]
+            ]
+        ]);
         $this->addElement($back);
 
         $actions = $this->getDisplayGroup('actions');
@@ -83,7 +83,7 @@ class Admin_Form_PersonsConfirm extends Application_Form_Model_Abstract
         // reordering is necessary to show first 'Save' and then 'Cancel' with 'float: right'
         // 'back' button is 'float: left'
         // TODO maybe use 'float: right' by everywhere
-        $actions->addElements(array($back, $elements[self::ELEMENT_CANCEL], $elements[self::ELEMENT_SAVE]));
+        $actions->addElements([$back, $elements[self::ELEMENT_CANCEL], $elements[self::ELEMENT_SAVE]]);
 
         $this->setAttrib('class', 'persons-confirm');
 
@@ -106,9 +106,9 @@ class Admin_Form_PersonsConfirm extends Application_Form_Model_Abstract
         $subform = $this->getSubForm(self::SUBFORM_DOCUMENTS);
         $subform->setDocuments($documentIds, $person);
         $subform->removeDecorator('fieldset');
-        $subform->addDecorator('fieldset', array(
+        $subform->addDecorator('fieldset', [
             'legend' => $this->getTranslator()->translate('admin_title_documents') . " ($docCount)"
-        ));
+        ]);
     }
 
     public function setChanges($changes)
@@ -116,7 +116,8 @@ class Admin_Form_PersonsConfirm extends Application_Form_Model_Abstract
         $this->getSubForm(self::SUBFORM_CHANGES)->setChanges($changes);
     }
 
-    public function getDocuments() {
+    public function getDocuments()
+    {
         return $this->getSubForm(self::SUBFORM_DOCUMENTS)->getSelectedDocuments();
     }
 
@@ -133,5 +134,4 @@ class Admin_Form_PersonsConfirm extends Application_Form_Model_Abstract
 
         return parent::processPost($post, $context);
     }
-
 }

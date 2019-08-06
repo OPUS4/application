@@ -88,11 +88,11 @@ class AuthControllerTest extends ControllerTestCase
         $this->resetRequest();
         $this->request
             ->setMethod('POST')
-            ->setPost(array(
+            ->setPost([
                 'hash' => $hash,
                 'login' => 'admin',
                 'password' => 'adminadmin'
-            ));
+            ]);
         $this->dispatch('/auth/login/rmodule/home/rcontroller/index/raction/index');
         $this->assertRedirect('/home/index/index');
         $this->assertModule('default');
@@ -136,4 +136,3 @@ class AuthControllerTest extends ControllerTestCase
         $this->assertNull(Zend_Auth::getInstance()->getIdentity());
     }
 }
-

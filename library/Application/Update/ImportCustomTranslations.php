@@ -107,7 +107,7 @@ class Application_Update_ImportCustomTranslations extends Application_Update_Plu
     public function removeFolder($path)
     {
         $colors = new Opus_Util_ConsoleColors();
-        if (!(new \FilesystemIterator(APPLICATION_PATH . $path))->valid()) {
+        if (! (new \FilesystemIterator(APPLICATION_PATH . $path))->valid()) {
             rmdir(APPLICATION_PATH . $path);
             $this->log("Removed folder '$path'" . PHP_EOL);
         } else {

@@ -41,7 +41,8 @@
  * Zend_Controller_Action_HelperBroker::getStaticHelper('MainMenu')->setActive('home');
  * {code}
  */
-class Application_Controller_Action_Helper_MainMenu extends Zend_Controller_Action_Helper_Abstract {
+class Application_Controller_Action_Helper_MainMenu extends Zend_Controller_Action_Helper_Abstract
+{
 
     /**
      * Allows calling helper like a method of the broker.
@@ -52,7 +53,8 @@ class Application_Controller_Action_Helper_MainMenu extends Zend_Controller_Acti
      *
      * @param string $entry
      */
-    public function direct($entry) {
+    public function direct($entry)
+    {
         $this->setActive($entry);
     }
 
@@ -60,19 +62,17 @@ class Application_Controller_Action_Helper_MainMenu extends Zend_Controller_Acti
      * Sets entry with matching label active.
      * @param string $entry
      */
-    public function setActive($entry) {
+    public function setActive($entry)
+    {
         $mainMenu = Zend_Registry::get('Opus_Navigation');
 
         foreach ($mainMenu as $page) {
             $label = $page->getLabel();
             if (($label === $entry . '_menu_label') || ($label === $entry)) {
                 $page->setActive(true);
-            }
-            else {
+            } else {
                 $page->setActive(false);
             }
         }
     }
-
 }
-

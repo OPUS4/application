@@ -25,37 +25,35 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Application_Security 
+ * @package     Application_Security
  * @author      Sascha Szott
  * @copyright   Copyright (c) 2016
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 class Application_Security_BasicAuthProtection
 {
-    
-    static public function accessAllowed($request, $response)
+
+    public static function accessAllowed($request, $response)
     {
-        $adapter = new Application_Security_HttpAuthAdapter(array(
+        $adapter = new Application_Security_HttpAuthAdapter([
             'accept_schemes' => 'basic',
-            'realm' => 'opus-sword'            
-        ));
-        
+            'realm' => 'opus-sword'
+        ]);
+
         $adapter->setBasicResolver(new Application_Security_HttpAuthResolver());
         $adapter->setRequest($request);
         $adapter->setResponse($response);
-        
+
         $auth = Zend_Auth::getInstance();
         $result = $auth->authenticate($adapter);
-        
-        if (!$result->isValid())
-        {
+
+        if (! $result->isValid()) {
             return false;
         }
-        
+
         $userName = $result->getIdentity()['username'];
         $auth->clearIdentity();
 
         return $userName;
     }
-
 }

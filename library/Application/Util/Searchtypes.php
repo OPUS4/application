@@ -34,7 +34,8 @@
  * TODO move to search package
  */
 
-class Application_Util_Searchtypes {
+class Application_Util_Searchtypes
+{
 
     const SIMPLE_SEARCH = 'simple';
     const ADVANCED_SEARCH = 'advanced';
@@ -45,8 +46,9 @@ class Application_Util_Searchtypes {
     const SERIES_SEARCH = 'series';
     const ID_SEARCH = 'id';
 
-    public static function isSupported($searchtype) {
-        $supportedTypes = array (
+    public static function isSupported($searchtype)
+    {
+        $supportedTypes = [
             self::SIMPLE_SEARCH,
             self::ADVANCED_SEARCH,
             self::AUTHOR_SEARCH,
@@ -55,7 +57,7 @@ class Application_Util_Searchtypes {
             self::ALL_SEARCH,
             self::SERIES_SEARCH,
             self::ID_SEARCH
-        );
+        ];
         return in_array($searchtype, $supportedTypes);
     }
 
@@ -93,6 +95,4 @@ class Application_Util_Searchtypes {
 
         return $plugin;
     }
-
 }
-

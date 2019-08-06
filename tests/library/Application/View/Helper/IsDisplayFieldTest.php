@@ -42,9 +42,9 @@ class Application_View_Helper_IsDisplayFieldTest extends ControllerTestCase
 
         $this->assertFalse($helper->isDisplayField('BelongsToBibliography'));
 
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
-            'frontdoor' => array('metadata' => array('BelongsToBibliography' => '1'))
-        )));
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'frontdoor' => ['metadata' => ['BelongsToBibliography' => '1']]
+        ]));
 
         $this->assertTrue($helper->isDisplayField('BelongsToBibliography'));
     }

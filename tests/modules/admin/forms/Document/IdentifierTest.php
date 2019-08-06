@@ -172,5 +172,4 @@ class Admin_Form_Document_IdentifierTest extends ControllerTestCase
         $this->assertEquals(1, count($messages));
         $this->assertContains('Unknown identifier ID = \'7777\'.', $messages[0]);
     }
-
 }

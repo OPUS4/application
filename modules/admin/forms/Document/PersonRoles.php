@@ -35,25 +35,26 @@
 /**
  * Unterformular fuer die Buttons, um die Rolle einer Person zu ändern.
  */
-class Admin_Form_Document_PersonRoles extends Admin_Form_AbstractDocumentSubForm {
-    
+class Admin_Form_Document_PersonRoles extends Admin_Form_AbstractDocumentSubForm
+{
+
     /**
      * Name fuer Formularelement fuer Feld Role.
      */
     const ELEMENT_PREFIX_ROLE = 'Role';
-    
+
     /**
      * Konstante für das Ändern der Rolle für eine Person.
      */
     const RESULT_CHANGE_ROLE = 'changeRole';
-            
+
     /**
      * Mögliche Rollen für eine Person.
      * @var array
-     * 
+     *
      * TODO centralize
      */
-    private $_personRoles =  array(
+    private $_personRoles = [
         'author' => 'author',
         'editor' => 'editor',
         'translator' => 'translator',
@@ -62,74 +63,79 @@ class Admin_Form_Document_PersonRoles extends Admin_Form_AbstractDocumentSubForm
         'advisor' => 'advisor',
         'referee' => 'referee',
         'submitter' => 'submitter'
-    );
-    
+    ];
+
     /**
      * Konstruiert Formular zum Ändern der Rolle einer Person.
-     * 
+     *
      * @param string $role Name der aktuellen Rolle
      * @param mixed $options
      */
-    public function __construct($role = null, $options = null) {
-        if (!is_null($role) && isset($this->_personRoles[$role])) {
+    public function __construct($role = null, $options = null)
+    {
+        if (! is_null($role) && isset($this->_personRoles[$role])) {
             unset($this->_personRoles[$role]);
         }
-        
+
         parent::__construct($options);
     }
-    
+
     /**
      * Erzeugt Buttons für sämtliche Rollen und kümmert sich um Dekoratoren.
      */
-    public function init() {
+    public function init()
+    {
         parent::init();
-        
+
         $roles = $this->_personRoles;
-        
+
         $this->setDecorators(
-            array(
+            [
             'FormElements',
-            array('HtmlTag', array('tag' => 'ul', 'class' => 'links'))
-            )
+            ['HtmlTag', ['tag' => 'ul', 'class' => 'links']]
+            ]
         );
-        
+
         foreach ($roles as $role) {
             $this->addElement(
-                'submit', $this->getRoleElementName($role), array(
-                'decorators' => array('ViewHelper', array('HtmlTag', array('tag' => 'li'))),
+                'submit',
+                $this->getRoleElementName($role),
+                [
+                'decorators' => ['ViewHelper', ['HtmlTag', ['tag' => 'li']]],
                 'label' => 'Opus_Person_Role_Value_' . ucfirst($role)
-                )
+                ]
             );
         }
     }
-    
+
     /**
      * Prüft ob in einem POST einer der Rollen-Buttons geklickt wurde.
      * @param array $post POST Daten für Formular
      * @param array $context POST Daten für gesamtes Formular
      * @return array
      */
-    public function processPost($post, $context) {
+    public function processPost($post, $context)
+    {
         // Prüfen, ob Button für Rollenänderung ausgewählt wurde
         foreach ($this->_personRoles as $role) {
             if (array_key_exists($this->getRoleElementName($role), $post)) {
-                return array(
+                return [
                     'result' => Admin_Form_Document_PersonRoles::RESULT_CHANGE_ROLE,
                     'role' => $role
-                );
+                ];
             }
         }
-        
+
         return null;
     }
-    
+
     /**
      * Liefert Namen des Elements für eine Rolle.
      * @param string $role
      * @return string
      */
-    public function getRoleElementName($role) {
+    public function getRoleElementName($role)
+    {
         return self::ELEMENT_PREFIX_ROLE . ucfirst($role);
     }
-
 }

@@ -34,7 +34,8 @@
 /**
  * Anzeigefeld für den Registrierungsstatus von lokalen DOIs
  */
-class Admin_Form_Document_RegistrationNote extends Admin_Form_AbstractDocumentSubForm {
+class Admin_Form_Document_RegistrationNote extends Admin_Form_AbstractDocumentSubForm
+{
 
     /**
      * Name für Anzeigefeld, in dem der Registrierungsstatus von DOIs angezeigt
@@ -43,54 +44,58 @@ class Admin_Form_Document_RegistrationNote extends Admin_Form_AbstractDocumentSu
 
     private $identifier;
 
-    public function getIdentifier() {
+    public function getIdentifier()
+    {
         return $this->identifier;
     }
 
-    public function init() {
+    public function init()
+    {
         parent::init();
 
         $statusNote = new Zend_Form_Element_Note(self::ELEMENT_REGISTRATION_NOTE);
         $this->addElement($statusNote);
     }
 
-    public function populateFromModel($model) {
+    public function populateFromModel($model)
+    {
         if (is_string($model) && is_numeric($model)) {
             // Identifier-ID übergeben
             try {
                 $model = new Opus_Identifier($model);
-            }
-            catch (Opus_Model_NotFoundException $e) {
+            } catch (Opus_Model_NotFoundException $e) {
                 // ignore silently
                 return;
             }
         }
 
-        if (!($model instanceof Opus_Identifier)) {
+        if (! ($model instanceof Opus_Identifier)) {
             return;
         }
-        if (!$model->isLocalDoi()) {
+        if (! $model->isLocalDoi()) {
             return; // Statusinformationen werden nur für lokale DOIs (gemäß der Konfiguration) angezeigt
         }
 
         $this->identifier = $model;
     }
 
-    public function loadDefaultDecorators() {
+    public function loadDefaultDecorators()
+    {
         $this->setDecorators(
-            array(
-                array(
+            [
+                [
                     'ViewScript',
-                    array('viewScript' => 'identifierStatus.phtml')
-                )
-            )
+                    ['viewScript' => 'identifierStatus.phtml']
+                ]
+            ]
         );
     }
 
     /**
      * Diese Methode wird aufgerufen, wenn das Formular im Nicht-Edit-Modus angezeigt werden soll.
      */
-    public function prepareRenderingAsView() {
+    public function prepareRenderingAsView()
+    {
         if (is_null($this->identifier)) {
             return; // es wird keine Information angezeigt
         }
@@ -100,7 +105,5 @@ class Admin_Form_Document_RegistrationNote extends Admin_Form_AbstractDocumentSu
         // in diesem Fall soll der DOI-Registrierungsstatus angezeigt werden (statt einer Warnung, wenn DOI bereits registiert ist)
         $element = $this->getElement(self::ELEMENT_REGISTRATION_NOTE);
         $element->setValue('Diese DOI ist bereits registriert. Sie sollte nicht mehr geändert werden!');
-
     }
-
 }
