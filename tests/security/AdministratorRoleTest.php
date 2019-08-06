@@ -128,5 +128,4 @@ class AdministratorRoleTest extends ControllerTestCase
         $this->dispatch('/frontdoor/index/index/docId/92');
         $this->assertQuery('//div[@id="actionboxContainer"]', 'frontdoor not asserted');
     }
-
 }

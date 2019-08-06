@@ -41,13 +41,14 @@ defined('APPLICATION_ENV')
 // Configure include path.
 set_include_path(
     implode(
-        PATH_SEPARATOR, array(
+        PATH_SEPARATOR,
+        [
             '.',
             dirname(__FILE__),
             APPLICATION_PATH . '/library',
             APPLICATION_PATH . '/vendor',
             get_include_path(),
-        )
+        ]
     )
 );
 
@@ -56,15 +57,15 @@ require_once 'autoload.php';
 // environment initializiation
 $application = new Zend_Application(
     APPLICATION_ENV,
-    array(
-        "config"=>array(
+    [
+        "config" => [
             APPLICATION_PATH . '/application/configs/application.ini',
             APPLICATION_PATH . '/application/configs/config.ini',
             APPLICATION_PATH . '/application/configs/console.ini',
             APPLICATION_PATH . '/tests/config.ini',
             APPLICATION_PATH . '/tests/tests.ini'
-        )
-    )
+        ]
+    ]
 );
 
 // Bootstrapping application

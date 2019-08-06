@@ -48,27 +48,27 @@ class SendNotificationTest extends CronTestCase
 
     public function testSendNotification()
     {
-        $this->createJob(Opus_Job_Worker_MailNotification::LABEL, array(
+        $this->createJob(Opus_Job_Worker_MailNotification::LABEL, [
             'subject' => 'SendNotification Test',
             'message' => 'This is a test message generated in ' . __FILE__,
-            'users' => array(array('address' => 'user@example.org', 'name' => 'Test User'))
-        ));
+            'users' => [['address' => 'user@example.org', 'name' => 'Test User']]
+        ]);
         $this->executeScript('cron-send-notification.php');
-        $allJobs = Opus_Job::getByLabels(array(Opus_Job_Worker_MailNotification::LABEL), null, Opus_Job::STATE_UNDEFINED);
+        $allJobs = Opus_Job::getByLabels([Opus_Job_Worker_MailNotification::LABEL], null, Opus_Job::STATE_UNDEFINED);
         $this->assertTrue(empty($allJobs), 'Expected no more jobs in queue');
-        $failedJobs = Opus_Job::getByLabels(array(Opus_Job_Worker_MailNotification::LABEL), null, Opus_Job::STATE_FAILED);
+        $failedJobs = Opus_Job::getByLabels([Opus_Job_Worker_MailNotification::LABEL], null, Opus_Job::STATE_FAILED);
         $this->assertTrue(empty($failedJobs), 'Expected no failed jobs in queue');
     }
 
     public function testFailSendNotification()
     {
-        $this->createJob(Opus_Job_Worker_MailNotification::LABEL, array(
+        $this->createJob(Opus_Job_Worker_MailNotification::LABEL, [
             'subject' => 'SendNotification Test',
             'message' => 'This is a test message generated in ' . __FILE__,
             'users' => ''
-        ));
+        ]);
         $this->executeScript('cron-send-notification.php');
-        $failedJobs = Opus_Job::getByLabels(array(Opus_Job_Worker_MailNotification::LABEL), null, Opus_Job::STATE_FAILED);
+        $failedJobs = Opus_Job::getByLabels([Opus_Job_Worker_MailNotification::LABEL], null, Opus_Job::STATE_FAILED);
         $this->assertEquals(1, count($failedJobs), 'Expected one failed job in queue');
     }
 }

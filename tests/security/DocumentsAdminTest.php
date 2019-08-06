@@ -114,8 +114,10 @@ class DocumentsAdminTest extends ControllerTestCase
         $this->assertQueryContentContains("//a[@href=\"$baseUri/admin/document/index/id/92\"]", 'Administration');
 
         $this->assertQuery("//a[@href=\"$baseUri/admin/workflow/changestate/docId/92/targetState/restricted\"]");
-        $this->assertQueryContentContains("//a[@href=\"$baseUri/admin/workflow/changestate/docId/92/targetState/restricted\"]",
-            'Restrict document');
+        $this->assertQueryContentContains(
+            "//a[@href=\"$baseUri/admin/workflow/changestate/docId/92/targetState/restricted\"]",
+            'Restrict document'
+        );
     }
 
     /**
@@ -236,5 +238,4 @@ class DocumentsAdminTest extends ControllerTestCase
         $this->dispatch('/admin/document/edit/id/146');
         $this->assertRedirectTo('/auth/index/rmodule/admin/rcontroller/document/raction/edit/id/146');
     }
-
 }

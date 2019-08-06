@@ -8,6 +8,7 @@
     <file>library</file>
     <file>modules</file>
     <file>scripts</file>
-    <file>tests/library</file>
-    <file>tests/modules</file>
+    <file>public/index.php</file>
+    <file>db/createdb.php</file>
+    <file>tests</file>
 </ruleset>
