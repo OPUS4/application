@@ -51,9 +51,9 @@ class Publish_Form_PublishingFirstTest extends ControllerTestCase
         $config->form->first->bibliographie = 0;
 
         $form = new Publish_Form_PublishingFirst(new Zend_View());
-        $data = array(
+        $data = [
             'documentType' => ''
-        );
+        ];
 
         $valid = $form->isValid($data);
         $this->assertFalse($valid);
@@ -67,13 +67,12 @@ class Publish_Form_PublishingFirstTest extends ControllerTestCase
         $config->form->first->bibliographie = 0;
 
         $form = new Publish_Form_PublishingFirst(new Zend_View());
-        $data = array(
+        $data = [
             'documentType' => 'preprint',
             'rights' => '0'
-        );
+        ];
 
         $valid = $form->isValid($data);
         $this->assertFalse($valid);
     }
-
 }

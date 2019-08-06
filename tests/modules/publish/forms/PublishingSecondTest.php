@@ -76,10 +76,10 @@ class Publish_Form_PublishingSecondTest extends ControllerTestCase
         $session = new Zend_Session_Namespace('Publish');
         $session->documentType = 'workingpaper';
         $form = new Publish_Form_PublishingSecond($this->_logger);
-        $data = array(
+        $data = [
             'PersonSubmitterFirstName_1' => 'John',
             'PersonSubmitterLastName_1' => 'Doe'
-        );
+        ];
 
         $valid = $form->isValid($data);
         $this->assertFalse($valid);
@@ -95,10 +95,10 @@ class Publish_Form_PublishingSecondTest extends ControllerTestCase
         $session = new Zend_Session_Namespace('Publish');
         $session->documentType = 'demo';
         $form = new Publish_Form_PublishingSecond($this->_logger);
-        $data = array(
+        $data = [
             'PersonSubmitterFirstName_1' => 'John',
             'PersonSubmitterLastName_1' => 'Doe'
-        );
+        ];
 
         $valid = $form->isValid($data);
         $this->assertTrue($valid);
@@ -115,10 +115,10 @@ class Publish_Form_PublishingSecondTest extends ControllerTestCase
         $session->documentType = 'demo';
 
         $form = new Publish_Form_PublishingSecond($this->_logger);
-        $data = array(
+        $data = [
             'PersonSubmitterFirstName_1' => 'John',
             'PersonSubmitterLastName_1' => 'Doe'
-        );
+        ];
         $form->prepareCheck();
         $this->assertNotNull($form->getElement('back'));
         $this->assertNotNull($form->getElement('send'));
@@ -130,9 +130,9 @@ class Publish_Form_PublishingSecondTest extends ControllerTestCase
     {
         $session = new Zend_Session_Namespace('Publish');
         $session->documentType = 'all';
-        $session->additionalFields = array();
+        $session->additionalFields = [];
 
-        $elementData = array(
+        $elementData = [
             'id' => 'LegalNotices',
             'label' => 'LegalNotices',
             'req' => 'required',
@@ -142,9 +142,9 @@ class Publish_Form_PublishingSecondTest extends ControllerTestCase
             'value' => '0',
             'check' => '',
             'disabled' => '0',
-            'error' => array(),
+            'error' => [],
             'DT_external' => true
-        );
+        ];
 
         $session->DT_externals['LegalNotices'] = $elementData;
 

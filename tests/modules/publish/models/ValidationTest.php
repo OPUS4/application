@@ -216,7 +216,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase
 
         $activeLicences = [];
 
-        foreach($licences as $licence) {
+        foreach ($licences as $licence) {
             if ($licence->getActive() == '1') {
                 $activeLicences[] = $licence->getDisplayName();
             }
@@ -225,7 +225,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase
         $val = new Publish_Model_Validation('Licence', $this->session);
         $values = $val->selectOptions();
 
-        $this->assertEquals( count($values), count($activeLicences));
+        $this->assertEquals(count($values), count($activeLicences));
 
         $pos = 0;
 
@@ -247,8 +247,8 @@ class Publish_Model_ValidationTest extends ControllerTestCase
         $this->assertArrayHasKey('eins', $children);
     }
 
-     public function testSelectOptionsForThesisGrantor()
-     {
+    public function testSelectOptionsForThesisGrantor()
+    {
         $val = new Publish_Model_Validation('ThesisGrantor', $this->session);
         $children = $val->selectOptions();
 
@@ -336,13 +336,13 @@ class Publish_Model_ValidationTest extends ControllerTestCase
 
         $visibleSeries = [];
 
-        foreach($series as $serie) {
+        foreach ($series as $serie) {
             if ($serie->getVisible() == '1') {
                 $visibleSeries[] = $serie->getTitle();
             }
         }
 
-        $this->assertEquals( count($values), count($visibleSeries));
+        $this->assertEquals(count($values), count($visibleSeries));
 
         $index = 0;
         foreach ($values as $name) {
