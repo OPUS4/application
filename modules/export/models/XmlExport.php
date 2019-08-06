@@ -28,7 +28,7 @@
  * @package     Module_Export
  * @author      Michael Lang <lang@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -164,12 +164,8 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract
         if (is_null($this->_downloadEnabled)) {
             $appConfig = Application_Configuration::getInstance()->getConfig();
 
-            if (isset($appConfig->export->download)) {
-                $value = $appConfig->export->download;
-                $this->_downloadEnabled = $value !== '0' && $value !== false && $value !== '';
-            } else {
-                $this->_downloadEnabled = true;
-            }
+            $this->_downloadEnabled = isset($appConfig->export->download) ?
+                filter_var($appConfig->export->download, FILTER_VALIDATE_BOOLEAN) : true;
         }
 
         return $this->_downloadEnabled;
