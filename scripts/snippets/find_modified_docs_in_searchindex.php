@@ -45,16 +45,14 @@ $numOfErrors = 0;
 $finder = new Opus_DocumentFinder();
 $finder->setServerState('published');
 foreach ($finder->ids() as $docId) {
-
     // check if document with id $docId is already persisted in search index
     $search = Opus_Search_Service::selectSearchingService();
-    $query  = Opus_Search_QueryFactory::selectDocumentById( $search, $docId );
+    $query  = Opus_Search_QueryFactory::selectDocumentById($search, $docId);
 
-    if ( $search->customSearch( $query )->getAllMatchesCount() != 1 ) {
+    if ($search->customSearch($query)->getAllMatchesCount() != 1) {
         echo "ERROR: document # $docId is not stored in search index\n";
         $numOfErrors++;
-    }
-    else {
+    } else {
         $result = $search->getResults();
         $solrModificationDate = $result[0]->getServerDateModified();
         $document = new Opus_Document($docId);
@@ -68,8 +66,7 @@ foreach ($finder->ids() as $docId) {
 if ($numOfErrors > 0) {
     echo "$numOfErrors missing documents were found\n";
     echo "$numOfModified modified documents were found\n";
-}
-else {
+} else {
     echo "no missing or modified documents were found\n";
 }
 

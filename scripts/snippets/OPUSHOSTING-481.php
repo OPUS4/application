@@ -33,8 +33,8 @@
 
 
 /**
- * Dieses Script gibt die IDs aller veröffentlichten Dokumente aus, bei denen 
- * Jane Doe der Name des Autors ODER der Name einer sonstigen beteiligten 
+ * Dieses Script gibt die IDs aller veröffentlichten Dokumente aus, bei denen
+ * Jane Doe der Name des Autors ODER der Name einer sonstigen beteiligten
  * Personen (advisor, contributor, editor, other, translator) ist
  */
 
@@ -47,17 +47,19 @@ $docfinder->setServerState('published');
 $select = $docfinder->getSelect();
 $select
   ->joinLeft(
-      array('pd' => 'link_persons_documents'), 'd.id = pd.document_id AND (pd.role = "author"'
+      ['pd' => 'link_persons_documents'],
+      'd.id = pd.document_id AND (pd.role = "author"'
       . ' OR pd.role = "advisor" OR pd.role = "contributor" OR pd.role = "editor" OR pd.role = "other"'
-      . ' OR pd.role = "translator")', array()
+      . ' OR pd.role = "translator")',
+      []
   )
-  ->joinLeft(array('p' => 'persons'), 'pd.person_id = p.id', array())
+  ->joinLeft(['p' => 'persons'], 'pd.person_id = p.id', [])
   ->where('p.first_name = ?', $firstName)
   ->where('p.last_name = ?', $lastName)
   ->group('d.id');
 
 foreach ($docfinder->ids() as $docId) {
-  echo "DocID $docId\n";
+    echo "DocID $docId\n";
 }
 
 exit();

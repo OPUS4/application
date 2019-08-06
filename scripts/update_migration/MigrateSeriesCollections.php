@@ -35,24 +35,27 @@
 
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
-class FindMissingSeriesNumbers {
+class FindMissingSeriesNumbers
+{
 
     private $_logger;
-    
+
     private $_seriesRole;
 
-    public function __construct($logfile) {
+    public function __construct($logfile)
+    {
         $this->_seriesRole = Opus_CollectionRole::fetchByName('series');
         $this->initLogger($logfile);
     }
-    
+
     /**
      * Initialise the logger with the given file.
      */
-    private function initLogger($logfileName) {
+    private function initLogger($logfileName)
+    {
         $logfile = @fopen($logfileName, 'a', false);
-        $writer = new Zend_Log_Writer_Stream($logfile);        
-        $formatter=new Zend_Log_Formatter_Simple('%priorityName%: %message%' . PHP_EOL);
+        $writer = new Zend_Log_Writer_Stream($logfile);
+        $formatter = new Zend_Log_Formatter_Simple('%priorityName%: %message%' . PHP_EOL);
         $writer->setFormatter($formatter);
         $this->_logger = new Zend_Log($writer);
     }
@@ -64,10 +67,11 @@ class FindMissingSeriesNumbers {
      *
      * Die Wurzel-Collection der Collection Role series wird nicht betrachtet.
      *
-     * 
+     *
      * @return int number of collections that were migrated
      */
-    private function migrateCollectionToSeries() {
+    private function migrateCollectionToSeries()
+    {
         $numOfCollectionsMigrated = 0;
         foreach (Opus_Collection::fetchCollectionsByRoleId($this->_seriesRole->getId()) as $collection) {
             // ignore root collection (does not have valid data and associated documents)
@@ -121,12 +125,13 @@ class FindMissingSeriesNumbers {
      * @return array an array that contains both the number of conflicts found and
      * the number of documents that were successfully migrated
      */
-    private function migrateDocuments() {
+    private function migrateDocuments()
+    {
         $numOfConflicts = 0;
         $numOfDocsMigrated = 0;
         $finder = new Opus_DocumentFinder();
         $finder->setCollectionRoleId($this->_seriesRole->getId());
-        $serialIdsInUse = array();
+        $serialIdsInUse = [];
         foreach ($finder->ids() as $docId) {
             $doc = new Opus_Document($docId);
             $serialIds = $doc->getIdentifierSerial();
@@ -147,18 +152,15 @@ class FindMissingSeriesNumbers {
             }
 
             $serialId = $serialIds[0]->getValue();
-            $remainingCollections = array();
+            $remainingCollections = [];
 
             foreach ($doc->getCollection() as $collection) {
-
                 // only consider collection in collection role series
                 if ($collection->getRoleId() != $this->_seriesRole->getId()) {
                     array_push($remainingCollections, $collection);
-                }
-                else {
+                } else {
                     $collectionId = $collection->getId();
-                    if (!$collection->isRoot()) {
-                        
+                    if (! $collection->isRoot()) {
                         // check for conflict
                         if (array_key_exists($collectionId, $serialIdsInUse)
                                 && in_array($serialId, $serialIdsInUse[$collectionId])) {
@@ -172,19 +174,17 @@ class FindMissingSeriesNumbers {
                             );
                             array_push($remainingCollections, $collection);
                             $numOfConflicts++;
-                        }
-                        else {
+                        } else {
                             // no conflict
                             $series = new Opus_Series($collectionId);
                             $doc->addSeries($series)->setNumber($serialId);
-                            $doc->setIdentifierSerial(array());
-                            
+                            $doc->setIdentifierSerial([]);
+
                             // mark usage of serialId for collection $collectionId
                             if (array_key_exists($collectionId, $serialIdsInUse)) {
                                 array_push($serialIdsInUse[$collectionId], $serialId);
-                            }
-                            else {
-                                $serialIdsInUse[$collectionId] = array($serialId);
+                            } else {
+                                $serialIdsInUse[$collectionId] = [$serialId];
                             }
                             $this->_logger->info(
                                 "doc #$docId : assign document to series #$collectionId with value $serialId"
@@ -195,8 +195,7 @@ class FindMissingSeriesNumbers {
                             );
                             $numOfDocsMigrated++;
                         }
-                    }
-                    else {
+                    } else {
                         // series root collection assignment will not be migrated
                         $this->_logger->warn(
                             "doc #$docId : is assigned to root collection #$collectionId of collection role series:"
@@ -212,11 +211,12 @@ class FindMissingSeriesNumbers {
             $doc->unregisterPlugin('Opus_Document_Plugin_Index');
             $doc->store();
         }
-        
-        return array('numOfConflicts' => $numOfConflicts, 'numOfDocsMigrated' => $numOfDocsMigrated);
+
+        return ['numOfConflicts' => $numOfConflicts, 'numOfDocsMigrated' => $numOfDocsMigrated];
     }
 
-    private function hideCollectionRoleSeries() {
+    private function hideCollectionRoleSeries()
+    {
         $this->_seriesRole->setVisible(0);
         $this->_seriesRole->setVisibleBrowsingStart(0);
         $this->_seriesRole->setVisibleFrontdoor(0);
@@ -225,11 +225,12 @@ class FindMissingSeriesNumbers {
         $this->_logger->info("set visibility status of collection role series to unvisible");
     }
 
-    public function run() {
+    public function run()
+    {
         $numOfCollectionsMigrated = $this->migrateCollectionToSeries();
         $result = $this->migrateDocuments();
         $this->hideCollectionRoleSeries();
-        return array($result['numOfConflicts'], $numOfCollectionsMigrated, $result['numOfDocsMigrated']);
+        return [$result['numOfConflicts'], $numOfCollectionsMigrated, $result['numOfDocsMigrated']];
     }
 }
 if ($argc < 2) {

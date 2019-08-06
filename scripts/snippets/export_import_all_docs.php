@@ -39,12 +39,10 @@
 $docFinder = new Opus_DocumentFinder();
 
 foreach ($docFinder->ids() as $id) {
-
     $doc = null;
     try {
         $doc = new Opus_Document($id);
-    }
-    catch (Opus_Model_NotFoundException $e) {
+    } catch (Opus_Model_NotFoundException $e) {
         // document with id $id does not exist
         continue;
     }
@@ -65,8 +63,7 @@ foreach ($docFinder->ids() as $id) {
         $doc = $xmlModelImport->getModel();
         $doc->store();
         echo "OK - import of document $id was successful.\n";
-    }
-    catch (Exception $e) {
+    } catch (Exception $e) {
         echo "ERR - import of document $id was NOT successful.\n";
         echo $e;
     }

@@ -36,17 +36,15 @@
  * Returns the XML representation of the document with given id $id.
  */
 
-if (isset($argv[2]) && !empty($argv[2]) && is_numeric($argv[2])) {
+if (isset($argv[2]) && ! empty($argv[2]) && is_numeric($argv[2])) {
     $id = $argv[2];
-}
-else {
+} else {
     $id = 91;
 }
 
 try {
     $doc = new Opus_Document($id);
-}
-catch (Opus_Model_NotFoundException $e) {
+} catch (Opus_Model_NotFoundException $e) {
     echo "document with id $id does not exist";
     exit();
 }

@@ -58,12 +58,12 @@ $logger = new Zend_Log($writer);
 
 // load collections (and check existence)
 $mscRole = Opus_CollectionRole::fetchByName('msc');
-if (!is_object($mscRole)) {
+if (! is_object($mscRole)) {
     $logger->warn("MSC collection does not exist.  Cannot migrate SubjectMSC.");
 }
 
 $ddcRole = Opus_CollectionRole::fetchByName('ddc');
-if (!is_object($ddcRole)) {
+if (! is_object($ddcRole)) {
     $logger->warn("DDC collection does not exist.  Cannot migrate SubjectDDC.");
 }
 
@@ -73,21 +73,18 @@ createEnrichmentKey('MigrateSubjectDDC');
 
 // Iterate over all documents.
 $docFinder = new Opus_DocumentFinder();
-$changedDocumentIds = array();
-foreach ($docFinder->ids() AS $docId) {
-
+$changedDocumentIds = [];
+foreach ($docFinder->ids() as $docId) {
     $doc = null;
     try {
         $doc = new Opus_Document($docId);
-    }
-    catch (Opus_Model_NotFoundException $e) {
+    } catch (Opus_Model_NotFoundException $e) {
         continue;
     }
 
-    $removeMscSubjects = array();
-    $removeDdcSubjects = array();
+    $removeMscSubjects = [];
+    $removeDdcSubjects = [];
     try {
-
         if (is_object($mscRole)) {
             $removeMscSubjects = migrateSubjectToCollection($doc, 'msc', $mscRole->getId(), 'MigrateSubjectMSC');
         }
@@ -95,8 +92,7 @@ foreach ($docFinder->ids() AS $docId) {
         if (is_object($ddcRole)) {
             $removeDdcSubjects = migrateSubjectToCollection($doc, 'ddc', $ddcRole->getId(), 'MigrateSubjectDDC');
         }
-    }
-    catch (Exception $e) {
+    } catch (Exception $e) {
         $logger->err("fatal error while parsing document $docId: " . $e);
         continue;
     }
@@ -108,16 +104,16 @@ foreach ($docFinder->ids() AS $docId) {
             $doc->unregisterPlugin('Opus_Document_Plugin_Index');
             $doc->store();
             $logger->info("changed document $docId");
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $logger->err("fatal error while STORING document $docId: " . $e);
         }
     }
 }
 $logger->info("changed " . count($changedDocumentIds) . " documents: " . implode(",", $changedDocumentIds));
 
-function checkDocumentHasCollectionId($doc, $collectionId) {
-    foreach ($doc->getCollection() AS $c) {
+function checkDocumentHasCollectionId($doc, $collectionId)
+{
+    foreach ($doc->getCollection() as $c) {
         if ($c->getId() === $collectionId) {
             return true;
         }
@@ -125,13 +121,14 @@ function checkDocumentHasCollectionId($doc, $collectionId) {
     return false;
 }
 
-function migrateSubjectToCollection($doc, $subjectType, $roleId, $eKeyName) {
+function migrateSubjectToCollection($doc, $subjectType, $roleId, $eKeyName)
+{
     global $logger;
     $logPrefix = sprintf("[docId % 5d] ", $doc->getId());
 
-    $keepSubjects = array();
-    $removeSubjects = array();
-    foreach ($doc->getSubject() AS $subject) {
+    $keepSubjects = [];
+    $removeSubjects = [];
+    foreach ($doc->getSubject() as $subject) {
         $keepSubjects[$subject->getId()] = $subject;
 
         $type = $subject->getType();
@@ -148,7 +145,7 @@ function migrateSubjectToCollection($doc, $subjectType, $roleId, $eKeyName) {
 
         // check if (unique) collection for subject value exists
         $collections = Opus_Collection::fetchCollectionsByRoleNumber($roleId, $value);
-        if (!is_array($collections) or count($collections) < 1) {
+        if (! is_array($collections) or count($collections) < 1) {
             $logger->warn("$logPrefix  No collection found for value '$value' -- migrating to enrichment $eKeyName.");
             // migrate subject to enrichments
             $doc->addEnrichment()
@@ -181,7 +178,7 @@ function migrateSubjectToCollection($doc, $subjectType, $roleId, $eKeyName) {
         $collectionId = $collection->getId();
         // check if document already belongs to this collection
         if (checkDocumentHasCollectionId($doc, $collectionId)) {
-            // nothing to do            
+            // nothing to do
             $logger->info(
                 "$logPrefix  Migrating subject (type '$type', value '$value') -- collection already assigned to "
                 . "collection $collectionId."
@@ -196,14 +193,14 @@ function migrateSubjectToCollection($doc, $subjectType, $roleId, $eKeyName) {
 
     if (count($removeSubjects) > 0) {
         // debug: removees
-        foreach ($removeSubjects AS $r) {
+        foreach ($removeSubjects as $r) {
             $logger->debug(
                 "$logPrefix  Removing subject (type '" . $r->getType() . "', value '" . $r->getValue() . "')"
             );
         }
 
         $newSubjects = array_filter(array_values($keepSubjects));
-        foreach ($newSubjects AS $k) {
+        foreach ($newSubjects as $k) {
             $logger->debug(
                 "$logPrefix  Keeping subject (type '" . $k->getType() . "', value '" . $k->getValue() . "')"
             );
@@ -215,13 +212,12 @@ function migrateSubjectToCollection($doc, $subjectType, $roleId, $eKeyName) {
     return $removeSubjects;
 }
 
-function createEnrichmentKey($name) {
+function createEnrichmentKey($name)
+{
     try {
         $eKey = new Opus_EnrichmentKey();
         $eKey->setName($name)->store();
-    }
-    catch (Exception $e) {
-        
+    } catch (Exception $e) {
     }
 
     return new Opus_EnrichmentKey($name);

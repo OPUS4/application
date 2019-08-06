@@ -43,4 +43,3 @@ $solr->commit();
 $solr->optimize();
 
 echo 'Cleaning solr index on "' . $host . ':' . $port . $baseUri  . '" done.' . $EOL;
-

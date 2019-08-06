@@ -44,19 +44,19 @@ $inputFile = '../workspace/tmp/ddc_dnb.txt';
 $visible = true;
 $fieldSeparator = '	';
 
-if (!file_exists($inputFile)) {
+if (! file_exists($inputFile)) {
     echo "Error: input file $inputFile does not exist\n";
     exit();
 }
 
-if (!is_readable($inputFile)) {
+if (! is_readable($inputFile)) {
     echo "Error: input file $inputFile is not readable\n";
     exit();
 }
 
 // find next valid position for collection role
 $table  = Opus_Db_TableGateway::getInstance(Opus_CollectionRole::getTableGatewayClass());
-$select = $table->select()->from($table, array('MAX(position) AS max_position'));
+$select = $table->select()->from($table, ['MAX(position) AS max_position']);
 $row = $table->fetchRow($select);
 $position = $row->max_position + 1;
 
@@ -79,8 +79,7 @@ $rootCollection->setVisible(true);
 $rootCollection->setRoleId($collectionRoleId);
 $rootCollection->store();
 
-if (!is_null($rootCollection)) {
-
+if (! is_null($rootCollection)) {
     $lineCount = 0;
     $linesImported = 0;
     foreach (file($inputFile) as $line) {

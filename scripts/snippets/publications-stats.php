@@ -41,13 +41,12 @@ $years = $df->setServerState('published')->groupedServerYearPublished();
 sort($years);
 
 $cumSum = 0;
-foreach ($years AS $year) {
-   $df = new Opus_DocumentFinder();
-   $count = $df->setServerState('published')->setServerDatePublishedRange($year, $year+1)->count();
+foreach ($years as $year) {
+    $df = new Opus_DocumentFinder();
+    $count = $df->setServerState('published')->setServerDatePublishedRange($year, $year + 1)->count();
 
-   $cumSum += $count;
-   echo "year $year: $cumSum ($count)\n";
+    $cumSum += $count;
+    echo "year $year: $cumSum ($count)\n";
 }
 
 exit();
-            
