@@ -35,7 +35,7 @@
 class Frontdoor_Model_DocumentAccessNotAllowedException extends Frontdoor_Model_FrontdoorDeliveryException
 {
 
-    public function  __construct()
+    public function __construct()
     {
         $this->translateKey = 'frontdoor_no_doc_access';
         parent::__construct($this->translateKey, 403);

@@ -35,7 +35,8 @@
 /**
  * Interface fuer OPUS Form Element Klassen.
  */
-interface Application_Form_IElement {
+interface Application_Form_IElement
+{
 
     /**
      * Liefert Hinweis zum Element-Value, z.B. das eine ISBN ungültig ist.
@@ -54,5 +55,4 @@ interface Application_Form_IElement {
      * Statt eines Input-Tags könnte zum Beispiel nur der Wert als einfacher Text ausgegeben werden.
      */
     public function prepareRenderingAsView();
-
 }

@@ -34,7 +34,8 @@
 /**
  * Modelklasse fuer Suchfunktionalität, die von den Controllern verwendet wird.
  */
-class Solrsearch_Model_Search extends Application_Model_Abstract {
+class Solrsearch_Model_Search extends Application_Model_Abstract
+{
 
 
 
@@ -50,47 +51,53 @@ class Solrsearch_Model_Search extends Application_Model_Abstract {
         return Application_Util_Searchtypes::getSearchPlugin($searchType);
     }
 
-    public function createSimpleSearchUrlParams($request) {
+    public function createSimpleSearchUrlParams($request)
+    {
         $params = $this->createBasicSearchParams($request);
         $params['searchtype'] = $request->getParam('searchtype', Application_Util_Searchtypes::SIMPLE_SEARCH);
         $params['query'] = $request->getParam('query', '*:*');
         return $params;
     }
 
-    public function createAdvancedSearchUrlParams($request) {
+    public function createAdvancedSearchUrlParams($request)
+    {
         $params = $this->createBasicSearchParams($request);
         $params['searchtype'] = $request->getParam('searchtype', Application_Util_Searchtypes::ADVANCED_SEARCH);
 
-        foreach (array('author', 'title', 'persons', 'referee', 'abstract', 'fulltext', 'year') as $fieldname) {
+        foreach (['author', 'title', 'persons', 'referee', 'abstract', 'fulltext', 'year'] as $fieldname) {
             $fieldvalue = $request->getParam($fieldname, '');
             if ($fieldvalue !== '') {
                 $params[$fieldname] = $fieldvalue;
                 $params[$fieldname . 'modifier'] = $request->getParam(
-                    $fieldname . 'modifier', Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL
+                    $fieldname . 'modifier',
+                    Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL
                 );
             }
         }
         return $params;
     }
 
-    public function createBasicSearchParams($request) {
-        return array(
+    public function createBasicSearchParams($request)
+    {
+        return [
             'start' => $request->getParam('start', '0'),
             'rows' => $request->getParam('rows', Opus_SolrSearch_Query::getDefaultRows()),
             'sortfield' => $request->getParam('sortfield', 'score'),
             'sortorder' => $request->getParam('sortorder', 'desc')
-        );
+        ];
     }
 
-    public function isSimpleSearchRequestValid($request) {
+    public function isSimpleSearchRequestValid($request)
+    {
         $query = $request->getParam('query');
-        return !is_null($query) && trim($query) != '';
+        return ! is_null($query) && trim($query) != '';
     }
 
-    public function isAdvancedSearchRequestValid($request) {
-        foreach (array('author', 'title', 'persons', 'referee', 'abstract', 'fulltext',  'year') as $fieldname) {
+    public function isAdvancedSearchRequestValid($request)
+    {
+        foreach (['author', 'title', 'persons', 'referee', 'abstract', 'fulltext',  'year'] as $fieldname) {
             $fieldvalue = $request->getParam($fieldname);
-            if (!is_null($fieldvalue) && trim($fieldvalue) != '') {
+            if (! is_null($fieldvalue) && trim($fieldvalue) != '') {
                 return true;
             }
         }
@@ -101,11 +108,12 @@ class Solrsearch_Model_Search extends Application_Model_Abstract {
      * Creates an URL to execute a search. The URL will be mapped to:
      * module=solrsearch, controller=index, action=search
      */
-    public static function createSearchUrlArray($params = array(), $rss = false) {
-        $url = array(
+    public static function createSearchUrlArray($params = [], $rss = false)
+    {
+        $url = [
             'module' => $rss ? 'rss' : 'solrsearch',
             'controller' => 'index',
-            'action' => $rss ? 'index' : 'search');
+            'action' => $rss ? 'index' : 'search'];
         foreach ($params as $key => $value) {
             $url[$key] = $value;
         }
@@ -119,5 +127,4 @@ class Solrsearch_Model_Search extends Application_Model_Abstract {
         }
         return $url;
     }
-
 }

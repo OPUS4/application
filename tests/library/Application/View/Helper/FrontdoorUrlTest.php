@@ -44,5 +44,4 @@ class Application_View_Helper_FrontdoorUrlTest extends ControllerTestCase
         $frontDoorUrl = $helper->frontdoorUrl('123');
         $this->assertEquals('http:///frontdoor/index/index/docId/123', $frontDoorUrl);
     }
-
 }

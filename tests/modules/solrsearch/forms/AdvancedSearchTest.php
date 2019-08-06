@@ -43,7 +43,7 @@ class Solrsearch_Form_AdvancedSearchTest extends ControllerTestCase
         $this->assertEquals(20, count($form->getElements()));
 
         // check search fields (14)
-        $fields = array('author', 'title', 'persons', 'referee', 'abstract', 'fulltext', 'year');
+        $fields = ['author', 'title', 'persons', 'referee', 'abstract', 'fulltext', 'year'];
 
         foreach ($fields as $name) {
             $this->assertNotNull($form->getElement($name), "Element $name is missing.");
@@ -51,7 +51,7 @@ class Solrsearch_Form_AdvancedSearchTest extends ControllerTestCase
         }
 
         // check other elements (7)
-        $elements = array('searchtype', 'start', 'sortfield', 'sortorder', 'Search', 'Reset');
+        $elements = ['searchtype', 'start', 'sortfield', 'sortorder', 'Search', 'Reset'];
 
         foreach ($elements as $name) {
             $this->assertNotNull($form->getElement($name), "Element $name is missing.");
@@ -68,7 +68,7 @@ class Solrsearch_Form_AdvancedSearchTest extends ControllerTestCase
         $this->assertNull($form->getElement('yearmodifier'));
 
         // check search fields (14)
-        $fields = array('author', 'title', 'persons', 'referee', 'abstract', 'fulltext');
+        $fields = ['author', 'title', 'persons', 'referee', 'abstract', 'fulltext'];
 
         foreach ($fields as $name) {
             $this->assertNotNull($form->getElement($name), "Element $name is missing.");
@@ -76,11 +76,10 @@ class Solrsearch_Form_AdvancedSearchTest extends ControllerTestCase
         }
 
         // check other elements (7)
-        $elements = array('searchtype', 'start', 'sortfield', 'sortorder', 'Search', 'Reset');
+        $elements = ['searchtype', 'start', 'sortfield', 'sortorder', 'Search', 'Reset'];
 
         foreach ($elements as $name) {
             $this->assertNotNull($form->getElement($name), "Element $name is missing.");
         }
     }
-
 }

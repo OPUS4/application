@@ -53,5 +53,4 @@ class Application_View_Helper_FileUrlTest extends ControllerTestCase
         $fileUrl = $helper->fileUrl('123', 'foo:bar.pdf');
         $this->assertEquals('http:///files/123/foo%3Abar.pdf', $fileUrl);
     }
-
 }

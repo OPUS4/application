@@ -43,6 +43,7 @@ script:
   - ant reset-testdata
   - travis_fold end "prepare_testing"
   - mysql opusdb -u root --password='' -e 'SELECT * FROM schema_version'
+  - composer cs-check
   - ./vendor/bin/phpunit --configuration ./tests/phpunit.xml --no-coverage --testsuite library
   - ./vendor/bin/phpunit --configuration ./tests/phpunit.xml --no-coverage --testsuite modules
   - ./vendor/bin/phpunit --configuration ./tests/phpunit.xml --no-coverage --testsuite admin

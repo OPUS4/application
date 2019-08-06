@@ -32,26 +32,30 @@
  * @version     $Id$
  */
 
-class Admin_Model_IndexMaintenanceLogData {
-    
+class Admin_Model_IndexMaintenanceLogData
+{
+
     private $_content;
-    
+
     private $_modifiedDate;
-    
-    public function getContent() {
+
+    public function getContent()
+    {
         return $this->_content;
     }
 
-    public function setContent($content) {
+    public function setContent($content)
+    {
         $this->_content = $content;
     }
 
-    public function getModifiedDate() {
+    public function getModifiedDate()
+    {
         return $this->_modifiedDate;
     }
 
-    public function setModifiedDate($modifiedDate) {
+    public function setModifiedDate($modifiedDate)
+    {
         $this->_modifiedDate = $modifiedDate;
-    }    
-
+    }
 }

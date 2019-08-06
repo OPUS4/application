@@ -35,7 +35,8 @@
 /**
  * Utility methods for arrays.
  */
-class Application_Util_Array {
+class Application_Util_Array
+{
 
     /**
      * Trims an entire array of strings.
@@ -43,17 +44,17 @@ class Application_Util_Array {
      *
      * TODO optionally remove empty values
      */
-    public static function trim(&$array) {
-        array_walk($array, array('Application_Util_Array', 'trimValue'));
+    public static function trim(&$array)
+    {
+        array_walk($array, ['Application_Util_Array', 'trimValue']);
     }
 
     /**
      * Trims a single string.
      * @param string $value
      */
-    public static function trimValue(&$value) {
+    public static function trimValue(&$value)
+    {
         $value = trim($value);
     }
-
 }
-

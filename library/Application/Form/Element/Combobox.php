@@ -59,16 +59,16 @@ class Application_Form_Element_Combobox extends Zend_Form_Element_Multi
 
     public function loadDefaultDecorators()
     {
-        if (!$this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
+        if (! $this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
             $this->setDecorators(
-                array(
+                [
                     'ViewHelper',
                     'Description',
                     'Errors',
                     'ElementHtmlTag',
-                    array('LabelNotEmpty', array('tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend')),
-                    array(array('dataWrapper' => 'HtmlTagWithId'), array('tag' => 'div', 'class' => 'data-wrapper'))
-                )
+                    ['LabelNotEmpty', ['tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend']],
+                    [['dataWrapper' => 'HtmlTagWithId'], ['tag' => 'div', 'class' => 'data-wrapper']]
+                ]
             );
         }
     }
@@ -77,21 +77,17 @@ class Application_Form_Element_Combobox extends Zend_Form_Element_Multi
      * Sets multi option such that value and label are equal.
      * @param $values
      */
-    public function setAutocompleteValues($values) {
-        if (!is_null($values))
-        {
-            if (is_array($values))
-            {
+    public function setAutocompleteValues($values)
+    {
+        if (! is_null($values)) {
+            if (is_array($values)) {
                 $options = array_combine($values, $values);
-                $options = array_diff($options, array(null)); // remove options with null value
-            }
-            else
-            {
-                $options = array($values => $values);
+                $options = array_diff($options, [null]); // remove options with null value
+            } else {
+                $options = [$values => $values];
             }
 
             $this->setMultiOptions($options);
         }
     }
-
 }

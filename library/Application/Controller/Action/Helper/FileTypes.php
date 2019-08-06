@@ -50,19 +50,15 @@ class Application_Controller_Action_Helper_FileTypes extends Application_Control
      */
     public function getValidMimeTypes()
     {
-        if (is_null($this->_validMimeTypes))
-        {
-
+        if (is_null($this->_validMimeTypes)) {
             $config = $this->getConfig();
 
-            $mimeTypes = array();
+            $mimeTypes = [];
 
             $fileTypes = $config->filetypes->toArray();
 
-            foreach ($fileTypes as $extension => $fileType)
-            {
-                if (isset($fileType['mimeType']) && $extension !== 'default')
-                {
+            foreach ($fileTypes as $extension => $fileType) {
+                if (isset($fileType['mimeType']) && $extension !== 'default') {
                     $mimeTypes[$extension] = $fileType['mimeType'];
                 }
             }
@@ -86,23 +82,20 @@ class Application_Controller_Action_Helper_FileTypes extends Application_Control
     {
         $mimeTypes = $this->getValidMimeTypes();
 
-        if (!is_null($extension)) {
+        if (! is_null($extension)) {
             if (isset($mimeTypes[$extension])) {
                 $mimeTypes = $mimeTypes[$extension];
-            }
-            else {
+            } else {
                 // unknown extension
                 return false;
             }
 
             if (is_array($mimeTypes)) {
                 return in_array($mimeType, $mimeTypes);
-            }
-            else {
+            } else {
                 return $mimeType === $mimeTypes;
             }
-        }
-        else {
+        } else {
             if (in_array($mimeType, $mimeTypes)) {
                 return true;
             } else {
@@ -128,16 +121,12 @@ class Application_Controller_Action_Helper_FileTypes extends Application_Control
 
         $contentDisposition = $fileTypes->default->contentDisposition;
 
-        foreach($fileTypes->toArray() as $extension => $fileType)
-        {
-            if (isset($fileType['mimeType']) && $fileType['mimeType'] === $mimeType)
-            {
-                if (isset($fileType['contentDisposition']))
-                {
+        foreach ($fileTypes->toArray() as $extension => $fileType) {
+            if (isset($fileType['mimeType']) && $fileType['mimeType'] === $mimeType) {
+                if (isset($fileType['contentDisposition'])) {
                     $contentDisposition = $fileType['contentDisposition'];
                     break;
                 }
-
             }
         }
 

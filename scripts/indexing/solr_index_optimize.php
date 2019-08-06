@@ -42,4 +42,3 @@ $solr->commit();
 $solr->optimize();
 
 echo 'Optimizing solr index on "' . $host . ':' . $port . $baseUri  . '" done.' . $EOL;
-

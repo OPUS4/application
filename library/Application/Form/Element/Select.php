@@ -35,30 +35,33 @@
 /**
  * Angepasste Klasse für SELECT Formularelemente.
  */
-class Application_Form_Element_Select extends Zend_Form_Element_Select implements Application_Form_IElement {
+class Application_Form_Element_Select extends Zend_Form_Element_Select implements Application_Form_IElement
+{
 
     /**
      * Initialisiert das Formularelement.
      *
      * Fügt PrefixPath für angepasste OPUS Dekoratoren hinzu.
      */
-    public function init() {
+    public function init()
+    {
         parent::init();
 
         $this->addPrefixPath('Application_Form_Decorator', 'Application/Form/Decorator', Zend_Form::DECORATOR);
     }
 
-    public function loadDefaultDecorators() {
-        if (!$this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
+    public function loadDefaultDecorators()
+    {
+        if (! $this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
             $this->setDecorators(
-                array(
+                [
                 'ViewHelper',
                 'Errors',
                 'Description',
                 'ElementHtmlTag',
-                array('LabelNotEmpty', array('tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend')),
-                array(array('dataWrapper' => 'HtmlTagWithId'), array('tag' => 'div', 'class' => 'data-wrapper'))
-                )
+                ['LabelNotEmpty', ['tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend']],
+                [['dataWrapper' => 'HtmlTagWithId'], ['tag' => 'div', 'class' => 'data-wrapper']]
+                ]
             );
         }
     }
@@ -66,7 +69,8 @@ class Application_Form_Element_Select extends Zend_Form_Element_Select implement
     /**
      * Sorgt dafür, daß nur der Text ausgeben wird und kein INPUT-Tag.
      */
-    public function prepareRenderingAsView() {
+    public function prepareRenderingAsView()
+    {
         $viewHelper = $this->getDecorator('ViewHelper');
         if ($viewHelper instanceof Application_Form_Decorator_ViewHelper) {
             $viewHelper->setViewOnlyEnabled(true);
@@ -81,12 +85,13 @@ class Application_Form_Element_Select extends Zend_Form_Element_Select implement
      *
      * @return string
      */
-    public function getHint() {
+    public function getHint()
+    {
         return null; // TODO: Implement getHint() method.
     }
 
-    public function getStaticViewHelper() {
+    public function getStaticViewHelper()
+    {
         return 'viewFormSelect';
     }
-
 }

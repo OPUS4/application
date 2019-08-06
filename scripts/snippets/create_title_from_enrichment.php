@@ -50,19 +50,18 @@ if (basename(__FILE__) !== basename($argv[0])) {
 
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
-$options = getopt('', array('dryrun', 'type:', 'doctype:', 'enrichment:'));
+$options = getopt('', ['dryrun', 'type:', 'doctype:', 'enrichment:']);
 
 $dryrun = isset($options['dryrun']);
 
 $doctype = '';
 if (is_null($options['doctype'])) {
     echo "parameter --doctype not specified; function will be executed for all document types" . PHP_EOL;
-}
-else {
+} else {
     $doctype = $options['doctype'];
 }
 
-if (!isset($options['type']) || empty($options['type'])) {
+if (! isset($options['type']) || empty($options['type'])) {
     echo "Usage: {$argv[0]} --type <type of title> (--dryrun)" . PHP_EOL;
     echo "type of title must be provided (e. g. parent)" . PHP_EOL;
     exit;
@@ -72,8 +71,7 @@ $enrichmentField = '';
 if (is_null($options['enrichment'])) {
     echo "parameter --enrichment not specified; function will now exit" . PHP_EOL;
     exit;
-}
-else {
+} else {
     $enrichmentField = $options['enrichment'];
 }
 
@@ -81,7 +79,7 @@ $getType = 'getTitle' . ucfirst(strtolower($options['type']));
 $addType = 'addTitle' . ucfirst(strtolower($options['type']));
 
 if ($dryrun) {
-    _log("TEST RUN: NO DATA WILL BE MODIFIED"); 
+    _log("TEST RUN: NO DATA WILL BE MODIFIED");
 }
 
 $docFinder = new Opus_DocumentFinder();
@@ -102,12 +100,11 @@ foreach ($docIds as $docId) {
                         'Title ' . ucfirst(strtolower($options['type'])) . ' already exists for Document #' . $docId
                         . '. Skipping.. '
                     );
-                }
-                else {
+                } else {
                     $title = $doc->{$addType}();
                     $title->setValue($enrichmentArray['Value']);
-                    if (!$dryrun) {
-                        $doc->store(); 
+                    if (! $dryrun) {
+                        $doc->store();
                     }
                     _log('Document #' . $docId . ' updated');
                 }
@@ -116,7 +113,7 @@ foreach ($docIds as $docId) {
     }
 }
 
-function _log($message) {
+function _log($message)
+{
     echo $message . PHP_EOL;
 }
-

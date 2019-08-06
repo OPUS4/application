@@ -32,16 +32,19 @@
  * @version     $Id$
  */
 
-class Publish_Model_Exception extends Exception {
-    
+class Publish_Model_Exception extends Exception
+{
+
     protected $_translateKey;
 
-    public function __construct($key = null) {
+    public function __construct($key = null)
+    {
         parent::__construct($key);
         $this->_translateKey = $key;
     }
 
-    public function getTranslateKey() {
+    public function getTranslateKey()
+    {
         return $this->_translateKey;
     }
 }

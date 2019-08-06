@@ -38,13 +38,14 @@
 // Configure include path.
 set_include_path(
     implode(
-        PATH_SEPARATOR, array(
+        PATH_SEPARATOR,
+        [
         '.',
         dirname(__FILE__),
         dirname(dirname(dirname(__FILE__))) . '/library',
         dirname(dirname(dirname(__FILE__))) . '/vendor',
         get_include_path(),
-        )
+        ]
     )
 );
 
@@ -63,13 +64,13 @@ require_once 'opus-php-compatibility.php';
 // environment initializiation
 $application = new Zend_Application(
     APPLICATION_ENV,
-    array(
-        "config" => array(
+    [
+        "config" => [
             APPLICATION_PATH . '/application/configs/application.ini',
             APPLICATION_PATH . '/application/configs/config.ini',
             APPLICATION_PATH . '/application/configs/console.ini'
-        )
-    )
+        ]
+    ]
 );
 
 // Bootstrapping application
@@ -77,4 +78,3 @@ $application->bootstrap('Backend');
 
 // Bootstrapping modules
 $application->getBootstrap()->getPluginResource('modules')->init();
-

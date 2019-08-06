@@ -38,7 +38,8 @@
  * This class keeps some of the special code generating translation keys out of
  * the controllers and view scripts.
  */
-class Application_Controller_Action_Helper_Translation extends Zend_Controller_Action_Helper_Abstract {
+class Application_Controller_Action_Helper_Translation extends Zend_Controller_Action_Helper_Abstract
+{
 
     /**
      * Gets called when the helper is used like a method of the broker.
@@ -48,7 +49,8 @@ class Application_Controller_Action_Helper_Translation extends Zend_Controller_A
      * @param string $value
      * @return string
      */
-    public function direct($modelName, $fieldName, $value) {
+    public function direct($modelName, $fieldName, $value)
+    {
         return $this->getKeyForValue($modelName, $fieldName, $value);
     }
 
@@ -59,7 +61,8 @@ class Application_Controller_Action_Helper_Translation extends Zend_Controller_A
      * @param string $value
      * @return string Translation key
      */
-    public function getKeyForValue($modelName, $fieldName, $value) {
+    public function getKeyForValue($modelName, $fieldName, $value)
+    {
         // The 'Type' and the 'Language' field of Opus_Document currently need
         // to be handled separately, since their key don't have a prefix.
         if ($modelName === 'Opus_Document'
@@ -67,11 +70,9 @@ class Application_Controller_Action_Helper_Translation extends Zend_Controller_A
                         || $fieldName === 'Type'
                         || $fieldName === 'PublicationState')) {
             return $value;
-        }
-        elseif ($modelName === 'Opus_Enrichment' && $fieldName === 'KeyName') {
+        } elseif ($modelName === 'Opus_Enrichment' && $fieldName === 'KeyName') {
             return $value;
-        }
-        else {
+        } else {
             return $modelName . '_' . $fieldName . '_Value_' . ucfirst($value);
         }
     }
@@ -86,11 +87,11 @@ class Application_Controller_Action_Helper_Translation extends Zend_Controller_A
      * @param string $fieldName
      * @return string Translation key
      */
-    public function getKeyForField($modelName, $fieldName) {
+    public function getKeyForField($modelName, $fieldName)
+    {
         if ($fieldName === 'Type') {
             return $modelName . '_' . $fieldName;
-        }
-        else {
+        } else {
             switch ($modelName) {
                 case 'Opus_Language':
                     return $modelName . '_' . $fieldName;
@@ -99,6 +100,4 @@ class Application_Controller_Action_Helper_Translation extends Zend_Controller_A
             }
         }
     }
-
 }
-

@@ -48,7 +48,7 @@ class Application_Form_Element_Roles extends Application_Form_Element_MultiCheck
 
     public function loadDefaultDecorators()
     {
-        if (!$this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
+        if (! $this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
             $this->setDecorators([
                 'ViewHelper',
                 'ElementHtmlTag', [

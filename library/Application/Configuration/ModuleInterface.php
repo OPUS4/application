@@ -82,5 +82,4 @@ interface Application_Configuration_ModuleInterface
      * @return boolean
      */
     public function isConfigurable();
-
 }

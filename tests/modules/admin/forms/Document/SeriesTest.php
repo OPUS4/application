@@ -139,10 +139,10 @@ class Admin_Form_Document_SeriesTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Series();
 
-        $post = array(
+        $post = [
             'Number' => ' ',
             'SeriesId' => ' '
-        );
+        ];
 
         $this->assertFalse($form->isValid($post));
 
@@ -154,19 +154,19 @@ class Admin_Form_Document_SeriesTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Series();
 
-        $post = array(
+        $post = [
             'SortOrder' => '1st'
-        );
+        ];
 
         $this->assertFalse($form->isValid($post));
 
         $this->assertContains('notInt', $form->getErrors('SortOrder'));
 
-        $post = array(
+        $post = [
             'SeriesId' => '2', // required
             'Number' => '800', // required
             'SortOrder' => '-1'
-        );
+        ];
 
         $this->assertFalse($form->isValid($post));
 
@@ -177,9 +177,9 @@ class Admin_Form_Document_SeriesTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Series();
 
-        $post = array(
+        $post = [
             'SeriesId' => 'a',
-        );
+        ];
 
         $this->assertFalse($form->isValid($post));
 
@@ -190,11 +190,11 @@ class Admin_Form_Document_SeriesTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Series();
 
-        $post = array(
+        $post = [
             'Id' => '250',
             'SeriesId' => '1',
             'Number' => '5/5' // used by document ID = 146
-        );
+        ];
 
         $this->assertFalse($form->isValid($post));
         $this->assertContains('notAvailable', $form->getErrors('Number'));
@@ -204,13 +204,12 @@ class Admin_Form_Document_SeriesTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Series();
 
-        $post = array(
+        $post = [
             'Id' => '146',
             'SeriesId' => '1',
             'Number' => '5/5' // used by document ID = 146
-        );
+        ];
 
         $this->assertTrue($form->isValid($post));
     }
-
 }

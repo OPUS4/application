@@ -66,5 +66,4 @@ class Application_Update_Exception extends Exception
     {
         return $this->_output;
     }
-
 }

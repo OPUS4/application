@@ -68,16 +68,18 @@ class Application_Form_Decorator_RemoveButtonTest extends ControllerTestCase
 
         $output = $decorator->render('content'); // Output wird an content dran gehängt
 
-        $this->assertEquals('content'
+        $this->assertEquals(
+            'content'
             . '<input type="hidden" name="Id" id="Id" value="10" />'
             . '<input type="submit" name="Remove" id="Remove" value="Remove" />',
-            $output);
+            $output
+        );
     }
 
     public function testSetSecondElementOption()
     {
         $element = new Application_Form_Element_Hidden('name');
-        $decorator = new Application_Form_Decorator_RemoveButton(array('element' => $element));
+        $decorator = new Application_Form_Decorator_RemoveButton(['element' => $element]);
 
         $this->assertEquals($element, $decorator->getSecondElement());
         $this->assertEquals($element, $decorator->getSecondElement()); // works 2nd time as well

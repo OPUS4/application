@@ -31,18 +31,21 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Application_View_Helper_ViewFormDefaultTest extends ControllerTestCase {
+class Application_View_Helper_ViewFormDefaultTest extends ControllerTestCase
+{
 
-    public function testViewFormDefault() {
+    public function testViewFormDefault()
+    {
         $helper = new Application_View_Helper_ViewFormDefault();
         $helper->setView(new Zend_View());
 
-        $markup = $helper->viewFormDefault('testName', 'testValue', array('id' => '10'));
+        $markup = $helper->viewFormDefault('testName', 'testValue', ['id' => '10']);
 
         $this->assertEquals('<div id="10" class="field">testValue</div>', $markup);
     }
 
-    public function testViewFormDefaultOnlyName() {
+    public function testViewFormDefaultOnlyName()
+    {
         $helper = new Application_View_Helper_ViewFormDefault();
         $helper->setView(new Zend_View());
 
@@ -51,19 +54,20 @@ class Application_View_Helper_ViewFormDefaultTest extends ControllerTestCase {
         $this->assertEquals('<div id="testName" class="field"></div>', $markup);
     }
 
-    public function testViewFormDefaultEscaping() {
+    public function testViewFormDefaultEscaping()
+    {
         $helper = new Application_View_Helper_ViewFormDefault();
         $helper->setView(new Zend_View());
 
-        $markup = $helper->viewFormDefault('testName', '<h1>HTML</h1>', array('id' => '10'));
+        $markup = $helper->viewFormDefault('testName', '<h1>HTML</h1>', ['id' => '10']);
 
         $this->assertEquals('<div id="10" class="field">&lt;h1&gt;HTML&lt;/h1&gt;</div>', $markup);
     }
 
-    public function testGetElementClass() {
+    public function testGetElementClass()
+    {
         $helper = new Application_View_Helper_ViewFormDefault();
 
         $this->assertEquals('field', $helper->getElementClass());
     }
-
 }

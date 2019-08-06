@@ -28,7 +28,7 @@
  * @package     Module_Setup
  * @author      Edouard Simon <edouard.simon@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -46,7 +46,7 @@ class Application_Translate_TmxFile
      * template for new tmx files
      */
 
-    const template = '<?xml version="1.0" encoding="UTF-8"?>
+    const TEMPLATE = '<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE tmx SYSTEM "http://www.gala-global.org/oscarStandards/tmx/tmx14.dtd">
 <tmx version="1.4">
     <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de"
@@ -153,7 +153,7 @@ class Application_Translate_TmxFile
     {
         $tmxArray = $this->toArray();
 
-        if (!isset($tmxArray[$key])) {
+        if (! isset($tmxArray[$key])) {
             $tmxArray[$key] = [];
         }
 
@@ -185,7 +185,8 @@ class Application_Translate_TmxFile
      *
      * @param $key string Translation key
      */
-    public function removeTranslation($key) {
+    public function removeTranslation($key)
+    {
         unset($this->data[$key]);
     }
 
@@ -226,7 +227,7 @@ class Application_Translate_TmxFile
         $dom->formatOutput = true;
         $dom->substituteEntities = false;
 
-        $dom->loadXML(self::template);
+        $dom->loadXML(self::TEMPLATE);
 
         foreach ($array as $unitName => $variants) {
             $tuElement = $dom->createElement('tu');

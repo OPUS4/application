@@ -274,7 +274,7 @@ class Application_Form_Validate_IdentifierTest extends ControllerTestCase
             $validatorClass = $val['class'];
             $validator = new $validatorClass;
             $messageValidator = $validator->getMessageTemplates();
-            if(array_key_exists('messageTemplates',$val)){
+            if (array_key_exists('messageTemplates', $val)) {
                 $messageConfig = $val['messageTemplates'];
                 foreach ($messageConfig as $key => $val) {
                     $this->assertArrayHasKey($key, $messageValidator);
@@ -292,7 +292,7 @@ class Application_Form_Validate_IdentifierTest extends ControllerTestCase
         $config = Application_Configuration::getInstance()->getConfig();
         $validators = $config->identifier->validation->toArray();
         foreach ($validators as $key => $val) {
-            if(array_key_exists('messageTemplates',$val)) {
+            if (array_key_exists('messageTemplates', $val)) {
                 $messageConfig = $val['messageTemplates'];
                 foreach ($messageConfig as $key => $val) {
                     $this->assertTrue($translate->isTranslated($val));
@@ -300,5 +300,4 @@ class Application_Form_Validate_IdentifierTest extends ControllerTestCase
             }
         }
     }
-
 }

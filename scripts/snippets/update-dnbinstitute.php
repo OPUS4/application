@@ -32,7 +32,7 @@
  * @version     $Id: update-thesispublisher.php 11775 2013-06-25 14:28:41Z tklein $
  */
 /**
- * 
+ *
  */
 if (basename(__FILE__) !== basename($argv[0])) {
     echo "script must be executed directy (not via opus-console)\n";
@@ -46,10 +46,10 @@ require_once dirname(__FILE__) . '/../common/bootstrap.php';
 //    exit;
 //}
 
-$options = getopt('', array('doctype:', 'publisherid:', 'grantorid:', 'dryrun'));
+$options = getopt('', ['doctype:', 'publisherid:', 'grantorid:', 'dryrun']);
 
-if ((!isset($options['publisherid']) || empty($options['publisherid']))
-        && (!isset($options['grantorid']) || empty($options['grantorid']))) {
+if ((! isset($options['publisherid']) || empty($options['publisherid']))
+        && (! isset($options['grantorid']) || empty($options['grantorid']))) {
     echo "Usage: {$argv[0]} [--publisherid <thesis publisher ID>] [--grantorid <thesis grantor ID>]"
         . " (--doctype <document type>) (--dryrun)\n";
     echo "publisherid and/or grantorid must be provided.\n";
@@ -68,14 +68,14 @@ try {
     exit;
 }
 if ($dryrun) {
-    _log("TEST RUN: NO DATA WILL BE MODIFIED"); 
+    _log("TEST RUN: NO DATA WILL BE MODIFIED");
 }
 
 $docFinder = new Opus_DocumentFinder();
 $docIds = $docFinder
         ->setServerState('published');
 if ($documentType != false) {
-    $docFinder->setType($documentType); 
+    $docFinder->setType($documentType);
 }
 $docIds = $docFinder->ids();
 
@@ -88,30 +88,28 @@ foreach ($docIds as $docId) {
             _log("Document <$docId> has no files, skipping..");
             continue;
         }
-        if (!is_null($thesisPublisherId)) {
+        if (! is_null($thesisPublisherId)) {
             $thesisPublisher = $doc->getThesisPublisher();
             if (empty($thesisPublisher)) {
-                if (!$dryrun) {
+                if (! $dryrun) {
                     $doc->setThesisPublisher($dnbInstitute);
                     $doc->store();
                 }
                 _log("Setting ThesisPublisher <$thesisPublisherId> on Document <$docId>");
-            }
-            else {
+            } else {
                 $existingThesisPublisherId = $thesisPublisher[0]->getId();
                 _log("ThesisPublisher <{$existingThesisPublisherId[1]}> already set for Document <$docId>");
             }
         }
-        if (!is_null($thesisGrantorId)) {
+        if (! is_null($thesisGrantorId)) {
             $thesisGrantor = $doc->getThesisGrantor();
             if (empty($thesisGrantor)) {
-                if (!$dryrun) {
+                if (! $dryrun) {
                     $doc->setThesisGrantor($dnbInstitute);
                     $doc->store();
                 }
                 _log("Setting ThesisGrantor <$thesisGrantorId> on Document <$docId>");
-            }
-            else {
+            } else {
                 $existingThesisGrantorId = $thesisGrantor[0]->getId();
                 _log("ThesisGrantor <{$existingThesisGrantorId[1]}> already set for Document <$docId>");
             }
@@ -122,7 +120,7 @@ foreach ($docIds as $docId) {
     }
 }
 
-function _log($message) {
+function _log($message)
+{
     echo "$message\n";
 }
-

@@ -38,7 +38,8 @@
  *
  * TODO The export mechanism should/could be separated from the request/response handling.
  */
-interface Application_Export_ExportPlugin {
+interface Application_Export_ExportPlugin
+{
 
     /**
      * Returns name of plugin.
@@ -79,6 +80,4 @@ interface Application_Export_ExportPlugin {
      * @return bool returns true if plugin access is restricted to administrators
      */
     public function isAccessRestricted();
-
 }
-

@@ -33,11 +33,12 @@
  * @version     $Id$
  */
 
-class Publish_Model_NoViewFoundException extends Publish_Model_Exception {
-    
-    public function  __construct() {
+class Publish_Model_NoViewFoundException extends Publish_Model_Exception
+{
+
+    public function __construct()
+    {
         parent::__construct('publish_form_second_no_view_given');
         $this->code = 404;
     }
 }
-

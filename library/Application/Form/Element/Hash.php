@@ -35,14 +35,15 @@
 /**
  *
  */
-class Application_Form_Element_Hash extends Zend_Form_Element_Hash {
+class Application_Form_Element_Hash extends Zend_Form_Element_Hash
+{
 
-    public function loadDefaultDecorators() {
+    public function loadDefaultDecorators()
+    {
         $this->setDecorators(
-            array(
+            [
             'ViewHelper'
-            )
+            ]
         );
     }
-
 }

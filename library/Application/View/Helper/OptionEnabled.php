@@ -47,8 +47,7 @@ class Application_View_Helper_OptionEnabled extends Application_View_Helper_Abst
     {
         $key = $optionKey;
 
-        if (!is_null($context))
-        {
+        if (! is_null($context)) {
             $key = "$context.$key";
         }
 
@@ -56,5 +55,4 @@ class Application_View_Helper_OptionEnabled extends Application_View_Helper_Abst
 
         return $value === 'true' or $value == '1';
     }
-
 }

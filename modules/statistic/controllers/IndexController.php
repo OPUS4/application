@@ -32,7 +32,8 @@
  * @version     $Id$
  */
 
-class Statistic_IndexController extends Application_Controller_Action {
+class Statistic_IndexController extends Application_Controller_Action
+{
 
     /**
      * Just for manual testing, not for final opus version
@@ -40,7 +41,8 @@ class Statistic_IndexController extends Application_Controller_Action {
      * @return void
      *
      */
-    public function testAction() {
+    public function testAction()
+    {
         $this->view->title = 'statistic';
         $counter = Opus_Statistic_LocalCounter::getInstance();
         $form = new Test();
@@ -53,10 +55,9 @@ class Statistic_IndexController extends Application_Controller_Action {
         $ip = $form->getValue('ip');
         $userAgent = $form->getValue('user_agent');
         $result = $counter->count($documentId, $fileId, 'files', $ip, $userAgent);
-        if ($result === FALSE) {
+        if ($result === false) {
             $this->view->doubleClick = true;
-        }
-        else {
+        } else {
             $this->view->doubleClick = false;
             $this->view->count = $result;
         }
@@ -72,9 +73,10 @@ class Statistic_IndexController extends Application_Controller_Action {
         //print_r($registry);
     }
 
-    public function indexAction() {
+    public function indexAction()
+    {
         $docId = $this->getRequest()->getParam("docId");
-        if (isset($docId) === FALSE) {
+        if (isset($docId) === false) {
             throw new Exception("docId must be set");
         }
         $this->view->docId = $docId;
@@ -88,8 +90,7 @@ class Statistic_IndexController extends Application_Controller_Action {
 
         if (isset($session->language)) {
             $language = $session->language;
-        }
-        else {
+        } else {
             $language = 'en';
         }
 
@@ -99,7 +100,7 @@ class Statistic_IndexController extends Application_Controller_Action {
             }
         }
 
-        $authorsArray = array();
+        $authorsArray = [];
         foreach ($authors as $author) {
             $authorsArray[] = $author->getName();
         }
@@ -119,7 +120,7 @@ class Statistic_IndexController extends Application_Controller_Action {
 
         $years = array_merge(array_keys($yearAbstractPage), array_keys($yearFiles));
         if (count($years) == 0) {
-            $years = array(date('Y'));
+            $years = [date('Y')];
         }
         foreach ($years as $year) {
             if (isset($yearFiles[$year]) === false) {
@@ -137,6 +138,4 @@ class Statistic_IndexController extends Application_Controller_Action {
         }
         $this->view->altTextStat = implode('; ', $lines);
     }
-
-
 }

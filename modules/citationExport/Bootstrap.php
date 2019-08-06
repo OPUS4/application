@@ -32,7 +32,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class CitationExport_Bootstrap extends Zend_Application_Module_Bootstrap {
+class CitationExport_Bootstrap extends Zend_Application_Module_Bootstrap
+{
 
     /**
      * Registers export formats supported by this module.
@@ -42,60 +43,57 @@ class CitationExport_Bootstrap extends Zend_Application_Module_Bootstrap {
      */
     protected function _initExport()
     {
-        if (!Zend_Registry::isRegistered('Opus_Exporter'))
-        {
+        if (! Zend_Registry::isRegistered('Opus_Exporter')) {
             Zend_Registry::get('Zend_Log')->err(__METHOD__ . ' exporter not found');
             return;
         }
 
         $exporter = Zend_Registry::get('Opus_Exporter');
 
-        if (is_null($exporter))
-        {
+        if (is_null($exporter)) {
             Zend_Registry::get('Zend_Log')->err(__METHOD__ . ' exporter not found');
             return;
         }
 
-        $exporter->addFormats(array(
-            'bibtex' => array(
+        $exporter->addFormats([
+            'bibtex' => [
                 'name' => 'BibTeX',
                 'description' => 'Export BibTeX',
                 'module' => 'citationExport',
                 'controller' => 'index',
                 'action' => 'download',
                 'search' => false,
-                'params' => array(
+                'params' => [
                     'output' => 'bibtex'
-                )
-            ),
-            'bibtex_list' => array(
+                ]
+            ],
+            'bibtex_list' => [
                 'name' => 'BibTeX',
                 'description' => 'Export BibTeX',
                 'module' => 'export',
                 'controller' => 'index',
                 'action' => 'bibtex',
                 'frontdoor' => false
-            ),
-            'ris' => array(
+            ],
+            'ris' => [
                 'name' => 'RIS',
                 'description' => 'Export RIS',
                 'module' => 'citationExport',
                 'controller' => 'index',
                 'action' => 'download',
                 'search' => false,
-                'params' => array(
+                'params' => [
                     'output' => 'ris'
-                )
-            ),
-            'ris_list' => array(
+                ]
+            ],
+            'ris_list' => [
                 'name' => 'RIS',
                 'description' => 'Export RIS',
                 'module' => 'export',
                 'controller' => 'index',
                 'action' => 'ris',
                 'frontdoor' => false
-            )
-        ));
+            ]
+        ]);
     }
-
 }

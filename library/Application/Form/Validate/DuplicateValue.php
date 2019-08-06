@@ -49,7 +49,8 @@
  *
  * TODO Basisklasse mit getLogger
  */
-class Application_Form_Validate_DuplicateValue extends Zend_Validate_Abstract {
+class Application_Form_Validate_DuplicateValue extends Zend_Validate_Abstract
+{
 
     /**
      * Error constant for language ID that does not exist.
@@ -75,9 +76,9 @@ class Application_Form_Validate_DuplicateValue extends Zend_Validate_Abstract {
     /**
      * Error messages.
      */
-    protected $_messageTemplates = array(
+    protected $_messageTemplates = [
         self::NOT_VALID => 'admin_validate_error_duplicated_value',
-    );
+    ];
 
     /**
      * Konstruiert Validator.
@@ -86,10 +87,11 @@ class Application_Form_Validate_DuplicateValue extends Zend_Validate_Abstract {
      * @param $position Position des Unterformulars
      * @param null $message Fehlermeldung
      */
-    public function __construct($values, $position, $message = null) {
+    public function __construct($values, $position, $message = null)
+    {
         $this->_values = $values;
         $this->_position = $position;
-        if (!is_null($message)) {
+        if (! is_null($message)) {
             $this->setMessage($message, self::NOT_VALID);
         }
     }
@@ -103,44 +105,46 @@ class Application_Form_Validate_DuplicateValue extends Zend_Validate_Abstract {
      * @param string $value Does not matter for this validator
      * @param hash $context Values of all the subforms
      */
-    public function isValid($value, $context = null) {
+    public function isValid($value, $context = null)
+    {
         $value = (string) $value;
         $this->_setValue($value);
 
         $valueCount = count($this->_values);
 
-        if (!($this->_position < $valueCount)) {
+        if (! ($this->_position < $valueCount)) {
             Zend_Registry::get('Zend_Log')->err(
                 __CLASS__ .
                 ' mit Position > count(values) konstruiert.'
             );
         }
 
-        if (!is_null($this->_values)) {
+        if (! is_null($this->_values)) {
             for ($index = 0; $index < $this->_position && $index < $valueCount; $index++) {
                 if ($this->isEqual($value, $context, $this->_values[$index])) {
                     $this->_error(self::NOT_VALID);
                     return false;
                 }
             }
-        }
-        else {
+        } else {
             Zend_Registry::get('Zend_Log')->err(__CLASS__ . ' mit Values = NULL konstruiert.');
         }
 
         return true;
     }
 
-    protected function isEqual($value, $context, $other) {
+    protected function isEqual($value, $context, $other)
+    {
         return $value == $other;
     }
 
-    public function getPosition() {
+    public function getPosition()
+    {
         return $this->_position;
     }
 
-    public function getValues() {
+    public function getValues()
+    {
         return $this->_values;
     }
-
 }

@@ -100,7 +100,6 @@ class Publish_Model_DocumenttypeParserTest extends ControllerTestCase
         $this->assertInstanceOf('DOMDocument', $dom);
 
         foreach ($dom->getElementsByTagname('documenttype') as $rootNode) {
-
             $domElement = $dom->createElement('field');
             $domAttribute = $dom->createAttribute('name');
 
@@ -133,7 +132,6 @@ class Publish_Model_DocumenttypeParserTest extends ControllerTestCase
         $this->assertInstanceOf('DOMDocument', $dom);
 
         foreach ($dom->getElementsByTagname('documenttype') as $rootNode) {
-
             $domElement = $dom->createElement('field');
 
             $domAttribute = $dom->createAttribute('name');

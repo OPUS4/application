@@ -31,7 +31,8 @@
  * @version     $Id$
  */
 
-class Application_Form_Validate_DOI extends Zend_Validate_Abstract {
+class Application_Form_Validate_DOI extends Zend_Validate_Abstract
+{
 
     const NOT_UNIQUE = 'notUnique';
 
@@ -41,34 +42,33 @@ class Application_Form_Validate_DOI extends Zend_Validate_Abstract {
      * Translation keys for validation messages.
      * @var array
      */
-    protected $_messageTemplates = array(
+    protected $_messageTemplates = [
         self::NOT_UNIQUE => 'admin_validation_error_localdoi_not_unique',
         self::NOT_VALID => 'admin_validation_error_localdoi_invalid',
-    );
+    ];
 
-    public function isValid($value, $context = null) {
+    public function isValid($value, $context = null)
+    {
         $currentDocId = $context[Admin_Form_Document_IdentifierSpecific::ELEMENT_DOC_ID];
 
         $doi = new Opus_Identifier();
         $doi->setType('doi');
         $doi->setValue($value);
 
-        if (!$doi->isLocalDoi()) {
+        if (! $doi->isLocalDoi()) {
             return true; // keine Prüfung für nicht lokale-DOIs: nicht-lokale DOIs können ohne Prüfung gespeichert werden
         }
 
-        if (!$doi->isDoiUnique($currentDocId)) {
+        if (! $doi->isDoiUnique($currentDocId)) {
             $this->_error(self::NOT_UNIQUE);
             return false; // Formular kann nicht gespeichert werden, weil eine lokale DOI eingegeben wurde, die bereits existiert
         }
 
-        if (!$doi->isValidDoi()) {
+        if (! $doi->isValidDoi()) {
             $this->_error(self::NOT_VALID);
             return false; // lokale DOI enthält unerlaubte Zeichen
         }
 
         return true; // DOI kann gespeichert werden
-
     }
-
 }

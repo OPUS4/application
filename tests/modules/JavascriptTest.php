@@ -41,7 +41,7 @@ class JavascriptTest extends ControllerTestCase
 
         $helper = new Application_View_Helper_JQueryEnabled();
 
-        if (!$helper->jQueryEnabled()) {
+        if (! $helper->jQueryEnabled()) {
             $this->markTestSkipped('Javascript not enabled (JQuery missing).');
         }
     }

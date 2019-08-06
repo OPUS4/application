@@ -89,7 +89,9 @@ class Application_Form_Decorator_TableHeaderTest extends ControllerTestCase
         $markup = $decorator->render('content');
 
         $this->assertEquals(
-            '<thead><tr><th class="name">column1</th><th class="size">column2</th></tr></thead>content', $markup);
+            '<thead><tr><th class="name">column1</th><th class="size">column2</th></tr></thead>content',
+            $markup
+        );
     }
 
     public function testRenderEscape()
@@ -106,7 +108,9 @@ class Application_Form_Decorator_TableHeaderTest extends ControllerTestCase
         $markup = $decorator->render('content');
 
         $this->assertEquals(
-            '<thead><tr><th class="">&lt;h1&gt;HTML&lt;/h1&gt;</th></tr></thead>content', $markup);
+            '<thead><tr><th class="">&lt;h1&gt;HTML&lt;/h1&gt;</th></tr></thead>content',
+            $markup
+        );
     }
 
     public function testRenderTranslate()
@@ -115,7 +119,7 @@ class Application_Form_Decorator_TableHeaderTest extends ControllerTestCase
 
         $decorator = new Application_Form_Decorator_TableHeader();
 
-        $decorator->setColumns(array(array('label' => 'Value')));
+        $decorator->setColumns([['label' => 'Value']]);
 
         $form = new Zend_Form();
         $form->addSubForm(new Zend_Form_SubForm(), 'subform1');
@@ -125,6 +129,8 @@ class Application_Form_Decorator_TableHeaderTest extends ControllerTestCase
         $markup = $decorator->render('content');
 
         $this->assertEquals(
-            '<thead><tr><th class="">Text</th></tr></thead>content', $markup);
+            '<thead><tr><th class="">Text</th></tr></thead>content',
+            $markup
+        );
     }
 }

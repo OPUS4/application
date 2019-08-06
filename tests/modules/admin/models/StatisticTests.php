@@ -42,15 +42,21 @@ class Admin_Model_StatisticsTest extends ControllerTestCase
     {
         $statistics = new Admin_Model_Statistics();
         $institutes = $statistics->getInstituteStatistics(2010);
-        $this->assertEquals(29, $institutes['Technische Universität Hamburg-Harburg'],
-            'wrong publication count of Technische Universität Hamburg-Harburg returned');
+        $this->assertEquals(
+            29,
+            $institutes['Technische Universität Hamburg-Harburg'],
+            'wrong publication count of Technische Universität Hamburg-Harburg returned'
+        );
         $this->assertEquals(1, $institutes['Bauwesen'], 'wrong publicatin count of "Bauwesen" returned');
         $this->assertEquals(1, $institutes['Maschinenbau'], 'wrong publication count of "Maschinenbau" returned');
         $this->assertNotContains('Massivbau B-7', $institutes, 'Institutes should not contain data with 0 documents');
 
         $institutes = $statistics->getInstituteStatistics(2009);
-        $this->assertEquals(50, $institutes['Technische Universität Hamburg-Harburg'],
-            'wrong publication count of Technische Universität Hamburg-Harburg returned');
+        $this->assertEquals(
+            50,
+            $institutes['Technische Universität Hamburg-Harburg'],
+            'wrong publication count of Technische Universität Hamburg-Harburg returned'
+        );
         $this->assertNotContains('Bauwesen', $institutes, 'Institutes should not contain data with 0 documents');
         $this->assertEquals(3, $institutes['Maschinenbau'], 'wrong publication count of "Maschinenbau" returned');
         $this->assertNotContains('Massivbau B-7', $institutes, 'Institutes should not contain data with 0 documents');
@@ -119,6 +125,4 @@ class Admin_Model_StatisticsTest extends ControllerTestCase
         $this->assertContains('2012', $years);
         $this->assertContains('2013', $years);
     }
-
-
 }

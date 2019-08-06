@@ -31,14 +31,16 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Application_View_Helper_ViewFormTextarea extends Application_View_Helper_ViewFormDefault {
+class Application_View_Helper_ViewFormTextarea extends Application_View_Helper_ViewFormDefault
+{
 
-    public function viewFormTextarea($name, $value = null, $attribs = null) {
+    public function viewFormTextarea($name, $value = null, $attribs = null)
+    {
         return $this->viewFormDefault($name, $value, $attribs);
     }
 
-    public function getElementClass() {
+    public function getElementClass()
+    {
         return parent::getElementClass() . ' textarea';
     }
-
 }

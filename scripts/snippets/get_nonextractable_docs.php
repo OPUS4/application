@@ -48,12 +48,10 @@ $overallNumOfFulltexts = 0;
 $numOfNonExtractableFulltexts = 0;
 
 foreach ($docFinder->ids() as $id) {
-
     $d = null;
     try {
         $d = new Opus_Document($id);
-    }
-    catch (Opus_Model_NotFoundException $e) {
+    } catch (Opus_Model_NotFoundException $e) {
         // document with id $id does not exist
         continue;
     }
@@ -68,10 +66,10 @@ foreach ($docFinder->ids() as $id) {
         $response = null;
         try {
             $response = $solrServer->extract(
-                $file->getPath(), array( 'extractOnly' => 'true', 'extractFormat' => 'text' )
+                $file->getPath(),
+                [ 'extractOnly' => 'true', 'extractFormat' => 'text' ]
             );
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             echo "error while extracting full text for document # " . $d->getId() . " (file name : "
                 . $file->getPath() . " )\n";
             $numOfNonExtractableFulltexts++;
@@ -83,7 +81,6 @@ foreach ($docFinder->ids() as $id) {
             $numOfNonExtractableFulltexts++;
         }
     }
-
 }
 
 echo "overall num of full texts: $overallNumOfFulltexts\n";

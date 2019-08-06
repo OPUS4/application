@@ -68,19 +68,23 @@ class Application_Form_Model_AbstractTest extends ControllerTestCase
 
     public function testProcessPost()
     {
-        $this->assertNull($this->form->processPost(array(), array()));
+        $this->assertNull($this->form->processPost([], []));
     }
 
     public function testProcessPostSave()
     {
-        $this->assertEquals(Application_Form_Model_Abstract::RESULT_SAVE,
-            $this->form->processPost(array('Save' => 'Speichern'), array()));
+        $this->assertEquals(
+            Application_Form_Model_Abstract::RESULT_SAVE,
+            $this->form->processPost(['Save' => 'Speichern'], [])
+        );
     }
 
     public function testProcessPostCancel()
     {
-        $this->assertEquals(Application_Form_Model_Abstract::RESULT_CANCEL,
-            $this->form->processPost(array('Cancel' => 'Abbrechen'), array()));
+        $this->assertEquals(
+            Application_Form_Model_Abstract::RESULT_CANCEL,
+            $this->form->processPost(['Cancel' => 'Abbrechen'], [])
+        );
     }
 
     public function testGetModel()
@@ -214,4 +218,3 @@ class Application_Form_Model_AbstractTest extends ControllerTestCase
         $this->assertNull($method->invoke($this->form, null));
     }
 }
-

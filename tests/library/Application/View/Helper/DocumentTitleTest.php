@@ -105,9 +105,9 @@ class Application_View_Helper_DocumentTitleTest extends ControllerTestCase
     public function testDocumentTitleUserInterfaceLanguage()
     {
         Zend_Registry::get('Zend_Config')->merge(new Zend_Config(
-            array('search' => array('result' => array('display' => array(
+            ['search' => ['result' => ['display' => [
                 'preferUserInterfaceLanguage' => '1'
-            ))))
+            ]]]]
         ));
 
         $this->assertTrue($this->_helper->isPreferUserInterfaceLanguage());
@@ -168,6 +168,4 @@ class Application_View_Helper_DocumentTitleTest extends ControllerTestCase
         $this->_helper->setPreferUserInterfaceLanguage(0);
         $this->assertFalse($this->_helper->isPreferUserInterfaceLanguage());
     }
-
-
 }

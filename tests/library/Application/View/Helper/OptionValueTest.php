@@ -50,9 +50,9 @@ class Application_View_Helper_OptionValueTest extends ControllerTestCase
 
         $this->assertEquals('OPUS 4', $helper->optionValue('name'));
 
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
             'name' => '<b>OPUS 4</b>'
-        )));
+        ]));
 
         $this->assertEquals('<b>OPUS 4</b>', $helper->optionValue('name'));
         $this->assertEquals('&lt;b&gt;OPUS 4&lt;/b&gt;', $helper->optionValue('name', null, true));
@@ -64,5 +64,4 @@ class Application_View_Helper_OptionValueTest extends ControllerTestCase
 
         $this->assertNull($helper->optionValue('unknownKey'));
     }
-
 }

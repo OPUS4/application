@@ -34,7 +34,8 @@
  * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-abstract class Application_Controller_Action_Helper_Abstract extends Zend_Controller_Action_Helper_Abstract {
+abstract class Application_Controller_Action_Helper_Abstract extends Zend_Controller_Action_Helper_Abstract
+{
 
     /**
      * Logger for controller classes.
@@ -50,7 +51,8 @@ abstract class Application_Controller_Action_Helper_Abstract extends Zend_Contro
      * Returns logger.
      * @return Zend_Log
      */
-    public function getLogger() {
+    public function getLogger()
+    {
         if (is_null($this->_logger)) {
             $this->_logger = Zend_Registry::get('Zend_Log');
         }
@@ -61,7 +63,8 @@ abstract class Application_Controller_Action_Helper_Abstract extends Zend_Contro
      * Sets logger for class.
      * @param $logger Zend_Log
      */
-    public function setLogger($logger) {
+    public function setLogger($logger)
+    {
         $this->_logger = $logger;
     }
 
@@ -74,11 +77,9 @@ abstract class Application_Controller_Action_Helper_Abstract extends Zend_Contro
      */
     public function getView()
     {
-        if (is_null($this->_view))
-        {
+        if (is_null($this->_view)) {
             $controller = $this->getActionController();
-            if (!is_null($controller))
-            {
+            if (! is_null($controller)) {
                 $this->_view = $controller->view;
             }
         }
@@ -102,12 +103,10 @@ abstract class Application_Controller_Action_Helper_Abstract extends Zend_Contro
      */
     public function getConfig()
     {
-        if (is_null($this->_config))
-        {
+        if (is_null($this->_config)) {
             $this->_config = Application_Configuration::getInstance()->getConfig();
         }
 
         return $this->_config;
     }
-
 }

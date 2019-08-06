@@ -43,7 +43,7 @@ class Admin_Form_Document_MultiIdentifierOtherSubForm extends Admin_Form_Documen
     public function getFieldValues($document)
     {
         $value = parent::getFieldValues($document);
-        if (!is_null($value)) {
+        if (! is_null($value)) {
             $value = $this->filterIdentifier($value);
         }
         return $value;
@@ -58,7 +58,7 @@ class Admin_Form_Document_MultiIdentifierOtherSubForm extends Admin_Form_Documen
      */
     private function filterIdentifier($identifiers)
     {
-        $result = array();
+        $result = [];
         foreach ($identifiers as $identifier) {
             if ($identifier->getType() == 'doi' || $identifier->getType() == 'urn') {
                 continue;
@@ -80,7 +80,7 @@ class Admin_Form_Document_MultiIdentifierOtherSubForm extends Admin_Form_Documen
         $values = $this->getSubFormModels($document);
         $identifiers = $document->getIdentifier();
 
-        $result = array();
+        $result = [];
         foreach ($identifiers as $identifier) {
             $identifierType = $identifier->getType();
             if ($identifierType == 'doi' || $identifierType == 'urn') {

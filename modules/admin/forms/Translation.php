@@ -75,5 +75,4 @@ class Admin_Form_Translation extends Application_Form_Abstract
     {
         $this->setLegend($key);
     }
-
 }

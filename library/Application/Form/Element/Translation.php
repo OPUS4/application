@@ -72,7 +72,7 @@ class Application_Form_Element_Translation extends Zend_Form_Element_Multi
 
     public function loadDefaultDecorators()
     {
-        if (!$this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
+        if (! $this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
             $this->setDecorators([
                 'ViewHelper',
                 'ElementHtmlTag',

@@ -51,7 +51,7 @@ class Admin_Form_Document_MultiEnrichmentSubFormTest extends ControllerTestCase
         // create a test document with four enrichments
         $doc = new Opus_Document();
 
-        $enrichments = array();
+        $enrichments = [];
         $enrichments[] = $this->createEnrichment('Audience', 'val1');
         $enrichments[] = $this->createEnrichment('Audience', 'val2');
         $enrichments[] = $this->createEnrichment('opus.doi.autoCreate', 'val3');
@@ -75,17 +75,20 @@ class Admin_Form_Document_MultiEnrichmentSubFormTest extends ControllerTestCase
     public function testPopulateFromModel()
     {
         $form = new Admin_Form_Document_MultiEnrichmentSubForm(
-            'Admin_Form_Document_Enrichment', 'Enrichment', null,
-            array('columns' => array(
-                array('label' => 'KeyName'),
-                array('label' => 'Value')
-            )), 'Enrichments'
+            'Admin_Form_Document_Enrichment',
+            'Enrichment',
+            null,
+            ['columns' => [
+                ['label' => 'KeyName'],
+                ['label' => 'Value']
+            ]],
+            'Enrichments'
         );
 
         // create a test document with two enrichments
         $doc = new Opus_Document();
 
-        $enrichments = array();
+        $enrichments = [];
         $enrichments[] = $this->createEnrichment('Audience', 'val1');
         $enrichments[] = $this->createEnrichment('Audience', 'val2');
 
@@ -107,23 +110,26 @@ class Admin_Form_Document_MultiEnrichmentSubFormTest extends ControllerTestCase
 
     public function testConstructFromPost()
     {
-        $post = array(
-            'Enrichment0' => array(
+        $post = [
+            'Enrichment0' => [
                 'KeyName' => 'Audience',
                 'Value' => 'foo'
-            ),
-            'Enrichment1' => array(
+            ],
+            'Enrichment1' => [
                 'KeyName' => 'Audience',
                 'Value' => 'bar'
-            ),
-        );
+            ],
+        ];
 
         $form = new Admin_Form_Document_MultiEnrichmentSubForm(
-            'Admin_Form_Document_Enrichment', 'Enrichment', null,
-            array('columns' => array(
-                array('label' => 'KeyName'),
-                array('label' => 'Value')
-            )), 'Enrichments'
+            'Admin_Form_Document_Enrichment',
+            'Enrichment',
+            null,
+            ['columns' => [
+                ['label' => 'KeyName'],
+                ['label' => 'Value']
+            ]],
+            'Enrichments'
         );
         $form->constructFromPost($post);
 
@@ -134,7 +140,7 @@ class Admin_Form_Document_MultiEnrichmentSubFormTest extends ControllerTestCase
 
     public function testConstructFromPostSelectType()
     {
-        $enrichmentKey = $this->createEnrichmentKey('SelectType', array("values" => array("foo", "bar")));
+        $enrichmentKey = $this->createEnrichmentKey('SelectType', ["values" => ["foo", "bar"]]);
 
         $form = $this->createTestPostDataAndConstructForm(self::$firstEnrichmentKeyName, 1);
 
@@ -165,7 +171,7 @@ class Admin_Form_Document_MultiEnrichmentSubFormTest extends ControllerTestCase
 
     public function testConstructFromPostRegexType()
     {
-        $enrichmentKey = $this->createEnrichmentKey('RegexType', array("regex" => "^.*$"));
+        $enrichmentKey = $this->createEnrichmentKey('RegexType', ["regex" => "^.*$"]);
 
         $form = $this->createTestPostDataAndConstructForm(self::$firstEnrichmentKeyName, 'a');
 
@@ -300,11 +306,11 @@ class Admin_Form_Document_MultiEnrichmentSubFormTest extends ControllerTestCase
         $enrichmentKey = new Opus_EnrichmentKey();
         $enrichmentKey->setName(self::$firstEnrichmentKeyName);
 
-        if (!is_null($type)) {
+        if (! is_null($type)) {
             $enrichmentKey->setType($type);
         }
 
-        if (!is_null($options)) {
+        if (! is_null($options)) {
             $enrichmentKey->setOptions(json_encode($options));
         }
 
@@ -337,17 +343,17 @@ class Admin_Form_Document_MultiEnrichmentSubFormTest extends ControllerTestCase
 
     private function createTestPostDataAndConstructForm($keyName, $value, $clickedButton = null)
     {
-        $post = array(
-            'Enrichment0' => array(
+        $post = [
+            'Enrichment0' => [
                 'KeyName' => $keyName,
                 'Value' => $value
-            ),
-        );
+            ],
+        ];
 
         Opus_EnrichmentKey::getAll();
 
         // trifft nur zu, wenn der Add-Button gedrückt oder ein Enrichment-Key im Select-Feld ausgewählt wurde
-        if (!is_null($clickedButton)) {
+        if (! is_null($clickedButton)) {
             $post[$clickedButton] = '';
         }
 
@@ -355,22 +361,21 @@ class Admin_Form_Document_MultiEnrichmentSubFormTest extends ControllerTestCase
             'Admin_Form_Document_Enrichment',
             'Enrichment',
             null,
-            array('columns' =>
-                array(
-                    array('label' => 'KeyName'),
-                    array('label' => 'Value')
-                )
-            ),
+            ['columns' =>
+                [
+                    ['label' => 'KeyName'],
+                    ['label' => 'Value']
+                ]
+            ],
             'Enrichments'
         );
 
         $form->constructFromPost($post);
 
-        if (!is_null($clickedButton)) {
-            $form->processPost($post, array());
+        if (! is_null($clickedButton)) {
+            $form->processPost($post, []);
         }
 
         return $form;
     }
-
 }

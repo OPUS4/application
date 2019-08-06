@@ -99,7 +99,8 @@ class ControllerTestCase extends TestCase
     public function getApplication()
     {
         return new Zend_Application(
-            $this->applicationEnv, ["config" => [
+            $this->applicationEnv,
+            ["config" => [
                 APPLICATION_PATH . '/application/configs/application.ini',
                 APPLICATION_PATH . '/tests/tests.ini',
                 APPLICATION_PATH . '/tests/config.ini'
@@ -181,11 +182,12 @@ class ControllerTestCase extends TestCase
     protected function checkForCustomBadStringsInHtml($body, array $badStrings)
     {
         $bodyLowerCase = strtolower($body);
-        foreach ($badStrings AS $badString) {
+        foreach ($badStrings as $badString) {
             $this->assertNotContains(
                 strtolower($badString),
                 $bodyLowerCase,
-                "Response must not contain '$badString'");
+                "Response must not contain '$badString'"
+            );
         }
     }
 
@@ -224,7 +226,7 @@ class ControllerTestCase extends TestCase
     public function logoutUser()
     {
         $instance = Zend_Auth::getInstance();
-        if (!is_null($instance)) {
+        if (! is_null($instance)) {
             $instance->clearIdentity();
         }
         $realm = Opus_Security_Realm::getInstance();
@@ -397,7 +399,7 @@ class ControllerTestCase extends TestCase
         $filteredErrors = [];
 
         foreach ($errors as $error) {
-            if (!in_array(trim($error->message), $ignored)) {
+            if (! in_array(trim($error->message), $ignored)) {
                 $filteredErrors[] = $error;
             }
         }
@@ -412,7 +414,8 @@ class ControllerTestCase extends TestCase
         }
 
         $this->assertEquals(
-            0, count($errors),
+            0,
+            count($errors),
             'XHTML Schemaverletzungen gefunden (' . count($errors) . ')' . PHP_EOL . $output
         );
 
@@ -440,7 +443,7 @@ class ControllerTestCase extends TestCase
      */
     public function verifyCommandAvailable($command)
     {
-        if (!$this->isCommandAvailable($command)) {
+        if (! $this->isCommandAvailable($command)) {
             if ($this->isFailTestOnMissingCommand()) {
                 $this->fail("Command '$command' not installed.");
             } else {
@@ -548,15 +551,17 @@ class ControllerTestCase extends TestCase
 
         foreach ($pages as $page) {
             if ($page->getController() == $controller && $page->getAction() == $action) {
-                if (!$breadcrumbDefined) {
+                if (! $breadcrumbDefined) {
                     $breadcrumbDefined = true;
 
                     $translate = Zend_Registry::get('Zend_Translate');
 
                     $label = $page->getLabel();
 
-                    $this->assertTrue($translate->isTranslated($label),
-                        "Label '$label' für Seite '$location' nicht übersetzt.");
+                    $this->assertTrue(
+                        $translate->isTranslated($label),
+                        "Label '$label' für Seite '$location' nicht übersetzt."
+                    );
                 } else {
                     $this->fail("Seite '$location' mehr als einmal in navigationModules.xml definiert.");
                 }
@@ -603,11 +608,13 @@ class ControllerTestCase extends TestCase
         }
 
         try {
+            new Opus_Document($docId);
             $doc->deletePermanent();
         } catch (Opus_Model_NotFoundException $omnfe) {
             // Model nicht gefunden -> alles gut (hoffentlich)
-        }
-        catch (Exception $ex) {
+            $this->getLogger()->debug("Test document {$docId} was deleted successfully by test.");
+            return;
+        } catch (Exception $ex) {
             $this->getLogger()->err('unexpected exception while cleaning document ' . $docId . ': ' . $ex);
             throw $ex;
         }
@@ -642,21 +649,14 @@ class ControllerTestCase extends TestCase
 
     /**
      * Erzeugt ein Testdokument, das nach der Testausführung automatisch aufgeräumt wird.
-     * Falls das Aufräumen nicht gewünscht ist, kann dieser Umstand durch Setzen des
-     * Parameters $cleanup auf false angezeigt werden. Dann muss sich der aufrufende Test Case
-     * bzw. der im Test verwendete Code um das Cleanup kümmern! Dieser Fall sollte nur sehr
-     * selten vorkommen.
      *
-     * @param bool $cleanup wenn false, dann erfolgt kein automatischer Cleanup beim tearDown
      * @return Opus_Document
      * @throws Opus_Model_Exception
      */
-    protected function createTestDocument($cleanup = true)
+    protected function createTestDocument()
     {
         $doc = new Opus_Document();
-        if ($cleanup) {
-            $this->addTestDocument($doc);
-        }
+        $this->addTestDocument($doc);
         return $doc;
     }
 
@@ -666,7 +666,7 @@ class ControllerTestCase extends TestCase
     protected function addTestDocument($document)
     {
         if (is_null($this->testDocuments)) {
-            $this->testDocuments = array();
+            $this->testDocuments = [];
         }
         array_push($this->testDocuments, $document);
     }
@@ -699,10 +699,10 @@ class ControllerTestCase extends TestCase
     protected function createTestFile($filename, $filepath = null)
     {
         if (is_null($this->testFiles)) {
-            $this->testFiles = array();
+            $this->testFiles = [];
         }
         $config = Zend_Registry::get('Zend_Config');
-        if (!isset($config->workspacePath)) {
+        if (! isset($config->workspacePath)) {
             throw new Exception("config key 'workspacePath' not defined in config file");
         }
 
@@ -718,7 +718,7 @@ class ControllerTestCase extends TestCase
         $file->setPathName(basename($filepath));
         $file->setTempFile($filepath);
         if (array_key_exists($filename, $this->testFiles)) {
-            throw Exception ('filenames should be unique');
+            throw Exception('filenames should be unique');
         }
         $this->testFiles[$filename] = $filepath;
         return $file;
@@ -726,7 +726,7 @@ class ControllerTestCase extends TestCase
 
     private function deleteTestFiles()
     {
-        if (!is_null($this->testFiles)) {
+        if (! is_null($this->testFiles)) {
             foreach ($this->testFiles as $key => $filepath) {
                 try {
                     Opus_Util_File::deleteDirectory(dirname($filepath));
@@ -740,7 +740,8 @@ class ControllerTestCase extends TestCase
     {
         $this->assertEquals(1, Zend_Registry::get('Zend_Config')->security);
         $this->assertTrue(
-            Zend_Registry::isRegistered('Opus_Acl'), 'Expected registry key Opus_Acl to be set'
+            Zend_Registry::isRegistered('Opus_Acl'),
+            'Expected registry key Opus_Acl to be set'
         );
         $acl = Zend_Registry::get('Opus_Acl');
         $this->assertTrue($acl instanceof Zend_Acl, 'Expected instance of Zend_Acl');

@@ -37,7 +37,8 @@
  *
  * Wird für die Prüfung verwendet, ob ein TitleMain in der Dokumentensprache vorliegt.
  */
-class Application_Form_Validate_ValuePresentInSubforms extends Zend_Validate_Abstract {
+class Application_Form_Validate_ValuePresentInSubforms extends Zend_Validate_Abstract
+{
 
     /**
      * Error constant for language ID that does not exist.
@@ -52,15 +53,16 @@ class Application_Form_Validate_ValuePresentInSubforms extends Zend_Validate_Abs
     /**
      * Error messages.
      */
-    protected $_messageTemplates = array(
+    protected $_messageTemplates = [
         self::NOT_VALID => 'admin_validate_error_value_duplicated',
-    );
+    ];
 
     /**
      * Konstruiert Instanz des Validators.
      * @param string $elementName
      */
-    public function __construct($elementName) {
+    public function __construct($elementName)
+    {
         $this->_elementName = $elementName;
     }
 
@@ -74,18 +76,18 @@ class Application_Form_Validate_ValuePresentInSubforms extends Zend_Validate_Abs
      * @param array $context
      * @return boolean TRUE - wenn der Wert in den Unterformularen vorkommt; FALSE - wenn er nicht vorkommt
      */
-    public function isValid($value, $context = null) {
+    public function isValid($value, $context = null)
+    {
         $value = (string) $value;
         $this->_setValue($value);
 
-        if (!is_null($context) && count(trim($this->_elementName)) !== 0) {
+        if (! is_null($context) && count(trim($this->_elementName)) !== 0) {
             foreach ($context as $index => $entry) {
                 if (isset($entry[$this->_elementName]) && $entry[$this->_elementName] == $value) {
                     return true;
                 }
             }
-        }
-        else {
+        } else {
             Zend_Registry::get('Zend_Log')->err(__CLASS__ . '::' . __METHOD__ . ' mit $context = null aufgerufen.');
         }
 
@@ -97,8 +99,8 @@ class Application_Form_Validate_ValuePresentInSubforms extends Zend_Validate_Abs
      * Liefert den Namen des Elements, dass geprüft werden soll.
      * @return string
      */
-    public function getElementName() {
+    public function getElementName()
+    {
         return $this->_elementName;
     }
-
 }

@@ -32,6 +32,6 @@
  * @version     $Id$
  */
 
-class Solrsearch_Bootstrap extends Zend_Application_Module_Bootstrap {
+class Solrsearch_Bootstrap extends Zend_Application_Module_Bootstrap
+{
 }
-

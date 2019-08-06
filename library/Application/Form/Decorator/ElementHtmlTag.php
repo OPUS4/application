@@ -37,7 +37,8 @@
  *
  * Die Klasse dient dazu die Decoratorkonfiguration für einzelne Elemente zu vereinfachen.
  */
-class Application_Form_Decorator_ElementHtmlTag extends Zend_Form_Decorator_HtmlTag {
+class Application_Form_Decorator_ElementHtmlTag extends Zend_Form_Decorator_HtmlTag
+{
 
     /**
      * Tag Attribute vorbereiten.
@@ -47,22 +48,23 @@ class Application_Form_Decorator_ElementHtmlTag extends Zend_Form_Decorator_Html
      * @param array $attribs
      * @return array
      */
-    protected function _htmlAttribs(array $attribs) {
+    protected function _htmlAttribs(array $attribs)
+    {
         if (is_null($attribs)) {
-            $attribs = array();
+            $attribs = [];
         }
 
-        if (!isset($attribs['class'])) {
+        if (! isset($attribs['class'])) {
             $attribs['class'] = 'field';
         }
 
         $element = $this->getElement();
 
-        if (!is_null($element)) {
+        if (! is_null($element)) {
             $attribs['id'] = $element->getId() . '-element';
         }
 
-        return parent::_htmlAttribs($attribs);;
+        return parent::_htmlAttribs($attribs);
+        ;
     }
-
 }

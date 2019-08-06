@@ -32,7 +32,8 @@
  * @version     $Id$
  */
 
-abstract class Oai_Model_AbstractFile extends Application_Model_Abstract {
+abstract class Oai_Model_AbstractFile extends Application_Model_Abstract
+{
 
     protected $_path;
 
@@ -40,23 +41,28 @@ abstract class Oai_Model_AbstractFile extends Application_Model_Abstract {
 
     protected $_extension;
 
-    public function getPath() {
+    public function getPath()
+    {
         return $this->_path;
     }
 
-    public function getMimeType() {
+    public function getMimeType()
+    {
         return $this->_mimeType;
     }
 
-    public function getExtension() {
+    public function getExtension()
+    {
         return $this->_extension;
     }
 
-    public function delete() {
+    public function delete()
+    {
         unlink($this->_path);
     }
 
-    protected function logErrorMessage($message) {
+    protected function logErrorMessage($message)
+    {
         $this->getLogger()->err(__CLASS__ . ': ' . $message);
     }
 }

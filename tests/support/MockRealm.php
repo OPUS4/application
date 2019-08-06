@@ -33,34 +33,45 @@
  */
 
 
-class MockRealm implements Opus_Security_IRealm {
+class MockRealm implements Opus_Security_IRealm
+{
 
     private $fileAllowed;
     private $docAllowed;
 
-    public function  __construct($fileAllowed, $docAllowed) {
+    public function __construct($fileAllowed, $docAllowed)
+    {
         $this->fileAllowed = $fileAllowed;
         $this->docAllowed = $docAllowed;
     }
 
-    public function checkDocument($document_id = null) {
+    public function checkDocument($document_id = null)
+    {
         return $this->docAllowed;
     }
 
-    public function checkFile($file_id = null) {
+    public function checkFile($file_id = null)
+    {
         return $this->fileAllowed;
     }
 
-    public function checkModule($module_name = null) {
+    public function checkModule($module_name = null)
+    {
         return true;
     }
 
-    public function getRoles() {
-        return array('guest');
+    public function getRoles()
+    {
+        return ['guest'];
     }
 
-    public function setUser($username){}
-    public function setIp($ipaddress){}
-    public function check($privilege, $documentServerState = null, $fileId = null){}
-
+    public function setUser($username)
+    {
+    }
+    public function setIp($ipaddress)
+    {
+    }
+    public function check($privilege, $documentServerState = null, $fileId = null)
+    {
+    }
 }

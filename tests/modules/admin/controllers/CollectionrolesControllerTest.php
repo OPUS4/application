@@ -68,10 +68,10 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase
 
     public function tearDown()
     {
-        if (!is_null($this->nonEmptyCollectionRole) && !is_null($this->nonEmptyCollectionRole->getId())) {
+        if (! is_null($this->nonEmptyCollectionRole) && ! is_null($this->nonEmptyCollectionRole->getId())) {
             $this->nonEmptyCollectionRole->delete();
         }
-        if (!is_null($this->emptyCollectionRole) && !is_null($this->emptyCollectionRole->getId())) {
+        if (! is_null($this->emptyCollectionRole) && ! is_null($this->emptyCollectionRole->getId())) {
             $this->emptyCollectionRole->delete();
         }
         parent::tearDown();
@@ -311,7 +311,7 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase
         $newColFound = false;
 
         foreach ($roles as $role) {
-            if (!in_array($role->getId(), $roleIds)) {
+            if (! in_array($role->getId(), $roleIds)) {
                 $role->delete();
 
                 $this->assertEquals('CreateTestColName', $role->getName());
@@ -331,8 +331,10 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase
 
         $this->assertTrue($newColFound, 'No new CollectionRole was created.');
         $this->assertRedirectTo('/admin/collectionroles');
-        $this->verifyFlashMessage('Collection role \'CreateTestColName\' was created successfully.',
-            self::MESSAGE_LEVEL_NOTICE);
+        $this->verifyFlashMessage(
+            'Collection role \'CreateTestColName\' was created successfully.',
+            self::MESSAGE_LEVEL_NOTICE
+        );
 
         $translations = $dao->getTranslation('default_collection_role_CreateTestColName');
 
@@ -407,8 +409,10 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase
         $this->assertEquals(0, $role->getHideEmptyCollections());
 
         $this->assertRedirectTo('/admin/collectionroles');
-        $this->verifyFlashMessage('Collection role \'ModifiedName\' was edited successfully.',
-            self::MESSAGE_LEVEL_NOTICE);
+        $this->verifyFlashMessage(
+            'Collection role \'ModifiedName\' was edited successfully.',
+            self::MESSAGE_LEVEL_NOTICE
+        );
 
         $translations = $dao->getTranslation('default_collection_role_ModifiedName');
 
@@ -485,8 +489,10 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase
         $this->assertEquals(0, $role->getHideEmptyCollections());
 
         $this->assertRedirectTo('/admin/collectionroles');
-        $this->verifyFlashMessage('Collection role \'ModifiedName\' was edited successfully.',
-            self::MESSAGE_LEVEL_NOTICE);
+        $this->verifyFlashMessage(
+            'Collection role \'ModifiedName\' was edited successfully.',
+            self::MESSAGE_LEVEL_NOTICE
+        );
 
         $this->assertNull($dao->getTranslation('default_collection_role_ModifiedName'));
     }

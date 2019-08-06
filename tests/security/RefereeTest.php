@@ -47,7 +47,7 @@ class RefereeTest extends ControllerTestCase
         $account = new Opus_Account();
         $account->setLogin('referee');
         $account->setPassword('refereereferee');
-        $account->setRole(array($userRole));
+        $account->setRole([$userRole]);
         $account->store();
 
         $this->_refereeAccount = $account;
@@ -61,7 +61,7 @@ class RefereeTest extends ControllerTestCase
         $this->logoutUser();
         $this->restoreSecuritySetting();
 
-        if (!is_null($this->_refereeAccount)) {
+        if (! is_null($this->_refereeAccount)) {
             $this->_refereeAccount->delete();
         }
 
@@ -81,5 +81,4 @@ class RefereeTest extends ControllerTestCase
         $this->markTestIncomplete('not tested');
         // TODO
     }
-
 }

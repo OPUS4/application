@@ -51,8 +51,7 @@ class Application_Util_String
         $keys = array_keys($properties);
 
         if ($quote) {
-            array_walk($properties, function(&$value, $key)
-            {
+            array_walk($properties, function (&$value, $key) {
                 $value = self::quoteValue($value);
             });
         }
@@ -70,12 +69,10 @@ class Application_Util_String
      */
     public static function quoteValue($value)
     {
-        if (strpos($value, '"') !== false)
-        {
+        if (strpos($value, '"') !== false) {
             $value = str_replace('"', '\"', $value);
         }
 
         return "\"$value\"";
     }
-
 }

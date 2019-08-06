@@ -40,7 +40,7 @@ class Admin_Model_DoiStatusTest extends ControllerTestCase
 
     public function tearDown()
     {
-        if (!is_null($this->docId)) {
+        if (! is_null($this->docId)) {
             // removed previously created test document from database
             $doc = new Opus_Document($this->docId);
             $doc->deletePermanent();

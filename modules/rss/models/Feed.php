@@ -33,11 +33,13 @@
  * TODO context spezifische Titel für RSS feed (latest, collections, ...)
  */
 
-class Rss_Model_Feed extends Application_Model_Abstract {
+class Rss_Model_Feed extends Application_Model_Abstract
+{
 
     private $view;
 
-    public function __construct($view) {
+    public function __construct($view)
+    {
         $this->view = $view;
     }
 
@@ -56,19 +58,20 @@ class Rss_Model_Feed extends Application_Model_Abstract {
      *
      * @return string
      */
-    public function getTitle() {
+    public function getTitle()
+    {
         $config = $this->getConfig();
 
         $name = Application_Configuration::getInstance()->getName();
 
         if (isset($config->rss->default->feedTitle)) {
             $feedTitle = $config->rss->default->feedTitle;
-        }
-        else {
+        } else {
             $feedTitle = '%4$s';
         }
 
-        $feedTitle = sprintf($feedTitle,
+        $feedTitle = sprintf(
+            $feedTitle,
             $name,
             $this->view->getHelper('ServerUrl')->getHost(),
             substr($this->view->baseUrl(), 1),
@@ -86,17 +89,16 @@ class Rss_Model_Feed extends Application_Model_Abstract {
      *
      * @return string
      */
-    public function getDescription() {
+    public function getDescription()
+    {
         $config = $this->getConfig();
 
         if (isset($config->rss->default->feedDescription)) {
             $feedDescription = $config->rss->default->feedDescription;
-        }
-        else {
+        } else {
             $feedDescription = 'OPUS documents';
         }
 
         return $feedDescription;
     }
-
 }

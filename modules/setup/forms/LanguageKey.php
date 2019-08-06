@@ -36,15 +36,15 @@
 /**
  * SubForm used by language controller for editing single tranlsation key
  */
-class Setup_Form_LanguageKey extends Zend_Form_SubForm {
+class Setup_Form_LanguageKey extends Zend_Form_SubForm
+{
 
-    public function __construct($key, $options = null) {
+    public function __construct($key, $options = null)
+    {
         parent::__construct($options);
 
-        $this->addElement('textarea', 'en', array('label' => 'en'));
-        $this->addElement('textarea', 'de', array('label' => 'de'));
-        $this->addDisplayGroup(array('de', 'en'), $key, array('legend' => $key));
-        
+        $this->addElement('textarea', 'en', ['label' => 'en']);
+        $this->addElement('textarea', 'de', ['label' => 'de']);
+        $this->addDisplayGroup(['de', 'en'], $key, ['legend' => $key]);
     }
-
 }

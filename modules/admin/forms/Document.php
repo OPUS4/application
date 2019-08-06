@@ -35,7 +35,8 @@
 /**
  * Formular fuer Metadaten eines Dokuments.
  */
-class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
+class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm
+{
 
     /**
      * Ergebnis wenn keine weiteren Aktionen ausgeführt werden müssen.
@@ -94,25 +95,26 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
     /**
      * Konstruiert das Metadaten-Formular aus verschiedenen Unterformularen und den Aktion Buttons.
      */
-    public function init() {
+    public function init()
+    {
         parent::init();
 
         $this->setDecorators(
-            array(
+            [
             'FormElements',
-            array(
-                array('wrapperDivClose' => 'HtmlTag'),
-                array('tag' => 'div', 'closeOnly' => 'true', 'placement' => 'append')
-            )
-            )
+            [
+                ['wrapperDivClose' => 'HtmlTag'],
+                ['tag' => 'div', 'closeOnly' => 'true', 'placement' => 'append']
+            ]
+            ]
         );
 
         $this->addSubForm(new Admin_Form_ActionBox($this), 'ActionBox');
 
         $subform = new Admin_Form_InfoBox();
         $subform->addDecorator(
-            array('wrapperDivOpen' => 'HtmlTag'),
-            array('tag' => 'div', 'placement' => 'prepend', 'class' => 'wrapper', 'openOnly' => 'true')
+            ['wrapperDivOpen' => 'HtmlTag'],
+            ['tag' => 'div', 'placement' => 'prepend', 'class' => 'wrapper', 'openOnly' => 'true']
         );
         $this->addSubForm($subform, 'InfoBox');
 
@@ -125,25 +127,33 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
         $this->addSubForm(new Admin_Form_Document_Bibliographic(), 'Bibliographic');
         $this->addSubForm(
             new Admin_Form_Document_MultiSubForm(
-                'Admin_Form_Document_Series', 'Series',
+                'Admin_Form_Document_Series',
+                'Series',
                 new Application_Form_Validate_MultiSubForm_RepeatedValues(
-                    'SeriesId', 'admin_document_error_repeated_series'), array(
-                'columns' => array(
-                array(),
-                array('label' => 'Opus_Model_Dependent_Link_DocumentSeries_Number'),
-                array('label' => 'Opus_Model_Dependent_Link_DocumentSeries_SortOrder')
-                ))
-            ), 'Series'
+                    'SeriesId',
+                    'admin_document_error_repeated_series'
+                ),
+                [
+                'columns' => [
+                [],
+                ['label' => 'Opus_Model_Dependent_Link_DocumentSeries_Number'],
+                ['label' => 'Opus_Model_Dependent_Link_DocumentSeries_SortOrder']
+                    ]]
+            ),
+            'Series'
         );
 
         $this->addSubForm(
             new Admin_Form_Document_MultiEnrichmentSubForm(
-                'Admin_Form_Document_Enrichment', 'Enrichment', null,
-                array('columns' => array(
-                    array('label' => 'KeyName'),
-                    array('label' => 'Value')
-                ))
-            ), 'Enrichments'
+                'Admin_Form_Document_Enrichment',
+                'Enrichment',
+                null,
+                ['columns' => [
+                    ['label' => 'KeyName'],
+                    ['label' => 'Value']
+                ]]
+            ),
+            'Enrichments'
         );
 
         $this->addSubForm(new Admin_Form_Document_Collections(), 'Collections');
@@ -153,7 +163,8 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
         $subform->setLegend('admin_document_section_content');
         $subform->addSubForm(
             new Admin_Form_Document_MultiSubForm(
-                'Admin_Form_Document_Abstract', 'TitleAbstract',
+                'Admin_Form_Document_Abstract',
+                'TitleAbstract',
                 new Application_Form_Validate_MultiSubForm_RepeatedValues(
                     'Language',
                     'admin_document_error_MoreThanOneTitleInLanguage'
@@ -176,7 +187,8 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
     /**
      * Populates form from model values.
      */
-    public function populateFromModel($document) {
+    public function populateFromModel($document)
+    {
         $this->_document = $document;
 
         $subforms = $this->getSubForms();
@@ -190,7 +202,8 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
      * Konstruiert Formular mit Unterformularen basierend auf POST Daten.
      * @param array $data
      */
-    public static function getInstanceFromPost($data, $document = null) {
+    public static function getInstanceFromPost($data, $document = null)
+    {
         $form = new Admin_Form_Document();
 
         $subforms = $form->getSubForms();
@@ -198,11 +211,10 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
         foreach ($subforms as $name => $subform) {
             if (array_key_exists($name, $data)) {
                 $subform->constructFromPost($data[$name], $document);
-            }
-            else {
+            } else {
                 // ActionBox und InfoBox haben keine Element die im POST enthalten wären, müssen aber nach POST wieder
                 // neu initialisiert werden
-                $subform->constructFromPost(array(), $document);
+                $subform->constructFromPost([], $document);
             }
         }
 
@@ -213,7 +225,8 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
      * Verarbeitet POST Request vom Formular.
      * @param type $data
      */
-    public function processPost($data, $context) {
+    public function processPost($data, $context)
+    {
         // POST Daten an Unterformulare weiterreichen
         $subforms = $this->getSubForms();
 
@@ -222,7 +235,7 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
                 // TODO process return value (exit from loop if success)
                 $result = $form->processPost($data[$name], $data);
 
-                if (!is_null($result)) {
+                if (! is_null($result)) {
                     return $result;
                 }
             }
@@ -236,7 +249,8 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
      * @param $request
      * @param null $session
      */
-    public function continueEdit($request, $session = null) {
+    public function continueEdit($request, $session = null)
+    {
         $subforms = $this->getSubForms();
 
         foreach ($subforms as $subform) {
@@ -255,7 +269,8 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
      * @param array $data
      * @param array $context
      */
-    public function isValid($data, $context = null) {
+    public function isValid($data, $context = null)
+    {
         $result = parent::isValid($data, $context);
 
         return ($result & $this->isDependenciesValid($data, $data)) == 1;
@@ -269,7 +284,8 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
      *
      * @return void|Zend_Form_SubForm
      */
-    public function loadDefaultDecorators() {
+    public function loadDefaultDecorators()
+    {
         parent::loadDefaultDecorators();
 
         $this->removeDecorator('Fieldset');
@@ -279,7 +295,8 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
      * Setzt die globale Nachricht für das Formular.
      * @param $message string Nachricht
      */
-    public function setMessage($message) {
+    public function setMessage($message)
+    {
         $this->_message = $message;
     }
 
@@ -287,7 +304,8 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
      * Liefert die globale Nachricht für das Formular.
      * @return null|string
      */
-    public function getMessage() {
+    public function getMessage()
+    {
         return $this->_message;
     }
 
@@ -297,10 +315,11 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
      * Fuegt Unterformular fuer Dateien hinzu. Dateien sind nicht Teil des Metadaten-Formulars, werden aber in der
      * Metadaten-Übersicht mit aufgelistet.
      */
-    public function prepareRenderingAsView() {
+    public function prepareRenderingAsView()
+    {
         parent::prepareRenderingAsView();
 
-        if (!is_null($this->_document)) {
+        if (! is_null($this->_document)) {
             if (count($this->_document->getFile()) > 0) {
                 $subform = new Admin_Form_Document_Files();
                 $subform->populateFromModel($this->_document);
@@ -308,5 +327,4 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
             }
         }
     }
-
 }

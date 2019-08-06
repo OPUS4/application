@@ -33,15 +33,17 @@
 /**
  * TODO if password is not set should the result be TRUE?
  */
-class Application_Form_Validate_Password extends Zend_Validate_Abstract {
+class Application_Form_Validate_Password extends Zend_Validate_Abstract
+{
 
     const NOT_MATCH = 'notMatch';
 
-    protected $_messageTemplates = array(
+    protected $_messageTemplates = [
         self::NOT_MATCH => 'password_confirmation_error'
-    );
+    ];
 
-    public function isValid($value, $context = null) {
+    public function isValid($value, $context = null)
+    {
         $value = (string) $value;
 
         $this->_setValue($value);
@@ -51,14 +53,11 @@ class Application_Form_Validate_Password extends Zend_Validate_Abstract {
                     ($value == $context['password'])) {
                 return true;
             }
-        }
-        elseif (is_string($context) && ($value == $context)) {
+        } elseif (is_string($context) && ($value == $context)) {
             return true;
         }
 
         $this->_error(self::NOT_MATCH);
         return false;
     }
-
 }
-

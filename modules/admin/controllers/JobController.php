@@ -35,9 +35,11 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Admin_JobController extends Application_Controller_Action {
+class Admin_JobController extends Application_Controller_Action
+{
 
-    public function indexAction() {
+    public function indexAction()
+    {
 
         $config = $this->getConfig();
 
@@ -45,13 +47,13 @@ class Admin_JobController extends Application_Controller_Action {
             $this->view->asyncjobs = true;
             $this->view->failedJobCount = Opus_Job::getCountPerLabel(Opus_Job::STATE_FAILED);
             $this->view->unprocessedJobCount = Opus_Job::getCountPerLabel(Opus_Job::STATE_UNDEFINED);
-        }
-        else {
+        } else {
             $this->view->asyncjobs = false;
         }
     }
 
-    public function menuAction() {
+    public function menuAction()
+    {
         $this->view->title = $this->view->translate('admin_title_job');
     }
 
@@ -59,18 +61,19 @@ class Admin_JobController extends Application_Controller_Action {
     /**
      * TODO review functionality and create ticket
      */
-    public function workerMonitorAction() {
+    public function workerMonitorAction()
+    {
         $config = $this->getConfig();
         $this->_helper->layout()->disableLayout();
         if (isset($config->runjobs->asynchronous) && $config->runjobs->asynchronous) {
             $this->view->failedJobCount = Opus_Job::getCount(Opus_Job::STATE_FAILED);
-        }
-        else {
+        } else {
             $this->view->failedJobCount = 0;
         }
     }
 
-    public function detailAction() {
+    public function detailAction()
+    {
         $this->view->state = $this->_request->getParam('state');
         $this->view->label = $this->_request->getParam('label');
 
@@ -78,7 +81,6 @@ class Admin_JobController extends Application_Controller_Action {
             throw new Application_Exception('Invalid arguments');
         }
 
-        $this->view->jobs = Opus_Job::getByLabels(array($this->view->label), null, $this->view->state);
+        $this->view->jobs = Opus_Job::getByLabels([$this->view->label], null, $this->view->state);
     }
-
 }

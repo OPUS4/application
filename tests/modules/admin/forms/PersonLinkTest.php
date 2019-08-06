@@ -108,10 +108,10 @@ class Admin_Form_PersonLinkTest extends ControllerTestCase
     {
         $form = new Admin_Form_PersonLink();
 
-        $post = array(
+        $post = [
             'PersonId' => '', // Personen ID muss vorhanden sein
             'Role' => '' // Rolle muss vorhanden sein
-        );
+        ];
 
         $this->assertFalse($form->isValid($post));
 
@@ -125,10 +125,10 @@ class Admin_Form_PersonLinkTest extends ControllerTestCase
     {
         $form = new Admin_Form_PersonLink();
 
-        $post = array(
+        $post = [
             'PersonId' => 'tom', // keine ID
             'Role' => 'unknown' // das ist keine erlaubte Rolle
-        );
+        ];
 
         $this->assertFalse($form->isValid($post));
 
@@ -143,10 +143,10 @@ class Admin_Form_PersonLinkTest extends ControllerTestCase
     {
         $form = new Admin_Form_PersonLink();
 
-        $post = array(
+        $post = [
             'PersonId' => '310', // Personen ID muss vorhanden sein
             'Role' => 'author' // Rolle muss vorhanden sein
-        );
+        ];
 
         $this->assertTrue($form->isValid($post));
     }
@@ -183,5 +183,4 @@ class Admin_Form_PersonLinkTest extends ControllerTestCase
         $this->assertEquals(1, count($messages));
         $this->assertContains('not instance of', $messages[0]);
     }
-
 }

@@ -39,5 +39,4 @@ class Application_View_Helper_FrontdoorUrl extends Application_View_Helper_Docum
         // FIXME do we need a check if serverUrl ends with /
         return $this->view->serverUrl() . parent::frontdoor($docId);
     }
-
 }

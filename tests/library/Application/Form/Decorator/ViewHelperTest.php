@@ -82,7 +82,7 @@ class Application_Form_Decorator_ViewHelperTest extends TestCase
 
     public function testSetViewOnlyEnabledOption()
     {
-        $decorator = new Application_Form_Decorator_ViewHelper(array('viewOnlyEnabled' => true));
+        $decorator = new Application_Form_Decorator_ViewHelper(['viewOnlyEnabled' => true]);
 
         $this->assertTrue($decorator->isViewOnlyEnabled());
     }

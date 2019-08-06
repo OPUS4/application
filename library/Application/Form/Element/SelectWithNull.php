@@ -32,26 +32,26 @@
  * @version     $Id$
  */
 
-class Application_Form_Element_SelectWithNull extends Application_Form_Element_Select {
+class Application_Form_Element_SelectWithNull extends Application_Form_Element_Select
+{
 
-    public function setValue($value) {
+    public function setValue($value)
+    {
         if (is_null($value)) {
             parent::setValue('Null');
-        }
-        else {
+        } else {
             parent::setValue($value);
         }
     }
 
-    public function getValue() {
+    public function getValue()
+    {
         $value = parent::getValue();
 
         if ($value == 'Null') {
             return null;
-        }
-        else {
+        } else {
             return $value;
         }
     }
-
 }

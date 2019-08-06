@@ -38,7 +38,8 @@
  *
  * - must be at least 6 characters long
  */
-class Application_Form_Element_Password extends Zend_Form_Element_Password {
+class Application_Form_Element_Password extends Zend_Form_Element_Password
+{
 
     /**
      * Initializes form element.
@@ -49,7 +50,7 @@ class Application_Form_Element_Password extends Zend_Form_Element_Password {
 
         $this->addPrefixPath('Application_Form_Decorator', 'Application/Form/Decorator', Zend_Form::DECORATOR);
         $this->setAllowEmpty(false);
-        $this->addValidator('stringLength', false, array('min' => 6));
+        $this->addValidator('stringLength', false, ['min' => 6]);
 
         $messageTemplates = [
             'stringLengthInvalid' => 'validation_error_stringLengthInvalid',
@@ -65,18 +66,18 @@ class Application_Form_Element_Password extends Zend_Form_Element_Password {
      */
     public function loadDefaultDecorators()
     {
-        if (!$this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
+        if (! $this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
             $this->setDecorators(
-                array(
+                [
                     'ViewHelper',
                     'Placeholder',
                     'Description',
                     'ElementHint',
                     'Errors',
                     'ElementHtmlTag',
-                    array('LabelNotEmpty', array('tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend')),
-                    array(array('dataWrapper' => 'HtmlTagWithId'), array('tag' => 'div', 'class' => 'data-wrapper'))
-                )
+                    ['LabelNotEmpty', ['tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend']],
+                    [['dataWrapper' => 'HtmlTagWithId'], ['tag' => 'div', 'class' => 'data-wrapper']]
+                ]
             );
         }
     }

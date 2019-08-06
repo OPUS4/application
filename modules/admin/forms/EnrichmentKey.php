@@ -92,12 +92,14 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
         $name->addValidator(new Application_Form_Validate_EnrichmentKeyAvailable());
         $this->addElement($name);
 
-        $element = $this->createElement('select', self::ELEMENT_TYPE,
-            array(
+        $element = $this->createElement(
+            'select',
+            self::ELEMENT_TYPE,
+            [
                 'label' => 'admin_enrichmentkey_label_type',
                 'id' => 'admin_enrichmentkey_type',
                 'required' => true
-            )
+            ]
         );
 
         // alle verfügbaren EnrichmentTypes ermitteln und als Auswahlfeld anzeigen
@@ -106,12 +108,15 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
         $element->setMultiOptions($availableTypes);
         $this->addElement($element);
 
-        $element = $this->createElement('textarea', self::ELEMENT_OPTIONS,
-            array(
+        $element = $this->createElement(
+            'textarea',
+            self::ELEMENT_OPTIONS,
+            [
                 'label' => 'admin_enrichmentkey_label_options',
                 'id' => 'admin_enrichmentkey_options',
                 'description' => $this->getTranslator()->translate('admin_enrichmentkey_options_description')
-            ));
+            ]
+        );
         $this->addElement($element);
 
         $translations = new Admin_Form_TranslationSet();
@@ -134,7 +139,7 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
         $this->getElement(self::ELEMENT_TYPE)->setValue($enrichmentKey->getType());
 
         $enrichmentType = $this->initEnrichmentType($enrichmentKey->getType());
-        if (!is_null($enrichmentType)) {
+        if (! is_null($enrichmentType)) {
             $enrichmentType->setOptions($enrichmentKey->getOptions());
             $optionsElement = $this->getElement(self::ELEMENT_OPTIONS);
             $optionsElement->setValue($enrichmentType->getOptionsAsString());
@@ -152,7 +157,7 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
         $enrichmentKey->setType($this->getElementValue(self::ELEMENT_TYPE));
 
         $enrichmentType = $this->initEnrichmentType($this->getElementValue(self::ELEMENT_TYPE));
-        if (!is_null($enrichmentType)) {
+        if (! is_null($enrichmentType)) {
             $enrichmentType->setOptionsFromString($this->getElementValue(self::ELEMENT_OPTIONS));
             $enrichmentKey->setOptions($enrichmentType->getOptions());
         }
@@ -182,5 +187,4 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
 
         return null;
     }
-
 }

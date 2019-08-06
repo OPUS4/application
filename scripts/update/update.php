@@ -39,11 +39,12 @@
 
 set_include_path(
     implode(
-        PATH_SEPARATOR, array(
+        PATH_SEPARATOR,
+        [
             dirname(dirname(dirname(__FILE__))) . '/library',
             dirname(dirname(dirname(__FILE__))) . '/vendor',
             get_include_path()
-        )
+        ]
     )
 );
 

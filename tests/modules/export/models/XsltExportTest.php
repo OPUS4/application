@@ -38,7 +38,8 @@ class Export_Model_XsltExportTest extends ControllerTestCase
 
     private $plugin;
 
-    public function setUp() {
+    public function setUp()
+    {
         parent::setUp();
 
         $plugin = new Export_Model_XmlExport();
@@ -57,5 +58,4 @@ class Export_Model_XsltExportTest extends ControllerTestCase
 
         $this->markTestIncomplete('test rendering of example xslt');
     }
-
 }

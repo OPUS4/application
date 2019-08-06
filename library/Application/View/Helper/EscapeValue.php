@@ -39,36 +39,25 @@ class Application_View_Helper_EscapeValue extends Application_View_Helper_Abstra
 
     public function escapeValue($value, $highlightNull = false)
     {
-        if (is_array($value))
-        {
-            return array_map(function($value) use ($highlightNull)
-            {
-                if (is_array($value))
-                {
+        if (is_array($value)) {
+            return array_map(function ($value) use ($highlightNull) {
+                if (is_array($value)) {
                     return $this->escapeValue($value);
-                }
-                else
-                {
+                } else {
                     return $this->escape($value, $highlightNull);
                 }
             }, $value);
-        }
-        else
-        {
+        } else {
             return $this->escape($value, $highlightNull);
         }
     }
 
     public function escape($value, $highlightNull = false)
     {
-        if (is_null($value) && $highlightNull)
-        {
+        if (is_null($value) && $highlightNull) {
             return '<span class="null">' . $this->view->translate('Value_Null') . '</span>';
-        }
-        else {
+        } else {
             return $this->view->escape($value);
         }
     }
-
-
 }

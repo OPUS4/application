@@ -62,10 +62,10 @@ class Admin_IprangeControllerTest extends CrudControllerTestCase
         $ipRange->setName('localhost');
         $ipRange->setStartingip('127.0.0.1');
         $ipRange->setEndingip('127.0.0.2');
-        $ipRange->setRole(array(
+        $ipRange->setRole([
             Opus_UserRole::fetchByName('reviewer'),
             Opus_UserRole::fetchByName('docsadmin')
-        ));
+        ]);
 
         return $ipRange->store();
     }
@@ -99,13 +99,13 @@ class Admin_IprangeControllerTest extends CrudControllerTestCase
     {
         $this->createsModels = true;
 
-        $post = array(
+        $post = [
             'Name' => 'test range',
             'Startingip' => '127.0.0.3',
             'Endingip' => '127.0.0.4',
-            'Roles' => array('docsadmin', 'guest'),
+            'Roles' => ['docsadmin', 'guest'],
             'Save' => 'Speichern'
-        );
+        ];
 
         $this->getRequest()->setPost($post)->setMethod('POST');
 
@@ -137,12 +137,12 @@ class Admin_IprangeControllerTest extends CrudControllerTestCase
 
         $modelCount = count($this->getModels());
 
-        $post = array(
+        $post = [
             'Name' => 'test range',
             'Startingip' => '127.0.0.5',
             'Endingip' => '127.0.0.6',
             'Cancel' => 'Abbrechen'
-        );
+        ];
 
         $this->getRequest()->setPost($post)->setMethod('POST');
 
@@ -175,14 +175,14 @@ class Admin_IprangeControllerTest extends CrudControllerTestCase
     {
         $iprangeId = $this->createNewModel();
 
-        $this->getRequest()->setMethod('POST')->setPost(array(
+        $this->getRequest()->setMethod('POST')->setPost([
             'Id' => $iprangeId,
             'Name' => 'ModifiedName',
             'Startingip' => '127.0.0.99',
             'Endingip' => '127.0.0.100',
-            'Roles' => array('docsadmin', 'jobaccess'),
+            'Roles' => ['docsadmin', 'jobaccess'],
             'Save' => 'Abspeichern'
-        ));
+        ]);
 
         $this->dispatch('/admin/iprange/edit');
         $this->assertRedirectTo("/admin/iprange/show/id/$iprangeId");
@@ -198,20 +198,20 @@ class Admin_IprangeControllerTest extends CrudControllerTestCase
 
         $this->assertCount(2, $roles);
 
-        $this->verifyRoles($roles, array('docsadmin', 'jobaccess'));
+        $this->verifyRoles($roles, ['docsadmin', 'jobaccess']);
     }
 
     public function testEditActionCancel()
     {
         $iprangeId = $this->createNewModel();
 
-        $this->getRequest()->setMethod('POST')->setPost(array(
+        $this->getRequest()->setMethod('POST')->setPost([
             'Id' => $iprangeId,
             'Name' => 'ModifiedName',
             'Startingip' => '200.0.0.1',
             'Endingip' => '200.0.0.2',
             'Cancel' => 'Abbrechen'
-        ));
+        ]);
 
         $this->dispatch("/admin/iprange/edit");
         $this->assertRedirectTo('/admin/iprange');
@@ -242,11 +242,9 @@ class Admin_IprangeControllerTest extends CrudControllerTestCase
         foreach ($roles as $role) {
             $name = $role->getName();
             $this->assertContains($name, $expectedRoles);
-            $expectedRoles = array_diff($expectedRoles, array($name));
+            $expectedRoles = array_diff($expectedRoles, [$name]);
         }
 
         $this->assertEmpty($expectedRoles);
     }
-
 }
-

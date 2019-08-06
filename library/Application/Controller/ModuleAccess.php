@@ -40,7 +40,8 @@
  * @category    Application
  * @package     Controller
  */
-class Application_Controller_ModuleAccess extends Zend_Controller_Action {
+class Application_Controller_ModuleAccess extends Zend_Controller_Action
+{
 
     const ACCESS_DENIED_ACTION = 'module-access-denied';
 
@@ -59,12 +60,14 @@ class Application_Controller_ModuleAccess extends Zend_Controller_Action {
     /**
      * Use pre-dispatch to check user access rights *before* action is called.
      */
-    public function preDispatch() {
+    public function preDispatch()
+    {
         parent::preDispatch();
         $this->checkAccessModulePermissions();
     }
 
-    public function init() {
+    public function init()
+    {
         parent::init();
 
         // Wählt Hauptmenueeintrag nach Modul aus
@@ -77,7 +80,8 @@ class Application_Controller_ModuleAccess extends Zend_Controller_Action {
      *
      * @return void
      */
-    protected function checkAccessModulePermissions() {
+    protected function checkAccessModulePermissions()
+    {
         $logger = $this->getLogger();
         $module = $this->_request->getModuleName();
 
@@ -91,7 +95,7 @@ class Application_Controller_ModuleAccess extends Zend_Controller_Action {
 
         $realm = Opus_Security_Realm::getInstance();
 
-        if (!$realm->skipSecurityChecks()) {
+        if (! $realm->skipSecurityChecks()) {
             // Check, if the user has accesss to the module...
             if (true !== $realm->checkModule($module)) {
                 $logger->debug("FAILED authorization check for module '$module'");
@@ -121,7 +125,8 @@ class Application_Controller_ModuleAccess extends Zend_Controller_Action {
      *
      * TODO Kann ein Teil davon vielleicht schon im Bootstrap passieren?
      */
-    protected function checkPermissions() {
+    protected function checkPermissions()
+    {
         $logger = $this->getLogger();
 
         $navigation = $this->view->getHelper('navigation');
@@ -133,22 +138,21 @@ class Application_Controller_ModuleAccess extends Zend_Controller_Action {
 
         $activePage = $navigation->findActive($navigation->getContainer());
 
-        if (!empty($activePage)) {
+        if (! empty($activePage)) {
             $logger->debug('ACL: active page found');
             $activePage = $activePage['page'];
 
             $resource = $this->findResourceForPage($activePage);
 
             return is_null($resource) || $acl->isAllowed(Application_Security_AclProvider::ACTIVE_ROLE, $resource);
-        }
-        else {
+        } else {
             $logger->debug('ACL: active page not found');
             // Entweder die Seite ist nicht erfasst oder Zugriff ist nicht erlaubt.
             $pageInNav = $this->isPageForRequestInNavigation($navigation);
 
             $logger->debug('ACL: page configured = ' . $pageInNav);
 
-            return !$pageInNav;
+            return ! $pageInNav;
         }
 
         return true;
@@ -158,7 +162,8 @@ class Application_Controller_ModuleAccess extends Zend_Controller_Action {
      * Searches navigation for resource definition for current request.
      * @return string
      */
-    protected function findResourceForPage($activePage) {
+    protected function findResourceForPage($activePage)
+    {
         $resource = null;
 
         if ($activePage instanceof Zend_Navigation_Page) {
@@ -166,7 +171,7 @@ class Application_Controller_ModuleAccess extends Zend_Controller_Action {
 
             $page = $activePage->getParent();
 
-            while (!is_null($page) && $page instanceof Zend_Navigation_Page && is_null($resource)) {
+            while (! is_null($page) && $page instanceof Zend_Navigation_Page && is_null($resource)) {
                 $resource = $page->getResource();
                 $page = $page->getParent();
             }
@@ -178,20 +183,21 @@ class Application_Controller_ModuleAccess extends Zend_Controller_Action {
     /**
      * Prüft ob die Seite in der Navigation definiert ist.
      */
-    protected function isPageForRequestInNavigation($navigation) {
+    protected function isPageForRequestInNavigation($navigation)
+    {
         $module = $this->_request->getModuleName();
         $controller = $this->_request->getControllerName();
         $action = $this->_request->getActionName();
 
-        if (!is_null($module)) {
+        if (! is_null($module)) {
             $pages = $navigation->getContainer()->findAllBy('module', $this->_request->getModuleName());
 
-            if (!is_null($controller) && !is_null($pages)) {
+            if (! is_null($controller) && ! is_null($pages)) {
                 // found pages for module
                 foreach ($pages as $page) {
                     if ($page->getController() === $controller) {
                         // found pages for controller
-                        if (!is_null($action) && $page->getAction() === $action) {
+                        if (! is_null($action) && $page->getAction() === $action) {
                             return true;
                         }
                     }
@@ -208,14 +214,16 @@ class Application_Controller_ModuleAccess extends Zend_Controller_Action {
      *
      * @return boolean
      */
-    protected function customAccessCheck() {
+    protected function customAccessCheck()
+    {
         return true;
     }
 
     /**
      * Method called when access to module has been denied.
      */
-    public function moduleAccessDeniedAction() {
+    public function moduleAccessDeniedAction()
+    {
         $this->_forward('login', 'auth', 'default');
     }
 
@@ -223,7 +231,8 @@ class Application_Controller_ModuleAccess extends Zend_Controller_Action {
      * Liefert den gesetzten Logger oder holt bei Bedarf Logger aus Zend_Registry.
      * @return Zend_Log
      */
-    public function getLogger() {
+    public function getLogger()
+    {
         if (is_null($this->_logger)) {
             $this->_logger = Zend_Registry::get('Zend_Log');
             if (is_null($this->_logger)) {
@@ -241,7 +250,8 @@ class Application_Controller_ModuleAccess extends Zend_Controller_Action {
      *
      * @param Zend_Log
      */
-    public function setLogger($logger) {
+    public function setLogger($logger)
+    {
         $this->_logger = $logger;
     }
 
@@ -249,7 +259,8 @@ class Application_Controller_ModuleAccess extends Zend_Controller_Action {
      * Returns configuration object or null if none can be found.
      * @return null|Zend_Config
      */
-    public function getConfig() {
+    public function getConfig()
+    {
         if (is_null($this->_config)) {
             $this->_config = Application_Configuration::getInstance()->getConfig();
         }
@@ -259,10 +270,9 @@ class Application_Controller_ModuleAccess extends Zend_Controller_Action {
     /**
      * TODO move to parent class (redundant code)
      */
-    protected function disableViewRendering() {
+    protected function disableViewRendering()
+    {
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender();
     }
-
-
 }

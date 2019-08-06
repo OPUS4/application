@@ -50,7 +50,7 @@ class Admin_Form_File_UploadTest extends ControllerTestCase
     {
         $form = new Admin_Form_File_Upload();
 
-        $elements = array('Id', 'File', 'Label', 'Comment', 'Language', 'Save', 'Cancel', 'OpusHash', 'SortOrder');
+        $elements = ['Id', 'File', 'Label', 'Comment', 'Language', 'Save', 'Cancel', 'OpusHash', 'SortOrder'];
 
         $this->assertEquals(count($elements), count($form->getElements()));
 
@@ -83,7 +83,7 @@ class Admin_Form_File_UploadTest extends ControllerTestCase
     {
         $form = new Admin_Form_File_Upload();
 
-        $post = array();
+        $post = [];
 
         $result = $form->isValid($post);
 
@@ -105,13 +105,13 @@ class Admin_Form_File_UploadTest extends ControllerTestCase
 
         $document = $this->createTestDocument();
 
-        $fileInfo = array(
-            array(
+        $fileInfo = [
+            [
                 'name' => 'test%202.txt',
                 'type' => 'text/plain',
                 'tmp_name' => 'test'
-            )
-        );
+            ]
+        ];
 
         $form->setFileInfo($fileInfo);
         $form->updateModel($document);
@@ -145,9 +145,9 @@ class Admin_Form_File_UploadTest extends ControllerTestCase
         $form = new Admin_Form_File_Upload();
 
         // entspricht nicht der richtige Struktur, reicht aber für Test
-        $fileInfo = array(
-            array('file')
-        );
+        $fileInfo = [
+            ['file']
+        ];
 
         $form->setFileInfo($fileInfo);
 

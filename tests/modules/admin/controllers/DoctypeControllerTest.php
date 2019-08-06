@@ -46,8 +46,10 @@ class Admin_DoctypeControllerTest extends ControllerTestCase
         $this->dispatch('/admin/doctype/index');
         $this->assertResponseCode(200);
         $this->assertQuery('//a[@href="doctype/show/doctype/demo_invalid"]');
-        $this->assertQueryContentContains('//div',
-            'Die Validierung der rot-markierten Dokumententypen ist fehlgeschlagen.');
+        $this->assertQueryContentContains(
+            '//div',
+            'Die Validierung der rot-markierten Dokumententypen ist fehlgeschlagen.'
+        );
         $this->assertQueryContentContains('//th', 'Artikel');
         $this->assertQueryContentContains('//td', 'article');
         $this->assertQueryContentContains('//td', 'aktiv');
@@ -94,5 +96,4 @@ class Admin_DoctypeControllerTest extends ControllerTestCase
         $this->assertRedirectTo('/admin/doctype');
         $this->verifyFlashMessage('admin_doctype_invalid');
     }
-
 }

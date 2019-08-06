@@ -31,11 +31,13 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Application_Form_Decorator_Button extends Zend_Form_Decorator_Abstract {
+class Application_Form_Decorator_Button extends Zend_Form_Decorator_Abstract
+{
 
     private $_elementName;
 
-    public function render($content) {
+    public function render($content)
+    {
         $button = $this->getElement()->getElement($this->getElementName());
 
         if (is_null($button)) {
@@ -59,20 +61,20 @@ class Application_Form_Decorator_Button extends Zend_Form_Decorator_Abstract {
         return $content . $markup;
     }
 
-    public function setElementName($columns) {
+    public function setElementName($columns)
+    {
         $this->columns = $columns;
     }
 
-    public function getElementName() {
+    public function getElementName()
+    {
         $name = $this->getOption('name');
-        if (!is_null($name)) {
+        if (! is_null($name)) {
             $this->removeOption('name');
-        }
-        else {
+        } else {
             $name = $this->_elementName;
         }
 
         return $name;
     }
-
 }

@@ -60,6 +60,5 @@ class OpusDocumentMock extends Opus_Document
         $dbadapter->commit();
 
         $this->_postStore();
-
     }
 }

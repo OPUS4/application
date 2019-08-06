@@ -42,6 +42,6 @@ class Admin_DnbinstituteController extends Application_Controller_ActionCRUD
 
     public function isDeletable($model)
     {
-        return !$model->isUsed();
+        return ! $model->isUsed();
     }
 }

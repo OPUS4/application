@@ -48,7 +48,6 @@ class Application_Update_AddCC30LicenceShotNamesTest extends ControllerTestCase
 
     public function tearDown()
     {
-
     }
 
     public function licenceMatchProvider()
@@ -206,7 +205,5 @@ class Application_Update_AddCC30LicenceShotNamesTest extends ControllerTestCase
         $this->assertNull($cacheResult);
         $this->assertEquals($dateModified->getUnixTimestamp(), $doc->getServerDateModified()->getUnixTimestamp());
         $this->assertEquals('CC BY 3.0', $licence->getName());
-
     }
-
 }

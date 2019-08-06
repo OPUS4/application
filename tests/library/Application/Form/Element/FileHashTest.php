@@ -43,7 +43,7 @@ class Application_Form_Element_FileHashTest extends FormElementTestCase
 
     protected $_expectedDecoratorCount = 4;
 
-    protected $_expectedDecorators = array('FileHash', 'ElementHtmlTag', 'LabelNotEmpty', 'dataWrapper');
+    protected $_expectedDecorators = ['FileHash', 'ElementHtmlTag', 'LabelNotEmpty', 'dataWrapper'];
 
     public function testGetLabel()
     {
@@ -65,12 +65,9 @@ class Application_Form_Element_FileHashTest extends FormElementTestCase
 
     public function testSetGetValue()
     {
-
     }
 
     public function tesSetGetFile()
     {
-
     }
-
 }

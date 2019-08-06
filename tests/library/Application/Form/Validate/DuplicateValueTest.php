@@ -57,7 +57,8 @@ class Application_Form_Validate_DuplicateValueTest extends TestCase
         $this->assertTrue($validator->isValid('deu'));
     }
 
-    public function testIsSelectionValidTrueForFirstOccurence() {
+    public function testIsSelectionValidTrueForFirstOccurence()
+    {
         $values = ['deu', 'deu'];
 
         $validator = new Application_Form_Validate_DuplicateValue($values, 0); // erstes Unterformular
@@ -65,7 +66,8 @@ class Application_Form_Validate_DuplicateValueTest extends TestCase
         $this->assertTrue($validator->isValid('deu'));
     }
 
-    public function testIsSelectionValidFalse() {
+    public function testIsSelectionValidFalse()
+    {
         $values = ['deu', 'deu'];
 
         $validator = new Application_Form_Validate_DuplicateValue($values, 1); // zweites Unterformular
@@ -73,7 +75,8 @@ class Application_Form_Validate_DuplicateValueTest extends TestCase
         $this->assertFalse($validator->isValid('deu'));
     }
 
-    public function testIsSelectionValidFalseForSecondOccurence() {
+    public function testIsSelectionValidFalseForSecondOccurence()
+    {
         $values = ['deu', 'deu', 'deu'];
 
         $validator = new Application_Form_Validate_DuplicateValue($values, 2); // drittes Unterformular

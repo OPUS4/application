@@ -115,9 +115,9 @@ class Account_IndexControllerTest extends ControllerTestCase
         $this->loginUser('john', 'testpwd');
         $this->request
             ->setMethod('POST')
-            ->setPost(array(
+            ->setPost([
                 'password' => 'newpassword'
-            ));
+            ]);
         $this->dispatch('/account/index/save');
         $this->assertResponseCode(200);
         $this->assertModule('account');
@@ -140,10 +140,10 @@ class Account_IndexControllerTest extends ControllerTestCase
         $this->loginUser('john', 'testpwd');
         $this->request
             ->setMethod('POST')
-            ->setPost(array(
+            ->setPost([
                 'password' => 'newpassword',
                 'confirmPassword' => 'anotherpassword'
-            ));
+            ]);
         $this->dispatch('/account/index/save');
         $this->assertResponseCode(200);
         $this->assertModule('account');
@@ -169,14 +169,14 @@ class Account_IndexControllerTest extends ControllerTestCase
         $this->loginUser('john', 'testpwd');
         $this->request
             ->setMethod('POST')
-            ->setPost(array(
+            ->setPost([
                 'username' => 'john',
                 'firstname' => '',
                 'lastname' => '',
                 'email' => '',
                 'password' => 'newpassword',
                 'confirm' => 'newpassword'
-            ));
+            ]);
         $this->dispatch('/account/index/save');
         $this->assertRedirect();
 
@@ -198,14 +198,14 @@ class Account_IndexControllerTest extends ControllerTestCase
         $this->loginUser('john', 'testpwd');
         $this->request
             ->setMethod('POST')
-            ->setPost(array(
+            ->setPost([
                 'username' => 'john',
                 'firstname' => '',
                 'lastname' => '',
                 'email' => '',
                 'password' => 'new@pwd$%',
                 'confirm' => 'new@pwd$%'
-            ));
+            ]);
         $this->dispatch('/account/index/save');
         $this->assertRedirect();
 
@@ -229,12 +229,12 @@ class Account_IndexControllerTest extends ControllerTestCase
         $this->loginUser('john', 'testpwd');
         $this->getRequest()
             ->setMethod('POST')
-            ->setPost(array(
+            ->setPost([
                 'username' => 'john2',
                 'firstname' => '',
                 'lastname' => '',
                 'email' => ''
-            ));
+            ]);
         $this->dispatch('/account/index/save');
 
         $this->assertRedirect();

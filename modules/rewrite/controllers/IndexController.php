@@ -32,35 +32,50 @@
  * @version     $Id$
  */
 
-class Rewrite_IndexController extends Application_Controller_Action {
+class Rewrite_IndexController extends Application_Controller_Action
+{
 
     /**
      * maps arbitrary OPUS document indentifiers to the
      * corresponding internal document id, e.g., this function provides
      * a means to map OPUS 3.x document ids to OPUS 4 document ids
      */
-    public function idAction() {
+    public function idAction()
+    {
         $type = $this->getRequest()->getParam('type');
         $value = $this->getRequest()->getParam('value');
         if (empty($type) || empty($value)) {
             return $this->_helper->Redirector->redirectToAndExit(
-                'index', array('failure' => 'missing argument'), 'index', 'home'
+                'index',
+                ['failure' => 'missing argument'],
+                'index',
+                'home'
             );
         }
         $f = new Opus_DocumentFinder();
         $ids = $f->setIdentifierTypeValue($type, $value)->ids();
         if (count($ids) < 1) {
             return $this->_helper->Redirector->redirectToAndExit(
-                'index', array('failure' => 'given id is unknown'), 'index', 'home'
+                'index',
+                ['failure' => 'given id is unknown'],
+                'index',
+                'home'
             );
         }
         if (count($ids) > 1) {
             return $this->_helper->Redirector->redirectToAndExit(
-                'index', array('failure' => 'given id is not unique'), 'index', 'home'
+                'index',
+                ['failure' => 'given id is not unique'],
+                'index',
+                'home'
             );
         }
         return $this->_helper->Redirector->redirectToAndExit(
-            'index', '', 'index', 'frontdoor', array('docId' => $ids[0])
+            'index',
+            '',
+            'index',
+            'frontdoor',
+            ['docId' => $ids[0]]
         );
     }
 
@@ -68,30 +83,40 @@ class Rewrite_IndexController extends Application_Controller_Action {
      * redirects OPUS 3.x file names to the corresponding OPUS 4.0 file names
      * in addition it returns HTTP code 301 (moved permanently)
      */
-    public function opus3fileAction() {
+    public function opus3fileAction()
+    {
         $docid = $this->getRequest()->getParam('opus3id');
         $filename = $this->getRequest()->getParam('filename');
         if (empty($docid) || empty($filename)) {
             return $this->_helper->Redirector->redirectToAndExit(
-                'index', array('failure' => 'missing argument'), 'index', 'home'
+                'index',
+                ['failure' => 'missing argument'],
+                'index',
+                'home'
             );
         }
         $f = new Opus_DocumentFinder();
         $ids = $f->setIdentifierTypeValue('opus3-id', $docid)->ids();
         if (count($ids) < 1) {
             return $this->_helper->Redirector->redirectToAndExit(
-                'index', array('failure' => 'given opus3id is unknown'), 'index', 'home'
+                'index',
+                ['failure' => 'given opus3id is unknown'],
+                'index',
+                'home'
             );
         }
         if (count($ids) > 1) {
             return $this->_helper->Redirector->redirectToAndExit(
-                'index', array('failure' => 'given opus3id is not unique'), 'index', 'home'
+                'index',
+                ['failure' => 'given opus3id is not unique'],
+                'index',
+                'home'
             );
         }
         return $this->_redirect(
-            $this->getRequest()->getBaseUrl() . '/files/' . $ids[0] . '/' . $filename, array('prependBase' => false,
-            'code' => 301)
+            $this->getRequest()->getBaseUrl() . '/files/' . $ids[0] . '/' . $filename,
+            ['prependBase' => false,
+            'code' => 301]
         );
     }
 }
-

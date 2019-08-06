@@ -42,10 +42,10 @@ class Frontdoor_Form_AtLeastOneValidatorTest extends ControllerTestCase
         $validator->addField($checkbox1);
         $validator->addField($checkbox2);
 
-        $this->assertTrue($validator->isValid(null, array(
+        $this->assertTrue($validator->isValid(null, [
             'checkbox1' => '0',
             'checkbox2' => '1'
-        )));
+        ]));
     }
 
     public function testValidationFailure()
@@ -57,21 +57,19 @@ class Frontdoor_Form_AtLeastOneValidatorTest extends ControllerTestCase
         $validator->addField($checkbox1);
         $validator->addField($checkbox2);
 
-        $this->assertFalse($validator->isValid(null, array(
+        $this->assertFalse($validator->isValid(null, [
             'checkbox1' => '0',
             'checkbox2' => '0'
-        )));
+        ]));
     }
 
     public function testNoFieldRequired()
     {
         $validator = new Frontdoor_Form_AtLeastOneValidator();
 
-        $this->assertTrue($validator->isValid(null, array(
+        $this->assertTrue($validator->isValid(null, [
             'checkbox1' => '0',
             'checkbox2' => '0'
-        )));
+        ]));
     }
-
 }
-

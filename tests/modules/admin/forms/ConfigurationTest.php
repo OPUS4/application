@@ -50,14 +50,14 @@ class Admin_Form_ConfigurationTest extends ControllerTestCase
     {
         $form = new Admin_Form_Configuration();
 
-        $form->populateFromModel(new Zend_Config(array(
+        $form->populateFromModel(new Zend_Config([
             'supportedLanguages' => 'en,de'
-        )));
+        ]));
 
         $element = $form->getElement('supportedLanguages');
 
         $this->assertNotNull($element);
-        $this->assertEquals(array('en', 'de'), $element->getValue());
+        $this->assertEquals(['en', 'de'], $element->getValue());
     }
 
     public function testUpdateModel()
@@ -67,7 +67,7 @@ class Admin_Form_ConfigurationTest extends ControllerTestCase
         $form->getElement('supportedLanguages')->setValue('de');
         $form->getElement('maxSearchResults')->setValue(15);
 
-        $config = new Zend_Config(array(), true);
+        $config = new Zend_Config([], true);
 
         $form->updateModel($config);
 
@@ -79,19 +79,18 @@ class Admin_Form_ConfigurationTest extends ControllerTestCase
     {
         $form = new Admin_Form_Configuration();
 
-        $this->assertTrue($form->isValid(array(
-            'supportedLanguages' => array('de'),
+        $this->assertTrue($form->isValid([
+            'supportedLanguages' => ['de'],
             'maxSearchResults' => '10'
-        )));
+        ]));
     }
 
     public function testValidationFailure()
     {
         $form = new Admin_Form_Configuration();
 
-        $this->assertFalse($form->isValid(array(
-            'supportedLanguages' => array('ru')
-        )));
+        $this->assertFalse($form->isValid([
+            'supportedLanguages' => ['ru']
+        ]));
     }
-
 }

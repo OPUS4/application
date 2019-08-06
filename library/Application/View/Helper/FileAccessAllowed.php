@@ -42,13 +42,11 @@ class Application_View_Helper_FileAccessAllowed extends Zend_View_Helper_Abstrac
      */
     public function fileAccessAllowed($fileId = null)
     {
-        if (is_null($fileId))
-        {
+        if (is_null($fileId)) {
             return false;
         }
 
         $realm = Opus_Security_Realm::getInstance();
         return $realm->checkFile($fileId);
     }
-
 }

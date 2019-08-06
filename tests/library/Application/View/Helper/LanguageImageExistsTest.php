@@ -47,5 +47,4 @@ class Application_View_Helper_LanguageImageExistsTest extends ControllerTestCase
 
         $this->assertFalse($helper->languageImageExists('abc'));
     }
-
 }

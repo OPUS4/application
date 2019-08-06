@@ -34,64 +34,72 @@
 
 /**
  * Unterformular fuer Subjects im Metadaten-Formular.
- * 
+ *
  * Dieses Formular enthaelt die Unterformulare fuer die verschiedenen Schlagwort-Typen und ist dafuer verantwortlich
  * das Feld "Subject" im Dokument zu aktualisieren.
- * 
+ *
  * TODO Umgang mit alten Schlagwörtern mit unbekanntem Typ (siehe auch OPUSVIER-2604)
  *
  * @category    Application
  * @package     Module_Admin
  */
-class Admin_Form_Document_Subjects extends Admin_Form_Document_Section {
-    
+class Admin_Form_Document_Subjects extends Admin_Form_Document_Section
+{
+
     /**
      * Initialisiert Formular und fuegt Unterformulare fuer Schlagworttypen hinzu.
      */
-    public function init() {
+    public function init()
+    {
         parent::init();
-        
+
         $this->addSubForm(
             new Admin_Form_Document_SubjectType(
-                'swd', array('columns' => array(
-                array(), array('label' => 'Opus_Subject_Value'), array('label' => 'ExternalKey')))
-            ), 'Swd'
+                'swd',
+                ['columns' => [
+                [], ['label' => 'Opus_Subject_Value'], ['label' => 'ExternalKey']]]
+            ),
+            'Swd'
         );
 
         $this->addSubForm(
             new Admin_Form_Document_SubjectType(
-                'psyndex', array('columns' => array(
-                array(), array('label' => 'Opus_Subject_Value'), array('label' => 'ExternalKey')))
-            ), 'Psyndex'
+                'psyndex',
+                ['columns' => [
+                [], ['label' => 'Opus_Subject_Value'], ['label' => 'ExternalKey']]]
+            ),
+            'Psyndex'
         );
 
         $this->addSubForm(
             new Admin_Form_Document_SubjectType(
-                'uncontrolled', array('columns' => array(
-                array(), array('label' => 'Opus_Subject_Value'), array('label' => 'ExternalKey')))
-            ), 'Uncontrolled'
+                'uncontrolled',
+                ['columns' => [
+                [], ['label' => 'Opus_Subject_Value'], ['label' => 'ExternalKey']]]
+            ),
+            'Uncontrolled'
         );
 
         // TODO Unterformular fuer unbekannte Typen hinzufügen?
-        
-        $this->setDecorators(array('FormElements'));
+
+        $this->setDecorators(['FormElements']);
     }
-    
+
     /**
      * Sammelt Schlagwoerter von Unterformularen ein und aktualisiert Dokument.
      * @param Opus_Document $document
      */
-    public function updateModel($document) {
+    public function updateModel($document)
+    {
         $subforms = $this->getSubForms();
-        
-        $subjects = array();
-        
+
+        $subjects = [];
+
         foreach ($subforms as $subform) {
             $subjectsWithType = $subform->getSubFormModels();
             $subjects = array_merge($subjects, $subjectsWithType);
         }
-        
+
         $document->setSubject($subjects);
     }
-    
 }

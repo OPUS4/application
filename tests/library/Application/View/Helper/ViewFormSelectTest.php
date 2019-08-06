@@ -31,24 +31,26 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Application_View_Helper_ViewFormSelectTest extends ControllerTestCase {
+class Application_View_Helper_ViewFormSelectTest extends ControllerTestCase
+{
 
-    public function testViewFormSelect() {
+    public function testViewFormSelect()
+    {
         $helper = new Application_View_Helper_ViewFormSelect();
         $helper->setView(new Zend_View());
 
-        $markup = $helper->viewFormSelect('testName', '1', null, array('Value1', 'Value2', 'Value3'));
+        $markup = $helper->viewFormSelect('testName', '1', null, ['Value1', 'Value2', 'Value3']);
 
         $this->assertEquals('<div id="testName" class="field">Value2</div>', $markup);
     }
 
-    public function testViewFormSelectEscaping() {
+    public function testViewFormSelectEscaping()
+    {
         $helper = new Application_View_Helper_ViewFormSelect();
         $helper->setView(new Zend_View());
 
-        $markup = $helper->viewFormSelect('testName', '1', null, array('Value1', '<h1>Value2</h1>', 'Value3'));
+        $markup = $helper->viewFormSelect('testName', '1', null, ['Value1', '<h1>Value2</h1>', 'Value3']);
 
         $this->assertEquals('<div id="testName" class="field">&lt;h1&gt;Value2&lt;/h1&gt;</div>', $markup);
     }
-
 }

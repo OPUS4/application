@@ -32,7 +32,7 @@
  */
 
 /**
- * 
+ *
  * Durchsucht die Vornamen aller in der Datenbank abgespeicherten Personen.
  * Ist in einem Vornamen auch der akademische Titel angegebenen (in Klammern),
  * dann wird dieser entfernt und in dem dafür vorgesehenen OPUS4-Feld
@@ -40,14 +40,13 @@
  *
  * Dieses Problem tritt auf bei der Migration aus OPUS3, wo es noch kein
  * separates Feld für das Ablegen des akademischen Titels einer Person gab.
- * 
+ *
  */
 
 foreach (Opus_Person::getAll() as $person) {
-
     $firstname = $person->getFirstName();
     $numOfOpeningParenthesis = substr_count($firstname, '(');
-    $numOfClosingParenthesis = substr_count($firstname, ')');    
+    $numOfClosingParenthesis = substr_count($firstname, ')');
 
     if ($numOfOpeningParenthesis != $numOfClosingParenthesis) {
         // conflict found
@@ -86,11 +85,9 @@ foreach (Opus_Person::getAll() as $person) {
         $person->store();
         echo '[INFO] Opus_Person #' . $person->getId() . " changed firstname from '$firstname' "
             . "to '$remainingFirstname' and set academicTitle to '$academicTitle'\n";
-    }
-    catch (Exception $e) {
+    } catch (Exception $e) {
         echo '[ERR] Opus_Person #' . $person->getId() . ' could not be stored to database: ' . $e->getMessage() . "\n";
     }
-
 }
 
 exit();

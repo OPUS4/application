@@ -41,17 +41,12 @@ class Application_View_Helper_AssignCollectionAllowed extends Zend_View_Helper_A
 
     public function assignCollectionAllowed($collection, $docId = null)
     {
-        if (!is_null($docId))
-        {
-            if (isset($collection['assigned']) && $collection['assigned'])
-            {
+        if (! is_null($docId)) {
+            if (isset($collection['assigned']) && $collection['assigned']) {
                 return false;
-            }
-            else if (isset($collection['collection']))
-            {
+            } elseif (isset($collection['collection'])) {
                 $colObj = $collection['collection'];
-                if ($colObj->holdsDocumentById($docId))
-                {
+                if ($colObj->holdsDocumentById($docId)) {
                     return false;
                 }
             }
@@ -60,24 +55,20 @@ class Application_View_Helper_AssignCollectionAllowed extends Zend_View_Helper_A
 
         $role = null;
 
-        if (isset($collection['role']))
-        {
+        if (isset($collection['role'])) {
             $role = $collection['role'];
         }
 
-        if (isset($collection['isLeaf']) && !$collection['isLeaf'] && !is_null($role)
-            && $role->getAssignLeavesOnly() == 1)
-        {
+        if (isset($collection['isLeaf']) && ! $collection['isLeaf'] && ! is_null($role)
+            && $role->getAssignLeavesOnly() == 1) {
             return false;
         }
 
-        if (isset($collection['isRoot']) && $collection['isRoot'] && !is_null($role)
-            && $role->getAssignRoot() == 0)
-        {
+        if (isset($collection['isRoot']) && $collection['isRoot'] && ! is_null($role)
+            && $role->getAssignRoot() == 0) {
             return false;
         }
 
         return true;
     }
-
 }

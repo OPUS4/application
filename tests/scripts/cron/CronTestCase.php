@@ -39,7 +39,7 @@ class CronTestCase extends ControllerTestCase
 
     protected static $scriptPath;
     protected static $lockDir;
-    private $jobIds = array();
+    private $jobIds = [];
 
     public static function setUpBeforeClass()
     {
@@ -50,13 +50,12 @@ class CronTestCase extends ControllerTestCase
 
     public function tearDown()
     {
-        if (!empty($this->jobIds)) {
+        if (! empty($this->jobIds)) {
             foreach ($this->jobIds as $jobId) {
                 try {
                     $job = new Opus_Job($jobId);
                     $job->delete();
                 } catch (Opus_Model_NotFoundException $e) {
-
                 }
             }
         }
@@ -75,7 +74,7 @@ class CronTestCase extends ControllerTestCase
         return $result;
     }
 
-    protected function createJob($label, $data = array())
+    protected function createJob($label, $data = [])
     {
         $job = new Opus_Job();
         $job->setLabel($label);

@@ -31,11 +31,11 @@
  * @category    Application
  * @package     Admin_Form
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class Admin_Form_File extends Admin_Form_AbstractModelSubForm {
+class Admin_Form_File extends Admin_Form_AbstractModelSubForm
+{
 
     /**
      * Name fuer die Formularelemente.
@@ -67,7 +67,8 @@ class Admin_Form_File extends Admin_Form_AbstractModelSubForm {
 
     const SUBFORM_HASHES                = 'Hashes';
 
-    public function init() {
+    public function init()
+    {
         parent::init();
 
         $this->setUseNameAsLabel(true);
@@ -94,30 +95,33 @@ class Admin_Form_File extends Admin_Form_AbstractModelSubForm {
         $element = $this->createElement('SortOrder', self::ELEMENT_SORT_ORDER);
         $this->addElement($element);
 
-        $this->addElement('Language', self::ELEMENT_LANGUAGE, array('label' => 'Language', 'required' => true));
+        $this->addElement('Language', self::ELEMENT_LANGUAGE, ['label' => 'Language', 'required' => true]);
         $this->addElement('text', self::ELEMENT_LABEL);
         $this->addElement('textarea', self::ELEMENT_COMMENT);
 
         $this->addSubForm(new Admin_Form_File_Hashes(), self::SUBFORM_HASHES);
 
         $this->addElement(
-            'multiCheckbox', self::ELEMENT_VISIBILITY, array(
-            'multiOptions' => array(
+            'multiCheckbox',
+            self::ELEMENT_VISIBILITY,
+            [
+            'multiOptions' => [
                 'frontdoor' => 'admin_filemanager_label_visibleinfrontdoor',
                 'oai' => 'admin_filemanager_label_visibleinoai'
-            ),
+            ],
             'label' => 'admin_filemanager_file_visibility'
-            )
+            ]
         );
 
-        $this->addElement('Roles', self::ELEMENT_ROLES, array('label' => 'admin_filemanager_file_roles'));
+        $this->addElement('Roles', self::ELEMENT_ROLES, ['label' => 'admin_filemanager_file_roles']);
     }
 
     /**
      * Initialisierung des Formulars mit den Werten in einer Model-Instanz.
      * @param Opus_File $file
      */
-    public function populateFromModel($file) {
+    public function populateFromModel($file)
+    {
         $this->getElement(self::ELEMENT_ID)->setValue($file->getId());
         $this->getElement(self::ELEMENT_FILE_LINK)->setValue($file);
         $this->getElement(self::ELEMENT_LABEL)->setValue($file->getLabel());
@@ -129,7 +133,7 @@ class Admin_Form_File extends Admin_Form_AbstractModelSubForm {
         );
         $this->getElement(self::ELEMENT_SORT_ORDER)->setValue($file->getSortOrder());
 
-        $visibility = array();
+        $visibility = [];
 
         if ($file->getVisibleInFrontdoor()) {
             $visibility[] = 'frontdoor';
@@ -150,7 +154,8 @@ class Admin_Form_File extends Admin_Form_AbstractModelSubForm {
      * @param array $post
      * @return Zend_Form
      */
-    public function setDefaults(array $defaults) {
+    public function setDefaults(array $defaults)
+    {
         $return = parent::setDefaults($defaults);
 
         if (isset($defaults[$this->getName()])) {
@@ -158,8 +163,7 @@ class Admin_Form_File extends Admin_Form_AbstractModelSubForm {
             $file = new Opus_File($fileId);
             $this->getSubForm(self::SUBFORM_HASHES)->populateFromModel($file);
             $this->getElement(self::ELEMENT_FILE_SIZE)->setValue($file->getFileSize());
-        }
-        else {
+        } else {
             $this->getLogger()->err('No POST data for subform \'' . $this->getName() . '\'.');
         }
         return $return;
@@ -169,16 +173,17 @@ class Admin_Form_File extends Admin_Form_AbstractModelSubForm {
      * Update einer Model-Instanz mit den Werten im Formular.
      * @param Opus_Model_AbstractDb $model
      */
-    public function updateModel($file) {
+    public function updateModel($file)
+    {
         $file->setLanguage($this->getElementValue(self::ELEMENT_LANGUAGE));
         $file->setLabel($this->getElementValue(self::ELEMENT_LABEL));
         $file->setComment($this->getElementValue(self::ELEMENT_COMMENT));
 
         $sortOrder = $this->getElementValue(self::ELEMENT_SORT_ORDER);
-        $file->setSortOrder(!is_null($sortOrder) ? $sortOrder : 0);
+        $file->setSortOrder(! is_null($sortOrder) ? $sortOrder : 0);
 
         $visibility = $this->getElementValue(self::ELEMENT_VISIBILITY);
-        $visibility = (is_array($visibility)) ? $visibility : array($visibility);
+        $visibility = (is_array($visibility)) ? $visibility : [$visibility];
 
         $file->setVisibleInFrontdoor(in_array('frontdoor', $visibility));
         $file->setVisibleInOai(in_array('oai', $visibility));
@@ -191,14 +196,14 @@ class Admin_Form_File extends Admin_Form_AbstractModelSubForm {
     /**
      * Liefert angezeigte Datei.
      */
-    function getModel() {
+    public function getModel()
+    {
         $fileId = $this->getElementValue(self::ELEMENT_ID);
 
         if (strlen(trim($fileId)) > 0 && is_numeric($fileId)) {
             try {
                 $file = new Opus_File($fileId);
-            }
-            catch (Opus_Model_NotFoundException $omnfe) {
+            } catch (Opus_Model_NotFoundException $omnfe) {
                 $this->getLogger()->err(__METHOD__ . " Unknown file ID = '$fileId'.");
                 throw new Application_Exception("Unknown file ID = '$fileId'.");
             }
@@ -206,8 +211,7 @@ class Admin_Form_File extends Admin_Form_AbstractModelSubForm {
             $this->updateModel($file);
 
             return $file;
-        }
-        else {
+        } else {
             $this->getLogger()->err(__METHOD__ . " Bad file ID = '$fileId'.");
             throw new Application_Exception("Bad file ID = '$fileId'.");
         }
@@ -215,8 +219,9 @@ class Admin_Form_File extends Admin_Form_AbstractModelSubForm {
         return null;
     }
 
-    public function getRolesForFile($fileId) {
-        $checkedRoles = array();
+    public function getRolesForFile($fileId)
+    {
+        $checkedRoles = [];
 
         $roles = Opus_UserRole::getAll();
 
@@ -230,8 +235,9 @@ class Admin_Form_File extends Admin_Form_AbstractModelSubForm {
         return $checkedRoles;
     }
 
-    public function updateFileRoles($file, $selectedRoles) {
-        $selectedRoles = (is_array($selectedRoles)) ? $selectedRoles : array($selectedRoles);
+    public function updateFileRoles($file, $selectedRoles)
+    {
+        $selectedRoles = (is_array($selectedRoles)) ? $selectedRoles : [$selectedRoles];
 
         $fileId = $file->getId();
 
@@ -239,7 +245,7 @@ class Admin_Form_File extends Admin_Form_AbstractModelSubForm {
 
         // remove roles that are not selected
         foreach ($currentRoleNames as $index => $roleName) {
-            if (!in_array($roleName, $selectedRoles)) {
+            if (! in_array($roleName, $selectedRoles)) {
                 $role = Opus_UserRole::fetchByName($roleName);
                 $role->removeAccessFile($fileId);
                 $role->store();
@@ -254,23 +260,17 @@ class Admin_Form_File extends Admin_Form_AbstractModelSubForm {
         // add selected roles
         foreach ($selectedRoles as $roleName) {
             $role = Opus_UserRole::fetchByName($roleName);
-            if (!is_null($role)) {
-                if (!in_array($roleName, $currentRoleNames)) {
+            if (! is_null($role)) {
+                if (! in_array($roleName, $currentRoleNames)) {
                     $role->appendAccessFile($fileId);
                     $role->store();
                     $this->getLogger()->debug("File ID = $fileId access for role '$roleName' added.");
-                }
-                else {
+                } else {
                     $this->getLogger()->debug("File ID = $fileId access for role '$roleName' already permitted.");
                 }
-            }
-            else {
+            } else {
                 $this->getLogger()->err(__METHOD__ . " Unknown role '$roleName'.'");
             }
         }
-
     }
-
 }
-
-

@@ -39,10 +39,11 @@
  * @package     Module_Admin
  * @subpackage  Form_Document
  */
-class Admin_Form_Document_Grantor extends Admin_Form_Document_Institute {
-    
-    public function __construct() {
+class Admin_Form_Document_Grantor extends Admin_Form_Document_Institute
+{
+
+    public function __construct()
+    {
         parent::__construct(self::ROLE_GRANTOR);
     }
-    
 }

@@ -129,7 +129,7 @@ class Application_Controller_MessageTemplatesTest extends TestCase
 
     public function testSetMessageArray()
     {
-        $message = array('failure' => 'Something bad happened!');
+        $message = ['failure' => 'Something bad happened!'];
         $this->messageTemplates->setMessage('newkey', $message);
         $this->assertEquals($message, $this->messageTemplates->getMessage('newkey'));
     }

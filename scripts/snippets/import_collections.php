@@ -45,12 +45,12 @@ $inputFile = '../workspace/tmp/test.txt';
 // visibility status of imported collections
 $visible = true;
 
-if (!file_exists($inputFile)) {
+if (! file_exists($inputFile)) {
     echo "Error: input file $inputFile does not exist\n";
     exit();
 }
 
-if (!is_readable($inputFile)) {
+if (! is_readable($inputFile)) {
     echo "Error: input file $inputFile is not readable\n";
     exit();
 }
@@ -58,14 +58,12 @@ if (!is_readable($inputFile)) {
 $rootCollection = null;
 try {
     $rootCollection = new Opus_Collection($parentCollectionId);
-}
-catch (Opus_Model_NotFoundException $e) {
+} catch (Opus_Model_NotFoundException $e) {
     echo "Error: collection with id $parentCollectionId does not exist\n";
     exit();
 }
 
-if (!is_null($rootCollection)) {
-
+if (! is_null($rootCollection)) {
     $lineCount = 0;
     $linesImported = 0;
     foreach (file($inputFile) as $line) {

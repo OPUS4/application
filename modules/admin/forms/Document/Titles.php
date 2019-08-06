@@ -46,12 +46,14 @@
  * @category    Application
  * @package     Module_Admin
  */
-class Admin_Form_Document_Titles extends Admin_Form_Document_Section {
+class Admin_Form_Document_Titles extends Admin_Form_Document_Section
+{
 
     /**
      * Initialisiert das Formular und erzeugt die Unterformulare für die Titeltypen.
      */
-    public function init() {
+    public function init()
+    {
         parent::init();
 
         $this->setLegend('admin_document_section_titles');
@@ -59,22 +61,27 @@ class Admin_Form_Document_Titles extends Admin_Form_Document_Section {
         $this->addSubForm(new Admin_Form_Document_TitlesMain(), 'Main');
         $this->addSubForm(
             new Admin_Form_Document_MultiSubForm(
-                'Admin_Form_Document_Title', 'TitleAdditional',
+                'Admin_Form_Document_Title',
+                'TitleAdditional',
                 new Application_Form_Validate_MultiSubForm_RepeatedLanguages()
-            ), 'Additional'
+            ),
+            'Additional'
         );
         $this->addSubForm(
             new Admin_Form_Document_MultiSubForm(
-                'Admin_Form_Document_Title', 'TitleParent',
+                'Admin_Form_Document_Title',
+                'TitleParent',
                 new Application_Form_Validate_MultiSubForm_RepeatedLanguages()
-            ), 'Parent'
+            ),
+            'Parent'
         );
         $this->addSubForm(
             new Admin_Form_Document_MultiSubForm(
-                'Admin_Form_Document_Title', 'TitleSub',
+                'Admin_Form_Document_Title',
+                'TitleSub',
                 new Application_Form_Validate_MultiSubForm_RepeatedLanguages()
-            ), 'Sub'
+            ),
+            'Sub'
         );
     }
-
 }

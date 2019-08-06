@@ -49,5 +49,4 @@ class Solrsearch_Model_Search_AdvancedTest extends ControllerTestCase
 
         // $results = $this->_search->performSearch($query);
     }
-
 }

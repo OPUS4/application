@@ -38,7 +38,8 @@
  * @category    Application
  * @package     Controller
  */
-class Application_Controller_Plugin_Navigation extends Zend_Controller_Plugin_Abstract {
+class Application_Controller_Plugin_Navigation extends Zend_Controller_Plugin_Abstract
+{
 
     /**
      * Set up Opus_Navigation.
@@ -46,7 +47,8 @@ class Application_Controller_Plugin_Navigation extends Zend_Controller_Plugin_Ab
      * @param Zend_Controller_Request_Abstract $request The current request.
      * @return void
      */
-    public function routeStartup(Zend_Controller_Request_Abstract $request) {
+    public function routeStartup(Zend_Controller_Request_Abstract $request)
+    {
 
         // Hide menu entries based on privileges
         $navigation = Zend_Registry::get('Opus_Navigation');
@@ -60,18 +62,16 @@ class Application_Controller_Plugin_Navigation extends Zend_Controller_Plugin_Ab
 
         // Der folgende Code sorgt dafür, daß für Nutzer mit Zugriff auf das 'admin' und das 'review' Modul der Link
         // zu den Review Seiten in der Administration angezeigt wird.
-        if ($realm->checkModule('admin') or !$realm->checkModule('review')) {
+        if ($realm->checkModule('admin') or ! $realm->checkModule('review')) {
             // Entferne Link zu Review
             $page = $navigation->findBy('label', 'review_menu_label');
             $navigation->removePage($page);
         }
 
-        if (!$realm->checkModule('admin')) {
+        if (! $realm->checkModule('admin')) {
             // Entferne Link zu Admin
             $page = $navigation->findBy('label', 'admin_menu_label');
             $navigation->removePage($page);
         }
-
     }
-
 }

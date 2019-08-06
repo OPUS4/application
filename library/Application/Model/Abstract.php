@@ -35,7 +35,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-abstract class Application_Model_Abstract {
+abstract class Application_Model_Abstract
+{
 
     /**
      * Logger for this class.
@@ -53,7 +54,8 @@ abstract class Application_Model_Abstract {
      * Set logger for this class.
      * @param Zend_Log $logger
      */
-    public function setLogger($logger) {
+    public function setLogger($logger)
+    {
         $this->_logger = $logger;
     }
 
@@ -61,7 +63,8 @@ abstract class Application_Model_Abstract {
      * Returns logger for this class.
      * @return Zend_Log
      */
-    public function getLogger() {
+    public function getLogger()
+    {
         if (is_null($this->_logger)) {
             $this->_logger = Zend_Registry::get('Zend_Log');
         }
@@ -73,7 +76,8 @@ abstract class Application_Model_Abstract {
      * Sets configuration.
      * @param $config Zend_Config
      */
-    public function setConfig(Zend_Config $config = null) {
+    public function setConfig(Zend_Config $config = null)
+    {
         $this->_config = $config;
     }
 
@@ -82,11 +86,11 @@ abstract class Application_Model_Abstract {
      * @return Zend_Config
      * @throws Zend_Exception
      */
-    public function getConfig() {
+    public function getConfig()
+    {
         if (is_null($this->_config)) {
             $this->_config = Zend_Registry::get('Zend_Config');
         }
         return $this->_config;
     }
-
 }

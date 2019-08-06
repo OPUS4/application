@@ -45,19 +45,16 @@ class Application_Util_File
      * @param $properties Array with properties for replacement
      * @throws Exception
      */
-    public static function copyAndFilter($source, $dest, $properties) {
-        if (is_readable($source))
-        {
+    public static function copyAndFilter($source, $dest, $properties)
+    {
+        if (is_readable($source)) {
             $content = file_get_contents($source);
 
             $content = Application_Util_String::replaceProperties($content, $properties);
 
             file_put_contents($dest, $content);
-        }
-        else
-        {
+        } else {
             throw new Exception("could not read source file ($source)");
         }
     }
-
 }

@@ -34,9 +34,11 @@
  * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Application_View_Helper_ViewFormSelect extends Zend_View_Helper_FormSelect {
+class Application_View_Helper_ViewFormSelect extends Zend_View_Helper_FormSelect
+{
 
-    public function viewFormSelect($name, $value = null, $attribs = null, $options = null, $listsep = "<br />\n") {
+    public function viewFormSelect($name, $value = null, $attribs = null, $options = null, $listsep = "<br />\n")
+    {
         $info = $this->_getInfo($name, $value, $attribs, $options, $listsep);
         extract($info);
 
@@ -48,5 +50,4 @@ class Application_View_Helper_ViewFormSelect extends Zend_View_Helper_FormSelect
 
         return $markup;
     }
-
 }

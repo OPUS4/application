@@ -40,4 +40,3 @@ $jobrunner->registerWorker($indexWorker);
 
 // run processing
 $jobrunner->run();
-

@@ -52,13 +52,11 @@ class Admin_ConfigControllerTest extends ControllerTestCase
 
     public function testIndexActionCancel()
     {
-        $this->getRequest()->setMethod('POST')->setPost(array(
+        $this->getRequest()->setMethod('POST')->setPost([
             'Cancel' => 'Cancel'
-        ));
+        ]);
 
         $this->dispatch('/admin/config');
         $this->assertRedirectTo('/admin/index/config');
     }
-
 }
-

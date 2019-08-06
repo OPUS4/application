@@ -63,7 +63,9 @@ class Application_Form_Validate_MultiSubForm_RepeatedValuesTest extends Controll
     public function testConstructWithOtherElements()
     {
         $instance = new Application_Form_Validate_MultiSubForm_RepeatedValues(
-            'Value', 'testmessage', array('Language', 'Active')
+            'Value',
+            'testmessage',
+            ['Language', 'Active']
         );
 
         $this->assertEquals('Value', $instance->getElementName());
@@ -114,71 +116,73 @@ class Application_Form_Validate_MultiSubForm_RepeatedValuesTest extends Controll
     {
         $validator = new Application_Form_Validate_MultiSubForm_RepeatedValues('Language', 'message');
 
-        $post = array(
-            'subform1' => array(
+        $post = [
+            'subform1' => [
                 'Language' => 'deu'
-            ),
-            'subform2' => array(
+            ],
+            'subform2' => [
                 'Language' => 'eng'
-            )
-        );
+            ]
+        ];
 
         $values = $validator->getValues('Language', $post);
 
         $this->assertEquals(2, count($values));
-        $this->assertEquals(array('deu', 'eng'), $values);
+        $this->assertEquals(['deu', 'eng'], $values);
     }
 
     public function testGetValuesWithOtherElement()
     {
         $validator = new Application_Form_Validate_MultiSubForm_RepeatedValues('Value', 'message', 'Language');
 
-        $post = array(
-            'subform1' => array(
+        $post = [
+            'subform1' => [
                 'Language' => 'deu',
                 'Value' => 'Schlagwort 1'
-            ),
-            'subform2' => array(
+            ],
+            'subform2' => [
                 'Language' => 'eng',
                 'Value' => 'Schlagwort 2'
-            )
-        );
+            ]
+        ];
 
         $values = $validator->getValues('Value', $post);
 
         $this->assertEquals(2, count($values));
-        $this->assertEquals(array(
-            array('deu', 'Schlagwort 1'),
-            array('eng', 'Schlagwort 2')
-        ), $values);
+        $this->assertEquals([
+            ['deu', 'Schlagwort 1'],
+            ['eng', 'Schlagwort 2']
+        ], $values);
     }
 
     public function testGetValuesWithOtherElements()
     {
         $validator = new Application_Form_Validate_MultiSubForm_RepeatedValues(
-            'Value', 'message', array('Language', 'Active')
+            'Value',
+            'message',
+            ['Language', 'Active']
         );
 
-        $post = array(
-            'subform1' => array(
+        $post = [
+            'subform1' => [
                 'Language' => 'deu',
                 'Value' => 'Schlagwort 1',
                 'Active' => '1'
-            ),
-            'subform2' => array(
+            ],
+            'subform2' => [
                 'Language' => 'eng',
                 'Value' => 'Schlagwort 2',
                 'Active' => 0
-            )
-        );
+            ]
+        ];
 
         $values = $validator->getValues('Value', $post);
 
         $this->assertEquals(2, count($values));
-        $this->assertEquals(array(
-            array('deu', '1', 'Schlagwort 1'),
-            array('eng', '0', 'Schlagwort 2')
-        ), $values);
+        $this->assertEquals([
+            ['deu', '1', 'Schlagwort 1'],
+            ['eng', '0', 'Schlagwort 2']
+        ], $values);
     }
 
     public function testPrepareValidation()
@@ -195,14 +199,14 @@ class Application_Form_Validate_MultiSubForm_RepeatedValuesTest extends Controll
         $subform->addElement('text', 'Language');
         $form->addSubForm($subform, 'subform2');
 
-        $post = array(
-            'subform1' => array(
+        $post = [
+            'subform1' => [
                 'Language' => 'deu'
-            ),
-            'subform2' => array(
+            ],
+            'subform2' => [
                 'Language' => 'eng'
-            )
-        );
+            ]
+        ];
 
         $validator->prepareValidation($form, $post, null);
 
@@ -212,7 +216,7 @@ class Application_Form_Validate_MultiSubForm_RepeatedValuesTest extends Controll
             $element = $subform->getElement('Language');
             $this->assertTrue($element->getValidator('Application_Form_Validate_DuplicateValue') !== false);
             $validator = $element->getValidator('Application_Form_Validate_DuplicateValue');
-            $this->assertEquals(array('deu', 'eng'), $validator->getValues());
+            $this->assertEquals(['deu', 'eng'], $validator->getValues());
             $this->assertEquals($position++, $validator->getPosition());
             $messageTemplates = $validator->getMessageTemplates();
             $this->assertEquals('testmessage', $messageTemplates['notValid']);
@@ -233,16 +237,16 @@ class Application_Form_Validate_MultiSubForm_RepeatedValuesTest extends Controll
         $subform->addElement('text', 'Value');
         $form->addSubForm($subform, 'subform2');
 
-        $post = array(
-            'subform1' => array(
+        $post = [
+            'subform1' => [
                 'Language' => 'deu',
                 'Value' => 'Schlagwort 1'
-            ),
-            'subform2' => array(
+            ],
+            'subform2' => [
                 'Language' => 'eng',
                 'Value' => 'Schlagwort 2'
-            )
-        );
+            ]
+        ];
 
         $validator->prepareValidation($form, $post, null);
 
@@ -252,13 +256,13 @@ class Application_Form_Validate_MultiSubForm_RepeatedValuesTest extends Controll
             $element = $subform->getElement('Value');
             $this->assertTrue($element->getValidator('Application_Form_Validate_DuplicateMultiValue') !== false);
             $validator = $element->getValidator('Application_Form_Validate_DuplicateMultiValue');
-            $this->assertEquals(array(array('deu', 'Schlagwort 1'), array('eng', 'Schlagwort 2')),
-                $validator->getValues());
+            $this->assertEquals(
+                [['deu', 'Schlagwort 1'], ['eng', 'Schlagwort 2']],
+                $validator->getValues()
+            );
             $this->assertEquals($position++, $validator->getPosition());
             $messageTemplates = $validator->getMessageTemplates();
             $this->assertEquals('testmessage', $messageTemplates['notValid']);
         }
     }
-
-
 }

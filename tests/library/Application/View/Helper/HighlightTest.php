@@ -71,5 +71,4 @@ class Application_View_Helper_HighlightTest extends ControllerTestCase
     {
         $this->assertEquals('Ján', $this->_helper->highlight('Ján', null));
     }
-
 }

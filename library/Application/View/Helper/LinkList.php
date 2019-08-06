@@ -31,9 +31,11 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Application_View_Helper_LinkList extends Application_View_Helper_Abstract {
+class Application_View_Helper_LinkList extends Application_View_Helper_Abstract
+{
 
-    public function linkList($links) {
+    public function linkList($links)
+    {
         if (is_array($links)) {
             $markup = '<ul>';
             foreach ($links as $href => $label) {
@@ -42,12 +44,10 @@ class Application_View_Helper_LinkList extends Application_View_Helper_Abstract 
             }
             $markup .= '</ul>';
             return $markup;
-        }
-        else {
+        } else {
             $this->getLogger()->err(__METHOD__ . ' Parameter must be array.');
         }
 
         return '';
     }
-
 }

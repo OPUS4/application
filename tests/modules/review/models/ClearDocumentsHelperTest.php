@@ -44,8 +44,8 @@ class Review_Model_ClearDocumentsHelperTest extends ControllerTestCase
 
         $document = $this->createTestDocument();
         $document->setServerState('unpublished');
-        $document->setPersonReferee(array());
-        $document->setEnrichment(array());
+        $document->setPersonReferee([]);
+        $document->setEnrichment([]);
         $this->documentId = $document->store();
 
         $document = new Opus_Document($this->documentId);
@@ -61,7 +61,7 @@ class Review_Model_ClearDocumentsHelperTest extends ControllerTestCase
     public function testClearDocument()
     {
         $helper = new Review_Model_ClearDocumentsHelper();
-        $helper->clear(array($this->documentId), 23, $this->person);
+        $helper->clear([$this->documentId], 23, $this->person);
 
         $document = new Opus_Document($this->documentId);
         $this->assertEquals('published', $document->getServerState());
@@ -90,7 +90,7 @@ class Review_Model_ClearDocumentsHelperTest extends ControllerTestCase
         $document->store();
 
         $helper = new Review_Model_ClearDocumentsHelper();
-        $helper->clear(array($this->documentId), 23, $this->person);
+        $helper->clear([$this->documentId], 23, $this->person);
 
         $document = new Opus_Document($this->documentId);
         $this->assertEquals('published', $document->getServerState());
@@ -104,7 +104,7 @@ class Review_Model_ClearDocumentsHelperTest extends ControllerTestCase
     public function testRejectDocument()
     {
         $helper = new Review_Model_ClearDocumentsHelper();
-        $helper->reject(array($this->documentId), 23, $this->person);
+        $helper->reject([$this->documentId], 23, $this->person);
 
         $document = new Opus_Document($this->documentId);
         $this->assertNotEquals('published', $document->getServerState());
@@ -120,7 +120,7 @@ class Review_Model_ClearDocumentsHelperTest extends ControllerTestCase
         $helper = new Review_Model_ClearDocumentsHelper();
 
         $this->setExpectedException('Opus_Model_NotFoundException');
-        $helper->clear(array($this->documentId + 100000), 23);
+        $helper->clear([$this->documentId + 100000], 23);
     }
 
     public function testRejectInvalidDocument()
@@ -128,13 +128,13 @@ class Review_Model_ClearDocumentsHelperTest extends ControllerTestCase
         $helper = new Review_Model_ClearDocumentsHelper();
 
         $this->setExpectedException('Opus_Model_NotFoundException');
-        $helper->reject(array($this->documentId + 100000), 23);
+        $helper->reject([$this->documentId + 100000], 23);
     }
 
     public function testClearDocumentWoPerson()
     {
         $helper = new Review_Model_ClearDocumentsHelper();
-        $helper->clear(array($this->documentId), 23);
+        $helper->clear([$this->documentId], 23);
 
         $document = new Opus_Document($this->documentId);
         $this->assertEquals('published', $document->getServerState());
@@ -148,7 +148,7 @@ class Review_Model_ClearDocumentsHelperTest extends ControllerTestCase
     public function testRejectDocumentWoPerson()
     {
         $helper = new Review_Model_ClearDocumentsHelper();
-        $helper->reject(array($this->documentId), 23);
+        $helper->reject([$this->documentId], 23);
 
         $document = new Opus_Document($this->documentId);
         $this->assertNotEquals('published', $document->getServerState());
