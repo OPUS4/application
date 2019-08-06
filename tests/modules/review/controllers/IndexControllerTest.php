@@ -48,8 +48,8 @@ class Review_IndexControllerTest extends ControllerTestCase
 
         $document = $this->createTestDocument();
         $document->setServerState('unpublished');
-        $document->setPersonReferee(array());
-        $document->setEnrichment(array());
+        $document->setPersonReferee([]);
+        $document->setEnrichment([]);
         $this->documentId = $document->store();
 
         $document = new Opus_Document($this->documentId);
@@ -92,10 +92,10 @@ class Review_IndexControllerTest extends ControllerTestCase
     {
         $this->request
             ->setMethod('POST')
-            ->setPost(array(
-                'selected' => array('1', $this->documentId),
+            ->setPost([
+                'selected' => ['1', $this->documentId],
                 'buttonSubmit' => 'buttonSubmit',
-            ));
+            ]);
         $this->dispatch('/review/index/index');
 
         $this->assertResponseCode(200);
@@ -115,9 +115,9 @@ class Review_IndexControllerTest extends ControllerTestCase
     {
         $this->request
             ->setMethod('POST')
-            ->setPost(array(
+            ->setPost([
                 'selected' => $this->documentId,
-            ));
+            ]);
         $this->dispatch('/review/index/clear');
 
         $this->assertResponseCode(200);
@@ -137,10 +137,10 @@ class Review_IndexControllerTest extends ControllerTestCase
     {
         $this->request
             ->setMethod('POST')
-            ->setPost(array(
+            ->setPost([
                 'selected' => $this->documentId,
                 'sureno' => 'no',
-            ));
+            ]);
         $this->dispatch('/review/index/clear');
 
         $this->assertResponseCode(200);
@@ -160,10 +160,10 @@ class Review_IndexControllerTest extends ControllerTestCase
     {
         $this->request
             ->setMethod('POST')
-            ->setPost(array(
+            ->setPost([
                 'selected' => $this->documentId,
                 'sureyes' => 'yes',
-            ));
+            ]);
         $this->dispatch('/review/index/clear');
 
         $this->assertResponseCode(200);
@@ -183,9 +183,9 @@ class Review_IndexControllerTest extends ControllerTestCase
     {
         $this->request
             ->setMethod('POST')
-            ->setPost(array(
+            ->setPost([
                 'selected' => $this->documentId,
-            ));
+            ]);
         $this->dispatch('/review/index/reject');
 
         $this->assertResponseCode(200);
@@ -205,10 +205,10 @@ class Review_IndexControllerTest extends ControllerTestCase
     {
         $this->request
             ->setMethod('POST')
-            ->setPost(array(
+            ->setPost([
                 'selected' => $this->documentId,
                 'sureno' => 'no',
-            ));
+            ]);
         $this->dispatch('/review/index/reject');
 
         $this->assertResponseCode(200);
@@ -228,10 +228,10 @@ class Review_IndexControllerTest extends ControllerTestCase
     {
         $this->request
             ->setMethod('POST')
-            ->setPost(array(
+            ->setPost([
                 'selected' => $this->documentId,
                 'sureyes' => 'yes',
-            ));
+            ]);
         $this->dispatch('/review/index/reject');
 
         $this->assertResponseCode(200);
@@ -246,5 +246,4 @@ class Review_IndexControllerTest extends ControllerTestCase
         $document = new Opus_Document($this->documentId);
         $this->assertEquals('deleted', $document->getServerState());
     }
-
 }

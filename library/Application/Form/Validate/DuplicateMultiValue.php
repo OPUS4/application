@@ -33,23 +33,25 @@
  */
 
 
-class Application_Form_Validate_DuplicateMultiValue extends Application_Form_Validate_DuplicateValue {
+class Application_Form_Validate_DuplicateMultiValue extends Application_Form_Validate_DuplicateValue
+{
 
     private $_otherElements;
 
-    public function __construct($values, $position, $message, $otherElements) {
-        if (!is_array($otherElements)) {
-            $this->_otherElements = array($otherElements);
-        }
-        else {
+    public function __construct($values, $position, $message, $otherElements)
+    {
+        if (! is_array($otherElements)) {
+            $this->_otherElements = [$otherElements];
+        } else {
             $this->_otherElements = $otherElements;
         }
 
         parent::__construct($values, $position, $message);
     }
 
-    protected function isEqual($value, $context, $other) {
-        $multiValue = array();
+    protected function isEqual($value, $context, $other)
+    {
+        $multiValue = [];
 
         foreach ($this->_otherElements as $element) {
             if (isset($context[$element])) {
@@ -62,5 +64,4 @@ class Application_Form_Validate_DuplicateMultiValue extends Application_Form_Val
         // Return true wenn keine Unterschiede gefunden wurden
         return count(array_diff($multiValue, $other)) == 0;
     }
-
 }

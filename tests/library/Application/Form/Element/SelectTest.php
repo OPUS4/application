@@ -38,8 +38,8 @@ class Application_Form_Element_SelectTest extends FormElementTestCase
     {
         $this->_formElementClass = 'Application_Form_Element_Select';
         $this->_expectedDecoratorCount = 6;
-        $this->_expectedDecorators = array('ViewHelper', 'Errors', 'Description', 'ElementHtmlTag', 'LabelNotEmpty',
-            'dataWrapper');
+        $this->_expectedDecorators = ['ViewHelper', 'Errors', 'Description', 'ElementHtmlTag', 'LabelNotEmpty',
+            'dataWrapper'];
         $this->_staticViewHelper = 'viewFormSelect';
         parent::setUp();
     }

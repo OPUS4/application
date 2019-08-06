@@ -84,24 +84,30 @@ class Application_View_Helper_BreadcrumbsTest extends ControllerTestCase
     {
         $this->breadcrumbs->setReplacement('Breadcrumbs Text');
 
-        $this->assertEquals('<div class="breadcrumbsContainer"><div class="wrapper">Breadcrumbs Text</div></div>',
-            $this->breadcrumbs->renderStraight());
+        $this->assertEquals(
+            '<div class="breadcrumbsContainer"><div class="wrapper">Breadcrumbs Text</div></div>',
+            $this->breadcrumbs->renderStraight()
+        );
     }
 
     public function testRenderStraight()
     {
         $this->dispatch('/admin');
-        $this->assertEquals('<div class="breadcrumbsContainer"><div class="wrapper">Administration</div></div>',
-            $this->breadcrumbs->renderStraight());
+        $this->assertEquals(
+            '<div class="breadcrumbsContainer"><div class="wrapper">Administration</div></div>',
+            $this->breadcrumbs->renderStraight()
+        );
     }
 
     public function testSetSuffix()
     {
         $this->dispatch('/admin');
         $this->breadcrumbs->setSuffix('(Extra Stuff)');
-        $this->assertEquals('<div class="breadcrumbsContainer">'
+        $this->assertEquals(
+            '<div class="breadcrumbsContainer">'
             . '<div class="wrapper">Administration &gt; (Extra Stuff)</div></div>',
-            $this->breadcrumbs->renderStraight());
+            $this->breadcrumbs->renderStraight()
+        );
     }
 
     public function testSetSuffixWithoutSeparator()
@@ -109,8 +115,10 @@ class Application_View_Helper_BreadcrumbsTest extends ControllerTestCase
         $this->dispatch('/admin');
         $this->breadcrumbs->setSuffix(' (Extra Stuff)');
         $this->breadcrumbs->setSuffixSeparatorDisabled(true);
-        $this->assertEquals('<div class="breadcrumbsContainer">'
+        $this->assertEquals(
+            '<div class="breadcrumbsContainer">'
             . '<div class="wrapper">Administration (Extra Stuff)</div></div>',
-            $this->breadcrumbs->renderStraight());
+            $this->breadcrumbs->renderStraight()
+        );
     }
 }

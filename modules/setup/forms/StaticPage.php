@@ -34,12 +34,14 @@
  */
 
 /**
- * 
+ *
  */
-class Setup_Form_StaticPage extends Zend_Form_SubForm {
+class Setup_Form_StaticPage extends Zend_Form_SubForm
+{
 
-    public function buildFromArray(array $array) {
-        
+    public function buildFromArray(array $array)
+    {
+
         $translator = $this->getTranslator();
 
         foreach ($array as $language => $data) {
@@ -53,7 +55,9 @@ class Setup_Form_StaticPage extends Zend_Form_SubForm {
                         $languageForm->addSubForm($fileForm, 'file');
                         $fileForm->addElement('hidden', 'filename');
                         $fileForm->addElement(
-                            'textarea', 'contents', array('label' => $translator->translate('setup_page_content'))
+                            'textarea',
+                            'contents',
+                            ['label' => $translator->translate('setup_page_content')]
                         );
                         break;
                     case 'key':
@@ -62,8 +66,9 @@ class Setup_Form_StaticPage extends Zend_Form_SubForm {
                         $translationUnits = array_keys($values);
                         foreach ($translationUnits as $translationUnit) {
                             $keyForm->addElement(
-                                'text', $translationUnit,
-                                array('label' => $translator->translate("setup_$translationUnit"), 'size' => 90)
+                                'text',
+                                $translationUnit,
+                                ['label' => $translator->translate("setup_$translationUnit"), 'size' => 90]
                             );
                         }
                         break;
@@ -74,14 +79,15 @@ class Setup_Form_StaticPage extends Zend_Form_SubForm {
         return $this;
     }
 
-    public function isValid($data) {
+    public function isValid($data)
+    {
         $this->buildFromArray($data);
         return parent::isValid($data);
     }
 
-    public function populate(array $values) {
+    public function populate(array $values)
+    {
         $this->buildFromArray($values);
         parent::populate($values);
     }
-
 }

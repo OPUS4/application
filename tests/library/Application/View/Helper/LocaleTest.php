@@ -48,5 +48,4 @@ class Application_View_Helper_LocaleTest extends ControllerTestCase
 
         $this->assertEquals('de', $helper->locale());
     }
-
 }

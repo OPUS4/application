@@ -44,5 +44,4 @@ class Application_View_Helper_CustomFileSortingEnabled extends Zend_View_Helper_
     {
         return Zend_Registry::get('Zend_Config')->frontdoor->files->customSorting == '1';
     }
-
 }

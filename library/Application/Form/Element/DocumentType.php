@@ -64,7 +64,7 @@ class Application_Form_Element_DocumentType extends Application_Form_Element_Sel
 
         $translator = Zend_Registry::get('Zend_Translate');
 
-        if (!is_null($translator)) {
+        if (! is_null($translator)) {
             $label = $translator->translate($value);
         } else {
             $label = $value;

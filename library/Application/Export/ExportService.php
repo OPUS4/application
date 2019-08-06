@@ -60,8 +60,7 @@ class Application_Export_ExportService extends Application_Model_Abstract
     {
         $plugins = $this->getAllPlugins();
 
-        if (isset($plugins[$name]))
-        {
+        if (isset($plugins[$name])) {
             $pluginConfig = $plugins[$name];
             $pluginClass = $pluginConfig->class;
 
@@ -69,9 +68,7 @@ class Application_Export_ExportService extends Application_Model_Abstract
             $plugin->setConfig($pluginConfig);
 
             return $plugin;
-        }
-        else
-        {
+        } else {
             return null;
         }
     }
@@ -85,8 +82,7 @@ class Application_Export_ExportService extends Application_Model_Abstract
      */
     public function getAllPlugins()
     {
-        if (is_null($this->_plugins))
-        {
+        if (is_null($this->_plugins)) {
             $this->loadPlugins();
         }
 
@@ -104,12 +100,10 @@ class Application_Export_ExportService extends Application_Model_Abstract
     {
         $config = $this->getConfig();
 
-        if (isset($config->plugins->export))
-        {
+        if (isset($config->plugins->export)) {
             $exportPlugins = $config->plugins->export->toArray();
 
-            foreach ($exportPlugins as $name => $plugin)
-            {
+            foreach ($exportPlugins as $name => $plugin) {
                 $pluginName = ($name === 'default') ? 'index' : $name;
 
                 $this->addPlugin($pluginName, $config->plugins->export->$name);
@@ -133,16 +127,13 @@ class Application_Export_ExportService extends Application_Model_Abstract
      */
     public function getDefaults()
     {
-        if (is_null($this->_defaults))
-        {
+        if (is_null($this->_defaults)) {
             $config = $this->getConfig();
 
-            if (isset($config->plugins->export->default))
-            {
+            if (isset($config->plugins->export->default)) {
                 $this->_defaults = $config->plugins->export->default;
-            }
-            else {
-                $this->_defaults = new Zend_Config(array());
+            } else {
+                $this->_defaults = new Zend_Config([]);
             }
         }
 
@@ -155,9 +146,8 @@ class Application_Export_ExportService extends Application_Model_Abstract
      */
     public function addPlugin($name, $config)
     {
-        if (is_null($this->_plugins))
-        {
-            $this->_plugins = array();
+        if (is_null($this->_plugins)) {
+            $this->_plugins = [];
         }
 
         $defaults = $this->getDefaults();
@@ -165,6 +155,4 @@ class Application_Export_ExportService extends Application_Model_Abstract
         $pluginConfig->merge($config);
         $this->_plugins[$name] = $pluginConfig;
     }
-
-
 }

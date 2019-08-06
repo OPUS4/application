@@ -43,12 +43,10 @@ class Application_View_Helper_EmbargoHasPassed extends Zend_View_Helper_Abstract
      */
     public static function embargoHasPassed($doc)
     {
-        if ( ! $doc instanceof Opus_Document)
-        {
+        if (! $doc instanceof Opus_Document) {
             $doc = new Opus_Document($doc);
         }
 
         return $doc->hasEmbargoPassed();
     }
-
 }

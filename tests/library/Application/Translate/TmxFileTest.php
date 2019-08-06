@@ -71,7 +71,7 @@ class Application_Translate_TmxFileTest extends ControllerTestCase
         $tmxFile = new Application_Translate_TmxFile();
 
         $tmxFile->setTranslation('translation_key', 'en', 'Translation Key');
-        $tmxFile->setTranslation(     'translation_key', 'de', 'Übersetzungsschlüssel');
+        $tmxFile->setTranslation('translation_key', 'de', 'Übersetzungsschlüssel');
 
         $filePath = $this->getTempFile('TmxFileTest');
 
@@ -123,7 +123,8 @@ class Application_Translate_TmxFileTest extends ControllerTestCase
         $this->verifyTestData($tmxFile->toArray());
     }
 
-    protected function verifyTestData($data) {
+    protected function verifyTestData($data)
+    {
         $this->assertEquals([
             'home_index_contact_pagetitle' => [
                 'en' => 'Contact',

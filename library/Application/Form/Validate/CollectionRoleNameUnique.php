@@ -31,13 +31,14 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Application_Form_Validate_CollectionRoleNameUnique extends Zend_Validate_Abstract {
+class Application_Form_Validate_CollectionRoleNameUnique extends Zend_Validate_Abstract
+{
 
     const NAME_NOT_UNIQUE = 'notUnique';
 
-    protected $_messageTemplates = array(
+    protected $_messageTemplates = [
         self::NAME_NOT_UNIQUE => 'admin_collectionroles_error_not_unique'
-    );
+    ];
 
     /**
      * Returns true if and only if $value meets the validation requirements
@@ -50,21 +51,21 @@ class Application_Form_Validate_CollectionRoleNameUnique extends Zend_Validate_A
      * @return boolean
      * @throws Zend_Validate_Exception If validation of $value is impossible
      */
-    public function isValid($value, $context = null) {
+    public function isValid($value, $context = null)
+    {
         $value = (string) $value;
 
         $this->_setValue($value);
 
-        if (!is_null($context) && is_array($context) && array_key_exists('Id', $context)) {
+        if (! is_null($context) && is_array($context) && array_key_exists('Id', $context)) {
             $collectionId = $context['Id'];
-        }
-        else {
+        } else {
             $collectionId = 0;
         }
 
         $model = $this->_getModel($value);
 
-        if (!is_null($model) && $model->getId() != $collectionId) {
+        if (! is_null($model) && $model->getId() != $collectionId) {
             // es gibt bereits CollectionRole mit Identifier (z.B. Name) und anderer ID
             $this->_error(self::NAME_NOT_UNIQUE);
             return false;
@@ -78,9 +79,8 @@ class Application_Form_Validate_CollectionRoleNameUnique extends Zend_Validate_A
      * @param $identifier
      * @return Opus_CollectionRole
      */
-    protected function _getModel($identifier) {
+    protected function _getModel($identifier)
+    {
         return Opus_CollectionRole::fetchByName($identifier);
     }
-
 }
-

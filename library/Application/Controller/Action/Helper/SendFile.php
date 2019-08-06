@@ -31,7 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Application_Controller_Action_Helper_SendFile extends Application_Controller_Action_Helper_Abstract {
+class Application_Controller_Action_Helper_SendFile extends Application_Controller_Action_Helper_Abstract
+{
 
     const FPASSTHRU = 'fpassthru';
 
@@ -59,12 +60,12 @@ class Application_Controller_Action_Helper_SendFile extends Application_Controll
     public function sendFile($file, $method = self::FPASSTHRU, $mustResend = false)
     {
         $response = $this->getResponse();
-        if (!$response->canSendHeaders()) {
+        if (! $response->canSendHeaders()) {
             throw new Exception("Cannot send headers");
         }
 
         $file = realpath($file);
-        if (!is_readable($file)) {
+        if (! is_readable($file)) {
             throw new Exception("File is not readable");
         }
 
@@ -88,7 +89,8 @@ class Application_Controller_Action_Helper_SendFile extends Application_Controll
      * @param  string $modified  Timestamp string
      * @return boolean
      */
-    public function notModifiedSince($modified) {
+    public function notModifiedSince($modified)
+    {
         if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) && $modified <= strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE'])) {
             $response = $this->getResponse();
             $response->setHttpResponseCode(304);
@@ -126,9 +128,9 @@ class Application_Controller_Action_Helper_SendFile extends Application_Controll
 
         $logger = $this->getLogger();
 
-        if (!is_null($logger)) {
+        if (! is_null($logger)) {
             $content = ob_get_contents();
-            if (!empty($content)) {
+            if (! empty($content)) {
                 $logger->err($content);
             }
         }
@@ -155,5 +157,4 @@ class Application_Controller_Action_Helper_SendFile extends Application_Controll
 
         exit; // needed for preventing broken downloads (OPUSVIER-1806)
     }
-
 }

@@ -38,18 +38,20 @@
  * TODO make options configurable?
  * TODO limit configurable default value?
  */
-class Application_Form_Element_HitsPerPage extends Application_Form_Element_Select {
+class Application_Form_Element_HitsPerPage extends Application_Form_Element_Select
+{
 
-    public function init() {
+    public function init()
+    {
         parent::init();
 
         $this->setLabel('advanced_search_form_hits_per_page');
 
-        $options = array('10', '20', '50', '100');
+        $options = ['10', '20', '50', '100'];
 
         $defaultRows = Opus_Search_Query::getDefaultRows();
 
-        if (!in_array($defaultRows, $options)) {
+        if (! in_array($defaultRows, $options)) {
             $options[] = $defaultRows;
             sort($options);
         }
@@ -60,12 +62,11 @@ class Application_Form_Element_HitsPerPage extends Application_Form_Element_Sele
 
         $this->setValue($defaultRows);
 
-        $this->setDecorators(array(
+        $this->setDecorators([
             'ViewHelper',
             'Errors',
             'Description',
             'Label'
-        ));
+        ]);
     }
-
 }

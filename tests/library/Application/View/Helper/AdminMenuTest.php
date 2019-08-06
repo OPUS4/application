@@ -105,5 +105,4 @@ class Application_View_Helper_AdminMenuTest extends ControllerTestCase
         $this->assertTrue($this->_helper->hasAllowedChildren($page));
         $this->assertTrue($this->_helper->isRenderActive($page));
     }
-
 }

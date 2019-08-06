@@ -48,21 +48,19 @@ class Application_Form_Validate_CollectionRoleNameUniqueTest extends ControllerT
     public function testIsValidTrue()
     {
         $this->assertTrue($this->validator->isValid('newTestColRole'));
-        $this->assertTrue($this->validator->isValid('newTestColRole', array()));
-        $this->assertTrue($this->validator->isValid('newTestColRole', array('Id' => 1)));
+        $this->assertTrue($this->validator->isValid('newTestColRole', []));
+        $this->assertTrue($this->validator->isValid('newTestColRole', ['Id' => 1]));
     }
 
     public function testIsValidTrueForUpdate()
     {
-        $this->assertTrue($this->validator->isValid('ddc', array('Id' => 2)));
+        $this->assertTrue($this->validator->isValid('ddc', ['Id' => 2]));
     }
 
     public function testIsValidFalse()
     {
         $this->assertFalse($this->validator->isValid('ddc'));
-        $this->assertFalse($this->validator->isValid('ddc', array()));
-        $this->assertFalse($this->validator->isValid('ddc', array('Id' => 1)));
+        $this->assertFalse($this->validator->isValid('ddc', []));
+        $this->assertFalse($this->validator->isValid('ddc', ['Id' => 1]));
     }
-
-
 }

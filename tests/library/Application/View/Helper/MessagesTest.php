@@ -52,13 +52,14 @@ class Application_View_Helper_MessagesTest extends ControllerTestCase
         $messages[] = ['message' => 'Hello, world!', 'level' => 'error'];
 
         $this->assertEquals(
-<<<EOT
+            <<<EOT
 <div class="messages">
   <div class="error">Hello, world!</div>
 </div>
 
 EOT
-, $helper->messages($messages)
+            ,
+            $helper->messages($messages)
         );
     }
 
@@ -77,7 +78,7 @@ EOT
         $messages[] = ['message' => 'Without level.'];
 
         $this->assertEquals(
-<<<EOT
+            <<<EOT
 <div class="messages">
   <div class="error">Please provide a number.</div>
   <div class="info">Just a test!</div>
@@ -85,7 +86,8 @@ EOT
 </div>
 
 EOT
-            , $helper->messages($messages)
+            ,
+            $helper->messages($messages)
         );
     }
 
@@ -102,13 +104,14 @@ EOT
         $messages[] = ['message' => 'validation_error_int', 'level' => 'error'];
 
         $this->assertEquals(
-<<<EOT
+            <<<EOT
 <div class="messages">
   <div class="error">Please provide a number.</div>
 </div>
 
 EOT
-            , $helper->messages($messages)
+            ,
+            $helper->messages($messages)
         );
     }
 
@@ -128,13 +131,14 @@ EOT
         $helper->setView(Zend_Registry::get('Opus_View'));
 
         $this->assertEquals(
-<<<EOT
+            <<<EOT
 <div class="messages">
   <div>No key for this message.</div>
 </div>
 
 EOT
-            , $helper->messages(['No key for this message.'])
+            ,
+            $helper->messages(['No key for this message.'])
         );
     }
 }

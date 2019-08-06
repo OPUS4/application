@@ -38,53 +38,54 @@
  *
  * It is used by the LoginBar and the init.php files.
  */
-class Application_Controller_Action_Helper_ReturnParams extends Zend_Controller_Action_Helper_Abstract {
+class Application_Controller_Action_Helper_ReturnParams extends Zend_Controller_Action_Helper_Abstract
+{
 
     /**
      * Look for current module, controller, action and parameters. Forwards them to auth controller.
      *
      * returns mixed Associative array containing parameters for auth controller.
      */
-    public function getReturnParameters() {
+    public function getReturnParameters()
+    {
         // TODO put into constructor
         $log = Zend_Registry::get('Zend_Log');
 
-        $params = array();
+        $params = [];
         foreach (Zend_Controller_Front::getInstance()->getRequest()->getUserParams() as $key => $value) {
             switch ($key) {
-            case 'module' :
-                $params['rmodule'] = $value;
-                break;
-            case 'controller' :
-                $params['rcontroller'] = $value;
-                break;
-            case 'action' :
-                $params['raction'] = $value;
-                break;
-            case 'rmodule' :
-                $params['rrmodule'] = $value;
-                break;
-            case 'rcontroller' :
-                $params['rrcontroller'] = $value;
-                break;
-            case 'raction' :
-                $params['rraction'] = $value;
-                break;
-            case 'error_handler':
-                // don't use for URL generation
-                break;
-            default :
-                if (!is_array($value)) {
-                    $log->debug('Login extra param: ' . $key . " -> " . $value);
-                    $params[$key] = $value;
-                }
-                else {
-                    // ignore array values
-                    // TODO when do these values occur?
-                    $output = Zend_Debug::dump($value, null, false);
-                    $log->debug("Login array param ignored: $key -> $output");
-                }
-                break;
+                case 'module':
+                    $params['rmodule'] = $value;
+                    break;
+                case 'controller':
+                    $params['rcontroller'] = $value;
+                    break;
+                case 'action':
+                    $params['raction'] = $value;
+                    break;
+                case 'rmodule':
+                    $params['rrmodule'] = $value;
+                    break;
+                case 'rcontroller':
+                    $params['rrcontroller'] = $value;
+                    break;
+                case 'raction':
+                    $params['rraction'] = $value;
+                    break;
+                case 'error_handler':
+                    // don't use for URL generation
+                    break;
+                default:
+                    if (! is_array($value)) {
+                        $log->debug('Login extra param: ' . $key . " -> " . $value);
+                        $params[$key] = $value;
+                    } else {
+                        // ignore array values
+                        // TODO when do these values occur?
+                        $output = Zend_Debug::dump($value, null, false);
+                        $log->debug("Login array param ignored: $key -> $output");
+                    }
+                    break;
             }
         }
 
@@ -96,9 +97,8 @@ class Application_Controller_Action_Helper_ReturnParams extends Zend_Controller_
      *
      * @return array
      */
-    public function direct() {
+    public function direct()
+    {
         return $this->getReturnParameters();
     }
-
 }
-

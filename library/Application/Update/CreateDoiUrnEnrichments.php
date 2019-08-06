@@ -45,7 +45,7 @@ class Application_Update_CreateDoiUrnEnrichments extends Application_Update_Plug
 
     public function run()
     {
-        foreach($this->keyNames as $name) {
+        foreach ($this->keyNames as $name) {
             $enrichmentKey = Opus_EnrichmentKey::fetchByName($name);
 
             if (is_null($enrichmentKey)) {

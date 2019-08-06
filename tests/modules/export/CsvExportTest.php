@@ -51,15 +51,13 @@ class Export_CsvExportTest extends ControllerTestCase
         $this->assertEquals(2, substr_count($body, "\n"));
         $this->assertContains('OPUS4-146', $body);
 
-        $data = array();
+        $data = [];
 
-        foreach (preg_split("/((\r?\n)|(\n?\r))/", $body) as $line)
-        {
+        foreach (preg_split("/((\r?\n)|(\n?\r))/", $body) as $line) {
             $lineData = preg_split("/[\t]/", $line);
             $data[] = $lineData;
         }
 
         $this->assertEquals('OPUS4-146', $data[1][0]);
     }
-
 }

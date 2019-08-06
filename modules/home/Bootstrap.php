@@ -35,5 +35,6 @@
 /**
  * Empty class seems to be necessary to setup autoloading for modules.
  */
-class Home_Bootstrap extends Zend_Application_Module_Bootstrap {
+class Home_Bootstrap extends Zend_Application_Module_Bootstrap
+{
 }

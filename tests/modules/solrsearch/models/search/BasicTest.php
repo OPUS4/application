@@ -39,10 +39,10 @@ class Solrsearch_Model_Search_BasicTest extends ControllerTestCase
     public function testCreateQueryBuilderInputFromRequest()
     {
         $request = $this->getRequest();
-        $request->setParams(array('searchtype' => 'all',
+        $request->setParams(['searchtype' => 'all',
             'start' => '0',
             'rows' => '1337',
-            'sortOrder' => 'desc'));
+            'sortOrder' => 'desc']);
 
         $queryBuilder = new Solrsearch_Model_Search_Basic();
 
@@ -63,7 +63,7 @@ class Solrsearch_Model_Search_BasicTest extends ControllerTestCase
         $config->searchengine->solr->numberOfDefaultSearchResults = 1337;
 
         $request = $this->getRequest();
-        $request->setParams(array('searchtype' => 'all'));
+        $request->setParams(['searchtype' => 'all']);
 
         $queryBuilder = new Solrsearch_Model_Search_Basic();
         $result = $queryBuilder->createQueryBuilderInputFromRequest($request);
@@ -73,5 +73,4 @@ class Solrsearch_Model_Search_BasicTest extends ControllerTestCase
 
         $this->assertEquals($result['rows'], 1337);
     }
-
 }

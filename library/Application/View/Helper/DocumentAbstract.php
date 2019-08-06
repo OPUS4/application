@@ -45,24 +45,18 @@ class Application_View_Helper_DocumentAbstract extends Application_View_Helper_D
      */
     public function documentAbstract($document = null)
     {
-        if ($this->isPreferUserInterfaceLanguage())
-        {
+        if ($this->isPreferUserInterfaceLanguage()) {
             $language = Opus_Language::getPart2tForPart1(Zend_Registry::get('Zend_Translate')->getLocale());
 
             $abstract = $document->getMainAbstract($language);
-        }
-        else {
+        } else {
             $abstract = $document->getMainAbstract();
         }
 
-        if (!is_null($abstract))
-        {
+        if (! is_null($abstract)) {
             return htmlspecialchars($abstract->getValue());
-        }
-        else
-        {
+        } else {
             return null;
         }
     }
-
 }

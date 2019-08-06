@@ -54,6 +54,6 @@ class Admin_LanguageController extends Application_Controller_ActionCRUD
 
     public function isDeletable($model)
     {
-        return !$model->isUsed();
+        return ! $model->isUsed();
     }
 }

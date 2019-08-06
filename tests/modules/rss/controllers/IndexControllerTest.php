@@ -180,7 +180,6 @@ class Rss_IndexControllerTest extends ControllerTestCase
         $this->assertNotContains("Warning: XSLTProcessor::transformToXml(): runtime error", $this->getResponse()->getBody());
 
         $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());
-
     }
 
     /**
@@ -195,5 +194,4 @@ class Rss_IndexControllerTest extends ControllerTestCase
         $this->assertXpathContentContains('//link', 'http://opus4dev/frontdoor/index/index/docId/147');
         $this->assertXpathContentContains('//link', 'http://opus4dev/frontdoor/index/index/docId/150');
     }
-
 }

@@ -31,9 +31,11 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Oai_Model_ErrorTest extends ControllerTestCase {
+class Oai_Model_ErrorTest extends ControllerTestCase
+{
 
-    public function testMapCode() {
+    public function testMapCode()
+    {
         $code = Oai_Model_Error::mapCode('1010');
 
         $this->assertEquals('badVerb', $code);
@@ -43,8 +45,8 @@ class Oai_Model_ErrorTest extends ControllerTestCase {
      * @expectedException Oai_Model_Exception
      * @expectedExceptionMessage Unknown oai error code 1
      */
-    public function testMapCodeUnknown() {
+    public function testMapCodeUnknown()
+    {
         Oai_Model_Error::mapCode(1);
     }
-
 }

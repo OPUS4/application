@@ -44,7 +44,7 @@ class Admin_Form_PersonListControl extends Application_Form_Abstract
 
         $role = $this->createElement('PersonRole', self::ELEMENT_ROLE);
         $options = $role->getMultiOptions();
-        $options = array('all' => 'All') + $options;
+        $options = ['all' => 'All'] + $options;
         $role->setMultiOptions($options);
         $this->addElement($role);
 
@@ -53,5 +53,4 @@ class Admin_Form_PersonListControl extends Application_Form_Abstract
         $this->addDecorator('FormElements');
         $this->addDecorator('Form');
     }
-
 }

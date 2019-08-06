@@ -47,5 +47,4 @@ class Application_Form_Element_DocumentsTest extends ControllerTestCase
     {
         $this->assertEquals('formDocuments', $this->_element->getAttrib('helper'));
     }
-
 }

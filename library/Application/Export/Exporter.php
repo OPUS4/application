@@ -41,7 +41,7 @@ class Application_Export_Exporter
 
     public function addFormats($options)
     {
-        if (!is_array($options)) {
+        if (! is_array($options)) {
             throw new Exception('Invalid argument: should be array');
         }
 
@@ -78,7 +78,7 @@ class Application_Export_Exporter
             }
         }
 
-        usort($allowed, function($one, $two) {
+        usort($allowed, function ($one, $two) {
             return strcmp($one->get('name'), $two->get('name'));
         });
 

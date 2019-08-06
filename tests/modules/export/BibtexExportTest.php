@@ -42,9 +42,9 @@ class Export_BibtexExportTest extends ControllerTestCase
     {
         parent::setUp();
 
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
-            'searchengine' => array('solr' => array('numberOfDefaultSearchResults' => 10))
-        )));
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'searchengine' => ['solr' => ['numberOfDefaultSearchResults' => 10]]
+        ]));
     }
 
     /**
@@ -77,9 +77,9 @@ class Export_BibtexExportTest extends ControllerTestCase
 
     public function testExportSingleDocument()
     {
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
-            'export' => array('download' => '0')
-        )));
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'export' => ['download' => '0']
+        ]));
 
         $this->dispatch('/export/index/bibtex/searchtype/id/docId/146');
 
@@ -96,10 +96,10 @@ class Export_BibtexExportTest extends ControllerTestCase
      */
     public function testExportLatestDocuments()
     {
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
-            'export' => array('download' => '0'),
-            'searchengine' => array('solr' => array('numberOfDefaultSearchResults' => 10))
-        )));
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'export' => ['download' => '0'],
+            'searchengine' => ['solr' => ['numberOfDefaultSearchResults' => 10]]
+        ]));
 
         $this->dispatch('/export/index/bibtex/searchtype/latest');
 
@@ -112,9 +112,9 @@ class Export_BibtexExportTest extends ControllerTestCase
 
     public function testExportLatestDocumentsWithCustomRows()
     {
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
-            'export' => array('download' => '0')
-        )));
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'export' => ['download' => '0']
+        ]));
 
         $this->dispatch('/export/index/bibtex/searchtype/latest/rows/12');
 
@@ -124,5 +124,4 @@ class Export_BibtexExportTest extends ControllerTestCase
 
         $this->assertEquals(12, substr_count($body, '@'));
     }
-
 }

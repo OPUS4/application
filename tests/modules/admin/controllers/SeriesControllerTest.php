@@ -29,7 +29,7 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @author      Michael Lang <lang@zib.de>
  * @author      Maximilian Salomon <salomon@zib.de>
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -49,12 +49,12 @@ class Admin_SeriesControllerTest extends CrudControllerTestCase
         parent::setUp();
     }
 
-    function getModels()
+    public function getModels()
     {
         return Opus_Series::getAllSortedBySortKey();
     }
 
-    function createNewModel()
+    public function createNewModel()
     {
         $series = new Opus_Series();
 
@@ -66,7 +66,7 @@ class Admin_SeriesControllerTest extends CrudControllerTestCase
         return $series->store();
     }
 
-    function getModel($identifier)
+    public function getModel($identifier)
     {
         return new Opus_Series($identifier);
     }

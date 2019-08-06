@@ -36,18 +36,19 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Admin_InfoController extends Application_Controller_Action {
+class Admin_InfoController extends Application_Controller_Action
+{
 
     /**
      * Zeigt Informationen über die OPUS Systemkonfiguration an.
      */
-    public function indexAction() {
+    public function indexAction()
+    {
         $config = $this->getConfig();
 
         if (isset($config->publish->maxfilesize)) {
             $this->view->maxfilesize = $config->publish->maxfilesize;
-        }
-        else {
+        } else {
             $this->view->maxfilesize = $this->view->translate('admin_info_error_not_set');
         }
         $this->view->postMaxSize = ini_get('post_max_size');
@@ -60,7 +61,8 @@ class Admin_InfoController extends Application_Controller_Action {
      * TODO Behandlung von is_null($latestVersion) hängt vom Verhalten der Version Helpers ab (ueberarbeiten)
      * TODO move comparison code into non-controller class, e.g. Application_Configuration
      */
-    public function updateAction() {
+    public function updateAction()
+    {
         $localVersion = Application_Configuration::getOpusVersion();
         $latestVersion = $this->_helper->version();
 
@@ -70,30 +72,24 @@ class Admin_InfoController extends Application_Controller_Action {
 
         if (is_null($latestVersion)) {
             $this->view->message = $this->view->translate('admin_info_version_error_getting_latest');
-        }
-        elseif ($localVersion == $latestVersion) {
+        } elseif ($localVersion == $latestVersion) {
             $this->view->message = $this->view->translate('admin_info_version_current');
-        }
-        else {
+        } else {
             if (strpos($localVersion, 'DEV') === false) {
                 if (version_compare($localVersion, $latestVersion) >= 0) {
                     $this->view->message = $this->view->translate('admin_info_version_current');
-                }
-                else {
+                } else {
                     $this->view->message = $this->view->translate('admin_info_version_outdated');
                     $this->view->showUpdateLink = true;
                 }
-            }
-            else {
+            } else {
                 if (version_compare(substr($localVersion, 0, 5), substr($latestVersion, 0, 5)) < 0) {
                     $this->view->message = $this->view->translate('admin_info_version_outdated');
                     $this->view->showUpdateLink = true;
-                }
-                else {
+                } else {
                     $this->view->message = $this->view->translate('admin_info_version_current');
                 }
             }
         }
     }
-
 }

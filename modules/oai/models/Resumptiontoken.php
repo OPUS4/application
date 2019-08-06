@@ -36,14 +36,15 @@
 /**
  * Contains content and structure of a resumption token
  */
-class Oai_Model_Resumptiontoken {
+class Oai_Model_Resumptiontoken
+{
 
     /**
      * Holds dcoument ids
      *
      * @var array
      */
-    private $_documentIds = array();
+    private $_documentIds = [];
 
     /**
      * Holds metadata prefix information
@@ -78,7 +79,8 @@ class Oai_Model_Resumptiontoken {
      *
      * @return array
      */
-    public function getDocumentIds() {
+    public function getDocumentIds()
+    {
         return $this->_documentIds;
     }
 
@@ -87,7 +89,8 @@ class Oai_Model_Resumptiontoken {
      *
      * @return string
      */
-    public function getMetadataPrefix() {
+    public function getMetadataPrefix()
+    {
         return $this->_metadataPrefix;
     }
 
@@ -96,7 +99,8 @@ class Oai_Model_Resumptiontoken {
      *
      * @return string Returns resumption id
      */
-    public function getResumptionId() {
+    public function getResumptionId()
+    {
         return $this->_resumptionId;
     }
 
@@ -105,7 +109,8 @@ class Oai_Model_Resumptiontoken {
      *
      * @return in
      */
-    public function getStartPosition() {
+    public function getStartPosition()
+    {
         return $this->_startPosition;
     }
 
@@ -114,7 +119,8 @@ class Oai_Model_Resumptiontoken {
      *
      * @return int
      */
-    public function getTotalIds() {
+    public function getTotalIds()
+    {
         return $this->_totalIds;
     }
 
@@ -124,9 +130,10 @@ class Oai_Model_Resumptiontoken {
      * @param $idsToStore Set of document ids to store.
      * @return void
      */
-    public function setDocumentIds($idsToStore) {
+    public function setDocumentIds($idsToStore)
+    {
         if (false === is_array($idsToStore)) {
-            $idsToStore = array($idsToStore);
+            $idsToStore = [$idsToStore];
         }
 
         $this->_documentIds = $idsToStore;
@@ -138,7 +145,8 @@ class Oai_Model_Resumptiontoken {
      * @param string $prefix
      * @return void
      */
-    public function setMetadataPrefix($prefix) {
+    public function setMetadataPrefix($prefix)
+    {
         $this->_metadataPrefix = $prefix;
     }
 
@@ -147,7 +155,8 @@ class Oai_Model_Resumptiontoken {
      *
      * @return void
      */
-    public function setResumptionId($resumptionId) {
+    public function setResumptionId($resumptionId)
+    {
         $this->_resumptionId = $resumptionId;
     }
 
@@ -157,7 +166,8 @@ class Oai_Model_Resumptiontoken {
      * @param $startPostion Positon where to start on next request
      * @return void
      */
-    public function setStartPosition($startPosition) {
+    public function setStartPosition($startPosition)
+    {
         $this->_startPosition = (int) $startPosition;
     }
 
@@ -166,8 +176,8 @@ class Oai_Model_Resumptiontoken {
      *
      * @return void
      */
-    public function setTotalIds($totalIds) {
+    public function setTotalIds($totalIds)
+    {
         $this->_totalIds = (int) $totalIds;
     }
 }
-

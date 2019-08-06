@@ -38,8 +38,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-abstract class Application_Form_Model_Abstract extends Application_Form_AbstractViewable
-    implements Application_Form_IModel {
+abstract class Application_Form_Model_Abstract extends Application_Form_AbstractViewable implements Application_Form_IModel
+{
 
     /**
      * Name von Formularelement fuer Model-ID.
@@ -81,44 +81,52 @@ abstract class Application_Form_Model_Abstract extends Application_Form_Abstract
     /**
      * Initialisiert die Formularelement und Dekoratoren.
      */
-    public function init() {
+    public function init()
+    {
         parent::init();
 
         $this->setDecorators(
-            array(
+            [
             'FormElements',
             'Form'
-            )
+            ]
         );
 
         $this->addElement(
-            'hidden', self::ELEMENT_MODEL_ID, array('decorators' => array(
+            'hidden',
+            self::ELEMENT_MODEL_ID,
+            ['decorators' => [
             'ViewHelper',
-            array(array('liWrapper' => 'HtmlTag'), array('tag' => 'li'))
-            ))
+            [['liWrapper' => 'HtmlTag'], ['tag' => 'li']]
+            ]]
         );
 
         $this->addElement(
-            'submit', self::ELEMENT_SAVE, array('decorators' => array(
+            'submit',
+            self::ELEMENT_SAVE,
+            ['decorators' => [
             'ViewHelper',
-            array(array('liWrapper' => 'HtmlTag'), array('tag' => 'li', 'class' => 'save-element'))
-            ))
+            [['liWrapper' => 'HtmlTag'], ['tag' => 'li', 'class' => 'save-element']]
+            ]]
         );
 
         $this->addElement(
-            'submit', self::ELEMENT_CANCEL, array('decorators' => array(
+            'submit',
+            self::ELEMENT_CANCEL,
+            ['decorators' => [
             'ViewHelper',
-            array(array('liWrapper' => 'HtmlTag'), array('tag' => 'li', 'class' => 'cancel-element'))
-            ))
+            [['liWrapper' => 'HtmlTag'], ['tag' => 'li', 'class' => 'cancel-element']]
+            ]]
         );
 
         $this->addDisplayGroup(
-            array(self::ELEMENT_MODEL_ID, self::ELEMENT_SAVE, self::ELEMENT_CANCEL), 'actions',
-            array('order' => 1000, 'decorators' => array(
+            [self::ELEMENT_MODEL_ID, self::ELEMENT_SAVE, self::ELEMENT_CANCEL],
+            'actions',
+            ['order' => 1000, 'decorators' => [
                 'FormElements',
-                array(array('ulWrapper' => 'HtmlTag'), array('tag' => 'ul', 'class' => 'form-action')),
-                array(array('divWrapper' => 'HtmlTag'), array('id' => 'form-action'))
-            ))
+                [['ulWrapper' => 'HtmlTag'], ['tag' => 'ul', 'class' => 'form-action']],
+                [['divWrapper' => 'HtmlTag'], ['id' => 'form-action']]
+            ]]
         );
     }
 
@@ -129,11 +137,11 @@ abstract class Application_Form_Model_Abstract extends Application_Form_Abstract
      * @param array $context POST Daten fuer gesamten Request
      * @return mixed Ergebnis der POST Verarbeitung
      */
-    public function processPost($post, $context) {
+    public function processPost($post, $context)
+    {
         if (array_key_exists(self::ELEMENT_SAVE, $post)) {
             return self::RESULT_SAVE;
-        }
-        else if (array_key_exists(self::ELEMENT_CANCEL, $post)) {
+        } elseif (array_key_exists(self::ELEMENT_CANCEL, $post)) {
             return self::RESULT_CANCEL;
         }
     }
@@ -144,7 +152,8 @@ abstract class Application_Form_Model_Abstract extends Application_Form_Abstract
      * @throws Application_Exception
      * @return Opus_Model_AbbstractDb
      */
-    public function getModel() {
+    public function getModel()
+    {
         $modelClass = $this->getModelClass();
 
         if (is_null($modelClass)) {
@@ -159,8 +168,7 @@ abstract class Application_Form_Model_Abstract extends Application_Form_Abstract
 
         try {
             $model = new $modelClass($modelId);
-        }
-        catch (Opus_Model_NotFoundException $omnfe) {
+        } catch (Opus_Model_NotFoundException $omnfe) {
             $this->getLogger()->err($omnfe->getMessage());
             throw new Application_Exception(__METHOD__ . " Model with ID '$modelId' not found.");
         }
@@ -174,7 +182,8 @@ abstract class Application_Form_Model_Abstract extends Application_Form_Abstract
      * Holt die Model-ID vom Formularelement 'Id';
      * @return mixed
      */
-    protected function getModelId() {
+    protected function getModelId()
+    {
         return $this->getElementValue(self::ELEMENT_MODEL_ID);
     }
 
@@ -189,8 +198,9 @@ abstract class Application_Form_Model_Abstract extends Application_Form_Abstract
      * @param $modelId
      * @throws Application_Exception
      */
-    protected function validateModelId($modelId) {
-        if (!is_null($modelId) && !is_numeric($modelId) && $this->getVerifyModelIdIsNumeric()) {
+    protected function validateModelId($modelId)
+    {
+        if (! is_null($modelId) && ! is_numeric($modelId) && $this->getVerifyModelIdIsNumeric()) {
             throw new Application_Exception(__METHOD__ . ' Model-ID must be numeric.');
         }
     }
@@ -199,7 +209,8 @@ abstract class Application_Form_Model_Abstract extends Application_Form_Abstract
      * Liefert die gesetzte Modelklasse fuer das Formular.
      * @return string
      */
-    public function getModelClass() {
+    public function getModelClass()
+    {
         return $this->_modelClass;
     }
 
@@ -207,20 +218,22 @@ abstract class Application_Form_Model_Abstract extends Application_Form_Abstract
      * Setzt die Modelklasse fuer das Formular.
      * @param $modelClass
      */
-    public function setModelClass($modelClass) {
+    public function setModelClass($modelClass)
+    {
         $this->_modelClass = $modelClass;
     }
 
     /**
      * Bereitet das Formular fuer die Anzeige als View vor.
      */
-    public function prepareRenderingAsView() {
+    public function prepareRenderingAsView()
+    {
         parent::prepareRenderingAsView();
         $this->removeDecorator('Form');
         $this->removeDisplayGroup('actions');
 
         $modelIdElement = $this->getElement(self::ELEMENT_MODEL_ID);
-        if (!is_null($modelIdElement)) {
+        if (! is_null($modelIdElement)) {
             $modelIdElement->removeDecorator('liWrapper');
         }
     }
@@ -229,7 +242,8 @@ abstract class Application_Form_Model_Abstract extends Application_Form_Abstract
      * Set if model ID should be validated as numeric value.
      * @param $enabled true to enable, false to disable model ID validation
      */
-    public function setVerifyModelIdIsNumeric($enabled) {
+    public function setVerifyModelIdIsNumeric($enabled)
+    {
         $this->_verifyModelIdIsNumeric = $enabled;
     }
 
@@ -237,8 +251,8 @@ abstract class Application_Form_Model_Abstract extends Application_Form_Abstract
      * Return setting for verifying model Ids as numeric values.
      * @return bool true - Model ID must be numeric; false - Model ID not verified
      */
-    public function getVerifyModelIdIsNumeric() {
+    public function getVerifyModelIdIsNumeric()
+    {
         return $this->_verifyModelIdIsNumeric;
     }
-
 }

@@ -45,7 +45,7 @@ class Application_Update_AddCC30LicenceShortNames extends Application_Update_Plu
      * Patterns for licence matching.
      * @var array
      */
-    private $licences = array(
+    private $licences = [
         '/(?:(Creative Commons)|(CC)).*Namensnennung.*Nicht.*kommerziell.*Keine.*Bearbeitung/' => 'CC BY-NC-ND 3.0',
         '/(?:(Creative Commons)|(CC)).*Namensnennung.*Keine.*kommerzielle Nutzung.*Weitergabe.*unter.*gleichen.*Bedingungen/' => 'CC BY-NC-SA 3.0',
         '/(?:(Creative Commons)|(CC)).*Namensnennung.*Nicht.*kommerziell.*Weitergabe.*unter.*gleichen.*Bedingungen/' => 'CC BY-NC-SA 3.0',
@@ -53,7 +53,7 @@ class Application_Update_AddCC30LicenceShortNames extends Application_Update_Plu
         '/(?:(Creative Commons)|(CC)).*Namensnennung.*Keine.*Bearbeitung/' => 'CC BY-ND 3.0',
         '/(?:(Creative Commons)|(CC)).*Namensnennung.*Weitergabe.*unter.*gleichen.*Bedingungen/' => 'CC BY-SA 3.0',
         '/(?:(Creative Commons)|(CC)).*Namensnennung/' => 'CC BY 3.0'
-    );
+    ];
 
     public function run()
     {
@@ -61,33 +61,28 @@ class Application_Update_AddCC30LicenceShortNames extends Application_Update_Plu
 
         $licences = Opus_Licence::getAll();
 
-        foreach ($licences as $licence)
-        {
+        foreach ($licences as $licence) {
             $nameLong = $licence->getNameLong();
 
             $name = $licence->getName();
 
-            if (!is_null($name))
-            {
+            if (! is_null($name)) {
                 $this->log("Licence already has short name ('$name' => '$nameLong')");
                 continue;
             }
 
-            if (strpos($nameLong, '4.0') !== false)
-            {
+            if (strpos($nameLong, '4.0') !== false) {
                 $this->log("Not adding label to 4.0 licence ($nameLong)");
                 continue;
             }
 
             $name = $this->getShortName($nameLong);
 
-            if (!is_null($name))
-            {
+            if (! is_null($name)) {
                 // 'name' must be unique - check if already used
                 $existingLicence = Opus_Licence::fetchByName($name);
 
-                if (is_null($existingLicence))
-                {
+                if (is_null($existingLicence)) {
                     $licence->setName($name);
 
                     // prevent updates to ServerDateModified
@@ -103,9 +98,7 @@ class Application_Update_AddCC30LicenceShortNames extends Application_Update_Plu
 
                     $this->removeLicence($name);
                 }
-            }
-            else
-            {
+            } else {
                 $this->log("No label found for licence '$nameLong'");
             }
         }
@@ -120,10 +113,8 @@ class Application_Update_AddCC30LicenceShortNames extends Application_Update_Plu
      */
     public function getShortName($nameLong)
     {
-        foreach ($this->licences as $long => $short)
-        {
-            if (preg_match($long,$nameLong) > 0)
-            {
+        foreach ($this->licences as $long => $short) {
+            if (preg_match($long, $nameLong) > 0) {
                 return $short;
             }
         }
@@ -137,10 +128,8 @@ class Application_Update_AddCC30LicenceShortNames extends Application_Update_Plu
      */
     public function removeLicence($name)
     {
-        if (($key = array_search($name, $this->licences)) !== false)
-        {
+        if (($key = array_search($name, $this->licences)) !== false) {
             unset($this->licences[$key]);
         }
     }
-
 }

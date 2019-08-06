@@ -32,9 +32,11 @@
  * @version     $Id$
  */
 
-class Application_Form_Element_Theme extends Application_Form_Element_SelectWithNull {
+class Application_Form_Element_Theme extends Application_Form_Element_SelectWithNull
+{
 
-    public function init() {
+    public function init()
+    {
         parent::init();
 
         $values = $this->getThemes();
@@ -46,11 +48,11 @@ class Application_Form_Element_Theme extends Application_Form_Element_SelectWith
         }
     }
 
-    public function setValue($value) {
-        if (!array_key_exists($value, $this->getMultiOptions())) {
+    public function setValue($value)
+    {
+        if (! array_key_exists($value, $this->getMultiOptions())) {
             parent::setValue('Null');
-        }
-        else {
+        } else {
             parent::setValue($value);
         }
     }
@@ -69,7 +71,8 @@ class Application_Form_Element_Theme extends Application_Form_Element_SelectWith
      */
     private static $_themes = null;
 
-    private function getThemes() {
+    private function getThemes()
+    {
         if (is_null(self::$_themes)) {
             $this->findThemes(APPLICATION_PATH . '/public/layouts'); // TODO configurable
         }
@@ -82,12 +85,13 @@ class Application_Form_Element_Theme extends Application_Form_Element_SelectWith
      *
      * @param  string $path
      */
-    public static function findThemes($path) {
+    public static function findThemes($path)
+    {
         if (is_dir($path) === false) {
             throw new InvalidArgumentException("Argument should be a valid path.");
         }
 
-        $themes = array();
+        $themes = [];
         foreach (glob($path . '/*') as $entry) {
             if (true === is_dir($entry)) {
                 $theme = basename($entry);
@@ -98,5 +102,4 @@ class Application_Form_Element_Theme extends Application_Form_Element_SelectWith
         self::$_themesPath = $path;
         self::$_themes = $themes;
     }
-
 }

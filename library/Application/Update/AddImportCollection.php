@@ -44,10 +44,9 @@ class Application_Update_AddImportCollection extends Application_Update_PluginAb
     public function run()
     {
         // add enrichment keys for imports
-        $keys = array('opus.import.checksum', 'opus.import.date', 'opus.import.file', 'opus.import.user');
+        $keys = ['opus.import.checksum', 'opus.import.date', 'opus.import.file', 'opus.import.user'];
 
-        foreach ($keys as $key)
-        {
+        foreach ($keys as $key) {
             $this->addEnrichmentKey($key);
         }
 
@@ -56,11 +55,11 @@ class Application_Update_AddImportCollection extends Application_Update_PluginAb
         $this->addCollection();
     }
 
-    public function addEnrichmentKey($name) {
+    public function addEnrichmentKey($name)
+    {
         $enrichmentKey = Opus_EnrichmentKey::fetchByName($name);
 
-        if (is_null($enrichmentKey))
-        {
+        if (is_null($enrichmentKey)) {
             $this->log("Creating enrichment key '$name' ... ");
             $enrichmentKey = new Opus_EnrichmentKey();
             $enrichmentKey->setName($name);
@@ -72,8 +71,7 @@ class Application_Update_AddImportCollection extends Application_Update_PluginAb
     {
         $collectionRole = Opus_CollectionRole::fetchByName('Import');
 
-        if (is_null($collectionRole))
-        {
+        if (is_null($collectionRole)) {
             $this->log("Creating collection role 'Import' ... ");
 
             $collectionRole = new Opus_CollectionRole();
@@ -88,8 +86,7 @@ class Application_Update_AddImportCollection extends Application_Update_PluginAb
             $collectionRole->setPosition(Opus_CollectionRole::getLastPosition() + 1);
             $root = $collectionRole->addRootCollection();
             $collectionRole->store();
-        }
-        else {
+        } else {
             $this->log("Collection role 'Import' already exists.");
         }
 
@@ -106,10 +103,8 @@ class Application_Update_AddImportCollection extends Application_Update_PluginAb
             $collection->setOaiSubset('import');
             $root->addFirstChild($collection);
             $collectionRole->store();
-        }
-        else {
+        } else {
             $this->log("Collection 'import' already exists.");
         }
     }
-
 }

@@ -37,37 +37,40 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Application_Form_Element_FileLink extends Application_Form_Element_Text {
+class Application_Form_Element_FileLink extends Application_Form_Element_Text
+{
 
-    public function loadDefaultDecorators() {
+    public function loadDefaultDecorators()
+    {
         parent::loadDefaultDecorators();
 
         $label = $this->getDecorator('LabelNotEmpty');
 
-        if ($label !== FALSE) {
+        if ($label !== false) {
             $label->setOption('disableFor', true);
         }
     }
 
-    public function getStaticViewHelper() {
+    public function getStaticViewHelper()
+    {
         return 'fileLink';
     }
 
-    public function setValue($file) {
+    public function setValue($file)
+    {
         if (is_null($file)) {
             throw new Application_Exception(__METHOD__ . " Value must not be null.");
         }
 
-        if (!$file instanceof Opus_File) {
+        if (! $file instanceof Opus_File) {
             try {
                 $file = new Opus_File($file);
-            }
-            catch (Opus_Model_NotFoundException $omnfe) {
+            } catch (Opus_Model_NotFoundException $omnfe) {
                 throw new Application_Exception("File with ID = $file not found.");
             }
         }
 
-        if (!$file->exists()) {
+        if (! $file->exists()) {
             $this->addError('admin_filemanager_file_does_not_exist');
         }
         parent::setValue($file);
@@ -81,16 +84,15 @@ class Application_Form_Element_FileLink extends Application_Form_Element_Text {
      * @param mixed $value
      * @return bool
      */
-    public function isValid($value) {
+    public function isValid($value)
+    {
         $this->setValue($value);
         $file = $this->getValue();
 
         if ($file instanceof Opus_File) {
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
-
 }

@@ -43,7 +43,7 @@ class Application_Form_Validate_LanguageUsedOnceOnlyTest extends ControllerTestC
     public function setUp()
     {
         parent::setUp();
-        $this->selectedLanguages = array('deu', 'fra', 'rus', 'deu', 'eng', 'deu');
+        $this->selectedLanguages = ['deu', 'fra', 'rus', 'deu', 'eng', 'deu'];
     }
 
     /**
@@ -89,30 +89,29 @@ class Application_Form_Validate_LanguageUsedOnceOnlyTest extends ControllerTestC
      */
     public function testLanguagesTooShortReturnsTrue()
     {
-        $validator = new Application_Form_Validate_LanguageUsedOnceOnly(array('eng', 'deu', 'spa'), 4);
+        $validator = new Application_Form_Validate_LanguageUsedOnceOnly(['eng', 'deu', 'spa'], 4);
 
         $this->assertTrue($validator->isValid('rus'));
     }
 
     public function testLanguagesTooShortReturnsFalse()
     {
-        $validator = new Application_Form_Validate_LanguageUsedOnceOnly(array('eng', 'deu', 'spa'), 4);
+        $validator = new Application_Form_Validate_LanguageUsedOnceOnly(['eng', 'deu', 'spa'], 4);
 
         $this->assertFalse($validator->isValid('deu'));
     }
 
     public function testGetPosition()
     {
-        $validator = new Application_Form_Validate_LanguageUsedOnceOnly(array('eng', 'deu', 'spa'), 4);
+        $validator = new Application_Form_Validate_LanguageUsedOnceOnly(['eng', 'deu', 'spa'], 4);
 
         $this->assertEquals(4, $validator->getPosition());
     }
 
     public function testGetLanguages()
     {
-        $validator = new Application_Form_Validate_LanguageUsedOnceOnly(array('eng', 'deu', 'spa'), 4);
+        $validator = new Application_Form_Validate_LanguageUsedOnceOnly(['eng', 'deu', 'spa'], 4);
 
-        $this->assertEquals(array('eng', 'deu', 'spa'), $validator->getLanguages());
+        $this->assertEquals(['eng', 'deu', 'spa'], $validator->getLanguages());
     }
-
 }

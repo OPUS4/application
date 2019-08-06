@@ -41,13 +41,12 @@ class Application_View_Helper_ResultsPerPageOptions extends Application_View_Hel
 
     public function resultsPerPageOptions($steps = null)
     {
-        $options = array(10, 20, 50, 100);
+        $options = [10, 20, 50, 100];
 
         $output = '<ul>';
 
-        foreach ($options as $option)
-        {
-            $searchUrl = $this->view->url(array('rows' => $option));
+        foreach ($options as $option) {
+            $searchUrl = $this->view->url(['rows' => $option]);
 
             $output .= "<li><a href=\"$searchUrl\">$option</a></li>";
         }
@@ -56,5 +55,4 @@ class Application_View_Helper_ResultsPerPageOptions extends Application_View_Hel
 
         return $output;
     }
-
 }

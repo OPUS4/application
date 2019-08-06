@@ -38,7 +38,8 @@
  * @category    Application
  * @package     Form_Validate
  */
-class Application_Form_Validate_AtLeastOneNotEmpty extends Zend_Validate_Abstract {
+class Application_Form_Validate_AtLeastOneNotEmpty extends Zend_Validate_Abstract
+{
 
     const ALL_EMPTY = 'allElementsEmpty';
 
@@ -47,15 +48,16 @@ class Application_Form_Validate_AtLeastOneNotEmpty extends Zend_Validate_Abstrac
      */
     private $_elements;
 
-    protected $_messageTemplates = array(
+    protected $_messageTemplates = [
         self::ALL_EMPTY => 'admin_collection_error_name_or_number_required'
-    );
+    ];
 
     /**
      * Constructs validator.
      * @param null $elements
      */
-    public function __construct($elements = null) {
+    public function __construct($elements = null)
+    {
         $this->_elements = $elements;
     }
 
@@ -68,7 +70,8 @@ class Application_Form_Validate_AtLeastOneNotEmpty extends Zend_Validate_Abstrac
      * @return boolean
      * @throws Zend_Validate_Exception If validation of $value is impossible
      */
-    public function isValid($value, $context = null) {
+    public function isValid($value, $context = null)
+    {
         if (is_array($this->_elements)) {
             $notEmpty = new Zend_Validate_NotEmpty();
             foreach ($this->_elements as $name) {
@@ -85,13 +88,13 @@ class Application_Form_Validate_AtLeastOneNotEmpty extends Zend_Validate_Abstrac
      * Adds a form element to group for validation.
      * @param $element Zend_Form_Element
      */
-    public function addElement($element) {
-        if (!is_array($this->_elements)) {
-            $this->_elements = array();
+    public function addElement($element)
+    {
+        if (! is_array($this->_elements)) {
+            $this->_elements = [];
         }
-        if (!in_array($element, $this->_elements)) {
+        if (! in_array($element, $this->_elements)) {
             $this->_elements[] = $element;
         }
     }
-
 }

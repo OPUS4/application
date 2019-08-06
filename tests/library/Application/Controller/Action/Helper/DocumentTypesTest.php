@@ -241,7 +241,7 @@ class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerT
         $documentTypes = $this->docTypeHelper->getDocumentTypes();
 
         foreach ($documentTypes as $docType => $docTypePath) {
-            if (!in_array($docType, $excludeFromTranslationCheck)) {
+            if (! in_array($docType, $excludeFromTranslationCheck)) {
                 $this->assertNotEquals($docType, $translate->translate($docType), 'Could not translate document type: ' . $docType);
             }
         }

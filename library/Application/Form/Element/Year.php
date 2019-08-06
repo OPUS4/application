@@ -35,14 +35,16 @@
 /**
  * Eingabefeld für Jahreszahlen.
  */
-class Application_Form_Element_Year extends Application_Form_Element_Text {
+class Application_Form_Element_Year extends Application_Form_Element_Text
+{
 
-    public function init() {
+    public function init()
+    {
         parent::init();
 
         $this->setLabel($this->getName()); // TODO use prefix for translation
 
-        $validators = array();
+        $validators = [];
 
         $validator = new Zend_Validate_Int();
         $validator->setMessage('validation_error_year_invalid_format');
@@ -50,17 +52,17 @@ class Application_Form_Element_Year extends Application_Form_Element_Text {
 
         $validator = new Zend_Validate_GreaterThan(-1);
         $validator->setMessages(
-            array(
+            [
             Zend_Validate_GreaterThan::NOT_GREATER => 'validation_error_year_invalid_negative'
-            )
+            ]
         );
         $validators[] = $validator;
 
         $validator = new Zend_Validate_LessThan(10000);
         $validator->setMessages(
-            array(
+            [
             Zend_Validate_LessThan::NOT_LESS => 'validation_error_year_too_large'
-            )
+            ]
         );
         $validators[] = $validator;
 
@@ -70,5 +72,4 @@ class Application_Form_Element_Year extends Application_Form_Element_Text {
 
         $this->setValidators($validators, true);
     }
-
 }

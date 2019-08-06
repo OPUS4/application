@@ -36,14 +36,16 @@
  * Browsing of file import folder for adding files to documents.
  *
  */
-class Admin_FilebrowserController extends Application_Controller_Action {
+class Admin_FilebrowserController extends Application_Controller_Action
+{
 
     const PARAM_DOCUMENT_ID = 'id';
 
     /**
      * Shows files in import folder.
      */
-    public function indexAction() {
+    public function indexAction()
+    {
         $docId = $this->getRequest()->getParam(self::PARAM_DOCUMENT_ID);
         if (is_null($docId)) {
             throw new Application_Exception('missing parameter docId');
@@ -52,15 +54,15 @@ class Admin_FilebrowserController extends Application_Controller_Action {
         $document = null;
         try {
             $document = new Opus_Document($docId);
-        }
-        catch (Opus_Model_NotFoundException $e) {
+        } catch (Opus_Model_NotFoundException $e) {
             throw new Application_Exception('no document found for id ' . $docId, null, $e);
         }
 
         $this->_breadcrumbs->setDocumentBreadcrumb($document);
         $this->_breadcrumbs->setParameters(
-            'admin_filemanager_index', array(self::PARAM_DOCUMENT_ID => $docId,
-            'continue' => true)
+            'admin_filemanager_index',
+            [self::PARAM_DOCUMENT_ID => $docId,
+            'continue' => true]
         );
 
         $importHelper = new Admin_Model_FileImport();
@@ -72,8 +74,9 @@ class Admin_FilebrowserController extends Application_Controller_Action {
     /**
      * Imports file(s) from import folder for document.
      */
-    public function importAction() {
-        if (!$this->getRequest()->isPost()) {
+    public function importAction()
+    {
+        if (! $this->getRequest()->isPost()) {
             throw new Application_Exception('unsupported HTTP method');
         }
 
@@ -86,28 +89,37 @@ class Admin_FilebrowserController extends Application_Controller_Action {
 
         if (isset($post['Cancel'])) {
             return $this->_helper->Redirector->redirectToAndExit(
-                'index', null, 'filemanager', 'admin',
-                array(self::PARAM_DOCUMENT_ID => $docId, 'continue' => 'true')
+                'index',
+                null,
+                'filemanager',
+                'admin',
+                [self::PARAM_DOCUMENT_ID => $docId, 'continue' => 'true']
             );
         }
 
         $files = $this->getRequest()->getPost('file');
         if (is_null($files) || is_array($files) && empty($files)) {
             return $this->_helper->Redirector->redirectToAndExit(
-                'index', null, 'filebrowser', 'admin',
-                array(self::PARAM_DOCUMENT_ID => $docId)
+                'index',
+                null,
+                'filebrowser',
+                'admin',
+                [self::PARAM_DOCUMENT_ID => $docId]
             );
         }
 
-        if (!is_array($files)) {
+        if (! is_array($files)) {
             throw new Application_Exception('invalid POST parameter');
         }
 
         $fileImportModel = new Admin_Model_FileImport();
         $fileImportModel->addFilesToDocument($docId, $files);
         return $this->_helper->Redirector->redirectToAndExit(
-            'index', null, 'filemanager', 'admin',
-            array(self::PARAM_DOCUMENT_ID => $docId, 'continue' => 'true')
+            'index',
+            null,
+            'filemanager',
+            'admin',
+            [self::PARAM_DOCUMENT_ID => $docId, 'continue' => 'true']
         );
     }
 }

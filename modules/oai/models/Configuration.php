@@ -38,7 +38,8 @@
  * gathered from Zend_Registry and application configuration.
  *
  */
-class Oai_Model_Configuration {
+class Oai_Model_Configuration
+{
 
     /**
      * Hold path where to store temporary resumption token files.
@@ -46,42 +47,42 @@ class Oai_Model_Configuration {
      * @var string
      */
     private $_pathTokens = '';
-    
+
     /**
      * Holds email address of repository contact person.
      *
      * @var string
      */
     private $_emailContact = '';
-    
+
     /**
      * Holds repository name.
      *
      * @var string
      */
     private $_repoName = '';
-    
+
     /**
      * Holds repository identifier.
      *
      * @var string
      */
     private $_repoId = '';
-    
+
     /**
      * Holds sample identifier.
      *
      * @var string
      */
     private $_sampleId = '';
-    
+
     /**
      * Holds maximum number of identifiers to list per request.
      *
      * @var int
      */
     private $_maxListIds = 10;
-    
+
     /**
      * Holds maximum number of records to list per request.
      *
@@ -101,7 +102,8 @@ class Oai_Model_Configuration {
      *
      * @throws Exception Thrown if no oai section is set.
      */
-    public function __construct(Zend_Config $config) {
+    public function __construct(Zend_Config $config)
+    {
         if (false === isset($config->oai)) {
             throw new Exception('No configuration for module oai.');
         }
@@ -127,10 +129,10 @@ class Oai_Model_Configuration {
 
         if (true === isset($config->workspacePath)) {
             $this->_pathTokens = $config->workspacePath
-                . DIRECTORY_SEPARATOR .'tmp' 
+                . DIRECTORY_SEPARATOR .'tmp'
                 . DIRECTORY_SEPARATOR . 'resumption';
         }
-        
+
         if (true === isset($config->mail->opus->address)) {
             $this->_emailContact = $config->mail->opus->address;
         }
@@ -141,16 +143,18 @@ class Oai_Model_Configuration {
      *
      * @return string Path.
      */
-    public function getResumptionTokenPath() {
+    public function getResumptionTokenPath()
+    {
         return $this->_pathTokens;
     }
-    
+
     /**
      * Return contact email address.
      *
      * @return string Email address.
      */
-    public function getEmailContact() {
+    public function getEmailContact()
+    {
         return $this->_emailContact;
     }
 
@@ -159,7 +163,8 @@ class Oai_Model_Configuration {
      *
      * @return string Oai base url.
      */
-    public function getOaiBaseUrl() {
+    public function getOaiBaseUrl()
+    {
         return $this->_oaiBaseUrl;
     }
 
@@ -168,16 +173,18 @@ class Oai_Model_Configuration {
      *
      * @return string Repository name.
      */
-    public function getRepositoryName() {
+    public function getRepositoryName()
+    {
         return $this->_repoName;
     }
-    
+
     /**
      * Return repository identifier.
      *
      * @return string Repository identifier.
      */
-    public function getRepositoryIdentifier() {
+    public function getRepositoryIdentifier()
+    {
         return $this->_repoId;
     }
 
@@ -186,16 +193,18 @@ class Oai_Model_Configuration {
      *
      * @return string Sample identifier.
      */
-    public function getSampleIdentifier() {
+    public function getSampleIdentifier()
+    {
         return $this->_sampleId;
     }
-    
+
     /**
      * Return maximum number of listable identifiers per request.
      *
      * @return int Maximum number of listable identifiers per request.
      */
-    public function getMaxListIdentifiers() {
+    public function getMaxListIdentifiers()
+    {
         return $this->_maxListIds;
     }
 
@@ -204,8 +213,8 @@ class Oai_Model_Configuration {
      *
      * @return int Maximum number of listable records per request.
      */
-    public function getMaxListRecords() {
+    public function getMaxListRecords()
+    {
         return $this->_maxListRecs;
     }
-
 }

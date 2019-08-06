@@ -38,7 +38,8 @@
  *
  * Enrichment key names are not case-sensitive.
  */
-class Application_Form_Validate_EnrichmentKeyAvailable extends Zend_Validate_Abstract {
+class Application_Form_Validate_EnrichmentKeyAvailable extends Zend_Validate_Abstract
+{
 
     /**
      * Constants for enrichment key not available anymore.
@@ -48,14 +49,15 @@ class Application_Form_Validate_EnrichmentKeyAvailable extends Zend_Validate_Abs
     /**
      * Error messages.
      */
-    protected $_messageTemplates = array(
+    protected $_messageTemplates = [
         self::NOT_AVAILABLE => 'admin_enrichmentkey_error_name_exists',
-    );
+    ];
 
     /**
      * Checks if an enrichmentkey already exists.
      */
-   public function isValid($value, $context = null) {
+    public function isValid($value, $context = null)
+    {
 
         $value = (string) $value;
         $this->_setValue($value);
@@ -66,8 +68,7 @@ class Application_Form_Validate_EnrichmentKeyAvailable extends Zend_Validate_Abs
             if (isset($context['Id'])) {
                 $name = $context['Id'];
             }
-        }
-        elseif (is_string($context)) {
+        } elseif (is_string($context)) {
             $name = $context;
         }
 
@@ -81,18 +82,17 @@ class Application_Form_Validate_EnrichmentKeyAvailable extends Zend_Validate_Abs
         }
 
         return true;
-   }
+    }
 
     /**
      * Checks if a enrichmentkey already used.
      * @param string $login
      * @return boolean
      */
-    protected function _isEnrichmentKeyUsed($name) {
+    protected function _isEnrichmentKeyUsed($name)
+    {
         $enrichmentkey = Opus_EnrichmentKey::fetchByName($name);
 
-        return !is_null($enrichmentkey);
+        return ! is_null($enrichmentkey);
     }
-
 }
-

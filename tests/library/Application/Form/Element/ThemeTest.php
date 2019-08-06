@@ -32,18 +32,21 @@
  * @version     $Id$
  */
 
-class Application_Form_Element_ThemeTest extends FormElementTestCase {
+class Application_Form_Element_ThemeTest extends FormElementTestCase
+{
 
-    public function setUp() {
+    public function setUp()
+    {
         $this->_formElementClass = 'Application_Form_Element_Theme';
         $this->_expectedDecoratorCount = 6;
-        $this->_expectedDecorators = array('ViewHelper', 'Errors', 'Description', 'ElementHtmlTag', 'LabelNotEmpty',
-            'dataWrapper');
+        $this->_expectedDecorators = ['ViewHelper', 'Errors', 'Description', 'ElementHtmlTag', 'LabelNotEmpty',
+            'dataWrapper'];
         $this->_staticViewHelper = 'viewFormSelect';
         parent::setUp();
     }
 
-    public function testOptions() {
+    public function testOptions()
+    {
         $element = $this->getElement();
 
         $options = $element->getMultiOptions();
@@ -54,7 +57,8 @@ class Application_Form_Element_ThemeTest extends FormElementTestCase {
         $this->assertEquals('plain', $options['plain']);
     }
 
-    public function testSetValue() {
+    public function testSetValue()
+    {
         $element = $this->getElement();
 
         $this->assertNull($element->getValue());
@@ -64,7 +68,8 @@ class Application_Form_Element_ThemeTest extends FormElementTestCase {
         $this->assertEquals('opus4', $element->getValue());
     }
 
-    public function testSetUnknownValue() {
+    public function testSetUnknownValue()
+    {
         $element = $this->getElement();
 
         $this->assertNull($element->getValue());
@@ -78,8 +83,8 @@ class Application_Form_Element_ThemeTest extends FormElementTestCase {
      * @expectedException InvalidArgumentException
      * @expectedExceptionMessage Argument should be a valid path.
      */
-    public function testFindThemesInvalidPath() {
+    public function testFindThemesInvalidPath()
+    {
         Application_Form_Element_Theme::findThemes('/invalidPath');
     }
-
 }

@@ -38,5 +38,4 @@ class Solrsearch_Model_Search_DocumentTest extends ControllerTestCase
     {
         $this->markTestIncomplete('TODO - do some testing');
     }
-
 }

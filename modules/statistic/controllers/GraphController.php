@@ -32,12 +32,15 @@
  * @version     $Id$
  */
 
-class Statistic_GraphController extends Application_Controller_Action {
+class Statistic_GraphController extends Application_Controller_Action
+{
 
-    protected function buildGraph($title, $dataPdf, $dataFrontdoor) {
+    protected function buildGraph($title, $dataPdf, $dataFrontdoor)
+    {
     }
 
-    public function indexAction() {
+    public function indexAction()
+    {
         $this->_forward('year');
     }
 
@@ -47,11 +50,12 @@ class Statistic_GraphController extends Application_Controller_Action {
      * @return void
      *
      */
-    public function yearAction() {
+    public function yearAction()
+    {
         $this->disableViewRendering();
 
         $id = $this->getRequest()->getParam('id');
-        if (isset($id) === FALSE) {
+        if (isset($id) === false) {
             //TODO: create own exception
 
             throw new Exception("Parameter id must be set.");
@@ -60,7 +64,7 @@ class Statistic_GraphController extends Application_Controller_Action {
         $dataFrontdoor = Opus_Statistic_LocalCounter::getInstance()->readYears($id, 'frontdoor');
         $years = array_merge(array_keys($dataFrontdoor), array_keys($dataPdf));
         if (count($years) == 0) {
-            $years = array(date('Y'));
+            $years = [date('Y')];
         }
         foreach ($years as $year) {
             if (isset($dataPdf[$year]) === false) {
@@ -74,7 +78,9 @@ class Statistic_GraphController extends Application_Controller_Action {
         ksort($dataFrontdoor);
 
         $graph = new Statistic_Model_StatisticGraph(
-            $this->view->translate('graph_year_title'), $dataPdf, $dataFrontdoor
+            $this->view->translate('graph_year_title'),
+            $dataPdf,
+            $dataFrontdoor
         );
         $graph->setXAxisTitle($this->view->translate('graph_year_xaxis'));
         $graph->setYAxisTitle($this->view->translate('graph_yaxis'));
@@ -90,22 +96,23 @@ class Statistic_GraphController extends Application_Controller_Action {
      * @return void
      *
      */
-    public function monthAction() {
+    public function monthAction()
+    {
         $this->disableViewRendering();
 
         $id = $this->getRequest()->getParam('id');
-        if (isset($id) === FALSE) {
+        if (isset($id) === false) {
             //TODO: create own exception
             throw new Exception("Parameter id must be set.");
         }
         $dataPdf = Opus_Statistic_LocalCounter::getInstance()->readMonths($id);
         $dataFrontdoor = Opus_Statistic_LocalCounter::getInstance()->readMonths($id, 'frontdoor');
 
-        for ($i = 1; $i<13; $i++) {
-            if (isset($dataPdf[$i]) === FALSE) {
+        for ($i = 1; $i < 13; $i++) {
+            if (isset($dataPdf[$i]) === false) {
                 $dataPdf[$i] = 0;
             }
-            if (isset($dataFrontdoor[$i]) === FALSE) {
+            if (isset($dataFrontdoor[$i]) === false) {
                 $dataFrontdoor[$i] = 0;
             }
         }
@@ -114,7 +121,9 @@ class Statistic_GraphController extends Application_Controller_Action {
         ksort($dataFrontdoor);
 
         $graph = new Statistic_Model_StatisticGraph(
-            $this->view->translate('graph_month_title'), $dataPdf, $dataFrontdoor
+            $this->view->translate('graph_month_title'),
+            $dataPdf,
+            $dataFrontdoor
         );
         $graph->setXAxisTitle($this->view->translate('graph_month_xaxis'));
         $graph->setYAxisTitle($this->view->translate('graph_yaxis'));
@@ -131,11 +140,12 @@ class Statistic_GraphController extends Application_Controller_Action {
      * @return void
      *
      */
-    public function thumbAction() {
+    public function thumbAction()
+    {
         $this->disableViewRendering();
 
         $id = $this->getRequest()->getParam('id');
-        if (isset($id) === FALSE) {
+        if (isset($id) === false) {
             //TODO: create own exception
             throw new Exception("Parameter id must be set.");
         }
@@ -143,11 +153,7 @@ class Statistic_GraphController extends Application_Controller_Action {
         //TODO maybe there is a more elegant way to do this!?
         $layoutPath = $this->view->layout()->getLayoutPath();
 
-        $graph = new Statistic_Model_StatisticGraphThumb(array(90,150,30), $layoutPath . '/img/statistics_bg.jpg');
+        $graph = new Statistic_Model_StatisticGraphThumb([90,150,30], $layoutPath . '/img/statistics_bg.jpg');
         $graph->drawGraph();
-
     }
-
-
-
 }

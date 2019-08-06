@@ -40,24 +40,20 @@ class Application_View_Helper_Highlight extends Zend_View_Helper_Abstract
 
     public function highlight($subject, $needle, $prefix = null, $suffix = null)
     {
-        if (is_null($needle) || $needle === '')
-        {
+        if (is_null($needle) || $needle === '') {
             return $subject;
         }
 
-        if (is_null($prefix))
-        {
+        if (is_null($prefix)) {
             $prefix = '<b>';
         }
 
-        if (is_null($suffix))
-        {
+        if (is_null($suffix)) {
             $suffix = '</b>';
         }
 
         $quotedNeedle = preg_quote($needle, '/');
 
-        return preg_replace("/($quotedNeedle)/i", "$prefix$0$suffix" , $subject);
+        return preg_replace("/($quotedNeedle)/i", "$prefix$0$suffix", $subject);
     }
-
 }

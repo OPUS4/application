@@ -83,5 +83,4 @@ class Solrsearch_Model_SeriesTest extends ControllerTestCase
         $series = new Solrsearch_Model_Series(6);
         $this->assertNull($series->getLogoFilename());
     }
-
 }

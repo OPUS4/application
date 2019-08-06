@@ -53,5 +53,4 @@ class Application_Security_HttpAuthAdapter extends Zend_Auth_Adapter_Http
     {
         return parent::_secureStringCompare($a, sha1($b));
     }
-
 }

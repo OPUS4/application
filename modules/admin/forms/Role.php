@@ -51,7 +51,7 @@ class Admin_Form_Role extends Application_Form_Model_Abstract
 
         $section = empty($id) ? 'new' : 'edit';
 
-        if (!empty($id)) {
+        if (! empty($id)) {
             $role = new Opus_UserRole($id);
             $this->populateFromModel($role);
         }

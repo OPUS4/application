@@ -31,7 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Oai_Model_Error {
+class Oai_Model_Error
+{
 
     /**
      * Define all valid error codes.
@@ -48,14 +49,14 @@ class Oai_Model_Error {
      *
      * @var array  Valid OAI parameters.
      */
-    protected static $_oaiErrorCodes = array(
+    protected static $_oaiErrorCodes = [
         self::BADVERB => 'badVerb',
         self::BADARGUMENT => 'badArgument',
         self::NORECORDSMATCH => 'noRecordsMatch',
         self::CANNOTDISSEMINATEFORMAT => 'cannotDisseminateFormat',
         self::BADRESUMPTIONTOKEN => 'badResumptionToken',
         self::IDDOESNOTEXIST => 'idDoesNotExist',
-    );
+    ];
 
     /**
      * Map internal error codes to OAI error codes.
@@ -63,7 +64,8 @@ class Oai_Model_Error {
      * @param int $code Internal error code.
      * @return string OAI error code.
      */
-    public static function mapCode($code) {
+    public static function mapCode($code)
+    {
         if (false === array_key_exists($code, self::$_oaiErrorCodes)) {
                 throw new Oai_Model_Exception("Unknown oai error code $code");
         }

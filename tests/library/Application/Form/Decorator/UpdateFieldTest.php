@@ -82,7 +82,9 @@ class Application_Form_Decorator_UpdateFieldTest extends ControllerTestCase
         $this->assertEquals(
             '<div class="update-field-wrapper">'
             . '<input class="field-update-checkbox" name="cityUpdateEnabled" id="cityUpdateEnabled"'
-            . ' type="checkbox" checked="checked" /> Update field</div>CONTENT', $output);
+            . ' type="checkbox" checked="checked" /> Update field</div>CONTENT',
+            $output
+        );
         $this->assertContains('checked="checked"', $output);
     }
 

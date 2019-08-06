@@ -44,9 +44,9 @@ class Application_View_Helper_FormatDate extends Zend_View_Helper_Abstract
      *
      * TODO behaviour of function is not obvious - clean up
      */
-    public function formatDate($day = null, $month = null, $year = null) {
-        if (func_num_args() == 0)
-        {
+    public function formatDate($day = null, $month = null, $year = null)
+    {
+        if (func_num_args() == 0) {
             return $this;
         }
 
@@ -60,21 +60,18 @@ class Application_View_Helper_FormatDate extends Zend_View_Helper_Abstract
         return date_format($date, $formatPattern);
     }
 
-    public function formatOpusDate($date, $showTime = false) {
-        if (is_null($date))
-        {
+    public function formatOpusDate($date, $showTime = false)
+    {
+        if (is_null($date)) {
             return '';
         }
 
         $session = new Zend_Session_Namespace();
 
         // TODO aktuell werden nur zwei Sprachen unterstützt
-        if ($showTime)
-        {
+        if ($showTime) {
             $formatPattern = ($session->language == 'de') ? 'd.m.Y H:i' : 'Y/m/d H:i';
-        }
-        else
-        {
+        } else {
             $formatPattern = ($session->language == 'de') ? 'd.m.Y' : 'Y/m/d';
         }
 
@@ -82,5 +79,4 @@ class Application_View_Helper_FormatDate extends Zend_View_Helper_Abstract
 
         return $dateTime->format($formatPattern);
     }
-
 }

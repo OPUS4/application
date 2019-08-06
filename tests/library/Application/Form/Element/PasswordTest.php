@@ -91,6 +91,5 @@ class Application_Form_Element_PasswordTest extends FormElementTestCase
         $this->assertCount(1, $messages);
         $this->assertArrayHasKey('stringLengthTooShort', $messages);
         $this->assertContains('weniger als 6 Zeichen', $messages['stringLengthTooShort']);
-
     }
 }

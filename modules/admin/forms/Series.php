@@ -31,27 +31,30 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Admin_Form_Series extends Application_Form_Model_Abstract {
+class Admin_Form_Series extends Application_Form_Model_Abstract
+{
 
     const ELEMENT_TITLE = 'Title';
     const ELEMENT_INFOBOX = 'Infobox';
     const ELEMENT_VISIBLE = 'Visible';
     const ELEMENT_SORT_ORDER = 'SortOrder';
 
-    public function init() {
+    public function init()
+    {
         parent::init();
 
         $this->setRemoveEmptyCheckbox(false);
         $this->setUseNameAsLabel(true);
         $this->setModelClass('Opus_Series');
 
-        $this->addElement('text', self::ELEMENT_TITLE, array('required' => true, 'size' => 70));
+        $this->addElement('text', self::ELEMENT_TITLE, ['required' => true, 'size' => 70]);
         $this->addElement('textarea', self::ELEMENT_INFOBOX);
         $this->addElement('checkbox', self::ELEMENT_VISIBLE);
-        $this->addElement('text', self::ELEMENT_SORT_ORDER, array('required' => true)); // TODO improve?
+        $this->addElement('text', self::ELEMENT_SORT_ORDER, ['required' => true]); // TODO improve?
     }
 
-    public function populateFromModel($series) {
+    public function populateFromModel($series)
+    {
         $this->getElement(self::ELEMENT_MODEL_ID)->setValue($series->getId());
         $this->getElement(self::ELEMENT_TITLE)->setValue($series->getTitle());
         $this->getElement(self::ELEMENT_INFOBOX)->setValue($series->getInfobox());
@@ -59,11 +62,11 @@ class Admin_Form_Series extends Application_Form_Model_Abstract {
         $this->getElement(self::ELEMENT_SORT_ORDER)->setValue($series->getSortOrder());
     }
 
-    public function updateModel($series) {
+    public function updateModel($series)
+    {
         $series->setTitle($this->getElementValue(self::ELEMENT_TITLE));
         $series->setInfobox($this->getElementValue(self::ELEMENT_INFOBOX));
         $series->setVisible($this->getElementValue(self::ELEMENT_VISIBLE));
         $series->setSortOrder($this->getElementValue(self::ELEMENT_SORT_ORDER));
     }
-
 }

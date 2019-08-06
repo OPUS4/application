@@ -58,7 +58,6 @@ class Application_Security_AclProviderTest extends ControllerTestCase
 
         // fake authentication
         Zend_Auth::getInstance()->getStorage()->write('role_tester');
-
     }
 
     public function tearDown()
@@ -75,11 +74,14 @@ class Application_Security_AclProviderTest extends ControllerTestCase
         $aclProvider = new Application_Security_AclProvider();
         $acl = $aclProvider->getAcls();
         $this->assertTrue($acl instanceof Zend_Acl, 'Excpected instance of Zend_Acl');
-        $this->assertTrue($acl->isAllowed(Application_Security_AclProvider::ACTIVE_ROLE, 'documents'),
-            "expectec user has access to resource 'documents'");
-        $this->assertFalse($acl->isAllowed(Application_Security_AclProvider::ACTIVE_ROLE, 'accounts'),
-            "expectec user has no access to resource 'accounts'");
-
+        $this->assertTrue(
+            $acl->isAllowed(Application_Security_AclProvider::ACTIVE_ROLE, 'documents'),
+            "expectec user has access to resource 'documents'"
+        );
+        $this->assertFalse(
+            $acl->isAllowed(Application_Security_AclProvider::ACTIVE_ROLE, 'accounts'),
+            "expectec user has no access to resource 'accounts'"
+        );
     }
 
     public function testRoleNameLikeUserName()
@@ -95,17 +97,21 @@ class Application_Security_AclProviderTest extends ControllerTestCase
         $acl = $aclProvider->getAcls();
         $userAccount->delete();
         $this->assertTrue($acl instanceof Zend_Acl, 'Excpected instance of Zend_Acl');
-        $this->assertTrue($acl->isAllowed(Application_Security_AclProvider::ACTIVE_ROLE, 'documents'),
-            "expected user has access to resource 'documents'");
-        $this->assertFalse($acl->isAllowed(Application_Security_AclProvider::ACTIVE_ROLE, 'accounts'),
-            "expected user has no access to resource 'account'");
+        $this->assertTrue(
+            $acl->isAllowed(Application_Security_AclProvider::ACTIVE_ROLE, 'documents'),
+            "expected user has access to resource 'documents'"
+        );
+        $this->assertFalse(
+            $acl->isAllowed(Application_Security_AclProvider::ACTIVE_ROLE, 'accounts'),
+            "expected user has no access to resource 'account'"
+        );
     }
 
     public function testGetAllResources()
     {
         $aclResources = Application_Security_AclProvider::$resourceNames;
 
-        $allResources = array();
+        $allResources = [];
 
         foreach ($aclResources as $resources) {
             $allResources = array_merge($allResources, $resources);
@@ -113,5 +119,4 @@ class Application_Security_AclProviderTest extends ControllerTestCase
         $aclProvider = new Application_Security_AclProvider();
         $this->assertEquals($allResources, $aclProvider->getAllResources());
     }
-
 }

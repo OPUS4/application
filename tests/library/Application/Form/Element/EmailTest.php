@@ -49,7 +49,10 @@ class Application_Form_Element_EmailTest extends ControllerTestCase
         $this->assertNotNull($element->getAttrib('placeholder'));
 
         // Funktioniert evtl. nicht, wenn die Übersetzungsressource in Modul liegt (nicht 'default')
-        $this->assertNotEquals('email_format', $element->getAttrib('placeholder'),
-            'Der Schlüssel \'email_format\' wurde nicht übersetzt.');
+        $this->assertNotEquals(
+            'email_format',
+            $element->getAttrib('placeholder'),
+            'Der Schlüssel \'email_format\' wurde nicht übersetzt.'
+        );
     }
 }

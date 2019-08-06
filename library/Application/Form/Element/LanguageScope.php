@@ -32,16 +32,17 @@
  * @version     $Id$
  */
 
-class Application_Form_Element_LanguageScope extends Application_Form_Element_SelectWithNull {
+class Application_Form_Element_LanguageScope extends Application_Form_Element_SelectWithNull
+{
 
-    public function init() {
+    public function init()
+    {
         parent::init();
 
-        $values = array('Null', 'I', 'M', 'S');
+        $values = ['Null', 'I', 'M', 'S'];
 
         foreach ($values as $value) {
             $this->addMultiOption($value, 'Opus_Language_Scope_Value_' . $value);
         }
     }
-
 }

@@ -35,42 +35,45 @@
 /**
  * Angepasste Klasse für Checkbox Formularelemente.
  */
-class Application_Form_Element_Checkbox extends Zend_Form_Element_Checkbox implements Application_Form_IElement {
+class Application_Form_Element_Checkbox extends Zend_Form_Element_Checkbox implements Application_Form_IElement
+{
 
     private $_viewCheckedValue = 'Field_Value_True';
 
     private $_viewUncheckedValue = 'Field_Value_False';
 
-    public function init() {
+    public function init()
+    {
         $this->addPrefixPath('Application_Form_Decorator', 'Application/Form/Decorator', Zend_Form::DECORATOR);
     }
 
-    public function loadDefaultDecorators() {
-        if (!$this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
+    public function loadDefaultDecorators()
+    {
+        if (! $this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
             $this->setDecorators(
-                array(
+                [
                 'ViewHelper',
                 'Errors',
                 'Description',
                 'ElementHtmlTag',
-                array('Label', array('tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend')),
-                array(array('dataWrapper' => 'HtmlTagWithId'), array('tag' => 'div', 'class' => 'data-wrapper'))
-                )
+                ['Label', ['tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend']],
+                [['dataWrapper' => 'HtmlTagWithId'], ['tag' => 'div', 'class' => 'data-wrapper']]
+                ]
             );
         }
     }
 
-    public function prepareRenderingAsView() {
+    public function prepareRenderingAsView()
+    {
         $viewHelper = $this->getDecorator('ViewHelper');
         if ($viewHelper instanceof Application_Form_Decorator_ViewHelper) {
             $viewHelper->setViewOnlyEnabled(true);
         }
         $translator = $this->getTranslator();
-        if (!is_null($translator)) {
+        if (! is_null($translator)) {
             $this->setCheckedValue($translator->translate($this->_viewCheckedValue));
             $this->setUncheckedValue($translator->translate($this->_viewUncheckedValue));
-        }
-        else {
+        } else {
             $this->setCheckedValue($this->_viewCheckedValue);
             $this->setUncheckedValue($this->_viewUncheckedValue);
         }
@@ -86,26 +89,30 @@ class Application_Form_Element_Checkbox extends Zend_Form_Element_Checkbox imple
      *
      * @return string
      */
-    public function getHint() {
+    public function getHint()
+    {
         return null;
     }
 
-    public function getViewCheckedValue() {
+    public function getViewCheckedValue()
+    {
         return $this->_viewCheckedValue;
     }
 
-    public function setViewCheckedValue($value) {
+    public function setViewCheckedValue($value)
+    {
         $this->_viewCheckedValue = $value;
         return $this;
     }
 
-    public function getViewUncheckedValue() {
+    public function getViewUncheckedValue()
+    {
         return $this->_viewUncheckedValue;
     }
 
-    public function setViewUncheckedValue($value) {
+    public function setViewUncheckedValue($value)
+    {
         $this->_viewUncheckedValue = $value;
         return $this;
     }
-
 }

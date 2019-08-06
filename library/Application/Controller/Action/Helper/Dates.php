@@ -35,7 +35,8 @@
 /**
  * Controller helper for handling conversion between Opus_Date and strings.
  */
-class Application_Controller_Action_Helper_Dates extends Zend_Controller_Action_Helper_Abstract {
+class Application_Controller_Action_Helper_Dates extends Zend_Controller_Action_Helper_Abstract
+{
 
     /**
      * Validator for dates.
@@ -46,7 +47,8 @@ class Application_Controller_Action_Helper_Dates extends Zend_Controller_Action_
     /**
      * Constructs Application_Controller_Action_Helper_Dates.
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->_validator = new Application_Form_Validate_Date();
     }
 
@@ -55,7 +57,8 @@ class Application_Controller_Action_Helper_Dates extends Zend_Controller_Action_
      * @param string $datestr Date string
      * @return
      */
-    public function direct($datestr) {
+    public function direct($datestr)
+    {
         return $this->getOpusDate($datestr);
     }
 
@@ -64,7 +67,8 @@ class Application_Controller_Action_Helper_Dates extends Zend_Controller_Action_
      * @param string $datestr Date string
      * @return boolean TRUE - Only if date string is valid for current local
      */
-    public function isValid($datestr) {
+    public function isValid($datestr)
+    {
         $validator = new Application_Form_Validate_Date();
         return $validator->isValid($datestr);
     }
@@ -74,16 +78,16 @@ class Application_Controller_Action_Helper_Dates extends Zend_Controller_Action_
      * @param string $datestr Date string
      * @return Opus_Date
      */
-    public function getOpusDate($datestr) {
-        if (!is_null($datestr) && $this->isValid($datestr)) {
+    public function getOpusDate($datestr)
+    {
+        if (! is_null($datestr) && $this->isValid($datestr)) {
             $dateFormat = $this->_validator->getDateFormat();
 
             $date = new Zend_Date($datestr, $dateFormat);
 
             $dateModel = new Opus_Date($date);
             return $dateModel;
-        }
-        else {
+        } else {
             // TODO throw exception
             return null;
         }
@@ -94,16 +98,15 @@ class Application_Controller_Action_Helper_Dates extends Zend_Controller_Action_
      * @param Opus_Date $date Date
      * @return Date string for current language
      */
-    public function getDateString($date) {
+    public function getDateString($date)
+    {
         // Protect against invalid dates
-        if (!is_null($date) && $date->isValid()) {
+        if (! is_null($date) && $date->isValid()) {
             $dateFormat = $this->_validator->getDateFormat();
             $zendDate = $date->getZendDate();
             return $zendDate->get($dateFormat);
-        }
-        else {
+        } else {
             return null;
         }
     }
-
 }

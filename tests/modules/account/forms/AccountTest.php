@@ -57,7 +57,7 @@ class Account_Form_AccountTest extends ControllerTestCase
 
     public function tearDown()
     {
-        if (!is_null($this->account)) {
+        if (! is_null($this->account)) {
             $this->account->delete();
         }
 
@@ -94,12 +94,12 @@ class Account_Form_AccountTest extends ControllerTestCase
 
         $this->assertNotNull($form);
 
-        $postData = array(
+        $postData = [
             'username' => 'admin',
             'roleguest' => '1',
             'password' => 'notchanged',
             'confirmPassword' => 'notchanged'
-        );
+        ];
 
         $this->assertFalse($form->isValid($postData));
     }
@@ -112,12 +112,12 @@ class Account_Form_AccountTest extends ControllerTestCase
 
         $this->assertNotNull($form);
 
-        $postData = array(
+        $postData = [
             'username' => 'newuser',
             'roleguest' => '1',
             'password' => 'notchanged',
             'confirm' => 'notchanged'
-        );
+        ];
 
         $this->assertTrue($form->isValid($postData));
     }
@@ -131,13 +131,13 @@ class Account_Form_AccountTest extends ControllerTestCase
         // check that form was populated
         $this->assertEquals('user', $form->getElement('username')->getValue());
 
-        $postData = array(
+        $postData = [
             'username' => 'user',
             'oldLogin' => 'user', // added by AccountController based on ID
             'roleguest' => '1',
             'password' => 'notchanged',
             'confirm' => 'notchanged'
-        );
+        ];
 
         $this->assertTrue($form->isValid($postData));
     }
@@ -148,12 +148,12 @@ class Account_Form_AccountTest extends ControllerTestCase
         $account = new Opus_Account(null, null, 'user');
         $form->populateFromModel($account);
 
-        $postData = array(
+        $postData = [
             'username' => 'user',
             'roleguest' => '1',
             'password' => 'password',
             'confirm' => 'different'
-        );
+        ];
 
         $this->assertFalse($form->isValid($postData));
 
@@ -169,13 +169,13 @@ class Account_Form_AccountTest extends ControllerTestCase
         $account = new Opus_Account(null, null, 'user');
         $form->populateFromModel($account);
 
-        $postData = array(
+        $postData = [
             'username' => 'user',
             'roleguest' => '1',
             'email' => 'notAnEmail',
             'password' => 'password',
             'confirm' => 'password'
-        );
+        ];
 
         $this->assertFalse($form->isValid($postData));
 

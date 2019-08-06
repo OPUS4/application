@@ -36,7 +36,8 @@
 /**
  * Helper for getting a list of document IDs used by admin and review module.
  */
-class Application_Controller_Action_Helper_Documents extends Zend_Controller_Action_Helper_Abstract {
+class Application_Controller_Action_Helper_Documents extends Zend_Controller_Action_Helper_Abstract
+{
 
     /**
      * Gets called when the helper is used like a function of the helper broker.
@@ -46,7 +47,8 @@ class Application_Controller_Action_Helper_Documents extends Zend_Controller_Act
      * @param string $state ('published', 'unpublished', ...)
      * @return array of document identifiers
      */
-    public function direct($sortOrder = null, $sortReverse = 0, $state = 'published') {
+    public function direct($sortOrder = null, $sortReverse = 0, $state = 'published')
+    {
         return $this->getSortedDocumentIds($sortOrder, $sortReverse, $state);
     }
 
@@ -55,16 +57,16 @@ class Application_Controller_Action_Helper_Documents extends Zend_Controller_Act
      * @param string $docId Document identifier
      * @return Opus_Document
      */
-    public function getDocumentForId($docId) {
+    public function getDocumentForId($docId)
+    {
         // Check if parameter is formally correct
-        if (empty($docId) || !is_numeric($docId)) {
+        if (empty($docId) || ! is_numeric($docId)) {
             return null;
         }
 
         try {
             $doc = new Opus_Document($docId);
-        }
-        catch (Opus_Model_NotFoundException $omnfe) {
+        } catch (Opus_Model_NotFoundException $omnfe) {
             return null;
         }
 
@@ -81,16 +83,15 @@ class Application_Controller_Action_Helper_Documents extends Zend_Controller_Act
      *
      * TODO following could be handled inside a application model
      */
-    public function getSortedDocumentIds($sortOrder = null, $sortReverse = true, $state = null) {
+    public function getSortedDocumentIds($sortOrder = null, $sortReverse = true, $state = null)
+    {
         $finder = new Opus_DocumentFinder();
 
-        if (!is_null($state) && $state !== 'all')
-        {
+        if (! is_null($state) && $state !== 'all') {
             $finder->setServerState($state);
         }
 
-        switch ($sortOrder)
-        {
+        switch ($sortOrder) {
             case 'author':
                 $finder->orderByAuthorLastname($sortReverse);
                 break;
@@ -110,5 +111,4 @@ class Application_Controller_Action_Helper_Documents extends Zend_Controller_Act
 
         return $finder->ids();
     }
-
 }

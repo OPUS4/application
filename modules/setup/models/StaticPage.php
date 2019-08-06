@@ -69,7 +69,7 @@ class Setup_Model_StaticPage extends Setup_Model_Abstract
     public function setPageNames($pageNames)
     {
         // check if pageName is valid
-        if (!in_array($this->_pageName, $pageNames)) {
+        if (! in_array($this->_pageName, $pageNames)) {
             throw new Setup_Model_Exception('Invalid page name, not found in configuration. ');
         }
     }
@@ -141,7 +141,7 @@ class Setup_Model_StaticPage extends Setup_Model_Abstract
                 $resultArray[$language]['file']['filename'] = $fileName;
                 $resultArray[$language]['file']['contents'] = $this->getContent($filePath);
             }
-            if (!empty($translationUnits)) {
+            if (! empty($translationUnits)) {
                 foreach ($translationUnits as $translationUnit => $variants) {
                     $resultArray[$language]['key'][$translationUnit] = $variants[$language];
                 }
@@ -163,9 +163,9 @@ class Setup_Model_StaticPage extends Setup_Model_Abstract
             foreach ($fields as $key => $val) {
                 switch ($key) {
                     case 'file':
-                        if (!is_array($val)
-                                || !isset($val['filename'])
-                                || !isset($val['contents'])
+                        if (! is_array($val)
+                                || ! isset($val['filename'])
+                                || ! isset($val['contents'])
                         ) {
                             throw new Setup_Model_Exception('Invalid data structure');
                         }

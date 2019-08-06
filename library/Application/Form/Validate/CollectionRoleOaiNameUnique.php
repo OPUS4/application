@@ -31,13 +31,14 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Application_Form_Validate_CollectionRoleOaiNameUnique extends Application_Form_Validate_CollectionRoleNameUnique {
+class Application_Form_Validate_CollectionRoleOaiNameUnique extends Application_Form_Validate_CollectionRoleNameUnique
+{
 
     /**
      * Verwende OaiName um CollectionRole zu finden.
      */
-    protected function _getModel($identifier) {
+    protected function _getModel($identifier)
+    {
         return Opus_CollectionRole::fetchByOaiName($identifier);
     }
-
 }

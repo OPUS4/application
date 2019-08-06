@@ -32,7 +32,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Application_Data_SubjectProvider {
+class Application_Data_SubjectProvider
+{
 
     /**
      * Returns matching values as suggestions for autocomplete.
@@ -43,8 +44,8 @@ class Application_Data_SubjectProvider {
      * @param $term
      * @return array
      */
-    public function getValues($term) {
+    public function getValues($term)
+    {
         return Opus_Subject::getMatchingSubjects($term);
     }
-
 }

@@ -113,7 +113,8 @@ class Admin_Form_UserRoles extends Application_Form_Model_Abstract
      *
      * TODO special handling of 'guest' (see addRoleElements() function)
      */
-    public function clearAll() {
+    public function clearAll()
+    {
         $elements = $this->getElements();
 
         foreach ($elements as $element) {

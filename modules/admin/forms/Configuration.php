@@ -37,7 +37,8 @@
  *
  * TODO Application_Form_Abstract should be enough (not ID element needed)
  */
-class Admin_Form_Configuration extends Application_Form_Model_Abstract {
+class Admin_Form_Configuration extends Application_Form_Model_Abstract
+{
 
     /**
      * Prefix for translation keys of configuration options.
@@ -55,7 +56,8 @@ class Admin_Form_Configuration extends Application_Form_Model_Abstract {
     /**
      * Configures form and creates form elements.
      */
-    public function init() {
+    public function init()
+    {
         parent::init();
 
         $options = new Admin_Model_Options();
@@ -68,10 +70,11 @@ class Admin_Form_Configuration extends Application_Form_Model_Abstract {
             $element = $this->createElement(
                 $option->getElementType(),
                 $name,
-                array_merge(array(
+                array_merge(
+                    [
                     'label' => $option->getLabel(),
                     'description' => $option->getDescription()
-                    ),
+                    ],
                     $option->getOptions()
                 )
             );
@@ -86,7 +89,8 @@ class Admin_Form_Configuration extends Application_Form_Model_Abstract {
     /**
      * Initializes values of form elements from configuration.
      */
-    public function populateFromModel($config) {
+    public function populateFromModel($config)
+    {
         foreach ($this->_options as $name => $option) {
             $value = Application_Configuration::getValueFromConfig($config, $option->getKey());
             $this->getElement($name)->setValue($value);
@@ -96,7 +100,8 @@ class Admin_Form_Configuration extends Application_Form_Model_Abstract {
     /**
      * Updates configuration with values from form elements.
      */
-    public function updateModel($config) {
+    public function updateModel($config)
+    {
         foreach ($this->_options as $name => $option) {
             $value = $this->getElement($name)->getValue();
 
@@ -124,17 +129,15 @@ class Admin_Form_Configuration extends Application_Form_Model_Abstract {
 
         if (is_null($group)) {
             $this->addDisplayGroup(
-                array($element),
+                [$element],
                 $section,
-                array(
+                [
                     'legend' => self::LABEL_TRANSLATION_PREFIX . 'section_' . $section,
-                    'decorators' => array('FormElements', 'Fieldset')
-                )
+                    'decorators' => ['FormElements', 'Fieldset']
+                ]
             );
-        }
-        else {
+        } else {
             $group->addElement($element);
         }
     }
-
 }

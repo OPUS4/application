@@ -34,74 +34,77 @@
 
 /**
  * Unterformular fuer eine zugewiesene Collection.
- * 
+ *
  */
-class Admin_Form_Document_Collection extends Admin_Form_AbstractDocumentSubForm {
-    
+class Admin_Form_Document_Collection extends Admin_Form_AbstractDocumentSubForm
+{
+
     /**
      * Name von Formularelement fuer Collection-ID.
      */
     const ELEMENT_ID = 'Id';
-    
+
     /**
      * Name von Formularelement fuer das Editieren der Collection-Zuweisung zum Dokument.
-     * 
+     *
      * Ein Klick auf diesen Button zeigt die zugewiesene Collection in der Hierarchy an und erlaubt es dem Nutzer eine
      * andere beliebige Collection auszuwählen. Die alte Zuweisung wird durch die neue ersetzt. Der Use Case für diese
      * Funktion sind fast richtige Zuweisungen durch Einsteller, die vom Bearbeiter korrigiert werden müssen.
      */
     const ELEMENT_EDIT = 'Edit';
-    
+
     /**
      * Name von Formularelement fuer das Enfernen der Collection vom Dokument.
      */
     const ELEMENT_REMOVE = 'Remove';
-    
+
     private $_collectionName = null;
-        
+
     /**
      * Erzeugt die Formularelemente.
-     * 
+     *
      * TODO disable translation für EDIT Element
      */
-    public function init() {
+    public function init()
+    {
         parent::init();
-        
+
         $this->addElement('hidden', self::ELEMENT_ID);
         $this->addElement('submit', self::ELEMENT_EDIT);
         $this->getElement(self::ELEMENT_EDIT)->setDisableTranslator(true); // Collections are translated manually
-        $this->addElement('submit', self::ELEMENT_REMOVE, array('label' => 'admin_button_remove'));
+        $this->addElement('submit', self::ELEMENT_REMOVE, ['label' => 'admin_button_remove']);
     }
-    
+
     /**
      * Initialisiert das Formular mit einer Collection.
      * @param Opus_Collection $collection
      */
-    public function populateFromModel($collection) {
+    public function populateFromModel($collection)
+    {
         $this->getElement(self::ELEMENT_ID)->setValue($collection->getId());
         $displayName = $this->getDisplayNameForCollection($collection);
         $this->getElement(self::ELEMENT_EDIT)->setLabel($displayName);
         $this->setLegend($displayName);
     }
-    
+
     /**
      * Ermittelt Anzeigenamen fuer Sammlung.
-     * 
+     *
      * Root-Collections haben keinen Namen. In diesem Fall wird der Name der CollectionRole angezeigt. Da Collections
      * normalerweise nicht übersetzt werden, muss der Name der CollectionRole hier separate übersetzt werden.
-     * 
+     *
      * @param type $collection
      * @return type
      */
-    protected function getDisplayNameForCollection($collection) {
+    protected function getDisplayNameForCollection($collection)
+    {
         $displayName = $collection->getDisplayName();
         if (strlen(trim($displayName)) == 0 && $collection->isRoot()) {
             $translator = $this->getTranslator();
             $translationKey = 'default_collection_role_' . $collection->getRoleName();
             if ($translator->isTranslated($translationKey)) {
                 $displayName = $translator->translate($translationKey);
-            }
-            else {
+            } else {
                 $displayName = $collection->getRoleName();
             }
         }
@@ -114,75 +117,79 @@ class Admin_Form_Document_Collection extends Admin_Form_AbstractDocumentSubForm 
      * @param array $context POST Daten für gesamtes Metadaten-Formular
      * @return string Ergebnis der Verarbeitung oder NULL
      */
-    public function processPost($data, $context) {
+    public function processPost($data, $context)
+    {
         if (array_key_exists(self::ELEMENT_REMOVE, $data)) {
             return 'remove';
-        }
-        else if (array_key_exists(self::ELEMENT_EDIT, $data)) {
+        } elseif (array_key_exists(self::ELEMENT_EDIT, $data)) {
             // TODO edit collection (neue zuweisen, alte entfernen)
             // TODO Seitenwechel, POST sichern, Return value
             return 'edit';
         }
-        
+
         return null;
     }
-    
+
     /**
      * Liefert das Model für die angezeigte Collection.
-     * 
+     *
      * @return \Opus_Collection
      */
-    public function getModel() {
+    public function getModel()
+    {
         $colId = $this->getElement(self::ELEMENT_ID)->getValue();
-        
+
         return new Opus_Collection($colId);
     }
-    
+
     /**
      * Initialisiert das Formular basierend auf POST Daten.
-     * 
+     *
      * Der POST enthält nur die ID der Collection, damit der Name im Formular angezeigt werden kann,
      * muss die Collection instanziert werden.
-     * 
+     *
      * @param type $post
-     * 
+     *
      * TODO catch bad POST
      * TODO catch unknown Collection
      */
-    public function populateFromPost($post) {
+    public function populateFromPost($post)
+    {
         $colId = $post[self::ELEMENT_ID];
         $collection = new Opus_Collection($colId);
         $this->populateFromModel($collection);
     }
-    
+
     /**
      * Setzt die Decoratoren für das Formular.
      */
-    public function loadDefaultDecorators() {
+    public function loadDefaultDecorators()
+    {
         $this->setDecorators(
-            array(
+            [
             'PrepareElements',
-            array('ViewScript', array('viewScript' => 'form/collectionForm.phtml')),
-            array(array('multiWrapper' => 'HtmlTag'), array('class' => 'multiple-wrapper'))
-            )
+            ['ViewScript', ['viewScript' => 'form/collectionForm.phtml']],
+            [['multiWrapper' => 'HtmlTag'], ['class' => 'multiple-wrapper']]
+            ]
         );
     }
-    
+
     /**
-     * Überschreibt Funktion zum Entfernen aller Formularelemente für die Metadaten-Übersicht, um den Namen der 
+     * Überschreibt Funktion zum Entfernen aller Formularelemente für die Metadaten-Übersicht, um den Namen der
      * Collection im Formular zu speichern.
      */
-    public function _removeElements() {
+    public function _removeElements()
+    {
         $this->_collectionName = $this->getElement(self::ELEMENT_EDIT)->getLabel();
         parent::_removeElements();
     }
-    
+
     /**
      * Liefert den Namen der angezeigten Collection.
      * @return string
      */
-    public function getCollectionName() {
+    public function getCollectionName()
+    {
         return $this->_collectionName;
     }
-            
 }

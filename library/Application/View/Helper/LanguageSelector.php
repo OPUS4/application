@@ -38,14 +38,16 @@
  * Builds the language selection form.
  *
  */
-class Application_View_Helper_LanguageSelector extends Zend_View_Helper_Abstract {
+class Application_View_Helper_LanguageSelector extends Zend_View_Helper_Abstract
+{
 
     /**
      * Get an instance of the view helper.
      *
      * @return Application_View_Helper_LanguageSelector
      */
-    public function languageSelector() {
+    public function languageSelector()
+    {
         if (isset($this->view->languageSelectorDisabled) && $this->view->languageSelectorDisabled === true) {
             return null;
         }
@@ -60,24 +62,26 @@ class Application_View_Helper_LanguageSelector extends Zend_View_Helper_Abstract
         $supportedLang = $configHelper->getSupportedLanguages();
         $translations = array_intersect($translations, $supportedLang);
 
-        $result = array();
+        $result = [];
         foreach ($translations as $translation) {
             if ($currentLocale->getLanguage() !== $translation) {
                 $languageName = $currentLocale->getTranslation($translation, 'language', $translation);
                 $languageUrl = $this->view->url(
                     array_merge(
-                        array(
+                        [
                         'action' => 'language',
                         'controller' => 'index',
                         'module' => 'home',
-                        'language' => $translation), $returnParams->getReturnParameters()
-                    ), null, true
+                        'language' => $translation],
+                        $returnParams->getReturnParameters()
+                    ),
+                    null,
+                    true
                 );
-                array_push($result, array('name' => htmlspecialchars($languageName), 'url' => $languageUrl));
+                array_push($result, ['name' => htmlspecialchars($languageName), 'url' => $languageUrl]);
             }
         }
 
         return $result;
     }
-
 }

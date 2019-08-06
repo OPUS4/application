@@ -164,7 +164,6 @@ class Frontdoor_Model_HtmlMetaTags
         $datePublished = $document->getPublishedDate();
         if (! is_null($datePublished)) {
             $dateStr = $datePublished->getZendDate()->get('yyyy-MM-dd');
-
         } else {
             $dateStr = $document->getPublishedYear();
         }

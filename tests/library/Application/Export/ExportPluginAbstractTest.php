@@ -83,8 +83,9 @@ class Application_Export_ExportPluginAbstractTest extends ControllerTestCase
 
     private function setAdminOnly($optionValue)
     {
-        Zend_Registry::set('Zend_Config',
-            new Zend_Config(['adminOnly' => $optionValue]));
+        Zend_Registry::set(
+            'Zend_Config',
+            new Zend_Config(['adminOnly' => $optionValue])
+        );
     }
-
 }

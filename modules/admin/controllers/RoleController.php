@@ -37,7 +37,7 @@ class Admin_RoleController extends Application_Controller_ActionCRUD
 {
 
     // TODO duplicated in Admin_Form_Role (centralize)
-    private static $_protectedRoles = array('guest', 'administrator');
+    private static $_protectedRoles = ['guest', 'administrator'];
 
     public function init()
     {
@@ -54,6 +54,6 @@ class Admin_RoleController extends Application_Controller_ActionCRUD
 
     public function isModifiable($model)
     {
-        return !in_array($model->getName(), self::$_protectedRoles);
+        return ! in_array($model->getName(), self::$_protectedRoles);
     }
 }

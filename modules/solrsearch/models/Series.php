@@ -32,11 +32,13 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Solrsearch_Model_Series {
+class Solrsearch_Model_Series
+{
 
     private $_series;
 
-    public function  __construct($seriesId) {
+    public function __construct($seriesId)
+    {
         if (is_null($seriesId)) {
             throw new Solrsearch_Model_Exception('Could not browse series due to missing id parameter.', 400);
         }
@@ -44,8 +46,7 @@ class Solrsearch_Model_Series {
         $s = null;
         try {
             $s = new Opus_Series($seriesId);
-        }
-        catch (Opus_Model_NotFoundException $e) {
+        } catch (Opus_Model_NotFoundException $e) {
             throw new Solrsearch_Model_Exception("Series with id '" . $seriesId . "' does not exist.", 404);
         }
 
@@ -55,24 +56,30 @@ class Solrsearch_Model_Series {
 
         if ($s->getNumOfAssociatedPublishedDocuments() === 0) {
             throw new Solrsearch_Model_Exception(
-                "Series with id '" . $seriesId . "' does not have any published documents.", 404);
+                "Series with id '" . $seriesId . "' does not have any published documents.",
+                404
+            );
         }
         $this->_series = $s;
     }
 
-    public function getId() {
+    public function getId()
+    {
         return $this->_series->getId();
     }
 
-    public function getTitle() {
+    public function getTitle()
+    {
         return $this->_series->getTitle();
     }
 
-    public function getInfobox() {
+    public function getInfobox()
+    {
         return $this->_series->getInfobox();
     }
 
-    public function getLogoFilename() {
+    public function getLogoFilename()
+    {
         $logoDir = APPLICATION_PATH . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'series_logos'
             . DIRECTORY_SEPARATOR . $this->_series->getId();
         if (is_readable($logoDir)) {
@@ -85,6 +92,4 @@ class Solrsearch_Model_Series {
         }
         return null;
     }
-
 }
-

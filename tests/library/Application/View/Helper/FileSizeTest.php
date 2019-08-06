@@ -70,5 +70,4 @@ class Application_View_Helper_FileSizeTest extends ControllerTestCase
     {
         $this->assertEquals('1024 GB', $this->helper->fileSize(null, 1024 * 1024 * 1024 * 1024));
     }
-
 }

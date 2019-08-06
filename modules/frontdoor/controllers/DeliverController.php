@@ -60,12 +60,12 @@ class Frontdoor_DeliverController extends Application_Controller_Action
 
         try {
             $fileObject = $fileModel->getFileObject($realm);
-        } catch(Frontdoor_Model_FrontdoorDeliveryException $e) {
+        } catch (Frontdoor_Model_FrontdoorDeliveryException $e) {
             $this->handleDeliveryError($e);
             return;
         }
 
-        if (!$fileObject->exists()) {
+        if (! $fileObject->exists()) {
             $this->handleDeliveryError(new Frontdoor_Model_FileNotFoundException());
             return;
         }

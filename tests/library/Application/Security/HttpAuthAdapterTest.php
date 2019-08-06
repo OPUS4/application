@@ -36,10 +36,10 @@ class Application_Security_HttpAuthAdapterTest extends ControllerTestCase
 
     public function testSecureStringCompare()
     {
-        $adapter = new Application_Security_HttpAuthAdapter(array(
+        $adapter = new Application_Security_HttpAuthAdapter([
             'accept_schemes' => 'basic',
             'realm' => 'opus-sword'
-        ));
+        ]);
 
         $method = new ReflectionMethod('Application_Security_HttpAuthAdapter', '_secureStringCompare');
         $method->setAccessible(true);
@@ -49,5 +49,4 @@ class Application_Security_HttpAuthAdapterTest extends ControllerTestCase
         // second parameter gets hashed in function because the first parameter coming from database is hashed
         $this->assertTrue($method->invoke($adapter, sha1('password'), 'password'));
     }
-
 }

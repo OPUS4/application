@@ -86,7 +86,7 @@ class Admin_Model_DoiReport
         foreach ($docFinder->ids() as $docId) {
             $doc = new Opus_Document($docId);
             $dois = $doc->getIdentifierDoi();
-            if (!is_null($dois) && !empty($dois)) {
+            if (! is_null($dois) && ! empty($dois)) {
                 // es wird nur die erste DOI für die DOI-Registrierung berücksichtigt
                 $doi = $dois[0];
                 if (is_null($doi->getStatus()) && $doi->isLocalDoi()) {
@@ -116,11 +116,11 @@ class Admin_Model_DoiReport
         foreach ($docFinder->ids() as $docId) {
             $doc = new Opus_Document($docId);
             $dois = $doc->getIdentifierDoi();
-            if (!is_null($dois) && !empty($dois)) {
+            if (! is_null($dois) && ! empty($dois)) {
                 // es wird nur die erste DOI für die DOI-Prüfung berücksichtigt
                 $doi = $dois[0];
                 $status = $doi->getStatus();
-                if (!is_null($status) && $status != 'verified') {
+                if (! is_null($status) && $status != 'verified') {
                     $result++;
                 }
             }

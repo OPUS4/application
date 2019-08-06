@@ -43,7 +43,8 @@
  * @package     Module_Admin
  * @subpackage  Model
  */
-class Admin_Model_EnrichmentKeys extends Application_Model_Abstract {
+class Admin_Model_EnrichmentKeys extends Application_Model_Abstract
+{
 
     /**
      * Enrichment keys that are configured as protected.
@@ -58,16 +59,16 @@ class Admin_Model_EnrichmentKeys extends Application_Model_Abstract {
      *
      * @return array
      */
-    public function getProtectedEnrichmentKeys() {
+    public function getProtectedEnrichmentKeys()
+    {
         if (is_null($this->_protectedKeys)) {
             $config = $this->getConfig();
 
-            $protectedKeys = array();
+            $protectedKeys = [];
 
             if (isset($config->enrichmentkey->protected->modules)) {
                 $protectedKeys = explode(',', $config->enrichmentkey->protected->modules);
-            }
-            else {
+            } else {
                 $this->getLogger()->warn(
                     'config key \'enrichmentkey.protected.modules\' is not defined in config file'
                 );
@@ -75,10 +76,10 @@ class Admin_Model_EnrichmentKeys extends Application_Model_Abstract {
 
             if (isset($config->enrichmentkey->protected->migration)) {
                 $protectedKeys = array_merge(
-                    $protectedKeys, explode(',', $config->enrichmentkey->protected->migration)
+                    $protectedKeys,
+                    explode(',', $config->enrichmentkey->protected->migration)
                 );
-            }
-            else {
+            } else {
                 $this->getLogger()->warn(
                     'config key \'enrichmentkey.protected.migration\' is not defined in config file'
                 );
@@ -94,8 +95,8 @@ class Admin_Model_EnrichmentKeys extends Application_Model_Abstract {
      * Sets list of protected enrichment keys in model.
      * @param $keys array
      */
-    public function setProtectedEnrichmentKeys($keys) {
+    public function setProtectedEnrichmentKeys($keys)
+    {
         $this->_protectedKeys = $keys;
     }
-
 }

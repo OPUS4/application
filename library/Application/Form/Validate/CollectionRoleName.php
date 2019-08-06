@@ -35,9 +35,9 @@ class Application_Form_Validate_CollectionRoleName extends Opus_Validate_Collect
 
     const NAME_CONTAINS_INVALID_CHAR = 'containsInvalidChar';
 
-    protected $_messageTemplates = array(
+    protected $_messageTemplates = [
         self::NAME_CONTAINS_INVALID_CHAR => 'admin_collectionroles_error_name_contains_invalid_char'
-    );
+    ];
 
     /**
      * Returns true if and only if $value meets the validation requirements
@@ -59,4 +59,3 @@ class Application_Form_Validate_CollectionRoleName extends Opus_Validate_Collect
         return $valid;
     }
 }
-
