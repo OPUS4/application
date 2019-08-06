@@ -603,9 +603,12 @@ class ControllerTestCase extends TestCase
         }
 
         try {
+            new Opus_Document($docId);
             $doc->deletePermanent();
         } catch (Opus_Model_NotFoundException $omnfe) {
             // Model nicht gefunden -> alles gut (hoffentlich)
+            $this->getLogger()->debug("Test document {$docId} was deleted successfully by test.");
+            return;
         }
         catch (Exception $ex) {
             $this->getLogger()->err('unexpected exception while cleaning document ' . $docId . ': ' . $ex);
@@ -642,21 +645,14 @@ class ControllerTestCase extends TestCase
 
     /**
      * Erzeugt ein Testdokument, das nach der Testausführung automatisch aufgeräumt wird.
-     * Falls das Aufräumen nicht gewünscht ist, kann dieser Umstand durch Setzen des
-     * Parameters $cleanup auf false angezeigt werden. Dann muss sich der aufrufende Test Case
-     * bzw. der im Test verwendete Code um das Cleanup kümmern! Dieser Fall sollte nur sehr
-     * selten vorkommen.
      *
-     * @param bool $cleanup wenn false, dann erfolgt kein automatischer Cleanup beim tearDown
      * @return Opus_Document
      * @throws Opus_Model_Exception
      */
-    protected function createTestDocument($cleanup = true)
+    protected function createTestDocument()
     {
         $doc = new Opus_Document();
-        if ($cleanup) {
-            $this->addTestDocument($doc);
-        }
+        $this->addTestDocument($doc);
         return $doc;
     }
 
