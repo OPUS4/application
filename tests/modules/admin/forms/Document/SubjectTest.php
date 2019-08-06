@@ -196,9 +196,9 @@ class Admin_Form_Document_SubjectTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Subject('swd', 'deu');
 
-        $post = array(
+        $post = [
             'Value' => ' ' // darf nicht leer sein
-        );
+        ];
 
         $this->assertFalse($form->isValid($post));
 
@@ -217,5 +217,4 @@ class Admin_Form_Document_SubjectTest extends ControllerTestCase
         $this->assertNotNull($form->getElement('ExternalKey'));
         $this->assertNull($form->getElement('Remove'));
     }
-
 }

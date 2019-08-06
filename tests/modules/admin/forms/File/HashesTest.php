@@ -59,5 +59,4 @@ class Admin_Form_File_HashesTest extends ControllerTestCase
 
         $this->assertEquals(0, count($form->getElements()));
     }
-
 }

@@ -357,8 +357,7 @@ class Admin_AccountControllerTest extends ControllerTestCase
         $this->assertResponseCode(200);
 
         $this->assertQueryCount("a[@href='" . $this->getRequest()->getBaseUrl()
-            . "/admin/account/delete/id/" . $user->getId() . "']", 0, "There should be no delete link for 'admin'."
-        );
+            . "/admin/account/delete/id/" . $user->getId() . "']", 0, "There should be no delete link for 'admin'.");
     }
 
     public function testHideDeleteLinkForCurrentUser()
@@ -373,8 +372,10 @@ class Admin_AccountControllerTest extends ControllerTestCase
 
         $user = new Opus_Account(null, null, 'security4');
 
-        $this->assertQueryCount("a[@href='" . $this->getRequest()->getBaseUrl()
-            . "/admin/account/delete/id/" . $user->getId() . "']", 0,
+        $this->assertQueryCount(
+            "a[@href='" . $this->getRequest()->getBaseUrl()
+            . "/admin/account/delete/id/" . $user->getId() . "']",
+            0,
             "There should be no delete link for current user'."
         );
     }

@@ -452,9 +452,9 @@ class Admin_Form_Document_MultiSubFormTest extends ControllerTestCase
             ['label' => 'SortOrder']
         ];
 
-        $form = new Admin_Form_Document_MultiSubForm('Admin_Form_Document_Series', 'Series', null, array(
+        $form = new Admin_Form_Document_MultiSubForm('Admin_Form_Document_Series', 'Series', null, [
             'columns' => $columns
-        ));
+        ]);
 
         $subform = new Zend_Form_SubForm();
         $subform->addPrefixPath('Application_Form_Decorator', 'Application/Form/Decorator', Zend_Form::DECORATOR);
@@ -543,12 +543,18 @@ class Admin_Form_Document_MultiSubFormTest extends ControllerTestCase
         $form->populateFromModel($document);
 
         $this->assertNotNull($form->getSubform('TitleParent0'));
-        $this->assertEquals('multiple-wrapper even',
-            $form->getSubform('TitleParent0')->getDecorator('multiWrapper')->getOption('class'));
-        $this->assertEquals('multiple-wrapper odd',
-            $form->getSubform('TitleParent1')->getDecorator('multiWrapper')->getOption('class'));
-        $this->assertEquals('multiple-wrapper even',
-            $form->getSubform('TitleParent2')->getDecorator('multiWrapper')->getOption('class'));
+        $this->assertEquals(
+            'multiple-wrapper even',
+            $form->getSubform('TitleParent0')->getDecorator('multiWrapper')->getOption('class')
+        );
+        $this->assertEquals(
+            'multiple-wrapper odd',
+            $form->getSubform('TitleParent1')->getDecorator('multiWrapper')->getOption('class')
+        );
+        $this->assertEquals(
+            'multiple-wrapper even',
+            $form->getSubform('TitleParent2')->getDecorator('multiWrapper')->getOption('class')
+        );
     }
 
     public function testOddEvenAfterRemove()
@@ -584,10 +590,14 @@ class Admin_Form_Document_MultiSubFormTest extends ControllerTestCase
 
         $this->assertEquals(2, count($form->getSubForms()));
 
-        $this->assertEquals('multiple-wrapper even',
-            $form->getSubform('TitleParent0')->getDecorator('multiWrapper')->getOption('class'));
-        $this->assertEquals('multiple-wrapper odd',
-            $form->getSubform('TitleParent1')->getDecorator('multiWrapper')->getOption('class'));
+        $this->assertEquals(
+            'multiple-wrapper even',
+            $form->getSubform('TitleParent0')->getDecorator('multiWrapper')->getOption('class')
+        );
+        $this->assertEquals(
+            'multiple-wrapper odd',
+            $form->getSubform('TitleParent1')->getDecorator('multiWrapper')->getOption('class')
+        );
     }
 
     public function testRegression3106ConstructFromAddPost()
@@ -628,11 +638,16 @@ class Admin_Form_Document_MultiSubFormTest extends ControllerTestCase
         foreach ($subform->getElements() as $element) {
             $name = $element->getName();
             if ($name !== 'Id') {
-                $this->assertTrue($element->getDecorator('tableCellWrapper') !== false,
-                    "Element '$name' does not have 'tableCellWrapper'.");
+                $this->assertTrue(
+                    $element->getDecorator('tableCellWrapper') !== false,
+                    "Element '$name' does not have 'tableCellWrapper'."
+                );
                 $decorator = $element->getDecorator('tableCellWrapper');
-                $this->assertEquals("$name-data", $decorator->getOption('class'),
-                    "CSS class for element '$name' not set to '$name-data'.");
+                $this->assertEquals(
+                    "$name-data",
+                    $decorator->getOption('class'),
+                    "CSS class for element '$name' not set to '$name-data'."
+                );
             }
         }
     }
@@ -652,8 +667,11 @@ class Admin_Form_Document_MultiSubFormTest extends ControllerTestCase
         $index = 0;
 
         foreach ($form->getSubForms() as $name => $subform) {
-            $this->assertEquals($identifiers[$index]->getId(), $subform->getElement('Id')->getValue(),
-                "Subform $name should habe been at position $index.");
+            $this->assertEquals(
+                $identifiers[$index]->getId(),
+                $subform->getElement('Id')->getValue(),
+                "Subform $name should habe been at position $index."
+            );
             $index++;
         }
     }

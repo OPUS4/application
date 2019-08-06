@@ -69,9 +69,9 @@ class Admin_Form_Document_PersonMovesTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_PersonMoves();
 
-        $post = array(
+        $post = [
             'First' => 'Erster'
-        );
+        ];
 
         $result = $form->processPost($post, null);
 
@@ -109,7 +109,6 @@ class Admin_Form_Document_PersonMovesTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_PersonMoves();
 
-        $this->assertNull($form->processPost(array(), null));
+        $this->assertNull($form->processPost([], null));
     }
-
 }

@@ -141,7 +141,7 @@ class Admin_Model_DoiReportTest extends ControllerTestCase
             $doi->setValue('10.5072/anothersystem-' . $docId);
         }
         $doi->setStatus($doiStatus);
-        $doc->setIdentifier(array($doi));
+        $doc->setIdentifier([$doi]);
 
         $doc->store();
     }

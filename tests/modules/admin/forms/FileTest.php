@@ -75,9 +75,9 @@ class Admin_Form_FileTest extends ControllerTestCase
         $this->assertEquals('2013/12/10', $form->getElement('ServerDateSubmitted')->getValue());
         $this->assertEquals('1', $form->getElement('SortOrder')->getValue());
 
-        $this->assertEquals(array('frontdoor', 'oai'), $form->getElement('VisibleIn')->getValue());
+        $this->assertEquals(['frontdoor', 'oai'], $form->getElement('VisibleIn')->getValue());
 
-        $this->assertEquals(array('administrator', 'guest', 'reviewer'), $form->getElement('Roles')->getValue());
+        $this->assertEquals(['administrator', 'guest', 'reviewer'], $form->getElement('Roles')->getValue());
 
         $hashes = $form->getSubForm('Hashes');
         // TODO hashes
@@ -107,8 +107,8 @@ class Admin_Form_FileTest extends ControllerTestCase
         $form->getElement('Language')->setValue('fra');
         $form->getElement('Label')->setValue('Testlabel');
         $form->getElement('Comment')->setValue('Testkommentar');
-        $form->getElement('VisibleIn')->setValue(array('frontdoor', 'oai'));
-        $form->getElement('Roles')->setValue(array('reviewer', 'docsadmin'));
+        $form->getElement('VisibleIn')->setValue(['frontdoor', 'oai']);
+        $form->getElement('Roles')->setValue(['reviewer', 'docsadmin']);
 
         $document = $this->createTestDocument();
 
@@ -131,8 +131,8 @@ class Admin_Form_FileTest extends ControllerTestCase
         $this->assertContains('reviewer', $roles);
         $this->assertContains('docsadmin', $roles);
 
-        $form->getElement('VisibleIn')->setValue(array('oai'));
-        $form->getElement('Roles')->setValue(array('reviewer', 'guest'));
+        $form->getElement('VisibleIn')->setValue(['oai']);
+        $form->getElement('Roles')->setValue(['reviewer', 'guest']);
 
         $form->updateModel($file);
 
@@ -229,11 +229,11 @@ class Admin_Form_FileTest extends ControllerTestCase
         $form = new Admin_Form_File();
         $form->setName('File0');
 
-        $post = array(
-            'File0' => array(
+        $post = [
+            'File0' => [
                 'Id' => 116
-            )
-        );
+            ]
+        ];
 
         $form->setDefaults($post);
 
@@ -290,7 +290,7 @@ class Admin_Form_FileTest extends ControllerTestCase
 
         $document->store(); // setzt automatisch 'guest' Zugriff für Datei
 
-        $form->updateFileRoles($file, array('administrator', 'reviewer'));
+        $form->updateFileRoles($file, ['administrator', 'reviewer']);
 
         $fileId = $file->getId();
 
@@ -309,7 +309,7 @@ class Admin_Form_FileTest extends ControllerTestCase
 
         $logger->clear();
 
-        $form->updateFileRoles($file, array('guest', 'reviewer'));
+        $form->updateFileRoles($file, ['guest', 'reviewer']);
 
         $messages = $logger->getMessages();
 

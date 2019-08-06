@@ -38,6 +38,4 @@ class Admin_Form_YesNoFormTest extends ControllerTestCase
         $form = new Admin_Form_YesNoForm();
         $this->assertNotNull($form);
     }
-
 }
-

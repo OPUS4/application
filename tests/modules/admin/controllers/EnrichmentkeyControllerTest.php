@@ -46,7 +46,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
     /**
      * @var all enrichment keys
      */
-    private $allEnrichmentKeys = array();
+    private $allEnrichmentKeys = [];
 
     public function setUp()
     {
@@ -148,7 +148,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $this->assertNotNull($enrichmentKey);
         $this->assertEquals('MyTestEnrichment', $enrichmentKey->getName());
         $this->assertEquals('RegexType', $enrichmentKey->getType());
-        $this->assertEquals(json_encode(array("regex" => "^.*$")), $enrichmentKey->getOptions());
+        $this->assertEquals(json_encode(["regex" => "^.*$"]), $enrichmentKey->getOptions());
     }
 
     public function testNewActionSaveMissingEnrichmentType()
@@ -287,7 +287,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $this->assertNotNull($enrichmentKey);
         $this->assertEquals('MyTestEnrichmentModified', $enrichmentKey->getName());
         $this->assertEquals('RegexType', $enrichmentKey->getType());
-        $this->assertEquals(json_encode(array("regex" => "^.*$")), $enrichmentKey->getOptions());
+        $this->assertEquals(json_encode(["regex" => "^.*$"]), $enrichmentKey->getOptions());
 
         new Opus_EnrichmentKey('MyTestEnrichment');
 
@@ -619,7 +619,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
      */
     public function testUsedCssClassIsSet()
     {
-        $usedKeys =  Opus_EnrichmentKey::getAllReferenced();
+        $usedKeys = Opus_EnrichmentKey::getAllReferenced();
         $this->dispatch($this->getControllerPath());
         $response = $this->getResponse();
         $this->checkForBadStringsInHtml($response->getBody());

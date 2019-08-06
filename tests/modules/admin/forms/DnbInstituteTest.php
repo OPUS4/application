@@ -126,7 +126,7 @@ class Admin_Form_DnbInstituteTest extends ControllerTestCase
     {
         $form = new Admin_Form_DnbInstitute();
 
-        $this->assertFalse($form->isValid(array()));
+        $this->assertFalse($form->isValid([]));
 
         $this->assertContains('isEmpty', $form->getErrors('Name'));
         $this->assertContains('isEmpty', $form->getErrors('City'));
@@ -136,10 +136,10 @@ class Admin_Form_DnbInstituteTest extends ControllerTestCase
     {
         $form = new Admin_Form_DnbInstitute();
 
-        $this->assertFalse($form->isValid(array(
+        $this->assertFalse($form->isValid([
             'Name' => '   ',
             'City' => ' '
-        )));
+        ]));
 
         $this->assertContains('isEmpty', $form->getErrors('Name'));
         $this->assertContains('isEmpty', $form->getErrors('City'));
@@ -149,10 +149,10 @@ class Admin_Form_DnbInstituteTest extends ControllerTestCase
     {
         $form = new Admin_Form_DnbInstitute();
 
-        $this->assertTrue($form->isValid(array(
+        $this->assertTrue($form->isValid([
             'Name' => 'OPUS 4 University',
             'City' => 'Berlin'
-        )));
+        ]));
     }
 
     public function testTranslationKeysForElements()
@@ -160,9 +160,10 @@ class Admin_Form_DnbInstituteTest extends ControllerTestCase
         $form = new Admin_Form_DnbInstitute();
 
         foreach ($form->getElements() as $name => $element) {
-            $this->assertTrue(strpos($element->getLabel(), 'Opus_DnbInstitute_') === FALSE,
-                "Element '$name' is not translated.");
+            $this->assertTrue(
+                strpos($element->getLabel(), 'Opus_DnbInstitute_') === false,
+                "Element '$name' is not translated."
+            );
         }
     }
-
 }

@@ -100,6 +100,5 @@ class Admin_JobControllerTest extends ControllerTestCase
         $this->dispatch($failedJobsUrl);
         $this->assertResponseCode(200);
         $this->assertQueryContentContains('table.worker-jobs td div', 'task: get-me-a-coffee');
-
     }
 }

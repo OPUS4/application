@@ -45,7 +45,7 @@ class Admin_Model_UrnGeneratorTest extends ControllerTestCase
 
     public function tearDown()
     {
-        if (!is_null($this->config)) {
+        if (! is_null($this->config)) {
             // undo modifications in configuration
             Zend_Registry::set('Zend_Config', $this->config);
         }

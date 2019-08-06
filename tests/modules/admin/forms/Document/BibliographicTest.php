@@ -81,8 +81,10 @@ class Admin_Form_Document_BibliographicTest extends ControllerTestCase
 
         $form->populateFromModel($doc);
 
-        $this->assertEquals($doc->getContributingCorporation(),
-                $form->getElement('ContributingCorporation')->getValue());
+        $this->assertEquals(
+            $doc->getContributingCorporation(),
+            $form->getElement('ContributingCorporation')->getValue()
+        );
         $this->assertEquals($doc->getCreatingCorporation(), $form->getElement('CreatingCorporation')->getValue());
         $this->assertEquals($doc->getEdition(), $form->getElement('Edition')->getValue());
         $this->assertEquals($doc->getIssue(), $form->getElement('Issue')->getValue());

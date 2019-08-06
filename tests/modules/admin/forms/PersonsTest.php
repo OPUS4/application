@@ -150,7 +150,7 @@ class Admin_Form_PersonsTest extends ControllerTestCase
 
         $options = $form->getElement('AcademicTitle')->getMultiOptions();
         $this->assertCount(2, $options);
-        $this->assertContains('PhD',$options);
+        $this->assertContains('PhD', $options);
         $this->assertContains('Dr.', $options);
     }
 
@@ -231,8 +231,7 @@ class Admin_Form_PersonsTest extends ControllerTestCase
 
         $checkElements = ['LastName', 'FirstName', 'IdentifierOrcid', 'IdentifierGnd', 'IdentifierMisc'];
 
-        foreach ($checkElements as $name)
-        {
+        foreach ($checkElements as $name) {
             $element = $form->getElement($name);
             $this->assertNotNull($element);
 
