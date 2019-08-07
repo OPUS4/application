@@ -268,7 +268,7 @@ class Publish_FormControllerTest extends ControllerTestCase
         if (isset($config->form->first->bibliographie)) {
             $oldval = $config->form->first->bibliographie;
         }
-        $config->form->first->bibliographie = 1;
+        $config->form->first->bibliographie = '1';
 
         $doc = $this->createTemporaryDoc();
 
@@ -308,7 +308,7 @@ class Publish_FormControllerTest extends ControllerTestCase
         if (isset($config->form->first->bibliographie)) {
             $oldval = $config->form->first->bibliographie;
         }
-        $config->form->first->bibliographie = 1;
+        $config->form->first->bibliographie = '1';
 
         $doc = $this->createTemporaryDoc();
         $doc->setBelongsToBibliography(0);
@@ -350,7 +350,7 @@ class Publish_FormControllerTest extends ControllerTestCase
         if (isset($config->form->first->bibliographie)) {
             $oldval = $config->form->first->bibliographie;
         }
-        $config->form->first->bibliographie = 1;
+        $config->form->first->bibliographie = '1';
 
         $doc = $this->createTemporaryDoc();
         $doc->setBelongsToBibliography(1);
@@ -395,7 +395,7 @@ class Publish_FormControllerTest extends ControllerTestCase
         if (isset($config->form->first->bibliographie)) {
             $oldval = $config->form->first->bibliographie;
         }
-        $config->form->first->bibliographie = 0;
+        $config->form->first->bibliographie = '';
 
         $doc = $this->createTemporaryDoc();
 
@@ -439,7 +439,7 @@ class Publish_FormControllerTest extends ControllerTestCase
         if (isset($config->form->first->bibliographie)) {
             $oldval = $config->form->first->bibliographie;
         }
-        $config->form->first->bibliographie = 0;
+        $config->form->first->bibliographie = '';
 
         $this->request
             ->setMethod('POST')
@@ -484,7 +484,7 @@ class Publish_FormControllerTest extends ControllerTestCase
 
     public function testDoNotShowFileNoticeOnSecondFormPageIfFileUploadIsDisabled()
     {
-        $this->fileNoticeOnSecondFormPage(0);
+        $this->fileNoticeOnSecondFormPage('');
 
         $this->assertContains('<h3 class="document-type" title="Dokumenttyp">Alle Felder (Testdokumenttyp)</h3>', $this->getResponse()->getBody());
         $this->assertNotContains('<legend>Sie haben folgende Datei(en) hochgeladen: </legend>', $this->getResponse()->getBody());
@@ -493,7 +493,7 @@ class Publish_FormControllerTest extends ControllerTestCase
 
     public function testDoNotShowFileNoticeOnThirdFormPageIfFileUploadIsDisabled()
     {
-        $this->fileNoticeOnThirdFormPage(0);
+        $this->fileNoticeOnThirdFormPage('');
 
         $this->assertResponseCode(200);
         $this->assertContains('Bitte überprüfen Sie Ihre Eingaben', $this->getResponse()->getBody());
@@ -503,7 +503,7 @@ class Publish_FormControllerTest extends ControllerTestCase
 
     public function testShowFileNoticeOnSecondFormPageIfFileUploadIsEnabled()
     {
-        $this->fileNoticeOnSecondFormPage(1);
+        $this->fileNoticeOnSecondFormPage('1');
 
         $this->assertContains('<h3 class="document-type" title="Dokumenttyp">Alle Felder (Testdokumenttyp)</h3>', $this->getResponse()->getBody());
         $this->assertContains('<legend>Sie haben folgende Datei(en) hochgeladen: </legend>', $this->getResponse()->getBody());
@@ -512,7 +512,7 @@ class Publish_FormControllerTest extends ControllerTestCase
 
     public function testShowFileNoticeOnThirdFormPageIfFileUploadIsEnabled()
     {
-        $this->fileNoticeOnThirdFormPage(1);
+        $this->fileNoticeOnThirdFormPage('1');
 
         $this->assertResponseCode(200);
         $this->assertContains('Bitte überprüfen Sie Ihre Eingaben', $this->getResponse()->getBody());
