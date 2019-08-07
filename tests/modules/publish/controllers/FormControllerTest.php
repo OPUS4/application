@@ -468,10 +468,6 @@ class Publish_FormControllerTest extends ControllerTestCase
     private function fileNoticeOnThirdFormPage($value)
     {
         $config = Zend_Registry::get('Zend_Config');
-        $oldval = null;
-        if (isset($config->form->first->enable_upload)) {
-            $oldval = $config->form->first->enable_upload;
-        }
         $config->form->first->enable_upload = $value;
 
         $doc = $this->createTemporaryDoc();
@@ -491,22 +487,11 @@ class Publish_FormControllerTest extends ControllerTestCase
             ]);
 
         $this->dispatch('/publish/form/check');
-
-        // undo config changes
-        if (is_null($oldval)) {
-            unset($config->form->first->enable_upload);
-        } else {
-            $config->form->first->enable_upload = $oldval;
-        }
     }
 
     private function fileNoticeOnSecondFormPage($value)
     {
         $config = Zend_Registry::get('Zend_Config');
-        $oldval = null;
-        if (isset($config->form->first->enable_upload)) {
-            $oldval = $config->form->first->enable_upload;
-        }
         $config->form->first->enable_upload = $value;
 
         $doc = $this->createTemporaryDoc();
@@ -524,13 +509,6 @@ class Publish_FormControllerTest extends ControllerTestCase
             ]);
 
         $this->dispatch('/publish/form/check');
-
-        // undo config changes
-        if (is_null($oldval)) {
-            unset($config->form->first->enable_upload);
-        } else {
-            $config->form->first->enable_upload = $oldval;
-        }
     }
 
     private function addTemporaryTestDocument($session, $documentType)
