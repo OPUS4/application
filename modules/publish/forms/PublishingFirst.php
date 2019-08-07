@@ -224,8 +224,7 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract
             $bibliographie = $this->createElement('checkbox', 'bibliographie');
             $bibliographie->setDisableTranslator(true);
             $bibliographie->setLabel('bibliographie');
-        }
-        else {
+        } else {
             $this->bibliographie = 0;
             $bibliographie = null;
         }
@@ -244,8 +243,7 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract
                 ->setLabel('rights')
                 ->setRequired(true)
                 ->setChecked(false);
-        }
-        else {
+        } else {
             $this->showRights = 0;
             $rightsCheckbox = null;
         }
