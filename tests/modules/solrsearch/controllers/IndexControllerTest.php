@@ -807,14 +807,14 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
 
         $this->dispatch('/solrsearch/index/search/searchtype/simple/query/facetlimittestwithsubjects-opusvier2610');
 
-        for ($index = 0; $index < $config->searchengine->solr->globalfacetlimit; $index++) {
+        for ($index = 0; $index < intval($config->searchengine->solr->globalfacetlimit); $index++) {
             $path = '/solrsearch/index/search/searchtype/simple/query/facetlimittestwithsubjects-opusvier2610/start/0/rows/10/subjectfq/subject';
             if ($index < 10) {
                 $path .= '0';
             }
             $this->assertContains($path . $index, $this->getResponse()->getBody());
         }
-        for ($index = $config->searchengine->solr->globalfacetlimit; $index < $numOfSubjects; $index++) {
+        for ($index = intval($config->searchengine->solr->globalfacetlimit); $index < $numOfSubjects; $index++) {
             $path = '/solrsearch/index/search/searchtype/simple/query/facetlimittestwithsubjects-opusvier2610/start/0/rows/10/subjectfq/subject';
             if ($index < 10) {
                 $path .= '0';
