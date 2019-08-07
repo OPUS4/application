@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -48,7 +47,8 @@ class Publish_View_Helper_BibliographieOverview extends Zend_View_Helper_Abstrac
     public function bibliographieOverview()
     {
         $config = Zend_Registry::get('Zend_Config');
-        if (! isset($config->form->first->bibliographie) || $config->form->first->bibliographie != 1) {
+        if (! isset($config->form->first->bibliographie) ||
+            (! filter_var($config->form->first->bibliographie, FILTER_VALIDATE_BOOLEAN))) {
             return;
         }
 
