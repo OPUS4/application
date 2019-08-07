@@ -264,10 +264,6 @@ class Publish_FormControllerTest extends ControllerTestCase
     public function testOPUSVIER1886WithBibliography()
     {
         $config = Zend_Registry::get('Zend_Config');
-        $oldval = null;
-        if (isset($config->form->first->bibliographie)) {
-            $oldval = $config->form->first->bibliographie;
-        }
         $config->form->first->bibliographie = '1';
 
         $doc = $this->createTemporaryDoc();
@@ -288,13 +284,6 @@ class Publish_FormControllerTest extends ControllerTestCase
 
         $this->dispatch('/publish/form/check');
 
-        // undo config changes
-        if (is_null($oldval)) {
-            unset($config->form->first->bibliographie);
-        } else {
-            $config->form->first->bibliographie = $oldval;
-        }
-
         $this->assertResponseCode(200);
         $this->assertContains('Bitte überprüfen Sie Ihre Eingaben.', $this->getResponse()->getBody());
         $this->assertContains('<legend>Bibliographie</legend>', $this->getResponse()->getBody());
@@ -304,10 +293,6 @@ class Publish_FormControllerTest extends ControllerTestCase
     public function testOPUSVIER1886WithBibliographyUnselected()
     {
         $config = Zend_Registry::get('Zend_Config');
-        $oldval = null;
-        if (isset($config->form->first->bibliographie)) {
-            $oldval = $config->form->first->bibliographie;
-        }
         $config->form->first->bibliographie = '1';
 
         $doc = $this->createTemporaryDoc();
@@ -330,13 +315,6 @@ class Publish_FormControllerTest extends ControllerTestCase
 
         $this->dispatch('/publish/form/check');
 
-        // undo config changes
-        if (is_null($oldval)) {
-            unset($config->form->first->bibliographie);
-        } else {
-            $config->form->first->bibliographie = $oldval;
-        }
-
         $this->assertResponseCode(200);
         $this->assertContains('Bitte überprüfen Sie Ihre Eingaben.', $this->getResponse()->getBody());
         $this->assertContains('<legend>Bibliographie</legend>', $this->getResponse()->getBody());
@@ -346,10 +324,6 @@ class Publish_FormControllerTest extends ControllerTestCase
     public function testOPUSVIER1886WithBibliographySelected()
     {
         $config = Zend_Registry::get('Zend_Config');
-        $oldval = null;
-        if (isset($config->form->first->bibliographie)) {
-            $oldval = $config->form->first->bibliographie;
-        }
         $config->form->first->bibliographie = '1';
 
         $doc = $this->createTemporaryDoc();
@@ -372,13 +346,6 @@ class Publish_FormControllerTest extends ControllerTestCase
 
         $this->dispatch('/publish/form/check');
 
-        // undo config changes
-        if (is_null($oldval)) {
-            unset($config->form->first->bibliographie);
-        } else {
-            $config->form->first->bibliographie = $oldval;
-        }
-
         $this->assertResponseCode(200);
         $this->assertContains('Bitte überprüfen Sie Ihre Eingaben.', $this->getResponse()->getBody());
         $this->assertContains('<legend>Bibliographie</legend>', $this->getResponse()->getBody());
@@ -391,10 +358,6 @@ class Publish_FormControllerTest extends ControllerTestCase
     public function testOPUSVIER1886WithoutBibliography()
     {
         $config = Zend_Registry::get('Zend_Config');
-        $oldval = null;
-        if (isset($config->form->first->bibliographie)) {
-            $oldval = $config->form->first->bibliographie;
-        }
         $config->form->first->bibliographie = '';
 
         $doc = $this->createTemporaryDoc();
@@ -415,13 +378,6 @@ class Publish_FormControllerTest extends ControllerTestCase
 
         $this->dispatch('/publish/form/check');
 
-        // undo config changes
-        if (is_null($oldval)) {
-            unset($config->form->first->bibliographie);
-        } else {
-            $config->form->first->bibliographie = $oldval;
-        }
-
         $this->assertResponseCode(200);
         $this->assertContains('Bitte überprüfen Sie Ihre Eingaben.', $this->getResponse()->getBody());
         $this->assertNotContains('<legend>Bibliographie</legend>', $this->getResponse()->getBody());
@@ -435,10 +391,6 @@ class Publish_FormControllerTest extends ControllerTestCase
     {
         $this->markTestIncomplete('testing multipart formdata not yet solved');
         $config = Zend_Registry::get('Zend_Config');
-        $oldval = null;
-        if (isset($config->form->first->bibliographie)) {
-            $oldval = $config->form->first->bibliographie;
-        }
         $config->form->first->bibliographie = '';
 
         $this->request
@@ -454,13 +406,6 @@ class Publish_FormControllerTest extends ControllerTestCase
             ]);
         $this->dispatch('/publish/form/upload');
         $session = new Zend_Session_Namespace('Publish');
-
-        // undo config changes
-        if (is_null($oldval)) {
-            unset($config->form->first->bibliographie);
-        } else {
-            $config->form->first->bibliographie = $oldval;
-        }
 
         $doc = new Opus_Document($session->documentId);
         $belongsToBibliography = $doc->getBelongsToBibliography();
