@@ -1288,7 +1288,6 @@ class Oai_IndexControllerTest extends ControllerTestCase
     {
         $this->enableSecurity();
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=oai_dc&identifier=oai::123');
-        $this->resetSecurity();
 
         $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());
         $this->assertContains('<GetRecord>', $this->getResponse()->getBody());
@@ -1420,7 +1419,6 @@ class Oai_IndexControllerTest extends ControllerTestCase
             $this->getResponse()->getBody(),
             'do not prevent usage of metadataPrefix copy_xml and verb GetRecords'
         );
-        $this->resetSecurity();
     }
 
     /**
@@ -1435,7 +1433,6 @@ class Oai_IndexControllerTest extends ControllerTestCase
             $this->getResponse()->getBody(),
             'do not prevent usage of metadataPrefix copy_xml and verb ListRecords'
         );
-        $this->resetSecurity();
     }
 
     /**
@@ -1450,7 +1447,6 @@ class Oai_IndexControllerTest extends ControllerTestCase
             $this->getResponse()->getBody(),
             'do not prevent usage of metadataPrefix copy_xml and verb ListIdentifiers'
         );
-        $this->resetSecurity();
     }
 
     public function enableSecurity()
@@ -1465,25 +1461,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
         }
 
         // enable security
-        $config = Zend_Registry::get('Zend_Config');
-        $this->_security = $config->security;
-        $config->security = '1';
-        Zend_Registry::set('Zend_Config', $config);
-    }
-
-    private function resetSecurity()
-    {
-        $r = Opus_UserRole::fetchByName('guest');
-
-        if ($this->_addOaiModuleAccess) {
-            $r->removeAccessModule('oai');
-            $r->store();
-        }
-
-        // restore security settings
-        $config = Zend_Registry::get('Zend_Config');
-        $config->security = $this->_security;
-        Zend_Registry::set('Zend_Config', $config);
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(['security' => '1']));
     }
 
     /**
@@ -1882,8 +1860,8 @@ class Oai_IndexControllerTest extends ControllerTestCase
     {
         $max_records = '2';
 
-        $config = Zend_Registry::get('Zend_Config');
-        $config->oai->max->listrecords = $max_records;
+        Zend_Registry::get('Zend_Config')->merge(
+            new Zend_Config(['oai' => ['max' => ['listrecords' => $max_records]]]));
 
         // first request: fetch documents list and expect resumption code
         $this->dispatch("/oai?verb=ListRecords&metadataPrefix=oai_dc");
@@ -1927,8 +1905,8 @@ class Oai_IndexControllerTest extends ControllerTestCase
     {
         $max_records = '100';
 
-        $config = Zend_Registry::get('Zend_Config');
-        $config->oai->max->listrecords = $max_records;
+        Zend_Registry::get('Zend_Config')->merge(
+            new Zend_Config(['oai' => ['max' => ['listrecords' => $max_records]]]));
 
         // first request: fetch documents list and expect resumption code
         $this->dispatch("/oai?verb=ListRecords&metadataPrefix=oai_dc");
@@ -2543,9 +2521,6 @@ class Oai_IndexControllerTest extends ControllerTestCase
 
     public function testGetRecordMarc21OfDocId91()
     {
-        // manipulate configuration
-        $config = Zend_Registry::get('Zend_Config');
-
         Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
             'marc21' => [
                 'isil' => 'DE-9999',
@@ -2555,9 +2530,6 @@ class Oai_IndexControllerTest extends ControllerTestCase
         ]));
 
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=marc21&identifier=oai::91');
-
-        // revert changes in configuration
-        Zend_Registry::set('Zend_Config', $config);
 
         $this->assertResponseCode(200);
 
