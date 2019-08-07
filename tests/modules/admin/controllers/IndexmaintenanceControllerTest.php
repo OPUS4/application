@@ -173,7 +173,7 @@ class Admin_IndexmaintenanceControllerTest extends ControllerTestCase
 
     private function disableAsyncMode()
     {
-        $this->setAsyncMode('');
+        $this->setAsyncMode(''); // false
     }
 
     private function setAsyncMode($value)
@@ -195,7 +195,7 @@ class Admin_IndexmaintenanceControllerTest extends ControllerTestCase
 
     private function disableAsyncIndexmaintenanceMode()
     {
-        $this->setAsyncIndexmaintenanceMode('');
+        $this->setAsyncIndexmaintenanceMode(''); // false
     }
 
     private function setAsyncIndexmaintenanceMode($value)
