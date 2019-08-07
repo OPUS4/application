@@ -57,8 +57,8 @@ class Export_Model_XmlExportTest extends ControllerTestCase
         $plugin->init();
         $plugin->setConfig(new Zend_Config([
             'class' => 'Export_Model_XmlExport',
-            'maxDocumentsGuest' => 100,
-            'maxDocumentsUser' => 500,
+            'maxDocumentsGuest' => '100',
+            'maxDocumentsUser' => '500',
         ]));
 
         $this->plugin = $plugin;
@@ -267,7 +267,7 @@ class Export_Model_XmlExportTest extends ControllerTestCase
         $plugin->setDownloadEnabled(null);
 
         Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
-            'export' => ['download' => '0']
+            'export' => ['download' => '']
         ]));
 
         $this->assertFalse($plugin->isDownloadEnabled());
