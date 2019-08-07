@@ -150,11 +150,8 @@ class Home_IndexController extends Application_Controller_Action
     public function helpAction()
     {
         $config = $this->getConfig();
-        if (isset($config->help->separate)) {
-            $this->view->separate = (boolean) $config->help->separate;
-        } else {
-            $this->view->separate = false;
-        }
+        $this->view->separate = isset($config->help->separate) &&
+            filter_var($config->help->separate, FILTER_VALIDATE_BOOLEAN);
 
         if ($this->view->separate) {
             $content = $this->getRequest()->getParam('content');

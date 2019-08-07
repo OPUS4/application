@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -83,7 +83,7 @@ class Home_IndexControllerTest extends ControllerTestCase
     public function testHelpActionSeparate()
     {
         $config = Zend_Registry::get('Zend_Config');
-        $config->help->separate = true;
+        $config->help->separate = '1';
         $this->dispatch('/home/index/help');
         $this->assertResponseCode(200);
         $this->assertModule('home');
