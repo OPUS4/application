@@ -54,7 +54,7 @@ class Account_IndexController extends Application_Controller_Action
             return false;
         }
 
-        return $parentValue and $config->account->editOwnAccount;
+        return $parentValue && filter_var($config->account->editOwnAccount, FILTER_VALIDATE_BOOLEAN);
     }
 
     /**

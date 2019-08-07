@@ -134,7 +134,7 @@ class Application_TranslateTest extends ControllerTestCase
     {
         $config = Zend_Registry::get('Zend_Config');
         $logUntranslated = $config->log->untranslated;
-        $config->log->untranslated = true;
+        $config->log->untranslated = '1';
         $this->assertTrue($this->translate->isLogUntranslatedEnabled());
         $config->log->untranslated = $logUntranslated;
     }
@@ -142,7 +142,7 @@ class Application_TranslateTest extends ControllerTestCase
     public function testIsLogUntranslatedEnabledFalse()
     {
         $config = Zend_Registry::get('Zend_Config');
-        $config->log->untranslated = false;
+        $config->log->untranslated = '';
         $this->assertFalse($this->translate->isLogUntranslatedEnabled());
         $config->log->untranslated = true; // Siehe testIsLogUntranslatedEnabledTrue
     }
@@ -151,7 +151,7 @@ class Application_TranslateTest extends ControllerTestCase
     {
         $config = Zend_Registry::get('Zend_Config');
         $logUntranslated = $config->log->untranslated;
-        $config->log->untranslated = true;
+        $config->log->untranslated = '1';
 
         $options = $this->translate->getOptions();
 
@@ -168,7 +168,7 @@ class Application_TranslateTest extends ControllerTestCase
     {
         $config = Zend_Registry::get('Zend_Config');
         $logUntranslated = $config->log->untranslated;
-        $config->log->untranslated = false;
+        $config->log->untranslated = '';
 
         $options = $this->translate->getOptions();
 
@@ -183,7 +183,7 @@ class Application_TranslateTest extends ControllerTestCase
     {
         $config = Zend_Registry::get('Zend_Config');
         $logUntranslated = $config->log->untranslated;
-        $config->log->untranslated = true;
+        $config->log->untranslated = '1';
 
         $logger = new MockLogger();
 
@@ -204,7 +204,7 @@ class Application_TranslateTest extends ControllerTestCase
     {
         $config = Zend_Registry::get('Zend_Config');
         $logUntranslated = $config->log->untranslated;
-        $config->log->untranslated = false;
+        $config->log->untranslated = '';
 
         $logger = new MockLogger();
 
