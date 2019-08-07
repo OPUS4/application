@@ -55,11 +55,9 @@ IsbnValidation.prototype.validateISBN = function (value) {
 
     if (isbnDigits.length === 10) {
         return this.validateISBN10(value);
-    }
-    else if (isbnDigits.length === 13) {
+    } else if (isbnDigits.length === 13) {
         return this.validateISBN13(value);
-    }
-    else {
+    } else {
         return this.getMessage("identifierInvalidFormat", value);
     }
 };
@@ -147,7 +145,7 @@ IsbnValidation.prototype.calculateCheckDigitISBN13 = function (value) {
     return (check % 10 === 0);
 };
 
-IsbnValidation.prototype.getMessage = function($key, value) {
+IsbnValidation.prototype.getMessage = function ($key, value) {
     return opus4Messages[$key].replace("%value%", value);
 };
 
@@ -196,7 +194,7 @@ IssnValidation.prototype.calculateCheckDigitISSN = function (value) {
     return checkdigit;
 };
 
-IssnValidation.prototype.getMessage = function($key, value) {
+IssnValidation.prototype.getMessage = function ($key, value) {
     return opus4Messages[$key].replace("%value%", value);
 };
 
@@ -264,8 +262,7 @@ $(document).ready(function () {
                 elem[0].innerHTML = result;
                 elem.removeAttr("style");
                 $(value).addClass("invalid");
-            }
-            else {
+            } else {
                 elem.attr("style", "display : none");
                 $(value).removeClass("invalid");
             }

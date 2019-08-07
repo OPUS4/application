@@ -47,7 +47,7 @@
             <?PHP foreach ($values as $value => $link) : ?>
                 <?PHP if ($this->state !== $value) : ?>
                     <li><a href="<?= $link ?>"><?= $this->translate('admin_documents_state_' . $value) ?></a></li>
-                    <?PHP else : ?>
+                <?PHP else : ?>
                     <li class="active"><?= $this->translate('admin_documents_state_' . $this->state) ?></li>
                 <?PHP endif ?>
             <?PHP endforeach ?>

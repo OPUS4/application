@@ -62,14 +62,14 @@
 
     <table >
         <tr>
-            <?PHP foreach ($this->sortKeys as $sortKey): ?>
+            <?PHP foreach ($this->sortKeys as $sortKey) : ?>
                 <th class="<?= $sortKey == $this->currentSortKey ? 'hilite' : '' ?>"><?= $this->translate('setup_language_' . $sortKey) ?></th>
             <?PHP endforeach ?>
             <th>&nbsp;</th>
         </tr>
         <?PHP
 //        $keyPos = array_flip($this->sortKeys);
-        foreach ($this->translations as $row):
+        foreach ($this->translations as $row) :
             $writeable = ($row['directory'] == 'language_custom');
             $file = $row['module'] . DIRECTORY_SEPARATOR . $row['directory'] . DIRECTORY_SEPARATOR . $row['filename'];
             $key = array_shift($row);
@@ -80,7 +80,7 @@
                 <td><?= $row['directory'] ?></td>
                 <td><?= $row['filename'] ?></td>
                 <?PHP $index = 0 ?>
-                <?PHP foreach($row['translations'] as $language => $translation) : ?>
+                <?PHP foreach ($row['translations'] as $language => $translation) : ?>
                     <?PHP if ($index > 0) : ?>
             </tr>
             <tr>

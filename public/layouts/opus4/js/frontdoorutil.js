@@ -30,13 +30,14 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-$(function() {
+$(function () {
     $('.abstractFull').hide();
     $('.abstractShort').show();
     $('.abstractThreeDots').show();
     $('.abstractButtonShow').show();
 
-    function toggleAbstract() {
+    function toggleAbstract()
+    {
         var id = $(this).attr('id').split("_")[1];
         $('#abstractFull_' + id).toggle();
         $('#abstractShort_' + id).toggle();
@@ -53,19 +54,17 @@ $(function() {
     $('body').on('keydown', function (e) {
             var event = window.event ? window.event : e;
 
-            if (event.keyCode == 37) {
-                var link = $('#frontdoor-link-prev');
-                if (link.length) {
-                    link[0].click();
-                }
+        if (event.keyCode == 37) {
+            var link = $('#frontdoor-link-prev');
+            if (link.length) {
+                link[0].click();
             }
-            else if (event.keyCode == 39) {
-                var link = $('#frontdoor-link-next');
-                if (link.length) {
-                    link[0].click();
-                }
+        } else if (event.keyCode == 39) {
+            var link = $('#frontdoor-link-next');
+            if (link.length) {
+                link[0].click();
             }
         }
-    );
+    });
 });
 

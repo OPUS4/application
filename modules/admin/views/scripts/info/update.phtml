@@ -35,7 +35,7 @@
 <dl>
     <dt><?= $this->translate('admin_info_version') ?></dt>
     <dd><?= htmlspecialchars($this->currentVersion) ?></dd>
-    <?PHP if (!is_null($this->latestVersion)) : ?>
+    <?PHP if (! is_null($this->latestVersion)) : ?>
     <dt><?= $this->translate('admin_info_version_latest') ?></dt>
     <dd><?= htmlspecialchars($this->latestVersion) ?></dd>
     <?PHP endif; ?>

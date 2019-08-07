@@ -29,13 +29,13 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-$(function() {
+$(function () {
     var fileElem = $("input:file")[0];
 
     if (! typeof fileElem === "undefined") {
         fileElem.validFileExtensions = null; // nichts erlaubt, wird auf Publishseite überschrieben
         fileElem.invalidFileMessage = 'The extension of file \'%value%\' is not allowed.';
-        fileElem.onchange = function() {
+        fileElem.onchange = function () {
             var filename = this.value;
             var ext = filename.match(/\.([^\.]+)$/);
             if (fileElem.validFileExtensions != null && (ext == null || $.inArray(ext[1], this.validFileExtensions) == -1)) {

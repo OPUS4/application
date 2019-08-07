@@ -37,19 +37,19 @@
 
 <h1><?=$this->translate('admin_title_collections') ?></h1>
 
-<?= $this->partial('docinfo.phtml', array( 'document' => $this->documentAdapter)) ?>
+<?= $this->partial('docinfo.phtml', [ 'document' => $this->documentAdapter]) ?>
 
-<?php if (!empty($this->breadcrumb)) : ?>
+<?php if (! empty($this->breadcrumb)) : ?>
 <div class="collection_breadcrumbs">
     <?= $this->translate('breadcrumb_title') ?>
-    <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'assign',
-        'document' => $this->documentId), null, true)?>">Collections</a>
-    <?php foreach($this->breadcrumb as $i => $parent) : ?>
+    <a href="<?= $this->url(['module' => 'admin', 'controller' => 'collection', 'action' => 'assign',
+        'document' => $this->documentId], null, true)?>">Collections</a>
+    <?php foreach ($this->breadcrumb as $i => $parent) : ?>
         &raquo;
         <?php if ($i === 0) : ?>
             <?php if (count($this->breadcrumb) > 1) : ?>
-                <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'assign',
-                    'id' => $parent->getId(), 'document' => $this->documentId), null, true) ?>"><?=
+                <a href="<?= $this->url(['module' => 'admin', 'controller' => 'collection', 'action' => 'assign',
+                    'id' => $parent->getId(), 'document' => $this->documentId], null, true) ?>"><?=
                     htmlspecialchars($this->translate('default_collection_role_' . $this->role_name)) ?></a>
             <?php else : ?>
                 <?= htmlspecialchars($this->translate('default_collection_role_' . $this->role_name)) ?>
@@ -57,8 +57,8 @@
         <?php elseif ($i === count($this->breadcrumb) - 1) : ?>
             <?= htmlspecialchars($parent->getNumberAndName()) ?>
         <?php else : ?>
-            <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'assign',
-                'id' => $parent->getId(), 'document' => $this->documentId), null, true) ?>"><?=
+            <a href="<?= $this->url(['module' => 'admin', 'controller' => 'collection', 'action' => 'assign',
+                'id' => $parent->getId(), 'document' => $this->documentId], null, true) ?>"><?=
                 htmlspecialchars($parent->getNumberAndName()) ?></a>
         <?php endif ?>
     <?php endforeach; ?>
@@ -66,18 +66,18 @@
 <?php endif ?>
 
 <div>
-<a class="add" href="<?=$this->url(array('module' => 'admin', 'controller' => 'document', 'action' => 'edit',
-    'id' => $this->documentId, 'section' => 'collections'), null, true)?>"><?=
+<a class="add" href="<?=$this->url(['module' => 'admin', 'controller' => 'document', 'action' => 'edit',
+    'id' => $this->documentId, 'section' => 'collections'], null, true)?>"><?=
     $this->translate('admin_collections_collection_assign_abort')?></a>
 </div>
 
 <table class="collections">
-    <?php foreach($this->collections as $i => $collection) : ?>
-    <tr class="<?= ($i %2 == 0) ? 'even' : 'odd'?>">
+    <?php foreach ($this->collections as $i => $collection) : ?>
+    <tr class="<?= ($i % 2 == 0) ? 'even' : 'odd'?>">
         <td class="<?= ($collection['visible'] === '1') ? 'visible' : 'invisible' ?><?=($collection['assigned']) ? ' assigned' : '' ?>">
             <?php if ($collection['hasChildren']) : ?>
-                <a href="<?=$this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'assign',
-                    'id' => $collection['id'], 'document' => $this->documentId), null, true)?>"><?=
+                <a href="<?=$this->url(['module' => 'admin', 'controller' => 'collection', 'action' => 'assign',
+                    'id' => $collection['id'], 'document' => $this->documentId], null, true)?>"><?=
                     htmlspecialchars($collection['name']) ?></a>
             <?php else : ?>
                 <?= htmlspecialchars($collection['name']) ?>
@@ -85,8 +85,8 @@
         </td>
         <td>
             <?PHP if ($this->assignCollectionAllowed($collection, $this->documentId)) : ?>
-            <form method="post" action="<?= $this->url(array('module' => 'admin', 'controller' => 'collection',
-                'action' => 'assign', 'id' => $collection['id'], 'document' => $this->documentId), null, true)?>">
+            <form method="post" action="<?= $this->url(['module' => 'admin', 'controller' => 'collection',
+                'action' => 'assign', 'id' => $collection['id'], 'document' => $this->documentId], null, true)?>">
                 <input type="submit" value="<?=$this->translate('admin_collections_collection_assign_here')?>" />
             </form>
             <?PHP endif ?>

@@ -69,16 +69,16 @@
         <th><?= $this->translate('admin_account_label_has_access') ?></th>
         <th><?= $this->translate('admin_account_label_roles') ?></th>
     </tr>
-    <?php foreach ($this->allModules AS $module) : ?>
+    <?php foreach ($this->allModules as $module) : ?>
       <tr class="<?= count($this->modulesRoles[$module]) > 0 ? 'access' : 'noaccess' ?>">
           <td class="column-module"><?= htmlspecialchars($module) ?></td>
-      <?php if (count($this->modulesRoles[$module]) > 0) : ?>
+        <?php if (count($this->modulesRoles[$module]) > 0) : ?>
         <td><?= $this->translate('answer_yes') ?></td>
         <td><?= htmlspecialchars(implode(", ", $this->modulesRoles[$module])) ?></td>
-      <?php else : ?>
+        <?php else : ?>
         <td><?= $this->translate('answer_no') ?></td>
         <td>-</td>
-      <?php endif ?>
+        <?php endif ?>
     <?php endforeach ?>
 </table>
 </fieldset>

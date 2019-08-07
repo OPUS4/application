@@ -37,7 +37,7 @@
 
 <?PHP $parent = $this->adminMenu()->getParent(); ?>
 
-<?PHP if (!is_null($parent)) : ?>
+<?PHP if (! is_null($parent)) : ?>
 <ul class="menu">
     <?PHP foreach ($parent->getPages() as $page) : ?>
         <?PHP if ($page->group !== 'hidden') : ?>

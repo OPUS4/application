@@ -31,11 +31,11 @@
  */
 ?>
 
-<?PHP if (!is_null($this->document)) : ?>
+<?PHP if (! is_null($this->document)) : ?>
 <?PHP $authors = $this->document->getAuthors(); ?>
 <div id="docinfo">
     <h2><span class="docid"><?=$this->document->getDocId()?></span> - <?= $this->escape($this->document->getMainTitle()) ?></h2>
-    <?PHP if (!empty($authors)) : ?>
+    <?PHP if (! empty($authors)) : ?>
     <p class="author"><?=$authors[0]['name']?></p>
     <?PHP endif; ?>
 </div>

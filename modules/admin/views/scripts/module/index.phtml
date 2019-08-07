@@ -46,7 +46,9 @@
             <div class="opus-module-description"><?= $this->translate($module->getDescription()) ?></div></td>
         <td class="module-access <?= ($module->isPublic() ? 'public' : 'closed') ?>"
             ><?= ($module->isPublic() ? $this->translate('admin_module_access_public') : $this->translate('admin_module_access_closed')) ?></td>
-        <td class="module-options"><?php if ($module->isConfigurable()) : ?><a href="">Configure</a><?php endif; ?></td>
+        <td class="module-options"><?php if ($module->isConfigurable()) :
+?><a href="">Configure</a><?php
+                                   endif; ?></td>
     </tr>
 <?php endforeach; ?>
 </table>

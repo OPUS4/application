@@ -38,17 +38,17 @@
 <span id="years">
 <?php foreach ($this->years as $year) : ?>
     <?PHP if ($year !== $this->listYear) : ?>
-        <a title="documents published in year <?= $year ?>" href="<?= $this->url(array('module' => 'crawlers', 'controller' => 'sitelinks', 'action' => 'list', 'year' => $year)) ?>"><?= $year ?></a>
+        <a title="documents published in year <?= $year ?>" href="<?= $this->url(['module' => 'crawlers', 'controller' => 'sitelinks', 'action' => 'list', 'year' => $year]) ?>"><?= $year ?></a>
     <?PHP else : ?>
         <?= $year ?>
     <?PHP endif ?>
 <?php endforeach; ?>
 </span>
 
-<?PHP if (!is_null($this->ids)) : ?>
+<?PHP if (! is_null($this->ids)) : ?>
 <ol id="documents">
 <?php foreach ($this->ids as $id) : ?>
-    <li><a href="<?= $this->url(array('module' => 'frontdoor', 'controller' => 'index', 'action' => 'index', 'docId' => $id)) ?>">document <?= $id ?></a></li>
+    <li><a href="<?= $this->url(['module' => 'frontdoor', 'controller' => 'index', 'action' => 'index', 'docId' => $id]) ?>">document <?= $id ?></a></li>
 <?php endforeach; ?>
 </ol>
 <?PHP endif ?>

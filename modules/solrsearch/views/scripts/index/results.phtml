@@ -35,17 +35,17 @@
 ?>
 
 <?php
-if($this->jQueryEnabled()) {
+if ($this->jQueryEnabled()) {
     $this->headScript()->appendScript("$(document).ready(function () { $('.abstractText').hide(); });");
 }
 ?>
 
 <?php
-    $this->headLink(array(
+    $this->headLink([
         'rel' => 'alternate',
         'type' => 'application/rss+xml',
         'href' => $this->serverUrl() . $this->url($this->rssUrl)
-    ));
+    ]);
 ?>
 
 <?php if (isset($this->specialTitle)) : ?>
@@ -54,25 +54,29 @@ if($this->jQueryEnabled()) {
 
 <div class="content">
     <?PHP
-    if ($this->searchType === 'simple' && !$this->browsing)
+    if ($this->searchType === 'simple' && ! $this->browsing) {
         include('simpleSearchForm.phtml');
-    else if (($this->searchType === 'advanced' || $this->searchType === 'authorsearch') && !$this->browsing) {
+    } elseif (($this->searchType === 'advanced' || $this->searchType === 'authorsearch') && ! $this->browsing) {
         echo $this->form;
-    }
-    else if ($this->searchType === 'collection')
+    } elseif ($this->searchType === 'collection') {
         include('browsecollection.phtml');
-    else if ($this->searchType === 'series')
+    } elseif ($this->searchType === 'series') {
         include('browseseries.phtml');
+    }
     ?>
 </div>
 <div class="content">
-    <?php if (!$this->isSimpleList) include('facetsMenu.phtml'); ?>
+<?php if (! $this->isSimpleList) {
+    include('facetsMenu.phtml');
+} ?>
     <div id="searchbar">
         <div class="breadcrumb_results">
-            <?php if (!isset($this->specialTitle) || $this->browsing) : ?>
+            <?php if (! isset($this->specialTitle) || $this->browsing) : ?>
                 <h3><span id="search-result-numofhits"><?= $this->numOfHits . '</span> ' . ($this->numOfHits === 1 ? $this->translate('results_title_single') : $this->translate('results_title')); ?></h3>
             <?php endif ?>
-            <?php if (!$this->isSimpleList) include('pagination.phtml'); ?>
+<?php if (! $this->isSimpleList) {
+    include('pagination.phtml');
+} ?>
             <?PHP if ($this->exportLinksEnabled('search')) : ?>
             <div class="export-links dropdown">
                 <button class="dropdown-button">Export</button>
@@ -84,55 +88,59 @@ if($this->jQueryEnabled()) {
                 <?= $this->resultsPerPageOptions() ?>
             </div>
         </div>
-        <?php if (!$this->isSimpleList) include('searchOptions.phtml'); ?>
-        <?php if (!is_null($this->results)) : ?>
+<?php if (! $this->isSimpleList) {
+    include('searchOptions.phtml');
+} ?>
+        <?php if (! is_null($this->results)) : ?>
             <div id="search_results" class="search_results">
                 <?php $rowCount = 0; ?>
-                <?PHP foreach($this->results as $result) : ?>
+                <?PHP foreach ($this->results as $result) : ?>
                     <?php
                     $document = $result->getDocument();
 
                     // TODO this is ugly (parameter automatisch übernehmen?) - put it somewhere else (view helper)
-                    $frontdoorUrl = $this->url(array(
+                    $frontdoorUrl = $this->url([
                         'module' => 'frontdoor', 'controller' => 'index', 'action' => 'index',
                         'docId' => $document->getId(),
                         'start' => $this->start + $rowCount,
                         'rows' => $this->rows,
                         'searchtype' => $this->searchType
-                    ));
+                    ]);
                     ?>
                     <div class="result_box <?= $rowCount++ % 2 === 0 ? 'even' : 'odd'; ?>">
                         <?= $this->fulltextLogo($document) ?>
-                        <?php if (isset($this->seriesId) && $this->seriesId && !is_null($result->getSeriesNumber( $this->seriesId ))) : ?>
-                            <div class="results_seriesnumber"><?= htmlspecialchars($result->getSeriesNumber( $this->seriesId )); ?></div>
+                        <?php if (isset($this->seriesId) && $this->seriesId && ! is_null($result->getSeriesNumber($this->seriesId))) : ?>
+                            <div class="results_seriesnumber"><?= htmlspecialchars($result->getSeriesNumber($this->seriesId)); ?></div>
                         <?php endif ?>
 
                         <div class="results_title">
 
-                            <?php if (!is_null($result->getAsset('title'))) : ?>
+                            <?php if (! is_null($result->getAsset('title'))) : ?>
                                 <a href="<?= $frontdoorUrl ?>"><?= $this->documentTitle($document) ?></a>
-                            <?php else: ?>
+                            <?php else : ?>
                                 <a href="<?= $frontdoorUrl ?>" class="missing_title"><?= $this->translate('results_missingtitle') ?></a>
                             <?php endif ?>
 
-                            <?php if ($result->getAsset( 'year' )) : ?>
-                                (<?= htmlspecialchars($result->getAsset( 'year' )); ?>)
+                            <?php if ($result->getAsset('year')) : ?>
+                                (<?= htmlspecialchars($result->getAsset('year')); ?>)
                             <?php endif ?>
                         </div>
-                        <?php if (!is_null($result->getAsset( 'author' ))) : ?>
+                        <?php if (! is_null($result->getAsset('author'))) : ?>
                             <div class="results_author">
-                                <?php foreach($result->getAsset( 'author' ) as $authorIndex => $author) :
+                                <?php foreach ($result->getAsset('author') as $authorIndex => $author) :
                                     $authorSearch = $this->authorSearch;
                                     $authorSearch['author'] = '"'.$author.'"';
                                 ?>
-                                    <?PHP if ($authorIndex !== 0) : ?> ; <?PHP endif ?>
+                                    <?PHP if ($authorIndex !== 0) :
+?> ; <?PHP
+                                    endif ?>
                                     <a href="<?= $this->url($authorSearch, null, true); ?>"><?= htmlspecialchars($author) ?></a>
                                 <?php endforeach ?>
                             </div>
                         <?php endif ?>
                         <?php if ($this->jQueryEnabled()) : ?>
                             <div class="abstract-wrapper">
-                            <?php if (!is_null($result->getAsset( 'abstract' ))) : ?>
+                            <?php if (! is_null($result->getAsset('abstract'))) : ?>
                                 <a id="abstractToggle_<?= $document->getId() ?>"
                                    class="abstract-toggle collapsed"
                                    title="<?= $this->translate('results_hideabstract_title') ?>"
@@ -146,7 +154,9 @@ if($this->jQueryEnabled()) {
             </div>
         <?php endif ?>
         <div class="breadcrumb_results">
-            <?php if (!$this->isSimpleList) include('pagination.phtml') ?>
+<?php if (! $this->isSimpleList) {
+    include('pagination.phtml');
+} ?>
         </div>
     </div>
 </div>

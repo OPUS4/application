@@ -41,11 +41,11 @@
 
 <h2><?= $this->translate('access_available_roles') ?></h2>
 
-<form method="POST" action="<?= $this->url(array('module'=>'admin', 'controller'=>'access', 'action'=>'store'), null ,true) ?>">
+<form method="POST" action="<?= $this->url(['module' => 'admin', 'controller' => 'access', 'action' => 'store'], null, true) ?>">
     <ul>
-    <?php foreach($this->roles as $role) : ?>
+    <?php foreach ($this->roles as $role) : ?>
         <li><input type="checkbox" name="<?= $role->getName()?>"
-        <?php if(in_array($role->getId(), $this->checkedRoles)) : ?>
+        <?php if (in_array($role->getId(), $this->checkedRoles)) : ?>
             checked="checked"
         <?php endif ?>
         /><?= $role->getName(); ?><br/></li>

@@ -45,7 +45,7 @@
     <div class="opdescription"><?= $this->translate('admin_indexmaintenance_consistencycheck_description') ?></div>
     <?php if ($this->allowConsistencyCheck) : ?>
         <div class="oprun">
-            <form method="post" action="<?= $this->url(array('module' => 'admin', 'controller' => 'indexmaintenance', 'action' => 'checkconsistency'), null, true) ?>">
+            <form method="post" action="<?= $this->url(['module' => 'admin', 'controller' => 'indexmaintenance', 'action' => 'checkconsistency'], null, true) ?>">
                 <input type="submit" value="<?= $this->translate('admin_indexmaintenance_runjob') ?>">
             </form>
         </div>
@@ -71,13 +71,13 @@
 </div>
 
 <!-- TODO feature will be implemented in a later version OPUSVIER-2955 -->
-<?php if (!$this->disabledFeatureFulltextExtractionCheck) : ?>
+<?php if (! $this->disabledFeatureFulltextExtractionCheck) : ?>
 <div class="operation">
     <div class="opname"><?= $this->translate('admin_indexmaintenance_fulltextextractioncheck_name') ?></div>    
     <div class="opdescription"><?= $this->translate('admin_indexmaintenance_fulltextextractioncheck_description') ?></div>
     <?php if ($this->allowFulltextExtractionCheck) : ?>
         <div class="oprun">
-            <form method="post" action="<?= $this->url(array('module' => 'admin', 'controller' => 'indexmaintenance', 'action' => 'checkfulltexts'), null, true) ?>">
+            <form method="post" action="<?= $this->url(['module' => 'admin', 'controller' => 'indexmaintenance', 'action' => 'checkfulltexts'], null, true) ?>">
                 <input type="submit" value="<?= $this->translate('admin_indexmaintenance_runjob') ?>">
             </form>
         </div>
@@ -100,13 +100,13 @@
 <?php endif ?>
 
 <!-- TODO feature will be implemented in a later version OPUSVIER-2956 -->
-<?php if (!$this->disabledFeatureIndexOptimization) : ?>
+<?php if (! $this->disabledFeatureIndexOptimization) : ?>
 <div class="operation">    
     <div class="opname"><?= $this->translate('admin_indexmaintenance_indexoptimize_name') ?></div>        
     <div class="opdescription"><?= $this->translate('admin_indexmaintenance_indexoptimize_description') ?></div>
     <?php if ($this->allowIndexOptimization) : ?>
         <div class="oprun">
-            <form method="post" action="<?= $this->url(array('module' => 'admin', 'controller' => 'indexmaintenance', 'action' => 'optimizeindex'), null, true) ?>">
+            <form method="post" action="<?= $this->url(['module' => 'admin', 'controller' => 'indexmaintenance', 'action' => 'optimizeindex'], null, true) ?>">
                 <input type="submit" value="<?= $this->translate('admin_indexmaintenance_runjob') ?>">
             </form>
         </div>

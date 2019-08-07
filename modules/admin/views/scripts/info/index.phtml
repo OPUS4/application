@@ -33,7 +33,7 @@
  */
 ?>
 
-<?PHP if (!empty(Application_Configuration::getOpusInfo())) : ?>
+<?PHP if (! empty(Application_Configuration::getOpusInfo())) : ?>
 <dl>
     <?PHP foreach (Application_Configuration::getOpusInfo() as $infoKey => $infoValue) : ?>
         <dt id="<?= $infoKey ?>"><?= htmlspecialchars($this->translate($infoKey)) ?></dt>
@@ -43,7 +43,7 @@
 <?PHP endif ?>
 
 <dl>
-    <dt><a href="<?= $this->url(array('module' => 'admin', 'controller' => 'info', 'action' => 'update')) ?>">
+    <dt><a href="<?= $this->url(['module' => 'admin', 'controller' => 'info', 'action' => 'update']) ?>">
         <?= htmlspecialchars($this->translate('admin_info_versioncheck')) ?></a></dt>
 </dl>
 
