@@ -29,22 +29,34 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
+ *
+ * TODO handle seriesId
+ * TODO handle authorSearch
  */
 ?>
 
 <?php
-    $document = $this->document;
-    $result = $this->result;
+$result = $this->result;
+$document = $result->getDocument();
+$rowCount = $this->partialCounter;
+
+// TODO this is ugly (parameter automatisch übernehmen?) - put it somewhere else (view helper)
+$frontdoorUrl = $this->url([
+    'module' => 'frontdoor', 'controller' => 'index', 'action' => 'index',
+    'docId' => $document->getId(),
+    'start' => $this->start + $rowCount,
+    'rows' => $this->rows,
+    'searchtype' => $this->searchType
+]);
 ?>
 
-<div class="result_box <?= $this->rowCount++ % 2 === 0 ? 'even' : 'odd'; ?> <?= $document->getServerState() ?>">
+<div class="result_box <?= $rowCount % 2 === 0 ? 'even' : 'odd'; ?> <?= $document->getServerState() ?>">
     <?= $this->fulltextLogo($document) ?>
     <?php if (isset($this->seriesId) && $this->seriesId && !is_null($result->getSeriesNumber( $this->seriesId ))) : ?>
         <div class="results_seriesnumber"><?= htmlspecialchars($result->getSeriesNumber( $this->seriesId )); ?></div>
     <?php endif ?>
 
     <div class="results_title">
-
         <?php if (!is_null($result->getAsset('title'))) : ?>
             <a href="<?= $this->frontdoorUrl ?>"><?= $this->documentTitle($document) ?></a>
         <?php else: ?>
@@ -55,6 +67,7 @@
             (<?= htmlspecialchars($result->getAsset( 'year' )); ?>)
         <?php endif ?>
     </div>
+
     <?php if (!is_null($result->getAsset( 'author' ))) : ?>
         <div class="results_author">
             <?php foreach($result->getAsset( 'author' ) as $authorIndex => $author) :

@@ -87,27 +87,7 @@ if($this->jQueryEnabled()) {
         <?php if (! $this->isSimpleList) include('searchOptions.phtml'); ?>
         <?php if (! is_null($this->results)) : ?>
             <div id="search_results" class="search_results">
-                <?php $rowCount = 0; ?>
-                <?PHP foreach($this->results as $result) : ?>
-                    <?php
-                    $document = $result->getDocument();
-
-                    // TODO this is ugly (parameter automatisch übernehmen?) - put it somewhere else (view helper)
-                    $frontdoorUrl = $this->url([
-                        'module' => 'frontdoor', 'controller' => 'index', 'action' => 'index',
-                        'docId' => $document->getId(),
-                        'start' => $this->start + $rowCount,
-                        'rows' => $this->rows,
-                        'searchtype' => $this->searchType
-                    ]);
-                    ?>
-                    <?= $this->partial('index/result.phtml', [
-                        'result' => $result,
-                        'document' => $document,
-                        'rowCount' => $rowCount,
-                        'frontdoorUrl' => $frontdoorUrl
-                    ]) ?>
-                <?php endforeach ?>
+                <?= $this->partialLoop()->setObjectKey('result')->partialLoop('index/result.phtml', $this->results) ?>
             </div>
         <?php endif ?>
         <div class="breadcrumb_results">
