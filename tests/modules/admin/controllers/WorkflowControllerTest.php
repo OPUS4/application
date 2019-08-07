@@ -433,7 +433,7 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
     public function testConfirmationDisabled()
     {
         Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
-            'confirmation' => ['document' => ['statechange' => ['enabled' => '']]]
+            'confirmation' => ['document' => ['statechange' => ['enabled' => '']]] // false
         ]));
 
         $this->dispatch('/admin/workflow/changestate/docId/102/targetState/deleted');

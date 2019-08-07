@@ -106,15 +106,13 @@ class Application_Util_PublicationNotification extends Application_Util_Notifica
     public function isEnabled()
     {
         $config = $this->getConfig();
-
         return isset($config->notification->document->published->enabled)
-            && $config->notification->document->published->enabled == 1;
+            && filter_var($config->notification->document->published->enabled, FILTER_VALIDATE_BOOLEAN);
     }
 
     public function getSubjectTemplate()
     {
         $config = $this->getConfig();
-
         if (isset($config->notification->document->published->subject)) {
             return $config->notification->document->published->subject;
         }

@@ -141,6 +141,7 @@ class Application_Util_Notification extends Application_Model_Abstract
     }
 
     /**
+     * @param $document Opus_Document
      * @param $docId
      * @param $authors
      * @param $title
@@ -184,7 +185,6 @@ class Application_Util_Notification extends Application_Model_Abstract
     public function getSubjectTemplate()
     {
         $config = $this->getConfig();
-
         if (isset($config->notification->document->submitted->subject)) {
             return $config->notification->document->submitted->subject;
         }
@@ -193,7 +193,6 @@ class Application_Util_Notification extends Application_Model_Abstract
     public function getMailBody($docId, $authors, $title, $url)
     {
         $config = $this->getConfig();
-
         if (isset($config->notification->document->submitted->template)) {
             return $this->getTemplate(
                 $config->notification->document->submitted->template,
@@ -271,7 +270,7 @@ class Application_Util_Notification extends Application_Model_Abstract
         $config = $this->getConfig();
 
         return isset($config->notification->document->published->enabled)
-                && $config->notification->document->published->enabled == 1;
+                && filter_var($config->notification->document->published->enabled, FILTER_VALIDATE_BOOLEAN);
     }
 
     /**
@@ -305,7 +304,8 @@ class Application_Util_Notification extends Application_Model_Abstract
 
                 $config = $this->getConfig();
 
-                if (isset($config->runjobs->asynchronous) && $config->runjobs->asynchronous) {
+                if (isset($config->runjobs->asynchronous) &&
+                    filter_var($config->runjobs->asynchronous, FILTER_VALIDATE_BOOLEAN)) {
                     // Queue job (execute asynchronously)
                     // skip creating job if equal job already exists
                     if (true === $job->isUniqueInQueue()) {

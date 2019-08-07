@@ -65,9 +65,8 @@ class Admin_Form_WorkflowNotification extends Admin_Form_YesNoForm
     public function isNotificationEnabled()
     {
         $config = Zend_Registry::get('Zend_Config');
-
-        return ((isset($config->notification->document->published->enabled)
-            && $config->notification->document->published->enabled == 1));
+        return (isset($config->notification->document->published->enabled)
+            && filter_var($config->notification->document->published->enabled, FILTER_VALIDATE_BOOLEAN));
     }
 
     /**
