@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -46,9 +45,9 @@ class Publish_Form_PublishingFirstTest extends ControllerTestCase
     public function testIsValidMethodWithMissingDocumentType()
     {
         $config = Zend_Registry::get('Zend_Config');
-        $config->form->first->require_upload = 0;
-        $config->form->first->show_rights_checkbox = 0;
-        $config->form->first->bibliographie = 0;
+        $config->form->first->require_upload = '';
+        $config->form->first->show_rights_checkbox = '';
+        $config->form->first->bibliographie = '';
 
         $form = new Publish_Form_PublishingFirst(new Zend_View());
         $data = [
@@ -62,9 +61,9 @@ class Publish_Form_PublishingFirstTest extends ControllerTestCase
     public function testIsValidMethodWithMissingRightsCheckbox()
     {
         $config = Zend_Registry::get('Zend_Config');
-        $config->form->first->require_upload = 0;
-        $config->form->first->show_rights_checkbox = 1;
-        $config->form->first->bibliographie = 0;
+        $config->form->first->require_upload = '';
+        $config->form->first->show_rights_checkbox = '1';
+        $config->form->first->bibliographie = '';
 
         $form = new Publish_Form_PublishingFirst(new Zend_View());
         $data = [
