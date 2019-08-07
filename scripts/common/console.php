@@ -37,7 +37,7 @@
  */
 
 $config = Zend_Registry::get('Zend_Config');
-if ($config->security !== '0') {
+if (isset($config->security) && filter_var($config->security, FILTER_VALIDATE_BOOLEAN)) {
     // setup realm
     $realm = Opus_Security_Realm::getInstance();
 }
