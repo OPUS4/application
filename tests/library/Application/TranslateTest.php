@@ -142,7 +142,6 @@ class Application_TranslateTest extends ControllerTestCase
         $config = Zend_Registry::get('Zend_Config');
         $config->log->untranslated = '';
         $this->assertFalse($this->translate->isLogUntranslatedEnabled());
-        $config->log->untranslated = true; // Siehe testIsLogUntranslatedEnabledTrue
     }
 
     public function testGetOptionsLogEnabled()
