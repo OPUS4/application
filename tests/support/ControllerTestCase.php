@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -39,7 +39,6 @@
  */
 class ControllerTestCase extends TestCase
 {
-
     const MESSAGE_LEVEL_NOTICE = 'notice';
 
     const MESSAGE_LEVEL_FAILURE = 'failure';
@@ -214,11 +213,13 @@ class ControllerTestCase extends TestCase
     {
         $adapter = new Opus_Security_AuthAdapter();
         $adapter->setCredentials($login, $password);
+
         $auth = Zend_Auth::getInstance();
-        $result = $auth->authenticate($adapter);
+        $auth->authenticate($adapter);
         $this->assertTrue($auth->hasIdentity());
+
         $config = Zend_Registry::get('Zend_Config');
-        if ($config->security) {
+        if (isset($config->security) && filter_var($config->security, FILTER_VALIDATE_BOOLEAN)) {
             Application_Security_AclProvider::init();
         }
     }
@@ -460,7 +461,7 @@ class ControllerTestCase extends TestCase
     {
         $config = Zend_Registry::get('Zend_Config');
         return (isset($config->tests->failTestOnMissingCommand) &&
-                $config->tests->failTestOnMissingCommand) ? true : false;
+                filter_var($config->tests->failTestOnMissingCommand, FILTER_VALIDATE_BOOLEAN));
     }
 
     /**
@@ -738,7 +739,7 @@ class ControllerTestCase extends TestCase
 
     public function assertSecurityConfigured()
     {
-        $this->assertEquals(1, Zend_Registry::get('Zend_Config')->security);
+        $this->assertEquals('1', Zend_Registry::get('Zend_Config')->security);
         $this->assertTrue(
             Zend_Registry::isRegistered('Opus_Acl'),
             'Expected registry key Opus_Acl to be set'
