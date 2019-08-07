@@ -1861,7 +1861,8 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $max_records = '2';
 
         Zend_Registry::get('Zend_Config')->merge(
-            new Zend_Config(['oai' => ['max' => ['listrecords' => $max_records]]]));
+            new Zend_Config(['oai' => ['max' => ['listrecords' => $max_records]]])
+        );
 
         // first request: fetch documents list and expect resumption code
         $this->dispatch("/oai?verb=ListRecords&metadataPrefix=oai_dc");
@@ -1906,7 +1907,8 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $max_records = '100';
 
         Zend_Registry::get('Zend_Config')->merge(
-            new Zend_Config(['oai' => ['max' => ['listrecords' => $max_records]]]));
+            new Zend_Config(['oai' => ['max' => ['listrecords' => $max_records]]])
+        );
 
         // first request: fetch documents list and expect resumption code
         $this->dispatch("/oai?verb=ListRecords&metadataPrefix=oai_dc");
