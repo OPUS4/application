@@ -65,7 +65,7 @@ class Publish_IndexControllerTest extends ControllerTestCase
         if (isset($config->form->first->enable_upload)) {
             $oldval = $config->form->first->enable_upload;
         }
-        $config->form->first->enable_upload = 1;
+        $config->form->first->enable_upload = '1';
 
         $this->dispatch('/publish');
 
@@ -98,7 +98,7 @@ class Publish_IndexControllerTest extends ControllerTestCase
         if (isset($config->form->first->enable_upload)) {
             $oldval = $config->form->first->enable_upload;
         }
-        $config->form->first->enable_upload = 0;
+        $config->form->first->enable_upload = '';
 
         $this->dispatch('/publish');
 
@@ -132,7 +132,7 @@ class Publish_IndexControllerTest extends ControllerTestCase
         if (isset($config->form->first->bibliographie)) {
             $oldval = $config->form->first->bibliographie;
         }
-        $config->form->first->bibliographie = 1;
+        $config->form->first->bibliographie = '1';
 
         $this->dispatch('/publish');
 
@@ -163,7 +163,7 @@ class Publish_IndexControllerTest extends ControllerTestCase
         if (isset($config->form->first->bibliographie)) {
             $oldval = $config->form->first->bibliographie;
         }
-        $config->form->first->bibliographie = 0;
+        $config->form->first->bibliographie = '';
 
         $this->dispatch('/publish');
 
