@@ -53,6 +53,6 @@ class Application_View_Helper_OptionEnabled extends Application_View_Helper_Abst
 
         $value = Application_Configuration::getInstance()->getValue($key);
 
-        return $value === 'true' or $value == '1';
+        return filter_var($value, FILTER_VALIDATE_BOOLEAN);
     }
 }
