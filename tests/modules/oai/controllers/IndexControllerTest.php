@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -1211,8 +1210,8 @@ class Oai_IndexControllerTest extends ControllerTestCase
             new Zend_Config([
                 'oai' => [
                     'max' => [
-                        'listrecords' => 100,
-                        'listidentifiers' => 200,
+                        'listrecords' => '100',
+                        'listidentifiers' => '200',
                     ]
                 ]
             ])
@@ -1881,7 +1880,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
      */
     public function testListRecordsWithResumptionToken()
     {
-        $max_records = 2;
+        $max_records = '2';
 
         $config = Zend_Registry::get('Zend_Config');
         $config->oai->max->listrecords = $max_records;
@@ -1926,7 +1925,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
      */
     public function testListRecordsWithEmptyResumptionTokenForLastBlock()
     {
-        $max_records = 100;
+        $max_records = '100';
 
         $config = Zend_Registry::get('Zend_Config');
         $config->oai->max->listrecords = $max_records;
