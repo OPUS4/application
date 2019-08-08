@@ -722,6 +722,7 @@ class Export_IndexControllerTest extends ControllerTestCase
     public function testPublistActionGroupedByCompletedYear()
     {
         $config = Zend_Registry::get('Zend_Config');
+        // FIXME OPUSVIER-4130 config does not make sense - completely ignores value of setting
         if (isset($config->plugins->export->publist->groupby->completedyear)) {
             $config->plugins->export->publist->groupby->completedyear = '1';
         } else {
