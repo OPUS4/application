@@ -241,9 +241,9 @@ class SolrFulltextCacheBuilder
     private function forceSyncMode()
     {
         $config = Zend_Registry::get('Zend_Config');
-        if (isset($config->runjobs->asynchronous) && $config->runjobs->asynchronous) {
+        if (isset($config->runjobs->asynchronous) && filter_var($config->runjobs->asynchronous, FILTER_VALIDATE_BOOLEAN)) {
             $this->_syncMode = false;
-            $config->runjobs->asynchronous = 0;
+            $config->runjobs->asynchronous = ''; // false
             Zend_Registry::set('Zend_Config', $config);
         }
     }
@@ -252,7 +252,7 @@ class SolrFulltextCacheBuilder
     {
         if (! $this->_syncMode) {
             $config = Zend_Registry::get('Zend_Config');
-            $config->runjobs->asynchronous = 1;
+            $config->runjobs->asynchronous = '1'; // true
             Zend_Registry::set('Zend_Config', $config);
         }
     }
