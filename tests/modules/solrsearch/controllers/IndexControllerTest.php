@@ -656,7 +656,6 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
 
         $host = $config->searchengine->solr->default->service->default->endpoint->primary->host;
         $port = $config->searchengine->solr->default->service->default->endpoint->primary->port;
-        $oldValue = $config->searchengine->solr->default->service->default->endpoint->primary->path;
         $config->searchengine->solr->default->service->default->endpoint->primary->path = '/solr/corethatdoesnotexist';
         Zend_Registry::set('Zend_Config', $config);
 
@@ -666,11 +665,6 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
         $this->assertNotContains("http://${host}:${port}/solr/corethatdoesnotexist", $body);
         $this->assertContains('The search service is currently not available.', $body);
         $this->assertResponseCode(503);
-
-        // restore configuration
-        $config = Zend_Registry::get('Zend_Config');
-        $config->searchengine->solr->default->service->default->endpoint->primary->path = $oldValue;
-        Zend_Registry::set('Zend_Config', $config);
     }
 
     /**
