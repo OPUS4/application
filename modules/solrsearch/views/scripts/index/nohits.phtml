@@ -35,22 +35,23 @@
 ?>
 
 <?php
-    $this->headLink(array(
+    $this->headLink([
         'rel' => 'alternate',
         'type' => 'application/rss+xml',
         'href' => $this->serverUrl() . $this->url($this->rssUrl)
-    ));
+    ]);
 ?>
 
 <?php
-    if($this->searchType === 'simple')
-        include('simpleSearchForm.phtml');
-    else if ($this->searchType === 'advanced' || $this->searchType === 'authorsearch')
-        echo $this->form;
-    else if ($this->searchType === 'collection')
-        include('browsecollection.phtml');
-    else if ($this->searchType === 'series')
-        include('browseseries.phtml');
+if ($this->searchType === 'simple') {
+    include('simpleSearchForm.phtml');
+} elseif ($this->searchType === 'advanced' || $this->searchType === 'authorsearch') {
+    echo $this->form;
+} elseif ($this->searchType === 'collection') {
+    include('browsecollection.phtml');
+} elseif ($this->searchType === 'series') {
+    include('browseseries.phtml');
+}
 ?>
 
 <?php if ($this->searchType !== 'collection') : ?>

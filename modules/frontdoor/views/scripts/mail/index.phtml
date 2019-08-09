@@ -36,7 +36,7 @@
  *  This view displays a mailform for recommendation of a document starting from frontdoor-view
  */
 ?>
-<h1><?= $this->translate ('frontdoor_recommendationtitle')?></h1>
+<h1><?= $this->translate('frontdoor_recommendationtitle')?></h1>
 
 <?php foreach ($this->author as $author) : ?>
 <b><u><?= htmlspecialchars($author) ?></u></b>:&nbsp;
@@ -53,5 +53,5 @@
 <br/>
 <br/>
 <p>
-    <a href="<?= $this->url(array('module' => 'frontdoor', 'controller' => 'index', 'docId' => $this->docId), null, true); ?>"><?= $this->translate('frontdoor_back')?></a>
+    <a href="<?= $this->url(['module' => 'frontdoor', 'controller' => 'index', 'docId' => $this->docId], null, true); ?>"><?= $this->translate('frontdoor_back')?></a>
 </p>
