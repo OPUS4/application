@@ -233,12 +233,13 @@ class Application_Translate extends Zend_Translate
 
     /**
      *
-     * @return type
+     * @return bool
      */
     public function isLogUntranslatedEnabled()
     {
         $config = Zend_Registry::get('Zend_Config');
-        return (isset($config->log->untranslated)) ? (bool)$config->log->untranslated : false;
+        return (isset($config->log->untranslated)) ?
+            filter_var($config->log->untranslated, FILTER_VALIDATE_BOOLEAN) : false;
     }
 
     /**

@@ -111,7 +111,6 @@ class Oai_Model_ContainerTest extends ControllerTestCase
 
         // enable security
         $config = Zend_Registry::get('Zend_Config');
-        $security = $config->security;
         $config->security = '1';
         Zend_Registry::set('Zend_Config', $config);
 
@@ -132,10 +131,6 @@ class Oai_Model_ContainerTest extends ControllerTestCase
             $r->removeAccessModule('oai');
             $r->store();
         }
-
-        // restore security settings
-        $config->security = $security;
-        Zend_Registry::set('Zend_Config', $config);
     }
 
     public function testConstructorWithPublishedDocumentWithoutAnyFiles()

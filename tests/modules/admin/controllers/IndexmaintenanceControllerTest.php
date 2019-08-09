@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -168,12 +168,12 @@ class Admin_IndexmaintenanceControllerTest extends ControllerTestCase
 
     private function enableAsyncMode()
     {
-        $this->setAsyncMode(1);
+        $this->setAsyncMode('1');
     }
 
     private function disableAsyncMode()
     {
-        $this->setAsyncMode(0);
+        $this->setAsyncMode(''); // false
     }
 
     private function setAsyncMode($value)
@@ -190,12 +190,12 @@ class Admin_IndexmaintenanceControllerTest extends ControllerTestCase
 
     private function enableAsyncIndexmaintenanceMode()
     {
-        $this->setAsyncIndexmaintenanceMode(1);
+        $this->setAsyncIndexmaintenanceMode('1');
     }
 
     private function disableAsyncIndexmaintenanceMode()
     {
-        $this->setAsyncIndexmaintenanceMode(0);
+        $this->setAsyncIndexmaintenanceMode(''); // false
     }
 
     private function setAsyncIndexmaintenanceMode($value)

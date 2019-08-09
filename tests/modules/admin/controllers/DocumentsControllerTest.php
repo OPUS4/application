@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -37,7 +37,6 @@
  */
 class Admin_DocumentsControllerTest extends ControllerTestCase
 {
-
     protected $additionalResources = ['database', 'view', 'mainMenu', 'navigation', 'translation'];
 
     /**
@@ -165,7 +164,7 @@ class Admin_DocumentsControllerTest extends ControllerTestCase
     public function testConfigureDefaultHitsPerPage()
     {
         $config = Zend_Registry::get('Zend_Config');
-        $config->admin->documents->maxDocsDefault = 7;
+        $config->admin->documents->maxDocsDefault = '7';
 
         $this->dispatch('/admin/documents');
         $this->assertQueryCount('span.title', 7);

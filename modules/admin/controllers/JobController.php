@@ -43,7 +43,7 @@ class Admin_JobController extends Application_Controller_Action
 
         $config = $this->getConfig();
 
-        if (isset($config->runjobs->asynchronous) && $config->runjobs->asynchronous) {
+        if (isset($config->runjobs->asynchronous) && filter_var($config->runjobs->asynchronous, FILTER_VALIDATE_BOOLEAN)) {
             $this->view->asyncjobs = true;
             $this->view->failedJobCount = Opus_Job::getCountPerLabel(Opus_Job::STATE_FAILED);
             $this->view->unprocessedJobCount = Opus_Job::getCountPerLabel(Opus_Job::STATE_UNDEFINED);
@@ -65,7 +65,7 @@ class Admin_JobController extends Application_Controller_Action
     {
         $config = $this->getConfig();
         $this->_helper->layout()->disableLayout();
-        if (isset($config->runjobs->asynchronous) && $config->runjobs->asynchronous) {
+        if (isset($config->runjobs->asynchronous) && filter_var($config->runjobs->asynchronous, FILTER_VALIDATE_BOOLEAN)) {
             $this->view->failedJobCount = Opus_Job::getCount(Opus_Job::STATE_FAILED);
         } else {
             $this->view->failedJobCount = 0;

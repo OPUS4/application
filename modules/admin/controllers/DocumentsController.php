@@ -66,12 +66,8 @@ class Admin_DocumentsController extends Application_Controller_Action
         parent::init();
 
         $config = $this->getConfig();
-
-        if (isset($config->admin->documents->linkToAuthorSearch)) {
-            $this->view->linkToAuthorSearch = $config->admin->documents->linkToAuthorSearch;
-        } else {
-            $this->view->linkToAuthorSearch = 0;
-        }
+        $this->view->linkToAuthorSearch = isset($config->admin->documents->linkToAuthorSearch) &&
+            filter_var($config->admin->documents->linkToAuthorSearch, FILTER_VALIDATE_BOOLEAN);
 
         if (isset($config->admin->documents->maxDocsDefault)) {
             $this->_maxDocsDefault = $config->admin->documents->maxDocsDefault;

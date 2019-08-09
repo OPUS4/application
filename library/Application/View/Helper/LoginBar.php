@@ -132,7 +132,7 @@ class Application_View_Helper_LoginBar extends Zend_View_Helper_Abstract
             // Prüfe, ob Nutzer ihren Account editieren dürfen
             $config = Zend_Registry::get('Zend_Config');
             if (isset($config) and isset($config->account->editOwnAccount)) {
-                $addAccountLink = $config->account->editOwnAccount;
+                $addAccountLink = filter_var($config->account->editOwnAccount, FILTER_VALIDATE_BOOLEAN);
             }
         }
 

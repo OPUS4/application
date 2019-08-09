@@ -31,7 +31,6 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-
 class Solrsearch_Model_FacetMenuTest extends ControllerTestCase
 {
 
@@ -39,13 +38,18 @@ class Solrsearch_Model_FacetMenuTest extends ControllerTestCase
 
     public function testGetFacetLimitsFromConfig()
     {
-        $model = new Solrsearch_Model_FacetMenu();
+        new Solrsearch_Model_FacetMenu();
         $config = Zend_Registry::get('Zend_Config');
         $config->merge(new Zend_Config(['searchengine' =>
             ['solr' =>
                 ['facetlimit' =>
-                    ['author_facet' => 3,
-                        'year' => 15]]]]));
+                    [
+                        'author_facet' => '3',
+                        'year' => '15'
+                    ]
+                ]
+            ]
+        ]));
 
         $facetLimits = Opus_Search_Config::getFacetLimits();
 
@@ -60,7 +64,7 @@ class Solrsearch_Model_FacetMenuTest extends ControllerTestCase
 
     public function testGetFacetLimitsFromConfigWithYearInverted()
     {
-        $model = new Solrsearch_Model_FacetMenu();
+        new Solrsearch_Model_FacetMenu();
         $config = Zend_Registry::get('Zend_Config');
         if (isset($config->searchengine->solr->facets)) {
             $config->searchengine->solr->facets = 'year_inverted,doctype,author_facet,language,has_fulltext,belongs_to_bibliography,subject,institute';
@@ -75,8 +79,13 @@ class Solrsearch_Model_FacetMenuTest extends ControllerTestCase
         $config->merge(new Zend_Config(['searchengine' =>
             ['solr' =>
                 ['facetlimit' =>
-                    ['author_facet' => 3,
-                        'year_inverted' => 15]]]]));
+                    [
+                        'author_facet' => '3',
+                        'year_inverted' => '15'
+                    ]
+                ]
+            ]
+        ]));
 
         $facetLimits = Opus_Search_Config::getFacetLimits();
 

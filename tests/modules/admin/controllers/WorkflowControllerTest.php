@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -44,7 +44,7 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
     private function enablePublishNotification()
     {
         $config = Zend_Registry::get('Zend_Config');
-        $config->notification->document->published->enabled = 1;
+        $config->notification->document->published->enabled = '1';
         $config->notification->document->published->email = "published@localhost";
     }
 
@@ -433,7 +433,7 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
     public function testConfirmationDisabled()
     {
         Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
-            'confirmation' => ['document' => ['statechange' => ['enabled' => '0']]]
+            'confirmation' => ['document' => ['statechange' => ['enabled' => '']]] // false
         ]));
 
         $this->dispatch('/admin/workflow/changestate/docId/102/targetState/deleted');

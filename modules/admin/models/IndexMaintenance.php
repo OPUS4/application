@@ -65,9 +65,9 @@ class Admin_Model_IndexMaintenance
     {
         $this->_featureDisabled = ! (
                 (isset($this->_config->runjobs->indexmaintenance->asynchronous)
-                    && $this->_config->runjobs->indexmaintenance->asynchronous) ||
+                    && filter_var($this->_config->runjobs->indexmaintenance->asynchronous, FILTER_VALIDATE_BOOLEAN)) ||
                 (! isset($this->_config->runjobs->indexmaintenance->asynchronous)
-                    && isset($this->_config->runjobs->asynchronous) && $this->_config->runjobs->asynchronous));
+                    && isset($this->_config->runjobs->asynchronous) && filter_var($this->_config->runjobs->asynchronous, FILTER_VALIDATE_BOOLEAN)));
     }
 
     public function getFeatureDisabled()

@@ -133,25 +133,21 @@ class Application_TranslateTest extends ControllerTestCase
     public function testIsLogUntranslatedEnabledTrue()
     {
         $config = Zend_Registry::get('Zend_Config');
-        $logUntranslated = $config->log->untranslated;
-        $config->log->untranslated = true;
+        $config->log->untranslated = '1';
         $this->assertTrue($this->translate->isLogUntranslatedEnabled());
-        $config->log->untranslated = $logUntranslated;
     }
 
     public function testIsLogUntranslatedEnabledFalse()
     {
         $config = Zend_Registry::get('Zend_Config');
-        $config->log->untranslated = false;
+        $config->log->untranslated = '';
         $this->assertFalse($this->translate->isLogUntranslatedEnabled());
-        $config->log->untranslated = true; // Siehe testIsLogUntranslatedEnabledTrue
     }
 
     public function testGetOptionsLogEnabled()
     {
         $config = Zend_Registry::get('Zend_Config');
-        $logUntranslated = $config->log->untranslated;
-        $config->log->untranslated = true;
+        $config->log->untranslated = '1';
 
         $options = $this->translate->getOptions();
 
@@ -160,30 +156,24 @@ class Application_TranslateTest extends ControllerTestCase
         $this->assertArrayHasKey('log', $options);
         $this->assertInstanceOf('Zend_Log', $options['log']);
         $this->assertTrue($options['logUntranslated']);
-
-        $config->log->untranslated = $logUntranslated;
     }
 
     public function testGetOptionsLogDisabled()
     {
         $config = Zend_Registry::get('Zend_Config');
-        $logUntranslated = $config->log->untranslated;
-        $config->log->untranslated = false;
+        $config->log->untranslated = '';
 
         $options = $this->translate->getOptions();
 
         $this->assertInternalType('array', $options);
         $this->assertEquals(10, count($options));
         $this->assertFalse($options['logUntranslated']);
-
-        $config->log->untranslated = $logUntranslated;
     }
 
     public function testLoggingEnabled()
     {
         $config = Zend_Registry::get('Zend_Config');
-        $logUntranslated = $config->log->untranslated;
-        $config->log->untranslated = true;
+        $config->log->untranslated = '1';
 
         $logger = new MockLogger();
 
@@ -196,15 +186,12 @@ class Application_TranslateTest extends ControllerTestCase
         $messages = $logger->getMessages();
         $this->assertEquals(1, count($messages));
         $this->assertContains('Unable to translate', $messages[0]);
-
-        $config->log->untranslated = $logUntranslated;
     }
 
     public function testLoggingDisabled()
     {
         $config = Zend_Registry::get('Zend_Config');
-        $logUntranslated = $config->log->untranslated;
-        $config->log->untranslated = false;
+        $config->log->untranslated = '';
 
         $logger = new MockLogger();
 
@@ -216,8 +203,6 @@ class Application_TranslateTest extends ControllerTestCase
 
         $messages = $logger->getMessages();
         $this->assertEquals(0, count($messages));
-
-        $config->log->untranslated = $logUntranslated;
     }
 
     public function enLanguageDataProvider()
