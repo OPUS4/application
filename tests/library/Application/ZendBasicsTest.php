@@ -69,4 +69,11 @@ class ZendBasicsTest extends ControllerTestCase
 
         $this->assertTrue(filter_var($value, FILTER_VALIDATE_BOOLEAN) === $result);
     }
+
+    public function testIssetForOptionIfConfigObjectIsNull()
+    {
+        $config = null; // this is on purpose
+
+        $this->assertFalse(isset($config->test->option));
+    }
 }
