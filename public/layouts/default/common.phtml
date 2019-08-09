@@ -182,13 +182,8 @@ if (isset($config->javascript->latex->mathjax)) {
         </div>
     </div>
 
-    <div id="content"
-         class="opus <?= (in_array($this->moduleName, ['admin', 'review', 'setup', 'account'])) ? 'adminContainer' : '' ?> <?= $this->moduleName ?>
-        <?php if ($this->moduleName === 'publish') :
-            ?>">
-        <?php else : ?>
-            <?= ($this->controllerName === 'index' ? '' : '_' . $this->controllerName) ?><?= ($this->actionName === 'index' ? '' : '_' . $this->actionName) ?><?= ($this->searchType === 'collection' || $this->searchType === 'latest' ? ' ' . $this->searchType : '') ?>">
-        <?php endif ?>
+    <?PHP // TODO searchType as CSS only for 'collection' and 'latest' used - Can it be refactored? ?>
+    <div id="content" class="opus <?= $this->adminCssClass() ?> <?= $this->moduleName ?> <?= $this->actionCssClass() ?> <?= $this->searchType ?>">
 
         <?PHP $messages = ! is_null($this->flashMessenger) ? $this->flashMessenger->getMessages() : null ?>
 
