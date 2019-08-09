@@ -99,7 +99,8 @@ class ErrorController extends Application_Controller_Action
             return;
         }
 
-        $this->view->showException = filter_var($errorConfig->showException, FILTER_VALIDATE_BOOLEAN);
+        $this->view->showException = isset($this->view->showException)
+            && filter_var($errorConfig->showException, FILTER_VALIDATE_BOOLEAN);
         if (isset($errorConfig->showRequest) && filter_var($errorConfig->showRequest, FILTER_VALIDATE_BOOLEAN)) {
             $this->view->errorRequest = $errors->request;
         }
