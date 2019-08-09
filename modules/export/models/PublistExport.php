@@ -99,7 +99,7 @@ class Export_Model_PublistExport extends Export_Model_XsltExport
 
         // TODO config
         $groupBy = 'publishedYear';
-        // TODO config does not make sense - completely ignores value of setting
+        // FIXME OPUSVIER-4130 config does not make sense - completely ignores value of setting
         if (isset($config->groupby->completedyear)) {
             $groupBy = 'completedYear';
         }

@@ -65,17 +65,11 @@ class Rss_IndexControllerTest extends ControllerTestCase
         $config = Zend_Registry::get('Zend_Config');
         $host = $config->searchengine->index->host;
         $port = $config->searchengine->index->port;
-        $oldValue = $config->searchengine->index->app;
         $config->searchengine->index->app = 'solr/corethatdoesnotexist';
         Zend_Registry::set('Zend_Config', $config);
 
         $this->dispatch('/rss/index/index/searchtype/all');
         $body = $this->getResponse()->getBody();
-
-        // restore configuration
-        $config = Zend_Registry::get('Zend_Config');
-        $config->searchengine->index->app = $oldValue;
-        Zend_Registry::set('Zend_Config', $config);
 
         $this->assertNotContains("http://${host}:${port}/solr/corethatdoesnotexist", $body);
         $this->assertContains("The search service is currently not available.", $body);

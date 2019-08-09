@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -51,7 +50,6 @@ class Application_Security_AccessTest extends ControllerTestCase
         $this->dispatch('/admin');
 
         $this->logoutUser();
-        $this->restoreSecuritySetting();
 
         $this->assertQuery('//a[@href="/admin/licence"]');
         $this->assertQuery('//a[@href="/admin/index/info"]');

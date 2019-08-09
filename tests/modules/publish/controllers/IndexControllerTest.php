@@ -59,22 +59,9 @@ class Publish_IndexControllerTest extends ControllerTestCase
     public function testShowFileUpload()
     {
         $config = Zend_Registry::get('Zend_Config');
-
-        // manipulate config
-        $oldval = null;
-        if (isset($config->form->first->enable_upload)) {
-            $oldval = $config->form->first->enable_upload;
-        }
-        $config->form->first->enable_upload = 1;
+        $config->form->first->enable_upload = '1';
 
         $this->dispatch('/publish');
-
-        // undo config changes before asserting anything
-        if (is_null($oldval)) {
-            unset($config->form->first->enable_upload);
-        } else {
-            $config->form->first->enable_upload = $oldval;
-        }
 
         $this->assertResponseCode(200);
         $this->assertController('index');
@@ -92,22 +79,9 @@ class Publish_IndexControllerTest extends ControllerTestCase
     public function testDoNotShowFileUpload()
     {
         $config = Zend_Registry::get('Zend_Config');
-
-        // manipulate config
-        $oldval = null;
-        if (isset($config->form->first->enable_upload)) {
-            $oldval = $config->form->first->enable_upload;
-        }
-        $config->form->first->enable_upload = 0;
+        $config->form->first->enable_upload = '';
 
         $this->dispatch('/publish');
-
-        // undo config changes
-        if (is_null($oldval)) {
-            unset($config->form->first->enable_upload);
-        } else {
-            $config->form->first->enable_upload = $oldval;
-        }
 
         $this->assertResponseCode(200);
         $this->assertController('index');
@@ -126,22 +100,9 @@ class Publish_IndexControllerTest extends ControllerTestCase
     public function testShowBibliographyCheckbox()
     {
         $config = Zend_Registry::get('Zend_Config');
-
-        // manipulate config
-        $oldval = null;
-        if (isset($config->form->first->bibliographie)) {
-            $oldval = $config->form->first->bibliographie;
-        }
-        $config->form->first->bibliographie = 1;
+        $config->form->first->bibliographie = '1';
 
         $this->dispatch('/publish');
-
-        // undo config changes before asserting anything
-        if (is_null($oldval)) {
-            unset($config->form->first->bibliographie);
-        } else {
-            $config->form->first->bibliographie = $oldval;
-        }
 
         $this->assertResponseCode(200);
         $this->assertController('index');
@@ -157,22 +118,9 @@ class Publish_IndexControllerTest extends ControllerTestCase
     public function testDoNotShowBibliographyCheckbox()
     {
         $config = Zend_Registry::get('Zend_Config');
-
-        // manipulate config
-        $oldval = null;
-        if (isset($config->form->first->bibliographie)) {
-            $oldval = $config->form->first->bibliographie;
-        }
-        $config->form->first->bibliographie = 0;
+        $config->form->first->bibliographie = '';
 
         $this->dispatch('/publish');
-
-        // undo config changes before asserting anything
-        if (is_null($oldval)) {
-            unset($config->form->first->bibliographie);
-        } else {
-            $config->form->first->bibliographie = $oldval;
-        }
 
         $this->assertResponseCode(200);
         $this->assertController('index');

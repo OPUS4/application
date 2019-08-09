@@ -161,13 +161,11 @@ class Review_IndexController extends Application_Controller_Action
         $this->view->documentCount = count($ids);
         $this->view->actionUrl = $this->view->url(['action' => 'clear']);
 
-        $useCurrentUser = false;
         $person = null;
 
         $config = $this->getConfig();
-        if (isset($config, $config->clearing->addCurrentUserAsReferee)) {
-            $useCurrentUser = $config->clearing->addCurrentUserAsReferee;
-        }
+        $useCurrentUser = isset($config, $config->clearing->addCurrentUserAsReferee) &&
+            filter_var($config->clearing->addCurrentUserAsReferee, FILTER_VALIDATE_BOOLEAN);
 
         if ($useCurrentUser) {
             $person = $this->_loggedUser->createPerson();

@@ -195,14 +195,10 @@ class Export_IndexControllerTest extends ControllerTestCase
 
         // enable security
         $config = Zend_Registry::get('Zend_Config');
-        $security = $config->security;
         $config->security = '1';
         Zend_Registry::set('Zend_Config', $config);
 
         $this->dispatch('/export/index/index/export/xml');
-
-        $config->security = $security;
-        Zend_Registry::set('Zend_Config', $config);
 
         $this->assertResponseCode(500);
         $this->assertContains('missing parameter stylesheet', $this->getResponse()->getBody());
@@ -231,21 +227,13 @@ class Export_IndexControllerTest extends ControllerTestCase
         $config = Zend_Registry::get('Zend_Config');
         $host = $config->searchengine->index->host;
         $port = $config->searchengine->index->port;
-        $oldValue = $config->searchengine->index->app;
         $this->disableSolr();
 
-        $security = $config->security;
         $config->security = '1';
         Zend_Registry::set('Zend_Config', $config);
 
         $this->dispatch('/export/index/index/searchtype/all/export/xml/stylesheet/example');
         $body = $this->getResponse()->getBody();
-
-        // restore configuration
-        $config = Zend_Registry::get('Zend_Config');
-        $config->searchengine->index->app = $oldValue;
-        $config->security = $security;
-        Zend_Registry::set('Zend_Config', $config);
 
         $this->assertNotContains("http://${host}:${port}/solr/corethatdoesnotexist", $body);
         $this->assertContains("exception 'Application_SearchException' with message 'search server is not responding -- try again later'", $body);
@@ -632,9 +620,6 @@ class Export_IndexControllerTest extends ControllerTestCase
 
     public function testPublistActionWithoutStylesheetParameterInUrlAndInvalidConfigParameter()
     {
-        // manipulate application configuration
-        $oldConfig = Zend_Registry::get('Zend_Config');
-
         $config = Zend_Registry::get('Zend_Config');
         if (isset($config->plugins->export->publist->stylesheet)) {
             $config->plugins->export->publist->stylesheet = 'invalid';
@@ -648,8 +633,6 @@ class Export_IndexControllerTest extends ControllerTestCase
 
         $this->dispatch('/export/index/publist/role/publists/number/coll_visible');
 
-        // undo configuration manipulation
-        Zend_Registry::set('Zend_Config', $oldConfig);
         $this->assertResponseCode(500);
         $response = $this->getResponse();
         $this->assertContains('given stylesheet does not exist or is not readable', $response->getBody());
@@ -657,9 +640,6 @@ class Export_IndexControllerTest extends ControllerTestCase
 
     public function testPublistActionWithValidStylesheetInConfig()
     {
-        // manipulate application configuration
-        $oldConfig = Zend_Registry::get('Zend_Config');
-
         $config = Zend_Registry::get('Zend_Config');
         if (isset($config->plugins->export->publist->stylesheet)) {
             $config->plugins->export->publist->stylesheet = 'raw';
@@ -682,8 +662,6 @@ class Export_IndexControllerTest extends ControllerTestCase
 
         $this->dispatch('/export/index/publist/role/publists/number/coll_visible');
 
-        // undo configuration manipulation
-        Zend_Registry::set('Zend_Config', $oldConfig);
         $this->assertResponseCode(200);
         $response = $this->getResponse();
         $this->assertContains('<export timestamp=', $response->getBody());
@@ -744,6 +722,7 @@ class Export_IndexControllerTest extends ControllerTestCase
     public function testPublistActionGroupedByCompletedYear()
     {
         $config = Zend_Registry::get('Zend_Config');
+        // FIXME OPUSVIER-4130 config does not make sense - completely ignores value of setting
         if (isset($config->plugins->export->publist->groupby->completedyear)) {
             $config->plugins->export->publist->groupby->completedyear = '1';
         } else {
@@ -1012,8 +991,6 @@ class Export_IndexControllerTest extends ControllerTestCase
      */
     public function testNonAdminAccessOnUnrestrictedMarc21ExportAllowed()
     {
-        $config = Zend_Registry::get('Zend_Config');
-
         Zend_Registry::get('Zend_Config')->merge(
             new Zend_Config(
                 ['plugins' => ['export' => ['marc21' => ['adminOnly' => '']]]]
@@ -1028,9 +1005,6 @@ class Export_IndexControllerTest extends ControllerTestCase
         if ($exportAccessProvided) {
             $this->removeAccessOnModuleExportForGuest();
         }
-
-        // revert configuration changes
-        Zend_Registry::set('Zend_Config', $config);
 
         $this->assertResponseCode(200);
     }

@@ -434,7 +434,8 @@ class Publish_Model_Validation
 
             $config = Zend_Registry::get('Zend_Config');
 
-            if (isset($config->browsing->series->sortByTitle) && boolval($config->browsing->series->sortByTitle)) {
+            if (isset($config->browsing->series->sortByTitle) &&
+                filter_var($config->browsing->series->sortByTitle, FILTER_VALIDATE_BOOLEAN)) {
                 uasort($sets, function ($value1, $value2) {
                     return strnatcmp($value1, $value2);
                 });

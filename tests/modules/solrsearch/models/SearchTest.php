@@ -111,7 +111,7 @@ class Solrsearch_Model_SearchTest extends ControllerTestCase
         $request = $this->getRequest();
 
         Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
-            'searchengine' => ['solr' => ['numberOfDefaultSearchResults' => 25]]
+            'searchengine' => ['solr' => ['numberOfDefaultSearchResults' => '25']]
         ]));
 
         $model = new Solrsearch_Model_Search();

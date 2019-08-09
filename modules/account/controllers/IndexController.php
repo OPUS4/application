@@ -54,7 +54,7 @@ class Account_IndexController extends Application_Controller_Action
             return false;
         }
 
-        return $parentValue and $config->account->editOwnAccount;
+        return $parentValue && filter_var($config->account->editOwnAccount, FILTER_VALIDATE_BOOLEAN);
     }
 
     /**
@@ -114,8 +114,8 @@ class Account_IndexController extends Application_Controller_Action
 
             // check if username was provided and if it may be changed
             if (! isset($postData['username'])
-                    || (isset($config->account->editPasswordOnly) && $config->account->editPasswordOnly)
-                    || (isset($config->account->changeLogin) && ! $config->account->changeLogin)) {
+                    || (isset($config->account->editPasswordOnly) && filter_var($config->account->editPasswordOnly, FILTER_VALIDATE_BOOLEAN))
+                    || (isset($config->account->changeLogin) && (! filter_var($config->account->changeLogin, FILTER_VALIDATE_BOOLEAN)))) {
                 $postData['username'] = $login;
             }
 
@@ -132,7 +132,7 @@ class Account_IndexController extends Application_Controller_Action
 
                 $isLoginChanged = false;
 
-                if (isset($config->account->editPasswordOnly) && ! $config->account->editPasswordOnly) {
+                if (isset($config->account->editPasswordOnly) && (! filter_var($config->account->editPasswordOnly, FILTER_VALIDATE_BOOLEAN))) {
                     $account->setFirstName($firstname);
                     $account->setLastName($lastname);
                     $account->setEmail($email);

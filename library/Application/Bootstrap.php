@@ -315,7 +315,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base
 
         $config = $this->getResource('configuration');
 
-        if (isset($config->security) && $config->security == 1) {
+        if (isset($config->security) && filter_var($config->security, FILTER_VALIDATE_BOOLEAN)) {
             Application_Security_AclProvider::init();
         } else {
             Zend_View_Helper_Navigation_HelperAbstract::setDefaultAcl(null);

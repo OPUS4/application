@@ -264,11 +264,7 @@ class Publish_FormControllerTest extends ControllerTestCase
     public function testOPUSVIER1886WithBibliography()
     {
         $config = Zend_Registry::get('Zend_Config');
-        $oldval = null;
-        if (isset($config->form->first->bibliographie)) {
-            $oldval = $config->form->first->bibliographie;
-        }
-        $config->form->first->bibliographie = 1;
+        $config->form->first->bibliographie = '1';
 
         $doc = $this->createTemporaryDoc();
 
@@ -288,13 +284,6 @@ class Publish_FormControllerTest extends ControllerTestCase
 
         $this->dispatch('/publish/form/check');
 
-        // undo config changes
-        if (is_null($oldval)) {
-            unset($config->form->first->bibliographie);
-        } else {
-            $config->form->first->bibliographie = $oldval;
-        }
-
         $this->assertResponseCode(200);
         $this->assertContains('Bitte überprüfen Sie Ihre Eingaben.', $this->getResponse()->getBody());
         $this->assertContains('<legend>Bibliographie</legend>', $this->getResponse()->getBody());
@@ -304,11 +293,7 @@ class Publish_FormControllerTest extends ControllerTestCase
     public function testOPUSVIER1886WithBibliographyUnselected()
     {
         $config = Zend_Registry::get('Zend_Config');
-        $oldval = null;
-        if (isset($config->form->first->bibliographie)) {
-            $oldval = $config->form->first->bibliographie;
-        }
-        $config->form->first->bibliographie = 1;
+        $config->form->first->bibliographie = '1';
 
         $doc = $this->createTemporaryDoc();
         $doc->setBelongsToBibliography(0);
@@ -330,13 +315,6 @@ class Publish_FormControllerTest extends ControllerTestCase
 
         $this->dispatch('/publish/form/check');
 
-        // undo config changes
-        if (is_null($oldval)) {
-            unset($config->form->first->bibliographie);
-        } else {
-            $config->form->first->bibliographie = $oldval;
-        }
-
         $this->assertResponseCode(200);
         $this->assertContains('Bitte überprüfen Sie Ihre Eingaben.', $this->getResponse()->getBody());
         $this->assertContains('<legend>Bibliographie</legend>', $this->getResponse()->getBody());
@@ -346,11 +324,7 @@ class Publish_FormControllerTest extends ControllerTestCase
     public function testOPUSVIER1886WithBibliographySelected()
     {
         $config = Zend_Registry::get('Zend_Config');
-        $oldval = null;
-        if (isset($config->form->first->bibliographie)) {
-            $oldval = $config->form->first->bibliographie;
-        }
-        $config->form->first->bibliographie = 1;
+        $config->form->first->bibliographie = '1';
 
         $doc = $this->createTemporaryDoc();
         $doc->setBelongsToBibliography(1);
@@ -372,13 +346,6 @@ class Publish_FormControllerTest extends ControllerTestCase
 
         $this->dispatch('/publish/form/check');
 
-        // undo config changes
-        if (is_null($oldval)) {
-            unset($config->form->first->bibliographie);
-        } else {
-            $config->form->first->bibliographie = $oldval;
-        }
-
         $this->assertResponseCode(200);
         $this->assertContains('Bitte überprüfen Sie Ihre Eingaben.', $this->getResponse()->getBody());
         $this->assertContains('<legend>Bibliographie</legend>', $this->getResponse()->getBody());
@@ -391,11 +358,7 @@ class Publish_FormControllerTest extends ControllerTestCase
     public function testOPUSVIER1886WithoutBibliography()
     {
         $config = Zend_Registry::get('Zend_Config');
-        $oldval = null;
-        if (isset($config->form->first->bibliographie)) {
-            $oldval = $config->form->first->bibliographie;
-        }
-        $config->form->first->bibliographie = 0;
+        $config->form->first->bibliographie = '';
 
         $doc = $this->createTemporaryDoc();
 
@@ -415,13 +378,6 @@ class Publish_FormControllerTest extends ControllerTestCase
 
         $this->dispatch('/publish/form/check');
 
-        // undo config changes
-        if (is_null($oldval)) {
-            unset($config->form->first->bibliographie);
-        } else {
-            $config->form->first->bibliographie = $oldval;
-        }
-
         $this->assertResponseCode(200);
         $this->assertContains('Bitte überprüfen Sie Ihre Eingaben.', $this->getResponse()->getBody());
         $this->assertNotContains('<legend>Bibliographie</legend>', $this->getResponse()->getBody());
@@ -435,11 +391,7 @@ class Publish_FormControllerTest extends ControllerTestCase
     {
         $this->markTestIncomplete('testing multipart formdata not yet solved');
         $config = Zend_Registry::get('Zend_Config');
-        $oldval = null;
-        if (isset($config->form->first->bibliographie)) {
-            $oldval = $config->form->first->bibliographie;
-        }
-        $config->form->first->bibliographie = 0;
+        $config->form->first->bibliographie = '';
 
         $this->request
             ->setMethod('POST')
@@ -454,13 +406,6 @@ class Publish_FormControllerTest extends ControllerTestCase
             ]);
         $this->dispatch('/publish/form/upload');
         $session = new Zend_Session_Namespace('Publish');
-
-        // undo config changes
-        if (is_null($oldval)) {
-            unset($config->form->first->bibliographie);
-        } else {
-            $config->form->first->bibliographie = $oldval;
-        }
 
         $doc = new Opus_Document($session->documentId);
         $belongsToBibliography = $doc->getBelongsToBibliography();
@@ -484,7 +429,7 @@ class Publish_FormControllerTest extends ControllerTestCase
 
     public function testDoNotShowFileNoticeOnSecondFormPageIfFileUploadIsDisabled()
     {
-        $this->fileNoticeOnSecondFormPage(0);
+        $this->fileNoticeOnSecondFormPage('');
 
         $this->assertContains('<h3 class="document-type" title="Dokumenttyp">Alle Felder (Testdokumenttyp)</h3>', $this->getResponse()->getBody());
         $this->assertNotContains('<legend>Sie haben folgende Datei(en) hochgeladen: </legend>', $this->getResponse()->getBody());
@@ -493,7 +438,7 @@ class Publish_FormControllerTest extends ControllerTestCase
 
     public function testDoNotShowFileNoticeOnThirdFormPageIfFileUploadIsDisabled()
     {
-        $this->fileNoticeOnThirdFormPage(0);
+        $this->fileNoticeOnThirdFormPage('');
 
         $this->assertResponseCode(200);
         $this->assertContains('Bitte überprüfen Sie Ihre Eingaben', $this->getResponse()->getBody());
@@ -503,7 +448,7 @@ class Publish_FormControllerTest extends ControllerTestCase
 
     public function testShowFileNoticeOnSecondFormPageIfFileUploadIsEnabled()
     {
-        $this->fileNoticeOnSecondFormPage(1);
+        $this->fileNoticeOnSecondFormPage('1');
 
         $this->assertContains('<h3 class="document-type" title="Dokumenttyp">Alle Felder (Testdokumenttyp)</h3>', $this->getResponse()->getBody());
         $this->assertContains('<legend>Sie haben folgende Datei(en) hochgeladen: </legend>', $this->getResponse()->getBody());
@@ -512,7 +457,7 @@ class Publish_FormControllerTest extends ControllerTestCase
 
     public function testShowFileNoticeOnThirdFormPageIfFileUploadIsEnabled()
     {
-        $this->fileNoticeOnThirdFormPage(1);
+        $this->fileNoticeOnThirdFormPage('1');
 
         $this->assertResponseCode(200);
         $this->assertContains('Bitte überprüfen Sie Ihre Eingaben', $this->getResponse()->getBody());
@@ -523,10 +468,6 @@ class Publish_FormControllerTest extends ControllerTestCase
     private function fileNoticeOnThirdFormPage($value)
     {
         $config = Zend_Registry::get('Zend_Config');
-        $oldval = null;
-        if (isset($config->form->first->enable_upload)) {
-            $oldval = $config->form->first->enable_upload;
-        }
         $config->form->first->enable_upload = $value;
 
         $doc = $this->createTemporaryDoc();
@@ -546,22 +487,11 @@ class Publish_FormControllerTest extends ControllerTestCase
             ]);
 
         $this->dispatch('/publish/form/check');
-
-        // undo config changes
-        if (is_null($oldval)) {
-            unset($config->form->first->enable_upload);
-        } else {
-            $config->form->first->enable_upload = $oldval;
-        }
     }
 
     private function fileNoticeOnSecondFormPage($value)
     {
         $config = Zend_Registry::get('Zend_Config');
-        $oldval = null;
-        if (isset($config->form->first->enable_upload)) {
-            $oldval = $config->form->first->enable_upload;
-        }
         $config->form->first->enable_upload = $value;
 
         $doc = $this->createTemporaryDoc();
@@ -579,13 +509,6 @@ class Publish_FormControllerTest extends ControllerTestCase
             ]);
 
         $this->dispatch('/publish/form/check');
-
-        // undo config changes
-        if (is_null($oldval)) {
-            unset($config->form->first->enable_upload);
-        } else {
-            $config->form->first->enable_upload = $oldval;
-        }
     }
 
     private function addTemporaryTestDocument($session, $documentType)

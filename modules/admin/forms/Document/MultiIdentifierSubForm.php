@@ -228,10 +228,12 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
         $config = $this->getApplicationConfig();
         switch ($this->_typeShort) {
             case 'doi':
-                $autoGenerateCheckbox->setChecked($config->doi->autoCreate || $config->doi->autoCreate == '1');
+                $checkboxValue = isset($config->doi->autoCreate) && filter_var($config->doi->autoCreate, FILTER_VALIDATE_BOOLEAN);
+                $autoGenerateCheckbox->setChecked($checkboxValue);
                 break;
             case 'urn':
-                $autoGenerateCheckbox->setChecked($config->urn->autoCreate || $config->urn->autoCreate == '1');
+                $checkboxValue = isset($config->urn->autoCreate) && filter_var($config->urn->autoCreate, FILTER_VALIDATE_BOOLEAN);
+                $autoGenerateCheckbox->setChecked($checkboxValue);
                 break;
         }
     }

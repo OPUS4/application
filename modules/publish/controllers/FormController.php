@@ -394,7 +394,8 @@ class Publish_FormController extends Application_Controller_Action
      */
     private function _storeBibliography($data, $config)
     {
-        if (! isset($config->form->first->bibliographie) || $config->form->first->bibliographie != '1') {
+        if (! isset($config->form->first->bibliographie) ||
+            ! filter_var($config->form->first->bibliographie, FILTER_VALIDATE_BOOLEAN)) {
             return;
         }
 

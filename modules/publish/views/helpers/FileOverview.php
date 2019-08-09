@@ -49,7 +49,8 @@ class Publish_View_Helper_FileOverview extends Zend_View_Helper_Abstract
     public function fileOverview()
     {
         $config = Zend_Registry::get('Zend_Config');
-        if (! isset($config->form->first->enable_upload) || $config->form->first->enable_upload != 1) {
+        if (! isset($config->form->first->enable_upload) ||
+            (! filter_var($config->form->first->enable_upload, FILTER_VALIDATE_BOOLEAN))) {
             return;
         }
 

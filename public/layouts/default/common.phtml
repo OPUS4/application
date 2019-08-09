@@ -262,8 +262,8 @@ if (isset($config->javascript->latex->mathjax)) {
 
 <?php
 $dbprofiler = Zend_Registry::get('db_adapter')->getProfiler();
-$profiler_show_queries = (bool)$config->db->params->showqueries;
-$profiler_max_queries = (int)$config->db->params->maxqueries;
+$profiler_show_queries = isset($config->db->params->showqueries) && filter_var($config->db->params->showqueries, FILTER_VALIDATE_BOOLEAN);
+$profiler_max_queries = (int) $config->db->params->maxqueries;
 if ($dbprofiler->getEnabled() === true) : ?>
     <div class="debug dbprofiler">
         <div class="wrapper">
