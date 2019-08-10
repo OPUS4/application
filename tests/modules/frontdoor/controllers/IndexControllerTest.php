@@ -1395,7 +1395,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     public function testTwitterOpenInNewWindowEnabled()
     {
         Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
-            'twitter' => ['openInNewWindow' => self::CONFIG_VALUE_FALSE]
+            'twitter' => ['openInNewWindow' => self::CONFIG_VALUE_TRUE]
         ]));
         $this->dispatch('/frontdoor/index/index/docId/146');
         $this->assertResponseCode(200);
