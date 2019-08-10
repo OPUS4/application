@@ -84,7 +84,7 @@ class Oai_ContainerControllerTest extends ControllerTestCase
 
         // enable security
         $config = Zend_Registry::get('Zend_Config');
-        $config->security = '1';
+        $config->security = self::CONFIG_VALUE_TRUE;
         Zend_Registry::set('Zend_Config', $config);
 
         $doc = $this->createTestDocument();

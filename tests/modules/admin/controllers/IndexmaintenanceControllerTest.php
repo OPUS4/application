@@ -168,12 +168,12 @@ class Admin_IndexmaintenanceControllerTest extends ControllerTestCase
 
     private function enableAsyncMode()
     {
-        $this->setAsyncMode('1');
+        $this->setAsyncMode(self::CONFIG_VALUE_TRUE);
     }
 
     private function disableAsyncMode()
     {
-        $this->setAsyncMode(''); // false
+        $this->setAsyncMode(self::CONFIG_VALUE_FALSE);
     }
 
     private function setAsyncMode($value)
@@ -190,12 +190,12 @@ class Admin_IndexmaintenanceControllerTest extends ControllerTestCase
 
     private function enableAsyncIndexmaintenanceMode()
     {
-        $this->setAsyncIndexmaintenanceMode('1');
+        $this->setAsyncIndexmaintenanceMode(self::CONFIG_VALUE_TRUE);
     }
 
     private function disableAsyncIndexmaintenanceMode()
     {
-        $this->setAsyncIndexmaintenanceMode(''); // false
+        $this->setAsyncIndexmaintenanceMode(self::CONFIG_VALUE_FALSE);
     }
 
     private function setAsyncIndexmaintenanceMode($value)

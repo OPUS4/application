@@ -98,7 +98,7 @@ class Solrsearch_Model_SeriesUtilTest extends ControllerTestCase
         Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
             'browsing' => [
                 'series' => [
-                    'sortByTitle' => '1'
+                    'sortByTitle' => self::CONFIG_VALUE_TRUE
                 ]
             ]
         ]));

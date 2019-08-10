@@ -59,7 +59,7 @@ class Publish_IndexControllerTest extends ControllerTestCase
     public function testShowFileUpload()
     {
         $config = Zend_Registry::get('Zend_Config');
-        $config->form->first->enable_upload = '1';
+        $config->form->first->enable_upload = self::CONFIG_VALUE_TRUE;
 
         $this->dispatch('/publish');
 
@@ -79,7 +79,7 @@ class Publish_IndexControllerTest extends ControllerTestCase
     public function testDoNotShowFileUpload()
     {
         $config = Zend_Registry::get('Zend_Config');
-        $config->form->first->enable_upload = '';
+        $config->form->first->enable_upload = self::CONFIG_VALUE_FALSE;
 
         $this->dispatch('/publish');
 
@@ -100,7 +100,7 @@ class Publish_IndexControllerTest extends ControllerTestCase
     public function testShowBibliographyCheckbox()
     {
         $config = Zend_Registry::get('Zend_Config');
-        $config->form->first->bibliographie = '1';
+        $config->form->first->bibliographie = self::CONFIG_VALUE_TRUE;
 
         $this->dispatch('/publish');
 
@@ -118,7 +118,7 @@ class Publish_IndexControllerTest extends ControllerTestCase
     public function testDoNotShowBibliographyCheckbox()
     {
         $config = Zend_Registry::get('Zend_Config');
-        $config->form->first->bibliographie = '';
+        $config->form->first->bibliographie = self::CONFIG_VALUE_FALSE;
 
         $this->dispatch('/publish');
 

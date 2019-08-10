@@ -195,7 +195,7 @@ class Export_IndexControllerTest extends ControllerTestCase
 
         // enable security
         $config = Zend_Registry::get('Zend_Config');
-        $config->security = '1';
+        $config->security = self::CONFIG_VALUE_TRUE;
         Zend_Registry::set('Zend_Config', $config);
 
         $this->dispatch('/export/index/index/export/xml');
@@ -229,7 +229,7 @@ class Export_IndexControllerTest extends ControllerTestCase
         $port = $config->searchengine->index->port;
         $this->disableSolr();
 
-        $config->security = '1';
+        $config->security = self::CONFIG_VALUE_TRUE;
         Zend_Registry::set('Zend_Config', $config);
 
         $this->dispatch('/export/index/index/searchtype/all/export/xml/stylesheet/example');
@@ -724,10 +724,10 @@ class Export_IndexControllerTest extends ControllerTestCase
         $config = Zend_Registry::get('Zend_Config');
         // FIXME OPUSVIER-4130 config does not make sense - completely ignores value of setting
         if (isset($config->plugins->export->publist->groupby->completedyear)) {
-            $config->plugins->export->publist->groupby->completedyear = '1';
+            $config->plugins->export->publist->groupby->completedyear = self::CONFIG_VALUE_TRUE;
         } else {
             $configNew = new Zend_Config(['plugins' => ['export' => [
-                'publist' => ['groupby' => ['completedyear' => '1']]]]], false);
+                'publist' => ['groupby' => ['completedyear' => self::CONFIG_VALUE_TRUE]]]]], false);
             // Include the above made configuration changes in the application configuration.
             $config->merge($configNew);
         }
@@ -993,9 +993,9 @@ class Export_IndexControllerTest extends ControllerTestCase
     {
         Zend_Registry::get('Zend_Config')->merge(
             new Zend_Config(
-                ['plugins' => ['export' => ['marc21' => ['adminOnly' => '']]]]
+                ['plugins' => ['export' => ['marc21' => ['adminOnly' => self::CONFIG_VALUE_FALSE]]]]
             )
-        ); // false
+        );
 
         $exportAccessProvided = $this->addAccessOnModuleExportForGuest();
         $this->enableSecurity();

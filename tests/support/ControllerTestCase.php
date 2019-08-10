@@ -43,6 +43,10 @@ class ControllerTestCase extends TestCase
 
     const MESSAGE_LEVEL_FAILURE = 'failure';
 
+    const CONFIG_VALUE_FALSE = ''; // Zend_Config übersetzt false in den Wert ''
+
+    const CONFIG_VALUE_TRUE = '1'; // Zend_Config übersetzt true in den Wert '1'
+
     private $securityEnabled;
 
     private $testDocuments;
@@ -296,7 +300,7 @@ class ControllerTestCase extends TestCase
     {
         $config = Zend_Registry::get('Zend_Config');
         $this->securityEnabled = $config->security;
-        $config->security = '1';
+        $config->security = self::CONFIG_VALUE_TRUE;
         Zend_Registry::set('Zend_Config', $config);
     }
 

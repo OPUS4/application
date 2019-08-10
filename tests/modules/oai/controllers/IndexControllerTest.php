@@ -1461,7 +1461,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
         }
 
         // enable security
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(['security' => '1']));
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(['security' => self::CONFIG_VALUE_TRUE]));
     }
 
     /**
