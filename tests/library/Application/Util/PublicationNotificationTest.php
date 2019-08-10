@@ -51,8 +51,8 @@ class Application_Util_PublicationNotificationTest extends ControllerTestCase
         $this->logger = Zend_Registry::get('Zend_Log');
         // add required config keys
         $this->config = Zend_Registry::get('Zend_Config');
-        $this->config->notification->document->submitted->enabled = '1';
-        $this->config->notification->document->published->enabled = '1';
+        $this->config->notification->document->submitted->enabled = self::CONFIG_VALUE_TRUE;
+        $this->config->notification->document->published->enabled = self::CONFIG_VALUE_TRUE;
         $this->config->notification->document->submitted->subject = 'Dokument #%1$s eingestellt: %2$s : %3$s';
         $this->config->notification->document->published->subject = 'Dokument #%1$s veröffentlicht: %2$s : %3$s';
         $this->config->notification->document->submitted->template = 'submitted.phtml';

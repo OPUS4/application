@@ -74,7 +74,7 @@ class Account_IndexControllerTest extends ControllerTestCase
     public function testIndexSuccessAction()
     {
         $config = Zend_Registry::get('Zend_Config');
-        $config->account->editOwnAccount = '1';
+        $config->account->editOwnAccount = self::CONFIG_VALUE_TRUE;
 
         $this->loginUser('admin', 'adminadmin');
         $this->dispatch('/account');
@@ -90,7 +90,7 @@ class Account_IndexControllerTest extends ControllerTestCase
     public function testIndexDeniedIfEditAccountDisabledAction()
     {
         $config = Zend_Registry::get('Zend_Config');
-        $config->account->editOwnAccount = ''; // false
+        $config->account->editOwnAccount = self::CONFIG_VALUE_FALSE;
 
         $this->loginUser('admin', 'adminadmin');
         $this->dispatch('/account');
@@ -110,7 +110,7 @@ class Account_IndexControllerTest extends ControllerTestCase
     public function testChangePasswordFailsOnMissingInputAction()
     {
         $config = Zend_Registry::get('Zend_Config');
-        $config->account->editOwnAccount = '1';
+        $config->account->editOwnAccount = self::CONFIG_VALUE_TRUE;
 
         $this->loginUser('john', 'testpwd');
         $this->request
@@ -135,7 +135,7 @@ class Account_IndexControllerTest extends ControllerTestCase
     public function testChangePasswordFailsOnNoMatch()
     {
         $config = Zend_Registry::get('Zend_Config');
-        $config->account->editOwnAccount = '1';
+        $config->account->editOwnAccount = self::CONFIG_VALUE_TRUE;
 
         $this->loginUser('john', 'testpwd');
         $this->request
@@ -164,7 +164,7 @@ class Account_IndexControllerTest extends ControllerTestCase
     public function testChangePasswordSuccess()
     {
         $config = Zend_Registry::get('Zend_Config');
-        $config->account->editOwnAccount = '1';
+        $config->account->editOwnAccount = self::CONFIG_VALUE_TRUE;
 
         $this->loginUser('john', 'testpwd');
         $this->request
@@ -193,7 +193,7 @@ class Account_IndexControllerTest extends ControllerTestCase
     public function testChangePasswordSuccessWithSpecialChars()
     {
         $config = Zend_Registry::get('Zend_Config');
-        $config->account->editOwnAccount = '1';
+        $config->account->editOwnAccount = self::CONFIG_VALUE_TRUE;
 
         $this->loginUser('john', 'testpwd');
         $this->request
@@ -222,7 +222,7 @@ class Account_IndexControllerTest extends ControllerTestCase
     public function testChangeLoginSuccess()
     {
         $config = Zend_Registry::get('Zend_Config');
-        $config->account->editOwnAccount = '1';
+        $config->account->editOwnAccount = self::CONFIG_VALUE_TRUE;
 
         $this->deleteUser('john2');
 

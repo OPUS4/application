@@ -46,7 +46,9 @@ class ZendBasicsTest extends ControllerTestCase
             ['option7', '0', false],
             ['option8', 0, false],
             ['option9', 'FaLsE', false],
-            ['option10', 'tRuE', true]
+            ['option10', 'tRuE', true],
+            ['option11', self::CONFIG_VALUE_TRUE, true],
+            ['option12', self::CONFIG_VALUE_FALSE, false]
         ];
     }
 

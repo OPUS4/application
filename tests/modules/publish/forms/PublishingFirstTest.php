@@ -45,9 +45,9 @@ class Publish_Form_PublishingFirstTest extends ControllerTestCase
     public function testIsValidMethodWithMissingDocumentType()
     {
         $config = Zend_Registry::get('Zend_Config');
-        $config->form->first->require_upload = '';
-        $config->form->first->show_rights_checkbox = '';
-        $config->form->first->bibliographie = '';
+        $config->form->first->require_upload = self::CONFIG_VALUE_FALSE;
+        $config->form->first->show_rights_checkbox = self::CONFIG_VALUE_FALSE;
+        $config->form->first->bibliographie = self::CONFIG_VALUE_FALSE;
 
         $form = new Publish_Form_PublishingFirst(new Zend_View());
         $data = [
@@ -61,9 +61,9 @@ class Publish_Form_PublishingFirstTest extends ControllerTestCase
     public function testIsValidMethodWithMissingRightsCheckbox()
     {
         $config = Zend_Registry::get('Zend_Config');
-        $config->form->first->require_upload = '';
-        $config->form->first->show_rights_checkbox = '1';
-        $config->form->first->bibliographie = '';
+        $config->form->first->require_upload = self::CONFIG_VALUE_FALSE;
+        $config->form->first->show_rights_checkbox = self::CONFIG_VALUE_TRUE;
+        $config->form->first->bibliographie = self::CONFIG_VALUE_FALSE;
 
         $form = new Publish_Form_PublishingFirst(new Zend_View());
         $data = [

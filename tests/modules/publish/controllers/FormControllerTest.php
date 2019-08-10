@@ -264,7 +264,7 @@ class Publish_FormControllerTest extends ControllerTestCase
     public function testOPUSVIER1886WithBibliography()
     {
         $config = Zend_Registry::get('Zend_Config');
-        $config->form->first->bibliographie = '1';
+        $config->form->first->bibliographie = self::CONFIG_VALUE_TRUE;
 
         $doc = $this->createTemporaryDoc();
 
@@ -293,7 +293,7 @@ class Publish_FormControllerTest extends ControllerTestCase
     public function testOPUSVIER1886WithBibliographyUnselected()
     {
         $config = Zend_Registry::get('Zend_Config');
-        $config->form->first->bibliographie = '1';
+        $config->form->first->bibliographie = self::CONFIG_VALUE_TRUE;
 
         $doc = $this->createTemporaryDoc();
         $doc->setBelongsToBibliography(0);
@@ -324,7 +324,7 @@ class Publish_FormControllerTest extends ControllerTestCase
     public function testOPUSVIER1886WithBibliographySelected()
     {
         $config = Zend_Registry::get('Zend_Config');
-        $config->form->first->bibliographie = '1';
+        $config->form->first->bibliographie = self::CONFIG_VALUE_TRUE;
 
         $doc = $this->createTemporaryDoc();
         $doc->setBelongsToBibliography(1);
@@ -358,7 +358,7 @@ class Publish_FormControllerTest extends ControllerTestCase
     public function testOPUSVIER1886WithoutBibliography()
     {
         $config = Zend_Registry::get('Zend_Config');
-        $config->form->first->bibliographie = '';
+        $config->form->first->bibliographie = self::CONFIG_VALUE_FALSE;
 
         $doc = $this->createTemporaryDoc();
 
@@ -391,7 +391,7 @@ class Publish_FormControllerTest extends ControllerTestCase
     {
         $this->markTestIncomplete('testing multipart formdata not yet solved');
         $config = Zend_Registry::get('Zend_Config');
-        $config->form->first->bibliographie = '';
+        $config->form->first->bibliographie = self::CONFIG_VALUE_FALSE;
 
         $this->request
             ->setMethod('POST')
@@ -429,7 +429,7 @@ class Publish_FormControllerTest extends ControllerTestCase
 
     public function testDoNotShowFileNoticeOnSecondFormPageIfFileUploadIsDisabled()
     {
-        $this->fileNoticeOnSecondFormPage('');
+        $this->fileNoticeOnSecondFormPage(self::CONFIG_VALUE_FALSE);
 
         $this->assertContains('<h3 class="document-type" title="Dokumenttyp">Alle Felder (Testdokumenttyp)</h3>', $this->getResponse()->getBody());
         $this->assertNotContains('<legend>Sie haben folgende Datei(en) hochgeladen: </legend>', $this->getResponse()->getBody());
@@ -438,7 +438,7 @@ class Publish_FormControllerTest extends ControllerTestCase
 
     public function testDoNotShowFileNoticeOnThirdFormPageIfFileUploadIsDisabled()
     {
-        $this->fileNoticeOnThirdFormPage('');
+        $this->fileNoticeOnThirdFormPage(self::CONFIG_VALUE_FALSE);
 
         $this->assertResponseCode(200);
         $this->assertContains('Bitte überprüfen Sie Ihre Eingaben', $this->getResponse()->getBody());
@@ -448,7 +448,7 @@ class Publish_FormControllerTest extends ControllerTestCase
 
     public function testShowFileNoticeOnSecondFormPageIfFileUploadIsEnabled()
     {
-        $this->fileNoticeOnSecondFormPage('1');
+        $this->fileNoticeOnSecondFormPage(self::CONFIG_VALUE_TRUE);
 
         $this->assertContains('<h3 class="document-type" title="Dokumenttyp">Alle Felder (Testdokumenttyp)</h3>', $this->getResponse()->getBody());
         $this->assertContains('<legend>Sie haben folgende Datei(en) hochgeladen: </legend>', $this->getResponse()->getBody());
@@ -457,7 +457,7 @@ class Publish_FormControllerTest extends ControllerTestCase
 
     public function testShowFileNoticeOnThirdFormPageIfFileUploadIsEnabled()
     {
-        $this->fileNoticeOnThirdFormPage('1');
+        $this->fileNoticeOnThirdFormPage(self::CONFIG_VALUE_TRUE);
 
         $this->assertResponseCode(200);
         $this->assertContains('Bitte überprüfen Sie Ihre Eingaben', $this->getResponse()->getBody());

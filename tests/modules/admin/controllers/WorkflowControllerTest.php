@@ -44,7 +44,7 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
     private function enablePublishNotification()
     {
         $config = Zend_Registry::get('Zend_Config');
-        $config->notification->document->published->enabled = '1';
+        $config->notification->document->published->enabled = self::CONFIG_VALUE_TRUE;
         $config->notification->document->published->email = "published@localhost";
     }
 
@@ -433,7 +433,7 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
     public function testConfirmationDisabled()
     {
         Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
-            'confirmation' => ['document' => ['statechange' => ['enabled' => '']]] // false
+            'confirmation' => ['document' => ['statechange' => ['enabled' => self::CONFIG_VALUE_FALSE]]]
         ]));
 
         $this->dispatch('/admin/workflow/changestate/docId/102/targetState/deleted');

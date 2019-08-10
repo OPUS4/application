@@ -1341,7 +1341,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
     public function testDisableEmptyCollectionsTrue()
     {
         Zend_Registry::get('Zend_Config')->merge(
-            new Zend_Config(['browsing' => ['disableEmptyCollections' => '1']])
+            new Zend_Config(['browsing' => ['disableEmptyCollections' => self::CONFIG_VALUE_TRUE]])
         );
 
         $this->dispatch('/solrsearch/index/search/searchtype/collection/id/2');
@@ -1356,7 +1356,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
     public function testDisableEmptyCollectionsFalse()
     {
         Zend_Registry::get('Zend_Config')->merge(
-            new Zend_Config(['browsing' => ['disableEmptyCollections' => '']])
+            new Zend_Config(['browsing' => ['disableEmptyCollections' => self::CONFIG_VALUE_FALSE]])
         );
 
         $this->dispatch('/solrsearch/index/search/searchtype/collection/id/2');

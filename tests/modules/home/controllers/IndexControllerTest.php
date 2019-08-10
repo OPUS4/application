@@ -83,7 +83,7 @@ class Home_IndexControllerTest extends ControllerTestCase
     public function testHelpActionSeparate()
     {
         $config = Zend_Registry::get('Zend_Config');
-        $config->help->separate = '1';
+        $config->help->separate = self::CONFIG_VALUE_TRUE;
         $this->dispatch('/home/index/help');
         $this->assertResponseCode(200);
         $this->assertModule('home');
