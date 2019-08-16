@@ -25,52 +25,63 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     View_Helper
+ * @package     View
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
- * View helper for rendering the fulltext logo for documents in the search result list.
+ * Helper for printing the title of a OPUS document in search results.
+ *
+ * TODO use $result->getAsset('title') ??? Avoid using Opus_Document (?)
  */
-class Application_View_Helper_FulltextLogo extends Application_View_Helper_Document_HelperAbstract
+class Application_View_Helper_ResultTitle extends Application_View_Helper_Document_HelperAbstract
 {
 
-    public function fulltextLogo($doc = null)
+    /**
+     * Prints escaped main title of document.
+     * @return null|string
+     */
+    public function resultTitle($document = null)
     {
-        if (is_null($doc)) {
-            $doc = $this->getDocument();
+        if (is_null($document)) {
+            $document = $this->getDocument();
         }
 
-        if (! $doc instanceof Opus_Document) {
-            // TODO log
-            return;
+        $frontdoorUrl = $this->getFrontdoorUrl($document);
+
+        $title = $this->view->documentTitle($document);
+
+        $output = "<a href=\"$frontdoorUrl\"";
+
+        if (is_null($title)) {
+            $title = $this->view->translate('results_missingtitle');
+            $output .= ' class="missing_title"';
         }
 
-        $cssClass = "fulltext-logo";
-        $tooltip = null;
-
-
-        if ($doc->hasFulltext()) {
-            $cssClass .= ' fulltext';
-            $tooltip = 'fulltext-icon-tooltip';
-        }
-
-        if ($doc->isOpenAccess()) {
-            $cssClass .= ' openaccess';
-            $tooltip = 'fulltext-icon-oa-tooltip';
-        }
-
-        $output = "<div class=\"$cssClass\"";
-
-        if (! is_null($tooltip)) {
-            $tooltip = $this->view->translate([$tooltip]);
-            $output .= " title=\"$tooltip\"";
-        }
-
-        $output .= "></div>";
+        $output .= ">$title</a>";
 
         return $output;
+    }
+
+    /**
+     * TODO get rid of this here - there are already DocumentUrl and FrontdoorUrl
+     */
+    public function getFrontdoorUrl($document)
+    {
+        if (isset($this->view->start)) {
+            $start = $this->view->start + $this->view->partialCounter;
+        } else {
+            $start = null;
+        }
+
+        return $this->view->url([
+            'module' => 'frontdoor', 'controller' => 'index', 'action' => 'index',
+            'docId' => $document->getId(),
+            'start' => $start,
+            'rows' => $this->view->rows,
+            'searchtype' => $this->view->searchType
+        ]);
     }
 }

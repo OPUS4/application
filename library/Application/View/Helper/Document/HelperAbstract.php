@@ -72,4 +72,20 @@ abstract class Application_View_Helper_Document_HelperAbstract extends Applicati
     {
         $this->_preferUserInterfaceLanguage = ($enabled == 1 || $enabled === 'true');
     }
+
+    public function getResult()
+    {
+        return $this->view->result;
+    }
+
+    public function getDocument()
+    {
+        $result = $this->getResult();
+
+        if (! is_null($result)) {
+            return $result->getDocument();
+        } else {
+            return null;
+        }
+    }
 }
