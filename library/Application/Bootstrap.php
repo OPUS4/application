@@ -144,6 +144,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base
 
         // Set path to shared view partials
         $view->addScriptPath($libRealPath . '/Application/View/Partial');
+        $view->addScriptPath( APPLICATION_PATH . '/application/configs/templates');
 
         // Breadcrumbs View Helper global ersetzen
         $breadcrumbsHelper = new Application_View_Helper_Breadcrumbs();

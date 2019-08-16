@@ -93,7 +93,7 @@ if ($this->jQueryEnabled()) {
 } ?>
         <?php if (! is_null($this->results)) : ?>
             <div id="search_results" class="search_results">
-                <?= $this->partialLoop()->setObjectKey('result')->partialLoop('index/result.phtml', $this->results) ?>
+                <?= $this->partialLoop()->setObjectKey('result')->partialLoop($this->resultScript, $this->results) ?>
             </div>
         <?php endif ?>
         <div class="breadcrumb_results">
