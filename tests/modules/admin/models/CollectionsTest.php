@@ -27,11 +27,13 @@
  * @category    Tests
  * @package     Admin_Model
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 class Admin_Model_CollectionsTest extends ControllerTestCase
 {
+
+    protected $additionalResources = ['database', 'view'];
 
     private $collectionRoleId;
 
@@ -171,15 +173,12 @@ class Admin_Model_CollectionsTest extends ControllerTestCase
         $this->assertNotNull($collections);
         $this->assertInternalType('array', $collections);
 
-        foreach ($collections as $collection)
-        {
+        foreach ($collections as $collection) {
             $this->assertArrayHasKey('assigned', $collection);
 
-            if (strcmp($collection['name'], 'default_collection_role_TestCollectionRole-Name') === 0)
-            {
+            if (strcmp($collection['name'], 'default_collection_role_TestCollectionRole-Name') === 0) {
                 $this->assertTrue($collection['assigned']);
-            }
-            else {
+            } else {
                 $this->assertFalse($collection['assigned']);
             }
         }

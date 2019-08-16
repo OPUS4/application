@@ -57,5 +57,4 @@ class Application_Update_Helper extends Application_Update_PluginAbstract
 
         return ($response == 'Y' || $response == 'y');
     }
-
 }

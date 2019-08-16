@@ -35,23 +35,27 @@
 /**
  * Unit test for filter class Application_Form_Filter_ReplaceNewlines.
  */
-class Application_Form_Filter_ReplaceNewlinesTest extends ControllerTestCase {
+class Application_Form_Filter_ReplaceNewlinesTest extends ControllerTestCase
+{
 
-    public function testFilterCRLF() {
+    public function testFilterCRLF()
+    {
         $value = "Title with\r\nline break.";
         $filter = new Application_Form_Filter_ReplaceNewlines();
 
         $this->assertEquals('Title with line break.', $filter->filter($value));
     }
 
-    public function testFilterLF() {
+    public function testFilterLF()
+    {
         $value = "Title with\nline break.";
         $filter = new Application_Form_Filter_ReplaceNewlines();
 
         $this->assertEquals('Title with line break.', $filter->filter($value));
     }
 
-    public function testFilterCR() {
+    public function testFilterCR()
+    {
         $value = "Title with\rline break.";
         $filter = new Application_Form_Filter_ReplaceNewlines();
 
@@ -63,10 +67,10 @@ class Application_Form_Filter_ReplaceNewlinesTest extends ControllerTestCase {
      *
      * This seems to be the behaviour of Zend_Filter_StripNewlines as well.
      */
-    public function testFilterWithNull() {
+    public function testFilterWithNull()
+    {
         $filter = new Application_Form_Filter_ReplaceNewlines();
 
         $this->assertEquals('', $filter->filter(null));
     }
-
 }

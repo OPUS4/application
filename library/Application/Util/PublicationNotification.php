@@ -73,12 +73,12 @@ class Application_Util_PublicationNotification extends Application_Util_Notifica
             );
         }
 
-        if ($notifySubmitter && !is_null($document)) {
+        if ($notifySubmitter && ! is_null($document)) {
             $submitter = $document->getPersonSubmitter();
-            if (!empty($submitter)) {
+            if (! empty($submitter)) {
                 $name = trim($submitter[0]->getLastName() . ", " . $submitter[0]->getFirstName());
                 $email = trim($submitter[0]->getEmail());
-                if (!empty($email)) {
+                if (! empty($email)) {
                     array_push($addresses, ["name" => $name , "address" => $email]);
                     $logger->debug("send publication notification mail to submitter $email ($name)");
                 }
@@ -94,8 +94,11 @@ class Application_Util_PublicationNotification extends Application_Util_Notifica
 
         if (isset($config->notification->document->published->template)) {
             return $this->getTemplate(
-                $config->notification->document->published->template, $docId, $authors,
-                $title, $url
+                $config->notification->document->published->template,
+                $docId,
+                $authors,
+                $title,
+                $url
             );
         }
     }
@@ -103,19 +106,15 @@ class Application_Util_PublicationNotification extends Application_Util_Notifica
     public function isEnabled()
     {
         $config = $this->getConfig();
-
         return isset($config->notification->document->published->enabled)
-            && $config->notification->document->published->enabled == 1;
+            && filter_var($config->notification->document->published->enabled, FILTER_VALIDATE_BOOLEAN);
     }
 
     public function getSubjectTemplate()
     {
         $config = $this->getConfig();
-
         if (isset($config->notification->document->published->subject)) {
             return $config->notification->document->published->subject;
         }
     }
-
-
 }

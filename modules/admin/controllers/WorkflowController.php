@@ -70,7 +70,7 @@ class Admin_WorkflowController extends Application_Controller_Action
         $config = $this->getConfig();
 
         if (isset($config->confirmation->document->statechange->enabled)) {
-            $this->_confirmChanges = ($config->confirmation->document->statechange->enabled == 1) ? true : false;
+            $this->_confirmChanges = filter_var($config->confirmation->document->statechange->enabled, FILTER_VALIDATE_BOOLEAN);
         } else {
             $this->_confirmChanges = true;
         }
@@ -87,29 +87,41 @@ class Admin_WorkflowController extends Application_Controller_Action
         $document = $this->_documentsHelper->getDocumentForId($docId);
 
         // Check if document identifier is valid
-        if (!isset($document)) {
+        if (! isset($document)) {
             return $this->_helper->Redirector->redirectTo(
-                'index', ['failure' => $this->view->translate(
+                'index',
+                ['failure' => $this->view->translate(
                     'admin_document_error_novalidid'
-                )], 'documents', 'admin'
+                )],
+                'documents',
+                'admin'
             );
         }
 
         // Check if valid target state
-        if (!$this->_workflowHelper->isValidState($targetState)) {
+        if (! $this->_workflowHelper->isValidState($targetState)) {
             return $this->_helper->Redirector->redirectTo(
-                'index', ['failure' => $this->view->translate(
+                'index',
+                ['failure' => $this->view->translate(
                     'admin_workflow_error_invalidstate'
-                )], 'document', 'admin', ['id' => $docId]
+                )],
+                'document',
+                'admin',
+                ['id' => $docId]
             );
         }
 
         // Check if allowed target state
-        if (!$this->_workflowHelper->isTransitionAllowed($document, $targetState)) {
+        if (! $this->_workflowHelper->isTransitionAllowed($document, $targetState)) {
             return $this->_helper->Redirector->redirectTo(
-                'index', ['failure' => $this->view->translate(
-                    'admin_workflow_error_illegal_transition', $targetState
-                )], 'document', 'admin', ['id' => $docId]
+                'index',
+                ['failure' => $this->view->translate(
+                    'admin_workflow_error_illegal_transition',
+                    [$targetState]
+                )],
+                'document',
+                'admin',
+                ['id' => $docId]
             );
         }
 
@@ -117,12 +129,15 @@ class Admin_WorkflowController extends Application_Controller_Action
         if ($document->getServerState() === $targetState) {
             // if defined used custom message for state, other use common key
             $key = 'admin_workflow_error_already_' . $targetState;
-            if (!$this->view->translate()->getTranslator()->isTranslated($key)) {
+            if (! $this->view->translate()->getTranslator()->isTranslated($key)) {
                 $key = 'admin_workflow_error_alreadyinstate';
             }
             return $this->_helper->Redirector->redirectTo(
-                'index', ['failure' => $this->view->translate($key, $targetState)],
-                'document', 'admin', ['id' => $docId]
+                'index',
+                ['failure' => $this->view->translate($key, [$targetState])],
+                'document',
+                'admin',
+                ['id' => $docId]
             );
         }
 
@@ -134,14 +149,18 @@ class Admin_WorkflowController extends Application_Controller_Action
                     return $this->_changeState($document, $targetState, $form);
                 }
                 return $this->_helper->Redirector->redirectTo(
-                    'index', null, 'document', 'admin', ['id' => $docId]
+                    'index',
+                    null,
+                    'document',
+                    'admin',
+                    ['id' => $docId]
                 );
             }
 
             // show confirmation page
             $this->view->documentAdapter = new Application_Util_DocumentAdapter($this->view, $document);
             $this->view->title = $this->view->translate('admin_workflow_' . $targetState);
-            $this->view->text = $this->view->translate('admin_workflow_' . $targetState . '_sure', $docId);
+            $this->view->text = $this->view->translate('admin_workflow_' . $targetState . '_sure', [$docId]);
             $this->view->form = $this->_getConfirmationForm($document, $targetState);
         } else {
             return $this->_changeState($document, $targetState);
@@ -156,35 +175,46 @@ class Admin_WorkflowController extends Application_Controller_Action
             if ($targetState == 'published') {
                 $this->_sendNotification($document, $form);
             }
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             return $this->_helper->Redirector->redirectTo(
-                'index', ['failure' => $e->getMessage()], 'documents', 'admin'
+                'index',
+                ['failure' => $e->getMessage()],
+                'documents',
+                'admin'
             );
         }
 
         $key = 'admin_workflow_' . $targetState . '_success';
-        if (!$this->view->translate()->getTranslator()->isTranslated($key)) {
+        if (! $this->view->translate()->getTranslator()->isTranslated($key)) {
             $key = 'admin_workflow_success';
         }
-        $message = $this->view->translate($key, $document->getId(), $targetState);
+        $message = $this->view->translate($key, $document->getId(), [$targetState]);
 
         if ($targetState === 'removed') {
             return $this->_helper->Redirector->redirectTo('index', $message, 'documents', 'admin');
         }
         return $this->_helper->Redirector->redirectTo(
-            'index', $message, 'document', 'admin', ['id' => $document->getId()]
+            'index',
+            $message,
+            'document',
+            'admin',
+            ['id' => $document->getId()]
         );
     }
 
     /**
      * @param $document
      * @param null $form
+     *
+     * TODO get recipients from form
+     * TODO dryrun mode for notifications for testing
      */
     private function _sendNotification($document, $form = null)
     {
         $notification = new Application_Util_PublicationNotification();
-        $url = $this->view->url([
+
+        $url = $this->view->url(
+            [
                 "module" => "frontdoor",
                 "controller" => "index",
                 "action" => "index",
@@ -194,24 +224,12 @@ class Admin_WorkflowController extends Application_Controller_Action
             true
         );
 
-        $authorsBitmask = [];
-        $notifySubmitter = true;
-
-        if (!is_null($form)) {
-            foreach ($form->getValues() as $key => $val) {
-                $pos = strpos($key, 'author_');
-                if ($pos !== false && $pos === 0) {
-                    array_push($authorsBitmask, $val == '1');
-                }
-            }
-            $notifySubmitter = $form->getValue('submitter') == '1';
-        }
+        $recipients = $form->getSelectedRecipients($document, $this->getRequest()->getPost());
 
         $notification->prepareMail(
             $document,
             $this->view->serverUrl() . $url,
-            $notifySubmitter,
-            $authorsBitmask
+            $recipients
         );
     }
 

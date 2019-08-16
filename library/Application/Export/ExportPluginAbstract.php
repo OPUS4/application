@@ -27,9 +27,8 @@
  * @category    Application
  * @package     Module_Export
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -37,8 +36,8 @@
  * TODO in the long run should not be a model and cannot extend Application_Model_Abstract
  * TODO configuration should be limited to plugin (and not the global object)
  */
-abstract class Application_Export_ExportPluginAbstract extends Application_Model_Abstract
-    implements Application_Export_ExportPlugin {
+abstract class Application_Export_ExportPluginAbstract extends Application_Model_Abstract implements Application_Export_ExportPlugin
+{
 
     /**
      * @var Name of plugin.
@@ -65,7 +64,8 @@ abstract class Application_Export_ExportPluginAbstract extends Application_Model
      * Returns name of plugin instance.
      * @return Name
      */
-    public function getName() {
+    public function getName()
+    {
         return $this->_name;
     }
 
@@ -73,7 +73,8 @@ abstract class Application_Export_ExportPluginAbstract extends Application_Model
      * Sets name of plugin instance.
      * @param $name
      */
-    public function setName($name) {
+    public function setName($name)
+    {
         $this->_name = $name;
     }
 
@@ -81,7 +82,8 @@ abstract class Application_Export_ExportPluginAbstract extends Application_Model
      * Returns request object.
      * @return Zend_Controller_Request_Http
      */
-    public function getRequest() {
+    public function getRequest()
+    {
         return $this->_request;
     }
 
@@ -89,7 +91,8 @@ abstract class Application_Export_ExportPluginAbstract extends Application_Model
      * Sets request object.
      * @param Zend_Controller_Request_Http $request
      */
-    public function setRequest(Zend_Controller_Request_Http $request) {
+    public function setRequest(Zend_Controller_Request_Http $request)
+    {
         $this->_request = $request;
     }
 
@@ -97,7 +100,8 @@ abstract class Application_Export_ExportPluginAbstract extends Application_Model
      * Returns response object.
      * @return Zend_Controller_Response_Http
      */
-    public function getResponse() {
+    public function getResponse()
+    {
         return $this->_response;
     }
 
@@ -105,7 +109,8 @@ abstract class Application_Export_ExportPluginAbstract extends Application_Model
      * Sets response object.
      * @param Zend_Controller_Response_Http $response
      */
-    public function setResponse(Zend_Controller_Response_Http $response) {
+    public function setResponse(Zend_Controller_Response_Http $response)
+    {
         $this->_response = $response;
     }
 
@@ -113,7 +118,8 @@ abstract class Application_Export_ExportPluginAbstract extends Application_Model
      * Returns view object.
      * @return Zend_View
      */
-    public function getView() {
+    public function getView()
+    {
         return $this->_view;
     }
 
@@ -121,8 +127,24 @@ abstract class Application_Export_ExportPluginAbstract extends Application_Model
      * Sets view object.
      * @param Zend_View $view
      */
-    public function setView(Zend_View $view) {
+    public function setView(Zend_View $view)
+    {
         $this->_view = $view;
+    }
+
+    /**
+     * Checks if access is restricted to adminstrators.
+     *
+     * @return bool true if access is restricted, otherwise false
+     * @throws Zend_Exception
+     */
+    public function isAccessRestricted()
+    {
+        if (isset($this->getConfig()->adminOnly) &&
+            filter_var($this->getConfig()->adminOnly, FILTER_VALIDATE_BOOLEAN)) {
+            return ! Opus_Security_Realm::getInstance()->checkModule('admin');
+        }
+        return false; // keine Einschränkung des Zugriffs
     }
 
     /**
@@ -131,5 +153,4 @@ abstract class Application_Export_ExportPluginAbstract extends Application_Model
      * Needs to be implemented by child classes.
      */
     abstract public function execute();
-
 }

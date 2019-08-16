@@ -43,13 +43,11 @@ $helper = new Application_Update_Helper();
 
 $licence = Opus_Licence::fetchByName('CC BY 4.0');
 
-if (!is_null($licence))
-{
+if (! is_null($licence)) {
     $helper->log('Creative Commons 4.0 seem to be present in database.');
 }
 
-if ($helper->askYesNo('Add CC 4.0 licences to database [Y|n]? '))
-{
+if ($helper->askYesNo('Add CC 4.0 licences to database [Y|n]? ')) {
     $helper->log('Add CC 4.0 licences ...');
 
     $database = new Opus_Database();

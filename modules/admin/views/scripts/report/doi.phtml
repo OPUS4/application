@@ -36,37 +36,37 @@
         <?= $this->translate('admin_report_doi_filter') ?>
     </p>
     <ul>
-        <?php if (!is_null($this->filter)) : ?>
-            <li><a href="<?= $this->url(array('filter' => null)) ?>"><?= $this->translate('admin_report_doi_filter_all') ?></a></li>
-        <?php else: ?>
+        <?php if (! is_null($this->filter)) : ?>
+            <li><a href="<?= $this->url(['filter' => null]) ?>"><?= $this->translate('admin_report_doi_filter_all') ?></a></li>
+        <?php else : ?>
             <li><b><?= $this->translate('admin_report_doi_filter_all') ?></b></li>
         <?php endif; ?>
         <?php if ($this->filter != 'unregistered') : ?>
-            <li><a href="<?= $this->url(array('filter' => 'unregistered')) ?>"><?= $this->translate('admin_report_doi_filter_unregistered') ?></a></li>
-        <?php else: ?>
+            <li><a href="<?= $this->url(['filter' => 'unregistered']) ?>"><?= $this->translate('admin_report_doi_filter_unregistered') ?></a></li>
+        <?php else : ?>
             <li><b><?= $this->translate('admin_report_doi_filter_unregistered') ?></b></li>
         <?php endif; ?>
         <?php if ($this->filter != 'registered') : ?>
-            <li><a href="<?= $this->url(array('filter' => 'registered')) ?>"><?= $this->translate('admin_report_doi_filter_registered') ?></a></li>
-        <?php else: ?>
+            <li><a href="<?= $this->url(['filter' => 'registered']) ?>"><?= $this->translate('admin_report_doi_filter_registered') ?></a></li>
+        <?php else : ?>
             <li><b><?= $this->translate('admin_report_doi_filter_registered') ?></b></li>
         <?php endif; ?>
         <?php if ($this->filter != 'verified') : ?>
-            <li><a href="<?= $this->url(array('filter' => 'verified')) ?>"><?= $this->translate('admin_report_doi_filter_verified') ?></a></li>
-        <?php else: ?>
+            <li><a href="<?= $this->url(['filter' => 'verified']) ?>"><?= $this->translate('admin_report_doi_filter_verified') ?></a></li>
+        <?php else : ?>
             <li><b><?= $this->translate('admin_report_doi_filter_verified') ?></b></li>
         <?php endif; ?>
     </ul>
 </div>
 
-<?php if (empty($this->docList)): ?>
+<?php if (empty($this->docList)) : ?>
     <i><?= $this->translate('admin_report_doi_nothing_found') ?></i>
-<?php else: ?>
+<?php else : ?>
 <div class="formElementInline">
-<form action="<?= $this->url(array('op' => 'register')) ?>" method="POST">
-    <input type="submit" <?= $this->numDoisForBulkRegistration > 0  ? '' : 'disabled' ?> value="<?= $this->translate('admin_report_doi_bulk_registration', $this->numDoisForBulkRegistration) ?>" />
+<form action="<?= $this->url(['op' => 'register']) ?>" method="POST">
+    <input type="submit" <?= $this->numDoisForBulkRegistration > 0 ? '' : 'disabled' ?> value="<?= $this->translate('admin_report_doi_bulk_registration', $this->numDoisForBulkRegistration) ?>" />
 </form>
-<form action="<?= $this->url(array('op' => 'verify')) ?>" method="POST">
+<form action="<?= $this->url(['op' => 'verify']) ?>" method="POST">
     <input type="submit" <?= $this->numDoisForBulkVerification > 0 ? '' : 'disabled' ?> value="<?= $this->translate('admin_report_doi_bulk_verification', $this->numDoisForBulkVerification) ?>" />
 </form>
 </div>
@@ -95,18 +95,18 @@
             </td>
             <td>
                 <?php if ($doc->getDoiStatus() == 'registered') : ?>
-                    <form action="<?= $this->url(array('op' => 'verify', 'docId' => $doc->getDocId())) ?>" method="POST">
+                    <form action="<?= $this->url(['op' => 'verify', 'docId' => $doc->getDocId()]) ?>" method="POST">
                         <input type="submit" value="<?= $this->translate('admin_report_doi_verify') ?>" />
                     </form>
                 <?php elseif ($doc->getDoiStatus() == 'verified') : ?>
-                    <form action="<?= $this->url(array('op' => 'verify', 'docId' => $doc->getDocId())) ?>" method="POST">
+                    <form action="<?= $this->url(['op' => 'verify', 'docId' => $doc->getDocId()]) ?>" method="POST">
                         <input type="submit" value="<?= $this->translate('admin_report_doi_verify_again') ?>" />
                     </form>
                 <?php elseif ($doc->isPublished() && is_null($doc->getDoiStatus())) : ?>
-                    <form action="<?= $this->url(array('op' => 'register', 'docId' => $doc->getDocId())) ?>" method="POST">
+                    <form action="<?= $this->url(['op' => 'register', 'docId' => $doc->getDocId()]) ?>" method="POST">
                         <input type="submit" value="<?= $this->translate('admin_report_doi_register') ?>" />
                     </form>
-                <?php elseif (!$doc->isPublished() && is_null($doc->getDoiStatus())) :  ?>
+                <?php elseif (! $doc->isPublished() && is_null($doc->getDoiStatus())) :  ?>
                     <i><?= $this->translate('admin_report_doi_unpublished_doc') ?></i>
                 <?php endif; ?>
             </td>

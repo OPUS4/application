@@ -44,6 +44,7 @@
     exclude-result-prefixes="php">
 
     <xsl:param name="urnResolverUrl" />
+    <xsl:param name="doiResolverUrl" />
 
     <!-- add include here for each new metadata format    -->
 
@@ -52,6 +53,7 @@
     <xsl:include href="prefixes/epicur.xslt"/>
     <xsl:include href="prefixes/XMetaDissPlus.xslt"/>
     <xsl:include href="prefixes/copy_xml.xslt"/>
+    <xsl:include href="prefixes/marc21.xslt"/>
 
     <xsl:output method="xml" indent="yes" encoding="utf-8" />
 
@@ -267,6 +269,11 @@
             <schema><xsl:text>http://files.dnb.de/standards/xmetadissplus/xmetadissplus.xsd</xsl:text></schema>
             <metadataNamespace><xsl:text>http://www.d-nb.de/standards/xmetadissplus/</xsl:text></metadataNamespace>
           </metadataFormat>
+            <metadataFormat>
+                <metadataPrefix><xsl:text>MARC21</xsl:text></metadataPrefix>
+                <schema><xsl:text>https://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd</xsl:text></schema>
+                <metadataNamespace><xsl:text>http://www.loc.gov/MARC21/slim</xsl:text></metadataNamespace>
+            </metadataFormat>
         </ListMetadataFormats>
     </xsl:template>
 
@@ -274,14 +281,20 @@
         <xsl:if test="count(Opus_Document) > 0">
             <ListIdentifiers>
                 <xsl:apply-templates select="Opus_Document" />
-                <xsl:if test="$totalIds > 0">
-                    <resumptionToken>
-                        <xsl:attribute name="expirationDate"><xsl:value-of select="$dateDelete"/></xsl:attribute>
-                        <xsl:attribute name="completeListSize"><xsl:value-of select="$totalIds"/></xsl:attribute>
-                        <xsl:attribute name="cursor"><xsl:value-of select="$cursor"/></xsl:attribute>
-                        <xsl:value-of select="$res"/>
-                    </resumptionToken>
-                </xsl:if>
+                <xsl:choose>
+                    <xsl:when test="$totalIds > 0 and $res != ''">
+                        <resumptionToken>
+                            <xsl:attribute name="expirationDate"><xsl:value-of select="$dateDelete"/></xsl:attribute>
+                            <xsl:attribute name="completeListSize"><xsl:value-of select="$totalIds"/></xsl:attribute>
+                            <xsl:attribute name="cursor"><xsl:value-of select="$cursor"/></xsl:attribute>
+                            <xsl:value-of select="$res"/>
+                        </resumptionToken>
+                    </xsl:when>
+                    <xsl:when test="$totalIds > 0 and $res = ''">
+                        <resumptionToken />
+                    </xsl:when>
+                    <xsl:otherwise></xsl:otherwise>
+                </xsl:choose>
             </ListIdentifiers>
         </xsl:if>
     </xsl:template>
@@ -296,14 +309,20 @@
         <xsl:if test="count(Opus_Document) > 0">
             <ListRecords>
             <xsl:apply-templates select="Opus_Document" />
-                <xsl:if test="$totalIds > 0">
-                    <resumptionToken>
-                        <xsl:attribute name="expirationDate"><xsl:value-of select="$dateDelete"/></xsl:attribute>
-                        <xsl:attribute name="completeListSize"><xsl:value-of select="$totalIds"/></xsl:attribute>
-                        <xsl:attribute name="cursor"><xsl:value-of select="$cursor"/></xsl:attribute>
-                        <xsl:value-of select="$res"/>
-                    </resumptionToken>
-                </xsl:if>
+                <xsl:choose>
+                    <xsl:when test="$totalIds > 0 and $res != ''">
+                        <resumptionToken>
+                            <xsl:attribute name="expirationDate"><xsl:value-of select="$dateDelete"/></xsl:attribute>
+                            <xsl:attribute name="completeListSize"><xsl:value-of select="$totalIds"/></xsl:attribute>
+                            <xsl:attribute name="cursor"><xsl:value-of select="$cursor"/></xsl:attribute>
+                            <xsl:value-of select="$res"/>
+                        </resumptionToken>
+                    </xsl:when>
+                    <xsl:when test="$totalIds > 0 and $res = ''">
+                        <resumptionToken />
+                    </xsl:when>
+                    <xsl:otherwise></xsl:otherwise>
+                </xsl:choose>
             </ListRecords>
         </xsl:if>
     </xsl:template>
@@ -402,6 +421,9 @@
                     <xsl:when test="$oai_metadataPrefix='copy_xml'">
                        <xsl:apply-templates select="." mode="copy_xml" />
                     </xsl:when>
+                     <xsl:when test="$oai_metadataPrefix='marc21'">
+                         <xsl:apply-templates select="." mode="marc21" />
+                     </xsl:when>
                  </xsl:choose>
                  </metadata>
 

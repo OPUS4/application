@@ -41,9 +41,9 @@
 
         <!-- First and previous page link -->
         <?php if (isset($this->previous)) : ?>
-            <li><a class="pagination-first" href="<?= $this->url(array('page' => $this->first)) ?>"
+            <li><a class="pagination-first" href="<?= $this->url(['page' => $this->first]) ?>"
                    title="<?= $this->translate('pagination_first') ?>"></a></li>
-            <li><a class="pagination-prev" href="<?= $this->url(array('page' => $this->previous)) ?>"
+            <li><a class="pagination-prev" href="<?= $this->url(['page' => $this->previous]) ?>"
                    title="<?= $this->translate('pagination_previous') ?>"></a></li>
         <?php else : ?>
             <li><div class="pagination-first"></div></li>
@@ -53,7 +53,7 @@
         <!-- Numbered page links -->
         <?php foreach ($this->pagesInRange as $page) : ?>
             <?php if ($page != $this->current) : ?>
-                <li><a href="<?= $this->url(array('page' => $page)) ?>"><?= $page ?></a></li>
+                <li><a href="<?= $this->url(['page' => $page]) ?>"><?= $page ?></a></li>
             <?php else : ?>
                 <li class="currentPage"><?= $page ?></li>
             <?php endif ?>
@@ -61,9 +61,9 @@
 
         <!-- Next and last page link -->
         <?php if (isset($this->next)) : ?>
-            <li><a class="pagination-next" href="<?= $this->url(array('page' => $this->next)) ?>"
+            <li><a class="pagination-next" href="<?= $this->url(['page' => $this->next]) ?>"
                    title="<?= $this->translate('pagination_next') ?>"></a></li>
-            <li><a class="pagination-last" href="<?= $this->url(array('page' => $this->last)) ?>"
+            <li><a class="pagination-last" href="<?= $this->url(['page' => $this->last]) ?>"
                    title="<?= $this->translate('pagination_last') ?>"></a></li>
         <?php else : ?>
             <li><div class="pagination-next"></div></li>

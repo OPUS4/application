@@ -28,12 +28,15 @@
  * @package     Tests
  * @author      Sascha Szott <szott@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 class Application_Util_NotificationTest extends ControllerTestCase
 {
+    protected $configModifiable = true;
+
+    protected $additionalResources = 'database';
 
     protected $notification;
 
@@ -48,8 +51,8 @@ class Application_Util_NotificationTest extends ControllerTestCase
         $this->logger = Zend_Registry::get('Zend_Log');
         // add required config keys
         $this->config = Zend_Registry::get('Zend_Config');
-        $this->config->notification->document->submitted->enabled = 1;
-        $this->config->notification->document->published->enabled = 1;
+        $this->config->notification->document->submitted->enabled = self::CONFIG_VALUE_TRUE;
+        $this->config->notification->document->published->enabled = self::CONFIG_VALUE_TRUE;
         $this->config->notification->document->submitted->subject = 'Dokument #%1$s eingestellt: %2$s : %3$s';
         $this->config->notification->document->published->subject = 'Dokument #%1$s veröffentlicht: %2$s : %3$s';
         $this->config->notification->document->submitted->template = 'submitted.phtml';
@@ -78,29 +81,44 @@ class Application_Util_NotificationTest extends ControllerTestCase
 
     public function testGetSubmissionMailSubjectWithEmptyAuthorsAndEmptyTitle()
     {
+        $document = $this->createTestDocument();
+        $docId = $document->store();
+
         $method = $this->getMethod('getMailSubject');
-        $subject = $method->invokeArgs($this->notification, ["123", [], ""]);
-        $this->assertEquals("Dokument #123 eingestellt: n/a : n/a", $subject);
+        $subject = $method->invokeArgs($this->notification, [$document, []]);
+        $this->assertEquals("Dokument #$docId eingestellt: n/a : n/a", $subject);
     }
 
     public function testGetSubmissionMailSubjectWithOneAuthor()
     {
+        $document = $this->createTestDocument();
+        $title = $document->addTitleMain();
+        $title->setLanguage('deu');
+        $title->setValue('Test Document');
+        $docId = $document->store();
+
         $method = $this->getMethod('getMailSubject');
         $subject = $method->invokeArgs(
             $this->notification,
-            ["123", ["Doe, John"], "Test Document"]
+            [$document, ["Doe, John"]]
         );
-        $this->assertEquals("Dokument #123 eingestellt: Doe, John : Test Document", $subject);
+        $this->assertEquals("Dokument #$docId eingestellt: Doe, John : Test Document", $subject);
     }
 
     public function testGetSubmissionMailSubjectWithTwoAuthors()
     {
+        $document = $this->createTestDocument();
+        $title = $document->addTitleMain();
+        $title->setLanguage('deu');
+        $title->setValue('Test Document');
+        $docId = $document->store();
+
         $method = $this->getMethod('getMailSubject');
         $subject = $method->invokeArgs(
             $this->notification,
-            ["123", ["Doe, John", "Doe, Jane"], "Test Document"]
+            [$document, ["Doe, John", "Doe, Jane"]]
         );
-        $this->assertEquals("Dokument #123 eingestellt: Doe, John ; Doe, Jane : Test Document", $subject);
+        $this->assertEquals("Dokument #$docId eingestellt: Doe, John ; Doe, Jane : Test Document", $subject);
     }
 
     public function testGetSubmissionMailBodyWithEmptyAuthorsAndEmptyTitle()
@@ -205,7 +223,10 @@ class Application_Util_NotificationTest extends ControllerTestCase
 
         $doc->store();
         $this->notification->prepareMail(
-            $doc, 'http://localhost/foo/1', false, [false, true]
+            $doc,
+            'http://localhost/foo/1',
+            false,
+            [false, true]
         );
     }
 
@@ -214,13 +235,13 @@ class Application_Util_NotificationTest extends ControllerTestCase
         // TODO use Opus_Job::deleteAll() - requires opus4admin permissions !
         $jobs = Opus_Job::getAll();
 
-        if(!empty($jobs)) {
-            foreach($jobs as $job) {
+        if (! empty($jobs)) {
+            foreach ($jobs as $job) {
                 $job->delete();
             }
         }
 
-        $this->config->merge(new Zend_Config(['runjobs' => ['asynchronous' => 1]]));
+        $this->config->merge(new Zend_Config(['runjobs' => ['asynchronous' => self::CONFIG_VALUE_TRUE]]));
         $this->assertEquals(0, Opus_Job::getCount(), 'test data changed.');
 
         $doc = $this->createTestDocument();
@@ -240,8 +261,8 @@ class Application_Util_NotificationTest extends ControllerTestCase
 
         $jobs = Opus_Job::getAll();
 
-        if(!empty($jobs)) {
-            foreach($jobs as $job) {
+        if (! empty($jobs)) {
+            foreach ($jobs as $job) {
                 $job->delete();
             }
         }
@@ -253,5 +274,30 @@ class Application_Util_NotificationTest extends ControllerTestCase
         $method = $class->getMethod($methodName);
         $method->setAccessible(true);
         return $method;
+    }
+
+    public function testGetSubjectTemplate()
+    {
+        $template = $this->notification->getSubjectTemplate();
+        $this->assertNotNull($template);
+        $this->assertNotEmpty($template);
+    }
+
+    public function testGetMailSubject()
+    {
+        $document = $this->createTestDocument();
+        $document->setLanguage('deu');
+
+        $title = $document->addTitleMain();
+        $title->setLanguage('deu');
+        $title->setValue('Testdokument');
+
+        $docId = $document->store();
+
+        $subject = $this->notification->getMailSubject($document, []);
+
+        $this->assertNotContains($title->__toString(), $subject);
+        $this->assertContains('Testdokument', $subject);
+        $this->assertContains($docId, $subject);
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -25,20 +26,24 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Admin_Model_OptionsTest extends ControllerTestCase {
+
+class Admin_Model_OptionsTest extends ControllerTestCase
+{
 
     private $_model;
 
-    public function setUp() {
+    public function setUp()
+    {
         parent::setUp();
 
         $this->_model = new Admin_Model_Options();
     }
 
-    public function testGetOptions() {
+    public function testGetOptions()
+    {
         $options = $this->_model->getOptions();
 
         $this->assertInternalType('array', $options);
@@ -49,5 +54,4 @@ class Admin_Model_OptionsTest extends ControllerTestCase {
             $this->assertEquals($name, $option->getName());
         }
     }
-
 }

@@ -35,20 +35,22 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Admin_Form_Document_File extends Admin_Form_AbstractDocumentSubForm {
+class Admin_Form_Document_File extends Admin_Form_AbstractDocumentSubForm
+{
 
     private $_file = null;
 
     /**
      * Initialisiert Formular und setzt Dekoratoren.
      */
-    public function init() {
+    public function init()
+    {
         parent::init();
 
         $this->setDecorators(
-            array(
-            array('ViewScript', array('viewScript' => 'filerow.phtml'))
-            )
+            [
+            ['ViewScript', ['viewScript' => 'filerow.phtml']]
+            ]
         );
     }
 
@@ -56,7 +58,8 @@ class Admin_Form_Document_File extends Admin_Form_AbstractDocumentSubForm {
      * Setzt die Instanz von Opus_File fuer das Formular.
      * @param Opus_File $model
      */
-    public function populateFromModel($model) {
+    public function populateFromModel($model)
+    {
         $this->_file = $model;
     }
 
@@ -64,9 +67,8 @@ class Admin_Form_Document_File extends Admin_Form_AbstractDocumentSubForm {
      * Liefert die gesetzte Instanz von Opus_File fuer Formular.
      * @return null
      */
-    public function getModel() {
+    public function getModel()
+    {
         return $this->_file;
     }
-
 }
-

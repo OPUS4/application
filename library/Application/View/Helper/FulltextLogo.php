@@ -39,8 +39,7 @@ class Application_View_Helper_FulltextLogo extends Application_View_Helper_Abstr
 
     public function fulltextLogo($doc)
     {
-        if (!$doc instanceof Opus_Document)
-        {
+        if (! $doc instanceof Opus_Document) {
             // TODO log
             return;
         }
@@ -49,23 +48,20 @@ class Application_View_Helper_FulltextLogo extends Application_View_Helper_Abstr
         $tooltip = null;
 
 
-        if ($doc->hasFulltext())
-        {
+        if ($doc->hasFulltext()) {
             $cssClass .= ' fulltext';
             $tooltip = 'fulltext-icon-tooltip';
         }
 
-        if ($doc->isOpenAccess())
-        {
+        if ($doc->isOpenAccess()) {
             $cssClass .= ' openaccess';
             $tooltip = 'fulltext-icon-oa-tooltip';
         }
 
         $output = "<div class=\"$cssClass\"";
 
-        if (!is_null($tooltip))
-        {
-            $tooltip = $this->view->translate(array($tooltip));
+        if (! is_null($tooltip)) {
+            $tooltip = $this->view->translate([$tooltip]);
             $output .= " title=\"$tooltip\"";
         }
 
@@ -73,5 +69,4 @@ class Application_View_Helper_FulltextLogo extends Application_View_Helper_Abstr
 
         return $output;
     }
-
 }

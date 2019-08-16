@@ -39,27 +39,32 @@
  * TODO use one action for different lists, so that a list can be added without changes
  * TODO eliminate standard list rendering PHTML
  */
-class Solrsearch_BrowseController extends Application_Controller_Action {
+class Solrsearch_BrowseController extends Application_Controller_Action
+{
 
     /**
      * @var Solrsearch_Model_SeriesUtil
      */
     private $seriesUtil;
 
-    public function init() {
+    public function init()
+    {
         parent::init();
         $this->_helper->mainMenu('browsing');
         $this->seriesUtil = new Solrsearch_Model_SeriesUtil();
+        $this->view->robots = 'noindex, nofollow';
     }
 
-    public function indexAction() {
+    public function indexAction()
+    {
         $this->view->baseUrl = $this->getRequest()->getBaseUrl();
         $collectionRoles = new Solrsearch_Model_CollectionRoles();
         $this->view->collectionRoles = $collectionRoles->getAllVisible();
         $this->view->showSeriesBrowsing = $this->seriesUtil->hasDisplayableSeries();
     }
 
-    public function doctypesAction() {
+    public function doctypesAction()
+    {
         $facetname = 'doctype';
         $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::FACET_ONLY);
         $query->setFacetField($facetname);
@@ -67,13 +72,12 @@ class Solrsearch_BrowseController extends Application_Controller_Action {
         try {
             $searcher = new Opus_SolrSearch_Searcher();
             $facets = $searcher->search($query)->getFacets();
-        }
-        catch (Opus_SolrSearch_Exception $e) {
+        } catch (Opus_SolrSearch_Exception $e) {
             $this->getLogger()->err(__METHOD__ . ' : ' . $e);
             throw new Application_SearchException($e);
         }
 
-        $docTypesTranslated = array();
+        $docTypesTranslated = [];
         foreach ($facets[$facetname] as $facetitem) {
             $translation = $this->view->translate($facetitem->getText());
             $docTypesTranslated[$translation] = $facetitem;
@@ -83,19 +87,17 @@ class Solrsearch_BrowseController extends Application_Controller_Action {
         $this->view->title = $this->view->translate('solrsearch_browse_doctypes');
     }
 
-    public function yearsAction() {
+    public function yearsAction()
+    {
         $facetname = 'year';
 
         $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::FACET_ONLY);
         $query->setFacetField($facetname);
 
-        try
-        {
+        try {
             $searcher = new Opus_SolrSearch_Searcher();
             $facets = $searcher->search($query)->getFacets();
-        }
-        catch (Opus_SolrSearch_Exception $ose)
-        {
+        } catch (Opus_SolrSearch_Exception $ose) {
             $this->getLogger()->err(__METHOD__ . ' : ' . $ose);
             throw new Application_SearchException($ose);
         }
@@ -111,16 +113,14 @@ class Solrsearch_BrowseController extends Application_Controller_Action {
     /**
      * Lists all visible series with at least on document.
      */
-    public function seriesAction() {
+    public function seriesAction()
+    {
         $visibleSeries = $this->seriesUtil->getVisibleSeries();
 
-        if (count($visibleSeries) == 0)
-        {
+        if (count($visibleSeries) == 0) {
             $this->_helper->Redirector->redirectToAndExit('index');
         }
 
         $this->view->series = $visibleSeries;
     }
-
 }
-

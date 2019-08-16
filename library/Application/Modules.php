@@ -31,7 +31,7 @@
  * @category    Application
  * @package     Application
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  *
  * TODO is this the right package?
@@ -61,28 +61,28 @@ class Application_Modules
      * Descriptors for explicitly registered modules.
      * @var array
      */
-    private $_registeredModules;
+    private $_registeredModules = [];
 
     /**
      * Prevent direct instantiation of class.
      */
-    private function __construct() {
+    private function __construct()
+    {
     }
 
     /**
      * Return instance of module management class.
      */
-    static public function getInstance()
+    public static function getInstance()
     {
-        if (is_null(self::$_moduleManager))
-        {
+        if (is_null(self::$_moduleManager)) {
             self::$_moduleManager = new Application_Modules();
         }
 
         return self::$_moduleManager;
     }
 
-    static public function setInstance($modules)
+    public static function setInstance($modules)
     {
         self::$_moduleManager = $modules;
     }
@@ -91,7 +91,7 @@ class Application_Modules
      * Register a module with the manager.
      * @param $module
      */
-    static public function registerModule($module)
+    public static function registerModule($module)
     {
         self::getInstance()->_addModule($module);
     }
@@ -103,11 +103,9 @@ class Application_Modules
      */
     public function isRegistered($name)
     {
-        if (is_array($this->_registeredModules))
-        {
+        if (is_array($this->_registeredModules)) {
             return array_key_exists($name, $this->_registeredModules);
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -119,10 +117,11 @@ class Application_Modules
      */
     public function getModules()
     {
-        if (is_null($this->_modules))
-        {
+        if (is_null($this->_modules)) {
             $this->_modules = array_merge($this->findModules(), $this->_registeredModules);
         }
+
+        ksort($this->_modules);
 
         return $this->_modules;
     }
@@ -132,8 +131,7 @@ class Application_Modules
      */
     public function getModulesPath()
     {
-        if (is_null($this->_modulesPath))
-        {
+        if (is_null($this->_modulesPath)) {
             $this->_modulesPath = APPLICATION_PATH . DIRECTORY_SEPARATOR . 'modules';
         }
 
@@ -143,33 +141,35 @@ class Application_Modules
     /**
      * Iterates over module directories and returns all module names
      *
-     * 'default' gets filtered - it must always be present and accessible
-     *
      * @return array List of module names
      */
-    public function findModules() {
+    public function findModules()
+    {
         $modulesPath = $this->getModulesPath();
 
-        $modules = array();
+        $modules = [];
 
-        foreach (new DirectoryIterator($modulesPath) as $fileInfo)
-        {
-            if ($fileInfo->isDot()) continue; // ignore '.' and '..'
-            if ($fileInfo->isFile()) continue; // ignore files
+        foreach (new DirectoryIterator($modulesPath) as $fileInfo) {
+            if ($fileInfo->isDot()) {
+                continue; // ignore '.' and '..'
+            }
+            if ($fileInfo->isFile()) {
+                continue; // ignore files
+            }
 
             $name = $fileInfo->getBasename();
 
-            if (substr($name, 0, 1) === '.' ) continue; // ignore folders starting with a dot
+            if (substr($name, 0, 1) === '.') {
+                continue; // ignore folders starting with a dot
+            }
 
             // ignore directories without 'controllers' subdirectory
             $controllersPath = $fileInfo->getRealPath() . DIRECTORY_SEPARATOR . 'controllers';
-            if (!is_dir($controllersPath)) continue;
-
-            // filter 'default' ?
-            if ($name !== 'default')
-            {
-                $modules[$name] = new Application_Configuration_Module($name);
+            if (! is_dir($controllersPath)) {
+                continue;
             }
+
+            $modules[$name] = new Application_Configuration_Module($name);
         }
 
         return $modules;
@@ -182,12 +182,10 @@ class Application_Modules
      */
     protected function _addModule($module)
     {
-        if (is_null($this->_registeredModules))
-        {
-            $this->_registeredModules = array();
+        if (is_null($this->_registeredModules)) {
+            $this->_registeredModules = [];
         }
 
         $this->_registeredModules[$module->getName()] = $module;
     }
-
 }

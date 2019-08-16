@@ -27,14 +27,16 @@
  * @category    Application Unit Tests
  * @package     Application
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2018, OPUS 4 development team
+ * @author      Sascha Szott <opus-development@saschaszott.de>
+ * @copyright   Copyright (c) 2018-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 class Application_Import_PackageReaderTest extends ControllerTestCase
 {
-
     private $mockReader;
+
+    protected $additionalResources = 'database';
 
     public function setUp()
     {
@@ -47,25 +49,111 @@ class Application_Import_PackageReaderTest extends ControllerTestCase
     {
         $method = $this->getMethod('createExtractionDir');
 
-        $path = $method->invokeArgs($this->mockReader, ['testfile.zip', '.zip']);
+        $baseDir = APPLICATION_PATH . '/tests/workspace/tmp/Application_Import_PackageReaderTest_createExtractionDir';
+        mkdir($baseDir);
 
-        $this->assertTrue(is_dir($path));
-        $this->assertTrue(is_writable($path));
-        $this->assertStringStartsWith(APPLICATION_PATH . '/tests/workspace/tmp/', $path);
+        $extractDir = $method->invokeArgs($this->mockReader, [$baseDir]);
 
-        rmdir($path);
+        $this->assertTrue(is_dir($extractDir));
+        $this->assertTrue(is_writable($extractDir));
+        $this->assertStringStartsWith($baseDir, $extractDir);
 
-        $this->assertFalse(is_dir($path));
+        rmdir($extractDir);
+        rmdir($baseDir);
+
+        $this->assertFalse(is_dir($extractDir));
     }
 
-    public function testRemoveExtractionDir()
+    public function testProcessPackageWithMissingFile()
     {
-        $this->markTestIncomplete('test not implemented');
+        $method = $this->getMethod('processPackage');
+
+        $extractDir = APPLICATION_PATH . '/tests/workspace/tmp/Application_Import_PackageReaderTest_processPackage_1';
+        mkdir($extractDir);
+
+        $statusDoc = $method->invokeArgs($this->mockReader, [$extractDir]);
+        $this->assertNull($statusDoc);
+
+        rmdir($extractDir);
     }
 
-    public function testProcessOpusXml()
+    public function testProcessPackageWithEmptyFile()
     {
-        $this->markTestIncomplete('test not implemented');
+        $method = $this->getMethod('processPackage');
+
+        $extractDir = APPLICATION_PATH . '/tests/workspace/tmp/Application_Import_PackageReaderTest_processPackage_2';
+        mkdir($extractDir);
+
+        $metadataFile = $extractDir . DIRECTORY_SEPARATOR . Application_Import_PackageReader::METADATA_FILENAME;
+        touch($metadataFile);
+
+        $statusDoc = $method->invokeArgs($this->mockReader, [$extractDir]);
+        $this->assertNull($statusDoc);
+
+        unlink($metadataFile);
+        rmdir($extractDir);
+    }
+
+    public function testProcessPackageWithInvalidFile()
+    {
+        $method = $this->getMethod('processPackage');
+
+        $extractDir = APPLICATION_PATH . '/tests/workspace/tmp/Application_Import_PackageReaderTest_processPackage_3';
+        mkdir($extractDir);
+
+        $metadataFile = $extractDir . DIRECTORY_SEPARATOR . Application_Import_PackageReader::METADATA_FILENAME;
+        touch($metadataFile);
+        file_put_contents($metadataFile, '<import><opusDocument></opusDocument></import>');
+
+        try {
+            $this->setExpectedException('Application_Import_MetadataImportInvalidXmlException');
+            $method->invokeArgs($this->mockReader, [$extractDir]);
+        }
+        finally {
+            unlink($metadataFile);
+            rmdir($extractDir);
+        }
+    }
+
+    public function testProcessPackageWithValidFile()
+    {
+        $method = $this->getMethod('processPackage');
+
+        $extractDir = APPLICATION_PATH . '/tests/workspace/tmp/Application_Import_PackageReaderTest_processPackage_4';
+        mkdir($extractDir);
+
+        $metadataFile = $extractDir . DIRECTORY_SEPARATOR . Application_Import_PackageReader::METADATA_FILENAME;
+        touch($metadataFile);
+
+        $xml = <<<XML
+<import>
+    <opusDocument language="eng" type="article" serverState="unpublished">
+        <titlesMain>
+            <titleMain language="eng">This is a test document</titleMain>
+        </titlesMain>   
+    </opusDocument>
+</import>
+XML;
+
+        file_put_contents($metadataFile, $xml);
+
+        $statusDoc = $method->invokeArgs($this->mockReader, [$extractDir]);
+        $this->assertFalse($statusDoc->noDocImported());
+        $this->assertCount(1, $statusDoc->getDocs());
+
+        $doc = $statusDoc->getDocs()[0];
+        $this->assertEquals('eng', $doc->getLanguage());
+        $this->assertEquals('article', $doc->getType());
+        $this->assertEquals('unpublished', $doc->getServerState());
+        $this->assertCount(1, $doc->getTitleMain());
+        $title = $doc->getTitleMain()[0];
+        $this->assertEquals('eng', $title->getLanguage());
+        $this->assertEquals('This is a test document', $title->getValue());
+
+        $this->addTestDocument($doc); // for cleanup
+
+        unlink($metadataFile);
+        rmdir($extractDir);
     }
 
     protected static function getMethod($name)
@@ -74,5 +162,19 @@ class Application_Import_PackageReaderTest extends ControllerTestCase
         $method = $class->getMethod($name);
         $method->setAccessible(true);
         return $method;
+    }
+
+    public static function cleanupTmpDir($tmpDirName)
+    {
+        $it = new RecursiveDirectoryIterator($tmpDirName, RecursiveDirectoryIterator::SKIP_DOTS);
+        $files = new RecursiveIteratorIterator($it, RecursiveIteratorIterator::CHILD_FIRST);
+        foreach ($files as $file) {
+            if ($file->isDir()) {
+                rmdir($file->getRealPath());
+            } else {
+                unlink($file->getRealPath());
+            }
+        }
+        rmdir($tmpDirName);
     }
 }

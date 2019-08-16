@@ -33,24 +33,26 @@
  *
  * TODO rename to CollectionRolePosition or make generic
  */
- class Application_Form_Element_Position extends Application_Form_Element_Select {
+class Application_Form_Element_Position extends Application_Form_Element_Select
+{
 
-     public function init() {
-         parent::init();
+    public function init()
+    {
+        parent::init();
 
-         $allCollectionRoles = Opus_CollectionRole::fetchAll();
+        $allCollectionRoles = Opus_CollectionRole::fetchAll();
 
-         $translator = Zend_Registry::get('Zend_Translate');
+        $translator = Zend_Registry::get('Zend_Translate');
 
-         foreach ($allCollectionRoles as $collectionRole) {
-             $position = $collectionRole->getPosition();
-             $this->addMultiOption(
-                 $position, $position . ' - '
-                 . $translator->translate('default_collection_role_' . $collectionRole->getDisplayName())
-             );
-         }
+        foreach ($allCollectionRoles as $collectionRole) {
+            $position = $collectionRole->getPosition();
+            $this->addMultiOption(
+                $position,
+                $position . ' - '
+                . $translator->translate('default_collection_role_' . $collectionRole->getDisplayName())
+            );
+        }
 
-         $this->addMultiOption(count($allCollectionRoles) + 1, 'admin_collectionroles_last_position');
-     }
-
- }
+        $this->addMultiOption(count($allCollectionRoles) + 1, 'admin_collectionroles_last_position');
+    }
+}

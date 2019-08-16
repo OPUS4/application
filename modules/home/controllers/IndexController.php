@@ -33,14 +33,16 @@
  * @version     $Id$
  */
 
-class Home_IndexController extends Application_Controller_Action {
+class Home_IndexController extends Application_Controller_Action
+{
 
     /**
      * Do some initialization on startup of every action.
      *
      * @return void
      */
-    public function init() {
+    public function init()
+    {
         parent::init();
     }
 
@@ -54,8 +56,9 @@ class Home_IndexController extends Application_Controller_Action {
      * @param  array  $parameters The parameters passed to the action.
      * @return void
      */
-    public function __call($action, $parameters) {
-        if (!'Action' == substr($action, -6)) {
+    public function __call($action, $parameters)
+    {
+        if (! 'Action' == substr($action, -6)) {
             $this->getLogger()->info(__METHOD__ . ' undefined method: ' . $action);
             parent::__call($action, $parameters);
         }
@@ -65,7 +68,7 @@ class Home_IndexController extends Application_Controller_Action {
 
         $phtmlFilesAvailable = $this->getViewScripts();
 
-        if (array_search($actionName, $phtmlFilesAvailable) === FALSE) {
+        if (array_search($actionName, $phtmlFilesAvailable) === false) {
             $this->getLogger()->info(
                 __METHOD__ . ' requested file ' . $actionName . '.phtml is not readable or does not exist'
             );
@@ -77,10 +80,9 @@ class Home_IndexController extends Application_Controller_Action {
         $helpFilesAvailable = Home_Model_HelpFiles::getFiles();
 
         $pos = array_search($translation, $helpFilesAvailable);
-        if ($pos === FALSE) {
+        if ($pos === false) {
             $this->view->text = $translation;
-        }
-        else {
+        } else {
             $this->view->text = Home_Model_HelpFiles::getFileContent($helpFilesAvailable[$pos]);
         }
     }
@@ -90,12 +92,13 @@ class Home_IndexController extends Application_Controller_Action {
      *
      * @return void
      */
-    public function languageAction() {
+    public function languageAction()
+    {
         $module = null;
         $controller = null;
         $action = null;
         $language = null;
-        $params = array();
+        $params = [];
 
         foreach ($this->getRequest()->getParams() as $param => $value) {
             switch ($param) {
@@ -127,7 +130,7 @@ class Home_IndexController extends Application_Controller_Action {
 
         $appConfig = new Application_Configuration();
 
-        if ($appConfig->isLanguageSelectionEnabled() && !is_null($language)
+        if ($appConfig->isLanguageSelectionEnabled() && ! is_null($language)
                 && Zend_Registry::get('Zend_Translate')->isAvailable($language)) {
             $sessiondata = new Zend_Session_Namespace();
             $sessiondata->language = $language;
@@ -135,7 +138,8 @@ class Home_IndexController extends Application_Controller_Action {
         $this->_helper->Redirector->redirectTo($action, '', $controller, $module, $params);
     }
 
-    public function indexAction() {
+    public function indexAction()
+    {
         $this->_helper->mainMenu('home');
         $finder = new Opus_DocumentFinder();
         $finder->setServerState('published');
@@ -143,18 +147,15 @@ class Home_IndexController extends Application_Controller_Action {
     }
 
 
-    public function helpAction() {
+    public function helpAction()
+    {
         $config = $this->getConfig();
-        if (isset($config->help->separate)) {
-            $this->view->separate = (boolean) $config->help->separate;
-        }
-        else {
-            $this->view->separate = false;
-        }
+        $this->view->separate = isset($config->help->separate) &&
+            filter_var($config->help->separate, FILTER_VALIDATE_BOOLEAN);
 
         if ($this->view->separate) {
             $content = $this->getRequest()->getParam('content');
-            if (!is_null($content)) {
+            if (! is_null($content)) {
                 if ($content === 'contact') {
                     $this->_helper->Redirector->redirectToAndExit('contact');
                 }
@@ -168,11 +169,10 @@ class Home_IndexController extends Application_Controller_Action {
                 $helpFilesAvailable = Home_Model_HelpFiles::getFiles();
 
                 $pos = array_search($translation, $helpFilesAvailable);
-                if ($pos !== FALSE) {
+                if ($pos !== false) {
                     $this->view->contenttitle = 'help_title_' . $content;
                     $this->view->content = Home_Model_HelpFiles::getFileContent($helpFilesAvailable[$pos]);
-                }
-                elseif ($translation !== 'help_content_' . $content) {
+                } elseif ($translation !== 'help_content_' . $content) {
                     // a translation exists, but it is not a valid file name
                     $this->view->contenttitle = 'help_title_' . $content;
                     $this->view->content = $translation;
@@ -188,8 +188,9 @@ class Home_IndexController extends Application_Controller_Action {
      *
      * TODO remove
      */
-    public function failureAction() {
-        $this->_helper->Redirector->redirectTo('index', array('failure' => 'This is a warning.'));
+    public function failureAction()
+    {
+        $this->_helper->Redirector->redirectTo('index', ['failure' => 'This is a warning.']);
     }
 
     /**
@@ -197,16 +198,18 @@ class Home_IndexController extends Application_Controller_Action {
      *
      * TODO remove
      */
-    public function noticeAction() {
-        $this->_helper->Redirector->redirectTo('index', array('notice' => 'This is a notice.'));
+    public function noticeAction()
+    {
+        $this->_helper->Redirector->redirectTo('index', ['notice' => 'This is a notice.']);
     }
 
     /**
      * Returns basenames of all phtml files.
      * @return array Basenames of phtml files for 'home' module
      */
-    protected function getViewScripts() {
-        $phtmlFilesAvailable = array();
+    protected function getViewScripts()
+    {
+        $phtmlFilesAvailable = [];
         $dir = new DirectoryIterator($this->view->getScriptPath('index'));
         foreach ($dir as $file) {
             if ($file->isFile() && $file->getFilename() != '.' && $file->getFilename() != '..' && $file->isReadable()) {
@@ -215,5 +218,4 @@ class Home_IndexController extends Application_Controller_Action {
         }
         return $phtmlFilesAvailable;
     }
-
 }

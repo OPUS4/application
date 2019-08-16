@@ -44,13 +44,18 @@ defined('APPLICATION_ENV')
         || define('APPLICATION_ENV', 'testing');
 
 // Ensure library/ is on include_path
-set_include_path(implode(PATH_SEPARATOR, array(
+set_include_path(implode(PATH_SEPARATOR, [
     APPLICATION_PATH . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'support', // Support-Klassen fuer Tests
     APPLICATION_PATH . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'library', // tests/library
     APPLICATION_PATH . DIRECTORY_SEPARATOR . 'library', // Server library
     APPLICATION_PATH . DIRECTORY_SEPARATOR . 'vendor', // 3rd party library
     get_include_path()
-)));
+]));
+
+$catalogPath = APPLICATION_PATH . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR .
+    'resources' . DIRECTORY_SEPARATOR . 'opus4-catalog.xml';
+
+putenv("XML_CATALOG_FILES=$catalogPath");
 
 require_once 'autoload.php';
 
@@ -69,8 +74,9 @@ ensureDirectory(APPLICATION_PATH . '/tests/workspace/files');
 ensureDirectory(APPLICATION_PATH . '/tests/workspace/cache');
 ensureDirectory(APPLICATION_PATH . '/tests/workspace/export');
 
-function ensureDirectory($path) {
-    if (!is_dir($path)) {
+function ensureDirectory($path)
+{
+    if (! is_dir($path)) {
         mkdir($path);
         echo "Created directory '$path'" . PHP_EOL;
     }

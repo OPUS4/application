@@ -27,16 +27,19 @@
  * @category    Cronjob
  * @package     Tests
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 require_once('CronTestCase.php');
 
-class ConsistencyCheckTest extends CronTestCase {
+class ConsistencyCheckTest extends CronTestCase
+{
 
-    private function getPublishedDocumentCount() {
+    protected $additionalResources = 'database';
+
+    private function getPublishedDocumentCount()
+    {
         $finder = new Opus_DocumentFinder();
         $finder->setServerState('published');
         return count($finder->ids());
@@ -45,14 +48,15 @@ class ConsistencyCheckTest extends CronTestCase {
     /**
      * TODO fix for Solr update
      */
-    public function testJobSuccess() {
+    public function testJobSuccess()
+    {
         $this->createJob(Opus_Job_Worker_ConsistencyCheck::LABEL);
         $this->executeScript('cron-check-consistency.php');
 
-        $allJobs = Opus_Job::getByLabels(array(Opus_Job_Worker_ConsistencyCheck::LABEL), null, Opus_Job::STATE_UNDEFINED);
+        $allJobs = Opus_Job::getByLabels([Opus_Job_Worker_ConsistencyCheck::LABEL], null, Opus_Job::STATE_UNDEFINED);
         $this->assertTrue(empty($allJobs), 'Expected no more jobs in queue: found ' . count($allJobs) . ' jobs');
 
-        $failedJobs = Opus_Job::getByLabels(array(Opus_Job_Worker_ConsistencyCheck::LABEL), null, Opus_Job::STATE_FAILED);
+        $failedJobs = Opus_Job::getByLabels([Opus_Job_Worker_ConsistencyCheck::LABEL], null, Opus_Job::STATE_FAILED);
         $this->assertTrue(empty($failedJobs), 'Expected no failed jobs in queue: found ' . count($failedJobs) . ' jobs');
 
         $logPath = parent::$scriptPath . '/../../workspace/log/';
@@ -62,14 +66,20 @@ class ConsistencyCheckTest extends CronTestCase {
         $publishedDocsCount = $this->getPublishedDocumentCount();
 
         $contents = file_get_contents($logPath . 'opus_consistency-check.log');
-        $this->assertFalse(strpos($contents, 'checking ' . $publishedDocsCount
+        $this->assertFalse(
+            strpos($contents, 'checking ' . $publishedDocsCount
                 . ' published documents for consistency.') === false,
             "Logfile opus_consistency-check.log does not contain 'checking ' . $publishedDocsCount
-            . '...' [$contents].");
-        $this->assertFalse(strpos($contents, 'No inconsistency was detected.') === false,
-            'Logfile opus_consistency-check.log does not contain "No inconsistency ...". ' . $contents);
-        $this->assertFalse(strpos($contents, 'Completed operation after') === false,
-            'Logfile opus_consistency-check.log does not contain "Completed operation after".');
+            . '...' [$contents]."
+        );
+        $this->assertFalse(
+            strpos($contents, 'No inconsistency was detected.') === false,
+            'Logfile opus_consistency-check.log does not contain "No inconsistency ...". ' . $contents
+        );
+        $this->assertFalse(
+            strpos($contents, 'Completed operation after') === false,
+            'Logfile opus_consistency-check.log does not contain "Completed operation after".'
+        );
 
         unlink($logPath . 'opus_consistency-check.log');
     }
@@ -77,17 +87,18 @@ class ConsistencyCheckTest extends CronTestCase {
     /**
      * TODO fix for Solr Update
      */
-    public function testJobSuccessWithInconsistency() {
-        $service = Opus_Search_Service::selectIndexingService( null, 'solr' );
+    public function testJobSuccessWithInconsistency()
+    {
+        $service = Opus_Search_Service::selectIndexingService(null, 'solr');
         $service->removeAllDocumentsFromIndex();
 
         $this->createJob(Opus_Job_Worker_ConsistencyCheck::LABEL);
         $this->executeScript('cron-check-consistency.php');
 
-        $allJobs = Opus_Job::getByLabels(array(Opus_Job_Worker_ConsistencyCheck::LABEL), null, Opus_Job::STATE_UNDEFINED);
+        $allJobs = Opus_Job::getByLabels([Opus_Job_Worker_ConsistencyCheck::LABEL], null, Opus_Job::STATE_UNDEFINED);
         $this->assertTrue(empty($allJobs), 'Expected no more jobs in queue: found ' . count($allJobs) . ' jobs');
 
-        $failedJobs = Opus_Job::getByLabels(array(Opus_Job_Worker_ConsistencyCheck::LABEL), null, Opus_Job::STATE_FAILED);
+        $failedJobs = Opus_Job::getByLabels([Opus_Job_Worker_ConsistencyCheck::LABEL], null, Opus_Job::STATE_FAILED);
         $this->assertTrue(empty($failedJobs), 'Expected no failed jobs in queue: found ' . count($failedJobs) . ' jobs');
 
         $logPath = parent::$scriptPath . '/../../workspace/log/';
@@ -97,22 +108,36 @@ class ConsistencyCheckTest extends CronTestCase {
         $publishedDocsCount = $this->getPublishedDocumentCount();
 
         $contents = file_get_contents($logPath . 'opus_consistency-check.log');
-        $this->assertFalse(strpos($contents, 'checking ' . $publishedDocsCount . ' published documents for consistency.') === false,
+        $this->assertFalse(
+            strpos($contents, 'checking ' . $publishedDocsCount . ' published documents for consistency.') === false,
             "Logfile opus_consistency-check.log does not contain 'checking ' . $publishedDocsCount
-            . ' ...' [$contents].");
-        $this->assertFalse(strpos($contents, 'inconsistency found for document 1: document is in database, but is not in Solr index.') === false,
-            'Logfile opus_consistency-check.log does not contain "inconsistency found for document 1: ...".');
-        $this->assertFalse(strpos($contents, 'inconsistency found for document 200: document is in database, but is not in Solr index.') === false,
-            'Logfile opus_consistency-check.log does not contain "inconsistency found for document 200: ...".');
-        $this->assertFalse(strpos($contents, $publishedDocsCount . ' inconsistencies were detected: '
+            . ' ...' [$contents]."
+        );
+        $this->assertFalse(
+            strpos($contents, 'inconsistency found for document 1: document is in database, but is not in Solr index.') === false,
+            'Logfile opus_consistency-check.log does not contain "inconsistency found for document 1: ...".'
+        );
+        $this->assertFalse(
+            strpos($contents, 'inconsistency found for document 200: document is in database, but is not in Solr index.') === false,
+            'Logfile opus_consistency-check.log does not contain "inconsistency found for document 200: ...".'
+        );
+        $this->assertFalse(
+            strpos($contents, $publishedDocsCount . ' inconsistencies were detected: '
                 . $publishedDocsCount . ' of them were resolved.') === false,
-            'Logfile opus_consistency-check.log does not contain "' . $publishedDocsCount . ' inconsistencies ...".');
-        $this->assertFalse(strpos($contents, 'number of updates: ' . $publishedDocsCount) === false,
-            'Logfile opus_consistency-check.log does not contain "number of updates: ' . $publishedDocsCount . '".');
-        $this->assertFalse(strpos($contents, 'number of deletions: 0') === false,
-            'Logfile opus_consistency-check.log does not contain "number of deletions: 0".');
-        $this->assertFalse(strpos($contents, 'Completed operation after') === false,
-            'Logfile opus_consistency-check.log does not contain "Completed operation after".');
+            'Logfile opus_consistency-check.log does not contain "' . $publishedDocsCount . ' inconsistencies ...".'
+        );
+        $this->assertFalse(
+            strpos($contents, 'number of updates: ' . $publishedDocsCount) === false,
+            'Logfile opus_consistency-check.log does not contain "number of updates: ' . $publishedDocsCount . '".'
+        );
+        $this->assertFalse(
+            strpos($contents, 'number of deletions: 0') === false,
+            'Logfile opus_consistency-check.log does not contain "number of deletions: 0".'
+        );
+        $this->assertFalse(
+            strpos($contents, 'Completed operation after') === false,
+            'Logfile opus_consistency-check.log does not contain "Completed operation after".'
+        );
 
         unlink($logPath . 'opus_consistency-check.log');
     }

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -32,7 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Publish_View_Helper_BibliographieOverview extends Zend_View_Helper_Abstract {
+class Publish_View_Helper_BibliographieOverview extends Zend_View_Helper_Abstract
+{
 
     public $view;
     public $session;
@@ -44,9 +44,11 @@ class Publish_View_Helper_BibliographieOverview extends Zend_View_Helper_Abstrac
      * The view helper can be used anywhere in the publish process: on index, specific form or check page.
      * @return String (html output)
      */
-    public function bibliographieOverview() {
+    public function bibliographieOverview()
+    {
         $config = Zend_Registry::get('Zend_Config');
-        if (!isset($config->form->first->bibliographie) || $config->form->first->bibliographie != 1) {
+        if (! isset($config->form->first->bibliographie) ||
+            (! filter_var($config->form->first->bibliographie, FILTER_VALIDATE_BOOLEAN))) {
             return;
         }
 
@@ -66,11 +68,9 @@ class Publish_View_Helper_BibliographieOverview extends Zend_View_Helper_Abstrac
         if (empty($bib)) {
             return $fieldsetStart . $this->view->translate('notBelongsToBibliographie') . $fieldsetEnd;
         }
-        
+
         $overview = $this->view->translate('belongsToBibliographie');
 
         return $fieldsetStart . $overview . $fieldsetEnd;
     }
-
 }
-

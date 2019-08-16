@@ -27,7 +27,7 @@
 
 /**
  * Unterformular fuer Bemerkungen/Notizen.
- * 
+ *
  * @category    Application
  * @package     Admin_Form
  * @author      Jens Schwidder <schwidder@zib.de>
@@ -35,60 +35,66 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Admin_Form_Document_Note extends Admin_Form_AbstractModelSubForm {
+class Admin_Form_Document_Note extends Admin_Form_AbstractModelSubForm
+{
 
     const ELEMENT_ID = 'Id';
     const ELEMENT_VISIBILITY = 'Visibility';
     const ELEMENT_MESSAGE = 'Message';
-    
-    public function init() {
+
+    public function init()
+    {
         parent::init();
-        
+
         $this->addElement('hidden', self::ELEMENT_ID);
-        $this->addElement('checkbox', self::ELEMENT_VISIBILITY, array('label' => 'Opus_Note_Visibility_Value_Public'));
-        $this->addElement('textarea', self::ELEMENT_MESSAGE, array('required' => true, 'rows' => 4));
-        
+        $this->addElement('checkbox', self::ELEMENT_VISIBILITY, ['label' => 'Opus_Note_Visibility_Value_Public']);
+        $this->addElement('textarea', self::ELEMENT_MESSAGE, ['required' => true, 'rows' => 4]);
+
         $this->getElement(self::ELEMENT_VISIBILITY)
                 ->setViewCheckedValue('Opus_Note_Visibility_Value_Public')
                 ->setViewUncheckedValue('Opus_Note_Visibility_Value_Private');
-        
+
         $this->setRemoveEmptyCheckbox(false);
     }
-    
-    public function populateFromModel($note) {
+
+    public function populateFromModel($note)
+    {
         $this->getElement(self::ELEMENT_ID)->setValue($note->getId());
         $this->getElement(self::ELEMENT_MESSAGE)->setValue($note->getMessage());
         $this->getElement(self::ELEMENT_VISIBILITY)->setChecked($note->getVisibility() === 'public');
     }
-    
-    public function updateModel($note) {
+
+    public function updateModel($note)
+    {
         $note->setMessage($this->getElement(self::ELEMENT_MESSAGE)->getValue());
         $note->setVisibility(($this->getElement(self::ELEMENT_VISIBILITY)->getValue()) ? 'public' : 'private');
     }
 
-    public function getModel() {
+    public function getModel()
+    {
         $noteId = $this->getElement(self::ELEMENT_ID)->getValue();
-        
+
         if (empty($noteId)) {
             $noteId = null;
         }
-        
+
         $note = new Opus_Note($noteId);
-        
+
         $this->updateModel($note);
-        
+
         return $note;
     }
-    
-    public function loadDefaultDecorators() {
+
+    public function loadDefaultDecorators()
+    {
         parent::loadDefaultDecorators();
-        
+
         $this->removeDecorator('Fieldset');
     }
 
-    public function prepareRenderingAsView() {
+    public function prepareRenderingAsView()
+    {
         parent::prepareRenderingAsView();
         $this->getElement(self::ELEMENT_VISIBILITY)->removeDecorator('Label');
     }
-    
 }

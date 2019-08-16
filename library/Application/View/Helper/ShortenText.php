@@ -52,18 +52,15 @@ class Application_View_Helper_ShortenText extends Application_View_Helper_Abstra
     {
         $maxLength = $this->getMaxLength();
 
-        if (strlen($text) > $maxLength)
-        {
+        if (strlen($text) > $maxLength) {
             $shortText = mb_substr($text, 0, $maxLength);
 
-            if (!ctype_space(mb_substr($text, $maxLength, 1)))
-            {
+            if (! ctype_space(mb_substr($text, $maxLength, 1))) {
                 $lastSpace = mb_strrpos($shortText, ' ');
 
                 $shortText = mb_substr($shortText, 0, $lastSpace);
             }
-        }
-        else {
+        } else {
             $shortText = $text;
         }
 
@@ -77,14 +74,12 @@ class Application_View_Helper_ShortenText extends Application_View_Helper_Abstra
      */
     public function getMaxLength()
     {
-        if (is_null($this->_maxLength))
-        {
+        if (is_null($this->_maxLength)) {
             $config = $this->getConfig();
 
             $maxLength = 0;
 
-            if (!is_null($config) && isset($config->frontdoor->numOfShortAbstractChars))
-            {
+            if (! is_null($config) && isset($config->frontdoor->numOfShortAbstractChars)) {
                 $maxLength = trim($config->frontdoor->numOfShortAbstractChars);
             }
 
@@ -101,12 +96,10 @@ class Application_View_Helper_ShortenText extends Application_View_Helper_Abstra
      */
     public function setMaxLength($length)
     {
-        if (!is_int($length) && !ctype_digit($length))
-        {
+        if (! is_int($length) && ! ctype_digit($length)) {
             $length = 0;
         }
 
         $this->_maxLength = $length;
     }
-
 }

@@ -36,16 +36,19 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Admin_DoctypeController extends Application_Controller_Action {
+class Admin_DoctypeController extends Application_Controller_Action
+{
 
     private $_documentTypesHelper;
 
-    public function init() {
+    public function init()
+    {
         parent::init();
         $this->_documentTypesHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
     }
 
-    public function indexAction() {
+    public function indexAction()
+    {
         $validationArray = $this->_documentTypesHelper->validateAll();
         ksort($validationArray);
         $this->view->content = $validationArray;
@@ -55,12 +58,15 @@ class Admin_DoctypeController extends Application_Controller_Action {
         $this->view->numActiveDocs = sizeof($this->view->activeDoctypes);
     }
 
-    public function showAction() {
+    public function showAction()
+    {
         $doctype = $this->getRequest()->getParam('doctype');
-        if (!$this->_documentTypesHelper->isValid($doctype)) {
+        if (! $this->_documentTypesHelper->isValid($doctype)) {
             return $this->_helper->Redirector->redirectTo(
-                'index', array('failure' => 'admin_doctype_invalid'),
-                'doctype', 'admin'
+                'index',
+                ['failure' => 'admin_doctype_invalid'],
+                'doctype',
+                'admin'
             );
         }
         $this->view->doctypeName = $doctype . ':';

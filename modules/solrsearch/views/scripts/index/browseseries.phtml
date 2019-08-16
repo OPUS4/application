@@ -37,7 +37,7 @@
 
 <div id="seriesbar">
     <?php $classAttribute = '' ?>
-    <?php if (!is_null($this->logoFilename)) : ?>
+    <?php if (! is_null($this->logoFilename)) : ?>
     <div id="serieslogo">
         <img src="<?= $this->baseUrl() . '/series_logos/' . $this->seriesId . '/' . $this->logoFilename ?>"/>
     </div>

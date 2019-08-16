@@ -28,18 +28,21 @@
  * @package     Tests
  * @author      Sascha Szott <szott@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
-class CitationExport_Model_HelperTest extends ControllerTestCase {
+class CitationExport_Model_HelperTest extends ControllerTestCase
+{
+
+    protected $additionalResources = ['database'];
 
     private $_documentId;
 
     private $_helper;
 
-    public function setUp() {
+    public function setUp()
+    {
         parent::setUp();
 
         $document = $this->createTestDocument();
@@ -54,14 +57,16 @@ class CitationExport_Model_HelperTest extends ControllerTestCase {
         );
     }
 
-    public function testGetScriptPath() {
+    public function testGetScriptPath()
+    {
         $this->assertEquals(
             APPLICATION_PATH . '/modules/citationExport/views/scripts/index',
             $this->_helper->getScriptPath()
         );
     }
 
-    public function testGetAvailableStylesheets() {
+    public function testGetAvailableStylesheets()
+    {
         $stylesheets = $this->_helper->getAvailableStylesheets();
 
         $this->assertContains('ris', $stylesheets);
@@ -71,7 +76,8 @@ class CitationExport_Model_HelperTest extends ControllerTestCase {
         $this->assertNotContains('download.phtml', $stylesheets);
     }
 
-    public function testBibtexAttributeSchoolForMasterThesis() {
+    public function testBibtexAttributeSchoolForMasterThesis()
+    {
         $document = new Opus_Document($this->_documentId);
 
         $document->setType('masterthesis');
@@ -90,7 +96,8 @@ class CitationExport_Model_HelperTest extends ControllerTestCase {
         $this->assertContains('school      = {School of Life},', $output);
     }
 
-    public function testBibtexAttributeSchoolWithDepartment() {
+    public function testBibtexAttributeSchoolWithDepartment()
+    {
         $document = new Opus_Document($this->_documentId);
 
         $document->setType('masterthesis');
@@ -118,7 +125,8 @@ class CitationExport_Model_HelperTest extends ControllerTestCase {
         $this->assertContains('school      = {Test Uni, Test Dep},', $output);
     }
 
-    public function testBibtexAttributeSchoolForDoctoralThesis() {
+    public function testBibtexAttributeSchoolForDoctoralThesis()
+    {
         $document = new Opus_Document($this->_documentId);
 
         $document->setType('doctoralthesis');
@@ -137,7 +145,8 @@ class CitationExport_Model_HelperTest extends ControllerTestCase {
         $this->assertContains('school      = {School of Life},', $output);
     }
 
-    public function testGetExtension() {
+    public function testGetExtension()
+    {
         $this->assertEquals('bib', $this->_helper->getExtension('bibtex'));
         $this->assertEquals('ris', $this->_helper->getExtension('ris'));
         $this->assertEquals('txt', $this->_helper->getExtension('unknown'));
@@ -145,7 +154,8 @@ class CitationExport_Model_HelperTest extends ControllerTestCase {
         $this->assertEquals('txt', $this->_helper->getExtension(''));
     }
 
-    public function testGetTemplateForDocument() {
+    public function testGetTemplateForDocument()
+    {
         $document = new Opus_Document($this->_documentId);
 
         $document->setType('masterthesis');
@@ -164,7 +174,8 @@ class CitationExport_Model_HelperTest extends ControllerTestCase {
      * @expectedException CitationExport_Model_Exception
      * @expectedExceptionMessage invalid_format
      */
-    public function testGetTemplateForDocumentInvalidFormat() {
+    public function testGetTemplateForDocumentInvalidFormat()
+    {
         $document = new Opus_Document($this->_documentId);
 
         $document->setType('masterthesis');
@@ -177,7 +188,8 @@ class CitationExport_Model_HelperTest extends ControllerTestCase {
      * @expectedException CitationExport_Model_Exception
      * @expectedExceptionMessage invalid_docid
      */
-    public function testGetDocumentMissingDocId() {
+    public function testGetDocumentMissingDocId()
+    {
         $this->_helper->getDocument($this->getRequest());
     }
 
@@ -185,13 +197,15 @@ class CitationExport_Model_HelperTest extends ControllerTestCase {
      * @expectedException CitationExport_Model_Exception
      * @expectedExceptionMessage invalid_docid
      */
-    public function testGetDocumentInvalidDocId() {
+    public function testGetDocumentInvalidDocId()
+    {
         $request = $this->getRequest();
         $request->setParam('docId', '9999');
         $this->_helper->getDocument($request);
     }
 
-    public function testGetDocument() {
+    public function testGetDocument()
+    {
         $request = $this->getRequest();
         $request->setParam('docId', '146');
         $document = $this->_helper->getDocument($request);
@@ -204,7 +218,8 @@ class CitationExport_Model_HelperTest extends ControllerTestCase {
      * @expectedException Application_Exception
      * @expectedExceptionMessage not allowed
      */
-    public function testGetDocumentUnpublished() {
+    public function testGetDocumentUnpublished()
+    {
         $this->enableSecurity();
         $this->loginUser('security7', 'security7pwd');
 
@@ -219,7 +234,8 @@ class CitationExport_Model_HelperTest extends ControllerTestCase {
         $this->assertEquals($this->_documentId, $document->getId());
     }
 
-    public function testGetPlainOutputRis() {
+    public function testGetPlainOutputRis()
+    {
         $document = new Opus_Document(146);
 
         $output = $this->_helper->getPlainOutput($document, 'ris.xslt');
@@ -228,6 +244,4 @@ class CitationExport_Model_HelperTest extends ControllerTestCase {
         $this->assertContains('T1  - COLN', $output);
         $this->assertContains('T2  - Parent Title', $output);
     }
-
 }
-

@@ -62,24 +62,26 @@
             <div><?= $person['identifier_misc'] ?></div>
         </td>
         <td class="documents"><a href="<?= $this->url(array_merge(
-                array(
-                    'module' => 'admin', 'controller' => 'documents', 'action' => 'index', 'state' => 'all'),
-                    $person
-            )) ?>"><?= count(Opus_Person::getPersonDocuments($person)) ?></a></td>
+            [
+                    'module' => 'admin', 'controller' => 'documents', 'action' => 'index', 'state' => 'all'],
+            $person
+        )) ?>"><?= count(Opus_Person::getPersonDocuments($person)) ?></a></td>
         <td class="roles">
             <?PHP foreach (Opus_Person::getPersonRoles($person) as $role) : ?>
-            <a href="<?= $this->url(array_merge(array(
-                    'module' => 'admin', 'controller' => 'documents', 'action' => 'index', 'state' => 'all', 'role' => $role['role']),
-                    $person
+            <a href="<?= $this->url(array_merge(
+                [
+                    'module' => 'admin', 'controller' => 'documents', 'action' => 'index', 'state' => 'all', 'role' => $role['role']],
+                $person
             )) ?>" class="role <?= $role['role'] ?>"><?=
                 $this->translate('Opus_Person_Role_Value_' . ucfirst($role['role']))
                 ?> <span class="count">(<?= $role['documents'] ?>)</span></a>
             <?PHP endforeach ?>
         </td>
-        <td><a href="<?= $this->url(array_merge(array(
-                'module' => 'admin', 'controller' => 'person', 'action' => 'edit'),
-                $person
-            )) ?>"><?= $this->translate('admin_form_action_edit') ?></a></td>
+        <td><a href="<?= $this->url(array_merge(
+            [
+                'module' => 'admin', 'controller' => 'person', 'action' => 'edit'],
+            $person
+        )) ?>"><?= $this->translate('admin_form_action_edit') ?></a></td>
     </tr>
 <?PHP endforeach ?>
 </table>

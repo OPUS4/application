@@ -36,14 +36,14 @@
 
 <div id="facets" class="results_facets">
     <h3><?= $this->translate('facets_menu_title')  ?> </h3>
-    <?php foreach($this->facets as $key => $facet) : ?>
+    <?php foreach ($this->facets as $key => $facet) : ?>
         <div id="<?= $key ?>_facet" class="facet">
             <?PHP
                 $facetUrl = $this->firstPage;
                 $facetUrl["facetNumber_" . $key] = 'all'; ?>
             <h4><?= $this->translate($key . "_facet_heading") ?> </h4>
             <ul>
-                <?php foreach($facet as $facetItem) :
+                <?php foreach ($facet as $facetItem) :
                     $fqUrl = $this->firstPage;
                     $fqUrl[$key.'fq'] = $facetItem->getText();
                     $fqLinkRel = count($this->selectedFacets) > 0 ? 'rel="nofollow"' : '';
@@ -70,7 +70,7 @@
                 <?php endforeach ?>
             </ul>
             <?PHP if ($this->showFacetExtender[$key]) : ?>
-                <?PHP if (!isset($this->openFacets[$key])) : ?>
+                <?PHP if (! isset($this->openFacets[$key])) : ?>
                     <div class="facetValueExtender"><a href="<?= $this->url($facetUrl) . '#' . $key . '_facet' ?>"
                             title="<?= $this->translate('facets_more_title') ?>">
                             <?= $this->translate('facets_more_results') ?></a></div>

@@ -27,7 +27,8 @@
  * @category    Tests
  * @package     Frontdoor
  * @author      Thoralf Klein <thoralf.klein@zib.de>
- * @copyright   Copyright (c) 2012-2018, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2012-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -36,19 +37,31 @@
  *
  * @covers Frontdoor_DeliverController
  */
-class Frontdoor_DeliverControllerTest extends ControllerTestCase {
+class Frontdoor_DeliverControllerTest extends ControllerTestCase
+{
+
+    protected $additionalResources = ['database', 'authz', 'view', 'mainMenu', 'translation'];
+
+    public function setUp()
+    {
+        parent::setUpWithEnv('production');
+        $this->assertSecurityConfigured();
+    }
 
     /**
      * Use this test to trigger class loader on 'Frontdoor_DeliverController'.
      */
-    public function testClassLoaded() {
+    public function testClassLoaded()
+    {
         $this->dispatch('/frontdoor/deliver/index');
         $this->assertController('deliver');
         $this->assertAction('index');
 
         // Use this assertion to trigger autoloader
-        $this->assertTrue(class_exists('Frontdoor_DeliverController'),
-                'could not load tested class');
+        $this->assertTrue(
+            class_exists('Frontdoor_DeliverController'),
+            'could not load tested class'
+        );
     }
 
     /**
@@ -56,14 +69,15 @@ class Frontdoor_DeliverControllerTest extends ControllerTestCase {
      *
      * @depends testClassLoaded
      */
-    public function testQuoteAsciiFileName() {
-        $testcase = array(
+    public function testQuoteAsciiFileName()
+    {
+        $testcase = [
             'my-file.txt' => 'my-file.txt',
             'my file.txt' => 'my file.txt',
             'my,file.txt' => 'my,file.txt',
-        );
+        ];
 
-        foreach ($testcase AS $string => $expected_output) {
+        foreach ($testcase as $string => $expected_output) {
             $output = Frontdoor_DeliverController::quoteFileName($string);
             $this->assertEquals($expected_output, $output);
         }
@@ -74,16 +88,45 @@ class Frontdoor_DeliverControllerTest extends ControllerTestCase {
      *
      * @depends testClassLoaded
      */
-    public function testQuoteUnicodeFileName() {
-        $testcase = array(
+    public function testQuoteUnicodeFileName()
+    {
+        $testcase = [
             'schrödinger-equation.pdf' => '=?UTF-8?B?c2NocsO2ZGluZ2VyLWVxdWF0aW9uLnBkZg==?=',
             'with "weird" chars.pdf'   => '=?UTF-8?B?d2l0aCAid2VpcmQiIGNoYXJzLnBkZg==?=',
-        );
+        ];
 
-        foreach ($testcase AS $string => $expected_output) {
+        foreach ($testcase as $string => $expected_output) {
             $output = Frontdoor_DeliverController::quoteFileName($string);
             $this->assertEquals($expected_output, $output);
         }
     }
 
+    public function testHttpResponseCodeSetForUnpublished()
+    {
+        $doc = $this->createTestDocument();
+        $file = $this->createTestFile('test.pdf');
+        $doc->addFile($file);
+        $doc->setServerState('unpublished');
+        $docId = $doc->store();
+
+        $this->dispatch("/frontdoor/deliver/index/docId/$docId/file/test.pdf");
+
+        // denied because document not published
+        $this->assertResponseCode(403);
+    }
+
+    public function testHttpResponseCodeSetForProtectedFile()
+    {
+        $doc = $this->createTestDocument();
+        $file = $this->createTestFile('test.pdf');
+        $file->setVisibleInFrontdoor(0);
+        $doc->addFile($file);
+        $doc->setServerState('published');
+        $docId = $doc->store();
+
+        $this->dispatch("/frontdoor/deliver/index/docId/$docId/file/test.pdf");
+
+        // denied because document not published
+        $this->assertResponseCode(403);
+    }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -27,41 +28,47 @@
  * @category    Application Unit Test
  * @package     Form_Element
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Application_Form_Element_CollectionDisplayFormatTest extends FormElementTestCase {
+class Application_Form_Element_CollectionDisplayFormatTest extends FormElementTestCase
+{
+
+    protected $additionalResources = 'translation';
 
     private $keys = null;
 
     private $values = null;
 
-    public function setUp() {
-        $this->keys = array('Name', 'Number', 'NameNumber', 'NumberName');
-        $this->values = array('Name', 'Number', 'Name,Number', 'Number,Name');
+    public function setUp()
+    {
+        $this->keys = ['Name', 'Number', 'NameNumber', 'NumberName'];
+        $this->values = ['Name', 'Number', 'Name,Number', 'Number,Name'];
 
         $this->_formElementClass = 'Application_Form_Element_CollectionDisplayFormat';
         $this->_expectedDecoratorCount = 6;
-        $this->_expectedDecorators = array('ViewHelper', 'Errors', 'Description', 'ElementHtmlTag', 'LabelNotEmpty',
-            'dataWrapper');
+        $this->_expectedDecorators = ['ViewHelper', 'Errors', 'Description', 'ElementHtmlTag', 'LabelNotEmpty',
+            'dataWrapper'];
         $this->_staticViewHelper = 'viewFormSelect';
 
         parent::setUp();
     }
 
-    public function testOptions() {
+    public function testOptions()
+    {
         $element = $this->getElement();
 
         $options = $element->getMultiOptions();
 
         $this->assertEquals(count($this->values), count($options));
 
-        foreach($this->values as $value) {
+        foreach ($this->values as $value) {
             $this->assertTrue(array_key_exists($value, $options), "Value '$value' is missing.");
         }
     }
 
-    public function testOptionsTranslated() {
+    public function testOptionsTranslated()
+    {
         $translator = Zend_Registry::get('Zend_Translate');
 
         foreach ($this->keys as $key) {
@@ -69,7 +76,8 @@ class Application_Form_Element_CollectionDisplayFormatTest extends FormElementTe
         }
     }
 
-    public function testSetValueWithSpaces() {
+    public function testSetValueWithSpaces()
+    {
         $element = $this->getElement();
 
         $element->setValue(' Name, Number ');
@@ -80,5 +88,4 @@ class Application_Form_Element_CollectionDisplayFormatTest extends FormElementTe
 
         $this->assertEquals('Number,Name', $element->getValue());
     }
-
 }

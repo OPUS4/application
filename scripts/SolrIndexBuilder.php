@@ -42,7 +42,8 @@ require_once dirname(__FILE__) . '/common/bootstrap.php';
  *
  * TODO move to class and unit test
  */
-class SolrIndexBuilder {
+class SolrIndexBuilder
+{
 
     /**
      * Start of document ID range for indexing (first command line parameter).
@@ -89,7 +90,8 @@ class SolrIndexBuilder {
     /**
      * Prints a help message to the console.
      */
-    private function printHelpMessage($argv) {
+    private function printHelpMessage($argv)
+    {
         $text = <<<EOT
 OPUS 4 SolrIndexBuilder
 
@@ -121,8 +123,9 @@ EOT;
     /**
      * Evaluates command line arguments.
      */
-    private function evaluateArguments($argc, $argv) {
-        $options = getopt("cdh", array('help', 'debug'));
+    private function evaluateArguments($argc, $argv)
+    {
+        $options = getopt("cdh", ['help', 'debug']);
 
         if (array_key_exists('debug', $options) || array_key_exists('d', $options)) {
             $this->_debugEnabled = true;
@@ -137,28 +140,23 @@ EOT;
             $this->_clearCache = true;
         }
 
-        if ($argc == 2)
-        {
+        if ($argc == 2) {
             $start = $argv[$argc - 1];
-        }
-        else if ($argc > 2)
-        {
+        } elseif ($argc > 2) {
             $start = $argv[$argc - 2];
             $end = $argv[$argc - 1];
         }
 
-        if (is_numeric($start) && ctype_digit($start))
-        {
+        if (is_numeric($start) && ctype_digit($start)) {
             $this->_start = $start;
         }
 
-        if (is_numeric($end) && ctype_digit($end))
-        {
+        if (is_numeric($end) && ctype_digit($end)) {
             $this->_end = $end;
         }
 
         // check if only end is set (happens when options are used)
-        if (is_null($this->_start) && !is_null($this->_end)) {
+        if (is_null($this->_start) && ! is_null($this->_end)) {
             $this->_start = $this->_end;
             $this->_end = null;
         }
@@ -172,7 +170,8 @@ EOT;
     /**
      * Starts an Opus console.
      */
-    public function run($argc, $argv) {
+    public function run($argc, $argv)
+    {
         $this->evaluateArguments($argc, $argv);
 
         if ($this->_showHelp) {
@@ -180,27 +179,21 @@ EOT;
             return;
         }
 
-        if (!is_null($this->_end))
-        {
+        if (! is_null($this->_end)) {
             echo PHP_EOL . "Indexing documents {$this->_start} to {$this->_end} ..." . PHP_EOL;
-        }
-        else if (!is_null($this->_start))
-        {
+        } elseif (! is_null($this->_start)) {
             echo PHP_EOL . "Indexing documents starting at ID = {$this->_start} ..." . PHP_EOL;
-        }
-        else
-        {
+        } else {
             echo PHP_EOL . 'Indexing all documents ...' . PHP_EOL;
         }
 
         try {
             $runtime = $this->index($this->_start, $this->_end);
             echo PHP_EOL . "Operation completed successfully in $runtime seconds." . PHP_EOL;
-        }
-        catch (Opus_Search_Exception $e) {
+        } catch (Opus_Search_Exception $e) {
             echo PHP_EOL . "An error occurred while indexing.";
             echo PHP_EOL . "Error Message: " . $e->getMessage();
-            if (!is_null($e->getPrevious())) {
+            if (! is_null($e->getPrevious())) {
                 echo PHP_EOL . "Caused By: " . $e->getPrevious()->getMessage();
             }
             echo PHP_EOL . "Stack Trace:" . PHP_EOL . $e->getTraceAsString();
@@ -208,12 +201,13 @@ EOT;
         }
     }
 
-    private function index($startId, $endId) {
+    private function index($startId, $endId)
+    {
         $this->forceSyncMode();
 
         $docIds = $this->getDocumentIds($startId, $endId);
 
-        $indexer = Opus_Search_Service::selectIndexingService( 'indexBuilder' );
+        $indexer = Opus_Search_Service::selectIndexingService('indexBuilder');
 
         if ($this->_deleteAllDocs) {
             echo 'Removing all documents from the index ...' . PHP_EOL;
@@ -224,7 +218,7 @@ EOT;
         $numOfDocs = 0;
         $runtime = microtime(true);
 
-        $docs = array();
+        $docs = [];
 
         // measure time for each document
 
@@ -252,15 +246,15 @@ EOT;
             $numOfDocs++;
 
             if ($numOfDocs % 10 == 0) {
-                $this->addDocumentsToIndex( $indexer, $docs );
-                $docs = array();
+                $this->addDocumentsToIndex($indexer, $docs);
+                $docs = [];
                 $this->outputProgress($runtime, $numOfDocs);
             }
         }
 
         // Index leftover documents
         if (count($docs) > 0) {
-            $this->addDocumentsToIndex( $indexer, $docs );
+            $this->addDocumentsToIndex($indexer, $docs);
             $this->outputProgress($runtime, $numOfDocs);
         }
 
@@ -283,7 +277,8 @@ EOT;
      * @param $end int End of ID range
      * @return array Array of document IDs
      */
-    private function getDocumentIds($start, $end) {
+    private function getDocumentIds($start, $end)
+    {
         $finder = new Opus_DocumentFinder();
 
         $finder->setServerState('published');
@@ -305,7 +300,8 @@ EOT;
      * @param $runtime long Time of start of processing
      * @param $numOfDocs Number of processed documents
      */
-    private function outputProgress($runtime, $numOfDocs) {
+    private function outputProgress($runtime, $numOfDocs)
+    {
         $memNow = round(memory_get_usage() / 1024 / 1024);
         $memPeak = round(memory_get_peak_usage() / 1024 / 1024);
 
@@ -317,43 +313,42 @@ EOT;
             . " peak memory $memPeak (MB), $docPerSecond docs/second, $secondsPerDoc seconds/doc" . PHP_EOL;
     }
 
-    private function addDocumentsToIndex($indexer, $docs) {
+    private function addDocumentsToIndex($indexer, $docs)
+    {
         try {
-            $indexer->addDocumentsToIndex( $docs );
-        }
-        catch ( Opus_Search_Exception $e ) {
+            $indexer->addDocumentsToIndex($docs);
+        } catch (Opus_Search_Exception $e) {
             // echo date('Y-m-d H:i:s') . " ERROR: Failed indexing document $docId.\n";
             echo date('Y-m-d H:i:s') . "        {$e->getMessage()}\n";
-
-        }
-        catch ( Opus_Storage_Exception $e ) {
+        } catch (Opus_Storage_Exception $e) {
             // echo date('Y-m-d H:i:s') . " ERROR: Failed indexing unavailable file on document $docId.\n";
             echo date('Y-m-d H:i:s') . "        {$e->getMessage()}\n";
-
         }
     }
 
-    private function forceSyncMode() {
+    private function forceSyncMode()
+    {
         $config = Zend_Registry::get('Zend_Config');
-        if (isset($config->runjobs->asynchronous) && $config->runjobs->asynchronous) {
+        if (isset($config->runjobs->asynchronous) && filter_var($config->runjobs->asynchronous, FILTER_VALIDATE_BOOLEAN)) {
             $this->_syncMode = false;
-            $config->runjobs->asynchronous = 0;
+            $config->runjobs->asynchronous = ''; // false
             Zend_Registry::set('Zend_Config', $config);
         }
     }
 
-    private function resetMode() {
-        if (!$this->_syncMode) {
+    private function resetMode()
+    {
+        if (! $this->_syncMode) {
             $config = Zend_Registry::get('Zend_Config');
-            $config->runjobs->asynchronous = 1;
+            $config->runjobs->asynchronous = '1'; // true
             Zend_Registry::set('Zend_Config', $config);
         }
     }
 
-    private function write($str) {
+    private function write($str)
+    {
         echo $str;
     }
-
 }
 
 /**

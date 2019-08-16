@@ -48,6 +48,8 @@ class Application_Util_Notification extends Application_Model_Abstract
      * @param boolean $notifySubmitter Wenn false, wird der Submitter nicht notifiziert
      * @param array $notifyAuthors Bitmaske, die für jeden Autor (über den Index referenziert) angibt, ob ihm/ihr eine
      *                             E-Mail gesendet werden kann (wenn false, dann wird keine Notifizierung versendet)
+     *
+     * TODO this class should not collect recipients on its own -> recipients should be provided
      */
     public function prepareMail($document, $url, $notifySubmitter = true, $notifyAuthors = [])
     {
@@ -56,24 +58,11 @@ class Application_Util_Notification extends Application_Model_Abstract
         $logger->info("prepare notification email for document id " . $document->getId());
 
         $authorAddresses = [];
-        $authors = [];
-
-        $personAuthors = $document->getPersonAuthor();
-        if (!empty($personAuthors)) {
-            $index = 0;
-            foreach ($personAuthors as $author) {
-                // TODO Komma nur wenn FirstName present
-                $name = trim($author->getLastName() . ", " . $author->getFirstName());
-                array_push($authors, $name);
-
-                $index++;
-            }
-        }
-
-        $title = $document->getMainTitle();
+        $authors = $this->getAuthors($document);
+        $title = $this->getMainTitle($document);
 
         $this->scheduleNotification(
-            $this->getMailSubject($document->getId(), $authors, $title),
+            $this->getMailSubject($document, $authors),
             $this->getMailBody($document->getId(), $authors, $title, $url),
             $this->getRecipients($authorAddresses, $document, $notifySubmitter)
         );
@@ -81,28 +70,112 @@ class Application_Util_Notification extends Application_Model_Abstract
         $logger->info("notification mail creation was completed successfully");
     }
 
-    private function getMailSubject($docId, $authors, $title)
+    public function getMainTitle($document)
+    {
+        // TODO refactor getting main title value
+        $titleObj = $document->getMainTitle();
+
+        if (! is_null($titleObj)) {
+            return $titleObj->getValue();
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * @param $document
+     * @param $url
+     * @param $recipients
+     *
+     * TODO this function is only used for PublicatioNotification at the moment - cleanup!
+     */
+    public function prepareMailFor($document, $url, $recipients)
     {
         $logger = $this->getLogger();
 
-        $authorString = "";
+        $logger->info("prepare notification email for document id " . $document->getId());
+
+        $authors = $this->getAuthors($document);
+
+        $title = $this->getMainTitle($document);
+
+        // TODO currently we need to convert between the old and new array structure
+        // TODO the components and interfaces involved need to be defined clearly
+
+        $converted = [];
+
+        foreach ($recipients as $address => $recipient) {
+            $entry = [];
+            $entry['address'] = $address;
+
+            if (is_array($recipient['name'])) {
+                $entry['name'] = $recipient['name'][0]; // TODO only use name of first address occurence
+            } else {
+                $entry['name'] = $recipient['name'];
+            }
+        }
+
+        $this->scheduleNotification(
+            $this->getMailSubject($document, $authors),
+            $this->getMailBody($document->getId(), $authors, $title, $url),
+            $converted
+        );
+
+        $logger->info("notification mail creation was completed successfully");
+    }
+
+    public function getAuthors($document)
+    {
+        $authors = [];
+
+        $personAuthors = $document->getPersonAuthor();
+        if (! empty($personAuthors)) {
+            foreach ($personAuthors as $author) {
+                // TODO Komma nur wenn FirstName present
+                $name = trim($author->getLastName() . ", " . $author->getFirstName());
+                array_push($authors, $name);
+            }
+        }
+
+        return $authors;
+    }
+
+    /**
+     * @param $document Opus_Document
+     * @param $docId
+     * @param $authors
+     * @param $title
+     * @return string
+     *
+     * TODO refactor for single document parameter?
+     */
+    public function getMailSubject($document, $authors)
+    {
+        $logger = $this->getLogger();
+
+        $title = $this->getMainTitle($document);
+
+        $authorString = '';
+
         for ($i = 0; $i < count($authors); $i++) {
             if ($i > 0) {
-                $authorString .= " ; ";
+                $authorString .= ' ; ';
             }
             $authorString .= $authors[$i];
         }
-        if ($authorString == "") {
-            $authorString = "n/a";
+
+        if ($authorString == '') {
+            $authorString = 'n/a';
         }
-        if ($title == "") {
-            $title = "n/a";
+
+        if ($title == '') {
+            $title = 'n/a';
         }
 
         $subjectTemplate = $this->getSubjectTemplate();
 
         if (strlen(trim($subjectTemplate)) > 0) {
-            return sprintf($subjectTemplate, $docId, $authorString, $title);
+            return sprintf($subjectTemplate, $document->getId(), $authorString, $title);
         } else {
             $logger->err("could not construct mail subject based on application configuration");
             return '';
@@ -112,7 +185,6 @@ class Application_Util_Notification extends Application_Model_Abstract
     public function getSubjectTemplate()
     {
         $config = $this->getConfig();
-
         if (isset($config->notification->document->submitted->subject)) {
             return $config->notification->document->submitted->subject;
         }
@@ -121,11 +193,13 @@ class Application_Util_Notification extends Application_Model_Abstract
     public function getMailBody($docId, $authors, $title, $url)
     {
         $config = $this->getConfig();
-
         if (isset($config->notification->document->submitted->template)) {
             return $this->getTemplate(
-                $config->notification->document->submitted->template, $docId, $authors,
-                $title, $url
+                $config->notification->document->submitted->template,
+                $docId,
+                $authors,
+                $title,
+                $url
             );
         }
     }
@@ -133,7 +207,7 @@ class Application_Util_Notification extends Application_Model_Abstract
     public function getTemplate($template, $docId, $authors, $title, $url)
     {
         $templateFileName = APPLICATION_PATH . '/application/configs/mail_templates/' . $template;
-        if (!is_file($templateFileName)) {
+        if (! is_file($templateFileName)) {
             $this->getLogger()->err(
                 "could not find mail template based on application configuration: '$templateFileName'"
                 . ' does not exist or is not readable'
@@ -142,12 +216,12 @@ class Application_Util_Notification extends Application_Model_Abstract
         }
         ob_start();
         extract(
-            array(
+            [
             "authors" => $authors,
             "title" => $title,
             "docId" => $docId,
             "url" => $url
-            )
+            ]
         );
         require($templateFileName);
         $body = ob_get_contents();
@@ -196,7 +270,7 @@ class Application_Util_Notification extends Application_Model_Abstract
         $config = $this->getConfig();
 
         return isset($config->notification->document->published->enabled)
-                && $config->notification->document->published->enabled == 1;
+                && filter_var($config->notification->document->published->enabled, FILTER_VALIDATE_BOOLEAN);
     }
 
     /**
@@ -219,7 +293,7 @@ class Application_Util_Notification extends Application_Model_Abstract
 
         foreach ($recipients as $recipient) {
             // only send if email address has not been used before
-            if (!in_array($recipient['address'], $addressesUsed)) {
+            if (! in_array($recipient['address'], $addressesUsed)) {
                 $job = new Opus_Job();
                 $job->setLabel(Opus_Job_Worker_MailNotification::LABEL);
                 $job->setData([
@@ -230,7 +304,8 @@ class Application_Util_Notification extends Application_Model_Abstract
 
                 $config = $this->getConfig();
 
-                if (isset($config->runjobs->asynchronous) && $config->runjobs->asynchronous) {
+                if (isset($config->runjobs->asynchronous) &&
+                    filter_var($config->runjobs->asynchronous, FILTER_VALIDATE_BOOLEAN)) {
                     // Queue job (execute asynchronously)
                     // skip creating job if equal job already exists
                     if (true === $job->isUniqueInQueue()) {
@@ -241,8 +316,7 @@ class Application_Util_Notification extends Application_Model_Abstract
                     try {
                         $mail = new Opus_Job_Worker_MailNotification($this->getLogger(), false);
                         $mail->work($job);
-                    }
-                    catch (Exception $exc) {
+                    } catch (Exception $exc) {
                         $this->getLogger()->err("Email notification failed: " . $exc);
                     }
                 }

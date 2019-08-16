@@ -39,7 +39,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Application_Controller_MessageTemplates {
+class Application_Controller_MessageTemplates
+{
 
     /**
      * Nachrichten.
@@ -65,8 +66,9 @@ class Application_Controller_MessageTemplates {
      * Konstruiert Instanz mit Basisnachrichten.
      * @param array $messages
      */
-    public function __construct($messages) {
-        if (is_null($messages) || !is_array($messages)) {
+    public function __construct($messages)
+    {
+        if (is_null($messages) || ! is_array($messages)) {
             throw new Application_Exception(__METHOD__ . ' Parameter \'messages\' is required and must be an array.');
         }
 
@@ -78,7 +80,8 @@ class Application_Controller_MessageTemplates {
      *
      * @return array
      */
-    public function getMessages() {
+    public function getMessages()
+    {
         return $this->_messages;
     }
 
@@ -86,13 +89,13 @@ class Application_Controller_MessageTemplates {
      * Setzt mehrere Nachrichten.
      * @param array $messages
      */
-    public function setMessages($messages) {
+    public function setMessages($messages)
+    {
         if (is_array($messages)) {
             foreach ($messages as $key => $message) {
                 $this->setMessage($key, $message);
             }
         }
-
     }
 
     /**
@@ -101,11 +104,11 @@ class Application_Controller_MessageTemplates {
      * @throws Application_Exception
      * @return string
      */
-    public function getMessage($key) {
+    public function getMessage($key)
+    {
         if (array_key_exists($key, $this->_messages)) {
             return $this->_messages[$key];
-        }
-        else {
+        } else {
             throw new Application_Exception("Message key '$key' is not defined.");
         }
     }
@@ -118,9 +121,10 @@ class Application_Controller_MessageTemplates {
      * @param $key Nachrichtenschlüssel
      * @param $message Nachricht
      */
-    public function setMessage($key, $message) {
-        if (!is_array($this->_messages)) {
-            $this->_messages = array();
+    public function setMessage($key, $message)
+    {
+        if (! is_array($this->_messages)) {
+            $this->_messages = [];
         }
 
         if (is_null($message)) {
@@ -129,5 +133,4 @@ class Application_Controller_MessageTemplates {
 
         $this->_messages[$key] = $message;
     }
-
 }

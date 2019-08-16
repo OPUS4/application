@@ -27,12 +27,14 @@
  * @category    Tests
  * @package     Admin
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 class Admin_Form_WorkflowNotificationTest extends ControllerTestCase
 {
+
+    protected $additionalResources = ['database'];
 
     private $doc;
 
@@ -86,7 +88,7 @@ class Admin_Form_WorkflowNotificationTest extends ControllerTestCase
     {
         $this->setUpTestDocument();
 
-        $form = new Admin_Form_DocumentStateChange('published');
+        $form = new Admin_Form_WorkflowNotification('published');
 
         $recipients = $form->getRecipients($this->doc);
 
@@ -112,6 +114,29 @@ class Admin_Form_WorkflowNotificationTest extends ControllerTestCase
         ], $recipients);
     }
 
+    public function testGetSelectedRecipients()
+    {
+        $this->setUpTestDocument();
+
+        $form = new Admin_Form_WorkflowNotification('published');
+
+        $post = [
+            'sureyes' => 'Yes',
+            'id' => 150,
+            'submitter' => '1',
+            'author_0' => '1',
+            'author_1' => '1',
+            'author_2' => '1'
+        ];
+
+        $recipients = $form->getSelectedRecipients($this->doc, $post);
+
+        $this->assertCount(2, $recipients);
+        $this->assertArrayHasKey('john@example.org', $recipients);
+        $this->assertArrayHasKey('jane@example.org', $recipients);
+
+        // TODO check more expectations (array structure)
+    }
 
     /* TODO integrate or delete
      *     /**

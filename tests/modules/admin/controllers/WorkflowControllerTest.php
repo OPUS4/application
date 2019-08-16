@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -39,11 +39,12 @@
  */
 class Admin_WorkflowControllerTest extends ControllerTestCase
 {
+    protected $additionalResources = 'all';
 
     private function enablePublishNotification()
     {
         $config = Zend_Registry::get('Zend_Config');
-        $config->notification->document->published->enabled = 1;
+        $config->notification->document->published->enabled = self::CONFIG_VALUE_TRUE;
         $config->notification->document->published->email = "published@localhost";
     }
 
@@ -202,10 +203,14 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
         $this->assertEquals(302, $this->getResponse()->getHttpResponseCode());
         $this->assertResponseLocationHeader($this->getResponse(), '/admin/document/index/id/100');
 
-        $this->assertFalse($this->getResponse()->getHttpResponseCode() == 200,
-                "Request was not redirected.");
-        $this->assertTrue($this->getResponse()->getHttpResponseCode() != 500,
-                "Request produced internal error. " . $this->getResponse()->getBody());
+        $this->assertFalse(
+            $this->getResponse()->getHttpResponseCode() == 200,
+            "Request was not redirected."
+        );
+        $this->assertTrue(
+            $this->getResponse()->getHttpResponseCode() != 500,
+            "Request produced internal error. " . $this->getResponse()->getBody()
+        );
     }
 
     /**
@@ -233,10 +238,14 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
         $this->assertEquals(302, $this->getResponse()->getHttpResponseCode());
         $this->assertResponseLocationHeader($this->getResponse(), '/admin/document/index/id/123');
 
-        $this->assertFalse($this->getResponse()->getHttpResponseCode() == 200,
-                "Request was not redirected.");
-        $this->assertTrue($this->getResponse()->getHttpResponseCode() != 500,
-                "Request produced internal error.");
+        $this->assertFalse(
+            $this->getResponse()->getHttpResponseCode() == 200,
+            "Request was not redirected."
+        );
+        $this->assertTrue(
+            $this->getResponse()->getHttpResponseCode() != 500,
+            "Request produced internal error."
+        );
     }
 
     /**
@@ -250,10 +259,14 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
         $this->assertEquals(302, $this->getResponse()->getHttpResponseCode());
         $this->assertResponseLocationHeader($this->getResponse(), '/admin/documents');
 
-        $this->assertFalse($this->getResponse()->getHttpResponseCode() == 200,
-                "Request was not redirected.");
-        $this->assertTrue($this->getResponse()->getHttpResponseCode() != 500,
-                "Request produced internal error. " . $this->getResponse()->getBody());
+        $this->assertFalse(
+            $this->getResponse()->getHttpResponseCode() == 200,
+            "Request was not redirected."
+        );
+        $this->assertTrue(
+            $this->getResponse()->getHttpResponseCode() != 500,
+            "Request produced internal error. " . $this->getResponse()->getBody()
+        );
     }
 
     /**
@@ -267,16 +280,21 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
         $this->assertEquals(302, $this->getResponse()->getHttpResponseCode());
         $this->assertResponseLocationHeader($this->getResponse(), '/admin/documents');
 
-        $this->assertFalse($this->getResponse()->getHttpResponseCode() == 200,
-                "Request was not redirected.");
-        $this->assertTrue($this->getResponse()->getHttpResponseCode() != 500,
-                "Request produced internal error. " . $this->getResponse()->getBody());
+        $this->assertFalse(
+            $this->getResponse()->getHttpResponseCode() == 200,
+            "Request was not redirected."
+        );
+        $this->assertTrue(
+            $this->getResponse()->getHttpResponseCode() != 500,
+            "Request produced internal error. " . $this->getResponse()->getBody()
+        );
     }
 
     public function testNotificationIsNotSupported()
     {
         $doc = $this->createDocWithSubmitterAndAuthor(
-            'submitter@localhost.de', 'author@localhost.de'
+            'submitter@localhost.de',
+            'author@localhost.de'
         );
         $this->dispatch('/admin/workflow/changestate/docId/' . $doc->getId() . '/targetState/published');
 
@@ -285,10 +303,12 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
         $this->assertNotContains('submitter@localhost.de', $body);
         $this->assertNotContains('author@localhost.de', $body);
         $this->assertNotContains(
-            '<input type="checkbox" name="submitter" id="submitter"', $body
+            '<input type="checkbox" name="submitter" id="submitter"',
+            $body
         );
         $this->assertNotContains(
-            '<input type="checkbox" name="author_1" id="author_1"', $body
+            '<input type="checkbox" name="author_1" id="author_1"',
+            $body
         );
     }
 
@@ -296,7 +316,8 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
     {
         $this->enablePublishNotification();
         $doc = $this->createDocWithSubmitterAndAuthor(
-            'submitter@localhost.de', 'author@localhost.de'
+            'submitter@localhost.de',
+            'author@localhost.de'
         );
         $this->dispatch('/admin/workflow/changestate/docId/' . $doc->getId() . '/targetState/published');
 
@@ -304,17 +325,15 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
 
         $this->assertContains('submitter@localhost.de', $body);
         $this->assertContains('author@localhost.de', $body);
-        $this->assertContains(
-            '<input type="checkbox" name="submitter" id="submitter" value="1" checked="checked"',
-            $body
-        );
+        $this->assertXpath('//input[@type="checkbox" and @id="submitter" and @name="submitter" and @value="1" and @checked="checked"]');
     }
 
     public function testAuthorNotificationIsAvailable()
     {
         $this->enablePublishNotification();
         $doc = $this->createDocWithSubmitterAndAuthor(
-            'submitter@localhost.de', 'author@localhost.de'
+            'submitter@localhost.de',
+            'author@localhost.de'
         );
         $this->dispatch('/admin/workflow/changestate/docId/' . $doc->getId() . '/targetState/published');
 
@@ -322,10 +341,7 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
 
         $this->assertContains('submitter@localhost.de', $body);
         $this->assertContains('author@localhost.de', $body);
-        $this->assertContains(
-            '<input type="checkbox" name="author_1" id="author_1" value="1" checked="checked"',
-            $body
-        );
+        $this->assertXpath('//input[@type="checkbox" and @id="author_0" and @name="author_0" and @value="1" and @checked="checked"]');
     }
 
     public function testSubmitterNotificationIsNotAvailable()
@@ -339,14 +355,8 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
 
         $this->assertNotContains('submitter@localhost.de', $body);
         $this->assertContains('author@localhost.de', $body);
-        $this->assertContains(
-            '<input type="checkbox" name="submitter" id="submitter" value="1" disabled="1"',
-            $body
-        );
-        $this->assertContains(
-            '<input type="checkbox" name="author_1" id="author_1" value="1" checked="checked"',
-            $body
-        );
+        $this->assertXpath('//input[@type="checkbox" and @id="submitter" and @name="submitter" and @value="1" and @disabled="disabled"]');
+        $this->assertXpath('//input[@type="checkbox" and @id="author_0" and @name="author_0" and @value="1" and @checked="checked"]');
     }
 
     public function testAuthorNotificationIsNotAvailable()
@@ -360,21 +370,16 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
 
         $this->assertContains('submitter@localhost.de', $body);
         $this->assertNotContains('author@localhost.de', $body);
-        $this->assertContains(
-            '<input type="checkbox" name="submitter" id="submitter" value="1" checked="checked"',
-            $body
-        );
-        $this->assertContains(
-            '<input type="checkbox" name="author_1" id="author_1" value="1" disabled="1"',
-            $body
-        );
+        $this->assertXpath('//input[@type="checkbox" and @id="submitter" and @name="submitter" and @value="1" and @checked="checked"]');
+        $this->assertXpath('//input[@type="checkbox" and @id="author_0" and @name="author_0" and @value="1" and @disabled="disabled"]');
     }
 
     public function testAuthorNotificationForMultipleAuthors()
     {
         $this->enablePublishNotification();
         $doc = $this->createDocWithSubmitterAndAuthor(
-            'submitter@localhost.de', 'author@localhost.de'
+            'submitter@localhost.de',
+            'author@localhost.de'
         );
 
         $author = new Opus_Person();
@@ -405,21 +410,11 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
         $this->assertContains('A@localhost.de', $body);
         $this->assertContains('C@localhost.de', $body);
 
-        $this->assertContains(
-            '<input type="checkbox" name="submitter" id="submitter" value="1" checked="checked"', $body
-        );
-        $this->assertContains(
-            '<input type="checkbox" name="author_1" id="author_1" value="1" checked="checked"', $body
-        );
-        $this->assertContains(
-            '<input type="checkbox" name="author_2" id="author_2" value="1" checked="checked"', $body
-        );
-        $this->assertContains(
-            '<input type="checkbox" name="author_3" id="author_3" value="1" disabled="1"', $body
-        );
-        $this->assertContains(
-            '<input type="checkbox" name="author_4" id="author_4" value="1" checked="checked"', $body
-        );
+        $this->assertXpath('//input[@type="checkbox" and @id="submitter" and @name="submitter" and @value="1" and @checked="checked"]');
+        $this->assertXpath('//input[@type="checkbox" and @id="author_0" and @name="author_0" and @value="1" and @checked="checked"]');
+        $this->assertXpath('//input[@type="checkbox" and @id="author_1" and @name="author_1" and @value="1" and @checked="checked"]');
+        $this->assertXpath('//input[@type="checkbox" and @id="author_2" and @name="author_2" and @value="1" and @disabled="disabled"]');
+        $this->assertXpath('//input[@type="checkbox" and @id="author_3" and @name="author_3" and @value="1" and @checked="checked"]');
     }
 
     public function testShowDocInfoOnConfirmationPage()
@@ -438,7 +433,7 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
     public function testConfirmationDisabled()
     {
         Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
-            'confirmation' => ['document' => ['statechange' => ['enabled' => '0']]]
+            'confirmation' => ['document' => ['statechange' => ['enabled' => self::CONFIG_VALUE_FALSE]]]
         ]));
 
         $this->dispatch('/admin/workflow/changestate/docId/102/targetState/deleted');

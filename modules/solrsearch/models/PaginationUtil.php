@@ -31,7 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Solrsearch_Model_PaginationUtil {
+class Solrsearch_Model_PaginationUtil
+{
 
     // prequisites
     private $_rows;
@@ -53,7 +54,8 @@ class Solrsearch_Model_PaginationUtil {
      * @param string $query search query
      * @param string $searchType search type
      */
-    public function __construct($rows, $numHits, $startIndex, $query, $searchType) {
+    public function __construct($rows, $numHits, $startIndex, $query, $searchType)
+    {
         $this->_rows = $rows;
         $this->_numHits = $numHits;
         $this->_query = $query;
@@ -62,38 +64,43 @@ class Solrsearch_Model_PaginationUtil {
         $this->compute();
     }
 
-    private function compute() {
+    private function compute()
+    {
         $this->_lastPageStartIndex = 0;
-        $this->_lastPageStartIndex = (int) (($this->_numHits - 1) / $this->_rows)  * $this->_rows;
+        $this->_lastPageStartIndex = (int) (($this->_numHits - 1) / $this->_rows) * $this->_rows;
         $this->_prevPageStartIndex = $this->_startIndex - $this->_rows;
         $this->_nextPageStartIndex = $this->_startIndex + $this->_rows;
     }
 
-    public function getFirstPageUrlArray() {
+    public function getFirstPageUrlArray()
+    {
         return $this->constructUrlArrayWithStartIndex('0');
     }
 
-    public function getNextPageUrlArray() {
+    public function getNextPageUrlArray()
+    {
         return $this->constructUrlArrayWithStartIndex($this->_nextPageStartIndex);
     }
 
-    public function getPreviousPageUrlArray() {
+    public function getPreviousPageUrlArray()
+    {
         return $this->constructUrlArrayWithStartIndex($this->_prevPageStartIndex);
     }
 
-    public function getLastPageUrlArray() {
+    public function getLastPageUrlArray()
+    {
         return $this->constructUrlArrayWithStartIndex($this->_lastPageStartIndex);
     }
 
-    private function constructUrlArrayWithStartIndex($pageStartIndex) {
-        $array =  array(
-            'searchtype'=>$this->_searchType,
-            'start'=>$pageStartIndex,
-            'rows'=>$this->_rows);
+    private function constructUrlArrayWithStartIndex($pageStartIndex)
+    {
+        $array = [
+            'searchtype' => $this->_searchType,
+            'start' => $pageStartIndex,
+            'rows' => $this->_rows];
         if ($this->_query != null) {
             $array['query'] = $this->_query;
         }
         return $array;
     }
 }
-

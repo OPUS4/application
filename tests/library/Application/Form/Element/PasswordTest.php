@@ -27,22 +27,28 @@
  * @category    Application Unit Test
  * @package     Application_Form_Element
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
-class Application_Form_Element_PasswordTest extends FormElementTestCase {
+class Application_Form_Element_PasswordTest extends FormElementTestCase
+{
 
-    public function setUp() {
+    protected $additionalResources = 'translation';
+
+    public function setUp()
+    {
         $this->_formElementClass = 'Application_Form_Element_Password';
         $this->_expectedDecoratorCount = 8;
-        $this->_expectedDecorators = array('ViewHelper', 'Placeholder', 'Description', 'ElementHint', 'Errors',
-            'ElementHtmlTag', 'LabelNotEmpty', 'dataWrapper');
+        $this->_expectedDecorators = [
+            'ViewHelper', 'Placeholder', 'Description', 'ElementHint', 'Errors',
+            'ElementHtmlTag', 'LabelNotEmpty', 'dataWrapper'
+        ];
         parent::setUp();
     }
 
-    public function testValidationSuccess() {
+    public function testValidationSuccess()
+    {
         $element = $this->getElement();
 
         $this->assertTrue($element->isValid('123456'));
@@ -53,11 +59,37 @@ class Application_Form_Element_PasswordTest extends FormElementTestCase {
         $this->assertTrue($element->isValid('123456%'));
     }
 
-    public function testValidationFailure() {
+    public function testValidationFailure()
+    {
         $element = $this->getElement();
 
         $this->assertFalse($element->isValid(''));
         $this->assertFalse($element->isValid('12345'));
     }
 
+    public function testTranslatedMessages()
+    {
+        $this->useEnglish();
+        $element = $this->getElement();
+
+        $validator = $element->getValidator('StringLength');
+
+        $validator->isValid('123');
+
+        $messages = $validator->getMessages();
+
+        $this->assertCount(1, $messages);
+        $this->assertArrayHasKey('stringLengthTooShort', $messages);
+        $this->assertContains('less than 6 characters', $messages['stringLengthTooShort']);
+
+        $this->useGerman();
+
+        $validator->isValid('123');
+
+        $messages = $validator->getMessages();
+
+        $this->assertCount(1, $messages);
+        $this->assertArrayHasKey('stringLengthTooShort', $messages);
+        $this->assertContains('weniger als 6 Zeichen', $messages['stringLengthTooShort']);
+    }
 }

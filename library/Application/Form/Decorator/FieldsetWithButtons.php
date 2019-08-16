@@ -37,7 +37,8 @@
  *
  * Wird im Metadaten-Formular und Filemanager verwendet, um die Add- und Import Buttons richtig zu positionieren.
  */
-class Application_Form_Decorator_FieldsetWithButtons extends Zend_Form_Decorator_Fieldset {
+class Application_Form_Decorator_FieldsetWithButtons extends Zend_Form_Decorator_Fieldset
+{
 
     protected $_legendButtons = null;
 
@@ -45,17 +46,20 @@ class Application_Form_Decorator_FieldsetWithButtons extends Zend_Form_Decorator
      * @param string $content
      * @return string|void
      */
-    public function render($content) {
+    public function render($content)
+    {
         $this->setOption('escape', false);
         $this->getElement()->setDisableTranslator(true); // legend is translated before set
         return parent::render($content);
     }
 
-    public function setLegendButtons($buttons) {
+    public function setLegendButtons($buttons)
+    {
         $this->_legendButtons = $buttons;
     }
 
-    public function getLegendButtons() {
+    public function getLegendButtons()
+    {
         $buttons = $this->_legendButtons;
 
         if ((null === $buttons) && (null !== ($element = $this->getElement()))) {
@@ -73,7 +77,8 @@ class Application_Form_Decorator_FieldsetWithButtons extends Zend_Form_Decorator
         return $buttons;
     }
 
-    public function getLegend() {
+    public function getLegend()
+    {
         $legend = parent::getLegend();
 
         $element = $this->getElement();
@@ -81,17 +86,17 @@ class Application_Form_Decorator_FieldsetWithButtons extends Zend_Form_Decorator
 
         $buttons = $this->getLegendButtons();
 
-        if (!is_null($buttons) && !is_array($buttons)) {
-            $buttons = array($buttons);
+        if (! is_null($buttons) && ! is_array($buttons)) {
+            $buttons = [$buttons];
         }
 
         $markup = '';
 
-        if (!is_null($buttons) && count($buttons) >= 1) {
+        if (! is_null($buttons) && count($buttons) >= 1) {
             $markup .= '<span class="button-group">';
             foreach ($buttons as $button) {
                 $button = $element->getElement($button);
-                if (!is_null($button)) {
+                if (! is_null($button)) {
                     $markup .= $this->renderButton($button);
                 }
             }
@@ -105,7 +110,8 @@ class Application_Form_Decorator_FieldsetWithButtons extends Zend_Form_Decorator
      * @param $button
      * @return string
      */
-    protected function renderButton($button) {
+    protected function renderButton($button)
+    {
         $name = $button->getName();
         $elementId = $button->getId();
         $decorator = new Zend_Form_Decorator_ViewHelper();
@@ -117,5 +123,4 @@ class Application_Form_Decorator_FieldsetWithButtons extends Zend_Form_Decorator
             . '</span></span>';
         return $markup;
     }
-
 }

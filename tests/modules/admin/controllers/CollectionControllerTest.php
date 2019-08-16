@@ -28,7 +28,7 @@
  * @package     Admin
  * @author      Sascha Szott <szott@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -39,6 +39,8 @@
  */
 class Admin_CollectionControllerTest extends ControllerTestCase
 {
+
+    protected $additionalResources = 'all';
 
     private $emptyCollectionRole = null;
     private $nonEmptyCollectionRole = null;
@@ -84,10 +86,10 @@ class Admin_CollectionControllerTest extends ControllerTestCase
 
     public function tearDown()
     {
-        if (!is_null($this->nonEmptyCollectionRole) && !is_null($this->nonEmptyCollectionRole->getId())) {
+        if (! is_null($this->nonEmptyCollectionRole) && ! is_null($this->nonEmptyCollectionRole->getId())) {
             $this->nonEmptyCollectionRole->delete();
         }
-        if (!is_null($this->emptyCollectionRole) && !is_null($this->emptyCollectionRole->getId())) {
+        if (! is_null($this->emptyCollectionRole) && ! is_null($this->emptyCollectionRole->getId())) {
             $this->emptyCollectionRole->delete();
         }
         parent::tearDown();
@@ -302,7 +304,8 @@ class Admin_CollectionControllerTest extends ControllerTestCase
         $this->assertQueryContentContains(
             '//div[@class="breadcrumbsContainer"]//a[@href="/admin/collection/show/id/'
             . $this->rootCollection->getId() . '"]',
-            'default_collection_role_test2role', $this->getResponse()->getBody()
+            'default_collection_role_test2role',
+            $this->getResponse()->getBody()
         );
     }
 
@@ -385,8 +388,10 @@ class Admin_CollectionControllerTest extends ControllerTestCase
     {
         $this->useEnglish();
         $this->dispatch('/admin/collection/assign/document/146');
-        $this->assertQueryContentContains('//a[@href="/admin/collection/assign/id/2/document/146"]',
-            'Dewey Decimal Classification');
+        $this->assertQueryContentContains(
+            '//a[@href="/admin/collection/assign/id/2/document/146"]',
+            'Dewey Decimal Classification'
+        );
     }
 
     public function testCollectionBreadcrumbTranslatedAndLinked()
@@ -395,8 +400,9 @@ class Admin_CollectionControllerTest extends ControllerTestCase
         $this->dispatch('/admin/collection/new/id/2/type/child'); // add entry to DDC
         $this->assertResponseCode(200);
         $this->assertQueryContentContains(
-                '//div[@class="breadcrumbsContainer"]//a[@href="/admin/collection/show/id/2"]',
-                'Dewey Decimal Classification');
+            '//div[@class="breadcrumbsContainer"]//a[@href="/admin/collection/show/id/2"]',
+            'Dewey Decimal Classification'
+        );
     }
 
     public function testCreateCollectionCancel()

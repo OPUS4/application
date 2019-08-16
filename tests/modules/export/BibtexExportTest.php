@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -27,20 +27,24 @@
  * @category    Tests
  * @package     Export
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2017-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 class Export_BibtexExportTest extends ControllerTestCase
 {
 
+    protected $configModifiable = true;
+
+    protected $additionalResources = 'all';
+
     public function setUp()
     {
         parent::setUp();
 
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
-            'searchengine' => array('solr' => array('numberOfDefaultSearchResults' => 10))
-        )));
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'searchengine' => ['solr' => ['numberOfDefaultSearchResults' => '10']]
+        ]));
     }
 
     /**
@@ -73,9 +77,9 @@ class Export_BibtexExportTest extends ControllerTestCase
 
     public function testExportSingleDocument()
     {
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
-            'export' => array('download' => '0')
-        )));
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'export' => ['download' => self::CONFIG_VALUE_FALSE]
+        ]));
 
         $this->dispatch('/export/index/bibtex/searchtype/id/docId/146');
 
@@ -92,10 +96,10 @@ class Export_BibtexExportTest extends ControllerTestCase
      */
     public function testExportLatestDocuments()
     {
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
-            'export' => array('download' => '0'),
-            'searchengine' => array('solr' => array('numberOfDefaultSearchResults' => 10))
-        )));
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'export' => ['download' => self::CONFIG_VALUE_FALSE],
+            'searchengine' => ['solr' => ['numberOfDefaultSearchResults' => '10']]
+        ]));
 
         $this->dispatch('/export/index/bibtex/searchtype/latest');
 
@@ -108,9 +112,9 @@ class Export_BibtexExportTest extends ControllerTestCase
 
     public function testExportLatestDocumentsWithCustomRows()
     {
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
-            'export' => array('download' => '0')
-        )));
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'export' => ['download' => self::CONFIG_VALUE_FALSE]
+        ]));
 
         $this->dispatch('/export/index/bibtex/searchtype/latest/rows/12');
 
@@ -120,5 +124,4 @@ class Export_BibtexExportTest extends ControllerTestCase
 
         $this->assertEquals(12, substr_count($body, '@'));
     }
-
 }

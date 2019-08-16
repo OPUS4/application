@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -26,19 +27,26 @@
  *
  * @category    Application Unit Test
  * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class ReviewerAndPartialAdminTest extends ControllerTestCase {
 
-    public function setUp() {
+class ReviewerAndPartialAdminTest extends ControllerTestCase
+{
+
+    protected $configModifiable = true;
+
+    protected $additionalResources = ['authz', 'database', 'translation', 'view', 'mainMenu', 'navigation'];
+
+    public function setUp()
+    {
         parent::setUp();
         $this->enableSecurity();
         $this->loginUser('security5', 'security5pwd');
     }
 
-    public function tearDown() {
+    public function tearDown()
+    {
         $this->logoutUser();
         $this->restoreSecuritySetting();
         parent::tearDown();
@@ -47,7 +55,8 @@ class ReviewerAndPartialAdminTest extends ControllerTestCase {
     /**
      * Prüft, ob 'Review' Eintrag im Hauptmenu existiert.
      */
-    public function testMainMenu() {
+    public function testMainMenu()
+    {
         $this->useEnglish();
         $this->dispatch('/home');
         $this->assertQueryContentContains("//div[@id='header']", 'Administration');
@@ -57,7 +66,8 @@ class ReviewerAndPartialAdminTest extends ControllerTestCase {
     /**
      * Prüft, daß Review Link in Admin Menu erscheint.
      */
-    public function testAdminMenuFiltering() {
+    public function testAdminMenuFiltering()
+    {
         $this->dispatch('/admin');
         $this->assertQuery('//a[@href="/review"]');
         $this->assertQuery('//a[@href="/admin/licence"]');
@@ -67,7 +77,8 @@ class ReviewerAndPartialAdminTest extends ControllerTestCase {
     /**
      * Prüft, ob auf die Startseite des Review Modules zugegriffen werden kann.
      */
-    public function testAccessReviewModule() {
+    public function testAccessReviewModule()
+    {
         $this->useEnglish();
         $this->dispatch('/review');
         $this->assertQueryContentContains('//html/head/title', 'Review Documents');
@@ -76,7 +87,8 @@ class ReviewerAndPartialAdminTest extends ControllerTestCase {
     /**
      * Prüft, ob auf den LicenceController zugegriffen werden kann.
      */
-    public function testAccessLicenceController() {
+    public function testAccessLicenceController()
+    {
         $this->useEnglish();
         $this->dispatch('/admin/licence');
         $this->assertQueryContentContains('//html/head/title', 'Admin Licences');
@@ -85,7 +97,8 @@ class ReviewerAndPartialAdminTest extends ControllerTestCase {
     /**
      * Prüft, ob auf den OaiLinkController zugriffen werden kann.
      */
-    public function testAccessOaiLinkController() {
+    public function testAccessOaiLinkController()
+    {
         $this->useEnglish();
         $this->dispatch('/admin/oailink');
         $this->assertQueryContentContains('//html/head/title', 'OAI Links');
@@ -94,12 +107,12 @@ class ReviewerAndPartialAdminTest extends ControllerTestCase {
     /**
      * Prüft, das nicht auf die Seite zur Verwaltung von Dokumenten zugegriffen werden kann.
      */
-    public function testNoAccessDocumentsController() {
+    public function testNoAccessDocumentsController()
+    {
         $this->dispatch('/admin/documents');
         $this->assertRedirectTo(
             '/auth/index/rmodule/admin/rcontroller/documents/raction/index',
             'redirect from /admin/documents to /auth not asserted'
         );
     }
-
 }

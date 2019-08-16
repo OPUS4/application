@@ -36,7 +36,8 @@
  *
  * TODO Redundanz mit RepeatedInstitutes eliminieren
  */
-class Application_Form_Validate_MultiSubForm_RepeatedLanguages implements Application_Form_Validate_IMultiSubForm {
+class Application_Form_Validate_MultiSubForm_RepeatedLanguages implements Application_Form_Validate_IMultiSubForm
+{
 
     /**
      * Es werden keine Validierungen auf Formularebene ausgeführt.
@@ -45,7 +46,8 @@ class Application_Form_Validate_MultiSubForm_RepeatedLanguages implements Applic
      * @param array $context
      * @return boolean Immer true
      */
-    public function isValid($data, $context = null) {
+    public function isValid($data, $context = null)
+    {
         return true;
     }
 
@@ -59,7 +61,8 @@ class Application_Form_Validate_MultiSubForm_RepeatedLanguages implements Applic
      * @param array $data
      * @param array $context
      */
-    public function prepareValidation($form, $data, $context = null) {
+    public function prepareValidation($form, $data, $context = null)
+    {
         $position = 0;
 
         $languages = $this->getSelectedLanguages($data);
@@ -67,7 +70,7 @@ class Application_Form_Validate_MultiSubForm_RepeatedLanguages implements Applic
         foreach ($form->getSubForms() as $name => $subform) {
             if (array_key_exists($name, $data)) {
                 $element = $subform->getElement(Admin_Form_Document_Title::ELEMENT_LANGUAGE);
-                if (!is_null($element)) {
+                if (! is_null($element)) {
                     $element->addValidator(new Application_Form_Validate_LanguageUsedOnceOnly($languages, $position++));
                 }
             }
@@ -79,8 +82,9 @@ class Application_Form_Validate_MultiSubForm_RepeatedLanguages implements Applic
      * @param array $parentContext
      * @return array
      */
-    public function getSelectedLanguages($parentContext) {
-        $values = array();
+    public function getSelectedLanguages($parentContext)
+    {
+        $values = [];
 
         foreach ($parentContext as $index => $entry) {
             if (isset($entry[Admin_Form_Document_Title::ELEMENT_LANGUAGE])) {
@@ -90,5 +94,4 @@ class Application_Form_Validate_MultiSubForm_RepeatedLanguages implements Applic
 
         return $values;
     }
-
 }

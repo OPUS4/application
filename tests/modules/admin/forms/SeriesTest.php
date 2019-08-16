@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -27,13 +28,16 @@
  * @category    Application Unit Test
  * @package     Admin_Form
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class Admin_Form_SeriesTest extends ControllerTestCase {
+class Admin_Form_SeriesTest extends ControllerTestCase
+{
 
-    public function testConstructForm() {
+    protected $additionalResources = ['database'];
+
+    public function testConstructForm()
+    {
         $form = new Admin_Form_Series();
 
         $this->assertEquals(7, count($form->getElements()));
@@ -48,7 +52,8 @@ class Admin_Form_SeriesTest extends ControllerTestCase {
         $this->assertNotNull($form->getElement('Id'));
     }
 
-    public function testPopulateFromModel() {
+    public function testPopulateFromModel()
+    {
         $form = new Admin_Form_Series();
 
         $series = new Opus_Series();
@@ -65,7 +70,8 @@ class Admin_Form_SeriesTest extends ControllerTestCase {
         $this->assertEquals(20, $form->getElement('SortOrder')->getValue());
     }
 
-    public function testPopulateFromModelWithId() {
+    public function testPopulateFromModelWithId()
+    {
         $form = new Admin_Form_Series();
 
         $series = new Opus_Series(2);
@@ -75,7 +81,8 @@ class Admin_Form_SeriesTest extends ControllerTestCase {
         $this->assertEquals(2, $form->getElement('Id')->getValue());
     }
 
-    public function testUpdateModel() {
+    public function testUpdateModel()
+    {
         $form = new Admin_Form_Series();
 
         $form->getElement('Title')->setValue('TestTitle');
@@ -93,26 +100,28 @@ class Admin_Form_SeriesTest extends ControllerTestCase {
         $this->assertEquals(22, $series->getSortOrder());
     }
 
-    public function testValidationEmptyPost() {
+    public function testValidationEmptyPost()
+    {
         $form = new Admin_Form_Series();
 
-        $this->assertFalse($form->isValid(array()));
+        $this->assertFalse($form->isValid([]));
 
         $this->assertContains('isEmpty', $form->getErrors('Title'));
     }
 
-    public function testValidationEmptyFields() {
+    public function testValidationEmptyFields()
+    {
         $form = new Admin_Form_Series();
 
-        $this->assertFalse($form->isValid(array('Title' => '  ')));
+        $this->assertFalse($form->isValid(['Title' => '  ']));
 
         $this->assertContains('isEmpty', $form->getErrors('Title'));
     }
 
-    public function testValidationTrue() {
+    public function testValidationTrue()
+    {
         $form = new Admin_Form_Series();
 
-        $this->assertTrue($form->isValid(array('Title' => 'TestTitle', 'SortOrder' => '50')));
+        $this->assertTrue($form->isValid(['Title' => 'TestTitle', 'SortOrder' => '50']));
     }
-
 }

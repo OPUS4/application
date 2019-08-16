@@ -34,92 +34,96 @@
 
 /**
  * Unterformular mit Haupttitel, ID, und Authoren eines Dokuments.
- * 
+ *
  * Dieses Formular wird in das Metadaten-Formular mit eingegliedert, um einige Grundinformationen über das Dokument
  * anzuzeigen. Es enthält keine aktiven Formularelemente.
  */
-class Admin_Form_InfoBox extends Admin_Form_AbstractDocumentSubForm {
+class Admin_Form_InfoBox extends Admin_Form_AbstractDocumentSubForm
+{
 
     /**
      * Dokument das angezeigt wird.
-     * @var Opus_Document 
+     * @var Opus_Document
      */
     private $_document;
-    
+
     /**
      * Initialisiert das Formular.
-     * 
+     *
      * Setzt den ViewScript Dekorator für die Ausgabe der Dokumentinformationen.
      */
-    public function init() {
+    public function init()
+    {
         $this->setDisableLoadDefaultDecorators(true);
-        
+
         parent::init();
-        
+
         $this->setDecorators(
-            array(
-            array('ViewScript', array('viewScript' => 'infobox.phtml'))
-            )
+            [
+            ['ViewScript', ['viewScript' => 'infobox.phtml']]
+            ]
         );
     }
-    
+
     /**
      * Initialisiert Formular mit Dokument.
      * @param Opus_Document $document
      */
-    public function populateFromModel($document) {
+    public function populateFromModel($document)
+    {
         if ($document instanceof Opus_Document) {
             $this->_document = $document;
-        }
-        else {
-            $objclass = ($document !== null) ? get_class($document) : 'null'; 
+        } else {
+            $objclass = ($document !== null) ? get_class($document) : 'null';
             $this->getLog()->err(__METHOD__ . " Called with instance of '$objclass'.");
         }
     }
-    
+
     /**
      * Initialisiert Formular nach POST.
      * @param array $post
      * @param Opus_Document $document
      */
-    public function constructFromPost($post, $document = null) {
+    public function constructFromPost($post, $document = null)
+    {
         if ($document instanceof Opus_Document) {
             $this->_document = $document;
-        }
-        else {
-            $objclass = ($document !== null) ? get_class($document) : 'null'; 
+        } else {
+            $objclass = ($document !== null) ? get_class($document) : 'null';
             $this->getLog()->err(__METHOD__ . " Called with instance of '$objclass'.");
         }
     }
-    
+
     /**
-     * Liefert Dokument zurück. 
-     * 
+     * Liefert Dokument zurück.
+     *
      * Wird vom ViewScript verwendet, um das Dokument zu holen.
      * @return Opus_Document
      */
-    public function getDocument() {
+    public function getDocument()
+    {
         return $this->_document;
     }
-    
+
     /**
      * Meldet, ob Formular leer ist.
-     * 
+     *
      * Dieses Formular soll immer angezeigt werden, daher liefert diese Funktion immer FALSE zurück.
-     * 
+     *
      * @return boolean FALSE immer
      */
-    public function isEmpty() {
+    public function isEmpty()
+    {
         return false;
     }
-    
+
     /**
      * Bereitet Formular auf Ausgabe in Metadaten-Übersicht vor.
-     * 
+     *
      * Für dieses Formular solle bei der Vorbereitung nichts passieren, also keine Element entfernt werden.
      */
-    public function prepareRenderingAsView() {
+    public function prepareRenderingAsView()
+    {
         // do nothing
     }
-
 }

@@ -38,7 +38,8 @@
  *
  * TODO document class
  */
-class Oai_Model_Container extends Application_Model_Abstract {
+class Oai_Model_Container extends Application_Model_Abstract
+{
 
     /**
      * OPUS document identifier.
@@ -61,7 +62,8 @@ class Oai_Model_Container extends Application_Model_Abstract {
      * @param $docId
      * @param null $logger
      */
-    public function  __construct($docId) {
+    public function __construct($docId)
+    {
         $this->_doc = $this->validateId($docId);
         $this->_docId = $this->_doc->getId();
         $this->_appConfig = Application_Configuration::getInstance();
@@ -71,7 +73,8 @@ class Oai_Model_Container extends Application_Model_Abstract {
      * Writes log message with additional class information.
      * @param $message
      */
-    private function logErrorMessage($message) {
+    private function logErrorMessage($message)
+    {
         $this->getLogger()->err(__CLASS__ . ': ' . $message);
     }
 
@@ -83,21 +86,21 @@ class Oai_Model_Container extends Application_Model_Abstract {
      *
      * TODO centralize this function (is used in several controllers)
      */
-    private function validateId($docId) {
+    private function validateId($docId)
+    {
         if (is_null($docId)) {
             $this->logErrorMessage('missing parameter docId');
             throw new Oai_Model_Exception('missing parameter docId');
         }
 
-        if (!is_numeric($docId)) {
+        if (! is_numeric($docId)) {
             $this->logErrorMessage('given document id is not valid');
             throw new Oai_Model_Exception('invalid value for parameter docId');
         }
 
         try {
             return new Opus_Document($docId);
-        }
-        catch (Opus_Model_NotFoundException $e) {
+        } catch (Opus_Model_NotFoundException $e) {
             $this->logErrorMessage('document with id ' . $docId . ' does not exist');
             throw new Oai_Model_Exception('requested docId does not exist');
         }
@@ -110,18 +113,19 @@ class Oai_Model_Container extends Application_Model_Abstract {
      * TODO check embargo date
      * TODO merge access checks with code for deliver controller
      */
-    public function getAccessibleFiles() {
+    public function getAccessibleFiles()
+    {
         $realm = Opus_Security_Realm::getInstance();
 
         // admins sollen immer durchgelassen werden, nutzer nur wenn das doc im publizierten Zustand ist
-        if (!$realm->skipSecurityChecks()) {
+        if (! $realm->skipSecurityChecks()) {
             // kein administrator
 
             // PUBLISHED Dokumente sind immer verfügbar (Zugriff auf Modul kann eingeschränkt sein)
             if ($this->_doc->getServerState() !== 'published') {
                 // Dokument nicht published
 
-                if (!$realm->checkDocument($this->_docId)) {
+                if (! $realm->checkDocument($this->_docId)) {
                     // Dokument ist nicht verfügbar für aktuellen Nutzer
                     $this->logErrorMessage(
                         'document id =' . $this->_docId
@@ -132,7 +136,7 @@ class Oai_Model_Container extends Application_Model_Abstract {
             }
 
             if ($this->_doc->hasEmbargoPassed() === false) {
-                if (!$realm->checkDocument($this->_docId)) {
+                if (! $realm->checkDocument($this->_docId)) {
                     // Dokument ist nicht verfügbar für aktuellen Nutzer
                     $this->logErrorMessage(
                         'document id =' . $this->_docId
@@ -140,19 +144,17 @@ class Oai_Model_Container extends Application_Model_Abstract {
                     );
                     throw new Oai_Model_Exception('access to requested document files is embargoed');
                 }
-
             }
         }
 
-        $files = array();
+        $files = [];
         $filesToCheck = $this->_doc->getFile();
         /* @var $file Opus_File */
         foreach ($filesToCheck as $file) {
             $filename = $this->_appConfig->getFilesPath() . $this->_docId . DIRECTORY_SEPARATOR . $file->getPathName();
             if (is_readable($filename)) {
                 array_push($files, $file);
-            }
-            else {
+            } else {
                 $this->logErrorMessage("skip non-readable file $filename");
             }
         }
@@ -162,7 +164,7 @@ class Oai_Model_Container extends Application_Model_Abstract {
             throw new Oai_Model_Exception('requested document does not have any associated readable files');
         }
 
-        $containerFiles = array();
+        $containerFiles = [];
         /* @var $file Opus_File */
         foreach ($files as $file) {
             if ($file->getVisibleInOai() && $realm->checkFile($file->getId())) {
@@ -180,27 +182,37 @@ class Oai_Model_Container extends Application_Model_Abstract {
         return $containerFiles;
     }
 
-    public function getFileHandle() {
+    public function getFileHandle()
+    {
         $config = $this->_appConfig;
         $filesToInclude = $this->getAccessibleFiles();
         if (count($filesToInclude) > 1) {
             return new Oai_Model_TarFile(
-                $this->_docId, $filesToInclude, $config->getFilesPath(), $config->getTempPath(), $this->getLogger()
+                $this->_docId,
+                $filesToInclude,
+                $config->getFilesPath(),
+                $config->getTempPath(),
+                $this->getLogger()
             );
-        }
-        else {
+        } else {
             return new Oai_Model_SingleFile(
-                $this->_docId, $filesToInclude, $config->getFilesPath(), $config->getTempPath(), $this->getLogger()
+                $this->_docId,
+                $filesToInclude,
+                $config->getFilesPath(),
+                $config->getTempPath(),
+                $this->getLogger()
             );
         }
     }
 
-    public function getZip() {
+    public function getZip()
+    {
         // TODO
         throw new Exception('Not Implemented');
     }
 
-    public function getCompressedTar() {
+    public function getCompressedTar()
+    {
         // TODO
         throw new Exception('Not Implemented');
     }
@@ -212,8 +224,8 @@ class Oai_Model_Container extends Application_Model_Abstract {
      *
      * @return int
      */
-    public function getName() {
+    public function getName()
+    {
         return $this->_docId;
     }
-
 }

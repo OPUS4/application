@@ -32,11 +32,13 @@
  * @version     $Id$
  */
 
-class Application_Util_BrowsingParams {
+class Application_Util_BrowsingParams
+{
 
     private $_request;
 
-    public function  __construct($request, $log) {
+    public function __construct($request, $log)
+    {
         $this->log = $log;
         $this->_request = $request;
     }
@@ -46,12 +48,12 @@ class Application_Util_BrowsingParams {
      * @return string collection id
      * @throws Application_Util_BrowsingParamsException if requested collection is not accessible in search context
      */
-    public function getCollectionId() {
+    public function getCollectionId()
+    {
         try {
             $collectionList = new Solrsearch_Model_CollectionList($this->_request->getParam('id'));
             return $collectionList->getCollectionId();
-        }
-        catch (Solrsearch_Model_Exception $e) {
+        } catch (Solrsearch_Model_Exception $e) {
             $this->log->debug($e->getMessage());
             throw new Application_Util_BrowsingParamsException($e->getMessage(), $e->getCode(), $e);
         }
@@ -62,15 +64,14 @@ class Application_Util_BrowsingParams {
      * @return string series id
      * @throws Application_Util_BrowsingParamsException if requested series is not accessible in search context
      */
-    public function getSeriesId() {
+    public function getSeriesId()
+    {
         try {
             $series = new Solrsearch_Model_Series($this->_request->getParam('id'));
             return $series->getId();
-        }
-        catch (Solrsearch_Model_Exception $e) {
+        } catch (Solrsearch_Model_Exception $e) {
             $this->log->debug($e->getMessage());
             throw new Application_Util_BrowsingParamsException($e->getMessage(), $e->getCode(), $e);
         }
     }
-
 }

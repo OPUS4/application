@@ -47,14 +47,14 @@ foreach ($docfinder->ids() as $docId) {
     $doc = new Opus_Document($docId);
 
     $numVisibleFiles = 0;
-    foreach ($doc->getFile() AS $file) {
-       if ($file->getVisibleInOai() == 1) {
-          $numVisibleFiles++;
-       }
+    foreach ($doc->getFile() as $file) {
+        if ($file->getVisibleInOai() == 1) {
+            $numVisibleFiles++;
+        }
     }
 
     if ($numVisibleFiles > 0) {
-       continue;
+        continue;
     }
 
     echo "-- document $docId has an URN " . $doc->getIdentifierUrn(0)->getValue() . ", but no visible files\n";
@@ -62,8 +62,7 @@ foreach ($docfinder->ids() as $docId) {
 
 if ($updateRequired == 0) {
     echo "all docs were checked -- nothing to do!\n";
-}
-else {
+} else {
     echo "$updateRequired docs need to be updated manually!\n";
 }
 

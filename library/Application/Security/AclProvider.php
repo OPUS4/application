@@ -121,11 +121,10 @@ class Application_Security_AclProvider
 
         $user = Zend_Auth::getInstance()->getIdentity();
 
-        if (!is_null($user)) {
+        if (! is_null($user)) {
             try {
                 $realm->setUser($user);
-            }
-            catch (Opus_Security_Exception $ose) {
+            } catch (Opus_Security_Exception $ose) {
                 // unknown user -> invalidate session (logout)
                 Zend_Auth::getInstance()->clearIdentity();
                 $user = null;
@@ -204,7 +203,7 @@ class Application_Security_AclProvider
         $acl->allow('administrator');
 
         foreach ($roles as $role) {
-            if (!$acl->hasRole($role)) {
+            if (! $acl->hasRole($role)) {
                 $acl->addRole(new Zend_Acl_Role($role));
             }
 

@@ -45,15 +45,15 @@ class Solrsearch_Model_Search_Latest extends Solrsearch_Model_Search_Basic
     {
         $input = parent::createQueryBuilderInputFromRequest($request);
 
-        if (!isset($request->rows))
-        {
+        if (! isset($request->rows)) {
             $input['rows'] = Opus_Search_Query::getDefaultRows();
         }
 
         return $input;
     }
 
-    public function createSearchQuery($input) {
+    public function createSearchQuery($input)
+    {
         $this->getLogger()->debug("Constructing query for latest search.");
 
         $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::LATEST_DOCS);
@@ -67,5 +67,4 @@ class Solrsearch_Model_Search_Latest extends Solrsearch_Model_Search_Basic
         $this->getLogger()->debug("Query $query complete");
         return $query;
     }
-
 }

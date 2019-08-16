@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -28,15 +27,16 @@
  * @category    Application
  * @package     Module_Setup
  * @author      Edouard Simon (edouard.simon@zib.de)
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
  *
  */
-class Setup_Model_StaticPage extends Setup_Model_Abstract {
+class Setup_Model_StaticPage extends Setup_Model_Abstract
+{
 
     /**
      * name of the page to edit
@@ -60,14 +60,16 @@ class Setup_Model_StaticPage extends Setup_Model_Abstract {
      *                                  parameters (@see setConfig() for details).
      * @param Zend_Log $log             Instance of Zend_Log (@see setLog())
      */
-    public function __construct($pageName, $config = null, $log = null) {
+    public function __construct($pageName, $config = null, $log = null)
+    {
         $this->_pageName = $pageName;
         parent::__construct($config, $log);
     }
 
-    public function setPageNames($pageNames) {
+    public function setPageNames($pageNames)
+    {
         // check if pageName is valid
-        if (!in_array($this->_pageName, $pageNames)) {
+        if (! in_array($this->_pageName, $pageNames)) {
             throw new Setup_Model_Exception('Invalid page name, not found in configuration. ');
         }
     }
@@ -78,7 +80,8 @@ class Setup_Model_StaticPage extends Setup_Model_Abstract {
      *
      * @param string $tmxTargetPath directory path used to write tmx content
      */
-    public function setTranslationTargetPath($tmxTargetPath) {
+    public function setTranslationTargetPath($tmxTargetPath)
+    {
         $this->setTranslationTarget($tmxTargetPath . DIRECTORY_SEPARATOR . $this->_pageName . '.tmx');
     }
 
@@ -88,7 +91,8 @@ class Setup_Model_StaticPage extends Setup_Model_Abstract {
      *
      * @param string $tmxTargetPath directory path used to write tmx content
      */
-    public function setUseContentFile($bool = true) {
+    public function setUseContentFile($bool = true)
+    {
         $this->_useContentFile = $bool;
     }
 
@@ -99,8 +103,9 @@ class Setup_Model_StaticPage extends Setup_Model_Abstract {
      * @param array $tmxSourcePaths Array of directory paths used for reading tmx content
      *
      */
-    public function setTranslationSourcePaths(array $tmxSourcePaths) {
-        $filePaths = array();
+    public function setTranslationSourcePaths(array $tmxSourcePaths)
+    {
+        $filePaths = [];
         foreach ($tmxSourcePaths as $tmxsrc) {
             $filePaths[] = $tmxsrc . DIRECTORY_SEPARATOR . $this->_pageName . '.tmx';
         }
@@ -113,20 +118,22 @@ class Setup_Model_StaticPage extends Setup_Model_Abstract {
      *
      * @param string $basePath name of directory used to read / write page content
      */
-    public function setContentBasepath($basePath) {
+    public function setContentBasepath($basePath)
+    {
         $this->_contentBasepath = $basePath;
     }
 
     /**
      * @see Description in abstract base class
      */
-    public function toArray() {
-        $languages = array('de', 'en');
+    public function toArray()
+    {
+        $languages = ['de', 'en']; // TODO get languages from configuration - maybe more in the future
 
-        $resultArray = array();
+        $resultArray = [];
         $translationUnits = $this->getTranslation();
         foreach ($languages as $language) {
-            $resultArray[$language] = array();
+            $resultArray[$language] = [];
             if ($this->_useContentFile) {
                 $fileName = "{$this->_pageName}.$language.txt";
                 $filePath = $this->_contentBasepath . DIRECTORY_SEPARATOR . $fileName;
@@ -134,7 +141,7 @@ class Setup_Model_StaticPage extends Setup_Model_Abstract {
                 $resultArray[$language]['file']['filename'] = $fileName;
                 $resultArray[$language]['file']['contents'] = $this->getContent($filePath);
             }
-            if (!empty($translationUnits)) {
+            if (! empty($translationUnits)) {
                 foreach ($translationUnits as $translationUnit => $variants) {
                     $resultArray[$language]['key'][$translationUnit] = $variants[$language];
                 }
@@ -147,17 +154,18 @@ class Setup_Model_StaticPage extends Setup_Model_Abstract {
     /**
      * @see Description in abstract base class
      */
-    public function fromArray(array $data) {
-        $resultData = array();
-        $resultTmx = new Application_Util_TmxFile();
+    public function fromArray(array $data)
+    {
+        $resultData = [];
+        $resultTmx = new Application_Translate_TmxFile();
 
         foreach ($data as $language => $fields) {
             foreach ($fields as $key => $val) {
                 switch ($key) {
                     case 'file':
-                        if (!is_array($val)
-                                || !isset($val['filename'])
-                                || !isset($val['contents'])
+                        if (! is_array($val)
+                                || ! isset($val['filename'])
+                                || ! isset($val['contents'])
                         ) {
                             throw new Setup_Model_Exception('Invalid data structure');
                         }
@@ -166,7 +174,7 @@ class Setup_Model_StaticPage extends Setup_Model_Abstract {
                         break;
                     case 'key':
                         foreach ($val as $translationUnit => $variant) {
-                            $resultTmx->setVariantSegment($translationUnit, $language, $variant);
+                            $resultTmx->setTranslation($translationUnit, $language, $variant);
                         }
                         break;
                     default:
@@ -177,5 +185,4 @@ class Setup_Model_StaticPage extends Setup_Model_Abstract {
         $this->setContent($resultData);
         $this->setTranslation($resultTmx->toArray());
     }
-
 }

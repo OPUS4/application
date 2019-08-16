@@ -29,75 +29,81 @@
  * @author      Sascha Szott <szott@zib.de>
  * @author      Michael Lang <lang@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Oai_Model_ContainerTest extends ControllerTestCase {
+class Oai_Model_ContainerTest extends ControllerTestCase
+{
+
+    protected $additionalResources = ['database'];
 
     private $workspacePath;
     private $roleId;
     private $userId;
 
-    public function  setUp() {
+    public function setUp()
+    {
         parent::setUp();
         $config = Zend_Registry::get('Zend_Config');
-        if (!isset($config->workspacePath)) {
+        if (! isset($config->workspacePath)) {
             throw new Exception("config key 'workspacePath' not defined in config file");
         }
         $this->workspacePath = $config->workspacePath;
     }
 
-    public function tearDown() {
-        if (!is_null($this->roleId)) {
+    public function tearDown()
+    {
+        if (! is_null($this->roleId)) {
             $testRole = new Opus_UserRole($this->roleId);
             $testRole->delete();
         }
-        if (!is_null($this->userId)) {
+        if (! is_null($this->userId)) {
             $userAccount = new Opus_Account($this->userId);
             $userAccount->delete();
         }
         parent::tearDown();
     }
 
-    public function testConstructorWithNullArgument() {
+    public function testConstructorWithNullArgument()
+    {
         $model = null;
         try {
             $model = new Oai_Model_Container(null);
-        }
-        catch (Oai_Model_Exception $e) {
+        } catch (Oai_Model_Exception $e) {
             $this->assertEquals('missing parameter docId', $e->getMessage());
         }
         $this->assertTrue(is_null($model));
     }
 
-    public function testConstructorWithInvalidArgument() {
+    public function testConstructorWithInvalidArgument()
+    {
         $model = null;
         try {
             $model = new Oai_Model_Container('foo');
-        }
-        catch (Oai_Model_Exception $e) {
+        } catch (Oai_Model_Exception $e) {
             $this->assertEquals('invalid value for parameter docId', $e->getMessage());
         }
         $this->assertTrue(is_null($model));
     }
 
-    public function testConstructorWithUnknownDocId() {
+    public function testConstructorWithUnknownDocId()
+    {
         $model = null;
         try {
             $model = new Oai_Model_Container('123456789');
-        }
-        catch (Oai_Model_Exception $e) {
+        } catch (Oai_Model_Exception $e) {
             $this->assertEquals('requested docId does not exist', $e->getMessage());
         }
         $this->assertTrue(is_null($model));
     }
 
-    public function testConstructorWithUnpublishedDocument() {
+    public function testConstructorWithUnpublishedDocument()
+    {
         $r = Opus_UserRole::fetchByName('guest');
 
         $modules = $r->listAccessModules();
-        $addOaiModuleAccess = !in_array('oai', $modules);
+        $addOaiModuleAccess = ! in_array('oai', $modules);
         if ($addOaiModuleAccess) {
             $r->appendAccessModule('oai');
             $r->store();
@@ -105,8 +111,7 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
 
         // enable security
         $config = Zend_Registry::get('Zend_Config');
-        $security = $config->security;
-        $config->security = '1';
+        $config->security = self::CONFIG_VALUE_TRUE;
         Zend_Registry::set('Zend_Config', $config);
 
         $doc = $this->createTestDocument();
@@ -117,8 +122,7 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
         $tarball = null;
         try {
             $tarball = $model->getFileHandle();
-        }
-        catch (Oai_Model_Exception $e) {
+        } catch (Oai_Model_Exception $e) {
             $this->assertEquals('access to requested document is forbidden', $e->getMessage());
         }
         $this->assertTrue(is_null($tarball));
@@ -127,13 +131,10 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
             $r->removeAccessModule('oai');
             $r->store();
         }
-
-        // restore security settings
-        $config->security = $security;
-        Zend_Registry::set('Zend_Config', $config);
     }
 
-    public function testConstructorWithPublishedDocumentWithoutAnyFiles() {
+    public function testConstructorWithPublishedDocumentWithoutAnyFiles()
+    {
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
         $doc->store();
@@ -142,14 +143,14 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
         $tarball = null;
         try {
             $tarball = $model->getFileHandle();
-        }
-        catch (Oai_Model_Exception $e) {
+        } catch (Oai_Model_Exception $e) {
             $this->assertEquals('requested document does not have any associated readable files', $e->getMessage());
         }
         $this->assertTrue(is_null($tarball));
     }
 
-    public function testGetName() {
+    public function testGetName()
+    {
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
         $file = new Opus_File();
@@ -162,7 +163,8 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
         $this->assertEquals($doc->getId(), $container->getName());
     }
 
-    public function testDocumentWithRestrictedFile() {
+    public function testDocumentWithRestrictedFile()
+    {
         $filename = 'foo.pdf';
         $file = $this->createTestFile($filename);
 
@@ -178,14 +180,14 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
         $tarball = null;
         try {
             $tarball = $model->getFileHandle();
-        }
-        catch (Oai_Model_Exception $e) {
+        } catch (Oai_Model_Exception $e) {
             $this->assertEquals('access denied on all files that are associated to the requested document', $e->getMessage());
         }
         $this->assertTrue(is_null($tarball));
     }
 
-    public function testDocumentWithNonExistentFile() {
+    public function testDocumentWithNonExistentFile()
+    {
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
         $file = new Opus_File();
@@ -198,14 +200,14 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
         $tarball = null;
         try {
             $tarball = $model->getFileHandle();
-        }
-        catch (Oai_Model_Exception $e) {
+        } catch (Oai_Model_Exception $e) {
             $this->assertEquals('requested document does not have any associated readable files', $e->getMessage());
         }
         $this->assertTrue(is_null($tarball));
     }
 
-    public function testDocumentWithSingleUnrestrictedFile() {
+    public function testDocumentWithSingleUnrestrictedFile()
+    {
         $filename = 'test.txt';
         $file = $this->createTestFile($filename);
 
@@ -232,7 +234,8 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
         $this->assertTrue($mimeType == 'application/x-empty' || $mimeType == 'inode/x-empty');
     }
 
-    public function testDocumentWithTwoUnrestrictedFiles() {
+    public function testDocumentWithTwoUnrestrictedFiles()
+    {
         $filename1 = 'foo.pdf';
         $filename2 = 'bar.pdf';
 
@@ -265,7 +268,8 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
         $this->assertEquals('application/x-tar', $mimeType);
     }
 
-    public function testDeleteContainerTarFile() {
+    public function testDeleteContainerTarFile()
+    {
         $filename1 = 'test.pdf';
         $filename2 = 'foo.html';
 
@@ -292,7 +296,8 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
         $this->assertFalse(file_exists($tarball->getPath()));
     }
 
-    public function testDeleteContainerSingleFile() {
+    public function testDeleteContainerSingleFile()
+    {
         $filename1 = 'test.pdf';
 
         $file = $this->createTestFile($filename1);
@@ -316,7 +321,8 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
     /*
      * tests document access for three user roles (admin, user with access rights, user without access rights)
      */
-    public function testAdminAccessToFileRegression3281() {
+    public function testAdminAccessToFileRegression3281()
+    {
         $this->enableSecurity();
 
         // test document access as admin
@@ -333,7 +339,8 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
         $this->tryAccessForDocument($docId, true);
     }
 
-    public function testAccessUserToFileRegression3281() {
+    public function testAccessUserToFileRegression3281()
+    {
         $this->enableSecurity();
 
         // test document access as user with document access rights
@@ -362,7 +369,8 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
         $this->logoutUser();
     }
 
-    public function testGuestAccessToFileRegression3281() {
+    public function testGuestAccessToFileRegression3281()
+    {
         $this->enableSecurity();
 
         // test document access as user without access rights
@@ -377,20 +385,19 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
         $this->tryAccessForDocument($docId, false);
     }
 
-    private function tryAccessForDocument($docId, $accessAllowed) {
+    private function tryAccessForDocument($docId, $accessAllowed)
+    {
         $model = new Oai_Model_Container($docId);
         $tarball = null;
         $exceptionMessage = null;
         try {
             $tarball = $model->getFileHandle();
-        }
-        catch (Oai_Model_Exception $e) {
+        } catch (Oai_Model_Exception $e) {
             $exceptionMessage = $e->getMessage();
         }
         if ($accessAllowed === true) {
             $this->assertEquals('requested document does not have any associated readable files', $exceptionMessage);
-        }
-        else {
+        } else {
             $this->assertEquals('access to requested document is forbidden', $exceptionMessage);
         }
     }
@@ -399,7 +406,8 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
      * @expectedException Oai_Model_Exception
      * @expectedExceptionMessage access to requested document files is embargoed
      */
-    public function testGetAccessibleFilesForEmbargoedDocument() {
+    public function testGetAccessibleFilesForEmbargoedDocument()
+    {
         $this->enableSecurity();
 
         $doc = $this->createTestDocument();
@@ -422,5 +430,4 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
         $container = new Oai_Model_Container($doc->getId());
         $container->getAccessibleFiles();
     }
-
 }

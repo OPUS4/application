@@ -27,9 +27,8 @@
  * @category    Application
  * @package     View
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -40,7 +39,8 @@
  * TODO Explore options to remove overlap with ShowModel view helper
  *      (ShowModel combines value formatting and layout).
  */
-class Application_View_Helper_FormatValue extends Zend_View_Helper_Abstract {
+class Application_View_Helper_FormatValue extends Zend_View_Helper_Abstract
+{
 
     /**
      * Logger for this class.
@@ -63,21 +63,18 @@ class Application_View_Helper_FormatValue extends Zend_View_Helper_Abstract {
     /**
      * Constructs Application_View_Helper_FormatValue.
      */
-    public function __construct() {
-        $this->_translation =
-                Zend_Controller_Action_HelperBroker::getStaticHelper(
-                    'Translation'
-                );
-
-        $this->_dates =
-                Zend_Controller_Action_HelperBroker::getStaticHelper('Dates');
+    public function __construct()
+    {
+        $this->_translation = Zend_Controller_Action_HelperBroker::getStaticHelper('Translation');
+        $this->_dates = Zend_Controller_Action_HelperBroker::getStaticHelper('Dates');
     }
 
     /**
      * Returns instance of the view helper.
      * @return Application_View_Helper_FormatValue
      */
-    public function formatValue() {
+    public function formatValue()
+    {
         return $this;
     }
 
@@ -87,16 +84,16 @@ class Application_View_Helper_FormatValue extends Zend_View_Helper_Abstract {
      * @param string Name of model for field (default = null)
      * @return string Formatted output
      */
-    public function formatModel($field, $model = null) {
+    public function formatModel($field, $model = null)
+    {
         if ($field instanceof Opus_Date) {
             return $this->formatDate($field);
-        }
-        else {
+        } else {
             $modelClass = $field->getValueModelClass();
 
             $this->getLogger()->debug('Formatting field ' . $field->getName());
 
-            if (!empty($modelClass)) {
+            if (! empty($modelClass)) {
                 switch ($modelClass) {
                     case 'Opus_Date':
                         return $this->formatDate($field->getValue());
@@ -104,36 +101,35 @@ class Application_View_Helper_FormatValue extends Zend_View_Helper_Abstract {
                         $value = $field->getValue();
                         if (isset($value[0])) {
                             return $value[0]->getName();
-                        }
-                        else {
+                        } else {
                             // Should never happen (DNB Institute without name),
                             // but in case it does:
                             return 'ERROR: DNB institute without name.';
                         }
+                        break; // should never be reached
                     default:
                         // Should never happen, but in case it does:
                         $this->getLogger()->err(__CLASS__ . ' Trying to format unknown model ' . $modelClass);
                         return 'ERROR: Unknown model class (see log).';
                 }
-            }
-            else {
-                if ($field->isSelection()) {
+            } else {
+                $value = $field->getValue();
+
+                if ($field->getName() === 'Language') {
+                    return $this->view->translateLanguage($value);
+                } elseif ($field->isSelection()) {
                     Application_Form_Element_Language::getLanguageList(); // initializes language list translations
-                    $value = $field->getValue();
                     $key = $this->_translation->getKeyForValue($model, $field->getName(), $value);
                     return $this->view->translate($key);
-                }
-                else if ($field->isCheckbox()) {
-                    if ($field->getValue()) {
+                } elseif ($field->isCheckbox()) {
+                    if ($value) {
                         $key = 'Field_Value_True';
-                    }
-                    else {
+                    } else {
                         $key = 'Field_Value_False';
                     }
                     return $this->view->translate($key);
-                }
-                else {
-                    return $field->getValue();
+                } else {
+                    return $value;
                 }
             }
         }
@@ -144,11 +140,11 @@ class Application_View_Helper_FormatValue extends Zend_View_Helper_Abstract {
      * @param Opus_Date $date
      * @return string Formatted date
      */
-    public function formatDate($date) {
-        if (!($date instanceof Opus_Date)) {
+    public function formatDate($date)
+    {
+        if (! ($date instanceof Opus_Date)) {
             return $date;
-        }
-        else {
+        } else {
             return $this->_dates->getDateString($date);
         }
     }
@@ -165,14 +161,14 @@ class Application_View_Helper_FormatValue extends Zend_View_Helper_Abstract {
      * TODO can't get list of allowed values from model
      * TODO some things have special methods (Person->getDisplayName())
      */
-    public function format($value, $model = null) {
+    public function format($value, $model = null)
+    {
         if ($value instanceof Opus_Model_Abstract) {
             return $this->formatModel($value, $model);
         }
         if ($value instanceof Opus_Model_Field) {
             return $this->formatModel($value, $model);
-        }
-        else {
+        } else {
             $this->getLogger()->debug('Formatting ' . $value);
             return $value;
         }
@@ -182,13 +178,12 @@ class Application_View_Helper_FormatValue extends Zend_View_Helper_Abstract {
      * Returns logger.
      * @return Zend_Log
      */
-    private function getLogger() {
+    private function getLogger()
+    {
         if (empty($this->logger)) {
             $this->_logger = Zend_Registry::get('Zend_Log');
         }
 
         return $this->_logger;
     }
-
 }
-

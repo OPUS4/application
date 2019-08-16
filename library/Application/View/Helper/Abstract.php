@@ -34,7 +34,8 @@
 /**
  * Abstract base class for view helpers.
  */
-class Application_View_Helper_Abstract extends Zend_View_Helper_Abstract {
+class Application_View_Helper_Abstract extends Zend_View_Helper_Abstract
+{
 
     /**
      * Logger for class.
@@ -72,5 +73,4 @@ class Application_View_Helper_Abstract extends Zend_View_Helper_Abstract {
     {
         return Application_Configuration::getInstance()->getConfig();
     }
-
 }

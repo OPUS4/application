@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -28,31 +27,38 @@
  * @category    Application
  * @package     Module_Setup
  * @author      Edouard Simon <edouard.simon@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
- *
+ * TODO remove camel case from controller name
  */
-class Setup_HelpPageController extends Application_Controller_SetupAbstract {
+class Setup_HelpPageController extends Application_Controller_Action
+{
 
-    public function init() {
+    public function init()
+    {
         parent::init();
 
         $this->getHelper('MainMenu')->setActive('admin');
     }
 
-    public function indexAction() {
-        $this->forward('edit');
+    public function indexAction()
+    {
+        // TODO fix $this->forward('edit');
     }
 
-    protected function getForm() {
+    protected function getForm()
+    {
         return new Setup_Form_HelpPage();
     }
 
-    protected function getModel() {
-        return new Setup_Model_HelpPage(new Zend_Config_Ini(APPLICATION_PATH . '/modules/setup/setup.ini', 'help'));
+    protected function getModel()
+    {
+        return new Setup_Model_HelpPage(
+            new Zend_Config_Ini(APPLICATION_PATH . '/modules/setup/setup.ini', 'help')
+        );
     }
 }

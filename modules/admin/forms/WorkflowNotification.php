@@ -29,6 +29,8 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
+ *
+ * TODO use getRecipients
  */
 class Admin_Form_WorkflowNotification extends Admin_Form_YesNoForm
 {
@@ -63,9 +65,8 @@ class Admin_Form_WorkflowNotification extends Admin_Form_YesNoForm
     public function isNotificationEnabled()
     {
         $config = Zend_Registry::get('Zend_Config');
-
-        return ((isset($config->notification->document->published->enabled)
-            && $config->notification->document->published->enabled == 1));
+        return (isset($config->notification->document->published->enabled)
+            && filter_var($config->notification->document->published->enabled, FILTER_VALIDATE_BOOLEAN));
     }
 
     /**
@@ -86,7 +87,6 @@ class Admin_Form_WorkflowNotification extends Admin_Form_YesNoForm
             $this->addSubForm($subform, 'notification');
         }
     }
-
     /**
      * Returns list of recipients for document state change notifications.
      *
@@ -97,7 +97,8 @@ class Admin_Form_WorkflowNotification extends Admin_Form_YesNoForm
      * @param $document
      * TODO should not be part of the form class (encapsulate in different class)
      */
-    public function getRecipients($document) {
+    public function getRecipients($document)
+    {
         $recipients = [];
 
         $authors = $document->getPersonAuthor();
@@ -111,7 +112,7 @@ class Admin_Form_WorkflowNotification extends Admin_Form_YesNoForm
 
     protected function addPersons(&$recipients, $persons, $role = 'author')
     {
-        foreach ($persons as $person) {
+        foreach ($persons as $index => $person) {
             $fullname = $person->getDisplayName();
             $email = $person->getEmail();
             if (strlen(trim($email)) > 0) {
@@ -119,9 +120,9 @@ class Admin_Form_WorkflowNotification extends Admin_Form_YesNoForm
                     $entry = $recipients[$email];
                     $names = $entry['name'];
 
-                    if (!is_array($names) && $names !== $fullname ||
-                        is_array($names) && !in_array($fullname, $names)) {
-                        if (!is_array($names)) {
+                    if (! is_array($names) && $names !== $fullname ||
+                        is_array($names) && ! in_array($fullname, $names)) {
+                        if (! is_array($names)) {
                             $names = [$names];
                         }
 
@@ -131,9 +132,9 @@ class Admin_Form_WorkflowNotification extends Admin_Form_YesNoForm
 
                     $roles = $entry['role'];
 
-                    if (!is_array($roles) && $roles !== $role ||
-                        is_array($roles) && !in_array($role, $roles)) {
-                        if (!is_array($roles)) {
+                    if (! is_array($roles) && $roles !== $role ||
+                        is_array($roles) && ! in_array($role, $roles)) {
+                        if (! is_array($roles)) {
                             $roles = [$roles];
 
                             $roles[] = $role;
@@ -150,5 +151,37 @@ class Admin_Form_WorkflowNotification extends Admin_Form_YesNoForm
                 }
             }
         }
+    }
+
+    /**
+     * Returns the recipients that have been selected in the form.
+     * @return
+     */
+    public function getSelectedRecipients($document, $post)
+    {
+        $recipients = [];
+
+        $authors = $document->getPersonAuthor();
+
+        $selected = [];
+
+        // TODO $post = $this->getValues();
+
+        foreach ($authors as $index => $author) {
+            $key = "author_$index";
+            if (isset($post[$key]) && $post[$key] == '1') {
+                $selected[] = $authors[$index];
+            }
+        }
+
+        if (count($selected) > 0) {
+            $this->addPersons($recipients, $selected, 'author');
+        }
+
+        if (isset($post['submitter']) && $post['submitter'] == '1') {
+            $this->addPersons($recipients, [$document->getPersonSubmitter(0)], 'submitter');
+        }
+
+        return $recipients;
     }
 }

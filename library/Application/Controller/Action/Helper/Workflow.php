@@ -97,16 +97,17 @@ class Application_Controller_Action_Helper_Workflow extends Zend_Controller_Acti
 
         $acl = $this->getAcl();
 
-        if (!is_null($acl)) {
+        if (! is_null($acl)) {
             $logger->debug("ACL: got instance");
 
-            if (!is_null($acl)) {
+            if (! is_null($acl)) {
                 $allowedTargetStates = [];
 
                 foreach ($targetStates as $targetState) {
                     $resource = 'workflow_' . $currentState . '_' . $targetState;
-                    if (!$acl->has(new Zend_Acl_Resource($resource)) || $acl->isAllowed(
-                        Application_Security_AclProvider::ACTIVE_ROLE, $resource
+                    if (! $acl->has(new Zend_Acl_Resource($resource)) || $acl->isAllowed(
+                        Application_Security_AclProvider::ACTIVE_ROLE,
+                        $resource
                     )) {
                         $allowedTargetStates[] = $targetState;
                     } else {
@@ -137,10 +138,10 @@ class Application_Controller_Action_Helper_Workflow extends Zend_Controller_Acti
 
         $targetStates = $workflow->get($currentState);
 
-        if (!empty($targetStates)) {
+        if (! empty($targetStates)) {
             return $targetStates->toArray();
         } else {
-            return array();
+            return [];
         }
     }
 

@@ -82,7 +82,7 @@
             <xsl:apply-templates select="PersonAuthor" mode="oai_pp" />
             <!-- dc:publisher -->
             <!--  was soll hier genau stehen ??? --> 
-            <xsl:element name="PP:DC.Publisher">
+            <xsl:element name="PP:DC.publisher">
                <xsl:apply-templates select="@PublisherName" mode="oai_pp" />
                <xsl:apply-templates select="@PublisherPlace" mode="oai_pp" />
             </xsl:element>
@@ -90,7 +90,7 @@
     </xsl:template>
 
     <xsl:template match="TitleMain" mode="oai_pp">
-        <xsl:element name="PP:DC.Title">
+        <xsl:element name="PP:DC.title">
             <xsl:choose>
               <!--  noch aendern auf "=", wenn das mit den Sprachen geklaert ist -->
               <xsl:when test="../@Language!=@Language">
@@ -106,14 +106,14 @@
     </xsl:template>
 
     <xsl:template match="PersonAuthor" mode="oai_pp">
-        <xsl:element name="PP:DC.Creator">
+        <xsl:element name="PP:DC.creator">
            <xsl:value-of select="@LastName" />,
            <xsl:value-of select="@FirstName" />
         </xsl:element>
     </xsl:template>
 
     <xsl:template match="Subject[@Type='swd']" mode="oai_pp">
-        <xsl:element name="PP:DC.Subject">
+        <xsl:element name="PP:DC.subject">
             <xsl:attribute name="scheme">
                 <xsl:text>swd</xsl:text>
             </xsl:attribute>
@@ -122,7 +122,7 @@
     </xsl:template>
 
     <xsl:template match="Subject[@Type='uncontrolled']" mode="oai_pp">
-        <xsl:element name="PP:DC.Subject">
+        <xsl:element name="PP:DC.subject">
             <xsl:attribute name="language">
                 <xsl:value-of select="@Language" />
             </xsl:attribute>
@@ -148,7 +148,7 @@
     </xsl:template>
 
     <xsl:template match="PersonAdvisor" mode="oai_pp">
-       <xsl:element name="PP:DC.Contributor">
+       <xsl:element name="PP:DC.contributor">
            <xsl:value-of select="@Name" />
        </xsl:element>
     </xsl:template>

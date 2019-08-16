@@ -64,7 +64,9 @@ class Application_Form_Element_Text extends Zend_Form_Element_Text implements Ap
         parent::init();
 
         $this->addPrefixPath(
-            'Application_Form_Decorator', 'Application/Form/Decorator', Zend_Form::DECORATOR
+            'Application_Form_Decorator',
+            'Application/Form/Decorator',
+            Zend_Form::DECORATOR
         );
     }
 
@@ -73,7 +75,7 @@ class Application_Form_Element_Text extends Zend_Form_Element_Text implements Ap
      */
     public function loadDefaultDecorators()
     {
-        if (!$this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
+        if (! $this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
             $this->setDecorators([
                 'ViewHelper',
                 'Placeholder',
