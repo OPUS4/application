@@ -27,7 +27,7 @@
  * @category    Application
  * @package     Module_Admin
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -57,6 +57,7 @@ class Admin_PersonController extends Application_Controller_Action
 
         $this->_documentsHelper = $this->_helper->getHelper('Documents');
         $this->_dates = $this->_helper->getHelper('Dates');
+        $this->view->contentWrapperDisabled = true;
     }
 
     /**

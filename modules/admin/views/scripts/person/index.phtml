@@ -27,7 +27,7 @@
  * @category    Application
  * @package     Module_Admin
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2017-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  *
  * TODO use view helper to clean up this page
@@ -44,6 +44,7 @@
 </div>
 
 <table class="persons-table">
+    <thead>
     <tr>
         <th><?= $this->translate('LastName') ?></th>
         <th><?= $this->translate('FirstName') ?></th>
@@ -52,6 +53,7 @@
         <th><?= $this->translate('admin_account_column_roles') ?></th>
         <th></th>
     </tr>
+    </thead>
 <?PHP foreach ($this->persons as $person) : ?>
     <tr>
         <td class="lastname"><?= $this->highlight(htmlspecialchars($person['last_name']), $this->filter) ?></td>
