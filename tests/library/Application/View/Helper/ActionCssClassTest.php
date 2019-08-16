@@ -24,22 +24,38 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Ralf Claussnitzer (ralf.claussnitzer@slub-dresden.de)
- * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
- * @author      Jens Schwidder (schwidder@zib.de)
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @category    Application Unit Test
+ * @package     Application_View_Helper
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-?>
 
-<div id="adminMenuContainer">
-    <?PHP
-    $partial = ['menu.phtml', 'admin'];
-    $this->navigation()->menu()->setPartial($partial);
-    echo $this->navigation()->menu()->render();
-    $this->navigation()->menu()->setPartial(null); // prevents invluencing main menu
-    ?>
-</div>
+class Application_View_Helper_ActionCssClassTest extends ControllerTestCase
+{
+
+    protected $additionalResources = 'view';
+
+    public function testActionCssClass()
+    {
+        $helper = new Application_View_Helper_ActionCssClass();
+        $helper->setView(Zend_Registry::get('Opus_View'));
+
+        $this->assertEquals('', $helper->actionCssClass());
+
+        $helper->view->moduleName = 'admin';
+        $this->assertEquals('admin', $helper->actionCssClass());
+
+        $helper->view->controllerName = 'index';
+        $this->assertEquals('admin', $helper->actionCssClass());
+
+        $helper->view->controllerName = 'documents';
+        $this->assertEquals('admin_documents', $helper->actionCssClass());
+
+        $helper->view->actionName = 'index';
+        $this->assertEquals('admin_documents', $helper->actionCssClass());
+
+        $helper->view->actionName = 'edit';
+        $this->assertEquals('admin_documents_edit', $helper->actionCssClass());
+    }
+}

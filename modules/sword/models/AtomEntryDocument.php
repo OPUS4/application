@@ -57,8 +57,8 @@ class Sword_Model_AtomEntryDocument
 
         if (! empty($this->entries)) {
             $config = Zend_Registry::get('Zend_Config');
-            $prettyPrinting = $config->prettyXml;
-            if ($prettyPrinting == 'true') {
+            $prettyPrinting = isset($config->prettyXml) && filter_var($config->prettyXml, FILTER_VALIDATE_BOOLEAN);
+            if ($prettyPrinting) {
                 $dom = new DOMDocument;
                 $dom->preserveWhiteSpace = false;
                 $dom->formatOutput = true;

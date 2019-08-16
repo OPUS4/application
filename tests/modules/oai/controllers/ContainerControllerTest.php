@@ -84,8 +84,7 @@ class Oai_ContainerControllerTest extends ControllerTestCase
 
         // enable security
         $config = Zend_Registry::get('Zend_Config');
-        $security = $config->security;
-        $config->security = '1';
+        $config->security = self::CONFIG_VALUE_TRUE;
         Zend_Registry::set('Zend_Config', $config);
 
         $doc = $this->createTestDocument();
@@ -97,10 +96,6 @@ class Oai_ContainerControllerTest extends ControllerTestCase
             $r->removeAccessModule('oai');
             $r->store();
         }
-
-        // restore security settings
-        $config->security = $security;
-        Zend_Registry::set('Zend_Config', $config);
 
         $this->assertResponseCode(500);
         $this->assertContains('access to requested document is forbidden', $this->getResponse()->getBody());

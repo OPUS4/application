@@ -8,7 +8,9 @@
     <file>library</file>
     <file>modules</file>
     <file>scripts</file>
-    <file>public/index.php</file>
-    <file>db/createdb.php</file>
+    <file>public</file>
+    <file>db</file>
     <file>tests</file>
+    <exclude-pattern>public/assets</exclude-pattern>
+    <exclude-pattern>public/js</exclude-pattern>
 </ruleset>

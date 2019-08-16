@@ -381,7 +381,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     public function testSubjectSortOrderAlphabetical()
     {
         Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
-            'frontdoor' => ['subjects' => ['alphabeticalSorting' => '1']]
+            'frontdoor' => ['subjects' => ['alphabeticalSorting' => self::CONFIG_VALUE_TRUE]]
         ]));
 
         // frontdoor.subjects.alphabeticalSorting
@@ -790,7 +790,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     {
         // Aktiviere Kürzung von Abstrakten
         $config = Zend_Registry::get('Zend_Config')->merge(new Zend_Config(
-            ['frontdoor' => ['numOfShortAbstractChars' => 200]]
+            ['frontdoor' => ['numOfShortAbstractChars' => '200']]
         ));
 
         $this->dispatch('/frontdoor/index/index/docId/92');
@@ -932,7 +932,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     public function testFilesInCustomSortOrder()
     {
         $config = Zend_Registry::get('Zend_Config');
-        $config->frontdoor->files->customSorting = 1;
+        $config->frontdoor->files->customSorting = '1';
 
         $this->dispatch('/frontdoor/index/index/docId/155');
 
@@ -951,7 +951,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     public function testFilesInAlphabeticSortOrder()
     {
         $config = Zend_Registry::get('Zend_Config');
-        $config->frontdoor->files->customSorting = 0;
+        $config->frontdoor->files->customSorting = self::CONFIG_VALUE_FALSE;
 
         $this->dispatch('/frontdoor/index/index/docId/155');
 
@@ -1362,7 +1362,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     public function testGoogleScholarOpenInNewWindowEnabled()
     {
         Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
-            'googleScholar' => ['openInNewWindow' => 1]
+            'googleScholar' => ['openInNewWindow' => self::CONFIG_VALUE_TRUE]
         ]));
         $this->dispatch('/frontdoor/index/index/docId/146');
         $this->assertResponseCode(200);
@@ -1373,7 +1373,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     public function testGoogleScholarOpenInNewWindowDisabled()
     {
         Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
-            'googleScholar' => ['openInNewWindow' => 0]
+            'googleScholar' => ['openInNewWindow' => self::CONFIG_VALUE_FALSE]
         ]));
         $this->dispatch('/frontdoor/index/index/docId/146');
         $this->assertResponseCode(200);
@@ -1395,7 +1395,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     public function testTwitterOpenInNewWindowEnabled()
     {
         Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
-            'twitter' => ['openInNewWindow' => 1]
+            'twitter' => ['openInNewWindow' => self::CONFIG_VALUE_TRUE]
         ]));
         $this->dispatch('/frontdoor/index/index/docId/146');
         $this->assertResponseCode(200);
@@ -1406,7 +1406,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     public function testTwitterOpenInNewWindowDisabled()
     {
         Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
-            'twitter' => ['openInNewWindow' => 0]
+            'twitter' => ['openInNewWindow' => self::CONFIG_VALUE_FALSE]
         ]));
         $this->dispatch('/frontdoor/index/index/docId/146');
         $this->assertResponseCode(200);
@@ -1455,7 +1455,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     {
         $this->useEnglish();
         Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
-            'frontdoor' => ['metadata' => ['BelongsToBibliography' => 1]]
+            'frontdoor' => ['metadata' => ['BelongsToBibliography' => self::CONFIG_VALUE_TRUE]]
         ]));
 
         $this->dispatch('/frontdoor/index/index/docId/146');
@@ -1467,7 +1467,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     public function testBelongsToBibliographyTurnedOff()
     {
         Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
-            'frontdoor' => ['metadata' => ['BelongsToBibliography' => 0]]
+            'frontdoor' => ['metadata' => ['BelongsToBibliography' => self::CONFIG_VALUE_FALSE]]
         ]));
 
         $this->dispatch('/frontdoor/index/index/docId/146');

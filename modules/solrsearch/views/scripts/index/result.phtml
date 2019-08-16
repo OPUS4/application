@@ -41,8 +41,8 @@ $document = $result->getDocument();
 
 <div class="result_box <?= $this->partialCounter % 2 === 0 ? 'even' : 'odd'; ?> <?= $document->getServerState() ?>">
     <?= $this->fulltextLogo() ?>
-    <?php if (isset($this->seriesId) && $this->seriesId && !is_null($result->getSeriesNumber( $this->seriesId ))) : ?>
-        <div class="results_seriesnumber"><?= htmlspecialchars($result->getSeriesNumber( $this->seriesId )); ?></div>
+    <?php if (isset($this->seriesId) && $this->seriesId && ! is_null($result->getSeriesNumber($this->seriesId))) : ?>
+        <div class="results_seriesnumber"><?= htmlspecialchars($result->getSeriesNumber($this->seriesId)); ?></div>
     <?php endif ?>
 
     <div class="results_title">
@@ -53,7 +53,7 @@ $document = $result->getDocument();
         <?PHP endif ?>
     </div>
 
-    <?php if (!is_null($result->getAsset( 'author' ))) : ?>
+    <?php if (! is_null($result->getAsset('author'))) : ?>
         <div class="results_author">
             <?= $this->resultAuthors() ?>
         </div>
@@ -61,7 +61,7 @@ $document = $result->getDocument();
 
     <?php if ($this->jQueryEnabled()) : ?>
         <div class="abstract-wrapper">
-            <?php if (!is_null($result->getAsset( 'abstract' ))) : ?>
+            <?php if (! is_null($result->getAsset('abstract'))) : ?>
                 <a id="abstractToggle_<?= $document->getId() ?>"
                    class="abstract-toggle collapsed"
                    title="<?= $this->translate('results_hideabstract_title') ?>"

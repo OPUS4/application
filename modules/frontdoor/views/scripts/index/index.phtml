@@ -36,7 +36,9 @@
 ?>
 
 <div class="frontdoor">
-    <?php if (isset($this->paginate) && $this->paginate) include('pagination.phtml') ?>
+<?php if (isset($this->paginate) && $this->paginate) {
+    include('pagination.phtml');
+} ?>
 
     <?= $this->frontdoor ?>
 

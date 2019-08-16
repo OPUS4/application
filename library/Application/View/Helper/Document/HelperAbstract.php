@@ -36,7 +36,6 @@
  */
 abstract class Application_View_Helper_Document_HelperAbstract extends Application_View_Helper_Abstract
 {
-
     /**
      * Determines if preferably the title matching the user interface language should be used.
      * @var bool
@@ -52,13 +51,8 @@ abstract class Application_View_Helper_Document_HelperAbstract extends Applicati
         $config = $this->getConfig();
 
         if (is_null($this->_preferUserInterfaceLanguage)) {
-            if (isset($config->search->result->display->preferUserInterfaceLanguage)) {
-                $value = trim($config->search->result->display->preferUserInterfaceLanguage);
-
-                $this->_preferUserInterfaceLanguage = ($value == 1 || $value === 'true');
-            } else {
-                $this->_preferUserInterfaceLanguage = false;
-            }
+            $this->_preferUserInterfaceLanguage = isset($config->search->result->display->preferUserInterfaceLanguage) &&
+                filter_var($config->search->result->display->preferUserInterfaceLanguage, FILTER_VALIDATE_BOOLEAN);
         }
 
         return $this->_preferUserInterfaceLanguage;
@@ -70,7 +64,7 @@ abstract class Application_View_Helper_Document_HelperAbstract extends Applicati
      */
     public function setPreferUserInterfaceLanguage($enabled)
     {
-        $this->_preferUserInterfaceLanguage = ($enabled == 1 || $enabled === 'true');
+        $this->_preferUserInterfaceLanguage = filter_var($enabled, FILTER_VALIDATE_BOOLEAN);
     }
 
     public function getResult()

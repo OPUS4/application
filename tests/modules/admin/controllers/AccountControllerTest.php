@@ -368,7 +368,6 @@ class Admin_AccountControllerTest extends ControllerTestCase
         $this->dispatch('/admin/account');
         $this->assertResponseCode(200, $this->getResponse()->getBody());
         $this->logoutUser();
-        $this->restoreSecuritySetting();
 
         $user = new Opus_Account(null, null, 'security4');
 

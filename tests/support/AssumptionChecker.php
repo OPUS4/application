@@ -33,7 +33,6 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 class AssumptionChecker
 {
@@ -62,7 +61,7 @@ class AssumptionChecker
 
         Zend_Registry::get('Zend_Config')->merge(new Zend_Config(
             ['searchengine' => ['solr' => [
-                'facetlimit' => ['year' => 10, 'year_inverted' => 10],
+                'facetlimit' => ['year' => '10', 'year_inverted' => '10'],
                 'facets' => 'year,doctype,author_facet,language,has_fulltext,belongs_to_bibliography,subject,institute'
             ]]]
         ));

@@ -68,7 +68,7 @@
 <?php endif; ?>
 
 <p>
-    <a href="<?= $this->url(array('module' => 'export', 'controller' => 'index', 'action' => 'datacite', 'docId' => $this->docId, 'validate' => 'no'), null, true) ?>"><?= $this->translate('export_datacite_download_xml') ?></a>
+    <a href="<?= $this->url(['module' => 'export', 'controller' => 'index', 'action' => 'datacite', 'docId' => $this->docId, 'validate' => 'no'], null, true) ?>"><?= $this->translate('export_datacite_download_xml') ?></a>
 </p>
 <?php if ($this->docServerState !== 'published') : ?>
     <p>

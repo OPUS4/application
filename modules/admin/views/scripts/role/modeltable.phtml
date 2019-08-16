@@ -35,27 +35,27 @@
     <thead>
         <tr>
             <th class="visible"><?= $this->translate($this->element->getColumnLabel(0)) ?>
-                <a class="add" href="<?= $this->url(array('action' => 'new')) ?>"><?=
+                <a class="add" href="<?= $this->url(['action' => 'new']) ?>"><?=
                     $this->translate('admin_button_add') ?></a></th>
             <th colspan="3">&nbsp;</th>
         </tr>
     </thead>
-    <?PHP foreach($this->element->getModels() as $model) : ?>
+    <?PHP foreach ($this->element->getModels() as $model) : ?>
         <tr>
             <td><?= htmlspecialchars($model->getDisplayName()) ?></td>
             <td class="accesscontrol">
-                <a href="<?= $this->url(array('controller' => 'access', 'action' => 'listmodule', 'roleid' => $model->getId())) ?>"
+                <a href="<?= $this->url(['controller' => 'access', 'action' => 'listmodule', 'roleid' => $model->getId()]) ?>"
                 ><?= $this->translate('admin_role_edit_access'); ?></a>
             </td>
             <td class="edit">
                 <?PHP if ($this->element->isModifiable($model)) : ?>
-                <a href="<?= $this->url(array('action' => 'edit', 'id' => $model->getId())) ?>"
+                <a href="<?= $this->url(['action' => 'edit', 'id' => $model->getId()]) ?>"
                     ><?= $this->translate('admin_button_edit'); ?></a>
                 <?PHP endif ?>
             </td>
             <td class="remove">
                 <?PHP if ($this->element->isDeletable($model)) : ?>
-                <a href="<?= $this->url(array('action' => 'delete', 'id' => $model->getId())) ?>"
+                <a href="<?= $this->url(['action' => 'delete', 'id' => $model->getId()]) ?>"
                     ><?= $this->translate('admin_button_remove'); ?></a>
                 <?PHP endif ?>
             </td>

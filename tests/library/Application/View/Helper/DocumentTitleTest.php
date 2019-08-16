@@ -106,7 +106,7 @@ class Application_View_Helper_DocumentTitleTest extends ControllerTestCase
     {
         Zend_Registry::get('Zend_Config')->merge(new Zend_Config(
             ['search' => ['result' => ['display' => [
-                'preferUserInterfaceLanguage' => '1'
+                'preferUserInterfaceLanguage' => self::CONFIG_VALUE_TRUE
             ]]]]
         ));
 
@@ -158,6 +158,9 @@ class Application_View_Helper_DocumentTitleTest extends ControllerTestCase
         $this->_helper->setPreferUserInterfaceLanguage('1');
         $this->assertTrue($this->_helper->isPreferUserInterfaceLanguage());
 
+        $this->_helper->setPreferUserInterfaceLanguage(self::CONFIG_VALUE_TRUE);
+        $this->assertTrue($this->_helper->isPreferUserInterfaceLanguage());
+
         // false
         $this->_helper->setPreferUserInterfaceLanguage('bla');
         $this->assertFalse($this->_helper->isPreferUserInterfaceLanguage());
@@ -166,6 +169,9 @@ class Application_View_Helper_DocumentTitleTest extends ControllerTestCase
         $this->assertFalse($this->_helper->isPreferUserInterfaceLanguage());
 
         $this->_helper->setPreferUserInterfaceLanguage(0);
+        $this->assertFalse($this->_helper->isPreferUserInterfaceLanguage());
+
+        $this->_helper->setPreferUserInterfaceLanguage(self::CONFIG_VALUE_FALSE);
         $this->assertFalse($this->_helper->isPreferUserInterfaceLanguage());
     }
 }

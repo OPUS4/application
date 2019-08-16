@@ -105,9 +105,9 @@ class Admin_Model_IndexMaintenanceTest extends ControllerTestCase
 
         $config = Zend_Registry::get('Zend_Config');
         if (isset($config->runjobs->asynchronous)) {
-            $config->runjobs->asynchronous = 1;
+            $config->runjobs->asynchronous = self::CONFIG_VALUE_TRUE;
         } else {
-            $config = new Zend_Config(['runjobs' => ['asynchronous' => 1]], true);
+            $config = new Zend_Config(['runjobs' => ['asynchronous' => self::CONFIG_VALUE_TRUE]], true);
             $config->merge(Zend_Registry::get('Zend_Config'));
         }
         Zend_Registry::set('Zend_Config', $config);
@@ -119,9 +119,9 @@ class Admin_Model_IndexMaintenanceTest extends ControllerTestCase
 
         $config = Zend_Registry::get('Zend_Config');
         if (isset($config->runjobs->indexmaintenance->asynchronous)) {
-            $config->runjobs->indexmaintenance->asynchronous = 1;
+            $config->runjobs->indexmaintenance->asynchronous = self::CONFIG_VALUE_TRUE;
         } else {
-            $config = new Zend_Config(['runjobs' => ['indexmaintenance' => ['asynchronous' => 1]]], true);
+            $config = new Zend_Config(['runjobs' => ['indexmaintenance' => ['asynchronous' => self::CONFIG_VALUE_TRUE]]], true);
             $config->merge(Zend_Registry::get('Zend_Config'));
         }
 

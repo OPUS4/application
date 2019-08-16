@@ -60,12 +60,12 @@
             <ul class="nav help">
                 <?php foreach ($entries as $entry) : ?>
                     <li>
-                        <?php if (!$this->separate) : ?>
+                        <?php if (! $this->separate) : ?>
                             <a href="#<?= $entry; ?>">
                                 <?= $this->translate('help_title_' . $entry) ?>
                             </a>
                         <?php else : ?>
-                            <a href="<?= $this->url(array('module' => 'home', 'controller' => 'index', 'action' => 'help', 'content' => $entry), null, true) ?>">
+                            <a href="<?= $this->url(['module' => 'home', 'controller' => 'index', 'action' => 'help', 'content' => $entry], null, true) ?>">
                                 <?= $this->translate('help_title_' . $entry) ?>
                             </a>
                         <?php endif ?>
@@ -75,7 +75,7 @@
         <?php endforeach; ?>
         </div>
 
-        <?php if (!$this->separate) : ?>
+        <?php if (! $this->separate) : ?>
          <div class="section answers">
             <h2><?= $this->translate('help_index_answerstitle') ?></h2>
             <dl>
@@ -87,7 +87,7 @@
                     <dd>
                     <?php
                         $pos = array_search($translation, $helpFilesAvailable);
-                        if ($pos !== FALSE) : ?>
+                    if ($pos !== false) : ?>
                         <div><?= Home_Model_HelpFiles::getFileContent($helpFilesAvailable[$pos]) ?></div>
                     <?php elseif (($translation !== 'help_content_' . $entry)) : ?>
                         <div><?= $translation ?></div>

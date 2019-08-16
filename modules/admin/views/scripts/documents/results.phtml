@@ -37,7 +37,7 @@
     <tr>
         <th>ID</th>
         <th><?= $this->translate('admin_documents_table_column_title') ?></th>
-        <?PHP if (!empty($this->series)) : ?>
+        <?PHP if (! empty($this->series)) : ?>
         <th>&nbsp;</th>
         <?PHP endif; ?>
         <th><?= $this->translate('admin_documents_table_column_type') ?></th>
@@ -54,7 +54,7 @@
             <td class="id"><?= $docId ?></td>
             <td class="info">
                 <?PHP $authorsCount = count($document->getAuthors()) - 1; ?>
-                <?PHP foreach($document->getAuthors() as $count => $author) : ?>
+                <?PHP foreach ($document->getAuthors() as $count => $author) : ?>
                     <span class="author">
                 <?PHP if ($this->linkToAuthorSearch) : ?>
                     <a href="<?= $author['url'] ?>"><?= $author['name'] ?></a>
@@ -69,7 +69,7 @@
                     ><?= htmlspecialchars($document->getDocTitle()) ?></a></span>
                 (<span class="pubDate"><?= $document->getYear() ?></span>)
             </td>
-            <?PHP if (!empty($this->series)) : ?>
+            <?PHP if (! empty($this->series)) : ?>
                 <td>
                     <span><?= $this->seriesNumber($document->getDocument(), $this->series) ?></span>
                 </td>

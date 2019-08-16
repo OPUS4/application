@@ -37,7 +37,7 @@
 
 <div id="adminMenuContainer">
     <?PHP
-    $partial = array('menu.phtml', 'admin');
+    $partial = ['menu.phtml', 'admin'];
     $this->navigation()->menu()->setPartial($partial);
     echo $this->navigation()->menu()->render();
     $this->navigation()->menu()->setPartial(null); // prevents influencing main menu

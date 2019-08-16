@@ -39,7 +39,8 @@
  *
  * @returns {boolean}
  */
-function resetAdvancedSearchForm() {
+function resetAdvancedSearchForm()
+{
     var fields = ['author', 'title', 'referee', 'abstract', 'fulltext', 'year'];
     for (i = 0; i < fields.length; i++) {
         var id = fields[i];
@@ -50,14 +51,16 @@ function resetAdvancedSearchForm() {
     return false;
 }
 
-function resetTextBox(id) {
+function resetTextBox(id)
+{
     var textBox = document.getElementById(id);
     if (textBox != null) {
         textBox.value = '';
     }
 }
 
-function resetComboBox(id) {
+function resetComboBox(id)
+{
     var comboBox = document.getElementById(id);
     if (comboBox != null) {
         comboBox.selectedIndex = 0;

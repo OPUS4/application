@@ -70,7 +70,7 @@ class Admin_WorkflowController extends Application_Controller_Action
         $config = $this->getConfig();
 
         if (isset($config->confirmation->document->statechange->enabled)) {
-            $this->_confirmChanges = ($config->confirmation->document->statechange->enabled == 1) ? true : false;
+            $this->_confirmChanges = filter_var($config->confirmation->document->statechange->enabled, FILTER_VALIDATE_BOOLEAN);
         } else {
             $this->_confirmChanges = true;
         }

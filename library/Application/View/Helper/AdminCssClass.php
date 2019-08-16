@@ -25,21 +25,26 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_Admin
- * @author      Ralf Claussnitzer (ralf.claussnitzer@slub-dresden.de)
- * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
- * @author      Jens Schwidder (schwidder@zib.de)
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @package     View
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-?>
 
-<div id="adminMenuContainer">
-    <?PHP
-    $partial = ['menu.phtml', 'admin'];
-    $this->navigation()->menu()->setPartial($partial);
-    echo $this->navigation()->menu()->render();
-    $this->navigation()->menu()->setPartial(null); // prevents invluencing main menu
-    ?>
-</div>
+/**
+ * Return CSS class for admin layout.
+ *
+ * TODO allow every module to configure which CSS should be used (general, administration)
+ */
+class Application_View_Helper_AdminCssClass extends Application_View_Helper_Abstract
+{
+
+    public function adminCssClass()
+    {
+        if (in_array($this->view->moduleName, ['admin', 'review', 'setup', 'account'])) {
+            return 'adminContainer';
+        } else {
+            return '';
+        }
+    }
+}

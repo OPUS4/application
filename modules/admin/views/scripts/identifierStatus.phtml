@@ -33,20 +33,20 @@
 
 <?php
     $identifier = $this->element->getIdentifier();
-    if (!is_null($identifier)) {
-        $identifierStatus = $identifier->getStatus();
-        $viewMode = $this->element->isViewModeEnabled();
-    }
+if (! is_null($identifier)) {
+    $identifierStatus = $identifier->getStatus();
+    $viewMode = $this->element->isViewModeEnabled();
+}
 ?>
 
-<?php if (!is_null($identifier) && $identifierStatus != ''): ?>
+<?php if (! is_null($identifier) && $identifierStatus != '') : ?>
     <div class="identifierStatus">
-        <?php if ($viewMode): ?>
+        <?php if ($viewMode) : ?>
             <div class="<?= is_null($identifierStatus) ? 'unregistered' : $identifierStatus ?>">
                 <?= is_null($identifierStatus) ? htmlspecialchars($this->translate('admin_document_identifier_doi_unregistered')) : htmlspecialchars($this->translate('admin_document_identifier_doi_' . $identifierStatus)) ?>
             </div>
-        <?php else: ?>
-            <?php if (!is_null($identifierStatus)): ?>
+        <?php else : ?>
+            <?php if (! is_null($identifierStatus)) : ?>
             <div class="warning"><?= htmlspecialchars($this->translate('admin_document_identifier_doi_donotedit')) ?></div>
             <?php endif; ?>
         <?php endif; ?>

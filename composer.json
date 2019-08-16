@@ -44,7 +44,7 @@
     "component-dir": "public/assets"
   },
   "scripts": {
-    "cs-check": "phpcs -n",
-    "cs-fix": "phpcbf"
+    "cs-check": "phpcs -n --extensions=php,phtml,css,js,inc",
+    "cs-fix": "phpcbf --extensions=php,phtml,css,js,inc"
   }
 }

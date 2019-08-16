@@ -76,8 +76,8 @@ class Sword_ServicedocumentController extends Zend_Rest_Controller
         $domDocument = $serviceDocument->getDocument();
 
         $config = Zend_Registry::get('Zend_Config');
-        $prettyPrinting = $config->prettyXml;
-        if ($prettyPrinting == 'true') {
+        $prettyPrinting = isset($config->prettyXml) && filter_var($config->prettyXml, FILTER_VALIDATE_BOOLEAN);
+        if ($prettyPrinting) {
             $domDocument->preserveWhiteSpace = false;
             $domDocument->formatOutput = true;
         }
