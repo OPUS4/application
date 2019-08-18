@@ -246,16 +246,17 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
 
     public function testEditActionShowFormForProtectedEnrichment()
     {
-        $this->dispatch($this->getControllerPath() . '/edit/id/City');
+        $protectedEnrichmentKeyName = 'ClassRvk';
+        $this->assertNotNull(new Opus_EnrichmentKey($protectedEnrichmentKeyName));
+
+        $this->dispatch($this->getControllerPath() . '/edit/id/' . $protectedEnrichmentKeyName);
 
         $this->assertRedirect();
         $this->assertRedirectTo($this->getControllerPath());
         $this->verifyFlashMessage('controller_crud_model_not_modifiable', self::MESSAGE_LEVEL_FAILURE);
 
-        $enrichmentKey = new Opus_EnrichmentKey('City');
-
-        $this->assertNotNull($enrichmentKey);
-        $this->assertEquals('City', $enrichmentKey->getName());
+        $enrichmentKey = new Opus_EnrichmentKey($protectedEnrichmentKeyName);
+        $this->assertEquals($protectedEnrichmentKeyName, $enrichmentKey->getName());
     }
 
     /**
@@ -296,35 +297,30 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
 
     /**
      * @expectedException Opus_Model_NotFoundException
-     * @expectedExceptionMessage No Opus_Db_EnrichmentKeys with id CityModified in database.
+     * @expectedExceptionMessage No Opus_Db_EnrichmentKeys with id ClassRvkModified in database.
      */
     public function testEditActionSaveForProtectedEnrichment()
     {
-        $this->createsModels = true;
-
-        $enrichmentKey = new Opus_EnrichmentKey();
-        $enrichmentKey->setName('MyTestEnrichment');
-        $enrichmentKey->store();
+        $protectedEnrichmentKeyName = 'ClassRvk';
+        $this->assertNotNull(new Opus_EnrichmentKey($protectedEnrichmentKeyName));
 
         $this->getRequest()->setMethod('POST')->setPost([
-            'Id' => 'City',
-            'Name' => 'CityModified',
+            'Id' => $protectedEnrichmentKeyName,
+            'Name' => "${protectedEnrichmentKeyName}Modified",
             'Type' => 'TextType',
-            'Options' => '',
             'Save' => 'Speichern'
         ]);
 
         $this->dispatch($this->getControllerPath() . '/edit');
+
+        $this->assertRedirect();
         $this->assertRedirectTo($this->getControllerPath());
         $this->verifyFlashMessage('controller_crud_model_not_modifiable', self::MESSAGE_LEVEL_FAILURE);
 
-        $enrichmentKey = new Opus_EnrichmentKey('City');
+        $enrichmentKey = new Opus_EnrichmentKey($protectedEnrichmentKeyName);
+        $this->assertEquals($protectedEnrichmentKeyName, $enrichmentKey->getName());
 
-        $this->assertNotNull($enrichmentKey);
-        $this->assertEquals('City', $enrichmentKey->getName());
-
-        new Opus_EnrichmentKey('CityModified');
-
+        new Opus_EnrichmentKey("${protectedEnrichmentKeyName}Modified");
         $this->fail('Previous statement should have thrown exception.');
     }
 
@@ -409,32 +405,28 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
 
     /**
      * @expectedException Opus_Model_NotFoundException
-     * @expectedExceptionMessage No Opus_Db_EnrichmentKeys with id CityModified in database.
+     * @expectedExceptionMessage No Opus_Db_EnrichmentKeys with id ClassRvkModified in database.
      */
     public function testEditActionCancelForProtectedEnrichment()
     {
-        $this->createsModels = true;
-
-        $enrichmentKey = new Opus_EnrichmentKey();
-        $enrichmentKey->setName('MyTestEnrichment');
-        $enrichmentKey->store();
+        $protectedEnrichmentKeyName = 'ClassRvk';
+        $this->assertNotNull(new Opus_EnrichmentKey($protectedEnrichmentKeyName));
 
         $this->getRequest()->setMethod('POST')->setPost([
-            'Id' => 'City',
-            'Name' => 'CityModified',
+            'Id' => $protectedEnrichmentKeyName,
+            'Name' => "${protectedEnrichmentKeyName}Modified",
             'Cancel' => 'Abbrechen'
         ]);
 
         $this->dispatch($this->getControllerPath() . '/edit');
+
+        $this->assertRedirect();
         $this->assertRedirectTo($this->getControllerPath());
 
-        $enrichmentKey = new Opus_EnrichmentKey('City');
+        $enrichmentKey = new Opus_EnrichmentKey($protectedEnrichmentKeyName);
+        $this->assertEquals($protectedEnrichmentKeyName, $enrichmentKey->getName());
 
-        $this->assertNotNull($enrichmentKey);
-        $this->assertEquals('City', $enrichmentKey->getName());
-
-        new Opus_EnrichmentKey('CityModified');
-
+        new Opus_EnrichmentKey("${protectedEnrichmentKeyName}Modified");
         $this->fail('Previous statement should have thrown exception.');
     }
 
