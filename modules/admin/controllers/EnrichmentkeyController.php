@@ -100,4 +100,45 @@ class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD
         // weil die Tabelle enrichmentkeys keine Spalte mit dem Namen 'id' besitzt
         return ! in_array($model->getId(), $protectedKeys);
     }
+
+    public function removefromdocsAction()
+    {
+        if ($this->getRequest()->isPost() === true) {
+            // Bestätigungsformular POST verarbeiten
+            $result = $this->handleConfirmationPost();
+        } else {
+            // Bestätigungsformular anzeigen
+            $model = $this->getModel($this->getRequest()->getParam(self::PARAM_MODEL_ID));
+            if (! is_null($model)) {
+                if ($this->isDeletable($model)) {
+                    $form = $this->getConfirmationForm($model);
+                    $form->setLegend($this->view->translate('admin_enrichmentkey_remove_from_documents_title', $model->getName()));
+                    $form->setQuestion($this->view->translate('admin_enrichmentkey_remove_from_documents_description', $model->getName()));
+                    $result = $form;
+                } else {
+                    $result = $this->createCannotBeDeletedResult();
+                }
+            } else {
+                // Request mit invaliden IDs werden ignoriert und zur Index Seite umgeleitet
+                $result = $this->createInvalidIdResult();
+            }
+        }
+
+        $this->renderResult($result);
+    }
+
+    /**
+     * @param Opus_EnrichmentKey $model
+     */
+    public function deleteModel($model)
+    {
+        $request = $this->getRequest();
+        // Kontext ermitteln: Löschen des EKs oder nur Enrichments mit dem EK aus den Dokumenten löschen
+        if ($request->getActionName() === 'removeFromDocs') {
+            $model->deleteFromDocuments();
+        }
+        else {
+            parent::deleteModel($model);
+        }
+    }
 }

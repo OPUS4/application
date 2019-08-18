@@ -350,8 +350,11 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action
     }
 
     /**
-     * Verarbeitet POST vom Bestätigunsformular.
+     * Verarbeitet POST-Request vom Bestätigungsformular.
      *
+     * @param null $post
+     * @return array
+     * @throws Application_Exception
      */
     public function handleConfirmationPost($post = null)
     {

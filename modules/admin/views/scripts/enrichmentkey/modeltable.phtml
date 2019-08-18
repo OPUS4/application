@@ -45,8 +45,7 @@
     <tr>
         <th>Name</th>
         <th>Typ</th>
-        <th></th>
-        <th></th>
+        <th colspan="3"></th>
     </tr>
     </thead>
     <?PHP foreach ($this->element->getModels() as $model) : ?>
@@ -77,6 +76,12 @@
                 <?PHP if ($this->element->isModifiable($model)) : ?>
                     <a href="<?= $this->url(['action' => 'edit', 'id' => $model->getId()]) ?>"
                     ><?= $this->translate('admin_button_edit'); ?></a>
+                <?PHP endif ?>
+            </td>
+            <td class="remove">
+                <?PHP if ($this->element->isModifiable($model) && $this->element->isUsed($model)) : ?>
+                    <a href="<?= $this->url(['action' => 'removeFromDocs', 'id' => $model->getId()]) ?>"
+                    ><?= $this->translate('admin_button_remove_from_documents'); ?></a>
                 <?PHP endif ?>
             </td>
             <td class="remove">

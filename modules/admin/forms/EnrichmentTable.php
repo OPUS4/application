@@ -45,11 +45,24 @@ class Admin_Form_EnrichmentTable extends Application_Form_Model_Table
         parent::init();
     }
 
+    /**
+     * Liefert true, wenn es sich um einen geschützten EnrichmentKey handelt; andernfalls false.
+     *
+     * @param Opus_EnrichmentKey $model
+     * @return bool
+     */
     public function isProtected($model)
     {
         return in_array($model->getId(), $this->enrichmentKeys->getProtectedEnrichmentKeys());
     }
 
+    /**
+     * Liefert true, wenn der EnrichmentKey in mindestens einem Enrichment eines Dokuments
+     * verwendet wird; andernfalls false.
+     *
+     * @param Opus_EnrichmentKey $model
+     * @return bool
+     */
     public function isUsed($model)
     {
         return in_array($model->getId(), Opus_EnrichmentKey::getAllReferenced());
