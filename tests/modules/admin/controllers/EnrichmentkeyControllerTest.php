@@ -561,8 +561,6 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $this->getRequest()->setPost($post)->setMethod('POST');
         $this->dispatch($this->getControllerPath() . '/removeFromDocs/id/' . $enrichmentKeyName);
 
-        echo $this->getResponse()->getBody();
-
         $this->assertRedirect();
         $this->assertRedirectTo($this->getControllerPath());
         $this->verifyFlashMessage('controller_crud_delete_success', self::MESSAGE_LEVEL_NOTICE);
