@@ -555,10 +555,10 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
 
         $this->getRequest()->setPost($post)->setMethod('POST');
         $this->dispatch($this->getControllerPath() . '/removeFromDocs/id/' . $enrichmentKeyName);
-        $this->verifyFlashMessage('controller_crud_delete_success', self::MESSAGE_LEVEL_NOTICE);
 
         $this->assertRedirect();
         $this->assertRedirectTo($this->getControllerPath());
+        $this->verifyFlashMessage('controller_crud_delete_success', self::MESSAGE_LEVEL_NOTICE);
 
         // EnrichmentKey muss noch vorhanden sein, aber das entsprechende Enrichment im Testdokument wurde gelöscht
         $enrichmentKey = new Opus_EnrichmentKey($enrichmentKeyName);
