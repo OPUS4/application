@@ -529,10 +529,13 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
 
     public function testRemoveFromDocsForUnprotectedEnrichmentKey()
     {
-        $enrichmentKeyName = 'Audience';
+        $enrichmentKeyName = 'testRemoveFromDocsForUnprotectedEnrichmentKey';
+        $this->createsModels = true; // damit am Ende des Test ein Cleanup durchgeführt wird (neu angelegter EK wird gelöscht)
 
-        $enrichmentKey = new Opus_EnrichmentKey($enrichmentKeyName);
-        $this->assertEquals($enrichmentKeyName, $enrichmentKey->getName());
+        $enrichmentKey = new Opus_EnrichmentKey();
+        $enrichmentKey->setName($enrichmentKeyName);
+        $enrichmentKey->setType('Text');
+        $enrichmentKey->store();
 
         // assign test document to enrichment key
         $doc = $this->createTestDocument();
@@ -555,6 +558,8 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
 
         $this->getRequest()->setPost($post)->setMethod('POST');
         $this->dispatch($this->getControllerPath() . '/removeFromDocs/id/' . $enrichmentKeyName);
+
+        echo $this->getResponse()->getBody();
 
         $this->assertRedirect();
         $this->assertRedirectTo($this->getControllerPath());
