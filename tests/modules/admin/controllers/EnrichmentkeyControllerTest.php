@@ -537,6 +537,8 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $enrichmentKey->setType('Text');
         $enrichmentKey->store();
 
+        $this->assertContains($enrichmentKeyName, Opus_EnrichmentKey::getAll(true));
+
         // assign test document to enrichment key
         $doc = $this->createTestDocument();
 
