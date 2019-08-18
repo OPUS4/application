@@ -534,7 +534,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
 
         $enrichmentKey = new Opus_EnrichmentKey();
         $enrichmentKey->setName($enrichmentKeyName);
-        $enrichmentKey->setType('Text');
+        $enrichmentKey->setType('TextType');
         $enrichmentKey->store();
 
         $this->assertContains($enrichmentKeyName, Opus_EnrichmentKey::getAll(true));
