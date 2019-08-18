@@ -449,18 +449,17 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
 
     public function testDeleteActionShowFormForProtectedEnrichment()
     {
-        $this->useEnglish();
+        $protectedEnrichmentKeyName = 'ClassRvk';
+        $this->assertNotNull(new Opus_EnrichmentKey($protectedEnrichmentKeyName));
 
-        $this->dispatch($this->getControllerPath() . '/delete/id/City');
+        $this->dispatch($this->getControllerPath() . '/delete/id/' . $protectedEnrichmentKeyName);
 
         $this->assertRedirect();
         $this->assertRedirectTo($this->getControllerPath());
         $this->verifyFlashMessage('controller_crud_model_cannot_delete', self::MESSAGE_LEVEL_FAILURE);
 
-        $enrichmentKey = new Opus_EnrichmentKey('City');
-
-        $this->assertNotNull($enrichmentKey);
-        $this->assertEquals('City', $enrichmentKey->getName());
+        $enrichmentKey = new Opus_EnrichmentKey($protectedEnrichmentKeyName);
+        $this->assertEquals($protectedEnrichmentKeyName, $enrichmentKey->getName());
     }
 
     public function testEnrichmentTypeHandlingRoundTrip()
