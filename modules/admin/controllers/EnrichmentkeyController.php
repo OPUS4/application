@@ -136,8 +136,7 @@ class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD
         // Kontext ermitteln: Löschen des EKs oder nur Enrichments mit dem EK aus den Dokumenten löschen
         if ($request->getActionName() === 'removeFromDocs') {
             $model->deleteFromDocuments();
-        }
-        else {
+        } else {
             parent::deleteModel($model);
         }
     }
