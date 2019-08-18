@@ -538,6 +538,7 @@ ul.form-action {
 
 /* @group form content */
 .adminContainer .collection_new a.add,
+.adminContainer .enrichmentkey_new a.add,
 .adminContainer table a.add,
 .adminContainer td.edit a,
 .adminContainer td.move-up a,
@@ -1608,6 +1609,7 @@ ul.links input:hover {
 }
 
 .adminContainer .collection_new a.add,
+.adminContainer .enrichmentkey_new a.add,
 .adminContainer table a.add {
     background-position: -17px -16px;
     border-radius: 5px;
