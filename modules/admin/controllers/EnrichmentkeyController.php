@@ -60,15 +60,6 @@ class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD
     private $_enrichmentKeys;
 
     /**
-     * Diese EnrichmentKeys dürfen nicht editiert werden (entweder weil sie
-     * geschützt sind oder weil sie noch in Opus_Document Objekten verwendet werden).
-     * Wird zwischengespeichert um unnötige Datenbank-Anfragen zu sparen.
-     *
-     * @var array
-     */
-    private $unmodifyableEnrichmentKeys;
-
-    /**
      * Initializes and configures controller.
      * @throws Application_Exception
      */
@@ -96,19 +87,17 @@ class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD
     }
 
     /**
-     * Checks if a model can be modified.
+     * Checks if an enrichment key can be modified. All enrichment keys except protected ones
+     * can be modified even if they are referenced in enrichments of documents.
+     *
      * @param $model Opus_EnrichmentKey
      * @return bool true if model can be edited and deleted, false if model is protected
      */
     public function isModifiable($model)
     {
-        if (! isset($this->unmodifyableEnrichmentKeys)) {
-            $protectedKeys = $this->_enrichmentKeys->getProtectedEnrichmentKeys();
-            $this->unmodifyableEnrichmentKeys = array_merge($protectedKeys, Opus_EnrichmentKey::getAllReferenced());
-        }
-
+        $protectedKeys = $this->_enrichmentKeys->getProtectedEnrichmentKeys();
         // hier kann $model->getId() statt $model->getName() verwendet werden,
         // weil die Tabelle enrichmentkeys keine Spalte mit dem Namen 'id' besitzt
-        return ! in_array($model->getId(), $this->unmodifyableEnrichmentKeys);
+        return ! in_array($model->getId(), $protectedKeys);
     }
 }
