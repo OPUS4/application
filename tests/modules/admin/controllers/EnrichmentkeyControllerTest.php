@@ -231,9 +231,12 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $this->assertQueryContentContains('div#Name-element', 'Enrichmentkey already exists.');
     }
 
-    public function testEditActionShowForm()
+    /**
+     * @dataProvider enrichmentKeyNamesProvider
+     */
+    public function testEditActionShowFormForUnprotectedEnrichmentKey($enrichmentKeyName)
     {
-        $this->dispatch($this->getControllerPath() . '/edit/id/BibtexRecord');
+        $this->dispatch($this->getControllerPath() . '/edit/id/' . $enrichmentKeyName);
         $this->assertResponseCode(200);
         $this->assertController('enrichmentkey');
         $this->assertAction('edit');
@@ -244,7 +247,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $this->assertQueryCount('input#Id', 1);
     }
 
-    public function testEditActionShowFormForProtectedEnrichment()
+    public function testEditActionShowFormForProtectedEnrichmentKey()
     {
         $protectedEnrichmentKeyName = 'ClassRvk';
         $this->assertNotNull(new Opus_EnrichmentKey($protectedEnrichmentKeyName));
@@ -430,21 +433,24 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $this->fail('Previous statement should have thrown exception.');
     }
 
-    public function testDeleteActionShowFormForUnprotectedEnrichmentKey()
+    /**
+     * @dataProvider enrichmentKeyNamesProvider
+     */
+    public function testDeleteActionShowFormForUnprotectedEnrichmentKey($enrichmentKeyName)
     {
         $this->useEnglish();
 
-        $this->dispatch($this->getControllerPath() . '/delete/id/BibtexRecord');
+        $this->dispatch($this->getControllerPath() . '/delete/id/' . $enrichmentKeyName);
 
         $this->assertQueryContentContains('legend', 'Delete EnrichmentKey');
-        $this->assertQueryContentContains('span.displayname', 'BibtexRecord');
+        $this->assertQueryContentContains('span.displayname', $enrichmentKeyName);
         $this->assertQuery('input#ConfirmYes');
         $this->assertQuery('input#ConfirmNo');
 
-        $enrichmentKey = new Opus_EnrichmentKey('BibtexRecord');
+        $enrichmentKey = new Opus_EnrichmentKey($enrichmentKeyName);
 
         $this->assertNotNull($enrichmentKey);
-        $this->assertEquals('BibtexRecord', $enrichmentKey->getName());
+        $this->assertEquals($enrichmentKeyName, $enrichmentKey->getName());
     }
 
     public function testDeleteActionShowFormForProtectedEnrichmentKey()
@@ -477,10 +483,11 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $this->assertEquals($protectedEnrichmentKeyName, $enrichmentKey->getName());
     }
 
-    public function testRemoveFromDocsShowFormForUnprotectedEnrichment()
+    /**
+     * @dataProvider enrichmentKeyNamesProvider
+     */
+    public function testRemoveFromDocsShowFormForUnprotectedEnrichment($enrichmentKeyName)
     {
-        $enrichmentKeyName = 'Audience';
-
         $enrichmentKey = new Opus_EnrichmentKey($enrichmentKeyName);
         $this->assertEquals($enrichmentKeyName, $enrichmentKey->getName());
 
@@ -774,4 +781,13 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
             }
         }
     }
+
+    public function enrichmentKeyNamesProvider()
+    {
+        return [
+            ['BibtexRecord'], // unreferenced enrichment key
+            ['Audience']      // referenced enrichment key
+        ];
+    }
+
 }
