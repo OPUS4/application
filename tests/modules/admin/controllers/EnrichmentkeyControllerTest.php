@@ -491,15 +491,6 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $enrichmentKey = new Opus_EnrichmentKey($enrichmentKeyName);
         $this->assertEquals($enrichmentKeyName, $enrichmentKey->getName());
 
-        // assign test document to enrichment key
-        $doc = $this->createTestDocument();
-
-        $enrichment = new Opus_Enrichment();
-        $enrichment->setKeyName($enrichmentKeyName);
-        $enrichment->setValue('foo');
-        $doc->addEnrichment($enrichment);
-        $doc->store();
-
         $this->useEnglish();
 
         $this->dispatch($this->getControllerPath() . '/removeFromDocs/id/' . $enrichmentKeyName);
