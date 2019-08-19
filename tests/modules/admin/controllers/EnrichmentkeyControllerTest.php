@@ -789,5 +789,4 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
             ['Audience']      // referenced enrichment key
         ];
     }
-
 }
