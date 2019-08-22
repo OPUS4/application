@@ -78,7 +78,7 @@ class Admin_Model_IndexMaintenance
     public function createJob()
     {
         $job = new Opus_Job();
-        $job->setLabel(Opus\Search\Task\ConsistenyCheck::LABEL);
+        $job->setLabel(Opus\Search\Task\ConsistencyCheck::LABEL);
 
         if (! $this->_featureDisabled) {
             // Queue job (execute asynchronously)
@@ -92,7 +92,7 @@ class Admin_Model_IndexMaintenance
 
         // Execute job immediately (synchronously): currently NOT supported
         try {
-            $worker = new Opus\Search\Task\ConsistenyCheck();
+            $worker = new Opus\Search\Task\ConsistencyCheck();
             $worker->setLogger($this->_logger);
             $worker->work($job);
         } catch (Exception $exc) {
@@ -152,7 +152,7 @@ class Admin_Model_IndexMaintenance
 
     public function allowConsistencyCheck()
     {
-        return Opus_Job::getCountForLabel(Opus\Search\Task\ConsistenyCheck::LABEL) == 0;
+        return Opus_Job::getCountForLabel(Opus\Search\Task\ConsistencyCheck::LABEL) == 0;
     }
 
     public function allowFulltextExtractionCheck()
