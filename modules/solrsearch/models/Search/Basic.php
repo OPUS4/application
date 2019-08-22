@@ -43,7 +43,7 @@ class Solrsearch_Model_Search_Basic extends Solrsearch_Model_Search_Abstract
     {
         $this->getLogger()->debug("Constructing query for simple search.");
 
-        $query = new Opus_Search_Util_Query(Opus_Search_Util_Query::SIMPLE);
+        $query = new Opus\Search\Util\Query(Opus\Search\Util\Query::SIMPLE);
         $query->setStart($input['start']);
         $query->setRows($input['rows']);
         $query->setSortField($input['sortField']);

@@ -228,7 +228,7 @@ class Export_Model_XmlExportTest extends ControllerTestCase
 
     public function testGetMaxRows()
     {
-        $this->assertEquals(Opus_Search_Util_Query::MAX_ROWS, $this->plugin->getMaxRows());
+        $this->assertEquals(Opus\Search\Util\Query::MAX_ROWS, $this->plugin->getMaxRows());
 
         $this->enableSecurity();
 
@@ -240,7 +240,7 @@ class Export_Model_XmlExportTest extends ControllerTestCase
 
         $this->loginUser('admin', 'adminadmin');
 
-        $this->assertEquals(Opus_Search_Util_Query::MAX_ROWS, $this->plugin->getMaxRows());
+        $this->assertEquals(Opus\Search\Util\Query::MAX_ROWS, $this->plugin->getMaxRows());
     }
 
     public function testGetValueIfValid()

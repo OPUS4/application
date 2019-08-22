@@ -61,7 +61,7 @@ class Solrsearch_Model_Search_Advanced extends Solrsearch_Model_Search_Basic
     {
         $this->getLogger()->debug("Constructing query for advanced search.");
 
-        $query = new Opus_Search_Util_Query(Opus_Search_Util_Query::ADVANCED);
+        $query = new Opus\Search\Util\Query(Opus\Search\Util\Query::ADVANCED);
         $query->setStart($input['start']);
         $query->setRows($input['rows']);
         $query->setSortField($input['sortField']);

@@ -298,7 +298,7 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract
      */
     public function getMaxRows()
     {
-        $maxRows = Opus_Search_Util_Query::MAX_ROWS;
+        $maxRows = Opus\Search\Util\Query::MAX_ROWS;
 
         $config = $this->getConfig();
 

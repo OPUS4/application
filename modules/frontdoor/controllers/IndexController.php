@@ -297,13 +297,13 @@ class Frontdoor_IndexController extends Application_Controller_Action
 
             // TODO fix usage of search code - should be identical to search/export/rss - except just 1 row
 
-            $searcher = new Opus_Search_Util_Searcher();
+            $searcher = new Opus\Search\Util\Searcher();
 
             $resultList = $searcher->search($query);
 
             $queryResult = $resultList->getResults();
 
-            if (is_array($queryResult) && ! empty($queryResult) && $queryResult[0] instanceof Opus_Search_Result_Match) {
+            if (is_array($queryResult) && ! empty($queryResult) && $queryResult[0] instanceof Opus\Search\Result\Match) {
                 $resultDocId = $queryResult[0]->getId();
 
                 if ($request->has('docId')) {

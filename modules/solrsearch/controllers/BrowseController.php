@@ -66,13 +66,13 @@ class Solrsearch_BrowseController extends Application_Controller_Action
     public function doctypesAction()
     {
         $facetname = 'doctype';
-        $query = new Opus_Search_Util_Query(Opus_Search_Util_Query::FACET_ONLY);
+        $query = new Opus\Search\Util\Query(Opus\Search\Util\Query::FACET_ONLY);
         $query->setFacetField($facetname);
 
         try {
-            $searcher = new Opus_Search_Util_Searcher();
+            $searcher = new Opus\Search\Util\Searcher();
             $facets = $searcher->search($query)->getFacets();
-        } catch (Opus_Search_Exception $e) {
+        } catch (Opus\Search\Exception $e) {
             $this->getLogger()->err(__METHOD__ . ' : ' . $e);
             throw new Application_SearchException($e);
         }
@@ -91,13 +91,13 @@ class Solrsearch_BrowseController extends Application_Controller_Action
     {
         $facetname = 'year';
 
-        $query = new Opus_Search_Util_Query(Opus_Search_Util_Query::FACET_ONLY);
+        $query = new Opus\Search\Util\Query(Opus\Search\Util\Query::FACET_ONLY);
         $query->setFacetField($facetname);
 
         try {
-            $searcher = new Opus_Search_Util_Searcher();
+            $searcher = new Opus\Search\Util\Searcher();
             $facets = $searcher->search($query)->getFacets();
-        } catch (Opus_Search_Exception $ose) {
+        } catch (Opus\Search\Exception $ose) {
             $this->getLogger()->err(__METHOD__ . ' : ' . $ose);
             throw new Application_SearchException($ose);
         }

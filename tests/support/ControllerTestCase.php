@@ -248,7 +248,7 @@ class ControllerTestCase extends TestCase
      */
     protected function requireSolrConfig()
     {
-        $config = Opus_Search_Config::getServiceConfiguration(Opus_Search_Service::SERVICE_TYPE_INDEX);
+        $config = Opus\Search\Config::getServiceConfiguration(Opus\Search\Service::SERVICE_TYPE_INDEX);
 
         if (is_null($config)) {
             $this->markTestSkipped('No solr-config given.  Skipping test.');

@@ -52,7 +52,7 @@ workspacePath = APPLICATION_PATH "/tests/workspace"
 path.workspace.temp = APPLICATION_PATH "/tests/workspace/tmp"
 
 ;SEARCH ENGINE SETTINGS
-searchengine.solr.adapterClass = Opus_Search_Solr_Solarium_Adapter
+searchengine.solr.adapterClass = Opus\Search\Solr\Solarium\Adapter
 searchengine.solr.default.service.default.endpoint.primary.host = @searchengine.index.host@
 searchengine.solr.default.service.default.endpoint.primary.port = @searchengine.index.port@
 searchengine.solr.default.service.default.endpoint.primary.path = @searchengine.index.app@

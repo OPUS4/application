@@ -66,7 +66,7 @@ class Admin_IndexmaintenanceControllerTest extends ControllerTestCase
         }
 
         // Cleanup of Jobs Table
-        $jobs = Opus_Job::getByLabels([Opus_Job_Worker_ConsistencyCheck::LABEL]);
+        $jobs = Opus_Job::getByLabels([Opus\Search\Task\ConsistenyCheck::LABEL]);
         foreach ($jobs as $job) {
             try {
                 $job->delete();
@@ -259,7 +259,7 @@ class Admin_IndexmaintenanceControllerTest extends ControllerTestCase
     {
         $this->enableAsyncIndexmaintenanceMode();
 
-        $numOfJobs = Opus_Job::getCountForLabel(Opus_Job_Worker_ConsistencyCheck::LABEL);
+        $numOfJobs = Opus_Job::getCountForLabel(Opus\Search\Task\ConsistenyCheck::LABEL);
         $this->assertEquals(0, $numOfJobs);
 
         $this->getRequest()->setMethod('POST');
@@ -268,19 +268,19 @@ class Admin_IndexmaintenanceControllerTest extends ControllerTestCase
         $this->assertResponseCode(302);
         $this->assertResponseLocationHeader($this->getResponse(), '/admin/indexmaintenance');
 
-        $this->assertEquals(1, Opus_Job::getCountForLabel(Opus_Job_Worker_ConsistencyCheck::LABEL));
+        $this->assertEquals(1, Opus_Job::getCountForLabel(Opus\Search\Task\ConsistenyCheck::LABEL));
 
-        $jobs = Opus_Job::getByLabels([Opus_Job_Worker_ConsistencyCheck::LABEL]);
+        $jobs = Opus_Job::getByLabels([Opus\Search\Task\ConsistenyCheck::LABEL]);
         $jobs[0]->delete();
 
-        $this->assertEquals(0, Opus_Job::getCountForLabel(Opus_Job_Worker_ConsistencyCheck::LABEL));
+        $this->assertEquals(0, Opus_Job::getCountForLabel(Opus\Search\Task\ConsistenyCheck::LABEL));
     }
 
     public function testCheckconsistencyActionResult()
     {
         $this->enableAsyncIndexmaintenanceMode();
 
-        $this->assertEquals(0, Opus_Job::getCountForLabel(Opus_Job_Worker_ConsistencyCheck::LABEL), 'missing cleanup of jobs table');
+        $this->assertEquals(0, Opus_Job::getCountForLabel(Opus\Search\Task\ConsistenyCheck::LABEL), 'missing cleanup of jobs table');
 
         $this->getRequest()->setMethod('POST');
         $this->dispatch('/admin/indexmaintenance/checkconsistency');
@@ -288,7 +288,7 @@ class Admin_IndexmaintenanceControllerTest extends ControllerTestCase
         $this->assertResponseCode(302);
         $this->assertResponseLocationHeader($this->getResponse(), '/admin/indexmaintenance');
 
-        $this->assertEquals(1, Opus_Job::getCountForLabel(Opus_Job_Worker_ConsistencyCheck::LABEL), 'consistency check job was not stored in database');
+        $this->assertEquals(1, Opus_Job::getCountForLabel(Opus\Search\Task\ConsistenyCheck::LABEL), 'consistency check job was not stored in database');
 
         /*
          * check if job was scheduled for execution
@@ -311,11 +311,11 @@ class Admin_IndexmaintenanceControllerTest extends ControllerTestCase
          */
         $jobrunner = new Opus_Job_Runner();
         $jobrunner->setLogger(Zend_Registry::get('Zend_Log'));
-        $worker = new Opus_Job_Worker_ConsistencyCheck();
+        $worker = new Opus\Search\Task\ConsistenyCheck();
         $jobrunner->registerWorker($worker);
         $jobrunner->run();
 
-        $jobs = Opus_Job::getByLabels([Opus_Job_Worker_ConsistencyCheck::LABEL]);
+        $jobs = Opus_Job::getByLabels([Opus\Search\Task\ConsistenyCheck::LABEL]);
         if (count($jobs) > 0) {
             $job = $jobs[0];
             $message = 'at least one unexpected job found (Label: \'%s\', State: \'%s\', Data: \'%s\', Errors: \'%s\, SHA1 Hash: \'%s\')';
@@ -327,7 +327,7 @@ class Admin_IndexmaintenanceControllerTest extends ControllerTestCase
             $this->fail(sprintf($message, $label, $state, $data, $errors, $hash));
         }
 
-        $this->assertEquals(0, Opus_Job::getCountForLabel(Opus_Job_Worker_ConsistencyCheck::LABEL), 'consistency check job was not removed from database after execution');
+        $this->assertEquals(0, Opus_Job::getCountForLabel(Opus\Search\Task\ConsistenyCheck::LABEL), 'consistency check job was not removed from database after execution');
 
         $this->resetResponse();
         $this->resetRequest();

@@ -22,12 +22,12 @@
  * OPUS is distributed in the hope that it will be useful, but WITHOUT ANY
  * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details. You should have received a copy of the GNU General Public License 
- * along with OPUS; if not, write to the Free Software Foundation, Inc., 51 
+ * details. You should have received a copy of the GNU General Public License
+ * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Framework
- * @package     Opus_Search
+ * @package     Opus\Search
  * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
  * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
@@ -65,7 +65,7 @@
                         </xsl:otherwise>
                     </xsl:choose>
                 </xsl:variable>
-                
+
                 <xsl:element name="field">
                     <xsl:attribute name="name">year</xsl:attribute>
                     <xsl:value-of select="$year"/>
@@ -101,7 +101,7 @@
                 <xsl:element name="field">
                     <xsl:attribute name="name">language</xsl:attribute>
                     <xsl:value-of select="$language" />
-                </xsl:element>            
+                </xsl:element>
 
                 <!-- title / title_output -->
                 <xsl:for-each select="/Opus/Opus_Document/TitleMain">
@@ -130,7 +130,7 @@
                         </xsl:element>
                     </xsl:if>
                 </xsl:for-each>
-                
+
                 <!-- author -->
                 <xsl:for-each select="/Opus/Opus_Document/PersonAuthor">
                     <xsl:element name="field">
@@ -238,7 +238,7 @@
                        <xsl:otherwise>
                             <xsl:text>true</xsl:text>
                        </xsl:otherwise>
-                    </xsl:choose>                    
+                    </xsl:choose>
                 </xsl:element>
 
                 <!-- collections: project, app_area, institute, ids -->
@@ -287,7 +287,7 @@
                         <xsl:value-of select="@Value" />
                     </xsl:element>
                 </xsl:for-each>
-                
+
                 <!-- series ids and series number per id (modeled as dynamic field) -->
                 <xsl:for-each select="/Opus/Opus_Document/Series">
                     <xsl:element name="field">

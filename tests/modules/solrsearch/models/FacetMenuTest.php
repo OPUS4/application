@@ -50,7 +50,7 @@ class Solrsearch_Model_FacetMenuTest extends ControllerTestCase
             ]
         ]));
 
-        $facetLimits = Opus_Search_Config::getFacetLimits();
+        $facetLimits = Opus\Search\Config::getFacetLimits();
 
         $this->assertEquals(3, $facetLimits['author_facet']);
         $this->assertEquals(15, $facetLimits['year']);
@@ -85,7 +85,7 @@ class Solrsearch_Model_FacetMenuTest extends ControllerTestCase
             ]
         ]));
 
-        $facetLimits = Opus_Search_Config::getFacetLimits();
+        $facetLimits = Opus\Search\Config::getFacetLimits();
 
         $this->assertEquals(3, $facetLimits['author_facet']);
         $this->assertEquals(15, $facetLimits['year']);

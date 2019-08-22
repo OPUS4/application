@@ -70,11 +70,11 @@ class Solrsearch_Model_Search_Series extends Solrsearch_Model_Search_Abstract
     {
         $this->getLogger()->debug("Constructing query for series search.");
 
-        $query = new Opus_Search_Util_Query(Opus_Search_Util_Query::SIMPLE);
+        $query = new Opus\Search\Util\Query(Opus\Search\Util\Query::SIMPLE);
         $query->setStart($input['start']);
         $query->setRows($input['rows']);
         if ($input['sortField'] === 'seriesnumber'
-            || $input['sortField'] === Opus_Search_Query::getDefaultSortingField()) {
+            || $input['sortField'] === Opus\Search\Query::getDefaultSortingField()) {
             $query->setSortField('doc_sort_order_for_seriesid_' . $input['seriesId']);
         } else {
             $query->setSortField($input['sortField']);

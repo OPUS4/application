@@ -96,7 +96,7 @@ class Solrsearch_Model_Search_Collection extends Solrsearch_Model_Search_Basic
     {
         $this->getLogger()->debug("Constructing query for collection search.");
 
-        $query = new Opus_Search_Util_Query(Opus_Search_Util_Query::SIMPLE);
+        $query = new Opus\Search\Util\Query(Opus\Search\Util\Query::SIMPLE);
         $query->setStart($input['start']);
         $query->setRows($input['rows']);
         $query->setSortField($input['sortField']);

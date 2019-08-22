@@ -86,9 +86,9 @@ class Rss_IndexController extends Application_Controller_Xml
 
         $resultList = [];
         try {
-            $searcher = new Opus_Search_Util_Searcher();
+            $searcher = new Opus\Search\Util\Searcher();
             $resultList = $searcher->search($search->createSearchQuery($params));
-        } catch (Opus_Search_Exception $exception) {
+        } catch (Opus\Search\Exception $exception) {
             $this->handleSolrError($exception);
         }
 
@@ -100,7 +100,7 @@ class Rss_IndexController extends Application_Controller_Xml
         $this->setFrontdoorBaseUrl();
     }
 
-    private function handleSolrError(Opus_Search_Exception $exception)
+    private function handleSolrError(Opus\Search\Exception $exception)
     {
         $this->_helper->layout()->enableLayout();
         $this->getLogger()->err(__METHOD__ . ' : ' . $exception);

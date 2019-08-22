@@ -54,7 +54,7 @@ class Solrsearch_Model_FacetMenu extends Application_Model_Abstract
      */
     public function buildFacetArray($paramSet)
     {
-        return Opus_Search_Facet_Set::getFacetLimitsFromInput($paramSet);
+        return Opus\Search\Facet\Set::getFacetLimitsFromInput($paramSet);
     }
 
     /**
@@ -63,7 +63,7 @@ class Solrsearch_Model_FacetMenu extends Application_Model_Abstract
     {
         $facets = $result->getFacets();
 
-        $facetLimit = Opus_Search_Config::getFacetLimits();
+        $facetLimit = Opus\Search\Config::getFacetLimits();
 
         $facetArray = [];
         $selectedFacets = [];

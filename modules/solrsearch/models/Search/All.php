@@ -38,7 +38,7 @@ class Solrsearch_Model_Search_All extends Solrsearch_Model_Search_Basic
     {
         $this->getLogger()->debug("Constructing query for all search.");
 
-        $query = new Opus_Search_Util_Query(Opus_Search_Util_Query::ALL_DOCS);
+        $query = new Opus\Search\Util\Query(Opus\Search\Util\Query::ALL_DOCS);
         $query->setStart($input['start']);
         $query->setRows($input['rows']);
         $query->setSortField($input['sortField']);

@@ -42,9 +42,9 @@ class Application_Form_Element_SearchFieldModifier extends Application_Form_Elem
         parent::init();
 
         $options = [
-            Opus_Search_Util_Query::SEARCH_MODIFIER_CONTAINS_ALL => 'advanced_search_form_modifier_all',
-            Opus_Search_Util_Query::SEARCH_MODIFIER_CONTAINS_ANY => 'advanced_search_form_modifier_one',
-            Opus_Search_Util_Query::SEARCH_MODIFIER_CONTAINS_NONE => 'advanced_search_form_modifier_none'
+            Opus\Search\Util\Query::SEARCH_MODIFIER_CONTAINS_ALL => 'advanced_search_form_modifier_all',
+            Opus\Search\Util\Query::SEARCH_MODIFIER_CONTAINS_ANY => 'advanced_search_form_modifier_one',
+            Opus\Search\Util\Query::SEARCH_MODIFIER_CONTAINS_NONE => 'advanced_search_form_modifier_none'
         ];
 
         $this->addMultiOptions($options);

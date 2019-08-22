@@ -57,7 +57,7 @@ class Admin_Model_IndexMaintenanceTest extends ControllerTestCase
         }
 
         // Cleanup of Jobs Table
-        $jobs = Opus_Job::getByLabels([Opus_Job_Worker_ConsistencyCheck::LABEL]);
+        $jobs = Opus_Job::getByLabels([Opus\Search\Task\ConsistenyCheck::LABEL]);
         foreach ($jobs as $job) {
             try {
                 $job->delete();
@@ -160,7 +160,7 @@ class Admin_Model_IndexMaintenanceTest extends ControllerTestCase
         $model->createJob();
         $this->assertFalse($model->allowConsistencyCheck());
 
-        $this->assertEquals(1, Opus_Job::getCountForLabel(Opus_Job_Worker_ConsistencyCheck::LABEL));
+        $this->assertEquals(1, Opus_Job::getCountForLabel(Opus\Search\Task\ConsistenyCheck::LABEL));
     }
 
     public function testNotAllowConsistencyCheckAlt()
@@ -171,7 +171,7 @@ class Admin_Model_IndexMaintenanceTest extends ControllerTestCase
         $model->createJob();
         $this->assertFalse($model->allowConsistencyCheck());
 
-        $this->assertEquals(1, Opus_Job::getCountForLabel(Opus_Job_Worker_ConsistencyCheck::LABEL));
+        $this->assertEquals(1, Opus_Job::getCountForLabel(Opus\Search\Task\ConsistenyCheck::LABEL));
     }
 
     public function testProcessingStateInvalidContext()
@@ -183,15 +183,15 @@ class Admin_Model_IndexMaintenanceTest extends ControllerTestCase
 
     private function runJobImmediately()
     {
-        $this->assertEquals(1, Opus_Job::getCountForLabel(Opus_Job_Worker_ConsistencyCheck::LABEL));
+        $this->assertEquals(1, Opus_Job::getCountForLabel(Opus\Search\Task\ConsistenyCheck::LABEL));
 
         $jobrunner = new Opus_Job_Runner;
         $jobrunner->setLogger(Zend_Registry::get('Zend_Log'));
-        $worker = new Opus_Job_Worker_ConsistencyCheck();
+        $worker = new Opus\Search\Task\ConsistenyCheck();
         $jobrunner->registerWorker($worker);
         $jobrunner->run();
 
-        $this->assertEquals(0, Opus_Job::getCountForLabel(Opus_Job_Worker_ConsistencyCheck::LABEL));
+        $this->assertEquals(0, Opus_Job::getCountForLabel(Opus\Search\Task\ConsistenyCheck::LABEL));
     }
 
     public function testProcessingStateInitial()
