@@ -28,33 +28,41 @@
  * @package     Tests
  * @author      Sascha Szott <szott@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Solrsearch_Model_SeriesTest extends ControllerTestCase {
+class Solrsearch_Model_SeriesTest extends ControllerTestCase
+{
 
-    public function testConstructWithInvalidSeriesId() {
+    protected $additionalResources = ['database'];
+
+    public function testConstructWithInvalidSeriesId()
+    {
         $this->setExpectedException('Solrsearch_Model_Exception');
         new Solrsearch_Model_Series(null);
     }
 
-    public function testConstructWithUnknownSeriesId() {
+    public function testConstructWithUnknownSeriesId()
+    {
         $this->setExpectedException('Solrsearch_Model_Exception');
         new Solrsearch_Model_Series(999);
     }
 
-    public function testConstructWithInvisibleSeries() {
+    public function testConstructWithInvisibleSeries()
+    {
         $this->setExpectedException('Solrsearch_Model_Exception');
         new Solrsearch_Model_Series(3);
     }
 
-    public function testConstructWithEmptyVisibleSeries() {
+    public function testConstructWithEmptyVisibleSeries()
+    {
         $this->setExpectedException('Solrsearch_Model_Exception');
         new Solrsearch_Model_Series(8);
     }
 
-    public function testConstructWithNonEmptyVisibleSeries() {
+    public function testConstructWithNonEmptyVisibleSeries()
+    {
         $series = new Solrsearch_Model_Series(1);
         $this->assertNotNull($series);
         $seriesFramework = new Opus_Series(1);
@@ -63,15 +71,16 @@ class Solrsearch_Model_SeriesTest extends ControllerTestCase {
         $this->assertEquals($seriesFramework->getInfobox(), $series->getInfobox());
     }
 
-    public function testGetLogoFilename() {
+    public function testGetLogoFilename()
+    {
         $series = new Solrsearch_Model_Series(1);
         $this->assertNotNull($series->getLogoFilename());
         $this->assertEquals('300_150.png', $series->getLogoFilename());
     }
 
-    public function testGetLogoFilenameForNoLogoSeries() {
+    public function testGetLogoFilenameForNoLogoSeries()
+    {
         $series = new Solrsearch_Model_Series(6);
         $this->assertNull($series->getLogoFilename());
     }
-
 }

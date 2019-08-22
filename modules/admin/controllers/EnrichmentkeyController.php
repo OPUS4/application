@@ -28,18 +28,19 @@
  * @package     Module_Admin
  * @author      Gunar Maiwald <maiwald@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
+ * @author      Sascha Szott <opus-development@saschaszott.de>
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id: EnrichmentkeyController.php 9368 2011-12-13 09:05:15Z gmaiwald $
  */
 
 /**
  * Class Admin_EnrichmentkeyController
  *
- * All enrichments are shown, but only enrichments that are not protected can be edited or deleted. An enrichment is
- * protected if it is configured as such in the configuration file or if it is referenced by documents.
+ * All enrichment keys are shown, but only enrichment keys that are not protected
+ * can be edited or deleted. An enrichment key is protected if it is configured
+ * as such in the configuration file or if it is referenced by at least one document.
  *
- * The two configurations parameters are:
+ * The two configuration parameters are:
  *
  * enrichmentkey.protected.modules   (for special enrichments used by modules)
  * enrichmentkey.protected.migration (for enrichments created during migration from OPUS 3)
@@ -49,7 +50,8 @@
  *
  * TODO show protected/referenced in list of keys
  */
-class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD {
+class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD
+{
 
     /**
      * Model for handling enrichment keys.
@@ -58,10 +60,20 @@ class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD {
     private $_enrichmentKeys;
 
     /**
+     * Diese EnrichmentKeys dürfen nicht editiert werden (entweder weil sie
+     * geschützt sind oder weil sie noch in Opus_Document Objekten verwendet werden).
+     * Wird zwischengespeichert um unnötige Datenbank-Anfragen zu sparen.
+     *
+     * @var array
+     */
+    private $unmodifyableEnrichmentKeys;
+
+    /**
      * Initializes and configures controller.
      * @throws Application_Exception
      */
-    public function init() {
+    public function init()
+    {
         $this->_enrichmentKeys = new Admin_Model_EnrichmentKeys();
         $this->setVerifyModelIdIsNumeric(false);
         $this->setShowActionEnabled(false);
@@ -70,13 +82,33 @@ class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD {
     }
 
     /**
+     * Modifiziert Formular für Indextabelle, so dass angepasstes ViewScript verwendet wird.
+     * @return Admin_Form_EnrichmentTable
+     */
+    public function getIndexForm()
+    {
+        $form = new Admin_Form_EnrichmentTable();
+        $form->setModels($this->getAllModels());
+        $form->setColumns([['label' => $this->getModelClass()]]);
+        $form->setController($this);
+        $form->setViewScript('enrichmentkey/modeltable.phtml');
+        return $form;
+    }
+
+    /**
      * Checks if a model can be modified.
      * @param $model Opus_EnrichmentKey
      * @return bool true if model can be edited and deleted, false if model is protected
      */
-    public function isModifiable($model) {
-        $protectedKeys = $this->_enrichmentKeys->getProtectedEnrichmentKeys();
-        return !in_array($model->getId(), array_merge($protectedKeys, Opus_EnrichmentKey::getAllReferenced()));
-    }
+    public function isModifiable($model)
+    {
+        if (! isset($this->unmodifyableEnrichmentKeys)) {
+            $protectedKeys = $this->_enrichmentKeys->getProtectedEnrichmentKeys();
+            $this->unmodifyableEnrichmentKeys = array_merge($protectedKeys, Opus_EnrichmentKey::getAllReferenced());
+        }
 
+        // hier kann $model->getId() statt $model->getName() verwendet werden,
+        // weil die Tabelle enrichmentkeys keine Spalte mit dem Namen 'id' besitzt
+        return ! in_array($model->getId(), $this->unmodifyableEnrichmentKeys);
+    }
 }

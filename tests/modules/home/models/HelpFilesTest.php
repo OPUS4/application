@@ -27,17 +27,18 @@
  * @category    Application
  * @package     Tests
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
  * Unit tests for Home_Model_HelpFiles class.
  */
-class Home_Model_HelpFilesTest extends ControllerTestCase {
+class Home_Model_HelpFilesTest extends ControllerTestCase
+{
 
-    public function testGetFiles() {
+    public function testGetFiles()
+    {
         $helpFiles = Home_Model_HelpFiles::getFiles();
 
         $this->assertNotNull($helpFiles);
@@ -45,26 +46,30 @@ class Home_Model_HelpFilesTest extends ControllerTestCase {
         $this->assertTrue(in_array('contact.de.txt', $helpFiles));
     }
 
-    public function testGetFileContent() {
+    public function testGetFileContent()
+    {
         $content = Home_Model_HelpFiles::getFileContent('contact.de.txt');
 
         $this->assertNotEmpty($content);
         $this->assertTrue(strpos('Tragen Sie Ihre Kontaktinformationen ein.', $content) >= 0);
     }
 
-    public function testGetFileContentBadFile() {
+    public function testGetFileContentBadFile()
+    {
         $content = Home_Model_HelpFiles::getFileContent('dummy-contact.de.txt');
 
         $this->assertNull($content);
     }
 
-    public function testGetFileContentNull() {
+    public function testGetFileContentNull()
+    {
         $content = Home_Model_HelpFiles::getFileContent(null);
 
         $this->assertNull($content);
     }
 
-    public function testGetFileContentForAllFiles() {
+    public function testGetFileContentForAllFiles()
+    {
         $helpFiles = Home_Model_HelpFiles::getFiles();
 
         foreach ($helpFiles as $file) {
@@ -73,7 +78,8 @@ class Home_Model_HelpFilesTest extends ControllerTestCase {
         }
     }
 
-    public function testGetHelpEntries() {
+    public function testGetHelpEntries()
+    {
         $entries = Home_Model_HelpFiles::getHelpEntries();
 
         $this->assertNotNull($entries);
@@ -86,7 +92,8 @@ class Home_Model_HelpFilesTest extends ControllerTestCase {
         $this->assertTrue(in_array('documentation', $entries['help_index_misc']));
     }
 
-    public function testHelpFileExists() {
+    public function testHelpFileExists()
+    {
         $this->markTestIncomplete("File names are translated, but translation resources not yet accessible here.");
         $entries = Home_Model_HelpFiles::getHelpEntries();
 
@@ -96,6 +103,4 @@ class Home_Model_HelpFilesTest extends ControllerTestCase {
             }
         }
     }
-
 }
-

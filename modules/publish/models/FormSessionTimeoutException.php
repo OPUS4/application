@@ -33,11 +33,12 @@
  * @version     $Id$
  */
 
-class Publish_Model_FormSessionTimeoutException extends Publish_Model_FormException {
-    
-    public function  __construct() {
+class Publish_Model_FormSessionTimeoutException extends Publish_Model_FormException
+{
+
+    public function __construct()
+    {
         $this->_translateKey = 'publish_form_second_timeout_parsing';
         $this->code = 404;
     }
 }
-

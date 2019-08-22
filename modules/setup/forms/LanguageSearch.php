@@ -34,21 +34,23 @@
  */
 
 /**
- * 
+ *
  */
-class Setup_Form_LanguageSearch extends Zend_Form {
+class Setup_Form_LanguageSearch extends Zend_Form
+{
 
-    protected $_sortKeys = array('unit', 'module', 'directory', 'filename', 'language', 'variant');
+    protected $_sortKeys = ['unit', 'module', 'directory', 'filename', 'language', 'variant'];
 
-    public function getSortKeys() {
+    public function getSortKeys()
+    {
         return $this->_sortKeys;
     }
-    
-    public function init() {
+
+    public function init()
+    {
         $this->addElement('text', 'search');
 
         $this->addElement('select', 'sort');
         $this->addElement('submit', 'Anzeigen');
     }
-
 }

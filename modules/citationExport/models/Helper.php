@@ -32,13 +32,15 @@
  * @version     $Id$
  */
 
-class CitationExport_Model_Helper extends Application_Model_Abstract {
+class CitationExport_Model_Helper extends Application_Model_Abstract
+{
 
     private $_baseUrl;
 
     private $_scriptPath;
 
-    public function __construct($baseUrl, $scriptPath) {
+    public function __construct($baseUrl, $scriptPath)
+    {
         $this->_baseUrl = $baseUrl;
         $this->_scriptPath = $scriptPath;
     }
@@ -49,7 +51,8 @@ class CitationExport_Model_Helper extends Application_Model_Abstract {
      * @throws Application_Exception
      * @throws CitationExport_Model_Exception
      */
-    public function getOutput($request) {
+    public function getOutput($request)
+    {
         $output = null;
         $outputFormat = $request->getParam('output');
 
@@ -69,7 +72,8 @@ class CitationExport_Model_Helper extends Application_Model_Abstract {
      *
      * @return Opus_Document
      */
-    public function getDocument($request) {
+    public function getDocument($request)
+    {
         $docId = $request->getParam('docId');
         if (is_null($docId)) {
             throw new CitationExport_Model_Exception('invalid_docid');
@@ -78,8 +82,7 @@ class CitationExport_Model_Helper extends Application_Model_Abstract {
         $document = null;
         try {
             $document = new Opus_Document($docId);
-        }
-        catch (Opus_Model_NotFoundException $e) {
+        } catch (Opus_Model_NotFoundException $e) {
             throw new CitationExport_Model_Exception('invalid_docid', null, $e);
         }
 
@@ -94,7 +97,8 @@ class CitationExport_Model_Helper extends Application_Model_Abstract {
      * Returns file extension for output format.
      * @param $outputFormat
      */
-    public function getExtension($outputFormat) {
+    public function getExtension($outputFormat)
+    {
         switch ($outputFormat) {
             case 'bibtex':
                 $extension = 'bib';
@@ -116,7 +120,8 @@ class CitationExport_Model_Helper extends Application_Model_Abstract {
      *
      * @return string
      */
-    public function getTemplateForDocument($document, $outputFormat) {
+    public function getTemplateForDocument($document, $outputFormat)
+    {
         if (is_null($outputFormat)) {
             throw new CitationExport_Model_Exception('invalid_format');
         }
@@ -125,13 +130,13 @@ class CitationExport_Model_Helper extends Application_Model_Abstract {
 
         // check for document type specific stylesheet
         $pos = array_search($outputFormat . '_' . $document->getType(), $stylesheetsAvailable);
-        if ($pos !== FALSE) {
+        if ($pos !== false) {
             return $stylesheetsAvailable[$pos] . '.xslt';
         }
 
         // check for generic stylesheet for format
         $pos = array_search($outputFormat, $stylesheetsAvailable);
-        if ($pos !== FALSE) {
+        if ($pos !== false) {
             return $stylesheetsAvailable[$pos] . '.xslt';
         }
 
@@ -142,8 +147,9 @@ class CitationExport_Model_Helper extends Application_Model_Abstract {
     /**
      *
      */
-    public function getAvailableStylesheets() {
-        $stylesheetsAvailable = array();
+    public function getAvailableStylesheets()
+    {
+        $stylesheetsAvailable = [];
 
         $dir = new DirectoryIterator($this->getScriptPath());
 
@@ -159,7 +165,8 @@ class CitationExport_Model_Helper extends Application_Model_Abstract {
     /**
      * @return mixed
      */
-    public function getScriptPath() {
+    public function getScriptPath()
+    {
         return $this->_scriptPath;
     }
 
@@ -171,7 +178,8 @@ class CitationExport_Model_Helper extends Application_Model_Abstract {
      *
      * @return string document in the given output format as plain text
      */
-    public function getPlainOutput($document, $template) {
+    public function getPlainOutput($document, $template)
+    {
         $xml = $document->toXml();
 
         // Set up XSLT-Stylesheet
@@ -183,7 +191,7 @@ class CitationExport_Model_Helper extends Application_Model_Abstract {
         $enrichmentNote = null;
         $config = $this->getConfig();
         if (isset($config->citationExport->bibtex->enrichment)
-            && !empty($config->citationExport->bibtex->enrichment)) {
+            && ! empty($config->citationExport->bibtex->enrichment)) {
             $enrichmentNote = $config->citationExport->bibtex->enrichment;
         }
 
@@ -197,10 +205,8 @@ class CitationExport_Model_Helper extends Application_Model_Abstract {
             $proc->importStyleSheet($xslt);
 
             return $proc->transformToXML($xml);
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             throw new Application_Exception($e->getMessage(), null, $e);
         }
     }
-
 }

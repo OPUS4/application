@@ -41,7 +41,8 @@
  * TODO stylesheet stuff moves to XsltExport
  * TODO output is not xml, but rather text/html (DIV, HTML snippet)
  */
-class Export_Model_PublistExport extends Export_Model_XsltExport {
+class Export_Model_PublistExport extends Export_Model_XsltExport
+{
 
     /**
      * File mime types that are allowed for publication list.
@@ -54,7 +55,8 @@ class Export_Model_PublistExport extends Export_Model_XsltExport {
      */
     private static $_instances;
 
-    public function __construct($name) {
+    public function __construct($name)
+    {
         $this->setName($name);
         self::registerInstance($this);
     }
@@ -62,7 +64,8 @@ class Export_Model_PublistExport extends Export_Model_XsltExport {
     /**
      * @throws Application_Exception if parameters are not sufficient
      */
-    public function execute() {
+    public function execute()
+    {
         $config = $this->getConfig();
         $request = $this->getRequest();
         $view = $this->getView();
@@ -71,8 +74,7 @@ class Export_Model_PublistExport extends Export_Model_XsltExport {
         // TODO Xslt stuff
         if (isset($config->stylesheetDirectory)) {
             $stylesheetDirectory = $config->stylesheetDirectory;
-        }
-        else {
+        } else {
             $logger->debug(Zend_Debug::dump($config->toArray(), 'no stylesheet directory specified'));
         }
 
@@ -80,7 +82,7 @@ class Export_Model_PublistExport extends Export_Model_XsltExport {
             $stylesheet = $config->stylesheet;
         }
 
-        if (!is_null($request->getParam('stylesheet'))) {
+        if (! is_null($request->getParam('stylesheet'))) {
             $stylesheet = $request->getParam('stylesheet');
         }
 
@@ -97,7 +99,7 @@ class Export_Model_PublistExport extends Export_Model_XsltExport {
 
         // TODO config
         $groupBy = 'publishedYear';
-        // TODO config does not make sense - completely ignores value of setting
+        // FIXME OPUSVIER-4130 config does not make sense - completely ignores value of setting
         if (isset($config->groupby->completedyear)) {
             $groupBy = 'completedYear';
         }
@@ -123,18 +125,20 @@ class Export_Model_PublistExport extends Export_Model_XsltExport {
         $this->prepareXml();
     }
 
-    public function setMimeTypes($mimeTypes) {
+    public function setMimeTypes($mimeTypes)
+    {
         $this->_allowedMimeTypes = $mimeTypes;
     }
 
     /**
      * Initialize the mime types from configuration
      */
-    public function getMimeTypes() {
+    public function getMimeTypes()
+    {
         if (is_null($this->_allowedMimeTypes)) {
             $config = $this->getConfig();
             $this->_allowedMimeTypes =
-                isset($config->file->allow->mimetype) ? $config->file->allow->mimetype->toArray() : array();
+                isset($config->file->allow->mimetype) ? $config->file->allow->mimetype->toArray() : [];
         }
 
         return $this->_allowedMimeTypes;
@@ -144,7 +148,8 @@ class Export_Model_PublistExport extends Export_Model_XsltExport {
      * Registers instances of plugin by name.
      * @param $instance
      */
-    private static function registerInstance($instance) {
+    private static function registerInstance($instance)
+    {
         self::$_instances[$instance->getName()] = $instance;
     }
 
@@ -153,7 +158,8 @@ class Export_Model_PublistExport extends Export_Model_XsltExport {
      * @param $pluginName
      * @return null
      */
-    public static function getInstance($pluginName) {
+    public static function getInstance($pluginName)
+    {
         return isset(self::$_instances[$pluginName]) ? self::$_instances[$pluginName] : null;
     }
 
@@ -164,7 +170,8 @@ class Export_Model_PublistExport extends Export_Model_XsltExport {
      *
      * @result string display name for mime type
      */
-    public static function getMimeTypeDisplayName($pluginName, $mimeType) {
+    public static function getMimeTypeDisplayName($pluginName, $mimeType)
+    {
         $instance = self::getInstance($pluginName);
         $mimeTypes = $instance->getMimeTypes();
         return isset($mimeTypes[$mimeType]) ? $mimeTypes[$mimeType] : '';
@@ -173,7 +180,8 @@ class Export_Model_PublistExport extends Export_Model_XsltExport {
     /**
      * Maps query for publist action.
      */
-    public function mapQuery($roleParam, $numberParam) {
+    public function mapQuery($roleParam, $numberParam)
+    {
         if (is_null(Opus_CollectionRole::fetchByName($roleParam))) {
             throw new Application_Exception('specified role does not exist');
         }
@@ -200,5 +208,4 @@ class Export_Model_PublistExport extends Export_Model_XsltExport {
 
         return $collection;
     }
-
 }

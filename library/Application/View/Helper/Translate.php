@@ -27,14 +27,15 @@
  * @category    Application
  * @package     View
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2016, OPUS 4 development team
+ * @copyright   Copyright (c) 2016-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
  * View helper for translations modifying behaviour of base class.
  */
-class Application_View_Helper_Translate extends Zend_View_Helper_Translate {
+class Application_View_Helper_Translate extends Zend_View_Helper_Translate
+{
 
     /**
      * Changes default behaviour of translate function to return empty string for null values.
@@ -47,13 +48,15 @@ class Application_View_Helper_Translate extends Zend_View_Helper_Translate {
      * of a placeholder value that matches a locale, for instance a collection with the name 'de'.
      * (for more information see OPUSVIER-2546)
      *
+     * TODO replace parent function entirely? Doing basically same things twice is not very efficient.
+     * TODO really try to get rid of this
      * TODO review if the behaviour changes are worth it - is there a better way?
      */
-    public function translate($messageid = -1.1) {
+    public function translate($messageid = -1.1)
+    {
         if (is_null($messageid)) {
             return '';
-        }
-        else if ($messageid === -1.1) {
+        } elseif ($messageid === -1.1) {
             return $this;
         }
 
@@ -64,14 +67,12 @@ class Application_View_Helper_Translate extends Zend_View_Helper_Translate {
 
         $locale = null;
 
-        if (($optCount === 1) and (is_array($options[0]) === true)) {
-            $options = $options[0];
+        if (($optCount > 1) and Zend_Locale::isLocale($options[$optCount - 1])) {
+            $locale = array_pop($options);
         }
-        else if ($optCount > 1)
-        {
-            if (Zend_Locale::isLocale($options[$optCount - 1])) {
-                $locale = array_pop($options);
-            }
+
+        if (($optCount > 0) and is_array($options[0]) === true) {
+            $options = $options[0];
         }
 
         $translate = $this->getTranslator();
@@ -86,5 +87,4 @@ class Application_View_Helper_Translate extends Zend_View_Helper_Translate {
 
         return vsprintf($messageid, $options);
     }
-
 }

@@ -42,13 +42,13 @@ class Application_View_Helper_Messages extends Application_View_Helper_Abstract
      */
     public function messages($messages = null)
     {
-        if (!is_array($messages)) {
+        if (! is_array($messages)) {
             $messages = $this->getMessages();
         }
 
         $output = '';
 
-        if (!empty($messages)) {
+        if (! empty($messages)) {
             $output .= '<div class="messages">' . PHP_EOL;
 
             foreach ($messages as $message) {
@@ -57,8 +57,7 @@ class Application_View_Helper_Messages extends Application_View_Helper_Abstract
                     $level = array_key_exists('level', $message) ? $message['level'] : '';
 
                     $output .= "  <div class=\"$level\">$translated</div>" . PHP_EOL;
-                }
-                else {
+                } else {
                     $translated = htmlspecialchars($this->view->translate($message));
                     $output .= "  <div>$translated</div>" . PHP_EOL;
                 }
@@ -72,6 +71,6 @@ class Application_View_Helper_Messages extends Application_View_Helper_Abstract
 
     public function getMessages()
     {
-        return !is_null($this->view->flashMessenger) ? $this->view->flashMessenger->getMessages() : null;
+        return ! is_null($this->view->flashMessenger) ? $this->view->flashMessenger->getMessages() : null;
     }
 }

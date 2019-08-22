@@ -27,20 +27,95 @@
  * @category    Application Unit Tests
  * @package     Module_Admin
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2013-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
-class Admin_Form_Document_CollectionsTest extends ControllerTestCase {
-    
-    public function testConstructForm() {
+class Admin_Form_Document_CollectionsTest extends ControllerTestCase
+{
+
+    protected $additionalResources = ['database', 'view'];
+
+    public function testConstructForm()
+    {
         $form = new Admin_Form_Document_Collections();
-        
+
         $this->assertEquals(1, count($form->getElements()));
         $this->assertNotNull($form->getElement('Add'));
-        
+
         $this->assertNotNull($form->getLegend());
     }
-    
+
+    /**
+     * Just checking that form names can contain dashes.
+     *
+     * Unfortunately when the form is rendered as HTML the dashes are removed.
+     */
+    public function testAddGetSubformWithDashInName()
+    {
+        $form = new Admin_Form_Document_Collections();
+
+        $subform = new Zend_Form_SubForm();
+
+        $form->addSubForm($subform, 'ddc-2');
+
+        $subform2 = $form->getSubForm('ddc-2');
+
+        $this->assertNotNull($subform2);
+    }
+
+    public function testPopulateFromPost()
+    {
+        $form = new Admin_Form_Document_Collections();
+
+        $form->constructFromPost([
+            'ddc2' => [
+                'collection0' => ['Id' => 40],
+                'collection1' => ['Id' => 68]
+            ]
+        ]);
+
+        $subforms = $form->getSubForms();
+
+        $this->assertInternalType('array', $subforms);
+        $this->assertArrayHasKey('ddc2', $subforms);
+
+        $ddcform = $subforms['ddc2'];
+
+        $this->assertInstanceOf('Admin_Form_Document_Section', $ddcform);
+
+        $colforms = $ddcform->getSubforms();
+
+        $this->assertCount(2, $colforms);
+    }
+
+    /**
+     * Just checking that Zend_Form renders form name without '-'.
+     */
+    public function testFormNameRendering()
+    {
+        $form = new Zend_Form();
+        $form->setName('ddc-2');
+
+        $html = $form->render();
+
+        $this->assertContains('id="ddc2"', $html);
+    }
+
+    public function testGetGroupedCollections()
+    {
+        $document = new Opus_Document(146);
+
+        $form = new Admin_Form_Document_Collections();
+
+        $grouped = $form->getGroupedCollections($document);
+
+        $this->assertCount(8, $grouped);
+        $this->assertArrayHasKey('ddc', $grouped);
+
+        $ddc = $grouped['ddc'];
+
+        $this->assertCount(4, $ddc);
+        $this->assertInstanceOf('Opus_Collection', $ddc[0]);
+    }
 }

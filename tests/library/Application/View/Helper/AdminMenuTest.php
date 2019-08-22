@@ -27,34 +27,42 @@
  * @category    Tests
  * @package     Application_View_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Application_View_Helper_AdminMenuTest extends ControllerTestCase {
+class Application_View_Helper_AdminMenuTest extends ControllerTestCase
+{
+
+    protected $additionalResources = ['database', 'authz', 'view', 'navigation', 'translation'];
 
     private $_helper;
 
-    public function setUp() {
+    public function setUp()
+    {
         parent::setUpWithEnv('production');
         $this->assertSecurityConfigured();
         $this->_helper = new Application_View_Helper_AdminMenu();
         $this->_helper->setView(Zend_Registry::get('Opus_View'));
     }
 
-    private function getPageByLabel($label) {
+    private function getPageByLabel($label)
+    {
         return $this->_helper->view->navigation()->findByLabel($label);
     }
 
-    public function testAdminMenu() {
+    public function testAdminMenu()
+    {
         $this->assertSame($this->_helper, $this->_helper->adminMenu());
     }
 
-    public function testGetAcl() {
+    public function testGetAcl()
+    {
         $this->assertSame(Zend_Registry::get('Opus_Acl'), $this->_helper->getAcl());
     }
 
-    public function testHasAllowedChildren() {
+    public function testHasAllowedChildren()
+    {
         $this->loginUser('security8', 'security8pwd');
 
         $page = $this->getPageByLabel('admin_title_info');
@@ -77,9 +85,8 @@ class Application_View_Helper_AdminMenuTest extends ControllerTestCase {
         $this->assertTrue($this->_helper->hasAllowedChildren($page));
     }
 
-    public function testIsRenderDescription() {
-        Zend_Registry::get('Zend_Translate')->loadModule('admin');
-
+    public function testIsRenderDescription()
+    {
         // show description if attribute is set and translation exists
         $page = $this->getPageByLabel('admin_title_documents');
         $this->assertTrue($this->_helper->isRenderDescription($page));
@@ -90,12 +97,12 @@ class Application_View_Helper_AdminMenuTest extends ControllerTestCase {
         $this->assertNotNull($page->description);
     }
 
-    public function testOaiLinkRendered() {
+    public function testOaiLinkRendered()
+    {
         $this->loginUser('security19', 'security19pwd');
 
         $page = $this->getPageByLabel('admin_title_oailink');
         $this->assertTrue($this->_helper->hasAllowedChildren($page));
         $this->assertTrue($this->_helper->isRenderActive($page));
     }
-
 }

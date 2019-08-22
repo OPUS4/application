@@ -39,7 +39,8 @@
  * @category    Application
  * @package     Controller
  */
-class Application_Controller_Xml extends Application_Controller_ModuleAccess {
+class Application_Controller_Xml extends Application_Controller_ModuleAccess
+{
 
     /**
      * Holds xml representation of document information to be processed.
@@ -67,14 +68,14 @@ class Application_Controller_Xml extends Application_Controller_ModuleAccess {
      *
      * @return void
      */
-    public function init() {
+    public function init()
+    {
         // Controller outputs plain Xml, so rendering and layout are disabled.
         $this->disableViewRendering();
 
         // Initialize member variables.
         $this->_xml = new DomDocument;
         $this->_proc = new XSLTProcessor;
-
     }
 
     /**
@@ -82,14 +83,14 @@ class Application_Controller_Xml extends Application_Controller_ModuleAccess {
      *
      * @return void
      */
-    public function postDispatch() {
-        if (!isset($this->view->errorMessage)) {
+    public function postDispatch()
+    {
+        if (! isset($this->view->errorMessage)) {
             // Send Xml response.
             $this->getResponse()->setHeader('Content-Type', 'text/xml; charset=UTF-8', true);
             if (false === is_null($this->_xslt)) {
                 $this->getResponse()->setBody($this->_proc->transformToXML($this->_xml));
-            }
-            else {
+            } else {
                 $this->getResponse()->setBody($this->_xml->saveXml());
             }
         }
@@ -101,7 +102,8 @@ class Application_Controller_Xml extends Application_Controller_ModuleAccess {
      *
      * @return void
      */
-    protected function loadStyleSheet($stylesheet) {
+    protected function loadStyleSheet($stylesheet)
+    {
         $this->_xslt = new DomDocument;
         $this->_xslt->load($stylesheet);
         $this->_proc->importStyleSheet($this->_xslt);
@@ -114,7 +116,8 @@ class Application_Controller_Xml extends Application_Controller_ModuleAccess {
     /**
      * Method called when access to module has been denied.
      */
-    public function moduleAccessDeniedAction() {
+    public function moduleAccessDeniedAction()
+    {
         $response = $this->getResponse();
         $response->setHttpResponseCode(401);
 
@@ -122,5 +125,4 @@ class Application_Controller_Xml extends Application_Controller_ModuleAccess {
         $element = $this->_xml->createElement('error', 'Unauthorized: Access to module not allowed.');
         $this->_xml->appendChild($element);
     }
-
 }

@@ -27,12 +27,14 @@
  * @category    Tests
  * @package     Application_View_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2017-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 class Application_View_Helper_FormDocumentsTest extends ControllerTestCase
 {
+
+    protected $additionalResources = ['database', 'view'];
 
     private $_helper;
 
@@ -52,12 +54,11 @@ class Application_View_Helper_FormDocumentsTest extends ControllerTestCase
 
     public function testFormDocuments()
     {
-        $output = $this->_helper->formDocuments('Documents', null, null, array(
+        $output = $this->_helper->formDocuments('Documents', null, null, [
             1 => new Opus_Document(1)
-        ));
+        ]);
 
         $this->assertContains('<div class="documents">', $output);
         $this->assertContains('<div class="document-authors"><span class="author">Hapke, Thomas</span></div>', $output);
     }
-
 }

@@ -27,21 +27,26 @@
  * @category    Application Unit Tests
  * @package     Application_Controller_Action_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Application_Controller_Action_Helper_DocumentsTest extends ControllerTestCase {
+class Application_Controller_Action_Helper_DocumentsTest extends ControllerTestCase
+{
+
+    protected $additionalResources = 'database';
 
     private $documents;
 
-    public function setUp() {
+    public function setUp()
+    {
         parent::setUp();
 
         $this->documents = Zend_Controller_Action_HelperBroker::getStaticHelper('Documents');
     }
 
-    public function testGetDocumentForIdForValidId() {
+    public function testGetDocumentForIdForValidId()
+    {
         $docId = 1;
 
         $document = $this->documents->getDocumentForId($docId);
@@ -50,25 +55,29 @@ class Application_Controller_Action_Helper_DocumentsTest extends ControllerTestC
         $this->assertInstanceOf('Opus_Document', $document);
     }
 
-    public function testGetDocumentForIdForEmptyValue() {
+    public function testGetDocumentForIdForEmptyValue()
+    {
         $docId = null;
 
         $this->assertNull($this->documents->getDocumentForId($docId));
     }
 
-    public function testGetDocumentForIdForMalformedValue() {
+    public function testGetDocumentForIdForMalformedValue()
+    {
         $docId = '<h1>123</h1>';
 
         $this->assertNull($this->documents->getDocumentForId($docId));
     }
 
-    public function testGetDocumentForIdForNotExistingValue() {
+    public function testGetDocumentForIdForNotExistingValue()
+    {
         $docId = 3000;
 
         $this->assertNull($this->documents->getDocumentForId($docId));
     }
 
-    public function testGetDocumentForIdForNegativeValue() {
+    public function testGetDocumentForIdForNegativeValue()
+    {
         $docId = -1;
 
         $this->assertNull($this->documents->getDocumentForId($docId));
@@ -108,14 +117,14 @@ class Application_Controller_Action_Helper_DocumentsTest extends ControllerTestC
 
     public function stateProvider()
     {
-        return array(
+        return [
             'published' => ['published'],
             'restricted' => ['restricted'],
             'unpublished' => ['unpublished'],
             'deleted' => ['deleted'],
             'inprogress' => ['inprogress'],
             'audited' => ['audited']
-        );
+        ];
     }
 
     /**
@@ -130,14 +139,11 @@ class Application_Controller_Action_Helper_DocumentsTest extends ControllerTestC
         $this->assertInternalType('array', $documents);
         // $this->assertGreaterThan(0, count($documents));
 
-        if (count($documents) > 0)
-        {
-            foreach ($documents as $docId)
-            {
+        if (count($documents) > 0) {
+            foreach ($documents as $docId) {
                 $document = new Opus_Document($docId);
                 $this->assertEquals($state, $document->getServerState());
             }
         }
     }
-
 }

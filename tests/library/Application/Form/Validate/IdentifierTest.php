@@ -26,7 +26,7 @@
  *
  * @category    Tests
  * @author      Maximilian Salomon <salomon@zib.de>
- * @copyright   Copyright (c) 2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2017-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -36,6 +36,9 @@
  */
 class Application_Form_Validate_IdentifierTest extends ControllerTestCase
 {
+
+    protected $additionalResources = ['database', 'translation'];
+
     /**
      * Represents an validator-object for identifier-elements.
      * @var Zend_Validate_Abstract
@@ -54,6 +57,8 @@ class Application_Form_Validate_IdentifierTest extends ControllerTestCase
     public function setUp()
     {
         parent::setUp();
+
+        $this->makeConfigurationModifiable();
 
         Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
             'identifier' => ['validation' => [
@@ -269,7 +274,7 @@ class Application_Form_Validate_IdentifierTest extends ControllerTestCase
             $validatorClass = $val['class'];
             $validator = new $validatorClass;
             $messageValidator = $validator->getMessageTemplates();
-            if(array_key_exists('messageTemplates',$val)){
+            if (array_key_exists('messageTemplates', $val)) {
                 $messageConfig = $val['messageTemplates'];
                 foreach ($messageConfig as $key => $val) {
                     $this->assertArrayHasKey($key, $messageValidator);
@@ -287,7 +292,7 @@ class Application_Form_Validate_IdentifierTest extends ControllerTestCase
         $config = Application_Configuration::getInstance()->getConfig();
         $validators = $config->identifier->validation->toArray();
         foreach ($validators as $key => $val) {
-            if(array_key_exists('messageTemplates',$val)) {
+            if (array_key_exists('messageTemplates', $val)) {
                 $messageConfig = $val['messageTemplates'];
                 foreach ($messageConfig as $key => $val) {
                     $this->assertTrue($translate->isTranslated($val));
@@ -295,5 +300,4 @@ class Application_Form_Validate_IdentifierTest extends ControllerTestCase
             }
         }
     }
-
 }

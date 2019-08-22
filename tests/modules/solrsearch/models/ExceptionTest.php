@@ -32,10 +32,11 @@
  * @version     $Id$
  */
 
-class Solrsearch_Model_ExceptionTest extends ControllerTestCase {
+class Solrsearch_Model_ExceptionTest extends ControllerTestCase
+{
 
-    public function testConstructor() {
+    public function testConstructor()
+    {
         new Solrsearch_Model_Exception();
     }
 }
-

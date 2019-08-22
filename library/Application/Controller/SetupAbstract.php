@@ -36,13 +36,15 @@
 /**
  *
  */
-abstract class Application_Controller_SetupAbstract extends Application_Controller_Action {
+abstract class Application_Controller_SetupAbstract extends Application_Controller_Action
+{
 
     abstract protected function getModel();
 
     abstract protected function getForm();
 
-    public function editAction() {
+    public function editAction()
+    {
 
         try {
             $model = $this->getModel();
@@ -56,59 +58,53 @@ abstract class Application_Controller_SetupAbstract extends Application_Controll
             if ($this->_request->isPost()) {
                 $postData = $this->_request->getPost('data');
                 if ($dataForm->isValid($postData)) {
-                    $this->view->messages = array();
+                    $this->view->messages = [];
                     $model->fromArray($postData);
                     $stored = $model->store();
-                    if (!$stored) {
+                    if (! $stored) {
                         $dataForm->populate($postData);
-                        $this->view->messages[] = array('level' => 'failure',
-                            'message' => $this->view->translate('setup_message_write-failed'));
-                    }
-                    else {
-                        $this->view->messages[] = array('level' => 'notice',
-                            'message' => $this->view->translate('setup_message_write-success'));
+                        $this->view->messages[] = ['level' => 'failure',
+                            'message' => $this->view->translate('setup_message_write-failed')];
+                    } else {
+                        $this->view->messages[] = ['level' => 'notice',
+                            'message' => $this->view->translate('setup_message_write-success')];
                         Zend_Translate::clearCache();
                     }
+                } else {
+                    $this->view->messages[] = ['level' => 'failure',
+                        'message' => 'Es ist ein Fehler aufgetreten. Bitte überprüfen Sie Ihre Eingaben.'];
                 }
-                else {
-                    $this->view->messages[] = array('level' => 'failure',
-                        'message' => 'Es ist ein Fehler aufgetreten. Bitte überprüfen Sie Ihre Eingaben.');
-                }
-            }
-            else {
+            } else {
                 $formData = $model->toArray();
                 $dataForm->populate($formData);
             }
 
             $this->view->form = $form;
-        }
-        catch (Setup_Model_FileNotReadableException $exc) {
+        } catch (Setup_Model_FileNotReadableException $exc) {
             $this->_helper->Redirector->redirectTo(
                 'error',
-                array('failure' => $this->view->translate('setup_message_error_read-access', $exc->getMessage()))
+                ['failure' => $this->view->translate('setup_message_error_read-access', [$exc->getMessage()])]
             );
-        }
-        catch (Setup_Model_FileNotWriteableException $exc) {
+        } catch (Setup_Model_FileNotWriteableException $exc) {
             $this->_helper->Redirector->redirectTo(
                 'error',
-                array('failure' => $this->view->translate('setup_message_error_write-access', $exc->getMessage()))
+                ['failure' => $this->view->translate('setup_message_error_write-access', [$exc->getMessage()])]
             );
-        }
-        catch (Setup_Model_FileNotFoundException $exc) {
+        } catch (Setup_Model_FileNotFoundException $exc) {
             $this->_helper->Redirector->redirectTo(
                 'error',
-                array('failure' => $this->view->translate('setup_message_error_filenotfound', $exc->getMessage()))
+                ['failure' => $this->view->translate('setup_message_error_filenotfound', [$exc->getMessage()])]
             );
         }
         $this->render('edit', null, true);
     }
 
-    public function errorAction() {
+    public function errorAction()
+    {
         $this->view->backLink = $this->view->url(
-            array('controller' => $this->getRequest()->getControllerName(),
-            'action' => 'index')
+            ['controller' => $this->getRequest()->getControllerName(),
+            'action' => 'index']
         );
         $this->render('error', null, true);
     }
-
 }

@@ -34,7 +34,8 @@
 class Solrsearch_Model_Search_Document extends Solrsearch_Model_Search_Basic
 {
 
-    public function createSearchQuery($input) {
+    public function createSearchQuery($input)
+    {
         $this->getLogger()->debug("Constructing query for id search.");
 
         if (is_null($input['docId'])) {
@@ -52,5 +53,4 @@ class Solrsearch_Model_Search_Document extends Solrsearch_Model_Search_Basic
 
         return $query;
     }
-
 }

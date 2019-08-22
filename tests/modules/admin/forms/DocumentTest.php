@@ -26,22 +26,25 @@
  *
  * @category    Application Unit Test
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2013-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
  * Unit Tests für Metadaten-Formular Klasse.
  */
-class Admin_Form_DocumentTest extends ControllerTestCase {
+class Admin_Form_DocumentTest extends ControllerTestCase
+{
 
-    public function testConstructForm() {
+    protected $additionalResources = ['view', 'translation'];
+
+    public function testConstructForm()
+    {
         $form = new Admin_Form_Document();
 
         $this->assertEquals(0, count($form->getElements()));
 
-        $subformNames = array(
+        $subformNames = [
             'ActionBox',
             'InfoBox',
             'General',
@@ -57,7 +60,7 @@ class Admin_Form_DocumentTest extends ControllerTestCase {
             'Patents',
             'Notes',
             'Actions'
-        );
+        ];
 
         $this->verifySubForms($form, $subformNames);
     }
@@ -65,7 +68,8 @@ class Admin_Form_DocumentTest extends ControllerTestCase {
     /**
      * Prüft ob populateFromModel an Unterformulare weitergereicht wird.
      */
-    public function testPopulateFromModel() {
+    public function testPopulateFromModel()
+    {
         $form = new Admin_Form_Document();
 
         $document = new Opus_Document(146);
@@ -80,10 +84,11 @@ class Admin_Form_DocumentTest extends ControllerTestCase {
         $this->assertEquals(8, count($form->getSubForm('Collections')->getSubForms()));
     }
 
-    public function testGetInstanceFromPost() {
+    public function testGetInstanceFromPost()
+    {
         $document = new Opus_Document(146);
 
-        $post = array();
+        $post = [];
 
         $form = Admin_Form_Document::getInstanceFromPost($post, $document);
 
@@ -91,35 +96,38 @@ class Admin_Form_DocumentTest extends ControllerTestCase {
         $this->assertInstanceOf('Admin_Form_Document', $form);
     }
 
-    public function testProcessPostEmpty() {
+    public function testProcessPostEmpty()
+    {
         $form = new Admin_Form_Document();
 
-        $this->assertNull($form->processPost(array(), array()));
+        $this->assertNull($form->processPost([], []));
     }
 
-    public function testProcessPostSave() {
+    public function testProcessPostSave()
+    {
         $form = new Admin_Form_Document();
 
-        $post = array(
-            'ActionBox' => array(
+        $post = [
+            'ActionBox' => [
                 'Save' => 'Speichern'
-            )
-        );
+            ]
+        ];
 
         $this->assertEquals(Admin_Form_Document::RESULT_SAVE, $form->processPost($post, $post));
     }
 
-    public function testContinueEdit() {
+    public function testContinueEdit()
+    {
         $form = new Admin_Form_Document();
 
         $request = $this->getRequest();
-        $request->setParams(array(
+        $request->setParams([
             'continue' => 'addperson',
             'person' => '310',
             'role' => 'editor',
             'order' => '2',
             'contact' => '0'
-        ));
+        ]);
 
         $session = new Admin_Model_DocumentEditSession(100);
 
@@ -137,7 +145,8 @@ class Admin_Form_DocumentTest extends ControllerTestCase {
         $this->assertEquals(0, $subform->getElementValue('AllowContact'));
     }
 
-    public function testIsValidTrue() {
+    public function testIsValidTrue()
+    {
         $form = new Admin_Form_Document();
 
         $document = $this->createTestDocument();
@@ -145,23 +154,23 @@ class Admin_Form_DocumentTest extends ControllerTestCase {
 
         $form->populateFromModel($document);
 
-        $post = array(
-            'General' => array(
+        $post = [
+            'General' => [
                 'Language' => 'deu',
                 'Type' => 'all'
-            ),
-            'Titles' => array(
-                'Main' => array(
-                    'TitleMain0' => array(
+            ],
+            'Titles' => [
+                'Main' => [
+                    'TitleMain0' => [
                         'Language' => 'deu',
                         'Value' => 'Deutscher Titel'
-                    )
-                )
-            ),
-            'Actions' => array(
+                    ]
+                ]
+            ],
+            'Actions' => [
                 'OpusHash' => $this->getHash($form)
-            )
-        );
+            ]
+        ];
 
         $result = $form->isValid($post, $post);
 
@@ -171,7 +180,9 @@ class Admin_Form_DocumentTest extends ControllerTestCase {
     /**
      * Die Validierung schlägt fehl, weil der Titel einen leeren Wert hat.
      */
-    public function testIsValidFalse() {
+    public function testIsValidFalse()
+    {
+        $this->disableTranslation();
         $form = new Admin_Form_Document();
 
         $document = $this->createTestDocument();
@@ -179,23 +190,23 @@ class Admin_Form_DocumentTest extends ControllerTestCase {
 
         $form->populateFromModel($document);
 
-        $post = array(
-            'General' => array(
+        $post = [
+            'General' => [
                 'Language' => 'deu',
                 'Type' => 'all'
-            ),
-            'Titles' => array(
-                'Main' => array(
-                    'TitleMain0' => array(
+            ],
+            'Titles' => [
+                'Main' => [
+                    'TitleMain0' => [
                         'Language' => 'deu',
                         'Value' => ''
-                    )
-                )
-            ),
-            'Actions' => array(
+                    ]
+                ]
+            ],
+            'Actions' => [
                 'OpusHash' => $this->getHash($form)
-            )
-        );
+            ]
+        ];
 
         $result = $form->isValid($post, $post);
 
@@ -209,7 +220,9 @@ class Admin_Form_DocumentTest extends ControllerTestCase {
      * Die Validierung schlägt fehl, weil die Dokumentensprache 'deu' ist und kein deutscher Titel vorliegt. Diese
      * Prüfung wird intern über die Funktion isDependenciesValid durchgeführt.
      */
-    public function testIsValidFalseDependency() {
+    public function testIsValidFalseDependency()
+    {
+        $this->disableTranslation();
         $form = new Admin_Form_Document();
 
         $document = $this->createTestDocument();
@@ -217,23 +230,23 @@ class Admin_Form_DocumentTest extends ControllerTestCase {
 
         $form->populateFromModel($document);
 
-        $post = array(
-            'General' => array(
+        $post = [
+            'General' => [
                 'Language' => 'deu',
                 'Type' => 'all'
-            ),
-            'Titles' => array(
-                'Main' => array(
-                    'TitleMain0' => array(
+            ],
+            'Titles' => [
+                'Main' => [
+                    'TitleMain0' => [
                         'Language' => 'eng',
                         'Value' => 'English Title'
-                    )
-                )
-            ),
-            'Actions' => array(
+                    ]
+                ]
+            ],
+            'Actions' => [
                 'OpusHash' => $this->getHash($form)
-            )
-        );
+            ]
+        ];
 
         $result = $form->isValid($post, $post);
 
@@ -247,7 +260,9 @@ class Admin_Form_DocumentTest extends ControllerTestCase {
     /**
      * Prüft ob Dependency Validierung ausgeführt wird, wenn normale Validierung fehlschlägt.
      */
-    public function testIsValidFalseDependency2() {
+    public function testIsValidFalseDependency2()
+    {
+        $this->disableTranslation();
         $form = new Admin_Form_Document();
 
         $document = $this->createTestDocument();
@@ -256,27 +271,27 @@ class Admin_Form_DocumentTest extends ControllerTestCase {
 
         $form->populateFromModel($document);
 
-        $post = array(
-            'General' => array(
+        $post = [
+            'General' => [
                 'Language' => 'deu',
                 'Type' => 'all'
-            ),
-            'Titles' => array(
-                'Main' => array(
-                    'TitleMain0' => array(
+            ],
+            'Titles' => [
+                'Main' => [
+                    'TitleMain0' => [
                         'Language' => 'eng',
                         'Value' => 'English Title'
-                    ),
-                    'TitleMain1' => array(
+                    ],
+                    'TitleMain1' => [
                         'Language' => 'rus',
                         'Value' => ''
-                    )
-                )
-            ),
-            'Actions' => array(
+                    ]
+                ]
+            ],
+            'Actions' => [
                 'OpusHash' => $this->getHash($form)
-            )
-        );
+            ]
+        ];
 
         $result = $form->isValid($post, $post);
 
@@ -290,7 +305,8 @@ class Admin_Form_DocumentTest extends ControllerTestCase {
         $this->assertContains('admin_document_error_NoTitleInDocumentLanguage', $subform->getErrorMessages());
     }
 
-    public function testSetGetMessage() {
+    public function testSetGetMessage()
+    {
         $form = new Admin_Form_Document();
 
         $this->assertNull($form->getMessage());
@@ -300,7 +316,8 @@ class Admin_Form_DocumentTest extends ControllerTestCase {
         $this->assertEquals('Test Nachricht', $form->getMessage());
     }
 
-    public function testPrepareRenderingAsViewFullDocument() {
+    public function testPrepareRenderingAsViewFullDocument()
+    {
         $form = new Admin_Form_Document();
 
         $document = new Opus_Document(146);
@@ -308,7 +325,7 @@ class Admin_Form_DocumentTest extends ControllerTestCase {
         $form->populateFromModel($document);
         $form->prepareRenderingAsView();
 
-        $this->verifySubForms($form, array(
+        $this->verifySubForms($form, [
             'ActionBox',
             'InfoBox',
             'General',
@@ -324,10 +341,11 @@ class Admin_Form_DocumentTest extends ControllerTestCase {
             'Patents',
             'Notes',
             'Files'
-        ));
+        ]);
     }
 
-    public function testPrepareRenderingAsViewDocumentWithoutFiles() {
+    public function testPrepareRenderingAsViewDocumentWithoutFiles()
+    {
         $form = new Admin_Form_Document();
 
         $document = new Opus_Document(200);
@@ -342,7 +360,8 @@ class Admin_Form_DocumentTest extends ControllerTestCase {
      * Für ein leeres Dokument werden fast alle Unterformulare entfernt.
      * Weiterhin angezeigt werden die ActionBox, und die InfoBox,
      */
-    public function testPrepareRenderingAsViewForEmptyDocument() {
+    public function testPrepareRenderingAsViewForEmptyDocument()
+    {
         $form = new Admin_Form_Document();
 
         $document = $this->createTestDocument();
@@ -350,10 +369,11 @@ class Admin_Form_DocumentTest extends ControllerTestCase {
         $form->populateFromModel($document);
         $form->prepareRenderingAsView();
 
-        $this->verifySubForms($form, array('ActionBox', 'InfoBox', 'Bibliographic', 'IdentifiersAll'));
+        $this->verifySubForms($form, ['ActionBox', 'InfoBox', 'Bibliographic', 'IdentifiersAll']);
     }
 
-    protected function verifySubForms($form, $names) {
+    protected function verifySubForms($form, $names)
+    {
         $this->assertEquals(count($names), count($form->getSubForms()));
 
         foreach ($names as $name) {
@@ -361,7 +381,8 @@ class Admin_Form_DocumentTest extends ControllerTestCase {
         }
     }
 
-    protected function getHash($form) {
+    protected function getHash($form)
+    {
         $session = new Zend_Session_Namespace('testing');
 
         $hashElement = $form->getSubForm('Actions')->getElement('OpusHash');
@@ -371,5 +392,4 @@ class Admin_Form_DocumentTest extends ControllerTestCase {
 
         return $hashElement->getHash();
     }
-
 }

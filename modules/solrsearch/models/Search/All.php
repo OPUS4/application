@@ -34,7 +34,8 @@
 class Solrsearch_Model_Search_All extends Solrsearch_Model_Search_Basic
 {
 
-    public function createSearchQuery($input) {
+    public function createSearchQuery($input)
+    {
         $this->getLogger()->debug("Constructing query for all search.");
 
         $query = new Opus_Search_Util_Query(Opus_Search_Util_Query::ALL_DOCS);
@@ -52,5 +53,4 @@ class Solrsearch_Model_Search_All extends Solrsearch_Model_Search_Basic
         $this->getLogger()->debug("Query $query complete");
         return $query;
     }
-
 }

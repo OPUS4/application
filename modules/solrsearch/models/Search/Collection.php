@@ -51,10 +51,9 @@ class Solrsearch_Model_Search_Collection extends Solrsearch_Model_Search_Basic
         $collectionList = null;
         try {
             $collectionList = new Solrsearch_Model_CollectionList($request->getParam('id'));
-        }
-        catch (Solrsearch_Model_Exception $e) {
+        } catch (Solrsearch_Model_Exception $e) {
             $this->getLogger()->debug($e->getMessage());
-            return $this->_helper->Redirector->redirectToAndExit('index', '', 'browse', null, array(), true); // TODO FIX
+            return $this->_helper->Redirector->redirectToAndExit('index', '', 'browse', null, [], true); // TODO FIX
         }
 
         $view = $this->getView();
@@ -71,8 +70,7 @@ class Solrsearch_Model_Search_Collection extends Solrsearch_Model_Search_Basic
 
         if ($collectionList->isRootCollection()) {
             $view->title = $translation;
-        }
-        else {
+        } else {
             $view->title = $collectionList->getTitle();
         }
 
@@ -80,13 +78,12 @@ class Solrsearch_Model_Search_Collection extends Solrsearch_Model_Search_Basic
         // set in the request.  To enable the collection theme, add
         // /usetheme/1/ to the URL.
         $usetheme = $request->getParam("usetheme");
-        if (!is_null($usetheme) && 1 === (int) $usetheme) {
+        if (! is_null($usetheme) && 1 === (int) $usetheme) {
             $layoutPath = APPLICATION_PATH . '/public/layouts/' . $collectionList->getTheme();
             if (is_readable($layoutPath . '/common.phtml')) {
                 $layout = Zend_Controller_Action_HelperBroker::getStaticHelper('layout');
                 $layout->setLayoutPath($layoutPath);
-            }
-            else {
+            } else {
                 $this->getLogger()->debug(
                     "The requested theme '" . $collectionList->getTheme()
                     . "' does not exist - use default theme instead."
@@ -95,7 +92,8 @@ class Solrsearch_Model_Search_Collection extends Solrsearch_Model_Search_Basic
         }
     }
 
-    public function createSearchQuery($input) {
+    public function createSearchQuery($input)
+    {
         $this->getLogger()->debug("Constructing query for collection search.");
 
         $query = new Opus_Search_Util_Query(Opus_Search_Util_Query::SIMPLE);
@@ -127,5 +125,4 @@ class Solrsearch_Model_Search_Collection extends Solrsearch_Model_Search_Basic
 
         return $input;
     }
-
 }

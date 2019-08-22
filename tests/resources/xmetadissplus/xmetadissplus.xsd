@@ -64,11 +64,11 @@
 	<!-- XSD Imports end -->
 	<xs:element name="xMetaDiss">
 		<xs:annotation>
-			<xs:documentation xml:lang="de">XmetaDissPlus 2.0 ist eine Erweiterung des Metadatenformat XMetaDiss 1.3 fuer Online-Hochschulschriften aufbauend auf DublinCore, ETD-MS und interen Metadaten in der Deutschen Nationalbibliothek wie pc Personal Core, cc Corporate Core und ddb fuer administrative und technische Elemente. 
+			<xs:documentation xml:lang="de">XmetaDissPlus 2.0 ist eine Erweiterung des Metadatenformat XMetaDiss 1.3 fuer Online-Hochschulschriften aufbauend auf DublinCore, ETD-MS und interen Metadaten in der Deutschen Nationalbibliothek wie pc Personal Core, cc Corporate Core und ddb fuer administrative und technische Elemente.
 				Das Format XMetaDiss wurde auf XMetaDissPlus erweitert, wie es das BSZ bereits eingefuehrt hat: Ueber die Definition eines Vokabulars von Publikationstypen, das im Rahmen eines XML-Schemas definiert ist, sind weitere Dokumentarten darstellbar.
 				Die Schemata fuer das erweiterte Metadatenformat wurden von Makram Sakji (BSZ) erstellt, vorhandene Schemata wurden z. T. erweitert.
 				In der Version 2.1. wurde die Checksumme als weiteres Element ergaenzt und die Kardinalitaet fuer die Transfer-URL angepasst.
-				In der Version 2.2 wurde die Kardinalitaet 1 fuer das Element fileProperties aufgehoben. 
+				In der Version 2.2 wurde die Kardinalitaet 1 fuer das Element fileProperties aufgehoben.
 			</xs:documentation>
 		</xs:annotation>
 		<xs:complexType>
@@ -103,7 +103,7 @@
 				<xs:element ref="dc:rights" minOccurs="0" maxOccurs="unbounded" />
 				<xs:element ref="thesis:degree" minOccurs="0" maxOccurs="1" />
 				<xs:element ref="ddb:contact" minOccurs="0" maxOccurs="1" />
-				<xs:element ref="ddb:fileNumber" />				
+				<xs:element ref="ddb:fileNumber" />
 				<xs:element ref="ddb:fileProperties" minOccurs="0" maxOccurs="unbounded" />
 				<xs:element ref="ddb:checksum" minOccurs="0" maxOccurs="1" />
 				<xs:element ref="ddb:transfer" minOccurs="1" maxOccurs="unbounded" />

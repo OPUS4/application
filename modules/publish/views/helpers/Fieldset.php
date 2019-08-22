@@ -33,23 +33,24 @@
  * @version     $Id$
  */
 
-class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract {
+class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract
+{
 
     protected $_disable = false;
 
-    function fieldset() {
-        
+    public function fieldset()
+    {
     }
-     
-    function renderHtmlText($field, $options) {
+
+    public function renderHtmlText($field, $options)
+    {
         $fieldset = "";
-        if (!isset($field['isLeaf'])) {
+        if (! isset($field['isLeaf'])) {
             $fieldset .= "\n\t\t\t\t<input type='text' class='form-textfield' name='" . $field['id'] . "' id='"
                 . $field['id'] . "' ";
             if ($options !== null) {
                 $fieldset .= $options . " ";
-            }
-            else {
+            } else {
                 $fieldset .= "size='30' ";
             }
 
@@ -59,8 +60,8 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract {
             }
 
             $fieldset .= " title='" . htmlspecialchars($this->view->translate($field['hint']), ENT_QUOTES) . "' ";
-            
-            $fieldset .= " value='" . htmlspecialchars($field['value'], ENT_QUOTES) . "' />\n";            
+
+            $fieldset .= " value='" . htmlspecialchars($field['value'], ENT_QUOTES) . "' />\n";
             if (isset($field['desc'])) {
                 $fieldset .= '<div class="description hint">' . $this->view->translate($field['desc']) . '</div>';
             }
@@ -68,12 +69,12 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract {
         return $fieldset;
     }
 
-    function renderHtmlTextarea($field, $options) {
+    public function renderHtmlTextarea($field, $options)
+    {
         $fieldset = "\n\t\t\t\t<textarea name='" . $field['id'] . "' class='form-textarea' ";
         if ($options !== null) {
             $fieldset .= $options . " ";
-        }
-        else {
+        } else {
             $fieldset .= "cols='30' rows='5' ";
         }
 
@@ -89,7 +90,8 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract {
     }
 
     // TODO: wofür wird der Parameter $options benötigt?
-    function renderHtmlSelect($field, $options) {
+    public function renderHtmlSelect($field, $options)
+    {
         // TODO move style to CSS
         $fieldset = "\n\t\t\t\t" . '<select style="width:300px" name="' . $field['id']
             . '" class="form-selectfield"  id="' . $field['id'] . '"';
@@ -100,10 +102,14 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract {
         }
         $fieldset .= '>' . "\n\t\t\t\t\t";
 
-        foreach ($field['options'] AS $key => $option) {
+        if ($options !== null) {
+            $field['options'] = $options;
+        }
+
+        foreach ($field['options'] as $key => $option) {
             $fieldset .= '<option value="' . htmlspecialchars($key, ENT_QUOTES) . '" label="'
                 . htmlspecialchars($option, ENT_QUOTES) . '"';
-            
+
             if ($option == $field['value'] || $key == $field['value']) {
                 $fieldset .= ' selected="selected"';
             }
@@ -120,13 +126,14 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract {
     }
 
     // TODO: wofür wird der Parameter $options benötigt?
-    function renderHtmlCheckbox($field, $options) {
+    public function renderHtmlCheckbox($field, $options)
+    {
         $fieldset = "<input type='hidden' name='" . $field['id'] . "' value='0' />";
         $fieldset .= "\n\t\t\t\t<input type='checkbox' class='form-checkbox' name='" . $field['id'] . "' id='"
             . $field['id'] . "' ";
         $fieldset .= "value='" . $field['value'] . "' ";
         if ($field['check'] == 'checked') {
-            $fieldset .= " checked='checked' "; 
+            $fieldset .= " checked='checked' ";
         }
 
         if ($field['disabled'] === true) {
@@ -139,14 +146,14 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract {
         return $fieldset;
     }
 
-    function renderHtmlFile($field, $options) {
+    public function renderHtmlFile($field, $options)
+    {
         $fieldset = "<input type='file' name='" . $field['id'] . "' id='" . $field['id']
             . "' enctype='multipart/form-data' ";
         $fieldset .= "title='" . htmlspecialchars($this->view->translate($field['hint']), ENT_QUOTES) . "' ";
         if ($options !== null) {
             $fieldset .= $options . " ";
-        }
-        else {
+        } else {
             $fieldset .= "size='30'";
         }
         $fieldset .= " />\n";
@@ -162,11 +169,12 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract {
      * Kann man verhindern, wenn man dem Array ein zusätzliches Feld "isGroup" o.ä. mitgibt, das überprüft, ob es
      * sich tatsächlich um eine Gruppe handelt.
      */
-    function renderFieldsetErrors($field) {
+    public function renderFieldsetErrors($field)
+    {
         $fieldset = "";
-        if (isset($field) && !empty($field)) {
+        if (isset($field) && ! empty($field)) {
             $fieldset .= "<div class='form-errors'><ul>";
-            foreach ($field AS $err) {
+            foreach ($field as $err) {
                 $fieldset .= "\n<li>" . htmlspecialchars($err, ENT_QUOTES) . "</li>";
             }
             $fieldset .= "\n</ul></div>";
@@ -174,26 +182,25 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract {
         return $fieldset;
     }
 
-    function renderHtmlButtons($buttons) {
+    public function renderHtmlButtons($buttons)
+    {
         $fieldset = "\n\t\t\t\t<div class='button-wrapper add-delete-wrapper'>";
-        foreach ($buttons AS $button) {
-            if (!$this->_disable) {
+        foreach ($buttons as $button) {
+            if (! $this->_disable) {
                 $fieldset .= "<input type='submit' ";
                 if (strstr($button['id'], 'Down') !== false) {
-                    $fieldset .= "class='form-button down-button' "; 
-                }
-                else {
+                    $fieldset .= "class='form-button down-button' ";
+                } else {
                     if (strstr($button['id'], 'Up') !== false) {
-                        $fieldset .= "class='form-button up-button' "; 
+                        $fieldset .= "class='form-button up-button' ";
                     }
                 }
 
                 if (strstr($button['id'], 'add') !== false) {
-                    $fieldset .= "class='form-button add-button' "; 
-                }
-                else {
+                    $fieldset .= "class='form-button add-button' ";
+                } else {
                     if (strstr($button['id'], 'delete') !== false) {
-                        $fieldset .= "class='form-button delete-button' "; 
+                        $fieldset .= "class='form-button delete-button' ";
                     }
                 }
 
@@ -207,16 +214,18 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract {
         return $fieldset;
     }
 
-    function renderHtmlHidden($hiddens) {
-    $fieldset = "";
-        foreach ($hiddens AS $hidden) {
+    public function renderHtmlHidden($hiddens)
+    {
+        $fieldset = "";
+        foreach ($hiddens as $hidden) {
             $fieldset .= "\n<input type='hidden' name='" . $hidden['id'] . "' id='" . $hidden['id'] . "' value='"
                 . $hidden['value'] . "' />";
-        }    
+        }
         return $fieldset;
     }
-    
-    function _renderSubmit($value, $options=null, $name=null) {
+
+    public function _renderSubmit($value, $options = null, $name = null)
+    {
         $submit = "\n\t\t<input type='submit' name='" . $name . "' id='" . $name . "' value='"
             . htmlspecialchars($this->view->translate($value), ENT_QUOTES) . "' ";
         if (isset($options)) {
@@ -226,16 +235,18 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract {
     }
 
     // TODO: wofür wird der Parameter $options benötigt?
-    function _renderHidden($value, $options = null, $name=null) {
+    public function _renderHidden($value, $options = null, $name = null)
+    {
         $hiddenfield = "<input type='hidden' name='" . $name . "' id='" . $name . "' value='" . $value . "' />";
         return $hiddenfield;
     }
 
     /**
      * Returns the hint string for a required element
-     * @return <type> 
+     * @return <type>
      */
-    function getRequiredSign() {
+    public function getRequiredSign()
+    {
         return "<span class='required' title='"
             . htmlspecialchars($this->view->translate('required_star_title'), ENT_QUOTES) . "'>*</span>";
     }
@@ -245,11 +256,13 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract {
      * @param <String> Name of element or group
      * @return <type>
      */
-    function getFieldsetHint($name) {
+    public function getFieldsetHint($name)
+    {
         return "<div class='description hint'><p>" . $this->view->translate('hint_' . $name) . "</p></div>";
     }
 
-    function getLabelFor($name, $label, $required) {
+    public function getLabelFor($name, $label, $required)
+    {
         $fieldset = "<label for='" . $name . "'>" . htmlspecialchars($this->view->translate($label), ENT_QUOTES);
 
         if ($required === 'required') {
@@ -260,9 +273,8 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract {
         return $fieldset;
     }
 
-    function getLegendFor($name) {
+    public function getLegendFor($name)
+    {
         return "<legend>" . $this->view->translate($name) . "</legend>\n\t\t\n\t\t";
     }
-
 }
-

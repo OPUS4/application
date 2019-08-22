@@ -26,119 +26,131 @@
  *
  * @category    Application Unit Test
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2013-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
-class Admin_Form_Document_PersonAddTest extends ControllerTestCase {
- 
-    public function testConstructForm() {
+class Admin_Form_Document_PersonAddTest extends ControllerTestCase
+{
+
+    protected $additionalResources = ['database', 'translation'];
+
+    public function testConstructForm()
+    {
         $form = new Admin_Form_Document_PersonAdd();
-        
+
         $this->assertEquals(1, count($form->getSubForms()));
-        
+
         $this->assertNotNull($form->getSubForm('Document'));
-        
+
         // TODO formelements
         // TODO buttons
     }
-    
-    public function testProcessPostCancel() {
+
+    public function testProcessPostCancel()
+    {
         $form = new Admin_Form_Document_PersonAdd();
-        
-        $post = array( 
+
+        $post = [
             'Cancel' => 'Abbrechen'
-        );
-        
+        ];
+
         $this->assertEquals(Admin_Form_Document_PersonAdd::RESULT_CANCEL, $form->processPost($post, null));
     }
-    
-    public function testProcessPostNext() {
+
+    public function testProcessPostNext()
+    {
         $form = new Admin_Form_Document_PersonAdd();
-        
-        $post = array( 
+
+        $post = [
             'Next' => 'Weiter'
-        );
-        
+        ];
+
         $this->assertEquals(Admin_Form_Document_PersonAdd::RESULT_NEXT, $form->processPost($post, null));
     }
 
-    public function testGetSelectedRole() {
+    public function testGetSelectedRole()
+    {
         $form = new Admin_Form_Document_PersonAdd();
 
         $form->getSubForm(Admin_Form_Document_PersonAdd::SUBFORM_DOCUMENT)->getElement(
-            Admin_Form_PersonLink::ELEMENT_ROLE)->setValue('contributor');
+            Admin_Form_PersonLink::ELEMENT_ROLE
+        )->setValue('contributor');
 
         $this->assertEquals('contributor', $form->getSelectedRole());
     }
 
-    public function testSetSelectedRole() {
+    public function testSetSelectedRole()
+    {
         $form = new Admin_Form_Document_PersonAdd();
-        
+
         $form->setSelectedRole('other');
-        
+
         $this->assertEquals('other', $form->getSubForm('Document')->getElement('Role')->getValue());
     }
-    
-    public function testSetSelectedRoleBadRole() {
+
+    public function testSetSelectedRoleBadRole()
+    {
         $form = new Admin_Form_Document_PersonAdd();
-        
+
         $logger = new MockLogger();
-        
+
         $form->setLogger($logger);
         $form->setSelectedRole('unknown');
-        
+
         $this->assertEquals('author', $form->getSubForm('Document')->getElement('Role')->getValue());
-        
+
         $messages = $logger->getMessages();
         $this->assertEquals(1, count($messages));
         $this->assertContains('Called with unknown role', $messages[0]);
     }
-    
-    public function testValidationFalse() {
+
+    public function testValidationFalse()
+    {
         $this->useEnglish();
-        
+
         $form = new Admin_Form_Document_PersonAdd();
-        
-        $post = array(
+
+        $post = [
             'LastName' => '', // darf nicht leer sein
             'Email' => 'beispiel', // muss Email sein ('name@domain')
             'DateOfBirth' => '1970/02/31', // muss gültiges Datum sein
-            'Document' => array(
+            'Document' => [
                 'Role' => 'unknown', // muss gültige Rolle sein
                 'SortOrder' => 'Erster' // muss Integer sein
-            ) 
-        );
-        
+            ]
+        ];
+
         $this->assertFalse($form->isValid($post));
-        
+
         $this->assertContains('isEmpty', $form->getErrors('LastName'));
         $this->assertContains('emailAddressInvalidFormat', $form->getErrors('Email'));
         $this->assertContains('dateInvalidDate', $form->getErrors('DateOfBirth'));
         $this->assertContains('notInArray', $form->getSubForm('Document')->getErrors('Role'));
         $this->assertContains('notInt', $form->getSubForm('Document')->getErrors('SortOrder'));
     }
-    
-    public function testValidationTrue() {
+
+    public function testValidationTrue()
+    {
         $this->useEnglish();
-        
+
         $form = new Admin_Form_Document_PersonAdd();
-        
-        $post = array(
+
+        $post = [
             'LastName' => 'Meier', // darf nicht leer sein
             'Email' => 'beispiel@example.org', // muss Email sein ('name@domain')
             'DateOfBirth' => '1970/01/31', // muss gültiges Datum sein
-            'Document' => array(
+            'Document' => [
                 'Role' => 'editor', // muss gültige Rolle sein
                 'SortOrder' => '1' // muss Integer sein
-            ) 
-        );
-        
+            ]
+        ];
+
         $this->assertTrue($form->isValid($post));
     }
 
-    public function testGetPersonLinkProperties() {
+    public function testGetPersonLinkProperties()
+    {
         $form = new Admin_Form_Document_PersonAdd();
 
         $subform = $form->getSubForm(Admin_Form_Document_PersonAdd::SUBFORM_DOCUMENT);
@@ -161,7 +173,8 @@ class Admin_Form_Document_PersonAddTest extends ControllerTestCase {
         $this->assertEquals(4, $personProps['order']);
     }
 
-    public function testGetPersonLinkProperties2() {
+    public function testGetPersonLinkProperties2()
+    {
         $form = new Admin_Form_Document_PersonAdd();
 
         $subform = $form->getSubForm(Admin_Form_Document_PersonAdd::SUBFORM_DOCUMENT);

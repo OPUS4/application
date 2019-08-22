@@ -44,7 +44,8 @@
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 require_once 'Log.php';
 
-class CSVImporter {
+class CSVImporter
+{
     // das ist aktuell nur eine Auswahl der Metadatenfelder (speziell für Fromm zugeschnitten)
 
     const NUM_OF_COLUMNS = 33;
@@ -84,11 +85,12 @@ class CSVImporter {
     const ENRICHMENT_RELEVANCE = 31;
     const FILENAME = 32;
 
-    private $_seriesIdsMap = array();
+    private $_seriesIdsMap = [];
     private $_fulltextDir = null;
     private $_guestRole = null;
 
-    public function run($argv) {
+    public function run($argv)
+    {
         if (count($argv) < 2) {
             echo "missing file name\n";
             return;
@@ -100,22 +102,21 @@ class CSVImporter {
         }
 
         if (count($argv) > 2) {
-            if (!is_readable($argv[2])) {
+            if (! is_readable($argv[2])) {
                 echo "fulltext directory '" . $argv[2] . "' is not readable -- check path or permissions\n";
-            }
-            else {
+            } else {
                 $this->_fulltextDir = $argv[2];
                 $this->_guestRole = Opus_UserRole::fetchByName('guest');
             }
         }
 
         $filename = $argv[1];
-        if (!is_readable($filename)) {
+        if (! is_readable($filename)) {
             echo "import file does not exist or is not readable\n";
         }
 
         $file = fopen($filename, 'r');
-        if (!$file) {
+        if (! $file) {
             echo "Error while opening import file\n";
         }
 
@@ -136,8 +137,7 @@ class CSVImporter {
             }
             if ($this->processRow($row)) {
                 $docCounter++;
-            }
-            else {
+            } else {
                 $errorCounter++;
             }
         }
@@ -154,7 +154,8 @@ class CSVImporter {
         fclose($file);
     }
 
-    private function processRow($row) {
+    private function processRow($row)
+    {
         $doc = new Opus_Document();
 
         $oldId = $row[self::OLD_ID];
@@ -178,9 +179,9 @@ class CSVImporter {
             $this->processLicence($row, $doc, $oldId);
             $this->processSeries($row, $doc);
             $this->processEnrichmentKindofpublication($row, $doc, $oldId);
-            
+
             // TODO Fromm verwendet aktuell sieben Enrichments (muss noch generalisiert werden)
-            $enrichementkeys = array(
+            $enrichementkeys = [
                 self::ENRICHMENT_AVAILABILITY,
                 self::ENRICHMENT_FORMAT,
                 self::ENRICHMENT_KINDOFPUBLICATION,
@@ -188,7 +189,7 @@ class CSVImporter {
                 self::ENRICHMENT_COPYRIGHTPRINT,
                 self::ENRICHMENT_COPYRIGHTEBOOK,
                 self::ENRICHMENT_RELEVANCE
-            );
+            ];
             foreach ($enrichementkeys as $enrichmentkey) {
                 $this->processEnrichment($enrichmentkey, $row, $doc);
             }
@@ -197,12 +198,11 @@ class CSVImporter {
 
             $doc->store();
 
-            if (!is_null($file) && $file instanceof Opus_File && !is_null($this->_guestRole)) {
+            if (! is_null($file) && $file instanceof Opus_File && ! is_null($this->_guestRole)) {
                 $this->_guestRole->appendAccessFile($file->getId());
                 $this->_guestRole->store();
             }
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             echo "import of document " . $oldId . " was not successful: " . $e->getMessage() . "\n";
         }
 
@@ -210,15 +210,15 @@ class CSVImporter {
             $this->processPersons($row, $doc, $oldId);
             $doc->store();
             return true;
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             echo "import of person(s) for document " . $oldId . " was not successful: " . $e->getMessage() . "\n";
         }
 
         return false;
     }
 
-    private function processTitlesAndAbstract($row, $doc, $oldId) {
+    private function processTitlesAndAbstract($row, $doc, $oldId)
+    {
         $t = $doc->addTitleMain();
         $t->setValue(trim($row[self::TITLE_MAIN_VALUE]));
         $t->setLanguage(trim($row[self::TITLE_MAIN_LANGUAGE]));
@@ -226,7 +226,6 @@ class CSVImporter {
         // Abstract ist kein Pflichtfeld
         if (trim($row[self::ABSTRACT_LANGUAGE]) != '') {
             if (trim($row[self::ABSTRACT_VALUE]) != '') {
-
                 // möglicherweise sind mehrere Abstracts (und zugehörige Sprachen) vorhanden
 
                 $values = explode('||', trim($row[self::ABSTRACT_VALUE]));
@@ -242,8 +241,7 @@ class CSVImporter {
                     $t->setValue(trim($values[$i]));
                     $t->setLanguage(trim($languages[$i]));
                 }
-            }
-            else {
+            } else {
                 echo "Dokument $oldId mit leerem Abstract, aber vorhandener Sprachangabe\n";
             }
         }
@@ -255,20 +253,18 @@ class CSVImporter {
                 $t = $doc->$method();
                 $t->setValue(trim($row[self::OTHER_TITLE_VALUE]));
                 $t->setLanguage(trim($row[self::OTHER_TITLE_LANGUAGE]));
-            }
-            else {
+            } else {
                 echo "Dokument $oldId mit leerem Titel (Typ: " . $row[self::OTHER_TITLE_TYPE]
                     . "), aber vorhandener Sprachangabe\n";
             }
         }
     }
 
-    private function processPersons($row, $doc, $oldId) {
+    private function processPersons($row, $doc, $oldId)
+    {
         // Personen sind nicht Pflicht
 
         if ($row[self::PERSON_TYPE] != '') {
-
-
             // die drei Spalten persontype, firstname, lastname können mehrere
             // Personen enthalten
             // in diesem Fall erfolgt die Abtrennung *innerhalb* des Felds durch ||
@@ -284,9 +280,8 @@ class CSVImporter {
                     if ($numOfPipesTypeFirstnames != $numOfPipesTypeLastnames) {
                         throw new Exception("skip all persons of document $oldId");
                     }
-                }
-                else {
-                    if (!($numOfPipesTypeField == $numOfPipesTypeFirstnames
+                } else {
+                    if (! ($numOfPipesTypeField == $numOfPipesTypeFirstnames
                             && $numOfPipesTypeField == $numOfPipesTypeLastnames)) {
                         throw new Exception("skip all persons of document $oldId");
                     }
@@ -297,14 +292,12 @@ class CSVImporter {
                 for ($i = 0; $i <= $numOfPipesTypeFirstnames; $i++) {
                     if ($numOfPipesTypeField == 0) {
                         $this->addPerson($doc, $types[0], $firstnames[$i], $lastnames[$i], $oldId);
-                    }
-                    else {
+                    } else {
                         $this->addPerson($doc, $types[$i], $firstnames[$i], $lastnames[$i], $oldId);
                     }
                 }
-            }
-            else {
-                if (!($numOfPipesTypeLastnames == 0 && $numOfPipesTypeField == 0)) {
+            } else {
+                if (! ($numOfPipesTypeLastnames == 0 && $numOfPipesTypeField == 0)) {
                     throw new Exception("skip all persons of document $oldId");
                 }
                 $this->addPerson($doc, $types, $firstnames, $lastnames, $oldId);
@@ -312,12 +305,12 @@ class CSVImporter {
         }
     }
 
-    private function addPerson($doc, $type, $firstname, $lastname, $oldId) {
+    private function addPerson($doc, $type, $firstname, $lastname, $oldId)
+    {
         $p = new Opus_Person();
         if (trim($firstname) == '') {
             echo "Datensatz $oldId ohne Wert für $type.firstname\n";
-        }
-        else {
+        } else {
             $p->setFirstName(trim($firstname));
         }
         $p->setLastName(trim($lastname));
@@ -326,19 +319,20 @@ class CSVImporter {
         $doc->$method($p);
     }
 
-    private function processDate($row, $doc, $oldId) {
-        // TODO aktuell nur Unterstützung für Jahreszahlen        
+    private function processDate($row, $doc, $oldId)
+    {
+        // TODO aktuell nur Unterstützung für Jahreszahlen
         $date = trim($row[self::DATE_VALUE]);
         if (preg_match("/^[0-9]{4}$/", $date)) {
             $method = 'set' . ucfirst($row[self::DATE_TYPE]) . "Year";
             $doc->$method($date);
-        }
-        else {
+        } else {
             echo "Dokument $oldId mit ungültiger Jahresangabe '$date' : wird ignoriert\n";
         }
     }
 
-    private function processIdentifier($row, $doc, $oldId) {
+    private function processIdentifier($row, $doc, $oldId)
+    {
         // ist kein Pflichtfeld
         if (trim($row[self::IDENTIFIER_TYPE]) != '') {
             // die zwei Spalten identifiertype und identifier können mehrere
@@ -359,7 +353,8 @@ class CSVImporter {
         }
     }
 
-    private function addIdentifier($doc, $type, $value) {
+    private function addIdentifier($doc, $type, $value)
+    {
         $identifier = new Opus_Identifier();
         $identifier->setValue(trim($value));
         $identifier->setType(trim($type));
@@ -367,7 +362,8 @@ class CSVImporter {
         $doc->$method($identifier);
     }
 
-    private function processNote($row, $doc, $oldId) {
+    private function processNote($row, $doc, $oldId)
+    {
         // TODO aktuell nur Unterstützung für *eine* Note
         // ist kein Pflichtfeld
         if (trim($row[self::NOTE_VALUE]) != '') {
@@ -375,16 +371,17 @@ class CSVImporter {
             $n->setMessage(trim($row[self::NOTE_VALUE]));
             $visibility = trim($row[self::NOTE_VISIBILITY]);
             if (empty($visibility)) {
-               $visibility = 'private';
-               echo "Dokument $oldId: Sichtbarkeit des Bemerkungsfelds nicht angegeben, wird auf 'private' gesetzt.\n";
+                $visibility = 'private';
+                echo "Dokument $oldId: Sichtbarkeit des Bemerkungsfelds nicht angegeben, wird auf 'private' gesetzt.\n";
             }
             $n->setVisibility($visibility);
         }
     }
 
-    private function processCollections($row, $doc) {
+    private function processCollections($row, $doc)
+    {
         // TODO mehrere Collection-IDs können innerhalb des Felds durch || getrennt werden
-        // ist kein Pflichtfeld                
+        // ist kein Pflichtfeld
         if (trim($row[self::COLLECTION_ID]) != '') {
             $collIds = explode('||', $row[self::COLLECTION_ID]);
             foreach ($collIds as $collId) {
@@ -393,55 +390,53 @@ class CSVImporter {
                 try {
                     $c = new Opus_Collection($collectionId);
                     $doc->addCollection($c);
-                }
-                catch (Opus_Model_NotFoundException $e) {
+                } catch (Opus_Model_NotFoundException $e) {
                     throw new Exception('collection id ' . $collectionId . ' does not exist: ' . $e->getMessage());
                 }
             }
         }
     }
 
-    private function processLicence($row, $doc, $oldId) {
+    private function processLicence($row, $doc, $oldId)
+    {
         // TODO aktuell nur Unterstützung für *eine* Lizenz
         if (trim($row[self::LICENCE_ID]) != '') {
             $licenceId = trim($row[self::LICENCE_ID]);
             try {
                 $l = new Opus_Licence($licenceId);
                 $doc->addLicence($l);
-            }
-            catch (Opus_Model_NotFoundException $e) {
+            } catch (Opus_Model_NotFoundException $e) {
                 throw new Exception('licence id ' . $licenceId . ' does not exist: ' . $e->getMessage());
             }
-        }
-        else {
+        } else {
             // in diesem Fall versuchen wir die Lizenz aus dem format-Enrichment abzuleiten
             $format = trim($row[self::ENRICHMENT_FORMAT]);
 
-            if (!(strpos($format, 'no download') == false) || !(strpos($format, 'no copy') == false)) {
+            if (! (strpos($format, 'no download') == false) || ! (strpos($format, 'no copy') == false)) {
                 $l = new Opus_Licence(11);
                 $doc->addLicence($l);
                 return;
             }
 
-            if (!(strpos($format, 'xerox') == false)) {
+            if (! (strpos($format, 'xerox') == false)) {
                 $l = new Opus_Licence(13);
                 $doc->addLicence($l);
                 return;
             }
 
-            if (!(strpos($format, 'to download') == false)) {
+            if (! (strpos($format, 'to download') == false)) {
                 $l = new Opus_Licence(9);
                 $doc->addLicence($l);
                 return;
             }
 
-            if (!(strpos($format, 'upon request') == false)) {
+            if (! (strpos($format, 'upon request') == false)) {
                 $l = new Opus_Licence(10);
                 $doc->addLicence($l);
                 return;
             }
 
-            if (!(strpos($format, 'to purchase') == false)) {
+            if (! (strpos($format, 'to purchase') == false)) {
                 $l = new Opus_Licence(12);
                 $doc->addLicence($l);
                 return;
@@ -452,7 +447,8 @@ class CSVImporter {
         }
     }
 
-    private function processEnrichment($enrichmentkey, $row, $doc, $oldId=null) {
+    private function processEnrichment($enrichmentkey, $row, $doc, $oldId = null)
+    {
         // aktuell hat der Feldinhalt die Struktur '{ ekey: evalue }'
         // TODO das ist natürlich redundant, da innerhalb einer Spalte immer
         // nur Enrichments eines Enrichmentkeys stehen
@@ -469,8 +465,7 @@ class CSVImporter {
             // check if enrichment key exists
             try {
                 new Opus_EnrichmentKey($key);
-            }
-            catch (Opus_Model_NotFoundException $e) {
+            } catch (Opus_Model_NotFoundException $e) {
                 throw new Exception('enrichment key ' . $key . ' does not exist: ' . $e->getMessage());
             }
 
@@ -483,8 +478,9 @@ class CSVImporter {
         }
     }
 
-    private function processEnrichmentKindofpublication ($row, $doc, $oldId=null) {
-        // Spezial-Workaround fuer Fromm, um die Inhalte aus der 
+    private function processEnrichmentKindofpublication($row, $doc, $oldId = null)
+    {
+        // Spezial-Workaround fuer Fromm, um die Inhalte aus der
         // Spalte 26 (Enrichment: kindofpublication) in das Identifierfeld serial zu schreiben
         $value = trim($row[self::ENRICHMENT_KINDOFPUBLICATION]);
         if ($value != '') {
@@ -495,8 +491,9 @@ class CSVImporter {
             $this->addIdentifier($doc, 'serial', trim($matches[2]));
         }
     }
-    
-    private function processSeries($row, $doc) {
+
+    private function processSeries($row, $doc)
+    {
         // ist kein Pflichtfeld
         if (trim($row[self::SERIES_ID]) != '') {
             $seriesIds = explode('||', $row[self::SERIES_ID]);
@@ -513,15 +510,15 @@ class CSVImporter {
                     $seriesNumber++;
                     $doc->addSeries($series)->setNumber($seriesNumber);
                     $this->_seriesIdsMap[$seriesIdTrimmed] = $seriesNumber;
-                }
-                catch (Opus_Model_NotFoundException $e) {
+                } catch (Opus_Model_NotFoundException $e) {
                     throw new Exception('series id ' . $seriesIdTrimmed . ' does not exist: ' . $e->getMessage());
                 }
             }
         }
     }
 
-    private function processFile($row, $doc, $oldId, $extension = 'pdf') {
+    private function processFile($row, $doc, $oldId, $extension = 'pdf')
+    {
 
         $format = trim($row[self::ENRICHMENT_FORMAT]);
         $filename = trim($row[self::FILENAME]);
@@ -539,9 +536,9 @@ class CSVImporter {
 
         // bei den Keywords 'no download', 'no copy' und 'to purchase' wird keine Dateiangabe erwartet: steht doch ein
         // da, ist das ein Fehler!
-        if (!(strpos($format, 'no download') === false) ||
-                !(strpos($format, 'no copy') === false) ||
-                !(strpos($format, 'to purchase') === false)) {
+        if (! (strpos($format, 'no download') === false) ||
+                ! (strpos($format, 'no copy') === false) ||
+                ! (strpos($format, 'to purchase') === false)) {
             if ($filename != '') {
                 echo "Dokument $oldId: [ERR002] Dateiname angegeben aber format-Enrichment mit unerwartetem Inhalt"
                     . " '$format' -- Datei wird nicht importiert\n";
@@ -550,8 +547,8 @@ class CSVImporter {
         }
 
         // nur bei den Keywords 'to download' und 'upon request' wird überhaupt eine Datei erwartet
-        if ($filename == '' && (!(strpos($format, 'to download') === false)
-                || !(strpos($format, 'upon request') === false))) {
+        if ($filename == '' && (! (strpos($format, 'to download') === false)
+                || ! (strpos($format, 'upon request') === false))) {
             // bei 'xerox upon request' wird keine Datei erwartet
             if (strpos($format, 'xerox upon request') === false) {
                 echo "Dokument $oldId: [ERR003] Dateiname erwartet, aber leeren Inhalt in Spalte für Dateinamen"
@@ -570,13 +567,13 @@ class CSVImporter {
         $filename = $filename . '.' . $extension;
         $tempfile = $this->_fulltextDir . DIRECTORY_SEPARATOR . $filename;
 
-        if (!file_exists($tempfile)) {
+        if (! file_exists($tempfile)) {
             echo "Dokument $oldId: [ERR006] zugeordnete Datei wurden nicht importiert, da sie nicht im angegebenen"
                 . " Ordner existiert\n";
             return null;
         }
 
-        if (!is_readable($tempfile)) {
+        if (! is_readable($tempfile)) {
             echo "Dokument $oldId: [ERR005] zugeordnete Datei wurden nicht importiert, da nicht lesbar\n";
             return null;
         }
@@ -591,16 +588,13 @@ class CSVImporter {
 
         // guest-Role darf Datei nur lesen, wenn format-Enrichment den Wert 'to download' hat (ansonsten nur die
         // administrator-Role, die das Leserecht automatisch erhält)
-        if (!(strpos($format, 'to download') === false)) {
+        if (! (strpos($format, 'to download') === false)) {
             return $file;
         }
 
         return null;
     }
-
 }
 
 $importer = new CSVImporter();
 $importer->run($argv);
-
-

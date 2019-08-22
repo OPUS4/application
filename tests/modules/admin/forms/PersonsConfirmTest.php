@@ -27,12 +27,14 @@
  * @category    Tests
  * @package     Admin_Form
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2017-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 class Admin_Form_PersonsConfirmTest extends ControllerTestCase
 {
+
+    protected $additionalResources = 'translation';
 
     private $_form;
 
@@ -68,19 +70,21 @@ class Admin_Form_PersonsConfirmTest extends ControllerTestCase
     {
         $form = $this->_form;
 
-        $result = $form->processPost(array('Back' => 'Zurück'), null);
+        $result = $form->processPost(['Back' => 'Zurück'], null);
 
         $this->assertEquals(Admin_Form_PersonsConfirm::RESULT_BACK, $result);
     }
 
     public function testPopulateFromModel()
     {
+        $this->disableTranslation();
+
         $form = $this->_form;
 
-        $person = array(
+        $person = [
             'last_name' => 'Doe',
             'first_name' => 'Jane'
-        );
+        ];
 
         $form->populateFromModel($person);
 
@@ -90,5 +94,4 @@ class Admin_Form_PersonsConfirmTest extends ControllerTestCase
 
         $this->assertEquals('admin_title_documents (8)', $legend);
     }
-
 }

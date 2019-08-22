@@ -37,14 +37,16 @@
  * @category    Application
  * @package     Admin
  */
-class Admin_OailinkController extends Application_Controller_Action {
+class Admin_OailinkController extends Application_Controller_Action
+{
 
     /**
      * Shows link to oai module.
      *
      * @return void
      */
-    public function indexAction() {
+    public function indexAction()
+    {
         $this->view->title = $this->view->translate('admin_title_oailink');
 
         $request = $this->getRequest();

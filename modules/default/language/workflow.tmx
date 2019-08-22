@@ -265,7 +265,7 @@
         <seg>Submitter</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Einsteller</seg>
+        <seg>Einsteller*in</seg>
       </tuv>
     </tu>
 
@@ -274,7 +274,7 @@
         <seg>Submitter and %1$s. author</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Einsteller und %1$s. Autor</seg>
+        <seg>Einsteller*in und %1$s. Autor*in</seg>
       </tuv>
     </tu>
 
@@ -283,7 +283,7 @@
         <seg>Author</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Autor</seg>
+        <seg>Autor*in</seg>
       </tuv>
     </tu>
 

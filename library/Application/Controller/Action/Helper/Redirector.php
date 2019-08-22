@@ -27,7 +27,7 @@
  * @category    Application
  * @package     Solrsearch_Model_Search
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2017-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -56,9 +56,13 @@ class Application_Controller_Action_Helper_Redirector extends Zend_Controller_Ac
      * @return void
      */
     public function redirectTo(
-        $action, $message = null, $controller = null, $module = null, $params = array()
-    )
-    {
+        $action,
+        $message = null,
+        $controller = null,
+        $module = null,
+        $params = []
+    ) {
+
         $this->performRedirect($action, $message, $controller, $module, $params);
     }
 
@@ -72,22 +76,36 @@ class Application_Controller_Action_Helper_Redirector extends Zend_Controller_Ac
      * @param string $module        The target module.
      * @param array $params         Optional request parameters.
      */
-    public function redirectToPermanent($action, $message = null, $controller = null, $module = null,
-                                            $params = array()) {
+    public function redirectToPermanent(
+        $action,
+        $message = null,
+        $controller = null,
+        $module = null,
+        $params = []
+    ) {
         $this->setCode(301);
         $this->performRedirect($action, $message, $controller, $module, $params);
     }
 
-    public function redirectToPermanentAndExit($action, $message = null, $controller = null, $module = null,
-                                                   $params = array()) {
+    public function redirectToPermanentAndExit(
+        $action,
+        $message = null,
+        $controller = null,
+        $module = null,
+        $params = []
+    ) {
         $this->setCode(301);
         $this->performRedirect($action, $message, $controller, $module, $params, true);
     }
 
     public function redirectToAndExit(
-        $action, $message = null, $controller = null, $module = null, $params = array()
-    )
-    {
+        $action,
+        $message = null,
+        $controller = null,
+        $module = null,
+        $params = []
+    ) {
+
         $this->performRedirect($action, $message, $controller, $module, $params, true);
     }
 
@@ -111,22 +129,25 @@ class Application_Controller_Action_Helper_Redirector extends Zend_Controller_Ac
      * @throws Application_Exception
      */
     public function performRedirect(
-        $action, $message = null, $controller = null, $module = null, $params = array(), $exit = false
-    )
-    {
-        if (!is_null($message)) {
-            if (is_array($message) && count($message) !==  0) {
+        $action,
+        $message = null,
+        $controller = null,
+        $module = null,
+        $params = [],
+        $exit = false
+    ) {
+
+        if (! is_null($message)) {
+            if (is_array($message) && count($message) !== 0) {
                 $keys = array_keys($message);
                 $key = $keys[0];
                 if ($key === 'failure' || $key === 'notice') {
-                    $this->_flashMessenger->addMessage(array ('level' => $key, 'message' => $message[$key]));
+                    $this->_flashMessenger->addMessage(['level' => $key, 'message' => $message[$key]]);
+                } else {
+                    $this->_flashMessenger->addMessage(['level' => 'notice', 'message' => $message[$key]]);
                 }
-                else {
-                    $this->_flashMessenger->addMessage(array ('level' => 'notice', 'message' => $message[$key]));
-                }
-            }
-            else if (is_string($message) && $message != '') {
-                $this->_flashMessenger->addMessage(array('level' => 'notice', 'message' => $message));
+            } elseif (is_string($message) && $message != '') {
+                $this->_flashMessenger->addMessage(['level' => 'notice', 'message' => $message]);
             }
         }
         $this->getLogger()->debug("redirect to module: $module controller: $controller action: $action");
@@ -137,14 +158,12 @@ class Application_Controller_Action_Helper_Redirector extends Zend_Controller_Ac
 
             $urlHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('url');
 
-            $gotoUrl = $urlHelper->url(array_merge(array(
+            $gotoUrl = $urlHelper->url(array_merge([
                 'action' => $action, 'controller' => $controller, 'module' => $module
-            ), $params));
+            ], $params));
 
-            $this->gotoUrl($gotoUrl . $anchor, array('prependBase' => false));
-        }
-        else
-        {
+            $this->gotoUrl($gotoUrl . $anchor, ['prependBase' => false]);
+        } else {
             $this->gotoSimple($action, $controller, $module, $params);
             $this->setExit($exit); // TODO does not do anything at this point
         }

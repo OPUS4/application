@@ -27,12 +27,14 @@
  * @category    Application
  * @package     Module_Publish Unit Test
  * @author      Susanne Gottwald <gottwald@zib.de>
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 class Publish_Model_ValidationTest extends ControllerTestCase
 {
+
+    protected $additionalResources = ['translation'];
 
     private $session;
 
@@ -214,7 +216,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase
 
         $activeLicences = [];
 
-        foreach($licences as $licence) {
+        foreach ($licences as $licence) {
             if ($licence->getActive() == '1') {
                 $activeLicences[] = $licence->getDisplayName();
             }
@@ -223,7 +225,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase
         $val = new Publish_Model_Validation('Licence', $this->session);
         $values = $val->selectOptions();
 
-        $this->assertEquals( count($values), count($activeLicences));
+        $this->assertEquals(count($values), count($activeLicences));
 
         $pos = 0;
 
@@ -245,8 +247,8 @@ class Publish_Model_ValidationTest extends ControllerTestCase
         $this->assertArrayHasKey('eins', $children);
     }
 
-     public function testSelectOptionsForThesisGrantor()
-     {
+    public function testSelectOptionsForThesisGrantor()
+    {
         $val = new Publish_Model_Validation('ThesisGrantor', $this->session);
         $children = $val->selectOptions();
 
@@ -334,13 +336,13 @@ class Publish_Model_ValidationTest extends ControllerTestCase
 
         $visibleSeries = [];
 
-        foreach($series as $serie) {
+        foreach ($series as $serie) {
             if ($serie->getVisible() == '1') {
                 $visibleSeries[] = $serie->getTitle();
             }
         }
 
-        $this->assertEquals( count($values), count($visibleSeries));
+        $this->assertEquals(count($values), count($visibleSeries));
 
         $index = 0;
         foreach ($values as $name) {

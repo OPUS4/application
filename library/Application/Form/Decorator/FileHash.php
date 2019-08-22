@@ -37,18 +37,20 @@
  *
  * TODO HIDDEN inputs mit Hash entfernen? Werden momentan nicht benötigt.
  */
-class Application_Form_Decorator_FileHash extends Zend_Form_Decorator_Abstract {
+class Application_Form_Decorator_FileHash extends Zend_Form_Decorator_Abstract
+{
 
-    public function render($content) {
+    public function render($content)
+    {
         $element = $this->getElement();
 
-        if (!$element instanceof Application_Form_Element_FileHash) {
+        if (! $element instanceof Application_Form_Element_FileHash) {
             return $content;
         }
 
         $view = $element->getView();
 
-        if (!$view instanceof Zend_View_Interface) {
+        if (! $view instanceof Zend_View_Interface) {
             return $content;
         }
 
@@ -74,17 +76,14 @@ class Application_Form_Decorator_FileHash extends Zend_Form_Decorator_Abstract {
             if (strlen(trim($hashIst)) !== 0) {
                 $markup .= htmlspecialchars($hashIst) . '</div>';
                 $markup .= $view->formHidden($element->getFullyQualifiedName() . '[Ist]', $hashIst);
-            }
-            else {
-                if ($file->exists() && !$file->canVerify()) {
+            } else {
+                if ($file->exists() && ! $file->canVerify()) {
                     $markup .= $view->translate('frontdoor_file_too_big') . '</div>';
-                }
-                else {
+                } else {
                     $markup .= $view->translate('frontdoor_checksum_not_verified') . '</div>';
                 }
             }
-        }
-        else {
+        } else {
             $markup = '<div class="textarea hashsoll">' . htmlspecialchars($hashSoll) . '</div>';
             $markup .= $view->formHidden($element->getFullyQualifiedName() . '[Soll]', $hashSoll);
         }
@@ -97,5 +96,4 @@ class Application_Form_Decorator_FileHash extends Zend_Form_Decorator_Abstract {
                 return $content . $markup;
         }
     }
-
 }

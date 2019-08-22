@@ -27,9 +27,9 @@
  * @category    Application
  * @package     Module_Setup
  * @author      Edouard Simon <edouard.simon@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 ?>
 
@@ -62,25 +62,41 @@
 
     <table >
         <tr>
-            <?PHP foreach ($this->sortKeys as $sortKey): ?>
+            <?PHP foreach ($this->sortKeys as $sortKey) : ?>
                 <th class="<?= $sortKey == $this->currentSortKey ? 'hilite' : '' ?>"><?= $this->translate('setup_language_' . $sortKey) ?></th>
             <?PHP endforeach ?>
+            <th>&nbsp;</th>
         </tr>
         <?PHP
 //        $keyPos = array_flip($this->sortKeys);
-        foreach ($this->translations as $row):
+        foreach ($this->translations as $row) :
             $writeable = ($row['directory'] == 'language_custom');
             $file = $row['module'] . DIRECTORY_SEPARATOR . $row['directory'] . DIRECTORY_SEPARATOR . $row['filename'];
             $key = array_shift($row);
             ?>
             <tr>
                 <td><?= empty($this->searchTerm) ? $key : str_replace($this->searchTerm, '<span class="hilite">' . $this->searchTerm . '</span>', $key) ?></td>
-                <?PHP foreach ($row as $item): ?>
-                    <td><?= $item ?></td>
+                <td><?= $row['module'] ?></td>
+                <td><?= $row['directory'] ?></td>
+                <td><?= $row['filename'] ?></td>
+                <?PHP $index = 0 ?>
+                <?PHP foreach ($row['translations'] as $language => $translation) : ?>
+                    <?PHP if ($index > 0) : ?>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                    <?PHP endif ?>
+                    <td><?= $language ?></td>
+                    <td><?= $translation ?></td>
+                    <td>
+                        <a href="<?= $this->url(['action' => 'edit', 'file' => urlencode($file), 'key' => $key, 'search' => $this->searchTerm, 'sort' => $this->currentSortKey]) ?>"
+                           title="<?= $this->translate('setup_language_edit_hint', [$key, $row['module'] . DIRECTORY_SEPARATOR . 'language_custom' . DIRECTORY_SEPARATOR . $row['filename']]) ?>"><?= ($writeable) ? 'bearbeiten' : 'übernehmen' ?></a>
+                    </td>
+                    <?PHP $index++ ?>
                 <?PHP endforeach ?>
-                <td>
-                    <a href="<?= $this->url(array('action' => 'edit', 'file' => urlencode($file), 'key' => $key, 'search' => $this->searchTerm, 'sort' => $this->currentSortKey)) ?>" title="<?= $this->translate('setup_language_edit_hint', $key, $row['module'] . DIRECTORY_SEPARATOR . 'language_custom' . DIRECTORY_SEPARATOR . $row['filename']) ?>"><?= ($writeable) ? 'bearbeiten' : 'übernehmen' ?></a>
-                </td>
             </tr>
         <?PHP endforeach ?>
 

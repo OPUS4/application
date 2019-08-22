@@ -40,11 +40,12 @@
  * @package     Admin_Form_File
  * @author      Henning Gerhardt (henning.gerhardt@slub-dresden.de)
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @author      Maximilian Salomon <salomon@zib.de>
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class Admin_Form_File_Upload extends Application_Form_Model_Abstract {
+class Admin_Form_File_Upload extends Application_Form_Model_Abstract
+{
 
     const ELEMENT_HASH       = 'OpusHash';
     const ELEMENT_FILE       = 'File';
@@ -57,7 +58,8 @@ class Admin_Form_File_Upload extends Application_Form_Model_Abstract {
 
     private $_fileInfo = null;
 
-    public function init() {
+    public function init()
+    {
         parent::init();
 
         $this->addSubForm(new Admin_Form_InfoBox(), self::SUBFORM_DOCINFO);
@@ -68,19 +70,32 @@ class Admin_Form_File_Upload extends Application_Form_Model_Abstract {
         $this->setUseNameAsLabel(true);
 
         $element = $this->createElement(
-            'file', self::ELEMENT_FILE, array(
+            'file',
+            self::ELEMENT_FILE,
+            [
             'required' => true,
             'label' => 'admin_filemanager_element_file',
-            )
+            ]
         );
+
+        $config = $this->getApplicationConfig();
+
+        $filenameOptions = [
+            'filenameMaxLength' => $config->publish->filenameMaxLength,
+            'filenameFormat' => $config->publish->filenameFormat
+        ];
+        $filenameValidator = new Application_Form_Validate_Filename($filenameOptions);
+
+        $element->addValidator($filenameValidator, false);
         $element->addValidator('Count', false, 1); // ensure only 1 file
+
         $this->addElement($element);
 
-        $this->addElement('Language', self::ELEMENT_LANGUAGE, array('label' => 'Language', 'required' => true));
+        $this->addElement('Language', self::ELEMENT_LANGUAGE, ['label' => 'Language', 'required' => true]);
         $this->addElement('text', self::ELEMENT_LABEL);
         $this->addElement('textarea', self::ELEMENT_COMMENT);
-        $hash = $this->createElement('hash', self::ELEMENT_HASH, array('salt' => 'unique'));
-        $hash->addDecorator('HtmlTag', array('tag' => 'div'));
+        $hash = $this->createElement('hash', self::ELEMENT_HASH, ['salt' => 'unique']);
+        $hash->addDecorator('HtmlTag', ['tag' => 'div']);
         $this->addElement($hash);
 
         $this->addElement('SortOrder', self::ELEMENT_SORT_ORDER);
@@ -88,7 +103,8 @@ class Admin_Form_File_Upload extends Application_Form_Model_Abstract {
         $this->getElement(self::ELEMENT_MODEL_ID)->setRequired(true);
     }
 
-    public function populateFromModel($document) {
+    public function populateFromModel($document)
+    {
         $this->getSubForm(self::SUBFORM_DOCINFO)->populateFromModel($document);
         $this->getElement(self::ELEMENT_MODEL_ID)->setValue($document->getId());
     }
@@ -98,7 +114,8 @@ class Admin_Form_File_Upload extends Application_Form_Model_Abstract {
      *
      * @param Opus_Model_AbstractDb $document
      */
-    public function updateModel($document) {
+    public function updateModel($document)
+    {
         $files = $this->getFileInfo();
 
         foreach ($files as $file) {
@@ -122,18 +139,18 @@ class Admin_Form_File_Upload extends Application_Form_Model_Abstract {
         }
     }
 
-    public function getFileInfo() {
+    public function getFileInfo()
+    {
         if (is_null($this->_fileInfo)) {
             $upload = new Zend_File_Transfer_Adapter_Http();
             return $upload->getFileInfo();
-        }
-        else {
+        } else {
             return $this->_fileInfo;
         }
     }
 
-    public function setFileInfo($fileInfo) {
+    public function setFileInfo($fileInfo)
+    {
         $this->_fileInfo = $fileInfo;
     }
-
 }

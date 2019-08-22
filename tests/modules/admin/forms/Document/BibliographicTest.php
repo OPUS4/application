@@ -26,20 +26,24 @@
  *
  * @category    Application Unit Test
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2013-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
  * Unit Tests fuer Unterformular fuer bibliographische Information im Metadaten-Formular.
  */
-class Admin_Form_Document_BibliographicTest extends ControllerTestCase {
+class Admin_Form_Document_BibliographicTest extends ControllerTestCase
+{
 
-    public function testCreateForm() {
+    protected $additionalResources = ['translation'];
+
+    public function testCreateForm()
+    {
+        $this->disableTranslation();
         $form = new Admin_Form_Document_Bibliographic();
 
-        $elements = array(
+        $elements = [
             'ContributingCorporation',
             'CreatingCorporation',
             'Edition',
@@ -53,7 +57,7 @@ class Admin_Form_Document_BibliographicTest extends ControllerTestCase {
             'ThesisDateAccepted',
             'ThesisYearAccepted',
             'BelongsToBibliography'
-        );
+        ];
 
         $this->assertEquals(count($elements), count($form->getElements()));
 
@@ -69,15 +73,18 @@ class Admin_Form_Document_BibliographicTest extends ControllerTestCase {
         $this->assertNotNull($form->getSubForm('Grantors'));
     }
 
-    public function testPopulateFromModel() {
+    public function testPopulateFromModel()
+    {
         $form = new Admin_Form_Document_Bibliographic();
 
         $doc = new Opus_Document(146);
 
         $form->populateFromModel($doc);
 
-        $this->assertEquals($doc->getContributingCorporation(),
-                $form->getElement('ContributingCorporation')->getValue());
+        $this->assertEquals(
+            $doc->getContributingCorporation(),
+            $form->getElement('ContributingCorporation')->getValue()
+        );
         $this->assertEquals($doc->getCreatingCorporation(), $form->getElement('CreatingCorporation')->getValue());
         $this->assertEquals($doc->getEdition(), $form->getElement('Edition')->getValue());
         $this->assertEquals($doc->getIssue(), $form->getElement('Issue')->getValue());
@@ -96,7 +103,8 @@ class Admin_Form_Document_BibliographicTest extends ControllerTestCase {
         $this->assertEquals($doc->getBelongsToBibliography(), $form->getElement('BelongsToBibliography')->getValue());
     }
 
-    public function testUpdateModel() {
+    public function testUpdateModel()
+    {
         $this->useEnglish();
 
         $form = new Admin_Form_Document_Bibliographic();
@@ -144,7 +152,8 @@ class Admin_Form_Document_BibliographicTest extends ControllerTestCase {
         $this->assertEquals(0, $model->getBelongsToBibliography());
     }
 
-    public function testUpdateModelForEmptyFields() {
+    public function testUpdateModelForEmptyFields()
+    {
         $this->useEnglish();
 
         $form = new Admin_Form_Document_Bibliographic();
@@ -179,7 +188,8 @@ class Admin_Form_Document_BibliographicTest extends ControllerTestCase {
         $this->assertNull($model->getThesisYearAccepted(), 'ThesisYearAccepted not null');
     }
 
-    public function testUpdateModelForValue0() {
+    public function testUpdateModelForValue0()
+    {
         $form = new Admin_Form_Document_Bibliographic();
 
         $form->getElement('ContributingCorporation')->setValue('0');
@@ -208,45 +218,46 @@ class Admin_Form_Document_BibliographicTest extends ControllerTestCase {
         $this->assertEquals('0', $model->getThesisYearAccepted());
     }
 
-    public function testValidation() {
+    public function testValidation()
+    {
         $this->useEnglish();
 
         $form = new Admin_Form_Document_Bibliographic();
 
-        $post = array(
+        $post = [
             'ThesisDateAccepted' => '2010/02/31', // muss korrektes Datum sein
             'ThesisYearAccepted' => 'Jahr' // muss Zahl sein
-        );
+        ];
 
         $this->assertFalse($form->isValid($post));
 
         $this->assertContains('dateInvalidDate', $form->getErrors('ThesisDateAccepted'));
         $this->assertContains('notInt', $form->getErrors('ThesisYearAccepted'));
 
-        $post = array();
+        $post = [];
 
         $this->assertTrue($form->isValid($post)); // keine Pflichteingaben
 
-        $post = array(
+        $post = [
             'ThesisDateAccepted' => '20. Feb 2010',
             'ThesisYearAccepted' => '-1'
-        );
+        ];
 
         $this->assertFalse($form->isValid($post)); // keine Pflichteingaben
         $this->assertContains('notGreaterThan', $form->getErrors('ThesisYearAccepted'));
         $this->assertContains('dateFalseFormat', $form->getErrors('ThesisDateAccepted'));
     }
 
-    public function testRegression3046AlphanumericPageFirstLastAndNumberValues() {
+    public function testRegression3046AlphanumericPageFirstLastAndNumberValues()
+    {
         $form = new Admin_Form_Document_Bibliographic();
 
-        $post = array(
+        $post = [
             'PageFirst' => 'XI',
             'PageLast' => '12',
             'PageCount' => 'iiv'
-        );
+        ];
 
         $this->assertTrue($form->isValid($post));
     }
-
 }

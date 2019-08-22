@@ -31,16 +31,19 @@
  * @category    Application
  * @package     Application_View_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class Application_View_Helper_FileLinkTest extends ControllerTestCase {
+class Application_View_Helper_FileLinkTest extends ControllerTestCase
+{
+
+    protected $additionalResources = ['database', 'view'];
 
     /**
      * Keine serverUrl und keine baseUrl in Unit Tests, daher "http:///files/...".
      */
-    public function testFileLink() {
+    public function testFileLink()
+    {
         $helper = new Application_View_Helper_FileLink();
 
         $helper->setView(new Zend_View());
@@ -48,11 +51,15 @@ class Application_View_Helper_FileLinkTest extends ControllerTestCase {
         $file = new Opus_File(126);
 
         $this->assertEquals('<a href="http:///files/146/test.pdf" class="filelink">foo-pdf</a>'
-            . '<input type="hidden" name="" value="126" id="" />', $helper->fileLink(null, $file,
-            array('useFileLabel' => true)));
+            . '<input type="hidden" name="" value="126" id="" />', $helper->fileLink(
+                null,
+                $file,
+                ['useFileLabel' => true]
+            ));
     }
 
-    public function testFileLinkSpecialCharacters() {
+    public function testFileLinkSpecialCharacters()
+    {
         $helper = new Application_View_Helper_FileLink();
 
         $helper->setView(new Zend_View());
@@ -62,10 +69,12 @@ class Application_View_Helper_FileLinkTest extends ControllerTestCase {
         $this->assertEquals(
             '<a href="http:///files/147/special-chars-%25-%22-%23-%26.pdf" class="filelink">Dateiname-mit-Sonderzeichen.pdf</a>'
             . '<input type="hidden" name="" value="130" id="" />',
-            $helper->fileLink(null, $file, array('useFileLabel' => true)));
+            $helper->fileLink(null, $file, ['useFileLabel' => true])
+        );
     }
 
-    public function testFileLinkSpacesAndQuotes() {
+    public function testFileLinkSpacesAndQuotes()
+    {
         $helper = new Application_View_Helper_FileLink();
 
         $helper->setView(Zend_Registry::get('Opus_View'));
@@ -75,10 +84,12 @@ class Application_View_Helper_FileLinkTest extends ControllerTestCase {
         $this->assertEquals(
             '<a href="http:///files/147/%27many%27++-++spaces++and++quotes.pdf" class="filelink">'
             . 'Dateiname-mit-vielen-Spaces-und-Quotes.pdf</a>' . '<input type="hidden" name="" value="131" id="" />',
-            $helper->fileLink(null, $file, array('useFileLabel' => true)));
+            $helper->fileLink(null, $file, ['useFileLabel' => true])
+        );
     }
 
-    public function testFileLinkNoLabel() {
+    public function testFileLinkNoLabel()
+    {
         $helper = new Application_View_Helper_FileLink();
 
         $helper->setView(Zend_Registry::get('Opus_View'));
@@ -86,15 +97,18 @@ class Application_View_Helper_FileLinkTest extends ControllerTestCase {
         $file = new Opus_File(126);
         $file->setLabel(null);
 
-        $this->assertEquals('<a href="http:///files/146/test.pdf" class="filelink">test.pdf</a>'
+        $this->assertEquals(
+            '<a href="http:///files/146/test.pdf" class="filelink">test.pdf</a>'
             . '<input type="hidden" name="" value="126" id="" />',
-            $helper->fileLink(null, $file, array('useFileLabel' => true)));
+            $helper->fileLink(null, $file, ['useFileLabel' => true])
+        );
     }
 
     /**
      * Regression Test fuer OPUSVIER-3192.
      */
-    public function testBaseUrlUsedForFileLinks() {
+    public function testBaseUrlUsedForFileLinks()
+    {
         $helper = new Application_View_Helper_FileLink();
 
         $view = new Zend_View();
@@ -106,8 +120,10 @@ class Application_View_Helper_FileLinkTest extends ControllerTestCase {
         $file = new Opus_File(126);
 
         $this->assertEquals('<a href="http:///testbase/files/146/test.pdf" class="filelink">foo-pdf</a>'
-        . '<input type="hidden" name="" value="126" id="" />', $helper->fileLink(null, $file,
-            array('useFileLabel' => true)));
+            . '<input type="hidden" name="" value="126" id="" />', $helper->fileLink(
+                null,
+                $file,
+                ['useFileLabel' => true]
+            ));
     }
-
 }

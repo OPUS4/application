@@ -35,22 +35,22 @@
  *  This view displays a mailform to recommend a document
  */
 ?>
-<h1><?= $this->translate ('frontdoor_sendmailtitle')?></h1><br/>
+<h1><?= $this->translate('frontdoor_sendmailtitle')?></h1><br/>
 <?PHP
-echo $this->translate ('frontdoor_sendmailtext') . ': <br>';
+echo $this->translate('frontdoor_sendmailtext') . ': <br>';
 echo '<br><b>'. $this->title . '</b> (' . $this->translate($this->docType) . ').</br>';
 echo '<br><br><b>'. $this->translate('frontdoor_recipientmail') . ': </b></br></br>';
 echo $this->recipientMail;
 if ($this->message != '') {
-   echo '<br><br><b>'. $this->translate('frontdoor_message') . ': </b></br></br>';
-   echo $this->message;
+    echo '<br><br><b>'. $this->translate('frontdoor_message') . ': </b></br></br>';
+    echo $this->message;
 }
 ?>
 
 <br />
 <br /><p><a href="<?= $this->value =
-   $this->url(array(
+   $this->url([
    'module' => 'frontdoor',
    'controller' => 'index',
    'docId' => $this->docId,
-   ), null, true);?>"><?= $this->translate('frontdoor_back')?></a></p><br />
+   ], null, true);?>"><?= $this->translate('frontdoor_back')?></a></p><br />

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -27,15 +28,19 @@
  * @category    Application Unit Test
  * @package     Admin_Model
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2018-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Admin_Model_DoiStatusTest extends ControllerTestCase {
+class Admin_Model_DoiStatusTest extends ControllerTestCase
+{
+
+    protected $additionalResources = 'database';
 
     private $docId;
 
-    protected function tearDown() {
-        if (!is_null($this->docId)) {
+    public function tearDown()
+    {
+        if (! is_null($this->docId)) {
             // removed previously created test document from database
             $doc = new Opus_Document($this->docId);
             $doc->deletePermanent();
@@ -43,7 +48,8 @@ class Admin_Model_DoiStatusTest extends ControllerTestCase {
         parent::tearDown();
     }
 
-    public function testWithPublishedDoc() {
+    public function testWithPublishedDoc()
+    {
         $this->createTestDocWithDoi('published');
         $doc = new Opus_Document($this->docId);
         $identifiers = $doc->getIdentifier();
@@ -57,7 +63,8 @@ class Admin_Model_DoiStatusTest extends ControllerTestCase {
         $this->assertEquals($doi->getStatus(), $doiStatus->getDoiStatus());
     }
 
-    public function testWithUnpublishedDoc() {
+    public function testWithUnpublishedDoc()
+    {
         $this->createTestDocWithDoi('unpublished');
         $doc = new Opus_Document($this->docId);
         $identifiers = $doc->getIdentifier();
@@ -71,7 +78,8 @@ class Admin_Model_DoiStatusTest extends ControllerTestCase {
         $this->assertEquals($doi->getStatus(), $doiStatus->getDoiStatus());
     }
 
-    private function createTestDocWithDoi($serverState) {
+    private function createTestDocWithDoi($serverState)
+    {
         $doc = new Opus_Document();
         $doc->setServerState($serverState);
         $this->docId = $doc->store();
@@ -80,7 +88,7 @@ class Admin_Model_DoiStatusTest extends ControllerTestCase {
         $doi->setType('doi');
         $doi->setValue('10.5027/opustest-' . $this->docId);
         $doi->setStatus('registered');
-        $doc->setIdentifier(array($doi));
+        $doc->setIdentifier([$doi]);
 
         $doc->store();
     }

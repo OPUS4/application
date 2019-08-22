@@ -33,15 +33,19 @@
  * @version     $Id$
  */
 
-class Publish_DepositController extends Application_Controller_Action {
+class Publish_DepositController extends Application_Controller_Action
+{
 
-    public $depositData = array();
+    public $depositData = [];
     public $log;
     public $session;
     public $document;
 
-    public function __construct(Zend_Controller_Request_Abstract $request, Zend_Controller_Response_Abstract $response,
-                                array $invokeArgs = array()) {
+    public function __construct(
+        Zend_Controller_Request_Abstract $request,
+        Zend_Controller_Response_Abstract $response,
+        array $invokeArgs = []
+    ) {
         $this->log = $this->getLogger();
         $this->session = new Zend_Session_Namespace('Publish');
 
@@ -52,7 +56,8 @@ class Publish_DepositController extends Application_Controller_Action {
      * stores a delivered form as document in the database
      * uses check_array
      */
-    public function depositAction() {
+    public function depositAction()
+    {
 
         if ($this->getRequest()->isPost() !== true) {
             return $this->_helper->Redirector->redirectTo('index', '', 'index');
@@ -68,10 +73,10 @@ class Publish_DepositController extends Application_Controller_Action {
                 try {
                     $document = new Opus_Document($this->session->documentId);
                     $document->deletePermanent();
-                }
-                catch (Opus_Model_Exception $e) {
+                } catch (Opus_Model_Exception $e) {
                     $this->getLogger()->err(
-                        "deletion of document # " . $this->session->documentId . " was not successful", $e
+                        "deletion of document # " . $this->session->documentId . " was not successful",
+                        $e
                     );
                 }
             }
@@ -83,11 +88,11 @@ class Publish_DepositController extends Application_Controller_Action {
 
         //deposit data is coming from the session
         if (isset($this->session->elements)) {
-            foreach ($this->session->elements AS $element) {
-                $this->depositData[$element['name']] = array(
+            foreach ($this->session->elements as $element) {
+                $this->depositData[$element['name']] = [
                     'value' => $element['value'],
                     'datatype' => $element['datatype'],
-                    'subfield' => $element['subfield']);
+                    'subfield' => $element['subfield']];
 
                 $this->log->debug(
                     "STORE DATA: " . $element['name'] . ": " . $element['value'] . ", Typ:" . $element['datatype']
@@ -103,8 +108,7 @@ class Publish_DepositController extends Application_Controller_Action {
         try {
             $depositData = new Publish_Model_Deposit();
             $depositData->storeDocument($this->session->documentId, $this->log, $this->depositData);
-        }
-        catch (Publish_Model_Exception $e) {
+        } catch (Publish_Model_Exception $e) {
             throw new Application_Exception('publish_error_unexpected');
         }
 
@@ -113,8 +117,7 @@ class Publish_DepositController extends Application_Controller_Action {
 
         try {
             $docId = $this->document->store();
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             // TODO wie sollte die Exception sinnvoll behandelt werden?
             $this->log->err("Document could not be stored successfully: " . $e->getMessage());
             throw new Application_Exception('publish_error_unexpected');
@@ -139,17 +142,18 @@ class Publish_DepositController extends Application_Controller_Action {
 
         $notification = new Application_Util_Notification($this->log, $config);
         $url = $this->view->url(
-            array(
+            [
                 "module" => "admin",
                 "controller" => "document",
                 "action" => "index",
                 "id" => $this->document->getId()
-            ),
+            ],
             null,
             true
         );
         $notification->prepareMail(
-            $this->document,  $this->view->serverUrl() . $url
+            $this->document,
+            $this->view->serverUrl() . $url
         );
 
         return $this->_helper->Redirector->redirectToAndExit($targetAction, null, $targetController, $targetModule);
@@ -159,7 +163,8 @@ class Publish_DepositController extends Application_Controller_Action {
      * Shows a confirmation for the user, when the publication process is
      * finished.
      */
-    public function confirmAction() {
+    public function confirmAction()
+    {
         // redirecting if action is called directly
         if (is_null($this->session->depositConfirmDocumentId)) {
             return $this->_helper->Redirector->redirectToAndExit('index', null, 'index');
@@ -175,6 +180,4 @@ class Publish_DepositController extends Application_Controller_Action {
         //unset all possible session content
         $this->session->unsetAll();
     }
-
 }
-

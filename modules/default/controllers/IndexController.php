@@ -41,13 +41,14 @@
  * @category    Application
  * @package     Module_Default
  */
-class IndexController extends Application_Controller_Action {
+class IndexController extends Application_Controller_Action
+{
 
     /**
      * Always allow access to this controller; Override check in parent method.
      */
-    protected function checkAccessModulePermissions() {
-
+    protected function checkAccessModulePermissions()
+    {
     }
 
     /**
@@ -55,7 +56,8 @@ class IndexController extends Application_Controller_Action {
      *
      * @return void
      */
-    public function indexAction() {
+    public function indexAction()
+    {
         $this->_helper->getHelper('Redirector')->gotoSimple('index', 'index', 'home');
     }
 }

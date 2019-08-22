@@ -36,25 +36,23 @@ class Solrsearch_Model_Search_Series extends Solrsearch_Model_Search_Abstract
 
     public function buildQuery($request)
     {
-        if (!$this->prepareSeries($request)) {
+        if (! $this->prepareSeries($request)) {
             return null;
         }
 
         return parent::buildQuery($request);
     }
 
-    public function prepareSeries($request) {
+    public function prepareSeries($request)
+    {
         $series = null;
 
-        try
-        {
+        try {
             $series = new Solrsearch_Model_Series($request->getParam('id'));
-        }
-        catch (Solrsearch_Model_Exception $sme)
-        {
+        } catch (Solrsearch_Model_Exception $sme) {
             $this->getLogger()->debug($sme->getMessage());
             $redirector = Zend_Controller_Action_HelperBroker::getStaticHelper('redirector');
-            $redirector->redirectToAndExit('index', '', 'browse', null, array(), true);
+            $redirector->redirectToAndExit('index', '', 'browse', null, [], true);
             return false;
         }
 
@@ -68,7 +66,8 @@ class Solrsearch_Model_Search_Series extends Solrsearch_Model_Search_Abstract
         return true;
     }
 
-    public function createSearchQuery($input) {
+    public function createSearchQuery($input)
+    {
         $this->getLogger()->debug("Constructing query for series search.");
 
         $query = new Opus_Search_Util_Query(Opus_Search_Util_Query::SIMPLE);
@@ -77,8 +76,7 @@ class Solrsearch_Model_Search_Series extends Solrsearch_Model_Search_Abstract
         if ($input['sortField'] === 'seriesnumber'
             || $input['sortField'] === Opus_Search_Query::getDefaultSortingField()) {
             $query->setSortField('doc_sort_order_for_seriesid_' . $input['seriesId']);
-        }
-        else {
+        } else {
             $query->setSortField($input['sortField']);
         }
         $query->setSortOrder($input['sortOrder']);
@@ -104,5 +102,4 @@ class Solrsearch_Model_Search_Series extends Solrsearch_Model_Search_Abstract
 
         return $input;
     }
-
 }

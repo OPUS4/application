@@ -32,7 +32,8 @@
  * @version     $Id$
  */
 
-class SendMailMock {
+class SendMailMock
+{
 
     private $from;
     private $fromName;
@@ -48,32 +49,37 @@ class SendMailMock {
      * @param string $bodyText
      * @param array  $address Recipients (array [#] => array ('name' => '...', 'address' => '...'))
      */
-    public function sendMail($from, $fromName, $subject, $bodyText, $address) {
+    public function sendMail($from, $fromName, $subject, $bodyText, $address)
+    {
         $this->from = $from;
         $this->fromName = $fromName;
         $this->subject = $subject;
         $this->bodyText = $bodyText;
         $this->address = $address;
     }
-    
-    public function getFrom() {
+
+    public function getFrom()
+    {
         return $this->from;
     }
 
-    public function getFromName() {
+    public function getFromName()
+    {
         return $this->fromName;
     }
 
-    public function getSubject() {
+    public function getSubject()
+    {
         return $this->subject;
     }
 
-    public function getBodyText() {
+    public function getBodyText()
+    {
         return $this->bodyText;
     }
 
-    public function getAddress() {
+    public function getAddress()
+    {
         return $this->address;
     }
 }
-

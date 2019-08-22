@@ -31,31 +31,35 @@
  * @category    Application Unit Test
  * @package     Application_Model
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class Application_Model_AbstractTest extends ControllerTestCase {
+class Application_Model_AbstractTest extends ControllerTestCase
+{
 
     private $_model;
 
-    public function setUp() {
+    public function setUp()
+    {
         parent::setUp();
         $this->_model = $this->getModel();
     }
 
-    private function getModel() {
+    private function getModel()
+    {
         return $this->getMockForAbstractClass('Application_Model_Abstract');
     }
 
-    public function testGetLogger() {
+    public function testGetLogger()
+    {
         $logger = $this->_model->getLogger();
 
         $this->assertNotNull($logger);
         $this->assertInstanceOf('Zend_Log', $logger);
     }
 
-    public function testSetLogger() {
+    public function testSetLogger()
+    {
         $logger = new MockLogger();
 
         $this->_model->setLogger($logger);
@@ -64,15 +68,17 @@ class Application_Model_AbstractTest extends ControllerTestCase {
         $this->assertInstanceOf('MockLogger', $this->_model->getLogger());
     }
 
-    public function testGetConfig() {
+    public function testGetConfig()
+    {
         $config = $this->_model->getConfig();
 
         $this->assertInstanceOf('Zend_Config', $config);
         $this->assertEquals(Zend_Registry::get('Zend_Config'), $config);
     }
 
-    public function testSetConfig() {
-        $config = new Zend_Config(array());
+    public function testSetConfig()
+    {
+        $config = new Zend_Config([]);
 
         $this->_model->setConfig($config);
 
@@ -81,5 +87,4 @@ class Application_Model_AbstractTest extends ControllerTestCase {
         $this->assertInstanceOf('Zend_Config', $returnedConfig);
         $this->assertEquals($config, $returnedConfig);
     }
-
 }

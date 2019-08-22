@@ -1,5 +1,60 @@
 # OPUS 4 Release Notes
 
+## Release 4.6.4 2019-09-x
+
+### Übersetzungen
+
+Die Übersetzung von Sprachen, z.B. 'deu' => 'German', erfolgt nun mit Hilfe von PHP 
+Funktionen. Die Datei 'modules/default/language/languages.tmx' wurde gelöscht. 
+Übersetzungen von Sprachen in angepassten TMX-Dateien werden immer noch verwendet, 
+sollten aber nicht mehr notwendig sein. 
+
+### Apache-Solr Update
+
+Mit diesem Release wechselt OPUS 4 zu Apache Solr 7.7.1. Der Umstieg muss manuell
+durchgeführt werden. Apache Solr ist gut dokumentiert und die Installationsskripte 
+funktionieren nach unserer Erfahrung zuverlässig. 
+
+<http://lucene.apache.org/solr/>
+
+Wir empfehlen, Solr als Service auf dem OPUS 4-Server zu installieren. Dazu kann 
+man nach dem Download und Auspacken von Solr folgendes Skript verwenden.
+
+    solr-7.7.1/bin/install_solr_service.sh PATH_TO_DOWNLOADED_SOLR_TAR 
+    
+Genauere Informationen finden sich in der Solr-Dokumentation. 
+
+<http://lucene.apache.org/solr/guide/7_7/taking-solr-to-production.html>
+
+Anschließend müssen gegebenenfalls in der Konfigurationsdatei `config.ini` die 
+Solr-Parameter, z.B. für einen neuen Port aktualisiert werden.
+
+Für die richtige Funktion der Suche muss Solr mit OPUS 4-Konfigurationsdateien
+betrieben werden. Auf der folgenden Seite findet sich eine einfache Anleitung,
+wie man diese in Solr einbinden kann.
+
+<http://www.opus-repository.org/devdoc/installation/solrsetupmanuell.html> 
+
+Zum Abschluss muss mit dem SolrIndexBuilder-Skript der Index neu aufgebaut werden.
+
+    $ php scripts/SolrIndexBuilder.php
+    
+### Administration    
+    
+Dateinamen werden beim Upload in der Administration nun wie im Publish-Modul auf
+Länge und Zeichensatz geprüft. 
+
+### MySQL Zeichensatz aktualisiert
+    
+Um sämtliche Zeichen speichern zu können, verwendet die Datenbank jetzt den 
+Zeichensatz `utf8mb4` und die Collation `utf8mb4_unicode_ci`. Das Update-Skript 
+führt automatisch die Konvertierung durch. Wie immer ist dringend geraten vorher
+ein Backup der Datenbank anzulegen. Neue Instanzen verwenden automatisch den 
+neuen Zeichensatz. Nach der Konvertierung der Datenbank sollten *Repair* und
+*Optimize* für die Datenbank durchgeführt werden, zum Beispiel wie folgt:
+
+    $ mysqlcheck -u root -p --auto-repair --optimize opusdb    
+
 ---
 
 ## Release 4.6.3 2018-11-05

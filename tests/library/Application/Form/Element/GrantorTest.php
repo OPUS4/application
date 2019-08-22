@@ -27,23 +27,28 @@
  * @category    Application Unit Test
  * @package     Form_Element
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
-class Application_Form_Element_GrantorTest extends FormElementTestCase {
+class Application_Form_Element_GrantorTest extends FormElementTestCase
+{
 
-    public function setUp() {
+    protected $additionalResources = 'database';
+
+    public function setUp()
+    {
         $this->_formElementClass = 'Application_Form_Element_Grantor';
         $this->_expectedDecoratorCount = 6;
-        $this->_expectedDecorators = array('ViewHelper', 'Errors', 'Description', 'ElementHtmlTag', 'LabelNotEmpty',
-            'dataWrapper');
+        $this->_expectedDecorators = [
+            'ViewHelper', 'Errors', 'Description', 'ElementHtmlTag', 'LabelNotEmpty', 'dataWrapper'
+        ];
         $this->_staticViewHelper = 'viewFormSelect';
         parent::setUp();
     }
 
-    public function testOptions() {
+    public function testOptions()
+    {
         $element = $this->getElement();
 
         $grantors = Opus_DnbInstitute::getGrantors();
@@ -59,10 +64,79 @@ class Application_Form_Element_GrantorTest extends FormElementTestCase {
         }
     }
 
-    public function testValidator() {
+    public function testValidator()
+    {
         $element = $this->getElement();
 
         $this->assertTrue($element->getValidator('Int') !== false);
     }
 
+    public function testSetValueForNonGrantorInstitut()
+    {
+        $element = $this->getElement();
+
+        $optionCount = count($element->getMultiOptions());
+
+        $grantors = Opus_DnbInstitute::getGrantors();
+        $publishers = Opus_DnbInstitute::getPublishers();
+
+        $nonGrantors = array_diff($publishers, $grantors);
+
+        $this->assertGreaterThan(0, count($nonGrantors));
+
+        $institute = $nonGrantors[0];
+
+        $this->assertEquals(0, $institute->getIsGrantor());
+
+        $element->setValue($institute->getId());
+
+        $this->assertEquals($institute->getId(), $element->getValue());
+
+        // a grantor institution is valid
+        $this->assertTrue($element->isValid($grantors[0]->getId()));
+
+        // any other institution should be valid too
+        $this->assertTrue($element->isValid($institute->getId()));
+        $this->assertEquals($optionCount + 1, count($element->getMultiOptions()));
+    }
+
+    public function testSetValueForUnknownId()
+    {
+        $element = $this->getElement();
+
+        $optionCount = count($element->getMultiOptions());
+
+        // getting unused id for test
+        $institutes = Opus_DnbInstitute::getAll();
+
+        $instituteIds = array_map(function ($item) {
+            return $item->getId();
+        }, $institutes);
+
+        $testId = 999;
+
+        while (in_array($testId, $instituteIds)) {
+            $testId++;
+        }
+
+        $element->setValue(999);
+
+        $this->assertFalse($element->isValid(999));
+        $this->assertEquals($optionCount, count($element->getMultiOptions()));
+    }
+
+    public function testSetValueInstituteNotAddedTwice()
+    {
+        $element = $this->getElement();
+
+        $grantors = Opus_DnbInstitute::getGrantors();
+
+        $this->assertGreaterThan(0, count($grantors));
+
+        $optionCount = count($element->getMultiOptions());
+
+        $element->setValue($grantors[0]->getId());
+
+        $this->assertEquals($optionCount, count($element->getMultiOptions()));
+    }
 }

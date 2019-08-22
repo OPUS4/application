@@ -36,14 +36,14 @@
 ?>
 
 <?php
-    $this->headLink(array(
+    $this->headLink([
         'rel' => 'alternate',
         'type' => 'application/rss+xml',
         'href' => $this->serverUrl() . $this->baseUrl() . '/rss/index/index'
-    ));
+    ]);
 ?>
 
-<?PHP $this->title = $this->translate('home_index_index_pagetitle') ?>
+<?PHP $this->title = 'home_index_index_pagetitle' ?>
 
 <h2><?= $this->translate('home_index_index_title') ?></h2>
 

@@ -27,7 +27,7 @@
  * @category    Application
  * @package     Solrsearch_Model_Search
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2017-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -59,16 +59,17 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
      *
      * TODO move out of constructor?
      */
-    public function __construct() {
+    public function __construct()
+    {
         $logger = $this->getLogger();
 
-        $this->_filterFields = array();
+        $this->_filterFields = [];
 
         $filters = Opus_Search_Config::getFacetFields();
-        if ( !count( $filters ) ) {
-            $logger->debug( 'key searchengine.solr.facets is not present in config. skipping filter queries' );
+        if (! count($filters)) {
+            $logger->debug('key searchengine.solr.facets is not present in config. skipping filter queries');
         } else {
-            $logger->debug( 'searchengine.solr.facets is set to ' . implode( ',', $filters ) );
+            $logger->debug('searchengine.solr.facets is set to ' . implode(',', $filters));
         }
 
         foreach ($filters as $filterfield) {
@@ -78,7 +79,7 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
             array_push($this->_filterFields, trim($filterfield));
         }
 
-        $this->_searchFields = array('author', 'title', 'persons', 'referee', 'abstract', 'fulltext', 'year');
+        $this->_searchFields = ['author', 'title', 'persons', 'referee', 'abstract', 'fulltext', 'year'];
     }
 
     /**
@@ -86,22 +87,23 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
      * @param $request
      * @return array
      */
-    public function createQueryBuilderInputFromRequest($request) {
+    public function createQueryBuilderInputFromRequest($request)
+    {
         if (is_null($request->getParams())) {
             throw new Application_Search_QueryBuilderException('Unable to read request data. Search cannot be performed.');
         }
 
         $this->validateParamsType($request);
 
-        if ( $request->getParam( 'sortfield' ) ) {
-            $sorting = array( $request->getParam( 'sortfield' ), 'asc' );
+        if ($request->getParam('sortfield')) {
+            $sorting = [ $request->getParam('sortfield'), 'asc' ];
         } else {
             $sorting = Opus_Search_Query::getDefaultSorting();
         }
 
         $searchType = $this->getSearchType();
 
-        $input = array(
+        $input = [
             'searchtype' => $searchType,
             'start' => $request->getParam('start', Opus_Search_Query::getDefaultStart()),
             'rows' => $request->getParam('rows', Opus_Search_Query::getDefaultRows()),
@@ -109,7 +111,7 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
             'sortOrder' => $request->getParam('sortorder', $sorting[1]),
             'docId' => $request->getParam('docId'),
             'query' => $request->getParam('query', '*:*')
-        );
+        ];
 
         if ($this->getExport()) {
             $maxNumber = $this->getMaxRows();
@@ -124,12 +126,10 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
 
             $input['rows'] = $rows > 0 || ($rows == 0 && $rowsParam == '0') ? $rows : $maxNumber;
 
-            if ($input['start'] > $maxNumber)
-            {
+            if ($input['start'] > $maxNumber) {
                 $input['start'] = $maxNumber;
             }
-            if ($input['rows'] + $input['start'] > $maxNumber)
-            {
+            if ($input['rows'] + $input['start'] > $maxNumber) {
                 $input['rows'] = $maxNumber - $input['start'];
             }
         }
@@ -137,7 +137,8 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
         foreach ($this->_searchFields as $searchField) {
             $input[$searchField] = $request->getParam($searchField, '');
             $input[$searchField . 'modifier'] = $request->getParam(
-                $searchField . 'modifier', Opus_Search_Util_Query::SEARCH_MODIFIER_CONTAINS_ALL
+                $searchField . 'modifier',
+                Opus_Search_Util_Query::SEARCH_MODIFIER_CONTAINS_ALL
             );
         }
 
@@ -154,8 +155,9 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
      *
      * @throws Application_Search_QueryBuilderException
      */
-    public function validateParamsType($request) {
-        $paramNames = array(
+    public function validateParamsType($request)
+    {
+        $paramNames = [
             'searchtype',
             'start',
             'rows',
@@ -164,7 +166,7 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
             'query',
             'collectionId',
             'seriesId'
-        );
+        ];
         foreach ($this->_searchFields as $searchField) {
             array_push($paramNames, $searchField, $searchField . 'modifier');
         }
@@ -174,7 +176,7 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
 
         foreach ($paramNames as $paramName) {
             $paramValue = $request->getParam($paramName, null);
-            if (!is_null($paramValue) && !is_string($paramValue)) {
+            if (! is_null($paramValue) && ! is_string($paramValue)) {
                 throw new Application_Search_QueryBuilderException('Parameter ' . $paramName . ' is not of type string');
             }
         }
@@ -212,25 +214,21 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
 
     public function buildQuery($request)
     {
-        try
-        {
+        try {
             return $this->getQueryUrl($request);
-        }
-        catch (Application_Util_BrowsingParamsException $e)
-        {
+        } catch (Application_Util_BrowsingParamsException $e) {
             $this->getLogger()->err(__METHOD__ . ' : ' . $e->getMessage());
-            $this->_helper->Redirector->redirectToAndExit('index', '', 'browse', null, array(), true);
+            $this->_helper->Redirector->redirectToAndExit('index', '', 'browse', null, [], true);
             return null;
-        }
-        catch (Application_Search_QueryBuilderException $e)
-        {
+        } catch (Application_Search_QueryBuilderException $e) {
             $this->getLogger()->err(__METHOD__ . ' : ' . $e->getMessage());
             $this->_helper->Redirector->redirectToAndExit('index');
             return null;
         }
     }
 
-    public function getQueryUrl($request) {
+    public function getQueryUrl($request)
+    {
 
         $queryBuilderInput = $this->createQueryBuilderInputFromRequest($request);
 
@@ -286,12 +284,12 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
      *
      * TODO CRITICAL merge with regular buildQuery
      */
-    public function buildExportQuery($request) {
-        $queryBuilderInput = array();
+    public function buildExportQuery($request)
+    {
+        $queryBuilderInput = [];
         try {
             $queryBuilderInput = $this->createQueryBuilderInputFromRequest($request);
-        }
-        catch (Application_Search_QueryBuilderException $e) {
+        } catch (Application_Search_QueryBuilderException $e) {
             $this->getLogger()->err(__METHOD__ . ' : ' . $e->getMessage());
             $applicationException = new Application_Exception($e->getMessage());
             $code = $e->getCode();
@@ -304,7 +302,8 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
         return $this->createSearchQuery($queryBuilderInput);
     }
 
-    public function setViewValues($request, $query, $resultList, $searchType) {
+    public function setViewValues($request, $query, $resultList, $searchType)
+    {
         $this->setGeneralViewValues($request, $query, $resultList, $searchType);
 
         if ($resultList->getNumberOfHits() > 0) {
@@ -326,8 +325,7 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
                 $queryString = $query->getCatchAll();
                 if (trim($queryString) !== '*:*') {
                     $view->q = $queryString;
-                }
-                else {
+                } else {
                     $view->q = '';
                 }
                 $this->setFilterQueryBaseURL($request);
@@ -371,18 +369,15 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
         }
 
         $view->rows = $query->getRows();
-        $view->authorSearch = Solrsearch_Model_Search::createSearchUrlArray(array(
+        $view->authorSearch = Solrsearch_Model_Search::createSearchUrlArray([
             'searchtype' => Application_Util_Searchtypes::AUTHOR_SEARCH
-        ));
+        ]);
         $view->isSimpleList = false;
         $view->browsing = (boolean) $request->getParam('browsing', false);
 
-        if ($searchType == Application_Util_Searchtypes::SERIES_SEARCH)
-        {
+        if ($searchType == Application_Util_Searchtypes::SERIES_SEARCH) {
             $view->sortfield = $request->getParam('sortfield', 'seriesnumber');
-        }
-        else
-        {
+        } else {
             $view->sortfield = $request->getParam('sortfield', 'score');
         }
 
@@ -391,16 +386,18 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
         $this->setRssUrl();
     }
 
-    public function setRssUrl() {
+    public function setRssUrl()
+    {
         $view = $this->getView();
 
-        $view->rssUrl = Solrsearch_Model_Search::createSearchUrlArray(array(), true);
+        $view->rssUrl = Solrsearch_Model_Search::createSearchUrlArray([], true);
     }
 
     /**
      * Sets the base URL that is used to build all remove filter query URLs.
      */
-    public function setFilterQueryBaseURL($request) {
+    public function setFilterQueryBaseURL($request)
+    {
         $view = $this->getView();
 
         $view->removeFilterQueryBase = $request->getParams();
@@ -449,15 +446,12 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
         try {
             $searcher = new Opus_Search_Util_Searcher();
 
-            if (!is_null($openFacets))
-            {
+            if (! is_null($openFacets)) {
                 $searcher->setFacetArray($openFacets);
             }
 
             $resultList = $searcher->search($query);
-        }
-        catch (Opus_Search_Exception $e)
-        {
+        } catch (Opus_Search_Exception $e) {
             $this->getLogger()->err(__METHOD__ . ' : ' . $e);
             throw new Application_SearchException($e);
         }
@@ -465,7 +459,8 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
         return $resultList;
     }
 
-    public function addFiltersToQuery($query, $input) {
+    public function addFiltersToQuery($query, $input)
+    {
         foreach ($this->_filterFields as $filterField) {
             $facetKey = $filterField . 'fq';
             $facetValue = $input[$facetKey];
@@ -495,5 +490,4 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
     {
         $this->_maxRows = $maxRows;
     }
-
 }

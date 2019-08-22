@@ -27,9 +27,9 @@
  * @category    Application
  * @package     Module_Admin
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -37,57 +37,59 @@
  *
  * TODO auf Application_Controller_ActionCRUD umstellen (IndexTabelle und neue Actions berücksichtigen)
  */
-class Admin_CollectionrolesController extends Application_Controller_Action {
+class Admin_CollectionrolesController extends Application_Controller_Action
+{
 
     /**
      * List all available collection role instances.
      */
-    public function indexAction() {
+    public function indexAction()
+    {
         $this->view->collectionRoles = Opus_CollectionRole::fetchAll();
     }
 
     /**
      * Zeigt Formular für Erzeugung einer neuen CollectionRole an.
      */
-    public function newAction() {
+    public function newAction()
+    {
         Opus_CollectionRole::fixPositions();
         $collectionRoleModel = new Admin_Model_CollectionRole();
         $this->view->form = $this->getRoleForm($collectionRoleModel->getObject());
     }
 
-
-
     /**
      * Zeigt Formular für das Editieren einer CollectionRole.
      */
-    public function editAction() {
+    public function editAction()
+    {
         Opus_CollectionRole::fixPositions();
         try {
             $collectionRoleModel = new Admin_Model_CollectionRole($this->getRequest()->getParam('roleid', ''));
             $this->view->form = $this->getRoleForm($collectionRoleModel->getObject());
             $this->setCollectionBreadcrumb('default_collection_role_' . $collectionRoleModel->getObject()->getName());
-        }
-        catch (Application_Exception $e) {
-            return $this->_helper->Redirector->redirectToAndExit('index', array('failure' => $e->getMessage()));
+        } catch (Application_Exception $e) {
+            return $this->_helper->Redirector->redirectToAndExit('index', ['failure' => $e->getMessage()]);
         }
     }
 
     /**
      * Verschiebt eine CollectionRole einen Schritt nach oben oder unten.
      */
-    public function moveAction() {
+    public function moveAction()
+    {
         try {
             $collectionRoleModel = new Admin_Model_CollectionRole($this->getRequest()->getParam('roleid', ''));
             $collectionRoleModel->move($this->getRequest()->getParam('pos'));
             return $this->_helper->Redirector->redirectTo(
-                'index', $this->view->translate(
+                'index',
+                $this->view->translate(
                     'admin_collectionroles_move',
-                    $collectionRoleModel->getObject()->getName()
+                    [$collectionRoleModel->getObject()->getName()]
                 )
             );
-        }
-        catch (Application_Exception $e) {
-            return $this->_helper->Redirector->redirectToAndExit('index', array('failure' => $e->getMessage()));
+        } catch (Application_Exception $e) {
+            return $this->_helper->Redirector->redirectToAndExit('index', ['failure' => $e->getMessage()]);
         }
     }
 
@@ -95,19 +97,20 @@ class Admin_CollectionrolesController extends Application_Controller_Action {
      * Ändert die Sichtbarkeit einer CollectionRole.
      * @param $visibility boolean
      */
-    private function changeRoleVisibility($visibility) {
+    private function changeRoleVisibility($visibility)
+    {
         try {
             $collectionRoleModel = new Admin_Model_CollectionRole($this->getRequest()->getParam('roleid', ''));
             $collectionRoleModel->setVisibility($visibility);
             return $this->_helper->Redirector->redirectTo(
-                'index', $this->view->translate(
+                'index',
+                $this->view->translate(
                     'admin_collectionroles_changevisibility',
-                    $collectionRoleModel->getObject()->getName()
+                    [$collectionRoleModel->getObject()->getName()]
                 )
             );
-        }
-        catch (Application_Exception $e) {
-            return $this->_helper->Redirector->redirectToAndExit('index', array('failure' => $e->getMessage()));
+        } catch (Application_Exception $e) {
+            return $this->_helper->Redirector->redirectToAndExit('index', ['failure' => $e->getMessage()]);
         }
     }
 
@@ -115,9 +118,10 @@ class Admin_CollectionrolesController extends Application_Controller_Action {
      * Sets Breadcrumbs for a CollectionRole.
      * @param $name
      */
-    public function setCollectionBreadcrumb($name) {
+    public function setCollectionBreadcrumb($name)
+    {
         $page = $this->view->navigation()->findOneBy('label', 'admin_collection_index');
-        if (!is_null($page)) {
+        if (! is_null($page)) {
             $page->setLabel($name);
         }
     }
@@ -125,22 +129,25 @@ class Admin_CollectionrolesController extends Application_Controller_Action {
     /**
      * Setzt eine CollectionRole unsichtbar.
      */
-    public function hideAction() {
+    public function hideAction()
+    {
         $this->changeRoleVisibility(false);
     }
 
     /**
      * Setzt eine CollectionRole sichtbar.
      */
-    public function unhideAction() {
+    public function unhideAction()
+    {
         $this->changeRoleVisibility(true);
     }
 
     /**
      * Erzeugt eine neue CollectionRole bzw. speichert eine geänderte ab.
      */
-    public function createAction() {
-        if (!$this->getRequest()->isPost()) {
+    public function createAction()
+    {
+        if (! $this->getRequest()->isPost()) {
             return $this->_helper->Redirector->redirectToAndExit('index');
         }
 
@@ -152,7 +159,7 @@ class Admin_CollectionrolesController extends Application_Controller_Action {
         $form = new Admin_Form_CollectionRole();
         $form->populate($data);
 
-        if (!$form->isValid($data)) {
+        if (! $form->isValid($data)) {
             $this->view->form = $this->initCreateRoleForm($form, $collectionRole);
             $this->setTitle($collectionRole);
             return;
@@ -167,15 +174,23 @@ class Admin_CollectionrolesController extends Application_Controller_Action {
                 $collectionRole->addRootCollection();
                 $collectionRole->getRootCollection()->setVisible('1');
             }
-        }
-        else {
+        } else {
             $messageKey = 'admin_collectionroles_edit_notice';
+        }
+
+        // TODO move somewhere else, at least a function
+        // TODO detect if translations have been changed and store if so
+        $translationsElement = $form->getElement(Admin_Form_CollectionRole::ELEMENT_DISPLAYNAME);
+        if (! is_null($translationsElement)) {
+            $key = 'default_collection_role_' . $collectionRole->getName();
+            $translationsElement->updateTranslations($key);
         }
 
         $collectionRole->store();
 
         return $this->_helper->Redirector->redirectTo(
-            'index', $this->view->translate($messageKey, $collectionRole->getName())
+            'index',
+            $this->view->translate($messageKey, [$collectionRole->getName()])
         );
     }
 
@@ -183,7 +198,8 @@ class Admin_CollectionrolesController extends Application_Controller_Action {
      * Setzt die Überschrift der Seite, abhängig vom Status der CollectionRole.
      * @param $collectionRole
      */
-    private function setTitle($collectionRole) {
+    private function setTitle($collectionRole)
+    {
         if ($collectionRole->isNewRecord()) {
             $this->view->title = 'admin_collectionroles_new';
         }
@@ -196,7 +212,8 @@ class Admin_CollectionrolesController extends Application_Controller_Action {
      * @param Opus_CollectionRole $collectionRole
      * @return mixed
      */
-    private function getRoleForm(Opus_CollectionRole $collectionRole) {
+    private function getRoleForm(Opus_CollectionRole $collectionRole)
+    {
         $form = new Admin_Form_CollectionRole();
         $form->populateFromModel($collectionRole);
 
@@ -211,12 +228,12 @@ class Admin_CollectionrolesController extends Application_Controller_Action {
      * @param $collectionRole
      * @return Admin_Form_CollectionRole
      */
-    private function initCreateRoleForm($form, $collectionRole) {
+    private function initCreateRoleForm($form, $collectionRole)
+    {
         if ($collectionRole->isNewRecord()) {
-            $form->setAction($this->view->url(array('action' => 'create')));
-        }
-        else {
-            $form->setAction($this->view->url(array('action' => 'create', 'oid' => $collectionRole->getId())));
+            $form->setAction($this->view->url(['action' => 'create']));
+        } else {
+            $form->setAction($this->view->url(['action' => 'create', 'oid' => $collectionRole->getId()]));
         }
         return $form;
     }
@@ -224,20 +241,19 @@ class Admin_CollectionrolesController extends Application_Controller_Action {
     /**
      * Löscht eine CollectionRole.
      */
-    public function deleteAction() {
+    public function deleteAction()
+    {
         try {
             $collectionRoleModel = new Admin_Model_CollectionRole($this->getRequest()->getParam('roleid', ''));
             $collectionRoleModel->delete();
             $collectionRoleModel->getObject()->getDisplayName();
             $message = $this->view->translate(
                 'admin_collectionroles_delete',
-                $collectionRoleModel->getObject()->getName()
+                [$collectionRoleModel->getObject()->getName()]
             );
             return $this->_helper->Redirector->redirectTo('index', $message);
-        }
-        catch (Application_Exception $e) {
-            return $this->_helper->Redirector->redirectToAndExit('index', array('failure' => $e->getMessage()));
+        } catch (Application_Exception $e) {
+            return $this->_helper->Redirector->redirectToAndExit('index', ['failure' => $e->getMessage()]);
         }
     }
-
 }

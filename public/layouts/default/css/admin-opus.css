@@ -1,0 +1,522 @@
+/**
+ * This file is part of OPUS. The software OPUS has been originally developed
+ * at the University of Stuttgart with funding from the German Research Net,
+ * the Federal Department of Higher Education and Research and the Ministry
+ * of Science, Research and the Arts of the State of Baden-Wuerttemberg.
+ *
+ * OPUS 4 is a complete rewrite of the original OPUS software and was developed
+ * by the Stuttgart University Library, the Library Service Center
+ * Baden-Wuerttemberg, the Cooperative Library Network Berlin-Brandenburg,
+ * the Saarland University and State Library, the Saxon State Library -
+ * Dresden State and University Library, the Bielefeld University Library and
+ * the University Library of Hamburg University of Technology with funding from
+ * the German Research Foundation and the European Regional Development Fund.
+ *
+ * LICENCE
+ * OPUS is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the Licence, or any later version.
+ * OPUS is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details. You should have received a copy of the GNU General Public License
+ * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
+ * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * @category    Application
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
+ * @version     $Id$
+ */
+
+.adminContainer .title {
+    font-weight: normal;
+}
+
+.adminContainer .instruction {
+    font-weight: normal;
+}
+
+.adminContainer table.documents {
+    border-collapse: collapse;
+    border-top: 1px solid gray;
+    border-bottom: 1px solid gray;
+    font-size: small;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.adminContainer table.documents td {
+    vertical-align: top;
+    padding: 0.2em 0.5em;
+}
+
+.adminContainer table.documents td.id {
+    text-align: right;
+}
+
+.adminContainer table.documents td.info {
+}
+
+.adminContainer table.documents td .authors {
+    font-style: italic;
+}
+
+.adminContainer table.documents td.info span.author {
+    font-style: italic;
+}
+
+.adminContainer table.documents td.actions {
+    white-space: inherit;
+}
+
+.adminContainer table tr.odd {
+    background: #f4f4f4;
+}
+
+.adminContainer table tr.even {
+    background: white;
+}
+
+.adminContainer .breadcrumbsContainer {
+    background-color: #f3f6f8;
+    padding: 4px 10px;
+    border: solid #e2e6e9;
+    border-width: 0px 0 0px;
+    font-weight: normal;
+    font-size: 1.7em;
+    margin-bottom: 0.5em;
+    clear: both;
+}
+
+.adminContainer div span.label {
+    display: table-cell;
+    width: 15em;
+    padding: 2px;
+    padding-left: 0.5em;
+    border-bottom: 2px solid white;
+    background-color: lightgray;
+}
+
+.adminContainer div span.value {
+    display: table-cell;
+    text-align: left;
+    padding: 2px;
+    padding-left: 0.5em;
+    border-bottom: 2px solid white;
+    background-color: #eeeeee;
+    width: 50em;
+}
+
+.adminContainer div span.value div span.label {
+    width: 10em;
+    border-bottom: 1px solid white;
+}
+
+.adminContainer div span.value div span.value {
+    width: 38em;
+    border-bottom: 1px solid white;
+}
+
+.adminContainer div span.value div:last-child span.label {
+    width: 10em;
+    border-bottom: none;
+}
+
+.adminContainer div span.value div:last-child span.value {
+    width: 38em;
+    border-bottom: none;
+}
+
+.adminContainer ul.sortingNavigation {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    background-color: green;
+}
+
+.adminContainer ul.sortingNavigation li {
+    float: left;
+    margin: 0;
+    padding: 0;
+    padding-right: 2em;
+}
+
+.adminContainer ul.sortingNavigation li a {
+}
+
+.adminContainer ul.sortingNavigation li.active {
+    font-weight: bold;
+}
+
+.adminContainer .paginationInfo {
+    clear: both;
+    padding: 0.5em;
+    text-align: center;
+}
+
+.adminContainer .paginationControl {
+    text-align: center;
+    margin: 4px 0px;
+    padding: 2px;
+    background-color: #b3c6d6;
+}
+
+.adminContainer .paginationControl a {
+    text-decoration: none;
+    color: black;
+}
+
+.adminContainer .paginationControl a:visited {
+    text-decoration: none;
+    color: black;
+}
+
+.adminContainer .paginationControl a:hover {
+    text-decoration: none;
+    color: blue;
+}
+
+.adminContainer .paginationControl span.currentPage {
+    font-weight: bold;
+}
+
+.adminContainer .paginationControl span.disabled {
+    color: gray;
+}
+
+.adminContainer .docstateMenu {
+    text-align: center;
+    padding: 0.1em 0em;
+    margin-bottom: 0.5em;
+}
+
+.adminContainer .docstateMenu span {
+    padding: 0 0.5em;
+}
+
+.adminContainer .docstateMenu span.active {
+    /* font-weight: bold; */
+}
+
+.adminContainer .docstateMenu a {
+    background-color: #dfefff;
+    color: black;
+    padding: 0px 6px;
+    padding-bottom: 1px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+    text-decoration: none;
+}
+
+.adminContainer .docstateMenu a.workflow {
+    color: white;
+    padding: 0px 6px;
+    padding-bottom: 1px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+    text-decoration: none;
+}
+
+.adminContainer .docstateMenu span.active a {
+    background-color: #0088bb;
+    color: white;
+}
+
+.adminContainer .documentOptions {
+    padding: 0.5em;
+    background-color: white; /* #efefef; */
+}
+
+.adminContainer dl.menu {
+    margin-left: 2em;
+}
+
+.adminContainer dl.menu dt {
+    font-size: 120%;
+    margin-left: 0em;
+}
+
+.adminContainer dl.menu dd {
+    margin-left: 0em;
+    color: gray;
+    font-style: italic;
+    margin-bottom: 0.5em;
+}
+
+.adminContainer .form dt {
+}
+
+.adminContainer .form dd {
+}
+
+.adminContainer #upload-form {
+    background-color: #f3f6f8;
+    padding: 0.5em 2em;
+}
+
+.adminContainer fieldset {
+    margin: 0px;
+    background: #f3f6f8;
+}
+
+.adminContainer fieldset.file {
+    margin: 0.5em;
+    border-width: 1px;
+    border-style: solid;
+}
+
+.adminContainer fieldset.file legend.filename {
+    font-size: large;
+    padding-left: 1em;
+    padding-right: 1em;
+}
+
+.adminContainer fieldset.file .file-actions {
+    font-size: 110%;
+    padding: 0.5em;
+}
+
+.adminContainer fieldset .form-item {
+    margin-bottom: 4px;
+}
+
+.adminContainer input.delete-button {
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+.adminContainer input.add-button {
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+.adminContainer div.collection_new {
+    margin: 3em 0;
+}
+
+.adminContainer table.collections td,
+.adminContainer table.series td {
+    padding: 1em;
+}
+
+.adminContainer table.collections td.visible,
+.adminContainer table.collections td.visible a,
+.adminContainer table.series td.visible,
+.adminContainer table.series td.visible a {
+    color: green;
+}
+
+.adminContainer table.collections td.unvisible,
+.adminContainer table.collections td.unvisible a,
+.adminContainer table.series td.unvisible,
+.adminContainer table.series td.unvisible a {
+    color: red;
+}
+
+.adminContainer a.add {
+    font-size: 80%;
+    color: #26517D;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #26517D;
+    padding: .25em .5em;
+    text-decoration: none;
+}
+
+.adminContainer div.failure, .adminContainer ul.errors {
+    background-color: lightpink;
+    color: red;
+    font-family: monospace;
+    font-size: large;
+}
+
+.adminContainer ul.errors li {
+    margin: 1em;
+    list-style: none;
+    padding: .5em;
+}
+
+.adminContainer .collection_breadcrumbs {
+    padding: 1em .5em;
+    margin-bottom: 1em;
+    background-color: #dfefff;
+}
+
+.adminContainer table.collections,
+.adminContainer table.series {
+    margin: 2em 0;
+}
+
+.adminContainer #showdocmenu a {
+    padding: 0.2em 0.5em;
+    margin-right: 0.5em;
+}
+
+.adminContainer table.systeminfo {
+}
+
+.adminContainer table.systeminfo td {
+    padding: 2px 4px;
+}
+
+.adminContainer table.systeminfo td.label {
+}
+
+.adminContainer table.systeminfo td.value {
+}
+
+.adminContainer table.systeminfo td.location {
+}
+
+.adminContainer table.systeminfo td.description {
+}
+
+.adminContainer .unavailable {
+    color: gray;
+}
+
+.adminContainer #showdoc span.label {
+    background-color: inherit;
+    border: none;
+}
+
+.adminContainer #showdoc span.value {
+    background-color: inherit;
+    border: none;
+    font-weight: bold;
+}
+
+.adminContainer #showdoc fieldset {
+    margin-bottom: 1em;
+}
+
+.adminContainer #showdoc fieldset legend {
+    font-size: 1.5em;
+}
+
+.adminContainer #showdoc span.value span.label {
+    font-weight: normal;
+}
+
+.adminContainer .odd {
+    background: inherit;
+}
+
+.adminContainer .even {
+    background: #e9e9e9;
+}
+
+.adminContainer span.editLink {
+    font-size: 80%;
+    padding: 2px;
+    /* margin-left: 1em; */
+}
+
+.adminContainer span.editLink:before {
+    content: '<'
+}
+
+.adminContainer span.editLink:after {
+    content: '>'
+}
+
+.adminContainer fieldset.overview {
+    /* background: inherit; */
+}
+
+.adminContainer fieldset.overview legend {
+    text-transform: none;
+    border: none;
+}
+
+.adminContainer #filebrowser {
+    padding: 2em;
+}
+
+.adminContainer #filebrowser #headline {
+    margin-bottom: 1em;
+    font-size: medium;
+}
+
+.adminContainer #filebrowser #filelisting table th {
+    color: gray;
+}
+
+.adminContainer #filebrowser #filelisting table {
+    margin-bottom: 1em;
+    min-width: 50%;
+    padding: .5em;
+    border: 1px solid #f4f4f4;
+}
+
+.adminContainer #filebrowser #filelisting table td {
+    padding: 5px;
+}
+
+.adminContainer #filebrowser #headline span {
+    color: blue;
+    font-weight: bold;
+}
+
+pre.abstractTextContainer, pre.noteTextContainer {
+    background: white;
+    border: 1px dotted lightgray;
+    padding: 3px;
+    font-weight: bold;
+}
+
+form.inline {
+    display: inline!important;
+}
+
+label.option-not-available {
+    color: gray;
+}
+
+label.notification-option {
+    padding-top: 1.5em;
+    padding-left: 1em;
+    display: block;
+}
+.adminFrame {
+    border-style:solid;
+    border-width: 1px;
+    border-color: #D4DDE6;
+    padding: 1em;
+}
+
+.adminContainer .active_licence {
+    color: green;
+}
+
+.adminContainer .inactive_licence {
+    color: red;
+    font-style: italic;
+}
+
+.adminContainer #docinfo {
+    border: 1px dotted lightgray;
+    padding: 0.5em;
+}
+
+.adminContainer #docinfo span.docid {
+    font-size: 120%;
+    font-weight: bold;
+}
+
+.adminContainer #docinfo span.title {
+    font-size: 120%;
+}
+
+.adminContainer #docinfo span.author {
+    padding-left: 3em;
+    font-style: italic;
+}
+
+.adminContainer table#accounts td {
+    padding: 2px 4px;
+}
+

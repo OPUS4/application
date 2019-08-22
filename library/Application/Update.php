@@ -61,31 +61,30 @@ class Application_Update extends Application_Update_PluginAbstract
      */
     public function bootstrap()
     {
-        $configFiles = array(
+        $configFiles = [
             APPLICATION_PATH . '/application/configs/application.ini',
             APPLICATION_PATH . '/application/configs/config.ini'
-        );
+        ];
 
         $consoleIniPath = APPLICATION_PATH . '/application/configs/console.ini';
 
-        if (is_readable($consoleIniPath))
-        {
+        if (is_readable($consoleIniPath)) {
             $configFiles[] = $consoleIniPath;
         }
 
-        $application = new Zend_Application(APPLICATION_ENV, array("config"=>$configFiles));
+        $application = new Zend_Application(APPLICATION_ENV, ["config" => $configFiles]);
 
         // setup logging for updates
-        $options = $application->mergeOptions($application->getOptions(), array(
-            'log' => array(
+        $options = $application->mergeOptions($application->getOptions(), [
+            'log' => [
                 'filename' => 'update.log',
                 'level' => 'INFO'
-            )
-        ));
+            ]
+        ]);
 
         $application->setOptions($options);
 
-        $application->bootstrap(array('Configuration', 'Logging'));
+        $application->bootstrap(['Configuration', 'Logging']);
     }
 
     /**
@@ -94,8 +93,7 @@ class Application_Update extends Application_Update_PluginAbstract
      */
     public function processArguments($arguments)
     {
-        if (array_search('--confirm-steps', $arguments))
-        {
+        if (array_search('--confirm-steps', $arguments)) {
             $this->setConfirmSteps(true);
         }
     }
@@ -125,14 +123,12 @@ class Application_Update extends Application_Update_PluginAbstract
 
         // Run all the other update scripts
         $this->log(PHP_EOL . 'Running update scripts ... ');
-        try
-        {
+        try {
             $this->runUpdateScripts();
-        }
-        catch (Application_Update_Exception $aue)
-        {
+        } catch (Application_Update_Exception $aue) {
             // TODO figure out a way to log stderr output of update script
             $this->log(PHP_EOL . 'ERROR - An error occured during updating!');
+            $this->log($aue->getMessage());
             $this->log('Update aborted!');
             return;
         }
@@ -154,16 +150,12 @@ class Application_Update extends Application_Update_PluginAbstract
 
         $scripts = $this->getUpdateScripts($version);
 
-        foreach ($scripts as $script)
-        {
+        foreach ($scripts as $script) {
             $basename = basename($script);
 
-            if (!$this->getConfirmSteps() || $this->confirmRunningScript($basename))
-            {
+            if (! $this->getConfirmSteps() || $this->confirmRunningScript($basename)) {
                 $this->runScript($script);
-            }
-            else
-            {
+            } else {
                 $this->log("Skipping script '$basename'");
             }
 
@@ -198,13 +190,11 @@ class Application_Update extends Application_Update_PluginAbstract
      */
     public function runScript($script)
     {
-        if (!file_exists($script))
-        {
+        if (! file_exists($script)) {
             throw new Application_Update_Exception("Update script '$script' not found!");
         }
 
-        if (!is_executable($script))
-        {
+        if (! is_executable($script)) {
             throw new Application_Update_Exception("Update script '$script' can not be executed!");
         }
 
@@ -235,27 +225,24 @@ class Application_Update extends Application_Update_PluginAbstract
     {
         $files = new DirectoryIterator(APPLICATION_PATH . $this->_scriptsPath);
 
-        $updateScripts = array();
+        $updateScripts = [];
 
-        foreach ($files as $file)
-        {
+        foreach ($files as $file) {
             $filename = $file->getBasename();
             if (strrchr($filename, '.') == '.php' && preg_match('/^\d{3}-.*/', $filename)) {
                 $updateScripts[] = $file->getPathname();
             }
         }
 
-        if (!is_null($version))
-        {
-            $updateScripts = array_filter($updateScripts, function($value) use ($version) {
+        if (! is_null($version)) {
+            $updateScripts = array_filter($updateScripts, function ($value) use ($version) {
                 $number = substr(basename($value), 0, 3);
                 return ($number > $version);
             });
         }
 
-        if (!is_null($targetVersion))
-        {
-            $updateScripts = array_filter($updateScripts, function($value) use ($targetVersion) {
+        if (! is_null($targetVersion)) {
+            $updateScripts = array_filter($updateScripts, function ($value) use ($targetVersion) {
                 $number = substr(basename($value), 0, 3);
                 return ($number <= $targetVersion);
             });
@@ -286,12 +273,10 @@ class Application_Update extends Application_Update_PluginAbstract
 
             $result = $pdo->query($sql)->fetch();
 
-            if (isset($result['version']))
-            {
+            if (isset($result['version'])) {
                 $version = ( int )$result['version'];
             }
-        }
-        catch(PDOException $pdoex) {
+        } catch (PDOException $pdoex) {
             // TODO logging
         }
 
@@ -309,8 +294,7 @@ class Application_Update extends Application_Update_PluginAbstract
      */
     public function setVersion($version)
     {
-        if (!is_int($version) and !ctype_digit($version))
-        {
+        if (! is_int($version) and ! ctype_digit($version)) {
             $this->log("Cannot set OPUS version '$version'.");
             return;
         }
@@ -321,9 +305,7 @@ class Application_Update extends Application_Update_PluginAbstract
             $sql = "TRUNCATE TABLE `opus_version`; INSERT INTO `opus_version` (`version`) VALUES ($version);";
 
             $database->exec($sql);
-        }
-        catch (PDOException $pdoex) {
-
+        } catch (PDOException $pdoex) {
         }
     }
 
@@ -344,5 +326,4 @@ class Application_Update extends Application_Update_PluginAbstract
     {
         return $this->_confirmSteps;
     }
-
 }

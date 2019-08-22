@@ -27,41 +27,55 @@
  * @category    Application Unit Test
  * @package     Form_Validate
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
-class DuplicateMultiValueTest extends ControllerTestCase {
+/**
+ * Class Application_Form_Validate_DuplicateMultiValueTest.
+ */
+class Application_Form_Validate_DuplicateMultiValueTest extends TestCase
+{
 
-    public function testIsValidTrue() {
-        $values = array(
-            array('deu', 'Tag 1'),
-            array('eng', 'Tag 1')
+    public function testIsValidTrue()
+    {
+        $values = [
+            ['deu', 'Tag 1'],
+            ['eng', 'Tag 1']
+        ];
+
+        $validator = new Application_Form_Validate_DuplicateMultiValue(
+            $values,
+            1,
+            'testmessage',
+            'Language'
         );
 
-        $validator = new Application_Form_Validate_DuplicateMultiValue($values, 1, 'testmessage', 'Language');
-
-        $context = array(
+        $context = [
             'Language' => 'eng',
-        );
+        ];
 
         $this->assertTrue($validator->isValid('Tag 1', $context));
     }
 
-    public function testIsValidFalse() {
-        $values = array(
-            array('deu', 'Tag 1'),
-            array('deu', 'Tag 1')
+    public function testIsValidFalse()
+    {
+        $values = [
+            ['deu', 'Tag 1'],
+            ['deu', 'Tag 1']
+        ];
+
+        $validator = new Application_Form_Validate_DuplicateMultiValue(
+            $values,
+            1,
+            'testmessage',
+            'Language'
         );
 
-        $validator = new Application_Form_Validate_DuplicateMultiValue($values, 1, 'testmessage', 'Language');
-
-        $context = array(
+        $context = [
             'Language' => 'deu',
-        );
+        ];
 
         $this->assertFalse($validator->isValid('Tag 1', $context));
     }
-
 }

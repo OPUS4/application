@@ -41,7 +41,8 @@
  * @category    Application
  * @package     Controller
  */
-class Application_Controller_Plugin_SecurityRealm extends Zend_Controller_Plugin_Abstract {
+class Application_Controller_Plugin_SecurityRealm extends Zend_Controller_Plugin_Abstract
+{
 
     /**
      * Determine the current User's security role and set up Opus_Security_Realm.
@@ -49,7 +50,8 @@ class Application_Controller_Plugin_SecurityRealm extends Zend_Controller_Plugin
      * @param Zend_Controller_Request_Abstract $request The current request.
      * @return void
      */
-    public function routeStartup(Zend_Controller_Request_Abstract $request) {
+    public function routeStartup(Zend_Controller_Request_Abstract $request)
+    {
 
         // Create a Realm instance.  Initialize privileges to empty.
         $realm = Opus_Security_Realm::getInstance();
@@ -63,12 +65,10 @@ class Application_Controller_Plugin_SecurityRealm extends Zend_Controller_Plugin
         if (false === empty($identity)) {
             try {
                 $realm->setUser($identity);
-            }
-            catch (Opus_Security_Exception $e) {
+            } catch (Opus_Security_Exception $e) {
                 // unknown account -> clean identity (e.g. session of deleted user - OPUSVIER-3214)
                 $auth->clearIdentity();
-            }
-            catch (Exception $e) {
+            } catch (Exception $e) {
                 // unexpected exception -> clear identity and throw
                 $auth->clearIdentity();
                 throw new Exception($e);
@@ -83,16 +83,18 @@ class Application_Controller_Plugin_SecurityRealm extends Zend_Controller_Plugin
         }
     }
 
-    
+
     // adjustments to enable different authentication mechanism for SWORD module
-    public function __construct($groups = array()) {
-        $this->groups = array();
+    public function __construct($groups = [])
+    {
+        $this->groups = [];
         foreach ((array) $groups as $id => $modules) {
             $this->groups[$id] = (array) $modules;
         }
     }
 
-    private function getModuleMemberName($moduleName) {
+    private function getModuleMemberName($moduleName)
+    {
         $member = Zend_Auth_Storage_Session::MEMBER_DEFAULT;
         // try to find group of module
         foreach ($this->groups as $id => $modules) {
@@ -105,11 +107,11 @@ class Application_Controller_Plugin_SecurityRealm extends Zend_Controller_Plugin
         return $member;
     }
 
-    public function preDispatch(Zend_Controller_Request_Abstract $request) {
+    public function preDispatch(Zend_Controller_Request_Abstract $request)
+    {
         $namespace = Zend_Auth_Storage_Session::NAMESPACE_DEFAULT;
         $member = $this->getModuleMemberName($request->getModuleName());
         $storage = new Zend_Auth_Storage_Session($namespace, $member);
         Zend_Auth::getInstance()->setStorage($storage);
     }
-
 }

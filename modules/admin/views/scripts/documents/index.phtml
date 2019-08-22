@@ -53,9 +53,9 @@
 <div class="right">
 
     <div class="documentOptions">
-        <?PHP if (!empty($this->collection)) : ?>
+        <?PHP if (! empty($this->collection)) : ?>
             <?=$this->translate('admin_documents_label_collection')?>: <b><?=htmlspecialchars($this->collectionName)?></b>
-        <?PHP elseif (!empty($this->series)) : ?>
+        <?PHP elseif (! empty($this->series)) : ?>
             <?= $this->translate('Opus_Series') ?>: <b><?=htmlspecialchars($this->series->getTitle())?></b>
         <?PHP else : ?>
             <div class="docstateMenu">
@@ -94,7 +94,7 @@
     </div>
 
     <div class ="paginationInfo">
-        <?= $this->paginationControl($this->paginator, NULL, 'itemCount_pagination.phtml') ?>
+        <?= $this->paginationControl($this->paginator, null, 'itemCount_pagination.phtml') ?>
     </div>
 
     <div class="itemCountLinks">
@@ -102,13 +102,18 @@
         <ul>
             <?PHP foreach ($this->itemCountLinks as $link) : ?>
                 <?PHP if ($link['label'] != $this->maxHitsPerPage && ($link['label'] !== 'all' || $this->maxHitsPerPage != 0)) : ?>
-                    <li><a href="<?= $link['url'] ?>"><?PHP if ($link['label'] === 'all') : ?>
-                        <?= $this->translate('admin_documents_maxhitsperpage_all') ?><?PHP else : ?><?= $link['label'] ?>
-                    <?PHP endif; ?></a><?PHP else : ?>
-                    <?PHP if ($link['label'] === 'all') : ?><?= $this->translate('admin_documents_maxhitsperpage_all') ?>
-                    <?PHP else : ?>
-                        <li class="current"><?= $link['label'] ?>
-                    <?PHP endif; ?>
+                    <li><a href="<?= $link['url'] ?>">
+                    <?PHP if ($link['label'] === 'all') : ?>
+                        <?= $this->translate('admin_documents_maxhitsperpage_all')?><?PHP
+                    else : ?>
+                        <?= $link['label'] ?><?PHP
+                    endif; ?></a>
+                <?PHP else : ?>
+                    <?PHP if ($link['label'] === 'all') : ?>
+                        <?= $this->translate('admin_documents_maxhitsperpage_all') ?><?PHP
+                    else : ?>
+                        <li class="current"><?= $link['label'] ?><?PHP
+                    endif; ?>
                 <?PHP endif; ?></li>
             <?PHP endforeach; ?>
         </ul>
@@ -127,9 +132,10 @@
     <div id="filter">
         <h4>Filter</h4>
         <ul>
-            <li><?= $this->person['last_name'] ?><?PHP if (isset($this->person['first_name'])) : ?>,
+            <li><?= $this->person['last_name'] ?><?PHP if (isset($this->person['first_name'])) :
+?>,
             <?= $this->person['first_name'] ?>
-            <?PHP endif ?>
+                <?PHP endif ?>
             </li>
             <?PHP if (isset($this->person['identifier_orcid'])) : ?>
                 <li class="identifier_orcid"><?= $this->person['identifier_orcid'] ?></li>
@@ -144,7 +150,7 @@
     </div>
     <?PHP endif ?>
     <div id="facetMenu">
-        <?PHP if (!isset($this->collectionName) && !isset($this->series)) : ?>
+        <?PHP if (! isset($this->collectionName) && ! isset($this->series)) : ?>
             <?PHP include('facet.phtml') ?>
         <?PHP endif ?>
         <?PHP if (isset($this->person)) : ?>

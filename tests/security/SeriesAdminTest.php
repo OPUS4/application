@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -26,17 +27,23 @@
  *
  * @category    Application Unit Test
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class SeriesAdminTest extends ControllerTestCase {
+
+class SeriesAdminTest extends ControllerTestCase
+{
+
+    protected $configModifiable = true;
+
+    protected $additionalResources = ['database', 'translation', 'view', 'navigation', 'mainMenu'];
 
     private $userName = 'seriesadminuser';
 
     private $roleName = 'test-seriesadmin';
 
-    public function setUp() {
+    public function setUp()
+    {
         parent::setUp();
         $this->enableSecurity();
 
@@ -55,7 +62,8 @@ class SeriesAdminTest extends ControllerTestCase {
         $this->loginUser($this->userName, 'seriesadminpwd');
     }
 
-    public function tearDown() {
+    public function tearDown()
+    {
         $this->logoutUser();
         $this->restoreSecuritySetting();
 
@@ -72,7 +80,8 @@ class SeriesAdminTest extends ControllerTestCase {
     /**
      * Regression Test für OPUSVIER-3306.
      */
-    public function testAccessEditSeries() {
+    public function testAccessEditSeries()
+    {
         $this->useEnglish();
         $this->dispatch('/admin/series/edit/id/4');
         $this->assertResponseCode(200);
@@ -80,5 +89,4 @@ class SeriesAdminTest extends ControllerTestCase {
         $this->assertQueryContentContains('//html/head/title', 'Edit Series');
         $this->assertXPath("//input[@type = 'hidden' and @value = '4']");
     }
-
 }

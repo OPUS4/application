@@ -32,7 +32,8 @@
  * @version     $Id$
  */
 
-class Account_Form_Account extends Application_Form_Model_Abstract {
+class Account_Form_Account extends Application_Form_Model_Abstract
+{
 
     const ELEMENT_LOGIN = 'username';
     const ELEMENT_FIRSTNAME = 'firstname';
@@ -42,17 +43,18 @@ class Account_Form_Account extends Application_Form_Model_Abstract {
     const ELEMENT_CONFIRM_PASSWORD = 'confirm';
     const ELEMENT_SUBMIT = 'submit';
 
-    public function init() {
+    public function init()
+    {
         parent::init();
 
         $this->setUseNameAsLabel(true);
         $this->setLabelPrefix('admin_account_label_');
 
-        $this->addElement('Login', self::ELEMENT_LOGIN, array(
+        $this->addElement('Login', self::ELEMENT_LOGIN, [
             'label' => 'admin_account_label_login'
-        ));
+        ]);
         $this->getElement(self::ELEMENT_LOGIN)->addValidator(
-            new Application_Form_Validate_LoginAvailable(array('ignoreCase' => true))
+            new Application_Form_Validate_LoginAvailable(['ignoreCase' => true])
         );
 
         $this->addElement('Text', self::ELEMENT_FIRSTNAME);
@@ -60,23 +62,24 @@ class Account_Form_Account extends Application_Form_Model_Abstract {
         $this->addElement('Email', self::ELEMENT_EMAIL);
 
         $this->addElement('Password', self::ELEMENT_PASSWORD);
-        $this->addElement('Password', self::ELEMENT_CONFIRM_PASSWORD, array(
+        $this->addElement('Password', self::ELEMENT_CONFIRM_PASSWORD, [
             'label' => 'admin_account_label_confirmPassword'
-        ));
+        ]);
 
         $this->getElement(self::ELEMENT_CONFIRM_PASSWORD)->addValidator(
             new Application_Form_Validate_Password()
         );
 
         $this->getElement(self::ELEMENT_PASSWORD)->addErrorMessages(
-            array(Zend_Validate_StringLength::TOO_SHORT => 'admin_account_error_password_tooshort')
+            [Zend_Validate_StringLength::TOO_SHORT => 'admin_account_error_password_tooshort']
         );
     }
 
     /**
      * @param $account Opus_Account
      */
-    public function populateFromModel($account) {
+    public function populateFromModel($account)
+    {
         $login = strtolower($account->getLogin());
 
         $this->getElement(self::ELEMENT_LOGIN)->setValue($login);
@@ -87,13 +90,13 @@ class Account_Form_Account extends Application_Form_Model_Abstract {
         $this->getElement('lastname')->setValue($account->getLastName());
         $this->getElement('email')->setValue($account->getEmail());
 
-        if (isset($config->account->editPasswordOnly) && $config->account->editPasswordOnly) {
+        if (isset($config->account->editPasswordOnly) && filter_var($config->account->editPasswordOnly, FILTER_VALIDATE_BOOLEAN)) {
             $this->getElement('username')->setAttrib('disabled', true);
             $this->getElement('firstname')->setAttrib('disabled', true);
             $this->getElement('lastname')->setAttrib('disabled', true);
             $this->getElement('email')->setAttrib('disabled', true);
-        }
-        else if (isset($config->account->changeLogin) && !$config->account->changeLogin) {
+        } elseif (isset($config->account->changeLogin) &&
+            (! filter_var($config->account->changeLogin, FILTER_VALIDATE_BOOLEAN))) {
             $this->getElement('username')->setAttrib('disabled', true);
         }
 
@@ -102,9 +105,7 @@ class Account_Form_Account extends Application_Form_Model_Abstract {
         }
     }
 
-    public function updateModel($account) {
-
+    public function updateModel($account)
+    {
     }
-
 }
-

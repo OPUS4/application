@@ -29,7 +29,6 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -44,15 +43,14 @@ class Export_Model_XsltExport extends Export_Model_XmlExport
     {
         $config = $this->getConfig();
 
-        if (isset($config->stylesheet))
-        {
+        $stylesheet = null;
+        if (isset($config->stylesheet)) {
             $stylesheet = $config->stylesheet;
         }
 
         $stylesheetDirectory = 'stylesheets';
 
-        if (isset($config->stylesheetDirectory))
-        {
+        if (isset($config->stylesheetDirectory)) {
             $stylesheetDirectory = $config->stylesheetDirectory;
         }
 
@@ -63,7 +61,9 @@ class Export_Model_XsltExport extends Export_Model_XmlExport
             )
         );
 
-        $this->prepareXml();
+        $restrictExportToPublishedDocuments =
+            ! (isset($config->restrictExportToPublishedDocuments) &&
+                (! filter_var($config->restrictExportToPublishedDocuments, FILTER_VALIDATE_BOOLEAN)));
+        $this->prepareXml($restrictExportToPublishedDocuments);
     }
-
 }

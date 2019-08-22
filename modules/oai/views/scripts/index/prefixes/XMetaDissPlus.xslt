@@ -208,7 +208,14 @@
             </dc:type>
 
             <!-- dc:identifier -->
-            <xsl:apply-templates select="IdentifierUrn" mode="xmetadissplus" />
+            <xsl:choose>
+                <xsl:when test="IdentifierUrn">
+                    <xsl:apply-templates select="IdentifierUrn" mode="xmetadissplus" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:apply-templates select="IdentifierDoi" mode="xmetadissplus" />
+                </xsl:otherwise>
+            </xsl:choose>
 
             <!-- weird DNB constraint: dcterms:medium must appear after dc:identifier -->
             <xsl:for-each select="File[not(@MimeType = preceding-sibling::File/@MimeType)]/@MimeType">
@@ -223,7 +230,7 @@
 
             <!-- weird DNB constraint: dc:language must appear after dcterms:medium -->
             <dc:language xsi:type="dcterms:ISO639-2">
-                <xsl:value-of select="php:functionString('Oai_Model_Language::getLanguageCode', @Language)" />
+                <xsl:value-of select="php:functionString('Opus_Language::getLanguageCode', @Language)" />
             </dc:language >
 
             <!-- dcterms:isPartOf -->
@@ -313,6 +320,10 @@
                <xsl:value-of select="@frontdoorurl" />
             </ddb:identifier>
 
+            <xsl:if test="IdentifierUrn">
+                <xsl:apply-templates select="IdentifierDoi" mode="ddb" />
+            </xsl:if>
+
             <ddb:rights ddb:kind="free" />
 
         </xMetaDiss:xMetaDiss>
@@ -321,7 +332,7 @@
     <xsl:template match="TitleMain" mode="xmetadissplus">
         <dc:title xsi:type="ddb:titleISO639-2">
             <xsl:attribute name="lang">
-              <xsl:value-of select="php:functionString('Oai_Model_Language::getLanguageCode', @Language)" />
+              <xsl:value-of select="php:functionString('Opus_Language::getLanguageCode', @Language)" />
              </xsl:attribute>
             <xsl:choose>
               <xsl:when test="../@Language!=@Language">
@@ -337,7 +348,7 @@
     <xsl:template match="TitleSub" mode="xmetadissplus">
         <dcterms:alternative xsi:type="ddb:talternativeISO639-2">
             <xsl:attribute name="lang">
-                 <xsl:value-of select="php:functionString('Oai_Model_Language::getLanguageCode', @Language)" />
+                 <xsl:value-of select="php:functionString('Opus_Language::getLanguageCode', @Language)" />
             </xsl:attribute>
             <xsl:choose>
               <xsl:when test="../@Language!=@Language">
@@ -417,7 +428,7 @@
     <xsl:template match="TitleAbstract" mode="xmetadissplus">
         <dcterms:abstract xsi:type="ddb:contentISO639-2" ddb:type="noScheme">
             <xsl:attribute name="lang">
-                <xsl:value-of select="php:functionString('Oai_Model_Language::getLanguageCode', @Language)" />
+                <xsl:value-of select="php:functionString('Opus_Language::getLanguageCode', @Language)" />
             </xsl:attribute>
             <xsl:value-of select="@Value" />
         </dcterms:abstract>
@@ -509,6 +520,18 @@
         <dc:identifier xsi:type="urn:nbn">
             <xsl:value-of select="@Value" />
         </dc:identifier>
+    </xsl:template>
+
+    <xsl:template match="IdentifierDoi" mode="xmetadissplus">
+        <dc:identifier xsi:type="doi:doi">
+            <xsl:value-of select="@Value" />
+        </dc:identifier>
+    </xsl:template>
+
+    <xsl:template match="IdentifierDoi" mode="ddb">
+        <ddb:identifier ddb:type="DOI">
+            <xsl:value-of select="@Value" />
+        </ddb:identifier>
     </xsl:template>
 
     <xsl:template match="Licence" mode="xmetadissplus">

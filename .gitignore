@@ -39,5 +39,6 @@ opus4-solr-jetty.conf
 
 # IDE files
 .idea
+out
 *.iml
 nbproject

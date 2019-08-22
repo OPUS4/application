@@ -32,51 +32,55 @@
  * @version     $Id$
  */
 
-class Admin_Model_IndexMaintenance {
-    
+class Admin_Model_IndexMaintenance
+{
+
     private $_config;
-    
+
     private $_logger;
-    
+
     private $_consistencyCheckLogfilePath = null;
-    
+
     private $_featureDisabled = true;
-    
-    public function __construct($logger = null) {
+
+    public function __construct($logger = null)
+    {
         $this->_config = Zend_Registry::get('Zend_Config');
         $this->_logger = (is_null($logger)) ? Zend_Registry::get('Zend_Log') : $logger;
         $this->setFeatureDisabled();
-        
+
         if ($this->_featureDisabled) {
             return; // abort initialization
         }
 
-        if (!isset($this->_config->workspacePath) || trim($this->_config->workspacePath) == '') {
+        if (! isset($this->_config->workspacePath) || trim($this->_config->workspacePath) == '') {
             $this->_logger->err('configuration key \'workspacePath\' is not set correctly');
-        }
-        else {
+        } else {
             $this->_consistencyCheckLogfilePath = $this->_config->workspacePath . DIRECTORY_SEPARATOR . 'log'
                 . DIRECTORY_SEPARATOR . 'opus_consistency-check.log';
         }
     }
-    
-    private function setFeatureDisabled() {
-        $this->_featureDisabled = !(
+
+    private function setFeatureDisabled()
+    {
+        $this->_featureDisabled = ! (
                 (isset($this->_config->runjobs->indexmaintenance->asynchronous)
-                    && $this->_config->runjobs->indexmaintenance->asynchronous) ||
-                (!isset($this->_config->runjobs->indexmaintenance->asynchronous)
-                    && isset($this->_config->runjobs->asynchronous) && $this->_config->runjobs->asynchronous));
+                    && filter_var($this->_config->runjobs->indexmaintenance->asynchronous, FILTER_VALIDATE_BOOLEAN)) ||
+                (! isset($this->_config->runjobs->indexmaintenance->asynchronous)
+                    && isset($this->_config->runjobs->asynchronous) && filter_var($this->_config->runjobs->asynchronous, FILTER_VALIDATE_BOOLEAN)));
     }
-    
-    public function getFeatureDisabled() {
+
+    public function getFeatureDisabled()
+    {
         return $this->_featureDisabled;
     }
 
-    public function createJob() {
+    public function createJob()
+    {
         $job = new Opus_Job();
         $job->setLabel(Opus_Job_Worker_ConsistencyCheck::LABEL);
 
-        if (!$this->_featureDisabled) {
+        if (! $this->_featureDisabled) {
             // Queue job (execute asynchronously)
             // skip creating job if equal job already exists
             if (true === $job->isUniqueInQueue()) {
@@ -91,43 +95,44 @@ class Admin_Model_IndexMaintenance {
             $worker = new Opus_Job_Worker_ConsistencyCheck();
             $worker->setLogger($this->_logger);
             $worker->work($job);
-        }
-        catch(Exception $exc) {
+        } catch (Exception $exc) {
             $this->_logger->err($exc);
         }
         return false;
     }
-    
-    public function getProcessingState() {
+
+    public function getProcessingState()
+    {
         if (is_null($this->_consistencyCheckLogfilePath)) {
             return null; // unable to determine processing state
         }
-                
+
         if (file_exists($this->_consistencyCheckLogfilePath . '.lock')) {
             return 'inprogress'; // Operation is still in progress
         }
 
-        if (!file_exists($this->_consistencyCheckLogfilePath)) {
+        if (! file_exists($this->_consistencyCheckLogfilePath)) {
             return 'initial'; // Operation was never started before
         }
-        
-        if (!is_readable($this->_consistencyCheckLogfilePath)) {
+
+        if (! is_readable($this->_consistencyCheckLogfilePath)) {
             $this->_logger->err(
                 "Log File $this->_consistencyCheckLogfilePath exists but is not readable:"
                 . " this might indicate a permission problem"
             );
             return null;
         }
-        
-        if (!$this->allowConsistencyCheck()) {
+
+        if (! $this->allowConsistencyCheck()) {
             return 'scheduled'; // Operation was not started yet
         }
-        
-        return 'completed';        
+
+        return 'completed';
     }
 
-    public function readLogFile() {
-        if (is_null($this->_consistencyCheckLogfilePath) || !is_readable($this->_consistencyCheckLogfilePath)) {
+    public function readLogFile()
+    {
+        if (is_null($this->_consistencyCheckLogfilePath) || ! is_readable($this->_consistencyCheckLogfilePath)) {
             return null;
         }
 
@@ -137,23 +142,26 @@ class Admin_Model_IndexMaintenance {
             // ignore: nothing to read
             return null;
         }
-        
+
         $logdata = new Admin_Model_IndexMaintenanceLogData();
         $logdata->setContent($content);
         $lastModTime = filemtime($this->_consistencyCheckLogfilePath);
         $logdata->setModifiedDate(date("d-m-y H:i:s", $lastModTime));
         return $logdata;
     }
-    
-    public function allowConsistencyCheck() {
+
+    public function allowConsistencyCheck()
+    {
         return Opus_Job::getCountForLabel(Opus_Job_Worker_ConsistencyCheck::LABEL) == 0;
     }
-    
-    public function allowFulltextExtractionCheck() {
+
+    public function allowFulltextExtractionCheck()
+    {
         return false; // TODO OPUSVIER-2955
     }
-    
-    public function allowIndexOptimization() {
+
+    public function allowIndexOptimization()
+    {
         return false; // TODO OPUSVIER-2956
     }
 }

@@ -32,7 +32,7 @@
  * @version     $Id$
  */
 
-class Frontdoor_Model_Exception extends Exception {
+class Frontdoor_Model_Exception extends Exception
+{
 
 }
-
