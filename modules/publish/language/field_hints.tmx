@@ -947,30 +947,31 @@ Beispieleingabe: "00A09" (für Popularization of mathematics)]]></seg>
 
 <!-- DDC **************************************************** -->
     <tu tuid="hint_groupSubjectDDC">
-            <tuv xml:lang="en">
-                <seg><![CDATA[Please enter the DDC class of your document. You can add or delete additional classifications by clicking on the button below. DDC classes follow a three-digit pattern. Using the dropdown box and the 'down' button, please set the DDC class for your document.<br />
+	<tuv xml:lang="en">
+            <seg><![CDATA[Please enter the DDC class of your document. You can add or delete additional classifications by clicking on the button below. DDC classes follow a three-digit pattern. Using the dropdown box and the 'down' button, please set the DDC class for your document.<br />
                 Please click the following link for an overview (in German) of DDC at the German National Library:
                 <a href="https://www.dnb.de/ddcindnb" target="tab" > https://www.dnb.de/ddcindnb</a><br />
                 Example input: "100" (for "Philosophie und Psychologie")]]></seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg><![CDATA[Tragen Sie hier bitte die DDC Klassen Ihres Dokumentes ein. Sie können durch Klicken auf den Button weitere Klassen hinzufügen (oder wieder löschen). Die DDC Klasse ist 3-stellig anzugeben. Nutzen Sie dazu den Button "runter".<br />
+        </tuv>
+        <tuv xml:lang="de">
+            <seg><![CDATA[Tragen Sie hier bitte die DDC Klassen Ihres Dokumentes ein. Sie können durch Klicken auf den Button weitere Klassen hinzufügen (oder wieder löschen). Die DDC Klasse ist 3-stellig anzugeben. Nutzen Sie dazu den Button "runter".<br />
                 Eine Übersicht über die DDC in der Deutschen Nationalbibliothek bekommen Sie unter:
                 <a href="https://www.dnb.de/ddcindnb" target="tab" > https://www.dnb.de/ddcindnb</a><br />
                 Beispieleingabe: "100" (für "Philosophie und Psychologie")]]></seg>
-            </tuv>
-        </tu>
-            <tu tuid="hint_SubjectDDC">
-                <tuv xml:lang="en">
-                    <seg>Please enter a DDC class.</seg>
-                </tuv>
-                <tuv xml:lang="de">
-                    <seg>Tragen Sie bitte eine DDC Klasse ein.</seg>
-                </tuv>
-            </tu>
+        </tuv>
+    </tu>
+	  
+    <tu tuid="hint_SubjectDDC">
+        <tuv xml:lang="en">
+            <seg>Please enter a DDC class.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie bitte eine DDC Klasse ein.</seg>
+        </tuv>
+    </tu>
 
 <!-- DDC-Sachgruppen **************************************************** -->
-<tu tuid="hint_groupddc_dnb">
+    <tu tuid="hint_groupddc_dnb">
         <tuv xml:lang="en">
             <seg>Please enter the DDC subject groups of the document. You may add more DDC subject groups by clicking on the button )or delete them).</seg>
         </tuv>
