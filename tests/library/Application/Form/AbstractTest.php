@@ -68,7 +68,7 @@ class Application_Form_AbstractTest extends ControllerTestCase
     {
         $logger = new MockLogger();
 
-        $this->form->setLog($logger);
+        $this->form->setLogger($logger);
 
         $this->assertEquals($logger, $this->form->getLogger());
     }
