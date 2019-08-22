@@ -752,8 +752,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
         if ($contains) {
             $this->assertContains('test document for OPUSVIER-2484', $this->getResponse()->getBody());
             $this->assertContains($lastName, $this->getResponse()->getBody());
-        }
-        else {
+        } else {
             $this->assertNotContains('test document for OPUSVIER-2484', $this->getResponse()->getBody());
         }
     }

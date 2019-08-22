@@ -168,5 +168,4 @@ class Application_Controller_Action_Helper_Redirector extends Zend_Controller_Ac
             $this->setExit($exit); // TODO does not do anything at this point
         }
     }
-
 }
