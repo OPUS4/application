@@ -269,7 +269,7 @@ class Application_ConfigurationTest extends ControllerTestCase
         $document = new Opus_Document();
 
         $this->assertEquals([
-            'Opus_Document_Plugin_Index',
+            'Opus\Search\Plugin\Index',
             'Opus_Document_Plugin_XmlCache',
             'Opus_Document_Plugin_IdentifierUrn',
             'Opus_Document_Plugin_IdentifierDoi'

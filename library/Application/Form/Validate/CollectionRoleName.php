@@ -30,7 +30,7 @@
  * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Application_Form_Validate_CollectionRoleName extends Opus_Validate_CollectionRoleName
+class Application_Form_Validate_CollectionRoleName extends Opus\Validate\CollectionRoleName
 {
 
     const NAME_CONTAINS_INVALID_CHAR = 'containsInvalidChar';
