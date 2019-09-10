@@ -1,18 +1,16 @@
 def jobNameParts = JOB_NAME.tokenize('/') as String[]
 def projectName = jobNameParts[0]
+def buildType = "short"
 
 if (projectName.contains('night')) {
-    TYPE = "long"
-} else {
-    TYPE = "short"
+    buildType = "long"
 }
-
 pipeline {
     agent { dockerfile {args "-u root -v /var/run/docker.sock:/var/run/docker.sock"}}
     environment {XML_CATALOG_FILES = "${WORKSPACE}/tests/resources/opus4-catalog.xml"}
 
     triggers {
-        cron( TYPE.equals('long') ? 'H 3 * * *' : '')
+        cron( buildType.equals('long') ? 'H 3 * * *' : '')
     }
 
     stages {
@@ -47,11 +45,14 @@ pipeline {
         stage('Test') {
             steps {
                 script{
-                   if (TYPE == 'short') {
-                       sh 'sudo -E -u opus4 ant phpunit-fast'
-                   } else if (TYPE == 'long') {
-                       sh 'sudo -E -u opus4 ant phpunit'
-                   }
+                    switch (buildType) {
+                        case "long":
+                            sh 'sudo -E -u opus4 ant phpunit'
+                            break
+                        default:
+                            sh 'sudo -E -u opus4 ant phpunit-fast'
+                            break
+                  }
                 }
             }
         }
@@ -59,8 +60,12 @@ pipeline {
         stage('Analyse') {
             steps {
                 script{
-                   if (TYPE == 'long') {
-                       sh 'ant analyse-code'
+                   switch (buildType) {
+                       case "long":
+                           sh 'ant analyse-code'
+                           breaek
+                       default:
+                            break
                    }
                 }
             }
