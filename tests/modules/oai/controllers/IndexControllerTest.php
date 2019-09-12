@@ -1646,6 +1646,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
                 . '/tests/resources/xmetadissplus/xmetadissplus.xsd');
 
         $this->assertTrue($valid, 'XML Schema validation failed for XMetaDissPlus');
+        libxml_use_internal_errors(false);
+        libxml_clear_errors();
     }
 
     /**
@@ -2218,6 +2220,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
         // Schema validation does not detect problem
         $this->assertNotContains('>"', $this->getResponse()->getBody(), 'XML contains \'"\' after an element.');
+        libxml_use_internal_errors(false);
+        libxml_clear_errors();
     }
 
 }

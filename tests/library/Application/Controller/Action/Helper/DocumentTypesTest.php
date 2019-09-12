@@ -253,7 +253,7 @@ class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerT
                 }
             }
         }
-
+        libxml_use_internal_errors(false);
         libxml_clear_errors();
     }
 

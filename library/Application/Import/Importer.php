@@ -270,6 +270,8 @@ class Application_Import_Importer
 
         $this->log('Loading Result: OK');
         $this->xml = $xml;
+        libxml_use_internal_errors(false);
+        libxml_clear_errors();
     }
 
     private function validateXml()
