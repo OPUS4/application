@@ -1633,7 +1633,9 @@ class Oai_IndexControllerTest extends ControllerTestCase {
             $this->markTestSkipped(
                 'Environment Variable XML_CATALOG_FILES not set for resources/opus4-catalog.xml.');
         }
-        libxml_use_internal_errors(true);
+        
+        libxml_clear_errors();
+        $useInternalErrors = libxml_use_internal_errors(true);
 
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=XMetaDissPlus&identifier=oai::146');
         $xpath = $this->prepareXpathFromResultString($this->getResponse()->getBody());
@@ -1646,7 +1648,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
                 . '/tests/resources/xmetadissplus/xmetadissplus.xsd');
 
         $this->assertTrue($valid, 'XML Schema validation failed for XMetaDissPlus');
-        libxml_use_internal_errors(false);
+        libxml_use_internal_errors($useInternalErrors);
         libxml_clear_errors();
     }
 
@@ -2204,7 +2206,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
     {
         $this->dispatch('/oai?verb=GetRecord&identifier=oai:opus4.demo:146&metadataPrefix=xMetaDissPlus');
 
-        libxml_use_internal_errors(true);
+        libxml_clear_errors();
+        $useInternalErrors = libxml_use_internal_errors(true);
 
         $xpath = $this->prepareXpathFromResultString($this->getResponse()->getBody());
         $xMetaDissNode = $xpath->query('//xMetaDiss:xMetaDiss')->item(0);
@@ -2220,7 +2223,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
         // Schema validation does not detect problem
         $this->assertNotContains('>"', $this->getResponse()->getBody(), 'XML contains \'"\' after an element.');
-        libxml_use_internal_errors(false);
+        libxml_use_internal_errors($useInternalErrors);
         libxml_clear_errors();
     }
 
