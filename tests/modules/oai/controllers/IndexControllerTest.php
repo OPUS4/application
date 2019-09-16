@@ -1838,7 +1838,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
                 'Environment Variable XML_CATALOG_FILES not set for resources/opus4-catalog.xml.'
             );
         }
-        
+
         libxml_clear_errors();
         $useInternalErrors = libxml_use_internal_errors(true);
 
