@@ -108,6 +108,7 @@ class ControllerTestCase extends TestCase
             ["config" => [
                 APPLICATION_PATH . '/application/configs/application.ini',
                 APPLICATION_PATH . '/application/configs/config.ini',
+                APPLICATION_PATH . '/application/configs/console.ini',
                 APPLICATION_PATH . '/tests/tests.ini',
                 APPLICATION_PATH . '/tests/config.ini'
             ]]
