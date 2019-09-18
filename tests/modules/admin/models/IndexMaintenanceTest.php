@@ -27,6 +27,7 @@
  * @category    Application
  * @package     Tests
  * @author      Sascha Szott <szott@zib.de>
+ * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
@@ -34,9 +35,9 @@
 class Admin_Model_IndexMaintenanceTest extends ControllerTestCase
 {
 
-    protected $additionalResources = 'database';
+    protected $configModifiable = true;
 
-    private $config;
+    protected $additionalResources = 'database';
 
     public function tearDown()
     {
@@ -92,40 +93,23 @@ class Admin_Model_IndexMaintenanceTest extends ControllerTestCase
     public function testConstructorWithFeatureEnabledBoth()
     {
         $this->enableAsyncIndexmaintenanceMode();
-        $this->enableAsyncMode(false);
+        $this->enableAsyncMode();
         $model = new Admin_Model_IndexMaintenance();
         $this->assertFalse($model->getFeatureDisabled());
     }
 
-    private function enableAsyncMode($backupConfig = true)
+    private function enableAsyncMode()
     {
-        if ($backupConfig) {
-            $this->config = Zend_Registry::get('Zend_Config');
-        }
-
-        $config = Zend_Registry::get('Zend_Config');
-        if (isset($config->runjobs->asynchronous)) {
-            $config->runjobs->asynchronous = self::CONFIG_VALUE_TRUE;
-        } else {
-            $config = new Zend_Config(['runjobs' => ['asynchronous' => self::CONFIG_VALUE_TRUE]], true);
-            $config->merge(Zend_Registry::get('Zend_Config'));
-        }
-        Zend_Registry::set('Zend_Config', $config);
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'runjobs' => ['asynchronous' => self::CONFIG_VALUE_TRUE]
+        ]));
     }
 
     private function enableAsyncIndexmaintenanceMode()
     {
-        $this->config = Zend_Registry::get('Zend_Config');
-
-        $config = Zend_Registry::get('Zend_Config');
-        if (isset($config->runjobs->indexmaintenance->asynchronous)) {
-            $config->runjobs->indexmaintenance->asynchronous = self::CONFIG_VALUE_TRUE;
-        } else {
-            $config = new Zend_Config(['runjobs' => ['indexmaintenance' => ['asynchronous' => self::CONFIG_VALUE_TRUE]]], true);
-            $config->merge(Zend_Registry::get('Zend_Config'));
-        }
-
-        Zend_Registry::set('Zend_Config', $config);
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'runjobs' => ['indexmaintenance' => ['asynchronous' => self::CONFIG_VALUE_TRUE]]
+        ]));
     }
 
     public function testAllowConsistencyCheck()

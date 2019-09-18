@@ -27,9 +27,9 @@
  * @category    Application
  * @package     Module_Admin
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 class Admin_Model_IndexMaintenance
@@ -61,13 +61,26 @@ class Admin_Model_IndexMaintenance
         }
     }
 
+    /**
+     * Disables index maintenance feature depending on configuration.
+     *
+     * runjobs.indexmaintenance.asynchronous
+     * runjobs.asynchronous
+     *
+     * One of the two options needs to be enabled for the "feature" to be enabled.
+     *
+     * TODO a nightmare of inversions - Why not setFeatureEnabled
+     * TODO and what is the "feature"?
+     */
     private function setFeatureDisabled()
     {
-        $this->_featureDisabled = ! (
-                (isset($this->_config->runjobs->indexmaintenance->asynchronous)
-                    && filter_var($this->_config->runjobs->indexmaintenance->asynchronous, FILTER_VALIDATE_BOOLEAN)) ||
-                (! isset($this->_config->runjobs->indexmaintenance->asynchronous)
-                    && isset($this->_config->runjobs->asynchronous) && filter_var($this->_config->runjobs->asynchronous, FILTER_VALIDATE_BOOLEAN)));
+        $jobsAsyncEnabled = isset($this->_config->runjobs->asynchronous)
+            && filter_var($this->_config->runjobs->asynchronous, FILTER_VALIDATE_BOOLEAN);
+
+        $indexMaintenanceAsyncEnabled = isset($this->_config->runjobs->indexmaintenance->asynchronous)
+            && filter_var($this->_config->runjobs->indexmaintenance->asynchronous, FILTER_VALIDATE_BOOLEAN);
+
+        $this->_featureDisabled = ! ($indexMaintenanceAsyncEnabled || $jobsAsyncEnabled);
     }
 
     public function getFeatureDisabled()
