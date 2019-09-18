@@ -25,24 +25,14 @@
 ; @category    Application
 ; @author      Ralf Claussnitzer <ralf.claussnitzer@slub-dresden.de>
 ; @author      Thoralf Klein <thoralf.klein@zib.de>
-; @copyright   Copyright (c) 2008-2011, OPUS 4 development team
+; @author      Jens Schwidder <schwidder@zib.de>
+; @copyright   Copyright (c) 2008-2019, OPUS 4 development team
 ; @license     http://www.gnu.org/licenses/gpl.html General Public License
-; @version     $Id$
 
 ; Database adapter configuration using standard Zend_db option names.
 ; Have a look on Zend_Db::factory() method for information about adapter creation.
 
 [production]
-; db.params.host     = localhost
-; db.params.port     = 3306
-db.params.username = @db.user.name@
-db.params.password = @db.user.password@
-db.params.dbname   = @db.name@
-
-; Admin access for is used to create or rebuild the database.
-opusdb.params.admin.name = @db.admin.name@
-opusdb.params.admin.password = @db.admin.password@
-
 ;PHP SETTINGS - enable error reporting
 phpSettings.display_startup_errors = 1
 phpSettings.display_errors = 1
@@ -51,17 +41,6 @@ phpSettings.error_reporting = E_ALL | E_STRICT
 workspacePath = APPLICATION_PATH "/tests/workspace"
 path.workspace.temp = APPLICATION_PATH "/tests/workspace/tmp"
 
-;SEARCH ENGINE SETTINGS
-searchengine.solr.adapterClass = Opus\Search\Solr\Solarium\Adapter
-searchengine.solr.default.service.default.endpoint.primary.host = @searchengine.index.host@
-searchengine.solr.default.service.default.endpoint.primary.port = @searchengine.index.port@
-searchengine.solr.default.service.default.endpoint.primary.path = @searchengine.index.app@
-searchengine.solr.default.service.index.endpoint.primary.host = @searchengine.index.host@
-searchengine.solr.default.service.index.endpoint.primary.port = @searchengine.index.port@
-searchengine.solr.default.service.index.endpoint.primary.path = @searchengine.index.app@
-searchengine.solr.default.service.extract.endpoint.primary.host = @searchengine.extract.host@
-searchengine.solr.default.service.extract.endpoint.primary.port = @searchengine.extract.port@
-searchengine.solr.default.service.extract.endpoint.primary.path = @searchengine.extract.app@
 
 ;DUMMY MAIL SERVER -- Run "./scripts/opus-smtp-dumpserver.php"
 ; mail.opus.smtp = localhost
