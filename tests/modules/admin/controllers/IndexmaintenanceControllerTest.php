@@ -200,14 +200,9 @@ class Admin_IndexmaintenanceControllerTest extends ControllerTestCase
 
     private function setAsyncIndexmaintenanceMode($value)
     {
-        $config = Zend_Registry::get('Zend_Config');
-        if (isset($config->runjobs->indexmaintenance->asynchronous)) {
-            $config->runjobs->indexmaintenance->asynchronous = $value;
-        } else {
-            $config = new Zend_Config(['runjobs' => ['indexmaintenance' => ['asynchronous' => $value]]], true);
-            $config->merge(Zend_Registry::get('Zend_Config'));
-        }
-        Zend_Registry::set('Zend_Config', $config);
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'runjobs' => ['indexmaintenance' => ['asynchronous' => $value]]
+        ]));
     }
 
     public function testCheckconsistencyActionWithDisabledFeature()
