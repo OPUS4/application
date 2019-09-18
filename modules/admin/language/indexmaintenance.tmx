@@ -14,7 +14,7 @@
                 <seg>Verwaltung des Solr-Index</seg>
             </tuv>
         </tu>
-        
+
         <tu tuid="admin_indexmaintenance_index">
             <tuv xml:lang="en">
                 <seg>Solr Index Maintenance</seg>
@@ -22,9 +22,9 @@
             <tuv xml:lang="de">
                 <seg>Verwaltung des Solr-Index</seg>
             </tuv>
-        </tu>        
-        
-                
+        </tu>
+
+
         <tu tuid="admin_indexmaintenance_inprogress">
             <tuv xml:lang="en">
                 <seg>Operation is still in progress. Come back later to see results.</seg>
@@ -50,8 +50,8 @@
             <tuv xml:lang="de">
                 <seg>Die Operation ist das erste Mal zur Ausführung vermerkt. Die Ergebnisse werden angezeigt, sobald die Operation beendet wurde.</seg>
             </tuv>
-        </tu>        
-                        
+        </tu>
+
         <tu tuid="admin_indexmaintenance_error">
             <tuv xml:lang="en">
                 <seg>Could not determine processing state. This might indicate a misconfiguration issue.</seg>
@@ -59,7 +59,7 @@
             <tuv xml:lang="de">
                 <seg>Der Verarbeitungszustand der Operation konnte nicht ermittelt werden. Dies kann auf eine Fehlkonfiguration hindeuten.</seg>
             </tuv>
-        </tu>        
+        </tu>
 
         <tu tuid="admin_indexmaintenance_consistencycheck_name">
             <tuv xml:lang="en">
@@ -69,11 +69,11 @@
                 <seg>Überprüfung der Konsistenz</seg>
             </tuv>
         </tu>
-        
+
         <tu tuid="admin_indexmaintenance_consistencycheck_description">
             <tuv xml:lang="en">
                 <seg>
-                    Checks for each published document if it exists in database and search index. 
+                    Checks for each published document if it exists in database and search index.
                     Furthermore, checks if both versions agree with each other.
                     Any inconsistencies found will be resolved immediately.
                 </seg>
@@ -85,8 +85,8 @@
                 </seg>
             </tuv>
         </tu>
-        
-        
+
+
         <tu tuid="admin_indexmaintenance_fulltextextractioncheck_name">
             <tuv xml:lang="en">
                 <seg>Perform Fulltext Extraction Check</seg>
@@ -95,7 +95,7 @@
                 <seg>Überprüfung der Volltextextraktion</seg>
             </tuv>
         </tu>
-        
+
         <tu tuid="admin_indexmaintenance_fulltextextractioncheck_description">
             <tuv xml:lang="en">
                 <seg>TODO add a short description</seg>
@@ -104,8 +104,8 @@
                 <seg>TODO kurze Beschreibung hinzufügen</seg>
             </tuv>
         </tu>
-        
-        
+
+
         <tu tuid="admin_indexmaintenance_indexoptimize_name">
             <tuv xml:lang="en">
                 <seg>TODO Perform Index Optimization</seg>
@@ -151,8 +151,8 @@
                 <seg>Verarbeitungszeit</seg>
             </tuv>
         </tu>
-        
-        <tu tuid="admin_indexmaintenance_jobsumitted">
+
+        <tu tuid="admin_indexmaintenance_jobsubmitted">
             <tuv xml:lang="en">
                 <seg>Job %1s was successfully submitted to queue.</seg>
             </tuv>
@@ -160,7 +160,7 @@
                 <seg>Job %1s wurde erfolgreich in der Warteschlange abgelegt.</seg>
             </tuv>
         </tu>
-        
+
         <tu tuid="admin_indexmaintenance_disabled">
             <tuv xml:lang="en">
                 <seg>
@@ -174,7 +174,7 @@
                     Weitere Hinweise dazu finden Sie in der Dokumentation.
                 </seg>
             </tuv>
-        </tu>        
+        </tu>
 
     </body>
 
