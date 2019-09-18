@@ -654,9 +654,9 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
         // manipulate solr configuration
         $config = Zend_Registry::get('Zend_Config');
 
-        $host = $config->searchengine->solr->default->service->default->endpoint->primary->host;
-        $port = $config->searchengine->solr->default->service->default->endpoint->primary->port;
-        $config->searchengine->solr->default->service->default->endpoint->primary->path = '/solr/corethatdoesnotexist';
+        $host = $config->searchengine->solr->default->service->default->endpoint->localhost->host;
+        $port = $config->searchengine->solr->default->service->default->endpoint->localhost->port;
+        $config->searchengine->solr->default->service->default->endpoint->localhost->path = '/solr/corethatdoesnotexist';
         Zend_Registry::set('Zend_Config', $config);
 
         $this->dispatch('/solrsearch/browse/doctypes');
