@@ -39,20 +39,12 @@
 class Admin_IndexmaintenanceControllerTest extends ControllerTestCase
 {
 
+    protected $configModifiable = true;
+
     protected $additionalResources = 'all';
-
-    private $config;
-
-    public function setUp()
-    {
-        parent::setUp();
-        $this->config = Zend_Registry::get('Zend_Config');
-    }
 
     public function tearDown()
     {
-        Zend_Registry::set('Zend_Config', $this->config);
-
         // Cleanup of Log File
         $config = Zend_Registry::get('Zend_Config');
         $filename = $config->workspacePath . DIRECTORY_SEPARATOR . 'log' . DIRECTORY_SEPARATOR . 'opus_consistency-check.log';
@@ -178,14 +170,9 @@ class Admin_IndexmaintenanceControllerTest extends ControllerTestCase
 
     private function setAsyncMode($value)
     {
-        $config = Zend_Registry::get('Zend_Config');
-        if (isset($config->runjobs->asynchronous)) {
-            $config->runjobs->asynchronous = $value;
-        } else {
-            $config = new Zend_Config(['runjobs' => ['asynchronous' => $value]], true);
-            $config->merge(Zend_Registry::get('Zend_Config'));
-        }
-        Zend_Registry::set('Zend_Config', $config);
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'runjobs' => ['asynchronous' => $value]
+        ]));
     }
 
     private function enableAsyncIndexmaintenanceMode()

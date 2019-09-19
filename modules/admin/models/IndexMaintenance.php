@@ -77,10 +77,12 @@ class Admin_Model_IndexMaintenance
         $jobsAsyncEnabled = isset($this->_config->runjobs->asynchronous)
             && filter_var($this->_config->runjobs->asynchronous, FILTER_VALIDATE_BOOLEAN);
 
-        $indexMaintenanceAsyncEnabled = isset($this->_config->runjobs->indexmaintenance->asynchronous)
+        $indexMaintenanceConfigured = isset($this->_config->runjobs->indexmaintenance->asynchronous);
+        $indexMaintenanceAsyncEnabled = $indexMaintenanceConfigured
             && filter_var($this->_config->runjobs->indexmaintenance->asynchronous, FILTER_VALIDATE_BOOLEAN);
 
-        $this->_featureDisabled = ! ($indexMaintenanceAsyncEnabled || $jobsAsyncEnabled);
+        $this->_featureDisabled = ! ($indexMaintenanceAsyncEnabled ||
+            ($jobsAsyncEnabled && ! $indexMaintenanceConfigured));
     }
 
     public function getFeatureDisabled()
