@@ -79,6 +79,7 @@ php rebuild-database.php
 # Backup old fulltexts and log files and series logos
 #
 
+function fulltextBackup(){
 TEMP_DIR=$(mktemp -d $workspace_tmp_dir/old-XXXXXXX)
 mkdir -v "$TEMP_DIR"/{files,log}
 
@@ -131,11 +132,13 @@ else
     rsync -r $fulltext_dir/ $workspace_files_dir
     rsync -r $fulltext_dir/ $workspace_test_dir/files
 fi
-
+}
 
 #
 # Restore log files
 #
+
+function restore() {
 if [ ! -d ${workspace_log_dir} ] ; then
    mkdir -p ${workspace_log_dir}
 fi
@@ -152,4 +155,23 @@ if [[ $VERBOSE -eq 1 ]] ; then
     rsync -rv --exclude=.svn $test_series_logos_dir/ $series_logos_dir
 else
     rsync -r --exclude=.svn $test_series_logos_dir/ $series_logos_dir
+fi
+
+}
+
+#
+# to get a backup type in comman line: $ backup=1 ./rebuilding_database.sh
+#
+
+if [ ! -z $backup ]
+then
+{
+    fulltextBackup
+}
+
+else [ -z $backup ]
+{
+    restore
+}
+
 fi
