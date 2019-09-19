@@ -79,7 +79,8 @@ php rebuild-database.php
 # Backup old fulltexts and log files and series logos
 #
 
-function fulltextBackup(){
+function fulltextBackup()
+{
 TEMP_DIR=$(mktemp -d $workspace_tmp_dir/old-XXXXXXX)
 mkdir -v "$TEMP_DIR"/{files,log}
 
@@ -138,7 +139,8 @@ fi
 # Restore log files
 #
 
-function restore() {
+function restoreLogFiles()
+{
 if [ ! -d ${workspace_log_dir} ] ; then
    mkdir -p ${workspace_log_dir}
 fi
@@ -160,7 +162,7 @@ fi
 }
 
 #
-# to get a backup type in comman line: $ backup=1 ./rebuilding_database.sh
+# to get a backup from old full texts type in command line: $ backup=1 ./rebuilding_database.sh
 #
 
 if [ ! -z $backup ]
@@ -171,7 +173,7 @@ then
 
 else [ -z $backup ]
 {
-    restore
+    restoreLogFiles
 }
 
 fi
