@@ -194,7 +194,7 @@ class Solrsearch_Form_AdvancedSearch extends Application_Form_Abstract {
         ));
 
         if ($name === 'fulltext') {
-            $modifier->removeMultiOption(Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ANY);
+            $modifier->removeMultiOption(Opus_Search_Util_Query::SEARCH_MODIFIER_CONTAINS_ANY);
         }
         $this->addElement($modifier);
 

@@ -86,7 +86,7 @@ class Admin_Form_Document_PersonAddTest extends ControllerTestCase {
         
         $logger = new MockLogger();
         
-        $form->setLog($logger);
+        $form->setLogger($logger);
         $form->setSelectedRole('unknown');
         
         $this->assertEquals('author', $form->getSubForm('Document')->getElement('Role')->getValue());

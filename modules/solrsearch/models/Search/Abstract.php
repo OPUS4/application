@@ -53,7 +53,7 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
      * Maximum number of rows for search.
      * @var int
      */
-    private $_maxRows = Opus_SolrSearch_Query::MAX_ROWS;
+    private $_maxRows = Opus_Search_Util_Query::MAX_ROWS;
 
     /**
      *
@@ -137,7 +137,7 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
         foreach ($this->_searchFields as $searchField) {
             $input[$searchField] = $request->getParam($searchField, '');
             $input[$searchField . 'modifier'] = $request->getParam(
-                $searchField . 'modifier', Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL
+                $searchField . 'modifier', Opus_Search_Util_Query::SEARCH_MODIFIER_CONTAINS_ALL
             );
         }
 
@@ -447,7 +447,7 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
         $resultList = null;
 
         try {
-            $searcher = new Opus_SolrSearch_Searcher();
+            $searcher = new Opus_Search_Util_Searcher();
 
             if (!is_null($openFacets))
             {
@@ -456,7 +456,7 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
 
             $resultList = $searcher->search($query);
         }
-        catch (Opus_SolrSearch_Exception $e)
+        catch (Opus_Search_Exception $e)
         {
             $this->getLogger()->err(__METHOD__ . ' : ' . $e);
             throw new Application_SearchException($e);

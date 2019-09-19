@@ -126,10 +126,10 @@ class Home_IndexControllerTest extends ControllerTestCase {
     }
 
     private function getDocsInSearchIndex($checkConsistency = true) {
-        $searcher = new Opus_SolrSearch_Searcher();
-        $query = new Opus_SolrSearch_Query();
+        $searcher = new Opus_Search_Util_Searcher();
+        $query = new Opus_Search_Util_Query();
         $query->setCatchAll("*:*");
-        $query->setRows(Opus_SolrSearch_Query::MAX_ROWS);
+        $query->setRows(Opus_Search_Util_Query::MAX_ROWS);
         $resultList = $searcher->search($query, $checkConsistency);
         return $resultList;
     }

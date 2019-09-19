@@ -28,26 +28,22 @@
  * @package     Application
  * @author      Jens Schwidder <schwidder@zib.de>
  * @author      Michael Lang   <lang@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
  * Klasse für das Laden von Übersetzungsressourcen.
  */
-class Application_Configuration {
+class Application_Configuration
+{
+
+    use \Opus\LoggingTrait;
 
     /**
      * Defaultsprache.
      */
     const DEFAULT_LANGUAGE = 'en';
-
-    /**
-     * Logger.
-     * @var Zend_Log
-     */
-    private $_logger = null;
 
     /**
      * Unterstützte Sprachen.
@@ -86,25 +82,6 @@ class Application_Configuration {
         }
 
         return self::$_instance;
-    }
-
-    /**
-     * Liefert den Logger für diese Klasse.
-     * @return Zend_Log
-     */
-    public function getLogger() {
-        if (is_null($this->_logger)) {
-            $this->_logger = Zend_Registry::get('Zend_Log');
-        }
-
-        return $this->_logger;
-    }
-
-    /**
-     * Setzt den Logger für diese Klasse.
-     */
-    public function setLogger($logger) {
-        $this->_logger = $logger;
     }
 
     /**
@@ -368,5 +345,4 @@ class Application_Configuration {
     {
         return Zend_Registry::get('Zend_Translate');
     }
-
 }

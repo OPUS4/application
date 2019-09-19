@@ -98,7 +98,7 @@ class Admin_Form_PersonLink extends Admin_Form_AbstractDocumentSubForm {
             $this->_model = $personLink;
         }
         else {
-            $this->getLog()->err(__METHOD__ . self::BAD_MODEL_MESSAGE);
+            $this->getLogger()->err(__METHOD__ . self::BAD_MODEL_MESSAGE);
         }
     }
    
@@ -113,7 +113,7 @@ class Admin_Form_PersonLink extends Admin_Form_AbstractDocumentSubForm {
             $personLink->setRole($this->getElementValue(self::ELEMENT_ROLE));
         }
         else {
-            $this->getLog()->err(__METHOD__ . self::BAD_MODEL_MESSAGE);
+            $this->getLogger()->err(__METHOD__ . self::BAD_MODEL_MESSAGE);
         }
     }
     

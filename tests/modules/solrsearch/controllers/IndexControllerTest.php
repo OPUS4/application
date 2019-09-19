@@ -652,10 +652,25 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
         }
     }
 
+    public function catchAllSearchConsidersAllPersonsProvider()
+    {
+        return [
+            ['personauthor-opusvier-2484', 'author', true],
+            ['personadvisor-opusvier-2484', 'advisor', true],
+            ['personcontributor-opusvier-2484', 'contributor', true],
+            ['personeditor-opusvier-2484', 'editor', true],
+            ['personreferee-opusvier-2484', 'referee', true],
+            ['personother-opusvier-2484', 'other', true],
+            ['persontranslator-opusvier-2484', 'translator', true],
+            ['personsubmitter-opusvier-2484', 'submitter', false]
+        ];
+    }
+
     /**
      * test for OPUSVIER-2484 and regression test for OPUSVIER-2539
+     * @dataProvider catchAllSearchConsidersAllPersonsProvider
      */
-    public function testCatchAllSearchConsidersAllPersons() {
+    public function testCatchAllSearchConsidersAllPersons($lastName, $role, $contains) {
         $this->requireSolrConfig();
 
         // create a test doc with all available person types
@@ -668,66 +683,23 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
         $doc->setTitleMain($title);
 
         $person = new Opus_Person();
-        $person->setLastName('personauthor-opusvier-2484');
-        $doc->addPersonAuthor($person);
+        $person->setLastName($lastName);
+        $personLink = $doc->addPerson($person);
+        $personLink->setRole($role);
 
-        $person = new Opus_Person();
-        $person->setLastName('personadvisor-opusvier-2484');
-        $doc->addPersonAdvisor($person);
+        $docId = $doc->store();
 
-        $person = new Opus_Person();
-        $person->setLastName('personcontributor-opusvier-2484');
-        $doc->addPersonContributor($person);
-
-        $person = new Opus_Person();
-        $person->setLastName('personeditor-opusvier-2484');
-        $doc->addPersonEditor($person);
-
-        $person = new Opus_Person();
-        $person->setLastName('personreferee-opusvier-2484');
-        $doc->addPersonReferee($person);
-
-        $person = new Opus_Person();
-        $person->setLastName('personother-opusvier-2484');
-        $doc->addPersonOther($person);
-
-        $person = new Opus_Person();
-        $person->setLastName('persontranslator-opusvier-2484');
-        $doc->addPersonTranslator($person);
-
-        // nach Submitter kann nicht gesucht werden
-        $person = new Opus_Person();
-        $person->setLastName('personsubmitter-opusvier-2484');
-        $doc->addPersonSubmitter($person);
-
-        $doc->store();
-
-        // search for document based on persons
-        $persons = array(
-            'personauthor-opusvier-2484',
-            'personadvisor-opusvier-2484',
-            'personcontributor-opusvier-2484',
-            'personeditor-opusvier-2484',
-            'personreferee-opusvier-2484',
-            'personother-opusvier-2484',
-            'persontranslator-opusvier-2484',
-        );
-        foreach ($persons as $person) {
-            $this->dispatch('/solrsearch/index/search/searchtype/simple/query/' . $person);
-
-            $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());
-            $this->assertContains('test document for OPUSVIER-2484', $this->getResponse()->getBody());
-            $this->assertContains($person, $this->getResponse()->getBody());
-
-            $this->getResponse()->clearAllHeaders();
-            $this->getResponse()->clearBody();
-        }
-
-        $this->dispatch('/solrsearch/index/search/searchtype/simple/query/personsubmitter-opusvier-2484');
+        $this->dispatch("/solrsearch/index/search/searchtype/simple/query/$lastName");
 
         $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());
-        // search should not return the test document
-        $this->assertNotContains('test document for OPUSVIER-2484', $this->getResponse()->getBody());
+
+        if ($contains) {
+            $this->assertContains('test document for OPUSVIER-2484', $this->getResponse()->getBody());
+            $this->assertContains($lastName, $this->getResponse()->getBody());
+        }
+        else {
+            $this->assertNotContains('test document for OPUSVIER-2484', $this->getResponse()->getBody());
+        }
     }
 
     public function testFacetLimitWithDefaultSetting() {

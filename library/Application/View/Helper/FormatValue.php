@@ -27,9 +27,8 @@
  * @category    Application
  * @package     View
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -40,13 +39,10 @@
  * TODO Explore options to remove overlap with ShowModel view helper
  *      (ShowModel combines value formatting and layout).
  */
-class Application_View_Helper_FormatValue extends Zend_View_Helper_Abstract {
+class Application_View_Helper_FormatValue extends Zend_View_Helper_Abstract
+{
 
-    /**
-     * Logger for this class.
-     * @var Zend_Log Logger
-     */
-    private $_logger;
+    use \Opus\LoggingTrait;
 
     /**
      * Controller helper for translations.
@@ -177,18 +173,4 @@ class Application_View_Helper_FormatValue extends Zend_View_Helper_Abstract {
             return $value;
         }
     }
-
-    /**
-     * Returns logger.
-     * @return Zend_Log
-     */
-    private function getLogger() {
-        if (empty($this->logger)) {
-            $this->_logger = Zend_Registry::get('Zend_Log');
-        }
-
-        return $this->_logger;
-    }
-
 }
-

@@ -27,9 +27,8 @@
  * @category    Application
  * @package     Application
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -39,7 +38,10 @@
  * gespeichert. Mit den Erweiterungen können an beliebigen Stellen problemlos weitere Übersetzungsdateien geladen
  * werden.
  */
-class Application_Translate extends Zend_Translate {
+class Application_Translate extends Zend_Translate
+{
+
+    use \Opus\LoggingTrait;
 
     /**
      * Schlüssel für Zend_Translate in Zend_Registry.
@@ -51,13 +53,7 @@ class Application_Translate extends Zend_Translate {
      * @var array
      */
     private $_loadedModules = array();
-    
-    /**
-     * Logger.
-     * @var Zend_Log
-     */
-    private $_logger;
-    
+
     /**
      * Optionen für Zend_Translate.
      *
@@ -144,26 +140,7 @@ class Application_Translate extends Zend_Translate {
         
         return true;
     }
-    
-    /**
-     * Liefert den Logger für diese Klasse.
-     * @return Zend_Log
-     */
-    public function getLogger() {
-        if (is_null($this->_logger)) {
-            $this->_logger = Zend_Registry::get('Zend_Log');
-        }
 
-        return $this->_logger;
-    }
-
-    /**
-     * Setzt den Logger für diese Klasse.
-     */
-    public function setLogger($logger) {
-        $this->_logger = $logger;
-    }
-    
     /**
      * Liefert die Optionen für Zend_Translate.
      * @return array

@@ -175,7 +175,7 @@ class Admin_Form_Document_Persons extends Admin_Form_AbstractDocumentSubForm {
                     );
                 }
                 else {
-                    $this->getLog()->err(__METHOD__ . ' Attempt to add person without ID.');
+                    $this->getLogger()->err(__METHOD__ . ' Attempt to add person without ID.');
                 }
             }
         }      

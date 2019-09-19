@@ -309,7 +309,7 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract {
      */
     public function getMaxRows()
     {
-        $maxRows = Opus_SolrSearch_Query::MAX_ROWS;
+        $maxRows = Opus_Search_Util_Query::MAX_ROWS;
 
         $config = $this->getConfig();
 
@@ -358,7 +358,7 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract {
 
     /**
      * Sets up an xml document out of the result list.
-     * @param array $results An array of Opus_SolrSearch_Result objects.
+     * @param array $results An array of Opus_Search_Util_Result objects.
      */
     private function handleResults($results, $numOfHits) {
         $proc = $this->_proc;
@@ -393,7 +393,7 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract {
     /**
      * Returns result for ID search of a single document.
      * @param $request HTTP request object
-     * @return Opus_SolrSearch_ResultList
+     * @return Opus_Search_Util_ResultList
      */
     private function buildResultListForIdSearch($request) {
         $docId = $request->getParam('docId');
@@ -411,7 +411,7 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract {
         catch (Exception $e) {
             // do nothing; return result with empty array
         }
-        return new Opus_SolrSearch_ResultList($result);
+        return new Opus_Search_Util_ResultList($result);
     }
 
     /**

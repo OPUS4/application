@@ -363,7 +363,7 @@ class Admin_Form_Document_PersonRole extends Admin_Form_Document_MultiSubForm {
      */
     public function addPerson($personProps) {
         if (!array_key_exists('person', $personProps)) {
-            $this->getLog()->err(__METHOD__ . " Attempt to add person without ID.");
+            $this->getLogger()->err(__METHOD__ . " Attempt to add person without ID.");
             return;
         }
         

@@ -56,7 +56,7 @@ class Admin_Form_InfoBoxTest extends ControllerTestCase {
         $form = new Admin_Form_InfoBox();
         
         $logger = new MockLogger();
-        $form->setLog($logger);
+        $form->setLogger($logger);
         
         $form->populateFromModel(null);
         
@@ -90,7 +90,7 @@ class Admin_Form_InfoBoxTest extends ControllerTestCase {
         $form = new Admin_Form_InfoBox();
         
         $logger = new MockLogger();
-        $form->setLog($logger);
+        $form->setLogger($logger);
         
         $form->constructFromPost(array(), null);
         

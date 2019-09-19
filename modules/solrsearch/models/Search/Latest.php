@@ -56,7 +56,7 @@ class Solrsearch_Model_Search_Latest extends Solrsearch_Model_Search_Basic
     public function createSearchQuery($input) {
         $this->getLogger()->debug("Constructing query for latest search.");
 
-        $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::LATEST_DOCS);
+        $query = new Opus_Search_Util_Query(Opus_Search_Util_Query::LATEST_DOCS);
         $query->setRows($input['rows']);
         $query->setStart($input['start']);
 

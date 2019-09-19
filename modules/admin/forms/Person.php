@@ -231,7 +231,7 @@ class Admin_Form_Person extends Admin_Form_AbstractDocumentSubForm {
             $model->setDateOfBirth($datesHelper->getOpusDate($this->getElementValue(self::ELEMENT_DATE_OF_BIRTH)));
         }
         else {
-            $this->getLog()->err(__METHOD__ . ' called with object that is not instance of Opus_Person');
+            $this->getLogger()->err(__METHOD__ . ' called with object that is not instance of Opus_Person');
         }
     }
 

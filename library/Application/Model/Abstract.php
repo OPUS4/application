@@ -31,43 +31,19 @@
  * @category    Application
  * @package     Application_Model
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-abstract class Application_Model_Abstract {
+abstract class Application_Model_Abstract
+{
 
-    /**
-     * Logger for this class.
-     * @var Zend_Log
-     */
-    private $_logger;
+    use \Opus\LoggingTrait;
 
     /**
      * Configuration for application.
      * @var Zend_Config
      */
     private $_config;
-
-    /**
-     * Set logger for this class.
-     * @param Zend_Log $logger
-     */
-    public function setLogger($logger) {
-        $this->_logger = $logger;
-    }
-
-    /**
-     * Returns logger for this class.
-     * @return Zend_Log
-     */
-    public function getLogger() {
-        if (is_null($this->_logger)) {
-            $this->_logger = Zend_Registry::get('Zend_Log');
-        }
-
-        return $this->_logger;
-    }
 
     /**
      * Sets configuration.
@@ -88,5 +64,4 @@ abstract class Application_Model_Abstract {
         }
         return $this->_config;
     }
-
 }

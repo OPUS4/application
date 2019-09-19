@@ -401,7 +401,7 @@ class Frontdoor_IndexController extends Application_Controller_Action {
 
             // TODO fix usage of search code - should be identical to search/export/rss - except just 1 row
 
-            $searcher = new Opus_SolrSearch_Searcher();
+            $searcher = new Opus_Search_Util_Searcher();
 
             $resultList = $searcher->search($query);
 

@@ -33,6 +33,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use \Opus\Search\Util\Indexer;
+
 /**
  * Class Export_IndexControllerTest.
  *
@@ -264,9 +266,9 @@ class Export_IndexControllerTest extends ControllerTestCase
         $doc2->store();
         $docId2 = $doc2->getId();
 
-        $indexer = new Opus_SolrSearch_Index_Indexer();
+        $indexer = new Indexer();
 
-        $class = new ReflectionClass('Opus_SolrSearch_Index_Indexer');
+        $class = new ReflectionClass('\Opus\Search\Util\Indexer');
         $methodGetSolrXmlDocument = $class->getMethod('getSolrXmlDocument');
         $methodGetSolrXmlDocument->setAccessible(true);
         $solrXml = $methodGetSolrXmlDocument->invoke($indexer, $doc2);

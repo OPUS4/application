@@ -71,7 +71,7 @@ class Solrsearch_Model_Search_Series extends Solrsearch_Model_Search_Abstract
     public function createSearchQuery($input) {
         $this->getLogger()->debug("Constructing query for series search.");
 
-        $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::SIMPLE);
+        $query = new Opus_Search_Util_Query(Opus_Search_Util_Query::SIMPLE);
         $query->setStart($input['start']);
         $query->setRows($input['rows']);
         if ($input['sortField'] === 'seriesnumber'

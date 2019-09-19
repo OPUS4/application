@@ -28,19 +28,21 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @author      Thoralf Klein <thoralf.klein@zib.de>
  * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
  * Base class for controller tests.
  */
-class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
+class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase
+{
+
+    use \Opus\LoggingTrait;
 
     private $securityEnabled;
     private $testDocuments;
     private $testFiles;
-    private $logger = null;
 
     const MESSAGE_LEVEL_NOTICE = 'notice';
     const MESSAGE_LEVEL_FAILURE = 'failure';
@@ -657,14 +659,6 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
         $this->assertTrue(Zend_Registry::isRegistered('Opus_Acl'), 'Expected registry key Opus_Acl to be set');
         $acl = Zend_Registry::get('Opus_Acl');
         $this->assertTrue($acl instanceof Zend_Acl, 'Expected instance of Zend_Acl');
-    }
-
-    public function getLogger() {
-        if (is_null($this->logger)) {
-            $this->logger = Zend_Registry::get('Zend_Log');
-        }
-
-        return $this->logger;
     }
 
     public function resetSearch() {
