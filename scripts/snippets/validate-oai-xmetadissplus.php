@@ -47,7 +47,7 @@ if (!isset($options['source']) || empty($options['schema-cache'])) {
 }
 
 
-libxml_use_internal_errors(true);
+$useInternalErrors = libxml_use_internal_errors(true);
 
 $sourceXml = file_get_contents($options['source']);
 $sourceDocument = new DOMDocument();
@@ -85,6 +85,7 @@ if (!is_file($schemaFile)) {
 $metadataDocument->schemaValidate($options['schema-cache'] . '/xmetadissplus.xsd');
 printXmlErrors($sourceXml);
 
+libxml_use_internal_errors($useInternalErrors);
 //}
 
 function printXmlErrors($xml) {
