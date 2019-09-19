@@ -60,6 +60,15 @@ export.stylesheet.frontdoor = example
 log.level = DEBUG
 log.untranslated = true
 
+; TODO really necessary - slim down configuration here
+oai.baseurl =
+oai.repository.name =
+oai.repository.identifier =
+oai.sample.identifier =
+
+; needed for at least one test
+urn.autoCreate = 1
+
 [testing : production]
 security = 0
 sql.schema.path =

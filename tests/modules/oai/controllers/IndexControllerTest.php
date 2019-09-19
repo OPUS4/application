@@ -2783,6 +2783,9 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $this->assertNotXpathContentContains('//marc:datafield[@tag="856"]/marc:subfield[@code="z"]', $licencePresent->getNameLong());
     }
 
+    /**
+     * TODO test depends on urn.autoCreate being enabled
+     */
     public function testGenerationOfField856With2VisibleInOaiFiles()
     {
         $doc = $this->createTestDocument();
