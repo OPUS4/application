@@ -63,7 +63,6 @@ class Application_Import_XmlValidation extends Application_Model_Abstract {
         $this->errors = libxml_get_errors();
         libxml_use_internal_errors($useInternalErrors);
         libxml_clear_errors();
-
         return $valid;
     }
 
@@ -83,6 +82,7 @@ class Application_Import_XmlValidation extends Application_Model_Abstract {
 
         libxml_use_internal_errors($useInternal_Errors);
         libxml_clear_errors();
+
         return $doc;
     }
     
