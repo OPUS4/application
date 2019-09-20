@@ -56,14 +56,13 @@ class Application_Import_XmlValidation extends Application_Model_Abstract {
         }
 
         libxml_clear_errors();
-        libxml_use_internal_errors(true);
+        $useInternalErrors = libxml_use_internal_errors(true);
 
         $valid = $xml->schemaValidate(__DIR__ . DIRECTORY_SEPARATOR . 'opus-import.xsd');        
 
-        $this->errors = libxml_get_errors();                
+        $this->errors = libxml_get_errors();
+        libxml_use_internal_errors($useInternalErrors);
         libxml_clear_errors();
-        libxml_use_internal_errors(false);
-
         return $valid;
     }
 
@@ -73,7 +72,7 @@ class Application_Import_XmlValidation extends Application_Model_Abstract {
 
     private function getDocument($xml) {
         libxml_clear_errors();
-        libxml_use_internal_errors(true);
+        $useInternal_Errors = libxml_use_internal_errors(true);
 
         $doc = new DOMDocument();
 
@@ -81,7 +80,7 @@ class Application_Import_XmlValidation extends Application_Model_Abstract {
 
         // TODO error processing
 
-        libxml_use_internal_errors(false);
+        libxml_use_internal_errors($useInternal_Errors);
         libxml_clear_errors();
 
         return $doc;
