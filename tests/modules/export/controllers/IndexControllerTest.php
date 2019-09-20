@@ -33,6 +33,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Search\Service;
 use \Opus\Search\Util\Indexer;
 
 /**
@@ -272,12 +273,8 @@ class Export_IndexControllerTest extends ControllerTestCase
         $doc2->store();
         $docId2 = $doc2->getId();
 
-        $indexer = new Indexer();
-
-        $class = new ReflectionClass('\Opus\Search\Util\Indexer');
-        $methodGetSolrXmlDocument = $class->getMethod('getSolrXmlDocument');
-        $methodGetSolrXmlDocument->setAccessible(true);
-        $solrXml = $methodGetSolrXmlDocument->invoke($indexer, $doc2);
+        $indexer = Service::selectIndexingService();
+        $solrXml = $indexer->toSolrDocument($doc2);
 
         // delete document from database
         $doc2->deletePermanent();
