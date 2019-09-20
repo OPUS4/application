@@ -321,7 +321,7 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
         }
 
         libxml_clear_errors();
-        libxml_use_internal_errors(true);
+        $useInternalErrors = libxml_use_internal_errors(true);
 
         $dom = new DOMDocument();
 
@@ -394,7 +394,7 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
         $this->assertEquals(0, count($errors), 'XHTML Schemaverletzungen gefunden (' . count($errors) . ')' . PHP_EOL
                 . $output);
 
-        libxml_use_internal_errors(false);
+        libxml_use_internal_errors($useInternalErrors);
         libxml_clear_errors();
     }
 

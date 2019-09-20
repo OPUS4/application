@@ -237,7 +237,7 @@ class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerT
 
         // Enable user error handling while validating input file
         libxml_clear_errors();
-        libxml_use_internal_errors(true);
+        $useInternalErrors = libxml_use_internal_errors(true);
 
         foreach ($iterator as $fileinfo) {
             if ($fileinfo->isFile()) {
@@ -253,7 +253,7 @@ class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerT
                 }
             }
         }
-
+        libxml_use_internal_errors($useInternalErrors);
         libxml_clear_errors();
     }
 
