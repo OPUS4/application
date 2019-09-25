@@ -639,7 +639,7 @@ class Admin_Form_Document_PersonRoleTest extends ControllerTestCase
 
         $logger = new MockLogger();
 
-        $form->setLog($logger);
+        $form->setLogger($logger);
 
         $form->addPerson([]);
 

@@ -378,4 +378,9 @@ class Application_Bootstrap extends Opus_Bootstrap_Base
 
         return $exporter;
     }
+
+    protected function _initIndexPlugin()
+    {
+        \Opus_Model_Xml_Cache::setIndexPluginClass('Opus\Search\Plugin\Index');
+    }
 }

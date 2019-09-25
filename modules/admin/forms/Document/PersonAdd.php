@@ -27,9 +27,8 @@
  * @category    Application
  * @package     Module_Admin
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2013-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -116,7 +115,7 @@ class Admin_Form_Document_PersonAdd extends Admin_Form_Person
     public function setSelectedRole($role)
     {
         if (! in_array($role, Admin_Form_Document_Persons::getRoles())) {
-            $this->getLog()->err(__METHOD__ . " Called with unknown role '$role'.");
+            $this->getLogger()->err(__METHOD__ . " Called with unknown role '$role'.");
             $role = 'author';
         }
 

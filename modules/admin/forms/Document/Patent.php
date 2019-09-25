@@ -160,7 +160,7 @@ class Admin_Form_Document_Patent extends Admin_Form_AbstractModelSubForm
             $patent = new Opus_Patent($patentId);
         } catch (Opus_Model_NotFoundException $omnfe) {
             // kann eigentlich nur bei manipuliertem POST passieren
-            $this->getLog()->err($omnfe);
+            $this->getLogger()->err($omnfe);
             // bei ungültiger ID wird Patentwie neu hinzugefügt behandelt
             $patent = new Opus_Patent();
         }

@@ -27,9 +27,8 @@
  * @category    Application
  * @package     Module_Admin
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2013-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -75,7 +74,7 @@ class Admin_Form_InfoBox extends Admin_Form_AbstractDocumentSubForm
             $this->_document = $document;
         } else {
             $objclass = ($document !== null) ? get_class($document) : 'null';
-            $this->getLog()->err(__METHOD__ . " Called with instance of '$objclass'.");
+            $this->getLogger()->err(__METHOD__ . " Called with instance of '$objclass'.");
         }
     }
 
@@ -90,7 +89,7 @@ class Admin_Form_InfoBox extends Admin_Form_AbstractDocumentSubForm
             $this->_document = $document;
         } else {
             $objclass = ($document !== null) ? get_class($document) : 'null';
-            $this->getLog()->err(__METHOD__ . " Called with instance of '$objclass'.");
+            $this->getLogger()->err(__METHOD__ . " Called with instance of '$objclass'.");
         }
     }
 

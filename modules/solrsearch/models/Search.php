@@ -27,7 +27,7 @@
  * @category    Application
  * @package     Solrsearch_Model
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -70,7 +70,7 @@ class Solrsearch_Model_Search extends Application_Model_Abstract
                 $params[$fieldname] = $fieldvalue;
                 $params[$fieldname . 'modifier'] = $request->getParam(
                     $fieldname . 'modifier',
-                    Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL
+                    Opus\Search\Util\Query::SEARCH_MODIFIER_CONTAINS_ALL
                 );
             }
         }
@@ -81,7 +81,7 @@ class Solrsearch_Model_Search extends Application_Model_Abstract
     {
         return [
             'start' => $request->getParam('start', '0'),
-            'rows' => $request->getParam('rows', Opus_SolrSearch_Query::getDefaultRows()),
+            'rows' => $request->getParam('rows', Opus\Search\Util\Query::getDefaultRows()),
             'sortfield' => $request->getParam('sortfield', 'score'),
             'sortorder' => $request->getParam('sortorder', 'desc')
         ];

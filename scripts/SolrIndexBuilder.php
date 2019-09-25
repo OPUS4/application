@@ -190,7 +190,7 @@ EOT;
         try {
             $runtime = $this->index($this->_start, $this->_end);
             echo PHP_EOL . "Operation completed successfully in $runtime seconds." . PHP_EOL;
-        } catch (Opus_Search_Exception $e) {
+        } catch (Opus\Search\Exception $e) {
             echo PHP_EOL . "An error occurred while indexing.";
             echo PHP_EOL . "Error Message: " . $e->getMessage();
             if (! is_null($e->getPrevious())) {
@@ -207,7 +207,7 @@ EOT;
 
         $docIds = $this->getDocumentIds($startId, $endId);
 
-        $indexer = Opus_Search_Service::selectIndexingService('indexBuilder');
+        $indexer = Opus\Search\Service::selectIndexingService('indexBuilder');
 
         if ($this->_deleteAllDocs) {
             echo 'Removing all documents from the index ...' . PHP_EOL;
@@ -228,7 +228,7 @@ EOT;
             $timeStart = microtime(true);
 
             if ($this->_clearCache) {
-                $cache->removeAllEntriesWhereDocumentId($docId);
+                $cache->remove($docId);
             }
 
             $doc = new Opus_Document($docId);
@@ -315,7 +315,7 @@ EOT;
     {
         try {
             $indexer->addDocumentsToIndex($docs);
-        } catch (Opus_Search_Exception $e) {
+        } catch (Opus\Search\Exception $e) {
             // echo date('Y-m-d H:i:s') . " ERROR: Failed indexing document $docId.\n";
             echo date('Y-m-d H:i:s') . "        {$e->getMessage()}\n";
         } catch (Opus_Storage_Exception $e) {

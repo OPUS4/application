@@ -28,9 +28,8 @@
  * @package     Module_Admin
  * @author      Jens Schwidder <schwidder@zib.de>
  * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -244,7 +243,7 @@ class Admin_Form_Person extends Admin_Form_AbstractDocumentSubForm
             $datesHelper = $this->getDatesHelper();
             $model->setDateOfBirth($datesHelper->getOpusDate($this->getElementValue(self::ELEMENT_DATE_OF_BIRTH)));
         } else {
-            $this->getLog()->err(__METHOD__ . ' called with object that is not instance of Opus_Person');
+            $this->getLogger()->err(__METHOD__ . ' called with object that is not instance of Opus_Person');
         }
     }
 

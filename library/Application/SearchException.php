@@ -37,7 +37,7 @@ class Application_SearchException extends Application_Exception
 
     /**
      *
-     * @param Opus_SolrSearch_Exception $exception
+     * @param Opus\Search\Exception $exception
      * @param boolean $usePlainMessage set to true if exception message should not be translated
      */
     public function __construct($exception, $usePlainMessage = false)

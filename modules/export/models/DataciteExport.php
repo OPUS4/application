@@ -57,7 +57,7 @@ class Export_Model_DataciteExport extends Application_Export_ExportPluginAbstrac
 
         try {
             $document = new Opus_Document($docId);
-        } catch (Opus_Model_Exception $e) {
+        } catch (Opus\Model\Exception $e) {
             throw new Application_Exception('could not retrieve document with given ID from OPUS database');
         }
 

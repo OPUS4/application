@@ -27,7 +27,7 @@
  * @category    Application
  * @package     Solrsearch_Model_Search
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2017-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -53,7 +53,7 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
      * Maximum number of rows for search.
      * @var int
      */
-    private $_maxRows = Opus_SolrSearch_Query::MAX_ROWS;
+    private $_maxRows = Opus\Search\Util\Query::MAX_ROWS;
 
     /**
      *
@@ -65,7 +65,7 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
 
         $this->_filterFields = [];
 
-        $filters = Opus_Search_Config::getFacetFields();
+        $filters = Opus\Search\Config::getFacetFields();
         if (! count($filters)) {
             $logger->debug('key searchengine.solr.facets is not present in config. skipping filter queries');
         } else {
@@ -98,15 +98,15 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
         if ($request->getParam('sortfield')) {
             $sorting = [ $request->getParam('sortfield'), 'asc' ];
         } else {
-            $sorting = Opus_Search_Query::getDefaultSorting();
+            $sorting = Opus\Search\Query::getDefaultSorting();
         }
 
         $searchType = $this->getSearchType();
 
         $input = [
             'searchtype' => $searchType,
-            'start' => $request->getParam('start', Opus_Search_Query::getDefaultStart()),
-            'rows' => $request->getParam('rows', Opus_Search_Query::getDefaultRows()),
+            'start' => $request->getParam('start', Opus\Search\Query::getDefaultStart()),
+            'rows' => $request->getParam('rows', Opus\Search\Query::getDefaultRows()),
             'sortField' => $sorting[0],
             'sortOrder' => $request->getParam('sortorder', $sorting[1]),
             'docId' => $request->getParam('docId'),
@@ -138,7 +138,7 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
             $input[$searchField] = $request->getParam($searchField, '');
             $input[$searchField . 'modifier'] = $request->getParam(
                 $searchField . 'modifier',
-                Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL
+                Opus\Search\Util\Query::SEARCH_MODIFIER_CONTAINS_ALL
             );
         }
 
@@ -444,14 +444,14 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
         $resultList = null;
 
         try {
-            $searcher = new Opus_SolrSearch_Searcher();
+            $searcher = new Opus\Search\Util\Searcher();
 
             if (! is_null($openFacets)) {
                 $searcher->setFacetArray($openFacets);
             }
 
             $resultList = $searcher->search($query);
-        } catch (Opus_SolrSearch_Exception $e) {
+        } catch (Opus\Search\Exception $e) {
             $this->getLogger()->err(__METHOD__ . ' : ' . $e);
             throw new Application_SearchException($e);
         }

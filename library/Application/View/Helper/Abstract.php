@@ -27,7 +27,7 @@
  * @category    Application
  * @package     Application_View_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -37,33 +37,7 @@
 class Application_View_Helper_Abstract extends Zend_View_Helper_Abstract
 {
 
-    /**
-     * Logger for class.
-     * @var Zend_Log
-     */
-    private $_logger;
-
-    /**
-     * Return logger for class.
-     * @return null|Zend_Log
-     * @throws Zend_Exception
-     */
-    public function getLogger()
-    {
-        if (is_null($this->_logger)) {
-            $this->_logger = Zend_Registry::get('Zend_Log');
-        }
-        return $this->_logger;
-    }
-
-    /**
-     * Set logger for class.
-     * @param $logger
-     */
-    public function setLogger($logger)
-    {
-        $this->_logger = $logger;
-    }
+    use \Opus\LoggingTrait;
 
     /**
      * Return configuration of application.

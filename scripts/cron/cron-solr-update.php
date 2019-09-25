@@ -47,7 +47,7 @@ $jobrunner->setDelay(0);
 // set a limit of 100 index jobs per run
 $jobrunner->setLimit(100);
 
-$indexWorker = new Opus_Job_Worker_IndexOpusDocument;
+$indexWorker = new Opus\Search\Task\IndexOpusDocument;
 $jobrunner->registerWorker($indexWorker);
 
 // run processing

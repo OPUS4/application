@@ -47,6 +47,8 @@
 class Application_Translate extends Zend_Translate
 {
 
+    use \Opus\LoggingTrait;
+
     /**
      * Schlüssel für Zend_Translate in Zend_Registry.
      */
@@ -195,27 +197,6 @@ class Application_Translate extends Zend_Translate
         }
 
         return true;
-    }
-
-    /**
-     * Liefert den Logger für diese Klasse.
-     * @return Zend_Log
-     */
-    public function getLogger()
-    {
-        if (is_null($this->_logger)) {
-            $this->_logger = Zend_Registry::get('Zend_Log');
-        }
-
-        return $this->_logger;
-    }
-
-    /**
-     * Setzt den Logger für diese Klasse.
-     */
-    public function setLogger($logger)
-    {
-        $this->_logger = $logger;
     }
 
     /**

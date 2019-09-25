@@ -226,7 +226,7 @@ class Admin_WorkflowController extends Application_Controller_Action
 
         $recipients = $form->getSelectedRecipients($document, $this->getRequest()->getPost());
 
-        $notification->prepareMail(
+        $notification->prepareMailFor(
             $document,
             $this->view->serverUrl() . $url,
             $recipients

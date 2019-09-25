@@ -47,6 +47,8 @@ class ControllerTestCase extends TestCase
 
     const CONFIG_VALUE_TRUE = '1'; // Zend_Config übersetzt true in den Wert '1'
 
+    use \Opus\LoggingTrait;
+
     private $securityEnabled;
 
     private $testDocuments;
@@ -105,6 +107,8 @@ class ControllerTestCase extends TestCase
             $this->applicationEnv,
             ["config" => [
                 APPLICATION_PATH . '/application/configs/application.ini',
+                APPLICATION_PATH . '/application/configs/config.ini',
+                APPLICATION_PATH . '/application/configs/console.ini',
                 APPLICATION_PATH . '/tests/tests.ini',
                 APPLICATION_PATH . '/tests/config.ini'
             ]]
@@ -246,7 +250,7 @@ class ControllerTestCase extends TestCase
      */
     protected function requireSolrConfig()
     {
-        $config = Opus_Search_Config::getServiceConfiguration(Opus_Search_Service::SERVICE_TYPE_INDEX);
+        $config = Opus\Search\Config::getServiceConfiguration(Opus\Search\Service::SERVICE_TYPE_INDEX);
 
         if (is_null($config)) {
             $this->markTestSkipped('No solr-config given.  Skipping test.');
@@ -752,19 +756,10 @@ class ControllerTestCase extends TestCase
         $this->assertTrue($acl instanceof Zend_Acl, 'Expected instance of Zend_Acl');
     }
 
-    public function getLogger()
-    {
-        if (is_null($this->logger)) {
-            $this->logger = Zend_Registry::get('Zend_Log');
-        }
-
-        return $this->logger;
-    }
-
     public function resetSearch()
     {
-        Opus_Search_Config::dropCached();
-        Opus_Search_Service::dropCached();
+        \Opus\Search\Config::dropCached();
+        \Opus\Search\Service::dropCached();
     }
 
     /**

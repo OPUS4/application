@@ -188,7 +188,7 @@ class Admin_Form_Document_PersonsTest extends ControllerTestCase
 
         $logger = new MockLogger();
 
-        $form->setLog($logger);
+        $form->setLogger($logger);
 
         $request = $this->getRequest();
         $request->setParams([

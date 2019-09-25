@@ -27,9 +27,9 @@
  * @category    Application
  * @package     Module_Admin
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 class Admin_Model_IndexMaintenance
@@ -61,13 +61,28 @@ class Admin_Model_IndexMaintenance
         }
     }
 
+    /**
+     * Disables index maintenance feature depending on configuration.
+     *
+     * runjobs.indexmaintenance.asynchronous
+     * runjobs.asynchronous
+     *
+     * One of the two options needs to be enabled for the "feature" to be enabled.
+     *
+     * TODO a nightmare of inversions - Why not setFeatureEnabled
+     * TODO and what is the "feature"?
+     */
     private function setFeatureDisabled()
     {
-        $this->_featureDisabled = ! (
-                (isset($this->_config->runjobs->indexmaintenance->asynchronous)
-                    && filter_var($this->_config->runjobs->indexmaintenance->asynchronous, FILTER_VALIDATE_BOOLEAN)) ||
-                (! isset($this->_config->runjobs->indexmaintenance->asynchronous)
-                    && isset($this->_config->runjobs->asynchronous) && filter_var($this->_config->runjobs->asynchronous, FILTER_VALIDATE_BOOLEAN)));
+        $jobsAsyncEnabled = isset($this->_config->runjobs->asynchronous)
+            && filter_var($this->_config->runjobs->asynchronous, FILTER_VALIDATE_BOOLEAN);
+
+        $indexMaintenanceConfigured = isset($this->_config->runjobs->indexmaintenance->asynchronous);
+        $indexMaintenanceAsyncEnabled = $indexMaintenanceConfigured
+            && filter_var($this->_config->runjobs->indexmaintenance->asynchronous, FILTER_VALIDATE_BOOLEAN);
+
+        $this->_featureDisabled = ! ($indexMaintenanceAsyncEnabled ||
+            ($jobsAsyncEnabled && ! $indexMaintenanceConfigured));
     }
 
     public function getFeatureDisabled()
@@ -78,7 +93,7 @@ class Admin_Model_IndexMaintenance
     public function createJob()
     {
         $job = new Opus_Job();
-        $job->setLabel(Opus_Job_Worker_ConsistencyCheck::LABEL);
+        $job->setLabel(Opus\Search\Task\ConsistencyCheck::LABEL);
 
         if (! $this->_featureDisabled) {
             // Queue job (execute asynchronously)
@@ -92,7 +107,7 @@ class Admin_Model_IndexMaintenance
 
         // Execute job immediately (synchronously): currently NOT supported
         try {
-            $worker = new Opus_Job_Worker_ConsistencyCheck();
+            $worker = new Opus\Search\Task\ConsistencyCheck();
             $worker->setLogger($this->_logger);
             $worker->work($job);
         } catch (Exception $exc) {
@@ -152,7 +167,7 @@ class Admin_Model_IndexMaintenance
 
     public function allowConsistencyCheck()
     {
-        return Opus_Job::getCountForLabel(Opus_Job_Worker_ConsistencyCheck::LABEL) == 0;
+        return Opus_Job::getCountForLabel(Opus\Search\Task\ConsistencyCheck::LABEL) == 0;
     }
 
     public function allowFulltextExtractionCheck()

@@ -79,8 +79,7 @@ class Admin_Form_PersonLinkTest extends ControllerTestCase
 
         $logger = new MockLogger();
 
-        $form->setLog($logger);
-
+        $form->setLogger($logger);
         $form->populateFromModel($this->createTestDocument());
 
         $messages = $logger->getMessages();
@@ -174,7 +173,7 @@ class Admin_Form_PersonLinkTest extends ControllerTestCase
 
         $logger = new MockLogger();
 
-        $form->setLog($logger);
+        $form->setLogger($logger);
 
         $form->updateModel($this->createTestDocument());
 
