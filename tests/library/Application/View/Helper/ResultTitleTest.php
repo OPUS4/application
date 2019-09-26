@@ -57,7 +57,7 @@ class Application_View_Helper_ResultTitleTest extends ControllerTestCase
 
         $docId = $document->store();
 
-        $result = new Opus_Search_Result_Match($docId);
+        $result = new \Opus\Search\Result\Match($docId);
         $this->helper->view->result = $result;
 
         $output = $this->helper->resultTitle();
@@ -75,7 +75,7 @@ class Application_View_Helper_ResultTitleTest extends ControllerTestCase
         $document = $this->createTestDocument();
         $docId = $document->store();
 
-        $result = new Opus_Search_Result_Match($docId);
+        $result = new \Opus\Search\Result\Match($docId);
         $this->helper->view->result = $result;
 
         $output = $this->helper->resultTitle();
@@ -93,7 +93,7 @@ class Application_View_Helper_ResultTitleTest extends ControllerTestCase
         $document = $this->createTestDocument();
         $docId = $document->store();
 
-        $result = new Opus_Search_Result_Match($docId);
+        $result = new \Opus\Search\Result\Match($docId);
         $this->helper->view->result = $result;
 
         $this->helper->view->start = 10;

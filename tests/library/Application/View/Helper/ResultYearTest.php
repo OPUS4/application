@@ -51,7 +51,7 @@ class Application_View_Helper_ResultYearTest extends ControllerTestCase
         $document = $this->createTestDocument();
         $docId = $document->store();
 
-        $result = new Opus_Search_Result_Match($docId);
+        $result = new \Opus\Search\Result\Match($docId);
         $result->setAsset('year', '2012');
         $this->helper->view->result = $result;
 
@@ -65,7 +65,7 @@ class Application_View_Helper_ResultYearTest extends ControllerTestCase
         $document = $this->createTestDocument();
         $docId = $document->store();
 
-        $result = new Opus_Search_Result_Match($docId);
+        $result = new \Opus\Search\Result\Match($docId);
         $this->helper->view->result = $result;
 
         $output = $this->helper->resultYear();

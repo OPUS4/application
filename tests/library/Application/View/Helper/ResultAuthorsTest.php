@@ -52,7 +52,7 @@ class Application_View_Helper_ResultAuthorsTest extends ControllerTestCase
         $document = $this->createTestDocument();
         $docId = $document->store();
 
-        $result = new Opus_Search_Result_Match($docId);
+        $result = new \Opus\Search\Result\Match($docId);
         $result->setAsset('author', ['Muster']);
         $this->helper->view->result = $result;
 
@@ -66,7 +66,7 @@ class Application_View_Helper_ResultAuthorsTest extends ControllerTestCase
         $document = $this->createTestDocument();
         $docId = $document->store();
 
-        $result = new Opus_Search_Result_Match($docId);
+        $result = new \Opus\Search\Result\Match($docId);
         $result->setAsset('author', ['Muster , ']);
         $this->helper->view->result = $result;
 
@@ -80,7 +80,7 @@ class Application_View_Helper_ResultAuthorsTest extends ControllerTestCase
         $document = $this->createTestDocument();
         $docId = $document->store();
 
-        $result = new Opus_Search_Result_Match($docId);
+        $result = new \Opus\Search\Result\Match($docId);
         $result->setAsset('author', ['Muster, John', 'Doe', 'Smith, John']);
         $this->helper->view->result = $result;
 
@@ -96,7 +96,7 @@ class Application_View_Helper_ResultAuthorsTest extends ControllerTestCase
         $document = $this->createTestDocument();
         $docId = $document->store();
 
-        $result = new Opus_Search_Result_Match($docId);
+        $result = new \Opus\Search\Result\Match($docId);
         $result->setAsset('author', ['Muster, John', 'Smith, John']);
         $this->helper->view->result = $result;
 
