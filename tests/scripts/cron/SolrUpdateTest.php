@@ -58,6 +58,8 @@ class SolrUpdateTest extends CronTestCase
         $this->executeScript('cron-solr-update.php');
         $allJobs = Opus_Job::getByLabels([Opus\Search\Task\IndexOpusDocument::LABEL], null, Opus_Job::STATE_UNDEFINED);
         $this->assertTrue(empty($allJobs), 'Expected no more jobs in queue');
+        $failedJobs = Opus_Job::getByLabels([Opus\Search\Task\IndexOpusDocument::LABEL], null, Opus_Job::STATE_FAILED);
+        $this->assertTrue(empty($failedJobs), 'Expected no failed jobs in queue');
     }
 
     public function testSolrRemoveIndex()
@@ -68,6 +70,8 @@ class SolrUpdateTest extends CronTestCase
         $this->executeScript('cron-solr-update.php');
         $allJobs = Opus_Job::getByLabels([Opus\Search\Task\IndexOpusDocument::LABEL], null, Opus_Job::STATE_UNDEFINED);
         $this->assertTrue(empty($allJobs), 'Expected no more jobs in queue');
+        $failedJobs = Opus_Job::getByLabels([Opus\Search\Task\IndexOpusDocument::LABEL], null, Opus_Job::STATE_FAILED);
+        $this->assertTrue(empty($failedJobs), 'Expected no failed jobs in queue');
     }
 
     public function testJobFailsIfInvalidTask()
