@@ -76,12 +76,15 @@ class Application_View_Helper_ResultTitle extends Application_View_Helper_Docume
             $start = null;
         }
 
+        // TODO hack - can this be avoided?
+        $searchType = Zend_Controller_Front::getInstance()->getRequest()->getParam('searchtype');
+
         return $this->view->url([
             'module' => 'frontdoor', 'controller' => 'index', 'action' => 'index',
             'docId' => $document->getId(),
             'start' => $start,
             'rows' => $this->view->rows,
-            'searchtype' => $this->view->searchType
+            'searchtype' => $searchType
         ]);
     }
 }
