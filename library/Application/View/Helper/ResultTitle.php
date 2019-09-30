@@ -77,7 +77,10 @@ class Application_View_Helper_ResultTitle extends Application_View_Helper_Docume
         }
 
         // TODO hack - can this be avoided?
-        $searchType = Zend_Controller_Front::getInstance()->getRequest()->getParam('searchtype');
+        $searchType = $this->view->searchType;
+        if (is_null($searchType)) {
+            $searchType = Zend_Controller_Front::getInstance()->getRequest()->getParam('searchtype');
+        }
 
         return $this->view->url([
             'module' => 'frontdoor', 'controller' => 'index', 'action' => 'index',
