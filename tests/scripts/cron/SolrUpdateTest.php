@@ -77,6 +77,6 @@ class SolrUpdateTest extends CronTestCase
             'task' => 'do-the-unexpected']);
         $this->executeScript('cron-solr-update.php');
         $allJobs = Opus_Job::getByLabels([Opus\Search\Task\IndexOpusDocument::LABEL], null, Opus_Job::STATE_FAILED);
-        $this->assertEquals(1, count($allJobs), 'Expected one failed job in queue');
+        $this->assertEquals(1, count($allJobs), 'Expected one failed job in queue (found ' . count($allJobs) . ')');
     }
 }
