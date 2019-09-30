@@ -37,12 +37,14 @@
 <?php
 $result = $this->result;
 $document = $result->getDocument();
+$view = Zend_Registry::get('Opus_View'); // TODO it is a bad hack to access variables in parent view
+$seriesId = $view->seriesId;
 ?>
 
 <div class="result_box <?= $this->partialCounter % 2 === 0 ? 'even' : 'odd'; ?> <?= $document->getServerState() ?>">
     <?= $this->fulltextLogo() ?>
-    <?php if (isset($this->seriesId) && $this->seriesId && ! is_null($result->getSeriesNumber($this->seriesId))) : ?>
-        <div class="results_seriesnumber"><?= htmlspecialchars($result->getSeriesNumber($this->seriesId)); ?></div>
+    <?php if (isset($seriesId) && $seriesId && ! is_null($result->getSeriesNumber($seriesId))) : ?>
+        <div class="results_seriesnumber"><?= htmlspecialchars($result->getSeriesNumber($seriesId)); ?></div>
     <?php endif ?>
 
     <div class="results_title">
