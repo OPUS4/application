@@ -84,6 +84,8 @@ class Admin_Form_Notification extends Admin_Form_AbstractDocumentSubForm
 
         $submitter = null;
 
+        $options = [];
+
         if (! is_null($submitters) && count($submitters) > 0) {
             $submitter = $submitters[0]->getModel();
             $option = $this->personToArray($submitters[0]);
