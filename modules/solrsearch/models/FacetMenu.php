@@ -80,7 +80,7 @@ class Solrsearch_Model_FacetMenu extends Application_Model_Abstract
                 $showFacetExtender[$key] = false;
             }
 
-            if (count($facets[$key]) > 1 || $facetValue !== '') {
+            if (count($facets[$key]) > 0 || $facetValue !== '') {
                 $facetArray[$key] = $facet;
             }
         }
