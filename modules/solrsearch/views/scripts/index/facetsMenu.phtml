@@ -39,14 +39,14 @@
     <?php foreach ($this->facets as $key => $facet) : ?>
         <div id="<?= $key ?>_facet" class="facet">
             <?PHP
-                $facetUrl = $this->firstPage;
-                $facetUrl["facetNumber_" . $key] = 'all';
-                if (substr($key, 0, strlen('enrichment_')) === 'enrichment_') {
-                    $enrichment = substr($key, strlen('enrichment_'));
-                    $facetHeadingKey = "Enrichment$enrichment";
-                } else {
-                    $facetHeadingKey = "{$key}_facet_heading";
-                }
+            $facetUrl = $this->firstPage;
+            $facetUrl["facetNumber_" . $key] = 'all';
+            if (substr($key, 0, strlen('enrichment_')) === 'enrichment_') {
+                $enrichment = substr($key, strlen('enrichment_'));
+                $facetHeadingKey = "Enrichment$enrichment";
+            } else {
+                $facetHeadingKey = "{$key}_facet_heading";
+            }
             ?>
             <h4><?= $this->translate($facetHeadingKey) ?> </h4>
             <ul>
