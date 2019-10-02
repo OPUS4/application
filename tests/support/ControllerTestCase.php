@@ -85,9 +85,6 @@ class ControllerTestCase extends TestCase
      */
     public function tearDown()
     {
-        $failedJobs = Opus_Job::getByLabels([Opus\Search\Task\IndexOpusDocument::LABEL], null, Opus_Job::STATE_FAILED);
-        $this->assertTrue(empty($failedJobs), 'Expected no failed jobs in queue');
-
         $this->logoutUser();
         $this->resetSearch();
 
