@@ -68,8 +68,10 @@ class Application_Controller_Action_Helper_WorkflowTest extends ControllerTestCa
         $states = Application_Controller_Action_Helper_Workflow::getAllStates();
 
         foreach ($states as $state) {
-            $this->assertTrue($this->__workflowHelper->isValidState($state),
-                'State \'' . $state . '\' should be valid.');
+            $this->assertTrue(
+                $this->__workflowHelper->isValidState($state),
+                'State \'' . $state . '\' should be valid.'
+            );
         }
     }
 
@@ -193,8 +195,10 @@ class Application_Controller_Action_Helper_WorkflowTest extends ControllerTestCa
 
         $doc->setServerState('unpublished');
 
-        $this->assertTrue($this->__workflowHelper->isTransitionAllowed($doc,
-            'published'));
+        $this->assertTrue($this->__workflowHelper->isTransitionAllowed(
+            $doc,
+            'published'
+        ));
     }
 
     public function testIsAllowedTransitionFalse()
@@ -203,8 +207,10 @@ class Application_Controller_Action_Helper_WorkflowTest extends ControllerTestCa
 
         $doc->setServerState('published');
 
-        $this->assertFalse($this->__workflowHelper->isTransitionAllowed($doc,
-            'unpublished'));
+        $this->assertFalse($this->__workflowHelper->isTransitionAllowed(
+            $doc,
+            'unpublished'
+        ));
     }
 
     public function testWorkflowTranslationsForStates()
@@ -215,8 +221,10 @@ class Application_Controller_Action_Helper_WorkflowTest extends ControllerTestCa
 
         foreach ($states as $state) {
             $key = 'admin_workflow_' . $state;
-            $this->assertTrue($translate->isTranslated($key),
-                'Translation key \'' . $key . '\' is missing.');
+            $this->assertTrue(
+                $translate->isTranslated($key),
+                'Translation key \'' . $key . '\' is missing.'
+            );
         }
     }
 

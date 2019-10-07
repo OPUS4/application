@@ -118,35 +118,35 @@ class Admin_Form_FileManagerTest extends ControllerTestCase
     {
         $form = new Admin_Form_FileManager();
 
-        $this->assertNull($form->processPost(array(), null));
+        $this->assertNull($form->processPost([], null));
 
-        $this->assertNull($form->processPost(array(
-            'Files' => array(
-                'File0' => array(
+        $this->assertNull($form->processPost([
+            'Files' => [
+                'File0' => [
                     'Id' => 5555
-                )
-            )
-        ), null));
+                ]
+            ]
+        ], null));
 
-        $post = array(
-            'Files' => array(
-                'File0' => array(
+        $post = [
+            'Files' => [
+                'File0' => [
                     'Id' => 5555,
                     'Remove' => 'Entfernen'
-                )
-            ));
+                ]
+            ]];
 
         $form->constructFromPost($post, null);
 
-        $this->assertEquals(array(
+        $this->assertEquals([
             'result' => 'switch',
-            'target' => array(
+            'target' => [
                 'module' => 'admin',
                 'controller' => 'filemanager',
                 'action' => 'delete',
                 'fileId' => '5555'
-            )
-        ), $form->processPost($post, null));
+            ]
+        ], $form->processPost($post, null));
 
         // alles weitere wird in den Unterformularen getestet
     }
@@ -155,7 +155,7 @@ class Admin_Form_FileManagerTest extends ControllerTestCase
     {
         $form = new Admin_Form_FileManager();
 
-        $form->constructFromPost(array(), null);
+        $form->constructFromPost([], null);
 
         $this->assertEquals(0, count($form->getSubForm('Files')->getSubForms()));
     }
@@ -164,16 +164,16 @@ class Admin_Form_FileManagerTest extends ControllerTestCase
     {
         $document = new Opus_Document(146);
 
-        $post = array(
-            'Files' => array(
-                'File0' => array(
+        $post = [
+            'Files' => [
+                'File0' => [
                     'Id' => 126
-                ),
-                'File1' => array(
+                ],
+                'File1' => [
                     'Id' => 116
-                )
-            )
-        );
+                ]
+            ]
+        ];
 
         $form = new Admin_Form_FileManager();
 
@@ -208,13 +208,13 @@ class Admin_Form_FileManagerTest extends ControllerTestCase
     {
         $document = new Opus_Document(146);
 
-        $post = array(
-            'Files' => array(
-                'File0' => array(
+        $post = [
+            'Files' => [
+                'File0' => [
                     'Id' => 126
-                )
-            )
-        );
+                ]
+            ]
+        ];
 
         $form = Admin_Form_FileManager::getInstanceFromPost($post, $document);
 
@@ -226,5 +226,4 @@ class Admin_Form_FileManagerTest extends ControllerTestCase
         $this->assertNotNull($fileForm);
         $this->assertNull($fileForm->getElementValue('Id')); // Formular noch nicht befüllt
     }
-
 }

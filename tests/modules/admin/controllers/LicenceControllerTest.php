@@ -187,8 +187,11 @@ class Admin_LicenceControllerTest extends CrudControllerTestCase
 
         $this->assertRedirectTo('/admin/licence', 'Should be a redirect to index action.');
 
-        $this->assertEquals($modelCount, count(Opus_Licence::getAll()),
-            'Es sollte keine neue Lizenz geben.');
+        $this->assertEquals(
+            $modelCount,
+            count(Opus_Licence::getAll()),
+            'Es sollte keine neue Lizenz geben.'
+        );
     }
 
     /**

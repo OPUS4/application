@@ -52,7 +52,7 @@ class Admin_Form_Document_MultiEnrichmentSubForm extends Admin_Form_Document_Mul
     public function getFieldValues($document)
     {
         $value = parent::getFieldValues($document);
-        if (!is_null($value)) {
+        if (! is_null($value)) {
             $value = $this->filterEnrichments($value);
         }
         return $value;
@@ -71,7 +71,7 @@ class Admin_Form_Document_MultiEnrichmentSubForm extends Admin_Form_Document_Mul
      */
     private function filterEnrichments($enrichments)
     {
-        $result = array();
+        $result = [];
         foreach ($enrichments as $enrichment) {
             $keyName = $enrichment->getKeyName();
             if ($keyName == 'opus.doi.autoCreate' || $keyName == 'opus.urn.autoCreate') {
@@ -110,7 +110,7 @@ class Admin_Form_Document_MultiEnrichmentSubForm extends Admin_Form_Document_Mul
             // zugeordnet wurde)
             if (array_key_exists(self::ELEMENT_ADD, $data)) {
                 $subForms = $this->getSubForms();
-                if (!empty($subForms)) {
+                if (! empty($subForms)) {
                     // das gerade neu hinzugefügte Subformular (noch ohne Feld für
                     // die Eingabe des Enrichmentwerts) auswählen und behandeln
                     $newSubForm = end($subForms);
@@ -135,7 +135,7 @@ class Admin_Form_Document_MultiEnrichmentSubForm extends Admin_Form_Document_Mul
     protected function processPostSelectionChanged()
     {
         $subForms = $this->getSubForms();
-        if (!empty($subForms)) {
+        if (! empty($subForms)) {
             $subForm = reset($subForms);
             // das erste Unterformular auswählen als Sprungziel nach dem Neuladen
             // des Metadatenformulars
@@ -187,5 +187,4 @@ class Admin_Form_Document_MultiEnrichmentSubForm extends Admin_Form_Document_Mul
             $this->prepareSubFormDecorators($subForm);
         }
     }
-
 }

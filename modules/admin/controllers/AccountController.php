@@ -113,12 +113,12 @@ class Admin_AccountController extends Application_Controller_ActionCRUD
 
         // Get all Opus_UserRoles for current Account *plus* 'guest'
         $roles = [];
-        foreach ($account->getRole() AS $roleLinkModel) {
+        foreach ($account->getRole() as $roleLinkModel) {
             $roles[] = $roleLinkModel->getModel();
         }
 
         $guestRole = Opus_UserRole::fetchByName('guest');
-        if (!is_null($guestRole)) {
+        if (! is_null($guestRole)) {
             $roles[] = $guestRole;
         }
 
@@ -128,12 +128,12 @@ class Admin_AccountController extends Application_Controller_ActionCRUD
             $modulesRoles[$module] = [];
         }
 
-        foreach ($roles AS $role) {
+        foreach ($roles as $role) {
             $roleName = $role->getName();
             $roleModules = $role->listAccessModules();
 
             foreach ($roleModules as $module) {
-                if (!array_key_exists($module, $modulesRoles)) {
+                if (! array_key_exists($module, $modulesRoles)) {
                     $modulesRoles[$module] = [];
                 }
 

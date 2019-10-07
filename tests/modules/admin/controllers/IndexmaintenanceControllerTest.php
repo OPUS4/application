@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -39,20 +39,12 @@
 class Admin_IndexmaintenanceControllerTest extends ControllerTestCase
 {
 
+    protected $configModifiable = true;
+
     protected $additionalResources = 'all';
-
-    private $config;
-
-    public function setUp()
-    {
-        parent::setUp();
-        $this->config = Zend_Registry::get('Zend_Config');
-    }
 
     public function tearDown()
     {
-        Zend_Registry::set('Zend_Config', $this->config);
-
         // Cleanup of Log File
         $config = Zend_Registry::get('Zend_Config');
         $filename = $config->workspacePath . DIRECTORY_SEPARATOR . 'log' . DIRECTORY_SEPARATOR . 'opus_consistency-check.log';
@@ -66,7 +58,7 @@ class Admin_IndexmaintenanceControllerTest extends ControllerTestCase
         }
 
         // Cleanup of Jobs Table
-        $jobs = Opus_Job::getByLabels([Opus_Job_Worker_ConsistencyCheck::LABEL]);
+        $jobs = Opus_Job::getByLabels([Opus\Search\Task\ConsistencyCheck::LABEL]);
         foreach ($jobs as $job) {
             try {
                 $job->delete();
@@ -168,46 +160,36 @@ class Admin_IndexmaintenanceControllerTest extends ControllerTestCase
 
     private function enableAsyncMode()
     {
-        $this->setAsyncMode(1);
+        $this->setAsyncMode(self::CONFIG_VALUE_TRUE);
     }
 
     private function disableAsyncMode()
     {
-        $this->setAsyncMode(0);
+        $this->setAsyncMode(self::CONFIG_VALUE_FALSE);
     }
 
     private function setAsyncMode($value)
     {
-        $config = Zend_Registry::get('Zend_Config');
-        if (isset($config->runjobs->asynchronous)) {
-            $config->runjobs->asynchronous = $value;
-        } else {
-            $config = new Zend_Config(['runjobs' => ['asynchronous' => $value]], true);
-            $config->merge(Zend_Registry::get('Zend_Config'));
-        }
-        Zend_Registry::set('Zend_Config', $config);
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'runjobs' => ['asynchronous' => $value]
+        ]));
     }
 
     private function enableAsyncIndexmaintenanceMode()
     {
-        $this->setAsyncIndexmaintenanceMode(1);
+        $this->setAsyncIndexmaintenanceMode(self::CONFIG_VALUE_TRUE);
     }
 
     private function disableAsyncIndexmaintenanceMode()
     {
-        $this->setAsyncIndexmaintenanceMode(0);
+        $this->setAsyncIndexmaintenanceMode(self::CONFIG_VALUE_FALSE);
     }
 
     private function setAsyncIndexmaintenanceMode($value)
     {
-        $config = Zend_Registry::get('Zend_Config');
-        if (isset($config->runjobs->indexmaintenance->asynchronous)) {
-            $config->runjobs->indexmaintenance->asynchronous = $value;
-        } else {
-            $config = new Zend_Config(['runjobs' => ['indexmaintenance' => ['asynchronous' => $value]]], true);
-            $config->merge(Zend_Registry::get('Zend_Config'));
-        }
-        Zend_Registry::set('Zend_Config', $config);
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'runjobs' => ['indexmaintenance' => ['asynchronous' => $value]]
+        ]));
     }
 
     public function testCheckconsistencyActionWithDisabledFeature()
@@ -259,7 +241,7 @@ class Admin_IndexmaintenanceControllerTest extends ControllerTestCase
     {
         $this->enableAsyncIndexmaintenanceMode();
 
-        $numOfJobs = Opus_Job::getCountForLabel(Opus_Job_Worker_ConsistencyCheck::LABEL);
+        $numOfJobs = Opus_Job::getCountForLabel(Opus\Search\Task\ConsistencyCheck::LABEL);
         $this->assertEquals(0, $numOfJobs);
 
         $this->getRequest()->setMethod('POST');
@@ -268,19 +250,19 @@ class Admin_IndexmaintenanceControllerTest extends ControllerTestCase
         $this->assertResponseCode(302);
         $this->assertResponseLocationHeader($this->getResponse(), '/admin/indexmaintenance');
 
-        $this->assertEquals(1, Opus_Job::getCountForLabel(Opus_Job_Worker_ConsistencyCheck::LABEL));
+        $this->assertEquals(1, Opus_Job::getCountForLabel(Opus\Search\Task\ConsistencyCheck::LABEL));
 
-        $jobs = Opus_Job::getByLabels([Opus_Job_Worker_ConsistencyCheck::LABEL]);
+        $jobs = Opus_Job::getByLabels([Opus\Search\Task\ConsistencyCheck::LABEL]);
         $jobs[0]->delete();
 
-        $this->assertEquals(0, Opus_Job::getCountForLabel(Opus_Job_Worker_ConsistencyCheck::LABEL));
+        $this->assertEquals(0, Opus_Job::getCountForLabel(Opus\Search\Task\ConsistencyCheck::LABEL));
     }
 
     public function testCheckconsistencyActionResult()
     {
         $this->enableAsyncIndexmaintenanceMode();
 
-        $this->assertEquals(0, Opus_Job::getCountForLabel(Opus_Job_Worker_ConsistencyCheck::LABEL), 'missing cleanup of jobs table');
+        $this->assertEquals(0, Opus_Job::getCountForLabel(Opus\Search\Task\ConsistencyCheck::LABEL), 'missing cleanup of jobs table');
 
         $this->getRequest()->setMethod('POST');
         $this->dispatch('/admin/indexmaintenance/checkconsistency');
@@ -288,7 +270,7 @@ class Admin_IndexmaintenanceControllerTest extends ControllerTestCase
         $this->assertResponseCode(302);
         $this->assertResponseLocationHeader($this->getResponse(), '/admin/indexmaintenance');
 
-        $this->assertEquals(1, Opus_Job::getCountForLabel(Opus_Job_Worker_ConsistencyCheck::LABEL), 'consistency check job was not stored in database');
+        $this->assertEquals(1, Opus_Job::getCountForLabel(Opus\Search\Task\ConsistencyCheck::LABEL), 'consistency check job was not stored in database');
 
         /*
          * check if job was scheduled for execution
@@ -311,11 +293,11 @@ class Admin_IndexmaintenanceControllerTest extends ControllerTestCase
          */
         $jobrunner = new Opus_Job_Runner();
         $jobrunner->setLogger(Zend_Registry::get('Zend_Log'));
-        $worker = new Opus_Job_Worker_ConsistencyCheck();
+        $worker = new Opus\Search\Task\ConsistencyCheck();
         $jobrunner->registerWorker($worker);
         $jobrunner->run();
 
-        $jobs = Opus_Job::getByLabels([Opus_Job_Worker_ConsistencyCheck::LABEL]);
+        $jobs = Opus_Job::getByLabels([Opus\Search\Task\ConsistencyCheck::LABEL]);
         if (count($jobs) > 0) {
             $job = $jobs[0];
             $message = 'at least one unexpected job found (Label: \'%s\', State: \'%s\', Data: \'%s\', Errors: \'%s\, SHA1 Hash: \'%s\')';
@@ -327,7 +309,7 @@ class Admin_IndexmaintenanceControllerTest extends ControllerTestCase
             $this->fail(sprintf($message, $label, $state, $data, $errors, $hash));
         }
 
-        $this->assertEquals(0, Opus_Job::getCountForLabel(Opus_Job_Worker_ConsistencyCheck::LABEL), 'consistency check job was not removed from database after execution');
+        $this->assertEquals(0, Opus_Job::getCountForLabel(Opus\Search\Task\ConsistencyCheck::LABEL), 'consistency check job was not removed from database after execution');
 
         $this->resetResponse();
         $this->resetRequest();

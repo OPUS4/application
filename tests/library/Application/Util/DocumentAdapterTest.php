@@ -319,5 +319,4 @@ class Application_Util_DocumentAdapterTest extends ControllerTestCase
         $this->assertNotEquals('0000', $adapter->getYear());
         $this->assertEquals(1999, $adapter->getYear());
     }
-
 }

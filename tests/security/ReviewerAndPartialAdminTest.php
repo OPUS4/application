@@ -115,5 +115,4 @@ class ReviewerAndPartialAdminTest extends ControllerTestCase
             'redirect from /admin/documents to /auth not asserted'
         );
     }
-
 }

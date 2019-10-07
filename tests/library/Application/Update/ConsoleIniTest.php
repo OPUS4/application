@@ -33,11 +33,11 @@
 class Application_Update_ConsoleIniTest extends ControllerTestCase
 {
 
-    public function testRun() {
+    public function testRun()
+    {
         $this->markTestIncomplete('Not clear how to test key input.');
 
         // TODO modify target paths to work on test files
         // TODO how to fake user interaction
     }
-
 }

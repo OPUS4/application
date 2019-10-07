@@ -127,7 +127,7 @@ class Admin_Form_LanguageTest extends ControllerTestCase
     {
         $form = new Admin_Form_Language();
 
-        $this->assertFalse($form->isValid(array()));
+        $this->assertFalse($form->isValid([]));
 
         $this->assertContains('isEmpty', $form->getErrors('RefName'));
         $this->assertContains('isEmpty', $form->getErrors('Part2T'));
@@ -137,10 +137,10 @@ class Admin_Form_LanguageTest extends ControllerTestCase
     {
         $form = new Admin_Form_Language();
 
-        $this->assertFalse($form->isValid(array(
+        $this->assertFalse($form->isValid([
             'RefName' => '   ',
             'Part2T' => ' '
-        )));
+        ]));
 
         $this->assertContains('isEmpty', $form->getErrors('RefName'));
         $this->assertContains('isEmpty', $form->getErrors('Part2T'));
@@ -150,12 +150,12 @@ class Admin_Form_LanguageTest extends ControllerTestCase
     {
         $form = new Admin_Form_Language();
 
-        $this->assertFalse($form->isValid(array(
+        $this->assertFalse($form->isValid([
             'RefName' => 'German',
             'Part2T' => 'deu',
             'Scope' => 'X',
             'Type' => 'Y'
-        )));
+        ]));
 
         $this->assertNotContains('isEmpty', $form->getErrors('RefName'));
         $this->assertNotContains('isEmpty', $form->getErrors('Part2T'));
@@ -167,9 +167,9 @@ class Admin_Form_LanguageTest extends ControllerTestCase
     {
         $form = new Admin_Form_Language();
 
-        $this->assertTrue($form->isValid(array(
+        $this->assertTrue($form->isValid([
             'RefName' => 'German',
             'Part2T' => 'deu',
-        )));
+        ]));
     }
 }

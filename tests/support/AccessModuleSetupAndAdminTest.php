@@ -1,5 +1,4 @@
 <?php
-
 /*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -46,7 +45,7 @@ abstract class AccessModuleSetupAndAdminTest extends ControllerTestCase
         'controller_language' => false
     ];
 
-    public function setUpTests($username = null, $password = null, $acls)
+    public function setUpTests($username = null, $password = null, $acls = null)
     {
         $this->acls = $acls;
         $this->enableSecurity();

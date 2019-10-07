@@ -120,5 +120,4 @@ class Oai_Model_XmlFactoryTest extends ControllerTestCase
         $this->assertTrue($doc->hasEmbargoPassed());
         $this->assertEquals('info:eu-repo/semantics/closedAccess', $this->_xmlFactory->getAccessRights($doc));
     }
-
 }

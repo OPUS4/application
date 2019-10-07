@@ -45,7 +45,10 @@ class Application_Form_Validate_DuplicateMultiValueTest extends TestCase
         ];
 
         $validator = new Application_Form_Validate_DuplicateMultiValue(
-            $values, 1, 'testmessage', 'Language'
+            $values,
+            1,
+            'testmessage',
+            'Language'
         );
 
         $context = [
@@ -63,7 +66,10 @@ class Application_Form_Validate_DuplicateMultiValueTest extends TestCase
         ];
 
         $validator = new Application_Form_Validate_DuplicateMultiValue(
-            $values, 1, 'testmessage', 'Language'
+            $values,
+            1,
+            'testmessage',
+            'Language'
         );
 
         $context = [
@@ -73,4 +79,3 @@ class Application_Form_Validate_DuplicateMultiValueTest extends TestCase
         $this->assertFalse($validator->isValid('Tag 1', $context));
     }
 }
-

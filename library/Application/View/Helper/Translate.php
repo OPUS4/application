@@ -56,7 +56,7 @@ class Application_View_Helper_Translate extends Zend_View_Helper_Translate
     {
         if (is_null($messageid)) {
             return '';
-        } else if ($messageid === -1.1) {
+        } elseif ($messageid === -1.1) {
             return $this;
         }
 

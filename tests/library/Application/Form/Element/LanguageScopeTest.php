@@ -40,12 +40,12 @@ class Application_Form_Element_LanguageScopeTest extends FormElementTestCase
 
     public function setUp()
     {
-        $this->keys = array('Null', 'I', 'M', 'S');
+        $this->keys = ['Null', 'I', 'M', 'S'];
 
         $this->_formElementClass = 'Application_Form_Element_LanguageScope';
         $this->_expectedDecoratorCount = 6;
-        $this->_expectedDecorators = array('ViewHelper', 'Errors', 'Description', 'ElementHtmlTag', 'LabelNotEmpty',
-            'dataWrapper');
+        $this->_expectedDecorators = ['ViewHelper', 'Errors', 'Description', 'ElementHtmlTag', 'LabelNotEmpty',
+            'dataWrapper'];
         $this->_staticViewHelper = 'viewFormSelect';
         parent::setUp();
     }
@@ -68,9 +68,10 @@ class Application_Form_Element_LanguageScopeTest extends FormElementTestCase
         $translator = Zend_Registry::get('Zend_Translate');
 
         foreach ($this->keys as $key) {
-            $this->assertTrue($translator->isTranslated('Opus_Language_Scope_Value_' . $key),
-                "Key '$key' not translated.");
+            $this->assertTrue(
+                $translator->isTranslated('Opus_Language_Scope_Value_' . $key),
+                "Key '$key' not translated."
+            );
         }
     }
-
 }

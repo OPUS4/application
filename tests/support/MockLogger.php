@@ -34,33 +34,37 @@
 
 /**
  * Mock Klasse für Logging.
- * 
+ *
  * TODO Unterscheidung von Nachrichten in Log-Leveln?
  */
-class MockLogger extends Zend_Log {
-    
-    private $messages = array();
+class MockLogger extends Zend_Log
+{
+
+    private $messages = [];
 
     private $logger = null;
 
-    public function __construct($logger = null) {
+    public function __construct($logger = null)
+    {
         parent::__construct();
         $this->logger = $logger;
     }
 
-    public function log($message, $priority, $extras = null) {
+    public function log($message, $priority, $extras = null)
+    {
         $this->messages[] = $message;
-        if (!is_null($this->logger)) {
+        if (! is_null($this->logger)) {
             $this->logger->log($message, $priority, $extras);
         }
     }
-     
-    public function getMessages() {
+
+    public function getMessages()
+    {
         return $this->messages;
     }
-    
-    public function clear() {
-        $this->messages = array();
+
+    public function clear()
+    {
+        $this->messages = [];
     }
-    
 }

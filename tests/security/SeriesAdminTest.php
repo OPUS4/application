@@ -89,5 +89,4 @@ class SeriesAdminTest extends ControllerTestCase
         $this->assertQueryContentContains('//html/head/title', 'Edit Series');
         $this->assertXPath("//input[@type = 'hidden' and @value = '4']");
     }
-
 }

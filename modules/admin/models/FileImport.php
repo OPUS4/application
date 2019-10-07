@@ -37,11 +37,13 @@
  *
  * TODO umbenennen für allgemeinen Dateisupport
  */
-class Admin_Model_FileImport extends Application_Model_Abstract {
+class Admin_Model_FileImport extends Application_Model_Abstract
+{
 
     private $_importFolder = null;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->_importFolder = APPLICATION_PATH . '/workspace/incoming';
     }
 
@@ -51,16 +53,16 @@ class Admin_Model_FileImport extends Application_Model_Abstract {
      * @param array $files
      * @throws Application_Exception in case database contains no document with id $docID
      */
-    public function addFilesToDocument($docId, $files) {
+    public function addFilesToDocument($docId, $files)
+    {
         if (empty($files)) {
             throw new Application_Exception('no files for import');
         }
-        
+
         $document = null;
         try {
             $document = new Opus_Document($docId);
-        }
-        catch (Opus_Model_NotFoundException $e) {
+        } catch (Opus_Model_NotFoundException $e) {
             throw new Application_Exception('no document found for id ' . $docId, null, $e);
         }
 
@@ -80,13 +82,12 @@ class Admin_Model_FileImport extends Application_Model_Abstract {
                 try {
                     $document->store();
                     $log->info('import of file ' . $pathname . ' successful');
-                }
-                catch (Exception $e) {
+                } catch (Exception $e) {
                     $log->err('import of file ' . $pathname . ' failed: ' . $e->getMessage());
                 }
 
                 $log->info('try to delete file ' . $pathname);
-                if (!unlink($pathname)) {
+                if (! unlink($pathname)) {
                     $log->err('could not delete file ' . $pathname);
                 }
             }
@@ -96,23 +97,27 @@ class Admin_Model_FileImport extends Application_Model_Abstract {
     /**
      * Lists files in import folder.
      */
-    public function listFiles() {
+    public function listFiles()
+    {
         return Zend_Controller_Action_HelperBroker::getStaticHelper('Files')->listFiles($this->_importFolder, true);
     }
 
-    public function getNamesOfIncomingFiles() {
-        $incomingFilenames = array();
+    public function getNamesOfIncomingFiles()
+    {
+        $incomingFilenames = [];
         foreach ($this->listFiles() as $file) {
-            array_push($incomingFilenames, $file['name']);            
+            array_push($incomingFilenames, $file['name']);
         }
         return $incomingFilenames;
     }
 
-    public function setImportFolder($path) {
+    public function setImportFolder($path)
+    {
         $this->_importFolder = $path;
     }
 
-    public function getImportFolder() {
+    public function getImportFolder()
+    {
         return $this->_importFolder;
     }
 
@@ -122,10 +127,11 @@ class Admin_Model_FileImport extends Application_Model_Abstract {
      * @param type $fileId
      * @return type
      */
-    public function deleteFile($docId, $fileId) {
+    public function deleteFile($docId, $fileId)
+    {
         $doc = new Opus_Document($docId);
 
-        $keepFiles = array();
+        $keepFiles = [];
 
         $files = $doc->getFile();
 
@@ -145,8 +151,9 @@ class Admin_Model_FileImport extends Application_Model_Abstract {
      * @param string $fileId
      * @return boolean True if file ID is valid
      */
-    public function isValidFileId($fileId) {
-        if (empty($fileId) || !is_numeric($fileId)) {
+    public function isValidFileId($fileId)
+    {
+        if (empty($fileId) || ! is_numeric($fileId)) {
             return false;
         }
 
@@ -154,8 +161,7 @@ class Admin_Model_FileImport extends Application_Model_Abstract {
 
         try {
             $file = new Opus_File($fileId);
-        }
-        catch (Opus_Model_NotFoundException $omnfe) {
+        } catch (Opus_Model_NotFoundException $omnfe) {
             return false;
         }
 
@@ -168,8 +174,9 @@ class Admin_Model_FileImport extends Application_Model_Abstract {
      * @param int $fileId
      * @return boolean True - if the file is linked to the document
      */
-    public function isFileBelongsToDocument($docId, $fileId) {
-        if (empty($fileId) || !is_numeric($fileId)) {
+    public function isFileBelongsToDocument($docId, $fileId)
+    {
+        if (empty($fileId) || ! is_numeric($fileId)) {
             return false;
         }
 
@@ -185,5 +192,4 @@ class Admin_Model_FileImport extends Application_Model_Abstract {
 
         return false;
     }
-
 }

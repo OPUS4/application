@@ -44,7 +44,7 @@ class Application_Update_ImportCustomTranslationsTest extends ControllerTestCase
 
         $path = APPLICATION_PATH . '/modules/default/language_custom';
 
-        if (!is_dir($path)) {
+        if (! is_dir($path)) {
             mkdir($path);
         }
 

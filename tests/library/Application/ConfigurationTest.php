@@ -76,7 +76,7 @@ class Application_ConfigurationTest extends ControllerTestCase
 
     public function testGetSupportedLanguages()
     {
-        $this->assertEquals(array('de', 'en'), $this->config->getSupportedLanguages());
+        $this->assertEquals(['de', 'en'], $this->config->getSupportedLanguages());
     }
 
     public function testIsLanguageSupportedTrue()
@@ -117,14 +117,14 @@ class Application_ConfigurationTest extends ControllerTestCase
 
     public function testIsLanguageSelectionEnabledTrue()
     {
-        $this->assertEquals(array('de', 'en'), $this->config->getSupportedLanguages());
+        $this->assertEquals(['de', 'en'], $this->config->getSupportedLanguages());
         $this->assertTrue($this->config->isLanguageSelectionEnabled());
     }
 
     public function testIsLanguageSelectionEnabledFalse()
     {
         Zend_Registry::get('Zend_Config')->supportedLanguages = 'de';
-        $this->assertEquals(array('de'), $this->config->getSupportedLanguages());
+        $this->assertEquals(['de'], $this->config->getSupportedLanguages());
         $this->assertFalse($this->config->isLanguageSelectionEnabled());
     }
 
@@ -165,9 +165,9 @@ class Application_ConfigurationTest extends ControllerTestCase
      */
     public function testGetWorkspacePathSetWithSlash()
     {
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
             'workspacePath' => APPLICATION_PATH . '/tests/workspace/'
-        )));
+        ]));
 
         $workspacePath = $this->config->getWorkspacePath();
 
@@ -210,7 +210,7 @@ class Application_ConfigurationTest extends ControllerTestCase
         $config = Application_Configuration::getInstance();
         $this->assertEquals('OPUS 4', $config->getName());
 
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array('name' => 'OPUS Test')));
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(['name' => 'OPUS Test']));
         $this->assertEquals('OPUS Test', $config->getName());
 
         $zendConfig = Zend_Registry::get('Zend_Config');
@@ -269,7 +269,7 @@ class Application_ConfigurationTest extends ControllerTestCase
         $document = new Opus_Document();
 
         $this->assertEquals([
-            'Opus_Document_Plugin_Index',
+            'Opus\Search\Plugin\Index',
             'Opus_Document_Plugin_XmlCache',
             'Opus_Document_Plugin_IdentifierUrn',
             'Opus_Document_Plugin_IdentifierDoi'

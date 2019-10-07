@@ -62,5 +62,4 @@ class Application_View_Helper_ExportLinksEnabledTest extends ControllerTestCase
         $this->assertTrue($this->_helper->exportLinksEnabled('search'));
         $this->assertTrue($this->_helper->exportLinksEnabled('unknown'));
     }
-
 }

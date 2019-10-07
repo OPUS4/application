@@ -51,7 +51,7 @@
                 <td class="change-arrow"><div class="fa fa-chevron-right"></div></td>
                 <td class="new-value"><?= $this->htmlList($this->escapeValue($values['new'], true), false, false, false) ?></td>
             <?PHP else : ?>
-                <?PHP if (!empty($values['old']) or (!is_array($values['old']) && strlen($values['old'] == 0))) : ?>
+                <?PHP if (! empty($values['old']) or (! is_array($values['old']) && strlen($values['old'] == 0))) : ?>
                     <td class="old-value" colspan="3"><?= $this->htmlList($this->escapeValue($values['old'], true), false, false, false) ?></td>
                 <?PHP else : ?>
                     <td class="not-set" colspan="3"></td>

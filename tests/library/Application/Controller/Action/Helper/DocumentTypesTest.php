@@ -241,7 +241,7 @@ class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerT
         $documentTypes = $this->docTypeHelper->getDocumentTypes();
 
         foreach ($documentTypes as $docType => $docTypePath) {
-            if (!in_array($docType, $excludeFromTranslationCheck)) {
+            if (! in_array($docType, $excludeFromTranslationCheck)) {
                 $this->assertNotEquals($docType, $translate->translate($docType), 'Could not translate document type: ' . $docType);
             }
         }
@@ -256,7 +256,7 @@ class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerT
 
         // Enable user error handling while validating input file
         libxml_clear_errors();
-        libxml_use_internal_errors(true);
+        $useInternalErrors = libxml_use_internal_errors(true);
 
         foreach ($iterator as $fileinfo) {
             if ($fileinfo->isFile()) {
@@ -272,7 +272,7 @@ class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerT
                 }
             }
         }
-
+        libxml_use_internal_errors($useInternalErrors);
         libxml_clear_errors();
     }
 

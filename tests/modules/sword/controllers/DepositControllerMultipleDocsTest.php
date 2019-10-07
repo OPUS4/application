@@ -150,10 +150,9 @@ class Sword_DepositControllerMultipleDocsTest extends ControllerTestCase
     {
         $this->assertEquals($name, $file->getPathName());
         $this->assertEquals($language, $file->getLanguage());
-        if (!is_null($displayName)) {
+        if (! is_null($displayName)) {
             $this->assertEquals($displayName, $file->getLabel());
         }
         $this->assertEquals($comment, $file->getComment());
     }
-
 }

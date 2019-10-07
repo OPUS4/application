@@ -92,7 +92,7 @@ class Application_View_Helper_TranslateTest extends ControllerTestCase
 
         $this->assertEquals(
             'Allow transition from \'state1\' to \'state2\'.',
-            $model->translate('acl_resource_workflow_generic', array('state1', 'state2'))
+            $model->translate('acl_resource_workflow_generic', ['state1', 'state2'])
         );
     }
 
@@ -106,7 +106,8 @@ class Application_View_Helper_TranslateTest extends ControllerTestCase
         $helper = new Application_View_Helper_Translate();
 
         $this->assertEquals(
-            'Collection \'de\' was edited successfully.', $helper->translate('admin_collections_edit', 'de')
+            'Collection \'de\' was edited successfully.',
+            $helper->translate('admin_collections_edit', 'de')
         );
 
         $this->assertEquals(
@@ -125,11 +126,13 @@ class Application_View_Helper_TranslateTest extends ControllerTestCase
         $helper = new Application_View_Helper_Translate();
 
         $this->assertEquals(
-            'Manage Collections', $helper->translate('admin_collectionroles_index')
+            'Manage Collections',
+            $helper->translate('admin_collectionroles_index')
         );
 
         $this->assertEquals(
-            'Sammlungsverwaltung', $helper->translate('admin_collectionroles_index', null, 'de')
+            'Sammlungsverwaltung',
+            $helper->translate('admin_collectionroles_index', null, 'de')
         );
     }
 
@@ -151,19 +154,23 @@ class Application_View_Helper_TranslateTest extends ControllerTestCase
         $helper = new Application_View_Helper_Translate();
 
         $this->assertEquals(
-            'Showing results <b>1</b> to <b>5</b>', $helper->translate('search_results_from_to', array(1, 5))
+            'Showing results <b>1</b> to <b>5</b>',
+            $helper->translate('search_results_from_to', [1, 5])
         );
 
         $this->assertEquals(
-            'Ergebnisse <b>1</b> bis <b>5</b>', $helper->translate('search_results_from_to', 1, 5, 'de')
+            'Ergebnisse <b>1</b> bis <b>5</b>',
+            $helper->translate('search_results_from_to', 1, 5, 'de')
         );
 
         $this->assertEquals(
-            'Ergebnisse <b>1</b> bis <b>5</b>', $helper->translate('search_results_from_to', array(1, 5), 'de')
+            'Ergebnisse <b>1</b> bis <b>5</b>',
+            $helper->translate('search_results_from_to', [1, 5], 'de')
         );
 
         $this->assertEquals(
-            'Showing results <b>1</b> to <b>5</b>', $helper->translate('search_results_from_to', 1, 5)
+            'Showing results <b>1</b> to <b>5</b>',
+            $helper->translate('search_results_from_to', 1, 5)
         );
     }
 }

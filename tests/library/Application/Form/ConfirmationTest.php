@@ -276,8 +276,10 @@ class Application_Form_ConfirmationTest extends ControllerTestCase
 
         $this->form->setQuestion('Klasse: %1$s, Name: %2$s');
 
-        $this->assertEquals('Klasse: Licence, Name: <span class="displayname">Creative Commons - CC BY-ND - Namensnennung - Keine Bearbeitungen 4.0 International</span>',
-            $this->form->renderQuestion());
+        $this->assertEquals(
+            'Klasse: Licence, Name: <span class="displayname">Creative Commons - CC BY-ND - Namensnennung - Keine Bearbeitungen 4.0 International</span>',
+            $this->form->renderQuestion()
+        );
     }
 
     public function testRenderQuestionTranslated()

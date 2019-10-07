@@ -53,7 +53,7 @@ $delayInHours = 24;
 $printErrors = false;
 
 $beforeDate = null;
-if (!is_null($delayInHours)) {
+if (! is_null($delayInHours)) {
     $dateTime = new DateTime();
     $beforeDate = date("Y-m-d H:i:s", strtotime("- $delayInHours hours"));
 }
@@ -63,8 +63,7 @@ $status = $doiManager->verifyRegisteredBefore($beforeDate);
 
 if ($status->isNoDocsToProcess()) {
     echo "could not find matching documents for DOI verification\n";
-}
-else {
+} else {
     echo count($status->getDocsWithDoiStatus()) . " documents have been processed\n";
 
     if ($printErrors) {

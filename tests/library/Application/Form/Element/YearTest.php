@@ -40,8 +40,8 @@ class Application_Form_Element_YearTest extends FormElementTestCase
     {
         $this->_formElementClass = 'Application_Form_Element_Year';
         $this->_expectedDecoratorCount = 8;
-        $this->_expectedDecorators = array('ViewHelper', 'Placeholder', 'Description', 'ElementHint', 'Errors',
-            'ElementHtmlTag', 'LabelNotEmpty', 'dataWrapper');
+        $this->_expectedDecorators = ['ViewHelper', 'Placeholder', 'Description', 'ElementHint', 'Errors',
+            'ElementHtmlTag', 'LabelNotEmpty', 'dataWrapper'];
         $this->_staticViewHelper = 'viewFormDefault';
         parent::setUp();
     }
@@ -75,5 +75,4 @@ class Application_Form_Element_YearTest extends FormElementTestCase
         $this->assertTrue($translator->isTranslated('validation_error_year_invalid_negative'));
         $this->assertTrue($translator->isTranslated('validation_error_year_too_large'));
     }
-
 }

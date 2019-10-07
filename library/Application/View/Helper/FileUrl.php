@@ -42,5 +42,4 @@ class Application_View_Helper_FileUrl extends Zend_View_Helper_Abstract
         $view = $this->view;
         return $view->serverUrl() . $view->baseUrl() . "/files/" . $docId . "/" . urlencode($pathName);
     }
-
 }

@@ -124,17 +124,16 @@ class Admin_Form_Document_InstituteTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Institute(Admin_Form_Document_Institute::ROLE_PUBLISHER);
 
-        $post = array();
+        $post = [];
 
         $this->assertFalse($form->isValid($post));
         $this->assertContains('isEmpty', $form->getErrors('Institute'));
 
-        $post = array(
+        $post = [
             'Institute' => 'a'
-        );
+        ];
 
         $this->assertFalse($form->isValid($post));
         $this->assertContains('notInt', $form->getErrors('Institute'));
     }
-
 }

@@ -280,5 +280,4 @@ class Sword_DepositControllerErrorCasesTest extends ControllerTestCase
         $this->testHelper->assertNodeProperties(2, $children, 'sword:summary', '');
         $this->testHelper->assertNodeProperties(3, $children, 'sword:userAgent', DepositTestHelper::USER_AGENT);
     }
-
 }

@@ -95,5 +95,4 @@ class ReviewerTest extends ControllerTestCase
             'redirect to /auth from /admin/documents not asserted'
         );
     }
-
 }

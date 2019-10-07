@@ -68,14 +68,14 @@ class RequireTest extends ControllerTestCase
         ];
 
         $checkClassFiles = [];
-        foreach ($classFiles AS $file) {
+        foreach ($classFiles as $file) {
             foreach ($blacklist as $excluded) {
                 if (strstr($file, $excluded)) {
                     $file = null;
                     continue;
                 }
             }
-            if (!is_null($file)) {
+            if (! is_null($file)) {
                 $checkClassFiles[] = [$file];
             }
         }

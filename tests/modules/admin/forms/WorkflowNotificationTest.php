@@ -114,7 +114,8 @@ class Admin_Form_WorkflowNotificationTest extends ControllerTestCase
         ], $recipients);
     }
 
-    public function testGetSelectedRecipients() {
+    public function testGetSelectedRecipients()
+    {
         $this->setUpTestDocument();
 
         $form = new Admin_Form_WorkflowNotification('published');

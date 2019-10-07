@@ -57,7 +57,7 @@ class Admin_Model_OptionTest extends ControllerTestCase
 
     public function testGetEmptyOptions()
     {
-        $model = new Admin_Model_Option('test', array('type' => 'number'));
+        $model = new Admin_Model_Option('test', ['type' => 'number']);
 
         $this->assertEquals([], $model->getOptions());
     }
@@ -69,7 +69,7 @@ class Admin_Model_OptionTest extends ControllerTestCase
 
     public function testGetDefaultSection()
     {
-        $model = new Admin_Model_Option('test', array());
+        $model = new Admin_Model_Option('test', []);
 
         $this->assertEquals('general', $model->getSection());
     }
@@ -81,7 +81,7 @@ class Admin_Model_OptionTest extends ControllerTestCase
 
     public function testGetDefaultElementType()
     {
-        $model = new Admin_Model_Option('test', array());
+        $model = new Admin_Model_Option('test', []);
         $this->assertEquals('text', $model->getElementType());
     }
 

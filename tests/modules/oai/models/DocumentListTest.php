@@ -55,9 +55,9 @@ class Oai_Model_DocumentListTest extends ControllerTestCase
         $docWoUrn->setServerState('published');
         $docWoUrnId = $docWoUrn->store();
 
-        $oaiRequest = array('metadataPrefix' => 'epicur');
+        $oaiRequest = ['metadataPrefix' => 'epicur'];
         $docListModel = new Oai_Model_DocumentList();
-        $docListModel->deliveringDocumentStates = array('published');
+        $docListModel->deliveringDocumentStates = ['published'];
         $docIds = $docListModel->query($oaiRequest);
 
         $this->assertTrue(in_array($docWithUrnId, $docIds), 'Document with URN is not returned.');
@@ -84,7 +84,8 @@ class Oai_Model_DocumentListTest extends ControllerTestCase
         $today->setDate(
             $serverDateModified->getYear(),
             $serverDateModified->getMonth(),
-            $serverDateModified->getDay());
+            $serverDateModified->getDay()
+        );
 
         $yesterday = clone $today;
         $yesterday->modify('-1 day');
@@ -108,7 +109,7 @@ class Oai_Model_DocumentListTest extends ControllerTestCase
             ['from' => $yesterdayStr, 'until' => $tomorrowStr],
         ];
 
-        foreach ($intervals AS $interval) {
+        foreach ($intervals as $interval) {
             $oaiRequest = ['verb' => 'ListRecords', 'metadataPrefix' => 'XMetaDissPlus'];
             $oaiRequest = array_merge($interval, $oaiRequest);
 
@@ -141,7 +142,8 @@ class Oai_Model_DocumentListTest extends ControllerTestCase
         $today->setDate(
             $serverDateModified->getYear(),
             $serverDateModified->getMonth(),
-            $serverDateModified->getDay());
+            $serverDateModified->getDay()
+        );
 
         $yesterday = clone $today;
         $yesterday->modify('-1 day');
@@ -160,20 +162,20 @@ class Oai_Model_DocumentListTest extends ControllerTestCase
         $tomorrowStr = date_format($tomorrow, 'Y-m-d');
         $dayAfterTomorrowStr = date_format($dayAfterTomorrow, 'Y-m-d');
 
-        $intervals = array(
-            array('from' => $tomorrowStr),
-            array('until' => $yesterdayStr),
-            array('from' => $tomorrowStr, 'until' => $dayAfterTomorrowStr),
-            array('from' => $dayBeforeYesterdayStr, 'until' => $yesterdayStr),
-        );
+        $intervals = [
+            ['from' => $tomorrowStr],
+            ['until' => $yesterdayStr],
+            ['from' => $tomorrowStr, 'until' => $dayAfterTomorrowStr],
+            ['from' => $dayBeforeYesterdayStr, 'until' => $yesterdayStr],
+        ];
 
-        foreach ($intervals AS $interval) {
-            $oaiRequest = array('verb' => 'ListRecords', 'metadataPrefix' => 'XMetaDissPlus');
+        foreach ($intervals as $interval) {
+            $oaiRequest = ['verb' => 'ListRecords', 'metadataPrefix' => 'XMetaDissPlus'];
             $oaiRequest = array_merge($interval, $oaiRequest);
 
             $docListModel = new Oai_Model_DocumentList();
-            $docListModel->deliveringDocumentStates = array('published', 'deleted');
-            $docListModel->xMetaDissRestriction = array();
+            $docListModel->deliveringDocumentStates = ['published', 'deleted'];
+            $docListModel->xMetaDissRestriction = [];
             $docIds = $docListModel->query($oaiRequest);
 
             $this->assertFalse(in_array($this->docId, $docIds), "Response must NOT contain document id $this->docId: " . var_export($interval, true));

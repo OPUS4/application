@@ -193,11 +193,11 @@ class Admin_Form_Document_PatentTest extends ControllerTestCase
 
         $form = new Admin_Form_Document_Patent();
 
-        $post = array(
+        $post = [
             'Number' => '', // ist Pflichtfeld
             'YearApplied' => 'year', // muss Integer sein
             'DateGranted' => '2008/02/31' // muss gültiges Datum sein
-        );
+        ];
 
         $this->assertFalse($form->isValid($post));
         $this->assertContains('isEmpty', $form->getErrors('Number'));
@@ -206,10 +206,10 @@ class Admin_Form_Document_PatentTest extends ControllerTestCase
         $this->assertContains('isEmpty', $form->getErrors('Countries'));
         $this->assertContains('isEmpty', $form->getErrors('Application'));
 
-        $post = array(
+        $post = [
             'Number' => '1',
             'YearApplied' => '-1'
-        );
+        ];
 
         $this->assertFalse($form->isValid($post));
         $this->assertContains('notGreaterThan', $form->getErrors('YearApplied'));
@@ -221,13 +221,13 @@ class Admin_Form_Document_PatentTest extends ControllerTestCase
 
         $form = new Admin_Form_Document_Patent();
 
-        $post = array(
+        $post = [
             'Number' => '1',
             'YearApplied' => '1980',
             'Countries' => 'Deutschland',
             'Application' => 'Meine tolle Erfindung',
             'DateGranted' => '2000/03/25'
-        );
+        ];
 
         $this->assertTrue($form->isValid($post));
     }
@@ -263,5 +263,4 @@ class Admin_Form_Document_PatentTest extends ControllerTestCase
         $this->assertNotEquals('0000', $patent->getYearApplied());
         $this->assertNull($patent->getYearApplied());
     }
-
 }

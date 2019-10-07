@@ -44,13 +44,14 @@ defined('APPLICATION_ENV')
 // Configure include path.
 set_include_path(
     implode(
-        PATH_SEPARATOR, array(
+        PATH_SEPARATOR,
+        [
             '.',
             dirname(__FILE__),
             APPLICATION_PATH . '/library',
             APPLICATION_PATH . '/vendor',
             get_include_path(),
-        )
+        ]
     )
 );
 
@@ -58,13 +59,13 @@ require_once 'autoload.php';
 
 $application = new Zend_Application(
     APPLICATION_ENV,
-    array(
-        "config"=>array(
+    [
+        "config" => [
             APPLICATION_PATH . '/application/configs/application.ini',
             APPLICATION_PATH . '/application/configs/config.ini',
             APPLICATION_PATH . '/application/configs/console.ini'
-        )
-    )
+        ]
+    ]
 );
 
 Zend_Registry::set('opus.disableDatabaseVersionCheck', true);
@@ -81,6 +82,3 @@ $database->create();
 $database->importSchema();
 
 $database->import(APPLICATION_PATH . '/db/masterdata'); // TODO only difference to createdb.php in framework
-
-
-

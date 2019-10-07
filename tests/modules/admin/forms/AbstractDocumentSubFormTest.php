@@ -78,7 +78,7 @@ class Admin_Form_AbstractDocumentSubFormTest extends ControllerTestCase
      */
     public function testConstructFromPost()
     {
-        $this->form->constructFromPost(array());
+        $this->form->constructFromPost([]);
     }
 
     /**
@@ -91,17 +91,17 @@ class Admin_Form_AbstractDocumentSubFormTest extends ControllerTestCase
 
     public function testProcessPostNoSubforms()
     {
-        $this->assertNull($this->form->processPost(array(), array()));
+        $this->assertNull($this->form->processPost([], []));
     }
 
     public function testProcessPost()
     {
         $this->markTestIncomplete('Mocking funktioniert noch nicht.');
-        $post = array(
-            'subform1' => array(
+        $post = [
+            'subform1' => [
                 'Button' => 'Value'
-            )
-        );
+            ]
+        ];
 
         $subform1 = $this->getMockForAbstractClass('Application_Form_Model_Abstract');
         $subform1->expects($this->exactly(1))->method('processPost')->will($this->returnValue(null));
@@ -131,5 +131,4 @@ class Admin_Form_AbstractDocumentSubFormTest extends ControllerTestCase
         $this->assertNotNull($form->getDatesHelper());
         $this->assertInstanceOf('Application_Controller_Action_Helper_Dates', $form->getDatesHelper());
     }
-
 }

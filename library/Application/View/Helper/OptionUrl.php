@@ -48,8 +48,7 @@ class Application_View_Helper_OptionUrl extends Application_View_Helper_Abstract
     {
         $key = $optionKey;
 
-        if (!is_null($context) && strlen(trim($context)) !== 0)
-        {
+        if (! is_null($context) && strlen(trim($context)) !== 0) {
             $key = "$context.$key";
         }
 
@@ -57,23 +56,18 @@ class Application_View_Helper_OptionUrl extends Application_View_Helper_Abstract
 
         $urlParts = parse_url($value);
 
-        if (array_key_exists('scheme', $urlParts))
-        {
+        if (array_key_exists('scheme', $urlParts)) {
             // apparently full URL configured
             $url = $value;
-        }
-        else {
-            if ($value[0] === '/')
-            {
+        } else {
+            if ($value[0] === '/') {
                 // absolute server URL configured
                 $url = $this->view->serverUrl() . $value;
-            }
-            else {
+            } else {
                 $url = $this->view->baseUrl() . '/' . $value;
             }
         }
 
         return $url;
     }
-
 }

@@ -55,11 +55,11 @@ class Export_Model_XmlExportTest extends ControllerTestCase
         $plugin->setRequest($this->getRequest());
         $plugin->setResponse($this->getResponse());
         $plugin->init();
-        $plugin->setConfig(new Zend_Config(array(
+        $plugin->setConfig(new Zend_Config([
             'class' => 'Export_Model_XmlExport',
-            'maxDocumentsGuest' => 100,
-            'maxDocumentsUser' => 500,
-        )));
+            'maxDocumentsGuest' => '100',
+            'maxDocumentsUser' => '500',
+        ]));
 
         $this->plugin = $plugin;
     }
@@ -74,9 +74,9 @@ class Export_Model_XmlExportTest extends ControllerTestCase
         $doc->setTitleMain($title);
         $doc->store();
 
-        $this->_request->setMethod('POST')->setPost(array(
+        $this->_request->setMethod('POST')->setPost([
             'searchtype' => 'all'
-        ));
+        ]);
 
         $this->plugin->prepareXml();
 
@@ -97,10 +97,10 @@ class Export_Model_XmlExportTest extends ControllerTestCase
         $doc->setTitleMain($title);
         $docId = $doc->store();
 
-        $this->getRequest()->setMethod('POST')->setPost(array(
+        $this->getRequest()->setMethod('POST')->setPost([
             'docId' => $docId,
             'searchtype' => 'id'
-        ));
+        ]);
 
         $this->plugin->prepareXml();
 
@@ -111,12 +111,12 @@ class Export_Model_XmlExportTest extends ControllerTestCase
         $this->assertEquals('Deutscher Titel', $result->item(--$count)->childNodes->item(3)->attributes->item(2)->nodeValue);
     }
 
-    public function testXmlPreparationForFrontdoorWithWrongDocId() 
+    public function testXmlPreparationForFrontdoorWithWrongDocId()
     {
-        $this->getRequest()->setMethod('POST')->setPost(array(
+        $this->getRequest()->setMethod('POST')->setPost([
             'docId' => 'docId',
             'searchtype' => 'id'
-        ));
+        ]);
 
         $this->plugin->prepareXml();
         $xpath = new DOMXPath($this->plugin->getXml());
@@ -124,11 +124,11 @@ class Export_Model_XmlExportTest extends ControllerTestCase
         $this->assertEquals(0, $result->length);
     }
 
-    public function testXmlPreparationForFrontdoorWithMissingDocId() 
+    public function testXmlPreparationForFrontdoorWithMissingDocId()
     {
-        $this->getRequest()->setMethod('POST')->setPost(array(
+        $this->getRequest()->setMethod('POST')->setPost([
             'searchtype' => 'id'
-        ));
+        ]);
         $this->plugin->prepareXml();
         $xpath = new DOMXPath($this->plugin->getXml());
         $result = $xpath->query('//Opus_Document');
@@ -162,12 +162,12 @@ class Export_Model_XmlExportTest extends ControllerTestCase
         $documentCacheTable->delete('document_id = ' . $secondDocId);
         $documentCacheTable->delete('document_id = ' . $firstDocId);
 
-        $this->getRequest()->setMethod('POST')->setPost(array(
+        $this->getRequest()->setMethod('POST')->setPost([
             'searchtype' => 'all',
             'sortfield' => 'year',
             'sortorder' => 'desc',
             'rows' => '10' // die ersten 10 Dokumente reichen
-        ));
+        ]);
 
         $this->plugin->prepareXml();
 
@@ -192,10 +192,10 @@ class Export_Model_XmlExportTest extends ControllerTestCase
         $doc->setServerState('published');
         $docId = $doc->store();
 
-        $this->getRequest()->setMethod('POST')->setPost(array(
+        $this->getRequest()->setMethod('POST')->setPost([
             'searchtype' => 'id',
             'docId' => $docId
-        ));
+        ]);
 
         $this->plugin->prepareXml();
 
@@ -213,10 +213,10 @@ class Export_Model_XmlExportTest extends ControllerTestCase
         $doc = $this->createTestDocument();
         $docId = $doc->store();
 
-        $this->getRequest()->setMethod('POST')->setPost(array(
+        $this->getRequest()->setMethod('POST')->setPost([
             'searchtype' => 'id',
             'docId' => $docId
-        ));
+        ]);
 
         $this->plugin->prepareXml();
 
@@ -228,7 +228,7 @@ class Export_Model_XmlExportTest extends ControllerTestCase
 
     public function testGetMaxRows()
     {
-        $this->assertEquals(Opus_SolrSearch_Query::MAX_ROWS, $this->plugin->getMaxRows());
+        $this->assertEquals(Opus\Search\Util\Query::MAX_ROWS, $this->plugin->getMaxRows());
 
         $this->enableSecurity();
 
@@ -240,7 +240,7 @@ class Export_Model_XmlExportTest extends ControllerTestCase
 
         $this->loginUser('admin', 'adminadmin');
 
-        $this->assertEquals(Opus_SolrSearch_Query::MAX_ROWS, $this->plugin->getMaxRows());
+        $this->assertEquals(Opus\Search\Util\Query::MAX_ROWS, $this->plugin->getMaxRows());
     }
 
     public function testGetValueIfValid()
@@ -266,9 +266,9 @@ class Export_Model_XmlExportTest extends ControllerTestCase
 
         $plugin->setDownloadEnabled(null);
 
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
-            'export' => array('download' => '0')
-        )));
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'export' => ['download' => self::CONFIG_VALUE_FALSE]
+        ]));
 
         $this->assertFalse($plugin->isDownloadEnabled());
     }
@@ -297,14 +297,13 @@ class Export_Model_XmlExportTest extends ControllerTestCase
 
         $this->assertEquals('text/xml', $plugin->getContentType());
 
-        $config = new Zend_Config(array('contentType' => 'text/plain'));
+        $config = new Zend_Config(['contentType' => 'text/plain']);
 
         $plugin->setContentType(null); // clear cached content type
 
         $plugin->setConfig($config);
 
         $this->assertEquals('text/plain', $plugin->getContentType());
-
     }
 
     public function testGetContentTypeFallback()
@@ -313,7 +312,7 @@ class Export_Model_XmlExportTest extends ControllerTestCase
 
         $plugin->setContentType(null);
 
-        $plugin->setConfig(new Zend_Config(array()));
+        $plugin->setConfig(new Zend_Config([]));
 
         $this->assertEquals('text/xml', $plugin->getContentType());
     }
@@ -335,7 +334,7 @@ class Export_Model_XmlExportTest extends ControllerTestCase
 
         $plugin->setAttachmentFilename(null); // clear cached name
 
-        $plugin->setConfig(new Zend_Config(array('attachmentFilename' => 'article.pdf')));
+        $plugin->setConfig(new Zend_Config(['attachmentFilename' => 'article.pdf']));
 
         $this->assertEquals('article.pdf', $plugin->getAttachmentFilename());
     }

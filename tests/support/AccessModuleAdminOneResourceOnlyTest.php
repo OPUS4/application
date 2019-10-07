@@ -40,11 +40,11 @@ abstract class AccessModuleAdminOneResourceOnlyTest extends ControllerTestCase
 
     protected $additionalResources = ['authz', 'database', 'view', 'mainMenu', 'navigation', 'translation'];
 
-    private $acls = array(
+    private $acls = [
         'module_admin' => false,
         'indexmaintenance' => false,
         'job' => false
-    );
+    ];
 
     public function setUpTests($username, $password, $acls = null)
     {
@@ -183,5 +183,4 @@ abstract class AccessModuleAdminOneResourceOnlyTest extends ControllerTestCase
             );
         }
     }
-
 }

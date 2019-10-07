@@ -61,21 +61,20 @@ class Application_Form_Validate_EnrichmentKeyAvailableTest extends ControllerTes
     {
         $validator = new Application_Form_Validate_EnrichmentKeyAvailable();
 
-        $this->assertTrue($validator->isValid('City', array('Id' => 'City')));
+        $this->assertTrue($validator->isValid('City', ['Id' => 'City']));
     }
 
     public function testIsValidFailureForChangedName()
     {
         $validator = new Application_Form_Validate_EnrichmentKeyAvailable();
 
-        $this->assertFalse($validator->isValid('City', array('Id' => 'TestEnrichment')));
+        $this->assertFalse($validator->isValid('City', ['Id' => 'TestEnrichment']));
     }
 
     public function testIsValidSuccessForChangedName()
     {
         $validator = new Application_Form_Validate_EnrichmentKeyAvailable();
 
-        $this->assertTrue($validator->isValid('TestEnrichment', array('Id' => 'City')));
+        $this->assertTrue($validator->isValid('TestEnrichment', ['Id' => 'City']));
     }
-
 }

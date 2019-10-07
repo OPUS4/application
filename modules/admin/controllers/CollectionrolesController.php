@@ -82,7 +82,8 @@ class Admin_CollectionrolesController extends Application_Controller_Action
             $collectionRoleModel = new Admin_Model_CollectionRole($this->getRequest()->getParam('roleid', ''));
             $collectionRoleModel->move($this->getRequest()->getParam('pos'));
             return $this->_helper->Redirector->redirectTo(
-                'index', $this->view->translate(
+                'index',
+                $this->view->translate(
                     'admin_collectionroles_move',
                     [$collectionRoleModel->getObject()->getName()]
                 )
@@ -102,7 +103,8 @@ class Admin_CollectionrolesController extends Application_Controller_Action
             $collectionRoleModel = new Admin_Model_CollectionRole($this->getRequest()->getParam('roleid', ''));
             $collectionRoleModel->setVisibility($visibility);
             return $this->_helper->Redirector->redirectTo(
-                'index', $this->view->translate(
+                'index',
+                $this->view->translate(
                     'admin_collectionroles_changevisibility',
                     [$collectionRoleModel->getObject()->getName()]
                 )
@@ -119,7 +121,7 @@ class Admin_CollectionrolesController extends Application_Controller_Action
     public function setCollectionBreadcrumb($name)
     {
         $page = $this->view->navigation()->findOneBy('label', 'admin_collection_index');
-        if (!is_null($page)) {
+        if (! is_null($page)) {
             $page->setLabel($name);
         }
     }
@@ -145,7 +147,7 @@ class Admin_CollectionrolesController extends Application_Controller_Action
      */
     public function createAction()
     {
-        if (!$this->getRequest()->isPost()) {
+        if (! $this->getRequest()->isPost()) {
             return $this->_helper->Redirector->redirectToAndExit('index');
         }
 
@@ -157,7 +159,7 @@ class Admin_CollectionrolesController extends Application_Controller_Action
         $form = new Admin_Form_CollectionRole();
         $form->populate($data);
 
-        if (!$form->isValid($data)) {
+        if (! $form->isValid($data)) {
             $this->view->form = $this->initCreateRoleForm($form, $collectionRole);
             $this->setTitle($collectionRole);
             return;
@@ -179,7 +181,7 @@ class Admin_CollectionrolesController extends Application_Controller_Action
         // TODO move somewhere else, at least a function
         // TODO detect if translations have been changed and store if so
         $translationsElement = $form->getElement(Admin_Form_CollectionRole::ELEMENT_DISPLAYNAME);
-        if (!is_null($translationsElement)) {
+        if (! is_null($translationsElement)) {
             $key = 'default_collection_role_' . $collectionRole->getName();
             $translationsElement->updateTranslations($key);
         }
@@ -187,8 +189,9 @@ class Admin_CollectionrolesController extends Application_Controller_Action
         $collectionRole->store();
 
         return $this->_helper->Redirector->redirectTo(
-            'index', $this->view->translate($messageKey, array($collectionRole->getName())
-        ));
+            'index',
+            $this->view->translate($messageKey, [$collectionRole->getName()])
+        );
     }
 
     /**

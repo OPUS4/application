@@ -78,5 +78,4 @@ class Application_Security_HttpAuthResolverTest extends ControllerTestCase
 
         $this->assertFalse($resolver->resolve('security8', 'opus-sword'));
     }
-
 }

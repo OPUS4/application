@@ -51,9 +51,9 @@ class Admin_Form_Document_PersonAddTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_PersonAdd();
 
-        $post = array(
+        $post = [
             'Cancel' => 'Abbrechen'
-        );
+        ];
 
         $this->assertEquals(Admin_Form_Document_PersonAdd::RESULT_CANCEL, $form->processPost($post, null));
     }
@@ -62,9 +62,9 @@ class Admin_Form_Document_PersonAddTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_PersonAdd();
 
-        $post = array(
+        $post = [
             'Next' => 'Weiter'
-        );
+        ];
 
         $this->assertEquals(Admin_Form_Document_PersonAdd::RESULT_NEXT, $form->processPost($post, null));
     }
@@ -74,7 +74,8 @@ class Admin_Form_Document_PersonAddTest extends ControllerTestCase
         $form = new Admin_Form_Document_PersonAdd();
 
         $form->getSubForm(Admin_Form_Document_PersonAdd::SUBFORM_DOCUMENT)->getElement(
-            Admin_Form_PersonLink::ELEMENT_ROLE)->setValue('contributor');
+            Admin_Form_PersonLink::ELEMENT_ROLE
+        )->setValue('contributor');
 
         $this->assertEquals('contributor', $form->getSelectedRole());
     }
@@ -94,7 +95,7 @@ class Admin_Form_Document_PersonAddTest extends ControllerTestCase
 
         $logger = new MockLogger();
 
-        $form->setLog($logger);
+        $form->setLogger($logger);
         $form->setSelectedRole('unknown');
 
         $this->assertEquals('author', $form->getSubForm('Document')->getElement('Role')->getValue());
@@ -110,15 +111,15 @@ class Admin_Form_Document_PersonAddTest extends ControllerTestCase
 
         $form = new Admin_Form_Document_PersonAdd();
 
-        $post = array(
+        $post = [
             'LastName' => '', // darf nicht leer sein
             'Email' => 'beispiel', // muss Email sein ('name@domain')
             'DateOfBirth' => '1970/02/31', // muss gültiges Datum sein
-            'Document' => array(
+            'Document' => [
                 'Role' => 'unknown', // muss gültige Rolle sein
                 'SortOrder' => 'Erster' // muss Integer sein
-            )
-        );
+            ]
+        ];
 
         $this->assertFalse($form->isValid($post));
 
@@ -135,15 +136,15 @@ class Admin_Form_Document_PersonAddTest extends ControllerTestCase
 
         $form = new Admin_Form_Document_PersonAdd();
 
-        $post = array(
+        $post = [
             'LastName' => 'Meier', // darf nicht leer sein
             'Email' => 'beispiel@example.org', // muss Email sein ('name@domain')
             'DateOfBirth' => '1970/01/31', // muss gültiges Datum sein
-            'Document' => array(
+            'Document' => [
                 'Role' => 'editor', // muss gültige Rolle sein
                 'SortOrder' => '1' // muss Integer sein
-            )
-        );
+            ]
+        ];
 
         $this->assertTrue($form->isValid($post));
     }

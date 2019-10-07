@@ -102,7 +102,6 @@ class Application_Controller_Action_Helper_DatesTest extends ControllerTestCase
         $this->useEnglish();
         $date = $this->__datesHelper->getOpusDate('2005');
         $this->assertNull($date);
-
     }
 
     public function testGetDateStringGerman()

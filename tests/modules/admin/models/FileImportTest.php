@@ -61,7 +61,7 @@ class Admin_Model_FileImportTest extends ControllerTestCase
     private function _clearImportFolder()
     {
         foreach (new DirectoryIterator($this->importFolder) as $fileInfo) {
-            if (!$fileInfo->isDot() && $fileInfo->isFile()) {
+            if (! $fileInfo->isDot() && $fileInfo->isFile()) {
                 unlink($fileInfo->getPathname());
             }
         }
@@ -89,7 +89,7 @@ class Admin_Model_FileImportTest extends ControllerTestCase
 
         file_put_contents($filePath, 'testfile');
 
-        $this->model->addFilesToDocument($this->documentId, array('test.txt'));
+        $this->model->addFilesToDocument($this->documentId, ['test.txt']);
 
         $document = new Opus_Document($this->documentId);
 
@@ -133,7 +133,7 @@ class Admin_Model_FileImportTest extends ControllerTestCase
      */
     public function testAddFilesToDocumentUnknownDocument()
     {
-        $this->model->addFilesToDocument(500, array('testfile'));
+        $this->model->addFilesToDocument(500, ['testfile']);
     }
 
     public function testIsValidFileId()
@@ -148,20 +148,34 @@ class Admin_Model_FileImportTest extends ControllerTestCase
 
     public function testFileBelongsToDocument()
     {
-        $this->assertTrue($this->model->isFileBelongsToDocument(91, 116),
-            'Datei ID = 116 sollte zu Dokument ID = 91 gehören.');
-        $this->assertTrue($this->model->isFileBelongsToDocument(91, "116"),
-            'Datei ID = "116" sollte zu Dokument ID = 91 gehören.');
-        $this->assertFalse($this->model->isFileBelongsToDocument(91, 123),
-            'Datei ID = 123 sollte nicht Dokument ID = 91 gehören.');
-        $this->assertFalse($this->model->isFileBelongsToDocument(91, 5555),
-            'Datei ID = 5555 sollte nicht Dokument ID = 91 gehören.');
-        $this->assertFalse($this->model->isFileBelongsToDocument(91, null),
-            'Datei ID = null sollte nicht Dokument ID = 91 gehören.');
-        $this->assertFalse($this->model->isFileBelongsToDocument(91, ' '),
-            'Datei ID = \' \' sollte nicht Dokument ID = 91 gehören.');
-        $this->assertFalse($this->model->isFileBelongsToDocument(91, 'bla'),
-            'Datei ID = \'bla\' sollte nicht Dokument ID = 91 gehören.');
+        $this->assertTrue(
+            $this->model->isFileBelongsToDocument(91, 116),
+            'Datei ID = 116 sollte zu Dokument ID = 91 gehören.'
+        );
+        $this->assertTrue(
+            $this->model->isFileBelongsToDocument(91, "116"),
+            'Datei ID = "116" sollte zu Dokument ID = 91 gehören.'
+        );
+        $this->assertFalse(
+            $this->model->isFileBelongsToDocument(91, 123),
+            'Datei ID = 123 sollte nicht Dokument ID = 91 gehören.'
+        );
+        $this->assertFalse(
+            $this->model->isFileBelongsToDocument(91, 5555),
+            'Datei ID = 5555 sollte nicht Dokument ID = 91 gehören.'
+        );
+        $this->assertFalse(
+            $this->model->isFileBelongsToDocument(91, null),
+            'Datei ID = null sollte nicht Dokument ID = 91 gehören.'
+        );
+        $this->assertFalse(
+            $this->model->isFileBelongsToDocument(91, ' '),
+            'Datei ID = \' \' sollte nicht Dokument ID = 91 gehören.'
+        );
+        $this->assertFalse(
+            $this->model->isFileBelongsToDocument(91, 'bla'),
+            'Datei ID = \'bla\' sollte nicht Dokument ID = 91 gehören.'
+        );
     }
 
     public function testDeleteFile()
@@ -177,7 +191,7 @@ class Admin_Model_FileImportTest extends ControllerTestCase
         $filePath2 = $this->importFolder . '/test2.txt';
         file_put_contents($filePath2, 'testfile2');
 
-        $this->model->addFilesToDocument($this->documentId, array('test1.txt', 'test2.txt'));
+        $this->model->addFilesToDocument($this->documentId, ['test1.txt', 'test2.txt']);
 
         $document = new Opus_Document($this->documentId);
 

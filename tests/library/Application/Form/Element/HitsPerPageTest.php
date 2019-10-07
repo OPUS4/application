@@ -60,9 +60,9 @@ class Application_Form_Element_HitsPerPageTest extends ControllerTestCase
 
     public function testInitWithCustomDefaultRows()
     {
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
-            'searchengine' => array('solr' => array('numberOfDefaultSearchResults' => 15))
-        )));
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'searchengine' => ['solr' => ['numberOfDefaultSearchResults' => '15']]
+        ]));
 
         $element = new Application_Form_Element_HitsPerPage('rows');
 
@@ -80,5 +80,4 @@ class Application_Form_Element_HitsPerPageTest extends ControllerTestCase
 
         $this->assertArrayHasKey(15, $options);
     }
-
 }

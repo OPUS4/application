@@ -181,8 +181,7 @@ class Admin_Form_Account extends Application_Form_Model_Abstract
             $this->getElement(self::ELEMENT_PASSWORD_CONFIRM)->setRequired(false);
             // force validation on empty field to check identity to password
             $this->getElement(self::ELEMENT_PASSWORD_CONFIRM)->setAllowEmpty(false);
-        }
-        else {
+        } else {
             // when creating new account password is required
             $this->getElement(self::ELEMENT_PASSWORD)->setRequired(true);
             $this->getElement(self::ELEMENT_PASSWORD_CONFIRM)->setRequired(true);
@@ -196,7 +195,7 @@ class Admin_Form_Account extends Application_Form_Model_Abstract
         if (isset($values[self::ELEMENT_MODEL_ID])) {
             $accountId = $values[self::ELEMENT_MODEL_ID];
 
-            if (!empty($accountId)) {
+            if (! empty($accountId)) {
                 $this->setMode(self::MODE_EDIT);
                 $account = new Opus_Account($accountId);
                 $values['oldLogin'] = $account->getLogin();
@@ -226,7 +225,7 @@ class Admin_Form_Account extends Application_Form_Model_Abstract
     {
         $accountId = $this->getElementValue(self::ELEMENT_MODEL_ID);
 
-        if (!empty($accountId)) {
+        if (! empty($accountId)) {
             $account = new Opus_Account($accountId);
             $oldLogin = $account->getLogin();
         } else {
@@ -242,7 +241,7 @@ class Admin_Form_Account extends Application_Form_Model_Abstract
 
         $accountId = $this->getElementValue(self::ELEMENT_MODEL_ID);
 
-        if (!empty($accountId)) {
+        if (! empty($accountId)) {
             $account = new Opus_Account($accountId);
             $oldLogin = $account->getLogin();
         } else {
@@ -254,7 +253,7 @@ class Admin_Form_Account extends Application_Form_Model_Abstract
 
     public function isPasswordChanged()
     {
-        return !empty($this->getElementValue(self::ELEMENT_PASSWORD));
+        return ! empty($this->getElementValue(self::ELEMENT_PASSWORD));
     }
 
     public function populate(array $values)
@@ -263,7 +262,7 @@ class Admin_Form_Account extends Application_Form_Model_Abstract
 
         $accountId = $this->getElement(self::ELEMENT_MODEL_ID);
 
-        if (!empty($accountId)) {
+        if (! empty($accountId)) {
             $this->setMode(self::MODE_EDIT);
         } else {
             $this->setMode(self::MODE_NEW);

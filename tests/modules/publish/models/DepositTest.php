@@ -36,6 +36,22 @@ class Publish_Model_DepositTest extends ControllerTestCase
 
     protected $additionalResources = ['database', 'translation'];
 
+    private $enrichmentKey;
+
+    public function tearDown()
+    {
+        parent::tearDown();
+
+        // das Entfernen des in den Tests neu angelegten EnrichmentKeys darf erst
+        // erfolgen, nachdem alle Dokumente, die den EnrichmentKey verwenden, aus
+        // der Datenbank entfernt wurden (ansonsten MySQL-Fehler, weil FK-Constraint
+        // fk_document_enrichment_enrichmentkeys in Tabelle document_enrichments
+        // verletzt wird)
+        if (! is_null($this->enrichmentKey)) {
+            $this->enrichmentKey->delete();
+        }
+    }
+
     /**
      * @expectedException Publish_Model_FormDocumentNotFoundException
      */
@@ -58,9 +74,9 @@ class Publish_Model_DepositTest extends ControllerTestCase
         $document->setServerState('temporary');
         $docId = $document->store();
 
-        $enrichment = new Opus_EnrichmentKey();
-        $enrichment->setName('Foo2Title');
-        $enrichment->store();
+        $this->enrichmentKey = new Opus_EnrichmentKey();
+        $this->enrichmentKey->setName('Foo2Title');
+        $this->enrichmentKey->store();
 
         $data = [
             'PersonSubmitterFirstName_1' => ['value' => 'Hans', 'datatype' => 'Person', 'subfield' => '0'],
@@ -215,9 +231,6 @@ class Publish_Model_DepositTest extends ControllerTestCase
         $this->assertEquals(4, $document->getSeries(0)->getModel()->getId());
 
         $this->assertEquals('title as enrichment', $document->getEnrichment(0)->getValue());
-
-        $document->deletePermanent();
-        Opus_EnrichmentKey::fetchbyName('Foo2Title')->delete();
     }
 
     /**

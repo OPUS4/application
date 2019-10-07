@@ -27,9 +27,8 @@
  * @category    Application
  * @package     Module_Account
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 class Account_Form_Account extends Application_Form_Model_Abstract
@@ -90,12 +89,12 @@ class Account_Form_Account extends Application_Form_Model_Abstract
         $this->getElement('lastname')->setValue($account->getLastName());
         $this->getElement('email')->setValue($account->getEmail());
 
-        if (isset($config->account->editPasswordOnly) && $config->account->editPasswordOnly) {
+        if (isset($config->account->editPasswordOnly) && filter_var($config->account->editPasswordOnly, FILTER_VALIDATE_BOOLEAN)) {
             $this->getElement('username')->setAttrib('disabled', true);
             $this->getElement('firstname')->setAttrib('disabled', true);
             $this->getElement('lastname')->setAttrib('disabled', true);
             $this->getElement('email')->setAttrib('disabled', true);
-        } elseif (isset($config->account->changeLogin) && ! $config->account->changeLogin) {
+        } elseif (isset($config->account->changeLogin) && (! filter_var( $config->account->changeLogin, FILTER_VALIDATE_BOOLEAN))) {
             $this->getElement('username')->setAttrib('disabled', true);
         }
 

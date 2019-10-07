@@ -36,7 +36,7 @@ class Solrsearch_Model_SeriesUtilTest extends ControllerTestCase
 
     protected $additionalResources = ['database'];
 
-    private $visibilities = array();
+    private $visibilities = [];
 
     private $model;
 
@@ -84,7 +84,7 @@ class Solrsearch_Model_SeriesUtilTest extends ControllerTestCase
     {
         $series = $this->model->getVisibleSeries();
 
-        $order = array(1, 4, 2, 5, 6);
+        $order = [1, 4, 2, 5, 6];
 
         $this->assertCount(5, $series);
 
@@ -95,17 +95,17 @@ class Solrsearch_Model_SeriesUtilTest extends ControllerTestCase
 
     public function testGetVisibleSeriesSortedAlphabetically()
     {
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
-            'browsing' => array(
-                'series' => array(
-                    'sortByTitle' => '1'
-                )
-            )
-        )));
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'browsing' => [
+                'series' => [
+                    'sortByTitle' => self::CONFIG_VALUE_TRUE
+                ]
+            ]
+        ]));
 
         $series = $this->model->getVisibleSeries();
 
-        $order = array(2, 1, 6, 5, 4);
+        $order = [2, 1, 6, 5, 4];
 
         $this->assertCount(5, $series);
 
@@ -129,5 +129,4 @@ class Solrsearch_Model_SeriesUtilTest extends ControllerTestCase
             $seriesItem->store();
         }
     }
-
 }

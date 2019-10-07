@@ -37,25 +37,24 @@
  */
 ?>
 
-<?PHP 
-    $personId = $this->element->getElement(Admin_Form_Person::ELEMENT_PERSON_ID)->getValue();
-    $person = $this->element->getModel();
-    if (is_null($person) && !is_null($personId)) {
-        $person = new Opus_Person($personId);
-    }
-    else {
-        // TODO err output
-    }
-    
-    // Vollständige ID für Formular ermitteln
-    $formId = $this->element->getElement(Admin_Form_Person::ELEMENT_PERSON_ID)->getId();
-    $formId = substr($formId, 0, strrpos($formId, '-') + 1);
+<?PHP
+$personId = $this->element->getElement(Admin_Form_Person::ELEMENT_PERSON_ID)->getValue();
+$person = $this->element->getModel();
+if (is_null($person) && ! is_null($personId)) {
+    $person = new Opus_Person($personId);
+} else {
+    // TODO err output
+}
+
+// Vollständige ID für Formular ermitteln
+$formId = $this->element->getElement(Admin_Form_Person::ELEMENT_PERSON_ID)->getId();
+$formId = substr($formId, 0, strrpos($formId, '-') + 1);
 ?>
 
 <div class="multiple-wrapper <?= ($this->element->getOrder() % 2) ? 'odd' : 'even' ?>">
     <div class="data-wrapper multiple-data">
 <div id="<?= $this->element->getId() . '-element' ?>"> <!-- TODO include Role in ID -->
-    <?PHP if (!$this->element->isViewModeEnabled()) : ?>
+    <?PHP if (! $this->element->isViewModeEnabled()) : ?>
     <dl class="sort dropdown">
         <dt>
             <?= $this->element->getElement(Admin_Form_Document_Person::ELEMENT_SORT_ORDER)->renderViewHelper() ?>
@@ -68,28 +67,28 @@
     <?PHP endif; ?>
     <div class="person-info">
         <span id="<?=$formId . 'LastName'?>" class="person-lastname"><?= $person->getLastName()?></span
-        ><?PHP if (!is_null($person->getFirstName())) : ?>, 
+           ><?PHP if (! is_null($person->getFirstName())) :
+            ?>,
             <span id="<?=$formId . 'FirstName'?>" class="person-firstname"><?= $person->getFirstName() ?></span>
-        <?PHP endif; ?>
-        <?PHP if (!is_null($person->getAcademicTitle())) : ?>
+            <?PHP endif ?>
+        <?PHP if (! is_null($person->getAcademicTitle())) : ?>
             <span id="<?=$formId . 'AcademicTitle'?>" class="person-academictitle">,
                 <?= $person->getAcademicTitle() ?></span>
         <?PHP endif; ?>
-        <?PHP if (!is_null($person->getDateOfBirth()) || !is_null($person->getPlaceOfBirth())) : ?>    
+        <?PHP if (! is_null($person->getDateOfBirth()) || ! is_null($person->getPlaceOfBirth())) : ?>
             (* <span id="<?= $formId . 'DateOfBirth' ?>" class="person-born-date"
                   ><?= $this->formatValue()->formatDate($person->getDateOfBirth()) ?></span
-            ><?PHP if (!is_null($person->getPlaceOfBirth())) : 
-                ?><?= (is_null($person->getDateOfBirth())) ? '' : ', ' 
+            ><?PHP if (! is_null($person->getPlaceOfBirth())) :
+                ?><?= (is_null($person->getDateOfBirth())) ? '' : ', '
                     ?><span id="<?= $formId . 'PlaceOfBirth' ?>" class="person-born-place"
                       ><?= $person->getPlaceOfBirth() ?></span
             ><?PHP endif; ?>)
         <?PHP endif; ?>
-        <?PHP if (!is_null($person->getEmail())) : ?>
+        <?PHP if (! is_null($person->getEmail())) : ?>
         <div>
             <span id="<?=$formId . 'Email'?>" class="person-email"><?= $person->getEmail() ?></span>
-            <?PHP if (!$this->element->isViewModeEnabled()) : ?>
-            -<?= $this->element->getElement(Admin_Form_Document_Person::ELEMENT_ALLOW_CONTACT
-                    )->renderViewHelper() ?>
+            <?PHP if (! $this->element->isViewModeEnabled()) : ?>
+            -<?= $this->element->getElement(Admin_Form_Document_Person::ELEMENT_ALLOW_CONTACT)->renderViewHelper() ?>
             <?= $this->translate('AllowEmailContact') ?>
             <?PHP elseif ($person->getAllowEmailContact()) : ?>
             <span id="<?= $formId . 'AllowContact'?>">(<?= $this->translate('AllowEmailContact') ?>)</span>
@@ -97,7 +96,7 @@
         </div>
         <?PHP endif; ?>
     </div>
-    <?PHP if (!$this->element->isViewModeEnabled()) : ?>
+    <?PHP if (! $this->element->isViewModeEnabled()) : ?>
     <div class="person-actions">
         <dl class="settings col dropdown">
             <dt><a><?= $this->translate('admin_document_person_actions_label') ?></a></dt>
@@ -107,14 +106,14 @@
                 <?= $this->element->getSubForm('Roles') ?>
                 <p class="label"><i><?= $this->translate('admin_document_person_remove_label') ?></i></p>
                 <ul class="buttons">
-                    <li class="edit"><?= $this->element->getElement(Admin_Form_Document_Person::ELEMENT_EDIT
-                            )->renderViewHelper() ?></li>
+                    <li class="edit"><?=
+                        $this->element->getElement(Admin_Form_Document_Person::ELEMENT_EDIT)->renderViewHelper()
+                    ?></li>
                 </ul>
             </dd>
         </dl>
         <ul class="links">
-            <li class="Remove-data"><?= $this->element->getElement(Admin_Form_Document_MultiSubForm::ELEMENT_REMOVE
-                    )->renderViewHelper() ?></li>
+            <li class="Remove-data"><?= $this->element->getElement(Admin_Form_Document_MultiSubForm::ELEMENT_REMOVE)->renderViewHelper() ?></li>
         </ul>
     </div>
     <?PHP endif; ?>

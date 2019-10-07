@@ -50,16 +50,16 @@ class Export_Model_PublistExportTest extends ControllerTestCase
         $config = Zend_Registry::get('Zend_Config');
 
         $config->merge(
-            new Zend_Config(array('plugins' => array('export' => array(
-                'publist' => array(
-                    'file' => array(
-                        'allow' => array(
-                            'mimetype' => array('application/xhtml+xml' => 'HTML')))))))));
+            new Zend_Config(['plugins' => ['export' => [
+                'publist' => [
+                    'file' => [
+                        'allow' => [
+            'mimetype' => ['application/xhtml+xml' => 'HTML']]]]]]])
+        );
 
         $plugin = new Export_Model_PublistExport('publist');
         $plugin->setConfig($config->plugins->export->publist);
 
-        $this->assertEquals(array('application/xhtml+xml' => 'HTML'), $plugin->getMimeTypes());
+        $this->assertEquals(['application/xhtml+xml' => 'HTML'], $plugin->getMimeTypes());
     }
-
 }

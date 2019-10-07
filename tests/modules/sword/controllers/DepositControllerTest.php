@@ -205,7 +205,7 @@ class Sword_DepositControllerTest extends ControllerTestCase
 
         $persons = $doc->getPerson();
         $this->assertEquals(8, count($persons));
-        $roles = array(
+        $roles = [
             'advisor' => 1,
             'author' => 2,
             'contributor' => 3,
@@ -213,11 +213,11 @@ class Sword_DepositControllerTest extends ControllerTestCase
             'referee' => 5,
             'translator' => 6,
             'submitter' => 7,
-            'other' => 8);
+            'other' => 8];
         for ($i = 0; $i < count($persons); $i++) {
             $person = $persons[$i];
             $role = $person->getRole();
-            if (!array_key_exists($role, $roles)) {
+            if (! array_key_exists($role, $roles)) {
                 throw new Exception('unexpected person role ' . $role);
             }
             $this->checkPersonFields($person, $roles[$role]);
@@ -298,15 +298,15 @@ class Sword_DepositControllerTest extends ControllerTestCase
     {
         $this->assertEquals($name, $file->getPathName());
         $this->assertEquals($language, $file->getLanguage());
-        if (!is_null($displayName)) {
+        if (! is_null($displayName)) {
             $this->assertEquals($displayName, $file->getLabel());
         }
         $this->assertEquals($visibleInOai, $file->getVisibleInOai());
         $this->assertEquals($visibleInFrontdoor, $file->getVisibleInFrontdoor());
-        if (!is_null($sortOrder)) {
+        if (! is_null($sortOrder)) {
             $this->assertEquals($sortOrder, $file->getSortOrder());
         }
-        if (!is_null($comment)) {
+        if (! is_null($comment)) {
             $this->assertEquals($comment, $file->getComment());
         }
     }
@@ -336,7 +336,7 @@ class Sword_DepositControllerTest extends ControllerTestCase
 
     private function checkCollections($collections)
     {
-        $idsFound = array();
+        $idsFound = [];
         foreach ($collections as $collection) {
             $collId = $collection->getId();
             if ($collId == $this->testHelper->getCollectionId() || $collId == 15997 || $collId == 7871) {
@@ -406,10 +406,16 @@ class Sword_DepositControllerTest extends ControllerTestCase
      * @return Opus_Document
      */
     private function depositSuccessful(
-        $fileName, $contentType, $abstractExist = true, $deleteDoc = true, $deleteCollection = true,
-        $numOfEnrichments = 4, $numOfCollections = 1, $serverState = 'unpublished'
-    )
-    {
+        $fileName,
+        $contentType,
+        $abstractExist = true,
+        $deleteDoc = true,
+        $deleteCollection = true,
+        $numOfEnrichments = 4,
+        $numOfCollections = 1,
+        $serverState = 'unpublished'
+    ) {
+
         $this->testHelper->assertEmptyTmpDir();
         $this->testHelper->disableExceptionConversion();
         $this->getRequest()->setMethod('POST');
@@ -445,7 +451,7 @@ class Sword_DepositControllerTest extends ControllerTestCase
         $this->assertEquals($serverState, $doc->getServerState());
         $this->checkHttpResponseHeaders($this->testHelper->getFrontdoorUrl());
 
-        if (!$deleteDoc) {
+        if (! $deleteDoc) {
             return $doc;
         }
 
@@ -470,6 +476,4 @@ class Sword_DepositControllerTest extends ControllerTestCase
             }
         }
     }
-
 }
-

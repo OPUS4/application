@@ -44,15 +44,13 @@ class Export_Model_XsltExport extends Export_Model_XmlExport
         $config = $this->getConfig();
 
         $stylesheet = null;
-        if (isset($config->stylesheet))
-        {
+        if (isset($config->stylesheet)) {
             $stylesheet = $config->stylesheet;
         }
 
         $stylesheetDirectory = 'stylesheets';
 
-        if (isset($config->stylesheetDirectory))
-        {
+        if (isset($config->stylesheetDirectory)) {
             $stylesheetDirectory = $config->stylesheetDirectory;
         }
 
@@ -63,10 +61,9 @@ class Export_Model_XsltExport extends Export_Model_XmlExport
             )
         );
 
-        // TODO OPUSVIER-4112 move handling of boolean configuration parameters to base helper class
         $restrictExportToPublishedDocuments =
-            !(isset($config->restrictExportToPublishedDocuments) && $config->restrictExportToPublishedDocuments == '');
+            ! (isset($config->restrictExportToPublishedDocuments) &&
+                (! filter_var($config->restrictExportToPublishedDocuments, FILTER_VALIDATE_BOOLEAN)));
         $this->prepareXml($restrictExportToPublishedDocuments);
     }
-
 }

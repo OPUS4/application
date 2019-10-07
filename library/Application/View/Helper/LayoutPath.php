@@ -32,16 +32,18 @@
  * @version     $Id$
  */
 
-class Application_View_Helper_LayoutPath extends Zend_View_Helper_Abstract {
+class Application_View_Helper_LayoutPath extends Zend_View_Helper_Abstract
+{
 
-    public function layoutPath() {
+    public function layoutPath()
+    {
         $config = Zend_Registry::get('Zend_Config');
         $theme = 'opus4';
         if (isset($config->theme)) {
             $theme = $config->theme;
         }
         $fc = Zend_Controller_Front::getInstance();
-        $request=$fc->getRequest();
+        $request = $fc->getRequest();
         return $request->getBaseUrl() . '/layouts/' . $theme;
     }
 }

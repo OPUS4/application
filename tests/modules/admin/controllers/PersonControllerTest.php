@@ -39,15 +39,6 @@ class Admin_PersonControllerTest extends ControllerTestCase
 
     protected $additionalResources = 'all';
 
-    private $documentId;
-
-    public function tearDown()
-    {
-        $this->removeDocument($this->documentId);
-
-        parent::tearDown();
-    }
-
     public function testAssignAction()
     {
         $this->dispatch('/admin/person/assign/document/146');
@@ -89,9 +80,9 @@ class Admin_PersonControllerTest extends ControllerTestCase
 
     public function testAssignActionCancel()
     {
-        $this->getRequest()->setMethod('POST')->setPost(array(
+        $this->getRequest()->setMethod('POST')->setPost([
             'Cancel' => 'Abbrechen'
-        ));
+        ]);
 
         $this->dispatch('/admin/person/assign/document/146/role/advisor');
         $this->assertRedirectTo('/admin/document/edit/id/146/continue/addperson');
@@ -101,21 +92,21 @@ class Admin_PersonControllerTest extends ControllerTestCase
     {
         $document = $this->createTestDocument();
 
-        $this->documentId = $document->store();
+        $documentId = $document->store();
 
-        $this->getRequest()->setMethod('POST')->setPost(array(
+        $this->getRequest()->setMethod('POST')->setPost([
             'LastName' => 'Testy-AssignAction',
-            'Document' => array(
+            'Document' => [
                 'Role' => 'translator'
-            ),
+            ],
             'Save' => 'Speichern'
-        ));
+        ]);
 
-        $this->dispatch('/admin/person/assign/document/' . $this->documentId . '/role/translator');
+        $this->dispatch('/admin/person/assign/document/' . $documentId . '/role/translator');
 
         $location = $this->getLocation();
 
-        $matches = array();
+        $matches = [];
         preg_match('/person\/(\d+)\//', $location, $matches);
         $personId = $matches[1];
 
@@ -126,7 +117,7 @@ class Admin_PersonControllerTest extends ControllerTestCase
         $person->delete();
 
         $this->assertTrue(strpos($location, '/admin/document/edit/id/'
-                . $this->documentId . '/continue/addperson') === 0);
+                . $documentId . '/continue/addperson') === 0);
 
         $this->assertEquals('Testy-AssignAction', $lastName);
     }
@@ -190,9 +181,9 @@ class Admin_PersonControllerTest extends ControllerTestCase
 
     public function testEditlinkedActionCancel()
     {
-        $this->getRequest()->setMethod('POST')->setPost(array(
+        $this->getRequest()->setMethod('POST')->setPost([
             'Cancel' => 'Abbrechen'
-        ));
+        ]);
 
         $this->dispatch('/admin/person/editlinked/document/146/personId/259');
         $this->assertRedirectTo('/admin/document/edit/id/146/continue/true');
@@ -207,24 +198,24 @@ class Admin_PersonControllerTest extends ControllerTestCase
 
         $person = $document->addPersonTranslator($person);
 
-        $this->documentId = $document->store();
+        $documentId = $document->store();
 
         $personId = $person->getModel()->getId();
 
-        $this->getRequest()->setMethod('POST')->setPost(array(
+        $this->getRequest()->setMethod('POST')->setPost([
             'PersonId' => $personId,
             'LastName' => 'Testy',
             'FirstName' => 'Simone',
-            'Document' => array(
+            'Document' => [
                 'Role' => 'translator'
-            ),
+            ],
             'Save' => 'Speichern'
-        ));
+        ]);
 
         $this->dispatch('/admin/person/editlinked/personId/' . $personId . '/role/translator/document/'
-            . $this->documentId);
+            . $documentId);
 
-        $this->assertRedirectTo('/admin/document/edit/id/' . $this->documentId
+        $this->assertRedirectTo('/admin/document/edit/id/' . $documentId
             . '/continue/updateperson/person/' . $personId);
 
         $person = new Opus_Person($personId);
@@ -262,7 +253,7 @@ class Admin_PersonControllerTest extends ControllerTestCase
      */
     public function redirectProvider()
     {
-        return array(
+        return [
             'limit zero' => ['limit/0', '/admin/person'],
             'limit not integer' => ['limit/infinity', '/admin/person'],
             // 'limit empty' => ['limit/', '/admin/person'],
@@ -272,7 +263,7 @@ class Admin_PersonControllerTest extends ControllerTestCase
             'page invalid' => ['page/here', '/admin/person'],
             'page zero' => ['page/0', '/admin/person'],
             'page negative' => ['page/-1', '/admin/person']
-        );
+        ];
     }
 
     /**
@@ -359,9 +350,9 @@ class Admin_PersonControllerTest extends ControllerTestCase
 
     public function testIndexRedirectPost()
     {
-        $this->getRequest()->setPost(array(
+        $this->getRequest()->setPost([
             'filter' => 'en', 'role' => 'author', 'limit' => '10',
-        ))->setMethod('POST');
+        ])->setMethod('POST');
 
         $this->dispatch('/admin/person');
 
@@ -518,17 +509,15 @@ class Admin_PersonControllerTest extends ControllerTestCase
     {
         $this->useEnglish();
 
-        $this->getRequest()->setMethod('POST')->setPost(array(
+        $this->getRequest()->setMethod('POST')->setPost([
             'LastName' => 'Test',
             'DateOfBirth' => '1970-01-01',
             'Save' => 'Weiter'
-        ));
+        ]);
 
         $this->dispatch('/admin/person/edit/last_name/Author/first_name/One');
 
         $this->assertQueryContentContains('ul.form-errors', 'at least one field');
         $this->assertNotQueryContentContains('ul.form-errors', 'Date of Birth');
-
     }
-
 }

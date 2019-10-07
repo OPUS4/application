@@ -52,13 +52,13 @@ class Application_Form_Validate_AtLeastOneNotEmptyTest extends TestCase
 
     public function testIsValidFalse()
     {
-        $this->assertFalse($this->_validator->isValid(null, array()));
+        $this->assertFalse($this->_validator->isValid(null, []));
     }
 
     public function testIsValidTrue()
     {
         // TODO use case? $this->assertTrue($this->_validator->isValid('value', array()));
-        $this->assertTrue($this->_validator->isValid(null, array('name' => 'Test')));
-        $this->assertTrue($this->_validator->isValid(null, array('number' => '12')));
+        $this->assertTrue($this->_validator->isValid(null, ['name' => 'Test']));
+        $this->assertTrue($this->_validator->isValid(null, ['number' => '12']));
     }
 }

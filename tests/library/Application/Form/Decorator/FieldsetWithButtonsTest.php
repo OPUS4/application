@@ -54,8 +54,10 @@ class Application_Form_Decorator_FieldsetWithButtonsTest extends ControllerTestC
 
     public function testRender()
     {
-        $this->assertEquals('<fieldset><legend>Test</legend>' . PHP_EOL . 'content</fieldset>',
-            $this->decorator->render('content'));
+        $this->assertEquals(
+            '<fieldset><legend>Test</legend>' . PHP_EOL . 'content</fieldset>',
+            $this->decorator->render('content')
+        );
     }
 
     public function testRenderWithButton()
@@ -64,12 +66,14 @@ class Application_Form_Decorator_FieldsetWithButtonsTest extends ControllerTestC
 
         $this->decorator->setLegendButtons('Add');
 
-        $this->assertEquals('<fieldset><legend>Test<span class="button-group">'
+        $this->assertEquals(
+            '<fieldset><legend>Test<span class="button-group">'
             . '<span class="data-wrapper Add-data">'
             . '<span class="field" id="Add-element">' . PHP_EOL
             . '<input type="submit" name="Add" id="Add" value="Add" /></span></span>'
             . '</span></legend>' . PHP_EOL . 'content</fieldset>',
-            $this->decorator->render('content'));
+            $this->decorator->render('content')
+        );
     }
 
     public function testRenderWithTwoButtons()
@@ -77,9 +81,10 @@ class Application_Form_Decorator_FieldsetWithButtonsTest extends ControllerTestC
         $this->form->addElement('submit', 'Add');
         $this->form->addElement('submit', 'Import');
 
-        $this->decorator->setLegendButtons(array('Import', 'Add'));
+        $this->decorator->setLegendButtons(['Import', 'Add']);
 
-        $this->assertEquals('<fieldset><legend>Test<span class="button-group">'
+        $this->assertEquals(
+            '<fieldset><legend>Test<span class="button-group">'
             . '<span class="data-wrapper Import-data">'
             . '<span class="field" id="Import-element">' . PHP_EOL
             . '<input type="submit" name="Import" id="Import" value="Import" /></span></span>'
@@ -87,6 +92,7 @@ class Application_Form_Decorator_FieldsetWithButtonsTest extends ControllerTestC
             . '<span class="field" id="Add-element">' . PHP_EOL
             . '<input type="submit" name="Add" id="Add" value="Add" /></span></span>'
             . '</span></legend>' . PHP_EOL . 'content</fieldset>',
-            $this->decorator->render('content'));
+            $this->decorator->render('content')
+        );
     }
 }

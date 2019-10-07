@@ -116,7 +116,7 @@ class Admin_Form_EnrichmentKeyTest extends ControllerTestCase
         $enrichmentKey = new Opus_EnrichmentKey();
         $enrichmentKey->setName('TestKey');
         $enrichmentKey->setType('RegexType');
-        $enrichmentKey->setOptions(json_encode(array('regex' => '^a$')));
+        $enrichmentKey->setOptions(json_encode(['regex' => '^a$']));
 
         $form = new Admin_Form_EnrichmentKey();
         $form->populateFromModel($enrichmentKey);
@@ -131,7 +131,7 @@ class Admin_Form_EnrichmentKeyTest extends ControllerTestCase
         $enrichmentKey = new Opus_EnrichmentKey();
         $enrichmentKey->setName('TestKey');
         $enrichmentKey->setType('FooType');
-        $enrichmentKey->setOptions(json_encode(array('regex' => '^a$')));
+        $enrichmentKey->setOptions(json_encode(['regex' => '^a$']));
 
         $form = new Admin_Form_EnrichmentKey();
         $form->populateFromModel($enrichmentKey);
@@ -194,7 +194,7 @@ class Admin_Form_EnrichmentKeyTest extends ControllerTestCase
 
         $this->assertEquals('TestEnrichmentKey', $enrichmentKey->getName());
         $this->assertEquals('RegexType', $enrichmentKey->getType());
-        $this->assertEquals(json_encode(array('regex' => '^a$')), $enrichmentKey->getOptions());
+        $this->assertEquals(json_encode(['regex' => '^a$']), $enrichmentKey->getOptions());
     }
 
     public function testUpdateModelWithUnknownTypeAndOptions()
@@ -225,9 +225,9 @@ class Admin_Form_EnrichmentKeyTest extends ControllerTestCase
         $this->assertTrue($form->isValid(
             $this->createArray(
                 str_pad('Long', Opus_EnrichmentKey::getFieldMaxLength('Name'), 'g'),
-                "TextType")
+                "TextType"
             )
-        );
+        ));
 
         $this->assertTrue($form->isValid($this->createArray('small_value59.dot', 'TextType')));
 
@@ -238,7 +238,7 @@ class Admin_Form_EnrichmentKeyTest extends ControllerTestCase
     {
         $form = new Admin_Form_EnrichmentKey();
 
-        $this->assertFalse($form->isValid(array()));
+        $this->assertFalse($form->isValid([]));
 
         $this->assertFalse($form->isValid($this->createArray('City', 'TextType')));
 
@@ -247,9 +247,9 @@ class Admin_Form_EnrichmentKeyTest extends ControllerTestCase
         $this->assertFalse($form->isValid(
             $this->createArray(
                 str_pad('toolong', Opus_EnrichmentKey::getFieldMaxLength('Name') + 1, 'g'),
-                "TextType")
+                "TextType"
             )
-        );
+        ));
 
         $this->assertFalse($form->isValid($this->createArray('5zig', 'TextType')));
 
@@ -267,14 +267,13 @@ class Admin_Form_EnrichmentKeyTest extends ControllerTestCase
 
     private function createArray($name, $type = null, $options = null)
     {
-        $result = array(Admin_Form_EnrichmentKey::ELEMENT_NAME => $name);
-        if (!is_null($type)) {
+        $result = [Admin_Form_EnrichmentKey::ELEMENT_NAME => $name];
+        if (! is_null($type)) {
             $result[Admin_Form_EnrichmentKey::ELEMENT_TYPE] = $type;
         }
-        if (!is_null($options)) {
+        if (! is_null($options)) {
             $result[Admin_Form_EnrichmentKey::ELEMENT_OPTIONS] = $options;
         }
         return $result;
     }
-
 }

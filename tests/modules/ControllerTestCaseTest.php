@@ -54,7 +54,9 @@ class ControllerTestCaseTest extends ControllerTestCase
         $realm = Opus_Security_Realm::getInstance();
 
         $this->assertContains(
-            'administrator', $realm->getRoles(), Zend_Debug::dump($realm->getRoles(), null, false)
+            'administrator',
+            $realm->getRoles(),
+            Zend_Debug::dump($realm->getRoles(), null, false)
         );
     }
 

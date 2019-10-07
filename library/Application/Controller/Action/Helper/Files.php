@@ -39,7 +39,8 @@
  *
  * TODO implement as Controller Helper (nicht soviel static)
  */
-class Application_Controller_Action_Helper_Files extends Zend_Controller_Action_Helper_Abstract {
+class Application_Controller_Action_Helper_Files extends Zend_Controller_Action_Helper_Abstract
+{
 
     /**
      * Lists files in import folder. If $ignoreAllowedFiletypes is set to true
@@ -50,29 +51,32 @@ class Application_Controller_Action_Helper_Files extends Zend_Controller_Action_
      * @param boolean $ignoreAllowedTypes
      * @return array
      */
-    public function listFiles($folder, $ignoreAllowedTypes = false) {
-        if (!is_dir($folder) || !is_readable($folder)) {
+    public function listFiles($folder, $ignoreAllowedTypes = false)
+    {
+        if (! is_dir($folder) || ! is_readable($folder)) {
             throw new Application_Exception("Directory '$folder' is not readable.");
         }
 
-        $result = array();
+        $result = [];
         foreach (new DirectoryIterator($folder) as $file) {
             if (self::checkFile($file, $ignoreAllowedTypes)) {
                 array_push(
-                    $result, array(
+                    $result,
+                    [
                     'name' => $file->getFilename(),
                     'size' => number_format($file->getSize() / 1024.0, 2, '.', ''),
-                    )
+                    ]
                 );
             }
         }
         return $result;
     }
 
-    private function getAllowedFileTypes() {
+    private function getAllowedFileTypes()
+    {
         $config = Zend_Registry::get('Zend_Config');
 
-        if (!isset($config->publish->filetypes->allowed)) {
+        if (! isset($config->publish->filetypes->allowed)) {
             return null;
         }
 
@@ -81,11 +85,12 @@ class Application_Controller_Action_Helper_Files extends Zend_Controller_Action_
         return $allowed;
     }
 
-    private function checkFile($file, $ignoreAllowedTypes) {
+    private function checkFile($file, $ignoreAllowedTypes)
+    {
         $log = Zend_Registry::get('Zend_Log');
         $logMessage = 'check for file: ' . $file->getPathname();
 
-        if (!$ignoreAllowedTypes) {
+        if (! $ignoreAllowedTypes) {
             $allowedFileTypes = Application_Controller_Action_Helper_Files::getAllowedFileTypes();
             if (is_null($allowedFileTypes) || empty($allowedFileTypes)) {
                 $log->debug('no filetypes are allowed');
@@ -99,13 +104,13 @@ class Application_Controller_Action_Helper_Files extends Zend_Controller_Action_
         }
 
         // filter links and directories
-        if (!$file->isFile()) {
+        if (! $file->isFile()) {
             $log->debug($logMessage . ' : is not a regular file');
             return false;
         }
 
         // filter unreadable files
-        if (!$file->isReadable()) {
+        if (! $file->isReadable()) {
             $log->debug($logMessage . ' : is not readable');
             return false;
         }
@@ -129,6 +134,4 @@ class Application_Controller_Action_Helper_Files extends Zend_Controller_Action_
         $log->debug($logMessage . ' : filetype is not allowed');
         return false;
     }
-
 }
-

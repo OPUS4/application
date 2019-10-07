@@ -62,7 +62,7 @@ class EmbargoUpdateTest extends CronTestCase
         $doc->setEmbargoDate($today);
         $notExpiredId = $doc->store();
 
-        Opus_Document::setServerDateModifiedByIds($twoDaysAgo, array($expiredId, $noEmbargoId, $notExpiredId));
+        Opus_Document::setServerDateModifiedByIds($twoDaysAgo, [$expiredId, $noEmbargoId, $notExpiredId]);
 
         $this->executeScript('cron-embargo-update.php');
 

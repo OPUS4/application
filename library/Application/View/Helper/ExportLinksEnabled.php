@@ -39,18 +39,15 @@ class Application_View_Helper_ExportLinksEnabled extends Application_View_Helper
 
         $formats = $exporter->getAllowedFormats();
 
-        $formatsInContext = array();
+        $formatsInContext = [];
 
-        foreach ($formats as $format)
-        {
+        foreach ($formats as $format) {
             // if context provided skip format if it has been set to false
-            if (is_null($context) || $format->get($context) !== false)
-            {
+            if (is_null($context) || $format->get($context) !== false) {
                 $formatsInContext[] = $format;
             }
         }
 
         return count($formatsInContext) > 0;
     }
-
 }

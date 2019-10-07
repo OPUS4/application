@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -107,7 +107,7 @@ class Admin_LanguageControllerTest extends CrudControllerTestCase
     {
         $this->createsModels = true;
 
-        $post = array(
+        $post = [
             'Active' => '1',
             'RefName' => 'German',
             'Part2T' => 'deu',
@@ -117,7 +117,7 @@ class Admin_LanguageControllerTest extends CrudControllerTestCase
             'Type' => 'L',
             'Comment' => 'test comment',
             'Save' => 'Speichern'
-        );
+        ];
 
         $this->getRequest()->setPost($post)->setMethod('POST');
 
@@ -152,11 +152,11 @@ class Admin_LanguageControllerTest extends CrudControllerTestCase
 
         $modelCount = count($this->getModels());
 
-        $post = array(
+        $post = [
             'RefName' => 'TestGerman',
             'Part2T' => 'tge',
             'Cancel' => 'Abbrechen'
-        );
+        ];
 
         $this->getRequest()->setPost($post)->setMethod('POST');
 
@@ -164,8 +164,11 @@ class Admin_LanguageControllerTest extends CrudControllerTestCase
 
         $this->assertRedirectTo('/admin/language', 'Should be a redirect to index action.');
 
-        $this->assertEquals($modelCount, count(Opus_Language::getAll()),
-            'Es sollte keine neue Sprache geben.');
+        $this->assertEquals(
+            $modelCount,
+            count(Opus_Language::getAll()),
+            'Es sollte keine neue Sprache geben.'
+        );
     }
 
 
@@ -196,7 +199,7 @@ class Admin_LanguageControllerTest extends CrudControllerTestCase
 
         $modelId = $model->store();
 
-        $this->getRequest()->setMethod('POST')->setPost(array(
+        $this->getRequest()->setMethod('POST')->setPost([
             'Id' => $modelId,
             'Active' => '1',
             'RefName' => 'RefNameModified',
@@ -207,7 +210,7 @@ class Admin_LanguageControllerTest extends CrudControllerTestCase
             'Type' => 'L',
             'Comment' => 'test comment',
             'Save' => 'Speichern'
-        ));
+        ]);
 
         $this->dispatch('/admin/language/edit');
         $this->assertRedirectTo('/admin/language/show/id/' . $modelId);
@@ -236,12 +239,12 @@ class Admin_LanguageControllerTest extends CrudControllerTestCase
 
         $modelId = $model->store();
 
-        $this->getRequest()->setMethod('POST')->setPost(array(
+        $this->getRequest()->setMethod('POST')->setPost([
             'Id' => $modelId,
             'RefName' => 'RefNameModified',
             'Part2T' => 'tes',
             'Cancel' => 'Abbrechen'
-        ));
+        ]);
 
         $this->dispatch('/admin/language/edit');
         $this->assertRedirectTo('/admin/language');
@@ -277,5 +280,4 @@ class Admin_LanguageControllerTest extends CrudControllerTestCase
     {
         return new Opus_Language($identifier);
     }
-
 }

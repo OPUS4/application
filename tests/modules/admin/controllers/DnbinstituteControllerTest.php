@@ -54,7 +54,7 @@ class Admin_DnbinstituteControllerTest extends CrudControllerTestCase
 
     public function tearDown()
     {
-        if (isset ($this->roleId) && isset($this->userId)) {
+        if (isset($this->roleId) && isset($this->userId)) {
             $testRole = new Opus_UserRole($this->roleId);
             $testRole->delete();
             $userAccount = new Opus_Account($this->userId);
@@ -131,7 +131,7 @@ class Admin_DnbinstituteControllerTest extends CrudControllerTestCase
     {
         $this->createsModels = true;
 
-        $post = array(
+        $post = [
             'Name' => 'TestName',
             'Department' => 'TestDepartment',
             'City' => 'TestCity',
@@ -141,7 +141,7 @@ class Admin_DnbinstituteControllerTest extends CrudControllerTestCase
             'IsGrantor' => '1',
             'IsPublisher' => '0',
             'Save' => 'Speichern',
-        );
+        ];
 
         $this->getRequest()->setPost($post)->setMethod('POST');
 
@@ -169,11 +169,11 @@ class Admin_DnbinstituteControllerTest extends CrudControllerTestCase
 
         $modelCount = count($this->getModels());
 
-        $post = array(
+        $post = [
             'Name' => 'TestName',
             'City' => 'TestCity',
             'Cancel' => 'Abbrechen'
-        );
+        ];
 
         $this->getRequest()->setPost($post)->setMethod('POST');
 
@@ -181,8 +181,11 @@ class Admin_DnbinstituteControllerTest extends CrudControllerTestCase
 
         $this->assertRedirectTo('/admin/dnbinstitute', 'Should be a redirect to index action.');
 
-        $this->assertEquals($modelCount, count(Opus_DnbInstitute::getAll()),
-            'Es sollte keine neue Sprache geben.');
+        $this->assertEquals(
+            $modelCount,
+            count(Opus_DnbInstitute::getAll()),
+            'Es sollte keine neue Sprache geben.'
+        );
     }
 
     public function testEditActionShowForm()
@@ -204,7 +207,7 @@ class Admin_DnbinstituteControllerTest extends CrudControllerTestCase
 
         $modelId = $this->createNewModel();
 
-        $post = array(
+        $post = [
             'Id' => $modelId,
             'Name' => 'NameModified',
             'Department' => 'DepartmentModified',
@@ -215,7 +218,7 @@ class Admin_DnbinstituteControllerTest extends CrudControllerTestCase
             'IsGrantor' => '0',
             'IsPublisher' => '1',
             'Save' => 'Speichern'
-        );
+        ];
 
         $this->getRequest()->setPost($post)->setMethod('POST');
 
@@ -242,12 +245,12 @@ class Admin_DnbinstituteControllerTest extends CrudControllerTestCase
 
         $modelId = $this->createNewModel();
 
-        $this->getRequest()->setMethod('POST')->setPost(array(
+        $this->getRequest()->setMethod('POST')->setPost([
             'Id' => $modelId,
             'Name' => 'NameModified',
             'City' => 'Berlin',
             'Cancel' => 'Abbrechen'
-        ));
+        ]);
 
         $this->dispatch('/admin/dnbinstitute/edit');
         $this->assertRedirectTo('/admin/dnbinstitute');
@@ -372,4 +375,3 @@ class Admin_DnbinstituteControllerTest extends CrudControllerTestCase
             'although he has the right to do it');
     }
 }
-

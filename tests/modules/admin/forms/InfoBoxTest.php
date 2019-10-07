@@ -61,7 +61,7 @@ class Admin_Form_InfoBoxTest extends ControllerTestCase
         $form = new Admin_Form_InfoBox();
 
         $logger = new MockLogger();
-        $form->setLog($logger);
+        $form->setLogger($logger);
 
         $form->populateFromModel(null);
 
@@ -86,7 +86,7 @@ class Admin_Form_InfoBoxTest extends ControllerTestCase
 
         $document = new Opus_Document(146);
 
-        $form->constructFromPost(array(), $document);
+        $form->constructFromPost([], $document);
 
         $this->assertNotNull($form->getDocument());
         $this->assertEquals($document, $form->getDocument());
@@ -97,10 +97,9 @@ class Admin_Form_InfoBoxTest extends ControllerTestCase
         $form = new Admin_Form_InfoBox();
 
         $logger = new MockLogger();
-        $form->setLog($logger);
+        $form->setLogger($logger);
 
-        $form->constructFromPost(array(), null);
-
+        $form->constructFromPost([], null);
         $messages = $logger->getMessages();
 
         $this->assertEquals(1, count($messages));
@@ -108,7 +107,7 @@ class Admin_Form_InfoBoxTest extends ControllerTestCase
 
         $logger->clear();
 
-        $form->constructFromPost(array(), new Opus_Person());
+        $form->constructFromPost([], new Opus_Person());
 
         $messages = $logger->getMessages();
 
@@ -122,5 +121,4 @@ class Admin_Form_InfoBoxTest extends ControllerTestCase
 
         $this->assertFalse($form->isEmpty());
     }
-
 }

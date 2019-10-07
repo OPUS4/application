@@ -59,17 +59,13 @@ class Admin_Form_EnrichmentTable extends Application_Form_Model_Table
     {
         if ($this->isProtected($model) and $this->isUsed($model)) {
             return "protected used";
-        }
-        elseif (!$this->isUsed($model) and $this->isProtected($model)) {
+        } elseif (! $this->isUsed($model) and $this->isProtected($model)) {
             return "protected unused";
-        }
-        elseif ($this->isUsed($model)) {
+        } elseif ($this->isUsed($model)) {
             return "used";
-        }
-        elseif ($this->isProtected($model)) {
+        } elseif ($this->isProtected($model)) {
             return "protected";
-        }
-        elseif (!$this->isUsed($model)) {
+        } elseif (! $this->isUsed($model)) {
             return "unused";
         }
 
@@ -80,14 +76,11 @@ class Admin_Form_EnrichmentTable extends Application_Form_Model_Table
     {
         if ($this->isProtected($model) and $this->isUsed($model)) {
             return 'admin_enrichmentkey_used_tooltip';
-        }
-        elseif (!$this->isUsed($model) and $this->isProtected($model)) {
+        } elseif (! $this->isUsed($model) and $this->isProtected($model)) {
             return 'admin_enrichmentkey_unused_tooltip';
-        }
-        elseif ($this->isUsed($model)) {
+        } elseif ($this->isUsed($model)) {
             return 'admin_enrichmentkey_used_tooltip';
-        }
-        elseif (!$this->isUsed($model)) {
+        } elseif (! $this->isUsed($model)) {
             return 'admin_enrichmentkey_unused_tooltip';
         }
 

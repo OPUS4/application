@@ -27,7 +27,7 @@
  * @category    Application
  * @package     View
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -42,11 +42,7 @@
 class Application_View_Helper_FormatValue extends Zend_View_Helper_Abstract
 {
 
-    /**
-     * Logger for this class.
-     * @var Zend_Log Logger
-     */
-    private $_logger;
+    use \Opus\LoggingTrait;
 
     /**
      * Controller helper for translations.
@@ -93,7 +89,7 @@ class Application_View_Helper_FormatValue extends Zend_View_Helper_Abstract
 
             $this->getLogger()->debug('Formatting field ' . $field->getName());
 
-            if (!empty($modelClass)) {
+            if (! empty($modelClass)) {
                 switch ($modelClass) {
                     case 'Opus_Date':
                         return $this->formatDate($field->getValue());
@@ -106,6 +102,7 @@ class Application_View_Helper_FormatValue extends Zend_View_Helper_Abstract
                             // but in case it does:
                             return 'ERROR: DNB institute without name.';
                         }
+                        break; // should never be reached
                     default:
                         // Should never happen, but in case it does:
                         $this->getLogger()->err(__CLASS__ . ' Trying to format unknown model ' . $modelClass);
@@ -116,11 +113,11 @@ class Application_View_Helper_FormatValue extends Zend_View_Helper_Abstract
 
                 if ($field->getName() === 'Language') {
                     return $this->view->translateLanguage($value);
-                } else if ($field->isSelection()) {
+                } elseif ($field->isSelection()) {
                     Application_Form_Element_Language::getLanguageList(); // initializes language list translations
                     $key = $this->_translation->getKeyForValue($model, $field->getName(), $value);
                     return $this->view->translate($key);
-                } else if ($field->isCheckbox()) {
+                } elseif ($field->isCheckbox()) {
                     if ($value) {
                         $key = 'Field_Value_True';
                     } else {
@@ -141,7 +138,7 @@ class Application_View_Helper_FormatValue extends Zend_View_Helper_Abstract
      */
     public function formatDate($date)
     {
-        if (!($date instanceof Opus_Date)) {
+        if (! ($date instanceof Opus_Date)) {
             return $date;
         } else {
             return $this->_dates->getDateString($date);
@@ -171,18 +168,5 @@ class Application_View_Helper_FormatValue extends Zend_View_Helper_Abstract
             $this->getLogger()->debug('Formatting ' . $value);
             return $value;
         }
-    }
-
-    /**
-     * Returns logger.
-     * @return Zend_Log
-     */
-    private function getLogger()
-    {
-        if (empty($this->logger)) {
-            $this->_logger = Zend_Registry::get('Zend_Log');
-        }
-
-        return $this->_logger;
     }
 }

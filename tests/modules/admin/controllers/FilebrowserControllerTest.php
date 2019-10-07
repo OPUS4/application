@@ -75,12 +75,16 @@ class Admin_FilebrowserControllerTest extends ControllerTestCase
 
         // check breadcrumbs
         $this->verifyBreadcrumbDefined();
-        $this->assertQueryContentContains('//div.breadcrumbsContainer//a[@href="/admin/document/index/id/'
+        $this->assertQueryContentContains(
+            '//div.breadcrumbsContainer//a[@href="/admin/document/index/id/'
             . $this->documentId . '"]',
-            "unbenanntes Dokument (id = '{$this->documentId}')");
-        $this->assertQueryContentContains('//div.breadcrumbsContainer//a[@href="/admin/filemanager/index/id/'
+            "unbenanntes Dokument (id = '{$this->documentId}')"
+        );
+        $this->assertQueryContentContains(
+            '//div.breadcrumbsContainer//a[@href="/admin/filemanager/index/id/'
             . $this->documentId . '/continue/1"]',
-            'Dateien');
+            'Dateien'
+        );
     }
 
     public function testShowDocInfoOnIndexPage()
@@ -105,7 +109,7 @@ class Admin_FilebrowserControllerTest extends ControllerTestCase
     {
         $this->request
             ->setMethod('POST')
-            ->setPost(array());
+            ->setPost([]);
         $this->dispatch('/admin/filebrowser/import');
         $this->assertResponseCode(500);
         $this->assertContains('missing parameter docId', $this->getResponse()->getBody());
@@ -115,7 +119,7 @@ class Admin_FilebrowserControllerTest extends ControllerTestCase
     {
         $this->request
             ->setMethod('POST')
-            ->setPost(array('id' => 'invaliddocid'));
+            ->setPost(['id' => 'invaliddocid']);
         $this->dispatch('/admin/filebrowser/import');
         $this->assertResponseLocationHeader($this->getResponse(), '/admin/filebrowser/index/id/invaliddocid');
     }
@@ -124,7 +128,7 @@ class Admin_FilebrowserControllerTest extends ControllerTestCase
     {
         $this->request
             ->setMethod('POST')
-            ->setPost(array('id' => $this->documentId));
+            ->setPost(['id' => $this->documentId]);
         $this->dispatch('/admin/filebrowser/import');
         $this->assertResponseLocationHeader($this->getResponse(), '/admin/filebrowser/index/id/' . $this->documentId);
     }
@@ -133,9 +137,9 @@ class Admin_FilebrowserControllerTest extends ControllerTestCase
     {
         $this->request
             ->setMethod('POST')
-            ->setPost(array(
+            ->setPost([
                 'id' => $this->documentId,
-                'file' => 'invalid'));
+                'file' => 'invalid']);
         $this->dispatch('/admin/filebrowser/import');
         $this->assertResponseCode(500);
         $this->assertContains('invalid POST parameter', $this->getResponse()->getBody());
@@ -146,11 +150,10 @@ class Admin_FilebrowserControllerTest extends ControllerTestCase
         $this->markTestIncomplete('TODO');
         $this->request
             ->setMethod('POST')
-            ->setPost(array(
+            ->setPost([
                 'docId' => $this->documentId,
-                'file' => 'test.txt'));
+                'file' => 'test.txt']);
         $this->dispatch('/admin/filebrowser/import');
         $this->assertResponseLocationHeader($this->getResponse(), '/admin/filemanager/index/docId/' . $this->documentId);
     }
 }
-

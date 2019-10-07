@@ -130,11 +130,11 @@ class Admin_Form_Document_Collections extends Admin_Form_AbstractDocumentSubForm
             foreach ($data as $roleName => $collections) {
                 $roleForm = $this->getSubForm($this->normalizeName($roleName));
 
-                if (!is_null($roleForm)) {
+                if (! is_null($roleForm)) {
                     foreach ($collections as $key => $collection) {
                         $colForm = $roleForm->getSubForm($key);
 
-                        if (!is_null($colForm)) {
+                        if (! is_null($colForm)) {
                             $result = $colForm->processPost($collection, $context);
 
                             if ($result === 'remove') {
@@ -190,16 +190,15 @@ class Admin_Form_Document_Collections extends Admin_Form_AbstractDocumentSubForm
             foreach ($colForms as $colForm) {
                 $value = $colForm->getModel();
 
-                if (!is_null($value)) {
+                if (! is_null($value)) {
                     $values[] = $value;
                 }
-
             }
         }
 
-       $field = $document->getField('Collection');
+        $field = $document->getField('Collection');
 
-       $field->setValue($values);
+        $field->setValue($values);
     }
 
     public function continueEdit($request, $session = null)
@@ -287,7 +286,7 @@ class Admin_Form_Document_Collections extends Admin_Form_AbstractDocumentSubForm
 
         $multiWrapper = $subform->getDecorator('multiWrapper');
 
-        if (!is_null($multiWrapper) && $multiWrapper instanceof Zend_Form_Decorator_HtmlTag) {
+        if (! is_null($multiWrapper) && $multiWrapper instanceof Zend_Form_Decorator_HtmlTag) {
             $multiClass = $multiWrapper->getOption('class');
             $multiClass .= ($position % 2 == 0) ? ' even' : ' odd';
             $multiWrapper->setOption('class', $multiClass);
@@ -305,10 +304,9 @@ class Admin_Form_Document_Collections extends Admin_Form_AbstractDocumentSubForm
         $groupedCollections = [];
 
         foreach ($document->getCollection() as $collection) {
-
             $roleName = $collection->getRoleName();
 
-            if (!isset($groupedCollections[$roleName])) {
+            if (! isset($groupedCollections[$roleName])) {
                 $groupedCollections[$roleName] = [];
             }
 

@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -39,10 +39,15 @@
  */
 class ControllerTestCase extends TestCase
 {
-
     const MESSAGE_LEVEL_NOTICE = 'notice';
 
     const MESSAGE_LEVEL_FAILURE = 'failure';
+
+    const CONFIG_VALUE_FALSE = ''; // Zend_Config übersetzt false in den Wert ''
+
+    const CONFIG_VALUE_TRUE = '1'; // Zend_Config übersetzt true in den Wert '1'
+
+    use \Opus\LoggingTrait;
 
     private $securityEnabled;
 
@@ -99,8 +104,11 @@ class ControllerTestCase extends TestCase
     public function getApplication()
     {
         return new Zend_Application(
-            $this->applicationEnv, ["config" => [
+            $this->applicationEnv,
+            ["config" => [
                 APPLICATION_PATH . '/application/configs/application.ini',
+                APPLICATION_PATH . '/application/configs/config.ini',
+                APPLICATION_PATH . '/application/configs/console.ini',
                 APPLICATION_PATH . '/tests/tests.ini',
                 APPLICATION_PATH . '/tests/config.ini'
             ]]
@@ -181,11 +189,12 @@ class ControllerTestCase extends TestCase
     protected function checkForCustomBadStringsInHtml($body, array $badStrings)
     {
         $bodyLowerCase = strtolower($body);
-        foreach ($badStrings AS $badString) {
+        foreach ($badStrings as $badString) {
             $this->assertNotContains(
                 strtolower($badString),
                 $bodyLowerCase,
-                "Response must not contain '$badString'");
+                "Response must not contain '$badString'"
+            );
         }
     }
 
@@ -212,11 +221,13 @@ class ControllerTestCase extends TestCase
     {
         $adapter = new Opus_Security_AuthAdapter();
         $adapter->setCredentials($login, $password);
+
         $auth = Zend_Auth::getInstance();
-        $result = $auth->authenticate($adapter);
+        $auth->authenticate($adapter);
         $this->assertTrue($auth->hasIdentity());
+
         $config = Zend_Registry::get('Zend_Config');
-        if ($config->security) {
+        if (isset($config->security) && filter_var($config->security, FILTER_VALIDATE_BOOLEAN)) {
             Application_Security_AclProvider::init();
         }
     }
@@ -224,7 +235,7 @@ class ControllerTestCase extends TestCase
     public function logoutUser()
     {
         $instance = Zend_Auth::getInstance();
-        if (!is_null($instance)) {
+        if (! is_null($instance)) {
             $instance->clearIdentity();
         }
         $realm = Opus_Security_Realm::getInstance();
@@ -239,7 +250,7 @@ class ControllerTestCase extends TestCase
      */
     protected function requireSolrConfig()
     {
-        $config = Opus_Search_Config::getServiceConfiguration(Opus_Search_Service::SERVICE_TYPE_INDEX);
+        $config = Opus\Search\Config::getServiceConfiguration(Opus\Search\Service::SERVICE_TYPE_INDEX);
 
         if (is_null($config)) {
             $this->markTestSkipped('No solr-config given.  Skipping test.');
@@ -293,7 +304,7 @@ class ControllerTestCase extends TestCase
     {
         $config = Zend_Registry::get('Zend_Config');
         $this->securityEnabled = $config->security;
-        $config->security = '1';
+        $config->security = self::CONFIG_VALUE_TRUE;
         Zend_Registry::set('Zend_Config', $config);
     }
 
@@ -397,7 +408,7 @@ class ControllerTestCase extends TestCase
         $filteredErrors = [];
 
         foreach ($errors as $error) {
-            if (!in_array(trim($error->message), $ignored)) {
+            if (! in_array(trim($error->message), $ignored)) {
                 $filteredErrors[] = $error;
             }
         }
@@ -412,7 +423,8 @@ class ControllerTestCase extends TestCase
         }
 
         $this->assertEquals(
-            0, count($errors),
+            0,
+            count($errors),
             'XHTML Schemaverletzungen gefunden (' . count($errors) . ')' . PHP_EOL . $output
         );
 
@@ -440,7 +452,7 @@ class ControllerTestCase extends TestCase
      */
     public function verifyCommandAvailable($command)
     {
-        if (!$this->isCommandAvailable($command)) {
+        if (! $this->isCommandAvailable($command)) {
             if ($this->isFailTestOnMissingCommand()) {
                 $this->fail("Command '$command' not installed.");
             } else {
@@ -457,7 +469,7 @@ class ControllerTestCase extends TestCase
     {
         $config = Zend_Registry::get('Zend_Config');
         return (isset($config->tests->failTestOnMissingCommand) &&
-                $config->tests->failTestOnMissingCommand) ? true : false;
+                filter_var($config->tests->failTestOnMissingCommand, FILTER_VALIDATE_BOOLEAN));
     }
 
     /**
@@ -548,15 +560,17 @@ class ControllerTestCase extends TestCase
 
         foreach ($pages as $page) {
             if ($page->getController() == $controller && $page->getAction() == $action) {
-                if (!$breadcrumbDefined) {
+                if (! $breadcrumbDefined) {
                     $breadcrumbDefined = true;
 
                     $translate = Zend_Registry::get('Zend_Translate');
 
                     $label = $page->getLabel();
 
-                    $this->assertTrue($translate->isTranslated($label),
-                        "Label '$label' für Seite '$location' nicht übersetzt.");
+                    $this->assertTrue(
+                        $translate->isTranslated($label),
+                        "Label '$label' für Seite '$location' nicht übersetzt."
+                    );
                 } else {
                     $this->fail("Seite '$location' mehr als einmal in navigationModules.xml definiert.");
                 }
@@ -576,44 +590,65 @@ class ControllerTestCase extends TestCase
 
     /**
      * Removes a test document from the database.
+     *
      * @param $value Opus_Document|int
+     * @throws Opus_Model_Exception
      */
     public function removeDocument($value)
     {
-        if (!is_null($value)) {
-            $docId = null;
-            try {
-                // check if value is Opus_Document or ID
-                $doc = ($value instanceof Opus_Document) ? $value : new Opus_Document($value);
-                $docId = $doc->getId();
-                $doc->deletePermanent();
-            } catch (Opus_Model_NotFoundException $omnfe) {
-                // Model nicht gefunden -> alles gut (hoffentlich)
-            }
+        if (is_null($value)) {
+            return;
+        }
 
-            // make sure test documents have been deleted
+        $doc = $value;
+        if (! ($value instanceof Opus_Document)) {
             try {
-                $doc = new Opus_Document($docId);
-                $this->getLogger()->debug("Test document {$docId} was not deleted.");
-            } catch (Opus_Model_NotFoundException $omnfe) {
-                // ignore - document was deleted
-                $this->getLogger()->debug("Test document {$docId} was deleted.");
+                $doc = new Opus_Document($value);
+            } catch (Opus_Model_NotFoundException $e) {
+                // could not find document -> no cleanup operation required: exit silently
+                return;
             }
+        }
+
+        $docId = $doc->getId();
+        if (is_null($docId)) {
+            // Dokument wurde (noch) nicht in DB persistiert
+            return;
+        }
+
+        try {
+            new Opus_Document($docId);
+            $doc->deletePermanent();
+        } catch (Opus_Model_NotFoundException $omnfe) {
+            // Model nicht gefunden -> alles gut (hoffentlich)
+            $this->getLogger()->debug("Test document {$docId} was deleted successfully by test.");
+            return;
+        } catch (Exception $ex) {
+            $this->getLogger()->err('unexpected exception while cleaning document ' . $docId . ': ' . $ex);
+            throw $ex;
+        }
+
+        // make sure test documents have been deleted
+        try {
+            new Opus_Document($docId);
+            $this->getLogger()->debug("Test document {$docId} was not deleted.");
+        } catch (Opus_Model_NotFoundException $omnfe) {
+            // ignore - document was deleted successfully
+            $this->getLogger()->debug("Test document {$docId} was deleted successfully.");
         }
     }
 
     private function deleteTestDocuments()
     {
-        if (!is_null($this->testDocuments)) {
-            foreach ($this->testDocuments as $key => $doc) {
-                try {
-                    $this->removeDocument($doc);
-                } catch (Exception $e) {
-                }
-            }
-
-            $this->testDocuments = null;
+        if (is_null($this->testDocuments)) {
+            return;
         }
+
+        foreach ($this->testDocuments as $key => $doc) {
+            $this->removeDocument($doc);
+        }
+
+        $this->testDocuments = null;
     }
 
     protected function getDocument($docId)
@@ -621,6 +656,12 @@ class ControllerTestCase extends TestCase
         return new Opus_Document($docId);
     }
 
+    /**
+     * Erzeugt ein Testdokument, das nach der Testausführung automatisch aufgeräumt wird.
+     *
+     * @return Opus_Document
+     * @throws Opus_Model_Exception
+     */
     protected function createTestDocument()
     {
         $doc = new Opus_Document();
@@ -634,7 +675,7 @@ class ControllerTestCase extends TestCase
     protected function addTestDocument($document)
     {
         if (is_null($this->testDocuments)) {
-            $this->testDocuments = array();
+            $this->testDocuments = [];
         }
         array_push($this->testDocuments, $document);
     }
@@ -667,10 +708,10 @@ class ControllerTestCase extends TestCase
     protected function createTestFile($filename, $filepath = null)
     {
         if (is_null($this->testFiles)) {
-            $this->testFiles = array();
+            $this->testFiles = [];
         }
         $config = Zend_Registry::get('Zend_Config');
-        if (!isset($config->workspacePath)) {
+        if (! isset($config->workspacePath)) {
             throw new Exception("config key 'workspacePath' not defined in config file");
         }
 
@@ -686,7 +727,7 @@ class ControllerTestCase extends TestCase
         $file->setPathName(basename($filepath));
         $file->setTempFile($filepath);
         if (array_key_exists($filename, $this->testFiles)) {
-            throw Exception ('filenames should be unique');
+            throw Exception('filenames should be unique');
         }
         $this->testFiles[$filename] = $filepath;
         return $file;
@@ -694,7 +735,7 @@ class ControllerTestCase extends TestCase
 
     private function deleteTestFiles()
     {
-        if (!is_null($this->testFiles)) {
+        if (! is_null($this->testFiles)) {
             foreach ($this->testFiles as $key => $filepath) {
                 try {
                     Opus_Util_File::deleteDirectory(dirname($filepath));
@@ -706,27 +747,19 @@ class ControllerTestCase extends TestCase
 
     public function assertSecurityConfigured()
     {
-        $this->assertEquals(1, Zend_Registry::get('Zend_Config')->security);
+        $this->assertEquals('1', Zend_Registry::get('Zend_Config')->security);
         $this->assertTrue(
-            Zend_Registry::isRegistered('Opus_Acl'), 'Expected registry key Opus_Acl to be set'
+            Zend_Registry::isRegistered('Opus_Acl'),
+            'Expected registry key Opus_Acl to be set'
         );
         $acl = Zend_Registry::get('Opus_Acl');
         $this->assertTrue($acl instanceof Zend_Acl, 'Expected instance of Zend_Acl');
     }
 
-    public function getLogger()
-    {
-        if (is_null($this->logger)) {
-            $this->logger = Zend_Registry::get('Zend_Log');
-        }
-
-        return $this->logger;
-    }
-
     public function resetSearch()
     {
-        Opus_Search_Config::dropCached();
-        Opus_Search_Service::dropCached();
+        \Opus\Search\Config::dropCached();
+        \Opus\Search\Service::dropCached();
     }
 
     /**

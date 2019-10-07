@@ -38,7 +38,8 @@ class Application_View_Helper_IsDisplayField extends Zend_View_Helper_Abstract
      * @param string $name Name of field
      * @return bool
      */
-    public function isDisplayField($name) {
+    public function isDisplayField($name)
+    {
         $config = Application_Configuration::getInstance()->getConfig();
 
         if (is_null($config)) {
@@ -47,10 +48,8 @@ class Application_View_Helper_IsDisplayField extends Zend_View_Helper_Abstract
 
         if (isset($config->frontdoor->metadata->$name)) {
             return $config->frontdoor->metadata->$name == 1;
-        }
-        else {
+        } else {
             return false;
         }
     }
-
 }

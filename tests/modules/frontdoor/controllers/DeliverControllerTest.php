@@ -77,7 +77,7 @@ class Frontdoor_DeliverControllerTest extends ControllerTestCase
             'my,file.txt' => 'my,file.txt',
         ];
 
-        foreach ($testcase AS $string => $expected_output) {
+        foreach ($testcase as $string => $expected_output) {
             $output = Frontdoor_DeliverController::quoteFileName($string);
             $this->assertEquals($expected_output, $output);
         }
@@ -95,7 +95,7 @@ class Frontdoor_DeliverControllerTest extends ControllerTestCase
             'with "weird" chars.pdf'   => '=?UTF-8?B?d2l0aCAid2VpcmQiIGNoYXJzLnBkZg==?=',
         ];
 
-        foreach ($testcase AS $string => $expected_output) {
+        foreach ($testcase as $string => $expected_output) {
             $output = Frontdoor_DeliverController::quoteFileName($string);
             $this->assertEquals($expected_output, $output);
         }

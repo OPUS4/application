@@ -37,71 +37,78 @@
  * This helper class defines only one method baseUrl() to retrieve the
  * application base url for absolute urls in views.
  */
-class Application_View_Helper_DocumentUrl extends Zend_View_Helper_Abstract {
+class Application_View_Helper_DocumentUrl extends Zend_View_Helper_Abstract
+{
 
-    public function documentUrl() {
+    public function documentUrl()
+    {
         return $this;
     }
 
-    public function frontdoor($docId) {
-        $url = array(
+    public function frontdoor($docId)
+    {
+        $url = [
             'module'     => 'frontdoor',
             'controller' => 'index',
             'action'     => 'index',
             'docId'      => $docId,
-        );
+        ];
         return $this->view->url($url, 'default', true);
     }
 
-    public function adminShow($docId) {
-        $url = array(
+    public function adminShow($docId)
+    {
+        $url = [
             'module'     => 'admin',
             'controller' => 'document',
             'action'     => 'index',
             'id'         => $docId,
-        );
+        ];
         return $this->view->url($url, 'default', true);
     }
 
-    public function adminFileManager($docId) {
-        $url = array(
+    public function adminFileManager($docId)
+    {
+        $url = [
             'module'     => 'admin',
             'controller' => 'filemanager',
             'action'     => 'index',
             'id'         => $docId,
-        );
+        ];
         return $this->view->url($url, 'default', true);
     }
 
-    public function adminAccessManager($docId) {
-        $url = array(
+    public function adminAccessManager($docId)
+    {
+        $url = [
             'module'     => 'admin',
             'controller' => 'access',
             'action'     => 'listrole',
             'docid'      => $docId,
-        );
+        ];
         return $this->view->url($url, 'default', true);
     }
 
-    public function adminEdit($docId) {
-        $url = array(
+    public function adminEdit($docId)
+    {
+        $url = [
             'module'     => 'admin',
             'controller' => 'document',
             'action'     => 'edit',
             'id'      => $docId,
-        );
+        ];
         return $this->view->url($url, 'default', true);
     }
 
-    public function adminChangeState($docId, $targetState) {
-        $url = array(
+    public function adminChangeState($docId, $targetState)
+    {
+        $url = [
             'module'     => 'admin',
             'controller' => 'workflow',
             'action'     => 'changestate',
             'docId'      => $docId,
             'targetState' => $targetState
-        );
+        ];
         return $this->view->url($url, 'default', true);
     }
-
 }

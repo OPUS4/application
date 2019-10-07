@@ -27,8 +27,13 @@
  * @category    Application
  * @package     Module_Frontdoor
  * @author      Sascha Szott <opus-development@saschaszott.de>
+ * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
+ *
+ * TODO new types have to be added as functions -> make extendable? how is it used when rendering?
+ *      Basically each type could be a separate class. Refactor for later so new types or metatags won't necessarily
+ *      require changing core classes (this class here).
  */
 class Frontdoor_Model_HtmlMetaTags
 {
@@ -41,6 +46,12 @@ class Frontdoor_Model_HtmlMetaTags
      * @var string
      */
     private $fullUrl;
+
+    /**
+     * Mapping of document types to meta tags types.
+     * @var array
+     */
+    private $mapping;
 
     /**
      * Frontdoor_Model_HtmlMetaTags constructor.
@@ -58,7 +69,8 @@ class Frontdoor_Model_HtmlMetaTags
      * @param Opus_Document $document
      * @return array Array mit Metatag-Paaren
      */
-    public function createTags($document) {
+    public function createTags($document)
+    {
         $metas = [];
         $this->handleAuthors($document, $metas);
         $this->handleDates($document, $metas);
@@ -152,7 +164,6 @@ class Frontdoor_Model_HtmlMetaTags
         $datePublished = $document->getPublishedDate();
         if (! is_null($datePublished)) {
             $dateStr = $datePublished->getZendDate()->get('yyyy-MM-dd');
-
         } else {
             $dateStr = $document->getPublishedYear();
         }
@@ -186,8 +197,7 @@ class Frontdoor_Model_HtmlMetaTags
                         // in der gleichen Sprache nicht speichern lassen: für Robustheit wird
                         // dieser Fall hier aber dennoch behandelt
                         $subtitlesByLang[$lang][] = $subtitleValue;
-                    }
-                    else {
+                    } else {
                         $subtitlesByLang[$lang] = [$subtitleValue];
                     }
                 }
@@ -339,8 +349,7 @@ class Frontdoor_Model_HtmlMetaTags
             $baseUrlFiles = $this->fullUrl;
             if (isset($this->config, $this->config->deliver->url->prefix)) {
                 $baseUrlFiles .= $this->config->deliver->url->prefix;
-            }
-            else {
+            } else {
                 $baseUrlFiles .= '/files';
             }
 
@@ -476,86 +485,106 @@ class Frontdoor_Model_HtmlMetaTags
      * @param Opus_Document $document
      * @return bool
      */
-    private function isJournalPaper($document)
+    public function isJournalPaper($document)
     {
-        if (isset($this->config, $this->config->metatags->mapping->journal_paper)) {
-            return in_array($document->getType(), $this->config->metatags->mapping->journal_paper->toArray());
-        }
-        return false;
+        return $this->getMetatagsType($document) === 'journal_paper';
     }
 
     /**
      * @param Opus_Document $document
      * @return bool
      */
-    private function isConferencePaper($document)
+    public function isConferencePaper($document)
     {
-        if (isset($this->config, $this->config->metatags->mapping->conference_paper)) {
-            return in_array($document->getType(), $this->config->metatags->mapping->conference_paper->toArray());
-        }
-        return false;
+        return $this->getMetatagsType($document) === 'conference_paper';
     }
 
     /**
      * @param Opus_Document $document
      * @return bool
      */
-    private function isThesis($document)
+    public function isThesis($document)
     {
-        if (isset($this->config, $this->config->metatags->mapping->thesis)) {
-            return in_array($document->getType(), $this->config->metatags->mapping->thesis->toArray());
-        }
-        return false;
+        return $this->getMetatagsType($document) === 'thesis';
     }
 
     /**
      * @param Opus_Document $document
      * @return bool
      */
-    private function isWorkingPaper($document)
+    public function isWorkingPaper($document)
     {
-        if (isset($this->config, $this->config->metatags->mapping->working_paper)) {
-            return in_array($document->getType(), $this->config->metatags->mapping->working_paper->toArray());
-        }
-        return false;
+        return $this->getMetatagsType($document) === 'working_paper';
     }
 
     /**
      * @param Opus_Document $document
      * @return bool
      */
-    private function isBook($document)
+    public function isBook($document)
     {
-        if (isset($this->config, $this->config->metatags->mapping->book)) {
-            return in_array($document->getType(), $this->config->metatags->mapping->book->toArray());
-        }
-        return false;
+        return $this->getMetatagsType($document) === 'book';
     }
 
     /**
      * @param Opus_Document $document
      * @return bool
      */
-    private function isBookPart($document)
+    public function isBookPart($document)
     {
-        if (isset($this->config, $this->config->metatags->mapping->book_part)) {
-            return in_array($document->getType(), $this->config->metatags->mapping->book_part->toArray());
-        }
-        return false;
+        return $this->getMetatagsType($document) === 'book_part';
     }
 
     /**
      * @param $document Opus_Document
      * @return bool
      */
-    private function isOther($document)
+    public function isOther($document)
     {
-        return ! ($this->isJournalPaper($document) ||
-            $this->isConferencePaper($document) ||
-            $this->isThesis($document) ||
-            $this->isWorkingPaper($document) ||
-            $this->isBook($document) ||
-            $this->isBookPart($document));
+        return $this->getMetatagsType($document) === 'other';
     }
 
+    public function getMetatagsType($document)
+    {
+        $mappingConfig = $this->getMappingConfig();
+        $docType = $document->getType();
+        if (isset($mappingConfig[$docType])) {
+            return $mappingConfig[$docType];
+        } else {
+            return 'other';
+        }
+    }
+
+    public function getMappingConfig()
+    {
+        if (is_null($this->mapping) && isset($this->config)) {
+            $mapping = [];
+
+            // load default mappings
+            if (isset($this->config->metatags->defaultMapping)) {
+                $mapping = array_merge($mapping, $this->loadMapping($this->config->metatags->defaultMapping));
+            }
+
+            // load custom mapping
+            if (isset($this->config->metatags->mapping)) {
+                $mapping = array_merge($mapping, $this->loadMapping($this->config->metatags->mapping));
+            }
+
+            $this->mapping = $mapping;
+        }
+
+        return $this->mapping;
+    }
+
+    private function loadMapping($config)
+    {
+        $mapping = [];
+        $types = $config->toArray();
+        foreach ($types as $metaTagType => $docTypes) {
+            foreach ($types[$metaTagType] as $doctype) {
+                $mapping[$doctype] = $metaTagType;
+            }
+        }
+        return $mapping;
+    }
 }

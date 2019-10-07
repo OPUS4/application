@@ -40,8 +40,8 @@ class Application_Form_Element_FileLinkTest extends FormElementTestCase
     {
         $this->_formElementClass = 'Application_Form_Element_FileLink';
         $this->_expectedDecoratorCount = 8;
-        $this->_expectedDecorators = array('ViewHelper', 'Placeholder', 'Description', 'ElementHint', 'Errors',
-            'ElementHtmlTag', 'LabelNotEmpty', 'dataWrapper');
+        $this->_expectedDecorators = ['ViewHelper', 'Placeholder', 'Description', 'ElementHint', 'Errors',
+            'ElementHtmlTag', 'LabelNotEmpty', 'dataWrapper'];
         $this->_staticViewHelper = 'fileLink';
         parent::setUp();
     }
@@ -130,5 +130,4 @@ class Application_Form_Element_FileLinkTest extends FormElementTestCase
 
         $this->assertFalse($element->isValid(5555)); // File 5555 does not exist
     }
-
 }

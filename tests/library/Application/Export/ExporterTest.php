@@ -53,8 +53,7 @@ class Application_Export_ExporterTest extends ControllerTestCase
         // restore guest access to export module
         $guest = Opus_UserRole::fetchByName('guest');
 
-        if ($this->_guestExportEnabled)
-        {
+        if ($this->_guestExportEnabled) {
             $guest->appendAccessModule('export');
         } else {
             $guest->removeAccessModule('export');
@@ -109,7 +108,8 @@ class Application_Export_ExporterTest extends ControllerTestCase
         $this->markTestIncomplete('more testing?');
     }
 
-    public function testContextProperties() {
+    public function testContextProperties()
+    {
         $exporter = new Application_Export_Exporter();
 
         $exporter->addFormats([
@@ -170,8 +170,7 @@ class Application_Export_ExporterTest extends ControllerTestCase
 
         $lastName = '';
 
-        foreach ($formats as $format)
-        {
+        foreach ($formats as $format) {
             $name = $format->get('name');
             $this->assertGreaterThanOrEqual($lastName, $name);
             $lastName = $name;

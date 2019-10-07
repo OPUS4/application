@@ -48,7 +48,7 @@ class Application_Form_Validate_CollectionRoleOaiNameUniqueTest extends Controll
     public function tearDown()
     {
         $collectionRole = Opus_CollectionRole::fetchByName('NewTestColRoleName');
-        if (!is_null($collectionRole)) {
+        if (! is_null($collectionRole)) {
             $collectionRole->delete();
         }
         parent::tearDown();
@@ -57,20 +57,20 @@ class Application_Form_Validate_CollectionRoleOaiNameUniqueTest extends Controll
     public function testIsValidTrue()
     {
         $this->assertTrue($this->validator->isValid('newTestColRole'));
-        $this->assertTrue($this->validator->isValid('newTestColRole', array()));
-        $this->assertTrue($this->validator->isValid('newTestColRole', array('Id' => 1)));
+        $this->assertTrue($this->validator->isValid('newTestColRole', []));
+        $this->assertTrue($this->validator->isValid('newTestColRole', ['Id' => 1]));
     }
 
     public function testIsValidTrueForUpdate()
     {
-        $this->assertTrue($this->validator->isValid('ddc', array('Id' => 2)));
+        $this->assertTrue($this->validator->isValid('ddc', ['Id' => 2]));
     }
 
     public function testIsValidFalse()
     {
         $this->assertFalse($this->validator->isValid('ddc'));
-        $this->assertFalse($this->validator->isValid('ddc', array()));
-        $this->assertFalse($this->validator->isValid('ddc', array('Id' => 1)));
+        $this->assertFalse($this->validator->isValid('ddc', []));
+        $this->assertFalse($this->validator->isValid('ddc', ['Id' => 1]));
     }
 
     public function testGetModel()
@@ -83,10 +83,9 @@ class Application_Form_Validate_CollectionRoleOaiNameUniqueTest extends Controll
         $method = new ReflectionMethod('Application_Form_Validate_CollectionRoleOaiNameUnique', '_getModel');
         $method->setAccessible(true);
 
-        $model = $method->invoke($this->validator, array('NewTestColRoleOaiName'));
+        $model = $method->invoke($this->validator, ['NewTestColRoleOaiName']);
 
         $this->assertNotNull($model);
         $this->assertEquals('NewTestColRoleOaiName', $model->getOaiName());
     }
-
 }

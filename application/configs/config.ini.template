@@ -202,7 +202,7 @@ oai.sample.identifier = oai:opus4.demo:90
 runjobs.asynchronous = 0
 ; configuration of specific jobs
 ; asynchronous execution of index maintenance jobs
-runjobs.indexmaintenance.asynchronous = 0
+; runjobs.indexmaintenance.asynchronous = 0
 
 ; SETUP CONFIGURATION SETTINGS
 ; Define for which modules translation resources may be edited through

@@ -103,7 +103,7 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
         $this->assertResponseCode(200);
         $response = $this->getResponse();
         $this->assertContains(
-             'title   = {Dokumenttitel mit Sonderzeichen \%-&quot;-\#-\&amp;, vgl. OPUSVIER-2716.},',
+            'title   = {Dokumenttitel mit Sonderzeichen \%-&quot;-\#-\&amp;, vgl. OPUSVIER-2716.},',
             $response->getBody()
         );
     }
@@ -189,7 +189,8 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
     {
         $this->setDocumentType('doctoralthesis');
         $this->dispatch('/citationExport/index/index/output/ris/docId/' . $this->documentId);
-        $this->checkRisAssertions('THES');;
+        $this->checkRisAssertions('THES');
+        ;
     }
 
     public function testIndexActionRisDoctypeMasterthesis()
@@ -345,7 +346,6 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
         $this->assertResponseCode(200);
         $response = $this->getResponse();
         $this->assertContains('T3  - ' . $s->getTitle() . ' - SeriesNumber', $response->getBody());
-
     }
 
     public function testIndexActionRisSeriesInvisible()
@@ -402,7 +402,8 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
         $this->checkBibtexAssertions('@incollection');
     }
 
-    public function testIndexActionBibtexDoctypeConferenceobject() {
+    public function testIndexActionBibtexDoctypeConferenceobject()
+    {
         $this->setDocumentType('conferenceobject');
         $this->dispatch('/citationExport/index/index/output/bibtex/docId/' . $this->documentId);
         $this->checkBibtexAssertions('@inproceedings');
@@ -436,7 +437,8 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
         $this->checkBibtexAssertions('@techreport');
     }
 
-    public function testIndexActionBibtexMisc() {
+    public function testIndexActionBibtexMisc()
+    {
         $this->setDocumentType('foo');
         $this->dispatch('/citationExport/index/index/output/bibtex/docId/' . $this->documentId);
         $this->checkBibtexAssertions('@misc');
@@ -475,9 +477,9 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
     /** Regression Test for OPUSVIER-3251 */
     public function testIndexActionBibtexEnrichmentVisibleAsNote()
     {
-        $bibtexConfArray = array(
-            'citationExport' => array('bibtex' => array('enrichment' => 'SourceTitle'))
-        );
+        $bibtexConfArray = [
+            'citationExport' => ['bibtex' => ['enrichment' => 'SourceTitle']]
+        ];
         $bibtexConf = new Zend_Config($bibtexConfArray);
         Zend_Registry::getInstance()->get('Zend_Config')->merge($bibtexConf);
         $this->dispatch('/citationExport/index/index/output/bibtex/docId/146');

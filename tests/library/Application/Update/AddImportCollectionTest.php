@@ -44,8 +44,7 @@ class Application_Update_AddImportCollectionTest extends ControllerTestCase
         // delete import collections
         $collectionRole = Opus_CollectionRole::fetchByName('Import');
 
-        if (!is_null($collectionRole))
-        {
+        if (! is_null($collectionRole)) {
             $collectionRole->delete();
         }
     }
@@ -54,8 +53,7 @@ class Application_Update_AddImportCollectionTest extends ControllerTestCase
     {
         $enrichmentKey = Opus_EnrichmentKey::fetchByName('opus.test.key');
 
-        if (!is_null($enrichmentKey))
-        {
+        if (! is_null($enrichmentKey)) {
             $enrichmentKey->delete();
         }
 
@@ -105,5 +103,4 @@ class Application_Update_AddImportCollectionTest extends ControllerTestCase
 
         $this->assertNotNull($collection);
     }
-
 }

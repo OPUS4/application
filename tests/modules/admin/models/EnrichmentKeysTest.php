@@ -42,10 +42,10 @@ class Admin_Model_EnrichmentKeysTest extends ControllerTestCase
     {
         $model = new Admin_Model_EnrichmentKeys();
 
-        $config = new Zend_Config(array('enrichmentkey' => array('protected' => array(
+        $config = new Zend_Config(['enrichmentkey' => ['protected' => [
             'modules' => 'pkey1,pkey2',
             'migration' => 'pkey3,pkey4'
-        ))));
+        ]]]);
 
         $model->setConfig($config);
 
@@ -57,9 +57,9 @@ class Admin_Model_EnrichmentKeysTest extends ControllerTestCase
         $this->assertContains('pkey3', $protectedKeys);
         $this->assertContains('pkey4', $protectedKeys);
 
-        $config = new Zend_Config(array('enrichmentkey' => array('protected' => array(
+        $config = new Zend_Config(['enrichmentkey' => ['protected' => [
             'migration' => 'pkey3,pkey4'
-        ))));
+        ]]]);
 
         $model->setConfig($config);
         $model->setProtectedEnrichmentKeys(null);
@@ -70,9 +70,9 @@ class Admin_Model_EnrichmentKeysTest extends ControllerTestCase
         $this->assertContains('pkey3', $protectedKeys);
         $this->assertContains('pkey4', $protectedKeys);
 
-        $config = new Zend_Config(array('enrichmentkey' => array('protected' => array(
+        $config = new Zend_Config(['enrichmentkey' => ['protected' => [
             'modules' => 'pkey1,pkey2',
-        ))));
+        ]]]);
 
         $model->setConfig($config);
         $model->setProtectedEnrichmentKeys(null);
@@ -88,7 +88,7 @@ class Admin_Model_EnrichmentKeysTest extends ControllerTestCase
     {
         $model = new Admin_Model_EnrichmentKeys();
 
-        $config = new Zend_Config(array());
+        $config = new Zend_Config([]);
 
         $model->setConfig($config);
 
@@ -97,5 +97,4 @@ class Admin_Model_EnrichmentKeysTest extends ControllerTestCase
         $this->assertInternalType('array', $protectedKeys);
         $this->assertCount(0, $protectedKeys);
     }
-
 }

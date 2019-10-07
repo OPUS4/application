@@ -116,5 +116,4 @@ class LicencesAdminTest extends ControllerTestCase
         $this->dispatch('/admin/access/listmodule/roleid/2');
         $this->assertRedirectTo('/auth');
     }
-
 }

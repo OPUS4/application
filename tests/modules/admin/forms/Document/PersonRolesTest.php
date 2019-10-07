@@ -59,8 +59,10 @@ class Admin_Form_Document_PersonRolesTest extends ControllerTestCase
 
         foreach ($this->roles as $role) {
             $elementName = 'Role' . ucfirst($role);
-            $this->assertNotNull($form->getElement($elementName),
-                "Element '$elementName' wurde nicht generiert.");
+            $this->assertNotNull(
+                $form->getElement($elementName),
+                "Element '$elementName' wurde nicht generiert."
+            );
         }
     }
 
@@ -78,8 +80,10 @@ class Admin_Form_Document_PersonRolesTest extends ControllerTestCase
 
             foreach ($activeRoles as $activeRole) {
                 $elementName = 'Role' . ucfirst($activeRole);
-                $this->assertNotNull($form->getElement($elementName),
-                    "Für Rolle '$role' wurde Element '$elementName' nicht generiert.");
+                $this->assertNotNull(
+                    $form->getElement($elementName),
+                    "Für Rolle '$role' wurde Element '$elementName' nicht generiert."
+                );
             }
         }
     }
@@ -88,9 +92,9 @@ class Admin_Form_Document_PersonRolesTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_PersonRoles();
 
-        $post = array(
+        $post = [
             'RoleContributor' => 'Beitragende Person'
-        );
+        ];
 
         $result = $form->processPost($post, null);
 
@@ -105,7 +109,7 @@ class Admin_Form_Document_PersonRolesTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_PersonRoles();
 
-        $this->assertNull($form->processPost(array(), null));
+        $this->assertNull($form->processPost([], null));
     }
 
     public function testGetRoleElementName()
@@ -116,6 +120,4 @@ class Admin_Form_Document_PersonRolesTest extends ControllerTestCase
         $this->assertEquals('RoleEditor', $form->getRoleElementName('Editor'));
         $this->assertEquals('Role', $form->getRoleElementName(null)); // nutzlos, aber keine Exception
     }
-
-
 }

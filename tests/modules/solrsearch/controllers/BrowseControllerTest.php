@@ -140,7 +140,7 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase
 
     private function setAllSeriesToUnvisible()
     {
-        $visibilities = array();
+        $visibilities = [];
         foreach (Opus_Series::getAll() as $seriesItem) {
             $visibilities[$seriesItem->getId()] = $seriesItem->getVisible();
             $seriesItem->setVisible(0);
@@ -162,7 +162,7 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase
         $this->dispatch('/solrsearch/browse/series');
         $this->assertResponseCode(200);
         $responseBody = $this->getResponse()->getBody();
-        $seriesIds = array('1', '4', '2', '5', '6');
+        $seriesIds = ['1', '4', '2', '5', '6'];
         foreach ($seriesIds as $seriesId) {
             $pos = strpos($responseBody, '/solrsearch/index/search/searchtype/series/id/' . $seriesId);
             $this->assertTrue($pos !== false);
@@ -183,7 +183,7 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase
         $this->dispatch('/solrsearch/browse/series');
         $this->assertResponseCode(200);
         $responseBody = $this->getResponse()->getBody();
-        $seriesIds = array('6', '5', '2', '4', '1');
+        $seriesIds = ['6', '5', '2', '4', '1'];
         foreach ($seriesIds as $seriesId) {
             $pos = strpos($responseBody, '/solrsearch/index/search/searchtype/series/id/' . $seriesId);
             $this->assertTrue($pos !== false);
@@ -208,7 +208,7 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase
         $this->dispatch('/solrsearch/browse/series');
         $this->assertResponseCode(200);
         $responseBody = $this->getResponse()->getBody();
-        $seriesIds = array('1', '6', '4', '2', '5');
+        $seriesIds = ['1', '6', '4', '2', '5'];
         foreach ($seriesIds as $seriesId) {
             $pos = strpos($responseBody, '/solrsearch/index/search/searchtype/series/id/' . $seriesId);
             $this->assertTrue($pos !== false);
@@ -220,7 +220,7 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase
 
     private function getSortOrders()
     {
-        $sortOrders = array();
+        $sortOrders = [];
         foreach (Opus_Series::getAll() as $seriesItem) {
             $sortOrders[$seriesItem->getId()] = $seriesItem->getSortOrder();
         }

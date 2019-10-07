@@ -39,8 +39,8 @@ class Application_Form_Element_IpAddressTest extends FormElementTestCase
     {
         $this->_formElementClass = 'Application_Form_Element_IpAddress';
         $this->_expectedDecoratorCount = 8;
-        $this->_expectedDecorators = array('ViewHelper', 'Placeholder', 'Description', 'ElementHint', 'Errors',
-            'ElementHtmlTag', 'LabelNotEmpty', 'dataWrapper');
+        $this->_expectedDecorators = ['ViewHelper', 'Placeholder', 'Description', 'ElementHint', 'Errors',
+            'ElementHtmlTag', 'LabelNotEmpty', 'dataWrapper'];
         $this->_staticViewHelper = 'viewFormDefault';
         parent::setUp();
     }
@@ -65,5 +65,4 @@ class Application_Form_Element_IpAddressTest extends FormElementTestCase
 
         $this->assertFalse($element->isValid('0000:0000:0000:0000:0000:0000:0000:0001'));
     }
-
 }

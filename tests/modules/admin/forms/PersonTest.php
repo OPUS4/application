@@ -138,7 +138,7 @@ class Admin_Form_PersonTest extends ControllerTestCase
 
         $logger = new MockLogger();
 
-        $form->setLog($logger);
+        $form->setLogger($logger);
 
         $form->updateModel($this->createTestDocument());
 
@@ -219,22 +219,21 @@ class Admin_Form_PersonTest extends ControllerTestCase
 
         $form = new Admin_Form_Person();
 
-        $post = array(
+        $post = [
             'LastName' => '', // Pflichtfeld
             'DateOfBirth' => 'Sonntag' //
-        );
+        ];
 
         $this->assertFalse($form->isValid($post));
         $this->assertContains('isEmpty', $form->getErrors('LastName'));
         $this->assertContains('dateFalseFormat', $form->getErrors('DateOfBirth'));
 
-        $post = array(
+        $post = [
             'LastName' => 'Doe', // Pflichtfeld
             'DateOfBirth' => '1990/02/01'
-        );
+        ];
 
         $this->assertTrue($form->isValid($post));
-
     }
 
     public function testValidationGerman()
@@ -243,10 +242,10 @@ class Admin_Form_PersonTest extends ControllerTestCase
 
         $form = new Admin_Form_Person();
 
-        $post = array(
+        $post = [
             'LastName' => 'Doe', // Pflichtfeld
             'DateOfBirth' => '01.02.1990'
-        );
+        ];
 
         $this->assertTrue($form->isValid($post));
     }
@@ -255,9 +254,9 @@ class Admin_Form_PersonTest extends ControllerTestCase
     {
         $form = new Admin_Form_Person();
 
-        $post = array(
+        $post = [
             'Save' => 'Speichern'
-        );
+        ];
 
         $this->assertEquals('save', $form->processPost($post, null));
     }
@@ -266,9 +265,9 @@ class Admin_Form_PersonTest extends ControllerTestCase
     {
         $form = new Admin_Form_Person();
 
-        $post = array(
+        $post = [
             'Cancel' => 'Abbrechen'
-        );
+        ];
 
         $this->assertEquals('cancel', $form->processPost($post, null));
     }
@@ -277,7 +276,6 @@ class Admin_Form_PersonTest extends ControllerTestCase
     {
         $form = new Admin_Form_Person();
 
-        $this->assertNull($form->processPost(array(), null));
+        $this->assertNull($form->processPost([], null));
     }
-
 }

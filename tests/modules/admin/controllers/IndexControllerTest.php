@@ -85,6 +85,4 @@ class Admin_IndexControllerTest extends ControllerTestCase
         $this->assertController('index');
         $this->assertAction('info');
     }
-
 }
-

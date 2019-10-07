@@ -40,9 +40,9 @@ class Application_Form_Validate_SeriesNumberAvailableTest extends ControllerTest
     {
         $validator = new Application_Form_Validate_SeriesNumberAvailable();
 
-        $context = array(
+        $context = [
             'SeriesId' => '1'
-        );
+        ];
 
         $this->assertTrue($validator->isValid('10/10', $context));
     }
@@ -51,9 +51,9 @@ class Application_Form_Validate_SeriesNumberAvailableTest extends ControllerTest
     {
         $validator = new Application_Form_Validate_SeriesNumberAvailable();
 
-        $context = array(
+        $context = [
             'SeriesId' => '1' // mit Dokument 146 (number = '5/5') verknuepft
-        );
+        ];
 
         $this->assertFalse($validator->isValid('5/5', $context));
     }
@@ -67,10 +67,10 @@ class Application_Form_Validate_SeriesNumberAvailableTest extends ControllerTest
     {
         $validator = new Application_Form_Validate_SeriesNumberAvailable();
 
-        $context = array(
+        $context = [
             'Id' => 146,
             'SeriesId' => '1' // mit Dokument 146 (number = '5/5') verknuepft
-        );
+        ];
 
         $this->assertTrue($validator->isValid('5/5', $context));
     }
@@ -86,7 +86,7 @@ class Application_Form_Validate_SeriesNumberAvailableTest extends ControllerTest
     {
         $validator = new Application_Form_Validate_SeriesNumberAvailable();
 
-        $context = array();
+        $context = [];
 
         $this->assertTrue($validator->isValid('5/5', $context));
     }
@@ -95,9 +95,9 @@ class Application_Form_Validate_SeriesNumberAvailableTest extends ControllerTest
     {
         $validator = new Application_Form_Validate_SeriesNumberAvailable();
 
-        $context = array(
+        $context = [
             'SeriesId' => 300
-        );
+        ];
 
         $this->assertTrue($validator->isValid('5/5', $context));
     }
@@ -106,11 +106,10 @@ class Application_Form_Validate_SeriesNumberAvailableTest extends ControllerTest
     {
         $validator = new Application_Form_Validate_SeriesNumberAvailable();
 
-        $context = array(
+        $context = [
             'SeriesId' => 'bla'
-        );
+        ];
 
         $this->assertTrue($validator->isValid('5/5', $context));
     }
-
 }

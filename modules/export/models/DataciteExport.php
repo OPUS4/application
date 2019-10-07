@@ -57,8 +57,7 @@ class Export_Model_DataciteExport extends Application_Export_ExportPluginAbstrac
 
         try {
             $document = new Opus_Document($docId);
-        }
-        catch (Opus_Model_Exception $e) {
+        } catch (Opus\Model\Exception $e) {
             throw new Application_Exception('could not retrieve document with given ID from OPUS database');
         }
 
@@ -78,8 +77,7 @@ class Export_Model_DataciteExport extends Application_Export_ExportPluginAbstrac
         try {
             // generiere DataCite-XML, wobei Pflichtfeld-Überprüfung nicht erneut durchgeführt werden soll
             $output = $generator->getXml($document, $skipValidation, true);
-        }
-        catch (Opus_Doi_DataCiteXmlGenerationException $e) {
+        } catch (Opus_Doi_DataCiteXmlGenerationException $e) {
             $errors = $e->getXmlErrors();
         }
 

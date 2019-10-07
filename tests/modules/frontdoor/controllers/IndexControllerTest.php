@@ -98,13 +98,6 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
         $this->_document_col->store();
     }
 
-    public function tearDown()
-    {
-        $this->removeDocument($this->_document);
-        $this->removeDocument($this->_document_col);
-        parent::tearDown();
-    }
-
     public function testIndexActionOnPublished()
     {
         $this->_document->setServerState('published')->store();
@@ -330,7 +323,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     {
         $d = new Opus_Document(1);
         $filePathnames = [];
-        foreach ($d->getFile() AS $file) {
+        foreach ($d->getFile() as $file) {
             $filePathnames[] = $file->getPathName();
         }
 
@@ -354,7 +347,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     {
         $d = new Opus_Document(147);
         $filePathnames = [];
-        foreach ($d->getFile() AS $file) {
+        foreach ($d->getFile() as $file) {
             $filePathnames[] = $file->getPathName();
         }
 
@@ -388,7 +381,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     public function testSubjectSortOrderAlphabetical()
     {
         Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
-            'frontdoor' => ['subjects' => ['alphabeticalSorting' => '1']]
+            'frontdoor' => ['subjects' => ['alphabeticalSorting' => self::CONFIG_VALUE_TRUE]]
         ]));
 
         // frontdoor.subjects.alphabeticalSorting
@@ -408,7 +401,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
         $d = new Opus_Document(149);
         $seriesIds = [];
         $seriesNumbers = [];
-        foreach ($d->getSeries() AS $series) {
+        foreach ($d->getSeries() as $series) {
             $seriesIds[] = $series->getModel()->getId();
             $seriesNumbers[] = $series->getNumber();
         }
@@ -440,7 +433,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
         $firstNames = [];
         $lastNames = [];
 
-        foreach ($d->getPersonAuthor() AS $author) {
+        foreach ($d->getPersonAuthor() as $author) {
             $firstNames[] = $author->getFirstName();
             $lastNames[] = $author->getLastName();
         }
@@ -593,8 +586,11 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
 
         $this->dispatch('/frontdoor/index/index/docId/' . $doc->getId());
 
-        $this->assertXpathContentContains('//li[contains(@class = "abstract preserve-spaces", @lang="en")]',
-            "foo\nbar\n\nbaz", $this->getResponse()->getBody());
+        $this->assertXpathContentContains(
+            '//li[contains(@class = "abstract preserve-spaces", @lang="en")]',
+            "foo\nbar\n\nbaz",
+            $this->getResponse()->getBody()
+        );
     }
 
     public function testNotePerserveSpace()
@@ -612,8 +608,10 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
 
         $this->dispatch('/frontdoor/index/index/docId/' . $doc->getId());
 
-        $this->assertContains('<pre class="preserve-spaces">' . "foo\nbar\n\nbaz</pre>",
-            $this->getResponse()->getBody());
+        $this->assertContains(
+            '<pre class="preserve-spaces">' . "foo\nbar\n\nbaz</pre>",
+            $this->getResponse()->getBody()
+        );
     }
 
     /**
@@ -633,7 +631,8 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
         $role->store();
 
         $this->assertQueryContentContains(
-            'td', 'Maschinenbau, Energietechnik, Fertigungstechnik: Allgemeines 52.00',
+            'td',
+            'Maschinenbau, Energietechnik, Fertigungstechnik: Allgemeines 52.00',
             $this->getResponse()->getBody()
         );
     }
@@ -655,7 +654,8 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
         $role->store();
 
         $this->assertQueryContentContains(
-            'td', '52.00 Maschinenbau, Energietechnik, Fertigungstechnik: Allgemeines',
+            'td',
+            '52.00 Maschinenbau, Energietechnik, Fertigungstechnik: Allgemeines',
             $this->getResponse()->getBody()
         );
     }
@@ -678,7 +678,8 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
 
         $this->assertNotQueryContentContains('td', '52.00', $this->getResponse()->getBody());
         $this->assertQueryContentContains(
-            'td', 'Maschinenbau, Energietechnik, Fertigungstechnik: Allgemeines',
+            'td',
+            'Maschinenbau, Energietechnik, Fertigungstechnik: Allgemeines',
             $this->getResponse()->getBody()
         );
     }
@@ -701,7 +702,8 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
 
         $this->assertQueryContentContains('td', '52.00', $this->getResponse()->getBody());
         $this->assertNotQueryContentContains(
-            'td', 'Maschinenbau, Energietechnik, Fertigungstechnik: Allgemeines',
+            'td',
+            'Maschinenbau, Energietechnik, Fertigungstechnik: Allgemeines',
             $this->getResponse()->getBody()
         );
     }
@@ -775,7 +777,6 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
             . '<td>Foobar Universität, Testwissenschaftliche Fakultät</td></tr>',
             $this->getResponse()->getBody()
         );
-
     }
 
     public function testValidateXHTML()
@@ -789,7 +790,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     {
         // Aktiviere Kürzung von Abstrakten
         $config = Zend_Registry::get('Zend_Config')->merge(new Zend_Config(
-            ['frontdoor' => ['numOfShortAbstractChars' => 200]]
+            ['frontdoor' => ['numOfShortAbstractChars' => '200']]
         ));
 
         $this->dispatch('/frontdoor/index/index/docId/92');
@@ -802,7 +803,8 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
         $this->useGerman();
         $this->dispatch('/frontdoor/index/index/docId/146');
         $this->assertQueryContentContains(
-            'td', 'Technische Universität Hamburg-Harburg / Bauwesen / Abwasserwirtschaft und Gewässerschutz B-2'
+            'td',
+            'Technische Universität Hamburg-Harburg / Bauwesen / Abwasserwirtschaft und Gewässerschutz B-2'
         );
     }
 
@@ -827,7 +829,6 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
             '<meta name="citation_date" content="2011" />',
             $this->getResponse()->getBody()
         );
-
     }
 
     public function testPatentInformationGerman()
@@ -892,10 +893,12 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
         $this->loginUser('admin', 'adminadmin');
         $this->dispatch('/frontdoor/index/index/docId/146');
         $this->assertNotQueryContentContains(
-            '//dl[@id="Document-ServerState"]//li[@class="active"]', 'Publish document'
+            '//dl[@id="Document-ServerState"]//li[@class="active"]',
+            'Publish document'
         );
         $this->assertQueryContentContains(
-            '//dl[@id="Document-ServerState"]//li[@class="active"]', 'Published'
+            '//dl[@id="Document-ServerState"]//li[@class="active"]',
+            'Published'
         );
     }
 
@@ -929,7 +932,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     public function testFilesInCustomSortOrder()
     {
         $config = Zend_Registry::get('Zend_Config');
-        $config->frontdoor->files->customSorting = 1;
+        $config->frontdoor->files->customSorting = '1';
 
         $this->dispatch('/frontdoor/index/index/docId/155');
 
@@ -948,7 +951,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     public function testFilesInAlphabeticSortOrder()
     {
         $config = Zend_Registry::get('Zend_Config');
-        $config->frontdoor->files->customSorting = 0;
+        $config->frontdoor->files->customSorting = self::CONFIG_VALUE_FALSE;
 
         $this->dispatch('/frontdoor/index/index/docId/155');
 
@@ -989,11 +992,13 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
 
             // Absicherung gegen HTML Aenderungen;  in Meta-Tags steht Text in Attribut
             $this->assertEquals(
-                1, substr_count($this->getResponse()->getBody(), '>deutscher Titel<'),
+                1,
+                substr_count($this->getResponse()->getBody(), '>deutscher Titel<'),
                 'Teststring is found more than once; test is not reliable anymore'
             );
             $this->assertEquals(
-                1, substr_count($this->getResponse()->getBody(), '>englischer Titel<'),
+                1,
+                substr_count($this->getResponse()->getBody(), '>englischer Titel<'),
                 'Teststring is found more than once; test is not reliable anymore'
             );
 
@@ -1031,11 +1036,13 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
             $this->dispatch('/frontdoor/index/index/docId/' . $docId);
             // Absicherung gegen HTML Aenderungen;  in Meta-Tags steht Text in Attribut
             $this->assertEquals(
-                1, substr_count($this->getResponse()->getBody(), '>deutscher Titel<'),
+                1,
+                substr_count($this->getResponse()->getBody(), '>deutscher Titel<'),
                 'Teststring is found more than once; test is not reliable anymore'
             );
             $this->assertEquals(
-                1, substr_count($this->getResponse()->getBody(), '>englischer Titel<'),
+                1,
+                substr_count($this->getResponse()->getBody(), '>englischer Titel<'),
                 'Teststring is found more than once; test is not reliable anymore'
             );
 
@@ -1106,19 +1113,24 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/frontdoor/index/index/docId/' . $docId);
         $body = $this->getResponse()->getBody();
         $this->assertContains(
-            '<img width="16" height="11" src="/img/lang/eng.png" class="file-language eng" alt="eng"/>', $body
+            '<img width="16" height="11" src="/img/lang/eng.png" class="file-language eng" alt="eng"/>',
+            $body
         );
         $this->assertContains(
-            '<img width="16" height="11" src="/img/lang/deu.png" class="file-language deu" alt="deu"/>', $body
+            '<img width="16" height="11" src="/img/lang/deu.png" class="file-language deu" alt="deu"/>',
+            $body
         );
         $this->assertContains(
-            '<img width="16" height="11" src="/img/lang/spa.png" class="file-language spa" alt="spa"/>', $body
+            '<img width="16" height="11" src="/img/lang/spa.png" class="file-language spa" alt="spa"/>',
+            $body
         );
         $this->assertContains(
-            '<img width="16" height="11" src="/img/lang/fra.png" class="file-language fra" alt="fra"/>', $body
+            '<img width="16" height="11" src="/img/lang/fra.png" class="file-language fra" alt="fra"/>',
+            $body
         );
         $this->assertContains(
-            '<img width="16" height="11" src="/img/lang/rus.png" class="file-language rus" alt="rus"/>', $body
+            '<img width="16" height="11" src="/img/lang/rus.png" class="file-language rus" alt="rus"/>',
+            $body
         );
     }
 
@@ -1329,7 +1341,8 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
         $body = $this->getResponse()->getBody();
         $this->assertContains(
             'http://scholar.google.de/scholar?hl=de&amp;q=&quot;KOBV&quot;&amp;as_sauthors=John+Doe' .
-            '&amp;as_ylo=2007&amp;as_yhi=2007', $body
+            '&amp;as_ylo=2007&amp;as_yhi=2007',
+            $body
         );
     }
 
@@ -1341,14 +1354,15 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
         $body = $this->getResponse()->getBody();
         $this->assertContains(
             'http://scholar.google.de/scholar?hl=en&amp;q=&quot;KOBV&quot;&amp;as_sauthors=John+Doe' .
-            '&amp;as_ylo=2007&amp;as_yhi=2007', $body
+            '&amp;as_ylo=2007&amp;as_yhi=2007',
+            $body
         );
     }
 
     public function testGoogleScholarOpenInNewWindowEnabled()
     {
         Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
-            'googleScholar' => ['openInNewWindow' => 1]
+            'googleScholar' => ['openInNewWindow' => self::CONFIG_VALUE_TRUE]
         ]));
         $this->dispatch('/frontdoor/index/index/docId/146');
         $this->assertResponseCode(200);
@@ -1359,7 +1373,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     public function testGoogleScholarOpenInNewWindowDisabled()
     {
         Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
-            'googleScholar' => ['openInNewWindow' => 0]
+            'googleScholar' => ['openInNewWindow' => self::CONFIG_VALUE_FALSE]
         ]));
         $this->dispatch('/frontdoor/index/index/docId/146');
         $this->assertResponseCode(200);
@@ -1381,7 +1395,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     public function testTwitterOpenInNewWindowEnabled()
     {
         Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
-            'twitter' => ['openInNewWindow' => 1]
+            'twitter' => ['openInNewWindow' => self::CONFIG_VALUE_TRUE]
         ]));
         $this->dispatch('/frontdoor/index/index/docId/146');
         $this->assertResponseCode(200);
@@ -1392,7 +1406,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     public function testTwitterOpenInNewWindowDisabled()
     {
         Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
-            'twitter' => ['openInNewWindow' => 0]
+            'twitter' => ['openInNewWindow' => self::CONFIG_VALUE_FALSE]
         ]));
         $this->dispatch('/frontdoor/index/index/docId/146');
         $this->assertResponseCode(200);
@@ -1411,7 +1425,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
 
         $this->dispatch('/frontdoor/index/index/docId/146');
 
-        $failedTranslations = array();
+        $failedTranslations = [];
 
         foreach ($filter->getMessages() as $line) {
             if (strpos($line, 'Unable to translate') !== false) {
@@ -1441,7 +1455,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     {
         $this->useEnglish();
         Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
-            'frontdoor' => ['metadata' => ['BelongsToBibliography' => 1]]
+            'frontdoor' => ['metadata' => ['BelongsToBibliography' => self::CONFIG_VALUE_TRUE]]
         ]));
 
         $this->dispatch('/frontdoor/index/index/docId/146');
@@ -1453,7 +1467,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     public function testBelongsToBibliographyTurnedOff()
     {
         Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
-            'frontdoor' => ['metadata' => ['BelongsToBibliography' => 0]]
+            'frontdoor' => ['metadata' => ['BelongsToBibliography' => self::CONFIG_VALUE_FALSE]]
         ]));
 
         $this->dispatch('/frontdoor/index/index/docId/146');
@@ -1480,16 +1494,20 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     {
         $this->dispatch('/frontdoor/index/index/docId/146');
         $this->assertXpathContentContains(
-            '//li[contains(@class = "abstract preserve-spaces", @lang = "en")]', 'Lorem'
+            '//li[contains(@class = "abstract preserve-spaces", @lang = "en")]',
+            'Lorem'
         );
         $this->assertXpathContentContains(
-            '//li[contains(@class = "abstract preserve-spaces", @lang = "de")]', 'Berlin-Dahlem'
+            '//li[contains(@class = "abstract preserve-spaces", @lang = "de")]',
+            'Berlin-Dahlem'
         );
         $this->assertXpathContentContains(
-            '//h3[contains(@class = "titlemain", @lang = "en")]', 'COLN'
+            '//h3[contains(@class = "titlemain", @lang = "en")]',
+            'COLN'
         );
         $this->assertXpathContentContains(
-            '//h2[contains(@class = "titlemain", @lang = "de")]', 'KOBV'
+            '//h2[contains(@class = "titlemain", @lang = "de")]',
+            'KOBV'
         );
     }
 
@@ -1509,10 +1527,14 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     public function testMetaCorrectTitleContentLang()
     {
         $this->dispatch('/frontdoor/index/index/docId/146');
-        $this->assertXpathContentContains('//td[contains(@class = "titlesub", @lang = "en")]',
-            "Service Center");
-        $this->assertXpathContentContains('//td[contains(@class = "titlesub", @lang = "de")]',
-            "Service-Zentrale");
+        $this->assertXpathContentContains(
+            '//td[contains(@class = "titlesub", @lang = "en")]',
+            "Service Center"
+        );
+        $this->assertXpathContentContains(
+            '//td[contains(@class = "titlesub", @lang = "de")]',
+            "Service-Zentrale"
+        );
     }
 
     public function testDuplicateDocIdParameter()

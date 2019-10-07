@@ -32,16 +32,19 @@
  * @version     $Id$
  */
 
-class Application_Form_Validate_OrcidTest extends ControllerTestCase {
+class Application_Form_Validate_OrcidTest extends ControllerTestCase
+{
 
     private $_validator;
 
-    public function setUp() {
+    public function setUp()
+    {
         parent::setUp();
         $this->_validator = new Application_Form_Validate_Orcid();
     }
 
-    public function testIsValidFalseFormat() {
+    public function testIsValidFalseFormat()
+    {
         $this->assertFalse($this->_validator->isValid(''));
         $this->assertFalse($this->_validator->isValid('Hallo'));
         $this->assertFalse($this->_validator->isValid('1234567890'));
@@ -51,20 +54,22 @@ class Application_Form_Validate_OrcidTest extends ControllerTestCase {
         $this->assertCount(1, $this->_validator->getMessages());
     }
 
-    public function testIsValidFalseChecksum() {
+    public function testIsValidFalseChecksum()
+    {
         $this->assertFalse($this->_validator->isValid('0000-0002-1825-009X'));
         $this->assertArrayHasKey('notValidChecksum', $this->_validator->getMessages());
         $this->assertCount(1, $this->_validator->getMessages());
     }
 
-    public function testIsValidTrue() {
+    public function testIsValidTrue()
+    {
         $this->assertTrue($this->_validator->isValid('0000-0002-1825-0097'));
         $this->assertTrue($this->_validator->isValid('0000-0002-1825-010X'));
     }
 
-    public function testGenerateCheckDigit() {
+    public function testGenerateCheckDigit()
+    {
         $this->assertEquals('7', Application_Form_Validate_Orcid::generateCheckDigit('0000-0002-1825-009'));
         $this->assertEquals('X', Application_Form_Validate_Orcid::generateCheckDigit('0000-0002-1825-010'));
     }
-
 }

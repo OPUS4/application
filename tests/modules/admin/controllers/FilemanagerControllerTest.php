@@ -41,14 +41,6 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase
 
     protected $additionalResources = 'all';
 
-    private $documentId;
-
-    public function tearDown()
-    {
-        $this->removeDocument($this->documentId);
-        parent::tearDown();
-    }
-
     /**
      * Basic unit test checks that error controller is not called.
      */
@@ -64,8 +56,10 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase
 
         // check breadcrumbs
         $this->verifyBreadcrumbDefined();
-        $this->assertQueryContentContains('//div.breadcrumbsContainer//a[@href="/admin/document/index/id/91"]',
-            'This is a pdf test document');
+        $this->assertQueryContentContains(
+            '//div.breadcrumbsContainer//a[@href="/admin/document/index/id/91"]',
+            'This is a pdf test document'
+        );
 
         // TODO DocInfo
         /*
@@ -75,7 +69,6 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase
         */
 
         // TODO Formular
-
     }
 
     public function testIndexActionBadId()
@@ -113,10 +106,14 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase
 
         // check breadcrumbs
         $this->verifyBreadcrumbDefined();
-        $this->assertQueryContentContains('//div.breadcrumbsContainer//a[@href="/admin/document/index/id/91"]',
-            'This is a pdf test document');
-        $this->assertQueryContentContains('//div.breadcrumbsContainer//a[@href="/admin/filemanager/index/id/91"]',
-            'Dateien');
+        $this->assertQueryContentContains(
+            '//div.breadcrumbsContainer//a[@href="/admin/document/index/id/91"]',
+            'This is a pdf test document'
+        );
+        $this->assertQueryContentContains(
+            '//div.breadcrumbsContainer//a[@href="/admin/filemanager/index/id/91"]',
+            'Dateien'
+        );
     }
 
     public function testUploadActionBadId()
@@ -193,8 +190,10 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase
         $this->assertController('filemanager');
         $this->assertAction('index');
 
-        $this->assertQueryContentContains('//div#FileManager-Files-File0-FileLink-element//li',
-            'File does not exist!');
+        $this->assertQueryContentContains(
+            '//div#FileManager-Files-File0-FileLink-element//li',
+            'File does not exist!'
+        );
     }
 
     public function testDontShowMissingFileError()
@@ -249,8 +248,10 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase
 
         $this->validateXHTML();
         $this->verifyBreadcrumbDefined();
-        $this->assertQueryContentContains('//div.breadcrumbsContainer//a[@href="/admin/document/index/id/91"]',
-            'This is a pdf test document');
+        $this->assertQueryContentContains(
+            '//div.breadcrumbsContainer//a[@href="/admin/document/index/id/91"]',
+            'This is a pdf test document'
+        );
     }
 
     public function testResetFormAction()
@@ -266,9 +267,9 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase
         $document = $this->createTestDocument();
         $file = $document->addFile();
         $file->setPathName('testdatei.txt');
-        $this->documentId = $document->store();
+        $documentId = $document->store();
 
-        $document = new Opus_Document($this->documentId);
+        $document = new Opus_Document($documentId);
 
         $fileId = $document->getFile(0)->getId();
 
@@ -276,25 +277,25 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase
         $files = $roleGuest->listAccessFiles();
         $this->assertContains($fileId, $files);
 
-        $this->getRequest()->setMethod('POST')->setPost(array(
-            'FileManager' => array(
-                'Files' => array(
-                    'File0' => array(
+        $this->getRequest()->setMethod('POST')->setPost([
+            'FileManager' => [
+                'Files' => [
+                    'File0' => [
                         'Id' => $fileId,
                         'FileLink' => $fileId,
                         'Language' => 'deu',
                         'Comment' => 'Testkommentar',
-                        'Roles' => array('administrator'),
+                        'Roles' => ['administrator'],
                         'SortOrder' => '0'
-                    )
-                ),
+                    ]
+                ],
                 'Save' => 'Speichern'
-            )
-        ));
+            ]
+        ]);
 
-        $this->dispatch('/admin/filemanager/index/id/' . $this->documentId);
+        $this->dispatch('/admin/filemanager/index/id/' . $documentId);
         $this->assertResponseCode(302);
-        $this->assertRedirectTo('/admin/document/index/id/' . $this->documentId);
+        $this->assertRedirectTo('/admin/document/index/id/' . $documentId);
 
         $roleGuest = Opus_UserRole::fetchByName('guest');
         $files = $roleGuest->listAccessFiles();
@@ -382,4 +383,3 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase
         $this->assertTrue($positionFile1 < $positionFile2);
     }
 }
-

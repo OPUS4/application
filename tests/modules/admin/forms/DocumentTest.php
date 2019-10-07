@@ -44,7 +44,7 @@ class Admin_Form_DocumentTest extends ControllerTestCase
 
         $this->assertEquals(0, count($form->getElements()));
 
-        $subformNames = array(
+        $subformNames = [
             'ActionBox',
             'InfoBox',
             'General',
@@ -60,7 +60,7 @@ class Admin_Form_DocumentTest extends ControllerTestCase
             'Patents',
             'Notes',
             'Actions'
-        );
+        ];
 
         $this->verifySubForms($form, $subformNames);
     }
@@ -88,7 +88,7 @@ class Admin_Form_DocumentTest extends ControllerTestCase
     {
         $document = new Opus_Document(146);
 
-        $post = array();
+        $post = [];
 
         $form = Admin_Form_Document::getInstanceFromPost($post, $document);
 
@@ -100,18 +100,18 @@ class Admin_Form_DocumentTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document();
 
-        $this->assertNull($form->processPost(array(), array()));
+        $this->assertNull($form->processPost([], []));
     }
 
     public function testProcessPostSave()
     {
         $form = new Admin_Form_Document();
 
-        $post = array(
-            'ActionBox' => array(
+        $post = [
+            'ActionBox' => [
                 'Save' => 'Speichern'
-            )
-        );
+            ]
+        ];
 
         $this->assertEquals(Admin_Form_Document::RESULT_SAVE, $form->processPost($post, $post));
     }
@@ -121,13 +121,13 @@ class Admin_Form_DocumentTest extends ControllerTestCase
         $form = new Admin_Form_Document();
 
         $request = $this->getRequest();
-        $request->setParams(array(
+        $request->setParams([
             'continue' => 'addperson',
             'person' => '310',
             'role' => 'editor',
             'order' => '2',
             'contact' => '0'
-        ));
+        ]);
 
         $session = new Admin_Model_DocumentEditSession(100);
 
@@ -154,23 +154,23 @@ class Admin_Form_DocumentTest extends ControllerTestCase
 
         $form->populateFromModel($document);
 
-        $post = array(
-            'General' => array(
+        $post = [
+            'General' => [
                 'Language' => 'deu',
                 'Type' => 'all'
-            ),
-            'Titles' => array(
-                'Main' => array(
-                    'TitleMain0' => array(
+            ],
+            'Titles' => [
+                'Main' => [
+                    'TitleMain0' => [
                         'Language' => 'deu',
                         'Value' => 'Deutscher Titel'
-                    )
-                )
-            ),
-            'Actions' => array(
+                    ]
+                ]
+            ],
+            'Actions' => [
                 'OpusHash' => $this->getHash($form)
-            )
-        );
+            ]
+        ];
 
         $result = $form->isValid($post, $post);
 
@@ -325,7 +325,7 @@ class Admin_Form_DocumentTest extends ControllerTestCase
         $form->populateFromModel($document);
         $form->prepareRenderingAsView();
 
-        $this->verifySubForms($form, array(
+        $this->verifySubForms($form, [
             'ActionBox',
             'InfoBox',
             'General',
@@ -341,7 +341,7 @@ class Admin_Form_DocumentTest extends ControllerTestCase
             'Patents',
             'Notes',
             'Files'
-        ));
+        ]);
     }
 
     public function testPrepareRenderingAsViewDocumentWithoutFiles()
@@ -369,7 +369,7 @@ class Admin_Form_DocumentTest extends ControllerTestCase
         $form->populateFromModel($document);
         $form->prepareRenderingAsView();
 
-        $this->verifySubForms($form, array('ActionBox', 'InfoBox', 'Bibliographic', 'IdentifiersAll'));
+        $this->verifySubForms($form, ['ActionBox', 'InfoBox', 'Bibliographic', 'IdentifiersAll']);
     }
 
     protected function verifySubForms($form, $names)
@@ -392,5 +392,4 @@ class Admin_Form_DocumentTest extends ControllerTestCase
 
         return $hashElement->getHash();
     }
-
 }

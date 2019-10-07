@@ -44,7 +44,8 @@ class Application_View_Helper_ExportLinks extends Application_View_Helper_Abstra
      * @param null $keys Keys for parameters that should be include in export link
      * @return string HTML
      */
-    public function exportLinks($keys = null, $context = null) {
+    public function exportLinks($keys = null, $context = null)
+    {
         return $this->toString($keys, $context);
     }
 
@@ -56,24 +57,20 @@ class Application_View_Helper_ExportLinks extends Application_View_Helper_Abstra
 
         $output = '<ul>';
 
-        foreach ($formats as $format)
-        {
+        foreach ($formats as $format) {
             // if context provided skip format if it has been set to false
-            if (!is_null($context) && $format->get($context) === false) {
+            if (! is_null($context) && $format->get($context) === false) {
                 continue;
             }
 
             $params = $format->getParams();
 
-            if (!is_null($keys))
-            {
-                if (!is_array($keys))
-                {
-                    $keys = array($keys);
+            if (! is_null($keys)) {
+                if (! is_array($keys)) {
+                    $keys = [$keys];
                 }
 
-                foreach ($keys as $key)
-                {
+                foreach ($keys as $key) {
                     $params[$key] = $this->view->$key;
                 }
             }

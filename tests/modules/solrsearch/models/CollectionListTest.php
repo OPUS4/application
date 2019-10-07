@@ -275,6 +275,4 @@ class Solrsearch_Model_CollectionListTest extends ControllerTestCase
         }
         return $children[0];
     }
-
 }
-

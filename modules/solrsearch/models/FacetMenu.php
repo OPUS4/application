@@ -37,7 +37,8 @@
  *
  * TODO refactor as view helper or something better
  */
-class Solrsearch_Model_FacetMenu extends Application_Model_Abstract {
+class Solrsearch_Model_FacetMenu extends Application_Model_Abstract
+{
 
     private $_facets;
 
@@ -51,21 +52,23 @@ class Solrsearch_Model_FacetMenu extends Application_Model_Abstract {
      * Resolves the facet-options from URL and builds a result array with the number of facets to display.
      * @return array result[facet_name] = number
      */
-    public function buildFacetArray($paramSet) {
-	    return Opus_Search_Facet_Set::getFacetLimitsFromInput( $paramSet );
+    public function buildFacetArray($paramSet)
+    {
+        return Opus\Search\Facet\Set::getFacetLimitsFromInput($paramSet);
     }
 
     /**
      */
-    public function prepareViewFacets($result, $request) {
+    public function prepareViewFacets($result, $request)
+    {
         $facets = $result->getFacets();
 
-        $facetLimit = Opus_Search_Config::getFacetLimits();
+        $facetLimit = Opus\Search\Config::getFacetLimits();
 
-        $facetArray = array();
-        $selectedFacets = array();
-        $facetNumberContainer = array();
-        $showFacetExtender = array();
+        $facetArray = [];
+        $selectedFacets = [];
+        $facetNumberContainer = [];
+        $showFacetExtender = [];
 
         foreach ($facets as $key => $facet) {
             $showFacetExtender[$key] = ($facetLimit[$key] <= sizeof($facet));
@@ -85,7 +88,7 @@ class Solrsearch_Model_FacetMenu extends Application_Model_Abstract {
         // Hide institutes facet if collection does not exist or is hidden
         $institutes = Opus_CollectionRole::fetchByName('institutes');
 
-        if (is_null($institutes) || !$institutes->getVisible()) {
+        if (is_null($institutes) || ! $institutes->getVisible()) {
             unset($facetArray['institute']);
         }
 
@@ -95,20 +98,23 @@ class Solrsearch_Model_FacetMenu extends Application_Model_Abstract {
         $this->_showFacetExtender = $showFacetExtender;
     }
 
-    public function getFacets() {
+    public function getFacets()
+    {
         return $this->_facets;
     }
 
-    public function getSelectedFacets() {
+    public function getSelectedFacets()
+    {
         return $this->_selectedFacets;
     }
 
-    public function getFacetNumberContainer() {
+    public function getFacetNumberContainer()
+    {
         return $this->_facetNumberContainer;
     }
 
-    public function getShowFacetExtender() {
+    public function getShowFacetExtender()
+    {
         return $this->_showFacetExtender;
     }
-
 }

@@ -47,6 +47,8 @@
 class Application_Translate extends Zend_Translate
 {
 
+    use \Opus\LoggingTrait;
+
     /**
      * Schlüssel für Zend_Translate in Zend_Registry.
      */
@@ -83,11 +85,11 @@ class Application_Translate extends Zend_Translate
      */
     public function __construct($options = null)
     {
-        $options = (!is_null($options)) ?  array_merge($this->getOptions(), $options) : $this->getOptions();
+        $options = (! is_null($options)) ? array_merge($this->getOptions(), $options) : $this->getOptions();
         parent::__construct($options);
     }
 
-    static public function getInstance()
+    public static function getInstance()
     {
         if (is_null(self::$instance)) {
             self::$instance = new Application_Translate();
@@ -161,7 +163,7 @@ class Application_Translate extends Zend_Translate
     {
         $path = realpath($directory);
 
-        if (($path === false) or (!is_dir($path)) or (!is_readable($path))) {
+        if (($path === false) or (! is_dir($path)) or (! is_readable($path))) {
             if ($warnIfMissing) {
                 $this->getLogger()->warn(__METHOD__ . " Directory '$directory' not found.");
             }
@@ -169,13 +171,13 @@ class Application_Translate extends Zend_Translate
         }
 
         $handle = opendir($path);
-        if (!$handle) {
+        if (! $handle) {
             return false;
         }
 
         while (false !== ($file = readdir($handle))) {
             // Ignore directories.
-            if (!is_file($path . DIRECTORY_SEPARATOR . $file)) {
+            if (! is_file($path . DIRECTORY_SEPARATOR . $file)) {
                 continue;
             }
 
@@ -198,27 +200,6 @@ class Application_Translate extends Zend_Translate
     }
 
     /**
-     * Liefert den Logger für diese Klasse.
-     * @return Zend_Log
-     */
-    public function getLogger()
-    {
-        if (is_null($this->_logger)) {
-            $this->_logger = Zend_Registry::get('Zend_Log');
-        }
-
-        return $this->_logger;
-    }
-
-    /**
-     * Setzt den Logger für diese Klasse.
-     */
-    public function setLogger($logger)
-    {
-        $this->_logger = $logger;
-    }
-
-    /**
      * Liefert die Optionen für Zend_Translate.
      * @return array
      */
@@ -233,12 +214,13 @@ class Application_Translate extends Zend_Translate
 
     /**
      *
-     * @return type
+     * @return bool
      */
     public function isLogUntranslatedEnabled()
     {
         $config = Zend_Registry::get('Zend_Config');
-        return (isset($config->log->untranslated)) ? (bool)$config->log->untranslated : false;
+        return (isset($config->log->untranslated)) ?
+            filter_var($config->log->untranslated, FILTER_VALIDATE_BOOLEAN) : false;
     }
 
     /**

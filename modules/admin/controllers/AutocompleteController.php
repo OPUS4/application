@@ -57,7 +57,7 @@ class Admin_AutocompleteController extends Application_Controller_ModuleAccess
     {
         $term = $this->getRequest()->getParam('term');
 
-        if (!is_null($term)) {
+        if (! is_null($term)) {
             $provider = new Application_Data_SubjectProvider();
 
             $data = $provider->getValues($term);
@@ -71,19 +71,18 @@ class Admin_AutocompleteController extends Application_Controller_ModuleAccess
         $description = '';
 
         $typeName = $this->getRequest()->getParam('typeName');
-        if (!is_null($typeName) && $typeName !== '') {
+        if (! is_null($typeName) && $typeName !== '') {
             $typeName = 'Opus_Enrichment_' . $typeName;
             $allTypes = Opus_Enrichment_AbstractType::getAllEnrichmentTypes(true);
             if (in_array($typeName, $allTypes)) {
                 $typeObj = new $typeName();
                 $typeDescription = $typeObj->getDescription();
-                if (!is_null($typeDescription) && $typeDescription !== '') {
+                if (! is_null($typeDescription) && $typeDescription !== '') {
                     $description = $this->view->translate($typeDescription);
                 }
             }
         }
 
-        echo json_encode(array('typeName' => $description));
+        echo json_encode(['typeName' => $description]);
     }
-
 }

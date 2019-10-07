@@ -51,8 +51,7 @@ class Admin_Form_AccountTest extends ControllerTestCase
 
     public function tearDown()
     {
-        if (!is_null($this->_account))
-        {
+        if (! is_null($this->_account)) {
             $this->_account->delete();
         }
 

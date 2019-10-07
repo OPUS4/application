@@ -144,8 +144,5 @@ class Frontdoor_MailControllerTest extends ControllerTestCase
         $this->dispatch('/frontdoor/mail/toauthor/docId/147/docId/146');
         $this->assertResponseCode(200);
         $this->assertContains('<b>KOBV</b>', $this->getResponse()->getBody());
-
     }
-
 }
-

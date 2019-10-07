@@ -82,7 +82,7 @@ class Admin_Form_Document_CollectionTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Collection();
 
-        $post = array('Id' => '499', 'Remove' => 'Remove Collection');
+        $post = ['Id' => '499', 'Remove' => 'Remove Collection'];
 
         $this->assertEquals('remove', $form->processPost($post, null));
     }
@@ -91,7 +91,7 @@ class Admin_Form_Document_CollectionTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Collection();
 
-        $post = array('Id' => '499', 'Edit' => 'Edit Collection');
+        $post = ['Id' => '499', 'Edit' => 'Edit Collection'];
 
         $this->assertEquals('edit', $form->processPost($post, null));
     }
@@ -100,7 +100,7 @@ class Admin_Form_Document_CollectionTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Collection();
 
-        $this->assertNull($form->processPost(array(), null));
+        $this->assertNull($form->processPost([], null));
     }
 
     public function testGetModel()
@@ -118,7 +118,7 @@ class Admin_Form_Document_CollectionTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Collection();
 
-        $post = array('Id' => '499');
+        $post = ['Id' => '499'];
 
         $form->populateFromPost($post);
 
@@ -127,5 +127,4 @@ class Admin_Form_Document_CollectionTest extends ControllerTestCase
         $this->assertEquals($collection->getDisplayName(), $form->getLegend());
         $this->assertEquals($collection->getId(), $form->getElement('Id')->getValue());
     }
-
 }

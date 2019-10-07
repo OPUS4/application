@@ -63,22 +63,22 @@ class Application_View_Helper_EscapeValueTest extends ControllerTestCase
 
     public function testEscapeValueArray()
     {
-        $this->assertEquals(array('Value1', '&lt;b&gt;Value2&lt;/b&gt;'), $this->_helper->escapeValue(array(
+        $this->assertEquals(['Value1', '&lt;b&gt;Value2&lt;/b&gt;'], $this->_helper->escapeValue([
             'Value1', '<b>Value2</b>'
-        )));
+        ]));
     }
 
     public function testEscapeValueArrayRecursive()
     {
-        $this->assertEquals(array(
+        $this->assertEquals([
             '&lt;b&gt;Value1&lt;/b&gt;',
-            array('Value2a', '&lt;i&gt;Value2b&lt;/i&gt;'),
+            ['Value2a', '&lt;i&gt;Value2b&lt;/i&gt;'],
             'Value3'
-        ), $this->_helper->escapeValue(array(
+        ], $this->_helper->escapeValue([
             '<b>Value1</b>',
-            array('Value2a', '<i>Value2b</i>'),
+            ['Value2a', '<i>Value2b</i>'],
             'Value3'
-        )));
+        ]));
     }
 
     public function testEscapeValueHighlightNullEnglish()
@@ -92,5 +92,4 @@ class Application_View_Helper_EscapeValueTest extends ControllerTestCase
         $this->useGerman();
         $this->assertEquals('<span class="null">LEER</span>', $this->_helper->escapeValue(null, true));
     }
-
 }

@@ -54,8 +54,7 @@ class Frontdoor_IndexController extends Application_Controller_Action
 
         if ($docId === false) {
             return;
-        }
-        else if ($docId == '') {
+        } elseif ($docId == '') {
             // TODO can this be reached?
             $this->printDocumentError("frontdoor_doc_id_missing", 404);
             return;
@@ -146,11 +145,11 @@ class Frontdoor_IndexController extends Application_Controller_Action
         $this->view->frontdoor = $frontdoorContent;
         $this->view->baseUrl = $baseUrl;
         $this->view->doctype(
-                '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN" "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">'
+            '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN" "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">'
         );
 
         $dateModified = $document->getServerDateModified();
-        if (!is_null($dateModified)) {
+        if (! is_null($dateModified)) {
             $this->view->headMeta()
                     ->appendHttpEquiv('Last-Modified', $dateModified->getDateTime()->format(DateTime::RFC1123));
         }
@@ -165,7 +164,8 @@ class Frontdoor_IndexController extends Application_Controller_Action
         $this->view->adminform = $actionbox;
     }
 
-    private function printDocumentError($message, $code) {
+    private function printDocumentError($message, $code)
+    {
         $this->view->errorMessage = $message;
         $this->getResponse()->setHttpResponseCode($code);
         $this->render('document-error');
@@ -175,7 +175,8 @@ class Frontdoor_IndexController extends Application_Controller_Action
      *
      * @param Opus_Document $doc
      */
-    private function isMailPossible($doc) {
+    private function isMailPossible($doc)
+    {
         $authors = new Frontdoor_Model_Authors($doc);
         return count($authors->getContactableAuthors()) > 0;
     }
@@ -185,18 +186,19 @@ class Frontdoor_IndexController extends Application_Controller_Action
      * @param Opus_Document $document
      * @return string
      */
-    private function getFrontdoorTitle($document) {
+    private function getFrontdoorTitle($document)
+    {
         $titlesMain = $document->getTitleMain();
         if (count($titlesMain) == 0) {
             return '';
         }
 
         $docLanguage = $document->getLanguage();
-        $docLanguage = is_array($docLanguage) ? $docLanguage : array($docLanguage);
+        $docLanguage = is_array($docLanguage) ? $docLanguage : [$docLanguage];
 
         $firstNonEmptyTitle = '';
 
-        foreach ($titlesMain AS $title) {
+        foreach ($titlesMain as $title) {
             $titleValue = trim($title->getValue());
             if (strlen($titleValue) == 0) {
                 continue;
@@ -214,7 +216,8 @@ class Frontdoor_IndexController extends Application_Controller_Action
         return $firstNonEmptyTitle;
     }
 
-    private function addMetaTagsForDocument($document) {
+    private function addMetaTagsForDocument($document)
+    {
         $htmlMetaTags = new Frontdoor_Model_HtmlMetaTags($this->getConfig(), $this->view->fullUrl());
         $tags = $htmlMetaTags->createTags($document);
         foreach ($tags as $pair) {
@@ -222,7 +225,8 @@ class Frontdoor_IndexController extends Application_Controller_Action
         }
     }
 
-    private function incrementStatisticsCounter($docId) {
+    private function incrementStatisticsCounter($docId)
+    {
         try {
             $statistics = Opus_Statistic_LocalCounter::getInstance();
             $statistics->countFrontdoor($docId);
@@ -239,10 +243,15 @@ class Frontdoor_IndexController extends Application_Controller_Action
      *
      * @return void
      */
-    public function mapopus3Action() {
+    public function mapopus3Action()
+    {
         $docId = $this->getRequest()->getParam('oldId');
         $this->_helper->Redirector->redirectToAndExit(
-            'id', '', 'index', 'rewrite', array('type' => 'opus3-id', 'value' => $docId)
+            'id',
+            '',
+            'index',
+            'rewrite',
+            ['type' => 'opus3-id', 'value' => $docId]
         );
     }
 
@@ -269,8 +278,7 @@ class Frontdoor_IndexController extends Application_Controller_Action
 
         $messages = null;
 
-        if ($request->has('searchtype') && $request->has('rows') && $request->has('start'))
-        {
+        if ($request->has('searchtype') && $request->has('rows') && $request->has('start')) {
             $listRows = $request->getParam('rows');
 
             $start = $request->getParam('start');
@@ -289,25 +297,21 @@ class Frontdoor_IndexController extends Application_Controller_Action
 
             // TODO fix usage of search code - should be identical to search/export/rss - except just 1 row
 
-            $searcher = new Opus_SolrSearch_Searcher();
+            $searcher = new Opus\Search\Util\Searcher();
 
             $resultList = $searcher->search($query);
 
             $queryResult = $resultList->getResults();
 
-            if (is_array($queryResult) && !empty($queryResult) && $queryResult[0] instanceof Opus_Search_Result_Match)
-            {
+            if (is_array($queryResult) && ! empty($queryResult) && $queryResult[0] instanceof Opus\Search\Result\Match) {
                 $resultDocId = $queryResult[0]->getId();
 
-                if ($request->has('docId'))
-                {
-                    if ($resultDocId != $docId)
-                    {
-                        $messages = array('notice' => $this->view->translate('frontdoor_pagination_list_changed'));
+                if ($request->has('docId')) {
+                    if ($resultDocId != $docId) {
+                        $messages = ['notice' => $this->view->translate('frontdoor_pagination_list_changed')];
                     }
-                }
-                else {
-                    $this->redirect($this->view->url(array('docId' => $resultDocId)), array('prependBase' => false));
+                } else {
+                    $this->redirect($this->view->url(['docId' => $resultDocId]), ['prependBase' => false]);
                     return false;
                 }
             }
@@ -317,12 +321,9 @@ class Frontdoor_IndexController extends Application_Controller_Action
             $this->view->paginate = true;
             $numHits = $resultList->getNumberOfHits();
 
-            if ($request->getParam('searchtype') == 'latest')
-            {
+            if ($request->getParam('searchtype') == 'latest') {
                 $this->view->numOfHits = $numHits < $listRows ? $numHits : $listRows;
-            }
-            else
-            {
+            } else {
                 $this->view->numOfHits = $numHits;
             }
 
@@ -335,5 +336,4 @@ class Frontdoor_IndexController extends Application_Controller_Action
 
         return $docId;
     }
-
 }

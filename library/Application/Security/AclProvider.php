@@ -41,14 +41,14 @@
 class Application_Security_AclProvider
 {
 
+    use \Opus\LoggingTrait;
+
     /**
      * Name der Role, die für ACL Prüfungen verwendet wird.
      *
      * Dieser Name wird anstatt des eigentlich Nutzernamens verwendet.
      */
     const ACTIVE_ROLE = '_user';
-
-    private $_logger;
 
     /**
      * Ressourcen, die in Datei application/configs/navigationModules.xml referenziert werden.
@@ -121,11 +121,10 @@ class Application_Security_AclProvider
 
         $user = Zend_Auth::getInstance()->getIdentity();
 
-        if (!is_null($user)) {
+        if (! is_null($user)) {
             try {
                 $realm->setUser($user);
-            }
-            catch (Opus_Security_Exception $ose) {
+            } catch (Opus_Security_Exception $ose) {
                 // unknown user -> invalidate session (logout)
                 Zend_Auth::getInstance()->clearIdentity();
                 $user = null;
@@ -204,7 +203,7 @@ class Application_Security_AclProvider
         $acl->allow('administrator');
 
         foreach ($roles as $role) {
-            if (!$acl->hasRole($role)) {
+            if (! $acl->hasRole($role)) {
                 $acl->addRole(new Zend_Acl_Role($role));
             }
 
@@ -212,18 +211,5 @@ class Application_Security_AclProvider
 
             $roleConfig->applyPermissions($acl);
         }
-    }
-
-    public function getLogger()
-    {
-        if (is_null($this->_logger)) {
-            $this->_logger = Zend_Registry::get('Zend_Log');
-        }
-        return $this->_logger;
-    }
-
-    public function setLogger($logger)
-    {
-        $this->_logger = $logger;
     }
 }

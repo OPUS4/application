@@ -41,6 +41,6 @@ class Application_Form_Element_HashTest extends ControllerTestCase
         $element->loadDefaultDecorators();
 
         $this->assertEquals(1, count($element->getDecorators()));
-        $this->assertTrue($element->getDecorator('ViewHelper') !== FALSE);
+        $this->assertTrue($element->getDecorator('ViewHelper') !== false);
     }
 }

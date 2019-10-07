@@ -130,25 +130,25 @@ class Admin_Form_CollectionTest extends ControllerTestCase
     {
         $form = new Admin_Form_Collection();
 
-        $this->assertTrue($form->isValid(array(
+        $this->assertTrue($form->isValid([
             'Name' => 'ColName'
-        )));
+        ]));
 
-        $this->assertTrue($form->isValid(array(
+        $this->assertTrue($form->isValid([
             'Number' => 'ColNumber'
-        )));
+        ]));
 
-        $this->assertTrue($form->isValid(array(
+        $this->assertTrue($form->isValid([
             'Name' => 'ColName',
             'Number' => 'ColNumber'
-        )));
+        ]));
     }
 
     public function testValidationFailure()
     {
         $form = new Admin_Form_Collection();
 
-        $this->assertFalse($form->isValid(array()));
+        $this->assertFalse($form->isValid([]));
 
         $errors = $form->getErrors('Name');
         $this->assertNotNull($errors);
@@ -158,5 +158,4 @@ class Admin_Form_CollectionTest extends ControllerTestCase
         $this->assertNotNull($errors);
         $this->assertContains('allElementsEmpty', $errors);
     }
-
 }

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -58,7 +57,8 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract
     {
         $valid = parent::isValid($data);
 
-        if ($this->_config->form->first->show_rights_checkbox == 1) {
+        if (isset($this->_config->form->first->show_rights_checkbox) &&
+            filter_var($this->_config->form->first->show_rights_checkbox, FILTER_VALIDATE_BOOLEAN)) {
             if (array_key_exists('rights', $data)) {
                 if ($data['rights'] == '0') {
                     $rights = $this->getElement('rights');
@@ -88,7 +88,8 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract
         $this->addElement($doctypes);
 
         //create and add file upload
-        $this->enableUpload = ($this->_config->form->first->enable_upload == 1);
+        $this->enableUpload = isset($this->_config->form->first->enable_upload) &&
+            filter_var($this->_config->form->first->enable_upload, FILTER_VALIDATE_BOOLEAN);
         if ($this->enableUpload) {
             $fileupload = $this->_createFileuploadField();
             $this->addDisplayGroup($fileupload, 'documentUpload');
@@ -164,12 +165,6 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract
             $maxFileSize = 1024000; //1MB
         }
 
-        // Upload-fields required to enter second stage
-        $requireUpload = $this->_config->form->first->require_upload;
-        if (true === empty($requireUpload)) {
-            $requireUpload = 0;
-        }
-
         //initialization of filename-validator
         $filenameMaxLength = $this->_config->publish->filenameMaxLength;
         $filenameFormat = $this->_config->publish->filenameFormat;
@@ -192,8 +187,11 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract
                 ->addValidator($filenameValidator, false)       // filename-format
                 ->setAttrib('enctype', 'multipart/form-data');
 
-        if (1 == $requireUpload) {
+        // Upload-fields required to enter second stage
+        if (isset($this->_config->form->first->require_upload) &&
+            filter_var($this->_config->form->first->require_upload, FILTER_VALIDATE_BOOLEAN)) {
             if (! isset($this->_session->fulltext) || $this->_session->fulltext == '0') {
+                // noch keine Datei zum Upload ausgewählt
                 $fileupload->setRequired(true);
             }
         } else {
@@ -220,19 +218,15 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract
      */
     private function _createBibliographyField()
     {
-        $bib = $this->_config->form->first->bibliographie;
-        if (true === empty($bib)) {
-            $bib = 0;
-            $this->bibliographie = 0;
-        }
-
-        $bibliographie = null;
-
-        if ($bib == 1) {
+        if (isset($this->_config->form->first->bibliographie) &&
+            filter_var($this->_config->form->first->bibliographie, FILTER_VALIDATE_BOOLEAN)) {
             $this->bibliographie = 1;
             $bibliographie = $this->createElement('checkbox', 'bibliographie');
             $bibliographie->setDisableTranslator(true);
             $bibliographie->setLabel('bibliographie');
+        } else {
+            $this->bibliographie = 0;
+            $bibliographie = null;
         }
 
         return $bibliographie;
@@ -240,22 +234,18 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract
 
     private function _createRightsCheckBox()
     {
-        $showRights = $this->_config->form->first->show_rights_checkbox;
-        if (true === empty($showRights)) {
-            $showRights = 0;
-            $this->showRights = 0;
-        }
-
-        $rightsCheckbox = null;
-
-        if ($showRights == 1) {
+        if (isset($this->_config->form->first->show_rights_checkbox) &&
+            filter_var($this->_config->form->first->show_rights_checkbox, FILTER_VALIDATE_BOOLEAN)) {
             $this->showRights = 1;
             $rightsCheckbox = $this->createElement('checkbox', 'rights');
             $rightsCheckbox
-                    ->setDisableTranslator(true)
-                    ->setLabel('rights')
-                    ->setRequired(true)
-                    ->setChecked(false);
+                ->setDisableTranslator(true)
+                ->setLabel('rights')
+                ->setRequired(true)
+                ->setChecked(false);
+        } else {
+            $this->showRights = 0;
+            $rightsCheckbox = null;
         }
 
         return $rightsCheckbox;

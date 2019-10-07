@@ -66,5 +66,4 @@ class Admin_Form_Document_SubjectsTest extends ControllerTestCase
         $this->assertEquals('swd', $subjects[0]->getType());
         $this->assertEquals('uncontrolled', $subjects[1]->getType());
     }
-
 }

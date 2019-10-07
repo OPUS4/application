@@ -73,8 +73,11 @@ class Admin_Form_Document_PersonsTest extends ControllerTestCase
         foreach ($this->roles as $role) {
             $subform = $form->getSubForm($role);
             $this->assertNotNull($subform, "Unterformular '$role' fehlt.");
-            $this->assertEquals(1, count($subform->getSubForms()),
-                "Unterformular '$role' sollte ein Unterformlar haben.");
+            $this->assertEquals(
+                1,
+                count($subform->getSubForms()),
+                "Unterformular '$role' sollte ein Unterformlar haben."
+            );
         }
     }
 
@@ -82,21 +85,21 @@ class Admin_Form_Document_PersonsTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Persons();
 
-        $post = array(
-            'author' => array(
-                'PersonAuthor0' => array(
+        $post = [
+            'author' => [
+                'PersonAuthor0' => [
                     'PersonId' => '310'
-                ),
-                'PersonAuthor1' => array(
+                ],
+                'PersonAuthor1' => [
                     'PersonId' => '311'
-                )
-            ),
-            'advisor' => array(
-                'PersonAdvisor0' => array(
+                ]
+            ],
+            'advisor' => [
+                'PersonAdvisor0' => [
                     'PersonId' => '312'
-                )
-            )
-        );
+                ]
+            ]
+        ];
 
         $form->constructFromPost($post);
 
@@ -123,20 +126,20 @@ class Admin_Form_Document_PersonsTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Persons();
 
-        $post = array(
-            'author' => array(
-                'PersonAuthor0' => array(
+        $post = [
+            'author' => [
+                'PersonAuthor0' => [
                     'PersonId' => '310'
-                ),
-                'PersonAuthor1' => array( // Es wird kein Unterformular angelegt
-                )
-            ),
-            'advisor' => array(
-                'PersonAdvisor0' => array(
+                ],
+                'PersonAuthor1' => [ // Es wird kein Unterformular angelegt
+                ]
+            ],
+            'advisor' => [
+                'PersonAdvisor0' => [
                     'PersonId' => '312'
-                )
-            )
-        );
+                ]
+            ]
+        ];
 
         $form->constructFromPost($post);
 
@@ -155,13 +158,13 @@ class Admin_Form_Document_PersonsTest extends ControllerTestCase
         $form = new Admin_Form_Document_Persons();
 
         $request = $this->getRequest();
-        $request->setParams(array(
+        $request->setParams([
             'continue' => 'addperson',
             'person' => '310',
             'role' => 'editor',
             'order' => '2',
             'contact' => '0'
-        ));
+        ]);
 
         $session = new Admin_Model_DocumentEditSession(100);
 
@@ -185,15 +188,15 @@ class Admin_Form_Document_PersonsTest extends ControllerTestCase
 
         $logger = new MockLogger();
 
-        $form->setLog($logger);
+        $form->setLogger($logger);
 
         $request = $this->getRequest();
-        $request->setParams(array(
+        $request->setParams([
             'continue' => 'addperson',
             'role' => 'editor',
             'order' => '2',
             'contact' => '0'
-        ));
+        ]);
 
         $session = new Admin_Model_DocumentEditSession(100);
 
@@ -214,19 +217,19 @@ class Admin_Form_Document_PersonsTest extends ControllerTestCase
         $form = new Admin_Form_Document_Persons();
 
         $request = $this->getRequest();
-        $request->setParams(array(
+        $request->setParams([
             'continue' => 'addperson'
-        ));
+        ]);
 
         $session = new Admin_Model_DocumentEditSession(100);
-        $session->addPerson(array(
+        $session->addPerson([
             'person' => 310,
             'role' => 'author'
-        ));
-        $session->addPerson(array(
+        ]);
+        $session->addPerson([
             'person' => 311,
             'role' => 'editor'
-        ));
+        ]);
 
         $this->assertEquals(0, count($form->getSubForm('author')->getSubForms()));
         $this->assertEquals(0, count($form->getSubForm('editor')->getSubForms()));
@@ -258,16 +261,16 @@ class Admin_Form_Document_PersonsTest extends ControllerTestCase
         $this->assertEquals(3, count($form->getSubForm('author')->getSubForms()));
         $this->assertEquals(0, count($form->getSubForm('advisor')->getSubForms()));
 
-        $post = array(
-            'author' => array(
-                'PersonAuthor0' => array(
+        $post = [
+            'author' => [
+                'PersonAuthor0' => [
                     'PersonId' => '310',
-                    'Roles' => array(
+                    'Roles' => [
                         'RoleAdvisor' => 'Advisor'
-                    )
-                )
-            )
-        );
+                    ]
+                ]
+            ]
+        ];
 
         $this->assertEquals(Admin_Form_Document::RESULT_SHOW, $form->processPost($post, null));
 
@@ -279,8 +282,10 @@ class Admin_Form_Document_PersonsTest extends ControllerTestCase
         // jetzt ein Advisor
         $this->assertEquals(1, count($form->getSubForm('advisor')->getSubForms()));
         $this->assertNotNull($form->getSubForm('advisor')->getSubForm('PersonAdvisor0'));
-        $this->assertEquals(310,
-            $form->getSubForm('advisor')->getSubForm('PersonAdvisor0')->getElementValue('PersonId'));
+        $this->assertEquals(
+            310,
+            $form->getSubForm('advisor')->getSubForm('PersonAdvisor0')->getElementValue('PersonId')
+        );
     }
 
     public function testProcessPostSort()
@@ -291,9 +296,9 @@ class Admin_Form_Document_PersonsTest extends ControllerTestCase
 
         $form->populateFromModel($document);
 
-        $post = array(
+        $post = [
             'Sort' => 'Sortieren'
-        );
+        ];
 
         $this->assertEquals(Admin_Form_Document::RESULT_SHOW, $form->processPost($post, null));
     }
@@ -302,7 +307,7 @@ class Admin_Form_Document_PersonsTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Persons();
 
-        $this->assertNull($form->processPost(array(), null));
+        $this->assertNull($form->processPost([], null));
     }
 
     /**
@@ -312,11 +317,11 @@ class Admin_Form_Document_PersonsTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Persons();
 
-        $this->assertNull($form->processPost(array(
-            'unknown' => array( // unbekannter Name für Unterformular (sollte Rolle für Person sein, z.B. 'author')
+        $this->assertNull($form->processPost([
+            'unknown' => [ // unbekannter Name für Unterformular (sollte Rolle für Person sein, z.B. 'author')
                 'key' => 'value'
-            )
-        ), null));
+            ]
+        ], null));
     }
 
     public function testProcessPostEmptyWithPersons()
@@ -327,7 +332,7 @@ class Admin_Form_Document_PersonsTest extends ControllerTestCase
 
         $form->populateFromModel($document);
 
-        $this->assertNull($form->processPost(array(), null));
+        $this->assertNull($form->processPost([], null));
     }
 
     public function testProcessPostResultNull()
@@ -338,9 +343,9 @@ class Admin_Form_Document_PersonsTest extends ControllerTestCase
 
         $form->populateFromModel($document);
 
-        $post = array(
-            'author' => array(),
-        );
+        $post = [
+            'author' => [],
+        ];
 
         $this->assertNull($form->processPost($post, null));
     }
@@ -353,11 +358,11 @@ class Admin_Form_Document_PersonsTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Persons();
 
-        $post = array(
-            'author' => array(
+        $post = [
+            'author' => [
                 'Add' => 'Hinzufügen'
-            )
-        );
+            ]
+        ];
 
         $result = $form->processPost($post, null);
 
@@ -388,12 +393,12 @@ class Admin_Form_Document_PersonsTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Persons();
 
-        $person = array(
+        $person = [
             'person' => 310, // von Document 250
             'order' => 2,
             'role' => 'editor',
             'contact' => 1
-        );
+        ];
 
         $this->assertEquals(0, count($form->getSubForm('editor')->getSubForms()), 'Es sollte keinen Editor geben.');
 
@@ -415,8 +420,8 @@ class Admin_Form_Document_PersonsTest extends ControllerTestCase
 
         $this->assertEquals(0, count($form->getSubForm('editor')->getSubForms()), 'Es sollte keinen Editor geben.');
 
-        $form->addPerson(array('person' => 310, 'role' => 'editor'));
-        $form->addPerson(array('person' => 311, 'role' => 'editor'));
+        $form->addPerson(['person' => 310, 'role' => 'editor']);
+        $form->addPerson(['person' => 311, 'role' => 'editor']);
 
         $this->assertEquals(2, count($form->getSubForm('editor')->getSubForms()), 'Es sollte zwei Personen geben.');
 
@@ -430,12 +435,10 @@ class Admin_Form_Document_PersonsTest extends ControllerTestCase
         $this->assertNotNull($subform);
         $this->assertEquals(311, $subform->getElementValue('PersonId'));
 
-        $form->addPerson(array('person' => 312, 'role' => 'editor', 'order' => 2));
+        $form->addPerson(['person' => 312, 'role' => 'editor', 'order' => 2]);
 
         $this->assertEquals(310, $form->getSubForm('editor')->getSubForm('PersonEditor0')->getElementValue('PersonId'));
         $this->assertEquals(312, $form->getSubForm('editor')->getSubForm('PersonEditor1')->getElementValue('PersonId'));
         $this->assertEquals(311, $form->getSubForm('editor')->getSubForm('PersonEditor2')->getElementValue('PersonId'));
     }
-
-
 }

@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -83,7 +83,7 @@ class Home_IndexControllerTest extends ControllerTestCase
     public function testHelpActionSeparate()
     {
         $config = Zend_Registry::get('Zend_Config');
-        $config->help->separate = true;
+        $config->help->separate = self::CONFIG_VALUE_TRUE;
         $this->dispatch('/home/index/help');
         $this->assertResponseCode(200);
         $this->assertModule('home');
@@ -138,10 +138,10 @@ class Home_IndexControllerTest extends ControllerTestCase
 
     private function getDocsInSearchIndex($checkConsistency = true)
     {
-        $searcher = new Opus_SolrSearch_Searcher();
-        $query = new Opus_SolrSearch_Query();
+        $searcher = new Opus\Search\Util\Searcher();
+        $query = new Opus\Search\Util\Query();
         $query->setCatchAll("*:*");
-        $query->setRows(Opus_SolrSearch_Query::MAX_ROWS);
+        $query->setRows(Opus\Search\Util\Query::MAX_ROWS);
         $resultList = $searcher->search($query, $checkConsistency);
         return $resultList;
     }

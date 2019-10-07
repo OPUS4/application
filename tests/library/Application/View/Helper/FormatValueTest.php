@@ -78,7 +78,7 @@ class Application_View_Helper_FormatValueTest extends ControllerTestCase
 
         $output = $this->__helper->format($field, 'Opus_Document');
 
-        $this->assertTrue(in_array($output, array('German', 'Deutsch')));
+        $this->assertTrue(in_array($output, ['German', 'Deutsch']));
     }
 
     public function testFormatValueForYear()
@@ -108,7 +108,7 @@ class Application_View_Helper_FormatValueTest extends ControllerTestCase
 
         $output = $this->__helper->format($field);
 
-        $this->assertTrue(in_array($output, array('2002/06/17', '17.06.2002')));
+        $this->assertTrue(in_array($output, ['2002/06/17', '17.06.2002']));
     }
 
     public function testFormatValueForInvalidDate()

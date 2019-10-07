@@ -40,11 +40,11 @@ class Application_Form_Element_LanguageTypeTest extends FormElementTestCase
 
     public function setUp()
     {
-        $this->keys = array('Null', 'A', 'C', 'E', 'H', 'L', 'S');
+        $this->keys = ['Null', 'A', 'C', 'E', 'H', 'L', 'S'];
         $this->_formElementClass = 'Application_Form_Element_LanguageType';
         $this->_expectedDecoratorCount = 6;
-        $this->_expectedDecorators = array('ViewHelper', 'Errors', 'Description', 'ElementHtmlTag', 'LabelNotEmpty',
-            'dataWrapper');
+        $this->_expectedDecorators = ['ViewHelper', 'Errors', 'Description', 'ElementHtmlTag', 'LabelNotEmpty',
+            'dataWrapper'];
         $this->_staticViewHelper = 'viewFormSelect';
         parent::setUp();
     }
@@ -70,5 +70,4 @@ class Application_Form_Element_LanguageTypeTest extends FormElementTestCase
             $this->assertTrue($translator->isTranslated('Opus_Language_Type_Value_' . $key));
         }
     }
-
 }

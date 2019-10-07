@@ -173,15 +173,12 @@ class Admin_Model_CollectionsTest extends ControllerTestCase
         $this->assertNotNull($collections);
         $this->assertInternalType('array', $collections);
 
-        foreach ($collections as $collection)
-        {
+        foreach ($collections as $collection) {
             $this->assertArrayHasKey('assigned', $collection);
 
-            if (strcmp($collection['name'], 'default_collection_role_TestCollectionRole-Name') === 0)
-            {
+            if (strcmp($collection['name'], 'default_collection_role_TestCollectionRole-Name') === 0) {
                 $this->assertTrue($collection['assigned']);
-            }
-            else {
+            } else {
                 $this->assertFalse($collection['assigned']);
             }
         }

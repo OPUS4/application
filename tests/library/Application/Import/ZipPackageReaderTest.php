@@ -44,15 +44,23 @@ class Application_Import_ZipPackageReaderTest extends ControllerTestCase
 
     public function testReadPackageWithXmlFile()
     {
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
-            'filetypes' => array('xml' => array('mimeType' => array(
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'filetypes' => ['xml' => ['mimeType' => [
                 'text/xml', 'application/xml'
-            )))
-        )));
+            ]]]
+        ]));
 
         $reader = new Application_Import_ZipPackageReader();
 
-        $status = $reader->readPackage(APPLICATION_PATH . '/tests/resources/sword-packages/single-doc-pdf-xml.zip');
+        $tmpDir = APPLICATION_PATH . '/tests/workspace/tmp/ZipPackageReaderTest_ReadPackageWithXmlFile';
+        mkdir($tmpDir);
+
+        copy(
+            APPLICATION_PATH . '/tests/resources/sword-packages/single-doc-pdf-xml.zip',
+            $tmpDir . DIRECTORY_SEPARATOR . 'package.zip'
+        );
+
+        $status = $reader->readPackage($tmpDir);
 
         $this->assertFalse($status->noDocImported());
         $this->assertCount(1, $status->getDocs());
@@ -64,5 +72,7 @@ class Application_Import_ZipPackageReaderTest extends ControllerTestCase
         $files = $document->getFile();
 
         $this->assertCount(2, $files);
+
+        Application_Import_PackageReaderTest::cleanupTmpDir($tmpDir);
     }
 }

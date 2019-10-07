@@ -31,24 +31,19 @@
  * @category    Application
  * @package     Application_Form
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-abstract class Application_Form_Abstract extends Zend_Form_SubForm {
+abstract class Application_Form_Abstract extends Zend_Form_SubForm
+{
+
+    use \Opus\LoggingTrait;
 
     /**
      * Konfiguration Objekt für Applikation.
      * @var Zend_Config
      */
     private $_config;
-
-
-    /**
-     * Logger für Formularklasse.
-     * @var Zend_Log
-     */
-    private $_logger;
 
     /**
      * Option für die automatische Verwendung der Element-Namen als Labels.
@@ -65,7 +60,8 @@ abstract class Application_Form_Abstract extends Zend_Form_SubForm {
     /**
      * Initialisiert das Formular.
      */
-    public function init() {
+    public function init()
+    {
         parent::init();
 
         $this->addPrefixPath('Application_Form_Decorator', 'Application/Form/Decorator', Zend_Form::DECORATOR);
@@ -86,20 +82,19 @@ abstract class Application_Form_Abstract extends Zend_Form_SubForm {
      * TODO Sind alle Fälle abgedeckt?
      * TODO replace with filter or override getValue($name)
      */
-    public function getElementValue($name) {
+    public function getElementValue($name)
+    {
         $element = $this->getElement($name);
-        if (!is_null($element)) {
+        if (! is_null($element)) {
             $value = $element->getValue();
 
             if ($element instanceof Zend_Form_Element_Text || $element instanceof Zend_Form_Element_Textarea
                 || $element instanceof Zend_Form_Element_Hidden) {
                 return (trim($value) === '') ? null : $value;
-            }
-            else {
+            } else {
                 return $value;
             }
-        }
-        else {
+        } else {
             // Sollte nie passieren - Schreibe Fehlermeldung ins Log
             $this->getLogger()->err("Element '$name' in form '" . $this->getName() . "' not found.");
             return null;
@@ -119,15 +114,16 @@ abstract class Application_Form_Abstract extends Zend_Form_SubForm {
      * @param null $options
      * @return void|Zend_Form
      */
-    public function createElement($element, $name , $options = null) {
+    public function createElement($element, $name, $options = null)
+    {
         if ($this->isUseNameAsLabel()) {
-            $labelOption = array('label' => is_null($this->_labelPrefix) ? $name : $this->_labelPrefix . $name);
+            $labelOption = ['label' => is_null($this->_labelPrefix) ? $name : $this->_labelPrefix . $name];
             $options = (is_array($options)) ? array_merge($labelOption, $options) : $labelOption;
         }
 
         $element = parent::createElement($element, $name, $options);
 
-        if (!is_null($element)) {
+        if (! is_null($element)) {
             $this->applyCustomMessages($element);
         }
 
@@ -138,10 +134,11 @@ abstract class Application_Form_Abstract extends Zend_Form_SubForm {
      * Fügt angepasste Nachrichten für Validierungen hinzu.
      * @param Zend_Form_Element $element
      */
-    protected function applyCustomMessages($element) {
+    protected function applyCustomMessages($element)
+    {
         if ($element->isRequired()) {
             // wenn Validator 'notEmpty' bereits gesetzt ist; nicht modifizieren
-            if (!$element->getValidator('notEmpty') && $element->autoInsertNotEmptyValidator()) {
+            if (! $element->getValidator('notEmpty') && $element->autoInsertNotEmptyValidator()) {
                 $notEmptyValidator = new Zend_Validate_NotEmpty();
                 $notEmptyValidator->setMessage('admin_validate_error_notempty');
                 $element->addValidator($notEmptyValidator);
@@ -150,49 +147,11 @@ abstract class Application_Form_Abstract extends Zend_Form_SubForm {
     }
 
     /**
-     * TODO Verwendung entfernen und dann löschen
-     * @deprecated wir sollten einheitlich get/setLogger verwenden
-     */
-    public function getLog() {
-        return $this->getLogger();
-    }
-
-    /**
-     * TODO Verwendung entfernen und dann löschen
-     * @deprecated wir sollten einheitlich get/setLogger verwenden
-     */
-    public function setLog($logger) {
-        $this->setLogger($logger);
-    }
-
-    /**
-     * Liefert den Logger für diese Klasse.
-     *
-     * Wenn für die Klasse kein Logger gesetzt wurde, wird der Wert von 'Zend_Log' in Zend_Registry zurueck geliefert.
-     *
-     * @return Zend_Log
-     */
-    public function getLogger() {
-        if (is_null($this->_logger)) {
-            $this->_logger = Zend_Registry::get('Zend_Log');
-        }
-
-        return $this->_logger;
-    }
-
-    /**
-     * Setzt den Logger für diese Klasse
-     * @param $logger
-     */
-    public function setLogger($logger) {
-        $this->_logger = $logger;
-    }
-
-    /**
      * Meldet, ob Element-Namen als Label verwendet werden.
      * @return bool TRUE - Element Namen werden als Label verwendet; FALSE - keine automatischen Label
      */
-    public function isUseNameAsLabel() {
+    public function isUseNameAsLabel()
+    {
         return $this->_useNameAsLabel;
     }
 
@@ -200,7 +159,8 @@ abstract class Application_Form_Abstract extends Zend_Form_SubForm {
      * Setzt Option fuer die automatische Verwendung von Element-Namen als Label.
      * @param bool $useNameAsLabel
      */
-    public function setUseNameAsLabel($useNameAsLabel) {
+    public function setUseNameAsLabel($useNameAsLabel)
+    {
         $this->_useNameAsLabel = $useNameAsLabel;
     }
 
@@ -208,7 +168,8 @@ abstract class Application_Form_Abstract extends Zend_Form_SubForm {
      * Liefert den gesetzten Prefix fuer automatisch generierte Label.
      * @return string
      */
-    public function getLabelPrefix() {
+    public function getLabelPrefix()
+    {
         return $this->_labelPrefix;
     }
 
@@ -217,7 +178,8 @@ abstract class Application_Form_Abstract extends Zend_Form_SubForm {
      *
      * @param $prefix
      */
-    public function setLabelPrefix($prefix) {
+    public function setLabelPrefix($prefix)
+    {
         $this->_labelPrefix = $prefix;
     }
 
@@ -225,7 +187,8 @@ abstract class Application_Form_Abstract extends Zend_Form_SubForm {
      * Returns configuration.
      * @return Zend_Config
      */
-    public function getApplicationConfig() {
+    public function getApplicationConfig()
+    {
         if (is_null($this->_config)) {
             $this->_config = Zend_Registry::get('Zend_Config');
         }
@@ -237,8 +200,8 @@ abstract class Application_Form_Abstract extends Zend_Form_SubForm {
      * Sets configuration.
      * @param $config Zend_Config
      */
-    public function setApplicationConfig($config) {
+    public function setApplicationConfig($config)
+    {
         $this->_config = $config;
     }
-
 }

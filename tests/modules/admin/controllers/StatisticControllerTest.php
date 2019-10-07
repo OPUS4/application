@@ -36,11 +36,13 @@
  *
  * @covers Admin_StatisticController
  */
-class Admin_StatisticControllerTest extends ControllerTestCase {
+class Admin_StatisticControllerTest extends ControllerTestCase
+{
 
     protected $additionalResources = 'all';
 
-    public function testIndexAction() {
+    public function testIndexAction()
+    {
         $this->dispatch('/admin/statistic');
         $this->assertResponseCode(200);
         $this->assertModule('admin');
@@ -49,10 +51,11 @@ class Admin_StatisticControllerTest extends ControllerTestCase {
         $this->validateXHTML();
     }
 
-    public function testShowAction() {
+    public function testShowAction()
+    {
         $this->request
                 ->setMethod('POST')
-                ->setPost(array('selectedYear' => '2010'));
+                ->setPost(['selectedYear' => '2010']);
         $this->dispatch('/admin/statistic/show');
         $this->assertResponseCode(200);
         $this->assertModule('admin');
@@ -64,11 +67,12 @@ class Admin_StatisticControllerTest extends ControllerTestCase {
     /*
      * Fragt ab, ob bei einem falschen Jahr die Indexseite angezeigt wird
      */
-    public function testIndexActionWithWrongYear() {
+    public function testIndexActionWithWrongYear()
+    {
         $this->useEnglish();
         $this->request
             ->setMethod('POST')
-            ->setPost(array('selectedYear' => '1337'));
+            ->setPost(['selectedYear' => '1337']);
         $this->dispatch('/admin/statistic/index');
         $this->assertResponseCode(200);
         $this->assertModule('admin');
@@ -76,24 +80,29 @@ class Admin_StatisticControllerTest extends ControllerTestCase {
         $this->assertAction('index');
         $this->assertQueryContentContains('//dt', 'Please select year:');
         $this->assertNotQueryContentContains('//h2', 'Month overview');
-        $this->checkForCustomBadStringsInHtml($this->getResponse()->getBody(), array('1337'));
+        $this->checkForCustomBadStringsInHtml($this->getResponse()->getBody(), ['1337']);
     }
 
-    public function testDisplayCurrentYear() {
+    public function testDisplayCurrentYear()
+    {
         $this->useGerman();
         $this->request
                 ->setMethod('POST')
-                ->setPost(array('selectedYear' => '2010'));
+                ->setPost(['selectedYear' => '2010']);
         $this->dispatch('/admin/statistic/show');
-        $this->assertQueryContentContains('//div[@class="breadcrumbsContainer"]', '2010',
-            'breadcrumbsContainer does not contain the current year');
+        $this->assertQueryContentContains(
+            '//div[@class="breadcrumbsContainer"]',
+            '2010',
+            'breadcrumbsContainer does not contain the current year'
+        );
         $this->assertQueryContentContains('//h1', 'Veröffentlichungstatistik 2010');
     }
 
     /**
      * Regression test for OPUSVIER-1770.
      */
-    public function testRedirectToIndexForShowWithoutSelectedYear() {
+    public function testRedirectToIndexForShowWithoutSelectedYear()
+    {
         $this->dispatch('/admin/statistic/show');
         $this->assertRedirectTo('/admin/statistic');
     }
@@ -102,9 +111,9 @@ class Admin_StatisticControllerTest extends ControllerTestCase {
      * Regression test for OPUSVIER-1769.
      * Documents must not be shown in publication statistics, if their serverState is not 'published'.
      */
-    public function testIgnoreUnpublishedDocuments() {
+    public function testIgnoreUnpublishedDocuments()
+    {
         $this->dispatch('/admin/statistic');
         $this->assertNotQueryContentContains('//option', '2110');
     }
 }
-

@@ -67,7 +67,7 @@ class Application_Controller_ActionCRUDTest extends ControllerTestCase
 
         if (count($this->licenceIds) < count($licences)) {
             foreach ($licences as $licence) {
-                if (!in_array($licence->getId(), $this->licenceIds)) {
+                if (! in_array($licence->getId(), $this->licenceIds)) {
                     $licence->delete();
                 }
             }

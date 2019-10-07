@@ -40,7 +40,8 @@
  * The export actions are separate classes implementing the interface Application_Export_ExportPlugin and are
  * dynamically mapped to controller functions.
  */
-class Export_IndexController extends Application_Controller_ModuleAccess {
+class Export_IndexController extends Application_Controller_ModuleAccess
+{
 
     /**
      * Manages export plugins.
@@ -91,7 +92,7 @@ class Export_IndexController extends Application_Controller_ModuleAccess {
     public function __call($action, $parameters)
     {
         // TODO what does this code do
-        if (!'Action' == substr($action, -6)) {
+        if (! 'Action' == substr($action, -6)) {
             $this->getLogger()->info(__METHOD__ . ' undefined method: ' . $action);
             parent::__call($action, $parameters);
         }
@@ -102,8 +103,7 @@ class Export_IndexController extends Application_Controller_ModuleAccess {
 
         $plugin = $this->_exportService->getPlugin($actionName);
 
-        if (!is_null($plugin)) {
-
+        if (! is_null($plugin)) {
             if ($plugin->isAccessRestricted()) {
                 $this->moduleAccessDeniedAction();
                 return;
@@ -122,11 +122,8 @@ class Export_IndexController extends Application_Controller_ModuleAccess {
             }
 
             $plugin->postDispatch();
-        }
-        else {
+        } else {
             throw new Application_Exception('Plugin ' . htmlspecialchars($actionName) . ' not found');
         }
     }
-
 }
-

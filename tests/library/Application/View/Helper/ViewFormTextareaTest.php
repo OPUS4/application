@@ -39,9 +39,9 @@ class Application_View_Helper_ViewFormTextareaTest extends ControllerTestCase
         $helper = new Application_View_Helper_ViewFormTextarea();
         $helper->setView(new Zend_View());
 
-        $this->assertContains('class="field textarea"', $helper->viewFormTextarea('testName', 'testValue', array(
+        $this->assertContains('class="field textarea"', $helper->viewFormTextarea('testName', 'testValue', [
             'id' => '10'
-        )));
+        ]));
     }
 
     public function testGetElementClass()
@@ -50,5 +50,4 @@ class Application_View_Helper_ViewFormTextareaTest extends ControllerTestCase
 
         $this->assertEquals('field textarea', $helper->getElementClass());
     }
-
 }

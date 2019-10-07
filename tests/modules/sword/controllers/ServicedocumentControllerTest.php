@@ -226,5 +226,4 @@ class Sword_ServicedocumentControllerTest extends ControllerTestCase
         $this->assertEquals('q', $attribute->nodeName);
         $this->assertEquals('1.0', $attribute->nodeValue);
     }
-
 }

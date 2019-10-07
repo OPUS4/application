@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -49,7 +48,7 @@ class Admin_JobControllerTest extends ControllerTestCase
 
         $config = Zend_Registry::get('Zend_Config');
         $this->__configBackup = $config;
-        $config->merge(new Zend_Config(['runjobs' => ['asynchronous' => true]]));
+        $config->merge(new Zend_Config(['runjobs' => ['asynchronous' => self::CONFIG_VALUE_TRUE]]));
 
         $this->assertEquals(0, Opus_Job::getCount(Opus_Job::STATE_FAILED), 'test data changed.');
 
@@ -100,6 +99,5 @@ class Admin_JobControllerTest extends ControllerTestCase
         $this->dispatch($failedJobsUrl);
         $this->assertResponseCode(200);
         $this->assertQueryContentContains('table.worker-jobs td div', 'task: get-me-a-coffee');
-
     }
 }

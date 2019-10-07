@@ -43,14 +43,14 @@ class Solrsearch_Model_SearchTest extends ControllerTestCase
     {
         $request = $this->getRequest();
 
-        $request->setParams(array(
+        $request->setParams([
             'searchtype' => 'all',
             'start' => '30',
             'rows' => '15',
             'query' => 'test',
             'sortfield' => 'year',
             'sortorder' => 'asc'
-        ));
+        ]);
 
         $model = new Solrsearch_Model_Search();
 
@@ -110,9 +110,9 @@ class Solrsearch_Model_SearchTest extends ControllerTestCase
     {
         $request = $this->getRequest();
 
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
-            'searchengine' => array('solr' => array('numberOfDefaultSearchResults' => 25))
-        )));
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'searchengine' => ['solr' => ['numberOfDefaultSearchResults' => '25']]
+        ]));
 
         $model = new Solrsearch_Model_Search();
 
@@ -126,7 +126,7 @@ class Solrsearch_Model_SearchTest extends ControllerTestCase
     {
         $request = $this->getRequest();
 
-        $request->setParams(array(
+        $request->setParams([
             'searchtype' => 'all',
             'start' => '30',
             'rows' => '15',
@@ -142,7 +142,7 @@ class Solrsearch_Model_SearchTest extends ControllerTestCase
             'fulltext' => 'TestWord',
             'fulltextmodifier' => 'contains_none',
             'year' => '2008'
-        ));
+        ]);
 
         $model = new Solrsearch_Model_Search();
 
@@ -239,7 +239,7 @@ class Solrsearch_Model_SearchTest extends ControllerTestCase
 
         $this->assertTrue($model->isAdvancedSearchRequestValid($request));
 
-        $request->setParams(array(
+        $request->setParams([
             'author' => 'TestAuthor',
             'title' => 'TestTitle',
             'persons' => '    ',
@@ -247,7 +247,7 @@ class Solrsearch_Model_SearchTest extends ControllerTestCase
             'abstract' => 'TestAbstract',
             'fulltext' => 'TestWord',
             'year' => '2008'
-        ));
+        ]);
 
         $this->assertTrue($model->isAdvancedSearchRequestValid($request));
     }

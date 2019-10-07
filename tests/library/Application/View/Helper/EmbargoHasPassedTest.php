@@ -50,7 +50,8 @@ class Application_View_Helper_EmbargoHasPassedTest extends ControllerTestCase
         $this->assertFalse($helper->embargoHasPassed($document));
     }
 
-    public function testEmbargoHasPassed() {
+    public function testEmbargoHasPassed()
+    {
         $helper = new Application_View_Helper_EmbargoHasPassed();
 
         $document = $this->createTestDocument();
@@ -63,5 +64,4 @@ class Application_View_Helper_EmbargoHasPassedTest extends ControllerTestCase
 
         $this->assertFalse($helper->embargoHasPassed($docId));
     }
-
 }

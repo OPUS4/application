@@ -54,7 +54,7 @@ class Admin_Form_Document_SectionTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Section();
 
-        $post = array();
+        $post = [];
 
         $form->constructFromPost($post);
     }
@@ -63,11 +63,10 @@ class Admin_Form_Document_SectionTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Section();
 
-        $post = array();
+        $post = [];
         $context = $post;
 
         $form->processPost($post, $context);
-
     }
 
     public function testContinueEdit()
@@ -85,5 +84,4 @@ class Admin_Form_Document_SectionTest extends ControllerTestCase
 
         $form->updateModel($model);
     }
-
 }

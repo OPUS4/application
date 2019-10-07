@@ -67,12 +67,17 @@ abstract class FormElementTestCase extends ControllerTestCase
 
         $this->assertEquals($this->_expectedDecoratorCount, count($element->getDecorators()));
 
-        $this->assertEquals($this->_expectedDecoratorCount, count($this->_expectedDecorators),
-            'Configured expected decorators do not match expected count.');
+        $this->assertEquals(
+            $this->_expectedDecoratorCount,
+            count($this->_expectedDecorators),
+            'Configured expected decorators do not match expected count.'
+        );
 
         foreach ($this->_expectedDecorators as $decorator) {
-            $this->assertTrue($element->getDecorator($decorator) !== FALSE,
-                "Decorator '$decorator' fehlt.'");
+            $this->assertTrue(
+                $element->getDecorator($decorator) !== false,
+                "Decorator '$decorator' fehlt.'"
+            );
         }
     }
 
@@ -121,8 +126,10 @@ abstract class FormElementTestCase extends ControllerTestCase
             $this->assertEquals($this->_staticViewHelper, $element->getStaticViewHelper());
         } else {
             // if method exists _staticViewHelper should be configured for testing
-            $this->assertFalse(method_exists($element, 'getStaticViewHelper'),
-                'Need to configure \'_staticViewHelper\' for test in class ' . __CLASS__ . '.');
+            $this->assertFalse(
+                method_exists($element, 'getStaticViewHelper'),
+                'Need to configure \'_staticViewHelper\' for test in class ' . __CLASS__ . '.'
+            );
         }
     }
 }

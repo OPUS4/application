@@ -244,6 +244,4 @@ class CitationExport_Model_HelperTest extends ControllerTestCase
         $this->assertContains('T1  - COLN', $output);
         $this->assertContains('T2  - Parent Title', $output);
     }
-
 }
-

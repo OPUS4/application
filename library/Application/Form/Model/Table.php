@@ -136,7 +136,7 @@ class Application_Form_Model_Table extends Application_Form_Abstract
      */
     public function setModels($models)
     {
-        if (!is_null($models) && !is_array($models)) {
+        if (! is_null($models) && ! is_array($models)) {
             throw new Application_Exception(__METHOD__ . 'Parameter must be array.');
         }
         $this->_models = $models;
@@ -148,7 +148,7 @@ class Application_Form_Model_Table extends Application_Form_Abstract
      */
     public function setViewScript($name)
     {
-        if (!is_null($name)) {
+        if (! is_null($name)) {
             $this->_viewScript = $name;
         } else {
             $this->_viewScript = 'modeltable.phtml';
@@ -182,8 +182,8 @@ class Application_Form_Model_Table extends Application_Form_Abstract
      */
     public function isRenderShowActionLink($model)
     {
-        if (!is_null($this->_controller)) {
-            if (!method_exists($this->_controller, 'getShowActionEnabled')) {
+        if (! is_null($this->_controller)) {
+            if (! method_exists($this->_controller, 'getShowActionEnabled')) {
                 $this->getLogger()->debug('The used controller does not have the method getShowActionEnabled.');
             } else {
                 return $this->_controller->getShowActionEnabled();
@@ -200,8 +200,8 @@ class Application_Form_Model_Table extends Application_Form_Abstract
      */
     public function isModifiable($model)
     {
-        if (!is_null($this->_controller)) {
-            if (!method_exists($this->_controller, 'isModifiable')) {
+        if (! is_null($this->_controller)) {
+            if (! method_exists($this->_controller, 'isModifiable')) {
                 $this->getLogger()->debug('The used controller does not have the method isModifiable.');
             } else {
                 return $this->_controller->isModifiable($model);
@@ -218,8 +218,8 @@ class Application_Form_Model_Table extends Application_Form_Abstract
      */
     public function isDeletable($model)
     {
-        if (!is_null($this->_controller)) {
-            if (!method_exists($this->_controller, 'isDeletable')) {
+        if (! is_null($this->_controller)) {
+            if (! method_exists($this->_controller, 'isDeletable')) {
                 $this->getLogger()->debug('The used controller does not have the method isDeletable.');
             } else {
                 return $this->_controller->isDeletable($model);
@@ -231,8 +231,8 @@ class Application_Form_Model_Table extends Application_Form_Abstract
 
     public function isUsed($model)
     {
-        if (!is_null($this->_controller)) {
-            if (!method_exists($this->_controller, 'isUsed')) {
+        if (! is_null($this->_controller)) {
+            if (! method_exists($this->_controller, 'isUsed')) {
                 $this->getLogger()->debug('The used controller does not have the method isUsed.');
             } else {
                 return $this->_controller->isUsed($model);
@@ -244,8 +244,8 @@ class Application_Form_Model_Table extends Application_Form_Abstract
 
     public function isProtected($model)
     {
-        if (!is_null($this->_controller)) {
-            if (!method_exists($this->_controller, 'isProtected')) {
+        if (! is_null($this->_controller)) {
+            if (! method_exists($this->_controller, 'isProtected')) {
                 $this->getLogger()->debug('The used controller does not have the method isProtected.');
             } else {
                 return $this->_controller->isProtected($model);
@@ -257,8 +257,8 @@ class Application_Form_Model_Table extends Application_Form_Abstract
 
     public function getRowCssClass($model)
     {
-        if (!is_null($this->_controller)) {
-            if (!method_exists($this->_controller, 'getRowCssClass')) {
+        if (! is_null($this->_controller)) {
+            if (! method_exists($this->_controller, 'getRowCssClass')) {
                 $this->getLogger()->debug('The used controller does not have the method getRowCssClass.');
             } else {
                 return $this->_controller->getRowCssClass($model);
@@ -270,8 +270,8 @@ class Application_Form_Model_Table extends Application_Form_Abstract
 
     public function getRowTooltip($model)
     {
-        if (!is_null($this->_controller)) {
-            if (!method_exists($this->_controller, 'getRowTooltip')) {
+        if (! is_null($this->_controller)) {
+            if (! method_exists($this->_controller, 'getRowTooltip')) {
                 $this->getLogger()->debug('The used controller does not have the method getRowTooltip.');
             } else {
                 return $this->_controller->getRowTooltip($model);

@@ -158,7 +158,7 @@ class Admin_Form_CollectionRoleTest extends ControllerTestCase
     {
         $form = new Admin_Form_CollectionRole();
 
-        $this->assertFalse($form->isValid(array()));
+        $this->assertFalse($form->isValid([]));
 
         $this->assertContains('isEmpty', $form->getErrors('Name'));
         $this->assertContains('isEmpty', $form->getErrors('OaiName'));
@@ -170,24 +170,24 @@ class Admin_Form_CollectionRoleTest extends ControllerTestCase
     {
         $form = new Admin_Form_CollectionRole();
 
-        $this->assertTrue($form->isValid(array(
+        $this->assertTrue($form->isValid([
             'Name' => 'TestName',
             'OaiName' => 'TestOaiName',
             'DisplayBrowsing' => 'Name',
             'DisplayFrontdoor' => 'Name,Number'
-        )));
+        ]));
     }
 
     public function testValidationFailureBecauseOfConflict()
     {
         $form = new Admin_Form_CollectionRole();
 
-        $this->assertFalse($form->isValid(array(
+        $this->assertFalse($form->isValid([
             'Name' => 'institutes',
             'OaiName' => 'institutes',
             'DisplayBrowsing' => 'Name',
             'DisplayFrontdoor' => 'Name,Number'
-        )));
+        ]));
 
         $this->assertContains('notUnique', $form->getErrors('Name'));
         $this->assertContains('notUnique', $form->getErrors('OaiName'));
@@ -197,25 +197,25 @@ class Admin_Form_CollectionRoleTest extends ControllerTestCase
     {
         $form = new Admin_Form_CollectionRole();
 
-        $this->assertTrue($form->isValid(array(
+        $this->assertTrue($form->isValid([
             'Id' => '1', // ID for 'institutes' CollectionRole
             'Name' => 'institutes',
             'OaiName' => 'institutes',
             'DisplayBrowsing' => 'Name',
             'DisplayFrontdoor' => 'Name,Number'
-        )));
+        ]));
     }
 
     public function testValidationWithoutInvalidCharInCollectionRoleName()
     {
         $form = new Admin_Form_CollectionRole();
 
-        $this->assertTrue($form->isValid(array(
+        $this->assertTrue($form->isValid([
             'Name' => 'foobar',
             'OaiName' => 'foobar',
             'DisplayBrowsing' => 'Name',
             'DisplayFrontdoor' => 'Name,Number'
-        )));
+        ]));
 
         $this->assertNotContains('containsInvalidChar', $form->getErrors('Name'));
         $this->assertNotContains('containsInvalidChar', $form->getErrors('OaiName'));
@@ -225,12 +225,12 @@ class Admin_Form_CollectionRoleTest extends ControllerTestCase
     {
         $form = new Admin_Form_CollectionRole();
 
-        $this->assertFalse($form->isValid(array(
+        $this->assertFalse($form->isValid([
             'Name' => 'foo bar',
             'OaiName' => 'foo bar',
             'DisplayBrowsing' => 'Name',
             'DisplayFrontdoor' => 'Name,Number'
-        )));
+        ]));
 
         $this->assertContains('containsInvalidChar', $form->getErrors('Name'));
         $this->assertNotContains('containsInvalidChar', $form->getErrors('OaiName'));

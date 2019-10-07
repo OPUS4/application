@@ -52,31 +52,31 @@ class SolrUpdateTest extends CronTestCase
 
     public function testSolrUpdateIndex()
     {
-        $this->createJob(Opus_Job_Worker_IndexOpusDocument::LABEL, array(
+        $this->createJob(Opus\Search\Task\IndexOpusDocument::LABEL, [
             'documentId' => $this->document->getId(),
-            'task' => 'index'));
+            'task' => 'index']);
         $this->executeScript('cron-solr-update.php');
-        $allJobs = Opus_Job::getByLabels(array(Opus_Job_Worker_IndexOpusDocument::LABEL), null, Opus_Job::STATE_UNDEFINED);
+        $allJobs = Opus_Job::getByLabels([Opus\Search\Task\IndexOpusDocument::LABEL], null, Opus_Job::STATE_UNDEFINED);
         $this->assertTrue(empty($allJobs), 'Expected no more jobs in queue');
     }
 
     public function testSolrRemoveIndex()
     {
-        $this->createJob(Opus_Job_Worker_IndexOpusDocument::LABEL, array(
+        $this->createJob(Opus\Search\Task\IndexOpusDocument::LABEL, [
             'documentId' => $this->document->getId(),
-            'task' => 'remove'));
+            'task' => 'remove']);
         $this->executeScript('cron-solr-update.php');
-        $allJobs = Opus_Job::getByLabels(array(Opus_Job_Worker_IndexOpusDocument::LABEL), null, Opus_Job::STATE_UNDEFINED);
+        $allJobs = Opus_Job::getByLabels([Opus\Search\Task\IndexOpusDocument::LABEL], null, Opus_Job::STATE_UNDEFINED);
         $this->assertTrue(empty($allJobs), 'Expected no more jobs in queue');
     }
 
     public function testJobFailsIfInvalidTask()
     {
-        $this->createJob(Opus_Job_Worker_IndexOpusDocument::LABEL, array(
+        $this->createJob(Opus\Search\Task\IndexOpusDocument::LABEL, [
             'documentId' => $this->document->getId(),
-            'task' => 'do-the-unexpected'));
+            'task' => 'do-the-unexpected']);
         $this->executeScript('cron-solr-update.php');
-        $allJobs = Opus_Job::getByLabels(array(Opus_Job_Worker_IndexOpusDocument::LABEL), null, Opus_Job::STATE_FAILED);
+        $allJobs = Opus_Job::getByLabels([Opus\Search\Task\IndexOpusDocument::LABEL], null, Opus_Job::STATE_FAILED);
         $this->assertEquals(1, count($allJobs), 'Expected one failed job in queue');
     }
 }

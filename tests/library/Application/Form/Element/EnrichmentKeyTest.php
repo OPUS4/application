@@ -51,14 +51,14 @@ class Application_Form_Element_EnrichmentKeyTest extends FormElementTestCase
     {
         $this->_formElementClass = 'Application_Form_Element_EnrichmentKey';
         $this->_expectedDecoratorCount = 6;
-        $this->_expectedDecorators = array(
+        $this->_expectedDecorators = [
             'ViewHelper',
             'Errors',
             'Description',
             'ElementHtmlTag',
             'LabelNotEmpty',
             'dataWrapper'
-        );
+        ];
         $this->_staticViewHelper = 'viewFormSelect';
         parent::setUp();
 
@@ -73,10 +73,10 @@ class Application_Form_Element_EnrichmentKeyTest extends FormElementTestCase
         parent::tearDown();
 
         // remove previously created enrichment key
-        if (!is_null($this->enrichmentKeyId)) {
+        if (! is_null($this->enrichmentKeyId)) {
             $enrichmentKey = new Opus_EnrichmentKey($this->enrichmentKeyId);
             $this->enrichmentKeyId = null;
-            if (!is_null($enrichmentKey)) {
+            if (! is_null($enrichmentKey)) {
                 $enrichmentKey->delete();
             }
         }

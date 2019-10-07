@@ -44,5 +44,4 @@ class Application_View_Helper_TransferUrlTest extends ControllerTestCase
         $transferUrl = $helper->transferUrl('123');
         $this->assertEquals('http:///oai/container/index/docId/123', $transferUrl);
     }
-
 }

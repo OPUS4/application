@@ -86,6 +86,4 @@ class Admin_InfoControllerTest extends ControllerTestCase
         $this->dispatch('admin/info/update');
         $this->assertQueryContentContains('//div', 'Your OPUS version is up to date.');
     }
-
 }
-

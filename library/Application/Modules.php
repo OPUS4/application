@@ -73,7 +73,7 @@ class Application_Modules
     /**
      * Return instance of module management class.
      */
-    static public function getInstance()
+    public static function getInstance()
     {
         if (is_null(self::$_moduleManager)) {
             self::$_moduleManager = new Application_Modules();
@@ -82,7 +82,7 @@ class Application_Modules
         return self::$_moduleManager;
     }
 
-    static public function setInstance($modules)
+    public static function setInstance($modules)
     {
         self::$_moduleManager = $modules;
     }
@@ -91,7 +91,7 @@ class Application_Modules
      * Register a module with the manager.
      * @param $module
      */
-    static public function registerModule($module)
+    public static function registerModule($module)
     {
         self::getInstance()->_addModule($module);
     }
@@ -143,22 +143,31 @@ class Application_Modules
      *
      * @return array List of module names
      */
-    public function findModules() {
+    public function findModules()
+    {
         $modulesPath = $this->getModulesPath();
 
         $modules = [];
 
         foreach (new DirectoryIterator($modulesPath) as $fileInfo) {
-            if ($fileInfo->isDot()) continue; // ignore '.' and '..'
-            if ($fileInfo->isFile()) continue; // ignore files
+            if ($fileInfo->isDot()) {
+                continue; // ignore '.' and '..'
+            }
+            if ($fileInfo->isFile()) {
+                continue; // ignore files
+            }
 
             $name = $fileInfo->getBasename();
 
-            if (substr($name, 0, 1) === '.' ) continue; // ignore folders starting with a dot
+            if (substr($name, 0, 1) === '.') {
+                continue; // ignore folders starting with a dot
+            }
 
             // ignore directories without 'controllers' subdirectory
             $controllersPath = $fileInfo->getRealPath() . DIRECTORY_SEPARATOR . 'controllers';
-            if (!is_dir($controllersPath)) continue;
+            if (! is_dir($controllersPath)) {
+                continue;
+            }
 
             $modules[$name] = new Application_Configuration_Module($name);
         }

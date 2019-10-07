@@ -76,10 +76,10 @@ class SimpleBootstrap extends Zend_Application_Bootstrap_Bootstrap
 
         $logfile = @fopen($logfilePath, 'a', false);
 
-        if ( $logfile === false ) {
+        if ($logfile === false) {
             $path = dirname($logfilePath);
 
-            if (!is_dir($path)) {
+            if (! is_dir($path)) {
                 throw new Exception('Directory for logging does not exist');
             } else {
                 throw new Exception("Failed to open logging file: $logfilePath");

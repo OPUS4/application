@@ -40,22 +40,7 @@ class Admin_Model_DoiReportTest extends ControllerTestCase
 
     protected $additionalResources = ['database'];
 
-    /**
-     * @var array
-     */
     private $docIds;
-
-    public function tearDown()
-    {
-        if (!is_null($this->docIds)) {
-            // removed previously created test documents from database
-            foreach ($this->docIds as $docId) {
-                $doc = new Opus_Document($docId);
-                $doc->deletePermanent();
-            }
-        }
-        parent::tearDown();
-    }
 
     public function setUp()
     {
@@ -156,7 +141,7 @@ class Admin_Model_DoiReportTest extends ControllerTestCase
             $doi->setValue('10.5072/anothersystem-' . $docId);
         }
         $doi->setStatus($doiStatus);
-        $doc->setIdentifier(array($doi));
+        $doc->setIdentifier([$doi]);
 
         $doc->store();
     }

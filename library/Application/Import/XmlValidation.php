@@ -35,7 +35,8 @@
  * Class for validating OPUS import xml.
  *
  */
-class Application_Import_XmlValidation extends Application_Model_Abstract {
+class Application_Import_XmlValidation extends Application_Model_Abstract
+{
 
     private $errors;
 
@@ -46,32 +47,35 @@ class Application_Import_XmlValidation extends Application_Model_Abstract {
      *
      * @param $xml DOMDocument|string
      */
-    public function validate($xml) {
+    public function validate($xml)
+    {
         $this->errors = null;
 
         // TODO check for null|empty
 
-        if (!$xml instanceof DOMDocument) {
+        if (! $xml instanceof DOMDocument) {
             $xml = $this->getDocument($xml);
         }
 
         libxml_clear_errors();
         libxml_use_internal_errors(true);
 
-        $valid = $xml->schemaValidate(__DIR__ . DIRECTORY_SEPARATOR . 'opus-import.xsd');        
+        $valid = $xml->schemaValidate(__DIR__ . DIRECTORY_SEPARATOR . 'opus-import.xsd');
 
-        $this->errors = libxml_get_errors();                
+        $this->errors = libxml_get_errors();
         libxml_clear_errors();
         libxml_use_internal_errors(false);
 
         return $valid;
     }
 
-    public function getErrors() {
+    public function getErrors()
+    {
         return $this->errors;
     }
 
-    private function getDocument($xml) {
+    private function getDocument($xml)
+    {
         libxml_clear_errors();
         libxml_use_internal_errors(true);
 
@@ -86,8 +90,9 @@ class Application_Import_XmlValidation extends Application_Model_Abstract {
 
         return $doc;
     }
-    
-    public function getErrorsPrettyPrinted() {
+
+    public function getErrorsPrettyPrinted()
+    {
         $errorMsg = '';
         foreach ($this->errors as $error) {
             $errorMsg .= "\non line $error->line ";
@@ -106,5 +111,4 @@ class Application_Import_XmlValidation extends Application_Model_Abstract {
         }
         return $errorMsg;
     }
-
 }

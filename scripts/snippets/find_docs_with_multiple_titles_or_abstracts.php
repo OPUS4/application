@@ -54,7 +54,7 @@ foreach ($docfinder->ids() as $docId) {
             $numOfTitles++;
         }
     }
-   
+
     $numOfAbstracts = 0;
     foreach ($doc->getTitleAbstract() as $abstract) {
         if ($abstract->getLanguage() === $doc->getLanguage()) {
@@ -82,8 +82,7 @@ foreach ($docfinder->ids() as $docId) {
 
 if ($updateRequired == 0) {
     echo "all docs were checked -- nothing to do!\n";
-}
-else {
+} else {
     echo "$updateRequired docs need to be updated manually!\n";
 }
 

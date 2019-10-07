@@ -29,7 +29,7 @@
  * @author      Thoralf Klein <thoralf.klein@zib.de>
  * @author      Sascha Szott <szott@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2010-2016, OPUS 4 development team
+ * @copyright   Copyright (c) 2010-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -57,15 +57,15 @@ $this->headLink()
     ->appendStylesheet($this->layoutPath() . '/css/opus.css', 'screen,print')
     ->appendStylesheet($this->layoutPath() . '/css/admin.css', 'screen,print')
     ->appendStylesheet($this->layoutPath() . '/css/theme.css', 'screen')
-    ->headLink(array(
+    ->headLink([
         'rel' => 'shortcut icon',
         'type' => 'image/x-icon',
-        'href' => $this->layoutPath() . '/img/logo/favicon.ico'))
-    ->headLink(array(
+        'href' => $this->layoutPath() . '/img/logo/favicon.ico'])
+    ->headLink([
         'rel' => 'search',
         'title' => 'OPUS 4 Search',
         'type' => 'application/opensearchdescription+xml',
-        'href' => $this->serverUrl() . $this->baseUrl() . '/solrsearch/opensearch'));
+        'href' => $this->serverUrl() . $this->baseUrl() . '/solrsearch/opensearch']);
 
 /*
 uncomment the following line if you want to enable your own layout changes
@@ -74,13 +74,12 @@ $this->headLink()->appendStylesheet($this->layoutPath() . '/css/custom.css');
 
 $this->container = Zend_Registry::get('Opus_Navigation');
 
-$jsFiles = array('searchutil.js', 'frontdoorutil.js', 'submit.js');
+$jsFiles = ['searchutil.js', 'frontdoorutil.js', 'submit.js'];
 
-if (in_array($this->moduleName, array('admin', 'review', 'setup', 'account'))) {
+if (in_array($this->moduleName, ['admin', 'review', 'setup', 'account'])) {
     $jsFiles[] = 'theme.js';
     $jsFiles[] = 'theme_lic.js';
-}
-else if (in_array($this->moduleName, array('publish'))) {
+} elseif (in_array($this->moduleName, ['publish'])) {
     $jsFiles[] = 'filetypes.js';
 }
 
@@ -89,7 +88,7 @@ if ($this->jQueryEnabled()) {
     $this->headScript()->prependFile($this->baseUrl() . '/' . $config->javascript->jquery->path);
 
     foreach ($jsFiles as $filename) {
-         $this->headScript()->appendFile($this->layoutPath() . '/js/' . $filename);
+        $this->headScript()->appendFile($this->layoutPath() . '/js/' . $filename);
     }
 }
 
@@ -97,8 +96,7 @@ $appConfig = new Application_Configuration();
 
 if ($appConfig->isLanguageSelectionEnabled()) {
     $languageSelectors = $this->languageSelector();
-}
-else {
+} else {
     $languageSelectors = null;
 }
 
@@ -109,180 +107,203 @@ if (isset($config->javascript->latex->mathjax)) {
 
 <?= $this->doctype() ?>
 
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?= $pageLanguage ?>" lang="<?= $pageLanguage ?>" dir="ltr" class="no-js">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?= $pageLanguage ?>" lang="<?= $pageLanguage ?>" dir="ltr"
+      class="no-js">
 
-    <head>
-<?= $this->headMeta()->setIndent(8) ?>
+<head>
+    <?= $this->headMeta()->setIndent(8) ?>
 
-<?= $this->headTitle()->setIndent(8) ?>
+    <?= $this->headTitle()->setIndent(8) ?>
 
-<?= $this->headLink()->setIndent(8) ?>
+    <?= $this->headLink()->setIndent(8) ?>
 
 
-        <script type="text/javascript">
+    <script type="text/javascript">
         //<![CDATA[
-            window.opusBaseUrl = '<?= $this->serverUrl() . $this->baseUrl() ?>';
+        window.opusBaseUrl = '<?= $this->serverUrl() . $this->baseUrl() ?>';
         //]]>
-        </script>
+    </script>
 
-<?= $this->headScript()->setIndent(8) ?>
+    <?= $this->headScript()->setIndent(8) ?>
 
-	<!--[if IE 6]>
-        <link rel="stylesheet" type="text/css" href="<?= $this->layoutPath() ?>/css/opus-ie.css" />
-        <![endif]-->
+    <!--[if IE 6]>
+    <link rel="stylesheet" type="text/css" href="<?= $this->layoutPath() ?>/css/opus-ie.css"/>
+    <![endif]-->
 
-        <!--[if lt IE 9]>
-        <link rel="stylesheet" type="text/css" href="<?= $this->layoutPath() ?>/css/opus-ie-7.css" />
-        <![endif]-->
-    </head>
+    <!--[if lt IE 9]>
+    <link rel="stylesheet" type="text/css" href="<?= $this->layoutPath() ?>/css/opus-ie-7.css"/>
+    <![endif]-->
+</head>
 
-    <body>
-        <div id="container">
-            <div id="top-header">
-                <div class="wrapper">
-                    <?php if (!is_null($languageSelectors)) : ?>
-                        <ul id="lang-switch" class="nav" title="Choose your language">
-                            <?php foreach ($languageSelectors as $i => $languageSelector) : ?>
-                                <li class="<?= ($i === 0) ? 'first' : '' ?>"><a href="<?= $languageSelector['url'] ?>" title="<?= $languageSelector['name'] ?>"><?= $languageSelector['name'] ?></a></li>
-                            <?php endforeach ?>
-                        </ul>
-                    <?php endif ?>
-                    <div id="login-bar" class="nav"><?= $this->loginBar() ?></div>
-                </div>
-                <?php if (APPLICATION_ENV !== 'production') : ?>
-                <div class="<?= APPLICATION_ENV ?>"><?= $this->translate('opus.environment') ?> (<?= APPLICATION_ENV ?>)</div>
-                <?php endif ?>
-            </div>
-
-            <div id="header">
-                <div class="wrapper">
-                    <h1 id="logo">
-                        <a href="<?= $this->url(array('module' => 'home', 'controller' => 'index', 'action' => 'index'), null, true) ?>"><img src="<?= $this->layoutPath() ?>/img/logo/logo.gif" alt="OPUS" title="Home" width="185" height="89" /></a>
-                    </h1>
-                    <ul id="primary-nav" class="nav">
-                    <?php foreach ($this->container as $page) : ?>
-                        <?php $pageIsActive = $page->isActive(false); ?>
-                        <li id="<?= $page->getId() ?>" class="<?= ($pageIsActive ? 'active ' : '').$page->getClass()?>">
-                            <a href="<?= $page->getHref() ?>" title="<?= $this->translate($page->getTitle()) ?>">
-                                <?php if($pageIsActive) : ?>
-                                <em>
-                                <?php endif ?>
-                                    <span><?= $this->translate($page->getLabel()) ?></span>
-                                <?php if($pageIsActive) : ?>
-                                </em>
-                                <?php endif ?>
-                            </a>
+<body>
+<div id="container">
+    <div id="top-header">
+        <div class="wrapper">
+            <?php if (! is_null($languageSelectors)) : ?>
+                <ul id="lang-switch" class="nav" title="Choose your language">
+                    <?php foreach ($languageSelectors as $i => $languageSelector) : ?>
+                        <li class="<?= ($i === 0) ? 'first' : '' ?>"><a href="<?= $languageSelector['url'] ?>"
+                                                                        title="<?= $languageSelector['name'] ?>"><?= $languageSelector['name'] ?></a>
                         </li>
                     <?php endforeach ?>
-                    </ul>
-                </div>
-            </div>
-
-            <div id="content" class="opus <?= (in_array($this->moduleName, array('admin', 'review', 'setup', 'account'))) ? 'adminContainer' : ''?> <?= $this->moduleName ?><?php if ($this->moduleName === 'publish') : ?>"><?php else : ?><?= ($this->controllerName === 'index' ? '' : '_'.$this->controllerName)?><?= ($this->actionName === 'index' ? '' : '_'.$this->actionName)?><?= ($this->searchType === 'collection' || $this->searchType === 'latest' ? ' '.$this->searchType : '') ?>"><?php  endif; ?>
-
-                <?PHP $messages = !is_null($this->flashMessenger) ? $this->flashMessenger->getMessages() : null ?>
-
-                <?PHP if (in_array($this->moduleName, array('admin', 'review', 'setup'))) : ?>
-                    <?PHP if ($this->breadcrumbsDisabled !== true) : ?>
-                        <?= $this->navigation()->breadcrumbs() ?>
-                    <?PHP endif; ?>
-
-                    <?php if (!empty($messages)) : ?>
-                    <div class="messages">
-                        <?php foreach ($messages as $message) : ?>
-                            <div class="<?= $message['level'] ?>"><?= htmlspecialchars($this->translate($message['message'])) ?></div>
-                        <?php endforeach ?>
-                    </div>
-                    <?php endif ?>
-
-                    <?PHP if ($this->contentWrapperDisabled !== true && $this->breadcrumbsDisabled !== true) : ?>
-                    <div class="wrapper">
-                        <?= $this->layout()->content ?>
-                    </div>
-                    <?PHP else : ?>
-                    <?= $this->layout()->content ?>
-                    <?PHP endif; ?>
-                <?PHP else : ?>
-                    <?PHP if ($this->accessAllowed('documents') && !is_null($this->adminform)) : ?>
-                        <?= $this->adminform ?>
-                    <?PHP endif ?>
-
-                    <?php if (!empty($messages)) : ?>
-                    <div class="messages">
-                        <?php foreach ($this->flashMessenger->getMessages() as $message) : ?>
-                            <div class="<?= $message['level'] ?>"><?= htmlspecialchars($this->translate($message['message'])) ?></div>
-                        <?php endforeach ?>
-                    </div>
-                    <?php endif ?>
-
-                    <div class="wrapper">
-                        <?= $this->layout()->content ?>
-                    </div>
-                <?PHP endif; ?>
-            </div>
-
-            <div id="page-footer">
-                <div class="wrapper">
-                    <p id="logo-wrapper"><a href="http://www.kobv.de/opus4/" title="Opus4 Website"><img src="<?= $this->layoutPath() ?>/img/logo/logo_small.gif" alt="OPUS4 Logo" title="" width="69" height="29" /></a></p>
-                    <ul id="secondary-nav" class="nav">
-                        <li class="first"><a href="<?= $this->url(array('module' => 'home', 'controller' => 'index', 'action' => 'contact'), null, true) ?>"><?= $this->translate('home_index_contact_actionname'); ?></a></li>
-                        <li><a href="<?= $this->url(array('module' => 'home', 'controller' => 'index', 'action' => 'imprint'), null, true) ?>"><?= $this->translate('home_index_imprint_actionname') ?></a></li>
-                        <li class="last"><a href="<?= $this->url(array('module' => 'crawlers', 'controller' => 'sitelinks'), null, true) ?>">Sitelinks</a></li>
-                    </ul>
-                </div>
-            </div>
+                </ul>
+            <?php endif ?>
+            <div id="login-bar" class="nav"><?= $this->loginBar() ?></div>
         </div>
-
-        <div id="appmode-<?= Zend_Controller_Front::getInstance()->getParam('bootstrap')->getEnvironment() ?>" class="debug revision">
-            <hr/>
-            <div class="wrapper">
-                <?php /* do not edit: revision number gets updated automatically */ ?>
-                <b>$Rev$</b>
+        <?php if (APPLICATION_ENV !== 'production') : ?>
+            <div class="<?= APPLICATION_ENV ?>"><?= $this->translate('opus.environment') ?> (<?= APPLICATION_ENV ?>)
             </div>
-        </div>
-
-        <?php
-            $dbprofiler = Zend_Registry::get('db_adapter')->getProfiler();
-            $profiler_show_queries = (bool) $config->db->params->showqueries;
-            $profiler_max_queries = (int) $config->db->params->maxqueries;
-            if ($dbprofiler->getEnabled() === true) :
-        ?>
-        <div class="debug dbprofiler">
-            <div class="wrapper">
-                <h2>Profiling information<?php if (isset($GLOBALS['start_mtime'])) : ?> (execution time <?= microtime(true) - $GLOBALS['start_mtime'] ?>)<?php endif ?></h2>
-                <b>Total number of queries: </b><?= $dbprofiler->getTotalNumQueries() ?><br />
-                <b>Total query time (s): </b><?= $dbprofiler->getTotalElapsedSecs() ?><br />
-                <b>Current memory consumption: </b><?= memory_get_usage(true) ?><br />
-                <b>Peak memory consumption: </b><?= memory_get_peak_usage(true) ?><br />
-                <?php if ($profiler_show_queries === true and $profiler_query_profiles = $dbprofiler->getQueryProfiles()) : ?>
-                    <b>Queries:</b><br />
-                    <ul>
-                    <?php for ($i=1; ($i < $profiler_max_queries) and ($i < count($profiler_query_profiles)); $i++) : ?>
-                        <li><pre><?= htmlspecialchars($profiler_query_profiles[$i]->getQuery()) ?></pre></li>
-                    <?php endfor ?>
-                    <?php if ($i < count($profiler_query_profiles)) { echo "<li>...</li>"; } ?>
-                    </ul>
-                <?php endif ?>
-            </div>
-        </div>
         <?php endif ?>
+    </div>
 
-        <?php
-            $identity = Zend_Auth::getInstance()->getIdentity();
-            if (isset($config->debugSession) and ((bool)$config->debugSession === true) and !empty($identity)) :
-        ?>
-        <div class="debug session">
+    <div id="header">
+        <div class="wrapper">
+            <h1 id="logo">
+                <a href="<?= $this->url(['module' => 'home', 'controller' => 'index', 'action' => 'index'], null, true) ?>"><img
+                            src="<?= $this->layoutPath() ?>/img/logo/logo.gif" alt="OPUS" title="Home" width="185"
+                            height="89"/></a>
+            </h1>
+            <ul id="primary-nav" class="nav">
+                <?php foreach ($this->container as $page) : ?>
+                    <?php $pageIsActive = $page->isActive(false); ?>
+                    <li id="<?= $page->getId() ?>" class="<?= ($pageIsActive ? 'active ' : '') . $page->getClass() ?>">
+                        <a href="<?= $page->getHref() ?>" title="<?= $this->translate($page->getTitle()) ?>">
+                            <?php if ($pageIsActive) : ?>
+                            <em>
+                            <?php endif ?>
+                                <span><?= $this->translate($page->getLabel()) ?></span>
+                            <?php if ($pageIsActive) : ?>
+                            </em>
+                            <?php endif ?>
+                        </a>
+                    </li>
+                <?php endforeach ?>
+            </ul>
+        </div>
+    </div>
+
+    <?PHP // TODO searchType as CSS only for 'collection' and 'latest' used - Can it be refactored? ?>
+    <div id="content" class="opus <?= $this->adminCssClass() ?> <?= $this->moduleName ?> <?= $this->actionCssClass() ?> <?= $this->searchType ?>">
+
+        <?PHP $messages = ! is_null($this->flashMessenger) ? $this->flashMessenger->getMessages() : null ?>
+
+        <?PHP if (in_array($this->moduleName, ['admin', 'review', 'setup'])) : ?>
+            <?PHP if ($this->breadcrumbsDisabled !== true) : ?>
+                <?= $this->navigation()->breadcrumbs() ?>
+            <?PHP endif; ?>
+
+            <?php if (! empty($messages)) : ?>
+                <div class="messages">
+                    <?php foreach ($messages as $message) : ?>
+                        <div class="<?= $message['level'] ?>"><?= htmlspecialchars($this->translate($message['message'])) ?></div>
+                    <?php endforeach ?>
+                </div>
+            <?php endif ?>
+
+            <?PHP if ($this->contentWrapperDisabled !== true && $this->breadcrumbsDisabled !== true) : ?>
+                <div class="wrapper">
+                    <?= $this->layout()->content ?>
+                </div>
+            <?PHP else : ?>
+                <?= $this->layout()->content ?>
+            <?PHP endif; ?>
+        <?PHP else : ?>
+            <?PHP if ($this->accessAllowed('documents') && ! is_null($this->adminform)) : ?>
+                <?= $this->adminform ?>
+            <?PHP endif ?>
+
+            <?php if (! empty($messages)) : ?>
+                <div class="messages">
+                    <?php foreach ($this->flashMessenger->getMessages() as $message) : ?>
+                        <div class="<?= $message['level'] ?>"><?= htmlspecialchars($this->translate($message['message'])) ?></div>
+                    <?php endforeach ?>
+                </div>
+            <?php endif ?>
+
             <div class="wrapper">
-                <h2>Session</h2>
+                <?= $this->layout()->content ?>
+            </div>
+        <?PHP endif; ?>
+    </div>
 
-<?php /* do not apply indentation here! */ ?>
-<pre>
+    <div id="page-footer">
+        <div class="wrapper">
+            <p id="logo-wrapper"><a href="http://www.kobv.de/opus4/" title="Opus4 Website"><img
+                            src="<?= $this->layoutPath() ?>/img/logo/logo_small.gif" alt="OPUS4 Logo" title=""
+                            width="69" height="29"/></a></p>
+            <ul id="secondary-nav" class="nav">
+                <li class="first"><a
+                            href="<?= $this->url(['module' => 'home', 'controller' => 'index', 'action' => 'contact'], null, true) ?>"><?= $this->translate('home_index_contact_actionname'); ?></a>
+                </li>
+                <li>
+                    <a href="<?= $this->url(['module' => 'home', 'controller' => 'index', 'action' => 'imprint'], null, true) ?>"><?= $this->translate('home_index_imprint_actionname') ?></a>
+                </li>
+                <li class="last"><a
+                            href="<?= $this->url(['module' => 'crawlers', 'controller' => 'sitelinks'], null, true) ?>">Sitelinks</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div id="appmode-<?= Zend_Controller_Front::getInstance()->getParam('bootstrap')->getEnvironment() ?>"
+     class="debug revision">
+    <hr/>
+    <div class="wrapper">
+        <?php /* do not edit: revision number gets updated automatically */ ?>
+        <b>$Rev$</b>
+    </div>
+</div>
+
+<?php
+$dbprofiler = Zend_Registry::get('db_adapter')->getProfiler();
+$profiler_show_queries = isset($config->db->params->showqueries) && filter_var($config->db->params->showqueries, FILTER_VALIDATE_BOOLEAN);
+$profiler_max_queries = (int) $config->db->params->maxqueries;
+if ($dbprofiler->getEnabled() === true) : ?>
+    <div class="debug dbprofiler">
+        <div class="wrapper">
+            <h2>Profiling information
+                <?php if (isset($GLOBALS['start_mtime'])) : ?>
+                    (execution time <?= microtime(true) - $GLOBALS['start_mtime'] ?>)
+                <?php endif ?>
+            </h2>
+            <b>Total number of queries: </b><?= $dbprofiler->getTotalNumQueries() ?><br/>
+            <b>Total query time (s): </b><?= $dbprofiler->getTotalElapsedSecs() ?><br/>
+            <b>Current memory consumption: </b><?= memory_get_usage(true) ?><br/>
+            <b>Peak memory consumption: </b><?= memory_get_peak_usage(true) ?><br/>
+            <?php if ($profiler_show_queries === true and $profiler_query_profiles = $dbprofiler->getQueryProfiles()) : ?>
+                <b>Queries:</b><br/>
+                <ul>
+                    <?php for ($i = 1; ($i < $profiler_max_queries) and ($i < count($profiler_query_profiles)); $i++) : ?>
+                        <li>
+                            <pre><?= htmlspecialchars($profiler_query_profiles[$i]->getQuery()) ?></pre>
+                        </li>
+                    <?php endfor ?>
+                    <?php if ($i < count($profiler_query_profiles)) : ?>
+                        <li>...</li>
+                    <?php endif ?>
+                </ul>
+            <?php endif ?>
+        </div>
+    </div>
+<?php endif ?>
+
+<?php
+$identity = Zend_Auth::getInstance()->getIdentity();
+if (isset($config->debugSession) and ((bool)$config->debugSession === true) and ! empty($identity)) :
+    ?>
+    <div class="debug session">
+        <div class="wrapper">
+            <h2>Session</h2>
+
+            <?php /* do not apply indentation here! */ ?>
+            <pre>
 <?= Zend_Debug::dump($_SESSION, 'Session Data', false); ?>
 </pre>
 
-            </div>
         </div>
-        <?php endif ?>
+    </div>
+<?php endif ?>
 
-    </body>
+</body>
 </html>

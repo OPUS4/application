@@ -28,9 +28,8 @@
  * @package     Module_Publish
  * @author      Susanne Gottwald <gottwald@zib.de>
  * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 class Publish_Model_Validation
 {
@@ -434,7 +433,8 @@ class Publish_Model_Validation
 
             $config = Zend_Registry::get('Zend_Config');
 
-            if (isset($config->browsing->series->sortByTitle) && boolval($config->browsing->series->sortByTitle)) {
+            if (isset($config->browsing->series->sortByTitle) &&
+                filter_var($config->browsing->series->sortByTitle, FILTER_VALIDATE_BOOLEAN)) {
                 uasort($sets, function ($value1, $value2) {
                     return strnatcmp($value1, $value2);
                 });

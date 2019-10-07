@@ -104,7 +104,7 @@ class Admin_Form_SeriesTest extends ControllerTestCase
     {
         $form = new Admin_Form_Series();
 
-        $this->assertFalse($form->isValid(array()));
+        $this->assertFalse($form->isValid([]));
 
         $this->assertContains('isEmpty', $form->getErrors('Title'));
     }
@@ -113,7 +113,7 @@ class Admin_Form_SeriesTest extends ControllerTestCase
     {
         $form = new Admin_Form_Series();
 
-        $this->assertFalse($form->isValid(array('Title' => '  ')));
+        $this->assertFalse($form->isValid(['Title' => '  ']));
 
         $this->assertContains('isEmpty', $form->getErrors('Title'));
     }
@@ -122,7 +122,6 @@ class Admin_Form_SeriesTest extends ControllerTestCase
     {
         $form = new Admin_Form_Series();
 
-        $this->assertTrue($form->isValid(array('Title' => 'TestTitle', 'SortOrder' => '50')));
+        $this->assertTrue($form->isValid(['Title' => 'TestTitle', 'SortOrder' => '50']));
     }
-
 }

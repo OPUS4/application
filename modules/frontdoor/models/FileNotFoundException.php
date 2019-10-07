@@ -35,7 +35,7 @@
 class Frontdoor_Model_FileNotFoundException extends Frontdoor_Model_FrontdoorDeliveryException
 {
 
-    public function  __construct()
+    public function __construct()
     {
         $this->translateKey = 'frontdoor_file_not_found';
         parent::__construct($this->translateKey, 404);

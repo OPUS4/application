@@ -47,12 +47,13 @@ class Application_XsltTest extends ControllerTestCase
         $this->assertSame($xslt, Application_Xslt::getInstance());
     }
 
-    public function testRegisterViewHelper() {
+    public function testRegisterViewHelper()
+    {
         $processor = new XSLTProcessor();
 
-        Application_Xslt::registerViewHelper($processor, array(
+        Application_Xslt::registerViewHelper($processor, [
             'translate', 'formatDate'
-        ));
+        ]);
 
         $this->markTestIncomplete('no assertions');
     }
@@ -72,5 +73,4 @@ class Application_XsltTest extends ControllerTestCase
         $this->useEnglish();
         $this->assertEquals('Yes', Application_Xslt::translate('answer_yes'));
     }
-
 }

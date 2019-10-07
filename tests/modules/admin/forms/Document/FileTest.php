@@ -58,5 +58,4 @@ class Admin_Form_Document_FileTest extends ControllerTestCase
 
         $this->assertEquals($file, $form->getModel());
     }
-
 }

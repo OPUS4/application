@@ -162,11 +162,12 @@ class Frontdoor_Model_AuthorsTest extends ControllerTestCase
             'opus',
             'example subject',
             'example text',
-            array(
+            [
                 $this->author1Id => '1',
                 $this->author2Id => '1',
                 $this->author3Id => '1',
-                $this->author4Id => '1'));
+            $this->author4Id => '1']
+        );
         $addresses = $mailProvider->getAddress();
         $this->assertTrue(is_array($addresses));
         foreach ($addresses as $address) {

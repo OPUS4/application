@@ -47,21 +47,21 @@ class Application_View_Helper_OptionUrlTest extends ControllerTestCase
 
         $helper->setView(Zend_Registry::get('Opus_View'));
 
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
             'logoLink' => 'home'
-        )));
+        ]));
 
         $this->assertEquals('http://localhost/opus4/home', $helper->optionUrl('logoLink'));
 
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
             'logoLink' => '/opus4/home'
-        )));
+        ]));
 
         $this->assertEquals('http://localhost/opus4/home', $helper->optionUrl('logoLink'));
 
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
             'logoLink' => 'http://www.opus-repository.org'
-        )));
+        ]));
 
         $this->assertEquals('http://www.opus-repository.org', $helper->optionUrl('logoLink'));
     }

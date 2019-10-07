@@ -40,14 +40,13 @@ class Application_View_Helper_TransferUrl extends Zend_View_Helper_Abstract
 
     public function transferUrl($docId)
     {
-        $url = array(
+        $url = [
             'module'     => 'oai',
             'controller' => 'container',
             'action'     => 'index',
             'docId'      => $docId,
-        );
+        ];
         // FIXME do we need a check if serverUrl ends with /
         return $this->view->serverUrl() . $this->view->url($url, 'default', true);
     }
-
 }

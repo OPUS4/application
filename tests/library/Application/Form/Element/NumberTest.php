@@ -40,8 +40,8 @@ class Application_Form_Element_NumberTest extends FormElementTestCase
     {
         $this->_formElementClass = 'Application_Form_Element_Number';
         $this->_expectedDecoratorCount = 8;
-        $this->_expectedDecorators = array('ViewHelper', 'Placeholder', 'Description', 'ElementHint', 'Errors',
-            'ElementHtmlTag', 'LabelNotEmpty', 'dataWrapper');
+        $this->_expectedDecorators = ['ViewHelper', 'Placeholder', 'Description', 'ElementHint', 'Errors',
+            'ElementHtmlTag', 'LabelNotEmpty', 'dataWrapper'];
         $this->_staticViewHelper = 'viewFormDefault';
         parent::setUp();
     }
@@ -64,7 +64,7 @@ class Application_Form_Element_NumberTest extends FormElementTestCase
 
     public function testCustomSize()
     {
-        $element = $this->getElement(array('size' => 10));
+        $element = $this->getElement(['size' => 10]);
 
         $this->assertEquals(10, $element->getAttrib('size'));
     }
@@ -79,7 +79,7 @@ class Application_Form_Element_NumberTest extends FormElementTestCase
 
     public function testSettingMinAndMax()
     {
-        $element = $this->getElement(array('min' => 10, 'max' => 100));
+        $element = $this->getElement(['min' => 10, 'max' => 100]);
 
         $this->assertNotFalse($element->getValidator('Between'), 'Validator Between missing.');
         $this->assertFalse($element->getValidator('GreaterThan'));
@@ -98,7 +98,7 @@ class Application_Form_Element_NumberTest extends FormElementTestCase
 
     public function testSettingMinOnly()
     {
-        $element = $this->getElement(array('min' => 10));
+        $element = $this->getElement(['min' => 10]);
 
         $this->assertFalse($element->getValidator('Between'), 'Validator Between present.');
         $this->assertNotFalse($element->getValidator('GreaterThan'));

@@ -28,63 +28,64 @@
  * @category    Application
  * @package     Module_Admin
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class Admin_IndexmaintenanceController extends Application_Controller_Action {
+class Admin_IndexmaintenanceController extends Application_Controller_Action
+{
 
     /**
      * @var Admin_Model_IndexMaintenance
      */
     private $_model;
 
-    public function init() {
+    public function init()
+    {
         parent::init();
         $this->_model = new Admin_Model_IndexMaintenance($this->getLogger());
-
 
         // TODO features will be enabled in later version
         $this->view->disabledFeatureFulltextExtractionCheck = true; // TODO OPUSVIER-2955
         $this->view->disabledFeatureIndexOptimization = true; // TODO OPUSVIER-2956
 
-
         if ($this->_model->getFeatureDisabled()) {
             $this->view->featureDisabled = true;
-        }
-        else {
+        } else {
             $this->view->allowConsistencyCheck = $this->_model->allowConsistencyCheck();
             $this->view->allowFulltextExtractionCheck = $this->_model->allowFulltextExtractionCheck();
             $this->view->allowIndexOptimization = $this->_model->allowIndexOptimization();
         }
     }
 
-    public function indexAction() {
-        if (!$this->_model->getFeatureDisabled()) {
+    public function indexAction()
+    {
+        if (! $this->_model->getFeatureDisabled()) {
             $state = $this->_model->getProcessingState();
-            $this->view->state = array('consistencycheck' => $state);
+            $this->view->state = ['consistencycheck' => $state];
             if ($state == 'scheduled' || $state == 'completed') {
                 $data = $this->_model->readLogFile();
-                if (!is_null($data)) {
-                    $this->view->content = array('consistencycheck' => $data->getContent());
-                    $this->view->contentLastModTime = array('consistencycheck' => $data->getModifiedDate());
+                if (! is_null($data)) {
+                    $this->view->content = ['consistencycheck' => $data->getContent()];
+                    $this->view->contentLastModTime = ['consistencycheck' => $data->getModifiedDate()];
                 }
             }
             if (is_null($state)) {
-                $this->view->error = array('consistencycheck' => true);
+                $this->view->error = ['consistencycheck' => true];
             }
         }
     }
 
-    public function checkconsistencyAction() {
-        if (!$this->_model->getFeatureDisabled() && $this->getRequest()->isPost()) {
+    public function checkconsistencyAction()
+    {
+        if (! $this->_model->getFeatureDisabled() && $this->getRequest()->isPost()) {
             $jobId = $this->_model->createJob();
-            if (!is_null($jobId)) {
+            if (! is_null($jobId)) {
                 return $this->_helper->Redirector->redirectToAndExit(
                     'index',
                     $this->view->translate(
-                        'admin_indexmaintenance_jobsumitted',
-                        array($jobId)
+                        'admin_indexmaintenance_jobsubmitted',
+                        [$jobId]
                     )
                 );
             }
@@ -96,8 +97,9 @@ class Admin_IndexmaintenanceController extends Application_Controller_Action {
      *
      * TODO implementation needed OPUSVIER-2956
      */
-    public function optimizeindexAction() {
-        if (!$this->_model->getFeatureDisabled() && $this->getRequest()->isPost()) {
+    public function optimizeindexAction()
+    {
+        if (! $this->_model->getFeatureDisabled() && $this->getRequest()->isPost()) {
             // add a job
         }
         return $this->_helper->Redirector->redirectToAndExit('index');
@@ -107,11 +109,11 @@ class Admin_IndexmaintenanceController extends Application_Controller_Action {
      *
      * TODO implementation needed OPUSVIER-2955
      */
-    public function checkfulltextsAction() {
-        if (!$this->_model->getFeatureDisabled() && $this->getRequest()->isPost()) {
+    public function checkfulltextsAction()
+    {
+        if (! $this->_model->getFeatureDisabled() && $this->getRequest()->isPost()) {
             // add a job
         }
         return $this->_helper->Redirector->redirectToAndExit('index');
     }
-
 }

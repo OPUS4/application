@@ -61,7 +61,8 @@ class Application_Form_Translations extends Application_Form_Abstract
         ]]);
 
         $this->addDisplayGroup(
-            [self::ELEMENT_SAVE, self::ELEMENT_CANCEL], 'actions',
+            [self::ELEMENT_SAVE, self::ELEMENT_CANCEL],
+            'actions',
             ['order' => 1000, 'decorators' => [
                 'FormElements',
                 [['ulWrapper' => 'HtmlTag'], ['tag' => 'ul', 'class' => 'form-action']],
@@ -100,7 +101,7 @@ class Application_Form_Translations extends Application_Form_Abstract
     {
         $elements = $this->getElements();
 
-        return array_filter($elements, function($value) {
+        return array_filter($elements, function ($value) {
             return $value instanceof Application_Form_Element_Translation;
         });
     }
@@ -142,8 +143,7 @@ class Application_Form_Translations extends Application_Form_Abstract
     {
         if (array_key_exists(self::ELEMENT_SAVE, $post)) {
             return self::RESULT_SAVE;
-        }
-        else if (array_key_exists(self::ELEMENT_CANCEL, $post)) {
+        } elseif (array_key_exists(self::ELEMENT_CANCEL, $post)) {
             return self::RESULT_CANCEL;
         }
     }

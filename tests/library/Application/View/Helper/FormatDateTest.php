@@ -94,5 +94,4 @@ class Application_View_Helper_FormatDateTest extends ControllerTestCase
 
         $this->assertEquals('', $helper->formatOpusDate(null));
     }
-
 }

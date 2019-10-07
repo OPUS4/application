@@ -55,27 +55,27 @@ class Admin_Form_FilesTest extends ControllerTestCase
 
         $decorator = $form->getDecorator('FieldsetWithButtons');
 
-        $this->assertEquals(array('Import', 'Add'), $decorator->getLegendButtons());
+        $this->assertEquals(['Import', 'Add'], $decorator->getLegendButtons());
     }
 
     public function testProcessPostAdd()
     {
         $form = new Admin_Form_Files();
 
-        $post = array(
+        $post = [
             'Add' => 'Upload'
-        );
+        ];
 
         $result = $form->processPost($post, null);
 
-        $this->assertEquals(array(
+        $this->assertEquals([
             'result' => 'switch',
-            'target' => array(
+            'target' => [
                 'module' => 'admin',
                 'controller' => 'filemanager',
                 'action' => 'upload'
-            )
-        ), $result);
+            ]
+        ], $result);
     }
 
     public function testProcessPostRemove()
@@ -84,44 +84,44 @@ class Admin_Form_FilesTest extends ControllerTestCase
 
         $form->appendSubForm();
 
-        $post = array(
-            'File0' => array(
+        $post = [
+            'File0' => [
                 'Id' => '5555',
                 'Remove' => 'Entfernen'
-            )
-        );
+            ]
+        ];
 
         $result = $form->processPost($post, null);
 
-        $this->assertEquals(array(
+        $this->assertEquals([
             'result' => 'switch',
-            'target' => array(
+            'target' => [
                 'module' => 'admin',
                 'controller' => 'filemanager',
                 'action' => 'delete',
                 'fileId' => '5555'
-            )
-        ), $result);
+            ]
+        ], $result);
     }
 
     public function testProcessPostImport()
     {
         $form = new Admin_Form_Files();
 
-        $post = array(
+        $post = [
             'Import' => 'Import'
-        );
+        ];
 
         $result = $form->processPost($post, null);
 
-        $this->assertEquals(array(
+        $this->assertEquals([
             'result' => 'switch',
-            'target' => array(
+            'target' => [
                 'module' => 'admin',
                 'controller' => 'filebrowser',
                 'action' => 'index'
-            )
-        ), $result);
+            ]
+        ], $result);
     }
 
     public function testContinueEdit()
@@ -172,15 +172,15 @@ class Admin_Form_FilesTest extends ControllerTestCase
 
         $this->assertEmpty($form->getSubForm('File1')->getElementValue('Comment'));
 
-        $post = array(
-            'File0' => array(
+        $post = [
+            'File0' => [
                 'Id' => '116'
-            ),
-            'File1' => array(
+            ],
+            'File1' => [
                 'Id' => '127',
                 'Comment' => 'Testkommentar'
-            )
-        );
+            ]
+        ];
 
         $form->continueEdit($request, $post);
 
@@ -223,8 +223,11 @@ class Admin_Form_FilesTest extends ControllerTestCase
         $index = 0;
 
         foreach ($form->getSubForms() as $name => $subform) {
-            $this->assertEquals($files[$index]->getId(), $subform->getElement('Id')->getValue(),
-                "Subform '$name' should have been at position $index.");
+            $this->assertEquals(
+                $files[$index]->getId(),
+                $subform->getElement('Id')->getValue(),
+                "Subform '$name' should have been at position $index."
+            );
             $index++;
         }
     }
@@ -245,5 +248,4 @@ class Admin_Form_FilesTest extends ControllerTestCase
             $this->assertEquals($file->getId(), $values[$index]->getId(), 'Files are not in expected order.');
         }
     }
-
 }

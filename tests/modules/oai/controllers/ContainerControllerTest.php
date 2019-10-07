@@ -45,24 +45,30 @@ class Oai_ContainerControllerTest extends ControllerTestCase
     {
         $this->dispatch('/oai/container/index');
         $this->assertResponseCode(500);
-        $this->assertContains('missing parameter docId',
-            $this->getResponse()->getBody());
+        $this->assertContains(
+            'missing parameter docId',
+            $this->getResponse()->getBody()
+        );
     }
 
     public function testRequestInvalidDocId()
     {
         $this->dispatch('/oai/container/index/docId/foobar');
         $this->assertResponseCode(500);
-        $this->assertContains('invalid value for parameter docId',
-            $this->getResponse()->getBody());
+        $this->assertContains(
+            'invalid value for parameter docId',
+            $this->getResponse()->getBody()
+        );
     }
 
     public function testRequestUnknownDocId()
     {
         $this->dispatch('/oai/container/index/docId/123456789');
         $this->assertResponseCode(500);
-        $this->assertContains('requested docId does not exist',
-            $this->getResponse()->getBody());
+        $this->assertContains(
+            'requested docId does not exist',
+            $this->getResponse()->getBody()
+        );
     }
 
     public function testRequestUnpublishedDoc()
@@ -70,7 +76,7 @@ class Oai_ContainerControllerTest extends ControllerTestCase
         $r = Opus_UserRole::fetchByName('guest');
 
         $modules = $r->listAccessModules();
-        $addOaiModuleAccess = !in_array('oai', $modules);
+        $addOaiModuleAccess = ! in_array('oai', $modules);
         if ($addOaiModuleAccess) {
             $r->appendAccessModule('oai');
             $r->store();
@@ -78,8 +84,7 @@ class Oai_ContainerControllerTest extends ControllerTestCase
 
         // enable security
         $config = Zend_Registry::get('Zend_Config');
-        $security = $config->security;
-        $config->security = '1';
+        $config->security = self::CONFIG_VALUE_TRUE;
         Zend_Registry::set('Zend_Config', $config);
 
         $doc = $this->createTestDocument();
@@ -91,10 +96,6 @@ class Oai_ContainerControllerTest extends ControllerTestCase
             $r->removeAccessModule('oai');
             $r->store();
         }
-
-        // restore security settings
-        $config->security = $security;
-        Zend_Registry::set('Zend_Config', $config);
 
         $this->assertResponseCode(500);
         $this->assertContains('access to requested document is forbidden', $this->getResponse()->getBody());
@@ -138,7 +139,8 @@ class Oai_ContainerControllerTest extends ControllerTestCase
 
         $this->assertResponseCode(500);
         $this->assertContains(
-            'access denied on all files that are associated to the requested document', $this->getResponse()->getBody()
+            'access denied on all files that are associated to the requested document',
+            $this->getResponse()->getBody()
         );
     }
 

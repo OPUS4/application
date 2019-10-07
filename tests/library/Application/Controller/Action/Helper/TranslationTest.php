@@ -81,7 +81,7 @@ class Application_Controller_Action_Helper_TranslationTest extends ControllerTes
     {
         $this->assertEquals(
             'testdoclang',
-            $this->helper->getKeyForValue('Opus_Document', 'Language','testdoclang')
+            $this->helper->getKeyForValue('Opus_Document', 'Language', 'testdoclang')
         );
     }
 
@@ -109,7 +109,8 @@ class Application_Controller_Action_Helper_TranslationTest extends ControllerTes
         foreach ($values as $value) {
             $key = $this->helper->getKeyForValue('Opus_Document', 'ServerState', $value);
             $this->assertNotEquals(
-                $key, $this->translate->translate($key),
+                $key,
+                $this->translate->translate($key),
                 "Translation key '$key' is missing."
             );
         }
@@ -123,7 +124,8 @@ class Application_Controller_Action_Helper_TranslationTest extends ControllerTes
         foreach ($values as $value) {
             $key = $this->helper->getKeyForValue('Opus_Person', 'Role', $value);
             $this->assertNotEquals(
-                $key, $this->translate->translate($key),
+                $key,
+                $this->translate->translate($key),
                 "Translation key '$key' is missing."
             );
         }
@@ -152,7 +154,8 @@ class Application_Controller_Action_Helper_TranslationTest extends ControllerTes
         foreach ($values as $value) {
             $key = $this->helper->getKeyForValue($className, 'Type', $value);
             $this->assertNotEquals(
-                $key, $this->translate->translate($key),
+                $key,
+                $this->translate->translate($key),
                 "Translation key '$key' is missing."
             );
         }
@@ -166,7 +169,8 @@ class Application_Controller_Action_Helper_TranslationTest extends ControllerTes
         foreach ($values as $value) {
             $key = $this->helper->getKeyForValue('Opus_Note', 'Visibility', $value);
             $this->assertNotEquals(
-                $key, $this->translate->translate($key),
+                $key,
+                $this->translate->translate($key),
                 "Translation key '$key' is missing."
             );
         }
@@ -193,7 +197,7 @@ class Application_Controller_Action_Helper_TranslationTest extends ControllerTes
 
         $fieldNames = $model->describe();
 
-        foreach($fieldNames as $name) {
+        foreach ($fieldNames as $name) {
             if ($name == 'Status' || $name == 'RegistrationTs') {
                 // do not provide translations for DOI specific fields
                 continue;
@@ -214,7 +218,7 @@ class Application_Controller_Action_Helper_TranslationTest extends ControllerTes
 
         $fieldNames = $model->describe();
 
-        foreach($fieldNames as $name) {
+        foreach ($fieldNames as $name) {
             $key = $this->helper->getKeyForField('Opus_Person', $name);
             $this->assertTrue(
                 $this->translate->isTranslated($key),
@@ -246,11 +250,11 @@ class Application_Controller_Action_Helper_TranslationTest extends ControllerTes
 
         $fieldNames = $model->describe();
 
-        foreach($fieldNames as $name) {
+        foreach ($fieldNames as $name) {
             $key = $this->helper->getKeyForField($className, $name);
             $this->assertTrue(
                 $this->translate->isTranslated($key),
-                    "Translation key '$key' is missing."
+                "Translation key '$key' is missing."
             );
         }
     }

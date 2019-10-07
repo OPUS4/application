@@ -196,7 +196,7 @@ class Publish_DepositControllerTest extends ControllerTestCase
 
         $session->elements = $elemente;
         $session->documentType = 'preprint';
-        $doc = $this->createTestDocument();
+        $doc = $this->createTestDocument(); // Cleanup des Dokuments erfolgt im Publish-Modul
         $doc->setServerState('temporary');
         $doc->setType('preprint');
         $session->documentId = $doc->store();

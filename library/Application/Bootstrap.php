@@ -40,7 +40,8 @@
  *
  * TODO unit test bootstrap
  */
-class Application_Bootstrap extends Opus_Bootstrap_Base {
+class Application_Bootstrap extends Opus_Bootstrap_Base
+{
 
     /**
      * Setup a front controller instance with error options and module
@@ -50,8 +51,9 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      *
      * TODO rename to _initControllerPlugins
      */
-    protected function _initOpusFrontController() {
-        $this->bootstrap(array('frontController'));
+    protected function _initOpusFrontController()
+    {
+        $this->bootstrap(['frontController']);
 
         $frontController = $this->getResource('frontController'); // Zend_Controller_Front::getInstance();
 
@@ -78,13 +80,13 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         $router->addDefaultRoutes();
 
         // specity the SWORD module as RESTful
-        $restRoute = new Zend_Rest_Route($frontController, array(), array('sword'));
+        $restRoute = new Zend_Rest_Route($frontController, [], ['sword']);
         $router->addRoute('rest', $restRoute);
 
         $documentRoute = new Application_Controller_Route_Redirect(
             '^(\d+)/?$',
-            array('module' => 'frontdoor', 'controller' => 'index', 'controller' => 'index', 'docId' => 1),
-            array( 1 => 'docId'),
+            ['module' => 'frontdoor', 'controller' => 'index', 'controller' => 'index', 'docId' => 1],
+            [ 1 => 'docId'],
             'document/%s'
         );
 
@@ -93,7 +95,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         // Simplify access to sitelinks, since crawlers module does not have a IndexController
         $crawlersRoute = new Application_Controller_Route_Redirect(
             'crawlers',
-            array('module' => 'crawlers', 'controller' => 'sitelinks', 'action' => 'index')
+            ['module' => 'crawlers', 'controller' => 'sitelinks', 'action' => 'index']
         );
 
         $router->addRoute('crawlers', $crawlersRoute);
@@ -105,8 +107,9 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      *
      * @return Zend_View
      */
-    protected function _initView() {
-        $this->bootstrap(array('Configuration','OpusFrontController'));
+    protected function _initView()
+    {
+        $this->bootstrap(['Configuration','OpusFrontController']);
 
         $config = $this->getResource('Configuration');
 
@@ -121,9 +124,9 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         }
 
         Zend_Layout::startMvc(
-            array(
-                'layoutPath'=> $layoutpath,
-                'layout'=>'common')
+            [
+                'layoutPath' => $layoutpath,
+                'layout' => 'common']
         );
 
         // Initialize view with custom encoding and global view helpers.
@@ -161,16 +164,17 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      *
      * @return void
      */
-    protected function _setupPageCache() {
+    protected function _setupPageCache()
+    {
         $config = $this->getResource('Configuration');
 
         $pagecache = null;
-        $frontendOptions = array(
+        $frontendOptions = [
             'lifetime' => 600, // in seconds
             'debug_header' => false,
             // turning on could slow down caching
             'automatic_serialization' => false,
-            'default_options' => array(
+            'default_options' => [
                 'cache_with_get_variables' => true,
                 'cache_with_post_variables' => true,
                 'cache_with_session_variables' => true,
@@ -181,13 +185,13 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
                 'make_id_with_session_variables' => true,
                 'make_id_with_files_variables' => true,
                 'make_id_with_cookie_variables' => true,
-                'cache' => true)
-        );
+                'cache' => true]
+        ];
 
-        $backendOptions = array(
+        $backendOptions = [
             // Directory where to put the cache files. Must be writeable for application server
             'cache_dir' => $config->workspacePath . '/cache/'
-            );
+            ];
 
         $pagecache = Zend_Cache::factory('Page', 'File', $frontendOptions, $backendOptions);
         Zend_Registry::set('Zend_Cache_Page', $pagecache);
@@ -232,12 +236,12 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         $language = $session->language;
 
         // check if language is supported; if not, use language from locale
-        if (!$configHelper->isLanguageSupported($language)) {
+        if (! $configHelper->isLanguageSupported($language)) {
             $locale = new Zend_Locale();
             $language = $locale->getLanguage();
             $logger->debug("Current locale = '$language'");
             // check if locale is supported; if not, use default language
-            if (!$configHelper->isLanguageSupported($language)) {
+            if (! $configHelper->isLanguageSupported($language)) {
                 $language = $configHelper->getDefaultLanguage();
             }
         }
@@ -255,8 +259,9 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      *
      * @return Zend_Session_Namespace
      */
-    protected function _initSession() {
-        $this->bootstrap(array('Database'));
+    protected function _initSession()
+    {
+        $this->bootstrap(['Database']);
         return new Zend_Session_Namespace();
     }
 
@@ -267,7 +272,8 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      *
      * TODO possible to cache? performance improvement?
      */
-    protected function _initNavigation() {
+    protected function _initNavigation()
+    {
         $this->bootstrap('Logging', 'View');
 
         $log = $this->getResource('Logging');
@@ -281,8 +287,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         $container = null;
         try {
             $container = new Zend_Navigation($navConfig);
-        }
-        catch (Zend_Navigation_Exception $e) {
+        } catch (Zend_Navigation_Exception $e) {
             /* TODO This suppresses the "Mystery Bug" that is producing errors
              * in unit tests sometimes. So far we haven't figured out the real
              * reason behind the errors. In regular Opus instances the error
@@ -304,15 +309,15 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      *
      * TODO use Application_Security_AclProvider
      */
-    protected function _initAuthz() {
+    protected function _initAuthz()
+    {
         $this->bootstrap('Logging', 'Navigation', 'view');
 
         $config = $this->getResource('configuration');
 
-        if (isset($config->security) && $config->security == 1) {
+        if (isset($config->security) && filter_var($config->security, FILTER_VALIDATE_BOOLEAN)) {
             Application_Security_AclProvider::init();
-        }
-        else {
+        } else {
             Zend_View_Helper_Navigation_HelperAbstract::setDefaultAcl(null);
             Zend_View_Helper_Navigation_HelperAbstract::setDefaultRole(null);
         }
@@ -322,7 +327,8 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      * Initializes navigation container for main menu.
      * @return Zend_Navigation
      */
-    protected function _initMainMenu() {
+    protected function _initMainMenu()
+    {
         $this->bootstrap('Logging', 'View', 'Navigation');
 
         $navigationConfigFile = APPLICATION_PATH . '/application/configs/navigation.xml';
@@ -344,7 +350,8 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
     /**
      * writes Opus-Version in html header
      */
-    protected  function _initVersionInfo() {
+    protected function _initVersionInfo()
+    {
         $this->bootstrap('View');
         $view = $this->getResource('View');
         $view->headMeta()->appendName('Opus-Version', Application_Configuration::getOpusVersion());
@@ -371,4 +378,8 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         return $exporter;
     }
 
+    protected function _initIndexPlugin()
+    {
+        \Opus_Model_Xml_Cache::setIndexPluginClass('Opus\Search\Plugin\Index');
+    }
 }
