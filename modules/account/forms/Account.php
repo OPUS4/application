@@ -94,7 +94,7 @@ class Account_Form_Account extends Application_Form_Model_Abstract
             $this->getElement('firstname')->setAttrib('disabled', true);
             $this->getElement('lastname')->setAttrib('disabled', true);
             $this->getElement('email')->setAttrib('disabled', true);
-        } elseif (isset($config->account->changeLogin) && (! filter_var( $config->account->changeLogin, FILTER_VALIDATE_BOOLEAN))) {
+        } elseif (isset($config->account->changeLogin) && (! filter_var($config->account->changeLogin, FILTER_VALIDATE_BOOLEAN))) {
             $this->getElement('username')->setAttrib('disabled', true);
         }
 
