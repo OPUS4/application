@@ -53,12 +53,20 @@
     padding: 15px 225px;
 }
 .opus.solrsearch #form-search{
-    padding: 25px 225px;
+    padding: 25px 0;
 }
 .solrsearch_search table.search-form-table,
 .solrsearch_advanced table.search-form-table {
     padding: 0 15px 10px 15px;
 }
+.solrsearch_invalidsearchterm .invalidsearchterm {
+    clear: both;
+    margin-top: 1em;
+}
+.solrsearch_invalidsearchterm .invalidsearchterm p {
+    padding-left: 1em;
+}
+
 /* frontdoor */
 #titlemain-wrapper{
     background: #F3F6F8 url(../img/theme/icon-title-frontdoor.gif) no-repeat 4px 6px;
