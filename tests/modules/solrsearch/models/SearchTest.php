@@ -106,6 +106,20 @@ class Solrsearch_Model_SearchTest extends ControllerTestCase
         $this->assertEquals('desc', $params['sortorder']);
     }
 
+    public function testCreateSimpleSearchUrlParamsWithFilter()
+    {
+        $request = $this->getRequest();
+
+        $request->setParam('institutefq', 'Technische+Univeristät+Hamburg-Harburg');
+
+        $model = new Solrsearch_Model_Search();
+
+        $params = $model->createSimpleSearchUrlParams($request);
+
+        $this->assertArrayHasKey('institutefq', $params);
+        $this->assertEquals('Technische+Univeristät+Hamburg-Harburg', $params['institutefq']);
+    }
+
     public function testCreateSimpleSearchUrlParamsWithCustomRows()
     {
         $request = $this->getRequest();
@@ -263,5 +277,24 @@ class Solrsearch_Model_SearchTest extends ControllerTestCase
         $request->setParam('persons', '   ');
 
         $this->assertFalse($model->isAdvancedSearchRequestValid($request));
+    }
+
+    public function testGetFilterParams()
+    {
+        $request = $this->getRequest();
+        $request->setParam('institutefq', 'ZIB');
+        $request->setParam('searchtype', 'simple');
+        $request->setParam('unknown', 'param');
+        $request->setParam('has_fulltextfq', 'true');
+
+        $model = new Solrsearch_Model_Search();
+
+        $params = $model->getFilterParams($request);
+
+        $this->assertCount(2, $params);
+        $this->assertEquals([
+            'institutefq' => 'ZIB',
+            'has_fulltextfq' => 'true'
+        ], $params);
     }
 }

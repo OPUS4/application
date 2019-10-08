@@ -56,6 +56,17 @@ class Solrsearch_Model_Search extends Application_Model_Abstract
         $params = $this->createBasicSearchParams($request);
         $params['searchtype'] = $request->getParam('searchtype', Application_Util_Searchtypes::SIMPLE_SEARCH);
         $params['query'] = $request->getParam('query', '*:*');
+        return array_merge($params, $this->getFilterParams($request));
+    }
+
+    public function getFilterParams($request)
+    {
+        $params = $request->getParams();
+
+        $params = array_filter($params, function ($key) {
+            return substr($key, -2) === 'fq';
+        }, ARRAY_FILTER_USE_KEY);
+
         return $params;
     }
 
@@ -74,7 +85,7 @@ class Solrsearch_Model_Search extends Application_Model_Abstract
                 );
             }
         }
-        return $params;
+        return array_merge($params, $this->getFilterParams($request));
     }
 
     public function createBasicSearchParams($request)
