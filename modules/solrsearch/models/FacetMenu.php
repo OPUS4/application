@@ -71,17 +71,19 @@ class Solrsearch_Model_FacetMenu extends Application_Model_Abstract
         $showFacetExtender = [];
 
         foreach ($facets as $key => $facet) {
-            $showFacetExtender[$key] = ($facetLimit[$key] <= sizeof($facet));
-            $this->getLogger()->debug("found $key facet in search results");
-            $facetNumberContainer[$key] = sizeof($facet);
-            $facetValue = $request->getParam($key . 'fq', '');
-            if ($facetValue !== '') {
-                $selectedFacets[$key] = $facetValue;
-                $showFacetExtender[$key] = false;
-            }
+            if ($this->isFacetAllowed($key)) {
+                $showFacetExtender[$key] = ($facetLimit[$key] <= sizeof($facet));
+                $this->getLogger()->debug("found $key facet in search results");
+                $facetNumberContainer[$key] = sizeof($facet);
+                $facetValue = $request->getParam($key . 'fq', '');
+                if ($facetValue !== '') {
+                    $selectedFacets[$key] = $facetValue;
+                    $showFacetExtender[$key] = false;
+                }
 
-            if (count($facets[$key]) > 0 || $facetValue !== '') {
-                $facetArray[$key] = $facet;
+                if (count($facets[$key]) > 0 || $facetValue !== '') {
+                    $facetArray[$key] = $facet;
+                }
             }
         }
 
@@ -96,6 +98,24 @@ class Solrsearch_Model_FacetMenu extends Application_Model_Abstract
         $this->_selectedFacets = $selectedFacets;
         $this->_facetNumberContainer = $facetNumberContainer;
         $this->_showFacetExtender = $showFacetExtender;
+    }
+
+    /**
+     * @param $key
+     * @return bool
+     * @throws Application_Exception
+     *
+     * TODO Refactor so there is a class for facets that answers this question
+     */
+    public function isFacetAllowed($key)
+    {
+        switch ($key) {
+            case 'server_state':
+                $accessControl = new Application_Controller_Action_Helper_AccessControl();
+                return $accessControl->accessAllowed('documents');
+            default:
+                return true;
+        }
     }
 
     public function getFacets()
