@@ -30,9 +30,11 @@ script_dir=$(cd `dirname $0` && pwd)
 
 VERBOSE=0
 
-while getopts "v" opt; do
+while getopts "v:b" opt; do
   case $opt in
     v) VERBOSE=1
+    ;;
+    b) BACKUP=1
     ;;
   esac
 done
@@ -73,12 +75,14 @@ test_series_logos_dir=$script_dir/series_logos
 #
 # Rebuild database
 #
+
 php rebuild-database.php
 
 #
 # Backup old fulltexts and log files and series logos
 #
 
+function fulltextBackup() {
 TEMP_DIR=$(mktemp -d $workspace_tmp_dir/old-XXXXXXX)
 mkdir -v "$TEMP_DIR"/{files,log}
 
@@ -132,13 +136,17 @@ else
     rsync -r $fulltext_dir/ $workspace_test_dir/files
 fi
 
+}
 
 #
 # Restore log files
 #
+
+function restoreLogFiles() {
 if [ ! -d ${workspace_log_dir} ] ; then
    mkdir -p ${workspace_log_dir}
 fi
+
 touch "$workspace_log_dir"/{opus.log,opus-console.log}
 chmod -R o+w,g+w {$workspace_files_dir,$workspace_log_dir}
 
@@ -152,4 +160,20 @@ if [[ $VERBOSE -eq 1 ]] ; then
     rsync -rv --exclude=.svn $test_series_logos_dir/ $series_logos_dir
 else
     rsync -r --exclude=.svn $test_series_logos_dir/ $series_logos_dir
+fi
+
+}
+
+#
+# To get a backup of old full texts use the command: $./rebuilding_database.sh -b
+#
+
+if [ ! -z $BACKUP ]
+then {
+    fulltextBackup
+    restoreLogFiles
+}
+
+else
+    restoreLogFiles
 fi
