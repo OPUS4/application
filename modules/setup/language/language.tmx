@@ -6,8 +6,8 @@
  </header>
   <body>
 
-      
-      
+
+
     <tu tuid="setup_language_searchTerm">
         <tuv xml:lang="en">
             <seg>search term (leave empty for all)</seg>
@@ -91,19 +91,10 @@
 
     <tu tuid="setup_language_edit">
         <tuv xml:lang="en">
-            <seg>edit</seg>
+            <seg>Edit</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>bearbeiten</seg>
-        </tuv>
-    </tu>
-
-    <tu tuid="setup_language_edit_hint">
-        <tuv xml:lang="en">
-            <seg>edit %1s and save it to %2s</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>%1s bearbeiten und in %2s speichern</seg>
+            <seg>Bearbeiten</seg>
         </tuv>
     </tu>
 

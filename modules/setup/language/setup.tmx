@@ -14,7 +14,7 @@
         </tuv>
     </tu>
 
-    <tu tuid="setup_translation_index">
+    <tu tuid="setup_infopages_index">
         <tuv xml:lang="en">
             <seg>Static Pages</seg>
         </tuv>
@@ -23,7 +23,7 @@
         </tuv>
     </tu>
 
-    <tu tuid="setup_translation_edit">
+    <tu tuid="setup_infopages_edit">
         <tuv xml:lang="en">
             <seg>Edit Static Pages</seg>
         </tuv>
@@ -59,7 +59,7 @@
         </tuv>
     </tu>
 
-    <tu tuid="setup_translation_error">
+    <tu tuid="setup_infopages_error">
         <tuv xml:lang="en">
             <seg>Error</seg>
         </tuv>
@@ -179,7 +179,7 @@
         </tuv>
     </tu>
 
-    <tu tuid="setup_translation_choose_page">
+    <tu tuid="setup_infopages_choose_page">
         <tuv xml:lang="en">
             <seg>Please choose the page to edit.</seg>
         </tuv>

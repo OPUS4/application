@@ -36,11 +36,12 @@
  * TODO show controller (functionality) in menu (currently hidden)
  * TODO limit editable keys to specific modules (?)
  * TODO update documentation
+ * TODO rename controller to TranslationController
  */
 class Setup_LanguageController extends Application_Controller_Action
 {
 
-    protected $_sortKeys = ['unit', 'module', 'directory', 'filename', 'language', 'variant'];
+    protected $_sortKeys = ['key', 'module', 'language', 'variant'];
 
     public function init()
     {
