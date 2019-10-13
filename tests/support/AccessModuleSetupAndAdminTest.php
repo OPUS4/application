@@ -166,7 +166,7 @@ abstract class AccessModuleSetupAndAdminTest extends ControllerTestCase
         $this->useEnglish();
         $this->dispatch('/setup/translation');
         if ($this->acls['module_setup'] || $this->acls['controller_staticpage']) {
-            $this->assertQueryContentContains('//html/head//title', 'Static Pages');
+            $this->assertQueryContentContains('//html/head//title', 'Information Pages');
         } else {
             $this->assertRedirectTo(
                 '/auth/index/rmodule/setup/rcontroller/translation/raction/index',
