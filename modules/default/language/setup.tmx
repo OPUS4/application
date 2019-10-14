@@ -94,7 +94,7 @@
         </tuv>
     </tu>
 
-    <tu tuid="setup_language_index">
+    <tu tuid="setup_translation_index">
         <tuv xml:lang="en">
             <seg>Translations</seg>
         </tuv>

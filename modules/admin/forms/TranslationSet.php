@@ -39,7 +39,7 @@ class Admin_Form_TranslationSet extends Application_Form_Abstract
     {
         parent::init();
 
-        $this->setLegend('setup_language_index');
+        $this->setLegend('setup_translation_index');
     }
 
     public function addKey($key)
