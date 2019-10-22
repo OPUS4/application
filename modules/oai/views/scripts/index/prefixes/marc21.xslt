@@ -108,7 +108,7 @@
                         <xsl:when test="./@Type='studythesis'">              <xsl:value-of select="'m'"/></xsl:when>
                         <xsl:when test="./@Type='workingpaper'">             <xsl:value-of select="'m'"/></xsl:when>
                         <xsl:otherwise>
-                            <xsl:text> </xsl:text><!-- soll leer bleiben -->
+                            <xsl:text>m</xsl:text>
                         </xsl:otherwise>
                     </xsl:choose>
                 </xsl:variable>
