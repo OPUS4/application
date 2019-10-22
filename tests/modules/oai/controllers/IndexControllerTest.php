@@ -2528,6 +2528,15 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $this->assertXpathContentContains('//xMetaDiss:xMetaDiss/ddb:identifier', '10.1007/978-3-540-76406-9');
     }
 
+    public function testGetRecordXMetaDissPlusDcmiType()
+    {
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=XMetaDissPlus&identifier=oai::146');
+
+        $this->registerXpathNamespaces($this->xpathNamespaces);
+
+        $this->assertXpathContentContains('//xMetaDiss:xMetaDiss/dc:type[@xsi:type = "dcterms:DCMIType"]', 'Text');
+    }
+
     public function testGetRecordMarc21OfDocId91()
     {
         Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
