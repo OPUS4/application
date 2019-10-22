@@ -79,10 +79,10 @@ test_series_logos_dir=$script_dir/series_logos
 php rebuild-database.php
 
 #
-# To get a backup of old full texts use the command: $./rebuilding_database.sh -b
+# Backup old fulltexts and log files and series logos
 #
 
-if [[ $BACKUP -eq 1 ]] ; then
+function fulltextBackup() {
     TEMP_DIR=$(mktemp -d $workspace_tmp_dir/old-XXXXXXX)
     mkdir -v "$TEMP_DIR"/{files,log}
 
@@ -99,22 +99,31 @@ if [[ $BACKUP -eq 1 ]] ; then
     fi
 
     echo -e "\n*** Created backup of fulltexts, log files and series logos in $TEMP_DIR ***\n"
-else
+}
 
-    echo -e "\n Deleting workspaces files, log and series logos \n"
-
+function deleteWorkspaces() {
     if [ -d ${workspace_files_dir} ] ; then
-        rm -rf $workspace_files_dir/
+        rm -rf $workspace_files_dir
     fi
 
     if [ -d ${workspace_log_dir} ] ; then
-        rm -rf $workspace_log_dir/
+        rm -rf $workspace_log_dir
     fi
 
     if [ -d ${series_logos_dir} ] ; then
         rm -rf $series_logos_dir
     fi
 
+}
+
+#
+# To get a backup of old full texts use the command: $./rebuilding_database.sh -b
+#
+
+if [[ $BACKUP -eq 1 ]] ; then
+    fulltextBackup
+else
+    deleteWorkspaces
 fi
 
 mkdir -p $workspace_files_dir
