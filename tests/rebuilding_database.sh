@@ -99,7 +99,7 @@ if [[ $BACKUP -eq 1 ]] ; then
     fi
 
     echo -e "\n*** Created backup of fulltexts, log files and series logos in $TEMP_DIR ***\n"
-else {
+else
 
     echo -e "\n Deleting workspaces files, log and series logos \n"
 
@@ -114,7 +114,7 @@ else {
     if [ -d ${series_logos_dir} ] ; then
         rm -rf $series_logos_dir
     fi
-}
+
 fi
 
 mkdir -p $workspace_files_dir
