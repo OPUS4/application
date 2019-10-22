@@ -104,7 +104,7 @@ else {
     echo -e "\n Deleting workspaces files, log and series logos \n"
 
     if [ -d ${workspace_files_dir} ] ; then
-        rm -r $workspace_files_dir/
+        rm -rf $workspace_files_dir/
     fi
 
     if [ -d ${workspace_log_dir} ] ; then
