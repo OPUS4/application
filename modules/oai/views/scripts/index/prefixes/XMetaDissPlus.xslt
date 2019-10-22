@@ -207,6 +207,10 @@
                  </xsl:choose>
             </dc:type>
 
+            <dc:type xsi:type="dcterms:DCMIType">
+                <xsl:value-of select="php:functionString('Application_Xslt::dcmiType', @Type)" />
+            </dc:type>
+
             <!-- dc:identifier -->
             <xsl:choose>
                 <xsl:when test="IdentifierUrn">
