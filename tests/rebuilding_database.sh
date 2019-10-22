@@ -97,33 +97,33 @@ function fulltextBackup() {
     if [ -d ${series_logos_dir} ] ; then
         mv $series_logos_dir $TEMP_DIR
     fi
-    echo -e "\n*** Created backup of fulltexts and log files in $TEMP_DIR ***\n"
+
+    mkdir -p $workspace_files_dir
+    mkdir -p $workspace_log_dir
+    mkdir -p $workspace_dir/cache
+    mkdir -p $workspace_dir/export
+    mkdir -p $workspace_dir/incoming
+    mkdir -p $workspace_dir/tmp
+    mkdir -p $workspace_dir/tmp/resumption
+    mkdir -p $series_logos_dir
+    rm -rf $workspace_test_dir/*
+    mkdir -p $workspace_test_dir/cache
+    mkdir -p $workspace_test_dir/export
+    mkdir -p $workspace_test_dir/incoming
+    mkdir -p $workspace_test_dir/tmp
+    mkdir -p $workspace_test_dir/tmp/resumption
+    mkdir -p $workspace_test_dir/files
+    mkdir -p $workspace_test_dir/log
     echo -e "\n*** Created backup of fulltexts, log files and series logos in $TEMP_DIR ***\n"
     }
 
 #
 # To get a backup of old full texts use the command: $./rebuilding_database.sh -b
 #
+
 if [[ $BACKUP -eq 1 ]] ; then
     fulltextBackup
 fi
-
-mkdir -p $workspace_files_dir
-mkdir -p $workspace_log_dir
-mkdir -p $workspace_dir/cache
-mkdir -p $workspace_dir/export
-mkdir -p $workspace_dir/incoming
-mkdir -p $workspace_dir/tmp
-mkdir -p $workspace_dir/tmp/resumption
-mkdir -p $series_logos_dir
-rm -rf $workspace_test_dir/*
-mkdir -p $workspace_test_dir/cache
-mkdir -p $workspace_test_dir/export
-mkdir -p $workspace_test_dir/incoming
-mkdir -p $workspace_test_dir/tmp
-mkdir -p $workspace_test_dir/tmp/resumption
-mkdir -p $workspace_test_dir/files
-mkdir -p $workspace_test_dir/log
 
 #
 # Copy test fulltexts to workspace
