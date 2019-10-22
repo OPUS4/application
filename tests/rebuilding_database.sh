@@ -79,10 +79,10 @@ test_series_logos_dir=$script_dir/series_logos
 php rebuild-database.php
 
 #
-# Backup old fulltexts and log files and series logos
+# To get a backup of old full texts use the command: $./rebuilding_database.sh -b
 #
 
-function fulltextBackup() {
+if [[ $BACKUP -eq 1 ]] ; then
     TEMP_DIR=$(mktemp -d $workspace_tmp_dir/old-XXXXXXX)
     mkdir -v "$TEMP_DIR"/{files,log}
 
@@ -98,32 +98,41 @@ function fulltextBackup() {
         mv $series_logos_dir $TEMP_DIR
     fi
 
-    mkdir -p $workspace_files_dir
-    mkdir -p $workspace_log_dir
-    mkdir -p $workspace_dir/cache
-    mkdir -p $workspace_dir/export
-    mkdir -p $workspace_dir/incoming
-    mkdir -p $workspace_dir/tmp
-    mkdir -p $workspace_dir/tmp/resumption
-    mkdir -p $series_logos_dir
-    rm -rf $workspace_test_dir/*
-    mkdir -p $workspace_test_dir/cache
-    mkdir -p $workspace_test_dir/export
-    mkdir -p $workspace_test_dir/incoming
-    mkdir -p $workspace_test_dir/tmp
-    mkdir -p $workspace_test_dir/tmp/resumption
-    mkdir -p $workspace_test_dir/files
-    mkdir -p $workspace_test_dir/log
     echo -e "\n*** Created backup of fulltexts, log files and series logos in $TEMP_DIR ***\n"
-    }
+else {
 
-#
-# To get a backup of old full texts use the command: $./rebuilding_database.sh -b
-#
+    echo -e "\n Deleting workspaces files, log and series logos \n"
 
-if [[ $BACKUP -eq 1 ]] ; then
-    fulltextBackup
+    if [ -d ${workspace_files_dir} ] ; then
+        rm -r $workspace_files_dir/
+    fi
+
+    if [ -d ${workspace_log_dir} ] ; then
+        rm -rf $workspace_log_dir/
+    fi
+
+    if [ -d ${series_logos_dir} ] ; then
+        rm -rf $series_logos_dir
+    fi
+}
 fi
+
+mkdir -p $workspace_files_dir
+mkdir -p $workspace_log_dir
+mkdir -p $workspace_dir/cache
+mkdir -p $workspace_dir/export
+mkdir -p $workspace_dir/incoming
+mkdir -p $workspace_dir/tmp
+mkdir -p $workspace_dir/tmp/resumption
+mkdir -p $series_logos_dir
+rm -rf $workspace_test_dir/*
+mkdir -p $workspace_test_dir/cache
+mkdir -p $workspace_test_dir/export
+mkdir -p $workspace_test_dir/incoming
+mkdir -p $workspace_test_dir/tmp
+mkdir -p $workspace_test_dir/tmp/resumption
+mkdir -p $workspace_test_dir/files
+mkdir -p $workspace_test_dir/log
 
 #
 # Copy test fulltexts to workspace
