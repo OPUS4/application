@@ -179,6 +179,7 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
 
         $enrichmentTypeName = 'Opus_Enrichment_' . $enrichmentTypeName;
         try {
+            // TODO OPUSVIER-4161 is this check necessary?
             if (@class_exists($enrichmentTypeName)) {
                 $enrichmentType = new $enrichmentTypeName();
                 return $enrichmentType;
