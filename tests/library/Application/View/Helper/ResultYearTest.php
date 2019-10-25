@@ -24,53 +24,52 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     View_Helper
+ * @category    Application Unit Test
+ * @package     Application_View_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-
-/**
- * View helper for rendering the fulltext logo for documents in the search result list.
- */
-class Application_View_Helper_FulltextLogo extends Application_View_Helper_Document_HelperAbstract
+class Application_View_Helper_ResultYearTest extends ControllerTestCase
 {
 
-    public function fulltextLogo($doc = null)
+    protected $additionalResources = ['database', 'view'];
+
+    protected $helper;
+
+    public function setUp()
     {
-        if (is_null($doc)) {
-            $doc = $this->getDocument();
-        }
+        parent::setUp();
 
-        if (! $doc instanceof Opus_Document) {
-            // TODO log
-            return;
-        }
+        $this->helper = new Application_View_Helper_ResultYear();
+        $view = Zend_Registry::get('Opus_View');
+        $this->helper->setView($view);
+    }
 
-        $cssClass = "fulltext-logo";
-        $tooltip = null;
+    public function testRendering()
+    {
+        $document = $this->createTestDocument();
+        $docId = $document->store();
 
+        $result = new \Opus\Search\Result\Match($docId);
+        $result->setAsset('year', '2012');
+        $this->helper->view->result = $result;
 
-        if ($doc->hasFulltext()) {
-            $cssClass .= ' fulltext';
-            $tooltip = 'fulltext-icon-tooltip';
-        }
+        $output = $this->helper->resultYear();
 
-        if ($doc->isOpenAccess()) {
-            $cssClass .= ' openaccess';
-            $tooltip = 'fulltext-icon-oa-tooltip';
-        }
+        $this->assertEquals('2012', $output);
+    }
 
-        $output = "<div class=\"$cssClass\"";
+    public function testRenderingNoYear()
+    {
+        $document = $this->createTestDocument();
+        $docId = $document->store();
 
-        if (! is_null($tooltip)) {
-            $tooltip = $this->view->translate([$tooltip]);
-            $output .= " title=\"$tooltip\"";
-        }
+        $result = new \Opus\Search\Result\Match($docId);
+        $this->helper->view->result = $result;
 
-        $output .= "></div>";
+        $output = $this->helper->resultYear();
 
-        return $output;
+        $this->assertEquals('', $output);
     }
 }

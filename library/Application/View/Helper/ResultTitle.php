@@ -25,61 +25,69 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     View_Helper_Document_Helper
+ * @package     View
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
- * Abstract base class for document focused view helpers.
+ * Helper for printing the title of a OPUS document in search results.
+ *
+ * TODO use $result->getAsset('title') ??? Avoid using Opus_Document (?)
  */
-abstract class Application_View_Helper_Document_HelperAbstract extends Application_View_Helper_Abstract
+class Application_View_Helper_ResultTitle extends Application_View_Helper_Document_HelperAbstract
 {
-    /**
-     * Determines if preferably the title matching the user interface language should be used.
-     * @var bool
-     */
-    private $_preferUserInterfaceLanguage = null;
 
     /**
-     * Returns if user interface language should be used.
-     * @return bool true if user interface language should be used
+     * Prints escaped main title of document.
+     * @return null|string
      */
-    public function isPreferUserInterfaceLanguage()
+    public function resultTitle($document = null)
     {
-        $config = $this->getConfig();
-
-        if (is_null($this->_preferUserInterfaceLanguage)) {
-            $this->_preferUserInterfaceLanguage = isset($config->search->result->display->preferUserInterfaceLanguage) &&
-                filter_var($config->search->result->display->preferUserInterfaceLanguage, FILTER_VALIDATE_BOOLEAN);
+        if (is_null($document)) {
+            $document = $this->getDocument();
         }
 
-        return $this->_preferUserInterfaceLanguage;
+        $frontdoorUrl = $this->getFrontdoorUrl($document);
+
+        $title = $this->view->documentTitle($document);
+
+        $output = "<a href=\"$frontdoorUrl\"";
+
+        if (is_null($title)) {
+            $title = $this->view->translate('results_missingtitle');
+            $output .= ' class="missing_title"';
+        }
+
+        $output .= ">$title</a>";
+
+        return $output;
     }
 
     /**
-     * Set if user interface language should be used.
-     * @param $enabled bool
+     * TODO get rid of this here - there are already DocumentUrl and FrontdoorUrl
      */
-    public function setPreferUserInterfaceLanguage($enabled)
+    public function getFrontdoorUrl($document)
     {
-        $this->_preferUserInterfaceLanguage = filter_var($enabled, FILTER_VALIDATE_BOOLEAN);
-    }
-
-    public function getResult()
-    {
-        return $this->view->result;
-    }
-
-    public function getDocument()
-    {
-        $result = $this->getResult();
-
-        if (! is_null($result)) {
-            return $result->getDocument();
+        if (isset($this->view->start)) {
+            $start = $this->view->start + $this->view->partialCounter;
         } else {
-            return null;
+            $start = null;
         }
+
+        // TODO hack - can this be avoided?
+        $searchType = $this->view->searchType;
+        if (is_null($searchType)) {
+            $searchType = Zend_Controller_Front::getInstance()->getRequest()->getParam('searchtype');
+        }
+
+        return $this->view->url([
+            'module' => 'frontdoor', 'controller' => 'index', 'action' => 'index',
+            'docId' => $document->getId(),
+            'start' => $start,
+            'rows' => $this->view->rows,
+            'searchtype' => $searchType
+        ]);
     }
 }
