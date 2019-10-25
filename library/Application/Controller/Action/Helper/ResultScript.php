@@ -1,5 +1,5 @@
-<?php
-/**
+<?PHP
+/*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -25,52 +25,29 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     View_Helper
+ * @package     Controller
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
- * View helper for rendering the fulltext logo for documents in the search result list.
+ * Provides name of script for single search result.
  */
-class Application_View_Helper_FulltextLogo extends Application_View_Helper_Document_HelperAbstract
+class Application_Controller_Action_Helper_ResultScript extends Application_Controller_Action_Helper_Abstract
 {
 
-    public function fulltextLogo($doc = null)
+    public function direct()
     {
-        if (is_null($doc)) {
-            $doc = $this->getDocument();
+        $config = $this->getConfig();
+
+        if (isset($config->search->result->script)) {
+            $script = $config->search->result->script;
+            if (is_readable(APPLICATION_PATH . '/application/configs/templates/' . $script)) {
+                return $script;
+            }
         }
 
-        if (! $doc instanceof Opus_Document) {
-            // TODO log
-            return;
-        }
-
-        $cssClass = "fulltext-logo";
-        $tooltip = null;
-
-
-        if ($doc->hasFulltext()) {
-            $cssClass .= ' fulltext';
-            $tooltip = 'fulltext-icon-tooltip';
-        }
-
-        if ($doc->isOpenAccess()) {
-            $cssClass .= ' openaccess';
-            $tooltip = 'fulltext-icon-oa-tooltip';
-        }
-
-        $output = "<div class=\"$cssClass\"";
-
-        if (! is_null($tooltip)) {
-            $tooltip = $this->view->translate([$tooltip]);
-            $output .= " title=\"$tooltip\"";
-        }
-
-        $output .= "></div>";
-
-        return $output;
+        return 'index/result.phtml';
     }
 }

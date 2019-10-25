@@ -179,8 +179,11 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
 
         $enrichmentTypeName = 'Opus_Enrichment_' . $enrichmentTypeName;
         try {
-            $enrichmentType = new $enrichmentTypeName();
-            return $enrichmentType;
+            if (@class_exists($enrichmentTypeName)) {
+                $enrichmentType = new $enrichmentTypeName();
+                return $enrichmentType;
+            }
+            $this->getLogger()->err('could not find class ' . $enrichmentTypeName);
         } catch (\Throwable $ex) {
             $this->getLogger()->err('could not instantiate class ' . $enrichmentTypeName . ': ' . $ex->getMessage());
         }

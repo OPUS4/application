@@ -28,12 +28,12 @@
  * @category    Application
  * @author      Sascha Szott <szott@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2010-2015, OPUS 4 development team
+ * @copyright   Copyright (c) 2010-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 // Bootstrapping
-require_once dirname(__FILE__) . '/common/bootstrap.php';
+require_once __DIR__ . '/common/bootstrap.php';
 
 /**
  * Indexes all or a range of documents.
@@ -280,8 +280,6 @@ EOT;
     private function getDocumentIds($start, $end)
     {
         $finder = new Opus_DocumentFinder();
-
-        $finder->setServerState('published');
 
         if (isset($start)) {
             $finder->setIdRangeStart($start);
