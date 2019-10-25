@@ -23,8 +23,11 @@
 # details. You should have received a copy of the GNU General Public License
 # along with OPUS; if not, write to the Free Software Foundation, Inc., 51
 # Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+
 #
-# To get a backup of old full texts use the command: $./rebuilding_database.sh -b
+# Options:
+#   -b  : To backup the old fulltext files before rebuilding
+#   -v  : For additional output
 #
 
 set -e
@@ -104,7 +107,7 @@ function fulltextBackup() {
     echo -e "\n*** Created backup of fulltexts, log files and series logos in $TEMP_DIR ***\n"
 }
 
-function cleanUpFolders() {
+function cleanupFolders() {
     if [ -d ${workspace_files_dir} ] ; then
         rm -rf $workspace_files_dir
     fi
@@ -121,7 +124,7 @@ function cleanUpFolders() {
 if [[ $BACKUP -eq 1 ]] ; then
     fulltextBackup
 else
-    cleanUpFolders
+    cleanupFolders
 fi
 
 mkdir -p $workspace_files_dir
@@ -132,6 +135,7 @@ mkdir -p $workspace_dir/incoming
 mkdir -p $workspace_dir/tmp
 mkdir -p $workspace_dir/tmp/resumption
 mkdir -p $series_logos_dir
+
 rm -rf $workspace_test_dir/*
 mkdir -p $workspace_test_dir/cache
 mkdir -p $workspace_test_dir/export
