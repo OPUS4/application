@@ -17,8 +17,8 @@
     "jpgraph/jpgraph": "dev-master",
     "solarium/solarium": "3.8.*",
     "opus4-repo/opus4-common": "dev-master",
-    "opus4-repo/framework": "4.7.x-dev",
-    "opus4-repo/search": "dev-OPUSVIER-1049",
+    "opus4-repo/framework": "dev-master",
+    "opus4-repo/search": "dev-master",
     "components/jquery": "1.12.*",
     "components/jqueryui": "1.12.*",
     "robloach/component-installer": "*"

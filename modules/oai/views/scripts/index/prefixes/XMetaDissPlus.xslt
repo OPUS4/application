@@ -213,11 +213,11 @@
 
             <!-- dc:identifier -->
             <xsl:choose>
-                <xsl:when test="IdentifierUrn">
-                    <xsl:apply-templates select="IdentifierUrn" mode="xmetadissplus" />
+                <xsl:when test="Identifier[@Type = 'urn']">
+                    <xsl:apply-templates select="Identifier[@Type = 'urn']" mode="xmetadissplus" />
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:apply-templates select="IdentifierDoi" mode="xmetadissplus" />
+                    <xsl:apply-templates select="Identifier[@Type = 'doi']" mode="xmetadissplus" />
                 </xsl:otherwise>
             </xsl:choose>
 
@@ -318,14 +318,14 @@
                 <xsl:apply-templates select="TransferUrl" mode="xmetadissplus" />
             </xsl:if>
 
-            <xsl:apply-templates select="IdentifierUrl" mode="xmetadissplus" />
+            <xsl:apply-templates select="Identifier[@Type = 'url']" mode="xmetadissplus" />
 
             <ddb:identifier ddb:type="URL">
                <xsl:value-of select="@frontdoorurl" />
             </ddb:identifier>
 
-            <xsl:if test="IdentifierUrn">
-                <xsl:apply-templates select="IdentifierDoi" mode="ddb" />
+            <xsl:if test="Identifier[@Type = 'urn']">
+                <xsl:apply-templates select="Identifier[@Type = 'doi']" mode="ddb" />
             </xsl:if>
 
             <ddb:rights ddb:kind="free" />
@@ -520,19 +520,19 @@
         </dc:publisher>
     </xsl:template>
 
-    <xsl:template match="IdentifierUrn" mode="xmetadissplus">
+    <xsl:template match="Identifier[@Type = 'urn']" mode="xmetadissplus">
         <dc:identifier xsi:type="urn:nbn">
             <xsl:value-of select="@Value" />
         </dc:identifier>
     </xsl:template>
 
-    <xsl:template match="IdentifierDoi" mode="xmetadissplus">
+    <xsl:template match="Identifier[@Type = 'doi']" mode="xmetadissplus">
         <dc:identifier xsi:type="doi:doi">
             <xsl:value-of select="@Value" />
         </dc:identifier>
     </xsl:template>
 
-    <xsl:template match="IdentifierDoi" mode="ddb">
+    <xsl:template match="Identifier[@Type = 'doi']" mode="ddb">
         <ddb:identifier ddb:type="DOI">
             <xsl:value-of select="@Value" />
         </ddb:identifier>
@@ -558,7 +558,7 @@
         </ddb:transfer>
     </xsl:template>
 
-    <xsl:template match="IdentifierUrl" mode="xmetadissplus">
+    <xsl:template match="Identifier[@Type = 'url']" mode="xmetadissplus">
         <ddb:identifier ddb:type="URL">
             <xsl:value-of select="@Value" />
         </ddb:identifier>
