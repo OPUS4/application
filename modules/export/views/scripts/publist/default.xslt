@@ -262,7 +262,7 @@
         <!-- Edition -->
         <xsl:apply-templates select="@Edition" />
         <!-- Isbn -->
-        <xsl:apply-templates select="IdentifierIsbn" />
+        <xsl:apply-templates select="Identifier[@Type = 'isbn']" />
         <!-- CompleteadDate, CompletedYear -->
         <xsl:call-template name="Year" />
     </xsl:template>
@@ -339,7 +339,7 @@
         <xsl:text>, </xsl:text>
     </xsl:template>
 
-    <xsl:template match="IdentifierIsbn">
+    <xsl:template match="Identifier[@Type = 'isbn']">
         <xsl:value-of select="@Value" />
         <xsl:text>, </xsl:text>
     </xsl:template>

@@ -94,9 +94,9 @@
             <dc:identifier>
                 <xsl:value-of select="@frontdoorurl"/>
             </dc:identifier>
-            <xsl:apply-templates select="IdentifierUrn" mode="oai_dc" />
-            <xsl:apply-templates select="IdentifierIsbn" mode="oai_dc" />
-            <xsl:apply-templates select="IdentifierDoi" mode="oai_dc" />
+            <xsl:apply-templates select="Identifier[@Type = 'urn']" mode="oai_dc" />
+            <xsl:apply-templates select="Identifier[@Type = 'isbn']" mode="oai_dc" />
+            <xsl:apply-templates select="Identifier[@Type = 'doi']" mode="oai_dc" />
             <xsl:apply-templates select="File" mode="oai_dc" />
             <!-- dc:language -->
             <xsl:apply-templates select="@Language" mode="oai_dc" />
@@ -320,7 +320,7 @@
         </dc:identifier>
     </xsl:template>
 
-    <xsl:template match="IdentifierIsbn" mode="oai_dc">
+    <xsl:template match="Identifier[@Type = 'isbn']" mode="oai_dc">
         <dc:identifier>
             <xsl:if test="starts-with($oai_set,'openaire')">
                 <xsl:text>urn:isbn:</xsl:text>
@@ -329,7 +329,7 @@
         </dc:identifier>
     </xsl:template>
 
-    <xsl:template match="IdentifierUrn" mode="oai_dc">
+    <xsl:template match="Identifier[@Type = 'urn']" mode="oai_dc">
         <dc:identifier>
             <xsl:value-of select="@Value" />
         </dc:identifier>
@@ -339,7 +339,7 @@
         </dc:identifier>
     </xsl:template>
 
-    <xsl:template match="IdentifierDoi" mode="oai_dc">
+    <xsl:template match="Identifier[@Type = 'doi']" mode="oai_dc">
         <dc:identifier>
             <xsl:value-of select="$doiResolverUrl" />
             <xsl:value-of select="@Value" />
