@@ -49,15 +49,15 @@
     <xsl:include href="utils/bibtex_editors.xslt"/>
 	<xsl:include href="utils/bibtex_institutions.xslt"/>
     <xsl:include href="utils/bibtex_pages.xslt"/>
-    
+
     <xsl:template match="*" />
-    
-       
-	
+
+
+
 	<xsl:template match="/">
 	  <xsl:apply-templates select="Documents" />
     </xsl:template>
-	
+
     <xsl:template match="Documents">
           <xsl:apply-templates select="Opus_Document" />
     </xsl:template>
@@ -86,7 +86,7 @@
                 </xsl:when> -->
                 <xsl:when test="normalize-space(@CompletedYear) != '0000'">
                     <xsl:value-of select="@CompletedYear" />
-                </xsl:when>                
+                </xsl:when>
            </xsl:choose>
        </xsl:variable>
 
@@ -114,7 +114,7 @@
         <xsl:variable name="editor">
             <xsl:apply-templates select="PersonEditor" />
         </xsl:variable>
-		
+
 		<xsl:variable name="institution">
             <xsl:apply-templates select="Collection[@RoleName='institutes']" />
         </xsl:variable>
@@ -145,7 +145,7 @@
 				<xsl:when test="@Type='article'">article</xsl:when>
 				<xsl:otherwise>misc</xsl:otherwise>
 			</xsl:choose>
-   	    </xsl:variable> 
+   	    </xsl:variable>
 	    <xsl:variable name="lang">
         	<xsl:choose>
         		<xsl:when test="@Language='deu'">de</xsl:when>
@@ -167,21 +167,21 @@
 				<xsl:when test="@Language='tur'">tr</xsl:when>
 				<xsl:otherwise>mul</xsl:otherwise>
 			</xsl:choose>
-   	    </xsl:variable> 
-		
-		
-		
+   	    </xsl:variable>
+
+
+
 		<xsl:variable name="subject">
 		  <xsl:apply-templates select="Subject[@Type='swd']" />
-		</xsl:variable> 
-		
-		
-		
-		
-        
+		</xsl:variable>
+
+
+
+
+
         <!-- Output: print Opus-Document in bibtex -->
-        
-             
+
+
         <xsl:text>@</xsl:text><xsl:value-of select="$pubtype"/><xsl:text>{</xsl:text><xsl:value-of select="$identifier" />
 <xsl:text>,
 </xsl:text>
@@ -211,8 +211,8 @@
             <xsl:with-param name="value"><xsl:value-of select ="@Volume" /></xsl:with-param>
             <xsl:with-param name="delimiter">,</xsl:with-param>
         </xsl:call-template>
-		
-		
+
+
        <xsl:choose>
                 <xsl:when test="@Type='conferenceobject'">
                     <xsl:call-template name="outputFieldValue">
@@ -228,7 +228,7 @@
                      <xsl:with-param name="delimiter">,</xsl:with-param>
 		            </xsl:call-template>
                 </xsl:when>
-				 				
+
                 <xsl:otherwise>
                     <xsl:call-template name="outputFieldValue">
                      <xsl:with-param name="field">journal  </xsl:with-param>
@@ -237,14 +237,14 @@
 		            </xsl:call-template>
                 </xsl:otherwise>
         </xsl:choose>
-        
-		
-		
+
+
+
 		<xsl:call-template name="outputFieldValue">
             <xsl:with-param name="field">volume   </xsl:with-param>
             <xsl:with-param name="value"><xsl:value-of select ="Enrichment[@KeyName='VolumeSource']/@Value" /></xsl:with-param>
             <xsl:with-param name="delimiter">,</xsl:with-param>
-        </xsl:call-template> 
+        </xsl:call-template>
         <xsl:call-template name="outputFieldValue">
             <xsl:with-param name="field">number   </xsl:with-param>
             <xsl:with-param name="value"><xsl:value-of select ="@Issue" /></xsl:with-param>
@@ -277,23 +277,23 @@
         </xsl:call-template>
         <xsl:call-template name="outputFieldValue">
             <xsl:with-param name="field">isbn     </xsl:with-param>
-            <xsl:with-param name="value"><xsl:value-of select ="IdentifierIsbn/@Value" /></xsl:with-param>
+            <xsl:with-param name="value"><xsl:value-of select ="Identifier[@Type = 'isbn']/@Value" /></xsl:with-param>
             <xsl:with-param name="delimiter">,</xsl:with-param>
         </xsl:call-template>
         <xsl:call-template name="outputFieldValue">
             <xsl:with-param name="field">issn     </xsl:with-param>
-            <xsl:with-param name="value"><xsl:value-of select ="IdentifierIssn/@Value" /></xsl:with-param>
+            <xsl:with-param name="value"><xsl:value-of select ="Identifier[@Type = 'issn']/@Value" /></xsl:with-param>
             <xsl:with-param name="delimiter">,</xsl:with-param>
         </xsl:call-template>
         <xsl:call-template name="outputFieldValue">
             <xsl:with-param name="field">doi      </xsl:with-param>
-            <xsl:with-param name="value"><xsl:value-of select ="IdentifierDoi/@Value" /></xsl:with-param>
+            <xsl:with-param name="value"><xsl:value-of select ="Identifier[@Type = 'doi']/@Value" /></xsl:with-param>
             <xsl:with-param name="delimiter">,</xsl:with-param>
         </xsl:call-template>
-        <xsl:if test="string-length(normalize-space(IdentifierUrn/@Value)) > 0">
+        <xsl:if test="string-length(normalize-space(Identifier[@Type = 'urn']/@Value)) > 0">
           <xsl:call-template name="outputFieldValue">
             <xsl:with-param name="field">url      </xsl:with-param>
-            <xsl:with-param name="value">http://nbn-resolving.de/<xsl:value-of select ="IdentifierUrn/@Value" /></xsl:with-param>
+            <xsl:with-param name="value">http://nbn-resolving.de/<xsl:value-of select ="Identifier[@Type = 'urn']/@Value" /></xsl:with-param>
             <xsl:with-param name="delimiter">,</xsl:with-param>
           </xsl:call-template>
 		</xsl:if>
@@ -314,11 +314,11 @@
             </xsl:call-template>
             <xsl:call-template name="outputFieldValue">
                 <xsl:with-param name="field">number   </xsl:with-param>
-                <xsl:with-param name="value"><xsl:value-of select ="IdentifierSerial/@Value" /></xsl:with-param>
+                <xsl:with-param name="value"><xsl:value-of select ="Identifier[@Type = 'serial']/@Value" /></xsl:with-param>
                 <xsl:with-param name="delimiter">,</xsl:with-param>
             </xsl:call-template>
-			
-		<xsl:if test="@Type='bachelorthesis' or @Type='doctoralthesis' or @Type='habilitation' or @Type='masterthesis' ">   
+
+		<xsl:if test="@Type='bachelorthesis' or @Type='doctoralthesis' or @Type='habilitation' or @Type='masterthesis' ">
           <xsl:call-template name="outputFieldValue">
             <xsl:with-param name="field">school     </xsl:with-param>
             <xsl:with-param name="value">
@@ -328,8 +328,8 @@
             <xsl:with-param name="delimiter">,</xsl:with-param>
         </xsl:call-template>
 		</xsl:if>
-		
-			<xsl:if test="@Type='book' or @Type='bookpart' ">   
+
+			<xsl:if test="@Type='book' or @Type='bookpart' ">
           <xsl:call-template name="outputFieldValue">
             <xsl:with-param name="field">publisher     </xsl:with-param>
             <xsl:with-param name="value">
@@ -338,7 +338,7 @@
             <xsl:with-param name="delimiter">,</xsl:with-param>
         </xsl:call-template>
 		</xsl:if>
-        
+
         <xsl:call-template name="outputFieldValue">
             <xsl:with-param name="field">address  </xsl:with-param>
             <xsl:with-param name="value"><xsl:value-of select ="Enrichment[@KeyName='address']/@Value" /></xsl:with-param>
@@ -386,24 +386,24 @@
             <xsl:with-param name="value"><xsl:value-of select ="TitleAbstract/@Value" /></xsl:with-param>
             <xsl:with-param name="delimiter">,</xsl:with-param>
         </xsl:call-template>
-		
+
 		<xsl:call-template name="outputFieldValue">
             <xsl:with-param name="field">subject     </xsl:with-param>
             <xsl:with-param name="value"><xsl:value-of select ="Subject[@Type='swd']/@Value" /></xsl:with-param>
             <xsl:with-param name="delimiter">,</xsl:with-param>
         </xsl:call-template>
 
-		
+
 		<xsl:text>  language  = {</xsl:text><xsl:value-of select="$lang"/><xsl:text>}&#10;</xsl:text>
 		<!--
 		<xsl:call-template name="outputFieldValue">
             <xsl:with-param name="field">language </xsl:with-param>
             <xsl:with-param name="value"><xsl:value-of select ="@Language" /></xsl:with-param>
         </xsl:call-template>-->
-		
+
 <xsl:text>}
 </xsl:text>
      </xsl:template>
-	 
-	   
+
+
 </xsl:stylesheet>

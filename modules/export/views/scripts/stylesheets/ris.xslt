@@ -185,24 +185,24 @@
         <xsl:value-of select="@Id" />
         <xsl:text>&#10;</xsl:text> -->
 
-        <xsl:if test="string-length(IdentifierUrn/@Value)>0">
-            <xsl:apply-templates select="IdentifierUrn" />
+        <xsl:if test="string-length(Identifier[@Type = 'urn']/@Value)>0">
+            <xsl:apply-templates select="Identifier[@Type = 'urn']" />
         </xsl:if>
 
-        <xsl:if test="string-length(IdentifierUrl/@Value)>0">
-            <xsl:apply-templates select="IdentifierUrl" />
+        <xsl:if test="string-length(Identifier[@Type = 'url']/@Value)>0">
+            <xsl:apply-templates select="Identifier[@Type = 'url']" />
         </xsl:if>
-        <xsl:if test="string-length(IdentifierIsbn/@Value)>0">
-            <xsl:apply-templates select="IdentifierIsbn" />
+        <xsl:if test="string-length(Identifier[@Type = 'isbn']/@Value)>0">
+            <xsl:apply-templates select="Identifier[@Type = 'isbn']" />
         </xsl:if>
 		<!-- DOI nur ausgeben wenn keine URN existiert - Boris 19.10.15 -->
         <!-- anscheinend doch immer ausgeben (laut FG, Mail v. 22.10.), sonst: -->
-		<xsl:if test="string-length(IdentifierDoi/@Value) > 0  and string-length(normalize-space(IdentifierUrn/@Value)) = 0">
-        <!-- <xsl:if test="string-length(IdentifierDoi/@Value) > 0">-->
-			<xsl:apply-templates select="IdentifierDoi" />
+		<xsl:if test="string-length(Identifier[@Type = 'doi']/@Value) > 0  and string-length(normalize-space(Identifier[@Type = 'urn']/@Value)) = 0">
+        <!-- <xsl:if test="string-length(Identifier[@Type = 'doi']/@Value) > 0">-->
+			<xsl:apply-templates select="Identifier[@Type = 'doi']" />
         </xsl:if>
-        <xsl:if test="string-length(IdentifierIssn/@Value)>0">
-            <xsl:apply-templates select="IdentifierIssn" />
+        <xsl:if test="string-length(Identifier[@Type = 'issn']/@Value)>0">
+            <xsl:apply-templates select="Identifier[@Type = 'issn']" />
         </xsl:if>
         <xsl:if test="string-length(Note/@Message)>0">
             <xsl:apply-templates select="Note" />
@@ -260,32 +260,32 @@
         <xsl:text>&#10;</xsl:text>
     </xsl:template>
 
-	<xsl:template match="IdentifierUrl">
+	<xsl:template match="Identifier[@Type = 'url']">
         <xsl:text>UR  - </xsl:text>
         <xsl:value-of select="@Value" />
         <xsl:text>&#10;</xsl:text>
     </xsl:template>
 
-	<xsl:template match="IdentifierDoi">
+	<xsl:template match="Identifier[@Type = 'doi']">
         <xsl:text>U6  - </xsl:text>
         <xsl:value-of select="php:functionString('Application_Xslt::optionValue', 'doi.resolverUrl')"/>
         <xsl:value-of select="@Value" />
         <xsl:text>&#10;</xsl:text>
     </xsl:template>
 
-    <xsl:template match="IdentifierUrn">
+    <xsl:template match="Identifier[@Type = 'urn']">
         <xsl:text>U6  - http://nbn-resolving.de/urn/resolver.pl?</xsl:text>
         <xsl:value-of select="@Value" />
         <xsl:text>&#10;</xsl:text>
     </xsl:template>
 
-    <xsl:template match="IdentifierIsbn">
+    <xsl:template match="Identifier[@Type = 'isbn']">
         <xsl:text>SN  - </xsl:text>
         <xsl:value-of select="@Value" />
         <xsl:text>&#10;</xsl:text>
     </xsl:template>
 
-    <xsl:template match="IdentifierIssn">
+    <xsl:template match="Identifier[@Type = 'issn']">
         <xsl:text>SN  - </xsl:text>
         <xsl:value-of select="@Value" />
         <xsl:text>&#10;</xsl:text>
