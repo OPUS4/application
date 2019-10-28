@@ -25,40 +25,48 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_Setup
- * @author      Edouard Simon <edouard.simon@zib.de>
+ * @package     Application_Translate
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-/**
- * TODO remove camel case from controller name
- */
-class Setup_HelpPageController extends Application_Controller_Action
+abstract class Application_Translate_Help
 {
 
-    public function init()
-    {
-        parent::init();
+    static private $instance;
 
-        $this->getHelper('MainMenu')->setActive('admin');
+    private $config;
+
+    public static function getInstance()
+    {
+        if (is_null(self::$instance)) {
+            self::$instance = new Home_Model_HelpFiles();
+        }
+
+        return self::$instance;
     }
 
-    public function indexAction()
+    public function getConfig()
     {
-        // TODO fix $this->forward('edit');
+        if (is_null($this->config)) {
+            $this->config = Zend_Registry::get('Zend_Config');
+        }
+        return $this->config;
     }
 
-    protected function getForm()
+    public function getSeparateViewEnabled()
     {
-        return new Setup_Form_HelpPage();
+        $config = $this->getConfig();
+
+        if (isset($config->help->separate)) {
+            return filter_var($config->help->separate, FILTER_VALIDATE_BOOLEAN);
+        } else {
+            return false;
+        }
     }
 
-    protected function getModel()
-    {
-        return new Setup_Model_HelpPage(
-            new Zend_Config_Ini(APPLICATION_PATH . '/modules/setup/setup.ini', 'help')
-        );
-    }
+    abstract public function getHelpEntries();
+
+    abstract public function getContent($key);
 }

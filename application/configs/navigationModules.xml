@@ -688,25 +688,25 @@
                             </pages>
                         </enrichmentKey>
 
-                        <help-page>
+                        <helppage>
                             <type>mvc</type>
-                            <label>setup_title_help-page</label>
-                            <description>setup_title_help-page_description</description>
+                            <label>setup_title_helppage</label>
+                            <description>setup_title_helppage_description</description>
                             <group>group-cafelatte</group>
                             <module>setup</module>
-                            <controller>help-page</controller>
+                            <controller>helppage</controller>
                             <action>index</action>
                             <pages>
                                 <error>
                                     <type>mvc</type>
                                     <label>setup_error</label>
                                     <module>setup</module>
-                                    <controller>help-page</controller>
+                                    <controller>helppage</controller>
                                     <action>error</action>
                                 </error>
                             </pages>
                             <resource>helppages</resource>
-                        </help-page>
+                        </helppage>
 
                         <staticpages>
                             <type>mvc</type>

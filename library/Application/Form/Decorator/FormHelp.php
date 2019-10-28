@@ -27,7 +27,7 @@
  * @category    Application
  * @package     View
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2017-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -93,8 +93,8 @@ class Application_Form_Decorator_FormHelp extends Zend_Form_Decorator_Abstract
         $cssClass = $this->_cssClass;
 
         if (! is_null($classOption = $this->getOption('class'))) {
-             $cssClass = $classOption;
-             $this->removeOption('class');
+            $cssClass = $classOption;
+            $this->removeOption('class');
         }
 
         $this->_cssClass = $cssClass;

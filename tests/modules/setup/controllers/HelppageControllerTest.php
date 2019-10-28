@@ -1,5 +1,5 @@
-<?PHP
-/*
+<?php
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,32 +24,29 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Application_Form_Decorator
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013-2019, OPUS 4 development team
+ * @category    Tests
+ * @package     Setup
+ * @author      Edouard Simon <edouard.simon@zib.de>
+ * @copyright   Copyright (c) 2013-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
- * TODO rename
+ * Class Setup_HelpPageControllerTest.
+ *
+ * @covers Setup_HelpPageController
  */
-class Application_Form_Decorator_HtmlTagWithId extends Zend_Form_Decorator_HtmlTag
+class Setup_HelppageControllerTest extends SetupControllerTestCase
 {
+    /**
+     * original file modes, needed for restoring after test
+     */
+    protected $origFileModes = [];
 
-    protected function _htmlAttribs(array $attribs)
+    protected $configSection = 'static-page';
+
+    public function testSomething()
     {
-        $element = $this->getElement();
-
-        if (! is_null($element)) {
-            if (! is_null($attribs) && isset($attribs['class'])) {
-                $attribs['class'] = $attribs['class'] . ' ' . $this->getElement()->getName() . '-data';
-            } else {
-                $attribs = [];
-                $attribs['class'] = $this->getElement()->getName() . '-data';
-            }
-        }
-
-        return parent::_htmlAttribs($attribs);
+        $this->markTestIncomplete('implement testing');
     }
 }

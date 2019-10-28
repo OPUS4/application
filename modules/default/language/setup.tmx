@@ -76,7 +76,7 @@
         </tuv>
     </tu>
 
-    <tu tuid="setup_title_help-page">
+    <tu tuid="setup_title_helppage">
         <tuv xml:lang="en">
             <seg>FAQ-Page</seg>
         </tuv>
@@ -85,7 +85,7 @@
         </tuv>
     </tu>
 
-    <tu tuid="setup_help-page_edit">
+    <tu tuid="setup_helppage_edit">
         <tuv xml:lang="en">
             <seg>Edit FAQ</seg>
         </tuv>
