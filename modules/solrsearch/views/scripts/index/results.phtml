@@ -29,7 +29,7 @@
  * @author      Julian Heise <heise@zib.de>
  * @author      Sascha Szott <szott@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 ?>
@@ -93,64 +93,7 @@ if ($this->jQueryEnabled()) {
 } ?>
         <?php if (! is_null($this->results)) : ?>
             <div id="search_results" class="search_results">
-                <?php $rowCount = 0; ?>
-                <?PHP foreach ($this->results as $result) : ?>
-                    <?php
-                    $document = $result->getDocument();
-
-                    // TODO this is ugly (parameter automatisch übernehmen?) - put it somewhere else (view helper)
-                    $frontdoorUrl = $this->url([
-                        'module' => 'frontdoor', 'controller' => 'index', 'action' => 'index',
-                        'docId' => $document->getId(),
-                        'start' => $this->start + $rowCount,
-                        'rows' => $this->rows,
-                        'searchtype' => $this->searchType
-                    ]);
-                    ?>
-                    <div class="result_box <?= $rowCount++ % 2 === 0 ? 'even' : 'odd'; ?>">
-                        <?= $this->fulltextLogo($document) ?>
-                        <?php if (isset($this->seriesId) && $this->seriesId && ! is_null($result->getSeriesNumber($this->seriesId))) : ?>
-                            <div class="results_seriesnumber"><?= htmlspecialchars($result->getSeriesNumber($this->seriesId)); ?></div>
-                        <?php endif ?>
-
-                        <div class="results_title">
-
-                            <?php if (! is_null($result->getAsset('title'))) : ?>
-                                <a href="<?= $frontdoorUrl ?>"><?= $this->documentTitle($document) ?></a>
-                            <?php else : ?>
-                                <a href="<?= $frontdoorUrl ?>" class="missing_title"><?= $this->translate('results_missingtitle') ?></a>
-                            <?php endif ?>
-
-                            <?php if ($result->getAsset('year')) : ?>
-                                (<?= htmlspecialchars($result->getAsset('year')); ?>)
-                            <?php endif ?>
-                        </div>
-                        <?php if (! is_null($result->getAsset('author'))) : ?>
-                            <div class="results_author">
-                                <?php foreach ($result->getAsset('author') as $authorIndex => $author) :
-                                    $authorSearch = $this->authorSearch;
-                                    $authorSearch['author'] = '"'.$author.'"';
-                                ?>
-                                    <?PHP if ($authorIndex !== 0) :
-?> ; <?PHP
-                                    endif ?>
-                                    <a href="<?= $this->url($authorSearch, null, true); ?>"><?= htmlspecialchars($author) ?></a>
-                                <?php endforeach ?>
-                            </div>
-                        <?php endif ?>
-                        <?php if ($this->jQueryEnabled()) : ?>
-                            <div class="abstract-wrapper">
-                            <?php if (! is_null($result->getAsset('abstract'))) : ?>
-                                <a id="abstractToggle_<?= $document->getId() ?>"
-                                   class="abstract-toggle collapsed"
-                                   title="<?= $this->translate('results_hideabstract_title') ?>"
-                                   onclick="return toggleAbstract(<?= $document->getId() ?>)"></a>
-                            <?php endif ?>
-                                <div class="abstractText" id="abstractText_<?= $document->getId() ?>"><?= $this->documentAbstract($document) ?></div>
-                            </div>
-                        <?php endif ?>
-                    </div>
-                <?php endforeach ?>
+                <?= $this->partialLoop()->setObjectKey('result')->partialLoop($this->resultScript, $this->results) ?>
             </div>
         <?php endif ?>
         <div class="breadcrumb_results">

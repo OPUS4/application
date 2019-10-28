@@ -1228,6 +1228,31 @@ class Oai_IndexControllerTest extends ControllerTestCase
     }
 
     /**
+     * TODO Test depends on record without URN in testdata.
+     */
+    public function testListRecordsXMetaDissPlusDocumentsWithoutUrn()
+    {
+        Zend_Registry::get('Zend_Config')->merge(
+            new Zend_Config([
+                'oai' => [
+                    'max' => [
+                        'listrecords' => '100',
+                        'listidentifiers' => '200',
+                    ]
+                ]
+            ])
+        );
+        $this->dispatch('/oai?verb=ListRecords&metadataPrefix=xMetaDissPlus');
+
+        $xpath = $this->prepareXpathFromResultString($this->getResponse()->getBody());
+
+        $elements = $xpath->query('//xMetaDiss:xMetaDiss[not(contains(., "urn:nbn"))]');
+        $recordCount = $elements->length;
+
+        $this->assertTrue($recordCount > 0);
+    }
+
+    /**
      * @covers ::indexAction
      */
     public function testListRecordsXMetaDissPlusDocumentsNotInEmbargoOnly()
@@ -1415,7 +1440,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $this->enableSecurity();
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=copy_xml&identifier=oai::80');
         $this->assertContains(
-            '<error code="cannotDisseminateFormat">The metadata format &amp;quot;copy_xml&amp;quot; given by metadataPrefix is not supported by the item or this repository.</error>',
+            '<error code="cannotDisseminateFormat">The metadata format \'copy_xml\' given by metadataPrefix is not supported by the item or this repository.</error>',
             $this->getResponse()->getBody(),
             'do not prevent usage of metadataPrefix copy_xml and verb GetRecords'
         );
@@ -1429,7 +1454,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $this->enableSecurity();
         $this->dispatch('/oai?verb=ListRecords&metadataPrefix=copy_xml&from=2100-01-01');
         $this->assertContains(
-            '<error code="cannotDisseminateFormat">The metadata format &amp;quot;copy_xml&amp;quot; given by metadataPrefix is not supported by the item or this repository.</error>',
+            '<error code="cannotDisseminateFormat">The metadata format \'copy_xml\' given by metadataPrefix is not supported by the item or this repository.</error>',
             $this->getResponse()->getBody(),
             'do not prevent usage of metadataPrefix copy_xml and verb ListRecords'
         );
@@ -1443,7 +1468,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $this->enableSecurity();
         $this->dispatch('/oai?verb=ListIdentifiers&metadataPrefix=copy_xml');
         $this->assertContains(
-            '<error code="cannotDisseminateFormat">The metadata format &amp;quot;copy_xml&amp;quot; given by metadataPrefix is not supported by the item or this repository.</error>',
+            '<error code="cannotDisseminateFormat">The metadata format \'copy_xml\' given by metadataPrefix is not supported by the item or this repository.</error>',
             $this->getResponse()->getBody(),
             'do not prevent usage of metadataPrefix copy_xml and verb ListIdentifiers'
         );
@@ -2528,6 +2553,15 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $this->assertXpathContentContains('//xMetaDiss:xMetaDiss/ddb:identifier', '10.1007/978-3-540-76406-9');
     }
 
+    public function testGetRecordXMetaDissPlusDcmiType()
+    {
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=XMetaDissPlus&identifier=oai::146');
+
+        $this->registerXpathNamespaces($this->xpathNamespaces);
+
+        $this->assertXpathContentContains('//xMetaDiss:xMetaDiss/dc:type[@xsi:type = "dcterms:DCMIType"]', 'Text');
+    }
+
     public function testGetRecordMarc21OfDocId91()
     {
         Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
@@ -2661,7 +2695,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
 
         $this->registerXpathNamespaces($this->xpathNamespaces);
 
-        $this->assertXpathContentContains('//marc:leader', '00000na  a22000005  4500');
+        $this->assertXpathContentContains('//marc:leader', '00000nam a22000005  4500');
         $this->assertXpathContentContains('//marc:controlfield[@tag="001"]', 'docId-' . $docId);
         $this->assertNotXpath('//marc:controlfield[@tag="003"]');
         $this->assertXpathContentContains('//marc:datafield[@tag="024"]/marc:subfield[@code="a"]', 'urn:nbn:de:foo:opus-4711');

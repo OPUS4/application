@@ -204,8 +204,8 @@ class Oai_Model_Request
             // MetadataPrefix not available.
             $this->setErrorCode(Oai_Model_Error::CANNOTDISSEMINATEFORMAT);
             $this->setErrorMessage(
-                'The metadata format "' . $oaiMetadataPrefix
-                . '" given by metadataPrefix is not supported by the item or this repository.'
+                'The metadata format \'' . $oaiMetadataPrefix
+                . '\' given by metadataPrefix is not supported by the item or this repository.'
             );
         }
 

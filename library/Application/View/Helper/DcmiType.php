@@ -25,52 +25,35 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     View_Helper
+ * @package     Application_View_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
- * View helper for rendering the fulltext logo for documents in the search result list.
+ * View helper for returning current locale.
  */
-class Application_View_Helper_FulltextLogo extends Application_View_Helper_Document_HelperAbstract
+class Application_View_Helper_DcmiType extends Application_View_Helper_Abstract
 {
 
-    public function fulltextLogo($doc = null)
+    /**
+     * Returns DCMI-Type for document type.
+     */
+    public function dcmiType($docType)
     {
-        if (is_null($doc)) {
-            $doc = $this->getDocument();
+        $config = $this->getConfig();
+
+        $dcmiType = null;
+
+        if (isset($config->documentType->$docType->dcmiType)) {
+            $dcmiType = $config->documentType->$docType->dcmiType;
+        } elseif (isset($config->documentType->default->dcmiType)) {
+            $dcmiType = $config->documentType->default->dcmiType;
+        } else {
+            $dcmiType = 'Text';
         }
 
-        if (! $doc instanceof Opus_Document) {
-            // TODO log
-            return;
-        }
-
-        $cssClass = "fulltext-logo";
-        $tooltip = null;
-
-
-        if ($doc->hasFulltext()) {
-            $cssClass .= ' fulltext';
-            $tooltip = 'fulltext-icon-tooltip';
-        }
-
-        if ($doc->isOpenAccess()) {
-            $cssClass .= ' openaccess';
-            $tooltip = 'fulltext-icon-oa-tooltip';
-        }
-
-        $output = "<div class=\"$cssClass\"";
-
-        if (! is_null($tooltip)) {
-            $tooltip = $this->view->translate([$tooltip]);
-            $output .= " title=\"$tooltip\"";
-        }
-
-        $output .= "></div>";
-
-        return $output;
+        return $dcmiType;
     }
 }

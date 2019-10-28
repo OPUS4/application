@@ -53,6 +53,7 @@ oai.max.listidentifiers = 10
 publish.maxfilesize = 1024000
 
 ; EXPORT SETTINGS
+export.download = 1
 export.stylesheet.search = example
 export.stylesheet.frontdoor = example
 

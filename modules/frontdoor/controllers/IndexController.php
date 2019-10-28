@@ -101,6 +101,7 @@ class Frontdoor_IndexController extends Application_Controller_Action
             'optionValue',
             'translate',
             'translateLanguage',
+            'translateIdentifier',
             'translateWithDefault',
             'formatDate',
             'isDisplayField',
