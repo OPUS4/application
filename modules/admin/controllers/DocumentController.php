@@ -290,14 +290,15 @@ class Admin_DocumentController extends Application_Controller_Action
 
         $document = $this->_documentsHelper->getDocumentForId($docId);
 
-        if (!isset($document)) {
+        if (! isset($document)) {
             return $this->_helper->Redirector->redirectTo(
-                'index', array('failure' =>
-                $this->view->translate('admin_document_error_novalidid')),
-                'documents', 'admin'
+                'index',
+                ['failure' =>
+                $this->view->translate('admin_document_error_novalidid')],
+                'documents',
+                'admin'
             );
-        }
-        else {
+        } else {
             $copyForm = new Admin_Form_CopyDocument();
 
             $request = $this->getRequest();
@@ -309,25 +310,32 @@ class Admin_DocumentController extends Application_Controller_Action
 
                 $result = $copyForm->processPost($data, $data);
 
-                switch($result) {
+                switch ($result) {
                     case Admin_Form_CopyDocument::RESULT_COPY:
                         //
                         break;
                     case Admin_Form_CopyDocument::RESULT_CANCEL:
                         // TODO redirect to frontdoor oder administration
                         return $this->_helper->Redirector->redirectTo(
-                            'index', null, 'document', 'admin', ['id' => $docId]
+                            'index',
+                            null,
+                            'document',
+                            'admin',
+                            ['id' => $docId]
                         );
                         break;
                     default:
                         // TODO log something
                         return $this->_helper->Redirector->redirectTo(
-                            'index', ['error' => 'Invalid post from form.'], 'document', 'admin', ['id' => $docId]
+                            'index',
+                            ['error' => 'Invalid post from form.'],
+                            'document',
+                            'admin',
+                            ['id' => $docId]
                         );
                         break;
                 }
-            }
-            else {
+            } else {
                 // TODO show options and confirmation
                 $copyForm->populateFromModel($document);
 

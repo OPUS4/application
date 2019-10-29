@@ -1439,7 +1439,6 @@ class Oai_IndexControllerTest extends ControllerTestCase
             '<error code="cannotDisseminateFormat">The metadata format \'copy_xml\' given by metadataPrefix is not supported by the item or this repository.</error>',
             $this->getResponse()->getBody(),
             'do not prevent usage of metadataPrefix copy_xml and verb GetRecords'
-
         );
     }
 
@@ -1454,7 +1453,6 @@ class Oai_IndexControllerTest extends ControllerTestCase
             '<error code="cannotDisseminateFormat">The metadata format \'copy_xml\' given by metadataPrefix is not supported by the item or this repository.</error>',
             $this->getResponse()->getBody(),
             'do not prevent usage of metadataPrefix copy_xml and verb ListRecords'
-
         );
     }
 
@@ -1469,7 +1467,6 @@ class Oai_IndexControllerTest extends ControllerTestCase
             '<error code="cannotDisseminateFormat">The metadata format \'copy_xml\' given by metadataPrefix is not supported by the item or this repository.</error>',
             $this->getResponse()->getBody(),
             'do not prevent usage of metadataPrefix copy_xml and verb ListIdentifiers'
-
         );
     }
 
@@ -2120,7 +2117,8 @@ class Oai_IndexControllerTest extends ControllerTestCase
             $parentTitleValue . ', ' .
             $doc->getVolume() . ', ' .
             $doc->getIssue() . ', ' .
-            'S. ' . $doc->getPageFirst() . '-' . $doc->getPageLast(), $dcSource->item(0)->nodeValue
+            'S. ' . $doc->getPageFirst() . '-' . $doc->getPageLast(),
+            $dcSource->item(0)->nodeValue
         );
     }
 
@@ -2158,8 +2156,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $this->assertEquals('TitleParent, ' .
             $doc->getVolume() . ', ' .
             $doc->getIssue() . ', ' .
-            $doc->getPageNumber() . ' S.', $dcSource->item(0)->nodeValue
-        );
+            $doc->getPageNumber() . ' S.', $dcSource->item(0)->nodeValue);
     }
 
     /**
@@ -2178,7 +2175,8 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $this->assertEquals(1, $dctermsIspartof->length);
 
         $this->assertEquals(
-            $series[0]->getTitle() . ' ; ' . $series[0]->getNumber(), $dctermsIspartof->item(0)->nodeValue
+            $series[0]->getTitle() . ' ; ' . $series[0]->getNumber(),
+            $dctermsIspartof->item(0)->nodeValue
         );
     }
 

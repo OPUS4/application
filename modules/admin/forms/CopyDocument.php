@@ -38,7 +38,7 @@
 class Admin_Form_CopyDocument extends Zend_Form
 {
 
-    const ELEMENT_COPY ='Copy';
+    const ELEMENT_COPY = 'Copy';
     const ELEMENT_CANCEL = 'Cancel';
     const ELEMENT_COPY_FILES = 'CopyFiles';
 
@@ -67,8 +67,7 @@ class Admin_Form_CopyDocument extends Zend_Form
     {
         if (array_key_exists(self::ELEMENT_COPY, $post)) {
             return self::RESULT_COPY;
-        }
-        else if (array_key_exists(self::ELEMENT_CANCEL,$post)) {
+        } elseif (array_key_exists(self::ELEMENT_CANCEL, $post)) {
             return self::RESULT_CANCEL;
         }
     }
