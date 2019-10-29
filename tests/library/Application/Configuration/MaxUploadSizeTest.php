@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -25,22 +26,23 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application Unit Test
- * @package     Application
+ * @package     Application_Configuration
  * @author      Sascha Szott
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2016-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2016-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Application_Configuration_MaxUploadSizeTest extends ControllerTestCase {
-    
+class Application_Configuration_MaxUploadSizeTest extends TestCase
+{
+
     /**
      * Der Wert von sword:maxUploadSize ist als das Minimum von den folgenden
      * drei Werten definiert:
-     * 
+     *
      * 1. Konfigurationsparameter publish.maxfilesize
      * 2. PHP-Laufzeitkonfiguration post_max_size
      * 3. PHP-Laufzeitkonfiguration upload_max_filesize
-     * 
+     *
      */
     public function testMaxUploadSize()
     {
@@ -69,8 +71,10 @@ class Application_Configuration_MaxUploadSizeTest extends ControllerTestCase {
             // The 'G' modifier is available since PHP 5.1.0
             case 'g':
                 $valInt *= 1024;
+                // fall through is intended
             case 'm':
                 $valInt *= 1024;
+                // fall through is intended
             case 'k':
                 // do nothing
                 break;
@@ -80,5 +84,4 @@ class Application_Configuration_MaxUploadSizeTest extends ControllerTestCase {
 
         return $valInt;
     }
-
 }

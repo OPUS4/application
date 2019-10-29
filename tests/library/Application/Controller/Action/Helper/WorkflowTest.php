@@ -27,53 +27,64 @@
  * @category    Application Unit Test
  * @package     Controller_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
  * Unit Test for class Application_Controller_Action_Helper_Workflow.
  */
-class Application_Controller_Action_Helper_WorkflowTest extends ControllerTestCase {
+class Application_Controller_Action_Helper_WorkflowTest extends ControllerTestCase
+{
+
+    protected $additionalResources = ['database', 'translation'];
 
     private $__workflowHelper;
 
-    public function setUp() {
+    public function setUp()
+    {
         parent::setUp();
 
         $this->__workflowHelper = new Application_Controller_Action_Helper_Workflow();
     }
 
-    public function testIsValidStateTrue() {
+    public function testIsValidStateTrue()
+    {
         $this->assertTrue($this->__workflowHelper->isValidState('published'));
     }
 
-    public function testIsValidStateFalse() {
+    public function testIsValidStateFalse()
+    {
         $this->assertFalse($this->__workflowHelper->isValidState('notvalid'));
     }
 
-    public function testIsValidStateForNull() {
+    public function testIsValidStateForNull()
+    {
         $this->assertFalse($this->__workflowHelper->isValidState(null));
     }
 
-    public function testIsValidStateForAllStates() {
+    public function testIsValidStateForAllStates()
+    {
         $states = Application_Controller_Action_Helper_Workflow::getAllStates();
 
         foreach ($states as $state) {
-            $this->assertTrue($this->__workflowHelper->isValidState($state),
-                    'State \'' . $state . '\' should be valid.');
+            $this->assertTrue(
+                $this->__workflowHelper->isValidState($state),
+                'State \'' . $state . '\' should be valid.'
+            );
         }
     }
 
-    public function testgetAllStates() {
+    public function testgetAllStates()
+    {
         $states = Application_Controller_Action_Helper_Workflow::getAllStates();
 
         $this->assertEquals(7, count($states));
         $this->assertTrue(in_array('removed', $states));
     }
 
-    public function testGetAllowedTargetStatesForDocument() {
+    public function testGetAllowedTargetStatesForDocument()
+    {
         $doc = $this->createTestDocument();
 
         $doc->setServerState('unpublished');
@@ -85,25 +96,29 @@ class Application_Controller_Action_Helper_WorkflowTest extends ControllerTestCa
         $this->assertFalse(in_array('unpublished', $targetStates));
     }
 
-    public function testGetTargetStatesForRemoved() {
-       $targetStates = Application_Controller_Action_Helper_Workflow::getTargetStates('removed');
+    public function testGetTargetStatesForRemoved()
+    {
+        $targetStates = Application_Controller_Action_Helper_Workflow::getTargetStates('removed');
 
-       $this->assertEquals(0, count($targetStates));
+        $this->assertEquals(0, count($targetStates));
     }
 
-    public function testGetTargetStatesForInvalidState() {
-       $targetStates = Application_Controller_Action_Helper_Workflow::getTargetStates('invalid');
+    public function testGetTargetStatesForInvalidState()
+    {
+        $targetStates = Application_Controller_Action_Helper_Workflow::getTargetStates('invalid');
 
-       $this->assertEquals(0, count($targetStates));
+        $this->assertEquals(0, count($targetStates));
     }
 
-    public function testGetTargetStatesForNull() {
-       $targetStates = Application_Controller_Action_Helper_Workflow::getTargetStates(null);
+    public function testGetTargetStatesForNull()
+    {
+        $targetStates = Application_Controller_Action_Helper_Workflow::getTargetStates(null);
 
-       $this->assertEquals(0, count($targetStates));
+        $this->assertEquals(0, count($targetStates));
     }
 
-    public function testChangeStateToPublished() {
+    public function testChangeStateToPublished()
+    {
         $doc = $this->createTestDocument();
 
         $doc->setServerState('unpublished');
@@ -120,7 +135,8 @@ class Application_Controller_Action_Helper_WorkflowTest extends ControllerTestCa
         $this->assertNotNull($doc->getServerDatePublished());
     }
 
-    public function testChangeStateToDeleted() {
+    public function testChangeStateToDeleted()
+    {
         $doc = $this->createTestDocument();
 
         $doc->setServerState('published');
@@ -136,7 +152,8 @@ class Application_Controller_Action_Helper_WorkflowTest extends ControllerTestCa
         $this->assertEquals('deleted', $doc->getServerState());
     }
 
-    public function testChangeStateToRemoved() {
+    public function testChangeStateToRemoved()
+    {
         $doc = $this->createTestDocument();
 
         $doc->setServerState('published');
@@ -155,7 +172,8 @@ class Application_Controller_Action_Helper_WorkflowTest extends ControllerTestCa
     /**
      * TODO unit test must be modified as soon as 'unpublish' is forbidden
      */
-    public function testChangeStateToUnpublished() {
+    public function testChangeStateToUnpublished()
+    {
         $doc = $this->createTestDocument();
 
         $doc->setServerState('published');
@@ -171,42 +189,50 @@ class Application_Controller_Action_Helper_WorkflowTest extends ControllerTestCa
         $this->assertEquals('unpublished', $doc->getServerState());
     }
 
-    public function testIsAllowedTransitionTrue() {
+    public function testIsAllowedTransitionTrue()
+    {
         $doc = $this->createTestDocument();
 
         $doc->setServerState('unpublished');
 
-        $this->assertTrue($this->__workflowHelper->isTransitionAllowed($doc,
-                'published'));
+        $this->assertTrue($this->__workflowHelper->isTransitionAllowed(
+            $doc,
+            'published'
+        ));
     }
 
-    public function testIsAllowedTransitionFalse() {
+    public function testIsAllowedTransitionFalse()
+    {
         $doc = $this->createTestDocument();
 
         $doc->setServerState('published');
 
-        $this->assertFalse($this->__workflowHelper->isTransitionAllowed($doc,
-                'unpublished'));
+        $this->assertFalse($this->__workflowHelper->isTransitionAllowed(
+            $doc,
+            'unpublished'
+        ));
     }
 
-    public function testWorkflowTranslationsForStates() {
+    public function testWorkflowTranslationsForStates()
+    {
         $states = Application_Controller_Action_Helper_Workflow::getAllStates();
-
-        Zend_Registry::get('Zend_Translate')->loadModule('admin');
 
         $translate = Zend_Registry::get('Zend_Translate');
 
         foreach ($states as $state) {
             $key = 'admin_workflow_' . $state;
-            $this->assertTrue($translate->isTranslated($key),
-                    'Translation key \'' . $key . '\' is missing.');
+            $this->assertTrue(
+                $translate->isTranslated($key),
+                'Translation key \'' . $key . '\' is missing.'
+            );
         }
     }
 
     /**
      * OPUSVIER-2446 Regression Test
      */
-    public function testRegression2446DontSetServerDatePublished() {
+    public function testRegression2446DontSetServerDatePublished()
+    {
         $doc = new Mock_Opus_Document();
 
         $doc->setServerState('unpublished');
@@ -216,5 +242,4 @@ class Application_Controller_Action_Helper_WorkflowTest extends ControllerTestCa
         $this->assertEquals('published', $doc->getServerState());
         $this->assertNull($doc->getServerDatePublished());
     }
-
 }

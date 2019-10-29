@@ -37,7 +37,8 @@
  *
  * TODO class is tied to Application_Controller_ActionCRUD - resolve
  */
-class Application_Form_Model_Table extends Application_Form_Abstract {
+class Application_Form_Model_Table extends Application_Form_Abstract
+{
 
     /**
      * Modelle die angezeigt werden sollen.
@@ -67,7 +68,8 @@ class Application_Form_Model_Table extends Application_Form_Abstract {
      *
      * Setzt Decorators so, daß das Rendering in einem View Script erfolgt.
      */
-    public function init() {
+    public function init()
+    {
         parent::init();
         $this->initDecorators();
     }
@@ -75,12 +77,15 @@ class Application_Form_Model_Table extends Application_Form_Abstract {
     /**
      * Initialisiert die Decorators für die Tabelle.
      */
-    public function initDecorators() {
+    public function initDecorators()
+    {
         $this->setDecorators(
-            array(
-            'PrepareElements',
-            array('ViewScript', array('viewScript' => $this->getViewScript()))
-            )
+            ['PrepareElements',
+                ['ViewScript',
+                    ['viewScript' => $this->getViewScript()
+                    ]
+                ]
+            ]
         );
     }
 
@@ -88,7 +93,8 @@ class Application_Form_Model_Table extends Application_Form_Abstract {
      * Liefert die Spaltenkonfiguration.
      * @return array|null
      */
-    public function getColumns() {
+    public function getColumns()
+    {
         return $this->_columns;
     }
 
@@ -96,7 +102,8 @@ class Application_Form_Model_Table extends Application_Form_Abstract {
      * Setzt die Spaltenkonfiguration.
      * @param $columns
      */
-    public function setColumns($columns) {
+    public function setColumns($columns)
+    {
         $this->_columns = $columns;
     }
 
@@ -105,11 +112,11 @@ class Application_Form_Model_Table extends Application_Form_Abstract {
      * @param $index Index der Spalte angefangen bei 0
      * @return string|null
      */
-    public function getColumnLabel($index) {
+    public function getColumnLabel($index)
+    {
         if (isset($this->_columns[$index]['label'])) {
             return $this->_columns[$index]['label'];
-        }
-        else {
+        } else {
             return null;
         }
     }
@@ -118,7 +125,8 @@ class Application_Form_Model_Table extends Application_Form_Abstract {
      * Liefert gesetzte Modelle.
      * @return array|null
      */
-    public function getModels() {
+    public function getModels()
+    {
         return $this->_models;
     }
 
@@ -126,8 +134,9 @@ class Application_Form_Model_Table extends Application_Form_Abstract {
      * Setzt Modelle für Anzeige.
      * @param $models
      */
-    public function setModels($models) {
-        if (!is_null($models) && !is_array($models)) {
+    public function setModels($models)
+    {
+        if (! is_null($models) && ! is_array($models)) {
             throw new Application_Exception(__METHOD__ . 'Parameter must be array.');
         }
         $this->_models = $models;
@@ -137,11 +146,11 @@ class Application_Form_Model_Table extends Application_Form_Abstract {
      * Setzt ViewScript für die Ausgabe der Modeltabelle.
      * @param $name
      */
-    public function setViewScript($name) {
-        if (!is_null($name)) {
+    public function setViewScript($name)
+    {
+        if (! is_null($name)) {
             $this->_viewScript = $name;
-        }
-        else {
+        } else {
             $this->_viewScript = 'modeltable.phtml';
         }
         $this->initDecorators();
@@ -150,7 +159,8 @@ class Application_Form_Model_Table extends Application_Form_Abstract {
     /**
      * Liefert Namen des ViewScripts für die Ausgabe der Modeltabelle.
      */
-    public function getViewScript() {
+    public function getViewScript()
+    {
         return $this->_viewScript;
     }
 
@@ -160,7 +170,8 @@ class Application_Form_Model_Table extends Application_Form_Abstract {
      *
      * TODO make independent from controller class
      */
-    public function setController($controller) {
+    public function setController($controller)
+    {
         $this->_controller = $controller;
     }
 
@@ -169,11 +180,15 @@ class Application_Form_Model_Table extends Application_Form_Abstract {
      * @param $model Model object
      * @return bool true - link should be rendered
      */
-    public function isRenderShowActionLink($model) {
-        if (!is_null($this->_controller)) {
-            return $this->_controller->getShowActionEnabled();
-        }
-        else {
+    public function isRenderShowActionLink($model)
+    {
+        if (! is_null($this->_controller)) {
+            if (! method_exists($this->_controller, 'getShowActionEnabled')) {
+                $this->getLogger()->debug('The used controller does not have the method getShowActionEnabled.');
+            } else {
+                return $this->_controller->getShowActionEnabled();
+            }
+        } else {
             return true;
         }
     }
@@ -183,14 +198,86 @@ class Application_Form_Model_Table extends Application_Form_Abstract {
      * @param $model Model object
      * @return bool true - model can be modified and links should be rendered
      */
-    public function isModifiable($model) {
-        if (!is_null($this->_controller)) {
-            return $this->_controller->isModifiable($model);
-        }
-        else {
+    public function isModifiable($model)
+    {
+        if (! is_null($this->_controller)) {
+            if (! method_exists($this->_controller, 'isModifiable')) {
+                $this->getLogger()->debug('The used controller does not have the method isModifiable.');
+            } else {
+                return $this->_controller->isModifiable($model);
+            }
+        } else {
             return true;
         }
     }
 
-}
+    /**
+     * Determines if an object can be deleted and a link for removing it should be rendered.
+     * @param $model Model object
+     * @return bool true - model can be deleted and link should be rendered
+     */
+    public function isDeletable($model)
+    {
+        if (! is_null($this->_controller)) {
+            if (! method_exists($this->_controller, 'isDeletable')) {
+                $this->getLogger()->debug('The used controller does not have the method isDeletable.');
+            } else {
+                return $this->_controller->isDeletable($model);
+            }
+        } else {
+            return true;
+        }
+    }
 
+    public function isUsed($model)
+    {
+        if (! is_null($this->_controller)) {
+            if (! method_exists($this->_controller, 'isUsed')) {
+                $this->getLogger()->debug('The used controller does not have the method isUsed.');
+            } else {
+                return $this->_controller->isUsed($model);
+            }
+        } else {
+            return false;
+        }
+    }
+
+    public function isProtected($model)
+    {
+        if (! is_null($this->_controller)) {
+            if (! method_exists($this->_controller, 'isProtected')) {
+                $this->getLogger()->debug('The used controller does not have the method isProtected.');
+            } else {
+                return $this->_controller->isProtected($model);
+            }
+        } else {
+            return false;
+        }
+    }
+
+    public function getRowCssClass($model)
+    {
+        if (! is_null($this->_controller)) {
+            if (! method_exists($this->_controller, 'getRowCssClass')) {
+                $this->getLogger()->debug('The used controller does not have the method getRowCssClass.');
+            } else {
+                return $this->_controller->getRowCssClass($model);
+            }
+        } else {
+            return null;
+        }
+    }
+
+    public function getRowTooltip($model)
+    {
+        if (! is_null($this->_controller)) {
+            if (! method_exists($this->_controller, 'getRowTooltip')) {
+                $this->getLogger()->debug('The used controller does not have the method getRowTooltip.');
+            } else {
+                return $this->_controller->getRowTooltip($model);
+            }
+        } else {
+            return null;
+        }
+    }
+}

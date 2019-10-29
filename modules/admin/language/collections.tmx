@@ -427,13 +427,13 @@
 			</tuv>
         </tu>
 
-        <tu tuid="DisplayOai">
-			<tuv xml:lang="en">
-				<seg>Shown metadata fields in OAI set.</seg>
-			</tuv>
-			<tuv xml:lang="de">
-				<seg>Auszugebende Metadaten-Felder im OAI-Set.</seg>
-			</tuv>
+        <tu tuid="HideEmptyCollections">
+            <tuv xml:lang="en">
+                <seg>Hide empty collections in browsing</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Leere Sammlungen beim Browsen ausblenden</seg>
+            </tuv>
         </tu>
 
         <tu tuid="breadcrumb_title">
@@ -577,6 +577,15 @@
             </tuv>
             <tuv xml:lang="de">
                 <seg>Der Wert existiert bereits.</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="admin_collectionroles_error_name_contains_invalid_char">
+            <tuv xml:lang="en">
+                <seg>Only letters, digits, hyphen and underscore are permitted.</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Es sind nur Buchstaben, Zahlen, Binde- und Unterstrich zulässig.</seg>
             </tuv>
         </tu>
 

@@ -27,12 +27,14 @@
  * @category    Application Unit Test
  * @package     View_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2017-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 class Application_View_Helper_FormatDateTest extends ControllerTestCase
 {
+
+    protected $additionalResources = ['translation'];
 
     public function testFormatDate()
     {
@@ -92,5 +94,4 @@ class Application_View_Helper_FormatDateTest extends ControllerTestCase
 
         $this->assertEquals('', $helper->formatOpusDate(null));
     }
-
 }

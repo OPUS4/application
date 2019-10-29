@@ -27,17 +27,21 @@
  * @category    Application
  * @package     Tests
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Solrsearch_Model_SeriesUtilTest extends ControllerTestCase {
+class Solrsearch_Model_SeriesUtilTest extends ControllerTestCase
+{
 
-    private $visibilities = array();
+    protected $additionalResources = ['database'];
+
+    private $visibilities = [];
 
     private $model;
 
-    public function setUp() {
+    public function setUp()
+    {
         parent::setUp();
 
         foreach (Opus_Series::getAll() as $seriesItem) {
@@ -47,13 +51,15 @@ class Solrsearch_Model_SeriesUtilTest extends ControllerTestCase {
         $this->model = new Solrsearch_Model_SeriesUtil();
     }
 
-    public function tearDown() {
+    public function tearDown()
+    {
         $this->restoreVisiblitySettings();
 
         parent::tearDown();
     }
 
-    public function testHasDisplayableSeries() {
+    public function testHasDisplayableSeries()
+    {
         $this->assertTrue($this->model->hasDisplayableSeries());
 
         $this->setAllSeriesToUnvisible();
@@ -63,7 +69,8 @@ class Solrsearch_Model_SeriesUtilTest extends ControllerTestCase {
         $this->assertTrue($this->model->hasDisplayableSeries());
     }
 
-    public function testGetVisibleNonEmptySeriesSortedBySortKey() {
+    public function testGetVisibleNonEmptySeriesSortedBySortKey()
+    {
         $this->assertTrue(count($this->model->getVisibleNonEmptySeriesSortedBySortKey()) === 5);
 
         $this->setAllSeriesToUnvisible();
@@ -73,10 +80,11 @@ class Solrsearch_Model_SeriesUtilTest extends ControllerTestCase {
         $this->assertTrue(count($this->model->getVisibleNonEmptySeriesSortedBySortKey()) === 5);
     }
 
-    public function testGetVisibleSeriesSortedBySortKey() {
+    public function testGetVisibleSeriesSortedBySortKey()
+    {
         $series = $this->model->getVisibleSeries();
 
-        $order = array(1, 4, 2, 5, 6);
+        $order = [1, 4, 2, 5, 6];
 
         $this->assertCount(5, $series);
 
@@ -85,18 +93,19 @@ class Solrsearch_Model_SeriesUtilTest extends ControllerTestCase {
         }
     }
 
-    public function testGetVisibleSeriesSortedAlphabetically() {
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
-            'browsing' => array(
-                'series' => array(
-                    'sortByTitle' => '1'
-                )
-            )
-        )));
+    public function testGetVisibleSeriesSortedAlphabetically()
+    {
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'browsing' => [
+                'series' => [
+                    'sortByTitle' => self::CONFIG_VALUE_TRUE
+                ]
+            ]
+        ]));
 
         $series = $this->model->getVisibleSeries();
 
-        $order = array(2, 1, 6, 5, 4);
+        $order = [2, 1, 6, 5, 4];
 
         $this->assertCount(5, $series);
 
@@ -105,18 +114,19 @@ class Solrsearch_Model_SeriesUtilTest extends ControllerTestCase {
         }
     }
 
-    private function setAllSeriesToUnvisible() {
+    private function setAllSeriesToUnvisible()
+    {
         foreach (Opus_Series::getAll() as $seriesItem) {
             $seriesItem->setVisible(0);
             $seriesItem->store();
         }
     }
 
-    private function restoreVisiblitySettings() {
+    private function restoreVisiblitySettings()
+    {
         foreach (Opus_Series::getAll() as $seriesItem) {
             $seriesItem->setVisible($this->visibilities[$seriesItem->getId()]);
             $seriesItem->store();
         }
     }
-
 }

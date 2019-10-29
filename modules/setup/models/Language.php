@@ -34,9 +34,10 @@
  */
 
 /**
- * 
+ *
  */
-class Setup_Model_Language extends Setup_Model_Abstract {
+class Setup_Model_Language extends Setup_Model_Abstract
+{
 
     protected $_moduleBasepath;
     protected $_moduleName;
@@ -54,12 +55,13 @@ class Setup_Model_Language extends Setup_Model_Abstract {
      * filename
      * @param array $params Array including the above fields
      */
-    public function setTranslationSourceParams(array $params) {
-        if (!isset($params['moduleBasepath'])
-                || !isset($params['moduleName'])
-                || !isset($params['languageDirectory'])
-                || !isset($params['filename'])) {
-            throw new Setup_Model_Exception('Invalid configuration'); 
+    public function setTranslationSourceParams(array $params)
+    {
+        if (! isset($params['moduleBasepath'])
+                || ! isset($params['moduleName'])
+                || ! isset($params['languageDirectory'])
+                || ! isset($params['filename'])) {
+            throw new Setup_Model_Exception('Invalid configuration');
         }
 
         $this->_moduleBasepath = $params['moduleBasepath'];
@@ -68,34 +70,35 @@ class Setup_Model_Language extends Setup_Model_Abstract {
         $this->_filename = $params['filename'];
     }
 
-    public function fromArray(array $array) {
+    public function fromArray(array $array)
+    {
         if (empty($this->_moduleBasepath)
                 || empty($this->_moduleName)
                 || empty($this->_languageDir)
                 || empty($this->_filename)) {
-            throw new Setup_Model_Exception('Invalid configuration'); 
+            throw new Setup_Model_Exception('Invalid configuration');
         }
         // when editing non-writeable file (i.e. module/language/xyz.tmx)
         // make sure custom translations are not overwritten
         $this->setTranslationSources(
-            array("{$this->_moduleBasepath}/{$this->_moduleName}/" . self::CUSTOM_DIR . "/{$this->_filename}")
+            ["{$this->_moduleBasepath}/{$this->_moduleName}/" . self::CUSTOM_DIR . "/{$this->_filename}"]
         );
 
         $this->setTranslation($array);
     }
 
-    public function toArray() {
+    public function toArray()
+    {
         if (empty($this->_moduleBasepath)
                 || empty($this->_moduleName)
                 || empty($this->_languageDir)
                 || empty($this->_filename)) {
-            throw new Setup_Model_Exception('Invalid configuration'); 
+            throw new Setup_Model_Exception('Invalid configuration');
         }
         $this->setTranslationSources(
-            array("{$this->_moduleBasepath}/{$this->_moduleName}/{$this->_languageDir}/{$this->_filename}")
+            ["{$this->_moduleBasepath}/{$this->_moduleName}/{$this->_languageDir}/{$this->_filename}"]
         );
 
         return $this->getTranslation();
     }
-
 }

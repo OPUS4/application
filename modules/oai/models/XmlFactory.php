@@ -55,29 +55,22 @@ class Oai_Model_XmlFactory extends Application_Model_Abstract
     public function getAccessRights($document)
     {
         // if document is in embargo always return 'embargoedAccess' independent of files
-        if (!$document->hasEmbargoPassed())
-        {
+        if (! $document->hasEmbargoPassed()) {
             return self::EMBARGOED_ACCESS;
         }
 
         $files = $document->getFile();
 
-        if (count($files) > 0)
-        {
+        if (count($files) > 0) {
             $restricted = false;
 
-            foreach ($files as $file)
-            {
-                if ($file->getVisibleInFrontdoor())
-                {
-                    if ($file->getVisibleInOai())
-                    {
+            foreach ($files as $file) {
+                if ($file->getVisibleInFrontdoor()) {
+                    if ($file->getVisibleInOai()) {
                         // if any file is accessible in frontdoor and OAI => openAccess
                         // TODO does that make sense? any file - a text file with comments, a readme
                         return self::OPEN_ACCESS;
-                    }
-                    else
-                    {
+                    } else {
                         // file is only visible in frontdoor and not in OAI => restrictedAccess
                         // TODO this case is probably more complicated (access permission)
                         $restricted = true;
@@ -86,8 +79,7 @@ class Oai_Model_XmlFactory extends Application_Model_Abstract
                 }
             }
 
-            if ($restricted)
-            {
+            if ($restricted) {
                 // no openAccess file was found, but files that are visible in frontdoor
                 return self::RESTRICTED_ACCESS;
             }
@@ -96,5 +88,4 @@ class Oai_Model_XmlFactory extends Application_Model_Abstract
         // just metadata or no accessible files
         return self::CLOSED_ACCESS;
     }
-
 }

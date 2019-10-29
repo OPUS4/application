@@ -36,13 +36,13 @@
  */
 ?>
 
-<h1><?= $this->translate ('frontdoor_toauthortitle')?></h1>
+<h1><?= $this->translate('frontdoor_toauthortitle')?></h1>
 <b><?= htmlspecialchars($this->title) ?></b>
 (<?= htmlspecialchars($this->translate($this->type)) ?>)
 <br/>
 <br/>
 <p>
-    <?= $this->translate ('frontdoor_toauthortext')?>
+    <?= $this->translate('frontdoor_toauthortext')?>
 </p>
 <br/>
 <br>
@@ -50,5 +50,5 @@
 <br/>
 <br/>
 <p>
-    <a href="<?= $this->url(array('module' => 'frontdoor', 'controller' => 'index','docId' => $this->docId), null, true); ?>"><?= $this->translate('frontdoor_back')?></a>
+    <a href="<?= $this->url(['module' => 'frontdoor', 'controller' => 'index','docId' => $this->docId], null, true); ?>"><?= $this->translate('frontdoor_back')?></a>
 </p>

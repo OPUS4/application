@@ -52,25 +52,18 @@ class Application_View_Helper_DocumentTitle extends Application_View_Helper_Docu
      */
     public function documentTitle($document = null)
     {
-        if ($this->isPreferUserInterfaceLanguage())
-        {
+        if ($this->isPreferUserInterfaceLanguage()) {
             $language = Opus_Language::getPart2tForPart1(Zend_Registry::get('Zend_Translate')->getLocale());
 
             $title = $document->getMainTitle($language);
-        }
-        else
-        {
+        } else {
             $title = $document->getMainTitle();
         }
 
-        if (!is_null($title))
-        {
+        if (! is_null($title)) {
             return htmlspecialchars($title->getValue());
-        }
-        else
-        {
+        } else {
             return null;
         }
     }
-
 }

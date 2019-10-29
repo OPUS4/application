@@ -54,12 +54,9 @@ class Application_Form_Decorator_FormHelp extends Zend_Form_Decorator_Abstract
     {
         $xhtml = $this->renderMessage();
 
-        if ($this->getPlacement() === self::APPEND)
-        {
+        if ($this->getPlacement() === self::APPEND) {
             $xhtml = $content . $xhtml;
-        }
-        else
-        {
+        } else {
             $xhtml .= $content;
         }
 
@@ -72,20 +69,16 @@ class Application_Form_Decorator_FormHelp extends Zend_Form_Decorator_Abstract
 
         $xhtml = '';
 
-        if (!is_null($message))
-        {
+        if (! is_null($message)) {
             $translator = $this->getElement()->getTranslator();
 
             $cssClass = $this->getClass();
 
             $xhtml = "<div class=\"$cssClass\">";
 
-            if (!is_null($translator))
-            {
+            if (! is_null($translator)) {
                 $xhtml .= $translator->translate($message);
-            }
-            else
-            {
+            } else {
                 $xhtml .= $message;
             }
 
@@ -99,8 +92,7 @@ class Application_Form_Decorator_FormHelp extends Zend_Form_Decorator_Abstract
     {
         $cssClass = $this->_cssClass;
 
-        if (!is_null($classOption = $this->getOption('class')))
-        {
+        if (! is_null($classOption = $this->getOption('class'))) {
              $cssClass = $classOption;
              $this->removeOption('class');
         }
@@ -109,5 +101,4 @@ class Application_Form_Decorator_FormHelp extends Zend_Form_Decorator_Abstract
 
         return $cssClass;
     }
-
 }

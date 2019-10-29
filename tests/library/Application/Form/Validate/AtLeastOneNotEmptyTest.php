@@ -27,9 +27,8 @@
  * @category    Application Unit Test
  * @package     Form_Validate
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -38,25 +37,28 @@
  * @category    Application Unit Test
  * @package     Form_Validate
  */
-class Application_Form_Validate_AtLeastOneNotEmptyTest extends ControllerTestCase {
+class Application_Form_Validate_AtLeastOneNotEmptyTest extends TestCase
+{
 
     private $_validator;
 
-    public function setUp() {
+    public function setUp()
+    {
         parent::setUp();
         $this->_validator = new Application_Form_Validate_AtLeastOneNotEmpty();
         $this->_validator->addElement('name');
         $this->_validator->addElement('number');
     }
 
-    public function testIsValidFalse() {
-        $this->assertFalse($this->_validator->isValid(null, array()));
+    public function testIsValidFalse()
+    {
+        $this->assertFalse($this->_validator->isValid(null, []));
     }
 
-    public function testIsValidTrue() {
+    public function testIsValidTrue()
+    {
         // TODO use case? $this->assertTrue($this->_validator->isValid('value', array()));
-        $this->assertTrue($this->_validator->isValid(null, array('name' => 'Test')));
-        $this->assertTrue($this->_validator->isValid(null, array('number' => '12')));
+        $this->assertTrue($this->_validator->isValid(null, ['name' => 'Test']));
+        $this->assertTrue($this->_validator->isValid(null, ['number' => '12']));
     }
-
 }

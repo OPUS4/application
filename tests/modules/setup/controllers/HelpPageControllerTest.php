@@ -36,41 +36,17 @@
  *
  * @covers Setup_HelpPageController
  */
-class Setup_HelpPageControllerTest extends SetupControllerTestCase {
-
+class Setup_HelpPageControllerTest extends SetupControllerTestCase
+{
     /**
      * original file modes, needed for restoring after test
      */
-    protected $origFileModes = array();
-    protected $configSection = 'help';
+    protected $origFileModes = [];
 
-    public function testEditSucceedsWithAccessPermissions() {
-        $this->setPermissions('0500', '0400', '0300');
-        $this->dispatch('/setup/help-page/edit');
-        $this->assertResponseCode(200);
+    protected $configSection = 'static-page';
+
+    public function testSomething()
+    {
+        $this->markTestIncomplete('implement testing');
     }
-
-    public function testEditFailsWithoutWritePermissions() {
-        $this->setPermissions('0500', '0400', '0000');
-        $this->dispatch('/setup/help-page/edit');
-        $this->assertResponseCode(302);
-    }
-
-    public function testEditFailsWithoutDataReadPermissions() {
-        $this->setPermissions('0000', '0400', '0000');
-        $this->dispatch('/setup/help-page/edit');
-        $this->assertResponseCode(302);
-    }
-
-    public function testExceptionThrownWithoutTmxReadPermissions() {
-        $this->markTestSkipped('test results in false negative, needs debugging.');
-        $this->setPermissions('0500', '0000', '0300');
-        $this->dispatch('/setup/help-page/edit');
-        $exceptions = $this->getResponse()->getExceptionByType('Setup_Model_Exception');
-        $this->assertTrue(is_array($exceptions) && $exceptions[0] instanceOf Setup_Model_Exception);
-        $this->assertEquals("No tmx data found.", $exceptions[0]->getMessage());
-        $this->assertResponseCode(500);
-    }
-
-
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -27,16 +28,20 @@
  * @category    Tests
  * @package     Admin
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  *
  * @covers Admin_FilebrowserController
  */
-class Admin_FilebrowserControllerTest extends ControllerTestCase {
-    
+class Admin_FilebrowserControllerTest extends ControllerTestCase
+{
+
+    protected $additionalResources = 'all';
+
     private $documentId;
 
-    public function setUp() {
+    public function setUp()
+    {
         parent::setUp();
 
         $document = $this->createTestDocument();
@@ -46,19 +51,22 @@ class Admin_FilebrowserControllerTest extends ControllerTestCase {
         $this->assertNotNull($this->documentId);
     }
 
-    public function testIndexActionWithMissingParam() {
+    public function testIndexActionWithMissingParam()
+    {
         $this->dispatch('/admin/filebrowser/index');
         $this->assertResponseCode(500);
         $this->assertContains('missing parameter docId', $this->getResponse()->getBody());
     }
 
-    public function testIndexActionWithInvalidDocId() {
+    public function testIndexActionWithInvalidDocId()
+    {
         $this->dispatch('/admin/filebrowser/index/id/invaliddocid');
         $this->assertResponseCode(500);
         $this->assertContains('no document found for id invaliddocid', $this->getResponse()->getBody());
     }
 
-    public function testIndexAction() {
+    public function testIndexAction()
+    {
         $this->useGerman();
 
         $this->dispatch('/admin/filebrowser/index/id/' . $this->documentId);
@@ -67,15 +75,20 @@ class Admin_FilebrowserControllerTest extends ControllerTestCase {
 
         // check breadcrumbs
         $this->verifyBreadcrumbDefined();
-        $this->assertQueryContentContains('//div.breadcrumbsContainer//a[@href="/admin/document/index/id/'
+        $this->assertQueryContentContains(
+            '//div.breadcrumbsContainer//a[@href="/admin/document/index/id/'
             . $this->documentId . '"]',
-            "unbenanntes Dokument (id = '{$this->documentId}')");
-        $this->assertQueryContentContains('//div.breadcrumbsContainer//a[@href="/admin/filemanager/index/id/'
+            "unbenanntes Dokument (id = '{$this->documentId}')"
+        );
+        $this->assertQueryContentContains(
+            '//div.breadcrumbsContainer//a[@href="/admin/filemanager/index/id/'
             . $this->documentId . '/continue/1"]',
-            'Dateien');
+            'Dateien'
+        );
     }
-    
-    public function testShowDocInfoOnIndexPage() {
+
+    public function testShowDocInfoOnIndexPage()
+    {
         $this->dispatch('/admin/filebrowser/index/id/146');
         $this->assertResponseCode(200);
 
@@ -85,57 +98,62 @@ class Admin_FilebrowserControllerTest extends ControllerTestCase {
         $this->assertQuery('div#docinfo', 'Doe, John');
     }
 
-    public function testImportActionWithInvalidMethod() {
+    public function testImportActionWithInvalidMethod()
+    {
         $this->dispatch('/admin/filebrowser/import');
         $this->assertResponseCode(500);
         $this->assertContains('unsupported HTTP method', $this->getResponse()->getBody());
     }
 
-    public function testImportActionWithMissingParam() {
+    public function testImportActionWithMissingParam()
+    {
         $this->request
-                ->setMethod('POST')
-                ->setPost(array());
+            ->setMethod('POST')
+            ->setPost([]);
         $this->dispatch('/admin/filebrowser/import');
         $this->assertResponseCode(500);
         $this->assertContains('missing parameter docId', $this->getResponse()->getBody());
     }
 
-    public function testImportActionWithInvalidDocId() {
+    public function testImportActionWithInvalidDocId()
+    {
         $this->request
-                ->setMethod('POST')
-                ->setPost(array('id' => 'invaliddocid'));
+            ->setMethod('POST')
+            ->setPost(['id' => 'invaliddocid']);
         $this->dispatch('/admin/filebrowser/import');
         $this->assertResponseLocationHeader($this->getResponse(), '/admin/filebrowser/index/id/invaliddocid');
     }
 
-    public function testImportActionWithEmptySelection() {
+    public function testImportActionWithEmptySelection()
+    {
         $this->request
-                ->setMethod('POST')
-                ->setPost(array('id' => $this->documentId));
+            ->setMethod('POST')
+            ->setPost(['id' => $this->documentId]);
         $this->dispatch('/admin/filebrowser/import');
         $this->assertResponseLocationHeader($this->getResponse(), '/admin/filebrowser/index/id/' . $this->documentId);
     }
 
-    public function testImportActionWithInvalidParamType() {
+    public function testImportActionWithInvalidParamType()
+    {
         $this->request
-                ->setMethod('POST')
-                ->setPost(array(
-                        'id' => $this->documentId,
-                        'file' => 'invalid'));
+            ->setMethod('POST')
+            ->setPost([
+                'id' => $this->documentId,
+                'file' => 'invalid']);
         $this->dispatch('/admin/filebrowser/import');
         $this->assertResponseCode(500);
         $this->assertContains('invalid POST parameter', $this->getResponse()->getBody());
     }
 
-    public function testImportAction() {
+    public function testImportAction()
+    {
         $this->markTestIncomplete('TODO');
         $this->request
-                ->setMethod('POST')
-                ->setPost(array(
-                        'docId' => $this->documentId,
-                        'file' => 'test.txt'));
+            ->setMethod('POST')
+            ->setPost([
+                'docId' => $this->documentId,
+                'file' => 'test.txt']);
         $this->dispatch('/admin/filebrowser/import');
         $this->assertResponseLocationHeader($this->getResponse(), '/admin/filemanager/index/docId/' . $this->documentId);
     }
 }
-

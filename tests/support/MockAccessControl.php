@@ -32,16 +32,18 @@
  * @version     $Id$
  */
 
-class MockAccessControl implements Application_Security_AccessControl {
+class MockAccessControl implements Application_Security_AccessControl
+{
 
     private $defaultAnswer = false;
 
-    public function __construct($answer = false) {
+    public function __construct($answer = false)
+    {
         $this->defaultAnswer = $answer;
     }
 
-    public function accessAllowed($resource) {
+    public function accessAllowed($resource)
+    {
         return $this->defaultAnswer;
     }
-
 }

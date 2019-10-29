@@ -41,7 +41,7 @@
 
 
 
-        <!-- 
+        <!--
 
             headlines help sections
 
@@ -60,7 +60,7 @@
                 <seg>Help for authors</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>Hilfe für Autoren</seg>
+                <seg>Hilfe für Autor*innen</seg>
             </tuv>
         </tu>
 
@@ -96,7 +96,7 @@
             headlines help sections
 
         -->
-        
+
         <tu tuid="help_title_searchtipps">
             <tuv xml:lang="en">
                 <seg>Hints for searching</seg>

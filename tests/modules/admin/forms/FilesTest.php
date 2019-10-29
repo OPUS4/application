@@ -31,13 +31,17 @@
  * @category    Application Unit Test
  * @package     Admin_Form
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class Admin_Form_FilesTest extends ControllerTestCase {
+class Admin_Form_FilesTest extends ControllerTestCase
+{
 
-    public function testConstructForm() {
+    protected $additionalResources = ['view', 'translation'];
+
+    public function testConstructForm()
+    {
+        $this->disableTranslation();
         $form = new Admin_Form_Files();
 
         $this->assertEquals('admin_document_section_files', $form->getLegend());
@@ -51,73 +55,77 @@ class Admin_Form_FilesTest extends ControllerTestCase {
 
         $decorator = $form->getDecorator('FieldsetWithButtons');
 
-        $this->assertEquals(array('Import', 'Add'), $decorator->getLegendButtons());
+        $this->assertEquals(['Import', 'Add'], $decorator->getLegendButtons());
     }
 
-    public function testProcessPostAdd() {
+    public function testProcessPostAdd()
+    {
         $form = new Admin_Form_Files();
 
-        $post = array(
+        $post = [
             'Add' => 'Upload'
-        );
+        ];
 
         $result = $form->processPost($post, null);
 
-        $this->assertEquals(array(
+        $this->assertEquals([
             'result' => 'switch',
-            'target' => array(
+            'target' => [
                 'module' => 'admin',
                 'controller' => 'filemanager',
                 'action' => 'upload'
-            )
-        ), $result);
+            ]
+        ], $result);
     }
 
-    public function testProcessPostRemove() {
+    public function testProcessPostRemove()
+    {
         $form = new Admin_Form_Files();
 
         $form->appendSubForm();
 
-        $post = array(
-            'File0' => array(
+        $post = [
+            'File0' => [
                 'Id' => '5555',
                 'Remove' => 'Entfernen'
-            )
-        );
+            ]
+        ];
 
         $result = $form->processPost($post, null);
 
-        $this->assertEquals(array(
+        $this->assertEquals([
             'result' => 'switch',
-            'target' => array(
+            'target' => [
                 'module' => 'admin',
                 'controller' => 'filemanager',
                 'action' => 'delete',
                 'fileId' => '5555'
-            )
-        ), $result);
+            ]
+        ], $result);
     }
 
-    public function testProcessPostImport() {
+    public function testProcessPostImport()
+    {
         $form = new Admin_Form_Files();
 
-        $post = array(
+        $post = [
             'Import' => 'Import'
-        );
+        ];
 
         $result = $form->processPost($post, null);
 
-        $this->assertEquals(array(
+        $this->assertEquals([
             'result' => 'switch',
-            'target' => array(
+            'target' => [
                 'module' => 'admin',
                 'controller' => 'filebrowser',
                 'action' => 'index'
-            )
-        ), $result);
+            ]
+        ], $result);
     }
 
-    public function testContinueEdit() {
+    public function testContinueEdit()
+    {
         $form = new Admin_Form_Files();
 
         $document = new Opus_Document(91);
@@ -129,7 +137,8 @@ class Admin_Form_FilesTest extends ControllerTestCase {
         $form->continueEdit($this->getRequest(), null);
     }
 
-    public function testContinueEditRemoveSubForm() {
+    public function testContinueEditRemoveSubForm()
+    {
         $form = new Admin_Form_Files();
 
         $document = new Opus_Document(91);
@@ -148,7 +157,8 @@ class Admin_Form_FilesTest extends ControllerTestCase {
         $this->assertEquals(3, count($form->getSubForms()));
     }
 
-    public function testContinueEditRemoveSubFormAndUpdate() {
+    public function testContinueEditRemoveSubFormAndUpdate()
+    {
         $form = new Admin_Form_Files();
 
         $document = new Opus_Document(91);
@@ -162,15 +172,15 @@ class Admin_Form_FilesTest extends ControllerTestCase {
 
         $this->assertEmpty($form->getSubForm('File1')->getElementValue('Comment'));
 
-        $post = array(
-            'File0' => array(
+        $post = [
+            'File0' => [
                 'Id' => '116'
-            ),
-            'File1' => array(
+            ],
+            'File1' => [
                 'Id' => '127',
                 'Comment' => 'Testkommentar'
-            )
-        );
+            ]
+        ];
 
         $form->continueEdit($request, $post);
 
@@ -180,7 +190,8 @@ class Admin_Form_FilesTest extends ControllerTestCase {
         $this->assertEquals($form->getSubForm('File0')->getElementValue('Comment'), 'Testkommentar');
     }
 
-    public function testGetSubFormForId() {
+    public function testGetSubFormForId()
+    {
         $form = new Admin_Form_Files();
 
         $document = new Opus_Document(91);
@@ -197,7 +208,8 @@ class Admin_Form_FilesTest extends ControllerTestCase {
         $this->assertNull($form->getSubFormForId(5555));
     }
 
-    public function testFilesAppearInOrder() {
+    public function testFilesAppearInOrder()
+    {
         $form = new Admin_Form_Files();
 
         $document = new Opus_Document(155);
@@ -211,13 +223,17 @@ class Admin_Form_FilesTest extends ControllerTestCase {
         $index = 0;
 
         foreach ($form->getSubForms() as $name => $subform) {
-            $this->assertEquals($files[$index]->getId(), $subform->getElement('Id')->getValue(),
-                    "Subform '$name' should have been at position $index.");
+            $this->assertEquals(
+                $files[$index]->getId(),
+                $subform->getElement('Id')->getValue(),
+                "Subform '$name' should have been at position $index."
+            );
             $index++;
         }
     }
 
-    public function testGetFieldValues() {
+    public function testGetFieldValues()
+    {
         $form = new Admin_Form_Files();
 
         $document = new Opus_Document(155);
@@ -232,5 +248,4 @@ class Admin_Form_FilesTest extends ControllerTestCase {
             $this->assertEquals($file->getId(), $values[$index]->getId(), 'Files are not in expected order.');
         }
     }
-
 }

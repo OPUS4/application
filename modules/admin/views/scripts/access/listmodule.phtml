@@ -28,56 +28,57 @@
  * @category    Application
  * @package     Module_Admin
  * @author      Julian Heise <heise@zib.de>
- * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 // TODO move some of the processing into model or controller
+// TODO do this as a Zend_Form
 ?>
 
-<h1><?= $this->translate('access_select_module', $this->roleName) ?></h1>
-<p><?= $this->translate('access_current_role_name', $this->roleName) ?></p>
+<h1><?= $this->translate('access_select_module', [$this->roleName]) ?></h1>
+<p><?= $this->translate('access_current_role_name', [$this->roleName]) ?></p>
 
 <h2><?= $this->translate('access_module_changes_affect_accounts') ?></h2>
 <div>
-    <?php foreach ($this->loginNames AS $login) : ?>
+    <?php foreach ($this->loginNames as $login) : ?>
         <?= htmlspecialchars($login) ?>
     <?php endforeach; ?>
 </div>
 <br/>
 
 <div class="form-wrapper">
-    <form action="<?= $this->url(array('module'=>'admin', 'controller'=>'access', 'action'=>'store'), null ,true) ?>" method="post">
+    <form action="<?= $this->url(['module' => 'admin', 'controller' => 'access', 'action' => 'store'], null, true) ?>" method="post">
 
         <?PHP // Liste mit allen Modulen ?>
         <h2><?= $this->translate('access_module_changes') ?></h2>
-        
-        <ul>
-        <?php foreach($this->allModules as $module) : ?>
+
+        <ul class="permissions-list">
+        <?php foreach ($this->allModules as $module) : ?>
             <li>
             <input type="hidden" name="<?= 'list_'.$module ?>" value="list" />
-            <input name="<?= 'set_'.$module ?>" type="checkbox" value="set"
+            <input name="<?= 'set_' . $module ?>" type="checkbox" value="set"
                 <?= in_array($module, $this->modules) ? ' checked="checked" ' : '' ?>
-                <?= in_array($module, array('default')) ? ' disabled="disabled" ' : '' ?>
-            /> <?= $this->translate('acl_resource_module_generic', array($module)); ?>
+                <?= in_array($module, ['default']) ? ' disabled="disabled" ' : '' ?>
+            /> <?= $this->translate('acl_resource_module_generic', [$module]); ?>
             <?PHP if (isset($this->guestModules) && in_array($module, $this->guestModules)) : ?>
                 <span style="font-style: italic; color: gray; padding-left: 0.5em"><?= $this->translate('admin_access_checked_in_guest'); ?></span>
             <?PHP endif; ?>
           </li>
         <?php endforeach ?>
         </ul>
-        
+
         <?PHP // Liste mit allen Ressourcen ?>
         <h2><?= $this->translate('access_resource_changes') ?></h2>
-        
-        <ul>
-        <?php foreach($this->allResources as $resource) : ?>
+
+        <ul class="permissions-list">
+        <?php foreach ($this->allResources as $resource) : ?>
             <li>
             <input type="hidden" name="<?= 'list_'.$resource ?>" value="list" />
             <input name="<?= 'set_'.$resource ?>" type="checkbox" value="set"
                 <?= in_array($resource, $this->modules) ? ' checked="checked" ' : '' ?>
-                <?= in_array($resource, array('default')) ? ' disabled="disabled" ' : '' ?>
+                <?= in_array($resource, ['default']) ? ' disabled="disabled" ' : '' ?>
             /> <?= $this->translate('acl_' . $resource); ?>
             <?PHP if (isset($this->guestModules) && in_array($resource, $this->guestModules)) : ?>
                 <span style="font-style: italic; color: gray; padding-left: 0.5em"><?= $this->translate('admin_access_checked_in_guest'); ?></span>
@@ -85,22 +86,22 @@
           </li>
         <?php endforeach ?>
         </ul>
-        
+
         <?PHP // Liste mit allen Workflow Übergängen ?>
         <h2><?= $this->translate('access_workflow_changes') ?></h2>
-        
-        <ul>
-        <?php foreach($this->allWorkflow as $resource) : ?>
+
+        <ul class="permissions-list">
+        <?php foreach ($this->allWorkflow as $resource) : ?>
             <li>
             <input type="hidden" name="<?= 'list_'.$resource ?>" value="list" />
             <input name="<?= 'set_'.$resource ?>" type="checkbox" value="set"
                 <?= in_array($resource, $this->modules) ? ' checked="checked" ' : '' ?>
-                <?= in_array($resource, array('default')) ? ' disabled="disabled" ' : '' ?>
-            /> 
+                <?= in_array($resource, ['default']) ? ' disabled="disabled" ' : '' ?>
+            />
             <?PHP $states = explode('_', $resource, 3); ?>
-            <?PHP $state = $this->translate('Opus_Document_ServerState_Value_' . ucfirst($states[1]) ); ?>
+            <?PHP $state = $this->translate('Opus_Document_ServerState_Value_' . ucfirst($states[1])); ?>
             <?PHP $targetState = $this->translate('Opus_Document_ServerState_Value_' . ucfirst($states[2])); ?>
-            <?= $this->translate('acl_resource_workflow_generic', array($state, $targetState)); ?> 
+            <?= $this->translate('acl_resource_workflow_generic', [$state, $targetState]); ?>
             <?PHP if (isset($this->guestModules) && in_array($resource, $this->guestModules)) : ?>
                 <span style="font-style: italic; color: gray; padding-left: 0.5em"><?= $this->translate('admin_access_checked_in_guest'); ?></span>
             <?PHP endif; ?>

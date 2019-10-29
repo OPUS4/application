@@ -26,17 +26,20 @@
  *
  * @category    Application Unit Test
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2013-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
  * Unit Tests fuer Unterformular fuer Verknuepfung mit Schriftenreihe in Metadaten-Formular.
  */
-class Admin_Form_Document_SeriesTest extends ControllerTestCase {
-    
-    public function testCreateForm() {
+class Admin_Form_Document_SeriesTest extends ControllerTestCase
+{
+
+    protected $additionalResources = ['database'];
+
+    public function testCreateForm()
+    {
         $form = new Admin_Form_Document_Series();
 
         $this->assertEquals(4, count($form->getElements()));
@@ -45,75 +48,80 @@ class Admin_Form_Document_SeriesTest extends ControllerTestCase {
         $this->assertNotNull($form->getElement('Number'));
         $this->assertNotNull($form->getElement('SortOrder'));
     }
-    
-    public function testPopulateFromModel() {
+
+    public function testPopulateFromModel()
+    {
         $form = new Admin_Form_Document_Series();
-        
+
         $doc = new Opus_Document(146);
-        
+
         $series = $doc->getSeries();
         $model = $series[0];
-        
+
         $form->populateFromModel($model);
-        
+
         $this->assertEquals($doc->getId(), $form->getElement('Id')->getValue());
         $this->assertEquals($model->getModel()->getId(), $form->getElement('SeriesId')->getValue());
         $this->assertEquals($model->getNumber(), $form->getElement('Number')->getValue());
         $this->assertEquals($model->getDocSortOrder(), $form->getElement('SortOrder')->getValue());
     }
-    
-    public function testUpdateModel() {
+
+    public function testUpdateModel()
+    {
         $form = new Admin_Form_Document_Series();
-        
+
         $form->getElement('SeriesId')->setValue(3);
         $form->getElement('Number')->setValue('III');
         $form->getElement('SortOrder')->setValue(2);
-        
+
         $model = new Opus_Model_Dependent_Link_DocumentSeries();
-        
+
         $form->updateModel($model);
-        
+
         $this->assertEquals(3, $model->getModel()->getId());
         $this->assertEquals('III', $model->getNumber());
         $this->assertEquals('2', $model->getDocSortOrder());
     }
-    
-    public function testGetModel() {
+
+    public function testGetModel()
+    {
         $form = new Admin_Form_Document_Series();
-        
+
         $doc = new Opus_Document(146);
         $series = $doc->getSeries();
-        
+
         $form->getElement('Id')->setValue($doc->getId());
         $form->getElement('SeriesId')->setValue($series[0]->getModel()->getId());
         $form->getElement('Number')->setValue('b');
         $form->getElement('SortOrder')->setValue(7);
-        
+
         $model = $form->getModel();
         $modelId = $model->getId();
-        
+
         $this->assertEquals(146, $modelId[0]);
         $this->assertEquals($series[0]->getModel()->getId(), $modelId[1]);
         $this->assertEquals('b', $model->getNumber());
         $this->assertEquals(7, $model->getDocSortOrder());
     }
-    
-    public function testGetNewModel() {
+
+    public function testGetNewModel()
+    {
         $form = new Admin_Form_Document_Series();
-        
+
         $form->getElement('SeriesId')->setValue(3);
         $form->getElement('Number')->setValue('VI');
         $form->getElement('SortOrder')->setValue(2);
-        
+
         $model = $form->getModel();
-        
+
         $this->assertNull($model->getId());
         $this->assertEquals(3, $model->getModel()->getId());
         $this->assertEquals('VI', $model->getNumber());
         $this->assertEquals(2, $model->getDocSortOrder());
     }
 
-    public function testGetModelWithoutSortOrder() {
+    public function testGetModelWithoutSortOrder()
+    {
         $form = new Admin_Form_Document_Series();
 
         $form->getElement('SeriesId')->setValue(3);
@@ -126,78 +134,82 @@ class Admin_Form_Document_SeriesTest extends ControllerTestCase {
         $this->assertEquals('VI', $model->getNumber());
         $this->assertNull($model->getDocSortOrder());
     }
-    
-    public function testValidationRequired() {
+
+    public function testValidationRequired()
+    {
         $form = new Admin_Form_Document_Series();
 
-        $post = array(
+        $post = [
             'Number' => ' ',
             'SeriesId' => ' '
-        );
-        
+        ];
+
         $this->assertFalse($form->isValid($post));
-        
+
         $this->assertContains('isEmpty', $form->getErrors('Number'));
         $this->assertContains('isEmpty', $form->getErrors('SeriesId'));
     }
 
-    public function testValidationSortOrder() {
+    public function testValidationSortOrder()
+    {
         $form = new Admin_Form_Document_Series();
 
-        $post = array(
+        $post = [
             'SortOrder' => '1st'
-        );
+        ];
 
         $this->assertFalse($form->isValid($post));
 
         $this->assertContains('notInt', $form->getErrors('SortOrder'));
 
-        $post = array(
+        $post = [
             'SeriesId' => '2', // required
             'Number' => '800', // required
             'SortOrder' => '-1'
-        );
+        ];
 
         $this->assertFalse($form->isValid($post));
 
         $this->assertContains('notGreaterThan', $form->getErrors('SortOrder'));
     }
 
-    public function testValidationSeriesId() {
+    public function testValidationSeriesId()
+    {
         $form = new Admin_Form_Document_Series();
 
-        $post = array(
+        $post = [
             'SeriesId' => 'a',
-        );
+        ];
 
         $this->assertFalse($form->isValid($post));
 
         $this->assertContains('notInt', $form->getErrors('SeriesId'));
     }
 
-    public function testValidationAlreadyUsedNumber() {
+    public function testValidationAlreadyUsedNumber()
+    {
         $form = new Admin_Form_Document_Series();
 
-        $post = array(
+        $post = [
             'Id' => '250',
             'SeriesId' => '1',
             'Number' => '5/5' // used by document ID = 146
-        );
+        ];
 
         $this->assertFalse($form->isValid($post));
         $this->assertContains('notAvailable', $form->getErrors('Number'));
     }
 
-    public function testValidationNumberCurrentDocument() {
+    public function testValidationNumberCurrentDocument()
+    {
         $form = new Admin_Form_Document_Series();
 
-        $post = array(
+        $post = [
             'Id' => '146',
             'SeriesId' => '1',
             'Number' => '5/5' // used by document ID = 146
-        );
+        ];
 
         $this->assertTrue($form->isValid($post));
     }
-
 }

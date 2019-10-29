@@ -44,6 +44,7 @@
     <uri name="http://www.d-nb.de/standards/xmetadiss/iso639-2.xsd" uri="xmetadissplus/iso639-2.new.xsd"/>
 
     <uri name="http://www.w3.org/2001/03/xml.xsd" uri="xmetadissplus/xml.xsd"/>
+    <uri name="http://www.w3.org/2009/01/xml.xsd" uri="xml/xml2009.xsd"/>
 
     <!-- XHTML Validierung -->
     <uri name="http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd" uri="xhtml/xhtml1-strict.dtd"/>

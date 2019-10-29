@@ -32,9 +32,11 @@
  * @version     $Id$
  */
 
-class Oai_Model_TarFile extends Oai_Model_AbstractFile {
+class Oai_Model_TarFile extends Oai_Model_AbstractFile
+{
 
-    public function __construct($docId, $filesToInclude, $filesPath, $tempPath, $logger = null) {
+    public function __construct($docId, $filesToInclude, $filesPath, $tempPath, $logger = null)
+    {
         $this->setLogger($logger);
         $numberOfFiles = count($filesToInclude);
         if ($numberOfFiles < 2) {
@@ -46,26 +48,25 @@ class Oai_Model_TarFile extends Oai_Model_AbstractFile {
         $this->_extension = '.tar';
     }
 
-    private function getTar($filesToInclude, $docId, $filesPath, $tempPath) {
+    private function getTar($filesToInclude, $docId, $filesPath, $tempPath)
+    {
         $tarball = $tempPath . uniqid($docId, true) . '.tar';
-    $phar = null;
-    try {
+        $phar = null;
+        try {
             $phar = new PharData($tarball);
-    }
-    catch(UnexpectedValueException $e) {
+        } catch (UnexpectedValueException $e) {
             $this->logErrorMessage(
                 'could not create tarball archive file ' . $tarball . ' due to insufficient file system permissions: '
                 . $e->getMessage()
             );
-            throw new Oai_Model_Exception('error while creating tarball container: could not open tarball');
-    }
+                throw new Oai_Model_Exception('error while creating tarball container: could not open tarball');
+        }
 
         foreach ($filesToInclude as $file) {
             $filePath = $filesPath . $docId . DIRECTORY_SEPARATOR;
             try {
                 $phar->addFile($filePath . $file->getPathName(), $file->getPathName());
-            }
-            catch (Exception $e) {
+            } catch (Exception $e) {
                 $this->logErrorMessage(
                     'could not add ' . $file->getPathName() . ' to tarball archive file: ' . $e->getMessage()
                 );
@@ -75,5 +76,4 @@ class Oai_Model_TarFile extends Oai_Model_AbstractFile {
 
         return $tarball;
     }
-    
 }

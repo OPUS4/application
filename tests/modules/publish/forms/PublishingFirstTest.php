@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -28,47 +27,51 @@
  * @category    Application
  * @package     Module_Publish Unit Test
  * @author      Susanne Gottwald <gottwald@zib.de>
- * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
-class Publish_Form_PublishingFirstTest extends ControllerTestCase {
+class Publish_Form_PublishingFirstTest extends ControllerTestCase
+{
 
-    public function testConstructorWithEmptyView() {
+    protected $additionalResources = ['view', 'translation'];
+
+    public function testConstructorWithEmptyView()
+    {
         $form = new Publish_Form_PublishingFirst();
-        $this->assertNotNull( $form->getElement('documentType') );
+        $this->assertNotNull($form->getElement('documentType'));
     }
-        
-    public function testIsValidMethodWithMissingDocumentType() {        
+
+    public function testIsValidMethodWithMissingDocumentType()
+    {
         $config = Zend_Registry::get('Zend_Config');
-        $config->form->first->require_upload = 0;
-        $config->form->first->show_rights_checkbox = 0;
-        $config->form->first->bibliographie = 0;
-        
+        $config->form->first->require_upload = self::CONFIG_VALUE_FALSE;
+        $config->form->first->show_rights_checkbox = self::CONFIG_VALUE_FALSE;
+        $config->form->first->bibliographie = self::CONFIG_VALUE_FALSE;
+
         $form = new Publish_Form_PublishingFirst(new Zend_View());
-        $data = array(
-            'documentType' => ''            
-        );
-        
+        $data = [
+            'documentType' => ''
+        ];
+
         $valid = $form->isValid($data);
         $this->assertFalse($valid);
     }
-    
-    public function testIsValidMethodWithMissingRightsCheckbox() {
+
+    public function testIsValidMethodWithMissingRightsCheckbox()
+    {
         $config = Zend_Registry::get('Zend_Config');
-        $config->form->first->require_upload = 0;
-        $config->form->first->show_rights_checkbox = 1;
-        $config->form->first->bibliographie = 0;
-        
+        $config->form->first->require_upload = self::CONFIG_VALUE_FALSE;
+        $config->form->first->show_rights_checkbox = self::CONFIG_VALUE_TRUE;
+        $config->form->first->bibliographie = self::CONFIG_VALUE_FALSE;
+
         $form = new Publish_Form_PublishingFirst(new Zend_View());
-        $data = array(
+        $data = [
             'documentType' => 'preprint',
             'rights' => '0'
-        );
-        
+        ];
+
         $valid = $form->isValid($data);
         $this->assertFalse($valid);
-    }    
-    
+    }
 }

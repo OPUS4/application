@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -27,25 +28,26 @@
  * @category    Application Unit Test
  * @package     Application_View_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class Application_View_Helper_ViewFormTextareaTest extends ControllerTestCase {
+class Application_View_Helper_ViewFormTextareaTest extends ControllerTestCase
+{
 
-    public function testViewFormTextarea() {
+    public function testViewFormTextarea()
+    {
         $helper = new Application_View_Helper_ViewFormTextarea();
         $helper->setView(new Zend_View());
 
-        $this->assertContains('class="field textarea"', $helper->viewFormTextarea('testName', 'testValue', array(
+        $this->assertContains('class="field textarea"', $helper->viewFormTextarea('testName', 'testValue', [
             'id' => '10'
-        )));
+        ]));
     }
 
-    public function testGetElementClass() {
+    public function testGetElementClass()
+    {
         $helper = new Application_View_Helper_ViewFormTextarea();
 
         $this->assertEquals('field textarea', $helper->getElementClass());
     }
-
 }

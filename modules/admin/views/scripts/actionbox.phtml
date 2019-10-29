@@ -26,9 +26,8 @@
  *
  * @category    Application
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -50,11 +49,11 @@
     $actionLinks = $this->element->getViewActionLinks();
 ?>
 
-<?PHP if (!is_null($document)) : ?>
-<div id="actionboxContainer">
+<?PHP if (! is_null($document)) : ?>
+<div id="actionboxContainer" class="fixedMenubar">
   <div class="wrapper">
       <div class="col col-1">
-        <?PHP if (!$this->element->isViewModeEnabled() || count($stateLinks) == 0) : ?>
+        <?PHP if (! $this->element->isViewModeEnabled() || count($stateLinks) == 0) : ?>
         <dl id="Document-ServerState">
           <dt id="Document-ServerState-label"><?= htmlspecialchars($this->translate('ServerState-short')) . ':'?></dt>
           <dd id="Document-ServerState-value"><?= htmlspecialchars($this->translate('Opus_Document_ServerState_Value_'
@@ -97,7 +96,7 @@
         <?PHP endif; ?>
       </div>
       <div class="col col-3">
-          <?PHP if (!$this->element->isViewModeEnabled()) : ?>
+          <?PHP if (! $this->element->isViewModeEnabled()) : ?>
           <ul class="form-action">
             <li class="save-element"><?= $this->element->getElement(Admin_Form_ActionBox::ELEMENT_SAVE) ?></li>
             <li class="cancel-element"><?= $this->element->getElement(Admin_Form_ActionBox::ELEMENT_CANCEL) ?></li>
@@ -107,17 +106,17 @@
           <?PHP foreach ($actionLinks as $action => $params) : ?>
             <li class="<?= $action ?>"><a href="<?= $this->url($params, null, true) ?>"
               ><?= htmlspecialchars($this->translate('admin_document_' .$action)) ?></a></li>
-          <?PHP endforeach; ?>
-          </ul>
+            <?PHP endforeach; ?>
+            </ul>
           <?PHP endif; ?>
       </div>
   </div>
-  <?PHP $message = $this->element->getMessage() ?>
-  <?PHP if (!is_null($message)) : ?>
+    <?PHP $message = $this->element->getMessage() ?>
+    <?PHP if (! is_null($message)) : ?>
   <div class="messagesContainer">
     <div class="messages"><?= $this->escape($message) ?></div>
   </div>
-  <?PHP endif; ?>
+    <?PHP endif; ?>
 </div>
 <?PHP else : ?>
 <?PHP Zend_Registry::get('Zend_Log')->err('Use of partial \'actionbox.phtml\' without document.'); ?>

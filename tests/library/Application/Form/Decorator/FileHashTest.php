@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -27,19 +28,24 @@
  * @category    Application Unit Test
  * @package     Application_Form_Decorator
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @author      Maximilian Salomon <salomon@zib.de>
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class Application_Form_Decorator_FileHashTest extends ControllerTestCase {
+class Application_Form_Decorator_FileHashTest extends ControllerTestCase
+{
 
-    public function testRenderWithoutElement() {
+    protected $additionalResources = ['view', 'translation'];
+
+    public function testRenderWithoutElement()
+    {
         $decorator = new Application_Form_Decorator_FileHash();
 
         $this->assertEquals('content', $decorator->render('content'));
     }
 
-    public function testRenderWithWrongElement() {
+    public function testRenderWithWrongElement()
+    {
         $decorator = new Application_Form_Decorator_FileHash();
 
         $decorator->setElement(new Zend_Form_Element_Text('text'));
@@ -47,7 +53,8 @@ class Application_Form_Decorator_FileHashTest extends ControllerTestCase {
         $this->assertEquals('content', $decorator->render('content'));
     }
 
-    public function testRender() {
+    public function testRender()
+    {
         $element = new Application_Form_Element_FileHash('name');
 
         $file = new Opus_File(116);
@@ -65,13 +72,16 @@ class Application_Form_Decorator_FileHashTest extends ControllerTestCase {
 
         $output = $decorator->render('content');
 
-        $this->assertEquals('content'
+        $this->assertEquals(
+            'content'
             . '<div class="textarea hashsoll">1ba50dc8abc619cea3ba39f77c75c0fe</div>'
             . '<input type="hidden" name="name[Soll]" value="1ba50dc8abc619cea3ba39f77c75c0fe" id="name-Soll" />',
-            $output);
+            $output
+        );
     }
 
-    public function testRenderWithIst() {
+    public function testRenderWithIst()
+    {
         $this->useEnglish();
         $element = new Application_Form_Element_FileHash('name');
 
@@ -96,11 +106,12 @@ class Application_Form_Decorator_FileHashTest extends ControllerTestCase {
             . '<div class="textarea hashsoll"><span class="hash-label">Expected:</span>1ba50dc8abc619cea3ba39f77c75c0ff</div>'
             . '<input type="hidden" name="name[Soll]" value="1ba50dc8abc619cea3ba39f77c75c0ff" id="name-Soll" />'
             . '<div class="textarea hashist"><span class="hash-label">Actual:</span>1ba50dc8abc619cea3ba39f77c75c0fe</div>'
-            . '<input type="hidden" name="name[Ist]" value="1ba50dc8abc619cea3ba39f77c75c0fe" id="name-Ist" />'
-            , $output);
+            . '<input type="hidden" name="name[Ist]" value="1ba50dc8abc619cea3ba39f77c75c0fe" id="name-Ist" />', $output);
     }
 
-    public function testRenderWithMissingFile() {
+    public function testRenderWithMissingFile()
+    {
+        $this->useEnglish();
         $element = new Application_Form_Element_FileHash('name');
 
         $file = new Opus_File(123);
@@ -122,13 +133,14 @@ class Application_Form_Decorator_FileHashTest extends ControllerTestCase {
             . '<input type="hidden" name="name[Soll]" value="1ba50dc8abc619cea3ba39f77c75c0fe" id="name-Soll" />'
             . '<div class="textarea hashist"><span class="hash-label">Actual:</span>'
             . Zend_Registry::get('Zend_Translate')->translate('frontdoor_checksum_not_verified')
-            . '</div>'
-            , $output);
+            . '</div>', $output);
     }
 
-    public function testRenderWithFileTooBig() {
+    public function testRenderWithFileTooBig()
+    {
+        $this->useEnglish();
         $config = Zend_Registry::get('Zend_Config');
-        $config->merge(new Zend_Config(array('checksum' => array('maxVerificationSize' => '0'))));
+        $config->merge(new Zend_Config(['checksum' => ['maxVerificationSize' => '0']]));
 
         $element = new Application_Form_Element_FileHash('name');
 
@@ -151,8 +163,6 @@ class Application_Form_Decorator_FileHashTest extends ControllerTestCase {
             . '<input type="hidden" name="name[Soll]" value="1ba50dc8abc619cea3ba39f77c75c0fe" id="name-Soll" />'
             . '<div class="textarea hashist"><span class="hash-label">Actual:</span>'
             . Zend_Registry::get('Zend_Translate')->translate('frontdoor_file_too_big')
-            . '</div>'
-            , $output);
+            . '</div>', $output);
     }
-
 }

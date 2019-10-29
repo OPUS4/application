@@ -27,10 +27,13 @@
  * @category    Tests
  * @package     Admin_Model
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Admin_Model_CollectionsTest extends ControllerTestCase {
+class Admin_Model_CollectionsTest extends ControllerTestCase
+{
+
+    protected $additionalResources = ['database', 'view'];
 
     private $collectionRoleId;
 
@@ -38,7 +41,8 @@ class Admin_Model_CollectionsTest extends ControllerTestCase {
 
     private $_docId;
 
-    public function setUp() {
+    public function setUp()
+    {
         parent::setUp();
 
         $collectionRole = new Opus_CollectionRole();
@@ -50,7 +54,6 @@ class Admin_Model_CollectionsTest extends ControllerTestCase {
         $collectionRole->setVisibleOai(1);
         $collectionRole->setDisplayBrowsing('Number');
         $collectionRole->setDisplayFrontdoor('Name');
-        $collectionRole->setDisplayOai('NumberName');
         $collectionRole->setPosition(99);
         $root = $collectionRole->addRootCollection();
 
@@ -64,7 +67,8 @@ class Admin_Model_CollectionsTest extends ControllerTestCase {
         $this->_docId = $document->store();
     }
 
-    public function tearDown() {
+    public function tearDown()
+    {
         $collectionRole = new Opus_CollectionRole($this->collectionRoleId);
         $collectionRole->delete();
 
@@ -74,7 +78,8 @@ class Admin_Model_CollectionsTest extends ControllerTestCase {
     /**
      * Checks that visible = 1 for visible collection role.
      */
-    public function testGetCollectionRoleInfo() {
+    public function testGetCollectionRoleInfo()
+    {
         $collections = $this->model->getCollectionRolesInfo();
 
         $this->assertNotNull($collections);
@@ -103,7 +108,8 @@ class Admin_Model_CollectionsTest extends ControllerTestCase {
     /**
      * Checks that hidden collection role has visible = 0.
      */
-    public function testRoleInvisible() {
+    public function testRoleInvisible()
+    {
         $collectionRole = Opus_CollectionRole::fetchByName('TestCollectionRole-Name');
         $collectionRole->setVisible(0);
         $collectionRole->store();
@@ -167,19 +173,14 @@ class Admin_Model_CollectionsTest extends ControllerTestCase {
         $this->assertNotNull($collections);
         $this->assertInternalType('array', $collections);
 
-        foreach ($collections as $collection)
-        {
+        foreach ($collections as $collection) {
             $this->assertArrayHasKey('assigned', $collection);
 
-            if (strcmp($collection['name'], 'default_collection_role_TestCollectionRole-Name') === 0)
-            {
+            if (strcmp($collection['name'], 'default_collection_role_TestCollectionRole-Name') === 0) {
                 $this->assertTrue($collection['assigned']);
-            }
-            else {
+            } else {
                 $this->assertFalse($collection['assigned']);
             }
         }
-
     }
-
 }

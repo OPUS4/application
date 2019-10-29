@@ -36,7 +36,8 @@
  *
  * TODO Basisklasse mit setLogger verwenden
  */
-class Application_Form_Validate_SeriesNumberAvailable extends Zend_Validate_Abstract {
+class Application_Form_Validate_SeriesNumberAvailable extends Zend_Validate_Abstract
+{
 
     /**
      * Constant for number is not available anymore message.
@@ -46,9 +47,9 @@ class Application_Form_Validate_SeriesNumberAvailable extends Zend_Validate_Abst
     /**
      * Error messages.
      */
-    protected $_messageTemplates = array(
+    protected $_messageTemplates = [
         self::NOT_AVAILABLE => 'admin_series_error_number_exists'
-    );
+    ];
 
     /**
      * Prüft, ob eine Nummer für eine Schriftenreihe bereits vergeben ist.
@@ -60,14 +61,14 @@ class Application_Form_Validate_SeriesNumberAvailable extends Zend_Validate_Abst
      * werden kann, ob es eine Kollision gibt. Eine fehlende Series-ID im Formular muss woanders geprüft und gemeldet
      * werden.
      */
-    public function isValid($value, $context = null) {
+    public function isValid($value, $context = null)
+    {
         $value = (string) $value;
         $this->_setValue($value);
 
         if (array_key_exists(Admin_Form_Document_Series::ELEMENT_SERIES_ID, $context)) {
             $seriesId = $context[Admin_Form_Document_Series::ELEMENT_SERIES_ID];
-        }
-        else {
+        } else {
             $seriesId = null;
         }
 
@@ -78,13 +79,12 @@ class Application_Form_Validate_SeriesNumberAvailable extends Zend_Validate_Abst
 
         try {
             $series = new Opus_Series($seriesId);
-        }
-        catch (Opus_Model_NotFoundException $omnfe) {
+        } catch (Opus_Model_NotFoundException $omnfe) {
             Zend_Registry::get('Zend_Log')->err(__METHOD__ . $omnfe->getMessage());
             return true;
         }
 
-        if (!$series->isNumberAvailable($value)) {
+        if (! $series->isNumberAvailable($value)) {
             if (array_key_exists(Admin_Form_Document_Series::ELEMENT_DOC_ID, $context)) {
                 $currentDocId = $context[Admin_Form_Document_Series::ELEMENT_DOC_ID];
                 $otherDocId = $series->getDocumentIdForNumber($value);
@@ -100,6 +100,4 @@ class Application_Form_Validate_SeriesNumberAvailable extends Zend_Validate_Abst
 
         return true;
     }
-
 }
-

@@ -31,7 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Admin_Model_Collections extends Application_Model_Abstract {
+class Admin_Model_Collections extends Application_Model_Abstract
+{
 
     private $view;
 
@@ -41,15 +42,16 @@ class Admin_Model_Collections extends Application_Model_Abstract {
      *
      * TODO using view in action helper is not best design
      */
-    public function getCollectionRolesInfo($documentId = null) {
-        $collections = array();
+    public function getCollectionRolesInfo($documentId = null)
+    {
+        $collections = [];
 
         $collectionRoles = Opus_CollectionRole::fetchAll();
 
         foreach ($collectionRoles as $collectionRole) {
             $rootCollection = $collectionRole->getRootCollection();
-            if (!is_null($rootCollection)) {
-                $collection = array(
+            if (! is_null($rootCollection)) {
+                $collection = [
                     'id' => $rootCollection->getId(),
                     'name' => $this->view->translate('default_collection_role_' . $collectionRole->getDisplayName()),
                     'hasChildren' => $rootCollection->hasChildren(),
@@ -57,13 +59,11 @@ class Admin_Model_Collections extends Application_Model_Abstract {
                     'isRoot' => true,
                     'role' => $collectionRole,
                     'collection' => $rootCollection
-                );
+                ];
 
-                if (!is_null($documentId))
-                {
+                if (! is_null($documentId)) {
                     $collection['assigned'] = $rootCollection->holdsDocumentById($documentId);
-                }
-                else {
+                } else {
                     $collection['assigned'] = false;
                 }
 
@@ -74,8 +74,8 @@ class Admin_Model_Collections extends Application_Model_Abstract {
         return $collections;
     }
 
-    public function setView($view) {
+    public function setView($view)
+    {
         $this->view = $view;
     }
-
 }

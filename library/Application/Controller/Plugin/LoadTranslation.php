@@ -29,16 +29,16 @@
  * @author      Ralf Claussnitzer (ralf.claussnitzer@slub-dresden.de)
  * @author      Thoralf Klein <thoralf.klein@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
  * Loads languages from modules.  When registered as FrontController plugin
  * it hooks into dispatchLoopStartup().
  */
-class Application_Controller_Plugin_LoadTranslation extends Zend_Controller_Plugin_Abstract {
+class Application_Controller_Plugin_LoadTranslation extends Zend_Controller_Plugin_Abstract
+{
 
     /**
      * Hooks into preDispatch to setup include path for every request.
@@ -46,7 +46,8 @@ class Application_Controller_Plugin_LoadTranslation extends Zend_Controller_Plug
      * @param Zend_Controller_Request_Abstract $request The request passed to the FrontController.
      * @return void
      */
-    public function preDispatch(Zend_Controller_Request_Abstract $request) {
+    public function preDispatch(Zend_Controller_Request_Abstract $request)
+    {
         $currentModule = $request->getModuleName();
 
         // Add translation
@@ -54,5 +55,4 @@ class Application_Controller_Plugin_LoadTranslation extends Zend_Controller_Plug
             Zend_Registry::get(Application_Translate::REGISTRY_KEY)->loadModule($currentModule);
         }
     }
-
 }

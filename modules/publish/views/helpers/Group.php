@@ -33,8 +33,9 @@
  * @version     $Id$
  */
 
-class Publish_View_Helper_Group extends Publish_View_Helper_Fieldset {
-   
+class Publish_View_Helper_Group extends Publish_View_Helper_Fieldset
+{
+
     /**
      * method to render specific elements of an form
      * @param <type> $type element type that has to rendered
@@ -42,7 +43,8 @@ class Publish_View_Helper_Group extends Publish_View_Helper_Fieldset {
      * @param <type> $name name of possible hidden element
      * @return element to render in view
      */
-    public function group($value, $options = null, $name = null) {
+    public function group($value, $options = null, $name = null)
+    {
         $this->view->count++;
         if ($name == null && $value == null) {
             $errorMessage = $this->view->translate('template_error_unknown_field');
@@ -56,10 +58,11 @@ class Publish_View_Helper_Group extends Publish_View_Helper_Fieldset {
      * Method to render a group of elements (group fields, buttons, hidden fields)
      * @param <Array> $group
      */
-    private function _renderGroup($group, $options= null, $name = null) {
+    private function _renderGroup($group, $options = null, $name = null)
+    {
         $fieldset = "";
 
-        if (!isset($group)) {
+        if (! isset($group)) {
             return $fieldset;
         }
 
@@ -75,8 +78,7 @@ class Publish_View_Helper_Group extends Publish_View_Helper_Fieldset {
         $groupElementCount = 0;
         $index = 0;
 
-        foreach ($group['Fields'] AS $field) {
-
+        foreach ($group['Fields'] as $field) {
             // besonderer Mechanismus erforderlich für Collection Roles (CRs sind erkennbar, weil nur bei ihnen
             // $group['Counter'] auf null gesetzt wurde)
             // dort kann jede Gruppe aus unterschiedlich vielen Select-Boxen aufgebaut sein
@@ -87,12 +89,11 @@ class Publish_View_Helper_Group extends Publish_View_Helper_Fieldset {
                 $groupElementCount = 0;
                 $fieldset .= "</div>";
             }
-                       
+
             if ($groupElementCount == 0) {
                 if ($groupCount % 2 == 0) {
                     $fieldset .= "<div class='form-multiple even'>";
-                }
-                else {
+                } else {
                     $fieldset .= "<div class='form-multiple odd'>";
                 }
             }
@@ -110,15 +111,15 @@ class Publish_View_Helper_Group extends Publish_View_Helper_Fieldset {
                     $fieldset .= $this->renderHtmlTextarea($field, $options);
                     break;
 
-                case "Zend_Form_Element_Select" :
+                case "Zend_Form_Element_Select":
                     $fieldset .= $this->renderHtmlSelect($field, $options);
                     break;
 
-                case 'Zend_Form_Element_Checkbox' :
+                case 'Zend_Form_Element_Checkbox':
                     $fieldset .= $this->renderHtmlCheckbox($field, $options);
                     break;
 
-                case 'Zend_Form_Element_File' :
+                case 'Zend_Form_Element_File':
                     $fieldset .= $this->renderHtmlFile($field, $options);
                     break;
 
@@ -130,7 +131,7 @@ class Publish_View_Helper_Group extends Publish_View_Helper_Fieldset {
             $fieldset .= "</div>"; // div.form-item schließen
 
             // Mechanimus für alle Gruppenfelder, die keine Collection Roles sind
-            if (!is_null($group['Counter']) && $groupElementCount === intval($group['Counter'])) {
+            if (! is_null($group['Counter']) && $groupElementCount === intval($group['Counter'])) {
                 $groupCount++;
                 $groupElementCount = 0;
                 $fieldset .= "</div>"; // div.form-multiple schließen
@@ -153,6 +154,4 @@ class Publish_View_Helper_Group extends Publish_View_Helper_Fieldset {
 
         return $fieldset;
     }
-
 }
-

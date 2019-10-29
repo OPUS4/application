@@ -26,6 +26,7 @@
  *
  * @category    Unit Tests
  * @author      Sascha Szott <szott@zib.de>
+ * @author      Maximilian Salomon <salomon@zib.de>
  * @copyright   Copyright (c) 2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
@@ -35,13 +36,17 @@
  *
  * @coversDefaultClass Admin_ReportController
  */
-class Admin_ReportControllerTest extends ControllerTestCase {
+class Admin_ReportControllerTest extends ControllerTestCase
+{
+
+    protected $additionalResources = 'all';
 
     private $config;
 
     private $docIds;
 
-    public function setUp() {
+    public function setUp()
+    {
         parent::setUp();
 
         // backup config
@@ -49,29 +54,30 @@ class Admin_ReportControllerTest extends ControllerTestCase {
 
         // modify DOI config
         $config = Zend_Registry::get('Zend_Config');
-        $config->merge(new Zend_Config(array(
-            'doi' => array(
+        $config->merge(new Zend_Config([
+            'doi' => [
                 'prefix' => '10.5072',
                 'localPrefix' => 'opustest',
                 'registration' =>
-                    array(
+                    [
                         'datacite' =>
-                            array(
+                            [
                                 'username' => 'test',
                                 'password' => 'secret',
                                 'serviceUrl' => 'http://192.0.2.1:54321'
-                            )
-                    )
-            )
-        )));
+                            ]
+                    ]
+            ]
+        ]));
         Zend_Registry::set('Zend_Config', $config);
     }
 
-    public function tearDown() {
+    public function tearDown()
+    {
         // restore config
         Zend_Registry::set('Zend_Config', $this->config);
 
-        if (!is_null($this->docIds)) {
+        if (! is_null($this->docIds)) {
             // removed previously created test documents from database
             foreach ($this->docIds as $docId) {
                 $doc = new Opus_Document($docId);
@@ -82,7 +88,9 @@ class Admin_ReportControllerTest extends ControllerTestCase {
         parent::tearDown();
     }
 
-    public function testDoiActionWithEmptyResult() {
+    public function testDoiActionWithEmptyResult()
+    {
+        $this->useEnglish();
         $this->dispatch('/admin/report/doi');
         $this->assertResponseCode(200);
         $this->assertModule('admin');
@@ -92,7 +100,8 @@ class Admin_ReportControllerTest extends ControllerTestCase {
         $this->assertQueryContentContains('//div["wrapper"]/div/i', 'Could not find matching local DOIs.');
     }
 
-    public function testDoiActionWithNonEmptyResult() {
+    public function testDoiActionWithNonEmptyResult()
+    {
         $this->createTestDocs();
 
         $this->dispatch('/admin/report/doi');
@@ -106,7 +115,8 @@ class Admin_ReportControllerTest extends ControllerTestCase {
         $this->assertXpathCount('//div["wrapper"]/table/tbody/tr', 4);
     }
 
-    public function testDoiActionWithNonEmptyResultAndUnregisteredFilter() {
+    public function testDoiActionWithNonEmptyResultAndUnregisteredFilter()
+    {
         $this->createTestDocs();
 
         $this->dispatch('/admin/report/doi/filter/unregistered');
@@ -120,7 +130,8 @@ class Admin_ReportControllerTest extends ControllerTestCase {
         $this->assertXpathCount('//div["wrapper"]/table/tbody/tr', 2);
     }
 
-    public function testDoiActionWithNonEmptyResultAndRegisteredFilter() {
+    public function testDoiActionWithNonEmptyResultAndRegisteredFilter()
+    {
         $this->createTestDocs();
 
         $this->dispatch('/admin/report/doi/filter/registered');
@@ -134,7 +145,8 @@ class Admin_ReportControllerTest extends ControllerTestCase {
         $this->assertXpathCount('//div["wrapper"]/table/tbody/tr', 1);
     }
 
-    public function testDoiActionWithNonEmptyResultAndVerifiedFilter() {
+    public function testDoiActionWithNonEmptyResultAndVerifiedFilter()
+    {
         $this->createTestDocs();
 
         $this->dispatch('/admin/report/doi/filter/verified');
@@ -148,15 +160,16 @@ class Admin_ReportControllerTest extends ControllerTestCase {
         $this->assertXpathCount('//div["wrapper"]/table/tbody/tr', 1);
     }
 
-    public function testRegisterSingle() {
+    public function testRegisterSingle()
+    {
         $this->createTestDocs();
         $docId = $this->docIds[1];
 
         $this->request->setMethod('POST')
-            ->setPost(array(
+            ->setPost([
                 'op' => 'register',
                 'docId' => $docId
-            ));
+            ]);
         $this->dispatch('/admin/report/doi');
         $this->assertResponseCode(302);
         $this->assertRedirectTo('/admin/report/doi');
@@ -164,15 +177,16 @@ class Admin_ReportControllerTest extends ControllerTestCase {
         // erfolgreiche Registrierung der DOI kann hier nicht geprüft werden: dazu Aufruf des DataCite-Service erforderlich
     }
 
-    public function testVerifySingle() {
+    public function testVerifySingle()
+    {
         $this->createTestDocs();
         $docId = $this->docIds[2];
 
         $this->request->setMethod('POST')
-            ->setPost(array(
+            ->setPost([
                 'op' => 'verify',
                 'docId' => $docId
-            ));
+            ]);
         $this->dispatch('/admin/report/doi');
         $this->assertResponseCode(302);
         $this->assertRedirectTo('/admin/report/doi');
@@ -180,15 +194,16 @@ class Admin_ReportControllerTest extends ControllerTestCase {
         // erfolgreiche Prüfung der DOI kann hier nicht geprüft werden: dazu Aufruf des DataCite-Service erforderlich
     }
 
-    public function testReverifySingle() {
+    public function testReverifySingle()
+    {
         $this->createTestDocs();
         $docId = $this->docIds[3];
 
         $this->request->setMethod('POST')
-            ->setPost(array(
+            ->setPost([
                 'op' => 'verify',
                 'docId' => $docId
-            ));
+            ]);
         $this->dispatch('/admin/report/doi');
         $this->assertResponseCode(302);
         $this->assertRedirectTo('/admin/report/doi');
@@ -196,13 +211,14 @@ class Admin_ReportControllerTest extends ControllerTestCase {
         // erfolgreiche (erneute) Prüfung der DOI kann hier nicht geprüft werden: dazu Aufruf des DataCite-Service erforderlich
     }
 
-    public function testRegisterBulk() {
+    public function testRegisterBulk()
+    {
         $this->createTestDocs();
 
         $this->request->setMethod('POST')
-            ->setPost(array(
+            ->setPost([
                 'op' => 'register'
-            ));
+            ]);
         $this->dispatch('/admin/report/doi');
         $this->assertResponseCode(302);
         $this->assertRedirectTo('/admin/report/doi');
@@ -210,13 +226,14 @@ class Admin_ReportControllerTest extends ControllerTestCase {
         // erfolgreiche Registrierung der DOIs kann hier nicht geprüft werden: dazu Aufruf des DataCite-Service erforderlich
     }
 
-    public function testVerifyBulk() {
+    public function testVerifyBulk()
+    {
         $this->createTestDocs();
 
         $this->request->setMethod('POST')
-            ->setPost(array(
+            ->setPost([
                 'op' => 'verify'
-            ));
+            ]);
         $this->dispatch('/admin/report/doi');
         $this->assertResponseCode(302);
         $this->assertRedirectTo('/admin/report/doi');
@@ -227,8 +244,9 @@ class Admin_ReportControllerTest extends ControllerTestCase {
     /**
      * create some test documents with DOIs: do NOT change order of creations
      */
-    private function createTestDocs() {
-        $this->docIds = array();
+    private function createTestDocs()
+    {
+        $this->docIds = [];
 
         $this->createTestDocWithDoi('unpublished', null);
         $this->createTestDocWithDoi('published', null);
@@ -237,7 +255,8 @@ class Admin_ReportControllerTest extends ControllerTestCase {
         $this->createTestDocWithDoi('published', null, false);
     }
 
-    private function createTestDocWithDoi($serverState, $doiStatus, $local = true) {
+    private function createTestDocWithDoi($serverState, $doiStatus, $local = true)
+    {
         $doc = new Opus_Document();
         $doc->setServerState($serverState);
         $docId = $doc->store();
@@ -247,12 +266,11 @@ class Admin_ReportControllerTest extends ControllerTestCase {
         $doi->setType('doi');
         if ($local) {
             $doi->setValue('10.5072/opustest-' . $docId);
-        }
-        else {
+        } else {
             $doi->setValue('10.5072/anothersystem-' . $docId);
         }
         $doi->setStatus($doiStatus);
-        $doc->setIdentifier(array($doi));
+        $doc->setIdentifier([$doi]);
 
         $doc->store();
     }

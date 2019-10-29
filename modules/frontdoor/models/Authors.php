@@ -32,7 +32,8 @@
  * @version     $Id$
  */
 
-class Frontdoor_Model_Authors {
+class Frontdoor_Model_Authors
+{
 
     /**
      *
@@ -47,15 +48,14 @@ class Frontdoor_Model_Authors {
      * no document with id $docId exists
      * or requested document exists but is not in server_state published
      */
-    public function __construct($arg) {
+    public function __construct($arg)
+    {
         if ($arg instanceof Opus_Document) {
             $this->_document = $arg;
-        }
-        else {
+        } else {
             try {
                 $this->_document = new Opus_Document($arg);
-            }
-            catch (Opus_Model_NotFoundException $e) {
+            } catch (Opus_Model_NotFoundException $e) {
                 throw new Frontdoor_Model_Exception('invalid value for parameter docId given', null, $e);
             }
         }
@@ -64,8 +64,7 @@ class Frontdoor_Model_Authors {
         // TODO document access check will be refactored in later releases
         try {
             new Application_Util_Document($this->_document);
-        }
-        catch (Application_Exception $e) {
+        } catch (Application_Exception $e) {
             throw new Frontdoor_Model_Exception('access to requested document is forbidden');
         }
     }
@@ -76,16 +75,18 @@ class Frontdoor_Model_Authors {
      *
      * @return array An array of authors for the given document.
      */
-    public function getAuthors() {
-        $authors = array();
+    public function getAuthors()
+    {
+        $authors = [];
         foreach ($this->_document->getPersonAuthor() as $author) {
             $authorId = $author->getId();
             array_push(
-                $authors, array(
+                $authors,
+                [
                 'id' => $authorId[0],
                 'name' => $author->getName(),
                 'mail' => $author->getEmail(),
-                'allowMail' => $author->getAllowEmailContact())
+                'allowMail' => $author->getAllowEmailContact()]
             );
         }
         return $authors;
@@ -98,10 +99,11 @@ class Frontdoor_Model_Authors {
      * array ('id' => 123, 'name' => 'John Doe', 'mail' => 'doe@example.org', 'allowMail' => 0 or 1).
      * Returns an empty array if no authors exists or no author allows email conact.
      */
-    public function getContactableAuthors() {
-        $authors = array();
+    public function getContactableAuthors()
+    {
+        $authors = [];
         foreach ($this->getAuthors() as $author) {
-            if (!($author['allowMail'] === '0' || empty($author['mail']))) {
+            if (! ($author['allowMail'] === '0' || empty($author['mail']))) {
                 array_push($authors, $author);
             }
         }
@@ -113,7 +115,8 @@ class Frontdoor_Model_Authors {
      *
      * @return Opus_Document
      */
-    public function getDocument() {
+    public function getDocument()
+    {
         return $this->_document;
     }
 
@@ -125,12 +128,13 @@ class Frontdoor_Model_Authors {
      * array('address' => 'doe@example.org', 'name' => 'Doe') that can be used
      * without conversion as input for the last argument of Opus_Mail_SendMail:sendMail().
      */
-    private function validateAuthorCheckboxInput($checkboxSelection) {
-        $authors = array();
+    private function validateAuthorCheckboxInput($checkboxSelection)
+    {
+        $authors = [];
         foreach ($this->getContactableAuthors() as $author) {
             $authorId = $author['id'];
             if (array_key_exists($authorId, $checkboxSelection) && $checkboxSelection[$authorId] == 1) {
-                array_push($authors, array('address' => $author['mail'], 'name' => $author['name']));
+                array_push($authors, ['address' => $author['mail'], 'name' => $author['name']]);
             }
         }
         return $authors;
@@ -142,15 +146,18 @@ class Frontdoor_Model_Authors {
      *
      * @throws
      */
-    public function sendMail($mailProvider, $from, $fromName, $subject, $bodyText, $authorSelection) {
+    public function sendMail($mailProvider, $from, $fromName, $subject, $bodyText, $authorSelection)
+    {
         try {
             $mailProvider->sendMail(
-                $from, $fromName, $subject, $bodyText, $this->validateAuthorCheckboxInput($authorSelection)
+                $from,
+                $fromName,
+                $subject,
+                $bodyText,
+                $this->validateAuthorCheckboxInput($authorSelection)
             );
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             throw new Frontdoor_Model_Exception('failure while sending mail', null, $e);
         }
     }
 }
-

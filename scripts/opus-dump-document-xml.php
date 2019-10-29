@@ -22,8 +22,8 @@
  * OPUS is distributed in the hope that it will be useful, but WITHOUT ANY
  * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details. You should have received a copy of the GNU General Public License 
- * along with OPUS; if not, write to the Free Software Foundation, Inc., 51 
+ * details. You should have received a copy of the GNU General Public License
+ * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
@@ -42,18 +42,18 @@ array_shift($argv);
 // Dump given documents
 error_log("dumping document(s): " . implode(", ", $argv));
 
-foreach ($argv AS $docId) {
-   error_log("<!-- dumping document-id $docId: -->");
+foreach ($argv as $docId) {
+    error_log("<!-- dumping document-id $docId: -->");
 
-   $d = new Opus_Document($docId);
+    $d = new Opus_Document($docId);
 
-   $xmlModel = new Opus_Model_Xml();
-   $xmlModel->setModel($d);
-   $xmlModel->excludeEmptyFields();
-   $xmlModel->setStrategy(new Opus_Model_Xml_Version1);
+    $xmlModel = new Opus_Model_Xml();
+    $xmlModel->setModel($d);
+    $xmlModel->excludeEmptyFields();
+    $xmlModel->setStrategy(new Opus_Model_Xml_Version1);
    // $xmlModel->setXmlCache(new Opus_Model_Xml_Cache);
 
-   $docXml = $xmlModel->getDomDocument();
-   $docXml->formatOutput = true;
-   echo $docXml->saveXml();
+    $docXml = $xmlModel->getDomDocument();
+    $docXml->formatOutput = true;
+    echo $docXml->saveXml();
 }

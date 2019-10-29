@@ -37,16 +37,18 @@
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 require_once 'Log.php';
 
-class MetadataImporter {
+class MetadataImporter
+{
 
     private $_console;
 
     private $_logfile;
 
-    public function run($options) {
-        $consoleConf = array('lineFormat' => '[%1$s] %4$s');
-        $logfileConf = array('append' => false, 'lineFormat' => '%4$s');
-        
+    public function run($options)
+    {
+        $consoleConf = ['lineFormat' => '[%1$s] %4$s'];
+        $logfileConf = ['append' => false, 'lineFormat' => '%4$s'];
+
         $this->_console = Log::factory('console', '', '', $consoleConf, PEAR_LOG_INFO);
 
         if (count($options) < 2) {
@@ -55,12 +57,12 @@ class MetadataImporter {
         }
 
         $logfilePath = 'reject.log';
-        if (count($options) > 2) { 
+        if (count($options) > 2) {
             // logfile path is given
             $logfilePath = $options[2];
         }
         $this->_logfile = Log::factory('file', $logfilePath, '', $logfileConf, PEAR_LOG_INFO);
-        
+
         $xmlFile = $options[1];
 
         $importer = new Opus_Util_MetadataImport($xmlFile, true, $this->_console, $this->_logfile);
@@ -71,8 +73,7 @@ class MetadataImporter {
 try {
     $importer = new MetadataImporter();
     $importer->run($argv);
-}
-catch (Exception $e) {
+} catch (Exception $e) {
     echo "\nAn error occurred while importing: " . $e->getMessage() . "\n\n";
     exit();
 }

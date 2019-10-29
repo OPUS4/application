@@ -28,29 +28,30 @@
  * @category    Application
  * @package     Module_Setup
  * @author      Edouard Simon <edouard.simon@zib.de>
- * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2013-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-abstract class SetupControllerTestCase extends ControllerTestCase {
+abstract class SetupControllerTestCase extends ControllerTestCase
+{
 
     /**
      * original file modes, needed for restoring after test
      */
-    protected $origFileModes = array();
+    protected $origFileModes = [];
     protected $config;
 
     protected $configSection;
-    
-    public function setUp() {
-        parent::setUp();
-        $this->assertTrue(!empty($this->configSection), 'Incomplete test class. Property configSection must be declared with non-empty value');
-        $this->config = new Zend_Config_Ini(APPLICATION_PATH . '/modules/setup/setup.ini', $this->configSection);
-        $this->assertTrue($this->config instanceOf Zend_Config, 'Error setting up configuration object for '.$this->configSection);
 
+    public function setUp()
+    {
+        parent::setUp();
+        $this->assertTrue(! empty($this->configSection), 'Incomplete test class. Property configSection must be declared with non-empty value');
+        $this->config = new Zend_Config_Ini(APPLICATION_PATH . '/modules/setup/setup.ini', $this->configSection);
+        $this->assertTrue($this->config instanceof Zend_Config, 'Error setting up configuration object for '.$this->configSection);
     }
 
-    public function tearDown() {
+    public function tearDown()
+    {
         $this->resetFileModes();
         parent::tearDown();
     }
@@ -58,11 +59,13 @@ abstract class SetupControllerTestCase extends ControllerTestCase {
     /**
      * Set permissions for data base dir, translations sources and translation target dir
      */
-    protected function setPermissions($contentBasepathPerms, $translationSourcesPerms, $translationTargetPerms) {
+    protected function setPermissions($contentBasepathPerms, $translationSourcesPerms, $translationTargetPerms)
+    {
         $this->changeFileMode($this->config->contentBasepath, "$contentBasepathPerms");
         foreach ($this->config->translationSources->toArray() as $tmxSource) {
-            if (file_exists($tmxSource))
+            if (file_exists($tmxSource)) {
                 $this->changeFileMode($tmxSource, "$translationSourcesPerms");
+            }
         }
         // target file should not exist, make sure parent directory is accessible
         $this->assertFileNotExists($this->config->translationTarget, 'test data changed');
@@ -71,21 +74,23 @@ abstract class SetupControllerTestCase extends ControllerTestCase {
         $this->changeFileMode($targetDir, "$translationTargetPerms");
     }
 
-    protected function changeFileMode($path, $mode) {
-        if (!(is_file($path) || is_dir($path))) {
+    protected function changeFileMode($path, $mode)
+    {
+        if (! (is_file($path) || is_dir($path))) {
             $this->fail("File or Directory $path not found");
         }
-        if (!isset($this->origFileModes[$path]))
+        if (! isset($this->origFileModes[$path])) {
             $this->origFileModes[$path] = substr(decoct(fileperms($path)), -4);
+        }
         @chmod($path, octdec("$mode"));
         clearstatcache();
         $this->assertEquals("$mode", substr(decoct(fileperms($path)), -4), "Failed setting mode $mode for $path");
     }
 
-    protected function resetFileModes() {
+    protected function resetFileModes()
+    {
         foreach ($this->origFileModes as $path => $mode) {
             $this->changeFileMode($path, $mode);
         }
     }
-
 }

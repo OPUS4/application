@@ -1,0 +1,194 @@
+<!--
+/**
+ * This file is part of OPUS. The software OPUS has been originally developed
+ * at the University of Stuttgart with funding from the German Research Net,
+ * the Federal Department of Higher Education and Research and the Ministry
+ * of Science, Research and the Arts of the State of Baden-Wuerttemberg.
+ *
+ * OPUS 4 is a complete rewrite of the original OPUS software and was developed
+ * by the Stuttgart University Library, the Library Service Center
+ * Baden-Wuerttemberg, the Cooperative Library Network Berlin-Brandenburg,
+ * the Saarland University and State Library, the Saxon State Library -
+ * Dresden State and University Library, the Bielefeld University Library and
+ * the University Library of Hamburg University of Technology with funding from
+ * the German Research Foundation and the European Regional Development Fund.
+ *
+ * LICENCE
+ * OPUS is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the Licence, or any later version.
+ * OPUS is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details. You should have received a copy of the GNU General Public License
+ * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
+ * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * @category    Application
+ * @author      Maximilian Salomon <salomon@zib.de>
+ * @copyright   Copyright (c) 2018, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
+ *
+ * Test of public/layouts/opus4/js/validation.js
+ * In this file, the ISBN-validation with JS is tested. To see the test-results, you have to open this file in a browser.
+ * This tests the validateISSN() function.
+ *
+ */
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        body {
+            font-family: "Arial", sans-serif;
+            margin: 1em auto;
+            padding: 1em 2em;
+        }
+
+        .passed {
+            background-color: lightgreen;
+        }
+
+        .failed {
+            background-color: lightcoral;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background-color: darkblue;
+            color: white;
+        }
+
+        td {
+            border-top: 1px solid white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 0.5em 1em;
+        }
+
+        .center-div {
+            margin: 0 auto;
+            width: 80%;
+        }
+    </style>
+    <meta charset="UTF-8">
+    <title>testValidation</title>
+    <script language="javascript" type="text/javascript" src="../../public/layouts/opus4/js/validation.js"></script>
+    <script type="text/javascript" src="../../vendor/components/jquery/jquery.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var issnValidator = new IssnValidation();
+            var tableRows = document.getElementById('ISSN').getElementsByTagName('tbody')[0].rows;
+            $.each(tableRows, function (index, value) {
+                var newCellActual = document.createElement('td');
+                value.appendChild(newCellActual);
+                var newCellResult = document.createElement('td');
+                value.appendChild(newCellResult);
+                var cells = value.getElementsByTagName('td');
+                var ISSN = cells[0].innerHTML;
+                var expectation = cells[1];
+                var actual = cells[2];
+                var result = cells[3];
+                if (issnValidator.validateISSN(ISSN) === true) {
+                    actual.innerHTML = "Valid";
+                } else {
+                    actual.innerHTML = "Invalid";
+                }
+                if (actual.innerHTML === expectation.innerHTML) {
+                    result.innerHTML = 'Passed';
+                    result.className += 'passed';
+                }
+                else {
+                    result.innerHTML = 'Failed';
+                    result.className += 'failed';
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+<div class="center-div">
+    <h1>Tests of ISSN-validation</h1>
+    <p>This test-page tests the ISSN-validation with javascript.</p>
+    <table id="ISSN">
+        <thead>
+        <tr>
+            <th>Test-ISSN</th>
+            <th>Expectation</th>
+            <th>Actual</th>
+            <th>Result</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>1050-124X</td>
+            <td>Valid</td>
+        </tr>
+        <tr>
+            <td>0001-3218</td>
+            <td>Valid</td>
+        </tr>
+        <tr>
+            <td>0025-5858</td>
+            <td>Valid</td>
+        </tr>
+        <tr>
+            <td>1062-5127</td>
+            <td>Valid</td>
+        </tr>
+        <tr>
+            <td>0317-8471</td>
+            <td>Valid</td>
+        </tr>
+        <tr>
+            <td>12345478</td>
+            <td>Invalid</td>
+        </tr>
+        <tr>
+            <td>null</td>
+            <td>Invalid</td>
+        </tr>
+        <tr>
+            <td>true</td>
+            <td>Invalid</td>
+        </tr>
+        <tr>
+            <td>12456-65478</td>
+            <td>Invalid</td>
+        </tr>
+        <tr>
+            <td>123456789</td>
+            <td>Invalid</td>
+        </tr>
+        <tr>
+            <td>1050 124X</td>
+            <td>Invalid</td>
+        </tr>
+        <tr>
+            <td>1050_124X</td>
+            <td>Invalid</td>
+        </tr>
+        <tr>
+            <td>1050-1242</td>
+            <td>Invalid</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

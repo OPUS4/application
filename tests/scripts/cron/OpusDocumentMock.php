@@ -28,18 +28,18 @@
  * @category    Cronjob
  * @package     Tests
  * @author      Edouard Simon (edouard.simon@zib.de)
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
  * Mock used by DbCleanTemporary
  */
+class OpusDocumentMock extends Opus_Document
+{
 
-class OpusDocumentMock extends Opus_Document {
-    
-    public function changeServerDateModified($date) {
+    public function changeServerDateModified($date)
+    {
         $this->setServerDateModified($date);
         // Start transaction
         $dbadapter = $this->getTableRow()->getTable()->getAdapter();
@@ -60,7 +60,5 @@ class OpusDocumentMock extends Opus_Document {
         $dbadapter->commit();
 
         $this->_postStore();
-
     }
-    
 }

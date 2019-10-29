@@ -37,7 +37,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Application_View_Helper_FileLink extends Zend_View_Helper_Abstract {
+class Application_View_Helper_FileLink extends Zend_View_Helper_Abstract
+{
 
     /**
      * Rendert Link fuer Datei.
@@ -45,7 +46,8 @@ class Application_View_Helper_FileLink extends Zend_View_Helper_Abstract {
      * @param $file Opus_File
      * @return string HTML output
      */
-    public function fileLink($name, $file, $options = null) {
+    public function fileLink($name, $file, $options = null)
+    {
         if (is_null($file)) {
             throw new Application_Exception(__METHOD__ . 'Parameter $file must not be null (for ' . $name  . ').');
         }
@@ -63,5 +65,4 @@ class Application_View_Helper_FileLink extends Zend_View_Helper_Abstract {
         return '<a href="' . $fileUrl . '" class="filelink">' .htmlspecialchars($fileName) . '</a>'
             . $this->view->formHidden($name, $file->getId(), null);
     }
-
 }

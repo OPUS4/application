@@ -29,13 +29,21 @@
  * @author      Thoralf Klein <thoralf.klein@zib.de>
  * @author      Sascha Szott <szott@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2010-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2010-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 $config = Zend_Registry::get('Zend_Config');
 
 $pageLanguage = Zend_Registry::get('Zend_Translate')->getLocale();
+
+/**
+ * Prevent indexing and following of links by web crawlers. Dynamic search pages should not be indexed, since their
+ * content might change, e.g. "Latest documents".
+ */
+if (isset($this->robots)) {
+    $this->headMeta($this->robots, 'robots');
+}
 
 $this->headMeta()
     ->prependHttpEquiv('Content-Type', 'text/html; charset=UTF-8')
@@ -49,44 +57,46 @@ if (isset($config->instance_name)) {
 }
 
 if (isset($this->title)) {
-    if ($this->moduleName !== 'frontdoor')
-    {
+    if ($this->moduleName !== 'frontdoor') {
         $this->headTitle($this->translate($this->title));
-    }
-    else
-    { // do not translate for frontdoor, because the document title is used
+    } else { // do not translate for frontdoor, because the document title is used
         $this->headTitle(htmlspecialchars($this->title));
     }
 }
 
 $this->headLink()
-    ->appendStylesheet('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
+    ->appendStylesheet($this->layoutPath() . '/fontawesome/css/fontawesome.min.css')
+    ->appendStylesheet($this->layoutPath() . '/fontawesome/css/solid.css')
     ->appendStylesheet($this->baseUrl() . '/' . $config->css->jqueryui->path, 'screen')
     ->appendStylesheet($this->layoutPath() . '/css/opus.css', 'screen,print')
     ->appendStylesheet($this->layoutPath() . '/css/admin.css', 'screen,print')
     ->appendStylesheet($this->layoutPath() . '/css/print.css', 'print')
     ->appendStylesheet($this->layoutPath() . '/css/custom.css')
-    ->headLink(array(
+    ->headLink([
         'rel' => 'shortcut icon',
         'type' => 'image/x-icon',
-        'href' => $this->layoutPath() . '/img/logo/favicon.ico'))
-    ->headLink(array(
+        'href' => $this->layoutPath() . '/img/logo/favicon.ico'
+    ])->headLink([
         'rel' => 'search',
         'title' => 'OPUS 4 Search',
         'type' => 'application/opensearchdescription+xml',
-        'href' => $this->serverUrl() . $this->baseUrl() . '/solrsearch/opensearch'));
+        'href' => $this->serverUrl() . $this->baseUrl() . '/solrsearch/opensearch'
+    ]);
 
 $this->container = Zend_Registry::get('Opus_Navigation');
 
-$jsFiles = array('searchutil.js', 'frontdoorutil.js', 'submit.js');
+$jsFiles = ['searchutil.js', 'frontdoorutil.js', 'submit.js'];
 
-if (in_array($this->moduleName, array('admin', 'review', 'setup', 'account'))) {
+if (in_array($this->moduleName, ['admin', 'review', 'setup', 'account'])) {
     $jsFiles[] = 'theme.js';
     $jsFiles[] = 'theme_lic.js';
     $jsFiles[] = 'opus-ui.js';
+} elseif (in_array($this->moduleName, ['publish'])) {
+    $jsFiles[] = 'upload.js';
 }
-else if (in_array($this->moduleName, array('publish'))) {
-    $jsFiles[] = 'filetypes.js';
+
+if (in_array($this->moduleName, ['admin'])) {
+    $jsFiles[] = 'validation.js';
 }
 
 if ($this->jQueryEnabled()) {
@@ -102,8 +112,7 @@ $appConfig = new Application_Configuration();
 
 if ($appConfig->isLanguageSelectionEnabled()) {
     $languageSelectors = $this->languageSelector();
-}
-else {
+} else {
     $languageSelectors = null;
 }
 
@@ -132,20 +141,21 @@ if (isset($config->javascript->latex->mathjax)) {
 
 <?= $this->headScript()->setIndent(8) ?>
 
-	<!--[if IE 6]>
+    <!--[if IE 6]>
         <link rel="stylesheet" type="text/css" href="<?= $this->layoutPath() ?>/css/opus-ie.css" />
         <![endif]-->
 
         <!--[if lt IE 9]>
         <link rel="stylesheet" type="text/css" href="<?= $this->layoutPath() ?>/css/opus-ie-7.css" />
         <![endif]-->
+<?= $this->javascriptMessages()->setIndent(8) ?>
     </head>
 
     <body>
         <div id="container">
             <div id="top-header">
                 <div class="wrapper">
-                    <?php if (!is_null($languageSelectors)) : ?>
+                    <?php if (! is_null($languageSelectors)) : ?>
                         <ul id="lang-switch" class="nav" title="Choose your language">
                             <?php foreach ($languageSelectors as $i => $languageSelector) : ?>
                                 <li class="<?= ($i === 0) ? 'first' : '' ?>"><a href="<?= $languageSelector['url'] ?>" title="<?= $languageSelector['name'] ?>"><?= $languageSelector['name'] ?></a></li>
@@ -170,11 +180,11 @@ if (isset($config->javascript->latex->mathjax)) {
                         <?php $pageIsActive = $page->isActive(false); ?>
                         <li id="<?= $page->getId() ?>" class="<?= ($pageIsActive ? 'active ' : '').$page->getClass()?>">
                             <a href="<?= $page->getHref() ?>" title="<?= $this->translate($page->getTitle()) ?>">
-                                <?php if($pageIsActive) : ?>
+                                <?php if ($pageIsActive) : ?>
                                 <em>
                                 <?php endif ?>
                                     <span><?= $this->translate($page->getLabel()) ?></span>
-                                <?php if($pageIsActive) : ?>
+                                <?php if ($pageIsActive) : ?>
                                 </em>
                                 <?php endif ?>
                             </a>
@@ -184,9 +194,10 @@ if (isset($config->javascript->latex->mathjax)) {
                 </div>
             </div>
 
-            <div id="content" class="opus <?= (in_array($this->moduleName, array('admin', 'review', 'setup', 'account'))) ? 'adminContainer' : ''?> <?= $this->moduleName ?><?php if ($this->moduleName === 'publish') : ?>"><?php else : ?><?= ($this->controllerName === 'index' ? '' : '_'.$this->controllerName)?><?= ($this->actionName === 'index' ? '' : '_'.$this->actionName)?><?= ($this->searchType === 'collection' || $this->searchType === 'latest' ? ' '.$this->searchType : '') ?>"><?php  endif; ?>
+            <?PHP // TODO searchType as CSS only for 'collection' and 'latest' used - Can it be refactored? ?>
+            <div id="content" class="opus <?= $this->adminCssClass() ?> <?= $this->moduleName ?> <?= $this->actionCssClass() ?> <?= $this->searchType ?>">
 
-                <?PHP if (in_array($this->moduleName, array('admin', 'review', 'setup'))) : ?>
+                <?PHP if (in_array($this->moduleName, ['admin', 'review', 'setup'])) : ?>
                     <?PHP if ($this->breadcrumbsDisabled !== true) : ?>
                         <?= $this->navigation()->breadcrumbs() ?>
                     <?PHP endif; ?>
@@ -201,7 +212,7 @@ if (isset($config->javascript->latex->mathjax)) {
                     <?= $this->layout()->content ?>
                     <?PHP endif; ?>
                 <?PHP else : ?>
-                    <?PHP if ($this->accessAllowed('documents') && !is_null($this->adminform)) : ?>
+                    <?PHP if ($this->accessAllowed('documents') && ! is_null($this->adminform)) : // TODO module specific code ?>
                         <?= $this->adminform ?>
                     <?PHP endif ?>
 
@@ -217,9 +228,9 @@ if (isset($config->javascript->latex->mathjax)) {
                 <div class="wrapper">
                     <p id="logo-wrapper"><a href="http://www.kobv.de/opus4/" title="Opus4 Website"><img src="<?= $this->layoutPath() ?>/img/logo/logo_small.gif" alt="OPUS4 Logo" title="" width="69" height="29" /></a></p>
                     <ul id="secondary-nav" class="nav">
-                        <li class="first"><a href="<?= $this->url(array('module' => 'home', 'controller' => 'index', 'action' => 'contact'), null, true) ?>"><?= $this->translate('home_index_contact_actionname'); ?></a></li>
-                        <li><a href="<?= $this->url(array('module' => 'home', 'controller' => 'index', 'action' => 'imprint'), null, true) ?>"><?= $this->translate('home_index_imprint_actionname') ?></a></li>
-                        <li class="last"><a href="<?= $this->url(array('module' => 'crawlers', 'controller' => 'sitelinks'), null, true) ?>">Sitelinks</a></li>
+                        <li class="first"><a href="<?= $this->url(['module' => 'home', 'controller' => 'index', 'action' => 'contact'], null, true) ?>"><?= $this->translate('home_index_contact_actionname'); ?></a></li>
+                        <li><a href="<?= $this->url(['module' => 'home', 'controller' => 'index', 'action' => 'imprint'], null, true) ?>"><?= $this->translate('home_index_imprint_actionname') ?></a></li>
+                        <li class="last"><a href="<?= $this->url(['module' => 'crawlers', 'controller' => 'sitelinks'], null, true) ?>">Sitelinks</a></li>
                     </ul>
                 </div>
             </div>

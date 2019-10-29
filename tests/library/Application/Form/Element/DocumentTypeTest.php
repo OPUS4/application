@@ -27,22 +27,27 @@
  * @category    Application Unit Test
  * @package     Form_Element
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class Application_Form_Element_DocumentTypeTest extends FormElementTestCase {
+class Application_Form_Element_DocumentTypeTest extends FormElementTestCase
+{
 
-    public function setUp() {
+    protected $additionalResources = ['view', 'translation'];
+
+    public function setUp()
+    {
         $this->_formElementClass = 'Application_Form_Element_DocumentType';
         $this->_expectedDecoratorCount = 6;
-        $this->_expectedDecorators = array('ViewHelper', 'Errors', 'Description', 'ElementHtmlTag', 'LabelNotEmpty',
-            'dataWrapper');
+        $this->_expectedDecorators = [
+            'ViewHelper', 'Errors', 'Description', 'ElementHtmlTag', 'LabelNotEmpty', 'dataWrapper'
+        ];
         $this->_staticViewHelper = 'viewFormSelect';
         parent::setUp();
     }
 
-    public function testOptions() {
+    public function testOptions()
+    {
         $element = $this->getElement();
 
         $types = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes')->getDocumentTypes();
@@ -54,11 +59,27 @@ class Application_Form_Element_DocumentTypeTest extends FormElementTestCase {
         }
     }
 
-    public function testValidation() {
+    public function testValidation()
+    {
         $element = $this->getElement();
 
         $this->assertFalse($element->isValid('unknowntype'));
         $this->assertTrue($element->isValid('all'));
     }
 
+    public function testValueAddedToOptions()
+    {
+        $element = $this->getElement();
+
+        $type = 'testtype';
+
+        $this->assertNull($element->getMultiOption($type));
+
+        $element->setValue($type);
+
+        $option = $element->getMultiOption($type);
+
+        $this->assertNotNull($option);
+        $this->assertEquals($type, $option);
+    }
 }

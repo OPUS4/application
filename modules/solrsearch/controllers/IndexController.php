@@ -30,7 +30,7 @@
  * @author      Sascha Szott <szott@zib.de>
  * @author      Michael Lang <lang@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -52,6 +52,7 @@ class Solrsearch_IndexController extends Application_Controller_Action
         parent::init();
 
         $this->_helper->mainMenu('search'); // activate entry in main menu
+        $this->view->robots = 'noindex, nofollow';
     }
 
     /**
@@ -70,9 +71,9 @@ class Solrsearch_IndexController extends Application_Controller_Action
     public function advancedAction()
     {
         $form = new Solrsearch_Form_AdvancedSearch();
-        $form->setAction($this->view->url(array(
+        $form->setAction($this->view->url([
                     'module' => 'solrsearch', 'controller' => 'dispatch', 'action' => 'index'
-        )));
+        ]));
         $this->view->form = $form;
         $this->view->title = $this->view->translate('solrsearch_title_advanced');
     }
@@ -81,7 +82,8 @@ class Solrsearch_IndexController extends Application_Controller_Action
      *
      * TODO get rid of this action
      */
-    public function invalidsearchtermAction() {
+    public function invalidsearchtermAction()
+    {
         $this->view->title = $this->view->translate('solrsearch_title_invalidsearchterm');
         $searchtype = $this->getRequest()->getParam('searchtype');
 
@@ -90,8 +92,7 @@ class Solrsearch_IndexController extends Application_Controller_Action
 
         if ($searchtype === Application_Util_Searchtypes::ADVANCED_SEARCH) {
             $this->view->searchType = Application_Util_Searchtypes::ADVANCED_SEARCH;
-        }
-        else {
+        } else {
             $this->view->searchType = Application_Util_Searchtypes::SIMPLE_SEARCH;
         }
     }
@@ -101,7 +102,8 @@ class Solrsearch_IndexController extends Application_Controller_Action
      *
      * TODO remove?
      */
-    public function searchdispatchAction() {
+    public function searchdispatchAction()
+    {
         $this->_forward('index', 'dispatch');
     }
 
@@ -111,13 +113,13 @@ class Solrsearch_IndexController extends Application_Controller_Action
      *
      * TODO remove this - go to export directly
      */
-    private function redirectToExport($params) {
+    private function redirectToExport($params)
+    {
         unset($params['start']);
         if ($params['searchtype'] != 'latest') {
             unset($params['rows']);
-        }
-        else {
-            if (!array_key_exists('rows', $params)) {
+        } else {
+            if (! array_key_exists('rows', $params)) {
                 $params['rows'] = 10;
             }
         }
@@ -136,12 +138,13 @@ class Solrsearch_IndexController extends Application_Controller_Action
      * @throws Application_SearchException
      * @throws Zend_Form_Exception
      */
-    public function searchAction() {
+    public function searchAction()
+    {
         // check if searchtype = latest and params parsed incorrect
         $searchType = $this->getParam('searchtype');
         $request = $this->getRequest();
 
-        if (in_array($searchType, array('advanced', 'authorsearch')) && !is_null($this->getParam('Reset'))) {
+        if (in_array($searchType, ['advanced', 'authorsearch']) && ! is_null($this->getParam('Reset'))) {
             // redirect to new advanced search form
             // TODO find better way
             $this->_helper->Redirector->redirectTo('advanced', null, 'index', 'solrsearch');
@@ -159,7 +162,7 @@ class Solrsearch_IndexController extends Application_Controller_Action
             return;
         }
 
-        if (!is_null($request->getParam('export'))) {
+        if (! is_null($request->getParam('export'))) {
             $params = $request->getParams();
             // export module ignores pagination parameters
             $this->redirectToExport($params);
@@ -180,10 +183,10 @@ class Solrsearch_IndexController extends Application_Controller_Action
         $query = $searchPlugin->buildQuery($request);
 
         // if query is null, redirect has already been set
-        if (!is_null($query)) {
+        if (! is_null($query)) {
             $facetMenu = new Solrsearch_Model_FacetMenu();
 
-            $openFacets = $facetMenu->buildFacetArray( $this->getRequest()->getParams() );
+            $openFacets = $facetMenu->buildFacetArray($this->getRequest()->getParams());
 
             $resultList = $searchPlugin->performSearch($query, $openFacets);
             $this->view->openFacets = $openFacets;
@@ -202,16 +205,18 @@ class Solrsearch_IndexController extends Application_Controller_Action
 
             $numOfHits = $resultList->getNumberOfHits();
 
+            $this->view->resultScript = $this->_helper->resultScript();
+
             if ($numOfHits === 0 || $query->getStart() >= $numOfHits) {
                 $this->render('nohits');
-            }
-            else {
+            } else {
                 $this->render('results');
             }
         }
     }
 
-    private function setLinkRelCanonical() {
+    private function setLinkRelCanonical()
+    {
         $query = $this->getRequest()->getParams();
         $query['rows'] = 10;
         unset($query['sortfield']);
@@ -220,7 +225,6 @@ class Solrsearch_IndexController extends Application_Controller_Action
         $serverUrl = $this->view->serverUrl();
         $fullCanonicalUrl = $serverUrl . $this->view->url($query, null, true);
 
-        $this->view->headLink(array('rel' => 'canonical', 'href' => $fullCanonicalUrl));
+        $this->view->headLink(['rel' => 'canonical', 'href' => $fullCanonicalUrl]);
     }
-
 }

@@ -35,7 +35,8 @@
 /**
  * Returns true is current user has access to a resource.
  */
-class Application_View_Helper_AccessAllowed extends Zend_View_Helper_Abstract {
+class Application_View_Helper_AccessAllowed extends Zend_View_Helper_Abstract
+{
 
     /**
      * @var \Application_Controller_Action_Helper_AccessControl
@@ -47,7 +48,8 @@ class Application_View_Helper_AccessAllowed extends Zend_View_Helper_Abstract {
      * @param type $resource
      * @return boolean
      */
-    public function accessAllowed($resource) {
+    public function accessAllowed($resource)
+    {
         return $this->getAccessControl()->accessAllowed($resource);
     }
 
@@ -55,11 +57,11 @@ class Application_View_Helper_AccessAllowed extends Zend_View_Helper_Abstract {
      * Returns the Zend_Acl object or null.
      * @return Zend_Acl
      */
-    protected function getAccessControl() {
+    protected function getAccessControl()
+    {
         if (is_null($this->_accessControl)) {
             $this->_accessControl = Zend_Controller_Action_HelperBroker::getStaticHelper('accessControl');
         }
         return $this->_accessControl;
     }
-
 }

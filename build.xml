@@ -2,12 +2,26 @@
 <project name="opus4server" default="build" xmlns:if="ant:if" xmlns:unless="ant:unless">
 
     <property environment="env" />
-    <property name="configfile" location="${basedir}/../opus-config.properties" />
     <property name="testpath" value="" />
     <property name="codingstandard" location="${basedir}/vendor/opus4-repo/codesniffer/ruleset.xml" />
     <property name="adminPassword" value="AdminAdmin" />
     <property name="bindir" value="${basedir}/vendor/bin" />
     <property name="verbose" value="" />
+    <property name="solrVersion" value="5.5.5" />
+    <property name="downloadDir" value="${basedir}/downloads" />
+
+    <!-- Properties for configuration files (config.ini, console.ini, tests/config.ini) used for testing. -->
+    <property name="dbName" value="opusdb" />
+    <property name="dbUserName" value="opus4admin" />
+    <property name="dbUserPassword" value="" />
+    <property name="dbAdminName" value="opus4" />
+    <property name="dbAdminPassword" value="" />
+    <property name="solrIndexHost" value="localhost" />
+    <property name="solrIndexPort" value="8983" />
+    <property name="solrIndexPath" value="/solr/opus4" />
+    <property name="solrExtractHost" value="localhost" />
+    <property name="solrExtractPort" value="8983" />
+    <property name="solrExtractPath" value="/solr/opus4" />
 
     <target name="analyse-code" depends="phpcs,phpmd,phpcpd,phploc" />
 
@@ -105,18 +119,54 @@
         <!-- Prepare test configuration. -->
         <copy file="${basedir}/tests/config.ini.template" toFile="${basedir}/tests/config.ini" filtering="true"
               overwrite="true">
-            <filterset filtersFile="${configfile}" />
+            <filterset>
+                <filter token="db.user.name" value="${dbUserName}" />
+                <filter token="db.user.password" value="${dbUserPassword}" />
+                <filter token="db.admin.name" value="${dbAdminName}" />
+                <filter token="db.admin.password" value="${dbAdminPassword}" />
+                <filter token="db.name" value="${dbName}" />
+                <filter token="searchengine.index.host" value="${solrIndexHost}" />
+                <filter token="searchengine.index.port" value="${solrIndexPort}" />
+                <filter token="searchengine.index.app" value="${solrIndexPath}" />
+                <filter token="searchengine.extract.host" value="${solrExtractHost}" />
+                <filter token="searchengine.extract.port" value="${solrExtractPort}" />
+                <filter token="searchengine.extract.app" value="${solrExtractPath}" />
+            </filterset>
         </copy>
 
         <!-- Prepare main configuration. Needed for scripts like SolrIndexBuilder. -->
         <copy file="${basedir}/application/configs/config.ini.template"
               toFile="${basedir}/application/configs/config.ini" filtering="true" overwrite="true">
-            <filterset filtersFile="${configfile}" />
+            <filterset>
+                <filter token="db.user.name" value="${dbUserName}" />
+                <filter token="db.user.password" value="${dbUserPassword}" />
+                <filter token="db.admin.name" value="${dbAdminName}" />
+                <filter token="db.admin.password" value="${dbAdminPassword}" />
+                <filter token="db.name" value="${dbName}" />
+                <filter token="searchengine.index.host" value="${solrIndexHost}" />
+                <filter token="searchengine.index.port" value="${solrIndexPort}" />
+                <filter token="searchengine.index.app" value="${solrIndexPath}" />
+                <filter token="searchengine.extract.host" value="${solrExtractHost}" />
+                <filter token="searchengine.extract.port" value="${solrExtractPort}" />
+                <filter token="searchengine.extract.app" value="${solrExtractPath}" />
+            </filterset>
         </copy>
 
         <copy file="${basedir}/application/configs/console.ini.template"
               toFile="${basedir}/application/configs/console.ini" filtering="true" overwrite="true">
-            <filterset filtersFile="${configfile}" />
+            <filterset>
+                <filter token="db.user.name" value="${dbUserName}" />
+                <filter token="db.user.password" value="${dbUserPassword}" />
+                <filter token="db.admin.name" value="${dbAdminName}" />
+                <filter token="db.admin.password" value="${dbAdminPassword}" />
+                <filter token="db.name" value="${dbName}" />
+                <filter token="searchengine.index.host" value="${solrIndexHost}" />
+                <filter token="searchengine.index.port" value="${solrIndexPort}" />
+                <filter token="searchengine.index.app" value="${solrIndexPath}" />
+                <filter token="searchengine.extract.host" value="${solrExtractHost}" />
+                <filter token="searchengine.extract.port" value="${solrExtractPort}" />
+                <filter token="searchengine.extract.app" value="${solrExtractPath}" />
+            </filterset>
         </copy>
     </target>
 
@@ -227,10 +277,52 @@
     </target>
 
     <target name="phpunit-fast" depends="rebuild-database,rebuild-index" description="Runs unit tests without coverage">
+        <tstamp />
         <exec executable="${bindir}/phpunit" dir="${basedir}/tests" failonerror="true">
             <arg line="--log-junit ${basedir}/build/logs/phpunit.xml" />
             <arg line="--configuration phpunit.xml" />
+            <!--arg line="-debug" /-->
             <arg line="${testpath}" />
+            <redirector output="build/testresult-${DSTAMP}-${TSTAMP}.txt" alwayslog="true" />
+        </exec>
+    </target>
+
+    <target name="test" depends="rebuild-database,rebuild-index" description="Runs all tests in blocks.">
+        <tstamp />
+        <echo message="${line.separator}Running 'library' tests ..." />
+        <exec executable="${bindir}/phpunit" dir="${basedir}/tests" failonerror="false">
+            <arg line="--log-junit ${basedir}/build/logs/phpunit.xml" />
+            <arg line="--configuration phpunit.xml" />
+            <arg line="--testsuite library" />
+            <redirector output="build/testresult-${DSTAMP}-${TSTAMP}.txt" alwayslog="true" append="true" />
+        </exec>
+        <echo message="${line.separator}Running 'modules' tests (without 'admin') ..." />
+        <exec executable="${bindir}/phpunit" dir="${basedir}/tests" failonerror="false">
+            <arg line="--log-junit ${basedir}/build/logs/phpunit.xml" />
+            <arg line="--configuration phpunit.xml" />
+            <arg line="--testsuite modules" />
+            <redirector output="build/testresult-${DSTAMP}-${TSTAMP}.txt" alwayslog="true" append="true" />
+        </exec>
+        <echo message="${line.separator}Running 'admin' module tests ..." />
+        <exec executable="${bindir}/phpunit" dir="${basedir}/tests" failonerror="false">
+            <arg line="--log-junit ${basedir}/build/logs/phpunit.xml" />
+            <arg line="--configuration phpunit.xml" />
+            <arg line="--testsuite admin" />
+            <redirector output="build/testresult-${DSTAMP}-${TSTAMP}.txt" alwayslog="true" append="true" />
+        </exec>
+        <echo message="${line.separator}Running 'scripts' tests ..." />
+        <exec executable="${bindir}/phpunit" dir="${basedir}/tests" failonerror="false">
+            <arg line="--log-junit ${basedir}/build/logs/phpunit.xml" />
+            <arg line="--configuration phpunit.xml" />
+            <arg line="--testsuite scripts" />
+            <redirector output="build/testresult-${DSTAMP}-${TSTAMP}.txt" alwayslog="true" append="true" />
+        </exec>
+        <echo message="${line.separator}Running 'security' tests ..." />
+        <exec executable="${bindir}/phpunit" dir="${basedir}/tests" failonerror="false">
+            <arg line="--log-junit ${basedir}/build/logs/phpunit.xml" />
+            <arg line="--configuration phpunit.xml" />
+            <arg line="--testsuite security" />
+            <redirector output="build/testresult-${DSTAMP}-${TSTAMP}.txt" alwayslog="true" append="true" />
         </exec>
     </target>
 
@@ -259,6 +351,18 @@
         <exec executable="php" dir="${basedir}/scripts" failonerror="true">
             <arg line="opus-console.php" />
             <arg line="snippets/delete_files.php" />
+        </exec>
+    </target>
+
+    <target name="download-solr">
+        <mkdir dir="${downloadDir}" />
+        <get src="https://archive.apache.org/dist/lucene/solr/${solrVersion}/solr-${solrVersion}.tgz"
+             dest="${downloadDir}/solr-${solrVersion}.tgz"
+             skipexisting="true" />
+        <exec executable="tar" dir="${downloadDir}">
+            <arg line="xfz" />
+            <arg line="solr-${solrVersion}.tgz" />
+            <arg line="-C ${basedir}" />
         </exec>
     </target>
 

@@ -35,7 +35,8 @@
 /**
  * Validiert Datumseingaben.
  */
-class Application_Form_Validate_Date extends Zend_Validate_Date {
+class Application_Form_Validate_Date extends Zend_Validate_Date
+{
 
     /**
      * Regex pattern for valid date input.
@@ -47,33 +48,34 @@ class Application_Form_Validate_Date extends Zend_Validate_Date {
      * Date formats and input patterns used by Opus.
      * @var array
      */
-    private static $_dateFormats = array(
-        'de' => array(
+    private static $_dateFormats = [
+        'de' => [
             'format' => 'dd.MM.yyyy',
             'regex' => '#^[0-9]{1,2}\.[0-9]{1,2}\.[0-9]{1,4}$#'
-        ),
-        'en' => array(
+        ],
+        'en' => [
             'format' => 'yyyy/MM/dd',
             'regex' => '#^[0-9]{1,4}/[0-9]{1,2}/[0-9]{1,2}$#'
-        )
-    );
+        ]
+    ];
 
     /**
      * Constructs Application_Form_Validate_Date class for validating date input.
      * @param array $config Configuration options (see Zend_Validate_Date)
      */
-    public function __construct($config = null) {
+    public function __construct($config = null)
+    {
         parent::__construct($config);
         // automatically set date format used by Opus
         $this->setFormat($this->getDateFormat());
         $this->setInputPattern($this->getDatePattern());
 
         $this->setMessages(
-            array(
+            [
                 Zend_Validate_Date::INVALID => 'validation_error_date_invalid',
                 Zend_Validate_Date::INVALID_DATE => 'validation_error_date_invaliddate',
                 Zend_Validate_Date::FALSEFORMAT => 'validation_error_date_falseformat'
-            )
+            ]
         );
     }
 
@@ -82,12 +84,13 @@ class Application_Form_Validate_Date extends Zend_Validate_Date {
      * @param string $value
      * @return boolean - True only if date input is valid for Opus requirements
      */
-    public function isValid($value) {
+    public function isValid($value)
+    {
         $this->_setValue($value);
         // Check first if input matches expected pattern
         $datePattern = $this->getInputPattern();
         $validator = new Zend_Validate_Regex($datePattern);
-        if (!$validator->isValid($value)) {
+        if (! $validator->isValid($value)) {
             $this->_error(Zend_Validate_Date::FALSEFORMAT);
             return false;
         }
@@ -100,11 +103,11 @@ class Application_Form_Validate_Date extends Zend_Validate_Date {
      * Returns input pattern that was set or default input pattern for locale.
      * @return string Regex input pattern for dates
      */
-    public function getInputPattern() {
+    public function getInputPattern()
+    {
         if (empty($this->_inputPattern)) {
             return $this->getDatePattern();
-        }
-        else {
+        } else {
             return $this->_inputPattern;
         }
     }
@@ -113,7 +116,8 @@ class Application_Form_Validate_Date extends Zend_Validate_Date {
      * Sets the expected input pattern for dates.
      * @param string $pattern Regex input pattern
      */
-    public function setInputPattern($pattern) {
+    public function setInputPattern($pattern)
+    {
         $this->_inputPattern = $pattern;
     }
 
@@ -121,13 +125,13 @@ class Application_Form_Validate_Date extends Zend_Validate_Date {
      * Sets locale and updated input format automatically.
      * @param Zend_Locale $locale
      */
-    public function setLocale($locale = null) {
+    public function setLocale($locale = null)
+    {
         parent::setLocale($locale);
         if ($locale instanceof Zend_Locale) {
             $dateFormat = $this->getDateFormat($locale->getLanguage());
             $inputPattern = $this->getDatePattern($locale->getLanguage());
-        }
-        else {
+        } else {
             $dateFormat = $this->getDateFormat($locale);
             $inputPattern = $this->getDatePattern($locale);
         }
@@ -139,12 +143,12 @@ class Application_Form_Validate_Date extends Zend_Validate_Date {
      * Returns date format string for selected language in session.
      * @return string Date format string
      */
-    public function getDateFormat($locale = null) {
+    public function getDateFormat($locale = null)
+    {
         if (empty($locale)) {
             $session = new Zend_Session_Namespace();
             $language = $session->language;
-        }
-        else {
+        } else {
             $language = $locale;
         }
 
@@ -155,12 +159,12 @@ class Application_Form_Validate_Date extends Zend_Validate_Date {
      * Returns date format pattern for selected language in session.
      * @return string Input pattern for dates
      */
-    public function getDatePattern($locale = null) {
+    public function getDatePattern($locale = null)
+    {
         if (empty($locale)) {
             $session = new Zend_Session_Namespace();
             $language = $session->language;
-        }
-        else {
+        } else {
             $language = $locale;
         }
         return $this->__getDatePatternForLocale($language);
@@ -171,11 +175,11 @@ class Application_Form_Validate_Date extends Zend_Validate_Date {
      * @param string $locale Locale string like 'de'
      * @return string Date format for locale
      */
-    private function __getDateFormatForLocale($locale) {
+    private function __getDateFormatForLocale($locale)
+    {
         if (array_key_exists($locale, self::$_dateFormats)) {
             return self::$_dateFormats[$locale]['format'];
-        }
-        else {
+        } else {
             return self::$_dateFormats['en']['format'];
         }
     }
@@ -185,13 +189,12 @@ class Application_Form_Validate_Date extends Zend_Validate_Date {
      * @param string $locale Locale string like 'de'
      * @return string Date input pattern for locale
      */
-    private function __getDatePatternForLocale($locale) {
+    private function __getDatePatternForLocale($locale)
+    {
         if (array_key_exists($locale, self::$_dateFormats)) {
             return self::$_dateFormats[$locale]['regex'];
-        }
-        else {
+        } else {
             return self::$_dateFormats['en']['regex'];
         }
     }
-
 }

@@ -30,16 +30,16 @@
  * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Application_Form_Element_HiddenTest extends FormElementTestCase {
+class Application_Form_Element_HiddenTest extends FormElementTestCase
+{
 
-    public function setUp() {
+    public function setUp()
+    {
         $this->_formElementClass = 'Application_Form_Element_Hidden';
         $this->_expectedDecoratorCount = 2;
-        $this->_expectedDecorators = array('ViewHelper', 'HtmlTag');
+        $this->_expectedDecorators = ['ViewHelper', 'HtmlTag'];
         $this->_staticViewHelper = 'formHidden';
 
         parent::setUp();
     }
-
 }
-

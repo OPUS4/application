@@ -39,9 +39,11 @@
  *
  */
 
-class Application_Controller_Plugin_ViewSetup extends Zend_Controller_Plugin_Abstract {
+class Application_Controller_Plugin_ViewSetup extends Zend_Controller_Plugin_Abstract
+{
 
-    public function dispatchLoopStartup(Zend_Controller_Request_Abstract $request) {
+    public function dispatchLoopStartup(Zend_Controller_Request_Abstract $request)
+    {
         $viewRenderer = Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer');
         $viewRenderer->init();
 
@@ -50,6 +52,4 @@ class Application_Controller_Plugin_ViewSetup extends Zend_Controller_Plugin_Abs
         $viewRenderer->view->controllerName = $request->getControllerName();
         $viewRenderer->view->actionName     = $request->getActionName();
     }
-
-
 }

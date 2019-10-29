@@ -27,14 +27,21 @@
  * @category    Application Unit Test
  * @package     Form_Element
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
-class Application_Form_Element_HitsPerPageTest extends ControllerTestCase {
+class Application_Form_Element_HitsPerPageTest extends ControllerTestCase
+{
 
-    public function testInit() {
+    public function setUp()
+    {
+        parent::setUp();
+        $this->makeConfigurationModifiable();
+    }
+
+    public function testInit()
+    {
         $element = new Application_Form_Element_HitsPerPage('rows');
 
         $options = $element->getMultiOptions();
@@ -51,10 +58,11 @@ class Application_Form_Element_HitsPerPageTest extends ControllerTestCase {
         }
     }
 
-    public function testInitWithCustomDefaultRows() {
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
-            'searchengine' => array('solr' => array('numberOfDefaultSearchResults' => 15))
-        )));
+    public function testInitWithCustomDefaultRows()
+    {
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'searchengine' => ['solr' => ['numberOfDefaultSearchResults' => '15']]
+        ]));
 
         $element = new Application_Form_Element_HitsPerPage('rows');
 
@@ -72,5 +80,4 @@ class Application_Form_Element_HitsPerPageTest extends ControllerTestCase {
 
         $this->assertArrayHasKey(15, $options);
     }
-
 }

@@ -31,29 +31,31 @@
  * @category    Application Unit Test
  * @package     Application_Controller
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class Application_Controller_MessageTemplatesTest extends ControllerTestCase {
+class Application_Controller_MessageTemplatesTest extends TestCase
+{
 
     private $exampleTemplates = null;
 
     private $messageTemplates = null;
 
-    public function setUp() {
+    public function setUp()
+    {
         parent::setUp();
-        $this->exampleTemplates = array(
+        $this->exampleTemplates = [
             'save_success' => 'save_success_msg',
-            'save_failure' => array('failure' => 'save_failure_msg'),
+            'save_failure' => ['failure' => 'save_failure_msg'],
             'delete_success' => 'delete_success_msg',
-            'delete_failure' => array('failure' => 'delete_failure_msg'),
-        );
+            'delete_failure' => ['failure' => 'delete_failure_msg'],
+        ];
 
         $this->messageTemplates = new Application_Controller_MessageTemplates($this->exampleTemplates);
     }
 
-    public function testConstruct() {
+    public function testConstruct()
+    {
         $this->assertEquals($this->exampleTemplates, $this->messageTemplates->getMessages());
     }
 
@@ -61,7 +63,8 @@ class Application_Controller_MessageTemplatesTest extends ControllerTestCase {
      * @expectedException Application_Exception
      * @expectedExceptionMessage Parameter 'messages' is required
      */
-    public function testConstructWithoutParam() {
+    public function testConstructWithoutParam()
+    {
         $messages = new Application_Controller_MessageTemplates(null);
     }
 
@@ -69,42 +72,48 @@ class Application_Controller_MessageTemplatesTest extends ControllerTestCase {
      * @expectedException Application_Exception
      * @expectedExceptionMessage Parameter 'messages' is required and must be an array.
      */
-    public function testConstructWithBadParam() {
+    public function testConstructWithBadParam()
+    {
         $messages = new Application_Controller_MessageTemplates('notanarray');
     }
 
-    public function testGetMessages() {
+    public function testGetMessages()
+    {
         $messages = $this->messageTemplates->getMessages();
 
         $this->assertEquals(4, count($messages));
         $this->verifyMessages($messages);
     }
 
-    public function testSetMessages() {
-        $this->messageTemplates->setMessages(array(
+    public function testSetMessages()
+    {
+        $this->messageTemplates->setMessages([
             'save_success' => 'success',
-            'save_failure' => array('failure' => 'failure')
-        ));
+            'save_failure' => ['failure' => 'failure']
+        ]);
 
         $this->assertEquals('success', $this->messageTemplates->getMessage('save_success'));
-        $this->assertEquals(array('failure' => 'failure'), $this->messageTemplates->getMessage('save_failure'));
+        $this->assertEquals(['failure' => 'failure'], $this->messageTemplates->getMessage('save_failure'));
         $this->assertEquals('delete_success_msg', $this->messageTemplates->getMessage('delete_success'));
     }
 
-    public function testGetMessage() {
+    public function testGetMessage()
+    {
         $this->assertEquals('save_success_msg', $this->messageTemplates->getMessage('save_success'));
-        $this->assertEquals(array('failure' => 'save_failure_msg'), $this->messageTemplates->getMessage('save_failure'));
+        $this->assertEquals(['failure' => 'save_failure_msg'], $this->messageTemplates->getMessage('save_failure'));
     }
 
     /**
      * @expectedException Application_Exception
      * @expectedExceptionMessage Message key 'unknownkey' is not defined.
      */
-    public function testGetMessageUnknownKey() {
+    public function testGetMessageUnknownKey()
+    {
         $this->messageTemplates->getMessage('unknownkey');
     }
 
-    public function testSetMessage() {
+    public function testSetMessage()
+    {
         $this->assertEquals('save_success_msg', $this->messageTemplates->getMessage('save_success'));
 
         $this->messageTemplates->setMessage('save_success', 'Erfolg!');
@@ -112,13 +121,15 @@ class Application_Controller_MessageTemplatesTest extends ControllerTestCase {
         $this->assertEquals('Erfolg!', $this->messageTemplates->getMessage('save_success'));
     }
 
-    public function testSetMessageNew() {
+    public function testSetMessageNew()
+    {
         $this->messageTemplates->setMessage('unknownkey', 'Neue Nachricht!');
         $this->assertEquals('Neue Nachricht!', $this->messageTemplates->getMessage('unknownkey'));
     }
 
-    public function testSetMessageArray() {
-        $message = array('failure' => 'Something bad happened!');
+    public function testSetMessageArray()
+    {
+        $message = ['failure' => 'Something bad happened!'];
         $this->messageTemplates->setMessage('newkey', $message);
         $this->assertEquals($message, $this->messageTemplates->getMessage('newkey'));
     }
@@ -127,7 +138,8 @@ class Application_Controller_MessageTemplatesTest extends ControllerTestCase {
      * @expectedException Application_Exception
      * @expectedExceptionMessage Message key 'save_success' must not be null.
      */
-    public function testSetMessageNull() {
+    public function testSetMessageNull()
+    {
         $this->messageTemplates->setMessage('save_success', null);
     }
 
@@ -135,16 +147,16 @@ class Application_Controller_MessageTemplatesTest extends ControllerTestCase {
      * @expectedException Application_Exception
      * @expectedExceptionMessage Message key 'unknownkey' must not be null.
      */
-    public function testSetMessageNullUnknownKey() {
+    public function testSetMessageNullUnknownKey()
+    {
         $this->messageTemplates->setMessage('unknownkey', null);
     }
 
-    private function verifyMessages($messages) {
+    private function verifyMessages($messages)
+    {
         $this->assertArrayHasKey('save_success', $messages);
         $this->assertArrayHasKey('save_failure', $messages);
         $this->assertArrayHasKey('delete_success', $messages);
         $this->assertArrayHasKey('delete_failure', $messages);
     }
-
-
 }

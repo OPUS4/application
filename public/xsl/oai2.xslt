@@ -8,8 +8,8 @@
 
 -->
 
-<!-- 
-  
+<!--
+
 Copyright (c) 2000-2004 University of Southampton, UK. SO17 1BJ.
 
 EPrints 2 is free software; you can redistribute it and/or modify
@@ -28,9 +28,9 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 -->
 
-   
+
 <!--
-  
+
   All the elements really needed for EPrints are done but if
   you want to use this XSL for other OAI archive you may want
   to make some minor changes or additions.
@@ -46,7 +46,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 -->
 <xsl:stylesheet
     version="1.0"
-    xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:oai="http://www.openarchives.org/OAI/2.0/"
 >
 
@@ -72,7 +72,7 @@ td.key {
 .dcdata td.key {
 	background-color: #ffffe0;
 }
-body { 
+body {
 	margin: 1em 2em 1em 2em;
 }
 h1, h2, h3 {
@@ -173,7 +173,7 @@ p.intro {
 
 <xsl:template name="quicklinks">
     <ul class="quicklinks">
-      <li><a href="?verb=Identify">Identify</a> | </li> 
+      <li><a href="?verb=Identify">Identify</a> | </li>
       <li><a href="?verb=ListRecords&amp;metadataPrefix=oai_dc">ListRecords</a> | </li>
       <li><a href="?verb=ListSets">ListSets</a> | </li>
       <li><a href="?verb=ListMetadataFormats">ListMetadataFormats</a> | </li>
@@ -332,7 +332,7 @@ p.intro {
 </xsl:template>
 
 <xsl:template match="fr:baseURL" xmlns:fr="http://www.openarchives.org/OAI/2.0/friends/">
-  <li><xsl:value-of select="."/> 
+  <li><xsl:value-of select="."/>
 <xsl:text> </xsl:text>
 <a class="link" href="{.}?verb=Identify">Identify</a></li>
 </xsl:template>
@@ -528,6 +528,7 @@ p.intro {
 <!-- oai resumptionToken -->
 
 <xsl:template match="oai:resumptionToken">
+    <xsl:if test="@expirationDate">
    <p>There are more results.</p>
    <table class="values">
      <tr><td class="key">resumptionToken:</td>
@@ -535,6 +536,7 @@ p.intro {
 <xsl:text> </xsl:text>
 <a class="link" href="?verb={/oai:OAI-PMH/oai:request/@verb}&amp;resumptionToken={.}">Resume</a></td></tr>
    </table>
+    </xsl:if>
 </xsl:template>
 
 <!-- unknown metadata format -->

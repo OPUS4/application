@@ -2,6 +2,61 @@
 
 ---
 
+## Release 4.6.3 2018-11-05
+
+### Feature Request
+
+* [OPUSVIER-2940] - Möglichkeit Dokumente direkt in der Administration zu erstellen
+* [OPUSVIER-3582] - OAI-Schnittstelle erweitern um Ausgabe von DOI
+* [OPUSVIER-3901] - DataCite-XML zum Debugging oder als Backup zwischenspeichern
+* [OPUSVIER-3902] - Unterstützung von Microsoft Edge
+* [OPUSVIER-3904] - Aufruf von Google Scholar aus der Frontdoor in einem eigenen Browserfenster
+* [OPUSVIER-3906] - Datei datacite.xslt für DOI-Registrierung konfigurierbar machen
+* [OPUSVIER-3908] - Prüfung von Dateinamen und deren Länge
+* [OPUSVIER-3919] - Adressaten von DOI Benachrichtigungen über Accounts konfigurieren
+* [OPUSVIER-3949] - GND-Schlagwörter in Frontdoor nicht alphabetisch sortieren
+
+### Bugs
+
+* [OPUSVIER-3892] - XML-Dateien werden bei Upload über SWORD ignoriert
+* [OPUSVIER-3896] - Neue Enrichments  <opus.doi.autoCreate> und <opus.urn.autoCreate> beim Update anlegen
+* [OPUSVIER-3897] - Haken bei Checkbox "URN beim Veröffentlichen generieren" im Metadatenformular funktioniert nicht
+* [OPUSVIER-3899] - Speichern von ungültigen Werten, z.B. ISBN, ermöglichen
+* [OPUSVIER-3900] - DOIs werden nicht als lokal erkannt
+* [OPUSVIER-3903] - Anzeigefehler wenn Englisch nicht als Übersetzungssprache vorhanden ist
+* [OPUSVIER-3905] - Landing Page nicht korrekt
+* [OPUSVIER-3907] - Bug in der Navigation in der Kurztrefferansicht
+* [OPUSVIER-3909] - Enrichments ohne Wert im Import-XML sollten ohne Fehler ignoriert werden
+* [OPUSVIER-3910] - Irreführende Fehlermeldung: plugin Opus_Document_Plugin_IdentifierDoi is not applicable for documents with server state ...
+* [OPUSVIER-3911] - fehlendes "resumptionToken"
+* [OPUSVIER-3912] - Aufruf von Twitter in neuem Browser-Fenster
+* [OPUSVIER-3915] - Publish-Formular: Eingabe einer bereits im System vorhandenen DOI muss abgefangen werden
+* [OPUSVIER-3916] - E-Mail-Text zum "Statusbericht über DOI-Registrierung" und "Statusbericht über DOI-Prüfung" ändern
+* [OPUSVIER-3925] - assertQueryCount - Path und Count Parameter vertauscht
+* [OPUSVIER-3931] - Fehler in Publish-Formular-Meldung bei zu großer Datei
+* [OPUSVIER-3933] - DataCite Registrierung schlägt fehl bei fehlendem PublishedYear/CompletedYear
+* [OPUSVIER-3950] - Ausgabe einer DOI mit "_" ist fehlerhaft im BibTeX CitationExport
+
+### Aufgaben
+
+* [OPUSVIER-2155] - CollectionRole-Feld "display_oai" aus Datenbank-Schema und Model entfernen
+* [OPUSVIER-2294] - URN-Vergabe für bereits vorhandene Dokumente deaktivieren
+* [OPUSVIER-3913] - ZIP und TAR Handhabung in PackageReader auf zwei Klassen aufteilen
+* [OPUSVIER-3918] - View Helper für Ausgabe von Nachrichten
+* [OPUSVIER-3920] - ActionBox Code vereinheitlichen
+* [OPUSVIER-3921] - DOI Support Cron-Jobs lauffähig für OPUS-User (ohne sudo)
+* [OPUSVIER-3922] - Aufruf Skript "Änderung der URL von Landing-Pages für lokale DOIs" klären und ggf. Handbuch anpassen
+* [OPUSVIER-3923] - Testing OPUS 4 mit Ubuntu 18.04 LTS
+* [OPUSVIER-3929] - Opus_Date-Objekte mit updateFromArray initialisieren
+* [OPUSVIER-3934] - Vergleichen von Opus_Date und anderen Objekten
+* [OPUSVIER-3939] - FromArray-Funktionen für Personen-Objekte
+* [OPUSVIER-3945] - Erlaubnis für DOI-Notifikationen zur Zugriffskontrolle hinzufügen
+* [OPUSVIER-3946] - Funktion, um alle Nutzer mit Zugriffsrecht zu ermitteln
+* [OPUSVIER-3947] - Übersetzungsmechanik für Javascript
+* [OPUSVIER-3948] - Funktion, um alle Jobs zu löschen
+
+---
+
 ## Release 4.6.2 2018-06-11
 
 ### Feature Request

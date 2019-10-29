@@ -31,9 +31,11 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Application_Form_Decorator_TableWrapper extends Zend_Form_Decorator_Abstract {
+class Application_Form_Decorator_TableWrapper extends Zend_Form_Decorator_Abstract
+{
 
-    public function render($content) {
+    public function render($content)
+    {
         // Render Tabellen Tags nur wenn es Einträge (Unterformulare) gibt
         if (count($this->getElement()->getSubForms()) == 0) {
             return $content;
@@ -41,5 +43,4 @@ class Application_Form_Decorator_TableWrapper extends Zend_Form_Decorator_Abstra
 
         return '<table>' . $content . '</table>';
     }
-
 }

@@ -27,7 +27,8 @@
  * @category    Tests
  * @author      Jens Schwidder <schwidder@zib.de>
  * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @author      Maximilian Salomon <salomon@zib.de>
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -38,6 +39,8 @@
  */
 class Admin_DocumentControllerTest extends ControllerTestCase
 {
+
+    protected $additionalResources = ['database', 'view', 'mainMenu', 'navigation', 'translation'];
 
     private $expectedNavigationLinks;
 
@@ -286,13 +289,17 @@ class Admin_DocumentControllerTest extends ControllerTestCase
         $this->assertQueryCount('//dl#Document-Goto//li/a', count($expectedLinks));
 
         foreach ($expectedLinks as $link => $label) {
-            $this->assertXpathContentContains("//dl[@id=\"Document-Goto\"]//li/a[@href=\"$link\"]", $label,
-                "Link '$link' mit Label '$label' is missing from navigation.");
+            $this->assertXpathContentContains(
+                "//dl[@id=\"Document-Goto\"]//li/a[@href=\"$link\"]",
+                $label,
+                "Link '$link' mit Label '$label' is missing from navigation."
+            );
         }
     }
 
     public function testEditActionValidXHTML()
     {
+        $this->useEnglish();
         $this->dispatch('/admin/document/edit/id/146');
         $this->assertResponseCode(200);
         $this->assertModule('admin');
@@ -451,8 +458,10 @@ class Admin_DocumentControllerTest extends ControllerTestCase
         $this->assertQueryContentContains('//*[@id="Document-Titles-Main-TitleMain1-Value"]', 'COLN');
 
         $this->assertQueryContentContains('//*[@id="Document-Titles-Additional-TitleAdditional0-Language"]', 'Deutsch');
-        $this->assertQueryContentContains('//*[@id="Document-Titles-Additional-TitleAdditional0-Value"]',
-                'Kooperativer Biblioheksverbund Berlin-Brandenburg');
+        $this->assertQueryContentContains(
+            '//*[@id="Document-Titles-Additional-TitleAdditional0-Value"]',
+            'Kooperativer Biblioheksverbund Berlin-Brandenburg'
+        );
 
         $this->assertQueryContentContains('//*[@id="Document-Titles-Parent-TitleParent0-Language"]', 'Deutsch');
         $this->assertQueryContentContains('//*[@id="Document-Titles-Parent-TitleParent0-Value"]', 'Parent Title');
@@ -533,12 +542,16 @@ class Admin_DocumentControllerTest extends ControllerTestCase
 
         // Abstracts
         $this->assertQueryContentContains('//*[@id="Document-Content-Abstracts-TitleAbstract0-Language"]', 'Deutsch');
-        $this->assertQueryContentContains('//*[@id="Document-Content-Abstracts-TitleAbstract0-Value"]',
-                'Die KOBV-Zentrale in Berlin-Dahlem.');
+        $this->assertQueryContentContains(
+            '//*[@id="Document-Content-Abstracts-TitleAbstract0-Value"]',
+            'Die KOBV-Zentrale in Berlin-Dahlem.'
+        );
 
         $this->assertQueryContentContains('//*[@id="Document-Content-Abstracts-TitleAbstract1-Language"]', 'Englisch');
-        $this->assertQueryContentContains('//*[@id="Document-Content-Abstracts-TitleAbstract1-Value"]',
-                'Lorem impsum.');
+        $this->assertQueryContentContains(
+            '//*[@id="Document-Content-Abstracts-TitleAbstract1-Value"]',
+            'Lorem impsum.'
+        );
 
         // Subjects
         $this->assertQueryContentContains('//*[@id="Document-Content-Subjects-Swd-Subject0-Value"]', 'Berlin');
@@ -547,7 +560,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase
         $this->assertQueryContentContains('//*[@id="Document-Content-Subjects-Uncontrolled-Subject0-Value"]', 'Palmöl');
 
         // Identifier
-        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-IdentifiersDOI-IdentifierDOI0-Value"]', '123');
+        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-IdentifiersDOI-IdentifierDOI0-Value"]', '10.1007/978-3-540-76406-9');
 
         $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-IdentifiersURN-IdentifierURN0-Value"]', 'urn:nbn:op:123');
 
@@ -687,8 +700,10 @@ class Admin_DocumentControllerTest extends ControllerTestCase
         $this->assertQueryContentContains('//*[@id="Document-Titles-Main-TitleMain1-Value"]', 'COLN');
 
         $this->assertQueryContentContains('//*[@id="Document-Titles-Additional-TitleAdditional0-Language"]', 'German');
-        $this->assertQueryContentContains('//*[@id="Document-Titles-Additional-TitleAdditional0-Value"]',
-                'Kooperativer Biblioheksverbund Berlin-Brandenburg');
+        $this->assertQueryContentContains(
+            '//*[@id="Document-Titles-Additional-TitleAdditional0-Value"]',
+            'Kooperativer Biblioheksverbund Berlin-Brandenburg'
+        );
 
         $this->assertQueryContentContains('//*[@id="Document-Titles-Parent-TitleParent0-Language"]', 'German');
         $this->assertQueryContentContains('//*[@id="Document-Titles-Parent-TitleParent0-Value"]', 'Parent Title');
@@ -769,12 +784,16 @@ class Admin_DocumentControllerTest extends ControllerTestCase
 
         // Abstracts
         $this->assertQueryContentContains('//*[@id="Document-Content-Abstracts-TitleAbstract0-Language"]', 'German');
-        $this->assertQueryContentContains('//*[@id="Document-Content-Abstracts-TitleAbstract0-Value"]',
-                'Die KOBV-Zentrale in Berlin-Dahlem.');
+        $this->assertQueryContentContains(
+            '//*[@id="Document-Content-Abstracts-TitleAbstract0-Value"]',
+            'Die KOBV-Zentrale in Berlin-Dahlem.'
+        );
 
         $this->assertQueryContentContains('//*[@id="Document-Content-Abstracts-TitleAbstract1-Language"]', 'English');
-        $this->assertQueryContentContains('//*[@id="Document-Content-Abstracts-TitleAbstract1-Value"]',
-                'Lorem impsum.');
+        $this->assertQueryContentContains(
+            '//*[@id="Document-Content-Abstracts-TitleAbstract1-Value"]',
+            'Lorem impsum.'
+        );
 
         // Subjects
         $this->assertQueryContentContains('//*[@id="Document-Content-Subjects-Swd-Subject0-Value"]', 'Berlin');
@@ -783,7 +802,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase
         $this->assertQueryContentContains('//*[@id="Document-Content-Subjects-Uncontrolled-Subject0-Value"]', 'Palmöl');
 
         // Identifier
-        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-IdentifiersDOI-IdentifierDOI0-Value"]', '123');
+        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-IdentifiersDOI-IdentifierDOI0-Value"]', '10.1007/978-3-540-76406-9');
 
         $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-IdentifiersURN-IdentifierURN0-Value"]', 'urn:nbn:op:123');
 
@@ -888,8 +907,10 @@ class Admin_DocumentControllerTest extends ControllerTestCase
         $this->dispatch('/admin/document/index/id/146');
         $this->assertXpath('//ul[@class = "form-action"]/li[@class = "frontdoor"]/a[contains(@href, "docId/146")]');
         $this->assertXpathCountMax(
-            '//ul[@class = "form-action"]/li[@class = "frontdoor"]/a[contains(@href, "id/146")]', 0,
-            'Parameter \'id\' should not appear in link to frontdoor.');
+            '//ul[@class = "form-action"]/li[@class = "frontdoor"]/a[contains(@href, "id/146")]',
+            0,
+            'Parameter \'id\' should not appear in link to frontdoor.'
+        );
     }
 
     /**

@@ -28,9 +28,8 @@
  * @category    Application
  * @package     Module_Licence
  * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -39,16 +38,22 @@
  * @category    Application
  * @package     Module_Admin
  */
-class Admin_LanguageController extends Application_Controller_ActionCRUD {
+class Admin_LanguageController extends Application_Controller_ActionCRUD
+{
 
     /**
      * List all available collection role instances
      *
      * @return void
      */
-    public function init() {
+    public function init()
+    {
         $this->setFormClass('Admin_Form_Language');
         parent::init();
     }
 
+    public function isDeletable($model)
+    {
+        return ! $model->isUsed();
+    }
 }
