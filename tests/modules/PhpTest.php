@@ -43,13 +43,13 @@ class PhpTest extends ControllerTestCase
      */
     public function testInArray()
     {
-        $array = array(
+        $array = [
             'egg' => true,
             'cheese' => false,
             'hair' => 765,
             'goblins' => null,
             'ogres' => 'no ogres allowed in this array',
-        );
+        ];
 
         // correct
         $this->assertTrue(in_array(null, $array));
@@ -60,7 +60,7 @@ class PhpTest extends ControllerTestCase
         $this->assertTrue(in_array(763, $array));
         $this->assertTrue(in_array('egg', $array));
         $this->assertTrue(in_array('hhh', $array));
-        $this->assertTrue(in_array(array(), $array));
+        $this->assertTrue(in_array([], $array));
 
         // using strict, it works as expected
         $this->assertTrue(in_array(null, $array, true));
@@ -69,9 +69,6 @@ class PhpTest extends ControllerTestCase
         $this->assertFalse(in_array(763, $array, true));
         $this->assertFalse(in_array('egg', $array, true));
         $this->assertFalse(in_array('hhh', $array, true));
-        $this->assertFalse(in_array(array(), $array, true));
+        $this->assertFalse(in_array([], $array, true));
     }
-
 }
-
-
