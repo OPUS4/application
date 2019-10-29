@@ -306,7 +306,8 @@ class Oai_IndexControllerTest extends ControllerTestCase
             'oai_dc' => 91,
             'oai_pp' => 91,
             'copy_xml' => 91,
-            'epicur' => 91
+            'epicur' => 91,
+            'marc21' => 91
         ];
 
         foreach ($formatTestDocuments as $format => $docId) {
