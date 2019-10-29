@@ -33,7 +33,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
  -->
-<documenttype name="periodical"
+<documenttype name="periodicalpart"
               xmlns="http://www.opus-repository.org/schema/documenttype"
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="http://www.opus-repository.org/schema/documenttype http://www.opus-repository.org/schema/documenttype.xsd">

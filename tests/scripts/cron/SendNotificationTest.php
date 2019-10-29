@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -28,9 +27,8 @@
  * @category    Cronjob
  * @package     Tests
  * @author      Edouard Simon (edouard.simon@zib.de)
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 require_once('CronTestCase.php');
 
@@ -43,30 +41,34 @@ require_once('CronTestCase.php');
  * TODO kann man das besser automatisieren
  *
  */
-class SendNotificationTest extends CronTestCase {
+class SendNotificationTest extends CronTestCase
+{
 
-    public function testSendNotification() {
-        $this->createJob(Opus_Job_Worker_MailNotification::LABEL, array(
+    protected $additionalResources = 'database';
+
+    public function testSendNotification()
+    {
+        $this->createJob(Opus_Job_Worker_MailNotification::LABEL, [
             'subject' => 'SendNotification Test',
             'message' => 'This is a test message generated in ' . __FILE__,
-            'users' => array(array('address' => 'user@example.org', 'name' => 'Test User'))
-        ));
+            'users' => [['address' => 'user@example.org', 'name' => 'Test User']]
+        ]);
         $this->executeScript('cron-send-notification.php');
-        $allJobs = Opus_Job::getByLabels(array(Opus_Job_Worker_MailNotification::LABEL), null, Opus_Job::STATE_UNDEFINED);
+        $allJobs = Opus_Job::getByLabels([Opus_Job_Worker_MailNotification::LABEL], null, Opus_Job::STATE_UNDEFINED);
         $this->assertTrue(empty($allJobs), 'Expected no more jobs in queue');
-        $failedJobs = Opus_Job::getByLabels(array(Opus_Job_Worker_MailNotification::LABEL), null, Opus_Job::STATE_FAILED);
+        $failedJobs = Opus_Job::getByLabels([Opus_Job_Worker_MailNotification::LABEL], null, Opus_Job::STATE_FAILED);
         $this->assertTrue(empty($failedJobs), 'Expected no failed jobs in queue');
     }
 
-    public function testFailSendNotification() {
-        $this->createJob(Opus_Job_Worker_MailNotification::LABEL, array(
+    public function testFailSendNotification()
+    {
+        $this->createJob(Opus_Job_Worker_MailNotification::LABEL, [
             'subject' => 'SendNotification Test',
             'message' => 'This is a test message generated in ' . __FILE__,
             'users' => ''
-        ));
+        ]);
         $this->executeScript('cron-send-notification.php');
-        $failedJobs = Opus_Job::getByLabels(array(Opus_Job_Worker_MailNotification::LABEL), null, Opus_Job::STATE_FAILED);
+        $failedJobs = Opus_Job::getByLabels([Opus_Job_Worker_MailNotification::LABEL], null, Opus_Job::STATE_FAILED);
         $this->assertEquals(1, count($failedJobs), 'Expected one failed job in queue');
     }
-
 }

@@ -28,25 +28,29 @@
  * @category    Application
  * @package     Module_Publish Unit Test
  * @author      Susanne Gottwald <gottwald@zib.de>
- * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class Publish_Model_FormElementTest extends ControllerTestCase {
+class Publish_Model_FormElementTest extends ControllerTestCase
+{
+
+    protected $additionalResources = ['view', 'translation'];
 
     protected $_logger;
 
-    public function setUp() {
+    public function setUp()
+    {
         $writer = new Zend_Log_Writer_Null;
         $this->_logger = new Zend_Log($writer);
         parent::setUp();
     }
 
-    public function testUnrequiredFirstNames() {
+    public function testUnrequiredFirstNames()
+    {
         $session = new Zend_Session_Namespace('Publish');
         $session->documentType = 'all';
-        
-        $form = new Publish_Form_PublishingSecond($this->_logger);        
+
+        $form = new Publish_Form_PublishingSecond($this->_logger);
         $name = 'PersonAuthor';
         $required = true;
         $formElement = 'text';
@@ -57,12 +61,11 @@ class Publish_Model_FormElementTest extends ControllerTestCase {
         $element->initGroup();
         $subformElements = $element->getSubFormElements();
 
-        foreach ($subformElements AS $sub) {
+        foreach ($subformElements as $sub) {
             /* @var $sub Zend_Form_Element */
-            if ($sub->getName() == 'PersonAuthorFirstName')
+            if ($sub->getName() == 'PersonAuthorFirstName') {
                 $this->assertFalse($sub->isRequired());
+            }
         }
     }
-
 }
-

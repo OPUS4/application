@@ -37,9 +37,10 @@
  *
  * TODO expand functionality
  */
-class LogFilter implements Zend_Log_Filter_Interface {
+class LogFilter implements Zend_Log_Filter_Interface
+{
 
-    private $messages = array();
+    private $messages = [];
 
     /**
      * Returns TRUE to accept the message, FALSE to block it.
@@ -47,13 +48,14 @@ class LogFilter implements Zend_Log_Filter_Interface {
      * @param  array $event event data
      * @return boolean            accepted?
      */
-    public function accept($event) {
+    public function accept($event)
+    {
         $this->messages[] = $event['message'];
         return true;
     }
 
-    public function getMessages() {
+    public function getMessages()
+    {
         return $this->messages;
     }
-
 }

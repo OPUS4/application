@@ -1,0 +1,119 @@
+@charset "utf-8";
+/* CSS Document */
+*{
+   background: white;
+   color: black;
+}
+a {
+   text-decoration: none;
+   color: black;
+}
+#download-fulltext a{
+   display: list-item;
+   list-style: square;
+   padding-left: 0;
+   margin-left: 2em;
+}
+.print-links{
+   display: block;
+}
+.print-links a:after{
+   content: " (" attr(href) ")";
+}
+html,
+body{
+   font: 1em/1.3 Georgia, serif;
+   margin: 0;
+   padding: 0;
+}
+pre.preserve-spaces{
+   font-family: Georgia, serif;
+}
+#top-header,
+#primary-nav,
+#actionboxContainer,
+#page-footer,
+.messages,
+#export,
+#additional-services,
+.breadcrumbsContainer{
+   display: none;
+}
+#services,
+#result-data{
+   float: none;
+   width: 100%;
+}
+#header{
+   float: right;
+   width: auto;
+   height: auto;
+   padding: 0;
+}
+#logo{
+   float: right;
+}
+.wrapper{
+   max-width: none;
+   width: auto;
+   float: none;
+}
+#titlemain-wrapper{
+   border-bottom: 4px solid black;
+}
+#services h3{
+   display: block;
+}
+#services h3,
+.frontdoordata caption{
+   border-bottom: 2px solid black;
+   padding-left: 0;
+   padding-right: 0;
+   font: normal bold 12pt Arial, Helvetica, sans-serif;
+   text-transform: none;
+}
+#titlemain-wrapper h2,
+#titlemain-wrapper h3{
+   font-weight: bold;
+}
+#titlemain-wrapper h2,
+#titlemain-wrapper h3,
+table.frontdoordata th,
+table.frontdoordata td,
+.services,
+.facet,
+.frontdoor #author,
+.frontdoor .abstract,
+.frontdoordata caption {
+    padding-left: 0;
+}
+.adminContainer form .wrapper > .subform > fieldset > legend:after,
+.adminContainer form .wrapper .subform legend .button-group{
+    display: none;
+}
+.adminContainer form .wrapper > .subform > fieldset > legend {
+    font: normal bold 1.1em Arial, Helvetica, sans-serif;
+    margin: 1em 0 0;
+    border: 1px solid black;
+    padding: 5pt
+ }
+.adminContainer form .wrapper .subform legend {
+    color: Black;
+    font: normal bold 1em Arial, Helvetica, sans-serif;
+    text-transform: none;
+    background-color: white;
+    padding: 0 0 2pt 0;
+    margin-left: 0.5%;
+    border-radius: 0;
+    border-bottom: 1px solid black;
+    line-height: normal;
+    display: block;
+    position: static;
+}
+/*.adminContainer form .wrapper .subform .subform fieldset{
+    border-top: 2px solid black !important;
+}*/
+
+.frontdoor .frontdoor_pagination {
+    display:none;
+}

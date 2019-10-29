@@ -34,7 +34,8 @@
 /**
  * Interface für Klassen die Validierungen für die Unterformulare von Admin_Form_Document_MultiSubForm durchführen.
  */
-interface Application_Form_Validate_IMultiSubForm {
+interface Application_Form_Validate_IMultiSubForm
+{
 
     /**
      * Bereitet die Validierung vor.
@@ -55,5 +56,4 @@ interface Application_Form_Validate_IMultiSubForm {
      * @param array $context
      */
     public function isValid($data, $context = null);
-
 }

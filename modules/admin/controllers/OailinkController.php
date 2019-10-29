@@ -27,25 +27,26 @@
  * @category    Application
  * @package     Module_Admin
  * @author      Henning Gerhardt (henning.gerhardt@slub-dresden.de)
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
  * Main entry point for this module.
  *
  * @category    Application
- * @package     Module_Admin
+ * @package     Admin
  */
-class Admin_OailinkController extends Application_Controller_Action {
+class Admin_OailinkController extends Application_Controller_Action
+{
 
     /**
      * Shows link to oai module.
      *
      * @return void
      */
-    public function indexAction() {
+    public function indexAction()
+    {
         $this->view->title = $this->view->translate('admin_title_oailink');
 
         $request = $this->getRequest();

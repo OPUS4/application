@@ -24,16 +24,25 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    TODO
+ * @category    Tests
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @author      Maximilian Salomon <salomon@zib.de>
+ * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
-class Admin_StatisticControllerTest extends ControllerTestCase {
+/**
+ * Class Admin_StatisticControllerTest.
+ *
+ * @covers Admin_StatisticController
+ */
+class Admin_StatisticControllerTest extends ControllerTestCase
+{
 
-    public function testIndexAction() {
+    protected $additionalResources = 'all';
+
+    public function testIndexAction()
+    {
         $this->dispatch('/admin/statistic');
         $this->assertResponseCode(200);
         $this->assertModule('admin');
@@ -42,10 +51,11 @@ class Admin_StatisticControllerTest extends ControllerTestCase {
         $this->validateXHTML();
     }
 
-    public function testShowAction() {
+    public function testShowAction()
+    {
         $this->request
                 ->setMethod('POST')
-                ->setPost(array('selectedYear' => '2010'));
+                ->setPost(['selectedYear' => '2010']);
         $this->dispatch('/admin/statistic/show');
         $this->assertResponseCode(200);
         $this->assertModule('admin');
@@ -57,10 +67,12 @@ class Admin_StatisticControllerTest extends ControllerTestCase {
     /*
      * Fragt ab, ob bei einem falschen Jahr die Indexseite angezeigt wird
      */
-    public function testIndexActionWithWrongYear() {
+    public function testIndexActionWithWrongYear()
+    {
+        $this->useEnglish();
         $this->request
             ->setMethod('POST')
-            ->setPost(array('selectedYear' => '1337'));
+            ->setPost(['selectedYear' => '1337']);
         $this->dispatch('/admin/statistic/index');
         $this->assertResponseCode(200);
         $this->assertModule('admin');
@@ -68,24 +80,29 @@ class Admin_StatisticControllerTest extends ControllerTestCase {
         $this->assertAction('index');
         $this->assertQueryContentContains('//dt', 'Please select year:');
         $this->assertNotQueryContentContains('//h2', 'Month overview');
-        $this->checkForCustomBadStringsInHtml($this->getResponse()->getBody(), array('1337'));
+        $this->checkForCustomBadStringsInHtml($this->getResponse()->getBody(), ['1337']);
     }
 
-    public function testDisplayCurrentYear() {
+    public function testDisplayCurrentYear()
+    {
         $this->useGerman();
         $this->request
                 ->setMethod('POST')
-                ->setPost(array('selectedYear' => '2010'));
+                ->setPost(['selectedYear' => '2010']);
         $this->dispatch('/admin/statistic/show');
-        $this->assertQueryContentContains('//div[@class="breadcrumbsContainer"]', '2010',
-            'breadcrumbsContainer does not contain the current year');
+        $this->assertQueryContentContains(
+            '//div[@class="breadcrumbsContainer"]',
+            '2010',
+            'breadcrumbsContainer does not contain the current year'
+        );
         $this->assertQueryContentContains('//h1', 'Veröffentlichungstatistik 2010');
     }
 
     /**
      * Regression test for OPUSVIER-1770.
      */
-    public function testRedirectToIndexForShowWithoutSelectedYear() {
+    public function testRedirectToIndexForShowWithoutSelectedYear()
+    {
         $this->dispatch('/admin/statistic/show');
         $this->assertRedirectTo('/admin/statistic');
     }
@@ -94,9 +111,9 @@ class Admin_StatisticControllerTest extends ControllerTestCase {
      * Regression test for OPUSVIER-1769.
      * Documents must not be shown in publication statistics, if their serverState is not 'published'.
      */
-    public function testIgnoreUnpublishedDocuments() {
+    public function testIgnoreUnpublishedDocuments()
+    {
         $this->dispatch('/admin/statistic');
         $this->assertNotQueryContentContains('//option', '2110');
     }
 }
-

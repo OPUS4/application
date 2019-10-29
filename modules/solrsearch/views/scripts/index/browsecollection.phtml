@@ -29,35 +29,33 @@
  * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 ?>
 
-<?php if (!empty($this->parents)) : ?>
+<?php if (! empty($this->parents)) : ?>
 <div id="breadcrumb">
     <ul>
         <?php foreach ($this->parents as $id => $parent) : ?>
             <?php
                 $displayNameShortened = '';
-                if ($id === 0) {
-                    $displayNameShortened = $this->collectionRoleTitle;
-                }
-                else {
-                    $displayNameShortened = $parent->getDisplayNameForBrowsingContext($this->collectionRole);
-                }
-                if (strlen($displayNameShortened) > 50) {
-                    $displayNameShortened = substr($displayNameShortened, 0, 50) . '...';
-                }
+            if ($id === 0) {
+                $displayNameShortened = $this->collectionRoleTitle;
+            } else {
+                $displayNameShortened = $parent->getDisplayNameForBrowsingContext($this->collectionRole);
+            }
+            if (strlen($displayNameShortened) > 50) {
+                $displayNameShortened = substr($displayNameShortened, 0, 50) . '...';
+            }
                 $displayNameShortened = htmlspecialchars($displayNameShortened);
             ?>
             <?php if ($id === 0) : ?>
-                <li><a href="<?= $this->url(array('module' => 'solrsearch', 'controller' => 'index',
-                        'action' => 'search', 'searchtype' => 'collection', 'id' => $parent->getId()), null, true)
+                <li><a href="<?= $this->url(['module' => 'solrsearch', 'controller' => 'index',
+                        'action' => 'search', 'searchtype' => 'collection', 'id' => $parent->getId()], null, true)
                     ?>"><?= $displayNameShortened ?></a></li>
             <?php else : ?>
                 <?php if ($parent->getVisible() === '1') : ?>
-                    <li><a href="<?= $this->url(array('module' => 'solrsearch', 'controller' => 'index',
-                            'action' => 'search', 'searchtype' => 'collection', 'id' => $parent->getId()), null, true)
+                    <li><a href="<?= $this->url(['module' => 'solrsearch', 'controller' => 'index',
+                            'action' => 'search', 'searchtype' => 'collection', 'id' => $parent->getId()], null, true)
                         ?>"><?= $displayNameShortened ?></a></li>
                 <?php else : ?>
                     <li class="empty-collection"><?= $displayNameShortened ?></li>
@@ -70,24 +68,29 @@
 
 <h2><?= htmlspecialchars($this->title) ?></h2>
 
-<?PHP $this->disableEmptyCollections = Zend_Registry::get('Zend_Config')->browsing->disableEmptyCollections; ?>
+<?php
+    $config = Zend_Registry::get('Zend_Config');
+    $this->disableEmptyCollections = isset($config->browsing->disableEmptyCollections) &&
+        filter_var($config->browsing->disableEmptyCollections, FILTER_VALIDATE_BOOLEAN);
+    $collRoleName = htmlspecialchars($this->collectionRole->getName(), ENT_QUOTES);
+?>
 
 <div class="content">
-    <ul class="nav browsing">
+    <ul class="nav browsing col-list role-<?= $collRoleName ?>">
     <?php foreach ($this->children as $child) : ?>
         <?php $documentCount = $child->getNumSubtreeEntries(); ?>
             <?php if ($documentCount === 0 && $this->disableEmptyCollections) : ?>
                 <li class="empty-collection"><?=
                     htmlspecialchars($child->getDisplayNameForBrowsingContext($this->collectionRole)) ?>
-            <?php else: ?>
+            <?php else : ?>
                 <li>
-                    <a href="<?= $this->url(array('module' => 'solrsearch', 'controller' => 'index',
-                        'action' => 'search', 'searchtype' => 'collection', 'id' => $child->getId()), null, true)
+                    <a href="<?= $this->url(['module' => 'solrsearch', 'controller' => 'index',
+                        'action' => 'search', 'searchtype' => 'collection', 'id' => $child->getId()], null, true)
                     ?>"><?= htmlspecialchars($child->getDisplayNameForBrowsingContext($this->collectionRole)) ?></a>
                     (<?= $documentCount ?>)
             <?php endif ?>
-                <a href="<?= $this->url(array('module' => 'rss', 'controller' => 'index', 'action' => 'index',
-                    'searchtype' => 'collection', 'id' => $child->getId()), null, true)
+                <a href="<?= $this->url(['module' => 'rss', 'controller' => 'index', 'action' => 'index',
+                    'searchtype' => 'collection', 'id' => $child->getId()], null, true)
                 ?>" class="rss" type="application/rss+xml">
                     <img src="<?= $this->layoutPath() ?>/img/feed_small.png" width="12" height="12"
                          alt="<?= $this->translate('rss_icon') ?>" title="<?= $this->translate('rss_title') ?>" />

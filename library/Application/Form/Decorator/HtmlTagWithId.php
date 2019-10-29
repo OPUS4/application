@@ -35,22 +35,23 @@
 /**
  * TODO rename
  */
-class Application_Form_Decorator_HtmlTagWithId extends Zend_Form_Decorator_HtmlTag {
+class Application_Form_Decorator_HtmlTagWithId extends Zend_Form_Decorator_HtmlTag
+{
 
-    protected function _htmlAttribs(array $attribs) {
+    protected function _htmlAttribs(array $attribs)
+    {
         $element = $this->getElement();
 
-        if (!is_null($element)) {
-            if (!is_null($attribs) && isset($attribs['class'])) {
+        if (! is_null($element)) {
+            if (! is_null($attribs) && isset($attribs['class'])) {
                 $attribs['class'] = $attribs['class'] . ' ' . $this->getElement()->getName() . '-data';
-            }
-            else {
-                $attribs = array();
+            } else {
+                $attribs = [];
                 $attribs['class'] = $this->getElement()->getName() . '-data';
             }
         }
 
-        return parent::_htmlAttribs($attribs);;
+        return parent::_htmlAttribs($attribs);
+        ;
     }
-
 }

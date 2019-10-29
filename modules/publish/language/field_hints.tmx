@@ -305,7 +305,7 @@
             <seg>Please enter the contact information of the authors. You may add more authors by clicking on the button (or delete them).</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Tragen Sie hier bitte die Kontaktdaten der Autoren ein. Sie können durch Klicken auf den Button weitere Autoren hinzufügen (oder wieder löschen).</seg>
+            <seg>Tragen Sie hier bitte die Kontaktdaten der Autor*innen ein. Sie können durch Klicken auf den Button weitere Autor*innen hinzufügen (oder wieder löschen).</seg>
         </tuv>
     </tu>
 
@@ -314,7 +314,7 @@
             <seg>Please enter the first name of an author.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den Vornamen des Autors ein.</seg>
+            <seg>Tragen Sie bitte den Vornamen der Autorin/des Autors ein.</seg>
         </tuv>
     </tu>
 
@@ -323,7 +323,7 @@
             <seg>Please enter the last name of an author.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den Nachnamen des Autors ein.</seg>
+            <seg>Tragen Sie bitte den Nachnamen der Autorin/des Autors ein.</seg>
         </tuv>
     </tu>
 
@@ -332,7 +332,7 @@
             <seg>Please enter the author's shortened academic title (i.e. Dr., Prof., PhD).</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den akademischen Titel des Autors in abgekürzter Form (z.B. Dr., Prof., Dr. jur.) ein.</seg>
+            <seg>Tragen Sie bitte den akademischen Titel der Autorin/des Autors in abgekürzter Form (z.B. Dr., Prof., Dr. jur.) ein.</seg>
         </tuv>
     </tu>
 
@@ -341,7 +341,7 @@
             <seg>Please enter the author's email adress.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Tragen Sie bitte eine E-Mailadresse des Autors ein.</seg>
+            <seg>Tragen Sie bitte eine E-Mailadresse der Autorin/des Autors ein.</seg>
         </tuv>
     </tu>
 
@@ -350,7 +350,7 @@
             <seg>Please enter the author's date of birth.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Tragen Sie bitte das Geburtsdatum des Autors ein.</seg>
+            <seg>Tragen Sie bitte das Geburtsdatum der Autorin/des Autors ein.</seg>
         </tuv>
     </tu>
 
@@ -359,7 +359,7 @@
             <seg>Please enter the author's place of birth.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den Geburtsort des Autors ein.</seg>
+            <seg>Tragen Sie bitte den Geburtsort der Autorin/des Autors ein.</seg>
         </tuv>
     </tu>
 
@@ -368,7 +368,7 @@
             <seg>Please enter the referee.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den Gutachter ein.</seg>
+            <seg>Tragen Sie bitte die/den Gutachter*in ein.</seg>
         </tuv>
     </tu>
 
@@ -377,7 +377,7 @@
             <seg>Please enter the first name of the referee.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den Vornamen des Gutachters ein.</seg>
+            <seg>Tragen Sie bitte den Vornamen der Gutachterin/des Gutachters ein.</seg>
         </tuv>
     </tu>
 
@@ -386,7 +386,7 @@
             <seg>Please enter the last name of the referee.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den Nachnamen des Gutachters ein.</seg>
+            <seg>Tragen Sie bitte den Nachnamen der Gutachterin/des Gutachters ein.</seg>
         </tuv>
     </tu>
 
@@ -395,7 +395,7 @@
             <seg>Please enter the referee's shortened academic title (i.e. Dr., Prof., PhD).</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den akademischen Titel des Gutachters in abgekürzter Form (z.B. Dr., Prof., Dr. jur.) ein.</seg>
+            <seg>Tragen Sie bitte den akademischen Titel der Gutachterin/des Gutachters in abgekürzter Form (z.B. Dr., Prof., Dr. jur.) ein.</seg>
         </tuv>
     </tu>
 
@@ -404,7 +404,7 @@
             <seg>Please enter the referee's email adress.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Tragen Sie bitte eine E-Mailadresse des Gutachters ein.</seg>
+            <seg>Tragen Sie bitte eine E-Mailadresse der Gutachterin/des Gutachters ein.</seg>
         </tuv>
     </tu>
 
@@ -413,7 +413,7 @@
             <seg>Please enter the referee's date of birth.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Tragen Sie bitte das Geburtsdatum des Gutachters ein.</seg>
+            <seg>Tragen Sie bitte das Geburtsdatum der Gutachterin/des Gutachters ein.</seg>
         </tuv>
     </tu>
 
@@ -422,7 +422,7 @@
             <seg>Please enter the referee's place of birth.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den Geburtsort des Gutachters ein.</seg>
+            <seg>Tragen Sie bitte den Geburtsort der Gutachterin/des Gutachters ein.</seg>
         </tuv>
     </tu>
 
@@ -431,7 +431,7 @@
             <seg>Please enter the Editor.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den Herausgeber ein.</seg>
+            <seg>Tragen Sie bitte die/den Herausgeber*in ein.</seg>
         </tuv>
     </tu>
 
@@ -440,7 +440,7 @@
             <seg>Please enter the first name of the Editor.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den Vornamen des Herausgebers ein.</seg>
+            <seg>Tragen Sie bitte den Vornamen der Herausgeberin/des Herausgebers ein.</seg>
         </tuv>
     </tu>
 
@@ -449,7 +449,7 @@
             <seg>Please enter the last name of the editor.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den Nachnamen des Herausgebers ein.</seg>
+            <seg>Tragen Sie bitte den Nachnamen der Herausgeberin/des Herausgebers ein.</seg>
         </tuv>
     </tu>
 
@@ -459,7 +459,7 @@
             <seg>Please enter the editor's shortened academic title (i.e. Dr., Prof., PhD).</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den akademischen Titel des Herausgebers in abgekürzter Form (z.B. Dr., Prof., Dr. jur.) ein.</seg>
+            <seg>Tragen Sie bitte den akademischen Titel der Herausgeberin/des Herausgebers in abgekürzter Form (z.B. Dr., Prof., Dr. jur.) ein.</seg>
         </tuv>
     </tu>
 
@@ -468,7 +468,7 @@
             <seg>Please enter the editor's email adress.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Tragen Sie bitte eine E-Mailadresse des Herausgebers ein.</seg>
+            <seg>Tragen Sie bitte eine E-Mailadresse der Herausgeberin/des Herausgebers ein.</seg>
         </tuv>
     </tu>
 
@@ -477,7 +477,7 @@
             <seg>Please enter the editor's date of birth.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Tragen Sie bitte das Geburtsdatum des Herausgebers ein.</seg>
+            <seg>Tragen Sie bitte das Geburtsdatum der Herausgeberin/des Herausgebers ein.</seg>
         </tuv>
     </tu>
 
@@ -486,7 +486,7 @@
             <seg>Please enter the editor's place of birth.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den Geburtsort des Herausgebers ein.</seg>
+            <seg>Tragen Sie bitte den Geburtsort der Herausgeberin/des Herausgebers ein.</seg>
         </tuv>
     </tu>
 
@@ -495,7 +495,7 @@
             <seg>Please enter the advisor.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den Betreuer ein.</seg>
+            <seg>Tragen Sie bitte die/den Betreuer*in ein.</seg>
         </tuv>
     </tu>
 
@@ -504,7 +504,7 @@
             <seg>Please enter the first name of the advisor.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den Vornamen des Betreuers ein.</seg>
+            <seg>Tragen Sie bitte den Vornamen der Betreuerin/des Betreuers ein.</seg>
         </tuv>
     </tu>
 
@@ -513,7 +513,7 @@
             <seg>Please enter the last name of the advisor.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den Nachnamen des Betreuers ein.</seg>
+            <seg>Tragen Sie bitte den Nachnamen der Betreuerin/des Betreuers ein.</seg>
         </tuv>
     </tu>
 
@@ -522,7 +522,7 @@
             <seg>Please enter the advisor's shortened academic title (i.e. Dr., Prof., PhD).</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den akademischen Titel des Betreuers in abgekürzter Form (z.B. Dr., Prof., Dr. jur.) ein.</seg>
+            <seg>Tragen Sie bitte den akademischen Titel der Betreuerin/des Betreuers in abgekürzter Form (z.B. Dr., Prof., Dr. jur.) ein.</seg>
         </tuv>
     </tu>
 
@@ -531,7 +531,7 @@
             <seg>Please enter the advisor's email adress.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Tragen Sie bitte eine E-Mailadresse des Betreuers ein.</seg>
+            <seg>Tragen Sie bitte eine E-Mailadresse der Betreuerin/des Betreuers ein.</seg>
         </tuv>
     </tu>
 
@@ -540,7 +540,7 @@
             <seg>Please enter the advisor's date of birth.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Tragen Sie bitte das Geburtsdatum des Betreuers ein.</seg>
+            <seg>Tragen Sie bitte das Geburtsdatum der Betreuerin/des Betreuers ein.</seg>
         </tuv>
     </tu>
 
@@ -549,7 +549,7 @@
             <seg>Please enter the advisor's place of birth.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den Geburtsort des Betreuers ein.</seg>
+            <seg>Tragen Sie bitte den Geburtsort der Betreuerin/des Betreuers ein.</seg>
         </tuv>
     </tu>
 
@@ -558,7 +558,7 @@
             <seg>Please enter the translator.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den Übersetzer ein.</seg>
+            <seg>Tragen Sie bitte die/den Übersetzer*in ein.</seg>
         </tuv>
     </tu>
 
@@ -567,7 +567,7 @@
             <seg>Please enter the first name of the Translator.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den Vornamen des Übersetzers ein.</seg>
+            <seg>Tragen Sie bitte den Vornamen der Übersetzerin/des Übersetzers ein.</seg>
         </tuv>
     </tu>
 
@@ -576,7 +576,7 @@
             <seg>Please enter the last name of the translator.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den Nachnamen des Übersetzers ein.</seg>
+            <seg>Tragen Sie bitte den Nachnamen der Übersetzerin/des Übersetzers ein.</seg>
         </tuv>
     </tu>
 
@@ -585,7 +585,7 @@
             <seg>Please enter the translator's shortened academic title (i.e. Dr., Prof., PhD).</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den akademischen Titel des Übersetzers in abgekürzter Form (z.B. Dr., Prof., Dr. jur.) ein.</seg>
+            <seg>Tragen Sie bitte den akademischen Titel der Übersetzerin/des Übersetzers in abgekürzter Form (z.B. Dr., Prof., Dr. jur.) ein.</seg>
         </tuv>
     </tu>
 
@@ -594,7 +594,7 @@
             <seg>Please enter the translator's email adress.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Tragen Sie bitte eine E-Mailadresse des Übersetzers ein.</seg>
+            <seg>Tragen Sie bitte eine E-Mailadresse der Übersetzerin/des Übersetzers ein.</seg>
         </tuv>
     </tu>
 
@@ -603,7 +603,7 @@
             <seg>Please enter the translator's date of birth.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Tragen Sie bitte das Geburtsdatum des Übersetzers ein.</seg>
+            <seg>Tragen Sie bitte das Geburtsdatum der Übersetzerin/des Übersetzers ein.</seg>
         </tuv>
     </tu>
 
@@ -612,7 +612,7 @@
             <seg>Please enter the translator's place of birth.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den Geburtsort des Übersetzers ein.</seg>
+            <seg>Tragen Sie bitte den Geburtsort der Übersetzerin/des Übersetzers ein.</seg>
         </tuv>
     </tu>
 
@@ -946,21 +946,21 @@ Beispieleingabe: "00A09" (für Popularization of mathematics)]]></seg>
     </tu>
 
 <!-- DDC **************************************************** -->
-<tu tuid="hint_groupSubjectDDC">
-        <tuv xml:lang="en">
-            <seg><![CDATA[Please enter the DDC class of your document. You can add or delete additional classifications by clicking on the button below. DDC classes follow a three-digit pattern. Using the dropdown box and the ‘down’ button, please set the DDC class for your document.<br />
-            Please click the following link for an overview (in German) of available DDC classes:<br />
-            <a href="http://www.dnb.de/Subsites/ddcdeutsch/DE/DDCprodukte/DDCuebersichten/DDCuebersichten_node.html" target="tab" > http://www.dnb.de/Subsites/ddcdeutsch/DE/DDCprodukte/DDCuebersichten/DDCuebersichten_node.html</a><br />
-            Example input: "100" (for "Philosophie und Psychologie")]]></seg>
+    <tu tuid="hint_groupSubjectDDC">
+	<tuv xml:lang="en">
+            <seg><![CDATA[Please enter the DDC class of your document. You can add or delete additional classifications by clicking on the button below. DDC classes follow a three-digit pattern. Using the dropdown box and the 'down' button, please set the DDC class for your document.<br />
+                Please click the following link for an overview (in German) of DDC at the German National Library:
+                <a href="https://www.dnb.de/ddcindnb" target="tab" > https://www.dnb.de/ddcindnb</a><br />
+                Example input: "100" (for "Philosophie und Psychologie")]]></seg>
         </tuv>
         <tuv xml:lang="de">
             <seg><![CDATA[Tragen Sie hier bitte die DDC Klassen Ihres Dokumentes ein. Sie können durch Klicken auf den Button weitere Klassen hinzufügen (oder wieder löschen). Die DDC Klasse ist 3-stellig anzugeben. Nutzen Sie dazu den Button "runter".<br />
-            Eine Übersicht über verfügbare Klassen bekommen Sie unter:<br />
-            <a href="http://www.dnb.de/Subsites/ddcdeutsch/DE/DDCprodukte/DDCuebersichten/DDCuebersichten_node.html" target="tab" > http://www.dnb.de/Subsites/ddcdeutsch/DE/DDCprodukte/DDCuebersichten/DDCuebersichten_node.html</a><br />
-            Beispieleingabe: "100" (für "Philosophie und Psychologie")]]></seg>
+                Eine Übersicht über die DDC in der Deutschen Nationalbibliothek bekommen Sie unter:
+                <a href="https://www.dnb.de/ddcindnb" target="tab" > https://www.dnb.de/ddcindnb</a><br />
+                Beispieleingabe: "100" (für "Philosophie und Psychologie")]]></seg>
         </tuv>
     </tu>
-
+	  
     <tu tuid="hint_SubjectDDC">
         <tuv xml:lang="en">
             <seg>Please enter a DDC class.</seg>
@@ -970,8 +970,8 @@ Beispieleingabe: "00A09" (für Popularization of mathematics)]]></seg>
         </tuv>
     </tu>
 
-	<!-- DDC-Sachgruppen **************************************************** -->
-<tu tuid="hint_groupddc_dnb">
+<!-- DDC-Sachgruppen **************************************************** -->
+    <tu tuid="hint_groupddc_dnb">
         <tuv xml:lang="en">
             <seg>Please enter the DDC subject groups of the document. You may add more DDC subject groups by clicking on the button )or delete them).</seg>
         </tuv>
@@ -1507,15 +1507,16 @@ END OF COMMENT -->
 
     <tu tuid="hint_documentUpload">
         <tuv xml:lang="en">
-            <seg>
-            Upload your fulltext documents here.  You get more upload-fields by
-            pressing the PLUS-sign.
+            <seg>Upload your documents here.
+            Filenames can be up to 50 characters long including the extension and use letters (a-z, A-Z), numbers (0-9), dashes (-) and underlines (_).
+            You get more upload-fields by pressing the PLUS-sign.
             </seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>
-            Wählen Sie hier die hochzuladenden Dokumente.  Weitere Upload-Felder
-            erhalten Sie per Klick auf das PLUS-Zeichen.
+            <seg>Wählen Sie hier die hochzuladenden Dokumente. Bitte achten Sie dabei die auf die Benennung der Dateien.
+            Es dürfen die alphanumerischen Zeichen (a-z, A-Z und 0-9) sowie Bindestriche (-) und Unterstriche (_) verwendet werden.
+            Der Dateiname darf bis zu 50 Zeichen lang sein, einschließlich der Dateiendung.
+            Weitere Upload-Felder erhalten Sie per Klick auf das PLUS-Zeichen.
             </seg>
         </tuv>
     </tu>

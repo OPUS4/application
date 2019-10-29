@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<import>
+    <opusDocument language="deu" type="article">
+        <titlesMain>
+            <titleMain language="deu">Der Titel</titleMain>
+        </titlesMain>
+        <enrichments>
+            <enrichment key="City" />
+        </enrichments>
+    </opusDocument>
+</import>

@@ -27,24 +27,26 @@
  * @category    Application Unit Test
  * @package     Form_Element
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+class Application_Form_Element_SortOrderTest extends FormElementTestCase
+{
 
+    protected $additionalResources = 'translation';
 
-class Application_Form_Element_SortOrderTest extends FormElementTestCase {
-
-    public function setUp() {
+    public function setUp()
+    {
         $this->_formElementClass = 'Application_Form_Element_SortOrder';
         $this->_expectedDecoratorCount = 8;
-        $this->_expectedDecorators = array('ViewHelper', 'Placeholder', 'Description', 'ElementHint', 'Errors',
-            'ElementHtmlTag', 'LabelNotEmpty', 'dataWrapper');
+        $this->_expectedDecorators = ['ViewHelper', 'Placeholder', 'Description', 'ElementHint', 'Errors',
+            'ElementHtmlTag', 'LabelNotEmpty', 'dataWrapper'];
         $this->_staticViewHelper = 'viewFormDefault';
         parent::setUp();
     }
 
-    public function testValidation() {
+    public function testValidation()
+    {
         $element = $this->getElement();
 
         $this->assertTrue($element->getValidator('Int') !== false, 'Validator Int is missing.');
@@ -52,23 +54,25 @@ class Application_Form_Element_SortOrderTest extends FormElementTestCase {
         $this->assertEquals(-1, $element->getValidator('GreaterThan')->getMin());
     }
 
-    public function testDefaultSize() {
+    public function testDefaultSize()
+    {
         $element = $this->getElement();
 
         $this->assertEquals(6, $element->getAttrib('size'));
     }
 
-    public function testCustomSize() {
-        $element = $this->getElement(array('size' => 10));
+    public function testCustomSize()
+    {
+        $element = $this->getElement(['size' => 10]);
 
         $this->assertEquals(10, $element->getAttrib('size'));
     }
 
-    public function testMessagesTranslated() {
+    public function testMessagesTranslated()
+    {
         $translator = Zend_Registry::get('Zend_Translate');
 
         $this->assertTrue($translator->isTranslated('validation_error_int'));
         $this->assertTrue($translator->isTranslated('validation_error_negative_number'));
     }
-
 }

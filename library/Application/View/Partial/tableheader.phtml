@@ -37,7 +37,7 @@
 
 <thead>
     <tr>
-        <?PHP for($index = 0; $index < $columnCount;$index++) : ?>
+        <?PHP for ($index = 0; $index < $columnCount; $index++) : ?>
         <th class="<?= $this->element->getColumnClass($index) ?>"
             ><?= $this->translate($this->element->getColumnLabel($index)) ?></th>
         <?PHP endfor; ?>

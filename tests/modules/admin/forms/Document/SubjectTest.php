@@ -26,17 +26,20 @@
  *
  * @category    Application Unit Test
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2013-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
  * Unit Tests fuer Unterformular fuer ein Subject im Metadaten-Formular.
  */
-class Admin_Form_Document_SubjectTest extends ControllerTestCase {
+class Admin_Form_Document_SubjectTest extends ControllerTestCase
+{
 
-    public function testCreateForm() {
+    protected $additionalResources = ['view', 'translation'];
+
+    public function testCreateForm()
+    {
         $form = new Admin_Form_Document_Subject('psyndex');
 
         $this->assertEquals(4, count($form->getElements()));
@@ -50,7 +53,8 @@ class Admin_Form_Document_SubjectTest extends ControllerTestCase {
         $this->assertNull($form->getLanguage());
     }
 
-    public function testCreateFormWithLanguage() {
+    public function testCreateFormWithLanguage()
+    {
         $form = new Admin_Form_Document_Subject('swd', 'deu');
 
         $this->assertEquals(4, count($form->getElements()));
@@ -68,71 +72,75 @@ class Admin_Form_Document_SubjectTest extends ControllerTestCase {
         $this->assertEquals('deu', $form->getLanguage());
     }
 
-    public function testPopulateFromModel() {
+    public function testPopulateFromModel()
+    {
         $form = new Admin_Form_Document_Subject('swd', 'deu');
-        
+
         $document = new Opus_Document(146);
         $subjects = $document->getSubject();
         $subjectSwd = $subjects[0];
-        
+
         $this->assertEquals('swd', $subjectSwd->getType());
 
         $form->populateFromModel($subjectSwd);
-        
+
         $this->assertEquals($subjectSwd->getId(), $form->getElement('Id')->getValue());
         $this->assertEquals($subjectSwd->getLanguage(), $form->getElement('Language')->getValue());
         $this->assertEquals($subjectSwd->getValue(), $form->getElement('Value')->getValue());
         $this->assertEquals($subjectSwd->getExternalKey(), $form->getElement('ExternalKey')->getValue());
     }
-    
-    public function testUpdateModel() {
+
+    public function testUpdateModel()
+    {
         $form = new Admin_Form_Document_Subject('psyndex');
-        
+
         $form->getElement('Language')->setValue('eng');
         $form->getElement('Value')->setValue('Test Schlagwort');
         $form->getElement('ExternalKey')->setValue('Test Schluessel');
-        
+
         $subject = new Opus_Subject();
-        
+
         $form->updateModel($subject);
-        
+
         $this->assertEquals('eng', $subject->getLanguage());
         $this->assertEquals('Test Schlagwort', $subject->getValue());
         $this->assertEquals('Test Schluessel', $subject->getExternalKey());
         $this->assertEquals('psyndex', $subject->getType());
     }
-    
-    public function testGetModel() {
+
+    public function testGetModel()
+    {
         $form = new Admin_Form_Document_Subject('uncontrolled');
-        
+
         $document = new Opus_Document(146);
         $subjects = $document->getSubject();
         $subject = $subjects[1];
-        
+
         $this->assertEquals('uncontrolled', $subject->getType());
-        
+
         $form->getElement('Id')->setValue($subject->getId());
         $form->getElement('Language')->setValue('rus');
         $form->getElement('Value')->setValue('Test Schlagwort');
         $form->getElement('ExternalKey')->setValue('Test Key');
-        
+
         $model = $form->getModel();
-        
+
         $this->assertEquals($subject->getId(), $model->getId());
         $this->assertEquals('rus', $model->getLanguage());
         $this->assertEquals('Test Schlagwort', $model->getValue());
         $this->assertEquals('Test Key', $model->getExternalKey());
         $this->assertEquals('uncontrolled', $model->getType());
     }
-    
-    public function testGetNewModel() {
+
+    public function testGetNewModel()
+    {
         $form = new Admin_Form_Document_Subject('swd', 'deu');
-        
+
         $form->getElement('Value')->setValue('Test Schlagwort');
         $form->getElement('ExternalKey')->setValue('Test Key');
-        
+
         $model = $form->getModel();
-        
+
         $this->assertNull($model->getId());
         $this->assertEquals('deu', $model->getLanguage());
         $this->assertEquals('Test Schlagwort', $model->getValue());
@@ -140,7 +148,8 @@ class Admin_Form_Document_SubjectTest extends ControllerTestCase {
         $this->assertEquals('swd', $model->getType());
     }
 
-    public function testGetModelUnknownId() {
+    public function testGetModelUnknownId()
+    {
         $form = new Admin_Form_Document_Subject('uncontrolled');
 
         $form->getElement('Id')->setValue('7777');
@@ -165,7 +174,8 @@ class Admin_Form_Document_SubjectTest extends ControllerTestCase {
         $this->assertContains('Unknown subject ID = \'7777\'.', $messages[0]);
     }
 
-    public function testGetModelBadId() {
+    public function testGetModelBadId()
+    {
         $form = new Admin_Form_Document_Subject('uncontrolled');
 
         $form->getElement('Id')->setValue('bad');
@@ -182,19 +192,21 @@ class Admin_Form_Document_SubjectTest extends ControllerTestCase {
         $this->assertEquals('uncontrolled', $model->getType());
     }
 
-    public function testValidation() {
+    public function testValidation()
+    {
         $form = new Admin_Form_Document_Subject('swd', 'deu');
 
-        $post = array(
+        $post = [
             'Value' => ' ' // darf nicht leer sein
-        );
-        
+        ];
+
         $this->assertFalse($form->isValid($post));
-        
+
         $this->assertContains('isEmpty', $form->getErrors('Value'));
     }
 
-    public function testPrepareRenderingAsView() {
+    public function testPrepareRenderingAsView()
+    {
         $form = new Admin_Form_Document_Subject('swd', 'deu');
 
         $form->prepareRenderingAsView();
@@ -205,5 +217,4 @@ class Admin_Form_Document_SubjectTest extends ControllerTestCase {
         $this->assertNotNull($form->getElement('ExternalKey'));
         $this->assertNull($form->getElement('Remove'));
     }
-    
 }

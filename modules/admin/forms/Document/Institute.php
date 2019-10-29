@@ -39,31 +39,34 @@
  * @package     Module_Admin
  * @subpackage  Form_Document
  */
-class Admin_Form_Document_Institute extends Admin_Form_AbstractModelSubForm {
-    
+class Admin_Form_Document_Institute extends Admin_Form_AbstractModelSubForm
+{
+
     const ROLE_PUBLISHER = 'publisher';
-    
+
     const ROLE_GRANTOR = 'grantor';
-    
+
     const ELEMENT_DOC_ID = 'Id';
-    
+
     const ELEMENT_INSTITUTE = 'Institute';
 
     /**
      * @var ROLE_GRANTOR or ROLE_PUBLISHER
      */
     private $_role;
-    
-    public function __construct($role, $options = null) {
+
+    public function __construct($role, $options = null)
+    {
         $this->_role = $role;
         parent::__construct($options);
     }
-    
-    public function init() {
+
+    public function init()
+    {
         parent::init();
-        
+
         $this->addElement('Hidden', self::ELEMENT_DOC_ID);
-        
+
         switch ($this->_role) {
             case self::ROLE_PUBLISHER:
                 $this->addElement('Publisher', self::ELEMENT_INSTITUTE);
@@ -77,54 +80,54 @@ class Admin_Form_Document_Institute extends Admin_Form_AbstractModelSubForm {
         }
     }
 
-    public function populateFromModel($link) {
+    public function populateFromModel($link)
+    {
         $linkId = $link->getId();
         $this->getElement(self::ELEMENT_DOC_ID)->setValue($linkId[0]);
         $this->getElement(self::ELEMENT_INSTITUTE)->setValue($link->getModel()->getId());
     }
-    
+
     /**
      * @param type $model
      */
-    public function updateModel($link) {
+    public function updateModel($link)
+    {
         $instituteId = $this->getElement(self::ELEMENT_INSTITUTE)->getValue();
         try {
             $institute = new Opus_DnbInstitute($instituteId);
 
             $link->setModel($institute);
-        }
-        catch (Opus_Model_NotFoundException $omnfe) {
+        } catch (Opus_Model_NotFoundException $omnfe) {
             $this->getLogger()->err(__METHOD__ . " Unknown institute ID = '$instituteId'.");
         }
     }
-    
-    public function getModel() {
+
+    public function getModel()
+    {
         $docId = $this->getElement(self::ELEMENT_DOC_ID)->getValue();
-        
+
         if (empty($docId)) {
             $linkId = null;
-        }
-        else {
+        } else {
             $instituteId = $this->getElement(self::ELEMENT_INSTITUTE)->getValue();
-            $linkId = array($docId, $instituteId, $this->_role);
+            $linkId = [$docId, $instituteId, $this->_role];
         }
-        
+
         try {
             $link = new Opus_Model_Dependent_Link_DocumentDnbInstitute($linkId);
-        }
-        catch (Opus_Model_NotFoundException $omnfe) {
+        } catch (Opus_Model_NotFoundException $omnfe) {
             $link = new Opus_Model_Dependent_Link_DocumentDnbInstitute();
         }
-        
+
         $this->updateModel($link);
 
         return $link;
     }
-    
-    public function loadDefaultDecorators() {
+
+    public function loadDefaultDecorators()
+    {
         parent::loadDefaultDecorators();
-        
+
         $this->removeDecorator('Fieldset');
     }
-    
 }

@@ -31,13 +31,16 @@
  * @category    Application Unit Test
  * @package     Admin_Form
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class Admin_Form_LicenceTest extends ControllerTestCase {
+class Admin_Form_LicenceTest extends ControllerTestCase
+{
 
-    public function testConstructForm() {
+    protected $additionalResources = ['database', 'view', 'translation'];
+
+    public function testConstructForm()
+    {
         $form = new Admin_Form_Licence();
 
         $this->assertEquals(15, count($form->getElements()));
@@ -60,7 +63,8 @@ class Admin_Form_LicenceTest extends ControllerTestCase {
         $this->assertNotNull($form->getElement('Id'));
     }
 
-    public function testPopulateFromModel() {
+    public function testPopulateFromModel()
+    {
         $form = new Admin_Form_Licence();
 
         $licence = new Opus_Licence();
@@ -93,7 +97,8 @@ class Admin_Form_LicenceTest extends ControllerTestCase {
         $this->assertEquals(0, $form->getElement('PodAllowed')->getValue());
     }
 
-    public function testPopulateFromModelWithId() {
+    public function testPopulateFromModelWithId()
+    {
         $form = new Admin_Form_Licence();
 
         $licence = new Opus_Licence(2);
@@ -103,7 +108,8 @@ class Admin_Form_LicenceTest extends ControllerTestCase {
         $this->assertEquals(2, $form->getElement('Id')->getValue());
     }
 
-    public function testUpdateModel() {
+    public function testUpdateModel()
+    {
         $form = new Admin_Form_Licence();
 
         $form->getElement('Id')->setValue(99);
@@ -139,10 +145,11 @@ class Admin_Form_LicenceTest extends ControllerTestCase {
         $this->assertEquals(1, $licence->getPodAllowed());
     }
 
-    public function testValidationEmptyPost() {
+    public function testValidationEmptyPost()
+    {
         $form = new Admin_Form_Licence();
 
-        $this->assertFalse($form->isValid(array()));
+        $this->assertFalse($form->isValid([]));
 
         $this->assertContains('isEmpty', $form->getErrors('NameLong'));
         $this->assertContains('isEmpty', $form->getErrors('Language'));
@@ -150,40 +157,42 @@ class Admin_Form_LicenceTest extends ControllerTestCase {
         $this->assertContains('isEmpty', $form->getErrors('LinkLicence'));
     }
 
-    public function testValidationEmptyFields() {
+    public function testValidationEmptyFields()
+    {
         $form = new Admin_Form_Licence();
 
-        $this->assertFalse($form->isValid(array(
+        $this->assertFalse($form->isValid([
             'NameLong' => '  ',
             'Language' => 'abc',
             'LinkLicence' => '  '
-        )));
+        ]));
 
         $this->assertContains('isEmpty', $form->getErrors('NameLong'));
         $this->assertContains('notInArray', $form->getErrors('Language'));
         $this->assertContains('isEmpty', $form->getErrors('LinkLicence'));
     }
 
-    public function testValidationUnknownLanguage() {
+    public function testValidationUnknownLanguage()
+    {
         $form = new Admin_Form_Licence();
 
-        $this->assertFalse($form->isValid(array(
+        $this->assertFalse($form->isValid([
             'NameLong' => 'Name',
             'Language' => 'abc',
             'LinkLicence' => 'Link'
-        )));
+        ]));
 
         $this->assertContains('notInArray', $form->getErrors('Language'));
     }
 
-    public function testValidationTrue() {
+    public function testValidationTrue()
+    {
         $form = new Admin_Form_Licence();
 
-        $this->assertTrue($form->isValid(array(
+        $this->assertTrue($form->isValid([
             'NameLong' => 'New Test Licence',
             'Language' => 'deu',
             'LinkLicence' => 'link'
-        )));
+        ]));
     }
-
 }

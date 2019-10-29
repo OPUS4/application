@@ -262,7 +262,7 @@
         <!-- Edition -->
         <xsl:apply-templates select="@Edition" />
         <!-- Isbn -->
-        <xsl:apply-templates select="IdentifierIsbn" />
+        <xsl:apply-templates select="Identifier[@Type = 'isbn']" />
         <!-- CompleteadDate, CompletedYear -->
         <xsl:call-template name="Year" />
     </xsl:template>
@@ -339,7 +339,7 @@
         <xsl:text>, </xsl:text>
     </xsl:template>
 
-    <xsl:template match="IdentifierIsbn">
+    <xsl:template match="Identifier[@Type = 'isbn']">
         <xsl:value-of select="@Value" />
         <xsl:text>, </xsl:text>
     </xsl:template>
@@ -562,7 +562,7 @@
         <xsl:if test="@Type='doi'">
             <xsl:element name="a">
                 <xsl:attribute name="href">
-                    <xsl:text>http://dx.doi.org/</xsl:text>
+                    <xsl:value-of select="php:functionString('Application_Xslt::optionValue', 'doi.resolverUrl')"/>
                     <xsl:value-of select="@Value" />
                 </xsl:attribute>
                 <xsl:text>DOI</xsl:text>

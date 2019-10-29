@@ -170,14 +170,14 @@
             </colgroup>
 
             <xsl:apply-templates select="PersonAuthor" />
-            <xsl:apply-templates select="IdentifierUrn" />
-            <xsl:apply-templates select="IdentifierUrl" />
-            <xsl:apply-templates select="IdentifierHandle" />
-            <xsl:apply-templates select="IdentifierDoi" />
-            <xsl:apply-templates select="IdentifierIsbn" />
-            <xsl:apply-templates select="IdentifierIssn" />
-            <xsl:apply-templates select="IdentifierArxiv" />
-            <xsl:apply-templates select="IdentifierPubmed" />
+            <xsl:apply-templates select="Identifier[@Type = 'urn']" />
+            <xsl:apply-templates select="Identifier[@Type = 'url']" />
+            <xsl:apply-templates select="Identifier[@Type = 'handle']" />
+            <xsl:apply-templates select="Identifier[@Type = 'doi']" />
+            <xsl:apply-templates select="Identifier[@Type = 'isbn']" />
+            <xsl:apply-templates select="Identifier[@Type = 'issn']" />
+            <xsl:apply-templates select="Identifier[@Type = 'arxiv']" />
+            <xsl:apply-templates select="Identifier[@Type = 'pmid']" />
             <xsl:apply-templates select="TitleParent" mode="mainLanguage" />
             <xsl:apply-templates select="TitleParent" mode="otherLanguage" />
             <xsl:apply-templates select="TitleSub" mode="mainLanguage" />
@@ -256,10 +256,17 @@
                     </td>
                 </tr>
             </xsl:if>
-            <xsl:apply-templates select="Subject[@Type='swd']">
-                <xsl:sort select="@Value"/>
-            </xsl:apply-templates>
-            <xsl:apply-templates select="Subject[@Type='psyndex']">
+            <xsl:choose>
+                <xsl:when test="php:functionString('Application_Xslt::optionEnabled', 'frontdoor.subjects.alphabeticalSorting')">
+                    <xsl:apply-templates select="Subject[@Type='swd']">
+                        <xsl:sort select="@Value"/>
+                    </xsl:apply-templates>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:apply-templates select="Subject[@Type='swd']" />
+                </xsl:otherwise>
+            </xsl:choose>
+           <xsl:apply-templates select="Subject[@Type='psyndex']">
                 <xsl:sort select="@Value"/>
             </xsl:apply-templates>
             <!-- End Subjects -->
@@ -297,7 +304,7 @@
             <xsl:apply-templates select="Collection[@RoleName='pacs']" />
             <xsl:apply-templates select="Collection[@RoleName='bk']" />
             <xsl:apply-templates select="Collection[@RoleName='jel']" />
-            <xsl:apply-templates select="IdentifierSerial" />
+            <xsl:apply-templates select="Identifier[@Type = 'serial']" />
 
             <xsl:for-each select="Collection[@RoleName!='institutes' and @RoleName!='projects' and @RoleName!='ccs' and @RoleName!='ddc' and @RoleName!='msc' and @RoleName!='pacs' and @RoleName!='bk' and @RoleName!='jel'][count(. | key('userCollections-by-roleId', @RoleId)[1]) = 1]">
                 <xsl:apply-templates select="key('userCollections-by-roleId', @RoleId)" />

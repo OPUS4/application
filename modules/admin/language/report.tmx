@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tmx SYSTEM "http://www.gala-global.org/oscarStandards/tmx/tmx14.dtd">
+<tmx version="1.4">
+    <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool"></header>
+    <body>
+        <tu tuid="admin_report_doi_filter">
+            <tuv xml:lang="en">
+                <seg>Filter local DOIs by registration state:</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Filtermöglichkeiten:</seg>
+            </tuv>
+        </tu>
+        <tu tuid="admin_report_doi_filter_all">
+            <tuv xml:lang="en">
+                <seg>Show all local DOIs</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Zeige alle lokalen DOIs</seg>
+            </tuv>
+        </tu>
+        <tu tuid="admin_report_doi_filter_unregistered">
+            <tuv xml:lang="en">
+                <seg>Show unregistered local DOIs</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Zeige nur nicht-registrierte lokale DOIs</seg>
+            </tuv>
+        </tu>
+        <tu tuid="admin_report_doi_filter_registered">
+            <tuv xml:lang="en">
+                <seg>Show registered local DOIs</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Zeige nur registrierte lokale DOIs</seg>
+            </tuv>
+        </tu>
+        <tu tuid="admin_report_doi_filter_verified">
+            <tuv xml:lang="en">
+                <seg>Show verified local DOIs</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Zeige nur geprüfte lokale DOIs</seg>
+            </tuv>
+        </tu>
+        <tu tuid="admin_report_doi_table_head_docId">
+            <tuv xml:lang="en">
+                <seg>Document ID</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Dokument-ID</seg>
+            </tuv>
+        </tu>
+        <tu tuid="admin_report_doi_table_head_doiValue">
+            <tuv xml:lang="en">
+                <seg>DOI</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>DOI</seg>
+            </tuv>
+        </tu>
+        <tu tuid="admin_report_doi_table_head_doiStatus">
+            <tuv xml:lang="en">
+                <seg>DOI Registration Status</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>DOI-Registrierungsstatus</seg>
+            </tuv>
+        </tu>
+        <tu tuid="admin_report_doi_verify">
+            <tuv xml:lang="en">
+                <seg>Verify DOI</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Prüfe DOI</seg>
+            </tuv>
+        </tu>
+        <tu tuid="admin_report_doi_verify_again">
+            <tuv xml:lang="en">
+                <seg>Verify DOI again</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Prüfe DOI erneut</seg>
+            </tuv>
+        </tu>
+        <tu tuid="admin_report_doi_register">
+            <tuv xml:lang="en">
+                <seg>Register DOI</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Registriere DOI</seg>
+            </tuv>
+        </tu>
+        <tu tuid="admin_report_doi_unregistered">
+            <tuv xml:lang="en">
+                <seg>Unregistered</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Nicht registriert</seg>
+            </tuv>
+        </tu>
+        <tu tuid="admin_report_doi_registered">
+            <tuv xml:lang="en">
+                <seg>Registered</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Registriert</seg>
+            </tuv>
+        </tu>
+        <tu tuid="admin_report_doi_verified">
+            <tuv xml:lang="en">
+                <seg>Verified</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Geprüft</seg>
+            </tuv>
+        </tu>
+        <tu tuid="admin_report_doi_unpublished_doc">
+            <tuv xml:lang="en">
+                <seg>Document is not yet published</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Dokument ist nicht veröffentlicht</seg>
+            </tuv>
+        </tu>
+        <tu tuid="admin_report_doi_registered_successfully">
+            <tuv xml:lang="en">
+                <seg>DOI '%1$s' was registered successfully.</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>DOI '%1$s' wurde erfolgreich registriert.</seg>
+            </tuv>
+        </tu>
+        <tu tuid="admin_report_doi_bulk_registration_successfully">
+            <tuv xml:lang="en">
+                <seg>%1$s local DOIs were registered successfully.</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>%1$s lokale DOIs wurden erfolgreich registriert.</seg>
+            </tuv>
+        </tu>
+        <tu tuid="admin_report_doi_registration_could_not_be_executed">
+            <tuv xml:lang="en">
+                <seg>DOI Registration of document '%1$s' could not be executed.</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>DOI-Registrierung für Dokument '%1$s' konnte nicht ausgeführt werden.</seg>
+            </tuv>
+        </tu>
+        <tu tuid="admin_report_doi_registration_unexpected_error">
+            <tuv xml:lang="en">
+                <seg>An unexpected error occured in DOI registration of document '%1$s'</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>unerwarteter Fehler bei der DOI-Registrierung für Dokument '%1$s'</seg>
+            </tuv>
+        </tu>
+        <tu tuid="admin_report_doi_registration_unexpected_error_specific">
+            <tuv xml:lang="en">
+                <seg>An unexpected error occured in registration of DOI '%1$s'</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>unerwarteter Fehler bei der Registrierung von DOI '%1$s'</seg>
+            </tuv>
+        </tu>
+        <tu tuid="admin_report_doi_bulk_registration_failed">
+            <tuv xml:lang="en">
+                <seg>%1$s error(s) occurred: %2$s of %3$s local DOIs have been registered successfully.</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>%1$s Fehler bei der DOI-Registrierung: %2$s von %3$s DOIs wurden erfolgreich registriert.</seg>
+            </tuv>
+        </tu>
+        <tu tuid="admin_report_doi_verified_successfully">
+            <tuv xml:lang="en">
+                <seg>DOI '%1$s' was verified successfully.</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>DOI '%1$s' wurde erfolgreich geprüft.</seg>
+            </tuv>
+        </tu>
+        <tu tuid="admin_report_doi_bulk_verification_successfully">
+            <tuv xml:lang="en">
+                <seg>Verification of %1$s DOIs completed successfully.</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>%1$s DOIs wurden erfolgreich geprüft.</seg>
+            </tuv>
+        </tu>
+        <tu tuid="admin_report_doi_verification_failed_specific">
+            <tuv xml:lang="en">
+                <seg>Verification of DOI '%1$s' failed.</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Prüfung von DOI '%1$s' war nicht erfolgreich.</seg>
+            </tuv>
+        </tu>
+        <tu tuid="admin_report_doi_verification_unexpected_error">
+            <tuv xml:lang="en">
+                <seg>An unexpected error occured in DOI verification of document '%1$s'</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>unerwarteter Fehler bei der DOI-Prüfung für Dokument '%1$s'</seg>
+            </tuv>
+        </tu>
+        <tu tuid="admin_report_doi_bulk_verification_failed">
+            <tuv xml:lang="en">
+                <seg>%1$s error(s) occurred: %2$s of %3$s DOIs have been verified successfully.</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>%1$s Fehler bei der DOI-Prüfung: %2$s von %3$s DOIs wurden erfolgreich geprüft.</seg>
+            </tuv>
+        </tu>
+        <tu tuid="admin_report_doi_nothing_found">
+            <tuv xml:lang="en">
+                <seg>Could not find matching local DOIs.</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Es wurden keine passenden lokalen DOIs gefunden.</seg>
+            </tuv>
+        </tu>
+        <tu tuid="admin_report_doi_bulk_registration">
+            <tuv xml:lang="en">
+                <seg>Register %1$s local DOI(s)</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Registriere %1$s lokale DOI(s)</seg>
+            </tuv>
+        </tu>
+        <tu tuid="admin_report_doi_bulk_verification">
+            <tuv xml:lang="en">
+                <seg>Verify %1$s registered DOI(s)</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Prüfe %1$s registrierte DOI(s)</seg>
+            </tuv>
+        </tu>
+    </body>
+</tmx>

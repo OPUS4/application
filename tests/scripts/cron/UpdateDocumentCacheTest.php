@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -28,18 +27,22 @@
  * @category    Cronjob
  * @package     Tests
  * @author      Edouard Simon (edouard.simon@zib.de)
- * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 require_once('CronTestCase.php');
 
 /**
- * 
+ *
  */
-class UpdateDocumentCacheTest extends CronTestCase {
+class UpdateDocumentCacheTest extends CronTestCase
+{
 
-    public function testUpdateOnLicenceChange() {
+    protected $additionalResources = 'database';
+
+    public function testUpdateOnLicenceChange()
+    {
         $document = $this->createTestDocument();
         $document->store();
 
@@ -76,5 +79,4 @@ class UpdateDocumentCacheTest extends CronTestCase {
         $licences = $document->getLicence();
         $licences[0]->delete();
     }
-
 }

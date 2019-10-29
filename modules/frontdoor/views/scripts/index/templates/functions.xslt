@@ -39,7 +39,7 @@
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:php="http://php.net/xsl"
                 exclude-result-prefixes="php">
-   
+
     <!-- Additional Templates with auxilliary functions. -->
 
 
@@ -49,7 +49,7 @@
         <xsl:if test="normalize-space(@Language)">
             <!-- translation of language abbreviations  -->
             <xsl:text> (</xsl:text>
-            <xsl:call-template name="translateString">
+            <xsl:call-template name="translateLanguage">
                 <xsl:with-param name="string" select="@Language" />
             </xsl:call-template>
             <xsl:text>)</xsl:text>
@@ -57,10 +57,20 @@
         <xsl:text>:</xsl:text>
     </xsl:template>
 
+    <xsl:template name="translateIdentifier">
+        <xsl:value-of select="php:functionString('Application_Xslt::translateIdentifier', @Type)" />
+        <xsl:text>:</xsl:text>
+    </xsl:template>
+
     <!-- Named template to translate an arbitrary string. Needs the translation key as a parameter. -->
     <xsl:template name="translateString">
         <xsl:param name="string" />
         <xsl:value-of select="php:functionString('Application_Xslt::translate', $string)" />
+    </xsl:template>
+
+    <xsl:template name="translateLanguage">
+        <xsl:param name="string" />
+        <xsl:value-of select="php:functionString('Application_Xslt::translateLanguage', $string)" />
     </xsl:template>
 
     <xsl:template name="translateStringWithDefault">

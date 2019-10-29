@@ -52,11 +52,9 @@ class Application_Form_Validate_Identifier extends Zend_Validate_Abstract
     {
         if ($element === null) {
             throw new InvalidArgumentException('Argument must not be NULL');
-        }
-        elseif ($element instanceof Zend_Form_Element) {
+        } elseif ($element instanceof Zend_Form_Element) {
             $this->_element = $element;
-        }
-        else {
+        } else {
             throw new InvalidArgumentException('Object must be Zend_Form_Element');
         }
     }
@@ -77,33 +75,31 @@ class Application_Form_Validate_Identifier extends Zend_Validate_Abstract
         $this->_setValue($value);
 
         $type = strtolower($this->_element->getValue());
-        $config = Application_Configuration::getInstance()->getConfig(); 
+        $config = Application_Configuration::getInstance()->getConfig();
 
-        if (isset($config->identifier->validation->$type))
-        {
-            $validatorClass = $config->identifier->validation->$type;
+        if (isset($config->identifier->validation->$type->class)) {
+            $validatorClass = $config->identifier->validation->$type->class;
             $validator = new $validatorClass;
             $result = $validator->isValid($value);
-            if ($result === false)
-            {
-                $this->_messageTemplates = $validator->getMessageTemplates();
-                foreach ($validator->getErrors() as $error)
-                {
+            if ($result === false) {
+                if (isset($config->identifier->validation->$type->messageTemplates)) {
+                    $this->_messageTemplates = array_merge($validator->getMessageTemplates(), $config->identifier
+                        ->validation->$type->messageTemplates->toArray());
+                } else {
+                    $this->_messageTemplates = $validator->getMessageTemplates();
+                }
+                foreach ($validator->getErrors() as $error) {
                     $this->_error($error);
                 }
             }
 
             return $result;
-        }
-        else
-        {
-            if (!empty($value))
-            {
+        } else {
+            if (! empty($value)) {
                 return true;
             }
         }
 
         return false;
     }
-
 }

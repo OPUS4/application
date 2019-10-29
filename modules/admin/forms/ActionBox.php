@@ -27,177 +27,171 @@
  * @category    Application
  * @package     Module_Admin
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2013-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
  * Unterformular für Actionbox für Metadaten-Formular.
- * 
+ *
  * Die Actiobox zeigt wichtige Statusinformationen zu einem Dokument und bietet
  * Navigation und direkten Zugang zu Funktionen wie Speichern und Abbrechen.
  */
-class Admin_Form_ActionBox extends Admin_Form_AbstractDocumentSubForm {
-    
+class Admin_Form_ActionBox extends Admin_Form_AbstractDocumentSubForm
+{
+
     const ELEMENT_SAVE = 'Save';
-    
+
     const ELEMENT_CANCEL = 'Cancel';
-    
+
     private $_document;
-    
+
     private $_parentForm;
 
-    public function __construct($parentForm = null, $options = null) {
+    public function __construct($parentForm = null, $options = null)
+    {
         parent::__construct($options);
         $this->_parentForm = $parentForm;
     }
 
-    public function init() {
+    public function init()
+    {
         parent::init();
-        
+
         $element = new Zend_Form_Element_Submit(self::ELEMENT_SAVE);
-        $element->setValue('save'); 
+        $element->setValue('save');
         $element->removeDecorator('DtDdWrapper');
         $this->addElement($element);
-        
+
         $element = new Zend_Form_Element_Submit(self::ELEMENT_CANCEL);
         $element->setValue('cancel');
         $element->removeDecorator('DtDdWrapper');
         $this->addElement($element);
     }
-    
-    public function populateFromModel($document) {
-        $this->_document= $document;
-    }
-    
-    public function constructFromPost($post, $document = null) {
+
+    public function populateFromModel($document)
+    {
         $this->_document = $document;
     }
-    
-    public function processPost($post, $context) {
+
+    public function constructFromPost($post, $document = null)
+    {
+        $this->_document = $document;
+    }
+
+    public function processPost($post, $context)
+    {
         if (array_key_exists(self::ELEMENT_SAVE, $post)) {
             return Admin_Form_Document::RESULT_SAVE;
-        }
-        else if (array_key_exists(self::ELEMENT_CANCEL, $post)) {
+        } elseif (array_key_exists(self::ELEMENT_CANCEL, $post)) {
             return Admin_Form_Document::RESULT_CANCEL;
         }
     }
-    
-    public function getDocument() {
+
+    public function getDocument()
+    {
         return $this->_document;
     }
-    
-    public function getMessage() {
+
+    public function getMessage()
+    {
         return (method_exists($this->_parentForm, 'getMessage')) ? $this->_parentForm->getMessage() : null;
     }
-    
+
     /**
-     * 
+     *
      * @return string
      */
-    public function getJumpLinks() {
-        $links = array();
-        
+    public function getJumpLinks()
+    {
+        $links = [];
+
         if ($this->_parentForm != null) {
             $subforms = $this->_parentForm->getSubForms();
-            
+
             foreach ($subforms as $name => $subform) {
-                if (!is_null($subform->getDecorator('Fieldset'))) {
+                if (! is_null($subform->getDecorator('Fieldset'))) {
                     // Unterformular mit Fieldset
                     $legend = $subform->getLegend();
-                    if (!is_null($legend) && strlen(trim($legend)) !== 0) {
+                    if (! is_null($legend) && strlen(trim($legend)) !== 0) {
                         $links['#fieldset-' . $name] = $legend;
                     }
                 }
             }
-        }
-        else {
+        } else {
             // Sollte niemals passieren
             Zend_Registry::get('Zend_Log')->err('ActionBox without parent form');
         }
-        
+
         return $links;
     }
-    
-    public function getStateLinks() {
-        $links = array();
-        
+
+    public function getStateLinks()
+    {
+        $links = [];
+
         $workflow = Zend_Controller_Action_HelperBroker::getStaticHelper('workflow');
-        
+
         $targetStates = $workflow->getAllowedTargetStatesForDocument($this->_document);
 
         foreach ($targetStates as $targetState) {
-            $links[$targetState] = array(
+            $links[$targetState] = [
                 'module'     => 'admin',
                 'controller' => 'workflow',
                 'action'     => 'changestate',
                 'docId'      => $this->_document->getId(),
                 'targetState' => $targetState
-            );
+            ];
         }
-        
+
         return $links;
     }
-    
-    public function getViewActionLinks() {
-        $actions = array();
+
+    public function getViewActionLinks()
+    {
+        $actions = [];
 
         $docId = $this->_document->getId();
-        
-        $actions['edit'] = array(
-            'module' => 'admin', 
-            'controller' => 'document', 
-            'action' => 'edit', 
+
+        $actions['edit'] = [
+            'module' => 'admin',
+            'controller' => 'document',
+            'action' => 'edit',
             'id' => $docId
-        );
-        
-        $actions['files'] = array(
+        ];
+
+        $actions['files'] = [
             'module'     => 'admin',
             'controller' => 'filemanager',
             'action'     => 'index',
             'id'         => $docId,
-        );
+        ];
 
-        $actions['frontdoor'] = array(
+        $actions['frontdoor'] = [
             'module'     => 'frontdoor',
             'controller' => 'index',
             'action'     => 'index',
             'docId'         => $docId,
-        );
-        
+        ];
+
         return $actions;
     }
-    
-    public function getFrontdoorActionLinks() {
-        $actions = $this->getViewActionLinks();
-        
-        unset($actions['frontdoor']);
-        
-        $actions['view'] = array(
-            'module'     => 'admin',
-            'controller' => 'document',
-            'action'     => 'index',
-            'id'         => $this->_document->getId()
-        );
-        
-        return $actions;
-    }
-    
-    public function loadDefaultDecorators() {
+
+    public function loadDefaultDecorators()
+    {
         $this->setDecorators(
-            array(array(
-            'ViewScript', array('viewScript' => 'actionbox.phtml')))
+            [[
+            'ViewScript', ['viewScript' => 'actionbox.phtml', 'viewModule' => 'admin']]]
         );
     }
-    
-    public function prepareRenderingAsView() {
+
+    public function prepareRenderingAsView()
+    {
         $this->setViewModeEnabled();
     }
 
-    public function isNavigationEnabled() {
-        return !is_null($this->_parentForm);
+    public function isNavigationEnabled()
+    {
+        return ! is_null($this->_parentForm);
     }
-
-    
 }

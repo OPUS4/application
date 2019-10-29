@@ -42,30 +42,32 @@ defined('APPLICATION_PATH')
 
 // Define application environment (use 'production' by default)
 defined('APPLICATION_ENV')
-        || define('APPLICATION_ENV',
-        (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));
+        || define(
+            'APPLICATION_ENV',
+            (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production')
+        );
 
 // Ensure library/ is on include_path
-set_include_path(implode(PATH_SEPARATOR, array(
+set_include_path(implode(PATH_SEPARATOR, [
             realpath(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'library'),
             realpath(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'vendor'),
             get_include_path(),
-        )));
+        ]));
 
 require_once 'autoload.php';
 require_once 'opus-php-compatibility.php';
 
 // Zend_Application
 $config = new Zend_Config_Ini(
-        APPLICATION_PATH . '/application/configs/application.ini',
-        APPLICATION_ENV,
-        array('allowModifications'=>true)
+    APPLICATION_PATH . '/application/configs/application.ini',
+    APPLICATION_ENV,
+    ['allowModifications' => true]
 );
 
 $localConfig = new Zend_Config_Ini(
-        APPLICATION_PATH . '/application/configs/config.ini',
-        APPLICATION_ENV,
-        array('allowModifications'=>true)
+    APPLICATION_PATH . '/application/configs/config.ini',
+    APPLICATION_ENV,
+    ['allowModifications' => true]
 );
 
 $config->merge($localConfig);
@@ -73,7 +75,7 @@ $config->merge($localConfig);
 // configuration file that is modified via application user interface
 if (is_readable(APPLICATION_PATH . '/application/configs/config.xml')) {
     $onlineConfig = new Zend_Config_Xml(
-            APPLICATION_PATH . '/application/configs/config.xml'
+        APPLICATION_PATH . '/application/configs/config.xml'
     );
     $config->merge($onlineConfig);
 }
@@ -83,17 +85,14 @@ $application = new Zend_Application(APPLICATION_ENV, $config);
 
 try {
     $application->bootstrap()->run();
-}
-catch (Exception $e) {
+} catch (Exception $e) {
     if (APPLICATION_ENV === 'production') {
         header("HTTP/1.0 500 Internal Server Error");
         echo '<b>OPUS 4</b>' . PHP_EOL;
         echo '<p>Internal server error - See server logs for more information.</p>' . PHP_EOL;
         echo 'Timestamp: ' . date('Y-m-d H:i:s', time()) . PHP_EOL;
         error_log($e->getMessage());
-    }
-    else {
+    } else {
         throw $e;
     }
 }
-

@@ -708,20 +708,20 @@
                             <resource>helppages</resource>
                         </help-page>
 
-                        <static-page>
+                        <translation>
                             <type>mvc</type>
-                            <label>setup_title_static-page</label>
-                            <description>setup_title_static-page_description</description>
+                            <label>setup_title_translation</label>
+                            <description>setup_title_translation_description</description>
                             <group>group-cafelatte</group>
                             <module>setup</module>
-                            <controller>static-page</controller>
+                            <controller>translation</controller>
                             <action>index</action>
                             <pages>
                                 <edit>
                                     <type>mvc</type>
-                                    <label>setup_static-page_edit_contact</label>
+                                    <label>setup_translation_edit_contact</label>
                                     <module>setup</module>
-                                    <controller>static-page</controller>
+                                    <controller>translation</controller>
                                     <action>edit</action>
                                     <params>
                                         <page>contact</page>
@@ -729,9 +729,9 @@
                                 </edit>
                                 <edit-home>
                                     <type>mvc</type>
-                                    <label>setup_static-page_edit_imprint</label>
+                                    <label>setup_translation_edit_imprint</label>
                                     <module>setup</module>
-                                    <controller>static-page</controller>
+                                    <controller>translation</controller>
                                     <action>edit</action>
                                     <params>
                                         <page>imprint</page>
@@ -739,9 +739,9 @@
                                 </edit-home>
                                 <edit-imprint>
                                     <type>mvc</type>
-                                    <label>setup_static-page_edit_home</label>
+                                    <label>setup_translation_edit_home</label>
                                     <module>setup</module>
-                                    <controller>static-page</controller>
+                                    <controller>translation</controller>
                                     <action>edit</action>
                                     <params>
                                         <page>home</page>
@@ -751,18 +751,18 @@
                                     <type>mvc</type>
                                     <label>setup_error</label>
                                     <module>setup</module>
-                                    <controller>static-page</controller>
+                                    <controller>translation</controller>
                                     <action>error</action>
                                 </error>
                             </pages>
                             <resource>staticpages</resource>
-                        </static-page>
+                        </translation>
 
                         <!--
                         <translation>
                             <type>mvc</type>
-                            <label>setup_title_translation</label>
-                            <description>setup_title_translation_description</description>
+                            <label>setup_title_language</label>
+                            <description>setup_title_language_description</description>
                             <group>group-cafelatte</group>
                             <module>setup</module>
                             <controller>language</controller>
@@ -940,9 +940,16 @@
                                 </detail>
                             </pages>
                         </doctype>
+                        <doireport>
+                            <type>mvc</type>
+                            <label>admin_title_doireport</label>
+                            <group>group-chocolate</group>
+                            <module>admin</module>
+                            <controller>report</controller>
+                            <action>doi</action>
+                        </doireport>
                     </pages>
                 </info>
-
             </pages>
         </administration>
     </nav>

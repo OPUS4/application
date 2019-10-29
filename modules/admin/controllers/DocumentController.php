@@ -27,9 +27,9 @@
  * @category    Application
  * @package     Module_Admin
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @author      Maximilian Salomon <salomon@zib.de>
+ * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -38,7 +38,8 @@
  * @category    Application
  * @package     Module_Admin
  */
-class Admin_DocumentController extends Application_Controller_Action {
+class Admin_DocumentController extends Application_Controller_Action
+{
 
     /**
      * Helper for verifying document IDs.
@@ -49,7 +50,8 @@ class Admin_DocumentController extends Application_Controller_Action {
     /**
      * Initializes controller.
      */
-    public function init() {
+    public function init()
+    {
         parent::init();
         $this->_documentsHelper = $this->_helper->getHelper('Documents');
     }
@@ -58,7 +60,8 @@ class Admin_DocumentController extends Application_Controller_Action {
      * Produces metadata overview page of a document.
      * @return Opus_Document
      */
-    public function indexAction() {
+    public function indexAction()
+    {
         $docId = $this->getRequest()->getParam('id');
 
         $document = $this->_documentsHelper->getDocumentForId($docId);
@@ -75,13 +78,14 @@ class Admin_DocumentController extends Application_Controller_Action {
             $this->_helper->breadcrumbs()->setDocumentBreadcrumb($document);
 
             $this->renderForm(new Admin_Form_Wrapper($form));
-        }
-        else {
+        } else {
             // missing or bad parameter => go back to main page
             return $this->_helper->Redirector->redirectTo(
-                'index', array('failure' =>
-                $this->view->translate('admin_document_error_novalidid')),
-                'documents', 'admin'
+                'index',
+                ['failure' =>
+                $this->view->translate('admin_document_error_novalidid')],
+                'documents',
+                'admin'
             );
         }
     }
@@ -91,22 +95,27 @@ class Admin_DocumentController extends Application_Controller_Action {
      *
      * TODO prüfen ob Form DocID mit URL DocID übereinstimmt
      */
-    public function editAction() {
+    public function editAction()
+    {
         $docId = $this->getRequest()->getParam('id');
 
         $document = $this->_documentsHelper->getDocumentForId($docId);
 
-        if (!isset($document)) {
+        if (! isset($document)) {
             return $this->_helper->Redirector->redirectTo(
-                'index', array('failure' =>
-                $this->view->translate('admin_document_error_novalidid')),
-                'documents', 'admin'
+                'index',
+                ['failure' =>
+                $this->view->translate('admin_document_error_novalidid')],
+                'documents',
+                'admin'
             );
-        }
-        else {
+        } else {
             $editSession = new Admin_Model_DocumentEditSession($docId);
+            $form = null;
 
             if ($this->getRequest()->isPost()) {
+                // handle form submission (save button, add/remove element)
+
                 $data = $this->getRequest()->getPost();
                 $data = $data['Document']; // 'Document' Form wraps actual metadata form
 
@@ -123,8 +132,9 @@ class Admin_DocumentController extends Application_Controller_Action {
 
                 switch ($result) {
                     case Admin_Form_Document::RESULT_SAVE:
-                        if ($form->isValid($data)) {
-                            // Formular ist korrekt; aktualisiere Dokument
+                        $validationResult = $form->isValid($data);
+                        if ($validationResult) {
+                            // alle Formularwerte ist gültig; aktualisiere Dokument in Datenbank
                             $form->updateModel($document);
 
                             try {
@@ -133,16 +143,18 @@ class Admin_DocumentController extends Application_Controller_Action {
                                 // TODO redirect to Übersicht/Browsing/???
                                 $message = $this->view->translate('admin_document_update_success');
                                 return $this->_helper->Redirector->redirectTo(
-                                    'index', $message, 'document', 'admin', array('id' => $docId)
+                                    'index',
+                                    $message,
+                                    'document',
+                                    'admin',
+                                    ['id' => $document->getId()]
                                 );
-                            }
-                            catch (Exception $ex) {
+                            } catch (Exception $ex) {
                                 $message = $this->view->translate('admin_document_error_exception_storing');
                                 $message = sprintf($message, $ex->getMessage());
                                 $form->setMessage($message);
                             }
-                        }
-                        else {
+                        } else {
                             $form->setMessage($this->view->translate('admin_document_error_validation'));
                         }
                         break;
@@ -154,8 +166,7 @@ class Admin_DocumentController extends Application_Controller_Action {
 
                             // TODO handle exceptions
                             $document->store();
-                        }
-                        else {
+                        } else {
                             // Zend_Debug::dump($form->getErrors());
                             $form->setMessage($this->view->translate('admin_document_error_validation'));
                         }
@@ -165,15 +176,19 @@ class Admin_DocumentController extends Application_Controller_Action {
                         // TODO redirect to origin page (Store in Session oder Form?)
                         // Possible Rücksprungziele: Frontdoor, Metadaten-Übersicht, Suchergebnisse (Documents, ?)
                         return $this->_helper->Redirector->redirectTo(
-                            'index', null, 'document', 'admin', array('id' => $docId)
+                            'index',
+                            null,
+                            'document',
+                            'admin',
+                            ['id' => $document->getId()]
                         );
                         break;
 
                     case Admin_Form_Document::RESULT_SWITCH_TO:
-                        $editSession->storePost($data, $docId);
+                        $editSession->storePost($data, $document->getId());
 
                         // TODO Parameter in Unterarray 'params' => array() verlagern?
-                        $target['document'] = $docId;
+                        $target['document'] = $document->getId();
 
                         $action = $target['action'];
                         unset($target['action']);
@@ -189,29 +204,9 @@ class Admin_DocumentController extends Application_Controller_Action {
                         // Zurueck zum Formular
                         break;
                 }
-            }
-            else {
+            } else {
                 // GET zeige neues oder gespeichertes Formular an
-
-                // Hole gespeicherten POST aus Session
-                $post = $editSession->retrievePost($docId);
-
-                $continue = $this->getRequest()->getParam('continue', null);
-
-                if ($post && !is_null($continue)) {
-                    // Initialisiere Formular vom gespeicherten POST
-                    $form = Admin_Form_Document::getInstanceFromPost($post, $document);
-                    $form->populate($post);
-
-                    // Führe Rücksprung aus
-                    $form->continueEdit($this->getRequest(), $editSession);
-                }
-                else {
-                    // Initialisiere Formular vom Dokument
-                    $form = new Admin_Form_Document();
-                    $form->populateFromModel($document);
-                }
-
+                $form = $this->handleGet($document, $editSession);
             }
 
             $wrappedForm = new Admin_Form_Wrapper($form);
@@ -228,6 +223,64 @@ class Admin_DocumentController extends Application_Controller_Action {
         $this->_helper->breadcrumbs()->setDocumentBreadcrumb($document);
 
         $this->renderForm($this->view->form);
+
+        // Add translations for Javascript code
+        $javascriptTranslations = $this->view->getHelper('javascriptMessages');
+        $javascriptTranslations->addMessage('identifierInvalidFormat');
+        $javascriptTranslations->addMessage('identifierInvalidCheckdigit');
     }
 
+    /**
+     * Liefert ein Formular, dessen Elemente mit den Werten des übergebenen Dokuments
+     * initialisiert sind.
+     *
+     * @param $document Opus_Document
+     * @param $editSession Admin_Model_DocumentEditSession
+     *
+     * @return Admin_Form_Document|null
+     */
+    private function handleGet($document, $editSession)
+    {
+        $form = null;
+
+        // Hole gespeicherten POST aus Session, sofern verfügbar
+        $post = $editSession->retrievePost($document->getId());
+
+        $continue = $this->getRequest()->getParam('continue', null);
+
+        if ($post && ! is_null($continue)) {
+            // Initialisiere Formular vom gespeicherten POST
+            $form = Admin_Form_Document::getInstanceFromPost($post, $document);
+            $form->populate($post);
+
+            // Führe Rücksprung aus
+            $form->continueEdit($this->getRequest(), $editSession);
+        } else {
+            // Initialisiere Formular vom Dokument
+            $form = new Admin_Form_Document();
+            $form->populateFromModel($document);
+        }
+
+        return $form;
+    }
+
+    /**
+     * Creates a new document and opens it in the edit formular.
+     *
+     * TODO move creating of new document to model (maybe additional operations later)
+     */
+    public function createAction()
+    {
+        $doc = new Opus_Document();
+
+        $docId = $doc->store();
+
+        return $this->_helper->Redirector->redirectTo(
+            'edit',
+            'admin_document_created',
+            'document',
+            'admin',
+            ['id' => $docId]
+        );
+    }
 }

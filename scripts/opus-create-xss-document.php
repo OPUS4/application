@@ -26,25 +26,27 @@
  *
  * @category    Application
  * @author      Thoralf Klein <thoralf.klein@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 // Bootstrapping
 require_once dirname(__FILE__) . '/common/bootstrap.php';
 
 $counter = 1;
-function randString($counter) {
-   $template = '<i><script language="javascript" type="text/javascript">alert(\'alert STRING\');</script>';
-   return str_replace('STRING', $counter, $template);
+function randString($counter)
+{
+    $template = '<i><script language="javascript" type="text/javascript">alert(\'alert STRING\');</script>';
+    return str_replace('STRING', $counter, $template);
 }
 
 
 // error handler function
-function myErrorHandler($errno, $errstr, $errfile, $errline) {
-   echo "WARNING: myErrorHandler($errno, '$errstr', '$errfile', $errline)\n";
-   return true;
+function myErrorHandler($errno, $errstr, $errfile, $errline)
+{
+    echo "WARNING: myErrorHandler($errno, '$errstr', '$errfile', $errline)\n";
+    return true;
 }
 // set to the user defined error handler
 $oldErrorHandler = set_error_handler("myErrorHandler");
@@ -130,15 +132,15 @@ $doc->addPersonContributor($contributor);
 //
 // Titles
 //
-foreach (array('addTitleMain', 'addTitleAbstract', 'addTitleParent', 'addTitleSub', 'addTitleAdditional') AS
+foreach (['addTitleMain', 'addTitleAbstract', 'addTitleParent', 'addTitleSub', 'addTitleAdditional'] as
          $titleMethod) {
-   $doc->$titleMethod()
+    $doc->$titleMethod()
       ->setValue(randString($counter++))
       ->setLanguage(randString($counter++));
-   $doc->$titleMethod()
+    $doc->$titleMethod()
       ->setValue(randString($counter++))
       ->setLanguage('deu');
-   $doc->$titleMethod()
+    $doc->$titleMethod()
       ->setValue(randString($counter++))
       ->setLanguage('eng');
 }
@@ -158,15 +160,13 @@ $institutesRole->setName('institutes'.randString($counter++).rand())
                    ->setVisibleFrontdoor(1)
                    ->setDisplayFrontdoor('Name')
                    ->setVisibleOai('Name')
-                   ->setDisplayOai('Name')
                    ->store();
 
-$instituteName='Institut für empirische Forschung ' . randString($counter++);
+$instituteName = 'Institut für empirische Forschung ' . randString($counter++);
 $instituteCollections = Opus_Collection::fetchCollectionsByRoleName($institutesRole->getId(), $instituteName);
-if (count($instituteCollections) >=1) {
+if (count($instituteCollections) >= 1) {
     $instituteCollection = $instituteCollections[0];
-}
-else {
+} else {
     $rootCollection = $institutesRole->getRootCollection();
     if (is_null($rootCollection) === true) {
         $rootCollection = $institutesRole->addRootCollection();
@@ -225,23 +225,23 @@ $doc->setThesisPublisher($dnbInstitute);
 $doc->addSubject()->setType('swd')
    ->setValue(randString($counter++));
 
-foreach (array('uncontrolled', 'msc', 'ddc') AS $type) {
-   $doc->addSubject()->setType($type)
-   ->setLanguage(randString($counter++))
-   ->setValue(randString($counter++))
-   ->setExternalKey(randString($counter++));
-   $doc->addSubject()->setType($type)
-   ->setLanguage("eng\0".randString($counter++))
-   ->setValue(randString($counter++))
-   ->setExternalKey(randString($counter++));
-   $doc->addSubject()->setType($type)
-   ->setLanguage("deu")
-   ->setValue(randString($counter++))
-   ->setExternalKey(randString($counter++));
-   $doc->addSubject()->setType($type)
-   ->setLanguage("eng")
-   ->setValue(randString($counter++))
-   ->setExternalKey(randString($counter++));
+foreach (['uncontrolled', 'msc', 'ddc'] as $type) {
+    $doc->addSubject()->setType($type)
+    ->setLanguage(randString($counter++))
+    ->setValue(randString($counter++))
+    ->setExternalKey(randString($counter++));
+    $doc->addSubject()->setType($type)
+    ->setLanguage("eng\0".randString($counter++))
+    ->setValue(randString($counter++))
+    ->setExternalKey(randString($counter++));
+    $doc->addSubject()->setType($type)
+    ->setLanguage("deu")
+    ->setValue(randString($counter++))
+    ->setExternalKey(randString($counter++));
+    $doc->addSubject()->setType($type)
+    ->setLanguage("eng")
+    ->setValue(randString($counter++))
+    ->setExternalKey(randString($counter++));
 }
 
 

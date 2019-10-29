@@ -26,7 +26,7 @@
  *
  * @category    Tests
  * @author      Maximilian Salomon <salomon@zib.de>
- * @copyright   Copyright (c) 2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2017-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -36,6 +36,9 @@
  */
 class Application_Form_Validate_IdentifierTest extends ControllerTestCase
 {
+
+    protected $additionalResources = ['database', 'translation'];
+
     /**
      * Represents an validator-object for identifier-elements.
      * @var Zend_Validate_Abstract
@@ -54,9 +57,24 @@ class Application_Form_Validate_IdentifierTest extends ControllerTestCase
     public function setUp()
     {
         parent::setUp();
+
+        $this->makeConfigurationModifiable();
+
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'identifier' => ['validation' => [
+                'isbn' => [
+                    'class' => 'Opus\Validate\Isbn'
+                ],
+                'issn' => [
+                    'class' => 'Opus\Validate\Issn'
+                ]
+            ]]
+        ]));
+
         $this->_element = new Application_Form_Element_Identifier('Element');
         $this->_element->setValue('ISBN');
         $this->_validator = new Application_Form_Validate_Identifier($this->_element);
+        $this->useEnglish();
     }
 
     /**
@@ -186,7 +204,7 @@ class Application_Form_Validate_IdentifierTest extends ControllerTestCase
         $this->assertContains('checkdigit', $this->_validator->getErrors());
 
         $this->assertFalse($this->_validator->isValid('978-3-86680-192-7'));
-        $this->assertContains("The check digit of '978-3-86680-192-7' is not valid", $this->_validator->getMessages());
+        $this->assertContains("The check digit of '978-3-86680-192-7' is not valid.", $this->_validator->getMessages());
     }
 
     /**
@@ -197,15 +215,15 @@ class Application_Form_Validate_IdentifierTest extends ControllerTestCase
     {
         $this->assertFalse($this->_validator->isValid('978-3-866800-1942-34'));
         $this->assertContains('form', $this->_validator->getErrors());
-        $this->assertContains("'978-3-866800-1942-34' is malformed", $this->_validator->getMessages());
+        $this->assertContains("'978-3-866800-1942-34' is malformed.", $this->_validator->getMessages());
 
         $this->assertFalse($this->_validator->isValid('978386680192'));
         $this->assertContains('form', $this->_validator->getErrors());
-        $this->assertContains("'978386680192' is malformed", $this->_validator->getMessages());
+        $this->assertContains("'978386680192' is malformed.", $this->_validator->getMessages());
 
         $this->assertFalse($this->_validator->isValid('978-3-86680-1X2-9'));
         $this->assertContains('form', $this->_validator->getErrors());
-        $this->assertContains("'978-3-86680-1X2-9' is malformed", $this->_validator->getMessages());
+        $this->assertContains("'978-3-86680-1X2-9' is malformed.", $this->_validator->getMessages());
     }
 
     /**
@@ -220,8 +238,8 @@ class Application_Form_Validate_IdentifierTest extends ControllerTestCase
     }
 
     /**
-     * Invalid object type as constructor argument should throw exception. 
-     * 
+     * Invalid object type as constructor argument should throw exception.
+     *
      * @expectedException InvalidArgumentException
      * @expectedExceptionMessage Object must be Zend_Form_Element
      * @covers ::__construct
@@ -238,10 +256,48 @@ class Application_Form_Validate_IdentifierTest extends ControllerTestCase
     {
         $config = Application_Configuration::getInstance()->getConfig();
         $types = $config->identifier->validation->toArray();
-        foreach ($types as $key => $val)
-        {
-            $this->assertTrue(class_exists($types[$key]));
+        foreach ($types as $key => $val) {
+            $this->assertArrayHasKey('class', $val);
+            $this->assertTrue(class_exists($val['class']));
         }
     }
 
+    /**
+     * Tests, if keys for message-templates, which are set in the config-files, exists in the validator-files.
+     */
+    public function testMessagesKeyValid()
+    {
+        $config = Application_Configuration::getInstance()->getConfig();
+        $validators = $config->identifier->validation->toArray();
+
+        foreach ($validators as $key => $val) {
+            $validatorClass = $val['class'];
+            $validator = new $validatorClass;
+            $messageValidator = $validator->getMessageTemplates();
+            if (array_key_exists('messageTemplates', $val)) {
+                $messageConfig = $val['messageTemplates'];
+                foreach ($messageConfig as $key => $val) {
+                    $this->assertArrayHasKey($key, $messageValidator);
+                }
+            }
+        }
+    }
+
+    /**
+     * Tests if all set message-templates(error-codes) are translated.
+     */
+    public function testTranslationExists()
+    {
+        $translate = Zend_Registry::get('Zend_Translate');
+        $config = Application_Configuration::getInstance()->getConfig();
+        $validators = $config->identifier->validation->toArray();
+        foreach ($validators as $key => $val) {
+            if (array_key_exists('messageTemplates', $val)) {
+                $messageConfig = $val['messageTemplates'];
+                foreach ($messageConfig as $key => $val) {
+                    $this->assertTrue($translate->isTranslated($val));
+                }
+            }
+        }
+    }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -27,21 +28,22 @@
  * @category    Application Unit Test
  * @package     Application_Controller_Action_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  *
  * TODO test checkFile
  */
-class Application_Controller_Action_Helper_FilesTest extends ControllerTestCase {
+class Application_Controller_Action_Helper_FilesTest extends ControllerTestCase
+{
 
     private $helper;
 
     private $folder;
 
-    private $localTestFiles = array('test.pdf', 'test.txt', 'test.png');
+    private $localTestFiles = ['test.pdf', 'test.txt', 'test.png'];
 
-    public function setUp() {
+    public function setUp()
+    {
         parent::setUp();
 
         $this->helper = Zend_Controller_Action_HelperBroker::getStaticHelper('Files');
@@ -55,7 +57,8 @@ class Application_Controller_Action_Helper_FilesTest extends ControllerTestCase 
         }
     }
 
-    public function tearDown() {
+    public function tearDown()
+    {
         foreach ($this->localTestFiles as $file) {
             unlink($this->folder . '/' . $file);
         }
@@ -63,7 +66,8 @@ class Application_Controller_Action_Helper_FilesTest extends ControllerTestCase 
         parent::tearDown();
     }
 
-    public function testListFiles() {
+    public function testListFiles()
+    {
         $files = $this->helper->listFiles($this->folder);
 
         $this->assertInternalType('array', $files);
@@ -71,11 +75,12 @@ class Application_Controller_Action_Helper_FilesTest extends ControllerTestCase 
 
         foreach ($files as $file) {
             $fileName = $file['name'];
-            $this->assertContains($fileName, array('test.pdf', 'test.txt'), "Unexpected file '$fileName'.");
+            $this->assertContains($fileName, ['test.pdf', 'test.txt'], "Unexpected file '$fileName'.");
         }
     }
 
-    public function testListFilesAllFileTypes() {
+    public function testListFilesAllFileTypes()
+    {
         $files = $this->helper->listFiles($this->folder, true);
 
         $this->assertInternalType('array', $files);
@@ -87,14 +92,14 @@ class Application_Controller_Action_Helper_FilesTest extends ControllerTestCase 
         }
     }
 
-    public function testGetAllowedFileTypes() {
+    public function testGetAllowedFileTypes()
+    {
         $method = new ReflectionMethod('Application_Controller_Action_Helper_Files', 'getAllowedFileTypes');
         $method->setAccessible(true);
 
         $fileTypes = $method->invoke($this->helper);
 
         $this->assertEquals(4, count($fileTypes));
-        $this->assertEmpty(array_diff(array('pdf', 'txt', 'html', 'htm'), $fileTypes));
+        $this->assertEmpty(array_diff(['pdf', 'txt', 'html', 'htm'], $fileTypes));
     }
-
 }

@@ -24,22 +24,27 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    TODO
+ * @category    Tests
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
  * Basic unit tests for license controller in default module.
+ *
+ * @covers LicenseController
  */
-class LicenseControllerTest extends ControllerTestCase {
+class LicenseControllerTest extends ControllerTestCase
+{
+
+    protected $additionalResources = ['view', 'mainMenu', 'translation'];
 
     /**
      * Show license.
      */
-    public function testIndexAction() {
+    public function testIndexAction()
+    {
         $this->dispatch('/default/license/index/licId/1');
         $this->assertResponseCode(200);
         $this->assertModule('default');
@@ -47,12 +52,11 @@ class LicenseControllerTest extends ControllerTestCase {
         $this->assertAction('index');
     }
 
-    public function testIndexActionWrongId() {
+    public function testIndexActionWrongId()
+    {
         $this->dispatch('/default/license/index/licId/100');
         $this->assertModule('default');
         $this->assertController('error');
         $this->assertAction('error');
     }
-
 }
-

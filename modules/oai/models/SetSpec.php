@@ -31,12 +31,14 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Oai_Model_SetSpec {
+class Oai_Model_SetSpec
+{
 
-    public static function getSetSpecsFromCollections($collections) {
-        $sets = array();
+    public static function getSetSpecsFromCollections($collections)
+    {
+        $sets = [];
 
-        foreach ($collections AS $collection) {
+        foreach ($collections as $collection) {
             if ($collection->getVisible() != 1) {
                 continue;
             }
@@ -61,7 +63,5 @@ class Oai_Model_SetSpec {
         }
 
         return array_unique($sets);
-
     }
-
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,23 +25,22 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Unit Tests
- * @package     Admin_Controllers
+ * @category    Tests
+ * @package     Admin
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @author      Maximilian Salomon <salomon@zib.de>
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
+ *
+ * @covers Admin_PersonController
  */
-class PersonControllerTest extends ControllerTestCase {
+class Admin_PersonControllerTest extends ControllerTestCase
+{
 
-    private $documentId;
+    protected $additionalResources = 'all';
 
-    public function tearDown() {
-        $this->removeDocument($this->documentId);
-
-        parent::tearDown();
-    }
-
-    public function testAssignAction() {
+    public function testAssignAction()
+    {
         $this->dispatch('/admin/person/assign/document/146');
 
         $this->validateXHTML();
@@ -49,58 +49,64 @@ class PersonControllerTest extends ControllerTestCase {
         $this->assertXpath('//option[@value="author" and @selected="selected"]'); // default
     }
 
-    public function testAssignActionBadDocumentId() {
+    public function testAssignActionBadDocumentId()
+    {
         $this->dispatch('/admin/person/assign/document/bad');
         $this->assertRedirectTo('/admin/documents');
         $this->verifyFlashMessage('admin_document_error_novalidid');
     }
 
-    public function testAssignActionUnknownDocumentId() {
+    public function testAssignActionUnknownDocumentId()
+    {
         $this->dispatch('/admin/person/assign/document/5555');
         $this->assertRedirectTo('/admin/documents');
         $this->verifyFlashMessage('admin_document_error_novalidid');
     }
 
-    public function testAssignActionNoDocumentId() {
+    public function testAssignActionNoDocumentId()
+    {
         $this->dispatch('/admin/person/assign');
         $this->assertRedirectTo('/admin/documents');
         $this->verifyFlashMessage('admin_document_error_novalidid');
     }
 
-    public function testAssignActionWithRoleParam() {
+    public function testAssignActionWithRoleParam()
+    {
         $this->dispatch('/admin/person/assign/document/146/role/translator');
 
         $this->assertNotXpath('//option[@value="author" and @selected="selected"]');
         $this->assertXpath('//option[@value="translator" and @selected="selected"]');
     }
 
-    public function testAssignActionCancel() {
-        $this->getRequest()->setMethod('POST')->setPost(array(
+    public function testAssignActionCancel()
+    {
+        $this->getRequest()->setMethod('POST')->setPost([
             'Cancel' => 'Abbrechen'
-        ));
+        ]);
 
         $this->dispatch('/admin/person/assign/document/146/role/advisor');
         $this->assertRedirectTo('/admin/document/edit/id/146/continue/addperson');
     }
 
-    public function testAssignActionAddPerson() {
+    public function testAssignActionAddPerson()
+    {
         $document = $this->createTestDocument();
 
-        $this->documentId = $document->store();
+        $documentId = $document->store();
 
-        $this->getRequest()->setMethod('POST')->setPost(array(
+        $this->getRequest()->setMethod('POST')->setPost([
             'LastName' => 'Testy-AssignAction',
-            'Document' => array(
+            'Document' => [
                 'Role' => 'translator'
-            ),
+            ],
             'Save' => 'Speichern'
-        ));
+        ]);
 
-        $this->dispatch('/admin/person/assign/document/' . $this->documentId . '/role/translator');
+        $this->dispatch('/admin/person/assign/document/' . $documentId . '/role/translator');
 
         $location = $this->getLocation();
 
-        $matches = array();
+        $matches = [];
         preg_match('/person\/(\d+)\//', $location, $matches);
         $personId = $matches[1];
 
@@ -111,12 +117,13 @@ class PersonControllerTest extends ControllerTestCase {
         $person->delete();
 
         $this->assertTrue(strpos($location, '/admin/document/edit/id/'
-                . $this->documentId . '/continue/addperson') === 0);
+                . $documentId . '/continue/addperson') === 0);
 
         $this->assertEquals('Testy-AssignAction', $lastName);
     }
 
-    public function testEditlinkedAction() {
+    public function testEditlinkedAction()
+    {
         $this->dispatch('/admin/person/editlinked/document/146/personId/259');
 
         $this->validateXHTML();
@@ -126,55 +133,64 @@ class PersonControllerTest extends ControllerTestCase {
         $this->assertXpath('//input[@id="FirstName" and @value="John"]');
     }
 
-    public function testEditlinkedActionBadDocumentId() {
+    public function testEditlinkedActionBadDocumentId()
+    {
         $this->dispatch('/admin/person/editlinked/document/bad');
         $this->assertRedirectTo('/admin/documents');
         $this->verifyFlashMessage('admin_document_error_novalidid');
     }
 
-    public function testEditlinkedActionUnknownDocumentId() {
+    public function testEditlinkedActionUnknownDocumentId()
+    {
         $this->dispatch('/admin/person/editlinked/document/5555');
         $this->assertRedirectTo('/admin/documents');
         $this->verifyFlashMessage('admin_document_error_novalidid');
     }
 
-    public function testEditlinkedActionNoDocumentId() {
+    public function testEditlinkedActionNoDocumentId()
+    {
         $this->dispatch('/admin/person/editlinked');
         $this->assertRedirectTo('/admin/documents');
         $this->verifyFlashMessage('admin_document_error_novalidid');
     }
 
-    public function testEditlinkedActionNoPersonId() {
+    public function testEditlinkedActionNoPersonId()
+    {
         $this->dispatch('/admin/person/editlinked/document/146');
         $this->assertRedirectTo('/admin/document/edit/id/146/continue/true');
     }
 
-    public function testEditlinkedActionUnknownPersonId() {
+    public function testEditlinkedActionUnknownPersonId()
+    {
         $this->dispatch('/admin/person/editlinked/document/146/personId/7777');
         $this->assertRedirectTo('/admin/document/edit/id/146/continue/true');
     }
 
-    public function testEditlinkedActionBadPersonId() {
+    public function testEditlinkedActionBadPersonId()
+    {
         $this->dispatch('/admin/person/editlinked/document/146/personId/bad');
         $this->assertRedirectTo('/admin/document/edit/id/146/continue/true');
     }
 
-    public function testEditlinkedActionPersonNotLinkedToDocument() {
+    public function testEditlinkedActionPersonNotLinkedToDocument()
+    {
         $this->markTestIncomplete('Klären wofür die Action verwendet werden soll.');
         $this->dispatch('/admin/person/editlinked/document/146/personId/253');
         $this->assertRedirectTo('/admin/document/edit/id/146/continue/true');
     }
 
-    public function testEditlinkedActionCancel() {
-        $this->getRequest()->setMethod('POST')->setPost(array(
+    public function testEditlinkedActionCancel()
+    {
+        $this->getRequest()->setMethod('POST')->setPost([
             'Cancel' => 'Abbrechen'
-        ));
+        ]);
 
         $this->dispatch('/admin/person/editlinked/document/146/personId/259');
         $this->assertRedirectTo('/admin/document/edit/id/146/continue/true');
     }
 
-    public function testEditlinkedActionSave() {
+    public function testEditlinkedActionSave()
+    {
         $document = $this->createTestDocument();
 
         $person = new Opus_Person();
@@ -182,24 +198,24 @@ class PersonControllerTest extends ControllerTestCase {
 
         $person = $document->addPersonTranslator($person);
 
-        $this->documentId = $document->store();
+        $documentId = $document->store();
 
         $personId = $person->getModel()->getId();
 
-        $this->getRequest()->setMethod('POST')->setPost(array(
+        $this->getRequest()->setMethod('POST')->setPost([
             'PersonId' => $personId,
             'LastName' => 'Testy',
             'FirstName' => 'Simone',
-            'Document' => array(
+            'Document' => [
                 'Role' => 'translator'
-            ),
+            ],
             'Save' => 'Speichern'
-        ));
+        ]);
 
         $this->dispatch('/admin/person/editlinked/personId/' . $personId . '/role/translator/document/'
-            . $this->documentId);
+            . $documentId);
 
-        $this->assertRedirectTo('/admin/document/edit/id/' . $this->documentId
+        $this->assertRedirectTo('/admin/document/edit/id/' . $documentId
             . '/continue/updateperson/person/' . $personId);
 
         $person = new Opus_Person($personId);
@@ -237,7 +253,7 @@ class PersonControllerTest extends ControllerTestCase {
      */
     public function redirectProvider()
     {
-        return array(
+        return [
             'limit zero' => ['limit/0', '/admin/person'],
             'limit not integer' => ['limit/infinity', '/admin/person'],
             // 'limit empty' => ['limit/', '/admin/person'],
@@ -247,7 +263,7 @@ class PersonControllerTest extends ControllerTestCase {
             'page invalid' => ['page/here', '/admin/person'],
             'page zero' => ['page/0', '/admin/person'],
             'page negative' => ['page/-1', '/admin/person']
-        );
+        ];
     }
 
     /**
@@ -269,7 +285,7 @@ class PersonControllerTest extends ControllerTestCase {
         $this->dispatch('/admin/person/index/filter/Walruss');
 
         $this->assertResponseCode(200);
-        $this->assertQueryCount(1, 'td.lastname');
+        $this->assertQueryCount('td.lastname', 1);
         $this->assertQueryContentContains('td.lastname', 'Walruss');
         $this->assertQueryContentContains('td.firstname', 'Wally');
         $this->assertQueryContentContains('td.documents', 8);
@@ -280,7 +296,7 @@ class PersonControllerTest extends ControllerTestCase {
         $this->dispatch('/admin/person/index/filter/wAlRuSs');
 
         $this->assertResponseCode(200);
-        $this->assertQueryCount(1, 'td.lastname');
+        $this->assertQueryCount('td.lastname', 1);
         $this->assertNotQueryContentContains('td.lastname', 'wAlRuSs');
         $this->assertQueryContentContains('td.lastname', 'Walruss');
         $this->assertQueryContentContains('td.firstname', 'Wally');
@@ -334,9 +350,9 @@ class PersonControllerTest extends ControllerTestCase {
 
     public function testIndexRedirectPost()
     {
-        $this->getRequest()->setPost(array(
+        $this->getRequest()->setPost([
             'filter' => 'en', 'role' => 'author', 'limit' => '10',
-        ))->setMethod('POST');
+        ])->setMethod('POST');
 
         $this->dispatch('/admin/person');
 
@@ -361,6 +377,10 @@ class PersonControllerTest extends ControllerTestCase {
         $this->assertQueryCount('ul.paginationControl/li', 14);
     }
 
+    /**
+     * TODO test is affected by other tests creating Opus_Person objects, because deleting test documents does not
+     *      delete linked persons
+     */
     public function testIndexPaginationLastPage()
     {
         // use 5 because it is larger than max page number (with current test data)
@@ -372,11 +392,15 @@ class PersonControllerTest extends ControllerTestCase {
         $this->assertQuery('div.pagination-next');
         $this->assertQuery('div.pagination-last');
 
-        $this->assertQueryContentContains('li.currentPage', 3); // with current test data
+        $personsCount = Opus_Person::getAllPersonsCount();
+
+        $pages = ceil($personsCount / 50);
+
+        $this->assertQueryContentContains('li.currentPage', $pages); // with current test data
         $this->assertNotQuery('li.currentPage/a'); // no link for current page
         $this->assertQueryContentContains('li/a', 1);
         $this->assertQueryContentContains('li/a', 2);
-        $this->assertQueryCount('ul.paginationControl/li', 7); // 3 pages + 4 nav links
+        $this->assertQueryCount('ul.paginationControl/li', $pages + 4); // 3 pages + 4 nav links
     }
 
     public function testIndexPagination()
@@ -429,7 +453,8 @@ class PersonControllerTest extends ControllerTestCase {
         $this->assertQuery('div.pagination-last');
     }
 
-    public function testIndexPageDoNotShowPaginationIfResultIsSmallerThanLimit() {
+    public function testIndexPageDoNotShowPaginationIfResultIsSmallerThanLimit()
+    {
         $this->dispatch('/admin/person/index/filter/wally/page/1000/limit/1');
 
         $this->assertResponseCode(200);
@@ -484,17 +509,15 @@ class PersonControllerTest extends ControllerTestCase {
     {
         $this->useEnglish();
 
-        $this->getRequest()->setMethod('POST')->setPost(array(
+        $this->getRequest()->setMethod('POST')->setPost([
             'LastName' => 'Test',
             'DateOfBirth' => '1970-01-01',
             'Save' => 'Weiter'
-        ));
+        ]);
 
         $this->dispatch('/admin/person/edit/last_name/Author/first_name/One');
 
         $this->assertQueryContentContains('ul.form-errors', 'at least one field');
         $this->assertNotQueryContentContains('ul.form-errors', 'Date of Birth');
-
     }
-
 }

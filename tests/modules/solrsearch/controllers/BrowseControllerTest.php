@@ -29,29 +29,40 @@
  * @author      Sascha Szott <szott@zib.de>
  * @author      Michael Lang <lang@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
-class Solrsearch_BrowseControllerTest extends ControllerTestCase {
+/**
+ * Class Solrsearch_BrowseControllerTest.
+ *
+ * @covers Solrsearch_BrowseController
+ */
+class Solrsearch_BrowseControllerTest extends ControllerTestCase
+{
 
-    public function setUp() {
+    protected $additionalResources = 'all';
+
+    public function setUp()
+    {
         parent::setUp();
         $this->requireSolrConfig();
     }
 
-    public function testIndexAction() {
+    public function testIndexAction()
+    {
         $this->dispatch('/solrsearch/browse');
         $this->assertResponseCode(200);
     }
 
-    public function testDoctypesAction() {
+    public function testDoctypesAction()
+    {
         $this->dispatch('/solrsearch/browse/doctypes');
         $this->assertResponseCode(200);
     }
 
-    public function testSeriesAction() {
+    public function testSeriesAction()
+    {
         $this->dispatch('/solrsearch/browse/series');
         $responseBody = $this->getResponse()->getBody();
         $this->assertContains('/solrsearch/index/search/searchtype/series/id/1', $responseBody);
@@ -65,7 +76,8 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase {
         $this->assertResponseCode(200);
     }
 
-    public function testSeriesActionWithUnvisibleSeries() {
+    public function testSeriesActionWithUnvisibleSeries()
+    {
         $visibilities = $this->setAllSeriesToUnvisible();
 
         $this->dispatch('/solrsearch/browse/series');
@@ -75,7 +87,8 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase {
         $this->restoreSeriesVisibility($visibilities);
     }
 
-    public function testSeriesActionWithOneVisibleSeriesWithoutAnyPublishedDocument() {
+    public function testSeriesActionWithOneVisibleSeriesWithoutAnyPublishedDocument()
+    {
         $visibilities = $this->setAllSeriesToUnvisible();
 
         $d = $this->createTestDocument();
@@ -97,7 +110,8 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase {
         $this->assertResponseLocationHeader($this->getResponse(), '/solrsearch/browse');
     }
 
-    public function testSeriesActionWithOneVisibleSeriesWithOnePublishedDocument() {
+    public function testSeriesActionWithOneVisibleSeriesWithOnePublishedDocument()
+    {
         $visibilities = $this->setAllSeriesToUnvisible();
 
         $d = $this->createTestDocument();
@@ -124,8 +138,9 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase {
         $this->assertResponseCode(200);
     }
 
-    private function setAllSeriesToUnvisible() {
-        $visibilities = array();
+    private function setAllSeriesToUnvisible()
+    {
+        $visibilities = [];
         foreach (Opus_Series::getAll() as $seriesItem) {
             $visibilities[$seriesItem->getId()] = $seriesItem->getVisible();
             $seriesItem->setVisible(0);
@@ -134,18 +149,20 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase {
         return $visibilities;
     }
 
-    private function restoreSeriesVisibility($visibilities) {
+    private function restoreSeriesVisibility($visibilities)
+    {
         foreach (Opus_Series::getAll() as $seriesItem) {
             $seriesItem->setVisible($visibilities[$seriesItem->getId()]);
             $seriesItem->store();
         }
     }
 
-    public function testSeriesActionRespectsSeriesSortOrder() {
+    public function testSeriesActionRespectsSeriesSortOrder()
+    {
         $this->dispatch('/solrsearch/browse/series');
         $this->assertResponseCode(200);
         $responseBody = $this->getResponse()->getBody();
-        $seriesIds = array('1', '4', '2', '5', '6');
+        $seriesIds = ['1', '4', '2', '5', '6'];
         foreach ($seriesIds as $seriesId) {
             $pos = strpos($responseBody, '/solrsearch/index/search/searchtype/series/id/' . $seriesId);
             $this->assertTrue($pos !== false);
@@ -153,7 +170,8 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase {
         }
     }
 
-    public function testSeriesActionRespectsSeriesSortOrderAfterManipulation() {
+    public function testSeriesActionRespectsSeriesSortOrderAfterManipulation()
+    {
         $sortOrders = $this->getSortOrders();
 
         // reverse ordering of series
@@ -165,7 +183,7 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase {
         $this->dispatch('/solrsearch/browse/series');
         $this->assertResponseCode(200);
         $responseBody = $this->getResponse()->getBody();
-        $seriesIds = array('6', '5', '2', '4', '1');
+        $seriesIds = ['6', '5', '2', '4', '1'];
         foreach ($seriesIds as $seriesId) {
             $pos = strpos($responseBody, '/solrsearch/index/search/searchtype/series/id/' . $seriesId);
             $this->assertTrue($pos !== false);
@@ -175,7 +193,8 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase {
         $this->setSortOrders($sortOrders);
     }
 
-    public function testSeriesActionRespectsSeriesSortOrderIfItCoincidesBetweenTwoSeries() {
+    public function testSeriesActionRespectsSeriesSortOrderIfItCoincidesBetweenTwoSeries()
+    {
         $sortOrders = $this->getSortOrders();
 
         $s = new Opus_Series(2);
@@ -189,7 +208,7 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase {
         $this->dispatch('/solrsearch/browse/series');
         $this->assertResponseCode(200);
         $responseBody = $this->getResponse()->getBody();
-        $seriesIds = array('1', '6', '4', '2', '5');
+        $seriesIds = ['1', '6', '4', '2', '5'];
         foreach ($seriesIds as $seriesId) {
             $pos = strpos($responseBody, '/solrsearch/index/search/searchtype/series/id/' . $seriesId);
             $this->assertTrue($pos !== false);
@@ -199,22 +218,25 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase {
         $this->setSortOrders($sortOrders);
     }
 
-    private function getSortOrders() {
-        $sortOrders = array();
+    private function getSortOrders()
+    {
+        $sortOrders = [];
         foreach (Opus_Series::getAll() as $seriesItem) {
             $sortOrders[$seriesItem->getId()] = $seriesItem->getSortOrder();
         }
         return $sortOrders;
     }
 
-    private function setSortOrders($sortOrders) {
+    private function setSortOrders($sortOrders)
+    {
         foreach (Opus_Series::getAll() as $seriesItem) {
             $seriesItem->setSortOrder($sortOrders[$seriesItem->getId()]);
             $seriesItem->store();
         }
     }
 
-    public function testIndexActionDoesNotDisplaySeriesBrowsingLinkIfNothingToShow() {
+    public function testIndexActionDoesNotDisplaySeriesBrowsingLinkIfNothingToShow()
+    {
         $visibilities = $this->setAllSeriesToUnvisible();
         $this->dispatch('/solrsearch/browse');
         $this->assertResponseCode(200);
@@ -225,7 +247,8 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase {
     /**
      * Regression test for OPUSVIER-2337
      */
-    public function testUnavailableServiceReturnsHttpCode503() {
+    public function testUnavailableServiceReturnsHttpCode503()
+    {
         $this->markTestSkipped('How to disable Solr?');
 
         $this->requireSolrConfig();

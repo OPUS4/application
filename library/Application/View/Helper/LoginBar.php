@@ -42,21 +42,22 @@
  * @category    Application
  * @package     View
  */
-class Application_View_Helper_LoginBar extends Zend_View_Helper_Abstract {
+class Application_View_Helper_LoginBar extends Zend_View_Helper_Abstract
+{
 
     /**
      * Default login action.
      *
      * @var array
      */
-    protected $_loginUrl = array('action' => 'login', 'controller' => 'auth', 'module' => 'default');
+    protected $_loginUrl = ['action' => 'login', 'controller' => 'auth', 'module' => 'default'];
 
     /**
      * Default logout action.
      *
      * @var array
      */
-    protected $_logoutUrl = array('action' => 'logout', 'controller' => 'auth', 'module' => 'default');
+    protected $_logoutUrl = ['action' => 'logout', 'controller' => 'auth', 'module' => 'default'];
 
     /**
      * Set the action (controller and module) to perform a login.
@@ -66,7 +67,8 @@ class Application_View_Helper_LoginBar extends Zend_View_Helper_Abstract {
      * @param string $module     (Optional) Login module name.
      * @return void
      */
-    public function setLoginAction($action, $controller = null, $module = null) {
+    public function setLoginAction($action, $controller = null, $module = null)
+    {
         $this->_loginUrl['action'] = $action;
         if (is_null($controller) === false) {
             $this->_loginUrl['controller'] = $controller;
@@ -84,7 +86,8 @@ class Application_View_Helper_LoginBar extends Zend_View_Helper_Abstract {
      * @param string $module     (Optional) Logout module name.
      * @return void
      */
-    public function setLogoutAction($action, $controller = null, $module = null) {
+    public function setLogoutAction($action, $controller = null, $module = null)
+    {
         $this->_logoutUrl['action'] = $action;
         if (is_null($controller) === false) {
             $this->_logoutUrl['controller'] = $controller;
@@ -99,7 +102,8 @@ class Application_View_Helper_LoginBar extends Zend_View_Helper_Abstract {
      *
      * @return Application_View_Helper_LoginBar
      */
-    public function loginBar() {
+    public function loginBar()
+    {
         return $this;
     }
 
@@ -109,7 +113,8 @@ class Application_View_Helper_LoginBar extends Zend_View_Helper_Abstract {
      *
      * @return string
      */
-    public function __toString() {
+    public function __toString()
+    {
         $returnParams = Zend_Controller_Action_HelperBroker::getStaticHelper('ReturnParams');
         $identity = Zend_Auth::getInstance()->getIdentity();
         if (empty($identity) === true) {
@@ -127,7 +132,7 @@ class Application_View_Helper_LoginBar extends Zend_View_Helper_Abstract {
             // Prüfe, ob Nutzer ihren Account editieren dürfen
             $config = Zend_Registry::get('Zend_Config');
             if (isset($config) and isset($config->account->editOwnAccount)) {
-                $addAccountLink = $config->account->editOwnAccount;
+                $addAccountLink = filter_var($config->account->editOwnAccount, FILTER_VALIDATE_BOOLEAN);
             }
         }
 
@@ -136,12 +141,11 @@ class Application_View_Helper_LoginBar extends Zend_View_Helper_Abstract {
             . ' (' . htmlspecialchars($identity) . ')</a>';
 
         if ($addAccountLink) {
-            $accountUrl = $this->view->url(array('module' => 'account'), null, true);
+            $accountUrl = $this->view->url(['module' => 'account'], null, true);
             return '<a rel="nofollow" style="padding-right: 1em" href="' . $accountUrl .
             '">' . $this->view->translate('default_auth_account') . '</a> ' . $logoutLink;
         }
 
         return $logoutLink;
     }
-
 }

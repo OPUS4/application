@@ -26,39 +26,46 @@
  *
  * @category    Application Unit Tests
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
  * FIXME Tests only if methods throw exceptions.
  */
-class Application_View_Helper_LoginBarTest extends ControllerTestCase {
+class Application_View_Helper_LoginBarTest extends ControllerTestCase
+{
 
-    public function testSetLoginAction() {
+    protected $additionalResources = ['view', 'translation', 'mainMenu'];
+
+    public function testSetLoginAction()
+    {
         $loginBar = new Application_View_Helper_LoginBar();
         $loginBar->setLoginAction('login', 'auth', 'default');
     }
 
-    public function testSetLogoutAction() {
+    public function testSetLogoutAction()
+    {
         $loginBar = new Application_View_Helper_LoginBar();
         $loginBar->setLogoutAction('logout', 'auth', 'default');
     }
 
-    public function testGermanAnmelden() {
+    public function testGermanAnmelden()
+    {
         $this->useGerman();
         $this->dispatch('/home');
         $this->assertQueryContentContains('#login-bar', 'Anmelden');
     }
 
-    public function testEnglishLogin() {
+    public function testEnglishLogin()
+    {
         $this->useEnglish();
         $this->dispatch('/home');
         $this->assertQueryContentContains('#login-bar', 'Login');
     }
 
-    public function testGermanAbmelden() {
+    public function testGermanAbmelden()
+    {
         $this->useGerman();
         $this->loginUser('admin', 'adminadmin');
         $this->dispatch('/home');
@@ -66,13 +73,12 @@ class Application_View_Helper_LoginBarTest extends ControllerTestCase {
         $this->assertQueryContentContains('#login-bar', 'Abmelden (admin)');
     }
 
-    public function testEnglishLogout() {
+    public function testEnglishLogout()
+    {
         $this->useEnglish();
         $this->loginUser('admin', 'adminadmin');
         $this->dispatch('/home');
         $this->assertQueryContentContains('#login-bar', 'Account');
         $this->assertQueryContentContains('#login-bar', 'Logout (admin)');
     }
-
 }
-

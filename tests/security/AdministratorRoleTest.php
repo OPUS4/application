@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -26,19 +27,26 @@
  *
  * @category    Application Unit Test
  * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class AdministratorRoleTest extends ControllerTestCase {
 
-    public function setUp() {
+class AdministratorRoleTest extends ControllerTestCase
+{
+
+    protected $configModifiable = true;
+
+    protected $additionalResources = 'all';
+
+    public function setUp()
+    {
         parent::setUp();
         $this->enableSecurity();
         $this->loginUser('admin', 'adminadmin');
     }
 
-    public function tearDown() {
+    public function tearDown()
+    {
         $this->logoutUser();
         $this->restoreSecuritySetting();
         parent::tearDown();
@@ -47,7 +55,8 @@ class AdministratorRoleTest extends ControllerTestCase {
     /**
      * Prüft, ob ein Nutzer mit der Role administrator Superrechte hat
      */
-    public function testAdministratorRoleHasSuperPrivileges() {
+    public function testAdministratorRoleHasSuperPrivileges()
+    {
         $this->dispatch('/admin');
         $this->assertQuery('//a[@href="/admin/licence"]');
         $this->assertQuery('//a[@href="/admin/documents"]');
@@ -64,7 +73,8 @@ class AdministratorRoleTest extends ControllerTestCase {
     /**
      * Prüft, ob auf die Seite zur Verwaltung von Lizenzen zugegriffen werden kann.
      */
-    public function testAccessLicenceController() {
+    public function testAccessLicenceController()
+    {
         $this->useEnglish();
         $this->dispatch('/admin/licence');
         $this->assertQueryContentContains('//html/head/title', 'Admin Licences', 'admin/licence not asserted');
@@ -73,7 +83,8 @@ class AdministratorRoleTest extends ControllerTestCase {
     /**
      * Prüft, das auf die Seite zur Verwaltung von Dokumenten zugegriffen werden kann.
      */
-    public function testAccessDocumentsController() {
+    public function testAccessDocumentsController()
+    {
         $this->useEnglish();
         $this->dispatch('/admin/documents');
         $this->assertQueryContentContains('//html/head/title', 'Administration of Documents', 'admin/documents not asserted');
@@ -82,7 +93,8 @@ class AdministratorRoleTest extends ControllerTestCase {
     /**
      * Voller Zugriff auf Review Modul
      */
-    public function testAccessReviewModule() {
+    public function testAccessReviewModule()
+    {
         $this->useEnglish();
         $this->dispatch('/review');
         $this->assertQueryContentContains('//html/head/title', 'Review Documents', 'review not asserted');
@@ -91,7 +103,8 @@ class AdministratorRoleTest extends ControllerTestCase {
     /**
      * Voller Zugriff auf Setup Modul
      */
-    public function testAccessSetupModuleTranslations() {
+    public function testAccessSetupModuleTranslations()
+    {
         $this->useEnglish();
         $this->dispatch('/setup/language');
         $this->assertQueryContentContains('//html/head/title', 'Translations', 'setup/translations not asserted');
@@ -100,32 +113,19 @@ class AdministratorRoleTest extends ControllerTestCase {
     /**
      * Voller Zugriff auf Setup Modul
      */
-    public function testAccessSetupModuleStaticPage() {
+    public function testAccessSetupModuleStaticPage()
+    {
         $this->useEnglish();
-        $this->dispatch('/setup/static-page');
-        $this->assertQueryContentContains('//html/head/title', 'Static Pages', 'setup/static-page not asserted');
-    }
-
-    /**
-     * Voller Zugriff auf Setup Modul
-     * Schreibrechte werden vor dem Seitenaufruf weggenommen und anschließen wieder hinzugefügt
-     * um Browservergleichbarkeit zu erreichen
-     */
-    public function testAccessSetupModuleHelpPage() {
-        $filePath = APPLICATION_PATH . '/modules/home/language_custom';
-        $fileRights = fileperms($filePath);
-        chmod($filePath, 0400);
-        $this->dispatch('/setup/help-page');
-        chmod($filePath, $fileRights);
-        $this->assertRedirectTo('/setup/help-page/error', 'setup/help-page not asserted');
+        $this->dispatch('/setup/translation');
+        $this->assertQueryContentContains('//html/head/title', 'Static Pages', 'setup/translation not asserted');
     }
 
     /**
      * Prüft, ob fuer Nutzer mit vollem Zugriff auf Admin Modul der Edit Link in der Frontdoor angezeigt wird.
      */
-    public function testActionBoxInFrontdoorPresent() {
+    public function testActionBoxInFrontdoorPresent()
+    {
         $this->dispatch('/frontdoor/index/index/docId/92');
         $this->assertQuery('//div[@id="actionboxContainer"]', 'frontdoor not asserted');
     }
-
 }

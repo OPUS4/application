@@ -1,1 +1,2 @@
-Dieser Dokumentenserver wird auf Basis der Software OPUS4 betrieben. OPUS ist dokumentiert unter http://opus4.kobv.de/.
+Dieser Dokumentenserver wird auf Basis der Software OPUS4 betrieben. OPUS ist dokumentiert unter
+<a href="http://www.opus-repository.org/" target="_blank">https://www.opus-repository.org/</a>.

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -25,22 +26,30 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
+ *
+ * @covers Admin_DoctypeController
  */
-class Admin_DoctypeControllerTest extends ControllerTestCase {
+
+class Admin_DoctypeControllerTest extends ControllerTestCase
+{
+
+    protected $additionalResources = 'all';
 
     /**
      * Ruft die Dokumenttyp-Validierungsseite auf und prüft ob diese korrekt angezeigt wird.
      */
-    public function testDoctypePage() {
+    public function testDoctypePage()
+    {
         $this->useGerman();
         $this->dispatch('/admin/doctype/index');
         $this->assertResponseCode(200);
         $this->assertQuery('//a[@href="doctype/show/doctype/demo_invalid"]');
-        $this->assertQueryContentContains('//div',
-            'Die Validierung der rot-markierten Dokumententypen ist fehlgeschlagen.');
+        $this->assertQueryContentContains(
+            '//div',
+            'Die Validierung der rot-markierten Dokumententypen ist fehlgeschlagen.'
+        );
         $this->assertQueryContentContains('//th', 'Artikel');
         $this->assertQueryContentContains('//td', 'article');
         $this->assertQueryContentContains('//td', 'aktiv');
@@ -51,7 +60,8 @@ class Admin_DoctypeControllerTest extends ControllerTestCase {
     /**
      * Ruft die Fehlerseite für einzelne Dokumenttypen auf und prüft ob diese korrekt angezeigt wird.
      */
-    public function testDoctypeErrorMessagePage() {
+    public function testDoctypeErrorMessagePage()
+    {
         $this->useEnglish();
         $this->dispatch('/admin/doctype/show/doctype/demo_invalid');
         $this->assertResponseCode(200);
@@ -61,7 +71,8 @@ class Admin_DoctypeControllerTest extends ControllerTestCase {
     /**
      * Prüft, ob die Breadcrumbs auf dieser Seite korrekt angezeigt werden.
      */
-    public function testBreadcrumbs() {
+    public function testBreadcrumbs()
+    {
         $this->dispatch('/admin/doctype/show/doctype/demo_invalid');
         $this->assertQueryContentContains('//div[class="breadcrumbsContainer"]', 'demo_invalid');
     }
@@ -70,19 +81,19 @@ class Admin_DoctypeControllerTest extends ControllerTestCase {
      * Wenn nach der Fehlermeldung eines nicht existenten Dokumententyps gesucht wird, soll ein Redirect zur Übersicht
      * stattfinden und eine Fehlermeldung ausgegeben werden.
      */
-    public function testInvalidDocumentTypeRedirect() {
+    public function testInvalidDocumentTypeRedirect()
+    {
         $this->useEnglish();
         $this->dispatch('/admin/doctype/show/doctype/yoyo');
         $this->assertRedirectTo('/admin/doctype');
         $this->verifyFlashMessage('admin_doctype_invalid');
     }
 
-    public function testMissingDocumentTypeRedirect() {
+    public function testMissingDocumentTypeRedirect()
+    {
         $this->useEnglish();
         $this->dispatch('/admin/doctype/show');
         $this->assertRedirectTo('/admin/doctype');
         $this->verifyFlashMessage('admin_doctype_invalid');
     }
-
 }
- 

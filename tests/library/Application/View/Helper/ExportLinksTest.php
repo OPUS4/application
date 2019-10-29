@@ -31,12 +31,14 @@
  * @category    Application
  * @package     Application_View_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2017-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 class Application_View_Helper_ExportLinksTest extends ControllerTestCase
 {
+
+    protected $additionalResources = 'all';
 
     public function testToStringForSearch()
     {
@@ -60,6 +62,8 @@ class Application_View_Helper_ExportLinksTest extends ControllerTestCase
         $this->assertEquals(
             '<ul>' .
             '<li><a href="/citationExport/index/download/output/bibtex" title="Export BibTeX" class="export bibtex">BibTeX</a></li>' .
+            '<li><a href="/export/index/datacite" title="Export DataCite-XML" class="export datacite">DataCite</a></li>' .
+            '<li><a href="/export/index/marc21/searchtype/id" title="Export MARC21-XML" class="export marc21-xml">MARC21-XML</a></li>' .
             '<li><a href="/citationExport/index/download/output/ris" title="Export RIS" class="export ris">RIS</a></li>' .
             '<li><a href="/export/index/index/export/xml/searchtype/id/stylesheet/example" title="Export XML" class="export xml">XML</a></li>' .
             '</ul>',
@@ -69,17 +73,17 @@ class Application_View_Helper_ExportLinksTest extends ControllerTestCase
 
     public function testRenderLink()
     {
-        $page = new Zend_Navigation_Page_Mvc(array(
+        $page = new Zend_Navigation_Page_Mvc([
             'name' => 'bibtex',
             'description' => 'Export BibTeX',
             'module' => 'citationExport',
             'controller' => 'index',
             'action' => 'download',
-            'params' => array(
+            'params' => [
                 'output' => 'bibtex'
-            ),
+            ],
             'frontdoor' => true
-        ));
+        ]);
 
         $page->setParam('docId', 150);
 
@@ -89,9 +93,5 @@ class Application_View_Helper_ExportLinksTest extends ControllerTestCase
             '<a href="/citationExport/index/download/output/bibtex/docId/150" title="Export BibTeX" class="export bibtex">bibtex</a>',
             $exportLink->renderLink($page)
         );
-
-
     }
-
 }
-

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -25,49 +24,29 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Setup
+ * @category    Tests
+ * @package     Setup
  * @author      Edouard Simon <edouard.simon@zib.de>
- * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2013-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
-class Setup_HelpPageControllerTest extends SetupControllerTestCase {
-
+/**
+ * Class Setup_HelpPageControllerTest.
+ *
+ * @covers Setup_HelpPageController
+ */
+class Setup_HelpPageControllerTest extends SetupControllerTestCase
+{
     /**
      * original file modes, needed for restoring after test
      */
-    protected $origFileModes = array();
-    protected $configSection = 'help';
+    protected $origFileModes = [];
 
-    public function testEditSucceedsWithAccessPermissions() {
-        $this->setPermissions('0500', '0400', '0300');
-        $this->dispatch('/setup/help-page/edit');
-        $this->assertResponseCode(200);
+    protected $configSection = 'static-page';
+
+    public function testSomething()
+    {
+        $this->markTestIncomplete('implement testing');
     }
-
-    public function testEditFailsWithoutWritePermissions() {
-        $this->setPermissions('0500', '0400', '0000');
-        $this->dispatch('/setup/help-page/edit');
-        $this->assertResponseCode(302);
-    }
-
-    public function testEditFailsWithoutDataReadPermissions() {
-        $this->setPermissions('0000', '0400', '0000');
-        $this->dispatch('/setup/help-page/edit');
-        $this->assertResponseCode(302);
-    }
-
-    public function testExceptionThrownWithoutTmxReadPermissions() {
-        $this->markTestSkipped('test results in false negative, needs debugging.');
-        $this->setPermissions('0500', '0000', '0300');
-        $this->dispatch('/setup/help-page/edit');
-        $exceptions = $this->getResponse()->getExceptionByType('Setup_Model_Exception');
-        $this->assertTrue(is_array($exceptions) && $exceptions[0] instanceOf Setup_Model_Exception);
-        $this->assertEquals("No tmx data found.", $exceptions[0]->getMessage());
-        $this->assertResponseCode(500);
-    }
-
-
 }

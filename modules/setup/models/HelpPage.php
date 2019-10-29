@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -28,15 +27,15 @@
  * @category    Application
  * @package     Module_Setup
  * @author      Edouard Simon (edouard.simon@zib.de)
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
  *
  */
-class Setup_Model_HelpPage extends Setup_Model_Abstract {
+class Setup_Model_HelpPage
+{
 
     /**
      *  base path for content files
@@ -48,7 +47,8 @@ class Setup_Model_HelpPage extends Setup_Model_Abstract {
      *
      * @param string $basePath name of directory used to read / write page content
      */
-    public function setContentBasepath($basePath) {
+    public function setContentBasepath($basePath)
+    {
         $path = realpath($basePath);
         $this->_contentBasepath = $path;
     }
@@ -56,24 +56,24 @@ class Setup_Model_HelpPage extends Setup_Model_Abstract {
     /**
      * @see Description in abstract base class
      */
-    public function toArray() {
-        $resultArray = array();
+    public function toArray()
+    {
+        $resultArray = [];
         $translationUnits = $this->getTranslation();
         if ($translationUnits === false) { // error reading files, this should not happen
             throw new Setup_Model_Exception('No tmx data found.');
         }
         foreach ($translationUnits as $translationUnit => $variants) {
-            $resultArray[$translationUnit] = array();
+            $resultArray[$translationUnit] = [];
             foreach ($variants as $language => $text) {
                 if (substr($text, -4) == '.txt') {
-                    $resultArray[$translationUnit][$language] = array();
+                    $resultArray[$translationUnit][$language] = [];
                     $this->addContentSource($this->_contentBasepath . DIRECTORY_SEPARATOR . $text);
                     $resultArray[$translationUnit][$language]['filename'] = $text;
                     $resultArray[$translationUnit][$language]['contents'] = $this->getContent(
                         $this->_contentBasepath . DIRECTORY_SEPARATOR . $text
                     );
-                }
-                else {
+                } else {
                     $resultArray[$translationUnit][$language] = $text;
                 }
             }
@@ -84,12 +84,13 @@ class Setup_Model_HelpPage extends Setup_Model_Abstract {
     /**
      * Return translations according to definition in help.ini.
      */
-    public function getTranslation() {
+    public function getTranslation()
+    {
         // load translations in order specified in help.ini
         $helpConfig = new Zend_Config_Ini(APPLICATION_PATH . '/application/configs/help/help.ini');
         $helpConfigArray = $helpConfig->toArray();
-        $tmxData = parent::getTranslation();
-        $filteredTmxData = array();
+        $tmxData = []; // TODO parent::getTranslation();
+        $filteredTmxData = [];
         foreach ($helpConfigArray as $helpKey => $helpContents) {
             if (isset($tmxData[$helpKey])) {
                 $filteredTmxData[$helpKey] = $tmxData[$helpKey];
@@ -109,9 +110,10 @@ class Setup_Model_HelpPage extends Setup_Model_Abstract {
     /**
      * @see Description in abstract base class
      */
-    public function fromArray(array $data) {
-        $resultData = array();
-        $resultTmx = new Application_Util_TmxFile();
+    public function fromArray(array $data)
+    {
+        $resultData = [];
+        $resultTmx = new Application_Translate_TmxFile();
 
         foreach ($data as $translationUnit => $variants) {
             foreach ($variants as $language => $contents) {
@@ -120,11 +122,10 @@ class Setup_Model_HelpPage extends Setup_Model_Abstract {
                     $resultData[$filePath] = $contents['contents'];
                     $contents = $contents['filename'];
                 }
-                $resultTmx->setVariantSegment($translationUnit, $language, $contents);
+                $resultTmx->setTranslation($translationUnit, $language, $contents);
             }
         }
-        $this->setContent($resultData);
-        $this->setTranslation($resultTmx->toArray());
+        // $this->setContent($resultData);
+        // $this->setTranslation($resultTmx->toArray());
     }
-
 }

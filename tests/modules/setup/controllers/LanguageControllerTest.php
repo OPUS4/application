@@ -24,38 +24,42 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Unit Tests
+ * @category    Tests
  * @package     Module_Setup
  * @author      Edouard Simon (edouard.simon@zib.de)
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
- * 
+ * @covers Setup_LanguageController
  */
-class Setup_LanguageControllerTest extends ControllerTestCase {
+class Setup_LanguageControllerTest extends ControllerTestCase
+{
+
+    protected $configModifiable = true;
+
+    protected $additionalResources = 'all';
 
     /**
      * Regression Test for OPUSVIER-2971
      */
-    public function testMissingConfigMessageIsDisplayedRed() {
+    public function testMissingConfigMessageIsDisplayedRed()
+    {
         $config = Zend_Registry::get('Zend_Config');
-        $config->merge(new Zend_Config(array('setup' => array('translation' => array('modules' => array('allowed' => null))))));
+        $config->merge(new Zend_Config(['setup' => ['translation' => ['modules' => ['allowed' => null]]]]));
 
-        $this->getRequest()->setPost(array('Anzeigen' => 'Anzeigen', 'search' => 'test', 'sort' => 'unit'));
+        $this->getRequest()->setPost(['Anzeigen' => 'Anzeigen', 'search' => 'test', 'sort' => 'unit']);
         $this->dispatch('/setup/language/show');
-        
+
         $this->assertAction('show');
         $this->assertController('language');
         $this->assertModule('setup');
-        
+
         $this->assertResponseCode(302);
-        
+
         $this->assertRedirectTo('/setup/language/error');
 
         $this->verifyFlashMessage('setup_language_translation_modules_missing');
     }
-
 }

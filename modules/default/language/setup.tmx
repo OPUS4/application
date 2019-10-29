@@ -4,7 +4,7 @@
     <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool"></header>
     <body>
 
-    <tu tuid="setup_title_translation">
+    <tu tuid="setup_title_language">
         <tuv xml:lang="en">
             <seg>Translations</seg>
         </tuv>
@@ -13,7 +13,7 @@
         </tuv>
     </tu>
 
-    <tu tuid="setup_title_translation_description">
+    <tu tuid="setup_title_language_description">
         <tuv xml:lang="en">
             <seg>Names, Headlines, Help for Fields</seg>
         </tuv>
@@ -31,16 +31,7 @@
         </tuv>
     </tu>
 
-    <tu tuid="setup_translation_edit">
-        <tuv xml:lang="en">
-            <seg>Edit Translation Resource</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Übersetzungsressource bearbeiten</seg>
-        </tuv>
-    </tu>
-
-    <tu tuid="setup_title_static-page">
+    <tu tuid="setup_title_translation">
         <tuv xml:lang="en">
             <seg>Information Pages</seg>
         </tuv>
@@ -49,7 +40,7 @@
         </tuv>
     </tu>
 
-    <tu tuid="setup_title_static-page_description">
+    <tu tuid="setup_title_translation_description">
         <tuv xml:lang="en">
             <seg>Home Page, Contact Information, Imprint</seg>
         </tuv>
@@ -58,30 +49,30 @@
         </tuv>
     </tu>
 
-    <tu tuid="setup_static-page_edit_home">
+    <tu tuid="setup_translation_edit_home">
         <tuv xml:lang="en">
-            <seg>Edit Home Page</seg>
+            <seg>Home Page</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Hauptseite bearbeiten</seg>
+            <seg>Hauptseite</seg>
         </tuv>
     </tu>
 
-    <tu tuid="setup_static-page_edit_imprint">
+    <tu tuid="setup_translation_edit_imprint">
         <tuv xml:lang="en">
-            <seg>Edit Imprint</seg>
+            <seg>Imprint</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Impressum bearbeiten</seg>
+            <seg>Impressum</seg>
         </tuv>
     </tu>
 
-    <tu tuid="setup_static-page_edit_contact">
+    <tu tuid="setup_translation_edit_contact">
         <tuv xml:lang="en">
-            <seg>Edit Contact Information</seg>
+            <seg>Contact Information</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Kontaktinformationen bearbeiten</seg>
+            <seg>Kontaktinformationen</seg>
         </tuv>
     </tu>
 
@@ -103,5 +94,13 @@
         </tuv>
     </tu>
 
+    <tu tuid="setup_language_index">
+        <tuv xml:lang="en">
+            <seg>Translations</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Übersetzungen</seg>
+        </tuv>
+    </tu>
   </body>
 </tmx>

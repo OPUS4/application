@@ -38,7 +38,8 @@ require_once dirname(__FILE__) . '/common/bootstrap.php';
 /**
  * Populates cache for extracted full texts for all or a range of documents.
  */
-class SolrFulltextCacheBuilder {
+class SolrFulltextCacheBuilder
+{
 
     /**
      * Start of document ID range for indexing (first command line parameter).
@@ -67,7 +68,8 @@ class SolrFulltextCacheBuilder {
     /**
      * Prints a help message to the console.
      */
-    private function printHelpMessage($argv) {
+    private function printHelpMessage($argv)
+    {
         $this->write(
             PHP_EOL .
             "This program can be used to build up the full text cache for OPUS 4 documents. This is useful for testing
@@ -93,11 +95,11 @@ class SolrFulltextCacheBuilder {
     /**
      * Evaluates command line arguments.
      */
-    private function evaluateArguments($argc, $argv) {
+    private function evaluateArguments($argc, $argv)
+    {
         if (true === in_array('--help', $argv) || true === in_array('-h', $argv)) {
             $this->_showHelp = true;
-        }
-        else {
+        } else {
             if ($argc >= 2) {
                 $this->_start = $argv[1];
             }
@@ -110,7 +112,8 @@ class SolrFulltextCacheBuilder {
     /**
      * Starts an Opus console.
      */
-    public function run($argc, $argv) {
+    public function run($argc, $argv)
+    {
         $this->evaluateArguments($argc, $argv);
 
         if ($this->_showHelp) {
@@ -121,11 +124,10 @@ class SolrFulltextCacheBuilder {
         try {
             $runtime = $this->extract($this->_start, $this->_end);
             echo PHP_EOL . "Operation completed successfully in $runtime seconds." . PHP_EOL;
-        }
-        catch (Opus_Search_Exception $e) {
+        } catch (Opus\Search\Exception $e) {
             echo PHP_EOL . "An error occurred while indexing.";
             echo PHP_EOL . "Error Message: " . $e->getMessage();
-            if (!is_null($e->getPrevious())) {
+            if (! is_null($e->getPrevious())) {
                 echo PHP_EOL . "Caused By: " . $e->getPrevious()->getMessage();
             }
             echo PHP_EOL . "Stack Trace:" . PHP_EOL . $e->getTraceAsString();
@@ -133,12 +135,13 @@ class SolrFulltextCacheBuilder {
         }
     }
 
-    private function extract($startId, $endId) {
+    private function extract($startId, $endId)
+    {
         $this->forceSyncMode();
 
         $docIds = $this->getDocumentIds($startId, $endId);
 
-        $extractor = Opus_Search_Service::selectIndexingService( 'indexBuilder' );
+        $extractor = Opus\Search\Service::selectIndexingService('indexBuilder');
 
 
         echo date('Y-m-d H:i:s') . " Start indexing of " . count($docIds) . " documents.\n";
@@ -152,19 +155,15 @@ class SolrFulltextCacheBuilder {
 
             $doc = new Opus_Document($docId);
 
-            foreach ( $doc->getFile() as $file ) {
+            foreach ($doc->getFile() as $file) {
                 try {
-                    $extractor->extractDocumentFile( $file, $doc );
-                }
-                catch ( Opus_Search_Exception $e ) {
+                    $extractor->extractDocumentFile($file, $doc);
+                } catch (Opus\Search\Exception $e) {
                     echo date('Y-m-d H:i:s') . " ERROR: Failed extracting document $docId.\n";
                     echo date('Y-m-d H:i:s') . "        {$e->getMessage()}\n";
-
-                }
-                catch ( Opus_Storage_Exception $e ) {
+                } catch (Opus_Storage_Exception $e) {
                     echo date('Y-m-d H:i:s') . " ERROR: Failed extracting unavailable file on document $docId.\n";
                     echo date('Y-m-d H:i:s') . "        {$e->getMessage()}\n";
-
                 }
             }
 
@@ -199,7 +198,8 @@ class SolrFulltextCacheBuilder {
      * @param $end End of ID range
      * @return array Array of document IDs
      */
-    private function getDocumentIds($start, $end) {
+    private function getDocumentIds($start, $end)
+    {
         $finder = new Opus_DocumentFinder();
 
         $finder->setServerState('published');
@@ -221,7 +221,8 @@ class SolrFulltextCacheBuilder {
      * @param $runtime Time of start of processing
      * @param $numOfDocs Number of processed documents
      */
-    private function outputProgress($runtime, $numOfDocs) {
+    private function outputProgress($runtime, $numOfDocs)
+    {
         $memNow = round(memory_get_usage() / 1024 / 1024);
         $memPeak = round(memory_get_peak_usage() / 1024 / 1024);
 
@@ -233,30 +234,33 @@ class SolrFulltextCacheBuilder {
             . " peak memory $memPeak (MB), $docPerSecond docs/second, $secondsPerDoc seconds/doc" . PHP_EOL;
     }
 
-    private function addDocumentsToIndex($indexer, $docs) {
+    private function addDocumentsToIndex($indexer, $docs)
+    {
     }
 
-    private function forceSyncMode() {
+    private function forceSyncMode()
+    {
         $config = Zend_Registry::get('Zend_Config');
-        if (isset($config->runjobs->asynchronous) && $config->runjobs->asynchronous) {
+        if (isset($config->runjobs->asynchronous) && filter_var($config->runjobs->asynchronous, FILTER_VALIDATE_BOOLEAN)) {
             $this->_syncMode = false;
-            $config->runjobs->asynchronous = 0;
+            $config->runjobs->asynchronous = ''; // false
             Zend_Registry::set('Zend_Config', $config);
         }
     }
 
-    private function resetMode() {
-        if (!$this->_syncMode) {
+    private function resetMode()
+    {
+        if (! $this->_syncMode) {
             $config = Zend_Registry::get('Zend_Config');
-            $config->runjobs->asynchronous = 1;
+            $config->runjobs->asynchronous = '1'; // true
             Zend_Registry::set('Zend_Config', $config);
         }
     }
 
-    private function write($str) {
+    private function write($str)
+    {
         echo $str;
     }
-
 }
 
 /**

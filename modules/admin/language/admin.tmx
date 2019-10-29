@@ -269,5 +269,14 @@ Dokumentstatus ändern und Dateien (Volltexte) verwalten.</seg>
       </tuv>
     </tu>
 
+    <tu tuid="admin_title_doireport">
+      <tuv xml:lang="en">
+        <seg>DOI Report</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>DOI-Report</seg>
+      </tuv>
+    </tu>
+
   </body>
 </tmx>

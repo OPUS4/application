@@ -58,8 +58,7 @@ if (array_key_exists('o', $options)) {
     if ($exportPath === '.') {
         $exportPath = $config->workspacePath . DIRECTORY_SEPARATOR . "export";
     }
-}
-else {
+} else {
     $exportFilePath = 'export.xml';
     $exportPath = $config->workspacePath . DIRECTORY_SEPARATOR . "export";
 }
@@ -69,7 +68,7 @@ $exportFilePath = $exportPath . DIRECTORY_SEPARATOR . $exportFilePath;
 
 // Exception if not writeable
 try {
-    if (!is_writeable($exportPath)) {
+    if (! is_writeable($exportPath)) {
         throw new Exception("export folder is not writeable ($exportPath)");
     }
     if (file_exists($exportFilePath)) {
@@ -81,7 +80,7 @@ try {
 }
 
 $opusDocuments = new DOMDocument('1.0', 'utf-8');
-$opusDocuments->formatOutput = true; 
+$opusDocuments->formatOutput = true;
 $export = $opusDocuments->createElement('export');
 
 $docFinder = new Opus_DocumentFinder();
@@ -92,8 +91,7 @@ foreach ($docFinder->ids() as $id) {
 
     try {
         $doc = new Opus_Document($id);
-    }
-    catch (Opus_Model_NotFoundException $e) {
+    } catch (Opus_Model_NotFoundException $e) {
         echo "Document with id $id does not exist." . PHP_EOL;
         continue;
     }
@@ -108,7 +106,7 @@ $opusDocuments->appendChild($export);
 
 // write XML to export file
 echo "Writing export to $exportFilePath ..." . PHP_EOL;
-$exportFile= fopen($exportFilePath, 'w');
+$exportFile = fopen($exportFilePath, 'w');
 fputs($exportFile, $opusDocuments->saveXML());
 fclose($exportFile);
 

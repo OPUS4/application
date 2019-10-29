@@ -12,7 +12,7 @@
 # GNU General Public License for more details.
 #
 # @author      Jens Schwidder <schwidder@zib.de>
-# @copyright   Copyright (c) 2010-2016, OPUS 4 development team
+# @copyright   Copyright (c) 2010-2018, OPUS 4 development team
 # @license     http://www.gnu.org/licenses/gpl.html General Public License
 
 #
@@ -39,7 +39,9 @@ fi
 
 # START USER-CONFIGURATION
 
-SOLR_SERVER_URL='http://archive.apache.org/dist/lucene/solr/5.3.1/solr-5.3.1.tgz'
+SOLR_VERSION='7.7.1'
+
+SOLR_SERVER_URL="http://archive.apache.org/dist/lucene/solr/$SOLR_VERSION/solr-$SOLR_VERSION.tgz"
 
 # END OF USER-CONFIGURATION
 
@@ -168,4 +170,3 @@ bin/install_solr_service.sh "../downloads/$SOLR_ARCHIVE_NAME" -d "$SOLR_CORE_DIR
 if [ "$DELETE_DOWNLOADS" = Y ] || [ "$DELETE_DOWNLOADS" = y ]; then
   rm -rf downloads
 fi
-

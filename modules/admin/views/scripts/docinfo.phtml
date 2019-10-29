@@ -26,17 +26,16 @@
  *
  * @category    Application
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 ?>
 
-<?PHP if (!is_null($this->document)) : ?>
+<?PHP if (! is_null($this->document)) : ?>
 <?PHP $authors = $this->document->getAuthors(); ?>
 <div id="docinfo">
     <h2><span class="docid"><?=$this->document->getDocId()?></span> - <?= $this->escape($this->document->getMainTitle()) ?></h2>
-    <?PHP if (!empty($authors)) : ?>
+    <?PHP if (! empty($authors)) : ?>
     <p class="author"><?=$authors[0]['name']?></p>
     <?PHP endif; ?>
 </div>

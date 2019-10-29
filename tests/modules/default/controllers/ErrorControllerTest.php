@@ -24,22 +24,28 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Tests
+ * @category    Tests
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
-class ErrorControllerTest extends ControllerTestCase {
+/**
+ * Class ErrorControllerTest.
+ *
+ * @covers ErrorController
+ */
+class ErrorControllerTest extends ControllerTestCase
+{
 
-    public function testWrongRoute() {
+    protected $additionalResources = ['view', 'mainMenu', 'translation'];
+
+    public function testWrongRoute()
+    {
         $this->dispatch('/home/dummy/index');
         $this->assertResponseCode(404);
         $this->assertModule('default');
         $this->assertController('error');
         $this->assertAction('error');
     }
-
 }
-

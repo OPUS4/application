@@ -24,22 +24,26 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    TODO
+ * @category    Tests
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
-class Admin_OailinkControllerTest extends ControllerTestCase {
+/**
+ * @covers Admin_OailinkController
+ */
+class Admin_OailinkControllerTest extends ControllerTestCase
+{
 
-    public function testIndexAction() {
+    protected $additionalResources = 'all';
+
+    public function testIndexAction()
+    {
         $this->dispatch('/admin/oailink');
         $this->assertResponseCode(200);
         $this->assertModule('admin');
         $this->assertController('oailink');
         $this->assertAction('index');
     }
-
 }
-

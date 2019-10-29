@@ -32,19 +32,18 @@
  */
 
 /**
- * This script takes a doctype XML-definition as input and spills out the 
+ * This script takes a doctype XML-definition as input and spills out the
  * PHP instructions for use in the corresponding .phtml file.
  * It requires the file doctype.xslt to be in the same directory as this script.
  */
 
 if ($argc == 2) {
     $filename = realpath($argv[1]);
-    if (!is_file($filename)) {
+    if (! is_file($filename)) {
         echo "Could not find file {$argv[1]} ($filename)";
         exit;
     }
-}
-else {
+} else {
     echo "No file supplied";
     exit;
 }

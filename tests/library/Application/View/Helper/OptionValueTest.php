@@ -27,12 +27,14 @@
  * @category    Application Unit Test
  * @package     Application_View_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2017-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 class Application_View_Helper_OptionValueTest extends ControllerTestCase
 {
+
+    protected $configModifiable = true;
 
     public function testOptionValue()
     {
@@ -48,9 +50,9 @@ class Application_View_Helper_OptionValueTest extends ControllerTestCase
 
         $this->assertEquals('OPUS 4', $helper->optionValue('name'));
 
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
             'name' => '<b>OPUS 4</b>'
-        )));
+        ]));
 
         $this->assertEquals('<b>OPUS 4</b>', $helper->optionValue('name'));
         $this->assertEquals('&lt;b&gt;OPUS 4&lt;/b&gt;', $helper->optionValue('name', null, true));
@@ -62,5 +64,4 @@ class Application_View_Helper_OptionValueTest extends ControllerTestCase
 
         $this->assertNull($helper->optionValue('unknownKey'));
     }
-
 }

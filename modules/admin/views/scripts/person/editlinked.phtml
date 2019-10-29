@@ -34,11 +34,11 @@
 ?>
 
 <?= $this->navigation()->breadcrumbs()->setMaxDepth(1)->setLinkLast(true)->setSuffix(
-        htmlspecialchars($this->documentAdapter->getMainTitle())
-        . ' (' . $this->document->getId() . ')' . ' ' 
+     htmlspecialchars($this->documentAdapter->getMainTitle())
+        . ' (' . $this->document->getId() . ')' . ' '
         . $this->navigation()->breadcrumbs()->getSeparator()
         . ' ' . $this->translate('admin_person_editlinked')
-        ) ?> 
+ ) ?> 
 
 <div class="wrapper">
     <?= $this->form ?>

@@ -36,21 +36,30 @@
 
 <div id="facets" class="results_facets">
     <h3><?= $this->translate('facets_menu_title')  ?> </h3>
-    <?php foreach($this->facets as $key => $facet) : ?>
+    <?php foreach ($this->facets as $key => $facet) : ?>
         <div id="<?= $key ?>_facet" class="facet">
             <?PHP
-                $facetUrl = $this->firstPage;
-                $facetUrl["facetNumber_" . $key] = 'all'; ?>
-            <h4><?= $this->translate($key . "_facet_heading") ?> </h4>
+            $facetUrl = $this->firstPage;
+            $facetUrl["facetNumber_" . $key] = 'all';
+            if (substr($key, 0, strlen('enrichment_')) === 'enrichment_') {
+                $enrichment = substr($key, strlen('enrichment_'));
+                $facetHeadingKey = "Enrichment$enrichment";
+            } else {
+                $facetHeadingKey = "{$key}_facet_heading";
+            }
+            ?>
+            <h4><?= $this->translate($facetHeadingKey) ?> </h4>
             <ul>
-                <?php foreach($facet as $facetItem) :
+                <?php foreach ($facet as $facetItem) :
                     $fqUrl = $this->firstPage;
                     $fqUrl[$key.'fq'] = $facetItem->getText();
                     $fqLinkRel = count($this->selectedFacets) > 0 ? 'rel="nofollow"' : '';
 
-                    $facetvalue_name = $facetItem->getText();
+                    $facetValue = $facetItem->getText();
                     if ($key === 'has_fulltext' || $key === 'belongs_to_bibliography') {
-                        $facetvalue_name = $this->translate('facetvalue_' . $key . '_' . $facetvalue_name);
+                        $facetValue = $this->translate('facetvalue_' . $key . '_' . $facetValue);
+                    } elseif ($key === 'server_state') {
+                        $facetValue = 'Opus_Document_ServerState_Value_' . ucfirst($facetValue);
                     }
                 ?>
                     <?php if (array_key_exists($key, $this->selectedFacets)) : ?>
@@ -60,17 +69,17 @@
                             unset($remove_fq_params[$key . 'fq']);
                             $remove_fqUrl = $this->url($remove_fq_params, null, true);
                         ?>
-                            <li class="activeFacet"><?= $this->translate(htmlspecialchars($facetvalue_name)) ?>&nbsp;(<?= $facetItem->getCount() ?>)
+                            <li class="activeFacet"><?= $this->translate(htmlspecialchars($facetValue)) ?>&nbsp;(<?= $facetItem->getCount() ?>)
                             <span class="removeFacetLink"><a href="<?= $remove_fqUrl ?>" <?= $fqLinkRel ?>>(<?= $this->translate('facets_remove') ?>)</a></span>
                             </li>
                         <?php endif ?>
                     <?php else : ?>
-                        <li><a href="<?= $this->url($fqUrl) ?>" <?= $fqLinkRel ?>><?= $this->translate(htmlspecialchars($facetvalue_name)) ?></a>&nbsp;(<?= $facetItem->getCount() ?>)</li>
+                        <li><a href="<?= $this->url($fqUrl) ?>" <?= $fqLinkRel ?>><?= $this->translate(htmlspecialchars($facetValue)) ?></a>&nbsp;(<?= $facetItem->getCount() ?>)</li>
                     <?php endif; ?>
                 <?php endforeach ?>
             </ul>
             <?PHP if ($this->showFacetExtender[$key]) : ?>
-                <?PHP if (!isset($this->openFacets[$key])) : ?>
+                <?PHP if (! isset($this->openFacets[$key])) : ?>
                     <div class="facetValueExtender"><a href="<?= $this->url($facetUrl) . '#' . $key . '_facet' ?>"
                             title="<?= $this->translate('facets_more_title') ?>">
                             <?= $this->translate('facets_more_results') ?></a></div>

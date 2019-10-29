@@ -33,6 +33,7 @@ if hash apt-get 2>/dev/null; then
     apt-get install php5-mysql
     apt-get install php5-xsl
     apt-get install php-log
+    apt-get install php-zip
     apt-get install libapache2-mod-php5
 else
     echo -e "\nERROR: This script requires 'apt-get' to install packages.\n" 1>&2

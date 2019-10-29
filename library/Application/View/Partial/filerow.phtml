@@ -39,13 +39,16 @@
 <?PHP $formId = 'Document-Files-' . $this->element->getId() . '-' ?>
 
 <tr class="file <?= $this->element->getOrder() % 2 == 0 ? 'even' : 'odd' ?>">
-    <td id="<?= $formId . 'Label' ?>" class="label"><?= $this->fileLink('FileLink-' . $file->getId(),
-            $file, array('useFileLabel' => true))
+    <td id="<?= $formId . 'Label' ?>" class="label"><?= $this->fileLink(
+        'FileLink-' . $file->getId(),
+        $file,
+        ['useFileLabel' => true]
+    )
         ?></td>
     <td id="<?= $formId . 'FileSize' ?>" class="filesize"><?= $this->fileSize(null, $file->getFileSize()) ?></td>
     <td id="<?= $formId . 'MimeType' ?>" class="mimetype"><?= htmlspecialchars($file->getMimeType()) ?></td>
     <td id="<?= $formId . 'Language' ?>" class="language"
-        ><?= is_null($file->getLanguage()) ? '-' : $this->translate($file->getLanguage()) ?></td>
+        ><?= is_null($file->getLanguage()) ? '-' : $this->translateLanguage($file->getLanguage()) ?></td>
     <td id="<?= $formId . 'VisibleInFrontdoor' ?>" class="visiblefrontdoor"
         ><?= $this->translate($file->getVisibleInFrontdoor() ? 'Field_Value_True' : 'Field_Value_False') ?></td>
     <td id="<?= $formId . 'VisibleInOai' ?>" class="visibleoai"
