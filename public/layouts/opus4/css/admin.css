@@ -291,7 +291,7 @@ ul.form-action {
 /* @group ActionBox */
 
 #actionboxContainer {
-    background: url(../img/theme/admin/bg_actionbox-fixed.png);
+    background-color: #ffdba3;
     color: black;
     width: 100%;
     float: left;
@@ -399,14 +399,20 @@ ul.form-action {
 }
 
 #Document-Goto.dropdown dt a {
+    /* TODO update look
+    background-color: #f0cb92;
+    color: black;
+    */
     background-color: #595A56;
     color: white;
     padding: 6px 28px 6px 10px;
     position: relative;
+    border: 1px solid #8c8d8a;
+    border-radius: 4px;
 }
 
 #Document-Goto.dropdown dt a:after {
-    border-color: white transparent transparent;
+    border-color: black transparent transparent;
     top: 10px;
     right: 10px;
 }
@@ -431,6 +437,7 @@ ul.form-action {
 #actionboxContainer #Document-ServerState.dropdown {
     position: relative;
     top: -0.1em;
+    background: #f0cb92;
 }
 
 .docstateMenu dl.dropdown.dropdown-open,
@@ -2496,4 +2503,21 @@ table.module-access-table tr.noaccess {
 
 #content.setup_translation_edit textarea {
     resize: vertical;
+}
+
+a.link-button {
+    display: inline-block;
+    padding: 0.5em 1em;
+    background: #f0cb92;
+    color: black;
+    border-radius: 4px;
+    border: 1px solid #8c8d8a;
+}
+
+a.link-button:hover {
+    text-decoration: none;
+}
+
+a.create-document-link {
+    float: right;
 }
