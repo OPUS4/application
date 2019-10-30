@@ -59,6 +59,14 @@
                                     </pages>
                                 </edit>
 
+                                <copy>
+                                    <type>mvc</type>
+                                    <label>admin_document_copy</label>
+                                    <module>admin</module>
+                                    <controller>document</controller>
+                                    <action>copy</action>
+                                </copy>
+
                                 <filemanager>
                                     <type>mvc</type>
                                     <label>admin_filemanager_index</label>

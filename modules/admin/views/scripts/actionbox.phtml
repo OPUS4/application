@@ -96,17 +96,19 @@
         <?PHP endif; ?>
       </div>
       <div class="col col-3">
-        <ul class="form-action">
             <?PHP if (! $this->element->isViewModeEnabled()) : ?>
-          <li class="save-element"><?= $this->element->getElement(Admin_Form_ActionBox::ELEMENT_SAVE) ?></li>
-          <li class="cancel-element"><?= $this->element->getElement(Admin_Form_ActionBox::ELEMENT_CANCEL) ?></li>
+          <ul class="form-action">
+            <li class="save-element"><?= $this->element->getElement(Admin_Form_ActionBox::ELEMENT_SAVE) ?></li>
+            <li class="cancel-element"><?= $this->element->getElement(Admin_Form_ActionBox::ELEMENT_CANCEL) ?></li>
+          </ul>
             <?PHP else : ?>
+          <ul class="form-action">
             <?PHP foreach ($actionLinks as $action => $params) : ?>
-          <li class="<?= $action ?>"><a href="<?= $this->url($params, null, true) ?>"
+            <li class="<?= $action ?>"><a href="<?= $this->url($params, null, true) ?>"
               ><?= htmlspecialchars($this->translate('admin_document_' .$action)) ?></a></li>
             <?PHP endforeach; ?>
+            </ul>
             <?PHP endif; ?>
-        </ul>
       </div>
   </div>
     <?PHP $message = $this->element->getMessage() ?>
