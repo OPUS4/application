@@ -6,24 +6,26 @@
 
   By Christopher Gutteridge, University of Southampton
 
+  v1.1
+
 -->
 
 <!--
 
-Copyright (c) 2000-2004 University of Southampton, UK. SO17 1BJ.
+Copyright (c) 2006 University of Southampton, UK. SO17 1BJ.
 
-EPrints 2 is free software; you can redistribute it and/or modify
+EPrints 3 is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation; either version 2 of the License, or
 (at your option) any later version.
 
-EPrints 2 is distributed in the hope that it will be useful,
+EPrints 3 is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with EPrints 2; if not, write to the Free Software
+along with EPrints 3; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 -->
@@ -165,7 +167,7 @@ p.intro {
     <xsl:apply-templates select="/oai:OAI-PMH" />
     <xsl:call-template name="quicklinks"/>
     <h2><a name="moreinfo">About the XSLT</a></h2>
-    <p>An XSLT file has converted the <a href="http://www.openarchives.org">OAI-PMH 2.0</a> responses into XHTML which looks nice in a browser which supports XSLT such as Mozilla, Firebird and Internet Explorer. The XSLT file was created by <a href="http://www.ecs.soton.ac.uk/people/cjg">Christopher Gutteridge</a> at the University of Southampton as part of the <a href="http://software.eprints.org">GNU EPrints system</a>, and is freely redistributable under the <a href="http://www.gnu.org">GPL</a>.</p><p>If you want to use the XSL file on your own OAI interface you may but due to the way XSLT works you must install the XSL file on the same server as the OAI script, you can't just link to this copy.</p><p>For more information or to download the XSL file please see the <a href="http://software.eprints.org/xslt.php">OAI to XHTML XSLT homepage</a>.</p>
+    <p>An XSLT file has converted the <a href="http://www.openarchives.org">OAI-PMH 2.0</a> responses into XHTML which looks nice in a browser which supports XSLT such as Mozilla, Firebird and Internet Explorer. The XSLT file was created by <a href="http://www.ecs.soton.ac.uk/people/cjg">Christopher Gutteridge</a> at the University of Southampton as part of the <a href="http://www.eprints.org/software/">GNU EPrints system</a>, and is freely redistributable under the <a href="http://www.gnu.org">GPL</a>.</p><p>If you want to use the XSL file on your own OAI interface you may but due to the way XSLT works you must install the XSL file on the same server as the OAI script, you can't just link to this copy.</p><p>For more information or to download the XSL file please see the <a href="http://software.eprints.org/xslt.php">OAI to XHTML XSLT homepage</a>.</p>
 
   </body>
 </html>
@@ -455,7 +457,7 @@ p.intro {
   <h2>Metadata Format</h2>
   <table class="values">
     <tr><td class="key">metadataPrefix</td>
-    <td class="value"><xsl:value-of select="oai:metadataPrefix"/></td></tr>
+    <td class="value"><a class="link" href="?verb=ListRecords&amp;metadataPrefix={oai:metadataPrefix}"><xsl:value-of select="oai:metadataPrefix"/></a></td></tr>
     <tr><td class="key">metadataNamespace</td>
     <td class="value"><xsl:value-of select="oai:metadataNamespace"/></td></tr>
     <tr><td class="key">schema</td>
@@ -526,7 +528,6 @@ p.intro {
 <!-- oai resumptionToken -->
 
 <xsl:template match="oai:resumptionToken">
-    <xsl:if test="@expirationDate">
    <p>There are more results.</p>
    <table class="values">
      <tr><td class="key">resumptionToken:</td>
@@ -534,7 +535,6 @@ p.intro {
 <xsl:text> </xsl:text>
 <a class="link" href="?verb={/oai:OAI-PMH/oai:request/@verb}&amp;resumptionToken={.}">Resume</a></td></tr>
    </table>
-    </xsl:if>
 </xsl:template>
 
 <!-- unknown metadata format -->
