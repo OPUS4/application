@@ -24,53 +24,52 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
+ * @category    Application Unit Test
  * @package     View_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-
-/**
- * View helper for rendering the fulltext logo for documents in the search result list.
- */
-class Application_View_Helper_FulltextLogo extends Application_View_Helper_Document_HelperAbstract
+class Application_View_Helper_DcmiTypeTest extends ControllerTestCase
 {
 
-    public function fulltextLogo($doc = null)
+    private $helper = null;
+
+    public function setup()
     {
-        if (is_null($doc)) {
-            $doc = $this->getDocument();
-        }
+        parent::setUp();
 
-        if (! $doc instanceof Opus_Document) {
-            // TODO log
-            return;
-        }
+        $this->helper = new Application_View_Helper_DcmiType();
+    }
 
-        $cssClass = "fulltext-logo";
-        $tooltip = null;
+    public function testDcmiType()
+    {
+        $this->assertEquals('Text', $this->helper->dcmiType('article'));
+    }
 
+    public function testDcmiTypeForUnknownDocumentType()
+    {
+        $this->assertEquals('Text', $this->helper->dcmiType('unknown'));
+    }
 
-        if ($doc->hasFulltext()) {
-            $cssClass .= ' fulltext';
-            $tooltip = 'fulltext-icon-tooltip';
-        }
+    public function testDcmiTypeSound()
+    {
+        $this->assertEquals('Sound', $this->helper->dcmiType('sound'));
+    }
 
-        if ($doc->isOpenAccess()) {
-            $cssClass .= ' openaccess';
-            $tooltip = 'fulltext-icon-oa-tooltip';
-        }
+    public function testDcmiTypeImage()
+    {
+        $this->assertEquals('Image', $this->helper->dcmiType('image'));
+        $this->assertEquals('Image', $this->helper->dcmiType('movingimage'));
+    }
 
-        $output = "<div class=\"$cssClass\"";
+    public function testDcmiTypeForNull()
+    {
+        $this->assertEquals('Text', $this->helper->dcmiType(null));
+    }
 
-        if (! is_null($tooltip)) {
-            $tooltip = $this->view->translate([$tooltip]);
-            $output .= " title=\"$tooltip\"";
-        }
-
-        $output .= "></div>";
-
-        return $output;
+    public function testDcmiTypeForEmpty()
+    {
+        $this->assertEquals('Text', $this->helper->dcmiType(''));
     }
 }

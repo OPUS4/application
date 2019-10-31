@@ -24,53 +24,52 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     View_Helper
+ * @category    Application Unit Test
+ * @package     Application_View_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-/**
- * View helper for rendering the fulltext logo for documents in the search result list.
- */
-class Application_View_Helper_FulltextLogo extends Application_View_Helper_Document_HelperAbstract
+class Application_View_Helper_TranslateIdentifierTest extends ControllerTestCase
 {
 
-    public function fulltextLogo($doc = null)
+    protected $additionalResources = 'translation';
+
+    /**
+     * Return empty string for 'null' values.
+     */
+    public function testTranslateIdentifierNull()
     {
-        if (is_null($doc)) {
-            $doc = $this->getDocument();
-        }
+        $model = new Application_View_Helper_TranslateIdentifier();
 
-        if (! $doc instanceof Opus_Document) {
-            // TODO log
-            return;
-        }
+        $this->assertEquals($model, $model->translateIdentifier(null));
+    }
 
-        $cssClass = "fulltext-logo";
-        $tooltip = null;
+    /**
+     * Return $this for no value (default behaviour).
+     */
+    public function testTranslateIdentifierWithoutType()
+    {
+        $model = new Application_View_Helper_TranslateIdentifier();
 
+        $this->assertEquals($model, $model->translateIdentifier());
+    }
 
-        if ($doc->hasFulltext()) {
-            $cssClass .= ' fulltext';
-            $tooltip = 'fulltext-icon-tooltip';
-        }
+    public function testTranslateIdentifierWithUnknownType()
+    {
+        $model = new Application_View_Helper_TranslateIdentifier();
 
-        if ($doc->isOpenAccess()) {
-            $cssClass .= ' openaccess';
-            $tooltip = 'fulltext-icon-oa-tooltip';
-        }
+        $this->assertEquals('Identifier', $model->translateIdentifier('unknown'));
+    }
 
-        $output = "<div class=\"$cssClass\"";
+    public function testTranslateIdentifier()
+    {
+        $this->useEnglish();
 
-        if (! is_null($tooltip)) {
-            $tooltip = $this->view->translate([$tooltip]);
-            $output .= " title=\"$tooltip\"";
-        }
+        $model = new Application_View_Helper_TranslateIdentifier();
 
-        $output .= "></div>";
-
-        return $output;
+        $this->assertEquals('Pubmed Id', $model->translateIdentifier('pmid'));
+        $this->assertEquals('ISBN', $model->translateIdentifier('isbn'));
     }
 }

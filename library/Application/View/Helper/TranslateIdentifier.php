@@ -25,52 +25,29 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     View_Helper
+ * @package     View
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
- * View helper for rendering the fulltext logo for documents in the search result list.
+ *
  */
-class Application_View_Helper_FulltextLogo extends Application_View_Helper_Document_HelperAbstract
+class Application_View_Helper_TranslateIdentifier extends Zend_View_Helper_Translate
 {
 
-    public function fulltextLogo($doc = null)
+    /**
+     */
+    public function translateIdentifier($type = null)
     {
-        if (is_null($doc)) {
-            $doc = $this->getDocument();
+        if (is_null($type)) {
+            return $this;
         }
 
-        if (! $doc instanceof Opus_Document) {
-            // TODO log
-            return;
-        }
-
-        $cssClass = "fulltext-logo";
-        $tooltip = null;
-
-
-        if ($doc->hasFulltext()) {
-            $cssClass .= ' fulltext';
-            $tooltip = 'fulltext-icon-tooltip';
-        }
-
-        if ($doc->isOpenAccess()) {
-            $cssClass .= ' openaccess';
-            $tooltip = 'fulltext-icon-oa-tooltip';
-        }
-
-        $output = "<div class=\"$cssClass\"";
-
-        if (! is_null($tooltip)) {
-            $tooltip = $this->view->translate([$tooltip]);
-            $output .= " title=\"$tooltip\"";
-        }
-
-        $output .= "></div>";
-
-        return $output;
+        $translator = Zend_Registry::get(Application_Translate::REGISTRY_KEY);
+        // TODO map from Type to field name
+        $fieldname = Opus_Identifier::getFieldnameForType($type);
+        return $translator->translate($fieldname);
     }
 }

@@ -116,13 +116,13 @@ class Publish_Model_DepositTest extends ControllerTestCase
             'IdentifierUrn' => ['value' => 'Publish_Model_DepositTest_urn', 'datatype' => 'Identifier', 'subfield' => '0'],
             'IdentifierUrl' => ['value' => 'Publish_Model_DepositTest_url', 'datatype' => 'Identifier', 'subfield' => '0'],
             'IdentifierIssn' => ['value' => 'Publish_Model_DepositTest_issn', 'datatype' => 'Identifier', 'subfield' => '0'],
-            'IdentifierStdDoi' => ['value' => 'Publish_Model_DepositTest_stddoi', 'datatype' => 'Identifier', 'subfield' => '0'],
+            'IdentifierStdDoi' => ['value' => 'Publish_Model_DepositTest_std-doi', 'datatype' => 'Identifier', 'subfield' => '0'],
             'IdentifierArxiv' => ['value' => 'Publish_Model_DepositTest_arxiv', 'datatype' => 'Identifier', 'subfield' => '0'],
-            'IdentifierPubmed' => ['value' => 'Publish_Model_DepositTest_pubmed', 'datatype' => 'Identifier', 'subfield' => '0'],
-            'IdentifierCrisLink' => ['value' => 'Publish_Model_DepositTest_crislink', 'datatype' => 'Identifier', 'subfield' => '0'],
-            'IdentifierSplashUrl' => ['value' => 'Publish_Model_DepositTest_splashurl', 'datatype' => 'Identifier', 'subfield' => '0'],
-            'IdentifierOpus3' => ['value' => 'Publish_Model_DepositTest_opus3', 'datatype' => 'Identifier', 'subfield' => '0'],
-            'IdentifierOpac' => ['value' => 'Publish_Model_DepositTest_opac', 'datatype' => 'Identifier', 'subfield' => '0'],
+            'IdentifierPubmed' => ['value' => 'Publish_Model_DepositTest_pmid', 'datatype' => 'Identifier', 'subfield' => '0'],
+            'IdentifierCrisLink' => ['value' => 'Publish_Model_DepositTest_cris-link', 'datatype' => 'Identifier', 'subfield' => '0'],
+            'IdentifierSplashUrl' => ['value' => 'Publish_Model_DepositTest_splash-url', 'datatype' => 'Identifier', 'subfield' => '0'],
+            'IdentifierOpus3' => ['value' => 'Publish_Model_DepositTest_opus3-id', 'datatype' => 'Identifier', 'subfield' => '0'],
+            'IdentifierOpac' => ['value' => 'Publish_Model_DepositTest_opac-id', 'datatype' => 'Identifier', 'subfield' => '0'],
             'ReferenceIsbn' => ['value' => 'Publish_Model_DepositTest_ref_isbn', 'datatype' => 'Reference', 'subfield' => '0'],
             'ReferenceUrn' => ['value' => 'Publish_Model_DepositTest_ref_urn', 'datatype' => 'Reference', 'subfield' => '0'],
             'ReferenceHandle' => ['value' => 'Publish_Model_DepositTest_ref_handle', 'datatype' => 'Reference', 'subfield' => '0'],
@@ -194,38 +194,20 @@ class Publish_Model_DepositTest extends ControllerTestCase
         $this->assertEquals(2878, $document->getCollection(2)->getId());
         $this->assertEquals(13874, $document->getCollection(3)->getId());
 
-        $this->assertEquals('Publish_Model_DepositTest_old', $document->getIdentifier(0)->getValue());
-        $this->assertEquals('old', $document->getIdentifier(0)->getType());
-        $this->assertEquals('Publish_Model_DepositTest_serial', $document->getIdentifier(1)->getValue());
-        $this->assertEquals('serial', $document->getIdentifier(1)->getType());
-        $this->assertEquals('Publish_Model_DepositTest_uuid', $document->getIdentifier(2)->getValue());
-        $this->assertEquals('uuid', $document->getIdentifier(2)->getType());
-        $this->assertEquals('Publish_Model_DepositTest_isbn', $document->getIdentifier(3)->getValue());
-        $this->assertEquals('isbn', $document->getIdentifier(3)->getType());
-        $this->assertEquals('Publish_Model_DepositTest_urn', $document->getIdentifier(4)->getValue());
-        $this->assertEquals('urn', $document->getIdentifier(4)->getType());
-        $this->assertEquals('Publish_Model_DepositTest_doi', $document->getIdentifier(5)->getValue());
-        $this->assertEquals('doi', $document->getIdentifier(5)->getType());
-        $this->assertEquals('Publish_Model_DepositTest_handle', $document->getIdentifier(6)->getValue());
-        $this->assertEquals('handle', $document->getIdentifier(6)->getType());
-        $this->assertEquals('Publish_Model_DepositTest_url', $document->getIdentifier(7)->getValue());
-        $this->assertEquals('url', $document->getIdentifier(7)->getType());
-        $this->assertEquals('Publish_Model_DepositTest_issn', $document->getIdentifier(8)->getValue());
-        $this->assertEquals('issn', $document->getIdentifier(8)->getType());
-        $this->assertEquals('Publish_Model_DepositTest_stddoi', $document->getIdentifier(9)->getValue());
-        $this->assertEquals('std-doi', $document->getIdentifier(9)->getType());
-        $this->assertEquals('Publish_Model_DepositTest_crislink', $document->getIdentifier(10)->getValue());
-        $this->assertEquals('cris-link', $document->getIdentifier(10)->getType());
-        $this->assertEquals('Publish_Model_DepositTest_splashurl', $document->getIdentifier(11)->getValue());
-        $this->assertEquals('splash-url', $document->getIdentifier(11)->getType());
-        $this->assertEquals('Publish_Model_DepositTest_opus3', $document->getIdentifier(12)->getValue());
-        $this->assertEquals('opus3-id', $document->getIdentifier(12)->getType());
-        $this->assertEquals('Publish_Model_DepositTest_opac', $document->getIdentifier(13)->getValue());
-        $this->assertEquals('opac-id', $document->getIdentifier(13)->getType());
-        $this->assertEquals('Publish_Model_DepositTest_arxiv', $document->getIdentifier(14)->getValue());
-        $this->assertEquals('arxiv', $document->getIdentifier(14)->getType());
-        $this->assertEquals('Publish_Model_DepositTest_pubmed', $document->getIdentifier(15)->getValue());
-        $this->assertEquals('pmid', $document->getIdentifier(15)->getType());
+        // the order here matches the order in of identifiers in $data
+        $identifierTypes = [
+            'old', 'serial', 'uuid', 'isbn', 'doi', 'handle', 'urn', 'url', 'issn', 'std-doi', 'arxiv',
+            'pmid', 'cris-link', 'splash-url', 'opus3-id', 'opac-id'
+        ];
+
+        $identifiers = $document->getIdentifier();
+        $this->assertCount(16, $identifiers);
+
+        foreach ($identifiers as $index => $identifier) {
+            $type = $identifierTypes[$index];
+            $this->assertEquals("Publish_Model_DepositTest_$type", $document->getIdentifier($index)->getValue());
+            $this->assertEquals($type, $document->getIdentifier($index)->getType());
+        }
 
         $this->assertEquals(5, $document->getSeries(0)->getNumber());
         $this->assertEquals(4, $document->getSeries(0)->getModel()->getId());

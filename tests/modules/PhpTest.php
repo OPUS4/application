@@ -24,53 +24,51 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     View_Helper
+ * @category    Tests
+ * @package     Application
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
- * View helper for rendering the fulltext logo for documents in the search result list.
+ * This test class is used to document weird behavior of PHP functions
+ * that might be important to consider during development.
  */
-class Application_View_Helper_FulltextLogo extends Application_View_Helper_Document_HelperAbstract
+class PhpTest extends ControllerTestCase
 {
 
-    public function fulltextLogo($doc = null)
+    /**
+     * Test strange behavior of 'in_array' function.
+     */
+    public function testInArray()
     {
-        if (is_null($doc)) {
-            $doc = $this->getDocument();
-        }
+        $array = [
+            'egg' => true,
+            'cheese' => false,
+            'hair' => 765,
+            'goblins' => null,
+            'ogres' => 'no ogres allowed in this array',
+        ];
 
-        if (! $doc instanceof Opus_Document) {
-            // TODO log
-            return;
-        }
+        // correct
+        $this->assertTrue(in_array(null, $array));
+        $this->assertTrue(in_array(false, $array));
+        $this->assertTrue(in_array(765, $array));
 
-        $cssClass = "fulltext-logo";
-        $tooltip = null;
+        // weird, apparently "correct", but not as expected
+        $this->assertTrue(in_array(763, $array));
+        $this->assertTrue(in_array('egg', $array));
+        $this->assertTrue(in_array('hhh', $array));
+        $this->assertTrue(in_array([], $array));
 
-
-        if ($doc->hasFulltext()) {
-            $cssClass .= ' fulltext';
-            $tooltip = 'fulltext-icon-tooltip';
-        }
-
-        if ($doc->isOpenAccess()) {
-            $cssClass .= ' openaccess';
-            $tooltip = 'fulltext-icon-oa-tooltip';
-        }
-
-        $output = "<div class=\"$cssClass\"";
-
-        if (! is_null($tooltip)) {
-            $tooltip = $this->view->translate([$tooltip]);
-            $output .= " title=\"$tooltip\"";
-        }
-
-        $output .= "></div>";
-
-        return $output;
+        // using strict, it works as expected
+        $this->assertTrue(in_array(null, $array, true));
+        $this->assertTrue(in_array(false, $array, true));
+        $this->assertTrue(in_array(765, $array, true));
+        $this->assertFalse(in_array(763, $array, true));
+        $this->assertFalse(in_array('egg', $array, true));
+        $this->assertFalse(in_array('hhh', $array, true));
+        $this->assertFalse(in_array([], $array, true));
     }
 }

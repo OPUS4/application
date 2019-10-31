@@ -205,6 +205,8 @@ class Solrsearch_IndexController extends Application_Controller_Action
 
             $numOfHits = $resultList->getNumberOfHits();
 
+            $this->view->resultScript = $this->_helper->resultScript();
+
             if ($numOfHits === 0 || $query->getStart() >= $numOfHits) {
                 $this->render('nohits');
             } else {

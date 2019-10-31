@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,53 +24,55 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     View_Helper
+ * @category    Application Unit Test
+ * @package     Controller_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-/**
- * View helper for rendering the fulltext logo for documents in the search result list.
- */
-class Application_View_Helper_FulltextLogo extends Application_View_Helper_Document_HelperAbstract
+class Application_Controller_Action_Helper_ResultScriptTest extends ControllerTestCase
 {
 
-    public function fulltextLogo($doc = null)
+    protected $configModifiable = true;
+
+    protected $helper;
+
+    public function setUp()
     {
-        if (is_null($doc)) {
-            $doc = $this->getDocument();
-        }
+        parent::setUp();
 
-        if (! $doc instanceof Opus_Document) {
-            // TODO log
-            return;
-        }
+        $this->helper = new Application_Controller_Action_Helper_ResultScript();
+    }
 
-        $cssClass = "fulltext-logo";
-        $tooltip = null;
+    public function testDefaultScript()
+    {
+        $this->assertEquals('index/result.phtml', $this->helper->direct());
+    }
 
+    public function testCustomScriptDoesNotExist()
+    {
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'search' => ['result' => ['script' => 'result.phtml']]
+        ]));
 
-        if ($doc->hasFulltext()) {
-            $cssClass .= ' fulltext';
-            $tooltip = 'fulltext-icon-tooltip';
-        }
+        $script = $this->helper->direct();
 
-        if ($doc->isOpenAccess()) {
-            $cssClass .= ' openaccess';
-            $tooltip = 'fulltext-icon-oa-tooltip';
-        }
+        $this->assertEquals('index/result.phtml', $script);
+    }
 
-        $output = "<div class=\"$cssClass\"";
+    public function testCustomScriptExists()
+    {
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'search' => ['result' => ['script' => 'result.phtml']]
+        ]));
 
-        if (! is_null($tooltip)) {
-            $tooltip = $this->view->translate([$tooltip]);
-            $output .= " title=\"$tooltip\"";
-        }
+        touch(APPLICATION_PATH . '/application/configs/templates/result.phtml');
 
-        $output .= "></div>";
+        $script = $this->helper->direct();
 
-        return $output;
+        unlink(APPLICATION_PATH . '/application/configs/templates/result.phtml');
+
+        $this->assertEquals('result.phtml', $script);
     }
 }

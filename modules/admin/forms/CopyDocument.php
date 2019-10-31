@@ -25,52 +25,50 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     View_Helper
+ * @package     Admin_Form
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
- * View helper for rendering the fulltext logo for documents in the search result list.
+ *
+ * TODO
  */
-class Application_View_Helper_FulltextLogo extends Application_View_Helper_Document_HelperAbstract
+class Admin_Form_CopyDocument extends Zend_Form
 {
 
-    public function fulltextLogo($doc = null)
+    const ELEMENT_COPY = 'Copy';
+    const ELEMENT_CANCEL = 'Cancel';
+    const ELEMENT_COPY_FILES = 'CopyFiles';
+
+    const SUBFORM_DOCUMENT = 'document';
+
+    const RESULT_COPY = 'copy';
+    const RESULT_CANCEL = 'cancel';
+
+    public function init()
     {
-        if (is_null($doc)) {
-            $doc = $this->getDocument();
+        $infoBox = new Admin_Form_InfoBox();
+
+        $this->addSubForm($infoBox, self::SUBFORM_DOCUMENT);
+
+        $this->addElement('checkbox', self::ELEMENT_COPY_FILES);
+        $this->addElement('submit', self::ELEMENT_COPY);
+        $this->addElement('submit', self::ELEMENT_CANCEL);
+    }
+
+    public function populateFromModel($document)
+    {
+        $this->getSubForm(self::SUBFORM_DOCUMENT)->populateFromModel($document);
+    }
+
+    public function processPost($post, $context)
+    {
+        if (array_key_exists(self::ELEMENT_COPY, $post)) {
+            return self::RESULT_COPY;
+        } elseif (array_key_exists(self::ELEMENT_CANCEL, $post)) {
+            return self::RESULT_CANCEL;
         }
-
-        if (! $doc instanceof Opus_Document) {
-            // TODO log
-            return;
-        }
-
-        $cssClass = "fulltext-logo";
-        $tooltip = null;
-
-
-        if ($doc->hasFulltext()) {
-            $cssClass .= ' fulltext';
-            $tooltip = 'fulltext-icon-tooltip';
-        }
-
-        if ($doc->isOpenAccess()) {
-            $cssClass .= ' openaccess';
-            $tooltip = 'fulltext-icon-oa-tooltip';
-        }
-
-        $output = "<div class=\"$cssClass\"";
-
-        if (! is_null($tooltip)) {
-            $tooltip = $this->view->translate([$tooltip]);
-            $output .= " title=\"$tooltip\"";
-        }
-
-        $output .= "></div>";
-
-        return $output;
     }
 }

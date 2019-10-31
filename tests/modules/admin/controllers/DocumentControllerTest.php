@@ -102,8 +102,12 @@ class Admin_DocumentControllerTest extends ControllerTestCase
         $this->dispatch('/admin/document/index/id/' . $docId);
 
         $body = $this->getResponse()->getBody();
-        $this->assertTrue(substr_count($body, 'exception \'PHPUnit_Framework_Error_Warning\' with message \'htmlspecialchars() expects parameter 1 to be string, array given\' in /home/jens/opus4dev/opus4/server/modules/admin/views/scripts/document/index.phtml:145') == 0);
-        $this->assertTrue(substr_count($body, 'Warning: htmlspecialchars() expects parameter 1 to be string, array given in /home/jens/opus4dev/opus4/server/modules/admin/views/scripts/document/index.phtml on line 145') == 0);
+        $this->assertTrue(
+            substr_count($body, 'exception \'PHPUnit_Framework_Error_Warning\' with message \'htmlspecialchars() expects parameter 1 to be string, array given\' in /home/jens/opus4dev/opus4/server/modules/admin/views/scripts/document/index.phtml:145') == 0
+        );
+        $this->assertTrue(
+            substr_count($body, 'Warning: htmlspecialchars() expects parameter 1 to be string, array given in /home/jens/opus4dev/opus4/server/modules/admin/views/scripts/document/index.phtml on line 145') == 0
+        );
     }
 
     /**
@@ -154,7 +158,10 @@ class Admin_DocumentControllerTest extends ControllerTestCase
 
         $this->dispatch('/admin/document/index/id/' . $doc->getId());
 
-        $this->assertContains('<pre class="abstractTextContainer preserve-spaces">' . "foo\nbar\n\nbaz" . '</pre>', $this->getResponse()->getBody());
+        $this->assertContains(
+            '<pre class="abstractTextContainer preserve-spaces">' . "foo\nbar\n\nbaz" . '</pre>',
+            $this->getResponse()->getBody()
+        );
     }
 
     public function testPreserveNewlinesForNote()
@@ -173,7 +180,10 @@ class Admin_DocumentControllerTest extends ControllerTestCase
 
         $this->dispatch('/admin/document/index/id/' . $doc->getId());
 
-        $this->assertContains('<pre class="preserve-spaces noteTextContainer">' . "foo\nbar\n\nbaz" . '</pre>', $this->getResponse()->getBody());
+        $this->assertContains(
+            '<pre class="preserve-spaces noteTextContainer">' . "foo\nbar\n\nbaz" . '</pre>',
+            $this->getResponse()->getBody()
+        );
     }
 
     public function testDisplayCollectionNumberAndNameOnOverviewPageForDDCCollection()

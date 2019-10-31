@@ -167,6 +167,13 @@ class Admin_Form_ActionBox extends Admin_Form_AbstractDocumentSubForm
             'id'         => $docId,
         ];
 
+        $actions['copy'] = [
+            'module' => 'admin',
+            'controller' => 'document',
+            'action' => 'copy',
+            'id' => $docId
+        ];
+
         $actions['frontdoor'] = [
             'module'     => 'frontdoor',
             'controller' => 'index',

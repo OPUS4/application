@@ -373,6 +373,15 @@
             </tuv>
         </tu>
 
+        <tu tuid="server_state_facet_heading">
+            <tuv xml:lang="en">
+                <seg>State</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Status</seg>
+            </tuv>
+        </tu>
+
         <tu tuid="language_facet_heading">
             <tuv xml:lang="en">
                 <seg>Language</seg>
