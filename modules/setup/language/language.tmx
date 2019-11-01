@@ -26,45 +26,27 @@
         </tuv>
     </tu>
 
-    <tu tuid="setup_language_unit">
+    <tu tuid="setup_language_key">
         <tuv xml:lang="en">
-            <seg>translation unit</seg>
+            <seg>Key</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Übersetzungsschlüssel</seg>
+            <seg>Schlüssel</seg>
         </tuv>
     </tu>
 
     <tu tuid="setup_language_module">
         <tuv xml:lang="en">
-            <seg>module</seg>
+            <seg>Module</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Modul</seg>
         </tuv>
     </tu>
 
-    <tu tuid="setup_language_directory">
-        <tuv xml:lang="en">
-            <seg>directoy</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Verzeichnis</seg>
-        </tuv>
-    </tu>
-
-    <tu tuid="setup_language_filename">
-        <tuv xml:lang="en">
-            <seg>file name</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Dateiname</seg>
-        </tuv>
-    </tu>
-
     <tu tuid="setup_language_language">
         <tuv xml:lang="en">
-            <seg>language</seg>
+            <seg>Language</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Sprache</seg>
@@ -73,19 +55,10 @@
 
     <tu tuid="setup_language_variant">
         <tuv xml:lang="en">
-            <seg>translation</seg>
+            <seg>Translation</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Übersetzung</seg>
-        </tuv>
-    </tu>
-
-    <tu tuid="setup_language_transfer">
-        <tuv xml:lang="en">
-            <seg>edit and transfer</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>bearbeiten und übernehmen</seg>
         </tuv>
     </tu>
 

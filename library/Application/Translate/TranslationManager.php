@@ -50,7 +50,7 @@ class Application_Translate_TranslationManager
     /**
      * sort by translation unit
      */
-    const SORT_UNIT = 'unit';
+    const SORT_UNIT = 'key';
 
     /**
      * sort by application module
@@ -135,7 +135,7 @@ class Application_Translate_TranslationManager
                         foreach ($translationUnits as $key => $values) {
                             if (empty($this->_filter) || strpos($key, $this->_filter) !== false) {
                                 $row = [
-                                    'unit' => $key,
+                                    'key' => $key,
                                     'module' => $module,
                                     'directory' => $dir,
                                     'filename' => $fileName,
