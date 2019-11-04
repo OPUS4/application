@@ -177,7 +177,7 @@ class Application_Translate_TranslationManager
         $result = [];
 
         foreach ($translations as $translation) {
-            if (stripos($translation['unit'], $needle) !== false) {
+            if (stripos($translation['key'], $needle) !== false) {
                 $result[] = $translation;
             }
         }

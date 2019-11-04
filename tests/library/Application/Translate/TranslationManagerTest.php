@@ -137,7 +137,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
 
         foreach ($filteredTranlsations as $translation) {
             $this->assertTrue(
-                strpos($translation['unit'], $filter) !== false,
+                strpos($translation['key'], $filter) !== false,
                 'Expected filtered translation unit to contain filter string'
             );
         }
@@ -157,7 +157,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
         $maxLength = 0;
 
         foreach ($all as $entry) {
-            $text = $entry['unit'];
+            $text = $entry['key'];
             $length = strlen($text);
             if ($length > $maxLength) {
                 $maxLength = $length;
@@ -167,7 +167,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
         $keys = [];
 
         foreach ($all as $entry) {
-            $keys[] = $entry['unit'];
+            $keys[] = $entry['key'];
         }
 
         $keyCount = array_count_values($keys);
@@ -187,6 +187,6 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
 
         $this->assertInternalType('array', $result);
         $this->assertCount(1, $result);
-        $this->assertEquals('EmbargoDate', $result[0]['unit']);
+        $this->assertEquals('EmbargoDate', $result[0]['key']);
     }
 }
