@@ -82,12 +82,12 @@
 
                 <xsl:variable name="bibliographischesLevel">
                     <xsl:choose>
-                        <xsl:when test="./@Type='article'">                  <xsl:value-of select="'b'"/></xsl:when>
+                        <xsl:when test="./@Type='article'">                  <xsl:value-of select="'a'"/></xsl:when>
                         <xsl:when test="./@Type='bachelorthesis'">           <xsl:value-of select="'m'"/></xsl:when>
                         <xsl:when test="./@Type='book'">                     <xsl:value-of select="'m'"/></xsl:when>
                         <xsl:when test="./@Type='bookpart'">                 <xsl:value-of select="'a'"/></xsl:when>
                         <xsl:when test="./@Type='conferenceobject'">         <xsl:value-of select="'a'"/></xsl:when>
-                        <xsl:when test="./@Type='contributiontoperiodical'"> <xsl:value-of select="'b'"/></xsl:when>
+                        <xsl:when test="./@Type='contributiontoperiodical'"> <xsl:value-of select="'a'"/></xsl:when>
                         <xsl:when test="./@Type='coursematerial'">           <xsl:value-of select="'m'"/></xsl:when>
                         <xsl:when test="./@Type='diplom'">                   <xsl:value-of select="'m'"/></xsl:when>
                         <xsl:when test="./@Type='doctoralthesis'">           <xsl:value-of select="'m'"/></xsl:when>
@@ -100,7 +100,7 @@
                         <xsl:when test="./@Type='movingimage'">              <xsl:value-of select="'m'"/></xsl:when>
                         <xsl:when test="./@Type='other'">                    <xsl:value-of select="'m'"/></xsl:when>
                         <xsl:when test="./@Type='periodical'">               <xsl:value-of select="'s'"/></xsl:when>
-                        <xsl:when test="./@Type='periodicalpart'">           <xsl:value-of select="'b'"/></xsl:when>
+                        <xsl:when test="./@Type='periodicalpart'">           <xsl:value-of select="'a'"/></xsl:when>
                         <xsl:when test="./@Type='preprint'">                 <xsl:value-of select="'m'"/></xsl:when>
                         <xsl:when test="./@Type='report'">                   <xsl:value-of select="'m'"/></xsl:when>
                         <xsl:when test="./@Type='review'">                   <xsl:value-of select="'m'"/></xsl:when>
@@ -454,13 +454,13 @@
                 <!-- PersonAdvisor -->
                 <xsl:apply-templates select="./PersonAdvisor" mode="marc21">
                     <xsl:with-param name="tag">700</xsl:with-param>
-                    <xsl:with-param name="role">ths</xsl:with-param>
+                    <xsl:with-param name="role">dgs</xsl:with-param>
                 </xsl:apply-templates>
 
                 <!-- PersonContributor -->
                 <xsl:apply-templates select="./PersonContributor" mode="marc21">
                     <xsl:with-param name="tag">700</xsl:with-param>
-                    <xsl:with-param name="role">cont</xsl:with-param>
+                    <xsl:with-param name="role">ctb</xsl:with-param>
                 </xsl:apply-templates>
 
                 <xsl:if test="((not(./TitleParent) or count(TitleParent) &gt; 1)) and (./@Volume or ./@Issue or (./@PageFirst or ./@PageLast))">
