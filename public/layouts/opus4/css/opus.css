@@ -1630,3 +1630,8 @@ input[type='text'].invalid {
 #search_results :not(.published) .results_title,
 #search_results :not(.published) .results_author {
 }
+
+ul.list-style-none {
+    list-style: none;
+    padding-left: 2em;
+}
