@@ -1507,15 +1507,15 @@ END OF COMMENT -->
 
     <tu tuid="hint_documentUpload">
 	<tuv xml:lang="en">
-            <seg> Please mind the:
+            <seg><![CDATA[Please mind the:
                 <ul><b>naming of the files</b>: permitted are alphabetic characters (a-z, A-Z, no umlauts), numbers, hyphen, and underscore.</ul>
-                <ul><b>length of the file name</b>: up to 50 characters</ul>
+                <ul><b>length of the file name</b>: up to 50 characters</ul>]]>
             </seg>
         </tuv>
 	<tuv xml:lang="de">
-            <seg> Bitte beachten Sie dabei die:
+            <seg><![CDATA[Bitte beachten Sie dabei die:
                 <ul><b>Benennung der Dateien</b>: zulässig sind Buchstaben (a-z, A-Z, keine Umlaute), Zahlen, Bindestrich und Unterstrich.</ul>
-                <ul><b>Dateinamenslänge</b>: maximal 50 Zeichen</ul>
+                <ul><b>Dateinamenslänge</b>: maximal 50 Zeichen</ul>]]>
             </seg>
         </tuv>
     </tu>
