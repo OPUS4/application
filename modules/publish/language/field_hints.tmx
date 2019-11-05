@@ -1506,17 +1506,16 @@ END OF COMMENT -->
     </tu>
 
     <tu tuid="hint_documentUpload">
-        <tuv xml:lang="en">
-            <seg>Upload your documents here.
-            Filenames can be up to 50 characters long including the extension and use letters (a-z, A-Z), numbers (0-9), dashes (-) and underlines (_).
-            You get more upload-fields by pressing the PLUS-sign.
+	<tuv xml:lang="en">
+            <seg><![CDATA[Please mind the:
+                <ul><b>naming of the files</b>: permitted are alphabetic characters (a-z, A-Z, no umlauts), numbers, hyphen, and underscore.</ul>
+                <ul><b>length of the file name</b>: up to 50 characters</ul>]]>
             </seg>
         </tuv>
-        <tuv xml:lang="de">
-            <seg>Wählen Sie hier die hochzuladenden Dokumente. Bitte achten Sie dabei die auf die Benennung der Dateien.
-            Es dürfen die alphanumerischen Zeichen (a-z, A-Z und 0-9) sowie Bindestriche (-) und Unterstriche (_) verwendet werden.
-            Der Dateiname darf bis zu 50 Zeichen lang sein, einschließlich der Dateiendung.
-            Weitere Upload-Felder erhalten Sie per Klick auf das PLUS-Zeichen.
+	<tuv xml:lang="de">
+            <seg><![CDATA[Bitte beachten Sie dabei die:
+                <ul><b>Benennung der Dateien</b>: zulässig sind Buchstaben (a-z, A-Z, keine Umlaute), Zahlen, Bindestrich und Unterstrich.</ul>
+                <ul><b>Dateinamenslänge</b>: maximal 50 Zeichen</ul>]]>
             </seg>
         </tuv>
     </tu>
