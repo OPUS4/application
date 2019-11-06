@@ -255,7 +255,7 @@ class Publish_FormControllerTest extends ControllerTestCase
         $this->assertContains('<b>Weitere Formulardaten:</b>', $this->getResponse()->getBody());
         $this->assertContains('<td>22.01.2011</td>', $this->getResponse()->getBody());
         $this->assertContains('<td>Creative Commons - CC BY-ND - Namensnennung - Keine Bearbeitungen 4.0 International</td>', $this->getResponse()->getBody());
-        $this->assertContains('<b>Es wurden keine Dateien hochgeladen. </b>', $this->getResponse()->getBody());
+        $this->assertContains('<b>Es wurden keine Dateien hochgeladen.</b>', $this->getResponse()->getBody());
     }
 
     /**
@@ -451,8 +451,8 @@ class Publish_FormControllerTest extends ControllerTestCase
         $this->fileNoticeOnSecondFormPage(self::CONFIG_VALUE_TRUE);
 
         $this->assertContains('<h3 class="document-type" title="Dokumenttyp">Alle Felder (Testdokumenttyp)</h3>', $this->getResponse()->getBody());
-        $this->assertContains('<legend>Sie haben folgende Datei(en) hochgeladen: </legend>', $this->getResponse()->getBody());
-        $this->assertContains('<b>Es wurden keine Dateien hochgeladen. </b>', $this->getResponse()->getBody());
+        $this->assertContains('<legend>Sie haben folgende Datei(en) hochgeladen:</legend>', $this->getResponse()->getBody());
+        $this->assertContains('<b>Es wurden keine Dateien hochgeladen.</b>', $this->getResponse()->getBody());
     }
 
     public function testShowFileNoticeOnThirdFormPageIfFileUploadIsEnabled()
@@ -461,8 +461,8 @@ class Publish_FormControllerTest extends ControllerTestCase
 
         $this->assertResponseCode(200);
         $this->assertContains('Bitte überprüfen Sie Ihre Eingaben', $this->getResponse()->getBody());
-        $this->assertContains('<legend>Sie haben folgende Datei(en) hochgeladen: </legend>', $this->getResponse()->getBody());
-        $this->assertContains('<b>Es wurden keine Dateien hochgeladen. </b>', $this->getResponse()->getBody());
+        $this->assertContains('<legend>Sie haben folgende Datei(en) hochgeladen:</legend>', $this->getResponse()->getBody());
+        $this->assertContains('<b>Es wurden keine Dateien hochgeladen.</b>', $this->getResponse()->getBody());
     }
 
     private function fileNoticeOnThirdFormPage($value)
