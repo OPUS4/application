@@ -139,8 +139,8 @@ class Application_Controller_Action_Helper_FileTypesTest extends ControllerTestC
             'filetypes' => ['XML' => ['mimeType' => 'text/xml']]
         ]));
 
-        $this->assertTrue($this->_helper->isValidMimeType('text/xml','xml'));
-        $this->assertTrue($this->_helper->isValidMimeType('text/xml','XML'));
-        $this->assertTrue($this->_helper->isValidMimeType('text/xml','XmL'));
+        $this->assertTrue($this->_helper->isValidMimeType('text/xml', 'xml'));
+        $this->assertTrue($this->_helper->isValidMimeType('text/xml', 'XML'));
+        $this->assertTrue($this->_helper->isValidMimeType('text/xml', 'XmL'));
     }
 }
