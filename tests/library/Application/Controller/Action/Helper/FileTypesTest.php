@@ -132,4 +132,15 @@ class Application_Controller_Action_Helper_FileTypesTest extends ControllerTestC
         $this->assertFalse($this->_helper->isValidMimeType(null));
         $this->assertFalse($this->_helper->isValidMimeType(null, 'txt'));
     }
+
+    public function testExtensionCaseInsensitive()
+    {
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'filetypes' => ['XML' => ['mimeType' => 'text/xml']]
+        ]));
+
+        $this->assertTrue($this->_helper->isValidMimeType('text/xml','xml'));
+        $this->assertTrue($this->_helper->isValidMimeType('text/xml','XML'));
+        $this->assertTrue($this->_helper->isValidMimeType('text/xml','XmL'));
+    }
 }
