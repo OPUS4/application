@@ -59,7 +59,7 @@ class Application_Controller_Action_Helper_FileTypes extends Application_Control
 
             foreach ($fileTypes as $extension => $fileType) {
                 if (isset($fileType['mimeType']) && $extension !== 'default') {
-                    $mimeTypes[$extension] = $fileType['mimeType'];
+                    $mimeTypes[strtolower($extension)] = $fileType['mimeType'];
                 }
             }
 
@@ -83,6 +83,8 @@ class Application_Controller_Action_Helper_FileTypes extends Application_Control
         $mimeTypes = $this->getValidMimeTypes();
 
         if (! is_null($extension)) {
+            $extension = strtolower($extension);
+
             if (isset($mimeTypes[$extension])) {
                 $mimeTypes = $mimeTypes[$extension];
             } else {

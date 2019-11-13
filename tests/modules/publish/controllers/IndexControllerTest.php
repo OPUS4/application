@@ -71,7 +71,7 @@ class Publish_IndexControllerTest extends ControllerTestCase
         $this->assertContains('<legend>Dokument(e) hochladen</legend>', $this->getResponse()->getBody());
         $this->assertContains("<input type='hidden' name='MAX_FILE_SIZE' id='MAX_FILE_SIZE' value='1024000' />", $this->getResponse()->getBody());
         $this->assertContains("<label for='fileupload'>Datei wählen</label>", $this->getResponse()->getBody());
-        $this->assertContains("<input type='file' name='fileupload' id='fileupload' enctype='multipart/form-data' title='Bitte wählen Sie eine Datei, die Sie hochladen möchten ' size='30' />", $this->getResponse()->getBody());
+        $this->assertContains("<input type='file' name='fileupload' id='fileupload' enctype='multipart/form-data' title='Bitte wählen Sie eine Datei, die Sie hochladen möchten' size='30' />", $this->getResponse()->getBody());
         $this->assertContains("<label for='uploadComment'>Kommentar</label>", $this->getResponse()->getBody());
         $this->assertContains("<textarea name='uploadComment' class='form-textarea' cols='30' rows='5'  title='Fügen Sie hier einen Kommentar hinzu.'  id='uploadComment'></textarea>", $this->getResponse()->getBody());
     }
