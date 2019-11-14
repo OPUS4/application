@@ -46,10 +46,10 @@
 
     <tu tuid="setup_language_language">
         <tuv xml:lang="en">
-            <seg>Language</seg>
+            <seg> </seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Sprache</seg>
+            <seg> </seg>
         </tuv>
     </tu>
 

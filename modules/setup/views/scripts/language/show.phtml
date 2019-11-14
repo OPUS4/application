@@ -66,7 +66,8 @@
             <td><?= $translation ?></td>
                 <?PHP if ($index == 0) : ?>
             <td rowspan="<?= $langCount ?>">
-                <a href="<?= $this->url(['action' => 'edit', 'file' => urlencode($file), 'key' => $key, 'search' => $this->searchTerm, 'sort' => $this->currentSortKey]) ?>"
+                    <?PHP // TODO add module to parameters ?>
+                <a href="<?= $this->url(['action' => 'edit', 'key' => $key, 'search' => $this->searchTerm, 'sort' => $this->currentSortKey]) ?>"
                 ><?=$this->translate('setup_language_edit') ?></a>
             </td>
                 <?PHP endif ?>
