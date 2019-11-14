@@ -716,6 +716,7 @@ class Publish_Model_ExtendedValidation
                         $validSeries = false;
                     }
 
+                    /** TODO optionally supress duplicate series number values OPUSVIER-3917
                     if ($currSeries != null && ! $currSeries->isNumberAvailable($number)) {
                         $this->log->debug(
                             __METHOD__ . " : error for element $fieldname : serial number $number not available"
@@ -726,7 +727,7 @@ class Publish_Model_ExtendedValidation
                             $element->addError($this->translate('publish_error_seriesnumber_not_available'));
                         }
                         $validSeries = false;
-                    }
+                    }*/
                 }
             }
         }
