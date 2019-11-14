@@ -196,8 +196,9 @@ class Admin_Form_Document_SeriesTest extends ControllerTestCase
             'Number' => '5/5' // used by document ID = 146
         ];
 
-        $this->assertFalse($form->isValid($post));
-        $this->assertContains('notAvailable', $form->getErrors('Number'));
+        $this->assertTrue($form->isValid($post));
+        // TODO duplicate numbers are now allowed OPUSVIER-3917
+        // $this->assertContains('notAvailable', $form->getErrors('Number'));
     }
 
     public function testValidationNumberCurrentDocument()
