@@ -113,6 +113,11 @@ class Export_Model_PublistExport extends Export_Model_XsltExport
         $this->_proc->registerPHPFunctions('max');
         $this->_proc->registerPHPFunctions('urlencode');
         $this->_proc->registerPHPFunctions('Export_Model_PublistExport::getMimeTypeDisplayName');
+
+        // TODO find way to allow instance to add new helpers without modifying code here
+        Application_Xslt::registerViewHelper($this->_proc, [
+            'embargoHasPassed'
+        ]);
         $this->_proc->setParameter('', 'fullUrl', $view->fullUrl());
         $this->_proc->setParameter('', 'groupBy', $groupBy);
         $this->_proc->setParameter('', 'pluginName', $this->getName());
