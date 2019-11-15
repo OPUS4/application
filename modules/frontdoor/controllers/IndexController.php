@@ -222,7 +222,11 @@ class Frontdoor_IndexController extends Application_Controller_Action
         $htmlMetaTags = new Frontdoor_Model_HtmlMetaTags($this->getConfig(), $this->view->fullUrl());
         $tags = $htmlMetaTags->createTags($document);
         foreach ($tags as $pair) {
-            $this->view->headMeta($pair[1], $pair[0]);
+            if (count($pair) > 2) {
+                $this->view->headMeta($pair[1], $pair[0], 'name', $pair[2]);
+            } else {
+                $this->view->headMeta($pair[1], $pair[0]);
+            }
         }
     }
 

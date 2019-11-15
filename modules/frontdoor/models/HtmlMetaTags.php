@@ -218,9 +218,12 @@ class Frontdoor_Model_HtmlMetaTags
                     }
                 }
 
-                $metas[] = ['DC.title', $titleValue];
-                $metas[] = ['citation_title', $titleValue];
-                $metas[] = ['title', $titleValue];
+                $helper = new Application_View_Helper_LanguageWebForm();
+                $lang = $helper->languageWebForm($lang);
+
+                $metas[] = ['DC.title', $titleValue, ['lang' => $lang]];
+                $metas[] = ['citation_title', $titleValue, ['lang' => $lang]];
+                $metas[] = ['title', $titleValue, ['lang' => $lang]];
             }
         }
     }
@@ -249,8 +252,12 @@ class Frontdoor_Model_HtmlMetaTags
         foreach ($document->getTitleAbstract() as $abstract) {
             $abstractValue = trim($abstract->getValue());
             if ($abstractValue !== '') {
-                $metas[] = ['DC.description', $abstractValue];
-                $metas[] = ['description', $abstractValue];
+                $lang = $abstract->getLanguage();
+                $helper = new Application_View_Helper_LanguageWebForm(); // TODO avoid object creation
+                $lang = $helper->languageWebForm($lang);
+                $metas[] = ['DC.description', $abstractValue, ['lang' => $lang]];
+                $metas[] = ['description', $abstractValue, ['lang' => $lang]];
+                $metas[] = ['dcterms.abstract', $abstractValue, ['lang' => $lang]];
             }
         }
     }
