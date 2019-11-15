@@ -218,9 +218,12 @@ class Frontdoor_Model_HtmlMetaTags
                     }
                 }
 
-                $metas[] = ['DC.title', $titleValue];
-                $metas[] = ['citation_title', $titleValue];
-                $metas[] = ['title', $titleValue];
+                $helper = new Application_View_Helper_LanguageWebForm();
+                $lang = $helper->languageWebForm($lang);
+
+                $metas[] = ['DC.title', $titleValue, ['lang' => $lang]];
+                $metas[] = ['citation_title', $titleValue, ['lang' => $lang]];
+                $metas[] = ['title', $titleValue, ['lang' => $lang]];
             }
         }
     }

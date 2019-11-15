@@ -100,7 +100,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     {
         $result = $this->htmlMetaTags->createTags($doc);
 
-        $this->assertCount(59, $result);
+        $this->assertCount(61, $result);
         $this->assertCommonMetaTags($result, $doc->getId());
         $this->assertParentTitle($result, 'journal');
         $this->assertVolumeAndIssue($result);
@@ -131,7 +131,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     {
         $result = $this->htmlMetaTags->createTags($doc);
 
-        $this->assertCount(59, $result);
+        $this->assertCount(61, $result);
         $this->assertCommonMetaTags($result, $doc->getId());
         $this->assertParentTitle($result, 'conference');
         $this->assertVolumeAndIssue($result);
@@ -162,7 +162,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     {
         $result = $this->htmlMetaTags->createTags($doc);
 
-        $this->assertCount(50, $result);
+        $this->assertCount(52, $result);
         $this->assertCommonMetaTags($result, $doc->getId());
         $this->assertThesisPublisher($doc, $result);
         $this->assertDocumentType($result, $doc->getType());
@@ -191,7 +191,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     {
         $result = $this->htmlMetaTags->createTags($doc);
 
-        $this->assertCount(55, $result);
+        $this->assertCount(57, $result);
         $this->assertCommonMetaTags($result, $doc->getId());
         $this->assertVolumeAndIssue($result);
         $this->assertIssn($result);
@@ -289,7 +289,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     {
         $result = $this->htmlMetaTags->createTags($doc);
 
-        $this->assertCount(49, $result);
+        $this->assertCount(51, $result);
         $this->assertCommonMetaTags($result, $doc->getId());
         $this->assertParentTitle($result, 'inbook');
     }
@@ -317,7 +317,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     {
         $result = $this->htmlMetaTags->createTags($doc);
 
-        $this->assertCount(53, $result);
+        $this->assertCount(55, $result);
         $this->assertCommonMetaTags($result, $doc->getId());
         $this->assertPages($result);
         $this->assertParentTitle($result, 'inbook');
@@ -330,7 +330,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
 
         $result = $this->htmlMetaTags->createTags($doc);
 
-        $this->assertCount(49, $result);
+        $this->assertCount(51, $result);
         $this->assertCommonMetaTags($result, $docId);
         $this->assertIssn($result);
     }
@@ -390,14 +390,14 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
      */
     private function assertMainTitles($tags)
     {
-        $this->assertContains(['DC.title', 'titlemain-deu'], $tags);
-        $this->assertContains(['citation_title', 'titlemain-deu'], $tags);
-        $this->assertContains(['title', 'titlemain-deu'], $tags);
+        $this->assertContains(['DC.title', 'titlemain-deu', ['lang' => 'de']], $tags);
+        $this->assertContains(['citation_title', 'titlemain-deu', ['lang' => 'de']], $tags);
+        $this->assertContains(['title', 'titlemain-deu', ['lang' => 'de']], $tags);
 
 
-        $this->assertContains(['DC.title', 'titlemain-eng : titlesub-eng'], $tags);
-        $this->assertContains(['citation_title', 'titlemain-eng : titlesub-eng'], $tags);
-        $this->assertContains(['title', 'titlemain-eng : titlesub-eng'], $tags);
+        $this->assertContains(['DC.title', 'titlemain-eng : titlesub-eng', ['lang' => 'en']], $tags);
+        $this->assertContains(['citation_title', 'titlemain-eng : titlesub-eng', ['lang' => 'en']], $tags);
+        $this->assertContains(['title', 'titlemain-eng : titlesub-eng', ['lang' => 'en']], $tags);
     }
 
     /**
@@ -513,11 +513,11 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
      */
     private function assertAbstract($tags)
     {
-        $this->assertContains(['DC.description', 'abstract1-deu'], $tags);
-        $this->assertContains(['description', 'abstract1-deu'], $tags);
+        $this->assertContains(['DC.description', 'abstract1-deu', ['lang' => 'de']], $tags);
+        $this->assertContains(['description', 'abstract1-deu', ['lang' => 'de']], $tags);
 
-        $this->assertContains(['DC.description', 'abstract2-deu'], $tags);
-        $this->assertContains(['description', 'abstract2-deu'], $tags);
+        $this->assertContains(['DC.description', 'abstract2-deu', ['lang' => 'de']], $tags);
+        $this->assertContains(['description', 'abstract2-deu', ['lang' => 'de']], $tags);
     }
 
     /**
