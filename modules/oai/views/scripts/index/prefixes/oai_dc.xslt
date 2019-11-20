@@ -29,7 +29,7 @@
  * @package     Module_Oai
  * @author      Michael Lang <lang@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 -->
@@ -230,7 +230,7 @@
             </xsl:otherwise>
         </xsl:choose>
         <dc:type>
-            <xsl:call-template name="dcmiType"/>
+            <xsl:call-template name="dcType"/>
         </dc:type>
     </xsl:template>
 
@@ -284,22 +284,8 @@
         </xsl:choose>
      </xsl:template>
 
-     <xsl:template name="dcmiType" >
-          <xsl:choose>
-            <xsl:when test=". = 'diplthesis' or  . = 'diplom'">
-                <xsl:text>doc-type:masterThesis</xsl:text>
-            </xsl:when>
-            <xsl:when test=". = 'habilitation' or . = 'doctoralthesis'">
-                <xsl:text>doc-type:doctoralThesis</xsl:text>
-            </xsl:when>
-            <xsl:when test=". = 'bachelorthesis'">
-                <xsl:text>doc-type:bachelorThesis</xsl:text>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:text>doc-type:</xsl:text>
-                <xsl:value-of select="."/>
-            </xsl:otherwise>
-        </xsl:choose>
+    <xsl:template name="dcType" >
+        <xsl:text>doc-type:</xsl:text><xsl:value-of select="php:functionString('Application_Xslt::dcType', .)" />
     </xsl:template>
 
     <xsl:template match="@ContributingCorporation" mode="oai_dc">
@@ -413,4 +399,3 @@
     </xsl:template>
 
 </xsl:stylesheet>
-

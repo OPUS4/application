@@ -157,7 +157,8 @@ class Oai_Model_Server extends Application_Model_Abstract
                 'fileUrl',
                 'frontdoorUrl',
                 'transferUrl',
-                'dcmiType'
+                'dcmiType',
+                'dcType'
             ]
         );
         $this->_proc->setParameter('', 'urnResolverUrl', $this->getConfig()->urn->resolverUrl);
@@ -386,7 +387,6 @@ class Oai_Model_Server extends Application_Model_Abstract
 
         $sets = $oaiSets->getSets();
 
-
         foreach ($sets as $type => $name) {
             $opusDoc = $this->_xml->createElement('Opus_Sets');
             $typeAttr = $this->_xml->createAttribute('Type');
@@ -559,8 +559,10 @@ class Oai_Model_Server extends Application_Model_Abstract
 
         $node = $this->_xml->importNode($domNode, true);
 
+        $dcTypeHelper = new Application_View_Helper_DcType();
+
         $type = $document->getType();
-        $this->_addSpecInformation($node, 'doc-type:' . $type);
+        $this->_addSpecInformation($node, 'doc-type:' . $dcTypeHelper->dcType($type));
 
         $bibliography = $document->getBelongsToBibliography() == 1 ? 'true' : 'false';
         $this->_addSpecInformation($node, 'bibliography:' . $bibliography);

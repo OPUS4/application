@@ -30,9 +30,8 @@
  * @package     Module_Oai
  * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
  * @author      Simone Finkbeiner <simone.finkbeiner@ub.uni-stuttgart.de>
- * @copyright   Copyright (c) 2009, OPUS 4 development team
+ * @copyright   Copyright (c) 2009-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 -->
 
@@ -340,7 +339,6 @@
         </set>
     </xsl:template>
 
-
     <xsl:template match="Opus_Document">
       <xsl:choose>
          <xsl:when test="$oai_verb='ListIdentifiers'">
@@ -426,13 +424,12 @@
                      </xsl:when>
                  </xsl:choose>
                  </metadata>
-
             </xsl:when>
-            </xsl:choose>
+        </xsl:choose>
     </xsl:template>
 
     <xsl:template match="SetSpec">
-       <setSpec><xsl:value-of select="@Value"/></setSpec>
+				<setSpec><xsl:value-of select="@Value"/></setSpec>
     </xsl:template>
 
 </xsl:stylesheet>
