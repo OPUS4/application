@@ -30,9 +30,9 @@
  * @package     Module_Oai
  * @author      Simone Finkbeiner <simone.finkbeiner@ub.uni-stuttgart.de>
  * @author      Thoralf Klein <thoralf.klein@zib.de>
- * @copyright   Copyright (c) 2009-2012, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2009-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 -->
 
@@ -124,87 +124,7 @@
             </dcterms:issued>
 
             <dc:type xsi:type="dini:PublType">
-                 <xsl:choose>
-                   <xsl:when test="@Type='article'">
-                       <xsl:text>article</xsl:text>
-                   </xsl:when>
-                   <xsl:when test="@Type='bachelorthesis'">
-                       <xsl:text>bachelorThesis</xsl:text>
-                   </xsl:when>
-                   <xsl:when test="@Type='book'">
-                       <xsl:text>book</xsl:text>
-                   </xsl:when>
-                   <xsl:when test="@Type='bookpart'">
-                       <xsl:text>bookPart</xsl:text>
-                   </xsl:when>
-                   <xsl:when test="@Type='conferenceobject'">
-                       <xsl:text>conferenceObject</xsl:text>
-                   </xsl:when>
-                   <xsl:when test="@Type='contributiontoperiodical'">
-                       <xsl:text>contributionToPeriodical</xsl:text>
-                   </xsl:when>
-                   <xsl:when test="@Type='coursematerial'">
-                       <xsl:text>CourseMaterial</xsl:text>
-                   </xsl:when>
-                   <xsl:when test="@Type='diplom'">
-                       <xsl:text>masterThesis</xsl:text>
-                   </xsl:when>
-                   <xsl:when test="@Type='doctoralthesis'">
-                       <xsl:text>doctoralThesis</xsl:text>
-                   </xsl:when>
-                   <xsl:when test="@Type='examen'">
-                       <xsl:text>masterThesis</xsl:text>
-                   </xsl:when>
-                   <xsl:when test="@Type='habilitation'">
-                       <xsl:text>doctoralThesis</xsl:text>
-                   </xsl:when>
-                   <xsl:when test="@Type='image'">
-                       <xsl:text>Image</xsl:text>
-                   </xsl:when>
-                   <xsl:when test="@Type='lecture'">
-                       <xsl:text>lecture</xsl:text>
-                   </xsl:when>
-                   <xsl:when test="@Type='magister'">
-                       <xsl:text>masterThesis</xsl:text>
-                   </xsl:when>
-                   <xsl:when test="@Type='masterthesis'">
-                       <xsl:text>masterThesis</xsl:text>
-                   </xsl:when>
-                   <xsl:when test="@Type='movingimage'">
-                       <xsl:text>MovingImage</xsl:text>
-                   </xsl:when>
-                   <xsl:when test="@Type='other'">
-                       <xsl:text>Other</xsl:text>
-                   </xsl:when>
-                   <xsl:when test="@Type='periodical'">
-                       <xsl:text>Periodical</xsl:text>
-                   </xsl:when>
-                   <xsl:when test="@Type='periodicalpart'">
-                       <xsl:text>PeriodicalPart</xsl:text>
-                   </xsl:when>
-                   <xsl:when test="@Type='preprint'">
-                       <xsl:text>preprint</xsl:text>
-                   </xsl:when>
-                   <xsl:when test="@Type='report'">
-                       <xsl:text>report</xsl:text>
-                   </xsl:when>
-                   <xsl:when test="@Type='review'">
-                       <xsl:text>review</xsl:text>
-                   </xsl:when>
-                   <xsl:when test="@Type='sound'">
-                       <xsl:text>Sound</xsl:text>
-                   </xsl:when>
-                   <xsl:when test="@Type='studythesis'">
-                       <xsl:text>StudyThesis</xsl:text>
-                   </xsl:when>
-                   <xsl:when test="@Type='workingpaper'">
-                       <xsl:text>workingPaper</xsl:text>
-                   </xsl:when>
-                   <xsl:otherwise>
-                     <xsl:value-of select="@Type" />
-                       <xsl:text>Other</xsl:text>
-                   </xsl:otherwise>
-                 </xsl:choose>
+                <xsl:value-of select="php:function('Application_Xslt:dcType, @Type')" />
             </dc:type>
 
             <dc:type xsi:type="dcterms:DCMIType">
