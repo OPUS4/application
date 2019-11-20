@@ -157,7 +157,8 @@ class Oai_Model_Server extends Application_Model_Abstract
                 'fileUrl',
                 'frontdoorUrl',
                 'transferUrl',
-                'dcmiType'
+                'dcmiType',
+                'dcType'
             ]
         );
         $this->_proc->setParameter('', 'urnResolverUrl', $this->getConfig()->urn->resolverUrl);

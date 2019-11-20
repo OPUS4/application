@@ -30,9 +30,8 @@
  * @package     Module_Oai
  * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
  * @author      Simone Finkbeiner <simone.finkbeiner@ub.uni-stuttgart.de>
- * @copyright   Copyright (c) 2009, OPUS 4 development team
+ * @copyright   Copyright (c) 2009-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 -->
 
@@ -464,7 +463,7 @@
 						<xsl:when test="@Value = 'doc-type:review'">doc-type:review</xsl:when>
 						<xsl:when test="@Value = 'doc-type:radio'">doc-type:Sound</xsl:when>
 						<xsl:when test="@Value = 'doc-type:score'">doc-type:MusicalNotation</xsl:when>
-						<xsl:when test="@Value = 'doc-type:sound'">doc-type:Sound</xsl:when> 
+						<xsl:when test="@Value = 'doc-type:sound'">doc-type:Sound</xsl:when>
 						<xsl:otherwise><xsl:value-of select="@Value"/></xsl:otherwise>
 					</xsl:choose>
 				</xsl:variable>
