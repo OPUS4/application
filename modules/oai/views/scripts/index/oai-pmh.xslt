@@ -339,7 +339,6 @@
         </set>
     </xsl:template>
 
-
     <xsl:template match="Opus_Document">
       <xsl:choose>
          <xsl:when test="$oai_verb='ListIdentifiers'">
@@ -425,51 +424,12 @@
                      </xsl:when>
                  </xsl:choose>
                  </metadata>
-
             </xsl:when>
-            </xsl:choose>
+        </xsl:choose>
     </xsl:template>
 
     <xsl:template match="SetSpec">
-		<xsl:choose>
-			<xsl:when test="not(starts-with(@Value,'doc'))">
 				<setSpec><xsl:value-of select="@Value"/></setSpec>
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:variable name="translatedType">
-					<xsl:choose>
-						<xsl:when test="@Value = 'doc-type:diplthesis' or @Value = 'doc-type:diplom'">doc-type:masterThesis</xsl:when>
-						<xsl:when test="@Value = 'doc-type:habilitation' or @Value = 'doc-type:doctoralthesis'">doc-type:doctoralThesis</xsl:when>
-						<xsl:when test="@Value = 'doc-type:bachelorthesis'">doc-type:bachelorThesis</xsl:when>
-						<xsl:when test="@Value = 'doc-type:workingpaper'">doc-type:workingPaper</xsl:when>
-						<xsl:when test="@Value = 'doc-type:studythesis'">doc-type:StudyThesis</xsl:when>
-						<xsl:when test="@Value = 'doc-type:article'">doc-type:article</xsl:when>
-						<xsl:when test="@Value = 'doc-type:book'">doc-type:book</xsl:when>
-						<xsl:when test="@Value = 'doc-type:bookpart'">doc-type:bookPart</xsl:when>
-						<xsl:when test="@Value = 'doc-type:conferenceobject'">doc-type:conferenceObject</xsl:when>
-						<xsl:when test="@Value = 'doc-type:contributiontoperiodical'">doc-type:contributionToPeriodical</xsl:when>
-						<xsl:when test="@Value = 'doc-type:coursematerial'">doc-type:CourseMaterial</xsl:when>
-						<xsl:when test="@Value = 'doc-type:examen'">doc-type:masterThesis</xsl:when>
-						<xsl:when test="@Value = 'doc-type:image'">doc-type:Image</xsl:when>
-						<xsl:when test="@Value = 'doc-type:lecture'">doc-type:lecture</xsl:when>
-						<xsl:when test="@Value = 'doc-type:magister'">doc-type:masterThesis</xsl:when>
-						<xsl:when test="@Value = 'doc-type:masterthesis'">doc-type:masterThesis</xsl:when>
-						<xsl:when test="@Value = 'doc-type:movingimage'">doc-type:MovingImage</xsl:when>
-						<xsl:when test="@Value = 'doc-type:other'">doc-type:Other</xsl:when>
-						<xsl:when test="@Value = 'doc-type:periodical'">doc-type:Periodical</xsl:when>
-						<xsl:when test="@Value = 'doc-type:periodicalpart'">doc-type:PeriodicalPart</xsl:when>
-						<xsl:when test="@Value = 'doc-type:preprint'">doc-type:preprint</xsl:when>
-						<xsl:when test="@Value = 'doc-type:report'">doc-type:report</xsl:when>
-						<xsl:when test="@Value = 'doc-type:review'">doc-type:review</xsl:when>
-						<xsl:when test="@Value = 'doc-type:radio'">doc-type:Sound</xsl:when>
-						<xsl:when test="@Value = 'doc-type:score'">doc-type:MusicalNotation</xsl:when>
-						<xsl:when test="@Value = 'doc-type:sound'">doc-type:Sound</xsl:when>
-						<xsl:otherwise><xsl:value-of select="@Value"/></xsl:otherwise>
-					</xsl:choose>
-				</xsl:variable>
-				<setSpec><xsl:value-of select="$translatedType"/></setSpec>
-			</xsl:otherwise>
-		</xsl:choose>
     </xsl:template>
 
 </xsl:stylesheet>
