@@ -27,6 +27,7 @@
  * @category    Tests
  * @package     Export
  * @author      Sascha Szott <opus-development@saschaszott.de>
+ * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
@@ -54,7 +55,7 @@ class Export_Marc21ExportTest extends ControllerTestCase
 
         $this->assertResponseCode(200);
 
-        $this->assertXpathContentContains('//marc:leader', '00000nab a22000005  4500');
+        $this->assertXpathContentContains('//marc:leader', '00000naa a22000005  4500');
         $this->assertXpathContentContains('//marc:controlfield[@tag="001"]', 'docId-' . $docId);
         $this->assertXpathContentContains('//marc:controlfield[@tag="007"]', 'cr uuu---uunan');
         $this->assertXpathContentContains('//marc:datafield[@tag="041"]/marc:subfield[@code="a"]', 'eng');
