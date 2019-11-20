@@ -67,8 +67,11 @@ class Oai_Model_Sets extends Application_Model_Abstract
 
         $sets = [];
 
+        $dcTypeHelper = new Application_View_Helper_DcType();
+
         $finder = new Opus_DocumentFinder();
         $finder->setServerState('published');
+
         foreach ($finder->groupedTypesPlusCount() as $doctype => $row) {
             if (0 == preg_match("/^$setSpecPattern$/", $doctype)) {
                 $msg = "Invalid SetSpec (doctype='".$doctype."')."
@@ -77,9 +80,10 @@ class Oai_Model_Sets extends Application_Model_Abstract
                 continue;
             }
 
-            $setSpec = 'doc-type:' . $doctype;
-            // $count = $row['count'];
-            $sets[$setSpec] = "Set for document type '$doctype'";
+            $dcType = $dcTypeHelper->dcType($doctype);
+
+            $setSpec = "doc-type:$dcType";
+            $sets[$setSpec] = ucfirst($dcType);
         }
 
         return $sets;
