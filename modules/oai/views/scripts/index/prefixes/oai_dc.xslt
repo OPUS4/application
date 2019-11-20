@@ -230,7 +230,7 @@
             </xsl:otherwise>
         </xsl:choose>
         <dc:type>
-            <xsl:call-template name="dcmiType"/>
+            <xsl:call-template name="dcType"/>
         </dc:type>
     </xsl:template>
 
@@ -284,8 +284,8 @@
         </xsl:choose>
      </xsl:template>
 
-     <xsl:template name="dcmiType" >
-          <xsl:choose>
+     <xsl:template name="dcType" >
+		<xsl:choose>
             <xsl:when test=". = 'diplthesis' or  . = 'diplom'">
                 <xsl:text>doc-type:masterThesis</xsl:text>
             </xsl:when>
@@ -294,7 +294,76 @@
             </xsl:when>
             <xsl:when test=". = 'bachelorthesis'">
                 <xsl:text>doc-type:bachelorThesis</xsl:text>
+			</xsl:when>
+			<xsl:when test=". = 'workingpaper'">
+                <xsl:text>doc-type:workingPaper</xsl:text>
             </xsl:when>
+			<xsl:when test=". = 'studythesis'">
+                <xsl:text>doc-type:StudyThesis</xsl:text>
+            </xsl:when>            
+			<xsl:when test=". = 'article'">
+			   <xsl:text>doc-type:article</xsl:text>
+		    </xsl:when>
+		    <xsl:when test=". = 'book'">
+			   <xsl:text>doc-type:book</xsl:text>
+		    </xsl:when>
+		    <xsl:when test=". = 'bookpart'">
+			   <xsl:text>doc-type:bookPart</xsl:text>
+		    </xsl:when>
+		    <xsl:when test=". = 'conferenceobject'">
+			   <xsl:text>doc-type:conferenceObject</xsl:text>
+		    </xsl:when>
+		    <xsl:when test=". = 'contributiontoperiodical'">
+			   <xsl:text>doc-type:contributionToPeriodical</xsl:text>
+		    </xsl:when>
+		    <xsl:when test=". = 'coursematerial'">
+			   <xsl:text>doc-type:CourseMaterial</xsl:text>
+		    </xsl:when>
+		    <xsl:when test=". = 'examen'">
+			   <xsl:text>doc-type:masterThesis</xsl:text>
+		    </xsl:when>
+			<xsl:when test=". = 'image'">
+			   <xsl:text>doc-type:Image</xsl:text>
+		    </xsl:when>
+		    <xsl:when test=". = 'lecture'">
+			   <xsl:text>doc-type:lecture</xsl:text>
+		    </xsl:when>
+		    <xsl:when test=". = 'magister'">
+			   <xsl:text>doc-type:masterThesis</xsl:text>
+		    </xsl:when>
+		    <xsl:when test=". = 'masterthesis'">
+			   <xsl:text>doc-type:masterThesis</xsl:text>
+		    </xsl:when>
+		    <xsl:when test=". = 'movingimage'">
+			   <xsl:text>doc-type:MovingImage</xsl:text>
+		    </xsl:when>
+		    <xsl:when test=". = 'other'">
+			   <xsl:text>doc-type:Other</xsl:text>
+		    </xsl:when>
+		    <xsl:when test=". = 'periodical'">
+			   <xsl:text>doc-type:Periodical</xsl:text>
+		    </xsl:when>
+		    <xsl:when test=". = 'periodicalpart'">
+			   <xsl:text>doc-type:PeriodicalPart</xsl:text>
+		    </xsl:when>
+		    <xsl:when test=". = 'preprint'">
+			   <xsl:text>doc-type:preprint</xsl:text>
+		    </xsl:when>
+		    <xsl:when test=". = 'report'">
+			   <xsl:text>doc-type:report</xsl:text>
+		    </xsl:when>
+		    <xsl:when test=". = 'review'">
+			   <xsl:text>doc-type:review</xsl:text>
+		    </xsl:when>
+			<xsl:when test=". = 'radio'">
+			   <xsl:text>doc-type:Sound</xsl:text>
+		    </xsl:when>
+		    <xsl:when test=". = 'score'">
+			   <xsl:text>doc-type:MusicalNotation</xsl:text>
+		    </xsl:when>
+		    <xsl:when test=". = 'sound'">
+			   <xsl:text>doc-type:Sound</xsl:text>
+		    </xsl:when>
             <xsl:otherwise>
                 <xsl:text>doc-type:</xsl:text>
                 <xsl:value-of select="."/>
@@ -413,4 +482,3 @@
     </xsl:template>
 
 </xsl:stylesheet>
-
