@@ -49,7 +49,7 @@ class Application_View_Helper_DcTypeTest extends ControllerTestCase
 
     public function testDcTypeForUnknownDocumentType()
     {
-        $this->assertEquals('unknown', $this->helper->dcType('unknown'));
+        $this->assertEquals('Other', $this->helper->dcType('unknown'));
     }
 
     public function testDcTypeSound()

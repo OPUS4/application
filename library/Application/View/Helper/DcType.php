@@ -48,16 +48,10 @@ class Application_View_Helper_DcType extends Application_View_Helper_Abstract
 
         if (isset($config->documentType->$docType->dcType)) {
             $dcType = $config->documentType->$docType->dcType;
+        } elseif (isset($config->documentType->default->dcType)) {
+            $dcType = $config->documentType->default->dcType;
         } else {
-            if (strlen(trim($docType)) > 0) {
-                $dcType = $docType;
-            } else {
-                if (isset($config->documentType->default->dcType)) {
-                    $dcType = $config->documentType->default->dcType;
-                } else {
-                    $dcType = 'Other';
-                }
-            }
+            $dcType = 'Other';
         }
 
         return $dcType;
