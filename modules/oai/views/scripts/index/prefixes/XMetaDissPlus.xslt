@@ -124,7 +124,7 @@
             </dcterms:issued>
 
             <dc:type xsi:type="dini:PublType">
-                <xsl:value-of select="php:function('Application_Xslt:dcType, @Type')" />
+                <xsl:value-of select="php:functionString('Application_Xslt::dcType', @Type)" />
             </dc:type>
 
             <dc:type xsi:type="dcterms:DCMIType">
