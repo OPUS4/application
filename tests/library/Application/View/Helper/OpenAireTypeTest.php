@@ -42,7 +42,8 @@ class Application_View_Helper_OpenAireTypeTest extends ControllerTestCase
         $this->helper = new Application_View_Helper_OpenAireType();
     }
 
-    public function typeDataProvider() {
+    public function typeDataProvider()
+    {
         return [
             ['masterthesis', 'masterThesis'],
             ['bachelorthesis', 'bachelorThesis'],
