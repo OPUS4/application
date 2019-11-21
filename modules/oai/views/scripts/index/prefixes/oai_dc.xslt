@@ -235,53 +235,7 @@
     </xsl:template>
 
     <xsl:template name="compareDocumentName" >
-        <xsl:choose>
-            <xsl:when test=". = 'masterthesis'">
-                <xsl:text>info:eu-repo/semantics/masterThesis</xsl:text>
-            </xsl:when>
-            <xsl:when test=". = 'bachelorthesis'">
-                <xsl:text>info:eu-repo/semantics/bachelorThesis</xsl:text>
-            </xsl:when>
-            <xsl:when test=". = 'doctoralthesis'">
-                <xsl:text>info:eu-repo/semantics/doctoralThesis</xsl:text>
-            </xsl:when>
-            <xsl:when test=". = 'bookpart'">
-                <xsl:text>info:eu-repo/semantics/bookPart</xsl:text>
-            </xsl:when>
-            <xsl:when test=". = 'conferenceobject'">
-                <xsl:text>info:eu-repo/semantics/conferenceObject</xsl:text>
-            </xsl:when>
-            <xsl:when test=". = 'workingpaper'">
-                <xsl:text>info:eu-repo/semantics/workingPaper</xsl:text>
-            </xsl:when>
-            <xsl:when test=". = 'contributiontoperiodical'">
-                <xsl:text>info:eu-repo/semantics/contributionToPeriodical</xsl:text>
-            </xsl:when>
-            <xsl:when test=". = 'article'">
-                <xsl:text>info:eu-repo/semantics/article</xsl:text>
-            </xsl:when>
-            <xsl:when test=". = 'book'">
-                <xsl:text>info:eu-repo/semantics/book</xsl:text>
-            </xsl:when>
-            <xsl:when test=". = 'review'">
-                <xsl:text>info:eu-repo/semantics/review</xsl:text>
-            </xsl:when>
-            <xsl:when test=". = 'lecture'">
-                <xsl:text>info:eu-repo/semantics/lecture</xsl:text>
-            </xsl:when>
-            <xsl:when test=". = 'preprint'">
-                <xsl:text>info:eu-repo/semantics/preprint</xsl:text>
-            </xsl:when>
-            <xsl:when test=". = 'report'">
-                <xsl:text>info:eu-repo/semantics/report</xsl:text>
-            </xsl:when>
-            <xsl:when test=".='habilitation'" >
-                <xsl:text>info:eu-repo/semantics/doctoralThesis</xsl:text>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:text>info:eu-repo/semantics/other</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
+        <xsl:text>info:eu-repo/semantics/</xsl:text><xsl:value-of select="php:functionString('Application_Xslt::openAireType', .)" />
      </xsl:template>
 
     <xsl:template name="dcType" >
