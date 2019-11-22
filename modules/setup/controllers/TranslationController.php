@@ -34,7 +34,7 @@
 
 /**
  *
- * TODO refactor camel case in controller name; leads to static-page in translation keys and URLs
+ * TODO rename controller to InfopagesController (or something better)
  */
 class Setup_TranslationController extends Application_Controller_Action
 {

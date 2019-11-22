@@ -1,5 +1,4 @@
 <?php
-
 /*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -117,7 +116,7 @@ class AdministratorRoleTest extends ControllerTestCase
     {
         $this->useEnglish();
         $this->dispatch('/setup/translation');
-        $this->assertQueryContentContains('//html/head/title', 'Static Pages', 'setup/translation not asserted');
+        $this->assertQueryContentContains('//html/head/title', 'Translations', 'setup/translation not asserted');
     }
 
     /**

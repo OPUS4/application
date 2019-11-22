@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -28,29 +27,20 @@
  * @category    Application
  * @package     Module_Setup
  * @author      Edouard Simon (edouard.simon@zib.de)
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
- *
+ * TODO reduce vertical height of form ("Search: TEXT Button")
  */
 class Setup_Form_LanguageSearch extends Zend_Form
 {
 
-    protected $_sortKeys = ['unit', 'module', 'directory', 'filename', 'language', 'variant'];
-
-    public function getSortKeys()
-    {
-        return $this->_sortKeys;
-    }
-
     public function init()
     {
         $this->addElement('text', 'search');
-
-        $this->addElement('select', 'sort');
         $this->addElement('submit', 'Anzeigen');
     }
 }

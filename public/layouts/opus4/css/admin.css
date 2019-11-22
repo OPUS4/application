@@ -1594,6 +1594,34 @@ ul.links input:hover {
     background-color: #b7cde7;
 }
 
+.adminContainer table.table-translations {
+    font-size: 1.2em;
+}
+
+.adminContainer table.table-translations tbody:hover {
+    background-color: #b7cde7;
+}
+
+.adminContainer table.table-translations tbody tr:first-child td {
+    border-top: 2px solid #b7cde7;
+}
+
+.adminContainer table.table-translations td.lang {
+    font-weight: bold;
+}
+
+.adminContainer table.table-translations span.hilite {
+    font-weight: bold;
+}
+
+.adminContainer table.table-translations td.key {
+    font-family: monospace;
+}
+
+.adminContainer table.table-translations td.module {
+    font-size: 0.8em;
+}
+
 .adminContainer td.edit a {
     background-position: -20px -257px;
     padding-left: 19px;
