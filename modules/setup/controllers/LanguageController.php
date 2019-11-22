@@ -96,7 +96,6 @@ class Setup_LanguageController extends Application_Controller_Action
      */
     public function addAction()
     {
-
     }
 
     /**
@@ -110,7 +109,6 @@ class Setup_LanguageController extends Application_Controller_Action
         $translationKey = $this->getParam('key');
 
         if (! is_null($translationKey)) {
-
         }
     }
 
