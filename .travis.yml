@@ -27,14 +27,14 @@ script:
   - ant -version
   - travis_fold start "prepare_dependencies"
   - ant prepare-test-workspace prepare-workspace prepare-config -DdbUserName=root -DdbAdminName=root
-  - ant download-solr -DsolrVersion=7.7.1 -DdownloadDir=$HOME/downloads
-  - cd solr-7.7.1
+  - ant download-solr -DsolrVersion=7.7.2 -DdownloadDir=$HOME/downloads
+  - cd solr-7.7.2
   - ./bin/solr start
   - ./bin/solr create -c opus4
   - cd server/solr/opus4/conf
   - rm -f managed-schema schema.xml solrconfig.xml
-  - ln -s "$TRAVIS_BUILD_DIR/vendor/opus4-repo/search/config/schema.xml" schema.xml
-  - ln -s "$TRAVIS_BUILD_DIR/vendor/opus4-repo/search/config/solrconfig.xml" solrconfig.xml
+  - ln -s "$TRAVIS_BUILD_DIR/vendor/opus4-repo/search/conf/schema.xml" schema.xml
+  - ln -s "$TRAVIS_BUILD_DIR/vendor/opus4-repo/search/conf/solrconfig.xml" solrconfig.xml
   - cd ../../../../
   - ./bin/solr restart
   - cd ..

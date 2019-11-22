@@ -12,7 +12,7 @@
 # GNU General Public License for more details.
 #
 # @author      Jens Schwidder <schwidder@zib.de>
-# @copyright   Copyright (c) 2010-2018, OPUS 4 development team
+# @copyright   Copyright (c) 2010-2019, OPUS 4 development team
 # @license     http://www.gnu.org/licenses/gpl.html General Public License
 
 #
@@ -39,7 +39,7 @@ fi
 
 # START USER-CONFIGURATION
 
-SOLR_VERSION='7.7.1'
+SOLR_VERSION='7.7.2'
 
 SOLR_SERVER_URL="http://archive.apache.org/dist/lucene/solr/$SOLR_VERSION/solr-$SOLR_VERSION.tgz"
 
@@ -108,12 +108,12 @@ mkdir -p "${SOLR_CORE_DIR}/data/solr/conf"
 # put configuration and schema files
 ln -sf "$BASEDIR/vendor/opus4-repo/search/core.properties" "${SOLR_CORE_DIR}/data/solr"
 
-cp "${BASEDIR}/vendor/opus4-repo/search/config/schema.xml" "${SOLR_CORE_DIR}/data/solr/conf"
-cp "${BASEDIR}/vendor/opus4-repo/search/config/solrconfig.xml" "${SOLR_CORE_DIR}/data/solr/conf"
+ln -sf "${BASEDIR}/vendor/opus4-repo/search/conf/schema.xml" "${SOLR_CORE_DIR}/data/solr/conf"
+ln -sf "${BASEDIR}/vendor/opus4-repo/search/conf/solrconfig.xml" "${SOLR_CORE_DIR}/data/solr/conf"
 
 # provide logging properties
 # TODO check integration of logging.properties with recent versions of solr
-ln -sf "$BASEDIR/vendor/opus4-repo/search/config/logging.properties" opus4/logging.properties
+ln -sf "$BASEDIR/vendor/opus4-repo/search/conf/logging.properties" opus4/logging.properties
 
 # detect URL prefix to use
 SOLR_MAJOR="${SOLR_VERSION%%.*}"
