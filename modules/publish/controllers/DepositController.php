@@ -39,7 +39,6 @@ class Publish_DepositController extends Application_Controller_Action
     public $depositData = [];
     public $log;
     public $session;
-    public $document;
 
     public function __construct(
         Zend_Controller_Request_Abstract $request,
@@ -112,11 +111,12 @@ class Publish_DepositController extends Application_Controller_Action
             throw new Application_Exception('publish_error_unexpected');
         }
 
-        $this->document = $depositData->getDocument();
-        $this->document->setServerState('unpublished');
+        $document = $depositData->getDocument();
+        $document->setServerState('unpublished');
+        $this->addSourceEnrichment($document);
 
         try {
-            $docId = $this->document->store();
+            $docId = $document->store();
         } catch (Exception $e) {
             // TODO wie sollte die Exception sinnvoll behandelt werden?
             $this->log->err("Document could not be stored successfully: " . $e->getMessage());
@@ -146,13 +146,13 @@ class Publish_DepositController extends Application_Controller_Action
                 "module" => "admin",
                 "controller" => "document",
                 "action" => "index",
-                "id" => $this->document->getId()
+                "id" => $document->getId()
             ],
             null,
             true
         );
         $notification->prepareMail(
-            $this->document,
+            $document,
             $this->view->serverUrl() . $url
         );
 
@@ -179,5 +179,19 @@ class Publish_DepositController extends Application_Controller_Action
         }
         //unset all possible session content
         $this->session->unsetAll();
+    }
+
+    /**
+     * Fügt das interne Enrichment opus.import mit dem Wert 'publish' zum Dokument hinzu.
+     *
+     * @param Opus_Document $document
+     * @throws \Opus\Model\Exception
+     */
+    private function addSourceEnrichment($document)
+    {
+        $enrichment = new Opus_Enrichment();
+        $enrichment->setKeyName('opus.source');
+        $enrichment->setValue('publish');
+        $document->addEnrichment($enrichment);
     }
 }

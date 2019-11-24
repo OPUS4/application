@@ -205,8 +205,11 @@ class DepositTestHelper extends PHPUnit_Framework_Assert
                 case Application_Import_AdditionalEnrichments::OPUS_IMPORT_USER:
                     $this->assertEquals('sworduser', $enrichment->getValue());
                     break;
+                case Application_Import_AdditionalEnrichments::OPUS_SOURCE:
+                    $this->assertEquals('sword', $enrichment->getValue());
+                    break;
                 default:
-                    if ($expectedNumOfEnrichments == 4) {
+                    if ($expectedNumOfEnrichments == 5) {
                         throw new Exception('unexpected enrichment key ' . $enrichment->getKeyName());
                     }
             }
@@ -218,7 +221,7 @@ class DepositTestHelper extends PHPUnit_Framework_Assert
         $fileName,
         $checksum,
         $abstractExist = true,
-        $numOfEnrichments = 4,
+        $numOfEnrichments = 5,
         $numOfCollections = 1
     ) {
 
