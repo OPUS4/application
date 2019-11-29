@@ -58,20 +58,25 @@ class Setup_LanguageController extends Application_Controller_Action
         $this->view->form = $this->getSearchForm();
     }
 
+    /**
+     * @throws Setup_Model_FileNotReadableException
+     *
+     * TODO move handling of allowed modules into manager
+     */
     public function showAction()
     {
-        $searchTerm = $this->_request->getParam('search');
-        $sortKey = $this->_request->getParam('sort', 'unit');
-        $config = $this->getConfig()->toArray();
+        $searchTerm = $this->getParam('search');
+        $sortKey = $this->getParam('sort', 'key');
+        $config = $this->getConfig();
 
-        if (! isset($config['setup']['translation']['modules']['allowed'])) {
+        if (! isset($config->setup->translation->modules->allowed)) {
             $this->_helper->Redirector->redirectTo(
                 'error',
                 ['failure' => 'setup_language_translation_modules_missing']
             );
         }
 
-        $moduleNames = explode(',', $config['setup']['translation']['modules']['allowed']);
+        $moduleNames = explode(',', $config->setup->translation->modules->allowed);
 
         $translationManager = new Application_Translate_TranslationManager();
         $translationManager->setModules($moduleNames);

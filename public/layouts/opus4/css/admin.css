@@ -1622,6 +1622,11 @@ ul.links input:hover {
     font-size: 0.8em;
 }
 
+.adminContainer table.table-translations span.filename {
+    font-color: gray;
+    font-family: monospace;
+}
+
 .adminContainer td.edit a {
     background-position: -20px -257px;
     padding-left: 19px;
