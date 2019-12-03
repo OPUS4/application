@@ -38,6 +38,8 @@
 class Application_Translate_TranslationManagerTest extends ControllerTestCase
 {
 
+    protected $additionalResources = ['database', 'translation'];
+
     /**
      * @var Application_Translate_TranslationManager
      */
@@ -188,5 +190,11 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
         $this->assertInternalType('array', $result);
         $this->assertCount(1, $result);
         $this->assertEquals('EmbargoDate', $result[0]['key']);
+    }
+
+    public function testGetMergedTranslations()
+    {
+        $this->markTestIncomplete('not implemented yet');
+        $translations = $this->object->getMergedTranslations();
     }
 }

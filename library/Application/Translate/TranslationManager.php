@@ -146,7 +146,7 @@ class Application_Translate_TranslationManager
                                     $row['translations'][$lang] = $value;
                                 }
 
-                                $translations[] = $row;
+                                $translations[$key] = $row;
                                 $sortArray[] = $row[$sortKey];
                             }
                         }
@@ -160,6 +160,53 @@ class Application_Translate_TranslationManager
         array_multisort($sortArray, $sortOrder, SORT_STRING, $translations);
 
         return $translations;
+    }
+
+    /**
+     * Returns all translations from TMX files and database.
+     *
+     * - key
+     * - module
+     * - directory
+     * - filename
+     * - translations
+     *   - en -> English string
+     *   - de -> German string
+     *
+     * From database we get
+     *
+     *   key -> [
+     *       'en' -> Value,
+     *       'de' -> Value
+     *   ]
+     *
+     *
+     * @param string $sortKey
+     * @param int $sortOrder
+     */
+    public function getMergedTranslations($sortKey = self::SORT_UNIT, $sortOrder = SORT_ASC)
+    {
+        // get translations from TMX files
+        $translations = $this->getTranslations($sortKey, $sortOrder);
+
+        $database = new Opus_Translate_Dao();
+
+        $dbTranslations = $database->getAll();
+
+        foreach ($dbTranslations as $key => $languages) {
+            if (array_key_exists($key, $translations)) {
+                // key exists in TMX files and needs to be marked as edited
+                // keep original values from TMX files
+                $translations[$key]['translationsTmx'] = $translations[$key]['translations'];
+                $translations[$key]['translations'] = $languages;
+            } else {
+                // key does not exist in TMX files and needs to be added
+                $translations[$key]['key'] = $key;
+                $translations[$key]['translations'] = $languages;
+            }
+        }
+
+        return $dbTranslations;
     }
 
     /**
