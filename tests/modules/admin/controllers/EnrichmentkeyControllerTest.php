@@ -773,6 +773,73 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         }
     }
 
+    public function testInitializedNewFormWithoutKeyName() {
+        $this->dispatch($this->getControllerPath() . '/new');
+
+        // Formularfeld "Name" soll nicht gefüllt sein
+        $this->assertXpath('//form//input[@id="Name" and @value=""]');
+    }
+
+    public function testInitializedNewFormWithUnregisteredKeyName() {
+        $doc = $this->createTestDocument();
+
+        $enrichment = new Opus_Enrichment();
+        $enrichment->setKeyName('unregistered');
+        $enrichment->setValue('value');
+
+        $doc->addEnrichment($enrichment);
+        $doc->store();
+
+        $this->dispatch($this->getControllerPath() . '/new/id/unregistered');
+
+        // Formularfeld "Name" muss gefüllt sein
+        $this->assertXpath('//form//input[@id="Name" and @value="unregistered"]');
+    }
+
+    public function testInitializedNewFormWithRegisteredUnusedKeyName() {
+        $enrichmentKey = new Opus_EnrichmentKey();
+        $enrichmentKey->setName('unused');
+        $id = $enrichmentKey->store();
+
+        $this->dispatch($this->getControllerPath() . '/new/id/unused');
+
+        $enrichmentKey = new Opus_EnrichmentKey($id);
+        $enrichmentKey->delete();
+
+        // Formularfeld "Name" darf nicht gefüllt sein
+        $this->assertXpath('//form//input[@id="Name" and @value=""]');
+    }
+
+    public function testInitializedNewFormWithRegisteredUsedKeyName() {
+        $enrichmentKey = new Opus_EnrichmentKey();
+        $enrichmentKey->setName('used');
+        $id = $enrichmentKey->store();
+
+        $doc = $this->createTestDocument();
+
+        $enrichment = new Opus_Enrichment();
+        $enrichment->setKeyName('used');
+        $enrichment->setValue('value');
+
+        $doc->addEnrichment($enrichment);
+        $doc->store();
+
+        $this->dispatch($this->getControllerPath() . '/new/id/used');
+
+        $enrichmentKey = new Opus_EnrichmentKey($id);
+        $enrichmentKey->delete();
+
+        // Formularfeld "Name" darf nicht gefüllt sein
+        $this->assertXpath('//form//input[@id="Name" and @value=""]');
+    }
+
+    public function testInitializedNewFormWithUnknownKeyName() {
+        $this->dispatch($this->getControllerPath() . '/new/id/testInitializedNewFormWithUnknownKeyName');
+
+        // Formularfeld "Name" darf nicht gefüllt sein
+        $this->assertXpath('//form//input[@id="Name" and @value=""]');
+    }
+
     public function enrichmentKeyNamesProvider()
     {
         return [
