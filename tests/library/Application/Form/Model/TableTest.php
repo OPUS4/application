@@ -133,7 +133,7 @@ class Application_Form_Model_TableTest extends ControllerTestCase
     {
         $form = new Application_Form_Model_Table();
 
-        $this->assertTrue($form->isRenderShowActionLink(null));
+        $this->assertTrue($form->isRenderShowActionLink());
     }
 
     public function testIsModifiableDefault()
@@ -180,7 +180,7 @@ class Application_Form_Model_TableTest extends ControllerTestCase
 
         $mock = $this->getMockBuilder(Zend_Controller_Action_Interface::class)->getMock();
         $form->setController($mock);
-        $form->isRenderShowActionLink(null);
+        $form->isRenderShowActionLink();
 
         $this->assertEquals('The used controller does not have the method getShowActionEnabled.', $logger->getMessages()[0]);
     }

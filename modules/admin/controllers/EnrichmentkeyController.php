@@ -140,4 +140,36 @@ class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD
             parent::deleteModel($model);
         }
     }
+
+    public function getAllModels()
+    {
+        // determine names of all enrichment keys
+        $allKeyNames = Opus_Enrichment::getAllUsedEnrichmentKeyNames();
+
+        $registeredEnrichmentKeys = parent::getAllModels();
+        $mapNamesToEnrichmentKeys = [];
+        foreach ($registeredEnrichmentKeys as $enrichmentKey) {
+            $name = $enrichmentKey->getName();
+            $mapNamesToEnrichmentKeys[$name] = $enrichmentKey;
+            if (!in_array($name, $allKeyNames)) {
+                $allKeyNames[] = $name;
+            }
+        }
+
+        sort($allKeyNames, SORT_FLAG_CASE);
+
+        $result = [];
+        foreach ($allKeyNames as $keyName) {
+            if (key_exists($keyName, $mapNamesToEnrichmentKeys)) {
+                $result[] = $mapNamesToEnrichmentKeys[$keyName];
+            }
+            else {
+                $newEnrichmentKey = new Opus_EnrichmentKey();
+                $newEnrichmentKey->setName($keyName);
+                $result[] = $newEnrichmentKey;
+            }
+        }
+        return $result;
+    }
+
 }
