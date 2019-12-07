@@ -151,7 +151,7 @@ class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD
         foreach ($registeredEnrichmentKeys as $enrichmentKey) {
             $name = $enrichmentKey->getName();
             $mapNamesToEnrichmentKeys[$name] = $enrichmentKey;
-            if (!in_array($name, $allKeyNames)) {
+            if (! in_array($name, $allKeyNames)) {
                 $allKeyNames[] = $name;
             }
         }
@@ -162,8 +162,7 @@ class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD
         foreach ($allKeyNames as $keyName) {
             if (key_exists($keyName, $mapNamesToEnrichmentKeys)) {
                 $result[] = $mapNamesToEnrichmentKeys[$keyName];
-            }
-            else {
+            } else {
                 $newEnrichmentKey = new Opus_EnrichmentKey();
                 $newEnrichmentKey->setName($keyName);
                 $result[] = $newEnrichmentKey;
@@ -171,5 +170,4 @@ class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD
         }
         return $result;
     }
-
 }
