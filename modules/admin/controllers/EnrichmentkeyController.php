@@ -231,7 +231,6 @@ class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD
                 try {
                     return new $modelClass($modelId);
                 } catch (Opus_Model_NotFoundException $omnfe) {
-
                     if (in_array($modelId, Opus_EnrichmentKey::getAllReferenced())) {
                         // Sonderbehandlung: nicht registrierter, aber in Benutzung befindlicher Enrichment Key
                         $enrichmentKey = new Opus_EnrichmentKey();
