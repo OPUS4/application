@@ -102,20 +102,22 @@ class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD
     }
 
     /**
-     * Erzeugt Formular zum Hinzufügen eines neuen Models.
+     * Erzeugt Formular zum Hinzufügen eines neuen Enrichment Keys.
+     * Wird das Formular für einen bereits in Benutzung befindlichen Enrichment Key, der noch nicht registriert ist,
+     * aufgerufen, so wird das Formularfeld für den Namen bereits gefüllt.
+     *
      * @return Application_Form_IModel
      */
     public function getNewModelForm()
     {
         $form = parent::getNewModelForm();
-        if ($this->getRequest()->isGet() === true) {
+        if ($this->getRequest()->isGet()) {
             $name = $this->getRequest()->getParam(self::PARAM_MODEL_ID);
             if (! is_null($name) && trim($name) !== '') {
-                // der Enrichment Key muss in Benutzung sein, darf aber nicht bereits registriert sein
+                // prüfe, ob bereits ein nicht registrierter Enrichment Key mit den Namen existiert, der in Benutzung ist
                 if (is_null(Opus_EnrichmentKey::fetchByName($name)) &&
                     in_array($name, Opus_EnrichmentKey::getAllReferenced())) {
-                    $model = $form->getModel()->setName($name);
-                    $form->populateFromModel($model, false);
+                    $form->setNameElementValue($name);
                 }
             }
         }
