@@ -54,7 +54,7 @@
             <td>
                 <?php if (is_null($model->getId())) : ?>
                     <?= htmlspecialchars($model->getDisplayName()) ?>
-                <?php else: ?>
+                <?php else : ?>
                     <span class="strong">
                         <?= htmlspecialchars($model->getDisplayName()) ?>
                     </span>
@@ -85,7 +85,7 @@
                 <?PHP endif ?>
             </td>
             <td class="remove">
-                <?PHP if (!is_null($model->getId()) && $this->element->isModifiable($model)) : ?>
+                <?PHP if (! is_null($model->getId()) && $this->element->isModifiable($model)) : ?>
                     <a href="<?= $this->url(['action' => 'delete', 'id' => $model->getId()]) ?>"
                     ><?= $this->translate('admin_button_remove'); ?></a>
                 <?PHP endif ?>
