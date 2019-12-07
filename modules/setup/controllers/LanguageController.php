@@ -36,11 +36,15 @@
  * TODO show controller (functionality) in menu (currently hidden)
  * TODO limit editable keys to specific modules (?)
  * TODO update documentation
+ * TODO rename controller to TranslationController
+ * TODO sorting using table header
+ * TODO link for adding new translations
+ * TODO show module in translations
  */
 class Setup_LanguageController extends Application_Controller_Action
 {
 
-    protected $_sortKeys = ['unit', 'module', 'directory', 'filename', 'language', 'variant'];
+    protected $_sortKeys = ['key', 'module', 'language', 'variant'];
 
     public function init()
     {
@@ -82,6 +86,30 @@ class Setup_LanguageController extends Application_Controller_Action
         $this->view->sortKeys = $this->_sortKeys;
         $this->view->currentSortKey = $sortKey;
         $this->view->searchTerm = $searchTerm;
+    }
+
+    /**
+     * Action for adding a new translation key.
+     *
+     * TODO form with new key name
+     * TODO action shows form and processes submit
+     */
+    public function addAction()
+    {
+    }
+
+    /**
+     * Action for editing a single translation key.
+     *
+     * TODO use Translation form
+     * TODO action shows form and processes submit
+     */
+    public function editAction()
+    {
+        $translationKey = $this->getParam('key');
+
+        if (! is_null($translationKey)) {
+        }
     }
 
     protected function getForm()
@@ -143,18 +171,21 @@ class Setup_LanguageController extends Application_Controller_Action
         $form = new Setup_Form_LanguageSearch();
 
         $form->getElement('search')->setLabel($this->view->translate('setup_language_searchTerm'));
+        /*
         $form->getElement('sort')
             ->setLabel($this->view->translate('setup_language_sortKey'))
             ->setMultiOptions($sortKeysTranslated);
+        */
 
         $form->setAction($this->view->url(['action' => 'show']));
 
         if (! empty($searchTerm)) {
             $form->search->setValue($searchTerm);
         }
+        /*
         if (! empty($sortKey)) {
             $form->sort->setValue($sortKey);
-        }
+        }*/
 
         return $form;
     }

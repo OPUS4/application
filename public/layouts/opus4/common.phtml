@@ -65,7 +65,8 @@ if (isset($this->title)) {
 }
 
 $this->headLink()
-    ->appendStylesheet('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
+    ->appendStylesheet($this->layoutPath() . '/fontawesome/css/fontawesome.min.css')
+    ->appendStylesheet($this->layoutPath() . '/fontawesome/css/solid.css')
     ->appendStylesheet($this->baseUrl() . '/' . $config->css->jqueryui->path, 'screen')
     ->appendStylesheet($this->layoutPath() . '/css/opus.css', 'screen,print')
     ->appendStylesheet($this->layoutPath() . '/css/admin.css', 'screen,print')
@@ -211,7 +212,7 @@ if (isset($config->javascript->latex->mathjax)) {
                     <?= $this->layout()->content ?>
                     <?PHP endif; ?>
                 <?PHP else : ?>
-                    <?PHP if ($this->accessAllowed('documents') && ! is_null($this->adminform)) : ?>
+                    <?PHP if ($this->accessAllowed('documents') && ! is_null($this->adminform)) : // TODO module specific code ?>
                         <?= $this->adminform ?>
                     <?PHP endif ?>
 

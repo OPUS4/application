@@ -29,9 +29,8 @@
  * @package     Controller
  * @author      Thoralf Klein <thoralf.klein@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2011-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2011-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -43,13 +42,9 @@
 class Application_Controller_ModuleAccess extends Zend_Controller_Action
 {
 
-    const ACCESS_DENIED_ACTION = 'module-access-denied';
+    use \Opus\LoggingTrait;
 
-    /**
-     * Objekt für Logging.
-     * @var \Zend_Log
-     */
-    private $_logger = null;
+    const ACCESS_DENIED_ACTION = 'module-access-denied';
 
     /**
      * Konfigurationsobjekt.
@@ -225,34 +220,6 @@ class Application_Controller_ModuleAccess extends Zend_Controller_Action
     public function moduleAccessDeniedAction()
     {
         $this->_forward('login', 'auth', 'default');
-    }
-
-    /**
-     * Liefert den gesetzten Logger oder holt bei Bedarf Logger aus Zend_Registry.
-     * @return Zend_Log
-     */
-    public function getLogger()
-    {
-        if (is_null($this->_logger)) {
-            $this->_logger = Zend_Registry::get('Zend_Log');
-            if (is_null($this->_logger)) {
-                throw new Application_Exception('No logger found in Zend_Registry.');
-            }
-        }
-
-        return $this->_logger;
-    }
-
-    /**
-     * Setzt den Logger für die Klasse.
-     *
-     * Diese Funktion kann insbesondere in Unit Tests mit einem MockLogger verwendet werden.
-     *
-     * @param Zend_Log
-     */
-    public function setLogger($logger)
-    {
-        $this->_logger = $logger;
     }
 
     /**

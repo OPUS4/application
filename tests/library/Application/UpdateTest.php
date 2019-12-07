@@ -127,4 +127,27 @@ class Application_UpdateTest extends ControllerTestCase
 
         $this->assertEquals(999, $newVersion);
     }
+
+    public function updateScriptProvider()
+    {
+        $update = new Application_Update();
+        $scripts = $update->getUpdateScripts();
+
+        $data = array_map(function ($script) {
+            return [$script];
+        }, $scripts);
+
+        return $data;
+    }
+
+    /**
+     * @dataProvider updateScriptProvider
+     */
+    public function testUpdateScriptsExecutable($script)
+    {
+        $filename = basename($script);
+
+        $this->assertFileExists($script);
+        $this->assertTrue(is_executable($script), "Script \"$filename\" not executable.");
+    }
 }

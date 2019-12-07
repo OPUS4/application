@@ -29,7 +29,7 @@
  * @author      Sascha Szott <szott@zib.de>
  * @author      Michael Lang <lang@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  *
  * TODO context spezifische Titel für RSS feed (latest, collections, ...)
@@ -86,9 +86,9 @@ class Rss_IndexController extends Application_Controller_Xml
 
         $resultList = [];
         try {
-            $searcher = new Opus_SolrSearch_Searcher();
+            $searcher = new Opus\Search\Util\Searcher();
             $resultList = $searcher->search($search->createSearchQuery($params));
-        } catch (Opus_SolrSearch_Exception $exception) {
+        } catch (Opus\Search\Exception $exception) {
             $this->handleSolrError($exception);
         }
 
@@ -100,10 +100,11 @@ class Rss_IndexController extends Application_Controller_Xml
         $this->setFrontdoorBaseUrl();
     }
 
-    private function handleSolrError(Opus_SolrSearch_Exception $exception)
+    private function handleSolrError(Opus\Search\Exception $exception)
     {
         $this->_helper->layout()->enableLayout();
         $this->getLogger()->err(__METHOD__ . ' : ' . $exception);
+
         if ($exception->isServerUnreachable()) {
             $e = new Application_Exception('error_search_unavailable');
             $e->setHttpResponseCode(503);

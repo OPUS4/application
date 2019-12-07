@@ -34,11 +34,15 @@
 /**
  * View helper for rendering the fulltext logo for documents in the search result list.
  */
-class Application_View_Helper_FulltextLogo extends Application_View_Helper_Abstract
+class Application_View_Helper_FulltextLogo extends Application_View_Helper_Document_HelperAbstract
 {
 
-    public function fulltextLogo($doc)
+    public function fulltextLogo($doc = null)
     {
+        if (is_null($doc)) {
+            $doc = $this->getDocument();
+        }
+
         if (! $doc instanceof Opus_Document) {
             // TODO log
             return;

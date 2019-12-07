@@ -42,7 +42,7 @@ class Solrsearch_Model_Search_Document extends Solrsearch_Model_Search_Basic
             throw new Application_Exception("No id provided.", 404);
         }
 
-        $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::DOC_ID);
+        $query = new Opus\Search\Util\Query(Opus\Search\Util\Query::DOC_ID);
         $query->setField('id', $input['docId']);
 
         if ($this->getExport()) {

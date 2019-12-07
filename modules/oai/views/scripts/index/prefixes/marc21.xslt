@@ -82,12 +82,12 @@
 
                 <xsl:variable name="bibliographischesLevel">
                     <xsl:choose>
-                        <xsl:when test="./@Type='article'">                  <xsl:value-of select="'b'"/></xsl:when>
+                        <xsl:when test="./@Type='article'">                  <xsl:value-of select="'a'"/></xsl:when>
                         <xsl:when test="./@Type='bachelorthesis'">           <xsl:value-of select="'m'"/></xsl:when>
                         <xsl:when test="./@Type='book'">                     <xsl:value-of select="'m'"/></xsl:when>
                         <xsl:when test="./@Type='bookpart'">                 <xsl:value-of select="'a'"/></xsl:when>
                         <xsl:when test="./@Type='conferenceobject'">         <xsl:value-of select="'a'"/></xsl:when>
-                        <xsl:when test="./@Type='contributiontoperiodical'"> <xsl:value-of select="'b'"/></xsl:when>
+                        <xsl:when test="./@Type='contributiontoperiodical'"> <xsl:value-of select="'a'"/></xsl:when>
                         <xsl:when test="./@Type='coursematerial'">           <xsl:value-of select="'m'"/></xsl:when>
                         <xsl:when test="./@Type='diplom'">                   <xsl:value-of select="'m'"/></xsl:when>
                         <xsl:when test="./@Type='doctoralthesis'">           <xsl:value-of select="'m'"/></xsl:when>
@@ -100,7 +100,7 @@
                         <xsl:when test="./@Type='movingimage'">              <xsl:value-of select="'m'"/></xsl:when>
                         <xsl:when test="./@Type='other'">                    <xsl:value-of select="'m'"/></xsl:when>
                         <xsl:when test="./@Type='periodical'">               <xsl:value-of select="'s'"/></xsl:when>
-                        <xsl:when test="./@Type='periodicalpart'">           <xsl:value-of select="'b'"/></xsl:when>
+                        <xsl:when test="./@Type='periodicalpart'">           <xsl:value-of select="'a'"/></xsl:when>
                         <xsl:when test="./@Type='preprint'">                 <xsl:value-of select="'m'"/></xsl:when>
                         <xsl:when test="./@Type='report'">                   <xsl:value-of select="'m'"/></xsl:when>
                         <xsl:when test="./@Type='review'">                   <xsl:value-of select="'m'"/></xsl:when>
@@ -108,7 +108,7 @@
                         <xsl:when test="./@Type='studythesis'">              <xsl:value-of select="'m'"/></xsl:when>
                         <xsl:when test="./@Type='workingpaper'">             <xsl:value-of select="'m'"/></xsl:when>
                         <xsl:otherwise>
-                            <xsl:text> </xsl:text><!-- soll leer bleiben -->
+                            <xsl:text>m</xsl:text>
                         </xsl:otherwise>
                     </xsl:choose>
                 </xsl:variable>
@@ -166,8 +166,8 @@
                     <xsl:text>cr uuu---uunan</xsl:text>
                 </marc:controlfield>
 
-                <xsl:if test="not(./TitleParent) and ./IdentifierIsbn">
-                    <xsl:for-each select="./IdentifierIsbn">
+                <xsl:if test="not(./TitleParent) and ./Identifier[@Type = 'isbn']">
+                    <xsl:for-each select="./Identifier[@Type = 'isbn']">
                         <marc:datafield ind1=" " ind2=" " tag="020">
                             <marc:subfield code="a">
                                 <xsl:value-of select="./@Value"/>
@@ -176,8 +176,8 @@
                     </xsl:for-each>
                 </xsl:if>
 
-                <xsl:if test="not(./TitleParent) and ./IdentifierIssn">
-                    <xsl:for-each select="./IdentifierIssn">
+                <xsl:if test="not(./TitleParent) and ./Identifier[@Type = 'issn']">
+                    <xsl:for-each select="./Identifier[@Type = 'issn']">
                         <marc:datafield ind1=" " ind2=" " tag="022">
                             <marc:subfield code="a">
                                 <xsl:value-of select="./@Value"/>
@@ -186,10 +186,10 @@
                     </xsl:for-each>
                 </xsl:if>
 
-                <xsl:if test="./IdentifierUrn">
+                <xsl:if test="./Identifier[@Type = 'urn']">
                     <marc:datafield ind1="7" ind2=" " tag="024">
                         <marc:subfield code="a">
-                            <xsl:value-of select="./IdentifierUrn/@Value"/>
+                            <xsl:value-of select="./Identifier[@Type = 'urn']/@Value"/>
                         </marc:subfield>
                         <marc:subfield code="2">
                             <xsl:text>urn</xsl:text>
@@ -454,13 +454,13 @@
                 <!-- PersonAdvisor -->
                 <xsl:apply-templates select="./PersonAdvisor" mode="marc21">
                     <xsl:with-param name="tag">700</xsl:with-param>
-                    <xsl:with-param name="role">ths</xsl:with-param>
+                    <xsl:with-param name="role">dgs</xsl:with-param>
                 </xsl:apply-templates>
 
                 <!-- PersonContributor -->
                 <xsl:apply-templates select="./PersonContributor" mode="marc21">
                     <xsl:with-param name="tag">700</xsl:with-param>
-                    <xsl:with-param name="role">cont</xsl:with-param>
+                    <xsl:with-param name="role">ctb</xsl:with-param>
                 </xsl:apply-templates>
 
                 <xsl:if test="((not(./TitleParent) or count(TitleParent) &gt; 1)) and (./@Volume or ./@Issue or (./@PageFirst or ./@PageLast))">
@@ -486,14 +486,14 @@
                             <xsl:with-param name="pageFirst" select="./@PageFirst"/>
                             <xsl:with-param name="pageLast" select="./@PageLast"/>
                         </xsl:call-template>
-                        <xsl:if test="(count(./IdentifierIssn) = 1) and not(./IdentifierIsbn)">
+                        <xsl:if test="(count(./Identifier[@Type = 'issn']) = 1) and not(./Identifier[@Type = 'isbn'])">
                             <marc:subfield code="x">
-                                <xsl:value-of select="./IdentifierIssn/@Value"/>
+                                <xsl:value-of select="./Identifier[@Type = 'issn']/@Value"/>
                             </marc:subfield>
                         </xsl:if>
-                        <xsl:if test="(count(./IdentifierIsbn) = 1) and not (./IdentifierIssn)">
+                        <xsl:if test="(count(./Identifier[@Type = 'isbn']) = 1) and not (./Identifier[@Type = 'issn'])">
                             <marc:subfield code="z">
-                                <xsl:value-of select="./IdentifierIsbn/@Value"/>
+                                <xsl:value-of select="./Identifier[@Type = 'isbn']/@Value"/>
                             </marc:subfield>
                         </xsl:if>
                     </marc:datafield>
@@ -512,8 +512,8 @@
 
                 <!-- beim Vorhandensein mindestens eines TitleParent: ISSNs werden einzeln ausgegeben,
                      wenn es mehr als eine gibt oder mehr als einen TitleParent oder gleichzeitig eine ISBN existiert -->
-                <xsl:if test="./TitleParent and not((count(./TitleParent) = 1) and (count(./IdentifierIssn) = 1) and not(./IdentifierIsbn))">
-                    <xsl:for-each select="./IdentifierIssn">
+                <xsl:if test="./TitleParent and not((count(./TitleParent) = 1) and (count(./Identifier[@Type = 'issn']) = 1) and not(./Identifier[@Type = 'isbn']))">
+                    <xsl:for-each select="./Identifier[@Type = 'issn']">
                         <marc:datafield ind1="0" ind2=" " tag="773">
                             <marc:subfield code="x">
                                 <xsl:value-of select="./@Value"/>
@@ -524,8 +524,8 @@
 
                 <!-- beim Vorhandensein mindestens eines TitleParent: ISBNs werden einzeln ausgegeben,
                      wenn es mehr als eine gibt oder mehr als einen TitleParent oder gleichzeitig eine ISSN existiert -->
-                <xsl:if test="./TitleParent and not((count(./TitleParent) = 1) and (count(./IdentifierIsbn) = 1) and not(./IdentifierIssn))">
-                    <xsl:for-each select="./IdentifierIsbn">
+                <xsl:if test="./TitleParent and not((count(./TitleParent) = 1) and (count(./Identifier[@Type = 'isbn']) = 1) and not(./Identifier[@Type = 'issn']))">
+                    <xsl:for-each select="./Identifier[@Type = 'isbn']">
                         <marc:datafield ind1="0" ind2=" " tag="773">
                             <marc:subfield code="z">
                                 <xsl:value-of select="./@Value"/>
@@ -534,11 +534,11 @@
                     </xsl:for-each>
                 </xsl:if>
 
-                <xsl:if test="./IdentifierUrn">
+                <xsl:if test="./Identifier[@Type = 'urn']">
                     <marc:datafield ind1="4" ind2="0" tag="856">
                         <marc:subfield code="u">
                             <xsl:value-of select="php:functionString('Application_Xslt::optionValue', 'resolverUrl', 'urn')"/>
-                            <xsl:value-of select="./IdentifierUrn/@Value"/>
+                            <xsl:value-of select="./Identifier[@Type = 'urn']/@Value"/>
                         </marc:subfield>
                         <marc:subfield code="x">Resolving-URL</marc:subfield>
                     </marc:datafield>

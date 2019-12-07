@@ -156,7 +156,7 @@ class Application_Controller_Action_Helper_DocumentTypes extends Zend_Controller
 
         // clear libxml error buffer and enable user error handling
         libxml_clear_errors();
-        libxml_use_internal_errors(true);
+        $useInternalErrors = libxml_use_internal_errors(true);
 
         if (! $dom->schemaValidate($this->getXmlSchemaPath())) {
             libxml_clear_errors();
@@ -165,7 +165,8 @@ class Application_Controller_Action_Helper_DocumentTypes extends Zend_Controller
                 ' is not valid'
             );
         }
-
+        libxml_use_internal_errors($useInternalErrors);
+        libxml_clear_errors();
         return $dom;
     }
 
@@ -414,6 +415,8 @@ class Application_Controller_Action_Helper_DocumentTypes extends Zend_Controller
             $this->_errors[$documentType] = $e->getMessage();
             return 0;
         }
+        libxml_use_internal_errors(false);
+        libxml_clear_errors();
         return $isValid;
     }
 

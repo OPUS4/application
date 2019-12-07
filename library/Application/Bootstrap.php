@@ -144,6 +144,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base
 
         // Set path to shared view partials
         $view->addScriptPath($libRealPath . '/Application/View/Partial');
+        $view->addScriptPath(APPLICATION_PATH . '/application/configs/templates');
 
         // Breadcrumbs View Helper global ersetzen
         $breadcrumbsHelper = new Application_View_Helper_Breadcrumbs();
@@ -376,5 +377,10 @@ class Application_Bootstrap extends Opus_Bootstrap_Base
         Zend_Registry::set('Opus_ExportService', $exportService);
 
         return $exporter;
+    }
+
+    protected function _initIndexPlugin()
+    {
+        \Opus_Model_Xml_Cache::setIndexPluginClass('Opus\Search\Plugin\Index');
     }
 }

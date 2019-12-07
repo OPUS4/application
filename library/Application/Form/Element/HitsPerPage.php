@@ -49,7 +49,7 @@ class Application_Form_Element_HitsPerPage extends Application_Form_Element_Sele
 
         $options = ['10', '20', '50', '100'];
 
-        $defaultRows = Opus_Search_Query::getDefaultRows();
+        $defaultRows = Opus\Search\Query::getDefaultRows();
 
         if (! in_array($defaultRows, $options)) {
             $options[] = $defaultRows;

@@ -76,7 +76,7 @@ class Admin_Form_Document_Series extends Admin_Form_AbstractModelSubForm
 
         $this->addElement('Series', self::ELEMENT_SERIES_ID);
         $number = $this->createElement('text', self::ELEMENT_NUMBER, ['required' => true]);
-        $number->addValidator(new Application_Form_Validate_SeriesNumberAvailable());
+        // $number->addValidator(new Application_Form_Validate_SeriesNumberAvailable());
         $this->addElement($number);
         $this->addElement('SortOrder', self::ELEMENT_SORT_ORDER);
     }

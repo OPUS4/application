@@ -247,7 +247,7 @@ class Application_Import_Importer
     {
         // Enable user error handling while validating input
         libxml_clear_errors();
-        libxml_use_internal_errors(true);
+        $useInternalErrors = libxml_use_internal_errors(true);
 
         $this->log("Load XML ...");
         $xml = null;
@@ -268,6 +268,8 @@ class Application_Import_Importer
 
         $this->log('Loading Result: OK');
         $this->xml = $xml;
+        libxml_use_internal_errors($useInternalErrors);
+        libxml_clear_errors();
     }
 
     private function validateXml()

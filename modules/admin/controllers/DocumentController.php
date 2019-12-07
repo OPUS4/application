@@ -283,4 +283,65 @@ class Admin_DocumentController extends Application_Controller_Action
             ['id' => $docId]
         );
     }
+
+    public function copyAction()
+    {
+        $docId = $this->getRequest()->getParam('id');
+
+        $document = $this->_documentsHelper->getDocumentForId($docId);
+
+        if (! isset($document)) {
+            return $this->_helper->Redirector->redirectTo(
+                'index',
+                ['failure' =>
+                $this->view->translate('admin_document_error_novalidid')],
+                'documents',
+                'admin'
+            );
+        } else {
+            $copyForm = new Admin_Form_CopyDocument();
+
+            $request = $this->getRequest();
+
+            if ($request->isPost()) {
+                $data = $request->getPost();
+
+                $copyForm->populate($data);
+
+                $result = $copyForm->processPost($data, $data);
+
+                switch ($result) {
+                    case Admin_Form_CopyDocument::RESULT_COPY:
+                        //
+                        break;
+                    case Admin_Form_CopyDocument::RESULT_CANCEL:
+                        // TODO redirect to frontdoor oder administration
+                        return $this->_helper->Redirector->redirectTo(
+                            'index',
+                            null,
+                            'document',
+                            'admin',
+                            ['id' => $docId]
+                        );
+                        break;
+                    default:
+                        // TODO log something
+                        return $this->_helper->Redirector->redirectTo(
+                            'index',
+                            ['error' => 'Invalid post from form.'],
+                            'document',
+                            'admin',
+                            ['id' => $docId]
+                        );
+                        break;
+                }
+            } else {
+                // TODO show options and confirmation
+                $copyForm->populateFromModel($document);
+
+                // TODO create duplicate document and open (optionally) for editing
+                $this->renderForm($copyForm);
+            }
+        }
+    }
 }

@@ -101,6 +101,7 @@ class Frontdoor_IndexController extends Application_Controller_Action
             'optionValue',
             'translate',
             'translateLanguage',
+            'translateIdentifier',
             'translateWithDefault',
             'formatDate',
             'isDisplayField',
@@ -221,7 +222,11 @@ class Frontdoor_IndexController extends Application_Controller_Action
         $htmlMetaTags = new Frontdoor_Model_HtmlMetaTags($this->getConfig(), $this->view->fullUrl());
         $tags = $htmlMetaTags->createTags($document);
         foreach ($tags as $pair) {
-            $this->view->headMeta($pair[1], $pair[0]);
+            if (count($pair) > 2) {
+                $this->view->headMeta($pair[1], $pair[0], 'name', $pair[2]);
+            } else {
+                $this->view->headMeta($pair[1], $pair[0]);
+            }
         }
     }
 
@@ -297,13 +302,13 @@ class Frontdoor_IndexController extends Application_Controller_Action
 
             // TODO fix usage of search code - should be identical to search/export/rss - except just 1 row
 
-            $searcher = new Opus_SolrSearch_Searcher();
+            $searcher = new Opus\Search\Util\Searcher();
 
             $resultList = $searcher->search($query);
 
             $queryResult = $resultList->getResults();
 
-            if (is_array($queryResult) && ! empty($queryResult) && $queryResult[0] instanceof Opus_Search_Result_Match) {
+            if (is_array($queryResult) && ! empty($queryResult) && $queryResult[0] instanceof Opus\Search\Result\Match) {
                 $resultDocId = $queryResult[0]->getId();
 
                 if ($request->has('docId')) {

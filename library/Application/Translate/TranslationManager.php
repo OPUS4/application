@@ -28,7 +28,7 @@
  * @package     Module_Setup
  * @author      Edouard Simon (edouard.simon@zib.de)
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -50,7 +50,7 @@ class Application_Translate_TranslationManager
     /**
      * sort by translation unit
      */
-    const SORT_UNIT = 'unit';
+    const SORT_UNIT = 'key';
 
     /**
      * sort by application module
@@ -135,7 +135,7 @@ class Application_Translate_TranslationManager
                         foreach ($translationUnits as $key => $values) {
                             if (empty($this->_filter) || strpos($key, $this->_filter) !== false) {
                                 $row = [
-                                    'unit' => $key,
+                                    'key' => $key,
                                     'module' => $module,
                                     'directory' => $dir,
                                     'filename' => $fileName,
@@ -177,7 +177,7 @@ class Application_Translate_TranslationManager
         $result = [];
 
         foreach ($translations as $translation) {
-            if (stripos($translation['unit'], $needle) !== false) {
+            if (stripos($translation['key'], $needle) !== false) {
                 $result[] = $translation;
             }
         }

@@ -28,12 +28,12 @@
  * @category    Application
  * @author      Sascha Szott <szott@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2010-2015, OPUS 4 development team
+ * @copyright   Copyright (c) 2010-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 // Bootstrapping
-require_once dirname(__FILE__) . '/common/bootstrap.php';
+require_once __DIR__ . '/common/bootstrap.php';
 
 /**
  * Indexes all or a range of documents.
@@ -190,7 +190,7 @@ EOT;
         try {
             $runtime = $this->index($this->_start, $this->_end);
             echo PHP_EOL . "Operation completed successfully in $runtime seconds." . PHP_EOL;
-        } catch (Opus_Search_Exception $e) {
+        } catch (Opus\Search\Exception $e) {
             echo PHP_EOL . "An error occurred while indexing.";
             echo PHP_EOL . "Error Message: " . $e->getMessage();
             if (! is_null($e->getPrevious())) {
@@ -207,7 +207,7 @@ EOT;
 
         $docIds = $this->getDocumentIds($startId, $endId);
 
-        $indexer = Opus_Search_Service::selectIndexingService('indexBuilder');
+        $indexer = Opus\Search\Service::selectIndexingService('indexBuilder');
 
         if ($this->_deleteAllDocs) {
             echo 'Removing all documents from the index ...' . PHP_EOL;
@@ -228,13 +228,13 @@ EOT;
             $timeStart = microtime(true);
 
             if ($this->_clearCache) {
-                $cache->removeAllEntriesWhereDocumentId($docId);
+                $cache->remove($docId);
             }
 
             $doc = new Opus_Document($docId);
 
             // dirty hack: disable implicit reindexing of documents in case of cache misses
-            $doc->unregisterPlugin('Opus_Document_Plugin_Index');
+            $doc->unregisterPlugin('Opus\Search\Plugin\Index');
 
             $docs[] = $doc;
 
@@ -281,8 +281,6 @@ EOT;
     {
         $finder = new Opus_DocumentFinder();
 
-        $finder->setServerState('published');
-
         if (isset($start)) {
             $finder->setIdRangeStart($start);
         }
@@ -317,7 +315,7 @@ EOT;
     {
         try {
             $indexer->addDocumentsToIndex($docs);
-        } catch (Opus_Search_Exception $e) {
+        } catch (Opus\Search\Exception $e) {
             // echo date('Y-m-d H:i:s') . " ERROR: Failed indexing document $docId.\n";
             echo date('Y-m-d H:i:s') . "        {$e->getMessage()}\n";
         } catch (Opus_Storage_Exception $e) {

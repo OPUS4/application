@@ -4,7 +4,7 @@
     <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool"></header>
     <body>
 
-    <tu tuid="setup_title_language">
+    <tu tuid="setup_title_translation">
         <tuv xml:lang="en">
             <seg>Translations</seg>
         </tuv>
@@ -13,16 +13,16 @@
         </tuv>
     </tu>
 
-    <tu tuid="setup_title_language_description">
+    <tu tuid="setup_title_translation_description">
         <tuv xml:lang="en">
-            <seg>Names, Headlines, Help for Fields</seg>
+            <seg>Names, Headlines, Help for Fields, ...</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Feldnamen, Feldüberschriften, Feldhilfen</seg>
+            <seg>Feldnamen, Feldüberschriften, Feldhilfen, ...</seg>
         </tuv>
     </tu>
 
-    <tu tuid="setup_translation_choose">
+    <tu tuid="setup_infopages_choose">
         <tuv xml:lang="en">
             <seg>Choose Translation Resource</seg>
         </tuv>
@@ -31,7 +31,7 @@
         </tuv>
     </tu>
 
-    <tu tuid="setup_title_translation">
+    <tu tuid="setup_title_infopages">
         <tuv xml:lang="en">
             <seg>Information Pages</seg>
         </tuv>
@@ -40,7 +40,7 @@
         </tuv>
     </tu>
 
-    <tu tuid="setup_title_translation_description">
+    <tu tuid="setup_title_infopages_description">
         <tuv xml:lang="en">
             <seg>Home Page, Contact Information, Imprint</seg>
         </tuv>
@@ -49,7 +49,7 @@
         </tuv>
     </tu>
 
-    <tu tuid="setup_translation_edit_home">
+    <tu tuid="setup_infopages_edit_home">
         <tuv xml:lang="en">
             <seg>Home Page</seg>
         </tuv>
@@ -58,7 +58,7 @@
         </tuv>
     </tu>
 
-    <tu tuid="setup_translation_edit_imprint">
+    <tu tuid="setup_infopages_edit_imprint">
         <tuv xml:lang="en">
             <seg>Imprint</seg>
         </tuv>
@@ -67,7 +67,7 @@
         </tuv>
     </tu>
 
-    <tu tuid="setup_translation_edit_contact">
+    <tu tuid="setup_infopages_edit_contact">
         <tuv xml:lang="en">
             <seg>Contact Information</seg>
         </tuv>
@@ -76,7 +76,7 @@
         </tuv>
     </tu>
 
-    <tu tuid="setup_title_help-page">
+    <tu tuid="setup_title_helppage">
         <tuv xml:lang="en">
             <seg>FAQ-Page</seg>
         </tuv>
@@ -85,12 +85,21 @@
         </tuv>
     </tu>
 
-    <tu tuid="setup_help-page_edit">
+    <tu tuid="setup_helppage_edit">
         <tuv xml:lang="en">
             <seg>Edit FAQ</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>FAQ bearbeiten</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="setup_translation_index">
+        <tuv xml:lang="en">
+            <seg>Translations</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Übersetzungen</seg>
         </tuv>
     </tu>
 
@@ -102,5 +111,6 @@
             <seg>Übersetzungen</seg>
         </tuv>
     </tu>
+
   </body>
 </tmx>

@@ -25,19 +25,20 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_Frontdoor
+ * @package     Frontdoor_Model
  * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2014, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2014-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
+ *
+ * Loads XSLT file as DomDocument.
  */
-
 class Frontdoor_Model_DocumentBuilder
 {
 
     public function buildDomDocument($xsltFileName)
     {
-        $xslt = new DomDocument;
+        $xslt = new DomDocument();
         if (file_exists($xsltFileName . '_custom.xslt')) {
             $xslt->load($xsltFileName . '_custom.xslt');
         } else {

@@ -28,7 +28,7 @@
  * @package     Module_Solrsearch
  * @author      Sascha Szott <szott@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -66,13 +66,13 @@ class Solrsearch_BrowseController extends Application_Controller_Action
     public function doctypesAction()
     {
         $facetname = 'doctype';
-        $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::FACET_ONLY);
+        $query = new Opus\Search\Util\Query(Opus\Search\Util\Query::FACET_ONLY);
         $query->setFacetField($facetname);
 
         try {
-            $searcher = new Opus_SolrSearch_Searcher();
+            $searcher = new Opus\Search\Util\Searcher();
             $facets = $searcher->search($query)->getFacets();
-        } catch (Opus_SolrSearch_Exception $e) {
+        } catch (Opus\Search\Exception $e) {
             $this->getLogger()->err(__METHOD__ . ' : ' . $e);
             throw new Application_SearchException($e);
         }
@@ -91,13 +91,13 @@ class Solrsearch_BrowseController extends Application_Controller_Action
     {
         $facetname = 'year';
 
-        $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::FACET_ONLY);
+        $query = new Opus\Search\Util\Query(Opus\Search\Util\Query::FACET_ONLY);
         $query->setFacetField($facetname);
 
         try {
-            $searcher = new Opus_SolrSearch_Searcher();
+            $searcher = new Opus\Search\Util\Searcher();
             $facets = $searcher->search($query)->getFacets();
-        } catch (Opus_SolrSearch_Exception $ose) {
+        } catch (Opus\Search\Exception $ose) {
             $this->getLogger()->err(__METHOD__ . ' : ' . $ose);
             throw new Application_SearchException($ose);
         }

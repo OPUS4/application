@@ -45,7 +45,7 @@ class Setup_Form_ContactPage extends Application_Form_Translations
 
         $this->addKey('home_index_contact_pagetitle');
         $this->addKey('home_index_contact_title');
-        $this->addKey('home_index_contact_content', true, ['label' => 'setup_page_content']);
+        $this->addKey('help_content_contact', true, ['label' => 'setup_page_content']);
 
         $this->populateFromTranslations();
     }

@@ -124,7 +124,7 @@ class SolrFulltextCacheBuilder
         try {
             $runtime = $this->extract($this->_start, $this->_end);
             echo PHP_EOL . "Operation completed successfully in $runtime seconds." . PHP_EOL;
-        } catch (Opus_Search_Exception $e) {
+        } catch (Opus\Search\Exception $e) {
             echo PHP_EOL . "An error occurred while indexing.";
             echo PHP_EOL . "Error Message: " . $e->getMessage();
             if (! is_null($e->getPrevious())) {
@@ -141,7 +141,7 @@ class SolrFulltextCacheBuilder
 
         $docIds = $this->getDocumentIds($startId, $endId);
 
-        $extractor = Opus_Search_Service::selectIndexingService('indexBuilder');
+        $extractor = Opus\Search\Service::selectIndexingService('indexBuilder');
 
 
         echo date('Y-m-d H:i:s') . " Start indexing of " . count($docIds) . " documents.\n";
@@ -158,7 +158,7 @@ class SolrFulltextCacheBuilder
             foreach ($doc->getFile() as $file) {
                 try {
                     $extractor->extractDocumentFile($file, $doc);
-                } catch (Opus_Search_Exception $e) {
+                } catch (Opus\Search\Exception $e) {
                     echo date('Y-m-d H:i:s') . " ERROR: Failed extracting document $docId.\n";
                     echo date('Y-m-d H:i:s') . "        {$e->getMessage()}\n";
                 } catch (Opus_Storage_Exception $e) {

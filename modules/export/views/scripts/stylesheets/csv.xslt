@@ -51,17 +51,17 @@
     <xsl:include href="utils/csv_editors.xslt"/>
 	<xsl:include href="utils/csv_institutions.xslt"/>
     <xsl:include href="utils/bibtex_pages.xslt"/>
-    
+
     <xsl:template match="*" />
-    
-       
-	
+
+
+
 	<xsl:template match="/">
 	  <xsl:text>Dokument-ID	Dokumenttyp	Verfasser/Autoren	Herausgeber	Haupttitel	Abstract	Auflage	Verlagsort	Verlag	Erscheinungsjahr	Seitenzahl	Schriftenreihe Titel	Schriftenreihe Bandzahl	ISBN	Quelle der Hochschulschrift	Konferenzname	Quelle:Titel	Quelle:Jahrgang	Quelle:Heftnummer	Quelle:Erste Seite	Quelle:Letzte Seite	URN	DOI	Abteilungen
 </xsl:text>
 	  <xsl:apply-templates select="Documents" />
     </xsl:template>
-	
+
     <xsl:template match="Documents">
           <xsl:apply-templates select="Opus_Document" />
     </xsl:template>
@@ -69,12 +69,12 @@
     <xsl:template match="Opus_Document">
 
         <!--  Preprocessing: some variables must be defined -->
-        
+
         <xsl:variable name="identifier">
             <xsl:text>OPUS4-</xsl:text>
             <xsl:value-of select="@Id" />
          </xsl:variable>
-        
+
         <xsl:variable name="doctype">
             <xsl:value-of select="@Type" />
         </xsl:variable>
@@ -113,27 +113,27 @@
         <xsl:variable name="editor">
             <xsl:apply-templates select="PersonEditor" />
         </xsl:variable>
-        
+
         <xsl:variable name="title">
 	        <xsl:value-of select ="TitleMain/@Value" />
         </xsl:variable>
-        
+
         <xsl:variable name="abstract">
             <xsl:value-of select ="TitleAbstract/@Value" />
         </xsl:variable>
-        
+
         <xsl:variable name="edition">
 	        <xsl:value-of select ="@Edition" />
         </xsl:variable>
-        
+
         <xsl:variable name="publisher_place">
 	        <xsl:value-of select ="@PublisherPlace" />
         </xsl:variable>
-        
+
         <xsl:variable name="publisher_name">
 	        <xsl:value-of select ="@PublisherName" />
         </xsl:variable>
-        
+
         <xsl:variable name="completed_year">
             <xsl:choose>
              <xsl:when test="normalize-space(@CompletedYear) != '0000'">
@@ -141,23 +141,23 @@
                 </xsl:when>
                 <xsl:when test="string-length(normalize-space(CompletedDate/@Year)) > 0">
                     <xsl:value-of select="CompletedDate/@Year" />
-                </xsl:when>  
+                </xsl:when>
 				<xsl:when test="normalize-space(@PublishedYear) != '0000'">
                     <xsl:value-of select="@PublishedYear" />
                 </xsl:when>
                 <xsl:when test="string-length(normalize-space(PublishedDate/@Year)) > 0">
                     <xsl:value-of select="PublishedDate/@Year" />
-                </xsl:when>                
+                </xsl:when>
            </xsl:choose>
        </xsl:variable>
-	   
-	   
-	   
-       
+
+
+
+
        <xsl:variable name="pages">
            <xsl:choose>
                <xsl:when test="string-length(@PageNumber) > 0">
-                   <xsl:value-of select="@PageNumber" />        
+                   <xsl:value-of select="@PageNumber" />
                </xsl:when>
                <xsl:when test="(string-length(@PageFirst) > 0) and (string-length(@PageLast) > 0)" >
                    <xsl:value-of select="(@PageLast)-(@PageFirst)"/>
@@ -167,23 +167,23 @@
                </xsl:otherwise>
            </xsl:choose>
        </xsl:variable>
-	 
-     
-        
+
+
+
         <xsl:variable name="titleParent">
             <xsl:value-of select ="TitleParent/@Value" />
         </xsl:variable>
-        
+
         <xsl:variable name="volume">
             <xsl:value-of select ="@Volume" />
         </xsl:variable>
 
         <xsl:variable name="isbn">
-            <xsl:value-of select ="IdentifierIsbn/@Value" />
+            <xsl:value-of select ="Identifier[@Type = 'isbn']/@Value" />
         </xsl:variable>
 
         <xsl:variable name="doi">
-            <xsl:value-of select ="IdentifierDoi/@Value" />
+            <xsl:value-of select ="Identifier[@Type = 'doi']/@Value" />
         </xsl:variable>
 
         <xsl:variable name="thesisSource">
@@ -197,11 +197,11 @@
         <xsl:variable name="titleAdditional">
             <xsl:value-of select ="TitleAdditional/@Value" />
         </xsl:variable>
-        
+
         <xsl:variable name="volumeSource">
             <xsl:value-of select ="Enrichment[@KeyName='VolumeSource']/@Value" />
         </xsl:variable>
-				        
+
         <xsl:variable name="issue">
             <xsl:value-of select ="concat(' ',@Issue)" />
         </xsl:variable>
@@ -215,9 +215,9 @@
         </xsl:variable>
 
         <xsl:variable name="urn">
-            <xsl:value-of select ="IdentifierUrn/@Value" />
+            <xsl:value-of select ="Identifier[@Type = 'urn']/@Value" />
         </xsl:variable>
-        
+
 		<!--
 		<xsl:variable name="institution">
             <xsl:apply-templates select="Collection[@RoleName='institutes']" />
@@ -225,8 +225,8 @@
 		 -->
          <xsl:variable name="institution">
             <xsl:value-of select ="Collection[@RoleName='institutes']/@Name" />
-        </xsl:variable> 
-        
+        </xsl:variable>
+
         <!-- Ausgabe: Jede Zeile ist ein Record. -->
 
         <xsl:value-of select="$identifier" /><xsl:text>	</xsl:text>
@@ -281,7 +281,7 @@
                 <xsl:with-param name="field">institution</xsl:with-param>
                 <xsl:with-param name="value"><xsl:value-of select ="$institution" /></xsl:with-param>
                 <xsl:with-param name="delimiter"></xsl:with-param>
-        </xsl:call-template><xsl:text>         
+        </xsl:call-template><xsl:text>
 </xsl:text>
      </xsl:template>
 </xsl:stylesheet>

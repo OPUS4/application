@@ -164,22 +164,22 @@
         </xsl:call-template>
         <xsl:call-template name="outputFieldValue">
             <xsl:with-param name="field">isbn     </xsl:with-param>
-            <xsl:with-param name="value"><xsl:value-of select ="IdentifierIsbn/@Value" /></xsl:with-param>
+            <xsl:with-param name="value"><xsl:value-of select ="Identifier[@Type = 'isbn']/@Value" /></xsl:with-param>
             <xsl:with-param name="delimiter">,</xsl:with-param>
         </xsl:call-template>
         <xsl:call-template name="outputFieldValue">
             <xsl:with-param name="field">issn     </xsl:with-param>
-            <xsl:with-param name="value"><xsl:value-of select ="IdentifierIssn/@Value" /></xsl:with-param>
+            <xsl:with-param name="value"><xsl:value-of select ="Identifier[@Type = 'issn']/@Value" /></xsl:with-param>
             <xsl:with-param name="delimiter">,</xsl:with-param>
         </xsl:call-template>
         <xsl:call-template name="outputFieldValue">
             <xsl:with-param name="field">doi      </xsl:with-param>
-            <xsl:with-param name="value"><xsl:value-of select ="IdentifierDoi/@Value" /></xsl:with-param>
+            <xsl:with-param name="value"><xsl:value-of select ="Identifier[@Type = 'doi']/@Value" /></xsl:with-param>
             <xsl:with-param name="delimiter">,</xsl:with-param>
         </xsl:call-template>
         <xsl:call-template name="outputFieldValue">
             <xsl:with-param name="field">url      </xsl:with-param>
-            <xsl:with-param name="value"><xsl:value-of select ="IdentifierUrl/@Value" /></xsl:with-param>
+            <xsl:with-param name="value"><xsl:value-of select ="Identifier[@Type = 'url']/@Value" /></xsl:with-param>
             <xsl:with-param name="delimiter">,</xsl:with-param>
         </xsl:call-template>
         <xsl:call-template name="outputFieldValue">

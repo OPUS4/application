@@ -215,14 +215,12 @@ class Application_Util_Notification extends Application_Model_Abstract
             return;
         }
         ob_start();
-        extract(
-            [
+        extract([
             "authors" => $authors,
             "title" => $title,
             "docId" => $docId,
             "url" => $url
-            ]
-        );
+        ]);
         require($templateFileName);
         $body = ob_get_contents();
         ob_end_clean();

@@ -63,10 +63,10 @@ class Application_Form_Validate_IdentifierTest extends ControllerTestCase
         Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
             'identifier' => ['validation' => [
                 'isbn' => [
-                    'class' => 'Opus_Validate_Isbn'
+                    'class' => 'Opus\Validate\Isbn'
                 ],
                 'issn' => [
-                    'class' => 'Opus_Validate_Issn'
+                    'class' => 'Opus\Validate\Issn'
                 ]
             ]]
         ]));

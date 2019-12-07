@@ -27,9 +27,8 @@
  * @category    Application
  * @package     Module_Home
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -41,14 +40,20 @@
  *
  * TODO add handling of language (English/German) to this class
  */
-class Home_Model_HelpFiles
+class Home_Model_HelpFiles extends Application_Translate_Help
 {
+
+    /**
+     * Stores help configuration after reading it for the first time.
+     * @var array
+     */
+    private $helpConfig;
 
     /**
      * Returns the path to the help files.
      * @return string Path to help files
      */
-    public static function getHelpPath()
+    public function getHelpPath()
     {
         return APPLICATION_PATH . '/application/configs/help/';
     }
@@ -58,36 +63,61 @@ class Home_Model_HelpFiles
      * @param string $file File basename
      * @return string Content of file
      */
-    public static function getFileContent($file)
+    public function getContent($key)
     {
-        $path = Home_Model_HelpFiles::getHelpPath() . $file;
-        if (! is_null($file) && file_exists($path) && is_readable($path)) {
-            return file_get_contents($path);
-        } else {
-            return null;
+        $translate = Zend_Registry::get('Zend_Translate');
+
+        $translationKey = "help_content_$key";
+        $translation = $translate->translate($translationKey);
+
+        $pos = false;
+
+        if ($this->getUseFiles()) {
+            $file = $key . '.' . $translate->getLocale() . '.txt';
+            $helpFilesAvailable = $this->getFiles();
+            $pos = array_search($file, $helpFilesAvailable);
+
+            // TODO fallback if function is called with complete file name - necessary? remove?
+            if ($pos === false) {
+                $file = $key;
+                $pos = array_search($file, $helpFilesAvailable);
+            }
         }
+
+        if ($pos !== false) {
+            $path = $this->getHelpPath() . $file;
+            if (file_exists($path) && is_readable($path)) {
+                return file_get_contents($path);
+            } else {
+                return null;
+            }
+        } elseif ($translation !== $translationKey) {
+            return $translation;
+        }
+
+        return null;
     }
 
     /**
      * Returns available help files.
      * @return array Basenames of help files
      */
-    public static function getFiles()
+    public function getFiles()
     {
         $helpFilesAvailable = [];
-        $dir = new DirectoryIterator(Home_Model_HelpFiles::getHelpPath());
+        $dir = new DirectoryIterator($this->getHelpPath());
         foreach ($dir as $file) {
             if ($file->isFile() && $file->getFilename() != '.' && $file->getFilename() != '..' && $file->isReadable()
-                    && pathinfo($file->getFilename(), PATHINFO_EXTENSION) === 'txt') {
+                && pathinfo($file->getFilename(), PATHINFO_EXTENSION) === 'txt') {
                 array_push($helpFilesAvailable, $file->getBasename());
             }
         }
         return $helpFilesAvailable;
     }
 
-    public static function getHelpEntries()
+    public function getHelpEntries()
     {
-        $config = Home_Model_HelpFiles::getHelpConfig();
+        $config = $this->getHelpConfig();
 
         $data = $config->toArray();
 
@@ -95,21 +125,15 @@ class Home_Model_HelpFiles
     }
 
     /**
-     * Stores help configuration after reading it for the first time.
-     * @var array
-     */
-    private static $_helpConfig;
-
-    /**
      * Loads help configuration.
      * @return Zend_Config_Ini
      */
-    private static function getHelpConfig()
+    private function getHelpConfig()
     {
-        if (empty(Home_Model_HelpFiles::$_helpConfig)) {
+        if (empty($this->helpConfig)) {
             $config = null;
 
-            $filePath = Home_Model_HelpFiles::getHelpPath() . 'help.ini';
+            $filePath = $this->getHelpPath() . 'help.ini';
 
             if (file_exists($filePath)) {
                 try {
@@ -127,9 +151,16 @@ class Home_Model_HelpFiles
                 $config = new Zend_Config([]);
             }
 
-            Home_Model_HelpFiles::$_helpConfig = $config;
+            $this->helpConfig = $config;
         }
 
-        return Home_Model_HelpFiles::$_helpConfig;
+        return $this->helpConfig;
+    }
+
+    public function getUseFiles()
+    {
+        $config = $this->getConfig();
+
+        return (! isset($config->help->useFiles) || filter_var($config->help->useFiles, FILTER_VALIDATE_BOOLEAN));
     }
 }

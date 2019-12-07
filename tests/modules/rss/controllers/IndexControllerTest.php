@@ -103,7 +103,7 @@ class Rss_IndexControllerTest extends ControllerTestCase
         $date = new Zend_Date($doc1->getServerDatePublished());
         $dateValue1 = $date->get(Zend_Date::RFC_2822);
 
-        $indexer = Opus_Search_Service::selectIndexingService(null, 'solr');
+        $indexer = Opus\Search\Service::selectIndexingService(null, 'solr');
 
         $indexer->addDocumentsToIndex($doc1);
 

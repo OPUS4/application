@@ -27,9 +27,8 @@
  * @category    Application
  * @package     Module_Admin
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -102,7 +101,7 @@ class Admin_Form_PersonLink extends Admin_Form_AbstractDocumentSubForm
             $this->getElement(self::ELEMENT_ROLE)->setValue($personLink->getRole());
             $this->_model = $personLink;
         } else {
-            $this->getLog()->err(__METHOD__ . self::BAD_MODEL_MESSAGE);
+            $this->getLogger()->err(__METHOD__ . self::BAD_MODEL_MESSAGE);
         }
     }
 
@@ -117,7 +116,7 @@ class Admin_Form_PersonLink extends Admin_Form_AbstractDocumentSubForm
             $personLink->setSortOrder($this->getElementValue(self::ELEMENT_SORT_ORDER));
             $personLink->setRole($this->getElementValue(self::ELEMENT_ROLE));
         } else {
-            $this->getLog()->err(__METHOD__ . self::BAD_MODEL_MESSAGE);
+            $this->getLogger()->err(__METHOD__ . self::BAD_MODEL_MESSAGE);
         }
     }
 

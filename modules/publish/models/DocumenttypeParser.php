@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -28,12 +27,12 @@
  * @category    Application
  * @package     Module_Publish
  * @author      Susanne Gottwald <gottwald@zib.de>
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
-class Publish_Model_DocumenttypeParser
+class Publish_Model_DocumenttypeParser extends Application_Model_Abstract
 {
 
     /**
@@ -165,7 +164,6 @@ class Publish_Model_DocumenttypeParser
      */
     private function _parseSubFields(DomElement $field, $currentElement)
     {
-
         if ($field->hasChildNodes()) {
             foreach ($field->getElementsByTagname('subfield') as $subField) {
                 //subfields have also type FormElement
@@ -173,6 +171,11 @@ class Publish_Model_DocumenttypeParser
 
                 if ($subField->hasAttributes()) {
                     $subElementName = $subField->getAttribute('name');
+
+                    if (! $this->useSubfield($currentElement->getElementName(), $subElementName)) {
+                        continue;
+                    };
+
                     $subRequired = $subField->getAttribute('required');
                     $subFormElement = $subField->getAttribute('formelement');
                     $subDatatype = $subField->getAttribute('datatype');
@@ -210,6 +213,25 @@ class Publish_Model_DocumenttypeParser
             // No Subfields found!
             return false;
         }
+    }
+
+    private function useSubfield($elementName, $subfieldName)
+    {
+        switch ($elementName) {
+            case 'PersonAuthor':
+                if (! $this->includeExtendedAuthorInformation()
+                    && in_array($subfieldName, ['DateOfBirth', 'PlaceOfBirth'])) {
+                    return false;
+                }
+                if (! $this->includeAuthorEmail()
+                    && in_array($subfieldName, ['Email', 'AllowEmailContact'])) {
+                    return false;
+                }
+                break;
+            default:
+        }
+
+        return true;
     }
 
     /**
@@ -318,5 +340,21 @@ class Publish_Model_DocumenttypeParser
         }
 
         return true;
+    }
+
+    public function includeAuthorEmail()
+    {
+        $config = $this->getConfig();
+
+        return isset($config->publish->includeAuthorEmail)
+            && filter_var($config->publish->includeAuthorEmail, FILTER_VALIDATE_BOOLEAN);
+    }
+
+    public function includeExtendedAuthorInformation()
+    {
+        $config = $this->getConfig();
+
+        return isset($config->publish->includeExtendedAuthorInformation)
+            && filter_var($config->publish->includeExtendedAuthorInformation, FILTER_VALIDATE_BOOLEAN);
     }
 }

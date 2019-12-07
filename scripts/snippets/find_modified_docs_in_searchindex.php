@@ -46,8 +46,8 @@ $finder = new Opus_DocumentFinder();
 $finder->setServerState('published');
 foreach ($finder->ids() as $docId) {
     // check if document with id $docId is already persisted in search index
-    $search = Opus_Search_Service::selectSearchingService();
-    $query  = Opus_Search_QueryFactory::selectDocumentById($search, $docId);
+    $search = Opus\Search\Service::selectSearchingService();
+    $query  = Opus\Search\QueryFactory::selectDocumentById($search, $docId);
 
     if ($search->customSearch($query)->getAllMatchesCount() != 1) {
         echo "ERROR: document # $docId is not stored in search index\n";
