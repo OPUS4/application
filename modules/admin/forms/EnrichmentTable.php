@@ -68,9 +68,18 @@ class Admin_Form_EnrichmentTable extends Application_Form_Model_Table
         return in_array($model->getId(), Opus_EnrichmentKey::getAllReferenced());
     }
 
+    /**
+     * Bestimmt die zu verwendene CSS-Klasse für den übergebenen EnrichmentKey in der Listenansicht.
+     *
+     * @param Opus_EnrichmentKey $model
+     * @return string Name der zu nutzenden CSS-Klasse
+     */
     public function getRowCssClass($model)
     {
-        if ($this->isProtected($model) and $this->isUsed($model)) {
+        if (is_null($model->getId())) {
+            // es handelt sich um einen nicht registrierten, in Benutzung befindlichen Enrichment Namen
+            return "used";
+        } elseif ($this->isProtected($model) and $this->isUsed($model)) {
             return "protected used";
         } elseif (! $this->isUsed($model) and $this->isProtected($model)) {
             return "protected unused";
@@ -85,9 +94,19 @@ class Admin_Form_EnrichmentTable extends Application_Form_Model_Table
         return "";
     }
 
+    /**
+     * Bestimmt den Übersetzungsschlüssel des anzuzeigenden Tooltips für den übergebenen EnrichmentKey in
+     * der Listenansicht.
+     *
+     * @param Opus_EnrichmentKey $model
+     * @return string Übersetzungsschlüssel für den Tooltip
+     */
     public function getRowTooltip($model)
     {
-        if ($this->isProtected($model) and $this->isUsed($model)) {
+        if (is_null($model->getId())) {
+            // es handelt sich um einen nicht registrierten, in Benutzung befindlichen Enrichment Namen
+            return 'admin_enrichmentkey_unregistered_tooltip';
+        } elseif ($this->isProtected($model) and $this->isUsed($model)) {
             return 'admin_enrichmentkey_used_tooltip';
         } elseif (! $this->isUsed($model) and $this->isProtected($model)) {
             return 'admin_enrichmentkey_unused_tooltip';

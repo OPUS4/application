@@ -101,6 +101,27 @@ class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD
         return ! in_array($model->getId(), $protectedKeys);
     }
 
+    /**
+     * Erzeugt Formular zum Hinzufügen eines neuen Models.
+     * @return Application_Form_IModel
+     */
+    public function getNewModelForm()
+    {
+        $form = parent::getNewModelForm();
+        if ($this->getRequest()->isGet() === true) {
+            $name = $this->getRequest()->getParam(self::PARAM_MODEL_ID);
+            if (! is_null($name) && trim($name) !== '') {
+                // der Enrichment Key muss in Benutzung sein, darf aber nicht bereits registriert sein
+                if (is_null(Opus_EnrichmentKey::fetchByName($name)) &&
+                    in_array($name, Opus_EnrichmentKey::getAllReferenced())) {
+                    $model = $form->getModel()->setName($name);
+                    $form->populateFromModel($model, false);
+                }
+            }
+        }
+        return $form;
+    }
+
     public function removefromdocsAction()
     {
         if ($this->getRequest()->isPost() === true) {
@@ -108,13 +129,13 @@ class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD
             $result = $this->handleConfirmationPost();
         } else {
             // Bestätigungsformular anzeigen
-            $model = $this->getModel($this->getRequest()->getParam(self::PARAM_MODEL_ID));
-            if (! is_null($model)) {
-                if ($this->isDeletable($model)) {
-                    $form = $this->getConfirmationForm($model);
-                    $form->setLegend($this->view->translate('admin_enrichmentkey_remove_from_documents_title', $model->getName()));
-                    $form->setQuestion($this->view->translate('admin_enrichmentkey_remove_from_documents_description', $model->getName()));
-                    $result = $form;
+            $enrichmentKey = $this->getModel($this->getRequest()->getParam(self::PARAM_MODEL_ID));
+            if (! is_null($enrichmentKey)) {
+                if (is_null($enrichmentKey->getId())) {
+                    // Sonderbehandlung für nicht registrierte Enrichment Keys, die in Dokuemten verwendet werden
+                    $result = $this->initConfirmationForm($enrichmentKey, true);
+                } elseif ($this->isDeletable($enrichmentKey)) {
+                    $result = $this->initConfirmationForm($enrichmentKey);
                 } else {
                     $result = $this->createCannotBeDeletedResult();
                 }
@@ -125,6 +146,25 @@ class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD
         }
 
         $this->renderResult($result);
+    }
+
+    /**
+     * @param Opus_EnrichmentKey $model
+     * @param bool $unregistered
+     * @return Application_Form_Confirmation
+     */
+    private function initConfirmationForm($model, $unregistered = false)
+    {
+        $form = $this->getConfirmationForm($model, $unregistered);
+        if ($unregistered) {
+            $form->setLegend($this->view->translate('admin_enrichmentkey_remove_unregistered_from_documents_title', $model->getName()));
+            $form->setQuestion($this->view->translate('admin_enrichmentkey_remove_unregistered_from_documents_description', $model->getName()));
+            $form->getElement(Application_Form_Confirmation::ELEMENT_MODEL_ID)->setValue($model->getName());
+        } else {
+            $form->setLegend($this->view->translate('admin_enrichmentkey_remove_from_documents_title', $model->getName()));
+            $form->setQuestion($this->view->translate('admin_enrichmentkey_remove_from_documents_description', $model->getName()));
+        }
+        return $form;
     }
 
     /**
@@ -169,5 +209,38 @@ class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD
             }
         }
         return $result;
+    }
+
+    /**
+     * Liefert eine Instanz von Opus_Enrichment mit übergebenen $modelId, sofern diese existiert (andernfalls null).
+     * Hier wird der Sonderfall behandelt, dass die Id (d.h. der EnrichmentKey Name) nicht registriert ist.
+     * Wird der nicht registrierte EnrichmentKey Name in Dokumenten verwendet, so wird ebenfalls eine Instanz von
+     * Opus_Enrichment zurückgegeben, die allerdings nicht in der Datenbank persistiert ist.
+     *
+     * @param $modelId
+     * @return Opus_EnrichmentKey|null
+     */
+    public function getModel($modelId)
+    {
+        if (is_null($modelId) || is_numeric($modelId) || ! $this->getVerifyModelIdIsNumeric()) {
+            $modelClass = $this->getModelClass();
+
+            if (strlen(trim($modelId)) !== 0) {
+                try {
+                    return new $modelClass($modelId);
+                } catch (Opus_Model_NotFoundException $omnfe) {
+
+                    if (in_array($modelId, Opus_EnrichmentKey::getAllReferenced())) {
+                        // Sonderbehandlung: nicht registrierter, aber in Benutzung befindlicher Enrichment Key
+                        $enrichmentKey = new Opus_EnrichmentKey();
+                        $enrichmentKey->setName($modelId);
+                        return $enrichmentKey;
+                    }
+                    $this->getLogger()->err(__METHOD__ . ':' . $omnfe->getMessage());
+                }
+            }
+        }
+
+        return null; // keine gültige ID
     }
 }

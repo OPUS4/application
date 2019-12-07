@@ -73,13 +73,19 @@
                 <?PHP endif ?>
             </td>
             <td class="edit">
-                <?PHP if ($this->element->isModifiable($model)) : ?>
+                <?PHP if (is_null($model->getId())) : ?>
+                    <a href="<?= $this->url(['action' => 'new', 'id' => $model->getName()]) ?>"
+                    ><?= $this->translate('admin_button_create'); ?></a>
+                <?PHP elseif ($this->element->isModifiable($model)) : ?>
                     <a href="<?= $this->url(['action' => 'edit', 'id' => $model->getId()]) ?>"
                     ><?= $this->translate('admin_button_edit'); ?></a>
                 <?PHP endif ?>
             </td>
             <td class="remove">
-                <?PHP if ($this->element->isModifiable($model) && $this->element->isUsed($model)) : ?>
+                <?PHP if (is_null($model->getId())) : ?>
+                    <a href="<?= $this->url(['action' => 'removeFromDocs', 'id' => $model->getName()]) ?>"
+                    ><?= $this->translate('admin_button_remove_from_documents'); ?></a>
+                <?PHP elseif ($this->element->isModifiable($model) && $this->element->isUsed($model)) : ?>
                     <a href="<?= $this->url(['action' => 'removeFromDocs', 'id' => $model->getId()]) ?>"
                     ><?= $this->translate('admin_button_remove_from_documents'); ?></a>
                 <?PHP endif ?>
