@@ -265,6 +265,18 @@ class Admin_Form_EnrichmentKeyTest extends ControllerTestCase
         $this->assertFalse($form->isValid($this->createArray('FooBarKey', 'FooBarType')));
     }
 
+    public function testSetNameElementValue()
+    {
+        $form = new Admin_Form_EnrichmentKey();
+        $form->populateFromModel(new Opus_EnrichmentKey());
+        $form->setNameElementValue('foo');
+
+        $this->assertEquals('foo', $form->getElement(Admin_Form_EnrichmentKey::ELEMENT_NAME)->getValue());
+
+        $form->populateFromModel(new Opus_EnrichmentKey());
+        $this->assertNull($form->getElement(Admin_Form_EnrichmentKey::ELEMENT_NAME)->getValue());
+    }
+
     private function createArray($name, $type = null, $options = null)
     {
         $result = [Admin_Form_EnrichmentKey::ELEMENT_NAME => $name];
