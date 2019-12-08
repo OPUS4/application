@@ -978,6 +978,71 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $enrichmentKey->delete();
     }
 
+    public function testIndexPageShowUnregisteredKeys()
+    {
+        $doc = $this->createTestDocument();
+
+        $enrichment = new Opus_Enrichment();
+        $enrichment->setKeyName('unregistered');
+        $enrichment->setValue('value');
+
+        $doc->addEnrichment($enrichment);
+        $doc->store();
+
+        $this->dispatch($this->getControllerPath() . '/');
+
+        $this->assertResponseCode(200);
+        $this->assertContains('admin/enrichmentkey/new/id/unregistered', $this->getResponse()->getBody());
+        $this->assertNotContains('admin/enrichmentkey/edit/id/unregistered', $this->getResponse()->getBody());
+        $this->assertContains('admin/enrichmentkey/removeFromDocs/id/unregistered', $this->getResponse()->getBody());
+        $this->assertNotContains('admin/enrichmentkey/delete/id/unregistered', $this->getResponse()->getBody());
+    }
+
+    public function testIndexPageShowRegisteredUnusedKeys()
+    {
+        $enrichmentKey = new Opus_EnrichmentKey();
+        $enrichmentKey->setName('unused');
+        $id = $enrichmentKey->store();
+
+        $this->dispatch($this->getControllerPath() . '/');
+
+        $enrichmentKey = new Opus_EnrichmentKey($id);
+        $enrichmentKey->delete();
+
+        $this->assertResponseCode(200);
+        $this->assertNotContains('admin/enrichmentkey/new/id/unused', $this->getResponse()->getBody());
+        $this->assertContains('admin/enrichmentkey/edit/id/unused', $this->getResponse()->getBody());
+        $this->assertNotContains('admin/enrichmentkey/removeFromDocs/id/unused', $this->getResponse()->getBody());
+        $this->assertContains('admin/enrichmentkey/delete/id/unused', $this->getResponse()->getBody());
+    }
+
+    public function testIndexPageShowRegisteredUsedKeys()
+    {
+        $enrichmentKey = new Opus_EnrichmentKey();
+        $enrichmentKey->setName('used');
+        $id = $enrichmentKey->store();
+
+        $doc = $this->createTestDocument();
+
+        $enrichment = new Opus_Enrichment();
+        $enrichment->setKeyName('used');
+        $enrichment->setValue('value');
+
+        $doc->addEnrichment($enrichment);
+        $doc->store();
+
+        $this->dispatch($this->getControllerPath() . '/');
+
+        $enrichmentKey = new Opus_EnrichmentKey($id);
+        $enrichmentKey->delete();
+
+        $this->assertResponseCode(200);
+        $this->assertNotContains('admin/enrichmentkey/new/id/used', $this->getResponse()->getBody());
+        $this->assertContains('admin/enrichmentkey/edit/id/used', $this->getResponse()->getBody());
+        $this->assertContains('admin/enrichmentkey/removeFromDocs/id/used', $this->getResponse()->getBody());
+        $this->assertContains('admin/enrichmentkey/delete/id/used', $this->getResponse()->getBody());
+    }
+
     public function enrichmentKeyNamesProvider()
     {
         return [
