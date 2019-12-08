@@ -773,14 +773,16 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         }
     }
 
-    public function testInitializedNewFormWithoutKeyName() {
+    public function testInitializedNewFormWithoutKeyName()
+    {
         $this->dispatch($this->getControllerPath() . '/new');
 
         // Formularfeld "Name" soll nicht gefüllt sein
         $this->assertXpath('//form//input[@id="Name" and @value=""]');
     }
 
-    public function testInitializedNewFormWithUnregisteredKeyName() {
+    public function testInitializedNewFormWithUnregisteredKeyName()
+    {
         $doc = $this->createTestDocument();
 
         $enrichment = new Opus_Enrichment();
@@ -796,7 +798,8 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $this->assertXpath('//form//input[@id="Name" and @value="unregistered"]');
     }
 
-    public function testInitializedNewFormWithRegisteredUnusedKeyName() {
+    public function testInitializedNewFormWithRegisteredUnusedKeyName()
+    {
         $enrichmentKey = new Opus_EnrichmentKey();
         $enrichmentKey->setName('unused');
         $id = $enrichmentKey->store();
@@ -810,7 +813,8 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $this->assertXpath('//form//input[@id="Name" and @value=""]');
     }
 
-    public function testInitializedNewFormWithRegisteredUsedKeyName() {
+    public function testInitializedNewFormWithRegisteredUsedKeyName()
+    {
         $enrichmentKey = new Opus_EnrichmentKey();
         $enrichmentKey->setName('used');
         $id = $enrichmentKey->store();
@@ -833,11 +837,84 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $this->assertXpath('//form//input[@id="Name" and @value=""]');
     }
 
-    public function testInitializedNewFormWithUnknownKeyName() {
+    public function testInitializedNewFormWithUnknownKeyName()
+    {
         $this->dispatch($this->getControllerPath() . '/new/id/testInitializedNewFormWithUnknownKeyName');
 
         // Formularfeld "Name" darf nicht gefüllt sein
         $this->assertXpath('//form//input[@id="Name" and @value=""]');
+    }
+
+    public function testRemoveFromDocsActionWithoutId()
+    {
+        $this->dispatch($this->getControllerPath() . '/removeFromDocs');
+        $this->assertRedirectTo('/admin/enrichmentkey');
+    }
+
+    public function testRemoveFromDocsActionWithoutEmptyId()
+    {
+        $this->dispatch($this->getControllerPath() . '/removeFromDocs/id/');
+        $this->assertRedirectTo('/admin/enrichmentkey');
+    }
+
+    public function testRemoveFromDocsActionWithoutUnknownId()
+    {
+        $this->dispatch($this->getControllerPath() . '/removeFromDocs/id/testRemoveFromDocsActionWithoutUnknownId');
+        $this->assertRedirectTo('/admin/enrichmentkey');
+    }
+
+    public function testRemoveFromDocsActionWithUnregisteredId()
+    {
+        $doc = $this->createTestDocument();
+
+        $enrichment = new Opus_Enrichment();
+        $enrichment->setKeyName('testRemoveFromDocsActionWithUnregisteredId');
+        $enrichment->setValue('value');
+
+        $doc->addEnrichment($enrichment);
+        $doc->store();
+
+        $this->dispatch($this->getControllerPath() . '/removeFromDocs/id/testRemoveFromDocsActionWithUnregisteredId');
+        $this->assertResponseCode(200);
+        $this->assertXpathContentContains('//form/fieldset/legend/text()', 'testRemoveFromDocsActionWithUnregisteredId');
+    }
+
+    public function testRemoveFromDocsActionWithRegisteredUnusedId()
+    {
+        $enrichmentKey = new Opus_EnrichmentKey();
+        $enrichmentKey->setName('unused');
+        $id = $enrichmentKey->store();
+
+        $this->dispatch($this->getControllerPath() . '/removeFromDocs/id/unused');
+
+        $enrichmentKey = new Opus_EnrichmentKey($id);
+        $enrichmentKey->delete();
+
+        $this->assertRedirectTo('/admin/enrichmentkey');
+    }
+
+    public function testRemoveFromDocsActionWithRegisteredUsedId()
+    {
+        $enrichmentKey = new Opus_EnrichmentKey();
+        $enrichmentKey->setName('used');
+        $id = $enrichmentKey->store();
+
+        $doc = $this->createTestDocument();
+
+        $enrichment = new Opus_Enrichment();
+        $enrichment->setKeyName('used');
+        $enrichment->setValue('value');
+
+        $doc->addEnrichment($enrichment);
+        $doc->store();
+
+        $this->dispatch($this->getControllerPath() . '/removeFromDocs/id/used');
+
+        $enrichmentKey = new Opus_EnrichmentKey($id);
+        $enrichmentKey->delete();
+
+        $this->assertResponseCode(200);
+        $this->assertXpathContentContains('//form/fieldset/legend/text()', 'used');
     }
 
     public function enrichmentKeyNamesProvider()

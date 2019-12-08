@@ -132,7 +132,9 @@ class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD
         } else {
             // Bestätigungsformular anzeigen
             $enrichmentKey = $this->getModel($this->getRequest()->getParam(self::PARAM_MODEL_ID));
-            if (! is_null($enrichmentKey)) {
+
+            // dem Enrichment Key muss mindestens ein Dokument zugeordnet sein, sonst ist die Operation nicht ausführbar
+            if (! is_null($enrichmentKey) && in_array($enrichmentKey->getName(), Opus_EnrichmentKey::getAllReferenced())) {
                 if (is_null($enrichmentKey->getId())) {
                     // Sonderbehandlung für nicht registrierte Enrichment Keys, die in Dokuemten verwendet werden
                     $result = $this->initConfirmationForm($enrichmentKey, true);
