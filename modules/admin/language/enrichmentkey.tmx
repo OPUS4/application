@@ -43,6 +43,30 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_enrichmentkey_label_validation">
+      <tuv xml:lang="en">
+        <seg>Validate existing values?</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sollen existierende Werte validiert werden?</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_enrichmentkey_validation_description">
+      <tuv xml:lang="en">
+        <seg>
+          If this option is enabled, existing values of the given enrichment key are considered as
+          invalid if they did not conform with its type configuration.
+        </seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>
+          Durch das Aktivieren dieser Option können Sie bereits existierende Werte für diesen Enrichmentkey
+          nur dann speichern, wenn diese gemäß seiner aktuellen Typ-Konfiguration gültig sind.
+        </seg>
+      </tuv>
+    </tu>
+
     <tu tuid="admin_enrichmentkey_index">
       <tuv xml:lang="en">
         <seg>Enrichmentkeys Overview</seg>
