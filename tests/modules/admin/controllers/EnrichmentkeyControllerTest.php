@@ -917,6 +917,67 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $this->assertXpathContentContains('//form/fieldset/legend/text()', 'used');
     }
 
+    public function testRemoveFromDocsActionPostWithUnregisteredKey()
+    {
+        $doc = $this->createTestDocument();
+
+        $enrichment = new Opus_Enrichment();
+        $enrichment->setKeyName('unregistered');
+        $enrichment->setValue('value');
+
+        $doc->addEnrichment($enrichment);
+        $id = $doc->store();
+
+        $post = [
+            'Id' => 'unregistered',
+            'ConfirmYes' => 'Yes'
+        ];
+
+        $this->getRequest()->setPost($post)->setMethod('POST');
+        $this->dispatch($this->getControllerPath() . '/removeFromDocs');
+
+        $this->assertRedirectTo('/admin/enrichmentkey');
+
+        // das Testdokument sollte kein Enrichment mehr haben
+        $doc = new Opus_Document($id);
+        $this->assertNull($doc->getEnrichment('unregistered'));
+    }
+
+    public function testRemoveFromDocsActionPostWithRegisteredKey()
+    {
+        $enrichmentKey = new Opus_EnrichmentKey();
+        $enrichmentKey->setName('used');
+        $id = $enrichmentKey->store();
+
+        $doc = $this->createTestDocument();
+
+        $enrichment = new Opus_Enrichment();
+        $enrichment->setKeyName('used');
+        $enrichment->setValue('value');
+
+        $doc->addEnrichment($enrichment);
+        $docId = $doc->store();
+
+        $post = [
+            'Id' => 'used',
+            'ConfirmYes' => 'Yes'
+        ];
+
+        $this->getRequest()->setPost($post)->setMethod('POST');
+        $this->dispatch($this->getControllerPath() . '/removeFromDocs');
+
+        $this->assertRedirectTo('/admin/enrichmentkey');
+
+        // das Testdokument sollte kein Enrichment mehr haben; der EnrichmentKey muss weiterhin existieren
+        $doc = new Opus_Document($docId);
+        $this->assertNull($doc->getEnrichment('used'));
+        $enrichmentKey = new Opus_EnrichmentKey($id);
+        $this->assertNotNull($enrichmentKey);
+
+        // cleanup
+        $enrichmentKey->delete();
+    }
+
     public function enrichmentKeyNamesProvider()
     {
         return [
