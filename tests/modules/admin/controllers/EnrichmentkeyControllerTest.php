@@ -1041,6 +1041,79 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $this->assertContains('admin/enrichmentkey/delete/id/used', $this->getResponse()->getBody());
     }
 
+    public function testNewActionWithRenamingUnregisteredKey()
+    {
+        // prepare test document with unregistered enrichment key
+        $doc = $this->createTestDocument();
+        $enrichment = new Opus_Enrichment();
+        $enrichment->setKeyName('unregistered');
+        $enrichment->setValue('value');
+        $doc->addEnrichment($enrichment);
+        $id = $doc->store();
+
+        $post = [
+            'Name' => 'unregisterednew',
+            'Type' => 'TextType',
+            'Options' => '',
+            'Save' => 'Speichern'
+        ];
+
+        $this->getRequest()->setPost($post)->setMethod('POST');
+        $this->dispatch($this->getControllerPath() . '/new/id/unregistered');
+
+        $this->assertRedirect();
+        $this->assertRedirectRegex('/^\/admin\/enrichmentkey/');
+
+        $enrichmentKey = Opus_EnrichmentKey::fetchByName('unregistered');
+        $this->assertNull($enrichmentKey);
+
+        $enrichmentKey = Opus_EnrichmentKey::fetchByName('unregisterednew');
+        $this->assertNotNull($enrichmentKey);
+
+        $doc = new Opus_Document($id);
+        $enrichments = $doc->getEnrichment();
+        $this->assertCount(1, $enrichments);
+        $this->assertEquals('unregisterednew', $enrichments[0]->getKeyName());
+
+        // Cleanup
+        $enrichmentKey->delete();
+    }
+
+    public function testNewActionWithoutRenamingUnregisteredKey()
+    {
+        // prepare test document with unregistered enrichment key
+        $doc = $this->createTestDocument();
+        $enrichment = new Opus_Enrichment();
+        $enrichment->setKeyName('unregistered');
+        $enrichment->setValue('value');
+        $doc->addEnrichment($enrichment);
+        $id = $doc->store();
+
+        $post = [
+            'Name' => 'unregistered',
+            'Type' => 'TextType',
+            'Options' => '',
+            'Save' => 'Speichern'
+        ];
+
+        $this->getRequest()->setPost($post)->setMethod('POST');
+        $this->dispatch($this->getControllerPath() . '/new/id/unregistered');
+
+        $this->assertRedirect();
+        $this->assertRedirectRegex('/^\/admin\/enrichmentkey/');
+
+        $enrichmentKey = Opus_EnrichmentKey::fetchByName('unregistered');
+        $this->assertNotNull($enrichmentKey);
+
+        $doc = new Opus_Document($id);
+        $enrichments = $doc->getEnrichment();
+        $this->assertCount(1, $enrichments);
+        $this->assertEquals('unregistered', $enrichments[0]->getKeyName());
+
+        // Cleanup
+        $enrichmentKey->delete();
+    }
+
     public function enrichmentKeyNamesProvider()
     {
         return [

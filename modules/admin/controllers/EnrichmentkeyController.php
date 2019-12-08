@@ -144,8 +144,8 @@ class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD
         $oldName = null;
         $newName = null;
 
-        if (is_null($post[self::PARAM_MODEL_ID])) {
-            // Verarbeitung im Kontext der newAction: keine Model-ID im POST Request enthalten
+        if (! in_array(self::PARAM_MODEL_ID, $post) || $post[self::PARAM_MODEL_ID] === '') {
+            // Verarbeitung im Kontext der newAction: keine Model-ID im POST Request enthalten oder leer
 
             $oldName = $this->getRequest()->getParam(self::PARAM_MODEL_ID);
             if (! is_null($oldName) &&
@@ -153,6 +153,7 @@ class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD
                 in_array($oldName, Opus_EnrichmentKey::getAllReferenced())) {
                 $newName = $post[Admin_Form_EnrichmentKey::ELEMENT_NAME];
                 if (!is_null($newName) && $oldName !== $newName) {
+                    // Neuregistrierung mit gleichzeitiger Umbenennung des Enrichment Keys
                     $renamingOfUnregisteredKey = true;
                 }
             }
@@ -160,8 +161,8 @@ class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD
 
         $result = parent::handleModelPost($post);
 
-        // sofern der Enrichment Key erfolgreich registriert wurde: Umbenennung prüfen
         if ($renamingOfUnregisteredKey && is_array($result) && in_array(self::SAVE_SUCCESS, $result)) {
+            // Enrichment Key wurde erfolgreich registriert: Umbenennung des EK in den Dokumenten durchführen
             $enrichmentKey = Opus_EnrichmentKey::fetchByName($newName);
             if (! is_null($enrichmentKey)) {
                 // es hat eine Umbenennung mit gleichzeitiger Registrierung stattgefunden: nach der erfolgreichen
