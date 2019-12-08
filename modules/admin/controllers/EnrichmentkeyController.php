@@ -152,7 +152,7 @@ class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD
                 is_null(Opus_EnrichmentKey::fetchByName($oldName)) &&
                 in_array($oldName, Opus_EnrichmentKey::getAllReferenced())) {
                 $newName = $post[Admin_Form_EnrichmentKey::ELEMENT_NAME];
-                if (!is_null($newName) && $oldName !== $newName) {
+                if (! is_null($newName) && $oldName !== $newName) {
                     // Neuregistrierung mit gleichzeitiger Umbenennung des Enrichment Keys
                     $renamingOfUnregisteredKey = true;
                 }
