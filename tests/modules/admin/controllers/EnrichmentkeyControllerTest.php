@@ -483,11 +483,9 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $this->assertEquals($protectedEnrichmentKeyName, $enrichmentKey->getName());
     }
 
-    /**
-     * @dataProvider enrichmentKeyNamesProvider
-     */
-    public function testRemoveFromDocsShowFormForUnprotectedEnrichment($enrichmentKeyName)
+    public function testRemoveFromDocsShowFormForUnprotectedEnrichment()
     {
+        $enrichmentKeyName = 'Audience'; // wird von einem Dokument verwendet
         $enrichmentKey = new Opus_EnrichmentKey($enrichmentKeyName);
         $this->assertEquals($enrichmentKeyName, $enrichmentKey->getName());
 
