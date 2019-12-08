@@ -325,7 +325,8 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action
                         // Redirect zur Show Action
                         if ($this->getShowActionEnabled()) {
                             return [
-                                'action' => 'show', 'message' => self::SAVE_SUCCESS,
+                                'action' => 'show',
+                                'message' => self::SAVE_SUCCESS,
                                 'params' => [self::PARAM_MODEL_ID => $model->getId()]
                             ];
                         } else {

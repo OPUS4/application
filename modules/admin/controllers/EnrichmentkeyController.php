@@ -124,6 +124,55 @@ class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD
         return $form;
     }
 
+    /**
+     * Behandlung des POST-Request beim Anlegen oder Editieren eines Enrichment Keys.
+     *
+     * Bei der Erzeugung eines neuen Enrichment Keys ist eine Sonderbehandlung erfolrderlich, wenn ein
+     * nicht registrierter Enrichment Key mit geändertem Namen gespeichert werden soll. In diesem Fall
+     * müssen alle Dokumente, die den EK referenzieren, den geänderten EK-Namen verwenden.
+     */
+    public function handleModelPost($post = null)
+    {
+        if (is_null($post)) {
+            $post = $this->getRequest()->getPost();
+        }
+
+        // handelt es sich um die newAction und wird der per Request Parameter referenzierte Enrichment Key
+        // in Dokumenten verwendet und ist er nicht registriert, dann muss überprüft werden, ob eine
+        // Registrierung des Enrichment Keys mit gleichzeitiger Umbenennung vorliegt
+        $renamingOfUnregisteredKey = false;
+        $oldName = null;
+        $newName = null;
+
+        if (is_null($post[self::PARAM_MODEL_ID])) {
+            // Verarbeitung im Kontext der newAction: keine Model-ID im POST Request enthalten
+
+            $oldName = $this->getRequest()->getParam(self::PARAM_MODEL_ID);
+            if (! is_null($oldName) &&
+                is_null(Opus_EnrichmentKey::fetchByName($oldName)) &&
+                in_array($oldName, Opus_EnrichmentKey::getAllReferenced())) {
+                $newName = $post[Admin_Form_EnrichmentKey::ELEMENT_NAME];
+                if (!is_null($newName) && $oldName !== $newName) {
+                    $renamingOfUnregisteredKey = true;
+                }
+            }
+        }
+
+        $result = parent::handleModelPost($post);
+
+        // sofern der Enrichment Key erfolgreich registriert wurde: Umbenennung prüfen
+        if ($renamingOfUnregisteredKey && is_array($result) && in_array(self::SAVE_SUCCESS, $result)) {
+            $enrichmentKey = Opus_EnrichmentKey::fetchByName($newName);
+            if (! is_null($enrichmentKey)) {
+                // es hat eine Umbenennung mit gleichzeitiger Registrierung stattgefunden: nach der erfolgreichen
+                // Registrierung des Enrichment Key muss der Name des EK in allen Dokumenten geändert werden
+                $enrichmentKey->rename($enrichmentKey->getName(), $oldName);
+            }
+        }
+
+        return $result;
+    }
+
     public function removefromdocsAction()
     {
         if ($this->getRequest()->isPost() === true) {
