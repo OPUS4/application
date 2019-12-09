@@ -148,6 +148,16 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
     }
 
     /**
+     * Setzt einen Wert im Formularlement ELEMENT_NAME.
+     *
+     * @param string value der einzutragende Wert
+     */
+    public function setNameElementValue($value)
+    {
+        $this->getElement(self::ELEMENT_NAME)->setValue($value);
+    }
+
+    /**
      * Aktualisiert Model-Instanz mit Werten im Formular.
      * @param $model Opus_Enrichmentkey
      */

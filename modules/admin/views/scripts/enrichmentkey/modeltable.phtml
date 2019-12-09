@@ -32,32 +32,38 @@
  */
 ?>
 
+<h2>
+    <?= $this->translate($this->element->getColumnLabel(0)) ?>
+</h2>
+<div class="enrichmentkey_new">
+    <a class="add" href="<?= $this->url(['action' => 'new']) ?>">
+        <?= $this->translate('admin_button_add') ?>
+    </a>
+</div>
 <table id="enrichmentkeyTable">
     <thead>
     <tr>
-        <th class="visible"><?= $this->translate($this->element->getColumnLabel(0)) ?>
-            <a class="add" href="<?= $this->url(['action' => 'new']) ?>"><?=
-                $this->translate('admin_button_add') ?></a></th>
-        <th colspan="3">&nbsp;</th>
+        <th>Name</th>
+        <th>Typ</th>
+        <th colspan="3"></th>
     </tr>
     </thead>
     <?PHP foreach ($this->element->getModels() as $model) : ?>
         <tr class="<?= $this->element->getRowCssClass($model)?>"
-            title="<?= htmlspecialchars($this->translate($this->element->getRowTooltip($model))) ?>"
-        >
+            title="<?= htmlspecialchars($this->translate($this->element->getRowTooltip($model))) ?>">
             <td>
-                <?PHP if ($this->element->isRenderShowActionLink($model)) : ?>
-                    <a href="<?= $this->url(['action' => 'show', 'id' => $model->getId()]) ?>"
-                       class="displayname <?= (is_null($model->getField('Active')) || $model->getActive()) ? '' : ' invisible'?>"
-                    ><?= htmlspecialchars($model->getDisplayName()) ?></a>
-                <?PHP else : ?>
+                <?php if (is_null($model->getId())) : ?>
                     <?= htmlspecialchars($model->getDisplayName()) ?>
-                <?PHP endif ?>
-                <?PHP if ($this->element->isProtected($model)) : ?>
-                <i class="fa fa-lock"
-                   title="<?= htmlspecialchars($this->translate('admin_enrichmentkey_protected_tooltip')); ?>"
-                   aria-hidden="true"></i>
-                <?PHP endif ?>
+                <?php else : ?>
+                    <span class="strong">
+                        <?= htmlspecialchars($model->getDisplayName()) ?>
+                    </span>
+                    <?PHP if ($this->element->isProtected($model)) : ?>
+                        <i class="fa fa-lock"
+                           title="<?= htmlspecialchars($this->translate('admin_enrichmentkey_protected_tooltip')); ?>"
+                           aria-hidden="true"></i>
+                    <?PHP endif ?>
+                <?php endif; ?>
             </td>
             <td>
                 <?= htmlspecialchars($model->getType()) ?>
@@ -67,13 +73,25 @@
                 <?PHP endif ?>
             </td>
             <td class="edit">
-                <?PHP if ($this->element->isModifiable($model)) : ?>
+                <?PHP if (is_null($model->getId())) : ?>
+                    <a href="<?= $this->url(['action' => 'new', 'id' => $model->getName()]) ?>"
+                    ><?= $this->translate('admin_button_create'); ?></a>
+                <?PHP elseif ($this->element->isModifiable($model)) : ?>
                     <a href="<?= $this->url(['action' => 'edit', 'id' => $model->getId()]) ?>"
                     ><?= $this->translate('admin_button_edit'); ?></a>
                 <?PHP endif ?>
             </td>
             <td class="remove">
-                <?PHP if ($this->element->isModifiable($model)) : ?>
+                <?PHP if (is_null($model->getId())) : ?>
+                    <a href="<?= $this->url(['action' => 'removeFromDocs', 'id' => $model->getName()]) ?>"
+                    ><?= $this->translate('admin_button_remove_from_documents'); ?></a>
+                <?PHP elseif ($this->element->isModifiable($model) && $this->element->isUsed($model)) : ?>
+                    <a href="<?= $this->url(['action' => 'removeFromDocs', 'id' => $model->getId()]) ?>"
+                    ><?= $this->translate('admin_button_remove_from_documents'); ?></a>
+                <?PHP endif ?>
+            </td>
+            <td class="remove">
+                <?PHP if (! is_null($model->getId()) && $this->element->isModifiable($model)) : ?>
                     <a href="<?= $this->url(['action' => 'delete', 'id' => $model->getId()]) ?>"
                     ><?= $this->translate('admin_button_remove'); ?></a>
                 <?PHP endif ?>

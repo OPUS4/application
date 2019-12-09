@@ -839,10 +839,10 @@
 
       <tu tuid="admin_document_error_exception_storing">
           <tuv xml:lang="en">
-              <seg>An unexpected exception occurred while saving the document ("$1%s").</seg>
+              <seg>An unexpected exception occurred while saving the document ("%1$s").</seg>
           </tuv>
           <tuv xml:lang="de">
-              <seg>Ein unerwarteter Fehler ist beim Speichern aufgetreten ("$1%s").</seg>
+              <seg>Ein unerwarteter Fehler ist beim Speichern aufgetreten ("%1$s").</seg>
           </tuv>
       </tu>
 

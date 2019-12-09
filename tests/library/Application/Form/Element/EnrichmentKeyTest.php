@@ -38,11 +38,6 @@ class Application_Form_Element_EnrichmentKeyTest extends FormElementTestCase
     protected $additionalResources = ['database', 'translation'];
 
     /**
-     * @var integer ID des zu Testzwecken angelegten Enrichment Keys
-     */
-    private $enrichmentKeyId = null;
-
-    /**
      * @var string Name des Enrichment-Keys, der für Testzwecke angelegt wird
      */
     private static $testEnrichmentKeyName = 'TestEnrichmentKey';
@@ -65,7 +60,7 @@ class Application_Form_Element_EnrichmentKeyTest extends FormElementTestCase
         // create a new enrichment key with an untranslated name
         $enrichmentKey = new Opus_EnrichmentKey();
         $enrichmentKey->setName(self::$testEnrichmentKeyName);
-        $this->enrichmentKeyId = $enrichmentKey->store();
+        $enrichmentKey->store();
     }
 
     public function tearDown()
@@ -73,12 +68,9 @@ class Application_Form_Element_EnrichmentKeyTest extends FormElementTestCase
         parent::tearDown();
 
         // remove previously created enrichment key
-        if (! is_null($this->enrichmentKeyId)) {
-            $enrichmentKey = new Opus_EnrichmentKey($this->enrichmentKeyId);
-            $this->enrichmentKeyId = null;
-            if (! is_null($enrichmentKey)) {
-                $enrichmentKey->delete();
-            }
+        $enrichmentKey = new Opus_EnrichmentKey(self::$testEnrichmentKeyName);
+        if (! is_null($enrichmentKey)) {
+            $enrichmentKey->delete();
         }
     }
 
