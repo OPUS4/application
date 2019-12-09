@@ -180,7 +180,7 @@ class Application_Form_Model_TableTest extends ControllerTestCase
 
         $mock = $this->getMockBuilder(Zend_Controller_Action_Interface::class)->getMock();
         $form->setController($mock);
-        $form->isRenderShowActionLink();
+        $this->assertTrue($form->isRenderShowActionLink(null));
 
         $this->assertEquals('The used controller does not have the method getShowActionEnabled.', $logger->getMessages()[0]);
     }
@@ -194,7 +194,7 @@ class Application_Form_Model_TableTest extends ControllerTestCase
 
         $mock = $this->getMockBuilder(Zend_Controller_Action_Interface::class)->getMock();
         $form->setController($mock);
-        $form->isModifiable(null);
+        $this->assertTrue($form->isModifiable(null));
 
         $this->assertEquals('The used controller does not have the method isModifiable.', $logger->getMessages()[0]);
     }
@@ -208,7 +208,7 @@ class Application_Form_Model_TableTest extends ControllerTestCase
 
         $mock = $this->getMockBuilder(Zend_Controller_Action_Interface::class)->getMock();
         $form->setController($mock);
-        $form->isDeletable(null);
+        $this->assertTrue($form->isDeletable(null));
 
         $this->assertEquals('The used controller does not have the method isDeletable.', $logger->getMessages()[0]);
     }
@@ -222,7 +222,7 @@ class Application_Form_Model_TableTest extends ControllerTestCase
 
         $mock = $this->getMockBuilder(Zend_Controller_Action_Interface::class)->getMock();
         $form->setController($mock);
-        $form->isUsed(null);
+        $this->assertFalse($form->isUsed(null));
 
         $this->assertEquals('The used controller does not have the method isUsed.', $logger->getMessages()[0]);
     }
@@ -236,7 +236,7 @@ class Application_Form_Model_TableTest extends ControllerTestCase
 
         $mock = $this->getMockBuilder(Zend_Controller_Action_Interface::class)->getMock();
         $form->setController($mock);
-        $form->isProtected(null);
+        $this->assertFalse($form->isProtected(null));
 
         $this->assertEquals('The used controller does not have the method isProtected.', $logger->getMessages()[0]);
     }
@@ -250,7 +250,7 @@ class Application_Form_Model_TableTest extends ControllerTestCase
 
         $mock = $this->getMockBuilder(Zend_Controller_Action_Interface::class)->getMock();
         $form->setController($mock);
-        $form->getRowCssClass(null);
+        $this->assertNull($form->getRowCssClass(null));
 
         $this->assertEquals('The used controller does not have the method getRowCssClass.', $logger->getMessages()[0]);
     }
@@ -264,7 +264,7 @@ class Application_Form_Model_TableTest extends ControllerTestCase
 
         $mock = $this->getMockBuilder(Zend_Controller_Action_Interface::class)->getMock();
         $form->setController($mock);
-        $form->getRowTooltip(null);
+        $this->assertNull($form->getRowTooltip(null));
 
         $this->assertEquals('The used controller does not have the method getRowTooltip.', $logger->getMessages()[0]);
     }
