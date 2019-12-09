@@ -117,6 +117,16 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
         // neues Formularfeld für die Eingabe des Enrichment-Wertes erzeugen
         $element = $enrichmentType->getFormElement($value);
 
+        if ($enrichmentType->getFormElementName() === 'Select') {
+            // aktuellen Wert in Auswahlliste eintragen, sofern er nicht in der Auswahlliste enthalten ist
+            if (is_null($element->getMultiOption($value))) {
+                $options = $element->getMultiOptions();
+                array_unshift($options, $value);
+                $element->setMultiOptions($options);
+                $element->setValue($value);
+            }
+        }
+
         // neues Formularelement soll vor dem Entfernen-Button erscheinen
         $element->setOrder(2);
 
@@ -147,7 +157,20 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
                 // bei Select-Feldern wird im POST nicht der ausgewählte Wert übergeben,
                 // sondern der Index des Wertes in der Werteliste (beginnend mit 0)
                 // daher ist hier ein zusätzlicher Mapping-Schritt erforderlich
-                $enrichmentValue = $enrichmentType->getValues()[$enrichmentValue];
+
+                $offset = 0;
+                // hier muss der Fall behandelt werden, dass der ausgewählte Wert
+                // gar nicht in der Typkonfiguration vorkommt, aber im gespeicherten Enrichment
+                // verwendet wird
+                if (! in_array($enrichment->getValue(), $enrichmentType->getValues())) {
+                    $offset = 1; // die Auswahlliste wurde um den Enrichment-Typ erweitert
+                }
+
+                if ($offset == 1 && $enrichmentValue == 0) {
+                    $enrichmentValue = $enrichment->getValue();
+                } else {
+                    $enrichmentValue = $enrichmentType->getValues()[$enrichmentValue - $offset];
+                }
             }
         }
 
