@@ -133,7 +133,7 @@ class Application_Form_Model_TableTest extends ControllerTestCase
     {
         $form = new Application_Form_Model_Table();
 
-        $this->assertTrue($form->isRenderShowActionLink(null));
+        $this->assertTrue($form->isRenderShowActionLink());
     }
 
     public function testIsModifiableDefault()

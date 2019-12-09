@@ -45,7 +45,7 @@
     <?PHP foreach ($this->element->getModels() as $model) : ?>
         <tr>
             <td>
-                <?PHP if ($this->element->isRenderShowActionLink($model)) : ?>
+                <?PHP if ($this->element->isRenderShowActionLink()) : ?>
                 <a href="<?= $this->url(['action' => 'show', 'id' => $model->getId()]) ?>"
                     class="displayname<?= (is_null($model->getField('Active')) || $model->getActive()) ? '' : ' invisible'?>"
                     ><?= htmlspecialchars($model->getDisplayName()) ?></a>
