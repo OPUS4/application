@@ -1627,6 +1627,9 @@ ul.links input:hover {
     font-family: monospace;
 }
 
+.adminContainer table.table-translations td.value {
+}
+
 .adminContainer td.edit a {
     background-position: -20px -257px;
     padding-left: 19px;

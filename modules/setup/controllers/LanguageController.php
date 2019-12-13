@@ -113,7 +113,24 @@ class Setup_LanguageController extends Application_Controller_Action
     {
         $translationKey = $this->getParam('key');
 
-        if (! is_null($translationKey)) {
+        if (is_null($translationKey)) {
+            $this->_helper->Redirector->redirectTo('show');
+        }
+
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            // TODO process form
+            // TODO validate
+            // TODO save
+            $this->_helper->Redirector->redirectTo('show');
+        } else {
+            $form = new Application_Form_Translations();
+            $form->addKey($translationKey);
+            $form->populateFromTranslations();
+            // TODO use key as label (use different form?)
+
+            $this->_helper->viewRenderer->setNoRender(true);
+            echo $form;
         }
     }
 
