@@ -185,9 +185,12 @@ class Admin_Form_Document_MultiEnrichmentSubForm extends Admin_Form_Document_Mul
 
                 // es ist zu prüfen, ob das Enrichment einen Wert verwendet, der in der
                 // Typkonfiguration nicht angegeben ist
-                $enrichmentId = $post[$subFormName][Admin_Form_Document_Enrichment::ELEMENT_ID];
-                if ($enrichmentId == '') {
-                    $enrichmentId = null;
+                $enrichmentId = null;
+                if (array_key_exists(Admin_Form_Document_Enrichment::ELEMENT_ID, $post[$subFormName])) {
+                    $enrichmentId = $post[$subFormName][Admin_Form_Document_Enrichment::ELEMENT_ID];
+                    if ($enrichmentId == '') {
+                        $enrichmentId = null;
+                    }
                 }
 
                 $subForm->initEnrichmentValueElement($enrichmentKeyName, $enrichmentId);
