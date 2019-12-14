@@ -163,7 +163,7 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
             $optionsElement->setDescription($enrichmentType->getDescription());
 
             $validationElement = $this->getElement(self::ELEMENT_VALIDATION);
-            $validationElement->setValue($enrichmentType->applyValidation());
+            $validationElement->setValue($enrichmentType->isStrictValidation());
         }
     }
 

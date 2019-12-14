@@ -47,11 +47,12 @@ class Admin_Form_EnrichmentKeyTest extends ControllerTestCase
     {
         $form = new Admin_Form_EnrichmentKey();
 
-        $this->assertEquals(6, count($form->getElements()));
+        $this->assertEquals(7, count($form->getElements()));
 
         $this->assertNotNull($form->getElement(Admin_Form_EnrichmentKey::ELEMENT_NAME));
         $this->assertNotNull($form->getElement(Admin_Form_EnrichmentKey::ELEMENT_TYPE));
         $this->assertNotNull($form->getElement(Admin_Form_EnrichmentKey::ELEMENT_OPTIONS));
+        $this->assertNotNull($form->getElement(Admin_Form_EnrichmentKey::ELEMENT_VALIDATION));
         $this->assertNotNull($form->getElement(Admin_Form_EnrichmentKey::ELEMENT_SAVE));
         $this->assertNotNull($form->getElement(Admin_Form_EnrichmentKey::ELEMENT_CANCEL));
         $this->assertNotNull($form->getElement(Admin_Form_EnrichmentKey::ELEMENT_MODEL_ID));
@@ -194,7 +195,7 @@ class Admin_Form_EnrichmentKeyTest extends ControllerTestCase
 
         $this->assertEquals('TestEnrichmentKey', $enrichmentKey->getName());
         $this->assertEquals('RegexType', $enrichmentKey->getType());
-        $this->assertEquals(json_encode(['regex' => '^a$']), $enrichmentKey->getOptions());
+        $this->assertEquals(json_encode(['regex' => '^a$', 'validation' => 'none']), $enrichmentKey->getOptions());
     }
 
     public function testUpdateModelWithUnknownTypeAndOptions()
