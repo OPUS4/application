@@ -109,6 +109,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
             'Name' => 'MyTestEnrichment',
             'Type' => 'TextType',
             'Options' => '',
+            'Validation' => '0',
             'Save' => 'Speichern'
         ];
 
@@ -123,9 +124,10 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $enrichmentKey = new Opus_EnrichmentKey('MyTestEnrichment');
         $this->assertNotNull($enrichmentKey);
         $this->assertEquals('MyTestEnrichment', $enrichmentKey->getName());
+        $this->assertNull($enrichmentKey->getOptions());
     }
 
-    public function testNewActionSaveEnrichmentKeyWithTypeOptions()
+    public function testNewActionSaveEnrichmentKeyWithTypeOptionsAndStrictValidation()
     {
         $this->createsModels = true;
 
@@ -133,6 +135,34 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
             'Name' => 'MyTestEnrichment',
             'Type' => 'RegexType',
             'Options' => '^.*$',
+            'Validation' => '1',
+            'Save' => 'Speichern'
+        ];
+
+        $this->getRequest()->setPost($post)->setMethod('POST');
+
+        $this->dispatch($this->getControllerPath() . '/new');
+
+        $this->assertRedirect();
+        $this->assertRedirectRegex('/^\/admin\/enrichmentkey/');
+        $this->verifyFlashMessage('controller_crud_save_success', self::MESSAGE_LEVEL_NOTICE);
+
+        $enrichmentKey = new Opus_EnrichmentKey('MyTestEnrichment');
+        $this->assertNotNull($enrichmentKey);
+        $this->assertEquals('MyTestEnrichment', $enrichmentKey->getName());
+        $this->assertEquals('RegexType', $enrichmentKey->getType());
+        $this->assertEquals(json_encode(["regex" => "^.*$", "validation" => "strict"]), $enrichmentKey->getOptions());
+    }
+
+    public function testNewActionSaveEnrichmentKeyWithTypeOptionsAndNoValidation()
+    {
+        $this->createsModels = true;
+
+        $post = [
+            'Name' => 'MyTestEnrichment',
+            'Type' => 'RegexType',
+            'Options' => '^.*$',
+            'Validation' => '0',
             'Save' => 'Speichern'
         ];
 
@@ -178,6 +208,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
             'Name' => 'MyTestEnrichment',
             'Type' => 'FooBarType',
             'Options' => '',
+            'Validation' => '0',
             'Save' => 'Speichern'
         ];
 
@@ -276,6 +307,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
             'Name' => 'MyTestEnrichmentModified',
             'Type' => 'RegexType',
             'Options' => '^.*$',
+            'Validation' => '1',
             'Save' => 'Speichern'
         ]);
 
@@ -287,7 +319,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $this->assertNotNull($enrichmentKey);
         $this->assertEquals('MyTestEnrichmentModified', $enrichmentKey->getName());
         $this->assertEquals('RegexType', $enrichmentKey->getType());
-        $this->assertEquals(json_encode(["regex" => "^.*$", "validation" => "none"]), $enrichmentKey->getOptions());
+        $this->assertEquals(json_encode(["regex" => "^.*$", "validation" => "strict"]), $enrichmentKey->getOptions());
 
         new Opus_EnrichmentKey('MyTestEnrichment');
 
@@ -311,6 +343,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
             'Name' => 'CityModified',
             'Type' => 'TextType',
             'Options' => '',
+            'Validation' => '0',
             'Save' => 'Speichern'
         ]);
 
@@ -389,6 +422,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
             'Name' => 'MyTestEnrichmentModified',
             'Type' => 'RegexType',
             'Options' => '^.*$',
+            'Validation' => '0',
             'Cancel' => 'Abbrechen'
         ]);
 
@@ -482,12 +516,12 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
             'Name' => $enrichmentKeyName,
             'Type' => 'RegexType',
             'Options' => '^abc$',
+            'Validation' => '1',
             'Save' => 'Speichern'
         ];
 
         $this->getRequest()->setPost($post)->setMethod('POST');
         $this->dispatch($this->getControllerPath() . '/new');
-
 
         // prüfe, dass Enrichmentkey erfolgreich in Datenbank gespeichert wurde
         $this->assertRedirect();
@@ -499,7 +533,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $this->assertEquals($enrichmentKeyName, $enrichmentKey->getName());
         $this->assertEquals($post['Type'], $enrichmentKey->getType());
         $this->assertEquals($post['Options'], $enrichmentKey->getOptionsPrintable());
-
+        $this->assertTrue($enrichmentKey->getEnrichmentType()->isStrictValidation());
 
         // Enrichmentkey-Übersichtseite sollte nun den Typnamen und einen Tooltip anzeigen
         $this->resetRequest();
@@ -514,7 +548,6 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $this->assertContains($post['Type'], $this->getResponse()->getBody());
         $this->assertXpathCount('//i[@class="fa fa-info-circle" and @title="' . $post['Options'] . '"]', 1);
 
-
         // prüfe, dass Edit-Formular Typnamen und Optionen anzeigt
         $this->resetRequest();
         $this->resetResponse();
@@ -528,6 +561,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $this->assertXpathContentContains('//*[@id="Name"]/@value', $enrichmentKeyName);
         $this->assertXpathContentContains('//*[@id="admin_enrichmentkey_type"]/option[@selected="selected"]/@value', $post['Type']);
         $this->assertXpathContentContains('//*[@id="admin_enrichmentkey_options"]/text()', $post['Options']);
+        $this->assertXpath('//*[@id="admin_enrichmentkey_validation" and @checked="checked" and @value="' . $post['Validation'] . '"]');
 
         // Cleanup-Schritt
         $enrichmentKey->delete();
@@ -543,6 +577,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
             'Name' => $enrichmentKeyName,
             'Type' => 'RegexType',
             'Options' => '[', // dieser Regex ist ungültig
+            'Validation' => '0',
             'Save' => 'Speichern'
         ];
 
@@ -556,6 +591,9 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $enrichmentKey = new Opus_EnrichmentKey($enrichmentKeyName);
         $this->assertNotNull($enrichmentKey);
         $this->assertEquals($enrichmentKeyName, $enrichmentKey->getName());
+        $this->assertNull($enrichmentKey->getOptions());
+        $this->assertNull($enrichmentKey->getEnrichmentType()->getOptionsAsString());
+        $this->assertFalse($enrichmentKey->getEnrichmentType()->isStrictValidation());
 
         $this->resetRequest();
         $this->resetResponse();
@@ -571,6 +609,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $this->assertXpathContentContains('//*[@id="Name"]/@value', $enrichmentKeyName);
         $this->assertXpathContentContains('//*[@id="admin_enrichmentkey_type"]/option[@selected="selected"]/@value', $post['Type']);
         $this->assertNotXpath('//*[@id="admin_enrichmentkey_options"]/text()'); // invalider Regex sollte nicht übernommen worden sein
+        $this->assertNotXpath('//*[@id="admin_enrichmentkey_validation" and @checked="checked"]');
 
         $enrichmentKey->delete();
     }
