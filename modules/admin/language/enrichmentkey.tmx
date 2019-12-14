@@ -112,6 +112,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_enrichmentkey_removeFromDocs">
+      <tuv xml:lang="en">
+        <seg>Remove Enrichmentkey from Documents</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Enrichmentkey in Dokumenten entfernen</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="admin_enrichmentkey_none_defined">
       <tuv xml:lang="en">
         <seg>No Enrichmentkeys defined.</seg>
@@ -213,19 +222,64 @@
 
     <tu tuid="admin_enrichmentkey_unused_tooltip">
       <tuv xml:lang="en">
-        <seg>This is an unused enrichmentkey, which can be modified.</seg>
+        <seg>This is an unused enrichment key.</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Dieser Enrichmentkey wird nicht benutzt und kann modifiziert werden.</seg>
+        <seg>Dieser Enrichmentkey wird nicht benutzt.</seg>
       </tuv>
     </tu>
 
     <tu tuid="admin_enrichmentkey_used_tooltip">
       <tuv xml:lang="en">
-        <seg>This enrichmentkey is used and can not be modified.</seg>
+        <seg>This enrichmentkey is used.</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Dieser Enrichmentkey wird benutzt und kann nicht modifiziert werden.</seg>
+        <seg>Dieser Enrichmentkey wird benutzt.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_enrichmentkey_unregistered_tooltip">
+      <tuv xml:lang="en">
+        <seg>This is an unregistered enrichment key.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dieser Enrichmentkey ist nicht registriert.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_enrichmentkey_remove_from_documents_title">
+      <tuv xml:lang="en">
+        <seg>Remove enrichment key %1$s from all documents</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Löschen des Enrichmentkeys %1$s in allen Dokumenten</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_enrichmentkey_remove_from_documents_description">
+      <tuv xml:lang="en">
+        <seg>Remove enrichment key %1$s from all documents? This operation does not delete the enrichment key itself.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Soll der Enrichmentkey %1$s wirklich in allen Dokumenten gelöscht werden? Der Enrichmentkey wird hierbei nicht gelöscht.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_enrichmentkey_remove_unregistered_from_documents_title">
+      <tuv xml:lang="en">
+        <seg>Remove unregistered enrichment key %1$s from all documents</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Löschen des nicht registrierten Enrichmentkeys %1$s in allen Dokumenten</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_enrichmentkey_remove_unregistered_from_documents_description">
+      <tuv xml:lang="en">
+        <seg>Remove unregistered enrichment key %1$s from all documents?</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Soll der nicht registrierte Enrichmentkey %1$s wirklich in allen Dokumenten gelöscht werden?</seg>
       </tuv>
     </tu>
 
