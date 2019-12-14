@@ -55,6 +55,11 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
     const ELEMENT_VALUE = 'Value';
 
     /**
+     * wenn true, dann werden Fehler bezüglich des Formularelements für den Enrichmentwert ignoriert
+     */
+    private $ignoreValueErrors = false;
+
+    /**
      * Erzeugt die Formularelemente. Das Formularelement für den Enrichment-Wert
      * wird erst in das Formular eingefügt, wenn der tatsächlich ausgewählte
      * Enrichment-Key (aus dem sich schließlich der Enrichment-Type ergibt)
@@ -375,10 +380,9 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
                         }
                     }
                     if (! is_null($formValue) && $enrichment->getValue() === $formValue) {
-                        // Wert des Enrichments wurde nicht geändert und es findet keine strikte Validierung
-                        // statt: Validierungsergebnis wird daher auf "positiv" geändert
-                        $element = $this->getElement(self::ELEMENT_VALUE);
-                        $element->removeDecorator('Errors'); // Fehlermeldung nicht anzeigen
+                        // Wert des Enrichments wurde nicht geändert und es findet keine strikte Validierung statt
+                        // Validierungsergebnis wird daher auf "positiv" geändert
+                        $this->ignoreValueErrors = true;
                         return true;
                     }
                 } catch (Opus\Model\Exception $e) {
@@ -387,5 +391,25 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
             }
         }
         return false;
+    }
+
+    /**
+     * Die entsprechende Methode in Zend_Form musste überschrieben werden, weil die API keine Möglichkeit bietet,
+     * nach dem Aufruf von isValid auf dem Formularlement für den Enrichmentwert die in _errors gespeicherten Fehler
+     * zu entfernen. Dies ist aber genau dann erforderlich, wenn keine strikte Validierung stattfindet, und der
+     * ursprüngliche Enrichmentwert nicht verändert wurde.
+     *
+     * @param null $name
+     * @param bool $suppressArrayNotation
+     * @return array
+     */
+    public function getErrors($name = null, $suppressArrayNotation = false)
+    {
+        if ($this->ignoreValueErrors) {
+            // mögliche Fehler werden ignoriert
+            return [];
+        }
+
+        return parent::getErrors($name, $suppressArrayNotation);
     }
 }
