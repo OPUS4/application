@@ -194,7 +194,7 @@ class Admin_Form_EnrichmentKeyTest extends ControllerTestCase
 
         $this->assertEquals('TestEnrichmentKey', $enrichmentKey->getName());
         $this->assertEquals('RegexType', $enrichmentKey->getType());
-        $this->assertEquals(json_encode(['regex' => '^a$']), $enrichmentKey->getOptions());
+        $this->assertEquals(json_encode(['regex' => '^a$', 'validation' => 'none']), $enrichmentKey->getOptions());
     }
 
     public function testUpdateModelWithUnknownTypeAndOptions()
