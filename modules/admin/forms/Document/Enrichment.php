@@ -348,9 +348,19 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
             if (! is_null($enrichmentType) && ! $enrichmentType->isStrictValidation()) {
                 // hat sich der Enrichment-Wert nicht geändert, so ist der (nicht geänderte)
                 // Enrichment-Wert weiterhin gültig, auch wenn er gegen die Typkonfiguration verstößt
+
+                if (! array_key_exists(self::ELEMENT_ID, $enrichmentData)) {
+                    return false; // negatives Validierungsergebnis bleibt bestehen
+                }
+
                 $enrichmentId = $enrichmentData[self::ELEMENT_ID];
                 try {
                     $enrichment = new Opus_Enrichment($enrichmentId);
+
+                    if (! array_key_exists(self::ELEMENT_VALUE, $enrichmentData)) {
+                        return false; // negatives Validierungsergebnis bleibt bestehen
+                    }
+
                     $formValue = $enrichmentData[self::ELEMENT_VALUE];
                     if ($enrichmentType->getFormElementName() == 'Select') {
                         // bei Select-Formularfeldern wird im POST-Request nicht der ausgewählte Wert,
