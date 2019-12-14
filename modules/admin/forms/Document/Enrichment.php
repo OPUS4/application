@@ -193,7 +193,6 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
         $enrichmentValue = $this->getElementValue(self::ELEMENT_VALUE);
 
         if (! is_null($enrichmentKey)) {
-
             // Enrichment-Key existiert tatsächlich (es handelt sich um einen registrierten Key)
             $enrichment->setKeyName($enrichmentKeyName);
 
@@ -211,7 +210,6 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
                 // eigentlich nicht gültig ist: in diesem Fall keinen neuen Wert im Enrichment setzen
                 $indexOffset = 0;
                 if (! in_array($enrichment->getValue(), $enrichmentType->getValues())) {
-
                     if ($enrichmentValue == 0) {
                         return; // keine Änderung des Enrichment-Werts
                     }
@@ -362,11 +360,9 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
                         $formValueAsInt = intval($formValue);
                         if (0 <= $formValueAsInt && $formValueAsInt < count($options)) {
                             $formValue = $options[$formValueAsInt];
-                        }
-                        else {
+                        } else {
                             $formValue = null;
                         }
-
                     }
                     if (! is_null($formValue) && $enrichment->getValue() === $formValue) {
                         // Wert des Enrichments wurde nicht geändert und es findet keine strikte Validierung
@@ -375,13 +371,11 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
                         $element->removeDecorator('Errors'); // Fehlermeldung nicht anzeigen
                         return true;
                     }
-                }
-                catch (Opus\Model\Exception $e) {
+                } catch (Opus\Model\Exception $e) {
                     // ignore exception silently: do not change validation result
                 }
             }
         }
-
         return false;
     }
 }
