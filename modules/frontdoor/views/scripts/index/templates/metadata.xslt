@@ -78,7 +78,7 @@
         </tr>
     </xsl:template>
 
-    <xsl:template match="@PageFirst|@PageLast|@PageNumber|@PublishedYear|@PublisherName|@PublisherPlace">
+    <xsl:template match="@PageFirst|@PageLast|@PageNumber|@ArticleNumber|@PublishedYear|@PublisherName|@PublisherPlace">
         <tr>
             <th class="name">
                 <xsl:call-template name="translateFieldname" />
@@ -100,7 +100,6 @@
                         <xsl:value-of select="." />
                     </xsl:with-param>
                 </xsl:call-template>
-
             </td>
         </tr>
     </xsl:template>
