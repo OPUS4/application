@@ -140,6 +140,28 @@ class Export_DataCiteExportTest extends ControllerTestCase
         $this->assertXpath('//td/span[@class="fa fa-exclamation-triangle"]');
     }
 
+    public function testExportOfDataCiteXmlForUnpublishedDocWithServerDatePublished()
+    {
+        $oldConfig = Zend_Registry::get('Zend_Config');
+        $this->adaptDoiConfiguration();
+
+        // nicht freigegebenes Testdokument mit Pflichtfeldern erzeugen und ServerDatePublished
+        $doc = $this->createTestDocument();
+        $doc->setServerState('unpublished');
+        $doc->setServerDatePublished(new Opus_Date('2019-12-24'));
+        $docId = $this->addRequiredFields($doc);
+
+        $this->useGerman();
+        $this->dispatch('/export/index/datacite/docId/' . $docId);
+
+        // Änderungen an Konfiguration zurücksetzen
+        Zend_Registry::set('Zend_Config', $oldConfig);
+
+        $this->assertResponseCode(200);
+        $this->assertHeaderContains('Content-Type', 'text/xml; charset=UTF-8');
+        $this->assertNotEmpty($this->getResponse()->getBody());
+    }
+
     public function testExportOfDataCiteXmlStatusPageForPublishedDocWithoutServerDatePublished()
     {
         $oldConfig = Zend_Registry::get('Zend_Config');
