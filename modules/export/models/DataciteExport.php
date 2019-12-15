@@ -105,8 +105,8 @@ class Export_Model_DataciteExport extends Application_Export_ExportPluginAbstrac
     /**
      * Setzt die View-Objekte für die Generierung der HTML-Statusseite mit den Fehlermeldungen der XML-Generierung.
      *
-     * @param $document das aktuell verarbeitete Dokument
-     * @param $requiredFieldsStatus der Status (Existenz bzw. Nichtexistenz) der einzelnen Pflichtfelder
+     * @param Opus_Document $document das aktuell verarbeitete Dokument
+     * @param array $requiredFieldsStatus der Status (Existenz bzw. Nichtexistenz) der einzelnen Pflichtfelder
      * @param $errors die bei der DataCite-XML Generierung gefundenen Fehler
      */
     private function prepareView($document, $requiredFieldsStatus, $errors)
@@ -116,5 +116,33 @@ class Export_Model_DataciteExport extends Application_Export_ExportPluginAbstrac
         $view->errors = $errors;
         $view->docId = $document->getId();
         $view->docServerState = $document->getServerState();
+        $view->validUnpublishedDoc = $this->isUnpublishedDocValid($requiredFieldsStatus);
+    }
+
+    /**
+     * Nicht freigeschaltete Dokumente haben keinen Wert im Feld ServerDatePublished. Daher
+     * muss es bei solchen Dokumenten immer zu einem Validierungsfehler kommen, weil das Feld
+     * publicationYear nicht befüllt werden kann.
+     *
+     * Ist das übergebene Dokument nicht freigeschaltet und ist das Fehlen eines Wertes für
+     * publicationYear der einzige Fehler, so soll auf diesen Umstand bei der Anzeige des Validierungsstatus
+     * gesondert hingewiesen werden.
+     *
+     * @param array $requiredFieldsStatus
+     */
+    private function isUnpublishedDocValid($requiredFieldsStatus)
+    {
+        $result = false;
+        foreach ($requiredFieldsStatus as $fieldName => $status) {
+            if ($status == 'publication_date_missing_non_published') {
+                $result = true;
+            }
+            else {
+                if ($status !== true) {
+                    return false;
+                }
+            }
+        }
+        return $result; // wurde nur der Wert publication_date_missing_non_published gefunden, so wird true zurückgeben
     }
 }
