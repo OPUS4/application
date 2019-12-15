@@ -79,6 +79,7 @@ $titleParent->setLanguage('fra');
 $doc->setPageNumber('123');
 $doc->setPageFirst('122');
 $doc->setPageLast('124');
+$doc->setArticleNumber('125');
 
 $doc->setVolume('4');
 $doc->setIssue('18');
