@@ -235,5 +235,4 @@ class Export_DataCiteExportTest extends ControllerTestCase
             ])
         ));
     }
-
 }
