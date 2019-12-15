@@ -134,7 +134,7 @@ class Export_Model_DataciteExport extends Application_Export_ExportPluginAbstrac
     {
         $result = false;
         foreach ($requiredFieldsStatus as $fieldName => $status) {
-            if ($status == 'publication_date_missing_non_published') {
+            if (is_string($status) && $status == 'publication_date_missing_non_published') {
                 $result = true;
             }
             else {

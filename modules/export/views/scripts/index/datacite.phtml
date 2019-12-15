@@ -49,12 +49,13 @@ else {
     <?= $this->translate($headlineKey, $this->docId) ?>
 </h1>
 
-<?php if ($this->validUnpublishedDoc) ?>
+<?php if ($this->validUnpublishedDoc) : ?>
 <div>
     <h3 style="text-transform: none; color: <?= $colorCode ?>">
         <?= $this->translate('export_datacite_notice_head_subtitle') ?>
     </h3>
 </div>
+<?php endif; ?>
 
 <div>
     <h3><?= $this->translate('export_datacite_required_fields_header') ?></h3>
@@ -68,7 +69,7 @@ else {
                 <td>
                     <?php if ($value === 'publication_date_missing_non_published') : ?>
                         <?php $colorCode = '#ff9933'; ?>
-                        <span class="fa fa fa-exclamation-triangle" style="color: <?= $colorCode ?>"></span>
+                        <span class="fa fa-exclamation-triangle" style="color: <?= $colorCode ?>"></span>
                         <?php $colorCode = '#1b926c'; ?><?php /* Farbe für den folgenden Text */ ?>
                     <?php else: ?>
                         <?php $colorCode = '#d44950'; ?>
