@@ -148,7 +148,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $this->assertNotNull($enrichmentKey);
         $this->assertEquals('MyTestEnrichment', $enrichmentKey->getName());
         $this->assertEquals('RegexType', $enrichmentKey->getType());
-        $this->assertEquals(json_encode(["regex" => "^.*$"]), $enrichmentKey->getOptions());
+        $this->assertEquals(json_encode(["regex" => "^.*$", "validation" => "none"]), $enrichmentKey->getOptions());
     }
 
     public function testNewActionSaveMissingEnrichmentType()
@@ -291,7 +291,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $this->assertNotNull($enrichmentKey);
         $this->assertEquals('MyTestEnrichmentModified', $enrichmentKey->getName());
         $this->assertEquals('RegexType', $enrichmentKey->getType());
-        $this->assertEquals(json_encode(["regex" => "^.*$"]), $enrichmentKey->getOptions());
+        $this->assertEquals(json_encode(["regex" => "^.*$", "validation" => "none"]), $enrichmentKey->getOptions());
 
         new Opus_EnrichmentKey('MyTestEnrichment');
 
