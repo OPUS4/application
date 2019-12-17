@@ -55,6 +55,11 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
     const ELEMENT_VALUE = 'Value';
 
     /**
+     * wenn true, dann werden Fehler bezüglich des Formularelements für den Enrichmentwert ignoriert
+     */
+    private $ignoreValueErrors = false;
+
+    /**
      * Erzeugt die Formularelemente. Das Formularelement für den Enrichment-Wert
      * wird erst in das Formular eingefügt, wenn der tatsächlich ausgewählte
      * Enrichment-Key (aus dem sich schließlich der Enrichment-Type ergibt)
@@ -98,9 +103,9 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
      * Erzeugt ein für das Enrichment passendes Eingabeformularfeld (in Abhängigkeit
      * des EnrichmentTypes, der dem EnrichmentKey des Enrichments zugeordnet wurde).
      * Wurde ein Wert im zweiten Argument übergeben, so wird das neu eingefügte
-     * Formularfeld mit dem Wert initialisiert.
+     * Formularfeld mit diesem Wert initialisiert.
      *
-     * @param      $enrichmentKey EnrichmentKey, des Enrichments, für das ein
+     * @param      $enrichmentKey EnrichmentKey des Enrichments, für das ein
      *                            Eingabeformularelement erzeugt werden soll
      * @param null $value         optionaler Wert für das erzeugte Formularfeld
      */
@@ -114,8 +119,15 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
             $enrichmentType = new Opus_Enrichment_TextType();
         }
 
-        // neues Formularfeld für die Eingabe des Enrichment-Wertes erzeugen
-        $element = $enrichmentType->getFormElement($value);
+        if ($enrichmentType->getFormElementName() === 'Select') {
+            // Sonderbehandlung für Select-Formularfeld erforderlich: aktuellen Enrichment-Wert
+            // im vorliegenden Dokument in Auswahlliste eintragen, sofern er nicht bereits in der
+            // Auswahlliste enthalten ist
+            $element = $this->createSelectFormElement($enrichmentType, $value);
+        } else {
+            // neues Formularfeld für die Eingabe des Enrichment-Wertes erzeugen
+            $element = $enrichmentType->getFormElement($value);
+        }
 
         // neues Formularelement soll vor dem Entfernen-Button erscheinen
         $element->setOrder(2);
@@ -124,6 +136,53 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
         $elements = $this->getElements();
         $elements[self::ELEMENT_VALUE] = $element;
         $this->setElements($elements);
+    }
+
+    /**
+     * Besondere Behandlung von Enrichment-Typen, die zur Wertauswahl ein Select-Formularfeld verweden.
+     * Hier kann es erforderlich sein, dass im vorliegenden Dokument ein Enrichment-Wert genutzt wird,
+     * der nicht in der konfigurierten Werteliste im Enrichment-Key enthalten ist. Ein solcher Wert
+     * soll dennoch (als erster Eintrag) im Select-Formularfeld zur Auswahl angeboten werden.
+     *
+     * @param Opus_Enrichment_SelectType $enrichmentType
+     * @param string $value
+     */
+    private function createSelectFormElement($enrichmentType, $value)
+    {
+        if (is_null($value)) {
+            $enrichmentId = $this->getElement(self::ELEMENT_ID)->getValue();
+            try {
+                $enrichment = new Opus_Enrichment($enrichmentId);
+                $value = $enrichment->getValue();
+            } catch (\Opus\Model\Exception $e) {
+                // ignore exception silently
+            }
+        }
+
+        // Feldliste erweitern, wenn $value nicht bereits in der Feldliste auftritt
+        $addValueToOptions = ! is_null($value) && ! in_array($value, $enrichmentType->getValues());
+        if ($addValueToOptions) {
+            // Erweiterung der Feldliste des Select-Elements erforderlich
+            $values = $enrichmentType->getValues();
+            array_unshift($values, $value); // zusätzlichen Wert am Anfang hinzufügen
+            $enrichmentType->setValues($values);
+        }
+
+        $element = $enrichmentType->getFormElement($value);
+
+        if ($addValueToOptions && $enrichmentType->isStrictValidation()) {
+            // in diesem Fall muss sichergestellt werden, dass der ursprüngliche Wert des Enrichments
+            // im vorliegenden Dokument nicht mehr als gültig betrachtet und daher nicht mehr gespeichert werden darf
+            $validator = $element->getValidator('Zend_Validate_InArray');
+
+            // erster Wert (der nach der EnrichmentKey-Konfiguration nun nicht mehr gültig ist) muss
+            // aus der Liste der als gültig akzeptierten Werte entfernt werden und der Validator aktualisiert werden
+            $haystack = $validator->getHaystack();
+            array_shift($haystack);
+            $validator->setHaystack($haystack);
+        }
+
+        return $element;
     }
 
     /**
@@ -139,15 +198,32 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
         $enrichmentValue = $this->getElementValue(self::ELEMENT_VALUE);
 
         if (! is_null($enrichmentKey)) {
-            // Enrichment-Key existiert tatsächlich
+            // Enrichment-Key existiert tatsächlich (es handelt sich um einen registrierten Key)
             $enrichment->setKeyName($enrichmentKeyName);
 
+            // besondere Behandlung von Enrichment-Keys, die als Select-Formularlement dargestellt werden
             $enrichmentType = $enrichmentKey->getEnrichmentType();
             if (! is_null($enrichmentType) && $enrichmentType->getFormElementName() === 'Select') {
                 // bei Select-Feldern wird im POST nicht der ausgewählte Wert übergeben,
                 // sondern der Index des Wertes in der Werteliste (beginnend mit 0)
-                // daher ist hier ein zusätzlicher Mapping-Schritt erforderlich
-                $enrichmentValue = $enrichmentType->getValues()[$enrichmentValue];
+                // daher ist hier ein zusätzlicher Mapping-Schritt erforderlich, der vom im POST
+                // angegebenen Index den tatsächlich ausgewählten Wert ableitet
+
+                // falls keine strikte Validierung stattfindet, dann darf der ursprünglich im
+                // Dokument gespeichert Enrichment-Wert (steht in Select-Feldliste an erster Stelle)
+                // auch dann gespeichert werden, wenn er gemäß der Konfiguration des Enrichment-Keys
+                // eigentlich nicht gültig ist: in diesem Fall keinen neuen Wert im Enrichment setzen
+                $indexOffset = 0;
+                if (! in_array($enrichment->getValue(), $enrichmentType->getValues())) {
+                    if ($enrichmentValue == 0) {
+                        return; // keine Änderung des Enrichment-Werts
+                    }
+
+                    // beim Mapping von Select-Feldwertindex auf tatsächlichen Wert aus Typkonfiguration 1 abziehen
+                    $indexOffset = -1;
+                }
+
+                $enrichmentValue = $enrichmentType->getValues()[$enrichmentValue + $indexOffset];
             }
         }
 
@@ -192,18 +268,19 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
     }
 
     /**
-     * Initialisierung des Formularelements für den Enrichment-Werts in
-     * Abhängigkeit vom EnrichmentType des ausgewählten EnrichmentKeys.
+     * Initialisierung des Formularelements für den Enrichment-Wert in
+     * Abhängigkeit vom EnrichmentType des ausgewählten Enrichment-Keys.
      *
      * Der Name des Enrichment-Key kann als optionales Argument übergeben werden.
      * Wird kein Name übergeben, so wird der erste Enrichment-Key (in der nach
      * Name sortierten Reihenfolge) betrachtet.
      *
-     * @param null $enrichmentKeyName Name eines Enrichment-Keys oder null
+     * @param string|null $enrichmentKeyName Name eines Enrichment-Keys oder null
+     * @param string|null $enrichmentId ID des Enrichments
      */
-    public function initEnrichmentValueElement($enrichmentKeyName = null)
+    public function initEnrichmentValueElement($enrichmentKeyName = null, $enrichmentId = null)
     {
-        // wurde kein Name eines EnrichmentKeys übergeben, so ermittle den Namen
+        // wurde kein Name eines Enrichment-Keys übergeben, so ermittle den Namen
         // des ersten Enrichment-Keys im Auswahlfeld
         if (is_null($enrichmentKeyName)) {
             $enrichmentKeyElement = $this->getElement(self::ELEMENT_KEY_NAME);
@@ -219,9 +296,28 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
         if (! is_null($enrichmentKey)) {
             // hier braucht erstmal nur das Formularelement für die Eingabe des
             // Enrichment-Wertes erzeugt und in das bestehende Formular eingebunden
-            // werden - der konkrete Wert wird später durch einen andere Methode
+            // werden - der konkrete Wert des Enrichments wird später durch einen andere Methode
             // gesetzt
-            $this->setEnrichmentValueFormElement($enrichmentKey);
+
+            $valueToBeAdded = null;
+            if (! is_null($enrichmentId)) {
+                try {
+                    $enrichment = new Opus_Enrichment($enrichmentId);
+                    // besondere Überprüfung beim Select-Feld erforderlich: hier muss ggf. der aktuell
+                    // im Enrichment gespeicherte Wert zur Werteliste des Select-Felds hinzugefügt werden,
+                    // wenn er nicht bereits enthalten ist
+                    $enrichmentType = $enrichment->getEnrichmentKey()->getEnrichmentType();
+                    if (! is_null($enrichmentType) && $enrichmentType->getFormElementName() == 'Select') {
+                        $enrichmentValue = $enrichment->getValue();
+                        if (! in_array($enrichmentValue, $enrichmentType->getValues())) {
+                            $valueToBeAdded = $enrichmentValue;
+                        }
+                    }
+                } catch (\Opus\Model\Exception $e) {
+                    // ignore exception silently
+                }
+            }
+            $this->setEnrichmentValueFormElement($enrichmentKey, $valueToBeAdded);
         } else {
             $this->getLogger()->err('could not find enrichment key with name ' . $enrichmentKey);
         }
@@ -236,5 +332,84 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
     {
         $this->setRemoveEmptyCheckbox(false);
         parent::prepareRenderingAsView();
+    }
+
+    public function isValid($data)
+    {
+        $validationResult = parent::isValid($data);
+
+        if ($validationResult) {
+            return true; // keine Validierungsfehler gefunden
+        }
+
+        // ggf. kann das negative Validierungsergebnis noch auf "positiv" (true / valid) geändert werden,
+        // wenn die Validation Policy des Enrichment Types des verwendeten Enrichment Keys auf "none"
+        // gesetzt wurde und sich der Enrichment-Wert im POST-Request nicht vom ursprünglich im
+        // Dokument gespeicherten Enrichment-Wert unterscheidet
+        $enrichmentData = $data[$this->getName()];
+        $enrichmentKey = Opus_EnrichmentKey::fetchByName($enrichmentData[self::ELEMENT_KEY_NAME]);
+        if (! is_null($enrichmentKey)) {
+            $enrichmentType = $enrichmentKey->getEnrichmentType();
+            if (! is_null($enrichmentType) && ! $enrichmentType->isStrictValidation()) {
+                // hat sich der Enrichment-Wert nicht geändert, so ist der (nicht geänderte)
+                // Enrichment-Wert weiterhin gültig, auch wenn er gegen die Typkonfiguration verstößt
+
+                if (! array_key_exists(self::ELEMENT_ID, $enrichmentData)) {
+                    return false; // negatives Validierungsergebnis bleibt bestehen
+                }
+
+                $enrichmentId = $enrichmentData[self::ELEMENT_ID];
+                try {
+                    $enrichment = new Opus_Enrichment($enrichmentId);
+
+                    if (! array_key_exists(self::ELEMENT_VALUE, $enrichmentData)) {
+                        return false; // negatives Validierungsergebnis bleibt bestehen
+                    }
+
+                    $formValue = $enrichmentData[self::ELEMENT_VALUE];
+                    if ($enrichmentType->getFormElementName() == 'Select') {
+                        // bei Select-Formularfeldern wird im POST-Request nicht der ausgewählte Wert,
+                        // sondern der Index des Wertes in der Auswahlliste zurückgeben: daher ist hier
+                        // ein zusätzlicher Schritt zur Ermittlung des Formularwertes erforderlich
+                        $options = $this->getElement(self::ELEMENT_VALUE)->getMultiOptions();
+                        $formValueAsInt = intval($formValue);
+                        if (0 <= $formValueAsInt && $formValueAsInt < count($options)) {
+                            $formValue = $options[$formValueAsInt];
+                        } else {
+                            $formValue = null;
+                        }
+                    }
+                    if (! is_null($formValue) && $enrichment->getValue() === $formValue) {
+                        // Wert des Enrichments wurde nicht geändert und es findet keine strikte Validierung statt
+                        // Validierungsergebnis wird daher auf "positiv" geändert
+                        $this->ignoreValueErrors = true;
+                        return true;
+                    }
+                } catch (Opus\Model\Exception $e) {
+                    // ignore exception silently: do not change validation result
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Die entsprechende Methode in Zend_Form musste überschrieben werden, weil die API keine Möglichkeit bietet,
+     * nach dem Aufruf von isValid auf dem Formularlement für den Enrichmentwert die in _errors gespeicherten Fehler
+     * zu entfernen. Dies ist aber genau dann erforderlich, wenn keine strikte Validierung stattfindet, und der
+     * ursprüngliche Enrichmentwert nicht verändert wurde.
+     *
+     * @param null $name
+     * @param bool $suppressArrayNotation
+     * @return array
+     */
+    public function getErrors($name = null, $suppressArrayNotation = false)
+    {
+        if ($this->ignoreValueErrors) {
+            // mögliche Fehler werden ignoriert
+            return [];
+        }
+
+        return parent::getErrors($name, $suppressArrayNotation);
     }
 }
