@@ -58,6 +58,11 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
     const ELEMENT_OPTIONS = 'Options';
 
     /**
+     * Form element name for validation option.
+     */
+    const ELEMENT_VALIDATION = 'Validation';
+
+    /**
      * Pattern for checking valid enrichment key names.
      *
      * Enrichment key have to start with a letter and can use letters, numbers and '.' and '_'.
@@ -119,6 +124,17 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
         );
         $this->addElement($element);
 
+        $element = $this->createElement(
+            'checkbox',
+            self::ELEMENT_VALIDATION,
+            [
+                'label' => 'admin_enrichmentkey_label_validation',
+                'id' => 'admin_enrichmentkey_validation',
+                'description' => $this->getTranslator()->translate('admin_enrichmentkey_validation_description')
+            ]
+        );
+        $this->addElement($element);
+
         $translations = new Admin_Form_TranslationSet();
 
         $translations->addKey('TranslationLabel');
@@ -141,9 +157,13 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
         $enrichmentType = $this->initEnrichmentType($enrichmentKey->getType());
         if (! is_null($enrichmentType)) {
             $enrichmentType->setOptions($enrichmentKey->getOptions());
+
             $optionsElement = $this->getElement(self::ELEMENT_OPTIONS);
             $optionsElement->setValue($enrichmentType->getOptionsAsString());
             $optionsElement->setDescription($enrichmentType->getDescription());
+
+            $validationElement = $this->getElement(self::ELEMENT_VALIDATION);
+            $validationElement->setValue($enrichmentType->isStrictValidation());
         }
     }
 
@@ -168,7 +188,9 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
 
         $enrichmentType = $this->initEnrichmentType($this->getElementValue(self::ELEMENT_TYPE));
         if (! is_null($enrichmentType)) {
-            $enrichmentType->setOptionsFromString($this->getElementValue(self::ELEMENT_OPTIONS));
+            $enrichmentType->setOptionsFromString([
+                'options' => $this->getElementValue(self::ELEMENT_OPTIONS),
+                'validation' => $this->getElementValue(self::ELEMENT_VALIDATION)]);
             $enrichmentKey->setOptions($enrichmentType->getOptions());
         }
     }
