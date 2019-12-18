@@ -48,6 +48,7 @@ class Admin_Form_Document_BibliographicTest extends ControllerTestCase
             'CreatingCorporation',
             'Edition',
             'Issue',
+            'ArticleNumber',
             'PageFirst',
             'PageLast',
             'PageCount',
