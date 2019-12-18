@@ -180,6 +180,10 @@ class Sword_DepositControllerTest extends ControllerTestCase
         $this->assertEquals($fileCount, count($doc->getFile()));
     }
 
+    /**
+     * @param Opus_Document $doc
+     * @throws Exception
+     */
     private function checkAllFieldsImport($doc)
     {
         $this->assertEquals('deu', $doc->getLanguage());
@@ -187,6 +191,7 @@ class Sword_DepositControllerTest extends ControllerTestCase
         $this->assertEquals('10', $doc->getPageFirst());
         $this->assertEquals('20', $doc->getPageLast());
         $this->assertEquals('11', $doc->getPageNumber());
+        $this->assertEquals('42', $doc->getArticleNumber());
         $this->assertEquals('99', $doc->getEdition());
         $this->assertEquals('11', $doc->getVolume());
         $this->assertEquals('543', $doc->getIssue());
