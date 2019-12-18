@@ -341,6 +341,7 @@ class Application_Import_Importer
             'PageFirst',
             'PageLast',
             'PageNumber',
+            'ArticleNumber',
             'PublisherName',
             'PublisherPlace',
             'Type',
