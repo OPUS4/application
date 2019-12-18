@@ -20,9 +20,9 @@ sudo mkdir /var/solr && mkdir /var/solr/data && mkdir /var/solr/data/opus4
 
 # Install opus4-core
 sudo cp /opt/solr/server/solr/solr.xml /var/solr/data \
-    && cp vendor/opus4-repo/search/core.properties /var/solr/data/opus4/core.properties \
-    && cp vendor/opus4-repo/search/config/schema.xml /var/solr/data/opus4/schema.xml \
-    && cp vendor/opus4-repo/search/config/solrconfig.xml /var/solr/data/opus4/solrconfig.xml \
+    && cp vendor/opus4-repo/search/conf/logging.properties /var/solr/data/opus4/logging.properties \
+    && cp vendor/opus4-repo/search/conf/schema.xml /var/solr/data/opus4/schema.xml \
+    && cp vendor/opus4-repo/search/conf/solrconfig.xml /var/solr/data/opus4/solrconfig.xml \
     && chown solr:solr -R /var/solr
 
 # Configure Solr
