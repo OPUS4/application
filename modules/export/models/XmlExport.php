@@ -250,13 +250,11 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract
     }
 
     /**
-     * Prepares xml export for solr search results.
-     *
-     * @param bool $restrictExportToPublishedDocuments wenn true, dann können nur freigeschaltete Dokumente exportiert werden
+     * Prepares XML export of Solr search results.
      *
      * @throws Application_SearchException
      */
-    public function prepareXml($restrictExportToPublishedDocuments = true)
+    public function prepareXml()
     {
         $request = $this->getRequest();
 
@@ -271,7 +269,7 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract
 
         switch ($searchType) {
             case Application_Util_Searchtypes::ID_SEARCH:
-                $resultIds = $this->getAndValidateDocId($request, $restrictExportToPublishedDocuments);
+                $resultIds = $this->getAndValidateDocId($request);
                 $numberOfHits = count($resultIds);
                 break;
             default:
@@ -279,6 +277,10 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract
                 $search = $searchFactory->getSearchPlugin($searchType);
                 $search->setExport(true);
                 $search->setMaxRows($this->getMaxRows());
+
+                // im Solr-Index sind auch nicht freigeschaltete Dokumente: die Einschränkung der
+                // Suche auf ausschließlich freigeschaltete Dokumente erfolgt in der Suchklasse und
+                // muss daher hier nicht vorgenommen werden
                 $query = $search->buildExportQuery($request);
                 $resultList = $search->performSearch($query);
                 foreach ($resultList->getResults() as $result) {
@@ -377,18 +379,16 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract
 
     /**
      * Checks for existence of a document with the ID given in request parameter docId.
-     * Additionally, if $restrictExportToPublishedDocuments is set to true, restrict
-     * search to documents with serverState published only, otherwise all documents are
-     * considered.
+     * Additionally restrict search to documents with serverState published only if user does
+     * not have 'resource_documents' permission, otherwise all documents are considered.
      *
      * Returns an empty array, if ID is not present in request, is unknown or the corresponding
      * document is not in serverState published. Otherwise returns a one-element array with docId.
      *
      * @param $request HTTP request object
-     * @param bool $restrictExportToPublishedDocuments if true, restrict search to published documents only
      * @return array empty array or one-element array with docId.
      */
-    private function getAndValidateDocId($request, $restrictExportToPublishedDocuments = true)
+    private function getAndValidateDocId($request)
     {
         $docId = $request->getParam('docId');
 
@@ -399,11 +399,15 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract
         if (! is_null($docId)) {
             try {
                 $doc = new Opus_Document($docId);
-                if (! $restrictExportToPublishedDocuments || $doc->getServerState() == 'published') {
-                    $result[] = $doc->getId();
-                }
             } catch (Exception $e) {
                 // do nothing: return empty array
+            }
+            if (! is_null($doc)) {
+                if ($doc->getServerState() != 'published' && ! $this->isAllowExportOfUnpublishedDocs()) {
+                    // Export von nicht freigeschalteten Dokumente ist verboten
+                    throw new Application_Export_Exception('export of unpublished documents is not allowed');
+                }
+                $result[] = $doc->getId();
             }
         }
 
