@@ -397,11 +397,13 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract
         // TODO hier bessere Differenzierung zwischen unterschiedlichen Fehlerzuständen (docId Parameter
         // TODO fehlt im Request, hat falschen Typ, zugehöriges Dokument existiert nicht bzw. ist nicht publiziert)
         if (! is_null($docId)) {
+            $doc = null;
             try {
                 $doc = new Opus_Document($docId);
             } catch (Exception $e) {
                 // do nothing: return empty array
             }
+
             if (! is_null($doc)) {
                 if ($doc->getServerState() != 'published' && ! $this->isAllowExportOfUnpublishedDocs()) {
                     // Export von nicht freigeschalteten Dokumente ist verboten
