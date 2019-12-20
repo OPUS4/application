@@ -200,6 +200,7 @@ class Export_DataCiteExportTest extends ControllerTestCase
      */
     public function testExportOfDataCiteXmlWithUnpublishedDocNotAllowed()
     {
+        $removeAccess = $this->addModuleAccess('export', 'guest');
         $this->enableSecurity();
         $config = Zend_Registry::get('Zend_Config');
 
@@ -226,6 +227,9 @@ class Export_DataCiteExportTest extends ControllerTestCase
         // revert configuration changes
         $this->restoreSecuritySetting();
         Zend_Registry::set('Zend_Config', $config);
+        if ($removeAccess) {
+            $this->removeModuleAccess('export', 'guest');
+        }
 
         $this->assertResponseCode(401);
         $this->assertContains('export of unpublished documents is not allowed', $this->getResponse()->getBody());
@@ -266,6 +270,7 @@ class Export_DataCiteExportTest extends ControllerTestCase
 
     public function testExportOfDataCiteXmlWithUnpublishedDocAllowedForNonAdminUserWithPermission()
     {
+        $removeAccess = $this->addModuleAccess('export', 'security18');
         $this->enableSecurity();
         $config = Zend_Registry::get('Zend_Config');
 
@@ -292,6 +297,9 @@ class Export_DataCiteExportTest extends ControllerTestCase
         // revert configuration changes
         $this->restoreSecuritySetting();
         Zend_Registry::set('Zend_Config', $config);
+        if ($removeAccess) {
+            $this->removeModuleAccess('export', 'security18');
+        }
 
         $this->assertResponseCode(200);
         $this->assertContains("DataCite XML of document ${docId} is not valid", $this->getResponse()->getBody());
@@ -299,6 +307,7 @@ class Export_DataCiteExportTest extends ControllerTestCase
 
     public function testExportOfDataCiteXmlWithUnpublishedDocAllowedForNonAdminUserWithoutPermission()
     {
+        $removeAccess = $this->addModuleAccess('export', 'security19');
         $this->enableSecurity();
         $config = Zend_Registry::get('Zend_Config');
 
@@ -325,6 +334,9 @@ class Export_DataCiteExportTest extends ControllerTestCase
         // revert configuration changes
         $this->restoreSecuritySetting();
         Zend_Registry::set('Zend_Config', $config);
+        if ($removeAccess) {
+            $this->removeModuleAccess('export', 'security19');
+        }
 
         $this->assertResponseCode(401);
         $this->assertContains('export of unpublished documents is not allowed', $this->getResponse()->getBody());

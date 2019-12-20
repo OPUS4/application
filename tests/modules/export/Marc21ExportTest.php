@@ -46,6 +46,7 @@ class Export_Marc21ExportTest extends ControllerTestCase
      */
     public function testMarc21XmlExportWithUnpublishedDocNotAllowed()
     {
+        $removeAccess = $this->addModuleAccess('export', 'guest');
         $this->enableSecurity();
         $config = Zend_Registry::get('Zend_Config');
 
@@ -72,6 +73,9 @@ class Export_Marc21ExportTest extends ControllerTestCase
         // revert configuration changes
         $this->restoreSecuritySetting();
         Zend_Registry::set('Zend_Config', $config);
+        if ($removeAccess) {
+            $this->removeModuleAccess('export', 'guest');
+        }
 
         $this->assertResponseCode(401);
         $this->assertContains('export of unpublished documents is not allowed', $this->getResponse()->getBody());
@@ -120,6 +124,7 @@ class Export_Marc21ExportTest extends ControllerTestCase
 
     public function testMarc21XmlExportWithUnpublishedDocAllowedForNonAdminUserWithPermission()
     {
+        $removeAccess = $this->addModuleAccess('export', 'security18');
         $this->enableSecurity();
         $config = Zend_Registry::get('Zend_Config');
 
@@ -146,6 +151,9 @@ class Export_Marc21ExportTest extends ControllerTestCase
         // revert configuration changes
         $this->restoreSecuritySetting();
         Zend_Registry::set('Zend_Config', $config);
+        if ($removeAccess) {
+            $this->removeModuleAccess('export', 'security18');
+        }
 
         $this->assertResponseCode(200);
         $this->assertXpathContentContains('//marc:leader', '00000naa a22000005  4500');
@@ -161,6 +169,7 @@ class Export_Marc21ExportTest extends ControllerTestCase
 
     public function testMarc21XmlExportWithUnpublishedDocAllowedForNonAdminUserWithoutPermission()
     {
+        $removeAccess = $this->addModuleAccess('export', 'security19');
         $this->enableSecurity();
         $config = Zend_Registry::get('Zend_Config');
 
@@ -187,6 +196,9 @@ class Export_Marc21ExportTest extends ControllerTestCase
         // revert configuration changes
         $this->restoreSecuritySetting();
         Zend_Registry::set('Zend_Config', $config);
+        if ($removeAccess) {
+            $this->removeModuleAccess('export', 'security19');
+        }
 
         $this->assertResponseCode(401);
         $this->assertContains('export of unpublished documents is not allowed', $this->getResponse()->getBody());
