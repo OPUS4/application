@@ -270,7 +270,7 @@ class Export_DataCiteExportTest extends ControllerTestCase
 
     public function testExportOfDataCiteXmlWithUnpublishedDocAllowedForNonAdminUserWithPermission()
     {
-        $removeAccess = $this->addModuleAccess('export', 'security18');
+        $removeAccess = $this->addModuleAccess('export', 'docsadmin');
         $this->enableSecurity();
         $config = Zend_Registry::get('Zend_Config');
 
@@ -290,7 +290,7 @@ class Export_DataCiteExportTest extends ControllerTestCase
         $doc->setLanguage('eng');
         $docId = $doc->store();
 
-        $this->loginUser('security18', 'security18pwd');
+        $this->loginUser('security8', 'security8pwd');
 
         $this->dispatch("/export/index/datacite/docId/${docId}");
 
@@ -298,7 +298,7 @@ class Export_DataCiteExportTest extends ControllerTestCase
         $this->restoreSecuritySetting();
         Zend_Registry::set('Zend_Config', $config);
         if ($removeAccess) {
-            $this->removeModuleAccess('export', 'security18');
+            $this->removeModuleAccess('export', 'docsadmin');
         }
 
         $this->assertResponseCode(200);
@@ -307,7 +307,7 @@ class Export_DataCiteExportTest extends ControllerTestCase
 
     public function testExportOfDataCiteXmlWithUnpublishedDocAllowedForNonAdminUserWithoutPermission()
     {
-        $removeAccess = $this->addModuleAccess('export', 'security19');
+        $removeAccess = $this->addModuleAccess('export', 'collectionsadmin');
         $this->enableSecurity();
         $config = Zend_Registry::get('Zend_Config');
 
@@ -327,7 +327,7 @@ class Export_DataCiteExportTest extends ControllerTestCase
         $doc->setLanguage('eng');
         $docId = $doc->store();
 
-        $this->loginUser('security19', 'security19pwd');
+        $this->loginUser('security9', 'security9pwd');
 
         $this->dispatch("/export/index/datacite/docId/${docId}");
 
@@ -335,7 +335,7 @@ class Export_DataCiteExportTest extends ControllerTestCase
         $this->restoreSecuritySetting();
         Zend_Registry::set('Zend_Config', $config);
         if ($removeAccess) {
-            $this->removeModuleAccess('export', 'security19');
+            $this->removeModuleAccess('export', 'collectionsadmin');
         }
 
         $this->assertResponseCode(401);
