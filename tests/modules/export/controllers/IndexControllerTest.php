@@ -877,7 +877,10 @@ class Export_IndexControllerTest extends ControllerTestCase
 
     public function testXmlExportDoesNotContainUnpublishedDocument()
     {
+        parent::setUpWithEnv('production');
+
         $this->enableSecurity();
+        $this->assertSecurityConfigured();
         $changedAccess = $this->addAccessOnModuleExportForGuest();
 
         $doc = $this->createTestDocument();
@@ -890,9 +893,8 @@ class Export_IndexControllerTest extends ControllerTestCase
             $this->removeAccessOnModuleExportForGuest();
         }
 
-        $this->assertResponseCode(200);
-        $this->assertXpath('/export-example');
-        $this->assertNotXpath('/export-example/doc');
+        $this->assertResponseCode(401);
+        $this->assertContains('export of unpublished documents is not allowed', $this->getResponse()->getBody());
     }
 
     /**

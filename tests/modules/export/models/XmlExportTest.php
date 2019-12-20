@@ -40,7 +40,7 @@
 class Export_Model_XmlExportTest extends ControllerTestCase
 {
 
-    protected $additionalResources = ['database'];
+    protected $additionalResources = ['database', 'authz'];
 
     /**
      * @var \Export_Model_XmlExport
@@ -188,6 +188,10 @@ class Export_Model_XmlExportTest extends ControllerTestCase
      */
     public function testXmlExportForSearchtypeId()
     {
+        parent::setUpWithEnv('production');
+        $this->enableSecurity();
+        $this->assertSecurityConfigured();
+
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
         $docId = $doc->store();
@@ -202,6 +206,7 @@ class Export_Model_XmlExportTest extends ControllerTestCase
         $xpath = new DOMXPath($this->plugin->getXml());
         $result = $xpath->query('//Opus_Document');
 
+        $this->restoreSecuritySetting();
         $this->assertEquals($docId, $result->item(0)->attributes->item(0)->nodeValue);
     }
 
@@ -210,6 +215,10 @@ class Export_Model_XmlExportTest extends ControllerTestCase
      */
     public function testXmlExportForSearchtypeIdWithUnpublishedDocument()
     {
+        parent::setUpWithEnv('production');
+        $this->enableSecurity();
+        $this->assertSecurityConfigured();
+
         $doc = $this->createTestDocument();
         $docId = $doc->store();
 
@@ -218,12 +227,10 @@ class Export_Model_XmlExportTest extends ControllerTestCase
             'docId' => $docId
         ]);
 
+        $this->setExpectedException('Application_Export_Exception');
         $this->plugin->prepareXml();
 
-        $xpath = new DOMXPath($this->plugin->getXml());
-        $result = $xpath->query('//Opus_Document');
-
-        $this->assertEquals(0, $result->length);
+        $this->restoreSecuritySetting();
     }
 
     public function testGetMaxRows()

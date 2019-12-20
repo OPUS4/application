@@ -162,7 +162,10 @@ abstract class Application_Export_ExportPluginAbstract extends Application_Model
      */
     public function isAllowExportOfUnpublishedDocs()
     {
-        $accessControl = new Application_Controller_Action_Helper_AccessControl();
+        $accessControl = Zend_Controller_Action_HelperBroker::getStaticHelper('accessControl');
+        if (is_null($accessControl)) {
+            return false;
+        }
         return $accessControl->accessAllowed('documents');
     }
 }
