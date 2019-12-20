@@ -165,5 +165,4 @@ abstract class Application_Export_ExportPluginAbstract extends Application_Model
         $accessControl = new Application_Controller_Action_Helper_AccessControl();
         return $accessControl->accessAllowed('documents');
     }
-
 }

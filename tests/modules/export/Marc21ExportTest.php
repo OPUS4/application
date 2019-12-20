@@ -191,5 +191,4 @@ class Export_Marc21ExportTest extends ControllerTestCase
         $this->assertResponseCode(401);
         $this->assertContains('export of unpublished documents is not allowed', $this->getResponse()->getBody());
     }
-
 }
