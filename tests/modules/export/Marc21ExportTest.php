@@ -199,7 +199,52 @@ class Export_Marc21ExportTest extends ControllerTestCase
         }
 
         $this->assertResponseCode(401);
-        $this->assertContains('export of unpublished documents is not allowed', $this->getResponse()->getBody());
+        $this->assertContains('Unauthorized: Access to module not allowed.', $this->getResponse()->getBody());
+    }
+
+    public function testMarc21XmlExportWithPublishedDocAllowedForAdmin()
+    {
+        $removeAccess = $this->addModuleAccess('export', 'docsadmin');
+        $this->enableSecurity();
+        $config = Zend_Registry::get('Zend_Config');
+
+        Zend_Registry::get('Zend_Config')->merge(
+            new Zend_Config(
+                ['plugins' =>
+                    ['export' =>
+                        ['marc21' => ['adminOnly' => self::CONFIG_VALUE_TRUE]]
+                    ]
+                ]
+            )
+        );
+
+        $doc = $this->createTestDocument();
+        $doc->setServerState('published');
+        $doc->setType('article');
+        $doc->setLanguage('eng');
+        $docId = $doc->store();
+
+        $this->loginUser('security8', 'security8pwd');
+
+        $this->dispatch("/export/index/marc21/docId/${docId}/searchtype/id");
+
+        // revert configuration changes
+        $this->restoreSecuritySetting();
+        Zend_Registry::set('Zend_Config', $config);
+        if ($removeAccess) {
+            $this->removeModuleAccess('export', 'docsadmin');
+        }
+
+        $this->assertResponseCode(200);
+
+        $this->assertXpathContentContains('//marc:leader', '00000naa a22000005  4500');
+        $this->assertXpathContentContains('//marc:controlfield[@tag="001"]', 'docId-' . $docId);
+        $this->assertXpathContentContains('//marc:controlfield[@tag="007"]', 'cr uuu---uunan');
+        $this->assertXpathContentContains('//marc:datafield[@tag="041"]/marc:subfield[@code="a"]', 'eng');
+        $this->assertXpathContentContains('//marc:datafield[@tag="264"]/marc:subfield[@code="c"]', '2019');
+        $this->assertXpathContentContains('//marc:datafield[@tag="655"]/marc:subfield[@code="a"]', 'article');
+        $this->assertXpathContentContains('//marc:datafield[@tag="856"]/marc:subfield[@code="u"]', 'http:///frontdoor/index/index/docId/' . $docId);
+        $this->assertNotXpath('//marc:datafield[@tag="245"]');
     }
 
     public function testMarc21XmlExportWithPublishedDocAllowedForGuest()
