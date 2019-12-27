@@ -77,6 +77,8 @@ class Application_Translate_TranslationManager
      */
     protected $_filter;
 
+    protected $filterByContent = true;
+
     /**
      * Names of folders containing TMX files.
      * @var array
@@ -142,12 +144,19 @@ class Application_Translate_TranslationManager
                                     'translations' => []
                                 ];
 
+                                $matchesFilter = true;
+
                                 foreach ($values as $lang => $value) {
                                     $row['translations'][$lang] = $value;
+                                    if (! $matchesFilter && strpos($value, $this->_filter) !== false) {
+                                        $matchesFilter = true;
+                                    }
                                 }
 
-                                $translations[$key] = $row;
-                                $sortArray[] = $row[$sortKey];
+                                if ($matchesFilter) {
+                                    $translations[$key] = $row;
+                                    $sortArray[] = $row[$sortKey];
+                                }
                             }
                         }
                     } else {
