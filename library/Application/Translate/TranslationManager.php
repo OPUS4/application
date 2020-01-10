@@ -115,6 +115,8 @@ class Application_Translate_TranslationManager
      *                          Valid keys are defined as class constants
      * @param int $sortOrder    Sort order as expected by @see array_multisort()
      * @throw Setup_Model_FileNotReadableException Thrown if loading tmx file(s) fails.
+     *
+     * TODO refactor
      */
     public function getTranslations($sortKey = self::SORT_UNIT, $sortOrder = SORT_ASC)
     {
@@ -135,7 +137,7 @@ class Application_Translate_TranslationManager
                         $translationUnits = $tmxFile->toArray();
 
                         foreach ($translationUnits as $key => $values) {
-                            if (empty($this->_filter) || strpos($key, $this->_filter) !== false) {
+                            if (empty($this->_filter) || stripos($key, $this->_filter) !== false) {
                                 $row = [
                                     'key' => $key,
                                     'module' => $module,
@@ -148,7 +150,7 @@ class Application_Translate_TranslationManager
 
                                 foreach ($values as $lang => $value) {
                                     $row['translations'][$lang] = $value;
-                                    if (! $matchesFilter && strpos($value, $this->_filter) !== false) {
+                                    if (! $matchesFilter && stripos($value, $this->_filter) !== false) {
                                         $matchesFilter = true;
                                     }
                                 }
