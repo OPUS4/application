@@ -1612,6 +1612,7 @@ ul.links input:hover {
 
 .adminContainer table.table-translations span.hilite {
     font-weight: bold;
+    color: darkorange;
 }
 
 .adminContainer table.table-translations td.key {
