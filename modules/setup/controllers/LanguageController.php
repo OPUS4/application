@@ -40,6 +40,9 @@
  * TODO sorting using table header
  * TODO link for adding new translations
  * TODO show module in translations
+ *
+ * After canceling an Edit form the user gets returned to the search page displaying the last search.
+ *
  */
 class Setup_LanguageController extends Application_Controller_Action
 {
@@ -74,6 +77,13 @@ class Setup_LanguageController extends Application_Controller_Action
                 'error',
                 ['failure' => 'setup_language_translation_modules_missing']
             );
+        }
+
+        $request = $this->getRequest();
+
+        if ($request->isPost()) {
+            $post = $request->getPost();
+            $searchTerm = isset($post['search']) ? $post['search'] : $searchTerm;
         }
 
         $moduleNames = explode(',', $config->setup->translation->modules->allowed);
@@ -119,10 +129,24 @@ class Setup_LanguageController extends Application_Controller_Action
 
         $request = $this->getRequest();
         if ($request->isPost()) {
+            $post = $request->getPost();
+            $form = new Application_Form_Translations();
+            $result = $form->processPost($post, $post);
+            switch ($result) {
+                case Application_Form_Translations::RESULT_SAVE:
+                    break;
+                case Application_Form_Translations::RESULT_CANCEL:
+                    // no break
+                default:
+                    // redirect to search
+            }
             // TODO process form
             // TODO validate
             // TODO save
-            $this->_helper->Redirector->redirectTo('show');
+            $this->_helper->Redirector->redirectTo(
+                'show', null, 'language', 'setup',
+                ['search' => $this->getParam('search')]
+            );
         } else {
             $form = new Application_Form_Translations();
             $form->addKey($translationKey);
@@ -199,7 +223,8 @@ class Setup_LanguageController extends Application_Controller_Action
             ->setMultiOptions($sortKeysTranslated);
         */
 
-        $form->setAction($this->view->url(['action' => 'show']));
+        // remove search parameter from URL (gets set when returning from edit forms)
+        $form->setAction($this->view->url(['action' => 'show', 'search' => null]));
 
         if (! empty($searchTerm)) {
             $form->search->setValue($searchTerm);
