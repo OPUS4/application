@@ -1617,10 +1617,14 @@ ul.links input:hover {
 
 .adminContainer table.table-translations td.key {
     font-family: monospace;
+    font-size: 1em;
 }
 
-.adminContainer table.table-translations td.module {
-    font-size: 0.8em;
+.adminContainer table.table-translations .module {
+    font-size: 0.9em;
+    color: gray;
+    padding-top: 0.3em;
+    font-style: italic;
 }
 
 .adminContainer table.table-translations span.filename {

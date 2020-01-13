@@ -47,7 +47,7 @@
 class Setup_LanguageController extends Application_Controller_Action
 {
 
-    protected $_sortKeys = ['key', 'module', 'language', 'variant'];
+    protected $_sortKeys = ['key', 'language', 'variant'];
 
     public function init()
     {

@@ -54,8 +54,10 @@
         ?>
         <tbody>
         <tr>
-            <td rowspan="<?= $langCount ?>" class="key"><?= empty($this->searchTerm) ? $key : preg_replace("/" . preg_quote($this->searchTerm, "/") . "/i", "<span class=\"hilite\">$0</span>", $key) ?></td>
-            <td rowspan="<?= $langCount ?>" class="module"><?= $row['module'] ?><br /><span class="filename"><?= $row['filename'] ?></span></td>
+            <td rowspan="<?= $langCount ?>" class="key"
+                ><?= $this->highlight($key, $this->searchTerm, '<span class="hilite">', '</span>') ?>
+                <div class="module"><span class="filename"><?= $row['filename'] ?></span> (<?= $row['module'] ?>)</div>
+            </td>
             <?PHP $index = 0 ?>
             <?PHP foreach ($row['translations'] as $language => $translation) : ?>
                 <?PHP if ($index > 0) : ?>
@@ -63,7 +65,7 @@
         <tr class="lang-<?= $language?>">
                 <?PHP endif ?>
             <td class="lang"><?= $language ?></td>
-            <td class="value"><?= empty($this->searchTerm) ? $translation : preg_replace("/" . preg_quote($this->searchTerm, "/") . "/i", "<span class=\"hilite\">$0</span>", $translation) ?></td>
+            <td class="value"><?= $this->highlight($translation, $this->searchTerm, '<span class="hilite">', '</span>') ?></td>
                 <?PHP if ($index == 0) : ?>
             <td rowspan="<?= $langCount ?>">
                     <?PHP // TODO add module to parameters ?>
