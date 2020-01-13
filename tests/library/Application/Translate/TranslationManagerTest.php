@@ -55,6 +55,14 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
         $this->object = new Application_Translate_TranslationManager();
     }
 
+    public function tearDown()
+    {
+        $translationDb = new Opus_Translate_Dao();
+        $translationDb->removeAll();
+
+        parent::tearDown();
+    }
+
     /**
      */
     public function testGetFiles()
@@ -139,7 +147,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
 
         foreach ($filteredTranlsations as $translation) {
             $this->assertTrue(
-                strpos($translation['key'], $filter) !== false,
+                stripos($translation['key'], $filter) !== false,
                 'Expected filtered translation unit to contain filter string'
             );
         }
@@ -194,7 +202,36 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
 
     public function testGetMergedTranslations()
     {
-        $this->markTestIncomplete('not implemented yet');
-        $translations = $this->object->getMergedTranslations();
+        $manager = $this->object;
+        $manager->setModules(['default']);
+        $manager->setFilter('yes');
+
+        $translations = $manager->getMergedTranslations('key');
+
+        $this->assertInternalType('array', $translations);
+        $this->assertCount(1, $translations);
+        $this->assertArrayHasKey('answer_yes', $translations);
+
+        // TODO check translations from TMX, TMX+DB and just DB
+
+        $database = new Opus_Translate_Dao();
+        $database->setTranslation('yes', ['de' => 'Ja', 'en' => 'Yes']);
+
+        $translations = $manager->getMergedTranslations('key');
+
+        $this->assertInternalType('array', $translations);
+        $this->assertCount(2, $translations);
+        $this->assertArrayHasKey('answer_yes', $translations);
+        $this->assertArrayHasKey('yes', $translations);
+
+        $database->setTranslation('answer_yes', ['de' => 'JA', 'en' => 'YES']);
+
+        $translations = $manager->getMergedTranslations('key');
+
+        $this->assertInternalType('array', $translations);
+        $this->assertCount(2, $translations);
+        $this->assertArrayHasKey('answer_yes', $translations);
+        $this->assertArrayHasKey('yes', $translations);
+        $this->assertArrayHasKey('translationsTmx', $translations['answer_yes']);
     }
 }

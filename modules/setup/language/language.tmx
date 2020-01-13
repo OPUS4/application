@@ -71,6 +71,24 @@
         </tuv>
     </tu>
 
+    <tu tuid="setup_language_reset">
+      <tuv xml:lang="en">
+        <seg>Reset</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Zurücksetzen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="setup_language_remove">
+      <tuv xml:lang="en">
+        <seg>Remove</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Entfernen</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="setup_language_translation_modules_missing">
         <tuv xml:lang="en">
             <seg>There are no modules available for editing. Please configure the modules you want to be editable.</seg>

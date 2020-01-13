@@ -217,7 +217,7 @@ class Application_Translate_TranslationManager
             }
         }
 
-        return $dbTranslations;
+        return $translations;
     }
 
     /**

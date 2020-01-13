@@ -52,11 +52,13 @@
         $key = array_shift($row);
         $langCount = count($row['translations']);
         ?>
-        <tbody>
+        <tbody class="<?= isset($row['translationsTmx']) ? 'edited' : (! isset($row['filename']) ? 'added' : '') ?>">
         <tr>
             <td rowspan="<?= $langCount ?>" class="key"
                 ><?= $this->highlight($key, $this->searchTerm, '<span class="hilite">', '</span>') ?>
+                <?PHP if (isset($row['filename'])) : ?>
                 <div class="module"><span class="filename"><?= $row['filename'] ?></span> (<?= $row['module'] ?>)</div>
+                <?PHP endif ?>
             </td>
             <?PHP $index = 0 ?>
             <?PHP foreach ($row['translations'] as $language => $translation) : ?>
@@ -69,8 +71,15 @@
                 <?PHP if ($index == 0) : ?>
             <td rowspan="<?= $langCount ?>">
                     <?PHP // TODO add module to parameters ?>
-                <a href="<?= $this->url(['action' => 'edit', 'key' => $key, 'search' => $this->searchTerm, 'sort' => $this->currentSortKey]) ?>"
-                ><?=$this->translate('setup_language_edit') ?></a>
+                <div><a href="<?= $this->url(['action' => 'edit', 'key' => $key, 'search' => $this->searchTerm, 'sort' => $this->currentSortKey]) ?>"
+                ><?= $this->translate('setup_language_edit') ?></a></div>
+                <?PHP if (isset($row['translationsTmx'])) : ?>
+                <a href="<?= $this->url(['action' => 'reset', 'key' => $key, 'search' => $this->searchTerm, 'sort' => $this->currentSortKey]) ?>"
+                ><?= $this->translate('setup_language_reset') ?></a>
+                <?PHP elseif (! isset($row['filename'])) : ?>
+                <a href="<?= $this->url(['action' => 'remove', 'key' => $key, 'search' => $this->searchTerm, 'sort' => $this->currentSortKey]) ?>"
+                ><?= $this->translate('setup_language_remove') ?></a>
+                <?PHP endif ?>
             </td>
                 <?PHP endif ?>
                 <?PHP $index++ ?>

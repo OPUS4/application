@@ -97,7 +97,7 @@ class Setup_LanguageController extends Application_Controller_Action
 
         $this->view->form = $this->getSearchForm($searchTerm, $sortKey);
 
-        $this->view->translations = $translationManager->getTranslations($sortKey);
+        $this->view->translations = $translationManager->getMergedTranslations($sortKey);
         $this->view->sortKeys = $this->_sortKeys;
         $this->view->currentSortKey = $sortKey;
         $this->view->searchTerm = $searchTerm;
@@ -134,11 +134,14 @@ class Setup_LanguageController extends Application_Controller_Action
             $result = $form->processPost($post, $post);
             switch ($result) {
                 case Application_Form_Translations::RESULT_SAVE:
+                    $form->addKey($translationKey);
+                    $form->populate($post);
+                    $form->updateTranslations();
                     break;
                 case Application_Form_Translations::RESULT_CANCEL:
                     // no break
                 default:
-                    // redirect to search
+                    // redirect back to search
             }
             // TODO process form
             // TODO validate
