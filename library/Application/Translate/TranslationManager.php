@@ -211,9 +211,24 @@ class Application_Translate_TranslationManager
                 $translations[$key]['translationsTmx'] = $translations[$key]['translations'];
                 $translations[$key]['translations'] = $languages;
             } else {
+                $matchesFilter = false;
                 // key does not exist in TMX files and needs to be added
-                $translations[$key]['key'] = $key;
-                $translations[$key]['translations'] = $languages;
+                if (! empty($this->_filter)) {
+                    if (stripos($key, $this->_filter) !== false) {
+                        $matchesFilter = true;
+                    } else {
+                        foreach ($languages as $lang => $value) {
+                            if (!$matchesFilter && stripos($value, $this->_filter) !== false) {
+                                $matchesFilter = true;
+                            }
+                        }
+                    }
+                }
+
+                if ($matchesFilter) {
+                    $translations[$key]['key'] = $key;
+                    $translations[$key]['translations'] = $languages;
+                }
             }
         }
 

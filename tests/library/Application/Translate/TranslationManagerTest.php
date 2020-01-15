@@ -234,4 +234,27 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
         $this->assertArrayHasKey('yes', $translations);
         $this->assertArrayHasKey('translationsTmx', $translations['answer_yes']);
     }
+
+    public function testGetMergedTranslationDatabaseFiltered()
+    {
+        $manager = $this->object;
+        $manager->setModules(['default']);
+        $manager->setFilter('answer_no');
+
+        $translations = $manager->getMergedTranslations('key');
+
+        $this->assertInternalType('array', $translations);
+        $this->assertCount(1, $translations);
+        $this->assertArrayHasKey('answer_no', $translations);
+
+        $database = new Opus_Translate_Dao();
+
+        $database->setTranslation('answer_yes', ['de' => 'JA', 'en' => 'YES']);
+
+        $translations = $manager->getMergedTranslations('key');
+
+        $this->assertInternalType('array', $translations);
+        $this->assertCount(1, $translations);
+        $this->assertArrayHasKey('answer_no', $translations);
+    }
 }
