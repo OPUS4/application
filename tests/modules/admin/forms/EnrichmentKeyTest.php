@@ -315,7 +315,8 @@ class Admin_Form_EnrichmentKeyTest extends ControllerTestCase
      * @throws Zend_Form_Exception
      * @throws \Opus\Model\Exception
      */
-    public function testTypeIsRequiredForExistingTypedKey() {
+    public function testTypeIsRequiredForExistingTypedKey()
+    {
         $enrichmentKey = new Opus_EnrichmentKey();
         $enrichmentKey->setName('TestKey');
         $enrichmentKey->setType('BooleanType');
@@ -337,7 +338,8 @@ class Admin_Form_EnrichmentKeyTest extends ControllerTestCase
      * @throws Zend_Form_Exception
      * @throws \Opus\Model\Exception
      */
-    public function testTypeIsRequiredForExistingUntypedKey() {
+    public function testTypeIsRequiredForExistingUntypedKey()
+    {
         $enrichmentKey = new Opus_EnrichmentKey();
         $enrichmentKey->setName('TestKey');
 
