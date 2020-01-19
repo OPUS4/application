@@ -252,5 +252,4 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
         $element->setRequired(true);
         $this->applyCustomMessages($element);
     }
-
 }
