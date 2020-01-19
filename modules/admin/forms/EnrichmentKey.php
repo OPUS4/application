@@ -29,7 +29,7 @@
  * @author      Gunar Maiwald <maiwald@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
  * @author      Sascha Szott <opus-development@saschaszott.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -166,10 +166,7 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
         }
 
         if (! is_null($enrichmentKey->getType())) {
-            // leere Auswahlmöglichkeit im Select-Feld für Type wird nicht angeboten (Pflichtfeld)
-            $element = $this->getElement(self::ELEMENT_TYPE);
-            $element->removeMultiOption('');
-            $element->setRequired(true);
+            $this->setTypeFieldAsMandatory();
         }
     }
 
@@ -231,4 +228,29 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
 
         return null;
     }
+
+    public function populate(array $values)
+    {
+        if (array_key_exists(parent::ELEMENT_MODEL_ID, $values)) {
+            $enrichmentKey = Opus_EnrichmentKey::fetchByName($values[parent::ELEMENT_MODEL_ID]);
+            if (! is_null($enrichmentKey)) {
+                $enrichmentType = $enrichmentKey->getEnrichmentType();
+                if (! is_null($enrichmentType)) {
+                    $this->setTypeFieldAsMandatory();
+                }
+            }
+        }
+
+        return parent::populate($values);
+    }
+
+    private function setTypeFieldAsMandatory()
+    {
+        // leere Auswahlmöglichkeit im Select-Feld für Type wird nicht angeboten (Pflichtfeld)
+        $element = $this->getElement(self::ELEMENT_TYPE);
+        $element->removeMultiOption('');
+        $element->setRequired(true);
+        $this->applyCustomMessages($element);
+    }
+
 }

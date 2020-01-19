@@ -194,10 +194,38 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
 
         $this->dispatch($this->getControllerPath() . '/new');
 
-        $this->assertResponseCode(200);
-        $this->assertXpath("//form/div[2]/div[2]/ul[@class='errors']", $this->getResponse()->getBody());
+        $this->assertRedirect();
+        $this->assertRedirectRegex('/^\/admin\/enrichmentkey/');
+        $this->verifyFlashMessage('controller_crud_save_success', self::MESSAGE_LEVEL_NOTICE);
 
-        $this->assertNull(Opus_EnrichmentKey::fetchByName('MyTestEnrichment'));
+        $enrichmentKey = new Opus_EnrichmentKey('MyTestEnrichment');
+        $this->assertNotNull($enrichmentKey);
+        $this->assertEquals('MyTestEnrichment', $enrichmentKey->getName());
+        $this->assertNull($enrichmentKey->getOptions());
+    }
+
+    public function testNewActionSaveEmptyEnrichmentType()
+    {
+        $this->createsModels = true;
+
+        $post = [
+            'Name' => 'MyTestEnrichment',
+            'Type' => '',
+            'Save' => 'Speichern'
+        ];
+
+        $this->getRequest()->setPost($post)->setMethod('POST');
+
+        $this->dispatch($this->getControllerPath() . '/new');
+
+        $this->assertRedirect();
+        $this->assertRedirectRegex('/^\/admin\/enrichmentkey/');
+        $this->verifyFlashMessage('controller_crud_save_success', self::MESSAGE_LEVEL_NOTICE);
+
+        $enrichmentKey = new Opus_EnrichmentKey('MyTestEnrichment');
+        $this->assertNotNull($enrichmentKey);
+        $this->assertEquals('MyTestEnrichment', $enrichmentKey->getName());
+        $this->assertNull($enrichmentKey->getOptions());
     }
 
     public function testNewActionSaveUnknownEnrichmentType()
@@ -367,19 +395,64 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
 
         $enrichmentKey = new Opus_EnrichmentKey();
         $enrichmentKey->setName('MyTestEnrichment');
+        $enrichmentKey->setType('TextType');
         $enrichmentKey->store();
 
         $this->getRequest()->setMethod('POST')->setPost([
             'Id' => 'MyTestEnrichment',
-            'Name' => 'MyTestEnrichmentModified',
+            'Name' => 'MyTestEnrichment',
             'Save' => 'Speichern'
         ]);
 
         $this->dispatch($this->getControllerPath() . '/edit');
         $this->assertResponseCode(200);
 
-        $this->assertNull(Opus_EnrichmentKey::fetchByName('MyTestEnrichmentModified'));
-        $this->assertNotNull(Opus_EnrichmentKey::fetchByName('MyTestEnrichment'));
+        $this->assertXpath("//form/div[2]/div[2]/ul[@class='errors']", $this->getResponse()->getBody());
+    }
+
+    public function testEditActionSaveWithEmptyEnrichmentType()
+    {
+        $this->createsModels = true;
+
+        $enrichmentKey = new Opus_EnrichmentKey();
+        $enrichmentKey->setName('MyTestEnrichment');
+        $enrichmentKey->setType('TextType');
+        $enrichmentKey->store();
+
+        $this->getRequest()->setMethod('POST')->setPost([
+            'Id' => 'MyTestEnrichment',
+            'Name' => 'MyTestEnrichment',
+            'Type' => '',
+            'Save' => 'Speichern'
+        ]);
+
+        $this->dispatch($this->getControllerPath() . '/edit');
+        $this->assertResponseCode(200);
+
+        $this->assertXpath("//form/div[2]/div[2]/ul[@class='errors']", $this->getResponse()->getBody());
+    }
+
+    public function testEditActionSaveWithExistingEnrichmentType()
+    {
+        $this->createsModels = true;
+
+        $enrichmentKey = new Opus_EnrichmentKey();
+        $enrichmentKey->setName('MyTestEnrichment');
+        $enrichmentKey->setType('TextType');
+        $enrichmentKey->store();
+
+        $this->getRequest()->setMethod('POST')->setPost([
+            'Id' => 'MyTestEnrichment',
+            'Name' => 'MyTestEnrichment',
+            'Type' => 'BooleanType',
+            'Save' => 'Speichern'
+        ]);
+
+        $this->dispatch($this->getControllerPath() . '/edit');
+        $this->assertResponseCode(302);
+
+        $enrichmentKey = Opus_EnrichmentKey::fetchByName('MyTestEnrichment');
+        $this->assertEquals('BooleanType', $enrichmentKey->getEnrichmentType()->getName());
     }
 
     public function testEditActionSaveWithUnknownEnrichmentType()
