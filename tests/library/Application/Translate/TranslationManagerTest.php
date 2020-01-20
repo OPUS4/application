@@ -131,7 +131,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
      */
     public function testSetFilter()
     {
-        $filter = 'error';
+        $filter = 'error_';
 
         $this->object->setModules(['default']);
         $allTranlsations = $this->object->getTranslations();
@@ -209,8 +209,9 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
         $translations = $manager->getMergedTranslations('key');
 
         $this->assertInternalType('array', $translations);
-        $this->assertCount(1, $translations);
+        $this->assertCount(2, $translations);
         $this->assertArrayHasKey('answer_yes', $translations);
+        $this->assertArrayHasKey('Field_Value_True', $translations);
 
         // TODO check translations from TMX, TMX+DB and just DB
 
@@ -220,18 +221,20 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
         $translations = $manager->getMergedTranslations('key');
 
         $this->assertInternalType('array', $translations);
-        $this->assertCount(2, $translations);
+        $this->assertCount(3, $translations);
         $this->assertArrayHasKey('answer_yes', $translations);
         $this->assertArrayHasKey('yes', $translations);
+        $this->assertArrayHasKey('Field_Value_True', $translations);
 
         $database->setTranslation('answer_yes', ['de' => 'JA', 'en' => 'YES']);
 
         $translations = $manager->getMergedTranslations('key');
 
         $this->assertInternalType('array', $translations);
-        $this->assertCount(2, $translations);
+        $this->assertCount(3, $translations);
         $this->assertArrayHasKey('answer_yes', $translations);
         $this->assertArrayHasKey('yes', $translations);
+        $this->assertArrayHasKey('Field_Value_True', $translations);
         $this->assertArrayHasKey('translationsTmx', $translations['answer_yes']);
     }
 
@@ -256,5 +259,29 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
         $this->assertInternalType('array', $translations);
         $this->assertCount(1, $translations);
         $this->assertArrayHasKey('answer_no', $translations);
+    }
+
+    public function testFilterTranslationsWithSpecialCharacters()
+    {
+        $manager = $this->object;
+        $manager->setModules(['default']);
+        $manager->setFilter('*in');
+
+        $translations = $manager->getTranslations('key');
+
+        $this->assertNotNull($translations);
+        $this->assertGreaterThan(0, count($translations));
+    }
+
+    public function testFilterTranslationsAcrossAllLanguages()
+    {
+        $manager = $this->object;
+        $manager->setModules(['default']);
+        $manager->setFilter('Gutachter');
+
+        $translations = $manager->getTranslations('key');
+
+        $this->assertNotNull($translations);
+        $this->assertGreaterThan(0, count($translations));
     }
 }

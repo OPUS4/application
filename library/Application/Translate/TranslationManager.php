@@ -137,28 +137,30 @@ class Application_Translate_TranslationManager
                         $translationUnits = $tmxFile->toArray();
 
                         foreach ($translationUnits as $key => $values) {
+                            $matchesFilter = false;
+
+                            $row = [
+                                'key' => $key,
+                                'module' => $module,
+                                'directory' => $dir,
+                                'filename' => $fileName,
+                                'translations' => []
+                            ];
+
                             if (empty($this->_filter) || stripos($key, $this->_filter) !== false) {
-                                $row = [
-                                    'key' => $key,
-                                    'module' => $module,
-                                    'directory' => $dir,
-                                    'filename' => $fileName,
-                                    'translations' => []
-                                ];
-
                                 $matchesFilter = true;
+                            }
 
-                                foreach ($values as $lang => $value) {
-                                    $row['translations'][$lang] = $value;
-                                    if (! $matchesFilter && stripos($value, $this->_filter) !== false) {
-                                        $matchesFilter = true;
-                                    }
+                            foreach ($values as $lang => $value) {
+                                $row['translations'][$lang] = $value;
+                                if (! $matchesFilter && stripos($value, $this->_filter) !== false) {
+                                    $matchesFilter = true;
                                 }
+                            }
 
-                                if ($matchesFilter) {
-                                    $translations[$key] = $row;
-                                    $sortArray[] = $row[$sortKey];
-                                }
+                            if ($matchesFilter) {
+                                $translations[$key] = $row;
+                                $sortArray[] = $row[$sortKey];
                             }
                         }
                     } else {
@@ -194,6 +196,8 @@ class Application_Translate_TranslationManager
      *
      * @param string $sortKey
      * @param int $sortOrder
+     *
+     * TODO check if new values still match otherwise remove entry from result
      */
     public function getMergedTranslations($sortKey = self::SORT_UNIT, $sortOrder = SORT_ASC)
     {
