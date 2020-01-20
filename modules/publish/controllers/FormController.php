@@ -82,7 +82,7 @@ class Publish_FormController extends Application_Controller_Action
                 'index'
             );
         }
-        
+
         // Adds translated messages for javascript files
         $javascriptTranslations = $this->view->getHelper('javascriptMessages');
         $javascriptTranslations->getDefaultMessageSet();
