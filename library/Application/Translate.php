@@ -273,6 +273,8 @@ class Application_Translate extends Zend_Translate
         $database = new Opus_Translate_Dao();
 
         $database->setTranslation($key, $translations, $module);
+
+        self::clearCache();
     }
 
     /**
