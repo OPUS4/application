@@ -284,4 +284,43 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
         $this->assertNotNull($translations);
         $this->assertGreaterThan(0, count($translations));
     }
+
+    public function testFilterEditedTranslations()
+    {
+        $manager = $this->object;
+        $manager->setModules(['default']);
+        $manager->setFilter('Nein');
+
+        $translations = $manager->getMergedTranslations('key');
+
+        $this->assertNotNull($translations);
+        $this->assertCount(2, $translations);
+        $this->assertArrayHasKey('answer_no', $translations);
+        $this->assertArrayHasKey('Field_Value_False', $translations);
+
+        $database = new Opus_Translate_Dao();
+        $database->setTranslation('answer_no', ['de' => 'Nicht', 'en' => 'No']);
+
+        $translations = $manager->getMergedTranslations('key');
+
+        $this->assertNotNull($translations);
+        $this->assertCount(1, $translations);
+        $this->assertArrayHasKey('Field_Value_False', $translations);
+    }
+
+    public function testReset()
+    {
+        $manager = $this->object;
+
+        $testKey = 'answer_yes';
+
+        $manager->reset($testKey);
+
+
+    }
+
+    public function testDelete()
+    {
+
+    }
 }

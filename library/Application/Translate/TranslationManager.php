@@ -28,7 +28,7 @@
  * @package     Module_Setup
  * @author      Edouard Simon (edouard.simon@zib.de)
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -43,7 +43,6 @@
  *
  * TODO add logic where translations are automatically stored in language_custom and
  *      distinguish between DEFAULT and CUSTOM values in order to display them together in the user interface
- * TODO reset to default functionality
  */
 class Application_Translate_TranslationManager
 {
@@ -137,28 +136,19 @@ class Application_Translate_TranslationManager
                         $translationUnits = $tmxFile->toArray();
 
                         foreach ($translationUnits as $key => $values) {
-                            $matchesFilter = false;
+                            if ($this->matches($key, $values, $this->_filter)) {
+                                $row = [
+                                    'key' => $key,
+                                    'module' => $module,
+                                    'directory' => $dir,
+                                    'filename' => $fileName,
+                                    'translations' => []
+                                ];
 
-                            $row = [
-                                'key' => $key,
-                                'module' => $module,
-                                'directory' => $dir,
-                                'filename' => $fileName,
-                                'translations' => []
-                            ];
-
-                            if (empty($this->_filter) || stripos($key, $this->_filter) !== false) {
-                                $matchesFilter = true;
-                            }
-
-                            foreach ($values as $lang => $value) {
-                                $row['translations'][$lang] = $value;
-                                if (! $matchesFilter && stripos($value, $this->_filter) !== false) {
-                                    $matchesFilter = true;
+                                foreach ($values as $lang => $value) {
+                                    $row['translations'][$lang] = $value;
                                 }
-                            }
 
-                            if ($matchesFilter) {
                                 $translations[$key] = $row;
                                 $sortArray[] = $row[$sortKey];
                             }
@@ -212,24 +202,15 @@ class Application_Translate_TranslationManager
             if (array_key_exists($key, $translations)) {
                 // key exists in TMX files and needs to be marked as edited
                 // keep original values from TMX files
-                $translations[$key]['translationsTmx'] = $translations[$key]['translations'];
-                $translations[$key]['translations'] = $languages;
-            } else {
-                $matchesFilter = false;
-                // key does not exist in TMX files and needs to be added
-                if (! empty($this->_filter)) {
-                    if (stripos($key, $this->_filter) !== false) {
-                        $matchesFilter = true;
-                    } else {
-                        foreach ($languages as $lang => $value) {
-                            if (!$matchesFilter && stripos($value, $this->_filter) !== false) {
-                                $matchesFilter = true;
-                            }
-                        }
-                    }
+                if ($this->matches($key, $languages, $this->_filter)) {
+                    $translations[$key]['translationsTmx'] = $translations[$key]['translations'];
+                    $translations[$key]['translations'] = $languages;
+                } else {
+                    // remove if edited version does not match anymore
+                    unset($translations[$key]);
                 }
-
-                if ($matchesFilter) {
+            } else {
+                if ($this->matches($key, $languages, $this->_filter)) {
                     $translations[$key]['key'] = $key;
                     $translations[$key]['translations'] = $languages;
                 }
@@ -237,6 +218,25 @@ class Application_Translate_TranslationManager
         }
 
         return $translations;
+    }
+
+    public function matches($key, $values, $filter)
+    {
+        if (empty($filter)) {
+            return true;
+        }
+
+        if (stripos($key, $filter) !== false) {
+            return true;
+        }
+
+        foreach ($values as $lang => $value) {
+            if (stripos($value, $filter) !== false) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -327,5 +327,34 @@ class Application_Translate_TranslationManager
             $names[] = $name;
             $this->setFolderNames($names);
         }
+    }
+
+    public function keyExists($key)
+    {
+
+    }
+
+    /**
+     * Removes a translation key from the database if the key exists in TMX files.
+     * @param $key
+     */
+    public function reset($key)
+    {
+        $database = new Opus_Translate_Dao();
+
+        $translations = $this->getTranslations();
+
+        if (array_key_exists($key, $translations)) {
+            $database->remove($key);
+        }
+    }
+
+    /**
+     * Removes a translation key from the database.
+     * @param $key
+     */
+    public function delete($key)
+    {
+
     }
 }
