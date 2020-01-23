@@ -98,5 +98,32 @@
         </tuv>
     </tu>
 
+    <tu tuid="setup_translation_key">
+      <tuv xml:lang="en">
+        <seg>Key</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Übersetzungschlüssel</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="setup_translation_values">
+      <tuv xml:lang="en">
+        <seg>Translations</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Übersetzungen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="setup_translation_edit">
+      <tuv xml:lang="en">
+        <seg>Edit</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Editieren</seg>
+      </tuv>
+    </tu>
+
   </body>
 </tmx>

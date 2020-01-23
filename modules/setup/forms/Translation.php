@@ -25,33 +25,36 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_Setup
- * @author      Edouard Simon (edouard.simon@zib.de)
+ * @package     Setup_Form
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-/**
- * TODO reduce vertical height of form ("Search: TEXT Button")
- */
-class Setup_Form_LanguageSearch extends Zend_Form
+class Setup_Form_Translation extends Application_Form_Translations
 {
 
-    const ELEMENT_FILTER = 'search';
-
-    const ELEMENT_SUBMIT = 'Anzeigen';
-
-    /**
-     * TODO not supported yet (keys are always included) - make keys optional
-     */
-    const ELEMENT_INCLUDE_KEYS = 'SearchKeys';
+    const ELEMENT_KEY = 'Key';
 
     public function init()
     {
-        // $this->setDisableLoadDefaultDecorators(true);
-        // $this->addDecorator('FormElements');
-        $this->addElement('text', self::ELEMENT_FILTER);
-        $this->addElement('submit', self::ELEMENT_SUBMIT);
+        parent::init();
+
+        $this->addElement('text', self::ELEMENT_KEY, [
+            'label' => 'Key', 'size' => 80, 'disabled' => true
+        ]);
+    }
+
+    public function addKey($key, $textarea = true, $options = null)
+    {
+        if (is_null($options)) {
+            $options = [];
+        }
+
+        $options['label'] = 'setup_translation_values';
+
+        parent::addKey($key, $textarea, $options);
+
+        $this->getElement(self::ELEMENT_KEY)->setValue($key);
     }
 }

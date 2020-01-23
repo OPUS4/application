@@ -86,10 +86,7 @@ class Setup_LanguageController extends Application_Controller_Action
             $searchTerm = isset($post['search']) ? $post['search'] : $searchTerm;
         }
 
-        $moduleNames = explode(',', $config->setup->translation->modules->allowed);
-
-        $translationManager = new Application_Translate_TranslationManager();
-        $translationManager->setModules($moduleNames);
+        $translationManager = $this->getTranslationManager();
 
         if (! empty($searchTerm)) {
             $translationManager->setFilter($searchTerm);
@@ -111,6 +108,13 @@ class Setup_LanguageController extends Application_Controller_Action
      */
     public function addAction()
     {
+        $request = $this->getRequest();
+
+        if ($request->isPost()) {
+            // TODO process form submit
+        } else {
+            // TODO show form
+        }
     }
 
     /**
@@ -130,11 +134,11 @@ class Setup_LanguageController extends Application_Controller_Action
         $request = $this->getRequest();
         if ($request->isPost()) {
             $post = $request->getPost();
-            $form = new Application_Form_Translations();
+            $form = $this->getTranslationForm();
             $result = $form->processPost($post, $post);
             switch ($result) {
                 case Application_Form_Translations::RESULT_SAVE:
-                    $form->addKey($translationKey);
+                    $form->addKey($translationKey, true);
                     $form->populate($post);
                     $form->updateTranslations();
                     break;
@@ -151,8 +155,8 @@ class Setup_LanguageController extends Application_Controller_Action
                 ['search' => $this->getParam('search')]
             );
         } else {
-            $form = new Application_Form_Translations();
-            $form->addKey($translationKey);
+            $form = $this->getTranslationForm();
+            $form->addKey($translationKey, true);
             $form->populateFromTranslations();
             // TODO use key as label (use different form?)
 
@@ -161,50 +165,35 @@ class Setup_LanguageController extends Application_Controller_Action
         }
     }
 
-    protected function getForm()
+    /**
+     * Removes database entry for translations key from TMX files to reset the used value.
+     */
+    public function resetAction()
     {
-        $translationKey = $this->_request->getParam('key');
+        $key = $this->getParam('key', null);
 
-        if (empty($translationKey)) {
-            throw new Application_Exception('Parameters missing');
+        if (! is_null($key)) {
+            $translationManager = $this->getTranslationManager();
+
+            if ($translationManager->keyExists($key)) {
+                $translationManager->reset($key);
+            } else {
+                // TODO error invalid request
+            }
+        } else {
+            // TODO error invalid request
         }
 
-        $form = new Zend_Form_SubForm();
-        $form->addSubForm(new Setup_Form_LanguageKey($translationKey), $translationKey);
-
-        return $form;
+        $this->_helper->Redirector->redirectTo(
+            'show', null, 'language', 'setup',
+            ['search' => $this->getParam('search')]
+        );
     }
 
-    protected function getModel()
+    protected function getTranslationForm()
     {
-        $translationKey = $this->_request->getParam('key');
-        $sourceFileEncoded = $this->_request->getParam('file');
-
-        if (empty($translationKey) || empty($sourceFileEncoded)) {
-            throw new Application_Exception('Parameters missing');
-        }
-
-        $sourceFile = urldecode($sourceFileEncoded);
-
-        list($moduleName, $languageDir, $fileName) = explode('/', $sourceFile);
-
-        $basePath = APPLICATION_PATH . '/modules';
-
-        $targetFile = "$basePath/$moduleName/language_custom/$fileName";
-
-        $translationSourceParams = [
-            'moduleBasepath' => $basePath,
-            'moduleName' => $moduleName,
-            'languageDirectory' => $languageDir,
-            'filename' => $fileName
-        ];
-
-        $config = [
-            'translationSourceParams' => $translationSourceParams,
-            'translationTarget' => $targetFile
-        ];
-
-        return new Setup_Model_Language($config);
+        $form = new Setup_Form_Translation();
+        return $form;
     }
 
     protected function getSearchForm($searchTerm = null, $sortKey = null)
@@ -220,11 +209,6 @@ class Setup_LanguageController extends Application_Controller_Action
         $form = new Setup_Form_LanguageSearch();
 
         $form->getElement('search')->setLabel($this->view->translate('setup_language_searchTerm'));
-        /*
-        $form->getElement('sort')
-            ->setLabel($this->view->translate('setup_language_sortKey'))
-            ->setMultiOptions($sortKeysTranslated);
-        */
 
         // remove search parameter from URL (gets set when returning from edit forms)
         $form->setAction($this->view->url(['action' => 'show', 'search' => null]));
@@ -232,11 +216,19 @@ class Setup_LanguageController extends Application_Controller_Action
         if (! empty($searchTerm)) {
             $form->search->setValue($searchTerm);
         }
-        /*
-        if (! empty($sortKey)) {
-            $form->sort->setValue($sortKey);
-        }*/
 
         return $form;
+    }
+
+    protected function getTranslationManager()
+    {
+        $config = $this->getConfig();
+
+        $moduleNames = explode(',', $config->setup->translation->modules->allowed);
+
+        $translationManager = new Application_Translate_TranslationManager();
+        $translationManager->setModules($moduleNames);
+
+        return $translationManager;
     }
 }

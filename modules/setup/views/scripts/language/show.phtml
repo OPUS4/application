@@ -33,7 +33,16 @@
  */
 ?>
 
-<?= $this->form ?>
+<div>
+    <div><?= $this->form ?></div>
+    <ul>
+        <li><a href="">Add</a></li>
+        <li><a href="">Export</a></li>
+        <li><a href="">Import</a></li>
+        <li><a href="">Reset All</a></li>
+        <li><a href="">Delete All</a></li>
+    </ul>
+</div>
 
 <table class="table-translations">
     <thead>
@@ -47,6 +56,7 @@
     <?PHP
 //        $keyPos = array_flip($this->sortKeys);
     foreach ($this->translations as $row) :
+        if (! isset($row['directory'])) var_dump($row);
         $writeable = ($row['directory'] == 'language_custom');
         $file = $row['module'] . DIRECTORY_SEPARATOR . $row['directory'] . DIRECTORY_SEPARATOR . $row['filename'];
         $key = array_shift($row);
