@@ -80,4 +80,9 @@ interface Application_Export_ExportPlugin
      * @return bool returns true if plugin access is restricted to administrators
      */
     public function isAccessRestricted();
+
+    /**
+     * @return bool returns true if export of unpublished documents is allowed
+     */
+    public function isAllowExportOfUnpublishedDocs();
 }

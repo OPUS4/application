@@ -192,6 +192,157 @@ class Export_DataCiteExportTest extends ControllerTestCase
     }
 
     /**
+     * Nicht freigeschaltete Dokumente können nur dann exportiert werden,
+     * wenn der Benutzer das Recht 'resource_documents' besitzt.
+     *
+     * @throws Opus_Model_Exception
+     * @throws Zend_Exception
+     */
+    public function testExportOfDataCiteXmlWithUnpublishedDocNotAllowed()
+    {
+        $removeAccess = $this->addModuleAccess('export', 'guest');
+        $this->enableSecurity();
+        $config = Zend_Registry::get('Zend_Config');
+
+        Zend_Registry::get('Zend_Config')->merge(
+            new Zend_Config(
+                ['plugins' =>
+                    ['export' =>
+                        ['datacite' => ['adminOnly' => self::CONFIG_VALUE_FALSE]]
+                    ]
+                ]
+            )
+        );
+
+        $doc = $this->createTestDocument();
+        $doc->setServerState('unpublished');
+        $doc->setType('article');
+        $doc->setLanguage('eng');
+        $docId = $doc->store();
+
+        Application_Security_AclProvider::init();
+
+        $this->dispatch("/export/index/datacite/docId/${docId}");
+
+        // revert configuration changes
+        $this->restoreSecuritySetting();
+        Zend_Registry::set('Zend_Config', $config);
+        if ($removeAccess) {
+            $this->removeModuleAccess('export', 'guest');
+        }
+
+        $this->assertResponseCode(401);
+        $this->assertContains('export of unpublished documents is not allowed', $this->getResponse()->getBody());
+    }
+
+    public function testExportOfDataCiteXmlWithUnpublishedDocAllowedForAdmin()
+    {
+        $this->enableSecurity();
+        $config = Zend_Registry::get('Zend_Config');
+
+        Zend_Registry::get('Zend_Config')->merge(
+            new Zend_Config(
+                ['plugins' =>
+                    ['export' =>
+                        ['datacite' => ['adminOnly' => self::CONFIG_VALUE_FALSE]]
+                    ]
+                ]
+            )
+        );
+
+        $doc = $this->createTestDocument();
+        $doc->setServerState('unpublished');
+        $doc->setType('article');
+        $doc->setLanguage('eng');
+        $docId = $doc->store();
+
+        $this->loginUser('admin', 'adminadmin');
+
+        $this->dispatch("/export/index/datacite/docId/${docId}");
+
+        // revert configuration changes
+        $this->restoreSecuritySetting();
+        Zend_Registry::set('Zend_Config', $config);
+
+        $this->assertResponseCode(200);
+        $this->assertContains("DataCite XML of document ${docId} is not valid", $this->getResponse()->getBody());
+    }
+
+    public function testExportOfDataCiteXmlWithUnpublishedDocAllowedForNonAdminUserWithPermission()
+    {
+        $removeAccess = $this->addModuleAccess('export', 'docsadmin');
+        $this->enableSecurity();
+        $config = Zend_Registry::get('Zend_Config');
+
+        Zend_Registry::get('Zend_Config')->merge(
+            new Zend_Config(
+                ['plugins' =>
+                    ['export' =>
+                        ['datacite' => ['adminOnly' => self::CONFIG_VALUE_FALSE]]
+                    ]
+                ]
+            )
+        );
+
+        $doc = $this->createTestDocument();
+        $doc->setServerState('unpublished');
+        $doc->setType('article');
+        $doc->setLanguage('eng');
+        $docId = $doc->store();
+
+        $this->loginUser('security8', 'security8pwd');
+
+        $this->dispatch("/export/index/datacite/docId/${docId}");
+
+        // revert configuration changes
+        $this->restoreSecuritySetting();
+        Zend_Registry::set('Zend_Config', $config);
+        if ($removeAccess) {
+            $this->removeModuleAccess('export', 'docsadmin');
+        }
+
+        $this->assertResponseCode(200);
+        $this->assertContains("DataCite XML of document ${docId} is not valid", $this->getResponse()->getBody());
+    }
+
+    public function testExportOfDataCiteXmlWithUnpublishedDocAllowedForNonAdminUserWithoutPermission()
+    {
+        $removeAccess = $this->addModuleAccess('export', 'collectionsadmin');
+        $this->enableSecurity();
+        $config = Zend_Registry::get('Zend_Config');
+
+        Zend_Registry::get('Zend_Config')->merge(
+            new Zend_Config(
+                ['plugins' =>
+                    ['export' =>
+                        ['datacite' => ['adminOnly' => self::CONFIG_VALUE_FALSE]]
+                    ]
+                ]
+            )
+        );
+
+        $doc = $this->createTestDocument();
+        $doc->setServerState('unpublished');
+        $doc->setType('article');
+        $doc->setLanguage('eng');
+        $docId = $doc->store();
+
+        $this->loginUser('security9', 'security9pwd');
+
+        $this->dispatch("/export/index/datacite/docId/${docId}");
+
+        // revert configuration changes
+        $this->restoreSecuritySetting();
+        Zend_Registry::set('Zend_Config', $config);
+        if ($removeAccess) {
+            $this->removeModuleAccess('export', 'collectionsadmin');
+        }
+
+        $this->assertResponseCode(401);
+        $this->assertContains('export of unpublished documents is not allowed', $this->getResponse()->getBody());
+    }
+
+    /**
      * @param Opus_Document $doc
      * @return int ID des gespeicherten Dokuments
      */

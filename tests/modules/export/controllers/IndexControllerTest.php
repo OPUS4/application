@@ -51,9 +51,7 @@ class Export_IndexControllerTest extends ControllerTestCase
     public function tearDown()
     {
         if ($this->_removeExportFromGuest) {
-            $role = Opus_UserRole::fetchByName('guest');
-            $role->removeAccessModule('export');
-            $role->store();
+            $this->removeAccessOnModuleExportForGuest();
         }
 
         parent::tearDown();
@@ -187,14 +185,7 @@ class Export_IndexControllerTest extends ControllerTestCase
      */
     public function testRequestToRawXmlIsDenied()
     {
-        $r = Opus_UserRole::fetchByName('guest');
-
-        $modules = $r->listAccessModules();
-        if (! in_array('export', $modules)) {
-            $this->_removeExportFromGuest = true;
-            $r->appendAccessModule('export');
-            $r->store();
-        }
+        $this->_removeExportFromGuest = $this->addAccessOnModuleExportForGuest();
 
         // enable security
         $config = Zend_Registry::get('Zend_Config');
@@ -217,14 +208,7 @@ class Export_IndexControllerTest extends ControllerTestCase
         $this->requireSolrConfig();
 
         // role guest needs privilege to access module export
-        $r = Opus_UserRole::fetchByName('guest');
-
-        $modules = $r->listAccessModules();
-        if (! in_array('export', $modules)) {
-            $this->_removeExportFromGuest = true;
-            $r->appendAccessModule('export');
-            $r->store();
-        }
+        $this->_removeExportFromGuest = $this->addAccessOnModuleExportForGuest();
 
         // manipulate solr configuration
         $config = Zend_Registry::get('Zend_Config');
@@ -893,7 +877,10 @@ class Export_IndexControllerTest extends ControllerTestCase
 
     public function testXmlExportDoesNotContainUnpublishedDocument()
     {
+        parent::setUpWithEnv('production');
+
         $this->enableSecurity();
+        $this->assertSecurityConfigured();
         $changedAccess = $this->addAccessOnModuleExportForGuest();
 
         $doc = $this->createTestDocument();
@@ -906,9 +893,8 @@ class Export_IndexControllerTest extends ControllerTestCase
             $this->removeAccessOnModuleExportForGuest();
         }
 
-        $this->assertResponseCode(200);
-        $this->assertXpath('/export-example');
-        $this->assertNotXpath('/export-example/doc');
+        $this->assertResponseCode(401);
+        $this->assertContains('export of unpublished documents is not allowed', $this->getResponse()->getBody());
     }
 
     /**
@@ -1017,17 +1003,7 @@ class Export_IndexControllerTest extends ControllerTestCase
      */
     private function addAccessOnModuleExportForGuest()
     {
-        $changedAccess = false;
-
-        $r = Opus_UserRole::fetchByName('guest');
-        $modules = $r->listAccessModules();
-        if (! in_array('export', $modules)) {
-            $r->appendAccessModule('export');
-            $changedAccess = true;
-            $r->store();
-        }
-
-        return $changedAccess;
+        return $this->addModuleAccess('export', 'guest');
     }
 
     /**
@@ -1036,16 +1012,6 @@ class Export_IndexControllerTest extends ControllerTestCase
      */
     private function removeAccessOnModuleExportForGuest()
     {
-        $changedAccess = false;
-
-        $r = Opus_UserRole::fetchByName('guest');
-        $modules = $r->listAccessModules();
-        if (in_array('export', $modules)) {
-            $r->removeAccessModule('export');
-            $changedAccess = true;
-            $r->store();
-        }
-
-        return $changedAccess;
+        return $this->removeModuleAccess('export', 'guest');
     }
 }

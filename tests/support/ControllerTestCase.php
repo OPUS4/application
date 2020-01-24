@@ -819,4 +819,46 @@ class ControllerTestCase extends TestCase
             Zend_Registry::set('Zend_Translate', $this->translatorBackup);
         }
     }
+
+    /**
+     * Allow the given user (identified by his or her name) to access the given module.
+     * Returns true if access permission was added; otherwise false.
+     *
+     * @param $moduleName module name
+     * @param $userName user name
+     * @return bool
+     * @throws \Opus\Model\Exception
+     */
+    protected function addModuleAccess($moduleName, $userName)
+    {
+        $r = Opus_UserRole::fetchByName($userName);
+        $modules = $r->listAccessModules();
+        if (! in_array($moduleName, $modules)) {
+            $r->appendAccessModule($moduleName);
+            $r->store();
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Disallow the given user (identified by his or her name) to access the given module.
+     * Returns true if access permission was removed; otherwise false.
+     *
+     * @param $moduleName module name
+     * @param $userName user name
+     * @return bool
+     * @throws \Opus\Model\Exception
+     */
+    protected function removeModuleAccess($moduleName, $userName)
+    {
+        $r = Opus_UserRole::fetchByName($userName);
+        $modules = $r->listAccessModules();
+        if (in_array($moduleName, $modules)) {
+            $r->removeAccessModule($moduleName);
+            $r->store();
+            return true;
+        }
+        return false;
+    }
 }
