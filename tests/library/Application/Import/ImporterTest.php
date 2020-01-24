@@ -52,4 +52,11 @@ class Application_Import_ImporterTest extends ControllerTestCase
         $this->assertCount(1, $document->getEnrichment());
         $this->assertEquals('Berlin', $document->getEnrichmentValue('City'));
     }
+
+    public function testFromArray()
+    {
+        $doc = new Opus_Document(146);
+
+        // var_dump($doc->toArray());
+    }
 }

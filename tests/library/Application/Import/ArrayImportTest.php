@@ -1,4 +1,3 @@
-#!/usr/bin/env php5
 <?php
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
@@ -25,24 +24,30 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Import
- * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
+ * @category    Application Unit Tests
+ * @package     Application
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-/**
- *
- * TODO: dieses Skript wird aktuell nicht in den Tarball / Deb-Package aufgenommen
- * Es ist noch sehr stark an die Anforderungen einer Testinstanz angepasst und
- * müsste vor der offiziellen Aufnahme noch generalisiert werden. Die Steuerung
- * sollte über eine externe Konfigurationsdatei erfolgen, so dass der Quellcode
- * später nicht mehr angepasst werden muss.
- *
- */
-require_once dirname(__FILE__) . '/../common/bootstrap.php';
-require_once 'Log.php';
 
-$importer = new Application_Import_CsvImporter();
-$importer->run($argv);
+class Application_Import_ArrayImportTest
+{
+
+    public function testImport()
+    {
+        $importer = new Application_Import_ArrayImport();
+
+        $importer->import([
+            'Type' => 'article',
+            'TitleMain' => [
+                [
+                    'Type' => 'Main',
+                    'Language' => 'eng',
+                    'Value' => 'Document Test Title'
+                ]
+            ]
+        ]);
+    }
+
+}
