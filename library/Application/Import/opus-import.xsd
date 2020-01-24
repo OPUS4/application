@@ -80,6 +80,7 @@
                     <xsd:attribute name="pageFirst" type="xsd:string"/>
                     <xsd:attribute name="pageLast" type="xsd:string"/>
                     <xsd:attribute name="pageNumber" type="xsd:string"/>
+                    <xsd:attribute name="articleNumber" type="xsd:string"/>
                     <xsd:attribute name="edition" type="xsd:string"/>
                     <xsd:attribute name="volume" type="xsd:string"/>
                     <xsd:attribute name="issue" type="xsd:string"/>

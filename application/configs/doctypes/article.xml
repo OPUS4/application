@@ -68,6 +68,8 @@
     <field name="PersonEditor" required="no" formelement="Text" datatype="Person" multiplicity="*"/>
     <field name="PageFirst" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
     <field name="PageLast" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
+    <field name="ArticleNumber" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
+    <field name="PageNumber" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
     <field name="PublishedDate" required="no" formelement="Text" datatype="Date" multiplicity="1"/>    
     <field name="SubjectDDC" required="no" formelement="Select" datatype="CollectionLeaf" root="ddc" multiplicity="*"/>	
     <field name="SubjectUncontrolled" required="no" formelement="Text" datatype="Subject" multiplicity="5"/>

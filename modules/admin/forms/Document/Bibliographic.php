@@ -46,6 +46,7 @@ class Admin_Form_Document_Bibliographic extends Admin_Form_Document_Section
     const ELEMENT_CREATING_CORPORATION = 'CreatingCorporation';
     const ELEMENT_EDITION = 'Edition';
     const ELEMENT_ISSUE = 'Issue';
+    const ELEMENT_ARTICLE_NUMBER = 'ArticleNumber';
     const ELEMENT_PAGE_FIRST = 'PageFirst';
     const ELEMENT_PAGE_LAST = 'PageLast';
     const ELEMENT_PAGE_COUNT = 'PageCount';
@@ -75,6 +76,8 @@ class Admin_Form_Document_Bibliographic extends Admin_Form_Document_Section
         $this->addElement('text', self::ELEMENT_PAGE_LAST, ['size' => 15]);
 
         $this->addElement('text', self::ELEMENT_ISSUE, ['size' => 30]);
+        $this->addElement('text', self::ELEMENT_ARTICLE_NUMBER, ['size' => 15]);
+
         $this->addElement('text', self::ELEMENT_CONTRIBUTING_CORPORATION, ['size' => 70]);
         $this->addElement('text', self::ELEMENT_CREATING_CORPORATION, ['size' => 70]);
 
@@ -109,6 +112,9 @@ class Admin_Form_Document_Bibliographic extends Admin_Form_Document_Section
         $this->setRemoveEmptyCheckbox(false);
     }
 
+    /**
+     * @param Opus_Document $document
+     */
     public function populateFromModel($document)
     {
         parent::populateFromModel($document);
@@ -119,6 +125,7 @@ class Admin_Form_Document_Bibliographic extends Admin_Form_Document_Section
         $this->getElement(self::ELEMENT_CREATING_CORPORATION)->setValue($document->getCreatingCorporation());
         $this->getElement(self::ELEMENT_EDITION)->setValue($document->getEdition());
         $this->getElement(self::ELEMENT_ISSUE)->setValue($document->getIssue());
+        $this->getElement(self::ELEMENT_ARTICLE_NUMBER)->setValue($document->getArticleNumber());
         $this->getElement(self::ELEMENT_PAGE_FIRST)->setValue($document->getPageFirst());
         $this->getElement(self::ELEMENT_PAGE_LAST)->setValue($document->getPageLast());
         $this->getElement(self::ELEMENT_PAGE_COUNT)->setValue($document->getPageNumber());
@@ -132,6 +139,9 @@ class Admin_Form_Document_Bibliographic extends Admin_Form_Document_Section
         $this->getElement(self::ELEMENT_BELONGS_TO_BIBLIOGRAPHY)->setValue($document->getBelongsToBibliography());
     }
 
+    /**
+     * @param Opus_Document $document
+     */
     public function updateModel($document)
     {
         parent::updateModel($document);
@@ -142,6 +152,7 @@ class Admin_Form_Document_Bibliographic extends Admin_Form_Document_Section
         $document->setCreatingCorporation($this->getElementValue(self::ELEMENT_CREATING_CORPORATION));
         $document->setEdition($this->getElementValue(self::ELEMENT_EDITION));
         $document->setIssue($this->getElementValue(self::ELEMENT_ISSUE));
+        $document->setArticleNumber($this->getElementValue(self::ELEMENT_ARTICLE_NUMBER));
         $document->setPageFirst($this->getElementValue(self::ELEMENT_PAGE_FIRST));
         $document->setPageLast($this->getElementValue(self::ELEMENT_PAGE_LAST));
         $document->setPageNumber($this->getElementValue(self::ELEMENT_PAGE_COUNT));
