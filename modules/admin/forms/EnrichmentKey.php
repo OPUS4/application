@@ -29,7 +29,7 @@
  * @author      Gunar Maiwald <maiwald@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
  * @author      Sascha Szott <opus-development@saschaszott.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -102,8 +102,7 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
             self::ELEMENT_TYPE,
             [
                 'label' => 'admin_enrichmentkey_label_type',
-                'id' => 'admin_enrichmentkey_type',
-                'required' => true
+                'id' => 'admin_enrichmentkey_type'
             ]
         );
 
@@ -165,6 +164,10 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
             $validationElement = $this->getElement(self::ELEMENT_VALIDATION);
             $validationElement->setValue($enrichmentType->isStrictValidation());
         }
+
+        if (! is_null($enrichmentKey->getType())) {
+            $this->setTypeFieldAsMandatory();
+        }
     }
 
     /**
@@ -179,15 +182,17 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
 
     /**
      * Aktualisiert Model-Instanz mit Werten im Formular.
-     * @param $model Opus_Enrichmentkey
+     * @param $enrichmentKey Opus_Enrichmentkey
      */
     public function updateModel($enrichmentKey)
     {
         $enrichmentKey->setName($this->getElementValue(self::ELEMENT_NAME));
-        $enrichmentKey->setType($this->getElementValue(self::ELEMENT_TYPE));
 
-        $enrichmentType = $this->initEnrichmentType($this->getElementValue(self::ELEMENT_TYPE));
+        $enrichmentTypeValue = $this->getElementValue(self::ELEMENT_TYPE);
+        $enrichmentType = $this->initEnrichmentType($enrichmentTypeValue);
         if (! is_null($enrichmentType)) {
+            $enrichmentKey->setType($enrichmentTypeValue);
+
             $enrichmentType->setOptionsFromString([
                 'options' => $this->getElementValue(self::ELEMENT_OPTIONS),
                 'validation' => $this->getElementValue(self::ELEMENT_VALIDATION)]);
@@ -205,7 +210,7 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
      */
     private function initEnrichmentType($enrichmentTypeName)
     {
-        if (is_null($enrichmentTypeName)) {
+        if (is_null($enrichmentTypeName) || $enrichmentTypeName == '') {
             return null;
         }
 
@@ -222,5 +227,29 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
         }
 
         return null;
+    }
+
+    public function populate(array $values)
+    {
+        if (array_key_exists(parent::ELEMENT_MODEL_ID, $values)) {
+            $enrichmentKey = Opus_EnrichmentKey::fetchByName($values[parent::ELEMENT_MODEL_ID]);
+            if (! is_null($enrichmentKey)) {
+                $enrichmentType = $enrichmentKey->getEnrichmentType();
+                if (! is_null($enrichmentType)) {
+                    $this->setTypeFieldAsMandatory();
+                }
+            }
+        }
+
+        return parent::populate($values);
+    }
+
+    private function setTypeFieldAsMandatory()
+    {
+        // leere Auswahlmöglichkeit im Select-Feld für Type wird nicht angeboten (Pflichtfeld)
+        $element = $this->getElement(self::ELEMENT_TYPE);
+        $element->removeMultiOption('');
+        $element->setRequired(true);
+        $this->applyCustomMessages($element);
     }
 }
