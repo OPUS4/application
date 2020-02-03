@@ -35,10 +35,11 @@
 /**
  * Mock Opus_Document for unit testing.
  */
-class Mock_Opus_Document extends Opus_Document {
+class Mock_Opus_Document extends Opus_Document
+{
 
-    public function store() {
+    public function store()
+    {
         // don't do anything
     }
-
 }

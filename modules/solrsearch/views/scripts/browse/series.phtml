@@ -37,10 +37,10 @@
 
 <div class="content">
     <ul class="nav browsing">
-    <?php foreach($this->series as $seriesitem) : ?>
+    <?php foreach ($this->series as $seriesitem) : ?>
         <li>
-            <a href="<?= $this->url(array('module' => 'solrsearch', 'controller' => 'index', 'action' => 'search', 'searchtype' => 'series', 'id' => $seriesitem['id']), null, true) ?>"><?= htmlspecialchars($seriesitem['title']) ?></a>
-            <a href="<?= $this->url(array('module' => 'rss', 'controller' => 'index', 'action' => 'index', 'searchtype' => 'series', 'id' => $seriesitem['id']), null, true) ?>" class="rss" type="application/rss+xml">
+            <a href="<?= $this->url(['module' => 'solrsearch', 'controller' => 'index', 'action' => 'search', 'searchtype' => 'series', 'id' => $seriesitem['id']], null, true) ?>"><?= htmlspecialchars($seriesitem['title']) ?></a>
+            <a href="<?= $this->url(['module' => 'rss', 'controller' => 'index', 'action' => 'index', 'searchtype' => 'series', 'id' => $seriesitem['id']], null, true) ?>" class="rss" type="application/rss+xml">
                 <img src="<?= $this->layoutPath() ?>/img/feed_small.png" width="12" height="12" alt="<?= $this->translate('rss_icon') ?>" title="<?= $this->translate('rss_title') ?>" />
             </a>
         </li>

@@ -35,7 +35,8 @@
 /**
  * This view helper returns the escaped number of a document in a series.
  */
-class Application_View_Helper_SeriesNumber extends Zend_View_Helper_Abstract {
+class Application_View_Helper_SeriesNumber extends Zend_View_Helper_Abstract
+{
 
     /**
      * Returns the number of a document in a series.
@@ -43,7 +44,8 @@ class Application_View_Helper_SeriesNumber extends Zend_View_Helper_Abstract {
      * @param Opus_Series $series
      * @return string
      */
-    public function seriesNumber($document, $series) {
+    public function seriesNumber($document, $series)
+    {
         foreach ($document->getSeries() as $linkedSeries) {
             if ($linkedSeries->getModel()->getId() === $series->getId()) {
                 return htmlspecialchars($linkedSeries->getNumber());
@@ -52,5 +54,4 @@ class Application_View_Helper_SeriesNumber extends Zend_View_Helper_Abstract {
 
         return '';
     }
-
 }

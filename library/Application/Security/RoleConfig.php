@@ -34,62 +34,64 @@
 
 /**
  * Lädt die Konfigurationsdatei für eine Rolle.
- * 
- * In der Datei sind die Privilegien für die Rolle definiert. Existiert keine Datei gibt es keine weiteren 
+ *
+ * In der Datei sind die Privilegien für die Rolle definiert. Existiert keine Datei gibt es keine weiteren
  * Einschränkungen.
- * 
+ *
  * TODO Beschreibung überprüfen und ergänzen.
  */
-class Application_Security_RoleConfig {
-    
+class Application_Security_RoleConfig
+{
+
     private $_roleName;
-    
-    public function __construct($roleName) {
+
+    public function __construct($roleName)
+    {
         $this->_roleName = $roleName;
     }
-    
+
     /**
      * Fügt Rechte zu Zend_Acl Instanz hinzu.
      * @param Zend_Acl $acl
      */
-    public function applyPermissions($acl) {
+    public function applyPermissions($acl)
+    {
         $this->getRolePermissions($acl, $this->_roleName);
     }
 
-    
-    public function getRolePermissions($acl, $roleName) {
+
+    public function getRolePermissions($acl, $roleName)
+    {
         $role = Opus_UserRole::fetchByName($roleName);
-        
+
         if (is_null($role)) {
             Zend_Registry::get('Zend_Log')->err("Attempt to load unknown role '$roleName'.");
             return;
         }
-        
+
         $resources = $role->listAccessModules();
-        
+
         $resourcesConfigured = false;
-        
-        $accessibleModules = array();
-        
+
+        $accessibleModules = [];
+
         foreach ($resources as $resource) {
-            if (!strncmp('resource_', $resource, 9)) {
+            if (! strncmp('resource_', $resource, 9)) {
                 // resource (like languages);
                 $resource = new Zend_Acl_Resource(substr($resource, 9));
                 $acl->allow($roleName, $resource);
                 $resourcesConfigured = true;
-            }
-            else if (!strncmp('workflow_', $resource, 9)) {
+            } elseif (! strncmp('workflow_', $resource, 9)) {
                 // workflow permission
                 $resource = new Zend_Acl_Resource($resource);
                 $acl->allow($roleName, $resource);
-            }
-            else {
+            } else {
                 // module access
                 $accessibleModules[] = $resource;
             }
         }
 
-        if (!$resourcesConfigured) {
+        if (! $resourcesConfigured) {
             foreach ($accessibleModules as $module) {
                 if ($acl->has(new Zend_Acl_Resource($module))) {
                     $acl->allow($roleName, $module);
@@ -97,19 +99,18 @@ class Application_Security_RoleConfig {
             }
         }
     }
-    
+
     /**
-     * 
+     *
      * @param type $role
      * @return type
-     * 
+     *
      * TODO not used yet
      */
-    public function getRoleConfig($role) {
+    public function getRoleConfig($role)
+    {
         $path = APPLICATION_PATH . '/application/configs/security/' . $role . '.ini';
-        
+
         return file_exists($path) ? new Zend_Config_Ini($path) : null;
     }
-
-
 }

@@ -26,48 +26,28 @@
  *
  * @category    Application
  * @package     Application_Import
+ * @author      Sascha Szott <opus-development@saschaszott.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2018
+ * @copyright   Copyright (c) 2018-2019
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 class Application_Import_ZipPackageReader extends Application_Import_PackageReader
 {
-
-    public function readPackage($filename)
+    protected function extractPackage($dirName)
     {
-        $logger = $this->getLogger();
+        $filename = $dirName . DIRECTORY_SEPARATOR . 'package.zip';
+        $this->getLogger()->info('processing ZIP package in file system ' . $filename);
 
-        $logger->info('processing zip package ' . $filename);
-
-        if (!is_readable($filename)) {
-            $errMsg = 'ZIP archive ' . $filename . ' is not readable!';
-            $logger->err($errMsg);
+        if (! is_readable($filename)) {
+            $errMsg = 'ZIP package ' . $filename . ' is not readable!';
+            $this->getLogger()->err($errMsg);
             throw new Exception($errMsg);
         }
 
         $zip = new ZipArchive();
         $zip->open($filename);
-        $stat = $zip->statName(self::METADATA_FILENAME);
-        $handle = $zip->getStream(self::METADATA_FILENAME);
-        if ($handle == false || $stat['size'] == 0) {
-            return null;
-        }
-        $content = fread($handle, $stat['size']);
-        if (trim($content) == '') {
-            return null;
-        }
-
-        $dirName = $this->createExtractionDir($filename, '.zip');
-        $zip->extractTo($dirName);
+        $zip->extractTo($dirName . DIRECTORY_SEPARATOR . self::EXTRACTION_DIR_NAME);
         $zip->close();
-
-        try {
-            $statusDoc = $this->processOpusXML($content, $dirName);
-        }
-        finally {
-            $this->removeExtractionDir($dirName);
-        }
-        return $statusDoc;
     }
 }

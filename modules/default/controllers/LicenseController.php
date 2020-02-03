@@ -33,13 +33,14 @@
  *
  */
 
-class LicenseController extends Application_Controller_Action {
+class LicenseController extends Application_Controller_Action
+{
 
     /**
      * Always allow access to this controller; Override check in parent method.
      */
-    protected function checkAccessModulePermissions() {
-
+    protected function checkAccessModulePermissions()
+    {
     }
 
     /**
@@ -47,17 +48,16 @@ class LicenseController extends Application_Controller_Action {
      *
      * @return void
      */
-    public function indexAction() {
+    public function indexAction()
+    {
         // Load document
         $licId = $this->getRequest()->getParam('licId');
         try {
             $license = new Opus_Licence($licId);
 
             $this->view->license = $license;
-        }
-        catch (Opus_Model_NotFoundException $e) {
-            throw new Exception($this->view->translate('license_id_not_found', $licId));
+        } catch (Opus_Model_NotFoundException $e) {
+            throw new Exception($this->view->translate('license_id_not_found', [$licId]));
         }
     }
-
 }

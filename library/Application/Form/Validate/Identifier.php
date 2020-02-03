@@ -52,11 +52,9 @@ class Application_Form_Validate_Identifier extends Zend_Validate_Abstract
     {
         if ($element === null) {
             throw new InvalidArgumentException('Argument must not be NULL');
-        }
-        elseif ($element instanceof Zend_Form_Element) {
+        } elseif ($element instanceof Zend_Form_Element) {
             $this->_element = $element;
-        }
-        else {
+        } else {
             throw new InvalidArgumentException('Object must be Zend_Form_Element');
         }
     }
@@ -87,8 +85,7 @@ class Application_Form_Validate_Identifier extends Zend_Validate_Abstract
                 if (isset($config->identifier->validation->$type->messageTemplates)) {
                     $this->_messageTemplates = array_merge($validator->getMessageTemplates(), $config->identifier
                         ->validation->$type->messageTemplates->toArray());
-                }
-                else {
+                } else {
                     $this->_messageTemplates = $validator->getMessageTemplates();
                 }
                 foreach ($validator->getErrors() as $error) {
@@ -97,14 +94,12 @@ class Application_Form_Validate_Identifier extends Zend_Validate_Abstract
             }
 
             return $result;
-        }
-        else {
-            if (!empty($value)) {
+        } else {
+            if (! empty($value)) {
                 return true;
             }
         }
 
         return false;
     }
-
 }

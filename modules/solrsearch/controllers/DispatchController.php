@@ -39,12 +39,14 @@
  *
  * TODO eliminate controller (merge with IndexController, move code to model for testing)
  */
-class Solrsearch_DispatchController extends Application_Controller_Action {
+class Solrsearch_DispatchController extends Application_Controller_Action
+{
 
-    public function indexAction() {
+    public function indexAction()
+    {
         $this->getLogger()->debug('Received new search request. Redirecting to search action of IndexController.');
 
-        $params = array();
+        $params = [];
         $action = 'search';
 
         $searchModel = new Solrsearch_Model_Search();
@@ -53,37 +55,33 @@ class Solrsearch_DispatchController extends Application_Controller_Action {
 
         $searchType = $request->getParam('searchtype', 'invalid searchtype');
 
-        if (in_array($searchType, array('advanced', 'authorsearch')) && !is_null($this->getParam('Reset'))) {
+        if (in_array($searchType, ['advanced', 'authorsearch']) && ! is_null($this->getParam('Reset'))) {
             $this->_helper->Redirector->redirectTo('advanced', null, 'index', 'solrsearch');
             return;
         }
 
         switch ($searchType) {
-        case Application_Util_Searchtypes::SIMPLE_SEARCH:
-            if (!$searchModel->isSimpleSearchRequestValid($request)) {
-                $action = 'invalidsearchterm';
-                $params = array('searchtype' => Application_Util_Searchtypes::SIMPLE_SEARCH);
-            }
-            else {
-                $params= $searchModel->createSimpleSearchUrlParams($request);
-            }
-            break;
-        case Application_Util_Searchtypes::ADVANCED_SEARCH:
-        case Application_Util_Searchtypes::AUTHOR_SEARCH:
-            if (!$searchModel->isAdvancedSearchRequestValid($request)) {
-                $action = 'invalidsearchterm';
-                $params = array('searchtype' =>  $searchType);
-            }
-            else {
-                $params = $searchModel->createAdvancedSearchUrlParams($request);
-            }
-            break;
-        default:
-            break;
+            case Application_Util_Searchtypes::SIMPLE_SEARCH:
+                if (! $searchModel->isSimpleSearchRequestValid($request)) {
+                    $action = 'invalidsearchterm';
+                    $params = ['searchtype' => Application_Util_Searchtypes::SIMPLE_SEARCH];
+                } else {
+                    $params = $searchModel->createSimpleSearchUrlParams($request);
+                }
+                break;
+            case Application_Util_Searchtypes::ADVANCED_SEARCH:
+            case Application_Util_Searchtypes::AUTHOR_SEARCH:
+                if (! $searchModel->isAdvancedSearchRequestValid($request)) {
+                    $action = 'invalidsearchterm';
+                    $params = ['searchtype' => $searchType];
+                } else {
+                    $params = $searchModel->createAdvancedSearchUrlParams($request);
+                }
+                break;
+            default:
+                break;
         }
 
         $this->_helper->Redirector->redirectToPermanentAndExit($action, null, 'index', null, $params);
     }
-
 }
-

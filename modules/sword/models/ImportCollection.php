@@ -31,13 +31,15 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Sword_Model_ImportCollection {
-    
+class Sword_Model_ImportCollection
+{
+
     private $importCollection;
-    
+
     private $roleName;
-    
-    public function __construct() {
+
+    public function __construct()
+    {
         $logger = Zend_Registry::get('Zend_Log');
         $config = Zend_Registry::get('Zend_Config');
 
@@ -46,46 +48,51 @@ class Sword_Model_ImportCollection {
             $logger->warn('configuration key sword.collection.default.number is not defined -- documents that are imported via SWORD API will not be associated to OPUS collection');
             return;
         }
-        
+
         $collectionRole = Opus_CollectionRole::fetchByName('Import');
         if (is_null($collectionRole)) {
             $logger->warn('collection role "Import" does not exist -- documents that are imported via SWORD API will not be associated to OPUS collection');
             return;
-        }            
-        
+        }
+
         $collectionList = Opus_Collection::fetchCollectionsByRoleNumber($collectionRole->getId(), $collectionNumber);
         if (empty($collectionList)) {
             $logger->warn('could not find collection with number ' . $collectionNumber . ' and collection role ' . $collectionRole->getId() . ' -- documents that are imported via SWORD API will not be associated to OPUS collection');
             return;
         }
-        
+
         if (count($collectionList) > 1) {
             $logger->warn('there are multiple collections with number ' . $collectionNumber . ' and collection role ' . $collectionRole->getId() . ' -- documents that are imported via SWORD API will not be associated to OPUS collection');
             return;
         }
-        
+
         $this->importCollection = $collectionList[0];
         $this->roleName = $collectionRole->getName();
     }
 
-    
-    public function exists() {
-        return !is_null($this->importCollection);
+
+    public function exists()
+    {
+        return ! is_null($this->importCollection);
     }
-    
-    public function getName() {
+
+    public function getName()
+    {
         return $this->importCollection->getName();
     }
-    
-    public function getNumber() {
+
+    public function getNumber()
+    {
         return $this->importCollection->getNumber();
     }
-    
-    public function getRoleName() {
+
+    public function getRoleName()
+    {
         return $this->roleName;
     }
-    
-    public function getCollection() {
+
+    public function getCollection()
+    {
         return $this->importCollection;
     }
 }

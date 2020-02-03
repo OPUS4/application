@@ -38,35 +38,35 @@
 <h2><?= $this->authors?></h2>
 <h3><?= $this->title?></h3>
 <p><?= $this->translate('total_views')?>
- <?= $this->translate('graph_legend_frontdoor')?>:
+    <?= $this->translate('graph_legend_frontdoor')?>:
 <?= $this->totalAbstractPage?>,
 <?= $this->translate('graph_legend_files')?>:
 <?= $this->totalFiles?> </p>
-<p><img src="<?= $this->url(array(
+<p><img src="<?= $this->url([
         'module' => 'statistic',
         'controller' => 'graph',
         'action' => 'year',
         'id' => $this->docId,
-        )); ?>"
+        ]); ?>"
 alt="<?=$this->translate('graph_year_title'). ' ('.$this->translate('graph_legend_frontdoor').', '.$this->translate('graph_legend_files').')'.': ' . $this->altTextStat?>"
 />
 </p>
 
-<p><img src="<?= $this->url(array(
+<p><img src="<?= $this->url([
         'module' => 'statistic',
         'controller' => 'graph',
         'action' => 'month',
         'id' => $this->docId,
-        )); ?>"
+        ]); ?>"
 alt ="<?=$this->translate('graph_month_title')?>"
 />
 </p>
-<p><a href="<?= $this->url(array(
-        'module' =>'frontdoor',
+<p><a href="<?= $this->url([
+        'module' => 'frontdoor',
         'controller' => 'index',
         'action' => 'index',
         'docId' => $this->docId,
-    )); ?>"
+    ]); ?>"
     >
     <?= $this->translate('back_to_frontdoor'); ?>
    </a>

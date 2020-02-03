@@ -94,8 +94,7 @@ class Admin_Model_Option extends Application_Model_Abstract
     {
         if (isset($this->_config['type'])) {
             $type = $this->_config['type'];
-        }
-        else {
+        } else {
             $type = 'text';
         }
 
@@ -106,7 +105,8 @@ class Admin_Model_Option extends Application_Model_Abstract
      * Returns name of section in configuration for option.
      * @return string
      */
-    public function getSection() {
+    public function getSection()
+    {
         if (isset($this->_config['section'])) {
             $sectionName = $this->_config['section'];
         } else {
@@ -120,13 +120,12 @@ class Admin_Model_Option extends Application_Model_Abstract
      * Returns additional options for configuration element.
      * @return array
      */
-    public function getOptions() {
+    public function getOptions()
+    {
         if (isset($this->_config['options'])) {
             return $this->_config['options'];
-        }
-        else {
-            return array();
+        } else {
+            return [];
         }
     }
-
 }

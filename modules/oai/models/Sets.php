@@ -31,7 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Oai_Model_Sets extends Application_Model_Abstract {
+class Oai_Model_Sets extends Application_Model_Abstract
+{
 
     const SET_SPEC_PATTERN = '[A-Za-z0-9\-_\.!~\*\'\(\)]+';
 
@@ -39,11 +40,12 @@ class Oai_Model_Sets extends Application_Model_Abstract {
      * Returns all oai sets.
      * @return array
      */
-    public function getSets() {
-        $sets = array(
+    public function getSets()
+    {
+        $sets = [
             'bibliography:true'  => 'Set for bibliographic entries',
             'bibliography:false' => 'Set for non-bibliographic entries',
-        );
+        ];
 
         $sets = array_merge(
             $sets,
@@ -58,15 +60,19 @@ class Oai_Model_Sets extends Application_Model_Abstract {
      * Returns oai sets for document types.
      * @return array
      */
-    public function getSetsForDocumentTypes() {
+    public function getSetsForDocumentTypes()
+    {
         $logger = $this->getLogger();
         $setSpecPattern = self::SET_SPEC_PATTERN;
 
-        $sets = array();
+        $sets = [];
+
+        $dcTypeHelper = new Application_View_Helper_DcType();
 
         $finder = new Opus_DocumentFinder();
         $finder->setServerState('published');
-        foreach ($finder->groupedTypesPlusCount() AS $doctype => $row) {
+
+        foreach ($finder->groupedTypesPlusCount() as $doctype => $row) {
             if (0 == preg_match("/^$setSpecPattern$/", $doctype)) {
                 $msg = "Invalid SetSpec (doctype='".$doctype."')."
                     . " Allowed characters are [$setSpecPattern].";
@@ -74,9 +80,10 @@ class Oai_Model_Sets extends Application_Model_Abstract {
                 continue;
             }
 
-            $setSpec = 'doc-type:' . $doctype;
-            // $count = $row['count'];
-            $sets[$setSpec] = "Set for document type '$doctype'";
+            $dcType = $dcTypeHelper->dcType($doctype);
+
+            $setSpec = "doc-type:$dcType";
+            $sets[$setSpec] = ucfirst($dcType);
         }
 
         return $sets;
@@ -86,8 +93,9 @@ class Oai_Model_Sets extends Application_Model_Abstract {
      * Returns oai sets for collections.
      * @return array
      */
-    public function getSetsForCollections() {
-        $sets = array();
+    public function getSetsForCollections()
+    {
+        $sets = [];
 
         $logger = $this->getLogger();
 
@@ -95,7 +103,7 @@ class Oai_Model_Sets extends Application_Model_Abstract {
 
         $oaiRolesSets = Opus_CollectionRole::fetchAllOaiEnabledRoles();
 
-        foreach ($oaiRolesSets AS $result) {
+        foreach ($oaiRolesSets as $result) {
             if ($result['oai_name'] == 'doc-type') {
                 continue;
             }
@@ -124,15 +132,16 @@ class Oai_Model_Sets extends Application_Model_Abstract {
      * @param $roleId Database ID of role
      * @return array
      */
-    public function getSetsForCollectionRole($setSpec, $roleId) {
+    public function getSetsForCollectionRole($setSpec, $roleId)
+    {
         $logger = $this->getLogger();
 
-        $sets = array();
+        $sets = [];
 
         $setSpecPattern = self::SET_SPEC_PATTERN;
 
         $role = new Opus_CollectionRole($roleId);
-        foreach ($role->getOaiSetNames() AS $subset) {
+        foreach ($role->getOaiSetNames() as $subset) {
             $subSetSpec  = "$setSpec:" . $subset['oai_subset'];
             // $subSetCount = $subset['count'];
 
@@ -151,5 +160,4 @@ class Oai_Model_Sets extends Application_Model_Abstract {
 
         return $sets;
     }
-
 }

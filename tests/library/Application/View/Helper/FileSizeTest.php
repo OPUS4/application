@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -27,41 +28,46 @@
  * @category    Application Unit Test
  * @package     Application_View_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class Application_View_Helper_FileSizeTest extends ControllerTestCase {
+class Application_View_Helper_FileSizeTest extends ControllerTestCase
+{
 
     private $helper = null;
 
-    public function setUp() {
+    public function setUp()
+    {
         parent::setUp();
 
         $this->helper = new Application_View_Helper_FileSize();
     }
 
-    public function testByte() {
+    public function testByte()
+    {
         $this->assertEquals('100 Byte', $this->helper->fileSize(null, 100));
     }
 
-    public function testKByte() {
+    public function testKByte()
+    {
         $this->assertEquals('1 KB', $this->helper->fileSize(null, 1024));
         $this->assertEquals('1.5 KB', $this->helper->fileSize(null, 1024 * 1.5));
     }
 
-    public function testMByte() {
+    public function testMByte()
+    {
         $this->assertEquals('3.46 MB', $this->helper->fileSize(null, 1024 * 1024 * 3.46));
         $this->assertEquals('2 MB', $this->helper->fileSize(null, 1024 * 1024 * 2));
     }
 
-    public function testGByte() {
+    public function testGByte()
+    {
         $this->assertEquals('1 GB', $this->helper->fileSize(null, 1024 * 1024 * 1024));
         $this->assertEquals('1.49 GB', $this->helper->fileSize(null, 1600000000));
     }
 
-    public function testTByte() {
+    public function testTByte()
+    {
         $this->assertEquals('1024 GB', $this->helper->fileSize(null, 1024 * 1024 * 1024 * 1024));
     }
-
 }

@@ -27,11 +27,13 @@
  * @category    Application Unit Test
  * @package     Application_Update
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2017-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 class Application_Update_AddCC30LicenceShotNamesTest extends ControllerTestCase
 {
+
+    protected $additionalResources = 'database';
 
     private $_update = null;
 
@@ -46,7 +48,6 @@ class Application_Update_AddCC30LicenceShotNamesTest extends ControllerTestCase
 
     public function tearDown()
     {
-
     }
 
     public function licenceMatchProvider()
@@ -204,7 +205,5 @@ class Application_Update_AddCC30LicenceShotNamesTest extends ControllerTestCase
         $this->assertNull($cacheResult);
         $this->assertEquals($dateModified->getUnixTimestamp(), $doc->getServerDateModified()->getUnixTimestamp());
         $this->assertEquals('CC BY 3.0', $licence->getName());
-
     }
-
 }

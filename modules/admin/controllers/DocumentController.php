@@ -78,13 +78,14 @@ class Admin_DocumentController extends Application_Controller_Action
             $this->_helper->breadcrumbs()->setDocumentBreadcrumb($document);
 
             $this->renderForm(new Admin_Form_Wrapper($form));
-        }
-        else {
+        } else {
             // missing or bad parameter => go back to main page
             return $this->_helper->Redirector->redirectTo(
-                'index', array('failure' =>
-                $this->view->translate('admin_document_error_novalidid')),
-                'documents', 'admin'
+                'index',
+                ['failure' =>
+                $this->view->translate('admin_document_error_novalidid')],
+                'documents',
+                'admin'
             );
         }
     }
@@ -100,17 +101,21 @@ class Admin_DocumentController extends Application_Controller_Action
 
         $document = $this->_documentsHelper->getDocumentForId($docId);
 
-        if (!isset($document)) {
+        if (! isset($document)) {
             return $this->_helper->Redirector->redirectTo(
-                'index', array('failure' =>
-                $this->view->translate('admin_document_error_novalidid')),
-                'documents', 'admin'
+                'index',
+                ['failure' =>
+                $this->view->translate('admin_document_error_novalidid')],
+                'documents',
+                'admin'
             );
-        }
-        else {
+        } else {
             $editSession = new Admin_Model_DocumentEditSession($docId);
+            $form = null;
 
             if ($this->getRequest()->isPost()) {
+                // handle form submission (save button, add/remove element)
+
                 $data = $this->getRequest()->getPost();
                 $data = $data['Document']; // 'Document' Form wraps actual metadata form
 
@@ -127,8 +132,9 @@ class Admin_DocumentController extends Application_Controller_Action
 
                 switch ($result) {
                     case Admin_Form_Document::RESULT_SAVE:
-                        if ($form->isValid($data)) {
-                            // Formular ist korrekt; aktualisiere Dokument
+                        $validationResult = $form->isValid($data);
+                        if ($validationResult) {
+                            // alle Formularwerte ist gültig; aktualisiere Dokument in Datenbank
                             $form->updateModel($document);
 
                             try {
@@ -137,16 +143,18 @@ class Admin_DocumentController extends Application_Controller_Action
                                 // TODO redirect to Übersicht/Browsing/???
                                 $message = $this->view->translate('admin_document_update_success');
                                 return $this->_helper->Redirector->redirectTo(
-                                    'index', $message, 'document', 'admin', array('id' => $docId)
+                                    'index',
+                                    $message,
+                                    'document',
+                                    'admin',
+                                    ['id' => $document->getId()]
                                 );
-                            }
-                            catch (Exception $ex) {
+                            } catch (Exception $ex) {
                                 $message = $this->view->translate('admin_document_error_exception_storing');
                                 $message = sprintf($message, $ex->getMessage());
                                 $form->setMessage($message);
                             }
-                        }
-                        else {
+                        } else {
                             $form->setMessage($this->view->translate('admin_document_error_validation'));
                         }
                         break;
@@ -158,8 +166,7 @@ class Admin_DocumentController extends Application_Controller_Action
 
                             // TODO handle exceptions
                             $document->store();
-                        }
-                        else {
+                        } else {
                             // Zend_Debug::dump($form->getErrors());
                             $form->setMessage($this->view->translate('admin_document_error_validation'));
                         }
@@ -169,15 +176,19 @@ class Admin_DocumentController extends Application_Controller_Action
                         // TODO redirect to origin page (Store in Session oder Form?)
                         // Possible Rücksprungziele: Frontdoor, Metadaten-Übersicht, Suchergebnisse (Documents, ?)
                         return $this->_helper->Redirector->redirectTo(
-                            'index', null, 'document', 'admin', array('id' => $docId)
+                            'index',
+                            null,
+                            'document',
+                            'admin',
+                            ['id' => $document->getId()]
                         );
                         break;
 
                     case Admin_Form_Document::RESULT_SWITCH_TO:
-                        $editSession->storePost($data, $docId);
+                        $editSession->storePost($data, $document->getId());
 
                         // TODO Parameter in Unterarray 'params' => array() verlagern?
-                        $target['document'] = $docId;
+                        $target['document'] = $document->getId();
 
                         $action = $target['action'];
                         unset($target['action']);
@@ -193,29 +204,9 @@ class Admin_DocumentController extends Application_Controller_Action
                         // Zurueck zum Formular
                         break;
                 }
-            }
-            else {
+            } else {
                 // GET zeige neues oder gespeichertes Formular an
-
-                // Hole gespeicherten POST aus Session
-                $post = $editSession->retrievePost($docId);
-
-                $continue = $this->getRequest()->getParam('continue', null);
-
-                if ($post && !is_null($continue)) {
-                    // Initialisiere Formular vom gespeicherten POST
-                    $form = Admin_Form_Document::getInstanceFromPost($post, $document);
-                    $form->populate($post);
-
-                    // Führe Rücksprung aus
-                    $form->continueEdit($this->getRequest(), $editSession);
-                }
-                else {
-                    // Initialisiere Formular vom Dokument
-                    $form = new Admin_Form_Document();
-                    $form->populateFromModel($document);
-                }
-
+                $form = $this->handleGet($document, $editSession);
             }
 
             $wrappedForm = new Admin_Form_Wrapper($form);
@@ -240,6 +231,40 @@ class Admin_DocumentController extends Application_Controller_Action
     }
 
     /**
+     * Liefert ein Formular, dessen Elemente mit den Werten des übergebenen Dokuments
+     * initialisiert sind.
+     *
+     * @param $document Opus_Document
+     * @param $editSession Admin_Model_DocumentEditSession
+     *
+     * @return Admin_Form_Document|null
+     */
+    private function handleGet($document, $editSession)
+    {
+        $form = null;
+
+        // Hole gespeicherten POST aus Session, sofern verfügbar
+        $post = $editSession->retrievePost($document->getId());
+
+        $continue = $this->getRequest()->getParam('continue', null);
+
+        if ($post && ! is_null($continue)) {
+            // Initialisiere Formular vom gespeicherten POST
+            $form = Admin_Form_Document::getInstanceFromPost($post, $document);
+            $form->populate($post);
+
+            // Führe Rücksprung aus
+            $form->continueEdit($this->getRequest(), $editSession);
+        } else {
+            // Initialisiere Formular vom Dokument
+            $form = new Admin_Form_Document();
+            $form->populateFromModel($document);
+        }
+
+        return $form;
+    }
+
+    /**
      * Creates a new document and opens it in the edit formular.
      *
      * TODO move creating of new document to model (maybe additional operations later)
@@ -251,7 +276,72 @@ class Admin_DocumentController extends Application_Controller_Action
         $docId = $doc->store();
 
         return $this->_helper->Redirector->redirectTo(
-            'edit', 'admin_document_created', 'document', 'admin', ['id' => $docId]
+            'edit',
+            'admin_document_created',
+            'document',
+            'admin',
+            ['id' => $docId]
         );
+    }
+
+    public function copyAction()
+    {
+        $docId = $this->getRequest()->getParam('id');
+
+        $document = $this->_documentsHelper->getDocumentForId($docId);
+
+        if (! isset($document)) {
+            return $this->_helper->Redirector->redirectTo(
+                'index',
+                ['failure' =>
+                $this->view->translate('admin_document_error_novalidid')],
+                'documents',
+                'admin'
+            );
+        } else {
+            $copyForm = new Admin_Form_CopyDocument();
+
+            $request = $this->getRequest();
+
+            if ($request->isPost()) {
+                $data = $request->getPost();
+
+                $copyForm->populate($data);
+
+                $result = $copyForm->processPost($data, $data);
+
+                switch ($result) {
+                    case Admin_Form_CopyDocument::RESULT_COPY:
+                        //
+                        break;
+                    case Admin_Form_CopyDocument::RESULT_CANCEL:
+                        // TODO redirect to frontdoor oder administration
+                        return $this->_helper->Redirector->redirectTo(
+                            'index',
+                            null,
+                            'document',
+                            'admin',
+                            ['id' => $docId]
+                        );
+                        break;
+                    default:
+                        // TODO log something
+                        return $this->_helper->Redirector->redirectTo(
+                            'index',
+                            ['error' => 'Invalid post from form.'],
+                            'document',
+                            'admin',
+                            ['id' => $docId]
+                        );
+                        break;
+                }
+            } else {
+                // TODO show options and confirmation
+                $copyForm->populateFromModel($document);
+
+                // TODO create duplicate document and open (optionally) for editing
+                $this->renderForm($copyForm);
+            }
+        }
     }
 }

@@ -34,74 +34,87 @@
  */
 
 
-class Statistic_Form_Test extends Zend_Form {
+class Statistic_Form_Test extends Zend_Form
+{
 
-    public $elementDecorators = array(
+    public $elementDecorators = [
         'ViewHelper',
         'Errors',
-        array(array('data' => 'HtmlTag'), array('tag' => 'td', 'class' => 'element')),
-        array('Label', array('tag' => 'td')),
-        array(array('row' => 'HtmlTag'), array('tag' => 'tr')),
-    );
+        [['data' => 'HtmlTag'], ['tag' => 'td', 'class' => 'element']],
+        ['Label', ['tag' => 'td']],
+        [['row' => 'HtmlTag'], ['tag' => 'tr']],
+    ];
 
-    public $buttonDecorators = array(
+    public $buttonDecorators = [
         'ViewHelper',
-        array(array('data' => 'HtmlTag'), array('tag' => 'td', 'class' => 'element')),
-        array(array('label' => 'HtmlTag'), array('tag' => 'td', 'placement' => 'prepend')),
-        array(array('row' => 'HtmlTag'), array('tag' => 'tr')),
-    );
+        [['data' => 'HtmlTag'], ['tag' => 'td', 'class' => 'element']],
+        [['label' => 'HtmlTag'], ['tag' => 'td', 'placement' => 'prepend']],
+        [['row' => 'HtmlTag'], ['tag' => 'tr']],
+    ];
 
-    public function init() {
+    public function init()
+    {
         $this->addElement(
-            'text', 'document_id', array(
+            'text',
+            'document_id',
+            [
             'decorators' => $this->elementDecorators,
             'label'       => 'Document ID:',
-            )
+            ]
         );
         $this->addElement(
-            'text', 'file_id', array(
+            'text',
+            'file_id',
+            [
             'decorators' => $this->elementDecorators,
             'label'       => 'File ID:',
-            )
+            ]
         );
 
         $this->addElement(
-            'text', 'ip', array(
+            'text',
+            'ip',
+            [
             'decorators' => $this->elementDecorators,
             'label'       => 'IP:',
-            )
+            ]
         );
         $this->addElement(
-            'text', 'user_agent', array(
+            'text',
+            'user_agent',
+            [
             'decorators' => $this->elementDecorators,
             'label'       => 'User Agent:',
-            )
+            ]
         );
 
         $this->addElement(
-            'submit', 'save', array(
+            'submit',
+            'save',
+            [
             'decorators' => $this->buttonDecorators,
             'label'       => 'Submit!',
-            )
+            ]
         );
 
         $this->setDefaults(
-            array(
+            [
                 'document_id' => 1,
                 'file_id' => 1,
                 'user_agent' => '',
                 'ip' => '127.0.0.1'
-            )
+            ]
         );
     }
 
-    public function loadDefaultDecorators() {
+    public function loadDefaultDecorators()
+    {
         $this->setDecorators(
-            array(
+            [
             'FormElements',
-            array('HtmlTag', array('tag' => 'table')),
+            ['HtmlTag', ['tag' => 'table']],
             'Form',
-            )
+            ]
         );
     }
 

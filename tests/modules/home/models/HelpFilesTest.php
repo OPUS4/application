@@ -27,54 +27,86 @@
  * @category    Application
  * @package     Tests
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
  * Unit tests for Home_Model_HelpFiles class.
  */
-class Home_Model_HelpFilesTest extends ControllerTestCase {
+class Home_Model_HelpFilesTest extends ControllerTestCase
+{
 
-    public function testGetFiles() {
-        $helpFiles = Home_Model_HelpFiles::getFiles();
+    protected $additionalResources = 'translation';
+
+    protected $configModifiable = true;
+
+    private $help;
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->help = new Home_Model_HelpFiles();
+    }
+
+
+    public function testGetFiles()
+    {
+        $helpFiles = $this->help->getFiles();
 
         $this->assertNotNull($helpFiles);
         $this->assertEquals(18, count($helpFiles));
         $this->assertTrue(in_array('contact.de.txt', $helpFiles));
     }
 
-    public function testGetFileContent() {
-        $content = Home_Model_HelpFiles::getFileContent('contact.de.txt');
+    public function testGetFileContent()
+    {
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'help' => [
+                'useFiles' => true
+            ]
+        ]));
+
+        $content = $this->help->getContent('contact.de.txt');
 
         $this->assertNotEmpty($content);
         $this->assertTrue(strpos('Tragen Sie Ihre Kontaktinformationen ein.', $content) >= 0);
     }
 
-    public function testGetFileContentBadFile() {
-        $content = Home_Model_HelpFiles::getFileContent('dummy-contact.de.txt');
+    public function testGetFileContentBadFile()
+    {
+        $content = $this->help->getContent('dummy-contact.de.txt');
 
         $this->assertNull($content);
     }
 
-    public function testGetFileContentNull() {
-        $content = Home_Model_HelpFiles::getFileContent(null);
+    public function testGetFileContentNull()
+    {
+        $content = $this->help->getContent(null);
 
         $this->assertNull($content);
     }
 
-    public function testGetFileContentForAllFiles() {
-        $helpFiles = Home_Model_HelpFiles::getFiles();
+    public function testGetFileContentForAllFiles()
+    {
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'help' => [
+                'useFiles' => true
+            ]
+        ]));
+
+        $helpFiles = $this->help->getFiles();
 
         foreach ($helpFiles as $file) {
-            $content = Home_Model_HelpFiles::getFileContent($file);
+            $content = $this->help->getContent($file);
             $this->assertNotEmpty($content, "Could not get content of file '$file'.");
         }
     }
 
-    public function testGetHelpEntries() {
-        $entries = Home_Model_HelpFiles::getHelpEntries();
+    public function testGetHelpEntries()
+    {
+        $entries = $this->help->getHelpEntries();
 
         $this->assertNotNull($entries);
         $this->assertEquals(5, count(array_keys($entries)));
@@ -86,9 +118,10 @@ class Home_Model_HelpFilesTest extends ControllerTestCase {
         $this->assertTrue(in_array('documentation', $entries['help_index_misc']));
     }
 
-    public function testHelpFileExists() {
+    public function testHelpFileExists()
+    {
         $this->markTestIncomplete("File names are translated, but translation resources not yet accessible here.");
-        $entries = Home_Model_HelpFiles::getHelpEntries();
+        $entries = $this->help->getHelpEntries();
 
         foreach ($entries as $section) {
             foreach ($section as $file) {
@@ -96,6 +129,4 @@ class Home_Model_HelpFilesTest extends ControllerTestCase {
             }
         }
     }
-
 }
-

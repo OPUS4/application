@@ -1,5 +1,156 @@
 # OPUS 4 Release Notes
 
+## Release 4.7 2019-12-06
+
+Dieser Release enthält eine Vielzahl von Veränderungen. Es wurde fast jede Datei 
+angefasst. Für Instanzen, die Anpassungen an OPUS 4 Dateien, insbesondere mit den 
+Endungen `.php` und `.xslt`, vorgenommen haben kann dieses Update aufwendiger sein.
+Wenn es Probleme gibt wenden sie sich bitte an die Mailing-Liste 'kobv-opus-tester' 
+bzw. legen sie einen neuen "Issue" auf GitHub an.
+
+* <http://listserv.zib.de/mailman/listinfo/kobv-opus-tester>
+* <https://github.com/OPUS4/application/issues>
+
+Für Instanzen im Hosting wurde ein Katalog an Anpassungen erstellt, um im Rahmen der
+weiteren Entwicklung mehr und mehr dieser Anpassungen, insbesondere beim Export, bei 
+der Suche und in der Anzeige unnötig zu machen und die Konfigurationsoptionen zu 
+ersetzen. 
+
+### Übersetzungen
+
+Die Übersetzung von Sprachen, z.B. 'deu' => 'German', erfolgt nun mit Hilfe von PHP 
+Funktionen. Die Datei 'modules/default/language/languages.tmx' wurde gelöscht.
+
+Die Anpassungen an den Übersetzungen, die bisher in 'language_custom' Verzeichnissen
+gespeichert wurden wandern mit dieser Version in die Datenbank. Die TMX-Dateien 
+enthalten die Standardübersetzungen während die lokalen Anpassungen aus der Datenbank
+gelesen werden.
+
+Im Setup-Bereich der Administration lassen sich beliebige Übersetzungsschlüssel 
+editieren bzw. neu anlegen. Darüber hinaus wurde das Editieren von Übersetzungen in 
+verschiedenste Formulare integriert, so dass z.B. die Übersetzungen für ein Enrichment
+direkt in den Enrichment-Verwaltung editiert werden können.
+
+### Erweiterung der Suche
+
+Mit diesem Release wurden einige wichtige Verbesserungen der Suche in OPUS 4 
+umgesetzt. Die Entwicklung der Suche ist damit aber noch nicht abgeschlossen und 
+es wird mehr Erweiterungen und Änderungen in kommenden Version geben.
+
+Der Code für die Suchanbindung ist vom 'framework'-Repository auf GitHub in das
+'search'-Repository verschoben worden.
+
+* <https://github.com/OPUS4/framework>
+* <https://github.com/OPUS4/opus4-search>
+
+
+
+Die Datei `solr.xslt` existiert nicht länger im Konfigurationsverzeichnis 
+`application/configs/solr`. Die Defaultdatei ist Teil des `opus4-search`-Paketes.
+Eine eigene Datei kann aber weiterhin in der `config.ini`-Datei spezifiziert 
+werden. Wird eine lokale Datei verwendet, muss nach einem Update selbstständig 
+sichergestellt werden, dass Änderungen in der Standarddatei in die lokale, 
+angepasste Datei übernommen werden. 
+
+#### Suche für Administratoren
+
+Es werden nun alle Dokumente indiziert. Für normale Nutzer werden weiterhin nur 
+publizierte Dokumente gefunden und angezeigt. Administratoren können nun die Suche,
+um nach allen Dokumenten zu suchen und Filter anzuwenden.
+
+Die Verwaltung der Dokumente in der Administration funktioniert weiter wie bisher. 
+In Zukunft ist vorgesehen, dass alte Interface dort komplett durch die Suche zu 
+ersetzen. 
+
+#### Suche nach Enrichments
+
+Es werden jetzt alle Enrichments indiziert. Es kann konfiguriert werden, welche 
+Enrichments in der Suche als Facetten auftauchen sollen und ob diese Facetten für 
+alle Nutzer oder nur Administratoren sichtbar sein sollen.
+
+Die Quelle von Dokumenten, also Publish-Modul oder SWORD, wird als neues Enrichment 
+gespeichert. Damit ist die Unterscheidung zwischen lokal eingestellten Dokumenten 
+und Dokumenten, die z.B. von DeepGreen geliefert wurden, einfach möglich.    
+
+#### Apache-Solr Update
+
+Mit diesem Release wechselt OPUS 4 zu Apache Solr 7.7.1. Der Umstieg muss manuell
+durchgeführt werden. Apache Solr ist gut dokumentiert und die Installationsskripte 
+funktionieren nach unserer Erfahrung zuverlässig. 
+
+<http://lucene.apache.org/solr/>
+
+Wir empfehlen, Solr als Service auf dem OPUS 4-Server zu installieren. Dazu kann 
+man nach dem Download und Auspacken von Solr folgendes Skript verwenden.
+
+    solr-7.7.1/bin/install_solr_service.sh PATH_TO_DOWNLOADED_SOLR_TAR 
+    
+Genauere Informationen finden sich in der Solr-Dokumentation. 
+
+<http://lucene.apache.org/solr/guide/7_7/taking-solr-to-production.html>
+
+Anschließend müssen gegebenenfalls in der Konfigurationsdatei `config.ini` die 
+Solr-Parameter, z.B. für einen neuen Port aktualisiert werden.
+
+Für die richtige Funktion der Suche muss Solr mit OPUS 4-Konfigurationsdateien
+betrieben werden. Auf der folgenden Seite findet sich eine einfache Anleitung,
+wie man diese in Solr einbinden kann.
+
+<http://www.opus-repository.org/devdoc/installation/solrsetupmanuell.html> 
+
+Zum Abschluss muss mit dem SolrIndexBuilder-Skript der Index neu aufgebaut werden.
+
+    $ php scripts/SolrIndexBuilder.php
+    
+### OAI/Export
+
+Das OAI Module und der Export unterstützen nun MARC21-XML.
+
+### Erweiterte Enrichments
+
+
+
+### Frontdoor
+
+Die META-Tags, die in der Frontdoor für ein Dokument ausgegeben werden, wurden 
+erweitert um die für einen Dokumenttyp angemessenen Informationen auszugeben und 
+dadurch z.B. auch Google Scholar besser zu unterstützen.    
+    
+### Administration    
+    
+Dateinamen werden beim Upload in der Administration nun wie im Publish-Modul auf
+Länge und Zeichensatz geprüft. 
+
+Das Löschen von benutzten Sprachen und Lizenzen wird nun verhindert.
+
+### MySQL Zeichensatz aktualisiert
+    
+Um sämtliche Zeichen speichern zu können, verwendet die Datenbank jetzt den 
+Zeichensatz `utf8mb4` und die Collation `utf8mb4_unicode_ci`. Das Update-Skript 
+führt automatisch die Konvertierung durch. Wie immer ist dringend geraten vorher
+ein Backup der Datenbank anzulegen. Neue Instanzen verwenden automatisch den 
+neuen Zeichensatz. Nach der Konvertierung der Datenbank sollten *Repair* und
+*Optimize* für die Datenbank durchgeführt werden, zum Beispiel wie folgt:
+
+    $ mysqlcheck -u root -p --auto-repair --optimize opusdb    
+    
+### Dokumentation
+
+Für die Entwicklerdokumentation und das OPUS 4 Handbuch wurde DuckDuckGo als Suche
+integriert. Es gab viele Aktualisierungen im Handbuch.   
+
+<https://www.opus-repository.org>    
+
+Beiträge zur Dokumentation sind ein guter Weg die Entwicklung von OPUS 4 zu 
+unterstützen. Die Inhalte werden wie der Source-Code auf GitHub gehostet.  
+
+<https://github.com/OPUS4/userdoc>
+    
+### Bugs        
+
+Es wurde eine vielzahl von großen und kleinen Problemen behoben. Die genaue Liste
+befindet sich `CHANGES.md`.
+
 ---
 
 ## Release 4.6.3 2018-11-05
@@ -1433,8 +1584,3 @@ durch
     <tu tuid="EnrichmentTempSourceTitle">
     ...
     </tu>
-
-
-
-
-

@@ -45,7 +45,8 @@ class Application_Update_ConsoleIni extends Application_Update_PluginAbstract
 
     const CREATEDB_SCRIPT_PATH = '/db/createdb.sh';
 
-    public function run() {
+    public function run()
+    {
         $this->log('Checking if console.ini exists ...');
 
         $consoleIniPath = $this->getConsoleIniPath();
@@ -69,8 +70,7 @@ class Application_Update_ConsoleIni extends Application_Update_PluginAbstract
 
             $adminUser = $shellScript->getProperty('user');
             $adminPassword = $shellScript->getProperty('password');
-        }
-        else {
+        } else {
             $this->log("Script '$createDbPath' not found");
         }
 
@@ -79,10 +79,10 @@ class Application_Update_ConsoleIni extends Application_Update_PluginAbstract
         $adminPassword = $this->readAdminPassword($adminPassword);
 
         // create console.ini
-        $properties = array(
+        $properties = [
             '@db.admin.name@' => $adminUser,
             '@db.admin.password@' => $adminPassword
-        );
+        ];
 
         $fileUtil = new Application_Util_File();
         $fileUtil->copyAndFilter($this->getConsoleIniTemplatePath(), $consoleIniPath, $properties);
@@ -96,7 +96,8 @@ class Application_Update_ConsoleIni extends Application_Update_PluginAbstract
      * Returns path to console.ini file.
      * @return string
      */
-    public function getConsoleIniPath() {
+    public function getConsoleIniPath()
+    {
         return APPLICATION_PATH . self::CONSOLE_INI_PATH;
     }
 
@@ -104,7 +105,8 @@ class Application_Update_ConsoleIni extends Application_Update_PluginAbstract
      * Returns path to createdb.sh file.
      * @return string
      */
-    public function getCreateDbScriptPath() {
+    public function getCreateDbScriptPath()
+    {
         return APPLICATION_PATH . self::CREATEDB_SCRIPT_PATH;
     }
 
@@ -112,7 +114,8 @@ class Application_Update_ConsoleIni extends Application_Update_PluginAbstract
      * Returns path to console.ini.template file.
      * @return string
      */
-    public function getConsoleIniTemplatePath() {
+    public function getConsoleIniTemplatePath()
+    {
         return APPLICATION_PATH . self::CONSOLE_INI_TEMPLATE_PATH;
     }
 
@@ -123,12 +126,11 @@ class Application_Update_ConsoleIni extends Application_Update_PluginAbstract
      */
     public function readAdminUser($adminUser)
     {
-        if (is_null($adminUser) || strlen(trim($adminUser)) === 0)
-        {
+        if (is_null($adminUser) || strlen(trim($adminUser)) === 0) {
             $adminUser = self::DEFAULT_ADMIN_USER;
             $input = readline("Please enter OPUS admin user name [$adminUser]: ");
 
-            if (!is_null($input) && strlen(trim($input)) > 0) {
+            if (! is_null($input) && strlen(trim($input)) > 0) {
                 $adminUser = $input;
             }
         }
@@ -143,22 +145,18 @@ class Application_Update_ConsoleIni extends Application_Update_PluginAbstract
      */
     public function readAdminPassword($adminPassword)
     {
-        if (is_null($adminPassword) || strlen(trim($adminPassword)) === 0)
-        {
+        if (is_null($adminPassword) || strlen(trim($adminPassword)) === 0) {
             $adminPassword = null;
             $confirmPassword = null;
 
-            while (is_null($adminPassword) || $adminPassword !== $confirmPassword)
-            {
-                while (is_null($adminPassword) || strlen(trim($adminPassword)) === 0)
-                {
+            while (is_null($adminPassword) || $adminPassword !== $confirmPassword) {
+                while (is_null($adminPassword) || strlen(trim($adminPassword)) === 0) {
                     $adminPassword = readline('Please enter OPUS admin password: ');
                 }
 
                 $confirmPassword = readline('Please enter OPUS admin password again: ');
 
-                if ($adminPassword !== $confirmPassword)
-                {
+                if ($adminPassword !== $confirmPassword) {
                     $this->println('Passwords do not match.');
                     $adminPassword = null;
                 }
@@ -167,5 +165,4 @@ class Application_Update_ConsoleIni extends Application_Update_PluginAbstract
 
         return $adminPassword;
     }
-
 }

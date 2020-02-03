@@ -59,6 +59,14 @@
                                     </pages>
                                 </edit>
 
+                                <copy>
+                                    <type>mvc</type>
+                                    <label>admin_document_copy</label>
+                                    <module>admin</module>
+                                    <controller>document</controller>
+                                    <action>copy</action>
+                                </copy>
+
                                 <filemanager>
                                     <type>mvc</type>
                                     <label>admin_filemanager_index</label>
@@ -688,40 +696,40 @@
                             </pages>
                         </enrichmentKey>
 
-                        <help-page>
+                        <helppage>
                             <type>mvc</type>
-                            <label>setup_title_help-page</label>
-                            <description>setup_title_help-page_description</description>
+                            <label>setup_title_helppage</label>
+                            <description>setup_title_helppage_description</description>
                             <group>group-cafelatte</group>
                             <module>setup</module>
-                            <controller>help-page</controller>
+                            <controller>helppage</controller>
                             <action>index</action>
                             <pages>
                                 <error>
                                     <type>mvc</type>
                                     <label>setup_error</label>
                                     <module>setup</module>
-                                    <controller>help-page</controller>
+                                    <controller>helppage</controller>
                                     <action>error</action>
                                 </error>
                             </pages>
                             <resource>helppages</resource>
-                        </help-page>
+                        </helppage>
 
-                        <static-page>
+                        <staticpages>
                             <type>mvc</type>
-                            <label>setup_title_static-page</label>
-                            <description>setup_title_static-page_description</description>
+                            <label>setup_title_infopages</label>
+                            <description>setup_title_infopages_description</description>
                             <group>group-cafelatte</group>
                             <module>setup</module>
-                            <controller>static-page</controller>
+                            <controller>translation</controller>
                             <action>index</action>
                             <pages>
                                 <edit>
                                     <type>mvc</type>
-                                    <label>setup_static-page_edit_contact</label>
+                                    <label>setup_infopages_edit_contact</label>
                                     <module>setup</module>
-                                    <controller>static-page</controller>
+                                    <controller>translation</controller>
                                     <action>edit</action>
                                     <params>
                                         <page>contact</page>
@@ -729,9 +737,9 @@
                                 </edit>
                                 <edit-home>
                                     <type>mvc</type>
-                                    <label>setup_static-page_edit_imprint</label>
+                                    <label>setup_infopages_edit_imprint</label>
                                     <module>setup</module>
-                                    <controller>static-page</controller>
+                                    <controller>translation</controller>
                                     <action>edit</action>
                                     <params>
                                         <page>imprint</page>
@@ -739,9 +747,9 @@
                                 </edit-home>
                                 <edit-imprint>
                                     <type>mvc</type>
-                                    <label>setup_static-page_edit_home</label>
+                                    <label>setup_infopages_edit_home</label>
                                     <module>setup</module>
-                                    <controller>static-page</controller>
+                                    <controller>translation</controller>
                                     <action>edit</action>
                                     <params>
                                         <page>home</page>
@@ -751,14 +759,13 @@
                                     <type>mvc</type>
                                     <label>setup_error</label>
                                     <module>setup</module>
-                                    <controller>static-page</controller>
+                                    <controller>translation</controller>
                                     <action>error</action>
                                 </error>
                             </pages>
                             <resource>staticpages</resource>
-                        </static-page>
+                        </staticpages>
 
-                        <!--
                         <translation>
                             <type>mvc</type>
                             <label>setup_title_translation</label>

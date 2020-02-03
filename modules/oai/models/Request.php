@@ -39,7 +39,8 @@
  * @category Application
  * @package Module_Oai
  */
-class Oai_Model_Request {
+class Oai_Model_Request
+{
 
     /**
      * TODO
@@ -81,7 +82,7 @@ class Oai_Model_Request {
      *
      * @var array
      */
-    private $_validArguments = array(
+    private $_validArguments = [
             'verb',
             'identifier',
             'metadataPrefix',
@@ -89,51 +90,51 @@ class Oai_Model_Request {
             'until',
             'set',
             'resumptionToken',
-        );
+        ];
 
     /**
      * TODO
      *
      * @var array
      */
-    private $_validQueries = array(
-            'GetRecord' => array(
-                array('required' => array('identifier', 'metadataPrefix'),
-                      'optional' => array()),
-                ),
-            'ListRecords' => array(
-                array('required' => array('metadataPrefix'),
-                      'optional' => array('from', 'until', 'set')
-                      ),
-                array('required' => array('resumptionToken'),
-                      'optional' => array()
-                    ),
-                ),
-            'ListIdentifiers' => array(
-                array('required' => array('metadataPrefix'),
-                      'optional' => array('from', 'until', 'set')
-                      ),
-                array('required' => array('resumptionToken'),
-                      'optional' => array()
-                    ),
-                ),
-            'ListSets' => array(
-                array('required' => array(),
-                      'optional' => array()
-                      ),
-                array('required' => array('resumptionToken'),
-                      'optional' => array()
-                    ),
-                ),
-            'ListMetadataFormats' => array(
-                array('required' => array(),
-                      'optional' => array('identifier')),
-                ),
-            'Identify' => array(
-                array('required' => array(),
-                      'optional' => array()),
-                ),
-        );
+    private $_validQueries = [
+            'GetRecord' => [
+                ['required' => ['identifier', 'metadataPrefix'],
+                      'optional' => []],
+                ],
+            'ListRecords' => [
+                ['required' => ['metadataPrefix'],
+                      'optional' => ['from', 'until', 'set']
+                      ],
+                ['required' => ['resumptionToken'],
+                      'optional' => []
+                    ],
+                ],
+            'ListIdentifiers' => [
+                ['required' => ['metadataPrefix'],
+                      'optional' => ['from', 'until', 'set']
+                      ],
+                ['required' => ['resumptionToken'],
+                      'optional' => []
+                    ],
+                ],
+            'ListSets' => [
+                ['required' => [],
+                      'optional' => []
+                      ],
+                ['required' => ['resumptionToken'],
+                      'optional' => []
+                    ],
+                ],
+            'ListMetadataFormats' => [
+                ['required' => [],
+                      'optional' => ['identifier']],
+                ],
+            'Identify' => [
+                ['required' => [],
+                      'optional' => []],
+                ],
+        ];
 
     /**
      * Checks for a valide date
@@ -141,7 +142,8 @@ class Oai_Model_Request {
      * @param &$date Date string to proof
      * @return boolean
      */
-    private function checkDate(&$date) {
+    private function checkDate(&$date)
+    {
         // simple proofing
         $result = Zend_Date::isDate($date, $this->_dateFormat);
 
@@ -159,7 +161,8 @@ class Oai_Model_Request {
      * @param mixed &$date
      * @return boolean
      */
-    private function _validateFrom(&$date) {
+    private function _validateFrom(&$date)
+    {
         $result = $this->checkDate($date);
 
         if (false === $result) {
@@ -178,20 +181,21 @@ class Oai_Model_Request {
      * @param mixed $oaiMetadataPrefix
      * @return boolean
      */
-    private function _validateMetadataPrefix($oaiMetadataPrefix) {
+    private function _validateMetadataPrefix($oaiMetadataPrefix)
+    {
 
         // we assuming that a metadata prefix file ends with xslt
         $possibleFiles = glob($this->_pathToMetadataPrefixFiles . DIRECTORY_SEPARATOR . '*.xslt');
 
         // we support both spellings, xMetaDissPlus and XMetaDissPlus TODO really?
-        $availableMetadataPrefixes = array('xMetaDissPlus');
+        $availableMetadataPrefixes = ['xMetaDissPlus'];
         foreach ($possibleFiles as $prefixFile) {
-           $availableMetadataPrefixes[] = basename($prefixFile, '.xslt');
+            $availableMetadataPrefixes[] = basename($prefixFile, '.xslt');
         }
 
         // only adminstrators can request copy_xml format
-        if (!Opus_Security_Realm::getInstance()->checkModule('admin')) {
-            $availableMetadataPrefixes = array_diff($availableMetadataPrefixes, array('copy_xml'));
+        if (! Opus_Security_Realm::getInstance()->checkModule('admin')) {
+            $availableMetadataPrefixes = array_diff($availableMetadataPrefixes, ['copy_xml']);
         }
 
         $result = in_array($oaiMetadataPrefix, $availableMetadataPrefixes);
@@ -200,8 +204,8 @@ class Oai_Model_Request {
             // MetadataPrefix not available.
             $this->setErrorCode(Oai_Model_Error::CANNOTDISSEMINATEFORMAT);
             $this->setErrorMessage(
-                'The metadata format "' . $oaiMetadataPrefix
-                . '" given by metadataPrefix is not supported by the item or this repository.'
+                'The metadata format \'' . $oaiMetadataPrefix
+                . '\' given by metadataPrefix is not supported by the item or this repository.'
             );
         }
 
@@ -214,7 +218,8 @@ class Oai_Model_Request {
      * @param mixed $date
      * @return boolean
      */
-    private function _validateUntil(&$date) {
+    private function _validateUntil(&$date)
+    {
         $result = $this->checkDate($date);
 
         if (false === $result) {
@@ -234,7 +239,8 @@ class Oai_Model_Request {
      * @param mixed $until
      * @return boolean
      */
-    private function _validateFromUntilRange($from, $until) {
+    private function _validateFromUntilRange($from, $until)
+    {
 
         $result = $this->_validateFrom($from);
         if (false === $result) {
@@ -267,7 +273,8 @@ class Oai_Model_Request {
      * @param  string  $oaiResumptionToken The resumption token to validate.
      * @return boolean
      */
-    private function _validateResumptionToken($oaiResumptionToken) {
+    private function _validateResumptionToken($oaiResumptionToken)
+    {
 
         $tokenWorker = new Oai_Model_Resumptiontokens;
 
@@ -297,7 +304,8 @@ class Oai_Model_Request {
      *
      * @return mixed
      */
-    public function getErrorCode() {
+    public function getErrorCode()
+    {
         return $this->_errorCode;
     }
 
@@ -306,7 +314,8 @@ class Oai_Model_Request {
      *
      * @return string
      */
-    public function getErrorMessage() {
+    public function getErrorMessage()
+    {
         return $this->_errorMessage;
     }
 
@@ -316,7 +325,8 @@ class Oai_Model_Request {
      * @param mixed $code
      * @return void
      */
-    protected function setErrorCode($code) {
+    protected function setErrorCode($code)
+    {
         $this->_errorCode = $code;
     }
 
@@ -326,7 +336,8 @@ class Oai_Model_Request {
      * @param string $message
      * @return void
      */
-    protected function setErrorMessage($message) {
+    protected function setErrorMessage($message)
+    {
         $this->_errorMessage = $message;
     }
 
@@ -338,7 +349,8 @@ class Oai_Model_Request {
      * @param mixed $path
      * @return boolean
      */
-    public function setPathToMetadataPrefixFiles($path) {
+    public function setPathToMetadataPrefixFiles($path)
+    {
         $realpathToFiles = realpath($path);
 
         $result = is_dir($realpathToFiles);
@@ -358,7 +370,8 @@ class Oai_Model_Request {
      * @param mixed $path
      * @return boolean
      */
-    public function setResumptionPath($path) {
+    public function setResumptionPath($path)
+    {
         $realpathToFiles = realpath($path);
 
         $result = is_dir($realpathToFiles);
@@ -376,13 +389,14 @@ class Oai_Model_Request {
      * @param array $request
      * @return boolean
      */
-    public function validate(array $oaiRequest) {
+    public function validate(array $oaiRequest)
+    {
         $logger = Zend_Registry::get('Zend_Log');
 
-        $errorInformation = array(
+        $errorInformation = [
             'message' => 'General oai request validation error.',
             'code' => Oai_Model_Error::BADARGUMENT,
-        );
+        ];
 
         // Evaluate if a proper verb was supplied.
         if ((false === array_key_exists('verb', $oaiRequest)) or
@@ -405,11 +419,10 @@ class Oai_Model_Request {
         }
 
         // Evaluate if the query is valid, i.e. check for proper parameter combinations.
-        $oaiParameters = array_diff(array_keys($oaiRequest), array('verb'));
+        $oaiParameters = array_diff(array_keys($oaiRequest), ['verb']);
 
         $valid = false;
         foreach ($this->_validQueries[$oaiRequest['verb']] as $validRequest) {
-
             $valid = true;
 
             $missingRequiredParameters = array_diff(
@@ -424,26 +437,25 @@ class Oai_Model_Request {
 
             if (false === empty($missingRequiredParameters)) {
                 // Missing required parameter
-                $errorInformation = array(
+                $errorInformation = [
                         'message' => 'Missing parameter(s) ' . implode(', ', $missingRequiredParameters),
                         'code' => Oai_Model_Error::BADARGUMENT
-                    );
+                    ];
                 $valid = false;
-            }
-            else if (false === empty($unknownParameters)) {
+            } elseif (false === empty($unknownParameters)) {
                 // Superflous parameter
-                $errorInformation = array(
+                $errorInformation = [
                         'message' => 'badArgument ' . implode(', ', $unknownParameters),
                         'code' => Oai_Model_Error::BADARGUMENT
-                    );
+                    ];
                 $valid = false;
             }
 
             if (true === $valid) {
-                $errorInformation = array(
+                $errorInformation = [
                         'message' => 'no validation error',
                         'code' => null
-                    );
+                    ];
                 break;
             }
         }
@@ -480,5 +492,4 @@ class Oai_Model_Request {
 
         return true;
     }
-
 }

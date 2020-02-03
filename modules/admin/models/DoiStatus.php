@@ -30,7 +30,8 @@
  * @copyright   Copyright (c) 2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Admin_Model_DoiStatus {
+class Admin_Model_DoiStatus
+{
 
     private $docId;
 
@@ -45,27 +46,31 @@ class Admin_Model_DoiStatus {
      *
      * @param Opus_Document $doc
      */
-    public function __construct($doc, $doi) {
+    public function __construct($doc, $doi)
+    {
         $this->docId = $doc->getId();
         $this->published = ($doc->getServerState() == 'published');
         $this->doi = $doi->getValue();
         $this->doiStatus = $doi->getStatus();
     }
 
-    public function getDocId() {
+    public function getDocId()
+    {
         return $this->docId;
     }
 
-    public function getDoi() {
+    public function getDoi()
+    {
         return $this->doi;
     }
 
-    public function isPublished() {
+    public function isPublished()
+    {
         return $this->published;
     }
 
-    public function getDoiStatus() {
+    public function getDoiStatus()
+    {
         return $this->doiStatus;
     }
-
 }

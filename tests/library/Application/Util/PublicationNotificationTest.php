@@ -27,12 +27,16 @@
  * @category    Application
  * @package     Tests
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2018-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 class Application_Util_PublicationNotificationTest extends ControllerTestCase
 {
+
+    protected $configModifiable = true;
+
+    protected $additionalResources = 'database';
 
     protected $notification;
 
@@ -47,8 +51,8 @@ class Application_Util_PublicationNotificationTest extends ControllerTestCase
         $this->logger = Zend_Registry::get('Zend_Log');
         // add required config keys
         $this->config = Zend_Registry::get('Zend_Config');
-        $this->config->notification->document->submitted->enabled = 1;
-        $this->config->notification->document->published->enabled = 1;
+        $this->config->notification->document->submitted->enabled = self::CONFIG_VALUE_TRUE;
+        $this->config->notification->document->published->enabled = self::CONFIG_VALUE_TRUE;
         $this->config->notification->document->submitted->subject = 'Dokument #%1$s eingestellt: %2$s : %3$s';
         $this->config->notification->document->published->subject = 'Dokument #%1$s veröffentlicht: %2$s : %3$s';
         $this->config->notification->document->submitted->template = 'submitted.phtml';
@@ -300,31 +304,46 @@ class Application_Util_PublicationNotificationTest extends ControllerTestCase
 
     public function testGetPublicationMailSubjectWithEmptyAuthorsAndEmptyTitle()
     {
+        $document = $this->createTestDocument();
+        $docId = $document->store();
+
         $method = $this->getMethod('getMailSubject');
         $subject = $method->invokeArgs(
             $this->notification,
-            ["123", [], ""]
+            [$document, []]
         );
-        $this->assertEquals("Dokument #123 veröffentlicht: n/a : n/a", $subject);
+        $this->assertEquals("Dokument #$docId veröffentlicht: n/a : n/a", $subject);
     }
 
     public function testGetPublicationMailSubjectWithOneAuthor()
     {
+        $document = $this->createTestDocument();
+        $title = $document->addTitleMain();
+        $title->setLanguage('deu');
+        $title->setValue('Test Document');
+        $docId = $document->store();
+
         $method = $this->getMethod('getMailSubject');
         $subject = $method->invokeArgs(
             $this->notification,
-            ["123", ["Doe, John"], "Test Document"]
+            [$document, ["Doe, John"]]
         );
-        $this->assertEquals("Dokument #123 veröffentlicht: Doe, John : Test Document", $subject);
+        $this->assertEquals("Dokument #$docId veröffentlicht: Doe, John : Test Document", $subject);
     }
 
     public function testGetPublicationMailSubjectWithTwoAuthors()
     {
+        $document = $this->createTestDocument();
+        $title = $document->addTitleMain();
+        $title->setLanguage('deu');
+        $title->setValue('Test Document');
+        $docId = $document->store();
+
         $method = $this->getMethod('getMailSubject');
         $subject = $method->invokeArgs(
             $this->notification,
-            ["123", ["Doe, John", "Doe, Jane"], "Test Document"]
+            [$document, ["Doe, John", "Doe, Jane"]]
         );
-        $this->assertEquals("Dokument #123 veröffentlicht: Doe, John ; Doe, Jane : Test Document", $subject);
+        $this->assertEquals("Dokument #$docId veröffentlicht: Doe, John ; Doe, Jane : Test Document", $subject);
     }
 }

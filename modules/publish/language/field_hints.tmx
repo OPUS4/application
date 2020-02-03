@@ -2,1241 +2,1298 @@
 <!DOCTYPE tmx SYSTEM "http://www.gala-global.org/oscarStandards/tmx/tmx14.dtd">
 <tmx version="1.4">
 
- <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
- </header>
+  <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de"
+          o-tmf="abc" creationtool="XYZTool">
+  </header>
 
   <body>
-<!-- This language file contains all texts concerning field hints. -->
+    <!-- This language file contains all texts concerning field hints. -->
 
     <tu tuid="hint_LegalNotices">
-        <tuv xml:lang="en">
-            <seg><![CDATA[Please confirm that you read and commit to the legal notices and <a href="home/index/help#policies">policies</a> of our document server.]]></seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg><![CDATA[Bitte bestätigen Sie, dass Sie die rechtlichen Hinweise sowie die <a href="home/index/help#policies">Leitlinien</a> unseres Dokumentenservers gelesen haben und damit einverstanden sind.]]></seg>
-        </tuv>
+      <tuv xml:lang="en">
+        <seg>
+          <![CDATA[Please confirm that you read and commit to the legal notices and <a href="home/index/help#policies">policies</a> of our document server.]]></seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>
+          <![CDATA[Bitte bestätigen Sie, dass Sie die rechtlichen Hinweise sowie die <a href="home/index/help#policies">Leitlinien</a> unseres Dokumentenservers gelesen haben und damit einverstanden sind.]]></seg>
+      </tuv>
     </tu>
 
     <tu tuid="publish_controller_required_hint">
-        <!-- Hint for the required sign -->
-        <tuv xml:lang="en">
-            <seg><![CDATA[Fields that are marked with <span class="required" title="This field has to be filled.">*</span> have to be filled.]]></seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg><![CDATA[Felder, die mit einem <span class="required" title="Dieses Feld muss ausgefüllt werden">*</span> markiert sind, müssen ausgefüllt werden.]]></seg>
-        </tuv>
+      <!-- Hint for the required sign -->
+      <tuv xml:lang="en">
+        <seg>
+          <![CDATA[Fields that are marked with <span class="required" title="This field has to be filled.">*</span> have to be filled.]]></seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>
+          <![CDATA[Felder, die mit einem <span class="required" title="Dieses Feld muss ausgefüllt werden">*</span> markiert sind, müssen ausgefüllt werden.]]></seg>
+      </tuv>
     </tu>
 
     <tu tuid="hint_fileupload">
-        <!-- Text for alreaded uploaded files -->
-        <tuv xml:lang="en">
-            <seg>Please choose a file for uploading</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Bitte wählen Sie eine Datei, die Sie hochladen möchten </seg>
-        </tuv>
+      <!-- Text for alreaded uploaded files -->
+      <tuv xml:lang="en">
+        <seg>Please choose a file for uploading</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bitte wählen Sie eine Datei, die Sie hochladen möchten</seg>
+      </tuv>
     </tu>
 
     <tu tuid="already_uploaded_files">
-        <!-- Text for alreaded uploaded files -->
-        <tuv xml:lang="en">
-            <seg>You uploaded the following file(s):</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Sie haben folgende Datei(en) hochgeladen: </seg>
-        </tuv>
+      <!-- Text for alreaded uploaded files -->
+      <tuv xml:lang="en">
+        <seg>You uploaded the following file(s):</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sie haben folgende Datei(en) hochgeladen:</seg>
+      </tuv>
     </tu>
 
     <tu tuid="no_uploaded_files">
-        <!-- Text for alreaded uploaded files -->
-        <tuv xml:lang="en">
-            <seg>No files uploaded.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Es wurden keine Dateien hochgeladen. </seg>
-        </tuv>
+      <!-- Text for alreaded uploaded files -->
+      <tuv xml:lang="en">
+        <seg>No files uploaded.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Es wurden keine Dateien hochgeladen.</seg>
+      </tuv>
     </tu>
 
     <tu tuid="required_star_title">
-        <tuv xml:lang="en">
-            <seg>This field has to be filled.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Dieses Feld muss ausgefüllt werden.</seg>
-        </tuv>
+      <tuv xml:lang="en">
+        <seg>This field has to be filled.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dieses Feld muss ausgefüllt werden.</seg>
+      </tuv>
     </tu>
 
     <tu tuid="publish_controller_one_doctype">
-        <tuv xml:lang="en">
-            <seg>Only one document type available.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Nur ein Dokumenttyp verfügbar.</seg>
-        </tuv>
+      <tuv xml:lang="en">
+        <seg>Only one document type available.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Nur ein Dokumenttyp verfügbar.</seg>
+      </tuv>
     </tu>
 
     <tu tuid="publish_controller_index_fileupload">
-        <tuv xml:lang="en">
-            <seg>You may upload different files.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Sie können mehrere verschiedene Dateien hochladen.</seg>
-        </tuv>
+      <tuv xml:lang="en">
+        <seg>You may upload different files.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sie können mehrere verschiedene Dateien hochladen.</seg>
+      </tuv>
     </tu>
 
     <tu tuid="hint_no_selection_Licence">
-        <tuv xml:lang="en">
-            <seg>Sorry: No licences have been found in our database.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Entschuldigung: Es wurden keine Lizenzen in unserer Datenbank gefunden.</seg>
-        </tuv>
+      <tuv xml:lang="en">
+        <seg>Sorry: No licences have been found in our database.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Entschuldigung: Es wurden keine Lizenzen in unserer Datenbank gefunden.</seg>
+      </tuv>
     </tu>
 
     <tu tuid="hint_no_selection_Language">
-        <tuv xml:lang="en">
-            <seg>Sorry: No languages have been found in our database.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Entschuldigung: Es wurden keine Sprachen in unserer Datenbank gefunden.</seg>
-        </tuv>
+      <tuv xml:lang="en">
+        <seg>Sorry: No languages have been found in our database.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Entschuldigung: Es wurden keine Sprachen in unserer Datenbank gefunden.</seg>
+      </tuv>
     </tu>
 
     <tu tuid="hint_no_selection_Project">
-        <tuv xml:lang="en">
-            <seg>Sorry: No projects have been found in our database.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Entschuldigung: Es wurden keine Projekte in unserer Datenbank gefunden.</seg>
-        </tuv>
+      <tuv xml:lang="en">
+        <seg>Sorry: No projects have been found in our database.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Entschuldigung: Es wurden keine Projekte in unserer Datenbank gefunden.</seg>
+      </tuv>
     </tu>
 
     <tu tuid="hint_no_selection_Institute">
-        <tuv xml:lang="en">
-            <seg>Sorry: No institutes have been found in our database.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Entschuldigung: Es wurden keine Institute in unserer Datenbank gefunden.</seg>
-        </tuv>
+      <tuv xml:lang="en">
+        <seg>Sorry: No institutes have been found in our database.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Entschuldigung: Es wurden keine Institute in unserer Datenbank gefunden.</seg>
+      </tuv>
     </tu>
 
     <tu tuid="hint_no_selection_SubjectMSC">
-        <tuv xml:lang="en">
-            <seg>Sorry: No MSC classes have been found in our database.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Entschuldigung: Es wurden keine MSC Klassen in unserer Datenbank gefunden.</seg>
-        </tuv>
+      <tuv xml:lang="en">
+        <seg>Sorry: No MSC classes have been found in our database.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Entschuldigung: Es wurden keine MSC Klassen in unserer Datenbank gefunden.</seg>
+      </tuv>
     </tu>
 
     <tu tuid="hint_no_selection_SubjectDDC">
-        <tuv xml:lang="en">
-            <seg>Sorry: No DDC classes have been found in our database.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Entschuldigung: Es wurden keine DDC Klassen in unserer Datenbank gefunden.</seg>
-        </tuv>
+      <tuv xml:lang="en">
+        <seg>Sorry: No DDC classes have been found in our database.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Entschuldigung: Es wurden keine DDC Klassen in unserer Datenbank gefunden.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_no_selection_ddc_dnb">
-        <tuv xml:lang="en">
-            <seg>Sorry: No DDC subject categories have been found in our database.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Entschuldigung: Es wurden keine DDC-Sachgruppen in unserer Datenbank gefunden.</seg>
-        </tuv>
+    <tu tuid="hint_no_selection_ddc_dnb">
+      <tuv xml:lang="en">
+        <seg>Sorry: No DDC subject categories have been found in our database.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Entschuldigung: Es wurden keine DDC-Sachgruppen in unserer Datenbank gefunden.</seg>
+      </tuv>
     </tu>
 
     <tu tuid="hint_no_selection_SubjectJEL">
-        <tuv xml:lang="en">
-            <seg>Sorry: No JEL classes have been found in our database.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Entschuldigung: Es wurden keine JEL Klassen in unserer Datenbank gefunden.</seg>
-        </tuv>
+      <tuv xml:lang="en">
+        <seg>Sorry: No JEL classes have been found in our database.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Entschuldigung: Es wurden keine JEL Klassen in unserer Datenbank gefunden.</seg>
+      </tuv>
     </tu>
 
     <tu tuid="hint_no_selection_SubjectCCS">
-        <tuv xml:lang="en">
-            <seg>Sorry: No CCS classes have been found in our database.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Entschuldigung: Es wurden keine CCS Klassen in unserer Datenbank gefunden.</seg>
-        </tuv>
+      <tuv xml:lang="en">
+        <seg>Sorry: No CCS classes have been found in our database.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Entschuldigung: Es wurden keine CCS Klassen in unserer Datenbank gefunden.</seg>
+      </tuv>
     </tu>
 
     <tu tuid="hint_no_selection_SubjectPACS">
-        <tuv xml:lang="en">
-            <seg>Sorry: No PACS classes have been found in our database.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Entschuldigung: Es wurden keine PACS Klassen in unserer Datenbank gefunden.</seg>
-        </tuv>
+      <tuv xml:lang="en">
+        <seg>Sorry: No PACS classes have been found in our database.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Entschuldigung: Es wurden keine PACS Klassen in unserer Datenbank gefunden.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_no_selection_SubjectBKL">
-        <tuv xml:lang="en">
-            <seg>Sorry: No BKL classes have been found in our database.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Entschuldigung: Es wurden keine BKL Klassen in unserer Datenbank gefunden.</seg>
-        </tuv>
+    <tu tuid="hint_no_selection_SubjectBKL">
+      <tuv xml:lang="en">
+        <seg>Sorry: No BKL classes have been found in our database.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Entschuldigung: Es wurden keine BKL Klassen in unserer Datenbank gefunden.</seg>
+      </tuv>
     </tu>
 
     <tu tuid="hint_no_selection_Series">
-        <tuv xml:lang="en">
-            <seg>Sorry: No series have been found in our database.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Entschuldigung: Es wurden keine Schriftenreihen in unserer Datenbank gefunden.</seg>
-        </tuv>
+      <tuv xml:lang="en">
+        <seg>Sorry: No series have been found in our database.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Entschuldigung: Es wurden keine Schriftenreihen in unserer Datenbank gefunden.</seg>
+      </tuv>
     </tu>
 
     <tu tuid="hint_no_selection_projects">
-        <tuv xml:lang="en">
-            <seg>Sorry: No projects have been found in our database.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Entschuldigung: Es wurden keine Projekte in unserer Datenbank gefunden.</seg>
-        </tuv>
+      <tuv xml:lang="en">
+        <seg>Sorry: No projects have been found in our database.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Entschuldigung: Es wurden keine Projekte in unserer Datenbank gefunden.</seg>
+      </tuv>
     </tu>
 
     <tu tuid="hint_no_selection_ThesisGrantor">
-        <tuv xml:lang="en">
-            <seg>Sorry: No institutions have been found in our database.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Entschuldigung: Es wurden keine Institutionen in unserer Datenbank gefunden.</seg>
-        </tuv>
+      <tuv xml:lang="en">
+        <seg>Sorry: No institutions have been found in our database.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Entschuldigung: Es wurden keine Institutionen in unserer Datenbank gefunden.</seg>
+      </tuv>
     </tu>
 
     <tu tuid="hint_no_selection_ThesisPublisher">
-        <tuv xml:lang="en">
-            <seg>Sorry: No institutions have been found in our database.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Entschuldigung: Es wurden keine Institutionen in unserer Datenbank gefunden.</seg>
-        </tuv>
+      <tuv xml:lang="en">
+        <seg>Sorry: No institutions have been found in our database.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Entschuldigung: Es wurden keine Institutionen in unserer Datenbank gefunden.</seg>
+      </tuv>
     </tu>
 
     <tu tuid="hint_groupPersonSubmitter">
-        <tuv xml:lang="en">
-            <seg>Please enter your contact information.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie hier bitte Ihre Kontaktdaten ein.</seg>
-        </tuv>
+      <tuv xml:lang="en">
+        <seg>Please enter your contact information.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie hier bitte Ihre Kontaktdaten ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_PersonSubmitterFirstName">
-        <tuv xml:lang="en">
-            <seg>Please enter your first name.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte Ihren Vornamen ein.</seg>
-        </tuv>
+    <tu tuid="hint_PersonSubmitterFirstName">
+      <tuv xml:lang="en">
+        <seg>Please enter your first name.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte Ihren Vornamen ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_PersonSubmitterLastName">
-        <tuv xml:lang="en">
-            <seg>Please enter your last name.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte Ihren Nachnamen ein.</seg>
-        </tuv>
+    <tu tuid="hint_PersonSubmitterLastName">
+      <tuv xml:lang="en">
+        <seg>Please enter your last name.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte Ihren Nachnamen ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_PersonSubmitterEmail">
-        <tuv xml:lang="en">
-            <seg>Please enter your email adress.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte Ihre E-Mailadresse ein.</seg>
-        </tuv>
+    <tu tuid="hint_PersonSubmitterEmail">
+      <tuv xml:lang="en">
+        <seg>Please enter your email adress.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte Ihre E-Mailadresse ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_PersonSubmitterAcademicTitle">
-        <tuv xml:lang="en">
-            <seg>Please enter your academic title.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte Ihren akademischen Titel ein.</seg>
-        </tuv>
+    <tu tuid="hint_PersonSubmitterAcademicTitle">
+      <tuv xml:lang="en">
+        <seg>Please enter your academic title.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte Ihren akademischen Titel ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_PersonSubmitterDateOfBirth">
-        <tuv xml:lang="en">
-            <seg>Please enter your date of birth.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte Ihr Geburtsdatum ein.</seg>
-        </tuv>
+    <tu tuid="hint_PersonSubmitterDateOfBirth">
+      <tuv xml:lang="en">
+        <seg>Please enter your date of birth.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte Ihr Geburtsdatum ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_PersonSubmitterPlaceOfBirth">
-        <tuv xml:lang="en">
-            <seg>Please enter your place of birth.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte Ihren Geburtsort ein.</seg>
-        </tuv>
+    <tu tuid="hint_PersonSubmitterPlaceOfBirth">
+      <tuv xml:lang="en">
+        <seg>Please enter your place of birth.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte Ihren Geburtsort ein.</seg>
+      </tuv>
     </tu>
 
     <tu tuid="hint_groupLicence">
-        <tuv xml:lang="en">
-            <seg>Please choose the licence(s) for the document.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Bitte wählen Sie hier die Lizenz(en) für Ihr Dokument aus.</seg>
-        </tuv>
+      <tuv xml:lang="en">
+        <seg>Please choose the licence(s) for the document.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bitte wählen Sie hier die Lizenz(en) für Ihr Dokument aus.</seg>
+      </tuv>
     </tu>
 
     <tu tuid="hint_Licence">
-        <tuv xml:lang="en">
-            <seg>Please choose the licence(s) for the document. By choosing a license you decide which legal conditions will apply to the document you are publishing.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Bitte wählen Sie hier die Lizenz(en) für Ihr Dokument aus. Mit der Wahl der Lizenz entscheiden Sie, unter welchen Bedingungen das von Ihnen veröffentlichte Dokument zukünftig genutzt werden darf.</seg>
-        </tuv>
+      <tuv xml:lang="en">
+        <seg>Please choose the licence(s) for the document. By choosing a license you decide which legal
+          conditions will apply to the document you are publishing.
+        </seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bitte wählen Sie hier die Lizenz(en) für Ihr Dokument aus. Mit der Wahl der Lizenz entscheiden Sie,
+          unter welchen Bedingungen das von Ihnen veröffentlichte Dokument zukünftig genutzt werden darf.
+        </seg>
+      </tuv>
     </tu>
 
     <tu tuid="hint_groupPersonAuthor">
-        <tuv xml:lang="en">
-            <seg>Please enter the contact information of the authors. You may add more authors by clicking on the button (or delete them).</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie hier bitte die Kontaktdaten der Autoren ein. Sie können durch Klicken auf den Button weitere Autoren hinzufügen (oder wieder löschen).</seg>
-        </tuv>
+      <tuv xml:lang="en">
+        <seg>Please enter the contact information of the authors. You may add more authors by clicking on the
+          button (or delete them).
+        </seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie hier bitte die Kontaktdaten der Autor*innen ein. Sie können durch Klicken auf den Button
+          weitere Autor*innen hinzufügen (oder wieder löschen).
+        </seg>
+      </tuv>
     </tu>
 
     <tu tuid="hint_PersonAuthorFirstName">
-        <tuv xml:lang="en">
-            <seg>Please enter the first name of an author.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den Vornamen des Autors ein.</seg>
-        </tuv>
+      <tuv xml:lang="en">
+        <seg>Please enter the first name of an author.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte den Vornamen der Autorin/des Autors ein.</seg>
+      </tuv>
     </tu>
 
     <tu tuid="hint_PersonAuthorLastName">
-        <tuv xml:lang="en">
-            <seg>Please enter the last name of an author.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den Nachnamen des Autors ein.</seg>
-        </tuv>
+      <tuv xml:lang="en">
+        <seg>Please enter the last name of an author.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte den Nachnamen der Autorin/des Autors ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_PersonAuthorAcademicTitle">
-        <tuv xml:lang="en">
-            <seg>Please enter the author's shortened academic title (i.e. Dr., Prof., PhD).</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den akademischen Titel des Autors in abgekürzter Form (z.B. Dr., Prof., Dr. jur.) ein.</seg>
-        </tuv>
+    <tu tuid="hint_PersonAuthorAcademicTitle">
+      <tuv xml:lang="en">
+        <seg>Please enter the author's shortened academic title (i.e. Dr., Prof., PhD).</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte den akademischen Titel der Autorin/des Autors in abgekürzter Form (z.B. Dr.,
+          Prof., Dr. jur.) ein.
+        </seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_PersonAuthorEmail">
-        <tuv xml:lang="en">
-            <seg>Please enter the author's email adress.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte eine E-Mailadresse des Autors ein.</seg>
-        </tuv>
+    <tu tuid="hint_PersonAuthorEmail">
+      <tuv xml:lang="en">
+        <seg>Please enter the author's email adress.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte eine E-Mailadresse der Autorin/des Autors ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_PersonAuthorDateOfBirth">
-        <tuv xml:lang="en">
-            <seg>Please enter the author's date of birth.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte das Geburtsdatum des Autors ein.</seg>
-        </tuv>
+    <tu tuid="hint_PersonAuthorDateOfBirth">
+      <tuv xml:lang="en">
+        <seg>Please enter the author's date of birth.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte das Geburtsdatum der Autorin/des Autors ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_PersonAuthorPlaceOfBirth">
-        <tuv xml:lang="en">
-            <seg>Please enter the author's place of birth.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den Geburtsort des Autors ein.</seg>
-        </tuv>
+    <tu tuid="hint_PersonAuthorPlaceOfBirth">
+      <tuv xml:lang="en">
+        <seg>Please enter the author's place of birth.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte den Geburtsort der Autorin/des Autors ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_groupPersonReferee">
-        <tuv xml:lang="en">
-            <seg>Please enter the referee.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den Gutachter ein.</seg>
-        </tuv>
+    <tu tuid="hint_groupPersonReferee">
+      <tuv xml:lang="en">
+        <seg>Please enter the referee.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte die/den Gutachter*in ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_PersonRefereeFirstName">
-        <tuv xml:lang="en">
-            <seg>Please enter the first name of the referee.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den Vornamen des Gutachters ein.</seg>
-        </tuv>
+    <tu tuid="hint_PersonRefereeFirstName">
+      <tuv xml:lang="en">
+        <seg>Please enter the first name of the referee.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte den Vornamen der Gutachterin/des Gutachters ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_PersonRefereeLastName">
-        <tuv xml:lang="en">
-            <seg>Please enter the last name of the referee.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den Nachnamen des Gutachters ein.</seg>
-        </tuv>
+    <tu tuid="hint_PersonRefereeLastName">
+      <tuv xml:lang="en">
+        <seg>Please enter the last name of the referee.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte den Nachnamen der Gutachterin/des Gutachters ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_PersonRefereeAcademicTitle">
-        <tuv xml:lang="en">
-            <seg>Please enter the referee's shortened academic title (i.e. Dr., Prof., PhD).</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den akademischen Titel des Gutachters in abgekürzter Form (z.B. Dr., Prof., Dr. jur.) ein.</seg>
-        </tuv>
+    <tu tuid="hint_PersonRefereeAcademicTitle">
+      <tuv xml:lang="en">
+        <seg>Please enter the referee's shortened academic title (i.e. Dr., Prof., PhD).</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte den akademischen Titel der Gutachterin/des Gutachters in abgekürzter Form (z.B.
+          Dr., Prof., Dr. jur.) ein.
+        </seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_PersonRefereeEmail">
-        <tuv xml:lang="en">
-            <seg>Please enter the referee's email adress.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte eine E-Mailadresse des Gutachters ein.</seg>
-        </tuv>
+    <tu tuid="hint_PersonRefereeEmail">
+      <tuv xml:lang="en">
+        <seg>Please enter the referee's email adress.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte eine E-Mailadresse der Gutachterin/des Gutachters ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_PersonRefereeDateOfBirth">
-        <tuv xml:lang="en">
-            <seg>Please enter the referee's date of birth.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte das Geburtsdatum des Gutachters ein.</seg>
-        </tuv>
+    <tu tuid="hint_PersonRefereeDateOfBirth">
+      <tuv xml:lang="en">
+        <seg>Please enter the referee's date of birth.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte das Geburtsdatum der Gutachterin/des Gutachters ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_PersonRefereePlaceOfBirth">
-        <tuv xml:lang="en">
-            <seg>Please enter the referee's place of birth.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den Geburtsort des Gutachters ein.</seg>
-        </tuv>
+    <tu tuid="hint_PersonRefereePlaceOfBirth">
+      <tuv xml:lang="en">
+        <seg>Please enter the referee's place of birth.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte den Geburtsort der Gutachterin/des Gutachters ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_groupPersonEditor">
-        <tuv xml:lang="en">
-            <seg>Please enter the Editor.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den Herausgeber ein.</seg>
-        </tuv>
+    <tu tuid="hint_groupPersonEditor">
+      <tuv xml:lang="en">
+        <seg>Please enter the Editor.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte die/den Herausgeber*in ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_PersonEditorFirstName">
-        <tuv xml:lang="en">
-            <seg>Please enter the first name of the Editor.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den Vornamen des Herausgebers ein.</seg>
-        </tuv>
+    <tu tuid="hint_PersonEditorFirstName">
+      <tuv xml:lang="en">
+        <seg>Please enter the first name of the Editor.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte den Vornamen der Herausgeberin/des Herausgebers ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_PersonEditorLastName">
-        <tuv xml:lang="en">
-            <seg>Please enter the last name of the editor.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den Nachnamen des Herausgebers ein.</seg>
-        </tuv>
+    <tu tuid="hint_PersonEditorLastName">
+      <tuv xml:lang="en">
+        <seg>Please enter the last name of the editor.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte den Nachnamen der Herausgeberin/des Herausgebers ein.</seg>
+      </tuv>
     </tu>
 
 
-	<tu tuid="hint_PersonEditorAcademicTitle">
-        <tuv xml:lang="en">
-            <seg>Please enter the editor's shortened academic title (i.e. Dr., Prof., PhD).</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den akademischen Titel des Herausgebers in abgekürzter Form (z.B. Dr., Prof., Dr. jur.) ein.</seg>
-        </tuv>
+    <tu tuid="hint_PersonEditorAcademicTitle">
+      <tuv xml:lang="en">
+        <seg>Please enter the editor's shortened academic title (i.e. Dr., Prof., PhD).</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte den akademischen Titel der Herausgeberin/des Herausgebers in abgekürzter Form
+          (z.B. Dr., Prof., Dr. jur.) ein.
+        </seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_PersonEditorEmail">
-        <tuv xml:lang="en">
-            <seg>Please enter the editor's email adress.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte eine E-Mailadresse des Herausgebers ein.</seg>
-        </tuv>
+    <tu tuid="hint_PersonEditorEmail">
+      <tuv xml:lang="en">
+        <seg>Please enter the editor's email adress.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte eine E-Mailadresse der Herausgeberin/des Herausgebers ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_PersonEditorDateOfBirth">
-        <tuv xml:lang="en">
-            <seg>Please enter the editor's date of birth.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte das Geburtsdatum des Herausgebers ein.</seg>
-        </tuv>
+    <tu tuid="hint_PersonEditorDateOfBirth">
+      <tuv xml:lang="en">
+        <seg>Please enter the editor's date of birth.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte das Geburtsdatum der Herausgeberin/des Herausgebers ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_PersonEditorPlaceOfBirth">
-        <tuv xml:lang="en">
-            <seg>Please enter the editor's place of birth.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den Geburtsort des Herausgebers ein.</seg>
-        </tuv>
+    <tu tuid="hint_PersonEditorPlaceOfBirth">
+      <tuv xml:lang="en">
+        <seg>Please enter the editor's place of birth.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte den Geburtsort der Herausgeberin/des Herausgebers ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_groupPersonAdvisor">
-        <tuv xml:lang="en">
-            <seg>Please enter the advisor.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den Betreuer ein.</seg>
-        </tuv>
+    <tu tuid="hint_groupPersonAdvisor">
+      <tuv xml:lang="en">
+        <seg>Please enter the advisor.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte die/den Betreuer*in ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_PersonAdvisorFirstName">
-        <tuv xml:lang="en">
-            <seg>Please enter the first name of the advisor.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den Vornamen des Betreuers ein.</seg>
-        </tuv>
+    <tu tuid="hint_PersonAdvisorFirstName">
+      <tuv xml:lang="en">
+        <seg>Please enter the first name of the advisor.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte den Vornamen der Betreuerin/des Betreuers ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_PersonAdvisorLastName">
-        <tuv xml:lang="en">
-            <seg>Please enter the last name of the advisor.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den Nachnamen des Betreuers ein.</seg>
-        </tuv>
+    <tu tuid="hint_PersonAdvisorLastName">
+      <tuv xml:lang="en">
+        <seg>Please enter the last name of the advisor.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte den Nachnamen der Betreuerin/des Betreuers ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_PersonAdvisorAcademicTitle">
-        <tuv xml:lang="en">
-            <seg>Please enter the advisor's shortened academic title (i.e. Dr., Prof., PhD).</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den akademischen Titel des Betreuers in abgekürzter Form (z.B. Dr., Prof., Dr. jur.) ein.</seg>
-        </tuv>
+    <tu tuid="hint_PersonAdvisorAcademicTitle">
+      <tuv xml:lang="en">
+        <seg>Please enter the advisor's shortened academic title (i.e. Dr., Prof., PhD).</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte den akademischen Titel der Betreuerin/des Betreuers in abgekürzter Form (z.B. Dr.,
+          Prof., Dr. jur.) ein.
+        </seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_PersonAdvisorEmail">
-        <tuv xml:lang="en">
-            <seg>Please enter the advisor's email adress.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte eine E-Mailadresse des Betreuers ein.</seg>
-        </tuv>
+    <tu tuid="hint_PersonAdvisorEmail">
+      <tuv xml:lang="en">
+        <seg>Please enter the advisor's email adress.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte eine E-Mailadresse der Betreuerin/des Betreuers ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_PersonAdvisorDateOfBirth">
-        <tuv xml:lang="en">
-            <seg>Please enter the advisor's date of birth.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte das Geburtsdatum des Betreuers ein.</seg>
-        </tuv>
+    <tu tuid="hint_PersonAdvisorDateOfBirth">
+      <tuv xml:lang="en">
+        <seg>Please enter the advisor's date of birth.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte das Geburtsdatum der Betreuerin/des Betreuers ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_PersonAdvisorPlaceOfBirth">
-        <tuv xml:lang="en">
-            <seg>Please enter the advisor's place of birth.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den Geburtsort des Betreuers ein.</seg>
-        </tuv>
+    <tu tuid="hint_PersonAdvisorPlaceOfBirth">
+      <tuv xml:lang="en">
+        <seg>Please enter the advisor's place of birth.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte den Geburtsort der Betreuerin/des Betreuers ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_groupPersonTranslator">
-        <tuv xml:lang="en">
-            <seg>Please enter the translator.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den Übersetzer ein.</seg>
-        </tuv>
+    <tu tuid="hint_groupPersonTranslator">
+      <tuv xml:lang="en">
+        <seg>Please enter the translator.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte die/den Übersetzer*in ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_PersonTranslatorFirstName">
-        <tuv xml:lang="en">
-            <seg>Please enter the first name of the Translator.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den Vornamen des Übersetzers ein.</seg>
-        </tuv>
+    <tu tuid="hint_PersonTranslatorFirstName">
+      <tuv xml:lang="en">
+        <seg>Please enter the first name of the Translator.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte den Vornamen der Übersetzerin/des Übersetzers ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_PersonTranslatorLastName">
-        <tuv xml:lang="en">
-            <seg>Please enter the last name of the translator.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den Nachnamen des Übersetzers ein.</seg>
-        </tuv>
+    <tu tuid="hint_PersonTranslatorLastName">
+      <tuv xml:lang="en">
+        <seg>Please enter the last name of the translator.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte den Nachnamen der Übersetzerin/des Übersetzers ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_PersonTranslatorAcademicTitle">
-        <tuv xml:lang="en">
-            <seg>Please enter the translator's shortened academic title (i.e. Dr., Prof., PhD).</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den akademischen Titel des Übersetzers in abgekürzter Form (z.B. Dr., Prof., Dr. jur.) ein.</seg>
-        </tuv>
+    <tu tuid="hint_PersonTranslatorAcademicTitle">
+      <tuv xml:lang="en">
+        <seg>Please enter the translator's shortened academic title (i.e. Dr., Prof., PhD).</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte den akademischen Titel der Übersetzerin/des Übersetzers in abgekürzter Form (z.B.
+          Dr., Prof., Dr. jur.) ein.
+        </seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_PersonTranslatorEmail">
-        <tuv xml:lang="en">
-            <seg>Please enter the translator's email adress.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte eine E-Mailadresse des Übersetzers ein.</seg>
-        </tuv>
+    <tu tuid="hint_PersonTranslatorEmail">
+      <tuv xml:lang="en">
+        <seg>Please enter the translator's email adress.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte eine E-Mailadresse der Übersetzerin/des Übersetzers ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_PersonTranslatorDateOfBirth">
-        <tuv xml:lang="en">
-            <seg>Please enter the translator's date of birth.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte das Geburtsdatum des Übersetzers ein.</seg>
-        </tuv>
+    <tu tuid="hint_PersonTranslatorDateOfBirth">
+      <tuv xml:lang="en">
+        <seg>Please enter the translator's date of birth.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte das Geburtsdatum der Übersetzerin/des Übersetzers ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_PersonTranslatorPlaceOfBirth">
-        <tuv xml:lang="en">
-            <seg>Please enter the translator's place of birth.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den Geburtsort des Übersetzers ein.</seg>
-        </tuv>
+    <tu tuid="hint_PersonTranslatorPlaceOfBirth">
+      <tuv xml:lang="en">
+        <seg>Please enter the translator's place of birth.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte den Geburtsort der Übersetzerin/des Übersetzers ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_groupPersonContributor">
-        <tuv xml:lang="en">
-            <seg>Please enter the contributor.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte die beteiligte Person ein.</seg>
-        </tuv>
+    <tu tuid="hint_groupPersonContributor">
+      <tuv xml:lang="en">
+        <seg>Please enter the contributor.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte die beteiligte Person ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_PersonContributorFirstName">
-        <tuv xml:lang="en">
-            <seg>Please enter the first name of the contributor.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den Vornamen der beteiligten Person ein.</seg>
-        </tuv>
+    <tu tuid="hint_PersonContributorFirstName">
+      <tuv xml:lang="en">
+        <seg>Please enter the first name of the contributor.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte den Vornamen der beteiligten Person ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_PersonContributorLastName">
-        <tuv xml:lang="en">
-            <seg>Please enter the last name of the contributor.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den Nachnamen der beteiligten Person ein.</seg>
-        </tuv>
+    <tu tuid="hint_PersonContributorLastName">
+      <tuv xml:lang="en">
+        <seg>Please enter the last name of the contributor.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte den Nachnamen der beteiligten Person ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_PersonContributorAcademicTitle">
-        <tuv xml:lang="en">
-            <seg>Please enter the contributor's shortened academic title (i.e. Dr., Prof., PhD).</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den akademischen Titel der beteiligten Person in abgekürzter Form (z.B. Dr., Prof., Dr. jur.) ein.</seg>
-        </tuv>
+    <tu tuid="hint_PersonContributorAcademicTitle">
+      <tuv xml:lang="en">
+        <seg>Please enter the contributor's shortened academic title (i.e. Dr., Prof., PhD).</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte den akademischen Titel der beteiligten Person in abgekürzter Form (z.B. Dr.,
+          Prof., Dr. jur.) ein.
+        </seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_PersonContributorEmail">
-        <tuv xml:lang="en">
-            <seg>Please enter the contributor's email adress.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte eine E-Mailadresse der beteiligten Person ein.</seg>
-        </tuv>
+    <tu tuid="hint_PersonContributorEmail">
+      <tuv xml:lang="en">
+        <seg>Please enter the contributor's email adress.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte eine E-Mailadresse der beteiligten Person ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_PersonContributorDateOfBirth">
-        <tuv xml:lang="en">
-            <seg>Please enter the contributor's date of birth.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte das Geburtsdatum der beteiligten Person ein.</seg>
-        </tuv>
+    <tu tuid="hint_PersonContributorDateOfBirth">
+      <tuv xml:lang="en">
+        <seg>Please enter the contributor's date of birth.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte das Geburtsdatum der beteiligten Person ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_PersonContributorPlaceOfBirth">
-        <tuv xml:lang="en">
-            <seg>Please enter the contributor's place of birth.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den Geburtsort der beteiligten Person ein.</seg>
-        </tuv>
+    <tu tuid="hint_PersonContributorPlaceOfBirth">
+      <tuv xml:lang="en">
+        <seg>Please enter the contributor's place of birth.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte den Geburtsort der beteiligten Person ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_groupCreatingCorporation">
-        <tuv xml:lang="en">
-            <seg>Please enter the creating Corporation.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte die urhebende Körperschaft ein.</seg>
-        </tuv>
+    <tu tuid="hint_groupCreatingCorporation">
+      <tuv xml:lang="en">
+        <seg>Please enter the creating Corporation.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte die urhebende Körperschaft ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_CreatingCorporation">
-        <tuv xml:lang="en">
-            <seg>Please enter the creating Corporation.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte die urhebende Körperschaft ein.</seg>
-        </tuv>
+    <tu tuid="hint_CreatingCorporation">
+      <tuv xml:lang="en">
+        <seg>Please enter the creating Corporation.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte die urhebende Körperschaft ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_groupContributingCorporation">
-        <tuv xml:lang="en">
-            <seg>Please enter the contributing Corporation.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte die beteiligte Körperschaft ein.</seg>
-        </tuv>
+    <tu tuid="hint_groupContributingCorporation">
+      <tuv xml:lang="en">
+        <seg>Please enter the contributing Corporation.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte die beteiligte Körperschaft ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_ContributingCorporation">
-        <tuv xml:lang="en">
-            <seg>Please enter the contributing Corporation.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte die beteiligte Körperschaft ein.</seg>
-        </tuv>
+    <tu tuid="hint_ContributingCorporation">
+      <tuv xml:lang="en">
+        <seg>Please enter the contributing Corporation.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte die beteiligte Körperschaft ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_Edition">
-        <tuv xml:lang="en">
-            <seg>Please enter the Edition.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte die Auflage ein.</seg>
-        </tuv>
+    <tu tuid="hint_Edition">
+      <tuv xml:lang="en">
+        <seg>Please enter the Edition.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte die Auflage ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_Volume">
-        <tuv xml:lang="en">
-            <seg>Please enter the Volume.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte die Bandangabe ein.</seg>
-        </tuv>
+    <tu tuid="hint_Volume">
+      <tuv xml:lang="en">
+        <seg>Please enter the Volume.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte die Bandangabe ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_Issue">
-        <tuv xml:lang="en">
-            <seg>Please enter the Issue.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte die Heftangabe ein.</seg>
-        </tuv>
+    <tu tuid="hint_Issue">
+      <tuv xml:lang="en">
+        <seg>Please enter the Issue.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte die Heftangabe ein.</seg>
+      </tuv>
     </tu>
 
     <tu tuid="hint_groupInstitute">
-        <tuv xml:lang="en">
-            <seg>Please choose the involved institutes. You may add more instiutes by clicking on the button (or delete them).</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Wählen Sie hier bitte die beteiligten Institute aus. Sie können durch Klicken auf den Button weitere Institute hinzufügen (oder wieder löschen).</seg>
-        </tuv>
+      <tuv xml:lang="en">
+        <seg>Please choose the involved institutes. You may add more instiutes by clicking on the button (or
+          delete them).
+        </seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Wählen Sie hier bitte die beteiligten Institute aus. Sie können durch Klicken auf den Button
+          weitere Institute hinzufügen (oder wieder löschen).
+        </seg>
+      </tuv>
     </tu>
 
     <tu tuid="hint_Institute">
-        <tuv xml:lang="en">
-            <seg>Please choose the involved institute. </seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Wählen Sie das beteiligte Institut aus.</seg>
-        </tuv>
+      <tuv xml:lang="en">
+        <seg>Please choose the involved institute.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Wählen Sie das beteiligte Institut aus.</seg>
+      </tuv>
     </tu>
 
     <tu tuid="hint_Language">
-        <tuv xml:lang="en">
-            <seg>Please enter the language of the documents content.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte die Sprache des Dokumenteninhalts ein.</seg>
-        </tuv>
+      <tuv xml:lang="en">
+        <seg>Please enter the language of the documents content.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte die Sprache des Dokumenteninhalts ein.</seg>
+      </tuv>
     </tu>
 
     <tu tuid="hint_groupTitleMain">
-        <tuv xml:lang="en">
-            <seg>Please enter the titles and its language. You may add more titles by clicking on the button (or delete them).</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie hier bitte den Titel und seine Sprachen ein. Sie können durch Klicken auf den Button weitere Titel hinzufügen (oder wieder löschen).</seg>
-        </tuv>
+      <tuv xml:lang="en">
+        <seg>Please enter the titles and its language. You may add more titles by clicking on the button (or
+          delete them).
+        </seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie hier bitte den Titel und seine Sprachen ein. Sie können durch Klicken auf den Button
+          weitere Titel hinzufügen (oder wieder löschen).
+        </seg>
+      </tuv>
     </tu>
 
     <tu tuid="hint_TitleMain">
-        <tuv xml:lang="en">
-            <seg>Please enter the documents main title.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den Titel des Dokuments ein.</seg>
-        </tuv>
+      <tuv xml:lang="en">
+        <seg>Please enter the documents main title.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte den Titel des Dokuments ein.</seg>
+      </tuv>
     </tu>
 
     <tu tuid="hint_TitleMainLanguage">
-        <tuv xml:lang="en">
-            <seg>Please enter the language of the title.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Wählen Sie bitte die Sprache des Titels aus.</seg>
-        </tuv>
+      <tuv xml:lang="en">
+        <seg>Please enter the language of the title.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Wählen Sie bitte die Sprache des Titels aus.</seg>
+      </tuv>
     </tu>
 
     <tu tuid="hint_groupTitleAbstract">
-        <tuv xml:lang="en">
-            <seg>Please enter the possible abstracts. You may add more abstracts by clicking on the button (or delete them).</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie hier bitte die Zusammenfassungen Ihres Dokumentes und ihre jeweiligen Sprachen ein. Sie können durch Klicken auf den Button weitere Zusammenfassungen hinzufügen (oder wieder löschen).</seg>
-        </tuv>
+      <tuv xml:lang="en">
+        <seg>Please enter the possible abstracts. You may add more abstracts by clicking on the button (or
+          delete them).
+        </seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie hier bitte die Zusammenfassungen Ihres Dokumentes und ihre jeweiligen Sprachen ein. Sie
+          können durch Klicken auf den Button weitere Zusammenfassungen hinzufügen (oder wieder löschen).
+        </seg>
+      </tuv>
     </tu>
 
     <tu tuid="hint_TitleAbstract">
-        <tuv xml:lang="en">
-            <seg>Please enter the documents abstract.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte die Zusammenfassung des Dokuments ein.</seg>
-        </tuv>
+      <tuv xml:lang="en">
+        <seg>Please enter the documents abstract.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte die Zusammenfassung des Dokuments ein.</seg>
+      </tuv>
     </tu>
 
     <tu tuid="hint_TitleAbstractLanguage">
-        <tuv xml:lang="en">
-            <seg>Please choose the language of the documents abstract.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Wählen Sie bitte die Sprache des Abstracts aus.</seg>
-        </tuv>
+      <tuv xml:lang="en">
+        <seg>Please choose the language of the documents abstract.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Wählen Sie bitte die Sprache des Abstracts aus.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_groupTitleSub">
-        <tuv xml:lang="en">
-            <seg>Please enter the documents subtitle.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den Untertitel des Dokuments ein.</seg>
-        </tuv>
+    <tu tuid="hint_groupTitleSub">
+      <tuv xml:lang="en">
+        <seg>Please enter the documents subtitle.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte den Untertitel des Dokuments ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_TitleSub">
-        <tuv xml:lang="en">
-            <seg>Please enter the documents subtitle.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den Untertitel des Dokuments ein.</seg>
-        </tuv>
+    <tu tuid="hint_TitleSub">
+      <tuv xml:lang="en">
+        <seg>Please enter the documents subtitle.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte den Untertitel des Dokuments ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_TitleSubLanguage">
-        <tuv xml:lang="en">
-            <seg>Please choose the language of the documents subtitle.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Bitte wählen Sie die Sprache des Untertitels aus.</seg>
-        </tuv>
+    <tu tuid="hint_TitleSubLanguage">
+      <tuv xml:lang="en">
+        <seg>Please choose the language of the documents subtitle.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bitte wählen Sie die Sprache des Untertitels aus.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_groupTitleAdditional">
-        <tuv xml:lang="en">
-            <seg>Please enter the documents translated title.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie hier bitte den übersetzten Titel des Dokuments ein.</seg>
-        </tuv>
+    <tu tuid="hint_groupTitleAdditional">
+      <tuv xml:lang="en">
+        <seg>Please enter the documents translated title.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie hier bitte den übersetzten Titel des Dokuments ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_TitleAdditional">
-        <tuv xml:lang="en">
-            <seg>Please enter the documents translated title.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie hier bitte den übersetzten Titel des Dokuments ein.</seg>
-        </tuv>
+    <tu tuid="hint_TitleAdditional">
+      <tuv xml:lang="en">
+        <seg>Please enter the documents translated title.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie hier bitte den übersetzten Titel des Dokuments ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_TitleAdditionalLanguage">
-        <tuv xml:lang="en">
-            <seg>Please choose the language of the translated title.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Bitte wählen Sie die Sprache des übersetzten Titels aus.</seg>
-        </tuv>
+    <tu tuid="hint_TitleAdditionalLanguage">
+      <tuv xml:lang="en">
+        <seg>Please choose the language of the translated title.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bitte wählen Sie die Sprache des übersetzten Titels aus.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_groupTitleParent">
-        <tuv xml:lang="en">
-            <seg>Please enter the parent work's title (i.e. Journal, Compilation, Anthology).</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den Titel des übergeordneten Werks (z.B. Zeitschrift, Sammelwerk, Sammelband) ein.</seg>
-        </tuv>
+    <tu tuid="hint_groupTitleParent">
+      <tuv xml:lang="en">
+        <seg>Please enter the parent work's title (i.e. Journal, Compilation, Anthology).</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte den Titel des übergeordneten Werks (z.B. Zeitschrift, Sammelwerk, Sammelband)
+          ein.
+        </seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_TitleParent">
-        <tuv xml:lang="en">
-            <seg>Please enter the parent work's title (i.e. Journal, Collected Edition, Anthology).</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den Titel des übergeordneten Werks (z.B. Zeitschrift, Sammelwerk, Sammelband) ein.</seg>
-        </tuv>
+    <tu tuid="hint_TitleParent">
+      <tuv xml:lang="en">
+        <seg>Please enter the parent work's title (i.e. Journal, Collected Edition, Anthology).</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte den Titel des übergeordneten Werks (z.B. Zeitschrift, Sammelwerk, Sammelband)
+          ein.
+        </seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_TitleParentLanguage">
-        <tuv xml:lang="en">
-            <seg>Please choose a parent work's title language.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Bitte wählen Sie eine Sprache des Titels des übergeordneten Werks.</seg>
-        </tuv>
+    <tu tuid="hint_TitleParentLanguage">
+      <tuv xml:lang="en">
+        <seg>Please choose a parent work's title language.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bitte wählen Sie eine Sprache des Titels des übergeordneten Werks.</seg>
+      </tuv>
     </tu>
 
     <tu tuid="hint_groupProject">
-        <tuv xml:lang="en">
-            <seg>Please choose the documents Matheon projects. You may add more projects by clicking on the button (or delete them).</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Wählen Sie hier bitte die zugehörigen Matheon Projekte Ihres Dokumentes aus. Sie können durch Klicken auf den Button weitere Projekte hinzufügen (oder wieder löschen)</seg>
-        </tuv>
+      <tuv xml:lang="en">
+        <seg>Please choose the documents Matheon projects. You may add more projects by clicking on the button
+          (or delete them).
+        </seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Wählen Sie hier bitte die zugehörigen Matheon Projekte Ihres Dokumentes aus. Sie können durch
+          Klicken auf den Button weitere Projekte hinzufügen (oder wieder löschen)
+        </seg>
+      </tuv>
     </tu>
 
     <tu tuid="hint_Project">
-        <tuv xml:lang="en">
-            <seg>Please choose the documents Matheon projects.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Wählen Sie bitte die zugehörigen Matheon Projekte Ihres Dokumentes aus.</seg>
-        </tuv>
+      <tuv xml:lang="en">
+        <seg>Please choose the documents Matheon projects.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Wählen Sie bitte die zugehörigen Matheon Projekte Ihres Dokumentes aus.</seg>
+      </tuv>
     </tu>
 
-<!-- MSC ************************************************ -->
+    <!-- MSC ************************************************ -->
     <tu tuid="hint_groupSubjectMSC">
-        <tuv xml:lang="en">
-            <seg><![CDATA[Please enter the MSC classes of the document. You may add more MSC classes by clicking on the button (or delete them).<br />
+      <tuv xml:lang="en">
+        <seg><![CDATA[Please enter the MSC classes of the document. You may add more MSC classes by clicking on the button (or delete them).<br />
 See the manual at <a href="http://www.ams.org/mathscinet/msc/msc2010.html" target="tab" >http://www.ams.org/mathscinet/msc/msc2010.html</a>.<br />
 Example input: "00A09" (for Popularization of mathematics)]]></seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg><![CDATA[Tragen Sie hier bitte die MSC Klassen Ihres Dokumentes ein. Sie können durch Klicken auf den Button weitere Klassen hinzufügen (oder wieder löschen).<br />
+      </tuv>
+      <tuv xml:lang="de">
+        <seg><![CDATA[Tragen Sie hier bitte die MSC Klassen Ihres Dokumentes ein. Sie können durch Klicken auf den Button weitere Klassen hinzufügen (oder wieder löschen).<br />
 Hilfe zur Klassifikation bekommen Sie unter: <a href="http://www.ams.org/mathscinet/msc/msc2010.html" target="tab" >http://www.ams.org/mathscinet/msc/msc2010.html</a><br />
 Beispieleingabe: "00A09" (für Popularization of mathematics)]]></seg>
-        </tuv>
+      </tuv>
     </tu>
 
     <tu tuid="hint_SubjectMSC">
-        <tuv xml:lang="en">
-            <seg>Please enter a MSC class.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte eine MSC Klasse ein.</seg>
-        </tuv>
+      <tuv xml:lang="en">
+        <seg>Please enter a MSC class.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte eine MSC Klasse ein.</seg>
+      </tuv>
     </tu>
 
-<!-- DDC **************************************************** -->
-<tu tuid="hint_groupSubjectDDC">
-        <tuv xml:lang="en">
-            <seg><![CDATA[Please enter the DDC class of your document. You can add or delete additional classifications by clicking on the button below. DDC classes follow a three-digit pattern. Using the dropdown box and the ‘down’ button, please set the DDC class for your document.<br />
-            Please click the following link for an overview (in German) of available DDC classes:<br />
-            <a href="http://www.dnb.de/Subsites/ddcdeutsch/DE/DDCprodukte/DDCuebersichten/DDCuebersichten_node.html" target="tab" > http://www.dnb.de/Subsites/ddcdeutsch/DE/DDCprodukte/DDCuebersichten/DDCuebersichten_node.html</a><br />
-            Example input: "100" (for "Philosophie und Psychologie")]]></seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg><![CDATA[Tragen Sie hier bitte die DDC Klassen Ihres Dokumentes ein. Sie können durch Klicken auf den Button weitere Klassen hinzufügen (oder wieder löschen). Die DDC Klasse ist 3-stellig anzugeben. Nutzen Sie dazu den Button "runter".<br />
-            Eine Übersicht über verfügbare Klassen bekommen Sie unter:<br />
-            <a href="http://www.dnb.de/Subsites/ddcdeutsch/DE/DDCprodukte/DDCuebersichten/DDCuebersichten_node.html" target="tab" > http://www.dnb.de/Subsites/ddcdeutsch/DE/DDCprodukte/DDCuebersichten/DDCuebersichten_node.html</a><br />
-            Beispieleingabe: "100" (für "Philosophie und Psychologie")]]></seg>
-        </tuv>
+    <!-- DDC **************************************************** -->
+    <tu tuid="hint_groupSubjectDDC">
+      <tuv xml:lang="en">
+        <seg><![CDATA[Please enter the DDC class of your document. You can add or delete additional classifications by clicking on the button below. DDC classes follow a three-digit pattern. Using the dropdown box and the 'down' button, please set the DDC class for your document.<br />
+                Please click the following link for an overview (in German) of DDC at the German National Library:
+                <a href="https://www.dnb.de/ddcindnb" target="tab" > https://www.dnb.de/ddcindnb</a><br />
+                Example input: "100" (for "Philosophie und Psychologie")]]></seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg><![CDATA[Tragen Sie hier bitte die DDC Klassen Ihres Dokumentes ein. Sie können durch Klicken auf den Button weitere Klassen hinzufügen (oder wieder löschen). Die DDC Klasse ist 3-stellig anzugeben. Nutzen Sie dazu den Button "runter".<br />
+                Eine Übersicht über die DDC in der Deutschen Nationalbibliothek bekommen Sie unter:
+                <a href="https://www.dnb.de/ddcindnb" target="tab" > https://www.dnb.de/ddcindnb</a><br />
+                Beispieleingabe: "100" (für "Philosophie und Psychologie")]]></seg>
+      </tuv>
     </tu>
 
     <tu tuid="hint_SubjectDDC">
-        <tuv xml:lang="en">
-            <seg>Please enter a DDC class.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte eine DDC Klasse ein.</seg>
-        </tuv>
+      <tuv xml:lang="en">
+        <seg>Please enter a DDC class.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte eine DDC Klasse ein.</seg>
+      </tuv>
     </tu>
 
-	<!-- DDC-Sachgruppen **************************************************** -->
-<tu tuid="hint_groupddc_dnb">
-        <tuv xml:lang="en">
-            <seg>Please enter the DDC subject groups of the document. You may add more DDC subject groups by clicking on the button )or delete them).</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie hier bitte die DDC-Sachgruppe Ihres Dokumentes ein. Sie können durch Klicken auf den Button weitere DDC-Sachgruppen hinzufügen (oder wieder löschen).</seg>
-        </tuv>
+    <!-- DDC-Sachgruppen **************************************************** -->
+    <tu tuid="hint_groupddc_dnb">
+      <tuv xml:lang="en">
+        <seg>Please enter the DDC subject groups of the document. You may add more DDC subject groups by
+          clicking on the button )or delete them).
+        </seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie hier bitte die DDC-Sachgruppe Ihres Dokumentes ein. Sie können durch Klicken auf den
+          Button weitere DDC-Sachgruppen hinzufügen (oder wieder löschen).
+        </seg>
+      </tuv>
     </tu>
 
     <tu tuid="hint_ddc">
-        <tuv xml:lang="en">
-            <seg>Please enter a DDC subject group.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte eine DDC-Sachgruppe ein.</seg>
-        </tuv>
+      <tuv xml:lang="en">
+        <seg>Please enter a DDC subject group.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte eine DDC-Sachgruppe ein.</seg>
+      </tuv>
     </tu>
 
-<!-- JEL **************************************************** -->
-<tu tuid="hint_groupSubjectJEL">
-        <tuv xml:lang="en">
-            <seg><![CDATA[Please enter the JEL classes of the document. You may add more JEL classes by clicking on the button (or delete them).<br />
+    <!-- JEL **************************************************** -->
+    <tu tuid="hint_groupSubjectJEL">
+      <tuv xml:lang="en">
+        <seg><![CDATA[Please enter the JEL classes of the document. You may add more JEL classes by clicking on the button (or delete them).<br />
 See the overview at <a href="http://www.aeaweb.org/jel/jel_class_system.php" target="tab">http://www.aeaweb.org/jel/jel_class_system.php</a>]]></seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg><![CDATA[Tragen Sie hier bitte die JEL Klassen Ihres Dokumentes ein. Sie können durch Klicken auf den Button weitere Klassen hinzufügen (oder wieder löschen).<br />
+      </tuv>
+      <tuv xml:lang="de">
+        <seg><![CDATA[Tragen Sie hier bitte die JEL Klassen Ihres Dokumentes ein. Sie können durch Klicken auf den Button weitere Klassen hinzufügen (oder wieder löschen).<br />
 Eine Übersicht über verfügbare Klassen bekommen Sie unter: <a href="http://www.aeaweb.org/jel/jel_class_system.php" target="tab" >http://www.aeaweb.org/jel/jel_class_system.php</a>]]></seg>
-        </tuv>
+      </tuv>
     </tu>
 
     <tu tuid="hint_SubjectJEL">
-        <tuv xml:lang="en">
-            <seg>Please enter a JEL class.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte eine JEL Klasse ein.</seg>
-        </tuv>
+      <tuv xml:lang="en">
+        <seg>Please enter a JEL class.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte eine JEL Klasse ein.</seg>
+      </tuv>
     </tu>
 
-<!-- CCS ****************************************************** -->
-<tu tuid="hint_groupSubjectCCS">
-        <tuv xml:lang="en">
-            <seg><![CDATA[Please enter the CCS classes of the document. You may add more CCS classes by clicking on the button (or delete them).<br />
+    <!-- CCS ****************************************************** -->
+    <tu tuid="hint_groupSubjectCCS">
+      <tuv xml:lang="en">
+        <seg><![CDATA[Please enter the CCS classes of the document. You may add more CCS classes by clicking on the button (or delete them).<br />
 See the overview at <a href="http://portal.acm.org/ccs.cfm" target="tab" >http://portal.acm.org/ccs.cfm</a>.<br />
 Example input: "C.1" (for Processor Architectures)]]></seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg><![CDATA[Tragen Sie hier bitte die CCS Klassen Ihres Dokumentes ein. Sie können durch Klicken auf den Button weitere Klassen hinzufügen (oder wieder löschen).<br />
+      </tuv>
+      <tuv xml:lang="de">
+        <seg><![CDATA[Tragen Sie hier bitte die CCS Klassen Ihres Dokumentes ein. Sie können durch Klicken auf den Button weitere Klassen hinzufügen (oder wieder löschen).<br />
 Eine Übersicht über verfügbare Klassen bekommen Sie unter: <a href="http://portal.acm.org/ccs.cfm" target="tab" >http://portal.acm.org/ccs.cfm</a><br />
 Beispieleingabe: "C.1" (für Processor Architectures)]]></seg>
-        </tuv>
+      </tuv>
     </tu>
 
     <tu tuid="hint_SubjectCCS">
-        <tuv xml:lang="en">
-            <seg>Please enter a CCS class.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte eine CCS Klasse ein.</seg>
-        </tuv>
+      <tuv xml:lang="en">
+        <seg>Please enter a CCS class.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte eine CCS Klasse ein.</seg>
+      </tuv>
     </tu>
 
-<!-- PACS ****************************************************** -->
-<tu tuid="hint_groupSubjectPACS">
-        <tuv xml:lang="en">
-            <seg><![CDATA[Please enter the PACS classes of the document. You may add more PACS classes by clicking on the button (or delete them).<br />
+    <!-- PACS ****************************************************** -->
+    <tu tuid="hint_groupSubjectPACS">
+      <tuv xml:lang="en">
+        <seg><![CDATA[Please enter the PACS classes of the document. You may add more PACS classes by clicking on the button (or delete them).<br />
 See the overview at <a href="http://www.aip.org/publishing/pacs/pacs-2010-regular-edition" target="tab" >http://www.aip.org/publishing/pacs/pacs-2010-regular-edition</a>.<br />
 Example input: "11.15.Bt" (for General properties of perturbation theory )]]></seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg><![CDATA[Tragen Sie hier bitte die PACS Klassen Ihres Dokumentes ein. Sie können durch Klicken auf den Button weitere Klassen hinzufügen (oder wieder löschen).<br />
+      </tuv>
+      <tuv xml:lang="de">
+        <seg><![CDATA[Tragen Sie hier bitte die PACS Klassen Ihres Dokumentes ein. Sie können durch Klicken auf den Button weitere Klassen hinzufügen (oder wieder löschen).<br />
 Eine Übersicht über verfügbare Klassen bekommen Sie unter: <a href="http://www.aip.org/publishing/pacs/pacs-2010-regular-edition" target="tab" >http://www.aip.org/publishing/pacs/pacs-2010-regular-edition</a><br />
 Beispieleingabe: "11.15.Bt" (für General properties of perturbation theory )]]></seg>
-        </tuv>
+      </tuv>
     </tu>
 
     <tu tuid="hint_SubjectPACS">
-        <tuv xml:lang="en">
-            <seg>Please enter a PACS class.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte eine PACS Klasse ein.</seg>
-        </tuv>
+      <tuv xml:lang="en">
+        <seg>Please enter a PACS class.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte eine PACS Klasse ein.</seg>
+      </tuv>
     </tu>
 
-	<!-- BKL ****************************************************** -->
-<tu tuid="hint_groupSubjectBKL">
-        <tuv xml:lang="en">
-            <seg><![CDATA[Please enter the BKL classes of the document. You may add more BKL classes by clicking on the button (or delete them).<br />
+    <!-- BKL ****************************************************** -->
+    <tu tuid="hint_groupSubjectBKL">
+      <tuv xml:lang="en">
+        <seg><![CDATA[Please enter the BKL classes of the document. You may add more BKL classes by clicking on the button (or delete them).<br />
 See the overview at <a href="http://www.gbv.de/vgm/info/mitglieder/02Verbund/01Erschliessung/02Richtlinien/05Basisklassifikation/index" target="tab" >http://www.gbv.de/vgm/info/mitglieder/02Verbund/01Erschliessung/02Richtlinien/05Basisklassifikation/index</a>.<br />
 Example input: "17.08" (for Semiotik)]]></seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg><![CDATA[Tragen Sie hier bitte die BKL Klassen Ihres Dokumentes ein. Sie können durch Klicken auf den Button weitere Klassen hinzufügen (oder wieder löschen).<br />
+      </tuv>
+      <tuv xml:lang="de">
+        <seg><![CDATA[Tragen Sie hier bitte die BKL Klassen Ihres Dokumentes ein. Sie können durch Klicken auf den Button weitere Klassen hinzufügen (oder wieder löschen).<br />
 Eine Übersicht über verfügbare Klassen bekommen Sie unter: <a href="http://www.gbv.de/vgm/info/mitglieder/02Verbund/01Erschliessung/02Richtlinien/05Basisklassifikation/index" target="tab" >http://www.gbv.de/vgm/info/mitglieder/02Verbund/01Erschliessung/02Richtlinien/05Basisklassifikation/index</a><br />
 Beispieleingabe: "17.08" (für Semiotik)]]></seg>
-        </tuv>
+      </tuv>
     </tu>
 
     <tu tuid="hint_SubjectBKL">
-        <tuv xml:lang="en">
-            <seg>Please enter a BKL class.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte eine BKL Klasse ein.</seg>
-        </tuv>
+      <tuv xml:lang="en">
+        <seg>Please enter a BKL class.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte eine BKL Klasse ein.</seg>
+      </tuv>
     </tu>
 
-<!-- SubjectUncontrolled ************************************************** -->
+    <!-- SubjectUncontrolled ************************************************** -->
     <tu tuid="hint_groupSubjectUncontrolled">
-        <tuv xml:lang="en">
-            <seg>Please enter keywords of the document. You may add more keywords by clicking on the button (or delete them).</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie hier bitte frei wählbare Schlagwörter Ihres Dokumentes ein. Sie können durch Klicken auf den Button weitere Schlagwörter hinzufügen (oder wieder löschen).</seg>
-        </tuv>
+      <tuv xml:lang="en">
+        <seg>Please enter keywords of the document. You may add more keywords by clicking on the button (or
+          delete them).
+        </seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie hier bitte frei wählbare Schlagwörter Ihres Dokumentes ein. Sie können durch Klicken auf
+          den Button weitere Schlagwörter hinzufügen (oder wieder löschen).
+        </seg>
+      </tuv>
     </tu>
 
     <tu tuid="hint_SubjectUncontrolled">
-        <tuv xml:lang="en">
-            <seg>Please enter an uncontrolled subject.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte ein freies Schlagwort ein.</seg>
-        </tuv>
+      <tuv xml:lang="en">
+        <seg>Please enter an uncontrolled subject.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte ein freies Schlagwort ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_SubjectUncontrolledLanguage">
-        <tuv xml:lang="en">
-            <seg>Please enter the language of an uncontrolled subject.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte die Sprache des freien Schlagworts ein.</seg>
-        </tuv>
+    <tu tuid="hint_SubjectUncontrolledLanguage">
+      <tuv xml:lang="en">
+        <seg>Please enter the language of an uncontrolled subject.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte die Sprache des freien Schlagworts ein.</seg>
+      </tuv>
     </tu>
 
-<!-- SubjectSwd ************************************************** -->
-	<tu tuid="hint_groupSubjectSwd">
-        <tuv xml:lang="en">
-            <seg>Please enter GND keywords of the document. You may add more keywords by clicking on the button (or delete them).</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg><![CDATA[Tragen Sie hier bitte GND-Schlagwörter zu Ihrem Dokument ein. Sie können durch Klicken auf den Button weitere Schlagwörter hinzufügen (oder wieder löschen).
+    <!-- SubjectSwd ************************************************** -->
+    <tu tuid="hint_groupSubjectSwd">
+      <tuv xml:lang="en">
+        <seg>Please enter GND keywords of the document. You may add more keywords by clicking on the button (or
+          delete them).
+        </seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg><![CDATA[Tragen Sie hier bitte GND-Schlagwörter zu Ihrem Dokument ein. Sie können durch Klicken auf den Button weitere Schlagwörter hinzufügen (oder wieder löschen).
 			Hilfe zur Auswahl bekommen Sie in der OGND des BSZ: <a href="http://swb.bsz-bw.de/DB=2.104/" target="tab" >http://swb.bsz-bw.de/DB=2.104/</a>]]></seg>
-        </tuv>
+      </tuv>
     </tu>
 
     <tu tuid="hint_SubjectSwd">
-        <tuv xml:lang="en">
-            <seg>Please enter a GND subject.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte ein GND-Schlagwort ein.</seg>
-        </tuv>
+      <tuv xml:lang="en">
+        <seg>Please enter a GND subject.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte ein GND-Schlagwort ein.</seg>
+      </tuv>
     </tu>
 
     <tu tuid="hint_groupNote">
-        <tuv xml:lang="en">
-            <seg>You have the possibility to upload notices or a message along with your document.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Sie haben die Möglichkeit, gemeinsam mit Ihrem Dokument Notizen oder eine Nachricht auf unseren Server hochzuladen.</seg>
-        </tuv>
+      <tuv xml:lang="en">
+        <seg>You have the possibility to upload notices or a message along with your document.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sie haben die Möglichkeit, gemeinsam mit Ihrem Dokument Notizen oder eine Nachricht auf unseren
+          Server hochzuladen.
+        </seg>
+      </tuv>
     </tu>
 
     <tu tuid="hint_Note">
-        <tuv xml:lang="en">
-            <seg>Room for a notification...</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Raum für Notizen und Benachrichtigungen...</seg>
-        </tuv>
+      <tuv xml:lang="en">
+        <seg>Room for a notification...</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Raum für Notizen und Benachrichtigungen...</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_PageNumber">
-        <tuv xml:lang="en">
-            <seg>Please enter the documents page number.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte die Seitenanzahl des Dokuments ein.</seg>
-        </tuv>
+    <tu tuid="hint_PageNumber">
+      <tuv xml:lang="en">
+        <seg>Please enter the documents page number.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte die Seitenanzahl des Dokuments ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_PageFirst">
-        <tuv xml:lang="en">
-            <seg>Please enter the number of the documents first page.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte die Nummer der ersten Seite des Dokuments ein.</seg>
-        </tuv>
+    <tu tuid="hint_PageFirst">
+      <tuv xml:lang="en">
+        <seg>Please enter the number of the documents first page.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte die Nummer der ersten Seite des Dokuments ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_PageLast">
-        <tuv xml:lang="en">
-            <seg>Please enter the number of the documents last page.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte die Nummer der letzten Seite des Dokuments ein.</seg>
-        </tuv>
+    <tu tuid="hint_PageLast">
+      <tuv xml:lang="en">
+        <seg>Please enter the number of the documents last page.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte die Nummer der letzten Seite des Dokuments ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_PublishedDate">
-        <tuv xml:lang="en">
-            <seg>Please enter the date of the documents first publishing in the format YYYY/MM/DD.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte das Erstveröffentlichungsdatum des Dokuments im Format TT.MM.JJJJ ein.</seg>
-        </tuv>
+    <tu tuid="hint_PublishedDate">
+      <tuv xml:lang="en">
+        <seg>Please enter the date of the documents first publishing in the format YYYY/MM/DD.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte das Erstveröffentlichungsdatum des Dokuments im Format TT.MM.JJJJ ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_PublishedYear">
-        <tuv xml:lang="en">
-            <seg>Please enter the year of the documents first publishing.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte das Erstveröffentlichungsjahr des Dokuments ein.</seg>
-        </tuv>
+    <tu tuid="hint_PublishedYear">
+      <tuv xml:lang="en">
+        <seg>Please enter the year of the documents first publishing.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte das Erstveröffentlichungsjahr des Dokuments ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_CompletedDate">
-        <tuv xml:lang="en">
-            <seg>Please enter the date of the documents publishing in the format YYYY/MM/DD.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte das Veröffentlichungsdatum (online) des Dokuments im Format TT.MM.JJJJ ein.</seg>
-        </tuv>
+    <tu tuid="hint_CompletedDate">
+      <tuv xml:lang="en">
+        <seg>Please enter the date of the documents publishing in the format YYYY/MM/DD.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte das Veröffentlichungsdatum (online) des Dokuments im Format TT.MM.JJJJ ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_EmbargoDate">
-        <tuv xml:lang="en">
-            <seg>Please enter the date of the expiring of the file embargo in the format YYYY/MM/DD.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte das Auslaufdatum des Datei-Embargos im Format TT.MM.JJJJ ein.</seg>
-        </tuv>
+    <tu tuid="hint_EmbargoDate">
+      <tuv xml:lang="en">
+        <seg>Please enter the date of the expiring of the file embargo in the format YYYY/MM/DD.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte das Auslaufdatum des Datei-Embargos im Format TT.MM.JJJJ ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_CompletedYear">
-        <tuv xml:lang="en">
-            <seg>Please enter the year of the documents publishing.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte das Veröffentlichungsjahr des Dokuments ein.</seg>
-        </tuv>
+    <tu tuid="hint_CompletedYear">
+      <tuv xml:lang="en">
+        <seg>Please enter the year of the documents publishing.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte das Veröffentlichungsjahr des Dokuments ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_PublisherName">
-        <tuv xml:lang="en">
-            <seg>Please enter the Publisher.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den Verlag ein.</seg>
-        </tuv>
+    <tu tuid="hint_PublisherName">
+      <tuv xml:lang="en">
+        <seg>Please enter the Publisher.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte den Verlag ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_PublisherPlace">
-        <tuv xml:lang="en">
-            <seg>Please enter the place of publishing.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den Verlagsort ein.</seg>
-        </tuv>
+    <tu tuid="hint_PublisherPlace">
+      <tuv xml:lang="en">
+        <seg>Please enter the place of publishing.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte den Verlagsort ein.</seg>
+      </tuv>
     </tu>
 
-<!-- Beginn IDENTIFIER ************************************************** -->
-	<tu tuid="hint_IdentifierUrl">
+    <!-- Beginn IDENTIFIER ************************************************** -->
+    <tu tuid="hint_IdentifierUrl">
       <tuv xml:lang="en">
         <seg>Please enter the url at which the document is available.</seg>
       </tuv>
@@ -1245,34 +1302,34 @@ Beispieleingabe: "17.08" (für Semiotik)]]></seg>
       </tuv>
     </tu>
 
-	<tu tuid="hint_IdentifierUrn">
-        <tuv xml:lang="en">
-            <seg>Please enter the URN.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte die URN ein.</seg>
-        </tuv>
+    <tu tuid="hint_IdentifierUrn">
+      <tuv xml:lang="en">
+        <seg>Please enter the URN.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte die URN ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_IdentifierIsbn">
-        <tuv xml:lang="en">
-            <seg>Please enter the ISBN.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte die ISBN ein.</seg>
-        </tuv>
+    <tu tuid="hint_IdentifierIsbn">
+      <tuv xml:lang="en">
+        <seg>Please enter the ISBN.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte die ISBN ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_IdentifierIssn">
-        <tuv xml:lang="en">
-            <seg>Please enter the ISSN.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte die ISSN ein.</seg>
-        </tuv>
+    <tu tuid="hint_IdentifierIssn">
+      <tuv xml:lang="en">
+        <seg>Please enter the ISSN.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte die ISSN ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_IdentifierOpus3">
+    <tu tuid="hint_IdentifierOpus3">
       <tuv xml:lang="en">
         <seg>Please specify the Opus3 ID, if you have one.</seg>
       </tuv>
@@ -1281,277 +1338,289 @@ Beispieleingabe: "17.08" (für Semiotik)]]></seg>
       </tuv>
     </tu>
 
-	<tu tuid="hint_IdentifierOpac">
-        <tuv xml:lang="en">
-            <seg>Please enter the documents OPAC-Number.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte die OPAC-Nummer des Dokuments ein.</seg>
-        </tuv>
+    <tu tuid="hint_IdentifierOpac">
+      <tuv xml:lang="en">
+        <seg>Please enter the documents OPAC-Number.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte die OPAC-Nummer des Dokuments ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_IdentifierOld">
-        <tuv xml:lang="en">
-            <seg>Please enter the old ID, if you have one.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Geben Sie hier die alte ID ein, wenn vorhanden.</seg>
-        </tuv>
+    <tu tuid="hint_IdentifierOld">
+      <tuv xml:lang="en">
+        <seg>Please enter the old ID, if you have one.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Geben Sie hier die alte ID ein, wenn vorhanden.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_IdentifierSerial">
-        <tuv xml:lang="en">
-            <seg>Please enter the Serial.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte die Sequenznummer ein.</seg>
-        </tuv>
+    <tu tuid="hint_IdentifierSerial">
+      <tuv xml:lang="en">
+        <seg>Please enter the Serial.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte die Sequenznummer ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_IdentifierUuid">
-        <tuv xml:lang="en">
-            <seg>Please enter the Uuid.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte die Uuid ein.</seg>
-        </tuv>
+    <tu tuid="hint_IdentifierUuid">
+      <tuv xml:lang="en">
+        <seg>Please enter the Uuid.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte die Uuid ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_IdentifierDoi">
-        <tuv xml:lang="en">
-            <seg>Please enter the DOI.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte die DOI ein.</seg>
-        </tuv>
+    <tu tuid="hint_IdentifierDoi">
+      <tuv xml:lang="en">
+        <seg>Please enter the DOI.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte die DOI ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_IdentifierHandle">
-        <tuv xml:lang="en">
-            <seg>Please enter the Handle.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den Handle ein.</seg>
-        </tuv>
+    <tu tuid="hint_IdentifierHandle">
+      <tuv xml:lang="en">
+        <seg>Please enter the Handle.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte den Handle ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_IdentifierStdDoi">
-        <tuv xml:lang="en">
-            <seg>Please enter the StdDoi.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte die StdDoi ein.</seg>
-        </tuv>
+    <tu tuid="hint_IdentifierStdDoi">
+      <tuv xml:lang="en">
+        <seg>Please enter the StdDoi.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte die StdDoi ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_IdentifierCrisLink">
-        <tuv xml:lang="en">
-            <seg>Please enter the CRIS-Link.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den CRIS-Link ein.</seg>
-        </tuv>
+    <tu tuid="hint_IdentifierCrisLink">
+      <tuv xml:lang="en">
+        <seg>Please enter the CRIS-Link.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte den CRIS-Link ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_IdentifierSplashUrl">
-        <tuv xml:lang="en">
-            <seg>Please enter the SplashURL.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den SplashURL ein.</seg>
-        </tuv>
+    <tu tuid="hint_IdentifierSplashUrl">
+      <tuv xml:lang="en">
+        <seg>Please enter the SplashURL.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte den SplashURL ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_IdentifierPubmed">
-        <tuv xml:lang="en">
-            <seg>Please enter the Pubmed Id.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte die Pubmed-Id ein.</seg>
-        </tuv>
+    <tu tuid="hint_IdentifierPubmed">
+      <tuv xml:lang="en">
+        <seg>Please enter the Pubmed Id.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte die Pubmed-Id ein.</seg>
+      </tuv>
     </tu>
 
-	<tu tuid="hint_IdentifierArxiv">
-        <tuv xml:lang="en">
-            <seg>Please enter the Arxiv Id.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte die Arxiv-Id ein.</seg>
-        </tuv>
+    <tu tuid="hint_IdentifierArxiv">
+      <tuv xml:lang="en">
+        <seg>Please enter the Arxiv Id.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte die Arxiv-Id ein.</seg>
+      </tuv>
     </tu>
 
-<!-- Ende IDENTIFIER ************************************************** -->
+    <!-- Ende IDENTIFIER ************************************************** -->
 
     <tu tuid="hint_groupThesisDateAccepted">
-        <tuv xml:lang="en">
-            <seg>Please enter the date, when the Thesis has been accepted in terms of the examination regulations. In most cases this will be equal to the date of the (last) oral exam.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte das Datum ein, an dem die Abschlussarbeit im Sinne der Prüfungsordnung angenommen wurde. In den meisten Fällen ist dies mit dem Datum der (letzten) mündlichen Prüfung gleichzusetzen.</seg>
-        </tuv>
+      <tuv xml:lang="en">
+        <seg>Please enter the date, when the Thesis has been accepted in terms of the examination regulations.
+          In most cases this will be equal to the date of the (last) oral exam.
+        </seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte das Datum ein, an dem die Abschlussarbeit im Sinne der Prüfungsordnung angenommen
+          wurde. In den meisten Fällen ist dies mit dem Datum der (letzten) mündlichen Prüfung gleichzusetzen.
+        </seg>
+      </tuv>
     </tu>
 
     <tu tuid="hint_ThesisDateAccepted">
-        <tuv xml:lang="en">
-            <seg>Please enter the date, when the Thesis has been accepted.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte das Datum ein, an dem die Abschlussarbeit im Sinne der Prüfungsordnung angenommen wurde .</seg>
-        </tuv>
+      <tuv xml:lang="en">
+        <seg>Please enter the date, when the Thesis has been accepted.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte das Datum ein, an dem die Abschlussarbeit im Sinne der Prüfungsordnung angenommen
+          wurde .
+        </seg>
+      </tuv>
     </tu>
 
     <tu tuid="hint_ThesisYearAccepted">
-        <tuv xml:lang="en">
-            <seg>Please enter the year, when the Thesis has been accepted.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte das Jahr ein, an dem die Abschlussarbeit im Sinne der Prüfungsordnung angenommen wurde .</seg>
-        </tuv>
+      <tuv xml:lang="en">
+        <seg>Please enter the year, when the Thesis has been accepted.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte das Jahr ein, an dem die Abschlussarbeit im Sinne der Prüfungsordnung angenommen
+          wurde .
+        </seg>
+      </tuv>
     </tu>
 
     <tu tuid="hint_groupThesisGrantor">
-        <tuv xml:lang="en">
-            <seg>Please choose the granting institution.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Wählen Sie bitte die Titel verleihende(n) Institution(en) aus.</seg>
-        </tuv>
-    </tu>
-
-	<tu tuid="hint_groupThesisPublisher">
-        <tuv xml:lang="en">
-            <seg>Please choose the publishing institution(s).</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Wählen Sie bitte die veröffentlichende(n) Institution(en) aus.</seg>
-        </tuv>
-    </tu>
-
-	<tu tuid="hint_ThesisGrantor">
-        <tuv xml:lang="en">
-            <seg>Please choose the granting institution(s).</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Wählen Sie bitte die titelverleihende(n) Institution(en) aus.</seg>
-        </tuv>
-    </tu>
-
-	<tu tuid="hint_ThesisPublisher">
-        <tuv xml:lang="en">
-            <seg>Please choose the publishing institution(s).</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Wählen Sie bitte die veröffentlichende(n) Institution(en) aus.</seg>
-        </tuv>
-    </tu>
-
-<!-- BEGIN OF COMMENT
-    Language keys can be used after the corresponding Enrichment keys
-    were created in administration -> Enrichments.
-
-    <tu tuid="hint_EnrichmentNeuesFeld">
       <tuv xml:lang="en">
-        <seg>You can define whatever you want</seg>
+        <seg>Please choose the granting institution.</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Sie können hier definieren, was Sie möchten.</seg>
+        <seg>Wählen Sie bitte die Titel verleihende(n) Institution(en) aus.</seg>
       </tuv>
     </tu>
 
-    <tu tuid="hint_EnrichmentNeuesSelect">
+    <tu tuid="hint_groupThesisPublisher">
       <tuv xml:lang="en">
-        <seg>You can define whatever you want</seg>
+        <seg>Please choose the publishing institution(s).</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Sie können hier definieren, was Sie möchten.</seg>
+        <seg>Wählen Sie bitte die veröffentlichende(n) Institution(en) aus.</seg>
       </tuv>
     </tu>
 
-    <tu tuid="hint_groupNeuesSelect">
+    <tu tuid="hint_ThesisGrantor">
       <tuv xml:lang="en">
-        <seg>You can define whatever you want</seg>
+        <seg>Please choose the granting institution(s).</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Sie können hier definieren, was Sie möchten.</seg>
+        <seg>Wählen Sie bitte die titelverleihende(n) Institution(en) aus.</seg>
       </tuv>
     </tu>
 
-END OF COMMENT -->
+    <tu tuid="hint_ThesisPublisher">
+      <tuv xml:lang="en">
+        <seg>Please choose the publishing institution(s).</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Wählen Sie bitte die veröffentlichende(n) Institution(en) aus.</seg>
+      </tuv>
+    </tu>
+
+    <!-- BEGIN OF COMMENT
+        Language keys can be used after the corresponding Enrichment keys
+        were created in administration -> Enrichments.
+
+        <tu tuid="hint_EnrichmentNeuesFeld">
+          <tuv xml:lang="en">
+            <seg>You can define whatever you want</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Sie können hier definieren, was Sie möchten.</seg>
+          </tuv>
+        </tu>
+
+        <tu tuid="hint_EnrichmentNeuesSelect">
+          <tuv xml:lang="en">
+            <seg>You can define whatever you want</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Sie können hier definieren, was Sie möchten.</seg>
+          </tuv>
+        </tu>
+
+        <tu tuid="hint_groupNeuesSelect">
+          <tuv xml:lang="en">
+            <seg>You can define whatever you want</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Sie können hier definieren, was Sie möchten.</seg>
+          </tuv>
+        </tu>
+
+    END OF COMMENT -->
 
     <tu tuid="hint_documentType">
-        <tuv xml:lang="en">
-            <seg>Please choose a document type from the list.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Bitte wählen Sie einen Dokumenttyp aus der Liste aus.</seg>
-        </tuv>
+      <tuv xml:lang="en">
+        <seg>Please choose a document type from the list.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bitte wählen Sie einen Dokumenttyp aus der Liste aus.</seg>
+      </tuv>
     </tu>
 
     <tu tuid="tooltip_documentType">
-        <tuv xml:lang="en">
-            <seg>Please choose a document type from the list.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Bitte wählen Sie einen Dokumenttyp aus der Liste aus.</seg>
-        </tuv>
+      <tuv xml:lang="en">
+        <seg>Please choose a document type from the list.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bitte wählen Sie einen Dokumenttyp aus der Liste aus.</seg>
+      </tuv>
     </tu>
 
     <tu tuid="hint_uploadComment">
-        <tuv xml:lang="en">
-            <seg>Add a comment.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Fügen Sie hier einen Kommentar hinzu.</seg>
-        </tuv>
+      <tuv xml:lang="en">
+        <seg>Add a comment.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Fügen Sie hier einen Kommentar hinzu.</seg>
+      </tuv>
     </tu>
 
     <tu tuid="hint_documentUpload">
-        <tuv xml:lang="en">
-            <seg>Upload your documents here.
-            Filenames can be up to 50 characters long including the extension and use letters (a-z, A-Z), numbers (0-9), dashes (-) and underlines (_).
-            You get more upload-fields by pressing the PLUS-sign.
-            </seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Wählen Sie hier die hochzuladenden Dokumente. Bitte achten Sie dabei die auf die Benennung der Dateien.
-            Es dürfen die alphanumerischen Zeichen (a-z, A-Z und 0-9) sowie Bindestriche (-) und Unterstriche (_) verwendet werden.
-            Der Dateiname darf bis zu 50 Zeichen lang sein, einschließlich der Dateiendung.
-            Weitere Upload-Felder erhalten Sie per Klick auf das PLUS-Zeichen.
-            </seg>
-        </tuv>
+      <tuv xml:lang="en">
+        <seg><![CDATA[Please mind the:
+                <ul class="list-style-none"><li><b>Naming of the files</b>: permitted are alphabetic characters (a-z, A-Z, no umlauts), numbers, hyphen, and underscore.</li>
+                  <li><b>Length of the file name</b>: up to 50 characters</li></ul>]]></seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg><![CDATA[Bitte beachten Sie dabei die:
+                <ul class="list-style-none"><li><b>Benennung der Dateien</b>: zulässig sind Buchstaben (a-z, A-Z, keine Umlaute), Zahlen, Bindestrich und Unterstrich.</li>
+                <li><b>Dateinamenslänge</b>: maximal 50 Zeichen</li></ul>]]></seg>
+      </tuv>
     </tu>
 
     <tu tuid="hint_bibliographie">
-        <tuv xml:lang="en">
-            <seg>Shall your document appear in bibliography collection?</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Soll Ihr Dokument in der Bibliographie Sammlung erscheinen?</seg>
-        </tuv>
+      <tuv xml:lang="en">
+        <seg>Shall your document appear in bibliography collection?</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Soll Ihr Dokument in der Bibliographie Sammlung erscheinen?</seg>
+      </tuv>
     </tu>
 
     <tu tuid="hint_collection">
-        <tuv xml:lang="en">
-            <seg>Please choose a collection. After that you can navigate to the collection entries of that collection.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Bitte wählen Sie eine Sammlung aus. Sie können danach zu weiteren Sammlungeinträgen der Sammlung navigieren.</seg>
-        </tuv>
+      <tuv xml:lang="en">
+        <seg>Please choose a collection. After that you can navigate to the collection entries of that
+          collection.
+        </seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bitte wählen Sie eine Sammlung aus. Sie können danach zu weiteren Sammlungeinträgen der Sammlung
+          navigieren.</seg>
+      </tuv>
     </tu>
 
-  <tu tuid="hint_Opus_Model_Filter_Licence">
-            <tuv xml:lang="en">
-                <seg>Please select a license for your document. By choosing a license you decide which legal conditions will apply to the document you are publishing.</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Bitte wählen Sie die Lizenz, unter der das Dokument veröffentlicht werden soll. Mit der Wahl der Lizenz entscheiden Sie, unter welchen Bedingungen das von Ihnen veröffentlichte Dokument zukünftig genutzt werden darf.</seg>
-            </tuv>
-        </tu>
+    <tu tuid="hint_Opus_Model_Filter_Licence">
+      <tuv xml:lang="en">
+        <seg>Please select a license for your document. By choosing a license you decide which legal conditions
+          will apply to the document you are publishing.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bitte wählen Sie die Lizenz, unter der das Dokument veröffentlicht werden soll. Mit der Wahl der
+          Lizenz entscheiden Sie, unter welchen Bedingungen das von Ihnen veröffentlichte Dokument zukünftig
+          genutzt werden darf.</seg>
+      </tuv>
+    </tu>
 
     <tu tuid="hint_add_SubjectUncontrolled">
       <tuv xml:lang="en">
         <seg>You can index your document with free
-        English keywords here.</seg>
+          English keywords here.
+        </seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Sie können hier freie Schlagwörter eingeben.</seg>
@@ -1559,12 +1628,12 @@ END OF COMMENT -->
     </tu>
 
     <tu tuid="hint_Opus_Model_Filter_TitleParent">
-            <tuv xml:lang="en">
-                <seg>Please insert the Parent Title.</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Geben Sie bitte den Titel des übergeordneten Werks ein.</seg>
-            </tuv>
+      <tuv xml:lang="en">
+        <seg>Please insert the Parent Title.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Geben Sie bitte den Titel des übergeordneten Werks ein.</seg>
+      </tuv>
     </tu>
 
     <tu tuid="hint_Opus_Model_Filter_Language">
@@ -1577,13 +1646,13 @@ END OF COMMENT -->
     </tu>
 
     <tu tuid="hint_Opus_Model_Filter_TitleMain">
-            <tuv xml:lang="en">
-                <seg>Please insert Title here.</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Geben Sie hier bitte den Titel ein.</seg>
-            </tuv>
-        </tu>
+      <tuv xml:lang="en">
+        <seg>Please insert Title here.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Geben Sie hier bitte den Titel ein.</seg>
+      </tuv>
+    </tu>
 
     <tu tuid="hint_Opus_Model_Filter_TitleAbstract_add">
       <tuv xml:lang="en">
@@ -1595,13 +1664,13 @@ END OF COMMENT -->
     </tu>
 
     <tu tuid="hint_Opus_Model_Filter_TitleAdditional">
-            <tuv xml:lang="en">
-                <seg>Please insert a translated Title.</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Geben Sie bitte einen übersetzten Titel ein.</seg>
-            </tuv>
-        </tu>
+      <tuv xml:lang="en">
+        <seg>Please insert a translated Title.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Geben Sie bitte einen übersetzten Titel ein.</seg>
+      </tuv>
+    </tu>
 
     <tu tuid="hint_FirstName">
       <tuv xml:lang="en">
@@ -1621,7 +1690,7 @@ END OF COMMENT -->
       </tuv>
     </tu>
 
-	<tu tuid="hint_Series">
+    <tu tuid="hint_Series">
       <tuv xml:lang="en">
         <seg>Choose a series from the select box and enter the corresponding number.</seg>
       </tuv>
@@ -1631,15 +1700,15 @@ END OF COMMENT -->
     </tu>
 
     <tu tuid="hint_PublicationState">
-        <tuv xml:lang="en">
-            <seg>Please enter the status of your document.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Bitte geben Sie den Status ihres Dokuments an.</seg>
-        </tuv>
+      <tuv xml:lang="en">
+        <seg>Please enter the status of your document.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bitte geben Sie den Status ihres Dokuments an.</seg>
+      </tuv>
     </tu>
 
-<tu tuid="hint_SeriesNumber">
+    <tu tuid="hint_SeriesNumber">
       <tuv xml:lang="en">
         <seg>Please specify the corresponding number.</seg>
       </tuv>
@@ -1647,5 +1716,14 @@ END OF COMMENT -->
         <seg>Geben Sie die Bandnummer ein.</seg>
       </tuv>
     </tu>
-    </body>
+
+    <tu tuid="hint_rights">
+      <tuv xml:lang="en">
+        <seg><![CDATA[Please confirm that you read and agree to the <a href="home/index/help">legal notices</a> of our publication server.]]></seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg><![CDATA[Bitte bestätigen Sie, dass Sie die <a href="home/index/help">rechtlichen Hinweise und Leitlinien</a> unseres Publikationsservers gelesen haben und damit einverstanden sind.]]></seg>
+      </tuv>
+    </tu>
+  </body>
 </tmx>

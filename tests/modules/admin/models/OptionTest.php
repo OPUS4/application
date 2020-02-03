@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -25,73 +26,85 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Admin_Model_OptionTest extends ControllerTestCase {
+
+class Admin_Model_OptionTest extends ControllerTestCase
+{
 
     private $_model;
 
-    public function setUp() {
+    public function setUp()
+    {
         parent::setUp();
 
-        $this->_model = new Admin_Model_Option('test', array(
+        $this->_model = new Admin_Model_Option('test', [
             'key' => 'supportedLanguages',
             'type' => 'number',
             'section' => 'search',
-            'options' => array(
+            'options' => [
                 'min' => 11,
-                'max' =>19
-            )
-        ));
+                'max' => 19
+            ]
+        ]);
     }
 
-    public function testGetOptions() {
-        $this->assertEquals(array('min' => 11, 'max' => 19), $this->_model->getOptions());
+    public function testGetOptions()
+    {
+        $this->assertEquals(['min' => 11, 'max' => 19], $this->_model->getOptions());
     }
 
-    public function testGetEmptyOptions() {
-        $model = new Admin_Model_Option('test', array('type' => 'number'));
+    public function testGetEmptyOptions()
+    {
+        $model = new Admin_Model_Option('test', ['type' => 'number']);
 
-        $this->assertEquals(array(), $model->getOptions());
+        $this->assertEquals([], $model->getOptions());
     }
 
-    public function testGetSection() {
+    public function testGetSection()
+    {
         $this->assertEquals('search', $this->_model->getSection());
     }
 
-    public function testGetDefaultSection() {
-        $model = new Admin_Model_Option('test', array());
+    public function testGetDefaultSection()
+    {
+        $model = new Admin_Model_Option('test', []);
 
         $this->assertEquals('general', $model->getSection());
     }
 
-    public function testGetElementType() {
+    public function testGetElementType()
+    {
         $this->assertEquals('number', $this->_model->getElementType());
     }
 
-    public function testGetDefaultElementType() {
-        $model = new Admin_Model_Option('test', array());
+    public function testGetDefaultElementType()
+    {
+        $model = new Admin_Model_Option('test', []);
         $this->assertEquals('text', $model->getElementType());
     }
 
-    public function testGetLabel() {
+    public function testGetLabel()
+    {
         $this->assertEquals(Admin_Form_Configuration::LABEL_TRANSLATION_PREFIX . 'test', $this->_model->getLabel());
     }
 
-    public function testGetDescription() {
+    public function testGetDescription()
+    {
         $this->assertEquals(
             Admin_Form_Configuration::LABEL_TRANSLATION_PREFIX . 'test_description',
             $this->_model->getDescription()
         );
     }
 
-    public function testGetName() {
+    public function testGetName()
+    {
         $this->assertEquals('test', $this->_model->getName());
     }
 
-    public function testGetKey() {
+    public function testGetKey()
+    {
         $this->assertEquals('supportedLanguages', $this->_model->getKey());
     }
-
 }

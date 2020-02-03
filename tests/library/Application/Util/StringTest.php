@@ -34,21 +34,22 @@
 class Application_Util_StringTest extends ControllerTestCase
 {
 
-    public function testReplaceProperties() {
+    public function testReplaceProperties()
+    {
         $content = "User @user@ and parameters. value1 value1";
         $expected = 'User "admin" and "password". "value2" "value2"';
-        $properties = array(
+        $properties = [
             '@user@' => 'admin',
             'parameters' => 'password',
             'value1' => 'value2'
-        );
+        ];
 
         $this->assertEquals($expected, Application_Util_String::replaceProperties($content, $properties));
     }
 
-    public function testQuoteString() {
+    public function testQuoteString()
+    {
         $this->assertEquals('"dummy"', Application_Util_String::quoteValue('dummy'));
         $this->assertEquals('"dum\"my"', Application_Util_String::quoteValue('dum"my'));
     }
-
 }

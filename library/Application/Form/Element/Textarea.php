@@ -35,14 +35,16 @@
 /**
  * Angepasste Klasse für Textarea Formularelemente.
  */
-class Application_Form_Element_Textarea extends Zend_Form_Element_Textarea implements Application_Form_IElement {
+class Application_Form_Element_Textarea extends Zend_Form_Element_Textarea implements Application_Form_IElement
+{
 
     /**
      * Initialisiert das Formularelement.
      *
      * Fügt PrefixPath für angepasste OPUS Dekoratoren hinzu.
      */
-    public function init() {
+    public function init()
+    {
         parent::init();
 
         // TODO move to setDefaultAttribs()
@@ -57,37 +59,40 @@ class Application_Form_Element_Textarea extends Zend_Form_Element_Textarea imple
         $this->addPrefixPath('Application_Form_Decorator', 'Application/Form/Decorator', Zend_Form::DECORATOR);
     }
 
-    public function loadDefaultDecorators() {
-        if (!$this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
+    public function loadDefaultDecorators()
+    {
+        if (! $this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
             $this->setDecorators(
-                array(
+                [
                 'ViewHelper',
                 'Errors',
                 'Description',
                 'ElementHtmlTag',
-                array('LabelNotEmpty', array('tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend')),
-                array(array('dataWrapper' => 'HtmlTagWithId'), array('tag' => 'div', 'class' => 'data-wrapper'))
-                )
+                ['LabelNotEmpty', ['tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend']],
+                [['dataWrapper' => 'HtmlTagWithId'], ['tag' => 'div', 'class' => 'data-wrapper']]
+                ]
             );
         }
     }
 
-    public function getHint() {
+    public function getHint()
+    {
         return null; // kein Textarea bekannt das Hints benötigen würde
     }
 
     /**
      * Sorgt dafür, daß nur der Text ausgeben wird und kein INPUT-Tag.
      */
-    public function prepareRenderingAsView() {
+    public function prepareRenderingAsView()
+    {
         $viewHelper = $this->getDecorator('ViewHelper');
         if ($viewHelper instanceof Application_Form_Decorator_ViewHelper) {
             $viewHelper->setViewOnlyEnabled(true);
         }
     }
 
-    public function getStaticViewHelper() {
+    public function getStaticViewHelper()
+    {
         return 'viewFormTextarea';
     }
-
 }

@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -28,9 +28,8 @@
  * @author      Susanne Gottwald <gottwald@zib.de>
  * @author      Doreen Thiede <thiede@zib.de>
  * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 ?>
 
@@ -47,7 +46,7 @@
         <div class="form-hint"><p><?= $this->requiredHint; ?></p></div>
 
             <?php $this->count = 0; ?>
-            <?= $this->fileOverview(); ?>           
+            <?= $this->fileOverview(); ?>
             <?= $this->group($this->groupPersonSubmitter); ?>
             <?= $this->group($this->groupPersonAuthor); ?>
             <?= $this->element($this->Language); ?>
@@ -56,20 +55,20 @@
             <?= $this->group($this->groupTitleSub); ?>
             <?= $this->group($this->groupTitleAdditional); ?>
             <?= $this->group($this->groupTitleParent); ?>
-            <?= $this->element($this->PublicationState); ?>         
+            <?= $this->element($this->PublicationState); ?>
             <?= $this->group($this->groupSubjectMSC); ?>
             <?= $this->group($this->groupSubjectDDC); ?>
             <?= $this->group($this->groupSubjectCCS); ?>
             <?= $this->group($this->groupSubjectPACS); ?>
             <?= $this->group($this->groupSubjectJEL); ?>
             <?= $this->group($this->groupSubjectBKL); ?>
-            <?= $this->group($this->groupSeries); ?>            
+            <?= $this->group($this->groupSeries); ?>
             <?= $this->element($this->PageNumber); ?>
             <?= $this->element($this->PageFirst); ?>
             <?= $this->element($this->PageLast); ?>
             <?= $this->element($this->Volume); ?>
             <?= $this->element($this->Issue); ?>
-	    <?= $this->element($this->Edition); ?>
+        <?= $this->element($this->Edition); ?>
             <?= $this->group($this->groupInstitute); ?>
             <?= $this->element($this->PublishedYear); ?>
             <?= $this->element($this->PublishedDate); ?>
@@ -111,7 +110,7 @@
             <?= $this->element($this->Licence); ?>
 
             <?= $this->legalNotices($this->form); ?>
-        
+
             <div class="button-wrapper">
         <?= $this->element('button_label_abort', "class='form-button abort-button'", "Submit", "abort"); ?>
         <?= $this->element('button_label_send', "class='form-button submit-button'", "Submit", "send"); ?>

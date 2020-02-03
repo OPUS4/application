@@ -26,21 +26,24 @@
  *
  * @category    Unit Tests
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
  *
  */
-class Application_Form_Validate_LoginAvailableTest extends ControllerTestCase {
+class Application_Form_Validate_LoginAvailableTest extends ControllerTestCase
+{
+
+    protected $additionalResources = 'database';
 
     private $validator;
 
     private $_account;
 
-    public function setUp() {
+    public function setUp()
+    {
         parent::setUp();
         $this->validator = new Application_Form_Validate_LoginAvailable();
 
@@ -52,9 +55,9 @@ class Application_Form_Validate_LoginAvailableTest extends ControllerTestCase {
         $this->_account = $user;
     }
 
-    public function tearDown() {
-        if (!is_null($this->_account))
-        {
+    public function tearDown()
+    {
+        if (! is_null($this->_account)) {
             $this->_account->delete();
         }
 
@@ -66,28 +69,33 @@ class Application_Form_Validate_LoginAvailableTest extends ControllerTestCase {
      * This test will break if that behaviour of the database/framework will
      * change.
      */
-    public function testValidationNotCaseSensitive() {
+    public function testValidationNotCaseSensitive()
+    {
         $this->assertFalse($this->validator->isValid('User'));
         $this->assertFalse($this->validator->isValid('user'));
         $this->assertFalse($this->validator->isValid('uSer'));
         $this->assertFalse($this->validator->isValid('USER'));
     }
 
-    public function testAccountAvailable() {
+    public function testAccountAvailable()
+    {
         $this->assertTrue($this->validator->isValid('newuser'));
     }
 
-    public function testAccountNotAvailable() {
+    public function testAccountNotAvailable()
+    {
         $this->assertFalse($this->validator->isValid('admin'));
     }
 
-    public function testAccountAvailableInEditMode() {
-        $validator = new Application_Form_Validate_LoginAvailable(array('ignoreCase' => true));
+    public function testAccountAvailableInEditMode()
+    {
+        $validator = new Application_Form_Validate_LoginAvailable(['ignoreCase' => true]);
         $this->assertTrue($validator->isValid('newuser'));
     }
 
-    public function testAccountNotAvailableInEditMode() {
-        $validator = new Application_Form_Validate_LoginAvailable(array('ignoreCase' => true));
+    public function testAccountNotAvailableInEditMode()
+    {
+        $validator = new Application_Form_Validate_LoginAvailable(['ignoreCase' => true]);
         $this->assertFalse($validator->isValid('admin'));
     }
 
@@ -96,22 +104,22 @@ class Application_Form_Validate_LoginAvailableTest extends ControllerTestCase {
      * Account bereits existiert, aber sich der neue Name nur im Case von Zeichen
      * vom alten Namen unterscheidet.
      */
-    public function testIgnoreCaseChangesForEditMode() {
-        $validator = new Application_Form_Validate_LoginAvailable(array('ignoreCase' => true));
+    public function testIgnoreCaseChangesForEditMode()
+    {
+        $validator = new Application_Form_Validate_LoginAvailable(['ignoreCase' => true]);
 
-        $context = array('oldLogin' => 'admin');
+        $context = ['oldLogin' => 'admin'];
 
         $this->assertTrue($validator->isValid('ADMIN', $context));
         $this->assertTrue($validator->isValid('aDmin', $context));
     }
 
-    public function testNotAvailableForEditMode() {
-        $validator = new Application_Form_Validate_LoginAvailable(array('ignoreCase' => true));
+    public function testNotAvailableForEditMode()
+    {
+        $validator = new Application_Form_Validate_LoginAvailable(['ignoreCase' => true]);
 
-        $context = array('oldLogin' => 'admin');
+        $context = ['oldLogin' => 'admin'];
 
         $this->assertFalse($validator->isValid('user', $context));
     }
-
 }
-

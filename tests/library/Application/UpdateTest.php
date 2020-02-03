@@ -42,8 +42,8 @@ class Application_UpdateTest extends ControllerTestCase
 
         $this->assertGreaterThan(2, $scripts);
 
-        $this->assertContains( APPLICATION_PATH . '/scripts/update/001-Add-import-collection.php', $scripts);
-        $this->assertContains( APPLICATION_PATH . '/scripts/update/002-Add-CC-4.0-licences.php', $scripts);
+        $this->assertContains(APPLICATION_PATH . '/scripts/update/001-Add-import-collection.php', $scripts);
+        $this->assertContains(APPLICATION_PATH . '/scripts/update/002-Add-CC-4.0-licences.php', $scripts);
     }
 
     public function testGetUpdateScriptsSorting()
@@ -58,8 +58,7 @@ class Application_UpdateTest extends ControllerTestCase
 
         $lastNumber = 0;
 
-        foreach ($scripts as $script)
-        {
+        foreach ($scripts as $script) {
             $number = substr(basename($script), 0, 3);
             $this->assertGreaterThan($lastNumber, $number);
             $lastNumber = $number;
@@ -75,7 +74,7 @@ class Application_UpdateTest extends ControllerTestCase
         $this->assertGreaterThan(1, $scripts);
 
         $this->assertNotContains(APPLICATION_PATH . '/scripts/update/001-Add-import-collection.php', $scripts);
-        $this->assertContains( APPLICATION_PATH . '/scripts/update/002-Add-CC-4.0-licences.php', $scripts);
+        $this->assertContains(APPLICATION_PATH . '/scripts/update/002-Add-CC-4.0-licences.php', $scripts);
     }
 
     public function testGetUpdateScriptsForTargetVersion()
@@ -86,8 +85,8 @@ class Application_UpdateTest extends ControllerTestCase
 
         $this->assertCount(2, $scripts);
 
-        $this->assertContains( APPLICATION_PATH . '/scripts/update/001-Add-import-collection.php', $scripts);
-        $this->assertContains( APPLICATION_PATH . '/scripts/update/002-Add-CC-4.0-licences.php', $scripts);
+        $this->assertContains(APPLICATION_PATH . '/scripts/update/001-Add-import-collection.php', $scripts);
+        $this->assertContains(APPLICATION_PATH . '/scripts/update/002-Add-CC-4.0-licences.php', $scripts);
     }
 
     public function testGetUpdateScriptsFromVersionToTargetVersion()
@@ -98,7 +97,7 @@ class Application_UpdateTest extends ControllerTestCase
 
         $this->assertCount(1, $scripts);
 
-        $this->assertContains( APPLICATION_PATH . '/scripts/update/002-Add-CC-4.0-licences.php', $scripts);
+        $this->assertContains(APPLICATION_PATH . '/scripts/update/002-Add-CC-4.0-licences.php', $scripts);
     }
 
     public function testGetVersion()
@@ -129,4 +128,26 @@ class Application_UpdateTest extends ControllerTestCase
         $this->assertEquals(999, $newVersion);
     }
 
+    public function updateScriptProvider()
+    {
+        $update = new Application_Update();
+        $scripts = $update->getUpdateScripts();
+
+        $data = array_map(function ($script) {
+            return [$script];
+        }, $scripts);
+
+        return $data;
+    }
+
+    /**
+     * @dataProvider updateScriptProvider
+     */
+    public function testUpdateScriptsExecutable($script)
+    {
+        $filename = basename($script);
+
+        $this->assertFileExists($script);
+        $this->assertTrue(is_executable($script), "Script \"$filename\" not executable.");
+    }
 }

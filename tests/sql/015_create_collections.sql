@@ -6,7 +6,7 @@ INSERT INTO `collections_roles` (`id`, `name`, `oai_name`, `position`, `visible`
 (17, 'no-root-test', 'no-root-test', 13, 0, 0, 'Name', 1, 'Name', 1),
 (18, 'frontdoor-test-1', 'frontdoor-test-1', 14, 1, 1, 'Name', 1, 'Name', 1),
 (19, 'frontdoor-test-2', 'frontdoor-test-2', 15, 1, 1, 'Name', 1, 'Name', 1),
-(20, 'single-level collection', 'single-level collection', 16, 1, 1, 'Name', 1, 'Name', 1),
+(20, 'single-level-collection', 'single-level-collection', 16, 1, 1, 'Name', 1, 'Name', 1),
 (21, 'publists', 'publists', 17, 1, 1, 'Name', 1, 'Name', 1),
 (22, 'invisible-collection', 'invisible collection', 18, 0, 0, 'Name', 0, 'Name', 0);
 

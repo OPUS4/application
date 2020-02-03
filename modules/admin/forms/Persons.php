@@ -108,40 +108,45 @@ class Admin_Form_Persons extends Application_Form_Model_Abstract
     /**
      * Erzeugt die Formularelemente.
      */
-    public function init() {
+    public function init()
+    {
         parent::init();
 
         $this->setDecorators(
-            array(
-                array('FormErrors', array('onlyCustomFormErrors' => true, 'ignoreSubForms' => true)),
+            [
+                ['FormErrors', ['onlyCustomFormErrors' => true, 'ignoreSubForms' => true]],
                 'FormElements',
                 'Fieldset',
                 'Form',
-                array('FormHelp', array('message' => 'admin_person_edit_help'))
-            )
+                ['FormHelp', ['message' => 'admin_person_edit_help']]
+            ]
         );
 
-        $this->addElement('combobox', self::ELEMENT_ACADEMIC_TITLE, array('label' => 'AcademicTitle'));
+        $this->addElement('combobox', self::ELEMENT_ACADEMIC_TITLE, ['label' => 'AcademicTitle']);
 
         $this->addElement(
-            'text', self::ELEMENT_LAST_NAME,
-            array('label' => 'LastName', 'required' => true, 'size' => 50)
+            'text',
+            self::ELEMENT_LAST_NAME,
+            [
+                'label' => 'LastName', 'required' => true, 'size' => 50,
+                'maxlength' => Opus_Person::getFieldMaxLength('LastName')
+            ]
         );
-        $this->addElement('text', self::ELEMENT_FIRST_NAME, array('label' => 'FirstName', 'size' => 50));
+        $this->addElement('text', self::ELEMENT_FIRST_NAME, ['label' => 'FirstName', 'size' => 50]);
 
-        $email = $this->createElement('combobox', self::ELEMENT_EMAIL, array('label' => 'Email'));
+        $email = $this->createElement('combobox', self::ELEMENT_EMAIL, ['label' => 'Email']);
         $email->addValidator(new Application_Form_Validate_EmailAddress());
         $this->addElement($email);
 
-        $this->addElement('combobox', self::ELEMENT_PLACE_OF_BIRTH, array('label' => 'PlaceOfBirth', 'size' => 40));
+        $this->addElement('combobox', self::ELEMENT_PLACE_OF_BIRTH, ['label' => 'PlaceOfBirth', 'size' => 40]);
 
-        $dateOfBirth = $this->createElement('combobox', self::ELEMENT_DATE_OF_BIRTH, array('label' => 'DateOfBirth'));
+        $dateOfBirth = $this->createElement('combobox', self::ELEMENT_DATE_OF_BIRTH, ['label' => 'DateOfBirth']);
         $dateOfBirth->addValidator(new Application_Form_Validate_Date());
         $this->addElement($dateOfBirth);
 
-        $this->addElement('text', self::ELEMENT_IDENTIFIER_GND, array('label' => 'IdentifierGnd', 'size' => 40));
-        $this->addElement('text', self::ELEMENT_IDENTIFIER_ORCID, array('label' => 'IdentifierOrcid', 'size' => 40));
-        $this->addElement('text', self::ELEMENT_IDENTIFIER_MISC, array('label' => 'IdentifierMisc', 'size' => 40));
+        $this->addElement('text', self::ELEMENT_IDENTIFIER_GND, ['label' => 'IdentifierGnd', 'size' => 40]);
+        $this->addElement('text', self::ELEMENT_IDENTIFIER_ORCID, ['label' => 'IdentifierOrcid', 'size' => 40]);
+        $this->addElement('text', self::ELEMENT_IDENTIFIER_MISC, ['label' => 'IdentifierMisc', 'size' => 40]);
 
         $this->getElement(self::ELEMENT_IDENTIFIER_GND)->addValidator(new Application_Form_Validate_Gnd());
         $this->getElement(self::ELEMENT_IDENTIFIER_ORCID)->addValidator(new Application_Form_Validate_Orcid());
@@ -168,26 +173,23 @@ class Admin_Form_Persons extends Application_Form_Model_Abstract
     {
         $elements = $this->getElements();
 
-        foreach ($elements as $key => $element)
-        {
+        foreach ($elements as $key => $element) {
             $decorators = $element->getDecorators();
             $index = array_search('Zend_Form_Decorator_Errors', array_keys($decorators));
 
             // array_splice($decorators, $index + 1, 0, array('UpdateField' => 'Test'));
 
-            if ($index !== false)
-            {
-                $element->setDecorators(array(
+            if ($index !== false) {
+                $element->setDecorators([
                     'ViewHelper',
                     'Description',
                     'ElementHint',
                     'Errors',
                     'UpdateField',
                     'ElementHtmlTag',
-                    array('LabelNotEmpty', array('tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend')),
-                    array(array('dataWrapper' => 'HtmlTagWithId'), array('tag' => 'div', 'class' => 'data-wrapper'))
-                ));
-
+                    ['LabelNotEmpty', ['tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend']],
+                    [['dataWrapper' => 'HtmlTagWithId'], ['tag' => 'div', 'class' => 'data-wrapper']]
+                ]);
             }
         }
     }
@@ -201,18 +203,14 @@ class Admin_Form_Persons extends Application_Form_Model_Abstract
     {
         parent::populate($values);
 
-        foreach ($values as $key => $value)
-        {
-            if (strpos($key, 'UpdateEnabled'))
-            {
-                if (strtolower($value) == 'on')
-                {
+        foreach ($values as $key => $value) {
+            if (strpos($key, 'UpdateEnabled')) {
+                if (strtolower($value) == 'on') {
                     $elemName = preg_filter('/(.*)UpdateEnabled/', '$1', $key);
 
                     $element = $this->getElement($elemName);
 
-                    if (!is_null($element))
-                    {
+                    if (! is_null($element)) {
                         $element->setAttrib('active', true);
                     }
                 }
@@ -234,12 +232,13 @@ class Admin_Form_Persons extends Application_Form_Model_Abstract
      * Setzt die Werte der Formularelmente entsprechend der uebergebenen Opus_Person Instanz.
      * @param Opus_Person $model
      */
-    public function populateFromModel($values) {
+    public function populateFromModel($values)
+    {
         // make sure all keys exist
-        $validNames = array(
+        $validNames = [
             'first_name', 'last_name', 'identifier_gnd', 'identifier_orcid', 'identifier_misc',
             'place_of_birth', 'date_of_birth', 'academic_title', 'email'
-        );
+        ];
 
         $defaults = array_fill_keys($validNames, null);
         $values = array_merge($defaults, $values);
@@ -259,12 +258,12 @@ class Admin_Form_Persons extends Application_Form_Model_Abstract
 
         $dates = $values['date_of_birth'];
 
-        if (!is_null($dates)) {
-            if (!is_array($dates)) {
-                $dates = array($dates);
+        if (! is_null($dates)) {
+            if (! is_array($dates)) {
+                $dates = [$dates];
             }
 
-            $formattedDates = array();
+            $formattedDates = [];
 
             $datesHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('dates');
 
@@ -286,23 +285,18 @@ class Admin_Form_Persons extends Application_Form_Model_Abstract
      */
     public function setIdentityValue($element, $value)
     {
-        if (is_array($value))
-        {
+        if (is_array($value)) {
             $element->setHint($this->getTranslator()->translate('admin_persons_values_not_trimmed'));
             $displayValue = $value[0];
-        }
-        else
-        {
+        } else {
             $displayValue = $value;
         }
 
         $person = $this->getPerson();
 
-        if (!is_null($person))
-        {
+        if (! is_null($person)) {
             $columnName = Opus_Person::convertFieldnameToColumn($element->getName());
-            if (array_key_exists($columnName, $person))
-            {
+            if (array_key_exists($columnName, $person)) {
                 $displayValue = $person[$columnName];
             }
         }
@@ -316,11 +310,11 @@ class Admin_Form_Persons extends Application_Form_Model_Abstract
      * @param array $context
      * @return string String fuer gewuenschte Operation
      */
-    public function processPost($post, $context) {
+    public function processPost($post, $context)
+    {
         if (array_key_exists(self::ELEMENT_SAVE, $post)) {
             return self::RESULT_SAVE;
-        }
-        else if (array_key_exists(self::ELEMENT_CANCEL, $post)) {
+        } elseif (array_key_exists(self::ELEMENT_CANCEL, $post)) {
             return self::RESULT_CANCEL;
         }
 
@@ -331,7 +325,8 @@ class Admin_Form_Persons extends Application_Form_Model_Abstract
      * Setzt die Felder einer Opus_Person Instanz entsprechend dem Formularinhalt.
      * @param Opus_Person $model
      */
-    public function updateModel($model) {
+    public function updateModel($model)
+    {
     }
 
     /**
@@ -341,7 +336,7 @@ class Admin_Form_Persons extends Application_Form_Model_Abstract
     {
         $elements = $this->getElements();
 
-        $changes = array();
+        $changes = [];
 
         foreach ($elements as $element) {
             if ($element->getAttrib('active')) {
@@ -351,8 +346,12 @@ class Admin_Form_Persons extends Application_Form_Model_Abstract
                     // TODO this date conversion stuff is still too complicated
                     $dateHelper = new Application_Controller_Action_Helper_Dates();
                     $date = $dateHelper->getOpusDate($value); // get a date with time
-                    $date->setDateOnly($date->getDateTime()); // remove time
-                    $value = $date->__toString(); // get properly formatted string
+                    if ($date !== null) {
+                        $date->setDateOnly($date->getDateTime()); // remove time
+                        $value = $date->__toString(); // get properly formatted string
+                    } else {
+                        $value = null;
+                    }
                 }
 
                 if (strlen(trim($value)) == 0) {
@@ -370,7 +369,8 @@ class Admin_Form_Persons extends Application_Form_Model_Abstract
      * Liefert Instanz von Opus_Person zurueck.
      * @return \Opus_Person
      */
-    public function getModel() {
+    public function getModel()
+    {
     }
 
     public function isValid($data, $context = null)
@@ -379,21 +379,17 @@ class Admin_Form_Persons extends Application_Form_Model_Abstract
 
         $update = false;
 
-        foreach ($data as $fieldName => $value)
-        {
-            if (strpos($fieldName, 'UpdateEnabled') !== false && stripos($value, 'on') !== false)
-            {
+        foreach ($data as $fieldName => $value) {
+            if (strpos($fieldName, 'UpdateEnabled') !== false && stripos($value, 'on') !== false) {
                 $update = true;
                 break;
             }
         }
 
-        if (!$update)
-        {
+        if (! $update) {
             $this->addErrorMessage('admin_person_error_no_update');
         }
 
         return $result && $update;
     }
-
 }

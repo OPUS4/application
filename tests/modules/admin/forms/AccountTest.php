@@ -26,15 +26,16 @@
  *
  * @category    Application Unit Test
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
-class Admin_Form_AccountTest extends ControllerTestCase {
+class Admin_Form_AccountTest extends ControllerTestCase
+{
+
+    protected $additionalResources = ['database', 'translation'];
 
     private $_account;
-
 
     public function setUp()
     {
@@ -50,20 +51,21 @@ class Admin_Form_AccountTest extends ControllerTestCase {
 
     public function tearDown()
     {
-        if (!is_null($this->_account))
-        {
+        if (! is_null($this->_account)) {
             $this->_account->delete();
         }
 
         parent::tearDown();
     }
 
-    public function testCreateForm() {
+    public function testCreateForm()
+    {
         $form = new Admin_Form_Account();
         $this->assertNotNull($form);
     }
 
-    public function testCreateFormForUser() {
+    public function testCreateFormForUser()
+    {
         $user = new Opus_Account(null, null, 'user');
         $form = new Admin_Form_Account($user->getId());
         $this->assertNotNUll($form);
@@ -74,19 +76,21 @@ class Admin_Form_AccountTest extends ControllerTestCase {
      * Test that the checkbox for the role 'administrator' is disabled if the
      * current user is editing him or herself.
      */
-    public function testCreateFormForCurrentUser() {
+    public function testCreateFormForCurrentUser()
+    {
         $this->loginUser('admin', 'adminadmin');
         $user = new Opus_Account(null, null, 'admin');
         $form = new Admin_Form_Account($user->getId());
         $this->assertNotNull($form);
-        $element = $form->getElement('roleadministrator');
+        $element = $form->getSubForm(Admin_Form_Account::SUBFORM_ROLES)->getElement('administrator');
         $this->assertEquals(true, $element->getAttrib('disabled'));
     }
 
     /**
      * Test creating an account form.
      */
-    public function testDoNotLowerCaseUsername() {
+    public function testDoNotLowerCaseUsername()
+    {
         $user = new Opus_Account(null, null, 'user');
 
         $form = new Admin_Form_Account($user->getId());
@@ -100,41 +104,44 @@ class Admin_Form_AccountTest extends ControllerTestCase {
         $this->assertTrue($username->getValue() === 'DummYuser', $username->getValue());
     }
 
-    public function testChangedLoginNameValidationExistingLoginNameAccount() {
+    public function testChangedLoginNameValidationExistingLoginNameAccount()
+    {
         $user = new Opus_Account(null, null, 'user');
 
         $form = new Admin_Form_Account($user->getId());
 
         $this->assertNotNull($form);
 
-        $postData = array(
+        $postData = [
             'username' => 'admin',
             'roleguest' => '1',
             'password' => 'notchanged',
             'confirmPassword' => 'notchanged'
-            );
+        ];
 
         $this->assertFalse($form->isValid($postData));
     }
 
-    public function testChangedLoginNameValidationNewLoginName() {
+    public function testChangedLoginNameValidationNewLoginName()
+    {
         $user = new Opus_Account(null, null, 'user');
 
         $form = new Admin_Form_Account($user->getId());
 
         $this->assertNotNull($form);
 
-        $postData = array(
+        $postData = [
             'username' => 'newuser',
             'roleguest' => '1',
             'password' => 'notchanged',
             'confirmPassword' => 'notchanged'
-            );
+        ];
 
         $this->assertTrue($form->isValid($postData));
     }
 
-    public function testEditValidationSameAccount() {
+    public function testEditValidationSameAccount()
+    {
         $user = new Opus_Account(null, null, 'user');
 
         $form = new Admin_Form_Account($user->getId());
@@ -142,47 +149,72 @@ class Admin_Form_AccountTest extends ControllerTestCase {
         // check that form was populated
         $this->assertEquals('user', $form->getElement('username')->getValue());
 
-        $postData = array(
+        $postData = [
             'username' => 'user',
             'oldLogin' => 'user', // added by AccountController based on ID
             'roleguest' => '1',
             'password' => 'notchanged',
             'confirmPassword' => 'notchanged'
-            );
+        ];
 
         $this->assertTrue($form->isValid($postData));
     }
 
-    public function testValidationMissmatchedPasswords() {
+    public function testValidationMissmatchedPasswords()
+    {
         $form = new Admin_Form_Account();
 
-        $postData = array(
+        $postData = [
             'username' => 'newaccount',
             'roleguest' => '1',
             'password' => 'password',
             'confirmPassword' => 'different'
-        );
+        ];
 
         $this->assertFalse($form->isValid($postData));
 
         $this->assertContains('notMatch', $form->getErrors('confirmPassword'));
     }
 
-    public function testValidationBadEmail() {
+    public function testValidationBadEmail()
+    {
         $form = new Admin_Form_Account();
 
-        $postData = array(
+        $postData = [
             'username' => 'newaccount',
             'roleguest' => '1',
             'email' => 'notAnEmail',
             'password' => 'password',
             'confirmPassword' => 'password'
-        );
+        ];
 
         $this->assertFalse($form->isValid($postData));
 
         $this->assertContains('emailAddressInvalidFormat', $form->getErrors('email'));
     }
 
-}
+    public function testPopulate()
+    {
+        $form = new Admin_Form_Account();
 
+        $form->populate([
+            'username' => 'test',
+            'roles' => [
+                'administrator' => '1',
+                'docsadmin' => '0',
+                'jobaccess' => '1'
+            ]
+        ]);
+
+        $this->assertEquals('test', $form->getElementValue('username'));
+
+        $rolesForm = $form->getSubForm(Admin_Form_Account::SUBFORM_ROLES);
+
+        $selected = $rolesForm->getSelectedRoles();
+
+        $this->assertCount(3, $selected);
+        $this->assertContains('administrator', $selected);
+        $this->assertContains('jobaccess', $selected);
+        $this->assertContains('guest', $selected);
+    }
+}

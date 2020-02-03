@@ -14,7 +14,7 @@
       <tuv xml:lang="de">
         <seg>Sprache</seg>
       </tuv>
-    </tu>   
+    </tu>
 
         <tu tuid="Licence">
             <tuv xml:lang="en">
@@ -447,7 +447,7 @@
                 <seg>DDC Klasse</seg>
             </tuv>
         </tu>
-		
+
 		<tu tuid="ddc_dnb">
             <tuv xml:lang="en">
                 <seg>DDC subject group</seg>
@@ -474,7 +474,7 @@
 				<seg>CCS Klasse</seg>
 			</tuv>
 		</tu>
-	
+
         <tu tuid="SubjectJEL">
             <tuv xml:lang="en">
                 <seg>JEL Term</seg>
@@ -483,7 +483,7 @@
                 <seg>JEL Klasse</seg>
             </tuv>
         </tu>
-		
+
 		<tu tuid="SubjectBKL">
             <tuv xml:lang="en">
                 <seg>BKL Term</seg>
@@ -564,7 +564,16 @@
                 <seg>Seitenzahl</seg>
             </tuv>
         </tu>
-        
+
+        <tu tuid="ArticleNumber">
+            <tuv xml:lang="en">
+                <seg>Article Number</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Aufsatznummer</seg>
+            </tuv>
+        </tu>
+
         <tu tuid="PageCount">
             <tuv xml:lang="en">
                 <seg>Number of Pages</seg>
@@ -572,7 +581,7 @@
             <tuv xml:lang="de">
                 <seg>Anzahl der Seiten</seg>
             </tuv>
-        </tu>        
+        </tu>
 
         <tu tuid="CompletedYear">
             <tuv xml:lang="en">
@@ -681,7 +690,7 @@
                 <seg>Status des Publikationsprozesses</seg>
             </tuv>
         </tu>
-        
+
         <!-- Wird von ActionBox verwendet -->
         <tu tuid="ServerState-short">
             <tuv xml:lang="en">
@@ -728,7 +737,7 @@
                 <seg>Letzte Änderung</seg>
             </tuv>
         </tu>
-        
+
         <tu tuid="ServerDatePublished">
             <tuv xml:lang="en">
                 <seg>Release Date</seg>
@@ -747,7 +756,7 @@
                 <seg>Freigeschaltet</seg>
             </tuv>
         </tu>
-        
+
         <tu tuid="ServerDateDeleted">
             <tuv xml:lang="en">
                 <seg>Date of Deletion</seg>
@@ -1429,7 +1438,7 @@
                 <seg>Editor</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>Herausgeber</seg>
+                <seg>Herausgeber*in</seg>
             </tuv>
         </tu>
 
@@ -1456,7 +1465,7 @@
                 <seg>Referee</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>Gutachter</seg>
+                <seg>Gutachter*in</seg>
             </tuv>
         </tu>
 
@@ -1465,7 +1474,7 @@
                 <seg>Translator</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>Übersetzer</seg>
+                <seg>Übersetzer*in</seg>
             </tuv>
         </tu>
 
@@ -1483,7 +1492,7 @@
                 <seg>Submitter</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>Einsteller</seg>
+                <seg>Einsteller*in</seg>
             </tuv>
         </tu>
 
@@ -2084,7 +2093,7 @@
                 <seg>Schriftenreihe</seg>
             </tuv>
         </tu>
-        
+
         <tu tuid="Opus_Model_Dependent_Link_DocumentSeries_Number">
             <tuv xml:lang="en">
                 <seg>Number</seg>

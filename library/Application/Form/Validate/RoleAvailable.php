@@ -34,7 +34,8 @@
 /**
  * Checks if a role already exists.
  */
-class Application_Form_Validate_RoleAvailable extends Zend_Validate_Abstract {
+class Application_Form_Validate_RoleAvailable extends Zend_Validate_Abstract
+{
 
     /**
      * Constant for login is not available anymore.
@@ -44,9 +45,9 @@ class Application_Form_Validate_RoleAvailable extends Zend_Validate_Abstract {
     /**
      * Error messages.
      */
-    protected $_messageTemplates = array(
+    protected $_messageTemplates = [
         self::NOT_AVAILABLE => 'admin_role_error_role_used'
-    );
+    ];
 
     /**
      * Checks if a login already exists.
@@ -60,7 +61,8 @@ class Application_Form_Validate_RoleAvailable extends Zend_Validate_Abstract {
      * @param mixed $context
      * @return boolean
      */
-    public function isValid($value, $context = null) {
+    public function isValid($value, $context = null)
+    {
         $value = (string) $value;
 
         $this->_setValue($value);
@@ -71,12 +73,11 @@ class Application_Form_Validate_RoleAvailable extends Zend_Validate_Abstract {
             if (isset($context['oldRole'])) {
                 $oldRole = $context['oldRole'];
             }
-        }
-        elseif (is_string($context)) {
+        } elseif (is_string($context)) {
             $oldRole = $context;
         }
 
-        if (($this->_isRoleUsed($value)) && !($oldRole === $value)) {
+        if (($this->_isRoleUsed($value)) && ! ($oldRole === $value)) {
             $this->_error(self::NOT_AVAILABLE);
             return false;
         }
@@ -89,7 +90,8 @@ class Application_Form_Validate_RoleAvailable extends Zend_Validate_Abstract {
      * @param string $login
      * @return boolean
      */
-    protected function _isRoleUsed($role) {
+    protected function _isRoleUsed($role)
+    {
         try {
             $role = Opus_UserRole::fetchByName($role);
 
@@ -101,6 +103,4 @@ class Application_Form_Validate_RoleAvailable extends Zend_Validate_Abstract {
         }
         return true;
     }
-
 }
-

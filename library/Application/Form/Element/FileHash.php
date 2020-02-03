@@ -35,13 +35,15 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Application_Form_Element_FileHash extends Zend_Form_Element_Xhtml {
+class Application_Form_Element_FileHash extends Zend_Form_Element_Xhtml
+{
 
     private $_hash;
 
     private $_file;
 
-    public function init() {
+    public function init()
+    {
         parent::init();
 
         $this->addPrefixPath('Application_Form_Decorator', 'Application/Form/Decorator', Zend_Form::DECORATOR);
@@ -49,41 +51,45 @@ class Application_Form_Element_FileHash extends Zend_Form_Element_Xhtml {
         $this->setLabel($this->getTranslator()->translate('admin_filemanager_checksum') . ' - ');
     }
 
-    public function loadDefaultDecorators() {
-        if (!$this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
+    public function loadDefaultDecorators()
+    {
+        if (! $this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
             $this->setDecorators(
-                array(
+                [
                 'FileHash',
-                array('ElementHtmlTag'),
-                array('LabelNotEmpty', array('tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend',
-                    'disableFor' => true)),
-                array(array('dataWrapper' => 'HtmlTagWithId'), array('tag' => 'div', 'class' => 'data-wrapper'))
-                )
+                ['ElementHtmlTag'],
+                ['LabelNotEmpty', ['tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend',
+                    'disableFor' => true]],
+                [['dataWrapper' => 'HtmlTagWithId'], ['tag' => 'div', 'class' => 'data-wrapper']]
+                ]
             );
         }
     }
 
-    public function setFile($file) {
+    public function setFile($file)
+    {
         $this->_file = $file;
     }
 
-    public function getFile() {
+    public function getFile()
+    {
         return $this->_file;
     }
 
-    public function setValue($hash) {
+    public function setValue($hash)
+    {
         if ($hash instanceof Opus_HashValues) {
             $this->_hash = $hash;
         }
     }
 
-    public function getValue() {
+    public function getValue()
+    {
         return $this->_hash;
     }
 
-    public function getLabel() {
+    public function getLabel()
+    {
         return parent::getLabel() . $this->getTranslator()->translate($this->_hash->getType());
     }
-
 }
-

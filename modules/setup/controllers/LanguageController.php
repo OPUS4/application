@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -27,46 +26,57 @@
  *
  * @category    Application
  * @package     Module_Setup
- * @author      Edouard Simon (edouard.simon@zib.de)
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @author      Edouard Simon <edouard.simon@zib.de>
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
- *
+ * TODO show controller (functionality) in menu (currently hidden)
+ * TODO limit editable keys to specific modules (?)
+ * TODO update documentation
+ * TODO rename controller to TranslationController
+ * TODO sorting using table header
+ * TODO link for adding new translations
+ * TODO show module in translations
  */
-class Setup_LanguageController extends Application_Controller_SetupAbstract {
+class Setup_LanguageController extends Application_Controller_Action
+{
 
-    protected $_sortKeys = array('unit', 'module', 'directory', 'filename', 'language', 'variant');
+    protected $_sortKeys = ['key', 'module', 'language', 'variant'];
 
-    public function init() {
+    public function init()
+    {
         parent::init();
 
         $this->getHelper('MainMenu')->setActive('admin');
     }
 
-    public function indexAction() {
+    public function indexAction()
+    {
         $this->view->form = $this->getSearchForm();
     }
 
-    public function showAction() {
-
+    public function showAction()
+    {
         $searchTerm = $this->_request->getParam('search');
         $sortKey = $this->_request->getParam('sort', 'unit');
         $config = $this->getConfig()->toArray();
-        if (!isset($config['setup']['translation']['modules']['allowed'])) {
+
+        if (! isset($config['setup']['translation']['modules']['allowed'])) {
             $this->_helper->Redirector->redirectTo(
-                'error', array('failure' => 'setup_language_translation_modules_missing')
+                'error',
+                ['failure' => 'setup_language_translation_modules_missing']
             );
         }
 
-
         $moduleNames = explode(',', $config['setup']['translation']['modules']['allowed']);
 
-        $translationManager = new Setup_Model_Language_TranslationManager();
+        $translationManager = new Application_Translate_TranslationManager();
         $translationManager->setModules($moduleNames);
-        if (!empty($searchTerm)) {
+
+        if (! empty($searchTerm)) {
             $translationManager->setFilter($searchTerm);
         }
 
@@ -76,10 +86,34 @@ class Setup_LanguageController extends Application_Controller_SetupAbstract {
         $this->view->sortKeys = $this->_sortKeys;
         $this->view->currentSortKey = $sortKey;
         $this->view->searchTerm = $searchTerm;
-
     }
 
-    protected function getForm() {
+    /**
+     * Action for adding a new translation key.
+     *
+     * TODO form with new key name
+     * TODO action shows form and processes submit
+     */
+    public function addAction()
+    {
+    }
+
+    /**
+     * Action for editing a single translation key.
+     *
+     * TODO use Translation form
+     * TODO action shows form and processes submit
+     */
+    public function editAction()
+    {
+        $translationKey = $this->getParam('key');
+
+        if (! is_null($translationKey)) {
+        }
+    }
+
+    protected function getForm()
+    {
         $translationKey = $this->_request->getParam('key');
 
         if (empty($translationKey)) {
@@ -92,7 +126,8 @@ class Setup_LanguageController extends Application_Controller_SetupAbstract {
         return $form;
     }
 
-    protected function getModel() {
+    protected function getModel()
+    {
         $translationKey = $this->_request->getParam('key');
         $sourceFileEncoded = $this->_request->getParam('file');
 
@@ -108,43 +143,50 @@ class Setup_LanguageController extends Application_Controller_SetupAbstract {
 
         $targetFile = "$basePath/$moduleName/language_custom/$fileName";
 
-        $translationSourceParams = array(
+        $translationSourceParams = [
             'moduleBasepath' => $basePath,
             'moduleName' => $moduleName,
             'languageDirectory' => $languageDir,
             'filename' => $fileName
-        );
+        ];
 
-        $config = array(
+        $config = [
             'translationSourceParams' => $translationSourceParams,
-            'translationTarget' => $targetFile);
+            'translationTarget' => $targetFile
+        ];
+
         return new Setup_Model_Language($config);
     }
 
-    protected function getSearchForm($searchTerm = null, $sortKey = null) {
+    protected function getSearchForm($searchTerm = null, $sortKey = null)
+    {
+        $sortKeysTranslated = [];
 
-        $sortKeysTranslated = array();
-        foreach ($this->_sortKeys as $option) {
+        $sortKeys = array_diff($this->_sortKeys, ['language', 'variant']);
+
+        foreach ($sortKeys as $option) {
             $sortKeysTranslated[$option] = $this->view->translate('setup_language_' . $option);
         }
 
         $form = new Setup_Form_LanguageSearch();
 
         $form->getElement('search')->setLabel($this->view->translate('setup_language_searchTerm'));
+        /*
         $form->getElement('sort')
-                ->setLabel($this->view->translate('setup_language_sortKey'))
-                ->setMultiOptions($sortKeysTranslated);
+            ->setLabel($this->view->translate('setup_language_sortKey'))
+            ->setMultiOptions($sortKeysTranslated);
+        */
 
-        $form->setAction($this->view->url(array('action' => 'show')));
+        $form->setAction($this->view->url(['action' => 'show']));
 
-        if (!empty($searchTerm)) {
+        if (! empty($searchTerm)) {
             $form->search->setValue($searchTerm);
         }
-        if (!empty($sortKey)) {
+        /*
+        if (! empty($sortKey)) {
             $form->sort->setValue($sortKey);
-        }
+        }*/
 
         return $form;
     }
-
 }
