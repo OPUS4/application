@@ -105,9 +105,9 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
      * Wurde ein Wert im zweiten Argument übergeben, so wird das neu eingefügte
      * Formularfeld mit diesem Wert initialisiert.
      *
-     * @param      $enrichmentKey EnrichmentKey des Enrichments, für das ein
-     *                            Eingabeformularelement erzeugt werden soll
-     * @param null $value         optionaler Wert für das erzeugte Formularfeld
+     * @param Opus_EnrichmentKey $enrichmentKey EnrichmentKey des Enrichments, für das ein
+     *                           Eingabeformularelement erzeugt werden soll
+     * @param null $value        optionaler Wert für das erzeugte Formularfeld
      */
     private function setEnrichmentValueFormElement($enrichmentKey, $value = null)
     {
@@ -136,6 +136,15 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
         $elements = $this->getElements();
         $elements[self::ELEMENT_VALUE] = $element;
         $this->setElements($elements);
+
+        if (! $enrichmentType->isStrictValidation()) {
+            // verstößt der im Enrichment gespeicherte Wert gegen die aktuelle Typkonfiguration
+            if (! is_null($value) && ! $element->isValid($value)) {
+                // Hinweistext anzeigen, der auf Verstoß hinweist
+                $element->markAsError();
+                $this->handleValidationErrorNonStrict();
+            }
+        }
     }
 
     /**
@@ -327,10 +336,19 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
      * Bei der Anzeige des Formulars im Non-Edit-Mode soll auch eine Ausgabe erfolgen,
      * wenn der EnrichmentType als Checkbox dargestellt wird. In diesem Fall soll
      * der Text No/Nein erscheinen.
+     *
+     * Außerdem soll ein möglicher Verstoß des Enrichmentwerts gegen die Typkonfiguration
+     * des Enrichment-Keys nicht als Validierungsfehler im Non-Edit-Mode erscheinen.
+     *
      */
     public function prepareRenderingAsView()
     {
         $this->setRemoveEmptyCheckbox(false);
+
+        $element = $this->getElement(self::ELEMENT_VALUE);
+        $element->setAttrib('data-opusValidationError', 'false');
+        $element->removeDecorator('Errors');
+
         parent::prepareRenderingAsView();
     }
 
@@ -383,6 +401,7 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
                         // Wert des Enrichments wurde nicht geändert und es findet keine strikte Validierung statt
                         // Validierungsergebnis wird daher auf "positiv" geändert
                         $this->ignoreValueErrors = true;
+                        $this->handleValidationErrorNonStrict();
                         return true;
                     }
                 } catch (Opus\Model\Exception $e) {
@@ -411,5 +430,21 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
         }
 
         return parent::getErrors($name, $suppressArrayNotation);
+    }
+
+    /**
+     * Verstößt der in einem Feld gespeicherte Enrichment-Wert gegen die aktuelle Typkonfiguration
+     * des Enrichment Keys, so wird im Validierungsmodus "non strict" nur ein Hinweis, aber keine
+     * Fehlermeldung angezeigt. Der unveränderte (aber bezüglich der aktuellen Typkonfiguration invalide)
+     * Wert lässt sicher weiterhin speichern.
+     *
+     * @throws Zend_Form_Exception
+     */
+    private function handleValidationErrorNonStrict()
+    {
+        $element = $this->getElement(self::ELEMENT_VALUE);
+        $element->setAttrib('data-opusValidationError', 'true');
+        $decorator = $element->getDecorator('Errors');
+        $decorator->setOption('class', 'errors notice');
     }
 }
