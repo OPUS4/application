@@ -565,15 +565,6 @@
             </tuv>
         </tu>
 
-        <tu tuid="ArticleNumber">
-            <tuv xml:lang="en">
-                <seg>Article Number</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Aufsatznummer</seg>
-            </tuv>
-        </tu>
-
         <tu tuid="PageCount">
             <tuv xml:lang="en">
                 <seg>Number of Pages</seg>
