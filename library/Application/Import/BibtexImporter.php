@@ -1,4 +1,3 @@
-#!/usr/bin/env php5
 <?php
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
@@ -26,23 +25,44 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Import
- * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
+ * @package     Application_Import
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2020
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-/**
- *
- * TODO: dieses Skript wird aktuell nicht in den Tarball / Deb-Package aufgenommen
- * Es ist noch sehr stark an die Anforderungen einer Testinstanz angepasst und
- * müsste vor der offiziellen Aufnahme noch generalisiert werden. Die Steuerung
- * sollte über eine externe Konfigurationsdatei erfolgen, so dass der Quellcode
- * später nicht mehr angepasst werden muss.
- *
- */
-require_once dirname(__FILE__) . '/../common/bootstrap.php';
-require_once 'Log.php';
 
-$importer = new Application_Import_CsvImporter();
-$importer->run($argv);
+/**
+ * Performs command line import of BibTeX file.
+ *
+ * TODO this class should only contain the command line specific code
+ * TODO processing should be in other classes
+ * TODO help output
+ *
+ * Command line parameters:
+ * - filename
+ * - defaultLanguage
+ * - submitter
+ *
+ * TODO any additional parameters for default values?
+ */
+class Application_Import_BibtexImporter
+{
+
+    public function run($arguments)
+    {
+        $filename = $arguments[1];
+
+        $colors = new Opus_Util_ConsoleColors();
+
+        if (! is_readable($filename)) {
+            echo $colors->red('File not found or readable.' . PHP_EOL);
+            return;
+        }
+
+        // TODO call BibTexParser with file - return OPUS object array
+
+        // TODO import object array (one by one)
+
+        $data = [];
+    }
+}
