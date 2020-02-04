@@ -237,11 +237,13 @@ class Export_Marc21ExportTest extends ControllerTestCase
 
         $this->assertResponseCode(200);
 
+        $currentYear = date('Y');
+
         $this->assertXpathContentContains('//marc:leader', '00000naa a22000005  4500');
         $this->assertXpathContentContains('//marc:controlfield[@tag="001"]', 'docId-' . $docId);
         $this->assertXpathContentContains('//marc:controlfield[@tag="007"]', 'cr uuu---uunan');
         $this->assertXpathContentContains('//marc:datafield[@tag="041"]/marc:subfield[@code="a"]', 'eng');
-        $this->assertXpathContentContains('//marc:datafield[@tag="264"]/marc:subfield[@code="c"]', '2019');
+        $this->assertXpathContentContains('//marc:datafield[@tag="264"]/marc:subfield[@code="c"]', $currentYear);
         $this->assertXpathContentContains('//marc:datafield[@tag="655"]/marc:subfield[@code="a"]', 'article');
         $this->assertXpathContentContains('//marc:datafield[@tag="856"]/marc:subfield[@code="u"]', 'http:///frontdoor/index/index/docId/' . $docId);
         $this->assertNotXpath('//marc:datafield[@tag="245"]');
@@ -280,11 +282,13 @@ class Export_Marc21ExportTest extends ControllerTestCase
 
         $this->assertResponseCode(200);
 
+        $currentYear = date('Y');
+
         $this->assertXpathContentContains('//marc:leader', '00000naa a22000005  4500');
         $this->assertXpathContentContains('//marc:controlfield[@tag="001"]', 'docId-' . $docId);
         $this->assertXpathContentContains('//marc:controlfield[@tag="007"]', 'cr uuu---uunan');
         $this->assertXpathContentContains('//marc:datafield[@tag="041"]/marc:subfield[@code="a"]', 'eng');
-        $this->assertXpathContentContains('//marc:datafield[@tag="264"]/marc:subfield[@code="c"]', '2019');
+        $this->assertXpathContentContains('//marc:datafield[@tag="264"]/marc:subfield[@code="c"]', $currentYear);
         $this->assertXpathContentContains('//marc:datafield[@tag="655"]/marc:subfield[@code="a"]', 'article');
         $this->assertXpathContentContains('//marc:datafield[@tag="856"]/marc:subfield[@code="u"]', 'http:///frontdoor/index/index/docId/' . $docId);
         $this->assertNotXpath('//marc:datafield[@tag="245"]');
