@@ -71,7 +71,7 @@ foreach ($collectionIds as $colId) {
         $col = new Opus_Collection($colId);
         $collections[] = $col;
     } catch (Opus_Model_NotFoundException $omnfe) {
-       echo "Collection $colId not found" . PHP_EOL;
+        echo "Collection $colId not found" . PHP_EOL;
     }
 }
 
@@ -84,7 +84,8 @@ $format = 'bibtex';
 class ImportHelper
 {
 
-    public function createEnrichmentKey($name) {
+    public function createEnrichmentKey($name)
+    {
         $sourceEnrichmentKey = Opus_EnrichmentKey::fetchByName($name);
         if (is_null($sourceEnrichmentKey)) {
             $sourceEnrichmentKey = new Opus_EnrichmentKey();

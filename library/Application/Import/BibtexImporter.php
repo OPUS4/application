@@ -64,7 +64,5 @@ class Application_Import_BibtexImporter
         // TODO import object array (one by one)
 
         $data = [];
-
-
     }
 }
