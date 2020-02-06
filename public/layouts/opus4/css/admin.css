@@ -1592,7 +1592,7 @@ ul.links input:hover {
 
 .adminContainer table.table-translations {
     font-size: 1.2em;
-    width: 100%;
+    width: auto;
 }
 
 .adminContainer table.table-translations tbody {
@@ -1632,6 +1632,9 @@ ul.links input:hover {
 
 .adminContainer table.table-translations td.lang {
     font-weight: bold;
+    margin-right: 0;
+    padding-right: 0;
+    padding-left: 0;
 }
 
 .adminContainer table.table-translations span.hilite {
@@ -1658,7 +1661,11 @@ ul.links input:hover {
 }
 
 .adminContainer table.table-translations td.value {
-    width: 50%;
+    width: auto;
+    padding-right: 0;
+}
+
+.adminContainer table.table-translations td.actions {
 }
 
 .adminContainer td.edit a {

@@ -79,7 +79,7 @@
             <td class="lang"><?= $language ?></td>
             <td class="value"><?= $this->highlight($translation, $this->searchTerm, '<span class="hilite">', '</span>') ?></td>
                 <?PHP if ($index == 0) : ?>
-            <td rowspan="<?= $langCount ?>">
+            <td rowspan="<?= $langCount ?>" class="actions">
                     <?PHP // TODO add module to parameters ?>
                 <div><a href="<?= $this->url(['action' => 'edit', 'key' => $key, 'search' => $this->searchTerm, 'sort' => $this->currentSortKey]) ?>"
                 ><?= $this->translate('setup_language_edit') ?></a></div>
