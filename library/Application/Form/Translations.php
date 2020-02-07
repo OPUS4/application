@@ -84,6 +84,8 @@ class Application_Form_Translations extends Application_Form_Abstract
 
         $width = 90;
 
+        $name = $this->normalizeKey($key);
+
         if ($textarea) {
             $options = array_merge($options, ['cols' => $width, "rows" => 12]);
         } else {
@@ -94,7 +96,30 @@ class Application_Form_Translations extends Application_Form_Abstract
             $options = array_merge($options, $customOptions);
         }
 
-        $this->addElement('translation', $key, $options);
+        $element = $this->createElement('translation', $name, $options);
+        $element->setKey($key);
+        $this->addElement($element);
+    }
+
+    /**
+     * Removes dashes from key names.
+     *
+     * Keys are used as identifier for form elements. However a dash is a special character for Zend when processing
+     * the POST data. Therefore the identifiers cannot contain dashes.
+     *
+     * @param $key
+     * @return string|string[]|null
+     *
+     * TODO verify and document why it works! Zend normalizes the name anyway - however we now store the real key in the
+     *      object, so we don't use the name for accessing translations. This is a bit fragile. Somebody who doesn't
+     *      understand the connections might break it.
+     * TODO there could be a collision with two translations where one is identical except for dashes between words,
+     *      e.g. 'admin-error' and 'adminerror'. These two keys would get the same form element name.
+     *
+     */
+    public function normalizeKey($key)
+    {
+        return $key; // preg_replace('/-/', '-', $key);
     }
 
     public function getTranslationElements()
@@ -112,8 +137,9 @@ class Application_Form_Translations extends Application_Form_Abstract
 
         $translate = Zend_Registry::get('Zend_Translate');
 
-        foreach ($elements as $key => $element) {
+        foreach ($elements as $name => $element) {
             // TODO handle no translation
+            $key = $element->getKey();
             $translations = $translate->getTranslations($key);
             $element->setValue($translations);
         }
@@ -123,7 +149,8 @@ class Application_Form_Translations extends Application_Form_Abstract
     {
         $elements = $this->getTranslationElements();
 
-        foreach ($elements as $key => $element) {
+        foreach ($elements as $name => $element) {
+            $key = $element->getKey();
             $element->updateTranslations($key);
         }
 

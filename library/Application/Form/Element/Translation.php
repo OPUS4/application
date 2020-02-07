@@ -49,6 +49,8 @@ class Application_Form_Element_Translation extends Zend_Form_Element_Multi
 
     protected $_isArray = false;
 
+    private $key;
+
     public function init()
     {
         parent::init();
@@ -107,6 +109,7 @@ class Application_Form_Element_Translation extends Zend_Form_Element_Multi
         $translate = Zend_Registry::get('Zend_Translate');
 
         $old = $translate->getTranslations($key);
+
         $translations = $this->getValue();
 
         if ($translations != $old) {
@@ -120,5 +123,15 @@ class Application_Form_Element_Translation extends Zend_Form_Element_Multi
         if (is_array($value)) {
             $this->setMultiOptions($value);
         }
+    }
+
+    public function getKey()
+    {
+        return $this->key;
+    }
+
+    public function setKey($key)
+    {
+        $this->key = $key;
     }
 }
