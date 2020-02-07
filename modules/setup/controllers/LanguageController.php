@@ -167,10 +167,19 @@ class Setup_LanguageController extends Application_Controller_Action
 
     /**
      * Removes database entry for translations key from TMX files to reset the used value.
+     *
+     * TODO show confirmation form
+     * TODO handle removing all edited translations from database
      */
     public function resetAction()
     {
-        $key = $this->getParam('key', null);
+        $all = $this->getParam('all', false);
+
+        if (filter_var($all, FILTER_VALIDATE_BOOLEAN)) {
+            $all = true;
+        } else {
+            $key = $this->getParam('key', null);
+        }
 
         if (! is_null($key)) {
             $translationManager = $this->getTranslationManager();
