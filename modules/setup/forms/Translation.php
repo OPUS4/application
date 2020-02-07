@@ -57,4 +57,9 @@ class Setup_Form_Translation extends Application_Form_Translations
 
         $this->getElement(self::ELEMENT_KEY)->setValue($key);
     }
+
+    public function setKeyEditable($enabled)
+    {
+        $this->getElement(self::ELEMENT_KEY)->setAttrib('disabled', $enabled);
+    }
 }
