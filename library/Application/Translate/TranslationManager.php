@@ -331,7 +331,9 @@ class Application_Translate_TranslationManager
 
     public function keyExists($key)
     {
+        $database = new Opus_Translate_Dao();
 
+        return ! is_null($database->getTranslation($key));
     }
 
     /**
