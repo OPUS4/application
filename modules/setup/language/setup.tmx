@@ -86,6 +86,45 @@
         </tuv>
     </tu>
 
+    <tu tuid="setup_language_confirm_reset_all">
+      <tuv xml:lang="en">
+        <seg>All translations that have been edited will be reset to the value provided in the original TMX files.
+Translation keys added to the system, won't be affected.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Alle Übersetzungen, die editiert wurden, werden auf den Originaltext aus den TMX-Dateien zurück gesetzt.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="setup_language_confirm_reset_all_title">
+      <tuv xml:lang="en">
+        <seg>Reset all edited translations?</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Alle editierten Übersetzungen zurücksetzen?</seg>
+      </tuv>
+    </tu>
+
+      <tu tuid="setup_language_confirm_delete_all_title">
+          <tuv xml:lang="en">
+              <seg>Reset all edited translations?</seg>
+          </tuv>
+          <tuv xml:lang="de">
+              <seg>Alle editierten Übersetzungen zurücksetzen?</seg>
+          </tuv>
+      </tu>
+
+
+      <tu tuid="setup_language_confirm_delete_all_title">
+          <tuv xml:lang="en">
+              <seg>Reset all edited translations?</seg>
+          </tuv>
+          <tuv xml:lang="de">
+              <seg>Alle editierten Übersetzungen zurücksetzen?</seg>
+          </tuv>
+      </tu>
+
+
     <tu tuid="setup_message_error_read-access">
         <tuv xml:lang="en">
             <seg>

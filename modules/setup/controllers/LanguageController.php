@@ -113,7 +113,6 @@ class Setup_LanguageController extends Application_Controller_Action
         if ($request->isPost()) {
             // TODO process form submit
         } else {
-            // TODO show form
         }
     }
 
@@ -177,17 +176,46 @@ class Setup_LanguageController extends Application_Controller_Action
 
         if (filter_var($all, FILTER_VALIDATE_BOOLEAN)) {
             $all = true;
-        } else {
-            $key = $this->getParam('key', null);
         }
 
-        if (! is_null($key)) {
-            $translationManager = $this->getTranslationManager();
+        $key = $this->getParam('key', null);
 
-            if ($translationManager->keyExists($key)) {
-                $translationManager->reset($key);
+        if (! is_null($key) || $all) {
+
+            $request = $this->getRequest();
+
+            if ($request->isPost()) {
+                $form = $this->getConfirmationForm();
+
+                $result = $form->processPost($request->getPost());
+
+                switch($result) {
+                    case Setup_Form_Confirmation::RESULT_NO:
+                        $this->_helper->Redirector->redirectTo(
+                            'show', null, 'language', 'setup',
+                            ['search' => $this->getParam('search')]
+                        );
+                        break;
+                    default:
+                }
+
+
+                $translationManager = $this->getTranslationManager();
+
+
+
+                if ($translationManager->keyExists($key)) {
+                    $translationManager->reset($key);
+                } else {
+                    // TODO error invalid request
+                }
             } else {
-                // TODO error invalid request
+                $form = $this->getConfirmationForm();
+                $form->setQuestion('setup_language_confirm_reset_all');
+                $form->setLegend('setup_language_confirm_reset_all_title');
+
+                $this->_helper->renderForm($form);
+                return;
             }
         } else {
             // TODO error invalid request
@@ -197,6 +225,11 @@ class Setup_LanguageController extends Application_Controller_Action
             'show', null, 'language', 'setup',
             ['search' => $this->getParam('search')]
         );
+    }
+
+    public function deleteAction()
+    {
+
     }
 
     protected function getTranslationForm()
@@ -239,5 +272,12 @@ class Setup_LanguageController extends Application_Controller_Action
         $translationManager->setModules($moduleNames);
 
         return $translationManager;
+    }
+
+    protected function getConfirmationForm()
+    {
+        $form = new Setup_Form_Confirmation();
+
+        return $form;
     }
 }
