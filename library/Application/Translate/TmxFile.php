@@ -38,7 +38,7 @@
  * TODO functions to add/remove/update translations directly in a more direct way (not just passing in arrays)
  * TODO detect duplicate keys in file
  * TODO load should not add to existing keys - object should not represent multiple files
- *
+ * TODO use creationtool on entries to store module name
  */
 class Application_Translate_TmxFile
 {
