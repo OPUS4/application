@@ -48,6 +48,7 @@ class Admin_Form_Document_BibliographicTest extends ControllerTestCase
             'CreatingCorporation',
             'Edition',
             'Issue',
+            'ArticleNumber',
             'PageFirst',
             'PageLast',
             'PageCount',
@@ -88,6 +89,7 @@ class Admin_Form_Document_BibliographicTest extends ControllerTestCase
         $this->assertEquals($doc->getCreatingCorporation(), $form->getElement('CreatingCorporation')->getValue());
         $this->assertEquals($doc->getEdition(), $form->getElement('Edition')->getValue());
         $this->assertEquals($doc->getIssue(), $form->getElement('Issue')->getValue());
+        $this->assertEquals($doc->getArticleNumber(), $form->getElement('ArticleNumber')->getValue());
         $this->assertEquals($doc->getPageFirst(), $form->getElement('PageFirst')->getValue());
         $this->assertEquals($doc->getPageLast(), $form->getElement('PageLast')->getValue());
         $this->assertEquals($doc->getPageNumber(), $form->getElement('PageCount')->getValue());
@@ -113,6 +115,7 @@ class Admin_Form_Document_BibliographicTest extends ControllerTestCase
         $form->getElement('CreatingCorporation')->setValue('creatingcorp');
         $form->getElement('Edition')->setValue('2nd');
         $form->getElement('Issue')->setValue('3');
+        $form->getElement('ArticleNumber')->setValue('42');
         $form->getElement('PageFirst')->setValue(34);
         $form->getElement('PageLast')->setValue(38);
         $form->getElement('PageCount')->setValue('5');
@@ -131,6 +134,7 @@ class Admin_Form_Document_BibliographicTest extends ControllerTestCase
         $this->assertEquals('creatingcorp', $model->getCreatingCorporation());
         $this->assertEquals('2nd', $model->getEdition());
         $this->assertEquals('3', $model->getIssue());
+        $this->assertEquals(42, $model->getArticleNumber());
         $this->assertEquals(34, $model->getPageFirst());
         $this->assertEquals('38', $model->getPageLast());
         $this->assertEquals(5, $model->getPageNumber());
@@ -162,6 +166,7 @@ class Admin_Form_Document_BibliographicTest extends ControllerTestCase
         $form->getElement('CreatingCorporation')->setValue(' ');
         $form->getElement('Edition')->setValue(' ');
         $form->getElement('Issue')->setValue(' ');
+        $form->getElement('ArticleNumber')->setValue(' ');
         $form->getElement('PageFirst')->setValue(' ');
         $form->getElement('PageLast')->setValue(' ');
         $form->getElement('PageCount')->setValue(' ');
@@ -178,6 +183,7 @@ class Admin_Form_Document_BibliographicTest extends ControllerTestCase
         $this->assertNull($model->getCreatingCorporation(), 'CreatingCorportation not null');
         $this->assertNull($model->getEdition(), 'Edition not null');
         $this->assertNull($model->getIssue(), 'Issue not null');
+        $this->assertNull($model->getArticleNumber(), 'ArticleNumber not null');
         $this->assertNull($model->getPageFirst(), 'PageFirst not null');
         $this->assertNull($model->getPageLast(), 'PageLast not null');
         $this->assertNull($model->getPageNumber(), 'PageNumber not null');
@@ -196,6 +202,7 @@ class Admin_Form_Document_BibliographicTest extends ControllerTestCase
         $form->getElement('CreatingCorporation')->setValue('0');
         $form->getElement('Edition')->setValue('0');
         $form->getElement('Issue')->setValue('0');
+        $form->getElement('ArticleNumber')->setValue('0');
         $form->getElement('PageFirst')->setValue('0');
         $form->getElement('PageLast')->setValue('0');
         $form->getElement('PublisherName')->setValue('0');
@@ -210,6 +217,7 @@ class Admin_Form_Document_BibliographicTest extends ControllerTestCase
         $this->assertEquals('0', $model->getCreatingCorporation());
         $this->assertEquals('0', $model->getEdition());
         $this->assertEquals('0', $model->getIssue());
+        $this->assertEquals('0', $model->getArticleNumber());
         $this->assertEquals('0', $model->getPageFirst());
         $this->assertEquals('0', $model->getPageLast());
         $this->assertEquals('0', $model->getPublisherName());
@@ -255,7 +263,8 @@ class Admin_Form_Document_BibliographicTest extends ControllerTestCase
         $post = [
             'PageFirst' => 'XI',
             'PageLast' => '12',
-            'PageCount' => 'iiv'
+            'PageCount' => 'iiv',
+            'ArticleNumber' => '42'
         ];
 
         $this->assertTrue($form->isValid($post));

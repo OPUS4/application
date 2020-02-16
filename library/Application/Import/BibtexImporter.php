@@ -25,40 +25,44 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_Export
+ * @package     Application_Import
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2020
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
- * Export plugin for applying XSLT on XML before returning response.
+ * Performs command line import of BibTeX file.
+ *
+ * TODO this class should only contain the command line specific code
+ * TODO processing should be in other classes
+ * TODO help output
+ *
+ * Command line parameters:
+ * - filename
+ * - defaultLanguage
+ * - submitter
+ *
+ * TODO any additional parameters for default values?
  */
-class Export_Model_XsltExport extends Export_Model_XmlExport
+class Application_Import_BibtexImporter
 {
 
-    public function execute()
+    public function run($arguments)
     {
-        $config = $this->getConfig();
+        $filename = $arguments[1];
 
-        $stylesheet = null;
-        if (isset($config->stylesheet)) {
-            $stylesheet = $config->stylesheet;
+        $colors = new Opus_Util_ConsoleColors();
+
+        if (! is_readable($filename)) {
+            echo $colors->red('File not found or readable.' . PHP_EOL);
+            return;
         }
 
-        $stylesheetDirectory = 'stylesheets';
+        // TODO call BibTexParser with file - return OPUS object array
 
-        if (isset($config->stylesheetDirectory)) {
-            $stylesheetDirectory = $config->stylesheetDirectory;
-        }
+        // TODO import object array (one by one)
 
-        $this->loadStyleSheet(
-            $this->buildStylesheetPath(
-                $stylesheet,
-                $this->getView()->getScriptPath('') . $stylesheetDirectory
-            )
-        );
-
-        $this->prepareXml();
+        $data = [];
     }
 }

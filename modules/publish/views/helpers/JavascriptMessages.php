@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -25,40 +26,28 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_Export
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @package     Module_Publish
+ * @author      Maximilian Salomon <salomon@zib.de>
+ * @copyright   Copyright (c) 2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
- * Export plugin for applying XSLT on XML before returning response.
+ * Class Publish_View_Helper_JavascriptMessages extends the generic view-helper with the default-message-set
+ * for the publish-module
  */
-class Export_Model_XsltExport extends Export_Model_XmlExport
+class Publish_View_Helper_JavascriptMessages extends Application_View_Helper_JavascriptMessages
 {
-
-    public function execute()
+    /**
+     * Default message-set for the publish-module
+     */
+    public function getDefaultMessageSet()
     {
-        $config = $this->getConfig();
-
-        $stylesheet = null;
-        if (isset($config->stylesheet)) {
-            $stylesheet = $config->stylesheet;
-        }
-
-        $stylesheetDirectory = 'stylesheets';
-
-        if (isset($config->stylesheetDirectory)) {
-            $stylesheetDirectory = $config->stylesheetDirectory;
-        }
-
-        $this->loadStyleSheet(
-            $this->buildStylesheetPath(
-                $stylesheet,
-                $this->getView()->getScriptPath('') . $stylesheetDirectory
-            )
-        );
-
-        $this->prepareXml();
+        $this->addMessage('uploadedFileHasErrorMessage');
+        $this->addMessage('fileExtensionFalse');
+        $this->addMessage('fileUploadErrorSize');
+        $this->addMessage('filenameLengthError');
+        $this->addMessage('filenameFormatError');
+        $this->addMessage('chooseAnotherFile');
     }
 }

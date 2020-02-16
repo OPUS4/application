@@ -543,6 +543,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
         $this->assertQueryContentContains($path, $translate->_('subject_frontdoor_uncontrolled'));
         $this->assertQueryContentContains($path, $translate->_('Volume'));
         $this->assertQueryContentContains($path, $translate->_('Issue'));
+        $this->assertQueryContentContains($path, $translate->_('ArticleNumber'));
         $this->assertQueryContentContains($path, $translate->_('Edition'));
         $this->assertQueryContentContains($path, $translate->_('PageNumber'));
         $this->assertQueryContentContains($path, $translate->_('PageFirst'));

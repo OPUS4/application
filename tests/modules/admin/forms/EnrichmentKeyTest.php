@@ -195,13 +195,13 @@ class Admin_Form_EnrichmentKeyTest extends ControllerTestCase
     {
         $form = new Admin_Form_EnrichmentKey();
         $form->getElement(Admin_Form_EnrichmentKey::ELEMENT_NAME)->setValue('TestEnrichmentKey');
-        $form->getElement(Admin_Form_EnrichmentKey::ELEMENT_TYPE)->setValue('FooType');
+        $form->getElement(Admin_Form_EnrichmentKey::ELEMENT_TYPE)->setValue('UnknownType');
 
         $enrichmentKey = new Opus_EnrichmentKey();
         $form->updateModel($enrichmentKey);
 
         $this->assertEquals('TestEnrichmentKey', $enrichmentKey->getName());
-        $this->assertEquals('FooType', $enrichmentKey->getType());
+        $this->assertNull($enrichmentKey->getType());
         $this->assertNull($enrichmentKey->getOptions());
     }
 
@@ -241,7 +241,7 @@ class Admin_Form_EnrichmentKeyTest extends ControllerTestCase
     {
         $form = new Admin_Form_EnrichmentKey();
         $form->getElement(Admin_Form_EnrichmentKey::ELEMENT_NAME)->setValue('TestEnrichmentKey');
-        $form->getElement(Admin_Form_EnrichmentKey::ELEMENT_TYPE)->setValue('FooType');
+        $form->getElement(Admin_Form_EnrichmentKey::ELEMENT_TYPE)->setValue('UnknownType');
         $form->getElement(Admin_Form_EnrichmentKey::ELEMENT_OPTIONS)->setValue('^a$');
         $form->getElement(Admin_Form_EnrichmentKey::ELEMENT_VALIDATION)->setValue('1');
 
@@ -249,7 +249,7 @@ class Admin_Form_EnrichmentKeyTest extends ControllerTestCase
         $form->updateModel($enrichmentKey);
 
         $this->assertEquals('TestEnrichmentKey', $enrichmentKey->getName());
-        $this->assertEquals('FooType', $enrichmentKey->getType());
+        $this->assertNull($enrichmentKey->getType());
         $this->assertNull($enrichmentKey->getOptions());
     }
 
@@ -286,11 +286,11 @@ class Admin_Form_EnrichmentKeyTest extends ControllerTestCase
         $this->assertFalse($form->isValid($this->createArray('5zig', 'TextType')));
         $this->assertFalse($form->isValid($this->createArray('_Value', 'TextType')));
 
-        // missing enrichment type
-        $this->assertFalse($form->isValid($this->createArray('FooBarKey')));
+        // missing enrichment type (valid when adding new keys)
+        $this->assertTrue($form->isValid($this->createArray('FooBarKey')));
 
-        // empty enrichment type
-        $this->assertFalse($form->isValid($this->createArray('FooBarKey', '')));
+        // empty enrichment type (valid when adding new keys)
+        $this->assertTrue($form->isValid($this->createArray('FooBarKey', '')));
 
         // unknown enrichment type
         $this->assertFalse($form->isValid($this->createArray('FooBarKey', 'FooBarType')));
@@ -306,6 +306,51 @@ class Admin_Form_EnrichmentKeyTest extends ControllerTestCase
 
         $form->populateFromModel(new Opus_EnrichmentKey());
         $this->assertNull($form->getElement(Admin_Form_EnrichmentKey::ELEMENT_NAME)->getValue());
+    }
+
+    /**
+     * Hat ein existierender Enrichment Key bereits einen zugeordneten Enrichment Type,
+     * so kann dieser nicht mehr gelöscht, sondern nur auf einen anderen Typ geändert werden.
+     *
+     * @throws Zend_Form_Exception
+     * @throws \Opus\Model\Exception
+     */
+    public function testTypeIsRequiredForExistingTypedKey()
+    {
+        $enrichmentKey = new Opus_EnrichmentKey();
+        $enrichmentKey->setName('TestKey');
+        $enrichmentKey->setType('BooleanType');
+
+        $form = new Admin_Form_EnrichmentKey();
+        $form->populateFromModel($enrichmentKey);
+
+        // missing enrichment type (is required)
+        $this->assertFalse($form->isValid($this->createArray('TestKey')));
+
+        // empty enrichment type (is required)
+        $this->assertFalse($form->isValid($this->createArray('TestKey', '')));
+    }
+
+    /**
+     * Hat ein existierender Enrichment Key keinen zugeordneten Enrichment Type,
+     * so muss dieser beim erneuten Speichern des Enrichment Keys auch nicht gesetzt werden.
+     *
+     * @throws Zend_Form_Exception
+     * @throws \Opus\Model\Exception
+     */
+    public function testTypeIsRequiredForExistingUntypedKey()
+    {
+        $enrichmentKey = new Opus_EnrichmentKey();
+        $enrichmentKey->setName('TestKey');
+
+        $form = new Admin_Form_EnrichmentKey();
+        $form->populateFromModel($enrichmentKey);
+
+        // missing enrichment type (is NOT required)
+        $this->assertTrue($form->isValid($this->createArray('TestKey')));
+
+        // empty enrichment type (is NOT required)
+        $this->assertTrue($form->isValid($this->createArray('TestKey', '')));
     }
 
     private function createArray($name, $type = null, $options = null)

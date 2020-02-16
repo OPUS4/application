@@ -24,41 +24,29 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Export
+ * @category    Application Unit Tests
+ * @package     Application
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-/**
- * Export plugin for applying XSLT on XML before returning response.
- */
-class Export_Model_XsltExport extends Export_Model_XmlExport
+class Application_Import_ArrayImportTest
 {
 
-    public function execute()
+    public function testImport()
     {
-        $config = $this->getConfig();
+        $importer = new Application_Import_ArrayImport();
 
-        $stylesheet = null;
-        if (isset($config->stylesheet)) {
-            $stylesheet = $config->stylesheet;
-        }
-
-        $stylesheetDirectory = 'stylesheets';
-
-        if (isset($config->stylesheetDirectory)) {
-            $stylesheetDirectory = $config->stylesheetDirectory;
-        }
-
-        $this->loadStyleSheet(
-            $this->buildStylesheetPath(
-                $stylesheet,
-                $this->getView()->getScriptPath('') . $stylesheetDirectory
-            )
-        );
-
-        $this->prepareXml();
+        $importer->import([
+            'Type' => 'article',
+            'TitleMain' => [
+                [
+                    'Type' => 'Main',
+                    'Language' => 'eng',
+                    'Value' => 'Document Test Title'
+                ]
+            ]
+        ]);
     }
 }

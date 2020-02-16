@@ -25,40 +25,13 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_Export
+ * @package     Scripts_Import
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-/**
- * Export plugin for applying XSLT on XML before returning response.
- */
-class Export_Model_XsltExport extends Export_Model_XmlExport
-{
+require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
-    public function execute()
-    {
-        $config = $this->getConfig();
-
-        $stylesheet = null;
-        if (isset($config->stylesheet)) {
-            $stylesheet = $config->stylesheet;
-        }
-
-        $stylesheetDirectory = 'stylesheets';
-
-        if (isset($config->stylesheetDirectory)) {
-            $stylesheetDirectory = $config->stylesheetDirectory;
-        }
-
-        $this->loadStyleSheet(
-            $this->buildStylesheetPath(
-                $stylesheet,
-                $this->getView()->getScriptPath('') . $stylesheetDirectory
-            )
-        );
-
-        $this->prepareXml();
-    }
-}
+$importer = new Application_Import_BibtexImporter();
+$importer->run($argv);

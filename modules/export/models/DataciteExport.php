@@ -61,6 +61,10 @@ class Export_Model_DataciteExport extends Application_Export_ExportPluginAbstrac
             throw new Application_Exception('could not retrieve document with given ID from OPUS database');
         }
 
+        if ($document->getServerState() != 'published' && ! $this->isAllowExportOfUnpublishedDocs()) {
+            throw new Application_Export_Exception('export of unpublished documents is not allowed');
+        }
+
         // wenn URL-Parameter validate auf no gesetzt, dann erfolgt keine Validierung des generierten XML
         $validate = $this->getRequest()->getParam('validate');
         $skipValidation = (! is_null($validate) && $validate === 'no');

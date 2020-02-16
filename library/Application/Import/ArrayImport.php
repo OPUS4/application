@@ -25,40 +25,22 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_Export
+ * @package     Application_Import
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2020
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-/**
- * Export plugin for applying XSLT on XML before returning response.
- */
-class Export_Model_XsltExport extends Export_Model_XmlExport
+class Application_Import_ArrayImport
 {
 
-    public function execute()
+    /**
+     * @param $data
+     *
+     * TODO handling of collections
+     */
+    public function import($data)
     {
-        $config = $this->getConfig();
-
-        $stylesheet = null;
-        if (isset($config->stylesheet)) {
-            $stylesheet = $config->stylesheet;
-        }
-
-        $stylesheetDirectory = 'stylesheets';
-
-        if (isset($config->stylesheetDirectory)) {
-            $stylesheetDirectory = $config->stylesheetDirectory;
-        }
-
-        $this->loadStyleSheet(
-            $this->buildStylesheetPath(
-                $stylesheet,
-                $this->getView()->getScriptPath('') . $stylesheetDirectory
-            )
-        );
-
-        $this->prepareXml();
+        $document = Opus_Document::fromArray($data);
     }
 }

@@ -1,26 +1,96 @@
-#!groovy
+def jobNameParts = JOB_NAME.tokenize('/') as String[]
+def projectName = jobNameParts[0]
+def buildType = "short"
 
+if (projectName.contains('night')) {
+    buildType = "long"
+}
 pipeline {
-    agent any
+    agent { dockerfile {args "-u root -v /var/run/docker.sock:/var/run/docker.sock"}}
+    environment {XML_CATALOG_FILES = "${WORKSPACE}/tests/resources/opus4-catalog.xml"}
+
+    triggers {
+        cron( buildType.equals('long') ? 'H 3 * * *' : '')
+    }
 
     stages {
-        stage('prepare') {
+        stage('Composer') {
             steps {
-                echo 'TODO - Configure database'
-                echo 'TODO - Configure Solr core'
+                sh 'composer install'
+                sh 'sudo apt-get update'
+                sh 'ant setup lint -DdbUserPassword=root -DdbAdminPassword=root'
             }
         }
 
-        stage('build') {
+        stage('Solr') {
             steps {
-                echo 'TODO - Run unit tests'
+                sh 'sudo bash bin/install_solr_docker.sh'
             }
         }
 
-        stage('publish') {
+        stage('MySQL') {
             steps {
-                echo 'TODO - Publish results'
+                sh 'sudo bash bin/install_mysql_docker.sh'
             }
+        }
+
+        stage('Prepare Opus4') {
+            steps {
+                sh 'php ${WORKSPACE}/scripts/opus-smtp-dumpserver.php 2>&1 >> ${WORKSPACE}/tests/workspace/log/opus-smtp-dumpserver.log &'
+                sh 'chown -R opus4:opus4 .'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                script{
+                    switch (buildType) {
+                        case "long":
+                            sh 'sudo -E -u opus4 ant phpunit'
+                            break
+                        default:
+                            sh 'sudo -E -u opus4 ant phpunit-fast'
+                            break
+                  }
+                }
+            }
+        }
+
+        stage('Analyse') {
+            steps {
+                script{
+                   switch (buildType) {
+                       case "long":
+                           sh 'ant analyse-code'
+                           break
+                       default:
+                            break
+                   }
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            step([
+                $class: 'JUnitResultArchiver',
+                testResults: 'build/logs/phpunit.xml'
+            ])
+            step([
+                $class: 'hudson.plugins.checkstyle.CheckStylePublisher',
+                pattern: 'build/logs/checkstyle.xml'
+            ])
+            step([
+                $class: 'hudson.plugins.dry.DryPublisher',
+                pattern: 'build/logs/pmd-cpd.xml'
+            ])
+            step([
+                $class: 'hudson.plugins.pmd.PmdPublisher',
+                pattern: 'build/logs/pmd.xml'
+            ])
+            sh "chmod -R 777 ."
+            step([$class: 'WsCleanup', externalDelete: 'rm -rf *'])
         }
     }
 }

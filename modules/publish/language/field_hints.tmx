@@ -1229,6 +1229,15 @@ Beispieleingabe: "17.08" (für Semiotik)]]></seg>
       </tuv>
     </tu>
 
+    <tu tuid="hint_ArticleNumber">
+      <tuv xml:lang="en">
+        <seg>Please enter the article number.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Tragen Sie bitte die Aufsatznummer ein.</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="hint_PublishedDate">
       <tuv xml:lang="en">
         <seg>Please enter the date of the documents first publishing in the format YYYY/MM/DD.</seg>
