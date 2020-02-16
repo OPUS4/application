@@ -148,7 +148,7 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
     }
 
     /**
-     * Besondere Behandlung von Enrichment-Typen, die zur Wertauswahl ein Select-Formularfeld verweden.
+     * Besondere Behandlung von Enrichment-Typen, die zur Wertauswahl ein Select-Formularfeld verwenden.
      * Hier kann es erforderlich sein, dass im vorliegenden Dokument ein Enrichment-Wert genutzt wird,
      * der nicht in der konfigurierten Werteliste im Enrichment-Key enthalten ist. Ein solcher Wert
      * soll dennoch (als erster Eintrag) im Select-Formularfeld zur Auswahl angeboten werden.
@@ -445,6 +445,6 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
         $element = $this->getElement(self::ELEMENT_VALUE);
         $element->setAttrib('data-opusValidationError', 'true');
         $decorator = $element->getDecorator('Errors');
-        $decorator->setOption('class', 'errors notice');
+        $decorator->setOption('class', 'errors datahint');
     }
 }
