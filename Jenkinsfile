@@ -2,7 +2,7 @@ def jobNameParts = JOB_NAME.tokenize('/') as String[]
 def projectName = jobNameParts[0]
 def buildType = "short"
 
-if (projectName.contains('night')) {
+if (projectName.contains('night') && (env.BRANCH_NAME == '4.7' || env.BRANCH_NAME == 'master')) {
     buildType = "long"
 }
 pipeline {
@@ -10,15 +10,14 @@ pipeline {
     environment {XML_CATALOG_FILES = "${WORKSPACE}/tests/resources/opus4-catalog.xml"}
 
     triggers {
-        cron( buildType.equals('long') ? 'H 3 * * *' : '')
+        cron( buildType.equals('long') ? 'H 21 * * 5' : '')
     }
 
     stages {
         stage('Composer') {
             steps {
-                sh 'composer install'
                 sh 'sudo apt-get update'
-                sh 'ant setup lint -DdbUserPassword=root -DdbAdminPassword=root'
+                sh 'curl -s http://getcomposer.org/installer | php && php composer.phar self-update && php composer.phar install'
             }
         }
 
@@ -36,36 +35,30 @@ pipeline {
 
         stage('Prepare Opus4') {
             steps {
+                sh 'ant prepare-workspace prepare-test-workspace prepare-javascript prepare-config lint -DdbUserPassword=root -DdbAdminPassword=root'
+                sh 'pecl install xdebug-2.8.0 && echo "zend_extension=/usr/lib/php/20151012/xdebug.so" >> /etc/php/7.0/cli/php.ini'
                 sh 'php ${WORKSPACE}/scripts/opus-smtp-dumpserver.php 2>&1 >> ${WORKSPACE}/tests/workspace/log/opus-smtp-dumpserver.log &'
                 sh 'chown -R opus4:opus4 .'
-            }
-        }
-
-        stage('Test') {
-            steps {
-                script{
-                    switch (buildType) {
-                        case "long":
-                            sh 'sudo -E -u opus4 ant phpunit'
-                            break
-                        default:
-                            sh 'sudo -E -u opus4 ant phpunit-fast'
-                            break
-                  }
-                }
             }
         }
 
         stage('Analyse') {
             steps {
                 script{
-                   switch (buildType) {
-                       case "long":
-                           sh 'ant analyse-code'
-                           break
-                       default:
-                            break
-                   }
+                   sh 'php composer.phar analysis'
+                }
+            }
+        }
+
+        stage('Test') {
+            steps {
+                script{
+                    sh 'ant reset-testdata'
+                    if (buildType == 'long'){
+                        sh 'php composer.phar test-coverage'
+                    } else {
+                        sh 'php composer.phar test'
+                    }
                 }
             }
         }
@@ -73,23 +66,28 @@ pipeline {
 
     post {
         always {
+            sh "chmod -R 777 ."
             step([
                 $class: 'JUnitResultArchiver',
-                testResults: 'build/logs/phpunit.xml'
+                testResults: 'build/phpunit.xml'
             ])
             step([
                 $class: 'hudson.plugins.checkstyle.CheckStylePublisher',
-                pattern: 'build/logs/checkstyle.xml'
+                pattern: 'build/checkstyle.xml'
             ])
             step([
                 $class: 'hudson.plugins.dry.DryPublisher',
-                pattern: 'build/logs/pmd-cpd.xml'
+                pattern: 'build/pmd-cpd.xml'
             ])
             step([
                 $class: 'hudson.plugins.pmd.PmdPublisher',
-                pattern: 'build/logs/pmd.xml'
+                pattern: 'build/pmd.xml'
             ])
-            sh "chmod -R 777 ."
+            step([
+                $class: 'CloverPublisher',
+                cloverReportDir: 'build',
+                cloverReportFileName: 'clover.xml"'
+            ])
             step([$class: 'WsCleanup', externalDelete: 'rm -rf *'])
         }
     }
