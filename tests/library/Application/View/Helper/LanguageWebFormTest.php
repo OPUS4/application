@@ -63,8 +63,8 @@ class Application_View_Helper_LanguageWebFormTest extends ControllerTestCase
     }
 
     /**
-     * Unittest for languageWebform.
-     * @covers ::languageWebform
+     * Unittest for languageWebForm.
+     * @covers Application_View_Helper_LanguageWebForm::languageWebForm
      * @dataProvider langProvider
      */
     public function testLanguageWebForm($long, $short)
