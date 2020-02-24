@@ -14,7 +14,7 @@ pipeline {
     agent { dockerfile {args "-u root -v /var/run/docker.sock:/var/run/docker.sock"}}
     environment {XML_CATALOG_FILES = "${WORKSPACE}/tests/resources/opus4-catalog.xml"}
 
-    // Set trigger if build is long -> Firday 21:00
+    // Set trigger if build is long -> Friday 21:00
     triggers {
         cron( buildType.equals('long') ? 'H 21 * * 5' : '')
     }
