@@ -33,13 +33,7 @@ jobs:
 
       - name: Coding-Style
         run: php composer.phar cs-check
-        
-      - name: Test-security
-        run: php composer.phar test -- --testsuite security
-
-      - name: Test-scripts
-        run: php composer.phar test -- --testsuite scripts
-
+      
       - name: Test-library
         run: php composer.phar test -- --testsuite library
 
@@ -48,3 +42,9 @@ jobs:
 
       - name: Test-admin
         run: php composer.phar test -- --testsuite admin
+        
+      - name: Test-security
+        run: php composer.phar test -- --testsuite security
+
+      - name: Test-scripts
+        run: php composer.phar test -- --testsuite scripts
