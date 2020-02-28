@@ -28,7 +28,7 @@
  * @package     Module_Setup
  * @author      Edouard Simon <edouard.simon@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -39,6 +39,8 @@
  * TODO detect duplicate keys in file
  * TODO load should not add to existing keys - object should not represent multiple files
  * TODO use creationtool on entries to store module name
+ * TODO needs to be able to read/write to/from TranslationManager array with additional information
+ * TODO maybe a factory class for creating TMX document from TranslationManager output
  */
 class Application_Translate_TmxFile
 {
