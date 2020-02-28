@@ -349,6 +349,9 @@ class Application_Translate_TranslationManager
         if (array_key_exists($key, $translations)) {
             $database->remove($key);
         }
+
+        $translate = Zend_Registry::get('Zend_Translate');
+        $translate->clearCache();
     }
 
     /**
