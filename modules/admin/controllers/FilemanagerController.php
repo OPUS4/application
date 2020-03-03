@@ -265,6 +265,16 @@ class Admin_FilemanagerController extends Application_Controller_Action
         $this->_breadcrumbs->setDocumentBreadcrumb($document);
         $this->_breadcrumbs->setParameters('admin_filemanager_index', [self::PARAM_DOCUMENT_ID => $docId]);
 
+        $config = $this->getConfig();
+
+        if (isset($config->publish->filetypes->allowed)) {
+            $this->view->extensions = $config->publish->filetypes->allowed;
+        }
+
+        // Adds translated messages for javascript files
+        $javascriptTranslations = $this->view->getHelper('javascriptMessages');
+        $javascriptTranslations->getDefaultMessageSet();
+
         $this->renderForm($form);
     }
 
