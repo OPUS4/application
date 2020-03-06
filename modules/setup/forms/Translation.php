@@ -60,6 +60,26 @@ class Setup_Form_Translation extends Application_Form_Translations
 
     public function setKeyEditable($enabled)
     {
-        $this->getElement(self::ELEMENT_KEY)->setAttrib('disabled', $enabled);
+        $this->getElement(self::ELEMENT_KEY)->setAttrib('disabled', $enabled ? null : true);
+    }
+
+    public function addTranslationElement($textarea = true, $customOptions = null)
+    {
+        $options = ['label' => "setup_translation", 'textarea' => $textarea];
+
+        $width = 90;
+
+        if ($textarea) {
+            $options = array_merge($options, ['cols' => $width, "rows" => 12]);
+        } else {
+            $options = array_merge($options, ['size' => $width]);
+        }
+
+        if (! is_null($customOptions)) {
+            $options = array_merge($options, $customOptions);
+        }
+
+        $element = $this->createElement('translation', 'translations', $options);
+        $this->addElement($element);
     }
 }

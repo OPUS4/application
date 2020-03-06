@@ -323,4 +323,21 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
     {
 
     }
+
+    public function testGetExportTmxFile()
+    {
+        $manager = $this->object;
+
+        $database = $manager->getDatabase();
+
+        $database->setTranslation('translationKey', [
+            'en' => 'Translation',
+            'de' => 'Übersetzung'
+        ]);
+
+        $tmxFile = $manager->getExportTmxFile();
+
+        $this->assertNotNull($tmxFile);
+        $this->assertInstanceOf('Application_Translation_TmxFile', $tmxFile);
+    }
 }

@@ -35,12 +35,22 @@
 /**
  * Simple class for reading, modifying and writing tmx files.
  *
+ * This class is used for migrating custom TMX files into the database. It is also used for exporting and importing
+ * translations from and to the database. This can be used to transfer customizations from one installation to another.
+ *
+ * A TMX file can normally only be part of one module. However in order to export/import translations that replace TMX
+ * entries in multiple modules we are storing the module in the 'creationtool' attribute of the TU-elements. This way
+ * we can import/export all custom translations in a single file without the need to create a ZIP package containing
+ * separate TMX files for different modules.
+ *
  * TODO functions to add/remove/update translations directly in a more direct way (not just passing in arrays)
  * TODO detect duplicate keys in file
  * TODO load should not add to existing keys - object should not represent multiple files
  * TODO use creationtool on entries to store module name
  * TODO needs to be able to read/write to/from TranslationManager array with additional information
  * TODO maybe a factory class for creating TMX document from TranslationManager output
+ *
+ * TODO store OPUSxxx something in the creationtool attribute of the header element
  */
 class Application_Translate_TmxFile
 {
@@ -58,8 +68,12 @@ class Application_Translate_TmxFile
 
     /**
      * Internal representation of the file
+     *
+     * TODO change internal storage to allow for additional attributes
      */
     private $data = [];
+
+    private $extraData = [];
 
     /**
      * Construct and optionally load TMX file.
@@ -79,7 +93,7 @@ class Application_Translate_TmxFile
      *
      * @return DomDocument
      */
-    public function toDomDocument()
+    public function getDomDocument()
     {
         return $this->arrayToDom($this->data);
     }
@@ -151,7 +165,7 @@ class Application_Translate_TmxFile
      *
      * @return self fluent Interface
      */
-    public function setTranslation($key, $language, $text)
+    public function setTranslation($key, $language, $text, $module = null)
     {
         $tmxArray = $this->toArray();
 
@@ -162,6 +176,10 @@ class Application_Translate_TmxFile
         $tmxArray[$key][$language] = $text;
 
         $this->fromArray($tmxArray);
+
+        if (! is_null($module)) {
+            $this->setModuleForKey($key, $module);
+        }
 
         return $this;
     }
@@ -183,6 +201,27 @@ class Application_Translate_TmxFile
     }
 
     /**
+     * Finds translations that contain needle.
+     *
+     * TODO find by key?
+     * TODO find by content?
+     *
+     * @param $needle
+     * @param null $language
+     */
+    public function findTranslation($needle, $language = null)
+    {
+    }
+
+    /**
+     * Returns languages included in file.
+     */
+    public function getLanguages()
+    {
+        // TODO implement
+    }
+
+    /**
      * Removes entry from translation file.
      *
      * @param $key string Translation key
@@ -190,6 +229,28 @@ class Application_Translate_TmxFile
     public function removeTranslation($key)
     {
         unset($this->data[$key]);
+    }
+
+    public function setModuleForKey($key, $module)
+    {
+        if (! is_array($this->extraData)) {
+            $this->extraData = [];
+        }
+
+        if (! isset($this->extraData[$key])) {
+            $this->extraData[$key] = [];
+        }
+
+        $this->extraData[$key]['module'] = $module;
+    }
+
+    public function getModuleForKey($key)
+    {
+        if (isset($this->extraData[$key]['module'])) {
+            return $this->extraData[$key]['module'];
+        }
+
+        return null;
     }
 
     /**
@@ -207,9 +268,15 @@ class Application_Translate_TmxFile
         foreach ($tuElements as $tu) {
             $key = $tu->attributes->getNamedItem('tuid')->textContent;
             $translationUnits[$key] = [];
+
+            $module = $tu->attributes->getNamedItem('creationtool');
+            $this->setModuleForKey($key, $module);
+
+            // process language entries (TUV-elements)
             foreach ($tu->getElementsByTagName('tuv') as $child) {
-                $translationUnits[$key][$child->attributes->getNamedItem('lang')->nodeValue] =
-                    $child->getElementsByTagName('seg')->item(0)->nodeValue;
+                $lang = $child->attributes->getNamedItem('lang')->nodeValue;
+                $translation = $child->getElementsByTagName('seg')->item(0)->nodeValue;
+                $translationUnits[$key][$lang] = $translation;
             }
         }
         return $translationUnits;

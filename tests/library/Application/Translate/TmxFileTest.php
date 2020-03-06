@@ -156,6 +156,26 @@ class Application_Translate_TmxFileTest extends ControllerTestCase
         ], $tmxFile->toArray());
     }
 
+    public function testSetTranslationWithModule()
+    {
+        $tmxFile = new Application_Translate_TmxFile();
+
+        $tmxFile->setTranslation('translationKey', 'en', 'Translation');
+
+        $this->assertNull($tmxFile->getModuleForKey('translationKey'));
+
+        $tmxFile->setTranslation('translationKey', 'de', 'Übersetzung', 'default');
+
+        $this->assertEquals([
+            'translationKey' => [
+                'en' => 'Translation',
+                'de' => 'Übersetzung'
+            ]
+        ], $tmxFile->toArray());
+
+        $this->assertEquals('default', $tmxFile->getModuleForKey('translationKey'));
+    }
+
     public function testFindTranslation()
     {
         $this->markTestIncomplete('not implemented yet');

@@ -362,4 +362,22 @@ class Application_Translate_TranslationManager
     {
 
     }
+
+    public function getExportTmxFile()
+    {
+        $database = $this->getDatabase();
+
+        $translations = $database->getTranslations();
+
+        $tmxFile = new Application_Translate_TmxFile();
+
+        foreach ($translations as $key => $data) {
+            var_dump($data);
+        }
+    }
+
+    public function getDatabase()
+    {
+        return new Opus_Translate_Dao();
+    }
 }

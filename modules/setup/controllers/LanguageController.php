@@ -111,8 +111,29 @@ class Setup_LanguageController extends Application_Controller_Action
         $request = $this->getRequest();
 
         if ($request->isPost()) {
-            // TODO process form submit
+            $post = $request->getPost();
+            $form = $this->getTranslationForm(true);
+            $result = $form->processPost($post, $post);
+
+            switch($result) {
+                case Setup_Form_Translation::RESULT_SAVE:
+                    // TODO save new translation key
+                    // TODO check if key already exists
+                    break;
+                case Setup_Form_Translation::RESULT_CANCEL:
+                default:
+            }
+
+            $this->_helper->Redirector->redirectTo(
+                'show', null, 'language', 'setup',
+                ['search' => $this->getParam('search')]
+            );
         } else {
+            $form = $this->getTranslationForm();
+
+            // render form
+            $this->_helper->viewRenderer->setNoRender(true);
+            echo $form;
         }
     }
 
@@ -232,9 +253,15 @@ class Setup_LanguageController extends Application_Controller_Action
 
     }
 
-    protected function getTranslationForm()
+    protected function getTranslationForm($add = false)
     {
         $form = new Setup_Form_Translation();
+
+        if ($add) {
+            $form->setKeyEditable(true);
+            $form->addTranslationElement();
+        }
+
         return $form;
     }
 
