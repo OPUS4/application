@@ -51,6 +51,7 @@
  * TODO maybe a factory class for creating TMX document from TranslationManager output
  *
  * TODO store OPUSxxx something in the creationtool attribute of the header element
+ * TODO create TMX file from string and write to sting
  */
 class Application_Translate_TmxFile
 {
@@ -62,7 +63,7 @@ class Application_Translate_TmxFile
 <!DOCTYPE tmx SYSTEM "http://www.gala-global.org/oscarStandards/tmx/tmx14.dtd">
 <tmx version="1.4">
     <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de"
-    o-tmf="abc" creationtool="Opus4"></header>
+    o-tmf="abc" creationtool="OPUS4"></header>
     <body></body>
 </tmx>';
 
@@ -270,7 +271,9 @@ class Application_Translate_TmxFile
             $translationUnits[$key] = [];
 
             $module = $tu->attributes->getNamedItem('creationtool');
-            $this->setModuleForKey($key, $module);
+            if (! is_null($module)) {
+                $this->setModuleForKey($key, $module->nodeValue);
+            }
 
             // process language entries (TUV-elements)
             foreach ($tu->getElementsByTagName('tuv') as $child) {
@@ -299,8 +302,11 @@ class Application_Translate_TmxFile
         $dom->loadXML(self::TEMPLATE);
 
         foreach ($array as $unitName => $variants) {
+            $module = $this->getModuleForKey($unitName);
+
             $tuElement = $dom->createElement('tu');
             $tuElement->setAttribute('tuid', $unitName);
+            $tuElement->setAttribute('creationtool', $module);
             $bodyElement = $dom->getElementsByTagName('body')->item(0);
             $tuNode = $bodyElement->appendChild($tuElement);
             foreach ($variants as $lang => $text) {

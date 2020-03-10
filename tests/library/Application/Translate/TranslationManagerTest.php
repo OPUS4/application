@@ -333,11 +333,71 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
         $database->setTranslation('translationKey', [
             'en' => 'Translation',
             'de' => 'Übersetzung'
-        ]);
+        ], 'home');
 
         $tmxFile = $manager->getExportTmxFile();
 
         $this->assertNotNull($tmxFile);
-        $this->assertInstanceOf('Application_Translation_TmxFile', $tmxFile);
+        $this->assertInstanceOf('Application_Translate_TmxFile', $tmxFile);
+
+        $dom = $tmxFile->getDomDocument();
+
+        $output = $dom->saveXML();
+
+        $this->getResponse()->setBody($output);
+
+        $this->assertXpathCount('//tu', 1);
+        $this->assertXpath('//tu[@tuid = "translationKey"]');
+        $this->assertXpath('//tu[@creationtool = "home"]');
+        $this->assertXpathContentContains('//tu/tuv/seg', 'Übersetzung');
+        $this->assertXpathContentContains('//tu/tuv/seg', 'Translation');
+    }
+
+    public function testGetExportTmxFileWithDefaultModuleTranslations()
+    {
+
+    }
+
+    public function testImportTmxFile()
+    {
+        $tmxFile = new Application_Translate_TmxFile(APPLICATION_PATH . '/tests/resources/tmx/opus.tmx');
+
+        $manager = $this->object;
+
+        $manager->importTmxFile($tmxFile);
+
+        $database = $manager->getDatabase();
+
+        $translations = $database->getTranslationsWithModules();
+
+        $this->assertCount(3, $translations);
+        $this->assertEquals([
+            'home_index_contact_pagetitle' => [
+                'module' => 'home',
+                'values' => [
+                    'en' => 'Contact',
+                    'de' => 'Kontakt'
+                ]
+            ],
+            'browsing_menu_label' => [
+                'module' => '', // TODO modify to omit field or use null
+                'values' => [
+                    'en' => 'Browse',
+                    'de' => 'Browsen'
+                ]
+            ],
+            'publish_controller_index' => [
+                'module' => 'publish',
+                'values' => [
+                    'en' => 'Publish',
+                    'de' => 'Veröffentlichen'
+                ]
+            ]
+        ], $translations);
+    }
+
+    public function testImportTmxFileWithModuleOverride()
+    {
+
     }
 }

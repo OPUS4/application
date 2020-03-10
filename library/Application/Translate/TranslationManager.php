@@ -363,19 +363,45 @@ class Application_Translate_TranslationManager
 
     }
 
+    /**
+     * Returns custom translations as TMX file.
+     */
     public function getExportTmxFile()
     {
         $database = $this->getDatabase();
 
-        $translations = $database->getTranslations();
+        $translations = $database->getTranslationsWithModules();
 
         $tmxFile = new Application_Translate_TmxFile();
 
         foreach ($translations as $key => $data) {
-            var_dump($data);
+            $module = $data['module'];
+            $languages = $data['values'];
+            foreach ($languages as $lang => $value)
+            $tmxFile->setTranslation($key, $lang, $value, $module);
+        }
+
+        return $tmxFile;
+    }
+
+    /**
+     * TODO move into separate class
+     */
+    public function importTmxFile($tmxFile)
+    {
+        $translations = $tmxFile->toArray();
+
+        $database = $this->getDatabase();
+
+        foreach ($translations as $key => $values) {
+            $module = $tmxFile->getModuleForKey($key);
+            $database->setTranslation($key, $values, $module);
         }
     }
 
+    /**
+     * @return Opus_Translate_Dao $database
+     */
     public function getDatabase()
     {
         return new Opus_Translate_Dao();
