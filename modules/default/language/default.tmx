@@ -719,5 +719,14 @@
          </tuv>
      </tu>
 
+      <tu tuid="default_download_button">
+        <tuv xml:lang="en">
+          <seg>Download</seg>
+        </tuv>
+        <tuv xml:lang="de">
+          <seg>Herunterladen</seg>
+        </tuv>
+      </tu>
+
     </body>
 </tmx>

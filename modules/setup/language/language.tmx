@@ -6,8 +6,6 @@
  </header>
   <body>
 
-
-
     <tu tuid="setup_language_searchTerm">
         <tuv xml:lang="en">
             <seg>search term (leave empty for all)</seg>
@@ -122,6 +120,48 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>Editieren</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="setup_language_export">
+      <tuv xml:lang="en">
+        <seg>Export translations</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Übersetzungen exportieren</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="setup_language_export_description">
+      <tuv xml:lang="en">
+        <seg>The customized translations can be downloaded as TMX file. The name of the module a translation key
+        belongs to is stored in the "creationtool" attribute of the TU-elements. The TMX file can be edited and
+        imported back into this or another OPUS 4 installation.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Die angepassten Übersetzungen können als TMX-Datei heruntergeladen werden. Der Name des Modules zu dem
+        ein Übersetzungsschlüssel gehört wird dabei im "creationtool"-Attribut des TU-Element gespeichert. Die
+          TMX-Datei kann editiert und wieder in diese oder eine andere OPUS 4 Installation importiert werden.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="setup_language_import">
+      <tuv xml:lang="en">
+        <seg>Import translations</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Übersetzungen importieren</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="setup_language_import_description">
+      <tuv xml:lang="en">
+        <seg>Import custom translations from TMX file. The "creationtool" attribute of the TU-elements will be used
+        to determine the module name for a translation key.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Angepasste Übersetzungen können von einer TMX-Datei importiert werden. Das "creationtool"-Attribut der
+        TU-Elemente wird dabei als Name des Modules für einen Übersetzungsschlüssel interpretiert.</seg>
       </tuv>
     </tu>
 

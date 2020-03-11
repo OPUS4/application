@@ -253,6 +253,43 @@ class Setup_LanguageController extends Application_Controller_Action
 
     }
 
+    /**
+     * Action for exporting custom translations.
+     *
+     * TODO make sure edited keys are stored with module information
+     */
+    public function exportAction()
+    {
+        $filename = $this->getParam('filename', null);
+
+        if (! is_null($filename)) {
+            $manager = $this->getTranslationManager();
+
+            $tmxFile = $manager->getExportTmxFile();
+
+            $doc = $tmxFile->getDomDocument();
+
+            $this->disableViewRendering();
+
+            $response = $this->getResponse();
+
+            $response->setHeader('Content-Type', "text/xml; charset=UTF-8", true);
+            $response->setHeader('Content-Disposition', "attachment; filename=opus.tmx", true);
+
+            echo $doc->saveXML();
+        } else {
+            // show information and options for download
+        }
+    }
+
+    /**
+     * Action for importing custom translations.
+     */
+    public function importAction()
+    {
+
+    }
+
     protected function getTranslationForm($add = false)
     {
         $form = new Setup_Form_Translation();

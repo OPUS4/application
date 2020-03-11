@@ -777,7 +777,7 @@
                             <pages>
                                 <show>
                                     <type>mvc</type>
-                                    <label>setup_translation_choose</label>
+                                    <label>setup_language_show</label>
                                     <module>setup</module>
                                     <controller>language</controller>
                                     <action>show</action>
@@ -789,6 +789,27 @@
                                     <controller>language</controller>
                                     <action>edit</action>
                                 </edit>
+                                <add>
+                                    <type>mvc</type>
+                                    <label>setup_language_add</label>
+                                    <module>setup</module>
+                                    <controller>language</controller>
+                                    <action>add</action>
+                                </add>
+                                <export>
+                                    <type>mvc</type>
+                                    <label>setup_language_export</label>
+                                    <module>setup</module>
+                                    <controller>language</controller>
+                                    <action>export</action>
+                                </export>
+                                <import>
+                                    <type>mvc</type>
+                                    <label>setup_language_import</label>
+                                    <module>setup</module>
+                                    <controller>language</controller>
+                                    <action>import</action>
+                                </import>
                                 <error>
                                     <type>mvc</type>
                                     <label>setup_error</label>
