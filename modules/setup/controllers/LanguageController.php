@@ -287,7 +287,16 @@ class Setup_LanguageController extends Application_Controller_Action
      */
     public function importAction()
     {
+        $request = $this->getRequest();
 
+        if ($request->isPost()) {
+            // process upload post
+
+        } else {
+            // show information and upload form
+            $form = new Setup_Form_ImportTmxFile();
+            $this->view->form = $form;
+        }
     }
 
     protected function getTranslationForm($add = false)

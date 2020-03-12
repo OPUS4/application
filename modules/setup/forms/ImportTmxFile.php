@@ -26,23 +26,39 @@
  *
  * @category    Application
  * @package     Module_Setup
- * @author      Edouard Simon <edouard.simon@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
+ * @copyright   Copyright (c) 2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- *
- * TODO list supported language
- * TODO provide function for adding new languages (requires fallback mechanism)
- * TODO additional statistics like (custom) translations per module
  */
-?>
 
-<?php if (isset($this->messages)) : ?>
-<div class="messages">
-    <?php foreach ($this->messages as $message) : ?>
-    <div class="<?= $message['level'] ?>"><?= htmlspecialchars($this->translate($message['message'])) ?></div>
-    <?php endforeach ?>
-</div>
-<?php endif ?>
+/**
+ * Form for importing custom translations from a TMX file.
+ *
+ * The form should allow overriding the module name for the translations. This way a normal TMX file can be uploaded to
+ * override translations of a module.
+ */
+class Setup_Form_ImportTmxFile extends Application_Form_Abstract
+{
 
-<?= $this->form ?>
+    const ELEMENT_FILE = 'File';
+
+    const ELEMENT_MODULE = 'Module';
+
+    const ELEMENT_IMPORT = 'Import';
+
+    public function init()
+    {
+        parent::init();
+
+        $this->addElement('file', self::ELEMENT_FILE);
+
+        // TODO add module enter/select field (simple text field for now)
+
+        // TODO add Import button
+
+        $this->addElement('submit', self::ELEMENT_IMPORT);
+    }
+
+
+
+}

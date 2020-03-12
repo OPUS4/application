@@ -34,6 +34,9 @@
 
 /**
  * TODO reduce vertical height of form ("Search: TEXT Button")
+ *
+ * TODO add option for search keys/content only
+ * TODO add option for filtering by module
  */
 class Setup_Form_LanguageSearch extends Zend_Form
 {
