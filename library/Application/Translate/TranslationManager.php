@@ -360,7 +360,6 @@ class Application_Translate_TranslationManager
      */
     public function delete($key)
     {
-
     }
 
     /**
@@ -377,8 +376,9 @@ class Application_Translate_TranslationManager
         foreach ($translations as $key => $data) {
             $module = $data['module'];
             $languages = $data['values'];
-            foreach ($languages as $lang => $value)
-            $tmxFile->setTranslation($key, $lang, $value, $module);
+            foreach ($languages as $lang => $value) {
+                $tmxFile->setTranslation($key, $lang, $value, $module);
+            }
         }
 
         return $tmxFile;

@@ -115,7 +115,7 @@ class Setup_LanguageController extends Application_Controller_Action
             $form = $this->getTranslationForm(true);
             $result = $form->processPost($post, $post);
 
-            switch($result) {
+            switch ($result) {
                 case Setup_Form_Translation::RESULT_SAVE:
                     // TODO save new translation key
                     // TODO check if key already exists
@@ -125,7 +125,10 @@ class Setup_LanguageController extends Application_Controller_Action
             }
 
             $this->_helper->Redirector->redirectTo(
-                'show', null, 'language', 'setup',
+                'show',
+                null,
+                'language',
+                'setup',
                 ['search' => $this->getParam('search')]
             );
         } else {
@@ -171,7 +174,10 @@ class Setup_LanguageController extends Application_Controller_Action
             // TODO validate
             // TODO save
             $this->_helper->Redirector->redirectTo(
-                'show', null, 'language', 'setup',
+                'show',
+                null,
+                'language',
+                'setup',
                 ['search' => $this->getParam('search')]
             );
         } else {
@@ -202,7 +208,6 @@ class Setup_LanguageController extends Application_Controller_Action
         $key = $this->getParam('key', null);
 
         if (! is_null($key) || $all) {
-
             $request = $this->getRequest();
 
             if ($request->isPost()) {
@@ -210,10 +215,13 @@ class Setup_LanguageController extends Application_Controller_Action
 
                 $result = $form->processPost($request->getPost());
 
-                switch($result) {
+                switch ($result) {
                     case Setup_Form_Confirmation::RESULT_NO:
                         $this->_helper->Redirector->redirectTo(
-                            'show', null, 'language', 'setup',
+                            'show',
+                            null,
+                            'language',
+                            'setup',
                             ['search' => $this->getParam('search')]
                         );
                         break;
@@ -243,14 +251,16 @@ class Setup_LanguageController extends Application_Controller_Action
         }
 
         $this->_helper->Redirector->redirectTo(
-            'show', null, 'language', 'setup',
+            'show',
+            null,
+            'language',
+            'setup',
             ['search' => $this->getParam('search')]
         );
     }
 
     public function deleteAction()
     {
-
     }
 
     /**
@@ -291,7 +301,6 @@ class Setup_LanguageController extends Application_Controller_Action
 
         if ($request->isPost()) {
             // process upload post
-
         } else {
             // show information and upload form
             $form = new Setup_Form_ImportTmxFile();

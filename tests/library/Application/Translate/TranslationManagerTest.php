@@ -315,13 +315,10 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
         $testKey = 'answer_yes';
 
         $manager->reset($testKey);
-
-
     }
 
     public function testDelete()
     {
-
     }
 
     public function testGetExportTmxFile()
@@ -355,7 +352,6 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
 
     public function testGetExportTmxFileWithDefaultModuleTranslations()
     {
-
     }
 
     public function testImportTmxFile()
@@ -398,6 +394,5 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
 
     public function testImportTmxFileWithModuleOverride()
     {
-
     }
 }

@@ -60,5 +60,4 @@ class Application_Controller_Action_Helper_RenderForm extends Zend_Controller_Ac
         $controller = $this->getActionController();
         return (! $controller->view->getScriptPath($controller->getHelper('ViewRenderer')->getViewScript())) ? false : true;
     }
-
 }

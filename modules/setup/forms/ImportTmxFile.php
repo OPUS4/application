@@ -58,7 +58,4 @@ class Setup_Form_ImportTmxFile extends Application_Form_Abstract
 
         $this->addElement('submit', self::ELEMENT_IMPORT);
     }
-
-
-
 }

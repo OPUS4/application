@@ -58,7 +58,9 @@
     <?PHP
 //        $keyPos = array_flip($this->sortKeys);
     foreach ($this->translations as $row) :
-        if (! isset($row['directory'])) var_dump($row);
+        if (! isset($row['directory'])) {
+            var_dump($row);
+        }
         $writeable = ($row['directory'] == 'language_custom');
         $file = $row['module'] . DIRECTORY_SEPARATOR . $row['directory'] . DIRECTORY_SEPARATOR . $row['filename'];
         $key = array_shift($row);
