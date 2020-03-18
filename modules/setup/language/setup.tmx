@@ -115,16 +115,6 @@ Translation keys added to the system, won't be affected.</seg>
       </tu>
 
 
-      <tu tuid="setup_language_confirm_delete_all_title">
-          <tuv xml:lang="en">
-              <seg>Reset all edited translations?</seg>
-          </tuv>
-          <tuv xml:lang="de">
-              <seg>Alle editierten Übersetzungen zurücksetzen?</seg>
-          </tuv>
-      </tu>
-
-
     <tu tuid="setup_message_error_read-access">
         <tuv xml:lang="en">
             <seg>
