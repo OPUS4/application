@@ -35,7 +35,7 @@ $(document).ready(function () {
         "class": "actionbox-spacer",
         "height": $actionbox.outerHeight()
     });
-    if ($actionbox.size()) {
+    if ($actionbox.length) {
         $(window).scroll(function () {
             if (! $actionbox.hasClass('fixed') && $(window).scrollTop() > $actionbox.offset().top) {
                 $actionbox.before($actionboxSpacer);
