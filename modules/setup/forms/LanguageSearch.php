@@ -28,21 +28,44 @@
  * @package     Module_Setup
  * @author      Edouard Simon (edouard.simon@zib.de)
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
+ * Form for search translations and translation keys.
+ *
  * TODO reduce vertical height of form ("Search: TEXT Button")
  *
  * TODO add option for search keys/content only
  * TODO add option for filtering by module
  */
-class Setup_Form_LanguageSearch extends Zend_Form
+class Setup_Form_LanguageSearch extends Application_Form_Abstract
 {
 
+    /**
+     * Input field for search string for translations.
+     */
     const ELEMENT_FILTER = 'search';
 
+    /**
+     * Select for modules included in search.
+     */
+    const ELEMENT_MODULES = 'modules';
+
+    /**
+     * Select for state of translations (All, Edited, Added).
+     */
+    const ELEMENT_STATE = 'state';
+
+    /**
+     * Select for scope of search (keys, translations)
+     */
+    const ELEMENT_SCOPE = 'scope';
+
+    /**
+     * Button for starting search.
+     */
     const ELEMENT_SUBMIT = 'Anzeigen';
 
     /**
@@ -52,9 +75,49 @@ class Setup_Form_LanguageSearch extends Zend_Form
 
     public function init()
     {
-        // $this->setDisableLoadDefaultDecorators(true);
-        // $this->addDecorator('FormElements');
-        $this->addElement('text', self::ELEMENT_FILTER);
-        $this->addElement('submit', self::ELEMENT_SUBMIT);
+        parent::init();
+
+        $element = $this->createElement('text', self::ELEMENT_FILTER, [
+            'size' => '40'
+        ]);
+        $element->setDecorators(['ViewHelper']);
+        $this->addElement($element);
+
+        $element = $this->createElement('submit', self::ELEMENT_SUBMIT);
+        $element->setDecorators(['ViewHelper']);
+        $this->addElement($element);
+
+        $element = $this->createElement('TranslationState', self::ELEMENT_STATE);
+        $element->setDecorators(['ViewHelper']);
+        $this->addElement($element);
+
+        $element = $this->createElement('TranslationScope', self::ELEMENT_SCOPE);
+        $element->setDecorators(['ViewHelper']);
+        $this->addElement($element);
+
+        $element = $this->createElement('TranslationModules', self::ELEMENT_MODULES);
+        $element->setDecorators(['ViewHelper']);
+        $this->addElement($element);
+
+        $this->setDecorators([
+            ['ViewScript', ['viewScript' => 'languagesearch.phtml']],
+            'Form'
+        ]);
+    }
+
+    /**
+     * @param $request
+     *
+     * TODO should this code go somewhere else (add responsiblity to class)
+     */
+    public function populateFromRequest($request)
+    {
+        $module = strtolower($request->getParam('modules', null));
+        $scope = strtolower($request->getParam('scope', null));
+        $state = strtolower($request->getParam('state', null));
+
+        $this->getElement(self::ELEMENT_MODULES)->setValue($module);
+        $this->getElement(self::ELEMENT_SCOPE)->setValue($scope);
+        $this->getElement(self::ELEMENT_STATE)->setValue($state);
     }
 }
