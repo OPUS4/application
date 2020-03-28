@@ -61,4 +61,19 @@ class Application_Form_Element_SelectWithNullTest extends FormElementTestCase
 
         $this->assertNull($element->getValue());
     }
+
+    public function testTestConfigureNullValue()
+    {
+        $element = $this->getElement();
+
+        $element->setNullValue('all');
+
+        $element->setValue('all');
+
+        $this->assertNull($element->getValue());
+
+        $element->setValue(null);
+
+        $this->assertEquals('all', $element->getUnfilteredValue());
+    }
 }
