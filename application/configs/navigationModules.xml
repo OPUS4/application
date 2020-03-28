@@ -775,13 +775,6 @@
                             <controller>language</controller>
                             <action>index</action>
                             <pages>
-                                <show>
-                                    <type>mvc</type>
-                                    <label>setup_language_show</label>
-                                    <module>setup</module>
-                                    <controller>language</controller>
-                                    <action>show</action>
-                                </show>
                                 <edit>
                                     <type>mvc</type>
                                     <label>setup_translation_edit</label>

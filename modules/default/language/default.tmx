@@ -728,5 +728,23 @@
         </tuv>
       </tu>
 
+      <tu tuid="default_all">
+        <tuv xml:lang="en">
+          <seg>All</seg>
+        </tuv>
+        <tuv xml:lang="de">
+          <seg>Alle</seg>
+        </tuv>
+      </tu>
+
+      <tu tuid="default_add">
+        <tuv xml:lang="en">
+          <seg>Add</seg>
+        </tuv>
+        <tuv xml:lang="de">
+          <seg>Hinzufügen</seg>
+        </tuv>
+      </tu>
+
     </body>
 </tmx>

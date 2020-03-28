@@ -47,31 +47,41 @@
 class Setup_LanguageController extends Application_Controller_Action
 {
 
-    protected $_sortKeys = ['key', 'language', 'variant'];
+    /**
+     * TODO update name and values for new functionality
+     */
+    private $sortKeys = ['key', 'variant'];
 
+    /**
+     * Initialize controller.
+     */
     public function init()
     {
         parent::init();
 
         $this->getHelper('MainMenu')->setActive('admin');
-    }
-
-    public function indexAction()
-    {
-        $this->view->form = $this->getSearchForm();
+        $this->view->headLink()->appendStylesheet($this->view->layoutPath() . '/css/setup.css');
     }
 
     /**
-     * @throws Setup_Model_FileNotReadableException
+     * Action for searching and showing translations.
      *
      * TODO move handling of allowed modules into manager
+     * TODO handle module parameter
+     * TODO handle scope parameter
+     * TODO handle state parameter
      */
-    public function showAction()
+    public function indexAction()
     {
-        $searchTerm = $this->getParam('search');
+        $searchTerm = $this->getParam('search', null);
         $sortKey = $this->getParam('sort', 'key');
+        $modules = $this->getParam('modules', null);
+        $state = $this->getParam('state', null);
+        $scope = $this->getParam('scope', null);
+
         $config = $this->getConfig();
 
+        // TODO move to manager (the check) - error handling should be here
         if (! isset($config->setup->translation->modules->allowed)) {
             $this->_helper->Redirector->redirectTo(
                 'error',
@@ -81,9 +91,15 @@ class Setup_LanguageController extends Application_Controller_Action
 
         $request = $this->getRequest();
 
+        $form = $this->getSearchForm($searchTerm, $sortKey);
+
         if ($request->isPost()) {
-            $post = $request->getPost();
-            $searchTerm = isset($post['search']) ? $post['search'] : $searchTerm;
+            $form ->populateFromRequest($request);
+
+            $searchTerm = $form->getElement($form::ELEMENT_FILTER)->getValue();
+            $modules = $form->getElement($form::ELEMENT_MODULES)->getValue();
+            $state = $form->getElement($form::ELEMENT_STATE)->getValue();
+            $scope = $form->getElement($form::ELEMENT_SCOPE)->getValue();
         }
 
         $translationManager = $this->getTranslationManager();
@@ -92,12 +108,41 @@ class Setup_LanguageController extends Application_Controller_Action
             $translationManager->setFilter($searchTerm);
         }
 
-        $this->view->form = $this->getSearchForm($searchTerm, $sortKey);
+        $translationManager->setModules($modules);
 
-        $this->view->translations = $translationManager->getMergedTranslations($sortKey);
-        $this->view->sortKeys = $this->_sortKeys;
+        switch (strtolower($state)) {
+            case 'edited':
+                $translationManager->setState($translationManager::STATE_EDITED);
+                break;
+            case 'added':
+                $translationManager->setState($translationManager::STATE_ADDED);
+                break;
+            default:
+                $translationManager->setState(null);
+                break;
+        }
+        switch (strtolower($scope)) {
+            case 'key':
+                $translationManager->setScope($translationManager::SCOPE_KEYS);
+                break;
+            case 'text':
+                $translationManager->setScope($translationManager::SCOPE_TEXT);
+                break;
+            default:
+                $translationManager->setScope(null);
+                break;
+        }
+
+        $translations = $translationManager->getMergedTranslations($sortKey);
+
+        $this->view->translations = $translations;
+        $this->view->form = $form;
+        $this->view->sortKeys = $this->sortKeys;
         $this->view->currentSortKey = $sortKey;
         $this->view->searchTerm = $searchTerm;
+        $this->view->searchState = $state;
+        $this->view->searchScope = $scope;
+        $this->view->headScript()->appendFile($this->view->layoutPath() . '/js/setup/setup.js');
     }
 
     /**
@@ -125,7 +170,7 @@ class Setup_LanguageController extends Application_Controller_Action
             }
 
             $this->_helper->Redirector->redirectTo(
-                'show',
+                'index',
                 null,
                 'language',
                 'setup',
@@ -151,7 +196,7 @@ class Setup_LanguageController extends Application_Controller_Action
         $translationKey = $this->getParam('key');
 
         if (is_null($translationKey)) {
-            $this->_helper->Redirector->redirectTo('show');
+            $this->_helper->Redirector->redirectTo('index');
         }
 
         $request = $this->getRequest();
@@ -174,7 +219,7 @@ class Setup_LanguageController extends Application_Controller_Action
             // TODO validate
             // TODO save
             $this->_helper->Redirector->redirectTo(
-                'show',
+                'index',
                 null,
                 'language',
                 'setup',
@@ -218,7 +263,7 @@ class Setup_LanguageController extends Application_Controller_Action
                 switch ($result) {
                     case Setup_Form_Confirmation::RESULT_NO:
                         $this->_helper->Redirector->redirectTo(
-                            'show',
+                            'index',
                             null,
                             'language',
                             'setup',
@@ -228,10 +273,7 @@ class Setup_LanguageController extends Application_Controller_Action
                     default:
                 }
 
-
                 $translationManager = $this->getTranslationManager();
-
-
 
                 if ($translationManager->keyExists($key)) {
                     $translationManager->reset($key);
@@ -251,7 +293,7 @@ class Setup_LanguageController extends Application_Controller_Action
         }
 
         $this->_helper->Redirector->redirectTo(
-            'show',
+            'index',
             null,
             'language',
             'setup',
@@ -308,6 +350,15 @@ class Setup_LanguageController extends Application_Controller_Action
         }
     }
 
+    /**
+     * Action for editing general language settings for the user interface.
+     *
+     * TODO more language options from configuration page
+     */
+    public function settingsAction()
+    {
+    }
+
     protected function getTranslationForm($add = false)
     {
         $form = new Setup_Form_Translation();
@@ -324,7 +375,7 @@ class Setup_LanguageController extends Application_Controller_Action
     {
         $sortKeysTranslated = [];
 
-        $sortKeys = array_diff($this->_sortKeys, ['language', 'variant']);
+        $sortKeys = array_diff($this->sortKeys, ['language', 'variant']);
 
         foreach ($sortKeys as $option) {
             $sortKeysTranslated[$option] = $this->view->translate('setup_language_' . $option);
@@ -332,10 +383,19 @@ class Setup_LanguageController extends Application_Controller_Action
 
         $form = new Setup_Form_LanguageSearch();
 
-        $form->getElement('search')->setLabel($this->view->translate('setup_language_searchTerm'));
+        $form->setAttrib('id', 'filter');
+
+        $form->getElement(Setup_Form_LanguageSearch::ELEMENT_FILTER)->setLabel(
+            $this->view->translate('setup_language_searchTerm')
+        );
 
         // remove search parameter from URL (gets set when returning from edit forms)
-        $form->setAction($this->view->url(['action' => 'show', 'search' => null]));
+        $form->setAction($this->view->url([
+            'action' => 'index',
+            'controller' => 'language',
+            'module' => 'setup',
+            'search' => null
+        ], null, true));
 
         if (! empty($searchTerm)) {
             $form->search->setValue($searchTerm);
@@ -346,12 +406,7 @@ class Setup_LanguageController extends Application_Controller_Action
 
     protected function getTranslationManager()
     {
-        $config = $this->getConfig();
-
-        $moduleNames = explode(',', $config->setup->translation->modules->allowed);
-
         $translationManager = new Application_Translate_TranslationManager();
-        $translationManager->setModules($moduleNames);
 
         return $translationManager;
     }

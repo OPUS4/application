@@ -88,9 +88,8 @@
 }
 
 .adminContainer .breadcrumbsContainer .wrapper {
-    max-width: 930px;
+    max-width: 95%;
     min-width: 770px;
-    padding: 0 50px 0 20px;
 }
 
 .adminContainer .breadcrumbsContainer * {
@@ -1588,84 +1587,6 @@ ul.links input:hover {
 
 .adminContainer table tbody th {
     font-weight: bold;
-}
-
-.adminContainer table.table-translations {
-    font-size: 1.2em;
-    width: auto;
-}
-
-.adminContainer table.table-translations tbody {
-    background: repeating-linear-gradient(
-        45deg,
-        white,
-        #dcdcdc 1px,
-        white 3px
-    )
-}
-
-.adminContainer table.table-translations tbody.edited {
-    background: none;
-    background-color: white;
-}
-
-.adminContainer table.table-translations tbody.added {
-    background: none;
-    background-color: lightgrey;
-}
-
-.adminContainer table tbody tr:hover {
-    background-color: #b7cde7;
-}
-
-.adminContainer table.table-translations tbody:hover {
-    background-color: #b7cde7;
-}
-
-.adminContainer table.table-translations tbody:hover tr {
-    background-color: #b7cde7;
-}
-
-.adminContainer table.table-translations tbody tr:first-child td {
-    border-top: 2px solid #b7cde7;
-}
-
-.adminContainer table.table-translations td.lang {
-    font-weight: bold;
-    margin-right: 0;
-    padding-right: 0;
-    padding-left: 0;
-}
-
-.adminContainer table.table-translations span.hilite {
-    font-weight: bold;
-    color: darkorange;
-}
-
-.adminContainer table.table-translations td.key {
-    font-family: monospace;
-    font-size: 1em;
-    width: 30%;
-}
-
-.adminContainer table.table-translations .module {
-    font-size: 0.9em;
-    color: slategrey;
-    padding-top: 0.3em;
-    font-style: italic;
-}
-
-.adminContainer table.table-translations span.filename {
-    font-color: gray;
-    font-family: monospace;
-}
-
-.adminContainer table.table-translations td.value {
-    width: auto;
-    padding-right: 0;
-}
-
-.adminContainer table.table-translations td.actions {
 }
 
 .adminContainer td.edit a {

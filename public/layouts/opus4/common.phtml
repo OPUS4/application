@@ -65,13 +65,13 @@ if (isset($this->title)) {
 }
 
 $this->headLink()
-    ->appendStylesheet($this->layoutPath() . '/fontawesome/css/fontawesome.min.css')
-    ->appendStylesheet($this->layoutPath() . '/fontawesome/css/solid.css')
-    ->appendStylesheet($this->baseUrl() . '/' . $config->css->jqueryui->path, 'screen')
-    ->appendStylesheet($this->layoutPath() . '/css/opus.css', 'screen,print')
-    ->appendStylesheet($this->layoutPath() . '/css/admin.css', 'screen,print')
-    ->appendStylesheet($this->layoutPath() . '/css/print.css', 'print')
-    ->appendStylesheet($this->layoutPath() . '/css/custom.css')
+    ->prependStylesheet($this->layoutPath() . '/css/custom.css')
+    ->prependStylesheet($this->layoutPath() . '/css/print.css', 'print')
+    ->prependStylesheet($this->layoutPath() . '/css/admin.css', 'screen,print')
+    ->prependStylesheet($this->layoutPath() . '/css/opus.css', 'screen,print')
+    ->prependStylesheet($this->baseUrl() . '/' . $config->css->jqueryui->path, 'screen')
+    ->prependStylesheet($this->layoutPath() . '/fontawesome/css/solid.css')
+    ->prependStylesheet($this->layoutPath() . '/fontawesome/css/fontawesome.min.css')
     ->headLink([
         'rel' => 'shortcut icon',
         'type' => 'image/x-icon',
