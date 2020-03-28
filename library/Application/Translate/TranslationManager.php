@@ -33,9 +33,27 @@
  */
 
 /**
- * Manages translations across OPUS 4 modules.
+ * Management of translations across OPUS 4 modules.
+ *
+ * # Editing translations in modules
  *
  * The translation manager does not automatically cover all modules, but only those allowed by the the configuration.
+ * If the configuration is empty editing of keys in all modules is allowed.
+ *
+ * setup.translation.modules.allowed = default,publish
+ *
+ * # Duplicate keys
+ *
+ * Duplicate keys are not allowed. Each key in a module should always start with the name of the module.
+ *
+ * All translations are always loaded, because modules can depend on each other and that dependency cannot be resolved
+ * at runtime to decide which translations should be loaded. It is easier to load all translations. if a key occurs
+ * twice, the value loaded last is used.
+ *
+ * It does not make sense to make the management of the translations more complicated to handle duplicate keys. So for
+ * normal operations a key can also appear only once in the management interface. However when loading the translations
+ * duplicates can be detected and conflicts highlighted. Since those conflicts come from TMX files. These conflicts have
+ * to be resolved by the developer of the module.
  *
  * TODO easy way to cover all modules (for development purposes)
  * TODO maybe development mode where original files can be edited
@@ -43,8 +61,10 @@
  *
  * TODO add logic where translations are automatically stored in language_custom and
  *      distinguish between DEFAULT and CUSTOM values in order to display them together in the user interface
+ * TODO place groups of translations like for collections in a "logical" module/namespace
+ * TODO namespaces for translations (?)
  */
-class Application_Translate_TranslationManager
+class Application_Translate_TranslationManager extends Application_Model_Abstract
 {
     /**
      * sort by translation unit
@@ -67,16 +87,51 @@ class Application_Translate_TranslationManager
     const SORT_FILENAME = 'filename';
 
     /**
-     * array holding modules to include
+     * Translations that have been customized (original in TMX files).
      */
-    protected $_modules = [];
+    const STATE_EDITED = 1;
 
     /**
-     * string used to filter translation units
+     * Translations that have been added (no entry in TMX files).
      */
-    protected $_filter;
+    const STATE_ADDED = 2;
 
-    protected $filterByContent = true;
+    /**
+     * Search for matching keys.
+     */
+    const SCOPE_KEYS = 4;
+
+    /**
+     * Search for matching translation texts.
+     */
+    const SCOPE_TEXT = 8;
+
+    /**
+     * String used to filter translations by key and/or value.
+     */
+    private $filter;
+
+    /**
+     * array holding modules to include
+     */
+    private $modules = null;
+
+    /**
+     * @var string
+     */
+    private $filterBy = null;
+
+    /**
+     * Filter translations by state (all, edited, added).
+     * @var string
+     */
+    private $state = null;
+
+    /**
+     * Filter translations by scope (keys and/or values).
+     * @var string
+     */
+    private $scope = null;
 
     /**
      * Names of folders containing TMX files.
@@ -85,14 +140,67 @@ class Application_Translate_TranslationManager
     private $folders = ['language'];
 
     /**
-     * Set Modules to include
+     * Get editable modules.
+     */
+    public function getModules()
+    {
+        if (is_null($this->modules)) {
+            $allowedModules  = $this->getAllowedModules();
+
+            if (is_null($allowedModules)) {
+                $modulesManager = Application_Modules::getInstance();
+                $allowedModules = array_keys($modulesManager->getModules());
+            }
+
+            $this->modules = $allowedModules;
+        }
+
+        return $this->modules;
+    }
+
+    public function getAllowedModules()
+    {
+        $config = $this->getConfig();
+
+        $allowedModules = null;
+
+        if (isset($config->setup->translation->modules->allowed)) {
+            $value = $config->setup->translation->modules->allowed;
+            if (! empty($value)) {
+                $modules = array_map('trim', explode(',', $value));
+
+                $allModules = Application_Modules::getInstance()->getModules();
+
+                $allowedModules = [];
+
+                foreach ($modules as $name) {
+                    if (array_key_exists($name, $allModules)) {
+                        $allowedModules[] = $name;
+                    } else {
+                        $this->getLogger()->err(
+                            "Configuration 'setup.translation.modules.allowed' contains unknown module '$name'."
+                        );
+                    }
+                }
+            }
+        }
+
+        return $allowedModules;
+    }
+
+    /**
+     * Set Modules to include.
      *
      * @param array $modules Modules to include
      *
      */
-    public function setModules($array)
+    public function setModules($modules)
     {
-        $this->_modules = $array;
+        if (! is_array($modules) && ! is_null($modules)) {
+            $this->modules = [$modules];
+        } else {
+            $this->modules = $modules;
+        }
     }
 
     /**
@@ -103,7 +211,7 @@ class Application_Translate_TranslationManager
      */
     public function setFilter($string)
     {
-        $this->_filter = $string;
+        $this->filter = $string;
     }
 
     /**
@@ -122,7 +230,6 @@ class Application_Translate_TranslationManager
         $fileData = $this->getFiles();
 
         $translations = [];
-
         $sortArray = [];
 
         foreach ($fileData as $module => $files) {
@@ -136,7 +243,7 @@ class Application_Translate_TranslationManager
                         $translationUnits = $tmxFile->toArray();
 
                         foreach ($translationUnits as $key => $values) {
-                            if ($this->matches($key, $values, $this->_filter)) {
+                            if ($this->matches($key, $values, $this->filter)) {
                                 $row = [
                                     'key' => $key,
                                     'module' => $module,
@@ -149,8 +256,21 @@ class Application_Translate_TranslationManager
                                     $row['translations'][$lang] = $value;
                                 }
 
-                                $translations[$key] = $row;
-                                $sortArray[] = $row[$sortKey];
+                                if (! array_key_exists($key, $translations)) {
+                                    $translations[$key] = $row;
+                                    $sortArray[] = $row[$sortKey];
+                                } else {
+                                    $entry = $translations[$key];
+                                    if (isset($entry['duplicates'])) {
+                                        $duplicates = $entry['duplicates'];
+                                        unset($entry['duplicates']);
+                                    } else {
+                                        $duplicates = [];
+                                    }
+                                    $duplicates[] = $entry;
+                                    $row['duplicates'] = $duplicates;
+                                    $translations[$key] = $row;
+                                }
                             }
                         }
                     } else {
@@ -186,8 +306,7 @@ class Application_Translate_TranslationManager
      *
      * @param string $sortKey
      * @param int $sortOrder
-     *
-     * TODO check if new values still match otherwise remove entry from result
+     * @return array Translations
      */
     public function getMergedTranslations($sortKey = self::SORT_UNIT, $sortOrder = SORT_ASC)
     {
@@ -200,19 +319,37 @@ class Application_Translate_TranslationManager
 
         foreach ($dbTranslations as $key => $languages) {
             if (array_key_exists($key, $translations)) {
-                // key exists in TMX files and needs to be marked as edited
+                // key exists in TMX files and needs to be marked as EDITED
                 // keep original values from TMX files
-                if ($this->matches($key, $languages, $this->_filter)) {
+                if ($this->matches($key, $languages, $this->filter)) {
                     $translations[$key]['translationsTmx'] = $translations[$key]['translations'];
                     $translations[$key]['translations'] = $languages;
+                    $translations[$key]['state'] = 'edited';
                 } else {
                     // remove if edited version does not match anymore
                     unset($translations[$key]);
                 }
             } else {
-                if ($this->matches($key, $languages, $this->_filter)) {
+                // key does not exist in TMX file and needs to be marked as ADDED
+                if ($this->matches($key, $languages, $this->filter)) {
                     $translations[$key]['key'] = $key;
                     $translations[$key]['translations'] = $languages;
+                    $translations[$key]['state'] = 'added';
+                }
+            }
+        }
+
+        if ($this->state !== null) {
+            foreach ($translations as $key => $entry) {
+                if ($this->state !== null && ! isset($entry['state'])) {
+                    unset($translations[$key]);
+                } else {
+                    if (($entry['state'] === 'added' && $this->state & self::STATE_ADDED) ||
+                        ($entry['state'] === 'edited' && $this->state & self::STATE_EDITED)) {
+                        // keep entry
+                    } else {
+                        unset($translations[$key]);
+                    }
                 }
             }
         }
@@ -220,19 +357,36 @@ class Application_Translate_TranslationManager
         return $translations;
     }
 
-    public function matches($key, $values, $filter)
+    /**
+     * Checks if translation matches configured criteria.
+     *
+     * Depending on the configured scope the function checks the key and/or the text of translations.
+     * Filtering by state happens outside this function because this depends on the presence of the
+     * key in the TMX files and the database or just the database.
+     *
+     * TODO should filting by module happen here
+     *
+     * @param $key string Name of translation key
+     * @param $values array Translated texts for supported languages
+     * @param $filter string Filter string for matching entries
+     * @param $module string Name of module for translation key
+     * @return bool
+     */
+    public function matches($key, $values, $filter, $module = null)
     {
         if (empty($filter)) {
             return true;
         }
 
-        if (stripos($key, $filter) !== false) {
+        if (($this->scope & self::SCOPE_KEYS || $this->scope == null) && stripos($key, $filter) !== false) {
             return true;
         }
 
-        foreach ($values as $lang => $value) {
-            if (stripos($value, $filter) !== false) {
-                return true;
+        if ($this->scope & self::SCOPE_TEXT || $this->scope == null) {
+            foreach ($values as $lang => $value) {
+                if (stripos($value, $filter) !== false) {
+                    return true;
+                }
             }
         }
 
@@ -272,11 +426,21 @@ class Application_Translate_TranslationManager
 
         $languageDirs = $this->getFolderNames();
 
-        foreach ($this->_modules as $moduleName) {
+        foreach ($this->getModules() as $moduleName) {
             $moduleFiles = [];
 
+            $modulePath = realpath(APPLICATION_PATH . "/modules/$moduleName");
+
+            if (! is_dir($modulePath)) {
+                // TODO should this throw an exception? basically this here should never happen
+                $this->getLogger()->err(
+                    "Module directory '$moduleName' not found for loading translations."
+                );
+                continue;
+            }
+
             $moduleSubDirs = new RecursiveDirectoryIterator(
-                realpath(APPLICATION_PATH . "/modules/$moduleName"),
+                $modulePath,
                 FilesystemIterator::CURRENT_AS_SELF
             );
 
@@ -303,6 +467,9 @@ class Application_Translate_TranslationManager
         return $modules;
     }
 
+    /**
+     * @return array
+     */
     public function getFolderNames()
     {
         if (! is_array($this->folders)) {
@@ -311,6 +478,9 @@ class Application_Translate_TranslationManager
         return $this->folders;
     }
 
+    /**
+     * @param $names
+     */
     public function setFolderNames($names)
     {
         if (! is_array($names)) {
@@ -319,6 +489,9 @@ class Application_Translate_TranslationManager
         $this->folders = $names;
     }
 
+    /**
+     * @param $name
+     */
     public function addFolderName($name)
     {
         $names = $this->getFolderNames();
@@ -329,6 +502,10 @@ class Application_Translate_TranslationManager
         }
     }
 
+    /**
+     * @param $key
+     * @return bool
+     */
     public function keyExists($key)
     {
         $database = new Opus_Translate_Dao();
@@ -405,5 +582,38 @@ class Application_Translate_TranslationManager
     public function getDatabase()
     {
         return new Opus_Translate_Dao();
+    }
+
+    public function setState($state)
+    {
+        $this->state = $state;
+    }
+
+    public function setScope($scope)
+    {
+        $this->scope = $scope;
+    }
+
+    /**
+     * Finds and returns duplicate keys in TMX files.
+     *
+     * TODO automatically search all modules? development setting?
+     */
+    public function getDuplicateKeys()
+    {
+        $all = $this->getTranslations();
+
+        $duplicateKeys = [];
+
+        foreach ($all as $key => $entry) {
+            if (isset($entry['duplicates'])) {
+                $duplicates = $entry['duplicates'];
+                unset($entry['duplicates']);
+                $duplicates[] = $entry;
+                $duplicateKeys[$key] = $duplicates;
+            }
+        }
+
+        return $duplicateKeys;
     }
 }

@@ -40,6 +40,8 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
 
     protected $additionalResources = ['database', 'translation'];
 
+    protected $configModifiable = true;
+
     /**
      * @var Application_Translate_TranslationManager
      */
@@ -63,22 +65,23 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
         parent::tearDown();
     }
 
-    /**
-     */
     public function testGetFiles()
     {
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'setup' => ['translation' => ['modules' => ['allowed' => 'default,publish']]]
+        ]));
+
         $files = $this->object->getFiles();
 
-        $this->assertEquals([], $files, 'Expected empty result with no modules set');
+        $this->assertCount(2, $files);
 
         $this->object->setModules(['default']);
         $files = $this->object->getFiles();
 
-        $this->assertNotEquals([], $files, 'Expected non empty result with module set');
+        $this->assertCount(1, $files, 'Expected non empty result with module set');
+        $this->assertArrayHasKey('default', $files);
     }
 
-    /**
-     */
     public function testGetTranslations()
     {
         $sortKeys = [
@@ -110,6 +113,19 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
                 $this->assertEquals($sortedValues, $actualValues);
             }
         }
+    }
+
+    public function testGetTranslationsModulesNull()
+    {
+        $manager = $this->object;
+
+        $manager->setModules(null);
+
+        $translations = $manager->getTranslations();
+
+        $this->assertNotNull($translations);
+        $this->assertInternalType('array', $translations);
+        $this->assertGreaterThan(0, count($translations));
     }
 
     /**
@@ -153,40 +169,56 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
         }
     }
 
-    public function testDuplicateKeys()
+    public function testGetDuplicateKeys()
     {
-        $modules = Application_Modules::getInstance()->getModules();
+        $manager = $this->object;
 
-        $modules['default'] = 'default';
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'setup' => ['translation' => ['modules' => ['allowed' => null]]]
+        ]));
 
+        $duplicateKeys = $manager->getDuplicateKeys();
+
+        $message = 'Duplicate translation keys found:' . PHP_EOL;
+
+        foreach ($duplicateKeys as $key => $entries) {
+            $modules = implode(',', array_map(function ($value) {
+                return $value['module'];
+            }, $entries));
+            $message .= "  $key ($modules)" . PHP_EOL;
+        }
+
+        $this->assertCount(0, $duplicateKeys, $message);
+    }
+
+    /**
+     * Checks maximum length of translation keys.
+     *
+     * The limit is 100 for storing key in the database. There should not be a reason for longer keys.
+     * The longest currently known key is 58 characters long.
+     */
+    public function testKeyMaxLength()
+    {
         $translations = $this->object;
 
-        $translations->setModules(array_keys($modules));
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'setup' => ['translation' => ['modules' => ['allowed' => null]]]
+        ]));
+
+        $translations->setModules(null);
+
         $all = $translations->getTranslations();
 
         $maxLength = 0;
 
-        foreach ($all as $entry) {
-            $text = $entry['key'];
-            $length = strlen($text);
+        foreach ($all as $key => $entry) {
+            $length = strlen($key);
             if ($length > $maxLength) {
                 $maxLength = $length;
             }
         }
 
-        $keys = [];
-
-        foreach ($all as $entry) {
-            $keys[] = $entry['key'];
-        }
-
-        $keyCount = array_count_values($keys);
-
-        $duplicateKeys = array_filter($keyCount, function ($value) {
-            return $value > 1;
-        });
-
-        $this->assertCount(0, $duplicateKeys);
+        $this->assertLessThan(100, $maxLength);
     }
 
     public function testFilterByValue()
@@ -315,10 +347,15 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
         $testKey = 'answer_yes';
 
         $manager->reset($testKey);
+
+        // TODO test
+        $this->markTestIncomplete();
     }
 
     public function testDelete()
     {
+        // TODO test
+        $this->markTestIncomplete();
     }
 
     public function testGetExportTmxFile()
@@ -352,6 +389,8 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
 
     public function testGetExportTmxFileWithDefaultModuleTranslations()
     {
+        // TODO test
+        $this->markTestIncomplete();
     }
 
     public function testImportTmxFile()
@@ -394,5 +433,201 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
 
     public function testImportTmxFileWithModuleOverride()
     {
+        // TODO test
+        $this->markTestIncomplete();
+    }
+
+    public function testFilterByStateEdited()
+    {
+        $manager = $this->object;
+
+        $database = new Opus_Translate_Dao();
+
+        $database->setTranslation('testkey', [
+            'en' => 'Testvalue',
+            'de' => 'Testwert'
+        ]);
+
+        $database->setTranslation('home_menu_label', [
+            'en' => 'Label',
+            'de' => 'Titel'
+        ]);
+
+        $manager->setModules('default');
+        $manager->setFilter(null);
+        $manager->setState(Application_Translate_TranslationManager::STATE_EDITED);
+
+        $translations = $manager->getMergedTranslations();
+
+        $this->assertCount(1, $translations);
+        $this->assertArrayHasKey('home_menu_label', $translations);
+    }
+
+    public function testFilterByStateAdded()
+    {
+        $manager = $this->object;
+
+        $database = new Opus_Translate_Dao();
+
+        $database->setTranslation('testkey', [
+            'en' => 'Testvalue',
+            'de' => 'Testwert'
+        ]);
+
+        $manager->setModules('default');
+        $manager->setFilter(null);
+        $manager->setState(Application_Translate_TranslationManager::STATE_ADDED);
+
+        $translations = $manager->getMergedTranslations();
+
+        $this->assertCount(1, $translations);
+        $this->assertArrayHasKey('testkey', $translations);
+    }
+
+    public function testFilterByScope()
+    {
+        $manager = $this->object;
+
+        $database = new Opus_Translate_Dao();
+
+        $database->setTranslation('dummykey', [
+            'en' => 'EN text',
+            'de' => 'DE Text'
+        ]);
+
+        $database->setTranslation('key2', [
+            'en' => 'dummy key',
+            'de' => 'Dummy'
+        ]);
+
+        $manager->setModules('default');
+        $manager->setFilter('dummy');
+        $manager->setScope(Application_Translate_TranslationManager::SCOPE_KEYS);
+
+        $translations = $manager->getMergedTranslations();
+
+        $this->assertCount(1, $translations);
+        $this->assertArrayHasKey('dummykey', $translations);
+
+        $manager->setScope(Application_Translate_TranslationManager::SCOPE_TEXT);
+
+        $translations = $manager->getMergedTranslations();
+
+        $this->assertCount(1, $translations);
+        $this->assertArrayHasKey('key2', $translations);
+
+        $manager->setScope(null);
+
+        $translations = $manager->getMergedTranslations();
+
+        $this->assertCount(2, $translations);
+        $this->assertArrayHasKey('dummykey', $translations);
+        $this->assertArrayHasKey('key2', $translations);
+    }
+
+    public function testGetModules()
+    {
+        $manager = $this->object;
+
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'setup' => ['translation' => ['modules' => ['allowed' => 'default,publish']]]
+        ]));
+
+        $modules = $manager->getModules();
+
+        $this->assertEquals([
+            'default',
+            'publish'
+        ], $modules);
+    }
+
+    public function testGetModulesNoRestrictions()
+    {
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'setup' => ['translation' => ['modules' => ['allowed' => null]]]
+        ]));
+
+        $manager = $this->object;
+
+        $modules = $manager->getModules();
+
+        $modulesManager = Application_Modules::getInstance();
+
+        $this->assertEquals(array_keys($modulesManager->getModules()), $modules);
+    }
+
+    public function testGetModulesRestrictionForUnknownModules()
+    {
+        $manager = $this->object;
+
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'setup' => ['translation' => ['modules' => ['allowed' => 'default,publish,unknown1']]]
+        ]));
+
+        $modules = $manager->getModules();
+
+        $this->assertEquals([
+            'default',
+            'publish'
+        ], $modules);
+    }
+
+    public function testGetAllowedModules()
+    {
+        $manager = $this->object;
+
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'setup' => ['translation' => ['modules' => ['allowed' => 'default,home,publish']]]
+        ]));
+
+        $modules = $manager->getAllowedModules();
+
+        $this->assertEquals([
+            'default',
+            'home',
+            'publish'
+        ], $modules);
+    }
+
+    public function testGetAllowedModulesHandlingSpaces()
+    {
+        $manager = $this->object;
+
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'setup' => ['translation' => ['modules' => ['allowed' => 'default, home , publish ']]]
+        ]));
+
+        $modules = $manager->getAllowedModules();
+
+        $this->assertEquals([
+            'default',
+            'home',
+            'publish'
+        ], $modules);
+    }
+
+    public function testGetAllowedModulesUnknownModule()
+    {
+        $manager = $this->object;
+
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'setup' => ['translation' => ['modules' => ['allowed' => 'default,unknown1']]]
+        ]));
+
+        $logger = new MockLogger();
+
+        $manager->setLogger($logger);
+
+        $modules = $manager->getAllowedModules();
+
+        $this->assertEquals([
+            'default'
+        ], $modules);
+
+        $messages = $logger->getMessages();
+
+        $this->assertCount(1, $messages);
+        $this->assertContains('setup.translation.modules.allowed', $messages[0]);
+        $this->assertContains('unknown1', $messages[0]);
     }
 }
