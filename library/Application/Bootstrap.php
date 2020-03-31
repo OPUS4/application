@@ -35,7 +35,7 @@
  * @author      Simone Finkbeiner (simone.finkbeiner@ub.uni-stuttgart.de)
  * @author      Jens Schwidder <schwidder@zib.de>
  * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  *
  * TODO unit test bootstrap
@@ -225,7 +225,8 @@ class Application_Bootstrap extends Opus_Bootstrap_Base
 
         $translate = Application_Translate::getInstance();
         $translate->setOptions([
-            'log' => $logger
+            'log' => $logger,
+            'route' => ['en' => 'de'] // TODO make configurable in administration AND/OR generate automatically (all lang -> default)
         ]);
 
         Zend_Registry::set(Application_Translate::REGISTRY_KEY, $translate);
