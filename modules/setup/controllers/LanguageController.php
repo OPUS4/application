@@ -162,6 +162,7 @@ class Setup_LanguageController extends Application_Controller_Action
 
             switch ($result) {
                 case Setup_Form_Translation::RESULT_SAVE:
+                    // TODO check if form is valid
                     // TODO save new translation key
                     // TODO check if key already exists
                     break;
@@ -364,8 +365,8 @@ class Setup_LanguageController extends Application_Controller_Action
         $form = new Setup_Form_Translation();
 
         if ($add) {
-            $form->setKeyEditable(true);
-            $form->addTranslationElement();
+            // TODO $form->setKeyEditable(true);
+            // $form->addTranslationElement();
         }
 
         return $form;
