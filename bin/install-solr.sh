@@ -101,13 +101,13 @@ echo "done"
 cd "$SOLR_DIR"
 
 SOLR_BASE_DIR="$(pwd)"
-SOLR_CORE_DIR="$(pwd)/opus4"
+SOLR_CORE_DIR="${SOLR_BASE_DIR}/opus4"
 
 # create space for configuring solr service
 mkdir -p "${SOLR_CORE_DIR}/data/solr/conf"
 
 # put configuration and schema files
-ln -sf "$BASEDIR/vendor/opus4-repo/search/core.properties" "${SOLR_CORE_DIR}/data/solr"
+ln -sf "$BASEDIR/vendor/opus4-repo/search/conf/core.properties" "${SOLR_CORE_DIR}/data/solr"
 
 ln -sf "${BASEDIR}/vendor/opus4-repo/search/conf/schema.xml" "${SOLR_CORE_DIR}/data/solr/conf"
 ln -sf "${BASEDIR}/vendor/opus4-repo/search/conf/solrconfig.xml" "${SOLR_CORE_DIR}/data/solr/conf"
