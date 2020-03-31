@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -27,24 +26,66 @@
  *
  * @category    Application
  * @package     Module_Setup
- * @author      Edouard Simon (edouard.simon@zib.de)
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
- * SubForm used by language controller for editing single tranlsation key
+ * TODO require default language value ?
  */
-class Setup_Form_LanguageKey extends Zend_Form_SubForm
+class Setup_Form_TranslationValuesTest extends ControllerTestCase
 {
 
-    public function __construct($key, $options = null)
-    {
-        parent::__construct($options);
+    protected $additionalResources = 'Translation';
 
-        $this->addElement('textarea', 'en', ['label' => 'en']);
-        $this->addElement('textarea', 'de', ['label' => 'de']);
-        $this->addDisplayGroup(['de', 'en'], $key, ['legend' => $key]);
+    public function testInit()
+    {
+        $form = $this->getForm();
+
+        $languages = Application_Configuration::getInstance()->getSupportedLanguages();
+
+        $elements = $form->getElements();
+
+        $this->assertEquals(count($languages), count($elements));
+    }
+
+    public function testPopulate()
+    {
+        $form = $this->getForm();
+
+        $form->setName('Translation');
+
+        $form->populate([
+            'Translation' => [
+                'en' => 'English',
+                'de' => 'Deutsch'
+            ]
+        ]);
+
+        $this->assertEquals('English', $form->getElement('en')->getValue());
+        $this->assertEquals('Deutsch', $form->getElement('de')->getValue());
+    }
+
+    public function testIsValidTrue()
+    {
+        $form = $this->getForm();
+
+        $this->assertTrue($form->isValid([]));
+    }
+
+    public function testIsValidEmptyValues()
+    {
+        $form = $this->getForm();
+
+        $this->assertTrue($form->isValid([
+            'en' => '',
+            'de' => ''
+        ]));
+    }
+
+    protected function getForm()
+    {
+        return new Setup_Form_TranslationValues();
     }
 }

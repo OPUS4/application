@@ -31,20 +31,118 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Setup_Form_Translation extends Application_Form_Translations
+/**
+ * Form for adding or editing translations.
+ *
+ * This form is independent of the classes used to integrate translation editing into other forms. This currently makes
+ * sense, because the requirments are different.
+ * - Application_Form_Element_Translation
+ * - Application_Form_Translations
+ *
+ * TODO support validation for adding new keys (don't exist yet)
+ * TODO support changing keys when editing for added keys
+ * TODO do not allow modification of module and key when editing values
+ *
+ * TODO review separation and refactor redundant code
+ * TODO use this form to test out new HTML structure and styling (responsive)
+ */
+class Setup_Form_Translation extends Application_Form_Abstract
 {
 
+    /**
+     * @var string Name of translation key.
+     */
     const ELEMENT_KEY = 'Key';
+
+    /**
+     * @var string Name of module for translation key.
+     */
+    const ELEMENT_MODULE = 'KeyModule';
+
+    /**
+     *
+     */
+    const SUBFORM_TRANSLATION = 'Translation';
+
+    const ELEMENT_SAVE = 'Save';
+
+    const ELEMENT_CANCEL = 'Cancel';
+
+    const RESULT_SAVE = 'Save';
+
+    const RESULT_CANCEL = 'Cancel';
 
     public function init()
     {
         parent::init();
 
+        $this->setElementDecorators([
+            'ViewHelper',
+            [['InputWrapper' => 'HtmlTag'], ['class' => 'col-input']],
+            ['Label', ['tag' => 'div', 'tagClass' => 'col-label', 'placement' => 'prepend']],
+            [['Wrapper' => 'HtmlTag'], ['class' => 'row']]
+        ]);
+
         $this->addElement('text', self::ELEMENT_KEY, [
-            'label' => 'Key', 'size' => 80, 'disabled' => true
+            'label' => 'Key', 'size' => 80, 'required' => true
+        ]);
+
+        // TODO no 'all' option
+        // TODO always all modules
+        // TODO maybe "virtual modules"
+        // TODO automatically use module name as prefix (?)
+        $this->addElement('Modules', self::ELEMENT_MODULE, [
+            'label' => 'Module', 'required' => true
+        ]);
+
+        // TODO add input element for every supported language (separate function)
+        $values = new Setup_Form_TranslationValues(self::SUBFORM_TRANSLATION);
+        $this->addSubForm($values, self::SUBFORM_TRANSLATION);
+
+        $this->addElement('submit', self::ELEMENT_SAVE, [
+            'decorators' => [
+                'ViewHelper'
+            ]
+        ]);
+        $this->addElement('submit', self::ELEMENT_CANCEL, [
+            'decorators' => [
+                'ViewHelper'
+            ]
+        ]);
+
+        $this->addDisplayGroup(
+            [self::ELEMENT_SAVE, self::ELEMENT_CANCEL],
+            'actions',
+            ['order' => 1000, 'decorators' => [
+                'FormElements',
+                [['divWrapper' => 'HtmlTag'], ['id' => 'form-action']]
+            ]]
+        );
+
+
+        $this->setDecorators([
+            'FormElements',
+            'Form'
         ]);
     }
 
+    /**
+     * Processes POST requests for this form.
+     * @param $post POST data for this form
+     * @param $context POST data for entire request
+     * @return string|null Result of processing
+     */
+    public function processPost($post, $context)
+    {
+        if (array_key_exists(self::ELEMENT_SAVE, $post)) {
+            return self::RESULT_SAVE;
+        } elseif (array_key_exists(self::ELEMENT_CANCEL, $post)) {
+            return self::RESULT_CANCEL;
+        }
+        return null;
+    }
+
+    /*
     public function addKey($key, $textarea = true, $options = null)
     {
         if (is_null($options)) {
@@ -62,10 +160,10 @@ class Setup_Form_Translation extends Application_Form_Translations
     {
         $this->getElement(self::ELEMENT_KEY)->setAttrib('disabled', $enabled ? null : true);
     }
-
-    public function addTranslationElement($textarea = true, $customOptions = null)
+    */
+    protected function addTranslationElement($language, $textarea = true, $customOptions = null)
     {
-        $options = ['label' => "setup_translation", 'textarea' => $textarea];
+        $options = ['label' => $language, 'textarea' => $textarea];
 
         $width = 90;
 
@@ -79,7 +177,7 @@ class Setup_Form_Translation extends Application_Form_Translations
             $options = array_merge($options, $customOptions);
         }
 
-        $element = $this->createElement('translation', 'translations', $options);
+        $element = $this->createElement('text', 'translation', $options);
         $this->addElement($element);
     }
 }

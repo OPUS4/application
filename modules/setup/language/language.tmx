@@ -60,6 +60,15 @@
         </tuv>
     </tu>
 
+    <tu tuid="setup_language_add">
+        <tuv xml:lang="en">
+            <seg>Add Key</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Schlüssel anlegen</seg>
+        </tuv>
+    </tu>
+
     <tu tuid="setup_language_edit">
         <tuv xml:lang="en">
             <seg>Edit</seg>
@@ -101,7 +110,7 @@
         <seg>Key</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Übersetzungschlüssel</seg>
+        <seg>Übersetzungsschlüssel</seg>
       </tuv>
     </tu>
 
@@ -294,6 +303,15 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>Einstellungen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="setup_translation_error_key_exists">
+      <tuv xml:lang="en">
+        <seg>The translation key already exists.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Der Übersetzungsschlüssel exisitiert bereits.</seg>
       </tuv>
     </tu>
 
