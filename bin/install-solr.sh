@@ -97,7 +97,7 @@ echo "done"
 # Run Solr installation
 #
 
-cd "$SOLR_DIR"
+cd "$SOLR_ARCHIVE_NAME"
 
 SOLR_BASE_DIR="$(pwd)"
 SOLR_CORE_DIR="$(pwd)/opus4"
