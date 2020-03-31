@@ -12,7 +12,7 @@
 # GNU General Public License for more details.
 #
 # @author      Jens Schwidder <schwidder@zib.de>
-# @copyright   Copyright (c) 2010-2019, OPUS 4 development team
+# @copyright   Copyright (c) 2010-2020, OPUS 4 development team
 # @license     http://www.gnu.org/licenses/gpl.html General Public License
 
 #
@@ -42,6 +42,7 @@ fi
 SOLR_VERSION='7.7.2'
 
 SOLR_SERVER_URL="http://archive.apache.org/dist/lucene/solr/$SOLR_VERSION/solr-$SOLR_VERSION.tgz"
+SOLR_DIR="solr-$SOLR_VERSION"
 
 # END OF USER-CONFIGURATION
 
@@ -88,7 +89,7 @@ EOT
 }
 }
 
-# extract archive into basedir (expecting to create folder named solr-x.y.z)
+# extract archive into basedir (expected to create folder named solr-x.y.z)
 echo "Extracting Solr archive ..."
 tar xfz "downloads/$SOLR_ARCHIVE_NAME"
 echo "done"
@@ -97,7 +98,7 @@ echo "done"
 # Run Solr installation
 #
 
-cd "$SOLR_ARCHIVE_NAME"
+cd "$SOLR_DIR"
 
 SOLR_BASE_DIR="$(pwd)"
 SOLR_CORE_DIR="$(pwd)/opus4"
