@@ -46,7 +46,6 @@
  */
 class Application_Import_AdditionalEnrichments
 {
-
     const OPUS_IMPORT_USER = 'opus.import.user';
 
     const OPUS_IMPORT_DATE = 'opus.import.date';
@@ -55,14 +54,30 @@ class Application_Import_AdditionalEnrichments
 
     const OPUS_IMPORT_CHECKSUM = 'opus.import.checksum';
 
+    const OPUS_SOURCE = 'opus.source';
+
     private $enrichmentMap;
 
-    public function checkKeysExist()
+    /**
+     * Application_Import_AdditionalEnrichments constructor.
+     */
+    public function __construct()
+    {
+        if (! $this->checkKeysExist()) {
+            throw new Exception('at least one import specific enrichment key does not exist');
+        }
+
+        $this->addEnrichment(self::OPUS_IMPORT_DATE, gmdate('c'));
+        $this->addEnrichment(self::OPUS_SOURCE, 'sword');
+    }
+
+    private function checkKeysExist()
     {
         return $this->keyExist(self::OPUS_IMPORT_USER)
             && $this->keyExist(self::OPUS_IMPORT_DATE)
             && $this->keyExist(self::OPUS_IMPORT_FILE)
-            && $this->keyExist(self::OPUS_IMPORT_CHECKSUM);
+            && $this->keyExist(self::OPUS_IMPORT_CHECKSUM)
+            && $this->keyExist(self::OPUS_SOURCE);
     }
 
     private function keyExist($key)
@@ -84,11 +99,6 @@ class Application_Import_AdditionalEnrichments
     public function addUser($value)
     {
         $this->addEnrichment(self::OPUS_IMPORT_USER, trim($value));
-    }
-
-    public function addDate($value)
-    {
-        $this->addEnrichment(self::OPUS_IMPORT_DATE, trim($value));
     }
 
     public function addFile($value)

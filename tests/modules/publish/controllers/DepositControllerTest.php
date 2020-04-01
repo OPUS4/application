@@ -156,6 +156,10 @@ class Publish_DepositControllerTest extends ControllerTestCase
         $this->assertResponseCode(302);
         $this->assertController('deposit');
         $this->assertAction('deposit');
+
+        $doc = new Opus_Document($session->documentId);
+        $this->assertEquals('unpublished', $doc->getServerState());
+        $this->assertEquals('publish', $doc->getEnrichmentValue('opus.source'));
     }
 
     public function testConfirmAction()

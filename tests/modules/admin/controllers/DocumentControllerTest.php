@@ -480,6 +480,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase
         $this->assertQueryContentContains('//*[@id="Document-Bibliographic-PageFirst"]', '1');
         $this->assertQueryContentContains('//*[@id="Document-Bibliographic-PageLast"]', '4');
         $this->assertQueryContentContains('//*[@id="Document-Bibliographic-Issue"]', '3');
+        $this->assertQueryContentContains('//*[@id="Document-Bibliographic-ArticleNumber"]', '2');
         $this->assertQueryContentContains('//*[@id="Document-Bibliographic-ContributingCorporation"]', 'Baz University');
         $this->assertQueryContentContains('//*[@id="Document-Bibliographic-CreatingCorporation"]', 'Bar University');
         $this->assertQueryContentContains('//*[@id="Document-Bibliographic-ThesisDateAccepted"]', '02.11.2010');
@@ -722,6 +723,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase
         $this->assertQueryContentContains('//*[@id="Document-Bibliographic-PageFirst"]', '1');
         $this->assertQueryContentContains('//*[@id="Document-Bibliographic-PageLast"]', '4');
         $this->assertQueryContentContains('//*[@id="Document-Bibliographic-Issue"]', '3');
+        $this->assertQueryContentContains('//*[@id="Document-Bibliographic-ArticleNumber"]', '2');
         $this->assertQueryContentContains('//*[@id="Document-Bibliographic-ContributingCorporation"]', 'Baz University');
         $this->assertQueryContentContains('//*[@id="Document-Bibliographic-CreatingCorporation"]', 'Bar University');
         $this->assertQueryContentContains('//*[@id="Document-Bibliographic-ThesisDateAccepted"]', '2010/11/02');

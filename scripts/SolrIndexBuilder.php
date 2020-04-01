@@ -234,7 +234,7 @@ EOT;
             $doc = new Opus_Document($docId);
 
             // dirty hack: disable implicit reindexing of documents in case of cache misses
-            $doc->unregisterPlugin('Opus_Document_Plugin_Index');
+            $doc->unregisterPlugin('Opus\Search\Plugin\Index');
 
             $docs[] = $doc;
 

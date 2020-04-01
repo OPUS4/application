@@ -91,11 +91,6 @@ class Publish_IndexController extends Application_Controller_Action
 
         // Adds translated messages for javascript files
         $javascriptTranslations = $this->view->getHelper('javascriptMessages');
-        $javascriptTranslations->addMessage('uploadedFileHasErrorMessage');
-        $javascriptTranslations->addMessage('fileExtensionFalse');
-        $javascriptTranslations->addMessage('fileUploadErrorSize');
-        $javascriptTranslations->addMessage('filenameLengthError');
-        $javascriptTranslations->addMessage('filenameFormatError');
-        $javascriptTranslations->addMessage('chooseAnotherFile');
+        $javascriptTranslations->getDefaultMessageSet();
     }
 }

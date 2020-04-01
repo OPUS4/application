@@ -164,12 +164,8 @@ class Sword_DepositController extends Zend_Rest_Controller
     private function getAdditionalEnrichments($userName, $request)
     {
         $additionalEnrichments = new Application_Import_AdditionalEnrichments();
-        if (! $additionalEnrichments->checkKeysExist()) {
-            throw new Exception('at least one import specific enrichment key does not exist');
-        }
 
         $additionalEnrichments->addUser($userName);
-        $additionalEnrichments->addDate(gmdate('c'));
 
         $fileName = $request->getHeader('Content-Disposition');
         if (! is_null($fileName) && $fileName !== false) {

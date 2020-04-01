@@ -73,14 +73,14 @@ class Application_Security_AclProviderTest extends ControllerTestCase
     {
         $aclProvider = new Application_Security_AclProvider();
         $acl = $aclProvider->getAcls();
-        $this->assertTrue($acl instanceof Zend_Acl, 'Excpected instance of Zend_Acl');
+        $this->assertTrue($acl instanceof Zend_Acl, 'Expected instance of Zend_Acl');
         $this->assertTrue(
             $acl->isAllowed(Application_Security_AclProvider::ACTIVE_ROLE, 'documents'),
-            "expectec user has access to resource 'documents'"
+            "expected user has access to resource 'documents'"
         );
         $this->assertFalse(
             $acl->isAllowed(Application_Security_AclProvider::ACTIVE_ROLE, 'accounts'),
-            "expectec user has no access to resource 'accounts'"
+            "expected user has no access to resource 'accounts'"
         );
     }
 

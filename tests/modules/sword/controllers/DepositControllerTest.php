@@ -60,7 +60,7 @@ class Sword_DepositControllerTest extends ControllerTestCase
 
     public function testZipArchiveAllFieldDocumentDeposit()
     {
-        $doc = $this->depositSuccessful('allfields-document.zip', DepositTestHelper::CONTENT_TYPE_ZIP, true, false, false, 6, 3, 'published');
+        $doc = $this->depositSuccessful('allfields-document.zip', DepositTestHelper::CONTENT_TYPE_ZIP, true, false, false, 7, 3, 'published');
         $this->checkAllFieldsImport($doc);
         $doc->deletePermanent();
         $this->testHelper->removeImportCollection();
@@ -68,7 +68,7 @@ class Sword_DepositControllerTest extends ControllerTestCase
 
     public function testTarArchiveAllFieldDocumentDeposit()
     {
-        $doc = $this->depositSuccessful('allfields-document.tar', DepositTestHelper::CONTENT_TYPE_TAR, true, false, false, 6, 3, 'published');
+        $doc = $this->depositSuccessful('allfields-document.tar', DepositTestHelper::CONTENT_TYPE_TAR, true, false, false, 7, 3, 'published');
         $this->checkAllFieldsImport($doc);
         $doc->deletePermanent();
         $this->testHelper->removeImportCollection();
@@ -180,6 +180,10 @@ class Sword_DepositControllerTest extends ControllerTestCase
         $this->assertEquals($fileCount, count($doc->getFile()));
     }
 
+    /**
+     * @param Opus_Document $doc
+     * @throws Exception
+     */
     private function checkAllFieldsImport($doc)
     {
         $this->assertEquals('deu', $doc->getLanguage());
@@ -187,6 +191,7 @@ class Sword_DepositControllerTest extends ControllerTestCase
         $this->assertEquals('10', $doc->getPageFirst());
         $this->assertEquals('20', $doc->getPageLast());
         $this->assertEquals('11', $doc->getPageNumber());
+        $this->assertEquals('42', $doc->getArticleNumber());
         $this->assertEquals('99', $doc->getEdition());
         $this->assertEquals('11', $doc->getVolume());
         $this->assertEquals('543', $doc->getIssue());
@@ -278,7 +283,7 @@ class Sword_DepositControllerTest extends ControllerTestCase
         $this->checkSeries($series[1], 4, 11);
 
         $enrichments = $doc->getEnrichment();
-        $this->assertEquals(6, count($enrichments));
+        $this->assertEquals(7, count($enrichments));
         $this->checkNonImportEnrichments($enrichments);
 
         $licences = $doc->getLicence();
@@ -319,11 +324,11 @@ class Sword_DepositControllerTest extends ControllerTestCase
     private function checkNonImportEnrichments($enrichments)
     {
         foreach ($enrichments as $enrichment) {
-            if (strpos($enrichment->getKeyName(), 'opus.import.') !== 0) {
+            $keyName = $enrichment->getKeyName();
+            if ($keyName != Application_Import_AdditionalEnrichments::OPUS_SOURCE && strpos($keyName, 'opus.import.') !== 0) {
                 // überprüfe hier nur die Enrichments, die nicht automatisch beim Import eines Dokuments angelegt werden
-                $keyname = $enrichment->getKeyName();
                 $value = $enrichment->getValue();
-                $this->assertTrue($keyname == 'SourceSwb' && $value == 'enrichment1' || $keyname == 'SourceTitle' && $value == 'enrichment2');
+                $this->assertTrue($keyName == 'SourceSwb' && $value == 'enrichment1' || $keyName == 'SourceTitle' && $value == 'enrichment2');
             }
         }
     }
@@ -411,7 +416,7 @@ class Sword_DepositControllerTest extends ControllerTestCase
         $abstractExist = true,
         $deleteDoc = true,
         $deleteCollection = true,
-        $numOfEnrichments = 4,
+        $numOfEnrichments = 5,
         $numOfCollections = 1,
         $serverState = 'unpublished'
     ) {

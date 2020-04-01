@@ -3,12 +3,30 @@
 <tmx>
     <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool" />
     <body>
-        <tu tuid="export_datacite_error_title">
+        <tu tuid="export_datacite_error_head_title">
             <tuv xml:lang="en">
                 <seg>DataCite XML of document %1$s is not valid</seg>
             </tuv>
             <tuv xml:lang="de">
                 <seg>DataCite XML von Dokument %1$s ist nicht gültig</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="export_datacite_notice_head_title">
+            <tuv xml:lang="en">
+                <seg>DataCite XML of unpublished document %1$s is valid</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>DataCite XML des nicht freigeschalteten Dokuments %1$s ist gültig</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="export_datacite_notice_head_subtitle">
+            <tuv xml:lang="en">
+                <seg>The value of mandatory field publicationYear cannot be determined until the document is published.</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Der Wert für das Pflichtelement publicationYear kann allerdings erst nach der Freischaltung bestimmt werden.</seg>
             </tuv>
         </tu>
 
@@ -93,12 +111,21 @@
             </tuv>
         </tu>
 
-        <tu tuid="export_datacite_error_publication_date_missing">
+        <tu tuid="export_datacite_error_publication_date_missing_non_published">
             <tuv xml:lang="en">
-                <seg>Please provide a date of publication! This date will be set automatically when the document is published.</seg>
+                <seg>This year will be set automatically when the document is published.</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>Bitte setzen Sie ein Publikationsdatum! Dieses wird beim Freischalten des Dokuments automatisch gesetzt.</seg>
+                <seg>Eine Jahresangabe wird beim Freischalten des Dokuments automatisch gesetzt.</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="export_datacite_error_publication_date_missing">
+            <tuv xml:lang="en">
+                <seg>Please provide a date of publication!</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Bitte setzen Sie ein Publikationsdatum!</seg>
             </tuv>
         </tu>
 
