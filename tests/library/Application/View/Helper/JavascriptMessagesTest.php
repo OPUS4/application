@@ -82,7 +82,7 @@ class Application_View_Helper_JavascriptMessagesTest extends ControllerTestCase
         $Messages = [
             'key1' => 'message1',
             'identifierInvalidFormat' => "'%value%' is malformed.",
-            'testkey' => 'testkey564'
+            'testkey564' => 'testkey564'
         ];
 
         $this->assertEquals($Messages, $this->helper->getMessages());
