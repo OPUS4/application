@@ -104,8 +104,8 @@ abstract class Application_Form_Model_Abstract extends Application_Form_Abstract
             'submit',
             self::ELEMENT_SAVE,
             ['decorators' => [
-            'ViewHelper',
-            [['liWrapper' => 'HtmlTag'], ['tag' => 'li', 'class' => 'save-element']]
+                'ViewHelper',
+                [['liWrapper' => 'HtmlTag'], ['tag' => 'li', 'class' => 'save-element']]
             ]]
         );
 
@@ -113,8 +113,8 @@ abstract class Application_Form_Model_Abstract extends Application_Form_Abstract
             'submit',
             self::ELEMENT_CANCEL,
             ['decorators' => [
-            'ViewHelper',
-            [['liWrapper' => 'HtmlTag'], ['tag' => 'li', 'class' => 'cancel-element']]
+                'ViewHelper',
+                [['liWrapper' => 'HtmlTag'], ['tag' => 'li', 'class' => 'cancel-element']]
             ]]
         );
 

@@ -31,6 +31,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+/**
+ * If there is no label defined nothing is rendered in order to avoid empty LABEL-tags.
+ */
 class Application_Form_Decorator_LabelNotEmpty extends Zend_Form_Decorator_Label
 {
 
