@@ -45,6 +45,7 @@
  *
  * TODO review separation and refactor redundant code
  * TODO use this form to test out new HTML structure and styling (responsive)
+ * TODO at least one language should have a translation (make EN und DE required) - Special treatment?
  */
 class Setup_Form_Translation extends Application_Form_Abstract
 {
@@ -78,6 +79,7 @@ class Setup_Form_Translation extends Application_Form_Abstract
 
         $this->setElementDecorators([
             'ViewHelper',
+            'Errors',
             [['InputWrapper' => 'HtmlTag'], ['class' => 'col-input']],
             ['Label', ['tag' => 'div', 'tagClass' => 'col-label', 'placement' => 'prepend']],
             [['Wrapper' => 'HtmlTag'], ['class' => 'row']]
@@ -86,6 +88,8 @@ class Setup_Form_Translation extends Application_Form_Abstract
         $this->addElement('text', self::ELEMENT_KEY, [
             'label' => 'Key', 'size' => 80, 'required' => true
         ]);
+
+        $this->getElement(self::ELEMENT_KEY)->addValidator(new Setup_Form_Validate_TranslationKeyAvailable());
 
         // TODO no 'all' option
         // TODO always all modules

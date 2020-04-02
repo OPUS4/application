@@ -164,3 +164,10 @@ form#filter .row:first-child {
 .adminContainer .table-translations th .actions a.button {
     margin: 0 0.3em;
 }
+
+.col-input ul.errors {
+    color: red;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
