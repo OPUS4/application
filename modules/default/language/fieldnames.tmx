@@ -376,6 +376,15 @@
             </tuv>
         </tu>
 
+        <tu tuid="Opus_Identifier_Value">
+            <tuv xml:lang="en">
+                <seg>Text</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Text</seg>
+            </tuv>
+        </tu>
+
         <tu tuid="Opus_Subject_Type">
             <tuv xml:lang="en">
                 <seg>Subject/Classification Type</seg>

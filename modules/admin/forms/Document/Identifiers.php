@@ -66,7 +66,7 @@ class Admin_Form_Document_Identifiers extends Admin_Form_Document_Section
                 [
                     'columns' => [
                         ['label' => 'Opus_Identifier_Type'],
-                        ['label' => 'Text']
+                        ['label' => 'Opus_Identifier_Value']
                     ]
                 ]
             ),
