@@ -179,13 +179,28 @@ class Application_TranslateTest extends ControllerTestCase
 
         $translate = new Application_Translate(['log' => $logger]);
         $translate->loadModules();
+        $translate->setLocale('de');
 
-        $this->assertFalse($translate->isTranslated('nottranslated123'));
-        $this->assertEquals('nottranslated123', $translate->translate('nottranslated123'));
+        $key = 'nottranslated123';
+
+        $this->assertFalse($translate->isTranslated($key));
+        $this->assertEquals($key, $translate->translate($key));
 
         $messages = $logger->getMessages();
         $this->assertEquals(1, count($messages));
         $this->assertContains('Unable to translate', $messages[0]);
+
+        // German is the fallback language for English by default. Since the key cannot be translated in English or
+        // German two messages are generated.
+        $translate->setLocale('en');
+
+        $logger->clear();
+        $this->assertEquals($key, $translate->translate($key));
+
+        $messages = $logger->getMessages();
+        $this->assertEquals(2, count($messages));
+        $this->assertContains("Unable to translate key '$key' into locale 'en'", $messages[0]);
+        $this->assertContains("Unable to translate key '$key' into locale 'de'", $messages[1]);
     }
 
     public function testLoggingDisabled()
