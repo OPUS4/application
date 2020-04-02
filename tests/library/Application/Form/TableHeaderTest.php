@@ -87,7 +87,7 @@ class Application_Form_TableHeaderTest extends TestCase
 
     public function testGetColumnLabel()
     {
-        $this->assertEquals('&nbsp;', $this->form->getColumnLabel(0));
+        $this->assertNull($this->form->getColumnLabel(0));
         $this->assertEquals('files_column_size', $this->form->getColumnLabel(1));
         $this->assertEquals('files_column_language', $this->form->getColumnLabel(2));
         $this->assertEquals('files_column_frontdoor', $this->form->getColumnLabel(3));
