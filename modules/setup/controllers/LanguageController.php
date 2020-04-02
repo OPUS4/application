@@ -162,28 +162,35 @@ class Setup_LanguageController extends Application_Controller_Action
 
             switch ($result) {
                 case Setup_Form_Translation::RESULT_SAVE:
-                    // TODO check if form is valid
-                    // TODO save new translation key
-                    // TODO check if key already exists
-                    break;
-                case Setup_Form_Translation::RESULT_CANCEL:
+                    if ($form->isValid($post)) {
+                        // TODO save new translation key
+                        // TODO check if key already exists
+                    } else {
+                        // go back to form
+                        break;
+                    }
+                    // fall through to CANCEL
                 default:
+                    // fall through to CANCEL
+                case Setup_Form_Translation::RESULT_CANCEL:
+                    $form = null;
             }
-
-            $this->_helper->Redirector->redirectTo(
-                'index',
-                null,
-                'language',
-                'setup',
-                ['search' => $this->getParam('search')]
-            );
+            if (is_null($form)) {
+                $this->_helper->Redirector->redirectTo(
+                    'index',
+                    null,
+                    'language',
+                    'setup',
+                    ['search' => $this->getParam('search')]
+                );
+            }
         } else {
             $form = $this->getTranslationForm();
-
-            // render form
-            $this->_helper->viewRenderer->setNoRender(true);
-            echo $form;
         }
+
+        // render form
+        $this->_helper->viewRenderer->setNoRender(true);
+        echo $form;
     }
 
     /**
