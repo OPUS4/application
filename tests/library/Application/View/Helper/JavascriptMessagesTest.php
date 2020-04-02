@@ -28,7 +28,7 @@
  * @package     Application_View_Helper
  * @author      Maximilian Salomon <salomon@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2018-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2018-2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -77,12 +77,12 @@ class Application_View_Helper_JavascriptMessagesTest extends ControllerTestCase
     {
         $this->helper->addMessage('key1', 'message1');
         $this->helper->addMessage('identifierInvalidFormat');
-        $this->helper->addMessage('testkey');
+        $this->helper->addMessage('testkey564'); // key must not exit for test to work
 
         $Messages = [
             'key1' => 'message1',
             'identifierInvalidFormat' => "'%value%' is malformed.",
-            'testkey' => 'testkey'
+            'testkey' => 'testkey564'
         ];
 
         $this->assertEquals($Messages, $this->helper->getMessages());
