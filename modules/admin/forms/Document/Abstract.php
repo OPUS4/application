@@ -53,7 +53,17 @@ class Admin_Form_Document_Abstract extends Admin_Form_AbstractModelSubForm
 
         $this->addElement('Hidden', self::ELEMENT_ID);
         $this->addElement('Language', self::ELEMENT_LANGUAGE);
-        $this->addElement('Textarea', self::ELEMENT_VALUE, ['required' => true, 'rows' => 12]);
+        $this->addElement('Textarea', self::ELEMENT_VALUE, [
+            'required' => true,
+            'rows' => 12,
+            'decorators' => [
+                'ViewHelper',
+                'Errors',
+                'Description',
+                'ElementHtmlTag',
+                [['dataWrapper' => 'HtmlTagWithId'], ['tag' => 'div', 'class' => 'data-wrapper']]
+            ]
+        ]);
     }
 
     public function populateFromModel($abstract)
