@@ -315,5 +315,23 @@
       </tuv>
     </tu>
 
+    <tu tuid="setup_translation_error_key_format_not_match">
+      <tuv xml:lang="en">
+        <seg>Keys must start with a letter and may also contain numbers and underlines.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Schlüssel müssen mit einem Buchstaben beginnen und dürfen sonst auch Zahlen und Unterstriche enthalten.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="setup_translation_error_key_too_long">
+      <tuv xml:lang="en">
+        <seg>Keys may not be longer than 100 characters.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Schlüssel dürfen maximal 100 Zeichen lang sein.</seg>
+      </tuv>
+    </tu>
+
   </body>
 </tmx>
