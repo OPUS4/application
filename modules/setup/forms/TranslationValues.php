@@ -65,7 +65,33 @@ class Setup_Form_TranslationValues extends Zend_Form_SubForm
         ]);
     }
 
-    public function getLanguages()
+    public function getTranslations()
+    {
+        $elements = $this->getElements();
+
+        $translations = [];
+
+        foreach ($elements as $name => $element) {
+            $value = $element->getValue();
+            $translations[$name] = trim($value);
+        }
+
+        return $translations;
+    }
+
+    public function setTranslations($translations)
+    {
+        foreach ($translations as $lang => $value) {
+            $element = $this->getElement($lang);
+            if (! is_null($element)) {
+                $element->setValue($value);
+            } else {
+                // TODO deal with missing language
+            }
+        }
+    }
+
+    protected function getLanguages()
     {
         return Application_Configuration::getInstance()->getSupportedLanguages();
     }

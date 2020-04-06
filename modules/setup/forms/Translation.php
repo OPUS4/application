@@ -50,6 +50,8 @@
 class Setup_Form_Translation extends Application_Form_Abstract
 {
 
+    const ELEMENT_ID = 'Id';
+
     /**
      * @var string Name of translation key.
      */
@@ -85,14 +87,24 @@ class Setup_Form_Translation extends Application_Form_Abstract
             [['Wrapper' => 'HtmlTag'], ['class' => 'row']]
         ]);
 
+        $this->addElement('hidden', self::ELEMENT_ID);
+
         $this->addElement('text', self::ELEMENT_KEY, [
-            'label' => 'Key', 'size' => 80, 'required' => true
+            'label' => 'Key', 'size' => 80, 'maxlength' => 100, 'required' => true
         ]);
 
-        $this->getElement(self::ELEMENT_KEY)->addValidator(new Setup_Form_Validate_TranslationKeyAvailable());
+        $lengthValidator = new Zend_Validate_StringLength(['max' => 100]);
+        $lengthValidator->setMessage('setup_translation_error_key_too_long', $lengthValidator::TOO_LONG);
+        // TODO test customized message
 
-        // TODO no 'all' option
-        // TODO always all modules
+        $this->getElement(self::ELEMENT_KEY)->addValidator(
+            new Setup_Form_Validate_TranslationKeyAvailable()
+        )->addValidator(
+            new Setup_Form_Validate_TranslationKeyFormat()
+        )->addValidator(
+            $lengthValidator
+        );
+
         // TODO maybe "virtual modules"
         // TODO automatically use module name as prefix (?)
         $this->addElement('Modules', self::ELEMENT_MODULE, [
@@ -123,7 +135,6 @@ class Setup_Form_Translation extends Application_Form_Abstract
             ]]
         );
 
-
         $this->setDecorators([
             'FormElements',
             'Form'
@@ -132,8 +143,8 @@ class Setup_Form_Translation extends Application_Form_Abstract
 
     /**
      * Processes POST requests for this form.
-     * @param $post POST data for this form
-     * @param $context POST data for entire request
+     * @param $post array POST data for this form
+     * @param $context array POST data for entire request
      * @return string|null Result of processing
      */
     public function processPost($post, $context)
@@ -146,42 +157,83 @@ class Setup_Form_Translation extends Application_Form_Abstract
         return null;
     }
 
-    /*
-    public function addKey($key, $textarea = true, $options = null)
+    /**
+     * Stores the translation.
+     *
+     * TODO form class is also model class (refactor! But not just to follow "rules". Why?)
+     * TODO do not use DAO class directly (refactor!)
+     * TODO throw some exceptions
+     * TODO review responsibilities of Translate and TranslationManager
+     */
+    public function updateTranslation()
     {
-        if (is_null($options)) {
-            $options = [];
-        }
+        $keyId = $this->getElement(self::ELEMENT_ID)->getValue();
+        $key = $this->getElement(self::ELEMENT_KEY)->getValue();
+        $module = $this->getElement(self::ELEMENT_MODULE)->getValue();
+        $translations = $this->getSubForm(self::SUBFORM_TRANSLATION)->getTranslations();
 
-        $options['label'] = 'setup_translation_values';
+        $manager = new Application_Translate_TranslationManager();
+        $translate = $this->getTranslationManager();
 
-        parent::addKey($key, $textarea, $options);
-
-        $this->getElement(self::ELEMENT_KEY)->setValue($key);
-    }
-
-    public function setKeyEditable($enabled)
-    {
-        $this->getElement(self::ELEMENT_KEY)->setAttrib('disabled', $enabled ? null : true);
-    }
-    */
-    protected function addTranslationElement($language, $textarea = true, $customOptions = null)
-    {
-        $options = ['label' => $language, 'textarea' => $textarea];
-
-        $width = 90;
-
-        if ($textarea) {
-            $options = array_merge($options, ['cols' => $width, "rows" => 12]);
+        if (strlen(trim($keyId)) === 0) {
+            // create new key
+            $translate->setTranslations($key, $translations, $module);
         } else {
-            $options = array_merge($options, ['size' => $width]);
+            // update key
+            $old = $manager->getTranslation($keyId);
+
+            if ($keyId !== $key || $old['module'] !== $module) {
+                // change name of key
+                $manager->updateTranslation($key, $translations, $module, $keyId);
+            } elseif ($translations != $old['translations']) {
+                $translate->setTranslations($key, $translations, $module);
+            }
+        }
+    }
+
+    /**
+     * Populates form for a translation key.
+     * @param $key
+     *
+     * TODO throw some exceptions :-)
+     */
+    public function populateFromKey($key)
+    {
+        $manager = new Application_Translate_TranslationManager();
+
+        // TODO get all keys (in case of multiple entries in database and deal with it)
+        $translation = $manager->getTranslation($key);
+
+        if (is_null($translation)) {
+            throw new \Opus\Translate\UnknownTranslationKey("Unknown key '$key'.");
         }
 
-        if (! is_null($customOptions)) {
-            $options = array_merge($options, $customOptions);
+        $idElement = $this->getElement(self::ELEMENT_ID);
+        $idElement->setValue($key);
+        $idElement->setRequired(true);
+
+        $keyElement = $this->getElement(self::ELEMENT_KEY);
+        $keyElement->setValue($key);
+
+        $module = $translation['module'];
+        $moduleElement = $this->getElement(self::ELEMENT_MODULE);
+        $moduleElement->setValue($module);
+
+        // disable editing of key and module for keys defined in TMX files
+        if (! isset($translation['state']) || $translation['state'] !== 'added') {
+            $keyElement->setAttrib('disabled', true);
+            $moduleElement->setAttrib('disabled', true);
         }
 
-        $element = $this->createElement('text', 'translation', $options);
-        $this->addElement($element);
+        $this->getSubForm(self::SUBFORM_TRANSLATION)->setTranslations($translation['translations']);
+    }
+
+    /**
+     * @return Application_Translate|null
+     * @throws Zend_Exception
+     */
+    protected function getTranslationManager()
+    {
+        return Zend_Registry::get('Zend_Translate');
     }
 }

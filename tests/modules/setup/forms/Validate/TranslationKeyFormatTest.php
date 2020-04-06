@@ -58,7 +58,7 @@ class Setup_Form_Validate_TranslationKeyFormatTest extends ControllerTestCase
     {
         $validator = new Setup_Form_Validate_TranslationKeyFormat();
 
-        $this->assertTrue( $validator->isValid($value) === $result, $value);
+        $this->assertTrue($validator->isValid($value) === $result, $value);
     }
 
     public function testMessagesTranslated()

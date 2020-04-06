@@ -28,18 +28,15 @@
  * @package     Module_Setup
  * @author      Edouard Simon <edouard.simon@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
- * TODO show controller (functionality) in menu (currently hidden)
- * TODO limit editable keys to specific modules (?)
  * TODO update documentation
  * TODO rename controller to TranslationController
  * TODO sorting using table header
  * TODO link for adding new translations
- * TODO show module in translations
  *
  * After canceling an Edit form the user gets returned to the search page displaying the last search.
  *
@@ -108,6 +105,13 @@ class Setup_LanguageController extends Application_Controller_Action
             $translationManager->setFilter($searchTerm);
         }
 
+        // check if modules parameter is allowed
+        $allowedModules = $translationManager->getAllowedModules();
+        if (($allowedModules !== null && ! in_array($modules, $allowedModules)) || strcasecmp($modules, 'all') === 0) {
+            // TODO log unknown modules ?
+            $modules = null;
+        }
+
         $translationManager->setModules($modules);
 
         switch (strtolower($state)) {
@@ -163,8 +167,9 @@ class Setup_LanguageController extends Application_Controller_Action
             switch ($result) {
                 case Setup_Form_Translation::RESULT_SAVE:
                     if ($form->isValid($post)) {
-                        // TODO save new translation key
-                        // TODO check if key already exists
+                        $form->updateTranslation();
+                        // TODO manipulate filter so new key is visible (?) - could lead to confusion
+                        $form = null; // triggers redirect to index page
                     } else {
                         // go back to form
                         break;
@@ -196,49 +201,70 @@ class Setup_LanguageController extends Application_Controller_Action
     /**
      * Action for editing a single translation key.
      *
-     * TODO use Translation form
-     * TODO action shows form and processes submit
+     * TODO check if form can be used to create arbitrary keys
+     * TODO review and refactor if necessary
      */
     public function editAction()
     {
-        $translationKey = $this->getParam('key');
+        $request = $this->getRequest();
 
-        if (is_null($translationKey)) {
+        $post = null;
+
+        if ($request->isPost()) {
+            $post = $request->getPost();
+            if (isset($post['Key'])) {
+                $key = $post['Key'];
+            }
+        } else {
+            $key = $this->getParam('key', null);
+        }
+
+        if (is_null($key)) {
             $this->_helper->Redirector->redirectTo('index');
         }
 
-        $request = $this->getRequest();
+        $form = $this->getTranslationForm();
+
         if ($request->isPost()) {
             $post = $request->getPost();
-            $form = $this->getTranslationForm();
+            $form->populate($post);
             $result = $form->processPost($post, $post);
             switch ($result) {
-                case Application_Form_Translations::RESULT_SAVE:
-                    $form->addKey($translationKey, true);
-                    $form->populate($post);
-                    $form->updateTranslations();
+                case Setup_Form_Translation::RESULT_SAVE:
+                    // add values for disabled elements to POST
+                    $post[$form::ELEMENT_KEY] = $key;
+                    $post[$form::ELEMENT_MODULE] = $form->getElement($form::ELEMENT_MODULE)->getValue();
+                    // disable validation for duplicate keys when editing existing key
+                    $form->getElement($form::ELEMENT_KEY)->removeValidator(
+                        'Setup_Form_Validate_TranslationKeyAvailable'
+                    );
+                    if ($form->isValid($post)) {
+                        $form->updateTranslation();
+                        $form = null;
+                    } else {
+                    }
                     break;
-                case Application_Form_Translations::RESULT_CANCEL:
+                case Setup_Form_Translation::RESULT_CANCEL:
                     // no break
                 default:
                     // redirect back to search
+                    $form = null;
             }
-            // TODO process form
-            // TODO validate
-            // TODO save
-            $this->_helper->Redirector->redirectTo(
-                'index',
-                null,
-                'language',
-                'setup',
-                ['search' => $this->getParam('search')]
-            );
+            if (is_null($form)) {
+                $this->_helper->Redirector->redirectTo(
+                    'index',
+                    null,
+                    'language',
+                    'setup',
+                    ['search' => $this->getParam('search')]
+                );
+                $form = null;
+            }
         } else {
-            $form = $this->getTranslationForm();
-            $form->addKey($translationKey, true);
-            $form->populateFromTranslations();
-            // TODO use key as label (use different form?)
+            $form->populateFromKey($key);
+        }
 
+        if (! is_null($form)) {
             $this->_helper->viewRenderer->setNoRender(true);
             echo $form;
         }
@@ -309,8 +335,30 @@ class Setup_LanguageController extends Application_Controller_Action
         );
     }
 
+    /**
+     *
+     */
     public function deleteAction()
     {
+        $search = $this->getParam('search', null);
+        $key = $this->getParam('key', null);
+        $filterModule = $this->getParam('modules', null);
+
+        if (! is_null($key)) {
+            // delete single key
+            $manager = $this->getTranslationManager();
+            $manager->delete($key);
+        } else {
+            // TODO delete multiple keys
+        }
+
+        $this->_helper->Redirector->redirectTo(
+            'index',
+            null,
+            'language',
+            'setup',
+            ['search' => $search]
+        );
     }
 
     /**
@@ -367,16 +415,9 @@ class Setup_LanguageController extends Application_Controller_Action
     {
     }
 
-    protected function getTranslationForm($add = false)
+    protected function getTranslationForm()
     {
-        $form = new Setup_Form_Translation();
-
-        if ($add) {
-            // TODO $form->setKeyEditable(true);
-            // $form->addTranslationElement();
-        }
-
-        return $form;
+        return new Setup_Form_Translation();
     }
 
     protected function getSearchForm($searchTerm = null, $sortKey = null)

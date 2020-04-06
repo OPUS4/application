@@ -630,4 +630,137 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
         $this->assertContains('setup.translation.modules.allowed', $messages[0]);
         $this->assertContains('unknown1', $messages[0]);
     }
+
+    public function testUpdateTranslation()
+    {
+        $manager = $this->object;
+
+        $oldKey = 'oldkey';
+
+        $database = new Opus_Translate_Dao();
+
+        $database->setTranslation($oldKey, [
+            'en' => 'English',
+            'de' => 'Deutsch'
+        ], 'publish');
+
+        $translation = $manager->getTranslation($oldKey);
+
+        $this->assertEquals([
+            'key' => $oldKey,
+            'module' => 'publish',
+            'translations' => [
+                'en' => 'English',
+                'de' => 'Deutsch'
+            ],
+            'state' => 'added'
+        ], $translation);
+
+        $newKey = 'newkey';
+
+        $manager->updateTranslation($newKey, [
+            'en' => 'EnglishEdited',
+            'de' => 'DeutschEditiert'
+        ], 'admin', $oldKey);
+
+        $translation = $manager->getTranslation($newKey);
+
+        $this->assertEquals([
+            'key' => $newKey,
+            'module' => 'admin',
+            'translations' => [
+                'en' => 'EnglishEdited',
+                'de' => 'DeutschEditiert'
+            ],
+            'state' => 'added'
+        ], $translation);
+
+        $failed = true;
+
+        try {
+            $translation = $manager->getTranslation($oldKey);
+        } catch (\Opus\Translate\UnknownTranslationKey $ex) {
+            $failed = false;
+        }
+
+        if ($failed) {
+            $this->fail("Translation key '$oldKey' should have been removed.");
+        }
+    }
+
+    /**
+     * @expectedException \Opus\Translate\Exception
+     * @expectedExceptionMessage default_add
+     */
+    public function testUpdateTranslationForEditedKey()
+    {
+        $manager = $this->object;
+
+        $manager->updateTranslation('default_add_new', [], 'default', 'default_add');
+    }
+
+    /**
+     * @expectedException \Opus\Translate\Exception
+     * @expectedExceptionMessage Module of key 'default_add' cannot be changed.
+     */
+    public function testUpdateTranslationCannotModifyModuleForEditedKey()
+    {
+        $manager = $this->object;
+
+        $manager->updateTranslation('default_add', null, 'publish');
+    }
+
+    public function testUpdateTranslationKeepValues()
+    {
+        $manager = $this->object;
+
+        $oldKey = 'oldkey';
+
+        $database = new Opus_Translate_Dao();
+
+        $database->setTranslation($oldKey, [
+            'en' => 'English',
+            'de' => 'Deutsch'
+        ], 'publish');
+
+        $translation = $manager->getTranslation($oldKey);
+
+        $this->assertEquals([
+            'key' => $oldKey,
+            'module' => 'publish',
+            'translations' => [
+                'en' => 'English',
+                'de' => 'Deutsch'
+            ],
+            'state' => 'added'
+        ], $translation);
+
+        $newKey = 'newkey';
+
+        $manager->updateTranslation($newKey, null, null, $oldKey);
+
+        $translation = $manager->getTranslation($newKey);
+
+        $this->assertEquals([
+            'key' => $newKey,
+            'module' => 'publish',
+            'translations' => [
+                'en' => 'English',
+                'de' => 'Deutsch'
+            ],
+            'state' => 'added'
+        ], $translation);
+
+        $failed = true;
+
+        try {
+            $translation = $manager->getTranslation($oldKey);
+        } catch (\Opus\Translate\UnknownTranslationKey $ex) {
+            $failed = false;
+        }
+
+        if ($failed) {
+            $this->fail("Translation key '$oldKey' should have been removed.");
+        }
+    }
 }

@@ -67,6 +67,10 @@ class Setup_Form_TranslationValuesTest extends ControllerTestCase
         $this->assertEquals('Deutsch', $form->getElement('de')->getValue());
     }
 
+    public function testPopulateUnknownLanguage()
+    {
+    }
+
     public function testIsValidTrue()
     {
         $form = $this->getForm();
@@ -82,6 +86,96 @@ class Setup_Form_TranslationValuesTest extends ControllerTestCase
             'en' => '',
             'de' => ''
         ]));
+    }
+
+    public function testGetTranslations()
+    {
+        $form = $this->getForm();
+
+        $data = [
+            'en' => 'English',
+            'de' => 'Deutsch',
+        ];
+
+        $form->populate($data);
+
+        $translations = $form->getTranslations();
+
+        $this->assertEquals($data, $translations);
+    }
+
+    public function testGetTranslationsNullValue()
+    {
+        $form = $this->getForm();
+
+        $data = [
+            'en' => 'English',
+            'de' => null,
+        ];
+
+        $form->populate($data);
+
+        $translations = $form->getTranslations();
+
+        $this->assertEquals($data, $translations);
+    }
+
+    public function testGetTranslationsTrimValue()
+    {
+        $form = $this->getForm();
+
+        $data = [
+            'en' => ' English ',
+            'de' => null,
+        ];
+
+        $form->populate($data);
+
+        $translations = $form->getTranslations();
+
+        $this->assertEquals([
+            'en' => 'English',
+            'de' => null
+        ], $translations);
+    }
+
+    public function testGetTranslationsTrimValueLineBreaks()
+    {
+        $form = $this->getForm();
+
+        $data = [
+            'en' => ' English ' . PHP_EOL . ' ',
+            'de' => ' ' . PHP_EOL . ' Deutsch',
+        ];
+
+        $form->populate($data);
+
+        $translations = $form->getTranslations();
+
+        $this->assertEquals([
+            'en' => 'English',
+            'de' => 'Deutsch'
+        ], $translations);
+    }
+
+    public function testSetTranslations()
+    {
+        $form = $this->getForm();
+
+        $data = [
+            'en' => 'English',
+            'de' => 'Deutsch'
+        ];
+
+        $form->setTranslations($data);
+
+        $this->assertEquals('English', $form->getElement('en')->getValue());
+        $this->assertEquals('Deutsch', $form->getElement('de')->getValue());
+    }
+
+    public function testSetTranslationsUnknownLanguage()
+    {
+        $this->markTestIncomplete('no handling of this situation yet');
     }
 
     protected function getForm()

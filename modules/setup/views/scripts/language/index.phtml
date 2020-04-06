@@ -80,11 +80,15 @@
                 ?><?= $this->highlight($key, $this->searchTerm, '<span class="hilite">', '</span>')
                 ?><?PHP
                  else :
-?><?= $key ?><?PHP
+                ?><?= $key ?><?PHP
                  endif ?>
-                <?PHP if (isset($row['filename'])) : ?>
-                <div class="module"><span class="filename"><?= $row['filename'] ?></span> (<?= $row['module'] ?>)</div>
-                <?PHP endif ?>
+                <?php if (isset($row['module'])) : ?>
+                <div class="module"><?= $row['module'] ?>
+                    <?PHP if (isset($row['filename'])) : ?>
+                    (<span class="filename"><?= $row['filename'] ?></span>)
+                    <?PHP endif ?>
+                </div>
+                <?php endif ?>
             </td>
             <?PHP $index = 0 ?>
             <?PHP foreach ($row['translations'] as $language => $translation) : ?>
@@ -107,7 +111,7 @@
                 <a href="<?= $this->url(['action' => 'reset', 'key' => $key, 'search' => $this->searchTerm, 'sort' => $this->currentSortKey]) ?>"
                 ><?= $this->translate('setup_language_reset') ?></a>
                 <?PHP elseif (! isset($row['filename'])) : ?>
-                <a href="<?= $this->url(['action' => 'remove', 'key' => $key, 'search' => $this->searchTerm, 'sort' => $this->currentSortKey]) ?>"
+                <a href="<?= $this->url(['action' => 'delete', 'key' => $key, 'search' => $this->searchTerm, 'sort' => $this->currentSortKey]) ?>"
                 ><?= $this->translate('setup_language_remove') ?></a>
                 <?PHP endif ?>
             </td>

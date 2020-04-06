@@ -42,6 +42,13 @@ class Setup_LanguageControllerTest extends ControllerTestCase
 
     protected $additionalResources = 'all';
 
+    public function tearDown()
+    {
+        $database = new Opus_Translate_Dao();
+        $database->removeAll();
+        parent::tearDown();
+    }
+
     /**
      * Regression Test for OPUSVIER-2971
      */
@@ -94,14 +101,82 @@ class Setup_LanguageControllerTest extends ControllerTestCase
         $this->assertEquals($translations, $storedTranslations);
     }
 
+    public function testAddTranslationShowForm()
+    {
+        $this->useEnglish();
+
+        $this->dispatch('/setup/language/add');
+
+        $this->assertResponseCode(200);
+
+        $this->assertQueryContentContains('//head/title', 'Add Key');
+        $this->assertXpath('//input[@type=\'submit\' and @id=\'Save\']');
+    }
+
     public function testAddTranslation()
     {
-        $this->markTestIncomplete('OPUSVIER-1907 Implement test');
+        $request = $this->getRequest();
+
+        $request->setMethod('POST');
+        $request->setPost([
+            'Key' => 'customkey',
+            'KeyModule' => 'home',
+            'Translation' => [
+                'en' => 'English',
+                'de' => 'Deutsch'
+            ],
+            'Save' => 'Speichern'
+        ]);
+
+        $this->dispatch('/setup/language/add');
+
+        $this->assertRedirectTo('/setup/language');
+
+        $manager = new Application_Translate_TranslationManager();
+
+        $translation = $manager->getTranslation('customkey');
+
+        $this->assertEquals([
+            'key' => 'customkey',
+            'module' => 'home',
+            'translations' => [
+                'en' => 'English',
+                'de' => 'Deutsch'
+            ],
+            'state' => 'added'
+        ], $translation);
     }
 
     public function testAddTranslationCancel()
     {
-        $this->markTestIncomplete('OPUSVIER-1907 Implement test');
+        $request = $this->getRequest();
+
+        $request->setMethod('POST');
+        $request->setPost([
+            'Key' => 'customkey',
+            'KeyModule' => 'account',
+            'Translation' => [
+                'en' => 'English',
+                'de' => 'Deutsch'
+            ],
+            'Cancel' => 'Abbrechen'
+        ]);
+
+        $this->dispatch('/setup/language/add');
+
+        $this->assertRedirectTo('/setup/language');
+
+        $manager = new Application_Translate_TranslationManager();
+
+        $keyFound = true;
+
+        try {
+            $manager->getTranslation('customkey');
+        } catch (\Opus\Translate\UnknownTranslationKey $ex) {
+            $keyFound = false;
+        }
+
+        $this->assertFalse($keyFound, 'Key should not have been created.');
     }
 
     public function testResetTranslation()
@@ -132,5 +207,46 @@ class Setup_LanguageControllerTest extends ControllerTestCase
     public function testDeleteAllConfirmNo()
     {
         $this->markTestIncomplete('OPUSVIER-1907 Implement test');
+    }
+
+    public function testChangeNameOfAddedKey()
+    {
+        $database = new Opus_Translate_Dao();
+
+        $oldKey = 'customkey';
+        $newKey = 'renamedkey';
+
+        $database->setTranslation($oldKey, [
+            'en' => 'English',
+            'de' => 'Deutsch'
+        ], 'crawlers');
+
+        $request = $this->getRequest();
+        $request->setMethod('POST');
+        $request->setPost([
+            'Id' => $oldKey,
+            'Key' => $newKey,
+            'KeyModule' => 'crawlers',
+            'Translation' => [
+                'en' => 'English',
+                'de' => 'Deutsch'
+            ],
+            'Save' => 'Speichern'
+        ]);
+
+        $this->dispatch('/setup/language/edit');
+
+        $this->assertRedirectTo('/setup/language');
+
+        $this->assertNull($database->getTranslation($oldKey));
+        $this->assertEquals([
+            'en' => 'English',
+            'de' => 'Deutsch'
+        ], $database->getTranslation($newKey));
+    }
+
+    public function testChangeModuleOfAddedKey()
+    {
+        $this->markTestIncomplete('Implement test');
     }
 }

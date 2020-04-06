@@ -315,9 +315,12 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
 
         $database = new Opus_Translate_Dao();
 
-        $dbTranslations = $database->getAll();
+        $modules = $this->getModules();
 
-        foreach ($dbTranslations as $key => $languages) {
+        $dbTranslations = $database->getTranslationsWithModules($modules);
+
+        foreach ($dbTranslations as $key => $info) {
+            $languages = $info['values'];
             if (array_key_exists($key, $translations)) {
                 // key exists in TMX files and needs to be marked as EDITED
                 // keep original values from TMX files
@@ -335,6 +338,7 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
                     $translations[$key]['key'] = $key;
                     $translations[$key]['translations'] = $languages;
                     $translations[$key]['state'] = 'added';
+                    $translations[$key]['module'] = $info['module'];
                 }
             }
         }
@@ -355,6 +359,26 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
         }
 
         return $translations;
+    }
+
+    /**
+     * @param $key
+     * TODO IMPORTANT optimize (do some caching or something)
+     * @throws \Opus\Translate\UnknownTranslationKey
+     */
+    public function getTranslation($key)
+    {
+        $translations = $this->getMergedTranslations();
+
+        $translation = null;
+
+        if (isset($translations[$key])) {
+            $translation = $translations[$key];
+        } else {
+            throw new \Opus\Translate\UnknownTranslationKey("Unknown key '$key'.");
+        }
+
+        return $translation;
     }
 
     /**
@@ -533,10 +557,13 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
 
     /**
      * Removes a translation key from the database.
-     * @param $key
+     * @param $key string Translation key
+     * @param $module string Module of translation key
      */
-    public function delete($key)
+    public function delete($key, $module = null)
     {
+        $database = $this->getDatabase();
+        $database->remove($key, $module);
     }
 
     /**
@@ -592,6 +619,50 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
     public function setScope($scope)
     {
         $this->scope = $scope;
+    }
+
+    /**
+     * @param $key
+     * @param $translations
+     * @param $module
+     * @param null $oldKey
+     * TODO perform as transaction
+     * TODO refactor to be efficient
+     */
+    public function updateTranslation($key, $translations, $module, $oldKey = null)
+    {
+        $dao = new Opus_Translate_Dao();
+        $translate = Zend_Registry::get('Zend_Translate');
+
+        if ($key !== $oldKey && ! is_null($oldKey)) {
+            $translation = $this->getTranslation($oldKey);
+            if (isset($translation['state']) && $translation['state'] === 'added') {
+                $dao->remove($oldKey);
+                $translate->clearCache();
+            } else {
+                throw new \Opus\Translate\Exception("Name of key '$oldKey' cannot be changed.");
+            }
+        } else {
+            $translation = $this->getTranslation($key);
+            if (isset($translation['module']) && $translation['module'] !== $module &&
+                isset($translation['state']) && $translation['state'] === 'added') {
+                $dao->remove($key);
+                $translate->clearCache();
+            } else {
+                throw new \Opus\Translate\Exception("Module of key '$key' cannot be changed.");
+            }
+        }
+
+        if (! is_null($translation)) {
+            if (is_null($translations)) {
+                $translations = $translation['translations'];
+            }
+            if (is_null($module)) {
+                $module = $translation['module'];
+            }
+        }
+
+        $dao->setTranslation($key, $translations, $module);
     }
 
     /**

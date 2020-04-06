@@ -41,8 +41,6 @@
  * Normally all translations from all modules should be loaded at startup, because modules can use classes from other
  * modules. Loading the translations for a module only when a request is directed at that module might not load all the
  * necessary translations if this module uses resources from another module that has not been loaded.
- *
- * TODO loading from database should not happen for every module, but just once
  */
 class Application_Translate extends Zend_Translate
 {
