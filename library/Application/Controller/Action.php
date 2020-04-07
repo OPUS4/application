@@ -119,23 +119,11 @@ class Application_Controller_Action extends Application_Controller_ModuleAccess
      * im View Script verwendet werden.
      *
      * @param $form
+     *
+     * TODO remove and use action helper directly
      */
     protected function renderForm($form)
     {
-        if ($this->isViewScriptPresent() === false) {
-            $this->_helper->viewRenderer->setNoRender(true);
-            echo $form;
-        } else {
-            $this->view->form = $form;
-        }
-    }
-
-    /**
-     * Prueft, ob fuer die Action ein View Script existiert.
-     * @return bool
-     */
-    protected function isViewScriptPresent()
-    {
-        return (! $this->view->getScriptPath($this->_helper->viewRenderer->getViewScript())) ? false : true;
+        $this->_helper->renderForm($form);
     }
 }

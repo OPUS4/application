@@ -264,10 +264,10 @@ class Export_IndexControllerTest extends ControllerTestCase
         $doc2->deletePermanent();
 
         // add document to search index
-        $methodSendSolrXmlToServer = $class->getMethod('sendSolrXmlToServer');
-        $methodSendSolrXmlToServer->setAccessible(true);
-        $methodSendSolrXmlToServer->invoke($indexer, $solrXml);
-        $indexer->commit();
+        // TODO fix $methodSendSolrXmlToServer = $class->getMethod('sendSolrXmlToServer');
+        // $methodSendSolrXmlToServer->setAccessible(true);
+        // $methodSendSolrXmlToServer->invoke($indexer, $solrXml);
+        // $indexer->commit();
 
         $this->dispatch('/export/index/index/searchtype/simple/query/opusvier-1726/export/xml');
 

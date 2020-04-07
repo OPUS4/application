@@ -69,15 +69,22 @@ class Admin_Form_Document_Actions extends Admin_Form_AbstractDocumentSubForm
         $this->addElement('submit', self::ELEMENT_SAVE_AND_CONTINUE, ['decorators' => ['ViewHelper']]);
         $this->addElement('submit', self::ELEMENT_CANCEL, ['decorators' => ['ViewHelper']]);
 
-        $this->setDecorators(
-            [
+        $this->getElement(self::ELEMENT_SAVE)->setDisableTranslator(true);
+        $this->getElement(self::ELEMENT_SAVE_AND_CONTINUE)->setDisableTranslator(true);
+        $this->getElement(self::ELEMENT_CANCEL)->setDisableTranslator(true);
+
+        $this->setDecorators([
             'PrepareElements',
             ['ViewScript', ['viewScript' => 'form/documentActions.phtml']],
             [['fieldsWrapper' => 'HtmlTag'], ['tag' => 'div', 'class' => 'fields-wrapper']],
-            [['divWrapper' => 'HtmlTag'], ['tag' => 'div', 'class' => 'subform',
-                'id' => 'subform-Actions']]
+            [
+                ['divWrapper' => 'HtmlTag'],
+                [
+                    'tag' => 'div', 'class' => 'subform',
+                    'id' => 'subform-Actions'
+                ]
             ]
-        );
+        ]);
     }
 
     public function populateFromModel($document)

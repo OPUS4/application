@@ -145,7 +145,10 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
 
     protected function initButton()
     {
-        $this->addElement('submit', self::ELEMENT_ADD, ['order' => 1000, 'label' => 'admin_button_add']);
+        $this->addElement('submit', self::ELEMENT_ADD, [
+            'order' => 1000,
+            'label' => 'admin_button_add'
+        ]);
     }
 
     /**

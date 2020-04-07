@@ -67,7 +67,7 @@ class Application_Form_TableHeader extends Application_Form_Abstract
         if (isset($this->_columns[$index]) && isset($this->_columns[$index]['label'])) {
             return $this->_columns[$index]['label'];
         } else {
-            return '&nbsp;';
+            return null;
         }
     }
 

@@ -90,7 +90,7 @@ $(function () {
                         value: text,
                         option: this
                     }
-                };
+                }
             }));
         },
 

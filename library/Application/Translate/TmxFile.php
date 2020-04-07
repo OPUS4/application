@@ -28,17 +28,30 @@
  * @package     Module_Setup
  * @author      Edouard Simon <edouard.simon@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
  * Simple class for reading, modifying and writing tmx files.
  *
+ * This class is used for migrating custom TMX files into the database. It is also used for exporting and importing
+ * translations from and to the database. This can be used to transfer customizations from one installation to another.
+ *
+ * A TMX file can normally only be part of one module. However in order to export/import translations that replace TMX
+ * entries in multiple modules we are storing the module in the 'creationtool' attribute of the TU-elements. This way
+ * we can import/export all custom translations in a single file without the need to create a ZIP package containing
+ * separate TMX files for different modules.
+ *
  * TODO functions to add/remove/update translations directly in a more direct way (not just passing in arrays)
  * TODO detect duplicate keys in file
  * TODO load should not add to existing keys - object should not represent multiple files
+ * TODO use creationtool on entries to store module name
+ * TODO needs to be able to read/write to/from TranslationManager array with additional information
+ * TODO maybe a factory class for creating TMX document from TranslationManager output
  *
+ * TODO store OPUSxxx something in the creationtool attribute of the header element
+ * TODO create TMX file from string and write to sting
  */
 class Application_Translate_TmxFile
 {
@@ -50,14 +63,18 @@ class Application_Translate_TmxFile
 <!DOCTYPE tmx SYSTEM "http://www.gala-global.org/oscarStandards/tmx/tmx14.dtd">
 <tmx version="1.4">
     <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de"
-    o-tmf="abc" creationtool="Opus4"></header>
+    o-tmf="abc" creationtool="OPUS4"></header>
     <body></body>
 </tmx>';
 
     /**
      * Internal representation of the file
+     *
+     * TODO change internal storage to allow for additional attributes
      */
     private $data = [];
+
+    private $extraData = [];
 
     /**
      * Construct and optionally load TMX file.
@@ -77,7 +94,7 @@ class Application_Translate_TmxFile
      *
      * @return DomDocument
      */
-    public function toDomDocument()
+    public function getDomDocument()
     {
         return $this->arrayToDom($this->data);
     }
@@ -149,7 +166,7 @@ class Application_Translate_TmxFile
      *
      * @return self fluent Interface
      */
-    public function setTranslation($key, $language, $text)
+    public function setTranslation($key, $language, $text, $module = null)
     {
         $tmxArray = $this->toArray();
 
@@ -160,6 +177,10 @@ class Application_Translate_TmxFile
         $tmxArray[$key][$language] = $text;
 
         $this->fromArray($tmxArray);
+
+        if (! is_null($module)) {
+            $this->setModuleForKey($key, $module);
+        }
 
         return $this;
     }
@@ -181,6 +202,27 @@ class Application_Translate_TmxFile
     }
 
     /**
+     * Finds translations that contain needle.
+     *
+     * TODO find by key?
+     * TODO find by content?
+     *
+     * @param $needle
+     * @param null $language
+     */
+    public function findTranslation($needle, $language = null)
+    {
+    }
+
+    /**
+     * Returns languages included in file.
+     */
+    public function getLanguages()
+    {
+        // TODO implement
+    }
+
+    /**
      * Removes entry from translation file.
      *
      * @param $key string Translation key
@@ -188,6 +230,28 @@ class Application_Translate_TmxFile
     public function removeTranslation($key)
     {
         unset($this->data[$key]);
+    }
+
+    public function setModuleForKey($key, $module)
+    {
+        if (! is_array($this->extraData)) {
+            $this->extraData = [];
+        }
+
+        if (! isset($this->extraData[$key])) {
+            $this->extraData[$key] = [];
+        }
+
+        $this->extraData[$key]['module'] = $module;
+    }
+
+    public function getModuleForKey($key)
+    {
+        if (isset($this->extraData[$key]['module'])) {
+            return $this->extraData[$key]['module'];
+        }
+
+        return null;
     }
 
     /**
@@ -205,9 +269,17 @@ class Application_Translate_TmxFile
         foreach ($tuElements as $tu) {
             $key = $tu->attributes->getNamedItem('tuid')->textContent;
             $translationUnits[$key] = [];
+
+            $module = $tu->attributes->getNamedItem('creationtool');
+            if (! is_null($module)) {
+                $this->setModuleForKey($key, $module->nodeValue);
+            }
+
+            // process language entries (TUV-elements)
             foreach ($tu->getElementsByTagName('tuv') as $child) {
-                $translationUnits[$key][$child->attributes->getNamedItem('lang')->nodeValue] =
-                    $child->getElementsByTagName('seg')->item(0)->nodeValue;
+                $lang = $child->attributes->getNamedItem('lang')->nodeValue;
+                $translation = $child->getElementsByTagName('seg')->item(0)->nodeValue;
+                $translationUnits[$key][$lang] = $translation;
             }
         }
         return $translationUnits;
@@ -230,8 +302,11 @@ class Application_Translate_TmxFile
         $dom->loadXML(self::TEMPLATE);
 
         foreach ($array as $unitName => $variants) {
+            $module = $this->getModuleForKey($unitName);
+
             $tuElement = $dom->createElement('tu');
             $tuElement->setAttribute('tuid', $unitName);
+            $tuElement->setAttribute('creationtool', $module);
             $bodyElement = $dom->getElementsByTagName('body')->item(0);
             $tuNode = $bodyElement->appendChild($tuElement);
             foreach ($variants as $lang => $text) {

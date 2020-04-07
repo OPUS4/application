@@ -27,9 +27,8 @@
  * @category    Application Unit Test
  * @package     Application
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 class Application_Translate_TmxFileTest extends ControllerTestCase
@@ -155,6 +154,26 @@ class Application_Translate_TmxFileTest extends ControllerTestCase
                 'de' => 'Übersetzungsschlüssel'
             ]
         ], $tmxFile->toArray());
+    }
+
+    public function testSetTranslationWithModule()
+    {
+        $tmxFile = new Application_Translate_TmxFile();
+
+        $tmxFile->setTranslation('translationKey', 'en', 'Translation');
+
+        $this->assertNull($tmxFile->getModuleForKey('translationKey'));
+
+        $tmxFile->setTranslation('translationKey', 'de', 'Übersetzung', 'default');
+
+        $this->assertEquals([
+            'translationKey' => [
+                'en' => 'Translation',
+                'de' => 'Übersetzung'
+            ]
+        ], $tmxFile->toArray());
+
+        $this->assertEquals('default', $tmxFile->getModuleForKey('translationKey'));
     }
 
     public function testFindTranslation()

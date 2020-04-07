@@ -205,9 +205,9 @@ runjobs.asynchronous = 0
 ; runjobs.indexmaintenance.asynchronous = 0
 
 ; SETUP CONFIGURATION SETTINGS
-; Define for which modules translation resources may be edited through
+; Defines which modules translation resources may be edited through
 ; the web interface
-setup.translation.modules.allowed = default,publish
+; setup.translation.modules.allowed = default,publish
 
 ; PUBLICATION LIST SETTINGS
 ; Per default publication lists are rendered by the default stylehseet.

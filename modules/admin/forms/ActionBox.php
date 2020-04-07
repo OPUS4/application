@@ -61,11 +61,13 @@ class Admin_Form_ActionBox extends Admin_Form_AbstractDocumentSubForm
         $element = new Zend_Form_Element_Submit(self::ELEMENT_SAVE);
         $element->setValue('save');
         $element->removeDecorator('DtDdWrapper');
+        $element->setLabel('Save');
         $this->addElement($element);
 
         $element = new Zend_Form_Element_Submit(self::ELEMENT_CANCEL);
         $element->setValue('cancel');
         $element->removeDecorator('DtDdWrapper');
+        $element->setLabel('Cancel');
         $this->addElement($element);
     }
 
