@@ -1,10 +1,12 @@
 # OPUS 4 Release Notes
 
-## Release 4.7 2019-12-06
+TODO Umlaute
 
-Dieser Release enthält eine Vielzahl von Veränderungen. Es wurde fast jede Datei 
-angefasst. Für Instanzen, die Anpassungen an OPUS 4 Dateien, insbesondere mit den 
-Endungen `.php` und `.xslt`, vorgenommen haben kann dieses Update aufwendiger sein.
+## Release Candidate 4.7-RC 2020-04-07
+
+Dieser Release Candidate enthält eine Vielzahl von Veränderungen. Es wurde fast jede 
+Datei angefasst. Für Instanzen, die Anpassungen an OPUS 4 Dateien, insbesondere mit 
+den Endungen `.php` und `.xslt`, vorgenommen haben kann dieses Update aufwendiger sein.
 Wenn es Probleme gibt wenden sie sich bitte an die Mailing-Liste 'kobv-opus-tester' 
 bzw. legen sie einen neuen "Issue" auf GitHub an.
 
@@ -16,20 +18,37 @@ weiteren Entwicklung mehr und mehr dieser Anpassungen, insbesondere beim Export,
 der Suche und in der Anzeige unnötig zu machen und die Konfigurationsoptionen zu 
 ersetzen. 
 
+### Update
+
+Die Entwicklungsarbeiten haben viele Dateien beruehrt. Darueber hinaus wurde in fast 
+allen Dateien die Formatierung vereinheitlicht, um eine automatische Pruefung des 
+Coding Style zu ermoeglichen, was die Entwicklung vereinfacht. Beim Update mit `git`
+kann es also zu Konflikten kommen, wenn Dateien lokal angepasst wurden.  
+
 ### Übersetzungen
 
 Die Übersetzung von Sprachen, z.B. 'deu' => 'German', erfolgt nun mit Hilfe von PHP 
 Funktionen. Die Datei 'modules/default/language/languages.tmx' wurde gelöscht.
 
 Die Anpassungen an den Übersetzungen, die bisher in 'language_custom' Verzeichnissen
-gespeichert wurden wandern mit dieser Version in die Datenbank. Die TMX-Dateien 
-enthalten die Standardübersetzungen während die lokalen Anpassungen aus der Datenbank
-gelesen werden.
+gespeichert wurden, werden mit dem Update auf diese Version in die Datenbank verschoben. 
+Die normalen TMX-Dateien enthalten weiterhin die Standardübersetzungen während die 
+lokalen Anpassungen aus der Datenbank gelesen werden.
 
 Im Setup-Bereich der Administration lassen sich beliebige Übersetzungsschlüssel 
 editieren bzw. neu anlegen. Darüber hinaus wurde das Editieren von Übersetzungen in 
 verschiedenste Formulare integriert, so dass z.B. die Übersetzungen für ein Enrichment
 direkt in den Enrichment-Verwaltung editiert werden können.
+
+Mit dem Konfigurationsparameter `setup.translation.modules.allowed` kann weiterhin 
+bestimmt werden fuer welche Module die Anpassung der Übersetzungen erlaubt ist. 
+
+Es ist moeglich die Anpassungen als TMX-Datei zu exportieren bzw. zu importieren, um
+Anpassungen von einer Instanz auf eine andere zu uebertragen. Es ist auch moeglich mit 
+externen Tools an den Texten zu arbeiten und sie dann zu importieren. 
+
+Die Integration der Uebersetzungsmoeglichkeiten in die Formulare der Administration
+wird noch weiter fortgesetzt und in kommenden Releases ausgebaut. 
 
 ### Erweiterung der Suche
 
@@ -43,38 +62,18 @@ Der Code für die Suchanbindung ist vom 'framework'-Repository auf GitHub in das
 * <https://github.com/OPUS4/framework>
 * <https://github.com/OPUS4/opus4-search>
 
-
-
 Die Datei `solr.xslt` existiert nicht länger im Konfigurationsverzeichnis 
 `application/configs/solr`. Die Defaultdatei ist Teil des `opus4-search`-Paketes.
 Eine eigene Datei kann aber weiterhin in der `config.ini`-Datei spezifiziert 
 werden. Wird eine lokale Datei verwendet, muss nach einem Update selbstständig 
 sichergestellt werden, dass Änderungen in der Standarddatei in die lokale, 
-angepasste Datei übernommen werden. 
+angepasste Datei übernommen werden.
 
-#### Suche für Administratoren
-
-Es werden nun alle Dokumente indiziert. Für normale Nutzer werden weiterhin nur 
-publizierte Dokumente gefunden und angezeigt. Administratoren können nun die Suche,
-um nach allen Dokumenten zu suchen und Filter anzuwenden.
-
-Die Verwaltung der Dokumente in der Administration funktioniert weiter wie bisher. 
-In Zukunft ist vorgesehen, dass alte Interface dort komplett durch die Suche zu 
-ersetzen. 
-
-#### Suche nach Enrichments
-
-Es werden jetzt alle Enrichments indiziert. Es kann konfiguriert werden, welche 
-Enrichments in der Suche als Facetten auftauchen sollen und ob diese Facetten für 
-alle Nutzer oder nur Administratoren sichtbar sein sollen.
-
-Die Quelle von Dokumenten, also Publish-Modul oder SWORD, wird als neues Enrichment 
-gespeichert. Damit ist die Unterscheidung zwischen lokal eingestellten Dokumenten 
-und Dokumenten, die z.B. von DeepGreen geliefert wurden, einfach möglich.    
+Die Suche mit diakritischen Zeichen funktioniert jetzt.     
 
 #### Apache-Solr Update
 
-Mit diesem Release wechselt OPUS 4 zu Apache Solr 7.7.1. Der Umstieg muss manuell
+Mit diesem Release wechselt OPUS 4 zu Apache Solr 7.7.2. Der Umstieg muss manuell
 durchgeführt werden. Apache Solr ist gut dokumentiert und die Installationsskripte 
 funktionieren nach unserer Erfahrung zuverlässig. 
 
@@ -83,7 +82,7 @@ funktionieren nach unserer Erfahrung zuverlässig.
 Wir empfehlen, Solr als Service auf dem OPUS 4-Server zu installieren. Dazu kann 
 man nach dem Download und Auspacken von Solr folgendes Skript verwenden.
 
-    solr-7.7.1/bin/install_solr_service.sh PATH_TO_DOWNLOADED_SOLR_TAR 
+    solr-7.7.2/bin/install_solr_service.sh PATH_TO_DOWNLOADED_SOLR_TAR 
     
 Genauere Informationen finden sich in der Solr-Dokumentation. 
 
@@ -101,27 +100,106 @@ wie man diese in Solr einbinden kann.
 Zum Abschluss muss mit dem SolrIndexBuilder-Skript der Index neu aufgebaut werden.
 
     $ php scripts/SolrIndexBuilder.php
+
+#### Suche für Administratoren
+
+Es werden nun alle Dokumente indiziert. Für normale Nutzer werden weiterhin nur 
+publizierte Dokumente gefunden und angezeigt. Administratoren können nun die normale 
+Suche verwenden, um nach allen Dokumenten zu suchen und Facetten zum Filern verwenden.
+
+Es ist dadurch fuer Administratoren moeglich nach noch nicht freigeschalteten 
+Dokumenten einer Autorin oder eines Autoren sowie nach Dokumenten mit oder ohne 
+Volltext zu filtern. Es gibt Facetten wie z.B. den Status von Dokumenten, die nur 
+fuer Administratoren angezeigt werden.  
+
+Die Verwaltung der Dokumente in der Administration funktioniert weiter wie bisher. 
+In Zukunft ist vorgesehen, dass alte Interface dort komplett durch die Suche zu 
+ersetzen. 
+
+#### Suche nach Enrichments
+
+Es werden jetzt alle Enrichments indiziert. Es kann konfiguriert werden, welche 
+Enrichments in der Suche als Facetten auftauchen sollen und ob diese Facetten für 
+alle Nutzer oder nur Administratoren sichtbar sein sollen.
+
+Die Quelle von Dokumenten, also Publish-Modul oder SWORD, wird als neues Enrichment 
+gespeichert. Damit ist die Unterscheidung zwischen lokal eingestellten Dokumenten 
+und Dokumenten, die z.B. von DeepGreen geliefert wurden, einfach möglich.
     
 ### OAI/Export
 
 Das OAI Module und der Export unterstützen nun MARC21-XML.
 
+Der DCMI-Type von Dokumenttypen wird nicht mehr im XSLT fuer die OAI-Schnittstelle
+definiert. Der Typ kann jetzt in den Konfigurationsdateien definiert werden. Der
+DC-Type kann ebenfalls festgelegt werden. 
+
+```
+documentType.default.dcmiType = 'Text'
+docuemntType.default.dcType = 'Other'
+documentType.diplthesis.dcType = 'masterThesis'
+documentType.image.dcmiType = 'Image'
+```
+
+Die Defaultkonfiguration befindet sich in der Datei `application.ini` und kann in
+der Datei `config.ini` ergaenzt bzw. ueberschrieben werden.
+
+Administratoren koennen jetzt in der Frontdoor das DataCite-XML exportieren, um 
+das XML zu pruefen oder eine manuelle Registrierung durchzufuehren. 
+
+### Import (SWORD)
+
+Beim Import von Dokumenten wird jetzt das Enrichment `opus.source` gesetzt, um ein
+Dokument als importiert zu markieren. Zusammen mit den Erweiterungen der Suche
+kann dieses Enrichment genutzt werden, um zwischen lokal eingestellten und z.B. von
+DeepGreen hochgeladenen Dokumenten zu unterscheiden.
+
+Die Dokumentation der SWORD Schnittstelle wurde ausgebaut und ist hier zu finden.
+
+<http://www.opus-repository.org/userdoc/import/sword.html>   
+
 ### Erweiterte Enrichments
 
+Die Verwaltung der Enrichments wurde erweitert. Es koennen jetzt Typen fuer 
+Enrichments festgelegt und konfiguriert werden. Zu den Standardtypen gehoert z.B. 
+eine Liste (Select) bei dem erlaubte Werte fuer das Enrichment festgelegt werden
+koennen. 
 
+Die Enrichments werden in der Administration entsprechend ihrem Typ angezeigt, so
+dass man z.B. fuer ein Boolean-Enrichment eine Checkbox sieht. 
+
+Die Handhabung von Enrichments in den Veroeffentlichungsformularen ist noch nicht 
+mit der neuen Konfiguration verknuepft. Dort muessen Enrichments momentan immer 
+noch zusaetzlich konfiguriert werden. Mit der geplanten Ueberarbeitung des Publish
+Modules wird die Konfiguration zusammengefuehrt werden.
+
+Die Validierung von Enrichments kann flexibel eingestellt werden, um mit dem Fall 
+umzugehen, dass Werte, die in der Vergangenheit gueltig waren, durch eine Aenderung
+in der Konfigurtion nicht laenger erlaubt sind.  
 
 ### Frontdoor
 
 Die META-Tags, die in der Frontdoor für ein Dokument ausgegeben werden, wurden 
 erweitert um die für einen Dokumenttyp angemessenen Informationen auszugeben und 
-dadurch z.B. auch Google Scholar besser zu unterstützen.    
+dadurch z.B. auch Google Scholar besser zu unterstützen.
+
+Das Mapping der Dokumenttypen zu Dokumentkategorien, um die Erzeugung der Tags
+zu steuern ist in der Dokumentation beschrieben.
+
+<http://www.opus-repository.org/userdoc/reference/metatags.html>
+
+### Browsing
+
+Leere Sammlungen koennen nun optional ausgeblendet werden. Dafuer gibt es jetzt
+eine Option in den Einstellungen von CollectionRoles in der Sammlungsverwaltung.    
     
 ### Administration    
     
 Dateinamen werden beim Upload in der Administration nun wie im Publish-Modul auf
 Länge und Zeichensatz geprüft. 
 
-Das Löschen von benutzten Sprachen und Lizenzen wird nun verhindert.
+Das Löschen von benutzten Sprachen, Lizenzen, DNB-Instituten und Sammlungen wird 
+nun verhindert.
 
 ### MySQL Zeichensatz aktualisiert
     
@@ -132,24 +210,60 @@ ein Backup der Datenbank anzulegen. Neue Instanzen verwenden automatisch den
 neuen Zeichensatz. Nach der Konvertierung der Datenbank sollten *Repair* und
 *Optimize* für die Datenbank durchgeführt werden, zum Beispiel wie folgt:
 
-    $ mysqlcheck -u root -p --auto-repair --optimize opusdb    
+    $ mysqlcheck -u root -p --auto-repair --optimize opusdb
+    
+### Datenmodell
+
+Die Metadaten fuer Dokumente wurden um eine Aufsatznummer erweitert. Sie kann in
+der Administration zusammen mit den anderen bibliographischen Informationen 
+editiert werden.
+
+Die Namen von CollectionRoles werden jetzt validiert. In manchen Instanzen wurden
+fuer die Namen Strings mit Sonderzeichen verwendet. Das hat zu Problemen gefuehrt,
+da diese Namen als Identifier im HTML-Code verwendet werden. Fuer die angezeigten 
+Namen von CollectionRoles sollte der Uebersetzungsmechanismus verwendet werden. Die 
+Uebersetzungen von CollectionRoles koennen jetzt direkt in den Formularen der 
+Sammlungsverwaltung editiert werden. Es gibt noch nicht die Moeglichkeit die 
+untergeordneten Sammlungen zu uebersetzen.
+
+Die Wiederholung einer Bandangabe bei Dokumenten einer Schriftenreihe ist jetzt
+erlaubt. 
+
+### Datenschutz
+
+Externe Ressourcen wie z.B. Fonts und Icon-Sammlungen wurden in die Dateien von 
+OPUS 4 uebernommen, um das Laden von externen Servern und die damit unter 
+Umstaenden verbundenen Cookies zu vermeiden. Momentan wird fuer OPUS 4 nur noch das
+PHP Session Cookie benoetigt, z.B. wenn man sich einloggt oder mit mehrseitigen 
+Formularen arbeitet.  
     
 ### Dokumentation
 
 Für die Entwicklerdokumentation und das OPUS 4 Handbuch wurde DuckDuckGo als Suche
 integriert. Es gab viele Aktualisierungen im Handbuch.   
 
-<https://www.opus-repository.org>    
+<https://www.opus-repository.org> 
 
 Beiträge zur Dokumentation sind ein guter Weg die Entwicklung von OPUS 4 zu 
 unterstützen. Die Inhalte werden wie der Source-Code auf GitHub gehostet.  
 
 <https://github.com/OPUS4/userdoc>
-    
+   
 ### Bugs        
 
 Es wurde eine vielzahl von großen und kleinen Problemen behoben. Die genaue Liste
 befindet sich `CHANGES.md`.
+
+### Entwicklung
+
+Die Git-Repositorien wurden um Konfigurationsdateien fuer Travis-ci.org und GitHub
+Actions ergaenzt. 
+
+<https://travis-ci.org/github/OPUS4>
+
+Damit koennen auch fuer einen Fork der OPUS 4 Repositorien sehr leicht die Unit 
+Tests ausgefuehrt werden. Diese System erleichtern die Entwicklung und koennen 
+genutzt werden, wenn externe Entwickler Beitraege zu OPUS 4 leisten wollen.
 
 ---
 
