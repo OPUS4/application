@@ -210,13 +210,13 @@ class Setup_LanguageController extends Application_Controller_Action
 
         $post = null;
 
+        $key = $this->getParam('key', null);
+
         if ($request->isPost()) {
             $post = $request->getPost();
             if (isset($post['Key'])) {
                 $key = $post['Key'];
             }
-        } else {
-            $key = $this->getParam('key', null);
         }
 
         if (is_null($key)) {
@@ -241,6 +241,7 @@ class Setup_LanguageController extends Application_Controller_Action
                     if ($form->isValid($post)) {
                         $form->updateTranslation();
                         $form = null;
+                        Zend_Registry::get('Zend_Translate')->clearCache(); // TODO encapsulate
                     } else {
                     }
                     break;
