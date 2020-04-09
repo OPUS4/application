@@ -6,6 +6,10 @@ Dieser Release Candidate sollte nicht für produktive Instanzen verwendet werden
 dient in erste Linie dem Testen des Updates und der neuen Funktionen von OPUS 4.7
 bevor die endgültige Version veröffentlicht wird. Wir hoffen auf Ihr Feedback.
 
+Die Version 4.7-RC ist auf dem gleichnamigen Branch zu finden.
+
+<https://github.com/OPUS4/application/tree/4.7-RC>
+
 Die neue Version von OPUS 4 enthält eine Vielzahl von Veränderungen. Es wurde fast jede 
 Datei angefasst. Für Instanzen, die Anpassungen an OPUS 4 Dateien, insbesondere mit 
 den Endungen `.php` und `.xslt`, vorgenommen haben, kann dieses Update aufwendiger sein.
