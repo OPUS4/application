@@ -3,7 +3,7 @@
 ## Release Candidate 4.7-RC 2020-04-07
 
 Dieser Release Candidate sollte nicht für produktive Instanzen verwendet werden. Er
-dient in erste Linie dem Testen des Updates und der neuen Funktionen von OPUS 4.7
+dient in erster Linie dem Testen des Updates und der neuen Funktionen von OPUS 4.7,
 bevor die endgültige Version veröffentlicht wird. Wir hoffen auf Ihr Feedback.
 
 Die Version 4.7-RC ist auf dem gleichnamigen Branch zu finden.
@@ -13,8 +13,8 @@ Die Version 4.7-RC ist auf dem gleichnamigen Branch zu finden.
 Die neue Version von OPUS 4 enthält eine Vielzahl von Veränderungen. Es wurde fast jede 
 Datei angefasst. Für Instanzen, die Anpassungen an OPUS 4 Dateien, insbesondere mit 
 den Endungen `.php` und `.xslt`, vorgenommen haben, kann dieses Update aufwendiger sein.
-Wenn es Probleme gibt wenden Sie sich bitte an die Mailing-Liste 'kobv-opus-tester' 
-bzw. legen sie einen neuen "Issue" auf GitHub an.
+Wenn es Probleme gibt, wenden Sie sich bitte an die Mailing-Liste 'kobv-opus-tester' 
+bzw. legen Sie einen neuen "Issue" auf GitHub an.
 
 * <http://listserv.zib.de/mailman/listinfo/kobv-opus-tester>
 * <https://github.com/OPUS4/application/issues>
