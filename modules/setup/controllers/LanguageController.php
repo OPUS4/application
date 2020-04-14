@@ -33,13 +33,10 @@
  */
 
 /**
- * TODO update documentation
  * TODO rename controller to TranslationController
  * TODO sorting using table header
- * TODO link for adding new translations
  *
  * After canceling an Edit form the user gets returned to the search page displaying the last search.
- *
  */
 class Setup_LanguageController extends Application_Controller_Action
 {
@@ -47,7 +44,7 @@ class Setup_LanguageController extends Application_Controller_Action
     /**
      * TODO update name and values for new functionality
      */
-    private $sortKeys = ['key', 'variant'];
+    private $sortKeys = ['key', 'translation'];
 
     /**
      * Initialize controller.
@@ -425,7 +422,7 @@ class Setup_LanguageController extends Application_Controller_Action
     {
         $sortKeysTranslated = [];
 
-        $sortKeys = array_diff($this->sortKeys, ['language', 'variant']);
+        $sortKeys = array_diff($this->sortKeys, ['language', 'translation']);
 
         foreach ($sortKeys as $option) {
             $sortKeysTranslated[$option] = $this->view->translate('setup_language_' . $option);

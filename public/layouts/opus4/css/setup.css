@@ -12,15 +12,15 @@
     font-weight: normal;
 }
 
-.adminContainer table.table-translations thead th.variant {
+.adminContainer table.table-translations thead th.translation {
     padding-left: 0;
 }
 
-.adminContainer table.table-translations thead th.variant div.translations{
+.adminContainer table.table-translations thead th.translation div.translations{
     display: flex;
 }
 
-.adminContainer table.table-translations thead th.variant .label {
+.adminContainer table.table-translations thead th.translation .label {
     flex: 1;
 }
 
