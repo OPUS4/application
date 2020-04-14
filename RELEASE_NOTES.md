@@ -30,11 +30,11 @@ OPUS 4 sollte auf einer Vielzahl von Systemen lauffähig sein. Es wird aber mit 
 unter Ubuntu 16 entwickelt. Es verwendet momentan noch Zend Framework 1 und ist damit
 leider nicht kompatibel zu PHP 7.2 und neuer. Ubuntu 16 kommt mit PHP 7.0.  
 
-Weitere allgemeinen Informationen zu den Anforderungen finden sich hier. 
+Weitere allgemeine Informationen zu den Anforderungen finden sich hier. 
 
 <http://www.opus-repository.org/userdoc/installation/requirements.html>
 
-Der Umstieg die aktuelle Version des Zend Frameworks, der mit umfangreichen Änderungen
+Der Umstieg auf die aktuelle Version des Zend Frameworks, der mit umfangreichen Änderungen
 verbunden ist, wird für OPUS 4.8 angestrebt.  
 
 ### Installation 
@@ -42,7 +42,7 @@ verbunden ist, wird für OPUS 4.8 angestrebt.
 Das Installationsskript von OPUS 4 ist auf Ubuntu 16 zu geschnitten. Es sollte dort 
 funktionieren. Während der Installation gibt es die Möglichkeit Solr 7.7.2 zu 
 installieren. Diese Installation ist zu Testzwecken ausreichend. Für produktive 
-Instanzen wird empfohlen Solr manuell und entsprechend den Empfehlungen der Solr 
+Instanzen wird empfohlen, Solr manuell und entsprechend den Empfehlungen der Solr 
 Dokumentaton zu installieren. Im Installationsskript werden dann nur die Daten für
 die Verbindung zu Solr angegeben.   
 
@@ -78,7 +78,7 @@ Funktionen. Die Datei 'modules/default/language/languages.tmx' wurde gelöscht.
 
 Die Anpassungen an den Übersetzungen, die bisher in 'language_custom' Verzeichnissen
 gespeichert wurden, werden mit dem Update auf diese Version in die Datenbank verschoben. 
-Die normalen TMX-Dateien enthalten weiterhin die Standardübersetzungen während die 
+Die normalen TMX-Dateien enthalten weiterhin die Standardübersetzungen, während die 
 lokalen Anpassungen aus der Datenbank gelesen werden.
 
 Im Setup-Bereich der Administration lassen sich beliebige Übersetzungsschlüssel 
@@ -98,7 +98,7 @@ wird noch weiter fortgesetzt und in kommenden Releases ausgebaut.
 
 Beim Editieren von Übersetzungen kann das Modul nicht verändert werden. Es wird durch
 das Modul der TMX-Datei mit der Standardübersetzung bestimmt. Für neue Schlüssel kann 
-ein Modul ausgewählt werden. Das ist in erster Linie für Entwicklung wichtig. Hier
+ein Modul ausgewählt werden. Das ist in erster Linie für die Entwicklung wichtig. Hier
 wird es bestimmt noch weitere Veränderungen geben. Im Zweifelsfall ist es in Ordnung
 einfach `default` ausgewählt zu lassen. Wir werden vermutlich später Namespaces für
 Übersetzungen von Sammlungen, Enrichments, Feldern, etc. einführen. 
@@ -110,7 +110,7 @@ Schlüssel darf also auch nicht in unterschiedlichen Modulen auftauchen.
 
 Mit diesem Release wurden einige wichtige Verbesserungen der Suche in OPUS 4 
 umgesetzt. Die Entwicklung der Suche ist damit aber noch nicht abgeschlossen und 
-es wird mehr Erweiterungen und Änderungen in kommenden Version geben.
+es wird mehr Erweiterungen und Änderungen in kommenden Versionen geben.
 
 Der Code für die Suchanbindung ist vom 'framework'-Repository auf GitHub in das
 'search'-Repository verschoben worden.
@@ -145,7 +145,7 @@ Genauere Informationen finden sich in der Solr-Dokumentation.
 <http://lucene.apache.org/solr/guide/7_7/taking-solr-to-production.html>
 
 Anschließend müssen gegebenenfalls in der Konfigurationsdatei `config.ini` die 
-Solr-Parameter, z.B. für einen neuen Port aktualisiert werden.
+Solr-Parameter, z.B. für einen neuen Port, aktualisiert werden.
 
 Für die richtige Funktion der Suche muss Solr mit OPUS 4-Konfigurationsdateien
 betrieben werden. Auf der folgenden Seite findet sich eine einfache Anleitung,
@@ -163,7 +163,7 @@ Es werden nun alle Dokumente indiziert. Für normale Nutzer werden weiterhin nur
 publizierte Dokumente gefunden und angezeigt. Administratoren können nun die normale 
 Suche verwenden, um nach allen Dokumenten zu suchen und mit Facetten zu filtern.
 
-Dadurch ist es nun für Administratoren möglich z.B. nach noch nicht freigeschalteten 
+Dadurch ist es nun für Administratoren möglich, z.B. nach noch nicht freigeschalteten 
 Dokumenten einer Autorin oder eines Autoren, sowie nach Dokumenten mit oder ohne 
 Volltext zu filtern. Es gibt Facetten wie z.B. den Status von Dokumenten, die nur 
 für Administratoren angezeigt werden. 
@@ -206,7 +206,7 @@ Die Defaultkonfiguration befindet sich in der Datei `application.ini` und kann i
 der Datei `config.ini` ergänzt bzw. überschrieben werden.
 
 Administratoren können jetzt in der Frontdoor das DataCite-XML exportieren, um 
-das XML bei Problemenn prüfen zu können eine manuelle Registrierung durchzuführen. 
+das XML bei Problemenn prüfen zu können und eine manuelle Registrierung durchzuführen. 
 
 ### Import (SWORD)
 
@@ -223,11 +223,11 @@ Die Dokumentation der SWORD Schnittstelle wurde ausgebaut und ist hier zu finden
 
 Die Verwaltung der Enrichments wurde erweitert. Es können jetzt Typen für 
 Enrichments festgelegt und konfiguriert werden. Zu den Standardtypen gehört z.B. 
-eine Liste (Select) bei der erlaubte Werte für das Enrichment festgelegt werden
+eine Liste (Select), in der erlaubte Werte für das Enrichment festgelegt werden
 können. 
 
 Die Enrichments werden im Metadatenformular entsprechend ihrem Typ angezeigt, so
-dass man z.B. für ein Boolean-Enrichment eine Checkbox sieht. Enrichments für die
+dass man z.B. für ein Boolean-Enrichment eine Checkbox sieht. Enrichments, für die
 kein Typ festgelegt wurde, werden weiterhin als Textfeld angezeigt.   
 
 Die Handhabung von Enrichments in den Veröffentlichungsformularen ist noch nicht 
@@ -239,8 +239,8 @@ Die Validierung von Enrichments kann flexibel eingestellt werden, um mit dem Fal
 umzugehen, dass Werte, die in der Vergangenheit gültig waren, durch eine Änderung
 in der Konfiguration nicht länger erlaubt sind. Das könnte der Fall sein, wenn die
 Liste der erlaubten Werte eines Select-Enrichments später geändert wird. Es gibt 
-in diesem Fall die Möglichkeit abweichende Werte die bereits in der Datenbank 
-gespeichert sind beim Editieren zu tolerieren. Neu ausgewählte Werte müssen aber 
+in diesem Fall die Möglichkeit abweichende Werte, die bereits in der Datenbank 
+gespeichert sind, beim Editieren zu tolerieren. Neu ausgewählte Werte müssen aber 
 der aktuellen Konfiguration entsprechen.
 
 Wir hoffen auf Ihr Feedback für die weitere Entwicklung der Enrichmentfunktionen.  
@@ -288,10 +288,10 @@ editiert werden.
 
 Die Namen von CollectionRoles werden jetzt validiert. In manchen Instanzen wurden
 für die Namen Strings mit Sonderzeichen verwendet. Das hat zu Problemen geführt,
-da diese Namen als Identifier z.B. im HTML-Code verwendet werden. Für die 
+da diese Namen als Identifier, z.B. im HTML-Code, verwendet werden. Für die 
 angezeigten Namen von CollectionRoles sollte der Übersetzungsmechanismus verwendet 
 werden. Die Übersetzungen von CollectionRoles können jetzt direkt in den Formularen 
-der Sammlungsverwaltung editiert werden. Es gibt noch nicht die Möglichkeit die 
+der Sammlungsverwaltung editiert werden. Es gibt noch keine Möglichkeit die 
 untergeordneten Sammlungen zu übersetzen. 
 
 Die Wiederholung einer Bandangabe bei Dokumenten einer Schriftenreihe ist jetzt
@@ -299,7 +299,7 @@ erlaubt.
 
 ### Datenschutz
 
-Externe Ressourcen wie z.B. Fonts und Icon-Sammlungen wurden in die Dateien von 
+Externe Ressourcen, wie z.B. Fonts und Icon-Sammlungen, wurden in die Dateien von 
 OPUS 4 übernommen, um das Laden von externen Servern und die damit unter 
 Umständen verbundenen Cookies zu vermeiden. Momentan wird für OPUS 4 nur noch das
 PHP Session Cookie benötigt, z.B. wenn man sich einloggt oder mit mehrseitigen 
@@ -319,7 +319,7 @@ unterstützen. Die Inhalte werden wie der Source-Code auf GitHub gehostet.
    
 ### Bugs        
 
-Es wurde eine vielzahl von großen und kleinen Problemen behoben. Die genaue Liste
+Es wurde eine Vielzahl von großen und kleinen Problemen behoben. Die genaue Liste
 befindet sich in [`CHANGES.md`](CHANGES.md).
 
 ### Entwicklung
@@ -330,7 +330,7 @@ Actions ergänzt.
 <https://travis-ci.org/github/OPUS4>
 
 Damit können auch für einen Fork der OPUS 4 Repositorien sehr leicht die Unit 
-Tests ausgeführt werden. Diese System erleichtern die Entwicklung und können 
+Tests ausgeführt werden. Diese erleichtern die Entwicklung und können 
 genutzt werden, wenn externe Entwickler Beiträge zu OPUS 4 leisten wollen.
 
 Die Dateien von OPUS 4 folgen jetzt einem einheitlichen Coding Style. Der Style
