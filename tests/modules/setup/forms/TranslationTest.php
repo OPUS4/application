@@ -373,6 +373,45 @@ class Setup_Form_TranslationTest extends ControllerTestCase
         ], $translation['translations']);
     }
 
+    /**
+     * Editing the translations to match the original TMX file should remove the translation from the database.
+     */
+    public function testUpdateManuallyToOriginal()
+    {
+        $manager = new Application_Translate_TranslationManager();
+        $dao = new Opus_Translate_Dao();
+
+        $key = 'default_add';
+
+        $dao->setTranslation($key, [
+            'en' => 'AddEdited',
+            'de' => 'AnlegenEdited'
+        ]);
+
+        $translation = $manager->getTranslation($key);
+
+        $this->assertArrayHasKey('state', $translation);
+        $this->assertEquals('edited', $translation['state']);
+
+        $form = $this->getForm();
+
+        $form->populateFromKey($key);
+
+        $valuesSubForm = $form->getSubForm($form::SUBFORM_TRANSLATION);
+
+        $this->assertEquals('AddEdited', $valuesSubForm->getValue('en'));
+
+        $valuesSubForm->getElement('en')->setValue('Add');
+        $valuesSubForm->getElement('de')->setValue('Hinzufügen');
+
+        $form->updateTranslation();
+
+        $translation = $manager->getTranslation($key);
+
+        $this->assertArrayNotHasKey('state', $translation);
+        $this->assertNull($dao->getTranslation($key));
+    }
+
     protected function getForm()
     {
         return new Setup_Form_Translation();

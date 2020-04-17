@@ -26,7 +26,7 @@
 
     <tu tuid="setup_language_key">
         <tuv xml:lang="en">
-            <seg>Keys</seg>
+            <seg>Key</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Schlüssel</seg>
@@ -228,6 +228,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="setup_translation_search_button">
+      <tuv xml:lang="en">
+        <seg>Show</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Anzeigen</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="setup_translation_modules_label">
       <tuv xml:lang="en">
         <seg>Module</seg>
@@ -248,7 +257,7 @@
 
     <tu tuid="setup_translation_scope_label">
       <tuv xml:lang="en">
-        <seg>Include</seg>
+        <seg>Search</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Durchsuchen</seg>
@@ -331,6 +340,24 @@
       <tuv xml:lang="de">
         <seg>Schlüssel dürfen maximal 100 Zeichen lang sein.</seg>
       </tuv>
+    </tu>
+
+    <tu tuid="setup_translation_tooltip_value_current">
+        <tuv xml:lang="en">
+            <seg>Custom translation</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Angepasste Übersetzung</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="setup_translation_tooltip_value_default">
+        <tuv xml:lang="en">
+            <seg>Default translation</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Standardübersetzung</seg>
+        </tuv>
     </tu>
 
   </body>

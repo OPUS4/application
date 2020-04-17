@@ -87,32 +87,50 @@
     </tu>
 
     <tu tuid="setup_language_confirm_reset_all">
-      <tuv xml:lang="en">
-        <seg>All translations that have been edited will be reset to the value provided in the original TMX files.
+        <tuv xml:lang="en">
+            <seg>All translations that have been edited will be reset to the value provided in the original TMX files.
 Translation keys added to the system, won't be affected.</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Alle Übersetzungen, die editiert wurden, werden auf den Originaltext aus den TMX-Dateien zurück gesetzt.</seg>
-      </tuv>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Alle Übersetzungen, die editiert wurden, werden auf den Originaltext aus den TMX-Dateien zurück gesetzt.</seg>
+        </tuv>
     </tu>
 
     <tu tuid="setup_language_confirm_reset_all_title">
-      <tuv xml:lang="en">
-        <seg>Reset all edited translations?</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Alle editierten Übersetzungen zurücksetzen?</seg>
-      </tuv>
+        <tuv xml:lang="en">
+            <seg>Reset all edited translations?</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Alle editierten Übersetzungen zurücksetzen?</seg>
+        </tuv>
     </tu>
 
-      <tu tuid="setup_language_confirm_delete_all_title">
-          <tuv xml:lang="en">
-              <seg>Reset all edited translations?</seg>
-          </tuv>
-          <tuv xml:lang="de">
-              <seg>Alle editierten Übersetzungen zurücksetzen?</seg>
-          </tuv>
-      </tu>
+    <tu tuid="setup_language_confirm_reset_key">
+        <tuv xml:lang="en">
+            <seg>The customization of the translation will be removed and the default values used.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Die Anpassungen werden entfernt und wieder die Standardübersetzungen genutzt.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="setup_language_confirm_reset_key_title">
+        <tuv xml:lang="en">
+            <seg>Reset translation to default?</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Übersetzungen auf den Standard zurücksetzen?</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="setup_language_confirm_delete_all_title">
+        <tuv xml:lang="en">
+             <seg>Reset all edited translations?</seg>
+        </tuv>
+        <tuv xml:lang="de">
+             <seg>Alle editierten Übersetzungen zurücksetzen?</seg>
+        </tuv>
+    </tu>
 
 
     <tu tuid="setup_message_error_read-access">
