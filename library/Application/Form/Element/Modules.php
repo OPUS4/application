@@ -41,8 +41,6 @@ class Application_Form_Element_Modules extends Application_Form_Element_Select
     {
         parent::init();
 
-        $this->setDisableTranslator(true);
-
         $manager = new Application_Translate_TranslationManager();
 
         $modules = $manager->getModules();
@@ -55,5 +53,10 @@ class Application_Form_Element_Modules extends Application_Form_Element_Select
         if (in_array('default', $modules)) {
             $this->setValue('default');
         }
+    }
+
+    protected function _translateOption($option, $value)
+    {
+        return false;
     }
 }
