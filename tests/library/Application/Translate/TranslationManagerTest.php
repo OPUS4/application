@@ -346,16 +346,52 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
 
         $testKey = 'answer_yes';
 
+        $dao = new Opus_Translate_Dao();
+
+        $dao->setTranslation($testKey, [
+            'en' => 'YesTest',
+            'de' => 'JaTest'
+        ]);
+
+        $translation = $manager->getTranslation($testKey);
+
+        $this->assertArrayHasKey('state', $translation);
+        $this->assertEquals('edited', $translation['state']);
+
         $manager->reset($testKey);
 
-        // TODO test
-        $this->markTestIncomplete();
+        $translation = $manager->getTranslation($testKey);
+
+        $this->assertArrayNotHasKey('state', $translation);
+        $this->assertEquals([
+            'en' => 'Yes',
+            'de' => 'Ja'
+        ], $translation['translations']);
     }
 
+    /**
+     * Deletes translation that was added to database.
+     *
+     * The content of TMX-Dateien is not modified using this function. Basically there is a read-only part.
+     */
     public function testDelete()
     {
-        // TODO test
-        $this->markTestIncomplete();
+        $manager = $this->object;
+
+        $dao = new Opus_Translate_Dao();
+
+        $key = 'customTestKey';
+
+        $dao->setTranslation($key, [
+            'en' => 'English',
+            'de' => 'Deutsch'
+        ]);
+
+        $this->assertNotNull($dao->getTranslation($key));
+
+        $manager->delete($key);
+
+        $this->assertNull($dao->getTranslation($key));
     }
 
     public function testGetExportTmxFile()
