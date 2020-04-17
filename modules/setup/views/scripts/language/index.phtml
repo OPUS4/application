@@ -58,8 +58,8 @@
             <div class="actions">
                 <a class="button" href="<?= $this->url(['action' => 'export']) ?>"><i class="fas fa-file-export"></i><?= $this->translate('setup_translation_button_export') ?></a>
                 <a class="button" href="<?= $this->url(['action' => 'import']) ?>"><i class="fas fa-file-import"></i><?= $this->translate('setup_translation_button_import') ?></a>
-                <a class="button" href="<?= $this->url(['action' => 'reset']) ?>"><?= $this->translate('setup_translation_button_reset_all') ?></a>
-                <a class="button" href="<?= $this->url(['action' => 'delete']) ?>"><?= $this->translate('setup_translation_button_delete_all') ?></a>
+                <a class="button" href="<?= $this->url(['action' => 'reset', 'all' => 'true']) ?>"><?= $this->translate('setup_translation_button_reset_all') ?></a>
+                <a class="button" href="<?= $this->url(['action' => 'delete', 'all' => 'true']) ?>"><?= $this->translate('setup_translation_button_delete_all') ?></a>
                 <a class="button" href="<?= $this->url(['action' => 'settings']) ?>"><i class="fas fa-cog"></i><?= $this->translate('setup_translation_button_settings') ?></a>
             </div>
             </div>
