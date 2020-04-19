@@ -123,6 +123,24 @@ Translation keys added to the system, won't be affected.</seg>
         </tuv>
     </tu>
 
+    <tu tuid="setup_language_confirm_delete_key">
+        <tuv xml:lang="en">
+            <seg>The translation key will be removed from the database. This operation cannot be reversed.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Der Übersetzungsschlüssel wird aus der Datenbank gelöscht. Diese Aktion kann nicht rückgängig gemacht werden.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="setup_language_confirm_delete_key_title">
+        <tuv xml:lang="en">
+            <seg>Delete translation key?</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Übersetzungsschlüssel löschen?</seg>
+        </tuv>
+    </tu>
+
     <tu tuid="setup_language_confirm_delete_all_title">
         <tuv xml:lang="en">
              <seg>Reset all edited translations?</seg>

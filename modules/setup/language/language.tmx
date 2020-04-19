@@ -132,6 +132,24 @@
       </tuv>
     </tu>
 
+    <tu tuid="setup_translation_reset">
+      <tuv xml:lang="en">
+        <seg>Reset</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Zurücksetzen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="setup_translation_delete">
+      <tuv xml:lang="en">
+        <seg>Delete</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Löschen</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="setup_language_export">
       <tuv xml:lang="en">
         <seg>Export translations</seg>

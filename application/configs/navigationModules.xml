@@ -782,6 +782,13 @@
                                     <controller>language</controller>
                                     <action>edit</action>
                                 </edit>
+                                <delete>
+                                    <type>mvc</type>
+                                    <label>setup_translation_delete</label>
+                                    <module>setup</module>
+                                    <controller>language</controller>
+                                    <action>delete</action>
+                                </delete>
                                 <add>
                                     <type>mvc</type>
                                     <label>setup_language_add</label>

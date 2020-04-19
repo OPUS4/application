@@ -41,6 +41,12 @@
 class Setup_LanguageController extends Application_Controller_Action
 {
 
+    const PARAM_SORT = 'sort';
+    const PARAM_SEARCH = 'search';
+    const PARAM_MODULE = 'modules';
+    const PARAM_SCOPE = 'scope';
+    const PARAM_STATE = 'state';
+
     /**
      * TODO update name and values for new functionality
      */
@@ -61,9 +67,6 @@ class Setup_LanguageController extends Application_Controller_Action
      * Action for searching and showing translations.
      *
      * TODO move handling of allowed modules into manager
-     * TODO handle module parameter
-     * TODO handle scope parameter
-     * TODO handle state parameter
      */
     public function indexAction()
     {
@@ -87,13 +90,22 @@ class Setup_LanguageController extends Application_Controller_Action
 
         $form = $this->getSearchForm($searchTerm, $sortKey);
 
-        if ($request->isPost()) {
-            $form ->populateFromRequest($request);
+        $form ->populateFromRequest($request);
 
+        if ($request->isPost()) {
             $searchTerm = $form->getElement($form::ELEMENT_FILTER)->getValue();
             $modules = $form->getElement($form::ELEMENT_MODULES)->getValue();
             $state = $form->getElement($form::ELEMENT_STATE)->getValue();
             $scope = $form->getElement($form::ELEMENT_SCOPE)->getValue();
+
+            // redirect so using the back button in the browser doesn't require resubmitting the form
+            $this->_helper->Redirector->redirectTo('index', null, null, null, [
+                'search' => $searchTerm,
+                'sort'  => $sortKey,
+                'modules' => $modules,
+                'state' => $state,
+                'scope' => $scope
+            ]);
         }
 
         $translationManager = $this->getTranslationManager();
@@ -158,7 +170,7 @@ class Setup_LanguageController extends Application_Controller_Action
 
         if ($request->isPost()) {
             $post = $request->getPost();
-            $form = $this->getTranslationForm(true);
+            $form = $this->getTranslationForm();
             $result = $form->processPost($post, $post);
 
             switch ($result) {
@@ -178,13 +190,7 @@ class Setup_LanguageController extends Application_Controller_Action
                     $form = null;
             }
             if (is_null($form)) {
-                $this->_helper->Redirector->redirectTo(
-                    'index',
-                    null,
-                    'language',
-                    'setup',
-                    ['search' => $this->getParam('search')]
-                );
+                $this->redirectWithParameters();
             }
         } else {
             $form = $this->getTranslationForm();
@@ -211,8 +217,10 @@ class Setup_LanguageController extends Application_Controller_Action
 
         if ($request->isPost()) {
             $post = $request->getPost();
-            if (isset($post['Key'])) {
-                $key = $post['Key'];
+            if (isset($post['Id'])) {
+                $key = $post['Id'];
+            } else {
+                // TODO handle error (this should not happen)
             }
         }
 
@@ -229,8 +237,16 @@ class Setup_LanguageController extends Application_Controller_Action
             switch ($result) {
                 case Setup_Form_Translation::RESULT_SAVE:
                     // add values for disabled elements to POST
-                    $post[$form::ELEMENT_KEY] = $key;
-                    $post[$form::ELEMENT_MODULE] = $form->getElement($form::ELEMENT_MODULE)->getValue();
+                    if (! isset($post[$form::ELEMENT_KEY])) {
+                        $post[$form::ELEMENT_KEY] = $key;
+                    }
+
+                    // KeyModule is not set if editing of module is disabled for edited key
+                    if (! isset($post[$form::ELEMENT_MODULE])) {
+                        $moduleElement = $form->getElement($form::ELEMENT_MODULE);
+                        $moduleElement->setRequired(false);
+                        $moduleElement->setValue(null);
+                    }
                     // disable validation for duplicate keys when editing existing key
                     $form->getElement($form::ELEMENT_KEY)->removeValidator(
                         'Setup_Form_Validate_TranslationKeyAvailable'
@@ -240,6 +256,7 @@ class Setup_LanguageController extends Application_Controller_Action
                         $form = null;
                         Zend_Registry::get('Zend_Translate')->clearCache(); // TODO encapsulate
                     } else {
+                        // TODO go back to form
                     }
                     break;
                 case Setup_Form_Translation::RESULT_CANCEL:
@@ -249,13 +266,7 @@ class Setup_LanguageController extends Application_Controller_Action
                     $form = null;
             }
             if (is_null($form)) {
-                $this->_helper->Redirector->redirectTo(
-                    'index',
-                    null,
-                    'language',
-                    'setup',
-                    ['search' => $this->getParam('search')]
-                );
+                $this->redirectWithParameters();
                 $form = null;
             }
         } else {
@@ -271,73 +282,80 @@ class Setup_LanguageController extends Application_Controller_Action
     /**
      * Removes database entry for translations key from TMX files to reset the used value.
      *
-     * TODO show confirmation form
+     * If a "key" is provided as parameter the "all" parameter is ignored.
+     * When reseting all changes a confirmation dialog is shown.
+     * When reseting a single key the current and the original translation are shown.
+     *
      * TODO handle removing all edited translations from database
+     * TODO option to only reset current filter result
      */
-    public function resetAction()
+    public function deleteAction()
     {
-        $all = $this->getParam('all', false);
-
-        if (filter_var($all, FILTER_VALIDATE_BOOLEAN)) {
-            $all = true;
-        }
+        $request = $this->getRequest();
 
         $key = $this->getParam('key', null);
 
-        if (! is_null($key) || $all) {
-            $request = $this->getRequest();
+        if ($request->isPost()) {
+            $post = $request->getPost();
+            if (isset($post['Id'])) {
+                $key = $post['Id'];
+            }
+        }
+
+        $manager = $this->getTranslationManager();
+
+        $form = null;
+
+        if (! is_null($key)) {
+            $form = new Setup_Form_DeleteKeyConfirmation();
 
             if ($request->isPost()) {
-                $form = $this->getConfirmationForm();
-
                 $result = $form->processPost($request->getPost());
 
                 switch ($result) {
-                    case Setup_Form_Confirmation::RESULT_NO:
-                        $this->_helper->Redirector->redirectTo(
-                            'index',
-                            null,
-                            'language',
-                            'setup',
-                            ['search' => $this->getParam('search')]
-                        );
+                    case $form::RESULT_YES:
+                        if ($manager->keyExists($key)) {
+                            $manager->delete($key);
+                        } else {
+                            // TODO error invalid request
+                        }
+                        $form = null;
                         break;
+                    case $form::RESULT_NO:
+                        // fall through to default
                     default:
-                }
-
-                $translationManager = $this->getTranslationManager();
-
-                if ($translationManager->keyExists($key)) {
-                    $translationManager->reset($key);
-                } else {
-                    // TODO error invalid request
+                        $form = null; // go back to index action
+                        break;
                 }
             } else {
-                $form = $this->getConfirmationForm();
-                $form->setQuestion('setup_language_confirm_reset_all');
-                $form->setLegend('setup_language_confirm_reset_all_title');
+                $form->setKey($key);
 
-                $this->_helper->renderForm($form);
-                return;
+                if ($manager->isEdited($key)) {
+                    $form->setQuestion('setup_language_confirm_reset_key');
+                    $form->setLegend('setup_language_confirm_reset_key_title');
+                } else {
+                    $form->setQuestion('setup_language_confirm_delete_key');
+                    $form->setLegend('setup_language_confirm_delete_key_title');
+                }
             }
         } else {
-            // TODO error invalid request
+            // ignore invalid requests (no key or all parameter)
         }
 
-        $this->_helper->Redirector->redirectTo(
-            'index',
-            null,
-            'language',
-            'setup',
-            ['search' => $this->getParam('search')]
-        );
+        if (! is_null($form)) {
+            $this->_helper->renderForm($form);
+        } else {
+            $this->redirectWithParameters();
+        }
     }
 
     /**
      *
      */
-    public function deleteAction()
+    public function deleteallAction()
     {
+        $request = $this->getRequest();
+
         $search = $this->getParam('search', null);
         $key = $this->getParam('key', null);
         $filterModule = $this->getParam('modules', null);
@@ -346,9 +364,29 @@ class Setup_LanguageController extends Application_Controller_Action
             // delete single key
             $manager = $this->getTranslationManager();
             $manager->delete($key);
-        } else {
-            // TODO delete multiple keys
         }
+
+        /* TODO implement
+        else if ($all) {
+            // Reset all translations matching current filter
+            $form = new Setup_Form_DeleteAllConfirmation();
+
+            if ($request->isPost()) {
+                $result = $form->processPost($request->getPost());
+
+                switch ($result) {
+                    case $form::RESULT_YES:
+                        break;
+
+                    case $form::RESULT_NO:
+                        // fall through to default
+                    default:
+                        $form = null;
+                        break;
+                }
+
+            }
+        }*/
 
         $this->_helper->Redirector->redirectTo(
             'index',
@@ -458,10 +496,24 @@ class Setup_LanguageController extends Application_Controller_Action
         return $translationManager;
     }
 
-    protected function getConfirmationForm()
+    /**
+     *
+     */
+    protected function redirectWithParameters($action = 'index')
     {
-        $form = new Setup_Form_Confirmation();
+        $this->_helper->Redirector->redirectTo(
+            $action,
+            null,
+            'language',
+            'setup',
+            [
+                self::PARAM_SEARCH => $this->getParam(self::PARAM_SEARCH),
+                self::PARAM_MODULE => $this->getParam(self::PARAM_MODULE),
+                self::PARAM_SCOPE => $this->getParam(self::PARAM_SCOPE),
+                self::PARAM_STATE => $this->getParam(self::PARAM_STATE),
+                self::PARAM_SORT => $this->getParam(self::PARAM_SORT)
+            ]
+        );
 
-        return $form;
     }
 }

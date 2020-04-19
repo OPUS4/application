@@ -170,30 +170,30 @@ form#filter .row:first-child {
     padding: 0;
 }
 
-.setup_language_reset .translation {
+.setup_language_delete .translation {
     margin: 1em 0;
 }
 
-.setup_language_reset .lang, .setup_language_reset .values {
+.setup_language_delete .lang, .setup_language_delete .values {
     display: inline-block;
     margin: 0.5em 0;
     padding: 0 0.5em;
     vertical-align: top;
 }
 
-.setup_language_reset .lang {
+.setup_language_delete .lang {
     font-size: 1.2em;
     font-weight: bold;
     text-transform: uppercase;
     padding: 0.3em;
 }
 
-.setup_language_reset .values {
+.setup_language_delete .values {
     position: relative;
     width: 90%;
 }
 
-.setup_language_reset .current, .setup_language_reset .default {
+.setup_language_delete .current, .setup_language_delete .default {
     padding: 0.3em;
     margin-bottom: 0.3em;
     border-radius: 3px;
@@ -202,30 +202,30 @@ form#filter .row:first-child {
     width: 100%;
 }
 
-.setup_language_reset .current {
+.setup_language_delete .current {
     background-color: pink;
 }
 
-.setup_language_reset .default {
+.setup_language_delete .default {
     background-color: whitesmoke;
 }
 
-.setup_language_reset .message {
+.setup_language_delete .message {
     font-size: 1.2em;
     margin: 1em 0;
 }
 
-.setup_language_reset .key-info {
+.setup_language_delete .key-info {
     margin-left: 4em;
 }
 
-.setup_language_reset .key-info .key {
+.setup_language_delete .key-info .key {
     font-size: 1.6em;
     font-family: monospace;
     margin-bottom: 0.3em;
 }
 
-.setup_language_reset .key-info .source {
+.setup_language_delete .key-info .source {
     font-size: 1.2em;
     font-style: italic;
     font-family: monospace;
