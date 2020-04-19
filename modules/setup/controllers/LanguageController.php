@@ -514,6 +514,5 @@ class Setup_LanguageController extends Application_Controller_Action
                 self::PARAM_SORT => $this->getParam(self::PARAM_SORT)
             ]
         );
-
     }
 }

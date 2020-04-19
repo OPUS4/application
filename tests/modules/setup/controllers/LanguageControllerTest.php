@@ -543,10 +543,9 @@ class Setup_LanguageControllerTest extends ControllerTestCase
         $translation = $manager->getTranslation($key);
 
         $this->assertEquals([
-            'en' =>'SitelinksEdited',
+            'en' => 'SitelinksEdited',
             'de' => 'SitelinksEdited'
         ], $translation);
-
     }
 
     public function testChangeNameOfAddedKey()
