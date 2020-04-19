@@ -799,4 +799,43 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
             $this->fail("Translation key '$oldKey' should have been removed.");
         }
     }
+
+    public function testIsEditedTrue()
+    {
+        $manager = $this->object;
+
+        $dao = new Opus_Translate_Dao();
+
+        $key = 'default_add';
+
+        $dao->setTranslation($key, [
+            'en' => 'AddEdited',
+            'de' => 'AnlegenEdited'
+        ]);
+
+        $this->assertTrue($manager->isEdited($key));
+    }
+
+    public function testIsEditedFalse()
+    {
+        $manager = $this->object;
+
+        $this->assertFalse($manager->isEdited('default_add'));
+    }
+
+    public function testIsEditedFalseForAddedKey()
+    {
+        $manager = $this->object;
+
+        $dao = new Opus_Translate_Dao();
+
+        $key = 'customtestkey';
+
+        $dao->setTranslation($key, [
+            'en' => 'test key',
+            'de' => 'Testschluessel'
+        ]);
+
+        $this->assertFalse($manager->isEdited($key));
+    }
 }

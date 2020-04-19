@@ -537,6 +537,13 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
         return ! is_null($database->getTranslation($key));
     }
 
+    public function isEdited($key)
+    {
+        $translation = $this->getTranslation($key);
+
+        return (isset($translation['state']) && $translation['state'] == 'edited');
+    }
+
     /**
      * Removes a translation key from the database if the key exists in TMX files.
      * @param $key
@@ -548,11 +555,8 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
         $translations = $this->getTranslations();
 
         if (array_key_exists($key, $translations)) {
-            $database->remove($key);
+            $this->delete($key);
         }
-
-        $translate = Zend_Registry::get('Zend_Translate');
-        $translate->clearCache();
     }
 
     /**
@@ -564,6 +568,9 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
     {
         $database = $this->getDatabase();
         $database->remove($key, $module);
+
+        $translate = Zend_Registry::get('Zend_Translate');
+        $translate->clearCache();
     }
 
     /**
