@@ -182,6 +182,10 @@ class Setup_Form_Translation extends Application_Form_Abstract
             // update key
             $old = $manager->getTranslation($keyId);
 
+            if (is_null($module)) {
+                $module = $old['module'];
+            }
+
             if ($keyId !== $key || $old['module'] !== $module) {
                 // change name of key
                 $manager->updateTranslation($key, $translations, $module, $keyId);
