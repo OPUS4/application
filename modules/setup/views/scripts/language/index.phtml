@@ -47,7 +47,6 @@
 
 <?PHP $resultCount = count($this->translations) ?>
 
-<?PHP if ($resultCount > 0) : ?>
 <table class="table-translations">
     <thead>
     <tr>
@@ -121,10 +120,9 @@
         </tr>
         </tbody>
     <?PHP endforeach ?>
-
 </table>
-<?PHP else : ?>
-<div class="notranslationsfound">
-<?= $this->translate('setup_translation_non_found') ?>
-</div>
+<?PHP if ($resultCount == 0) : ?>
+    <div class="notranslationsfound">
+        <?= $this->translate('setup_translation_non_found') ?>
+    </div>
 <?php endif ?>
