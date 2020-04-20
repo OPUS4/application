@@ -97,15 +97,6 @@ Translation keys added to the system will be removed.</seg>
         </tuv>
     </tu>
 
-    <tu tuid="setup_language_confirm_delete_all_title">
-        <tuv xml:lang="en">
-            <seg>Reset all edited translations?</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Alle editierten Übersetzungen zurücksetzen?</seg>
-        </tuv>
-    </tu>
-
     <tu tuid="setup_language_confirm_reset_key">
         <tuv xml:lang="en">
             <seg>The customization of the translation will be removed and the default values used.</seg>
@@ -150,7 +141,6 @@ Translation keys added to the system will be removed.</seg>
              <seg>Übersetzungen löschen?</seg>
         </tuv>
     </tu>
-
 
     <tu tuid="setup_message_error_read-access">
         <tuv xml:lang="en">
