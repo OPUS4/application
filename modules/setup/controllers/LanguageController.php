@@ -110,41 +110,7 @@ class Setup_LanguageController extends Application_Controller_Action
 
         $translationManager = $this->getTranslationManager();
 
-        if (! empty($searchTerm)) {
-            $translationManager->setFilter($searchTerm);
-        }
-
-        // check if modules parameter is allowed
-        $allowedModules = $translationManager->getAllowedModules();
-        if (($allowedModules !== null && ! in_array($modules, $allowedModules)) || strcasecmp($modules, 'all') === 0) {
-            // TODO log unknown modules ?
-            $modules = null;
-        }
-
-        $translationManager->setModules($modules);
-
-        switch (strtolower($state)) {
-            case 'edited':
-                $translationManager->setState($translationManager::STATE_EDITED);
-                break;
-            case 'added':
-                $translationManager->setState($translationManager::STATE_ADDED);
-                break;
-            default:
-                $translationManager->setState(null);
-                break;
-        }
-        switch (strtolower($scope)) {
-            case 'key':
-                $translationManager->setScope($translationManager::SCOPE_KEYS);
-                break;
-            case 'text':
-                $translationManager->setScope($translationManager::SCOPE_TEXT);
-                break;
-            default:
-                $translationManager->setScope(null);
-                break;
-        }
+        $this->setFilterParameters($translationManager);
 
         $translations = $translationManager->getMergedTranslations($sortKey);
 
@@ -356,45 +322,50 @@ class Setup_LanguageController extends Application_Controller_Action
     {
         $request = $this->getRequest();
 
-        $search = $this->getParam('search', null);
-        $key = $this->getParam('key', null);
-        $filterModule = $this->getParam('modules', null);
+        $form = new Setup_Form_DeleteAllConfirmation();
 
-        if (! is_null($key)) {
-            // delete single key
-            $manager = $this->getTranslationManager();
-            $manager->delete($key);
+        if ($request->isPost()) {
+            $result = $form->processPost($request->getPost());
+
+            switch ($result) {
+                case $form::RESULT_YES:
+                    $post = $request->getPost();
+                    if ($form->isValid($post)) {
+                        $delete = $form->getValue($form::ELEMENT_DELETE_ALL);
+                        switch ($delete) {
+                            case 'filter':
+                                $manager = $this->getTranslationManager();
+                                $this->setFilterParameters($manager);
+                                $manager->deleteMatches();
+                                break;
+                            case 'all':
+                                $manager = $this->getTranslationManager();
+                                $manager->deleteAll();
+                                break;
+                            default:
+                                // TODO error handling
+                                break;
+                        }
+                        $form = null;
+                    } else {
+                        // TODO logging/message
+                        // go back to form
+                    }
+                    break;
+
+                case $form::RESULT_NO:
+                    // fall through to default
+                default:
+                    $form = null;
+                    break;
+            }
         }
 
-        /* TODO implement
-        else if ($all) {
-            // Reset all translations matching current filter
-            $form = new Setup_Form_DeleteAllConfirmation();
-
-            if ($request->isPost()) {
-                $result = $form->processPost($request->getPost());
-
-                switch ($result) {
-                    case $form::RESULT_YES:
-                        break;
-
-                    case $form::RESULT_NO:
-                        // fall through to default
-                    default:
-                        $form = null;
-                        break;
-                }
-
-            }
-        }*/
-
-        $this->_helper->Redirector->redirectTo(
-            'index',
-            null,
-            'language',
-            'setup',
-            ['search' => $search]
-        );
+        if (! is_null($form)) {
+            $this->_helper->renderForm($form);
+        } else {
+            $this->redirectWithParameters();
+        }
     }
 
     /**
@@ -514,5 +485,49 @@ class Setup_LanguageController extends Application_Controller_Action
                 self::PARAM_SORT => $this->getParam(self::PARAM_SORT)
             ]
         );
+    }
+
+    protected function setFilterParameters($manager)
+    {
+        $searchTerm = $this->getParam('search', null);
+        $modules = $this->getParam('modules', null);
+        $state = $this->getParam('state', null);
+        $scope = $this->getParam('scope', null);
+
+        if (! empty($searchTerm)) {
+            $manager->setFilter($searchTerm);
+        }
+
+        // check if modules parameter is allowed
+        $allowedModules = $manager->getAllowedModules();
+        if (($allowedModules !== null && ! in_array($modules, $allowedModules)) || strcasecmp($modules, 'all') === 0) {
+            // TODO log unknown modules ?
+            $modules = null;
+        }
+
+        $manager->setModules($modules);
+
+        switch (strtolower($state)) {
+            case 'edited':
+                $manager->setState($manager::STATE_EDITED);
+                break;
+            case 'added':
+                $manager->setState($manager::STATE_ADDED);
+                break;
+            default:
+                $manager->setState(null);
+                break;
+        }
+        switch (strtolower($scope)) {
+            case 'key':
+                $manager->setScope($manager::SCOPE_KEYS);
+                break;
+            case 'text':
+                $manager->setScope($manager::SCOPE_TEXT);
+                break;
+            default:
+                $manager->setScope(null);
+                break;
+        }
     }
 }

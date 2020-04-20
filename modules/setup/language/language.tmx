@@ -150,6 +150,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="setup_language_deleteall">
+      <tuv xml:lang="en">
+        <seg>Delete Translations</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Übersetzungen löschen</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="setup_language_export">
       <tuv xml:lang="en">
         <seg>Export translations</seg>
@@ -375,6 +384,15 @@
         </tuv>
         <tuv xml:lang="de">
             <seg>Standardübersetzung</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="setup_translation_delete_all_option">
+        <tuv xml:lang="en">
+            <seg>Remove all edited and added translation keys</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Alle Anpassungen und hinzugefügten Schlüssel entfernen</seg>
         </tuv>
     </tu>
 

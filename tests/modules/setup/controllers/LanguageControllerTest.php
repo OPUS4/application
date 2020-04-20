@@ -155,6 +155,23 @@ class Setup_LanguageControllerTest extends ControllerTestCase
         $this->assertRedirectTo('/setup/language/index/sort/key');
     }
 
+    public function testIndexActionPost()
+    {
+        $request = $this->getRequest();
+
+        $request->setMethod('POST');
+        $request->setPost([
+            'modules' => 'account',
+            'scope' => 'keys',
+            'state' => 'edited'
+        ]);
+
+        $this->dispatch('/setup/language');
+
+        $this->assertNotResponseCode(200);
+        $this->assertRedirectTo('/setup/language/index/sort/key/modules/account/state/edited/scope/keys');
+    }
+
     public function testIndexActionStateEdited()
     {
         $manager = $this->getTranslationManager();
@@ -185,12 +202,50 @@ class Setup_LanguageControllerTest extends ControllerTestCase
 
     public function testIndexActionScopeKey()
     {
-        $this->markTestIncomplete();
+        $dao = new Opus_Translate_Dao();
+
+        $key1 = 'testentry';
+        $key2 = 'customkey2';
+
+        $dao->setTranslation($key1, [
+            'en' => 'Test key',
+            'de' => 'Testschluessel'
+        ]);
+
+        $dao->setTranslation($key2, [
+            'en' => 'English',
+            'de' => 'Deutsch'
+        ]);
+
+        $this->dispatch('/setup/language/index/scope/key/search/key/state/added');
+
+        $this->assertResponseCode(200);
+        $this->assertNotXpath("//a[@href = \"/setup/language/edit/scope/key/search/key/state/added/key/$key1/sort/key\"]");
+        $this->assertXpath("//a[@href = \"/setup/language/edit/scope/key/search/key/state/added/key/$key2/sort/key\"]");
     }
 
-    public function testIndexActionScopeKeyPost()
+    public function testIndexActionScopeTranslation()
     {
-        $this->markTestIncomplete();
+        $dao = new Opus_Translate_Dao();
+
+        $key1 = 'testentry';
+        $key2 = 'customkey2';
+
+        $dao->setTranslation($key1, [
+            'en' => 'Test key',
+            'de' => 'Testschluessel'
+        ]);
+
+        $dao->setTranslation($key2, [
+            'en' => 'English',
+            'de' => 'Deutsch'
+        ]);
+
+        $this->dispatch('/setup/language/index/scope/text/search/key/state/added');
+
+        $this->assertResponseCode(200);
+        $this->assertXpath("//a[@href = \"/setup/language/edit/scope/text/search/key/state/added/key/$key1/sort/key\"]");
+        $this->assertNotXpath("//a[@href = \"/setup/language/edit/scope/text/search/key/state/added/key/$key2/sort/key\"]");
     }
 
     public function testResetButtonForEditedKey()
@@ -473,12 +528,17 @@ class Setup_LanguageControllerTest extends ControllerTestCase
 
     public function testDeleteAllShowForm()
     {
+        $this->useEnglish();
+
         $this->dispatch('/setup/language/deleteall');
 
-        $this->markTestIncomplete();
+        $this->assertResponseCode(200);
+        $this->assertXpathContentContains('//h1', 'Remove translations?');
+        $this->assertXpath('//input[@type = "radio" and @name = "DeleteAll"]');
+        $this->assertXpath('//input[@type = "submit" and @name = "ConfirmYes"]');
     }
 
-    public function testResetAllConfirmYes()
+    public function testDeleteAllConfirmYes()
     {
         $database = new Opus_Translate_Dao();
 
@@ -499,22 +559,72 @@ class Setup_LanguageControllerTest extends ControllerTestCase
 
         $request->setMethod('POST');
         $request->setPost([
+            'DeleteAll' => 'all',
             'ConfirmYes' => 'Yes'
         ]);
 
-        $this->markTestIncomplete();
+        $this->dispatch('/setup/language/deleteall');
+
+        $this->assertRedirectTo('/setup/language');
+        $this->assertNull($database->getTranslation('default_add'));
+        $this->assertNull($database->getTranslation('home_menu_label'));
     }
 
-    public function testResetAllConfirmNo()
+    public function testDeleteAllConfirmYesMatchingEntriesOnly()
     {
+        $database = new Opus_Translate_Dao();
+
+        $database->setTranslation('default_add', [
+            'en' => 'CreateTest',
+            'de' => 'AnlegenTest'
+        ]);
+
+        $database->setTranslation('home_menu_label', [
+            'en' => 'HomeTest',
+            'de' => 'StartseiteTest'
+        ]);
+
+        $this->assertNotNull($database->getTranslation('default_add'));
+        $this->assertNotNull($database->getTranslation('home_menu_label'));
+
         $request = $this->getRequest();
 
         $request->setMethod('POST');
         $request->setPost([
+            'DeleteAll' => 'filter',
+            'ConfirmYes' => 'Yes'
+        ]);
+
+        $this->dispatch('/setup/language/deleteall/search/add');
+
+        $this->assertNull($database->getTranslation('default_add'));
+        $this->assertNotNull($database->getTranslation('home_menu_label'));
+    }
+
+    public function testDeleteAllConfirmNo()
+    {
+        $dao = new Opus_Translate_Dao();
+
+        $key = 'customtestkey';
+
+        $dao->setTranslation($key, [
+            'en' => 'English',
+            'de' => 'Deutsch'
+        ]);
+
+        $request = $this->getRequest();
+
+        $request->setMethod('POST');
+        $request->setPost([
+            'DeleteAll' => 'all',
             'ConfirmNo' => 'No'
         ]);
 
-        $this->markTestIncomplete();
+        $this->dispatch('/setup/language/deleteall');
+
+        $this->assertRedirectTo('/setup/language');
+
+        $this->assertNotNull($dao->getTranslation($key));
     }
 
     public function testEditTranslations()
@@ -586,7 +696,49 @@ class Setup_LanguageControllerTest extends ControllerTestCase
 
     public function testChangeModuleOfAddedKey()
     {
-        $this->markTestIncomplete('Implement test');
+        $dao = new Opus_Translate_Dao();
+
+        $key = 'customtestkey';
+
+        $dao->setTranslation($key, [
+            'en' => 'English',
+            'de' => 'Deutsch'
+        ], 'home');
+
+        $manager = new Application_Translate_TranslationManager();
+
+        $translation = $manager->getTranslation($key);
+
+        $this->assertNotNull($translation);
+        $this->assertArrayHasKey('state', $translation);
+        $this->assertEquals('added', $translation['state']);
+        $this->assertArrayHasKey('module', $translation);
+        $this->assertEquals('home', $translation['module']);
+
+        $request = $this->getRequest();
+        $request->setMethod('POST');
+        $request->setPost([
+            'Id' => $key,
+            'Key' => $key,
+            'KeyModule' => 'admin',
+            'Translation' => [
+                'en' => 'English',
+                'de' => 'Deutsch'
+            ],
+            'Save' => 'Speichern'
+        ]);
+
+        $this->dispatch('/setup/language/edit');
+
+        $this->assertRedirectTo('/setup/language');
+
+        $translation = $manager->getTranslation($key);
+
+        $this->assertNotNull($translation);
+        $this->assertArrayHasKey('state', $translation);
+        $this->assertEquals('added', $translation['state']);
+        $this->assertArrayHasKey('module', $translation);
+        $this->assertEquals('admin', $translation['module']);
     }
 
     /**
