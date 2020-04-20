@@ -838,4 +838,149 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
 
         $this->assertFalse($manager->isEdited($key));
     }
+
+    public function testDeleteAll()
+    {
+        $manager = $this->object;
+
+        $dao = new Opus_Translate_Dao();
+
+        $addedKey = 'customtestkey';
+        $editedKey = 'default_add';
+
+        $dao->setTranslation($addedKey, [
+            'en' => 'Added key',
+            'de' => 'Angelegter Schluessel'
+        ]);
+
+        $dao->setTranslation($editedKey, [
+            'en' => 'Edited key',
+            'de' => 'Angepasster Schluessel'
+        ]);
+
+        $this->assertNotNull($dao->getTranslation($addedKey));
+        $this->assertNotNull($dao->getTranslation($editedKey));
+
+        $manager->deleteAll();
+
+        $this->assertNull($dao->getTranslation($addedKey));
+        $this->assertNull($dao->getTranslation($editedKey));
+    }
+
+    public function testDeleteMatches()
+    {
+        $manager = $this->object;
+
+        $dao = new Opus_Translate_Dao();
+
+        $addedKey = 'customtestkey';
+        $editedKey = 'default_add';
+
+        $dao->setTranslation($addedKey, [
+            'en' => 'Added key',
+            'de' => 'Angelegter Schluessel'
+        ]);
+
+        $dao->setTranslation($editedKey, [
+            'en' => 'Edited key',
+            'de' => 'Angepasster Schluessel'
+        ]);
+
+        $this->assertNotNull($dao->getTranslation($addedKey));
+        $this->assertNotNull($dao->getTranslation($editedKey));
+
+        $manager->setFilter('testkey');
+        $manager->deleteMatches();
+
+        $this->assertNull($dao->getTranslation($addedKey));
+        $this->assertNotNull($dao->getTranslation($editedKey));
+    }
+
+    public function testDeleteMatchesByModule()
+    {
+        $manager = $this->object;
+
+        $dao = new Opus_Translate_Dao();
+
+        $addedKey = 'customtestkey';
+        $editedKey = 'default_add';
+
+        $dao->setTranslation($addedKey, [
+            'en' => 'Added key',
+            'de' => 'Angelegter Schluessel'
+        ]);
+
+        $dao->setTranslation($editedKey, [
+            'en' => 'Edited key',
+            'de' => 'Angepasster Schluessel'
+        ], 'home');
+
+        $this->assertNotNull($dao->getTranslation($addedKey));
+        $this->assertNotNull($dao->getTranslation($editedKey));
+
+        $manager->setModules('default');
+        $manager->deleteMatches();
+
+        $this->assertNull($dao->getTranslation($addedKey));
+        $this->assertNotNull($dao->getTranslation($editedKey));
+    }
+
+    public function testDeleteMatchesByState()
+    {
+        $manager = $this->object;
+
+        $dao = new Opus_Translate_Dao();
+
+        $addedKey = 'customtestkey';
+        $editedKey = 'default_add';
+
+        $dao->setTranslation($addedKey, [
+            'en' => 'Added key',
+            'de' => 'Angelegter Schluessel'
+        ]);
+
+        $dao->setTranslation($editedKey, [
+            'en' => 'Edited key',
+            'de' => 'Angepasster Schluessel'
+        ], 'home');
+
+        $this->assertNotNull($dao->getTranslation($addedKey));
+        $this->assertNotNull($dao->getTranslation($editedKey));
+
+        $manager->setState($manager::STATE_EDITED);
+        $manager->deleteMatches();
+
+        $this->assertNotNull($dao->getTranslation($addedKey));
+        $this->assertNull($dao->getTranslation($editedKey));
+    }
+
+    public function testDeleteMatchesByScope()
+    {
+        $manager = $this->object;
+
+        $dao = new Opus_Translate_Dao();
+
+        $addedKey = 'customtestkey';
+        $editedKey = 'default_add';
+
+        $dao->setTranslation($addedKey, [
+            'en' => 'Added key',
+            'de' => 'Angelegter Schluessel'
+        ]);
+
+        $dao->setTranslation($editedKey, [
+            'en' => 'Edited key',
+            'de' => 'Angepasster Schluessel'
+        ]);
+
+        $this->assertNotNull($dao->getTranslation($addedKey));
+        $this->assertNotNull($dao->getTranslation($editedKey));
+
+        $manager->setFilter('key'); // appears in added key and in edited key en value
+        $manager->setScope($manager::SCOPE_KEYS); // only look at keys
+        $manager->deleteMatches();
+
+        $this->assertNull($dao->getTranslation($addedKey));
+        $this->assertNotNull($dao->getTranslation($editedKey));
+    }
 }

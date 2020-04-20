@@ -573,6 +573,31 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
         $translate->clearCache();
     }
 
+    public function deleteAll()
+    {
+        $database = $this->getDatabase();
+        $database->removeAll();
+
+        $translate = Zend_Registry::get('Zend_Translate');
+        $translate->clearCache();
+    }
+
+    /**
+     * TODO IMPORTANT bad performance, improve!
+     */
+    public function deleteMatches()
+    {
+        $matches = $this->getMergedTranslations();
+
+        $database = $this->getDatabase();
+
+        foreach ($matches as $key => $translation) {
+            if (isset($translation['state']) && (in_array($translation['state'], ['edited', 'added']))) {
+                $database->remove($key);
+            }
+        }
+    }
+
     /**
      * Returns custom translations as TMX file.
      */
