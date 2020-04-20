@@ -25,38 +25,36 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Form_Element
+ * @package     Setup_Form
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-/**
- * Form element for selecting module that should be searched for translations.
- */
-class Application_Form_Element_Modules extends Application_Form_Element_Select
+class Setup_Form_DeleteAllConfirmation extends Setup_Form_Confirmation
 {
+
+    const ELEMENT_DELETE_ALL = 'DeleteAll';
 
     public function init()
     {
         parent::init();
 
-        $manager = new Application_Translate_TranslationManager();
+        $element = $this->createElement('radio', self::ELEMENT_DELETE_ALL);
+        $element->setMultiOptions([
+            'filter' => 'Delete current filter result',
+            'all' => 'setup_translation_delete_all_option'
+        ])->setValue('filter');
+        $this->addElement($element);
 
-        $modules = $manager->getModules();
+        $this->setQuestion('setup_language_confirm_delete_all');
+        $this->setLegend('setup_language_confirm_delete_all_title');
 
-        foreach ($modules as $name) {
-            $this->addMultiOption($name, $name);
-        }
+        $this->setDecorators([
+            ['ViewScript', ['viewScript' => 'language/deleteallConfirmation.phtml']],
+            'Form'
+        ]);
 
-        // Normally pre-select 'default' module
-        if (in_array('default', $modules)) {
-            $this->setValue('default');
-        }
-    }
-
-    protected function _translateOption($option, $value)
-    {
-        return false;
+        $this->removeElement(self::ELEMENT_MODEL_ID);
     }
 }

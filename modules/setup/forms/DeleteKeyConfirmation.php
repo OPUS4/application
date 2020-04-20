@@ -25,38 +25,53 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Form_Element
+ * @package     Setup_Form
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
- * Form element for selecting module that should be searched for translations.
+ * Form for reseting a customized translation.
+ *
+ * The form shows the current and the original translation and asks the use to confirm the reset operation.
  */
-class Application_Form_Element_Modules extends Application_Form_Element_Select
+class Setup_Form_DeleteKeyConfirmation extends Setup_Form_Confirmation
 {
+
+    private $translationKey = null;
 
     public function init()
     {
         parent::init();
 
-        $manager = new Application_Translate_TranslationManager();
-
-        $modules = $manager->getModules();
-
-        foreach ($modules as $name) {
-            $this->addMultiOption($name, $name);
-        }
-
-        // Normally pre-select 'default' module
-        if (in_array('default', $modules)) {
-            $this->setValue('default');
-        }
+        $this->setDecorators([
+            ['ViewScript', ['viewScript' => 'language/deletekeyConfirmation.phtml']],
+            'Form'
+        ]);
     }
 
-    protected function _translateOption($option, $value)
+    public function setKey($key)
     {
-        return false;
+        $this->translationKey = $key;
+        $this->getElement(self::ELEMENT_MODEL_ID)->setValue($key);
+    }
+
+    public function getKey()
+    {
+        return $this->translationKey;
+    }
+
+    public function getTranslation()
+    {
+        $manager = new Application_Translate_TranslationManager();
+
+        $key = $this->getKey();
+
+        if (! is_null($key)) {
+            return $manager->getTranslation($key);
+        } else {
+            return null;
+        }
     }
 }

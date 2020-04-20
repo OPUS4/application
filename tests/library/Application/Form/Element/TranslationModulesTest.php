@@ -72,4 +72,22 @@ class Application_Form_Element_TranslationModulesTest extends ControllerTestCase
 
         $this->assertTrue($element->translatorIsDisabled());
     }
+
+    public function testSetValue()
+    {
+        $element = new Application_Form_Element_TranslationModules('modules');
+
+        $element->setValue('account');
+
+        $this->assertEquals('account', $element->getValue());
+    }
+
+    public function testSetValueAll()
+    {
+        $element = new Application_Form_Element_TranslationModules('modules');
+
+        $element->setValue('all');
+
+        $this->assertNull($element->getValue());
+    }
 }

@@ -12,15 +12,15 @@
     font-weight: normal;
 }
 
-.adminContainer table.table-translations thead th.variant {
+.adminContainer table.table-translations thead th.translation {
     padding-left: 0;
 }
 
-.adminContainer table.table-translations thead th.variant div.translations{
+.adminContainer table.table-translations thead th.translation div.translations{
     display: flex;
 }
 
-.adminContainer table.table-translations thead th.variant .label {
+.adminContainer table.table-translations thead th.translation .label {
     flex: 1;
 }
 
@@ -105,9 +105,8 @@
 }
 
 .notranslationsfound {
-    border-top: 1px solid black;
     margin-top: 0.5em;
-    padding-top: 1em;
+    padding-top: 0.5em;
     font-size: 1.5em;
     text-align: center;
 }
@@ -169,4 +168,65 @@ form#filter .row:first-child {
     list-style: none;
     margin: 0;
     padding: 0;
+}
+
+.setup_language_delete .translation {
+    margin: 1em 0;
+}
+
+.setup_language_delete .lang, .setup_language_delete .values {
+    display: inline-block;
+    margin: 0.5em 0;
+    padding: 0 0.5em;
+    vertical-align: top;
+}
+
+.setup_language_delete .lang {
+    font-size: 1.2em;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 0.3em;
+}
+
+.setup_language_delete .values {
+    position: relative;
+    width: 90%;
+}
+
+.setup_language_delete .current, .setup_language_delete .default {
+    padding: 0.3em;
+    margin-bottom: 0.3em;
+    border-radius: 3px;
+    border: 1px solid gray;
+    font-size: 1.2em;
+    width: 100%;
+}
+
+.setup_language_delete .current {
+    background-color: pink;
+}
+
+.setup_language_delete .default {
+    background-color: whitesmoke;
+}
+
+.setup_language_delete .message {
+    font-size: 1.2em;
+    margin: 1em 0;
+}
+
+.setup_language_delete .key-info {
+    margin-left: 4em;
+}
+
+.setup_language_delete .key-info .key {
+    font-size: 1.6em;
+    font-family: monospace;
+    margin-bottom: 0.3em;
+}
+
+.setup_language_delete .key-info .source {
+    font-size: 1.2em;
+    font-style: italic;
+    font-family: monospace;
 }

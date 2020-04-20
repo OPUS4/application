@@ -25,38 +25,28 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Form_Element
+ * @package     Module_Setup
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-/**
- * Form element for selecting module that should be searched for translations.
- */
-class Application_Form_Element_Modules extends Application_Form_Element_Select
+class Setup_Form_DeleteAllConfirmationTest extends ControllerTestCase
 {
 
-    public function init()
+    protected $additionalResources = 'translation';
+
+    public function testIsValid()
     {
-        parent::init();
+        $form = new Setup_Form_DeleteAllConfirmation();
 
-        $manager = new Application_Translate_TranslationManager();
+        $post = [
+            'DeleteAll' => 'all',
+            'ConfirmYes' => 'Yes'
+        ];
 
-        $modules = $manager->getModules();
+        $result = $form->isValid($post);
 
-        foreach ($modules as $name) {
-            $this->addMultiOption($name, $name);
-        }
-
-        // Normally pre-select 'default' module
-        if (in_array('default', $modules)) {
-            $this->setValue('default');
-        }
-    }
-
-    protected function _translateOption($option, $value)
-    {
-        return false;
+        $this->assertTrue($result);
     }
 }
