@@ -47,19 +47,17 @@
 
 <?PHP $resultCount = count($this->translations) ?>
 
-<?PHP if ($resultCount > 0) : ?>
 <table class="table-translations">
     <thead>
     <tr>
         <th class="key"><?= $this->translate('setup_language_key') ?> <span class="count">(<?= $resultCount ?>)</span><a
                     class="button" href="<?= $this->url(['action' => 'add']) ?>"><i class="fas fa-plus-circle"></i><?= $this->translate('default_add') ?></a></th>
-        <th class="variant" colspan="3"><div class="translations">
+        <th class="translation" colspan="3"><div class="translations">
             <div class="label"><?= $this->translate('setup_language_variant') ?></div>
             <div class="actions">
                 <a class="button" href="<?= $this->url(['action' => 'export']) ?>"><i class="fas fa-file-export"></i><?= $this->translate('setup_translation_button_export') ?></a>
                 <a class="button" href="<?= $this->url(['action' => 'import']) ?>"><i class="fas fa-file-import"></i><?= $this->translate('setup_translation_button_import') ?></a>
-                <a class="button" href="<?= $this->url(['action' => 'reset']) ?>"><?= $this->translate('setup_translation_button_reset_all') ?></a>
-                <a class="button" href="<?= $this->url(['action' => 'delete']) ?>"><?= $this->translate('setup_translation_button_delete_all') ?></a>
+                <a class="button" href="<?= $this->url(['action' => 'deleteall']) ?>"><?= $this->translate('setup_translation_button_delete_all') ?></a>
                 <a class="button" href="<?= $this->url(['action' => 'settings']) ?>"><i class="fas fa-cog"></i><?= $this->translate('setup_translation_button_settings') ?></a>
             </div>
             </div>
@@ -108,7 +106,7 @@
                 <div><a href="<?= $this->url(['action' => 'edit', 'key' => $key, 'search' => $this->searchTerm, 'sort' => $this->currentSortKey]) ?>"
                 ><?= $this->translate('setup_language_edit') ?></a></div>
                 <?PHP if (isset($row['translationsTmx'])) : ?>
-                <a href="<?= $this->url(['action' => 'reset', 'key' => $key, 'search' => $this->searchTerm, 'sort' => $this->currentSortKey]) ?>"
+                <a href="<?= $this->url(['action' => 'delete', 'key' => $key, 'search' => $this->searchTerm, 'sort' => $this->currentSortKey]) ?>"
                 ><?= $this->translate('setup_language_reset') ?></a>
                 <?PHP elseif (! isset($row['filename'])) : ?>
                 <a href="<?= $this->url(['action' => 'delete', 'key' => $key, 'search' => $this->searchTerm, 'sort' => $this->currentSortKey]) ?>"
@@ -121,10 +119,9 @@
         </tr>
         </tbody>
     <?PHP endforeach ?>
-
 </table>
-<?PHP else : ?>
-<div class="notranslationsfound">
-<?= $this->translate('setup_translation_non_found') ?>
-</div>
+<?PHP if ($resultCount == 0) : ?>
+    <div class="notranslationsfound">
+        <?= $this->translate('setup_translation_non_found') ?>
+    </div>
 <?php endif ?>

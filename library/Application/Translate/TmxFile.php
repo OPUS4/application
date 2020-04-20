@@ -157,12 +157,12 @@ class Application_Translate_TmxFile
     }
 
     /**
-     * Set a segment value for the given translation unit variant.
-     * If either the unit or the variant is not yet set, it will be added.
+     * Set a segment value for the given translation.
+     * If either the unit or the translation is not yet set, it will be added.
      *
-     * @param string $key identifier of translation unit
-     * @param string $language identifier of variant
-     * @param string $text Segment value to set for translation unit variant
+     * @param string $key Key identifier of translation
+     * @param string $language Language identifier of translation
+     * @param string $text Value to set for translation
      *
      * @return self fluent Interface
      */

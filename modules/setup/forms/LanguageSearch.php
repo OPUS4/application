@@ -66,7 +66,7 @@ class Setup_Form_LanguageSearch extends Application_Form_Abstract
     /**
      * Button for starting search.
      */
-    const ELEMENT_SUBMIT = 'Anzeigen';
+    const ELEMENT_SUBMIT = 'show';
 
     /**
      * TODO not supported yet (keys are always included) - make keys optional
@@ -77,26 +77,25 @@ class Setup_Form_LanguageSearch extends Application_Form_Abstract
     {
         parent::init();
 
+        $this->setElementDecorators(['ViewHelper']);
+
         $element = $this->createElement('text', self::ELEMENT_FILTER, [
             'size' => '40'
         ]);
-        $element->setDecorators(['ViewHelper']);
         $this->addElement($element);
 
-        $element = $this->createElement('submit', self::ELEMENT_SUBMIT);
-        $element->setDecorators(['ViewHelper']);
+        $element = $this->createElement('submit', self::ELEMENT_SUBMIT, [
+            'label' => 'setup_translation_search_button'
+        ]);
         $this->addElement($element);
 
         $element = $this->createElement('TranslationState', self::ELEMENT_STATE);
-        $element->setDecorators(['ViewHelper']);
         $this->addElement($element);
 
         $element = $this->createElement('TranslationScope', self::ELEMENT_SCOPE);
-        $element->setDecorators(['ViewHelper']);
         $this->addElement($element);
 
         $element = $this->createElement('TranslationModules', self::ELEMENT_MODULES);
-        $element->setDecorators(['ViewHelper']);
         $this->addElement($element);
 
         $this->setDecorators([

@@ -25,38 +25,55 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Form_Element
+ * @package     Setup_Views_Language
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+?>
 
-/**
- * Form element for selecting module that should be searched for translations.
- */
-class Application_Form_Element_Modules extends Application_Form_Element_Select
-{
+<?php $form = $this->element ?>
+<?php $translation = $form->getTranslation() ?>
 
-    public function init()
-    {
-        parent::init();
+<h1><?= $this->translate($form->getLegend()) ?></h1>
 
-        $manager = new Application_Translate_TranslationManager();
+<div class="message">
+<?= $form->renderQuestion() ?>
+</div>
 
-        $modules = $manager->getModules();
+<div class="key-info">
+    <div class="key"><?= $form->getKey() ?></div>
+    <div class="source"><?= $translation['module'] ?>
+        <?php if (isset($translation['filename'])) : ?>
+            (<span class="filename"><?= $translation['filename'] ?></span>)
+        <?php endif ?>
+    </div>
+</div>
 
-        foreach ($modules as $name) {
-            $this->addMultiOption($name, $name);
-        }
+<div class="translation">
+<?php if (! is_null($translation)) : ?>
+    <?php foreach ($translation['translations'] as $lang => $value) : ?>
+        <div>
+            <div class="lang"><?= $lang ?></div>
+            <div class="values">
+                <div class="current" title="<?= $this->translate('setup_translation_tooltip_value_current') ?>">
+                    <?= $value ?>
+                </div>
+            <?php if (isset($translation['translationsTmx'])) : ?>
+                <div class="default" title="<?= $this->translate('setup_translation_tooltip_value_default') ?>">
+                    <?= $translation['translationsTmx'][$lang] ?>
+                </div>
+            <?php endif ?>
+            </div>
+        </div>
+    <?php endforeach ?>
+<?php endif ?>
+</div>
 
-        // Normally pre-select 'default' module
-        if (in_array('default', $modules)) {
-            $this->setValue('default');
-        }
-    }
-
-    protected function _translateOption($option, $value)
-    {
-        return false;
-    }
-}
+<div id="form-action">
+    <?= $form->getElement(Application_Form_Confirmation::ELEMENT_MODEL_ID) ?>
+    <ul class="form-action">
+        <li class="save-element"><?= $form->getElement(Application_Form_Confirmation::ELEMENT_YES) ?></li>
+        <li class="cancel-element"><?= $form->getElement(Application_Form_Confirmation::ELEMENT_NO) ?></li>
+    </ul>
+</div>

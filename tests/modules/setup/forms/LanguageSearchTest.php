@@ -66,4 +66,46 @@ class Setup_Form_LanguageSearchTest extends ControllerTestCase
         $this->assertEquals('key', $form->getElement($form::ELEMENT_SCOPE)->getValue());
         $this->assertEquals('edited', $form->getElement($form::ELEMENT_STATE)->getValue());
     }
+
+    public function testPopulateFromRequestPost()
+    {
+        $form = new Setup_Form_LanguageSearch();
+
+        $request = $this->getRequest();
+        $request->setMethod('POST');
+        $request->setPost([
+            'search' => '',
+            'modules' => 'account',
+            'scope' => 'translation',
+            'state' => 'added',
+            'show' => 'Show'
+        ]);
+
+        $form->populateFromRequest($request);
+
+        $this->assertEquals('account', $form->getElement($form::ELEMENT_MODULES)->getValue());
+        $this->assertEquals('translation', $form->getElement($form::ELEMENT_SCOPE)->getValue());
+        $this->assertEquals('added', $form->getElement($form::ELEMENT_STATE)->getValue());
+    }
+
+    public function testPopulateFromRequestAllPost()
+    {
+        $form = new Setup_Form_LanguageSearch();
+
+        $request = $this->getRequest();
+        $request->setMethod('POST');
+        $request->setPost([
+            'search' => '',
+            'modules' => 'all',
+            'scope' => 'all',
+            'state' => 'all',
+            'show' => 'Show'
+        ]);
+
+        $form->populateFromRequest($request);
+
+        $this->assertNull($form->getElement($form::ELEMENT_MODULES)->getValue());
+        $this->assertNull($form->getElement($form::ELEMENT_SCOPE)->getValue());
+        $this->assertNull($form->getElement($form::ELEMENT_STATE)->getValue());
+    }
 }

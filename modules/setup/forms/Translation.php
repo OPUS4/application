@@ -90,7 +90,7 @@ class Setup_Form_Translation extends Application_Form_Abstract
         $this->addElement('hidden', self::ELEMENT_ID);
 
         $this->addElement('text', self::ELEMENT_KEY, [
-            'label' => 'Key', 'size' => 80, 'maxlength' => 100, 'required' => true
+            'label' => 'setup_language_key', 'size' => 80, 'maxlength' => 100, 'required' => true
         ]);
 
         $lengthValidator = new Zend_Validate_StringLength(['max' => 100]);
@@ -108,7 +108,7 @@ class Setup_Form_Translation extends Application_Form_Abstract
         // TODO maybe "virtual modules"
         // TODO automatically use module name as prefix (?)
         $this->addElement('Modules', self::ELEMENT_MODULE, [
-            'label' => 'Module', 'required' => true
+            'label' => 'setup_language_module', 'required' => true
         ]);
 
         // TODO add input element for every supported language (separate function)
@@ -182,11 +182,20 @@ class Setup_Form_Translation extends Application_Form_Abstract
             // update key
             $old = $manager->getTranslation($keyId);
 
+            if (is_null($module)) {
+                $module = $old['module'];
+            }
+
             if ($keyId !== $key || $old['module'] !== $module) {
                 // change name of key
                 $manager->updateTranslation($key, $translations, $module, $keyId);
             } elseif ($translations != $old['translations']) {
-                $translate->setTranslations($key, $translations, $module);
+                if (isset($old['translationsTmx']) && $translations == $old['translationsTmx']) {
+                    // New values match TMX file (reset instead of updating)
+                    $manager->reset($key);
+                } else {
+                    $translate->setTranslations($key, $translations, $module);
+                }
             }
         }
     }

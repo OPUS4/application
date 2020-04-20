@@ -276,16 +276,12 @@ class Setup_Form_TranslationTest extends ControllerTestCase
 
         $form->populateFromKey('default_add');
 
-        $this->assertEquals(
-            'Add',
-            $form->getSubForm($form::SUBFORM_TRANSLATION)->getElement('en')->getValue()
-        );
-        $this->assertEquals(
-            'Hinzufügen',
-            $form->getSubForm($form::SUBFORM_TRANSLATION)->getElement('de')->getValue()
-        );
+        $translationSubForm = $form->getSubForm($form::SUBFORM_TRANSLATION);
 
-        $form->getSubForm($form::SUBFORM_TRANSLATION)->setTranslations([
+        $this->assertEquals('Add', $translationSubForm->getValue('en'));
+        $this->assertEquals('Hinzufügen', $translationSubForm->getValue('de'));
+
+        $translationSubForm->setTranslations([
             'en' => 'AddEdited',
             'de' => 'HinzufügenEdited'
         ]);
@@ -299,6 +295,41 @@ class Setup_Form_TranslationTest extends ControllerTestCase
         $this->assertEquals('default', $translation['module']);
         $this->assertEquals('AddEdited', $translation['translations']['en']);
         $this->assertEquals('HinzufügenEdited', $translation['translations']['de']);
+    }
+
+    /**
+     * When editing a key from TMX files, the module element is disabled. The module is
+     * therefore not part of the POST. If the module == null it should not be modified.
+     */
+    public function testUpdateTranslationWithoutModule()
+    {
+        $form = $this->getForm();
+
+        $key = 'crawlers_sitelinks_index';
+
+        $form->populateFromKey($key);
+
+        $this->assertEquals('crawlers', $form->getValue($form::ELEMENT_MODULE));
+
+        $translationSubForm = $form->getSubForm($form::SUBFORM_TRANSLATION);
+
+        $translationSubForm->setTranslations([
+            'en' => 'SitelinksEdited',
+            'de' => 'SitelinksEditiert'
+        ]);
+
+        // remove module value like in a POST for an edited key
+        $form->getElement($form::ELEMENT_MODULE)->setValue(null);
+
+        $form->updateTranslation();
+
+        $manager = new Application_Translate_TranslationManager();
+
+        $translation = $manager->getTranslation($key);
+
+        $this->assertEquals('crawlers', $translation['module']);
+        $this->assertEquals('SitelinksEdited', $translation['translations']['en']);
+        $this->assertEquals('SitelinksEditiert', $translation['translations']['de']);
     }
 
     public function testUpdateModuleOfAddedKey()
@@ -371,6 +402,45 @@ class Setup_Form_TranslationTest extends ControllerTestCase
             'en' => 'English',
             'de' => 'Deutsch'
         ], $translation['translations']);
+    }
+
+    /**
+     * Editing the translations to match the original TMX file should remove the translation from the database.
+     */
+    public function testUpdateManuallyToOriginal()
+    {
+        $manager = new Application_Translate_TranslationManager();
+        $dao = new Opus_Translate_Dao();
+
+        $key = 'default_add';
+
+        $dao->setTranslation($key, [
+            'en' => 'AddEdited',
+            'de' => 'AnlegenEdited'
+        ]);
+
+        $translation = $manager->getTranslation($key);
+
+        $this->assertArrayHasKey('state', $translation);
+        $this->assertEquals('edited', $translation['state']);
+
+        $form = $this->getForm();
+
+        $form->populateFromKey($key);
+
+        $valuesSubForm = $form->getSubForm($form::SUBFORM_TRANSLATION);
+
+        $this->assertEquals('AddEdited', $valuesSubForm->getValue('en'));
+
+        $valuesSubForm->getElement('en')->setValue('Add');
+        $valuesSubForm->getElement('de')->setValue('Hinzufügen');
+
+        $form->updateTranslation();
+
+        $translation = $manager->getTranslation($key);
+
+        $this->assertArrayNotHasKey('state', $translation);
+        $this->assertNull($dao->getTranslation($key));
     }
 
     protected function getForm()
