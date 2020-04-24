@@ -688,7 +688,7 @@ class Setup_LanguageControllerTest extends ControllerTestCase
             'de' => 'CRIS-LinkEdited'
         ], $translation);
     }
-    
+
     public function testChangeNameOfAddedKey()
     {
         $database = new Opus_Translate_Dao();
