@@ -885,7 +885,7 @@
                             <pages>
                                 <job-detail>
                                     <type>mvc</type>
-                                    <label>admin_info_job-detail</label>
+                                    <label>admin_info_job_detail</label>
                                     <module>admin</module>
                                     <controller>info</controller>
                                     <action>job-detail</action>
@@ -940,7 +940,7 @@
                             <pages>
                                 <detail>
                                     <type>mvc</type>
-                                    <label>admin_info_job-detail</label>
+                                    <label>admin_info_job_detail</label>
                                     <module>admin</module>
                                     <controller>job</controller>
                                     <action>detail</action>
