@@ -805,7 +805,7 @@
                                 </add>
                                 <export>
                                     <type>mvc</type>
-                                    <label>setup_language_export</label>
+                                    <label>setup_language_export_breadcrumb</label>
                                     <module>setup</module>
                                     <controller>language</controller>
                                     <action>export</action>

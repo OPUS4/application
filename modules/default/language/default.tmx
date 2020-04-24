@@ -746,5 +746,14 @@
         </tuv>
       </tu>
 
+      <tu tuid="default_back">
+        <tuv xml:lang="en">
+          <seg>Back</seg>
+        </tuv>
+        <tuv xml:lang="de">
+          <seg>Zurück</seg>
+        </tuv>
+      </tu>
+
     </body>
 </tmx>
