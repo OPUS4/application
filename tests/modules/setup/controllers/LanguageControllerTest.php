@@ -658,6 +658,37 @@ class Setup_LanguageControllerTest extends ControllerTestCase
         ], $translation);
     }
 
+    public function testEditInvalidExistingKey()
+    {
+        $request = $this->getRequest();
+
+        $key = 'Opus_Identifier_Type_Value_Cris-link'; // invalid because of '-'
+
+        $request->setMethod('POST');
+        $request->setPost([
+            'Id' => $key,
+            'Translation' => [
+                'en' => 'CRIS-LinkEdited',
+                'de' => 'CRIS-LinkEdited'
+            ],
+            'Save' => 'Speichern'
+        ]);
+
+        $this->dispatch('/setup/language/edit');
+
+        $this->assertNotResponseCode(200);
+        $this->assertRedirectTo('/setup/language');
+
+        $manager = $this->getTranslationManager();
+
+        $translation = $manager->getTranslation($key);
+
+        $this->assertEquals([
+            'en' => 'CRIS-LinkEdited',
+            'de' => 'CRIS-LinkEdited'
+        ], $translation);
+    }
+    
     public function testChangeNameOfAddedKey()
     {
         $database = new Opus_Translate_Dao();

@@ -227,6 +227,7 @@ class Setup_Form_TranslationTest extends ControllerTestCase
 
         $this->assertEquals($key, $form->getElement($form::ELEMENT_KEY)->getValue());
         $this->assertTrue($form->getElement($form::ELEMENT_KEY)->getAttrib('disabled'));
+        $this->assertFalse($form->getElement($form::ELEMENT_KEY)->getValidator('Setup_Form_Validate_TranslationKeyFormat'));
         $this->assertEquals('admin', $form->getElement($form::ELEMENT_MODULE)->getValue());
         $this->assertTrue($form->getElement($form::ELEMENT_MODULE)->getAttrib('disabled'));
         $this->assertEquals([

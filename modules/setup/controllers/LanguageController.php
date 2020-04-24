@@ -198,10 +198,12 @@ class Setup_LanguageController extends Application_Controller_Action
 
         if ($request->isPost()) {
             $post = $request->getPost();
-            $form->populate($post);
             $result = $form->processPost($post, $post);
             switch ($result) {
                 case Setup_Form_Translation::RESULT_SAVE:
+                    $form->populateFromKey($key);
+                    $form->populate($post);
+
                     // add values for disabled elements to POST
                     if (! isset($post[$form::ELEMENT_KEY])) {
                         $post[$form::ELEMENT_KEY] = $key;
