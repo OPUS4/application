@@ -36,4 +36,12 @@
 
 <p><?= $this->translate('setup_language_export_description') ?></p>
 
-<a href="<?= $this->url(['action' => 'export', 'filename' => 'opus.tmx']) ?>" class="download-button"><?= $this->translate('default_download_button') ?></a>
+<ul id="translation-downloads">
+    <?php foreach ($this->downloadLinks as $label => $link) : ?>
+    <li><i class="fas fa-file-download"></i><a href="<?= $link ?>" class="download-button"><?= $this->translate($label) ?></a></li>
+    <?php endforeach ?>
+</ul>
+
+<div>
+    <a href="<?= $this->url(['action' => 'index']) ?>"><?= $this->translate('default_back') ?></a>
+</div>

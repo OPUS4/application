@@ -198,10 +198,12 @@ class Setup_LanguageController extends Application_Controller_Action
 
         if ($request->isPost()) {
             $post = $request->getPost();
-            $form->populate($post);
             $result = $form->processPost($post, $post);
             switch ($result) {
                 case Setup_Form_Translation::RESULT_SAVE:
+                    $form->populateFromKey($key);
+                    $form->populate($post);
+
                     // add values for disabled elements to POST
                     if (! isset($post[$form::ELEMENT_KEY])) {
                         $post[$form::ELEMENT_KEY] = $key;
@@ -370,8 +372,6 @@ class Setup_LanguageController extends Application_Controller_Action
 
     /**
      * Action for exporting custom translations.
-     *
-     * TODO make sure edited keys are stored with module information
      */
     public function exportAction()
     {
@@ -379,21 +379,44 @@ class Setup_LanguageController extends Application_Controller_Action
 
         if (! is_null($filename)) {
             $manager = $this->getTranslationManager();
+            $this->setFilterParameters($manager);
 
-            $tmxFile = $manager->getExportTmxFile();
+            $unmodified = filter_var(
+                $this->getParam('unmodified', null),
+                FILTER_VALIDATE_BOOLEAN
+            );
 
+            $tmxFile = $manager->getExportTmxFile($unmodified);
             $doc = $tmxFile->getDomDocument();
 
-            $this->disableViewRendering();
-
             $response = $this->getResponse();
-
             $response->setHeader('Content-Type', "text/xml; charset=UTF-8", true);
             $response->setHeader('Content-Disposition', "attachment; filename=opus.tmx", true);
 
+            $this->disableViewRendering();
             echo $doc->saveXML();
         } else {
-            // show information and options for download
+            $downloadLinks = [];
+
+            $downloadLinks['setup_language_export_filtered'] = $this->view->url([
+                'action' => 'export', 'filename' => 'opus.tmx'
+            ]);
+
+            $downloadLinks['setup_language_export_filtered_with_unmodified'] = $this->view->url([
+                'action' => 'export', 'filename' => 'opus.tmx', 'unmodified' => 'true'
+            ]);
+
+            $downloadLinks['setup_language_export_all'] = $this->view->url([
+                'action' => 'export', 'controller' => 'language', 'module' => 'setup',
+                'filename' => 'opus.tmx'
+            ], null, true);
+
+            $downloadLinks['setup_language_export_all_with_unmodified'] = $this->view->url([
+                'action' => 'export', 'controller' => 'language', 'module' => 'setup',
+                'filename' => 'opus.tmx', 'unmodified' => 'true'
+            ], null, true);
+
+            $this->view->downloadLinks = $downloadLinks;
         }
     }
 

@@ -805,7 +805,7 @@
                                 </add>
                                 <export>
                                     <type>mvc</type>
-                                    <label>setup_language_export</label>
+                                    <label>setup_language_export_breadcrumb</label>
                                     <module>setup</module>
                                     <controller>language</controller>
                                     <action>export</action>
@@ -885,7 +885,7 @@
                             <pages>
                                 <job-detail>
                                     <type>mvc</type>
-                                    <label>admin_info_job-detail</label>
+                                    <label>admin_info_job_detail</label>
                                     <module>admin</module>
                                     <controller>info</controller>
                                     <action>job-detail</action>
@@ -940,7 +940,7 @@
                             <pages>
                                 <detail>
                                     <type>mvc</type>
-                                    <label>admin_info_job-detail</label>
+                                    <label>admin_info_job_detail</label>
                                     <module>admin</module>
                                     <controller>job</controller>
                                     <action>detail</action>

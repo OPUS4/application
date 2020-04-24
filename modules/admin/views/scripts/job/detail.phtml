@@ -35,7 +35,7 @@
 <div id="adminMenuContainer">
 
     <fieldset>
-        <legend><?= $this->translate('admin_job_job-detail_description') ?>: <?= $this->translate('admin_job_label-' . $this->label) ?></legend>
+        <legend><?= $this->translate('admin_job_job_detail_description') ?>: <?= $this->translate('admin_job_label_' . $this->label) ?></legend>
 
         <table class="worker-jobs">
             <tr>
@@ -52,7 +52,7 @@
                     <tr>
                         <td><?= $job->getId() ?></td>
                         <td><?= $job->getSha1Id()?></td>
-                        <td><?= $this->translate('admin_job_state-'.($job->getState() ? : 'unprocessed')) ?></td>
+                        <td><?= $this->translate('admin_job_state_'.($job->getState() ? : 'unprocessed')) ?></td>
                         <td>
                             <?PHP foreach ((array) $job->getData() as $key => $value) : ?>
                                 <div><?= $key ?>: <?= $value ?></div>

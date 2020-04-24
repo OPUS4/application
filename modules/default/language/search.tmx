@@ -4,7 +4,7 @@
     <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool" />
     <body>
 
-        <tu tuid="fulltext-icon-tooltip">
+        <tu tuid="fulltext_icon_tooltip">
             <tuv xml:lang="en">
                 <seg>Fulltext available</seg>
             </tuv>
@@ -13,7 +13,7 @@
             </tuv>
         </tu>
 
-        <tu tuid="fulltext-icon-oa-tooltip">
+        <tu tuid="fulltext_icon_oa_tooltip">
             <tuv xml:lang="en">
                 <seg>Open Access fulltext available</seg>
             </tuv>

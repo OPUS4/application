@@ -425,8 +425,91 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
 
     public function testGetExportTmxFileWithDefaultModuleTranslations()
     {
-        // TODO test
-        $this->markTestIncomplete();
+        $manager = $this->object;
+
+        $database = $manager->getDatabase();
+
+        $database->setTranslation('customtestkey', [
+            'en' => 'English',
+            'de' => 'Deutsch'
+        ]);
+
+        $tmxFile = $manager->getExportTmxFile();
+
+        $this->assertNotNull($tmxFile);
+        $this->assertInstanceOf('Application_Translate_TmxFile', $tmxFile);
+
+        $dom = $tmxFile->getDomDocument();
+        $output = $dom->saveXML();
+        $this->getResponse()->setBody($output);
+
+        $this->assertXpathCount('//tu', 1);
+        $this->assertXpath('//tu[@tuid = "customtestkey"]');
+        $this->assertXpath('//tu[@creationtool = "default"]');
+        $this->assertXpathContentContains('//tu/tuv[@xml:lang = "de"]/seg', 'Deutsch');
+        $this->assertXpathContentContains('//tu/tuv[@xml:lang = "en"]/seg', 'English');
+    }
+
+    public function testGetExportTmxFileFiltered()
+    {
+        $manager = $this->object;
+
+        $database = $manager->getDatabase();
+
+        $database->setTranslation('defaultCustomKey', [
+            'en' => 'Default Test Key',
+            'de' => 'Default-Testschluessel'
+        ]);
+
+        $database->setTranslation('homeCustomKey', [
+            'en' => 'Home Test Key',
+            'de' => 'Home-Testschluessel'
+        ], 'home');
+
+        $manager->setModules('home');
+        $tmxFile = $manager->getExportTmxFile();
+
+        $this->assertNotNull($tmxFile);
+        $this->assertInstanceOf('Application_Translate_TmxFile', $tmxFile);
+
+        $dom = $tmxFile->getDomDocument();
+        $output = $dom->saveXML();
+        $this->getResponse()->setBody($output);
+
+        $this->assertXpathCount('//tu', 1);
+        $this->assertXpath('//tu[@tuid = "homeCustomKey"]');
+        $this->assertXpath('//tu[@creationtool = "home"]');
+        $this->assertXpathContentContains('//tu/tuv[@xml:lang = "de"]/seg', 'Home-Testschluessel');
+        $this->assertXpathContentContains('//tu/tuv[@xml:lang = "en"]/seg', 'Home Test Key');
+    }
+
+    public function testGetExportTmxFileIncludingUnmodified()
+    {
+        $manager = $this->object;
+
+        $database = $manager->getDatabase();
+
+        $database->setTranslation('customtestkey', [
+            'en' => 'test key',
+            'de' => 'Testschluessel'
+        ], 'crawlers');
+
+
+        $manager->setModules('crawlers');
+        $tmxFile = $manager->getExportTmxFile(true);
+
+        $this->assertNotNull($tmxFile);
+        $this->assertInstanceOf('Application_Translate_TmxFile', $tmxFile);
+
+        $dom = $tmxFile->getDomDocument();
+        $output = $dom->saveXML();
+        $this->getResponse()->setBody($output);
+
+        $this->assertXpathCount('//tu', 3);
+        $this->assertXpath('//tu[@tuid = "customtestkey"]');
+        $this->assertXpathCount('//tu[@creationtool = "crawlers"]', 3);
+        $this->assertXpathContentContains('//tu/tuv[@xml:lang = "de"]/seg', 'Testschluessel');
+        $this->assertXpathContentContains('//tu/tuv[@xml:lang = "en"]/seg', 'test key');
     }
 
     public function testImportTmxFile()
