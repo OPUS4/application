@@ -601,19 +601,19 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
     /**
      * Returns custom translations as TMX file.
      */
-    public function getExportTmxFile()
+    public function getExportTmxFile($unmodified = false)
     {
-        $database = $this->getDatabase();
-
-        $translations = $database->getTranslationsWithModules();
+        $translations = $this->getMergedTranslations();
 
         $tmxFile = new Application_Translate_TmxFile();
 
         foreach ($translations as $key => $data) {
-            $module = $data['module'];
-            $languages = $data['values'];
-            foreach ($languages as $lang => $value) {
-                $tmxFile->setTranslation($key, $lang, $value, $module);
+            if ($unmodified || isset($data['state'])) {
+                $module = $data['module'];
+                $languages = $data['translations'];
+                foreach ($languages as $lang => $value) {
+                    $tmxFile->setTranslation($key, $lang, $value, $module);
+                }
             }
         }
 
