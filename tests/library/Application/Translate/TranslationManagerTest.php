@@ -514,7 +514,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
 
     public function testImportTmxFile()
     {
-        $tmxFile = new Application_Translate_TmxFile(APPLICATION_PATH . '/tests/resources/tmx/opus.tmx');
+        $tmxFile = new Application_Translate_TmxFile(APPLICATION_PATH . '/tests/resources/tmx/opus2.tmx');
 
         $manager = $this->object;
 
@@ -529,31 +529,128 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
             'home_index_contact_pagetitle' => [
                 'module' => 'home',
                 'values' => [
-                    'en' => 'Contact',
-                    'de' => 'Kontakt'
+                    'en' => 'ContactEdited',
+                    'de' => 'KontaktEdited'
                 ]
             ],
             'browsing_menu_label' => [
-                'module' => '', // TODO modify to omit field or use null
+                'module' => 'default',
                 'values' => [
-                    'en' => 'Browse',
-                    'de' => 'Browsen'
+                    'en' => 'BrowseEdited',
+                    'de' => 'BrowsenEdited'
                 ]
             ],
             'publish_controller_index' => [
                 'module' => 'publish',
                 'values' => [
-                    'en' => 'Publish',
-                    'de' => 'Veröffentlichen'
+                    'en' => 'PublishEdited',
+                    'de' => 'VeröffentlichenEdited'
                 ]
             ]
         ], $translations);
     }
 
-    public function testImportTmxFileWithModuleOverride()
+    public function testImportTmxFileDoNotStoreUnmodified()
     {
-        // TODO test
-        $this->markTestIncomplete();
+        $tmxFile = new Application_Translate_TmxFile(APPLICATION_PATH . '/tests/resources/tmx/opus.tmx');
+
+        $manager = $this->object;
+
+        $manager->importTmxFile($tmxFile);
+
+        $database = $manager->getDatabase();
+
+        $translations = $database->getTranslationsWithModules();
+
+        $this->assertCount(1, $translations);
+        $this->assertEquals([
+            'customtestkey' => [
+                'module' => 'crawlers',
+                'values' => [
+                    'en' => 'Test key',
+                    'de' => 'Testschlüssel'
+                ]
+            ]
+        ], $translations);
+    }
+
+    public function testImportTmxFileDoesNotChangeModuleOfKey()
+    {
+        $tmxFile = new Application_Translate_TmxFile(APPLICATION_PATH . '/tests/resources/tmx/opus4.tmx');
+
+        $manager = $this->object;
+
+        $manager->importTmxFile($tmxFile);
+
+        $database = $manager->getDatabase();
+
+        $translations = $database->getTranslationsWithModules();
+
+        $this->assertCount(1, $translations);
+        $this->assertEquals([
+            'home_index_contact_pagetitle' => [
+                'module' => 'home',
+                'values' => [
+                    'en' => 'ContactEdited',
+                    'de' => 'KontaktEdited'
+                ]
+            ]
+        ], $translations);
+    }
+
+    public function testImportTmxFileWithoutModuleInformation()
+    {
+        $tmxFile = new Application_Translate_TmxFile(APPLICATION_PATH . '/tests/resources/tmx/opus3.tmx');
+
+        $manager = $this->object;
+
+        $manager->importTmxFile($tmxFile);
+
+        $database = $manager->getDatabase();
+
+        $translations = $database->getTranslationsWithModules();
+
+        $this->assertCount(4, $translations);
+        $this->assertEquals([
+            'home_index_contact_pagetitle' => [
+                'module' => 'home',
+                'values' => [
+                    'en' => 'ContactEdited',
+                    'de' => 'KontaktEdited'
+                ]
+            ],
+            'browsing_menu_label' => [
+                'module' => 'default',
+                'values' => [
+                    'en' => 'BrowseEdited',
+                    'de' => 'BrowsenEdited'
+                ]
+            ],
+            'publish_controller_index' => [
+                'module' => 'publish',
+                'values' => [
+                    'en' => 'PublishEdited',
+                    'de' => 'VeröffentlichenEdited'
+                ]
+            ],
+            'customtestkey' => [
+                'module' => '',
+                'values' => [
+                    'en' => 'Test key',
+                    'de' => 'Testschlüssel'
+                ]
+            ]
+        ], $translations);
+    }
+
+    public function testImportTmxFileAdditionalLanguageLocal()
+    {
+        $this->markTestIncomplete('implement when additional languages are supported');
+    }
+
+    public function testImportTmxFileAdditionalLanguageImport()
+    {
+        $this->markTestIncomplete('implement when additional languages are supported');
     }
 
     public function testFilterByStateEdited()

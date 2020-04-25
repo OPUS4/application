@@ -441,5 +441,14 @@
         </tuv>
     </tu>
 
+    <tu tuid="setup_language_clear_before_import">
+        <tuv xml:lang="en">
+            <seg>Remove all modifications before importing file?</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Alle Anpassungen entfernen vor dem Import der Datei?</seg>
+        </tuv>
+    </tu>
+
   </body>
 </tmx>

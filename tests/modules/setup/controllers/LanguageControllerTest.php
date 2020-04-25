@@ -874,6 +874,16 @@ class Setup_LanguageControllerTest extends ControllerTestCase
         $this->assertXpath('//tu[@tuid = "testkey2"]');
     }
 
+    public function testImportShowForm()
+    {
+        $this->markTestIncomplete();
+    }
+
+    public function testImportFile()
+    {
+        $this->markTestIncomplete('Can a upload file be added to request object for test?');
+    }
+
     /**
      * @return Opus_Database_Dao
      * TODO really use translation manager (be independent of database)
