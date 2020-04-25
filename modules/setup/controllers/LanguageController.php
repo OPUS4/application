@@ -427,11 +427,39 @@ class Setup_LanguageController extends Application_Controller_Action
     {
         $request = $this->getRequest();
 
+        $form = new Setup_Form_ImportTranslations();
+
         if ($request->isPost()) {
-            // process upload post
+            // TODO validate form
+            $upload = new Zend_File_Transfer_Adapter_Http();
+            $files = $upload->getFileInfo();
+
+            foreach ($files as $file => $fileInfo) {
+                $manager = $this->getTranslationManager();
+                if (isset($fileInfo['tmp_name'])) {
+                    // TODO error handling (corrupt or incompatible file)
+
+                    $post = $request->getPost();
+
+                    if (isset($post['Clear']) == '1') {
+                        $manager->deleteAll();
+                    }
+
+                    $tmxFile = new Application_Translate_TmxFile();
+                    $tmxFile->load($fileInfo['tmp_name']);
+
+                    if (count($tmxFile->toArray()) > 0) {
+                        $manager->importTmxFile($tmxFile);
+                        $manager->clearCache();
+                    } else {
+                        // TODO redirect with message
+                    }
+
+                    $this->redirectWithParameters();
+                }
+            }
         } else {
             // show information and upload form
-            $form = new Setup_Form_ImportTmxFile();
             $this->view->form = $form;
         }
     }
@@ -439,7 +467,7 @@ class Setup_LanguageController extends Application_Controller_Action
     /**
      * Action for editing general language settings for the user interface.
      *
-     * TODO more language options from configuration page
+     * TODO move language options from configuration page
      */
     public function settingsAction()
     {
