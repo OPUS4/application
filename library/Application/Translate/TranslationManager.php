@@ -582,7 +582,8 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
         $this->clearCache();
     }
 
-    public function clearCache() {
+    public function clearCache()
+    {
         $translate = Zend_Registry::get('Zend_Translate');
         $translate->clearCache();
     }
