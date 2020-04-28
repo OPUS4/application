@@ -529,6 +529,8 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
     /**
      * @param $key
      * @return bool
+     *
+     * TODO should check database and TMX
      */
     public function keyExists($key)
     {
@@ -569,8 +571,7 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
         $database = $this->getDatabase();
         $database->remove($key, $module);
 
-        $translate = Zend_Registry::get('Zend_Translate');
-        $translate->clearCache();
+        $this->clearCache();
     }
 
     public function deleteAll()
@@ -578,6 +579,11 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
         $database = $this->getDatabase();
         $database->removeAll();
 
+        $this->clearCache();
+    }
+
+    public function clearCache()
+    {
         $translate = Zend_Registry::get('Zend_Translate');
         $translate->clearCache();
     }
@@ -601,19 +607,19 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
     /**
      * Returns custom translations as TMX file.
      */
-    public function getExportTmxFile()
+    public function getExportTmxFile($unmodified = false)
     {
-        $database = $this->getDatabase();
-
-        $translations = $database->getTranslationsWithModules();
+        $translations = $this->getMergedTranslations();
 
         $tmxFile = new Application_Translate_TmxFile();
 
         foreach ($translations as $key => $data) {
-            $module = $data['module'];
-            $languages = $data['values'];
-            foreach ($languages as $lang => $value) {
-                $tmxFile->setTranslation($key, $lang, $value, $module);
+            if ($unmodified || isset($data['state'])) {
+                $module = $data['module'];
+                $languages = $data['translations'];
+                foreach ($languages as $lang => $value) {
+                    $tmxFile->setTranslation($key, $lang, $value, $module);
+                }
             }
         }
 
@@ -622,6 +628,7 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
 
     /**
      * TODO move into separate class
+     * TODO cache keys in manager (performance)
      */
     public function importTmxFile($tmxFile)
     {
@@ -631,7 +638,37 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
 
         foreach ($translations as $key => $values) {
             $module = $tmxFile->getModuleForKey($key);
-            $database->setTranslation($key, $values, $module);
+
+            $old = null;
+
+            try {
+                $old = $this->getTranslation($key);
+            } catch (\Opus\Translate\UnknownTranslationKey $ex) {
+                // do nothing
+                // TODO work without exception here (keyExists)?
+            }
+
+            if (! is_null($old)) {
+                // check if modules match
+                if (is_null($module) || $old['module'] !== $module) {
+                    $module = $old['module'];
+                    // TODO write to log
+                }
+
+                if (isset($old['transaltionsTmx'])) {
+                    $oldValues = $old['translationsTmx'];
+                } else {
+                    $oldValues = $old['translations'];
+                }
+
+                if ($oldValues != $values) {
+                    // only set if values differ from existing
+                    $database->setTranslation($key, $values, $module);
+                }
+            } else {
+                // add unknown key to database
+                $database->setTranslation($key, $values, $module);
+            }
         }
     }
 

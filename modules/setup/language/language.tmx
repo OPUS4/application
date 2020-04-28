@@ -168,6 +168,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="setup_language_export_breadcrumb">
+      <tuv xml:lang="en">
+        <seg>Export</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Exportieren</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="setup_language_export_description">
       <tuv xml:lang="en">
         <seg>The customized translations can be downloaded as TMX file. The name of the module a translation key
@@ -393,6 +402,51 @@
         </tuv>
         <tuv xml:lang="de">
             <seg>Alle Anpassungen und hinzugefügten Schlüssel entfernen</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="setup_language_export_filtered">
+        <tuv xml:lang="en">
+            <seg>Filtered customizations</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Gefilterte Anpassungen</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="setup_language_export_filtered_with_unmodified">
+        <tuv xml:lang="en">
+            <seg>Filtered customizations and unmodified translations</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Gefilterte Anpassungen und nicht modifizierte Übersetzungen</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="setup_language_export_all">
+        <tuv xml:lang="en">
+            <seg>All customized translations</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Alle angepassten Übersetzungen</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="setup_language_export_all_with_unmodified">
+        <tuv xml:lang="en">
+            <seg>All translations (customized and unmodified)</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Alle Übersetzungen (angepasst und nicht modifiziert)</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="setup_language_clear_before_import">
+        <tuv xml:lang="en">
+            <seg>Remove all modifications before importing file?</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Alle Anpassungen entfernen vor dem Import der Datei?</seg>
         </tuv>
     </tu>
 

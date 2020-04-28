@@ -25,52 +25,17 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     View_Helper
+ * @package     Module_Setup
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-/**
- * View helper for rendering the fulltext logo for documents in the search result list.
- */
-class Application_View_Helper_FulltextLogo extends Application_View_Helper_Document_HelperAbstract
+class Setup_Form_ImportTranslationsTest extends ControllerTestCase
 {
 
-    public function fulltextLogo($doc = null)
+    public function testInit()
     {
-        if (is_null($doc)) {
-            $doc = $this->getDocument();
-        }
-
-        if (! $doc instanceof Opus_Document) {
-            // TODO log
-            return;
-        }
-
-        $cssClass = "fulltext-logo";
-        $tooltip = null;
-
-
-        if ($doc->hasFulltext()) {
-            $cssClass .= ' fulltext';
-            $tooltip = 'fulltext_icon_tooltip';
-        }
-
-        if ($doc->isOpenAccess()) {
-            $cssClass .= ' openaccess';
-            $tooltip = 'fulltext_icon_oa_tooltip';
-        }
-
-        $output = "<div class=\"$cssClass\"";
-
-        if (! is_null($tooltip)) {
-            $tooltip = $this->view->translate([$tooltip]);
-            $output .= " title=\"$tooltip\"";
-        }
-
-        $output .= "></div>";
-
-        return $output;
+        $form = new Setup_Form_ImportTranslations();
     }
 }

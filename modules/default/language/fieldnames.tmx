@@ -701,7 +701,7 @@
         </tu>
 
         <!-- Wird von ActionBox verwendet -->
-        <tu tuid="ServerState-short">
+        <tu tuid="ServerState_short">
             <tuv xml:lang="en">
                 <seg>State</seg>
             </tuv>
@@ -738,7 +738,7 @@
         </tu>
 
         <!-- Wird von ActionBox verwendet -->
-        <tu tuid="ServerDateModified-short">
+        <tu tuid="ServerDateModified_short">
             <tuv xml:lang="en">
                 <seg>Last Modified</seg>
             </tuv>
@@ -757,7 +757,7 @@
         </tu>
 
         <!-- Wird von ActionBox verwendet -->
-        <tu tuid="ServerDatePublished-short">
+        <tu tuid="ServerDatePublished_short">
             <tuv xml:lang="en">
                 <seg>Release Date</seg>
             </tuv>

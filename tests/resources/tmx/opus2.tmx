@@ -5,37 +5,28 @@
     <body>
         <tu tuid="home_index_contact_pagetitle" creationtool="home">
           <tuv xml:lang="en">
-            <seg>Contact</seg>
+            <seg>ContactEdited</seg>
           </tuv>
           <tuv xml:lang="de">
-            <seg>Kontakt</seg>
+            <seg>KontaktEdited</seg>
           </tuv>
         </tu>
 
       <tu tuid="browsing_menu_label">
         <tuv xml:lang="en">
-          <seg>Browse</seg>
+          <seg>BrowseEdited</seg>
         </tuv>
         <tuv xml:lang="de">
-          <seg>Browsen</seg>
+          <seg>BrowsenEdited</seg>
         </tuv>
       </tu>
 
       <tu tuid="publish_controller_index" creationtool="publish">
         <tuv xml:lang="en">
-          <seg>Publish</seg>
+          <seg>PublishEdited</seg>
         </tuv>
         <tuv xml:lang="de">
-          <seg>Veröffentlichen</seg>
-        </tuv>
-      </tu>
-
-      <tu tuid="customtestkey" creationtool="crawlers">
-        <tuv xml:lang="en">
-          <seg>Test key</seg>
-        </tuv>
-        <tuv xml:lang="de">
-          <seg>Testschlüssel</seg>
+          <seg>VeröffentlichenEdited</seg>
         </tuv>
       </tu>
 

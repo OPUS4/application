@@ -658,6 +658,37 @@ class Setup_LanguageControllerTest extends ControllerTestCase
         ], $translation);
     }
 
+    public function testEditInvalidExistingKey()
+    {
+        $request = $this->getRequest();
+
+        $key = 'Opus_Identifier_Type_Value_Cris-link'; // invalid because of '-'
+
+        $request->setMethod('POST');
+        $request->setPost([
+            'Id' => $key,
+            'Translation' => [
+                'en' => 'CRIS-LinkEdited',
+                'de' => 'CRIS-LinkEdited'
+            ],
+            'Save' => 'Speichern'
+        ]);
+
+        $this->dispatch('/setup/language/edit');
+
+        $this->assertNotResponseCode(200);
+        $this->assertRedirectTo('/setup/language');
+
+        $manager = $this->getTranslationManager();
+
+        $translation = $manager->getTranslation($key);
+
+        $this->assertEquals([
+            'en' => 'CRIS-LinkEdited',
+            'de' => 'CRIS-LinkEdited'
+        ], $translation);
+    }
+
     public function testChangeNameOfAddedKey()
     {
         $database = new Opus_Translate_Dao();
@@ -739,6 +770,118 @@ class Setup_LanguageControllerTest extends ControllerTestCase
         $this->assertEquals('added', $translation['state']);
         $this->assertArrayHasKey('module', $translation);
         $this->assertEquals('admin', $translation['module']);
+    }
+
+    public function testExportShowPage()
+    {
+        $this->dispatch('/setup/language/export/modules/account');
+
+        $this->assertResponseCode(200);
+        $this->assertXpathCount(
+            '//div[contains(@class, "setup_language_export")]//li/a[@class = "download-button"]',
+            4
+        );
+
+        $this->assertXpath('//a[@href="/setup/language/export/modules/account/filename/opus.tmx"]');
+        $this->assertXpath('//a[@href="/setup/language/export/modules/account/filename/opus.tmx/unmodified/true"]');
+        $this->assertXpath('//a[@href="/setup/language/export/filename/opus.tmx"]');
+        $this->assertXpath('//a[@href="/setup/language/export/filename/opus.tmx/unmodified/true"]');
+    }
+
+    public function testExportFiltered()
+    {
+        $dao = new Opus_Translate_Dao();
+
+        $dao->setTranslation('customtestkey', [
+            'en' => 'English',
+            'de' => 'Deutsch'
+        ], 'crawlers');
+
+        $this->dispatch('/setup/language/export/filename/opus.tmx/modules/crawlers');
+
+        $this->assertResponseCode(200);
+        $this->assertHeaderContains('content-type', 'text/xml');
+        $this->assertHeaderContains('content-disposition', 'attachment');
+
+        $this->assertXpathCount('//tu', 1);
+        $this->assertXpathCount('//tu[@creationtool = "crawlers"]', 1);
+        $this->assertXpath('//tu[@tuid = "customtestkey"]');
+    }
+
+    public function testExportFilteredWithUnmodified()
+    {
+        $this->dispatch('/setup/language/export/filename/opus.tmx/unmodified/true/modules/crawlers');
+
+        $this->assertResponseCode(200);
+        $this->assertHeaderContains('content-type', 'text/xml');
+        $this->assertHeaderContains('content-disposition', 'attachment');
+
+        $this->assertXpathCount('//tu', 2);
+        $this->assertXpathCount('//tu[@creationtool = "crawlers"]', 2);
+    }
+
+    public function testExportAll()
+    {
+        $dao = new Opus_Translate_Dao();
+
+        $dao->setTranslation('testkey1', [
+            'en' => 'Test key 1',
+            'de' => 'Testschluessel 1'
+        ]);
+
+        $dao->setTranslation('testkey2', [
+            'en' => 'Test key 2',
+            'de' => 'Testschluessel 2'
+        ], 'crawlers');
+
+        $this->dispatch('/setup/language/export/filename/opus.tmx');
+
+        $this->assertResponseCode(200);
+        $this->assertHeaderContains('content-type', 'text/xml');
+        $this->assertHeaderContains('content-disposition', 'attachment');
+
+        $this->assertXpathCount('//tu', 2);
+        $this->assertXpathCount('//tu[@creationtool = "default"]', 1);
+        $this->assertXpathCount('//tu[@creationtool = "crawlers"]', 1);
+        $this->assertXpath('//tu[@tuid = "testkey1"]');
+        $this->assertXpath('//tu[@tuid = "testkey2"]');
+    }
+
+    public function testExportAllWithUnmodified()
+    {
+        $dao = new Opus_Translate_Dao();
+
+        $dao->setTranslation('testkey1', [
+            'en' => 'Test key 1',
+            'de' => 'Testschluessel 1'
+        ]);
+
+        $dao->setTranslation('testkey2', [
+            'en' => 'Test key 2',
+            'de' => 'Testschluessel 2'
+        ], 'crawlers');
+
+        $this->dispatch('/setup/language/export/filename/opus.tmx/unmodified/true');
+
+        $this->assertResponseCode(200);
+        $this->assertHeaderContains('content-type', 'text/xml');
+        $this->assertHeaderContains('content-disposition', 'attachment');
+
+        $this->assertXpathCountMin('//tu', 2000);
+        $this->assertXpathCountMin('//tu[@creationtool = "default"]', 500);
+        $this->assertXpathCount('//tu[@creationtool = "crawlers"]', 3);
+        $this->assertXpath('//tu[@tuid = "testkey1"]');
+        $this->assertXpath('//tu[@tuid = "testkey2"]');
+    }
+
+    public function testImportShowForm()
+    {
+        $this->markTestIncomplete();
+    }
+
+    public function testImportFile()
+    {
+        $this->markTestIncomplete('Can a upload file be added to request object for test?');
     }
 
     /**

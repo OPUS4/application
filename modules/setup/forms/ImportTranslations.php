@@ -32,17 +32,14 @@
  */
 
 /**
- * Form for importing custom translations from a TMX file.
- *
- * The form should allow overriding the module name for the translations. This way a normal TMX file can be uploaded to
- * override translations of a module.
+ * Form for importing translations from a TMX file.
  */
-class Setup_Form_ImportTmxFile extends Application_Form_Abstract
+class Setup_Form_ImportTranslations extends Application_Form_Abstract
 {
 
     const ELEMENT_FILE = 'File';
 
-    const ELEMENT_MODULE = 'Module';
+    const ELEMENT_CLEAR = 'Clear';
 
     const ELEMENT_IMPORT = 'Import';
 
@@ -52,10 +49,15 @@ class Setup_Form_ImportTmxFile extends Application_Form_Abstract
 
         $this->addElement('file', self::ELEMENT_FILE);
 
-        // TODO add module enter/select field (simple text field for now)
-
-        // TODO add Import button
+        $this->addElement('checkbox', self::ELEMENT_CLEAR, [
+            'label' => 'setup_language_clear_before_import'
+        ]);
 
         $this->addElement('submit', self::ELEMENT_IMPORT);
+
+        $this->setDecorators([
+            'FormElements',
+            'Form'
+        ]);
     }
 }

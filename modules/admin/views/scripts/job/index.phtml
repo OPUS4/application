@@ -51,7 +51,7 @@
                         </tr>
                         <tr>
                             <td class="label">
-                                <a href="<?= $this->url(['action' => 'detail', 'label' => $label, 'state' => Opus_Job::STATE_FAILED]) ?>" title="<?=$this->translate('admin_job_index_job_detail_hint')?>"><?= $this->translate('admin_job_label-'.$label) ?></a>
+                                <a href="<?= $this->url(['action' => 'detail', 'label' => $label, 'state' => Opus_Job::STATE_FAILED]) ?>" title="<?=$this->translate('admin_job_index_job_detail_hint')?>"><?= $this->translate('admin_job_label_'.$label) ?></a>
                             </td>
                             <td class="value"><?= $count ?></td>
                         </tr>
@@ -76,7 +76,7 @@
                         </tr>
                         <tr>
                             <td class="label">
-                                <a href="<?= $this->url(['action' => 'detail', 'label' => $label, 'state' => Opus_Job::STATE_UNDEFINED]) ?>" title="<?=$this->translate('admin_job_index_job_detail_hint')?>"><?= $this->translate('admin_job_label-'.$label) ?></a>
+                                <a href="<?= $this->url(['action' => 'detail', 'label' => $label, 'state' => Opus_Job::STATE_UNDEFINED]) ?>" title="<?=$this->translate('admin_job_index_job_detail_hint')?>"><?= $this->translate('admin_job_label_'.$label) ?></a>
 
                             </td>
                             <td class="value"><?= $count ?></td>

@@ -230,3 +230,22 @@ form#filter .row:first-child {
     font-style: italic;
     font-family: monospace;
 }
+
+.setup_language_export p {
+    font-size: 1.3em;
+    margin-bottom: 1em;
+}
+
+ul#translation-downloads {
+    list-style: none;
+}
+
+ul#translation-downloads li {
+    font-size: 1.3em;
+    margin: 0.6em 0em;
+}
+
+ul#translation-downloads li i {
+    color: #26517D;
+    margin-right: 0.3em;
+}

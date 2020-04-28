@@ -231,6 +231,7 @@ class Setup_Form_Translation extends Application_Form_Abstract
         // disable editing of key and module for keys defined in TMX files
         if (! isset($translation['state']) || $translation['state'] !== 'added') {
             $keyElement->setAttrib('disabled', true);
+            $keyElement->removeValidator('Setup_Form_Validate_TranslationKeyFormat');
             $moduleElement->setAttrib('disabled', true);
         }
 

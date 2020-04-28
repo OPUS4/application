@@ -142,36 +142,6 @@ Translation keys added to the system will be removed.</seg>
         </tuv>
     </tu>
 
-    <tu tuid="setup_message_error_read-access">
-        <tuv xml:lang="en">
-            <seg>
-                '%1$s' is not readable.
-                Please make sure that the web server has read access to the respective directory.
-            </seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>
-                '%1$s' kann nicht gelesen werden.
-                Bitte stellen Sie sicher, dass der Webserver Leserechte für das entsprechende Verzeichnis hat.
-            </seg>
-        </tuv>
-    </tu>
-
-    <tu tuid="setup_message_error_write-access">
-        <tuv xml:lang="en">
-            <seg>
-                '%1$s' is not writeable.
-                Please make sure that the web server has write access to the respective directory.
-            </seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>
-                '%1$s' kann nicht geschrieben werden.
-                Bitte stellen Sie sicher, dass der Webserver Schreibrechte auf das entsprechende Verzeichnis hat.
-            </seg>
-        </tuv>
-    </tu>
-
     <tu tuid="setup_message_error_filenotfound">
         <tuv xml:lang="en">
             <seg>
@@ -198,22 +168,7 @@ Translation keys added to the system will be removed.</seg>
         </tuv>
     </tu>
 
-    <tu tuid="setup_message_write-failed">
-        <tuv xml:lang="en">
-            <seg>
-                The changes could not be saved.
-                Please make sure that the web server has write access to the respective directories and files.
-            </seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>
-                Die Änderungen konnten nicht gespeichert werden.
-                Bitte stellen Sie sicher, dass der Webserver Schreibrechte auf die entsprechenden Verzeichnisse und Dateien hat.
-            </seg>
-        </tuv>
-    </tu>
-
-    <tu tuid="setup_message_write-success">
+    <tu tuid="setup_message_write_success">
         <tuv xml:lang="en">
             <seg>
                 The changes have been saved.

@@ -655,7 +655,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="admin-actionbox-goto-section">
+    <tu tuid="admin_actionbox_goto_section">
       <tuv xml:lang="en">
         <seg>Jump to</seg>
       </tuv>
@@ -664,7 +664,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="page-help-link-title">
+    <tu tuid="page_help_link_title">
         <tuv xml:lang="en">
             <seg>Help</seg>
         </tuv>
@@ -743,6 +743,15 @@
         </tuv>
         <tuv xml:lang="de">
           <seg>Hinzufügen</seg>
+        </tuv>
+      </tu>
+
+      <tu tuid="default_back">
+        <tuv xml:lang="en">
+          <seg>Back</seg>
+        </tuv>
+        <tuv xml:lang="de">
+          <seg>Zurück</seg>
         </tuv>
       </tu>
 

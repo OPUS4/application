@@ -55,13 +55,13 @@
       <div class="col col-1">
         <?PHP if (! $this->element->isViewModeEnabled() || count($stateLinks) == 0) : ?>
         <dl id="Document-ServerState">
-          <dt id="Document-ServerState-label"><?= htmlspecialchars($this->translate('ServerState-short')) . ':'?></dt>
+          <dt id="Document-ServerState-label"><?= htmlspecialchars($this->translate('ServerState_short')) . ':'?></dt>
           <dd id="Document-ServerState-value"><?= htmlspecialchars($this->translate('Opus_Document_ServerState_Value_'
                   . ucfirst($currentState))) ?></dd>
         </dl>
         <?PHP else : ?>
           <dl id="Document-ServerState" class="dropdown">
-              <dt><a><?= htmlspecialchars($this->translate('ServerState-short')) . ':'?></a></dt>
+              <dt><a><?= htmlspecialchars($this->translate('ServerState_short')) . ':'?></a></dt>
               <dd>
                 <ul>
                     <li class="active"><?= htmlspecialchars($this->translate('Opus_Document_ServerState_Value_'
@@ -77,18 +77,18 @@
       </div>
       <div class="col col-2">
         <dl id="Document-ServerDatePublished" class="col">
-          <dt><?= $this->translate('ServerDatePublished-short') . ':'?></dt>
+          <dt><?= $this->translate('ServerDatePublished_short') . ':'?></dt>
           <dd id="Document-ServerDatePublished-value"
               ><?= $this->formatDate()->formatOpusDate($document->getServerDatePublished(), false) ?></dd>
         </dl>
         <dl id="Document-ServerDateModified" class="col">
-          <dt><?= $this->translate('ServerDateModified-short') . ':'?></dt>
+          <dt><?= $this->translate('ServerDateModified_short') . ':'?></dt>
           <dd id="Document-ServerDateModified-value"
               ><?= $this->formatDate()->formatOpusDate($document->getServerDateModified(), true) ?></dd>
         </dl>
         <?PHP if ($this->element->isNavigationEnabled()) : ?>
         <dl id="Document-Goto" class="col dropdown">
-          <dt><a><?= $this->translate('admin-actionbox-goto-section') ?></a></dt>
+          <dt><a><?= $this->translate('admin_actionbox_goto_section') ?></a></dt>
           <dd>
             <?= $this->linkList($this->element->getJumpLinks()) ?>
           </dd>
