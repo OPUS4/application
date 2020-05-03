@@ -25,23 +25,34 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Setup_Form
+ * @package     Module_Setup
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2019-2020, OPUS 4 development team
+ * @copyright   Copyright (c) 2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Setup_Form_ImprintPage extends Application_Form_Translations
+/**
+ */
+class Setup_Form_ImprintPageTest extends ControllerTestCase
 {
 
-    public function init()
+    protected $additionalResources = 'Translation';
+
+    public function testInit()
     {
-        parent::init();
+        $form = new Setup_Form_ImprintPage();
 
-        $this->addKey('home_index_imprint_pagetitle');
-        $this->addKey('home_index_imprint_title');
-        $this->addKey('help_content_imprint', true, ['label' => 'setup_page_content']);
+        $element = $form->getElement('home_index_imprint_pagetitle');
+        $this->assertNotNull($element);
+        $this->assertEquals([
+            'en' => 'Imprint',
+            'de' => 'Impressum'
+        ], $element->getValue());
 
-        $this->populateFromTranslations();
+        $element = $form->getElement('help_content_imprint');
+        $this->assertNotNull($element);
+        $value = $element->getValue();
+        $this->assertArrayHasKey('en', $value);
+        $this->assertContains('law', $value['en']);
     }
 }
