@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+. /home/ramram/opus4/bin/parameter.conf
 #
 # LICENCE
 # This code is free software: you can redistribute it and/or modify

@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+. /home/ramram/opus4/bin/parameter.conf
 #
 # LICENCE
 # This code is free software: you can redistribute it and/or modify
@@ -153,7 +154,8 @@ then
 
     echo
     [[ -z $MYSQLROOT ]] && read -p "MySQL Root User [root]: "                    MYSQLROOT
-    read -p "MySQL Root User Password: " -s MYSQLROOT_PASSWORD
+    #read -p "MySQL Root User Password: " -s MYSQLROOT_PASSWORD
+    MYSQLROOT_PASSWORD="${MYSQLROOT_PASSWORD:-MYSQLROOT_PASSWORD}"
     echo
 
     # set defaults if value is not given

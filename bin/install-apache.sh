@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+. /home/ramram/opus4/bin/parameter.conf
 #
 # LICENCE
 # This code is free software: you can redistribute it and/or modify
@@ -68,7 +69,7 @@ INPUT_FILE="$BASEDIR/apacheconf/$INPUT_FILENAME"
 # Check if output file exists
 if [ -e "$OUTPUT_FILE" ] ;
 then
-  read -p "File $OUTPUT_FILE already exists. Create backup? [Y]: " REPLACE_FILE
+  #read -p "File $OUTPUT_FILE already exists. Create backup? [Y]: " REPLACE_FILE
 
   if [ -z "$REPLACE_FILE" ] || [ "$REPLACE_FILE" = Y ] || [ "$REPLACE_FILE" = Y ] ;
   then
