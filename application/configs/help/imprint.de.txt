@@ -1,4 +1,4 @@
-﻿<p>+++++++++++++++      MUSTER      +++++++++++++++</p>
+<p>+++++++++++++++      MUSTER      +++++++++++++++</p>
 
 <p><b>MUSTERINSTITUT</b>
 <br /><b>MUSTERSTRAßE 1</b>

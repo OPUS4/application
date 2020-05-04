@@ -1,4 +1,4 @@
-﻿<h4>Boolesche Operatoren <b>AND</b>, <b>OR</b>, <b>NOT</b></h4>
+<h4>Boolesche Operatoren <b>AND</b>, <b>OR</b>, <b>NOT</b></h4>
 
 <p>Bei der <b>Einfachen Suche</b> werden mehrere Suchbegriffe automatisch mit <b>und</b> verknüpft. Für eine gezieltere
 Suche empfiehlt es sich mit Hilfe der Booleschen Operatoren mehrere Suchbegriffe miteinander zu verknüpfen.</p>
