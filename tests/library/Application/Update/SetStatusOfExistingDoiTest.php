@@ -67,7 +67,10 @@ class Application_Update_SetStatusOfExistingDoiTest extends ControllerTestCase
 
         $doc = new Opus_Document($docId);
 
-        $this->assertEquals(0, $doc->getServerDateModified()->compare($modified));
+        $message = "{$doc->getServerDateModified()}" . PHP_EOL;
+        $message .= "$modified";
+
+        $this->assertEquals(0, $doc->getServerDateModified()->compare($modified), $message);
         $this->assertEquals('registered', $doc->getIdentifierDoi(0)->getStatus());
     }
 }
