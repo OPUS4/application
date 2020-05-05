@@ -40,7 +40,7 @@
 class Application_Update_ImportStaticPages extends Application_Update_PluginAbstract
 {
 
-    private $removeFilesEnabled = false;
+    private $removeFilesEnabled = true;
 
     public function run()
     {

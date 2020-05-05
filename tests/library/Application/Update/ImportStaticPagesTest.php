@@ -70,6 +70,8 @@ class Application_Update_ImportStaticPagesTest extends ControllerTestCase
     public function testImportFilesAsKey()
     {
         $update = new Application_Update_ImportStaticPages();
+        $update->setQuietMode(true);
+        $update->setRemoveFilesEnabled(false);
 
         $update->importFilesAsKey('contact', 'testkey', 'home');
 

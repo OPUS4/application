@@ -43,6 +43,7 @@ class Application_Update_ImportHelpFilesTest extends ControllerTestCase
 
         $update = new Application_Update_ImportHelpFiles();
         $update->setRemoveFilesEnabled(false);
+        $update->setQuietMode(true);
         $update->run();
 
         $translations = $database->getAll();
