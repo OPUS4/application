@@ -36,8 +36,8 @@
 require_once dirname(__FILE__) . '/../common/update.php';
 
 /**
- * Import content files for static pages into database.
+ * Import help files into database.
  */
 
-$update = new Application_Update_ImportStaticPages();
+$update = new Application_Update_ImportHelpFiles();
 $update->run();

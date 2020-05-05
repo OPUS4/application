@@ -1,6 +1,4 @@
-#!/usr/bin/env php
-
-<?PHP
+<?php
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -27,17 +25,38 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Scripts
+ * @package     Application_Update
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2019-2020, OPUS 4 development team
+ * @copyright   Copyright (c) 2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-require_once dirname(__FILE__) . '/../common/update.php';
+class Application_Update_ImportHelpFiles extends Application_Update_ImportStaticPages
+{
 
-/**
- * Import content files for static pages into database.
- */
+    public function run()
+    {
+        $help = new Home_Model_HelpFiles();
 
-$update = new Application_Update_ImportStaticPages();
-$update->run();
+        $files = $help->getFiles();
+
+        $this->log('Importing help files into database...');
+
+        $names = [];
+
+        foreach ($files as $file) {
+            $parts = explode('.', $file);
+            $name = $parts[0];
+            if (! in_array($name, ['contact', 'imprint'])) {
+                $names[] = $name;
+            }
+        }
+
+        $names = array_unique($names);
+
+        foreach ($names as $name) {
+            $this->log("Importing '$name' files ...");
+            $this->importFilesAsKey($name, "help_content_$name", 'help');
+        }
+    }
+}

@@ -1,6 +1,4 @@
-#!/usr/bin/env php
-
-<?PHP
+<?php
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -26,18 +24,30 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Scripts
+ * @category    Tests
+ * @package     Application_Update
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2019-2020, OPUS 4 development team
+ * @copyright   Copyright (c) 2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-require_once dirname(__FILE__) . '/../common/update.php';
+class Application_Update_ImportHelpFilesTest extends ControllerTestCase
+{
 
-/**
- * Import content files for static pages into database.
- */
+    protected $additionalResources = 'translation';
 
-$update = new Application_Update_ImportStaticPages();
-$update->run();
+    public function testRun()
+    {
+        $database = new Opus_Translate_Dao();
+        $database->removeAll();
+
+        $update = new Application_Update_ImportHelpFiles();
+        $update->setRemoveFilesEnabled(false);
+        $update->run();
+
+        $translations = $database->getAll();
+
+        // nothing should get stored in the database because default files should match TMX
+        $this->assertCount(0, $translations);
+    }
+}
