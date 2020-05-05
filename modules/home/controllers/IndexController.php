@@ -26,11 +26,11 @@
  *
  * @category    Application
  * @package     Module_Home
- * @author      Ralf Claussnitzer (ralf.claussnitzer@slub-dresden.de)
+ * @author      Ralf Claussnitzer <ralf.claussnitzer@slub-dresden.de>
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 class Home_IndexController extends Application_Controller_Action
@@ -55,6 +55,8 @@ class Home_IndexController extends Application_Controller_Action
      * @param  string $action     The name of the action that was called.
      * @param  array  $parameters The parameters passed to the action.
      * @return void
+     *
+     * TODO does it make sense? are we using this in the future? now?
      */
     public function __call($action, $parameters)
     {
@@ -75,16 +77,9 @@ class Home_IndexController extends Application_Controller_Action
             parent::__call($action, $parameters);
         }
 
-        $translation = $this->view->translate('help_content_' . $actionName);
+        $help = Application_Translate_Help::getInstance();
 
-        $helpFilesAvailable = Home_Model_HelpFiles::getFiles();
-
-        $pos = array_search($translation, $helpFilesAvailable);
-        if ($pos === false) {
-            $this->view->text = $translation;
-        } else {
-            $this->view->text = Home_Model_HelpFiles::getFileContent($helpFilesAvailable[$pos]);
-        }
+        $this->view->text = $help->getContent($actionName);
     }
 
     /**
@@ -146,16 +141,17 @@ class Home_IndexController extends Application_Controller_Action
         $this->view->totalNumOfDocs = $finder->count();
     }
 
-
     public function helpAction()
     {
-        $config = $this->getConfig();
-        $this->view->separate = isset($config->help->separate) &&
-            filter_var($config->help->separate, FILTER_VALIDATE_BOOLEAN);
+        $help = Application_Translate_Help::getInstance();
 
-        if ($this->view->separate) {
+        $this->view->help = $help;
+
+        // this loads content if answers should be shown on separate pages
+        if ($help->getSeparateViewEnabled()) {
             $content = $this->getRequest()->getParam('content');
             if (! is_null($content)) {
+                // TODO find generic way to handle redirect 'content'
                 if ($content === 'contact') {
                     $this->_helper->Redirector->redirectToAndExit('contact');
                 }
@@ -163,23 +159,12 @@ class Home_IndexController extends Application_Controller_Action
                     $this->_helper->Redirector->redirectToAndExit('imprint');
                 }
 
-                $translation = $this->view->translate('help_content_' . $content);
-
-                // get all readable help files in directory /home/views/scripts
-                $helpFilesAvailable = Home_Model_HelpFiles::getFiles();
-
-                $pos = array_search($translation, $helpFilesAvailable);
-                if ($pos !== false) {
-                    $this->view->contenttitle = 'help_title_' . $content;
-                    $this->view->content = Home_Model_HelpFiles::getFileContent($helpFilesAvailable[$pos]);
-                } elseif ($translation !== 'help_content_' . $content) {
-                    // a translation exists, but it is not a valid file name
-                    $this->view->contenttitle = 'help_title_' . $content;
-                    $this->view->content = $translation;
-                }
+                $this->view->contenttitle = "help_title_$content";
+                $this->view->content = $help->getContent($content);
             }
         }
 
+        // active proper entry in main menu
         $this->_helper->mainMenu('help');
     }
 

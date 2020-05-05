@@ -29,7 +29,7 @@
  * @package     Module_Oai
  * @author      Michael Lang <lang@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 -->
@@ -235,140 +235,11 @@
     </xsl:template>
 
     <xsl:template name="compareDocumentName" >
-        <xsl:choose>
-            <xsl:when test=". = 'masterthesis'">
-                <xsl:text>info:eu-repo/semantics/masterThesis</xsl:text>
-            </xsl:when>
-            <xsl:when test=". = 'bachelorthesis'">
-                <xsl:text>info:eu-repo/semantics/bachelorThesis</xsl:text>
-            </xsl:when>
-            <xsl:when test=". = 'doctoralthesis'">
-                <xsl:text>info:eu-repo/semantics/doctoralThesis</xsl:text>
-            </xsl:when>
-            <xsl:when test=". = 'bookpart'">
-                <xsl:text>info:eu-repo/semantics/bookPart</xsl:text>
-            </xsl:when>
-            <xsl:when test=". = 'conferenceobject'">
-                <xsl:text>info:eu-repo/semantics/conferenceObject</xsl:text>
-            </xsl:when>
-            <xsl:when test=". = 'workingpaper'">
-                <xsl:text>info:eu-repo/semantics/workingPaper</xsl:text>
-            </xsl:when>
-            <xsl:when test=". = 'contributiontoperiodical'">
-                <xsl:text>info:eu-repo/semantics/contributionToPeriodical</xsl:text>
-            </xsl:when>
-            <xsl:when test=". = 'article'">
-                <xsl:text>info:eu-repo/semantics/article</xsl:text>
-            </xsl:when>
-            <xsl:when test=". = 'book'">
-                <xsl:text>info:eu-repo/semantics/book</xsl:text>
-            </xsl:when>
-            <xsl:when test=". = 'review'">
-                <xsl:text>info:eu-repo/semantics/review</xsl:text>
-            </xsl:when>
-            <xsl:when test=". = 'lecture'">
-                <xsl:text>info:eu-repo/semantics/lecture</xsl:text>
-            </xsl:when>
-            <xsl:when test=". = 'preprint'">
-                <xsl:text>info:eu-repo/semantics/preprint</xsl:text>
-            </xsl:when>
-            <xsl:when test=". = 'report'">
-                <xsl:text>info:eu-repo/semantics/report</xsl:text>
-            </xsl:when>
-            <xsl:when test=".='habilitation'" >
-                <xsl:text>info:eu-repo/semantics/doctoralThesis</xsl:text>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:text>info:eu-repo/semantics/other</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
+        <xsl:text>info:eu-repo/semantics/</xsl:text><xsl:value-of select="php:functionString('Application_Xslt::openAireType', .)" />
      </xsl:template>
 
-     <xsl:template name="dcType" >
-		<xsl:choose>
-            <xsl:when test=". = 'diplthesis' or  . = 'diplom'">
-                <xsl:text>doc-type:masterThesis</xsl:text>
-            </xsl:when>
-            <xsl:when test=". = 'habilitation' or . = 'doctoralthesis'">
-                <xsl:text>doc-type:doctoralThesis</xsl:text>
-            </xsl:when>
-            <xsl:when test=". = 'bachelorthesis'">
-                <xsl:text>doc-type:bachelorThesis</xsl:text>
-			</xsl:when>
-			<xsl:when test=". = 'workingpaper'">
-                <xsl:text>doc-type:workingPaper</xsl:text>
-            </xsl:when>
-			<xsl:when test=". = 'studythesis'">
-                <xsl:text>doc-type:StudyThesis</xsl:text>
-            </xsl:when>            
-			<xsl:when test=". = 'article'">
-			   <xsl:text>doc-type:article</xsl:text>
-		    </xsl:when>
-		    <xsl:when test=". = 'book'">
-			   <xsl:text>doc-type:book</xsl:text>
-		    </xsl:when>
-		    <xsl:when test=". = 'bookpart'">
-			   <xsl:text>doc-type:bookPart</xsl:text>
-		    </xsl:when>
-		    <xsl:when test=". = 'conferenceobject'">
-			   <xsl:text>doc-type:conferenceObject</xsl:text>
-		    </xsl:when>
-		    <xsl:when test=". = 'contributiontoperiodical'">
-			   <xsl:text>doc-type:contributionToPeriodical</xsl:text>
-		    </xsl:when>
-		    <xsl:when test=". = 'coursematerial'">
-			   <xsl:text>doc-type:CourseMaterial</xsl:text>
-		    </xsl:when>
-		    <xsl:when test=". = 'examen'">
-			   <xsl:text>doc-type:masterThesis</xsl:text>
-		    </xsl:when>
-			<xsl:when test=". = 'image'">
-			   <xsl:text>doc-type:Image</xsl:text>
-		    </xsl:when>
-		    <xsl:when test=". = 'lecture'">
-			   <xsl:text>doc-type:lecture</xsl:text>
-		    </xsl:when>
-		    <xsl:when test=". = 'magister'">
-			   <xsl:text>doc-type:masterThesis</xsl:text>
-		    </xsl:when>
-		    <xsl:when test=". = 'masterthesis'">
-			   <xsl:text>doc-type:masterThesis</xsl:text>
-		    </xsl:when>
-		    <xsl:when test=". = 'movingimage'">
-			   <xsl:text>doc-type:MovingImage</xsl:text>
-		    </xsl:when>
-		    <xsl:when test=". = 'other'">
-			   <xsl:text>doc-type:Other</xsl:text>
-		    </xsl:when>
-		    <xsl:when test=". = 'periodical'">
-			   <xsl:text>doc-type:Periodical</xsl:text>
-		    </xsl:when>
-		    <xsl:when test=". = 'periodicalpart'">
-			   <xsl:text>doc-type:PeriodicalPart</xsl:text>
-		    </xsl:when>
-		    <xsl:when test=". = 'preprint'">
-			   <xsl:text>doc-type:preprint</xsl:text>
-		    </xsl:when>
-		    <xsl:when test=". = 'report'">
-			   <xsl:text>doc-type:report</xsl:text>
-		    </xsl:when>
-		    <xsl:when test=". = 'review'">
-			   <xsl:text>doc-type:review</xsl:text>
-		    </xsl:when>
-			<xsl:when test=". = 'radio'">
-			   <xsl:text>doc-type:Sound</xsl:text>
-		    </xsl:when>
-		    <xsl:when test=". = 'score'">
-			   <xsl:text>doc-type:MusicalNotation</xsl:text>
-		    </xsl:when>
-		    <xsl:when test=". = 'sound'">
-			   <xsl:text>doc-type:Sound</xsl:text>
-		    </xsl:when>
-            <xsl:otherwise>
-                <xsl:text>doc-type:</xsl:text>
-                <xsl:value-of select="."/>
-            </xsl:otherwise>
-        </xsl:choose>
+    <xsl:template name="dcType" >
+        <xsl:text>doc-type:</xsl:text><xsl:value-of select="php:functionString('Application_Xslt::dcType', .)" />
     </xsl:template>
 
     <xsl:template match="@ContributingCorporation" mode="oai_dc">

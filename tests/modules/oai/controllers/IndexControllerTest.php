@@ -35,6 +35,8 @@
  * TODO split specific protocol tests into separate classes
  * TODO unit tests transformations directly without "dispatch"
  * TODO create plugins for formats/protocols/standards
+ * TODO test dc:type value for different formats
+ * TODO test ListSets values for document type sets
  *
  * @covers Oai_IndexController
  */

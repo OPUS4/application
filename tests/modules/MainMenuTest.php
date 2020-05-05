@@ -71,7 +71,7 @@ class MainMenuTest extends ControllerTestCase
     public function testAdminControllerIndexPages()
     {
         $pages = [
-            "/setup/help-page",
+            "/setup/helppage",
             "/setup/translation",
             "/setup/language",
             "/admin/account",

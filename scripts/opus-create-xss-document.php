@@ -71,6 +71,7 @@ $doc->setPublisherPlace(randString($counter++));
 $doc->setPageNumber(randString($counter++));
 $doc->setPageFirst(randString($counter++));
 $doc->setPageLast(randString($counter++));
+$doc->setArticleNumber(randString($counter++));
 $doc->setVolume(randString($counter++));
 $doc->setIssue(randString($counter++));
 $doc->setCreatingCorporation(randString($counter++));

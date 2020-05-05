@@ -177,10 +177,9 @@ class Application_Form_Model_Table extends Application_Form_Abstract
 
     /**
      * Determines if a link for the show action should be rendered.
-     * @param $model Model object
      * @return bool true - link should be rendered
      */
-    public function isRenderShowActionLink($model)
+    public function isRenderShowActionLink($model = null)
     {
         if (! is_null($this->_controller)) {
             if (! method_exists($this->_controller, 'getShowActionEnabled')) {
@@ -188,9 +187,9 @@ class Application_Form_Model_Table extends Application_Form_Abstract
             } else {
                 return $this->_controller->getShowActionEnabled();
             }
-        } else {
-            return true;
         }
+
+        return true;
     }
 
     /**
@@ -206,9 +205,9 @@ class Application_Form_Model_Table extends Application_Form_Abstract
             } else {
                 return $this->_controller->isModifiable($model);
             }
-        } else {
-            return true;
         }
+
+        return true;
     }
 
     /**
@@ -224,9 +223,9 @@ class Application_Form_Model_Table extends Application_Form_Abstract
             } else {
                 return $this->_controller->isDeletable($model);
             }
-        } else {
-            return true;
         }
+
+        return true;
     }
 
     public function isUsed($model)
@@ -237,9 +236,9 @@ class Application_Form_Model_Table extends Application_Form_Abstract
             } else {
                 return $this->_controller->isUsed($model);
             }
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     public function isProtected($model)
@@ -250,9 +249,9 @@ class Application_Form_Model_Table extends Application_Form_Abstract
             } else {
                 return $this->_controller->isProtected($model);
             }
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     public function getRowCssClass($model)
@@ -263,9 +262,9 @@ class Application_Form_Model_Table extends Application_Form_Abstract
             } else {
                 return $this->_controller->getRowCssClass($model);
             }
-        } else {
-            return null;
         }
+
+        return null;
     }
 
     public function getRowTooltip($model)
@@ -276,8 +275,8 @@ class Application_Form_Model_Table extends Application_Form_Abstract
             } else {
                 return $this->_controller->getRowTooltip($model);
             }
-        } else {
-            return null;
         }
+
+        return null;
     }
 }

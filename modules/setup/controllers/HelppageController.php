@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -27,24 +26,38 @@
  *
  * @category    Application
  * @package     Module_Setup
- * @author      Edouard Simon (edouard.simon@zib.de)
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @author      Edouard Simon <edouard.simon@zib.de>
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
- * SubForm used by language controller for editing single tranlsation key
  */
-class Setup_Form_LanguageKey extends Zend_Form_SubForm
+class Setup_HelppageController extends Application_Controller_Action
 {
 
-    public function __construct($key, $options = null)
+    public function init()
     {
-        parent::__construct($options);
+        parent::init();
 
-        $this->addElement('textarea', 'en', ['label' => 'en']);
-        $this->addElement('textarea', 'de', ['label' => 'de']);
-        $this->addDisplayGroup(['de', 'en'], $key, ['legend' => $key]);
+        $this->getHelper('MainMenu')->setActive('admin');
+    }
+
+    public function indexAction()
+    {
+        // TODO fix $this->forward('edit');
+    }
+
+    protected function getForm()
+    {
+        return new Setup_Form_HelpPage();
+    }
+
+    protected function getModel()
+    {
+        return new Setup_Model_HelpPage(
+            new Zend_Config_Ini(APPLICATION_PATH . '/modules/setup/setup.ini', 'help')
+        );
     }
 }

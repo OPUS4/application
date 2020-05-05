@@ -273,6 +273,7 @@
 
             <xsl:apply-templates select="@Volume" />
             <xsl:apply-templates select="@Issue" />
+            <xsl:apply-templates select="@ArticleNumber" />
             <xsl:apply-templates select="@Edition" />
             <xsl:apply-templates select="@PageNumber" />
             <xsl:apply-templates select="@PageFirst" />

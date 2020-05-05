@@ -54,12 +54,12 @@ class Application_View_Helper_FulltextLogo extends Application_View_Helper_Docum
 
         if ($doc->hasFulltext()) {
             $cssClass .= ' fulltext';
-            $tooltip = 'fulltext-icon-tooltip';
+            $tooltip = 'fulltext_icon_tooltip';
         }
 
         if ($doc->isOpenAccess()) {
             $cssClass .= ' openaccess';
-            $tooltip = 'fulltext-icon-oa-tooltip';
+            $tooltip = 'fulltext_icon_oa_tooltip';
         }
 
         $output = "<div class=\"$cssClass\"";

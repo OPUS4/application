@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,29 +24,29 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @package     Setup
- * @author      Edouard Simon <edouard.simon@zib.de>
- * @copyright   Copyright (c) 2013-2018, OPUS 4 development team
+ * @category    Application
+ * @package     Setup_Form_Validate
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
- * Class Setup_HelpPageControllerTest.
+ * Checks format of translation keys.
  *
- * @covers Setup_HelpPageController
+ * Format: character, letters and underline, starting with a character
  */
-class Setup_HelpPageControllerTest extends SetupControllerTestCase
+class Setup_Form_Validate_TranslationKeyFormat extends Zend_Validate_Regex
 {
+
     /**
-     * original file modes, needed for restoring after test
+     * /^[A-Za-z0-9@._-]+$/
      */
-    protected $origFileModes = [];
+    const PATTERN = '/^[A-Za-z][A-Za-z0-9_]*$/';
 
-    protected $configSection = 'static-page';
-
-    public function testSomething()
+    public function __construct()
     {
-        $this->markTestIncomplete('implement testing');
+        parent::__construct(self::PATTERN);
+        $this->setMessage('setup_translation_error_key_format_not_match', self::NOT_MATCH);
     }
 }

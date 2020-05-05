@@ -34,7 +34,7 @@
 
 /**
  *
- * TODO refactor camel case in controller name; leads to static-page in translation keys and URLs
+ * TODO rename controller to InfopagesController (or something better)
  */
 class Setup_TranslationController extends Application_Controller_Action
 {
@@ -75,7 +75,7 @@ class Setup_TranslationController extends Application_Controller_Action
                 switch ($form->processPost($data, $data)) {
                     case Application_Form_Translations::RESULT_SAVE:
                         $form->updateTranslations();
-                        $this->_helper->Redirector->redirectTo('index', 'setup_message_write-success');
+                        $this->_helper->Redirector->redirectTo('index', 'setup_message_write_success');
                         break;
                     case Application_Form_Translations::RESULT_CANCEL:
                         $this->_helper->Redirector->redirectTo('index');

@@ -25,11 +25,10 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     View
+ * @package     Application_Form_Decorator
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2013-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -52,6 +51,5 @@ class Application_Form_Decorator_HtmlTagWithId extends Zend_Form_Decorator_HtmlT
         }
 
         return parent::_htmlAttribs($attribs);
-        ;
     }
 }

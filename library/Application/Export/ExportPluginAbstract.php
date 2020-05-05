@@ -153,4 +153,19 @@ abstract class Application_Export_ExportPluginAbstract extends Application_Model
      * Needs to be implemented by child classes.
      */
     abstract public function execute();
+
+    /**
+     * Export of unpublished documents is allowed only if the user has 'resource_documents'
+     * permission.
+     *
+     * @return bool true if export of unpublished documents is allowed
+     */
+    public function isAllowExportOfUnpublishedDocs()
+    {
+        $accessControl = Zend_Controller_Action_HelperBroker::getStaticHelper('accessControl');
+        if (is_null($accessControl)) {
+            return false;
+        }
+        return $accessControl->accessAllowed('documents');
+    }
 }

@@ -48,7 +48,17 @@ class Admin_Form_Document_Note extends Admin_Form_AbstractModelSubForm
 
         $this->addElement('hidden', self::ELEMENT_ID);
         $this->addElement('checkbox', self::ELEMENT_VISIBILITY, ['label' => 'Opus_Note_Visibility_Value_Public']);
-        $this->addElement('textarea', self::ELEMENT_MESSAGE, ['required' => true, 'rows' => 4]);
+        $this->addElement('textarea', self::ELEMENT_MESSAGE, [
+            'required' => true,
+            'rows' => 4,
+            'decorators' => [
+                'ViewHelper',
+                'Errors',
+                'Description',
+                'ElementHtmlTag',
+                [['dataWrapper' => 'HtmlTagWithId'], ['tag' => 'div', 'class' => 'data-wrapper']]
+            ]
+        ]);
 
         $this->getElement(self::ELEMENT_VISIBILITY)
                 ->setViewCheckedValue('Opus_Note_Visibility_Value_Public')

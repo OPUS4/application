@@ -85,10 +85,12 @@ $(function () {
             response(this.element.children("option").map(function () {
                 var text = $(this).text();
                 if ( this.value && ( ! request.term || matcher.test(text) ) ) {
-                    return label: text,
-                    value: text,
-                    option: this
-                };
+                    return {
+                        label: text,
+                        value: text,
+                        option: this
+                    }
+                }
             }));
         },
 

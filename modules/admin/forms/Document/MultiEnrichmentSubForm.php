@@ -163,7 +163,7 @@ class Admin_Form_Document_MultiEnrichmentSubForm extends Admin_Form_Document_Mul
     }
 
     /**
-     * Initialisiert die Eingabeformularelement für die Enrichment-Werte aus dem
+     * Initialisiert die Eingabeformularelemente für die Enrichment-Werte aus dem
      * POST-Request. Hierbei muss zusätzlich aus dem ausgewählten Enrichment-Key
      * der zugehörige Enrichment-Type abgeleitet werden. Daher musste die Methode
      * überschrieben werden.
@@ -182,7 +182,18 @@ class Admin_Form_Document_MultiEnrichmentSubForm extends Admin_Form_Document_Mul
                 if (array_key_exists($subFormName, $post)) {
                     $enrichmentKeyName = $post[$subFormName][Admin_Form_Document_Enrichment::ELEMENT_KEY_NAME];
                 }
-                $subForm->initEnrichmentValueElement($enrichmentKeyName);
+
+                // es ist zu prüfen, ob das Enrichment einen Wert verwendet, der in der
+                // Typkonfiguration nicht angegeben ist
+                $enrichmentId = null;
+                if (array_key_exists(Admin_Form_Document_Enrichment::ELEMENT_ID, $post[$subFormName])) {
+                    $enrichmentId = $post[$subFormName][Admin_Form_Document_Enrichment::ELEMENT_ID];
+                    if ($enrichmentId == '') {
+                        $enrichmentId = null;
+                    }
+                }
+
+                $subForm->initEnrichmentValueElement($enrichmentKeyName, $enrichmentId);
             }
             $this->prepareSubFormDecorators($subForm);
         }

@@ -28,7 +28,7 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @author      Michael Lang <lang@zib.de>
  * @author      Maximilian Salomon <salomon@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -480,6 +480,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase
         $this->assertQueryContentContains('//*[@id="Document-Bibliographic-PageFirst"]', '1');
         $this->assertQueryContentContains('//*[@id="Document-Bibliographic-PageLast"]', '4');
         $this->assertQueryContentContains('//*[@id="Document-Bibliographic-Issue"]', '3');
+        $this->assertQueryContentContains('//*[@id="Document-Bibliographic-ArticleNumber"]', '2');
         $this->assertQueryContentContains('//*[@id="Document-Bibliographic-ContributingCorporation"]', 'Baz University');
         $this->assertQueryContentContains('//*[@id="Document-Bibliographic-CreatingCorporation"]', 'Bar University');
         $this->assertQueryContentContains('//*[@id="Document-Bibliographic-ThesisDateAccepted"]', '02.11.2010');
@@ -722,6 +723,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase
         $this->assertQueryContentContains('//*[@id="Document-Bibliographic-PageFirst"]', '1');
         $this->assertQueryContentContains('//*[@id="Document-Bibliographic-PageLast"]', '4');
         $this->assertQueryContentContains('//*[@id="Document-Bibliographic-Issue"]', '3');
+        $this->assertQueryContentContains('//*[@id="Document-Bibliographic-ArticleNumber"]', '2');
         $this->assertQueryContentContains('//*[@id="Document-Bibliographic-ContributingCorporation"]', 'Baz University');
         $this->assertQueryContentContains('//*[@id="Document-Bibliographic-CreatingCorporation"]', 'Bar University');
         $this->assertQueryContentContains('//*[@id="Document-Bibliographic-ThesisDateAccepted"]', '2010/11/02');
@@ -950,6 +952,8 @@ class Admin_DocumentControllerTest extends ControllerTestCase
 
         $this->dispatch('/admin/document/index/id/146');
 
+        $this->assertResponseCode(200);
+
         $failedTranslations = [];
 
         foreach ($logger->getMessages() as $line) {
@@ -960,8 +964,8 @@ class Admin_DocumentControllerTest extends ControllerTestCase
 
         $output = Zend_Debug::dump($failedTranslations, null, false);
 
-        // until all messages can be prevented less than 20 is good enough
-        $this->assertLessThanOrEqual(20, count($failedTranslations), $output);
+        // currently only two messages cannot be avoided
+        $this->assertLessThanOrEqual(2, count($failedTranslations), $output);
     }
 
     public function testUnableToTranslateForEditForm()
@@ -976,6 +980,8 @@ class Admin_DocumentControllerTest extends ControllerTestCase
 
         $this->dispatch('/admin/document/edit/id/146');
 
+        $this->assertResponseCode(200);
+
         $failedTranslations = [];
 
         foreach ($logger->getMessages() as $line) {
@@ -986,8 +992,8 @@ class Admin_DocumentControllerTest extends ControllerTestCase
 
         $output = Zend_Debug::dump($failedTranslations, null, false);
 
-        // until all messages can be prevented less than 20 is good enough
-        $this->assertLessThanOrEqual(20, count($failedTranslations), $output);
+        // currently only two messages cannot be avoided
+        $this->assertLessThanOrEqual(2, count($failedTranslations), $output);
     }
 
     public function testRedirectToLogin()

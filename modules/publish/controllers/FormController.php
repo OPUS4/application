@@ -27,9 +27,8 @@
  * @category    Application
  * @package     Module_Publish
  * @author      Susanne Gottwald <gottwald@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 class Publish_FormController extends Application_Controller_Action
 {
@@ -83,6 +82,10 @@ class Publish_FormController extends Application_Controller_Action
                 'index'
             );
         }
+
+        // Adds translated messages for javascript files
+        $javascriptTranslations = $this->view->getHelper('javascriptMessages');
+        $javascriptTranslations->getDefaultMessageSet();
 
         //don't allow MAX_FILE_SIZE to get overridden
         $config = $this->getConfig();

@@ -33,8 +33,6 @@
 
 /**
  * Export plugin for applying XSLT on XML before returning response.
- *
- *
  */
 class Export_Model_XsltExport extends Export_Model_XmlExport
 {
@@ -61,9 +59,6 @@ class Export_Model_XsltExport extends Export_Model_XmlExport
             )
         );
 
-        $restrictExportToPublishedDocuments =
-            ! (isset($config->restrictExportToPublishedDocuments) &&
-                (! filter_var($config->restrictExportToPublishedDocuments, FILTER_VALIDATE_BOOLEAN)));
-        $this->prepareXml($restrictExportToPublishedDocuments);
+        $this->prepareXml();
     }
 }
