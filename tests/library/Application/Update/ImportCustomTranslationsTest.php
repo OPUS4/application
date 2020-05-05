@@ -86,6 +86,7 @@ class Application_Update_ImportCustomTranslationsTest extends ControllerTestCase
 
         // Perform import operation
         $update = new Application_Update_ImportCustomTranslations();
+        $update->setRemoveFilesEnabled(false);
         $update->setQuietMode(true);
         $update->run();
 

@@ -769,7 +769,7 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
 
         if (! is_null($old)) {
             if (isset($old['translationsTmx'])) {
-                $defaultValues= $old['translationsTmx'];
+                $defaultValues = $old['translationsTmx'];
             } else {
                 $defaultValues = $old['translations'];
             }
