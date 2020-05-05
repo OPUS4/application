@@ -27,86 +27,79 @@
  * @category    Tests
  * @package     Application_Update
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Application_Update_ImportCustomTranslationsTest extends ControllerTestCase
+class Application_Update_ImportStaticPagesTest extends ControllerTestCase
 {
 
-    protected $additionalResources = 'database';
-
-    private $testPath;
+    protected $additionalResources = ['database', 'translation'];
 
     public function setUp()
     {
         parent::setUp();
 
-        $path = APPLICATION_PATH . '/modules/default/language_custom';
-
-        if (! is_dir($path)) {
-            mkdir($path);
-        }
-
-        $this->testPath = $path;
-
-        $database = new Opus_Translate_Dao();
-        $database->removeAll();
+        $dao = new Opus_Translate_Dao();
+        $dao->removeAll();
     }
 
     public function tearDown()
     {
+        $dao = new Opus_Translate_Dao();
+        $dao->removeAll();
+
         parent::tearDown();
     }
 
-    public function testRunImportCustomTranslation()
+    public function testRun()
     {
-        // Setup file and folder for import test
-        $tmxFile = new Application_Translate_TmxFile();
-        $tmxFile->fromArray([
-            'test_admin_title' => [
-                'de' => 'Deutscher Titel',
-                'en' => 'English Title'
-            ],
-            'test_description' => [
-                'de' => 'Beschreibung',
-                'en' => 'Description'
-            ]
-        ]);
-
-        $filePath = $this->testPath . '/test.tmx';
-
-        $tmxFile->save($filePath);
-
         $database = new Opus_Translate_Dao();
 
-        // Check translations not in database
-        $this->assertNull($database->getTranslation('test_admin_title'));
-        $this->assertNull($database->getTranslation('test_description'));
-
-        // Perform import operation
-        $update = new Application_Update_ImportCustomTranslations();
+        $update = new Application_Update_ImportStaticPages();
         $update->setRemoveFilesEnabled(false);
         $update->setQuietMode(true);
         $update->run();
 
-        // Check file and folder removed
-        $this->assertFileNotExists($filePath);
-        $this->assertFileNotExists($this->testPath);
+        $translations = $database->getAll();
 
-        // Check translations in database
-        $translation = $database->getTranslation('test_admin_title');
+        // nothing should be in database because content matches TMX
+        $this->assertCount(0, $translations);
+    }
 
-        $this->assertEquals([
-            'de' => 'Deutscher Titel',
-            'en' => 'English Title'
-        ], $translation);
+    public function testImportFilesAsKey()
+    {
+        $update = new Application_Update_ImportStaticPages();
+        $update->setQuietMode(true);
+        $update->setRemoveFilesEnabled(false);
 
-        $translation = $database->getTranslation('test_description');
+        $update->importFilesAsKey('contact', 'testkey', 'home');
 
-        $this->assertEquals([
-            'de' => 'Beschreibung',
-            'en' => 'Description'
-        ], $translation);
+        $database = new Opus_Translate_Dao();
+
+        $translations = $database->getAll();
+
+        $this->assertCount(1, $translations);
+        $this->assertArrayHasKey('testkey', $translations);
+    }
+
+    public function testGetFiles()
+    {
+        $update = new Application_Update_ImportStaticPages();
+
+        $files = $update->getFiles('contact');
+
+        $this->assertCount(2, $files);
+        $this->assertContains('contact.en.txt', $files);
+        $this->assertContains('contact.de.txt', $files);
+    }
+
+    public function testGetTranslations()
+    {
+        $update = new Application_Update_ImportStaticPages();
+
+        $translations = $update->getTranslations('contact');
+
+        $this->assertNotNull($translations);
     }
 }

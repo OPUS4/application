@@ -698,7 +698,7 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
      * TODO perform as transaction
      * TODO refactor to be efficient
      */
-    public function updateTranslation($key, $translations, $module, $oldKey = null)
+    public function updateTranslation($key, $translations, $module = null, $oldKey = null)
     {
         $dao = new Opus_Translate_Dao();
         $translate = Zend_Registry::get('Zend_Translate');
@@ -713,12 +713,14 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
             }
         } else {
             $translation = $this->getTranslation($key);
-            if (isset($translation['module']) && $translation['module'] !== $module &&
-                isset($translation['state']) && $translation['state'] === 'added') {
-                $dao->remove($key);
-                $translate->clearCache();
-            } else {
-                throw new \Opus\Translate\Exception("Module of key '$key' cannot be changed.");
+            $changeModule = isset($translation['module']) && $translation['module'] !== $module && ! is_null($module);
+            if ($changeModule) {
+                if (isset($translation['state']) && $translation['state'] === 'added') {
+                    $dao->remove($key);
+                    $translate->clearCache();
+                } else {
+                    throw new \Opus\Translate\Exception("Module of key '$key' cannot be changed.");
+                }
             }
         }
 
@@ -755,5 +757,31 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
         }
 
         return $duplicateKeys;
+    }
+
+    public function setTranslation($key, $values, $module = null)
+    {
+        try {
+            $old = $this->getTranslation($key);
+        } catch (\Opus\Translate\UnknownTranslationKey $excep) {
+            $old = null;
+        }
+
+        if (! is_null($old)) {
+            if (isset($old['translationsTmx'])) {
+                $defaultValues = $old['translationsTmx'];
+            } else {
+                $defaultValues = $old['translations'];
+            }
+
+            if ($defaultValues == $values) {
+                $this->reset($key);
+            } else {
+                $this->updateTranslation($key, $values, $module);
+            }
+        } else {
+            $dao = $this->getDatabase();
+            $dao->setTranslation($key, $values, $module);
+        }
     }
 }

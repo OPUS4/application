@@ -104,7 +104,7 @@
             </tuv>
         </tu>
 
-        <tu tuid="help_content_legal_licence">
+        <tu tuid="help_content_legal_license">
             <tuv xml:lang="en">
                 <seg><![CDATA[Authors can choose which terms of use must be regarded for their publication. These terms are defined
 in a license. This repository supports different licenses, from which you can choose one
@@ -160,8 +160,7 @@ collection or simply safe it directly.<br /><br/>
 
 <b>Note:</b><br/>
 
-In oder to publish your work cookies have to be enabled in your web browser.
-]]></seg>
+In oder to publish your work cookies have to be enabled in your web browser.]]></seg>
             </tuv>
             <tuv xml:lang="de">
                 <seg><![CDATA[Klicken Sie auf der Startseite auf Veröffentlichen.<br/>
@@ -189,8 +188,7 @@ es einer Sammlung (Collection) hinzufügen oder direkt abspeichern.<br/><br/>
 
 <b>Hinweis:</b><br/>
 
-Cookies müssen im Webbrowser eingeschaltet sein, um Dokumente über das Veröffentlichungsformular einstellen zu können.
-]]></seg>
+Cookies müssen im Webbrowser eingeschaltet sein, um Dokumente über das Veröffentlichungsformular einstellen zu können.]]></seg>
             </tuv>
         </tu>
 
@@ -214,8 +212,7 @@ Core is the result of international efforts to reach a collective consensus in d
 objects (in the broadest sense). The Library of Congress (LoC), the Online Cataloging Library Center (OCLC)
 and several national libraries are dealing with Dublin Core in many projects and are close to introduce the
 system respectively.
-</p>
-]]></seg>
+</p>]]></seg>
             </tuv>
             <tuv xml:lang="de">
                 <seg><![CDATA[Metadaten können definiert werden als
@@ -237,8 +234,7 @@ bestehende <a href="http://dublincore.org/" target="_blank">Dublin Core Metedata
 gemeinsamen Konsens bei der Beschreibung elektronischer Objekte (im weitesten Sinne) zu finden.
 Die Library of Congress (LoC), das Online Cataloging Library Center (OCLC) und eine Reihe von
 Nationalbibliotheken setzen sich in Projekten mit Dublin Core auseinander bzw. stehen kurz vor dessen
-Einführung.</p>
-]]></seg>
+Einführung.</p>]]></seg>
             </tuv>
         </tu>
 
@@ -276,8 +272,7 @@ characters that are unknown or that may differ. You cannot use them in front of 
 
 <code>Example 2: <b>licen?e</b> finds <i>licence</i> and <i>license</i>.</code>
 
-<p>You may use double quotes (") to search for phrases.</p>
-]]></seg>
+<p>You may use double quotes (") to search for phrases.</p>]]></seg>
             </tuv>
             <tuv xml:lang="de">
                 <seg><![CDATA[<h4>Boolesche Operatoren <b>AND</b>, <b>OR</b>, <b>NOT</b></h4>
@@ -313,8 +308,7 @@ Beginn eines Suchbegriffes zu verwenden.</p>
 
 <div><code>Beispiel 2: "Ma<b>?</b>er" findet "Mayer", "Maier" oder auch "Mager" und "Maler".</code></div>
 
-<p>Sie können doppelte Anführungszeichen (") benutzen, um eine Phrasensuche durchzuführen.</p>
-]]></seg>
+<p>Sie können doppelte Anführungszeichen (") benutzen, um eine Phrasensuche durchzuführen.</p>]]></seg>
             </tuv>
         </tu>
 

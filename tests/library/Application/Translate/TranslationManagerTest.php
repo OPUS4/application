@@ -980,6 +980,23 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
         }
     }
 
+    public function testUpdateTranslationWithoutChangingModule()
+    {
+        $manager = $this->object;
+
+        $values = [
+            'en' => 'Contact information',
+            'de' => 'Kontaktinformationen'
+        ];
+
+        // key is part of home module
+        $manager->updateTranslation('help_content_contact', $values, 'home');
+
+        $translation = $manager->getTranslation('help_content_contact');
+
+        $this->assertEquals($values, $translation['translations']);
+    }
+
     public function testIsEditedTrue()
     {
         $manager = $this->object;
@@ -1162,5 +1179,42 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
 
         $this->assertNull($dao->getTranslation($addedKey));
         $this->assertNotNull($dao->getTranslation($editedKey));
+    }
+
+    public function testSetTranslation()
+    {
+        $database = new Opus_Translate_Dao();
+
+        $manager = $this->object;
+
+        $key = 'customttestkey';
+        $values = [
+            'en' => 'English',
+            'de' => 'Deutsch'
+        ];
+
+        $manager->setTranslation($key, $values, 'home');
+
+        $translation = $database->getTranslation($key, null, 'home');
+
+        $this->assertEquals($values, $translation);
+    }
+
+    public function testSetTranslationForDefaultKey()
+    {
+        $manager = $this->object;
+
+        $values = [
+            'en' => 'AddEdited',
+            'de' => 'AnlegenEdited'
+        ];
+
+        $manager->setTranslation('default_add', $values);
+
+        $translation = $manager->getTranslation('default_add');
+
+        $this->assertArrayHasKey('state', $translation);
+        $this->assertEquals('edited', $translation['state']);
+        $this->assertEquals($values, $translation['translations']);
     }
 }

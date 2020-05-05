@@ -1,6 +1,4 @@
-#!/usr/bin/env php
-
-<?PHP
+<?php
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -27,17 +25,15 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Scripts
+ * @package     Module_Review
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2019-2020, OPUS 4 development team
+ * @copyright   Copyright (c) 2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-require_once dirname(__FILE__) . '/../common/update.php';
-
 /**
- * Import content files for static pages into database.
+ * Empty class seems to be necessary to setup autoloading for modules.
  */
-
-$update = new Application_Update_ImportStaticPages();
-$update->run();
+class Help_Bootstrap extends Zend_Application_Module_Bootstrap
+{
+}

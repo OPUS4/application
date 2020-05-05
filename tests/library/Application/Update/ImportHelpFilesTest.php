@@ -24,60 +24,31 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @package     Application
+ * @category    Tests
+ * @package     Application_Update
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Application_ModulesTest extends ControllerTestCase
+class Application_Update_ImportHelpFilesTest extends ControllerTestCase
 {
 
-    public function testGetInstance()
+    protected $additionalResources = 'translation';
+
+    public function testRun()
     {
-        $modules = Application_Modules::getInstance();
+        $database = new Opus_Translate_Dao();
+        $database->removeAll();
 
-        $this->assertNotNull($modules);
-        $this->assertInstanceOf('Application_Modules', $modules);
+        $update = new Application_Update_ImportHelpFiles();
+        $update->setRemoveFilesEnabled(false);
+        $update->setQuietMode(true);
+        $update->run();
 
-        $this->assertSame($modules, Application_Modules::getInstance());
-    }
+        $translations = $database->getAll();
 
-    public function testRegisterModule()
-    {
-        Application_Modules::setInstance(null);
-
-        $module = new Application_Configuration_Module('frontdoor');
-
-        $this->assertFalse(Application_Modules::getInstance()->isRegistered('frontdoor'));
-
-        Application_Modules::registerModule($module);
-
-        $this->assertTrue(Application_Modules::getInstance()->isRegistered('frontdoor'));
-
-        Application_Modules::setInstance(null);
-    }
-
-    public function testGetModulesPath()
-    {
-        $path = Application_Modules::getInstance()->getModulesPath();
-
-        $this->assertEquals(APPLICATION_PATH . DIRECTORY_SEPARATOR . 'modules', $path);
-    }
-
-    public function testGetModules()
-    {
-        $modules = Application_Modules::getInstance()->getModules();
-
-        $this->assertCount(18, $modules);
-
-        // some expected modules
-        $expectedModules = ['admin', 'frontdoor', 'default', 'export', 'publish', 'solrsearch'];
-
-        foreach ($expectedModules as $name) {
-            $this->assertArrayHasKey($name, $modules, "Module [$name] is missing");
-            $this->assertInstanceOf('Application_Configuration_Module', $modules[$name]);
-        }
+        // nothing should get stored in the database because default files should match TMX
+        $this->assertCount(0, $translations);
     }
 }
