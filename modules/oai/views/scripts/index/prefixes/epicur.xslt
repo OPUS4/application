@@ -66,7 +66,7 @@
                <xsl:apply-templates select="Identifier[@Type = 'urn']" mode="epicur" />
 
                <resource>
-                    <identifier scheme="url" type="frontpage" role="primary" origin="original">
+                    <identifier scheme="url" role="primary">
                         <xsl:value-of select="@frontdoorurl"/>
                     </identifier>
 
@@ -94,7 +94,7 @@
 
     <xsl:template match="File" mode="epicur">
         <resource>
-            <identifier scheme="url" target="transfer" origin="original">
+            <identifier scheme="url">
                 <xsl:value-of select="@url"/>
             </identifier>
             <format scheme="imt">
