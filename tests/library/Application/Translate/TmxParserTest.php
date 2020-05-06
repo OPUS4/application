@@ -25,52 +25,46 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application Unit Test
- * @package     Application_Update
+ * @package     Application
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2018-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Application_Update_SetStatusOfExistingDoiTest extends ControllerTestCase
+class Application_Translate_TmxParserTest extends ControllerTestCase
 {
 
-    protected $additionalResources = 'database';
-
-    /**
-     * @throws Opus_Model_Exception
-     *
-     * TODO test sets Status of all DOI identifier of published documents to 'registered' (side effect)
-     * TODO this test has failed once (date got modified or compare didn't work) on Travis and worked in the next run
-     *      without changes - Why?
-     */
-    public function testRunDoesNotModifyServerDateModified()
+    public function testParse()
     {
-        $doc = $this->createTestDocument();
-        $doc->setServerState('published');
+        $path = APPLICATION_PATH . '/tests/resources/tmx/testWithTags.tmx';
+        $tmx = file_get_contents($path);
 
-        $doi = new Opus_Identifier();
-        $doi->setType('doi');
-        $doi->setValue('testdoi');
+        $parser = new Application_Translate_TmxParser();
 
-        $doc->addIdentifier($doi);
-        $docId = $doc->store();
+        $translations = $parser->parse($tmx);
 
-        $modified = $doc->getServerDateModified();
-
-        sleep(2);
-
-        $update = new Application_Update_SetStatusOfExistingDoi();
-        $update->setLogger(new MockLogger());
-        $update->setQuietMode(true);
-
-        $update->run();
-
-        $doc = new Opus_Document($docId);
-
-        $message = "{$doc->getServerDateModified()}" . PHP_EOL;
-        $message .= "$modified";
-
-        $this->assertEquals(0, $doc->getServerDateModified()->compare($modified), $message);
-        $this->assertEquals('registered', $doc->getIdentifierDoi(0)->getStatus());
+        $this->assertCount(3, $translations);
+        $this->assertEquals([
+            'testkey_cdata' => [
+                'values' => [
+                    'en' => '<span>Translation</span>',
+                    'de' => '&Uuml;bersetzung'
+                ]
+            ],
+            'testkey' => [
+                'module' => 'admin',
+                'values' => [
+                    'en' => '<span class="highlight" name="title">Translation</span>',
+                    'de' => '&Uuml;bersetzung'
+                ]
+            ],
+            'testkey_whitespace' => [
+                'module' => 'home',
+                'values' => [
+                    'en' => "line1\nline2\n  line3",
+                    'de' => "Zeile1\nZeile2\n  Zeile3"
+                ]
+            ]
+        ], $translations);
     }
 }

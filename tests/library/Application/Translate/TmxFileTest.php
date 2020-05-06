@@ -258,4 +258,31 @@ class Application_Translate_TmxFileTest extends ControllerTestCase
 
         $this->assertFalse($tmxFile->hasTranslation('unknown_key', 'ru'));
     }
+
+    public function testLoadTranslationsWithTagsAndEntities()
+    {
+        $tmxFile = new Application_Translate_TmxFile();
+
+        $file = APPLICATION_PATH . '/tests/resources/tmx/testWithTags.tmx';
+
+        $tmxFile->load($file);
+
+        $translations = $tmxFile->toArray();
+
+        $this->assertCount(3, $translations);
+        $this->assertEquals([
+            'testkey_cdata' => [
+                'en' => '<span>Translation</span>',
+                'de' => '&Uuml;bersetzung'
+            ],
+            'testkey' => [
+                'en' => '<span class="highlight" name="title">Translation</span>',
+                'de' => '&Uuml;bersetzung'
+            ],
+            'testkey_whitespace' => [
+                'en' => "line1\nline2\n  line3",
+                'de' => "Zeile1\nZeile2\n  Zeile3"
+            ]
+        ], $translations);
+    }
 }

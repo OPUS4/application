@@ -46,7 +46,6 @@
  * TODO functions to add/remove/update translations directly in a more direct way (not just passing in arrays)
  * TODO detect duplicate keys in file
  * TODO load should not add to existing keys - object should not represent multiple files
- * TODO use creationtool on entries to store module name
  * TODO needs to be able to read/write to/from TranslationManager array with additional information
  * TODO maybe a factory class for creating TMX document from TranslationManager output
  *
@@ -132,16 +131,42 @@ class Application_Translate_TmxFile
      * @param $fileName full path of file to load
      * @return bool true on success or false on failure
      */
-    public function load($fileName)
+    public function load($fileName, $addCdataWrapper = true)
+    {
+        $tmx = file_get_contents($fileName);
+
+        if ($addCdataWrapper) {
+            $tmx = preg_replace('/<seg>(?!<!\[CDATA\[)/i', '<seg><![CDATA[', $tmx);
+            $tmx = preg_replace('/(?<!]]>)<\/seg>/i', ']]></seg>', $tmx);
+        }
+
+        $result = $this->loadWithDom($tmx);
+        return $result;
+    }
+
+    protected function loadWithDom($tmx)
     {
         $dom = new DOMDocument();
         $dom->substituteEntities = false;
-        $result = @$dom->load($fileName); // supress warning since return value is checked
+        $result = @$dom->loadXML($tmx); // supress warning since return value is checked
         if ($result) {
             $newData = $this->domToArray($dom);
             $this->data = array_replace_recursive($this->data, $newData);
         }
         return $result;
+    }
+
+    protected function loadWithParser($tmx)
+    {
+        $parser = new Application_Translate_TmxParser();
+        $translations = $parser->parse($tmx);
+
+        /* foreach ($translations as $key => $data) {
+            // TODO implement
+
+        }*/
+
+        return true;
     }
 
     /**
