@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tmx SYSTEM "http://www.gala-global.org/oscarStandards/tmx/tmx14.dtd">
+<tmx version="1.4">
+    <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool"></header>
+    <body>
+        <tu tuid="testkey_cdata">
+          <tuv xml:lang="en">
+            <seg><![CDATA[<span>Translation</span>]]></seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg><![CDATA[&Uuml;bersetzung]]></seg>
+          </tuv>
+        </tu>
+
+        <tu tuid="testkey" creationtool="admin">
+          <tuv xml:lang="en">
+            <seg><span class="highlight" name="title">Translation</span></seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>&Uuml;bersetzung</seg>
+          </tuv>
+        </tu>
+
+        <tu tuid="testkey_whitespace" creationtool="home">
+          <tuv xml:lang="en">
+            <seg>line1
+line2
+  line3</seg>
+
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Zeile1
+Zeile2
+  Zeile3</seg>
+          </tuv>
+        </tu>
+
+    </body>
+</tmx>
