@@ -161,9 +161,10 @@ class Application_Translate_TmxFile
         $parser = new Application_Translate_TmxParser();
         $translations = $parser->parse($tmx);
 
-        foreach ($translations as $key => $data) {
+        /* foreach ($translations as $key => $data) {
+            // TODO implement
 
-        }
+        }*/
 
         return true;
     }
