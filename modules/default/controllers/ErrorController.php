@@ -59,6 +59,10 @@ class ErrorController extends Application_Controller_Action
         $config = $this->getConfig();
         $logger = $this->getLogger();
 
+        // log request URI if error occurs
+        $uri = Zend_Controller_Front::getInstance()->getRequest()->getRequestUri();
+        $logger->err("Request '$uri'");
+
         $errors = $this->_getParam('error_handler');
 
         if (isset($errors)) {
