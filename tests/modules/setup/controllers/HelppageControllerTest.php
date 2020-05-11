@@ -36,7 +36,7 @@
  *
  * @covers Setup_HelpPageController
  */
-class Setup_HelppageControllerTest extends SetupControllerTestCase
+class Setup_HelppageControllerTest extends ControllerTestCase
 {
     /**
      * original file modes, needed for restoring after test
