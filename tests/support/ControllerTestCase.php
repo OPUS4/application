@@ -28,7 +28,7 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @author      Thoralf Klein <thoralf.klein@zib.de>
  * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -229,6 +229,13 @@ class ControllerTestCase extends TestCase
         $config = Zend_Registry::get('Zend_Config');
         if (isset($config->security) && filter_var($config->security, FILTER_VALIDATE_BOOLEAN)) {
             Application_Security_AclProvider::init();
+
+            // make sure ACLs are not cached in action helper TODO find better solution
+            try {
+                $accessControl = Zend_Controller_Action_HelperBroker::getExistingHelper('accessControl');
+                $accessControl->setAcl(null);
+            } catch (Zend_Controller_Action_Exception $excep) {
+            }
         }
     }
 
@@ -241,6 +248,13 @@ class ControllerTestCase extends TestCase
         $realm = Opus_Security_Realm::getInstance();
         $realm->setUser(null);
         $realm->setIp(null);
+
+        // make sure ACLs are not cached in action helper TODO find better solution
+        try {
+            $accessControl = Zend_Controller_Action_HelperBroker::getExistingHelper('accessControl');
+            $accessControl->setAcl(null);
+        } catch (Zend_Controller_Action_Exception $excep) {
+        }
     }
 
     /**
