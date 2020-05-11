@@ -81,7 +81,7 @@ $options = $application->mergeOptions($application->getOptions(), [
 $application->setOptions($options);
 
 // Bootstrapping application
-$application->bootstrap();
+$application->bootstrap('Backend');
 
 // Bootstrapping modules so classes can be found
 $application->getBootstrap()->getPluginResource('modules')->init();

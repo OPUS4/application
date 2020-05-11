@@ -67,8 +67,6 @@ class Application_Update_ImportStaticPages extends Application_Update_PluginAbst
         } else {
             $this->log($colors->yellow('No text files for \'imprint\' found.'));
         }
-
-        $this->importFilesAsKey('unknown', 'help_content_unknown', 'home');
     }
 
     /**
