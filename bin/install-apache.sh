@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-. /home/ramram/opus4/bin/parameter.conf
 #
 # LICENCE
 # This code is free software: you can redistribute it and/or modify
@@ -37,6 +36,10 @@ set -e
 # TODO determine dynamically or make configurable?
 APACHE_SITE_DIR='/etc/apache2/sites-available'
 
+# Check for auto installation
+if [[ $INSTALLAPACHE -eq 1 ]] ; then
+. /home/ramram/opus4/bin/parameter.conf
+fi
 
 SCRIPT_NAME="`basename "$0"`"
 SCRIPT_NAME_FULL="`readlink -f "$0"`"

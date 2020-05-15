@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-. /home/ramram/opus4/bin/parameter.conf
 #
 # LICENCE
 # This code is free software: you can redistribute it and/or modify
@@ -26,23 +25,34 @@
 # Parameters:
 # -a <filename> : Sets name for Apache configuration file
 # -c <filename> : Sets name for OPUS configuration file (used for testing)
-#
+# -d <1>        : Set value 1 to execute the Auto installation
 
 set -e
 
 # Parse command line options
-
-while getopts ":a:c:" opt; do
+while getopts ":a:c:d:" opt; do
   case $opt in
     a) APACHE_CONF="$OPTARG"
     ;;
     c) OPUS_CONF="$OPTARG"
     ;;
+    d) AUTOINSTALL="$OPTARG"
+    ;;
+
   esac
 done
 
-# Check for sudo
+#Check for Autoinstallation
+if [[ $AUTOINSTALL -eq 1 ]] ; then
+   export INSTALLAPACHE=1
+   export INSTALLDATABASE=1
+   . /home/ramram/opus4/bin/parameter.conf
+else
+   echo "invalid argument for auto installation"
+   exit 1
+fi
 
+# Check for sudo
 if [[ $EUID -eq 0 ]]; then
     SUDO_ENABLED=1
 else

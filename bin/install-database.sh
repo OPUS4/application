@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-. /home/ramram/opus4/bin/parameter.conf
 #
 # LICENCE
 # This code is free software: you can redistribute it and/or modify
@@ -31,7 +30,6 @@
 set -e
 
 MYSQL_CLIENT='/usr/bin/mysql'
-
 SCRIPT_NAME="`basename "$0"`"
 SCRIPT_NAME_FULL="`readlink -f "$0"`"
 SCRIPT_PATH="`dirname "$SCRIPT_NAME_FULL"`"
@@ -45,6 +43,11 @@ while getopts ":c:" opt; do
     ;;
   esac
 done
+
+# Check for auto installation
+if [[ $INSTALLDATABASE -eq 1 ]] ; then
+. /home/ramram/opus4/bin/parameter.conf
+fi
 
 OPUS_CONF="${OPUS_CONF:-config.ini}"
 OPUS_CONSOLE_CONF="${OPUS_CONSOLE_CONF:-console.ini}"
