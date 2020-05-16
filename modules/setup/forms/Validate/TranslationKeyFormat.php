@@ -1,6 +1,5 @@
 <?php
-
-/**
+/*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -26,25 +25,28 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_Setup
- * @author      Edouard Simon (edouard.simon@zib.de)
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @package     Setup_Form_Validate
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
- * SubForm used by language controller for editing single tranlsation key
+ * Checks format of translation keys.
+ *
+ * Format: character, letters and underline, starting with a character
  */
-class Setup_Form_LanguageKey extends Zend_Form_SubForm
+class Setup_Form_Validate_TranslationKeyFormat extends Zend_Validate_Regex
 {
 
-    public function __construct($key, $options = null)
-    {
-        parent::__construct($options);
+    /**
+     * /^[A-Za-z0-9@._-]+$/
+     */
+    const PATTERN = '/^[A-Za-z][A-Za-z0-9_]*$/';
 
-        $this->addElement('textarea', 'en', ['label' => 'en']);
-        $this->addElement('textarea', 'de', ['label' => 'de']);
-        $this->addDisplayGroup(['de', 'en'], $key, ['legend' => $key]);
+    public function __construct()
+    {
+        parent::__construct(self::PATTERN);
+        $this->setMessage('setup_translation_error_key_format_not_match', self::NOT_MATCH);
     }
 }

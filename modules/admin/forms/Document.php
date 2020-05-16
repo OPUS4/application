@@ -99,15 +99,13 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm
     {
         parent::init();
 
-        $this->setDecorators(
-            [
+        $this->setDecorators([
             'FormElements',
             [
                 ['wrapperDivClose' => 'HtmlTag'],
                 ['tag' => 'div', 'closeOnly' => 'true', 'placement' => 'append']
             ]
-            ]
-        );
+        ]);
 
         $this->addSubForm(new Admin_Form_ActionBox($this), 'ActionBox');
 
@@ -135,10 +133,10 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm
                 ),
                 [
                 'columns' => [
-                [],
-                ['label' => 'Opus_Model_Dependent_Link_DocumentSeries_Number'],
-                ['label' => 'Opus_Model_Dependent_Link_DocumentSeries_SortOrder']
-                    ]]
+                    [],
+                    ['label' => 'Opus_Model_Dependent_Link_DocumentSeries_Number'],
+                    ['label' => 'Opus_Model_Dependent_Link_DocumentSeries_SortOrder']
+                ]]
             ),
             'Series'
         );

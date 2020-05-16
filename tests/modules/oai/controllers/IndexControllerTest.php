@@ -1385,8 +1385,8 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $xpath = $this->prepareXpathFromResultString($response->getBody());
 
         // Regression test for OPUSVIER-2444 - url encoding of transfer files.
-        $elements = $xpath->query('//epicur:resource/epicur:identifier[@target="transfer"]/text()');
-        $this->assertEquals(2, $elements->length, "Unexpected identifier count");
+        $elements = $xpath->query('//epicur:resource/epicur:identifier[@scheme="url"]/text()');
+        $this->assertEquals(3, $elements->length, "Unexpected identifier count");
 
         $fetchedNames = [];
         foreach ($elements as $element) {

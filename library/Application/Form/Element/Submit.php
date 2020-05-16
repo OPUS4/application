@@ -57,13 +57,11 @@ class Application_Form_Element_Submit extends Zend_Form_Element_Submit
     public function loadDefaultDecorators()
     {
         if (! $this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
-            $this->setDecorators(
-                [
+            $this->setDecorators([
                 'ViewHelper',
                 'ElementHtmlTag',
                 [['dataWrapper' => 'HtmlTagWithId'], ['tag' => 'div', 'class' => 'data-wrapper']]
-                ]
-            );
+            ]);
         }
         return $this;
     }

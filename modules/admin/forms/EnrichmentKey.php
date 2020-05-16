@@ -134,12 +134,14 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
         );
         $this->addElement($element);
 
+        /* TODO OPUSVIER-3433 translation of enrichments directly in this form
         $translations = new Admin_Form_TranslationSet();
 
         $translations->addKey('TranslationLabel');
         $translations->addKey('TranslationDescription');
 
         $this->addSubForm($translations, 'Translations');
+         */
     }
 
     /**

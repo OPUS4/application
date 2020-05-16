@@ -129,12 +129,10 @@ Dokument an den Hochschulschriftenserver übertragen.
 <p><b>JANE DOE</b> of <b>INSTITUTE</b> is responsible for editorial and database maintenance as defined by
 § 55 paragraph 2 RStV (Germany). (See <a href="contact">Contact</a>)</p>
 
-<p>The care of the hardware and software of this server is up to <b>INSTITUTE</b>.</p>
-                ]]></seg>
+<p>The care of the hardware and software of this server is up to <b>INSTITUTE</b>.</p>]]></seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg><![CDATA[
-<p>+++++++++++++++      MUSTER      +++++++++++++++</p>
+                <seg><![CDATA[<p>+++++++++++++++      MUSTER      +++++++++++++++</p>
 
 <p><b>MUSTERINSTITUT</b>
 <br /><b>MUSTERSTRAßE 1</b>
@@ -154,8 +152,7 @@ Dokument an den Hochschulschriftenserver übertragen.
 Personen zeichnet sich i.S.d. § 55 Abs. 2 RStV <b>MUSTERMENSCH</b> von <b>MUSTERMENSCH</b> verantwortlich.
 (Siehe <a href="contact">Kontakt</a>)</p>
 
-<p>Die Betreuung der Hard- und Software dieses Servers obliegt <b>MUSTERINSTITUT</b>.</p>
-                ]]></seg>
+<p>Die Betreuung der Hard- und Software dieses Servers obliegt <b>MUSTERINSTITUT</b>.</p>]]></seg>
             </tuv>
         </tu>
 

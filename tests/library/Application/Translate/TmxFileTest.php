@@ -27,9 +27,8 @@
  * @category    Application Unit Test
  * @package     Application
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 class Application_Translate_TmxFileTest extends ControllerTestCase
@@ -157,6 +156,26 @@ class Application_Translate_TmxFileTest extends ControllerTestCase
         ], $tmxFile->toArray());
     }
 
+    public function testSetTranslationWithModule()
+    {
+        $tmxFile = new Application_Translate_TmxFile();
+
+        $tmxFile->setTranslation('translationKey', 'en', 'Translation');
+
+        $this->assertNull($tmxFile->getModuleForKey('translationKey'));
+
+        $tmxFile->setTranslation('translationKey', 'de', 'Übersetzung', 'default');
+
+        $this->assertEquals([
+            'translationKey' => [
+                'en' => 'Translation',
+                'de' => 'Übersetzung'
+            ]
+        ], $tmxFile->toArray());
+
+        $this->assertEquals('default', $tmxFile->getModuleForKey('translationKey'));
+    }
+
     public function testFindTranslation()
     {
         $this->markTestIncomplete('not implemented yet');
@@ -238,5 +257,32 @@ class Application_Translate_TmxFileTest extends ControllerTestCase
         $tmxFile->setTranslation('test_key', 'en', 'test value');
 
         $this->assertFalse($tmxFile->hasTranslation('unknown_key', 'ru'));
+    }
+
+    public function testLoadTranslationsWithTagsAndEntities()
+    {
+        $tmxFile = new Application_Translate_TmxFile();
+
+        $file = APPLICATION_PATH . '/tests/resources/tmx/testWithTags.tmx';
+
+        $tmxFile->load($file);
+
+        $translations = $tmxFile->toArray();
+
+        $this->assertCount(3, $translations);
+        $this->assertEquals([
+            'testkey_cdata' => [
+                'en' => '<span>Translation</span>',
+                'de' => '&Uuml;bersetzung'
+            ],
+            'testkey' => [
+                'en' => '<span class="highlight" name="title">Translation</span>',
+                'de' => '&Uuml;bersetzung'
+            ],
+            'testkey_whitespace' => [
+                'en' => "line1\nline2\n  line3",
+                'de' => "Zeile1\nZeile2\n  Zeile3"
+            ]
+        ], $translations);
     }
 }

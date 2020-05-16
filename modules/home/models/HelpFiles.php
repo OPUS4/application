@@ -59,7 +59,7 @@ class Home_Model_HelpFiles extends Application_Translate_Help
     }
 
     /**
-     * Returns the contant of a help file.
+     * Returns the content of a help file.
      * @param string $file File basename
      * @return string Content of file
      */

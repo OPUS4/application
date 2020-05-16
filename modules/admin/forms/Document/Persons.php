@@ -72,8 +72,11 @@ class Admin_Form_Document_Persons extends Admin_Form_AbstractDocumentSubForm
         $this->addElement(
             'submit',
             'Sort',
-            ['label' => 'admin_button_sort', 'decorators' => [],
-            'disableLoadDefaultDecorators' => true]
+            [
+                'label' => 'admin_button_sort',
+                'decorators' => [],
+                'disableLoadDefaultDecorators' => true
+            ]
         );
 
         $this->getDecorator('FieldsetWithButtons')->setLegendButtons(['Sort']);

@@ -106,7 +106,7 @@ class Application_View_Helper_Breadcrumbs extends Zend_View_Helper_Navigation_Br
         $html = '<div class="breadcrumbsContainer"><div class="wrapper">';
 
         if (! is_null($helpPage)) {
-            $title = $this->view->translate('page-help-link-title');
+            $title = $this->view->translate('page_help_link_title');
 
             $iconUrl = $this->view->layoutPath() . '/img/theme/admin/ic_help.png';
             $pageUrl = $helpPage; // TODO evtl. baseUrl verwenden und helpUrl durch helpUri ersetzen

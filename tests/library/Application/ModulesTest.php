@@ -70,7 +70,7 @@ class Application_ModulesTest extends ControllerTestCase
     {
         $modules = Application_Modules::getInstance()->getModules();
 
-        $this->assertCount(17, $modules);
+        $this->assertCount(18, $modules);
 
         // some expected modules
         $expectedModules = ['admin', 'frontdoor', 'default', 'export', 'publish', 'solrsearch'];

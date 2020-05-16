@@ -16,11 +16,11 @@
     "zendframework/zendframework1": "1.12.*",
     "jpgraph/jpgraph": "dev-master",
     "solarium/solarium": "3.8.*",
-    "opus4-repo/opus4-common": "dev-master",
-    "opus4-repo/framework": "dev-master",
-    "opus4-repo/search": "dev-master",
-    "opus4-repo/opus4-bibtex": "*",
-    "components/jquery": "1.12.*",
+    "opus4-repo/opus4-common": "4.7-RC",
+    "opus4-repo/framework": "4.7-RC",
+    "opus4-repo/search": "4.7-RC",
+    "opus4-repo/opus4-bibtex": "0.1-beta",
+    "components/jquery": "3.4.*",
     "components/jqueryui": "1.12.*",
     "robloach/component-installer": "*"
   },
@@ -45,7 +45,27 @@
     "component-dir": "public/assets"
   },
   "scripts": {
+    "analysis": [
+      "Composer\\Config::disableProcessTimeout",
+      "@prepare",
+      "@cs-analysis",
+      "@phpmd",
+      "@phpcpd"
+    ],
+    "prepare": "mkdir -p build",
+    "test-coverage": [
+      "Composer\\Config::disableProcessTimeout",
+      "phpunit --log-junit build/phpunit.xml --colors=always --coverage-html build/ --coverage-clover build/clover.xml --configuration tests/phpunit.xml"
+    ],
+    "test": [
+      "Composer\\Config::disableProcessTimeout",
+      "phpunit --log-junit build/phpunit.xml --colors=always --configuration tests/phpunit.xml"
+    ],
     "cs-check": "phpcs -n --extensions=php,phtml,css,js,inc",
-    "cs-fix": "phpcbf --extensions=php,phtml,css,js,inc"
+    "cs-fix": "phpcbf --extensions=php,phtml,css,js,inc",
+    "cs-analysis": "phpcs -n --report=checkstyle --report-file=build/checkstyle.xml",
+    "phpmd": "phpmd library xml cleancode,unusedcode,design,naming --reportfile build/phpmd.xml --ignore-violations-on-exit",
+    "phploc": "phploc --log-csv build/phploc.csv src",
+    "phpcpd": "phpcpd . --min-lines 3 --min-tokens 30 --log-pmd build/pmd-cpd.xml --progress || true"
   }
 }

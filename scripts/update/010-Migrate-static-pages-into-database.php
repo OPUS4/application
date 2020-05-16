@@ -29,23 +29,15 @@
  * @category    Application
  * @package     Scripts
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2019-2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 require_once dirname(__FILE__) . '/../common/update.php';
 
 /**
- * Import content files for static pages into database
- *
- * TODO import contact.de.txt and contact.en.txt as 'home_index_contact_content'
- * TODO import imprint.de.txt and imprint.de.txt as 'home_index_imprint_content'
+ * Import content files for static pages into database.
  */
 
-/* code for loading content from file TODO use for update script
-$fileName = "{$this->_pageName}.$language.txt";
-$filePath = $this->_contentBasepath . DIRECTORY_SEPARATOR . $fileName;
-$this->addContentSource($filePath);
-$resultArray[$language]['file']['filename'] = $fileName;
-$resultArray[$language]['file']['contents'] = $this->getContent($filePath);
-*/
+$update = new Application_Update_ImportStaticPages();
+$update->run();
