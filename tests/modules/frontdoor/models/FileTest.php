@@ -322,7 +322,7 @@ class Frontdoor_Model_FileTest extends ControllerTestCase
      */
     public function testAccessDeniedForEmbargoedDocument()
     {
-        $file = $this->createTestFile('test.pdf');
+        $file = $this->createOpusTestFile('test.pdf');
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
         $doc->addFile($file);
@@ -345,7 +345,7 @@ class Frontdoor_Model_FileTest extends ControllerTestCase
     public function testAccessForEmbargoedDocumentForDocumentsAdmin()
     {
         $this->loginUser('security8', 'security8pwd');
-        $file = $this->createTestFile('test.pdf');
+        $file = $this->createOpusTestFile('test.pdf');
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
         $doc->addFile($file);
@@ -370,7 +370,7 @@ class Frontdoor_Model_FileTest extends ControllerTestCase
     public function testAccessForEmbargoedDocumentForAdmin()
     {
         $this->loginUser('admin', 'adminadmin');
-        $file = $this->createTestFile('test.pdf');
+        $file = $this->createOpusTestFile('test.pdf');
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
         $doc->addFile($file);
@@ -390,7 +390,7 @@ class Frontdoor_Model_FileTest extends ControllerTestCase
     public function testGetFileObjectForUnpublishedFileForDocumentsAdmin()
     {
         $this->loginUser('security8', 'security8pwd');
-        $file = $this->createTestFile('test.pdf');
+        $file = $this->createOpusTestFile('test.pdf');
         $doc = $this->createTestDocument();
         $doc->setServerState('unpublished');
         $doc->addFile($file);

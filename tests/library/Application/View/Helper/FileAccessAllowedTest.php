@@ -46,7 +46,7 @@ class Application_View_Helper_FileAccessAllowedTest extends ControllerTestCase
 
         $this->assertFalse($helper->fileAccessAllowed(null));
 
-        $file = $this->createTestFile('accesstest.txt');
+        $file = $this->createOpusTestFile('accesstest.txt');
 
         $this->assertFalse($helper->fileAccessAllowed($file));
 

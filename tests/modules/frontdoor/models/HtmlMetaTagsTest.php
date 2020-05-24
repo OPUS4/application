@@ -819,7 +819,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
         fwrite($fp, $header);
         fclose($fp);
 
-        $file = $this->createTestFile($fileName, $filepath);
+        $file = $this->createOpusTestFile($fileName, $filepath);
         return $file;
     }
 

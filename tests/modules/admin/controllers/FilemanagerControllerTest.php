@@ -322,7 +322,7 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase
     public function testFileUploadDate()
     {
         $this->useGerman();
-        $file = $this->createTestFile('foo.pdf');
+        $file = $this->createOpusTestFile('foo.pdf');
         $file->setVisibleInOai(false);
 
         $doc = $this->createTestDocument();

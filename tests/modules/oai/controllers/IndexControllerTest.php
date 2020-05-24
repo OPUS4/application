@@ -1263,13 +1263,13 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
         $doc->setEmbargoDate($tomorrow);
-        $file = $this->createTestFile('volltext.pdf');
+        $file = $this->createOpusTestFile('volltext.pdf');
         $doc->addFile($file);
         $docId = $doc->store();
 
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
-        $file = $this->createTestFile('volltext2.pdf');
+        $file = $this->createOpusTestFile('volltext2.pdf');
         $doc->addFile($file);
         $visibleId = $doc->store();
 

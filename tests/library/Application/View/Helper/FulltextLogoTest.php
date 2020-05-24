@@ -76,7 +76,7 @@ class Application_View_Helper_FulltextLogoTest extends ControllerTestCase
     {
         $doc = $this->createTestDocument();
 
-        $file = $this->createTestFile('article.pdf');
+        $file = $this->createOpusTestFile('article.pdf');
         $doc->addFile($file);
 
         $doc = new Opus_Document($doc->store());
@@ -92,7 +92,7 @@ class Application_View_Helper_FulltextLogoTest extends ControllerTestCase
         $openAccess = $openAccessRole->getCollectionByOaiSubset('open_access');
         $doc->addCollection($openAccess);
 
-        $file = $this->createTestFile('article.pdf');
+        $file = $this->createOpusTestFile('article.pdf');
         $doc->addFile($file);
 
         $doc = new Opus_Document($doc->store());

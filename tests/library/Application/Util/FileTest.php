@@ -38,8 +38,8 @@ class Application_Util_FileTest extends ControllerTestCase
 
     public function testCopyAndFilter()
     {
-        $source = $this->createTestFile('source.txt');
-        $dest = $this->createTestFile('test.txt');
+        $source = $this->createOpusTestFile('source.txt');
+        $dest = $this->createOpusTestFile('test.txt');
 
         $sourcePath = $source->getTempFile();
         $destPath = $dest->getTempFile();
@@ -77,7 +77,7 @@ TEXT;
     public function testCopyAndFilterMissingSource()
     {
         $source = APPLICATION_PATH . '/tests/resources/doesnotexist.txt';
-        $dest = $this->createTestFile('dest.txt');
+        $dest = $this->createOpusTestFile('dest.txt');
 
         $properties = ['@user@', 'admin'];
 
