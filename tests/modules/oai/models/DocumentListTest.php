@@ -72,7 +72,7 @@ class Oai_Model_DocumentListTest extends ControllerTestCase
     {
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
-        $file = $this->createTestFile('article.txt');
+        $file = $this->createOpusTestFile('article.txt');
         $file->setVisibleInOai(1);
         $doc->addFile($file);
         $this->docId = $doc->store();
@@ -186,14 +186,14 @@ class Oai_Model_DocumentListTest extends ControllerTestCase
     {
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
-        $file = $this->createTestFile('article.txt');
+        $file = $this->createOpusTestFile('article.txt');
         $file->setVisibleInOai(1);
         $doc->addFile($file);
         $docIdIncluded = $doc->store();
 
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
-        $file = $this->createTestFile('fulltext.txt');
+        $file = $this->createOpusTestFile('fulltext.txt');
         $file->setVisibleInOai(0);
         $doc->addFile($file);
         $docIdNotIncluded = $doc->store();

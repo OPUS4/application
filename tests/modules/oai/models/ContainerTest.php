@@ -166,7 +166,7 @@ class Oai_Model_ContainerTest extends ControllerTestCase
     public function testDocumentWithRestrictedFile()
     {
         $filename = 'foo.pdf';
-        $file = $this->createTestFile($filename);
+        $file = $this->createOpusTestFile($filename);
 
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
@@ -209,7 +209,7 @@ class Oai_Model_ContainerTest extends ControllerTestCase
     public function testDocumentWithSingleUnrestrictedFile()
     {
         $filename = 'test.txt';
-        $file = $this->createTestFile($filename);
+        $file = $this->createOpusTestFile($filename);
 
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
@@ -239,14 +239,14 @@ class Oai_Model_ContainerTest extends ControllerTestCase
         $filename1 = 'foo.pdf';
         $filename2 = 'bar.pdf';
 
-        $file1 = $this->createTestFile($filename1);
+        $file1 = $this->createOpusTestFile($filename1);
         $file1->setVisibleInOai(true);
 
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
         $doc->addFile($file1);
 
-        $file2 = $this->createTestFile($filename2);
+        $file2 = $this->createOpusTestFile($filename2);
         $file2->setVisibleInOai(true);
         $doc->addFile($file2);
         $doc->store();
@@ -273,14 +273,14 @@ class Oai_Model_ContainerTest extends ControllerTestCase
         $filename1 = 'test.pdf';
         $filename2 = 'foo.html';
 
-        $file1 = $this->createTestFile($filename1);
+        $file1 = $this->createOpusTestFile($filename1);
         $file1->setVisibleInOai(true);
 
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
         $doc->addFile($file1);
 
-        $file2 = $this->createTestFile($filename2);
+        $file2 = $this->createOpusTestFile($filename2);
         $file2->setVisibleInOai(true);
         $doc->addFile($file2);
         $doc->store();
@@ -300,7 +300,7 @@ class Oai_Model_ContainerTest extends ControllerTestCase
     {
         $filename1 = 'test.pdf';
 
-        $file = $this->createTestFile($filename1);
+        $file = $this->createOpusTestFile($filename1);
 
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
@@ -419,7 +419,7 @@ class Oai_Model_ContainerTest extends ControllerTestCase
         $doc->setEmbargoDate($date);
 
         // add a file visible in OAI
-        $file = $this->createTestFile('foo.pdf');
+        $file = $this->createOpusTestFile('foo.pdf');
         $file->setVisibleInOai(true);
         $doc->addFile($file);
 

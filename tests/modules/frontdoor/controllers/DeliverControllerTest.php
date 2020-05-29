@@ -104,7 +104,7 @@ class Frontdoor_DeliverControllerTest extends ControllerTestCase
     public function testHttpResponseCodeSetForUnpublished()
     {
         $doc = $this->createTestDocument();
-        $file = $this->createTestFile('test.pdf');
+        $file = $this->createOpusTestFile('test.pdf');
         $doc->addFile($file);
         $doc->setServerState('unpublished');
         $docId = $doc->store();
@@ -118,7 +118,7 @@ class Frontdoor_DeliverControllerTest extends ControllerTestCase
     public function testHttpResponseCodeSetForProtectedFile()
     {
         $doc = $this->createTestDocument();
-        $file = $this->createTestFile('test.pdf');
+        $file = $this->createOpusTestFile('test.pdf');
         $file->setVisibleInFrontdoor(0);
         $doc->addFile($file);
         $doc->setServerState('published');
