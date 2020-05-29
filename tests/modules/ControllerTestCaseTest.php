@@ -412,4 +412,21 @@ class ControllerTestCaseTest extends ControllerTestCase
         $this->cleanupTestFolders();
         $this->assertFileNotExists($dir);
     }
+
+    public function testCopyFiles()
+    {
+        $folder = $this->createTestFolder();
+
+        $helpFiles = new Home_Model_HelpFiles();
+        $helpPath = $helpFiles->getHelpPath();
+
+        $this->copyFiles($helpPath, $folder);
+
+        $files = scandir($folder);
+
+        $this->assertCount(21, $files);
+        $this->assertContains('help.ini', $files);
+        $this->assertContains('imprint.de.txt', $files);
+        $this->assertContains('metadata.en.txt', $files);
+    }
 }

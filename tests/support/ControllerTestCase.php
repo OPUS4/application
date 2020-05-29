@@ -822,6 +822,29 @@ class ControllerTestCase extends TestCase
     }
 
     /**
+     * @param $src
+     * @param $dest
+     * @throws Exception
+     *
+     * TODO recursive copying of subdirectories?
+     */
+    protected function copyFiles($src, $dest)
+    {
+        if (! is_dir($src) || ! is_dir($dest)) {
+            throw new Exception('Parameters need to be folders.');
+        }
+
+        $dest = rtrim($dest, '/') . '/';
+
+        $iterator = new RecursiveDirectoryIterator($src, FilesystemIterator::SKIP_DOTS);
+        foreach ($iterator as $file) {
+            if ($file->isFile()) {
+                copy($file->getPathname(), $dest . $file->getFilename());
+            }
+        }
+    }
+
+    /**
      * Deletes entire test folders.
      *
      * Normally does not delete files outside of configured workspace folder.
