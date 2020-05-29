@@ -584,8 +584,10 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
 
     public function clearCache()
     {
-        $translate = Zend_Registry::get('Zend_Translate');
-        $translate->clearCache();
+        if (Zend_Registry::isRegistered('Zend_Translate')) {
+            $translate = Zend_Registry::get('Zend_Translate');
+            $translate->clearCache();
+        }
     }
 
     /**
@@ -701,13 +703,12 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
     public function updateTranslation($key, $translations, $module = null, $oldKey = null)
     {
         $dao = new Opus_Translate_Dao();
-        $translate = Zend_Registry::get('Zend_Translate');
 
         if ($key !== $oldKey && ! is_null($oldKey)) {
             $translation = $this->getTranslation($oldKey);
             if (isset($translation['state']) && $translation['state'] === 'added') {
                 $dao->remove($oldKey);
-                $translate->clearCache();
+                $this->clearCache();
             } else {
                 throw new \Opus\Translate\Exception("Name of key '$oldKey' cannot be changed.");
             }
@@ -717,7 +718,7 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
             if ($changeModule) {
                 if (isset($translation['state']) && $translation['state'] === 'added') {
                     $dao->remove($key);
-                    $translate->clearCache();
+                    $this->clearCache();
                 } else {
                     throw new \Opus\Translate\Exception("Module of key '$key' cannot be changed.");
                 }

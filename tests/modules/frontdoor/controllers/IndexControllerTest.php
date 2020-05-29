@@ -1059,15 +1059,15 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
 
-        $file = $this->createTestFile('file1.txt');
+        $file = $this->createOpusTestFile('file1.txt');
         $file->setSortOrder(1);
         $doc->addFile($file);
 
-        $file = $this->createTestFile('file2.txt');
+        $file = $this->createOpusTestFile('file2.txt');
         $file->setSortOrder(2);
         $doc->addFile($file);
 
-        $file = $this->createTestFile('file10.txt');
+        $file = $this->createOpusTestFile('file10.txt');
         $file->setSortOrder(10);
         $doc->addFile($file);
 
@@ -1094,19 +1094,19 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     {
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
-        $file = $this->createTestFile('eng');
+        $file = $this->createOpusTestFile('eng');
         $file->setLanguage('eng');
         $doc->addFile($file);
-        $file = $this->createTestFile('deu');
+        $file = $this->createOpusTestFile('deu');
         $file->setLanguage('deu');
         $doc->addFile($file);
-        $file = $this->createTestFile('spa');
+        $file = $this->createOpusTestFile('spa');
         $file->setLanguage('spa');
         $doc->addFile($file);
-        $file = $this->createTestFile('fra');
+        $file = $this->createOpusTestFile('fra');
         $file->setLanguage('fra');
         $doc->addFile($file);
-        $file = $this->createTestFile('rus');
+        $file = $this->createOpusTestFile('rus');
         $file->setLanguage('rus');
         $doc->addFile($file);
         $docId = $doc->store();
@@ -1145,19 +1145,19 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
         $this->markTestSkipped('Refactor test for more direct testing.');
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
-        $file = $this->createTestFile('eng');
+        $file = $this->createOpusTestFile('eng');
         $file->setLanguage('eng');
         $doc->addFile($file);
-        $file = $this->createTestFile('deu');
+        $file = $this->createOpusTestFile('deu');
         $file->setLanguage('deu');
         $doc->addFile($file);
-        $file = $this->createTestFile('spa');
+        $file = $this->createOpusTestFile('spa');
         $file->setLanguage('spa');
         $doc->addFile($file);
-        $file = $this->createTestFile('fra');
+        $file = $this->createOpusTestFile('fra');
         $file->setLanguage('fra');
         $doc->addFile($file);
-        $file = $this->createTestFile('rus');
+        $file = $this->createOpusTestFile('rus');
         $file->setLanguage('rus');
         $doc->addFile($file);
         $docId = $doc->store();
@@ -1188,7 +1188,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     public function testEmbargoDatePassed()
     {
         $this->useEnglish();
-        $file = $this->createTestFile('foo.pdf');
+        $file = $this->createOpusTestFile('foo.pdf');
 
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
@@ -1211,7 +1211,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     public function testEmbargoDateHasNotPassed()
     {
         $this->useEnglish();
-        $file = $this->createTestFile('foo.pdf');
+        $file = $this->createOpusTestFile('foo.pdf');
 
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
@@ -1252,7 +1252,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
 
     public function testMetaTagsForFiles()
     {
-        $file = $this->createTestFile('foo.pdf');
+        $file = $this->createOpusTestFile('foo.pdf');
 
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
@@ -1266,7 +1266,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
 
     public function testMetaTagsforEmbargoedDocument()
     {
-        $file = $this->createTestFile('foo.pdf');
+        $file = $this->createOpusTestFile('foo.pdf');
 
         $doc = $this->createTestDocument();
         $doc->setEmbargoDate('2112-02-01');
@@ -1386,7 +1386,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     {
         $this->markTestIncomplete('OPUSVIER-3401');
         $doc = $this->createTestDocument();
-        $file = $this->createTestFile('nolang.pdf');
+        $file = $this->createOpusTestFile('nolang.pdf');
         $doc->addFile($file);
         $docId = $doc->store();
 
