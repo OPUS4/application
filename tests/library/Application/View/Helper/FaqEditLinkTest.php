@@ -43,7 +43,7 @@ class Application_View_Helper_FaqEditLinkTest extends ControllerTestCase
         $html = $helper->faqEditLink('searchtips');
 
         $this->assertEquals(
-            '<a id="searchtips" href="/setup/helppage/edit/id/searchtips">' .
+            '<a id="edit_searchtips" href="/setup/helppage/edit/id/searchtips">' .
             '<i class="fas fa-edit"></i></a>',
             $html
         );
@@ -68,7 +68,7 @@ class Application_View_Helper_FaqEditLinkTest extends ControllerTestCase
 
         $html = $helper->faqEditLink('searchtips');
         $this->assertEquals(
-            '<a id="searchtips" href="/setup/helppage/edit/id/searchtips">' .
+            '<a id="edit_searchtips" href="/setup/helppage/edit/id/searchtips">' .
             '<i class="fas fa-edit"></i></a>',
             $html
         );
@@ -95,7 +95,7 @@ class Application_View_Helper_FaqEditLinkTest extends ControllerTestCase
         $html = $helper->faqEditLink('searchtips');
 
         $this->assertEquals(
-            '<a id="searchtips" href="/setup/helppage/edit/id/searchtips">' .
+            '<a id="edit_searchtips" href="/setup/helppage/edit/id/searchtips">' .
             '<i class="fas fa-edit"></i></a>',
             $html
         );
