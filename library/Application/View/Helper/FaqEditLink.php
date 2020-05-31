@@ -40,7 +40,14 @@ class Application_View_Helper_FaqEditLink extends Application_View_Helper_Transl
      */
     public function faqEditLink($name)
     {
-        return parent::translationEditLink($name);
+        $html = '';
+
+        if ($this->isEditingEnabled()) {
+            $url = $this->getTargetUrl($name);
+
+            $html = "<a id=\"edit_$name\" href=\"$url\"><i class=\"fas fa-edit\"></i></a>";
+        }
+        return $html;
     }
 
     protected function getTargetUrl($name)
@@ -49,7 +56,7 @@ class Application_View_Helper_FaqEditLink extends Application_View_Helper_Transl
             'module' => 'setup',
             'controller' => 'helppage',
             'action' => 'edit',
-            'id' => $name
+            'id' => "$name"
         ]);
     }
 }
