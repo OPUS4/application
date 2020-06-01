@@ -288,5 +288,123 @@ Translation keys added to the system will be removed.</seg>
         </tuv>
     </tu>
 
+    <tu tuid="setup_helppage_instructions">
+        <tuv xml:lang="en">
+            <seg><![CDATA[
+<p>The entries of the FAQ page can be edited by clicking on the edit icon behind the section headlines or the
+entries.</p>
+
+<p>Entries and sections can be added by editing the structure of the FAQ page that is defined in the file "help.ini".
+Every section needs a translation key and every entry a unique identifier that determines the translation keys used
+for that entry.</p>
+
+<p>The translation keys for the FAQ page can also be edited in the general translation management interface. They are
+associated with the "help" module.</p>
+
+<p>The entries "contact" and "imprint" correspond to the contact and the imprint page. If the translations are changed,
+the change will appear on the FAQ page as well as the specific pages for these pages.</p>
+            ]]></seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg><![CDATA[
+<p>Die Einträge der FAQ-Seite können editiert werden indem das Edit-Icon hinter den Überschriften für die Abschnitte
+oder hinter den Fragen geklickt wird.</p>
+
+<p>Um Abschnitte oder Fragen hinzuzufügen muss die Struktur der FAQ-Seite editiert werden. Jeder Abschnitt und jede
+Frage benötigen einen eindeutigen String für die Identifizierung. Aus diesem String ergeben sich die verwendeten
+Übersetzungsschlüssel.</p>
+
+<dl class="code">
+<dt><b>searchtips</b> (Eintrag)</dt>
+<dd>help_content_<b>searchtipps</b><br />
+help_title_<b>searchtipps</b></dd>
+<dt><b>authorhelp</b> (Abschnitt)</dt>
+<dd>help_index_<b>authorhelp</b><dd>
+</dl>
+
+<p>Die Übersetzungen für diese Schlüssel können auch in der allgmeinen Übersetzungsverwaltung direkt angezeigt und
+editiert werden. Sei gehören zum Modul "help".</p>
+
+<p>Die Einträge für <b>contact</b> und <b>imprint</b> verwenden die gleichen Übersetzungsschlüssel wie die
+entsprechenden Seiten. Wenn die Inhalte editiert werden ändern sie sich auf der FAQ-Seite und auch den einzelnen Seiten
+für Impressum und Kontakt.</p>
+            ]]></seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="setup_helppage_link_module">
+        <tuv xml:lang="en">
+            <seg>Edit all FAQ translations (Help module)</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Alle FAQ-Übersetzungen editieren (Help-Modul)</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="setup_helppage_link_structure">
+        <tuv xml:lang="en">
+            <seg>Edit FAQ hierarchy</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>FAQ-Struktur editieren</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="setup_helppage_structure_title">
+        <tuv xml:lang="en">
+            <seg>Edit FAQ structure (help.ini)</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>FAQ Struktur (help.ini) editieren</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="setup_helppage_structure_description">
+      <tuv xml:lang="de">
+        <seg><![CDATA[<p>Hier kann die Struktur der FAQ-Seite editiert werden.</p>
+
+<p>Die Zeilen in der Konfiguration definieren Einträge auf der FAQ-Seite. Zeilen, die mit ";" anfangen, sind Kommentare.</p>
+
+<p>Auf der linken Seite stehen die Übersetzungsschlüssel für die Themenbereiche der FAQ-Seite und auf der rechten Seite vom Gleichzeichen die ID für den Eintrag.</p>
+
+<p>Die folgende Zeile korrespondiert mit drei Übersetzungsschlüsseln.</p>
+
+<p><div class="code">help_index_misc[] = 'policies'</div></p>
+
+<p>Die Schlüssel sind</p>
+
+<ul>
+<li><b>help_index_misc</b> (Überschrift des Themenbereichs)</li>
+<li><b>help_title_policies</b> (Frage/Titel des Eintrags)</li>
+<li><b>help_content_policies</b> (Antwort/Inhalt der Eintrags)</li>
+</ul>
+
+<p>Neue Themenbereiche und Einträge können hier einfach hinzugefügt werden. Nach dem Speichern tauchen sie auf der FAQ-Seite auf und die Übersetzungen können von dort editiert werden.</p>]]></seg>
+      </tuv>
+      <tuv xml:lang="en">
+        <seg><![CDATA[<p>Here you can edit the structure of the FAQ page.</p>
+
+<p>Each line defines an FAQ entry, except for comment lines that start with a ";".</p>
+
+<p>Each entry starts with the translation key for a section of the FAQ page and contains a unique identifier for the entry.</p>
+
+<p>The following line corresponds to three translation keys.</p>
+
+<p>
+<div class="code">
+help_index_misc[] = 'policies'
+</div></p>
+
+<p>The keys are</p>
+
+<ul>
+<li><b>help_index_misc</b> (title of section)</li>
+<li><b>help_title_policies</b> (question)</li>
+<li><b>help_content_policies</b> (answer)</li>
+</ul>
+
+<p>You can create new sections and entries by adding keys and identifiers to this configuration. After saving the configuration file (help.ini) they will show up on the FAQ page together with links for editing the translations.</p>]]></seg>
+      </tuv>
+    </tu>
   </body>
 </tmx>

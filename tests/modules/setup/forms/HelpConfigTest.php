@@ -24,25 +24,18 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
+ * @category    Test
  * @package     Setup_Form
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Setup_Form_HelpSection extends Application_Form_Translations
+class Setup_Form_HelpConfigTest extends ControllerTestCase
 {
 
-    public function init()
+    public function testInit()
     {
-        parent::init();
-
-        // TODO add key for section title
-        $this->addKey('');
-
-        // TODO add subforms for section entries
-
-        // TODO remove action element (convert to subform)
+        $this->markTestIncomplete();
     }
 }

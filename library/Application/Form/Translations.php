@@ -95,7 +95,7 @@ class Application_Form_Translations extends Application_Form_Abstract
         $name = $this->normalizeKey($key);
 
         if ($textarea) {
-            $options = array_merge($options, ['cols' => $width, "rows" => 12]);
+            $options = array_merge($options, ['cols' => $width, 'rows' => 12]);
         } else {
             $options = array_merge($options, ['size' => $width]);
         }

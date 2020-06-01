@@ -705,13 +705,13 @@
                             <controller>helppage</controller>
                             <action>index</action>
                             <pages>
-                                <error>
+                                <structure>
                                     <type>mvc</type>
-                                    <label>setup_error</label>
+                                    <label>setup_helppage_structure</label>
                                     <module>setup</module>
                                     <controller>helppage</controller>
-                                    <action>error</action>
-                                </error>
+                                    <action>structure</action>
+                                </structure>
                             </pages>
                             <resource>helppages</resource>
                         </helppage>

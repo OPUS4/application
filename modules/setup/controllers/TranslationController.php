@@ -49,6 +49,7 @@ class Setup_TranslationController extends Application_Controller_Action
     {
         parent::init();
         $this->getHelper('MainMenu')->setActive('admin');
+        $this->view->headLink()->appendStylesheet($this->view->layoutPath() . '/css/setup.css');
     }
 
     public function indexAction()

@@ -41,7 +41,7 @@
 
 <?PHP $this->title = 'help_index_pagetitle' ?>
 
-    <h2><?= $this->translate('help_index_title') ?></h2>
+    <h2><?= $this->translate('help_index_title') ?> <?= $this->helpSetupLink() ?></h2>
 
 <?php if (isset($this->content)) : ?>
     <h2><?= $this->translate($this->contenttitle) ?></h2>
@@ -57,7 +57,7 @@
         <?php $helpEntries = $this->help->getHelpEntries(); ?>
 
         <?php foreach ($helpEntries as $section => $entries) : ?>
-            <h3><?= $this->translate($section) ?> <?= $this->translationEditLink($section) ?></h3>
+            <h3><?= $this->translate($section) ?> <?= $this->faqSectionEditLink($section) ?></h3>
             <ul class="nav help">
                 <?php foreach ($entries as $entry) : ?>
                     <li>
