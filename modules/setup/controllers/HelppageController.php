@@ -73,7 +73,7 @@ class Setup_HelppageController extends Application_Controller_Action
         if ($request->isPost()) {
             $post = $request->getPost();
             $result = $form->processPost($post);
-            switch($result) {
+            switch ($result) {
                 case $form::RESULT_SAVE:
                     $form->populate($post);
                     $content = $form->getValue($form::ELEMENT_STRUCTURE);

@@ -101,7 +101,7 @@ class Setup_Form_HelpConfig extends Application_Form_Abstract
     {
         if (isset($post[self::ELEMENT_SAVE])) {
             return self::RESULT_SAVE;
-        } else if (isset($post[self::ELEMENT_CANCEL])) {
+        } elseif (isset($post[self::ELEMENT_CANCEL])) {
             return self::RESULT_CANCEL;
         } else {
             return null;

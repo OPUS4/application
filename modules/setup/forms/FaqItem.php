@@ -54,7 +54,7 @@ class Setup_Form_FaqItem extends Application_Form_Translations
             'textarea' => true, 'label' => 'Question', 'cols' => 90, 'rows' => 12
         ]);
         $this->addElement('translation', self::ELEMENT_ANSWER, [
-            'textarea'=> true, 'label' => 'Answer', 'cols' => 90, 'rows' => 12
+            'textarea' => true, 'label' => 'Answer', 'cols' => 90, 'rows' => 12
         ]);
     }
 
@@ -89,7 +89,6 @@ class Setup_Form_FaqItem extends Application_Form_Translations
             $question->updateTranslations("help_title_$faqId");
         } else {
             $database->remove("help_title_$faqId");
-
         }
 
         $answer = $this->getElement(self::ELEMENT_ANSWER);
