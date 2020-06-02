@@ -75,7 +75,7 @@ class Application_View_Helper_Messages extends Application_View_Helper_Abstract
         $translator = $this->view->translate()->getTranslator();
 
         if ($translator->isTranslated($message)) {
-            $message= $this->view->translate($message);
+            $message = $this->view->translate($message);
         }
 
         return htmlspecialchars($message);
