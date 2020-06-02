@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -25,19 +25,70 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_Setup
+ * @package     View
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2019-2020, OPUS 4 development team
+ * @copyright   Copyright (c) 2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-?>
 
-<h1><?= $this->translate('setup_helppage_index') ?></h1>
+/**
+ * View helper for linking to edit form for translation.
+ *
+ */
+class Application_View_Helper_TranslationEditLink extends Application_View_Helper_Abstract
+{
 
-<p><?= $this->translate('setup_helppage_instructions') ?></p>
+    /**
+     *
+     */
+    public function translationEditLink($key)
+    {
+        $html = '';
 
-<div class="links">
-    <div><a href="<?= $this->url(['action' => 'structure']) ?>"><?= $this->translate('setup_helppage_link_structure') ?></a></div>
-    <div><a href="<?= $this->url(['module' => 'home', 'controller' => 'index', 'action' => 'help']) ?>"><?= $this->translate('setup_title_helppage') ?></a></div>
-    <div><a href="<?= $this->url(['controller' => 'language', 'modules' => 'help']) ?>"><?= $this->translate('setup_helppage_link_module') ?></a></div>
-</div>
+        if ($this->isEditingEnabled()) {
+            $url = $this->getTargetUrl($key);
+
+            $html = "<a id=\"$key\" href=\"$url\"><i class=\"fas fa-edit\"></i></a>";
+        }
+        return $html;
+    }
+
+    /**
+     * @return bool
+     *
+     * TODO check editing of specific key
+     */
+    public function isEditingEnabled()
+    {
+        $accessControl = Zend_Controller_Action_HelperBroker::getStaticHelper('accessControl');
+
+        if (is_null($accessControl)) {
+            return false; // just in case - deny editing if access control mechanism isn't available
+        }
+
+        $manager = $this->getTranslationManager();
+        $modules = $manager->getAllowedModules();
+        $editingAllowed = false;
+        if (is_null($modules) || in_array('help', $modules)) {
+            $editingAllowed = true;
+        }
+
+        return $accessControl->accessAllowed('helppages') && $editingAllowed;
+    }
+
+    protected function getTargetUrl($key)
+    {
+        return $this->view->url([
+            'module' => 'setup',
+            'controller' => 'language',
+            'action' => 'edit',
+            'key' => $key,
+            'back' => 'help'
+        ]);
+    }
+
+    protected function getTranslationManager()
+    {
+        return new Application_Translate_TranslationManager();
+    }
+}

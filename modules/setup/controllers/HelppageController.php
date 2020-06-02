@@ -28,11 +28,15 @@
  * @package     Module_Setup
  * @author      Edouard Simon <edouard.simon@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
+ *
+ * TODO show instructions for editing help content
+ * TODO form for editing help.ini file
+ * TODO improve styling of FAQ page
  */
 class Setup_HelppageController extends Application_Controller_Action
 {
@@ -42,22 +46,182 @@ class Setup_HelppageController extends Application_Controller_Action
         parent::init();
 
         $this->getHelper('MainMenu')->setActive('admin');
+        $this->view->headLink()->appendStylesheet($this->view->layoutPath() . '/css/setup.css');
     }
 
     public function indexAction()
     {
-        // TODO fix $this->forward('edit');
     }
 
-    protected function getForm()
+    /**
+     * Action for editing structure of FAQ page (help.ini).
+     *
+     * TODO load ini
+     * TODO validate ini
+     * TODO display unknown entries on FAQ
+     */
+    public function structureAction()
     {
-        return new Setup_Form_HelpPage();
+        $request = $this->getRequest();
+
+        $help = new Setup_Model_HelpPage();
+
+        $config = $help->loadConfig();
+
+        $form = new Setup_Form_HelpConfig();
+
+        if ($request->isPost()) {
+            $post = $request->getPost();
+            $result = $form->processPost($post);
+            switch ($result) {
+                case $form::RESULT_SAVE:
+                    $form->populate($post);
+                    $content = $form->getValue($form::ELEMENT_STRUCTURE);
+                    $help->saveConfig($content);
+                    $form = null;
+                    break;
+
+                case $form::RESULT_CANCEL:
+                    $form = null;
+                    // fall through to default
+                default:
+                    break;
+            }
+
+            if (is_null($form)) {
+                $this->redirectWithParameters();
+            }
+        } else {
+            $form->getElement($form::ELEMENT_STRUCTURE)->setValue($config);
+        }
+
+        $this->_helper->renderForm($form);
     }
 
-    protected function getModel()
+    /**
+     * Action for editing FAQ entry.
+     *
+     * @throws Zend_Form_Exception
+     *
+     * TODO handle creating new entry
+     */
+    public function editAction()
     {
-        return new Setup_Model_HelpPage(
-            new Zend_Config_Ini(APPLICATION_PATH . '/modules/setup/setup.ini', 'help')
+        $request = $this->getRequest();
+
+        $name = $this->getParam('id', null);
+
+        $form = null;
+
+        if (! is_null($name)) {
+            $form = new Setup_Form_FaqItem();
+            $form->setName($name);
+
+            if ($request->isPost()) {
+                $post = $request->getPost();
+
+                $result = $form->processPost($post, $post);
+
+                switch ($result) {
+                    case $form::RESULT_SAVE:
+                        $form->populate($post);
+                        $form->updateEntry();
+                        $form = null;
+                        break;
+
+                    case $form::RESULT_CANCEL:
+                        $form = null;
+                        // fall through to default
+                    default:
+                        break;
+                }
+                // TODO Check if valid
+                // TODO store changes
+                // TODO go back to help page at right position
+            } else {
+                $form->setName($name);
+            }
+        }
+
+        if (is_null($form)) {
+            $this->redirectBack();
+        } else {
+            $this->_helper->renderForm($form);
+        }
+    }
+
+    protected function redirectBack()
+    {
+        $faqId = $this->getParam('id');
+
+        $url = '/home/index/help';
+
+        if (! empty($faqId)) {
+            $url .= "#$faqId";
+        }
+
+        $this->_helper->Redirector->gotoUrl($url);
+    }
+
+    /**
+     * Redirect to create or editing of translation keys.
+     */
+    public function sectionAction()
+    {
+        $key = $this->getParam('key', null);
+
+        $manager = new Application_Translate_TranslationManager();
+
+        $translation = null;
+
+        try {
+            $translation = $manager->getTranslation($key);
+        } catch (\Opus\Translate\UnknownTranslationKey $ex) {
+        }
+
+        if (is_null($translation)) {
+            $this->_helper->Redirector->redirectTo(
+                'add',
+                null,
+                'language',
+                'setup',
+                [
+                    'key' => $key,
+                    'keymodule' => 'help',
+                    'back' => 'help'
+                ]
+            );
+        } else {
+            $this->_helper->Redirector->redirectTo(
+                'edit',
+                null,
+                'language',
+                'setup',
+                [
+                    'key' => $key,
+                    'back' => 'help'
+                ]
+            );
+        }
+    }
+
+    /**
+     * Action for deleting FAQ entry.
+     */
+    public function deleteAction()
+    {
+    }
+
+    /**
+     *
+     */
+    protected function redirectWithParameters($action = 'index')
+    {
+        $this->_helper->Redirector->redirectTo(
+            $action,
+            null,
+            'helppage',
+            'setup'
         );
     }
 }

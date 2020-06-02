@@ -25,24 +25,70 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Setup_Form
+ * @package     View
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Setup_Form_HelpSection extends Application_Form_Translations
+/**
+ * View helper for linking to edit form for translation.
+ *
+ */
+class Application_View_Helper_FaqSectionEditLink extends Application_View_Helper_Abstract
 {
 
-    public function init()
+    /**
+     *
+     */
+    public function faqSectionEditLink($key)
     {
-        parent::init();
+        $html = '';
 
-        // TODO add key for section title
-        $this->addKey('');
+        if ($this->isEditingEnabled()) {
+            $url = $this->getTargetUrl($key);
 
-        // TODO add subforms for section entries
+            $html = "<a id=\"$key\" href=\"$url\"><i class=\"fas fa-edit\"></i></a>";
+        }
+        return $html;
+    }
 
-        // TODO remove action element (convert to subform)
+    /**
+     * @return bool
+     *
+     * TODO check editing of specific key
+     */
+    public function isEditingEnabled()
+    {
+        $accessControl = Zend_Controller_Action_HelperBroker::getStaticHelper('accessControl');
+
+        if (is_null($accessControl)) {
+            return false; // just in case - deny editing if access control mechanism isn't available
+        }
+
+        $manager = $this->getTranslationManager();
+        $modules = $manager->getAllowedModules();
+        $editingAllowed = false;
+        if (is_null($modules) || in_array('help', $modules)) {
+            $editingAllowed = true;
+        }
+
+        return $accessControl->accessAllowed('helppages') && $editingAllowed;
+    }
+
+    protected function getTargetUrl($key)
+    {
+        return $this->view->url([
+            'module' => 'setup',
+            'controller' => 'helppage',
+            'action' => 'section',
+            'key' => $key,
+            'back' => 'help'
+        ]);
+    }
+
+    protected function getTranslationManager()
+    {
+        return new Application_Translate_TranslationManager();
     }
 }

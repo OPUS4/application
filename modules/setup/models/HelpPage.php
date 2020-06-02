@@ -27,7 +27,8 @@
  * @category    Application
  * @package     Module_Setup
  * @author      Edouard Simon (edouard.simon@zib.de)
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -37,95 +38,39 @@
 class Setup_Model_HelpPage
 {
 
-    /**
-     *  base path for content files
-     */
-    protected $_contentBasepath = '';
-
-    /**
-     * Path to directory containing content files.
-     *
-     * @param string $basePath name of directory used to read / write page content
-     */
-    public function setContentBasepath($basePath)
+    public function loadConfig()
     {
-        $path = realpath($basePath);
-        $this->_contentBasepath = $path;
+        $help = new Home_Model_HelpFiles();
+
+        $path = $help->getHelpPath();
+        $path = rtrim($path, '/') . '/';
+
+        $filePath = $path . 'help.ini';
+
+        if (is_readable($filePath)) {
+            return file_get_contents($filePath);
+        } else {
+            return null;
+        }
     }
 
     /**
-     * @see Description in abstract base class
+     * @param $config
+     * @throws Setup_Model_Exception
      */
-    public function toArray()
+    public function saveConfig($config)
     {
-        $resultArray = [];
-        $translationUnits = $this->getTranslation();
-        if ($translationUnits === false) { // error reading files, this should not happen
-            throw new Setup_Model_Exception('No tmx data found.');
-        }
-        foreach ($translationUnits as $translationUnit => $variants) {
-            $resultArray[$translationUnit] = [];
-            foreach ($variants as $language => $text) {
-                if (substr($text, -4) == '.txt') {
-                    $resultArray[$translationUnit][$language] = [];
-                    $this->addContentSource($this->_contentBasepath . DIRECTORY_SEPARATOR . $text);
-                    $resultArray[$translationUnit][$language]['filename'] = $text;
-                    $resultArray[$translationUnit][$language]['contents'] = $this->getContent(
-                        $this->_contentBasepath . DIRECTORY_SEPARATOR . $text
-                    );
-                } else {
-                    $resultArray[$translationUnit][$language] = $text;
-                }
-            }
-        }
-        return $resultArray;
-    }
+        $help = new Home_Model_HelpFiles();
 
-    /**
-     * Return translations according to definition in help.ini.
-     */
-    public function getTranslation()
-    {
-        // load translations in order specified in help.ini
-        $helpConfig = new Zend_Config_Ini(APPLICATION_PATH . '/application/configs/help/help.ini');
-        $helpConfigArray = $helpConfig->toArray();
-        $tmxData = []; // TODO parent::getTranslation();
-        $filteredTmxData = [];
-        foreach ($helpConfigArray as $helpKey => $helpContents) {
-            if (isset($tmxData[$helpKey])) {
-                $filteredTmxData[$helpKey] = $tmxData[$helpKey];
-            }
-            foreach ($helpContents as $value) {
-                if (isset($tmxData["help_title_$value"])) {
-                    $filteredTmxData["help_title_$value"] = $tmxData["help_title_$value"];
-                }
-                if (isset($tmxData["help_content_$value"])) {
-                    $filteredTmxData["help_content_$value"] = $tmxData["help_content_$value"];
-                }
-            }
-        }
-        return $filteredTmxData;
-    }
+        $path = $help->getHelpPath();
+        $path = rtrim($path, '/') . '/';
 
-    /**
-     * @see Description in abstract base class
-     */
-    public function fromArray(array $data)
-    {
-        $resultData = [];
-        $resultTmx = new Application_Translate_TmxFile();
+        $filePath = $path . 'help.ini';
 
-        foreach ($data as $translationUnit => $variants) {
-            foreach ($variants as $language => $contents) {
-                if (is_array($contents) && isset($contents['filename']) && isset($contents['contents'])) {
-                    $filePath = $this->_contentBasepath . DIRECTORY_SEPARATOR . $contents['filename'];
-                    $resultData[$filePath] = $contents['contents'];
-                    $contents = $contents['filename'];
-                }
-                $resultTmx->setTranslation($translationUnit, $language, $contents);
-            }
+        if (is_writeable($filePath)) {
+            file_put_contents($filePath, $config);
+        } else {
+            throw new Setup_Model_Exception('Cannot write help.ini file.');
         }
-        // $this->setContent($resultData);
-        // $this->setTranslation($resultTmx->toArray());
     }
 }

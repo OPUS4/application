@@ -249,3 +249,23 @@ ul#translation-downloads li i {
     color: #26517D;
     margin-right: 0.3em;
 }
+
+.setup_helppage dt {
+    padding-bottom: 0.4em;
+}
+
+.setup_helppage dd {
+    padding-bottom: 1em;
+}
+
+.links a {
+    display: block;
+    margin-left: 2em;
+    padding: 0.5em;
+    font-size: 1.2em;
+}
+
+#content.setup_translation_edit textarea {
+    resize: vertical;
+}
+

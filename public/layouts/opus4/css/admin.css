@@ -2518,17 +2518,6 @@ table.module-access-table tr.noaccess {
     margin-bottom: 0.5em;
 }
 
-#content.setup_translation > .wrapper a {
-    display: block;
-    margin-left: 2em;
-    padding: 0.5em;
-    font-size: 1.2em;
-}
-
-#content.setup_translation_edit textarea {
-    resize: vertical;
-}
-
 a.link-button {
     display: inline-block;
     padding: 0.5em 1em;
@@ -2548,4 +2537,8 @@ a.create-document-link {
 
 #enrichmentkeyTable span.strong {
     font-weight: bold;
+}
+
+.code {
+    font-family: monospace;
 }

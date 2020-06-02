@@ -230,12 +230,19 @@ class Setup_Form_Translation extends Application_Form_Abstract
 
         // disable editing of key and module for keys defined in TMX files
         if (! isset($translation['state']) || $translation['state'] !== 'added') {
-            $keyElement->setAttrib('disabled', true);
-            $keyElement->removeValidator('Setup_Form_Validate_TranslationKeyFormat');
-            $moduleElement->setAttrib('disabled', true);
+            $this->disableKeyEditing();
         }
 
         $this->getSubForm(self::SUBFORM_TRANSLATION)->setTranslations($translation['translations']);
+    }
+
+    public function disableKeyEditing()
+    {
+        $keyElement = $this->getElement(self::ELEMENT_KEY);
+        $keyElement->setAttrib('disabled', true);
+        $keyElement->removeValidator('Setup_Form_Validate_TranslationKeyFormat');
+        $moduleElement = $this->getElement(self::ELEMENT_MODULE);
+        $moduleElement->setAttrib('disabled', true);
     }
 
     /**

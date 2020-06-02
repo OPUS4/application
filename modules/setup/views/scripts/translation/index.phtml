@@ -38,7 +38,9 @@
 
 <div>
     <h3><?= $this->translate('setup_infopages_choose_page') ?></h3>
+    <div class="links">
     <?PHP foreach ($this->pageNames as $pagename) : ?>
     <div><a href="<?= $this->url(['action' => 'edit', 'page' => $pagename]) ?>"><?= $this->translate('setup_infopages_edit_'.$pagename) ?></a></div>
     <?PHP endforeach ?>
+    </div>
 </div>

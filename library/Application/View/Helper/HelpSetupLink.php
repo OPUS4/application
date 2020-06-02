@@ -24,29 +24,38 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @package     Setup
- * @author      Edouard Simon <edouard.simon@zib.de>
- * @copyright   Copyright (c) 2013-2018, OPUS 4 development team
+ * @category    Application
+ * @package     View
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-/**
- * Class Setup_HelpPageControllerTest.
- *
- * @covers Setup_HelpPageController
- */
-class Setup_HelppageControllerTest extends ControllerTestCase
+class Application_View_Helper_HelpSetupLink extends Application_View_Helper_TranslationEditLink
 {
+
     /**
-     * original file modes, needed for restoring after test
+     * @param $name
+     * @return string
      */
-    protected $origFileModes = [];
-
-    protected $configSection = 'static-page';
-
-    public function testSomething()
+    public function helpSetupLink()
     {
-        $this->markTestIncomplete('implement testing');
+        $html = '';
+
+        if ($this->isEditingEnabled()) {
+            $url = $this->getHelpSetupUrl();
+
+            $html = "<a href=\"$url\"><i class=\"fas fa-edit\"></i></a>";
+        }
+        return $html;
+    }
+
+    protected function getHelpSetupUrl()
+    {
+        return $this->view->url([
+            'module' => 'setup',
+            'controller' => 'helppage',
+            'action' => 'index'
+        ]);
     }
 }

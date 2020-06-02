@@ -28,7 +28,7 @@
  * @package     Module_Setup
  * @author      Edouard Simon <edouard.simon@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -45,13 +45,11 @@ class Setup_TranslationController extends Application_Controller_Action
         'imprint' => 'Setup_Form_ImprintPage'
     ];
 
-    private $config;
-
     public function init()
     {
         parent::init();
-        $this->config = new Zend_Config_Ini(APPLICATION_PATH . '/modules/setup/setup.ini', 'static-page');
         $this->getHelper('MainMenu')->setActive('admin');
+        $this->view->headLink()->appendStylesheet($this->view->layoutPath() . '/css/setup.css');
     }
 
     public function indexAction()
