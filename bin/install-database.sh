@@ -24,6 +24,8 @@
 #
 # Parameters can be used to specify a different database name and other information.
 #
+# -d <filepath> : Config/file/path to execute the Auto installation
+#
 # TODO move to framework (SQL for creating database defined twice in framework and here)
 #
 
@@ -44,13 +46,23 @@ while getopts ":c:" opt; do
   esac
 done
 
-# Check for auto installation
-if [[ $INSTALLDATABASE -eq 1 ]] ; then
-. /home/ramram/opus4/bin/parameter.conf
-fi
-
 OPUS_CONF="${OPUS_CONF:-config.ini}"
 OPUS_CONSOLE_CONF="${OPUS_CONSOLE_CONF:-console.ini}"
+
+# Get command line parameters
+PARAMETER_CONF="$1"
+
+# Check for auto installation
+if [[ -n $PARAMETER_CONF ]]
+then
+  if [ -f $PARAMETER_CONF ]
+  then
+    source "$PARAMETER_CONF"
+  else
+    echo "The file `basename "$PARAMETER_CONF"` does not exist"
+    exit 1
+  fi
+fi
 
 #
 # Prompt for database parameters

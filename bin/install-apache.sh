@@ -36,11 +36,6 @@ set -e
 # TODO determine dynamically or make configurable?
 APACHE_SITE_DIR='/etc/apache2/sites-available'
 
-# Check for auto installation
-if [[ $INSTALLAPACHE -eq 1 ]] ; then
-. /home/ramram/opus4/bin/parameter.conf
-fi
-
 SCRIPT_NAME="`basename "$0"`"
 SCRIPT_NAME_FULL="`readlink -f "$0"`"
 SCRIPT_PATH="`dirname "$SCRIPT_NAME_FULL"`"
@@ -52,6 +47,18 @@ INPUT_FILENAME="$2"
 OUTPUT_FILENAME="$3"
 OS="$4"
 RESTART_APACHE="$5"
+PARAMETER_CONF="$6"
+# Check for auto installation
+if [[ -n $PARAMETER_CONF ]]
+then
+  if [ -f $PARAMETER_CONF ];
+  then
+    source "$PARAMETER_CONF"
+  else
+    echo "The file `basename "$PARAMETER_CONF"` does not exist"
+    exit 1
+  fi
+fi
 
 # Apache Version
 if [ -z "$INPUT_FILENAME" ] ;

@@ -25,32 +25,19 @@
 # Parameters:
 # -a <filename> : Sets name for Apache configuration file
 # -c <filename> : Sets name for OPUS configuration file (used for testing)
-# -d <1>        : Set value 1 to execute the Auto installation
-
+# -d <filepath> : Config/file/path to execute the Auto installation
+#
 set -e
 
 # Parse command line options
-while getopts ":a:c:d:" opt; do
+while getopts ":a:c:" opt; do
   case $opt in
     a) APACHE_CONF="$OPTARG"
     ;;
     c) OPUS_CONF="$OPTARG"
     ;;
-    d) AUTOINSTALL="$OPTARG"
-    ;;
-
   esac
 done
-
-#Check for Autoinstallation
-if [[ $AUTOINSTALL -eq 1 ]] ; then
-   export INSTALLAPACHE=1
-   export INSTALLDATABASE=1
-   . /home/ramram/opus4/bin/parameter.conf
-else
-   echo "invalid argument for auto installation"
-   exit 1
-fi
 
 # Check for sudo
 if [[ $EUID -eq 0 ]]; then
@@ -100,6 +87,22 @@ This script will ask you a number of questions in order to setup the following:
 - Solr index
 
 LimitString
+
+# Get command line parameters
+PARAMETER_CONF="$2"
+
+# Check for auto installation
+if [[ -n $PARAMETER_CONF ]]
+then
+  echo "$PARAMETER_CONF"
+  if [ -f $PARAMETER_CONF ]
+  then
+    source "$PARAMETER_CONF"
+  else
+    echo "The file `basename "$PARAMETER_CONF"` does not exist"
+    exit 1
+  fi
+fi
 
 # Ask for base Url for new OPUS 4 instance
 [[ -z $OPUS_URL_BASE ]] && read -p "Base URL for OPUS [/opus4]: " OPUS_URL_BASE
