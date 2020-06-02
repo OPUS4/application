@@ -117,7 +117,7 @@ class Admin_WorkflowController extends Application_Controller_Action
                 'index',
                 ['failure' => $this->view->translate(
                     'admin_workflow_error_illegal_transition',
-                    [$targetState]
+                    $targetState
                 )],
                 'document',
                 'admin',
@@ -134,7 +134,7 @@ class Admin_WorkflowController extends Application_Controller_Action
             }
             return $this->_helper->Redirector->redirectTo(
                 'index',
-                ['failure' => $this->view->translate($key, [$targetState])],
+                ['failure' => $this->view->translate($key, $targetState)],
                 'document',
                 'admin',
                 ['id' => $docId]
