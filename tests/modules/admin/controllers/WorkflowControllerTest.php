@@ -39,6 +39,7 @@
  */
 class Admin_WorkflowControllerTest extends ControllerTestCase
 {
+
     protected $additionalResources = 'all';
 
     private function enablePublishNotification()
