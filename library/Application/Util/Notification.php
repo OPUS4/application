@@ -27,7 +27,8 @@
  * @category    Application
  * @package     Notification
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2012-2018, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2012-2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  *
  * TODO remove concept of 'context' - class should not implement different context variations (use OO principles)
@@ -88,6 +89,7 @@ class Application_Util_Notification extends Application_Model_Abstract
      * @param $recipients
      *
      * TODO this function is only used for PublicatioNotification at the moment - cleanup!
+     * TODO needs more tests
      */
     public function prepareMailFor($document, $url, $recipients)
     {
@@ -113,8 +115,14 @@ class Application_Util_Notification extends Application_Model_Abstract
             } else {
                 $entry['name'] = $recipient['name'];
             }
+
+            $converted[] = $entry; // TODO removing this line does not break tests
         }
 
+        // TODO removing the following line does not break tests
+        $converted = $this->getRecipients($converted); // adding general recipients
+
+        // TODO this function should not send the messages, just prepare them (refactoring)
         $this->scheduleNotification(
             $this->getMailSubject($document, $authors),
             $this->getMailBody($document->getId(), $authors, $title, $url),
