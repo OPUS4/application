@@ -74,32 +74,42 @@ echo
 
 [[ -z $DBNAME ]] && read -p "New OPUS Database Name [opusdb]: "           DBNAME
 [[ -z $DB_ADMIN ]] && read -p "New OPUS Database Admin Name [opus4admin]: " DB_ADMIN
+if [ -n "$PARAMETER_CONF" ] ;
+then
+  DB_ADMIN_PASSWORD_VERIFY=$DB_ADMIN_PASSWORD
+else
+  while [[ -z $DB_ADMIN_PASSWORD || "$DB_ADMIN_PASSWORD" != "$DB_ADMIN_PASSWORD_VERIFY" ]] ;
+  do
+    read -p "New OPUS Database Admin Password: " -s       DB_ADMIN_PASSWORD
+    echo
+    read -p "New OPUS Database Admin Password again: " -s DB_ADMIN_PASSWORD_VERIFY
+    echo
+    if [[ $DB_ADMIN_PASSWORD != $DB_ADMIN_PASSWORD_VERIFY ]] ;
+    then
+      echo "Passwords do not match. Please try again."
+    fi
+  done
+fi
 
-while [[ -z $DB_ADMIN_PASSWORD || "$DB_ADMIN_PASSWORD" != "$DB_ADMIN_PASSWORD_VERIFY" ]] ;
-do
-  read -p "New OPUS Database Admin Password: " -s       DB_ADMIN_PASSWORD
-  echo
-  read -p "New OPUS Database Admin Password again: " -s DB_ADMIN_PASSWORD_VERIFY
-  echo
-  if [[ $DB_ADMIN_PASSWORD != $DB_ADMIN_PASSWORD_VERIFY ]] ;
-  then
-    echo "Passwords do not match. Please try again."
-  fi
-done
 
 [[ -z $DB_USER ]] && read -p "New OPUS Database User Name [opus4]: "       DB_USER
+if [ -n "$PARAMETER_CONF" ] ;
+then
+  DB_USER_PASSWORD_VERIFY=$DB_USER_PASSWORD
+else
+  while [[ -z $DB_USER_PASSWORD || "$DB_USER_PASSWORD" != "$DB_USER_PASSWORD_VERIFY" ]] ;
+  do
+    read -p "New OPUS Database User Password: " -s        DB_USER_PASSWORD
+    echo
+    read -p "New OPUS Database User Password again: " -s  DB_USER_PASSWORD_VERIFY
+    echo
+    if [[ $DB_USER_PASSWORD != $DB_USER_PASSWORD_VERIFY ]] ;
+    then
+      echo "Passwords do not match. Please try again."
+    fi
+  done
+fi
 
-while [[ -z $DB_USER_PASSWORD || "$DB_USER_PASSWORD" != "$DB_USER_PASSWORD_VERIFY" ]] ;
-do
-  read -p "New OPUS Database User Password: " -s        DB_USER_PASSWORD
-  echo
-  read -p "New OPUS Database User Password again: " -s  DB_USER_PASSWORD_VERIFY
-  echo
-  if [[ $DB_USER_PASSWORD != $DB_USER_PASSWORD_VERIFY ]] ;
-  then
-    echo "Passwords do not match. Please try again."
-  fi
-done
 
 # set defaults if values are not given
 DBNAME="${DBNAME:-opusdb}"

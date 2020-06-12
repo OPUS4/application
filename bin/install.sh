@@ -145,15 +145,21 @@ fi
 echo
 echo "Creating Apache2 site configuration ..."
 echo
-
-"$SCRIPT_PATH/install-apache.sh" "$OPUS_URL_BASE" "apache24.conf.template" "$APACHE_CONF" "$OS" 'N'
-
+if [ -n "$PARAMETER_CONF" ] ;
+then
+  "$SCRIPT_PATH/install-apache.sh" "$OPUS_URL_BASE" "apache24.conf.template" "$APACHE_CONF" "$OS" 'N' "$PARAMETER_CONF"
+else
+  "$SCRIPT_PATH/install-apache.sh" "$OPUS_URL_BASE" "apache24.conf.template" "$APACHE_CONF" "$OS" 'N'
+fi
 #
 # Setup database
 #
-
-"$SCRIPT_PATH/install-database.sh"
-
+if [ -n "$PARAMETER_CONF" ] ;
+then
+  "$SCRIPT_PATH/install-database.sh" "$PARAMETER_CONF"
+else
+  "$SCRIPT_PATH/install-database.sh"
+fi
 #
 # Set file permissions
 #
@@ -174,20 +180,23 @@ fi
 #
 # Set password for administrator account
 #
-
-while [[ -z $ADMIN_PWD || "$ADMIN_PWD" != "$ADMIN_PWD_VERIFY" ]] ;
-do
-  echo
-  read -p "Please enter password for OPUS 'admin' account: " -s ADMIN_PWD
-  echo
-  read -p "Please enter password again: " -s ADMIN_PWD_VERIFY
-  echo
-  if [[ $ADMIN_PWD != $ADMIN_PWD_VERIFY ]] ;
-  then
-    echo "Passwords do not match. Please try again."
-  fi
-done
-
+if [ -n "$PARAMETER_CONF" ] ;
+then
+  ADMIN_PWD_VERIFY=$ADMIN_PWD
+else
+  while [[ -z $ADMIN_PWD || "$ADMIN_PWD" != "$ADMIN_PWD_VERIFY" ]] ;
+  do
+    echo
+    read -p "Please enter password for OPUS 'admin' account: " -s ADMIN_PWD
+    echo
+    read -p "Please enter password again: " -s ADMIN_PWD_VERIFY
+    echo
+    if [[ $ADMIN_PWD != $ADMIN_PWD_VERIFY ]] ;
+    then
+      echo "Passwords do not match. Please try again."
+    fi
+  done
+fi
 php "$BASEDIR/scripts/change-password.php" admin "$ADMIN_PWD"
 
 #
