@@ -1217,4 +1217,30 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
         $this->assertEquals('edited', $translation['state']);
         $this->assertEquals($values, $translation['translations']);
     }
+
+    public function testGetLanguageOrderRef()
+    {
+        $manager = $this->object;
+
+        $class = new ReflectionClass(get_class($manager));
+        $method = $class->getMethod('getLanguageOrderRef');
+        $method->setAccessible(true);
+
+        $order = $method->invoke($manager);
+
+        $this->assertEquals([
+            'de' => 0,
+            'en' => 1
+        ], $order);
+    }
+
+    public function testGetLanguageOrder()
+    {
+        $this->markTestIncomplete();
+    }
+
+    public function testSetLanguageOrder()
+    {
+        $this->markTestIncomplete();
+    }
 }
