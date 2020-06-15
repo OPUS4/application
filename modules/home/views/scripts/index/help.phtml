@@ -44,7 +44,7 @@
     <h2><?= $this->translate('help_index_title') ?> <?= $this->helpSetupLink() ?></h2>
 
 <?php if (isset($this->content)) : ?>
-    <h2><?= $this->translate($this->contenttitle) ?></h2>
+    <h2><?= $this->translate($this->contenttitle) ?> <?= $this->faqEditLink($this->contentId) ?></h2>
     <div class="content">
         <div id="section-help" class="section help">
         <?= $this->content ?>

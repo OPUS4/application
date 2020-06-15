@@ -161,6 +161,7 @@ class Home_IndexController extends Application_Controller_Action
 
                 $this->view->contenttitle = "help_title_$content";
                 $this->view->content = $help->getContent($content);
+                $this->view->contentId = $content;
             }
         }
 
