@@ -152,12 +152,18 @@ class Setup_HelppageController extends Application_Controller_Action
 
     protected function redirectBack()
     {
+        $help = Application_Translate_Help::getInstance();
+
         $faqId = $this->getParam('id');
 
         $url = '/home/index/help';
 
         if (! empty($faqId)) {
-            $url .= "#$faqId";
+            if ($help->getSeparateViewEnabled()) {
+                $url .= "/content/$faqId";
+            } else {
+                $url .= "#$faqId";
+            }
         }
 
         $this->_helper->Redirector->gotoUrl($url);
