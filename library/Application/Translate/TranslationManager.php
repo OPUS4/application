@@ -140,6 +140,11 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
     private $folders = ['language'];
 
     /**
+     * @var array Reference for sorting languages
+     */
+    private $languageOrderRef;
+
+    /**
      * Get editable modules.
      */
     public function getModules()
@@ -256,6 +261,8 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
                                     $row['translations'][$lang] = $value;
                                 }
 
+                                $row['translations'] = $this->sortLanguages($row['translations']);
+
                                 if (! array_key_exists($key, $translations)) {
                                     $translations[$key] = $row;
                                     $sortArray[] = $row[$sortKey];
@@ -283,6 +290,34 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
         array_multisort($sortArray, $sortOrder, SORT_STRING, $translations);
 
         return $translations;
+    }
+
+    protected function sortLanguages($translations)
+    {
+        return array_merge($this->getLanguageOrderRef(), $translations);
+    }
+
+    protected function getLanguageOrderRef()
+    {
+        if (is_null($this->languageOrderRef)) {
+            $this->languageOrderRef = array_flip(Application_Configuration::getInstance()->getSupportedLanguages());
+        }
+
+        return $this->languageOrderRef;
+    }
+
+    public function getLanguageOrder()
+    {
+        if (is_array($this->languageOrderRef)) {
+            return array_flip($this->getLanguageOrderRef());
+        } else {
+            return null;
+        }
+    }
+
+    public function setLanguageOrder($order)
+    {
+        $this->languageOrderRef = array_flip($order);
     }
 
     /**
@@ -326,7 +361,7 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
                 // keep original values from TMX files
                 if ($this->matches($key, $languages, $this->filter)) {
                     $translations[$key]['translationsTmx'] = $translations[$key]['translations'];
-                    $translations[$key]['translations'] = $languages;
+                    $translations[$key]['translations'] = $this->sortLanguages($languages);
                     $translations[$key]['state'] = 'edited';
                 } else {
                     // remove if edited version does not match anymore
@@ -336,10 +371,11 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
                 // key does not exist in TMX file and needs to be marked as ADDED
                 if ($this->matches($key, $languages, $this->filter)) {
                     $translations[$key]['key'] = $key;
-                    $translations[$key]['translations'] = $languages;
+                    $translations[$key]['translations'] = $this->sortLanguages($languages);
                     $translations[$key]['state'] = 'added';
                     $translations[$key]['module'] = $info['module'];
                 }
+
             }
         }
 
