@@ -375,7 +375,6 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
                     $translations[$key]['state'] = 'added';
                     $translations[$key]['module'] = $info['module'];
                 }
-
             }
         }
 
