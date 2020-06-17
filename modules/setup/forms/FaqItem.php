@@ -86,14 +86,14 @@ class Setup_Form_FaqItem extends Application_Form_Translations
         $question = $this->getElement(self::ELEMENT_QUESTION);
 
         if (! $this->isArrayEmpty($question->getValue())) {
-            $question->updateTranslations("help_title_$faqId");
+            $question->updateTranslations("help_title_$faqId", 'help');
         } else {
             $database->remove("help_title_$faqId");
         }
 
         $answer = $this->getElement(self::ELEMENT_ANSWER);
         if (! $this->isArrayEmpty($answer->getValue())) {
-            $answer->updateTranslations("help_content_$faqId");
+            $answer->updateTranslations("help_content_$faqId", 'help');
         } else {
             $database->remove("help_content_$faqId");
         }

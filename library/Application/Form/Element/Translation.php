@@ -104,7 +104,7 @@ class Application_Form_Element_Translation extends Zend_Form_Element_Multi
         }
     }
 
-    public function updateTranslations($key = null)
+    public function updateTranslations($key, $module = null)
     {
         $translate = Zend_Registry::get('Zend_Translate');
 
@@ -113,7 +113,7 @@ class Application_Form_Element_Translation extends Zend_Form_Element_Multi
         $translations = $this->getValue();
 
         if ($translations != $old) {
-            $translate->setTranslations($key, $translations);
+            $translate->setTranslations($key, $translations, $module);
         }
     }
 
