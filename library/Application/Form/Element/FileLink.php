@@ -70,7 +70,7 @@ class Application_Form_Element_FileLink extends Application_Form_Element_Text
             }
         }
 
-        if (! $file->exists()) {
+        if (! $file->isReadable()) {
             $this->addError('admin_filemanager_file_does_not_exist');
         }
         parent::setValue($file);

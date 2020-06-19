@@ -65,7 +65,7 @@ class Frontdoor_DeliverController extends Application_Controller_Action
             return;
         }
 
-        if (! $fileObject->exists()) {
+        if (! $fileObject->isReadable()) {
             $this->handleDeliveryError(new Frontdoor_Model_FileNotFoundException());
             return;
         }

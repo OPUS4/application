@@ -129,7 +129,7 @@ class Sword_Model_ServiceDocument
     private function setImportCollection($collectionNode)
     {
         $importCollection = new Sword_Model_ImportCollection();
-        if ($importCollection->exists()) {
+        if ($importCollection->isReadable()) {
             $node = $this->document->createElementNS('http://www.w3.org/2005/Atom', 'atom:title', $importCollection->getName());
             $collectionNode->appendChild($node);
             $href = $this->fullUrl . '/sword/index/index/' . $importCollection->getRoleName() . '/' . $importCollection->getNumber();

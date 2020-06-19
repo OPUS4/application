@@ -361,7 +361,7 @@ class Frontdoor_Model_HtmlMetaTags
             }
 
             foreach ($document->getFile() as $file) {
-                if ((! $file->exists())
+                if ((! $file->isReadable())
                     or ($file->getVisibleInFrontdoor() !== '1')
                     or (! Application_Xslt::fileAccessAllowed($file->getId()))) {
                     continue;

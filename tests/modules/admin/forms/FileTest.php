@@ -91,7 +91,7 @@ class Admin_Form_FileTest extends ControllerTestCase
 
         $form->populateFromModel($file);
 
-        $this->assertFalse($file->exists(), 'Datei mit ID = 123 sollte in den Testdaten nicht existieren.');
+        $this->assertFalse($file->isReadable(), 'Datei mit ID = 123 sollte in den Testdaten nicht existieren.');
         $this->assertEquals(123, $form->getElementValue('Id'));
 
         $errorMessages = $form->getElement('FileLink')->getErrorMessages();

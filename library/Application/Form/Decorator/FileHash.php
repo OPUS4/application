@@ -76,7 +76,7 @@ class Application_Form_Decorator_FileHash extends Zend_Form_Decorator_Abstract
                 $markup .= htmlspecialchars($hashIst) . '</div>';
                 $markup .= $view->formHidden($element->getFullyQualifiedName() . '[Ist]', $hashIst);
             } else {
-                if ($file->exists() && ! $file->canVerify()) {
+                if ($file->isReadable() && ! $file->canVerify()) {
                     $markup .= $view->translate('frontdoor_file_too_big') . '</div>';
                 } else {
                     $markup .= $view->translate('frontdoor_checksum_not_verified') . '</div>';

@@ -87,12 +87,12 @@ class Admin_Model_Hash
      */
     public function checkFileExists()
     {
-        return $this->_file->exists();
+        return $this->_file->isReadable();
     }
 
     public function getIst()
     {
-        if ($this->_file->exists() && $this->getSignatureType() !== 'gpg' && $this->_file->canVerify()) {
+        if ($this->_file->isReadable() && $this->getSignatureType() !== 'gpg' && $this->_file->canVerify()) {
             return $this->_file->getRealHash($this->getHashType());
         } else {
             return null;
