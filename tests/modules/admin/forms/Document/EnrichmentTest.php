@@ -453,8 +453,7 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase
         $selectOptions = ['values' => $options];
         if ($strictValidation) {
             $selectOptions['validation'] = 'strict';
-        }
-        else {
+        } else {
             $selectOptions['validation'] = 'none';
         }
 
@@ -468,8 +467,7 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase
         $options = ['regex' => $regex];
         if ($strictValidation) {
             $options['validation'] = 'strict';
-        }
-        else {
+        } else {
             $options['validation'] = 'none';
         }
 

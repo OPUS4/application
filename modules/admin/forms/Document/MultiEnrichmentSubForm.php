@@ -180,7 +180,6 @@ class Admin_Form_Document_MultiEnrichmentSubForm extends Admin_Form_Document_Mul
         foreach ($this->getSubForms() as $subForm) {
             if ($subForm instanceof Admin_Form_Document_Enrichment) {
                 $subForm->initValueElement($post);
-
             }
             $this->prepareSubFormDecorators($subForm);
         }
