@@ -869,7 +869,7 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase
 
     public function testValidationWithRegexTypeUsedByFirstEnrichmentKey()
     {
-        $this->createTestRegexType('^abc$');
+        $type = $this->createTestRegexType('^abc$');
 
         // mit dem Namen soll sichergestellt werden, dass dieser Enrichment-Key
         // in der Auswahlliste als erster Eintrag auftritt
