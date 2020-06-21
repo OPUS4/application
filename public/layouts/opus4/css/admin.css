@@ -2539,15 +2539,6 @@ a.create-document-link {
     font-weight: bold;
 }
 
-/* Verstoß gegen Typkonfiguration eines Enrichment-Key nur als Hinweis anzeigen */
-.adminContainer ul.notice {
-    background-color: #E1E4E0 !important;
-    color: #595A56 !important;
-}
-.adminContainer ul.notice:before {
-    border-color: transparent transparent #E1E4E0 !important;
-}
-
 .code {
     font-family: monospace;
 }
