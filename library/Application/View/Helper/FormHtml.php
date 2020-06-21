@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -26,11 +26,44 @@
  *
  * @category    Application
  * @package     Module_Setup
- * @author      Edouard Simon (edouard.simon@zib.de)
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-?>
 
-<a href="<?= $this->backLink ?>"><?= $this->translate('setup_backlink') ?></a>
+class Application_View_Helper_FormHtml extends Zend_View_Helper_FormElement
+{
+
+    public function formHtml($name, $value = null, array $attribs = null)
+    {
+        if (isset($attribs['content'])) {
+            $content = $attribs['content'];
+        } else {
+            $content = '';
+        }
+
+        if (isset($attribs['tag'])) {
+            $tag = $attribs['tag'];
+        } else {
+            $tag = 'div';
+        }
+
+        if (isset($attribs['cssClass'])) {
+            $cssClass = $attribs['cssClass'];
+        } else {
+            $cssClass = null;
+        }
+
+        $translator = $this->getTranslator();
+
+        $output = "<$tag";
+        if (! is_null($cssClass)) {
+            $output .= " class=\"$cssClass\"";
+        }
+        $output .= '>';
+        $output .= $translator->translate($content);
+        $output .= "</$tag>";
+
+        return $output;
+    }
+}

@@ -28,7 +28,7 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @author      Thoralf Klein <thoralf.klein@zib.de>
  * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -55,11 +55,15 @@ class ControllerTestCase extends TestCase
 
     private $testFiles;
 
+    private $testFolders;
+
     private $tempFiles = [];
 
     private $logger = null;
 
     private $translatorBackup = null;
+
+    private $workspacePath = null;
 
     /**
      * Method to initialize Zend_Application for each test.
@@ -91,6 +95,7 @@ class ControllerTestCase extends TestCase
         $this->cleanupDatabase();
         $this->deleteTestFiles();
         $this->deleteTempFiles();
+        $this->cleanupTestFolders();
 
         $this->additionalChecks();
 
@@ -229,6 +234,13 @@ class ControllerTestCase extends TestCase
         $config = Zend_Registry::get('Zend_Config');
         if (isset($config->security) && filter_var($config->security, FILTER_VALIDATE_BOOLEAN)) {
             Application_Security_AclProvider::init();
+
+            // make sure ACLs are not cached in action helper TODO find better solution
+            try {
+                $accessControl = Zend_Controller_Action_HelperBroker::getExistingHelper('accessControl');
+                $accessControl->setAcl(null);
+            } catch (Zend_Controller_Action_Exception $excep) {
+            }
         }
     }
 
@@ -241,6 +253,13 @@ class ControllerTestCase extends TestCase
         $realm = Opus_Security_Realm::getInstance();
         $realm->setUser(null);
         $realm->setIp(null);
+
+        // make sure ACLs are not cached in action helper TODO find better solution
+        try {
+            $accessControl = Zend_Controller_Action_HelperBroker::getExistingHelper('accessControl');
+            $accessControl->setAcl(null);
+        } catch (Zend_Controller_Action_Exception $excep) {
+        }
     }
 
     /**
@@ -638,7 +657,7 @@ class ControllerTestCase extends TestCase
         }
     }
 
-    private function deleteTestDocuments()
+    protected function deleteTestDocuments()
     {
         if (is_null($this->testDocuments)) {
             return;
@@ -705,19 +724,16 @@ class ControllerTestCase extends TestCase
      * @throws Opus_Model_Exception
      * @throws Zend_Exception
      */
-    protected function createTestFile($filename, $filepath = null)
+    protected function createOpusTestFile($filename, $filepath = null)
     {
         if (is_null($this->testFiles)) {
             $this->testFiles = [];
         }
-        $config = Zend_Registry::get('Zend_Config');
-        if (! isset($config->workspacePath)) {
-            throw new Exception("config key 'workspacePath' not defined in config file");
-        }
+
+        $workspacePath = $this->getWorkspacePath();
 
         if (is_null($filepath)) {
-            $path = $config->workspacePath . DIRECTORY_SEPARATOR . uniqid();
-            mkdir($path, 0777, true);
+            $path = $this->createTestFolder();
             $filepath = $path . DIRECTORY_SEPARATOR . $filename;
             touch($filepath);
         }
@@ -733,14 +749,138 @@ class ControllerTestCase extends TestCase
         return $file;
     }
 
-    private function deleteTestFiles()
+    protected function deleteTestFiles()
     {
         if (! is_null($this->testFiles)) {
             foreach ($this->testFiles as $key => $filepath) {
                 try {
-                    Opus_Util_File::deleteDirectory(dirname($filepath));
+                    if (is_writeable($filepath)) {
+                        unlink($filepath);
+                    }
                 } catch (Exception $e) {
                 }
+            }
+        }
+    }
+
+    protected function createTestFile($filename, $content = null, $path = null)
+    {
+        if (is_null($path)) {
+            $filePath = $this->createTestFolder();
+        } else {
+            $filePath = $path;
+        }
+
+        $filePath .= DIRECTORY_SEPARATOR . $filename;
+
+        if (! is_null($content)) {
+            file_put_contents($filePath, $content);
+        } else {
+            touch($filePath);
+        }
+
+        if (is_null($this->testFiles)) {
+            $this->testFiles = [];
+        }
+        $this->testFiles[$filename] = $filePath;
+
+        return $filePath;
+    }
+
+    protected function getWorkspacePath()
+    {
+        if (is_null($this->workspacePath)) {
+            $config = $this->getConfig();
+            if (! isset($config->workspacePath)) {
+                throw new Exception('config key \'workspacePath\' not defined in config file');
+            }
+            $this->workspacePath = $config->workspacePath;
+        }
+
+        return $this->workspacePath;
+    }
+
+    protected function setWorkspacePath($path)
+    {
+        $this->workspacePath = $path;
+    }
+
+    protected function getConfig()
+    {
+        return Zend_Registry::get('Zend_Config');
+    }
+
+    protected function createTestFolder()
+    {
+        $workspacePath = $this->getWorkspacePath();
+        $path = $workspacePath . DIRECTORY_SEPARATOR . 'tmp' . DIRECTORY_SEPARATOR . uniqid('test');
+        if (! is_array($this->testFolders)) {
+            $this->testFolders = [];
+        }
+        $this->testFolders[] = $path;
+        mkdir($path, 0777, true);
+        return $path;
+    }
+
+    protected function cleanupTestFolders()
+    {
+        if (! is_array($this->testFolders)) {
+            return;
+        }
+
+        foreach ($this->testFolders as $path) {
+            if (is_dir($path)) {
+                $this->deleteFolder($path);
+            }
+        }
+    }
+
+    /**
+     * @param $src
+     * @param $dest
+     * @throws Exception
+     *
+     * TODO recursive copying of subdirectories?
+     */
+    protected function copyFiles($src, $dest)
+    {
+        if (! is_dir($src) || ! is_dir($dest)) {
+            throw new Exception('Parameters need to be folders.');
+        }
+
+        $dest = rtrim($dest, '/') . '/';
+
+        $iterator = new RecursiveDirectoryIterator($src, FilesystemIterator::SKIP_DOTS);
+        foreach ($iterator as $file) {
+            if ($file->isFile()) {
+                copy($file->getPathname(), $dest . $file->getFilename());
+            }
+        }
+    }
+
+    /**
+     * Deletes entire test folders.
+     *
+     * Normally does not delete files outside of configured workspace folder.
+     */
+    protected function deleteFolder($path, $deleteOutsideWorkspace = false)
+    {
+        if (is_dir($path)) {
+            $workspacePath = $this->getWorkspacePath();
+
+            if (strpos($path, $workspacePath) === 0 || $deleteOutsideWorkspace) {
+                $iterator = new RecursiveDirectoryIterator($path, FilesystemIterator::SKIP_DOTS);
+                foreach ($iterator as $file) {
+                    if ($file->isDir()) {
+                        $this->deleteFolder($file->getPathname());
+                    } else {
+                        $pathname = $file->getPathname();
+                        if (strpos($pathname, $workspacePath) === 0 || $deleteOutsideWorkspace) {
+                            unlink($file->getPathname());
+                        }
+                    }
+                }
+                rmdir($path);
             }
         }
     }

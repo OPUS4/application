@@ -50,7 +50,7 @@
 </div>
 <?PHP else : ?>
 <div class="data-wrapper multiple-data">
-    <?= $this->element->getElement(Admin_Form_Document_Collection::ELEMENT_EDIT) ?>
+    <?= $this->element->getElement(Admin_Form_Document_Collection::ELEMENT_EDIT)->getLabel() ?>
     <?= $this->element->getElement(Admin_Form_Document_Collection::ELEMENT_ID) ?>
 </div>
 <?= $this->element->getElement(Admin_Form_Document_Collection::ELEMENT_REMOVE) ?>

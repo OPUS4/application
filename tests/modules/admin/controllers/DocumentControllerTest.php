@@ -922,7 +922,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase
     public function testShowDocumentWithFilesWithLanguageNull()
     {
         $doc = $this->createTestDocument();
-        $file = $this->createTestFile('nolang.pdf');
+        $file = $this->createOpusTestFile('nolang.pdf');
 
         $file->setLanguage(null);
 

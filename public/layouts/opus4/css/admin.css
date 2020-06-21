@@ -2518,17 +2518,6 @@ table.module-access-table tr.noaccess {
     margin-bottom: 0.5em;
 }
 
-#content.setup_translation > .wrapper a {
-    display: block;
-    margin-left: 2em;
-    padding: 0.5em;
-    font-size: 1.2em;
-}
-
-#content.setup_translation_edit textarea {
-    resize: vertical;
-}
-
 a.link-button {
     display: inline-block;
     padding: 0.5em 1em;
@@ -2557,4 +2546,8 @@ a.create-document-link {
 }
 .adminContainer ul.notice:before {
     border-color: transparent transparent #E1E4E0 !important;
+}
+
+.code {
+    font-family: monospace;
 }

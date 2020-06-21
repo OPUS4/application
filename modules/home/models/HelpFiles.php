@@ -49,13 +49,19 @@ class Home_Model_HelpFiles extends Application_Translate_Help
      */
     private $helpConfig;
 
+    private $helpPath;
+
     /**
      * Returns the path to the help files.
      * @return string Path to help files
      */
     public function getHelpPath()
     {
-        return APPLICATION_PATH . '/application/configs/help/';
+        if (is_null($this->helpPath)) {
+            $this->helpPath = APPLICATION_PATH . '/application/configs/help/';
+        }
+
+        return $this->helpPath;
     }
 
     /**
@@ -162,5 +168,10 @@ class Home_Model_HelpFiles extends Application_Translate_Help
         $config = $this->getConfig();
 
         return (! isset($config->help->useFiles) || filter_var($config->help->useFiles, FILTER_VALIDATE_BOOLEAN));
+    }
+
+    public function setHelpPath($path)
+    {
+        $this->helpPath = rtrim($path, '/') . '/';
     }
 }

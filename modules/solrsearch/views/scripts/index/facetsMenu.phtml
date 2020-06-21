@@ -29,7 +29,7 @@
  * @author      Julian Heise <heise@zib.de>
  * @author      Michael Lang <lang@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 ?>
@@ -60,6 +60,9 @@
                         $facetValue = $this->translate('facetvalue_' . $key . '_' . $facetValue);
                     } elseif ($key === 'server_state') {
                         $facetValue = 'Opus_Document_ServerState_Value_' . ucfirst($facetValue);
+                    } elseif ($key === 'language') {
+                        // TODO translation of language is not tested
+                        $facetValue = $this->translateLanguage($facetValue);
                     }
                 ?>
                     <?php if (array_key_exists($key, $this->selectedFacets)) : ?>
