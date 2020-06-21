@@ -511,7 +511,6 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
             if (! is_null($enrichmentType)) {
                 if ($enrichmentType->isStrictValidation()) {
                     if ($enrichmentType->getFormElementName() == 'Select') {
-
                         // wenn der erste Auswahlwert im Select-Element gewählt wurde, so muss geprüft werden, ob
                         // dieser Wert möglicherweise gegen die Typkonfiguration verstößt (als erster Wert wird immer
                         // der aktuell im Enrichment gespeicherte Wert verwendet - dieser kann möglicherweise gegen
@@ -520,8 +519,7 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
 
                         $validationResult = $this->handleSelectFieldStrict($enrichmentData, $enrichmentType, $validationResult);
                     }
-                }
-                else {
+                } else {
                     // hat sich der Enrichment-Wert nicht geändert, so ist der (nicht geänderte)
                     // Enrichment-Wert weiterhin gültig, auch wenn er gegen die Typkonfiguration verstößt
 
@@ -563,8 +561,7 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
                             $valueElem = $this->getElement(self::ELEMENT_VALUE);
                             if ($enrichmentType->getFormElementName() == 'Select') {
                                 $formElementValidation = in_array($formValue, $enrichmentType->getValues());
-                            }
-                            else {
+                            } else {
                                 $formElementValidation = $valueElem->isValid($formValue);
                             }
                             if (! $formElementValidation) {
@@ -573,8 +570,7 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
                                 $this->handleValidationErrorNonStrict($enrichmentKey);
                             }
                             return true;
-                        }
-                        else {
+                        } else {
                             // Sonderbehandlung bei Select-Feldern: hier ist der letzte Wert als gültig zu betrachten,
                             // wenn in die Select-Liste der bzgl. der Typkonfiguration ungültige Wert als erster Eintrag
                             // aufgenommen wurde
@@ -664,5 +660,4 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
 
         return $translator->translate($translationPrefix . $keySuffix);
     }
-
 }

@@ -811,8 +811,7 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase
 
     public function testValidationWithRegexType()
     {
-        $type = new Opus_Enrichment_RegexType();
-        $type->setOptions(['regex' => '^abc$']);
+        $type = $this->createTestRegexType('^abc$');
 
         $enrichmentKey = $this->createEnrichmentKey('regex', $type);
         $enrichmentId = $this->createTestDocWithEnrichmentOfGivenKey('regex');
@@ -841,8 +840,7 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase
 
     public function testValidationWithRegexTypeWithMissingValue()
     {
-        $type = new Opus_Enrichment_RegexType();
-        $type->setOptions(['regex' => '^.*$']);
+        $type = $this->createTestRegexType('^.*$');
 
         $enrichmentKey = $this->createEnrichmentKey('regex', $type);
         $enrichmentId = $this->createTestDocWithEnrichmentOfGivenKey('regex');
@@ -871,8 +869,7 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase
 
     public function testValidationWithRegexTypeUsedByFirstEnrichmentKey()
     {
-        $type = new Opus_Enrichment_RegexType();
-        $type->setOptions(['regex' => '^abc$']);
+        $this->createTestRegexType('^abc$');
 
         // mit dem Namen soll sichergestellt werden, dass dieser Enrichment-Key
         // in der Auswahlliste als erster Eintrag auftritt
@@ -901,7 +898,7 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase
         $enrichmentKey->delete();
     }
 
-    public function testValidationWithRegexTypeAndStrictValidationWithInvalidOriginalValue()
+    public function testValidationStrictWithRegexTypeAndInvalidOriginalValue()
     {
         $type = $this->createTestRegexType('^abc$', true);
 
@@ -930,7 +927,7 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase
         $enrichmentKey->delete();
     }
 
-    public function testValidationWithRegexTypeAndStrictValidationWithInvalidChangedValue()
+    public function testValidationStrictWithRegexTypeAndInvalidChangedValue()
     {
         $type = $this->createTestRegexType('^abc$', true);
 
@@ -959,7 +956,7 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase
         $enrichmentKey->delete();
     }
 
-    public function testValidationWithRegexTypeAndStrictValidationWithValidValue()
+    public function testValidationStrictWithRegexTypeAndValidValue()
     {
         $type = $this->createTestRegexType('^abc$', true);
 
@@ -986,7 +983,7 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase
         $enrichmentKey->delete();
     }
 
-    public function testValidationWithRegexTypeAndNoValidationWithInvalidOriginalValue()
+    public function testValidationNoneWithRegexTypeAndInvalidOriginalValue()
     {
         $type = $this->createTestRegexType('^abc$');
 
@@ -1013,7 +1010,7 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase
         $enrichmentKey->delete();
     }
 
-    public function testValidationWithRegexTypeAndNoValidationWithInvalidChangedValue()
+    public function testValidationNoneWithRegexTypeAndInvalidChangedValue()
     {
         $type = $this->createTestRegexType('^abc$');
 
@@ -1042,7 +1039,7 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase
         $enrichmentKey->delete();
     }
 
-    public function testValidationWithRegexTypeAndNoValidationWithValidValue()
+    public function testValidationNoneWithRegexTypeAndValidValue()
     {
         $type = $this->createTestRegexType('^abc$');
 
