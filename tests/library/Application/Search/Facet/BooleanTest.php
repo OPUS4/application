@@ -24,17 +24,25 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Util
- * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
+ * @category    Application Unit Test
+ * @package     Application_Search
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-/**
- * TODO replace - QueryBuilder is not used anymore, right?
- */
-class Application_Search_QueryBuilderException extends Exception
+class Application_Search_Facet_BooleanTest extends ControllerTestCase
 {
 
+    protected $additionalResources = 'translation';
+
+    public function testGetLabel()
+    {
+        $this->useEnglish();
+
+        $facet = new Application_Search_Facet_Boolean('has_fulltext');
+
+        $this->assertEquals('yes', $facet->getLabel('true'));
+        $this->assertEquals('no', $facet->getLabel('false'));
+    }
 }

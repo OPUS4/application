@@ -766,19 +766,18 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
 
         $this->dispatch('/solrsearch/index/search/searchtype/simple/query/facetlimittestwithsubjects-opusvier2610');
 
-        for ($index = 0; $index < intval($config->searchengine->solr->globalfacetlimit); $index++) {
-            $path = '/solrsearch/index/search/searchtype/simple/query/facetlimittestwithsubjects-opusvier2610/start/0/rows/10/subjectfq/subject';
-            if ($index < 10) {
-                $path .= '0';
-            }
-            $this->assertContains($path . $index, $this->getResponse()->getBody());
+        $body = $this->getResponse()->getBody();
+
+        $path = '/solrsearch/index/search/searchtype/simple/query/facetlimittestwithsubjects-opusvier2610/start/0/rows/10/subjectfq/subject%\'.02d';
+
+        $facetLimit = intval($config->search->facet->default->limit);
+
+        for ($index = 0; $index < $facetLimit; $index++) {
+            $this->assertContains(sprintf($path, $index), $body);
         }
-        for ($index = intval($config->searchengine->solr->globalfacetlimit); $index < $numOfSubjects; $index++) {
-            $path = '/solrsearch/index/search/searchtype/simple/query/facetlimittestwithsubjects-opusvier2610/start/0/rows/10/subjectfq/subject';
-            if ($index < 10) {
-                $path .= '0';
-            }
-            $this->assertNotContains($path . $index, $this->getResponse()->getBody());
+
+        for ($index = $facetLimit; $index < $numOfSubjects; $index++) {
+            $this->assertNotContains(sprintf($path, $index), $body);
         }
     }
 
@@ -786,22 +785,12 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
     {
         // manipulate application configuration
         $config = Zend_Registry::get('Zend_Config');
-        $limit = null;
-        if (isset($config->searchengine->solr->globalfacetlimit)) {
-            $limit = $config->searchengine->solr->globalfacetlimit;
-        }
-        $config->searchengine->solr->globalfacetlimit = '5';
-        Zend_Registry::set('Zend_Config', $config);
+        $config->search->facet->default->limit = '5';
 
         $numOfSubjects = 10;
         $this->addSampleDocWithMultipleSubjects($numOfSubjects);
 
         $this->dispatch('/solrsearch/index/search/searchtype/simple/query/facetlimittestwithsubjects-opusvier2610');
-
-        // undo configuration manipulation
-        $config = Zend_Registry::get('Zend_Config');
-        $config->searchengine->solr->globalfacetlimit = $limit;
-        Zend_Registry::set('Zend_Config', $config);
 
         for ($index = 0; $index < 5; $index++) {
             $this->assertContains('/solrsearch/index/search/searchtype/simple/query/facetlimittestwithsubjects-opusvier2610/start/0/rows/10/subjectfq/subject0' . $index, $this->getResponse()->getBody());

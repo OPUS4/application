@@ -34,6 +34,8 @@
 class Solrsearch_Model_FacetMenuTest extends ControllerTestCase
 {
 
+    protected $additionalResources = ['database'];
+
     protected $configModifiable = true;
 
     public function testGetFacetLimitsFromConfig()
