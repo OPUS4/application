@@ -277,7 +277,7 @@ $(document).ready(function () {
      */
     $("input[data-opusValidationError='true'], select[data-opusValidationError='true']").on('input', function (event) {
         var element = $(this);
-        var errorMessage = element.next(".errors");
+        var errorMessage = element.next(".datahint");
         if (errorMessage) {
             var oldValue = errorMessage.data('errorValue');
             if (typeof oldValue === 'undefined' && (typeof event.target.defaultValue !== 'undefined')) {

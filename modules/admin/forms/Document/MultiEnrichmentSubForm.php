@@ -115,7 +115,9 @@ class Admin_Form_Document_MultiEnrichmentSubForm extends Admin_Form_Document_Mul
                     // die Eingabe des Enrichmentwerts) auswählen und behandeln
                     $newSubForm = end($subForms);
                     if ($newSubForm instanceof Admin_Form_Document_Enrichment) {
-                        $newSubForm->initEnrichmentValueElement();
+                        // expliziter Aufruf der nachfolgenden Methoden an dieser Stelle erforderlich, weil
+                        // die Methode processPost erst nach der Methode constructFromPost aufgerufen wird
+                        $newSubForm->initValueFormElement();
                         $this->prepareSubFormDecorators($newSubForm);
                     }
                 }
@@ -177,23 +179,8 @@ class Admin_Form_Document_MultiEnrichmentSubForm extends Admin_Form_Document_Mul
 
         foreach ($this->getSubForms() as $subForm) {
             if ($subForm instanceof Admin_Form_Document_Enrichment) {
-                $subFormName = $subForm->getName();
-                $enrichmentKeyName = null;
-                if (array_key_exists($subFormName, $post)) {
-                    $enrichmentKeyName = $post[$subFormName][Admin_Form_Document_Enrichment::ELEMENT_KEY_NAME];
-                }
+                $subForm->initValueElement($post);
 
-                // es ist zu prüfen, ob das Enrichment einen Wert verwendet, der in der
-                // Typkonfiguration nicht angegeben ist
-                $enrichmentId = null;
-                if (array_key_exists(Admin_Form_Document_Enrichment::ELEMENT_ID, $post[$subFormName])) {
-                    $enrichmentId = $post[$subFormName][Admin_Form_Document_Enrichment::ELEMENT_ID];
-                    if ($enrichmentId == '') {
-                        $enrichmentId = null;
-                    }
-                }
-
-                $subForm->initEnrichmentValueElement($enrichmentKeyName, $enrichmentId);
             }
             $this->prepareSubFormDecorators($subForm);
         }

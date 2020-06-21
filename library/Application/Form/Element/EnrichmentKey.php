@@ -44,10 +44,6 @@ class Application_Form_Element_EnrichmentKey extends Application_Form_Element_Se
         // load enrichment keys only once in order to save database queries
         $options = Opus_EnrichmentKey::getAll(false);
 
-        $values = [];
-
-        $translator = $this->getTranslator();
-
         $this->setDisableTranslator(true); // keys are translated below if possible
 
         foreach ($options as $index => $option) {
@@ -59,19 +55,57 @@ class Application_Form_Element_EnrichmentKey extends Application_Form_Element_Se
                 continue;
             }
 
-            $values[] = $keyName;
-
-            $translationKey = 'Enrichment' . $keyName;
-
-            if (! is_null($translator) && ($translator->isTranslated($translationKey))) {
-                $this->addMultiOption($keyName, $translator->translate($translationKey));
-            } else {
-                $this->addMultiOption($keyName, $keyName);
-            }
+            $this->addKeyNameAsOption($keyName);
         }
 
-        $validator = new Zend_Validate_InArray($values);
-        $validator->setMessage('validation_error_unknown_enrichmentkey');
+        $this->resetValidator();
+    }
+
+    private function addKeyNameAsOption($keyName)
+    {
+        $translationKey = 'Enrichment' . $keyName;
+
+        $translator = Zend_Registry::get('Zend_Translate');
+        if (! is_null($translator) && ($translator->isTranslated($translationKey))) {
+            $this->addMultiOption($keyName, $translator->translate($translationKey));
+        } else {
+            $this->addMultiOption($keyName, $keyName);
+        }
+    }
+
+    private function resetValidator()
+    {
+        $translator = Zend_Registry::get('Zend_Translate');
+        $message = 'validation_error_unknown_enrichmentkey';
+        if (! is_null($translator) && $translator->isTranslated($message)) {
+            $message = $translator->translate($message);
+        }
+
+        $validator = new Zend_Validate_InArray(array_keys($this->getMultiOptions()));
+        $validator->setMessage($message);
         $this->addValidator($validator);
+    }
+
+    /**
+     * Prüft, ob der übergebene EnrichmentKey-Name bereits in der Auswahl existiert
+     *
+     * @param $keyName
+     */
+    public function hasKeyName($keyName)
+    {
+        return array_key_exists($keyName, $this->getMultiOptions());
+    }
+
+    /**
+     * Fügt den übergebenen EnrichmentKey-Namen zur Auswahl hinzu, sofern es nicht bereits existiert.
+     *
+     * @param $keyName
+     */
+    public function addKeyNameIfMissing($keyName)
+    {
+        if (! $this->hasKeyName($keyName)) {
+            $this->addKeyNameAsOption($keyName);
+            $this->resetValidator();
+        }
     }
 }

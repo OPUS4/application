@@ -41,6 +41,11 @@ class Application_Form_Element_Select extends Zend_Form_Element_Select implement
 {
 
     /**
+     * @var string
+     */
+    private $_hint;
+
+    /**
      * Initialisiert das Formularelement.
      *
      * Fügt PrefixPath für angepasste OPUS Dekoratoren hinzu.
@@ -57,26 +62,26 @@ class Application_Form_Element_Select extends Zend_Form_Element_Select implement
         if (! $this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
             $this->setDecorators(
                 [
-                'ViewHelper',
-                'Errors',
-                'Description',
-                'ElementHtmlTag',
-                ['LabelNotEmpty', ['tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend']],
-                [['dataWrapper' => 'HtmlTagWithId'], ['tag' => 'div', 'class' => 'data-wrapper']]
+                    'ViewHelper',
+                    'Errors',
+                    'Description',
+                    'ElementHint',
+                    'ElementHtmlTag',
+                    ['LabelNotEmpty', ['tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend']],
+                    [['dataWrapper' => 'HtmlTagWithId'], ['tag' => 'div', 'class' => 'data-wrapper']]
                 ]
             );
         }
     }
 
     /**
-     * Sorgt dafür, daß nur der Text ausgeben wird und kein INPUT-Tag.
+     * Setzt den Hinweis für das Formularelement.
+     *
+     * @param string $hint Hinweis
      */
-    public function prepareRenderingAsView()
+    public function setHint($hint)
     {
-        $viewHelper = $this->getDecorator('ViewHelper');
-        if ($viewHelper instanceof Application_Form_Decorator_ViewHelper) {
-            $viewHelper->setViewOnlyEnabled(true);
-        }
+        $this->_hint = $hint;
     }
 
     /**
@@ -89,7 +94,18 @@ class Application_Form_Element_Select extends Zend_Form_Element_Select implement
      */
     public function getHint()
     {
-        return null; // TODO: Implement getHint() method.
+        return $this->_hint;
+    }
+
+    /**
+     * Sorgt dafür, daß nur der Text ausgeben wird und kein INPUT-Tag.
+     */
+    public function prepareRenderingAsView()
+    {
+        $viewHelper = $this->getDecorator('ViewHelper');
+        if ($viewHelper instanceof Application_Form_Decorator_ViewHelper) {
+            $viewHelper->setViewOnlyEnabled(true);
+        }
     }
 
     public function getStaticViewHelper()
