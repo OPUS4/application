@@ -31,7 +31,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Application_Search_Facet_BooleanTest extends ControllerTestCase
+class Application_Search_Facet_LanguageTest extends ControllerTestCase
 {
 
     protected $additionalResources = 'translation';
