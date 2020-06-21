@@ -109,6 +109,14 @@ class Application_Search_FacetManager
         // TODO does this make any sense here ('server_state' will already be there)
         $facets = array_merge($facets, ['server_state']);
 
+        // TODO there must be a better way, also make year_inverted independent of year
+        if (in_array('year_inverted', $facets)) {
+            $temp = array_flip($facets);
+            unset($temp['year_inverted']);
+            $facets = array_flip($facets);
+            $facets[] = 'year';
+        }
+
         return $facets;
     }
 }
