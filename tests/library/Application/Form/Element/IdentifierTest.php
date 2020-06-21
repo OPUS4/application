@@ -39,9 +39,9 @@ class Application_Form_Element_IdentifierTest extends FormElementTestCase
     public function setUp()
     {
         $this->_formElementClass = 'Application_Form_Element_Identifier';
-        $this->_expectedDecoratorCount = 6;
         $this->_expectedDecorators = ['ViewHelper', 'Errors', 'Description', 'ElementHtmlTag', 'LabelNotEmpty',
-            'dataWrapper'];
+            'dataWrapper', 'ElementHint'];
+        $this->_expectedDecoratorCount = count($this->_expectedDecorators);
         $this->_staticViewHelper = 'viewFormSelect';
         parent::setUp();
     }

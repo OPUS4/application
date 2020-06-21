@@ -43,9 +43,9 @@ class Application_Form_Element_LanguageScopeTest extends FormElementTestCase
         $this->keys = ['Null', 'I', 'M', 'S'];
 
         $this->_formElementClass = 'Application_Form_Element_LanguageScope';
-        $this->_expectedDecoratorCount = 6;
         $this->_expectedDecorators = ['ViewHelper', 'Errors', 'Description', 'ElementHtmlTag', 'LabelNotEmpty',
-            'dataWrapper'];
+            'dataWrapper', 'ElementHint'];
+        $this->_expectedDecoratorCount = count($this->_expectedDecorators);
         $this->_staticViewHelper = 'viewFormSelect';
         parent::setUp();
     }

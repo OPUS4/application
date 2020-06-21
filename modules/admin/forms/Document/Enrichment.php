@@ -641,10 +641,6 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
         $element->setHint($hint);
 
         $element->removeDecorator('Errors');
-
-        // FIXME kann weg -> Abhängigkeiten prüfen
-        //$decorator = $element->getDecorator('Errors');
-        //$decorator->setOption('class', 'errors datahint');
     }
 
     private function handleEnrichmentKeySpecificTranslations($keySuffix, $enrichmentKeyName = null)

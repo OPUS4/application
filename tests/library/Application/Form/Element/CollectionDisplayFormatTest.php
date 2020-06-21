@@ -46,9 +46,9 @@ class Application_Form_Element_CollectionDisplayFormatTest extends FormElementTe
         $this->values = ['Name', 'Number', 'Name,Number', 'Number,Name'];
 
         $this->_formElementClass = 'Application_Form_Element_CollectionDisplayFormat';
-        $this->_expectedDecoratorCount = 6;
         $this->_expectedDecorators = ['ViewHelper', 'Errors', 'Description', 'ElementHtmlTag', 'LabelNotEmpty',
-            'dataWrapper'];
+            'dataWrapper', 'ElementHint'];
+        $this->_expectedDecoratorCount = count($this->_expectedDecorators);
         $this->_staticViewHelper = 'viewFormSelect';
 
         parent::setUp();
