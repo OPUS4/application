@@ -180,8 +180,7 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
                     if ($enrichmentType->getFormElementName() === 'Select' && $formValue == 0) {
                         // Hinweistext anzeigen, der auf Verstoß hinweist
                         $this->handleValidationErrorNonStrict($enrichmentKey);
-                    }
-                    else {
+                    } else {
                         // wenn der Formularwert mit dem gespeicherten Wert übereinstimmt,
                         // dann im "Non Strict"-Mode Hinweis für den Benutzer anzeigen
                         if (is_null($formValue) || $enrichmentValue === $formValue) {
@@ -348,8 +347,7 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
             if (! is_null($enrichment) && ($enrichmentKeyName === $enrichment->getKeyName())) {
                 // der im Enrichment gespeicherte EnrichmentKey-Name ist nicht registriert
                 $this->getLogger()->info("processing of unregistered enrichment key name '$enrichmentKeyName'");
-            }
-            else {
+            } else {
                 // der im POST übergebene EnrichmentKey-Name ist nicht registriert und stimmt nicht mit dem
                 // im Enrichment gespeicherten EnrichmentKey-Name überein: POST wurde manipuliert - Fallback auf
                 // den ersten Auswahlwert
@@ -451,7 +449,8 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
         parent::prepareRenderingAsView();
     }
 
-    private function handleSelectFieldStrict($enrichmentData, $enrichmentType, $parentValidationResult) {
+    private function handleSelectFieldStrict($enrichmentData, $enrichmentType, $parentValidationResult)
+    {
         if (array_key_exists(self::ELEMENT_VALUE, $enrichmentData)) {
             $formValue = $enrichmentData[self::ELEMENT_VALUE]; // das ist nicht der ausgewählte Wert, sondern der Index des Wertes innerhalb der Select-Liste
             if ($formValue == 0) {
@@ -470,8 +469,7 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
                     $this->getElement(self::ELEMENT_VALUE)->addError($this->handleEnrichmentKeySpecificTranslations('errorMessage', $enrichment->getKeyName()));
                     return false; // Auswahlwert ist nach Typkonfiguration nicht zulässig
                 }
-            }
-            else {
+            } else {
                 $options = $enrichmentType->getValues();
                 if ($formValue == count($options)) {
                     // durch die Hinzufügung des aktuell im Enrichment gespeicherten Wertes (der nicht
