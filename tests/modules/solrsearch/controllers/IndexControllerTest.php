@@ -1394,4 +1394,24 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/solrsearch/index/search/searchtype/collection/id/2');
         $this->assertXpath("//ul[@class='nav browsing col-list role-ddc']");
     }
+
+    public function testEnrichmentFacet()
+    {
+        $this->markTestIncomplete();
+    }
+
+    public function testEnrichmentFacetWithTranslation()
+    {
+        $this->markTestIncomplete();
+    }
+
+    public function testEnrichmentFacetOnlyForAdmins()
+    {
+        $this->markTestIncomplete();
+    }
+
+    public function testEnrichmentFacetOnlyForDocumentAdmins()
+    {
+        $this->markTestIncomplete();
+    }
 }
