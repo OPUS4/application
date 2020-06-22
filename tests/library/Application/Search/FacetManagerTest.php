@@ -95,4 +95,49 @@ class Application_Search_FacetManagerTest extends ControllerTestCase
         $this->assertCount(9, $facets);
         $this->assertContains('server_state', $facets); // TODO does this make sense?
     }
+
+    public function testGetFacetEnrichment()
+    {
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'searchengine' => ['solr' => ['facets' => 'enrichment_Audience']]
+        ]));
+
+        $manager = new Application_Search_FacetManager();
+
+        $facet = $manager->getFacet('enrichment_Audience');
+
+        $this->assertNotNull($facet);
+        $this->assertInstanceOf('Application_Search_Facet', $facet);
+        $this->assertFalse($facet->isTranslated());
+    }
+
+    public function testGetFacetEnrichmentTranslated()
+    {
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'searchengine' => ['solr' => ['facets' => 'enrichment_Audience']]
+        ]));
+
+        $manager = new Application_Search_FacetManager();
+
+        $facet = $manager->getFacet('enrichment_Audience');
+
+        $this->assertNotNull($facet);
+        $this->assertInstanceOf('Application_Search_Facet', $facet);
+        $this->assertFalse($facet->isTranslated());
+    }
+
+    public function testGetFacetEnrichmentForAdmin()
+    {
+        $this->markTestIncomplete();
+    }
+
+    public function testGetFacetEnrichmentForDocumentsAdmin()
+    {
+        $this->markTestIncomplete();
+    }
+
+    public function testGetFacetEnrichmentBoolean()
+    {
+        $this->markTestIncomplete();
+    }
 }
