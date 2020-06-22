@@ -55,6 +55,8 @@ class Application_Search_Facet
 
     private $accessResource;
 
+    private $heading;
+
     public function __construct($name, $options = null)
     {
         $this->name = $name;
@@ -102,6 +104,10 @@ class Application_Search_Facet
      */
     public function getHeading()
     {
+        if (! is_null($this->heading)) {
+            return $this->heading;
+        }
+
         $name = $this->getName();
 
         if (substr($name, 0, strlen('enrichment_')) === 'enrichment_') {
@@ -112,6 +118,11 @@ class Application_Search_Facet
         }
 
         return $facetHeadingKey;
+    }
+
+    public function setHeading($heading)
+    {
+        $this->heading = $heading;
     }
 
     public function getItems()

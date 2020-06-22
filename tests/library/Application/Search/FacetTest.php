@@ -113,4 +113,15 @@ class Application_Search_FacetTest extends ControllerTestCase
 
         $this->assertEquals('doctype_facet_heading', $facet->getHeading());
     }
+
+    public function testSetHeading()
+    {
+        $facet = new Application_Search_Facet('test');
+
+        $facet->setHeading('TestHeading');
+        $this->assertEquals('TestHeading', $facet->getHeading());
+
+        $facet->setHeading(null);
+        $this->assertEquals('test_facet_heading', $facet->getHeading());
+    }
 }

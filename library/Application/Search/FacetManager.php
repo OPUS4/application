@@ -71,6 +71,9 @@ class Application_Search_FacetManager
 
     public function getFacetConfig($name)
     {
+        // replace dot with dash because dots have a meaning in INI files
+        $name = str_replace('.', '-', $name);
+
         // TODO merge default with specific
         // cache configuration
         $config = $this->getConfig();
