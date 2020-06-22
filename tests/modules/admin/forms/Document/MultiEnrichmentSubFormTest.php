@@ -38,7 +38,7 @@
 class Admin_Form_Document_MultiEnrichmentSubFormTest extends ControllerTestCase
 {
 
-    protected $additionalResources = ['database'];
+    protected $additionalResources = ['database', 'translation'];
 
     // dieser Enrichment-Key Name stellt sicher, dass der Enrichment-Key
     // im Auswahlfeld aller Enrichment-Keys an der ersten Position steht
