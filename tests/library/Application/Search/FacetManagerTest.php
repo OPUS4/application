@@ -140,4 +140,17 @@ class Application_Search_FacetManagerTest extends ControllerTestCase
     {
         $this->markTestIncomplete();
     }
+
+    public function testGetFacetConfigForFacetteWithDotInName()
+    {
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'search' => ['facet' => ['enrichment_opus-source' => ['heading' => 'EnrichmentOpusSource']]]
+        ]));
+
+        $manager = new Application_Search_FacetManager();
+
+        $config = $manager->getFacetConfig('enrichment_opus.source');
+
+        $this->assertEquals('EnrichmentOpusSource', $config->heading);
+    }
 }
