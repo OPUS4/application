@@ -62,7 +62,7 @@ class Application_Update_ConvertCollectionRoleTranslations extends Application_U
                 // create translation values using invalid collection role name
                 $supportedLanguages = Application_Configuration::getInstance()->getSupportedLanguages();
                 $translations = [];
-                foreach($supportedLanguages as $lang) {
+                foreach ($supportedLanguages as $lang) {
                     $translations[$lang] = $name;
                 }
 
