@@ -65,6 +65,8 @@ class ControllerTestCase extends TestCase
 
     private $workspacePath = null;
 
+    private $cleanupModels;
+
     /**
      * Method to initialize Zend_Application for each test.
      */
@@ -92,6 +94,7 @@ class ControllerTestCase extends TestCase
         $this->logoutUser();
         $this->resetSearch();
 
+        $this->cleanupModels();
         $this->cleanupDatabase();
         $this->deleteTestFiles();
         $this->deleteTempFiles();
@@ -1000,5 +1003,29 @@ class ControllerTestCase extends TestCase
             return true;
         }
         return false;
+    }
+
+    protected function addModelToCleanup($model)
+    {
+        if (! is_array($this->cleanupModels)) {
+            $this->cleanupModels = [];
+        }
+
+        $this->cleanupModels[] = $model;
+    }
+
+    protected function cleanupModels()
+    {
+        if (! is_array($this->cleanupModels)) {
+            return;
+        }
+
+        foreach ($this->cleanupModels as $model) {
+            try {
+                $model->delete();
+            } catch (Exception $ex) {
+                // TODO logging?
+            }
+        }
     }
 }
