@@ -85,4 +85,77 @@ class Application_Update_ConvertCollectionRoleTranslationsTest extends Controlle
             $this->assertEquals($invalidName, $value);
         }
     }
+
+    public function testRunWithExistingInvalidTranslationKey()
+    {
+        $role = new Opus_CollectionRole();
+
+        $invalidName = 'Tagungsbände';
+
+        $role->getField('Name')->setValidator(new DummyValidator()); // disable validation to store invalid name
+        $role->setName($invalidName);
+        $role->setOaiName('testColRole');
+
+        $this->roleId = $role->store();
+
+        $manager = new Application_Translate_TranslationManager();
+
+        $manager->setTranslation("default_collection_role_$invalidName", [
+            'en' => 'Translation EN',
+            'de' => 'Translation DE'
+        ], 'default');
+
+        $update = new Application_Update_ConvertCollectionRoleTranslations();
+        $update->setQuietMode(true);
+        $update->run();
+
+        $role = new Opus_CollectionRole($this->roleId);
+
+        $name = $role->getName();
+        $oaiName = $role->getOaiName();
+
+        $this->assertEquals($oaiName, $name);
+
+        $translation = $manager->getTranslation("default_collection_role_$name");
+
+        $this->assertEquals([
+            'en' => 'Translation EN',
+            'de' => 'Translation DE'
+        ], $translation['translations']);
+
+        $this->assertFalse($manager->keyExists("default_collection_role_$invalidName"));
+    }
+
+    public function testRunWithInvalidOaiName()
+    {
+        $role = new Opus_CollectionRole();
+
+        $invalidName = 'Tagungsbände';
+
+        $role->getField('Name')->setValidator(new DummyValidator()); // disable validation to store invalid name
+        $role->setName($invalidName);
+        $role->setOaiName($invalidName);
+
+        $this->roleId = $role->store();
+
+        $update = new Application_Update_ConvertCollectionRoleTranslations();
+        $update->setQuietMode(true);
+        $update->run();
+
+        $role = new Opus_CollectionRole($this->roleId);
+
+        $name = $role->getName();
+        $oaiName = $role->getOaiName();
+
+        $this->assertEquals("ColRole{$this->roleId}", $name);
+
+        $manager = new Application_Translate_TranslationManager();
+
+        $translation = $manager->getTranslation("default_collection_role_$name");
+
+        $this->assertEquals([
+            'en' => $invalidName,
+            'de' => $invalidName
+        ], $translation['translations']);
+    }
 }
