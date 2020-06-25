@@ -57,6 +57,7 @@ class Application_Update_ConvertCollectionRoleTranslations extends Application_U
 
             if (! $validator->isValid($name)) {
                 $roleId = $role->getId();
+
                 $this->log($colors->red("Collection role (id = $roleId) name is invalid (\"$name\")"));
 
                 // create translation values using invalid collection role name
@@ -66,38 +67,46 @@ class Application_Update_ConvertCollectionRoleTranslations extends Application_U
                     $translations[$lang] = $name;
                 }
 
-                $translationKey = "default_collection_role_$name";
+                $translationKey = "default_collection_role_$name"; // old key
 
                 // use OaiName as new name for collection role
                 $name = $role->getOaiName();
+
+                if (! $validator->isValid($name)) {
+                    $this->log("  OaiName '$name' not valid as new Name for collection role");
+                    $name = "ColRole$roleId";
+                } else {
+                    $this->log("  Using OaiName as new Name for collection role");
+                }
+
                 $role->setName($name);
-                $this->log("  Change collection role name to OaiName '$name'");
+                $this->log("  Changing collection role Name to '$name'");
 
                 try {
                     $translation = $manager->getTranslation($translationKey);
 
                     if (! is_null($translation)) {
-                        /* TODO this should not happen, because any invalid name would not be a valid translation key
-                         *      either
-                         */
-                        $this->log($colors->red(
-                            "  Translation key '{$colors->blue($translationKey)}' exists" .
-                            ' (will not be removed automatically)'
-                        ));
+                        $this->log($colors->red("  Translation key '{$colors->blue($translationKey)}' exists"));
+                        $translations = $translation['translations'];
+                        $this->log("  Keeping translations");
+                        $manager->delete($translationKey);
+                        $this->log("  Removing old translation key '{$colors->blue($translationKey)}'");
                     }
                 } catch (\Opus\Translate\UnknownTranslationKey $ex) {
                     $this->log("  Translation key '{$colors->blue($translationKey)}' does not exist");
+                    $this->log('  Using old Name for translations');
                 }
 
+                $translationKey = "default_collection_role_$name"; // new key
+
                 // store translation
-                $translationKey = "default_collection_role_$name";
                 $manager->setTranslation($translationKey, $translations, 'default');
-                $this->log("  Storing old name as translation under '{$colors->blue($translationKey)}'");
+                $this->log("  Storing translations under '{$colors->blue($translationKey)}'");
 
                 $role->store();
             }
         }
 
-        $this->log('Validation of collection role names finished');
+        $this->log('Validation of collection role names finished' . PHP_EOL);
     }
 }
