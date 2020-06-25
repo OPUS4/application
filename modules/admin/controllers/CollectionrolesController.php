@@ -28,7 +28,7 @@
  * @package     Module_Admin
  * @author      Sascha Szott <szott@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -165,7 +165,11 @@ class Admin_CollectionrolesController extends Application_Controller_Action
             return;
         }
 
+        $oldName = $collectionRole->getName();
+
         $form->updateModel($collectionRole);
+
+        $newName = $collectionRole->getName();
 
         if (true === $collectionRole->isNewRecord()) {
             $messageKey = 'admin_collectionroles_add';
@@ -174,16 +178,24 @@ class Admin_CollectionrolesController extends Application_Controller_Action
                 $collectionRole->addRootCollection();
                 $collectionRole->getRootCollection()->setVisible('1');
             }
+
+            $oldName = $newName; // since it is a new record name has not changed
         } else {
             $messageKey = 'admin_collectionroles_edit_notice';
         }
 
-        // TODO move somewhere else, at least a function
-        // TODO detect if translations have been changed and store if so
+        // TODO move somewhere else, at least a function (cleanup, refactoring)
         $translationsElement = $form->getElement(Admin_Form_CollectionRole::ELEMENT_DISPLAYNAME);
         if (! is_null($translationsElement)) {
-            $key = 'default_collection_role_' . $collectionRole->getName();
-            $translationsElement->updateTranslations($key);
+            $key = "default_collection_role_$newName";
+            if ($oldName == $newName) {
+                $translationsElement->updateTranslations($key, 'default');
+            } else {
+                $oldKey = "default_collection_role_$oldName";
+                $manager = new Application_Translate_TranslationManager();
+                $manager->delete($oldKey);
+            }
+            $translationsElement->updateTranslations($key, 'default');
         }
 
         $collectionRole->store();
