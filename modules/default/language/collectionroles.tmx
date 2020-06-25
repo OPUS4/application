@@ -74,5 +74,15 @@
             <seg>open_access (DINI-Set)</seg>
           </tuv>
         </tu>
+
+        <tu tuid="default_collection_role_OpenAIRE">
+          <tuv xml:lang="en">
+            <seg>OpenAIRE</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>OpenAIRE</seg>
+          </tuv>
+        </tu>
+
     </body>
 </tmx>
