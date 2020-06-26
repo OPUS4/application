@@ -49,7 +49,9 @@ class Application_Configuration
      * Unterstützte Sprachen.
      * @var array
      */
-    private $_supportedLanguages = null;
+    private $supportedLanguages = null;
+
+    private $activatedLanguages = null;
 
     /**
      * Is language selection active in user interface.
@@ -117,10 +119,10 @@ class Application_Configuration
      */
     public function getSupportedLanguages()
     {
-        if (is_null($this->_supportedLanguages)) {
+        if (is_null($this->supportedLanguages)) {
             $config = $this->getConfig();
             if (isset($config->supportedLanguages)) {
-                $this->_supportedLanguages = explode(",", $config->supportedLanguages);
+                $this->supportedLanguages = explode(',', $config->supportedLanguages);
                 /* TODO only used for debugging - remove?
                 $this->getLogger()->debug(
                     Zend_Debug::dump(
@@ -130,7 +132,21 @@ class Application_Configuration
                 );*/
             }
         }
-        return $this->_supportedLanguages;
+        return $this->supportedLanguages;
+    }
+
+    public function getActivatedLanguages()
+    {
+        if (is_null($this->activatedLanguages)) {
+            $config = $this->getConfig();
+            if (isset($config->activatedLanguages)) {
+                $this->activatedLanguages = explode(',', $config->activatedLanguages);
+            } else {
+                return $this->getSupportedLanguages();
+            }
+        }
+
+        return $this->activatedLanguages;
     }
 
     /**
@@ -311,6 +327,8 @@ class Application_Configuration
      * @param $option string Name of option
      * @param $value string New value for option
      * @throws Zend_Exception
+     *
+     * TODO review and if possible replace this code with something simpler
      */
     public static function setValueInConfig(Zend_Config $config, $option, $value)
     {

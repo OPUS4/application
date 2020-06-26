@@ -491,8 +491,6 @@ class Setup_LanguageController extends Application_Controller_Action
      * Action for editing general language settings for the user interface.
      *
      *
-     * TODO make CSS available for setup and admin
-     * TODO add breadcrumb
      * TODO modify configuration
      * TODO create tests
      */
@@ -502,7 +500,7 @@ class Setup_LanguageController extends Application_Controller_Action
 
         $form = new Admin_Form_Configuration([
             'supportedLanguages' => [
-                'key' => 'supportedLanguages',
+                'key' => 'activatedLanguages',
                 'type' => 'supportedLanguages',
                 'section' => 'general'
             ]
@@ -532,7 +530,14 @@ class Setup_LanguageController extends Application_Controller_Action
                     break;
             }
         } else {
-            $form->populateFromModel($this->getConfig());
+            $config = $this->getConfig();
+
+            $form->populateFromModel($config);
+
+            $element = $form->getElement('supportedLanguages');
+            if (! isset($config->activatedLanguages)) {
+                $element->setValue($config->supportedLanguages);
+            }
         }
 
         $this->_helper->viewRenderer->setNoRender(true);

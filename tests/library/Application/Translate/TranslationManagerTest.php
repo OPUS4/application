@@ -1243,4 +1243,29 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
     {
         $this->markTestIncomplete();
     }
+
+    public function testSortLanguages()
+    {
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'supportedLanguages' => 'de,en,fr'
+        ]));
+
+        $manager = $this->object;
+
+        $class = new ReflectionClass(get_class($manager));
+        $method = $class->getMethod('sortLanguages');
+        $method->setAccessible(true);
+
+        $sorted = $method->invoke($manager, [
+            'en' => 'English',
+            'de' => 'Deutsch'
+        ]);
+
+        $this->assertEquals([
+            'de' => 'Deutsch',
+            'en' => 'English'
+        ], $sorted);
+
+        $this->assertTrue(array_values($sorted)[0] === 'Deutsch');
+    }
 }
