@@ -490,10 +490,54 @@ class Setup_LanguageController extends Application_Controller_Action
     /**
      * Action for editing general language settings for the user interface.
      *
-     * TODO move language options from configuration page
+     *
+     * TODO make CSS available for setup and admin
+     * TODO add breadcrumb
+     * TODO modify configuration
+     * TODO create tests
      */
     public function settingsAction()
     {
+        // TODO provide form with options config
+
+        $form = new Admin_Form_Configuration([
+            'supportedLanguages' => [
+                'key' => 'supportedLanguages',
+                'type' => 'supportedLanguages',
+                'section' => 'general'
+            ]
+        ]);
+
+        if ($this->getRequest()->isPost()) {
+            $data = $this->getRequest()->getPost();
+
+            $form->populate($data);
+
+            $result = $form->processPost($data, $data);
+
+            switch ($result) {
+                case Admin_Form_Configuration::RESULT_SAVE:
+                    if ($form->isValid($data)) {
+                        $config = new Zend_Config([], true);
+                        $form->updateModel($config);
+                        Application_Configuration::save($config);
+                    } else {
+                        break;
+                    }
+                // after saving fall through for same redirect as 'Cancel'
+                case Admin_Form_Configuration::RESULT_CANCEL:
+                    $this->redirectWithParameters();
+                    break;
+                default:
+                    break;
+            }
+        } else {
+            $form->populateFromModel($this->getConfig());
+        }
+
+        $this->_helper->viewRenderer->setNoRender(true);
+
+        echo $form;
     }
 
     protected function getTranslationForm()
