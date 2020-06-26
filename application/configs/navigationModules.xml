@@ -824,6 +824,13 @@
                                     <controller>language</controller>
                                     <action>error</action>
                                 </error>
+                                <settings>
+                                    <type>mvc</type>
+                                    <label>admin_title_settings</label>
+                                    <module>setup</module>
+                                    <controller>language</controller>
+                                    <action>settings</action>
+                                </settings>
                             </pages>
                             <resource>translations</resource>
                         </translation>
