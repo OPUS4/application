@@ -73,14 +73,8 @@ class Admin_StatisticControllerTest extends ControllerTestCase
         $this->request
             ->setMethod('POST')
             ->setPost(['selectedYear' => '1337']);
-        $this->dispatch('/admin/statistic/index');
-        $this->assertResponseCode(200);
-        $this->assertModule('admin');
-        $this->assertController('statistic');
-        $this->assertAction('index');
-        $this->assertQueryContentContains('//dt', 'Please select year:');
-        $this->assertNotQueryContentContains('//h2', 'Month overview');
-        $this->checkForCustomBadStringsInHtml($this->getResponse()->getBody(), ['1337']);
+        $this->dispatch('/admin/statistic/show');
+        $this->assertRedirectTo('/admin/statistic');
     }
 
     public function testDisplayCurrentYear()
