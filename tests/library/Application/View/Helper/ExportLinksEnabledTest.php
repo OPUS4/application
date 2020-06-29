@@ -31,11 +31,13 @@
  * @category    Application
  * @package     Application_View_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2017-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 class Application_View_Helper_ExportLinksEnabledTest extends ControllerTestCase
 {
+
+    protected $additionalResources = 'all'; // TODO exporter is tricky
 
     private $_helper;
 
@@ -60,5 +62,4 @@ class Application_View_Helper_ExportLinksEnabledTest extends ControllerTestCase
         $this->assertTrue($this->_helper->exportLinksEnabled('search'));
         $this->assertTrue($this->_helper->exportLinksEnabled('unknown'));
     }
-
 }

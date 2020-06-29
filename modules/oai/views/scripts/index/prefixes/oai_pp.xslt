@@ -22,8 +22,8 @@
  * OPUS is distributed in the hope that it will be useful, but WITHOUT ANY
  * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details. You should have received a copy of the GNU General Public License 
- * along with OPUS; if not, write to the Free Software Foundation, Inc., 51 
+ * details. You should have received a copy of the GNU General Public License
+ * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
@@ -58,8 +58,8 @@
         <PP:ProPrint
             xsi:schemaLocation="http://www.proprint-service.de/xml/schemes/v1/ http://www.proprint-service.de/xml/schemes/v1/PROPRINT_METADATA_SET.xsd">
 
-            <!--  Identifier --> 
-            <xsl:apply-templates select="IdentifierUrn" mode="oai_pp" />
+            <!--  Identifier -->
+            <xsl:apply-templates select="Identifier[@Type = 'urn']" mode="oai_pp" />
             <!-- dc:title -->
             <xsl:apply-templates select="TitleMain" mode="oai_pp" />
             <!-- dc:subject -->
@@ -73,7 +73,7 @@
             <!--  eigentlich soll hier DateCreated stehen, aber welchem Feld entspricht das??  -->
             <xsl:apply-templates select="@DateAccepted" mode="oai_pp" />
             <xsl:apply-templates select="@Language" mode="oai_pp" />
-            <xsl:apply-templates select="IdentifierUrl" mode="oai_pp" />
+            <xsl:apply-templates select="Identifier[@Type = 'url']" mode="oai_pp" />
 
             <!-- adding download urls -->
             <xsl:apply-templates select="File" mode="oai_pp" />
@@ -81,8 +81,8 @@
             <!-- dc:creator -->
             <xsl:apply-templates select="PersonAuthor" mode="oai_pp" />
             <!-- dc:publisher -->
-            <!--  was soll hier genau stehen ??? --> 
-            <xsl:element name="PP:DC.Publisher">
+            <!--  was soll hier genau stehen ??? -->
+            <xsl:element name="PP:DC.publisher">
                <xsl:apply-templates select="@PublisherName" mode="oai_pp" />
                <xsl:apply-templates select="@PublisherPlace" mode="oai_pp" />
             </xsl:element>
@@ -90,7 +90,7 @@
     </xsl:template>
 
     <xsl:template match="TitleMain" mode="oai_pp">
-        <xsl:element name="PP:DC.Title">
+        <xsl:element name="PP:DC.title">
             <xsl:choose>
               <!--  noch aendern auf "=", wenn das mit den Sprachen geklaert ist -->
               <xsl:when test="../@Language!=@Language">
@@ -106,14 +106,14 @@
     </xsl:template>
 
     <xsl:template match="PersonAuthor" mode="oai_pp">
-        <xsl:element name="PP:DC.Creator">
+        <xsl:element name="PP:DC.creator">
            <xsl:value-of select="@LastName" />,
            <xsl:value-of select="@FirstName" />
         </xsl:element>
     </xsl:template>
 
     <xsl:template match="Subject[@Type='swd']" mode="oai_pp">
-        <xsl:element name="PP:DC.Subject">
+        <xsl:element name="PP:DC.subject">
             <xsl:attribute name="scheme">
                 <xsl:text>swd</xsl:text>
             </xsl:attribute>
@@ -122,7 +122,7 @@
     </xsl:template>
 
     <xsl:template match="Subject[@Type='uncontrolled']" mode="oai_pp">
-        <xsl:element name="PP:DC.Subject">
+        <xsl:element name="PP:DC.subject">
             <xsl:attribute name="language">
                 <xsl:value-of select="@Language" />
             </xsl:attribute>
@@ -148,7 +148,7 @@
     </xsl:template>
 
     <xsl:template match="PersonAdvisor" mode="oai_pp">
-       <xsl:element name="PP:DC.Contributor">
+       <xsl:element name="PP:DC.contributor">
            <xsl:value-of select="@Name" />
        </xsl:element>
     </xsl:template>
@@ -156,7 +156,7 @@
     <xsl:template match="@ContributingCorporation" mode="oai_pp">
        <xsl:element name="PP:PPQ.Contributor.CorporateName">
           <xsl:value-of select="." />
-       </xsl:element> 
+       </xsl:element>
     </xsl:template>
 
     <xsl:template match="@DateAccepted" mode="oai_pp">
@@ -165,7 +165,7 @@
         </xsl:element>
     </xsl:template>
 
-    <xsl:template match="IdentifierUrn" mode="oai_pp">
+    <xsl:template match="Identifier[@Type = 'urn']" mode="oai_pp">
         <xsl:element name="PP:Metadata">
             <xsl:attribute name="id">
               <xsl:value-of select="@Value" />
@@ -182,7 +182,7 @@
         </xsl:element>
     </xsl:template>
 
-    <xsl:template match="IdentifierUrl" mode="oai_pp">
+    <xsl:template match="Identifier[@Type = 'url']" mode="oai_pp">
         <xsl:element name="PP:PP.Origin">
             <xsl:value-of select="@Value" />
         </xsl:element>

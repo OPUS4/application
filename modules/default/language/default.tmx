@@ -79,14 +79,6 @@
 
 
 
-        <tu tuid="home_modulename">
-          <tuv xml:lang="en">
-            <seg>Home</seg>
-          </tuv>
-          <tuv xml:lang="de">
-            <seg>Einstieg</seg>
-          </tuv>
-        </tu>
         <tu tuid="search_modulename">
           <tuv xml:lang="en">
             <seg>Search and browse</seg>
@@ -113,15 +105,6 @@
         </tu>
 
 
-
-        <tu tuid="home_index_index_actionname">
-          <tuv xml:lang="en">
-            <seg>Home</seg>
-          </tuv>
-          <tuv xml:lang="de">
-            <seg>Einstieg</seg>
-          </tuv>
-        </tu>
 
         <tu tuid="home_index_help_actionname">
           <tuv xml:lang="en">
@@ -299,7 +282,7 @@
             <seg>Author</seg>
           </tuv>
           <tuv xml:lang="de">
-            <seg>Autor</seg>
+            <seg>Autor*in</seg>
           </tuv>
         </tu>
 
@@ -672,7 +655,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="admin-actionbox-goto-section">
+    <tu tuid="admin_actionbox_goto_section">
       <tuv xml:lang="en">
         <seg>Jump to</seg>
       </tuv>
@@ -681,7 +664,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="page-help-link-title">
+    <tu tuid="page_help_link_title">
         <tuv xml:lang="en">
             <seg>Help</seg>
         </tuv>
@@ -716,7 +699,7 @@
              <seg>Treffer</seg>
          </tuv>
      </tu>
-	 
+
 	 <tu tuid="logo_title">
          <tuv xml:lang="en">
              <seg>Home</seg>
@@ -725,7 +708,7 @@
              <seg>Home</seg>
          </tuv>
      </tu>
-	 
+
 
      <tu tuid="opus.environment">
          <tuv xml:lang="en">
@@ -735,6 +718,42 @@
              <seg>TESTUMGEBUNG</seg>
          </tuv>
      </tu>
+
+      <tu tuid="default_download_button">
+        <tuv xml:lang="en">
+          <seg>Download</seg>
+        </tuv>
+        <tuv xml:lang="de">
+          <seg>Herunterladen</seg>
+        </tuv>
+      </tu>
+
+      <tu tuid="default_all">
+        <tuv xml:lang="en">
+          <seg>All</seg>
+        </tuv>
+        <tuv xml:lang="de">
+          <seg>Alle</seg>
+        </tuv>
+      </tu>
+
+      <tu tuid="default_add">
+        <tuv xml:lang="en">
+          <seg>Add</seg>
+        </tuv>
+        <tuv xml:lang="de">
+          <seg>Hinzufügen</seg>
+        </tuv>
+      </tu>
+
+      <tu tuid="default_back">
+        <tuv xml:lang="en">
+          <seg>Back</seg>
+        </tuv>
+        <tuv xml:lang="de">
+          <seg>Zurück</seg>
+        </tuv>
+      </tu>
 
     </body>
 </tmx>

@@ -36,14 +36,16 @@
 /**
  * class to built the mail mask for document recommendation via e-mail
  */
-class Frontdoor_Form_MailForm extends Zend_Form {
+class Frontdoor_Form_MailForm extends Zend_Form
+{
 
     /**
      * Build easy mail form
      *
      * @return void
      */
-    public function init() {
+    public function init()
+    {
         // Create and configure query field elements:
         $recipient = new Zend_Form_Element_Text('recipient');
         $recipient->setRequired(false);
@@ -85,8 +87,7 @@ class Frontdoor_Form_MailForm extends Zend_Form {
 
         // Add elements to form:
         $this->addElements(
-            array($recipient, $recipientMail, $sender, $senderMail, $message, $title, $docId, $docType, $submit)
+            [$recipient, $recipientMail, $sender, $senderMail, $message, $title, $docId, $docType, $submit]
         );
     }
-
 }

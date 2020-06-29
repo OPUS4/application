@@ -28,7 +28,7 @@
  * @category    Cronjob
  * @package     Tests
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -39,6 +39,8 @@ require_once('CronTestCase.php');
  */
 class EmbargoUpdateTest extends CronTestCase
 {
+
+    protected $additionalResources = 'database';
 
     public function testEmbargoUpdate()
     {
@@ -60,7 +62,7 @@ class EmbargoUpdateTest extends CronTestCase
         $doc->setEmbargoDate($today);
         $notExpiredId = $doc->store();
 
-        Opus_Document::setServerDateModifiedByIds($twoDaysAgo, array($expiredId, $noEmbargoId, $notExpiredId));
+        Opus_Document::setServerDateModifiedByIds($twoDaysAgo, [$expiredId, $noEmbargoId, $notExpiredId]);
 
         $this->executeScript('cron-embargo-update.php');
 
@@ -83,7 +85,4 @@ class EmbargoUpdateTest extends CronTestCase
         $second = $secondDate->format('Y-m-d');
         return $first == $second;
     }
-
 }
-
-

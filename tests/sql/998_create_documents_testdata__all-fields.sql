@@ -1,5 +1,5 @@
-INSERT INTO `documents` (`id`, `completed_date`, `completed_year`, `contributing_corporation`, `creating_corporation`, `thesis_date_accepted`, `thesis_year_accepted`, `type`, `edition`, `issue`, `language`, `page_first`, `page_last`, `page_number`, `publication_state`, `published_date`, `published_year`, `publisher_name`, `publisher_place`, `server_date_created`, `server_date_modified`, `server_date_published`, `server_date_deleted`, `server_state`, `volume`, `belongs_to_bibliography`, `embargo_date`) VALUES
-(146,'2011-12-01',2009,'Baz University','Bar University','2010-11-02',1999,'masterthesis','1','3','deu',1,4,4,'draft','2007-04-30',2008,'Foo Publishing','Timbuktu','2012-01-03T15:06:40+01:00','2012-01-03T15:06:40+01:00','2012-01-03T15:06:40+01:00',NULL,'published','2',1,'1984-06-05');
+INSERT INTO `documents` (`id`, `completed_date`, `completed_year`, `contributing_corporation`, `creating_corporation`, `thesis_date_accepted`, `thesis_year_accepted`, `type`, `edition`, `issue`, `language`, `page_first`, `page_last`, `page_number`, `article_number`, `publication_state`, `published_date`, `published_year`, `publisher_name`, `publisher_place`, `server_date_created`, `server_date_modified`, `server_date_published`, `server_date_deleted`, `server_state`, `volume`, `belongs_to_bibliography`, `embargo_date`) VALUES
+(146,'2011-12-01',2009,'Baz University','Bar University','2010-11-02',1999,'masterthesis','1','3','deu',1,4,4,2,'draft','2007-04-30',2008,'Foo Publishing','Timbuktu','2012-01-03T15:06:40+01:00','2012-01-03T15:06:40+01:00','2012-01-03T15:06:40+01:00',NULL,'published','2',1,'1984-06-05');
 
 INSERT INTO `document_enrichments` (`id`, `document_id`, `key_name`, `value`) VALUES
 (1,146,'validtestkey','Köln'),
@@ -23,7 +23,7 @@ INSERT INTO `document_identifiers` (`id`, `document_id`, `type`, `value`) VALUES
 (501,146,'uuid','123'),
 (502,146,'isbn','123'),
 (503,146,'urn','urn:nbn:op:123'),
-(504,146,'doi','123'),
+(504,146,'doi','10.1007/978-3-540-76406-9'),
 (505,146,'handle','123'),
 (506,146,'url','123'),
 (507,146,'issn','123'),

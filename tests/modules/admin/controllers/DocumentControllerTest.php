@@ -28,7 +28,7 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @author      Michael Lang <lang@zib.de>
  * @author      Maximilian Salomon <salomon@zib.de>
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -37,15 +37,19 @@
  *
  * @covers Admin_DocumentController
  */
-class Admin_DocumentControllerTest extends ControllerTestCase {
+class Admin_DocumentControllerTest extends ControllerTestCase
+{
+
+    protected $additionalResources = ['database', 'view', 'mainMenu', 'navigation', 'translation'];
 
     private $expectedNavigationLinks;
 
-    public function setUp() {
+    public function setUp()
+    {
         parent::setUp();
 
         // Die Links werden aus den Fieldset Legenden der Unterformulare generiert (nur 1. Ebene)
-        $this->expectedNavigationLinks = array(
+        $this->expectedNavigationLinks = [
             '#fieldset-General' => 'Allgemeines',
             '#fieldset-Persons' => 'Personen',
             '#fieldset-Titles' => 'Titelinformationen',
@@ -59,13 +63,14 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
             '#fieldset-Patents' => 'Patente',
             '#fieldset-Notes' => 'Bemerkungen',
             '#fieldset-Files' => 'Dateien',
-        );
+        ];
     }
 
     /**
      * Regression test for OPUSVIER-1757
      */
-    public function testEditLinkForEmptySectionIsNotDisplayed() {
+    public function testEditLinkForEmptySectionIsNotDisplayed()
+    {
         $this->dispatch('/admin/document/index/id/92');
         $this->assertResponseCode(200);
         $this->assertModule('admin');
@@ -78,7 +83,8 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
     /**
      * Regression test for OPUSVIER-1841.
      */
-    public function testWarningDisplayingDateOfBirth() {
+    public function testWarningDisplayingDateOfBirth()
+    {
         $doc = $this->createTestDocument();
 
         $person = new Opus_Person();
@@ -96,19 +102,24 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
         $this->dispatch('/admin/document/index/id/' . $docId);
 
         $body = $this->getResponse()->getBody();
-        $this->assertTrue(substr_count($body, 'exception \'PHPUnit_Framework_Error_Warning\' with message \'htmlspecialchars() expects parameter 1 to be string, array given\' in /home/jens/opus4dev/opus4/server/modules/admin/views/scripts/document/index.phtml:145') == 0);
-        $this->assertTrue(substr_count($body, 'Warning: htmlspecialchars() expects parameter 1 to be string, array given in /home/jens/opus4dev/opus4/server/modules/admin/views/scripts/document/index.phtml on line 145') == 0);
+        $this->assertTrue(
+            substr_count($body, 'exception \'PHPUnit_Framework_Error_Warning\' with message \'htmlspecialchars() expects parameter 1 to be string, array given\' in /home/jens/opus4dev/opus4/server/modules/admin/views/scripts/document/index.phtml:145') == 0
+        );
+        $this->assertTrue(
+            substr_count($body, 'Warning: htmlspecialchars() expects parameter 1 to be string, array given in /home/jens/opus4dev/opus4/server/modules/admin/views/scripts/document/index.phtml on line 145') == 0
+        );
     }
 
     /**
      * Regression test for OPUSVIER-1843.
      */
-    public function testRegression1843() {
+    public function testRegression1843()
+    {
         $this->markTestSkipped('Replace - War für altes Metadaten-Formular.');
 
         $this->request
                 ->setMethod('POST')
-                ->setPost(array(
+                ->setPost([
                     'Opus_Document[CompletedDate]' => '2000/01/01',
                     'Opus_Document[CompletedYear]' => '2000',
                     'Opus_Document[ThesisDateAccepted]' => '2000/01/01',
@@ -117,21 +128,23 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
                     'Opus_Document[ServerDateModified]' => '2000/01/01',
                     'Opus_Document[ServerDatePublished]' => '2000/01/01',
                     'save' => 'Speichern'
-                ));
+                ]);
         $this->dispatch('/admin/document/update/id/96/section/dates');
 
         $body = $this->getResponse()->getBody();
         $this->assertTrue(substr_count($body, '1999/01/01') !== 0, $body);
     }
 
-    public function testRegression2353ExceptionForAbstractsEditForm() {
+    public function testRegression2353ExceptionForAbstractsEditForm()
+    {
         $this->dispatch('admin/document/edit/id/92/section/abstracts');
         $body = $this->getResponse()->getBody();
         $this->assertTrue(substr_count($body, 'Call to a member function setAttrib') == 0);
         $this->checkForBadStringsInHtml($body);
     }
 
-    public function testPreserveNewlinesForAbstract() {
+    public function testPreserveNewlinesForAbstract()
+    {
         $this->markTestIncomplete("Muss fuer OPUS 4.4 angepasst werden."); // TODO OPUSVIER-2794
         $doc = $this->createTestDocument();
         $doc->setLanguage("eng");
@@ -145,10 +158,14 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
 
         $this->dispatch('/admin/document/index/id/' . $doc->getId());
 
-        $this->assertContains('<pre class="abstractTextContainer preserve-spaces">' . "foo\nbar\n\nbaz" . '</pre>', $this->getResponse()->getBody());
+        $this->assertContains(
+            '<pre class="abstractTextContainer preserve-spaces">' . "foo\nbar\n\nbaz" . '</pre>',
+            $this->getResponse()->getBody()
+        );
     }
 
-    public function testPreserveNewlinesForNote() {
+    public function testPreserveNewlinesForNote()
+    {
         $this->markTestIncomplete("Muss fuer OPUS 4.4 angepasst werden."); // TODO OPUSVIER-2794
         $doc = $this->createTestDocument();
         $doc->setLanguage("eng");
@@ -163,10 +180,14 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
 
         $this->dispatch('/admin/document/index/id/' . $doc->getId());
 
-        $this->assertContains('<pre class="preserve-spaces noteTextContainer">' . "foo\nbar\n\nbaz" . '</pre>', $this->getResponse()->getBody());
+        $this->assertContains(
+            '<pre class="preserve-spaces noteTextContainer">' . "foo\nbar\n\nbaz" . '</pre>',
+            $this->getResponse()->getBody()
+        );
     }
 
-    public function testDisplayCollectionNumberAndNameOnOverviewPageForDDCCollection() {
+    public function testDisplayCollectionNumberAndNameOnOverviewPageForDDCCollection()
+    {
         $this->markTestIncomplete("Muss fuer OPUS 4.4 angepasst werden."); // TODO OPUSVIER-2794
         $role = new Opus_CollectionRole(2);
         $displayBrowsing = $role->getDisplayBrowsing();
@@ -183,7 +204,8 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
         $this->assertNotContains('Ingenieurwissenschaften 62', $this->getResponse()->getBody());
     }
 
-    public function testDisplayCollectionNumberAndNameOnAssignmentPageForDDCCollection() {
+    public function testDisplayCollectionNumberAndNameOnAssignmentPageForDDCCollection()
+    {
         $this->markTestIncomplete("Muss fuer OPUS 4.4 angepasst werden."); // TODO OPUSVIER-2794
         $role = new Opus_CollectionRole(2);
         $displayBrowsing = $role->getDisplayBrowsing();
@@ -200,7 +222,8 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
         $this->assertNotContains('Ingenieurwissenschaften 62', $this->getResponse()->getBody());
     }
 
-    public function testShowDocInfoOnIndex() {
+    public function testShowDocInfoOnIndex()
+    {
         $this->dispatch('/admin/document/index/id/146');
         $this->assertResponseCode(200);
         $this->assertModule('admin');
@@ -211,7 +234,8 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
         $this->assertQueryContentContains('div#docinfo', 'Doe, John');
     }
 
-    public function testIndexActionValidXHTML() {
+    public function testIndexActionValidXHTML()
+    {
         $this->dispatch('/admin/document/index/id/146');
         $this->assertResponseCode(200);
         $this->assertModule('admin');
@@ -223,7 +247,8 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
         $this->assertQueryContentContains('div.breadcrumbsContainer', 'KOBV');
     }
 
-    public function testIndexActionCollectionRolesTranslated() {
+    public function testIndexActionCollectionRolesTranslated()
+    {
         $this->useEnglish();
 
         $this->dispatch('/admin/document/index/id/146');
@@ -235,7 +260,8 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
         $this->assertQueryContentContains('//fieldset#fieldset-ddc/legend', 'Dewey Decimal Classification');
     }
 
-    public function testIndexActionNavigationLinksPresent() {
+    public function testIndexActionNavigationLinksPresent()
+    {
         $this->useGerman();
 
         $this->dispatch('/admin/document/index/id/146');
@@ -244,7 +270,8 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
         $this->verifyNavigationLinks($this->expectedNavigationLinks);
     }
 
-    public function testEditActionNavigationLinksPresent() {
+    public function testEditActionNavigationLinksPresent()
+    {
         $this->useGerman();
 
         $this->dispatch('/admin/document/edit/id/146');
@@ -256,17 +283,22 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
         $this->verifyNavigationLinks($this->expectedNavigationLinks);
     }
 
-    protected function verifyNavigationLinks($expectedLinks) {
+    protected function verifyNavigationLinks($expectedLinks)
+    {
         $this->assertQuery('//dl#Document-Goto');
         $this->assertQueryCount('//dl#Document-Goto//li/a', count($expectedLinks));
 
         foreach ($expectedLinks as $link => $label) {
-            $this->assertXpathContentContains("//dl[@id=\"Document-Goto\"]//li/a[@href=\"$link\"]", $label,
-                "Link '$link' mit Label '$label' is missing from navigation.");
+            $this->assertXpathContentContains(
+                "//dl[@id=\"Document-Goto\"]//li/a[@href=\"$link\"]",
+                $label,
+                "Link '$link' mit Label '$label' is missing from navigation."
+            );
         }
     }
 
-    public function testEditActionValidXHTML() {
+    public function testEditActionValidXHTML()
+    {
         $this->useEnglish();
         $this->dispatch('/admin/document/edit/id/146');
         $this->assertResponseCode(200);
@@ -279,7 +311,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
         $this->verifyBreadcrumbDefined();
 
         // Check Add-Buttons
-        $addButtons = array(
+        $addButtons = [
             'input#Document-Persons-author-Add',
             'input#Document-Persons-editor-Add',
             'input#Document-Persons-translator-Add',
@@ -309,7 +341,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
             'input#Document-IdentifiersAll-Identifiers-Add',
             'input#Document-Patents-Add',
             'input#Document-Notes-Add',
-        );
+        ];
 
         $this->assertQueryCount('input[@value="Add"]', count($addButtons), 'Not enough add buttons.');
 
@@ -318,7 +350,8 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
         }
     }
 
-    public function testRemoveButtonsTranslated() {
+    public function testRemoveButtonsTranslated()
+    {
         $this->useGerman();
 
         $this->dispatch('/admin/document/edit/id/146');
@@ -344,7 +377,8 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
     /**
      * Test for OPUSVIER-1841.
      */
-    public function testRegression1841() {
+    public function testRegression1841()
+    {
         $this->useEnglish();
         $this->loginUser('admin', 'adminadmin');
 
@@ -358,7 +392,8 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
     }
 
       // document/overviewTests
-    public function testIndexActionGerman() {
+    public function testIndexActionGerman()
+    {
         $this->useGerman();
 
         $this->dispatch('/admin/document/index/id/146');
@@ -423,8 +458,10 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
         $this->assertQueryContentContains('//*[@id="Document-Titles-Main-TitleMain1-Value"]', 'COLN');
 
         $this->assertQueryContentContains('//*[@id="Document-Titles-Additional-TitleAdditional0-Language"]', 'Deutsch');
-        $this->assertQueryContentContains('//*[@id="Document-Titles-Additional-TitleAdditional0-Value"]',
-                'Kooperativer Biblioheksverbund Berlin-Brandenburg');
+        $this->assertQueryContentContains(
+            '//*[@id="Document-Titles-Additional-TitleAdditional0-Value"]',
+            'Kooperativer Biblioheksverbund Berlin-Brandenburg'
+        );
 
         $this->assertQueryContentContains('//*[@id="Document-Titles-Parent-TitleParent0-Language"]', 'Deutsch');
         $this->assertQueryContentContains('//*[@id="Document-Titles-Parent-TitleParent0-Value"]', 'Parent Title');
@@ -443,6 +480,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
         $this->assertQueryContentContains('//*[@id="Document-Bibliographic-PageFirst"]', '1');
         $this->assertQueryContentContains('//*[@id="Document-Bibliographic-PageLast"]', '4');
         $this->assertQueryContentContains('//*[@id="Document-Bibliographic-Issue"]', '3');
+        $this->assertQueryContentContains('//*[@id="Document-Bibliographic-ArticleNumber"]', '2');
         $this->assertQueryContentContains('//*[@id="Document-Bibliographic-ContributingCorporation"]', 'Baz University');
         $this->assertQueryContentContains('//*[@id="Document-Bibliographic-CreatingCorporation"]', 'Bar University');
         $this->assertQueryContentContains('//*[@id="Document-Bibliographic-ThesisDateAccepted"]', '02.11.2010');
@@ -505,12 +543,16 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
 
         // Abstracts
         $this->assertQueryContentContains('//*[@id="Document-Content-Abstracts-TitleAbstract0-Language"]', 'Deutsch');
-        $this->assertQueryContentContains('//*[@id="Document-Content-Abstracts-TitleAbstract0-Value"]',
-                'Die KOBV-Zentrale in Berlin-Dahlem.');
+        $this->assertQueryContentContains(
+            '//*[@id="Document-Content-Abstracts-TitleAbstract0-Value"]',
+            'Die KOBV-Zentrale in Berlin-Dahlem.'
+        );
 
         $this->assertQueryContentContains('//*[@id="Document-Content-Abstracts-TitleAbstract1-Language"]', 'Englisch');
-        $this->assertQueryContentContains('//*[@id="Document-Content-Abstracts-TitleAbstract1-Value"]',
-                'Lorem impsum.');
+        $this->assertQueryContentContains(
+            '//*[@id="Document-Content-Abstracts-TitleAbstract1-Value"]',
+            'Lorem impsum.'
+        );
 
         // Subjects
         $this->assertQueryContentContains('//*[@id="Document-Content-Subjects-Swd-Subject0-Value"]', 'Berlin');
@@ -519,7 +561,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
         $this->assertQueryContentContains('//*[@id="Document-Content-Subjects-Uncontrolled-Subject0-Value"]', 'Palmöl');
 
         // Identifier
-        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-IdentifiersDOI-IdentifierDOI0-Value"]', '123');
+        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-IdentifiersDOI-IdentifierDOI0-Value"]', '10.1007/978-3-540-76406-9');
 
         $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-IdentifiersURN-IdentifierURN0-Value"]', 'urn:nbn:op:123');
 
@@ -591,7 +633,8 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
         $this->assertQueryContentContains('//*[@id="Document-Files-File0-VisibleInOai"]', 'Ja');
     }
 
-    public function testIndexActionEnglish() {
+    public function testIndexActionEnglish()
+    {
         $this->useEnglish();
 
         $this->dispatch('/admin/document/index/id/146');
@@ -658,8 +701,10 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
         $this->assertQueryContentContains('//*[@id="Document-Titles-Main-TitleMain1-Value"]', 'COLN');
 
         $this->assertQueryContentContains('//*[@id="Document-Titles-Additional-TitleAdditional0-Language"]', 'German');
-        $this->assertQueryContentContains('//*[@id="Document-Titles-Additional-TitleAdditional0-Value"]',
-                'Kooperativer Biblioheksverbund Berlin-Brandenburg');
+        $this->assertQueryContentContains(
+            '//*[@id="Document-Titles-Additional-TitleAdditional0-Value"]',
+            'Kooperativer Biblioheksverbund Berlin-Brandenburg'
+        );
 
         $this->assertQueryContentContains('//*[@id="Document-Titles-Parent-TitleParent0-Language"]', 'German');
         $this->assertQueryContentContains('//*[@id="Document-Titles-Parent-TitleParent0-Value"]', 'Parent Title');
@@ -678,6 +723,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
         $this->assertQueryContentContains('//*[@id="Document-Bibliographic-PageFirst"]', '1');
         $this->assertQueryContentContains('//*[@id="Document-Bibliographic-PageLast"]', '4');
         $this->assertQueryContentContains('//*[@id="Document-Bibliographic-Issue"]', '3');
+        $this->assertQueryContentContains('//*[@id="Document-Bibliographic-ArticleNumber"]', '2');
         $this->assertQueryContentContains('//*[@id="Document-Bibliographic-ContributingCorporation"]', 'Baz University');
         $this->assertQueryContentContains('//*[@id="Document-Bibliographic-CreatingCorporation"]', 'Bar University');
         $this->assertQueryContentContains('//*[@id="Document-Bibliographic-ThesisDateAccepted"]', '2010/11/02');
@@ -740,12 +786,16 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
 
         // Abstracts
         $this->assertQueryContentContains('//*[@id="Document-Content-Abstracts-TitleAbstract0-Language"]', 'German');
-        $this->assertQueryContentContains('//*[@id="Document-Content-Abstracts-TitleAbstract0-Value"]',
-                'Die KOBV-Zentrale in Berlin-Dahlem.');
+        $this->assertQueryContentContains(
+            '//*[@id="Document-Content-Abstracts-TitleAbstract0-Value"]',
+            'Die KOBV-Zentrale in Berlin-Dahlem.'
+        );
 
         $this->assertQueryContentContains('//*[@id="Document-Content-Abstracts-TitleAbstract1-Language"]', 'English');
-        $this->assertQueryContentContains('//*[@id="Document-Content-Abstracts-TitleAbstract1-Value"]',
-                'Lorem impsum.');
+        $this->assertQueryContentContains(
+            '//*[@id="Document-Content-Abstracts-TitleAbstract1-Value"]',
+            'Lorem impsum.'
+        );
 
         // Subjects
         $this->assertQueryContentContains('//*[@id="Document-Content-Subjects-Swd-Subject0-Value"]', 'Berlin');
@@ -754,7 +804,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
         $this->assertQueryContentContains('//*[@id="Document-Content-Subjects-Uncontrolled-Subject0-Value"]', 'Palmöl');
 
         // Identifier
-        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-IdentifiersDOI-IdentifierDOI0-Value"]', '123');
+        $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-IdentifiersDOI-IdentifierDOI0-Value"]', '10.1007/978-3-540-76406-9');
 
         $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-IdentifiersURN-IdentifierURN0-Value"]', 'urn:nbn:op:123');
 
@@ -829,7 +879,8 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
     /**
      * Asserts that document files are displayed up in the correct order, if the sort order field is set.
      */
-    public function testFilesWithSortOrder() {
+    public function testFilesWithSortOrder()
+    {
         $this->dispatch('/admin/document/index/id/155');
         $body = $this->_response->getBody();
         $positionFile1 = strpos($body, 'oai_invisible.txt');
@@ -844,7 +895,8 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
     /**
      * Asserts that document files are displayed up in the correct order, if the sort order field is NOT set.
      */
-    public function testDocumentFilesWithoutSortOrder() {
+    public function testDocumentFilesWithoutSortOrder()
+    {
         $this->dispatch('/admin/document/index/id/92');
         $body = $this->_response->getBody();
         $positionFile1 = strpos($body, 'test.xhtml');
@@ -852,19 +904,23 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
         $this->assertTrue($positionFile1 < $positionFile2);
     }
 
-    public function testFrontdoorLinkWithoutIdParameter() {
+    public function testFrontdoorLinkWithoutIdParameter()
+    {
         $this->dispatch('/admin/document/index/id/146');
         $this->assertXpath('//ul[@class = "form-action"]/li[@class = "frontdoor"]/a[contains(@href, "docId/146")]');
         $this->assertXpathCountMax(
-            '//ul[@class = "form-action"]/li[@class = "frontdoor"]/a[contains(@href, "id/146")]', 0,
-            'Parameter \'id\' should not appear in link to frontdoor.');
+            '//ul[@class = "form-action"]/li[@class = "frontdoor"]/a[contains(@href, "id/146")]',
+            0,
+            'Parameter \'id\' should not appear in link to frontdoor.'
+        );
     }
 
     /**
      * Run in separate process so fatal error won't stop build completely.
      * TODO OPUSVIER-3399 @ runInSeparateProcess
      */
-    public function testShowDocumentWithFilesWithLanguageNull() {
+    public function testShowDocumentWithFilesWithLanguageNull()
+    {
         $doc = $this->createTestDocument();
         $file = $this->createTestFile('nolang.pdf');
 
@@ -877,14 +933,15 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
 
         $body = $this->getResponse()->getBody();
 
-        $this->checkForCustomBadStringsInHtml($body, array(
+        $this->checkForCustomBadStringsInHtml($body, [
             'Catchable fatal error',
             'Object of class Zend_View_Helper_Translate could not be converted to string',
             'Application/View/Parial/filerow.phtml'
-        ));
+        ]);
     }
 
-    public function testUnableToTranslateForMetadataView() {
+    public function testUnableToTranslateForMetadataView()
+    {
         $logger = new MockLogger();
         Zend_Registry::set('Zend_Log', $logger);
 
@@ -895,7 +952,9 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
 
         $this->dispatch('/admin/document/index/id/146');
 
-        $failedTranslations = array();
+        $this->assertResponseCode(200);
+
+        $failedTranslations = [];
 
         foreach ($logger->getMessages() as $line) {
             if (strpos($line, 'Unable to translate') !== false) {
@@ -905,11 +964,12 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
 
         $output = Zend_Debug::dump($failedTranslations, null, false);
 
-        // until all messages can be prevented less than 20 is good enough
-        $this->assertLessThanOrEqual(20, count($failedTranslations), $output);
+        // currently only two messages cannot be avoided
+        $this->assertLessThanOrEqual(2, count($failedTranslations), $output);
     }
 
-    public function testUnableToTranslateForEditForm() {
+    public function testUnableToTranslateForEditForm()
+    {
         $logger = new MockLogger();
         Zend_Registry::set('Zend_Log', $logger);
 
@@ -920,7 +980,9 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
 
         $this->dispatch('/admin/document/edit/id/146');
 
-        $failedTranslations = array();
+        $this->assertResponseCode(200);
+
+        $failedTranslations = [];
 
         foreach ($logger->getMessages() as $line) {
             if (strpos($line, 'Unable to translate') !== false) {
@@ -930,8 +992,8 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
 
         $output = Zend_Debug::dump($failedTranslations, null, false);
 
-        // until all messages can be prevented less than 20 is good enough
-        $this->assertLessThanOrEqual(20, count($failedTranslations), $output);
+        // currently only two messages cannot be avoided
+        $this->assertLessThanOrEqual(2, count($failedTranslations), $output);
     }
 
     public function testRedirectToLogin()
@@ -942,5 +1004,4 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
 
         $this->assertRedirectTo('/auth/index/rmodule/admin/rcontroller/document/raction/index/id/1');
     }
-
 }

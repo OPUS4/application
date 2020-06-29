@@ -2,6 +2,234 @@
 
 ---
 
+## Release Candidate 4.7-RC 2020-04-07
+
+### Feature Request
+
+* [OPUSVIER-1567] - Anzeige im Adminbereich von unplublish Dokumenten, mit und ohne Dateien
+* [OPUSVIER-1946] - Sprachen, Lizenzen, Sammlungen, Institutionen sollten sich nur dann löschen lassen, wenn keine Dokumente mehr zugeordnet sind
+* [OPUSVIER-2981] - Label für de Übersetzungsschlüssel im Bearbeitungsformular für statische Seiten
+* [OPUSVIER-3124] - Konventionen für Coding Style
+* [OPUSVIER-3426] - Suche mit diakritischen Zeichen (z.B. Akzent)
+* [OPUSVIER-3938] - Navigation für Personenliste auch unterhalb der Anzeige
+* [OPUSVIER-3966] - Filterung von Dokumenten nach Quelle der Dokumentenbearbeitung
+* [OPUSVIER-4005] - Übergabe von Schriftenreihe und Bandnummer an DataCite ändern (Austausch Komma gegen Semikolon)
+* [OPUSVIER-4008] - Definierte Sortierung der Module in der Konfiguration der Zugriffsrechte der Nutzerrollen
+* [OPUSVIER-4041] - Enrichment Feld 'Auswahlliste' dynamisch setzen
+* [OPUSVIER-4173] - hint_documentUpload - Satz aktualisieren
+* [OPUSVIER-4174] - publish Prozess Autoren-Felder auskommentieren
+* [OPUSVIER-4175] - Standardtext für hint_rights ergänzen
+* [OPUSVIER-4185] - Function hasEmbargoPassed in PublistExport-XSLT verfügbar machen
+* [OPUSVIER-4188] - Frontdoor Meta-Tags um "dcterms.abstract" erweitern (für Google Scholar) 
+* [OPUSVIER-4201] - VisibleInOai soll konfigurierbar sein
+
+### Bugs
+
+* [OPUSVIER-1563] - Ungültiger Mime-Type in Testdaten für Dokument 6 erzeugt komische Frontdoor-Ausgabe
+* [OPUSVIER-1966] - Störende Sonderzeichen sind "erst" in Frontdoor sichtbar
+* [OPUSVIER-2203] - Erzeugtes Solr-Index-XML enthält leere Felder
+* [OPUSVIER-2249] - Log läuft über mit "Unable to translate key" Warnings
+* [OPUSVIER-2307] - Opus_Document: isModified() ändert den Wert nach einem lesenden Zugriff durch getPerson()
+* [OPUSVIER-2338] - DB-Skripte robuster machen
+* [OPUSVIER-2591] - Fehler beim Abspeichern von Abstracts, die Steuerzeichen enthalten
+* [OPUSVIER-2632] - merkwürde Lognachricht beim Abschicken des Formulars im dritten Formularschritt
+* [OPUSVIER-3140] - Metadaten-Formular verändert Dokument, wenn isGrantor oder isPublisher für ein Institut entfernt wird
+* [OPUSVIER-3476] - Eingabe von Sonderzeichen aus „Supplementary Private Use Area“ erzeugen unverständliche Fehlermeldungen in Admin und Publish (Eingaben gehen verloren)
+* [OPUSVIER-3607] - Steuerzeichen im Abstract werden in der Administration nicht angezeigt, aber auf der Frontdoor
+* [OPUSVIER-3712] - opus.log mit vielen "Application_Translate::loadLanguageDirectory Directory '' not found." Warnings
+* [OPUSVIER-3803] - Zend Fehlermeldung nach dem Update der Datenbank
+* [OPUSVIER-3843] - Prüfen von Dateinamen von Volltexten in der Administration
+* [OPUSVIER-3860] - getIdentifier[Type]() liefert nicht das erwartete Ergebnis
+* [OPUSVIER-3890] - Facettierte Suche für Autoren ohne Vornamen funktioniert nicht robust
+* [OPUSVIER-3891] - unschöne Anzeige von Autoren ohne Vornamen innerhalb der Kurztrefferanzeige
+* [OPUSVIER-3917] - Mehrere Datensätze mit identischer Bandangabe bei Schriftenreihen
+* [OPUSVIER-3952] - Probleme in OPUS 4.6.3 mit Ubuntu 14 und PHP 5.5
+* [OPUSVIER-3960] - Update Skript 006-Set-status-of-all-existing-DOIs.php setzt das Änderungsdatum der betroffenen Dokumente neu
+* [OPUSVIER-3965] - Fehler bei DOI-Registrierung für andere Sprachen (z.B. Französisch)
+* [OPUSVIER-3967] - Fehler "Memory exhausted" bei Upload großer Dateien über SWORD
+* [OPUSVIER-3975] -  Fehler in Benachrichtigungs-Emails 
+* [OPUSVIER-3976] - DataCite-XML kann nicht generiert werden bei Mehrfachbelegung der DDC-Notation
+* [OPUSVIER-3977] - DataCite-XML kann nicht generiert werden bei Mehrfachbelegung der ISSN
+* [OPUSVIER-3979] - Typo in theme.js?
+* [OPUSVIER-3985] - db/createdb.php wirft nach Umstellung auf utf8mb4 mit MySQL 5.6 Fehler
+* [OPUSVIER-3990] - Fix Caching von Solr-Download in Travis for Application-Build
+* [OPUSVIER-3993] - DOI.org URL in Export-Modul aktualisieren
+* [OPUSVIER-3994] - Erneutes Speichern von bereits veröffentlichten Dokumenten generiert DOI und/oder URN, wenn doi.autoCreate und/oder urn.autoCreate gesetzt sind
+* [OPUSVIER-3995] - Edit Formular für eine Person zeigt nicht das Geburtsdatum an
+* [OPUSVIER-3996] - Format und Größe von nicht zugänglichen Dateien sollen nicht an DataCite übergeben werden
+* [OPUSVIER-3999] - Löschen des Geburtsdatums in der Personen-Administration erzeugt Fehler
+* [OPUSVIER-4000] - Apache protokolliert HTTP-Code 200 beim Downloadversuch von geschützten Dateien
+* [OPUSVIER-4001] - Fehlerhafte Speicherung von Sammlungszuordnungen bei Sonderzeichen im Namen der Collection-Role
+* [OPUSVIER-4006] - Dokumenttyp wird überschrieben, wenn der Dokumenttyp in config.ini ausgeblendet wird
+* [OPUSVIER-4007] - Browsing nach Dokumenttyp und Jahr funktioniert nur mit aktivierter Facettierung
+* [OPUSVIER-4009] - Änderung von isGrantor oder isPublisher ändert ServerDateModified von verknüpften Dokumenten
+* [OPUSVIER-4010] - Google-Suchergebnis landet auf falscher Frontdoor
+* [OPUSVIER-4011] - Google indexiert Suchanfragen mit Facetten, Exports, neueste Dokumente
+* [OPUSVIER-4044] - Schreibfehler - Multiple Languages
+* [OPUSVIER-4045] - preDelete- und postDelete-Hook wird beim deletePermanent zweimal aufgerufen
+* [OPUSVIER-4049] - Abstract Table setzt Methoden vorraus die nicht zwangsweise vorhanden sein müssen
+* [OPUSVIER-4056] - XMetaDissPlus != xMetaDissPlus (XMetaDissPlus liefert Datensätze ohne Volltexte aus)
+* [OPUSVIER-4075] - falsche Methoden-Parameterübergabe beim Senden der E-Mailbenachrichtigung bei der Freischaltung eines Dokuments
+* [OPUSVIER-4090] - Zeilenabstand zwischen mehrzeiligen Export-Buttons fehlt
+* [OPUSVIER-4104] - DataCite-Export für nicht publizierte Dokumente möglich
+* [OPUSVIER-4105] - Opus_Document.hasEmbargoPassed liefert beim Aufruf zwischen 0 und 2 Uhr falsches Ergebnis 
+* [OPUSVIER-4111] - Sword-Schnittstelle kann keine Pakete mit einer Metadaten-Datei verarbeiten, die größer als 8192 Bytes ist
+* [OPUSVIER-4116] - Zugriff auf Zend_Config bei booleschen Konfigurationsparametern liefert String-Literale "1" oder ""
+* [OPUSVIER-4124] - Unvorhergesehene Exceptions während des Testdokument-Cleanup in ControllerTestCase nicht ignorieren
+* [OPUSVIER-4125] - Löschen von Dokumenten führt zu unvorhergesehener Opus_Model_DbException
+* [OPUSVIER-4147] - DOI-Registrierung schlägt wegen fehlender Pflichtelemente fehl
+* [OPUSVIER-4149] - Update auf 4.7 bricht ab, da neue Update-Skripte nicht ausführbar sind
+* [OPUSVIER-4150] - Fehlerabbruch beim Import der Testdaten während Installation von 4.7
+* [OPUSVIER-4154] - Probleme mit Enrichment vom Typ "Select", wenn Werte im Publish-Formular und in der Administration verschieden sind
+* [OPUSVIER-4158] - Case von Dateierweiterungen (.tif und .TIF) soll keine Rolle spielen
+* [OPUSVIER-4163] - Suchschlitz wird nach einfacher Suche verschoben
+* [OPUSVIER-4178] - OAI Identify: Doppelte Ausgabe des Content-Blocks
+* [OPUSVIER-4190] - OAI-Mapping/Format oai_dc: Groß-/Kleinschreibung der Dokumenttypen korrigieren
+* [OPUSVIER-4191] - Warnungen im Logfile bei Indexierung der Testdaten mit SolrIndexBuilder
+* [OPUSVIER-4195] - Syntaxfehler in opus-ui.js
+* [OPUSVIER-4203] - Mismatch zwischen Solr-Version in install-solr.sh und luceneMatchVersion in solrconfig.xml
+* [OPUSVIER-4210] - Fehlermeldung bei unzulässigem Datei-Upload "wechselt" Sprache
+* [OPUSVIER-4214] - CollectionRoles: lange Aktualisierungszeiten für DisplayName
+
+## Stories
+
+* [OPUSVIER-1902] - Editieren von Übersetzungen in der Administration
+* [OPUSVIER-3718] - Enrichments um Typen und Validierung erweitern
+
+### Aufgaben
+
+* [OPUSVIER-1049] - Indexierung von unpublizierten und gelöschten Dokumenten
+* [OPUSVIER-1353] - /solrsearch/dispatch sollte auch Filter Queries berücksichtigen
+* [OPUSVIER-1696] - SolrSearch: Unnötiger Output ins Logfile ("Connection to Solr server was successful")
+* [OPUSVIER-1905] - Unit Tests für ausgelieferte TMX Dateien
+* [OPUSVIER-1906] - Seite zum Editieren eines Übersetzungsschlüssels
+* [OPUSVIER-1962] - Störende Sonderzeichen über Metadaten-Formularen unsichtbar
+* [OPUSVIER-1963] - Störende Sonderzeichen werden in Publish-Bestätigungsseite nicht angezeigt
+* [OPUSVIER-2103] - Update/Delete für referenzierte EnrichmentKeys
+* [OPUSVIER-2104] - Skipped Unit-Test testIndexActionWithoutEnrichmentkeys() im EnrichmentKeyController zum Laufen bringen
+* [OPUSVIER-2418] - Minimalanforderungen in Google Scholar sicherstellen
+* [OPUSVIER-2480] - Suche im Adminbereich nach Autor
+* [OPUSVIER-2979] - OPUS Projekt Setup mit IntelliJ IDEA dokumentieren
+* [OPUSVIER-3184] - Übersichtsseite Nutzerkonten CSS anpassen
+* [OPUSVIER-3185] - Übersichtsseite Zugriffskontrolle CSS anpassen
+* [OPUSVIER-3298] - Error Handling mit libxml_use_internal_errors anschließend zurücksetzen
+* [OPUSVIER-3365] - Admin_File_Form::setDefaults verletzt STRICT Standard für PHP
+* [OPUSVIER-3425] - Coding Style Cleanup
+* [OPUSVIER-3432] - Markierung von geschützten und referenzierten EnrichmentKeys in der Administration
+* [OPUSVIER-3684] - Datei solr.xslt exisitiert an drei Stellen in Applikation und Framework
+* [OPUSVIER-3719] - SWORD Dokumentation
+* [OPUSVIER-3817] - Hilfe-Texte in Deutsch und Englisch überprüfen
+* [OPUSVIER-3857] - MARC 21 - Export aus OPUS
+* [OPUSVIER-3862] - Umstieg auf Solr 7.x
+* [OPUSVIER-3871] - Solr-Anbindung vom Framework zum Search Package verschieben
+* [OPUSVIER-3873] - Konfigurierbarkeit der Trefferliste
+* [OPUSVIER-3878] - PHP Traits für Logging Funktionen
+* [OPUSVIER-3879] - Opus_Validate-Klassen ins Common Package verschieben
+* [OPUSVIER-3930] - Füge vollen Unicode-Support zu: Änderung des charset auf utf8mb4
+* [OPUSVIER-3953] - Branches 4.7 und master (4.6.3) konsolidieren
+* [OPUSVIER-3956] - ISBN-Validierungsklassen aufräumen
+* [OPUSVIER-3958] - Löschen von benutzten Sprachen verhindern
+* [OPUSVIER-3961] - Sprachen automatisch übersetzen
+* [OPUSVIER-3963] - Löschen von benutzten Lizenzen verhindern
+* [OPUSVIER-3964] - Auswahl von Enrichment-Key (und damit Typ) in Metadatenformular
+* [OPUSVIER-3969] - Erweiterung des Datenmodells: EnrichmentKey um zusätzliche Attribute erweitern
+* [OPUSVIER-3970] - DB-Script erweitern für Änderungen an Tabelle enrichmentkeys
+* [OPUSVIER-3971] - Update-Script: vorhandene EnrichmentKeys auf Standard-Typ "simple" mappen
+* [OPUSVIER-3972] - Translate-Adapter für Übersetzungen aus Datenbank
+* [OPUSVIER-3973] - Datenbank für Übersetzungen erweitern
+* [OPUSVIER-3974] - DB-Schemadatei opus4schema.sql entfernen
+* [OPUSVIER-3978] - DataCite-XML as Export (für Administratoren) zur Verfügung stellen
+* [OPUSVIER-3980] - Ersetze Anker durch Anchor
+* [OPUSVIER-3982] - Löschen von genutzten DNB Institutionen verhindern
+* [OPUSVIER-3986] - OPUS 4 Test Build mit Travis ermöglichen
+* [OPUSVIER-3987] - Travis Builds für Framework optimieren
+* [OPUSVIER-3988] - Application Tests beschleunigen (Travis 50 Minuten Limit)
+* [OPUSVIER-3989] - Funktion zur Abfrage der maximalen Länge von Feldern
+* [OPUSVIER-3997] - Installationsskript für Solr 7.x anpassen
+* [OPUSVIER-4020] - CollectionRole Übersetzungen mit Sonderzeichen prüfen
+* [OPUSVIER-4021] - Einfach Eingabe der Übersetzungen für CollectionRoles
+* [OPUSVIER-4022] - Validierung von CollectionRole-Namen
+* [OPUSVIER-4026] - Docker für das lokale Rendern der Dokumentation
+* [OPUSVIER-4031] - DuckDuckGo-Suche für Online-Dokumentation 
+* [OPUSVIER-4036] -  Plugins für Opus_Document konfigurierbar machen
+* [OPUSVIER-4040] - DOI mit XMetaDissPlus ausliefern
+* [OPUSVIER-4046] - Composer-Dependency für phpunit von 4.8.24 auf 4.8.36 erhöhen
+* [OPUSVIER-4052] - Leere Sammlungen innerhalb des Browsings optional ausblenden
+* [OPUSVIER-4053] - DataCite-XML als Export für Admin auf Frontdoor anbieten
+* [OPUSVIER-4054] - DataCite-Status-Seite für einzelnes Dokument umsetzen
+* [OPUSVIER-4055] - DataCite XML Schema von Version 4.0 auf Version 4.2 aktualisieren
+* [OPUSVIER-4058] - Einheitliche Schreibweise der Dublin Core Metatags
+* [OPUSVIER-4059] - im Collection-Browsing: <ul> um class-Attribut der CollectionRole erweitern
+* [OPUSVIER-4062] - Export-Button für MARCXML auf Dokument-Frontdoor anzeigen
+* [OPUSVIER-4063] - Namen für Dokumenttyp "periodicalpart" im XML korrigiert
+* [OPUSVIER-4064] - MARCXML Export über OAI Schnittstelle
+* [OPUSVIER-4066] - Setzen von dcterms:DCMIType für Publikationstyp in XMetaDissPlus
+* [OPUSVIER-4071] - Theme-Option für Sammlungen verstecken
+* [OPUSVIER-4074] - Funktion für XSLT, um zu prüfen, ob Nutzer Admin-Rechte hat
+* [OPUSVIER-4084] - Inhalte der Kontaktseite in Datenbank speichern
+* [OPUSVIER-4085] - Inhalt der Imprint-Seite in Datenbank speichern
+* [OPUSVIER-4089] - Nachträgliches Laden der Übersetzungen für Module entfernen
+* [OPUSVIER-4091] - CollectionRoles um Language Feld erweitern
+* [OPUSVIER-4092] - rebuilding_database.sh um Option erweitern, die das Anlegen des Backups unter workspace/tmp/old-* verhindert
+* [OPUSVIER-4095] - Änderung des Verzeichnisnamens config in conf in opus4-search
+* [OPUSVIER-4096] - Namensänderung und Löschung von in Benutzung befindlicher EnrichmentKeys in der EK-Administration erlauben
+* [OPUSVIER-4097] - Neuen Button in EnrichmentKey-Administration für das Löschen eines EnrichmentKeys aus allen Dokumenten
+* [OPUSVIER-4101] - Inhalte der Homepage (Start) in der Datenbank speichern
+* [OPUSVIER-4112] - Code Cleanup: Behandlung von booleschen Konfigurationsparametern
+* [OPUSVIER-4113] - Ausgabe der ISBN in MARC-Felder 020 bzw. 773 $z
+* [OPUSVIER-4114] - Performanz von RequireTest optimieren
+* [OPUSVIER-4117] - Übersetzungen verbrauchen viel Speicher beim Testen
+* [OPUSVIER-4119] - Cache greift bei Übersetzungen nicht
+* [OPUSVIER-4120] - Filtern von über SWORD importierten Dokumenten in der Administration
+* [OPUSVIER-4121] - Optionale Indexierung ohne Volltexte
+* [OPUSVIER-4122] - Neue Konfigurationsschlüssel metatags.mapping.* für das Hinzufügen von Nicht-Standard-Dokumenttypen schaffen
+* [OPUSVIER-4123] - Facette für Dokument-Status zur Indexierung hinzufügen
+* [OPUSVIER-4128] - Cleanup PHTML, Javascript, CSS files
+* [OPUSVIER-4129] - ViewHelper für class-Attribute von #content DIV in common.phtml
+* [OPUSVIER-4131] - Erweiterung der Enrichment-Administration um genutzte (aber nicht registrierte) EnrichmentKeys
+* [OPUSVIER-4133] - Continuous Integration mit GitHub Actions (Beta)
+* [OPUSVIER-4134] - PHTML für Suchtrefferanzeige vereinfachen
+* [OPUSVIER-4135] - Tests fixen, die durch Indizierung aller Dokumente gebrochen sind
+* [OPUSVIER-4136] - Anzahl der Dokumente auf Homepage
+* [OPUSVIER-4138] - Normale Nutzer dürfen nur *published* Dokumente suchen
+* [OPUSVIER-4139] - Label für "Simple"-EK-Type im Select-Feld in der EnrichmentKey-Administration vergeben
+* [OPUSVIER-4141] - Branch 4.7 mit 4.6.4 zusammenführen
+* [OPUSVIER-4142] - Publish-Formulare: Link zu DDC-Sachgruppen der DNB hat sich geändert
+* [OPUSVIER-4165] - Font Awesome in Git-Repository übernehmen
+* [OPUSVIER-4167] - Anzahl der Dokumente im Browsing für Nutzer filtern
+* [OPUSVIER-4169] - Aufsatznummern erfassen, speichern und darstellen (GUI)
+* [OPUSVIER-4192] - Aktualisierung des DataCite Metadatenschema metadata.xsd (Version 4.3)
+* [OPUSVIER-4194] - mehrere Methoden in Application_Form_Model_Table mit implizitem Rückgabewert
+* [OPUSVIER-4196] - EnrichmentKey-Formular um Checkbox für Validierung erweitern
+* [OPUSVIER-4197] - Metadatenformular in Administration muss bei typisierten Enrichments die Validation Policy beachten
+* [OPUSVIER-4199] - Klärung Verwendung von localstat.xml und auftretenden Fehlern damit
+* [OPUSVIER-4226] - Übersetzungen nach Modul filtern
+* [OPUSVIER-4227] - Übersetzungen nach Usprung filtern
+* [OPUSVIER-4237] - Update auf JQuery 3.4.x
+* [OPUSVIER-4238] - Skript für Installation von PHP Paketen aktualisieren
+
+### Spezifikation
+
+* [OPUSVIER-2308] - Admin-Bereich: Müssen Übersetzungen escaped werden?
+* [OPUSVIER-4076] - Behandlung von Dateien in MARC21-XML-Export in Feld 856
+* [OPUSVIER-4077] - Behandlung von Schriftenreihen in MARC-Feld 490 im Marc21-XML-Export
+* [OPUSVIER-4078] - Behandlung von Abstracts in MARC-Feld 520 im MARC21-XML-Export
+* [OPUSVIER-4080] - Behandlung von übergeordneten Titeln (ParentTitle) in MARC-Feld 773
+* [OPUSVIER-4081] - Mehrere Klarstellungen zur Befüllung von MARC-Feld 264 im MARC-XML-Export
+* [OPUSVIER-4082] - Behandlung von Nicht-Standard-Dokumenttypen bei Generierung des Leader-Felds im MARC21-XML-Export
+* [OPUSVIER-4083] - PublisherPlace aus Konfiguration wird nicht in Subfield a geschrieben, wenn PublisherName im Dokument gesetzt wurde (und in Subfield b geschrieben wird)
+* [OPUSVIER-4098] - Soll das Hinzufügen eines Enrichments mit unbekannten KeyName erlaubt werden?
+* [OPUSVIER-4099] - Soll das Ändern des Keys eines Enrichments auf einen unbekannten KeyName erlaubt werden?
+* [OPUSVIER-4107] - Behandlung von Nicht-Standard-Dokumenttypen im Subfield 655a
+* [OPUSVIER-4110] - Ergänzung der Lizenz im MARC-Feld 856 für Transfer-URL
+
+### Dokumentation
+
+* [OPUSVIER-4061] - Dokumentation zum Mapping der OPUS-Dokumenttypen auf HTML-Metatags
+* [OPUSVIER-4115] - Update Testing Dokumentation für Entwickler
+
+---
+
 ## Release 4.6.3 2018-11-05
 
 ### Feature Request

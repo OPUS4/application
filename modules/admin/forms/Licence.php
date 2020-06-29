@@ -37,7 +37,8 @@
  * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Admin_Form_Licence extends Application_Form_Model_Abstract {
+class Admin_Form_Licence extends Application_Form_Model_Abstract
+{
 
     /**
      * Name von Formularelement fuer Aktivierungsstatus einer Lizenz.
@@ -107,7 +108,8 @@ class Admin_Form_Licence extends Application_Form_Model_Abstract {
     /**
      * Erzeugt die Formularelemente.
      */
-    public function init() {
+    public function init()
+    {
         parent::init();
 
         $this->setRemoveEmptyCheckbox(false);
@@ -115,15 +117,17 @@ class Admin_Form_Licence extends Application_Form_Model_Abstract {
         $this->setModelClass('Opus_Licence');
 
         $this->addElement('checkbox', self::ELEMENT_ACTIVE);
-        $this->addElement('text', self::ELEMENT_NAME);
-        $this->addElement('text', self::ELEMENT_NAME_LONG, array('required' => true, 'size' => 70));
-        $this->addElement('Language', self::ELEMENT_LANGUAGE, array('required' => true));
-        $this->addElement('text', self::ELEMENT_LINK_LICENCE, array('required' => true, 'size' => 70));
-        $this->addElement('text', self::ELEMENT_LINK_LOGO, array('size' => 70));
+        $this->addElement('text', self::ELEMENT_NAME, [
+            'maxlength' => Opus_Licence::getFieldMaxLength('Name')
+        ]);
+        $this->addElement('text', self::ELEMENT_NAME_LONG, ['required' => true, 'size' => 70]);
+        $this->addElement('Language', self::ELEMENT_LANGUAGE, ['required' => true]);
+        $this->addElement('text', self::ELEMENT_LINK_LICENCE, ['required' => true, 'size' => 70]);
+        $this->addElement('text', self::ELEMENT_LINK_LOGO, ['size' => 70]);
         $this->addElement('textarea', self::ELEMENT_DESC_TEXT);
         $this->addElement('textarea', self::ELEMENT_DESC_MARKUP);
         $this->addElement('textarea', self::ELEMENT_COMMENT_INTERNAL);
-        $this->addElement('text', self::ELEMENT_MIME_TYPE, array('size' => 30));
+        $this->addElement('text', self::ELEMENT_MIME_TYPE, ['size' => 30]);
         $this->addElement('checkbox', self::ELEMENT_POD_ALLOWED);
         $this->addElement('SortOrder', self::ELEMENT_SORT_ORDER);
     }
@@ -132,7 +136,8 @@ class Admin_Form_Licence extends Application_Form_Model_Abstract {
      * Initialisiert Formular von Opus_Licence Instanz.
      * @param Opus_Model_Licence $licence
      */
-    public function populateFromModel($licence) {
+    public function populateFromModel($licence)
+    {
         $this->getElement(self::ELEMENT_MODEL_ID)->setValue($licence->getId());
         $this->getElement(self::ELEMENT_ACTIVE)->setValue($licence->getActive());
         $this->getElement(self::ELEMENT_COMMENT_INTERNAL)->setValue($licence->getCommentInternal());
@@ -152,7 +157,8 @@ class Admin_Form_Licence extends Application_Form_Model_Abstract {
      * Aktualisiert Instanz von Opus_Licence mit Werte aus Formular.
      * @param Opus_Model_AbstractDb $licence
      */
-    public function updateModel($licence) {
+    public function updateModel($licence)
+    {
         $licence->setActive($this->getElementValue(self::ELEMENT_ACTIVE));
         $licence->setCommentInternal($this->getElementValue(self::ELEMENT_COMMENT_INTERNAL));
         $licence->setDescMarkup($this->getElementValue(self::ELEMENT_DESC_MARKUP));
@@ -166,5 +172,4 @@ class Admin_Form_Licence extends Application_Form_Model_Abstract {
         $licence->setSortOrder($this->getElementValue(self::ELEMENT_SORT_ORDER));
         $licence->setPodAllowed($this->getElementValue(self::ELEMENT_POD_ALLOWED));
     }
-
 }

@@ -108,7 +108,8 @@ class Application_View_Helper_JavascriptMessages extends Application_View_Helper
      * Renders Javascript for providing translated messages.
      * @return string Javascript snippet
      */
-    public function toString() {
+    public function toString()
+    {
         $indent = str_repeat(' ', $this->getIndent());
 
         $output = $indent . '<script type="text/javascript">' . "\n";
@@ -122,7 +123,8 @@ class Application_View_Helper_JavascriptMessages extends Application_View_Helper
         return $output;
     }
 
-    public function __toString() {
+    public function __toString()
+    {
         return $this->toString();
     }
 }

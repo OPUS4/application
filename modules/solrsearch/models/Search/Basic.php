@@ -39,10 +39,11 @@
 class Solrsearch_Model_Search_Basic extends Solrsearch_Model_Search_Abstract
 {
 
-    public function createSearchQuery($input) {
+    public function createSearchQuery($input)
+    {
         $this->getLogger()->debug("Constructing query for simple search.");
 
-        $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::SIMPLE);
+        $query = new Opus\Search\Util\Query(Opus\Search\Util\Query::SIMPLE);
         $query->setStart($input['start']);
         $query->setRows($input['rows']);
         $query->setSortField($input['sortField']);
@@ -58,5 +59,4 @@ class Solrsearch_Model_Search_Basic extends Solrsearch_Model_Search_Abstract
         $this->getLogger()->debug("Query $query complete");
         return $query;
     }
-
 }

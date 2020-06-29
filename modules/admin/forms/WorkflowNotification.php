@@ -65,9 +65,8 @@ class Admin_Form_WorkflowNotification extends Admin_Form_YesNoForm
     public function isNotificationEnabled()
     {
         $config = Zend_Registry::get('Zend_Config');
-
-        return ((isset($config->notification->document->published->enabled)
-            && $config->notification->document->published->enabled == 1));
+        return (isset($config->notification->document->published->enabled)
+            && filter_var($config->notification->document->published->enabled, FILTER_VALIDATE_BOOLEAN));
     }
 
     /**
@@ -98,7 +97,8 @@ class Admin_Form_WorkflowNotification extends Admin_Form_YesNoForm
      * @param $document
      * TODO should not be part of the form class (encapsulate in different class)
      */
-    public function getRecipients($document) {
+    public function getRecipients($document)
+    {
         $recipients = [];
 
         $authors = $document->getPersonAuthor();
@@ -120,9 +120,9 @@ class Admin_Form_WorkflowNotification extends Admin_Form_YesNoForm
                     $entry = $recipients[$email];
                     $names = $entry['name'];
 
-                    if (!is_array($names) && $names !== $fullname ||
-                        is_array($names) && !in_array($fullname, $names)) {
-                        if (!is_array($names)) {
+                    if (! is_array($names) && $names !== $fullname ||
+                        is_array($names) && ! in_array($fullname, $names)) {
+                        if (! is_array($names)) {
                             $names = [$names];
                         }
 
@@ -132,9 +132,9 @@ class Admin_Form_WorkflowNotification extends Admin_Form_YesNoForm
 
                     $roles = $entry['role'];
 
-                    if (!is_array($roles) && $roles !== $role ||
-                        is_array($roles) && !in_array($role, $roles)) {
-                        if (!is_array($roles)) {
+                    if (! is_array($roles) && $roles !== $role ||
+                        is_array($roles) && ! in_array($role, $roles)) {
+                        if (! is_array($roles)) {
                             $roles = [$roles];
 
                             $roles[] = $role;

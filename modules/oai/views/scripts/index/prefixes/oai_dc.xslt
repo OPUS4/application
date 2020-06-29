@@ -29,7 +29,7 @@
  * @package     Module_Oai
  * @author      Michael Lang <lang@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 -->
@@ -75,7 +75,7 @@
             <!-- dc:subject -->
             <xsl:apply-templates select="Subject[@Type='swd']" mode="oai_dc" />
             <xsl:apply-templates select="Collection[@RoleName='ddc' and @Visible=1]" mode="oai_dc" />
-           
+
             <!-- dc:description -->
             <xsl:apply-templates select="TitleAbstract" mode="oai_dc" />
             <!-- dc:publisher -->
@@ -94,8 +94,9 @@
             <dc:identifier>
                 <xsl:value-of select="@frontdoorurl"/>
             </dc:identifier>
-            <xsl:apply-templates select="IdentifierUrn" mode="oai_dc" />
-            <xsl:apply-templates select="IdentifierIsbn" mode="oai_dc" />
+            <xsl:apply-templates select="Identifier[@Type = 'urn']" mode="oai_dc" />
+            <xsl:apply-templates select="Identifier[@Type = 'isbn']" mode="oai_dc" />
+            <xsl:apply-templates select="Identifier[@Type = 'doi']" mode="oai_dc" />
             <xsl:apply-templates select="File" mode="oai_dc" />
             <!-- dc:language -->
             <xsl:apply-templates select="@Language" mode="oai_dc" />
@@ -142,7 +143,7 @@
     <xsl:template match="TitleMain" mode="oai_dc">
         <dc:title>
             <xsl:attribute name="xml:lang">
-                <xsl:value-of select="php:functionString('Oai_Model_Language::getLanguageCode', @Language, 'part1')" />
+                <xsl:value-of select="php:functionString('Opus_Language::getLanguageCode', @Language, 'part1')" />
             </xsl:attribute>
             <xsl:value-of select="@Value" />
             <xsl:if test="starts-with($oai_set,'openaire')  and ../TitleSub/@Value != ''">
@@ -186,7 +187,7 @@
         <dc:subject>
             <xsl:if test="@language != ''">
                 <xsl:attribute name="xml:lang">
-                    <xsl:value-of select="php:functionString('Oai_Model_Language::getLanguageCode', @Language, 'part1')" />
+                    <xsl:value-of select="php:functionString('Opus_Language::getLanguageCode', @Language, 'part1')" />
                 </xsl:attribute>
             </xsl:if>
             <xsl:value-of select="@Value" />
@@ -198,11 +199,11 @@
             <xsl:text>ddc:</xsl:text><xsl:value-of select="@Number" />
         </dc:subject>
     </xsl:template>
-	
+
     <xsl:template match="TitleAbstract" mode="oai_dc">
         <dc:description>
             <xsl:attribute name="xml:lang">
-                <xsl:value-of select="php:functionString('Oai_Model_Language::getLanguageCode', @Language, 'part1')" />
+                <xsl:value-of select="php:functionString('Opus_Language::getLanguageCode', @Language, 'part1')" />
             </xsl:attribute>
             <xsl:value-of select="@Value" />
         </dc:description>
@@ -212,7 +213,7 @@
         <xsl:choose>
             <xsl:when test="starts-with($oai_set,'openaire')">
                 <dc:type>
-                    <xsl:call-template name="compareDocumentName" />     
+                    <xsl:call-template name="compareDocumentName" />
                </dc:type>
             </xsl:when>
             <xsl:otherwise>
@@ -229,76 +230,16 @@
             </xsl:otherwise>
         </xsl:choose>
         <dc:type>
-            <xsl:call-template name="dcmiType"/>
+            <xsl:call-template name="dcType"/>
         </dc:type>
     </xsl:template>
 
     <xsl:template name="compareDocumentName" >
-        <xsl:choose>
-            <xsl:when test=". = 'masterthesis'">
-                <xsl:text>info:eu-repo/semantics/masterThesis</xsl:text>
-            </xsl:when>
-            <xsl:when test=". = 'bachelorthesis'">
-                <xsl:text>info:eu-repo/semantics/bachelorThesis</xsl:text>
-            </xsl:when>
-            <xsl:when test=". = 'doctoralthesis'">
-                <xsl:text>info:eu-repo/semantics/doctoralThesis</xsl:text>
-            </xsl:when>
-            <xsl:when test=". = 'bookpart'">
-                <xsl:text>info:eu-repo/semantics/bookPart</xsl:text>
-            </xsl:when>
-            <xsl:when test=". = 'conferenceobject'">
-                <xsl:text>info:eu-repo/semantics/conferenceObject</xsl:text>
-            </xsl:when>
-            <xsl:when test=". = 'workingpaper'">
-                <xsl:text>info:eu-repo/semantics/workingPaper</xsl:text>
-            </xsl:when>
-            <xsl:when test=". = 'contributiontoperiodical'">
-                <xsl:text>info:eu-repo/semantics/contributionToPeriodical</xsl:text>
-            </xsl:when>
-            <xsl:when test=". = 'article'">
-                <xsl:text>info:eu-repo/semantics/article</xsl:text>
-            </xsl:when>
-            <xsl:when test=". = 'book'">
-                <xsl:text>info:eu-repo/semantics/book</xsl:text>
-            </xsl:when>
-            <xsl:when test=". = 'review'">
-                <xsl:text>info:eu-repo/semantics/review</xsl:text>
-            </xsl:when>
-            <xsl:when test=". = 'lecture'">
-                <xsl:text>info:eu-repo/semantics/lecture</xsl:text>
-            </xsl:when>
-            <xsl:when test=". = 'preprint'">
-                <xsl:text>info:eu-repo/semantics/preprint</xsl:text>
-            </xsl:when>
-            <xsl:when test=". = 'report'">
-                <xsl:text>info:eu-repo/semantics/report</xsl:text>
-            </xsl:when>
-            <xsl:when test=".='habilitation'" >
-                <xsl:text>info:eu-repo/semantics/doctoralThesis</xsl:text>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:text>info:eu-repo/semantics/other</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
+        <xsl:text>info:eu-repo/semantics/</xsl:text><xsl:value-of select="php:functionString('Application_Xslt::openAireType', .)" />
      </xsl:template>
-	
-     <xsl:template name="dcmiType" >
-          <xsl:choose>
-            <xsl:when test=". = 'diplthesis' or  . = 'diplom'">
-                <xsl:text>doc-type:masterThesis</xsl:text>
-            </xsl:when>
-            <xsl:when test=". = 'habilitation' or . = 'doctoralthesis'">
-                <xsl:text>doc-type:doctoralThesis</xsl:text>
-            </xsl:when>
-            <xsl:when test=". = 'bachelorthesis'">
-                <xsl:text>doc-type:bachelorThesis</xsl:text>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:text>doc-type:</xsl:text>
-                <xsl:value-of select="."/>
-            </xsl:otherwise>
-        </xsl:choose>
+
+    <xsl:template name="dcType" >
+        <xsl:text>doc-type:</xsl:text><xsl:value-of select="php:functionString('Application_Xslt::dcType', .)" />
     </xsl:template>
 
     <xsl:template match="@ContributingCorporation" mode="oai_dc">
@@ -319,7 +260,7 @@
         </dc:identifier>
     </xsl:template>
 
-    <xsl:template match="IdentifierIsbn" mode="oai_dc">
+    <xsl:template match="Identifier[@Type = 'isbn']" mode="oai_dc">
         <dc:identifier>
             <xsl:if test="starts-with($oai_set,'openaire')">
                 <xsl:text>urn:isbn:</xsl:text>
@@ -328,12 +269,19 @@
         </dc:identifier>
     </xsl:template>
 
-    <xsl:template match="IdentifierUrn" mode="oai_dc">
+    <xsl:template match="Identifier[@Type = 'urn']" mode="oai_dc">
         <dc:identifier>
             <xsl:value-of select="@Value" />
         </dc:identifier>
         <dc:identifier>
             <xsl:value-of select="$urnResolverUrl" />
+            <xsl:value-of select="@Value" />
+        </dc:identifier>
+    </xsl:template>
+
+    <xsl:template match="Identifier[@Type = 'doi']" mode="oai_dc">
+        <dc:identifier>
+            <xsl:value-of select="$doiResolverUrl" />
             <xsl:value-of select="@Value" />
         </dc:identifier>
     </xsl:template>
@@ -379,7 +327,7 @@
          <xsl:if test="starts-with($oai_set,'openaire')">
             <dc:source>
                 <xsl:attribute name="xml:lang">
-                    <xsl:value-of select="php:functionString('Oai_Model_Language::getLanguageCode', @Language, 'part1')" />
+                    <xsl:value-of select="php:functionString('Opus_Language::getLanguageCode', @Language, 'part1')" />
                 </xsl:attribute>
                 <xsl:value-of select="@Value" />
             </dc:source>
@@ -405,4 +353,3 @@
     </xsl:template>
 
 </xsl:stylesheet>
-

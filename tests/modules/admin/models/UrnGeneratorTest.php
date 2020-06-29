@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -27,68 +28,82 @@
  * @category    Application Unit Test
  * @package     Admin_Model
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2018-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Admin_Model_UrnGeneratorTest extends ControllerTestCase {
+class Admin_Model_UrnGeneratorTest extends ControllerTestCase
+{
 
     private $config;
 
-    protected function tearDown() {
-        if (!is_null($this->config)) {
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->makeConfigurationModifiable();
+    }
+
+    public function tearDown()
+    {
+        if (! is_null($this->config)) {
             // undo modifications in configuration
             Zend_Registry::set('Zend_Config', $this->config);
         }
     }
 
-    private function modifyUrnConfig($nss, $nid) {
+    private function modifyUrnConfig($nss, $nid)
+    {
         // backup current config state
         $this->config = Zend_Registry::get('Zend_Config');
 
         // modify current config state
         $config = Zend_Registry::get('Zend_Config');
-        $config->merge(new Zend_Config(array(
-            'urn' => array(
+        $config->merge(new Zend_Config([
+            'urn' => [
                 'nss' => $nss,
                 'nid' => $nid
-            )
-        )));
+            ]
+        ]));
         Zend_Registry::set('Zend_Config', $config);
     }
 
-    public function testWithMissingConfig() {
+    public function testWithMissingConfig()
+    {
         $this->modifyUrnConfig('', '');
         $this->setExpectedException('Application_Exception');
         new Admin_Model_UrnGenerator();
     }
 
-    public function testWithMissingConfigNid() {
+    public function testWithMissingConfigNid()
+    {
         $this->modifyUrnConfig('de:kobv:test-opus', '');
 
         $this->setExpectedException('Application_Exception');
         new Admin_Model_UrnGenerator();
     }
 
-    public function testWithMissingConfigNss() {
+    public function testWithMissingConfigNss()
+    {
         $this->modifyUrnConfig('', 'nbn');
 
         $this->setExpectedException('Application_Exception');
         new Admin_Model_UrnGenerator();
     }
 
-    public function testConstructor() {
+    public function testConstructor()
+    {
         $this->modifyUrnConfig('de:kobv:test-opus', 'nbn');
 
         $urnGenerator = new Admin_Model_UrnGenerator();
         $this->assertNotNull($urnGenerator);
     }
 
-    public function testGeneration() {
+    public function testGeneration()
+    {
         $this->modifyUrnConfig('de:kobv:test-opus', 'nbn');
 
         $urnGenerator = new Admin_Model_UrnGenerator();
         $urn = $urnGenerator->generateUrnForDocument('123');
         $this->assertEquals('urn:nbn:de:kobv:test-opus-1232', $urn);
     }
-
 }

@@ -27,36 +27,42 @@
  * @category    Application Unit Test
  * @package     Application_View_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
-class Application_View_Helper_SeriesNumberTest extends ControllerTestCase {
+class Application_View_Helper_SeriesNumberTest extends ControllerTestCase
+{
+
+    protected $additionalResources = 'database';
 
     private $_helper = null;
 
-    public function setUp() {
+    public function setUp()
+    {
         parent::setUp();
 
         $this->_helper = new Application_View_Helper_SeriesNumber();
     }
 
-    public function testSeriesNumberForLinkedDocument() {
+    public function testSeriesNumberForLinkedDocument()
+    {
         $document = $this->getDocument(146);
         $series = new Opus_Series(1);
 
         $this->assertEquals('5/5', $this->_helper->seriesNumber($document, $series));
     }
 
-    public function testSeriesNumberForNotLinkedDocument() {
+    public function testSeriesNumberForNotLinkedDocument()
+    {
         $document = $this->getDocument(146);
         $series = new Opus_Series(2);
 
         $this->assertEquals('', $this->_helper->seriesNumber($document, $series));
     }
 
-    public function testSeriesNumberEscaped() {
+    public function testSeriesNumberEscaped()
+    {
         $document = $this->createTestDocument();
         $series = new Opus_Series(5);
 
@@ -65,5 +71,4 @@ class Application_View_Helper_SeriesNumberTest extends ControllerTestCase {
 
         $this->assertEquals('&lt;h&gt;XIII&lt;/h&gt;', $this->_helper->seriesNumber($document, $series));
     }
-
 }

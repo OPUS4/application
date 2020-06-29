@@ -34,7 +34,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="admin_info_job-detail">
+    <tu tuid="admin_info_job_detail">
       <tuv xml:lang="en">
         <seg>Details</seg>
       </tuv>
@@ -125,7 +125,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="admin_job_job-detail">
+    <tu tuid="admin_job_job_detail">
       <tuv xml:lang="en">
         <seg>Job Processing Details</seg>
       </tuv>
@@ -134,7 +134,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="admin_job_job-detail_description">
+    <tu tuid="admin_job_job_detail_description">
       <tuv xml:lang="en">
         <seg>Details</seg>
       </tuv>
@@ -143,7 +143,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="admin_job_label-opus-index-document">
+    <tu tuid="admin_job_label_opus-index-document">
       <tuv xml:lang="en">
         <seg>Document Indexing</seg>
       </tuv>
@@ -152,7 +152,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="admin_job_label-opus-mail-publish-notification">
+    <tu tuid="admin_job_label_opus-mail-publish-notification">
       <tuv xml:lang="en">
         <seg>E-Mail Notification</seg>
       </tuv>
@@ -161,7 +161,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="admin_job_label-opus-metadata-import-notification">
+    <tu tuid="admin_job_label_opus-metadata-import-notification">
       <tuv xml:lang="en">
         <seg>Metadata Import</seg>
       </tuv>
@@ -215,7 +215,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="admin_job_state-failed">
+    <tu tuid="admin_job_state_failed">
       <tuv xml:lang="en">
         <seg>failed</seg>
       </tuv>
@@ -224,7 +224,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="admin_job_state-unprocessed">
+    <tu tuid="admin_job_state_unprocessed">
       <tuv xml:lang="en">
         <seg>unprocessed</seg>
       </tuv>
@@ -233,7 +233,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="admin_job_state-processing">
+    <tu tuid="admin_job_state_processing">
       <tuv xml:lang="en">
         <seg>unprocessed</seg>
       </tuv>

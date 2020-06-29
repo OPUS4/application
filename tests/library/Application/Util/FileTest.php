@@ -27,24 +27,27 @@
  * @category    Application
  * @package     Tests
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 class Application_Util_FileTest extends ControllerTestCase
 {
 
-    public function testCopyAndFilter() {
+    protected $additionalResources = 'database';
+
+    public function testCopyAndFilter()
+    {
         $source = $this->createTestFile('source.txt');
         $dest = $this->createTestFile('test.txt');
 
         $sourcePath = $source->getTempFile();
         $destPath = $dest->getTempFile();
 
-        $properties = array(
+        $properties = [
             '@db.user.name@' => 'opus4user',
             '@db.user.password@' => 'dummypwd'
-        );
+        ];
 
         $content = <<<TEXT
 # Filtered File
@@ -71,13 +74,13 @@ TEXT;
      * @expectedException Exception
      * @expectedExceptionMessage could not read source file
      */
-    public function testCopyAndFilterMissingSource() {
+    public function testCopyAndFilterMissingSource()
+    {
         $source = APPLICATION_PATH . '/tests/resources/doesnotexist.txt';
         $dest = $this->createTestFile('dest.txt');
 
-        $properties = array('@user@', 'admin');
+        $properties = ['@user@', 'admin'];
 
         Application_Util_File::copyAndFilter($source, $dest->getTempFile(), $properties);
     }
-
 }

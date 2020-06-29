@@ -26,17 +26,20 @@
  *
  * @category    Application Unit Test
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
  * Unit Test fuer Identifier Formular Klasse.
  */
-class Admin_Form_Document_IdentifierTest extends ControllerTestCase {
-    
-    public function testCreateForm() {
+class Admin_Form_Document_IdentifierTest extends ControllerTestCase
+{
+
+    protected $additionalResources = ['database'];
+
+    public function testCreateForm()
+    {
         $form = new Admin_Form_Document_Identifier();
 
         $this->assertEquals(3, count($form->getElements()));
@@ -47,80 +50,85 @@ class Admin_Form_Document_IdentifierTest extends ControllerTestCase {
 
         $this->assertFalse($form->getDecorator('Fieldset'));
     }
-    
+
     /**
-     * Testet das Setzen der Elemente entsprechend Opus_Identifier. 
-     * 
+     * Testet das Setzen der Elemente entsprechend Opus_Identifier.
+     *
      * Dokument 146 wird verwendet, da es vollständig besetzt ist und normalerweise in den Unit Tests nicht modifiziert
      * wird.
      */
-    public function testPopulateFromModel() {
+    public function testPopulateFromModel()
+    {
         $form = new Admin_Form_Document_Identifier();
-        
+
         $document = new Opus_Document(146);
         $identifiers = $document->getIdentifier();
         $identifier = $identifiers[0];
 
         $form->populateFromModel($identifier);
-        
+
         $this->assertEquals($identifier->getId(), $form->getElement('Id')->getValue());
         $this->assertEquals($identifier->getType(), $form->getElement('Type')->getValue());
         $this->assertEquals($identifier->getValue(), $form->getElement('Value')->getValue());
     }
-    
-    public function testUpdateModel() {
+
+    public function testUpdateModel()
+    {
         $form = new Admin_Form_Document_Identifier();
-        
+
         $form->getElement('Type')->setValue('url');
         $form->getElement('Value')->setValue('test-urn-1');
-        
+
         $identifier = new Opus_Identifier();
-        
+
         $form->updateModel($identifier);
-        
+
         $this->assertEquals('url', $identifier->getType());
         $this->assertEquals('test-urn-1', $identifier->getValue());
     }
-    
+
     /**
      * Prueft, dass bei nicht gesetztem Id-Element ein neuer Identifier zurueck geliefert wird.
      */
-    public function testGetModel() {
+    public function testGetModel()
+    {
         $form = new Admin_Form_Document_Identifier();
-        
+
         $form->getElement('Type')->setValue('url');
         $form->getElement('Value')->setValue('test-urn-1');
-        
+
         $identifier = $form->getModel();
-        
+
         $this->assertNull($identifier->getId());
         $this->assertEquals('url', $identifier->getType());
         $this->assertEquals('test-urn-1', $identifier->getValue());
     }
-    
+
     /**
      * Prueft, dass bei gesetztem Id-Element, der Identifier mit dieser Id und aktualisierten Werten zurueck geliefert
      * wird.
      */
-    public function testGetModelExistingIdentifier() {
+    public function testGetModelExistingIdentifier()
+    {
         $form = new Admin_Form_Document_Identifier();
-        
+
         $document = new Opus_Document(146);
         $identifiers = $document->getIdentifier();
         $identifierId = $identifiers[0]->getId();
-        
+
         $form->getElement('Id')->setValue($identifierId);
         $form->getElement('Type')->setValue('url');
         $form->getElement('Value')->setValue('test-urn-1');
-        
+
         $identifier = $form->getModel();
-        
+
         $this->assertEquals($identifierId, $identifier->getId());
         $this->assertEquals('url', $identifier->getType());
         $this->assertEquals('test-urn-1', $identifier->getValue());
     }
 
-    public function testGetModelBadId() {
+    public function testGetModelBadId()
+    {
         $form = new Admin_Form_Document_Identifier();
 
         $form->getElement('Id')->setValue('bad');
@@ -142,7 +150,8 @@ class Admin_Form_Document_IdentifierTest extends ControllerTestCase {
         $this->assertContains('Unknown identifier ID = \'bad\'.', $messages[0]);
     }
 
-    public function testGetModelUnknownId() {
+    public function testGetModelUnknownId()
+    {
         $form = new Admin_Form_Document_Identifier();
 
         $form->getElement('Id')->setValue('7777');
@@ -163,5 +172,4 @@ class Admin_Form_Document_IdentifierTest extends ControllerTestCase {
         $this->assertEquals(1, count($messages));
         $this->assertContains('Unknown identifier ID = \'7777\'.', $messages[0]);
     }
-    
 }

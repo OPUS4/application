@@ -79,11 +79,12 @@ $titleParent->setLanguage('fra');
 $doc->setPageNumber('123');
 $doc->setPageFirst('122');
 $doc->setPageLast('124');
+$doc->setArticleNumber('125');
 
 $doc->setVolume('4');
 $doc->setIssue('18');
 
-$instituteName='Institut für empirische Forschung';
+$instituteName = 'Institut für empirische Forschung';
 $institutesRole = Opus_CollectionRole::fetchByName('institutes');
 if (is_null($institutesRole) === true) {
     $institutesRole = new Opus_CollectionRole();
@@ -99,10 +100,9 @@ if (is_null($institutesRole) === true) {
                    ->store();
 }
 $instituteCollections = Opus_Collection::fetchCollectionsByRoleName($institutesRole->getId(), $instituteName);
-if (count($instituteCollections) >=1) {
+if (count($instituteCollections) >= 1) {
     $instituteCollection = $instituteCollections[0];
-}
-else {
+} else {
     $rootCollection = $institutesRole->getRootCollection();
     if (is_null($rootCollection) === true) {
         $rootCollection = $institutesRole->addRootCollection();
@@ -144,7 +144,7 @@ $doc->addIdentifierOpac()->setValue('OPAC-ID 001 1237890654');
 $arxiv = $doc->addIdentifierArxiv();
 $arxiv->setValue('arXiv:0706.0001');
 
-// Valid DOI Identifier from DOI Homepage: http://www.doi.org/
+// Valid DOI Identifier from DOI Homepage: https://doi.org/
 $doi = $doc->addIdentifierDoi();
 $doi->setValue('10.1000/182');
 
@@ -154,7 +154,7 @@ $pubmed->setValue('9382368');
 
 $doc->setThesisDateAccepted('2003-02-01');
 
-$dnbInstitute=new Opus_DnbInstitute();
+$dnbInstitute = new Opus_DnbInstitute();
 $dnbInstitute->setName('Forschungsinstitut für Code Coverage');
 foreach (Opus_DnbInstitute::getGrantors() as $grantor) {
     if ($dnbInstitute->getName() === $grantor->getName()) {
@@ -221,8 +221,7 @@ $noteTwo->setVisibility('private')->setMessage('und noch eine Bemerkung zum Bear
 $licences = Opus_Licence::getAll();
 if (count($licences) >= 1) {
     $lic = $licences[0];
-}
-else {
+} else {
     $lic = new Opus_Licence();
     $lic->setActive(1);
     $lic->setLanguage('deu');
@@ -234,19 +233,20 @@ $doc->setLicence($lic);
 
 // check for enrichment keys before creating enrichments
 $enrichmentKeys = Opus_EnrichmentKey::getAll();
-$enrichmentKeyNames = array();
+$enrichmentKeyNames = [];
 foreach ($enrichmentKeys as $enrichmentKey) {
-   $enrichmentKeyNames[] = $enrichmentKey->getName();
+    $enrichmentKeyNames[] = $enrichmentKey->getName();
 }
 $missingEnrichmentKeyNames = array_diff(
-    array('SourceSwb','SourceTitle','ClassRvk','ContributorsName','Event', 'City', 'Country'), $enrichmentKeyNames
+    ['SourceSwb','SourceTitle','ClassRvk','ContributorsName','Event', 'City', 'Country'],
+    $enrichmentKeyNames
 );
-if (!empty($missingEnrichmentKeyNames)) {
-   foreach ($missingEnrichmentKeyNames as $missingEnrichmentKeyName) {
-      $newEnrichmentKey = new Opus_EnrichmentKey();
-      $newEnrichmentKey->setName($missingEnrichmentKeyName);
-      $newEnrichmentKey->store();
-   }
+if (! empty($missingEnrichmentKeyNames)) {
+    foreach ($missingEnrichmentKeyNames as $missingEnrichmentKeyName) {
+        $newEnrichmentKey = new Opus_EnrichmentKey();
+        $newEnrichmentKey->setName($missingEnrichmentKeyName);
+        $newEnrichmentKey->store();
+    }
 }
 
 // Some Enrichment-Fields from Opus3-Migration
@@ -262,4 +262,3 @@ $doc->addEnrichment()->setKeyName('Country')->setValue('Opus4 OAI-Country');
 
 $doc->store();
 print("Document stored. ID: " . $doc->getId() . "\n");
-

@@ -32,7 +32,15 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Publish_IndexController extends Application_Controller_Action {
+class Publish_IndexController extends Application_Controller_Action
+{
+
+    public function init()
+    {
+        parent::init();
+
+        $this->view->robots = 'noindex, nofollow';
+    }
 
     /**
      * Renders the first form:
@@ -42,7 +50,8 @@ class Publish_IndexController extends Application_Controller_Action {
      * @return void
      *
      */
-    public function indexAction() {
+    public function indexAction()
+    {
         $session = new Zend_Session_Namespace('Publish');
 
         //unset all possible session content
@@ -52,14 +61,13 @@ class Publish_IndexController extends Application_Controller_Action {
 
         $form = new Publish_Form_PublishingFirst();
 
-        $this->view->action_url = $this->view->url(array('controller' => 'form', 'action' => 'upload'));
+        $this->view->action_url = $this->view->url(['controller' => 'form', 'action' => 'upload']);
         $this->view->showBib = $form->bibliographie;
         $this->view->showRights = $form->showRights;
         $this->view->enableUpload = $form->enableUpload;
-        if (!$form->enableUpload) {
+        if (! $form->enableUpload) {
             $this->view->subtitle = 'publish_controller_index_sub_without_file';
-        }
-        else {
+        } else {
             $this->view->subtitle = 'publish_controller_index_sub';
         }
 
@@ -67,7 +75,7 @@ class Publish_IndexController extends Application_Controller_Action {
         // TODO hide initialization routine
         $session->documentType = "";
         $session->documentId = "";
-        $session->additionalFields = array();
+        $session->additionalFields = [];
 
         $config = $this->getConfig();
 
@@ -83,11 +91,6 @@ class Publish_IndexController extends Application_Controller_Action {
 
         // Adds translated messages for javascript files
         $javascriptTranslations = $this->view->getHelper('javascriptMessages');
-        $javascriptTranslations->addMessage('uploadedFileHasErrorMessage');
-        $javascriptTranslations->addMessage('fileExtensionFalse');
-        $javascriptTranslations->addMessage('fileUploadErrorSize');
-        $javascriptTranslations->addMessage('filenameLengthError');
-        $javascriptTranslations->addMessage('filenameFormatError');
-        $javascriptTranslations->addMessage('chooseAnotherFile');
+        $javascriptTranslations->getDefaultMessageSet();
     }
 }

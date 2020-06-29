@@ -60,6 +60,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_button_create">
+        <tuv xml:lang="en">
+            <seg>Create</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Erstellen</seg>
+        </tuv>
+    </tu>
+
     <tu tuid="admin_button_remove">
       <tuv xml:lang="en">
         <seg>Remove</seg>
@@ -67,6 +76,15 @@
       <tuv xml:lang="de">
         <seg>Entfernen</seg>
       </tuv>
+    </tu>
+
+    <tu tuid="admin_button_remove_from_documents">
+        <tuv xml:lang="en">
+            <seg>Remove from documents</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Aus Dokumenten entfernen</seg>
+        </tuv>
     </tu>
 
     <tu tuid="admin_button_edit">

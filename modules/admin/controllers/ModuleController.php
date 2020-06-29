@@ -52,13 +52,9 @@ class Admin_ModuleController extends Application_Controller_Action
         $this->view->modules = $modules;
 
         // load translations for all registered modules for descriptions and other language resources
-        foreach ($modules as $name => $descriptor)
-        {
-            if ($descriptor->isRegistered())
-            {
-                Zend_Registry::get('Zend_Translate')->loadModule($descriptor->getName());
+        foreach ($modules as $name => $descriptor) {
+            if ($descriptor->isRegistered()) {
             }
         }
     }
-
 }

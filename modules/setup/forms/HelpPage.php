@@ -28,40 +28,44 @@
  * @category    Application
  * @package     Setup
  * @author      Edouard Simon (edouard.simon@zib.de)
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
- * 
+ *
  */
-class Setup_Form_HelpPage extends Zend_Form_SubForm {
-    
-    public function buildFromArray(array $array) {
+class Setup_Form_HelpPage extends Zend_Form_SubForm
+{
+
+    public function buildFromArray(array $array)
+    {
         $translator = $this->getTranslator();
         if (isset($array[$this->getName()])) {
-            $array = $array[$this->getName()]; 
+            $array = $array[$this->getName()];
         }
         foreach ($array as $translationUnit => $variants) {
             $subForm = new Zend_Form_SubForm();
             $this->addSubForm($subForm, $translationUnit);
             foreach ($variants as $language => $text) {
                 if (is_array($text)) {
-                    if (!isset($text['filename']) || !isset($text['contents'])) {
-                        throw new Exception('Invalid data structure for HelpPage Form'); 
+                    if (! isset($text['filename']) || ! isset($text['contents'])) {
+                        throw new Exception('Invalid data structure for HelpPage Form');
                     }
                     $langSubForm = new Zend_Form_SubForm();
                     $langSubForm->addElement('hidden', 'filename');
                     $langSubForm->addElement(
-                        'textarea', 'contents', array('label' => $translator->translate("setup_language_$language"))
+                        'textarea',
+                        'contents',
+                        ['label' => $translator->translate("setup_language_$language")]
                     );
                     $subForm->addSubForm($langSubForm, $language);
-                }
-                else {
+                } else {
                     $subForm->addElement(
-                        'text', $language, array('label' => $translator->translate("setup_language_$language"),
-                        'attribs' => array('size' => 90))
+                        'text',
+                        $language,
+                        ['label' => $translator->translate("setup_language_$language"),
+                        'attribs' => ['size' => 90]]
                     );
                 }
             }
@@ -69,17 +73,16 @@ class Setup_Form_HelpPage extends Zend_Form_SubForm {
         }
         return $this;
     }
-    
-    public function isValid($data) {
+
+    public function isValid($data)
+    {
         $this->buildFromArray($data);
         return parent::isValid($data);
     }
 
-    public function populate(array $values) {
+    public function populate(array $values)
+    {
         $this->buildFromArray($values);
         parent::populate($values);
     }
-    
-    
-
 }

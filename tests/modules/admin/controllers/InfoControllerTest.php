@@ -27,7 +27,7 @@
  * @category    Tests
  * @package     Admin
  * @author      Edouard Simon <edouard.simon@zib.de>
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -36,9 +36,13 @@
  *
  * @covers Admin_InfoController
  */
-class Admin_InfoControllerTest extends ControllerTestCase {
+class Admin_InfoControllerTest extends ControllerTestCase
+{
 
-    public function testIndexDisplayVersion() {
+    protected $additionalResources = 'all';
+
+    public function testIndexDisplayVersion()
+    {
         $config = Zend_Registry::get('Zend_Config');
         $this->dispatch('admin/info');
         $this->assertResponseCode(200);
@@ -50,7 +54,8 @@ class Admin_InfoControllerTest extends ControllerTestCase {
     /**
      * Test für OPUSVIER-1386.
      */
-    public function testVersionWithOldVersion() {
+    public function testVersionWithOldVersion()
+    {
         $this->useEnglish();
 
         // set version that would otherwise be retrieved from server
@@ -72,7 +77,8 @@ class Admin_InfoControllerTest extends ControllerTestCase {
     /**
      * Test für OPUSVIER-1386.
      */
-    public function testVersionWithCurrentVersion() {
+    public function testVersionWithCurrentVersion()
+    {
         $this->useEnglish();
         $helper = Zend_Controller_Action_HelperBroker::getStaticHelper('version');
         $helper->setVersion(Zend_Registry::get('Zend_Config')->version);
@@ -80,6 +86,4 @@ class Admin_InfoControllerTest extends ControllerTestCase {
         $this->dispatch('admin/info/update');
         $this->assertQueryContentContains('//div', 'Your OPUS version is up to date.');
     }
-
 }
-

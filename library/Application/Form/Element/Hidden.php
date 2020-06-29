@@ -34,25 +34,28 @@
  * @copyright   Copyright (c) 2013-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Application_Form_Element_Hidden extends Zend_Form_Element_Hidden {
+class Application_Form_Element_Hidden extends Zend_Form_Element_Hidden
+{
 
-    public function init() {
+    public function init()
+    {
         $this->addPrefixPath('Application_Form_Decorator', 'Application/Form/Decorator', Zend_Form::DECORATOR);
     }
 
-    public function loadDefaultDecorators() {
-        if (!$this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
+    public function loadDefaultDecorators()
+    {
+        if (! $this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
             $this->setDecorators(
-                array(
+                [
                     'ViewHelper',
-                    array('HtmlTag', array('tag' => 'div'))
-                )
+                    ['HtmlTag', ['tag' => 'div']]
+                ]
             );
         }
     }
 
-    public function getStaticViewHelper() {
+    public function getStaticViewHelper()
+    {
         return 'formHidden';
     }
-
 }

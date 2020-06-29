@@ -30,7 +30,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Admin_Model_Options extends Application_Model_Abstract {
+class Admin_Model_Options extends Application_Model_Abstract
+{
 
     /**
      * Path to options configuration.
@@ -48,9 +49,10 @@ class Admin_Model_Options extends Application_Model_Abstract {
      *
      * @return array
      */
-    public function getOptions() {
+    public function getOptions()
+    {
         if (is_null($this->_options)) {
-            $this->_options = array();
+            $this->_options = [];
             $config = new Zend_Config_Json(APPLICATION_PATH . self::OPTIONS_CONFIG_FILE);
             $options = $config->toArray();
 
@@ -61,5 +63,4 @@ class Admin_Model_Options extends Application_Model_Abstract {
 
         return $this->_options;
     }
-
 }

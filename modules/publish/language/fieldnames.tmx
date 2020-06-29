@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE tmx SYSTEM "http://www.gala-global.org/oscarStandards/tmx/tmx14.dtd">
 <tmx version="1.4">
- 
+
  <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
  </header>
-  
+
   <body>
 
     <tu tuid="rights">
@@ -24,7 +24,7 @@
         <seg>Ich habe diese rechtlichen Hinweise gelesen und bin damit einverstanden.</seg>
       </tuv>
     </tu>
-	
+
    <tu tuid="PersonSubmitterFirstName">
       <tuv xml:lang="en">
         <seg>First name</seg>
@@ -51,7 +51,7 @@
         <seg>E-Mail-Adresse</seg>
       </tuv>
     </tu>
-	
+
     <tu tuid="PersonSubmitterAcademicTitle">
       <tuv xml:lang="en">
         <seg>Academic Title</seg>
@@ -60,7 +60,7 @@
         <seg>Akademischer Titel</seg>
       </tuv>
     </tu>
-	
+
     <tu tuid="PersonSubmitterDateOfBirth">
       <tuv xml:lang="en">
         <seg>Date of Birth</seg>
@@ -69,7 +69,7 @@
         <seg>Geburtsdatum</seg>
       </tuv>
     </tu>
-	
+
     <tu tuid="PersonSubmitterPlaceOfBirth">
       <tuv xml:lang="en">
         <seg>Place of Birth</seg>
@@ -78,7 +78,7 @@
         <seg>Geburtsort</seg>
       </tuv>
     </tu>
-	
+
     <tu tuid="PersonAuthorFirstName">
       <tuv xml:lang="en">
         <seg>First name</seg>
@@ -222,7 +222,7 @@
         <seg>Vorname</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="DateAccepted">
       <tuv xml:lang="en">
         <seg>Date of final exam</seg>
@@ -231,7 +231,7 @@
         <seg>Datum der Abschlussprüfung</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="SubjectSwdLanguage">
       <tuv xml:lang="en">
         <seg>GND Language</seg>
@@ -239,7 +239,7 @@
       <tuv xml:lang="de">
         <seg>GND-Sprache</seg>
       </tuv>
-    </tu>  
+    </tu>
 
     <tu tuid="SubjectUncontrolledLanguage">
       <tuv xml:lang="en">
@@ -249,7 +249,7 @@
         <seg>Schlagwort Sprache</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="Institute">
       <tuv xml:lang="en">
         <seg>Institute</seg>
@@ -267,7 +267,7 @@
         <seg>Sprache</seg>
       </tuv>
     </tu>
-  	
+
     <tu tuid="TitleSubLanguage">
       <tuv xml:lang="en">
         <seg>Language</seg>
@@ -276,7 +276,7 @@
         <seg>Sprache</seg>
       </tuv>
     </tu>
-	
+
     <tu tuid="TitleParentLanguage">
       <tuv xml:lang="en">
         <seg>Language</seg>
@@ -295,15 +295,6 @@
       </tuv>
     </tu>
 
-    <tu tuid="EmbargoDate">
-        <tuv xml:lang="en">
-            <seg>Embargo Date</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Embargo-Datum</seg>
-        </tuv>
-    </tu>
-
     <tu tuid="PersonEditorLastName">
       <tuv xml:lang="en">
         <seg>Last name</seg>
@@ -312,7 +303,7 @@
         <seg>Nachname</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="PersonContributorLastName">
       <tuv xml:lang="en">
         <seg>Last name</seg>
@@ -348,10 +339,10 @@
         <seg>Nachname</seg>
       </tuv>
     </tu>
-	
+
 <!-- BEGIN OF COMMENT
     Language keys can be used after the corresponding Enrichment keys
-    were created in administration -> Enrichments. 
+    were created in administration -> Enrichments.
 
     <tu tuid="EnrichmentNeuesSelect">
       <tuv xml:lang="en">
@@ -399,5 +390,5 @@ END OF COMMENT-->
       </tuv>
     </tu>
 
-  </body>  
+  </body>
 </tmx>

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -30,7 +29,7 @@
  * @author      Susanne Gottwald <gottwald@zib.de>
  * @author      Sascha Szott <szott@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -39,9 +38,13 @@
  *
  * @covers Publish_FormController
  */
-class Publish_FormControllerTest extends ControllerTestCase {
+class Publish_FormControllerTest extends ControllerTestCase
+{
 
-    public function setUp() {
+    protected $additionalResources = 'all';
+
+    public function setUp()
+    {
         parent::setUp();
         $this->useGerman();
     }
@@ -49,7 +52,8 @@ class Publish_FormControllerTest extends ControllerTestCase {
     /**
      * Test GET on upload action
      */
-    public function testUploadActionWithOutPost() {
+    public function testUploadActionWithOutPost()
+    {
         $this->dispatch('/publish/form/upload');
         $this->assertResponseCode(302);
         $this->assertController('form');
@@ -59,10 +63,11 @@ class Publish_FormControllerTest extends ControllerTestCase {
     /**
      * Test upload action with empty POST array
      */
-    public function testUploadActionWithEmptyPost() {
+    public function testUploadActionWithEmptyPost()
+    {
         $this->request
-                ->setMethod('POST')
-                ->setPost(array());
+            ->setMethod('POST')
+            ->setPost([]);
 
         $this->dispatch('/publish/form/upload');
         $this->assertResponseCode(302);
@@ -73,12 +78,13 @@ class Publish_FormControllerTest extends ControllerTestCase {
     /**
      * Test upload action with invalid POST array
      */
-    public function testUploadActionWithInvalidDummyPost() {
+    public function testUploadActionWithInvalidDummyPost()
+    {
         $this->request
-                ->setMethod('POST')
-                ->setPost(array(
-                    'foo' => 'bar',
-                ));
+            ->setMethod('POST')
+            ->setPost([
+                'foo' => 'bar',
+            ]);
 
         $this->dispatch('/publish/form/upload');
 
@@ -96,7 +102,8 @@ class Publish_FormControllerTest extends ControllerTestCase {
     /**
      * Test check action with GET
      */
-    public function testCheckActionWithoutPost() {
+    public function testCheckActionWithoutPost()
+    {
         $this->dispatch('/publish/form/check');
         $this->assertResponseCode(302);
         $this->assertController('form');
@@ -106,28 +113,29 @@ class Publish_FormControllerTest extends ControllerTestCase {
     /**
      * "Add Title" Button was pressed and the post is valid
      */
-    public function testCheckActionWithValidPostAndAddButton() {
+    public function testCheckActionWithValidPostAndAddButton()
+    {
         $doc = $this->createTemporaryDoc();
 
         $session = new Zend_Session_Namespace('Publish');
         $session->documentType = 'preprint';
         $session->documentId = $doc->getId();
         $session->fulltext = '0';
-        $session->additionalFields = array();
+        $session->additionalFields = [];
 
         $this->request
-                ->setMethod('POST')
-                ->setPost(array(
-                    'PersonSubmitterLastName_1' => 'Doe',
-                    'PersonSubmitterEmail_1' => 'doe@example.org',
-                    'TitleMain_1' => 'Entenhausen',
-                    'TitleMainLanguage_1' => 'deu',
-                    'PersonAuthorLastName_1' => 'AuthorLastName',
-                    'CompletedDate' => '22.01.2011',
-                    'Language' => 'deu',
-                    'Licence' => '4',
-                    'addMoreTitleMain' => 'Add one more title main'
-                ));
+            ->setMethod('POST')
+            ->setPost([
+                'PersonSubmitterLastName_1' => 'Doe',
+                'PersonSubmitterEmail_1' => 'doe@example.org',
+                'TitleMain_1' => 'Entenhausen',
+                'TitleMainLanguage_1' => 'deu',
+                'PersonAuthorLastName_1' => 'AuthorLastName',
+                'CompletedDate' => '22.01.2011',
+                'Language' => 'deu',
+                'Licence' => '4',
+                'addMoreTitleMain' => 'Add one more title main'
+            ]);
 
         $this->dispatch('/publish/form/check');
 
@@ -148,12 +156,13 @@ class Publish_FormControllerTest extends ControllerTestCase {
     /**
      * Abort from check page
      */
-    public function testCheckActionWithAbortInPost() {
+    public function testCheckActionWithAbortInPost()
+    {
         $this->request
-                ->setMethod('POST')
-                ->setPost(array(
-                    'abort' => '',
-                ));
+            ->setMethod('POST')
+            ->setPost([
+                'abort' => '',
+            ]);
 
         $this->dispatch('/publish/form/check');
         $this->assertResponseCode(302);
@@ -164,27 +173,28 @@ class Publish_FormControllerTest extends ControllerTestCase {
     /**
      * Send Button was pressed but the post is invalid (missing last name for author)
      */
-    public function testCheckActionWithValidPostAndSendButton() {
+    public function testCheckActionWithValidPostAndSendButton()
+    {
         $doc = $this->createTemporaryDoc();
 
         $session = new Zend_Session_Namespace('Publish');
         $session->documentType = 'preprint';
         $session->documentId = $doc->getId();
         $session->fulltext = '0';
-        $session->additionalFields = array();
+        $session->additionalFields = [];
 
         $this->request
-                ->setMethod('POST')
-                ->setPost(array(
-                    'PersonSubmitterLastName_1' => 'Doe',
-                    'PersonSubmitterEmail_1' => 'doe@example.org',
-                    'TitleMain_1' => 'Entenhausen',
-                    'TitleMainLanguage_1' => 'deu',
-                    'CompletedDate' => '22.01.2011',
-                    'Language' => 'deu',
-                    'Licence' => '4',
-                    'send' => 'Weiter zum nächsten Schritt'
-                ));
+            ->setMethod('POST')
+            ->setPost([
+                'PersonSubmitterLastName_1' => 'Doe',
+                'PersonSubmitterEmail_1' => 'doe@example.org',
+                'TitleMain_1' => 'Entenhausen',
+                'TitleMainLanguage_1' => 'deu',
+                'CompletedDate' => '22.01.2011',
+                'Language' => 'deu',
+                'Licence' => '4',
+                'send' => 'Weiter zum nächsten Schritt'
+            ]);
 
         $this->dispatch('/publish/form/check');
 
@@ -195,29 +205,30 @@ class Publish_FormControllerTest extends ControllerTestCase {
         $this->assertContains("<div class='form-errors'>", $this->getResponse()->getBody());
     }
 
-    public function testCheckActionWithValidPostAndSendButtonAndAllRequiredFields() {
+    public function testCheckActionWithValidPostAndSendButtonAndAllRequiredFields()
+    {
         $doc = $this->createTemporaryDoc();
 
         $session = new Zend_Session_Namespace('Publish');
         $session->documentType = 'preprint';
         $session->documentId = $doc->getId();
         $session->fulltext = '0';
-        $session->additionalFields = array();
+        $session->additionalFields = [];
 
         $this->request
-                ->setMethod('POST')
-                ->setPost(array(
-                    'PersonSubmitterLastName_1' => 'Doe',
-                    'PersonSubmitterEmail_1' => 'doe@example.org',
-                    'TitleMain_1' => 'Entenhausen',
-                    'TitleMainLanguage_1' => 'deu',
-                    'PersonAuthorLastName_1' => 'AuthorLastName',
-                    'CompletedDate' => '22.01.2011',
-                    'Language' => 'deu',
-                    'Licence' => '4',
-                    'ThesisPublisher_1' => '2',
-                    'send' => 'Weiter zum nächsten Schritt'
-                ));
+            ->setMethod('POST')
+            ->setPost([
+                'PersonSubmitterLastName_1' => 'Doe',
+                'PersonSubmitterEmail_1' => 'doe@example.org',
+                'TitleMain_1' => 'Entenhausen',
+                'TitleMainLanguage_1' => 'deu',
+                'PersonAuthorLastName_1' => 'AuthorLastName',
+                'CompletedDate' => '22.01.2011',
+                'Language' => 'deu',
+                'Licence' => '4',
+                'ThesisPublisher_1' => '2',
+                'send' => 'Weiter zum nächsten Schritt'
+            ]);
 
         $this->dispatch('/publish/form/check');
 
@@ -229,7 +240,7 @@ class Publish_FormControllerTest extends ControllerTestCase {
         $this->assertNotContains("<div class='form-errors'>", $this->getResponse()->getBody());
 
         $this->assertContains('Bitte überprüfen Sie Ihre Eingaben.', $this->getResponse()->getBody());
-        $this->assertContains('<b>Kontaktdaten des Einstellers</b>', $this->getResponse()->getBody());
+        $this->assertContains('<b>Kontaktdaten der Einstellerin/des Einstellers</b>', $this->getResponse()->getBody());
         $this->assertContains('<td>Doe</td>', $this->getResponse()->getBody());
         $this->assertContains('<td>doe@example.org</td>', $this->getResponse()->getBody());
 
@@ -237,26 +248,23 @@ class Publish_FormControllerTest extends ControllerTestCase {
         $this->assertContains('<td>Entenhausen</td>', $this->getResponse()->getBody());
         $this->assertQueryContentRegex('td', '/German|Deutsch/');
 
-        $this->assertContains('<b>Autor(en)</b>', $this->getResponse()->getBody());
+        $this->assertContains('<b>Autor*innen</b>', $this->getResponse()->getBody());
         $this->assertContains('<td>AuthorLastName</td>', $this->getResponse()->getBody());
         $this->assertContains('<td>Nein</td>', $this->getResponse()->getBody());
 
         $this->assertContains('<b>Weitere Formulardaten:</b>', $this->getResponse()->getBody());
         $this->assertContains('<td>22.01.2011</td>', $this->getResponse()->getBody());
         $this->assertContains('<td>Creative Commons - CC BY-ND - Namensnennung - Keine Bearbeitungen 4.0 International</td>', $this->getResponse()->getBody());
-        $this->assertContains('<b>Es wurden keine Dateien hochgeladen. </b>', $this->getResponse()->getBody());
+        $this->assertContains('<b>Es wurden keine Dateien hochgeladen.</b>', $this->getResponse()->getBody());
     }
 
     /**
      * Regression Test for OPUSVIER-1886
      */
-    public function testOPUSVIER1886WithBibliography() {
+    public function testOPUSVIER1886WithBibliography()
+    {
         $config = Zend_Registry::get('Zend_Config');
-        $oldval = null;
-        if (isset($config->form->first->bibliographie)) {
-            $oldval = $config->form->first->bibliographie;
-        }
-        $config->form->first->bibliographie = 1;
+        $config->form->first->bibliographie = self::CONFIG_VALUE_TRUE;
 
         $doc = $this->createTemporaryDoc();
 
@@ -264,24 +272,17 @@ class Publish_FormControllerTest extends ControllerTestCase {
         $session->documentType = 'demo';
         $session->documentId = $doc->getId();
         $session->fulltext = '0';
-        $session->additionalFields = array();
+        $session->additionalFields = [];
 
         $this->request
-                ->setMethod('POST')
-                ->setPost(array(
-                    'PersonSubmitterFirstName_1' => 'John',
-                    'PersonSubmitterLastName_1' => 'Doe',
-                    'send' => 'Weiter zum nächsten Schritt'
-                ));
+            ->setMethod('POST')
+            ->setPost([
+                'PersonSubmitterFirstName_1' => 'John',
+                'PersonSubmitterLastName_1' => 'Doe',
+                'send' => 'Weiter zum nächsten Schritt'
+            ]);
 
         $this->dispatch('/publish/form/check');
-
-        // undo config changes
-        if (is_null($oldval)) {
-            unset($config->form->first->bibliographie);
-        } else {
-            $config->form->first->bibliographie = $oldval;
-        }
 
         $this->assertResponseCode(200);
         $this->assertContains('Bitte überprüfen Sie Ihre Eingaben.', $this->getResponse()->getBody());
@@ -289,13 +290,10 @@ class Publish_FormControllerTest extends ControllerTestCase {
         $this->assertContains('Dokument wird <b>nicht</b> zur Bibliographie hinzugefügt.', $this->getResponse()->getBody());
     }
 
-    public function testOPUSVIER1886WithBibliographyUnselected() {
+    public function testOPUSVIER1886WithBibliographyUnselected()
+    {
         $config = Zend_Registry::get('Zend_Config');
-        $oldval = null;
-        if (isset($config->form->first->bibliographie)) {
-            $oldval = $config->form->first->bibliographie;
-        }
-        $config->form->first->bibliographie = 1;
+        $config->form->first->bibliographie = self::CONFIG_VALUE_TRUE;
 
         $doc = $this->createTemporaryDoc();
         $doc->setBelongsToBibliography(0);
@@ -305,24 +303,17 @@ class Publish_FormControllerTest extends ControllerTestCase {
         $session->documentType = 'demo';
         $session->documentId = $doc->getId();
         $session->fulltext = '0';
-        $session->additionalFields = array();
+        $session->additionalFields = [];
 
         $this->request
-                ->setMethod('POST')
-                ->setPost(array(
-                    'PersonSubmitterFirstName_1' => 'John',
-                    'PersonSubmitterLastName_1' => 'Doe',
-                    'send' => 'Weiter zum nächsten Schritt'
-                ));
+            ->setMethod('POST')
+            ->setPost([
+                'PersonSubmitterFirstName_1' => 'John',
+                'PersonSubmitterLastName_1' => 'Doe',
+                'send' => 'Weiter zum nächsten Schritt'
+            ]);
 
         $this->dispatch('/publish/form/check');
-
-        // undo config changes
-        if (is_null($oldval)) {
-            unset($config->form->first->bibliographie);
-        } else {
-            $config->form->first->bibliographie = $oldval;
-        }
 
         $this->assertResponseCode(200);
         $this->assertContains('Bitte überprüfen Sie Ihre Eingaben.', $this->getResponse()->getBody());
@@ -330,13 +321,10 @@ class Publish_FormControllerTest extends ControllerTestCase {
         $this->assertContains('Dokument wird <b>nicht</b> zur Bibliographie hinzugefügt.', $this->getResponse()->getBody());
     }
 
-    public function testOPUSVIER1886WithBibliographySelected() {
+    public function testOPUSVIER1886WithBibliographySelected()
+    {
         $config = Zend_Registry::get('Zend_Config');
-        $oldval = null;
-        if (isset($config->form->first->bibliographie)) {
-            $oldval = $config->form->first->bibliographie;
-        }
-        $config->form->first->bibliographie = 1;
+        $config->form->first->bibliographie = self::CONFIG_VALUE_TRUE;
 
         $doc = $this->createTemporaryDoc();
         $doc->setBelongsToBibliography(1);
@@ -346,24 +334,17 @@ class Publish_FormControllerTest extends ControllerTestCase {
         $session->documentType = 'demo';
         $session->documentId = $doc->getId();
         $session->fulltext = '0';
-        $session->additionalFields = array();
+        $session->additionalFields = [];
 
         $this->request
-                ->setMethod('POST')
-                ->setPost(array(
-                    'PersonSubmitterFirstName_1' => 'John',
-                    'PersonSubmitterLastName_1' => 'Doe',
-                    'send' => 'Weiter zum nächsten Schritt'
-                ));
+            ->setMethod('POST')
+            ->setPost([
+                'PersonSubmitterFirstName_1' => 'John',
+                'PersonSubmitterLastName_1' => 'Doe',
+                'send' => 'Weiter zum nächsten Schritt'
+            ]);
 
         $this->dispatch('/publish/form/check');
-
-        // undo config changes
-        if (is_null($oldval)) {
-            unset($config->form->first->bibliographie);
-        } else {
-            $config->form->first->bibliographie = $oldval;
-        }
 
         $this->assertResponseCode(200);
         $this->assertContains('Bitte überprüfen Sie Ihre Eingaben.', $this->getResponse()->getBody());
@@ -374,13 +355,10 @@ class Publish_FormControllerTest extends ControllerTestCase {
     /**
      * Regression Test for OPUSVIER-1886
      */
-    public function testOPUSVIER1886WithoutBibliography() {
+    public function testOPUSVIER1886WithoutBibliography()
+    {
         $config = Zend_Registry::get('Zend_Config');
-        $oldval = null;
-        if (isset($config->form->first->bibliographie)) {
-            $oldval = $config->form->first->bibliographie;
-        }
-        $config->form->first->bibliographie = 0;
+        $config->form->first->bibliographie = self::CONFIG_VALUE_FALSE;
 
         $doc = $this->createTemporaryDoc();
 
@@ -388,24 +366,17 @@ class Publish_FormControllerTest extends ControllerTestCase {
         $session->documentType = 'demo';
         $session->documentId = $doc->getId();
         $session->fulltext = '0';
-        $session->additionalFields = array();
+        $session->additionalFields = [];
 
         $this->request
-                ->setMethod('POST')
-                ->setPost(array(
-                    'PersonSubmitterFirstName_1' => 'John',
-                    'PersonSubmitterLastName_1' => 'Doe',
-                    'send' => 'Weiter zum nächsten Schritt'
-                ));
+            ->setMethod('POST')
+            ->setPost([
+                'PersonSubmitterFirstName_1' => 'John',
+                'PersonSubmitterLastName_1' => 'Doe',
+                'send' => 'Weiter zum nächsten Schritt'
+            ]);
 
         $this->dispatch('/publish/form/check');
-
-        // undo config changes
-        if (is_null($oldval)) {
-            unset($config->form->first->bibliographie);
-        } else {
-            $config->form->first->bibliographie = $oldval;
-        }
 
         $this->assertResponseCode(200);
         $this->assertContains('Bitte überprüfen Sie Ihre Eingaben.', $this->getResponse()->getBody());
@@ -416,35 +387,25 @@ class Publish_FormControllerTest extends ControllerTestCase {
     /**
      * Regression Test for OPUSVIER-2646
      */
-    public function testFormManipulationForBibliography() {
+    public function testFormManipulationForBibliography()
+    {
         $this->markTestIncomplete('testing multipart formdata not yet solved');
         $config = Zend_Registry::get('Zend_Config');
-        $oldval = null;
-        if (isset($config->form->first->bibliographie)) {
-            $oldval = $config->form->first->bibliographie;
-        }
-        $config->form->first->bibliographie = 0;
+        $config->form->first->bibliographie = self::CONFIG_VALUE_FALSE;
 
         $this->request
-                ->setMethod('POST')
-                  ->setPost(array(
-                    'documentType' => 'demo',
-                    'MAX_FILE_SIZE' => '10240000',
-                    'fileupload' => '',
-                    'uploadComment' => '',
-                    'bibliographie' => '1',
-                    'rights' => '1',
-                    'send' => 'Weiter zum nächsten Schritt',
-                ));
+            ->setMethod('POST')
+            ->setPost([
+                'documentType' => 'demo',
+                'MAX_FILE_SIZE' => '10240000',
+                'fileupload' => '',
+                'uploadComment' => '',
+                'bibliographie' => '1',
+                'rights' => '1',
+                'send' => 'Weiter zum nächsten Schritt',
+            ]);
         $this->dispatch('/publish/form/upload');
         $session = new Zend_Session_Namespace('Publish');
-
-        // undo config changes
-        if (is_null($oldval)) {
-            unset($config->form->first->bibliographie);
-        } else {
-            $config->form->first->bibliographie = $oldval;
-        }
 
         $doc = new Opus_Document($session->documentId);
         $belongsToBibliography = $doc->getBelongsToBibliography();
@@ -452,29 +413,32 @@ class Publish_FormControllerTest extends ControllerTestCase {
 
         $this->assertResponseCode(200);
         $this->assertNotContains("Es sind Fehler aufgetreten.", $this->response->getBody());
-        $this->assertFalse((boolean) $belongsToBibliography, 'Expected that document does not belong to bibliography');
+        $this->assertFalse((boolean)$belongsToBibliography, 'Expected that document does not belong to bibliography');
     }
 
     /**
      * @return Opus_Document
      */
-    private function createTemporaryDoc() {
+    private function createTemporaryDoc()
+    {
         $doc = $this->createTestDocument();
         $doc->setServerState('temporary');
         $doc->store();
         return $doc;
     }
 
-    public function testDoNotShowFileNoticeOnSecondFormPageIfFileUploadIsDisabled() {
-        $this->fileNoticeOnSecondFormPage(0);
+    public function testDoNotShowFileNoticeOnSecondFormPageIfFileUploadIsDisabled()
+    {
+        $this->fileNoticeOnSecondFormPage(self::CONFIG_VALUE_FALSE);
 
         $this->assertContains('<h3 class="document-type" title="Dokumenttyp">Alle Felder (Testdokumenttyp)</h3>', $this->getResponse()->getBody());
         $this->assertNotContains('<legend>Sie haben folgende Datei(en) hochgeladen: </legend>', $this->getResponse()->getBody());
         $this->assertNotContains('<b>Es wurden keine Dateien hochgeladen. </b>', $this->getResponse()->getBody());
     }
 
-    public function testDoNotShowFileNoticeOnThirdFormPageIfFileUploadIsDisabled() {
-        $this->fileNoticeOnThirdFormPage(0);
+    public function testDoNotShowFileNoticeOnThirdFormPageIfFileUploadIsDisabled()
+    {
+        $this->fileNoticeOnThirdFormPage(self::CONFIG_VALUE_FALSE);
 
         $this->assertResponseCode(200);
         $this->assertContains('Bitte überprüfen Sie Ihre Eingaben', $this->getResponse()->getBody());
@@ -482,29 +446,28 @@ class Publish_FormControllerTest extends ControllerTestCase {
         $this->assertNotContains('<b>Es wurden keine Dateien hochgeladen. </b>', $this->getResponse()->getBody());
     }
 
-    public function testShowFileNoticeOnSecondFormPageIfFileUploadIsEnabled() {
-        $this->fileNoticeOnSecondFormPage(1);
+    public function testShowFileNoticeOnSecondFormPageIfFileUploadIsEnabled()
+    {
+        $this->fileNoticeOnSecondFormPage(self::CONFIG_VALUE_TRUE);
 
         $this->assertContains('<h3 class="document-type" title="Dokumenttyp">Alle Felder (Testdokumenttyp)</h3>', $this->getResponse()->getBody());
-        $this->assertContains('<legend>Sie haben folgende Datei(en) hochgeladen: </legend>', $this->getResponse()->getBody());
-        $this->assertContains('<b>Es wurden keine Dateien hochgeladen. </b>', $this->getResponse()->getBody());
+        $this->assertContains('<legend>Sie haben folgende Datei(en) hochgeladen:</legend>', $this->getResponse()->getBody());
+        $this->assertContains('<b>Es wurden keine Dateien hochgeladen.</b>', $this->getResponse()->getBody());
     }
 
-    public function testShowFileNoticeOnThirdFormPageIfFileUploadIsEnabled() {
-        $this->fileNoticeOnThirdFormPage(1);
+    public function testShowFileNoticeOnThirdFormPageIfFileUploadIsEnabled()
+    {
+        $this->fileNoticeOnThirdFormPage(self::CONFIG_VALUE_TRUE);
 
         $this->assertResponseCode(200);
         $this->assertContains('Bitte überprüfen Sie Ihre Eingaben', $this->getResponse()->getBody());
-        $this->assertContains('<legend>Sie haben folgende Datei(en) hochgeladen: </legend>', $this->getResponse()->getBody());
-        $this->assertContains('<b>Es wurden keine Dateien hochgeladen. </b>', $this->getResponse()->getBody());
+        $this->assertContains('<legend>Sie haben folgende Datei(en) hochgeladen:</legend>', $this->getResponse()->getBody());
+        $this->assertContains('<b>Es wurden keine Dateien hochgeladen.</b>', $this->getResponse()->getBody());
     }
 
-    private function fileNoticeOnThirdFormPage($value) {
+    private function fileNoticeOnThirdFormPage($value)
+    {
         $config = Zend_Registry::get('Zend_Config');
-        $oldval = null;
-        if (isset($config->form->first->enable_upload)) {
-            $oldval = $config->form->first->enable_upload;
-        }
         $config->form->first->enable_upload = $value;
 
         $doc = $this->createTemporaryDoc();
@@ -513,32 +476,22 @@ class Publish_FormControllerTest extends ControllerTestCase {
         $session->documentType = 'demo';
         $session->documentId = $doc->getId();
         $session->fulltext = '0';
-        $session->additionalFields = array();
+        $session->additionalFields = [];
 
         $this->request
-                ->setMethod('POST')
-                ->setPost(array(
-                    'PersonSubmitterFirstName_1' => 'John',
-                    'PersonSubmitterLastName_1' => 'Doe',
-                    'send' => 'Weiter zum nächsten Schritt'
-                ));
+            ->setMethod('POST')
+            ->setPost([
+                'PersonSubmitterFirstName_1' => 'John',
+                'PersonSubmitterLastName_1' => 'Doe',
+                'send' => 'Weiter zum nächsten Schritt'
+            ]);
 
         $this->dispatch('/publish/form/check');
-
-        // undo config changes
-        if (is_null($oldval)) {
-            unset($config->form->first->enable_upload);
-        } else {
-            $config->form->first->enable_upload = $oldval;
-        }
     }
 
-    private function fileNoticeOnSecondFormPage($value) {
+    private function fileNoticeOnSecondFormPage($value)
+    {
         $config = Zend_Registry::get('Zend_Config');
-        $oldval = null;
-        if (isset($config->form->first->enable_upload)) {
-            $oldval = $config->form->first->enable_upload;
-        }
         $config->form->first->enable_upload = $value;
 
         $doc = $this->createTemporaryDoc();
@@ -547,39 +500,34 @@ class Publish_FormControllerTest extends ControllerTestCase {
         $session->documentType = 'all';
         $session->documentId = $doc->getId();
         $session->fulltext = '0';
-        $session->additionalFields = array();
+        $session->additionalFields = [];
 
         $this->request
-                ->setMethod('POST')
-                ->setPost(array(
-                    'addMoreTitleMain' => 'Add one more title main'
-                ));
+            ->setMethod('POST')
+            ->setPost([
+                'addMoreTitleMain' => 'Add one more title main'
+            ]);
 
         $this->dispatch('/publish/form/check');
-
-        // undo config changes
-        if (is_null($oldval)) {
-            unset($config->form->first->enable_upload);
-        } else {
-            $config->form->first->enable_upload = $oldval;
-        }
     }
 
-    private function addTemporaryTestDocument($session, $documentType) {
+    private function addTemporaryTestDocument($session, $documentType)
+    {
         $doc = $this->createTemporaryDoc();
 
         $session->documentType = $documentType;
         $session->documentId = $doc->getId();
-        $session->additionalFields = array();
+        $session->additionalFields = [];
     }
 
     /**
      * Button pressed: Add one more Title Main
      */
-    public function testCheckActionWithAddButton() {
+    public function testCheckActionWithAddButton()
+    {
         $session = new Zend_Session_Namespace('Publish');
         $this->addTemporaryTestDocument($session, 'preprint');
-        $data = array(
+        $data = [
             'PersonSubmitterFirstName_1' => '',
             'PersonSubmitterLastName_1' => '',
             'PersonSubmitterEmail_1' => '',
@@ -609,7 +557,7 @@ class Publish_FormControllerTest extends ControllerTestCase {
 
             // Add Button wurde gedrückt
             'addMoreTitleMain' => 'Einen+weiteren+Titel+hinzufügen',
-        );
+        ];
 
         $this->request
             ->setMethod('POST')
@@ -626,12 +574,13 @@ class Publish_FormControllerTest extends ControllerTestCase {
     /**
      * Button pressed: Delete the last Title Main
      */
-    public function testCheckActionWithDeleteButton() {
+    public function testCheckActionWithDeleteButton()
+    {
         $session = new Zend_Session_Namespace('Publish');
         $this->addTemporaryTestDocument($session, 'preprint');
         $session->additionalFields['TitleMain'] = '2';
 
-        $data = array(
+        $data = [
             'PersonSubmitterFirstName_1' => '',
             'PersonSubmitterLastName_1' => '',
             'PersonSubmitterEmail_1' => '',
@@ -663,7 +612,7 @@ class Publish_FormControllerTest extends ControllerTestCase {
 
             // Delete Button wurde gedrückt
             'deleteMoreTitleMain' => 'Den+letzten+Titel+löschen',
-        );
+        ];
 
         $this->request
             ->setMethod('POST')
@@ -680,14 +629,15 @@ class Publish_FormControllerTest extends ControllerTestCase {
     /**
      * Button pressed: Browse down Institute
      */
-    public function testCheckActionWithBrowseDownButton() {
+    public function testCheckActionWithBrowseDownButton()
+    {
         $session = new Zend_Session_Namespace('Publish');
         $this->addTemporaryTestDocument($session, 'preprint');
         $session->additionalFields['Institute'] = '1';
         $session->additionalFields['collId0Institute_1'] = '1';
         $session->additionalFields['stepInstitute_1'] = '1';
 
-        $data = array(
+        $data = [
             'PersonSubmitterFirstName_1' => '',
             'PersonSubmitterLastName_1' => '',
             'PersonSubmitterEmail_1' => '',
@@ -717,7 +667,7 @@ class Publish_FormControllerTest extends ControllerTestCase {
 
             // Browse Down Button wurde gedrückt
             'browseDownInstitute' => 'runter',
-        );
+        ];
 
         $this->request
             ->setMethod('POST')
@@ -735,7 +685,8 @@ class Publish_FormControllerTest extends ControllerTestCase {
     /**
      * Button pressed: Browse up Institute
      */
-    public function testCheckActionWithBrowseUpButton() {
+    public function testCheckActionWithBrowseUpButton()
+    {
         $session = new Zend_Session_Namespace('Publish');
         $this->addTemporaryTestDocument($session, 'preprint');
         $session->additionalFields['Institute'] = '1';
@@ -743,7 +694,7 @@ class Publish_FormControllerTest extends ControllerTestCase {
         $session->additionalFields['collId1Institute_1'] = '15994';
         $session->additionalFields['stepInstitute_1'] = '2';
 
-        $data = array(
+        $data = [
             'PersonSubmitterFirstName_1' => '',
             'PersonSubmitterLastName_1' => '',
             'PersonSubmitterEmail_1' => '',
@@ -773,7 +724,7 @@ class Publish_FormControllerTest extends ControllerTestCase {
 
             // Browse Up Button wurde gedrückt
             'browseUpInstitute' => 'hoch',
-        );
+        ];
 
         $this->request
             ->setMethod('POST')
@@ -791,7 +742,8 @@ class Publish_FormControllerTest extends ControllerTestCase {
     /**
      * Button pressed: no button pressed
      */
-    public function testCheckActionWithMissingButton() {
+    public function testCheckActionWithMissingButton()
+    {
         $session = new Zend_Session_Namespace('Publish');
         $this->addTemporaryTestDocument($session, 'preprint');
         $session->additionalFields['PersonSubmitter'] = '1';
@@ -804,7 +756,7 @@ class Publish_FormControllerTest extends ControllerTestCase {
         $session->additionalFields['Institute'] = '1';
         $session->additionalFields['Series'] = '1';
 
-        $data = array(
+        $data = [
             'PersonSubmitterFirstName_1' => '',
             'PersonSubmitterLastName_1' => '',
             'PersonSubmitterEmail_1' => '',
@@ -832,7 +784,7 @@ class Publish_FormControllerTest extends ControllerTestCase {
             'SeriesNumber_1' => '',
             'Series_1' => ''
             // kein Button wurde gedrückt
-        );
+        ];
 
         $this->request
             ->setMethod('POST')
@@ -856,27 +808,28 @@ class Publish_FormControllerTest extends ControllerTestCase {
         $this->assertEquals('1', $session->additionalFields['Series']);
     }
 
-    public function testManipulatePostMissingTitleMainLanguage() {
+    public function testManipulatePostMissingTitleMainLanguage()
+    {
         $doc = $this->createTemporaryDoc();
 
         $session = new Zend_Session_Namespace('Publish');
         $session->documentType = 'preprint';
         $session->documentId = $doc->getId();
         $session->fulltext = '0';
-        $session->additionalFields = array();
+        $session->additionalFields = [];
 
         $this->request
-                ->setMethod('POST')
-                ->setPost(array(
-                    'PersonSubmitterLastName_1' => 'Doe',
-                    'PersonSubmitterEmail_1' => 'doe@example.org',
-                    'TitleMain_1' => 'Entenhausen',
-                    'PersonAuthorLastName_1' => 'AuthorLastName',
-                    'CompletedDate' => '22.01.2011',
-                    'Language' => 'deu',
-                    'Licence' => '4',
-                    'send' => 'Weiter zum nächsten Schritt'
-                ));
+            ->setMethod('POST')
+            ->setPost([
+                'PersonSubmitterLastName_1' => 'Doe',
+                'PersonSubmitterEmail_1' => 'doe@example.org',
+                'TitleMain_1' => 'Entenhausen',
+                'PersonAuthorLastName_1' => 'AuthorLastName',
+                'CompletedDate' => '22.01.2011',
+                'Language' => 'deu',
+                'Licence' => '4',
+                'send' => 'Weiter zum nächsten Schritt'
+            ]);
 
         $this->dispatch('/publish/form/check');
 
@@ -888,29 +841,30 @@ class Publish_FormControllerTest extends ControllerTestCase {
         $this->assertContains("<div class='form-errors'>", $this->getResponse()->getBody());
     }
 
-    public function testManipulatePostMissingTitleAbstractLanguage() {
+    public function testManipulatePostMissingTitleAbstractLanguage()
+    {
         $doc = $this->createTemporaryDoc();
 
         $session = new Zend_Session_Namespace('Publish');
         $session->documentType = 'preprint';
         $session->documentId = $doc->getId();
         $session->fulltext = '0';
-        $session->additionalFields = array();
+        $session->additionalFields = [];
 
         $this->request
-                ->setMethod('POST')
-                ->setPost(array(
-                    'PersonSubmitterLastName_1' => 'Doe',
-                    'PersonSubmitterEmail_1' => 'doe@example.org',
-                    'TitleMain_1' => 'Entenhausen',
-                    'TitleMainLanguage_1' => 'deu',
-                    'TitleAbstract_1' => 'Foo',
-                    'PersonAuthorLastName_1' => 'AuthorLastName',
-                    'CompletedDate' => '22.01.2011',
-                    'Language' => 'deu',
-                    'Licence' => '4',
-                    'send' => 'Weiter zum nächsten Schritt'
-                ));
+            ->setMethod('POST')
+            ->setPost([
+                'PersonSubmitterLastName_1' => 'Doe',
+                'PersonSubmitterEmail_1' => 'doe@example.org',
+                'TitleMain_1' => 'Entenhausen',
+                'TitleMainLanguage_1' => 'deu',
+                'TitleAbstract_1' => 'Foo',
+                'PersonAuthorLastName_1' => 'AuthorLastName',
+                'CompletedDate' => '22.01.2011',
+                'Language' => 'deu',
+                'Licence' => '4',
+                'send' => 'Weiter zum nächsten Schritt'
+            ]);
 
         $this->dispatch('/publish/form/check');
 
@@ -921,103 +875,107 @@ class Publish_FormControllerTest extends ControllerTestCase {
         $this->assertNotContains('Undefined index: TitleAbstractLanguage_1', $this->getResponse()->getBody());
     }
 
-    public function testManipulatePostMissingTitleParentLanguage() {
+    public function testManipulatePostMissingTitleParentLanguage()
+    {
         $doc = $this->createTemporaryDoc();
 
         $session = new Zend_Session_Namespace('Publish');
         $session->documentType = 'all';
         $session->documentId = $doc->getId();
         $session->fulltext = '0';
-        $session->additionalFields = array();
+        $session->additionalFields = [];
 
         $this->request
-                ->setMethod('POST')
-                ->setPost(array(
-                    'PersonSubmitterLastName_1' => 'Doe',
-                    'PersonSubmitterEmail_1' => 'doe@example.org',
-                    'TitleMain_1' => 'Entenhausen',
-                    'TitleMainLanguage_1' => 'deu',
-                    'TitleParent_1' => 'Foo',
-                    'PersonAuthorLastName_1' => 'AuthorLastName',
-                    'CompletedDate' => '22.01.2011',
-                    'Language' => 'deu',
-                    'Licence' => '4',
-                    'send' => 'Weiter zum nächsten Schritt'
-                ));
+            ->setMethod('POST')
+            ->setPost([
+                'PersonSubmitterLastName_1' => 'Doe',
+                'PersonSubmitterEmail_1' => 'doe@example.org',
+                'TitleMain_1' => 'Entenhausen',
+                'TitleMainLanguage_1' => 'deu',
+                'TitleParent_1' => 'Foo',
+                'PersonAuthorLastName_1' => 'AuthorLastName',
+                'CompletedDate' => '22.01.2011',
+                'Language' => 'deu',
+                'Licence' => '4',
+                'send' => 'Weiter zum nächsten Schritt'
+            ]);
 
         $this->dispatch('/publish/form/check');
 
         $this->assertNotContains('Undefined index: TitleParentLanguage_1', $this->getResponse()->getBody());
     }
 
-    public function testManipulatePostMissingTitleSubLanguage() {
+    public function testManipulatePostMissingTitleSubLanguage()
+    {
         $doc = $this->createTemporaryDoc();
 
         $session = new Zend_Session_Namespace('Publish');
         $session->documentType = 'all';
         $session->documentId = $doc->getId();
         $session->fulltext = '0';
-        $session->additionalFields = array();
+        $session->additionalFields = [];
 
         $this->request
-                ->setMethod('POST')
-                ->setPost(array(
-                    'PersonSubmitterLastName_1' => 'Doe',
-                    'PersonSubmitterEmail_1' => 'doe@example.org',
-                    'TitleMain_1' => 'Entenhausen',
-                    'TitleMainLanguage_1' => 'deu',
-                    'TitleSub_1' => 'Foo',
-                    'PersonAuthorLastName_1' => 'AuthorLastName',
-                    'CompletedDate' => '22.01.2011',
-                    'Language' => 'deu',
-                    'Licence' => '4',
-                    'send' => 'Weiter zum nächsten Schritt'
-                ));
+            ->setMethod('POST')
+            ->setPost([
+                'PersonSubmitterLastName_1' => 'Doe',
+                'PersonSubmitterEmail_1' => 'doe@example.org',
+                'TitleMain_1' => 'Entenhausen',
+                'TitleMainLanguage_1' => 'deu',
+                'TitleSub_1' => 'Foo',
+                'PersonAuthorLastName_1' => 'AuthorLastName',
+                'CompletedDate' => '22.01.2011',
+                'Language' => 'deu',
+                'Licence' => '4',
+                'send' => 'Weiter zum nächsten Schritt'
+            ]);
 
         $this->dispatch('/publish/form/check');
 
         $this->assertNotContains('Undefined index: TitleSubLanguage_1', $this->getResponse()->getBody());
     }
 
-    public function testManipulatePostMissingTitleAdditionalLanguage() {
+    public function testManipulatePostMissingTitleAdditionalLanguage()
+    {
         $doc = $this->createTemporaryDoc();
 
         $session = new Zend_Session_Namespace('Publish');
         $session->documentType = 'all';
         $session->documentId = $doc->getId();
         $session->fulltext = '0';
-        $session->additionalFields = array();
+        $session->additionalFields = [];
 
         $this->request
-                ->setMethod('POST')
-                ->setPost(array(
-                    'PersonSubmitterLastName_1' => 'Doe',
-                    'PersonSubmitterEmail_1' => 'doe@example.org',
-                    'TitleMain_1' => 'Entenhausen',
-                    'TitleMainLanguage_1' => 'deu',
-                    'TitleAdditional_1' => 'Foo',
-                    'PersonAuthorLastName_1' => 'AuthorLastName',
-                    'CompletedDate' => '22.01.2011',
-                    'Language' => 'deu',
-                    'Licence' => '4',
-                    'send' => 'Weiter zum nächsten Schritt'
-                ));
+            ->setMethod('POST')
+            ->setPost([
+                'PersonSubmitterLastName_1' => 'Doe',
+                'PersonSubmitterEmail_1' => 'doe@example.org',
+                'TitleMain_1' => 'Entenhausen',
+                'TitleMainLanguage_1' => 'deu',
+                'TitleAdditional_1' => 'Foo',
+                'PersonAuthorLastName_1' => 'AuthorLastName',
+                'CompletedDate' => '22.01.2011',
+                'Language' => 'deu',
+                'Licence' => '4',
+                'send' => 'Weiter zum nächsten Schritt'
+            ]);
 
         $this->dispatch('/publish/form/check');
 
         $this->assertNotContains('Undefined index: TitleAdditionalLanguage_1', $this->getResponse()->getBody());
     }
 
-    public function testBarfooTemplateIsRenderedForDoctypeFoobar() {
+    public function testBarfooTemplateIsRenderedForDoctypeFoobar()
+    {
         $session = new Zend_Session_Namespace('Publish');
         $session->documentType = 'foobar';
         $doc = $this->createTemporaryDoc();
         $session->documentId = $doc->getId();
         $session->fulltext = '0';
-        $session->additionalFields = array();
+        $session->additionalFields = [];
 
         $this->request->setMethod('POST');
-        $this->request->setPost(array('browseUpInstitute' => 'ignore'));
+        $this->request->setPost(['browseUpInstitute' => 'ignore']);
 
         $this->dispatch('/publish/form/check');
 
@@ -1026,13 +984,14 @@ class Publish_FormControllerTest extends ControllerTestCase {
         $this->assertContains('>foobar</h3>', $respBody);
     }
 
-    public function testApplicationErrorForDoctypeBarbaz() {
+    public function testApplicationErrorForDoctypeBarbaz()
+    {
         $session = new Zend_Session_Namespace('Publish');
         $session->documentType = 'barbaz';
         $doc = $this->createTemporaryDoc();
         $session->documentId = $doc->getId();
         $session->fulltext = '0';
-        $session->additionalFields = array('browseUpInstitute' => 'hoch',);
+        $session->additionalFields = ['browseUpInstitute' => 'hoch',];
 
         $this->request->setMethod('POST');
 
@@ -1043,13 +1002,14 @@ class Publish_FormControllerTest extends ControllerTestCase {
         $this->assertContains('invalid configuration: template file barbaz.phtml is not readable or does not exist', $this->getResponse()->getBody());
     }
 
-    public function testApplicationErrorForDoctypeBazbar() {
+    public function testApplicationErrorForDoctypeBazbar()
+    {
         $session = new Zend_Session_Namespace('Publish');
         $session->documentType = 'bazbar';
         $doc = $this->createTemporaryDoc();
         $session->documentId = $doc->getId();
         $session->fulltext = '0';
-        $session->additionalFields = array('browseUpInstitute' => 'hoch',);
+        $session->additionalFields = ['browseUpInstitute' => 'hoch',];
 
         $this->request->setMethod('POST');
 
@@ -1059,6 +1019,4 @@ class Publish_FormControllerTest extends ControllerTestCase {
         $this->assertContains('Application_Exception', $this->getResponse()->getBody());
         $this->assertContains('invalid configuration: template file barbaz.phtml is not readable or does not exist', $this->getResponse()->getBody());
     }
-
 }
-

@@ -35,7 +35,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Admin_Model_Hash {
+class Admin_Model_Hash
+{
 
     private $_hash = null;
 
@@ -44,49 +45,56 @@ class Admin_Model_Hash {
      */
     private $_file = null;
 
-    public function __construct($file, $hash) {
+    public function __construct($file, $hash)
+    {
         $this->_hash = $hash;
         $this->_file = $file;
     }
 
-    public function getHashType() {
+    public function getHashType()
+    {
         return $this->_hash->getType();
     }
 
-    public function getSignatureType() {
+    public function getSignatureType()
+    {
         return substr($this->getHashType(), 0, 3);
     }
 
-    public function getSoll() {
+    public function getSoll()
+    {
         return $this->_hash->getValue();
     }
 
     /**
      * @return boolean
      */
-    public function canVerify() {
+    public function canVerify()
+    {
         return $this->_file->canVerify();
     }
 
     /**
      * @return boolean
      */
-    public function checkFilePermission() {
+    public function checkFilePermission()
+    {
         return $this->_file->isReadable();
     }
 
     /**
      * @return boolean
      */
-    public function checkFileExists() {
-        return $this->_file->exists();
+    public function checkFileExists()
+    {
+        return $this->_file->isReadable();
     }
 
-    public function getIst() {
-        if ($this->_file->exists() && $this->getSignatureType() !== 'gpg' && $this->_file->canVerify()) {
+    public function getIst()
+    {
+        if ($this->_file->isReadable() && $this->getSignatureType() !== 'gpg' && $this->_file->canVerify()) {
             return $this->_file->getRealHash($this->getHashType());
-        }
-        else {
+        } else {
             return null;
         }
     }

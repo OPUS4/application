@@ -36,6 +36,6 @@
 			  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 			  xsi:schemaLocation="http://www.opus-repository.org/schema/documenttype http://www.opus-repository.org/schema/documenttype.xsd">
 
-    <field name="SLC" required="no" formelement="Select" datatype="Collection" root="single-level collection" multiplicity="5"/>
+    <field name="SLC" required="no" formelement="Select" datatype="Collection" root="single-level-collection" multiplicity="5"/>
     
 </documenttype>

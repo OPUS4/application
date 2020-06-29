@@ -35,9 +35,11 @@
 /**
  * Unit Tests for SELECT Element für die Rolle einer Person.
  */
-class Application_Form_Element_PersonRoleTest extends ControllerTestCase {
+class Application_Form_Element_PersonRoleTest extends ControllerTestCase
+{
 
-    public function testConstruct() {
+    public function testConstruct()
+    {
         $element = new Application_Form_Element_PersonRole('Role');
 
         $this->assertEquals('Role', $element->getName());
@@ -45,17 +47,17 @@ class Application_Form_Element_PersonRoleTest extends ControllerTestCase {
         $this->assertEquals(8, count($element->getMultiOptions()));
     }
 
-    public function testGetSelectOptions() {
+    public function testGetSelectOptions()
+    {
         $element = new Application_Form_Element_PersonRole('Role');
 
         $options = $element->getSelectOptions();
 
         $this->assertEquals(8, count($options));
 
-        $result = array_diff($options, array('author', 'editor', 'translator', 'contributor', 'other', 'advisor',
-            'referee', 'submitter'));
+        $result = array_diff($options, ['author', 'editor', 'translator', 'contributor', 'other', 'advisor',
+            'referee', 'submitter']);
 
         $this->assertEmpty($result, 'Die Optionen (Rollen) entsprechen nicht der Erwartung.');
     }
-
 }

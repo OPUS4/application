@@ -40,7 +40,7 @@ class Application_Import_XmlValidationTest extends ControllerTestCase
     public function testValidation()
     {
         foreach (new DirectoryIterator(APPLICATION_PATH . '/tests/resources/import') as $fileInfo) {
-            if ($fileInfo->getExtension() !== 'xsd' && !$fileInfo->isDot()
+            if ($fileInfo->getExtension() !== 'xsd' && ! $fileInfo->isDot()
                     && strpos($fileInfo->getBasename(), 'import') === 0) {
                 $xml = file_get_contents($fileInfo->getRealPath());
                 $this->_checkValid($xml, $fileInfo->getBasename());

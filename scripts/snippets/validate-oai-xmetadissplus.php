@@ -39,9 +39,9 @@ if (basename(__FILE__) !== basename($argv[0])) {
 
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
-$options = getopt('', array('source:', 'schema-cache:'));
+$options = getopt('', ['source:', 'schema-cache:']);
 
-if (!isset($options['source']) || empty($options['schema-cache'])) {
+if (! isset($options['source']) || empty($options['schema-cache'])) {
     echo "Usage: {$argv[0]} --source <source url or filename> --schema-cache <path to schema files>\n";
     exit;
 }
@@ -69,7 +69,7 @@ $xMetaDissNodes = $xpath->query('//xMetaDiss:xMetaDiss');
 
 
 
-if (!($xMetaDissNodes instanceOf DOMNodeList) || $xMetaDissNodes->length == 0) {
+if (! ($xMetaDissNodes instanceof DOMNodeList) || $xMetaDissNodes->length == 0) {
     echo "No Document found.";
 }
 $xMetaDissNode = $xMetaDissNodes->item(0);
@@ -79,20 +79,21 @@ $importedNode = $metadataDocument->importNode($xMetaDissNode, true);
 $metadataDocument->appendChild($importedNode);
 
 $schemaFile = realpath($options['schema-cache'] . '/xmetadissplus.xsd');
-if (!is_file($schemaFile)) {
-    echo "Could not find schema file '" . $options['schema-cache'] . '/xmetadissplus.xsd' . "'"; 
+if (! is_file($schemaFile)) {
+    echo "Could not find schema file '" . $options['schema-cache'] . '/xmetadissplus.xsd' . "'";
 }
 $metadataDocument->schemaValidate($options['schema-cache'] . '/xmetadissplus.xsd');
 printXmlErrors($sourceXml);
 libxml_use_internal_errors($useInternalErrors);
 //}
 
-function printXmlErrors($xml) {
+function printXmlErrors($xml)
+{
     $errors = libxml_get_errors();
 
-    foreach ($errors AS $error) {
+    foreach ($errors as $error) {
         if ($error->level < 2) {
-            continue; 
+            continue;
         }
 
         $lines = explode("\n", $xml);
@@ -100,7 +101,7 @@ function printXmlErrors($xml) {
         echo "\n\nERROR(" . $error->level . "): \n";
         echo "\t" . trim($error->message) . ' at line ' . $error->line . ":\n";
         for ($i = $error->line - 20; $i < $error->line; $i++) {
-            echo isset($lines[$i]) ? ($i + 1) . "\t" . $lines[$i] . "\n" : ''; 
+            echo isset($lines[$i]) ? ($i + 1) . "\t" . $lines[$i] . "\n" : '';
         }
     }
 }

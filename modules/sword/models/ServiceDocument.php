@@ -31,33 +31,37 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Sword_Model_ServiceDocument {
-    
+class Sword_Model_ServiceDocument
+{
+
     private $document;
-    
+
     private $config;
-    
+
     private $fullUrl;
-    
+
     const SWORD_VERSION = '1.3';
-    
+
     const SWORD_LEVEL = '1';
-    
+
     const SWORD_SUPPORT_VERBOSE_MODE = 'false';
-    
+
     const SWORD_SUPPORT_NOOP_MODE = 'false';
-    
-    public function __construct($fullUrl) {
+
+    public function __construct($fullUrl)
+    {
         $this->config = Zend_Registry::get('Zend_Config');
         $this->fullUrl = $fullUrl;
         $this->initServiceDocument();
     }
-    
-    public function getDocument() {
+
+    public function getDocument()
+    {
         return $this->document;
-    }    
-    
-    private function initServiceDocument() {
+    }
+
+    private function initServiceDocument()
+    {
         $this->document = new DOMDocument();
         $rootElement = $this->document->createElementNS('http://www.w3.org/2007/app', 'service');
         $rootElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns', 'http://www.w3.org/2007/app');
@@ -83,16 +87,16 @@ class Sword_Model_ServiceDocument {
 
         $collectionNode = $this->document->createElement('collection');
         $this->setImportCollection($collectionNode);
-        $workspaceNode->appendChild($collectionNode);                
-        
+        $workspaceNode->appendChild($collectionNode);
+
         // das Element app:accept definiert die zulässigen MIME-Types der Packages
         // OPUS soll voerst Packages im Format TAR und ZIP unterstützen
         // ein Upload von XML-Dokumenten (metadata only) ist nicht vorgesehen
         $node = $this->document->createElement('accept', 'application/zip');
         $collectionNode->appendChild($node);
         $node = $this->document->createElement('accept', 'application/tar');
-        $collectionNode->appendChild($node);        
-        
+        $collectionNode->appendChild($node);
+
         $collectionPolicy = $this->config->sword->collection->default->collectionPolicy;
         $node = $this->document->createElementNS('http://purl.org/net/sword/', 'sword:collectionPolicy', $collectionPolicy);
         $collectionNode->appendChild($node);
@@ -108,27 +112,28 @@ class Sword_Model_ServiceDocument {
         $node = $this->document->createElementNS('http://purl.org/net/sword/', 'sword:acceptPackaging', $acceptPackaging);
         $node->setAttribute('q', '1.0');
         $collectionNode->appendChild($node);
-        
-        $abstract = $this->config->sword->collection->default->abstract;        
+
+        $abstract = $this->config->sword->collection->default->abstract;
         $node = $this->document->createElementNS('http://purl.org/dc/terms/', 'dcterms:abstract', $abstract);
         $collectionNode->appendChild($node);
-        
-        $this->document->appendChild($rootElement);        
+
+        $this->document->appendChild($rootElement);
     }
-        
-    private function addSwordElement($name, $value, $rootElement) {
+
+    private function addSwordElement($name, $value, $rootElement)
+    {
         $node = $this->document->createElementNS('http://purl.org/net/sword/', 'sword:' . $name, $value);
         $rootElement->appendChild($node);
     }
-    
-    private function setImportCollection($collectionNode) {
+
+    private function setImportCollection($collectionNode)
+    {
         $importCollection = new Sword_Model_ImportCollection();
-        if ($importCollection->exists()) {
+        if ($importCollection->isReadable()) {
             $node = $this->document->createElementNS('http://www.w3.org/2005/Atom', 'atom:title', $importCollection->getName());
             $collectionNode->appendChild($node);
             $href = $this->fullUrl . '/sword/index/index/' . $importCollection->getRoleName() . '/' . $importCollection->getNumber();
             $collectionNode->setAttribute('href', $href);
         }
     }
-            
 }

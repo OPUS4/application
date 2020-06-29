@@ -29,18 +29,19 @@
  * @package     Module_Frontdoor
  * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  *
  * Controller for handling file downloads in the frontdoor.
  */
-class Frontdoor_DeliverController extends Application_Controller_Action {
+class Frontdoor_DeliverController extends Application_Controller_Action
+{
 
     /**
      * Handles file downloads.
      */
-    public function indexAction() {
-
+    public function indexAction()
+    {
         $docId = $this->_getParam('docId', null);
         $path = $this->_getParam('file', null);
 
@@ -50,8 +51,7 @@ class Frontdoor_DeliverController extends Application_Controller_Action {
 
         try {
             $fileModel = new Frontdoor_Model_File($docId, $path);
-        }
-        catch (Frontdoor_Model_FrontdoorDeliveryException $e) {
+        } catch (Frontdoor_Model_FrontdoorDeliveryException $e) {
             $this->handleDeliveryError($e);
             return;
         }
@@ -60,13 +60,12 @@ class Frontdoor_DeliverController extends Application_Controller_Action {
 
         try {
             $fileObject = $fileModel->getFileObject($realm);
-        }
-        catch(Frontdoor_Model_FrontdoorDeliveryException $e) {
+        } catch (Frontdoor_Model_FrontdoorDeliveryException $e) {
             $this->handleDeliveryError($e);
             return;
         }
 
-        if (!$fileObject->exists()) {
+        if (! $fileObject->isReadable()) {
             $this->handleDeliveryError(new Frontdoor_Model_FileNotFoundException());
             return;
         }
@@ -90,8 +89,7 @@ class Frontdoor_DeliverController extends Application_Controller_Action {
         $this->_helper->SendFile->setLogger($this->getLogger());
         try {
             $this->_helper->SendFile($fullFilename);
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->logError($e);
             $response = $this->getResponse();
             $response->clearAllHeaders();
@@ -113,20 +111,23 @@ class Frontdoor_DeliverController extends Application_Controller_Action {
      *
      * TODO move to model class - unit test
      */
-    public static function quoteFileName($filename) {
+    public static function quoteFileName($filename)
+    {
         if (preg_match('/[^A-Za-z0-9_., -]/', $filename)) {
             return '=?UTF-8?B?'.base64_encode($filename).'?=';
         }
         return $filename;
     }
 
-    private function logError($exception) {
+    private function logError($exception)
+    {
         $this->getLogger()->err($exception);
     }
 
-    private function handleDeliveryError($exception) {
+    private function handleDeliveryError($exception)
+    {
+        $this->getResponse()->setHttpResponseCode($exception->getCode());
         $this->view->translateKey = $exception->getTranslateKey();
         $this->render('error');
     }
-
 }

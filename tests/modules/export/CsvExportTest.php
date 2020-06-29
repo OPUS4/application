@@ -27,7 +27,7 @@
  * @category    Tests
  * @package     Export
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2017-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  *
  * TODO more testing
@@ -35,6 +35,10 @@
 
 class Export_CsvExportTest extends ControllerTestCase
 {
+
+    protected $configModifiable = true;
+
+    protected $additionalResources = 'all';
 
     public function testExportSingleDocument()
     {
@@ -47,15 +51,13 @@ class Export_CsvExportTest extends ControllerTestCase
         $this->assertEquals(2, substr_count($body, "\n"));
         $this->assertContains('OPUS4-146', $body);
 
-        $data = array();
+        $data = [];
 
-        foreach (preg_split("/((\r?\n)|(\n?\r))/", $body) as $line)
-        {
+        foreach (preg_split("/((\r?\n)|(\n?\r))/", $body) as $line) {
             $lineData = preg_split("/[\t]/", $line);
             $data[] = $lineData;
         }
 
         $this->assertEquals('OPUS4-146', $data[1][0]);
     }
-
 }

@@ -25,14 +25,11 @@
 # Parameters:
 # -a <filename> : Sets name for Apache configuration file
 # -c <filename> : Sets name for OPUS configuration file (used for testing)
+# -d <filepath> : Config/file/path to execute the Auto installation
 #
-
 set -e
 
-# START USER-CONFIGURATION
-
-MYSQL_CLIENT='/usr/bin/mysql'
-
+# Parse command line options
 while getopts ":a:c:" opt; do
   case $opt in
     a) APACHE_CONF="$OPTARG"
@@ -42,10 +39,7 @@ while getopts ":a:c:" opt; do
   esac
 done
 
-# END OF USER-CONFIGURATION
-
 # Check for sudo
-
 if [[ $EUID -eq 0 ]]; then
     SUDO_ENABLED=1
 else
@@ -94,6 +88,22 @@ This script will ask you a number of questions in order to setup the following:
 
 LimitString
 
+# Get command line parameters
+PARAMETER_CONF="$2"
+
+# Check for auto installation
+if [[ -n $PARAMETER_CONF ]]
+then
+  echo "$PARAMETER_CONF"
+  if [ -f $PARAMETER_CONF ]
+  then
+    source "$PARAMETER_CONF"
+  else
+    echo "The file `basename "$PARAMETER_CONF"` does not exist"
+    exit 1
+  fi
+fi
+
 # Ask for base Url for new OPUS 4 instance
 [[ -z $OPUS_URL_BASE ]] && read -p "Base URL for OPUS [/opus4]: " OPUS_URL_BASE
 
@@ -114,6 +124,8 @@ fi
 #
 # Install Composer and dependencies
 #
+# Composer is not executed as root, but as the current user.
+#
 
 echo
 echo "Installing Composer and dependencies ..."
@@ -133,150 +145,21 @@ fi
 echo
 echo "Creating Apache2 site configuration ..."
 echo
-
-"$SCRIPT_PATH/install-apache.sh" "$OPUS_URL_BASE" "apache24.conf.template" "$APACHE_CONF" "$OS" 'N'
-
-#
-# Prompt for database parameters
-##
-
-echo
-echo "Database configuration"
-echo
-
-[[ -z $DBNAME ]] && read -p "New OPUS Database Name [opusdb]: "           DBNAME
-[[ -z $DB_ADMIN ]] && read -p "New OPUS Database Admin Name [opus4admin]: " DB_ADMIN
-
-while [[ -z $DB_ADMIN_PASSWORD || "$DB_ADMIN_PASSWORD" != "$DB_ADMIN_PASSWORD_VERIFY" ]] ;
-do
-  read -p "New OPUS Database Admin Password: " -s       DB_ADMIN_PASSWORD
-  echo
-  read -p "New OPUS Database Admin Password again: " -s DB_ADMIN_PASSWORD_VERIFY
-  echo
-  if [[ $DB_ADMIN_PASSWORD != $DB_ADMIN_PASSWORD_VERIFY ]] ;
-  then
-    echo "Passwords do not match. Please try again."
-  fi
-done
-
-[[ -z $DB_USER ]] && read -p "New OPUS Database User Name [opus4]: "       DB_USER
-
-while [[ -z $DB_USER_PASSWORD || "$DB_USER_PASSWORD" != "$DB_USER_PASSWORD_VERIFY" ]] ;
-do
-  read -p "New OPUS Database User Password: " -s        DB_USER_PASSWORD
-  echo
-  read -p "New OPUS Database User Password again: " -s  DB_USER_PASSWORD_VERIFY
-  echo
-  if [[ $DB_USER_PASSWORD != $DB_USER_PASSWORD_VERIFY ]] ;
-  then
-    echo "Passwords do not match. Please try again."
-  fi
-done
-
-# set defaults if values are not given
-DBNAME="${DBNAME:-opusdb}"
-DB_ADMIN="${DB_ADMIN:-opus4admin}"
-DB_USER="${DB_USER:-opus4}"
-
-# escape ! (for later use in sed substitute)
-DBNAME_ESC="${DBNAME//\!/\\\!}"
-DB_ADMIN_ESC="${DB_ADMIN//\!/\\\!}"
-DB_ADMIN_PASSWORD_ESC="${DB_ADMIN_PASSWORD//\!/\\\!}"
-DB_USER_ESC="${DB_USER//\!/\\\!}"
-DB_USER_PASSWORD_ESC="${DB_USER_PASSWORD//\!/\\\!}"
-
-#
-# Create database and users.
-#
-# By default the database and the users are created requiring the MySQL root password,
-# however that can be suppressed in order to just generate the configuration files for
-# an existing database.
-#
-
-echo
-echo "Please provide parameters for the database connection:"
-[[ -z $MYSQLHOST ]] && read -p "MySQL DBMS Host [localhost]: " MYSQLHOST
-[[ -z $MYSQLPORT ]] && read -p "MySQL DBMS Port [3306]: "      MYSQLPORT
-
-# set defaults if value is not given
-MYSQLHOST="${MYSQLHOST:-localhost}"
-MYSQLPORT="${MYSQLPORT:-3306}"
-
-# escape ! (for later use in sed substitute)
-MYSQLHOST_ESC="${MYSQLHOST//\!/\\\!}"
-MYSQLPORT_ESC="${MYSQLPORT//\!/\\\!}"
-
-#
-# Create config.ini and set database related parameters.
-#
-# TODO overwrite existing file?
-#
-
-cd "$BASEDIR/application/configs"
-cp config.ini.template "$OPUS_CONF"
-if [ localhost != "$MYSQLHOST" ]; then
-  sed -i -e "s!^; db.params.host = localhost!db.params.host = '$MYSQLHOST_ESC'!" "$OPUS_CONF"
-fi
-if [ 3306 != "$MYSQLPORT" ]; then
-  sed -i -e "s!^; db.params.port = 3306!db.params.port = '$MYSQLPORT_ESC'!" "$OPUS_CONF"
-fi
-sed -i -e "s!@db.user.name@!'$DB_USER_ESC'!" \
-       -e "s!@db.user.password@!'$DB_USER_PASSWORD_ESC'!" \
-       -e "s!@db.name@!'$DBNAME_ESC'!" "$OPUS_CONF"
-
-# Add admin credentials to configuration for command line scripts
-cp console.ini.template "$OPUS_CONSOLE_CONF"
-
-sed -i -e "s!@db.admin.name@!'$DB_ADMIN_ESC'!" \
-       -e "s!@db.admin.password@!'$DB_ADMIN_PASSWORD_ESC'!" "$OPUS_CONSOLE_CONF"
-
-#
-# Optionally initialize database.
-#
-
-[[ -z $CREATE_DATABASE ]] && read -p "Create database and users [Y]? " CREATE_DATABASE
-
-if [[ -z "$CREATE_DATABASE" || "$CREATE_DATABASE" == Y || "$CREATE_DATABASE" == y ]] ;
+if [ -n "$PARAMETER_CONF" ] ;
 then
-
-    echo
-    [[ -z $MYSQLROOT ]] && read -p "MySQL Root User [root]: "                    MYSQLROOT
-    read -p "MySQL Root User Password: " -s MYSQLROOT_PASSWORD
-    echo
-
-    # set defaults if value is not given
-    MYSQLROOT="${MYSQLROOT:-root}"
-
-    # prepare to access MySQL service
-    MYSQL_OPTS=""
-    [ "localhost" != "$MYSQLHOST" ] && MYSQL_OPTS="-h $MYSQLHOST"
-    [ "3306" != "$MYSQLPORT" ] && MYSQL_OPTS="$MYSQL_OPTS -P $MYSQLPORT"
-
-    #
-    # Create database and users in MySQL.
-    #
-    # Users do not have to be created first before granting privileges.
-    #
-
-mysqlRoot() {
-  "$MYSQL_CLIENT" --defaults-file=<(echo -e "[client]\npassword=${MYSQLROOT_PASSWORD}") --default-character-set=utf8 ${MYSQL_OPTS} -u "$MYSQLROOT" -v
-}
-
-mysqlRoot <<LimitString
-CREATE DATABASE IF NOT EXISTS $DBNAME DEFAULT CHARACTER SET = UTF8 DEFAULT COLLATE = UTF8_GENERAL_CI;
-GRANT ALL PRIVILEGES ON $DBNAME.* TO '$DB_ADMIN'@'$MYSQLHOST' IDENTIFIED BY '$DB_ADMIN_PASSWORD';
-GRANT SELECT,INSERT,UPDATE,DELETE ON $DBNAME.* TO '$DB_USER'@'$MYSQLHOST' IDENTIFIED BY '$DB_USER_PASSWORD';
-FLUSH PRIVILEGES;
-LimitString
-
-    #
-    # Create database schema
-    #
-
-    php "$BASEDIR/db/createdb.php"
-
+  "$SCRIPT_PATH/install-apache.sh" "$OPUS_URL_BASE" "apache24.conf.template" "$APACHE_CONF" "$OS" 'N' "$PARAMETER_CONF"
+else
+  "$SCRIPT_PATH/install-apache.sh" "$OPUS_URL_BASE" "apache24.conf.template" "$APACHE_CONF" "$OS" 'N'
 fi
-
+#
+# Setup database
+#
+if [ -n "$PARAMETER_CONF" ] ;
+then
+  "$SCRIPT_PATH/install-database.sh" "$PARAMETER_CONF"
+else
+  "$SCRIPT_PATH/install-database.sh"
+fi
 #
 # Set file permissions
 #
@@ -297,20 +180,23 @@ fi
 #
 # Set password for administrator account
 #
-
-while [[ -z $ADMIN_PWD || "$ADMIN_PWD" != "$ADMIN_PWD_VERIFY" ]] ;
-do
-  echo
-  read -p "Please enter password for OPUS 'admin' account: " -s ADMIN_PWD
-  echo
-  read -p "Please enter password again: " -s ADMIN_PWD_VERIFY
-  echo
-  if [[ $ADMIN_PWD != $ADMIN_PWD_VERIFY ]] ;
-  then
-    echo "Passwords do not match. Please try again."
-  fi
-done
-
+if [ -n "$PARAMETER_CONF" ] ;
+then
+  ADMIN_PWD_VERIFY=$ADMIN_PWD
+else
+  while [[ -z $ADMIN_PWD || "$ADMIN_PWD" != "$ADMIN_PWD_VERIFY" ]] ;
+  do
+    echo
+    read -p "Please enter password for OPUS 'admin' account: " -s ADMIN_PWD
+    echo
+    read -p "Please enter password again: " -s ADMIN_PWD_VERIFY
+    echo
+    if [[ $ADMIN_PWD != $ADMIN_PWD_VERIFY ]] ;
+    then
+      echo "Passwords do not match. Please try again."
+    fi
+  done
+fi
 php "$BASEDIR/scripts/change-password.php" admin "$ADMIN_PWD"
 
 #
@@ -320,6 +206,7 @@ php "$BASEDIR/scripts/change-password.php" admin "$ADMIN_PWD"
 # Optionally install new local Solr.
 #
 # TODO add new core to existing, local Solr
+# TODO separate Solr setup out so it can be used directly
 #
 
 echo
@@ -391,23 +278,6 @@ then
 
     cd "$BASEDIR/tests"
     cp config.ini.template config.ini
-    if [ localhost != "$MYSQLHOST" ]; then
-      sed -i -e "s!^; db.params.host = localhost!db.params.host = '$MYSQLHOST_ESC'!" config.ini
-    fi
-    if [ 3306 != "$MYSQLPORT" ]; then
-      sed -i -e "s!^; db.params.port = 3306!db.params.port = '$MYSQLPORT_ESC'!" config.ini
-    fi
-    sed -i -e "s!@db.user.name@!'$DB_USER_ESC'!" \
-           -e "s!@db.user.password@!'$DB_USER_PASSWORD_ESC'!" \
-           -e "s!@db.name@!'$DBNAME_ESC'!" \
-           -e "s!@db.admin.name@!'$DB_ADMIN_ESC'!" \
-           -e "s!@db.admin.password@!'$DB_ADMIN_PASSWORD_ESC'!" \
-           -e "s!@searchengine.index.host@!'$SOLR_SERVER_HOST'!" \
-           -e "s!@searchengine.index.port@!'$SOLR_SERVER_PORT'!" \
-           -e "s!@searchengine.index.app@!'$SOLR_CONTEXT'!" \
-           -e "s!@searchengine.extract.host@!'$SOLR_EXTRACT_SERVER_HOST'!" \
-           -e "s!@searchengine.extract.port@!'$SOLR_EXTRACT_SERVER_PORT'!" \
-           -e "s!@searchengine.extract.app@!'$SOLR_EXTRACT_CONTEXT'!" config.ini
 
     echo "done"
 

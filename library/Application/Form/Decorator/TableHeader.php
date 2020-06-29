@@ -31,15 +31,16 @@
  * @category    Application
  * @package     Application_Form_Decorator
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class Application_Form_Decorator_TableHeader extends Zend_Form_Decorator_Abstract {
+class Application_Form_Decorator_TableHeader extends Zend_Form_Decorator_Abstract
+{
 
     private $_columns = null;
 
-    public function render($content) {
+    public function render($content)
+    {
         // Zeige Tabellenkopf nur wenn es Einträge (Unterformulare) gibt
         if (count($this->getElement()->getSubForms()) == 0) {
             return $content;
@@ -47,7 +48,7 @@ class Application_Form_Decorator_TableHeader extends Zend_Form_Decorator_Abstrac
 
         $view = $this->getElement()->getView();
 
-        if (!$view instanceof Zend_View_Interface) {
+        if (! $view instanceof Zend_View_Interface) {
             return $content;
         }
 
@@ -64,18 +65,19 @@ class Application_Form_Decorator_TableHeader extends Zend_Form_Decorator_Abstrac
         return $markup . $content;
     }
 
-    public function setColumns($columns) {
+    public function setColumns($columns)
+    {
         $this->_columns = $columns;
     }
 
-    public function getColumns() {
+    public function getColumns()
+    {
         $columns = $this->getOption('columns');
 
-        if (!is_null($columns)) {
+        if (! is_null($columns)) {
             $this->removeOption('columns');
             $this->_columns = $columns;
-        }
-        else {
+        } else {
             if (method_exists($this->getElement(), 'getColumns')) {
                 $this->_columns = $this->getElement()->getColumns();
             }
@@ -83,5 +85,4 @@ class Application_Form_Decorator_TableHeader extends Zend_Form_Decorator_Abstrac
 
         return $this->_columns;
     }
-
 }

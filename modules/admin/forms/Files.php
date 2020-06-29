@@ -35,115 +35,120 @@
  * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Admin_Form_Files extends Admin_Form_Document_MultiSubForm {
+class Admin_Form_Files extends Admin_Form_Document_MultiSubForm
+{
 
     const ELEMENT_IMPORT = 'Import';
 
-    public function __construct($options = null) {
+    public function __construct($options = null)
+    {
         parent::__construct('Admin_Form_File', 'File', $options);
     }
 
-    public function init() {
+    public function init()
+    {
         parent::init();
 
         $this->setLegend('admin_document_section_files');
 
-        $this->getDecorator('FieldsetWithButtons')->setLegendButtons(array(self::ELEMENT_IMPORT, self::ELEMENT_ADD));
+        $this->getDecorator('FieldsetWithButtons')->setLegendButtons([self::ELEMENT_IMPORT, self::ELEMENT_ADD]);
     }
 
-    protected function initButton() {
+    protected function initButton()
+    {
         parent::initButton();
         $this->addElement(
-            'submit', self::ELEMENT_IMPORT, array('order' => 1002, 'label' => 'button_file_import',
-            'decorators' => array(), 'disableLoadDefaultDecorators' => true)
+            'submit',
+            self::ELEMENT_IMPORT,
+            ['order' => 1002, 'label' => 'button_file_import',
+            'decorators' => [], 'disableLoadDefaultDecorators' => true]
         );
     }
 
-    public function processPost($post, $context) {
+    public function processPost($post, $context)
+    {
         $result = parent::processPost($post, $context);
 
         if (is_null($result)) {
             if (array_key_exists(self::ELEMENT_IMPORT, $post)) {
-                $result = array(
+                $result = [
                     'result' => Admin_Form_Document::RESULT_SWITCH_TO,
-                    'target' => array(
+                    'target' => [
                         'module' => 'admin',
                         'controller' => 'filebrowser',
                         'action' => 'index'
-                    )
-                );
+                    ]
+                ];
             }
         }
 
         return $result;
     }
 
-    protected function processPostRemove($subFormName, $subdata) {
+    protected function processPostRemove($subFormName, $subdata)
+    {
         if (isset($subdata[Admin_Form_File::ELEMENT_ID])) {
             $fileId = $subdata[Admin_Form_File::ELEMENT_ID];
-        }
-        else {
+        } else {
             // no fileId specified (manipulated POST)
             // TODO error message
             return Admin_Form_Document::RESULT_SHOW;
         }
 
         // Hinzufuegen wurde ausgewaehlt
-        return array(
+        return [
             'result' => Admin_Form_Document::RESULT_SWITCH_TO,
-            'target' => array(
+            'target' => [
                 'module' => 'admin',
                 'controller' => 'filemanager',
                 'action' => 'delete',
                 'fileId' => $fileId
-            )
-        );
+            ]
+        ];
     }
 
-    protected function processPostAdd() {
+    protected function processPostAdd()
+    {
         // Hinzufuegen wurde ausgewaehlt
-        return array(
+        return [
             'result' => Admin_Form_Document::RESULT_SWITCH_TO,
-            'target' => array(
+            'target' => [
                 'module' => 'admin',
                 'controller' => 'filemanager',
                 'action' => 'upload'
-            )
-        );
+            ]
+        ];
     }
 
-    public function continueEdit($request, $post = null) {
+    public function continueEdit($request, $post = null)
+    {
         $removedFileId = $request->getParam('fileId'); // TODO make robuster
 
         if (is_array($post)) {
             foreach ($post as $file) {
-                if (isset($file['Id']))
-                {
+                if (isset($file['Id'])) {
                     $fileId = $file['Id'];
                     $subform = $this->getSubFormForId($fileId);
-                    if (!is_null($subform))
-                    {
-                        if ($fileId != $removedFileId)
-                        {
+                    if (! is_null($subform)) {
+                        if ($fileId != $removedFileId) {
                             $subform->populate($file);
-                        } else
-                        {
+                        } else {
                             $this->removeSubForm($subform->getName());
                         }
                     }
                 }
             }
-        }
-        else {
+        } else {
             $subform = $this->getSubFormForId($removedFileId);
 
-            if (!is_null($subform)) {
+            if (! is_null($subform)) {
                 $this->removeSubForm($subform->getName());
             }
         }
     }
 
-    public function getSubFormForId($fileId) {
+    public function getSubFormForId($fileId)
+    {
         foreach ($this->getSubForms() as $subform) {
             if ($subform->getElementValue(Admin_Form_File::ELEMENT_ID) == $fileId) {
                 return $subform;
@@ -157,8 +162,8 @@ class Admin_Form_Files extends Admin_Form_Document_MultiSubForm {
      * @param Opus_Document $document
      * @return array Array of Opus_File objects
      */
-    public function getFieldValues($document) {
+    public function getFieldValues($document)
+    {
         return $document->getFile();
     }
-
 }

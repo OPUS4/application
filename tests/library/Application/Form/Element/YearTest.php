@@ -27,23 +27,27 @@
  * @category    Application Unit Test
  * @package     Form_Element
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
-class Application_Form_Element_YearTest extends FormElementTestCase {
+class Application_Form_Element_YearTest extends FormElementTestCase
+{
 
-    public function setUp() {
+    protected $additionalResources = ['translation'];
+
+    public function setUp()
+    {
         $this->_formElementClass = 'Application_Form_Element_Year';
         $this->_expectedDecoratorCount = 8;
-        $this->_expectedDecorators = array('ViewHelper', 'Placeholder', 'Description', 'ElementHint', 'Errors',
-            'ElementHtmlTag', 'LabelNotEmpty', 'dataWrapper');
+        $this->_expectedDecorators = ['ViewHelper', 'Placeholder', 'Description', 'ElementHint', 'Errors',
+            'ElementHtmlTag', 'LabelNotEmpty', 'dataWrapper'];
         $this->_staticViewHelper = 'viewFormDefault';
         parent::setUp();
     }
 
-    public function testValidation() {
+    public function testValidation()
+    {
         $element = $this->getElement();
 
         $element->setValue(-1);
@@ -61,7 +65,8 @@ class Application_Form_Element_YearTest extends FormElementTestCase {
         $this->assertFalse($element->isValid(10000));
     }
 
-    public function testTranslation() {
+    public function testTranslation()
+    {
         $element = $this->getElement();
 
         $translator = $element->getTranslator();
@@ -70,5 +75,4 @@ class Application_Form_Element_YearTest extends FormElementTestCase {
         $this->assertTrue($translator->isTranslated('validation_error_year_invalid_negative'));
         $this->assertTrue($translator->isTranslated('validation_error_year_too_large'));
     }
-
 }

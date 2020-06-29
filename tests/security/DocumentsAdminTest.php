@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -26,18 +27,25 @@
  *
  * @category    Application Unit Test
  * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class DocumentsAdminTest extends ControllerTestCase {
 
-    public function setUp() {
+class DocumentsAdminTest extends ControllerTestCase
+{
+
+    protected $configModifiable = true;
+
+    protected $additionalResources = 'all';
+
+    public function setUp()
+    {
         parent::setUp();
         $this->enableSecurity();
     }
 
-    public function tearDown() {
+    public function tearDown()
+    {
         $this->logoutUser();
         $this->restoreSecuritySetting();
         parent::tearDown();
@@ -46,7 +54,8 @@ class DocumentsAdminTest extends ControllerTestCase {
     /**
      * Prüft, ob nur die erlaubten Einträge im Admin Menu angezeigt werden.
      */
-    public function testAdminMenuFiltering() {
+    public function testAdminMenuFiltering()
+    {
         $this->useEnglish();
         $this->loginUser("security8", "security8pwd");
         $this->dispatch('/admin');
@@ -65,7 +74,8 @@ class DocumentsAdminTest extends ControllerTestCase {
     /**
      * Prüft, ob auf die Seite zur Verwaltung von Dokumenten zugegriffen werden kann.
      */
-    public function testAccessDocumentsController() {
+    public function testAccessDocumentsController()
+    {
         $this->useEnglish();
         $this->loginUser("security8", "security8pwd");
         $this->dispatch('/admin/documents');
@@ -75,7 +85,8 @@ class DocumentsAdminTest extends ControllerTestCase {
     /**
      * Prüft, das auf die Seite Übersichtsseite eines Dokumentes zugegriffen werden kann.
      */
-    public function testAccessDocumentController() {
+    public function testAccessDocumentController()
+    {
         $this->useEnglish();
         $this->loginUser("security8", "security8pwd");
         $this->dispatch('/admin/document/index/id/92');
@@ -86,7 +97,8 @@ class DocumentsAdminTest extends ControllerTestCase {
     /**
      * Prüft, ob dem Nutzer die Actionbox für Administratoren angezeigt wird.
      */
-    public function testAdminLinksInFrontdoorPresent() {
+    public function testAdminLinksInFrontdoorPresent()
+    {
         $this->useEnglish();
         $this->loginUser("security8", "security8pwd");
         $this->dispatch('/frontdoor/index/index/docId/92');
@@ -102,14 +114,17 @@ class DocumentsAdminTest extends ControllerTestCase {
         $this->assertQueryContentContains("//a[@href=\"$baseUri/admin/document/index/id/92\"]", 'Administration');
 
         $this->assertQuery("//a[@href=\"$baseUri/admin/workflow/changestate/docId/92/targetState/restricted\"]");
-        $this->assertQueryContentContains("//a[@href=\"$baseUri/admin/workflow/changestate/docId/92/targetState/restricted\"]",
-            'Restrict document');
+        $this->assertQueryContentContains(
+            "//a[@href=\"$baseUri/admin/workflow/changestate/docId/92/targetState/restricted\"]",
+            'Restrict document'
+        );
     }
 
     /**
      * Prueft, ob auf den FilemanagerController zugegriffen werden kann.
      */
-    public function testAccessFilemanagerController() {
+    public function testAccessFilemanagerController()
+    {
         $this->useEnglish();
         $this->loginUser("security8", "security8pwd");
         $this->dispatch('/admin/filemanager/index/id/92');
@@ -117,7 +132,8 @@ class DocumentsAdminTest extends ControllerTestCase {
         $this->assertQueryContentContains('//html/body', 'test.xhtml');
     }
 
-    public function testAccessCollectionControllerAssignAction() {
+    public function testAccessCollectionControllerAssignAction()
+    {
         $this->useEnglish();
         $this->loginUser("security8", "security8pwd");
         $this->dispatch('/admin/collection/assign/document/92');
@@ -125,7 +141,8 @@ class DocumentsAdminTest extends ControllerTestCase {
         $this->assertQueryContentContains('//div[@class="breadcrumbsContainer"]', 'Assign Collection');
     }
 
-    public function testNoAccessCollectionControllerShowAction() {
+    public function testNoAccessCollectionControllerShowAction()
+    {
         $this->loginUser("security8", "security8pwd");
         $this->dispatch('/admin/collection/show/id/4');
         $this->assertRedirectTo(
@@ -134,7 +151,8 @@ class DocumentsAdminTest extends ControllerTestCase {
         );
     }
 
-    public function testStateChangeLinks() {
+    public function testStateChangeLinks()
+    {
         $this->useEnglish();
         $this->loginUser('security8', 'security8pwd');
         $this->dispatch('/admin/document/index/id/96');
@@ -148,7 +166,8 @@ class DocumentsAdminTest extends ControllerTestCase {
     /**
      * Basically, just checks access to WorkflowController.
      */
-    public function testDeleteDocument() {
+    public function testDeleteDocument()
+    {
         $this->useEnglish();
         $this->loginUser('security8', 'security8pwd');
         $this->dispatch('/admin/workflow/changestate/docId/300/targetState/deleted');
@@ -159,7 +178,8 @@ class DocumentsAdminTest extends ControllerTestCase {
     /**
      * Basically, just checks access to WorkflowController.
      */
-    public function testPublishDocument() {
+    public function testPublishDocument()
+    {
         $this->useEnglish();
         $this->loginUser('security8', 'security8pwd');
         $this->dispatch('/admin/workflow/changestate/docId/300/targetState/published');
@@ -167,7 +187,8 @@ class DocumentsAdminTest extends ControllerTestCase {
         $this->assertQueryContentContains('//html/body', 'Are you sure you want to publish document 300?');
     }
 
-    public function testAccessFilebrowserController() {
+    public function testAccessFilebrowserController()
+    {
         $this->useEnglish();
         $this->loginUser("security8", "security8pwd");
         $this->dispatch('/admin/filebrowser/index/id/92');
@@ -175,7 +196,8 @@ class DocumentsAdminTest extends ControllerTestCase {
         $this->assertQueryContentContains('//html/body', 'Add files to document with id');
     }
 
-    public function testAccessFrontdoorForUnpublishedDocumentRegression2815() {
+    public function testAccessFrontdoorForUnpublishedDocumentRegression2815()
+    {
         $this->useEnglish();
         $this->loginUser('security8', 'security8pwd');
         $this->dispatch('/frontdoor/index/index/docId/101');
@@ -183,7 +205,8 @@ class DocumentsAdminTest extends ControllerTestCase {
         $this->assertNotQueryContentContains('//div', 'Document with ID 101 has not been published yet!');
     }
 
-    public function testAccessToMetadatenOverview() {
+    public function testAccessToMetadatenOverview()
+    {
         $this->loginUser('security8', 'security8pwd');
         $this->dispatch('/admin/document/index/id/146');
         $this->assertNotQuery('//div[@class="messages"]/div[@class="failure"]');
@@ -191,7 +214,8 @@ class DocumentsAdminTest extends ControllerTestCase {
         $this->assertQueryContentContains('//h2/span[@class="docid"]', '146');
     }
 
-    public function testAccessToMetadatenFormular() {
+    public function testAccessToMetadatenFormular()
+    {
         $this->loginUser('security8', 'security8pwd');
         $this->dispatch('/admin/document/edit/id/146');
         $this->assertNotQuery('//div[@class="messages"]/div[@class="failure"]');
@@ -201,16 +225,17 @@ class DocumentsAdminTest extends ControllerTestCase {
         $this->assertQuery('//select[id="Document-General-Language"]');
     }
 
-    public function testNoAccessToMetadatenOverview() {
+    public function testNoAccessToMetadatenOverview()
+    {
         $this->loginUser('security9', 'security9pwd');
         $this->dispatch('/admin/document/index/id/146');
         $this->assertRedirectTo('/auth/index/rmodule/admin/rcontroller/document/raction/index/id/146');
     }
 
-    public function testNoAccessToMetadatenFormular() {
+    public function testNoAccessToMetadatenFormular()
+    {
         $this->loginUser('security9', 'security9pwd');
         $this->dispatch('/admin/document/edit/id/146');
         $this->assertRedirectTo('/auth/index/rmodule/admin/rcontroller/document/raction/edit/id/146');
     }
-
 }

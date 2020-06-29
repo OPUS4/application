@@ -31,13 +31,16 @@
  * @category    Application Unit Test
  * @package     Application_Form_Decorator
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class Application_Form_Decorator_RemoveButtonTest extends ControllerTestCase {
+class Application_Form_Decorator_RemoveButtonTest extends ControllerTestCase
+{
 
-    public function testRender() {
+    protected $additionalResources = 'view';
+
+    public function testRender()
+    {
         $form = new Zend_Form();
         $form->setName('Test');
         $form->addElement('submit', 'Remove');
@@ -50,7 +53,8 @@ class Application_Form_Decorator_RemoveButtonTest extends ControllerTestCase {
         $this->assertEquals('content<input type="submit" name="Remove" id="Remove" value="Remove" />', $output);
     }
 
-    public function testRenderWithHidden() {
+    public function testRenderWithHidden()
+    {
         $form = new Zend_Form();
         $form->setName('Test');
         $form->addElement('submit', 'Remove');
@@ -64,20 +68,20 @@ class Application_Form_Decorator_RemoveButtonTest extends ControllerTestCase {
 
         $output = $decorator->render('content'); // Output wird an content dran gehängt
 
-        $this->assertEquals('content'
+        $this->assertEquals(
+            'content'
             . '<input type="hidden" name="Id" id="Id" value="10" />'
             . '<input type="submit" name="Remove" id="Remove" value="Remove" />',
-            $output);
+            $output
+        );
     }
 
-    public function testSetSecondElementOption() {
+    public function testSetSecondElementOption()
+    {
         $element = new Application_Form_Element_Hidden('name');
-        $decorator = new Application_Form_Decorator_RemoveButton(array('element' => $element));
+        $decorator = new Application_Form_Decorator_RemoveButton(['element' => $element]);
 
         $this->assertEquals($element, $decorator->getSecondElement());
         $this->assertEquals($element, $decorator->getSecondElement()); // works 2nd time as well
-
-
     }
-
 }

@@ -38,7 +38,8 @@
  * @version     $Id$
  */
 
-class Application_Controller_Action extends Application_Controller_ModuleAccess {
+class Application_Controller_Action extends Application_Controller_ModuleAccess
+{
 
     /**
      * Holds the Redirector Helper.
@@ -65,7 +66,8 @@ class Application_Controller_Action extends Application_Controller_ModuleAccess 
      *
      * @return void
      */
-    public function init() {
+    public function init()
+    {
         parent::init();
         $this->view->title = $this->_request->getModuleName() . '_' . $this->_request->getParam('controller') . '_'
             . $this->_request->getParam('action');
@@ -81,7 +83,8 @@ class Application_Controller_Action extends Application_Controller_ModuleAccess 
      * Sets the 'action' parameter so title key is correct.
      * @return void
      */
-    protected function _forwardToAction($action) {
+    protected function _forwardToAction($action)
+    {
         $this->_request->setParam('action', $action);
         $this->_forward($action);
     }
@@ -89,17 +92,18 @@ class Application_Controller_Action extends Application_Controller_ModuleAccess 
     /**
      * Method called when access to module has been denied.
      */
-    public function moduleAccessDeniedAction() {
+    public function moduleAccessDeniedAction()
+    {
         // we are not allowed to access this module -- but why?
         $identity = Zend_Auth::getInstance()->getIdentity();
 
         $errorcode = 'no_identity_error';
-        if (!empty($identity)) {
+        if (! empty($identity)) {
             $errorcode = 'wrong_identity_error';
         }
 
         // Forward to module auth
-        $this->_flashMessenger->addMessage(array('level' => 'failure', 'message' => $errorcode));
+        $this->_flashMessenger->addMessage(['level' => 'failure', 'message' => $errorcode]);
 
         $returnParams = $this->_helper->returnParams();
 
@@ -109,29 +113,17 @@ class Application_Controller_Action extends Application_Controller_ModuleAccess 
     /**
      * Gibt das Formular aus wenn kein ViewScript vorhanden ist.
      *
-     * Durch diese Funktion können die ganzen View Scripte, die nur ein Formular ausgeben eingespart werden. Der
-     * Controller ruft einfach diese Funktion auf, wenn ein Formular ausgegeben werde sollte. Wenn doch ein View
-     * Skript für die Action existiert, dann wird das Formular in der View Variable 'form' gespeichert und kann
+     * Durch diese Funktion können die ganzen View Scripte, die nur ein Formular ausgeben, eingespart werden. Der
+     * Controller ruft einfach diese Funktion auf, wenn ein Formular ausgegeben werden sollte. Wenn doch ein View
+     * Script für die Action existiert, dann wird das Formular in der View Variable 'form' gespeichert und kann
      * im View Script verwendet werden.
      *
      * @param $form
+     *
+     * TODO remove and use action helper directly
      */
-    protected function renderForm($form) {
-        if ($this->isViewScriptPresent() === false) {
-            $this->_helper->viewRenderer->setNoRender(true);
-            echo $form;
-        }
-        else {
-            $this->view->form = $form;
-        }
+    protected function renderForm($form)
+    {
+        $this->_helper->renderForm($form);
     }
-
-    /**
-     * Prueft, ob fuer die Action ein View Script existiert.
-     * @return bool
-     */
-    protected function isViewScriptPresent() {
-        return (!$this->view->getScriptPath($this->_helper->viewRenderer->getViewScript())) ? false : true;
-    }
-
 }

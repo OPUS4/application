@@ -19,7 +19,8 @@
  * @version     $Id$
  */
 
-function printMessage($message) {
+function printMessage($message)
+{
     echo strftime('%d.%m.%Y %H:%M:%S', time()) . $message . "\n";
 }
 
@@ -47,7 +48,7 @@ if (false === $solr->ping()) {
 $startTime = time();
 $docIds = Opus_Document::getAllIds();
 
-$documents = array();
+$documents = [];
 
 $conf = Zend_Registry::get('Zend_Config');
 $baseFilePath = null;
@@ -57,7 +58,6 @@ if ((true === isset($conf->file->destinationPath)) and
 }
 
 foreach ($docIds as $docId) {
-
     printMessage(' Indexing document : ' . $docId);
 
     $opusDoc = new Opus_Document($docId);
@@ -67,9 +67,9 @@ foreach ($docIds as $docId) {
     if ((null !== $baseFilePath) and
         ('published' === $opusDoc->getServerState())) {
         $files = $opusDoc->getFile();
-        
+
         if (false === is_array($files)) {
-            $files = array($files);
+            $files = [$files];
         }
 
         foreach ($files as $file) {
@@ -101,13 +101,11 @@ foreach ($docIds as $docId) {
                         );
                         break;
                 }
-            }
-            else {
+            } else {
                 printMessage(' Skipped file "' . $filePath . '". Reason: File not found.');
             }
         }
-    }
-    else {
+    } else {
         printMessage(
             ' Skipped indexing of document files. Reason: no base path to files or document is not published.'
         );
@@ -119,13 +117,12 @@ foreach ($docIds as $docId) {
         printMessage(' Committing data set of ' . $commitRange . ' values.');
         $solr->addDocuments($documents);
         $solr->commit();
-        $documents = array();
+        $documents = [];
         printMessage(' Committing done.');
     }
-    
 }
 
-if (count($documents) > 0 ) {
+if (count($documents) > 0) {
     printMessage(' Committing data set of ' . count($documents) . ' values.');
     $solr->addDocuments($documents);
     $solr->commit();
@@ -138,5 +135,4 @@ printMessage(' Optimizing done.');
 
 $stopTime = time();
 $time = $stopTime - $startTime;
-echo 'Time to index all documents: ' . gmstrftime('%H:%M:%S', $time) . $EOL; 
-
+echo 'Time to index all documents: ' . gmstrftime('%H:%M:%S', $time) . $EOL;

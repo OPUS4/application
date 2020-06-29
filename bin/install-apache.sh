@@ -36,7 +36,6 @@ set -e
 # TODO determine dynamically or make configurable?
 APACHE_SITE_DIR='/etc/apache2/sites-available'
 
-
 SCRIPT_NAME="`basename "$0"`"
 SCRIPT_NAME_FULL="`readlink -f "$0"`"
 SCRIPT_PATH="`dirname "$SCRIPT_NAME_FULL"`"
@@ -48,6 +47,18 @@ INPUT_FILENAME="$2"
 OUTPUT_FILENAME="$3"
 OS="$4"
 RESTART_APACHE="$5"
+PARAMETER_CONF="$6"
+# Check for auto installation
+if [[ -n $PARAMETER_CONF ]]
+then
+  if [ -f $PARAMETER_CONF ];
+  then
+    source "$PARAMETER_CONF"
+  else
+    echo "The file `basename "$PARAMETER_CONF"` does not exist"
+    exit 1
+  fi
+fi
 
 # Apache Version
 if [ -z "$INPUT_FILENAME" ] ;
@@ -68,7 +79,7 @@ INPUT_FILE="$BASEDIR/apacheconf/$INPUT_FILENAME"
 # Check if output file exists
 if [ -e "$OUTPUT_FILE" ] ;
 then
-  read -p "File $OUTPUT_FILE already exists. Create backup? [Y]: " REPLACE_FILE
+  #read -p "File $OUTPUT_FILE already exists. Create backup? [Y]: " REPLACE_FILE
 
   if [ -z "$REPLACE_FILE" ] || [ "$REPLACE_FILE" = Y ] || [ "$REPLACE_FILE" = Y ] ;
   then

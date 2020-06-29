@@ -26,7 +26,7 @@
  *
  * @category    Tests
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -36,7 +36,10 @@
  * The unit test depend on the available document types in the doctypes folder
  * as well as the configuration in the file tests.ini.
  */
-class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerTestCase {
+class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerTestCase
+{
+
+    protected $additionalResources = 'translation';
 
     /**
      * @var Application_Controller_Action_Helper_DocumentTypes Instance of DocumentTypes helper for testing.
@@ -46,16 +49,17 @@ class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerT
     /**
      * Setup tests.
      */
-    public function setUp() {
+    public function setUp()
+    {
         parent::setUp();
         $this->docTypeHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
     }
 
-
     /*
      * Testet, ob die Validierung der Dokumenttypen korrekt ist.
      */
-    public function testDoctypeValidation() {
+    public function testDoctypeValidation()
+    {
         $validationArray = $this->docTypeHelper->validateAll();
         $this->assertTrue($validationArray['foobar'], 1);
         $this->assertTrue($validationArray['bazbar'], 1);
@@ -66,7 +70,8 @@ class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerT
     /*
      * Testet, ob die Dokumenttypen, die inkludiert oder exkludiert sind, ausgegeben werden
      */
-    public function testActiveDoctypes() {
+    public function testActiveDoctypes()
+    {
         $validationArray = $this->docTypeHelper->getDocumentTypes();
         $this->assertArrayHasKey('all', $validationArray);
         $this->assertArrayHasKey('preprint', $validationArray);
@@ -78,13 +83,14 @@ class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerT
     /*
      * Testet, ob die korrekte Fehlermeldung ausgegeben wird, wenn das Dokument nicht validiert werden kann
      */
-    public function testErrorMessage() {
+    public function testErrorMessage()
+    {
         $this->docTypeHelper->validate('demo_invalid');
         $errors = $this->docTypeHelper->getErrors();
         $demoInvalidErrors = $errors['demo_invalid'];
-        $this->assertEquals("Element '{http://www.opus-repository.org/schema/documenttype}field', ".
+        $this->assertEquals("Element '{http://www.opus-repository.org/schema/documenttype}field', " .
             "attribute 'dataType': The attribute 'dataType' is not allowed.\n", $demoInvalidErrors[0]->message);
-        $this->assertEquals("Element '{http://www.opus-repository.org/schema/documenttype}default', ".
+        $this->assertEquals("Element '{http://www.opus-repository.org/schema/documenttype}default', " .
             "attribute 'Value': The attribute 'Value' is not allowed.\n", $demoInvalidErrors[1]->message);
     }
 
@@ -93,7 +99,8 @@ class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerT
      *
      * The available document types are configured in *tests.ini*.
      */
-    public function testGetDocumentTypes() {
+    public function testGetDocumentTypes()
+    {
         $documentTypes = $this->docTypeHelper->getDocumentTypes();
 
         $this->assertNotNull($documentTypes);
@@ -112,7 +119,8 @@ class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerT
     /**
      * Test getting standard template name for document type.
      */
-    public function testGetTemplateName() {
+    public function testGetTemplateName()
+    {
         $template = $this->docTypeHelper->getTemplateName('preprint');
 
         $this->assertNotNull($template);
@@ -124,7 +132,8 @@ class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerT
      *
      * The custom template name is configured in *tests.ini*.
      */
-    public function testGetCustomTemplateName() {
+    public function testGetCustomTemplateName()
+    {
         $template = $this->docTypeHelper->getTemplateName('foobar');
 
         $this->assertNotNull($template);
@@ -134,32 +143,37 @@ class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerT
     /**
      * Test checking validity of allowed document type.
      */
-    public function testIsValid() {
+    public function testIsValid()
+    {
         $this->assertTrue($this->docTypeHelper->isValid('preprint'));
     }
 
     /**
      * Test checking validity of excluded document type.
      */
-    public function testIsNotValid() {
+    public function testIsNotValid()
+    {
         $this->assertFalse($this->docTypeHelper->isValid('article'));
     }
 
     /**
      * Test getting DOM for document type.
      */
-    public function testGetDocument() {
+    public function testGetDocument()
+    {
         $dom = $this->docTypeHelper->getDocument('preprint');
 
         $this->assertNotNull($dom);
     }
 
-    public function testGetDocumentThrowsException() {
+    public function testGetDocumentThrowsException()
+    {
         $this->setExpectedException('Application_Exception');
         $this->docTypeHelper->getDocument('article');
     }
 
-    public function testGetDocumentThrowsSchemaInvalidException() {
+    public function testGetDocumentThrowsSchemaInvalidException()
+    {
         $this->setExpectedException('Application_Exception');
         $this->docTypeHelper->getDocument('demo_invalid');
     }
@@ -167,7 +181,8 @@ class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerT
     /**
      * Testing helper without any configuration.
      */
-    public function testGetAllDocumentTypes() {
+    public function testGetAllDocumentTypes()
+    {
         $config = Zend_Registry::get('Zend_Config');
         unset($config->documentTypes);
 
@@ -181,7 +196,8 @@ class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerT
      * Test getting document types twice.
      */
 
-    public function testGetDocumentTypesTwice() {
+    public function testGetDocumentTypesTwice()
+    {
         $documentTypes = $this->docTypeHelper->getDocumentTypes();
 
         $documentTypes2 = $this->docTypeHelper->direct(); // test direct method
@@ -192,7 +208,8 @@ class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerT
     /**
      * Test getting template name for unknown document type.
      */
-    public function testGetTemplateForInvalidDocumentType() {
+    public function testGetTemplateForInvalidDocumentType()
+    {
         $template = $this->docTypeHelper->getTemplateName('unknownDocType');
 
         $this->assertNull($template);
@@ -204,7 +221,8 @@ class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerT
      * @expectedException Application_Exception
      * @expectedExceptionMessage Path to document types not configured
      */
-    public function testGetDocumentTypesWithPathNotSet() {
+    public function testGetDocumentTypesWithPathNotSet()
+    {
         $config = Zend_Registry::get('Zend_Config');
 
         unset($config->publish->path->documenttypes);
@@ -215,14 +233,15 @@ class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerT
     /**
      * Check if all document types can be translated.
      */
-    public function testTranslationOfDocumentTypes() {
-        $excludeFromTranslationCheck = array('demo_invalid', 'foobar', 'barbaz', 'bazbar');
+    public function testTranslationOfDocumentTypes()
+    {
+        $excludeFromTranslationCheck = ['demo_invalid', 'foobar', 'barbaz', 'bazbar'];
         $translate = Zend_Registry::get('Zend_Translate');
 
         $documentTypes = $this->docTypeHelper->getDocumentTypes();
 
         foreach ($documentTypes as $docType => $docTypePath) {
-            if (!in_array($docType, $excludeFromTranslationCheck)) {
+            if (! in_array($docType, $excludeFromTranslationCheck)) {
                 $this->assertNotEquals($docType, $translate->translate($docType), 'Could not translate document type: ' . $docType);
             }
         }
@@ -253,7 +272,6 @@ class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerT
                 }
             }
         }
-
         libxml_use_internal_errors($useInternalErrors);
         libxml_clear_errors();
     }
@@ -262,7 +280,8 @@ class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerT
      * Dieser Test vergleicht jedes DokumentTemplate mit jedem DokumentTyp und umgekehrt und validiert,
      * dass beide in Paaren vorkommen.
      */
-    public function testDocumentTypesAndTemplates() {
+    public function testDocumentTypesAndTemplates()
+    {
         $config = Zend_Registry::get('Zend_Config');
         $templates = $this->getFileNames($config->publish->path->documenttemplates, '.phtml');
         $types = $this->getFileNames($config->publish->path->documenttypes, '.xml');
@@ -282,8 +301,9 @@ class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerT
         $this->assertEmpty($array2, 'Template missing for doctype: ' . implode(", ", $array2));
     }
 
-    private function getFileNames($path, $extension) {
-        $fileNames = array();
+    private function getFileNames($path, $extension)
+    {
+        $fileNames = [];
 
         if ($path instanceof Zend_Config) {
             $path = $path->toArray();
@@ -298,7 +318,8 @@ class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerT
         return $fileNames;
     }
 
-    public function testGetDocTypesPathAsArray() {
+    public function testGetDocTypesPathAsArray()
+    {
         $paths = $this->docTypeHelper->getDocTypesPath();
 
         $this->assertNotNull($paths);
@@ -308,14 +329,15 @@ class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerT
         $this->assertContains(APPLICATION_PATH . '/tests/resources/doctypes', $paths);
     }
 
-    public function testGetDocTypesPath() {
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
-            'publish' => array(
-                'path' => array(
+    public function testGetDocTypesPath()
+    {
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'publish' => [
+                'path' => [
                     'documenttypes' => APPLICATION_PATH . '/application/configs/doctypes'
-                )
-            )
-        )));
+                ]
+            ]
+        ]));
 
         $paths = $this->docTypeHelper->getDocTypesPath();
 
@@ -324,7 +346,8 @@ class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerT
         $this->assertEquals(APPLICATION_PATH . '/application/configs/doctypes', $paths);
     }
 
-    public function testGetTemplates() {
+    public function testGetTemplates()
+    {
         $templates = $this->docTypeHelper->getTemplates();
 
         $this->assertCount(31, $templates);
@@ -336,7 +359,8 @@ class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerT
         }
     }
 
-    public function testTemplateForEveryDocumentType() {
+    public function testTemplateForEveryDocumentType()
+    {
         $config = Zend_Registry::get('Zend_Config');
         unset($config->documentTypes);
 
@@ -357,8 +381,8 @@ class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerT
         }
     }
 
-    public function testGetTemplatePathUnknownName() {
+    public function testGetTemplatePathUnknownName()
+    {
         $this->assertNull($this->docTypeHelper->getTemplatePath('unknown'));
     }
-
 }

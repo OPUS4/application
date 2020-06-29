@@ -35,12 +35,14 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Application_Form_TableHeader extends Application_Form_Abstract {
+class Application_Form_TableHeader extends Application_Form_Abstract
+{
 
     private $_columns = null;
 
-    public function __construct($columns, $options = null) {
-        if (!is_array($columns)) {
+    public function __construct($columns, $options = null)
+    {
+        if (! is_array($columns)) {
             throw new Application_Exception(__METHOD__ . ' Parameter \'columns\' must be array.');
         }
 
@@ -49,40 +51,42 @@ class Application_Form_TableHeader extends Application_Form_Abstract {
         parent::__construct($options);
     }
 
-    public function init() {
+    public function init()
+    {
         parent::init();
 
         $this->setDecorators(
-            array(
-            array('ViewScript', array('viewScript' => 'tableheader.phtml'))
-            )
+            [
+            ['ViewScript', ['viewScript' => 'tableheader.phtml']]
+            ]
         );
     }
 
-    public function getColumnLabel($index) {
+    public function getColumnLabel($index)
+    {
         if (isset($this->_columns[$index]) && isset($this->_columns[$index]['label'])) {
             return $this->_columns[$index]['label'];
-        }
-        else {
-            return '&nbsp;';
+        } else {
+            return null;
         }
     }
 
-    public function getColumnClass($index) {
+    public function getColumnClass($index)
+    {
         if (isset($this->_columns[$index]) && isset($this->_columns[$index]['class'])) {
             return $this->_columns[$index]['class'];
-        }
-        else {
+        } else {
             return '';
         }
     }
 
-    public function getColumnCount() {
+    public function getColumnCount()
+    {
         return count($this->_columns);
     }
 
-    public function getColumns() {
+    public function getColumns()
+    {
         return $this->_columns;
     }
-
 }

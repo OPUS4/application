@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -27,13 +28,16 @@
  * @category    Application Unit Test
  * @package     Admin_Form_Document
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class Admin_Form_Document_FileTest extends ControllerTestCase {
+class Admin_Form_Document_FileTest extends ControllerTestCase
+{
 
-    public function testConstructForm() {
+    protected $additionalResources = ['database'];
+
+    public function testConstructForm()
+    {
         $form = new Admin_Form_Document_File();
 
         $this->assertEquals(0, count($form->getElements()));
@@ -42,7 +46,8 @@ class Admin_Form_Document_FileTest extends ControllerTestCase {
         $this->assertNotNull($form->getDecorator('ViewScript'));
     }
 
-    public function testPopulateFromModel() {
+    public function testPopulateFromModel()
+    {
         $form = new Admin_Form_Document_File();
 
         $file = new Opus_File();
@@ -53,5 +58,4 @@ class Admin_Form_Document_FileTest extends ControllerTestCase {
 
         $this->assertEquals($file, $form->getModel());
     }
-
 }

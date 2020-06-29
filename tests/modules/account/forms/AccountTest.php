@@ -24,17 +24,19 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    TODO
+ * @category    Test
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
  * Basic unit tests for account form for users.
  */
-class Account_Form_AccountTest extends ControllerTestCase {
+class Account_Form_AccountTest extends ControllerTestCase
+{
+
+    protected $additionalResources = ['database', 'translation'];
 
     private $account = null;
 
@@ -44,8 +46,7 @@ class Account_Form_AccountTest extends ControllerTestCase {
 
         $account = Opus_Account::fetchAccountByLogin('user');
 
-        if (is_null($account))
-        {
+        if (is_null($account)) {
             $account = new Opus_Account();
             $account->setLogin('user');
             $account->setPassword('userpwd');
@@ -56,8 +57,7 @@ class Account_Form_AccountTest extends ControllerTestCase {
 
     public function tearDown()
     {
-        if (!is_null($this->account))
-        {
+        if (! is_null($this->account)) {
             $this->account->delete();
         }
 
@@ -67,7 +67,8 @@ class Account_Form_AccountTest extends ControllerTestCase {
     /**
      * Test creating an account form.
      */
-    public function testCreateForm() {
+    public function testCreateForm()
+    {
         $form = new Account_Form_Account('user');
 
         $this->assertNotNull($form);
@@ -76,7 +77,8 @@ class Account_Form_AccountTest extends ControllerTestCase {
     /**
      * OPUSVIER-2413 Regression Test.
      */
-    public function testDoNotLowerCaseUsername() {
+    public function testDoNotLowerCaseUsername()
+    {
         $form = new Account_Form_Account('user');
 
         $username = $form->getElement("username");
@@ -86,39 +88,42 @@ class Account_Form_AccountTest extends ControllerTestCase {
         $this->assertTrue($username->getValue() === 'DummYuser');
     }
 
-    public function testChangedLoginNameValidationExistingLoginNameAccount() {
+    public function testChangedLoginNameValidationExistingLoginNameAccount()
+    {
         $form = new Account_Form_Account('user');
 
         $this->assertNotNull($form);
 
-        $postData = array(
+        $postData = [
             'username' => 'admin',
             'roleguest' => '1',
             'password' => 'notchanged',
             'confirmPassword' => 'notchanged'
-            );
+        ];
 
         $this->assertFalse($form->isValid($postData));
     }
 
-    public function testChangedLoginNameValidationNewLoginName() {
+    public function testChangedLoginNameValidationNewLoginName()
+    {
         $form = new Account_Form_Account();
         $account = new Opus_Account(null, null, 'user');
         $form->populateFromModel($account);
 
         $this->assertNotNull($form);
 
-        $postData = array(
+        $postData = [
             'username' => 'newuser',
             'roleguest' => '1',
             'password' => 'notchanged',
             'confirm' => 'notchanged'
-            );
+        ];
 
         $this->assertTrue($form->isValid($postData));
     }
 
-    public function testEditValidationSameAccount() {
+    public function testEditValidationSameAccount()
+    {
         $form = new Account_Form_Account();
         $account = new Opus_Account(null, null, 'user');
         $form->populateFromModel($account);
@@ -126,28 +131,29 @@ class Account_Form_AccountTest extends ControllerTestCase {
         // check that form was populated
         $this->assertEquals('user', $form->getElement('username')->getValue());
 
-        $postData = array(
+        $postData = [
             'username' => 'user',
             'oldLogin' => 'user', // added by AccountController based on ID
             'roleguest' => '1',
             'password' => 'notchanged',
             'confirm' => 'notchanged'
-            );
+        ];
 
         $this->assertTrue($form->isValid($postData));
     }
 
-    public function testValidationMissmatchedPasswords() {
+    public function testValidationMissmatchedPasswords()
+    {
         $form = new Account_Form_Account();
         $account = new Opus_Account(null, null, 'user');
         $form->populateFromModel($account);
 
-        $postData = array(
+        $postData = [
             'username' => 'user',
             'roleguest' => '1',
             'password' => 'password',
             'confirm' => 'different'
-        );
+        ];
 
         $this->assertFalse($form->isValid($postData));
 
@@ -157,18 +163,19 @@ class Account_Form_AccountTest extends ControllerTestCase {
         $this->assertTrue(in_array('notMatch', $errors['confirm']));
     }
 
-    public function testValidationBadEmail() {
+    public function testValidationBadEmail()
+    {
         $form = new Account_Form_Account();
         $account = new Opus_Account(null, null, 'user');
         $form->populateFromModel($account);
 
-        $postData = array(
+        $postData = [
             'username' => 'user',
             'roleguest' => '1',
             'email' => 'notAnEmail',
             'password' => 'password',
             'confirm' => 'password'
-        );
+        ];
 
         $this->assertFalse($form->isValid($postData));
 
@@ -177,6 +184,4 @@ class Account_Form_AccountTest extends ControllerTestCase {
         $this->assertTrue(isset($errors['email']));
         $this->assertTrue(in_array('emailAddressInvalidFormat', $errors['email']));
     }
-
 }
-

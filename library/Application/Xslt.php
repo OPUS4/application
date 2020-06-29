@@ -45,7 +45,8 @@ class Application_Xslt
     /**
      * Prevent external construction of this class.
      */
-    private function __construct() {
+    private function __construct()
+    {
     }
 
     /**
@@ -54,8 +55,7 @@ class Application_Xslt
      */
     public static function getInstance()
     {
-        if (is_null(self::$_singleton))
-        {
+        if (is_null(self::$_singleton)) {
             self::$_singleton = new Application_Xslt();
         }
 
@@ -72,8 +72,8 @@ class Application_Xslt
     {
         $helper = self::getInstance()->findHelper($method);
 
-        if (!is_null($helper)) {
-            return call_user_func_array(array($helper, $method), $arguments);
+        if (! is_null($helper)) {
+            return call_user_func_array([$helper, $method], $arguments);
         }
 
         return parent::__call($method, $arguments);
@@ -85,7 +85,8 @@ class Application_Xslt
      * @return mixed Zend_View_Helper
      * @throws Zend_Exception
      */
-    public function findHelper($method) {
+    public function findHelper($method)
+    {
         $helper = Zend_Registry::get('Opus_View')->getHelper($method);
 
         return $helper;
@@ -99,8 +100,7 @@ class Application_Xslt
     public static function registerViewHelper($processor, $allowedFunctions)
     {
         $functions = array_map(
-            function($value)
-            {
+            function ($value) {
                 return 'Application_Xslt::' . $value;
             },
             $allowedFunctions
@@ -108,5 +108,4 @@ class Application_Xslt
 
         $processor->registerPHPFunctions($functions);
     }
-
 }

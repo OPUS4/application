@@ -27,18 +27,20 @@
  * @category    Application Unit Test
  * @package     Form_Element
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2017-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 class Application_Form_Element_IpAddressTest extends FormElementTestCase
 {
 
+    protected $additionalResources = 'translation';
+
     public function setUp()
     {
         $this->_formElementClass = 'Application_Form_Element_IpAddress';
         $this->_expectedDecoratorCount = 8;
-        $this->_expectedDecorators = array('ViewHelper', 'Placeholder', 'Description', 'ElementHint', 'Errors',
-            'ElementHtmlTag', 'LabelNotEmpty', 'dataWrapper');
+        $this->_expectedDecorators = ['ViewHelper', 'Placeholder', 'Description', 'ElementHint', 'Errors',
+            'ElementHtmlTag', 'LabelNotEmpty', 'dataWrapper'];
         $this->_staticViewHelper = 'viewFormDefault';
         parent::setUp();
     }
@@ -63,5 +65,4 @@ class Application_Form_Element_IpAddressTest extends FormElementTestCase
 
         $this->assertFalse($element->isValid('0000:0000:0000:0000:0000:0000:0000:0001'));
     }
-
 }

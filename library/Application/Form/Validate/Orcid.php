@@ -38,7 +38,8 @@
  * @category    Application
  * @package     Form_Validate
  */
-class Application_Form_Validate_Orcid extends Zend_Validate_Abstract {
+class Application_Form_Validate_Orcid extends Zend_Validate_Abstract
+{
 
     /**
      * Constant for message for invalid format.
@@ -59,10 +60,10 @@ class Application_Form_Validate_Orcid extends Zend_Validate_Abstract {
      * Translation keys for validation messages.
      * @var array
      */
-    protected $_messageTemplates = array(
+    protected $_messageTemplates = [
         self::NOT_VALID_FORMAT => 'validation_error_person_orcid',
         self::NOT_VALID_CHECKSUM => 'validation_error_person_orcid_checksum'
-    );
+    ];
 
     /**
      * Returns true if the orcid identifier can be validated.
@@ -71,8 +72,9 @@ class Application_Form_Validate_Orcid extends Zend_Validate_Abstract {
      * @return boolean
      * @throws Zend_Validate_Exception If validation of $value is impossible
      */
-    public function isValid($value) {
-        if (strlen($value) != 19 || !preg_match(self::PATTERN, $value)) {
+    public function isValid($value)
+    {
+        if (strlen($value) != 19 || ! preg_match(self::PATTERN, $value)) {
             $this->_error(self::NOT_VALID_FORMAT);
             return false;
         }
@@ -83,7 +85,6 @@ class Application_Form_Validate_Orcid extends Zend_Validate_Abstract {
         }
 
         return true;
-
     }
 
     /**
@@ -92,7 +93,8 @@ class Application_Form_Validate_Orcid extends Zend_Validate_Abstract {
      * @param string number without check digit
      * @return string check digit
      */
-    public static function generateCheckDigit($baseDigits) {
+    public static function generateCheckDigit($baseDigits)
+    {
         $total = 0;
         for ($i = 0; $i < strlen($baseDigits); $i++) {
             if ($baseDigits{$i} != '-') {
@@ -104,5 +106,4 @@ class Application_Form_Validate_Orcid extends Zend_Validate_Abstract {
         $result = (12 - $remainder) % 11;
         return $result == 10 ? "X" : (string) $result;
     }
-
 }
