@@ -1,5 +1,89 @@
 # OPUS 4 Release Notes
 
+## Release 4.7 2020-07-xx
+
+Die Änderungen in OPUS __4.7__ hier, ergänzen was schon für OPUS __4.7-RC__ weiter 
+unten beschrieben wurde. Für die vollständigen Informationen zur neuen Version bitte
+die Notizen für beider Versionen lesen.
+ 
+OPUS 4.7 befindet sich auf dem MASTER Branch auf GitHub.
+
+<https://github.com/OPUS4/application>
+
+TODO Hinweis auf die Dokumentation!
+
+
+### Update
+
+Es wurde noch Probleme beim Import von komplexeren FAQ-Anpassungen in die Datenbank
+behoben. Nach dem Update sollte die FAQ-Inhalte so angezeigt werden wie vorher.
+
+#### Ungültige Namen von CollectionRoles
+
+Die Übersetzungen von CollectionRoles können jetzt direkt im Edit-Formular in der 
+"Sammlungsverwaltung" editiert werden. Die Übersetzung von Collections (Sammlungen)
+ist komplizierter und ist für später geplant. Der Name einer CollectionRole wird als
+Teil des Übersetzungsschlüssels verwendet. In manchen Instanzen wurden Namen mit 
+Sonderzeichen angelegt was zu technischen Schwierigkeiten bei der Verwendung als 
+Schlüssel führt. Daher werden beim Update alle Namen validiert. Sollte ein Name nicht
+gültig sein, weil Sonderzeichen oder Leerzeichen verwendet wurden, wird versucht den
+Namen durch den OAI-Namen zu ersetzen. Falls dieser auch nicht gültig ist, wird ein 
+Name aus der ID der CollectionRole generiert. Der ursprüngliche Name wird als 
+Übersetzung für sämtliche Sprachen gespeichert, so dass nach dem Update die Anzeige 
+so wie vorher funktionieren sollte. Die Schritte werden im Update-Log dokumentiert.
+Die generierten Namen können nach dem Update durch einen Administrator angepasst 
+werden. Die Übersetzungsschlüssel werden dabei automatisch umbenannt.
+
+### Übersetzungsverwaltung
+
+Die Übersetzungsverwaltung findet sich in der Administration unter 
+"Oberflächenanpassungen > Übersetzungen". Hier wurden noch einige Bug beseitigt.
+Die Reihenfolge der angezeigten Sprachen richtet sich nun nach dem Parameter
+__supportedLanguages__ in der Konfiguration (`config.ini`). Es ist möglich eine 
+neue Sprache hinzuzufügen, z.B. "de,en,fr". In den Edit-Formularen taucht dann 
+Französisch als dritte Sprache auf. Sobald ein einziger Eintrag für die neue 
+Sprache existiert kann sie in den Einstellungen für die Nutzeroberfläche aktiviert 
+werden.
+
+TODO Fallback Languages
+
+Die Spracheinstellungen für Sprachen wurden vom "Einstellungen"-Bereich der 
+Administration zur Übersetzungsverwaltung verschoben.
+
+### FAQ-Seite editieren
+
+Auf der FAQ Seite tauchen nun Editier-Icons auf, wenn der Nutzer Zugriff auf das 
+Setup-Modul hat. Diese Links erlauben das Editieren der Sektionsüberschriften und
+der FAQ Einträge. Neue Sektionen und Einträge können auf der "FAQ-Seite" im Setup 
+hinzugefügt werden. Die entsprechenden Übersetzungsschlüssel tauchen dann auf der
+FAQ-Seite auf und können von dort aus editiert werden.
+
+### Logging
+
+Bei Fehlern wird jetzt die Request URI mit ins Log geschrieben, um sehen zu können
+welcher Aufruf das Problem ausgelöst hat.
+
+Die Fehlermeldungen für Übersetzungsschlüssel, die nicht übersetzt werden konnten, 
+werden jetzt in eine separate Datei geschrieben. Die Anzahl dieser Meldungen wurde 
+außerdem deutlich verringert. Es gibt aber immer noch Stellen an denen versucht 
+wird Werte von Feldern zu übersetzen, die nicht übersetzt werden können.  
+
+### Datenmodel
+
+Das Sortierfeld für mit Dokumenten verknüpfte Personen, z.B. Autoren, wurde 
+vergrößert, um mit mehr als 255 Autoren klarzukommen.
+
+### Suche 
+
+Die Konfiguration von Facetten wurde erweitert. Es können nur zusätzliche Optionen
+für die einzelnen Facette definiert werden. Damit können nur auch Enrichments als
+Facetten eingesetzt werden. Es kann bestimmt werden, ob eine Facette für alle Nutzer 
+sichtbar ist oder nur für Administratoren.
+
+TODO weitere Informationen?
+
+---
+
 ## Release Candidate 4.7-RC 2020-04-07
 
 Dieser Release Candidate sollte nicht für produktive Instanzen verwendet werden. Er
