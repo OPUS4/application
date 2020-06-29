@@ -32,7 +32,7 @@
  * @package     Application_Controller_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
  * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 class Application_Controller_Action_Helper_Breadcrumbs extends Application_Controller_Action_Helper_Abstract
@@ -129,7 +129,7 @@ class Application_Controller_Action_Helper_Breadcrumbs extends Application_Contr
     {
         $helper = new Application_Util_DocumentAdapter($this->getView(), $document);
         $title = $helper->getMainTitle();
-        return (strlen($title) > self::TITLE_MAX_LENGTH) ? substr($title, 0, self::TITLE_MAX_LENGTH)
+        return (mb_strlen($title) > self::TITLE_MAX_LENGTH) ? mb_substr($title, 0, self::TITLE_MAX_LENGTH)
             . self::TITLE_SHORT_SUFFIX : $title;
     }
 }
