@@ -146,7 +146,7 @@ class Oai_Model_Resumptiontokens
             $fileName .= '.' . $this->_fileExtension;
         }
 
-        if (true === file_exists($fileName)) {
+        if (true === is_readable($fileName)) {
             $fileContents = file_get_contents($fileName);
             // if data is not unserializueabke an E_NOTICE will be triggerd and false returned
             // avoid this E_NOTICE
