@@ -82,7 +82,7 @@ foreach ($docIds as $docId) {
                 continue;
             }
 
-            if (true === file_exists($filePath)) {
+            if (true === is_readable($filePath)) {
                 $mimeType = mime_content_type($filePath);
                 switch ($mimeType) {
                     case 'application/pdf':

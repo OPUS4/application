@@ -63,7 +63,7 @@ abstract class SetupControllerTestCase extends ControllerTestCase
     {
         $this->changeFileMode($this->config->contentBasepath, "$contentBasepathPerms");
         foreach ($this->config->translationSources->toArray() as $tmxSource) {
-            if (file_exists($tmxSource)) {
+            if (is_readable($tmxSource)) {
                 $this->changeFileMode($tmxSource, "$translationSourcesPerms");
             }
         }

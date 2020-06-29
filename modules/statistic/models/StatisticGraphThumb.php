@@ -72,7 +72,7 @@ class Statistic_Model_StatisticGraphThumb
         $bplot->SetFillColor('gray');
 
         //show background image if file exists
-        if (false === empty($this->_bgImg) && file_exists($this->_bgImg)) {
+        if (false === empty($this->_bgImg) && is_readable($this->_bgImg)) {
             $graph->SetBackgroundImage($this->_bgImg, BGIMG_FILLFRAME);
         }
         $bplot->SetFillGradient("gray", "darkgray", GRAD_HOR);
