@@ -34,49 +34,51 @@
  */
 ?>
 
-<table>
-    <tr>
-        <td class="label"><?= $this->translate('admin_account_label_login') ?></td>
-        <td class="value"><?= htmlspecialchars(strtolower($this->account->getLogin()))?></td>
-    </tr>
-    <tr>
-        <td class="label"><?= $this->translate('admin_account_label_firstname') ?></td>
-        <td class="value"><?= htmlspecialchars($this->account->getFirstName()) ?></td>
-    </tr>
-    <tr>
-        <td class="label"><?= $this->translate('admin_account_label_lastname') ?></td>
-        <td class="value"><?= htmlspecialchars($this->account->getLastName()) ?></td>
-    </tr>
-    <tr>
-        <td class="label"><?= $this->translate('admin_account_label_email') ?></td>
-        <td class="value"><?= htmlspecialchars($this->account->getEmail()) ?></td>
-    </tr>
-    <tr>
-        <td class="label"><?= $this->translate('admin_account_label_roles') ?></td>
-        <td class="value">
+<div class="account-info">
+    <div>
+        <div class="label"><?= $this->translate('admin_account_label_login') ?></div>
+        <div class="value"><?= htmlspecialchars(strtolower($this->account->getLogin()))?></div>
+    </div>
+    <div>
+        <div class="label"><?= $this->translate('admin_account_label_firstname') ?></div>
+        <div class="value"><?= htmlspecialchars($this->account->getFirstName()) ?></div>
+    </div>
+    <div>
+        <div class="label"><?= $this->translate('admin_account_label_lastname') ?></div>
+        <div class="value"><?= htmlspecialchars($this->account->getLastName()) ?></div>
+    </div>
+    <div>
+        <div class="label"><?= $this->translate('admin_account_label_email') ?></div>
+        <div class="value"><?= htmlspecialchars($this->account->getEmail()) ?></div>
+    </div>
+    <div>
+        <div class="label"><?= $this->translate('admin_account_label_roles') ?></div>
+        <div class="value">
             <?PHP foreach ($this->account->getRole() as $role) : ?>
             <?= htmlspecialchars($role) ?><br>
             <?PHP endforeach; ?>
-        </td>
-    </tr>
-</table>
+        </div>
+    </div>
+</div>
 
-<h2><?= $this->translate('admin_account_module_access_summary') ?></h2>
-<table>
+<fieldset>
+<legend><?= $this->translate('admin_account_module_access_summary') ?></legend>
+<table class="module-access-table">
     <tr>
         <th><?= $this->translate('admin_account_label_module') ?></th>
         <th><?= $this->translate('admin_account_label_has_access') ?></th>
         <th><?= $this->translate('admin_account_label_roles') ?></th>
     </tr>
-
-    <?php foreach ($this->allModules AS $module) : ?>
-      <tr><td><?= htmlspecialchars($module) ?></td>
-      <?php if (count($this->modulesRoles[$module]) > 0) : ?>
-        <td><b><?= $this->translate('answer_yes') ?></b></td>
-        <td><b><?= htmlspecialchars(implode(", ", $this->modulesRoles[$module])) ?></b></td>
-      <?php else : ?>
+    <?php foreach ($this->allModules as $module) : ?>
+      <tr class="<?= count($this->modulesRoles[$module]) > 0 ? 'access' : 'noaccess' ?>">
+          <td class="column-module"><?= htmlspecialchars($module) ?></td>
+        <?php if (count($this->modulesRoles[$module]) > 0) : ?>
+        <td><?= $this->translate('answer_yes') ?></td>
+        <td><?= htmlspecialchars(implode(", ", $this->modulesRoles[$module])) ?></td>
+        <?php else : ?>
         <td><?= $this->translate('answer_no') ?></td>
         <td>-</td>
-      <?php endif ?>
+        <?php endif ?>
     <?php endforeach ?>
 </table>
+</fieldset>

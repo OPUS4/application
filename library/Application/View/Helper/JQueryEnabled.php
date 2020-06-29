@@ -36,14 +36,15 @@
 /**
  * Checks if JQuery Library is available.
  */
-class Application_View_Helper_JQueryEnabled extends Zend_View_Helper_Abstract {
+class Application_View_Helper_JQueryEnabled extends Zend_View_Helper_Abstract
+{
 
-    public function jQueryEnabled() {
+    public function jQueryEnabled()
+    {
         $config = Zend_Registry::get('Zend_Config');
-        if (!isset($config->javascript->jquery->path)) {
+        if (! isset($config->javascript->jquery->path)) {
             return false;
         }
         return is_readable(APPLICATION_PATH . '/public/' . $config->javascript->jquery->path);
     }
-
 }

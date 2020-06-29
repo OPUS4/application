@@ -25,19 +25,28 @@ script:
   - mysql --version
   - java -version
   - ant -version
+  - travis_fold start "prepare_dependencies"
   - ant prepare-test-workspace prepare-workspace prepare-config -DdbUserName=root -DdbAdminName=root
-  - php db/createdb.php
-  - mysql opusdb -u root --password='' -e 'SELECT * FROM schema_version'
-  - ant download-solr -DsolrVersion=5.5.5
-  - cd solr-5.5.5
+  - ant download-solr -DsolrVersion=7.7.2 -DdownloadDir=$HOME/downloads
+  - cd solr-7.7.2
   - ./bin/solr start
   - ./bin/solr create -c opus4
   - cd server/solr/opus4/conf
   - rm -f managed-schema schema.xml solrconfig.xml
-  - ln -s ../../../../../vendor/opus4-repo/search/schema-5.xml schema.xml
-  - ln -s ../../../../../vendor/opus4-repo/search/solrconfig-5.xml solrconfig.xml
+  - ln -s "$TRAVIS_BUILD_DIR/vendor/opus4-repo/search/conf/schema.xml" schema.xml
+  - ln -s "$TRAVIS_BUILD_DIR/vendor/opus4-repo/search/conf/solrconfig.xml" solrconfig.xml
   - cd ../../../../
   - ./bin/solr restart
   - cd ..
+  - travis_fold end "prepare_dependencies"
+  - travis_fold start "prepare_testing"
   - ant reset-testdata
-  - ./vendor/bin/phpunit --configuration ./tests/phpunit.xml ./tests/modules
+  - travis_fold end "prepare_testing"
+  - mysql opusdb -u root --password='' -e 'SELECT * FROM schema_version'
+  - composer cs-check
+  - ./vendor/bin/phpunit --configuration ./tests/phpunit.xml --no-coverage --testsuite library
+  - ./vendor/bin/phpunit --configuration ./tests/phpunit.xml --no-coverage --testsuite modules
+  - ./vendor/bin/phpunit --configuration ./tests/phpunit.xml --no-coverage --testsuite admin
+  - ./vendor/bin/phpunit --configuration ./tests/phpunit.xml --no-coverage --testsuite security
+  - php ./scripts/opus-smtp-dumpserver.php 2>&1 >>./opus-smtp-dumpserver.log &
+  - ./vendor/bin/phpunit --configuration ./tests/phpunit.xml --no-coverage --testsuite scripts

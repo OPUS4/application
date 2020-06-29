@@ -27,9 +27,8 @@
  * @category    Application
  * @package     Module_Export
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -39,7 +38,8 @@
  *
  * TODO The export mechanism should/could be separated from the request/response handling.
  */
-interface Application_Export_ExportPlugin {
+interface Application_Export_ExportPlugin
+{
 
     /**
      * Returns name of plugin.
@@ -76,5 +76,13 @@ interface Application_Export_ExportPlugin {
      */
     public function execute();
 
-}
+    /**
+     * @return bool returns true if plugin access is restricted to administrators
+     */
+    public function isAccessRestricted();
 
+    /**
+     * @return bool returns true if export of unpublished documents is allowed
+     */
+    public function isAllowExportOfUnpublishedDocs();
+}

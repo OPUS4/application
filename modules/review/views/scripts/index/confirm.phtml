@@ -46,7 +46,7 @@
     </div>
 
     <div class="instruction">
-        <?= $this->translate( $this->instruction ) ?>
+        <?= $this->translate($this->instruction) ?>
     </div>
 
     <table style="margin-left: 2em;">
@@ -62,7 +62,7 @@
     <h3><?= $this->translate('review_selected_documents_list') ?></h3>
 
     <table style="margin-left: 2em">
-    <?PHP foreach( $this->selected as $index => $docId ) : ?>
+    <?PHP foreach ($this->selected as $index => $docId) : ?>
         <tr>
         <?PHP $document = new Application_Util_DocumentAdapter($this, $docId); ?>
         <td style="vertical-align: top; padding-right: 1em"><?= $docId ?></td>
@@ -70,7 +70,7 @@
             <div class="title" style="font-weight: bold"><?= htmlspecialchars($document->getDocTitle()) ?></div>
             <div class="authors">
                 <?PHP $authorsCount = count($document->getAuthors()) - 1; ?>
-                <?PHP foreach($document->getAuthors() as $count => $author) : ?>
+                <?PHP foreach ($document->getAuthors() as $count => $author) : ?>
                     <?= $author['name'] ?>
                     <?= ($count < $authorsCount) ? ';' : ''?>
                 <?PHP endforeach; ?>

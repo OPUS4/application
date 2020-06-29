@@ -26,11 +26,13 @@
  *
  * @category    Application Unit Tests
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 class Admin_Model_CollectionRoleTest extends ControllerTestCase
 {
+
+    protected $additionalResources = ['database'];
 
     private $collectionRoleId;
 
@@ -59,7 +61,7 @@ class Admin_Model_CollectionRoleTest extends ControllerTestCase
         $collectionRole = new Opus_CollectionRole($this->collectionRoleId);
         $collectionRole->delete();
 
-        if (!is_null($this->moveTestColId)) {
+        if (! is_null($this->moveTestColId)) {
             $collectionRole = new Opus_CollectionRole($this->moveTestColId);
             $collectionRole->delete();
         }

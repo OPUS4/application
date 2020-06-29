@@ -27,27 +27,30 @@
  * @category    Tests
  * @package     Admin_Model
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
  * Class Solrsearch_Model_SearchTest
  */
-class Solrsearch_Model_SearchTest extends ControllerTestCase {
+class Solrsearch_Model_SearchTest extends ControllerTestCase
+{
 
-    public function testCreateSimpleSearchUrlParams() {
+    protected $configModifiable = true;
+
+    public function testCreateSimpleSearchUrlParams()
+    {
         $request = $this->getRequest();
 
-        $request->setParams(array(
+        $request->setParams([
             'searchtype' => 'all',
             'start' => '30',
             'rows' => '15',
             'query' => 'test',
             'sortfield' => 'year',
             'sortorder' => 'asc'
-        ));
+        ]);
 
         $model = new Solrsearch_Model_Search();
 
@@ -74,7 +77,8 @@ class Solrsearch_Model_SearchTest extends ControllerTestCase {
         $this->assertEquals('asc', $params['sortorder']);
     }
 
-    public function testCreateSimpleSearchUrlParamsWithDefaults() {
+    public function testCreateSimpleSearchUrlParamsWithDefaults()
+    {
         $request = $this->getRequest();
 
         $model = new Solrsearch_Model_Search();
@@ -102,12 +106,27 @@ class Solrsearch_Model_SearchTest extends ControllerTestCase {
         $this->assertEquals('desc', $params['sortorder']);
     }
 
-    public function testCreateSimpleSearchUrlParamsWithCustomRows() {
+    public function testCreateSimpleSearchUrlParamsWithFilter()
+    {
         $request = $this->getRequest();
 
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
-            'searchengine' => array('solr' => array('numberOfDefaultSearchResults' => 25))
-        )));
+        $request->setParam('institutefq', 'Technische+Univeristät+Hamburg-Harburg');
+
+        $model = new Solrsearch_Model_Search();
+
+        $params = $model->createSimpleSearchUrlParams($request);
+
+        $this->assertArrayHasKey('institutefq', $params);
+        $this->assertEquals('Technische+Univeristät+Hamburg-Harburg', $params['institutefq']);
+    }
+
+    public function testCreateSimpleSearchUrlParamsWithCustomRows()
+    {
+        $request = $this->getRequest();
+
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'searchengine' => ['solr' => ['numberOfDefaultSearchResults' => '25']]
+        ]));
 
         $model = new Solrsearch_Model_Search();
 
@@ -117,10 +136,11 @@ class Solrsearch_Model_SearchTest extends ControllerTestCase {
         $this->assertEquals(25, $params['rows']);
     }
 
-    public function testCreateAdvancedSearchUrlParams() {
+    public function testCreateAdvancedSearchUrlParams()
+    {
         $request = $this->getRequest();
 
-        $request->setParams(array(
+        $request->setParams([
             'searchtype' => 'all',
             'start' => '30',
             'rows' => '15',
@@ -136,7 +156,7 @@ class Solrsearch_Model_SearchTest extends ControllerTestCase {
             'fulltext' => 'TestWord',
             'fulltextmodifier' => 'contains_none',
             'year' => '2008'
-        ));
+        ]);
 
         $model = new Solrsearch_Model_Search();
 
@@ -195,7 +215,8 @@ class Solrsearch_Model_SearchTest extends ControllerTestCase {
         $this->assertEquals('contains_all', $params['yearmodifier']);
     }
 
-    public function testIsSimpleSearchRequestValidTrue() {
+    public function testIsSimpleSearchRequestValidTrue()
+    {
         $model = new Solrsearch_Model_Search();
 
         $request = $this->getRequest();
@@ -205,7 +226,8 @@ class Solrsearch_Model_SearchTest extends ControllerTestCase {
         $this->assertTrue($model->isSimpleSearchRequestValid($request));
     }
 
-    public function testIsSimpleSearchRequestValidFalse() {
+    public function testIsSimpleSearchRequestValidFalse()
+    {
         $model = new Solrsearch_Model_Search();
 
         $request = $this->getRequest();
@@ -221,7 +243,8 @@ class Solrsearch_Model_SearchTest extends ControllerTestCase {
         $this->assertFalse($model->isSimpleSearchRequestValid($request));
     }
 
-    public function testIsAdvancedSearchRequestValidTrue() {
+    public function testIsAdvancedSearchRequestValidTrue()
+    {
         $model = new Solrsearch_Model_Search();
 
         $request = $this->getRequest();
@@ -230,7 +253,7 @@ class Solrsearch_Model_SearchTest extends ControllerTestCase {
 
         $this->assertTrue($model->isAdvancedSearchRequestValid($request));
 
-        $request->setParams(array(
+        $request->setParams([
             'author' => 'TestAuthor',
             'title' => 'TestTitle',
             'persons' => '    ',
@@ -238,12 +261,13 @@ class Solrsearch_Model_SearchTest extends ControllerTestCase {
             'abstract' => 'TestAbstract',
             'fulltext' => 'TestWord',
             'year' => '2008'
-        ));
+        ]);
 
         $this->assertTrue($model->isAdvancedSearchRequestValid($request));
     }
 
-    public function testIsAdvancedSearchRequestValidFalse() {
+    public function testIsAdvancedSearchRequestValidFalse()
+    {
         $model = new Solrsearch_Model_Search();
 
         $request = $this->getRequest();
@@ -255,4 +279,22 @@ class Solrsearch_Model_SearchTest extends ControllerTestCase {
         $this->assertFalse($model->isAdvancedSearchRequestValid($request));
     }
 
+    public function testGetFilterParams()
+    {
+        $request = $this->getRequest();
+        $request->setParam('institutefq', 'ZIB');
+        $request->setParam('searchtype', 'simple');
+        $request->setParam('unknown', 'param');
+        $request->setParam('has_fulltextfq', 'true');
+
+        $model = new Solrsearch_Model_Search();
+
+        $params = $model->getFilterParams($request);
+
+        $this->assertCount(2, $params);
+        $this->assertEquals([
+            'institutefq' => 'ZIB',
+            'has_fulltextfq' => 'true'
+        ], $params);
+    }
 }

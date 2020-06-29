@@ -37,13 +37,14 @@
  *
  * Die Funktion loadDefaultDecorators wird bereits während der Konstruktion einer Instanz aufgerufen.
  */
-class Application_Form_Element_SubmitTest extends FormElementTestCase {
+class Application_Form_Element_SubmitTest extends FormElementTestCase
+{
 
-    public function setUp() {
+    public function setUp()
+    {
         $this->_formElementClass = 'Application_Form_Element_Submit';
         $this->_expectedDecoratorCount = 3;
-        $this->_expectedDecorators = array('ViewHelper', 'ElementHtmlTag', 'dataWrapper');
+        $this->_expectedDecorators = ['ViewHelper', 'ElementHtmlTag', 'dataWrapper'];
         parent::setUp();
     }
-
 }

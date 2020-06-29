@@ -27,32 +27,36 @@
  * @category    Application
  * @package     Tests
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
-class Solrsearch_Model_CollectionListTest extends ControllerTestCase {
-    
-    public function testMissingCollectionId() {
+class Solrsearch_Model_CollectionListTest extends ControllerTestCase
+{
+
+    protected $additionalResources = ['database'];
+
+    public function testMissingCollectionId()
+    {
         $this->setExpectedException('Solrsearch_Model_Exception');
         new Solrsearch_Model_CollectionList(null);
     }
 
-    public function testInvalidCollectionId() {
+    public function testInvalidCollectionId()
+    {
         $this->setExpectedException('Solrsearch_Model_Exception');
         new Solrsearch_Model_CollectionList('');
     }
 
-    public function testInvisbleCollection() {
+    public function testInvisbleCollection()
+    {
         $collection = $this->getFirstNonRootCollection(1);
 
         $collection->setVisible(false);
         $collection->store();
         try {
             new Solrsearch_Model_CollectionList($collection->getId());
-        }
-        catch (Solrsearch_Model_Exception $e) {
+        } catch (Solrsearch_Model_Exception $e) {
             $collection->setVisible(true);
             $collection->store();
             return;
@@ -60,7 +64,8 @@ class Solrsearch_Model_CollectionListTest extends ControllerTestCase {
         $this->fail('Expected exception Solrsearch_Model_Exception was not raised.');
     }
 
-    public function testInvisibleCollectionRole() {
+    public function testInvisibleCollectionRole()
+    {
         $collectionRole = $this->getCollectionRole(1);
         $rootCollection = $this->getRootCollection($collectionRole->getId());
 
@@ -68,8 +73,7 @@ class Solrsearch_Model_CollectionListTest extends ControllerTestCase {
         $collectionRole->store();
         try {
             new Solrsearch_Model_CollectionList($rootCollection->getId());
-        }
-        catch (Solrsearch_Model_Exception $e) {
+        } catch (Solrsearch_Model_Exception $e) {
             $collectionRole->setVisible(true);
             $collectionRole->store();
             return;
@@ -77,7 +81,8 @@ class Solrsearch_Model_CollectionListTest extends ControllerTestCase {
         $this->fail('Expected exception Solrsearch_Model_Exception was not raised.');
     }
 
-    public function testInvisibleBrowsingCollectionRole() {
+    public function testInvisibleBrowsingCollectionRole()
+    {
         $collectionRole = $this->getCollectionRole(1);
         $rootCollection = $this->getRootCollection($collectionRole->getId());
 
@@ -85,8 +90,7 @@ class Solrsearch_Model_CollectionListTest extends ControllerTestCase {
         $collectionRole->store();
         try {
             new Solrsearch_Model_CollectionList($rootCollection->getId());
-        }
-        catch (Solrsearch_Model_Exception $e) {
+        } catch (Solrsearch_Model_Exception $e) {
             $collectionRole->setVisibleBrowsingStart(true);
             $collectionRole->store();
             return;
@@ -94,14 +98,16 @@ class Solrsearch_Model_CollectionListTest extends ControllerTestCase {
         $this->fail('Expected exception Solrsearch_Model_Exception was not raised.');
     }
 
-    public function testIsRootCollection() {
+    public function testIsRootCollection()
+    {
         $rootCollection = $this->getRootCollection(1);
-        
+
         $collectionList = new Solrsearch_Model_CollectionList($rootCollection->getId());
         $this->assertTrue($collectionList->isRootCollection());
     }
 
-    public function testIsNotRootCollection() {
+    public function testIsNotRootCollection()
+    {
         $rootCollection = $this->getRootCollection(1);
 
         $this->assertGreaterThan(0, count($rootCollection->getChildren()));
@@ -111,16 +117,18 @@ class Solrsearch_Model_CollectionListTest extends ControllerTestCase {
                 $this->assertFalse($collectionList->isRootCollection());
             }
         }
-   }
+    }
 
-    public function testGetParentsOfRootCollection() {
+    public function testGetParentsOfRootCollection()
+    {
         $rootCollection = $this->getRootCollection(1);
 
         $collectionList = new Solrsearch_Model_CollectionList($rootCollection->getId());
         $this->assertEquals(0, count($collectionList->getParents()));
     }
 
-    public function testGetParentsOfChildOfRootCollection() {
+    public function testGetParentsOfChildOfRootCollection()
+    {
         $rootCollection = $this->getRootCollection(1);
         $childCollections = $rootCollection->getChildren();
 
@@ -135,7 +143,8 @@ class Solrsearch_Model_CollectionListTest extends ControllerTestCase {
         }
     }
 
-    public function testGetParentsOfGrandchildOfRootCollection() {
+    public function testGetParentsOfGrandchildOfRootCollection()
+    {
         $rootCollection = $this->getRootCollection(1);
         $childCollections = $rootCollection->getChildren();
 
@@ -154,12 +163,13 @@ class Solrsearch_Model_CollectionListTest extends ControllerTestCase {
                     }
                 }
             }
-        }       
+        }
     }
 
-    public function testGetChildren() {
+    public function testGetChildren()
+    {
         $rootCollection = $this->getRootCollection(1);
-        
+
         $collectionList = new Solrsearch_Model_CollectionList($rootCollection->getId());
         $children = $collectionList->getChildren();
 
@@ -172,13 +182,15 @@ class Solrsearch_Model_CollectionListTest extends ControllerTestCase {
         }
     }
 
-    public function testTitleRootCollection() {
+    public function testTitleRootCollection()
+    {
         $rootCollection = $this->getRootCollection(1);
         $collectionList = new Solrsearch_Model_CollectionList($rootCollection->getId());
         $collectionList->getTitle();
     }
 
-    public function testTitleNonRootCollection() {
+    public function testTitleNonRootCollection()
+    {
         $rootCollection = $this->getRootCollection(1);
         foreach ($rootCollection->getChildren() as $childCollection) {
             if ($childCollection->getVisible() === '1') {
@@ -189,25 +201,56 @@ class Solrsearch_Model_CollectionListTest extends ControllerTestCase {
         }
     }
 
-    public function testTheme() {
+    public function testTheme()
+    {
         $rootCollection = $this->getRootCollection(1);
         $collectionList = new Solrsearch_Model_CollectionList($rootCollection->getId());
         $collectionList->getTheme();
     }
 
-    public function testCollectionId() {        
+    public function testCollectionId()
+    {
         $rootCollection = $this->getRootCollection(1);
         $collectionList = new Solrsearch_Model_CollectionList($rootCollection->getId());
         $collectionList->getCollectionId();
     }
 
-    public function testCollectionRoleTitle() {
+    public function testCollectionRoleTitle()
+    {
         $rootCollection = $this->getRootCollection(1);
         $collectionList = new Solrsearch_Model_CollectionList($rootCollection->getId());
         $collectionList->getCollectionRoleTitle();
     }
 
-    private function getCollectionRole($collectionRoleId) {
+    /**
+     * Teste das Ausblenden von leeren Sammlungen am Beispiel der MSC.
+     *
+     * @throws Opus_Model_Exception
+     * @throws Solrsearch_Model_Exception
+     */
+    public function testGetChildrenWithoutEmptyCollections()
+    {
+        $collRole = Opus_CollectionRole::fetchByName('msc');
+        $hideEmptyCollections = $collRole->getHideEmptyCollections();
+        $collRole->setHideEmptyCollections(1);
+        $collRole->store();
+
+        $collList = new Solrsearch_Model_CollectionList($collRole->getRootCollection()->getId());
+        $this->assertCount(2, $collList->getChildren());
+
+        $collRole->setHideEmptyCollections(0);
+        $collRole->store();
+
+        $collList = new Solrsearch_Model_CollectionList($collRole->getRootCollection()->getId());
+        $this->assertTrue(count($collList->getChildren()) > 2);
+
+        // ursprünglichen Wert wiederherstellen
+        $collRole->setHideEmptyCollections($hideEmptyCollections);
+        $collRole->store();
+    }
+
+    private function getCollectionRole($collectionRoleId)
+    {
         $collectionRole = new Opus_CollectionRole($collectionRoleId);
         $this->assertNotNull($collectionRole);
         $this->assertEquals('1', $collectionRole->getVisible());
@@ -215,14 +258,16 @@ class Solrsearch_Model_CollectionListTest extends ControllerTestCase {
         return $collectionRole;
     }
 
-    private function getRootCollection($collectionRoleId) {
+    private function getRootCollection($collectionRoleId)
+    {
         $rootCollection = $this->getCollectionRole($collectionRoleId)->getRootCollection();
         $this->assertNotNull($rootCollection);
         $this->assertEquals('1', $rootCollection->getVisible());
         return $rootCollection;
     }
 
-    private function getFirstNonRootCollection($collectionRoleId) {
+    private function getFirstNonRootCollection($collectionRoleId)
+    {
         $rootCollection = $this->getRootCollection($collectionRoleId);
         $children = $rootCollection->getChildren();
         if (count($children) == 0) {
@@ -231,4 +276,3 @@ class Solrsearch_Model_CollectionListTest extends ControllerTestCase {
         return $children[0];
     }
 }
-

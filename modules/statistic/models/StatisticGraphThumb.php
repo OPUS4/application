@@ -1,6 +1,6 @@
 <?php
-include_once ("jpgraph/jpgraph.php");
-include_once ("jpgraph/jpgraph_bar.php");
+include_once("jpgraph/jpgraph.php");
+include_once("jpgraph/jpgraph_bar.php");
 
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
@@ -34,25 +34,29 @@ include_once ("jpgraph/jpgraph_bar.php");
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Statistic_Model_StatisticGraphThumb {
+class Statistic_Model_StatisticGraphThumb
+{
 
     protected $_data = null;
     protected $_width = 35;
     protected $_height = 27;
     protected $_bgImg ;
 
-    public function __construct($data, $backgroundImage = null) {
+    public function __construct($data, $backgroundImage = null)
+    {
         $this->_bgImg = $backgroundImage;
 
         $this->_data = $data;
     }
 
-        public function setSize($width, $height) {
+    public function setSize($width, $height)
+    {
         $this->_width = $width;
         $this->_height = $height;
-        }
+    }
 
-    public function drawGraph() {
+    public function drawGraph()
+    {
         // generate graphic
         $graph = new Graph($this->_width, $this->_height, "auto");
         $graph->SetScale("textlin");
@@ -77,6 +81,5 @@ class Statistic_Model_StatisticGraphThumb {
 
         // show graphic
         $graph->Stroke();
-
     }
 }

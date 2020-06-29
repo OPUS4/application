@@ -33,27 +33,28 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-abstract class Admin_Form_AbstractDocumentSubForm extends Application_Form_AbstractViewable {
+abstract class Admin_Form_AbstractDocumentSubForm extends Application_Form_AbstractViewable
+{
 
-    public function init() {
+    public function init()
+    {
         parent::init();
 
         $this->setDisableLoadDefaultDecorators(true);
         $this->setDecorators(
-            array(
+            [
                 'FormElements',
-                array(
-                    array('fieldsWrapper' => 'HtmlTag'), 
-                    array('tag' => 'div', 'class' => 'fields-wrapper')
-                ),
+                [
+                    ['fieldsWrapper' => 'HtmlTag'],
+                    ['tag' => 'div', 'class' => 'fields-wrapper']
+                ],
                 'FieldsetWithButtons',
-                array(
-                    array('divWrapper' => 'HtmlTag'), 
-                    array('tag' => 'div', 'class' => 'subform')
-                )
-            )
+                [
+                    ['divWrapper' => 'HtmlTag'],
+                    ['tag' => 'div', 'class' => 'subform']
+                ]
+            ]
         );
     }
 
@@ -62,7 +63,8 @@ abstract class Admin_Form_AbstractDocumentSubForm extends Application_Form_Abstr
      *
      * @param $model
      */
-    public function populateFromModel($model) {
+    public function populateFromModel($model)
+    {
         // leere Implementation
     }
 
@@ -73,7 +75,8 @@ abstract class Admin_Form_AbstractDocumentSubForm extends Application_Form_Abstr
      *
      * TODO Möglich mit populate() zu verschmelzen?
      */
-    public function constructFromPost($post, $document = null) {
+    public function constructFromPost($post, $document = null)
+    {
     }
 
     /**
@@ -85,15 +88,18 @@ abstract class Admin_Form_AbstractDocumentSubForm extends Application_Form_Abstr
      * @param $context POST Daten vom gesamten Request
      *
      * TODO Modifiziere zu $context = null um context optional zu machen?
+     *
+     * FIXME Verwendung eines Result Objects (statt null, string oder array)
      */
-    public function processPost($data, $context) {
+    public function processPost($data, $context)
+    {
         $subforms = $this->getSubForms();
 
         foreach ($subforms as $name => $subform) {
             if (array_key_exists($name, $data)) {
                 $result = $subform->processPost($data[$name], $context);
 
-                if (!is_null($result)) {
+                if (! is_null($result)) {
                     return $result;
                 }
             }
@@ -108,7 +114,8 @@ abstract class Admin_Form_AbstractDocumentSubForm extends Application_Form_Abstr
      * TODO consider options for ChangeLog
      * @param Opus_Document $document
      */
-    public function updateModel($model) {
+    public function updateModel($model)
+    {
         $subforms = $this->getSubForms();
 
         foreach ($subforms as $form) {
@@ -123,7 +130,8 @@ abstract class Admin_Form_AbstractDocumentSubForm extends Application_Form_Abstr
      * @param $request
      * @param null $session
      */
-    public function continueEdit($request, $session = null) {
+    public function continueEdit($request, $session = null)
+    {
     }
 
     /**
@@ -136,11 +144,12 @@ abstract class Admin_Form_AbstractDocumentSubForm extends Application_Form_Abstr
      * @param array $globalContext
      * @return boolean true - wenn alle Abhängigkeiten erfüllt sind
      */
-    public function isDependenciesValid($data, $globalContext) {
+    public function isDependenciesValid($data, $globalContext)
+    {
         $result = true;
 
         foreach ($this->getSubForms() as $name => $subform) {
-            if (array_key_exists($name, $data) && !$subform->isDependenciesValid($data[$name], $globalContext)) {
+            if (array_key_exists($name, $data) && ! $subform->isDependenciesValid($data[$name], $globalContext)) {
                 $result = false; // trotzdem Validierung über alle Unterformulare um auch mehrere Meldungen anzuzeigen
             }
         }
@@ -153,7 +162,8 @@ abstract class Admin_Form_AbstractDocumentSubForm extends Application_Form_Abstr
      *
      * @return \Application_Controller_Action_Helper_Dates
      */
-    public function getDatesHelper() {
+    public function getDatesHelper()
+    {
         return Zend_Controller_Action_HelperBroker::getStaticHelper('Dates');
     }
 
@@ -166,14 +176,13 @@ abstract class Admin_Form_AbstractDocumentSubForm extends Application_Form_Abstr
      * @param string $legend
      * @return void|Zend_Form
      */
-    public function setLegend($legend) {
+    public function setLegend($legend)
+    {
         $translator = $this->getTranslator();
-        if (!is_null($translator) && $translator->isTranslated($legend)) {
+        if (! is_null($translator) && $translator->isTranslated($legend)) {
             parent::setLegend($translator->translate($legend));
-        }
-        else {
+        } else {
             parent::setLegend($legend);
         }
     }
-
 }

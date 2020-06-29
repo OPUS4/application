@@ -1,0 +1,105 @@
+<?php
+/**
+ * This file is part of OPUS. The software OPUS has been originally developed
+ * at the University of Stuttgart with funding from the German Research Net,
+ * the Federal Department of Higher Education and Research and the Ministry
+ * of Science, Research and the Arts of the State of Baden-Wuerttemberg.
+ *
+ * OPUS 4 is a complete rewrite of the original OPUS software and was developed
+ * by the Stuttgart University Library, the Library Service Center
+ * Baden-Wuerttemberg, the Cooperative Library Network Berlin-Brandenburg,
+ * the Saarland University and State Library, the Saxon State Library -
+ * Dresden State and University Library, the Bielefeld University Library and
+ * the University Library of Hamburg University of Technology with funding from
+ * the German Research Foundation and the European Regional Development Fund.
+ *
+ * LICENCE
+ * OPUS is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the Licence, or any later version.
+ * OPUS is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details. You should have received a copy of the GNU General Public License
+ * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
+ * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * @category    Application
+ * @package     Module_Export
+ * @author      Sascha Szott <opus-development@saschaszott.de>
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
+ *
+ */
+?>
+
+<?php
+if ($this->validUnpublishedDoc) {
+    $colorCode = '#ff9933';
+    $headlineKey = 'export_datacite_notice_head_title';
+} else {
+    $colorCode = '#d44950';
+    $headlineKey = 'export_datacite_error_head_title';
+}
+?>
+
+<h1 style="color: <?= $colorCode ?>">
+    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+    <?= $this->translate($headlineKey, $this->docId) ?>
+</h1>
+
+<?php if ($this->validUnpublishedDoc) : ?>
+<div>
+    <h3 style="text-transform: none; color: <?= $colorCode ?>">
+        <?= $this->translate('export_datacite_notice_head_subtitle') ?>
+    </h3>
+</div>
+<?php endif; ?>
+
+<div>
+    <h3><?= $this->translate('export_datacite_required_fields_header') ?></h3>
+    <table>
+    <?php foreach ($this->requiredFieldsStatus as $key => $value) : ?>
+        <tr>
+            <?php if ($value === true) : ?>
+                <td><span class="fa fa-check" style="color: #1b926c"></span></td>
+                <td>Element <b><?= $key ?></b></td>
+            <?php else : ?>
+                <td>
+                    <?php if ($value === 'publication_date_missing_non_published') : ?>
+                        <?php $colorCode = '#ff9933'; ?>
+                        <span class="fa fa-exclamation-triangle" style="color: <?= $colorCode ?>"></span>
+                        <?php $colorCode = '#1b926c'; ?><?php /* Farbe für den folgenden Text */ ?>
+                    <?php else : ?>
+                        <?php $colorCode = '#d44950'; ?>
+                        <span class="fa fa-exclamation-circle" style="color: <?= $colorCode ?>"></span>
+                    <?php endif; ?>
+                </td>
+                <td>Element <b><?= $key ?></b> <i style="color: <?= $colorCode ?>"><?= $this->translate('export_datacite_error_' . $value) ?></i>
+                </td>
+            <?php endif; ?>
+        </tr>
+    <?php endforeach; ?>
+    </table>
+</div>
+
+<?php if (! empty($this->errors)) : ?>
+<p>
+    <h3><?= $this->translate('export_datacite_xml_errors_header') ?></h3>
+
+    <?php foreach ($this->errors as $error) : ?>
+<pre class="exceptionMessage" style="white-space: pre-wrap;">
+<?= $error ?>
+</pre>
+    <?php endforeach; ?>
+</p>
+<?php endif; ?>
+
+<p>
+    <a href="<?= $this->url(['module' => 'export', 'controller' => 'index', 'action' => 'datacite', 'docId' => $this->docId, 'validate' => 'no'], null, true) ?>"><?= $this->translate('export_datacite_download_xml') ?></a>
+</p>
+<?php if ($this->docServerState !== 'published') : ?>
+    <p>
+        <b><?= $this->translate('export_datacite_non_published_doc_notice') ?></b>
+    </p>
+<?php endif; ?>

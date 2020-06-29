@@ -34,17 +34,18 @@
  * @category    Application
  * @package     Application_Form_Decorator
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  *
  * TODO find better solution that is more generic
  */
-class Application_Form_Decorator_RemoveButton extends Zend_Form_Decorator_Abstract {
+class Application_Form_Decorator_RemoveButton extends Zend_Form_Decorator_Abstract
+{
 
     private $_secondElement;
 
-    public function render($content) {
+    public function render($content)
+    {
         $button = $this->getElement();
 
         if ($button instanceof Zend_Form) {
@@ -57,13 +58,13 @@ class Application_Form_Decorator_RemoveButton extends Zend_Form_Decorator_Abstra
 
         $view = $button->getView();
 
-        if (!$view instanceof Zend_View_Interface) {
+        if (! $view instanceof Zend_View_Interface) {
             return $content;
         }
 
         $markup = $this->renderElement($button);
 
-        if (!is_null($this->getSecondElement())) {
+        if (! is_null($this->getSecondElement())) {
             $markup = $this->renderElement($this->getSecondElement(), 'hidden') . $markup;
         }
 
@@ -74,7 +75,8 @@ class Application_Form_Decorator_RemoveButton extends Zend_Form_Decorator_Abstra
      * @param $element
      * @return string
      */
-    public function renderElement($element, $type = 'submit') {
+    public function renderElement($element, $type = 'submit')
+    {
         $buttonId = $element->getId();
         $buttonFullName = $element->getFullyQualifiedName();
         $buttonName = $element->getName();
@@ -91,23 +93,20 @@ class Application_Form_Decorator_RemoveButton extends Zend_Form_Decorator_Abstra
         return $markup;
     }
 
-    public function setSecondElement($element) {
+    public function setSecondElement($element)
+    {
         $this->_secondElement = $element;
     }
 
-    public function getSecondElement() {
+    public function getSecondElement()
+    {
         $element = $this->getOption('element');
 
-        if (!is_null($element)) {
+        if (! is_null($element)) {
             $this->removeOption('element');
             $this->_secondElement = $element;
         }
 
         return $this->_secondElement;
     }
-
-
 }
-
-
-

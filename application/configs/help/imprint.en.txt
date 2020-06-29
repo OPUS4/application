@@ -1,18 +1,19 @@
-﻿<p>+++++++++++++++      Example      +++++++++++++++</p>
+<p>+++++++++++++++      EXAMPLE      +++++++++++++++</p>
 
-<p><i>Institute</i> 
-<br /><i>Address</i></p>
+<p><b>INSTITUTE</b>
+<br /><b>ADDRESS</b></p>
 
-<p>Telephone: </p>
-<p>Fax: </p>
+<p>Telephone:</p>
+<p>Fax:</p>
 <p>E-Mail:</p>
 
-<p>USt-Id-Nr.: </p>
+<p>USt-Id-Nr.:</p>
 
-<p><i>Institute</i> is a corporation under public law.</p>
-<p>It is legally represented by <i>John Doe</i>.</p>
+<p><b>INSTITUTE</b> is a corporation under public law.</p>
+<p>It is legally represented by <b>JOHN DOE</b>.</p>
 <p>Competent supervisory authority:</p>
 
-<p><i>Jane Doe</i> of <i>institute</i> is responsible for editorial and database maintenance as defined by § 55 paragraph 2 RStV (Germany). (See ..> <i>Contact</i>)</p>
+<p><b>JANE DOE</b> of <b>INSTITUTE</b> is responsible for editorial and database maintenance as defined by
+§ 55 paragraph 2 RStV (Germany). (See <a href="contact">Contact</a>)</p>
 
-<p>The care of the hardware and software of this server is up to <i>institute</i>.</p>
+<p>The care of the hardware and software of this server is up to <b>INSTITUTE</b>.</p>

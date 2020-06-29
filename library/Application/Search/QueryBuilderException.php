@@ -29,13 +29,12 @@
  * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
  * TODO replace - QueryBuilder is not used anymore, right?
  */
-class Application_Search_QueryBuilderException extends Exception {
+class Application_Search_QueryBuilderException extends Exception
+{
 
 }
-

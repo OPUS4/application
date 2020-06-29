@@ -61,11 +61,13 @@ class Admin_Form_Document_IdentifierSpecific extends Admin_Form_AbstractModelSub
     {
         parent::init();
 
-        $this->addElement('text', self::ELEMENT_VALUE,
-            array(
+        $this->addElement(
+            'text',
+            self::ELEMENT_VALUE,
+            [
                 'label' => $this->type,
                 'size' => '80'
-            )
+            ]
         );
         $this->addElement('hidden', self::ELEMENT_ID);
         $this->addElement('hidden', self::ELEMENT_DOC_ID);
@@ -108,8 +110,7 @@ class Admin_Form_Document_IdentifierSpecific extends Admin_Form_AbstractModelSub
         if (strlen(trim($modelId)) > 0) {
             try {
                 $identifier = new Opus_Identifier($modelId);
-            }
-            catch (Opus_Model_NotFoundException $omnfe) {
+            } catch (Opus_Model_NotFoundException $omnfe) {
                 $this->getLogger()->err(__METHOD__ . " Unknown identifier ID = '$modelId'.");
             }
         }

@@ -47,7 +47,7 @@
             <?PHP foreach ($values as $value => $link) : ?>
                 <?PHP if ($this->role !== $value) : ?>
                     <li><a href="<?= $link ?>"><?= $this->translate('Opus_Person_Role_Value_' . ucfirst($value)) ?></a></li>
-                    <?PHP else : ?>
+                <?PHP else : ?>
                     <li class="active"><?= $this->translate('Opus_Person_Role_Value_' . ucfirst($this->role)) ?></li>
                 <?PHP endif ?>
             <?PHP endforeach ?>

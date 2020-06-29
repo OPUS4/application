@@ -27,17 +27,18 @@
  * @category    Application
  * @package     View
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2013-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
  * Select Element für Thesis Grantor Institute.
  */
-class Application_Form_Element_Grantor extends Application_Form_Element_Select {
+class Application_Form_Element_Grantor extends Application_Form_Element_Select
+{
 
-    public function init() {
+    public function init()
+    {
         parent::init();
 
         $this->setRequired(true);
@@ -54,4 +55,25 @@ class Application_Form_Element_Grantor extends Application_Form_Element_Select {
         }
     }
 
+    /**
+     * Set value for Grantor select form element.
+     *
+     * If $value is a valid DNB institute a corresponding option is added to select if necessary.
+     *
+     * @param mixed $value
+     * @return void|Zend_Form_Element
+     * @throws Opus_Model_Exception
+     */
+    public function setValue($value)
+    {
+        try {
+            $institute = new Opus_DnbInstitute($value);
+        } catch (Opus_Model_NotFoundException $omne) {
+            parent::setValue($value); // could be blocked, but keeping compatibility just in case
+            return;
+        }
+
+        $this->addMultiOption($institute->getId(), $institute->getDisplayName());
+        parent::setValue($value);
+    }
 }

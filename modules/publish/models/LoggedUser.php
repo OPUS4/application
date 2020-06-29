@@ -32,13 +32,15 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Publish_Model_LoggedUser {
-    
+class Publish_Model_LoggedUser
+{
+
     private $_log     = null;
     private $_login   = null;
     private $_account = null;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->_log = Zend_Registry::get("Zend_Log");
 
         $login = Zend_Auth::getInstance()->getIdentity();
@@ -61,7 +63,8 @@ class Publish_Model_LoggedUser {
      *
      * @return Opus_Person
      */
-    public function getUserId() {
+    public function getUserId()
+    {
         return isset($this->_account) ? $this->_account->getId() : null;
     }
 
@@ -71,7 +74,8 @@ class Publish_Model_LoggedUser {
      *
      * @return Opus_Person
      */
-    public function createPerson() {
+    public function createPerson()
+    {
         if (is_null($this->_account)) {
             return;
         }
@@ -81,7 +85,7 @@ class Publish_Model_LoggedUser {
         $person->setLastName(trim($this->_account->getLastName()));
         $person->setEmail(trim($this->_account->getEmail()));
 
-        if (!$person->isValid()) {
+        if (! $person->isValid()) {
             $this->_log->err("Created Opus_Person object for user '" . $this->_login . "' is NOT VALID. ");
         }
 

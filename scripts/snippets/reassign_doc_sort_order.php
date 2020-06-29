@@ -32,7 +32,7 @@
  */
 
 /**
- * 
+ *
  * Setzt die interne Sortierreihenfolge (doc_sort_order) für die einer
  * Schriftenreihe zugeordneten Dokumente auf Basis der vergebenenen Bandnummern
  * neu.
@@ -54,7 +54,7 @@ foreach (Opus_Series::getAll() as $series) {
     }
     echo count($docIds) . " documents found\n";
 
-    $seriesNumbers = array();
+    $seriesNumbers = [];
     foreach ($docIds as $docId) {
         $doc = new Opus_Document($docId);
         foreach ($doc->getSeries() as $docSeries) {
@@ -66,22 +66,21 @@ foreach (Opus_Series::getAll() as $series) {
 
     $allNumerics = true;
     foreach ($seriesNumbers as $docId => $seriesNumber) {
-        if (!is_numeric($seriesNumber)) {
+        if (! is_numeric($seriesNumber)) {
             $allNumerics = false;
             break;
         }
     }
-    
+
     if ($allNumerics) {
         echo "sorting documents in series #" . $series->getId() . " numerically\n";
-        if (!asort($seriesNumbers, SORT_NUMERIC)) {
+        if (! asort($seriesNumbers, SORT_NUMERIC)) {
             echo "Error while sorting docs -- skip series #" . $series->getId() . "\n";
             break;
         }
-    }
-    else {
+    } else {
         echo "sorting documents in series #" . $series->getId() . " lexicographically\n";
-        if (!asort($seriesNumbers, SORT_STRING)) {
+        if (! asort($seriesNumbers, SORT_STRING)) {
             echo "Error while sorting docs -- skip series #" . $series->getId() . "\n";
             break;
         }
@@ -91,7 +90,7 @@ foreach (Opus_Series::getAll() as $series) {
     foreach ($seriesNumbers as $docId => $seriesNumber) {
         $doc = new Opus_Document($docId);
         $allSeries = $doc->getSeries();
-        $doc->setSeries(array());
+        $doc->setSeries([]);
         $doc->store();
         foreach ($allSeries as $docSeries) {
             $seriesInstance = $docSeries->getModel();
@@ -100,8 +99,7 @@ foreach (Opus_Series::getAll() as $series) {
                     . $docSeries->getNumber() . ") -- old / new doc_sort_order: " . $docSeries->getDocSortOrder()
                     . " / " . $seriesCounter . "\n";
                 $doc->addSeries($seriesInstance)->setNumber($docSeries->getNumber())->setDocSortOrder($seriesCounter++);
-            }
-            else {
+            } else {
                 $doc->addSeries($seriesInstance)->setNumber(
                     $docSeries->getNumber()
                 )->setDocSortOrder(

@@ -31,24 +31,29 @@
  * @category    Application Unit Tests
  * @package     Application_Form_Model
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class Application_Form_Model_AbstractTest extends ControllerTestCase {
+class Application_Form_Model_AbstractTest extends ControllerTestCase
+{
+
+    protected $additionalResources = 'database';
 
     private $form;
 
-    public function setUp() {
+    public function setUp()
+    {
         parent::setUp();
         $this->form = $this->getForm();
     }
 
-    private function getForm() {
+    private function getForm()
+    {
         return $this->getMockForAbstractClass('Application_Form_Model_Abstract');
     }
 
-    public function testInit() {
+    public function testInit()
+    {
         $this->assertEquals(3, count($this->form->getElements()));
         $this->assertNotNull($this->form->getElement('Id'));
         $this->assertNotNull($this->form->getElement('Save'));
@@ -61,21 +66,29 @@ class Application_Form_Model_AbstractTest extends ControllerTestCase {
         $this->assertNotNull($this->form->getDisplayGroup('actions'));
     }
 
-    public function testProcessPost() {
-        $this->assertNull($this->form->processPost(array(), array()));
+    public function testProcessPost()
+    {
+        $this->assertNull($this->form->processPost([], []));
     }
 
-    public function testProcessPostSave() {
-        $this->assertEquals(Application_Form_Model_Abstract::RESULT_SAVE,
-            $this->form->processPost(array('Save' => 'Speichern'), array()));
+    public function testProcessPostSave()
+    {
+        $this->assertEquals(
+            Application_Form_Model_Abstract::RESULT_SAVE,
+            $this->form->processPost(['Save' => 'Speichern'], [])
+        );
     }
 
-    public function testProcessPostCancel() {
-        $this->assertEquals(Application_Form_Model_Abstract::RESULT_CANCEL,
-            $this->form->processPost(array('Cancel' => 'Abbrechen'), array()));
+    public function testProcessPostCancel()
+    {
+        $this->assertEquals(
+            Application_Form_Model_Abstract::RESULT_CANCEL,
+            $this->form->processPost(['Cancel' => 'Abbrechen'], [])
+        );
     }
 
-    public function testGetModel() {
+    public function testGetModel()
+    {
         $this->form->setModelClass('Opus_Licence');
 
         $this->form->getElement('Id')->setValue(1);
@@ -87,7 +100,8 @@ class Application_Form_Model_AbstractTest extends ControllerTestCase {
         $this->assertEquals(1, $model->getId());
     }
 
-    public function testGetModelNewInstance() {
+    public function testGetModelNewInstance()
+    {
         $this->form->setModelClass('Opus_Licence');
 
         $model = $this->form->getModel();
@@ -101,7 +115,8 @@ class Application_Form_Model_AbstractTest extends ControllerTestCase {
      * @expectedException Application_Exception
      * @expectedExceptionMessage Model class has not been set.
      */
-    public function testGetModelNoModelClass() {
+    public function testGetModelNoModelClass()
+    {
         $this->form->getModel();
     }
 
@@ -109,7 +124,8 @@ class Application_Form_Model_AbstractTest extends ControllerTestCase {
      * @expectedException Application_Exception
      * @expectedExceptionMessage Model-ID must be numeric.
      */
-    public function testGetModelBadModelId() {
+    public function testGetModelBadModelId()
+    {
         $this->form->setModelClass('Opus_Licence');
         $this->form->getElement('Id')->setValue('notAnId');
         $this->form->getModel();
@@ -119,7 +135,8 @@ class Application_Form_Model_AbstractTest extends ControllerTestCase {
      * @expectedException Application_Exception
      * @expectedExceptionMessage Model with ID '1000' not found.
      */
-    public function testGetModelUnknownModelId() {
+    public function testGetModelUnknownModelId()
+    {
         $this->form->setModelClass('Opus_Licence');
         $this->form->getElement('Id')->setValue(1000);
         $this->form->getModel();
@@ -129,7 +146,8 @@ class Application_Form_Model_AbstractTest extends ControllerTestCase {
      * @covers Application_Form_Model_Abstract::setModelClass
      * @covers Application_Form_Model_Abstract::getModelClass
      */
-    public function testSetGetModelClass() {
+    public function testSetGetModelClass()
+    {
         $this->form->setModelClass('Opus_Licence');
 
         $this->assertEquals('Opus_Licence', $this->form->getModelClass());
@@ -139,14 +157,16 @@ class Application_Form_Model_AbstractTest extends ControllerTestCase {
         $this->assertNull($this->form->getModelClass());
     }
 
-    public function testPrepareRenderingAsView() {
+    public function testPrepareRenderingAsView()
+    {
         $this->form->prepareRenderingAsView();
 
         $this->assertFalse($this->form->getDecorator('Form'));
         $this->assertNull($this->form->getDisplayGroup('actions'));
     }
 
-    public function testSetGetVerifyModelIdIsNumeric() {
+    public function testSetGetVerifyModelIdIsNumeric()
+    {
         $value = $this->form->getVerifyModelIdIsNumeric();
 
         $this->assertTrue($value);
@@ -158,14 +178,16 @@ class Application_Form_Model_AbstractTest extends ControllerTestCase {
         $this->assertFalse($value);
     }
 
-    public function testValidateModelIdValidMustBeNumeric() {
+    public function testValidateModelIdValidMustBeNumeric()
+    {
         $method = new ReflectionMethod('Application_Form_Model_Abstract', 'validateModelId');
         $method->setAccessible(true);
 
         $this->assertNull($method->invoke($this->form, '123'));
     }
 
-    public function testValidateModelIdValidNonNumeric() {
+    public function testValidateModelIdValidNonNumeric()
+    {
         $method = new ReflectionMethod('Application_Form_Model_Abstract', 'validateModelId');
         $method->setAccessible(true);
 
@@ -177,14 +199,16 @@ class Application_Form_Model_AbstractTest extends ControllerTestCase {
      * @expectedException Application_Exception
      * @expectedExceptionMessage Model-ID must be numeric.
      */
-    public function testValidateModelIdNotValidNonNumeric() {
+    public function testValidateModelIdNotValidNonNumeric()
+    {
         $method = new ReflectionMethod('Application_Form_Model_Abstract', 'validateModelId');
         $method->setAccessible(true);
 
         $method->invoke($this->form, 'enrichment');
     }
 
-    public function testValidateModelIdForNull() {
+    public function testValidateModelIdForNull()
+    {
         $method = new ReflectionMethod('Application_Form_Model_Abstract', 'validateModelId');
         $method->setAccessible(true);
 
@@ -194,4 +218,3 @@ class Application_Form_Model_AbstractTest extends ControllerTestCase {
         $this->assertNull($method->invoke($this->form, null));
     }
 }
-

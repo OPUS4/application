@@ -26,23 +26,26 @@
  *
  * @category    Unit Tests
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
 /**
  * Description of Admin_LanguageTest
  *
  * @author Jens Schwidder <schwidder(at)zib.de>
  */
-class Admin_LanguageTest extends ControllerTestCase {
+class Admin_LanguageTest extends ControllerTestCase
+{
 
-    public function setUp() {
+    public function setUp()
+    {
         parent::setUp();
         $this->verifyCommandAvailable('xmllint');
     }
-    
-    public function testTmxFilesValid() {
+
+    public function testTmxFilesValid()
+    {
         $dir = APPLICATION_PATH . '/modules/admin/language';
         $filesIter = new DirectoryIterator($dir);
         foreach ($filesIter as $fileInfo) {
@@ -54,7 +57,4 @@ class Admin_LanguageTest extends ControllerTestCase {
             }
         }
     }
-
 }
-
-?>

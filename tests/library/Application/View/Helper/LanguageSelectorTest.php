@@ -26,18 +26,22 @@
  *
  * @category    Application Unit Tests
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
  * FIXME Tests only if methods throw exceptions.
  */
-class Application_View_Helper_LanguageSelectorTest extends ControllerTestCase {
+class Application_View_Helper_LanguageSelectorTest extends ControllerTestCase
+{
+
+    protected $additionalResources = ['view', 'translation', 'mainMenu'];
 
     private $_helper;
 
-    public function setUp() {
+    public function setUp()
+    {
         parent::setUp();
 
         $this->useEnglish();
@@ -49,7 +53,8 @@ class Application_View_Helper_LanguageSelectorTest extends ControllerTestCase {
         $this->_helper->setView(Zend_Registry::get('Opus_View'));
     }
 
-    public function testLanguageConfiguredAndInResourcesGerman() {
+    public function testLanguageConfiguredAndInResourcesGerman()
+    {
         $result = $this->_helper->languageSelector();
 
         $this->assertCount(1, $result);
@@ -63,7 +68,8 @@ class Application_View_Helper_LanguageSelectorTest extends ControllerTestCase {
         );
     }
 
-    public function testLanguageConfiguredAndInResourcesEnglish() {
+    public function testLanguageConfiguredAndInResourcesEnglish()
+    {
         $this->useGerman();
 
         $result = $this->_helper->languageSelector();
@@ -82,9 +88,12 @@ class Application_View_Helper_LanguageSelectorTest extends ControllerTestCase {
     /**
      * Only 'de' should show up in result since 'ru' is not present in TMX files.
      */
-    public function testLanguageConfiguredButNotInResources() {
-        Zend_Registry::set('Zend_Config',
-            Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array('supportedLanguages' => 'de,en,ru'))));
+    public function testLanguageConfiguredButNotInResources()
+    {
+        Zend_Registry::set(
+            'Zend_Config',
+            Zend_Registry::get('Zend_Config')->merge(new Zend_Config(['supportedLanguages' => 'de,en,ru']))
+        );
 
         $result = $this->_helper->languageSelector();
 
@@ -102,18 +111,20 @@ class Application_View_Helper_LanguageSelectorTest extends ControllerTestCase {
     /**
      * Result should be empty since only one language is supported, so no other can be selected.
      */
-    public function testOnlyOneLanguageConfigured() {
-        Zend_Registry::set('Zend_Config',
-            Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array('supportedLanguages' => 'en'))));
+    public function testOnlyOneLanguageConfigured()
+    {
+        Zend_Registry::set(
+            'Zend_Config',
+            Zend_Registry::get('Zend_Config')->merge(new Zend_Config(['supportedLanguages' => 'en']))
+        );
 
         $result = $this->_helper->languageSelector();
 
         $this->assertCount(0, $result);
     }
 
-    public function testLanguageInResourcesButNotConfigured() {
+    public function testLanguageInResourcesButNotConfigured()
+    {
         $this->markTestIncomplete('Find way to add TMX with additional language during test.');
     }
-
 }
-

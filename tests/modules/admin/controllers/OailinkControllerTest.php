@@ -26,22 +26,24 @@
  *
  * @category    Tests
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
  * @covers Admin_OailinkController
  */
-class Admin_OailinkControllerTest extends ControllerTestCase {
+class Admin_OailinkControllerTest extends ControllerTestCase
+{
 
-    public function testIndexAction() {
+    protected $additionalResources = 'all';
+
+    public function testIndexAction()
+    {
         $this->dispatch('/admin/oailink');
         $this->assertResponseCode(200);
         $this->assertModule('admin');
         $this->assertController('oailink');
         $this->assertAction('index');
     }
-
 }
-

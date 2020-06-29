@@ -81,7 +81,7 @@
                 <seg>Author</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>Autor</seg>
+                <seg>Autor*in</seg>
             </tuv>
         </tu>
 
@@ -351,7 +351,7 @@
                 <seg>Author</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>Autor</seg>
+                <seg>Autor*in</seg>
             </tuv>
         </tu>
 
@@ -370,6 +370,15 @@
             </tuv>
             <tuv xml:lang="de">
                 <seg>Dokumenttyp</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="server_state_facet_heading">
+            <tuv xml:lang="en">
+                <seg>State</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Status</seg>
             </tuv>
         </tu>
 
@@ -441,7 +450,7 @@
                 <seg>Author(s)</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>Autor(en)</seg>
+                <seg>Autor*innen</seg>
             </tuv>
         </tu>
 
@@ -468,7 +477,7 @@
                 <seg>Referee(s)</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>Gutachter</seg>
+                <seg>Gutachter*innen</seg>
             </tuv>
         </tu>
 
@@ -504,7 +513,7 @@
                 <seg>You can type multiple, blank separated authors into this field.</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>Sie können in dieses Feld auch mehrere Autoren durch Leerzeichen getrennt eingeben.</seg>
+                <seg>Sie können in dieses Feld auch mehrere Autor*innen durch Leerzeichen getrennt eingeben.</seg>
             </tuv>
         </tu>
 
@@ -531,7 +540,7 @@
                 <seg>You can type multiple, blank separated referees into this field.</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>Sie können in dieses Feld auch mehrere Gutachter durch Leerzeichen getrennt eingeben.</seg>
+                <seg>Sie können in dieses Feld auch mehrere Gutachter*innen durch Leerzeichen getrennt eingeben.</seg>
             </tuv>
         </tu>
 

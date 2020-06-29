@@ -32,5 +32,6 @@
  * @version     $Id$
  */
 
-class Publish_Model_FormException extends Publish_Model_Exception {
+class Publish_Model_FormException extends Publish_Model_Exception
+{
 }

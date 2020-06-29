@@ -30,19 +30,22 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Admin_Model_Statistics {
+class Admin_Model_Statistics
+{
 
     private $_documents = null;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->_documents = new Opus_Db_Documents();
     }
 
     /**
      * Helper-function (builds up the result array for the statistic-functions).
      */
-    private function fillResultArray($select, $name) {
-        $statistics = array();
+    private function fillResultArray($select, $name)
+    {
+        $statistics = [];
         $result = $select->fetchAll();
         foreach ($result as $row) {
             if ($row[$name] != '') {
@@ -58,7 +61,8 @@ class Admin_Model_Statistics {
     /**
      * Builds month statistics (returns sum of published documents sorted by month).
      */
-    public function getMonthStatistics($selectedYear) {
+    public function getMonthStatistics($selectedYear)
+    {
         // TODO: use tokens to reduce redundancy of inserting year twice
         $select = $this->_documents->getAdapter()->query(
             "SELECT months.m as mon, count(d.id) as c
@@ -73,13 +77,13 @@ class Admin_Model_Statistics {
                 months
             WHERE months.m = d.m
             GROUP BY months.m",
-            array($selectedYear, $selectedYear)
+            [$selectedYear, $selectedYear]
         );
 
         $monthStat = $this->fillResultArray($select, 'mon');
 
-        for ($i = 1; $i<13; $i++) {
-            if (isset($monthStat[$i]) === FALSE) {
+        for ($i = 1; $i < 13; $i++) {
+            if (isset($monthStat[$i]) === false) {
                 $monthStat[$i] = 0;
             }
         }
@@ -92,7 +96,8 @@ class Admin_Model_Statistics {
      *
      * Returns sum of published documents sorted by document types.
      */
-    public function getTypeStatistics($selectedYear) {
+    public function getTypeStatistics($selectedYear)
+    {
         // get document type overview from database
         $select = $this->_documents->getAdapter()->query(
             "SELECT t.type as ty, count(d.id) as c
@@ -100,7 +105,8 @@ class Admin_Model_Statistics {
           LEFT OUTER JOIN
           (SELECT id, type FROM documents WHERE YEAR(server_date_published) = ? AND server_state = 'published') d
           ON t.type = d.type
-          GROUP BY t.type", $selectedYear
+          GROUP BY t.type",
+            $selectedYear
         );
         return $this->fillResultArray($select, 'ty');
     }
@@ -110,9 +116,10 @@ class Admin_Model_Statistics {
      *
      * Returns sum of published documents sorted by institutes.
      */
-    public function getInstituteStatistics($selectedYear) {
+    public function getInstituteStatistics($selectedYear)
+    {
         $role = Opus_CollectionRole::fetchByName('institutes');
-        $instStat = array();
+        $instStat = [];
         if (isset($role)) {
             $query = "SELECT c.name name, COUNT(DISTINCT(d.id)) entries
                  FROM documents d
@@ -121,7 +128,7 @@ class Admin_Model_Statistics {
                  WHERE c.role_id=? AND YEAR(server_date_published)=? AND server_state='published'
                 group by name";
             $db = Zend_Registry::get('db_adapter');
-            $res = $db->query($query, array($role->getId(), $selectedYear))->fetchAll();
+            $res = $db->query($query, [$role->getId(), $selectedYear])->fetchAll();
 
             foreach ($res as $result) {
                 $instStat[$result['name']] = $result['entries'];
@@ -134,9 +141,10 @@ class Admin_Model_Statistics {
      * Returns all years in which documents were published.
      * TODO show that there are published documents without publication date?
      */
-    public function getYears() {
+    public function getYears()
+    {
         $documents = new Opus_Db_Documents();
-        $select = $documents->select()->from('documents', array('year' => 'YEAR(server_date_published)'))
+        $select = $documents->select()->from('documents', ['year' => 'YEAR(server_date_published)'])
             ->where('server_state = ?', 'published')
             ->where('server_date_published IS NOT NULL')
             ->distinct()
@@ -151,11 +159,11 @@ class Admin_Model_Statistics {
     /**
      * Returns sum of all documents published before the $thresholdYear.
      */
-    public function getNumDocsUntil($thresholdYear) {
+    public function getNumDocsUntil($thresholdYear)
+    {
         $finder = new Opus_DocumentFinder();
         $finder->setServerState('published');
-        $finder->setServerDatePublishedBefore($thresholdYear+1);
+        $finder->setServerDatePublishedBefore($thresholdYear + 1);
         return $finder->count();
     }
-
 }

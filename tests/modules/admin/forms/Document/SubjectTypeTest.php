@@ -26,27 +26,33 @@
  *
  * @category    Application Unit Test
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
  * Unit Tests für Unterformular, daß Subjects eines bestimmten Typs anzeigt.
  */
-class Admin_Form_Document_SubjectTypeTest extends ControllerTestCase {
+class Admin_Form_Document_SubjectTypeTest extends ControllerTestCase
+{
 
-    public function testCreateForm() {
+    protected $additionalResources = ['view', 'translation'];
+
+    public function testCreateForm()
+    {
         $form = new Admin_Form_Document_SubjectType('swd');
 
         $this->assertEquals(0, count($form->getSubForms()));
         $this->assertEquals(1, count($form->getElements()));
         $this->assertNotNull($form->getElement('Add'));
         $this->assertEquals('swd', $form->getSubjectType());
-        $this->assertEquals('admin_document_section_subjectswd', $form->getLegend());
+        $this->useEnglish();
+        // translation key is 'admin_document_section_subjectswd'
+        $this->assertEquals('GND Keywords', $form->getLegend());
     }
 
-    public function testCreateNewSubFormInstance() {
+    public function testCreateNewSubFormInstance()
+    {
         $form = new Admin_Form_Document_SubjectType('psyndex');
 
         $subform = $form->createNewSubFormInstance();
@@ -56,7 +62,8 @@ class Admin_Form_Document_SubjectTypeTest extends ControllerTestCase {
         $this->assertNull($subform->getLanguage());
     }
 
-    public function testCreateNewSubFormInstanceSwd() {
+    public function testCreateNewSubFormInstanceSwd()
+    {
         $form = new Admin_Form_Document_SubjectType('swd');
 
         $subform = $form->createNewSubFormInstance();
@@ -66,7 +73,8 @@ class Admin_Form_Document_SubjectTypeTest extends ControllerTestCase {
         $this->assertEquals('deu', $subform->getLanguage());
     }
 
-    public function testGetFieldValues() {
+    public function testGetFieldValues()
+    {
         $form = new Admin_Form_Document_SubjectType('swd');
 
         $document = new Opus_Document(146);
@@ -80,7 +88,8 @@ class Admin_Form_Document_SubjectTypeTest extends ControllerTestCase {
     /**
      * Dieser Test soll sicherstellen, das updateModel überschrieben wurde und das Dokument in Ruhe lässt.
      */
-    public function testUpdateModel() {
+    public function testUpdateModel()
+    {
         $form = new Admin_Form_Document_SubjectType('swd'); // Formular ohne Schlagwörter
 
         $document = new Opus_Document(200);
@@ -91,5 +100,4 @@ class Admin_Form_Document_SubjectTypeTest extends ControllerTestCase {
 
         $this->assertEquals(2, count($document->getSubject()));
     }
-
 }

@@ -32,14 +32,16 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Publish_Model_DocumentWorkflowMatheon extends Publish_Model_DocumentWorkflow {
-    
+class Publish_Model_DocumentWorkflowMatheon extends Publish_Model_DocumentWorkflow
+{
+
     /**
      * Initialize custom document fields.
      *
      * @return void
      */
-    protected function initializeDocument() {
+    protected function initializeDocument()
+    {
         $loggedUserModel = new Publish_Model_LoggedUser();
         $userId = trim($loggedUserModel->getUserId());
 
@@ -53,5 +55,4 @@ class Publish_Model_DocumentWorkflowMatheon extends Publish_Model_DocumentWorkfl
                 ->setKeyName('submitter.user_id')
                 ->setValue($userId);
     }
-
 }

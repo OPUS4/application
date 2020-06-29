@@ -34,7 +34,7 @@
  */
 
 /**
- * Class Oai_ContainerController deliveres files of a document for OAI clients.
+ * Class Oai_ContainerController delivers files of a document for OAI clients.
  *
  * If a document has only one file it is returned.
  *
@@ -43,9 +43,11 @@
  *
  * TODO apparently cannot handle filenames with spaces
  */
-class Oai_ContainerController extends Application_Controller_Action {
+class Oai_ContainerController extends Application_Controller_Action
+{
 
-    public function indexAction() {
+    public function indexAction()
+    {
         $docId = $this->getRequest()->getParam('docId', null);
 
         $container = null;
@@ -54,8 +56,7 @@ class Oai_ContainerController extends Application_Controller_Action {
         try {
             $container = new Oai_Model_Container($docId);
             $fileHandle = $container->getFileHandle();
-        }
-        catch (Application_Exception $ome) {
+        } catch (Application_Exception $ome) {
             $this->view->errorMessage = $ome->getMessage();
             $this->getResponse()->setHttpResponseCode(500);
             return $this->render('error');
@@ -67,16 +68,17 @@ class Oai_ContainerController extends Application_Controller_Action {
         $this->getResponse()
                 ->setHeader('Content-Type', $fileHandle->getMimeType(), true)
                 ->setHeader(
-                    'Content-Disposition', 'attachment; filename=' . $container->getName()
-                    . $fileHandle->getExtension(), true
+                    'Content-Disposition',
+                    'attachment; filename=' . $container->getName()
+                    . $fileHandle->getExtension(),
+                    true
                 );
 
         $this->_helper->SendFile->setLogger($this->getLogger());
 
         try {
             $this->_helper->SendFile($fileHandle->getPath());
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             $this->getLogger()->err($ex->getMessage());
             $this->getResponse()->clearAllHeaders();
             $this->getResponse()->clearBody();
@@ -85,5 +87,4 @@ class Oai_ContainerController extends Application_Controller_Action {
 
         $fileHandle->delete();
     }
-
 }

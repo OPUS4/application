@@ -1,19 +1,21 @@
-﻿<p>+++++++++++++++      Muster      +++++++++++++++</p>
+<p>+++++++++++++++      MUSTER      +++++++++++++++</p>
 
-<p>Musterinstitut 
-<br />Musterstraße 1
-<br />00000 Musterstadt</p>
+<p><b>MUSTERINSTITUT</b>
+<br /><b>MUSTERSTRAßE 1</b>
+<br /><b>00000 MUSTERSTADT</b></p>
 
-<p>Telefon: </p>
-<p>Fax: </p>
+<p>Telefon:</p>
+<p>Fax:</p>
 <p>E-Mail:</p>
 
-<p>USt-Id-Nr.: </p>
+<p>USt-Id-Nr.:</p>
 
-<p>Musterinstitut ist eine Körperschaft des öffentlichen Rechts.</p>
-<p>Sie wird durch Mustermann gesetzlich vertreten.</p>
+<p><b>MUSTERINSTITUT</b> ist eine Körperschaft des öffentlichen Rechts.</p>
+<p>Sie wird durch <b>MUSTERMENSCH</b> gesetzlich vertreten.</p>
 <p>Zuständige Aufsichtsbehörde:</p>
 
-<p>Für die Redaktion und die Pflege der Datenbank sowie die inhaltliche Fassung der Autorenseiten zeichnet sich i.S.d. § 55 Abs. 2 RStV Mustermensch von Musterinstitut verantwortlich. (Siehe ..> Kontakt)</p>
+<p>Für die Redaktion und die Pflege der Datenbank sowie die inhaltliche Fassung der Seiten der bücherschreibenden
+Personen zeichnet sich i.S.d. § 55 Abs. 2 RStV <b>MUSTERMENSCH</b> von <b>MUSTERMENSCH</b> verantwortlich.
+(Siehe <a href="contact">Kontakt</a>)</p>
 
-<p>Die Betreuung der Hard- und Software dieses Servers obliegt Musterinstitut.</p>
+<p>Die Betreuung der Hard- und Software dieses Servers obliegt <b>MUSTERINSTITUT</b>.</p>

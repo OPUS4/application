@@ -94,6 +94,7 @@
     <field name="SubjectUncontrolled" required="no" formelement="Select" datatype="Subject" multiplicity="5"/>
     <field name="Volume" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
     <field name="Issue" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
+    <field name="ArticleNumber" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
     <field name="Edition" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
     <field name="Institute" required="no" formelement="Select" datatype="Collection" root="institutes" multiplicity="5"/>
     <field name="PublishedYear" required="no" formelement="Text" datatype="Year" multiplicity="1"/>

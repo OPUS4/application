@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -27,22 +28,26 @@
  * @category    Application Unit Test
  * @package     Form_Element
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class Application_Form_Element_SeriesTest extends FormElementTestCase {
+class Application_Form_Element_SeriesTest extends FormElementTestCase
+{
 
-    public function setUp() {
+    protected $additionalResources = ['database', 'translation'];
+
+    public function setUp()
+    {
         $this->_formElementClass = 'Application_Form_Element_Series';
         $this->_expectedDecoratorCount = 6;
-        $this->_expectedDecorators = array('ViewHelper', 'Errors', 'Description', 'ElementHtmlTag', 'LabelNotEmpty',
-            'dataWrapper');
+        $this->_expectedDecorators = ['ViewHelper', 'Errors', 'Description', 'ElementHtmlTag', 'LabelNotEmpty',
+            'dataWrapper'];
         $this->_staticViewHelper = 'viewFormSelect';
         parent::setUp();
     }
 
-    public function testOptions() {
+    public function testOptions()
+    {
         $element = $this->getElement();
 
         $allSeries = Opus_Series::getAll();
@@ -61,7 +66,8 @@ class Application_Form_Element_SeriesTest extends FormElementTestCase {
     /**
      * TODO fehlender, leerer Wert wird nicht geprüft
      */
-    public function testValidation() {
+    public function testValidation()
+    {
         $element = $this->getElement();
 
         $this->assertFalse($element->isValid('-1'));
@@ -72,10 +78,10 @@ class Application_Form_Element_SeriesTest extends FormElementTestCase {
         $this->assertTrue($element->isValid('2')); // existing ID for series
     }
 
-    public function testTranslation() {
+    public function testTranslation()
+    {
         $translator = Zend_Registry::get(Application_Translate::REGISTRY_KEY);
 
         $this->assertTrue($translator->isTranslated('validation_error_int'));
     }
-
 }

@@ -27,31 +27,45 @@
  * @category    Application
  * @package     Form_Element
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
-class Application_Form_Element_SelectWithNull extends Application_Form_Element_Select {
+/**
+ * Select with option to selecting no option (null).
+ */
+class Application_Form_Element_SelectWithNull extends Application_Form_Element_Select
+{
 
-    public function setValue($value) {
+    private $nullValue = 'Null';
+
+    public function setValue($value)
+    {
         if (is_null($value)) {
-            parent::setValue('Null');
-        }
-        else {
+            parent::setValue($this->nullValue);
+        } else {
             parent::setValue($value);
         }
     }
 
-    public function getValue() {
+    public function getValue()
+    {
         $value = parent::getValue();
 
-        if ($value == 'Null') {
+        if ($value == $this->nullValue) {
             return null;
-        }
-        else {
+        } else {
             return $value;
         }
     }
 
+    public function setNullValue($nullValue)
+    {
+        $this->nullValue = $nullValue;
+    }
+
+    public function getNullValue()
+    {
+        return $this->nullValue;
+    }
 }

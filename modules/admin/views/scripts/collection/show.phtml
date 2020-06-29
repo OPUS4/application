@@ -37,19 +37,19 @@
 
 <div class="collection_breadcrumbs">
     <?= $this->translate('breadcrumb_title') ?>
-    <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collectionroles', 'action' => 'index'), null, true) ?>"><?= $this->translate('admin_title_collections') ?></a>
-    <?php foreach($this->breadcrumb as $i => $parent) : ?>
+    <a href="<?= $this->url(['module' => 'admin', 'controller' => 'collectionroles', 'action' => 'index'], null, true) ?>"><?= $this->translate('admin_title_collections') ?></a>
+    <?php foreach ($this->breadcrumb as $i => $parent) : ?>
         &raquo;
         <?php if ($i === 0) : ?>
             <?php if (count($this->breadcrumb) > 1) : ?>
-        <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'show', 'id' => $parent->getId()), null, true) ?>"><?= htmlspecialchars($this->translate('default_collection_role_' . $this->role_name)) ?></a>
+        <a href="<?= $this->url(['module' => 'admin', 'controller' => 'collection', 'action' => 'show', 'id' => $parent->getId()], null, true) ?>"><?= htmlspecialchars($this->translate('default_collection_role_' . $this->role_name)) ?></a>
             <?php else : ?>
                 <?= htmlspecialchars($this->translate('default_collection_role_' . $this->role_name)) ?>
             <?php endif ?>
         <?php elseif ($i === count($this->breadcrumb) - 1) : ?>
             <?= htmlspecialchars($parent->getNumberAndName()) ?>
         <?php else : ?>
-            <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'show', 'id' => $parent->getId()), null, true) ?>"><?= htmlspecialchars($parent->getNumberAndName()) ?></a>
+            <a href="<?= $this->url(['module' => 'admin', 'controller' => 'collection', 'action' => 'show', 'id' => $parent->getId()], null, true) ?>"><?= htmlspecialchars($parent->getNumberAndName()) ?></a>
         <?php endif ?>
     <?php endforeach; ?>
 </div>
@@ -59,17 +59,17 @@
         <dt><a><?= $this->translate('admin_collections_actions') ?></a></dt>
         <dd>
             <ul>
-                <li><a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'sort',
-                    'id' => $parent->getId(), 'sortby' => 'name')) ?>"
+                <li><a href="<?= $this->url(['module' => 'admin', 'controller' => 'collection', 'action' => 'sort',
+                    'id' => $parent->getId(), 'sortby' => 'name']) ?>"
                         ><?= $this->translate('admin_collections_sortby_name') ?></a></li>
-                <li><a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'sort',
-                    'id' => $parent->getId(), 'sortby' => 'name', 'order' => 'desc')) ?>"
+                <li><a href="<?= $this->url(['module' => 'admin', 'controller' => 'collection', 'action' => 'sort',
+                    'id' => $parent->getId(), 'sortby' => 'name', 'order' => 'desc']) ?>"
                         ><?= $this->translate('admin_collections_sortby_name_desc') ?></a></li>
-                <li><a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'sort',
-                        'id' => $parent->getId(), 'sortby' => 'number')) ?>"
+                <li><a href="<?= $this->url(['module' => 'admin', 'controller' => 'collection', 'action' => 'sort',
+                        'id' => $parent->getId(), 'sortby' => 'number']) ?>"
                         ><?= $this->translate('admin_collections_sortby_number') ?></a></li>
-                <li><a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'sort',
-                        'id' => $parent->getId(), 'sortby' => 'number', 'order' => 'desc')) ?>"
+                <li><a href="<?= $this->url(['module' => 'admin', 'controller' => 'collection', 'action' => 'sort',
+                        'id' => $parent->getId(), 'sortby' => 'number', 'order' => 'desc']) ?>"
                         ><?= $this->translate('admin_collections_sortby_number_desc') ?></a></li>
             </ul>
         </dd>
@@ -88,8 +88,8 @@
 <?php if (0 === count($this->collections)) : ?>
     <tr>
         <td>
-            <a class="add" href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection',
-                'action' => 'new', 'id' => $this->collection_id, 'type' => 'child'), null, true)?>"
+            <a class="add" href="<?= $this->url(['module' => 'admin', 'controller' => 'collection',
+                'action' => 'new', 'id' => $this->collection_id, 'type' => 'child'], null, true)?>"
                title="<?=$this->translate('admin_collections_collection_add')?>"
                 ><?= $this->translate('admin_collections_collection_add') ?>
             </a>
@@ -98,8 +98,8 @@
 <?php else : ?>
     <tr>
         <td colspan="7" class="insert">
-            <a class="insert" href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection',
-                'action' => 'new', 'id' => $this->collection_id, 'type' => 'child'), null, true) ?>"
+            <a class="insert" href="<?= $this->url(['module' => 'admin', 'controller' => 'collection',
+                'action' => 'new', 'id' => $this->collection_id, 'type' => 'child'], null, true) ?>"
                title="<?=$this->translate('admin_collections_collection_add')?>"
                 ><?=$this->translate('admin_collections_collection_add')?></a>
         </td>
@@ -107,26 +107,26 @@
     <?php foreach ($this->collections as $i => $collection) : ?>
     <tr id="col<?= $collection->getId() ?>" class="<?= ($i % 2 == 0) ? 'even' : 'odd'?>">
         <th class="<?= ($collection->getVisible() === '1') ? 'visible' : 'invisible' ?>">
-            <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'show', 'id' => $collection->getId()), null, true) ?>">
+            <a href="<?= $this->url(['module' => 'admin', 'controller' => 'collection', 'action' => 'show', 'id' => $collection->getId()], null, true) ?>">
             <?= htmlspecialchars($collection->getNumberAndName()) ?>
             </a>
         </th>
 
         <td class="edit">
-            <a href="<?= $this->url(array('module'=>'admin', 'controller'=>'collection', 'action' => 'edit', 'id' => $collection->getId()), null, true) ?>"><?=$this->translate('admin_button_edit')?></a>
+            <a href="<?= $this->url(['module' => 'admin', 'controller' => 'collection', 'action' => 'edit', 'id' => $collection->getId()], null, true) ?>"><?=$this->translate('admin_button_edit')?></a>
         </td>
 
         <td class="hide <?= ($collection->getVisible() === '1') ? 'visible' : 'invisible' ?>">
             <?php if ($collection->getVisible() === '1') : ?>
-                <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'hide', 'id' => $collection->getId()), null, true) ?>"><?=$this->translate('admin_collections_collection_hide')?></a>
+                <a href="<?= $this->url(['module' => 'admin', 'controller' => 'collection', 'action' => 'hide', 'id' => $collection->getId()], null, true) ?>"><?=$this->translate('admin_collections_collection_hide')?></a>
             <?php else : ?>
-                <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'unhide', 'id' => $collection->getId()), null, true) ?>"><?=$this->translate('admin_collections_collection_unhide')?></a>
+                <a href="<?= $this->url(['module' => 'admin', 'controller' => 'collection', 'action' => 'unhide', 'id' => $collection->getId()], null, true) ?>"><?=$this->translate('admin_collections_collection_unhide')?></a>
             <?php endif ?>
         </td>
 
         <td class="move-up">
             <?php if ($i > 0) : ?>
-                <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'move', 'id' => $collection->getId(), 'pos' => $i), null, true) ?>">
+                <a href="<?= $this->url(['module' => 'admin', 'controller' => 'collection', 'action' => 'move', 'id' => $collection->getId(), 'pos' => $i], null, true) ?>">
                 <?= $this->translate('admin_button_move_up') ?>
                 </a>
             <?php endif ?>
@@ -134,7 +134,7 @@
 
         <td class="move-down">
             <?php if ($i < count($this->collections) - 1) : ?>
-                <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'move', 'id' => $collection->getId(), 'pos' => $i + 2), null, true)?>">
+                <a href="<?= $this->url(['module' => 'admin', 'controller' => 'collection', 'action' => 'move', 'id' => $collection->getId(), 'pos' => $i + 2], null, true)?>">
                 <?= $this->translate('admin_button_move_down') ?>
                 </a>
             <?php endif ?>
@@ -144,7 +144,7 @@
             <?php if (count($collection->getDocumentIds()) == 0) : ?>
                 <span class="unavailable"><?= $this->translate('admin_collections_no_associated') ?></span>
             <?php else : ?>
-                <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'documents', 'action' => 'index', 'collectionid' => $collection->getId()), null, true) ?>">
+                <a href="<?= $this->url(['module' => 'admin', 'controller' => 'documents', 'action' => 'index', 'collectionid' => $collection->getId()], null, true) ?>">
                 <?= $this->translate('admin_collections_show_associated') ?>
                 </a>
             <?php endif ?>
@@ -152,13 +152,13 @@
 
         <td>
             <?php $confirmKey = ($collection->hasChildren() ? 'confirm_deletion' : 'confirm_deletion_empty'); ?>
-            <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'delete', 'id' => $collection->getId()), null, true) ?>" onclick="return confirm('<?= $this->translate($confirmKey) ?>');"><?=$this->translate('admin_collections_collection_delete')?></a>
+            <a href="<?= $this->url(['module' => 'admin', 'controller' => 'collection', 'action' => 'delete', 'id' => $collection->getId()], null, true) ?>" onclick="return confirm('<?= $this->translate($confirmKey) ?>');"><?=$this->translate('admin_collections_collection_delete')?></a>
         </td>
     </tr>
     <tr>
         <td colspan="7" class="insert">
-            <a class="insert" href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection',
-                'action' => 'new', 'id' => $collection->getId(), 'type' => 'sibling'), null, true) ?>"
+            <a class="insert" href="<?= $this->url(['module' => 'admin', 'controller' => 'collection',
+                'action' => 'new', 'id' => $collection->getId(), 'type' => 'sibling'], null, true) ?>"
                title="<?=$this->translate('admin_collections_collection_add')?>"
                 ><?=$this->translate('admin_collections_collection_add')?></a>
         </td>

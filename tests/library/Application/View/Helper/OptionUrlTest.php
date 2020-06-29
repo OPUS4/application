@@ -27,12 +27,16 @@
  * @category    Application
  * @package     Application_View_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2017-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 class Application_View_Helper_OptionUrlTest extends ControllerTestCase
 {
+
+    protected $configModifiable = true;
+
+    protected $additionalResources = 'view';
 
     public function testOptionUrl()
     {
@@ -43,24 +47,22 @@ class Application_View_Helper_OptionUrlTest extends ControllerTestCase
 
         $helper->setView(Zend_Registry::get('Opus_View'));
 
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
             'logoLink' => 'home'
-        )));
+        ]));
 
         $this->assertEquals('http://localhost/opus4/home', $helper->optionUrl('logoLink'));
 
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
             'logoLink' => '/opus4/home'
-        )));
+        ]));
 
         $this->assertEquals('http://localhost/opus4/home', $helper->optionUrl('logoLink'));
 
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
             'logoLink' => 'http://www.opus-repository.org'
-        )));
+        ]));
 
         $this->assertEquals('http://www.opus-repository.org', $helper->optionUrl('logoLink'));
-
     }
-
 }

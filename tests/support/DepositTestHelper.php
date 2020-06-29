@@ -31,77 +31,87 @@
  * @copyright   Copyright (c) 2016-2017
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class DepositTestHelper extends PHPUnit_Framework_Assert {
+class DepositTestHelper extends PHPUnit_Framework_Assert
+{
 
-    const USER_AGENT = 'PHPUnit';      
-    
+    const USER_AGENT = 'PHPUnit';
+
     const CONTENT_TYPE_ZIP = 'application/zip';
-    
+
     const CONTENT_TYPE_TAR = 'application/tar';
-    
+
     private $collectionId = null;
-    
+
     private $collectionName;
-    
+
     private $collectionNumber;
 
     private $configBackup;
-    
+
     private $frontdoorUrl;
 
-    public function getCollectionId() {
+    public function getCollectionId()
+    {
         return $this->collectionId;
     }
-    
-    public function getCollectionName() {
+
+    public function getCollectionName()
+    {
         return $this->collectionName;
     }
-    
-    public function getCollectionNumber() {
+
+    public function getCollectionNumber()
+    {
         return $this->collectionNumber;
     }
-    
-    public function getFrontdoorUrl() {
+
+    public function getFrontdoorUrl()
+    {
         return $this->frontdoorUrl;
     }
 
-    public function disableExceptionConversion() {
+    public function disableExceptionConversion()
+    {
         PHPUnit_Framework_Error_Warning::$enabled = false;
         PHPUnit_Framework_Error_Notice::$enabled = false;
-        PHPUnit_Framework_Error_Deprecated::$enabled = false;        
+        PHPUnit_Framework_Error_Deprecated::$enabled = false;
     }
-    
-    public function setValidAuthorizationHeader($request, $userAgent) {
+
+    public function setValidAuthorizationHeader($request, $userAgent)
+    {
         $authString = base64_encode('sworduser:sworduserpwd');
-        $request->setHeader('Authorization','Basic ' . $authString);        
+        $request->setHeader('Authorization', 'Basic ' . $authString);
         $request->setHeader('User-Agent', $userAgent);
     }
-    
-    public function uploadFile($request, $fileName, $checksum = null) {
+
+    public function uploadFile($request, $fileName, $checksum = null)
+    {
         $archive = APPLICATION_PATH . '/tests/resources/sword-packages/' . $fileName;
         $handle = fopen($archive, 'rb');
         $contents = fread($handle, filesize($archive));
-        $request->setRawBody($contents);        
+        $request->setRawBody($contents);
         fclose($handle);
-        
+
         if (is_null($checksum)) {
             // used to set an invalid checksum value
             $checksum = md5_file($archive);
-        }        
+        }
         $request->setHeader('Content-MD5', $checksum);
         return $checksum;
     }
-    
-    public function addImportCollection() {
+
+    public function addImportCollection()
+    {
         if (is_null($this->collectionId)) {
             $collectionRole = Opus_CollectionRole::fetchByName('Import');
             $this->assertFalse(
-                is_null($collectionRole), 'Collection Role "Import" is part of standard distribution since OPUS 4.5'
+                is_null($collectionRole),
+                'Collection Role "Import" is part of standard distribution since OPUS 4.5'
             );
             $rootCollection = $collectionRole->getRootCollection();
 
             // create temporary collection
-            $collection = new Opus_Collection();     
+            $collection = new Opus_Collection();
             $timestamp = time();
             $this->collectionNumber = 'sword-test-number-' . $timestamp;
             $collection->setNumber($this->collectionNumber);
@@ -117,22 +127,24 @@ class DepositTestHelper extends PHPUnit_Framework_Assert {
             $config->sword->collection->default->collectionPolicy = 'sword.collection.default.collectionPolicy';
             $config->sword->collection->default->treatment = 'sword.collection.default.treatment';
             $config->sword->collection->default->acceptPackaging = 'sword.collection.default.acceptPackaging';
-            Zend_Registry::set('Zend_Config', $config);            
+            Zend_Registry::set('Zend_Config', $config);
         }
-    }    
-        
-    public function removeImportCollection() {
-        if (!is_null($this->collectionId)) {
+    }
+
+    public function removeImportCollection()
+    {
+        if (! is_null($this->collectionId)) {
             $collection = new Opus_Collection($this->collectionId);
             $collection->delete();
             $this->collectionId = null;
             Zend_Registry::set('Zend_Config', $this->configBackup);
-        }        
-    }    
-    
-    public function assertTitleValues($title, $value, $language) {
+        }
+    }
+
+    public function assertTitleValues($title, $value, $language)
+    {
         $this->assertEquals($value, $title->getValue());
-        $this->assertEquals($language, $title->getLanguage());        
+        $this->assertEquals($language, $title->getLanguage());
     }
 
     /**
@@ -144,8 +156,7 @@ class DepositTestHelper extends PHPUnit_Framework_Assert {
     {
         $appConfig = Application_Configuration::getInstance();
         $tempPath = $appConfig->getTempPath() . 'sword';
-        if (!file_exists($tempPath))
-        {
+        if (! file_exists($tempPath)) {
             mkdir($tempPath);
         }
         $appConfig->setTempPath($tempPath);
@@ -156,24 +167,27 @@ class DepositTestHelper extends PHPUnit_Framework_Assert {
      *
      * @throws Zend_Exception
      */
-    public function assertEmptyTmpDir() {
+    public function assertEmptyTmpDir()
+    {
         $dirName = Application_Configuration::getInstance()->getTempPath();
         $files = scandir($dirName);
         foreach ($files as $file) {
-            $this->assertTrue(in_array($file, array( '.', '..', '.gitignore', 'resumption')), $dirName);
+            $this->assertTrue(in_array($file, [ '.', '..', '.gitignore', 'resumption']), $dirName);
         }
     }
 
-    public function assertNodeProperties($index, $root, $nodeName, $nodeValue) {
+    public function assertNodeProperties($index, $root, $nodeName, $nodeValue)
+    {
         $domNode = $root->item($index);
         $this->assertEquals($nodeName, $domNode->nodeName);
         $this->assertEquals($nodeValue, $domNode->nodeValue);
     }
-    
-    public function assertImportEnrichments($doc, $fileName, $checksum, $expectedNumOfEnrichments) {
+
+    public function assertImportEnrichments($doc, $fileName, $checksum, $expectedNumOfEnrichments)
+    {
         $enrichments = $doc->getEnrichment();
         $this->assertEquals($expectedNumOfEnrichments, count($enrichments));
-        
+
         foreach ($enrichments as $enrichment) {
             switch ($enrichment->getKeyName()) {
                 case Application_Import_AdditionalEnrichments::OPUS_IMPORT_CHECKSUM:
@@ -191,27 +205,34 @@ class DepositTestHelper extends PHPUnit_Framework_Assert {
                 case Application_Import_AdditionalEnrichments::OPUS_IMPORT_USER:
                     $this->assertEquals('sworduser', $enrichment->getValue());
                     break;
+                case Application_Import_AdditionalEnrichments::OPUS_SOURCE:
+                    $this->assertEquals('sword', $enrichment->getValue());
+                    break;
                 default:
-                    if ($expectedNumOfEnrichments == 4) {
+                    if ($expectedNumOfEnrichments == 5) {
                         throw new Exception('unexpected enrichment key ' . $enrichment->getKeyName());
                     }
             }
-        }        
+        }
     }
-    
+
     public function checkAtomEntryDocument(
-        $root, $fileName, $checksum, $abstractExist = true, $numOfEnrichments = 4, $numOfCollections = 1
-    )
-    {
+        $root,
+        $fileName,
+        $checksum,
+        $abstractExist = true,
+        $numOfEnrichments = 5,
+        $numOfCollections = 1
+    ) {
+
         $this->assertEquals('entry', $root->nodeName);
         $attributes = $root->attributes;
-        $this->assertEquals(0, $attributes->length);        
+        $this->assertEquals(0, $attributes->length);
 
         $entryChildren = $root->childNodes;
         if ($abstractExist) {
             $this->assertEquals(12, $entryChildren->length);
-        }
-        else {
+        } else {
             $this->assertEquals(11, $entryChildren->length);
         }
 
@@ -235,7 +256,7 @@ class DepositTestHelper extends PHPUnit_Framework_Assert {
         if ($abstractExist) {
             $this->assertNodeProperties(4, $entryChildren, 'summary', $doc->getTitleAbstract(0)->getValue());
             $offset = 1;
-        }                
+        }
 
         $contentNode = $entryChildren->item(4 + $offset);
         $this->assertEquals('content', $contentNode->nodeName);
@@ -259,25 +280,27 @@ class DepositTestHelper extends PHPUnit_Framework_Assert {
 
         $treatmentValue = $config->sword->treatment;
         $this->assertNodeProperties(7 + $offset, $entryChildren, 'sword:treatment', $treatmentValue);
-        
+
         $this->assertNodeProperties(
-            8 + $offset, $entryChildren, 'sword:packaging', 'sword.collection.default.acceptPackaging'
+            8 + $offset,
+            $entryChildren,
+            'sword:packaging',
+            'sword.collection.default.acceptPackaging'
         );
         $this->assertNodeProperties(9 + $offset, $entryChildren, 'sword:verboseDescription', '');
         $this->assertNodeProperties(10 + $offset, $entryChildren, 'sword:noOp', 'false');
 
         $this->assertImportEnrichments($doc, $fileName, $checksum, $numOfEnrichments);
-        $this->assertImportCollection($doc, $numOfCollections);      
-        
+        $this->assertImportCollection($doc, $numOfCollections);
+
         return $doc;
     }
-            
-    private function assertImportCollection($doc, $numOfCollections = 1) {
+
+    private function assertImportCollection($doc, $numOfCollections = 1)
+    {
         $collections = $doc->getCollection();
         $this->assertEquals($numOfCollections, count($collections));
         $collection = $collections[$numOfCollections - 1];
-        $this->assertEquals($this->collectionId, $collection->getId());        
+        $this->assertEquals($this->collectionId, $collection->getId());
     }
-
-    
 }

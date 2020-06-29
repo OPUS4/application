@@ -27,16 +27,20 @@
  * @category    Application Unit Test
  * @package     Application_View_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Application_View_Helper_TranslateTest extends ControllerTestCase {
-                                                         #
+class Application_View_Helper_TranslateTest extends ControllerTestCase
+{
+
+    protected $additionalResources = 'translation';
+
     /**
      * Return empty string for 'null' values.
      */
-    public function testTranslateNull() {
+    public function testTranslateNull()
+    {
         $model = new Application_View_Helper_Translate();
 
         $this->assertEquals('', $model->translate(null));
@@ -45,30 +49,32 @@ class Application_View_Helper_TranslateTest extends ControllerTestCase {
     /**
      * Return $this for no value (default behaviour).
      */
-    public function testTranslateWithoutParameter() {
+    public function testTranslateWithoutParameter()
+    {
         $model = new Application_View_Helper_Translate();
 
         $this->assertEquals($model, $model->translate());
     }
 
-    public function testTranslateUnknownKey() {
+    public function testTranslateUnknownKey()
+    {
         $model = new Application_View_Helper_Translate();
 
         $this->assertEquals('key123', $model->translate('key123'));
     }
 
-    public function testTranslateKnownKey() {
+    public function testTranslateKnownKey()
+    {
         $this->useGerman();
 
         $model = new Application_View_Helper_Translate();
 
-        $this->assertEquals('Deutsch', $model->translate('deu'));
+        $this->assertEquals('Signatur', $model->translate('SignatureValue'));
     }
 
-    public function testTranslateWithParameters() {
+    public function testTranslateWithParameters()
+    {
         $this->useEnglish();
-
-        Zend_Registry::get('Zend_Translate')->loadModule('admin');
 
         $model = new Application_View_Helper_Translate();
 
@@ -78,16 +84,15 @@ class Application_View_Helper_TranslateTest extends ControllerTestCase {
         );
     }
 
-    public function testTranslateWithParameterArray() {
+    public function testTranslateWithParameterArray()
+    {
         $this->useEnglish();
-
-        Zend_Registry::get('Zend_Translate')->loadModule('admin');
 
         $model = new Application_View_Helper_Translate();
 
         $this->assertEquals(
             'Allow transition from \'state1\' to \'state2\'.',
-            $model->translate('acl_resource_workflow_generic', array('state1', 'state2'))
+            $model->translate('acl_resource_workflow_generic', ['state1', 'state2'])
         );
     }
 
@@ -98,12 +103,11 @@ class Application_View_Helper_TranslateTest extends ControllerTestCase {
     {
         $this->useEnglish();
 
-        Zend_Registry::get('Zend_Translate')->loadModule('admin');
-
         $helper = new Application_View_Helper_Translate();
 
         $this->assertEquals(
-            'Collection \'de\' was edited successfully.', $helper->translate('admin_collections_edit', 'de')
+            'Collection \'de\' was edited successfully.',
+            $helper->translate('admin_collections_edit', 'de')
         );
 
         $this->assertEquals(
@@ -119,24 +123,22 @@ class Application_View_Helper_TranslateTest extends ControllerTestCase {
     {
         $this->useEnglish();
 
-        Zend_Registry::get('Zend_Translate')->loadModule('admin');
-
         $helper = new Application_View_Helper_Translate();
 
         $this->assertEquals(
-            'Manage Collections', $helper->translate('admin_collectionroles_index')
+            'Manage Collections',
+            $helper->translate('admin_collectionroles_index')
         );
 
         $this->assertEquals(
-            'Sammlungsverwaltung', $helper->translate('admin_collectionroles_index', null, 'de')
+            'Sammlungsverwaltung',
+            $helper->translate('admin_collectionroles_index', null, 'de')
         );
     }
 
     public function testTranslationMultipleParameters()
     {
         $this->useEnglish();
-
-        Zend_Registry::get('Zend_Translate')->loadModule('admin');
 
         $helper = new Application_View_Helper_Translate();
 
@@ -145,6 +147,30 @@ class Application_View_Helper_TranslateTest extends ControllerTestCase {
         $this->assertEquals('Showing results <b>1</b> to <b>10</b>', $result);
     }
 
+    public function testTranslationWithTwoPlaceholders()
+    {
+        $this->useEnglish();
 
+        $helper = new Application_View_Helper_Translate();
 
+        $this->assertEquals(
+            'Showing results <b>1</b> to <b>5</b>',
+            $helper->translate('search_results_from_to', [1, 5])
+        );
+
+        $this->assertEquals(
+            'Ergebnisse <b>1</b> bis <b>5</b>',
+            $helper->translate('search_results_from_to', 1, 5, 'de')
+        );
+
+        $this->assertEquals(
+            'Ergebnisse <b>1</b> bis <b>5</b>',
+            $helper->translate('search_results_from_to', [1, 5], 'de')
+        );
+
+        $this->assertEquals(
+            'Showing results <b>1</b> to <b>5</b>',
+            $helper->translate('search_results_from_to', 1, 5)
+        );
+    }
 }

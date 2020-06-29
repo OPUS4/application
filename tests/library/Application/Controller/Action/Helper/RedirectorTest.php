@@ -27,11 +27,11 @@
  * @category    Application Unit Test
  * @package     Application_Controller_Action_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2017-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Application_Controller_Helper_RedirectorTest extends ControllerTestCase
+class Application_Controller_Helper_RedirectorTest extends TestCase
 {
 
     /**
@@ -43,5 +43,4 @@ class Application_Controller_Helper_RedirectorTest extends ControllerTestCase
 
         // redirect didn't work properly if 'anchor' parameter was specified
     }
-
 }

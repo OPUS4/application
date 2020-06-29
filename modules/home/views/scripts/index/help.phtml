@@ -30,20 +30,21 @@
  * @author     Oliver Marahrens (o.marahrens@tu-harburg.de)
  * @author     Sascha Szott <szott@zib.de>
  * @author     Jens Schwidder <schwidder@zib.de>
- * @copyright  Copyright (c) 2008-2012, OPUS 4 development team
+ * @copyright  Copyright (c) 2008-2019, OPUS 4 development team
  * @license    http://www.gnu.org/licenses/gpl.html General Public License
- * @version    $Id$
  *
  * TODO pull out translation key generation (move to Home_Model_HelpFiles)
  * TODO refactor $helpFilesAvailable
+ * TODO breadcrumbs ? at least the look ?
  */
 ?>
 
-<?PHP $this->title = $this->translate('help_index_pagetitle') ?>
-<h2><?= $this->translate('help_index_title') ?></h2>
+<?PHP $this->title = 'help_index_pagetitle' ?>
+
+    <h2><?= $this->translate('help_index_title') ?> <?= $this->helpSetupLink() ?></h2>
 
 <?php if (isset($this->content)) : ?>
-    <h2><?= $this->translate($this->contenttitle) ?></h2>
+    <h2><?= $this->translate($this->contenttitle) ?> <?= $this->faqEditLink($this->contentId) ?></h2>
     <div class="content">
         <div id="section-help" class="section help">
         <?= $this->content ?>
@@ -53,19 +54,22 @@
     <div class="content">
         <div id="section-help" class="section help">
 
-        <?php $help_entries = Home_Model_HelpFiles::getHelpEntries(); ?>
+        <?php $helpEntries = $this->help->getHelpEntries(); ?>
 
-        <?php foreach ($help_entries as $section => $entries) : ?>
-            <h3><?= $this->translate($section) ?></h3>
+        <?php foreach ($helpEntries as $section => $entries) : ?>
+            <h3><?= $this->translate($section) ?> <?= $this->faqSectionEditLink($section) ?></h3>
             <ul class="nav help">
                 <?php foreach ($entries as $entry) : ?>
                     <li>
-                        <?php if (!$this->separate) : ?>
+                        <?php if (! $this->help->getSeparateViewEnabled()) : ?>
                             <a href="#<?= $entry; ?>">
                                 <?= $this->translate('help_title_' . $entry) ?>
                             </a>
                         <?php else : ?>
-                            <a href="<?= $this->url(array('module' => 'home', 'controller' => 'index', 'action' => 'help', 'content' => $entry), null, true) ?>">
+                            <a href="<?= $this->url([
+                                    'module' => 'home', 'controller' => 'index', 'action' => 'help',
+                                    'content' => $entry
+                                ], null, true) ?>">
                                 <?= $this->translate('help_title_' . $entry) ?>
                             </a>
                         <?php endif ?>
@@ -75,23 +79,15 @@
         <?php endforeach; ?>
         </div>
 
-        <?php if (!$this->separate) : ?>
+        <?php if (! $this->help->getSeparateViewEnabled()) : ?>
          <div class="section answers">
             <h2><?= $this->translate('help_index_answerstitle') ?></h2>
             <dl>
-            <?php $helpFilesAvailable = Home_Model_HelpFiles::getFiles(); ?>
-            <?php foreach ($help_entries as $section => $entries) : ?>
+            <?php foreach ($helpEntries as $section => $entries) : ?>
                 <?php foreach ($entries as $entry) : ?>
-                    <dt id="<?= $entry ?>"> <?= $this->translate('help_title_'.$entry) ?></dt>
-                    <?php $translation = $this->translate('help_content_' . $entry); ?>
+                    <dt id="<?= $entry ?>"><?= $this->translate("help_title_$entry") ?> <?= $this->faqEditLink($entry) ?></dt>
                     <dd>
-                    <?php
-                        $pos = array_search($translation, $helpFilesAvailable);
-                        if ($pos !== FALSE) : ?>
-                        <div><?= Home_Model_HelpFiles::getFileContent($helpFilesAvailable[$pos]) ?></div>
-                    <?php elseif (($translation !== 'help_content_' . $entry)) : ?>
-                        <div><?= $translation ?></div>
-                    <?php endif ?>
+                        <div><?= $this->help->getContent($entry) ?></div>
                         <p class="backlink"><a href="#section-help"><?= $this->translate('help_index_up') ?></a></p>
                     </dd>
                 <?php endforeach; ?>

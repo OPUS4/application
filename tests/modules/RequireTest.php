@@ -41,39 +41,13 @@
  * @group RequireTest
  *
  * @coversNothing
+ *
+ * TODO following annotations necessary/desired?
+ * @runTestsInSeparateProcess
+ * @preserveGlobalState disabled
  */
-class RequireTest extends Zend_Test_PHPUnit_ControllerTestCase
+class RequireTest extends ControllerTestCase
 {
-
-    /**
-     * Overwrite standard setUp method, no database connection needed.  Will
-     * create a file listing of class files instead.
-     *
-     * @return void
-     */
-    public function setUp() {
-        $this->bootstrap = new Zend_Application(
-            APPLICATION_ENV,
-            array(
-                "config" => array(
-                    APPLICATION_PATH . '/application/configs/application.ini',
-                    APPLICATION_PATH . '/tests/tests.ini',
-                    APPLICATION_PATH . '/tests/config.ini'
-                )
-            )
-        );
-
-        parent::setUp();
-    }
-
-    /**
-     * Overwrite standard tearDown method, no cleanup needed.
-     *
-     * @return void
-     */
-    public function tearDown()
-    {
-    }
 
     /**
      * Data provider for all classes which should be loadable.
@@ -93,15 +67,15 @@ class RequireTest extends Zend_Test_PHPUnit_ControllerTestCase
             'statistic/models/StatisticGraphThumb'
         ];
 
-        $checkClassFiles = array();
-        foreach ($classFiles AS $file) {
+        $checkClassFiles = [];
+        foreach ($classFiles as $file) {
             foreach ($blacklist as $excluded) {
                 if (strstr($file, $excluded)) {
                     $file = null;
                     continue;
                 }
             }
-            if (!is_null($file)) {
+            if (! is_null($file)) {
                 $checkClassFiles[] = [$file];
             }
         }

@@ -38,57 +38,71 @@
  * @category    Application
  * @package     Module_Admin
  */
-class Admin_Form_Document_Abstract extends Admin_Form_AbstractModelSubForm {
-    
+class Admin_Form_Document_Abstract extends Admin_Form_AbstractModelSubForm
+{
+
     const ELEMENT_ID = 'Id';
-    
+
     const ELEMENT_LANGUAGE = 'Language';
-    
+
     const ELEMENT_VALUE = 'Value';
 
-    public function init() {
+    public function init()
+    {
         parent::init();
-        
+
         $this->addElement('Hidden', self::ELEMENT_ID);
-        $this->addElement('Language', self::ELEMENT_LANGUAGE); 
-        $this->addElement('Textarea', self::ELEMENT_VALUE, array('required' => true, 'rows' => 12));
+        $this->addElement('Language', self::ELEMENT_LANGUAGE);
+        $this->addElement('Textarea', self::ELEMENT_VALUE, [
+            'required' => true,
+            'rows' => 12,
+            'decorators' => [
+                'ViewHelper',
+                'Errors',
+                'Description',
+                'ElementHtmlTag',
+                [['dataWrapper' => 'HtmlTagWithId'], ['tag' => 'div', 'class' => 'data-wrapper']]
+            ]
+        ]);
     }
-    
-    public function populateFromModel($abstract) {
+
+    public function populateFromModel($abstract)
+    {
         $this->getElement(self::ELEMENT_ID)->setValue($abstract->getId());
         $this->getElement(self::ELEMENT_LANGUAGE)->setValue($abstract->getLanguage());
         $this->getElement(self::ELEMENT_VALUE)->setValue($abstract->getValue());
     }
-    
-    public function updateModel($abstract) {
+
+    public function updateModel($abstract)
+    {
         $abstract->setLanguage($this->getElementValue(self::ELEMENT_LANGUAGE));
         $abstract->setValue($this->getElementValue(self::ELEMENT_VALUE));
     }
 
-    public function getModel() {
+    public function getModel()
+    {
         $abstractId = $this->getElement(self::ELEMENT_ID)->getValue();
-        
-        if (empty($abstractId) || !is_numeric($abstractId)) {
+
+        if (empty($abstractId) || ! is_numeric($abstractId)) {
             $abstractId = null;
         }
 
         try {
             $abstract = new Opus_TitleAbstract($abstractId);
-        }
-        catch (Opus_Model_NotFoundException $omnfe) {
+        } catch (Opus_Model_NotFoundException $omnfe) {
             $this->getLogger()->err(__METHOD__ . " Unknown ID = '$abstractId' (" . $omnfe->getMessage() . ').');
             $abstract = new Opus_TitleAbstract();
         }
-        
+
         $this->updateModel($abstract);
-        
+
         return $abstract;
     }
-    
-    public function loadDefaultDecorators() {
+
+    public function loadDefaultDecorators()
+    {
         parent::loadDefaultDecorators();
-        
+
         $this->removeDecorator('Fieldset');
     }
-
 }

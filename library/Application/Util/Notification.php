@@ -27,7 +27,8 @@
  * @category    Application
  * @package     Notification
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2012-2018, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2012-2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  *
  * TODO remove concept of 'context' - class should not implement different context variations (use OO principles)
@@ -75,7 +76,7 @@ class Application_Util_Notification extends Application_Model_Abstract
         // TODO refactor getting main title value
         $titleObj = $document->getMainTitle();
 
-        if (!is_null($titleObj)) {
+        if (! is_null($titleObj)) {
             return $titleObj->getValue();
         } else {
             return null;
@@ -88,6 +89,7 @@ class Application_Util_Notification extends Application_Model_Abstract
      * @param $recipients
      *
      * TODO this function is only used for PublicatioNotification at the moment - cleanup!
+     * TODO needs more tests
      */
     public function prepareMailFor($document, $url, $recipients)
     {
@@ -113,8 +115,14 @@ class Application_Util_Notification extends Application_Model_Abstract
             } else {
                 $entry['name'] = $recipient['name'];
             }
+
+            $converted[] = $entry; // TODO removing this line does not break tests
         }
 
+        // TODO removing the following line does not break tests
+        $converted = $this->getRecipients($converted); // adding general recipients
+
+        // TODO this function should not send the messages, just prepare them (refactoring)
         $this->scheduleNotification(
             $this->getMailSubject($document, $authors),
             $this->getMailBody($document->getId(), $authors, $title, $url),
@@ -129,7 +137,7 @@ class Application_Util_Notification extends Application_Model_Abstract
         $authors = [];
 
         $personAuthors = $document->getPersonAuthor();
-        if (!empty($personAuthors)) {
+        if (! empty($personAuthors)) {
             foreach ($personAuthors as $author) {
                 // TODO Komma nur wenn FirstName present
                 $name = trim($author->getLastName() . ", " . $author->getFirstName());
@@ -141,6 +149,7 @@ class Application_Util_Notification extends Application_Model_Abstract
     }
 
     /**
+     * @param $document Opus_Document
      * @param $docId
      * @param $authors
      * @param $title
@@ -184,7 +193,6 @@ class Application_Util_Notification extends Application_Model_Abstract
     public function getSubjectTemplate()
     {
         $config = $this->getConfig();
-
         if (isset($config->notification->document->submitted->subject)) {
             return $config->notification->document->submitted->subject;
         }
@@ -193,11 +201,13 @@ class Application_Util_Notification extends Application_Model_Abstract
     public function getMailBody($docId, $authors, $title, $url)
     {
         $config = $this->getConfig();
-
         if (isset($config->notification->document->submitted->template)) {
             return $this->getTemplate(
-                $config->notification->document->submitted->template, $docId, $authors,
-                $title, $url
+                $config->notification->document->submitted->template,
+                $docId,
+                $authors,
+                $title,
+                $url
             );
         }
     }
@@ -205,7 +215,7 @@ class Application_Util_Notification extends Application_Model_Abstract
     public function getTemplate($template, $docId, $authors, $title, $url)
     {
         $templateFileName = APPLICATION_PATH . '/application/configs/mail_templates/' . $template;
-        if (!is_file($templateFileName)) {
+        if (! is_file($templateFileName)) {
             $this->getLogger()->err(
                 "could not find mail template based on application configuration: '$templateFileName'"
                 . ' does not exist or is not readable'
@@ -213,14 +223,12 @@ class Application_Util_Notification extends Application_Model_Abstract
             return;
         }
         ob_start();
-        extract(
-            array(
+        extract([
             "authors" => $authors,
             "title" => $title,
             "docId" => $docId,
             "url" => $url
-            )
-        );
+        ]);
         require($templateFileName);
         $body = ob_get_contents();
         ob_end_clean();
@@ -268,7 +276,7 @@ class Application_Util_Notification extends Application_Model_Abstract
         $config = $this->getConfig();
 
         return isset($config->notification->document->published->enabled)
-                && $config->notification->document->published->enabled == 1;
+                && filter_var($config->notification->document->published->enabled, FILTER_VALIDATE_BOOLEAN);
     }
 
     /**
@@ -291,7 +299,7 @@ class Application_Util_Notification extends Application_Model_Abstract
 
         foreach ($recipients as $recipient) {
             // only send if email address has not been used before
-            if (!in_array($recipient['address'], $addressesUsed)) {
+            if (! in_array($recipient['address'], $addressesUsed)) {
                 $job = new Opus_Job();
                 $job->setLabel(Opus_Job_Worker_MailNotification::LABEL);
                 $job->setData([
@@ -302,7 +310,8 @@ class Application_Util_Notification extends Application_Model_Abstract
 
                 $config = $this->getConfig();
 
-                if (isset($config->runjobs->asynchronous) && $config->runjobs->asynchronous) {
+                if (isset($config->runjobs->asynchronous) &&
+                    filter_var($config->runjobs->asynchronous, FILTER_VALIDATE_BOOLEAN)) {
                     // Queue job (execute asynchronously)
                     // skip creating job if equal job already exists
                     if (true === $job->isUniqueInQueue()) {
@@ -313,8 +322,7 @@ class Application_Util_Notification extends Application_Model_Abstract
                     try {
                         $mail = new Opus_Job_Worker_MailNotification($this->getLogger(), false);
                         $mail->work($job);
-                    }
-                    catch (Exception $exc) {
+                    } catch (Exception $exc) {
                         $this->getLogger()->err("Email notification failed: " . $exc);
                     }
                 }

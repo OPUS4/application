@@ -34,59 +34,64 @@
 /**
  * Unit Tests für Validator, der prüft, ob ein Wert in Unterformularen vorkommt.
  */
-class Application_Form_Validate_ValuePresentInSubformsTest extends ControllerTestCase {
+class Application_Form_Validate_ValuePresentInSubformsTest extends ControllerTestCase
+{
 
     private $postData;
 
-    public function setUp() {
+    public function setUp()
+    {
         parent::setUp();
 
-        $this->postData = array(
-            'TitleMain0' => array(
+        $this->postData = [
+            'TitleMain0' => [
                 'Language' => 'deu',
                 'Value' => 'Titel 1'
-            ),
-            'TitleMain1' => array(
+            ],
+            'TitleMain1' => [
                 'Language' => 'eng',
                 'Value' => 'Title 2'
-            ),
-            'TitleMain2' => array(
+            ],
+            'TitleMain2' => [
                 'Language' => 'fra',
                 'Value' => 'Titel 3'
-            )
-        );
+            ]
+        ];
     }
 
 
-    public function testConstruct() {
+    public function testConstruct()
+    {
         $validator = new Application_Form_Validate_ValuePresentInSubforms('Language');
 
         $this->assertEquals('Language', $validator->getElementName());
     }
 
-    public function testIsValidTrue() {
+    public function testIsValidTrue()
+    {
         $validator = new Application_Form_Validate_ValuePresentInSubforms('Language');
 
         $this->assertTrue($validator->isValid('eng', $this->postData));
     }
 
-    public function testIsValidFalse() {
+    public function testIsValidFalse()
+    {
         $validator = new Application_Form_Validate_ValuePresentInSubforms('Language');
 
         $this->assertFalse($validator->isValid('rus', $this->postData));
     }
 
-    public function testIsValidFalseForContextNull() {
+    public function testIsValidFalseForContextNull()
+    {
         $validator = new Application_Form_Validate_ValuePresentInSubforms('Language');
 
         $this->assertFalse($validator->isValid('rus', null));
     }
 
-    public function testIsValidFalseForElementNull() {
+    public function testIsValidFalseForElementNull()
+    {
         $validator = new Application_Form_Validate_ValuePresentInSubforms(null);
 
         $this->assertFalse($validator->isValid('rus', $this->postData));
     }
-
 }
-

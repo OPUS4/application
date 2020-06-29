@@ -47,7 +47,7 @@
     <xsl:template match="/">
       <xsl:apply-templates select="Documents" />
     </xsl:template>
-	
+
     <xsl:template match="Documents">
           <xsl:apply-templates select="Opus_Document" />
     </xsl:template>
@@ -56,7 +56,7 @@
       <xsl:template match="@*|node()" />-->
     <!--
         here you can change the order of the fields, just change the order of the
-        apply-templates-rows 
+        apply-templates-rows
         if there is a choose-block for the field, you have to move the whole
         choose-block
         if you wish new fields, you have to add a new line xsl:apply-templates...
@@ -108,7 +108,7 @@
            </xsl:otherwise>
        </xsl:choose>
        <xsl:text>&#10;</xsl:text>
-       
+
        <xsl:if test="string-length(PersonAuthor/@LastName)>0">
            <xsl:apply-templates select="PersonAuthor" />
        </xsl:if>
@@ -133,7 +133,7 @@
        <xsl:if test="Series">
            <xsl:apply-templates select="Series" />
        </xsl:if>
-       
+
        <xsl:if test="string-length(Enrichment[@KeyName='VolumeSource']/@Value)>0">
            <xsl:apply-templates select="Enrichment[@KeyName='VolumeSource']" />
        </xsl:if>
@@ -141,13 +141,13 @@
        <xsl:if test="string-length(Subject/@Value)>0">
            <xsl:apply-templates select="Subject" />
        </xsl:if>
-       
+
        <!--<xsl:if test="string-length(@CompletedYear)>0">
             <xsl:text>Y1  - </xsl:text>
             <xsl:value-of select="@CompletedYear" />
             <xsl:text>&#10;</xsl:text>
         </xsl:if>-->
-		
+
 		 <xsl:choose>
 		<xsl:when test="normalize-space(ComletedDate/@Year)">
              <xsl:text>Y1  - </xsl:text><xsl:value-of select="ComletedDate/@Year" />
@@ -163,8 +163,8 @@
          </xsl:otherwise>
        </xsl:choose>
        <xsl:text>&#10;</xsl:text>
-		
-       
+
+
         <!-- BSZ - Angaben
 	   <xsl:choose>
         <xsl:when test="string-length(PublishedDate/@Year)>0">
@@ -178,31 +178,31 @@
        </xsl:choose>
 	   -->
 
- <!--  Frontdoor-Link raus - Boris 19.10.15      
+ <!--  Frontdoor-Link raus - Boris 19.10.15
        <xsl:text>UR  - http://ids-pub.bsz-bw.de</xsl:text>
  Zeile doppelt auskommentiert:        <xsl:value-of select="$url_prefix" />
         <xsl:text>/frontdoor/index/index/docId/</xsl:text>
         <xsl:value-of select="@Id" />
         <xsl:text>&#10;</xsl:text> -->
 
-        <xsl:if test="string-length(IdentifierUrn/@Value)>0">
-            <xsl:apply-templates select="IdentifierUrn" />
+        <xsl:if test="string-length(Identifier[@Type = 'urn']/@Value)>0">
+            <xsl:apply-templates select="Identifier[@Type = 'urn']" />
         </xsl:if>
 
-        <xsl:if test="string-length(IdentifierUrl/@Value)>0">
-            <xsl:apply-templates select="IdentifierUrl" />
+        <xsl:if test="string-length(Identifier[@Type = 'url']/@Value)>0">
+            <xsl:apply-templates select="Identifier[@Type = 'url']" />
         </xsl:if>
-        <xsl:if test="string-length(IdentifierIsbn/@Value)>0">
-            <xsl:apply-templates select="IdentifierIsbn" />
+        <xsl:if test="string-length(Identifier[@Type = 'isbn']/@Value)>0">
+            <xsl:apply-templates select="Identifier[@Type = 'isbn']" />
         </xsl:if>
 		<!-- DOI nur ausgeben wenn keine URN existiert - Boris 19.10.15 -->
-        <!-- anscheinend doch immer ausgeben (laut FG, Mail v. 22.10.), sonst: -->  
-		<xsl:if test="string-length(IdentifierDoi/@Value) > 0  and string-length(normalize-space(IdentifierUrn/@Value)) = 0">
-        <!-- <xsl:if test="string-length(IdentifierDoi/@Value) > 0">-->
-			<xsl:apply-templates select="IdentifierDoi" />
+        <!-- anscheinend doch immer ausgeben (laut FG, Mail v. 22.10.), sonst: -->
+		<xsl:if test="string-length(Identifier[@Type = 'doi']/@Value) > 0  and string-length(normalize-space(Identifier[@Type = 'urn']/@Value)) = 0">
+        <!-- <xsl:if test="string-length(Identifier[@Type = 'doi']/@Value) > 0">-->
+			<xsl:apply-templates select="Identifier[@Type = 'doi']" />
         </xsl:if>
-        <xsl:if test="string-length(IdentifierIssn/@Value)>0">
-            <xsl:apply-templates select="IdentifierIssn" />
+        <xsl:if test="string-length(Identifier[@Type = 'issn']/@Value)>0">
+            <xsl:apply-templates select="Identifier[@Type = 'issn']" />
         </xsl:if>
         <xsl:if test="string-length(Note/@Message)>0">
             <xsl:apply-templates select="Note" />
@@ -259,38 +259,39 @@
         <xsl:value-of select="@Value" />
         <xsl:text>&#10;</xsl:text>
     </xsl:template>
-	
-	<xsl:template match="IdentifierUrl">
+
+	<xsl:template match="Identifier[@Type = 'url']">
         <xsl:text>UR  - </xsl:text>
         <xsl:value-of select="@Value" />
         <xsl:text>&#10;</xsl:text>
     </xsl:template>
-	
-	<xsl:template match="IdentifierDoi">
-        <xsl:text>U6  - http://dx.doi.org/</xsl:text>
+
+	<xsl:template match="Identifier[@Type = 'doi']">
+        <xsl:text>U6  - </xsl:text>
+        <xsl:value-of select="php:functionString('Application_Xslt::optionValue', 'doi.resolverUrl')"/>
         <xsl:value-of select="@Value" />
         <xsl:text>&#10;</xsl:text>
     </xsl:template>
 
-    <xsl:template match="IdentifierUrn">
+    <xsl:template match="Identifier[@Type = 'urn']">
         <xsl:text>U6  - http://nbn-resolving.de/urn/resolver.pl?</xsl:text>
         <xsl:value-of select="@Value" />
         <xsl:text>&#10;</xsl:text>
     </xsl:template>
 
-    <xsl:template match="IdentifierIsbn">
+    <xsl:template match="Identifier[@Type = 'isbn']">
         <xsl:text>SN  - </xsl:text>
         <xsl:value-of select="@Value" />
         <xsl:text>&#10;</xsl:text>
     </xsl:template>
 
-    <xsl:template match="IdentifierIssn">
+    <xsl:template match="Identifier[@Type = 'issn']">
         <xsl:text>SN  - </xsl:text>
         <xsl:value-of select="@Value" />
         <xsl:text>&#10;</xsl:text>
     </xsl:template>
-    
-    
+
+
 
     <xsl:template match="Note[@Visibility='public']">
         <xsl:text>N1  - </xsl:text><xsl:value-of select="@Message" />
@@ -316,7 +317,7 @@
         <xsl:text>T1  - </xsl:text><xsl:value-of select="@Value" />
         <xsl:text>&#10;</xsl:text>
     </xsl:template>
-    
+
     <xsl:template match="TitleSub">
         <xsl:text>BT  - </xsl:text><xsl:value-of select="@Value" />
         <xsl:text>&#10;</xsl:text>
@@ -331,7 +332,7 @@
         <xsl:text>T2  - </xsl:text><xsl:value-of select="@Value" />
         <xsl:text>&#10;</xsl:text>
     </xsl:template-->
-	
+
 	 <xsl:template match="TitleParent">
 	   <xsl:choose>
 	     <xsl:when test="../@Type='book'">
@@ -348,12 +349,12 @@
 		 </xsl:otherwise>
 		 </xsl:choose>
     </xsl:template>
-    
+
     <xsl:template match="TitleAdditional">
         <xsl:text>T2  - </xsl:text><xsl:value-of select="@Value" />
         <xsl:text>&#10;</xsl:text>
     </xsl:template>
-    
+
     <xsl:template match="Edition">
         <xsl:text>ET  - </xsl:text>
         <xsl:value-of select="@Value" />

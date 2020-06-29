@@ -43,12 +43,12 @@ class Frontdoor_Form_FrontdoorActionBox extends Admin_Form_ActionBox
 
         unset($actions['frontdoor']);
 
-        $actions['view'] = array(
+        $actions['view'] = [
             'module'     => 'admin',
             'controller' => 'document',
             'action'     => 'index',
             'id'         => $this->getDocument()->getId()
-        );
+        ];
 
         return $actions;
     }

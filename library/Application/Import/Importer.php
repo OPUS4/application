@@ -140,7 +140,6 @@ class Application_Import_Importer
         $this->singleDocImport = $opusDocuments->length == 1;
 
         foreach ($opusDocuments as $opusDocumentElement) {
-
             // save oldId for later referencing of the record under consideration
             // according to the latest documentation the value of oldId is not
             // stored as an OPUS identifier
@@ -161,8 +160,7 @@ class Application_Import_Importer
                     $opusDocumentElement->removeAttribute('docId');
                     $this->log('Value of attribute docId is ignored in SWORD context');
                     $doc = $this->initDocument();
-                }
-                else {
+                } else {
                     // perform metadata update on given document
                     // please note that existing files that are already associated
                     // with the given document are not deleted or updated
@@ -187,7 +185,7 @@ class Application_Import_Importer
             try {
                 $this->processAttributes($opusDocumentElement->attributes, $doc);
                 $filesElementFound = $this->processElements($opusDocumentElement->childNodes, $doc);
-                if ($this->swordContext && $this->singleDocImport && !$filesElementFound) {
+                if ($this->swordContext && $this->singleDocImport && ! $filesElementFound) {
                     // add all files in the root level of the package to the currently
                     // processed document
                     $this->importFilesDirectly($doc);
@@ -199,21 +197,21 @@ class Application_Import_Importer
                 continue;
             }
 
-            if (!is_null($this->additionalEnrichments)) {
+            if (! is_null($this->additionalEnrichments)) {
                 $enrichments = $this->additionalEnrichments->getEnrichments();
                 foreach ($enrichments as $key => $value) {
                     $this->addEnrichment($doc, $key, $value);
                 }
             }
 
-            if (!is_null($this->importCollection)) {
+            if (! is_null($this->importCollection)) {
                 $doc->addCollection($this->importCollection);
             }
 
             try {
                 $doc->store();
                 $this->document = $doc;
-                if (!is_null($this->statusDoc)) {
+                if (! is_null($this->statusDoc)) {
                     $this->statusDoc->addDoc($doc);
                 }
             } catch (Exception $e) {
@@ -231,7 +229,7 @@ class Application_Import_Importer
             $this->log("Import finished successfully. $numOfDocsImported documents were imported.");
         } else {
             $this->log("Import finished. $numOfDocsImported documents were imported. $numOfSkippedDocs documents were skipped.");
-            if (!$this->swordContext) {
+            if (! $this->swordContext) {
                 throw new Application_Import_MetadataImportSkippedDocumentsException("$numOfSkippedDocs documents were skipped during import.");
             }
         }
@@ -249,27 +247,29 @@ class Application_Import_Importer
     {
         // Enable user error handling while validating input
         libxml_clear_errors();
-        libxml_use_internal_errors(true);
+        $useInternalErrors = libxml_use_internal_errors(true);
 
         $this->log("Load XML ...");
         $xml = null;
 
-        if (!is_null($this->xmlFile)) {
+        if (! is_null($this->xmlFile)) {
             $xml = new DOMDocument();
             $xml->load($this->xmlFile);
-            if (!$xml) {
+            if (! $xml) {
                 throw new Application_Import_MetadataImportInvalidXmlException('XML is not well-formed.');
             }
         } else {
             $xml = new DOMDocument();
             $xml->loadXML($this->xmlString);
-            if (!$xml) {
+            if (! $xml) {
                 throw new Application_Import_MetadataImportInvalidXmlException('XML is not well-formed.');
             }
         }
 
         $this->log('Loading Result: OK');
         $this->xml = $xml;
+        libxml_use_internal_errors($useInternalErrors);
+        libxml_clear_errors();
     }
 
     private function validateXml()
@@ -310,7 +310,8 @@ class Application_Import_Importer
      */
     private function resetDocument($doc)
     {
-        $fieldsToDelete = array_diff([
+        $fieldsToDelete = array_diff(
+            [
             'TitleMain',
             'TitleAbstract',
             'TitleParent',
@@ -340,6 +341,7 @@ class Application_Import_Importer
             'PageFirst',
             'PageLast',
             'PageNumber',
+            'ArticleNumber',
             'PublisherName',
             'PublisherPlace',
             'Type',
@@ -350,7 +352,8 @@ class Application_Import_Importer
             'ServerDateModified',
             'ServerDatePublished',
             'ServerDateDeleted'],
-            $this->fieldsToKeepOnUpdate);
+            $this->fieldsToKeepOnUpdate
+        );
 
         $doc->deleteFields($fieldsToDelete);
     }
@@ -368,7 +371,7 @@ class Application_Import_Importer
             if ($attribute->name == 'belongsToBibliography') {
                 if ($value == 'true') {
                     $value = '1';
-                } else if ($value == 'false') {
+                } elseif ($value == 'false') {
                     $value = '0';
                 }
             }
@@ -433,7 +436,7 @@ class Application_Import_Importer
                         break;
                     case 'files':
                         $filesElementPresent = true;
-                        if (!is_null($this->importDir)) {
+                        if (! is_null($this->importDir)) {
                             $baseDir = trim($node->getAttribute('basedir'));
                             $this->handleFiles($node, $doc, $baseDir);
                         }
@@ -594,7 +597,6 @@ class Application_Import_Importer
     {
         foreach ($node->childNodes as $childNode) {
             if ($childNode instanceof DOMElement) {
-
                 $instId = trim($childNode->getAttribute('id'));
                 $instRole = $childNode->getAttribute('role');
                 // check if dnbInstitute with given id and role exists
@@ -662,7 +664,6 @@ class Application_Import_Importer
     {
         foreach ($node->childNodes as $childNode) {
             if ($childNode instanceof DOMElement) {
-
                 $collectionId = trim($childNode->getAttribute('id'));
                 // check if collection with given id exists
                 try {
@@ -689,7 +690,6 @@ class Application_Import_Importer
     {
         foreach ($node->childNodes as $childNode) {
             if ($childNode instanceof DOMElement) {
-
                 $seriesId = trim($childNode->getAttribute('id'));
                 // check if document set with given id exists
                 try {
@@ -718,7 +718,6 @@ class Application_Import_Importer
     {
         foreach ($node->childNodes as $childNode) {
             if ($childNode instanceof DOMElement) {
-
                 $key = trim($childNode->getAttribute('key'));
                 // check if enrichment key exists
                 try {
@@ -764,7 +763,6 @@ class Application_Import_Importer
     {
         foreach ($node->childNodes as $childNode) {
             if ($childNode instanceof DOMElement) {
-
                 $licenceId = trim($childNode->getAttribute('id'));
                 try {
                     $l = new Opus_Licence($licenceId);
@@ -825,7 +823,6 @@ class Application_Import_Importer
     {
         foreach ($node->childNodes as $childNode) {
             if ($childNode instanceof DOMElement) {
-
                 $name = trim($childNode->getAttribute('name'));
                 $path = trim($childNode->getAttribute('path'));
                 if ($name == '' && $path == '') {
@@ -856,23 +853,23 @@ class Application_Import_Importer
         }
         $fullPath .= ($path != '') ? $path : $name;
 
-        if (!is_readable($fullPath)) {
+        if (! is_readable($fullPath)) {
             $this->log('Cannot read file ' . $fullPath . ': make sure that it is contained in import package');
             return;
         }
 
-        if (!$this->validMimeType($fullPath)) {
+        if (! $this->validMimeType($fullPath)) {
             $this->log('MIME type of file ' . $fullPath . ' is not allowed for import');
             return;
         }
 
-        if (!is_null($childNode) && !$this->checksumValidation($childNode, $fullPath)) {
+        if (! is_null($childNode) && ! $this->checksumValidation($childNode, $fullPath)) {
             $this->log('Checksum validation of file ' . $fullPath . ' was not successful: check import package');
             return;
         }
 
         $file = new Opus_File();
-        if (!is_null($childNode)) {
+        if (! is_null($childNode)) {
             $this->handleFileAttributes($childNode, $file);
         }
         if (is_null($file->getLanguage())) {
@@ -887,7 +884,7 @@ class Application_Import_Importer
         }
         $file->setPathName(basename($pathName));
 
-        if (!is_null($childNode)) {
+        if (! is_null($childNode)) {
             $comments = $childNode->getElementsByTagName('comment');
             if ($comments->length == 1) {
                 $comment = $comments->item(0);
@@ -964,10 +961,10 @@ class Application_Import_Importer
                         $attribute = 'label';
                         break;
                     case 'visibleInFrontdoor':
-                        $value = ($value == 'true')? true : false;
+                        $value = ($value == 'true') ? true : false;
                         break;
                     case 'visibleInOai':
-                        $value = ($value == 'true')? true : false;
+                        $value = ($value == 'true') ? true : false;
                         break;
                     case 'sortOrder':
                         $value = intval($value);

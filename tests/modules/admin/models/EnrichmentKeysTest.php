@@ -27,24 +27,25 @@
  * @category    Application Unit Test
  * @package     Module_Admin
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
  * @category    Application Unit Test
  * @package     Module_Admin
  */
-class Admin_Model_EnrichmentKeysTest extends ControllerTestCase {
+class Admin_Model_EnrichmentKeysTest extends ControllerTestCase
+{
 
-    public function testGetProtectedEnrichmentKeys() {
+    public function testGetProtectedEnrichmentKeys()
+    {
         $model = new Admin_Model_EnrichmentKeys();
 
-        $config = new Zend_Config(array('enrichmentkey' => array('protected' => array(
+        $config = new Zend_Config(['enrichmentkey' => ['protected' => [
             'modules' => 'pkey1,pkey2',
             'migration' => 'pkey3,pkey4'
-        ))));
+        ]]]);
 
         $model->setConfig($config);
 
@@ -56,9 +57,9 @@ class Admin_Model_EnrichmentKeysTest extends ControllerTestCase {
         $this->assertContains('pkey3', $protectedKeys);
         $this->assertContains('pkey4', $protectedKeys);
 
-        $config = new Zend_Config(array('enrichmentkey' => array('protected' => array(
+        $config = new Zend_Config(['enrichmentkey' => ['protected' => [
             'migration' => 'pkey3,pkey4'
-        ))));
+        ]]]);
 
         $model->setConfig($config);
         $model->setProtectedEnrichmentKeys(null);
@@ -69,9 +70,9 @@ class Admin_Model_EnrichmentKeysTest extends ControllerTestCase {
         $this->assertContains('pkey3', $protectedKeys);
         $this->assertContains('pkey4', $protectedKeys);
 
-        $config = new Zend_Config(array('enrichmentkey' => array('protected' => array(
+        $config = new Zend_Config(['enrichmentkey' => ['protected' => [
             'modules' => 'pkey1,pkey2',
-        ))));
+        ]]]);
 
         $model->setConfig($config);
         $model->setProtectedEnrichmentKeys(null);
@@ -83,10 +84,11 @@ class Admin_Model_EnrichmentKeysTest extends ControllerTestCase {
         $this->assertContains('pkey2', $protectedKeys);
     }
 
-    public function testGetProtectedEnrichmentKeysNotConfigured() {
+    public function testGetProtectedEnrichmentKeysNotConfigured()
+    {
         $model = new Admin_Model_EnrichmentKeys();
 
-        $config = new Zend_Config(array());
+        $config = new Zend_Config([]);
 
         $model->setConfig($config);
 
@@ -95,5 +97,4 @@ class Admin_Model_EnrichmentKeysTest extends ControllerTestCase {
         $this->assertInternalType('array', $protectedKeys);
         $this->assertCount(0, $protectedKeys);
     }
-
 }

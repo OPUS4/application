@@ -29,13 +29,13 @@
  * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
- */ 
+ */
 /**
  * Dieses Skript gibt alle IDs der Dokumente zurück, die keinen Titel
  * in der Sprache des Dokuments besitzen.
  *
  * Diese Dokumente werden in der Trefferansicht als "Unbekanntes Dokument" angezeigt.
- * 
+ *
  */
 
 $updateRequired = 0;
@@ -43,22 +43,21 @@ $docfinder = new Opus_DocumentFinder();
 foreach ($docfinder->ids() as $docId) {
     $doc = new Opus_Document($docId);
 
-foreach ($doc->getTitleMain() as $title) {
-    $titleLanguage = $title->getLanguage();
-    $docLanguage = $doc->getLanguage();    
-}
+    foreach ($doc->getTitleMain() as $title) {
+        $titleLanguage = $title->getLanguage();
+        $docLanguage = $doc->getLanguage();
+    }
 
-$lang = strpbrk($docLanguage, $titleLanguage);
+    $lang = strpbrk($docLanguage, $titleLanguage);
     if ($lang === false) {
-        echo "Dokument $doc muss überprueft werden.\n";    
+        echo "Dokument $doc muss überprueft werden.\n";
         $updateRequired++;
     }
 }
 
 if ($updateRequired == 0) {
     echo "Alle Dokumente wurden überprüft -- alles ok!\n";
-}
-else {
+} else {
     echo "Alle Dokumente wurden überprüft -- Anzahl der Dokumente, die  keinen Titel in der Sprache des Dokuments"
         . " besitzen: $updateRequired !\n";
 }

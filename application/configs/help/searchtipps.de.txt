@@ -1,4 +1,4 @@
-﻿<h4>Boolesche Operatoren <b>AND</b>, <b>OR</b>, <b>NOT</b></h4>
+<h4>Boolesche Operatoren <b>AND</b>, <b>OR</b>, <b>NOT</b></h4>
 
 <p>Bei der <b>Einfachen Suche</b> werden mehrere Suchbegriffe automatisch mit <b>und</b> verknüpft. Für eine gezieltere
 Suche empfiehlt es sich mit Hilfe der Booleschen Operatoren mehrere Suchbegriffe miteinander zu verknüpfen.</p>
@@ -17,9 +17,9 @@ einzuschränken: In Dokumenten, in denen der eine Suchbegriff vorkommt, darf der
 
 <p>Die Booleschen Operatoren funktionieren auch für die <b>Erweiterte Suche</b>. Dort können sie benutzt werden, um
 verschiedene Suchbegriffe innerhalb eines Suchfelds miteinander zu kombinieren. Zum Beispiel liefert die folgende
-Suchanfrage alle Dokumente des Autors "Mustermann" für die Jahre 2002 oder 2003:</p>
+Suchanfrage alle Dokumente des Autors bzw. der Autorin "Mustermensch" für die Jahre 2002 oder 2003:</p>
 
-<code> Autor: Mustermann <br/> Jahr: 2002 <b>OR</b> 2003</code>
+<code> Autor*innen: Mustermann <br/> Jahr: 2002 <b>OR</b> 2003</code>
 
 <h4><b>Platzhalter/ Wildcards</b></h4>
 
@@ -27,7 +27,7 @@ Suchanfrage alle Dokumente des Autors "Mustermann" für die Jahre 2002 oder 2003
 ihre Suche erweitern möchten, können Sie <b>*</b> und <b>?</b> als Wildcard verwenden. Es ist nicht möglich, diese am
 Beginn eines Suchbegriffes zu verwenden.</p>
 
-<div><code>Beispiel 1: "Biblio<b>*</b>" findet "Bibliothekar", "Bibliothek" oder auch "bibliothekarisch".</code></div>
+<div><code>Beispiel 1: "Biblio<b>*</b>" findet "Bibliothekarin", "Bibliothek" oder auch "bibliothekarisch".</code></div>
 
 <div><code>Beispiel 2: "Ma<b>?</b>er" findet "Mayer", "Maier" oder auch "Mager" und "Maler".</code></div>
 

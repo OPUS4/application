@@ -59,6 +59,14 @@
                                     </pages>
                                 </edit>
 
+                                <copy>
+                                    <type>mvc</type>
+                                    <label>admin_document_copy</label>
+                                    <module>admin</module>
+                                    <controller>document</controller>
+                                    <action>copy</action>
+                                </copy>
+
                                 <filemanager>
                                     <type>mvc</type>
                                     <label>admin_filemanager_index</label>
@@ -688,40 +696,40 @@
                             </pages>
                         </enrichmentKey>
 
-                        <help-page>
+                        <helppage>
                             <type>mvc</type>
-                            <label>setup_title_help-page</label>
-                            <description>setup_title_help-page_description</description>
+                            <label>setup_title_helppage</label>
+                            <description>setup_title_helppage_description</description>
                             <group>group-cafelatte</group>
                             <module>setup</module>
-                            <controller>help-page</controller>
+                            <controller>helppage</controller>
                             <action>index</action>
                             <pages>
-                                <error>
+                                <structure>
                                     <type>mvc</type>
-                                    <label>setup_error</label>
+                                    <label>setup_helppage_structure</label>
                                     <module>setup</module>
-                                    <controller>help-page</controller>
-                                    <action>error</action>
-                                </error>
+                                    <controller>helppage</controller>
+                                    <action>structure</action>
+                                </structure>
                             </pages>
                             <resource>helppages</resource>
-                        </help-page>
+                        </helppage>
 
-                        <static-page>
+                        <staticpages>
                             <type>mvc</type>
-                            <label>setup_title_static-page</label>
-                            <description>setup_title_static-page_description</description>
+                            <label>setup_title_infopages</label>
+                            <description>setup_title_infopages_description</description>
                             <group>group-cafelatte</group>
                             <module>setup</module>
-                            <controller>static-page</controller>
+                            <controller>translation</controller>
                             <action>index</action>
                             <pages>
                                 <edit>
                                     <type>mvc</type>
-                                    <label>setup_static-page_edit_contact</label>
+                                    <label>setup_infopages_edit_contact</label>
                                     <module>setup</module>
-                                    <controller>static-page</controller>
+                                    <controller>translation</controller>
                                     <action>edit</action>
                                     <params>
                                         <page>contact</page>
@@ -729,9 +737,9 @@
                                 </edit>
                                 <edit-home>
                                     <type>mvc</type>
-                                    <label>setup_static-page_edit_imprint</label>
+                                    <label>setup_infopages_edit_imprint</label>
                                     <module>setup</module>
-                                    <controller>static-page</controller>
+                                    <controller>translation</controller>
                                     <action>edit</action>
                                     <params>
                                         <page>imprint</page>
@@ -739,9 +747,9 @@
                                 </edit-home>
                                 <edit-imprint>
                                     <type>mvc</type>
-                                    <label>setup_static-page_edit_home</label>
+                                    <label>setup_infopages_edit_home</label>
                                     <module>setup</module>
-                                    <controller>static-page</controller>
+                                    <controller>translation</controller>
                                     <action>edit</action>
                                     <params>
                                         <page>home</page>
@@ -751,14 +759,13 @@
                                     <type>mvc</type>
                                     <label>setup_error</label>
                                     <module>setup</module>
-                                    <controller>static-page</controller>
+                                    <controller>translation</controller>
                                     <action>error</action>
                                 </error>
                             </pages>
                             <resource>staticpages</resource>
-                        </static-page>
+                        </staticpages>
 
-                        <!--
                         <translation>
                             <type>mvc</type>
                             <label>setup_title_translation</label>
@@ -768,13 +775,6 @@
                             <controller>language</controller>
                             <action>index</action>
                             <pages>
-                                <show>
-                                    <type>mvc</type>
-                                    <label>setup_translation_choose</label>
-                                    <module>setup</module>
-                                    <controller>language</controller>
-                                    <action>show</action>
-                                </show>
                                 <edit>
                                     <type>mvc</type>
                                     <label>setup_translation_edit</label>
@@ -782,6 +782,41 @@
                                     <controller>language</controller>
                                     <action>edit</action>
                                 </edit>
+                                <delete>
+                                    <type>mvc</type>
+                                    <label>setup_translation_delete</label>
+                                    <module>setup</module>
+                                    <controller>language</controller>
+                                    <action>delete</action>
+                                </delete>
+                                <deleteall>
+                                    <type>mvc</type>
+                                    <label>setup_language_deleteall</label>
+                                    <module>setup</module>
+                                    <controller>language</controller>
+                                    <action>deleteall</action>
+                                </deleteall>
+                                <add>
+                                    <type>mvc</type>
+                                    <label>setup_language_add</label>
+                                    <module>setup</module>
+                                    <controller>language</controller>
+                                    <action>add</action>
+                                </add>
+                                <export>
+                                    <type>mvc</type>
+                                    <label>setup_language_export_breadcrumb</label>
+                                    <module>setup</module>
+                                    <controller>language</controller>
+                                    <action>export</action>
+                                </export>
+                                <import>
+                                    <type>mvc</type>
+                                    <label>setup_language_import</label>
+                                    <module>setup</module>
+                                    <controller>language</controller>
+                                    <action>import</action>
+                                </import>
                                 <error>
                                     <type>mvc</type>
                                     <label>setup_error</label>
@@ -789,6 +824,13 @@
                                     <controller>language</controller>
                                     <action>error</action>
                                 </error>
+                                <settings>
+                                    <type>mvc</type>
+                                    <label>admin_title_settings</label>
+                                    <module>setup</module>
+                                    <controller>language</controller>
+                                    <action>settings</action>
+                                </settings>
                             </pages>
                             <resource>translations</resource>
                         </translation>
@@ -850,7 +892,7 @@
                             <pages>
                                 <job-detail>
                                     <type>mvc</type>
-                                    <label>admin_info_job-detail</label>
+                                    <label>admin_info_job_detail</label>
                                     <module>admin</module>
                                     <controller>info</controller>
                                     <action>job-detail</action>
@@ -905,7 +947,7 @@
                             <pages>
                                 <detail>
                                     <type>mvc</type>
-                                    <label>admin_info_job-detail</label>
+                                    <label>admin_info_job_detail</label>
                                     <module>admin</module>
                                     <controller>job</controller>
                                     <action>detail</action>

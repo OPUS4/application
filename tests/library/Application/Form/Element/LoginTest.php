@@ -27,23 +27,29 @@
  * @category    Application Unit Test
  * @package     Application_Form_Element
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
-class Application_Form_Element_LoginTest extends FormElementTestCase {
+class Application_Form_Element_LoginTest extends FormElementTestCase
+{
 
-    public function setUp() {
+    protected $additionalResources = 'translation';
+
+    public function setUp()
+    {
         $this->_formElementClass = 'Application_Form_Element_Login';
         $this->_expectedDecoratorCount = 8;
-        $this->_expectedDecorators = array('ViewHelper', 'Placeholder', 'Description', 'ElementHint', 'Errors',
-            'ElementHtmlTag', 'LabelNotEmpty', 'dataWrapper');
+        $this->_expectedDecorators = [
+            'ViewHelper', 'Placeholder', 'Description', 'ElementHint', 'Errors',
+            'ElementHtmlTag', 'LabelNotEmpty', 'dataWrapper'
+        ];
         $this->_staticViewHelper = 'viewFormDefault';
         parent::setUp();
     }
 
-    public function testValidationSuccess() {
+    public function testValidationSuccess()
+    {
         $element = $this->getElement();
 
         $this->assertTrue($element->isValid('user'));
@@ -61,7 +67,8 @@ class Application_Form_Element_LoginTest extends FormElementTestCase {
         $this->assertTrue($element->isValid('1234'));
     }
 
-    public function testValidationFailure() {
+    public function testValidationFailure()
+    {
         $element = $this->getElement();
 
         $this->assertFalse($element->isValid(''));
@@ -71,4 +78,51 @@ class Application_Form_Element_LoginTest extends FormElementTestCase {
         $this->assertFalse($element->isValid('ur'));
     }
 
+    public function testRegexValidationTranslated()
+    {
+        $this->useEnglish();
+        $element = $this->getElement();
+
+        $validator = $element->getValidator('Regex');
+
+        $validator->isValid('');
+        $messages = $validator->getMessages();
+
+        $this->assertCount(1, $messages);
+        $this->assertArrayHasKey('regexNotMatch', $messages);
+        $this->assertContains('letters, numbers', $messages['regexNotMatch']);
+
+        $this->useGerman();
+
+        $validator->isValid('');
+        $messages = $validator->getMessages();
+
+        $this->assertCount(1, $messages);
+        $this->assertArrayHasKey('regexNotMatch', $messages);
+        $this->assertContains('Buchstaben, Zahlen', $messages['regexNotMatch']);
+    }
+
+    public function testStringLengthValidationTranslated()
+    {
+        $this->useEnglish();
+        $element = $this->getElement();
+
+        $validator = $element->getValidator('stringLength');
+
+        $validator->isValid('12');
+        $messages = $validator->getMessages();
+
+        $this->assertCount(1, $messages);
+        $this->assertArrayHasKey('stringLengthTooShort', $messages);
+        $this->assertContains('less than 3 characters', $messages['stringLengthTooShort']);
+
+        $this->useGerman();
+
+        $validator->isValid('12');
+        $messages = $validator->getMessages();
+
+        $this->assertCount(1, $messages);
+        $this->assertArrayHasKey('stringLengthTooShort', $messages);
+        $this->assertContains('weniger als 3 Zeichen', $messages['stringLengthTooShort']);
+    }
 }

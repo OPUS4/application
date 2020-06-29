@@ -39,7 +39,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-interface Application_Form_IViewable {
+interface Application_Form_IViewable
+{
 
     /**
      * Bereites die Ausgabe des Formulares als View vor.
@@ -52,5 +53,4 @@ interface Application_Form_IViewable {
      * @return bool
      */
     public function isEmpty();
-
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -27,28 +28,33 @@
  * @category    Application Unit Test
  * @package     Form_Element
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class Application_Form_Element_FileLinkTest extends FormElementTestCase {
+class Application_Form_Element_FileLinkTest extends FormElementTestCase
+{
 
-    public function setUp() {
+    protected $additionalResources = 'database';
+
+    public function setUp()
+    {
         $this->_formElementClass = 'Application_Form_Element_FileLink';
         $this->_expectedDecoratorCount = 8;
-        $this->_expectedDecorators = array('ViewHelper', 'Placeholder', 'Description', 'ElementHint', 'Errors',
-            'ElementHtmlTag', 'LabelNotEmpty', 'dataWrapper');
+        $this->_expectedDecorators = ['ViewHelper', 'Placeholder', 'Description', 'ElementHint', 'Errors',
+            'ElementHtmlTag', 'LabelNotEmpty', 'dataWrapper'];
         $this->_staticViewHelper = 'fileLink';
         parent::setUp();
     }
 
-    public function testDisableLabelFor() {
+    public function testDisableLabelFor()
+    {
         $element = $this->getElement();
 
         $this->assertTrue($element->getDecorator('LabelNotEmpty')->getOption('disableFor'));
     }
 
-    public function testSetValueWithFile() {
+    public function testSetValueWithFile()
+    {
         $file = new Opus_File(130);
 
         $element = $this->getElement();
@@ -58,7 +64,8 @@ class Application_Form_Element_FileLinkTest extends FormElementTestCase {
         $this->assertEquals($file, $element->getValue());
     }
 
-    public function testSetValueWithFileId() {
+    public function testSetValueWithFileId()
+    {
         $element = $this->getElement();
 
         $element->setValue(130);
@@ -69,7 +76,8 @@ class Application_Form_Element_FileLinkTest extends FormElementTestCase {
         $this->assertEquals(130, $file->getId());
     }
 
-    public function testSetValueWithMissingFile() {
+    public function testSetValueWithMissingFile()
+    {
         $file = new Opus_File(123);
 
         $element = $this->getElement();
@@ -86,7 +94,8 @@ class Application_Form_Element_FileLinkTest extends FormElementTestCase {
      * @expectedException Application_Exception
      * @expectedExceptionMessage File with ID = 5555 not found.
      */
-    public function testSetValueWithUnknownFileId() {
+    public function testSetValueWithUnknownFileId()
+    {
         $element = $this->getElement();
 
         $element->setValue(5555);
@@ -96,13 +105,15 @@ class Application_Form_Element_FileLinkTest extends FormElementTestCase {
      * @expectedException Application_Exception
      * @expectedExceptionMessage Value must not be null.
      */
-    public function testSetValueNull() {
+    public function testSetValueNull()
+    {
         $element = $this->getElement();
 
         $element->setValue(null);
     }
 
-    public function testIsValid() {
+    public function testIsValid()
+    {
         $element = $this->getElement();
 
         $this->assertTrue($element->isValid(123)); // File 123 exists in database, but file is missing (document 122)
@@ -113,10 +124,10 @@ class Application_Form_Element_FileLinkTest extends FormElementTestCase {
      * @expectedException Application_Exception
      * @expectedExceptionMessage File with ID = 5555 not found.
      */
-    public function testIsValidUnknownId() {
+    public function testIsValidUnknownId()
+    {
         $element = $this->getElement();
 
         $this->assertFalse($element->isValid(5555)); // File 5555 does not exist
     }
-
 }

@@ -32,17 +32,19 @@
  *
  * The values of the options must be existing Collection field names that are separated by commas.
  */
-class Application_Form_Element_CollectionDisplayFormat extends Application_Form_Element_Select {
+class Application_Form_Element_CollectionDisplayFormat extends Application_Form_Element_Select
+{
 
-    public function init() {
+    public function init()
+    {
         parent::init();
 
-        $options = array(
+        $options = [
             'Name' => 'Name',
             'Number' => 'Number',
             'NameNumber' => 'Name,Number',
             'NumberName' => 'Number,Name'
-        );
+        ];
 
         foreach ($options as $label => $value) {
             $this->addMultiOption($value, $label);
@@ -54,11 +56,11 @@ class Application_Form_Element_CollectionDisplayFormat extends Application_Form_
      *
      * @param String $value
      */
-    public function setValue($value) {
+    public function setValue($value)
+    {
         // previous database versions sometimes used spaces in value like "Name, Number"
         $trimmed = preg_replace('/\s+/', '', $value);
 
         parent::setValue($trimmed);
     }
-
 }

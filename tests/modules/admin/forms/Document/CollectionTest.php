@@ -27,95 +27,104 @@
  * @category    Application Unit Tests
  * @package     Module_Admin
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
  * Tests fuer Admin_Form_Document_Collection Unterformular Klasse.
  */
-class Admin_Form_Document_CollectionTest extends ControllerTestCase {
-    
-    public function createForm() {
+class Admin_Form_Document_CollectionTest extends ControllerTestCase
+{
+
+    protected $additionalResources = ['database', 'translation'];
+
+    public function createForm()
+    {
         $form = new Admin_Form_Document_Collection();
-        
+
         $this->assertEquals(3, count($form->getElements()));
-        
+
         $this->assertNotNull($form->getElement('Id'));
         $this->assertNotNull($form->getElement('Edit'));
         $this->assertNotNull($form->getElement('Remove'));
     }
-    
-    public function testPopulateFromModel() {
+
+    public function testPopulateFromModel()
+    {
         $form = new Admin_Form_Document_Collection();
-        
+
         $collection = new Opus_Collection(499);
-        
+
         $form->populateFromModel($collection);
-        
+
         $this->assertEquals($collection->getDisplayName(), $form->getLegend());
         $this->assertEquals($collection->getId(), $form->getElement('Id')->getValue());
     }
-    
-    public function testPopulateFromModelWithRootCollectionWithoutName() {
+
+    public function testPopulateFromModelWithRootCollectionWithoutName()
+    {
         $this->useEnglish();
-        
+
         $form = new Admin_Form_Document_Collection();
-        
+
         $collection = new Opus_Collection(2); // Root-Collection DDC-Klassifikation
-        
+
         $form->populateFromModel($collection);
-        
+
         $this->assertEquals(2, $form->getElement('Id')->getValue());
         $this->assertNotEmpty($form->getLegend());
         $this->assertNotEmpty($form->getElement('Edit')->getLabel());
         $this->assertEquals('Dewey Decimal Classification', $form->getElement('Edit')->getLabel());
     }
-    
-    public function testProcessPostRemove() {
-        $form = new Admin_Form_Document_Collection();
-        
-        $post = array('Id' => '499', 'Remove' => 'Remove Collection');
-        
-        $this->assertEquals('remove', $form->processPost($post, null));
-    }
-    
-    public function testProcessPostEdit() {
-        $form = new Admin_Form_Document_Collection();
-        
-        $post = array('Id' => '499', 'Edit' => 'Edit Collection');
-        
-        $this->assertEquals('edit', $form->processPost($post, null));
-    }
-    
-    public function testProcessPostEmpty() {
+
+    public function testProcessPostRemove()
+    {
         $form = new Admin_Form_Document_Collection();
 
-        $this->assertNull($form->processPost(array(), null));
+        $post = ['Id' => '499', 'Remove' => 'Remove Collection'];
+
+        $this->assertEquals('remove', $form->processPost($post, null));
     }
-    
-    public function testGetModel() {
+
+    public function testProcessPostEdit()
+    {
         $form = new Admin_Form_Document_Collection();
-        
+
+        $post = ['Id' => '499', 'Edit' => 'Edit Collection'];
+
+        $this->assertEquals('edit', $form->processPost($post, null));
+    }
+
+    public function testProcessPostEmpty()
+    {
+        $form = new Admin_Form_Document_Collection();
+
+        $this->assertNull($form->processPost([], null));
+    }
+
+    public function testGetModel()
+    {
+        $form = new Admin_Form_Document_Collection();
+
         $form->getElement('Id')->setValue(499);
-        
+
         $collection = $form->getModel();
-        
+
         $this->assertEquals(499, $collection->getId());
     }
-    
-    public function testPopulateFromPost() {
+
+    public function testPopulateFromPost()
+    {
         $form = new Admin_Form_Document_Collection();
-        
-        $post = array('Id' => '499');
-        
+
+        $post = ['Id' => '499'];
+
         $form->populateFromPost($post);
-        
+
         $collection = new Opus_Collection(499);
-        
+
         $this->assertEquals($collection->getDisplayName(), $form->getLegend());
         $this->assertEquals($collection->getId(), $form->getElement('Id')->getValue());
     }
-    
 }
