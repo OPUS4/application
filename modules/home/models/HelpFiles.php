@@ -92,7 +92,7 @@ class Home_Model_HelpFiles extends Application_Translate_Help
 
         if ($pos !== false) {
             $path = $this->getHelpPath() . $file;
-            if (is_readable($path) && is_readable($path)) {
+            if (is_readable($path)) {
                 return file_get_contents($path);
             } else {
                 return null;

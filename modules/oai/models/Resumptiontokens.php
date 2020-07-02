@@ -90,7 +90,7 @@ class Oai_Model_Resumptiontokens
         do {
             $uniqueName = sprintf('%s%05d', $uniqueId, $fc++);
             $file = $this->_resumptionPath . DIRECTORY_SEPARATOR . $this->_filePrefix . $uniqueName . $fileExtension;
-        } while (true === file_exists($file));
+        } while (true === is_readable($file));
 
         $this->_resumptionId = $uniqueName;
 
