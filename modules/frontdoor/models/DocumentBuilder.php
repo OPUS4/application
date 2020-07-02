@@ -39,7 +39,7 @@ class Frontdoor_Model_DocumentBuilder
     public function buildDomDocument($xsltFileName)
     {
         $xslt = new DomDocument();
-        if (file_exists($xsltFileName . '_custom.xslt')) {
+        if (is_readable($xsltFileName . '_custom.xslt')) {
             $xslt->load($xsltFileName . '_custom.xslt');
         } else {
             $xslt->load($xsltFileName . '.xslt');

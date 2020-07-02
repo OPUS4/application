@@ -190,7 +190,7 @@ class Application_Update extends Application_Update_PluginAbstract
      */
     public function runScript($script)
     {
-        if (! file_exists($script)) {
+        if (! is_readable($script)) {
             throw new Application_Update_Exception("Update script '$script' not found!");
         }
 
