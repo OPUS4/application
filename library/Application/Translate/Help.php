@@ -71,4 +71,6 @@ abstract class Application_Translate_Help
     abstract public function getHelpEntries();
 
     abstract public function getContent($key);
+
+    abstract public function isContentAvailable($key);
 }

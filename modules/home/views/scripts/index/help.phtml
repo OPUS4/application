@@ -62,16 +62,24 @@
                 <?php foreach ($entries as $entry) : ?>
                     <li>
                         <?php if (! $this->help->getSeparateViewEnabled()) : ?>
+                            <?php if ($this->help->isContentAvailable($entry)) : ?>
                             <a href="#<?= $entry; ?>">
                                 <?= $this->translate('help_title_' . $entry) ?>
                             </a>
+                            <?php else : ?>
+                            <?= $this->translate('help_title_' . $entry) ?> <?= $this->faqEditLink($entry) ?>
+                            <?php endif ?>
                         <?php else : ?>
+                            <?php if ($this->help->isContentAvailable($entry)) : ?>
                             <a href="<?= $this->url([
                                     'module' => 'home', 'controller' => 'index', 'action' => 'help',
                                     'content' => $entry
                                 ], null, true) ?>">
                                 <?= $this->translate('help_title_' . $entry) ?>
                             </a>
+                            <?php else : ?>
+                            <?= $this->translate('help_title_' . $entry) ?> <?= $this->faqEditLink($entry) ?>
+                            <?php endif ?>
                         <?php endif ?>
                     </li>
                 <?php endforeach; ?>

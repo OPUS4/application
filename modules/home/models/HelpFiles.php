@@ -174,4 +174,13 @@ class Home_Model_HelpFiles extends Application_Translate_Help
     {
         $this->helpPath = rtrim($path, '/') . '/';
     }
+
+    public function isContentAvailable($key)
+    {
+        $translate = Zend_Registry::get('Zend_Translate');
+
+        $translationKey = "help_content_$key";
+
+        return $translate->isTranslated($translationKey);
+    }
 }

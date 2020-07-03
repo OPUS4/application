@@ -129,4 +129,12 @@ class Home_Model_HelpFilesTest extends ControllerTestCase
             }
         }
     }
+
+    public function testIsContentAvailable()
+    {
+        $help = $this->help;
+
+        $this->assertTrue($help->isContentAvailable('searchtipps'));
+        $this->assertFalse($help->isContentAvailable('someUnknownKey'));
+    }
 }
