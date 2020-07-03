@@ -67,7 +67,7 @@
                                 <?= $this->translate('help_title_' . $entry) ?>
                             </a>
                             <?php else : ?>
-                            <?= $this->translate('help_title_' . $entry) ?>
+                            <?= $this->translate('help_title_' . $entry) ?> <?= $this->faqEditLink($entry) ?>
                             <?php endif ?>
                         <?php else : ?>
                             <?php if ($this->help->isContentAvailable($entry)) : ?>
@@ -78,7 +78,7 @@
                                 <?= $this->translate('help_title_' . $entry) ?>
                             </a>
                             <?php else : ?>
-                            <?= $this->translate('help_title_' . $entry) ?>
+                            <?= $this->translate('help_title_' . $entry) ?> <?= $this->faqEditLink($entry) ?>
                             <?php endif ?>
                         <?php endif ?>
                     </li>
