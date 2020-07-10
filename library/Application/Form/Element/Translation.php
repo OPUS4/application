@@ -50,7 +50,7 @@ class Application_Form_Element_Translation extends Zend_Form_Element_Multi
     protected $_isArray = false;
 
     private $key;
-    
+
     public function init()
     {
         parent::init();
