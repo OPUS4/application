@@ -106,14 +106,23 @@ class Application_Form_Element_Translation extends Zend_Form_Element_Multi
 
     public function updateTranslations($key, $module = null)
     {
-        $translate = Zend_Registry::get('Zend_Translate');
+        $manager = new Application_Translate_TranslationManager();
 
-        $old = $translate->getTranslations($key);
+        try {
+            $translation = $manager->getTranslation($key);
+            $old = $translation['translations'];
+        } catch (\Opus\Translate\UnknownTranslationKey $ex) {
+            $old = null;
+        }
 
-        $translations = $this->getValue();
+        if (is_null($module) && isset($translation['module'])) {
+            $module = $translation['module'];
+        }
 
-        if ($translations != $old) {
-            $translate->setTranslations($key, $translations, $module);
+        $new = $this->getValue();
+
+        if ($new != $old) {
+            $manager->setTranslation($key, $new, $module);
         }
     }
 
