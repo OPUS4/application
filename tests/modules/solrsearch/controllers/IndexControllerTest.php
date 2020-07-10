@@ -936,38 +936,15 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
 
     public function testFacetSortForYearInverted()
     {
-        // manipulate application configuration
-        $oldConfig = Zend_Registry::get('Zend_Config');
-
-        $config = Zend_Registry::get('Zend_Config');
-        if (isset($config->searchengine->solr->sortcrit->year_inverted)) {
-            $config->searchengine->solr->sortcrit->year_inverted = 'lexi';
-        } else {
-            $config = new Zend_Config([
-                'searchengine' => [
-                    'solr' => [
-                        'sortcrit' => [
-                            'year_inverted' => 'lexi']]]], true);
-            // Include the above made configuration changes in the application configuration.
-            $config->merge(Zend_Registry::get('Zend_Config'));
-        }
-
-        if (isset($config->searchengine->solr->facets)) {
-            $config->searchengine->solr->facets = 'year_inverted,doctype,author_facet,language,has_fulltext,belongs_to_bibliography,subject,institute';
-        } else {
-            $config = new Zend_Config([
-                'searchengine' => [
-                    'solr' => [
-                        'facets' => 'year_inverted,doctype,author_facet,language,has_fulltext,belongs_to_bibliography,subject,institute']]], true);
-            // Include the above made configuration changes in the application configuration.
-            $config->merge(Zend_Registry::get('Zend_Config'));
-        }
-        Zend_Registry::set('Zend_Config', $config);
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'search' => ['facet' => ['year' => [
+                'sort' => 'lexi',
+                'indexField' => 'published_year_inverted'
+            ]]],
+            'searchengine' => ['solr' => ['facets' => 'year,doctype,author_facet,language,has_fulltext,belongs_to_bibliography,subject,institute']]
+        ]));
 
         $this->dispatch('/solrsearch/index/search/searchtype/all');
-
-        // undo configuration manipulation
-        Zend_Registry::set('Zend_Config', $oldConfig);
 
         $searchStrings = [
             '2013',
@@ -979,11 +956,16 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
             '2007',
             '2005',
             '2004',
-            '2003'];
-        $this->assertPositions($this->getResponse()->getBody(), $searchStrings, 'id="year_facet"');
+            '2003'
+        ];
 
-        $this->resetResponse();
+        $this->assertPositions($this->getResponse()->getBody(), $searchStrings, 'id="year_facet"');
+    }
+
+    public function testFacetSortForYearWithDefaultConfig()
+    {
         $this->dispatch('/solrsearch/index/search/searchtype/all');
+
         $searchStrings = [
             '2011',
             '2009',
@@ -994,7 +976,8 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
             '1979',
             '1962',
             '1963',
-            '1975'];
+            '1975'
+        ];
 
         // Wenn es hier bei den Tests Probleme gibt AssumptionChecker für die Diagnose verwenden (in tests/support).
         $this->assertPositions($this->getResponse()->getBody(), $searchStrings, 'id="year_facet"');
@@ -1159,16 +1142,11 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
     public function testFacetExtenderWithVariousConfigFacetLimits()
     {
         $this->useEnglish();
-        $config = Zend_Registry::get('Zend_Config');
-        $config->merge(new Zend_Config(['searchengine' =>
-            ['solr' =>
-                ['facetlimit' =>
-                    [
-                        'author_facet' => '3',
-                        'year' => '15'
-                    ]
-                ]
-            ]
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'search' => ['facet' => [
+                'author_facet' => ['limit' => '3'],
+                'year' => ['limit' => '15']
+            ]]
         ]));
         $this->dispatch('/solrsearch/index/search/searchtype/all/');
         $this->assertQueryContentContains("//div[@id='author_facet_facet']/div/a", ' + more');

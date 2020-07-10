@@ -77,7 +77,7 @@ class Solrsearch_Model_FacetMenu extends Application_Model_Abstract
             $indexFieldName = $facet->getIndexField();
             $facetValue = $request->getParam($name . 'fq', '');
 
-            if (count($indexFields[$indexFieldName]) > 0 || $facetValue !== '') {
+            if (isset($indexFields[$indexFieldName]) && (count($indexFields[$indexFieldName]) > 0 || $facetValue !== '')) {
                 $this->getLogger()->debug("found $name facet in search results");
 
                 $values = $indexFields[$indexFieldName];
