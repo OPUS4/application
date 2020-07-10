@@ -57,6 +57,12 @@ class Application_Search_Facet
 
     private $heading;
 
+    private $limit;
+
+    private $sort;
+
+    private $indexField;
+
     public function __construct($name, $options = null)
     {
         $this->name = $name;
@@ -239,5 +245,39 @@ class Application_Search_Facet
         }
 
         return true;
+    }
+
+    public function getLimit()
+    {
+        return $this->limit;
+    }
+
+    public function setLimit($limit)
+    {
+        $this->limit = $limit;
+    }
+
+    public function getSort()
+    {
+        return $this->sort;
+    }
+
+    public function setSort($sort)
+    {
+        $this->sort = $sort;
+    }
+
+    public function getIndexField()
+    {
+        if (! is_null($this->indexField)) {
+            return $this->indexField;
+        } else {
+            return $this->getName();
+        }
+    }
+
+    public function setIndexField($indexField)
+    {
+        $this->indexField = $indexField;
     }
 }

@@ -153,4 +153,26 @@ class Application_Search_FacetManagerTest extends ControllerTestCase
 
         $this->assertEquals('EnrichmentOpusSource', $config->heading);
     }
+
+    public function testFacetLimit()
+    {
+        $manager = new Application_Search_FacetManager();
+
+        $facet = $manager->getFacet('year');
+
+        $this->assertEquals(10, $facet->getLimit());
+    }
+
+    public function testFacetSortCrit()
+    {
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'search' => ['facet' => ['subject' => ['sort' => 'lexi']]]
+        ]));
+
+        $manager = new Application_Search_FacetManager();
+
+        $facet = $manager->getFacet('subject');
+
+        $this->assertEquals('lexi', $facet->getSort());
+    }
 }

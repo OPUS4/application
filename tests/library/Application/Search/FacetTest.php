@@ -124,4 +124,20 @@ class Application_Search_FacetTest extends ControllerTestCase
         $facet->setHeading(null);
         $this->assertEquals('test_facet_heading', $facet->getHeading());
     }
+
+    public function testGetIndexField()
+    {
+        $facet = new Application_Search_Facet('year');
+
+        $this->assertEquals('year', $facet->getIndexField());
+
+        $facet->setIndexField('year_inverted');
+
+        $this->assertEquals('year_inverted', $facet->getIndexField());
+    }
+
+    public function testGetLimit()
+    {
+        $this->markTestIncomplete();
+    }
 }

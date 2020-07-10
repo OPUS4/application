@@ -40,6 +40,10 @@ class Application_Search_FacetManager
 
     private $config;
 
+
+    /**
+     * TODO need to get limit?
+     */
     public function getFacet($name)
     {
         $activeFacets = $this->getActiveFacets();
