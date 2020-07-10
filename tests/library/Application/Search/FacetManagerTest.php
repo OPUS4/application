@@ -161,7 +161,6 @@ class Application_Search_FacetManagerTest extends ControllerTestCase
         $facet = $manager->getFacet('year');
 
         $this->assertEquals(10, $facet->getLimit());
-
     }
 
     public function testFacetSortCrit()
