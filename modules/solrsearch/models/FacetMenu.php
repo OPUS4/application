@@ -28,7 +28,7 @@
  * @package     Module_Solrsearch
  * @author      Michael Lang <lang@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -59,39 +59,46 @@ class Solrsearch_Model_FacetMenu extends Application_Model_Abstract
     {
         $facetManager = new Application_Search_FacetManager();
 
-        $facets = $result->getFacets(); // facets returned from search
-
-        $facetLimit = Opus\Search\Config::getFacetLimits(); // TODO decentralize facet configuration
+        $indexFields = $result->getFacets(); // facets returned from search
 
         $openFacets = $this->buildFacetArray($request->getParams());
 
         $facetArray = [];
 
-        foreach ($facets as $name => $facet) {
+        $facets = $facetManager->getActiveFacets();
+
+        foreach ($facets as $name) {
+            $facet = $facetManager->getFacet($name);
+
+            if (is_null($facet)) {
+                continue;
+            }
+
+            $indexFieldName = $facet->getIndexField();
             $facetValue = $request->getParam($name . 'fq', '');
 
-            if (count($facets[$name]) > 0 || $facetValue !== '') {
+            if (count($indexFields[$indexFieldName]) > 0 || $facetValue !== '') {
                 $this->getLogger()->debug("found $name facet in search results");
 
-                $facetObj = $facetManager->getFacet($name);
+                $values = $indexFields[$indexFieldName];
 
-                if (is_null($facetObj) || ! $facetObj->isAllowed()) {
+                if (is_null($facet) || ! $facet->isAllowed()) {
                     continue;
                 }
 
-                $facetObj->setValues($facet);
+                $facet->setValues($values);
 
                 if ($facetValue !== '') {
-                    $facetObj->setSelected($facetValue);
-                    $facetObj->setShowFacetExtender(false);
+                    $facet->setSelected($facetValue);
+                    $facet->setShowFacetExtender(false);
                 } else {
                     // TODO encapsulate in Facet object
-                    $facetObj->setShowFacetExtender($facetLimit[$name] <= sizeof($facet));
+                    $facet->setShowFacetExtender($facet->getLimit() <= sizeof($values));
                 }
 
-                $facetObj->setOpen(isset($openFacets[$name]));
+                $facet->setOpen(isset($openFacets[$name]));
 
-                $facetArray[$name] = $facetObj;
+                $facetArray[$name] = $facet;
             }
         }
 
