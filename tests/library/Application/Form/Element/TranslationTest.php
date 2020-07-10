@@ -160,4 +160,30 @@ class Application_Form_Element_TranslationTest extends ControllerTestCase
 
         $this->assertEquals($value, $element->getMultiOptions());
     }
+
+    public function testKeepModuleWhenUpdatingTranslation()
+    {
+        $element = new Application_Form_Element_Translation('Content');
+
+        $dao = new Opus_Translate_Dao();
+        $dao->removeAll();
+
+        $key = 'help_content_contact';
+
+        $data = [
+            'en' => 'Content',
+            'de' => 'Inhalt'
+        ];
+
+        $element->setValue($data);
+
+        $element->updateTranslations($key);
+
+        $manager = new Application_Translate_TranslationManager();
+
+        $translation = $manager->getTranslation($key);
+
+        $this->assertEquals($data, $translation['translations']);
+        $this->assertEquals('home', $translation['module']);
+    }
 }

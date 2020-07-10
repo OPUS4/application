@@ -50,7 +50,7 @@ class Application_Form_Element_Translation extends Zend_Form_Element_Multi
     protected $_isArray = false;
 
     private $key;
-
+    
     public function init()
     {
         parent::init();
@@ -106,14 +106,20 @@ class Application_Form_Element_Translation extends Zend_Form_Element_Multi
 
     public function updateTranslations($key, $module = null)
     {
-        $translate = Zend_Registry::get('Zend_Translate');
+        $manager = new Application_Translate_TranslationManager();
 
-        $old = $translate->getTranslations($key);
+        $translation = $manager->getTranslation($key);
 
-        $translations = $this->getValue();
+        $old = $translation['translations'];
 
-        if ($translations != $old) {
-            $translate->setTranslations($key, $translations, $module);
+        if (is_null($module) && isset($translation['module'])) {
+            $module = $translation['module'];
+        }
+
+        $new = $this->getValue();
+
+        if ($new != $old) {
+            $manager->updateTranslation($key, $new, $module);
         }
     }
 
