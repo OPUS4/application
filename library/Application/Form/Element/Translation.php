@@ -108,9 +108,12 @@ class Application_Form_Element_Translation extends Zend_Form_Element_Multi
     {
         $manager = new Application_Translate_TranslationManager();
 
-        $translation = $manager->getTranslation($key);
-
-        $old = $translation['translations'];
+        try {
+            $translation = $manager->getTranslation($key);
+            $old = $translation['translations'];
+        } catch (\Opus\Translate\UnknownTranslationKey $ex) {
+            $old = null;
+        }
 
         if (is_null($module) && isset($translation['module'])) {
             $module = $translation['module'];
@@ -119,7 +122,7 @@ class Application_Form_Element_Translation extends Zend_Form_Element_Multi
         $new = $this->getValue();
 
         if ($new != $old) {
-            $manager->updateTranslation($key, $new, $module);
+            $manager->setTranslation($key, $new, $module);
         }
     }
 

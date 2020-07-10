@@ -73,11 +73,13 @@ class Application_Form_Element_TranslationTest extends ControllerTestCase
     {
         $element = new Application_Form_Element_Translation('DisplayName');
 
+        $key = 'testkey';
+
         $dao = new Opus_Translate_Dao();
 
-        $dao->remove('testkey');
+        $dao->remove($key);
 
-        $this->assertNull($dao->getTranslation('testkey'));
+        $this->assertNull($dao->getTranslation($key));
 
         $data = [
             'en' => 'test key',
@@ -86,9 +88,9 @@ class Application_Form_Element_TranslationTest extends ControllerTestCase
 
         $element->setValue($data);
 
-        $element->updateTranslations('testkey');
+        $element->updateTranslations($key);
 
-        $this->assertEquals($data, $dao->getTranslation('testkey'));
+        $this->assertEquals($data, $dao->getTranslation($key));
     }
 
     public function testUpdateTranslationsOnlyIfChanged()
