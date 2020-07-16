@@ -76,6 +76,8 @@ class Solrsearch_Model_Search_Advanced extends Solrsearch_Model_Search_Basic
                     $facet = $facetManager->getFacet($fieldname);
                     if (! is_null($facet)) {
                         $indexField = $facet->getIndexField();
+                        // do not use inverted field TODO this is a hack - better solution?
+                        $indexField = preg_replace('/_inverted/', '', $indexField);
                     }
                 }
                 $query->setField($indexField, $input[$fieldname], $input[$fieldname . 'modifier']);
