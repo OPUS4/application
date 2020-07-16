@@ -67,9 +67,18 @@ class Solrsearch_Model_Search_Advanced extends Solrsearch_Model_Search_Basic
         $query->setSortField($input['sortField']);
         $query->setSortOrder($input['sortOrder']);
 
+        $facetManager = $this->getFacetManager();
+
         foreach (['author', 'title', 'persons', 'referee', 'abstract', 'fulltext', 'year'] as $fieldname) {
             if (! empty($input[$fieldname])) {
-                $query->setField($fieldname, $input[$fieldname], $input[$fieldname . 'modifier']);
+                $indexField = $fieldname;
+                if ($fieldname === 'year') {
+                    $facet = $facetManager->getFacet($fieldname);
+                    if (! is_null($facet)) {
+                        $indexField = $facet->getIndexField();
+                    }
+                }
+                $query->setField($indexField, $input[$fieldname], $input[$fieldname . 'modifier']);
             }
         }
 
