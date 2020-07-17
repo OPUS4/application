@@ -1392,4 +1392,19 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
     {
         $this->markTestIncomplete();
     }
+
+    public function testShowingYearForDocument()
+    {
+        $this->markTestIncomplete();
+    }
+
+    public function testFilteringByYear()
+    {
+        $this->markTestIncomplete();
+    }
+
+    public function testFilteringByYearWithInvertedYearFacetConfigured()
+    {
+        $this->markTestIncomplete();
+    }
 }
