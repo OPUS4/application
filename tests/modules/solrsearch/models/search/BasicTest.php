@@ -73,4 +73,9 @@ class Solrsearch_Model_Search_BasicTest extends ControllerTestCase
 
         $this->assertEquals($result['rows'], 1337);
     }
+
+    public function testFilterByPublishedYearInverted()
+    {
+        $this->markTestIncomplete();
+    }
 }

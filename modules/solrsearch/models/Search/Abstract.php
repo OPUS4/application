@@ -43,6 +43,10 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
 
     private $_view;
 
+    /**
+     * TODO this is used for facets (not index fields) - rename!
+     * @var array
+     */
     private $_filterFields;
 
     private $_searchFields;
@@ -226,7 +230,6 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
 
     public function getQueryUrl($request)
     {
-
         $queryBuilderInput = $this->createQueryBuilderInputFromRequest($request);
 
         $searchType = $request->getParam('searchtype');
@@ -459,6 +462,7 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
     public function addFiltersToQuery($query, $input)
     {
         $facetManager = $this->getFacetManager();
+
         foreach ($this->_filterFields as $filterField) {
             $facetName = $filterField;
             $facetKey = $facetName . 'fq';
@@ -468,7 +472,10 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
                 $this->getLogger()->debug(
                     "request has facet key: $facetKey - value is: $facetValue - corresponding facet is: $filterField"
                 );
-                $query->addFilterQuery($facet->getIndexField(), $facetValue);
+                $indexField = $facet->getIndexField();
+                $indexField = preg_replace('/_inverted/', '', $indexField);
+
+                $query->addFilterQuery($indexField, $facetValue);
             }
         }
     }
