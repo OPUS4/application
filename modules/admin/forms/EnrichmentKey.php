@@ -160,9 +160,12 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
     public function populateFromModel($enrichmentKey)
     {
         $name = $enrichmentKey->getName();
-        $this->getElement(self::ELEMENT_DISPLAYNAME)->populateFromTranslations(
-            'Enrichment' . $name
-        );
+
+        if (! is_null($name)) {
+            $this->getElement(self::ELEMENT_DISPLAYNAME)->populateFromTranslations(
+                'Enrichment' . $name
+            );
+        }
 
         // Enrichment-Keys haben keine numerische ID: hier wirkt der Name als Identifikator
         $this->getElement(self::ELEMENT_MODEL_ID)->setValue($name);
@@ -202,6 +205,8 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
      */
     public function updateModel($enrichmentKey)
     {
+        $oldName = $this->getElementValue(self::ELEMENT_MODEL_ID);
+
         $name = $this->getElementValue(self::ELEMENT_NAME);
 
         $enrichmentKey->setName($name);
@@ -217,8 +222,9 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
             $enrichmentKey->setOptions($enrichmentType->getOptions());
         }
 
-        // TODO detect if name has changed (change enrichment keys)
-        $this->getElement(self::ELEMENT_DISPLAYNAME)->updateTranslations("Enrichment$name", 'default');
+        $this->getElement(self::ELEMENT_DISPLAYNAME)->updateTranslations(
+            "Enrichment$name", 'default', "Enrichment$oldName"
+        );
     }
 
     /**

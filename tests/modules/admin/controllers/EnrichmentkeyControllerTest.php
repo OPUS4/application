@@ -250,6 +250,18 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $this->assertNull(Opus_EnrichmentKey::fetchByName('MyTestEnrichment'));
     }
 
+    public function testNewActionTranslationsEmpty()
+    {
+        $this->dispatch($this->getControllerPath() . '/new');
+
+        $this->assertResponseCode(200);
+
+        $this->assertNotXpath('//input[@id = "DisplayName-de" and @value = "Erweiterung"]');
+        $this->assertNotXpath('//input[@id = "DisplayName-en" and @value = "Enrichment"]');
+        $this->assertXpath('//input[@id = "DisplayName-de" and @value = ""]');
+        $this->assertXpath('//input[@id = "DisplayName-en" and @value = ""]');
+    }
+
     public function testNewActionCancel()
     {
         $this->createsModels = true;
@@ -407,7 +419,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $this->dispatch($this->getControllerPath() . '/edit');
         $this->assertResponseCode(200);
 
-        $this->assertXpath("//form/div[2]/div[2]/ul[@class='errors']", $this->getResponse()->getBody());
+        $this->assertXpath('//div[@id = "admin_enrichmentkey_type-element"]/ul[@class="errors"]');
     }
 
     public function testEditActionSaveWithEmptyEnrichmentType()
@@ -429,7 +441,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $this->dispatch($this->getControllerPath() . '/edit');
         $this->assertResponseCode(200);
 
-        $this->assertXpath("//form/div[2]/div[2]/ul[@class='errors']", $this->getResponse()->getBody());
+        $this->assertXpath('//div[@id = "admin_enrichmentkey_type-element"]/ul[@class="errors"]');
     }
 
     public function testEditActionSaveWithExistingEnrichmentType()

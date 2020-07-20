@@ -108,15 +108,20 @@ class Application_Form_Element_Translation extends Zend_Form_Element_Multi
         }
     }
 
-    public function updateTranslations($key, $module = null)
+    public function updateTranslations($key, $module = null, $oldKey = null)
     {
         $manager = new Application_Translate_TranslationManager();
 
-        try {
-            $translation = $manager->getTranslation($key);
-            $old = $translation['translations'];
-        } catch (\Opus\Translate\UnknownTranslationKey $ex) {
-            $old = null;
+        $old = null;
+
+        if (! is_null($oldKey) && $key !== $oldKey) {
+            $manager->delete($oldKey, $module);
+        } else {
+            try {
+                $translation = $manager->getTranslation($key);
+                $old = $translation['translations'];
+            } catch (\Opus\Translate\UnknownTranslationKey $ex) {
+            }
         }
 
         if (is_null($module) && isset($translation['module'])) {
@@ -125,8 +130,12 @@ class Application_Form_Element_Translation extends Zend_Form_Element_Multi
 
         $new = $this->getValue();
 
-        if ($new != $old) {
-            $manager->setTranslation($key, $new, $module);
+        if ($new !== $old) {
+            if (! is_null($new)) {
+                $manager->setTranslation($key, $new, $module);
+            } else {
+                $manager->delete($key, $module);
+            }
             $manager->clearCache();
         }
     }
