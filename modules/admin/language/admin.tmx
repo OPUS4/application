@@ -163,7 +163,7 @@ Dokumentstatus ändern und Dateien (Volltexte) verwalten.</seg>
 
     <tu tuid="admin_title_enrichmentkey">
       <tuv xml:lang="en">
-        <seg>Manage Enrichmentkeys</seg>
+        <seg>Enrichmentkeys</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Benutzerdefinierte Felder (Enrichments)</seg>
@@ -275,6 +275,15 @@ Dokumentstatus ändern und Dateien (Volltexte) verwalten.</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>DOI-Report</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="DisplayName">
+      <tuv xml:lang="en">
+        <seg>DisplayName</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Angezeigter Name</seg>
       </tuv>
     </tu>
 

@@ -49,6 +49,7 @@
  * @package     Module_Admin
  *
  * TODO show protected/referenced in list of keys
+ * TODO move to setup area (maybe in own module, but part of setup in administration)
  */
 class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD
 {
