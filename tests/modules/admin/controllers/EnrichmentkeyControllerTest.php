@@ -245,7 +245,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $this->dispatch($this->getControllerPath() . '/new');
 
         $this->assertResponseCode(200);
-        $this->assertXpath("//form/div[2]/div[2]/ul[@class='errors']", $this->getResponse()->getBody());
+        $this->assertXpath('//div[@id = "admin_enrichmentkey_type-element"]/ul[@class="errors"]');
 
         $this->assertNull(Opus_EnrichmentKey::fetchByName('MyTestEnrichment'));
     }
