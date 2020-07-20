@@ -223,7 +223,9 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
         }
 
         $this->getElement(self::ELEMENT_DISPLAYNAME)->updateTranslations(
-            "Enrichment$name", 'default', "Enrichment$oldName"
+            "Enrichment$name",
+            'default',
+            "Enrichment$oldName"
         );
     }
 
