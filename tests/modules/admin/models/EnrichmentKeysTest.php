@@ -38,6 +38,16 @@
 class Admin_Model_EnrichmentKeysTest extends ControllerTestCase
 {
 
+    protected $additionalResources = 'database';
+
+    public function tearDown()
+    {
+        $database = new Opus_Translate_Dao();
+        $database->removeAll();
+
+        parent::tearDown();
+    }
+
     public function testGetProtectedEnrichmentKeys()
     {
         $model = new Admin_Model_EnrichmentKeys();
@@ -96,5 +106,75 @@ class Admin_Model_EnrichmentKeysTest extends ControllerTestCase
 
         $this->assertInternalType('array', $protectedKeys);
         $this->assertCount(0, $protectedKeys);
+    }
+
+    public function testCreateTranslations()
+    {
+        $database = new Opus_Translate_Dao();
+        $database->removeAll();
+
+        $model = new Admin_Model_EnrichmentKeys();
+
+        $name = 'MyTestEnrichment';
+
+        $model->createTranslations($name);
+
+        $patterns = $model->getKeyPatterns();
+
+        $translations = $database->getTranslations('default');
+
+        $this->assertCount(6, $translations);
+
+        foreach ($patterns as $pattern) {
+            $key = sprintf($pattern, $name);
+            $this->assertArrayHasKey($key, $translations);
+        }
+    }
+
+    public function testChangeNamesOfTranslationKeys()
+    {
+        $database = new Opus_Translate_Dao();
+        $database->removeAll();
+
+        $model = new Admin_Model_EnrichmentKeys();
+
+        $name = 'MyTestEnrichment';
+
+        $model->createTranslations($name);
+
+        $newName = 'NewTest';
+
+        $model->createTranslations($newName, $name);
+
+        $patterns = $model->getKeyPatterns();
+
+        $translations = $database->getTranslations('default');
+
+        $this->assertCount(6, $translations);
+
+        foreach ($patterns as $pattern) {
+            $key = sprintf($pattern, $newName);
+            $this->assertArrayHasKey($key, $translations);
+        }
+    }
+
+    public function testRemoveTranslations()
+    {
+        $model = new Admin_Model_EnrichmentKeys();
+
+        $database = new Opus_Translate_Dao();
+        $database->removeAll();
+
+        $name = 'TestEnrichment';
+
+        $model->createTranslations($name);
+
+        $translations = $database->getTranslations('default');
+        $this->assertCount(6, $translations);
+
+        $model->removeTranslations($name);
+
+        $translations = $database->getTranslations('default');
+        $this->assertCount(0, $translations);
     }
 }

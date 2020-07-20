@@ -45,7 +45,7 @@
     <tr>
         <th>Name</th>
         <th>Typ</th>
-        <th colspan="3"></th>
+        <th colspan="4"></th>
     </tr>
     </thead>
     <?PHP foreach ($this->element->getModels() as $model) : ?>
@@ -89,6 +89,18 @@
                     <a href="<?= $this->url(['action' => 'removeFromDocs', 'id' => $model->getId()]) ?>"
                     ><?= $this->translate('admin_button_remove_from_documents'); ?></a>
                 <?PHP endif ?>
+            </td>
+            <td>
+                <?PHP if ($this->element->isModifiable($model)) : ?>
+                    <a href="<?= $this->url([
+                        'module' => 'setup',
+                        'controller' => 'language',
+                        'action' => 'index',
+                        'search' => $model->getName()
+                    ]) ?>"
+                    ><?= $this->translate('admin_button_translations'); ?></a>
+                <?PHP endif ?>
+            </td>
             </td>
             <td class="remove">
                 <?PHP if (! is_null($model->getId()) && $this->element->isModifiable($model)) : ?>
