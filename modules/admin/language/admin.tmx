@@ -278,5 +278,14 @@ Dokumentstatus ändern und Dateien (Volltexte) verwalten.</seg>
       </tuv>
     </tu>
 
+    <tu tuid="DisplayName">
+      <tuv xml:lang="en">
+        <seg>DisplayName</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Angezeigter Name</seg>
+      </tuv>
+    </tu>
+
   </body>
 </tmx>
