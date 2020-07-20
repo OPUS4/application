@@ -127,6 +127,7 @@ class Application_Form_Element_Translation extends Zend_Form_Element_Multi
 
         if ($new != $old) {
             $manager->setTranslation($key, $new, $module);
+            $manager->clearCache();
         }
     }
 
