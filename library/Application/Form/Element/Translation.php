@@ -95,12 +95,16 @@ class Application_Form_Element_Translation extends Zend_Form_Element_Multi
 
     public function populateFromTranslations($key)
     {
-        $translate = Zend_Registry::get('Zend_Translate');
+        $manager = new Application_Translate_TranslationManager();
 
-        $translations = $translate->getTranslations($key);
+        try {
+            $translation = $manager->getTranslation($key);
+        } catch (\Opus\Translate\UnknownTranslationKey $ex) {
+            $translation = null;
+        }
 
-        if (is_array($translations)) {
-            $this->setValue($translations);
+        if (isset($translation['translations'])) {
+            $this->setValue($translation['translations']);
         }
     }
 
@@ -142,5 +146,10 @@ class Application_Form_Element_Translation extends Zend_Form_Element_Multi
     public function setKey($key)
     {
         $this->key = $key;
+    }
+
+    protected function _translateValue($value)
+    {
+        return $value;
     }
 }

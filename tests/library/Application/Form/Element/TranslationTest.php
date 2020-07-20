@@ -37,7 +37,7 @@
 class Application_Form_Element_TranslationTest extends ControllerTestCase
 {
 
-    protected $additionalResources = 'translation';
+    protected $additionalResources = ['translation', 'view'];
 
     public function testConstruct()
     {
@@ -187,5 +187,25 @@ class Application_Form_Element_TranslationTest extends ControllerTestCase
 
         $this->assertEquals($data, $translation['translations']);
         $this->assertEquals('home', $translation['module']);
+    }
+
+    /**
+     * TODO improve test? check directly that translation of values is disabled
+     */
+    public function testValuesAreNotTranslated()
+    {
+        $this->useGerman();
+
+        $element = new Application_Form_Element_Translation('DisplayName');
+
+        $key = 'default_collection_role_institutes';
+
+        $element->populateFromTranslations($key);
+
+        $output = $element->render();
+
+        // do not translate 'Institute' into 'Institut'
+        $this->assertNotContains('id="DisplayName-de" value="Institut"', $output);
+        $this->assertContains('id="DisplayName-de" value="Institute"', $output);
     }
 }
