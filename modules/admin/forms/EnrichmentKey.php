@@ -222,11 +222,15 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
             $enrichmentKey->setOptions($enrichmentType->getOptions());
         }
 
+        // update translation keys for enrichment
         $this->getElement(self::ELEMENT_DISPLAYNAME)->updateTranslations(
             "Enrichment$name",
             'default',
             "Enrichment$oldName"
         );
+
+        $helper = new Admin_Model_EnrichmentKeys();
+        $helper->createTranslations($name, $oldName);
     }
 
     /**

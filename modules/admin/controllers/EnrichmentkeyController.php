@@ -232,7 +232,10 @@ class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD
         if ($request->getActionName() === 'removeFromDocs') {
             $model->deleteFromDocuments();
         } else {
+            $name = $model->getName();
             parent::deleteModel($model);
+            $helper = new Admin_Model_EnrichmentKeys();
+            $helper->removeTranslations($name);
         }
     }
 
