@@ -131,6 +131,47 @@ class Admin_Model_EnrichmentKeysTest extends ControllerTestCase
         }
     }
 
+    public function testCreateTranslationsDoNotOverwriteExistingValues()
+    {
+        $database = new Opus_Translate_Dao();
+        $database->removeAll();
+
+        $hintKey = 'hint_EnrichmentMyTestEnrichment';
+
+        $database->setTranslation($hintKey, [
+            'en' => 'English',
+            'de' => 'Deutsch'
+        ], 'default');
+
+        $model = new Admin_Model_EnrichmentKeys();
+
+        $name = 'MyTestEnrichment';
+
+        $model->createTranslations($name);
+
+        $patterns = $model->getKeyPatterns();
+
+        $translations = $database->getTranslations('default');
+
+        $this->assertCount(6, $translations);
+
+        foreach ($patterns as $pattern) {
+            $key = sprintf($pattern, $name);
+            $this->assertArrayHasKey($key, $translations);
+            if ($key !== 'hint_EnrichmentMyTestEnrichment') {
+                $this->assertEquals([
+                    'en' => 'MyTestEnrichment',
+                    'de' => 'MyTestEnrichment'
+                ], $translations[$key]);
+            } else {
+                $this->assertEquals([
+                    'en' => 'English',
+                    'de' => 'Deutsch'
+                ], $translations[$key]);
+            }
+        }
+    }
+
     public function testChangeNamesOfTranslationKeys()
     {
         $database = new Opus_Translate_Dao();
