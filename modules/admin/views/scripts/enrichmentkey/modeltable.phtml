@@ -96,7 +96,8 @@
                         'module' => 'setup',
                         'controller' => 'language',
                         'action' => 'index',
-                        'search' => $model->getName()
+                        'search' => $model->getName(),
+                        'scope' => 'key'
                     ]) ?>"
                     ><?= $this->translate('admin_button_translations'); ?></a>
                 <?PHP endif ?>
