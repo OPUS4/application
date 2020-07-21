@@ -121,6 +121,7 @@ class Admin_Model_EnrichmentKeys extends Application_Model_Abstract
         $patterns = $this->translationKeyPatterns;
 
         $database = new Opus_Translate_Dao();
+        $manager = new Application_Translate_TranslationManager();
 
         if (! is_null($oldName) && $name !== $oldName) {
             foreach ($patterns as $pattern) {
@@ -131,10 +132,12 @@ class Admin_Model_EnrichmentKeys extends Application_Model_Abstract
         } else {
             foreach ($patterns as $pattern) {
                 $key = sprintf($pattern, $name);
-                $database->setTranslation($key, [
-                    'en' => $name,
-                    'de' => $name
-                ], 'default');
+                if (! $manager->keyExists($key)) {
+                    $database->setTranslation($key, [
+                        'en' => $name,
+                        'de' => $name
+                    ], 'default');
+                }
             }
         }
     }
