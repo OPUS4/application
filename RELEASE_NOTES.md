@@ -1,17 +1,27 @@
 # OPUS 4 Release Notes
 
-## Release 4.7 2020-07-xx
+## Release 4.7 2020-07-31
 
 Die Änderungen in OPUS __4.7__ hier, ergänzen was schon für OPUS __4.7-RC__ weiter 
 unten beschrieben wurde. Für die vollständigen Informationen zur neuen Version bitte
-die Notizen für beider Versionen lesen.
+die Notizen beider Versionen lesen.
+
+Seit dem Release Candidate wurden noch einige kleine Probleme behoben und weitere 
+Funktionen hinzugefügt. Bei Schwierigkeiten, melden Sie sich am besten über die 
+Mailing-Liste oder legen Sir ein Issue auf GitHub an.
+
+<https://www.kobv.de/entwicklung/software/opus-4>
+<https://github.com/OPUS4/application/issues>  
  
 OPUS 4.7 befindet sich auf dem MASTER Branch auf GitHub.
 
 <https://github.com/OPUS4/application>
 
-TODO Hinweis auf die Dokumentation!
+Das OPUS 4 Handbuch wurde für diese Version an vielen Stellen aktualisiert und neu
+strukturiert. Insbesondere bei der Anpassung von Übersetzungen, der Konfiguration
+der Suchfacetten und den Enrichments hat sich einiges getan.
 
+<http://www.opus-repository.org/userdoc>
 
 ### Update
 
@@ -34,6 +44,9 @@ so wie vorher funktionieren sollte. Die Schritte werden im Update-Log dokumentie
 Die generierten Namen können nach dem Update durch einen Administrator angepasst 
 werden. Die Übersetzungsschlüssel werden dabei automatisch umbenannt.
 
+Wird der Name einer CollectionRole (Sammlung) verändert, werden die Namen der 
+Schlüssel für die Übersetzung automatisch angepasst.
+
 ### Übersetzungsverwaltung
 
 Die Übersetzungsverwaltung findet sich in der Administration unter 
@@ -44,8 +57,6 @@ neue Sprache hinzuzufügen, z.B. "de,en,fr". In den Edit-Formularen taucht dann
 Französisch als dritte Sprache auf. Sobald ein einziger Eintrag für die neue 
 Sprache existiert kann sie in den Einstellungen für die Nutzeroberfläche aktiviert 
 werden.
-
-TODO Fallback Languages
 
 Die Spracheinstellungen für Sprachen wurden vom "Einstellungen"-Bereich der 
 Administration zur Übersetzungsverwaltung verschoben.
@@ -66,7 +77,10 @@ welcher Aufruf das Problem ausgelöst hat.
 Die Fehlermeldungen für Übersetzungsschlüssel, die nicht übersetzt werden konnten, 
 werden jetzt in eine separate Datei geschrieben. Die Anzahl dieser Meldungen wurde 
 außerdem deutlich verringert. Es gibt aber immer noch Stellen an denen versucht 
-wird Werte von Feldern zu übersetzen, die nicht übersetzt werden können.  
+wird Werte von Feldern zu übersetzen, die nicht übersetzt werden können. 
+
+Meldungen im Zusammenhang mit den Übersetzungen, wie fehlende Schlüssel, werden nun
+in die Datei `translation.log` geschrieben. 
 
 ### Datenmodel
 
@@ -80,7 +94,28 @@ für die einzelnen Facette definiert werden. Damit können nur auch Enrichments 
 Facetten eingesetzt werden. Es kann bestimmt werden, ob eine Facette für alle Nutzer 
 sichtbar ist oder nur für Administratoren.
 
-TODO weitere Informationen?
+Die Konfigurationsmöglichkeiten für Facetten wurden weiter ausgebaut. Enrichments
+können als Facetten konfiguriert werden. Dabei kann die Sichtbarkeit eingeschränkt 
+werden, damit eine Facette für normale Nutzer nicht angezeigt wird.
+
+<http://www.opus-repository.org/userdoc/search/facets.html>
+
+Für die Jahr-Facette gibt es nun mehrere Konfigurationsmöglichkeiten. Es können
+verschiedene Index-Felder für die Anzeige ausgewählt werden bzw. die Indizierung
+so konfiguriert werden, dass die gewünschten Date/Year-Felder der Dokumente 
+berücksichtig werden. Mehr dazu in der Dokumentation.
+
+<http://www.opus-repository.org/userdoc/search/yearfacet.html>
+
+### Enrichments
+
+Die Übersetzungen von Enrichments können nun direkt im Edit-Formular für ein
+Enrichment editiert werden. Die notwendigen Schlüssel für die Anpassung des 
+Publish-Modules für ein Enrichment werden automatisch angelegt und können in 
+der Übersetzungsverwaltung editiert werden. Es gibt in der Enrichmentverwaltung
+Links zu den Übersetzungen. Unter Umständen werden dabei zusätzliche Schlüssel
+angezeigt, die den Namen des Enrichments enthalten, aber eigentlich nichts damit
+zu tun haben. 
 
 ---
 
