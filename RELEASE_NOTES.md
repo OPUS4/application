@@ -61,6 +61,18 @@ werden.
 Die Spracheinstellungen für Sprachen wurden vom "Einstellungen"-Bereich der 
 Administration zur Übersetzungsverwaltung verschoben.
 
+#### Veränderte Übersetzungsschlüssel
+
+Bei den folgenden drei Schlüsseln wurde die Bindestriche durch Unterstriche ersetzt.
+
+    fulltext-icon-tooltip        -> fulltext_icon_tooltip
+    fulltext-icon-oa-tooltip     -> fulltext_icon_oa_tooltip
+    admin-actionbox-goto-section -> admin_actionbox_goto_section
+
+Falls diese Schlüssel lokal angepasst wurden, wird die Umbenennung des angepassten 
+Schlüssels beim Update auf 4.7 nicht automatisch vorgenommen und muss gegebenenfalls 
+manuell durchgeführt werden.
+
 ### FAQ-Seite editieren
 
 Auf der FAQ Seite tauchen nun Editier-Icons auf, wenn der Nutzer Zugriff auf das 
