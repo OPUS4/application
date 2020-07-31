@@ -2,13 +2,13 @@
 
 ## Release 4.7 2020-07-31
 
-Die Änderungen in OPUS __4.7__ hier, ergänzen was schon für OPUS __4.7-RC__ weiter 
-unten beschrieben wurde. Für die vollständigen Informationen zur neuen Version bitte
-die Notizen beider Versionen lesen.
+Die Änderungen in OPUS __4.7__, die hier aufgeführt sind, ergänzen was schon für 
+OPUS __4.7-RC__ weiter unten beschrieben wurde. Für die vollständigen Informationen
+zur neuen Version bitte die Notizen beider Releases lesen.
 
-Seit dem Release Candidate wurden noch einige kleine Probleme behoben und weitere 
+Seit dem Release Candidate wurden noch kleinere Probleme behoben und weitere 
 Funktionen hinzugefügt. Bei Schwierigkeiten, melden Sie sich am besten über die 
-Mailing-Liste oder legen Sir ein Issue auf GitHub an.
+Mailing-Liste oder legen Sie ein Issue auf GitHub an.
 
 <https://www.kobv.de/entwicklung/software/opus-4>
 <https://github.com/OPUS4/application/issues>  
@@ -28,24 +28,31 @@ der Suchfacetten und den Enrichments hat sich einiges getan.
 Es wurde noch Probleme beim Import von komplexeren FAQ-Anpassungen in die Datenbank
 behoben. Nach dem Update sollte die FAQ-Inhalte so angezeigt werden wie vorher.
 
+Hinweise zum Update finden sich auch in der OPUS 4 Dokumentation.
+
+<http://www.opus-repository.org/userdoc/update/update47.html>
+
 #### Ungültige Namen von CollectionRoles
 
 Die Übersetzungen von CollectionRoles können jetzt direkt im Edit-Formular in der 
 "Sammlungsverwaltung" editiert werden. Die Übersetzung von Collections (Sammlungen)
-ist komplizierter und ist für später geplant. Der Name einer CollectionRole wird als
-Teil des Übersetzungsschlüssels verwendet. In manchen Instanzen wurden Namen mit 
-Sonderzeichen angelegt was zu technischen Schwierigkeiten bei der Verwendung als 
-Schlüssel führt. Daher werden beim Update alle Namen validiert. Sollte ein Name nicht
-gültig sein, weil Sonderzeichen oder Leerzeichen verwendet wurden, wird versucht den
-Namen durch den OAI-Namen zu ersetzen. Falls dieser auch nicht gültig ist, wird ein 
-Name aus der ID der CollectionRole generiert. Der ursprüngliche Name wird als 
-Übersetzung für sämtliche Sprachen gespeichert, so dass nach dem Update die Anzeige 
-so wie vorher funktionieren sollte. Die Schritte werden im Update-Log dokumentiert.
-Die generierten Namen können nach dem Update durch einen Administrator angepasst 
-werden. Die Übersetzungsschlüssel werden dabei automatisch umbenannt.
+ist komplizierter und ist für später geplant. 
 
-Wird der Name einer CollectionRole (Sammlung) verändert, werden die Namen der 
-Schlüssel für die Übersetzung automatisch angepasst.
+Der Name einer CollectionRole wird als Teil des Übersetzungsschlüssels verwendet. 
+In manchen Instanzen wurden Namen mit Sonderzeichen verwendet, was zu technischen 
+Schwierigkeiten bei der Verwendung als Schlüssel führt. Daher werden beim Update 
+alle Namen validiert. 
+
+Sollte ein Name nicht gültig sein, weil Sonderzeichen oder Leerzeichen verwendet 
+wurden, wird versucht den Namen durch den OAI-Namen zu ersetzen. Falls dieser auch 
+nicht gültig ist, wird ein Name aus der ID der CollectionRole generiert. Der 
+ursprüngliche Name wird als Übersetzung für sämtliche Sprachen gespeichert, damit 
+nach dem Update die Anzeige so aussieht wie vorher. 
+
+Die Schritte werden im Update-Log dokumentiert. Die generierten Namen können nach 
+dem Update durch einen Administrator angepasst werden. Wird der Name einer 
+CollectionRole (Sammlung) verändert, werden die Namen der Schlüssel für die 
+Übersetzung automatisch angepasst.
 
 ### Übersetzungsverwaltung
 
@@ -53,10 +60,10 @@ Die Übersetzungsverwaltung findet sich in der Administration unter
 "Oberflächenanpassungen > Übersetzungen". Hier wurden noch einige Bug beseitigt.
 Die Reihenfolge der angezeigten Sprachen richtet sich nun nach dem Parameter
 __supportedLanguages__ in der Konfiguration (`config.ini`). Es ist möglich eine 
-neue Sprache hinzuzufügen, z.B. "de,en,fr". In den Edit-Formularen taucht dann 
-Französisch als dritte Sprache auf. Sobald ein einziger Eintrag für die neue 
-Sprache existiert kann sie in den Einstellungen für die Nutzeroberfläche aktiviert 
-werden.
+neue Sprache hinzuzufügen, z.B. `de,en,fr`. In den Edit-Formularen für Übersetzungen 
+taucht dann Französisch als dritte Sprache auf. Sobald ein einziger Eintrag für die 
+neue Sprache existiert kann sie in den Einstellungen für die Nutzeroberfläche 
+aktiviert werden.
 
 Die Spracheinstellungen für Sprachen wurden vom "Einstellungen"-Bereich der 
 Administration zur Übersetzungsverwaltung verschoben.
@@ -70,8 +77,14 @@ Bei den folgenden drei Schlüsseln wurde die Bindestriche durch Unterstriche ers
     admin-actionbox-goto-section -> admin_actionbox_goto_section
 
 Falls diese Schlüssel lokal angepasst wurden, wird die Umbenennung des angepassten 
-Schlüssels beim Update auf 4.7 nicht automatisch vorgenommen und muss gegebenenfalls 
-manuell durchgeführt werden.
+Schlüssels beim Update auf 4.7 nicht automatisch vorgenommen. Der alte Schlüssel
+existiert nach dem Update in der Datenbank. Bei der Anzeige wird allerdings wieder 
+der Standardtext aus den TMX-Dateien verwendet. Um das zu korrigieren, müssen in der
+Übersetzungsverwaltung die neuen Schlüssel editiert und die alten gelöscht werden.
+
+Hinweis: Es wird für die weitere Entwicklung erforderlich sein größere Mengen an 
+Übersetzungsschlüssel umzubenennen. Dafür wird es in Zukunft automatische Update-
+Funktionen geben, damit keine manuelle Nacharbeiten notwendig sind.  
 
 ### FAQ-Seite editieren
 
@@ -81,18 +94,24 @@ der FAQ Einträge. Neue Sektionen und Einträge können auf der "FAQ-Seite" im S
 hinzugefügt werden. Die entsprechenden Übersetzungsschlüssel tauchen dann auf der
 FAQ-Seite auf und können von dort aus editiert werden.
 
+Damit die Einträge der FAQ-Seite editiert werden können müssen das __Home__ und das 
+__Help__ Modul für die Bearbeitung in der Übersetzungsverwaltung freigeschaltet sein. 
+
+<http://www.opus-repository.org/userdoc/translation>
+
 ### Logging
 
-Bei Fehlern wird jetzt die Request URI mit ins Log geschrieben, um sehen zu können
+Bei Fehlern wird jetzt die Request-URI mit ins Log geschrieben, um sehen zu können
 welcher Aufruf das Problem ausgelöst hat.
 
 Die Fehlermeldungen für Übersetzungsschlüssel, die nicht übersetzt werden konnten, 
 werden jetzt in eine separate Datei geschrieben. Die Anzahl dieser Meldungen wurde 
-außerdem deutlich verringert. Es gibt aber immer noch Stellen an denen versucht 
-wird Werte von Feldern zu übersetzen, die nicht übersetzt werden können. 
+außerdem deutlich verringert. Trotzdem gibt es immer noch Stellen an denen unter 
+Umständen versucht wird Werte von Feldern zu übersetzen, die nicht übersetzt werden
+können. 
 
-Meldungen im Zusammenhang mit den Übersetzungen, wie fehlende Schlüssel, werden nun
-in die Datei `translation.log` geschrieben. 
+Meldungen im Zusammenhang mit den Übersetzungen, wie fehlende Schlüssel, werden in 
+die Datei `translation.log` geschrieben. 
 
 ### Datenmodel
 
@@ -102,20 +121,17 @@ vergrößert, um mit mehr als 255 Autoren klarzukommen.
 ### Suche 
 
 Die Konfiguration von Facetten wurde erweitert. Es können nur zusätzliche Optionen
-für die einzelnen Facette definiert werden. Damit können nur auch Enrichments als
-Facetten eingesetzt werden. Es kann bestimmt werden, ob eine Facette für alle Nutzer 
-sichtbar ist oder nur für Administratoren.
+für einzelne Facetten definiert werden. 
 
-Die Konfigurationsmöglichkeiten für Facetten wurden weiter ausgebaut. Enrichments
-können als Facetten konfiguriert werden. Dabei kann die Sichtbarkeit eingeschränkt 
-werden, damit eine Facette für normale Nutzer nicht angezeigt wird.
+Es können nun auch Enrichments als Facetten eingesetzt werden. Dabei kann bestimmt 
+werden, ob eine Facette für alle Nutzer sichtbar ist oder nur für Administratoren.
 
 <http://www.opus-repository.org/userdoc/search/facets.html>
 
 Für die Jahr-Facette gibt es nun mehrere Konfigurationsmöglichkeiten. Es können
 verschiedene Index-Felder für die Anzeige ausgewählt werden bzw. die Indizierung
-so konfiguriert werden, dass die gewünschten Date/Year-Felder der Dokumente 
-berücksichtig werden. Mehr dazu in der Dokumentation.
+so konfiguriert werden, dass nur die gewünschten Date/Year-Felder der Dokumente 
+berücksichtigt werden. Mehr dazu in der Dokumentation.
 
 <http://www.opus-repository.org/userdoc/search/yearfacet.html>
 
