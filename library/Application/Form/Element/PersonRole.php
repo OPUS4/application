@@ -35,12 +35,14 @@
 /**
  * Select Element für Role einer Person.
  */
-class Application_Form_Element_PersonRole extends Application_Form_Element_Select {
+class Application_Form_Element_PersonRole extends Application_Form_Element_Select
+{
 
     /**
      * Initialisiert Formularelement.
      */
-    public function init() {
+    public function init()
+    {
         parent::init();
 
         $this->setRequired(true);
@@ -56,8 +58,8 @@ class Application_Form_Element_PersonRole extends Application_Form_Element_Selec
      * Liefert die erlaubten Rollen für die Optionen im Formularelement.
      * @return array
      */
-    public function getSelectOptions() {
+    public function getSelectOptions()
+    {
         return Admin_Form_Document_Persons::getRoles();
     }
-
 }

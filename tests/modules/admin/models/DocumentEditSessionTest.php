@@ -26,143 +26,151 @@
  *
  * @category    Application Unit Tests
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
-class Admin_Model_DocumentEditSessionTest extends ControllerTestCase {
-    
-    public function testCreateModel() {
+class Admin_Model_DocumentEditSessionTest extends ControllerTestCase
+{
+
+    public function testCreateModel()
+    {
         $model = new Admin_Model_DocumentEditSession(146);
         $this->assertEquals(146, $model->getDocumentId());
     }
-    
+
     /**
      * @expectedException InvalidArgumentException
      * @expectedExceptionMessage mit document ID '-1' aufgerufen
      */
-    public function testCreateModelWithBadId() {
+    public function testCreateModelWithBadId()
+    {
         $model = new Admin_Model_DocumentEditSession(-1);
     }
-    
-    public function testAddPerson() {
+
+    public function testAddPerson()
+    {
         $model = new Admin_Model_DocumentEditSession(146);
-        
-        $props = array(
+
+        $props = [
             'person' => 310,
             'role' => 'author',
             'order' => 2,
             'contact' => 1
-        );
-        
+        ];
+
         $this->assertEquals(0, $model->getPersonCount());
-        
+
         $model->addPerson($props);
-        
+
         $this->assertEquals(1, $model->getPersonCount());
     }
-    
-    public function testRetrievePersons() {
+
+    public function testRetrievePersons()
+    {
         $model = new Admin_Model_DocumentEditSession(146);
-        
+
         $this->assertEmpty($model->retrievePersons());
-        
-        $props = array(
+
+        $props = [
             'person' => 310,
             'role' => 'author',
             'order' => 2,
             'contact' => 1
-        );
-        
+        ];
+
         $model->addPerson($props);
-        
+
         $this->assertEquals(1, count($model->retrievePersons()));
-        
+
         // retrievePersons removes variable from session
-        $this->assertEmpty($model->retrievePersons()); 
+        $this->assertEmpty($model->retrievePersons());
     }
-    
-    public function testStoreRetrievePost() {
+
+    public function testStoreRetrievePost()
+    {
         $model = new Admin_Model_DocumentEditSession(146);
-        
-        $post = array(
+
+        $post = [
             'key1' => 'value1',
             'key2' => 'value2',
-            'subform1' => array(
-                'key1' => 'value1', 
+            'subform1' => [
+                'key1' => 'value1',
                 'key2' => 'value2'
-            )
-        );
-        
+            ]
+        ];
+
         $model->storePost($post);
-        
+
         $this->assertEquals($post, $model->retrievePost());
-        
+
         // retrievePost removes variable from session
         $this->assertNull($model->retrievePost());
     }
 
-    public function testStoreRetrievePostWithName() {
+    public function testStoreRetrievePostWithName()
+    {
         $model = new Admin_Model_DocumentEditSession(146);
 
-        $post = array(
+        $post = [
             'key1' => 'value1',
             'key2' => 'value2',
-            'subform1' => array(
+            'subform1' => [
                 'key1' => 'value1',
                 'key2' => 'value2'
-            )
-        );
+            ]
+        ];
 
         $model->storePost($post, 'files');
 
         $this->assertEquals($post, $model->retrievePost('files'));
     }
-    
-    public function testGetSessionNamespace() {
+
+    public function testGetSessionNamespace()
+    {
         $model = new Admin_Model_DocumentEditSession(146);
-        
+
         $namespace = $model->getSessionNamespace();
-        
+
         $this->assertNotNull($namespace);
-        
+
         $this->assertInstanceOf('Zend_Session_Namespace', $namespace);
 
         // zweimal aufrufen; beim ersten Mal ist die interne Variable noch nicht gesetzt
         $namespace2 = $model->getSessionNamespace();
-        
+
         $this->assertNotNull($namespace2);
         $this->assertEquals($namespace, $namespace2);
     }
-    
-    public function testGetDocumentSessionNamespace() {
+
+    public function testGetDocumentSessionNamespace()
+    {
         $model = new Admin_Model_DocumentEditSession(146);
-        
+
         $namespace = $model->getDocumentSessionNamespace();
-        
+
         $this->assertNotNull($namespace);
         $this->assertInstanceOf('Zend_Session_Namespace', $namespace);
-        
+
         $namespace2 = $model->getDocumentSessionNamespace();
-        
+
         $this->assertNotNull($namespace2);
         $this->assertEquals($namespace, $namespace2);
     }
-  
-    public function testEditTwoDocuments() {
+
+    public function testEditTwoDocuments()
+    {
         $model1 = new Admin_Model_DocumentEditSession(146);
         $model2 = new Admin_Model_DocumentEditSession(100);
-        
+
         $namespace1 = $model1->getDocumentSessionNamespace();
         $namespace2 = $model2->getDocumentSessionNamespace();
-        
+
         $this->assertNotEquals($namespace1, $namespace2);
-        
-        $model1->addPerson(array('person' => 310));
-        
+
+        $model1->addPerson(['person' => 310]);
+
         $this->assertEquals(1, $model1->getPersonCount());
         $this->assertEquals(0, $model2->getPersonCount());
     }
-    
 }

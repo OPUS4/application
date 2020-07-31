@@ -27,12 +27,13 @@
  * @category    Application
  * @package     Tests
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+class Frontdoor_Model_AuthorsTest extends ControllerTestCase
+{
 
-class Frontdoor_Model_AuthorsTest extends ControllerTestCase {
+    protected $additionalResources = ['database'];
 
     private $documentId;
     private $author1Id;
@@ -41,7 +42,8 @@ class Frontdoor_Model_AuthorsTest extends ControllerTestCase {
     private $author4Id;
     private $unpublishedDocumentId;
 
-    public function setUp() {
+    public function setUp()
+    {
         parent::setUp();
         $document = $this->createTestDocument();
         $document->setServerState('published');
@@ -68,7 +70,7 @@ class Frontdoor_Model_AuthorsTest extends ControllerTestCase {
         $this->author2Id = $author2->store();
 
         $link_person2 = $document->addPersonAuthor($author2);
-        $link_person2->setAllowEmailContact('0');   
+        $link_person2->setAllowEmailContact('0');
 
         $author3 = new Opus_Person();
         $author3->setFirstName('Jimmy');
@@ -83,7 +85,7 @@ class Frontdoor_Model_AuthorsTest extends ControllerTestCase {
         $author4->setLastName('Bar');
         $author4->setEmail('foo@bar.de');
         $this->author4Id = $author4->store();
-        
+
         $link_person4 = $document->addPersonAuthor($author4);
         $link_person4->setAllowEmailContact('1');
 
@@ -108,12 +110,14 @@ class Frontdoor_Model_AuthorsTest extends ControllerTestCase {
         $this->assertNotNull($this->unpublishedDocumentId);
     }
 
-    public function testConstructor() {
+    public function testConstructor()
+    {
         $model = new Frontdoor_Model_Authors($this->documentId);
         $this->assertNotNull($model);
     }
 
-    public function testGetAuthors() {
+    public function testGetAuthors()
+    {
         $model = new Frontdoor_Model_Authors($this->documentId);
         $this->assertNotNull($model);
         $authors = $model->getAuthors();
@@ -128,7 +132,8 @@ class Frontdoor_Model_AuthorsTest extends ControllerTestCase {
         $this->assertEquals('Bar, Foo', $author['name']);
     }
 
-    public function testGetContactableAuthors() {
+    public function testGetContactableAuthors()
+    {
         $model = new Frontdoor_Model_Authors($this->documentId);
         $this->assertNotNull($model);
         $authors = $model->getContactableAuthors();
@@ -139,27 +144,30 @@ class Frontdoor_Model_AuthorsTest extends ControllerTestCase {
         $this->assertEquals('Bar, Foo', $author['name']);
     }
 
-    public function testGetDocument() {
+    public function testGetDocument()
+    {
         $model = new Frontdoor_Model_Authors($this->documentId);
         $this->assertNotNull($model);
         $this->assertEquals($this->documentId, $model->getDocument()->getId());
     }
 
-    public function testSendMail() {
+    public function testSendMail()
+    {
         $model = new Frontdoor_Model_Authors($this->documentId);
         $this->assertNotNull($model);
         $mailProvider = new SendMailMock();
         $model->sendMail(
-                $mailProvider,
-                'opus@kobv.de',
-                'opus',
-                'example subject',
-                'example text',
-                array(
-                    $this->author1Id => '1',
-                    $this->author2Id => '1',
-                    $this->author3Id => '1',
-                    $this->author4Id => '1'));
+            $mailProvider,
+            'opus@kobv.de',
+            'opus',
+            'example subject',
+            'example text',
+            [
+                $this->author1Id => '1',
+                $this->author2Id => '1',
+                $this->author3Id => '1',
+            $this->author4Id => '1']
+        );
         $addresses = $mailProvider->getAddress();
         $this->assertTrue(is_array($addresses));
         foreach ($addresses as $address) {
@@ -174,28 +182,31 @@ class Frontdoor_Model_AuthorsTest extends ControllerTestCase {
         $this->assertEquals('Bar, Foo', $addresses[1]['name']);
     }
 
-    public function testUnpublishedDocumentID() {
+    public function testUnpublishedDocumentID()
+    {
         $this->markTestIncomplete('TODO: ensure that this method is called with guest privileges');
         $this->setExpectedException('Frontdoor_Model_Exception', 'access to requested document is forbidden');
         new Frontdoor_Model_Authors($this->unpublishedDocumentId);
     }
 
-    public function testUnknownDocumentID() {
+    public function testUnknownDocumentID()
+    {
         $this->setExpectedException('Frontdoor_Model_Exception', 'invalid value for parameter docId given');
         new Frontdoor_Model_Authors('foo');
     }
 
-    public function testPublishedDocument() {
+    public function testPublishedDocument()
+    {
         $doc = new Opus_Document($this->documentId);
         $model = new Frontdoor_Model_Authors($doc);
         $this->assertNotNull($model);
     }
 
-    public function testUnpublishedDocument() {
+    public function testUnpublishedDocument()
+    {
         $this->markTestIncomplete('TODO: ensure that this method is called with guest privileges');
         $doc = new Opus_Document($this->unpublishedDocumentId);
         $this->setExpectedException('Frontdoor_Model_Exception', 'access to requested document is forbidden');
         new Frontdoor_Model_Authors($doc);
     }
 }
-

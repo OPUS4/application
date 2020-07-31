@@ -29,7 +29,7 @@
  * @package     Module_Admin
  * @author      Julian Heise <heise@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -95,14 +95,13 @@ class Admin_AccessController extends Application_Controller_Action
             $guest = Opus_UserRole::fetchByName('guest');
             $guestModules = $guest->listAccessModules();
             // Role 'guest' has always access to 'default' module
-            if (!in_array('default', $guestModules)) {
+            if (! in_array('default', $guestModules)) {
                 $guestModules[] = 'default';
             }
             $this->view->guestModules = $guestModules;
-        }
-        else {
+        } else {
             // Role 'guest' has alreays access to 'default' module
-            if (!in_array('default', $roleModules)) {
+            if (! in_array('default', $roleModules)) {
                 $roleModules[] = 'default';
             }
         }
@@ -115,7 +114,10 @@ class Admin_AccessController extends Application_Controller_Action
         $this->view->roleName = $role->getName();
         $this->view->modules = $roleModules;
 
-        $this->view->allModules = array_keys(Application_Modules::getInstance()->getModules());
+        $modules = array_keys(Application_Modules::getInstance()->getModules());
+        unset($modules['default']);
+
+        $this->view->allModules = $modules;
         $this->view->allResources = $security->getAllResources();
         $this->view->allWorkflow = $transitions;
     }
@@ -129,16 +131,16 @@ class Admin_AccessController extends Application_Controller_Action
         $id = $this->getRequest()->getParam('roleid');
         $docId = $this->getRequest()->getParam('docid');
 
-        if (!empty($id)) {
+        if (! empty($id)) {
             $accessMode = $this->getRequest()->getParam('access_mode');
 
             $this->storeModules($this->getRequest());
 
-            $this->view->redirect = ['module'=>'admin','controller'=>'role','action'=>'show','id'=>$id];
-        } elseif (!empty($docId)) {
+            $this->view->redirect = ['module' => 'admin','controller' => 'role','action' => 'index'];
+        } elseif (! empty($docId)) {
             $this->storeRoles($this->getRequest());
 
-            $this->view->redirect = ['module'=>'admin','controller'=>'document','action'=>'index','id'=>$docId];
+            $this->view->redirect = ['module' => 'admin','controller' => 'document','action' => 'index','id' => $docId];
         }
 
         if ($save != null) {
@@ -172,7 +174,7 @@ class Admin_AccessController extends Application_Controller_Action
 
         $params = $request->getParams();
 
-        foreach ($params as $name=>$value) {
+        foreach ($params as $name => $value) {
             $startsWith = 'set_';
             if (substr($name, 0, strlen($startsWith)) === $startsWith) {
                 $module = explode("_", $name, 2);
@@ -203,12 +205,10 @@ class Admin_AccessController extends Application_Controller_Action
             if ($checked) {
                 $role->appendAccessDocument($docId);
                 $role->store();
-            }
-            else {
+            } else {
                 $role->removeAccessDocument($docId);
                 $role->store();
             }
         }
     }
 }
-

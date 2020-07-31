@@ -27,20 +27,23 @@
  * @category    Tests
  * @package     Solrsearch_Form
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2015, OPUS 4 development team
+ * @copyright   Copyright (c) 2015-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
-class Solrsearch_Form_AdvancedSearchTest extends ControllerTestCase {
+class Solrsearch_Form_AdvancedSearchTest extends ControllerTestCase
+{
 
-    public function testConstruct() {
+    protected $additionalResources = ['translation'];
+
+    public function testConstruct()
+    {
         $form = new Solrsearch_Form_AdvancedSearch();
 
         $this->assertEquals(20, count($form->getElements()));
 
         // check search fields (14)
-        $fields = array('author', 'title', 'persons', 'referee', 'abstract', 'fulltext', 'year');
+        $fields = ['author', 'title', 'persons', 'referee', 'abstract', 'fulltext', 'year'];
 
         foreach ($fields as $name) {
             $this->assertNotNull($form->getElement($name), "Element $name is missing.");
@@ -48,14 +51,15 @@ class Solrsearch_Form_AdvancedSearchTest extends ControllerTestCase {
         }
 
         // check other elements (7)
-        $elements = array('searchtype', 'start', 'sortfield', 'sortorder', 'Search', 'Reset');
+        $elements = ['searchtype', 'start', 'sortfield', 'sortorder', 'Search', 'Reset'];
 
         foreach ($elements as $name) {
             $this->assertNotNull($form->getElement($name), "Element $name is missing.");
         }
     }
 
-    public function testConstructForAuthorSearch() {
+    public function testConstructForAuthorSearch()
+    {
         $form = new Solrsearch_Form_AdvancedSearch('authorsearch');
 
         $this->assertEquals(18, count($form->getElements()));
@@ -64,7 +68,7 @@ class Solrsearch_Form_AdvancedSearchTest extends ControllerTestCase {
         $this->assertNull($form->getElement('yearmodifier'));
 
         // check search fields (14)
-        $fields = array('author', 'title', 'persons', 'referee', 'abstract', 'fulltext');
+        $fields = ['author', 'title', 'persons', 'referee', 'abstract', 'fulltext'];
 
         foreach ($fields as $name) {
             $this->assertNotNull($form->getElement($name), "Element $name is missing.");
@@ -72,11 +76,10 @@ class Solrsearch_Form_AdvancedSearchTest extends ControllerTestCase {
         }
 
         // check other elements (7)
-        $elements = array('searchtype', 'start', 'sortfield', 'sortorder', 'Search', 'Reset');
+        $elements = ['searchtype', 'start', 'sortfield', 'sortorder', 'Search', 'Reset'];
 
         foreach ($elements as $name) {
             $this->assertNotNull($form->getElement($name), "Element $name is missing.");
         }
     }
-
 }

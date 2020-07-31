@@ -27,17 +27,20 @@
  * @category    Application
  * @package     Tests
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2013-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
  * Unit Tests for SELECT Element für die Rolle einer Person.
  */
-class Application_Form_Element_EmailTest extends ControllerTestCase {
+class Application_Form_Element_EmailTest extends ControllerTestCase
+{
 
-    public function testConstruct() {
+    protected $additionalResources = 'translation';
+
+    public function testConstruct()
+    {
         $element = new Application_Form_Element_Email('Email');
 
         $this->assertEquals('Email', $element->getName());
@@ -46,8 +49,10 @@ class Application_Form_Element_EmailTest extends ControllerTestCase {
         $this->assertNotNull($element->getAttrib('placeholder'));
 
         // Funktioniert evtl. nicht, wenn die Übersetzungsressource in Modul liegt (nicht 'default')
-        $this->assertNotEquals('email_format', $element->getAttrib('placeholder'),
-                'Der Schlüssel \'email_format\' wurde nicht übersetzt.');
+        $this->assertNotEquals(
+            'email_format',
+            $element->getAttrib('placeholder'),
+            'Der Schlüssel \'email_format\' wurde nicht übersetzt.'
+        );
     }
-
 }

@@ -6,8 +6,6 @@
  </header>
   <body>
 
-      
-      
     <tu tuid="setup_language_searchTerm">
         <tuv xml:lang="en">
             <seg>search term (leave empty for all)</seg>
@@ -26,85 +24,76 @@
         </tuv>
     </tu>
 
-    <tu tuid="setup_language_unit">
+    <tu tuid="setup_language_key">
         <tuv xml:lang="en">
-            <seg>translation unit</seg>
+            <seg>Key</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Übersetzungsschlüssel</seg>
+            <seg>Schlüssel</seg>
         </tuv>
     </tu>
 
     <tu tuid="setup_language_module">
         <tuv xml:lang="en">
-            <seg>module</seg>
+            <seg>Module</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Modul</seg>
         </tuv>
     </tu>
 
-    <tu tuid="setup_language_directory">
-        <tuv xml:lang="en">
-            <seg>directoy</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Verzeichnis</seg>
-        </tuv>
-    </tu>
-
-    <tu tuid="setup_language_filename">
-        <tuv xml:lang="en">
-            <seg>file name</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Dateiname</seg>
-        </tuv>
-    </tu>
-
     <tu tuid="setup_language_language">
         <tuv xml:lang="en">
-            <seg>language</seg>
+            <seg> </seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Sprache</seg>
+            <seg> </seg>
         </tuv>
     </tu>
 
     <tu tuid="setup_language_variant">
         <tuv xml:lang="en">
-            <seg>translation</seg>
+            <seg>Translations</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Übersetzung</seg>
+            <seg>Übersetzungen</seg>
         </tuv>
     </tu>
 
-    <tu tuid="setup_language_transfer">
+    <tu tuid="setup_language_add">
         <tuv xml:lang="en">
-            <seg>edit and transfer</seg>
+            <seg>Add Key</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>bearbeiten und übernehmen</seg>
+            <seg>Schlüssel anlegen</seg>
         </tuv>
     </tu>
 
     <tu tuid="setup_language_edit">
         <tuv xml:lang="en">
-            <seg>edit</seg>
+            <seg>Edit</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>bearbeiten</seg>
+            <seg>Bearbeiten</seg>
         </tuv>
     </tu>
 
-    <tu tuid="setup_language_edit_hint">
-        <tuv xml:lang="en">
-            <seg>edit %1s and save it to %2s</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>%1s bearbeiten und in %2s speichern</seg>
-        </tuv>
+    <tu tuid="setup_language_reset">
+      <tuv xml:lang="en">
+        <seg>Reset</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Zurücksetzen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="setup_language_remove">
+      <tuv xml:lang="en">
+        <seg>Remove</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Entfernen</seg>
+      </tuv>
     </tu>
 
     <tu tuid="setup_language_translation_modules_missing">
@@ -113,6 +102,351 @@
         </tuv>
         <tuv xml:lang="de">
             <seg>Es sind keine Module für die Bearbeitung konfiguriert. Bitte konfgurieren Sie die zu bearbeitenden Module.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="setup_translation_key">
+      <tuv xml:lang="en">
+        <seg>Key</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Übersetzungsschlüssel</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="setup_translation_values">
+      <tuv xml:lang="en">
+        <seg>Translations</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Übersetzungen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="setup_translation_edit">
+      <tuv xml:lang="en">
+        <seg>Edit</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Editieren</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="setup_translation_reset">
+      <tuv xml:lang="en">
+        <seg>Reset</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Zurücksetzen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="setup_translation_delete">
+      <tuv xml:lang="en">
+        <seg>Delete</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Löschen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="setup_language_deleteall">
+      <tuv xml:lang="en">
+        <seg>Delete Translations</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Übersetzungen löschen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="setup_language_export">
+      <tuv xml:lang="en">
+        <seg>Export translations</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Übersetzungen exportieren</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="setup_language_export_breadcrumb">
+      <tuv xml:lang="en">
+        <seg>Export</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Exportieren</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="setup_language_export_description">
+      <tuv xml:lang="en">
+        <seg>The customized translations can be downloaded as TMX file. The name of the module a translation key
+        belongs to is stored in the "creationtool" attribute of the TU-elements. The TMX file can be edited and
+        imported back into this or another OPUS 4 installation.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Die angepassten Übersetzungen können als TMX-Datei heruntergeladen werden. Der Name des Modules zu dem
+        ein Übersetzungsschlüssel gehört wird dabei im "creationtool"-Attribut des TU-Element gespeichert. Die
+          TMX-Datei kann editiert und wieder in diese oder eine andere OPUS 4 Installation importiert werden.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="setup_language_import">
+      <tuv xml:lang="en">
+        <seg>Import translations</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Übersetzungen importieren</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="setup_language_import_description">
+      <tuv xml:lang="en">
+        <seg>Import custom translations from TMX file. The "creationtool" attribute of the TU-elements will be used
+        to determine the module name for a translation key.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Angepasste Übersetzungen können von einer TMX-Datei importiert werden. Das "creationtool"-Attribut der
+        TU-Elemente wird dabei als Name des Modules für einen Übersetzungsschlüssel interpretiert.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="setup_translation_state_edited">
+      <tuv xml:lang="en">
+        <seg>Edited</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Editiert</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="setup_translation_state_added">
+      <tuv xml:lang="en">
+        <seg>Added</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Hinzugefügt</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="setup_translation_scope_key">
+      <tuv xml:lang="en">
+        <seg>Key</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Schlüssel</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="setup_translation_scope_text">
+      <tuv xml:lang="en">
+        <seg>Translation</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Übersetzung</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="setup_translation_non_found">
+      <tuv xml:lang="en">
+        <seg>No translations found.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Keine Übersetzungen gefunden.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="setup_translation_search_label">
+      <tuv xml:lang="en">
+        <seg>Filter</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Filter</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="setup_translation_search_button">
+      <tuv xml:lang="en">
+        <seg>Show</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Anzeigen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="setup_translation_modules_label">
+      <tuv xml:lang="en">
+        <seg>Module</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Modul</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="setup_translation_state_label">
+      <tuv xml:lang="en">
+        <seg>State</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Status</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="setup_translation_scope_label">
+      <tuv xml:lang="en">
+        <seg>Search</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Durchsuchen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="setup_translation_results_label">
+      <tuv xml:lang="en">
+        <seg>Found</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Gefunden</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="setup_translation_button_export">
+      <tuv xml:lang="en">
+        <seg>Export</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Export</seg>
+      </tuv>
+    </tu>
+    <tu tuid="setup_translation_button_import">
+      <tuv xml:lang="en">
+        <seg>Import</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Import</seg>
+      </tuv>
+    </tu>
+    <tu tuid="setup_translation_button_reset_all">
+      <tuv xml:lang="en">
+        <seg>Reset</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Zurücksetzen</seg>
+      </tuv>
+    </tu>
+    <tu tuid="setup_translation_button_delete_all">
+      <tuv xml:lang="en">
+        <seg>Delete</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Löschen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="setup_translation_button_settings">
+      <tuv xml:lang="en">
+        <seg>Settings</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Einstellungen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="setup_translation_error_key_exists">
+      <tuv xml:lang="en">
+        <seg>The translation key already exists.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Der Übersetzungsschlüssel exisitiert bereits.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="setup_translation_error_key_format_not_match">
+      <tuv xml:lang="en">
+        <seg>Keys must start with a letter and may also contain numbers and underlines.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Schlüssel müssen mit einem Buchstaben beginnen und dürfen sonst auch Zahlen und Unterstriche enthalten.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="setup_translation_error_key_too_long">
+      <tuv xml:lang="en">
+        <seg>Keys may not be longer than 100 characters.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Schlüssel dürfen maximal 100 Zeichen lang sein.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="setup_translation_tooltip_value_current">
+        <tuv xml:lang="en">
+            <seg>Custom translation</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Angepasste Übersetzung</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="setup_translation_tooltip_value_default">
+        <tuv xml:lang="en">
+            <seg>Default translation</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Standardübersetzung</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="setup_translation_delete_all_option">
+        <tuv xml:lang="en">
+            <seg>Remove all edited and added translation keys</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Alle Anpassungen und hinzugefügten Schlüssel entfernen</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="setup_language_export_filtered">
+        <tuv xml:lang="en">
+            <seg>Filtered customizations</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Gefilterte Anpassungen</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="setup_language_export_filtered_with_unmodified">
+        <tuv xml:lang="en">
+            <seg>Filtered customizations and unmodified translations</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Gefilterte Anpassungen und nicht modifizierte Übersetzungen</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="setup_language_export_all">
+        <tuv xml:lang="en">
+            <seg>All customized translations</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Alle angepassten Übersetzungen</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="setup_language_export_all_with_unmodified">
+        <tuv xml:lang="en">
+            <seg>All translations (customized and unmodified)</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Alle Übersetzungen (angepasst und nicht modifiziert)</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="setup_language_clear_before_import">
+        <tuv xml:lang="en">
+            <seg>Remove all modifications before importing file?</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Alle Anpassungen entfernen vor dem Import der Datei?</seg>
         </tuv>
     </tu>
 

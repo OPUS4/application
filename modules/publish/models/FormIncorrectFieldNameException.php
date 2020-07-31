@@ -33,14 +33,15 @@
  * @version     $Id$
  */
 
-class Publish_Model_FormIncorrectFieldNameException extends Publish_Model_FormException {
-    
-    public $fieldName; 
-    
-    public function  __construct($field) {
+class Publish_Model_FormIncorrectFieldNameException extends Publish_Model_FormException
+{
+
+    public $fieldName;
+
+    public function __construct($field)
+    {
         $this->_translateKey = 'publish_incorrect_field_name';
         $this->code = 404;
         $this->fieldName = $field;
     }
 }
-

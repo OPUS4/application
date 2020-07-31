@@ -39,7 +39,7 @@
     <p class="label"><?= $this->translate('sorting_sort_by') ?></p>
     <ul class="sorting_options">
     
-    <?php if ($this->q !== '' && !$this->browsing 
+    <?php if ($this->q !== '' && ! $this->browsing
             && $this->searchType !== 'authorsearch'
             && $this->searchType !== 'collection'
             && $this->searchType !== 'series'
@@ -60,23 +60,23 @@
     <?php endif ?>
 
     <?php
-        $availableSearchFields = array('year', 'title', 'author');
-        if ($this->searchType === 'series') {
-            array_unshift($availableSearchFields, 'seriesnumber');
-        };
+        $availableSearchFields = ['year', 'title', 'author'];
+    if ($this->searchType === 'series') {
+        array_unshift($availableSearchFields, 'seriesnumber');
+    };
     ?>
 
     <?php foreach ($availableSearchFields as $sortfield) : ?>
-        <?php foreach (array('asc', 'desc') as $sortorder) :
+        <?php foreach (['asc', 'desc'] as $sortorder) :
                     $urlparams = $this->firstPage;
                     $urlparams['sortfield'] = $sortfield;
                     $urlparams['sortorder'] = $sortorder; ?>
         <li class="sorting_option sort_<?= $sortorder ?>">
             <?php if ($this->sortfield === $sortfield && $this->sortorder === $sortorder) : ?>
-                <?= $this->translate('sorting_' . $sortfield ) ?>
+                <?= $this->translate('sorting_' . $sortfield) ?>
             <?php else : ?>
                 <a href="<?= $this->url($urlparams) ?>" rel="nofollow">
-                    <?= $this->translate('sorting_' . $sortfield ) ?>
+                    <?= $this->translate('sorting_' . $sortfield) ?>
                 </a>
             <?php endif ?>
         </li>

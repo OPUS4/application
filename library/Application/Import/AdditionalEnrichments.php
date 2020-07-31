@@ -26,14 +26,13 @@
  *
  * @category    Application
  * @package     Import
- * @author      Sascha Szott
- * @copyright   Copyright (c) 2016
+ * @author      Sascha Szott <opus-development@saschaszott.de>
+ * @copyright   Copyright (c) 2016-2019
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
- * 
+ *
  * This class holds OPUS specific enrichments that are associated with every
  * document that is imported via SWORD API.
- * 
+ *
  * opus.import.user     : name of user (as used in HTTP Basic Auth) that issued
  *                        the SWORD request
  * opus.import.date     : datestamp of import
@@ -42,60 +41,80 @@
  *                        Content-Disposition header)
  * opus.import.checksum : md5 checksum of SWORD package (as specified in HTTP
  *                        Content-MD5 header)
- * 
- * 
+ *
+ *
  */
-class Application_Import_AdditionalEnrichments {
-    
+class Application_Import_AdditionalEnrichments
+{
     const OPUS_IMPORT_USER = 'opus.import.user';
-    
+
     const OPUS_IMPORT_DATE = 'opus.import.date';
-    
+
     const OPUS_IMPORT_FILE = 'opus.import.file';
-    
+
     const OPUS_IMPORT_CHECKSUM = 'opus.import.checksum';
-    
+
+    const OPUS_SOURCE = 'opus.source';
+
     private $enrichmentMap;
-    
-    public function checkKeysExist() {
-        return $this->keyExist(self::OPUS_IMPORT_USER) 
-                && $this->keyExist(self::OPUS_IMPORT_DATE) 
-                && $this->keyExist(self::OPUS_IMPORT_FILE) 
-                && $this->keyExist(self::OPUS_IMPORT_CHECKSUM);
+
+    /**
+     * Application_Import_AdditionalEnrichments constructor.
+     */
+    public function __construct()
+    {
+        if (! $this->checkKeysExist()) {
+            throw new Exception('at least one import specific enrichment key does not exist');
+        }
+
+        $this->addEnrichment(self::OPUS_IMPORT_DATE, gmdate('c'));
+        $this->addEnrichment(self::OPUS_SOURCE, 'sword');
     }
-    
-    private function keyExist($key) {
+
+    private function checkKeysExist()
+    {
+        return $this->keyExist(self::OPUS_IMPORT_USER)
+            && $this->keyExist(self::OPUS_IMPORT_DATE)
+            && $this->keyExist(self::OPUS_IMPORT_FILE)
+            && $this->keyExist(self::OPUS_IMPORT_CHECKSUM)
+            && $this->keyExist(self::OPUS_SOURCE);
+    }
+
+    private function keyExist($key)
+    {
         $enrichmentkey = Opus_EnrichmentKey::fetchByName($key);
-        return !is_null($enrichmentkey);
+        return ! is_null($enrichmentkey);
     }
-        
-    public function addEnrichment($key, $value) {
+
+    public function addEnrichment($key, $value)
+    {
         $this->enrichmentMap[$key] = $value;
     }
-    
-    public function getEnrichments() {
+
+    public function getEnrichments()
+    {
         return $this->enrichmentMap;
     }
-    
-    public function addUser($value) {
+
+    public function addUser($value)
+    {
         $this->addEnrichment(self::OPUS_IMPORT_USER, trim($value));
     }
-    
-    public function addDate($value) {
-        $this->addEnrichment(self::OPUS_IMPORT_DATE, trim($value));
-    }
-    
-    public function addFile($value) {
+
+    public function addFile($value)
+    {
         $this->addEnrichment(self::OPUS_IMPORT_FILE, trim($value));
     }
-    
-    public function addChecksum($value) {
+
+    public function addChecksum($value)
+    {
         $this->addEnrichment(self::OPUS_IMPORT_CHECKSUM, trim($value));
     }
-    
-    public function getChecksum() {
-        if (!array_key_exists(self::OPUS_IMPORT_CHECKSUM, $this->enrichmentMap)) {
-            return null;            
+
+    public function getChecksum()
+    {
+        if (! array_key_exists(self::OPUS_IMPORT_CHECKSUM, $this->enrichmentMap)) {
+            return null;
         }
         return $this->enrichmentMap[self::OPUS_IMPORT_CHECKSUM];
     }

@@ -27,26 +27,26 @@
  * @category    Application
  * @package     Module_Solrsearch
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
  * Class Application_Form_Element_SearchFieldModifier
  */
-class Application_Form_Element_SearchFieldModifier extends Application_Form_Element_Select {
+class Application_Form_Element_SearchFieldModifier extends Application_Form_Element_Select
+{
 
-    public function init() {
+    public function init()
+    {
         parent::init();
 
-        $options = array(
-            Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL => 'advanced_search_form_modifier_all',
-            Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ANY => 'advanced_search_form_modifier_one',
-            Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_NONE => 'advanced_search_form_modifier_none'
-        );
+        $options = [
+            Opus\Search\Util\Query::SEARCH_MODIFIER_CONTAINS_ALL => 'advanced_search_form_modifier_all',
+            Opus\Search\Util\Query::SEARCH_MODIFIER_CONTAINS_ANY => 'advanced_search_form_modifier_one',
+            Opus\Search\Util\Query::SEARCH_MODIFIER_CONTAINS_NONE => 'advanced_search_form_modifier_none'
+        ];
 
         $this->addMultiOptions($options);
     }
-
 }

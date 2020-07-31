@@ -33,50 +33,53 @@
  *
  * TODO use OPUS 4 base class?
  */
-class Sword_DepositController extends Zend_Rest_Controller {
+class Sword_DepositController extends Zend_Rest_Controller
+{
 
-    public function init() {
+    public function init()
+    {
         $this->getHelper('Layout')->disableLayout();
         $this->getHelper('ViewRenderer')->setNoRender();
     }
-    
-    public function postAction() {
+
+    public function postAction()
+    {
         $request = $this->getRequest();
         $response = $this->getResponse();
-        
+
         $userName = Application_Security_BasicAuthProtection::accessAllowed($request, $response);
-        if (!$userName) {
+        if (! $userName) {
             $errorDoc = new Sword_Model_ErrorDocument($request, $response);
             $errorDoc->setForbidden();
             return;
         }
-                
+
         // mediated deposit is currently not supported by OPUS
         $mediatedDeposit = $request->getHeader('X-On-Behalf-Of');
-        if (!is_null($mediatedDeposit) && $mediatedDeposit !== false) {
+        if (! is_null($mediatedDeposit) && $mediatedDeposit !== false) {
             $errorDoc = new Sword_Model_ErrorDocument($request, $response);
             $errorDoc->setMediationNotAllowed();
-            return;                       
+            return;
         }
-       
-        // currently OPUS supports deposit of ZIP and TAR packages only       
+
+        // currently OPUS supports deposit of ZIP and TAR packages only
         try {
             $contentType = $request->getHeader('Content-Type');
-            $packageHandler = new Sword_Model_PackageHandler($contentType);    
+            $packageHandler = new Sword_Model_PackageHandler($contentType);
         } catch (Exception $e) {
             $errorDoc = new Sword_Model_ErrorDocument($request, $response);
             $errorDoc->setErrorContent();
             return;
         }
-        
-        // check that package size does not exceed maximum upload size 
-        $payload = $request->getRawBody();       
+
+        // check that package size does not exceed maximum upload size
+        $payload = $request->getRawBody();
         if ($this->maxUploadSizeExceeded($payload)) {
             $errorDoc = new Sword_Model_ErrorDocument($request, $response);
             $errorDoc->setPayloadTooLarge();
             return;
         }
-        
+
         // check that all import enrichment keys are present
         try {
             $additionalEnrichments = $this->getAdditionalEnrichments($userName, $request);
@@ -86,10 +89,10 @@ class Sword_DepositController extends Zend_Rest_Controller {
             $errorDoc->setMissingImportEnrichmentKey();
             return;
         }
-        
+
         // compare checksums (if given in HTTP request header)
-        $checksum = $additionalEnrichments->getChecksum();        
-        if (!is_null($checksum)) {
+        $checksum = $additionalEnrichments->getChecksum();
+        if (! is_null($checksum)) {
             $checksumPayload = md5($payload);
             if (strcasecmp($checksum, $checksumPayload) != 0) {
                 $errorDoc = new Sword_Model_ErrorDocument($request, $response);
@@ -97,57 +100,58 @@ class Sword_DepositController extends Zend_Rest_Controller {
                 return;
             }
         }
-                
+
         try {
             $statusDoc = $packageHandler->handlePackage($payload);
             if (is_null($statusDoc)) {
                 // im Archiv befindet sich keine Datei opus.xml oder die Datei ist leer
                 $errorDoc = new Sword_Model_ErrorDocument($request, $response);
                 $errorDoc->setMissingXml();
-                return;                
+                return;
             }
-            
+
             if ($statusDoc->noDocImported()) {
-                // im Archiv befindet sich zwar ein nicht leeres opus.xml; es 
+                // im Archiv befindet sich zwar ein nicht leeres opus.xml; es
                 // konnte aber kein Dokument erfolgreich importiert werden
                 $errorDoc = new Sword_Model_ErrorDocument($request, $response);
                 $errorDoc->setInternalFrameworkError();
                 return;
             }
-        } 
-        catch (Application_Import_MetadataImportInvalidXmlException $ex) {
+        } catch (Application_Import_MetadataImportInvalidXmlException $ex) {
             $errorDoc = new Sword_Model_ErrorDocument($request, $response);
             $errorDoc->setInvalidXml();
-            return;        
-        } 
-        catch (Exception $ex) {
+            return;
+        } catch (Exception $ex) {
             $errorDoc = new Sword_Model_ErrorDocument($request, $response);
             return;
         }
-        
+
         $this->returnAtomEntryDocument($statusDoc, $request, $response, $userName);
     }
-    
-    private function returnAtomEntryDocument($statusDoc, $request, $response, $userName) {
+
+    private function returnAtomEntryDocument($statusDoc, $request, $response, $userName)
+    {
         $atomDoc = $this->createAtomEntryDocument($statusDoc);
-        $atomDoc->setResponse($request, $response, $this->getFullUrl(), $userName);        
+        $atomDoc->setResponse($request, $response, $this->getFullUrl(), $userName);
     }
-    
+
     /**
-     * 
+     *
      * @param Application_Import_ImportStatusDocument $statusDoc
      */
-    private function createAtomEntryDocument($statusDoc) {
+    private function createAtomEntryDocument($statusDoc)
+    {
         $atomEntryDoc = new Sword_Model_AtomEntryDocument();
         $atomEntryDoc->setEntries($statusDoc->getDocs());
         return $atomEntryDoc;
-    }    
-    
-    private function maxUploadSizeExceeded($payload) {
+    }
+
+    private function maxUploadSizeExceeded($payload)
+    {
 
         // retrieve number of bytes (not characters) of HTTP payload (SWORD package)
         $size = mb_strlen($payload, '8bit');
-        
+
         $maxUploadSize = (new Application_Configuration_MaxUploadSize())->getMaxUploadSizeInByte();
         if ($size > $maxUploadSize) {
             $log = Zend_Registry::get('Zend_Log');
@@ -156,58 +160,61 @@ class Sword_DepositController extends Zend_Rest_Controller {
         }
         return false;
     }
-    
-    private function getAdditionalEnrichments($userName, $request) {
+
+    private function getAdditionalEnrichments($userName, $request)
+    {
         $additionalEnrichments = new Application_Import_AdditionalEnrichments();
-        if (!$additionalEnrichments->checkKeysExist()) {
-            throw new Exception('at least one import specific enrichment key does not exist');
-        }
-        
+
         $additionalEnrichments->addUser($userName);
-        $additionalEnrichments->addDate(gmdate('c'));
-        
+
         $fileName = $request->getHeader('Content-Disposition');
-        if (!is_null($fileName) && $fileName !== false) {
+        if (! is_null($fileName) && $fileName !== false) {
             $additionalEnrichments->addFile($fileName);
         }
-        
+
         $checksum = $request->getHeader('Content-MD5');
-        if (!is_null($checksum) && $checksum !== false) {
+        if (! is_null($checksum) && $checksum !== false) {
             $additionalEnrichments->addChecksum($checksum);
         }
-        
-        return $additionalEnrichments;        
+
+        return $additionalEnrichments;
     }
 
-    private function getFullUrl() {
+    private function getFullUrl()
+    {
         $fullUrlHelper = new Application_View_Helper_FullUrl();
         $fullUrlHelper->setView(new Zend_View());
         return $fullUrlHelper->fullUrl();
     }
 
-    private function return500($response) {
+    private function return500($response)
+    {
         $response->setHttpResponseCode(500);
-        $response->appendBody("Method not allowed");        
+        $response->appendBody("Method not allowed");
     }
-    
-    public function indexAction() {
+
+    public function indexAction()
+    {
         $this->return500($this->getResponse());
     }
 
-    public function getAction() {
+    public function getAction()
+    {
         $this->return500($this->getResponse());
     }
 
-    public function headAction() {
+    public function headAction()
+    {
         $this->return500($this->getResponse());
     }
 
-    public function putAction() {
+    public function putAction()
+    {
         $this->return500($this->getResponse());
     }
 
-    public function deleteAction() {
+    public function deleteAction()
+    {
         $this->return500($this->getResponse());
     }
-    
 }

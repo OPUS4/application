@@ -27,18 +27,22 @@
  * @category    Application Unit Test
  * @package     Controller
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
-class Application_Controller_ModuleAccessTest extends ControllerTestCase {
+class Application_Controller_ModuleAccessTest extends ControllerTestCase
+{
 
-    public function getController() {
+    protected $additionalResources = ['view', 'mainMenu', 'navigation'];
+
+    public function getController()
+    {
         return new Application_Controller_ModuleAccess($this->getRequest(), $this->getResponse());
     }
 
-    public function testGetLogger() {
+    public function testGetLogger()
+    {
         $controller = $this->getController();
 
         $logger = $controller->getLogger();
@@ -48,7 +52,8 @@ class Application_Controller_ModuleAccessTest extends ControllerTestCase {
         $this->assertInstanceOf('Zend_Log', $logger);
     }
 
-    public function testSetGetLogger() {
+    public function testSetGetLogger()
+    {
         $controller = $this->getController();
 
         $logger = new MockLogger();
@@ -62,12 +67,12 @@ class Application_Controller_ModuleAccessTest extends ControllerTestCase {
      * @expectedException Application_Exception
      * @expectedExceptionMessage No logger found in Zend_Registry
      */
-    public function testNoLogger() {
+    public function testNoLogger()
+    {
         $controller = $this->getController();
 
         Zend_Registry::set('Zend_Log', null);
 
         $controller->getLogger();
     }
-
 }

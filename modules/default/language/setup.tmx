@@ -15,14 +15,14 @@
 
     <tu tuid="setup_title_translation_description">
         <tuv xml:lang="en">
-            <seg>Names, Headlines, Help for Fields</seg>
+            <seg>Names, Headlines, Help for Fields, ...</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Feldnamen, Feldüberschriften, Feldhilfen</seg>
+            <seg>Feldnamen, Feldüberschriften, Feldhilfen, ...</seg>
         </tuv>
     </tu>
 
-    <tu tuid="setup_translation_choose">
+    <tu tuid="setup_infopages_choose">
         <tuv xml:lang="en">
             <seg>Choose Translation Resource</seg>
         </tuv>
@@ -31,16 +31,7 @@
         </tuv>
     </tu>
 
-    <tu tuid="setup_translation_edit">
-        <tuv xml:lang="en">
-            <seg>Edit Translation Resource</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Übersetzungsressource bearbeiten</seg>
-        </tuv>
-    </tu>
-
-    <tu tuid="setup_title_static-page">
+    <tu tuid="setup_title_infopages">
         <tuv xml:lang="en">
             <seg>Information Pages</seg>
         </tuv>
@@ -49,7 +40,7 @@
         </tuv>
     </tu>
 
-    <tu tuid="setup_title_static-page_description">
+    <tu tuid="setup_title_infopages_description">
         <tuv xml:lang="en">
             <seg>Home Page, Contact Information, Imprint</seg>
         </tuv>
@@ -58,34 +49,34 @@
         </tuv>
     </tu>
 
-    <tu tuid="setup_static-page_edit_home">
+    <tu tuid="setup_infopages_edit_home">
         <tuv xml:lang="en">
-            <seg>Edit Home Page</seg>
+            <seg>Home Page</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Hauptseite bearbeiten</seg>
+            <seg>Hauptseite</seg>
         </tuv>
     </tu>
 
-    <tu tuid="setup_static-page_edit_imprint">
+    <tu tuid="setup_infopages_edit_imprint">
         <tuv xml:lang="en">
-            <seg>Edit Imprint</seg>
+            <seg>Imprint</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Impressum bearbeiten</seg>
+            <seg>Impressum</seg>
         </tuv>
     </tu>
 
-    <tu tuid="setup_static-page_edit_contact">
+    <tu tuid="setup_infopages_edit_contact">
         <tuv xml:lang="en">
-            <seg>Edit Contact Information</seg>
+            <seg>Contact Information</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Kontaktinformationen bearbeiten</seg>
+            <seg>Kontaktinformationen</seg>
         </tuv>
     </tu>
 
-    <tu tuid="setup_title_help-page">
+    <tu tuid="setup_title_helppage">
         <tuv xml:lang="en">
             <seg>FAQ-Page</seg>
         </tuv>
@@ -94,12 +85,30 @@
         </tuv>
     </tu>
 
-    <tu tuid="setup_help-page_edit">
+    <tu tuid="setup_helppage_edit">
         <tuv xml:lang="en">
             <seg>Edit FAQ</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>FAQ bearbeiten</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="setup_translation_index">
+        <tuv xml:lang="en">
+            <seg>Translations</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Übersetzungen</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="setup_language_index">
+        <tuv xml:lang="en">
+            <seg>Translations</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Übersetzungen</seg>
         </tuv>
     </tu>
 

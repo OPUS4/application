@@ -27,7 +27,7 @@
  * @category    Application Unit Test
  * @package     View_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2017-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -36,6 +36,8 @@
  */
 class Application_View_Helper_DocumentTitleTest extends ControllerTestCase
 {
+
+    protected $additionalResources = ['database', 'view', 'translation'];
 
     private $_helper = null;
 
@@ -103,9 +105,9 @@ class Application_View_Helper_DocumentTitleTest extends ControllerTestCase
     public function testDocumentTitleUserInterfaceLanguage()
     {
         Zend_Registry::get('Zend_Config')->merge(new Zend_Config(
-            array('search' => array('result' => array('display' => array(
-                'preferUserInterfaceLanguage' => '1'
-            ))))
+            ['search' => ['result' => ['display' => [
+                'preferUserInterfaceLanguage' => self::CONFIG_VALUE_TRUE
+            ]]]]
         ));
 
         $this->assertTrue($this->_helper->isPreferUserInterfaceLanguage());
@@ -156,6 +158,9 @@ class Application_View_Helper_DocumentTitleTest extends ControllerTestCase
         $this->_helper->setPreferUserInterfaceLanguage('1');
         $this->assertTrue($this->_helper->isPreferUserInterfaceLanguage());
 
+        $this->_helper->setPreferUserInterfaceLanguage(self::CONFIG_VALUE_TRUE);
+        $this->assertTrue($this->_helper->isPreferUserInterfaceLanguage());
+
         // false
         $this->_helper->setPreferUserInterfaceLanguage('bla');
         $this->assertFalse($this->_helper->isPreferUserInterfaceLanguage());
@@ -165,7 +170,8 @@ class Application_View_Helper_DocumentTitleTest extends ControllerTestCase
 
         $this->_helper->setPreferUserInterfaceLanguage(0);
         $this->assertFalse($this->_helper->isPreferUserInterfaceLanguage());
+
+        $this->_helper->setPreferUserInterfaceLanguage(self::CONFIG_VALUE_FALSE);
+        $this->assertFalse($this->_helper->isPreferUserInterfaceLanguage());
     }
-
-
 }

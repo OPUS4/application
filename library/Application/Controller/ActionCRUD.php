@@ -50,11 +50,11 @@
  * @category    Application
  * @package     Application_Controller
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2009-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2009-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class Application_Controller_ActionCRUD extends Application_Controller_Action {
+class Application_Controller_ActionCRUD extends Application_Controller_Action
+{
 
     /**
      * Message-Key für erfolgreiches Abspeichern.
@@ -82,9 +82,14 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action {
     const INVALID_ID = 'invalidId';
 
     /**
-     * Message-Key für Versuche ein geschütztes Model zu editieren oder löschen.
+     * Message-Key für Versuche ein geschütztes Model zu editieren.
      */
     const MODEL_NOT_MODIFIABLE = 'modelNotModifiable';
+
+    /**
+     * Message-Key für Versuche ein Model zu löschen, dass nicht gelöscht werden darf.
+     */
+    const MODEL_CANNOT_DELETE = 'modelCannotDelete';
 
     /**
      * Nachrichten für die verschiedenen Ereignisse.
@@ -96,14 +101,15 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action {
      * Default Messages für die verschiedenen Ereignisse.
      * @var array
      */
-    private $_defaultMessageTemplates = array(
+    private $_defaultMessageTemplates = [
         self::SAVE_SUCCESS => 'controller_crud_save_success',
-        self::SAVE_FAILURE => array('failure' => 'controller_crud_save_failure'),
+        self::SAVE_FAILURE => ['failure' => 'controller_crud_save_failure'],
         self::DELETE_SUCCESS => 'controller_crud_delete_success',
-        self::DELETE_FAILURE => array('failure' => 'controller_crud_delete_failure'),
-        self::INVALID_ID => array('failure' => 'controller_crud_invalid_id'),
-        self::MODEL_NOT_MODIFIABLE => array('failure' => 'controller_crud_model_not_modifiable')
-    );
+        self::DELETE_FAILURE => ['failure' => 'controller_crud_delete_failure'],
+        self::INVALID_ID => ['failure' => 'controller_crud_invalid_id'],
+        self::MODEL_NOT_MODIFIABLE => ['failure' => 'controller_crud_model_not_modifiable'],
+        self::MODEL_CANNOT_DELETE => ['failure' => 'controller_crud_model_cannot_delete']
+    ];
 
     /**
      * Name von Parameter für Model-ID.
@@ -143,7 +149,8 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action {
     /**
      * Initialisiert den Controller.
      */
-    public function init() {
+    public function init()
+    {
         parent::init();
         $this->loadDefaultMessages();
     }
@@ -154,7 +161,8 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action {
      * @return void
      *
      */
-    public function indexAction() {
+    public function indexAction()
+    {
         $this->renderForm($this->getIndexForm());
     }
 
@@ -163,10 +171,11 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action {
      * @return Application_Form_Model_Table
      * TODO Konfigurierbare Tabelle mit Links für Editing/Deleting
      */
-    public function getIndexForm() {
+    public function getIndexForm()
+    {
         $form = new Application_Form_Model_Table();
         $form->setModels($this->getAllModels());
-        $form->setColumns(array(array('label' => $this->getModelClass())));
+        $form->setColumns([['label' => $this->getModelClass()]]);
         $form->setController($this);
         return $form;
     }
@@ -178,21 +187,20 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action {
      *
      * @return void
      */
-    public function showAction() {
+    public function showAction()
+    {
         if ($this->getShowActionEnabled()) {
             $model = $this->getModel($this->getRequest()->getParam(self::PARAM_MODEL_ID));
 
-            if (!is_null($model)) {
+            if (! is_null($model)) {
                 $form = $this->getEditModelForm($model);
                 $form->prepareRenderingAsView();
                 $result = $form;
-            }
-            else {
+            } else {
                 $result = $this->createInvalidIdResult();
             }
-        }
-        else {
-            $result = array();
+        } else {
+            $result = [];
         }
 
         $this->renderResult($result);
@@ -203,15 +211,15 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action {
      *
      * @return void
      */
-    public function newAction() {
+    public function newAction()
+    {
         if ($this->getRequest()->isPost()) {
             // Formular POST verarbeiten
             $result = $this->handleModelPost();
-        }
-        else {
+        } else {
             // Neues Formular anlegen
             $form = $this->getNewModelForm();
-            $form->setAction($this->view->url(array('action' => 'new')));
+            $form->setAction($this->view->url(['action' => 'new']));
             $result = $form;
         }
 
@@ -223,26 +231,24 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action {
      *
      * @return void
      */
-    public function editAction() {
+    public function editAction()
+    {
         if ($this->getRequest()->isPost()) {
             // Formular POST verarbeiten
             $result = $this->handleModelPost();
-        }
-        else {
+        } else {
             // Neues Formular anzeigen
             $model = $this->getModel($this->getRequest()->getParam(self::PARAM_MODEL_ID));
 
-            if (!is_null($model)) {
+            if (! is_null($model)) {
                 if ($this->isModifiable($model)) {
                     $form = $this->getEditModelForm($model);
-                    $form->setAction($this->view->url(array('action' => 'edit')));
+                    $form->setAction($this->view->url(['action' => 'edit']));
                     $result = $form;
-                }
-                else {
+                } else {
                     $result = $this->createNotModifiableResult();
                 }
-            }
-            else {
+            } else {
                 $result = $this->createInvalidIdResult();
             }
         }
@@ -253,24 +259,22 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action {
     /**
      * Löscht eine Model-Instanz nachdem, die Löschung in einem Formular bestätigt wurde.
      */
-    public function deleteAction() {
+    public function deleteAction()
+    {
         if ($this->getRequest()->isPost() === true) {
             // Bestätigungsformular POST verarbeiten
             $result = $this->handleConfirmationPost();
-        }
-        else {
+        } else {
             // Bestätigungsformular anzeigen
             $model = $this->getModel($this->getRequest()->getParam(self::PARAM_MODEL_ID));
-            if (!is_null($model)) {
-                if ($this->isModifiable($model)) {
+            if (! is_null($model)) {
+                if ($this->isDeletable($model)) {
                     $form = $this->getConfirmationForm($model);
                     $result = $form;
+                } else {
+                    $result = $this->createCannotBeDeletedResult();
                 }
-                else {
-                    $result = $this->createNotModifiableResult();
-                }
-            }
-            else {
+            } else {
                 // Request mit invaliden IDs werden ignoriert und zur Index Seite umgeleitet
                 $result = $this->createInvalidIdResult();
             }
@@ -284,7 +288,8 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action {
      *
      * Ein POST kann nur Save oder Cancel bedeuten.
      */
-    public function handleModelPost($post = null) {
+    public function handleModelPost($post = null)
+    {
         if (is_null($post)) {
             $post = $this->getRequest()->getPost();
         }
@@ -300,63 +305,60 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action {
                     // Validierung erfolgreich; Hole Model vom Formular
                     try {
                         $model = $form->getModel();
-                    }
-                    catch (Application_Exception $ae) {
+                    } catch (Application_Exception $ae) {
                         $this->getLogger()->err(__METHOD__ . $ae->getMessage());
                         $model = null;
                     }
 
-                    if (!is_null($model)) {
-                        if (!$this->isModifiable($model)) {
-                            return array('message' => self::MODEL_NOT_MODIFIABLE);
+                    if (! is_null($model)) {
+                        if (! $this->isModifiable($model)) {
+                            return ['message' => self::MODEL_NOT_MODIFIABLE];
                         }
 
                         try {
                             $model->store();
-                        }
-                        catch (Opus_Model_Exception $ome) {
+                        } catch (Opus_Model_Exception $ome) {
                             // Speichern fehlgeschlagen
-                            return array('message' => self::SAVE_FAILURE);
+                            return ['message' => self::SAVE_FAILURE];
                         }
 
                         // Redirect zur Show Action
                         if ($this->getShowActionEnabled()) {
-                            return array(
-                                'action' => 'show', 'message' => self::SAVE_SUCCESS,
-                                'params' => array(self::PARAM_MODEL_ID => $model->getId())
-                            );
-                        }
-                        else {
+                            return [
+                                'action' => 'show',
+                                'message' => self::SAVE_SUCCESS,
+                                'params' => [self::PARAM_MODEL_ID => $model->getId()]
+                            ];
+                        } else {
                             // return to index page
-                            return array(
-                                'message' => self::SAVE_SUCCESS
-                            );
+                            return ['message' => self::SAVE_SUCCESS];
                         }
-                    }
-                    else {
+                    } else {
                         // Formular hat kein Model geliefert - Fehler beim speichern
                         return $this->createInvalidIdResult();
                     }
-                }
-                else {
+                } else {
                     // Validierung fehlgeschlagen; zeige Formular wieder an
                     $form->populate($post); // Validierung entfernt invalide Werte
                 }
                 break;
             case Application_Form_Model_Abstract::RESULT_CANCEL:
             default:
-                return array();
-
+                return [];
         }
 
         return $form;
     }
 
     /**
-     * Verarbeitet POST vom Bestätigunsformular.
+     * Verarbeitet POST-Request vom Bestätigungsformular.
      *
+     * @param null $post
+     * @return array
+     * @throws Application_Exception
      */
-    public function handleConfirmationPost($post = null) {
+    public function handleConfirmationPost($post = null)
+    {
         if (is_null($post)) {
             $post = $this->getRequest()->getPost();
         }
@@ -368,28 +370,26 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action {
             $modelId = $form->getModelId();
             $model = $this->getModel($modelId);
 
-            if (!is_null($model)) {
-                if (!$this->isModifiable($model)) {
-                    return array('message' => self::MODEL_NOT_MODIFIABLE);
+            if (! is_null($model)) {
+                if (! $this->isDeletable($model)) {
+                    return ['message' => self::MODEL_CANNOT_DELETE];
                 }
 
                 // Model löschen
                 try {
                     $this->deleteModel($model);
-                }
-                catch (Opus_Model_Exception $ome) {
+                } catch (Opus_Model_Exception $ome) {
                     $this->getLogger()->err(__METHOD__ . ' ' . $ome->getMessage());
-                    return array('message' => self::DELETE_FAILURE);
+                    return ['message' => self::DELETE_FAILURE];
                 }
 
-                return array('message' => self::DELETE_SUCCESS);
+                return ['message' => self::DELETE_SUCCESS];
             }
-        }
-        else {
+        } else {
             // Löschen abgebrochen (Nein) - bzw. Formular nicht valide
-            if (!$form->hasErrors()) {
+            if (! $form->hasErrors()) {
                 // keine Validierungsfehler
-                return array();
+                return [];
             }
         }
 
@@ -402,19 +402,19 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action {
      *
      * Es wird entweder ein Formular ausgeben oder ein Redirect veranlasst.
      */
-    protected function renderResult($result) {
+    protected function renderResult($result)
+    {
         if (is_array($result)) {
             $action = array_key_exists('action', $result) ? $result['action'] : 'index';
-            $params = array_key_exists('params', $result) ? $result['params'] : array();
+            $params = array_key_exists('params', $result) ? $result['params'] : [];
 
             $messageKey = array_key_exists('message', $result) ? $result['message'] : null;
-            $message = !is_null($messageKey) ? $this->getMessage($messageKey) : null;
+            $message = ! is_null($messageKey) ? $this->getMessage($messageKey) : null;
 
             $this->_helper->Redirector->redirectTo($action, $message, null, null, $params);
-        }
-        else {
+        } else {
             // Ergebnis ist Formular
-            if (!is_null($result) && $result instanceof Zend_Form) {
+            if (! is_null($result) && $result instanceof Zend_Form) {
                 $this->renderForm($result);
             }
         }
@@ -427,23 +427,35 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action {
      *
      * @param $model \Opus_Model_Abstract
      */
-    protected function deleteModel($model) {
+    protected function deleteModel($model)
+    {
         $model->delete();
     }
 
     /**
      * Fuehrt Redirect fuer eine ungueltige Model-ID aus.
      */
-    public function createInvalidIdResult() {
-        return array('message' => self::INVALID_ID);
+    public function createInvalidIdResult()
+    {
+        return ['message' => self::INVALID_ID];
     }
 
     /**
      * Fuehrt Redirect fuer ein nicht editierbares Model aus.
      * @return array
      */
-    public function createNotModifiableResult() {
-        return array('message' => self::MODEL_NOT_MODIFIABLE);
+    public function createNotModifiableResult()
+    {
+        return ['message' => self::MODEL_NOT_MODIFIABLE];
+    }
+
+    /**
+     * Fuehrt Redirect fuer ein nicht loeschbares Model aus.
+     * @return array
+     */
+    public function createCannotBeDeletedResult()
+    {
+        return ['message' => self::MODEL_CANNOT_DELETE];
     }
 
     /**
@@ -454,14 +466,15 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action {
      * @param Opus_Model_AbstractDb $model
      * @return Application_Form_Confirmation
      */
-    public function getConfirmationForm($model = null) {
+    public function getConfirmationForm($model = null)
+    {
         $form = new Application_Form_Confirmation($this->getModelClass());
 
-        if (!$this->getVerifyModelIdIsNumeric()) {
+        if (! $this->getVerifyModelIdIsNumeric()) {
             $form->getElement(Application_Form_Confirmation::ELEMENT_MODEL_ID)->removeValidator('int');
         }
 
-        if (!is_null($model)) {
+        if (! is_null($model)) {
             $form->setModel($model);
         }
 
@@ -471,15 +484,17 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action {
     /**
      * Liefert alle Instanzen der Model-Klasse.
      */
-    public function getAllModels() {
-        return call_user_func(array($this->getModelClass(), $this->_functionNameForGettingModels));
+    public function getAllModels()
+    {
+        return call_user_func([$this->getModelClass(), $this->_functionNameForGettingModels]);
     }
 
     /**
      * Erzeugt neue Instanz von Model-Klasse.
      * @return mixed
      */
-    public function getNewModel() {
+    public function getNewModel()
+    {
         $modelClass = $this->getModelClass();
         return new $modelClass();
     }
@@ -489,15 +504,15 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action {
      * @param type $modelId
      * @return \modelClass
      */
-    public function getModel($modelId) {
-        if (is_null($modelId) || is_numeric($modelId) || !$this->getVerifyModelIdIsNumeric()) {
+    public function getModel($modelId)
+    {
+        if (is_null($modelId) || is_numeric($modelId) || ! $this->getVerifyModelIdIsNumeric()) {
             $modelClass = $this->getModelClass();
 
             if (strlen(trim($modelId)) !== 0) {
                 try {
                     return new $modelClass($modelId);
-                }
-                catch (Opus_Model_NotFoundException $omnfe) {
+                } catch (Opus_Model_NotFoundException $omnfe) {
                     $this->getLogger()->err(__METHOD__ . ':' . $omnfe->getMessage());
                 }
             }
@@ -510,9 +525,10 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action {
      * Erzeugt Formular.
      * @return Application_Form_IModel
      */
-    public function getModelForm() {
+    public function getModelForm()
+    {
         $form = new $this->_formClass();
-        if (!$this->getVerifyModelIdIsNumeric()) {
+        if (! $this->getVerifyModelIdIsNumeric()) {
             $form->getElement(Application_Form_Model_Abstract::ELEMENT_MODEL_ID)->removeValidator('int');
         }
         return $form;
@@ -523,9 +539,10 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action {
      * @param $model
      * @return Application_Form_IModel
      */
-    public function getEditModelForm($model) {
+    public function getEditModelForm($model)
+    {
         $form = $this->getModelForm();
-        if (!$this->getVerifyModelIdIsNumeric()) {
+        if (! $this->getVerifyModelIdIsNumeric()) {
             $form->getElement(Application_Form_Model_Abstract::ELEMENT_MODEL_ID)->removeValidator('int');
         }
         $form->populateFromModel($model);
@@ -536,7 +553,8 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action {
      * Erzeugt Formular zum Hinzufügen eines neuen Models.
      * @return Application_Form_IModel
      */
-    public function getNewModelForm() {
+    public function getNewModelForm()
+    {
         $model = $this->getNewModel();
         $form = $this->getModelForm();
         $form->populateFromModel($model); // um evtl. Defaultwerte des Models zu setzen
@@ -547,7 +565,8 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action {
      * Liefert Formularklasse für Controller.
      * @return Application_Form_IModel|null
      */
-    public function getFormClass() {
+    public function getFormClass()
+    {
         return $this->_formClass;
     }
 
@@ -555,8 +574,9 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action {
      * Setzt die Model-Klasse die verwaltet wird.
      * @param $modelClass Name von Opus Model Klasse
      */
-    public function setFormClass($formClass) {
-        if (!$this->isClassSupported($formClass)) {
+    public function setFormClass($formClass)
+    {
+        if (! $this->isClassSupported($formClass)) {
             throw new Application_Exception("Class '$formClass' is not instance of Application_Form_IModel.");
         }
 
@@ -567,7 +587,8 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action {
      * Liefert die Model-Klasse die verwaltet wird.
      * @return null|Opus_Model_Abstract
      */
-    public function getModelClass() {
+    public function getModelClass()
+    {
         if (is_null($this->_modelClass)) {
             $this->_modelClass = $this->getModelForm()->getModelClass();
         }
@@ -580,7 +601,8 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action {
      * @param $formClass Name der Formularklasse
      * @return bool TRUE - wenn die Klasse unterstützt wird; FALSE - wenn nicht
      */
-    public function isClassSupported($formClass) {
+    public function isClassSupported($formClass)
+    {
         $form = new $formClass();
         return ($form instanceof Application_Form_IModel) ? true : false;
     }
@@ -589,7 +611,8 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action {
      * Liefert die konfigurierten Nachrichten.
      * @return array
      */
-    public function getMessages() {
+    public function getMessages()
+    {
         return $this->_messageTemplates->getMessages();
     }
 
@@ -597,7 +620,8 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action {
      * Setzt die Nachrichten.
      * @param $messages
      */
-    public function setMessages($messages) {
+    public function setMessages($messages)
+    {
         $this->_messageTemplates->setMessages($messages);
     }
 
@@ -606,7 +630,8 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action {
      * @param $key Nachrichtenschlüssel
      * @return null|string
      */
-    public function getMessage($key) {
+    public function getMessage($key)
+    {
         return $this->_messageTemplates->getMessage($key);
     }
 
@@ -615,14 +640,16 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action {
      * @param $key Nachrichtenschlüssel
      * @param $message Nachricht
      */
-    public function setMessage($key, $message) {
+    public function setMessage($key, $message)
+    {
         $this->_messageTemplates->setMessage($key, $message);
     }
 
     /**
      * Lädt die Standardnachrichten.
      */
-    public function loadDefaultMessages() {
+    public function loadDefaultMessages()
+    {
         $this->_messageTemplates = new Application_Controller_MessageTemplates($this->_defaultMessageTemplates);
     }
 
@@ -630,7 +657,8 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action {
      * Setzt Namen der Funktion, um alle Modelle zu holen.
      * @param $name
      */
-    public function setFunctionNameForGettingModels($name) {
+    public function setFunctionNameForGettingModels($name)
+    {
         $this->_functionNameForGettingModels = ($name != null) ? $name : 'getAll';
     }
 
@@ -638,14 +666,16 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action {
      * Liefert Namen der Funktion, die für das holen aller Modelle verwendet wird.
      * @return string
      */
-    public function getFunctionNameForGettingModels() {
+    public function getFunctionNameForGettingModels()
+    {
         return $this->_functionNameForGettingModels;
     }
 
     /**
      * @param $enabled boolean true enabled verification that model ID is numeric value
      */
-    public function setVerifyModelIdIsNumeric($enabled) {
+    public function setVerifyModelIdIsNumeric($enabled)
+    {
         $this->_verifyModelIdIsNumeric = $enabled;
     }
 
@@ -653,7 +683,8 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action {
      * Returns setting for verification of numeric model IDs.
      * @return bool
      */
-    public function getVerifyModelIdIsNumeric() {
+    public function getVerifyModelIdIsNumeric()
+    {
         return $this->_verifyModelIdIsNumeric;
     }
 
@@ -661,7 +692,8 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action {
      * Enables or disables show action.
      * @param $enabled bool true to enable show action
      */
-    public function setShowActionEnabled($enabled) {
+    public function setShowActionEnabled($enabled)
+    {
         $this->_showActionEnabled = $enabled;
     }
 
@@ -669,7 +701,8 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action {
      * Returns status of show action.
      * @return bool true - enabled; false - disabled
      */
-    public function getShowActionEnabled() {
+    public function getShowActionEnabled()
+    {
         return $this->_showActionEnabled;
     }
 
@@ -679,8 +712,18 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action {
      * @param $model Object
      * @return bool true if object can be edited; false - object cannot be edited
      */
-    public function isModifiable($model) {
+    public function isModifiable($model)
+    {
         return true;
     }
 
+    /**
+     * Determines if a model can be deleted.
+     * @param $model Object
+     * @return bool true if object can be deleted; false if not
+     */
+    public function isDeletable($model)
+    {
+        return $this->isModifiable($model);
+    }
 }

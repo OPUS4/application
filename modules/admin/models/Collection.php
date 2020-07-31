@@ -32,11 +32,13 @@
  * @version     $Id$
  */
 
-class Admin_Model_Collection {
+class Admin_Model_Collection
+{
 
     private $_collection = null;
 
-    public function  __construct($id = null) {
+    public function __construct($id = null)
+    {
         if ($id === '') {
             throw new Admin_Model_Exception('missing parameter id');
         }
@@ -46,13 +48,13 @@ class Admin_Model_Collection {
         }
         try {
             $this->_collection = new Opus_Collection($id);
-        }
-        catch (Opus_Model_NotFoundException $e) {
+        } catch (Opus_Model_NotFoundException $e) {
             throw new Admin_Model_Exception('id parameter value unknown');
         }
     }
 
-    private function initNewCollection() {
+    private function initNewCollection()
+    {
         $this->_collection = new Opus_Collection();
         $this->_collection->setVisible('1');
         $this->_collection->setVisiblePublish('1');
@@ -62,11 +64,13 @@ class Admin_Model_Collection {
      *
      * @return Opus_Collection
      */
-    public function getObject() {
+    public function getObject()
+    {
         return $this->_collection;
     }
 
-    public function delete() {
+    public function delete()
+    {
         if (is_null($this->_collection)) {
             return;
         }
@@ -75,7 +79,8 @@ class Admin_Model_Collection {
         return $parents[1]->getId();
     }
 
-    public function setVisiblity($visibility) {
+    public function setVisiblity($visibility)
+    {
         if (is_null($this->_collection)) {
             return;
         }
@@ -85,22 +90,23 @@ class Admin_Model_Collection {
         return $parents[1]->getId();
     }
 
-    public function addDocument($documentId) {
+    public function addDocument($documentId)
+    {
         if (is_null($documentId)) {
             throw new Admin_ModelException('missing document id');
         }
         $document = null;
         try {
             $document = new Opus_Document($documentId);
-        }
-        catch (Opus_Model_Exception $e) {
+        } catch (Opus_Model_Exception $e) {
             throw new Admin_Model_Exception('invalid document id');
         }
         $document->addCollection($this->_collection);
         $document->store();
     }
 
-    public function getName() {
+    public function getName()
+    {
         if (count($this->_collection->getParents()) === 1) {
             // die Wurzel einer Collection-Hierarchie hat selbst keinen Namen/Number: in diesem Fall wird der Name
             // der Collection Role verwendet
@@ -116,7 +122,8 @@ class Admin_Model_Collection {
      * @param int $newPosition
      * @return int
      */
-    public function move($newPosition) {
+    public function move($newPosition)
+    {
         if (is_null($newPosition)) {
             throw new Admin_Model_Exception('missing parameter pos');
         }
@@ -156,8 +163,7 @@ class Admin_Model_Collection {
 
         if ($newPosition > $oldPosition) {
             $this->_collection->moveAfterNextSibling();
-        }
-        else if ($newPosition < $oldPosition) {
+        } elseif ($newPosition < $oldPosition) {
             $this->_collection->moveBeforePrevSibling();
         }
         return $parents[1]->getId();

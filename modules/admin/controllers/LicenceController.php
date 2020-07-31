@@ -33,17 +33,19 @@
  * @author      Wolfgang Filter (wolfgang.filter@ub.uni-stuttgart.de)
  * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Admin_LicenceController extends Application_Controller_ActionCRUD {
+class Admin_LicenceController extends Application_Controller_ActionCRUD
+{
 
     /**
      * Initialisiert den Controller.
      *
      * Setzt die Formularklasse fuer Lizenzen.
      */
-    public function init() {
+    public function init()
+    {
         $this->setFormClass('Admin_Form_Licence');
         parent::init();
     }
@@ -52,10 +54,20 @@ class Admin_LicenceController extends Application_Controller_ActionCRUD {
      * Modifiziert Formular für Indextabelle, so daß angepasstes ViewScript verwendet wird.
      * @return Application_Form_Model_Table
      */
-    public function getIndexForm() {
+    public function getIndexForm()
+    {
         $form = parent::getIndexForm();
         $form->setViewScript('licence/modeltable.phtml');
         return $form;
     }
 
+    /**
+     * Prevent used licences from being deleted.
+     * @param Object $licence
+     * @return bool
+     */
+    public function isDeletable($licence)
+    {
+        return ! $licence->isUsed();
+    }
 }

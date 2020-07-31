@@ -27,11 +27,16 @@
  * @category    Application
  * @package     Tests
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Rss_Model_FeedTest extends ControllerTestCase {
+class Rss_Model_FeedTest extends ControllerTestCase
+{
+
+    protected $configModifiable = true;
+
+    protected $additionalResources = ['view'];
 
     private $_model;
 
@@ -54,17 +59,17 @@ class Rss_Model_FeedTest extends ControllerTestCase {
 
         $config = Zend_Registry::get('Zend_Config');
 
-        $config->merge(new Zend_Config(array(
-            'rss' => array('default' => array('feedTitle' => 'OPUS 4 Test'))
-        )));
+        $config->merge(new Zend_Config([
+            'rss' => ['default' => ['feedTitle' => 'OPUS 4 Test']]
+        ]));
         $this->assertEquals('OPUS 4 Test', $model->getTitle());
     }
 
     public function testGetTitleWithName()
     {
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
-            'rss' => array('default' => array('feedTitle' => '%1$s'))
-        )));
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'rss' => ['default' => ['feedTitle' => '%1$s']]
+        ]));
         $this->assertEquals('OPUS 4', $this->_model->getTitle());
     }
 
@@ -74,9 +79,9 @@ class Rss_Model_FeedTest extends ControllerTestCase {
         Zend_Controller_Front::getInstance()->setBaseUrl('/opus4test');
         $model = new Rss_Model_Feed($view);
 
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
-            'rss' => array('default' => array('feedTitle' => '%4$s'))
-        )));
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'rss' => ['default' => ['feedTitle' => '%4$s']]
+        ]));
         $this->assertEquals('http:///opus4test', $this->_model->getTitle());
     }
 
@@ -86,9 +91,9 @@ class Rss_Model_FeedTest extends ControllerTestCase {
         Zend_Controller_Front::getInstance()->setBaseUrl('/opus4test');
         $model = new Rss_Model_Feed($view);
 
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
-            'rss' => array('default' => array('feedTitle' => '%3$s'))
-        )));
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'rss' => ['default' => ['feedTitle' => '%3$s']]
+        ]));
         $this->assertEquals('opus4test', $model->getTitle());
     }
 
@@ -99,9 +104,9 @@ class Rss_Model_FeedTest extends ControllerTestCase {
         $view->getHelper('ServerUrl')->setHost('testhost');
         $model = new Rss_Model_Feed($view);
 
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
-            'rss' => array('default' => array('feedTitle' => '%2$s'))
-        )));
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'rss' => ['default' => ['feedTitle' => '%2$s']]
+        ]));
         $this->assertEquals('testhost', $model->getTitle());
     }
 
@@ -109,11 +114,10 @@ class Rss_Model_FeedTest extends ControllerTestCase {
     {
         $this->assertEquals('OPUS documents', $this->_model->getDescription());
 
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
-            'rss' => array('default' => array('feedDescription' => 'Test description.'))
-        )));
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'rss' => ['default' => ['feedDescription' => 'Test description.']]
+        ]));
 
         $this->assertEquals('Test description.', $this->_model->getDescription());
     }
-
 }

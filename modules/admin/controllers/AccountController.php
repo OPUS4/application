@@ -29,9 +29,8 @@
  * @package     Module_Admin
  * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -40,30 +39,62 @@
  * @category    Application
  * @package     Module_Admin
  *
- * TODO Support GET requests for create and update?
+ * This controller allows creating, editing and removing user accounts.
+ *
+ * - For new accounts the login must not already exist.
+ * - The password has to be entered twice for validation.
+ * - The guest role is always checked and disabled, because every user, annonymous or not, has at least that role.
+ * - The admin user cannot be removed.
+ *
+ * For editing accounts:
+ *
+ * - If the admin user is edited the 'administrator' role cannot be removed.
+ * - Validation for passwords is disabled unless something is entered into the fields.
+ * - If login or password of the current user are changed, the user is logged out.
  */
-class Admin_AccountController extends Application_Controller_Action {
+class Admin_AccountController extends Application_Controller_ActionCRUD
+{
+
+    public function init()
+    {
+        $this->setFormClass('Admin_Form_Account');
+        parent::init();
+    }
+
+    public function getIndexForm()
+    {
+        $form = parent::getIndexForm();
+        $form->setViewScript('account/modeltable.phtml');
+        return $form;
+    }
 
     /**
-     * Default action presents list of existing accounts.
+     * Admin and current user account cannot be deleted.
+     * @param Object $account
+     * @return bool
      */
-    public function indexAction() {
-        $accounts = Opus_Account::getAll();
+    public function isDeletable($account)
+    {
+        $login = $account->getLogin();
 
-        if (empty($accounts)) {
-            $this->view->title = $this->view->translate('admin_account_index');
-            return $this->renderScript('account/none.phtml');
-        }
-        $this->view->accounts = array();
-        foreach ($accounts as $account) {
-            $this->view->accounts[$account->getId()] = $account;
-        }
+        return ((Zend_Auth::getInstance()->getIdentity() !== strtolower($login)) && ($login !== 'admin'));
+    }
+
+    public function getEditModelForm($model)
+    {
+        $form = parent::getEditModelForm($model);
+        $form->setMode(Admin_Form_Account::MODE_EDIT);
+        return $form;
     }
 
     /**
      * Shows account information.
+     *
+     * TODO update look of page
+     * TODO move code into model classes for easier testing
      */
-    public function showAction() {
+    public function showAction()
+    {
         $this->view->title = $this->view->translate('admin_account_show');
 
         $id = $this->getRequest()->getParam('id');
@@ -72,35 +103,38 @@ class Admin_AccountController extends Application_Controller_Action {
             $this->_helper->redirector('index');
         }
 
-        $this->view->allModules = array_keys(Application_Modules::getInstance()->getModules());
+        $modules = array_keys(Application_Modules::getInstance()->getModules());
+        unset($modules['default']);
+
+        $this->view->allModules = $modules;
 
         $account = new Opus_Account($id);
         $this->view->account = $account;
 
         // Get all Opus_UserRoles for current Account *plus* 'guest'
-        $roles = array();
-        foreach ($account->getRole() AS $roleLinkModel) {
+        $roles = [];
+        foreach ($account->getRole() as $roleLinkModel) {
             $roles[] = $roleLinkModel->getModel();
         }
 
         $guestRole = Opus_UserRole::fetchByName('guest');
-        if (!is_null($guestRole)) {
+        if (! is_null($guestRole)) {
             $roles[] = $guestRole;
         }
 
         // Build module-roles table.
-        $modulesRoles = array();
+        $modulesRoles = [];
         foreach ($this->view->allModules as $module) {
-            $modulesRoles[$module] = array();
+            $modulesRoles[$module] = [];
         }
 
-        foreach ($roles AS $role) {
+        foreach ($roles as $role) {
             $roleName = $role->getName();
             $roleModules = $role->listAccessModules();
 
             foreach ($roleModules as $module) {
-                if (!array_key_exists($module, $modulesRoles)) {
-                    $modulesRoles[$module] = array();
+                if (! array_key_exists($module, $modulesRoles)) {
+                    $modulesRoles[$module] = [];
                 }
 
                 $modulesRoles[$module][] = $roleName;
@@ -116,222 +150,4 @@ class Admin_AccountController extends Application_Controller_Action {
 
         return $account;
     }
-
-    /**
-     * Shows form for creating new accounts.
-     */
-    public function newAction() {
-        $this->view->title = $this->view->translate('admin_account_new');
-
-        $accountForm = new Admin_Form_Account();
-
-        $actionUrl = $this->view->url(array('action' => 'create'));
-
-        $accountForm->setAction($actionUrl);
-
-        $this->view->form = $accountForm;
-    }
-
-    /**
-     * Creates new account.
-     */
-    public function createAction() {
-        if ($this->getRequest()->isPost()) {
-
-            $button = $this->getRequest()->getParam('cancel');
-            if (isset($button)) {
-                $this->_helper->redirector('index');
-                return;
-            }
-
-            $accountForm = new Admin_Form_Account();
-
-            $postData = $this->getRequest()->getPost();
-
-            if ($accountForm->isValid($postData)) {
-                $account = new Opus_Account();
-
-                $accountForm->updateModel($account);
-
-                $roles = Admin_Form_Account::parseSelectedRoles($postData);
-                $account->setRole($roles);
-
-                $account->store();
-            }
-            else {
-                $actionUrl = $this->view->url(array('action' => 'create'));
-                $accountForm->setAction($actionUrl);
-                $this->view->form = $accountForm;
-                $this->view->title = 'admin_account_new';
-                return $this->renderScript('account/new.phtml');
-            }
-        }
-
-        $this->_helper->redirector->gotoSimple('index');
-    }
-
-    /**
-     * Shows edit form for an account.
-     */
-    public function editAction() {
-        $this->view->title = $this->view->translate('admin_account_edit');
-
-        $id = $this->getRequest()->getParam('id');
-
-        if (empty($id)) {
-            $this->getLogger()->debug('Missing parameter account id.');
-            $this->_helper->redirector('index');
-        }
-        else {
-            $accountForm = new Admin_Form_Account($id);
-            $actionUrl = $this->view->url(array('action' => 'update', 'id' => $id));
-            $accountForm->setAction($actionUrl);
-            $this->view->form = $accountForm;
-        }
-    }
-
-    /**
-     * Updates account information.
-     */
-    public function updateAction() {
-        if ($this->getRequest()->isPost()) {
-
-            $button = $this->getRequest()->getParam('cancel');
-            if (isset($button)) {
-                $this->_helper->redirector('index');
-                return;
-            }
-
-            $id = $this->getRequest()->getParam('id');
-
-            $accountForm = new Admin_Form_Account($id);
-
-            $postData = $this->getRequest()->getPost();
-
-            $passwordChanged = true;
-            if (empty($postData['password'])) {
-                // modify to pass default validation
-                // TODO think about better solution (validation context?)
-                $postData['password'] = 'notchanged';
-                $postData['confirmPassword'] = 'notchanged';
-                $passwordChanged = false;
-            }
-
-            $account = new Opus_Account($id);
-
-            $postData['oldLogin'] = strtolower($account->getLogin());
-
-            if ($accountForm->isValid($postData)) {
-
-                $account->setFirstName($postData['firstname']);
-                $account->setLastName($postData['lastname']);
-                $account->setEmail($postData['email']);
-
-                $oldLogin = strtolower($account->getLogin());
-
-                // update login name
-                $newLogin = $postData['username'];
-
-                if ($newLogin !== $oldLogin) {
-                    $account->setLogin($newLogin);
-                    $loginChanged = true;
-                }
-                else {
-                    $loginChanged = false;
-                }
-
-                // update password
-                if ($passwordChanged) {
-                    $password = $postData['password'];
-                    $account->setPassword($password);
-                }
-
-                // update roles
-                $newRoles = Admin_Form_Account::parseSelectedRoles($postData);
-
-                // TODO optimize code
-                $hasAdministratorRole = false;
-
-                foreach ($newRoles as $role) {
-                    if (strtolower($role->getDisplayName()) === 'administrator') {
-                        $hasAdministratorRole = true;
-                        break;
-                    }
-                }
-
-                $currentUser = Zend_Auth::getInstance()->getIdentity();
-                $isCurrentUser = ($currentUser === $oldLogin) ? true : false;
-
-                if (!$hasAdministratorRole && $isCurrentUser) {
-                    $newRoles[] = Opus_UserRole::fetchByName('administrator');
-                }
-
-                $account->setRole($newRoles);
-
-                $account->store();
-
-                if ($isCurrentUser && ($loginChanged || $passwordChanged)) {
-                    Zend_Auth::getInstance()->clearIdentity();
-                }
-            }
-            else {
-                $actionUrl = $this->view->url(array('action' => 'update', 'id' => $id));
-                $accountForm->setAction($actionUrl);
-                $this->view->form = $accountForm;
-                $this->view->title = 'admin_account_edit';
-                return $this->renderScript('account/edit.phtml');
-            }
-        }
-
-        $this->_helper->redirector('index');
-    }
-
-    /**
-     * Deletes account.
-     */
-    public function deleteAction() {
-        $accountId = $this->getRequest()->getParam('id');
-
-        $message = null;
-
-        if (!empty($accountId)) {
-            $account = new Opus_Account($accountId);
-
-            if (!empty($account)) {
-                $currentUser = Zend_Auth::getInstance()->getIdentity();
-
-                // Check that user does not delete himself and protect admin
-                // account
-                if ($currentUser === strtolower($account->getLogin())) {
-                    $message = 'admin_account_error_delete_self';
-                }
-                else if (strtolower($account->getLogin()) === 'admin') {
-                    $message = 'admin_account_error_delete_admin';
-                }
-                else {
-                    $account->delete();
-                }
-            }
-            else {
-                $message = 'admin_account_error_badid';
-            }
-        }
-        else {
-            $message = 'admin_account_error_missingid';
-        }
-
-        $messages = array();
-
-        if ($message === null) {
-            $messages['notice'] = $this->view->translate(
-                'admin_account_delete_success'
-            );
-        }
-        else {
-            $messages['failure'] = $this->view->translate($message);
-        }
-
-        $this->_helper->Redirector->redirectTo('index', $messages);
-    }
-
 }

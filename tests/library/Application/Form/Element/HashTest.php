@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -27,19 +28,19 @@
  * @category    Application Unit Test
  * @package     Form_Element
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class Application_Form_Element_HashTest extends ControllerTestCase {
+class Application_Form_Element_HashTest extends ControllerTestCase
+{
 
-    public function testLoadDefaultDecorators() {
+    public function testLoadDefaultDecorators()
+    {
         $element = new Application_Form_Element_Hash('hashelem');
 
         $element->loadDefaultDecorators();
 
         $this->assertEquals(1, count($element->getDecorators()));
-        $this->assertTrue($element->getDecorator('ViewHelper') !== FALSE);
+        $this->assertTrue($element->getDecorator('ViewHelper') !== false);
     }
-
 }

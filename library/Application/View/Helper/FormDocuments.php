@@ -48,31 +48,25 @@ class Application_View_Helper_FormDocuments extends Zend_View_Helper_FormElement
         $info = $this->_getInfo($name, $value, $attribs, $options, $listsep);
         extract($info);
 
-        if (!is_array($options))
-        {
+        if (! is_array($options)) {
             return '';
         }
 
-        if (is_null($value))
-        {
-            $value = array();
-        }
-        else if (!is_array($value))
-        {
-            $value = array($value);
+        if (is_null($value)) {
+            $value = [];
+        } elseif (! is_array($value)) {
+            $value = [$value];
         }
 
         $xhtml = "<div class=\"documents\">\n    ";
 
-        foreach ($options as $docId => $doc)
-        {
+        foreach ($options as $docId => $doc) {
             // TODO use partial for defining rendering (title + authors + highlighting persons)
             $xhtml .= "<div class=\"document\">\n";
 
             $xhtml .= "<input name=\"$name\" class=\"document-checkbox\" type=\"checkbox\" value=\"$docId\"";
 
-            if (in_array($docId, $value))
-            {
+            if (in_array($docId, $value)) {
                 $xhtml .= " checked=\"checked\"";
             }
 
@@ -90,8 +84,7 @@ class Application_View_Helper_FormDocuments extends Zend_View_Helper_FormElement
 
             $xhtml .= "<div class=\"document-title\">$title";
 
-            if (!is_null($year))
-            {
+            if (! is_null($year)) {
                 $xhtml .= " <span class='document-year'>($year)</span>";
             }
 
@@ -99,19 +92,15 @@ class Application_View_Helper_FormDocuments extends Zend_View_Helper_FormElement
 
             $xhtml .= "<div class=\"document-authors\">";
 
-            if (isset($attribs['person']))
-            {
+            if (isset($attribs['person'])) {
                 $personCrit = $attribs['person'];
-            }
-            else
-            {
+            } else {
                 $personCrit = null;
             }
 
             $authors = $docHelper->getAuthors(); // always an array
 
-            foreach ($authors as $index => $author)
-            {
+            foreach ($authors as $index => $author) {
                 if ($index > 0) {
                     $xhtml .= "; ";
                 }
@@ -121,8 +110,7 @@ class Application_View_Helper_FormDocuments extends Zend_View_Helper_FormElement
 
                 $xhtml .= "<span class=\"author";
 
-                if (!is_null($personCrit) && $person->matches($personCrit))
-                {
+                if (! is_null($personCrit) && $person->matches($personCrit)) {
                     $xhtml .= " modified";
                 }
 
@@ -137,8 +125,7 @@ class Application_View_Helper_FormDocuments extends Zend_View_Helper_FormElement
 
             $persons = $doc->getPerson();
 
-            foreach ($persons as $person)
-            {
+            foreach ($persons as $person) {
                 $role = $person->getRole();
 
                 if ($role !== 'author' && $person->matches($personCrit)) {
@@ -158,5 +145,4 @@ class Application_View_Helper_FormDocuments extends Zend_View_Helper_FormElement
 
         return $xhtml;
     }
-
 }

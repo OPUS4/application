@@ -51,5 +51,4 @@ class Sword_Model_SwordModule extends Application_Configuration_Module
     {
         return false;
     }
-
 }

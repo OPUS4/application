@@ -38,7 +38,8 @@
  * @category    Application
  * @package     Module_Publish
  */
-class Review_IndexController extends Application_Controller_Action {
+class Review_IndexController extends Application_Controller_Action
+{
 
     /**
      * Restrict reviewable documents to the given status.
@@ -55,14 +56,14 @@ class Review_IndexController extends Application_Controller_Action {
     /**
      * Setup module.  Check privileges.
      */
-    public function init() {
+    public function init()
+    {
         parent::init();
 
         // Highlight menu entries.
         if (true === Opus_Security_Realm::getInstance()->checkModule('admin')) {
             $this->getHelper('MainMenu')->setActive('admin');
-        }
-        else {
+        } else {
             $this->getHelper('MainMenu')->setActive('review');
         }
 
@@ -75,15 +76,16 @@ class Review_IndexController extends Application_Controller_Action {
      *
      * Processes clicked buttons on that page.
      */
-    public function indexAction() {
+    public function indexAction()
+    {
         $ids = $this->_filterReviewableIds($this->_getParam('selected'));
 
         if ($this->_isButtonPressed('buttonSubmit', true, false)) {
-            return $this->_forward('clear', null, null, array('selected' => $ids));
+            return $this->_forward('clear', null, null, ['selected' => $ids]);
         }
 
         if ($this->_isButtonPressed('buttonReject', true, false)) {
-            return $this->_forward('reject', null, null, array('selected' => $ids));
+            return $this->_forward('reject', null, null, ['selected' => $ids]);
         }
 
         $sortOrder = $this->_getParam('sort_order');
@@ -92,18 +94,18 @@ class Review_IndexController extends Application_Controller_Action {
         $sortReverse = $this->_isButtonPressed('buttonDown', '1', $sortReverse);
 
         $this->view->selected = $ids;
-        $this->view->actionUrl = $this->view->url(array('action'=>'index'));
+        $this->view->actionUrl = $this->view->url(['action' => 'index']);
         $this->view->sort_order = $sortOrder;
         $this->view->sort_reverse = $sortReverse;
-        $this->view->selectAll = $this->_getParam('buttonSelectAll')  ? 1 : 0;
-        $this->view->selectNone = $this->_getParam('buttonSelectNone')  ? 1 : 0;
-        $this->view->sortOptions = array(
+        $this->view->selectAll = $this->_getParam('buttonSelectAll') ? 1 : 0;
+        $this->view->selectNone = $this->_getParam('buttonSelectNone') ? 1 : 0;
+        $this->view->sortOptions = [
             'author' => $this->view->translate('review_option_author'),
             'publicationDate' => $this->view->translate('review_option_date'),
             'docType' => $this->view->translate('review_option_doctype'),
             'title' => $this->view->translate('review_option_title'),
             'id' => $this->view->translate('review_option_docid'),
-        );
+        ];
 
         // Get list of document identifiers
         $finder = $this->_prepareDocumentFinder();
@@ -146,7 +148,8 @@ class Review_IndexController extends Application_Controller_Action {
     /**
      * Action for showing the clear form and processing POST from it.
      */
-    public function clearAction() {
+    public function clearAction()
+    {
         $ids = $this->_filterReviewableIds($this->_getParam('selected'));
 
         if (count($ids) < 1) {
@@ -156,20 +159,18 @@ class Review_IndexController extends Application_Controller_Action {
 
         $this->view->selected = $ids;
         $this->view->documentCount = count($ids);
-        $this->view->actionUrl = $this->view->url(array('action'=>'clear'));
+        $this->view->actionUrl = $this->view->url(['action' => 'clear']);
 
-        $useCurrentUser = false;
         $person = null;
 
         $config = $this->getConfig();
-        if (isset($config, $config->clearing->addCurrentUserAsReferee)) {
-            $useCurrentUser = $config->clearing->addCurrentUserAsReferee;
-        }
+        $useCurrentUser = isset($config, $config->clearing->addCurrentUserAsReferee) &&
+            filter_var($config->clearing->addCurrentUserAsReferee, FILTER_VALIDATE_BOOLEAN);
 
         if ($useCurrentUser) {
             $person = $this->_loggedUser->createPerson();
 
-            if (is_null($person) or !$person->isValid()) {
+            if (is_null($person) or ! $person->isValid()) {
                 $message = "Problem clearing documents.  Information for current user is incomplete or invalid.";
                 $this->getLogger()->err($message);
                 throw new Application_Exception($message);
@@ -177,7 +178,7 @@ class Review_IndexController extends Application_Controller_Action {
         }
 
         if ($this->_isButtonPressed('sureno', true, false)) {
-            return $this->_forward('index', null, null, array('selected' => $ids));
+            return $this->_forward('index', null, null, ['selected' => $ids]);
         }
 
         if ($this->_isButtonPressed('sureyes', true, false)) {
@@ -202,7 +203,8 @@ class Review_IndexController extends Application_Controller_Action {
     /**
      * Confirm rejection of selected documents and reject.
      */
-    public function rejectAction() {
+    public function rejectAction()
+    {
         $ids = $this->_filterReviewableIds($this->_getParam('selected'));
 
         if (count($ids) < 1) {
@@ -212,10 +214,10 @@ class Review_IndexController extends Application_Controller_Action {
 
         $this->view->selected = $ids;
         $this->view->documentCount = count($ids);
-        $this->view->actionUrl = $this->view->url(array('action' => 'reject'));
+        $this->view->actionUrl = $this->view->url(['action' => 'reject']);
 
         if ($this->_isButtonPressed('sureno', true, false)) {
-            return $this->_forward('index', null, null, array('selected' => $ids));
+            return $this->_forward('index', null, null, ['selected' => $ids]);
         }
 
         if ($this->_isButtonPressed('sureyes', true, false)) {
@@ -242,7 +244,8 @@ class Review_IndexController extends Application_Controller_Action {
      *
      * @return Opus_DocumentFinder
      */
-    protected function _prepareDocumentFinder() {
+    protected function _prepareDocumentFinder()
+    {
         $finder = new Opus_DocumentFinder();
         $finder->setServerState(self::$_reviewServerState);
 
@@ -254,18 +257,15 @@ class Review_IndexController extends Application_Controller_Action {
         if (Opus_Security_Realm::getInstance()->checkModule('admin')) {
             $message = "Review: Showing all unpublished documents to admin";
             $logger->debug($message . " (user_id: $userId)");
-        }
-        elseif (Opus_Security_Realm::getInstance()->checkModule('review')) {
+        } elseif (Opus_Security_Realm::getInstance()->checkModule('review')) {
             if ($onlyReviewerByUserId) {
                 $message = "Review: Showing only documents belonging to reviewer";
                 $finder->setEnrichmentKeyValue('reviewer.user_id', $userId);
-            }
-            else {
+            } else {
                 $message = "Review: Showing all unpublished documents to reviewer";
             }
             $logger->debug($message . " (user_id: $userId)");
-        }
-        else {
+        } else {
             $message = 'Review: Access to unpublished documents denied.';
             $logger->err($message . " (user_id: $userId)");
             throw new Application_Exception($message);
@@ -280,13 +280,14 @@ class Review_IndexController extends Application_Controller_Action {
      * @param array $ids
      * @return array
      */
-    protected function _filterReviewableIds( $ids ) {
-        if (isset($ids) and !is_array($ids)) {
-            $ids = array($ids);
+    protected function _filterReviewableIds($ids)
+    {
+        if (isset($ids) and ! is_array($ids)) {
+            $ids = [$ids];
         }
 
-        if (!isset($ids) or !is_array($ids) or (count($ids) < 1)) {
-            return array();
+        if (! isset($ids) or ! is_array($ids) or (count($ids) < 1)) {
+            return [];
         }
 
         $this->getLogger()->debug("ids before filtering: " . implode(", ", $ids));
@@ -305,10 +306,9 @@ class Review_IndexController extends Application_Controller_Action {
      * @param <type> $default
      * @return mixed
      */
-    protected function _isButtonPressed($name, $value, $default = null) {
+    protected function _isButtonPressed($name, $value, $default = null)
+    {
         $button = $this->_getParam($name);
-        return (isset($button) && !empty($button)) ? $value : $default;
+        return (isset($button) && ! empty($button)) ? $value : $default;
     }
-
 }
-

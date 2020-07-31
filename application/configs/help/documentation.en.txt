@@ -1,1 +1,2 @@
-This document server is based on the repository software OPUS4 OPUS is documented here: http://opus4.kobv.de/.
+This document server is based on the repository software OPUS4 OPUS is documented here:
+<a href="http://www.opus-repository.org/" target="_blank">https://www.opus-repository.org/</a>.

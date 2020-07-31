@@ -1,3 +1,3 @@
-Authors can choose which terms of use must be regarded for their publication. These terms are defined 
-in a license. This repository supports different licenses, from which you can choose one 
+Authors can choose which terms of use must be regarded for their publication. These terms are defined
+in a license. This repository supports different licenses, from which you can choose one
 (i.e. <a href="http://creativecommons.org/license/" target="_blank">Creative Commons Licenses/</a>).

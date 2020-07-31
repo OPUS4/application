@@ -28,7 +28,7 @@
  * @package     Module_Solrsearch
  * @author      Michael Lang <lang@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -37,78 +37,78 @@
  *
  * TODO refactor as view helper or something better
  */
-class Solrsearch_Model_FacetMenu extends Application_Model_Abstract {
-
-    private $_facets;
-
-    private $_selectedFacets;
-
-    private $_facetNumberContainer;
-
-    private $_showFacetExtender;
+class Solrsearch_Model_FacetMenu extends Application_Model_Abstract
+{
 
     /**
      * Resolves the facet-options from URL and builds a result array with the number of facets to display.
      * @return array result[facet_name] = number
      */
-    public function buildFacetArray($paramSet) {
-	    return Opus_Search_Facet_Set::getFacetLimitsFromInput( $paramSet );
+    public function buildFacetArray($paramSet)
+    {
+        // TODO not sure I like processing request parameters in *opus4-search* class (backend code)
+        return Opus\Search\Facet\Set::getFacetLimitsFromInput($paramSet);
     }
 
     /**
+     * This merges facets configurations and actual facet results.
+     *
+     * TODO create Facet objects here an populate with data (might be moved later, but is a start)
      */
-    public function prepareViewFacets($result, $request) {
-        $facets = $result->getFacets();
+    public function getFacets($result, $request)
+    {
+        $facetManager = new Application_Search_FacetManager();
 
-        $facetLimit = Opus_Search_Config::getFacetLimits();
+        $indexFields = $result->getFacets(); // facets returned from search
 
-        $facetArray = array();
-        $selectedFacets = array();
-        $facetNumberContainer = array();
-        $showFacetExtender = array();
+        $openFacets = $this->buildFacetArray($request->getParams());
 
-        foreach ($facets as $key => $facet) {
-            $showFacetExtender[$key] = ($facetLimit[$key] <= sizeof($facet));
-            $this->getLogger()->debug("found $key facet in search results");
-            $facetNumberContainer[$key] = sizeof($facet);
-            $facetValue = $request->getParam($key . 'fq', '');
-            if ($facetValue !== '') {
-                $selectedFacets[$key] = $facetValue;
-                $showFacetExtender[$key] = false;
+        $facetArray = [];
+
+        $facets = $facetManager->getActiveFacets();
+
+        foreach ($facets as $name) {
+            $facet = $facetManager->getFacet($name);
+
+            if (is_null($facet)) {
+                continue;
             }
 
-            if (count($facets[$key]) > 1 || $facetValue !== '') {
-                $facetArray[$key] = $facet;
+            $indexFieldName = $facet->getIndexField();
+            $facetValue = $request->getParam($name . 'fq', '');
+
+            if (isset($indexFields[$indexFieldName]) && (count($indexFields[$indexFieldName]) > 0 || $facetValue !== '')) {
+                $this->getLogger()->debug("found $name facet in search results");
+
+                $values = $indexFields[$indexFieldName];
+
+                if (is_null($facet) || ! $facet->isAllowed()) {
+                    continue;
+                }
+
+                $facet->setValues($values);
+
+                if ($facetValue !== '') {
+                    $facet->setSelected($facetValue);
+                    $facet->setShowFacetExtender(false);
+                } else {
+                    // TODO encapsulate in Facet object
+                    $facet->setShowFacetExtender($facet->getLimit() <= sizeof($values));
+                }
+
+                $facet->setOpen(isset($openFacets[$name]));
+
+                $facetArray[$name] = $facet;
             }
         }
 
-        // Hide institutes facet if collection does not exist or is hidden
+        // Hide institutes facet if collection does not exist or is hidden TODO handle somewhere else
         $institutes = Opus_CollectionRole::fetchByName('institutes');
 
-        if (is_null($institutes) || !$institutes->getVisible()) {
+        if (is_null($institutes) || ! $institutes->getVisible()) {
             unset($facetArray['institute']);
         }
 
-        $this->_facets = $facetArray;
-        $this->_selectedFacets = $selectedFacets;
-        $this->_facetNumberContainer = $facetNumberContainer;
-        $this->_showFacetExtender = $showFacetExtender;
+        return $facetArray;
     }
-
-    public function getFacets() {
-        return $this->_facets;
-    }
-
-    public function getSelectedFacets() {
-        return $this->_selectedFacets;
-    }
-
-    public function getFacetNumberContainer() {
-        return $this->_facetNumberContainer;
-    }
-
-    public function getShowFacetExtender() {
-        return $this->_showFacetExtender;
-    }
-
 }

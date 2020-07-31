@@ -36,7 +36,8 @@
 /**
  * Handling (read, write) of resumption tokens
  */
-class Oai_Model_Resumptiontokens {
+class Oai_Model_Resumptiontokens
+{
 
     /**
      * Holds resumption path without trailing slash.
@@ -68,12 +69,13 @@ class Oai_Model_Resumptiontokens {
 
     /**
      * Generate a unique file name and resumption id for storing resumption token.
-     * Double action because file name 8without prefix and file extension) 
+     * Double action because file name 8without prefix and file extension)
      * and resumption id should be equal.
      *
      * @return filename Generated filename including path and file extension.
      */
-    protected function generateResumptionName() {
+    protected function generateResumptionName()
+    {
         $fc = 0;
 
         // generate a unique partial name
@@ -88,7 +90,7 @@ class Oai_Model_Resumptiontokens {
         do {
             $uniqueName = sprintf('%s%05d', $uniqueId, $fc++);
             $file = $this->_resumptionPath . DIRECTORY_SEPARATOR . $this->_filePrefix . $uniqueName . $fileExtension;
-        } while (true === file_exists($file));
+        } while (true === is_readable($file));
 
         $this->_resumptionId = $uniqueName;
 
@@ -101,7 +103,8 @@ class Oai_Model_Resumptiontokens {
      * @param $resPath (Optional) Initialise resumption path on create.
      *
      */
-    public function __construct($resPath = null) {
+    public function __construct($resPath = null)
+    {
         if (false === empty($resPath)) {
             $this->setResumptionPath($resPath);
         }
@@ -113,7 +116,8 @@ class Oai_Model_Resumptiontokens {
      *
      * @return string|null
      */
-    public function getResumptionId() {
+    public function getResumptionId()
+    {
         return $this->_resumptionId;
     }
 
@@ -122,7 +126,8 @@ class Oai_Model_Resumptiontokens {
      *
      * @return string
      */
-    public function getResumptionPath() {
+    public function getResumptionPath()
+    {
         return $this->_resumptionPath;
     }
 
@@ -131,7 +136,8 @@ class Oai_Model_Resumptiontokens {
      *
      * @return Oai_Model_Resumptiontoken|null Oai_Model_Resumptiontoken on success else null;
      */
-    public function getResumptionToken($resId) {
+    public function getResumptionToken($resId)
+    {
 
         $token = null;
 
@@ -140,8 +146,7 @@ class Oai_Model_Resumptiontokens {
             $fileName .= '.' . $this->_fileExtension;
         }
 
-        if (true === file_exists($fileName)) {
-
+        if (true === is_readable($fileName)) {
             $fileContents = file_get_contents($fileName);
             // if data is not unserializueabke an E_NOTICE will be triggerd and false returned
             // avoid this E_NOTICE
@@ -152,7 +157,6 @@ class Oai_Model_Resumptiontokens {
         }
 
         return $token;
-
     }
 
     /**
@@ -161,7 +165,8 @@ class Oai_Model_Resumptiontokens {
      * @throws Oai_Model_ResumptionTokenException Thrown if directory operations failed.
      * @return void
      */
-    public function setResumptionPath($resPath) {
+    public function setResumptionPath($resPath)
+    {
         // expanding all symbolic links and resolving references
         $realPath = realpath($resPath);
 
@@ -187,7 +192,8 @@ class Oai_Model_Resumptiontokens {
      * @throws Oai_Model_ResumptionTokenException Thrown on file operation error.
      * @return void
      */
-    public function storeResumptionToken(Oai_Model_Resumptiontoken $token) {
+    public function storeResumptionToken(Oai_Model_Resumptiontoken $token)
+    {
 
         $fileName = $this->generateResumptionName();
 
@@ -207,7 +213,6 @@ class Oai_Model_Resumptiontokens {
         }
 
         $token->setResumptionId($this->_resumptionId);
-
     }
 
     /**
@@ -216,7 +221,8 @@ class Oai_Model_Resumptiontokens {
      * @param $resId
      * @return boolean
      */
-    public function validateResumptionToken($resId) {
+    public function validateResumptionToken($resId)
+    {
         $result = false;
 
         $token = $this->getResumptionToken($resId);
@@ -227,6 +233,4 @@ class Oai_Model_Resumptiontokens {
 
         return $result;
     }
-
 }
-

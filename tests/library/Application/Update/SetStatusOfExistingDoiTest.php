@@ -27,17 +27,21 @@
  * @category    Application Unit Test
  * @package     Application_Update
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2018-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 class Application_Update_SetStatusOfExistingDoiTest extends ControllerTestCase
 {
 
+    protected $additionalResources = 'database';
+
     /**
      * @throws Opus_Model_Exception
      *
      * TODO test sets Status of all DOI identifier of published documents to 'registered' (side effect)
+     * TODO this test has failed once (date got modified or compare didn't work) on Travis and worked in the next run
+     *      without changes - Why?
      */
     public function testRunDoesNotModifyServerDateModified()
     {
@@ -63,7 +67,10 @@ class Application_Update_SetStatusOfExistingDoiTest extends ControllerTestCase
 
         $doc = new Opus_Document($docId);
 
-        $this->assertEquals(0, $doc->getServerDateModified()->compare($modified));
+        $message = "{$doc->getServerDateModified()}" . PHP_EOL;
+        $message .= "$modified";
+
+        $this->assertEquals(0, $doc->getServerDateModified()->compare($modified), $message);
         $this->assertEquals('registered', $doc->getIdentifierDoi(0)->getStatus());
     }
 }

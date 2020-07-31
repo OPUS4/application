@@ -11,6 +11,7 @@
   pageFirst="1" 
   pageLast="4"
   pageNumber="4"
+  articleNumber="42"
   edition="1"
   volume="2"
   issue="3"

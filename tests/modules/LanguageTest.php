@@ -26,31 +26,34 @@
  *
  * @category    Unit Tests
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
 /**
- * Description of LanguageTest
+ * Tests language resources across modules.
  *
- * @author Jens Schwidder <schwidder(at)zib.de>
+ * @author Jens Schwidder <schwidder@zib.de>
  */
-class LanguageTest extends ControllerTestCase {
-    
-    public function setUp() {
+class LanguageTest extends ControllerTestCase
+{
+
+    public function setUp()
+    {
         parent::setUp();
         $this->verifyCommandAvailable('xmllint');
     }
 
-    public function getTmxFiles() {
+    public function getTmxFiles()
+    {
         $dir = APPLICATION_PATH . '/modules';
         $DirIter = new RecursiveDirectoryIterator($dir);
         $Iterator = new RecursiveIteratorIterator($DirIter);
         $Regex = new RegexIterator($Iterator, '/^.+\.tmx$/i', RecursiveRegexIterator::GET_MATCH);
 
-        $files = array();
+        $files = [];
         foreach ($Regex as $file) {
-            $files[] = array($file[0]);
+            $files[] = [$file[0]];
         }
 
         return $files;
@@ -65,25 +68,26 @@ class LanguageTest extends ControllerTestCase {
         exec(escapeshellcmd($xmllintCall), $xmllintOutput, $xmllintFeedback);
         $this->assertEquals('0', $xmllintFeedback, "File '$filePath' not valid. (Check with 'xmllint'!)");
     }
-    
+
     /**
      * Test für das Umschalten der Sprache in Unit Tests.
      */
-    public function testSetLanguage() {
+    public function testSetLanguage()
+    {
+        $this->application->bootstrap('translation');
+
         $translator = Zend_Registry::get('Zend_Translate');
-        
+
         $this->useGerman();
-        
+
         $this->assertEquals('Startseite', $translator->translate('home_menu_label'));
-        
+
         $this->useEnglish();
-       
+
         $this->assertEquals('Home', $translator->translate('home_menu_label'));
-        
+
         $this->useGerman();
-       
-        $this->assertEquals('Startseite', $translator->translate('home_menu_label'));        
-    }    
 
-
+        $this->assertEquals('Startseite', $translator->translate('home_menu_label'));
+    }
 }

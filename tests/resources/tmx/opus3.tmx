@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tmx SYSTEM "http://www.gala-global.org/oscarStandards/tmx/tmx14.dtd">
+<tmx version="1.4">
+    <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="OPUS4"></header>
+    <body>
+        <tu tuid="home_index_contact_pagetitle">
+          <tuv xml:lang="en">
+            <seg>ContactEdited</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>KontaktEdited</seg>
+          </tuv>
+        </tu>
+
+      <tu tuid="browsing_menu_label">
+        <tuv xml:lang="en">
+          <seg>BrowseEdited</seg>
+        </tuv>
+        <tuv xml:lang="de">
+          <seg>BrowsenEdited</seg>
+        </tuv>
+      </tu>
+
+      <tu tuid="publish_controller_index">
+        <tuv xml:lang="en">
+          <seg>PublishEdited</seg>
+        </tuv>
+        <tuv xml:lang="de">
+          <seg>VeröffentlichenEdited</seg>
+        </tuv>
+      </tu>
+
+      <tu tuid="customtestkey">
+        <tuv xml:lang="en">
+          <seg>Test key</seg>
+        </tuv>
+        <tuv xml:lang="de">
+          <seg>Testschlüssel</seg>
+        </tuv>
+      </tu>
+
+    </body>
+</tmx>

@@ -26,90 +26,98 @@
  *
  * @category    Application Unit Test
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2013-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  **/
 
-class Admin_Form_Document_PersonRolesTest extends ControllerTestCase {
+class Admin_Form_Document_PersonRolesTest extends ControllerTestCase
+{
 
     private $roles;
-    
-    public function setUp() {
+
+    public function setUp()
+    {
         parent::setUp();
-        
-        $this->roles = array(
-            'author' => 'author', 
-            'editor' => 'editor', 
-            'translator' => 'translator', 
-            'contributor' => 'contributor', 
-            'other' => 'other', 
-            'advisor' => 'advisor', 
-            'referee' => 'referee', 
+
+        $this->roles = [
+            'author' => 'author',
+            'editor' => 'editor',
+            'translator' => 'translator',
+            'contributor' => 'contributor',
+            'other' => 'other',
+            'advisor' => 'advisor',
+            'referee' => 'referee',
             'submitter' => 'submitter'
-        );        
+        ];
     }
-        
-    public function testConstructForm() {
+
+    public function testConstructForm()
+    {
         $form = new Admin_Form_Document_PersonRoles();
-        
+
         $this->assertEquals(8, count($form->getElements()));
-        
+
         foreach ($this->roles as $role) {
             $elementName = 'Role' . ucfirst($role);
-            $this->assertNotNull($form->getElement($elementName),
-                    "Element '$elementName' wurde nicht generiert.");
+            $this->assertNotNull(
+                $form->getElement($elementName),
+                "Element '$elementName' wurde nicht generiert."
+            );
         }
     }
-    
-    public function testConstructFormForRoles() {
+
+    public function testConstructFormForRoles()
+    {
         foreach ($this->roles as $role) {
             $activeRoles = $this->roles;
             unset($activeRoles[$role]);
-            
+
             $form = new Admin_Form_Document_PersonRoles($role);
 
             $this->assertEquals(7, count($form->getElements()));
 
             $this->assertNull($form->getElement('Role' . ucfirst($role)));
-            
+
             foreach ($activeRoles as $activeRole) {
                 $elementName = 'Role' . ucfirst($activeRole);
-                $this->assertNotNull($form->getElement($elementName),
-                        "Für Rolle '$role' wurde Element '$elementName' nicht generiert.");
+                $this->assertNotNull(
+                    $form->getElement($elementName),
+                    "Für Rolle '$role' wurde Element '$elementName' nicht generiert."
+                );
             }
-        } 
+        }
     }
-    
-    public function testProcessPost() {
+
+    public function testProcessPost()
+    {
         $form = new Admin_Form_Document_PersonRoles();
-        
-        $post = array(
+
+        $post = [
             'RoleContributor' => 'Beitragende Person'
-        );
-        
+        ];
+
         $result = $form->processPost($post, null);
-        
+
         $this->assertNotNull($result);
         $this->assertArrayHasKey('result', $result);
         $this->assertEquals(Admin_Form_Document_PersonRoles::RESULT_CHANGE_ROLE, $result['result']);
         $this->assertArrayHasKey('role', $result);
         $this->assertEquals('contributor', $result['role']);
     }
-    
-    public function testProcessPostEmpty() {
+
+    public function testProcessPostEmpty()
+    {
         $form = new Admin_Form_Document_PersonRoles();
-        
-        $this->assertNull($form->processPost(array(), null));
+
+        $this->assertNull($form->processPost([], null));
     }
-    
-    public function testGetRoleElementName() {
+
+    public function testGetRoleElementName()
+    {
         $form = new Admin_Form_Document_PersonRoles();
-        
+
         $this->assertEquals('RoleAuthor', $form->getRoleElementName('author'));
         $this->assertEquals('RoleEditor', $form->getRoleElementName('Editor'));
         $this->assertEquals('Role', $form->getRoleElementName(null)); // nutzlos, aber keine Exception
     }
-          
-    
 }

@@ -1,0 +1,271 @@
+.adminContainer table.table-translations {
+    font-size: 1em;
+    width: 100%;
+}
+
+.adminContainer table.table-translations th {
+    font-size: 1.4em;
+    font-weight: bold;
+}
+
+.adminContainer table.table-translations th span.count {
+    font-weight: normal;
+}
+
+.adminContainer table.table-translations thead th.translation {
+    padding-left: 0;
+}
+
+.adminContainer table.table-translations thead th.translation div.translations{
+    display: flex;
+}
+
+.adminContainer table.table-translations thead th.translation .label {
+    flex: 1;
+}
+
+.adminContainer table.table-translations tbody {
+    background: repeating-linear-gradient(
+            45deg,
+            white,
+            #dcdcdc 1px,
+            white 3px
+    )
+}
+
+.adminContainer table.table-translations tbody.edited {
+    background: none;
+    background-color: white;
+}
+
+.adminContainer table.table-translations tbody.added {
+    background: none;
+    background-color: lightgrey;
+}
+
+.adminContainer table tbody tr:hover {
+    background-color: #b7cde7;
+}
+
+.adminContainer table.table-translations tbody:hover {
+    background-color: #b7cde7;
+}
+
+.adminContainer table.table-translations tbody:hover tr {
+    background-color: #b7cde7;
+}
+
+.adminContainer table.table-translations tbody tr:first-child td {
+    border-top: 2px solid #b7cde7;
+}
+
+.adminContainer table.table-translations td.lang {
+    font-weight: bold;
+    margin-right: 0;
+    padding-right: 0;
+    padding-left: 0;
+}
+
+.adminContainer table.table-translations span.hilite {
+    font-weight: bold;
+    color: darkorange;
+}
+
+.adminContainer table.table-translations tbody {
+    font-size: 1.2em;
+}
+
+.adminContainer table.table-translations tbody td.key {
+    font-size: 1em;
+    font-family: monospace;
+    width: 30%;
+}
+
+.adminContainer table.table-translations .module {
+    font-size: 0.9em;
+    color: slategrey;
+    padding-top: 0.3em;
+    font-style: italic;
+}
+
+.adminContainer table.table-translations span.filename {
+    font-color: gray;
+    font-family: monospace;
+}
+
+.adminContainer table.table-translations td.value {
+    width: auto;
+    padding-right: 0;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
+
+.adminContainer table.table-translations td.actions {
+}
+
+.notranslationsfound {
+    margin-top: 0.5em;
+    padding-top: 0.5em;
+    font-size: 1.5em;
+    text-align: center;
+}
+
+form#filter {
+    margin: 0;
+    padding: 0.5em;
+}
+
+form#filter input, select, label {
+    font-size: 1.2em;
+    padding: 0.2em 0.4em;
+}
+
+form#filter label {
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+form#filter .row {
+    margin-top: 0.5em;
+    margin-right: 0.5em;
+    display: inline-block;
+}
+
+form#filter .row:first-child {
+    margin-right: 1em;
+}
+
+.adminContainer .table-translations a.button {
+    color: white;
+    background-color: #595955;
+    font-size: 0.8em;
+    font-weight: normal;
+    margin: 0 1em;
+    padding: 0.3em 0.5em;
+    border-radius: 0.25em;
+    white-space: nowrap;
+}
+
+.adminContainer .table-translations a.button i {
+    margin-right: 0.3em;
+}
+
+.adminContainer .table-translations a.button:hover {
+    text-decoration: none;
+}
+
+.adminContainer .table-translations th .actions {
+    text-align: right;
+}
+
+.adminContainer .table-translations th .actions a.button {
+    margin: 0 0.3em;
+}
+
+.col-input ul.errors {
+    color: red;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.setup_language_delete .translation {
+    margin: 1em 0;
+}
+
+.setup_language_delete .lang, .setup_language_delete .values {
+    display: inline-block;
+    margin: 0.5em 0;
+    padding: 0 0.5em;
+    vertical-align: top;
+}
+
+.setup_language_delete .lang {
+    font-size: 1.2em;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 0.3em;
+}
+
+.setup_language_delete .values {
+    position: relative;
+    width: 90%;
+}
+
+.setup_language_delete .current, .setup_language_delete .default {
+    padding: 0.3em;
+    margin-bottom: 0.3em;
+    border-radius: 3px;
+    border: 1px solid gray;
+    font-size: 1.2em;
+    width: 100%;
+}
+
+.setup_language_delete .current {
+    background-color: pink;
+}
+
+.setup_language_delete .default {
+    background-color: whitesmoke;
+}
+
+.setup_language_delete .message {
+    font-size: 1.2em;
+    margin: 1em 0;
+}
+
+.setup_language_delete .key-info {
+    margin-left: 4em;
+}
+
+.setup_language_delete .key-info .key {
+    font-size: 1.6em;
+    font-family: monospace;
+    margin-bottom: 0.3em;
+}
+
+.setup_language_delete .key-info .source {
+    font-size: 1.2em;
+    font-style: italic;
+    font-family: monospace;
+}
+
+.setup_language_export p {
+    font-size: 1.3em;
+    margin-bottom: 1em;
+}
+
+ul#translation-downloads {
+    list-style: none;
+}
+
+ul#translation-downloads li {
+    font-size: 1.3em;
+    margin: 0.6em 0em;
+}
+
+ul#translation-downloads li i {
+    color: #26517D;
+    margin-right: 0.3em;
+}
+
+.setup_helppage dt {
+    padding-bottom: 0.4em;
+}
+
+.setup_helppage dd {
+    padding-bottom: 1em;
+}
+
+.links a {
+    display: block;
+    margin-left: 2em;
+    padding: 0.5em;
+    font-size: 1.2em;
+}
+
+#content.setup_translation_edit textarea {
+    resize: vertical;
+}
+

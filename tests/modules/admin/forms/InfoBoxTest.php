@@ -26,93 +26,99 @@
  *
  * @category    Application Unit Test
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2013-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
-class Admin_Form_InfoBoxTest extends ControllerTestCase {
-    
-    public function testConstructForm() {
+class Admin_Form_InfoBoxTest extends ControllerTestCase
+{
+
+    protected $additionalResources = ['database'];
+
+    public function testConstructForm()
+    {
         $form = new Admin_Form_InfoBox();
-                
+
         $this->assertEquals(1, count($form->getDecorators()));
         $this->assertNotNull($form->getDecorator('ViewScript'));
         $this->assertNull($form->getDocument());
     }
-    
-    public function testPopulateFromModel() {
-        $form = new Admin_Form_InfoBox();
-        
-        $document = new Opus_Document(146);
-        
-        $form->populateFromModel($document);
-        
-        $this->assertNotNull($form->getDocument());
-        $this->assertEquals($document, $form->getDocument());
-    }
-    
-    public function testPopulateFromModelWithBadObject() {
-        $form = new Admin_Form_InfoBox();
-        
-        $logger = new MockLogger();
-        $form->setLog($logger);
-        
-        $form->populateFromModel(null);
-        
-        $messages = $logger->getMessages();
-        
-        $this->assertEquals(1, count($messages));
-        $this->assertContains('Called with instance of', $messages[0]);
-        
-        $logger->clear();
-        
-        $form->populateFromModel($this);
-        
-        $messages = $logger->getMessages();
-        
-        $this->assertEquals(1, count($messages));
-        $this->assertContains('Called with instance of \'' . __CLASS__ . '\'', $messages[0]);
-    }
-    
-    public function testConstructFromPost() {
+
+    public function testPopulateFromModel()
+    {
         $form = new Admin_Form_InfoBox();
 
         $document = new Opus_Document(146);
-        
-        $form->constructFromPost(array(), $document);
-        
+
+        $form->populateFromModel($document);
+
         $this->assertNotNull($form->getDocument());
         $this->assertEquals($document, $form->getDocument());
     }
-    
-    public function testConstructFromPostWithBadObject() {
+
+    public function testPopulateFromModelWithBadObject()
+    {
         $form = new Admin_Form_InfoBox();
-        
+
         $logger = new MockLogger();
-        $form->setLog($logger);
-        
-        $form->constructFromPost(array(), null);
-        
+        $form->setLogger($logger);
+
+        $form->populateFromModel(null);
+
         $messages = $logger->getMessages();
-        
+
         $this->assertEquals(1, count($messages));
         $this->assertContains('Called with instance of', $messages[0]);
-        
+
         $logger->clear();
-        
-        $form->constructFromPost(array(), new Opus_Person());
-        
+
+        $form->populateFromModel($this);
+
         $messages = $logger->getMessages();
-        
+
+        $this->assertEquals(1, count($messages));
+        $this->assertContains('Called with instance of \'' . __CLASS__ . '\'', $messages[0]);
+    }
+
+    public function testConstructFromPost()
+    {
+        $form = new Admin_Form_InfoBox();
+
+        $document = new Opus_Document(146);
+
+        $form->constructFromPost([], $document);
+
+        $this->assertNotNull($form->getDocument());
+        $this->assertEquals($document, $form->getDocument());
+    }
+
+    public function testConstructFromPostWithBadObject()
+    {
+        $form = new Admin_Form_InfoBox();
+
+        $logger = new MockLogger();
+        $form->setLogger($logger);
+
+        $form->constructFromPost([], null);
+        $messages = $logger->getMessages();
+
+        $this->assertEquals(1, count($messages));
+        $this->assertContains('Called with instance of', $messages[0]);
+
+        $logger->clear();
+
+        $form->constructFromPost([], new Opus_Person());
+
+        $messages = $logger->getMessages();
+
         $this->assertEquals(1, count($messages));
         $this->assertContains('Called with instance of \'Opus_Person\'', $messages[0]);
     }
-    
-    public function testIsEmpty() {
+
+    public function testIsEmpty()
+    {
         $form = new Admin_Form_InfoBox();
-        
+
         $this->assertFalse($form->isEmpty());
     }
-    
 }

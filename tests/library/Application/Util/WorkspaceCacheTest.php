@@ -40,8 +40,7 @@ class Application_Util_WorkspaceCacheTest extends ControllerTestCase
 
         $file = APPLICATION_PATH . '/tests/workspace/cache/Test_Zend_Translate_File';
 
-        if (!file_exists($file))
-        {
+        if (! file_exists($file)) {
             touch($file);
         }
 
@@ -51,5 +50,4 @@ class Application_Util_WorkspaceCacheTest extends ControllerTestCase
 
         $this->assertFileNotExists($file);
     }
-
 }

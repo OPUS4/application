@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -26,7 +26,7 @@
  *
  * @category    Tests
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -35,12 +35,15 @@
  *
  * @covers Admin_DocumentsController
  */
-class Admin_DocumentsControllerTest extends ControllerTestCase {
+class Admin_DocumentsControllerTest extends ControllerTestCase
+{
+    protected $additionalResources = ['database', 'view', 'mainMenu', 'navigation', 'translation'];
 
     /**
      * Test index action.
      */
-    public function testIndexAction() {
+    public function testIndexAction()
+    {
         $this->dispatch('/admin/documents');
         $this->assertResponseCode(200);
         $this->assertModule('admin');
@@ -51,7 +54,8 @@ class Admin_DocumentsControllerTest extends ControllerTestCase {
     /**
      * Regression test for OPUSVIER-2540
      */
-    public function testCollectionRoleNameGetsTranslatedForDDC() {
+    public function testCollectionRoleNameGetsTranslatedForDDC()
+    {
         $this->dispatch('/admin/documents/index/collectionid/2');
         $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());
         $body = $this->getResponse()->getBody();
@@ -62,7 +66,8 @@ class Admin_DocumentsControllerTest extends ControllerTestCase {
     /**
      * Regression test for OPUSVIER-2540
      */
-    public function testCollectionRoleNameGetsTranslatedForUserCollection() {
+    public function testCollectionRoleNameGetsTranslatedForUserCollection()
+    {
         $cr = new Opus_CollectionRole();
         $cr->setName('foo');
         $cr->setOaiName('foo');
@@ -75,7 +80,8 @@ class Admin_DocumentsControllerTest extends ControllerTestCase {
         $this->assertNotContains('<b>foo</b>', $this->getResponse()->getBody());
     }
 
-    public function testShowAllDocsForDDCCollection() {
+    public function testShowAllDocsForDDCCollection()
+    {
         $role = new Opus_CollectionRole(2);
         $displayBrowsing = $role->getDisplayBrowsing();
         $role->setDisplayBrowsing('Name');
@@ -91,88 +97,98 @@ class Admin_DocumentsControllerTest extends ControllerTestCase {
         $this->assertNotContains('<b>Ingenieurwissenschaften</b>', $this->getResponse()->getBody());
     }
 
-    public function testShowAllDocsForBklCollection() {
+    public function testShowAllDocsForBklCollection()
+    {
         $role = new Opus_CollectionRole(7);
         $displayBrowsing = $role->getDisplayBrowsing();
         $role->setDisplayBrowsing('Name');
         $role->store();
-        
+
         $this->dispatch('/admin/documents/index/collectionid/15028');
 
-        // undo changes
+        // undo changes TODO undo only happens if dispatch does not fail with exception/error
         $role->setDisplayBrowsing($displayBrowsing);
         $role->store();
 
         $this->assertContains('<b>52.00 Maschinenbau, Energietechnik, Fertigungstechnik: Allgemeines</b>', $this->getResponse()->getBody());
         $this->assertNotContains('<b>Maschinenbau, Energietechnik, Fertigungstechnik: Allgemeines</b>', $this->getResponse()->getBody());
     }
-    
-    public function testShowHitsPerPageLinks() {
+
+    public function testShowHitsPerPageLinks()
+    {
         $this->dispatch('/admin/documents');
         $this->assertQueryCount('div.itemCountLinks//li', 4);
         $this->assertQueryCount('div.itemCountLinks//a', 3); // einer ist aktiv und kein Link
     }
-    
-    public function testShowHitsPerPageOptionAsLink() {
+
+    public function testShowHitsPerPageOptionAsLink()
+    {
         $this->dispatch('/admin/documents/index/hitsperpage/10');
-        
+
         $this->assertQueryContentContains("div.itemCountLinks//a", '50');
         $this->assertQueryContentContains('div.itemCountLinks//a', '100');
     }
-    
-    public function testShowSelectedHitsPerPageOptionNotAsLink() {
+
+    public function testShowSelectedHitsPerPageOptionNotAsLink()
+    {
         $this->dispatch('/admin/documents/index/hitsperpage/10');
-        
+
         $this->assertQueryCount("a[@href='" . $this->getRequest()->getBaseUrl() . "/admin/documents/index/hitsperpage/10']", 0);
     }
-    
-    public function testSelectHitsPerPage() {
+
+    public function testSelectHitsPerPage()
+    {
         $this->dispatch('/admin/documents/index/state/unpublished/hitsperpage/8');
         $this->assertQueryCount('span.title', 8);
     }
-    
-    public function testShowAllHits() {
+
+    public function testShowAllHits()
+    {
         $docFinder = new Opus_DocumentFinder();
         $docFinder->setServerState('unpublished');
-        
+
         $unpublishedDocs = $docFinder->count();
-        
+
         $this->dispatch('/admin/documents/index/state/unpublished/hitsperpage/all');
         $this->assertQueryCount('span.title', $unpublishedDocs);
     }
-    
-    public function testHitsPerPageBadParameter() {
+
+    public function testHitsPerPageBadParameter()
+    {
         $docFinder = new Opus_DocumentFinder();
 
         $this->dispatch('/admin/documents/index/state/unpublished/hitsperpage/dummy');
         $this->assertQueryCount('span.title', 10); // default
     }
-    
-    public function testConfigureDefaultHitsPerPage() {
+
+    public function testConfigureDefaultHitsPerPage()
+    {
         $config = Zend_Registry::get('Zend_Config');
-        $config->admin->documents->maxDocsDefault = 7;
-        
+        $config->admin->documents->maxDocsDefault = '7';
+
         $this->dispatch('/admin/documents');
         $this->assertQueryCount('span.title', 7);
     }
-    
-    public function testConfigureHitsPerPageOptions() {
+
+    public function testConfigureHitsPerPageOptions()
+    {
         $config = Zend_Registry::get('Zend_Config');
         $config->admin->documents->maxDocsOptions = "20,60,all";
-        
+
         $this->dispatch('/admin/documents');
         $this->assertQueryContentContains("div.itemCountLinks//a", '20');
         $this->assertQueryContentContains('div.itemCountLinks//a', '60');
         $this->assertQueryCount("a[@href='" . $this->getRequest()->getBaseUrl() . "/admin/documents/index/hitsperpage/all']", 1);
     }
-    
-    public function testShowEditLink() {
+
+    public function testShowEditLink()
+    {
         $this->dispatch('/admin/documents');
         $this->assertResponseCode(200);
         $this->assertModule('admin');
         $this->assertController('documents');
         $this->assertAction('index');
-        
+
         $this->assertQueryCount("td.edit/a", 10);
         $this->assertXpathCount('//a[contains(@href, "/admin/document/edit/id/")]', 10);
     }
@@ -180,7 +196,8 @@ class Admin_DocumentsControllerTest extends ControllerTestCase {
     /**
      * Regression test for OPUSVIER-2401.
      */
-    public function testLinkForStateAuditedPresent() {
+    public function testLinkForStateAuditedPresent()
+    {
         $this->dispatch('/admin/documents');
         $this->assertQuery("//a[@href='/admin/documents/index/state/published']");
         $this->assertQuery("//a[@href='/admin/documents/index/state/audited']");
@@ -204,8 +221,5 @@ class Admin_DocumentsControllerTest extends ControllerTestCase {
         $this->assertQueryContentContains('li.identifier_orcid', '0000-0000-0000-0001');
         $this->assertQueryContentContains('li.identifier_gnd', '123456789');
         $this->assertQueryContentContains('li.identifier_misc', 'ID1234');
-
     }
-
 }
-

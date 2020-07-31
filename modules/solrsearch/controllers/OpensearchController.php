@@ -33,9 +33,11 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Solrsearch_OpensearchController extends Application_Controller_Xml {
+class Solrsearch_OpensearchController extends Application_Controller_Xml
+{
 
-    public function indexAction() {
+    public function indexAction()
+    {
         $config = Application_Configuration::getInstance();
         $this->_proc->setParameter(
             '',
@@ -51,4 +53,3 @@ class Solrsearch_OpensearchController extends Application_Controller_Xml {
         $this->loadStyleSheet($this->view->getScriptPath('opensearch') . DIRECTORY_SEPARATOR . 'opensearch.xslt');
     }
 }
-

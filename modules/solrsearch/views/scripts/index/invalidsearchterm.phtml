@@ -34,10 +34,11 @@
 ?>
 
 <?php
-    if($this->searchType === 'simple')
-        include('simpleSearchForm.phtml');
-    else if($this->searchType === 'advanced' || $this->searchType === 'authorsearch')
-        echo $this->form;
+if ($this->searchType === 'simple') {
+    include('simpleSearchForm.phtml');
+} elseif ($this->searchType === 'advanced' || $this->searchType === 'authorsearch') {
+    echo $this->form;
+}
 ?>
 
 <div class="invalidsearchterm">

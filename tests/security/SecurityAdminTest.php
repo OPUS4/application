@@ -26,29 +26,36 @@
  *
  * @category    Application Unit Test
  * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class SecurityAdminTest extends ControllerTestCase {
+class SecurityAdminTest extends ControllerTestCase
+{
 
-    public function setUp() {
+    protected $configModifiable = true;
+
+    protected $additionalResources = ['authz', 'view', 'navigation', 'mainMenu', 'database', 'translation'];
+
+    public function setUp()
+    {
         parent::setUp();
         $this->enableSecurity();
         $this->loginUser('security10', 'security10pwd');
     }
 
-    public function tearDown() {
+    public function tearDown()
+    {
         $this->logoutUser();
         $this->restoreSecuritySetting();
         parent::tearDown();
     }
 
-
     /**
      * Prüft, ob nur die erlaubten Einträge im Admin Menu angezeigt werden.
      */
-    public function testAdminMenuFiltering() {
+    public function testAdminMenuFiltering()
+    {
         $this->dispatch('/admin');
         $this->assertQuery('//a[@href="/admin/index/security"]');
         $this->assertNotQuery('//a[@href="/admin/collectionroles"]');
@@ -62,14 +69,19 @@ class SecurityAdminTest extends ControllerTestCase {
         $this->assertNotQuery('//a[@href="/admin/index/setup"]');
     }
 
-    public function testAccessAccountController() {
+    /**
+     * TODO make asserts more precise
+     */
+    public function testAccessAccountController()
+    {
         $this->useEnglish();
         $this->dispatch('/admin/account');
         $this->assertQueryContentContains('//html/head/title', 'Accounts');
-        $this->assertQueryContentContains('//html/body', 'Add Account');
+        $this->assertQueryContentContains('//html/body', 'Add');
     }
 
-    public function testAccessIprangeController() {
+    public function testAccessIprangeController()
+    {
         $this->useEnglish();
         $this->dispatch('/admin/iprange');
         $this->assertQueryContentContains('//html/head/title', 'Manage IP Ranges');
@@ -78,10 +90,10 @@ class SecurityAdminTest extends ControllerTestCase {
         $this->assertXpath('//a[@href="/admin/iprange/new"]');
     }
 
-    public function testAccessAccessController() {
+    public function testAccessAccessController()
+    {
         $this->useEnglish();
         $this->dispatch('/admin/access/listmodule/roleid/2');
         $this->assertQueryContentContains('//html/head/title', 'Edit user roles - access control');
     }
-
 }

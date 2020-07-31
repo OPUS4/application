@@ -28,7 +28,7 @@
  * @package     Publish
  * @author      Susanne Gottwald <gottwald@zib.de>
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -37,39 +37,31 @@
  *
  * @covers Publish_IndexController
  */
-class Publish_IndexControllerTest extends ControllerTestCase{
-    
-    public function setUp() {
+class Publish_IndexControllerTest extends ControllerTestCase
+{
+
+    protected $additionalResources = 'all';
+
+    public function setUp()
+    {
         parent::setUp();
         $this->useGerman();
     }
-    
-    public function testIndexAction() {
-        $this->dispatch('/publish');  
+
+    public function testIndexAction()
+    {
+        $this->dispatch('/publish');
         $this->assertResponseCode(200);
         $this->assertController('index');
         $this->assertAction('index');
     }
 
-    public function testShowFileUpload() {
+    public function testShowFileUpload()
+    {
         $config = Zend_Registry::get('Zend_Config');
-        
-        // manipulate config
-        $oldval = null;
-        if (isset($config->form->first->enable_upload)) {
-            $oldval = $config->form->first->enable_upload;
-        }
-        $config->form->first->enable_upload = 1;
+        $config->form->first->enable_upload = self::CONFIG_VALUE_TRUE;
 
         $this->dispatch('/publish');
-
-        // undo config changes before asserting anything
-        if (is_null($oldval)) {
-            unset($config->form->first->enable_upload);
-        }
-        else {
-            $config->form->first->enable_upload = $oldval;
-        }
 
         $this->assertResponseCode(200);
         $this->assertController('index');
@@ -79,30 +71,17 @@ class Publish_IndexControllerTest extends ControllerTestCase{
         $this->assertContains('<legend>Dokument(e) hochladen</legend>', $this->getResponse()->getBody());
         $this->assertContains("<input type='hidden' name='MAX_FILE_SIZE' id='MAX_FILE_SIZE' value='1024000' />", $this->getResponse()->getBody());
         $this->assertContains("<label for='fileupload'>Datei wählen</label>", $this->getResponse()->getBody());
-        $this->assertContains("<input type='file' name='fileupload' id='fileupload' enctype='multipart/form-data' title='Bitte wählen Sie eine Datei, die Sie hochladen möchten ' size='30' />", $this->getResponse()->getBody());
+        $this->assertContains("<input type='file' name='fileupload' id='fileupload' enctype='multipart/form-data' title='Bitte wählen Sie eine Datei, die Sie hochladen möchten' size='30' />", $this->getResponse()->getBody());
         $this->assertContains("<label for='uploadComment'>Kommentar</label>", $this->getResponse()->getBody());
         $this->assertContains("<textarea name='uploadComment' class='form-textarea' cols='30' rows='5'  title='Fügen Sie hier einen Kommentar hinzu.'  id='uploadComment'></textarea>", $this->getResponse()->getBody());
     }
 
-    public function testDoNotShowFileUpload() {
+    public function testDoNotShowFileUpload()
+    {
         $config = Zend_Registry::get('Zend_Config');
-        
-        // manipulate config
-        $oldval = null;
-        if (isset($config->form->first->enable_upload)) {
-            $oldval = $config->form->first->enable_upload;
-        }
-        $config->form->first->enable_upload = 0;
+        $config->form->first->enable_upload = self::CONFIG_VALUE_FALSE;
 
         $this->dispatch('/publish');
-
-        // undo config changes
-        if (is_null($oldval)) {
-            unset($config->form->first->enable_upload);
-        }
-        else {
-            $config->form->first->enable_upload = $oldval;
-        }        
 
         $this->assertResponseCode(200);
         $this->assertController('index');
@@ -118,25 +97,12 @@ class Publish_IndexControllerTest extends ControllerTestCase{
     }
 
 
-    public function testShowBibliographyCheckbox() {
+    public function testShowBibliographyCheckbox()
+    {
         $config = Zend_Registry::get('Zend_Config');
-
-        // manipulate config
-        $oldval = null;
-        if (isset($config->form->first->bibliographie)) {
-            $oldval = $config->form->first->bibliographie;
-        }
-        $config->form->first->bibliographie = 1;
+        $config->form->first->bibliographie = self::CONFIG_VALUE_TRUE;
 
         $this->dispatch('/publish');
-
-        // undo config changes before asserting anything
-        if (is_null($oldval)) {
-            unset($config->form->first->bibliographie);
-        }
-        else {
-            $config->form->first->bibliographie = $oldval;
-        }
 
         $this->assertResponseCode(200);
         $this->assertController('index');
@@ -144,30 +110,17 @@ class Publish_IndexControllerTest extends ControllerTestCase{
 
         $this->assertContains('<h3 class="document-type">Dokumenttyp und Datei wählen</h3>', $this->getResponse()->getBody());
         $this->assertContains('<legend>Bibliographie</legend>', $this->getResponse()->getBody());
-        $this->assertContains("<input type='checkbox' class='form-checkbox' name='bibliographie' id='bibliographie' value='1'  />", $this->getResponse()->getBody());        
+        $this->assertContains("<input type='checkbox' class='form-checkbox' name='bibliographie' id='bibliographie' value='1'  />", $this->getResponse()->getBody());
         $this->assertContains("<label for='bibliographie'>Zur Bibliographie hinzufügen?</label>", $this->getResponse()->getBody());
         $this->assertContains("<input type='hidden' name='bibliographie' value='0' />", $this->getResponse()->getBody());
     }
 
-    public function testDoNotShowBibliographyCheckbox() {
+    public function testDoNotShowBibliographyCheckbox()
+    {
         $config = Zend_Registry::get('Zend_Config');
-
-        // manipulate config
-        $oldval = null;
-        if (isset($config->form->first->bibliographie)) {
-            $oldval = $config->form->first->bibliographie;
-        }
-        $config->form->first->bibliographie = 0;
+        $config->form->first->bibliographie = self::CONFIG_VALUE_FALSE;
 
         $this->dispatch('/publish');
-
-        // undo config changes before asserting anything
-        if (is_null($oldval)) {
-            unset($config->form->first->bibliographie);
-        }
-        else {
-            $config->form->first->bibliographie = $oldval;
-        }
 
         $this->assertResponseCode(200);
         $this->assertController('index');
@@ -183,7 +136,8 @@ class Publish_IndexControllerTest extends ControllerTestCase{
     /**
      * Regression Test for OPUSVIER-809
      */
-    public function testDocumentTypeSelectBoxIsSortedAlphabetically() {
+    public function testDocumentTypeSelectBoxIsSortedAlphabetically()
+    {
         // manipulate list of available document types in application configuration
         $config = Zend_Registry::get('Zend_Config');
         $include = $config->documentTypes->include;
@@ -207,7 +161,6 @@ class Publish_IndexControllerTest extends ControllerTestCase{
 
         $this->assertTrue($doctypeAllPos < $doctypeWorkingpaper);
         $this->assertTrue($doctypeWorkingpaper < $doctypeArticlePos);
-        $this->assertTrue($doctypeArticlePos < $doctypeDemodemo);        
+        $this->assertTrue($doctypeArticlePos < $doctypeDemodemo);
     }
-
 }

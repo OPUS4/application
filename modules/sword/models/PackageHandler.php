@@ -26,14 +26,12 @@
  *
  * @category    Application
  * @package     Module_Sword
- * @author      Sascha Szott
- * @copyright   Copyright (c) 2016
+ * @author      Sascha Szott <opus-development@saschaszott.de>
+ * @copyright   Copyright (c) 2016-2019
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 class Sword_Model_PackageHandler
 {
-
     private $additionalEnrichments;
 
     private $packageType;
@@ -70,30 +68,67 @@ class Sword_Model_PackageHandler
         }
     }
 
+    /**
+     * Verarbeitet die mit dem SWORD-Request übergebene Paketdatei.
+     *
+     * @param string $payload der Inhalt der Paketdatei
+     * @return mixed
+     */
     public function handlePackage($payload)
     {
-        $tmpFileName = $this->getTmpFileName($payload);
-        $this->savePackage($payload, $tmpFileName);
-        $packageReader = $this->getPackageReader($this->packageType);
-        try {
-            $statusDoc = $packageReader->readPackage($tmpFileName);
-        } finally {
-            unlink($tmpFileName);
+        $packageReader = $this->getPackageReader();
+        if (is_null($packageReader)) {
+            // TODO improve error handling
+            return null;
         }
 
+        $tmpDirName = null;
+        $statusDoc = null;
+        try {
+            $tmpDirName = $this->createTmpDir($payload);
+            $this->savePackage($payload, $tmpDirName);
+            $statusDoc = $packageReader->readPackage($tmpDirName);
+        } finally {
+            if (! is_null($tmpDirName)) {
+                $this->cleanupTmpDir($tmpDirName);
+            }
+        }
         return $statusDoc;
     }
 
     /**
-     * @param $packageType
-     * @return null
+     * Entfernt das zuvor erzeugte temporäre Verzeichnis für die Extraktion des Paketinhalts.
+     * Das Verzeichnis enthält Dateien und ein Unterverzeichnis. Daher ist ein rekursives Löschen
+     * erforderlich.
+     *
+     * @param string $tmpDirName
+     */
+    private function cleanupTmpDir($tmpDirName)
+    {
+        $it = new RecursiveDirectoryIterator($tmpDirName, RecursiveDirectoryIterator::SKIP_DOTS);
+        $files = new RecursiveIteratorIterator($it, RecursiveIteratorIterator::CHILD_FIRST);
+        foreach ($files as $file) {
+            if ($file->isDir()) {
+                rmdir($file->getRealPath());
+            } else {
+                unlink($file->getRealPath());
+            }
+        }
+        rmdir($tmpDirName);
+    }
+
+    /**
+     * Liefert in Abhängigkeit vom zu verarbeitenden Pakettyp ein passendes Objekt zum Einlesen des Pakets zurück.
+     * Liefert null zurück, wenn der Pakettyp nicht verarbeitet werden kann.
+     *
+     * @return Application_Import_PackageReader
      *
      * TODO make types configurable and remove explicit TAR/ZIP declarations in this class (use factory class?)
      */
-    private function getPackageReader($packageType)
+    private function getPackageReader()
     {
         $packageReader = null;
-        switch ($packageType) {
+        switch ($this->packageType) {
             case self::PACKAGE_TYPE_ZIP:
                 $packageReader = new Application_Import_ZipPackageReader();
                 break;
@@ -101,29 +136,44 @@ class Sword_Model_PackageHandler
                 $packageReader = new Application_Import_TarPackageReader();
                 break;
             default:
-                // TODO do some error handling
                 break;
         }
         $packageReader->setAdditionalEnrichments($this->additionalEnrichments);
         return $packageReader;
     }
 
-    private function savePackage($payload, $tmpFileName)
+    /**
+     * Speichert die übergebene Payload als Datei im übergebenen Verzeichnis ab.
+     *
+     * @param string $payload
+     * @param string $tmpDir
+     */
+    private function savePackage($payload, $tmpDir)
     {
+        $tmpFileName = $tmpDir . DIRECTORY_SEPARATOR . 'package.' . $this->packageType;
         file_put_contents($tmpFileName, $payload);
     }
 
-    private function getTmpFileName($payload)
+    /**
+     * Erzeugt ein temporäres Verzeichnis, in dem die mit dem SWORD-Request übergebene Datei zwischengespeichert werden
+     * kann. Die Methode gibt den absoluten Pfad des Verzeichnisses zurück.
+     *
+     * @param string $payload der Inhalt des SWORD-Packages
+     * @return string absoluter Pfad des temporären Ablageverzeichnisses
+     * @throws Application_Exception
+     */
+    private function createTmpDir($payload)
     {
-        $dirName = Application_Configuration::getInstance()->getTempPath();
-        $fileName = md5($payload) . '-' . time() . '-' . rand(10000, 99999) . '.' . $this->packageType;
-        $tmpFileName = $dirName . $fileName;
+        $baseDirName = Application_Configuration::getInstance()->getTempPath()
+            . DIRECTORY_SEPARATOR . md5($payload) . '-' . time() . '-' . rand(10000, 99999);
         $suffix = 0;
-        while (file_exists($tmpFileName)) {
-            // add suffix to make file name unique (even if collision events are not very likely)
-            $tmpFileName .= "-$suffix";
+        $dirName = "$baseDirName-$suffix";
+        while (is_readable($dirName)) {
+            // add another suffix to make file name unique (even if collision events are not very likely)
             $suffix++;
+            $dirName = "$baseDirName-$suffix";
         }
-        return $tmpFileName;
+        mkdir($dirName);
+        return $dirName;
     }
 }

@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tmx SYSTEM "http://www.gala-global.org/oscarStandards/tmx/tmx14.dtd">
+<tmx>
+    <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool" />
+    <body>
+        <tu tuid="export_datacite_error_head_title">
+            <tuv xml:lang="en">
+                <seg>DataCite XML of document %1$s is not valid</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>DataCite XML von Dokument %1$s ist nicht gültig</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="export_datacite_notice_head_title">
+            <tuv xml:lang="en">
+                <seg>DataCite XML of unpublished document %1$s is valid</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>DataCite XML des nicht freigeschalteten Dokuments %1$s ist gültig</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="export_datacite_notice_head_subtitle">
+            <tuv xml:lang="en">
+                <seg>The value of mandatory field publicationYear cannot be determined until the document is published.</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Der Wert für das Pflichtelement publicationYear kann allerdings erst nach der Freischaltung bestimmt werden.</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="export_datacite_required_fields_header">
+            <tuv xml:lang="en">
+                <seg>State of required fields</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Status der DataCite-Pflichtfelder</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="export_datacite_xml_errors_header">
+            <tuv xml:lang="en">
+                <seg>XML validation errors</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Fehler bei der XML-Validierung</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="export_datacite_download_xml">
+            <tuv xml:lang="en">
+                <seg>Download DataCite XML File</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>DataCite XML-Datei herunterladen</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="export_datacite_non_published_doc_notice">
+            <tuv xml:lang="en">
+                <seg>As this document is not published, do not apply DOI registration manually!</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Da dieses Dokument nicht veröffentlicht ist, sollten Sie keine manuelle DOI-Registrierung durchführen!</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="export_datacite_error_local_DOI_missing">
+            <tuv xml:lang="en">
+                <seg>Please provide a local DOI!</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Bitte setzen Sie eine lokale DOI!</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="export_datacite_error_multiple_local_DOIs">
+            <tuv xml:lang="en">
+                <seg>The document must not contain multiple local DOIs!</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Das Dokument darf nicht mehrere lokale DOIs besitzen!</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="export_datacite_error_creator_missing">
+            <tuv xml:lang="en">
+                <seg>Please provide at least one author or a creating corporation!</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Bitte setzen Sie mindestens einen Autor oder eine urhebende Körperschaft!</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="export_datacite_error_title_missing">
+            <tuv xml:lang="en">
+                <seg>Please provide at lease one main title or sub title!</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Bitte setzen Sie mindestens einen Titel oder Untertitel!</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="export_datacite_error_publisher_missing">
+            <tuv xml:lang="en">
+                <seg>Please provide a publisher or alternatively exactly one publishing institution!</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Bitte setzen Sie einen Verlag oder alternativ genau eine Titel verleihende Institution!</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="export_datacite_error_publication_date_missing_non_published">
+            <tuv xml:lang="en">
+                <seg>This year will be set automatically when the document is published.</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Eine Jahresangabe wird beim Freischalten des Dokuments automatisch gesetzt.</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="export_datacite_error_publication_date_missing">
+            <tuv xml:lang="en">
+                <seg>Please provide a date of publication!</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Bitte setzen Sie ein Publikationsdatum!</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="export_datacite_error_publication_year_missing">
+            <tuv xml:lang="en">
+                <seg>Please provide a publication year greater than 0!</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Bitte setzen Sie ein Publikationsjahr, das größer 0 ist!</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="export_datacite_error_document_type_missing">
+            <tuv xml:lang="en">
+                <seg>Please provide a document type!</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Bitte setzen Sie einen Dokumenttyp!</seg>
+            </tuv>
+        </tu>
+
+    </body>
+</tmx>

@@ -32,10 +32,11 @@
  * @package     Application_Controller_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
  * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Application_Controller_Action_Helper_Breadcrumbs extends Application_Controller_Action_Helper_Abstract {
+class Application_Controller_Action_Helper_Breadcrumbs extends Application_Controller_Action_Helper_Abstract
+{
 
     /**
      * TODO centralize
@@ -48,12 +49,14 @@ class Application_Controller_Action_Helper_Breadcrumbs extends Application_Contr
 
     private $_navigation = null;
 
-    public function init() {
+    public function init()
+    {
         parent::init();
     }
 
-    public function direct($label = null, $parameters = null) {
-        if (!is_null($label) && is_array($parameters)) {
+    public function direct($label = null, $parameters = null)
+    {
+        if (! is_null($label) && is_array($parameters)) {
             $this->setParameters($label, $parameters);
         }
         return $this;
@@ -65,19 +68,18 @@ class Application_Controller_Action_Helper_Breadcrumbs extends Application_Contr
      * TODO shorten title
      * TODO log page misses
      */
-    public function setDocumentBreadcrumb($document) {
-        if (!is_null($document)) {
+    public function setDocumentBreadcrumb($document)
+    {
+        if (! is_null($document)) {
             $title = $this->getDocumentTitle($document);
             $page = $this->getNavigation()->findOneBy('label', 'admin_document_index');
-            if (!is_null($page)) {
+            if (! is_null($page)) {
                 $page->setLabel($title);
                 $page->setParam(self::PARAM_DOCUMENT_ID, $document->getId());
-            }
-            else {
+            } else {
                 $this->getLogger()->err(__METHOD__ . " Page with label 'admin_document_index' not found.");
             }
-        }
-        else {
+        } else {
             $this->getLogger()->err(__METHOD__ . " No document provided.");
         }
     }
@@ -85,7 +87,8 @@ class Application_Controller_Action_Helper_Breadcrumbs extends Application_Contr
     /**
      * Setzt das Label eines Breadcrumbs auf den Wert von $value.
      */
-    public function setLabelFor($label, $value) {
+    public function setLabelFor($label, $value)
+    {
         $page = $this->getNavigation()->findOneBy('label', $label);
         $page->setLabel($value);
     }
@@ -96,19 +99,20 @@ class Application_Controller_Action_Helper_Breadcrumbs extends Application_Contr
      * @param $label
      * @param $parameters
      */
-    public function setParameters($label, $parameters) {
+    public function setParameters($label, $parameters)
+    {
         $page = $this->getNavigation()->findOneBy('label', $label);
-        if (!is_null($page)) {
+        if (! is_null($page)) {
             foreach ($parameters as $key => $value) {
                 $page->setParam($key, $value);
             }
-        }
-        else {
+        } else {
             $this->getLogger()->err(__METHOD__ . " Page with label '$label' not found.");
         }
     }
 
-    public function getNavigation() {
+    public function getNavigation()
+    {
         if (is_null($this->_navigation)) {
             $this->_navigation = $this->getActionController()->view->navigation();
         }
@@ -116,15 +120,16 @@ class Application_Controller_Action_Helper_Breadcrumbs extends Application_Contr
         return $this->_navigation;
     }
 
-    public function setNavigation($navigation) {
+    public function setNavigation($navigation)
+    {
         $this->_navigation = $navigation;
     }
 
-    public function getDocumentTitle($document) {
+    public function getDocumentTitle($document)
+    {
         $helper = new Application_Util_DocumentAdapter($this->getView(), $document);
         $title = $helper->getMainTitle();
-        return (strlen($title) > self::TITLE_MAX_LENGTH) ? substr($title, 0, self::TITLE_MAX_LENGTH)
+        return (mb_strlen($title) > self::TITLE_MAX_LENGTH) ? mb_substr($title, 0, self::TITLE_MAX_LENGTH)
             . self::TITLE_SHORT_SUFFIX : $title;
     }
-
 }

@@ -27,12 +27,14 @@
  * @category    Application Unit Test
  * @package     Application_View_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2017-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 class Application_View_Helper_OptionEnabledTest extends ControllerTestCase
 {
+
+    protected $configModifiable = true;
 
     public function testOptionEnabled()
     {
@@ -41,9 +43,9 @@ class Application_View_Helper_OptionEnabledTest extends ControllerTestCase
         $this->assertTrue($helper->optionEnabled('orcid.linkAuthor.frontdoor'));
         $this->assertTrue($helper->optionEnabled('linkAuthor.frontdoor', 'orcid'));
 
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
-            'orcid' => array('linkAuthor' => array('frontdoor' => '0'))
-        )));
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'orcid' => ['linkAuthor' => ['frontdoor' => self::CONFIG_VALUE_FALSE]]
+        ]));
 
         $this->assertFalse($helper->optionEnabled('orcid.linkAuthor.frontdoor'));
         $this->assertFalse($helper->optionEnabled('linkAuthor.frontdoor', 'orcid'));
@@ -56,5 +58,4 @@ class Application_View_Helper_OptionEnabledTest extends ControllerTestCase
         $this->assertFalse($helper->optionEnabled('unknownKey'));
         $this->assertFalse($helper->optionEnabled('unknownKey', 'unknownContext'));
     }
-
 }

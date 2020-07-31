@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -27,13 +28,14 @@
  * @category    Application
  * @package     Application_Form_Decorator
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class Application_Form_Decorator_TableWrapper extends Zend_Form_Decorator_Abstract {
+class Application_Form_Decorator_TableWrapper extends Zend_Form_Decorator_Abstract
+{
 
-    public function render($content) {
+    public function render($content)
+    {
         // Render Tabellen Tags nur wenn es Einträge (Unterformulare) gibt
         if (count($this->getElement()->getSubForms()) == 0) {
             return $content;
@@ -41,5 +43,4 @@ class Application_Form_Decorator_TableWrapper extends Zend_Form_Decorator_Abstra
 
         return '<table>' . $content . '</table>';
     }
-
 }

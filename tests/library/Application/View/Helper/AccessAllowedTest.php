@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -27,19 +26,22 @@
  *
  * @category    Application Unit Tests
  * @author      Edouard Simon (edouard.simon@zib.de)
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
  *
  */
-class Application_View_Helper_AccessAllowedTest extends ControllerTestCase {
+class Application_View_Helper_AccessAllowedTest extends ControllerTestCase
+{
+
+    protected $additionalResources = ['database', 'authz', 'view'];
 
     private $__helper;
 
-    public function setUp() {
+    public function setUp()
+    {
         // workaround to enable security before bootstrapping
         // bootstrapping authorization twice is not possible
         parent::setUpWithEnv('production');
@@ -50,13 +52,15 @@ class Application_View_Helper_AccessAllowedTest extends ControllerTestCase {
         $this->__helper->setView(Zend_Registry::get('Opus_View'));
     }
 
-    public function tearDown() {
+    public function tearDown()
+    {
         $acl = Zend_Registry::get('Opus_Acl');
         $acl->deny('guest', 'accounts');
         parent::tearDown();
     }
 
-    public function testAccessAllowed() {
+    public function testAccessAllowed()
+    {
         $user = Zend_Auth::getInstance()->getIdentity();
         $this->assertEquals('', $user, "expected no user to be set (should use default 'guest' as default)");
         $allowedDocuments = $this->__helper->accessAllowed('documents');
@@ -64,5 +68,4 @@ class Application_View_Helper_AccessAllowedTest extends ControllerTestCase {
         $allowedAccount = $this->__helper->accessAllowed('accounts');
         $this->assertTrue($allowedAccount, "expected access allowed to module 'account'");
     }
-
 }

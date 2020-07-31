@@ -61,17 +61,19 @@ class Admin_Form_ActionBox extends Admin_Form_AbstractDocumentSubForm
         $element = new Zend_Form_Element_Submit(self::ELEMENT_SAVE);
         $element->setValue('save');
         $element->removeDecorator('DtDdWrapper');
+        $element->setLabel('Save');
         $this->addElement($element);
 
         $element = new Zend_Form_Element_Submit(self::ELEMENT_CANCEL);
         $element->setValue('cancel');
         $element->removeDecorator('DtDdWrapper');
+        $element->setLabel('Cancel');
         $this->addElement($element);
     }
 
     public function populateFromModel($document)
     {
-        $this->_document= $document;
+        $this->_document = $document;
     }
 
     public function constructFromPost($post, $document = null)
@@ -83,8 +85,7 @@ class Admin_Form_ActionBox extends Admin_Form_AbstractDocumentSubForm
     {
         if (array_key_exists(self::ELEMENT_SAVE, $post)) {
             return Admin_Form_Document::RESULT_SAVE;
-        }
-        else if (array_key_exists(self::ELEMENT_CANCEL, $post)) {
+        } elseif (array_key_exists(self::ELEMENT_CANCEL, $post)) {
             return Admin_Form_Document::RESULT_CANCEL;
         }
     }
@@ -105,22 +106,21 @@ class Admin_Form_ActionBox extends Admin_Form_AbstractDocumentSubForm
      */
     public function getJumpLinks()
     {
-        $links = array();
+        $links = [];
 
         if ($this->_parentForm != null) {
             $subforms = $this->_parentForm->getSubForms();
 
             foreach ($subforms as $name => $subform) {
-                if (!is_null($subform->getDecorator('Fieldset'))) {
+                if (! is_null($subform->getDecorator('Fieldset'))) {
                     // Unterformular mit Fieldset
                     $legend = $subform->getLegend();
-                    if (!is_null($legend) && strlen(trim($legend)) !== 0) {
+                    if (! is_null($legend) && strlen(trim($legend)) !== 0) {
                         $links['#fieldset-' . $name] = $legend;
                     }
                 }
             }
-        }
-        else {
+        } else {
             // Sollte niemals passieren
             Zend_Registry::get('Zend_Log')->err('ActionBox without parent form');
         }
@@ -130,20 +130,20 @@ class Admin_Form_ActionBox extends Admin_Form_AbstractDocumentSubForm
 
     public function getStateLinks()
     {
-        $links = array();
+        $links = [];
 
         $workflow = Zend_Controller_Action_HelperBroker::getStaticHelper('workflow');
 
         $targetStates = $workflow->getAllowedTargetStatesForDocument($this->_document);
 
         foreach ($targetStates as $targetState) {
-            $links[$targetState] = array(
+            $links[$targetState] = [
                 'module'     => 'admin',
                 'controller' => 'workflow',
                 'action'     => 'changestate',
                 'docId'      => $this->_document->getId(),
                 'targetState' => $targetState
-            );
+            ];
         }
 
         return $links;
@@ -151,30 +151,38 @@ class Admin_Form_ActionBox extends Admin_Form_AbstractDocumentSubForm
 
     public function getViewActionLinks()
     {
-        $actions = array();
+        $actions = [];
 
         $docId = $this->_document->getId();
 
-        $actions['edit'] = array(
+        $actions['edit'] = [
             'module' => 'admin',
             'controller' => 'document',
             'action' => 'edit',
             'id' => $docId
-        );
+        ];
 
-        $actions['files'] = array(
+        $actions['files'] = [
             'module'     => 'admin',
             'controller' => 'filemanager',
             'action'     => 'index',
             'id'         => $docId,
-        );
+        ];
 
-        $actions['frontdoor'] = array(
+        /*
+        $actions['copy'] = [
+            'module' => 'admin',
+            'controller' => 'document',
+            'action' => 'copy',
+            'id' => $docId
+        ];*/
+
+        $actions['frontdoor'] = [
             'module'     => 'frontdoor',
             'controller' => 'index',
             'action'     => 'index',
             'docId'         => $docId,
-        );
+        ];
 
         return $actions;
     }
@@ -182,8 +190,8 @@ class Admin_Form_ActionBox extends Admin_Form_AbstractDocumentSubForm
     public function loadDefaultDecorators()
     {
         $this->setDecorators(
-            array(array(
-            'ViewScript', array('viewScript' => 'actionbox.phtml', 'viewModule' => 'admin')))
+            [[
+            'ViewScript', ['viewScript' => 'actionbox.phtml', 'viewModule' => 'admin']]]
         );
     }
 
@@ -194,6 +202,6 @@ class Admin_Form_ActionBox extends Admin_Form_AbstractDocumentSubForm
 
     public function isNavigationEnabled()
     {
-        return !is_null($this->_parentForm);
+        return ! is_null($this->_parentForm);
     }
 }
