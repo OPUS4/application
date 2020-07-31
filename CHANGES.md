@@ -2,6 +2,79 @@
 
 ---
 
+## Release 4.7 - 2020-07-31
+
+### Aufgaben
+
+* [OPUSVIER-449] - Konfigurierbarkeit des XML-Felds/Attributs, das für die Befüllung des Indexfelds year genutzt wird
+* [OPUSVIER-519] - Verbesserung der Lesbarkeit des Logfiles
+* [OPUSVIER-1266] - lesender Zugriff auf Dateisystem: Test auf is_readable, statt auf file_exists
+* [OPUSVIER-1697] - Überflüssige und nichtssagende Informationen aus LogFile entfernen
+* [OPUSVIER-1907] - Übersetzungsseite in der Administration
+* [OPUSVIER-3428] - FAQ-Seiten (Struktur und Inhalte) komplett änderbar über die Administration
+* [OPUSVIER-3433] - Übersetzungen von EnrichmentKeys direkt in der Administration editieren
+* [OPUSVIER-3456] - Anpassungen von Übersetzungen von TMX Dateien in Datenbank verschieben
+* [OPUSVIER-3457] - Funktion um TMX Dateien in Datenbank zu importieren
+* [OPUSVIER-3861] - Einzelne MathJax-Schreibweisen werden in OPUS nicht umgesetzt 
+* [OPUSVIER-3875] - Enrichment-Felder generell suchbar machen
+* [OPUSVIER-4050] - Statische Inhalte einfacher editieren
+* [OPUSVIER-4051] - Benutzte EnrichmentKeys editieren
+* [OPUSVIER-4068] - Automatische Umwandlung von CollectionRole-Namen mit Sonderzeichen beim Update
+* [OPUSVIER-4093] - Ändern des Names einer CollectionRole muss Übersetzungsschlüssel anpassen
+* [OPUSVIER-4102] - Migration der existierenden statischen Inhalte in die Datenbank beim Update
+* [OPUSVIER-4159] - Erweiterte Facetten-Konfiguration
+* [OPUSVIER-4164] - Umgang mit Cookies
+* [OPUSVIER-4217] - Übersetzungen für Schlüssel mit Bindestrich nicht editierbar
+* [OPUSVIER-4219] - Transfer von Übersetzungen zwischen Instanzen
+* [OPUSVIER-4220] - Export Anpassungen in Datenbank als TMX-Datei
+* [OPUSVIER-4221] - Import von Übersetzungen aus TMX-Datei in Datenbank
+* [OPUSVIER-4225] - Erstellen neuer Sprachen unterstützen
+* [OPUSVIER-4242] - "Unable to translate" Nachrichten in separates Log schreiben
+* [OPUSVIER-4243] - Geänderte Übersetzungsschlüssel beim Update auf 4.7 
+* [OPUSVIER-4245] - OAI-PMH xepicur-Formatänderungen
+* [OPUSVIER-4246] - Einstellungen für Übersetzungen ins Setup verschieben
+* [OPUSVIER-4247] - Tags werden nicht importiert, wenn CDATA fehlt
+* [OPUSVIER-4254] - Einheitliche Reihenfolge von Sprachen beim Editieren von Übersetzungen
+* [OPUSVIER-4261] - Facetten "year" und "year_inverted" unabhängig machen
+* [OPUSVIER-4263] - Alte searchengine-Konfiguration auf neue Facetten-Konfiguration umstellen
+* [OPUSVIER-4264] - Zweite Zeile von Facetten-Einträgen einrücken
+* [OPUSVIER-4265] - Enrichments mit "." im Key als Facetten
+* [OPUSVIER-4276] - Übersetzungen von Enrichments: Filterung nur auf den Namen
+
+### Bugs
+
+* [OPUSVIER-2157] - Notice 'Unable to translate key ...' im Logfile beim Ändern des Dokumentstatus
+* [OPUSVIER-4198] - Fehlender Übersetzungsschlüssel für Standard Collection Role OpenAIRE
+* [OPUSVIER-4248] - Bei mehreren Logins in einem Unit Test werden die ACLs des ersten Nutzers verwendet
+* [OPUSVIER-4249] - Beim Update help.ini für Namen von Help-Dateien verwenden
+* [OPUSVIER-4253] - Notification für Publication-Event funktioniert nicht mehr
+* [OPUSVIER-4256] - Übersetzung der Facette "Sprache"
+* [OPUSVIER-4257] - Datenbankfehler beim Erfassen von mehr als 255 Autoren
+* [OPUSVIER-4260] - Wenn year_inverted verwendet wird, zeigt die Facette die Jahr doppelt an
+* [OPUSVIER-4262] - Abspeichern von FAQ Einträgen schlägt (manchmal) fehl
+* [OPUSVIER-4268] - Dokument-Titel in Navigation-Breadcrumbs verschwinden
+* [OPUSVIER-4269] - Test bricht, wenn Zahlenfolge zufällig auftaucht
+* [OPUSVIER-4271] - FAQ-Einträge für externe URLs werden doppelt verlinkt
+* [OPUSVIER-4273] - Editieren von Übersetzungen für statische Seiten über GUI: translationkey wird dupliziert statt geändert
+* [OPUSVIER-4274] - DisplayName von CollectionRole im Edit-Formular wird mit übersetzt
+* [OPUSVIER-4278] - Facette Year lässt sich nicht ausklappen
+
+### Dokumentation
+
+* [OPUSVIER-4106] - Anleitungen für Übersetzungen aktualisieren
+* [OPUSVIER-4285] - Hinweise zu OPUS 4.7 in Dokumentation aufnehmen
+* [OPUSVIER-4286] - Suche nach Enrichments dokumentieren
+* [OPUSVIER-4287] - Konfiguration der Jahr-Facette dokumentieren
+
+### Entwicklung
+
+* [OPUSVIER-3672] - Automatisch Datenbank für CI-System Build anlegen
+* [OPUSVIER-3868] - Docker für OPUS 4 Tests
+* [OPUSVIER-3936] - Demo Instanz neu aufsetzen und Wartung vereinfachen
+* [OPUSVIER-4187] - Release OPUS 4.7
+
+---
+
 ## Release Candidate 4.7-RC 2020-04-07
 
 ### Feature Request
