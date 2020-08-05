@@ -651,6 +651,7 @@
                             <module>admin</module>
                             <controller>doctype</controller>
                             <action>index</action>
+                            <resource>setup</resource>
                             <pages>
                                 <detail>
                                     <type>mvc</type>
