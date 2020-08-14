@@ -503,10 +503,14 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract
         return $scriptPath . 'stylesheets' . DIRECTORY_SEPARATOR . 'raw.xslt';
     }
 
+    /**
+     * TODO create test verifying expected functions are available
+     */
     protected function registerPhpFunctions()
     {
         Application_Xslt::registerViewHelper($this->_proc, [
-            'accessAllowed'
+            'accessAllowed',
+            'isAuthenticated'
         ]);
     }
 }
