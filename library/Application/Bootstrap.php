@@ -221,6 +221,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base
     {
         $this->bootstrap(['Configuration', 'Session', 'Logging', 'ZendCache']);
 
+        // TODO OPUSVIER-4289 Use LogService
         // TODO temporary hack until LogService refactoring is finished (OPUSVIER-3657)
         $logger = $this->getTranslationLog('translation');
 
@@ -391,6 +392,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base
     }
 
     /**
+     * TODO OPUSVIER-4289 Remove this function
      * TODO this function should be remove once OPUSVIER-3657 is done
      * TODO log should be created using LogService
      * TOOD log needs to include unique ID from main log
