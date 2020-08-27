@@ -1,7 +1,7 @@
 Metadata can be defined as
 
 <ul>
-<li>data describing one or more ressources or as</li>
+<li>data describing one or more resources or as</li>
 <li>data associated with an object and describing it</li>
 </ul>
 
@@ -11,7 +11,7 @@ Bibliographic data sets and catalog entries in library catalogs can be seen as a
 
 <p>
 This repository is using metadata in the <a href="http://dublincore.org/" target="_blank">Dublin
-Core Metedata Element Set</a> (short Dublin Core (DC)) which has fifteen basic elements. Dublin
+Core Metadata Element Set</a> (short Dublin Core (DC)) which has fifteen basic elements. Dublin
 Core is the result of international efforts to reach a collective consensus in describing electronic
 objects (in the broadest sense). The Library of Congress (LoC), the Online Cataloging Library Center (OCLC)
 and several national libraries are dealing with Dublin Core in many projects and are close to introduce the
