@@ -137,7 +137,7 @@ gestattet!</b> Dies können Sie zum Beispiel mit Hilfe der
 First you are requested to choose a document type. Right beneath that you can upload your document files. Having done
 so you may click on "send". What follows now is the actual form.
 You have to fill in data about your publication here (so called metadata), which is used to describe your work in
-catalouges and other bibliographic
+cataloges and other bibliographic
 directories. Describe the document you want to upload using the categories and fields on the publication form.
 Depending on the document type, some of
 these fields are <span class="required">mandatory</span> and therefore have to be filled in. Please describe your
@@ -197,7 +197,7 @@ Cookies müssen im Webbrowser eingeschaltet sein, um Dokumente über das Veröff
                 <seg><![CDATA[Metadata can be defined as
 
 <ul>
-<li>data describing one or more ressources or as</li>
+<li>data describing one or more resources or as</li>
 <li>data associated with an object and describing it</li>
 </ul>
 
@@ -207,7 +207,7 @@ Bibliographic data sets and catalog entries in library catalogs can be seen as a
 
 <p>
 This repository is using metadata in the <a href="http://dublincore.org/" target="_blank">Dublin
-Core Metedata Element Set</a> (short Dublin Core (DC)) which has fifteen basic elements. Dublin
+Core Metadata Element Set</a> (short Dublin Core (DC)) which has fifteen basic elements. Dublin
 Core is the result of international efforts to reach a collective consensus in describing electronic
 objects (in the broadest sense). The Library of Congress (LoC), the Online Cataloging Library Center (OCLC)
 and several national libraries are dealing with Dublin Core in many projects and are close to introduce the
