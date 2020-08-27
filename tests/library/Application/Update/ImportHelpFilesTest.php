@@ -306,4 +306,96 @@ class Application_Update_ImportHelpFilesTest extends ControllerTestCase
             }
         }
     }
+
+    /**
+     * OPUSVIER-4304
+     *
+     * Sometimes help files have been changed directly without copying the keys to `language_custom`. In that case,
+     * it is not possible to detect the customization during the update. However we should assume that this might
+     * have happened and import the files anyway.
+     */
+    public function testImportChangedHelpFilesWithoutCustomizedKeys()
+    {
+        $database = new Opus_Translate_Dao();
+        $database->removeAll();
+
+        $helpPath = $this->createTestFolder();
+
+        $generalDe = $this->createTestFile('general.de.txt', 'Allgemein', $helpPath);
+        $generalEn = $this->createTestFile('general.en.txt', 'General', $helpPath);
+        $policiesDe = $this->createTestFile('policies.de.txt', 'Leitlinien', $helpPath);
+        $policiesEn = $this->createTestFile('policies.en.txt', 'Policies', $helpPath);
+
+        $helpConfig = 'help_index_general[] = \'general\'' . PHP_EOL;
+        $helpConfig .= 'help_index_misc[] = \'policies\'' . PHP_EOL;
+        $helpIni = $this->createTestFile('help.ini', $helpConfig, $helpPath);
+
+        $database->setTranslation('help_content_general', [
+            'en' => 'general.en.txt',
+            'de' => 'general.de.txt'
+        ], 'help');
+        // no custom key for `help_content_policies`
+
+        $update = new Application_Update_ImportHelpFiles();
+        $update->setHelpPath($helpPath);
+        $update->setQuietMode(true);
+        $update->run();
+
+        $this->assertFileNotExists($generalDe);
+        $this->assertFileExists($generalDe . '.imported');
+        $this->assertFileNotExists($generalEn);
+        $this->assertFileExists($generalEn . '.imported');
+        $this->assertFileNotExists($policiesDe);
+        $this->assertFileExists($policiesDe . '.imported');
+        $this->assertFileNotExists($policiesEn);
+        $this->assertFileExists($policiesEn . '.imported');
+
+        $translations = $database->getTranslations();
+        $this->assertArrayHasKey('help_content_general', $translations);
+        $this->assertArrayHasKey('help_content_policies', $translations);
+
+        $translations = $database->getTranslation('help_content_general');
+        $this->assertEquals([
+            'en' => 'General',
+            'de' => 'Allgemein'
+        ], $translations);
+
+        $translations = $database->getTranslation('help_content_policies');
+        $this->assertEquals([
+            'en' => 'Policies',
+            'de' => 'Leitlinien'
+        ], $translations);
+    }
+
+    /**
+     * The help content in txt files and defined in TMX files needs to match perfectly, so the default
+     * content will not be imported into the database.
+     */
+    public function testTmxContentMatchesHelpFiles()
+    {
+        $database = new Opus_Translate_Dao();
+        $database->removeAll();
+
+        $update = new Application_Update_ImportHelpFiles();
+        $update->setRemoveFilesEnabled(false);
+        $update->setQuietMode(true);
+
+        $files = $update->getHelpFiles();
+        $helpPath = $update->getHelpPath();
+        $prefix = 'help_content_';
+
+        foreach ($files as $key => $translations) {
+            foreach ($translations as $lang => $value) {
+                if (substr($key, 0, strlen($prefix)) == $prefix) {
+                    $baseName = substr($key, strlen($prefix));
+                    $fileName = "$baseName.{$lang}.txt";
+                    $path = $helpPath . $fileName;
+                    if (is_readable($path)) {
+                        $fileContent = trim(file_get_contents($path));
+                    }
+                }
+                $this->assertEquals($fileContent, $value, "File and TMX for '$key' in '$lang' do not match.");
+            }
+        }
+    }
 }

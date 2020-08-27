@@ -185,6 +185,7 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract
         // Initialize member variables.
         $this->_xml = new DomDocument();
         $this->_proc = new XSLTProcessor();
+        $this->registerPhpFunctions();
     }
 
     /**
@@ -500,5 +501,16 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract
         $pos = strrpos($path, '/');
         $scriptPath = substr($path, 0, ++$pos);
         return $scriptPath . 'stylesheets' . DIRECTORY_SEPARATOR . 'raw.xslt';
+    }
+
+    /**
+     * TODO create test verifying expected functions are available
+     */
+    protected function registerPhpFunctions()
+    {
+        Application_Xslt::registerViewHelper($this->_proc, [
+            'accessAllowed',
+            'isAuthenticated'
+        ]);
     }
 }

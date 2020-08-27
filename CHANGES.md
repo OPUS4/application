@@ -1,5 +1,17 @@
 # OPUS 4 Change Log
 
+--- 
+
+## Patches for 4.7 - 2020-08-27
+
+### Aufgaben
+
+* [OPUSVIER-4293] - Login-Status in XSLT abfragen
+
+### Bugs
+
+* [OPUSVIER-4304] - Inhalte der angepassten Leitlinien / Policies werden beim Update auf OPUS 4.7 nicht importiert
+
 ---
 
 ## Release 4.7 - 2020-07-31
