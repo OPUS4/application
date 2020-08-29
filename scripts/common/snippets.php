@@ -41,7 +41,7 @@ if (false === is_null(ini_get('register_argc_argv'))
     // removes script name
     array_shift($snippetFiles);
     foreach ($snippetFiles as $snippetFile) {
-        if (false === file_exists($snippetFile)) {
+        if (false === is_readable($snippetFile)) {
             echo "# snippet $snippetFile does not exist\n";
             continue;
         }

@@ -59,7 +59,7 @@ class Application_View_Helper_LanguageSelector extends Zend_View_Helper_Abstract
 
         // only show languages that are present in resources and activated in configuration
         $translations = Zend_Registry::get('Zend_Translate')->getList();
-        $supportedLang = $configHelper->getSupportedLanguages();
+        $supportedLang = $configHelper->getActivatedLanguages();
         $translations = array_intersect($translations, $supportedLang);
 
         $result = [];

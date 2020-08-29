@@ -262,4 +262,14 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase
         $this->assertContains("exception 'Application_SearchException' with message 'error_search_unavailable'", $body);
         $this->assertResponseCode(503);
     }
+
+    public function testBrowsingByYear()
+    {
+        $this->markTestIncomplete();
+    }
+
+    public function testBrowsingByYearWithInvertedYearFacetConfigured()
+    {
+        $this->markTestIncomplete();
+    }
 }

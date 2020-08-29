@@ -49,6 +49,7 @@
  * @package     Module_Admin
  *
  * TODO show protected/referenced in list of keys
+ * TODO move to setup area (maybe in own module, but part of setup in administration)
  */
 class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD
 {
@@ -231,7 +232,10 @@ class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD
         if ($request->getActionName() === 'removeFromDocs') {
             $model->deleteFromDocuments();
         } else {
+            $name = $model->getName();
             parent::deleteModel($model);
+            $helper = new Admin_Model_EnrichmentKeys();
+            $helper->removeTranslations($name);
         }
     }
 

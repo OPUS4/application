@@ -48,7 +48,9 @@ class Application_View_Helper_ResultYear extends Application_View_Helper_Documen
         $output = '';
 
         if (! is_null($result) && $result->getAsset('year')) {
-            $output = htmlspecialchars($result->getAsset('year'));
+            $year = $result->getAsset('year');
+            $year = preg_replace('/[0-9]*:/', '', $year);
+            $output = htmlspecialchars($year);
         }
 
         return $output;

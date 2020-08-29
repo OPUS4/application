@@ -111,6 +111,6 @@ class Application_Security_RoleConfig
     {
         $path = APPLICATION_PATH . '/application/configs/security/' . $role . '.ini';
 
-        return file_exists($path) ? new Zend_Config_Ini($path) : null;
+        return is_readable($path) ? new Zend_Config_Ini($path) : null;
     }
 }

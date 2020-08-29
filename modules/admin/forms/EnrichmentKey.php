@@ -48,6 +48,11 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
     const ELEMENT_NAME = 'Name';
 
     /**
+     * Form element for translation of enrichment name.
+     */
+    const ELEMENT_DISPLAYNAME = 'DisplayName';
+
+    /**
      * Form element name for associated enrichment type.
      */
     const ELEMENT_TYPE = 'Type';
@@ -96,6 +101,10 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
         ]);
         $name->addValidator(new Application_Form_Validate_EnrichmentKeyAvailable());
         $this->addElement($name);
+
+        $this->addElement('translation', self::ELEMENT_DISPLAYNAME, [
+            'required' => false, 'size' => 70, 'label' => 'DisplayName'
+        ]);
 
         $element = $this->createElement(
             'select',
@@ -150,9 +159,17 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
      */
     public function populateFromModel($enrichmentKey)
     {
+        $name = $enrichmentKey->getName();
+
+        if (! is_null($name)) {
+            $this->getElement(self::ELEMENT_DISPLAYNAME)->populateFromTranslations(
+                'Enrichment' . $name
+            );
+        }
+
         // Enrichment-Keys haben keine numerische ID: hier wirkt der Name als Identifikator
-        $this->getElement(self::ELEMENT_MODEL_ID)->setValue($enrichmentKey->getName());
-        $this->getElement(self::ELEMENT_NAME)->setValue($enrichmentKey->getName());
+        $this->getElement(self::ELEMENT_MODEL_ID)->setValue($name);
+        $this->getElement(self::ELEMENT_NAME)->setValue($name);
         $this->getElement(self::ELEMENT_TYPE)->setValue($enrichmentKey->getType());
 
         $enrichmentType = $this->initEnrichmentType($enrichmentKey->getType());
@@ -188,7 +205,11 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
      */
     public function updateModel($enrichmentKey)
     {
-        $enrichmentKey->setName($this->getElementValue(self::ELEMENT_NAME));
+        $oldName = $this->getElementValue(self::ELEMENT_MODEL_ID);
+
+        $name = $this->getElementValue(self::ELEMENT_NAME);
+
+        $enrichmentKey->setName($name);
 
         $enrichmentTypeValue = $this->getElementValue(self::ELEMENT_TYPE);
         $enrichmentType = $this->initEnrichmentType($enrichmentTypeValue);
@@ -200,6 +221,16 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
                 'validation' => $this->getElementValue(self::ELEMENT_VALIDATION)]);
             $enrichmentKey->setOptions($enrichmentType->getOptions());
         }
+
+        // update translation keys for enrichment
+        $this->getElement(self::ELEMENT_DISPLAYNAME)->updateTranslations(
+            "Enrichment$name",
+            'default',
+            "Enrichment$oldName"
+        );
+
+        $helper = new Admin_Model_EnrichmentKeys();
+        $helper->createTranslations($name, $oldName);
     }
 
     /**
@@ -224,7 +255,7 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
                 return $enrichmentType;
             }
             $this->getLogger()->err('could not find class ' . $enrichmentTypeName);
-        } catch (\Throwable $ex) {
+        } catch (\Throwable $ex) { // TODO Throwable only available in PHP 7+
             $this->getLogger()->err('could not instantiate class ' . $enrichmentTypeName . ': ' . $ex->getMessage());
         }
 

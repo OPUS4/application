@@ -47,9 +47,10 @@ class Admin_Form_EnrichmentKeyTest extends ControllerTestCase
     {
         $form = new Admin_Form_EnrichmentKey();
 
-        $this->assertEquals(7, count($form->getElements()));
+        $this->assertEquals(8, count($form->getElements()));
 
         $this->assertNotNull($form->getElement(Admin_Form_EnrichmentKey::ELEMENT_NAME));
+        $this->assertNotNull($form->getElement(Admin_Form_EnrichmentKey::ELEMENT_DISPLAYNAME));
         $this->assertNotNull($form->getElement(Admin_Form_EnrichmentKey::ELEMENT_TYPE));
         $this->assertNotNull($form->getElement(Admin_Form_EnrichmentKey::ELEMENT_OPTIONS));
         $this->assertNotNull($form->getElement(Admin_Form_EnrichmentKey::ELEMENT_VALIDATION));
@@ -363,5 +364,137 @@ class Admin_Form_EnrichmentKeyTest extends ControllerTestCase
             $result[Admin_Form_EnrichmentKey::ELEMENT_OPTIONS] = $options;
         }
         return $result;
+    }
+
+    public function testPopulateDisplayName()
+    {
+        $enrichmentKey = new Opus_EnrichmentKey();
+        $enrichmentKey->setName('Country');
+
+        $form = new Admin_Form_EnrichmentKey();
+        $form->populateFromModel($enrichmentKey);
+
+        $translation = $form->getElementValue($form::ELEMENT_DISPLAYNAME);
+
+        $this->assertEquals([
+            'de' => 'Land der Veranstaltung',
+            'en' => 'Country of event'
+        ], $translation);
+    }
+
+    public function testUpdateTranslations()
+    {
+        $key = 'MyTestKey';
+
+        $enrichmentKey = new Opus_EnrichmentKey();
+        $enrichmentKey->setName($key);
+        $enrichmentKey->store();
+
+        $this->addModelToCleanup($enrichmentKey);
+
+        $database = new Opus_Translate_Dao();
+        $database->setTranslation("Enrichment$key", [
+            'en' => 'Old',
+            'de' => 'Alt'
+        ], 'default');
+
+        $form = new Admin_Form_EnrichmentKey();
+        $form->populateFromModel($enrichmentKey);
+
+        $form->getElement($form::ELEMENT_DISPLAYNAME)->setValue([
+            'de' => 'Neu',
+            'en' => 'New'
+        ]);
+
+        $form->updateModel($enrichmentKey);
+
+        $translation = $database->getTranslation("Enrichment$key");
+
+        $this->assertEquals([
+            'de' => 'Neu',
+            'en' => 'New'
+        ], $translation);
+    }
+
+    public function testChangeTranslationsKeysWithNameChange()
+    {
+        $oldKey = 'EnrichmentTestKey';
+
+        $database = new Opus_Translate_Dao();
+        $database->setTranslation($oldKey, [
+            'en' => 'English',
+            'de' => 'Deutsch'
+        ], 'default');
+
+        $enrichmentKey = new Opus_EnrichmentKey();
+        $enrichmentKey->setName('TestKey');
+        $enrichmentKey->store();
+        $this->addModelToCleanup($enrichmentKey);
+
+        $form = new Admin_Form_EnrichmentKey();
+        $form->populateFromModel($enrichmentKey);
+
+        $this->assertEquals([
+            'en' => 'English',
+            'de' => 'Deutsch'
+        ], $form->getElementValue($form::ELEMENT_DISPLAYNAME));
+
+        $form->getElement($form::ELEMENT_NAME)->setValue('NewTestKey');
+
+        $form->updateModel($enrichmentKey);
+
+        $translation = $database->getTranslation($oldKey);
+        $this->assertNull($translation);
+
+        $translation = $database->getTranslation('EnrichmentNewTestKey');
+        $this->assertEquals([
+            'en' => 'English',
+            'de' => 'Deutsch'
+        ], $translation);
+    }
+
+    public function testEmptyTranslationRemovesKey()
+    {
+        $key = 'EnrichmentTestKey';
+
+        $database = new Opus_Translate_Dao();
+        $database->setTranslation($key, [
+            'en' => 'English',
+            'de' => 'Deutsch'
+        ], 'default');
+
+        $enrichmentKey = new Opus_EnrichmentKey();
+        $enrichmentKey->setName('TestKey');
+        $enrichmentKey->store();
+        $this->addModelToCleanup($enrichmentKey);
+
+        $form = new Admin_Form_EnrichmentKey();
+        $form->populateFromModel($enrichmentKey);
+
+        $this->assertEquals([
+            'en' => 'English',
+            'de' => 'Deutsch'
+        ], $form->getElementValue($form::ELEMENT_DISPLAYNAME));
+
+        $form->getElement($form::ELEMENT_DISPLAYNAME)->setValue(null);
+
+        $form->updateModel($enrichmentKey);
+
+        $translation = $database->getTranslation($key);
+
+        $this->assertNull($translation);
+    }
+
+    public function testDoNotPopulateTranslationForNewKey()
+    {
+        $form = new Admin_Form_EnrichmentKey();
+
+        $enrichmentKey = new Opus_EnrichmentKey();
+
+        $form->populateFromModel($enrichmentKey);
+
+        $translation = $form->getElementValue($form::ELEMENT_DISPLAYNAME);
+
+        $this->assertNull($translation);
     }
 }

@@ -29,7 +29,7 @@
  * @package     Application_Controller_Action_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
  * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 class Application_Controller_Action_Helper_BreadcrumbsTest extends ControllerTestCase
@@ -145,7 +145,27 @@ class Application_Controller_Action_Helper_BreadcrumbsTest extends ControllerTes
 
         $document->addTitleMain($title);
 
-        $this->assertEquals('0123456789012345678901234567890123456789 ...', $this->helper->getDocumentTitle($document));
+        $title = $this->helper->getDocumentTitle($document);
+
+        $this->assertTrue(ctype_print($title));
+        $this->assertEquals('0123456789012345678901234567890123456789 ...', $title);
+    }
+
+    public function testGetDocumentTitleWithMultiByteChars()
+    {
+        $document = $this->createTestDocument();
+        $document->setLanguage('deu');
+
+        $title = new Opus_Title();
+        $title->setLanguage('deu');
+        $title->setValue('012345678901234567890123456789012345678ü123'); // 50 Zeichen lang
+
+        $document->addTitleMain($title);
+
+        $title = $this->helper->getDocumentTitle($document);
+
+        $this->assertTrue(mb_check_encoding($title));
+        $this->assertEquals('012345678901234567890123456789012345678ü ...', $title);
     }
 
     /**

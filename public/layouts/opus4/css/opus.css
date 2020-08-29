@@ -875,8 +875,10 @@ body > #top-header{
     padding-left: 18px;
     background: url(../img/theme/icon-filter-small-blue.gif) no-repeat 0 50%;
 }
-.facet li{
+.facet li {
     line-height: 1.5em;
+    text-indent: -0.5em;
+    margin-left: 0.5em;
 }
 #facets{
     width: 220px;

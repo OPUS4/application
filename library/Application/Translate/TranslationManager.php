@@ -294,7 +294,8 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
 
     protected function sortLanguages($translations)
     {
-        return array_merge($this->getLanguageOrderRef(), $translations);
+        $ref = array_intersect_key($this->getLanguageOrderRef(), $translations);
+        return array_merge($ref, $translations);
     }
 
     protected function getLanguageOrderRef()

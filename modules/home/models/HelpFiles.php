@@ -92,7 +92,7 @@ class Home_Model_HelpFiles extends Application_Translate_Help
 
         if ($pos !== false) {
             $path = $this->getHelpPath() . $file;
-            if (file_exists($path) && is_readable($path)) {
+            if (is_readable($path)) {
                 return file_get_contents($path);
             } else {
                 return null;
@@ -141,7 +141,7 @@ class Home_Model_HelpFiles extends Application_Translate_Help
 
             $filePath = $this->getHelpPath() . 'help.ini';
 
-            if (file_exists($filePath)) {
+            if (is_readable($filePath)) {
                 try {
                     $config = new Zend_Config_Ini($filePath);
                 } catch (Zend_Config_Exception $zce) {
@@ -173,5 +173,14 @@ class Home_Model_HelpFiles extends Application_Translate_Help
     public function setHelpPath($path)
     {
         $this->helpPath = rtrim($path, '/') . '/';
+    }
+
+    public function isContentAvailable($key)
+    {
+        $translate = Zend_Registry::get('Zend_Translate');
+
+        $translationKey = "help_content_$key";
+
+        return $translate->isTranslated($translationKey);
     }
 }

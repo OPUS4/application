@@ -46,6 +46,15 @@
 class Admin_Model_EnrichmentKeys extends Application_Model_Abstract
 {
 
+    private $translationKeyPatterns = [
+        'hint_Enrichment%s',
+        'header_Enrichment%s',
+        'group%s',
+        'hint_group%s',
+        'button_label_add_one_moreEnrichment%s',
+        'button_label_deleteEnrichment%s'
+    ];
+
     /**
      * Enrichment keys that are configured as protected.
      * @var array
@@ -98,5 +107,59 @@ class Admin_Model_EnrichmentKeys extends Application_Model_Abstract
     public function setProtectedEnrichmentKeys($keys)
     {
         $this->_protectedKeys = $keys;
+    }
+
+    /**
+     * Setup additional translation keys for an enrichment.
+     * @param $name Name of enrichment
+     * @param null $oldName Optionally old name if it has been changed
+     *
+     * TODO create keys if they don't exist
+     */
+    public function createTranslations($name, $oldName = null)
+    {
+        $patterns = $this->translationKeyPatterns;
+
+        $database = new Opus_Translate_Dao();
+        $manager = new Application_Translate_TranslationManager();
+
+        if (! is_null($oldName) && $name !== $oldName) {
+            foreach ($patterns as $pattern) {
+                $key = sprintf($pattern, $name);
+                $oldKey = sprintf($pattern, $oldName);
+                $database->renameKey($oldKey, $key, 'default');
+            }
+        } else {
+            foreach ($patterns as $pattern) {
+                $key = sprintf($pattern, $name);
+                if (! $manager->keyExists($key)) {
+                    $database->setTranslation($key, [
+                        'en' => $name,
+                        'de' => $name
+                    ], 'default');
+                }
+            }
+        }
+    }
+
+    /**
+     * Remove translation keys if enrichment is deleted.
+     * @param $name
+     */
+    public function removeTranslations($name)
+    {
+        $patterns = $this->translationKeyPatterns;
+
+        $database = new Opus_Translate_Dao();
+
+        foreach ($patterns as $pattern) {
+            $key = sprintf($pattern, $name);
+            $database->remove($key, 'default');
+        }
+    }
+
+    public function getKeyPatterns()
+    {
+        return $this->translationKeyPatterns;
     }
 }

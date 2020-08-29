@@ -68,6 +68,9 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase
 
     public function tearDown()
     {
+        $database = new Opus_Translate_Dao();
+        $database->removeAll();
+
         if (! is_null($this->nonEmptyCollectionRole) && ! is_null($this->nonEmptyCollectionRole->getId())) {
             $this->nonEmptyCollectionRole->delete();
         }
@@ -495,5 +498,58 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase
         );
 
         $this->assertNull($dao->getTranslation('default_collection_role_ModifiedName'));
+    }
+
+    public function testCollectionRoleNameChangeModifiesTranslationKey()
+    {
+        $oldName = 'TestCollectionRole';
+        $newName = 'NewNameForCollectionRole';
+
+        $role = new Opus_CollectionRole();
+        $role->setName($oldName);
+        $role->setOaiName('oaiTestRole');
+        $roleId = $role->store();
+
+        $this->addModelToCleanup($role);
+
+        $manager = new Application_Translate_TranslationManager();
+        $manager->setTranslation("default_collection_role_$oldName", [
+            'en' => 'Just for testing',
+            'de' => 'Nur zum Testen'
+        ], 'default');
+
+        $request = $this->getRequest();
+        $request->setMethod('POST');
+        $request->setPost([
+            'Id' => $roleId,
+            'Name' => $newName,
+            'DisplayName' => [
+                'en' => 'Just for testing',
+                'de' => 'Nur zum Testen'
+            ],
+            'OaiName' => 'oaiTestRole',
+            'DisplayBrowsing' => 'Name',
+            'DisplayFrontdoor' => 'Number',
+            'Visible' => '1',
+            'VisibleBrowsingStart' => '1',
+            'VisibleFrontdoor' => '0',
+            'VisibleOai' => '0',
+            'Position' => '20',
+            'HideEmptyCollections' => '1',
+            'Save' => 'Speichern'
+        ]);
+
+        $this->dispatch("/admin/collectionroles/create/roleid/$roleId/oid/$roleId");
+
+        $this->assertFalse($manager->keyExists("default_collection_role_$oldName"));
+
+        $newKey = "default_collection_role_$newName";
+        $this->assertTrue($manager->keyExists($newKey));
+
+        $translation = $manager->getTranslation($newKey);
+        $this->assertEquals([
+            'en' => 'Just for testing',
+            'de' => 'Nur zum Testen'
+        ], $translation['translations']);
     }
 }

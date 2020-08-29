@@ -168,7 +168,7 @@ class Sword_Model_PackageHandler
             . DIRECTORY_SEPARATOR . md5($payload) . '-' . time() . '-' . rand(10000, 99999);
         $suffix = 0;
         $dirName = "$baseDirName-$suffix";
-        while (file_exists($dirName)) {
+        while (is_readable($dirName)) {
             // add another suffix to make file name unique (even if collision events are not very likely)
             $suffix++;
             $dirName = "$baseDirName-$suffix";

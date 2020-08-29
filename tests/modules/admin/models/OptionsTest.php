@@ -26,7 +26,7 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -47,7 +47,7 @@ class Admin_Model_OptionsTest extends ControllerTestCase
         $options = $this->_model->getOptions();
 
         $this->assertInternalType('array', $options);
-        $this->assertCount(3, $options);
+        $this->assertCount(2, $options);
 
         foreach ($options as $name => $option) {
             $this->assertInstanceOf('Admin_Model_Option', $option);
