@@ -26,11 +26,15 @@
  *
  * @category    Application Unit Test
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 class ControllerTestCaseTest extends ControllerTestCase
 {
+
+    protected $additionalResources = ['view', 'translation'];
+
+    protected $configModifiable = true;
 
     public function tearDown()
     {
@@ -50,7 +54,9 @@ class ControllerTestCaseTest extends ControllerTestCase
         $realm = Opus_Security_Realm::getInstance();
 
         $this->assertContains(
-            'administrator', $realm->getRoles(), Zend_Debug::dump($realm->getRoles(), null, false)
+            'administrator',
+            $realm->getRoles(),
+            Zend_Debug::dump($realm->getRoles(), null, false)
         );
     }
 
@@ -137,7 +143,8 @@ class ControllerTestCaseTest extends ControllerTestCase
         $this->removeDocument($doc);
     }
 
-    public function testGetTempFile() {
+    public function testGetTempFile()
+    {
         $tempFile = $this->getTempFile();
 
         $this->assertFileExists($tempFile);
@@ -152,5 +159,274 @@ class ControllerTestCaseTest extends ControllerTestCase
 
         $this->assertFileNotExists($tempFile);
         $this->assertFileNotExists($tempFile2);
+    }
+
+    public function testDisableEnableTranslation()
+    {
+        $defaultTranslator = Zend_Registry::get('Zend_Translate');
+        $this->assertTrue($defaultTranslator->isTranslated('LastName'));
+
+        $this->disableTranslation();
+
+        $translator = Zend_Registry::get('Zend_Translate');
+        $this->assertFalse($translator->isTranslated('LastName'));
+
+        $this->enableTranslation();
+
+        $translator = Zend_Registry::get('Zend_Translate');
+        $this->assertTrue($translator->isTranslated('LastName'));
+
+        $this->assertSame($defaultTranslator, $translator);
+    }
+
+    public function testGetWorkspacePath()
+    {
+        $workspacePath = $this->getWorkspacePath();
+
+        $this->assertTrue(is_dir($workspacePath));
+        $this->assertTrue(is_writeable($workspacePath));
+    }
+
+    /**
+     * @expectedException Exception
+     * @expectedExceptionMessage config key 'workspacePath' not defined in config file
+     */
+    public function testGetWorkspacePathNotDefined()
+    {
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'workspacePath' => null
+        ]));
+
+        $this->getWorkspacePath();
+    }
+
+    public function testSetWorkspacePath()
+    {
+        $path = $this->getWorkspacePath();
+        $newPath = $path . DIRECTORY_SEPARATOR . 'tmp';
+
+        $this->setWorkspacePath($newPath);
+        $this->assertEquals($newPath, $this->getWorkspacePath());
+
+        $this->setWorkspacePath(null);
+        $this->assertEquals($path, $this->getWorkspacePath());
+    }
+
+    public function testCreateTestFolder()
+    {
+        $path = $this->createTestFolder();
+
+        $this->assertTrue(is_dir($path));
+        $this->assertTrue(is_writeable($path));
+    }
+
+    public function testCleanupTestFolders()
+    {
+        $path = $this->createTestFolder();
+
+        $this->assertTrue(is_dir($path));
+        $this->assertTrue(is_writeable($path));
+
+        $this->cleanupTestFolders();
+
+        $this->assertFalse(file_exists($path));
+    }
+
+    public function testCleanupTestFoldersWithFiles()
+    {
+        $path = $this->createTestFolder();
+
+        $this->assertTrue(is_dir($path));
+        $this->assertTrue(is_writeable($path));
+
+        $file1 = $this->createTestFile('test1.txt', null, $path);
+        $file2 = $this->createTestFile('test2.txt', null, $path);
+
+        $this->assertFileExists($file1);
+        $this->assertFileExists($file2);
+
+        $this->cleanupTestFolders();
+
+        $this->assertFileNotExists($file1);
+        $this->assertFileNotExists($file2);
+        $this->assertFileNotExists($path);
+    }
+
+    public function testCleanupTestFoldersWithSubfolders()
+    {
+        $path = $this->createTestFolder();
+
+        $subfolder = $path . DIRECTORY_SEPARATOR . 'sub1';
+        mkdir($subfolder);
+
+        $file1 = $this->createTestFile('test1.txt', null, $subfolder);
+
+        $this->assertFileExists($file1);
+
+        $this->cleanupTestFolders();
+
+        $this->assertFileNotExists($file1);
+        $this->assertFileNotExists($path);
+    }
+
+    public function testDeleteFolder()
+    {
+        $folder = $this->createTestFolder();
+
+        $subfolder = $folder . DIRECTORY_SEPARATOR . 'sub1';
+        mkdir($subfolder);
+
+        $file1 = $this->createTestFile('test1.txt', null, $folder);
+        $file2 = $this->createTestFile('test2.txt', null, $subfolder);
+
+        $this->assertFileExists($file1);
+        $this->assertFileExists($file2);
+
+        $this->deleteFolder($folder);
+
+        $this->assertFileNotExists($folder);
+    }
+
+    public function testDeleteFolderOutsideWorkspace()
+    {
+        $path = APPLICATION_PATH . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . uniqid();
+
+        mkdir($path);
+
+        $this->assertFileExists($path);
+        $this->deleteFolder($path);
+        $this->assertFileExists($path); // not deleted because outside workspace
+
+        $this->deleteFolder($path, true);
+        $this->assertFileNotExists($path);
+    }
+
+    public function testDeleteFolderDoNotFollowSymLinks()
+    {
+        $temp = sys_get_temp_dir();
+        $path = $temp . DIRECTORY_SEPARATOR . uniqid('opustest');
+        mkdir($path);
+
+        $file1 = $this->createTestFile('test1.txt', null, $path);
+
+        $folder = $this->createTestFolder();
+        $file2 = $this->createTestFile('test2.txt', null, $folder);
+
+        $link = $folder . DIRECTORY_SEPARATOR . 'link.txt';
+        symlink($file1, $link);
+
+        $this->deleteFolder($folder);
+
+        $this->assertFileNotExists($folder);
+        $this->assertFileExists($file1);
+
+        $this->deleteFolder($path, true);
+        $this->assertFileNotExists($path);
+    }
+
+    public function testCreateTestFile()
+    {
+        $path = $this->createTestFile('test1.txt');
+
+        $this->assertFileExists($path);
+    }
+
+    public function testCreateTestFileCleanup()
+    {
+        $path = $this->createTestFile('test1.txt');
+
+        $this->assertFileExists($path);
+
+        $this->deleteTestFiles();
+
+        $this->assertFileNotExists($path);
+    }
+
+    public function testCreateTestFileWithContent()
+    {
+        $content = 'Test file content';
+
+        $file = $this->createTestFile('opus1.txt', $content);
+
+        $this->assertFileExists($file);
+
+        $actual = file_get_contents($file);
+
+        $this->assertEquals($content, $actual);
+    }
+
+    public function testCreateTestFileWithPath()
+    {
+        $path = $this->createTestFolder();
+
+        $file = $this->createTestFile('opus1.txt', null, $path);
+
+        $this->assertFileExists($file);
+        $this->assertTrue(strpos($file, $path) === 0, 'File was not created with path.');
+    }
+
+    public function testDeleteTestFiles()
+    {
+        $file = $this->createTestFile('test1.txt');
+
+        $this->assertFileExists($file);
+        $this->deleteTestFiles();
+        $this->assertFileNotExists($file);
+    }
+
+    public function testDeleteTestFilesForOpusFile()
+    {
+        $file = $this->createOpusTestFile('opus1.txt');
+
+        $path = $file->getTempFile();
+
+        $this->assertFileExists($path);
+        $this->deleteTestFiles();
+        $this->assertFileNotExists($path);
+    }
+
+    public function testDeleteTestFilesAlreadyDeleted()
+    {
+        $file = $this->createTestFile('opus1.txt');
+
+        $this->assertFileExists($file);
+        unlink($file);
+        $this->assertFileNotExists($file);
+
+        $this->deleteTestFiles(); // no exceptions
+    }
+
+    public function testCreateOpusTestFileTempFolderCleanup()
+    {
+        $file = $this->createOpusTestFile('opus1.txt');
+
+        $path = $file->getTempFile();
+
+        $this->assertFileExists($path);
+        $this->deleteTestFiles();
+        $this->assertFileNotExists($path);
+
+        $dir = dirname($path);
+
+        $this->assertFileExists($dir);
+        $this->cleanupTestFolders();
+        $this->assertFileNotExists($dir);
+    }
+
+    public function testCopyFiles()
+    {
+        $folder = $this->createTestFolder();
+
+        $helpFiles = new Home_Model_HelpFiles();
+        $helpPath = $helpFiles->getHelpPath();
+
+        $this->copyFiles($helpPath, $folder);
+
+        $files = scandir($folder);
+
+        $this->assertCount(21, $files);
+        $this->assertContains('help.ini', $files);
+        $this->assertContains('imprint.de.txt', $files);
+        $this->assertContains('metadata.en.txt', $files);
     }
 }

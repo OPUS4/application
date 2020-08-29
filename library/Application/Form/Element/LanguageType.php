@@ -32,16 +32,17 @@
  * @version     $Id$
  */
 
-class Application_Form_Element_LanguageType extends Application_Form_Element_SelectWithNull {
+class Application_Form_Element_LanguageType extends Application_Form_Element_SelectWithNull
+{
 
-    public function init() {
+    public function init()
+    {
         parent::init();
 
-        $values = array('Null', 'A', 'C', 'E', 'H', 'L', 'S');
+        $values = ['Null', 'A', 'C', 'E', 'H', 'L', 'S'];
 
         foreach ($values as $value) {
             $this->addMultiOption($value, 'Opus_Language_Type_Value_' . $value);
         }
     }
-
 }

@@ -255,23 +255,6 @@ then
 
     cd "$BASEDIR/tests"
     cp config.ini.template config.ini
-    if [ localhost != "$MYSQLHOST" ]; then
-      sed -i -e "s!^; db.params.host = localhost!db.params.host = '$MYSQLHOST_ESC'!" config.ini
-    fi
-    if [ 3306 != "$MYSQLPORT" ]; then
-      sed -i -e "s!^; db.params.port = 3306!db.params.port = '$MYSQLPORT_ESC'!" config.ini
-    fi
-    sed -i -e "s!@db.user.name@!'$DB_USER_ESC'!" \
-           -e "s!@db.user.password@!'$DB_USER_PASSWORD_ESC'!" \
-           -e "s!@db.name@!'$DBNAME_ESC'!" \
-           -e "s!@db.admin.name@!'$DB_ADMIN_ESC'!" \
-           -e "s!@db.admin.password@!'$DB_ADMIN_PASSWORD_ESC'!" \
-           -e "s!@searchengine.index.host@!'$SOLR_SERVER_HOST'!" \
-           -e "s!@searchengine.index.port@!'$SOLR_SERVER_PORT'!" \
-           -e "s!@searchengine.index.app@!'$SOLR_CONTEXT'!" \
-           -e "s!@searchengine.extract.host@!'$SOLR_EXTRACT_SERVER_HOST'!" \
-           -e "s!@searchengine.extract.port@!'$SOLR_EXTRACT_SERVER_PORT'!" \
-           -e "s!@searchengine.extract.app@!'$SOLR_EXTRACT_CONTEXT'!" config.ini
 
     echo "done"
 

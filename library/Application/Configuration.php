@@ -28,15 +28,17 @@
  * @package     Application
  * @author      Jens Schwidder <schwidder@zib.de>
  * @author      Michael Lang   <lang@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
  * Klasse für das Laden von Übersetzungsressourcen.
  */
-class Application_Configuration {
+class Application_Configuration
+{
+
+    use \Opus\LoggingTrait;
 
     /**
      * Defaultsprache.
@@ -44,16 +46,12 @@ class Application_Configuration {
     const DEFAULT_LANGUAGE = 'en';
 
     /**
-     * Logger.
-     * @var Zend_Log
-     */
-    private $_logger = null;
-
-    /**
      * Unterstützte Sprachen.
      * @var array
      */
-    private $_supportedLanguages = null;
+    private $supportedLanguages = null;
+
+    private $activatedLanguages = null;
 
     /**
      * Is language selection active in user interface.
@@ -80,7 +78,8 @@ class Application_Configuration {
      * Returns instance of class.
      * @return Application_Configuration
      */
-    public static function getInstance() {
+    public static function getInstance()
+    {
         if (is_null(self::$_instance)) {
             self::$_instance = new Application_Configuration();
         }
@@ -89,29 +88,11 @@ class Application_Configuration {
     }
 
     /**
-     * Liefert den Logger für diese Klasse.
-     * @return Zend_Log
-     */
-    public function getLogger() {
-        if (is_null($this->_logger)) {
-            $this->_logger = Zend_Registry::get('Zend_Log');
-        }
-
-        return $this->_logger;
-    }
-
-    /**
-     * Setzt den Logger für diese Klasse.
-     */
-    public function setLogger($logger) {
-        $this->_logger = $logger;
-    }
-
-    /**
      * Liefert die Konfiguration für Applikation.
      * @return Zend_Config
      */
-    public function getConfig() {
+    public function getConfig()
+    {
         return Zend_Registry::get('Zend_Config');
     }
 
@@ -119,13 +100,13 @@ class Application_Configuration {
      * Returns name of repository.
      * @return string
      */
-    public function getName() {
+    public function getName()
+    {
         $config = $this->getConfig();
 
         if (isset($config->name)) {
             $name = $config->name;
-        }
-        else {
+        } else {
             $name = 'OPUS 4';
         }
 
@@ -138,19 +119,34 @@ class Application_Configuration {
      */
     public function getSupportedLanguages()
     {
-        if (is_null($this->_supportedLanguages)) {
+        if (is_null($this->supportedLanguages)) {
             $config = $this->getConfig();
             if (isset($config->supportedLanguages)) {
-                $this->_supportedLanguages = explode(",", $config->supportedLanguages);
+                $this->supportedLanguages = explode(',', $config->supportedLanguages);
+                /* TODO only used for debugging - remove?
                 $this->getLogger()->debug(
                     Zend_Debug::dump(
                         $this->_supportedLanguages, 'Supported languages ('
                         . count($this->_supportedLanguages) . ')', false
                     )
-                );
+                );*/
             }
         }
-        return $this->_supportedLanguages;
+        return $this->supportedLanguages;
+    }
+
+    public function getActivatedLanguages()
+    {
+        if (is_null($this->activatedLanguages)) {
+            $config = $this->getConfig();
+            if (isset($config->activatedLanguages)) {
+                $this->activatedLanguages = explode(',', $config->activatedLanguages);
+            } else {
+                return $this->getSupportedLanguages();
+            }
+        }
+
+        return $this->activatedLanguages;
     }
 
     /**
@@ -158,7 +154,8 @@ class Application_Configuration {
      * @param string $language Sprachcode (z.B. 'en')
      * @return bool
      */
-    public function isLanguageSupported($language) {
+    public function isLanguageSupported($language)
+    {
         $languages = $this->getSupportedLanguages();
         return in_array($language, $languages);
     }
@@ -167,7 +164,8 @@ class Application_Configuration {
      * Liefert Defaultsprache für Userinterface.
      * @return string
      */
-    public function getDefaultLanguage() {
+    public function getDefaultLanguage()
+    {
         if (is_null($this->defaultLanguage)) {
             $languages = $this->getSupportedLanguages();
             $this->defaultLanguage = $languages[0];
@@ -195,7 +193,8 @@ class Application_Configuration {
      * Prüft, ob mehr als eine Sprache unterstützt wird.
      * @return bool
      */
-    public function isLanguageSelectionEnabled() {
+    public function isLanguageSelectionEnabled()
+    {
         if (is_null($this->_languageSelectionEnabled)) {
             $this->_languageSelectionEnabled = count($this->getSupportedLanguages()) > 1;
         }
@@ -207,10 +206,11 @@ class Application_Configuration {
      *
      * @throws Application_Exception
      */
-    public function getWorkspacePath() {
+    public function getWorkspacePath()
+    {
         $config = $this->getConfig();
 
-        if (!isset($config->workspacePath)) {
+        if (! isset($config->workspacePath)) {
             $this->getLogger()->err('missing config key workspacePath');
             throw new Application_Exception('missing configuration key workspacePath');
         }
@@ -219,8 +219,7 @@ class Application_Configuration {
 
         if (substr($workspacePath, -1) === DIRECTORY_SEPARATOR) {
             return $workspacePath;
-        }
-        else {
+        } else {
             return $config->workspacePath . DIRECTORY_SEPARATOR;
         }
     }
@@ -232,8 +231,7 @@ class Application_Configuration {
      */
     public function getTempPath()
     {
-        if (is_null($this->_tempPath))
-        {
+        if (is_null($this->_tempPath)) {
             $this->_tempPath = trim($this->getWorkspacePath() . 'tmp' . DIRECTORY_SEPARATOR);
         }
 
@@ -254,14 +252,16 @@ class Application_Configuration {
      * @return string Folder for storing document files
      * @throws Application_Exception
      */
-    public function getFilesPath() {
+    public function getFilesPath()
+    {
         return $this->getWorkspacePath() . 'files' . DIRECTORY_SEPARATOR;
     }
 
     /**
      * Liest Inhalt von VERSION.txt um die installierte Opusversion zu ermitteln.
      */
-    public static function getOpusVersion() {
+    public static function getOpusVersion()
+    {
         $config = Zend_Registry::get('Zend_Config');
         $localVersion = $config->version;
         return (is_null($localVersion)) ? 'unknown' : $localVersion;
@@ -270,8 +270,9 @@ class Application_Configuration {
     /**
      * Liefert Informationen als Key -> Value Paare in einem Array.
      */
-    public static function getOpusInfo() {
-        $info = array();
+    public static function getOpusInfo()
+    {
+        $info = [];
         $info['admin_info_version'] = self::getOpusVersion();
         return $info;
     }
@@ -281,12 +282,14 @@ class Application_Configuration {
      * @param Zend_Config $config
      * @throws Zend_Config_Exception
      */
-    public static function save(Zend_Config $config) {
+    public static function save(Zend_Config $config)
+    {
         $writer = new Zend_Config_Writer_Xml();
         $writer->write(APPLICATION_PATH . '/application/configs/config.xml', $config);
     }
 
-    public static function load() {
+    public static function load()
+    {
     }
 
     /**
@@ -295,12 +298,13 @@ class Application_Configuration {
      * @param $option
      * @return mixed|Zend_Config
      */
-    public static function getValueFromConfig(Zend_Config $config, $option) {
+    public static function getValueFromConfig(Zend_Config $config, $option)
+    {
         $keys = explode('.', $option);
         $subconfig = $config;
         foreach ($keys as $key) {
             $subconfig = $subconfig->get($key);
-            if (!($subconfig instanceof Zend_Config)) {
+            if (! ($subconfig instanceof Zend_Config)) {
                 break;
             }
         }
@@ -323,8 +327,11 @@ class Application_Configuration {
      * @param $option string Name of option
      * @param $value string New value for option
      * @throws Zend_Exception
+     *
+     * TODO review and if possible replace this code with something simpler
      */
-    public static function setValueInConfig(Zend_Config $config, $option, $value) {
+    public static function setValueInConfig(Zend_Config $config, $option, $value)
+    {
         if ($config->readOnly()) {
             Zend_Registry::get('Zend_Log')->err('Zend_Config object is readonly.');
             return;
@@ -342,8 +349,7 @@ class Application_Configuration {
                 // create subsection
                 eval('$subconfig->' . $key . ' = array();');
                 $subconfig = $subconfig->get($key);
-            }
-            else {
+            } else {
                 // set value
                 eval('$subconfig->' . $key . ' = $value;');
             }
@@ -369,5 +375,4 @@ class Application_Configuration {
     {
         return Zend_Registry::get('Zend_Translate');
     }
-
 }

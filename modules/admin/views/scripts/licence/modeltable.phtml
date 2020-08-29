@@ -36,16 +36,16 @@
     <thead>
         <tr>
             <th class="visible"><?= $this->translate($this->element->getColumnLabel(0)) ?>
-                <a class="add" href="<?= $this->url(array('action' => 'new')) ?>"><?=
+                <a class="add" href="<?= $this->url(['action' => 'new']) ?>"><?=
                     $this->translate('admin_button_add') ?></a></th>
             <th>Name</th>
             <th>Docs</th>
             <th colspan="2">&nbsp;</th>
         </tr>
     </thead>
-    <?PHP foreach($this->element->getModels() as $model) : ?>
+    <?PHP foreach ($this->element->getModels() as $model) : ?>
         <tr>
-            <td><a href="<?= $this->url(array('action' => 'show', 'id' => $model->getId())) ?>"
+            <td><a href="<?= $this->url(['action' => 'show', 'id' => $model->getId()]) ?>"
                 class="displayname<?= (is_null($model->getField('Visible')) || $model->getVisible()) ? '' : ' invisible'?>"
                     ><?= htmlspecialchars($model->getDisplayName()) ?></a></td>
             <td><?= $model->getName()?></td>
@@ -54,12 +54,12 @@
             ?>
             <td><?= $documentCount === 0 ? '' : $documentCount ?></td>
             <td class="edit">
-                <a href="<?= $this->url(array('action' => 'edit', 'id' => $model->getId())) ?>"
+                <a href="<?= $this->url(['action' => 'edit', 'id' => $model->getId()]) ?>"
                     ><?= $this->translate('admin_button_edit'); ?></a>
             </td>
             <td class="remove">
-                <?PHP if (!$model->isUsed()) : ?>
-                <a href="<?= $this->url(array('action' => 'delete', 'id' => $model->getId())) ?>"
+                <?PHP if (! $model->isUsed()) : ?>
+                <a href="<?= $this->url(['action' => 'delete', 'id' => $model->getId()]) ?>"
                     ><?= $this->translate('admin_button_remove'); ?></a>
                 <?PHP endif ?>
             </td>

@@ -33,95 +33,110 @@
  */
 
 /**
- * Unterformular fuer das Editieren von Titeln. 
- * 
+ * Unterformular fuer das Editieren von Titeln.
+ *
  * Für das Metadaten-Formular wurde vereinbart, daß der Typ eines Titels nicht mehr verändert werden kann.
  *
  * @category    Application
  * @package     Module_Admin
  * @subpackage  Form_Document
  */
-class Admin_Form_Document_Title extends Admin_Form_AbstractModelSubForm {
-    
+class Admin_Form_Document_Title extends Admin_Form_AbstractModelSubForm
+{
+
     /**
      * Name von Formularelement fuer ID von Opus_Title Objekt.
      */
     const ELEMENT_ID = 'Id';
-    
+
     /**
      * Name von Formularelement fuer Titeltyp.
      */
     const ELEMENT_TYPE = 'Type';
-    
+
     /**
      * Name von Formularelement fuer Titelsprache.
      */
     const ELEMENT_LANGUAGE = 'Language';
-    
+
     /**
      * Name von Formularelement fuer Titeltext.
      */
     const ELEMENT_VALUE = 'Value';
-   
+
     /**
      * Erzeugt die Formularelemente.
      */
-    public function init() {
+    public function init()
+    {
         parent::init();
-        
+
         $this->addElement('Hidden', self::ELEMENT_ID);
         $this->addElement('Hidden', self::ELEMENT_TYPE); // Der Typ eines Titels ist nicht editierbar
-        $this->addElement('Language', self::ELEMENT_LANGUAGE, array('required' => true));
-        $this->addElement('textarea', self::ELEMENT_VALUE, array('required' => true, 'rows' => '4'));        
-        $this->getElement(self::ELEMENT_VALUE)->setErrorMessages(array('isEmpty' => 'admin_validate_error_notempty'));
+        $this->addElement('Language', self::ELEMENT_LANGUAGE, ['required' => true]);
+        $this->addElement('textarea', self::ELEMENT_VALUE, [
+            'required' => true,
+            'rows' => '4',
+            'decorators' => [
+                'ViewHelper',
+                'Errors',
+                'Description',
+                'ElementHtmlTag',
+                [['dataWrapper' => 'HtmlTagWithId'], ['tag' => 'div', 'class' => 'data-wrapper']]
+            ]
+        ]);
+        $this->getElement(self::ELEMENT_VALUE)->setErrorMessages(['isEmpty' => 'admin_validate_error_notempty']);
     }
-    
+
     /**
      * Lädt die Decoratoren für das Formular.
-     * 
+     *
      * Der Fieldset Dekorator wird wieder entfernt, so fern vorhanden.
      */
-    public function loadDefaultDecorators() {
+    public function loadDefaultDecorators()
+    {
         parent::loadDefaultDecorators();
-        
+
         $this->removeDecorator('Fieldset');
     }
-    
+
     /**
      * Initialisiert das Formular mit den Werten im Modell.
-     * 
+     *
      * @param \Opus_Title $title
      */
-    public function populateFromModel($title) {
+    public function populateFromModel($title)
+    {
         $this->getElement(self::ELEMENT_ID)->setValue($title->getId());
         $this->getElement(self::ELEMENT_TYPE)->setValue($title->getType());
         $this->getElement(self::ELEMENT_LANGUAGE)->setValue($title->getLanguage());
         $this->getElement(self::ELEMENT_VALUE)->setValue($title->getValue());
     }
-    
+
     /**
      * Aktualisiert Modell mit den Werten im Formular.
-     * 
+     *
      * @param \Opus_Title $title
      */
-    public function updateModel($title) {
+    public function updateModel($title)
+    {
         $title->setLanguage($this->getElementValue(self::ELEMENT_LANGUAGE));
         $title->setType($this->getElementValue(self::ELEMENT_TYPE));
         $title->setValue($this->getElementValue(self::ELEMENT_VALUE));
     }
-    
+
     /**
      * Liefert das angezeigte Objekt bzw. eine neue Instanz für Titel die im Formular hinzugefügt wurden.
      * @return \Opus_Title
      */
-    public function getModel() {
+    public function getModel()
+    {
         $titleId = $this->getElementValue(self::ELEMENT_ID);
-        
+
         $title = new Opus_Title($titleId);
-        
+
         $this->updateModel($title);
-        
+
         return $title;
     }
-
 }

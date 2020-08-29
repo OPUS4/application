@@ -376,6 +376,15 @@
             </tuv>
         </tu>
 
+        <tu tuid="Opus_Identifier_Value">
+            <tuv xml:lang="en">
+                <seg>Text</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Text</seg>
+            </tuv>
+        </tu>
+
         <tu tuid="Opus_Subject_Type">
             <tuv xml:lang="en">
                 <seg>Subject/Classification Type</seg>
@@ -558,7 +567,7 @@
 
         <tu tuid="PageNumber">
             <tuv xml:lang="en">
-                <seg>Pagenumber</seg>
+                <seg>Page Number</seg>
             </tuv>
             <tuv xml:lang="de">
                 <seg>Seitenzahl</seg>
@@ -571,6 +580,15 @@
             </tuv>
             <tuv xml:lang="de">
                 <seg>Anzahl der Seiten</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="ArticleNumber">
+            <tuv xml:lang="en">
+                <seg>Article Number</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Aufsatznummer</seg>
             </tuv>
         </tu>
 
@@ -683,7 +701,7 @@
         </tu>
 
         <!-- Wird von ActionBox verwendet -->
-        <tu tuid="ServerState-short">
+        <tu tuid="ServerState_short">
             <tuv xml:lang="en">
                 <seg>State</seg>
             </tuv>
@@ -720,7 +738,7 @@
         </tu>
 
         <!-- Wird von ActionBox verwendet -->
-        <tu tuid="ServerDateModified-short">
+        <tu tuid="ServerDateModified_short">
             <tuv xml:lang="en">
                 <seg>Last Modified</seg>
             </tuv>
@@ -739,7 +757,7 @@
         </tu>
 
         <!-- Wird von ActionBox verwendet -->
-        <tu tuid="ServerDatePublished-short">
+        <tu tuid="ServerDatePublished_short">
             <tuv xml:lang="en">
                 <seg>Release Date</seg>
             </tuv>

@@ -52,7 +52,7 @@ class Admin_Form_Document_MultiEnrichmentSubForm extends Admin_Form_Document_Mul
     public function getFieldValues($document)
     {
         $value = parent::getFieldValues($document);
-        if (!is_null($value)) {
+        if (! is_null($value)) {
             $value = $this->filterEnrichments($value);
         }
         return $value;
@@ -71,7 +71,7 @@ class Admin_Form_Document_MultiEnrichmentSubForm extends Admin_Form_Document_Mul
      */
     private function filterEnrichments($enrichments)
     {
-        $result = array();
+        $result = [];
         foreach ($enrichments as $enrichment) {
             $keyName = $enrichment->getKeyName();
             if ($keyName == 'opus.doi.autoCreate' || $keyName == 'opus.urn.autoCreate') {
@@ -110,7 +110,7 @@ class Admin_Form_Document_MultiEnrichmentSubForm extends Admin_Form_Document_Mul
             // zugeordnet wurde)
             if (array_key_exists(self::ELEMENT_ADD, $data)) {
                 $subForms = $this->getSubForms();
-                if (!empty($subForms)) {
+                if (! empty($subForms)) {
                     // das gerade neu hinzugefügte Subformular (noch ohne Feld für
                     // die Eingabe des Enrichmentwerts) auswählen und behandeln
                     $newSubForm = end($subForms);
@@ -135,11 +135,11 @@ class Admin_Form_Document_MultiEnrichmentSubForm extends Admin_Form_Document_Mul
     protected function processPostSelectionChanged()
     {
         $subForms = $this->getSubForms();
-        if (!empty($subForms)) {
+        if (! empty($subForms)) {
             $subForm = reset($subForms);
             // das erste Unterformular auswählen als Sprungziel nach dem Neuladen
             // des Metadatenformulars
-            $this->_addAnker($subForm);
+            $this->_addAnchor($subForm);
         }
     }
 
@@ -163,7 +163,7 @@ class Admin_Form_Document_MultiEnrichmentSubForm extends Admin_Form_Document_Mul
     }
 
     /**
-     * Initialisiert die Eingabeformularelement für die Enrichment-Werte aus dem
+     * Initialisiert die Eingabeformularelemente für die Enrichment-Werte aus dem
      * POST-Request. Hierbei muss zusätzlich aus dem ausgewählten Enrichment-Key
      * der zugehörige Enrichment-Type abgeleitet werden. Daher musste die Methode
      * überschrieben werden.
@@ -182,10 +182,20 @@ class Admin_Form_Document_MultiEnrichmentSubForm extends Admin_Form_Document_Mul
                 if (array_key_exists($subFormName, $post)) {
                     $enrichmentKeyName = $post[$subFormName][Admin_Form_Document_Enrichment::ELEMENT_KEY_NAME];
                 }
-                $subForm->initEnrichmentValueElement($enrichmentKeyName);
+
+                // es ist zu prüfen, ob das Enrichment einen Wert verwendet, der in der
+                // Typkonfiguration nicht angegeben ist
+                $enrichmentId = null;
+                if (array_key_exists(Admin_Form_Document_Enrichment::ELEMENT_ID, $post[$subFormName])) {
+                    $enrichmentId = $post[$subFormName][Admin_Form_Document_Enrichment::ELEMENT_ID];
+                    if ($enrichmentId == '') {
+                        $enrichmentId = null;
+                    }
+                }
+
+                $subForm->initEnrichmentValueElement($enrichmentKeyName, $enrichmentId);
             }
             $this->prepareSubFormDecorators($subForm);
         }
     }
-
 }

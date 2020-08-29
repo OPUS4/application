@@ -32,6 +32,6 @@
  * @version     $Id$
  */
 
-class Oai_Bootstrap extends Zend_Application_Module_Bootstrap {
+class Oai_Bootstrap extends Zend_Application_Module_Bootstrap
+{
 }
-

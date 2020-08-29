@@ -119,7 +119,7 @@ class Solrsearch_IndexController extends Application_Controller_Action
         if ($params['searchtype'] != 'latest') {
             unset($params['rows']);
         } else {
-            if (!array_key_exists('rows', $params)) {
+            if (! array_key_exists('rows', $params)) {
                 $params['rows'] = 10;
             }
         }
@@ -144,7 +144,7 @@ class Solrsearch_IndexController extends Application_Controller_Action
         $searchType = $this->getParam('searchtype');
         $request = $this->getRequest();
 
-        if (in_array($searchType, ['advanced', 'authorsearch']) && !is_null($this->getParam('Reset'))) {
+        if (in_array($searchType, ['advanced', 'authorsearch']) && ! is_null($this->getParam('Reset'))) {
             // redirect to new advanced search form
             // TODO find better way
             $this->_helper->Redirector->redirectTo('advanced', null, 'index', 'solrsearch');
@@ -162,7 +162,7 @@ class Solrsearch_IndexController extends Application_Controller_Action
             return;
         }
 
-        if (!is_null($request->getParam('export'))) {
+        if (! is_null($request->getParam('export'))) {
             $params = $request->getParams();
             // export module ignores pagination parameters
             $this->redirectToExport($params);
@@ -170,6 +170,7 @@ class Solrsearch_IndexController extends Application_Controller_Action
         }
 
         // TODO does the following make sense after the above?
+        // TODO move code somewhere else (encapsulate)
         $config = $this->getConfig();
         if (isset($config->export->stylesheet->search) && Opus_Security_Realm::getInstance()->checkModule('export')) {
             $this->view->stylesheet = $config->export->stylesheet->search;
@@ -183,28 +184,37 @@ class Solrsearch_IndexController extends Application_Controller_Action
         $query = $searchPlugin->buildQuery($request);
 
         // if query is null, redirect has already been set
-        if (!is_null($query)) {
+        if (! is_null($query)) {
+            /*
+             * TODO refactor to make facets independent of each other (no openFacets with list of facets,
+             *      just a list of facets that know if they are open or not)
+             * TODO what are open/close facets? document!
+             * TODO replace FacetMenu with FacetManager? NO - facetMenu is request dependent (FacetManager is not)
+             */
             $facetMenu = new Solrsearch_Model_FacetMenu();
 
-            $openFacets = $facetMenu->buildFacetArray( $this->getRequest()->getParams() );
+            $openFacets = $facetMenu->buildFacetArray($request->getParams());
 
             $resultList = $searchPlugin->performSearch($query, $openFacets);
+
             $this->view->openFacets = $openFacets;
 
+            // TODO What happens here?
             $searchPlugin->setViewValues($request, $query, $resultList, $searchType);
 
-            $facetMenu->prepareViewFacets($resultList, $this->getRequest());
-            $this->view->facets = $facetMenu->getFacets();
-            $this->view->selectedFacets = $facetMenu->getSelectedFacets();
-            $this->view->facetNumberContainer = $facetMenu->getFacetNumberContainer();
-            $this->view->showFacetExtender = $facetMenu->getShowFacetExtender();
 
+            $this->view->facets = $facetMenu->getFacets($resultList, $request);
+
+            // TODO What happens here?
             $this->setLinkRelCanonical();
 
             $this->view->form = $searchPlugin->createForm($request);
 
             $numOfHits = $resultList->getNumberOfHits();
 
+            $this->view->resultScript = $this->_helper->resultScript();
+
+            // TODO not sure I like having a separate nohits page (leads to redundant code)
             if ($numOfHits === 0 || $query->getStart() >= $numOfHits) {
                 $this->render('nohits');
             } else {

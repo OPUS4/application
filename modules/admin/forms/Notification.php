@@ -84,30 +84,28 @@ class Admin_Form_Notification extends Admin_Form_AbstractDocumentSubForm
 
         $submitter = null;
 
-        if (!is_null($submitters) && count($submitters) > 0) {
+        $options = [];
+
+        if (! is_null($submitters) && count($submitters) > 0) {
             $submitter = $submitters[0]->getModel();
             $option = $this->personToArray($submitters[0]);
             $option['value'] = 'submitter';
             $option['type'] = $translator->translate('admin_workflow_notification_submitter');
             $option['checked'] = 1;
             $options['submitter'] = $option;
-
         }
 
         $authors = $document->getPersonAuthor();
 
-        if (!is_null($authors)) {
+        if (! is_null($authors)) {
             foreach ($authors as $index => $author) {
                 $person = $author->getModel();
-                if (!is_null($submitter)
+                if (! is_null($submitter)
                     && $submitter->matches($person)
-                    && $submitter->getEmail() == $person->getEmail())
-                {
+                    && $submitter->getEmail() == $person->getEmail()) {
                     $msg = $translator->translate('admin_workflow_notification_submitter_and_author');
                     $options['submitter']['type'] = sprintf($msg, $index + 1);
-                }
-                else
-                {
+                } else {
                     $option = $this->personToArray($author);
                     $option['value'] = 'author_' . $index;
                     $pos = $index + 1;

@@ -28,11 +28,11 @@
  * @category    Application
  * @package     Module_Publish
  * @author      Susanne Gottwald <gottwald@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class Publish_View_Helper_FileOverview extends Zend_View_Helper_Abstract {
+class Publish_View_Helper_FileOverview extends Zend_View_Helper_Abstract
+{
 
     public $view;
     public $session;
@@ -45,9 +45,11 @@ class Publish_View_Helper_FileOverview extends Zend_View_Helper_Abstract {
      * @param <type> $name name of possible hidden element
      * @return element to render in view
      */
-    public function fileOverview() {
+    public function fileOverview()
+    {
         $config = Zend_Registry::get('Zend_Config');
-        if (!isset($config->form->first->enable_upload) || $config->form->first->enable_upload != 1) {
+        if (! isset($config->form->first->enable_upload) ||
+            (! filter_var($config->form->first->enable_upload, FILTER_VALIDATE_BOOLEAN))) {
             return;
         }
 
@@ -67,7 +69,7 @@ class Publish_View_Helper_FileOverview extends Zend_View_Helper_Abstract {
         if (empty($files)) {
             return $fieldsetStart . "<b>" . $this->view->translate('no_uploaded_files') . "</b>" . $fieldsetEnd;
         }
-        
+
         $overview = "";
 
         if ($this->view->uploadSuccess === false) {
@@ -82,11 +84,8 @@ class Publish_View_Helper_FileOverview extends Zend_View_Helper_Abstract {
                 . ' ' . $this->view->translate('bytes')
                 . '<br />' . $this->view->translate('uploadComment') . ': ' . htmlspecialchars($file->getComment())
                 . '</p>';
-
         }
 
         return $fieldsetStart . $overview . $fieldsetEnd;
     }
-
 }
-

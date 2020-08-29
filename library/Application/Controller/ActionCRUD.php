@@ -175,7 +175,7 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action
     {
         $form = new Application_Form_Model_Table();
         $form->setModels($this->getAllModels());
-        $form->setColumns(array(array('label' => $this->getModelClass())));
+        $form->setColumns([['label' => $this->getModelClass()]]);
         $form->setController($this);
         return $form;
     }
@@ -192,7 +192,7 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action
         if ($this->getShowActionEnabled()) {
             $model = $this->getModel($this->getRequest()->getParam(self::PARAM_MODEL_ID));
 
-            if (!is_null($model)) {
+            if (! is_null($model)) {
                 $form = $this->getEditModelForm($model);
                 $form->prepareRenderingAsView();
                 $result = $form;
@@ -200,7 +200,7 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action
                 $result = $this->createInvalidIdResult();
             }
         } else {
-            $result = array();
+            $result = [];
         }
 
         $this->renderResult($result);
@@ -219,7 +219,7 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action
         } else {
             // Neues Formular anlegen
             $form = $this->getNewModelForm();
-            $form->setAction($this->view->url(array('action' => 'new')));
+            $form->setAction($this->view->url(['action' => 'new']));
             $result = $form;
         }
 
@@ -240,10 +240,10 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action
             // Neues Formular anzeigen
             $model = $this->getModel($this->getRequest()->getParam(self::PARAM_MODEL_ID));
 
-            if (!is_null($model)) {
+            if (! is_null($model)) {
                 if ($this->isModifiable($model)) {
                     $form = $this->getEditModelForm($model);
-                    $form->setAction($this->view->url(array('action' => 'edit')));
+                    $form->setAction($this->view->url(['action' => 'edit']));
                     $result = $form;
                 } else {
                     $result = $this->createNotModifiableResult();
@@ -267,7 +267,7 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action
         } else {
             // Bestätigungsformular anzeigen
             $model = $this->getModel($this->getRequest()->getParam(self::PARAM_MODEL_ID));
-            if (!is_null($model)) {
+            if (! is_null($model)) {
                 if ($this->isDeletable($model)) {
                     $form = $this->getConfirmationForm($model);
                     $result = $form;
@@ -305,21 +305,19 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action
                     // Validierung erfolgreich; Hole Model vom Formular
                     try {
                         $model = $form->getModel();
-                    }
-                    catch (Application_Exception $ae) {
+                    } catch (Application_Exception $ae) {
                         $this->getLogger()->err(__METHOD__ . $ae->getMessage());
                         $model = null;
                     }
 
-                    if (!is_null($model)) {
-                        if (!$this->isModifiable($model)) {
+                    if (! is_null($model)) {
+                        if (! $this->isModifiable($model)) {
                             return ['message' => self::MODEL_NOT_MODIFIABLE];
                         }
 
                         try {
                             $model->store();
-                        }
-                        catch (Opus_Model_Exception $ome) {
+                        } catch (Opus_Model_Exception $ome) {
                             // Speichern fehlgeschlagen
                             return ['message' => self::SAVE_FAILURE];
                         }
@@ -327,7 +325,8 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action
                         // Redirect zur Show Action
                         if ($this->getShowActionEnabled()) {
                             return [
-                                'action' => 'show', 'message' => self::SAVE_SUCCESS,
+                                'action' => 'show',
+                                'message' => self::SAVE_SUCCESS,
                                 'params' => [self::PARAM_MODEL_ID => $model->getId()]
                             ];
                         } else {
@@ -346,15 +345,17 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action
             case Application_Form_Model_Abstract::RESULT_CANCEL:
             default:
                 return [];
-
         }
 
         return $form;
     }
 
     /**
-     * Verarbeitet POST vom Bestätigunsformular.
+     * Verarbeitet POST-Request vom Bestätigungsformular.
      *
+     * @param null $post
+     * @return array
+     * @throws Application_Exception
      */
     public function handleConfirmationPost($post = null)
     {
@@ -369,16 +370,15 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action
             $modelId = $form->getModelId();
             $model = $this->getModel($modelId);
 
-            if (!is_null($model)) {
-                if (!$this->isDeletable($model)) {
+            if (! is_null($model)) {
+                if (! $this->isDeletable($model)) {
                     return ['message' => self::MODEL_CANNOT_DELETE];
                 }
 
                 // Model löschen
                 try {
                     $this->deleteModel($model);
-                }
-                catch (Opus_Model_Exception $ome) {
+                } catch (Opus_Model_Exception $ome) {
                     $this->getLogger()->err(__METHOD__ . ' ' . $ome->getMessage());
                     return ['message' => self::DELETE_FAILURE];
                 }
@@ -387,7 +387,7 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action
             }
         } else {
             // Löschen abgebrochen (Nein) - bzw. Formular nicht valide
-            if (!$form->hasErrors()) {
+            if (! $form->hasErrors()) {
                 // keine Validierungsfehler
                 return [];
             }
@@ -406,15 +406,15 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action
     {
         if (is_array($result)) {
             $action = array_key_exists('action', $result) ? $result['action'] : 'index';
-            $params = array_key_exists('params', $result) ? $result['params'] : array();
+            $params = array_key_exists('params', $result) ? $result['params'] : [];
 
             $messageKey = array_key_exists('message', $result) ? $result['message'] : null;
-            $message = !is_null($messageKey) ? $this->getMessage($messageKey) : null;
+            $message = ! is_null($messageKey) ? $this->getMessage($messageKey) : null;
 
             $this->_helper->Redirector->redirectTo($action, $message, null, null, $params);
         } else {
             // Ergebnis ist Formular
-            if (!is_null($result) && $result instanceof Zend_Form) {
+            if (! is_null($result) && $result instanceof Zend_Form) {
                 $this->renderForm($result);
             }
         }
@@ -470,11 +470,11 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action
     {
         $form = new Application_Form_Confirmation($this->getModelClass());
 
-        if (!$this->getVerifyModelIdIsNumeric()) {
+        if (! $this->getVerifyModelIdIsNumeric()) {
             $form->getElement(Application_Form_Confirmation::ELEMENT_MODEL_ID)->removeValidator('int');
         }
 
-        if (!is_null($model)) {
+        if (! is_null($model)) {
             $form->setModel($model);
         }
 
@@ -486,7 +486,7 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action
      */
     public function getAllModels()
     {
-        return call_user_func(array($this->getModelClass(), $this->_functionNameForGettingModels));
+        return call_user_func([$this->getModelClass(), $this->_functionNameForGettingModels]);
     }
 
     /**
@@ -506,14 +506,13 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action
      */
     public function getModel($modelId)
     {
-        if (is_null($modelId) || is_numeric($modelId) || !$this->getVerifyModelIdIsNumeric()) {
+        if (is_null($modelId) || is_numeric($modelId) || ! $this->getVerifyModelIdIsNumeric()) {
             $modelClass = $this->getModelClass();
 
             if (strlen(trim($modelId)) !== 0) {
                 try {
                     return new $modelClass($modelId);
-                }
-                catch (Opus_Model_NotFoundException $omnfe) {
+                } catch (Opus_Model_NotFoundException $omnfe) {
                     $this->getLogger()->err(__METHOD__ . ':' . $omnfe->getMessage());
                 }
             }
@@ -529,7 +528,7 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action
     public function getModelForm()
     {
         $form = new $this->_formClass();
-        if (!$this->getVerifyModelIdIsNumeric()) {
+        if (! $this->getVerifyModelIdIsNumeric()) {
             $form->getElement(Application_Form_Model_Abstract::ELEMENT_MODEL_ID)->removeValidator('int');
         }
         return $form;
@@ -543,7 +542,7 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action
     public function getEditModelForm($model)
     {
         $form = $this->getModelForm();
-        if (!$this->getVerifyModelIdIsNumeric()) {
+        if (! $this->getVerifyModelIdIsNumeric()) {
             $form->getElement(Application_Form_Model_Abstract::ELEMENT_MODEL_ID)->removeValidator('int');
         }
         $form->populateFromModel($model);
@@ -577,7 +576,7 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action
      */
     public function setFormClass($formClass)
     {
-        if (!$this->isClassSupported($formClass)) {
+        if (! $this->isClassSupported($formClass)) {
             throw new Application_Exception("Class '$formClass' is not instance of Application_Form_IModel.");
         }
 

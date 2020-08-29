@@ -26,7 +26,7 @@
  *
  * @category    Application Unit Tests
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -35,6 +35,8 @@
  */
 class Application_View_Helper_FormatValueTest extends ControllerTestCase
 {
+
+    protected $additionalResources = ['database', 'view', 'translation'];
 
     private $__helper;
 
@@ -76,7 +78,7 @@ class Application_View_Helper_FormatValueTest extends ControllerTestCase
 
         $output = $this->__helper->format($field, 'Opus_Document');
 
-        $this->assertTrue(in_array($output, array('German', 'Deutsch')));
+        $this->assertTrue(in_array($output, ['German', 'Deutsch']));
     }
 
     public function testFormatValueForYear()
@@ -106,7 +108,7 @@ class Application_View_Helper_FormatValueTest extends ControllerTestCase
 
         $output = $this->__helper->format($field);
 
-        $this->assertTrue(in_array($output, array('2002/06/17', '17.06.2002')));
+        $this->assertTrue(in_array($output, ['2002/06/17', '17.06.2002']));
     }
 
     public function testFormatValueForInvalidDate()

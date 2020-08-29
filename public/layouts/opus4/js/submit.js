@@ -31,13 +31,13 @@
  *
  */
 
-$(function() {
+$(function () {
 
     // prevent double submits on forms
-    $('form').submit(function(){
-        $(':submit', this).click(function() {
-         return false;
+    $('form').submit(function () {
+        $(':submit', this).click(function () {
+            return false;
         });
     });
-    
+
 });

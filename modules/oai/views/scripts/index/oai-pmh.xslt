@@ -30,9 +30,8 @@
  * @package     Module_Oai
  * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
  * @author      Simone Finkbeiner <simone.finkbeiner@ub.uni-stuttgart.de>
- * @copyright   Copyright (c) 2009, OPUS 4 development team
+ * @copyright   Copyright (c) 2009-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 -->
 
@@ -53,6 +52,7 @@
     <xsl:include href="prefixes/epicur.xslt"/>
     <xsl:include href="prefixes/XMetaDissPlus.xslt"/>
     <xsl:include href="prefixes/copy_xml.xslt"/>
+    <xsl:include href="prefixes/marc21.xslt"/>
 
     <xsl:output method="xml" indent="yes" encoding="utf-8" />
 
@@ -268,6 +268,11 @@
             <schema><xsl:text>http://files.dnb.de/standards/xmetadissplus/xmetadissplus.xsd</xsl:text></schema>
             <metadataNamespace><xsl:text>http://www.d-nb.de/standards/xmetadissplus/</xsl:text></metadataNamespace>
           </metadataFormat>
+            <metadataFormat>
+                <metadataPrefix><xsl:text>MARC21</xsl:text></metadataPrefix>
+                <schema><xsl:text>https://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd</xsl:text></schema>
+                <metadataNamespace><xsl:text>http://www.loc.gov/MARC21/slim</xsl:text></metadataNamespace>
+            </metadataFormat>
         </ListMetadataFormats>
     </xsl:template>
 
@@ -333,7 +338,6 @@
            <setName><xsl:value-of select="@TypeName"/></setName>
         </set>
     </xsl:template>
-
 
     <xsl:template match="Opus_Document">
       <xsl:choose>
@@ -415,15 +419,17 @@
                     <xsl:when test="$oai_metadataPrefix='copy_xml'">
                        <xsl:apply-templates select="." mode="copy_xml" />
                     </xsl:when>
+                     <xsl:when test="$oai_metadataPrefix='marc21'">
+                         <xsl:apply-templates select="." mode="marc21" />
+                     </xsl:when>
                  </xsl:choose>
                  </metadata>
-
             </xsl:when>
-            </xsl:choose>
+        </xsl:choose>
     </xsl:template>
 
     <xsl:template match="SetSpec">
-       <setSpec><xsl:value-of select="@Value"/></setSpec>
+				<setSpec><xsl:value-of select="@Value"/></setSpec>
     </xsl:template>
 
 </xsl:stylesheet>

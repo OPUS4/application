@@ -27,12 +27,14 @@
  * @category    Application Unit Test
  * @package     View_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2017-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 class Application_View_Helper_IsDisplayFieldTest extends ControllerTestCase
 {
+
+    protected $configModifiable = true;
 
     public function testIsDisplayField()
     {
@@ -40,9 +42,9 @@ class Application_View_Helper_IsDisplayFieldTest extends ControllerTestCase
 
         $this->assertFalse($helper->isDisplayField('BelongsToBibliography'));
 
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
-            'frontdoor' => array('metadata' => array('BelongsToBibliography' => '1'))
-        )));
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+            'frontdoor' => ['metadata' => ['BelongsToBibliography' => self::CONFIG_VALUE_TRUE]]
+        ]));
 
         $this->assertTrue($helper->isDisplayField('BelongsToBibliography'));
     }
@@ -53,5 +55,4 @@ class Application_View_Helper_IsDisplayFieldTest extends ControllerTestCase
 
         $this->assertFalse($helper->isDisplayField('unknown'));
     }
-
 }

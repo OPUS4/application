@@ -33,11 +33,13 @@
  * @category    Application Unit Test
  * @package     Application_Controller_Action
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 class Application_Controller_ActionCRUDTest extends ControllerTestCase
 {
+
+    protected $additionalResources = ['database', 'view', 'mainMenu', 'navigation', 'translation'];
 
     private $controller = null;
 
@@ -52,7 +54,7 @@ class Application_Controller_ActionCRUDTest extends ControllerTestCase
 
         $licences = Opus_Licence::getAll();
 
-        $this->licenceIds = array();
+        $this->licenceIds = [];
 
         foreach ($licences as $licence) {
             $this->licenceIds[] = $licence->getId();
@@ -65,7 +67,7 @@ class Application_Controller_ActionCRUDTest extends ControllerTestCase
 
         if (count($this->licenceIds) < count($licences)) {
             foreach ($licences as $licence) {
-                if (!in_array($licence->getId(), $this->licenceIds)) {
+                if (! in_array($licence->getId(), $this->licenceIds)) {
                     $licence->delete();
                 }
             }

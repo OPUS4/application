@@ -35,12 +35,14 @@
 /**
  * Formularelement für die Eingabe von Email-Adressen.
  */
-class Application_Form_Element_Email extends Application_Form_Element_Text {
+class Application_Form_Element_Email extends Application_Form_Element_Text
+{
 
     /**
      * Konfiguriert das Formularelement.
      */
-    public function init() {
+    public function init()
+    {
         parent::init();
         $this->setAttrib('placeholder', $this->getTranslator()->translate('email_format'));
         $this->setAttrib('size', 60);
@@ -48,5 +50,4 @@ class Application_Form_Element_Email extends Application_Form_Element_Text {
         $validator->setMessage('admin_validate_error_email');
         $this->addValidator($validator);
     }
-
 }

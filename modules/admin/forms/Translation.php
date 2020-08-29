@@ -54,10 +54,6 @@ class Admin_Form_Translation extends Application_Form_Abstract
 
         $configHelper = Application_Configuration::getInstance();
 
-        $this->setLegend('Enrichment Name');
-
-        $this->setDescription('Hello, world!');
-
         $languages = $configHelper->getSupportedLanguages();
         $translate = $configHelper->getTranslate();
 
@@ -79,5 +75,4 @@ class Admin_Form_Translation extends Application_Form_Abstract
     {
         $this->setLegend($key);
     }
-
 }

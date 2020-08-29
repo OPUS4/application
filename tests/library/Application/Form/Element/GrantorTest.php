@@ -34,6 +34,8 @@
 class Application_Form_Element_GrantorTest extends FormElementTestCase
 {
 
+    protected $additionalResources = 'database';
+
     public function setUp()
     {
         $this->_formElementClass = 'Application_Form_Element_Grantor';

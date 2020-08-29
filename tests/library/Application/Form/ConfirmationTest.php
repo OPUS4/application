@@ -31,11 +31,15 @@
  * @category    Application Unit Test
  * @package     Application_Form
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
+ *
+ * TODO TRANSLATION use TestCase with Translation (without database)
  */
 class Application_Form_ConfirmationTest extends ControllerTestCase
 {
+
+    protected $additionalResources = 'translation';
 
     private $form;
 
@@ -272,8 +276,10 @@ class Application_Form_ConfirmationTest extends ControllerTestCase
 
         $this->form->setQuestion('Klasse: %1$s, Name: %2$s');
 
-        $this->assertEquals('Klasse: Licence, Name: <span class="displayname">Creative Commons - CC BY-ND - Namensnennung - Keine Bearbeitungen 4.0 International</span>',
-            $this->form->renderQuestion());
+        $this->assertEquals(
+            'Klasse: Licence, Name: <span class="displayname">Creative Commons - CC BY-ND - Namensnennung - Keine Bearbeitungen 4.0 International</span>',
+            $this->form->renderQuestion()
+        );
     }
 
     public function testRenderQuestionTranslated()

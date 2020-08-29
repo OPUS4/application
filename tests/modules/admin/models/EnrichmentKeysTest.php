@@ -27,24 +27,35 @@
  * @category    Application Unit Test
  * @package     Module_Admin
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
  * @category    Application Unit Test
  * @package     Module_Admin
  */
-class Admin_Model_EnrichmentKeysTest extends ControllerTestCase {
+class Admin_Model_EnrichmentKeysTest extends ControllerTestCase
+{
 
-    public function testGetProtectedEnrichmentKeys() {
+    protected $additionalResources = 'database';
+
+    public function tearDown()
+    {
+        $database = new Opus_Translate_Dao();
+        $database->removeAll();
+
+        parent::tearDown();
+    }
+
+    public function testGetProtectedEnrichmentKeys()
+    {
         $model = new Admin_Model_EnrichmentKeys();
 
-        $config = new Zend_Config(array('enrichmentkey' => array('protected' => array(
+        $config = new Zend_Config(['enrichmentkey' => ['protected' => [
             'modules' => 'pkey1,pkey2',
             'migration' => 'pkey3,pkey4'
-        ))));
+        ]]]);
 
         $model->setConfig($config);
 
@@ -56,9 +67,9 @@ class Admin_Model_EnrichmentKeysTest extends ControllerTestCase {
         $this->assertContains('pkey3', $protectedKeys);
         $this->assertContains('pkey4', $protectedKeys);
 
-        $config = new Zend_Config(array('enrichmentkey' => array('protected' => array(
+        $config = new Zend_Config(['enrichmentkey' => ['protected' => [
             'migration' => 'pkey3,pkey4'
-        ))));
+        ]]]);
 
         $model->setConfig($config);
         $model->setProtectedEnrichmentKeys(null);
@@ -69,9 +80,9 @@ class Admin_Model_EnrichmentKeysTest extends ControllerTestCase {
         $this->assertContains('pkey3', $protectedKeys);
         $this->assertContains('pkey4', $protectedKeys);
 
-        $config = new Zend_Config(array('enrichmentkey' => array('protected' => array(
+        $config = new Zend_Config(['enrichmentkey' => ['protected' => [
             'modules' => 'pkey1,pkey2',
-        ))));
+        ]]]);
 
         $model->setConfig($config);
         $model->setProtectedEnrichmentKeys(null);
@@ -83,10 +94,11 @@ class Admin_Model_EnrichmentKeysTest extends ControllerTestCase {
         $this->assertContains('pkey2', $protectedKeys);
     }
 
-    public function testGetProtectedEnrichmentKeysNotConfigured() {
+    public function testGetProtectedEnrichmentKeysNotConfigured()
+    {
         $model = new Admin_Model_EnrichmentKeys();
 
-        $config = new Zend_Config(array());
+        $config = new Zend_Config([]);
 
         $model->setConfig($config);
 
@@ -96,4 +108,114 @@ class Admin_Model_EnrichmentKeysTest extends ControllerTestCase {
         $this->assertCount(0, $protectedKeys);
     }
 
+    public function testCreateTranslations()
+    {
+        $database = new Opus_Translate_Dao();
+        $database->removeAll();
+
+        $model = new Admin_Model_EnrichmentKeys();
+
+        $name = 'MyTestEnrichment';
+
+        $model->createTranslations($name);
+
+        $patterns = $model->getKeyPatterns();
+
+        $translations = $database->getTranslations('default');
+
+        $this->assertCount(6, $translations);
+
+        foreach ($patterns as $pattern) {
+            $key = sprintf($pattern, $name);
+            $this->assertArrayHasKey($key, $translations);
+        }
+    }
+
+    public function testCreateTranslationsDoNotOverwriteExistingValues()
+    {
+        $database = new Opus_Translate_Dao();
+        $database->removeAll();
+
+        $hintKey = 'hint_EnrichmentMyTestEnrichment';
+
+        $database->setTranslation($hintKey, [
+            'en' => 'English',
+            'de' => 'Deutsch'
+        ], 'default');
+
+        $model = new Admin_Model_EnrichmentKeys();
+
+        $name = 'MyTestEnrichment';
+
+        $model->createTranslations($name);
+
+        $patterns = $model->getKeyPatterns();
+
+        $translations = $database->getTranslations('default');
+
+        $this->assertCount(6, $translations);
+
+        foreach ($patterns as $pattern) {
+            $key = sprintf($pattern, $name);
+            $this->assertArrayHasKey($key, $translations);
+            if ($key !== 'hint_EnrichmentMyTestEnrichment') {
+                $this->assertEquals([
+                    'en' => 'MyTestEnrichment',
+                    'de' => 'MyTestEnrichment'
+                ], $translations[$key]);
+            } else {
+                $this->assertEquals([
+                    'en' => 'English',
+                    'de' => 'Deutsch'
+                ], $translations[$key]);
+            }
+        }
+    }
+
+    public function testChangeNamesOfTranslationKeys()
+    {
+        $database = new Opus_Translate_Dao();
+        $database->removeAll();
+
+        $model = new Admin_Model_EnrichmentKeys();
+
+        $name = 'MyTestEnrichment';
+
+        $model->createTranslations($name);
+
+        $newName = 'NewTest';
+
+        $model->createTranslations($newName, $name);
+
+        $patterns = $model->getKeyPatterns();
+
+        $translations = $database->getTranslations('default');
+
+        $this->assertCount(6, $translations);
+
+        foreach ($patterns as $pattern) {
+            $key = sprintf($pattern, $newName);
+            $this->assertArrayHasKey($key, $translations);
+        }
+    }
+
+    public function testRemoveTranslations()
+    {
+        $model = new Admin_Model_EnrichmentKeys();
+
+        $database = new Opus_Translate_Dao();
+        $database->removeAll();
+
+        $name = 'TestEnrichment';
+
+        $model->createTranslations($name);
+
+        $translations = $database->getTranslations('default');
+        $this->assertCount(6, $translations);
+
+        $model->removeTranslations($name);
+
+        $translations = $database->getTranslations('default');
+        $this->assertCount(0, $translations);
+    }
 }

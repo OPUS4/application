@@ -31,12 +31,14 @@
  * @category    Application
  * @package     Form_Element
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Application_Form_Element_Roles extends Application_Form_Element_MultiCheckbox {
+class Application_Form_Element_Roles extends Application_Form_Element_MultiCheckbox
+{
 
-    public function init() {
+    public function init()
+    {
         parent::init();
 
         $this->addPrefixPath('Application_Form_Decorator', 'Application/Form/Decorator', Zend_Form::DECORATOR);
@@ -44,17 +46,20 @@ class Application_Form_Element_Roles extends Application_Form_Element_MultiCheck
         $this->setMultiOptions($this->getRolesMultiOptions());
     }
 
-    public function loadDefaultDecorators() {
-        if (!$this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
-            $this->setDecorators(
-                array(
+    public function loadDefaultDecorators()
+    {
+        if (! $this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
+            $this->setDecorators([
                 'ViewHelper',
-                'ElementHtmlTag',
-                array('LabelNotEmpty', array('tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend',
-                    'disableFor' => true)),
-                array(array('dataWrapper' => 'HtmlTagWithId'), array('tag' => 'div', 'class' => 'data-wrapper'))
-                )
-            );
+                'ElementHtmlTag', [
+                    'LabelNotEmpty', [
+                        'tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend', 'disableFor' => true
+                    ]
+                ], [
+                    ['dataWrapper' => 'HtmlTagWithId'],
+                    ['tag' => 'div', 'class' => 'data-wrapper']
+                ]
+            ]);
         }
     }
 
@@ -62,10 +67,11 @@ class Application_Form_Element_Roles extends Application_Form_Element_MultiCheck
      * Create options for all roles.
      * @return array
      */
-    public function getRolesMultiOptions() {
+    public function getRolesMultiOptions()
+    {
         $roles = Opus_UserRole::getAll();
 
-        $options = array();
+        $options = [];
 
         foreach ($roles as $role) {
             $roleName = $role->getDisplayName();
@@ -81,10 +87,8 @@ class Application_Form_Element_Roles extends Application_Form_Element_MultiCheck
      */
     public function setValue($value)
     {
-        if (is_array($value))
-        {
-            if (count($value) > 0 && $value[0] instanceof Opus_UserRole)
-            {
+        if (is_array($value)) {
+            if (count($value) > 0 && $value[0] instanceof Opus_UserRole) {
                 $value = $this->getRoleNames($value);
             }
         }
@@ -100,12 +104,10 @@ class Application_Form_Element_Roles extends Application_Form_Element_MultiCheck
     {
         $names = $this->getValue();
 
-        $roles = array();
+        $roles = [];
 
-        if (is_array($names))
-        {
-            foreach ($names as $name)
-            {
+        if (is_array($names)) {
+            foreach ($names as $name) {
                 array_push($roles, Opus_UserRole::fetchByName($name));
             }
         }
@@ -120,15 +122,12 @@ class Application_Form_Element_Roles extends Application_Form_Element_MultiCheck
      */
     public function getRoleNames($roles)
     {
-        $names = array();
+        $names = [];
 
-        foreach ($roles as $role)
-        {
+        foreach ($roles as $role) {
             array_push($names, $role->getName());
         }
 
         return $names;
     }
-
 }
-

@@ -33,11 +33,13 @@
  *
  * TODO überarbeiten (entfernen?)
  */
-class Admin_Model_CollectionRole {
+class Admin_Model_CollectionRole
+{
 
     private $_collectionRole = null;
 
-    public function  __construct($id = null) {
+    public function __construct($id = null)
+    {
         if ($id === '') {
             throw new Admin_Model_Exception('missing parameter roleid');
         }
@@ -47,8 +49,7 @@ class Admin_Model_CollectionRole {
         }
         try {
             $this->_collectionRole = new Opus_CollectionRole((int) $id);
-        }
-        catch (Opus_Model_NotFoundException $e) {
+        } catch (Opus_Model_NotFoundException $e) {
             throw new Admin_Model_Exception('roleid parameter value unknown');
         }
     }
@@ -56,9 +57,10 @@ class Admin_Model_CollectionRole {
     /**
      * Initialisiert Defaultwerte für neue CollectionRole.
      */
-    private function initNewCollectionRole() {
+    private function initNewCollectionRole()
+    {
         $this->_collectionRole = new Opus_CollectionRole();
-        foreach (array('Visible', 'VisibleBrowsingStart', 'VisibleFrontdoor', 'VisibleOai') as $field) {
+        foreach (['Visible', 'VisibleBrowsingStart', 'VisibleFrontdoor', 'VisibleOai'] as $field) {
             $this->_collectionRole->getField($field)->setValue(1);
         }
     }
@@ -67,14 +69,16 @@ class Admin_Model_CollectionRole {
      * Liefert CollectionRole.
      * @return null|Opus_CollectionRole
      */
-    public function getObject() {
+    public function getObject()
+    {
         return $this->_collectionRole;
     }
 
     /**
      * Löscht CollectionRole.
      */
-    public function delete() {
+    public function delete()
+    {
         $this->_collectionRole->delete();
     }
 
@@ -82,7 +86,8 @@ class Admin_Model_CollectionRole {
      * Setzt Sichtbarkeit von CollectionRole.
      * @param $visibility
      */
-    public function setVisibility($visibility) {
+    public function setVisibility($visibility)
+    {
         $this->_collectionRole->setVisible($visibility);
         $this->_collectionRole->store();
     }
@@ -94,7 +99,8 @@ class Admin_Model_CollectionRole {
      *
      * TODO make robuster
      */
-    public function move($position) {
+    public function move($position)
+    {
         if (is_null($position)) {
             return;
         }
@@ -105,5 +111,4 @@ class Admin_Model_CollectionRole {
         $this->_collectionRole->setPosition($position);
         $this->_collectionRole->store();
     }
-
 }

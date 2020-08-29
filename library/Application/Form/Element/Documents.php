@@ -43,8 +43,8 @@ class Application_Form_Element_Documents extends Application_Form_Element_MultiC
 
     public $helper = 'formDocuments';
 
-    public function init() {
+    public function init()
+    {
         parent::init();
     }
-
 }

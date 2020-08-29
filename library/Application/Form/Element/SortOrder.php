@@ -37,9 +37,11 @@
  *
  * x >= 0 oder NULL
  */
-class Application_Form_Element_SortOrder extends Application_Form_Element_Text {
+class Application_Form_Element_SortOrder extends Application_Form_Element_Text
+{
 
-    public function init() {
+    public function init()
+    {
         parent::init();
 
         if (is_null($this->getAttrib('size'))) {
@@ -54,5 +56,4 @@ class Application_Form_Element_SortOrder extends Application_Form_Element_Text {
         $validator->setMessage('validation_error_negative_number');
         $this->addValidator($validator);
     }
-
 }

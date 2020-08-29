@@ -27,12 +27,14 @@
  * @category    Application Unit Test
  * @package     Application
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 class Application_TranslateTest extends ControllerTestCase
 {
+
+    protected $additionalResources = ['database', 'translation'];
 
     private $translate;
 
@@ -40,6 +42,22 @@ class Application_TranslateTest extends ControllerTestCase
     {
         parent::setUp();
         $this->translate = new Application_Translate();
+    }
+
+    public function tearDown()
+    {
+        $dao = new Opus_Translate_Dao();
+        $dao->removeAll();
+        Zend_Translate::clearCache();
+        parent::tearDown();
+    }
+
+    public static function tearDownAfterClass()
+    {
+        $translate = Zend_Registry::get('Zend_Translate');
+        $translate->loadTranslations(true);
+
+        parent::tearDownAfterClass();
     }
 
     public function testConstruct()
@@ -51,63 +69,17 @@ class Application_TranslateTest extends ControllerTestCase
         $this->assertTrue($translate->isTranslated('home_menu_label'));
     }
 
-    public function testLoadModule()
+    public function testLoadModules()
     {
-        $this->assertFalse($this->translate->isTranslated('home_menu_label'));
+        $this->assertFalse($this->translate->isTranslated('home_menu_label')); // 'default' module
+        $this->assertFalse($this->translate->isTranslated('home_index_contact_pagetitle')); // 'home' module
+        $this->assertFalse($this->translate->isTranslated('admin_index_title')); // 'admin' module
 
-        $this->translate->loadModule('default');
+        $this->translate->loadModules();
 
-        $this->assertTrue($this->translate->isTranslated('home_menu_label')); // default immer noch geladen
-    }
-
-    public function testLoadModuleUnknown()
-    {
-        $logger = new MockLogger();
-
-        $this->translate->setLogger($logger);
-
-        $this->translate->loadModule('default');
-
-        $this->assertTrue($this->translate->isTranslated('home_menu_label'));
-
-        $this->translate->loadModule('unknown');
-
-        $this->assertTrue($this->translate->isTranslated('home_menu_label')); // default immer noch geladen
-
-        $messages = $logger->getMessages();
-
-        $this->assertEquals(0, count($messages)); // warning normally suppressed
-
-        $this->translate->loadLanguageDirectory(APPLICATION_PATH . '/modules/rewrite/language');
-        $this->translate->loadLanguageDirectory(APPLICATION_PATH . '/modules/rewrite/language_custom');
-
-        $messages = $logger->getMessages();
-
-        $this->assertEquals(2, count($messages));
-        $this->assertContains('not found', $messages[0]);
-        $this->assertContains('not found', $messages[1]);
-    }
-
-    public function testLoadModuleTwice()
-    {
-        $this->assertFalse($this->translate->isTranslated('admin_document_index'));
-
-        $logger = new MockLogger();
-
-        $this->translate->setLogger($logger);
-        $this->translate->loadModule('admin');
-
-        $this->assertTrue($this->translate->isTranslated('admin_document_index'));
-        $this->assertEquals(0, count($logger->getMessages()));
-
-        $logger->clear();
-
-        $this->translate->loadModule('admin'); // wird nicht noch einmal geladen
-
-        $messages = $logger->getMessages();
-
-        $this->assertEquals(1, count($messages));
-        $this->assertEquals('Already loaded translations for module \'admin\'.', $messages[0]);
+        $this->assertTrue($this->translate->isTranslated('home_menu_label')); // 'default' module
+        $this->assertTrue($this->translate->isTranslated('home_index_contact_pagetitle')); // 'home' module
+        $this->assertTrue($this->translate->isTranslated('admin_index_title')); // 'admin' module
     }
 
     public function testGetLogger()
@@ -161,25 +133,21 @@ class Application_TranslateTest extends ControllerTestCase
     public function testIsLogUntranslatedEnabledTrue()
     {
         $config = Zend_Registry::get('Zend_Config');
-        $logUntranslated = $config->log->untranslated;
-        $config->log->untranslated = true;
+        $config->log->untranslated = self::CONFIG_VALUE_TRUE;
         $this->assertTrue($this->translate->isLogUntranslatedEnabled());
-        $config->log->untranslated = $logUntranslated;
     }
 
     public function testIsLogUntranslatedEnabledFalse()
     {
         $config = Zend_Registry::get('Zend_Config');
-        $config->log->untranslated = false;
+        $config->log->untranslated = self::CONFIG_VALUE_FALSE;
         $this->assertFalse($this->translate->isLogUntranslatedEnabled());
-        $config->log->untranslated = true; // Siehe testIsLogUntranslatedEnabledTrue
     }
 
     public function testGetOptionsLogEnabled()
     {
         $config = Zend_Registry::get('Zend_Config');
-        $logUntranslated = $config->log->untranslated;
-        $config->log->untranslated = true;
+        $config->log->untranslated = self::CONFIG_VALUE_TRUE;
 
         $options = $this->translate->getOptions();
 
@@ -188,64 +156,68 @@ class Application_TranslateTest extends ControllerTestCase
         $this->assertArrayHasKey('log', $options);
         $this->assertInstanceOf('Zend_Log', $options['log']);
         $this->assertTrue($options['logUntranslated']);
-
-        $config->log->untranslated = $logUntranslated;
     }
 
     public function testGetOptionsLogDisabled()
     {
         $config = Zend_Registry::get('Zend_Config');
-        $logUntranslated = $config->log->untranslated;
-        $config->log->untranslated = false;
+        $config->log->untranslated = self::CONFIG_VALUE_FALSE;
 
         $options = $this->translate->getOptions();
 
         $this->assertInternalType('array', $options);
         $this->assertEquals(10, count($options));
         $this->assertFalse($options['logUntranslated']);
-
-        $config->log->untranslated = $logUntranslated;
     }
 
     public function testLoggingEnabled()
     {
         $config = Zend_Registry::get('Zend_Config');
-        $logUntranslated = $config->log->untranslated;
-        $config->log->untranslated = true;
+        $config->log->untranslated = self::CONFIG_VALUE_TRUE;
 
         $logger = new MockLogger();
 
         $translate = new Application_Translate(['log' => $logger]);
-        $translate->loadModule('default');
+        $translate->loadModules();
+        $translate->setLocale('de');
 
-        $this->assertFalse($translate->isTranslated('nottranslated123'));
-        $this->assertEquals('nottranslated123', $translate->translate('nottranslated123'));
+        $key = 'nottranslated123';
+
+        $this->assertFalse($translate->isTranslated($key));
+        $this->assertEquals($key, $translate->translate($key));
 
         $messages = $logger->getMessages();
         $this->assertEquals(1, count($messages));
         $this->assertContains('Unable to translate', $messages[0]);
 
-        $config->log->untranslated = $logUntranslated;
+        // German is the fallback language for English by default. Since the key cannot be translated in English or
+        // German two messages are generated.
+        $translate->setLocale('en');
+
+        $logger->clear();
+        $this->assertEquals($key, $translate->translate($key));
+
+        $messages = $logger->getMessages();
+        $this->assertEquals(2, count($messages));
+        $this->assertContains("Unable to translate key '$key' into locale 'en'", $messages[0]);
+        $this->assertContains("Unable to translate key '$key' into locale 'de'", $messages[1]);
     }
 
     public function testLoggingDisabled()
     {
         $config = Zend_Registry::get('Zend_Config');
-        $logUntranslated = $config->log->untranslated;
-        $config->log->untranslated = false;
+        $config->log->untranslated = self::CONFIG_VALUE_FALSE;
 
         $logger = new MockLogger();
 
         $translate = new Application_Translate(['log' => $logger]);
-        $translate->loadModule('admin');
+        $translate->loadModules();
 
         $this->assertFalse($translate->isTranslated('nottranslated123'));
         $this->assertEquals('nottranslated123', $translate->translate('nottranslated123'));
 
         $messages = $logger->getMessages();
         $this->assertEquals(0, count($messages));
-
-        $config->log->untranslated = $logUntranslated;
     }
 
     public function enLanguageDataProvider()
@@ -258,7 +230,7 @@ class Application_TranslateTest extends ControllerTestCase
             ['spa', 'Spanish'],
             ['ita', 'Italian'],
             ['por', 'Portuguese'],
-            ['mul', 'Multiple Languages']
+            ['mul', 'Multiple languages']
         ];
     }
 
@@ -282,8 +254,7 @@ class Application_TranslateTest extends ControllerTestCase
     public function testTranslateLanguageEnglish($langId, $translation)
     {
         $this->translate->setLocale('en');
-        $this->translate->loadModule('default');
-        $this->assertEquals($translation, $this->translate->translateLanguage($langId));
+        $this->assertEquals(strtolower($translation), strtolower($this->translate->translateLanguage($langId)));
     }
 
     /**
@@ -292,7 +263,152 @@ class Application_TranslateTest extends ControllerTestCase
     public function testTranslateLanguageGerman($langId, $translation)
     {
         $this->translate->setLocale('de');
-        $this->translate->loadModule('default');
         $this->assertEquals($translation, $this->translate->translateLanguage($langId));
+    }
+
+    public function testMixedTranslations()
+    {
+        $key = 'admin_title_configuration';
+
+        // clear custom translations from database
+        $database = new Opus_Translate_Dao();
+        $database->removeAll();
+
+        $translate = Zend_Registry::get('Zend_Translate');
+        $translate->clearCache();
+        $translate->loadTranslations();
+
+        $result = $translate->translate($key, 'de');
+        $this->assertNotEquals($key, $result);
+        $this->assertEquals('Konfiguration', $result);
+
+        $result = $translate->translate($key, 'en');
+        $this->assertNotEquals($key, $result);
+        $this->assertEquals('Configure', $result);
+
+        // clear cache again before modifying translations in database
+        $translate->clearCache();
+
+        // add database to translation mix
+        $database->setTranslation($key, [
+            'en' => 'Configuration',
+            'de' => 'Einstellungen'
+        ], 'admin');
+
+        // load module again with changes in database
+        Zend_Translate::clearCache();
+
+        $translate = new Application_Translate();
+        $translate->loadTranslations();
+
+        $result = $translate->translate($key, 'en');
+        $this->assertEquals('Configuration', $result);
+
+        $result = $translate->translate($key, 'de');
+        $this->assertEquals('Einstellungen', $result);
+    }
+
+    public function testGetTranslations()
+    {
+        $database = new Opus_Translate_Dao();
+        $database->removeAll();
+
+        Zend_Translate::clearCache();
+
+        $translate = Zend_Registry::get('Zend_Translate');
+        $translate->loadTranslations(true);
+
+        $key = 'default_collection_role_ddc';
+
+        $translations = $translate->getTranslations($key);
+
+        $this->assertEquals([
+            'de' => 'DDC-Klassifikation',
+            'en' => 'Dewey Decimal Classification'
+        ], $translations);
+
+        $custom = [
+            'de' => 'DDC-Sachgruppen',
+            'en' => 'DDC'
+        ];
+
+        $database->setTranslation($key, $custom, 'default');
+
+        // new object necessary, because translation have already been loaded
+        Zend_Translate::clearCache();
+        $translate->loadDatabase();
+
+        $translations = $translate->getTranslations($key);
+
+        $this->assertEquals($custom, $translations);
+    }
+
+    public function testGetTranslationsUnknownKey()
+    {
+        $translate = Zend_Registry::get('Zend_Translate');
+
+        $this->assertNull($translate->getTranslations('unknownkey9999'));
+    }
+
+    public function testSetTranslations()
+    {
+        $dao = new Opus_Translate_Dao();
+
+        $dao->remove('testkey');
+
+        $this->assertNull($dao->getTranslation('testkey'));
+
+        $translate = Zend_Registry::get('Zend_Translate');
+
+        $data = [
+            'en' => 'test key',
+            'de' => 'Testschüssel'
+        ];
+
+        $translate->setTranslations('testkey', $data);
+
+        $this->assertEquals($data, $dao->getTranslation('testkey'));
+    }
+
+    public function testLoadingPerformance()
+    {
+        $this->markTestSkipped('Used for manual performance testing.');
+
+        $translate = new Application_Translate();
+
+        for ($i = 0; $i < 1000; $i++) {
+            Zend_Translate::clearCache();
+            $translate->loadTranslations();
+        }
+    }
+
+    public function testFallbackToDefaultLanguage()
+    {
+        $this->useGerman();
+
+        $translate = Zend_Registry::get('Zend_Translate');
+
+        $this->assertInstanceOf('Application_Translate', $translate);
+
+        $key = 'test_fallback';
+
+        $dao = new Opus_Translate_Dao();
+
+        $dao->setTranslation($key, [
+            'en' => 'English'
+        ]);
+
+        Zend_Translate::clearCache();
+
+        $translate->loadTranslations();
+
+        // TODO this is currently necessary (not sure why)
+        Zend_Registry::get('Zend_Translate')->setLocale('de');
+
+        $this->assertTrue($translate->isTranslated($key));
+
+        $translation = $translate->translate($key);
+
+        $this->assertEquals('English', $translation);
     }
 }

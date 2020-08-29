@@ -33,6 +33,8 @@
 class Application_Form_Element_DocumentTypeTest extends FormElementTestCase
 {
 
+    protected $additionalResources = ['view', 'translation'];
+
     public function setUp()
     {
         $this->_formElementClass = 'Application_Form_Element_DocumentType';

@@ -31,9 +31,11 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Application_View_Helper_ViewFormDefault extends Zend_View_Helper_FormElement {
+class Application_View_Helper_ViewFormDefault extends Zend_View_Helper_FormElement
+{
 
-    public function viewFormDefault($name, $value = null, $attribs = null) {
+    public function viewFormDefault($name, $value = null, $attribs = null)
+    {
         $info = $this->_getInfo($name, $value, $attribs);
         extract($info);
 
@@ -46,8 +48,8 @@ class Application_View_Helper_ViewFormDefault extends Zend_View_Helper_FormEleme
         return $markup;
     }
 
-    public function getElementClass() {
+    public function getElementClass()
+    {
         return 'field';
     }
-
 }

@@ -34,6 +34,8 @@
 class Oai_Model_XmlFactoryTest extends ControllerTestCase
 {
 
+    protected $additionalResources = 'database';
+
     private $_xmlFactory;
 
     public function setUp()
@@ -50,7 +52,7 @@ class Oai_Model_XmlFactoryTest extends ControllerTestCase
         // document with no files
         $this->assertEquals('info:eu-repo/semantics/closedAccess', $this->_xmlFactory->getAccessRights($doc));
 
-        $file = $this->createTestFile('article.pdf');
+        $file = $this->createOpusTestFile('article.pdf');
         $file->setVisibleInOai(1);
         $file->setVisibleInFrontdoor(1);
         $doc->addFile($file);
@@ -72,7 +74,7 @@ class Oai_Model_XmlFactoryTest extends ControllerTestCase
         // document with file that is not visible in frontdoor or OAI
         $this->assertEquals('info:eu-repo/semantics/closedAccess', $this->_xmlFactory->getAccessRights($doc));
 
-        $file2 = $this->createTestFile('article.doc');
+        $file2 = $this->createOpusTestFile('article.doc');
         $file2->setVisibleInOai(1);
         $file2->setVisibleInFrontdoor(1);
         $doc->addFile($file2);
@@ -118,5 +120,4 @@ class Oai_Model_XmlFactoryTest extends ControllerTestCase
         $this->assertTrue($doc->hasEmbargoPassed());
         $this->assertEquals('info:eu-repo/semantics/closedAccess', $this->_xmlFactory->getAccessRights($doc));
     }
-
 }

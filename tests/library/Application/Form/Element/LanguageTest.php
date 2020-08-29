@@ -27,11 +27,13 @@
  * @category    Application Unit Test
  * @package     Form_Element
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 class Application_Form_Element_LanguageTest extends FormElementTestCase
 {
+
+    protected $additionalResources = ['view', 'translation'];
 
     public function setUp()
     {
@@ -50,13 +52,17 @@ class Application_Form_Element_LanguageTest extends FormElementTestCase
 
         $languages = Application_Form_Element_Language::getLanguageList();
 
+        // check "Multiple languages" separately because on some systems "Multiple Languages" is returned
+        $this->assertArrayHasKey('mul', $languages);
+        $this->assertEquals('multiple languages', strtolower($languages['mul']));
+        unset($languages['mul']);
+
         $this->assertEquals([
             'deu' => 'German',
             'eng' => 'English',
             'fra' => 'French',
             'rus' => 'Russian',
-            'spa' => 'Spanish',
-            'mul' => 'Multiple Languages'
+            'spa' => 'Spanish'
         ], $languages);
     }
 
@@ -84,6 +90,7 @@ class Application_Form_Element_LanguageTest extends FormElementTestCase
         $this->assertTrue($element->isValid('deu'));
     }
 
-    public function testUnknownLanguage() {
+    public function testUnknownLanguage()
+    {
     }
 }

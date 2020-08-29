@@ -26,20 +26,21 @@
  *
  * @category    Application Unit Tests
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2012, OPUS 4 development team
+ * @copyright   Copyright (c) 2012-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
  * Test validation of same element values across multiple subforms.
  */
-class Application_Form_Validate_DuplicateValueTest extends ControllerTestCase {
+class Application_Form_Validate_DuplicateValueTest extends TestCase
+{
 
-    public function testConstruct() {
-        $validator = new Application_Form_Validate_DuplicateValue(array('deu', 'eng'), 1, 'testmessage');
+    public function testConstruct()
+    {
+        $validator = new Application_Form_Validate_DuplicateValue(['deu', 'eng'], 1, 'testmessage');
 
-        $this->assertEquals(array('deu', 'eng'), $validator->getValues());
+        $this->assertEquals(['deu', 'eng'], $validator->getValues());
         $this->assertEquals(1, $validator->getPosition());
         $messageTemplates = $validator->getMessageTemplates();
         $this->assertInternalType('array', $messageTemplates);
@@ -47,37 +48,39 @@ class Application_Form_Validate_DuplicateValueTest extends ControllerTestCase {
         $this->assertEquals('testmessage', $messageTemplates['notValid']);
     }
 
-    public function testIsSelectionValidTrue() {
-        $values = array('deu', 'eng');
+    public function testIsSelectionValidTrue()
+    {
+        $values = ['deu', 'eng'];
 
         $validator = new Application_Form_Validate_DuplicateValue($values, 0); // erstes Unterformular
 
         $this->assertTrue($validator->isValid('deu'));
     }
 
-    public function testIsSelectionValidTrueForFirstOccurence() {
-        $values = array('deu', 'deu');
+    public function testIsSelectionValidTrueForFirstOccurence()
+    {
+        $values = ['deu', 'deu'];
 
         $validator = new Application_Form_Validate_DuplicateValue($values, 0); // erstes Unterformular
 
         $this->assertTrue($validator->isValid('deu'));
     }
 
-    public function testIsSelectionValidFalse() {
-        $values = array('deu', 'deu');
+    public function testIsSelectionValidFalse()
+    {
+        $values = ['deu', 'deu'];
 
         $validator = new Application_Form_Validate_DuplicateValue($values, 1); // zweites Unterformular
 
         $this->assertFalse($validator->isValid('deu'));
     }
 
-    public function testIsSelectionValidFalseForSecondOccurence() {
-        $values = array('deu', 'deu', 'deu');
+    public function testIsSelectionValidFalseForSecondOccurence()
+    {
+        $values = ['deu', 'deu', 'deu'];
 
         $validator = new Application_Form_Validate_DuplicateValue($values, 2); // drittes Unterformular
 
         $this->assertFalse($validator->isValid('deu'));
     }
-
 }
-

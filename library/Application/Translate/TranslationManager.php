@@ -28,14 +28,32 @@
  * @package     Module_Setup
  * @author      Edouard Simon (edouard.simon@zib.de)
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
- * Manages translations across OPUS 4 modules.
+ * Management of translations across OPUS 4 modules.
+ *
+ * # Editing translations in modules
  *
  * The translation manager does not automatically cover all modules, but only those allowed by the the configuration.
+ * If the configuration is empty editing of keys in all modules is allowed.
+ *
+ * setup.translation.modules.allowed = default,publish
+ *
+ * # Duplicate keys
+ *
+ * Duplicate keys are not allowed. Each key in a module should always start with the name of the module.
+ *
+ * All translations are always loaded, because modules can depend on each other and that dependency cannot be resolved
+ * at runtime to decide which translations should be loaded. It is easier to load all translations. if a key occurs
+ * twice, the value loaded last is used.
+ *
+ * It does not make sense to make the management of the translations more complicated to handle duplicate keys. So for
+ * normal operations a key can also appear only once in the management interface. However when loading the translations
+ * duplicates can be detected and conflicts highlighted. Since those conflicts come from TMX files. These conflicts have
+ * to be resolved by the developer of the module.
  *
  * TODO easy way to cover all modules (for development purposes)
  * TODO maybe development mode where original files can be edited
@@ -43,14 +61,15 @@
  *
  * TODO add logic where translations are automatically stored in language_custom and
  *      distinguish between DEFAULT and CUSTOM values in order to display them together in the user interface
- * TODO reset to default functionality
+ * TODO place groups of translations like for collections in a "logical" module/namespace
+ * TODO namespaces for translations (?)
  */
-class Application_Translate_TranslationManager
+class Application_Translate_TranslationManager extends Application_Model_Abstract
 {
     /**
      * sort by translation unit
      */
-    const SORT_UNIT = 'unit';
+    const SORT_UNIT = 'key';
 
     /**
      * sort by application module
@@ -68,24 +87,125 @@ class Application_Translate_TranslationManager
     const SORT_FILENAME = 'filename';
 
     /**
+     * Translations that have been customized (original in TMX files).
+     */
+    const STATE_EDITED = 1;
+
+    /**
+     * Translations that have been added (no entry in TMX files).
+     */
+    const STATE_ADDED = 2;
+
+    /**
+     * Search for matching keys.
+     */
+    const SCOPE_KEYS = 4;
+
+    /**
+     * Search for matching translation texts.
+     */
+    const SCOPE_TEXT = 8;
+
+    /**
+     * String used to filter translations by key and/or value.
+     */
+    private $filter;
+
+    /**
      * array holding modules to include
      */
-    protected $_modules = [];
+    private $modules = null;
 
     /**
-     * string used to filter translation units
+     * @var string
      */
-    protected $_filter;
+    private $filterBy = null;
 
     /**
-     * Set Modules to include
+     * Filter translations by state (all, edited, added).
+     * @var string
+     */
+    private $state = null;
+
+    /**
+     * Filter translations by scope (keys and/or values).
+     * @var string
+     */
+    private $scope = null;
+
+    /**
+     * Names of folders containing TMX files.
+     * @var array
+     */
+    private $folders = ['language'];
+
+    /**
+     * @var array Reference for sorting languages
+     */
+    private $languageOrderRef;
+
+    /**
+     * Get editable modules.
+     */
+    public function getModules()
+    {
+        if (is_null($this->modules)) {
+            $allowedModules  = $this->getAllowedModules();
+
+            if (is_null($allowedModules)) {
+                $modulesManager = Application_Modules::getInstance();
+                $allowedModules = array_keys($modulesManager->getModules());
+            }
+
+            $this->modules = $allowedModules;
+        }
+
+        return $this->modules;
+    }
+
+    public function getAllowedModules()
+    {
+        $config = $this->getConfig();
+
+        $allowedModules = null;
+
+        if (isset($config->setup->translation->modules->allowed)) {
+            $value = $config->setup->translation->modules->allowed;
+            if (! empty($value)) {
+                $modules = array_map('trim', explode(',', $value));
+
+                $allModules = Application_Modules::getInstance()->getModules();
+
+                $allowedModules = [];
+
+                foreach ($modules as $name) {
+                    if (array_key_exists($name, $allModules)) {
+                        $allowedModules[] = $name;
+                    } else {
+                        $this->getLogger()->err(
+                            "Configuration 'setup.translation.modules.allowed' contains unknown module '$name'."
+                        );
+                    }
+                }
+            }
+        }
+
+        return $allowedModules;
+    }
+
+    /**
+     * Set Modules to include.
      *
      * @param array $modules Modules to include
      *
      */
-    public function setModules($array)
+    public function setModules($modules)
     {
-        $this->_modules = $array;
+        if (! is_array($modules) && ! is_null($modules)) {
+            $this->modules = [$modules];
+        } else {
+            $this->modules = $modules;
+        }
     }
 
     /**
@@ -96,7 +216,7 @@ class Application_Translate_TranslationManager
      */
     public function setFilter($string)
     {
-        $this->_filter = $string;
+        $this->filter = $string;
     }
 
     /**
@@ -107,13 +227,14 @@ class Application_Translate_TranslationManager
      *                          Valid keys are defined as class constants
      * @param int $sortOrder    Sort order as expected by @see array_multisort()
      * @throw Setup_Model_FileNotReadableException Thrown if loading tmx file(s) fails.
+     *
+     * TODO refactor
      */
     public function getTranslations($sortKey = self::SORT_UNIT, $sortOrder = SORT_ASC)
     {
         $fileData = $this->getFiles();
 
         $translations = [];
-
         $sortArray = [];
 
         foreach ($fileData as $module => $files) {
@@ -127,9 +248,9 @@ class Application_Translate_TranslationManager
                         $translationUnits = $tmxFile->toArray();
 
                         foreach ($translationUnits as $key => $values) {
-                            if (empty($this->_filter) || strpos($key, $this->_filter) !== false) {
+                            if ($this->matches($key, $values, $this->filter)) {
                                 $row = [
-                                    'unit' => $key,
+                                    'key' => $key,
                                     'module' => $module,
                                     'directory' => $dir,
                                     'filename' => $fileName,
@@ -140,11 +261,25 @@ class Application_Translate_TranslationManager
                                     $row['translations'][$lang] = $value;
                                 }
 
-                                $translations[] = $row;
-                                $sortArray[] = $row[$sortKey];
+                                $row['translations'] = $this->sortLanguages($row['translations']);
+
+                                if (! array_key_exists($key, $translations)) {
+                                    $translations[$key] = $row;
+                                    $sortArray[] = $row[$sortKey];
+                                } else {
+                                    $entry = $translations[$key];
+                                    if (isset($entry['duplicates'])) {
+                                        $duplicates = $entry['duplicates'];
+                                        unset($entry['duplicates']);
+                                    } else {
+                                        $duplicates = [];
+                                    }
+                                    $duplicates[] = $entry;
+                                    $row['duplicates'] = $duplicates;
+                                    $translations[$key] = $row;
+                                }
                             }
                         }
-
                     } else {
                         throw new Setup_Model_FileNotReadableException($filePath);
                     }
@@ -155,6 +290,167 @@ class Application_Translate_TranslationManager
         array_multisort($sortArray, $sortOrder, SORT_STRING, $translations);
 
         return $translations;
+    }
+
+    protected function sortLanguages($translations)
+    {
+        $ref = array_intersect_key($this->getLanguageOrderRef(), $translations);
+        return array_merge($ref, $translations);
+    }
+
+    protected function getLanguageOrderRef()
+    {
+        if (is_null($this->languageOrderRef)) {
+            $this->languageOrderRef = array_flip(Application_Configuration::getInstance()->getSupportedLanguages());
+        }
+
+        return $this->languageOrderRef;
+    }
+
+    public function getLanguageOrder()
+    {
+        if (is_array($this->languageOrderRef)) {
+            return array_flip($this->getLanguageOrderRef());
+        } else {
+            return null;
+        }
+    }
+
+    public function setLanguageOrder($order)
+    {
+        $this->languageOrderRef = array_flip($order);
+    }
+
+    /**
+     * Returns all translations from TMX files and database.
+     *
+     * - key
+     * - module
+     * - directory
+     * - filename
+     * - translations
+     *   - en -> English string
+     *   - de -> German string
+     *
+     * From database we get
+     *
+     *   key -> [
+     *       'en' -> Value,
+     *       'de' -> Value
+     *   ]
+     *
+     *
+     * @param string $sortKey
+     * @param int $sortOrder
+     * @return array Translations
+     */
+    public function getMergedTranslations($sortKey = self::SORT_UNIT, $sortOrder = SORT_ASC)
+    {
+        // get translations from TMX files
+        $translations = $this->getTranslations($sortKey, $sortOrder);
+
+        $database = new Opus_Translate_Dao();
+
+        $modules = $this->getModules();
+
+        $dbTranslations = $database->getTranslationsWithModules($modules);
+
+        foreach ($dbTranslations as $key => $info) {
+            $languages = $info['values'];
+            if (array_key_exists($key, $translations)) {
+                // key exists in TMX files and needs to be marked as EDITED
+                // keep original values from TMX files
+                if ($this->matches($key, $languages, $this->filter)) {
+                    $translations[$key]['translationsTmx'] = $translations[$key]['translations'];
+                    $translations[$key]['translations'] = $this->sortLanguages($languages);
+                    $translations[$key]['state'] = 'edited';
+                } else {
+                    // remove if edited version does not match anymore
+                    unset($translations[$key]);
+                }
+            } else {
+                // key does not exist in TMX file and needs to be marked as ADDED
+                if ($this->matches($key, $languages, $this->filter)) {
+                    $translations[$key]['key'] = $key;
+                    $translations[$key]['translations'] = $this->sortLanguages($languages);
+                    $translations[$key]['state'] = 'added';
+                    $translations[$key]['module'] = $info['module'];
+                }
+            }
+        }
+
+        if ($this->state !== null) {
+            foreach ($translations as $key => $entry) {
+                if ($this->state !== null && ! isset($entry['state'])) {
+                    unset($translations[$key]);
+                } else {
+                    if (($entry['state'] === 'added' && $this->state & self::STATE_ADDED) ||
+                        ($entry['state'] === 'edited' && $this->state & self::STATE_EDITED)) {
+                        // keep entry
+                    } else {
+                        unset($translations[$key]);
+                    }
+                }
+            }
+        }
+
+        return $translations;
+    }
+
+    /**
+     * @param $key
+     * TODO IMPORTANT optimize (do some caching or something)
+     * @throws \Opus\Translate\UnknownTranslationKey
+     */
+    public function getTranslation($key)
+    {
+        $translations = $this->getMergedTranslations();
+
+        $translation = null;
+
+        if (isset($translations[$key])) {
+            $translation = $translations[$key];
+        } else {
+            throw new \Opus\Translate\UnknownTranslationKey("Unknown key '$key'.");
+        }
+
+        return $translation;
+    }
+
+    /**
+     * Checks if translation matches configured criteria.
+     *
+     * Depending on the configured scope the function checks the key and/or the text of translations.
+     * Filtering by state happens outside this function because this depends on the presence of the
+     * key in the TMX files and the database or just the database.
+     *
+     * TODO should filting by module happen here
+     *
+     * @param $key string Name of translation key
+     * @param $values array Translated texts for supported languages
+     * @param $filter string Filter string for matching entries
+     * @param $module string Name of module for translation key
+     * @return bool
+     */
+    public function matches($key, $values, $filter, $module = null)
+    {
+        if (empty($filter)) {
+            return true;
+        }
+
+        if (($this->scope & self::SCOPE_KEYS || $this->scope == null) && stripos($key, $filter) !== false) {
+            return true;
+        }
+
+        if ($this->scope & self::SCOPE_TEXT || $this->scope == null) {
+            foreach ($values as $lang => $value) {
+                if (stripos($value, $filter) !== false) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -172,7 +468,7 @@ class Application_Translate_TranslationManager
         $result = [];
 
         foreach ($translations as $translation) {
-            if (stripos($translation['unit'], $needle) !== false) {
+            if (stripos($translation['key'], $needle) !== false) {
                 $result[] = $translation;
             }
         }
@@ -188,14 +484,24 @@ class Application_Translate_TranslationManager
     {
         $modules = [];
 
-        $languageDirs = ['language', 'language_custom'];
+        $languageDirs = $this->getFolderNames();
 
-        foreach ($this->_modules as $moduleName) {
-
+        foreach ($this->getModules() as $moduleName) {
             $moduleFiles = [];
 
+            $modulePath = realpath(APPLICATION_PATH . "/modules/$moduleName");
+
+            if (! is_dir($modulePath)) {
+                // TODO should this throw an exception? basically this here should never happen
+                $this->getLogger()->err(
+                    "Module directory '$moduleName' not found for loading translations."
+                );
+                continue;
+            }
+
             $moduleSubDirs = new RecursiveDirectoryIterator(
-                realpath(APPLICATION_PATH . "/modules/$moduleName"), FilesystemIterator::CURRENT_AS_SELF
+                $modulePath,
+                FilesystemIterator::CURRENT_AS_SELF
             );
 
             foreach ($moduleSubDirs as $moduleSubDir) {
@@ -213,11 +519,306 @@ class Application_Translate_TranslationManager
                 }
             }
 
-            if (!empty($moduleFiles)) {
+            if (! empty($moduleFiles)) {
                 $modules[$moduleName] = $moduleFiles;
             }
         }
 
         return $modules;
+    }
+
+    /**
+     * @return array
+     */
+    public function getFolderNames()
+    {
+        if (! is_array($this->folders)) {
+            $this->folders = [];
+        }
+        return $this->folders;
+    }
+
+    /**
+     * @param $names
+     */
+    public function setFolderNames($names)
+    {
+        if (! is_array($names)) {
+            $names = [$names];
+        }
+        $this->folders = $names;
+    }
+
+    /**
+     * @param $name
+     */
+    public function addFolderName($name)
+    {
+        $names = $this->getFolderNames();
+
+        if (! in_array($name, $names)) {
+            $names[] = $name;
+            $this->setFolderNames($names);
+        }
+    }
+
+    /**
+     * @param $key
+     * @return bool
+     *
+     * TODO should check database and TMX
+     */
+    public function keyExists($key)
+    {
+        $database = new Opus_Translate_Dao();
+
+        return ! is_null($database->getTranslation($key));
+    }
+
+    public function isEdited($key)
+    {
+        $translation = $this->getTranslation($key);
+
+        return (isset($translation['state']) && $translation['state'] == 'edited');
+    }
+
+    /**
+     * Removes a translation key from the database if the key exists in TMX files.
+     * @param $key
+     */
+    public function reset($key)
+    {
+        $database = new Opus_Translate_Dao();
+
+        $translations = $this->getTranslations();
+
+        if (array_key_exists($key, $translations)) {
+            $this->delete($key);
+        }
+    }
+
+    /**
+     * Removes a translation key from the database.
+     * @param $key string Translation key
+     * @param $module string Module of translation key
+     */
+    public function delete($key, $module = null)
+    {
+        $database = $this->getDatabase();
+        $database->remove($key, $module);
+
+        $this->clearCache();
+    }
+
+    public function deleteAll()
+    {
+        $database = $this->getDatabase();
+        $database->removeAll();
+
+        $this->clearCache();
+    }
+
+    public function clearCache()
+    {
+        if (Zend_Registry::isRegistered('Zend_Translate')) {
+            $translate = Zend_Registry::get('Zend_Translate');
+            $translate->clearCache();
+        }
+    }
+
+    /**
+     * TODO IMPORTANT bad performance, improve!
+     */
+    public function deleteMatches()
+    {
+        $matches = $this->getMergedTranslations();
+
+        $database = $this->getDatabase();
+
+        foreach ($matches as $key => $translation) {
+            if (isset($translation['state']) && (in_array($translation['state'], ['edited', 'added']))) {
+                $database->remove($key);
+            }
+        }
+    }
+
+    /**
+     * Returns custom translations as TMX file.
+     */
+    public function getExportTmxFile($unmodified = false)
+    {
+        $translations = $this->getMergedTranslations();
+
+        $tmxFile = new Application_Translate_TmxFile();
+
+        foreach ($translations as $key => $data) {
+            if ($unmodified || isset($data['state'])) {
+                $module = $data['module'];
+                $languages = $data['translations'];
+                foreach ($languages as $lang => $value) {
+                    $tmxFile->setTranslation($key, $lang, $value, $module);
+                }
+            }
+        }
+
+        return $tmxFile;
+    }
+
+    /**
+     * TODO move into separate class
+     * TODO cache keys in manager (performance)
+     */
+    public function importTmxFile($tmxFile)
+    {
+        $translations = $tmxFile->toArray();
+
+        $database = $this->getDatabase();
+
+        foreach ($translations as $key => $values) {
+            $module = $tmxFile->getModuleForKey($key);
+
+            $old = null;
+
+            try {
+                $old = $this->getTranslation($key);
+            } catch (\Opus\Translate\UnknownTranslationKey $ex) {
+                // do nothing
+                // TODO work without exception here (keyExists)?
+            }
+
+            if (! is_null($old)) {
+                // check if modules match
+                if (is_null($module) || $old['module'] !== $module) {
+                    $module = $old['module'];
+                    // TODO write to log
+                }
+
+                if (isset($old['transaltionsTmx'])) {
+                    $oldValues = $old['translationsTmx'];
+                } else {
+                    $oldValues = $old['translations'];
+                }
+
+                if ($oldValues != $values) {
+                    // only set if values differ from existing
+                    $database->setTranslation($key, $values, $module);
+                }
+            } else {
+                // add unknown key to database
+                $database->setTranslation($key, $values, $module);
+            }
+        }
+    }
+
+    /**
+     * @return Opus_Translate_Dao $database
+     */
+    public function getDatabase()
+    {
+        return new Opus_Translate_Dao();
+    }
+
+    public function setState($state)
+    {
+        $this->state = $state;
+    }
+
+    public function setScope($scope)
+    {
+        $this->scope = $scope;
+    }
+
+    /**
+     * @param $key
+     * @param $translations
+     * @param $module
+     * @param null $oldKey
+     * TODO perform as transaction
+     * TODO refactor to be efficient
+     */
+    public function updateTranslation($key, $translations, $module = null, $oldKey = null)
+    {
+        $dao = new Opus_Translate_Dao();
+
+        if ($key !== $oldKey && ! is_null($oldKey)) {
+            $translation = $this->getTranslation($oldKey);
+            if (isset($translation['state']) && $translation['state'] === 'added') {
+                $dao->remove($oldKey);
+                $this->clearCache();
+            } else {
+                throw new \Opus\Translate\Exception("Name of key '$oldKey' cannot be changed.");
+            }
+        } else {
+            $translation = $this->getTranslation($key);
+            $changeModule = isset($translation['module']) && $translation['module'] !== $module && ! is_null($module);
+            if ($changeModule) {
+                if (isset($translation['state']) && $translation['state'] === 'added') {
+                    $dao->remove($key);
+                    $this->clearCache();
+                } else {
+                    throw new \Opus\Translate\Exception("Module of key '$key' cannot be changed.");
+                }
+            }
+        }
+
+        if (! is_null($translation)) {
+            if (is_null($translations)) {
+                $translations = $translation['translations'];
+            }
+            if (is_null($module)) {
+                $module = $translation['module'];
+            }
+        }
+
+        $dao->setTranslation($key, $translations, $module);
+    }
+
+    /**
+     * Finds and returns duplicate keys in TMX files.
+     *
+     * TODO automatically search all modules? development setting?
+     */
+    public function getDuplicateKeys()
+    {
+        $all = $this->getTranslations();
+
+        $duplicateKeys = [];
+
+        foreach ($all as $key => $entry) {
+            if (isset($entry['duplicates'])) {
+                $duplicates = $entry['duplicates'];
+                unset($entry['duplicates']);
+                $duplicates[] = $entry;
+                $duplicateKeys[$key] = $duplicates;
+            }
+        }
+
+        return $duplicateKeys;
+    }
+
+    public function setTranslation($key, $values, $module = null)
+    {
+        try {
+            $old = $this->getTranslation($key);
+        } catch (\Opus\Translate\UnknownTranslationKey $excep) {
+            $old = null;
+        }
+
+        if (! is_null($old)) {
+            if (isset($old['translationsTmx'])) {
+                $defaultValues = $old['translationsTmx'];
+            } else {
+                $defaultValues = $old['translations'];
+            }
+
+            if ($defaultValues == $values) {
+                $this->reset($key);
+            } else {
+                $this->updateTranslation($key, $values, $module);
+            }
+        } else {
+            $dao = $this->getDatabase();
+            $dao->setTranslation($key, $values, $module);
+        }
     }
 }

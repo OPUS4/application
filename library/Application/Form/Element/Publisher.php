@@ -68,8 +68,7 @@ class Application_Form_Element_Publisher extends Application_Form_Element_Select
     {
         try {
             $institute = new Opus_DnbInstitute($value);
-        }
-        catch (Opus_Model_NotFoundException $omne) {
+        } catch (Opus_Model_NotFoundException $omne) {
             parent::setValue($value); // could be blocked, but keeping compatibility just in case
             return;
         }

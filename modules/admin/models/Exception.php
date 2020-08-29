@@ -32,6 +32,7 @@
  * @version     $Id$
  */
 
-class Admin_Model_Exception extends Application_Exception {
+class Admin_Model_Exception extends Application_Exception
+{
 
 }

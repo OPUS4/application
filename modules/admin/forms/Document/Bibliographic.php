@@ -39,12 +39,14 @@
  * @package     Module_Admin
  * @subpackage  Form_Document
  */
-class Admin_Form_Document_Bibliographic extends Admin_Form_Document_Section {
+class Admin_Form_Document_Bibliographic extends Admin_Form_Document_Section
+{
 
     const ELEMENT_CONTRIBUTING_CORPORATION = 'ContributingCorporation';
     const ELEMENT_CREATING_CORPORATION = 'CreatingCorporation';
     const ELEMENT_EDITION = 'Edition';
     const ELEMENT_ISSUE = 'Issue';
+    const ELEMENT_ARTICLE_NUMBER = 'ArticleNumber';
     const ELEMENT_PAGE_FIRST = 'PageFirst';
     const ELEMENT_PAGE_LAST = 'PageLast';
     const ELEMENT_PAGE_COUNT = 'PageCount';
@@ -55,7 +57,8 @@ class Admin_Form_Document_Bibliographic extends Admin_Form_Document_Section {
     const ELEMENT_THESIS_YEAR_ACCEPTED = 'ThesisYearAccepted';
     const ELEMENT_BELONGS_TO_BIBLIOGRAPHY = 'BelongsToBibliography';
 
-    public function init() {
+    public function init()
+    {
         parent::init();
 
         $this->setLegend('admin_document_section_bibliographic');
@@ -63,39 +66,45 @@ class Admin_Form_Document_Bibliographic extends Admin_Form_Document_Section {
         $this->setUseNameAsLabel(true);
 
         // Label entsprechen den Namen der Elemente
-        $this->addElement('text', self::ELEMENT_EDITION, array('size' => 70));
-        $this->addElement('text', self::ELEMENT_VOLUME, array('size' => 30));
-        $this->addElement('text', self::ELEMENT_PUBLISHER_NAME, array('size' => 70));
-        $this->addElement('text', self::ELEMENT_PUBLISHER_PLACE, array('size' => 70));
+        $this->addElement('text', self::ELEMENT_EDITION, ['size' => 70]);
+        $this->addElement('text', self::ELEMENT_VOLUME, ['size' => 30]);
+        $this->addElement('text', self::ELEMENT_PUBLISHER_NAME, ['size' => 70]);
+        $this->addElement('text', self::ELEMENT_PUBLISHER_PLACE, ['size' => 70]);
 
-        $this->addElement('text', self::ELEMENT_PAGE_COUNT, array('size' => 15));
-        $this->addElement('text', self::ELEMENT_PAGE_FIRST, array('size' => 15));
-        $this->addElement('text', self::ELEMENT_PAGE_LAST, array('size' => 15));
+        $this->addElement('text', self::ELEMENT_PAGE_COUNT, ['size' => 15]);
+        $this->addElement('text', self::ELEMENT_PAGE_FIRST, ['size' => 15]);
+        $this->addElement('text', self::ELEMENT_PAGE_LAST, ['size' => 15]);
 
-        $this->addElement('text', self::ELEMENT_ISSUE, array('size' => 30));
-        $this->addElement('text', self::ELEMENT_CONTRIBUTING_CORPORATION, array('size' => 70));
-        $this->addElement('text', self::ELEMENT_CREATING_CORPORATION, array('size' => 70));
+        $this->addElement('text', self::ELEMENT_ISSUE, ['size' => 30]);
+        $this->addElement('text', self::ELEMENT_ARTICLE_NUMBER, ['size' => 15]);
+
+        $this->addElement('text', self::ELEMENT_CONTRIBUTING_CORPORATION, ['size' => 70]);
+        $this->addElement('text', self::ELEMENT_CREATING_CORPORATION, ['size' => 70]);
 
         $this->addElement('Date', self::ELEMENT_THESIS_DATE_ACCEPTED);
         $this->addElement('Year', self::ELEMENT_THESIS_YEAR_ACCEPTED);
 
         $this->addSubForm(
             new Admin_Form_Document_MultiSubForm(
-                'Admin_Form_Document_Publisher', 'ThesisPublisher',
+                'Admin_Form_Document_Publisher',
+                'ThesisPublisher',
                 new Application_Form_Validate_MultiSubForm_RepeatedValues(
                     Admin_Form_Document_Institute::ELEMENT_INSTITUTE,
                     'admin_document_error_repeated_institute'
                 )
-            ), 'Publishers'
+            ),
+            'Publishers'
         );
         $this->addSubForm(
             new Admin_Form_Document_MultiSubForm(
-                'Admin_Form_Document_Grantor', 'ThesisGrantor',
+                'Admin_Form_Document_Grantor',
+                'ThesisGrantor',
                 new Application_Form_Validate_MultiSubForm_RepeatedValues(
                     Admin_Form_Document_Institute::ELEMENT_INSTITUTE,
                     'admin_document_error_repeated_institute'
                 )
-            ), 'Grantors'
+            ),
+            'Grantors'
         );
 
         $this->addElement('checkbox', self::ELEMENT_BELONGS_TO_BIBLIOGRAPHY);
@@ -103,7 +112,11 @@ class Admin_Form_Document_Bibliographic extends Admin_Form_Document_Section {
         $this->setRemoveEmptyCheckbox(false);
     }
 
-    public function populateFromModel($document) {
+    /**
+     * @param Opus_Document $document
+     */
+    public function populateFromModel($document)
+    {
         parent::populateFromModel($document);
 
         $datesHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('Dates');
@@ -112,6 +125,7 @@ class Admin_Form_Document_Bibliographic extends Admin_Form_Document_Section {
         $this->getElement(self::ELEMENT_CREATING_CORPORATION)->setValue($document->getCreatingCorporation());
         $this->getElement(self::ELEMENT_EDITION)->setValue($document->getEdition());
         $this->getElement(self::ELEMENT_ISSUE)->setValue($document->getIssue());
+        $this->getElement(self::ELEMENT_ARTICLE_NUMBER)->setValue($document->getArticleNumber());
         $this->getElement(self::ELEMENT_PAGE_FIRST)->setValue($document->getPageFirst());
         $this->getElement(self::ELEMENT_PAGE_LAST)->setValue($document->getPageLast());
         $this->getElement(self::ELEMENT_PAGE_COUNT)->setValue($document->getPageNumber());
@@ -125,7 +139,11 @@ class Admin_Form_Document_Bibliographic extends Admin_Form_Document_Section {
         $this->getElement(self::ELEMENT_BELONGS_TO_BIBLIOGRAPHY)->setValue($document->getBelongsToBibliography());
     }
 
-    public function updateModel($document) {
+    /**
+     * @param Opus_Document $document
+     */
+    public function updateModel($document)
+    {
         parent::updateModel($document);
 
         $datesHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('Dates');
@@ -134,6 +152,7 @@ class Admin_Form_Document_Bibliographic extends Admin_Form_Document_Section {
         $document->setCreatingCorporation($this->getElementValue(self::ELEMENT_CREATING_CORPORATION));
         $document->setEdition($this->getElementValue(self::ELEMENT_EDITION));
         $document->setIssue($this->getElementValue(self::ELEMENT_ISSUE));
+        $document->setArticleNumber($this->getElementValue(self::ELEMENT_ARTICLE_NUMBER));
         $document->setPageFirst($this->getElementValue(self::ELEMENT_PAGE_FIRST));
         $document->setPageLast($this->getElementValue(self::ELEMENT_PAGE_LAST));
         $document->setPageNumber($this->getElementValue(self::ELEMENT_PAGE_COUNT));
@@ -148,5 +167,4 @@ class Admin_Form_Document_Bibliographic extends Admin_Form_Document_Section {
         $document->setThesisYearAccepted($this->getElementValue(self::ELEMENT_THESIS_YEAR_ACCEPTED));
         $document->setBelongsToBibliography($this->getElementValue(self::ELEMENT_BELONGS_TO_BIBLIOGRAPHY));
     }
-
 }

@@ -1,0 +1,397 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tmx SYSTEM "http://www.gala-global.org/oscarStandards/tmx/tmx14.dtd">
+<tmx version="1.4">
+    <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool"></header>
+    <body>
+        <tu tuid="help_index_title">
+            <tuv xml:lang="en">
+                <seg>Help</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Hilfe</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="help_index_answerstitle">
+            <tuv xml:lang="en">
+                <seg>Answers</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Antworten</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="help_index_up">
+            <tuv xml:lang="en">
+                <seg>Back to Help topics</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Zurück zu den Hilfe-Topics</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="help_index_pagetitle">
+          <tuv xml:lang="en">
+            <seg>Help</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Hilfe</seg>
+          </tuv>
+        </tu>
+
+        <tu tuid="help_index_general">
+            <tuv xml:lang="en">
+                <seg>Using this publication server</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Benutzung des Dokumentenservers</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="help_index_authorhelp">
+            <tuv xml:lang="en">
+                <seg>Help for authors</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Hilfe für Autor*innen</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="help_index_formfields">
+            <tuv xml:lang="en">
+                <seg>Single elements of the application form</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Elemente des Veröffentlichungsformulars</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="help_index_legal_title">
+            <tuv xml:lang="en">
+                <seg>Legal aspects</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Rechtliches</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="help_index_misc">
+            <tuv xml:lang="en">
+                <seg>Miscellaneous</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Sonstiges</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="help_content_documentation">
+            <tuv xml:lang="en">
+                <seg><![CDATA[This document server is based on the repository software OPUS4 OPUS is documented here:
+<a href="http://www.opus-repository.org/" target="_blank">https://www.opus-repository.org/</a>.]]></seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg><![CDATA[Dieser Dokumentenserver wird auf Basis der Software OPUS4 betrieben. OPUS ist dokumentiert unter
+<a href="http://www.opus-repository.org/" target="_blank">https://www.opus-repository.org/</a>.]]></seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="help_content_policies">
+            <tuv xml:lang="en">
+                <seg><![CDATA[Placeholder for the policy guidelines of the maintaining institution.]]></seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg><![CDATA[Platzhalter für die Leitlinien der betreibenden Institution.]]></seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="help_content_legal_license">
+            <tuv xml:lang="en">
+                <seg><![CDATA[Authors can choose which terms of use must be regarded for their publication. These terms are defined
+in a license. This repository supports different licenses, from which you can choose one
+(i.e. <a href="http://creativecommons.org/license/" target="_blank">Creative Commons Licenses/</a>).]]></seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg><![CDATA[Als Autor*innen können Sie selbst festlegen, welche Nutzungsbedingungen für Ihre Arbeit gelten sollen. Diese
+Bedingungen werden in der Lizenz festgelegt. Auf diesem Dokumentenserver können Sie zwischen verschiedenen Lizenztexten
+wählen (z. B. <a href="http://creativecommons.org/license/" target="_blank">Creative Commons Lizenzen</a>).]]></seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="help_content_legal_parallel">
+            <tuv xml:lang="en">
+                <seg><![CDATA[In most cases this is no problem. <b>Please ensure in any case, if your publisher allows a parallel
+publication!</b> To do that you can use the
+<a href="http://www.sherpa.ac.uk/romeo.php" target="_blank">SHERPA/ROMEO list</a>.]]></seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg><![CDATA[Dies muss nicht unbedingt im Widerspruch mit der Veröffentlichung auf unserem Dokumentenserver stehen.
+<b>Bitte pr&uuml;fen Sie auf jeden Fall, ob Ihr Vertrag eine Publikation auf unserem Dokumentenserver
+gestattet!</b> Dies können Sie zum Beispiel mit Hilfe der
+<a href="http://www.sherpa.ac.uk/romeo.php" target="_blank">SHERPA/ROMEO-Liste</a> tun.]]></seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="help_content_publicationprocess">
+            <tuv xml:lang="en">
+                <seg><![CDATA[Please click on the publication link on the start page.<br/>
+First you are requested to choose a document type. Right beneath that you can upload your document files. Having done
+so you may click on "send". What follows now is the actual form.
+You have to fill in data about your publication here (so called metadata), which is used to describe your work in
+cataloges and other bibliographic
+directories. Describe the document you want to upload using the categories and fields on the publication form.
+Depending on the document type, some of
+these fields are <span class="required">mandatory</span> and therefore have to be filled in. Please describe your
+document as clear as possible.
+
+Mandatory fields are for example:<br/>
+
+<ul>
+  <li>the document type (must be choosen from a list)</li>
+  <li>the title of your publication and the language of the title</li>
+  <li>the abstract of the document</li>
+  <li>the publication date of your document (normally the day you publish it online)</li>
+  <li>the language of the document (must be choosen from a list)</li>
+  <li>the licence, under which you want to publish your document (must be choosen from a list)</li>
+</ul>
+
+If you are unsure what to fill in certain form fields, you can point the cursor on a field and an explaining help text will be shown.<br/>
+After you have finished the form, all data will be displayed once again for a check-up and you then have three possibilities: you can correct them if necessary, add your document to a
+collection or simply safe it directly.<br /><br/>
+
+<b>Note:</b><br/>
+
+In oder to publish your work cookies have to be enabled in your web browser.]]></seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg><![CDATA[Klicken Sie auf der Startseite auf Veröffentlichen.<br/>
+Sie werden zunächst aufgefordert, einen Dokumenttyp auszuwählen. Direkt darunter können Sie Ihr(e) Dokument(e)
+hochladen. Klicken Sie anschließend auf "Abschicken". Es folgt das eigentliche Formular. Hier werden verschiedene Daten
+zu Ihrer Publikation (sog. Metadaten) abgefragt, die der Beschreibung in Katalogen und anderen bibliographischen
+Verzeichnissen dienen. Beschreiben Sie hier anhand der vorgegebenen Kategorien das Dokument, das Sie einbringen wollen.
+Abhängig vom Dokumenttyp sind einige der Felder <span class="required">Pflichtfelder</span> und müssen also von Ihnen
+ausgefüllt werden.Machen Sie ansonsten so genaue Angaben wie möglich. Zum Beispiel werden erfasst:<br/>
+
+<ul>
+  <li>Dokumentart (aus einer Liste auszuwählen)</li>
+  <li>der Titel Ihrer Veröffentlichung und die Sprache des Titels</li>
+  <li>Inhaltliche Kurzbeschreibung Ihres Dokuments</li>
+  <li>Datum, an dem das Dokument veröffentlicht wird (in der Regel der Tag, an dem Sie es einstellen)</li>
+  <li>die Sprache des Dokuments (aus einer Liste auszuwählen)</li>
+  <li>die Lizenz, unter der Sie Ihr Dokument veröffentlichen wollen (aus einer Liste auszuwählen)</li>
+</ul>
+
+Wenn Sie nicht wissen, was Sie in einem Formularfeld eintragen sollen, fahren Sie bitte mit dem Cursor über das
+Eingabefeld. Es wird ein erläuternder Hilfetext eingeblendet (Tooltip).<br/>
+Zum Abschluss der Datenerfassung werden Ihnen Ihre Eingaben noch einmal angezeigt und Sie haben drei Möglichkeiten:
+Sie können die Eingaben zu Ihrem Dokument gegebenenfalls korrigieren,
+es einer Sammlung (Collection) hinzufügen oder direkt abspeichern.<br/><br/>
+
+<b>Hinweis:</b><br/>
+
+Cookies müssen im Webbrowser eingeschaltet sein, um Dokumente über das Veröffentlichungsformular einstellen zu können.]]></seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="help_content_metadata">
+            <tuv xml:lang="en">
+                <seg><![CDATA[Metadata can be defined as
+
+<ul>
+<li>data describing one or more resources or as</li>
+<li>data associated with an object and describing it</li>
+</ul>
+
+Basically metadata is describing documents, objects or services and contains information about their content,
+structure or form. More abstractly metadata is a description of data or &quot;data about data&quot;.
+Bibliographic data sets and catalog entries in library catalogs can be seen as a kind of metadata.
+
+<p>
+This repository is using metadata in the <a href="http://dublincore.org/" target="_blank">Dublin
+Core Metadata Element Set</a> (short Dublin Core (DC)) which has fifteen basic elements. Dublin
+Core is the result of international efforts to reach a collective consensus in describing electronic
+objects (in the broadest sense). The Library of Congress (LoC), the Online Cataloging Library Center (OCLC)
+and several national libraries are dealing with Dublin Core in many projects and are close to introduce the
+system respectively.
+</p>]]></seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg><![CDATA[Metadaten können definiert werden als
+
+<ul>
+<li>Daten, die eine oder mehrere Ressourcen beschreiben oder als</li>
+<li>Daten, die mit einem Objekt verbunden sind und dieses Objekt beschreiben</li>
+</ul>
+
+<p>Prinzipiell stellen Metadaten daher eine Beschreibung von Dokumenten, Objekten oder Diensten dar und
+enthalten Informationen zu deren Inhalt, Struktur oder Form. Etwas abstrakter formuliert sind Metadaten
+Beschreibungen von Daten bzw. "Daten über Daten". Bibliographische Datensätze und Katalogeinträge in
+Bibliotheken können als eine Form von Metadaten gesehen werden.</p>
+
+<p>
+Als Grundlage für die Metadaten auf diesem Dokumentenserver soll das aus fünfzehn Basiselementen
+bestehende <a href="http://dublincore.org/" target="_blank">Dublin Core Metedata Element Set</a>
+(kurz Dublin Core bzw. DC) dienen. Dublin Core ist das Ergebnis internationaler Bemühungen, einen
+gemeinsamen Konsens bei der Beschreibung elektronischer Objekte (im weitesten Sinne) zu finden.
+Die Library of Congress (LoC), das Online Cataloging Library Center (OCLC) und eine Reihe von
+Nationalbibliotheken setzen sich in Projekten mit Dublin Core auseinander bzw. stehen kurz vor dessen
+Einführung.</p>]]></seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="help_content_searchtipps">
+            <tuv xml:lang="en">
+                <seg><![CDATA[<h4>Boolean Operators <b>AND</b>, <b>OR</b>, <b>NOT</b></h4>
+
+<p>When you use the <b>Simple Search</b>, all terms are combined by <b>AND</b> automatically. For a more tightly
+focused search you may use the Boolean Operators to combine different search terms.</p>
+
+<p><b>AND:</b> The document has to contain all search terms.</p>
+
+<p><b>OR:</b> The document has to contain one of the search terms. This function broadens your search and is
+recommended, when there are different terms for the same meaning.</p>
+
+<div><code>article <b>OR</b> paper</code></div>
+
+<p><b>NOT:</b> This function works excluding and might be useful to reduce a large result list: Documents, which
+contain the one term, may not contain the other.</p>
+
+<div><code>article <b>NOT</b> paper</code></div>
+
+<p>The Boolean Operators work for the <b>Advanced Search</b> as well. You may use them to combine different search
+terms within one search field. For example, to search for documents of the author "Doe" in the years 2002 or 2003,
+use the query:</p>
+
+<code>Author: Doe <br /> Year: 2002 <b>OR</b> 2003</code>
+
+<h4>Wildcards</h4>
+
+<p>In the field 'Search:', you may use the symbols '*' and '?' as wildcards. Use them in place of a character or
+characters that are unknown or that may differ. You cannot use them in front of a word or search string.</p>
+
+<code>Example 1: <b>chemi*</b> finds <i>chemical</i> but also <i>chemistry</i> or <i>chemist</i>.</code>
+
+<code>Example 2: <b>licen?e</b> finds <i>licence</i> and <i>license</i>.</code>
+
+<p>You may use double quotes (") to search for phrases.</p>]]></seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg><![CDATA[<h4>Boolesche Operatoren <b>AND</b>, <b>OR</b>, <b>NOT</b></h4>
+
+<p>Bei der <b>Einfachen Suche</b> werden mehrere Suchbegriffe automatisch mit <b>und</b> verknüpft. Für eine gezieltere
+Suche empfiehlt es sich mit Hilfe der Booleschen Operatoren mehrere Suchbegriffe miteinander zu verknüpfen.</p>
+
+<p><b>AND:</b> Alle eingegebenen Suchwörter müssen im Dokument vorkommen.</p>
+
+<p><b>OR:</b> Nur einer der eingegebenen Suchbegriffe muss im Dokument vorkommen. Diese Funktion erweitert den
+Suchbereich und bietet sich an, wenn unterschiedliche Bezeichnungen zu einem Thema existieren.</p>
+
+<code>Orange <b>OR</b> Apfelsine</code>
+
+<p><b>NOT:</b> Diese Funktion hat eine ausschließende Wirkung und kann benutzt werden, um die Treffermenge
+einzuschränken: In Dokumenten, in denen der eine Suchbegriff vorkommt, darf der andere nicht vorkommen.</p>
+
+<code>Orange <b>NOT</b> Apfelsine</code>
+
+<p>Die Booleschen Operatoren funktionieren auch für die <b>Erweiterte Suche</b>. Dort können sie benutzt werden, um
+verschiedene Suchbegriffe innerhalb eines Suchfelds miteinander zu kombinieren. Zum Beispiel liefert die folgende
+Suchanfrage alle Dokumente des Autors bzw. der Autorin "Mustermensch" für die Jahre 2002 oder 2003:</p>
+
+<code> Autor*innen: Mustermann <br/> Jahr: 2002 <b>OR</b> 2003</code>
+
+<h4><b>Platzhalter/ Wildcards</b></h4>
+
+<p>Wenn Sie sich nicht sicher sind, wie ein Suchbegriff, beispielsweise ein Name, geschrieben wird, oder wenn Sie
+ihre Suche erweitern möchten, können Sie <b>*</b> und <b>?</b> als Wildcard verwenden. Es ist nicht möglich, diese am
+Beginn eines Suchbegriffes zu verwenden.</p>
+
+<div><code>Beispiel 1: "Biblio<b>*</b>" findet "Bibliothekarin", "Bibliothek" oder auch "bibliothekarisch".</code></div>
+
+<div><code>Beispiel 2: "Ma<b>?</b>er" findet "Mayer", "Maier" oder auch "Mager" und "Maler".</code></div>
+
+<p>Sie können doppelte Anführungszeichen (") benutzen, um eine Phrasensuche durchzuführen.</p>]]></seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="help_title_searchtipps">
+            <tuv xml:lang="en">
+                <seg>Hints for searching</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Tipps für die Suche</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="help_title_contact">
+            <tuv xml:lang="en">
+                <seg>I have some more questions - whom shall I contact?</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>An wen kann ich mich bei Fragen wenden?</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="help_title_publicationprocess">
+            <tuv xml:lang="en">
+                <seg>How do I publish my work here?</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Wie geht der Veröffentlichungsvorgang vor sich?</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="help_title_metadata">
+            <tuv xml:lang="en">
+                <seg>What's metadata?</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Was sind Metadaten?</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="help_title_legal_parallel">
+            <tuv xml:lang="en">
+                <seg>What's to regard if I plan to publish my work by a professional publisher or have done that already?</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Was ist, wenn ich meine Publikation bei einem Verlag veröffentlichen lasse oder dies plane?</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="help_title_legal_license">
+            <tuv xml:lang="en">
+                <seg>What about licenses for my publication?</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Wie sieht es mit Lizenzen für mein Werk aus?</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="help_title_policies">
+            <tuv xml:lang="en">
+                <seg>Policies</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Leitlinien</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="help_title_documentation">
+            <tuv xml:lang="en">
+                <seg>Documentation</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Dokumentation</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="help_title_imprint">
+            <tuv xml:lang="en">
+                <seg>Imprint</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Impressum</seg>
+            </tuv>
+        </tu>
+
+    </body>
+</tmx>

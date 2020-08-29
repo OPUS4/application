@@ -31,7 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Admin_Model_UrnGenerator {
+class Admin_Model_UrnGenerator
+{
 
     // erforderlicher Parameter für die Generierung von URNs
     private $nid;
@@ -44,15 +45,16 @@ class Admin_Model_UrnGenerator {
      *
      * @throws Application_Exception Exception wird geworfen, wenn ein erforderlicher Konfigurationsparameter nicht vorhanden ist
      */
-    public function __construct() {
+    public function __construct()
+    {
         $config = Zend_Registry::get('Zend_Config');
 
-        if (!isset($config->urn->nid) || $config->urn->nid == '') {
+        if (! isset($config->urn->nid) || $config->urn->nid == '') {
             throw new Application_Exception('missing configuration setting for urn.nid - is required for URN generation');
         }
         $this->nid = $config->urn->nid;
 
-        if (!isset($config->urn->nss) || $config->urn->nss == '') {
+        if (! isset($config->urn->nss) || $config->urn->nss == '') {
             throw new Application_Exception('missing configuration setting for urn.nss - is required for URN generation');
         }
         $this->nss = $config->urn->nss;
@@ -65,7 +67,8 @@ class Admin_Model_UrnGenerator {
      * @param $docId ID des OPUS-Dokuments für das URN generiert werden soll
      * @return string
      */
-    public function generateUrnForDocument($docId) {
+    public function generateUrnForDocument($docId)
+    {
         $identifierUrn = new Opus_Identifier_Urn($this->nid, $this->nss);
         $urn = $identifierUrn->getUrn($docId);
 

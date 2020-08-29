@@ -57,6 +57,11 @@
         <xsl:text>:</xsl:text>
     </xsl:template>
 
+    <xsl:template name="translateIdentifier">
+        <xsl:value-of select="php:functionString('Application_Xslt::translateIdentifier', @Type)" />
+        <xsl:text>:</xsl:text>
+    </xsl:template>
+
     <!-- Named template to translate an arbitrary string. Needs the translation key as a parameter. -->
     <xsl:template name="translateString">
         <xsl:param name="string" />

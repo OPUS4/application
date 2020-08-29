@@ -70,26 +70,21 @@ class Crawlers_SitelinksController extends Application_Controller_Action
 
         $year = trim($this->_getParam('year'));
 
-        if (preg_match('/^\d{4}$/', $year) > 0)
-        {
-           $f = new Opus_DocumentFinder();
-           $f->setServerState('published');
-           $f->setServerDatePublishedRange($year, $year+1);
-           $this->view->ids = $f->ids();
+        if (preg_match('/^\d{4}$/', $year) > 0) {
+            $f = new Opus_DocumentFinder();
+            $f->setServerState('published');
+            $f->setServerDatePublishedRange($year, $year + 1);
+            $this->view->ids = $f->ids();
 
-           if (count($this->view->ids) > 0)
-           {
-               $this->view->listYear = $year;
-               $this->view->title = $this->view->translate('crawlers_sitelinks_list', $year);
-           }
-           else
-           {
-               $this->view->ids = null;
-               $this->view->title = $this->view->translate('crawlers_sitelinks_index');
-           }
+            if (count($this->view->ids) > 0) {
+                $this->view->listYear = $year;
+                $this->view->title = $this->view->translate('crawlers_sitelinks_list', $year);
+            } else {
+                $this->view->ids = null;
+                $this->view->title = $this->view->translate('crawlers_sitelinks_index');
+            }
         }
 
         return $this->render('index');
     }
-
 }

@@ -47,24 +47,18 @@ $helper->log('Removing database schema link and createdb.sh script ...');
 
 $schemaLink = APPLICATION_PATH . '/db/schema';
 
-if (is_link($schemaLink))
-{
+if (is_link($schemaLink)) {
     unlink($schemaLink);
     $helper->log("Deleted link '$schemaLink'");
-}
-else
-{
+} else {
     $helper->log("Link '$schemaLink' not found");
 }
 
 $createdbScript = APPLICATION_PATH . '/db/createdb.sh';
 
-if (is_file($createdbScript))
-{
+if (is_file($createdbScript)) {
     unlink($createdbScript);
     $helper->log("Deleted file '$createdbScript'");
-}
-else
-{
+} else {
     $helper->log("File '$createdbScript' not found");
 }

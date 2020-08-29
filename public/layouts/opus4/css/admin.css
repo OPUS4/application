@@ -1,5 +1,32 @@
 /**
- * utf-8 encoded!
+ * This file is part of OPUS. The software OPUS has been originally developed
+ * at the University of Stuttgart with funding from the German Research Net,
+ * the Federal Department of Higher Education and Research and the Ministry
+ * of Science, Research and the Arts of the State of Baden-Wuerttemberg.
+ *
+ * OPUS 4 is a complete rewrite of the original OPUS software and was developed
+ * by the Stuttgart University Library, the Library Service Center
+ * Baden-Wuerttemberg, the Cooperative Library Network Berlin-Brandenburg,
+ * the Saarland University and State Library, the Saxon State Library -
+ * Dresden State and University Library, the Bielefeld University Library and
+ * the University Library of Hamburg University of Technology with funding from
+ * the German Research Foundation and the European Regional Development Fund.
+ *
+ * LICENCE
+ * OPUS is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the Licence, or any later version.
+ * OPUS is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details. You should have received a copy of the GNU General Public License
+ * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
+ * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * @category    Application
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
@@ -88,9 +115,8 @@
 }
 
 .adminContainer .breadcrumbsContainer .wrapper {
-    max-width: 930px;
+    max-width: 95%;
     min-width: 770px;
-    padding: 0 50px 0 20px;
 }
 
 .adminContainer .breadcrumbsContainer * {
@@ -321,6 +347,12 @@ ul.form-action {
     z-index: 100;
 }
 
+.fixedMenubar.fixed {
+    position: fixed;
+    top: 0;
+    z-index: 100;
+}
+
 #actionboxContainer .col {
     float: left;
 
@@ -393,10 +425,16 @@ ul.form-action {
 }
 
 #Document-Goto.dropdown dt a {
+    /* TODO update look
+    background-color: #f0cb92;
+    color: black;
+    */
     background-color: #595A56;
     color: white;
     padding: 6px 28px 6px 10px;
     position: relative;
+    border: 1px solid #8c8d8a;
+    border-radius: 4px;
 }
 
 #Document-Goto.dropdown dt a:after {
@@ -532,6 +570,7 @@ ul.form-action {
 
 /* @group form content */
 .adminContainer .collection_new a.add,
+.adminContainer .enrichmentkey_new a.add,
 .adminContainer table a.add,
 .adminContainer td.edit a,
 .adminContainer td.move-up a,
@@ -1087,45 +1126,45 @@ ul.links input:hover {
 /* @end */
 
 /* @group Metadata table style */
-.adminContainer .wrapper td.Remove-data,
-.adminContainer .wrapper td.Generate-data {
+.adminContainer td.Remove-data,
+.adminContainer td.Generate-data {
     text-align: right;
     min-width: 15%;
 }
 
-.adminContainer .wrapper td.Language-data {
+.adminContainer td.Language-data {
     width: 19%;
 }
 
-.adminContainer .wrapper .fields-wrapper table {
+.adminContainer .fields-wrapper table {
     margin: 0;
 }
 
-.adminContainer .wrapper .fields-wrapper thead th {
+.adminContainer .fields-wrapper thead th {
     border-bottom: 1px solid #7D7E7A;
 }
 
-.adminContainer .wrapper .fields-wrapper tbody tr:hover {
+.adminContainer .fields-wrapper tbody tr:hover {
     background: none;
 }
 
-.adminContainer .wrapper .fields-wrapper th {
+.adminContainer .fields-wrapper th {
     font-size: 0.8em;
     font-weight: bold;
 }
 
-.adminContainer .wrapper .fields-wrapper td {
+.adminContainer .fields-wrapper td {
     border-top: 1px dotted #c2c2c2;
 }
 
-.adminContainer .wrapper .fields-wrapper th.visibleoai,
-.adminContainer .wrapper .fields-wrapper td.visibleoai {
+.adminContainer .fields-wrapper th.visibleoai,
+.adminContainer .fields-wrapper td.visibleoai {
     width: 4em;
     text-align: center;
 }
 
-.adminContainer .wrapper .fields-wrapper th.visiblefrontdoor,
-.adminContainer .wrapper .fields-wrapper td.visiblefrontdoor {
+.adminContainer .fields-wrapper th.visiblefrontdoor,
+.adminContainer .fields-wrapper td.visiblefrontdoor {
     width: 8em;
     text-align: center;
 }
@@ -1443,19 +1482,19 @@ ul.links input:hover {
     cursor: pointer;
 }
 
-.adminContainer .wrapper table.documents {
+.adminContainer table.documents {
     margin: 0;
 }
 
-.adminContainer .wrapper table.documents tr.published {
+.adminContainer table.documents tr.published {
     background-color: #edffed;
 }
 
-.adminContainer .wrapper table.documents tr.restricted {
+.adminContainer table.documents tr.restricted {
     background-color: #ffd3cf;
 }
 
-.adminContainer .wrapper table.documents tr.deleted {
+.adminContainer table.documents tr.deleted {
     background-color: #dcdcdc;
 }
 
@@ -1528,57 +1567,53 @@ ul.links input:hover {
 /* @end */
 
 /* @group admin_collectionroles */
-.adminContainer .wrapper table {
+.adminContainer table {
     border-collapse: separate;
     border-spacing: 0;
     margin: 1.5em 0;
     width: 100%;
 }
 
-.adminContainer .wrapper .invisible,
-.adminContainer .wrapper .invisible a,
-.adminContainer .wrapper a.invisible,
-.adminContainer .wrapper td.unhide a {
+.adminContainer .invisible,
+.adminContainer .invisible a,
+.adminContainer a.invisible,
+.adminContainer td.unhide a {
     color: #ff6347;
 }
 
-.adminContainer .wrapper th.invisible {
+.adminContainer th.invisible {
     font-weight: normal;
 }
 
-.adminContainer .wrapper table th,
-.adminContainer .wrapper table td {
+.adminContainer table th,
+.adminContainer table td {
     padding: 8px;
 }
 
-.adminContainer .wrapper table td {
+.adminContainer table td {
     vertical-align: text-top;
 }
 
-.adminContainer .wrapper table thead th {
+.adminContainer table thead th {
     border-bottom: 3px solid #5788c1;
     text-align: left;
     font-weight: normal;
     font-size: 1.167em;
 }
 
-.adminContainer .wrapper table td,
-.adminContainer .wrapper table tbody th {
+.adminContainer table td,
+.adminContainer table tbody th {
     border-top: 1px solid #b7cde7;
     font-size: 0.857em;
     text-align: left;
 }
 
-.adminContainer .wrapper table tbody > tr:first-child > * {
+.adminContainer table tbody > tr:first-child > * {
     border-top: none;
 }
 
-.adminContainer .wrapper table tbody th {
+.adminContainer table tbody th {
     font-weight: bold;
-}
-
-.adminContainer .wrapper table tbody tr:hover {
-    background-color: #b7cde7;
 }
 
 .adminContainer td.edit a {
@@ -1602,6 +1637,7 @@ ul.links input:hover {
 }
 
 .adminContainer .collection_new a.add,
+.adminContainer .enrichmentkey_new a.add,
 .adminContainer table a.add {
     background-position: -17px -16px;
     border-radius: 5px;
@@ -1615,7 +1651,7 @@ ul.links input:hover {
     margin-left: 1em;
 }
 
-.adminContainer .wrapper table td.insert {
+.adminContainer table td.insert {
     display: block;
     position: relative;
     border: none;
@@ -1644,7 +1680,7 @@ ul.links input:hover {
 
 }
 
-.adminContainer .wrapper table thead a.add {
+.adminContainer table thead a.add {
     font-size: 0.8em;
 }
 
@@ -2015,7 +2051,7 @@ ul.links input:hover {
     max-width: 95%;
 }
 
-.adminContainer .wrapper table td.module-options {
+.adminContainer table td.module-options {
     text-align: right; /* TODO not working yet */
 }
 
@@ -2025,6 +2061,16 @@ ul.links input:hover {
     overflow-wrap: break-word;
     -ms-word-break: break-all;
     display: block;
+}
+
+.adminContainer .persons-table {
+    max-width: 95%;
+    margin: 1em auto;
+    font-size: 0.9em;
+}
+
+.adminContainer .persons-table thead th {
+    font-size: 1.2em;
 }
 
 .adminContainer .persons-table td.firstname,
@@ -2210,58 +2256,59 @@ form.persons-confirm legend {
 
 /* Styling of table showing value changes */
 
-.adminContainer .wrapper .changes-table-wrapper {
+.adminContainer .changes-table-wrapper {
     width: 80%;
     margin: 0 auto;
 }
 
-.adminContainer .wrapper table.changes-table {
+.adminContainer table.changes-table {
     margin-left: -2em;
     font-size: 1.4em;
     border-spacing: 1px 2px;
 }
 
-.adminContainer .wrapper table.changes-table tr th:first-child {
+.adminContainer table.changes-table tr th:first-child {
     width: 8em;
 }
 
-.adminContainer .wrapper table.changes-table thead th:first-child {
+.adminContainer table.changes-table thead th:first-child {
     color: transparent;
 }
 
-.adminContainer .wrapper table.changes-table thead th {
+.adminContainer table.changes-table thead th {
     text-align: center;
 }
 
-.adminContainer .wrapper table.changes-table ul {
+.adminContainer table.changes-table ul {
     list-style: none;
     margin: 0;
     padding: 0;
 }
 
-.adminContainer .wrapper table.changes-table li {
+.adminContainer table.changes-table li {
     margin: 0;
     padding: 0;
 }
 
-.adminContainer .wrapper table.changes-table th {
+.adminContainer table.changes-table th {
     border: none;
 }
 
-.adminContainer .wrapper table.changes-table td {
+.adminContainer table.changes-table td {
     border: none;
 }
 
-.adminContainer .wrapper table.changes-table td:first-child, .adminContainer .wrapper table.changes-table th:first-child {
+.adminContainer table.changes-table td:first-child,
+.adminContainer table.changes-table th:first-child {
     border: none;
 }
 
 
-.adminContainer .wrapper table.changes-table tr:hover {
+.adminContainer table.changes-table tr:hover {
     background-color: transparent;
 }
 
-.adminContainer .wrapper table.changes-table tr {
+.adminContainer table.changes-table tr {
 }
 
 .changes-table tr.modified td {
@@ -2290,7 +2337,7 @@ form.persons-confirm legend {
     display: none;
 }
 
-.adminContainer .wrapper table.changes-table td.fieldname {
+.adminContainer table.changes-table td.fieldname {
     background-color: transparent;
     font-weight: bold;
     color: darkslategray;
@@ -2299,11 +2346,11 @@ form.persons-confirm legend {
     width: 20%
 }
 
-.adminContainer .wrapper table.changes-table tr td.old-value {
+.adminContainer table.changes-table tr td.old-value {
     width: 38%;
 }
 
-.adminContainer .wrapper table.changes-table tr td.new-value {
+.adminContainer table.changes-table tr td.new-value {
     width: 38%;
 }
 
@@ -2345,7 +2392,7 @@ form.persons-confirm legend {
     display: inline;
 }
 
-.adminContainer .wrapper table.changes-table td.change-arrow {
+.adminContainer table.changes-table td.change-arrow {
     padding: 0;
     margin: 0;
     text-align: center;
@@ -2382,6 +2429,25 @@ ul.permissions-list input[type=checkbox] {
     margin-right: 1em;
 }
 
+#personsMenu {
+    overflow: auto;
+    padding: 0.5em 1em;
+    background: url(../img/theme/admin/bg_actionbox-fixed.png);
+    -moz-box-shadow: 0px 2px 1px rgba(54, 54, 54, 0.4);
+    -webkit-box-shadow: 0px 2px 1px rgba(54, 54, 54, 0.4);
+    box-shadow: 0px 2px 1px rgba(54, 54, 54, 0.4);
+    -ms-filter: "progid:DXImageTransform.Microsoft.dropshadow(OffX=2,OffY=1,Color=#66545454,Positive=true)";
+    filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=1, Color=#66545454, Positive=true);
+}
+
+#personsMenu.fixed {
+    width: 100%;
+}
+
+form#persons {
+    overflow: auto;
+}
+
 #fieldset-Translations dl {
     padding-left: 1em;
     margin-top: 0;
@@ -2398,4 +2464,82 @@ ul.permissions-list input[type=checkbox] {
 
 .adminContainer #fieldset-Enrichments td {
     vertical-align: top;
+}
+
+.unused {
+    color: grey;
+}
+
+.used {
+    color: black;
+}
+
+table.module-access-table {
+    font-size: 1.1em;
+}
+
+table.module-access-table tr.access {
+    background-color: #bafbab;
+}
+
+table.module-access-table tr.access td.column-module {
+    font-weight: bold;
+}
+
+table.module-access-table tr.noaccess {
+     background-color: #ffb1ae;
+}
+
+.admin_account_show .label {
+    display: inline-block;
+    width: 32%;
+    margin-bottom: 0.8em;
+}
+
+.admin_account_show .value {
+    display: inline;
+}
+
+.admin_account_show .account-info {
+    margin-bottom: 1em;
+}
+
+/* TODO refactor CSS so the translation element can be styled globally */
+.field label, .admin_collectionroles_create .field label {
+    margin-left: -8em;
+}
+
+.field label span, .admin_collectionroles_create .field label span {
+    width: 7.5em;
+    display: inline-block;
+    text-align: right;
+    margin-right: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+a.link-button {
+    display: inline-block;
+    padding: 0.5em 1em;
+    background: black;
+    color: white;
+    border-radius: 4px;
+    border: 1px solid #8c8d8a;
+    border-radius: 4px;
+}
+
+a.link-button:hover {
+    text-decoration: none;
+    color: white;
+}
+
+a.create-document-link {
+    float: right;
+}
+
+#enrichmentkeyTable span.strong {
+    font-weight: bold;
+}
+
+.code {
+    font-family: monospace;
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -27,104 +28,116 @@
  * @category    Application Unit Test
  * @package     Admin_Model
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class Admin_Model_FileImportTest extends ControllerTestCase {
+class Admin_Model_FileImportTest extends ControllerTestCase
+{
+
+    protected $additionalResources = ['database'];
 
     private $model;
-    
+
     private $documentId;
-    
+
     private $importFolder;
-    
-    public function setUp() {
+
+    public function setUp()
+    {
         parent::setUp();
-        
+
         $this->model = new Admin_Model_FileImport();
-        
+
         $this->importFolder = APPLICATION_PATH . '/tests/workspace/incoming';
         $this->_clearImportFolder();
     }
-    
-    public function tearDown() {
+
+    public function tearDown()
+    {
         $this->_clearImportFolder();
         parent::tearDown();
     }
 
-    private function _clearImportFolder() {
+    private function _clearImportFolder()
+    {
         foreach (new DirectoryIterator($this->importFolder) as $fileInfo) {
-            if (!$fileInfo->isDot() && $fileInfo->isFile()) {
+            if (! $fileInfo->isDot() && $fileInfo->isFile()) {
                 unlink($fileInfo->getPathname());
             }
         }
     }
 
-    public function testConstruct() {
+    public function testConstruct()
+    {
         $this->assertEquals(APPLICATION_PATH . '/workspace/incoming', $this->model->getImportFolder());
     }
 
-    public function testSetGetImportFolder() {
+    public function testSetGetImportFolder()
+    {
         $this->model->setImportFolder('../workspace/incoming');
         $this->assertEquals('../workspace/incoming', $this->model->getImportFolder());
     }
-    
-    public function testAddFilesToDocument() {
+
+    public function testAddFilesToDocument()
+    {
         $document = $this->createTestDocument();
-        
+
         $this->documentId = $document->store();
 
         $this->model->setImportFolder($this->importFolder);
         $filePath = $this->importFolder . '/test.txt';
-        
+
         file_put_contents($filePath, 'testfile');
-        
-        $this->model->addFilesToDocument($this->documentId, array('test.txt'));
-        
+
+        $this->model->addFilesToDocument($this->documentId, ['test.txt']);
+
         $document = new Opus_Document($this->documentId);
-        
+
         $files = $document->getFile();
-        
+
         $this->assertNotNull($files);
         $this->assertEquals(1, count($files));
         $this->assertEquals('test.txt', $files[0]->getPathName());
         $this->assertEquals('test.txt', $files[0]->getLabel());
-        
+
         $this->assertFalse(file_exists($filePath)); // deleted after import
     }
-    
-    public function testGetNamesOfIncomingFiles() {
+
+    public function testGetNamesOfIncomingFiles()
+    {
         $this->model->setImportFolder($this->importFolder);
-        
+
         file_put_contents($this->importFolder . '/testfile', 'testfile');
-        
+
         $files = $this->model->getNamesOfIncomingFiles();
-        
+
         $this->assertInternalType('array', $files);
         $this->assertEquals(1, count($files));
         $this->assertEquals('testfile', $files[0]);
-        
+
         unlink($this->importFolder . '/testfile');
     }
-    
+
     /**
      * @expectedException Application_Exception
      * @expectedExceptionMessage no files for import
      */
-    public function testAddFilesToDocumentNoFiles() {
+    public function testAddFilesToDocumentNoFiles()
+    {
         $this->model->addFilesToDocument(200, null);
     }
-    
+
     /**
      * @expectedException Application_Exception
      * @expectedExceptionMessage no document found for id 500
      */
-    public function testAddFilesToDocumentUnknownDocument() {
-        $this->model->addFilesToDocument(500, array('testfile'));
+    public function testAddFilesToDocumentUnknownDocument()
+    {
+        $this->model->addFilesToDocument(500, ['testfile']);
     }
 
-    public function testIsValidFileId() {
+    public function testIsValidFileId()
+    {
         $this->assertTrue($this->model->isValidFileId(116), 'Datei ID = 116 (Dokument 91) fehlt.');
 
         $this->assertFalse($this->model->isValidFileId(5555), 'Datei ID = 5555 sollte nicht gültig sein.');
@@ -133,24 +146,40 @@ class Admin_Model_FileImportTest extends ControllerTestCase {
         $this->assertFalse($this->model->isValidFileId(' '), 'Datei ID = \' \' sollte nicht gültig sein.');
     }
 
-    public function testFileBelongsToDocument() {
-        $this->assertTrue($this->model->isFileBelongsToDocument(91, 116),
-            'Datei ID = 116 sollte zu Dokument ID = 91 gehören.');
-        $this->assertTrue($this->model->isFileBelongsToDocument(91, "116"),
-            'Datei ID = "116" sollte zu Dokument ID = 91 gehören.');
-        $this->assertFalse($this->model->isFileBelongsToDocument(91, 123),
-            'Datei ID = 123 sollte nicht Dokument ID = 91 gehören.');
-        $this->assertFalse($this->model->isFileBelongsToDocument(91, 5555),
-            'Datei ID = 5555 sollte nicht Dokument ID = 91 gehören.');
-        $this->assertFalse($this->model->isFileBelongsToDocument(91, null),
-            'Datei ID = null sollte nicht Dokument ID = 91 gehören.');
-        $this->assertFalse($this->model->isFileBelongsToDocument(91, ' '),
-            'Datei ID = \' \' sollte nicht Dokument ID = 91 gehören.');
-        $this->assertFalse($this->model->isFileBelongsToDocument(91, 'bla'),
-            'Datei ID = \'bla\' sollte nicht Dokument ID = 91 gehören.');
+    public function testFileBelongsToDocument()
+    {
+        $this->assertTrue(
+            $this->model->isFileBelongsToDocument(91, 116),
+            'Datei ID = 116 sollte zu Dokument ID = 91 gehören.'
+        );
+        $this->assertTrue(
+            $this->model->isFileBelongsToDocument(91, "116"),
+            'Datei ID = "116" sollte zu Dokument ID = 91 gehören.'
+        );
+        $this->assertFalse(
+            $this->model->isFileBelongsToDocument(91, 123),
+            'Datei ID = 123 sollte nicht Dokument ID = 91 gehören.'
+        );
+        $this->assertFalse(
+            $this->model->isFileBelongsToDocument(91, 5555),
+            'Datei ID = 5555 sollte nicht Dokument ID = 91 gehören.'
+        );
+        $this->assertFalse(
+            $this->model->isFileBelongsToDocument(91, null),
+            'Datei ID = null sollte nicht Dokument ID = 91 gehören.'
+        );
+        $this->assertFalse(
+            $this->model->isFileBelongsToDocument(91, ' '),
+            'Datei ID = \' \' sollte nicht Dokument ID = 91 gehören.'
+        );
+        $this->assertFalse(
+            $this->model->isFileBelongsToDocument(91, 'bla'),
+            'Datei ID = \'bla\' sollte nicht Dokument ID = 91 gehören.'
+        );
     }
 
-    public function testDeleteFile() {
+    public function testDeleteFile()
+    {
         $this->model->setImportFolder($this->importFolder);
 
         $document = $this->createTestDocument();
@@ -162,7 +191,7 @@ class Admin_Model_FileImportTest extends ControllerTestCase {
         $filePath2 = $this->importFolder . '/test2.txt';
         file_put_contents($filePath2, 'testfile2');
 
-        $this->model->addFilesToDocument($this->documentId, array('test1.txt', 'test2.txt'));
+        $this->model->addFilesToDocument($this->documentId, ['test1.txt', 'test2.txt']);
 
         $document = new Opus_Document($this->documentId);
 
@@ -187,5 +216,4 @@ class Admin_Model_FileImportTest extends ControllerTestCase {
         $this->assertEquals(1, count($files));
         $this->assertEquals('test2.txt', $files[0]->getPathName());
     }
-
 }

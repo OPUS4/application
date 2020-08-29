@@ -78,7 +78,7 @@
         </tr>
     </xsl:template>
 
-    <xsl:template match="@PageFirst|@PageLast|@PageNumber|@PublishedYear|@PublisherName|@PublisherPlace">
+    <xsl:template match="@PageFirst|@PageLast|@PageNumber|@ArticleNumber|@PublishedYear|@PublisherName|@PublisherPlace">
         <tr>
             <th class="name">
                 <xsl:call-template name="translateFieldname" />
@@ -100,7 +100,6 @@
                         <xsl:value-of select="." />
                     </xsl:with-param>
                 </xsl:call-template>
-
             </td>
         </tr>
     </xsl:template>
@@ -339,10 +338,10 @@
         </xsl:if>
     </xsl:template>
 
-    <xsl:template match="IdentifierArxiv">
+    <xsl:template match="Identifier[@Type = 'arxiv']">
         <tr>
             <th class="name">
-                <xsl:call-template name="translateFieldname"/>
+                <xsl:call-template name="translateIdentifier"/>
             </th>
             <td>
                 <xsl:element name="a">
@@ -357,10 +356,10 @@
         </tr>
     </xsl:template>
 
-    <xsl:template match="IdentifierPubmed">
+    <xsl:template match="Identifier[@Type = 'pmid']">
         <tr>
             <th class="name">
-                <xsl:call-template name="translateFieldname"/>
+                <xsl:call-template name="translateIdentifier"/>
             </th>
             <td>
                 <xsl:element name="a">
@@ -375,10 +374,10 @@
         </tr>
     </xsl:template>
 
-    <xsl:template match="IdentifierHandle|IdentifierUrl">
+    <xsl:template match="Identifier[@Type = 'handle']|Identifier[@Type = 'url']">
         <tr>
             <th class="name">
-                <xsl:call-template name="translateFieldname"/>
+                <xsl:call-template name="translateIdentifier"/>
             </th>
             <td>
                 <xsl:element name="a">
@@ -403,10 +402,10 @@
         </tr>
     </xsl:template>
 
-    <xsl:template match="IdentifierDoi|ReferenceDoi">
+    <xsl:template match="Identifier[@Type = 'doi']|ReferenceDoi">
         <tr>
             <th class="name">
-                <xsl:call-template name="translateFieldname"/>
+                <xsl:call-template name="translateIdentifier"/>
             </th>
             <td>
                 <xsl:element name="a">
@@ -421,10 +420,10 @@
         </tr>
     </xsl:template>
 
-    <xsl:template match="IdentifierUrn|ReferenceUrn">
+    <xsl:template match="Identifier[@Type = 'urn']|ReferenceUrn">
         <tr>
             <th class="name">
-                <xsl:call-template name="translateFieldname"/>
+                <xsl:call-template name="translateIdentifier"/>
             </th>
             <td>
                 <xsl:element name="a">
@@ -438,7 +437,18 @@
         </tr>
     </xsl:template>
 
-    <xsl:template match="IdentifierIsbn|IdentifierIssn|IdentifierSerial|ReferenceIsbn|ReferenceIssn|ReferenceHandle">
+    <xsl:template match="Identifier[@Type = 'isbn' or @Type = 'issn' or @Type = 'serial']">
+        <tr>
+            <th class="name">
+                <xsl:call-template name="translateIdentifier"/>
+            </th>
+            <td>
+                <xsl:value-of select="@Value" />
+            </td>
+        </tr>
+    </xsl:template>
+
+    <xsl:template match="ReferenceIsbn|ReferenceIssn|ReferenceHandle">
         <tr>
             <th class="name">
                 <xsl:call-template name="translateFieldname"/>
@@ -677,9 +687,9 @@
         </tr>
     </xsl:template>
 
-    <xsl:template match="IdentifierStdDoi"/>
-    <xsl:template match="IdentifierCrisLink"/>
-    <xsl:template match="IdentifierSplashUrl"/>
+    <xsl:template match="Identifier[@Type = 'std-doi']"/>
+    <xsl:template match="Identifier[@Type = 'cris-link']"/>
+    <xsl:template match="Identifier[@Type = 'splash-url']"/>
     <xsl:template match="ReferenceStdDoi"/>
     <xsl:template match="ReferenceCrisLink"/>
     <xsl:template match="ReferenceSplashUrl"/>

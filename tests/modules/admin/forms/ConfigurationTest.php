@@ -27,63 +27,67 @@
  * @category    Application Unit Tests
  * @package     Module_Admin
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Admin_Form_ConfigurationTest extends ControllerTestCase {
+class Admin_Form_ConfigurationTest extends ControllerTestCase
+{
 
-    public function testInit() {
+    protected $additionalResources = ['translation'];
+
+    public function testInit()
+    {
         $form = new Admin_Form_Configuration();
 
         $this->assertTrue(count($form->getElements()) > 3);
-        $this->assertNotNull($form->getElement('supportedLanguages'));
         $this->assertNotNull($form->getElement('Save'));
         $this->assertNotNull($form->getElement('Cancel'));
     }
 
-    public function testPopulateFromModel() {
+    public function testPopulateFromModel()
+    {
         $form = new Admin_Form_Configuration();
 
-        $form->populateFromModel(new Zend_Config(array(
-            'supportedLanguages' => 'en,de'
-        )));
+        $form->populateFromModel(new Zend_Config([
+            'searchengine' => ['solr' => ['parameterDefaults' => ['rows' => '20']]]
+        ])); // searchengine.solr.parameterDefaults.rows
 
-        $element = $form->getElement('supportedLanguages');
+        $element = $form->getElement('maxSearchResults');
 
         $this->assertNotNull($element);
-        $this->assertEquals(array('en', 'de'), $element->getValue());
+        $this->assertEquals(20, $element->getValue());
     }
 
-    public function testUpdateModel() {
+    public function testUpdateModel()
+    {
         $form = new Admin_Form_Configuration();
 
-        $form->getElement('supportedLanguages')->setValue('de');
         $form->getElement('maxSearchResults')->setValue(15);
 
-        $config = new Zend_Config(array(), true);
+        $config = new Zend_Config([], true);
 
         $form->updateModel($config);
 
-        $this->assertEquals('de', $config->supportedLanguages);
         $this->assertEquals(15, $config->searchengine->solr->parameterDefaults->rows);
     }
 
-    public function testValidationSuccess() {
+    public function testValidationSuccess()
+    {
         $form = new Admin_Form_Configuration();
 
-        $this->assertTrue($form->isValid(array(
-            'supportedLanguages' => array('de'),
+        $this->assertTrue($form->isValid([
+            'supportedLanguages' => ['de'],
             'maxSearchResults' => '10'
-        )));
+        ]));
     }
 
-    public function testValidationFailure() {
+    public function testValidationFailure()
+    {
         $form = new Admin_Form_Configuration();
 
-        $this->assertFalse($form->isValid(array(
-            'supportedLanguages' => array('ru')
-        )));
+        $this->assertFalse($form->isValid([
+            'supportedLanguages' => ['ru']
+        ]));
     }
-
 }

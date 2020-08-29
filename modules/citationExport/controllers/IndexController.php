@@ -35,7 +35,8 @@
  * @version     $Id$
  */
 
-class CitationExport_IndexController extends Application_Controller_Action {
+class CitationExport_IndexController extends Application_Controller_Action
+{
 
     /**
      * Helper for handling citation export requests.
@@ -46,7 +47,8 @@ class CitationExport_IndexController extends Application_Controller_Action {
     /**
      * Initializes common controller variables.
      */
-    public function init() {
+    public function init()
+    {
         parent::init();
 
         $this->_exportHelper = new CitationExport_Model_Helper(
@@ -61,9 +63,10 @@ class CitationExport_IndexController extends Application_Controller_Action {
      *
      * @return void
      */
-    public function indexAction() {
+    public function indexAction()
+    {
         $this->handleRequest();
-        $this->view->downloadUrl = $this->view->url(array('action' => 'download'), false, null);
+        $this->view->downloadUrl = $this->view->url(['action' => 'download'], false, null);
     }
 
     /**
@@ -71,10 +74,11 @@ class CitationExport_IndexController extends Application_Controller_Action {
      *
      * @return void
      */
-    public function downloadAction() {
+    public function downloadAction()
+    {
         $request = $this->getRequest();
 
-        if (!$this->handleRequest()) {
+        if (! $this->handleRequest()) {
             return;
         };
 
@@ -93,14 +97,12 @@ class CitationExport_IndexController extends Application_Controller_Action {
 
         $download = true;
 
-        if (isset($config->export->download))
-        {
+        if (isset($config->export->download)) {
             $value = $config->export->download;
             $download = $value !== '0' && $value !== false && $value !== '';
         }
 
-        if ($download)
-        {
+        if ($download) {
             $response->setHeader(
                 'Content-Disposition',
                 'attachment; filename=' . $outputFormat . '-' . $request->getParam('docId') . '.' . $extension,
@@ -111,16 +113,15 @@ class CitationExport_IndexController extends Application_Controller_Action {
         $response->setBody($this->view->output);
     }
 
-    public function handleRequest() {
+    public function handleRequest()
+    {
         try {
             $this->view->output = $this->_exportHelper->getOutput($this->getRequest());
-        }
-        catch (CitationExport_Model_Exception $ceme) {
+        } catch (CitationExport_Model_Exception $ceme) {
             $this->view->output = $this->view->translate($ceme->getMessage());
             $this->getResponse()->setHttpResponseCode(400);
             return 0;
         }
         return 1;
     }
-
 }

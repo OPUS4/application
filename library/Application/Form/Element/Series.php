@@ -35,9 +35,11 @@
 /**
  * Formularelement für Auswahl einer Schriftenreihe.
  */
-class Application_Form_Element_Series extends Application_Form_Element_Select {
+class Application_Form_Element_Series extends Application_Form_Element_Select
+{
 
-    public function init() {
+    public function init()
+    {
         parent::init();
 
         $this->setRequired(true);
@@ -53,5 +55,4 @@ class Application_Form_Element_Series extends Application_Form_Element_Select {
             $this->addMultiOption($option->getId(), $option->getTitle());
         }
     }
-
 }

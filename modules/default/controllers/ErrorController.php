@@ -39,13 +39,14 @@
  *
  * @package     Module_Default
  */
-class ErrorController extends Application_Controller_Action {
+class ErrorController extends Application_Controller_Action
+{
 
     /**
      * Always allow access to this controller; Override check in parent method.
      */
-    protected function checkAccessModulePermissions() {
-
+    protected function checkAccessModulePermissions()
+    {
     }
 
     /**
@@ -53,9 +54,14 @@ class ErrorController extends Application_Controller_Action {
      *
      * @return void
      */
-    public function errorAction() {
+    public function errorAction()
+    {
         $config = $this->getConfig();
         $logger = $this->getLogger();
+
+        // log request URI if error occurs
+        $uri = Zend_Controller_Front::getInstance()->getRequest()->getRequestUri();
+        $logger->err("Request '$uri'");
 
         $errors = $this->_getParam('error_handler');
 
@@ -92,17 +98,18 @@ class ErrorController extends Application_Controller_Action {
         $this->view->exception = $errors->exception;
 
         $errorConfig = $config->errorController;
-        if (!isset($errorConfig)) {
+        if (! isset($errorConfig)) {
             $logger->warn('ErrorController not configured.');
             return;
         }
 
-        $this->view->showException = $errorConfig->showException;
-        if ($errorConfig->showRequest) {
+        $this->view->showException = isset($errorConfig->showException)
+            && filter_var($errorConfig->showException, FILTER_VALIDATE_BOOLEAN);
+        if (isset($errorConfig->showRequest) && filter_var($errorConfig->showRequest, FILTER_VALIDATE_BOOLEAN)) {
             $this->view->errorRequest = $errors->request;
         }
 
-        if (!isset($errorConfig->mailTo)) {
+        if (! isset($errorConfig->mailTo)) {
             $logger->info('ErrorController mail feature not configured.');
             return;
         }
@@ -115,17 +122,16 @@ class ErrorController extends Application_Controller_Action {
                 $errors->request,
                 $errors->exception
             );
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $logger->err('ErrorController: Failed sending error email: ' . $e);
         }
     }
 
-    private function setResponseCode($code) {
+    private function setResponseCode($code)
+    {
         if ($code != null) {
             $this->getResponse()->setHttpResponseCode($code);
-        }
-        else {
+        } else {
             $this->getResponse()->setHttpResponseCode(500);
         }
     }
@@ -142,16 +148,17 @@ class ErrorController extends Application_Controller_Action {
      *
      * TODO Escape exception messages, other stuff? Is it possible to inject javascript in E-Mail?
      */
-    public function _sendErrorMail($config, $responseCode, $view, $request, $exception) {
-        if (!isset($config->errorController->mailTo)) {
+    public function _sendErrorMail($config, $responseCode, $view, $request, $exception)
+    {
+        if (! isset($config->errorController->mailTo)) {
             return false;
         }
 
-        if (!is_object($exception) or !($exception instanceof Exception)) {
+        if (! is_object($exception) or ! ($exception instanceof Exception)) {
             throw new Application_Exception('Invalid Exception object given.');
         }
 
-        if (!is_object($request) or !($request instanceof Zend_Controller_Request_Abstract)) {
+        if (! is_object($request) or ! ($request instanceof Zend_Controller_Request_Abstract)) {
             throw new Application_Exception('Invalid Zend_Controller_Request_Abstract object given.');
         }
 
@@ -181,7 +188,7 @@ class ErrorController extends Application_Controller_Action {
             $body .= "   message: " . $view->message . "\n";
         }
         $body .= "\n";
-        
+
         // Add document ID for errors occuring during publish process
         $session = new Zend_Session_Namespace('Publish');
         if (isset($session->documentId)) {
@@ -191,8 +198,8 @@ class ErrorController extends Application_Controller_Action {
         $body .= "\n";
 
         $body .= "Request:\n";
-        $serverKeys = array('HTTP_USER_AGENT', 'SCRIPT_URI', 'HTTP_REFERER', 'REMOTE_ADDR');
-        foreach ($serverKeys AS $key) {
+        $serverKeys = ['HTTP_USER_AGENT', 'SCRIPT_URI', 'HTTP_REFERER', 'REMOTE_ADDR'];
+        foreach ($serverKeys as $key) {
             if (array_key_exists($key, $_SERVER)) {
                 $body .= "   $key: " . $_SERVER[$key] . "\n";
             }
@@ -210,25 +217,25 @@ class ErrorController extends Application_Controller_Action {
 
         $body .= "Request parameters:\n";
         $body .= "-- start request params --\n";
-        $body .= var_export($request->getParams(), TRUE) . "\n";
+        $body .= var_export($request->getParams(), true) . "\n";
         $body .= "-- end request params --\n\n";
 
         $body .= "Request:\n";
         $body .= "-- start request --\n";
-        $body .= var_export($request, TRUE) . "\n";
+        $body .= var_export($request, true) . "\n";
         $body .= "-- end request --\n\n";
 
         if (isset($_SERVER)) {
             $body .= "Request header:\n";
             $body .= "-- start request header --\n";
-            $body .= var_export($_SERVER, TRUE) . "\n";
+            $body .= var_export($_SERVER, true) . "\n";
             $body .= "-- end request header --\n\n";
         }
 
-        $adminAddress = array(
+        $adminAddress = [
             'address' => $config->errorController->mailTo->address,
             'name' => $config->errorController->mailTo->name,
-        );
+        ];
 
         $mail = new Opus_Mail_SendMail();
         $mail->sendMail(
@@ -236,10 +243,9 @@ class ErrorController extends Application_Controller_Action {
             $config->mail->opus->name,
             $subject,
             $body,
-            array($adminAddress)
+            [$adminAddress]
         );
 
         return true;
     }
-
 }

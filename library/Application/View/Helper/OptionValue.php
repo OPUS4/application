@@ -56,20 +56,16 @@ class Application_View_Helper_OptionValue extends Application_View_Helper_Abstra
     {
         $key = $optionKey;
 
-        if (!is_null($context) && strlen(trim($context)) !== 0)
-        {
+        if (! is_null($context) && strlen(trim($context)) !== 0) {
             $key = "$context.$key";
         }
 
         $value = Application_Configuration::getInstance()->getValue($key);
 
-        if ($escape)
-        {
+        if ($escape) {
             return htmlspecialchars($value);
-        }
-        else {
+        } else {
             return $value;
         }
     }
-
 }

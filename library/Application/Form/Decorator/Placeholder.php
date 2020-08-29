@@ -27,17 +27,17 @@
  * @category    Application
  * @package     View
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2013-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
-class Application_Form_Decorator_Placeholder extends Zend_Form_Decorator_Abstract {
+class Application_Form_Decorator_Placeholder extends Zend_Form_Decorator_Abstract
+{
 
-    public function render($content) {
+    public function render($content)
+    {
         $placeholder = $this->getElement()->getAttrib('placeholder');
 
-        return (!is_null($placeholder)) ? $content . '<i class="placeholder">' . $placeholder . '</i>' : $content;
+        return (! is_null($placeholder)) ? $content . '<i class="placeholder">' . $placeholder . '</i>' : $content;
     }
-
 }

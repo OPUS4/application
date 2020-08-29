@@ -1,0 +1,50 @@
+name: PHP Composer
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-16.04
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Change to PHP7.0
+        run: sudo update-alternatives --set php /usr/bin/php7.0
+
+      - name: Install Composer and Dependencies
+        run: sudo apt-get update && curl -s http://getcomposer.org/installer | php && php composer.phar self-update && php composer.phar install
+
+      - name: Install additional Software
+        run: sudo apt-get install libxml2-utils
+
+      - name: Solr
+        run: sudo bash bin/install_solr_docker.sh
+
+      - name: MySQL
+        run: sudo bash bin/install_mysql_docker.sh
+
+      - name: Prepare
+        run: ant prepare-workspace prepare-test-workspace prepare-javascript prepare-config lint reset-testdata -DdbUserPassword=root -DdbAdminPassword=root
+
+      - name: Mail-Server
+        run: php scripts/opus-smtp-dumpserver.php 2>&1 >> tests/workspace/log/opus-smtp-dumpserver.log &
+
+      - name: Coding-Style
+        run: php composer.phar cs-check
+      
+      - name: Test-library
+        run: php composer.phar test -- --testsuite library
+
+      - name: Test-modules
+        run: php composer.phar test -- --testsuite modules
+
+      - name: Test-admin
+        run: php composer.phar test -- --testsuite admin
+        
+      - name: Test-security
+        run: php composer.phar test -- --testsuite security
+
+      - name: Test-scripts
+        run: php composer.phar test -- --testsuite scripts

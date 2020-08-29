@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -29,7 +28,7 @@
  * @package     Module_Publish
  * @author      Susanne Gottwald <gottwald@zib.de>
  * @author      Maximilian Salomon <salomon@zib.de>
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -37,7 +36,8 @@
  * Builds the fist page of an upload form for one file
  *
  */
-class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
+class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract
+{
 
     public $bibliographie;
 
@@ -48,14 +48,17 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
      */
     public $enableUpload = false;
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
     }
 
-    public function isValid($data) {
+    public function isValid($data)
+    {
         $valid = parent::isValid($data);
 
-        if ($this->_config->form->first->show_rights_checkbox == 1) {
+        if (isset($this->_config->form->first->show_rights_checkbox) &&
+            filter_var($this->_config->form->first->show_rights_checkbox, FILTER_VALIDATE_BOOLEAN)) {
             if (array_key_exists('rights', $data)) {
                 if ($data['rights'] == '0') {
                     $rights = $this->getElement('rights');
@@ -74,7 +77,8 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
      *
      * @return void
      */
-    public function init() {
+    public function init()
+    {
         parent::init();
 
         $this->setDisableTranslator(true);
@@ -84,7 +88,8 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
         $this->addElement($doctypes);
 
         //create and add file upload
-        $this->enableUpload = ($this->_config->form->first->enable_upload == 1);
+        $this->enableUpload = isset($this->_config->form->first->enable_upload) &&
+            filter_var($this->_config->form->first->enable_upload, FILTER_VALIDATE_BOOLEAN);
         if ($this->enableUpload) {
             $fileupload = $this->_createFileuploadField();
             $this->addDisplayGroup($fileupload, 'documentUpload');
@@ -92,13 +97,13 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
 
         //create and add bibliographie
         $bibliographie = $this->_createBibliographyField();
-        if (!is_null($bibliographie)) {
+        if (! is_null($bibliographie)) {
             $this->addElement($bibliographie);
         }
 
         //create and add rights checkbox
         $rights = $this->_createRightsCheckBox();
-        if (!is_null($rights)) {
+        if (! is_null($rights)) {
             $this->addElement($rights);
         }
 
@@ -116,8 +121,9 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
      *
      * @return <Zend_Element>
      */
-    private function _createDocumentTypeField() {
-        $optionsSorted = array();
+    private function _createDocumentTypeField()
+    {
+        $optionsSorted = [];
         foreach ($this->_documentTypesHelper->getDocumentTypes() as $value => $path) {
             $optionsSorted[$value] = $this->view->translate($value);
         }
@@ -127,10 +133,10 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
         $doctypes->setDisableTranslator(true)
                 ->setLabel('selecttype')
                 ->setMultiOptions(
-                    array_merge(array('' => $this->view->translate('choose_valid_doctype')), $optionsSorted)
+                    array_merge(['' => $this->view->translate('choose_valid_doctype')], $optionsSorted)
                 )
                 ->setRequired(true)
-                ->setErrorMessages(array($this->view->translate('publish_error_missing_doctype')));
+                ->setErrorMessages([$this->view->translate('publish_error_missing_doctype')]);
 
         return $doctypes;
     }
@@ -139,7 +145,8 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
      * Method shows the fields for file uploads by looking in config file
      * @return <Zend_Element>
      */
-    private function _createFileuploadField() {
+    private function _createFileuploadField()
+    {
         // get path to store files
         $tempPath = $this->_config->form->first->temp;
         if (true === empty($tempPath)) {
@@ -156,12 +163,6 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
         $maxFileSize = (int) $this->_config->publish->maxfilesize;
         if (true === empty($maxFileSize)) {
             $maxFileSize = 1024000; //1MB
-        }
-
-        // Upload-fields required to enter second stage
-        $requireUpload = $this->_config->form->first->require_upload;
-        if (true === empty($requireUpload)) {
-            $requireUpload = 0;
         }
 
         //initialization of filename-validator
@@ -186,12 +187,14 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
                 ->addValidator($filenameValidator, false)       // filename-format
                 ->setAttrib('enctype', 'multipart/form-data');
 
-        if (1 == $requireUpload) {
-            if (!isset($this->_session->fulltext) || $this->_session->fulltext == '0') {
+        // Upload-fields required to enter second stage
+        if (isset($this->_config->form->first->require_upload) &&
+            filter_var($this->_config->form->first->require_upload, FILTER_VALIDATE_BOOLEAN)) {
+            if (! isset($this->_session->fulltext) || $this->_session->fulltext == '0') {
+                // noch keine Datei zum Upload ausgewählt
                 $fileupload->setRequired(true);
             }
-        }
-        else {
+        } else {
             $fileupload->setRequired(false);
         }
 
@@ -204,7 +207,7 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
         $comment->setLabel('uploadComment');
         $this->addElement($comment);
 
-        $group = array($fileupload->getName(), 'addAnotherFile', $comment->getName());
+        $group = [$fileupload->getName(), 'addAnotherFile', $comment->getName()];
 
         return $group;
     }
@@ -213,42 +216,36 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
      * Method shows bibliography field by looking in config file
      * @return <Zend_Element>
      */
-    private function _createBibliographyField() {
-        $bib = $this->_config->form->first->bibliographie;
-        if (true === empty($bib)) {
-            $bib = 0;
-            $this->bibliographie = 0;
-        }
-
-        $bibliographie = null;
-
-        if ($bib == 1) {
+    private function _createBibliographyField()
+    {
+        if (isset($this->_config->form->first->bibliographie) &&
+            filter_var($this->_config->form->first->bibliographie, FILTER_VALIDATE_BOOLEAN)) {
             $this->bibliographie = 1;
             $bibliographie = $this->createElement('checkbox', 'bibliographie');
             $bibliographie->setDisableTranslator(true);
             $bibliographie->setLabel('bibliographie');
+        } else {
+            $this->bibliographie = 0;
+            $bibliographie = null;
         }
 
         return $bibliographie;
     }
 
-    private function _createRightsCheckBox() {
-        $showRights = $this->_config->form->first->show_rights_checkbox;
-        if (true === empty($showRights)) {
-            $showRights = 0;
-            $this->showRights = 0;
-        }
-
-        $rightsCheckbox = null;
-
-        if ($showRights == 1) {
+    private function _createRightsCheckBox()
+    {
+        if (isset($this->_config->form->first->show_rights_checkbox) &&
+            filter_var($this->_config->form->first->show_rights_checkbox, FILTER_VALIDATE_BOOLEAN)) {
             $this->showRights = 1;
             $rightsCheckbox = $this->createElement('checkbox', 'rights');
             $rightsCheckbox
-                    ->setDisableTranslator(true)
-                    ->setLabel('rights')
-                    ->setRequired(true)
-                    ->setChecked(false);
+                ->setDisableTranslator(true)
+                ->setLabel('rights')
+                ->setRequired(true)
+                ->setChecked(false);
+        } else {
+            $this->showRights = 0;
+            $rightsCheckbox = null;
         }
 
         return $rightsCheckbox;
@@ -257,8 +254,9 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
     /**
      * Method sets the different variables and arrays for the view and the templates in the first form
      */
-    public function setViewValues() {
-        foreach ($this->getElements() AS $currentElement => $value) {
+    public function setViewValues()
+    {
+        foreach ($this->getElements() as $currentElement => $value) {
             $this->view->$currentElement = $this->getElementAttributes($currentElement);
         }
 
@@ -275,5 +273,4 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
             $this->view->filenameFormat = $this->_config->publish->filenameFormat;
         }
     }
-
 }

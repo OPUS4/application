@@ -34,6 +34,9 @@
 
 class Application_Util_NotificationTest extends ControllerTestCase
 {
+    protected $configModifiable = true;
+
+    protected $additionalResources = 'database';
 
     protected $notification;
 
@@ -48,8 +51,8 @@ class Application_Util_NotificationTest extends ControllerTestCase
         $this->logger = Zend_Registry::get('Zend_Log');
         // add required config keys
         $this->config = Zend_Registry::get('Zend_Config');
-        $this->config->notification->document->submitted->enabled = 1;
-        $this->config->notification->document->published->enabled = 1;
+        $this->config->notification->document->submitted->enabled = self::CONFIG_VALUE_TRUE;
+        $this->config->notification->document->published->enabled = self::CONFIG_VALUE_TRUE;
         $this->config->notification->document->submitted->subject = 'Dokument #%1$s eingestellt: %2$s : %3$s';
         $this->config->notification->document->published->subject = 'Dokument #%1$s veröffentlicht: %2$s : %3$s';
         $this->config->notification->document->submitted->template = 'submitted.phtml';
@@ -220,7 +223,10 @@ class Application_Util_NotificationTest extends ControllerTestCase
 
         $doc->store();
         $this->notification->prepareMail(
-            $doc, 'http://localhost/foo/1', false, [false, true]
+            $doc,
+            'http://localhost/foo/1',
+            false,
+            [false, true]
         );
     }
 
@@ -229,13 +235,13 @@ class Application_Util_NotificationTest extends ControllerTestCase
         // TODO use Opus_Job::deleteAll() - requires opus4admin permissions !
         $jobs = Opus_Job::getAll();
 
-        if(!empty($jobs)) {
-            foreach($jobs as $job) {
+        if (! empty($jobs)) {
+            foreach ($jobs as $job) {
                 $job->delete();
             }
         }
 
-        $this->config->merge(new Zend_Config(['runjobs' => ['asynchronous' => 1]]));
+        $this->config->merge(new Zend_Config(['runjobs' => ['asynchronous' => self::CONFIG_VALUE_TRUE]]));
         $this->assertEquals(0, Opus_Job::getCount(), 'test data changed.');
 
         $doc = $this->createTestDocument();
@@ -255,8 +261,8 @@ class Application_Util_NotificationTest extends ControllerTestCase
 
         $jobs = Opus_Job::getAll();
 
-        if(!empty($jobs)) {
-            foreach($jobs as $job) {
+        if (! empty($jobs)) {
+            foreach ($jobs as $job) {
                 $job->delete();
             }
         }

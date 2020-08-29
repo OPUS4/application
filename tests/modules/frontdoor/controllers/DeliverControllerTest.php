@@ -40,6 +40,8 @@
 class Frontdoor_DeliverControllerTest extends ControllerTestCase
 {
 
+    protected $additionalResources = ['database', 'authz', 'view', 'mainMenu', 'translation'];
+
     public function setUp()
     {
         parent::setUpWithEnv('production');
@@ -75,7 +77,7 @@ class Frontdoor_DeliverControllerTest extends ControllerTestCase
             'my,file.txt' => 'my,file.txt',
         ];
 
-        foreach ($testcase AS $string => $expected_output) {
+        foreach ($testcase as $string => $expected_output) {
             $output = Frontdoor_DeliverController::quoteFileName($string);
             $this->assertEquals($expected_output, $output);
         }
@@ -93,7 +95,7 @@ class Frontdoor_DeliverControllerTest extends ControllerTestCase
             'with "weird" chars.pdf'   => '=?UTF-8?B?d2l0aCAid2VpcmQiIGNoYXJzLnBkZg==?=',
         ];
 
-        foreach ($testcase AS $string => $expected_output) {
+        foreach ($testcase as $string => $expected_output) {
             $output = Frontdoor_DeliverController::quoteFileName($string);
             $this->assertEquals($expected_output, $output);
         }
@@ -102,7 +104,7 @@ class Frontdoor_DeliverControllerTest extends ControllerTestCase
     public function testHttpResponseCodeSetForUnpublished()
     {
         $doc = $this->createTestDocument();
-        $file = $this->createTestFile('test.pdf');
+        $file = $this->createOpusTestFile('test.pdf');
         $doc->addFile($file);
         $doc->setServerState('unpublished');
         $docId = $doc->store();
@@ -116,7 +118,7 @@ class Frontdoor_DeliverControllerTest extends ControllerTestCase
     public function testHttpResponseCodeSetForProtectedFile()
     {
         $doc = $this->createTestDocument();
-        $file = $this->createTestFile('test.pdf');
+        $file = $this->createOpusTestFile('test.pdf');
         $file->setVisibleInFrontdoor(0);
         $doc->addFile($file);
         $doc->setServerState('published');

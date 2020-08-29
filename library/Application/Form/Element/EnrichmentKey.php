@@ -34,15 +34,17 @@
 /**
  * Formularelement für die Auswahl eines EnrichmentKeys.
  */
-class Application_Form_Element_EnrichmentKey extends Application_Form_Element_Select {
+class Application_Form_Element_EnrichmentKey extends Application_Form_Element_Select
+{
 
-    public function init() {
+    public function init()
+    {
         parent::init();
 
         // load enrichment keys only once in order to save database queries
         $options = Opus_EnrichmentKey::getAll(false);
 
-        $values = array();
+        $values = [];
 
         $translator = $this->getTranslator();
 
@@ -61,10 +63,9 @@ class Application_Form_Element_EnrichmentKey extends Application_Form_Element_Se
 
             $translationKey = 'Enrichment' . $keyName;
 
-            if (!is_null($translator) && ($translator->isTranslated($translationKey))) {
+            if (! is_null($translator) && ($translator->isTranslated($translationKey))) {
                 $this->addMultiOption($keyName, $translator->translate($translationKey));
-            }
-            else {
+            } else {
                 $this->addMultiOption($keyName, $keyName);
             }
         }
@@ -73,5 +74,4 @@ class Application_Form_Element_EnrichmentKey extends Application_Form_Element_Se
         $validator->setMessage('validation_error_unknown_enrichmentkey');
         $this->addValidator($validator);
     }
-
 }

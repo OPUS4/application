@@ -34,8 +34,9 @@
  */
 
 /**
- * 
+ *
  */
-class Setup_Model_Exception extends Application_Exception {
-    
+class Setup_Model_Exception extends Application_Exception
+{
+
 }

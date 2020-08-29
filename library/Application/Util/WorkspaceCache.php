@@ -43,15 +43,12 @@ class Application_Util_WorkspaceCache
     {
         $files = new DirectoryIterator(Application_Configuration::getInstance()->getWorkspacePath() . '/cache');
 
-        foreach ($files as $file)
-        {
+        foreach ($files as $file) {
             $basename = $file->getBasename();
 
-            if (preg_match('/Zend_Translate/', $basename))
-            {
+            if (preg_match('/Zend_Translate/', $basename)) {
                 unlink($file->getRealPath());
             }
         }
     }
-
 }

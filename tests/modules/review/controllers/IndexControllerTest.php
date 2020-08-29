@@ -26,7 +26,7 @@
  *
  * @category    Tests
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -35,17 +35,21 @@
  *
  * @covers Review_IndexController
  */
-class Review_IndexControllerTest extends ControllerTestCase {
+class Review_IndexControllerTest extends ControllerTestCase
+{
+
+    protected $additionalResources = 'all';
 
     private $documentId = null;
 
-    public function setUp() {
+    public function setUp()
+    {
         parent::setUp();
 
         $document = $this->createTestDocument();
         $document->setServerState('unpublished');
-        $document->setPersonReferee(array());
-        $document->setEnrichment(array());
+        $document->setPersonReferee([]);
+        $document->setEnrichment([]);
         $this->documentId = $document->store();
 
         $document = new Opus_Document($this->documentId);
@@ -56,7 +60,8 @@ class Review_IndexControllerTest extends ControllerTestCase {
     /**
      * Basic tests dispatching and executing 'index' action.
      */
-    public function testCallWithoutActionShouldPullFromIndexAction() {
+    public function testCallWithoutActionShouldPullFromIndexAction()
+    {
         $this->dispatch('/review');
 
         $this->assertResponseCode(200);
@@ -66,7 +71,8 @@ class Review_IndexControllerTest extends ControllerTestCase {
         $this->assertQueryCount('//table.documents//a[@class="new-window"]', 10);
     }
 
-    public function testClearActionWithoutPost() {
+    public function testClearActionWithoutPost()
+    {
         $this->dispatch('/review/index/clear');
 
         $this->assertResponseCode(200);
@@ -74,20 +80,22 @@ class Review_IndexControllerTest extends ControllerTestCase {
         $this->assertAction('clear');
     }
 
-    public function testRejectActionWithoutPost() {
+    public function testRejectActionWithoutPost()
+    {
         $this->dispatch('/review/index/reject');
         $this->assertResponseCode(200);
         $this->assertController('index');
         $this->assertAction('reject');
     }
 
-    public function testIndexActionClearButtonWithOneDocumentGoesToClear() {
+    public function testIndexActionClearButtonWithOneDocumentGoesToClear()
+    {
         $this->request
-                ->setMethod('POST')
-                ->setPost(array(
-                    'selected' => array('1', $this->documentId),
-                    'buttonSubmit' => 'buttonSubmit',
-                ));
+            ->setMethod('POST')
+            ->setPost([
+                'selected' => ['1', $this->documentId],
+                'buttonSubmit' => 'buttonSubmit',
+            ]);
         $this->dispatch('/review/index/index');
 
         $this->assertResponseCode(200);
@@ -103,12 +111,13 @@ class Review_IndexControllerTest extends ControllerTestCase {
         $this->assertEquals('unpublished', $document->getServerState());
     }
 
-    public function testClearActionWithOneDocumentUnconfirmed() {
+    public function testClearActionWithOneDocumentUnconfirmed()
+    {
         $this->request
-                ->setMethod('POST')
-                ->setPost(array(
-                    'selected' => $this->documentId,
-                ));
+            ->setMethod('POST')
+            ->setPost([
+                'selected' => $this->documentId,
+            ]);
         $this->dispatch('/review/index/clear');
 
         $this->assertResponseCode(200);
@@ -124,13 +133,14 @@ class Review_IndexControllerTest extends ControllerTestCase {
         $this->assertEquals('unpublished', $document->getServerState());
     }
 
-    public function testClearActionWithOneDocumentCanceled() {
+    public function testClearActionWithOneDocumentCanceled()
+    {
         $this->request
-                ->setMethod('POST')
-                ->setPost(array(
-                    'selected' => $this->documentId,
-                    'sureno' => 'no',
-                ));
+            ->setMethod('POST')
+            ->setPost([
+                'selected' => $this->documentId,
+                'sureno' => 'no',
+            ]);
         $this->dispatch('/review/index/clear');
 
         $this->assertResponseCode(200);
@@ -146,13 +156,14 @@ class Review_IndexControllerTest extends ControllerTestCase {
         $this->assertEquals('unpublished', $document->getServerState());
     }
 
-    public function testClearActionWithOneDocumentConfirmed() {
+    public function testClearActionWithOneDocumentConfirmed()
+    {
         $this->request
-                ->setMethod('POST')
-                ->setPost(array(
-                    'selected' => $this->documentId,
-                    'sureyes' => 'yes',
-                ));
+            ->setMethod('POST')
+            ->setPost([
+                'selected' => $this->documentId,
+                'sureyes' => 'yes',
+            ]);
         $this->dispatch('/review/index/clear');
 
         $this->assertResponseCode(200);
@@ -168,12 +179,13 @@ class Review_IndexControllerTest extends ControllerTestCase {
         $this->assertEquals('published', $document->getServerState());
     }
 
-    public function testRejectActionWithOneDocumentUnconfirmed() {
+    public function testRejectActionWithOneDocumentUnconfirmed()
+    {
         $this->request
-                ->setMethod('POST')
-                ->setPost(array(
-                    'selected' => $this->documentId,
-                ));
+            ->setMethod('POST')
+            ->setPost([
+                'selected' => $this->documentId,
+            ]);
         $this->dispatch('/review/index/reject');
 
         $this->assertResponseCode(200);
@@ -189,13 +201,14 @@ class Review_IndexControllerTest extends ControllerTestCase {
         $this->assertEquals('unpublished', $document->getServerState());
     }
 
-    public function testRejectActionWithOneDocumentCanceled() {
+    public function testRejectActionWithOneDocumentCanceled()
+    {
         $this->request
-                ->setMethod('POST')
-                ->setPost(array(
-                    'selected' => $this->documentId,
-                    'sureno' => 'no',
-                ));
+            ->setMethod('POST')
+            ->setPost([
+                'selected' => $this->documentId,
+                'sureno' => 'no',
+            ]);
         $this->dispatch('/review/index/reject');
 
         $this->assertResponseCode(200);
@@ -211,13 +224,14 @@ class Review_IndexControllerTest extends ControllerTestCase {
         $this->assertEquals('unpublished', $document->getServerState());
     }
 
-    public function testRejectActionWithOneDocumentConfirmed() {
+    public function testRejectActionWithOneDocumentConfirmed()
+    {
         $this->request
-                ->setMethod('POST')
-                ->setPost(array(
-                    'selected' => $this->documentId,
-                    'sureyes' => 'yes',
-                ));
+            ->setMethod('POST')
+            ->setPost([
+                'selected' => $this->documentId,
+                'sureyes' => 'yes',
+            ]);
         $this->dispatch('/review/index/reject');
 
         $this->assertResponseCode(200);
@@ -232,5 +246,4 @@ class Review_IndexControllerTest extends ControllerTestCase {
         $document = new Opus_Document($this->documentId);
         $this->assertEquals('deleted', $document->getServerState());
     }
-
 }

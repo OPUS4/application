@@ -45,10 +45,8 @@ abstract class Application_Update_PluginAbstract extends Opus_Update_Plugin_Abst
      */
     public function println($message)
     {
-        if (!$this->getQuietMode())
-        {
+        if (! $this->getQuietMode()) {
             echo $message . PHP_EOL;
         }
     }
-
 }

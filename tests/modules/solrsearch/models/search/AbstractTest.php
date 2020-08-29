@@ -39,5 +39,4 @@ class Solrsearch_Model_Search_AbstractTest extends ControllerTestCase
     {
         $this->markTestIncomplete('TODO - test the abstract base class');
     }
-
 }

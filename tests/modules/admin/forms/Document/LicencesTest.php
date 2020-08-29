@@ -26,42 +26,45 @@
  *
  * @category    Application Unit Test
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
  * Description of Document_LicencesTest
  */
-class Admin_Form_Document_LicencesTest extends ControllerTestCase {
-    
-    public function testCreateForm() {
+class Admin_Form_Document_LicencesTest extends ControllerTestCase
+{
+
+    protected $additionalResources = ['database'];
+
+    public function testCreateForm()
+    {
         $form = new Admin_Form_Document_Licences();
-        
+
         $licences = Opus_Licence::getAll();
-        
+
         foreach ($licences as $licence) {
             $element = $form->getElement('licence' . $licence->getId());
             $this->assertNotNull($element, 'Checkbox for Licence ' . $licence->getId() . ' is missing.');
-            
+
             $cssClass = $element->getDecorator('Label')->getOption('class');
             if ($licence->getActive()) {
                 $this->assertEquals(Admin_Form_Document_Licences::ACTIVE_CSS_CLASS, $cssClass);
-            }
-            else {
+            } else {
                 $this->assertEquals(Admin_Form_Document_Licences::INACTIVE_CSS_CLASS, $cssClass);
             }
         }
     }
-    
-    public function testPopulateFromModel() {
+
+    public function testPopulateFromModel()
+    {
         $form = new Admin_Form_Document_Licences();
-        
+
         $document = new Opus_Document(146);
-        
+
         $form->populateFromModel($document);
-        
+
         $licences = Opus_Licence::getAll();
 
         foreach ($licences as $licence) {
@@ -70,76 +73,81 @@ class Admin_Form_Document_LicencesTest extends ControllerTestCase {
             // Nur Lizenz mit ID = 4 ist gesetzt fuer Dokument 146
             if ($licence->getId() == 4) {
                 $this->assertEquals(4, $element->getValue(), 'Lizenz ' . $licence->getId() . ' nicht gesetzt.');
-            }
-            else {
-                $this->assertEquals(0, $element->getValue(),  'Lizenz ' . $licence->getId() . ' gesetzt.');
+            } else {
+                $this->assertEquals(0, $element->getValue(), 'Lizenz ' . $licence->getId() . ' gesetzt.');
             }
         }
     }
-    
-    public function testUpdateModel() {
+
+    public function testUpdateModel()
+    {
         $form = new Admin_Form_Document_Licences();
-        
+
         $form->getElement('licence4')->setChecked(true);
         $form->getElement('licence2')->setChecked(true);
-        
+
         $document = $this->createTestDocument();
-        
+
         $form->updateModel($document);
-        
+
         $licences = $document->getLicence();
-        
+
         $this->assertEquals(2, count($licences));
-        
-        $licenceIds = array();
-        
+
+        $licenceIds = [];
+
         $licenceIds[] = $licences[0]->getModel()->getId();
         $licenceIds[] = $licences[1]->getModel()->getId();
-        
+
         $this->assertContains('2', $licenceIds);
         $this->assertContains('4', $licenceIds);
     }
-    
-    public function testIsEmptyFalse() {
+
+    public function testIsEmptyFalse()
+    {
         $form = new Admin_Form_Document_Licences();
-        
+
         $form->getElement('licence4')->setChecked(true);
         $form->getElement('licence2')->setChecked(true);
-        
+
         $this->assertFalse($form->isEmpty());
     }
-    
-    public function testIsEmptyTrue() {
+
+    public function testIsEmptyTrue()
+    {
         $form = new Admin_Form_Document_Licences();
-        
+
         $this->assertTrue($form->isEmpty());
     }
-    
-    public function testHasLicenceFalse() {
+
+    public function testHasLicenceFalse()
+    {
         $form = new Admin_Form_Document_Licences();
-        
+
         $document = new Opus_Document(146);
         $licence = new Opus_Licence(2);
-        
+
         $this->assertFalse($form->hasLicence($document, $licence));
     }
-    
-    public function testHasLicenceTrue() {
+
+    public function testHasLicenceTrue()
+    {
         $form = new Admin_Form_Document_Licences();
-        
+
         $document = new Opus_Document(146);
-        
+
         $this->assertTrue($form->hasLicence($document, 4));
     }
-    
-    public function testPrepareRenderingAsView() {
+
+    public function testPrepareRenderingAsView()
+    {
         $form = new Admin_Form_Document_Licences();
-        
+
         $form->getElement('licence4')->setChecked(true);
         $form->getElement('licence2')->setChecked(true);
-        
+
         $form->prepareRenderingAsView();
-        
+
         $this->assertEquals(2, count($form->getElements()));
         $this->assertNotNull($form->getElement('licence4'));
         $this->assertNotNull($form->getElement('licence2'));
@@ -150,5 +158,4 @@ class Admin_Form_Document_LicencesTest extends ControllerTestCase {
         $this->assertFalse($element->getDecorator('ElementHtmlTag'));
         $this->assertTrue($element->getDecorator('Label')->getOption('disableFor'));
     }
-    
 }

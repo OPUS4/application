@@ -35,110 +35,112 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Admin_Model_DocumentEditSession extends Application_Model_Abstract {
-    
+class Admin_Model_DocumentEditSession extends Application_Model_Abstract
+{
+
     /**
      * Dokument-ID.
-     * @var int 
+     * @var int
      */
     private $_docId;
-    
+
     /**
      * Name für allgemeinen Session Namespace.
-     * @var type 
+     * @var type
      */
     private $_namespace = 'admin';
 
     /**
      * Allgemeiner Session Namespace.
-     * @Zend_Session_Namespace type 
+     * @Zend_Session_Namespace type
      */
     private $_session;
 
     /**
      * Session Namespaces fuer einzelne Dokument.
-     * 
+     *
      * Wenn beim Editieren der Metadaten eines Dokuments auf eine andere Seite gewechselt wird (Collections, Personen),
-     * wird der letzte POST in einem Namespace für eine Dokumenten-ID abgespeichert, um den Zustand des Formulares 
+     * wird der letzte POST in einem Namespace für eine Dokumenten-ID abgespeichert, um den Zustand des Formulares
      * wieder herstellen zu können, wenn zur Formularseite zurück gewechselt wird.
-     * 
+     *
      * @var array
-     * 
+     *
      * TODO Review solution (Wie funktioniert Namespace Bereinigung?)
      */
-    private $_documentNamespaces = array();
-    
+    private $_documentNamespaces = [];
+
     /**
      * Konstruiert Model für Zugriff auf Edit Session eines Dokuments.
-     * @param int $documentId Dokument-ID 
+     * @param int $documentId Dokument-ID
      * @throws InvalidArgumentException Wenn $documentId keine Zahl oder kleiner als 1 ist.
      */
-    public function __construct($documentId) {
+    public function __construct($documentId)
+    {
         if (is_numeric($documentId) && $documentId > 0) {
             $this->_docId = $documentId;
-        }
-        else {
+        } else {
             // should never happen
             throw new InvalidArgumentException(__CLASS__ . " mit document ID '$documentId' aufgerufen.");
         }
     }
-    
+
     /**
      * Fügt eine Person zur List der Personen, die dem Metadaten-Formular hinzugefügt werden müssen.
      * @param array $form
      */
-    public function addPerson($linkProps) {
+    public function addPerson($linkProps)
+    {
         $namespace = $this->getDocumentSessionNamespace();
-        
+
         if (isset($namespace->addedPersons)) {
             $persons = $namespace->addedPersons;
+        } else {
+            $persons = [];
         }
-        else {
-            $persons = array();
-        }
-        
+
         $persons[] = $linkProps;
-        
+
         $namespace->addedPersons = $persons;
     }
-    
+
     /**
      * Liefert die Liste der Personen, die dem Metadaten-Formular hinzugefügt werden müssen.
      */
-    public function retrievePersons() {
+    public function retrievePersons()
+    {
         $namespace = $this->getDocumentSessionNamespace();
-        
+
         if (isset($namespace->addedPersons)) {
             $persons = $namespace->addedPersons;
             $namespace->addedPersons = null;
+        } else {
+            $persons = [];
         }
-        else {
-            $persons = array();
-        }
-        
+
         return $persons;
     }
-    
+
     /**
      * Liefert die Anzahl der in der Session gespeicherten Personen-Links.
      * @return int
      */
-    public function getPersonCount() {
+    public function getPersonCount()
+    {
         $namespace = $this->getDocumentSessionNamespace();
-        
+
         if (isset($namespace->addedPersons)) {
             return count($namespace->addedPersons);
-        }
-        else {
+        } else {
             return 0;
         }
     }
-    
+
     /**
      * Speichert POST in session.
      * @param array $post
      */
-    public function storePost($post, $name = null) {
+    public function storePost($post, $name = null)
+    {
         $namespace = $this->getDocumentSessionNamespace();
 
         if (is_null($name)) {
@@ -147,13 +149,14 @@ class Admin_Model_DocumentEditSession extends Application_Model_Abstract {
 
         $namespace->$name = $post;
     }
-    
+
     /**
      * Liefert gespeicherten POST.
      * @param string $hash Hash für Formular
      * @return array
      */
-    public function retrievePost($name = null) {
+    public function retrievePost($name = null)
+    {
         $namespace = $this->getDocumentSessionNamespace();
 
         if (is_null($name)) {
@@ -164,48 +167,48 @@ class Admin_Model_DocumentEditSession extends Application_Model_Abstract {
             $post = $namespace->$name;
             $namespace->$name = null;
             return $post;
-        }
-        else {
+        } else {
             return null;
         }
     }
-    
+
     /**
      * Liefert Session Namespace fuer diesen Controller.
      * @return Zend_Session_Namespace
      */
-    public function getSessionNamespace() {
+    public function getSessionNamespace()
+    {
         if (null === $this->_session) {
             $this->_session = new Zend_Session_Namespace($this->_namespace);
         }
- 
+
         return $this->_session;
     }
-    
+
     /**
      * Liefert Session Namespace fuer einzelnes Dokument.
      * @return Zend_Session_Namespace
      */
-    public function getDocumentSessionNamespace() {
+    public function getDocumentSessionNamespace()
+    {
         $key = 'doc' . $this->_docId;
-        
-        if (!array_key_exists($key, $this->_documentNamespaces)) {
+
+        if (! array_key_exists($key, $this->_documentNamespaces)) {
             $namespace = new Zend_Session_Namespace($key);
             $this->_documentNamespaces[$key] = $namespace;
-        }
-        else {
+        } else {
             $namespace = $this->_documentNamespaces[$key];
         }
- 
-        return $namespace;        
+
+        return $namespace;
     }
-    
+
     /**
      * Gibt die Dokument-ID für das Model zurück.
      * @return int
      */
-    public function getDocumentId() {
+    public function getDocumentId()
+    {
         return $this->_docId;
     }
-    
 }

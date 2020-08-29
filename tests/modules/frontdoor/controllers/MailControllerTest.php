@@ -27,7 +27,7 @@
  * @category    Tests
  * @package     Frontdoor
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -36,14 +36,18 @@
  *
  * @covers Frontdoor_MailController
  */
-class Frontdoor_MailControllerTest extends ControllerTestCase {
+class Frontdoor_MailControllerTest extends ControllerTestCase
+{
+
+    protected $additionalResources = ['database', 'view', 'mainMenu', 'translation'];
 
     private $documentId;
 
     private $authorDocumentId;
     private $authorId;
 
-    public function setUp() {
+    public function setUp()
+    {
         parent::setUp();
         $document = $this->createTestDocument();
         $document->setServerState('published');
@@ -80,49 +84,58 @@ class Frontdoor_MailControllerTest extends ControllerTestCase {
         $this->assertNotNull($this->authorDocumentId);
     }
 
-    public function testIndexActionNotSupported() {
+    public function testIndexActionNotSupported()
+    {
         $this->dispatch('/frontdoor/mail/index/');
         $this->assertResponseCode(500);
         $this->assertContains('currently not supported', $this->getResponse()->getBody());
     }
 
-    public function testSendmailActionNotSupported() {
+    public function testSendmailActionNotSupported()
+    {
         $this->dispatch('/frontdoor/mail/sendmail/');
         $this->assertResponseCode(500);
         $this->assertContains('currently not supported', $this->getResponse()->getBody());
     }
 
-    public function testToauthorActionWithMissingParam() {
+    public function testToauthorActionWithMissingParam()
+    {
         $this->dispatch('/frontdoor/mail/toauthor/');
         $this->assertResponseCode(500);
     }
 
-    public function testToauthorActionWithInvalidParam() {
+    public function testToauthorActionWithInvalidParam()
+    {
         $this->dispatch('/frontdoor/mail/toauthor/docId/invaliddocid');
         $this->assertResponseCode(500);
     }
 
-    public function testToauthorActionWithoutContactableAuthor() {
+    public function testToauthorActionWithoutContactableAuthor()
+    {
         $this->dispatch('/frontdoor/mail/toauthor/docId/' . $this->documentId);
         $this->assertResponseCode(500);
     }
 
-    public function testToauthorAction() {
+    public function testToauthorAction()
+    {
         $this->dispatch('/frontdoor/mail/toauthor/docId/' . $this->authorDocumentId);
         $this->assertResponseCode(200);
     }
 
-    public function testToauthorActionWithPost() {
+    public function testToauthorActionWithPost()
+    {
         $this->getRequest()->setMethod('POST');
         $this->dispatch('/frontdoor/mail/toauthor/docId/' . $this->authorDocumentId);
         $this->assertResponseCode(200);
     }
 
-    public function testToauthorActionWithInvalidPost() {
+    public function testToauthorActionWithInvalidPost()
+    {
         $this->markTestIncomplete('TODO');
     }
 
-    public function testToauthorActionWithValidPost() {
+    public function testToauthorActionWithValidPost()
+    {
         $this->markTestIncomplete('TODO');
     }
 
@@ -131,8 +144,5 @@ class Frontdoor_MailControllerTest extends ControllerTestCase {
         $this->dispatch('/frontdoor/mail/toauthor/docId/147/docId/146');
         $this->assertResponseCode(200);
         $this->assertContains('<b>KOBV</b>', $this->getResponse()->getBody());
-
     }
-
 }
-

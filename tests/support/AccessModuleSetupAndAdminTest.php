@@ -26,37 +26,44 @@
  *
  * @category    Application Unit Test
  * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-abstract class AccessModuleSetupAndAdminTest extends ControllerTestCase {
 
-    private $acls = array(
+abstract class AccessModuleSetupAndAdminTest extends ControllerTestCase
+{
+
+    protected $configModifiable = true;
+
+    protected $additionalResources = 'all';
+
+    private $acls = [
         'module_admin' => false,
         'module_setup' => false,
         'controller_staticpage' => false,
         'controller_helppage' => false,
         'controller_language' => false
-    );
+    ];
 
-    public function setUpTests($username = null, $password = null, $acls) {
+    public function setUpTests($username = null, $password = null, $acls = null)
+    {
         $this->acls = $acls;
         $this->enableSecurity();
         $this->loginUser($username, $password);
     }
 
-    public function tearDown() {
+    public function tearDown()
+    {
         $this->logoutUser();
         $this->restoreSecuritySetting();
         parent::tearDown();
     }
 
-    private function assertElement($xpath, $present = true) {
+    private function assertElement($xpath, $present = true)
+    {
         if ($present) {
             $this->assertQuery($xpath);
-        }
-        else {
+        } else {
             $this->assertNotQuery($xpath);
         }
     }
@@ -66,7 +73,8 @@ abstract class AccessModuleSetupAndAdminTest extends ControllerTestCase {
      * Grund fuer if-Abfrage: die Seite kann nicht aufgerufen werden und es wird als content eine leere Variable
      * zurueckgegeben
      */
-    public function testAdminMenuFiltering() {
+    public function testAdminMenuFiltering()
+    {
         $this->dispatch('/admin');
         if ($this->acls['module_admin']) {
             $this->assertElement('//a[@href="/admin/licence"]', $this->acls['module_admin']);
@@ -79,8 +87,7 @@ abstract class AccessModuleSetupAndAdminTest extends ControllerTestCase {
             $this->assertElement('//a[@href="/admin/index/info"]', $this->acls['module_admin']);
             $this->assertElement('//a[@href="/admin/index/setup"]', $this->acls['module_admin']);
             $this->assertElement('//a[@href="/review"]', false);
-        }
-        else {
+        } else {
             $this->assertRedirectTo(
                 '/auth/index/rmodule/admin/rcontroller/index/raction/index',
                 'assert redirect from /admin to auth failed'
@@ -92,13 +99,13 @@ abstract class AccessModuleSetupAndAdminTest extends ControllerTestCase {
     /**
      * Überprüft, ob auf die Seite zur Verwaltung von Lizenzen zugegriffen werden kann.
      */
-    public function testAccessLicenceController() {
+    public function testAccessLicenceController()
+    {
         $this->useEnglish();
         $this->dispatch('/admin/licence');
         if ($this->acls['module_admin']) {
             $this->assertQueryContentContains('//html/head/title', 'Admin Licences');
-        }
-        else {
+        } else {
             $this->assertRedirectTo(
                 '/auth/index/rmodule/admin/rcontroller/licence/raction/index',
                 'assert redirect from /admin/licence to auth failed'
@@ -109,13 +116,13 @@ abstract class AccessModuleSetupAndAdminTest extends ControllerTestCase {
     /**
      * Überprüft, ob auf die Seite zur Verwaltung von Dokumenten zugegriffen werden kann.
      */
-    public function testAccessDocumentsController() {
+    public function testAccessDocumentsController()
+    {
         $this->useEnglish();
         $this->dispatch('/admin/documents');
         if ($this->acls['module_admin']) {
             $this->assertQueryContentContains('//html/head/title', 'Administration of Documents');
-        }
-        else {
+        } else {
             $this->assertRedirectTo(
                 '/auth/index/rmodule/admin/rcontroller/documents/raction/index',
                 'assert redirect from /admin/documents to auth failed'
@@ -126,7 +133,8 @@ abstract class AccessModuleSetupAndAdminTest extends ControllerTestCase {
     /**
      * Überprüfe, dass keine Zugriff auf Module Review
      */
-    public function testNoAccessReviewModule() {
+    public function testNoAccessReviewModule()
+    {
         $this->dispatch('/review');
         $this->assertRedirectTo(
             '/auth/index/rmodule/review/rcontroller/index/raction/index',
@@ -153,16 +161,16 @@ abstract class AccessModuleSetupAndAdminTest extends ControllerTestCase {
     /**
      * Überprüft Zugriff auf StaticPage Controller im Setup Modul
      */
-    public function testAccessSetupModuleStaticPage() {
+    public function testAccessSetupModuleStaticPage()
+    {
         $this->useEnglish();
-        $this->dispatch('/setup/static-page');
+        $this->dispatch('/setup/translation');
         if ($this->acls['module_setup'] || $this->acls['controller_staticpage']) {
-            $this->assertQueryContentContains('//html/head//title', 'Static Pages');
-        }
-        else {
+            $this->assertQueryContentContains('//html/head//title', 'Translations');
+        } else {
             $this->assertRedirectTo(
-                '/auth/index/rmodule/setup/rcontroller/static-page/raction/index',
-                'assert redirect from /setup/static-page to auth failed'
+                '/auth/index/rmodule/setup/rcontroller/translation/raction/index',
+                'assert redirect from /setup/translation to auth failed'
             );
         }
     }
@@ -170,19 +178,15 @@ abstract class AccessModuleSetupAndAdminTest extends ControllerTestCase {
     /**
      * Überprüft Zugriff auf HelpPage Controller im Setup Modul
      */
-    public function testAccessSetupModuleHelpPage() {
-        $filePath = APPLICATION_PATH . '/modules/home/language_custom';
-        $fileRights = fileperms($filePath);
-        chmod($filePath, 0400);
-        $this->dispatch('/setup/help-page');
-        chmod($filePath, $fileRights);
+    public function testAccessSetupModuleHelpPage()
+    {
+        $this->dispatch('/setup/helppage');
         if ($this->acls['module_setup'] || $this->acls['controller_helppage']) {
-            $this->assertRedirectTo('/setup/help-page/error', 'setup/help-page not asserted');
-        }
-        else {
+            $this->assertResponseCode(200);
+        } else {
             $this->assertRedirectTo(
-                '/auth/index/rmodule/setup/rcontroller/help-page/raction/index',
-                'assert redirect from /setup/help-page to auth failed'
+                '/auth/index/rmodule/setup/rcontroller/helppage/raction/index',
+                'assert redirect from /setup/helppage to auth failed'
             );
         }
     }
@@ -190,17 +194,17 @@ abstract class AccessModuleSetupAndAdminTest extends ControllerTestCase {
     /**
      * Überprüft Zugriff auf die Einträge in der Rubrik "Setup" im Admin Untermenü
      */
-    public function testAccessSetupMenu() {
+    public function testAccessSetupMenu()
+    {
         $this->dispatch('/admin/index/setup');
         if ($this->acls['module_admin']) {
             $this->assertElement('//a[@href="/admin/enrichmentkey"]', $this->acls['module_admin']);
-            $this->assertElement('//a[@href="/setup/help-page"]', $this->acls['module_admin'] && ($this->acls['module_setup'] || $this->acls['controller_helppage']));
-            $this->assertElement('//a[@href="/setup/static-page"]', $this->acls['module_admin'] && ($this->acls['module_setup'] || $this->acls['controller_staticpage']));
+            $this->assertElement('//a[@href="/setup/helppage"]', $this->acls['module_admin'] && ($this->acls['module_setup'] || $this->acls['controller_helppage']));
+            $this->assertElement('//a[@href="/setup/translation"]', $this->acls['module_admin'] && ($this->acls['module_setup'] || $this->acls['controller_staticpage']));
             /* TODO OPUSVIER-3268 - Menu Eintrag wurde versteckt.
              $this->assertElement('//a[@href="/setup/language"]', $this->acls['module_admin'] && ($this->acls['module_setup'] || $this->acls['controller_language']));
             */
-        }
-        else {
+        } else {
             $this->assertRedirectTo(
                 '/auth/index/rmodule/admin/rcontroller/index/raction/setup',
                 'assert redirect from /admin to auth failed'
@@ -212,9 +216,9 @@ abstract class AccessModuleSetupAndAdminTest extends ControllerTestCase {
     /**
      * Prüft, ob fuer Nutzer mit vollem Zugriff auf Admin Modul der Edit Link in der Frontdoor angezeigt wird.
      */
-    public function testActionBoxInFrontdoorPresent() {
+    public function testActionBoxInFrontdoorPresent()
+    {
         $this->dispatch('/frontdoor/index/index/docId/92');
         $this->assertElement('//div[@id="actionboxContainer"]', $this->acls['module_admin']);
     }
-
 }

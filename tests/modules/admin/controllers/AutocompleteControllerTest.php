@@ -38,9 +38,11 @@
 class Admin_AutocompleteControllerTest extends ControllerTestCase
 {
 
+    protected $additionalResources = 'all';
+
     public function testAutocompleteGndSubjectUnknown()
     {
-        $this->dispatch( 'admin/autocomplete/subject?term=foo');
+        $this->dispatch('admin/autocomplete/subject?term=foo');
 
         $response = $this->getResponse()->getBody();
 
@@ -50,7 +52,7 @@ class Admin_AutocompleteControllerTest extends ControllerTestCase
 
     public function testAutocompleteGndSubject()
     {
-        $this->dispatch( 'admin/autocomplete/subject?term=informationssystem');
+        $this->dispatch('admin/autocomplete/subject?term=informationssystem');
 
         $response = $this->getResponse()->getBody();
 
@@ -60,7 +62,7 @@ class Admin_AutocompleteControllerTest extends ControllerTestCase
 
     public function testEnrichmentTypeDescriptionUnknown()
     {
-        $this->dispatch( 'admin/autocomplete/enrichmenttypedescription?typeName=unknowntype');
+        $this->dispatch('admin/autocomplete/enrichmenttypedescription?typeName=unknowntype');
 
         $response = $this->getResponse()->getBody();
 
@@ -71,7 +73,7 @@ class Admin_AutocompleteControllerTest extends ControllerTestCase
     public function testEnrichmentTypeDescriptionGerman()
     {
         $this->useGerman();
-        $this->dispatch( 'admin/autocomplete/enrichmenttypedescription?typeName=RegexType');
+        $this->dispatch('admin/autocomplete/enrichmenttypedescription?typeName=RegexType');
 
         $response = $this->getResponse()->getBody();
 
@@ -82,12 +84,11 @@ class Admin_AutocompleteControllerTest extends ControllerTestCase
     public function testEnrichmentTypeDescriptionEnglish()
     {
         $this->useEnglish();
-        $this->dispatch( 'admin/autocomplete/enrichmenttypedescription?typeName=RegexType');
+        $this->dispatch('admin/autocomplete/enrichmenttypedescription?typeName=RegexType');
 
         $response = $this->getResponse()->getBody();
 
         $this->assertJson($response);
         $this->assertEquals('{"typeName":"Please provide a valid regular expression that defines the set of values of this type."}', $response);
     }
-
 }

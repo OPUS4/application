@@ -35,14 +35,16 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Application_Form_Element_Submit extends Zend_Form_Element_Submit {
+class Application_Form_Element_Submit extends Zend_Form_Element_Submit
+{
 
     /**
      * Initialisiert Formularelement.
      *
      * Fügt Prefix-Path für Decorator hinzu, damit 'ElementHtmlTag' verwendet werden kann.
      */
-    public function init() {
+    public function init()
+    {
         parent::init();
 
         $this->addPrefixPath('Application_Form_Decorator', 'Application/Form/Decorator', Zend_Form::DECORATOR);
@@ -52,17 +54,15 @@ class Application_Form_Element_Submit extends Zend_Form_Element_Submit {
      * Lädt die Dekoratoren für Button Element.
      * @return $this|Zend_Form_Element_Submit
      */
-    public function loadDefaultDecorators() {
-        if (!$this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
-            $this->setDecorators(
-                array(
+    public function loadDefaultDecorators()
+    {
+        if (! $this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
+            $this->setDecorators([
                 'ViewHelper',
                 'ElementHtmlTag',
-                array(array('dataWrapper' => 'HtmlTagWithId'), array('tag' => 'div', 'class' => 'data-wrapper'))
-                )
-            );
+                [['dataWrapper' => 'HtmlTagWithId'], ['tag' => 'div', 'class' => 'data-wrapper']]
+            ]);
         }
         return $this;
     }
-
 }

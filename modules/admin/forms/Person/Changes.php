@@ -80,13 +80,12 @@ class Admin_Form_Person_Changes extends Application_Form_Abstract
         $oldValues = $this->getOldValues();
         $changes = $this->getChanges();
 
-        if (!is_array($oldValues))
-        {
+        if (! is_array($oldValues)) {
             // TODO do some logging
             throw new InvalidArgumentException('Changes form requires old values attribute to be set');
         }
 
-        $preparedChanges = array();
+        $preparedChanges = [];
 
         $helper = new Application_Controller_Action_Helper_Dates();
 
@@ -105,7 +104,6 @@ class Admin_Form_Person_Changes extends Application_Form_Abstract
             $action = 'notmodified';
 
             if (array_key_exists($field, $changes)) {
-
                 if (stripos($field, 'date') !== false) {
                     $preparedChanges[$field]['new'] = $this->forceArray($helper->getDateString(
                         new Opus_Date($changes[$field])

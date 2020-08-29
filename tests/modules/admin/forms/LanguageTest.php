@@ -27,14 +27,17 @@
  * @category    Application Unit Test
  * @package     Admin_Form
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
-class Admin_Form_LanguageTest extends ControllerTestCase {
+class Admin_Form_LanguageTest extends ControllerTestCase
+{
 
-    public function testConstructForm() {
+    protected $additionalResources = ['database'];
+
+    public function testConstructForm()
+    {
         $form = new Admin_Form_Language();
 
         $this->assertEquals(11, count($form->getElements()));
@@ -53,7 +56,8 @@ class Admin_Form_LanguageTest extends ControllerTestCase {
         $this->assertNotNull($form->getElement('Id'));
     }
 
-    public function testPopulateFromModel() {
+    public function testPopulateFromModel()
+    {
         $form = new Admin_Form_Language();
 
         $language = new Opus_Language();
@@ -79,7 +83,8 @@ class Admin_Form_LanguageTest extends ControllerTestCase {
         $this->assertNull($form->getElement('Id')->getValue());
     }
 
-    public function testPopulateFromModelWithId() {
+    public function testPopulateFromModelWithId()
+    {
         $form = new Admin_Form_Language();
 
         $language = new Opus_Language(2);
@@ -89,7 +94,8 @@ class Admin_Form_LanguageTest extends ControllerTestCase {
         $this->assertEquals(2, $form->getElement('Id')->getValue());
     }
 
-    public function testUpdateModel() {
+    public function testUpdateModel()
+    {
         $form = new Admin_Form_Language();
 
         $form->getElement('Id')->setValue(99);
@@ -117,36 +123,39 @@ class Admin_Form_LanguageTest extends ControllerTestCase {
         $this->assertEquals('L', $language->getType());
     }
 
-    public function testValidationEmptyPost() {
+    public function testValidationEmptyPost()
+    {
         $form = new Admin_Form_Language();
 
-        $this->assertFalse($form->isValid(array()));
+        $this->assertFalse($form->isValid([]));
 
         $this->assertContains('isEmpty', $form->getErrors('RefName'));
         $this->assertContains('isEmpty', $form->getErrors('Part2T'));
     }
 
-    public function testValidationEmptyFields() {
+    public function testValidationEmptyFields()
+    {
         $form = new Admin_Form_Language();
 
-        $this->assertFalse($form->isValid(array(
+        $this->assertFalse($form->isValid([
             'RefName' => '   ',
             'Part2T' => ' '
-        )));
+        ]));
 
         $this->assertContains('isEmpty', $form->getErrors('RefName'));
         $this->assertContains('isEmpty', $form->getErrors('Part2T'));
     }
 
-    public function testValidationInvalidValues() {
+    public function testValidationInvalidValues()
+    {
         $form = new Admin_Form_Language();
 
-        $this->assertFalse($form->isValid(array(
+        $this->assertFalse($form->isValid([
             'RefName' => 'German',
             'Part2T' => 'deu',
             'Scope' => 'X',
             'Type' => 'Y'
-        )));
+        ]));
 
         $this->assertNotContains('isEmpty', $form->getErrors('RefName'));
         $this->assertNotContains('isEmpty', $form->getErrors('Part2T'));
@@ -154,13 +163,13 @@ class Admin_Form_LanguageTest extends ControllerTestCase {
         $this->assertContains('notInArray', $form->getErrors('Type'));
     }
 
-    public function testValidationTrue() {
+    public function testValidationTrue()
+    {
         $form = new Admin_Form_Language();
 
-        $this->assertTrue($form->isValid(array(
+        $this->assertTrue($form->isValid([
             'RefName' => 'German',
             'Part2T' => 'deu',
-        )));
+        ]));
     }
-
 }

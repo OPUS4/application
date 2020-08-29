@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -26,19 +27,26 @@
  *
  * @category    Application Unit Test
  * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class LicencesAdminTest extends ControllerTestCase {
 
-    public function setUp() {
+class LicencesAdminTest extends ControllerTestCase
+{
+
+    protected $configModifiable = true;
+
+    protected $additionalResources = 'all';
+
+    public function setUp()
+    {
         parent::setUp();
         $this->enableSecurity();
         $this->loginUser('security2', 'security2pwd');
     }
 
-    public function tearDown() {
+    public function tearDown()
+    {
         $this->logoutUser();
         $this->restoreSecuritySetting();
         parent::tearDown();
@@ -47,7 +55,8 @@ class LicencesAdminTest extends ControllerTestCase {
     /**
      * Prüft, ob nur die erlaubten Einträge im Admin Menu angezeigt werden.
      */
-    public function testAdminMenuFiltering() {
+    public function testAdminMenuFiltering()
+    {
         $this->dispatch('/admin');
         $this->assertQuery('//a[@href="/admin/licence"]');
         $this->assertQuery('//a[@href="/admin/index/info"]');
@@ -64,7 +73,8 @@ class LicencesAdminTest extends ControllerTestCase {
     /**
      * Prüft, ob auf die Seite zur Verwaltung von Lizenzen zugegriffen werden kann.
      */
-    public function testAccessLicenceController() {
+    public function testAccessLicenceController()
+    {
         $this->useEnglish();
         $this->dispatch('/admin/licence');
         $this->assertQueryContentContains('//html/head/title', 'Admin Licences');
@@ -73,7 +83,8 @@ class LicencesAdminTest extends ControllerTestCase {
     /**
      * Prüft, das nicht auf die Seite zur Verwaltung von Dokumenten zugegriffen werden kann.
      */
-    public function testNoAccessDocumentsController() {
+    public function testNoAccessDocumentsController()
+    {
         $this->dispatch('/admin/documents');
         $this->assertRedirectTo('/auth');
     }
@@ -81,25 +92,28 @@ class LicencesAdminTest extends ControllerTestCase {
     /**
      * Prüft, ob fuer Nutzer mit vollem Zugriff auf Admin Modul der Edit Link in der Frontdoor angezeigt wird.
      */
-    public function testEditLinkInFrontdoorNotPresent() {
+    public function testEditLinkInFrontdoorNotPresent()
+    {
         $this->useEnglish();
         $this->dispatch('/frontdoor/index/index/docId/92');
         $this->assertNotQueryContentContains('//html/body', 'Edit this document');
     }
 
-    public function testNoAccessFilebrowserController() {
+    public function testNoAccessFilebrowserController()
+    {
         $this->dispatch('/admin/filebrowser/index/docId/92');
         $this->assertRedirectTo('/auth');
     }
 
-    public function testNoAccessWorkflowController() {
+    public function testNoAccessWorkflowController()
+    {
         $this->dispatch('/admin/workflow/changestate/docId/300/targetState/deleted');
         $this->assertRedirectTo('/auth');
     }
 
-    public function testNoAccessAccessController() {
+    public function testNoAccessAccessController()
+    {
         $this->dispatch('/admin/access/listmodule/roleid/2');
         $this->assertRedirectTo('/auth');
     }
-
 }

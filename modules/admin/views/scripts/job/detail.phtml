@@ -35,7 +35,7 @@
 <div id="adminMenuContainer">
 
     <fieldset>
-        <legend><?= $this->translate('admin_job_job-detail_description') ?>: <?= $this->translate('admin_job_label-' . $this->label) ?></legend>
+        <legend><?= $this->translate('admin_job_job_detail_description') ?>: <?= $this->translate('admin_job_label_' . $this->label) ?></legend>
 
         <table class="worker-jobs">
             <tr>
@@ -46,22 +46,22 @@
                 <td><?=$this->translate('admin_job_errors')?></td>
             </tr>
 
-            <?PHP if ($this->jobs && count($this->jobs) > 0): ?>
+            <?PHP if ($this->jobs && count($this->jobs) > 0) : ?>
 
                 <?PHP foreach ($this->jobs as $job) : ?>
                     <tr>
                         <td><?= $job->getId() ?></td>
                         <td><?= $job->getSha1Id()?></td>
-                        <td><?= $this->translate('admin_job_state-'.($job->getState() ? : 'unprocessed')) ?></td>
+                        <td><?= $this->translate('admin_job_state_'.($job->getState() ? : 'unprocessed')) ?></td>
                         <td>
-                            <?PHP foreach ((array) $job->getData() as $key => $value): ?>
+                            <?PHP foreach ((array) $job->getData() as $key => $value) : ?>
                                 <div><?= $key ?>: <?= $value ?></div>
                             <?PHP endforeach ?>
 
                         <td>
                             <?PHP
                             $error = $job->getErrors();
-                            if (!empty($error)):
+                            if (! empty($error)) :
                                 $errorObject = json_decode($error);
                                 ?>
                                 <div><?= $this->translate('admin_job_exception_classname') ?>: <?= $errorObject->exception ?></div>
