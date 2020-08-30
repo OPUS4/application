@@ -693,7 +693,7 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
                     // TODO write to log
                 }
 
-                if (isset($old['transaltionsTmx'])) {
+                if (isset($old['translationsTmx'])) {
                     $oldValues = $old['translationsTmx'];
                 } else {
                     $oldValues = $old['translations'];
