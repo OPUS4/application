@@ -36,13 +36,13 @@
     <dl>
     <fieldset>
         <legend><?= $this->translate('admin_job_index_async_description') ?></legend>
-        <?PHP if ($this->asyncjobs): ?>
+        <?PHP if ($this->asyncjobs) : ?>
 
             <table class="worker-jobs">
                 <tr>
                     <th><?= $this->translate('admin_job_index_failedjobs') ?></th>
                 </tr>
-                <?PHP if ($this->failedJobCount && count($this->failedJobCount) > 0): ?>
+                <?PHP if ($this->failedJobCount && count($this->failedJobCount) > 0) : ?>
 
                     <?PHP foreach ($this->failedJobCount as $label => $count) : ?>
                         <tr>
@@ -51,12 +51,12 @@
                         </tr>
                         <tr>
                             <td class="label">
-                                <a href="<?= $this->url(array('action' => 'detail', 'label' => $label, 'state' => Opus_Job::STATE_FAILED)) ?>" title="<?=$this->translate('admin_job_index_job_detail_hint')?>"><?= $this->translate('admin_job_label-'.$label) ?></a>
+                                <a href="<?= $this->url(['action' => 'detail', 'label' => $label, 'state' => Opus_Job::STATE_FAILED]) ?>" title="<?=$this->translate('admin_job_index_job_detail_hint')?>"><?= $this->translate('admin_job_label_'.$label) ?></a>
                             </td>
                             <td class="value"><?= $count ?></td>
                         </tr>
                     <?PHP endforeach ?>
-                <?PHP else: ?>
+                <?PHP else : ?>
                     <tr>
                         <td><?= $this->translate('admin_job_index_nofailedjobs') ?></td>
                     </tr>
@@ -67,7 +67,7 @@
                 <tr>
                     <th><?= $this->translate('admin_job_index_unprocessedjobs') ?></th>
                 </tr>
-                <?PHP if ($this->unprocessedJobCount && count($this->unprocessedJobCount) > 0): ?>
+                <?PHP if ($this->unprocessedJobCount && count($this->unprocessedJobCount) > 0) : ?>
 
                     <?PHP foreach ($this->unprocessedJobCount as $label => $count) : ?>
                         <tr>
@@ -76,20 +76,20 @@
                         </tr>
                         <tr>
                             <td class="label">
-                                <a href="<?= $this->url(array('action' => 'detail', 'label' => $label, 'state' => Opus_Job::STATE_UNDEFINED)) ?>" title="<?=$this->translate('admin_job_index_job_detail_hint')?>"><?= $this->translate('admin_job_label-'.$label) ?></a>
+                                <a href="<?= $this->url(['action' => 'detail', 'label' => $label, 'state' => Opus_Job::STATE_UNDEFINED]) ?>" title="<?=$this->translate('admin_job_index_job_detail_hint')?>"><?= $this->translate('admin_job_label_'.$label) ?></a>
 
                             </td>
                             <td class="value"><?= $count ?></td>
                         </tr>
                     <?PHP endforeach ?>
-                <?PHP else: ?>
+                <?PHP else : ?>
                     <tr>
                         <td><?= $this->translate('admin_job_index_nounprocessedjobs') ?></td>
                     </tr>
                 <?PHP endif ?>
             </table>
 
-        <?PHP else: ?>
+        <?PHP else : ?>
             <div><?= $this->translate('admin_job_index_async_disabled') ?></div>
         <?PHP endif ?>
 

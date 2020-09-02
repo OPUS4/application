@@ -41,19 +41,22 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Admin_Form_File_Hashes extends Admin_Form_AbstractDocumentSubForm {
+class Admin_Form_File_Hashes extends Admin_Form_AbstractDocumentSubForm
+{
 
-    public function init() {
+    public function init()
+    {
         parent::init();
 
-        $this->setDecorators(array('FormElements'));
+        $this->setDecorators(['FormElements']);
     }
 
-    public function populateFromModel($file) {
+    public function populateFromModel($file)
+    {
         foreach ($file->getHashValue() as $hashValue) {
             $hash = new Admin_Model_Hash($file, $hashValue);
             $hashType = $hash->getHashType();
-            if (!empty($hashType)) {
+            if (! empty($hashType)) {
                 $signType = $hash->getSignatureType();
                 switch ($signType) {
                     case 'gpg':
@@ -69,12 +72,12 @@ class Admin_Form_File_Hashes extends Admin_Form_AbstractDocumentSubForm {
     /**
      * @param $hash
      */
-    public function addHashElement($file, $hash) {
+    public function addHashElement($file, $hash)
+    {
         $index = count($this->getElements());
         $element = $this->createElement('fileHash', 'Hash' . $index);
         $element->setValue($hash);
         $element->setFile($file);
         $this->addElement($element);
     }
-
 }

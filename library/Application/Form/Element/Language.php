@@ -27,20 +27,21 @@
  * @category    Application
  * @package     View
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2014-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
  *
  * TODO override setLabel for more robust translation
  */
-class Application_Form_Element_Language extends Application_Form_Element_Select {
+class Application_Form_Element_Language extends Application_Form_Element_Select
+{
 
     private static $_languageList;
 
-    public function init() {
+    public function init()
+    {
         parent::init();
 
         $this->setLabel($this->getView()->translate($this->getName()));
@@ -52,7 +53,8 @@ class Application_Form_Element_Language extends Application_Form_Element_Select 
         }
     }
 
-    public static function getLanguageList() {
+    public static function getLanguageList()
+    {
         if (is_null(self::$_languageList)) {
             self::initLanguageList();
         }
@@ -64,12 +66,13 @@ class Application_Form_Element_Language extends Application_Form_Element_Select 
      *
      * @return void
      */
-    public static function initLanguageList() {
+    public static function initLanguageList()
+    {
         $translate = Zend_Registry::get(Application_Translate::REGISTRY_KEY);
-        $languages = array();
+        $languages = [];
         foreach (Opus_Language::getAllActiveTable() as $languageRow) {
             $langId = $languageRow['part2_t'];
-            $languages[$langId] = $translate->translate($langId);
+            $languages[$langId] = $translate->translateLanguage($langId);
         }
         self::$_languageList = $languages;
         Zend_Registry::set('Available_Languages', $languages);

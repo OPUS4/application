@@ -36,7 +36,8 @@
 /**
  * Contains code for clearing documents (switching to published state).
  */
-class Review_Model_ClearDocumentsHelper {
+class Review_Model_ClearDocumentsHelper
+{
 
     /**
      * Publishes documents and adds the given Person as referee.
@@ -47,10 +48,11 @@ class Review_Model_ClearDocumentsHelper {
      *
      * FIXME capture success or failure for display afterwards
      */
-    public function clear(array $docIds = null, $userId = null, $person = null) {
+    public function clear(array $docIds = null, $userId = null, $person = null)
+    {
         $logger = Zend_Registry::get('Zend_Log');
 
-        foreach ($docIds AS $docId) {
+        foreach ($docIds as $docId) {
             $logger->debug('Change state to "published" for document: ' . $docId);
             $document = new Opus_Document($docId);
             $document->setServerState('published');
@@ -61,7 +63,7 @@ class Review_Model_ClearDocumentsHelper {
             $document->setPublishedDate($date);
 
             $guestRole = Opus_UserRole::fetchByName('guest');
-            foreach ($document->getFile() AS $file) {
+            foreach ($document->getFile() as $file) {
                 $guestRole->appendAccessFile($file->getId());
             }
 
@@ -90,10 +92,11 @@ class Review_Model_ClearDocumentsHelper {
      *
      * FIXME capture success or failure for display afterwards
      */
-    public function reject(array $docIds = null, $userId = null, $person = null) {
+    public function reject(array $docIds = null, $userId = null, $person = null)
+    {
         $logger = Zend_Registry::get('Zend_Log');
 
-        foreach ($docIds AS $docId) {
+        foreach ($docIds as $docId) {
             $logger->debug('Deleting document with id: ' . $docId);
             $document = new Opus_Document($docId);
 

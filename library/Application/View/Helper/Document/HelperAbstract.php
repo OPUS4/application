@@ -36,7 +36,6 @@
  */
 abstract class Application_View_Helper_Document_HelperAbstract extends Application_View_Helper_Abstract
 {
-
     /**
      * Determines if preferably the title matching the user interface language should be used.
      * @var bool
@@ -47,21 +46,13 @@ abstract class Application_View_Helper_Document_HelperAbstract extends Applicati
      * Returns if user interface language should be used.
      * @return bool true if user interface language should be used
      */
-    public function isPreferUserInterfaceLanguage() {
+    public function isPreferUserInterfaceLanguage()
+    {
         $config = $this->getConfig();
 
-        if (is_null($this->_preferUserInterfaceLanguage))
-        {
-            if (isset($config->search->result->display->preferUserInterfaceLanguage))
-            {
-                $value = trim($config->search->result->display->preferUserInterfaceLanguage);
-
-                $this->_preferUserInterfaceLanguage = ($value == 1 || $value === 'true');
-            }
-            else {
-                $this->_preferUserInterfaceLanguage = false;
-            }
-
+        if (is_null($this->_preferUserInterfaceLanguage)) {
+            $this->_preferUserInterfaceLanguage = isset($config->search->result->display->preferUserInterfaceLanguage) &&
+                filter_var($config->search->result->display->preferUserInterfaceLanguage, FILTER_VALIDATE_BOOLEAN);
         }
 
         return $this->_preferUserInterfaceLanguage;
@@ -73,7 +64,22 @@ abstract class Application_View_Helper_Document_HelperAbstract extends Applicati
      */
     public function setPreferUserInterfaceLanguage($enabled)
     {
-        $this->_preferUserInterfaceLanguage = ($enabled == 1 || $enabled === 'true');
+        $this->_preferUserInterfaceLanguage = filter_var($enabled, FILTER_VALIDATE_BOOLEAN);
     }
 
+    public function getResult()
+    {
+        return $this->view->result;
+    }
+
+    public function getDocument()
+    {
+        $result = $this->getResult();
+
+        if (! is_null($result)) {
+            return $result->getDocument();
+        } else {
+            return null;
+        }
+    }
 }

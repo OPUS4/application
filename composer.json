@@ -3,33 +3,69 @@
   "description": "Application Environment for Opus 4",
   "license": "GPL-2.0+",
   "require": {
+    "php": ">=7.0 <7.2",
+    "ext-intl": "*",
+    "ext-gd": "*",
+    "ext-mcrypt": "*",
+    "ext-mbstring": "*",
+    "ext-pdo": "*",
+    "ext-pdo_mysql": "*",
+    "ext-curl": "*",
+    "ext-xml": "*",
+    "ext-zip": "*",
     "zendframework/zendframework1": "1.12.*",
     "jpgraph/jpgraph": "dev-master",
-    "solarium/solarium": "3.4.1",
-    "opus4-repo/framework": "4.6.4.*",
-    "opus4-repo/opus4-doi": "4.6.2",
-    "opus4-repo/search": "4.5",
-    "components/jquery": "1.12.4",
-    "components/jqueryui": "1.12.1",
+    "solarium/solarium": "3.8.*",
+    "opus4-repo/opus4-common": "4.7",
+    "opus4-repo/framework": "4.7",
+    "opus4-repo/search": "4.7",
+    "opus4-repo/opus4-bibtex": "0.1-beta",
+    "components/jquery": "3.4.*",
+    "components/jqueryui": "1.12.*",
     "robloach/component-installer": "*"
   },
   "require-dev": {
-    "phpunit/phpunit": "4.8.24",
+    "phpunit/phpunit": "4.8.*",
     "phpunit/dbunit": "~1.3",
     "phpunit/phpunit-story": "~1.0",
     "phpunit/phpunit-selenium": "~1.4",
-    "phpunit/php-invoker": "~1.1",
+    "phpunit/php-invoker": "1.1.*",
     "phploc/phploc": "*",
     "phpdocumentor/phpdocumentor": "2.*",
-    "phpmd/phpmd" : "2.4.3",
+    "phpmd/phpmd" : "2.*",
     "sebastian/phpcpd": "*",
     "mayflower/php-codebrowser": "~1.1",
     "squizlabs/php_codesniffer": "2.*",
-    "opus4-repo/codesniffer": "dev-master"
+    "opus4-repo/codesniffer": "dev-master",
+    "zendframework/zend-coding-standard": "~1.0.0"
   },
   "minimum-stability": "dev",
   "prefer-stable": true,
   "config": {
     "component-dir": "public/assets"
+  },
+  "scripts": {
+    "analysis": [
+      "Composer\\Config::disableProcessTimeout",
+      "@prepare",
+      "@cs-analysis",
+      "@phpmd",
+      "@phpcpd"
+    ],
+    "prepare": "mkdir -p build",
+    "test-coverage": [
+      "Composer\\Config::disableProcessTimeout",
+      "phpunit --log-junit build/phpunit.xml --colors=always --coverage-html build/ --coverage-clover build/clover.xml --configuration tests/phpunit.xml"
+    ],
+    "test": [
+      "Composer\\Config::disableProcessTimeout",
+      "phpunit --log-junit build/phpunit.xml --colors=always --configuration tests/phpunit.xml"
+    ],
+    "cs-check": "phpcs -n --extensions=php,phtml,css,js,inc",
+    "cs-fix": "phpcbf --extensions=php,phtml,css,js,inc",
+    "cs-analysis": "phpcs -n --report=checkstyle --report-file=build/checkstyle.xml",
+    "phpmd": "phpmd library xml cleancode,unusedcode,design,naming --reportfile build/phpmd.xml --ignore-violations-on-exit",
+    "phploc": "phploc --log-csv build/phploc.csv src",
+    "phpcpd": "phpcpd . --min-lines 3 --min-tokens 30 --log-pmd build/pmd-cpd.xml --progress || true"
   }
 }

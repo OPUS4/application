@@ -27,38 +27,39 @@
  * @category    Application Unit Test
  * @package     Form_Element
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
-class Application_Form_Element_SearchFieldModifierTest extends ControllerTestCase {
+class Application_Form_Element_SearchFieldModifierTest extends ControllerTestCase
+{
 
-    public function testOptions() {
+    public function testOptions()
+    {
         $element = new Application_Form_Element_SearchFieldModifier('modifier');
 
         $options = $element->getMultiOptions();
 
         $this->assertCount(3, $options);
 
-        $this->assertNotNull($element->getMultiOption(Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL));
-        $this->assertNotNull($element->getMultiOption(Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ANY));
-        $this->assertNotNull($element->getMultiOption(Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_NONE));
+        $this->assertNotNull($element->getMultiOption(Opus\Search\Util\Query::SEARCH_MODIFIER_CONTAINS_ALL));
+        $this->assertNotNull($element->getMultiOption(Opus\Search\Util\Query::SEARCH_MODIFIER_CONTAINS_ANY));
+        $this->assertNotNull($element->getMultiOption(Opus\Search\Util\Query::SEARCH_MODIFIER_CONTAINS_NONE));
     }
 
-    public function testValidationTrue() {
+    public function testValidationTrue()
+    {
         $element = new Application_Form_Element_SearchFieldModifier('modifier');
 
-        $this->assertTrue($element->isValid(Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL));
-        $this->assertTrue($element->isValid(Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ANY));
-        $this->assertTrue($element->isValid(Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_NONE));
+        $this->assertTrue($element->isValid(Opus\Search\Util\Query::SEARCH_MODIFIER_CONTAINS_ALL));
+        $this->assertTrue($element->isValid(Opus\Search\Util\Query::SEARCH_MODIFIER_CONTAINS_ANY));
+        $this->assertTrue($element->isValid(Opus\Search\Util\Query::SEARCH_MODIFIER_CONTAINS_NONE));
     }
 
-    public function testValidationFalse() {
+    public function testValidationFalse()
+    {
         $element = new Application_Form_Element_SearchFieldModifier('modifier');
 
         $this->assertFalse($element->isValid('anything'));
     }
-
-
 }

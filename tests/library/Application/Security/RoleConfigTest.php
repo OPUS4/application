@@ -28,39 +28,40 @@
  * @category    TODO
  * @package     TODO
  * @author      Edouard Simon (edouard.simon@zib.de)
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
- * 
+ *
  */
-class Application_Security_RoleConfigTest extends ControllerTestCase {
+class Application_Security_RoleConfigTest extends ControllerTestCase
+{
+
+    protected $additionalResources = 'database';
 
     private $guestRole;
-    
-    public function setUp() {
+
+    public function setUp()
+    {
         parent::setUp();
         $this->guestRole = new Opus_UserRole(2);
         $this->guestRole->appendAccessModule('documents');
     }
-    
-    public function tearDown() {
+
+    public function tearDown()
+    {
         parent::tearDown();
         $this->guestRole->removeAccessModule('documents');
     }
-    
-    public function testApplyPermissions() {
+
+    public function testApplyPermissions()
+    {
         $acl = new Zend_Acl();
         $this->setExpectedException('Zend_Acl_Role_Registry_Exception');
         $acl->isAllowed($this->guestRole, 'documents');
         $roleConfig = new Application_Security_RoleConfig('guest');
         $roleConfig->applyPermissions($acl);
         $this->assertTrue($acl->isAllowed($this->guestRole, 'documents'), "Expected role 'guest' can access resource 'documents'");
-        
     }
-    
 }
-
-?>

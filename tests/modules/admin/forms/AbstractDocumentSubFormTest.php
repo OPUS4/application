@@ -30,24 +30,29 @@
  *
  * @category    Application Unit Test
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2013-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class Admin_Form_AbstractDocumentSubFormTest extends ControllerTestCase {
+class Admin_Form_AbstractDocumentSubFormTest extends ControllerTestCase
+{
+
+    protected $additionalResources = ['database'];
 
     private $form;
 
-    public function setUp() {
+    public function setUp()
+    {
         parent::setUp();
         $this->form = $this->getForm();
     }
 
-    private function getForm() {
+    private function getForm()
+    {
         return $this->getMockForAbstractClass('Admin_Form_AbstractDocumentSubForm');
     }
 
-    public function testInit() {
+    public function testInit()
+    {
         $form = $this->form;
 
         $form->init();
@@ -63,35 +68,40 @@ class Admin_Form_AbstractDocumentSubFormTest extends ControllerTestCase {
     /**
      * Tut nichts.
      */
-    public function testPopulateFromModel() {
+    public function testPopulateFromModel()
+    {
         $this->form->populateFromModel(new Opus_Licence());
     }
 
     /**
      * Tut nichts.
      */
-    public function testConstructFromPost() {
-        $this->form->constructFromPost(array());
+    public function testConstructFromPost()
+    {
+        $this->form->constructFromPost([]);
     }
 
     /**
      * Tut nichts.
      */
-    public function testContinueEdit() {
+    public function testContinueEdit()
+    {
         $this->form->continueEdit($this->getRequest());
     }
 
-    public function testProcessPostNoSubforms() {
-        $this->assertNull($this->form->processPost(array(), array()));
+    public function testProcessPostNoSubforms()
+    {
+        $this->assertNull($this->form->processPost([], []));
     }
 
-    public function testProcessPost() {
+    public function testProcessPost()
+    {
         $this->markTestIncomplete('Mocking funktioniert noch nicht.');
-        $post = array(
-            'subform1' => array(
+        $post = [
+            'subform1' => [
                 'Button' => 'Value'
-            )
-        );
+            ]
+        ];
 
         $subform1 = $this->getMockForAbstractClass('Application_Form_Model_Abstract');
         $subform1->expects($this->exactly(1))->method('processPost')->will($this->returnValue(null));
@@ -104,19 +114,21 @@ class Admin_Form_AbstractDocumentSubFormTest extends ControllerTestCase {
         $this->assertNull($this->form->processPost($post, $post));
     }
 
-    public function testUpdateModel() {
+    public function testUpdateModel()
+    {
         $this->markTestIncomplete('Mocking funktioniert noch nicht.');
     }
 
-    public function testIsDependenciesValid() {
+    public function testIsDependenciesValid()
+    {
         $this->markTestIncomplete('Mocking funktioniert noch nicht.');
     }
 
-    public function testGetDatesHelper() {
+    public function testGetDatesHelper()
+    {
         $form = $this->getForm();
 
         $this->assertNotNull($form->getDatesHelper());
         $this->assertInstanceOf('Application_Controller_Action_Helper_Dates', $form->getDatesHelper());
     }
-
 }

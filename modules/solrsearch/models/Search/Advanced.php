@@ -50,35 +50,47 @@ class Solrsearch_Model_Search_Advanced extends Solrsearch_Model_Search_Basic
 
         $view = $this->getView();
 
-        $form->setAction($view->url(array(
+        $form->setAction($view->url([
             'module' => 'solrsearch', 'controller' => 'dispatch', 'action' => 'index'
-        ), null, true));
+        ], null, true));
 
         return $form;
     }
 
-    public function createSearchQuery($input) {
+    public function createSearchQuery($input)
+    {
         $this->getLogger()->debug("Constructing query for advanced search.");
 
-        $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::ADVANCED);
+        $query = new Opus\Search\Util\Query(Opus\Search\Util\Query::ADVANCED);
         $query->setStart($input['start']);
         $query->setRows($input['rows']);
         $query->setSortField($input['sortField']);
         $query->setSortOrder($input['sortOrder']);
 
-        foreach (array('author', 'title', 'persons', 'referee', 'abstract', 'fulltext', 'year') as $fieldname) {
-            if (!empty($input[$fieldname])) {
-                $query->setField($fieldname, $input[$fieldname], $input[$fieldname . 'modifier']);
+        $facetManager = $this->getFacetManager();
+
+        foreach (['author', 'title', 'persons', 'referee', 'abstract', 'fulltext', 'year'] as $fieldname) {
+            if (! empty($input[$fieldname])) {
+                $indexField = $fieldname;
+                if ($fieldname === 'year') {
+                    $facet = $facetManager->getFacet($fieldname);
+                    if (! is_null($facet)) {
+                        $indexField = $facet->getIndexField();
+                        // do not use inverted field TODO this is a hack - better solution?
+                        $indexField = preg_replace('/_inverted/', '', $indexField);
+                    }
+                }
+                $query->setField($indexField, $input[$fieldname], $input[$fieldname . 'modifier']);
             }
         }
 
         $this->addFiltersToQuery($query, $input);
 
         //im Falle einer Autorensuche werden Kommas und Semikolons aus dem Suchstring entfernt
-        if (!is_null($query->getField('author'))) {
+        if (! is_null($query->getField('author'))) {
             $author = $query->getField('author');
             $authormodifier = $query->getModifier('author');
-            $query->setField('author', str_replace(array(',', ';'), '', $author), $authormodifier);
+            $query->setField('author', str_replace([',', ';'], '', $author), $authormodifier);
         }
 
         if ($this->getExport()) {
@@ -88,5 +100,4 @@ class Solrsearch_Model_Search_Advanced extends Solrsearch_Model_Search_Basic
         $this->getLogger()->debug("Query $query complete");
         return $query;
     }
-
 }

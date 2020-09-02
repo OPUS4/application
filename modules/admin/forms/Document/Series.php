@@ -41,7 +41,8 @@
  * @package     Module_Admin
  * @subpackage  Form_Document
  */
-class Admin_Form_Document_Series extends Admin_Form_AbstractModelSubForm {
+class Admin_Form_Document_Series extends Admin_Form_AbstractModelSubForm
+{
 
     /**
      * Name von Formelement für Dokument-ID (Teil des Schlüssels für Link DocumentSeries).
@@ -66,15 +67,16 @@ class Admin_Form_Document_Series extends Admin_Form_AbstractModelSubForm {
     /**
      * Erzeugt die Formulareelemente.
      */
-    public function init() {
+    public function init()
+    {
         parent::init();
 
         // Schluessel fuer Link Objekte ist Dokument-ID + Series-ID
         $this->addElement('Hidden', self::ELEMENT_DOC_ID);
 
         $this->addElement('Series', self::ELEMENT_SERIES_ID);
-        $number = $this->createElement('text', self::ELEMENT_NUMBER, array('required' => true));
-        $number->addValidator(new Application_Form_Validate_SeriesNumberAvailable());
+        $number = $this->createElement('text', self::ELEMENT_NUMBER, ['required' => true]);
+        // $number->addValidator(new Application_Form_Validate_SeriesNumberAvailable());
         $this->addElement($number);
         $this->addElement('SortOrder', self::ELEMENT_SORT_ORDER);
     }
@@ -84,7 +86,8 @@ class Admin_Form_Document_Series extends Admin_Form_AbstractModelSubForm {
      *
      * @param Opus_Model_Dependent_Link_DocumentSeries $seriesLink
      */
-    public function populateFromModel($seriesLink) {
+    public function populateFromModel($seriesLink)
+    {
         $linkId = $seriesLink->getId();
         $this->getElement(self::ELEMENT_DOC_ID)->setValue($linkId[0]);
         $series = $seriesLink->getModel();
@@ -97,7 +100,8 @@ class Admin_Form_Document_Series extends Admin_Form_AbstractModelSubForm {
      * Aktualisiert das Modell mit den Werten im Formular.
      * @param type $seriesLink
      */
-    public function updateModel($seriesLink) {
+    public function updateModel($seriesLink)
+    {
         $seriesId = $this->getElementValue(self::ELEMENT_SERIES_ID);
         $series = new Opus_Series($seriesId);
         $seriesLink->setModel($series);
@@ -109,21 +113,20 @@ class Admin_Form_Document_Series extends Admin_Form_AbstractModelSubForm {
      * Liefert das angezeigte Modell oder ein neues für hinzugefügte Verknüpfungen.
      * @return \Opus_Model_Dependent_Link_DocumentSeries
      */
-    public function getModel() {
+    public function getModel()
+    {
         $docId = $this->getElement(self::ELEMENT_DOC_ID)->getValue();
 
         if (empty($docId)) {
             $linkId = null;
-        }
-        else {
+        } else {
             $seriesId = $this->getElement(self::ELEMENT_SERIES_ID)->getValue();
-            $linkId = array($docId, $seriesId);
+            $linkId = [$docId, $seriesId];
         }
 
         try {
             $seriesLink = new Opus_Model_Dependent_Link_DocumentSeries($linkId);
-        }
-        catch (Opus_Model_NotFoundException $omnfe) {
+        } catch (Opus_Model_NotFoundException $omnfe) {
             $seriesLink = new Opus_Model_Dependent_Link_DocumentSeries();
         }
 
@@ -131,5 +134,4 @@ class Admin_Form_Document_Series extends Admin_Form_AbstractModelSubForm {
 
         return $seriesLink;
     }
-
 }

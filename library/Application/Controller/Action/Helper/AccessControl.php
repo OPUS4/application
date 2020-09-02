@@ -38,8 +38,7 @@
  *
  * TODO weiter ausbauen und mit Opus_Security_IRealm konsolidieren (Framework vs. Application Security)
  */
-class Application_Controller_Action_Helper_AccessControl extends Zend_Controller_Action_Helper_Abstract
-    implements Application_Security_AccessControl
+class Application_Controller_Action_Helper_AccessControl extends Zend_Controller_Action_Helper_Abstract implements Application_Security_AccessControl
 {
 
     private $_acl;
@@ -68,10 +67,9 @@ class Application_Controller_Action_Helper_AccessControl extends Zend_Controller
             throw new Application_Exception('#1 argument must not be empty|null');
         }
 
-        if (!is_null($acl)) {
+        if (! is_null($acl)) {
             return $acl->isAllowed(Application_Security_AclProvider::ACTIVE_ROLE, $resource);
-        }
-        else {
+        } else {
             return true; // Security disabled
         }
     }

@@ -34,20 +34,23 @@
 /**
  *
  */
-class Application_Form_Validate_RequiredIfTest extends PHPUnit_Framework_TestCase {
+class Application_Form_Validate_RequiredIfTest extends PHPUnit_Framework_TestCase
+{
 
     private $validator;
 
-    protected function setUp() {
-        $this->validator = new Application_Form_Validate_RequiredIf(array(
-            'target' => 'FieldB', 'targetValue' => null, 'negate' => false));
+    protected function setUp()
+    {
+        $this->validator = new Application_Form_Validate_RequiredIf([
+            'target' => 'FieldB', 'targetValue' => null, 'negate' => false]);
     }
 
     /**
      * Test current field and target field have value.
      */
-    public function testRequiredValid() {
-        $context = array();
+    public function testRequiredValid()
+    {
+        $context = [];
         $context['FieldB'] = 'notEmpty';
 
         $this->assertTrue($this->validator->isValid('value', $context));
@@ -56,8 +59,9 @@ class Application_Form_Validate_RequiredIfTest extends PHPUnit_Framework_TestCas
     /**
      * Test current field has no value, target field has value.
      */
-    public function testRequiredFailed() {
-        $context = array();
+    public function testRequiredFailed()
+    {
+        $context = [];
         $context['FieldB'] = 'notEmpty';
 
         $this->assertFalse($this->validator->isValid(null, $context));
@@ -66,8 +70,9 @@ class Application_Form_Validate_RequiredIfTest extends PHPUnit_Framework_TestCas
     /**
      *
      */
-    public function testRequiredValidTargetEmpty() {
-        $context = array();
+    public function testRequiredValidTargetEmpty()
+    {
+        $context = [];
         $context['FieldB'] = null;
 
         $this->assertTrue($this->validator->isValid('hasValue', $context));
@@ -76,12 +81,11 @@ class Application_Form_Validate_RequiredIfTest extends PHPUnit_Framework_TestCas
     /**
      *
      */
-    public function testRequiredFailedTargetEmpty() {
-        $context = array();
+    public function testRequiredFailedTargetEmpty()
+    {
+        $context = [];
         $context['FieldB'] = null;
 
         $this->assertTrue($this->validator->isValid(null, $context));
     }
-
 }
-

@@ -27,52 +27,61 @@
  * @category    Application Unit Test
  * @package     Controller_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
  * Unit Test for class Admin_Model_Workflow.
  */
-class Application_Controller_Action_Helper_DatesTest extends ControllerTestCase {
+class Application_Controller_Action_Helper_DatesTest extends ControllerTestCase
+{
+
+    protected $additionalResources = 'translation';
 
     private $__datesHelper;
 
-    public function setUp() {
+    public function setUp()
+    {
         parent::setUp();
 
         $this->__datesHelper = new Application_Controller_Action_Helper_Dates();
     }
 
-    public function testIsValidGermanTrue() {
+    public function testIsValidGermanTrue()
+    {
         $this->useGerman();
         $this->assertTrue($this->__datesHelper->isValid('20.3.2005'));
     }
 
-    public function testIsValidGermanFalse() {
+    public function testIsValidGermanFalse()
+    {
         $this->useGerman();
         $this->assertFalse($this->__datesHelper->isValid('2005'));
     }
 
-    public function testIsValidEnglishTrue() {
+    public function testIsValidEnglishTrue()
+    {
         $this->useEnglish();
         $this->assertTrue($this->__datesHelper->isValid('2005/03/20'));
     }
 
-    public function testIsValidEnglishFalse() {
+    public function testIsValidEnglishFalse()
+    {
         $this->useEnglish();
         $this->assertFalse($this->__datesHelper->isValid('2005'));
     }
 
-    public function testGetOpusDateGerman() {
+    public function testGetOpusDateGerman()
+    {
         $this->useGerman();
         $date = $this->__datesHelper->getOpusDate('25.3.2005');
         $this->assertNotNull($date);
         $this->assertEquals('25.03.2005', $this->__datesHelper->getDateString($date));
     }
 
-    public function testGetOpusDateEnglish() {
+    public function testGetOpusDateEnglish()
+    {
         $this->useEnglish();
         $date = $this->__datesHelper->getOpusDate('2005/03/25');
         $this->assertNotNull($date);
@@ -81,36 +90,39 @@ class Application_Controller_Action_Helper_DatesTest extends ControllerTestCase 
         $this->assertEquals('25.03.2005', $this->__datesHelper->getDateString($date));
     }
 
-    public function testGetOpusDateInvalidGerman() {
+    public function testGetOpusDateInvalidGerman()
+    {
         $this->useGerman();
         $date = $this->__datesHelper->getOpusDate('2005');
         $this->assertNull($date);
     }
 
-    public function testGetOpusDateInvalidEnglish() {
+    public function testGetOpusDateInvalidEnglish()
+    {
         $this->useEnglish();
         $date = $this->__datesHelper->getOpusDate('2005');
         $this->assertNull($date);
-
     }
 
-    public function testGetDateStringGerman() {
+    public function testGetDateStringGerman()
+    {
         $this->useGerman();
         $date = new Opus_Date('2005-03-25');
         $this->assertEquals('25.03.2005', $this->__datesHelper->getDateString($date));
     }
 
-    public function testGetDateStringEnglish() {
+    public function testGetDateStringEnglish()
+    {
         $this->useEnglish();
         $date = new Opus_Date('2005-03-25');
         $this->assertEquals('2005/03/25', $this->__datesHelper->getDateString($date));
     }
 
-    public function testGetDateStringForInvalidDate() {
+    public function testGetDateStringForInvalidDate()
+    {
         $this->useGerman();
         $date = new Opus_Date('2005');
         $this->assertFalse($date->isValid());
         $this->assertEquals(null, $this->__datesHelper->getDateString($date));
     }
-
 }

@@ -38,14 +38,16 @@
  * Controller for document recommendation starting from Frontdoor
  *
  */
-class Frontdoor_MailController extends Application_Controller_Action {
+class Frontdoor_MailController extends Application_Controller_Action
+{
 
     /**
      *
      * TODO: this action is currently untested and therefore not supported
      *
      */
-    public function indexAction() {
+    public function indexAction()
+    {
         throw new Application_Exception('currently not supported');
         /*
         $docId = $this->getRequest()->getParam('docId');
@@ -90,7 +92,8 @@ class Frontdoor_MailController extends Application_Controller_Action {
      * TODO: this action is currently untested and therefore not supported
      *
      */
-    public function sendmailAction() {
+    public function sendmailAction()
+    {
         throw new Application_Exception('currently not supported');
 
         /*
@@ -149,18 +152,21 @@ class Frontdoor_MailController extends Application_Controller_Action {
     /**
      * Send mail to author(s) of document.
      */
-    public function toauthorAction() {
+    public function toauthorAction()
+    {
 
         $docId = $this->getRequest()->getParam('docId');
         if (is_null($docId)) {
             throw new Application_Exception('missing parameter docId');
         }
+        if (is_Array($docId)) {
+            $docId = end($docId);
+        }
 
         $authorsModel = null;
         try {
             $authorsModel = new Frontdoor_Model_Authors($docId);
-        }
-        catch (Frontdoor_Model_Exception $e) {
+        } catch (Frontdoor_Model_Exception $e) {
             throw new Application_Exception($e->getMessage());
         }
 
@@ -169,20 +175,20 @@ class Frontdoor_MailController extends Application_Controller_Action {
             throw new Application_Exception('no authors contactable via email');
         }
 
-        $form = new Frontdoor_Form_ToauthorForm(array('authors' => $authors));
+        $form = new Frontdoor_Form_ToauthorForm(['authors' => $authors]);
         $form->setAction(
             $this->view->url(
-                array(
+                [
                     'module' => 'frontdoor',
                     'controller' => 'mail',
-                    'action' => 'toauthor')
+                    'action' => 'toauthor']
             )
         );
         $form->setMethod('post');
 
         $this->view->docId = $docId;
 
-        if (!$this->getRequest()->isPost() || !$form->isValid($this->getRequest()->getPost())) {
+        if (! $this->getRequest()->isPost() || ! $form->isValid($this->getRequest()->getPost())) {
             $this->view->form = $form;
             $this->view->author = $authors;
             $this->view->type = $authorsModel->getDocument()->getType();
@@ -200,8 +206,7 @@ class Frontdoor_MailController extends Application_Controller_Action {
                 $form->getValue('authors')
             );
             $this->view->success = 'frontdoor_mail_ok';
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->getLogger()->err($e->getMessage());
             $this->view->success = 'frontdoor_mail_notok';
         }

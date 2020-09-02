@@ -30,20 +30,22 @@
  * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
  * @author      Michael Lang <lang@zib.de>
    @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class Admin_StatisticController extends Application_Controller_Action {
+class Admin_StatisticController extends Application_Controller_Action
+{
 
     private $_statisticsModel = null;
 
-    public function init() {
+    public function init()
+    {
         parent::init();
         $this->_statisticsModel = new Admin_Model_Statistics();
     }
 
-    public function indexAction() {
+    public function indexAction()
+    {
         $this->view->title = 'admin_title_statistic';
 
         $years = $this->_statisticsModel->getYears();
@@ -52,7 +54,7 @@ class Admin_StatisticController extends Application_Controller_Action {
 
         $selectYear = new Zend_Form_Element_Select(
             'selectedYear',
-            array("multiOptions" => $years, "value" => $highest)
+            ["multiOptions" => $years, "value" => $highest]
         );
 
         $selectYear->setRequired(true)
@@ -62,16 +64,17 @@ class Admin_StatisticController extends Application_Controller_Action {
         $submit->setLabel($this->view->translate('Submit_Button_Label'));
 
         $form = new Zend_Form();
-        $form->setAction($this->view->url(array("controller" => "statistic", "action" => "show")));
-        $form->addElements(array($selectYear, $submit));
+        $form->setAction($this->view->url(["controller" => "statistic", "action" => "show"]));
+        $form->addElements([$selectYear, $submit]);
 
         $this->view->form = $form;
     }
 
-    public function showAction() {
-        $selectedYear =  $this->getRequest()->getParam('selectedYear', null);
+    public function showAction()
+    {
+        $selectedYear = $this->getRequest()->getParam('selectedYear', null);
 
-        if (is_null($selectedYear) || !in_array($selectedYear, $this->_statisticsModel->getYears())) {
+        if (is_null($selectedYear) || ! in_array($selectedYear, $this->_statisticsModel->getYears())) {
             return $this->_helper->Redirector->redirectToAndExit('index');
         }
 

@@ -28,28 +28,36 @@
  * @category    Application
  * @package     Module_Admin
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
+ * @author      Sascha Szott <opus-development@saschaszott.de>
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
  * Controller for providing JSON formatted data used for autocomplete
  * functions in forms.
+ *
+ * TODO should we better rename this controller to RestController as it
+ *      is not exclusively responsible for auto completion?
  */
 class Admin_AutocompleteController extends Application_Controller_ModuleAccess
 {
 
-    public function init() {
+    public function init()
+    {
         parent::init();
 
         $this->disableViewRendering();
+
+        $this->getResponse()->setHeader('Content-Type', 'application/json');
     }
 
 
-    public function subjectAction() {
+    public function subjectAction()
+    {
         $term = $this->getRequest()->getParam('term');
 
-        if (!is_null($term)) {
+        if (! is_null($term)) {
             $provider = new Application_Data_SubjectProvider();
 
             $data = $provider->getValues($term);
@@ -58,4 +66,23 @@ class Admin_AutocompleteController extends Application_Controller_ModuleAccess
         echo json_encode($data);
     }
 
+    public function enrichmenttypedescriptionAction()
+    {
+        $description = '';
+
+        $typeName = $this->getRequest()->getParam('typeName');
+        if (! is_null($typeName) && $typeName !== '') {
+            $typeName = 'Opus_Enrichment_' . $typeName;
+            $allTypes = Opus_Enrichment_AbstractType::getAllEnrichmentTypes(true);
+            if (in_array($typeName, $allTypes)) {
+                $typeObj = new $typeName();
+                $typeDescription = $typeObj->getDescription();
+                if (! is_null($typeDescription) && $typeDescription !== '') {
+                    $description = $this->view->translate($typeDescription);
+                }
+            }
+        }
+
+        echo json_encode(['typeName' => $description]);
+    }
 }

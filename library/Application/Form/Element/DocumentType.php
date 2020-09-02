@@ -25,20 +25,21 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     View
+ * @package     Application_Form_Element
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2013-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
  *
  * TODO override setLabel for more robust translation
  */
-class Application_Form_Element_DocumentType extends Application_Form_Element_Select {
+class Application_Form_Element_DocumentType extends Application_Form_Element_Select
+{
 
-    public function init() {
+    public function init()
+    {
         parent::init();
 
         $this->setLabel($this->getView()->translate($this->getName()));
@@ -48,11 +49,38 @@ class Application_Form_Element_DocumentType extends Application_Form_Element_Sel
 
         $options = $docTypeHelper->getDocumentTypes();
 
-        foreach ($options as $index => $type) {
-            $this->addMultiOption($index, $index);
-        }
+        $this->setDisableTranslator(true);
 
-        $this->setDisableTranslator(true); // document types already translated after addMultiOption
+        $translator = Zend_Registry::get('Zend_Translate');
+
+        foreach ($options as $index => $type) {
+            if (! is_null($translator) && $translator->isTranslated($index)) {
+                $label = $translator->translate($index);
+            } else {
+                $label = $index;
+            }
+            $this->addMultiOption($index, $label);
+        }
     }
 
+    /**
+     */
+    public function setValue($value)
+    {
+        $option = $this->getMultiOption($value);
+
+        $translator = Zend_Registry::get('Zend_Translate');
+
+        if (! is_null($translator) && $translator->isTranslated($value)) {
+            $label = $translator->translate($value);
+        } else {
+            $label = $value;
+        }
+
+        if (is_null($option)) {
+            $this->addMultiOption($value, $label);
+        }
+
+        parent::setValue($value);
+    }
 }

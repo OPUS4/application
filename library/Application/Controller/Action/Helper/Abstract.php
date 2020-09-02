@@ -31,39 +31,17 @@
  * @category    Application
  * @package     Application_Controller_Action_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-abstract class Application_Controller_Action_Helper_Abstract extends Zend_Controller_Action_Helper_Abstract {
+abstract class Application_Controller_Action_Helper_Abstract extends Zend_Controller_Action_Helper_Abstract
+{
 
-    /**
-     * Logger for controller classes.
-     * @var Zend_Log
-     */
-    private $_logger = null;
+    use \Opus\LoggingTrait;
 
     private $_view = null;
 
     private $_config = null;
-
-    /**
-     * Returns logger.
-     * @return Zend_Log
-     */
-    public function getLogger() {
-        if (is_null($this->_logger)) {
-            $this->_logger = Zend_Registry::get('Zend_Log');
-        }
-        return $this->_logger;
-    }
-
-    /**
-     * Sets logger for class.
-     * @param $logger Zend_Log
-     */
-    public function setLogger($logger) {
-        $this->_logger = $logger;
-    }
 
     /**
      * Returns view if it has been set or tries to retrieve view from action controller.
@@ -74,11 +52,9 @@ abstract class Application_Controller_Action_Helper_Abstract extends Zend_Contro
      */
     public function getView()
     {
-        if (is_null($this->_view))
-        {
+        if (is_null($this->_view)) {
             $controller = $this->getActionController();
-            if (!is_null($controller))
-            {
+            if (! is_null($controller)) {
                 $this->_view = $controller->view;
             }
         }
@@ -102,12 +78,10 @@ abstract class Application_Controller_Action_Helper_Abstract extends Zend_Contro
      */
     public function getConfig()
     {
-        if (is_null($this->_config))
-        {
+        if (is_null($this->_config)) {
             $this->_config = Application_Configuration::getInstance()->getConfig();
         }
 
         return $this->_config;
     }
-
 }

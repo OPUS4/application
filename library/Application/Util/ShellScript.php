@@ -60,8 +60,7 @@ class Application_Util_ShellScript
     {
         if (array_key_exists($name, $this->_properties)) {
             return $this->_properties[$name];
-        }
-        else {
+        } else {
             return null;
         }
     }
@@ -75,32 +74,25 @@ class Application_Util_ShellScript
      */
     public static function getPropertiesFromScript($path)
     {
-        $properties = array();
+        $properties = [];
 
-        if (!is_readable($path))
-        {
+        if (! is_readable($path)) {
             throw new Exception('cannot read file');
         }
 
         $file = fopen($path, 'r');
 
-        if ($file)
-        {
-            while (($line = fgets($file)) !== false)
-            {
+        if ($file) {
+            while (($line = fgets($file)) !== false) {
                 $line = trim($line);
 
                 // ignore comments
-                if (preg_match('/^#/', $line))
-                {
+                if (preg_match('/^#/', $line)) {
                     continue;
-                }
-                else {
-                    if (preg_match('/[A-Za-z0-9]+=.+/', $line))
-                    {
+                } else {
+                    if (preg_match('/[A-Za-z0-9]+=.+/', $line)) {
                         $property = preg_split('/\s*=\s*/', $line, 2);
-                        if (count($property) === 2)
-                        {
+                        if (count($property) === 2) {
                             $properties[$property[0]] = trim($property[1], '"\'');
                         }
                     }
@@ -108,12 +100,10 @@ class Application_Util_ShellScript
             }
 
             fclose($file);
-        }
-        else {
+        } else {
             throw new Exception('could not open file');
         }
 
         return $properties;
     }
-
 }

@@ -32,7 +32,8 @@
  * @version     $Id$
  */
 
-class Admin_Form_DnbInstitute extends Application_Form_Model_Abstract {
+class Admin_Form_DnbInstitute extends Application_Form_Model_Abstract
+{
 
     const ELEMENT_NAME = 'Name';
     const ELEMENT_DEPARTMENT = 'Department';
@@ -43,7 +44,8 @@ class Admin_Form_DnbInstitute extends Application_Form_Model_Abstract {
     const ELEMENT_IS_GRANTOR = 'IsGrantor';
     const ELEMENT_IS_PUBLISHER = 'IsPublisher';
 
-    public function init() {
+    public function init()
+    {
         parent::init();
 
         $this->setRemoveEmptyCheckbox(false);
@@ -51,17 +53,22 @@ class Admin_Form_DnbInstitute extends Application_Form_Model_Abstract {
         $this->setUseNameAsLabel(true);
         $this->setModelClass('Opus_DnbInstitute');
 
-        $this->addElement('text', self::ELEMENT_NAME, array('required' => true, 'size' => 70));
-        $this->addElement('text', self::ELEMENT_DEPARTMENT, array('size' => 70));
+        $this->addElement('text', self::ELEMENT_NAME, [
+            'required' => true, 'size' => 70, 'maxlength' => Opus_DnbInstitute::getFieldMaxLength('Name')
+        ]);
+        $this->addElement('text', self::ELEMENT_DEPARTMENT, [
+            'size' => 70, 'maxlength' => Opus_DnbInstitute::getFieldMaxLength('Department')
+        ]);
         $this->addElement('textarea', self::ELEMENT_ADDRESS);
-        $this->addElement('text', self::ELEMENT_CITY, array('required' => true, 'size' => 50));
+        $this->addElement('text', self::ELEMENT_CITY, ['required' => true, 'size' => 50]);
         $this->addElement('text', self::ELEMENT_PHONE);
         $this->addElement('text', self::ELEMENT_DNB_CONTACT_ID);
         $this->addElement('checkbox', self::ELEMENT_IS_GRANTOR);
         $this->addElement('checkbox', self::ELEMENT_IS_PUBLISHER);
     }
 
-    public function populateFromModel($institute) {
+    public function populateFromModel($institute)
+    {
         $this->getElement(self::ELEMENT_MODEL_ID)->setValue($institute->getId());
         $this->getElement(self::ELEMENT_NAME)->setValue($institute->getName());
         $this->getElement(self::ELEMENT_DEPARTMENT)->setValue($institute->getDepartment());
@@ -73,7 +80,8 @@ class Admin_Form_DnbInstitute extends Application_Form_Model_Abstract {
         $this->getElement(self::ELEMENT_IS_PUBLISHER)->setValue($institute->getIsPublisher());
     }
 
-    public function updateModel($institute) {
+    public function updateModel($institute)
+    {
         $institute->setName($this->getElementValue(self::ELEMENT_NAME));
         $institute->setDepartment($this->getElementValue(self::ELEMENT_DEPARTMENT));
         $institute->setAddress($this->getElementValue(self::ELEMENT_ADDRESS));
@@ -83,5 +91,4 @@ class Admin_Form_DnbInstitute extends Application_Form_Model_Abstract {
         $institute->setIsGrantor($this->getElementValue(self::ELEMENT_IS_GRANTOR));
         $institute->setIsPublisher($this->getElementValue(self::ELEMENT_IS_PUBLISHER));
     }
-
 }

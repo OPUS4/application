@@ -34,14 +34,15 @@
 class Solrsearch_Model_Search_Document extends Solrsearch_Model_Search_Basic
 {
 
-    public function createSearchQuery($input) {
+    public function createSearchQuery($input)
+    {
         $this->getLogger()->debug("Constructing query for id search.");
 
         if (is_null($input['docId'])) {
             throw new Application_Exception("No id provided.", 404);
         }
 
-        $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::DOC_ID);
+        $query = new Opus\Search\Util\Query(Opus\Search\Util\Query::DOC_ID);
         $query->setField('id', $input['docId']);
 
         if ($this->getExport()) {
@@ -52,5 +53,4 @@ class Solrsearch_Model_Search_Document extends Solrsearch_Model_Search_Basic
 
         return $query;
     }
-
 }

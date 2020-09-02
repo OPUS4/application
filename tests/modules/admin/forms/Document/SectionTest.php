@@ -26,57 +26,62 @@
  *
  * @category    Application Unit Test
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2013-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
  * Unit Tests fuer Unterformular zur Gruppierung von Metadaten im Formular.
- * 
+ *
  * TODO implement MockSubForm() um Delegation zu testen
  * TODO implement more stringent tests
  */
-class Admin_Form_Document_SectionTest extends ControllerTestCase {
-    
-    public function testPopulateFromModel() {
+class Admin_Form_Document_SectionTest extends ControllerTestCase
+{
+
+    protected $additionalResources = ['database'];
+
+    public function testPopulateFromModel()
+    {
         $form = new Admin_Form_Document_Section();
-        
+
         $model = $this->createTestDocument();
-        
+
         $form->populateFromModel($model);
     }
-    
-    public function testConstructFromPost() {
+
+    public function testConstructFromPost()
+    {
         $form = new Admin_Form_Document_Section();
-        
-        $post = array();
-        
+
+        $post = [];
+
         $form->constructFromPost($post);
     }
-    
-    public function testProcessPost() {
+
+    public function testProcessPost()
+    {
         $form = new Admin_Form_Document_Section();
-        
-        $post = array();
+
+        $post = [];
         $context = $post;
-        
+
         $form->processPost($post, $context);
-        
     }
-    
-    public function testContinueEdit() {
+
+    public function testContinueEdit()
+    {
         $form = new Admin_Form_Document_Section();
-        
+
         $form->continueEdit(null);
     }
-    
-    public function testUpdateModel() {
+
+    public function testUpdateModel()
+    {
         $form = new Admin_Form_Document_Section();
-        
+
         $model = $this->createTestDocument();
-        
+
         $form->updateModel($model);
     }
-    
 }

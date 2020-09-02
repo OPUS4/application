@@ -48,5 +48,4 @@ class Application_Update_Database extends Application_Update_PluginAbstract
 
         $this->log('Database update finished');
     }
-
 }

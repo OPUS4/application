@@ -34,12 +34,14 @@
 /**
  * Controller for generating reports.
  */
-class Admin_ReportController extends Application_Controller_Action {
+class Admin_ReportController extends Application_Controller_Action
+{
 
     /**
      * Show overview of registration status for local DOIs.
      */
-    public function doiAction() {
+    public function doiAction()
+    {
         $params = $this->getRequest()->getParams();
 
         // TODO sollte Registrierung und Prüfung von DOIs besser
@@ -48,7 +50,6 @@ class Admin_ReportController extends Application_Controller_Action {
             $operation = $params['op'];
             $docId = array_key_exists('docId', $params) ? $params['docId'] : null;
             switch ($operation) {
-
                 case 'register':
                     if (is_null($docId)) {
                         return $this->handleBulkRegistration();
@@ -85,43 +86,44 @@ class Admin_ReportController extends Application_Controller_Action {
      *
      * @param $docId ID des Dokuments
      */
-    private function handleDoiRegistration($docId) {
+    private function handleDoiRegistration($docId)
+    {
         try {
             $doiManager = new Opus_Doi_DoiManager();
             $doiRegistered = $doiManager->register($docId, true);
-            if (!is_null($doiRegistered)) {
+            if (! is_null($doiRegistered)) {
                 return $this->_helper->Redirector->redirectTo(
                     'doi',
                     $this->view->translate(
-                        'admin_report_doi_registered_successfully', $doiRegistered->getValue()
+                        'admin_report_doi_registered_successfully',
+                        $doiRegistered->getValue()
                     )
                 );
             }
-        }
-        catch (Opus_Doi_RegistrationException $e) {
+        } catch (Opus_Doi_RegistrationException $e) {
             return $this->_helper->Redirector->redirectTo(
                 'doi',
-                array('failure' =>
+                ['failure' =>
                     $this->view->translate(
-                        'admin_report_doi_registration_unexpected_error_specific', $e->getDoi()->getValue()
+                        'admin_report_doi_registration_unexpected_error_specific',
+                        $e->getDoi()->getValue()
                     ) . ': ' . $e->getMessage()
-                )
+                ]
             );
-        }
-        catch (Opus_Doi_DoiException $e) {
+        } catch (Opus_Doi_DoiException $e) {
             return $this->_helper->Redirector->redirectTo(
                 'doi',
-                array('failure' =>
+                ['failure' =>
                     $this->view->translate('admin_report_doi_registration_unexpected_error', $docId) . ': ' . $e->getMessage()
-                )
+                ]
             );
         }
 
         return $this->_helper->Redirector->redirectTo(
             'doi',
-            array('failure' =>
+            ['failure' =>
                 $this->view->translate('admin_report_doi_registration_could_not_be_executed', $docId)
-            )
+            ]
         );
     }
 
@@ -130,16 +132,17 @@ class Admin_ReportController extends Application_Controller_Action {
      *
      * @param $docId ID des Dokuments
      */
-    private function handleDoiVerification($docId) {
+    private function handleDoiVerification($docId)
+    {
         $doiManager = new Opus_Doi_DoiManager();
         $status = new Opus_Doi_DoiManagerStatus();
         $verifiedDoi = $doiManager->verify($docId, true, null, $status);
 
-        if (!is_null($verifiedDoi)) {
+        if (! is_null($verifiedDoi)) {
             $docsWithDoiStatus = $status->getDocsWithDoiStatus();
             if (array_key_exists($docId, $docsWithDoiStatus)) {
                 $doiStatus = $docsWithDoiStatus[$docId];
-                if (!$doiStatus['error']) {
+                if (! $doiStatus['error']) {
                     return $this->_helper->Redirector->redirectTo(
                         'doi',
                         $this->view->translate('admin_report_doi_verified_successfully', $verifiedDoi->getValue())
@@ -154,23 +157,25 @@ class Admin_ReportController extends Application_Controller_Action {
                     $failureMsg .= ': ' . $doiStatus['msg'];
                 }
 
-                return $this->_helper->Redirector->redirectTo('doi', array('failure' => $failureMsg));
+                return $this->_helper->Redirector->redirectTo('doi', ['failure' => $failureMsg]);
             }
         }
 
         return $this->_helper->Redirector->redirectTo(
             'doi',
-            array('failure' => $this->view->translate('admin_report_doi_verification_unexpected_error', $docId))
+            ['failure' => $this->view->translate('admin_report_doi_verification_unexpected_error', $docId)]
         );
     }
 
-    private function handleBulkRegistration() {
+    private function handleBulkRegistration()
+    {
         $doiManager = new Opus_Doi_DoiManager();
         $status = $doiManager->registerPending();
         return $this->handleBulkOperation($status, 'registration');
     }
 
-    private function handleBulkVerification() {
+    private function handleBulkVerification()
+    {
         $doiManager = new Opus_Doi_DoiManager();
         $status = $doiManager->verifyRegistered();
         return $this->handleBulkOperation($status, 'verification');
@@ -184,7 +189,8 @@ class Admin_ReportController extends Application_Controller_Action {
      * @param Opus_Doi_DoiManagerStatus $status
      * @param string $mode
      */
-    private function handleBulkOperation($status, $mode) {
+    private function handleBulkOperation($status, $mode)
+    {
         if ($status->isNoDocsToProcess()) {
             // es wurden keine DOIs zur Registrierung oder Prüfung gefunden: springe zur Übersichtsseite zurück
             return $this->_helper->Redirector->redirectTo('doi');
@@ -195,8 +201,7 @@ class Admin_ReportController extends Application_Controller_Action {
         foreach ($status->getDocsWithDoiStatus() as $docId => $docWithDoiStatus) {
             if ($docWithDoiStatus['error']) {
                 $numOfFailedOps++;
-            }
-            else {
+            } else {
                 $numOfSuccessfulOps++;
             }
         }
@@ -212,13 +217,13 @@ class Admin_ReportController extends Application_Controller_Action {
         // TODO optional könnte man die einzelnen Fehler ausgeben (werden zusätzlich per Mail verschickt)
         return $this->_helper->Redirector->redirectTo(
             'doi',
-            array('failure' =>
+            ['failure' =>
                 $this->view->translate(
                     'admin_report_doi_bulk_' . $mode . '_failed',
                     $numOfFailedOps,
                     $numOfSuccessfulOps,
-                    count($status->getDocsWithDoiStatus())))
+                    count($status->getDocsWithDoiStatus())
+                )]
         );
     }
-
 }

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -25,27 +26,37 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class Admin_Model_StatisticsTest extends ControllerTestCase {
+
+class Admin_Model_StatisticsTest extends ControllerTestCase
+{
+
+    protected $additionalResources = ['database'];
 
     /**
      * Tests, if publication count of institute statistics is correct.
      */
-    public function testInstituteStatistics() {
+    public function testInstituteStatistics()
+    {
         $statistics = new Admin_Model_Statistics();
         $institutes = $statistics->getInstituteStatistics(2010);
-        $this->assertEquals(29, $institutes['Technische Universität Hamburg-Harburg'],
-            'wrong publication count of Technische Universität Hamburg-Harburg returned' );
+        $this->assertEquals(
+            29,
+            $institutes['Technische Universität Hamburg-Harburg'],
+            'wrong publication count of Technische Universität Hamburg-Harburg returned'
+        );
         $this->assertEquals(1, $institutes['Bauwesen'], 'wrong publicatin count of "Bauwesen" returned');
         $this->assertEquals(1, $institutes['Maschinenbau'], 'wrong publication count of "Maschinenbau" returned');
         $this->assertNotContains('Massivbau B-7', $institutes, 'Institutes should not contain data with 0 documents');
 
         $institutes = $statistics->getInstituteStatistics(2009);
-        $this->assertEquals(50, $institutes['Technische Universität Hamburg-Harburg'],
-            'wrong publication count of Technische Universität Hamburg-Harburg returned' );
+        $this->assertEquals(
+            50,
+            $institutes['Technische Universität Hamburg-Harburg'],
+            'wrong publication count of Technische Universität Hamburg-Harburg returned'
+        );
         $this->assertNotContains('Bauwesen', $institutes, 'Institutes should not contain data with 0 documents');
         $this->assertEquals(3, $institutes['Maschinenbau'], 'wrong publication count of "Maschinenbau" returned');
         $this->assertNotContains('Massivbau B-7', $institutes, 'Institutes should not contain data with 0 documents');
@@ -54,7 +65,8 @@ class Admin_Model_StatisticsTest extends ControllerTestCase {
     /**
      * Tests, if publication count of month statistics is correct.
      */
-    public function testMonthStatistics() {
+    public function testMonthStatistics()
+    {
         $statistics = new Admin_Model_Statistics();
         $months = $statistics->getMonthStatistics(2010);
         $this->assertEquals(16, $months[1], 'wrong publication count of month Jan returned');
@@ -72,7 +84,8 @@ class Admin_Model_StatisticsTest extends ControllerTestCase {
     /**
      * Tests, if publication count of type statistics is correct.
      */
-    public function testTypeStatistics() {
+    public function testTypeStatistics()
+    {
         $statistics = new Admin_Model_Statistics();
         $types = $statistics->getTypeStatistics(2010);
         $this->assertEquals(15, $types['article'], 'wrong publication count of Article returned');
@@ -88,7 +101,8 @@ class Admin_Model_StatisticsTest extends ControllerTestCase {
     /**
      * Tests, if the right number of documents has been published until 2010.
      */
-    public function testGetNumDocsUntil() {
+    public function testGetNumDocsUntil()
+    {
         $statistics = new Admin_Model_Statistics();
         $this->assertEquals(0, $statistics->getNumDocsUntil(1900), 'wrong publication count of documents until 1900');
         $this->assertEquals(10, $statistics->getNumDocsUntil(2008), 'wrong publication count of documents until 2008');
@@ -99,7 +113,8 @@ class Admin_Model_StatisticsTest extends ControllerTestCase {
     /*
      * tests getYears() of Statistic Model
      */
-    public function testGetYears() {
+    public function testGetYears()
+    {
         $statistics = new Admin_Model_Statistics();
         $years = $statistics->getYears();
         $this->assertContains('2002', $years);
@@ -110,7 +125,4 @@ class Admin_Model_StatisticsTest extends ControllerTestCase {
         $this->assertContains('2012', $years);
         $this->assertContains('2013', $years);
     }
-
-
 }
- 

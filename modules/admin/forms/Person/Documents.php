@@ -49,21 +49,18 @@ class Admin_Form_Person_Documents extends Application_Form_Abstract
 
     public function setDocuments($documentIds, $person = null)
     {
-        if (is_null($documentIds))
-        {
+        if (is_null($documentIds)) {
             // TODO do some logging
             return;
         }
 
-        if (!is_array($documentIds))
-        {
-            $documentIds = array($documentIds);
+        if (! is_array($documentIds)) {
+            $documentIds = [$documentIds];
         }
 
-        $options = array();
+        $options = [];
 
-        foreach ($documentIds as $docId)
-        {
+        foreach ($documentIds as $docId) {
             $options[$docId] = new Opus_Document($docId);
         }
 
@@ -71,8 +68,7 @@ class Admin_Form_Person_Documents extends Application_Form_Abstract
         $documents->setMultiOptions($options);
         $documents->setValue($documentIds);
 
-        if (!is_null($person))
-        {
+        if (! is_null($person)) {
             $documents->setAttrib('person', Opus_Person::convertToFieldNames($person));
         }
     }
@@ -81,5 +77,4 @@ class Admin_Form_Person_Documents extends Application_Form_Abstract
     {
         return $this->getElement(self::ELEMENT_DOCUMENTS)->getValue();
     }
-
 }

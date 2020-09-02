@@ -43,7 +43,17 @@
  * @package     Module_Admin
  * @subpackage  Model
  */
-class Admin_Model_EnrichmentKeys extends Application_Model_Abstract {
+class Admin_Model_EnrichmentKeys extends Application_Model_Abstract
+{
+
+    private $translationKeyPatterns = [
+        'hint_Enrichment%s',
+        'header_Enrichment%s',
+        'group%s',
+        'hint_group%s',
+        'button_label_add_one_moreEnrichment%s',
+        'button_label_deleteEnrichment%s'
+    ];
 
     /**
      * Enrichment keys that are configured as protected.
@@ -58,16 +68,16 @@ class Admin_Model_EnrichmentKeys extends Application_Model_Abstract {
      *
      * @return array
      */
-    public function getProtectedEnrichmentKeys() {
+    public function getProtectedEnrichmentKeys()
+    {
         if (is_null($this->_protectedKeys)) {
             $config = $this->getConfig();
 
-            $protectedKeys = array();
+            $protectedKeys = [];
 
             if (isset($config->enrichmentkey->protected->modules)) {
                 $protectedKeys = explode(',', $config->enrichmentkey->protected->modules);
-            }
-            else {
+            } else {
                 $this->getLogger()->warn(
                     'config key \'enrichmentkey.protected.modules\' is not defined in config file'
                 );
@@ -75,10 +85,10 @@ class Admin_Model_EnrichmentKeys extends Application_Model_Abstract {
 
             if (isset($config->enrichmentkey->protected->migration)) {
                 $protectedKeys = array_merge(
-                    $protectedKeys, explode(',', $config->enrichmentkey->protected->migration)
+                    $protectedKeys,
+                    explode(',', $config->enrichmentkey->protected->migration)
                 );
-            }
-            else {
+            } else {
                 $this->getLogger()->warn(
                     'config key \'enrichmentkey.protected.migration\' is not defined in config file'
                 );
@@ -94,8 +104,62 @@ class Admin_Model_EnrichmentKeys extends Application_Model_Abstract {
      * Sets list of protected enrichment keys in model.
      * @param $keys array
      */
-    public function setProtectedEnrichmentKeys($keys) {
+    public function setProtectedEnrichmentKeys($keys)
+    {
         $this->_protectedKeys = $keys;
     }
 
+    /**
+     * Setup additional translation keys for an enrichment.
+     * @param $name Name of enrichment
+     * @param null $oldName Optionally old name if it has been changed
+     *
+     * TODO create keys if they don't exist
+     */
+    public function createTranslations($name, $oldName = null)
+    {
+        $patterns = $this->translationKeyPatterns;
+
+        $database = new Opus_Translate_Dao();
+        $manager = new Application_Translate_TranslationManager();
+
+        if (! is_null($oldName) && $name !== $oldName) {
+            foreach ($patterns as $pattern) {
+                $key = sprintf($pattern, $name);
+                $oldKey = sprintf($pattern, $oldName);
+                $database->renameKey($oldKey, $key, 'default');
+            }
+        } else {
+            foreach ($patterns as $pattern) {
+                $key = sprintf($pattern, $name);
+                if (! $manager->keyExists($key)) {
+                    $database->setTranslation($key, [
+                        'en' => $name,
+                        'de' => $name
+                    ], 'default');
+                }
+            }
+        }
+    }
+
+    /**
+     * Remove translation keys if enrichment is deleted.
+     * @param $name
+     */
+    public function removeTranslations($name)
+    {
+        $patterns = $this->translationKeyPatterns;
+
+        $database = new Opus_Translate_Dao();
+
+        foreach ($patterns as $pattern) {
+            $key = sprintf($pattern, $name);
+            $database->remove($key, 'default');
+        }
+    }
+
+    public function getKeyPatterns()
+    {
+        return $this->translationKeyPatterns;
+    }
 }

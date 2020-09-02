@@ -63,12 +63,12 @@ class Admin_Form_Document_Identifiers extends Admin_Form_Document_Section
                     'admin_document_error_repeated_identifier',
                     'Type'
                 ),
-                array(
-                    'columns' => array(
-                        array('label' => 'Opus_Identifier_Type'),
-                        array('label' => 'Text')
-                    )
-                )
+                [
+                    'columns' => [
+                        ['label' => 'Opus_Identifier_Type'],
+                        ['label' => 'Opus_Identifier_Value']
+                    ]
+                ]
             ),
             'Identifiers'
         );

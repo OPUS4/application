@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -26,19 +27,26 @@
  *
  * @category    Application Unit Test
  * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class CollectionsAdminTest extends ControllerTestCase {
 
-    public function setUp() {
+class CollectionsAdminTest extends ControllerTestCase
+{
+
+    protected $configModifiable = true;
+
+    protected $additionalResources = ['authz', 'database', 'view', 'mainMenu', 'navigation', 'translation'];
+
+    public function setUp()
+    {
         parent::setUp();
         $this->enableSecurity();
         $this->loginUser('security9', 'security9pwd');
     }
 
-    public function tearDown() {
+    public function tearDown()
+    {
         $this->logoutUser();
         $this->restoreSecuritySetting();
         parent::tearDown();
@@ -47,7 +55,8 @@ class CollectionsAdminTest extends ControllerTestCase {
     /**
      * Prüft, ob nur die erlaubten Einträge im Admin Menu angezeigt werden.
      */
-    public function testAdminMenuFiltering() {
+    public function testAdminMenuFiltering()
+    {
         $this->dispatch('/admin');
         $this->assertNotQuery('//a[@href="/admin/licence"]');
         $this->assertQuery('//a[@href="/admin/index/info"]');
@@ -64,7 +73,8 @@ class CollectionsAdminTest extends ControllerTestCase {
     /**
      * Prüft, ob die List Collection Seite korrekt aufgerufen wird
      */
-    public function testAccessCollectionControllerShowAction() {
+    public function testAccessCollectionControllerShowAction()
+    {
         $this->useEnglish();
         $this->dispatch('/admin/collection/show/id/4');
         $this->assertQueryContentContains('//html/head/title', 'List Collection Entries');
@@ -74,7 +84,8 @@ class CollectionsAdminTest extends ControllerTestCase {
     /**
      * Prüft, ob die Assign Collection Seite gesperrt ist für security9.
      */
-    public function testNoAccessCollectionControllerAssignAction() {
+    public function testNoAccessCollectionControllerAssignAction()
+    {
         $this->dispatch('/admin/collection/assign/document/92');
         $this->assertRedirectTo(
             '/auth/index/rmodule/admin/rcontroller/collection/raction/assign/document/92',

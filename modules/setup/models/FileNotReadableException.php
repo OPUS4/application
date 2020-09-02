@@ -36,6 +36,7 @@
 /**
  * Exception thrown by model if a file supposed to be writeabe is not.
  */
-class Setup_Model_FileNotReadableException extends Setup_Model_Exception {
-    
+class Setup_Model_FileNotReadableException extends Setup_Model_Exception
+{
+
 }

@@ -37,7 +37,8 @@
  *
  * TODO Application_Form_Abstract should be enough (not ID element needed)
  */
-class Admin_Form_Configuration extends Application_Form_Model_Abstract {
+class Admin_Form_Configuration extends Application_Form_Model_Abstract
+{
 
     /**
      * Prefix for translation keys of configuration options.
@@ -50,28 +51,41 @@ class Admin_Form_Configuration extends Application_Form_Model_Abstract {
      * Configured options for form.
      * @var array
      */
-    private $_options;
+    private $options;
+
+    public function __construct($config = null)
+    {
+        if (! is_null($config)) {
+            $options = new Admin_Model_Options($config);
+            $this->options = $options->getOptions();
+        }
+
+        parent::__construct();
+    }
 
     /**
      * Configures form and creates form elements.
      */
-    public function init() {
+    public function init()
+    {
         parent::init();
 
-        $options = new Admin_Model_Options();
+        if (is_null($this->options)) {
+            $options = new Admin_Model_Options();
+            $this->options = $options->getOptions();
+        }
 
-        $this->_options = $options->getOptions();
-
-        foreach ($this->_options as $name => $option) {
+        foreach ($this->options as $name => $option) {
             $section = $option->getSection();
 
             $element = $this->createElement(
                 $option->getElementType(),
                 $name,
-                array_merge(array(
+                array_merge(
+                    [
                     'label' => $option->getLabel(),
                     'description' => $option->getDescription()
-                    ),
+                    ],
                     $option->getOptions()
                 )
             );
@@ -81,13 +95,16 @@ class Admin_Form_Configuration extends Application_Form_Model_Abstract {
         }
 
         $this->removeElement(self::ELEMENT_MODEL_ID);
+
+        $this->setAttrib('class', 'admin_config');
     }
 
     /**
      * Initializes values of form elements from configuration.
      */
-    public function populateFromModel($config) {
-        foreach ($this->_options as $name => $option) {
+    public function populateFromModel($config)
+    {
+        foreach ($this->options as $name => $option) {
             $value = Application_Configuration::getValueFromConfig($config, $option->getKey());
             $this->getElement($name)->setValue($value);
         }
@@ -96,8 +113,9 @@ class Admin_Form_Configuration extends Application_Form_Model_Abstract {
     /**
      * Updates configuration with values from form elements.
      */
-    public function updateModel($config) {
-        foreach ($this->_options as $name => $option) {
+    public function updateModel($config)
+    {
+        foreach ($this->options as $name => $option) {
             $value = $this->getElement($name)->getValue();
 
             // TODO move into Admin_Model_Option?
@@ -124,17 +142,15 @@ class Admin_Form_Configuration extends Application_Form_Model_Abstract {
 
         if (is_null($group)) {
             $this->addDisplayGroup(
-                array($element),
+                [$element],
                 $section,
-                array(
+                [
                     'legend' => self::LABEL_TRANSLATION_PREFIX . 'section_' . $section,
-                    'decorators' => array('FormElements', 'Fieldset')
-                )
+                    'decorators' => ['FormElements', 'Fieldset']
+                ]
             );
-        }
-        else {
+        } else {
             $group->addElement($element);
         }
     }
-
 }

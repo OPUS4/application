@@ -50,30 +50,30 @@
             <?PHP if ($this->start > 0) : ?>
             <a class="pagination-prev" href="<?= $this->url($this->prevPage); ?>"
                 title="<?= $this->translate('pagination_previous_page') ?>"></a>
-                <?PHP else : ?>
+            <?PHP else : ?>
                 <div class="pagination-prev"></div>
             <?php endif ?>
         </li>
 
         <li>
-            <strong><?= (int)($this->start)+1 ?></strong> <?= $this->translate('pagination_to') ?>
-            <strong><?php if(((int)($this->start) + (int)($this->rows)) > $this->numOfHits) echo $this->numOfHits; else echo (int)($this->start) + (int)($this->rows); ?></strong>
+            <strong><?= (int)($this->start) + 1 ?></strong> <?= $this->translate('pagination_to') ?>
+            <strong><?= (((int)($this->start) + (int)($this->rows)) > $this->numOfHits) ? $this->numOfHits : (int)($this->start) + (int)($this->rows) ?></strong>
         </li>
 
         <li>
-            <?php if($this->start < ((int)($this->numOfHits) - (int)($this->rows))) : ?>
+            <?php if ($this->start < ((int)($this->numOfHits) - (int)($this->rows))) : ?>
             <a class="pagination-next" href="<?= $this->url($this->nextPage); ?>"
                 title="<?= $this->translate('pagination_next_page') ?>"></a>
-                <?PHP else : ?>
+            <?PHP else : ?>
                 <div class="pagination-next"></div>
             <?PHP endif ?>
         </li>
 
         <li>
-            <?php if($this->start < ((int)($this->numOfHits) - (int)($this->rows))) : ?>
+            <?php if ($this->start < ((int)($this->numOfHits) - (int)($this->rows))) : ?>
             <a class="pagination-last" href="<?= $this->url($this->lastPage); ?>"
                 title="<?= $this->translate('pagination_last_page') ?>"></a>
-                <?PHP else : ?>
+            <?PHP else : ?>
                 <div class="pagination-last"></div>
             <?php endif ?>
         </li>

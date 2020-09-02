@@ -26,11 +26,18 @@
  *
  * @category    Application Unit Test
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Admin_Model_Options extends Application_Model_Abstract {
+/**
+ * Class Admin_Model_Options
+ *
+ * TODO refactor this class (cleanup the design)
+ * TODO cleanup dependency on module/admin
+ */
+class Admin_Model_Options extends Application_Model_Abstract
+{
 
     /**
      * Path to options configuration.
@@ -41,25 +48,49 @@ class Admin_Model_Options extends Application_Model_Abstract {
      * Option objects.
      * @var array
      */
-    private $_options;
+    private $options;
+
+    private $config;
+
+    /**
+     * Admin_Model_Options constructor.
+     * @param null $config
+     *
+     * TODO allow providing Zend_Config object
+     */
+    public function __construct($config = null)
+    {
+        if (! is_null($config) && is_array($config)) {
+            $this->config = new Zend_Config($config);
+        }
+    }
 
     /**
      * Returns options configuration from file.
      *
      * @return array
      */
-    public function getOptions() {
-        if (is_null($this->_options)) {
-            $this->_options = array();
-            $config = new Zend_Config_Json(APPLICATION_PATH . self::OPTIONS_CONFIG_FILE);
+    public function getOptions()
+    {
+        if (is_null($this->options)) {
+            $this->options = [];
+            $config = $this->getConfig();
             $options = $config->toArray();
 
             foreach ($options as $name => $parameters) {
-                $this->_options[$name] = new Admin_Model_Option($name, $parameters);
+                $this->options[$name] = new Admin_Model_Option($name, $parameters);
             }
         }
 
-        return $this->_options;
+        return $this->options;
     }
 
+    public function getConfig()
+    {
+        if (is_null($this->config)) {
+            $this->config = new Zend_Config_Json(APPLICATION_PATH . self::OPTIONS_CONFIG_FILE);
+        }
+
+        return $this->config;
+    }
 }

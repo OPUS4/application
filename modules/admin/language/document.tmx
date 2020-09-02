@@ -174,7 +174,7 @@
         <seg>Authors</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Autoren</seg>
+        <seg>Autor*innen</seg>
       </tuv>
     </tu>
 
@@ -183,7 +183,7 @@
         <seg>Editors</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Herausgeber</seg>
+        <seg>Herausgeber*in</seg>
       </tuv>
     </tu>
 
@@ -210,7 +210,7 @@
         <seg>Referee</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Gutachter</seg>
+        <seg>Gutachter*in</seg>
       </tuv>
     </tu>
 
@@ -219,7 +219,7 @@
         <seg>Translators</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Übersetzer</seg>
+        <seg>Übersetzer*in</seg>
       </tuv>
     </tu>
 
@@ -237,7 +237,7 @@
         <seg>Submitter</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Einsteller</seg>
+        <seg>Einsteller*in</seg>
       </tuv>
     </tu>
 
@@ -839,10 +839,10 @@
 
       <tu tuid="admin_document_error_exception_storing">
           <tuv xml:lang="en">
-              <seg>An unexpected exception occurred while saving the document ("$1%s").</seg>
+              <seg>An unexpected exception occurred while saving the document ("%1$s").</seg>
           </tuv>
           <tuv xml:lang="de">
-              <seg>Ein unerwarteter Fehler ist beim Speichern aufgetreten ("$1%s").</seg>
+              <seg>Ein unerwarteter Fehler ist beim Speichern aufgetreten ("%1$s").</seg>
           </tuv>
       </tu>
 

@@ -1,6 +1,6 @@
 <?php
-include_once ("jpgraph/jpgraph.php");
-include_once ("jpgraph/jpgraph_bar.php");
+include_once("jpgraph/jpgraph.php");
+include_once("jpgraph/jpgraph_bar.php");
 
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
@@ -34,7 +34,8 @@ include_once ("jpgraph/jpgraph_bar.php");
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Statistic_Model_StatisticGraph {
+class Statistic_Model_StatisticGraph
+{
 
     protected $_dataPdf = null;
     protected $_dataFrontdoor = null;
@@ -47,38 +48,46 @@ class Statistic_Model_StatisticGraph {
     protected $_width = 330;
     protected $_height = 200;
 
-    public function __construct($title = 'Statistic Graph', $dataPdf = null, $dataFrontdoor = null) {
+    public function __construct($title = 'Statistic Graph', $dataPdf = null, $dataFrontdoor = null)
+    {
         $this->_title = $title;
         $this->_dataPdf = $dataPdf;
         $this->_dataFrontdoor = $dataFrontdoor;
     }
 
-    public function setXAxisTitle($title) {
+    public function setXAxisTitle($title)
+    {
         $this->_xaxis = $title;
     }
 
-    public function setYAxisTitle($title) {
+    public function setYAxisTitle($title)
+    {
         $this->_yaxis = $title;
     }
 
-    public function setTitle($title) {
+    public function setTitle($title)
+    {
         $this->_title = $title;
     }
 
-    public function setSize($width, $height) {
+    public function setSize($width, $height)
+    {
         $this->_width = $width;
         $this->_height = $height;
     }
 
-    public function setLegendFrontdoorLabel($frontdoor) {
+    public function setLegendFrontdoorLabel($frontdoor)
+    {
         $this->_frontdoorLabel = $frontdoor;
     }
 
-    public function setLegendFilesLabel($files) {
+    public function setLegendFilesLabel($files)
+    {
         $this->_filesLabel = $files;
     }
 
-    public function drawGraph() {
+    public function drawGraph()
+    {
         // generate graphic
         $graph = new Graph($this->_width, $this->_height, "auto");
         $graph->SetScale("textlin");
@@ -94,7 +103,7 @@ class Statistic_Model_StatisticGraph {
         $bplot->SetLegend($this->_filesLabel);
         $bplotFrontdoor = new BarPlot(array_values($this->_dataFrontdoor));
         $bplotFrontdoor->SetLegend($this->_frontdoorLabel);
-        $gbplot  = new GroupBarPlot(array($bplot ,$bplotFrontdoor));
+        $gbplot  = new GroupBarPlot([$bplot ,$bplotFrontdoor]);
         $graph->Add($gbplot);
 
         // format bars
@@ -132,6 +141,5 @@ class Statistic_Model_StatisticGraph {
 
         // show graphic
         $graph->Stroke();
-
     }
 }

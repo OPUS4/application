@@ -1,19 +1,28 @@
 Please click on the publication link on the start page.<br/>
-First you are requested to choose a document type. Right beneath that you can upload your document files. Having done so you may click on "send". What follows now is the actual form.
-You have to fill in data about your publication here (so called metadata), which is used to describe your work in catalouges and other bibliographic
-directories. Describe the document you want to upload using the categories and fields on the publication form. Depending on the document type, some of
-these fields are <span class="required">mandatory</span> and therefore have to be filled in. Please describe your document as clear as possible.
+First you are requested to choose a document type. Right beneath that you can upload your document files. Having done
+so you may click on "send". What follows now is the actual form.
+You have to fill in data about your publication here (so called metadata), which is used to describe your work in
+cataloges and other bibliographic
+directories. Describe the document you want to upload using the categories and fields on the publication form.
+Depending on the document type, some of
+these fields are <span class="required">mandatory</span> and therefore have to be filled in. Please describe your
+document as clear as possible.
+
 Mandatory fields are for example:<br/>
+
 <ul>
-<li>the document type (must be choosen from a list)</li>
-<li>the title of your publication and the language of the title</li>
-<li>the abstract of the document</li>
-<li>the publication date of your document (normally the day you publish it online)</li>
-<li>the language of the document (must be choosen from a list)</li>
-<li>the licence, under which you want to publish your document (must be choosen from a list)</li>
+  <li>the document type (must be choosen from a list)</li>
+  <li>the title of your publication and the language of the title</li>
+  <li>the abstract of the document</li>
+  <li>the publication date of your document (normally the day you publish it online)</li>
+  <li>the language of the document (must be choosen from a list)</li>
+  <li>the licence, under which you want to publish your document (must be choosen from a list)</li>
 </ul>
+
 If you are unsure what to fill in certain form fields, you can point the cursor on a field and an explaining help text will be shown.<br/>
 After you have finished the form, all data will be displayed once again for a check-up and you then have three possibilities: you can correct them if necessary, add your document to a
 collection or simply safe it directly.<br /><br/>
+
 <b>Note:</b><br/>
+
 In oder to publish your work cookies have to be enabled in your web browser.

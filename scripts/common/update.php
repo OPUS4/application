@@ -35,13 +35,14 @@
 // Configure include path.
 set_include_path(
     implode(
-        PATH_SEPARATOR, array(
+        PATH_SEPARATOR,
+        [
             '.',
             dirname(__FILE__),
             dirname(dirname(dirname(__FILE__))) . '/library',
             dirname(dirname(dirname(__FILE__))) . '/vendor',
             get_include_path(),
-        )
+        ]
     )
 );
 
@@ -60,24 +61,27 @@ require_once 'opus-php-compatibility.php';
 // environment initializiation
 $application = new Zend_Application(
     APPLICATION_ENV,
-    array(
-        "config" => array(
+    [
+        "config" => [
             APPLICATION_PATH . '/application/configs/application.ini',
             APPLICATION_PATH . '/application/configs/config.ini',
             APPLICATION_PATH . '/application/configs/console.ini'
-        )
-    )
+        ]
+    ]
 );
 
 // setup logging for updates
-$options = $application->mergeOptions($application->getOptions(), array(
-    'log' => array(
+$options = $application->mergeOptions($application->getOptions(), [
+    'log' => [
         'filename' => 'update.log',
         'level' => 'INFO'
-    )
-));
+    ]
+]);
 
 $application->setOptions($options);
 
 // Bootstrapping application
 $application->bootstrap('Backend');
+
+// Bootstrapping modules so classes can be found
+$application->getBootstrap()->getPluginResource('modules')->init();

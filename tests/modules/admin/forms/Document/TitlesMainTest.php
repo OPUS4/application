@@ -34,82 +34,89 @@
 /**
  * Unit Tests fuer das Unterformular fuer die Haupttitel eines Dokuments.
  */
-class Admin_Form_Document_TitlesMainTest extends ControllerTestCase {
+class Admin_Form_Document_TitlesMainTest extends ControllerTestCase
+{
+
+    protected $additionalResources = ['database', 'view', 'translation'];
 
     /**
      * Prueft, das der Titel in der Dokumentensprache an erste Position zurueckgegeben wird.
      */
-    public function testGetFieldValues() {
+    public function testGetFieldValues()
+    {
         $form = new Admin_Form_Document_TitlesMain();
-        
+
         $document = $this->getTestDocument();
-                
+
         $values = $form->getFieldValues($document);
-        
+
         $this->assertEquals(2, count($values));
         $this->assertEquals('deu', $values[0]->getLanguage());
         $this->assertEquals('eng', $values[1]->getLanguage());
     }
-    
-    public function testIsDependenciesValidTrue() {
+
+    public function testIsDependenciesValidTrue()
+    {
         $form = new Admin_Form_Document_TitlesMain();
-        
+
         $document = $this->getTestDocument();
-        
+
         $form->populateFromModel($document);
-        
+
         $this->assertEquals(2, count($form->getSubForms()));
-        
-        $globalContext = array('General' => array('Language' => 'deu')); // es gibt einen Titel in 'deu'
-        
+
+        $globalContext = ['General' => ['Language' => 'deu']]; // es gibt einen Titel in 'deu'
+
         $post = $this->getPostData();
-        
+
         $this->assertTrue($form->isDependenciesValid($post, $globalContext));
     }
-    
-    public function testIsDependenciesValidFalse() {
+
+    public function testIsDependenciesValidFalse()
+    {
         $form = new Admin_Form_Document_TitlesMain();
-        
+
         $document = $this->getTestDocument();
-        
+
         $form->populateFromModel($document);
-        
+
         $this->assertEquals(2, count($form->getSubForms()));
-        
-        $globalContext = array('General' => array('Language' => 'rus')); // es gibt keinen Titel in 'rus'
-        
+
+        $globalContext = ['General' => ['Language' => 'rus']]; // es gibt keinen Titel in 'rus'
+
         $post = $this->getPostData();
-        
+
         $this->assertFalse($form->isDependenciesValid($post, $globalContext));
     }
-    
-    protected function getTestDocument() {
+
+    protected function getTestDocument()
+    {
         $document = $this->createTestDocument();
-        
+
         $document->setLanguage('deu');
-        
+
         $title1 = new Opus_Title();
         $title1->setLanguage('deu');
         $title1->setValue('Deutscher Titel');
-        
+
         $title2 = new Opus_Title();
         $title2->setLanguage('eng');
         $title2->setValue('English Title');
-        
-        $document->setTitleMain(array($title1, $title2));        
-        
+
+        $document->setTitleMain([$title1, $title2]);
+
         return $document;
     }
-    
-    protected function getPostData() {
-        return array(
-            'TitleMain0' => array(
+
+    protected function getPostData()
+    {
+        return [
+            'TitleMain0' => [
                 'Language' => 'eng'
-            ),
-            'TitleMain1' => array(
+            ],
+            'TitleMain1' => [
                 'Language' => 'deu'
-            )
-        );
+            ]
+        ];
     }
-    
 }

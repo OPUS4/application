@@ -31,72 +31,82 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Sword_ServicedocumentController extends Zend_Rest_Controller {
-    
-    public function init() {
+class Sword_ServicedocumentController extends Zend_Rest_Controller
+{
+
+    public function init()
+    {
         $this->getHelper('Layout')->disableLayout();
         $this->getHelper('ViewRenderer')->setNoRender();
     }
-    
-    public function indexAction() {
+
+    public function indexAction()
+    {
         $this->getAction();
     }
 
-    public function getAction() {
+    public function getAction()
+    {
         $request = $this->getRequest();
         $response = $this->getResponse();
-        
+
         $response->setHeader('Content-Type', 'text/xml; charset=UTF-8', true);
-        
+
         $accessAllowed = Application_Security_BasicAuthProtection::accessAllowed($request, $response);
-        if (!$accessAllowed) {
+        if (! $accessAllowed) {
             $this->setErrorDocument($response);
             return;
         }
         $this->setServiceDocument($response);
     }
 
-    private function setErrorDocument($response) {
+    private function setErrorDocument($response)
+    {
         $response->setHttpResponseCode(403);
         $domDocument = new DOMDocument();
         $element = $domDocument->createElement('error', 'Access to SWORD module is forbidden.');
         $domDocument->appendChild($element);
-        $response->setBody($domDocument->saveXML());        
+        $response->setBody($domDocument->saveXML());
     }
-    
-    private function setServiceDocument($response) {
+
+    private function setServiceDocument($response)
+    {
         $fullUrl = $this->view->fullUrl();
         $serviceDocument = new Sword_Model_ServiceDocument($fullUrl);
         $domDocument = $serviceDocument->getDocument();
-        
+
         $config = Zend_Registry::get('Zend_Config');
-        $prettyPrinting = $config->prettyXml;
-        if ($prettyPrinting == 'true') {      
+        $prettyPrinting = isset($config->prettyXml) && filter_var($config->prettyXml, FILTER_VALIDATE_BOOLEAN);
+        if ($prettyPrinting) {
             $domDocument->preserveWhiteSpace = false;
-            $domDocument->formatOutput = true;            
-        }        
-        
-        $response->setBody($domDocument->saveXml());        
+            $domDocument->formatOutput = true;
+        }
+
+        $response->setBody($domDocument->saveXml());
     }
-    public function deleteAction() {
+    public function deleteAction()
+    {
         $this->return500($this->getResponse());
     }
 
-    public function headAction() {
+    public function headAction()
+    {
         $this->return500($this->getResponse());
     }
 
-    public function postAction() {
+    public function postAction()
+    {
         $this->return500($this->getResponse());
     }
 
-    public function putAction() {
+    public function putAction()
+    {
         $this->return500($this->getResponse());
     }
 
-    private function return500($response) {
+    private function return500($response)
+    {
         $response->setHttpResponseCode(500);
-        $response->appendBody("Method not allowed");        
+        $response->appendBody("Method not allowed");
     }
-    
 }

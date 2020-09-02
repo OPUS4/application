@@ -26,21 +26,23 @@
  *
  * @category    Application
  * @package     Module_Home
- * @author      Ralf Claussnitzer (ralf.claussnitzer@slub-dresden.de)
+ * @author      Ralf Claussnitzer <ralf.claussnitzer@slub-dresden.de>
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
-class Home_IndexController extends Application_Controller_Action {
+class Home_IndexController extends Application_Controller_Action
+{
 
     /**
      * Do some initialization on startup of every action.
      *
      * @return void
      */
-    public function init() {
+    public function init()
+    {
         parent::init();
     }
 
@@ -53,9 +55,12 @@ class Home_IndexController extends Application_Controller_Action {
      * @param  string $action     The name of the action that was called.
      * @param  array  $parameters The parameters passed to the action.
      * @return void
+     *
+     * TODO does it make sense? are we using this in the future? now?
      */
-    public function __call($action, $parameters) {
-        if (!'Action' == substr($action, -6)) {
+    public function __call($action, $parameters)
+    {
+        if (! 'Action' == substr($action, -6)) {
             $this->getLogger()->info(__METHOD__ . ' undefined method: ' . $action);
             parent::__call($action, $parameters);
         }
@@ -65,24 +70,16 @@ class Home_IndexController extends Application_Controller_Action {
 
         $phtmlFilesAvailable = $this->getViewScripts();
 
-        if (array_search($actionName, $phtmlFilesAvailable) === FALSE) {
+        if (array_search($actionName, $phtmlFilesAvailable) === false) {
             $this->getLogger()->info(
                 __METHOD__ . ' requested file ' . $actionName . '.phtml is not readable or does not exist'
             );
             parent::__call($action, $parameters);
         }
 
-        $translation = $this->view->translate('help_content_' . $actionName);
+        $help = Application_Translate_Help::getInstance();
 
-        $helpFilesAvailable = Home_Model_HelpFiles::getFiles();
-
-        $pos = array_search($translation, $helpFilesAvailable);
-        if ($pos === FALSE) {
-            $this->view->text = $translation;
-        }
-        else {
-            $this->view->text = Home_Model_HelpFiles::getFileContent($helpFilesAvailable[$pos]);
-        }
+        $this->view->text = $help->getContent($actionName);
     }
 
     /**
@@ -90,12 +87,13 @@ class Home_IndexController extends Application_Controller_Action {
      *
      * @return void
      */
-    public function languageAction() {
+    public function languageAction()
+    {
         $module = null;
         $controller = null;
         $action = null;
         $language = null;
-        $params = array();
+        $params = [];
 
         foreach ($this->getRequest()->getParams() as $param => $value) {
             switch ($param) {
@@ -127,7 +125,7 @@ class Home_IndexController extends Application_Controller_Action {
 
         $appConfig = new Application_Configuration();
 
-        if ($appConfig->isLanguageSelectionEnabled() && !is_null($language)
+        if ($appConfig->isLanguageSelectionEnabled() && ! is_null($language)
                 && Zend_Registry::get('Zend_Translate')->isAvailable($language)) {
             $sessiondata = new Zend_Session_Namespace();
             $sessiondata->language = $language;
@@ -135,26 +133,25 @@ class Home_IndexController extends Application_Controller_Action {
         $this->_helper->Redirector->redirectTo($action, '', $controller, $module, $params);
     }
 
-    public function indexAction() {
+    public function indexAction()
+    {
         $this->_helper->mainMenu('home');
         $finder = new Opus_DocumentFinder();
         $finder->setServerState('published');
         $this->view->totalNumOfDocs = $finder->count();
     }
 
+    public function helpAction()
+    {
+        $help = Application_Translate_Help::getInstance();
 
-    public function helpAction() {
-        $config = $this->getConfig();
-        if (isset($config->help->separate)) {
-            $this->view->separate = (boolean) $config->help->separate;
-        }
-        else {
-            $this->view->separate = false;
-        }
+        $this->view->help = $help;
 
-        if ($this->view->separate) {
+        // this loads content if answers should be shown on separate pages
+        if ($help->getSeparateViewEnabled()) {
             $content = $this->getRequest()->getParam('content');
-            if (!is_null($content)) {
+            if (! is_null($content)) {
+                // TODO find generic way to handle redirect 'content'
                 if ($content === 'contact') {
                     $this->_helper->Redirector->redirectToAndExit('contact');
                 }
@@ -162,24 +159,13 @@ class Home_IndexController extends Application_Controller_Action {
                     $this->_helper->Redirector->redirectToAndExit('imprint');
                 }
 
-                $translation = $this->view->translate('help_content_' . $content);
-
-                // get all readable help files in directory /home/views/scripts
-                $helpFilesAvailable = Home_Model_HelpFiles::getFiles();
-
-                $pos = array_search($translation, $helpFilesAvailable);
-                if ($pos !== FALSE) {
-                    $this->view->contenttitle = 'help_title_' . $content;
-                    $this->view->content = Home_Model_HelpFiles::getFileContent($helpFilesAvailable[$pos]);
-                }
-                elseif ($translation !== 'help_content_' . $content) {
-                    // a translation exists, but it is not a valid file name
-                    $this->view->contenttitle = 'help_title_' . $content;
-                    $this->view->content = $translation;
-                }
+                $this->view->contenttitle = "help_title_$content";
+                $this->view->content = $help->getContent($content);
+                $this->view->contentId = $content;
             }
         }
 
+        // active proper entry in main menu
         $this->_helper->mainMenu('help');
     }
 
@@ -188,8 +174,9 @@ class Home_IndexController extends Application_Controller_Action {
      *
      * TODO remove
      */
-    public function failureAction() {
-        $this->_helper->Redirector->redirectTo('index', array('failure' => 'This is a warning.'));
+    public function failureAction()
+    {
+        $this->_helper->Redirector->redirectTo('index', ['failure' => 'This is a warning.']);
     }
 
     /**
@@ -197,16 +184,18 @@ class Home_IndexController extends Application_Controller_Action {
      *
      * TODO remove
      */
-    public function noticeAction() {
-        $this->_helper->Redirector->redirectTo('index', array('notice' => 'This is a notice.'));
+    public function noticeAction()
+    {
+        $this->_helper->Redirector->redirectTo('index', ['notice' => 'This is a notice.']);
     }
 
     /**
      * Returns basenames of all phtml files.
      * @return array Basenames of phtml files for 'home' module
      */
-    protected function getViewScripts() {
-        $phtmlFilesAvailable = array();
+    protected function getViewScripts()
+    {
+        $phtmlFilesAvailable = [];
         $dir = new DirectoryIterator($this->view->getScriptPath('index'));
         foreach ($dir as $file) {
             if ($file->isFile() && $file->getFilename() != '.' && $file->getFilename() != '..' && $file->isReadable()) {
@@ -215,5 +204,4 @@ class Home_IndexController extends Application_Controller_Action {
         }
         return $phtmlFilesAvailable;
     }
-
 }

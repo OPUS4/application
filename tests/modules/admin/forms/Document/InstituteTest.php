@@ -27,17 +27,20 @@
  * @category    Application Unit Test
  * @package     Module_Admin
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2013-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
  * Unit Tests fuer Unterformular fuer Verknuepfung mit einem Institut im Metadaten-Formular.
  */
-class Admin_Form_Document_InstituteTest extends ControllerTestCase {
-    
-    public function testCreateForm() {
+class Admin_Form_Document_InstituteTest extends ControllerTestCase
+{
+
+    protected $additionalResources = ['database'];
+
+    public function testCreateForm()
+    {
         $form = new Admin_Form_Document_Institute(Admin_Form_Document_Institute::ROLE_PUBLISHER);
 
         $this->assertEquals(2, count($form->getElements()));
@@ -49,38 +52,42 @@ class Admin_Form_Document_InstituteTest extends ControllerTestCase {
      * @expectedException Application_Exception
      * @expectedExceptionMessage Unknown role 'unknown_role'.
      */
-    public function testCreateFormBadRole() {
+    public function testCreateFormBadRole()
+    {
         $form = new Admin_Form_Document_Institute('unknown_role');
     }
-    
-    public function testPopulateFromModel() {
+
+    public function testPopulateFromModel()
+    {
         $form = new Admin_Form_Document_Institute(Admin_Form_Document_Institute::ROLE_PUBLISHER);
-        
+
         $doc = new Opus_Document(146);
         $publishers = $doc->getThesisPublisher();
         $publisher = $publishers[0];
-        
+
         $form->populateFromModel($publisher);
-        
+
         $this->assertEquals($doc->getId(), $form->getElement('Id')->getValue());
         $this->assertEquals($publisher->getModel()->getId(), $form->getElement('Institute')->getValue());
     }
-    
-    public function testUpdateModel() {
+
+    public function testUpdateModel()
+    {
         $form = new Admin_Form_Document_Institute(Admin_Form_Document_Institute::ROLE_PUBLISHER);
-        
+
         $form->getElement('Institute')->setValue(3);
 
         $model = new Opus_Model_Dependent_Link_DocumentDnbInstitute();
-        
+
         $form->updateModel($model);
-        
+
         $this->assertEquals(3, $model->getModel()->getId());
     }
-    
-    public function testGetModel() {
+
+    public function testGetModel()
+    {
         $form = new Admin_Form_Document_Institute(Admin_Form_Document_Institute::ROLE_PUBLISHER);
-        
+
         $doc = new Opus_Document(146);
         $publishers = $doc->getThesisPublisher();
         $publisher = $publishers[0];
@@ -88,10 +95,10 @@ class Admin_Form_Document_InstituteTest extends ControllerTestCase {
 
         $form->getElement('Id')->setValue($doc->getId());
         $form->getElement('Institute')->setValue($publisherId);
-        
+
         $model = $form->getModel();
         $modelId = $model->getId();
-        
+
         $this->assertNotNull($model);
         $this->assertNotNull($modelId);
         $this->assertEquals($doc->getId(), $modelId[0]);
@@ -99,33 +106,34 @@ class Admin_Form_Document_InstituteTest extends ControllerTestCase {
         $this->assertEquals('publisher', $modelId[2]);
         $this->assertEquals($publisherId, $model->getModel()->getId());
     }
-    
-    public function testGetNewModel() {
+
+    public function testGetNewModel()
+    {
         $form = new Admin_Form_Document_Institute(Admin_Form_Document_Institute::ROLE_PUBLISHER);
-        
+
         $form->getElement('Institute')->setValue(3);
-        
+
         $model = $form->getModel();
-        
+
         $this->assertNotNull($model);
         $this->assertNull($model->getId());
         $this->assertEquals(3, $model->getModel()->getId());
     }
 
-    public function testValidation() {
+    public function testValidation()
+    {
         $form = new Admin_Form_Document_Institute(Admin_Form_Document_Institute::ROLE_PUBLISHER);
 
-        $post = array();
-        
+        $post = [];
+
         $this->assertFalse($form->isValid($post));
         $this->assertContains('isEmpty', $form->getErrors('Institute'));
-        
-        $post = array(
+
+        $post = [
             'Institute' => 'a'
-        );
-        
+        ];
+
         $this->assertFalse($form->isValid($post));
         $this->assertContains('notInt', $form->getErrors('Institute'));
     }
-
 }

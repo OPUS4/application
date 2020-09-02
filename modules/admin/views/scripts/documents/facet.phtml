@@ -41,13 +41,13 @@
 <?PHP $values = $this->registers ?>
 
 <div class="facet">
-    <h4 class="facet-title"><?= $this->translate('ServerState-short') ?></h4>
+    <h4 class="facet-title"><?= $this->translate('ServerState_short') ?></h4>
     <div>
         <ul class="facet-values">
             <?PHP foreach ($values as $value => $link) : ?>
                 <?PHP if ($this->state !== $value) : ?>
                     <li><a href="<?= $link ?>"><?= $this->translate('admin_documents_state_' . $value) ?></a></li>
-                    <?PHP else : ?>
+                <?PHP else : ?>
                     <li class="active"><?= $this->translate('admin_documents_state_' . $this->state) ?></li>
                 <?PHP endif ?>
             <?PHP endforeach ?>

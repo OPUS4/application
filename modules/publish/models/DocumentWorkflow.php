@@ -32,8 +32,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Publish_Model_DocumentWorkflow {
-    
+class Publish_Model_DocumentWorkflow
+{
+
     const DOCUMENT_STATE = 'temporary';
 
     /**
@@ -45,9 +46,10 @@ class Publish_Model_DocumentWorkflow {
      * Create and initialize document object.
      *
      * @param type $documentType
-     * @return Opus_Document 
+     * @return Opus_Document
      */
-    public function createDocument($documentType) {
+    public function createDocument($documentType)
+    {
         $this->_document = new Opus_Document();
         $this->_document->setServerState(self::DOCUMENT_STATE)
             ->setType($documentType);
@@ -62,7 +64,8 @@ class Publish_Model_DocumentWorkflow {
      *
      * @return void
      */
-    protected function initializeDocument() {
+    protected function initializeDocument()
+    {
     }
 
     /**
@@ -70,10 +73,11 @@ class Publish_Model_DocumentWorkflow {
      *
      * @param type $documentId
      * @return Opus_Document
-     * @throws Publish_Model_Exception 
+     * @throws Publish_Model_Exception
      */
-    public function loadDocument($documentId) {
-        if (!isset($documentId) or !preg_match('/^\d+$/', $documentId)) {
+    public function loadDocument($documentId)
+    {
+        if (! isset($documentId) or ! preg_match('/^\d+$/', $documentId)) {
             throw new Publish_Model_Exception('Invalid document ID given');
         }
 
@@ -85,8 +89,8 @@ class Publish_Model_DocumentWorkflow {
         return $this->_document;
     }
 
-    public function getDocument() {
+    public function getDocument()
+    {
         return $this->_document;
     }
-
 }

@@ -26,13 +26,17 @@
  *
  * @category    Tests
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2018-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Admin_Form_NotificationTest extends ControllerTestCase {
+class Admin_Form_NotificationTest extends ControllerTestCase
+{
 
-    public function testGetRows() {
+    protected $additionalResources = 'translation';
+
+    public function testGetRows()
+    {
         $form = new Admin_Form_Notification();
 
         $form->addPublishNotificationSelection(new Opus_Document(146));
@@ -41,5 +45,4 @@ class Admin_Form_NotificationTest extends ControllerTestCase {
 
         $this->assertCount(2, $rows);
     }
-
 }

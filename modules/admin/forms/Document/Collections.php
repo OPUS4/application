@@ -27,103 +27,114 @@
  * @category    Application
  * @package     Module_Admin
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
  * Subform fuer Collections im Metadaten-Formular.
- * 
+ *
  * Dieses Formular zeigt die dem Dokument zugewiesenen Collections an. Jede Collection erhält einen "Entfernen" Button
  * um die Zuweisung zu löschen. Außerdem gibt es einen Submit Button der den Nutzer zur Seite für das Zuweisen einer
  * weiteren Collection bringt.
- * 
+ *
  * Für jede CollectionRole wird ein Zend_Form_SubForm angelegt. Diesem wiederum wird für jede zugehörige Collection
  * ein Admin_Form_Document_Collection Unterformular hinzugefügt. Dadurch entsteht eine Hierarchy für die Anzeige und
  * POST Verarbeitung.
- * 
+ *
  * <pre>
  * Admin_Form_Document_Collections
  *   +-Zend_Form_SubForm
  *     +-Admin_Form_Document_Collection
  * </pre>
- * 
- * Wenn eine neue Collection zugewiesen werden soll, muß dem Controller signalisiert werden, das der aktuelle POST in 
- * der Session gespeichert werden muß und eine neue URL (zum Zuweisen der Collection) angesprungen werden soll. 
- * 
+ *
+ * Wenn eine neue Collection zugewiesen werden soll, muß dem Controller signalisiert werden, das der aktuelle POST in
+ * der Session gespeichert werden muß und eine neue URL (zum Zuweisen der Collection) angesprungen werden soll.
+ *
  * TODO eliminiere redundanten Code fuer CollectionRole SubForm (separate Klasse?) (vergl. mit MultiSubForm Klasse)
  */
-class Admin_Form_Document_Collections extends Admin_Form_AbstractDocumentSubForm {
-    
+class Admin_Form_Document_Collections extends Admin_Form_AbstractDocumentSubForm
+{
+
     /**
      * Name für Button zum Hinzufügen von Collections.
      */
     const ELEMENT_ADD = 'Add';
-    
+
     /**
      * Initialisiert Elemente für gesamtes Collections Formular.
      */
-    public function init() {
+    public function init()
+    {
         parent::init();
-        
-        $this->addElement(
-            'submit', self::ELEMENT_ADD, array('order' => 1000, 'label' => 'admin_button_add',
-            'decorators' => array(), 'disableLoadDefaultDecorators' => true)
-        );
+
+        $this->addElement('submit', self::ELEMENT_ADD, [
+            'order' => 1000,
+            'label' => 'admin_button_add',
+            'decorators' => [],
+            'disableLoadDefaultDecorators' => true
+        ]);
         $this->setLegend('admin_document_section_collection');
 
         $this->getDecorator('FieldsetWithButtons')->setLegendButtons(self::ELEMENT_ADD);
     }
-    
+
     /**
      * Erzeugt und initialisiert Unterformulare entsprechend den Collections eines Dokuments.
      * @param Opus_Document $document
      */
-    public function populateFromModel($document) {
+    public function populateFromModel($document)
+    {
         $this->clearSubForms();
-        
+
         $collectionRoles = $this->getGroupedCollections($document);
-        
+
         // Iteriere über CollectionRole Namen für Dokument und erzeuge Unterformulare
         foreach ($collectionRoles as $roleName => $collections) {
             $roleForm = new Admin_Form_Document_Section();
-            
+
             $roleForm->setLegend('default_collection_role_' . $roleName);
-            
+
             $position = 0;
-            
+
             // Iteriere über Collections für CollectionRole und erzeuge Unterformulare
             foreach ($collections as $index => $collection) {
                 $collectionForm = $this->createCollectionForm($position++);
                 $collectionForm->populateFromModel($collection);
                 $roleForm->addSubForm($collectionForm, 'collection' . $index);
             }
-            
-            $this->addSubForm($roleForm, $roleName);
+
+            $this->addSubForm($roleForm, $this->normalizeName($roleName));
         }
     }
-        
-    public function processPost($data, $context) {
+
+    public function normalizeName($name)
+    {
+        return str_replace('-', '', $name);
+    }
+
+    public function processPost($data, $context)
+    {
         if (array_key_exists(self::ELEMENT_ADD, $data)) {
             // Neue Sammlung zuweisen
-            return array( 'result' => Admin_Form_Document::RESULT_SWITCH_TO, 
-                'target' => array(
-                'module' => 'admin',
-                'controller' => 'collection',
-                'action' => 'assign')
-            );
-        }
-        else {
-            // POST Verarbeitung der Unterformular 
+            return [
+                'result' => Admin_Form_Document::RESULT_SWITCH_TO,
+                'target' => [
+                    'module' => 'admin',
+                    'controller' => 'collection',
+                    'action' => 'assign'
+                ]
+            ];
+        } else {
+            // POST Verarbeitung der Unterformular
             foreach ($data as $roleName => $collections) {
-                $roleForm = $this->getSubForm($roleName);
+                $roleForm = $this->getSubForm($this->normalizeName($roleName));
 
-                if (!is_null($roleForm)) {
+                if (! is_null($roleForm)) {
                     foreach ($collections as $key => $collection) {
                         $colForm = $roleForm->getSubForm($key);
 
-                        if (!is_null($colForm)) {
+                        if (! is_null($colForm)) {
                             $result = $colForm->processPost($collection, $context);
 
                             if ($result === 'remove') {
@@ -136,12 +147,12 @@ class Admin_Form_Document_Collections extends Admin_Form_AbstractDocumentSubForm
         }
     }
 
-    protected function _removeCollection($roleForm, $colForm) {
+    protected function _removeCollection($roleForm, $colForm)
+    {
         $roleForm->removeSubForm($colForm->getName());
         if (count($roleForm->getSubForms()) == 0) {
             $this->removeSubForm($roleForm->getName());
-        }
-        else {
+        } else {
             $roleForm->removeGapsInSubFormOrder('collection');
         }
     }
@@ -149,7 +160,8 @@ class Admin_Form_Document_Collections extends Admin_Form_AbstractDocumentSubForm
     /**
      * Erzeugt Unterformulare basierend auf den Informationen in den POST Daten.
      */
-    public function constructFromPost($post, $document = null) {
+    public function constructFromPost($post, $document = null)
+    {
         foreach ($post as $roleName => $data) {
             // Prüfen ob Unterformluar (array) oder Feld
             if (is_array($data)) {
@@ -157,59 +169,61 @@ class Admin_Form_Document_Collections extends Admin_Form_AbstractDocumentSubForm
             }
         }
     }
-    
+
     /**
      * Aktualisiert die Liste der zugewiesenen Collections für ein Dokument.
-     * 
+     *
      * Diese Funktion iteriert über alle Unterformulare und fragt die Collections ab. Die Collections werden in einem
      * Array gesammelt und dann dem Dokument zugewiesen.
-     * 
+     *
      * @param Opus_Document $document
      */
-    public function updateModel($document) {
+    public function updateModel($document)
+    {
         $roleForms = $this->getSubForms();
-        
-        $values = array();
-        
+
+        $values = [];
+
         foreach ($roleForms as $roleForm) {
             $colForms = $roleForm->getSubForms();
-            
+
             foreach ($colForms as $colForm) {
                 $value = $colForm->getModel();
-                
-                if (!is_null($value)) {
+
+                if (! is_null($value)) {
                     $values[] = $value;
                 }
-                
             }
         }
-        
-       $field = $document->getField('Collection');
-       
-       $field->setValue($values);
+
+        $field = $document->getField('Collection');
+
+        $field->setValue($values);
     }
-    
-    public function continueEdit($request, $session = null) {
+
+    public function continueEdit($request, $session = null)
+    {
         if ($request->getParam('continue', null) == 'addcol') {
             $colId = $request->getParam('colId');
-            
+
             $this->_addCollection($colId);
         }
     }
-    
+
     /**
      * Fügt Unterformular für eine Collection hinzu.
-     *  
+     *
      * @param string $roleName
      * @param array $data
-     * 
+     *
      * TODO Sollte roleForm nur bei Bedarf hinzufügen.
      */
-    protected function _addSubForm($roleName, $data) {
+    protected function _addSubForm($roleName, $data)
+    {
         $roleForm = new Admin_Form_Document_Section();
-        
+
         $roleForm->setLegend('default_collection_role_' . $roleName);
-        
+
         $position = 0;
 
         foreach ($data as $index => $collection) {
@@ -218,22 +232,23 @@ class Admin_Form_Document_Collections extends Admin_Form_AbstractDocumentSubForm
             $roleForm->addSubForm($collectionForm, $index);
         }
 
-        $this->addSubForm($roleForm, $roleName);
+        $this->addSubForm($roleForm, $this->normalizeName($roleName));
     }
 
     /**
      * Adds a collection to the form.
      * @param $colId
      */
-    protected function _addCollection($colId) {
+    protected function _addCollection($colId)
+    {
         $collection = new Opus_Collection($colId);
-        
+
         $collectionRole = $collection->getRole();
-        
+
         $roleName = $collectionRole->getName();
-        
+
         $roleForm = $this->_getRoleForm($roleName);
-        
+
         $collectionForm = new Admin_Form_Document_Collection();
 
         $collectionForm->populateFromModel($collection);
@@ -244,36 +259,39 @@ class Admin_Form_Document_Collections extends Admin_Form_AbstractDocumentSubForm
 
         $roleForm->removeGapsInSubFormOrder('collection');
     }
-    
-    protected function _getRoleForm($roleName) {
-        $roleForm = $this->getSubForm($roleName);
-        
+
+    protected function _getRoleForm($roleName)
+    {
+        $roleForm = $this->getSubForm($this->normalizeName($roleName));
+
         if (is_null($roleForm)) {
             $roleForm = new Admin_Form_Document_Section();
-            
+
             $roleForm->setLegend('default_collection_role_' . $roleName);
-            
-            $this->addSubForm($roleForm, $roleName);
+
+            $this->addSubForm($roleForm, $this->normalizeName($roleName));
         }
-        
+
         return $roleForm;
     }
-    
-    public function isEmpty() {
+
+    public function isEmpty()
+    {
         return count($this->getSubForms()) == 0;
     }
-    
-    public function createCollectionForm($position) {
+
+    public function createCollectionForm($position)
+    {
         $subform = new Admin_Form_Document_Collection();
-        
+
         $multiWrapper = $subform->getDecorator('multiWrapper');
 
-        if (!is_null($multiWrapper) && $multiWrapper instanceof Zend_Form_Decorator_HtmlTag) {
+        if (! is_null($multiWrapper) && $multiWrapper instanceof Zend_Form_Decorator_HtmlTag) {
             $multiClass = $multiWrapper->getOption('class');
             $multiClass .= ($position % 2 == 0) ? ' even' : ' odd';
             $multiWrapper->setOption('class', $multiClass);
         }
-        
+
         return $subform;
     }
 
@@ -281,15 +299,15 @@ class Admin_Form_Document_Collections extends Admin_Form_AbstractDocumentSubForm
      * Returns the collections grouped by CollectionRole.
      * @return array Collections grouped by CollectionRole
      */
-    public function getGroupedCollections($document) {
-        $groupedCollections = array();
+    public function getGroupedCollections($document)
+    {
+        $groupedCollections = [];
 
         foreach ($document->getCollection() as $collection) {
-
             $roleName = $collection->getRoleName();
 
-            if (!isset($groupedCollections[$roleName])) {
-                $groupedCollections[$roleName] = array();
+            if (! isset($groupedCollections[$roleName])) {
+                $groupedCollections[$roleName] = [];
             }
 
             $collections = $groupedCollections[$roleName];
@@ -301,6 +319,4 @@ class Admin_Form_Document_Collections extends Admin_Form_AbstractDocumentSubForm
 
         return $groupedCollections;
     }
-
 }
-

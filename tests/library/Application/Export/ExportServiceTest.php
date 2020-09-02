@@ -27,7 +27,7 @@
  * @category    Application
  * @package     Module_Export
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2017-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -40,6 +40,8 @@ class Application_Export_ExportServiceTest extends ControllerTestCase
     {
         parent::setUp();
 
+        $this->makeConfigurationModifiable();
+
         $this->_service = new Application_Export_ExportService();
     }
 
@@ -50,12 +52,13 @@ class Application_Export_ExportServiceTest extends ControllerTestCase
         $plugins = $this->_service->getAllPlugins();
 
         $this->assertInternalType('array', $plugins);
-        $this->assertCount(5, $plugins);
+        $this->assertCount(7, $plugins);
         $this->assertArrayHasKey('index', $plugins);
         $this->assertArrayHasKey('bibtex', $plugins);
         $this->assertArrayHasKey('ris', $plugins);
         $this->assertArrayHasKey('csv', $plugins);
         $this->assertArrayHasKey('publist', $plugins);
+        $this->assertArrayHasKey('datacite', $plugins);
 
         $this->assertInstanceOf('Zend_Config', $plugins['index']);
 
@@ -98,9 +101,9 @@ class Application_Export_ExportServiceTest extends ControllerTestCase
 
     public function testSetDefaults()
     {
-        $this->_service->setDefaults(new Zend_Config(array(
+        $this->_service->setDefaults(new Zend_Config([
             'class' => 'Export_Model_XsltExport'
-        )));
+        ]));
 
         $defaults = $this->_service->getDefaults();
 
@@ -109,10 +112,10 @@ class Application_Export_ExportServiceTest extends ControllerTestCase
 
     public function testAddPlugin()
     {
-        $this->_service->addPlugin('marc', new Zend_Config(array(
+        $this->_service->addPlugin('marc', new Zend_Config([
             'class' => 'Export_Model_XsltExport',
             'stylesheet' => 'marc.xslt'
-        )));
+        ]));
 
         $plugins = $this->_service->getAllPlugins();
 
@@ -128,5 +131,4 @@ class Application_Export_ExportServiceTest extends ControllerTestCase
         $this->assertEquals(100, $config->maxDocumentsGuest);
         $this->assertEquals('marc.xslt', $config->stylesheet);
     }
-
 }

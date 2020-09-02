@@ -35,7 +35,8 @@
 /**
  * Controller for editing account of logged in user.
  */
-class Account_IndexController extends Application_Controller_Action {
+class Account_IndexController extends Application_Controller_Action
+{
 
     /**
      * Custom access check to be called by parent class.  Returns the value of
@@ -43,16 +44,17 @@ class Account_IndexController extends Application_Controller_Action {
      *
      * @return boolean
      */
-    protected function customAccessCheck() {
-        $parentValue =  parent::customAccessCheck();
+    protected function customAccessCheck()
+    {
+        $parentValue = parent::customAccessCheck();
 
         $config = $this->getConfig();
 
-        if (!isset($config) or !isset($config->account->editOwnAccount)) {
+        if (! isset($config) or ! isset($config->account->editOwnAccount)) {
             return false;
         }
 
-        return $parentValue and $config->account->editOwnAccount;
+        return $parentValue && filter_var($config->account->editOwnAccount, FILTER_VALIDATE_BOOLEAN);
     }
 
     /**
@@ -60,21 +62,21 @@ class Account_IndexController extends Application_Controller_Action {
      *
      * TODO show title on page H" $this->view->title;
      */
-    public function indexAction() {
+    public function indexAction()
+    {
         $login = Zend_Auth::getInstance()->getIdentity();
 
-        if (!empty($login)) {
+        if (! empty($login)) {
             $accountForm = new Account_Form_Account();
             $account = new Opus_Account(null, null, $login);
             $accountForm->populateFromModel($account);
 
-            $actionUrl = $this->view->url(array('action' => 'save'));
+            $actionUrl = $this->view->url(['action' => 'save']);
 
             $accountForm->setAction($actionUrl);
 
             $this->renderForm($accountForm);
-        }
-        else {
+        } else {
             $params = $this->_helper->returnParams->getReturnParameters();
             $this->_helper->redirector->gotoSimple('index', 'auth', 'default', $params);
         }
@@ -86,13 +88,14 @@ class Account_IndexController extends Application_Controller_Action {
      *
      * TODO move logic into model or form
      */
-    public function saveAction() {
+    public function saveAction()
+    {
         $login = Zend_Auth::getInstance()->getIdentity();
 
         $config = $this->getConfig();
         $logger = $this->getLogger();
 
-        if (!empty($login) && $this->getRequest()->isPost()) {
+        if (! empty($login) && $this->getRequest()->isPost()) {
             $accountForm = new Account_Form_Account();
             $account = new Opus_Account(null, null, $login);
             $accountForm->populateFromModel($account);
@@ -110,9 +113,9 @@ class Account_IndexController extends Application_Controller_Action {
             }
 
             // check if username was provided and if it may be changed
-            if (!isset($postData['username'])
-                    || (isset($config->account->editPasswordOnly) && $config->account->editPasswordOnly)
-                    || (isset($config->account->changeLogin) && !$config->account->changeLogin)) {
+            if (! isset($postData['username'])
+                    || (isset($config->account->editPasswordOnly) && filter_var($config->account->editPasswordOnly, FILTER_VALIDATE_BOOLEAN))
+                    || (isset($config->account->changeLogin) && (! filter_var($config->account->changeLogin, FILTER_VALIDATE_BOOLEAN)))) {
                 $postData['username'] = $login;
             }
 
@@ -129,7 +132,7 @@ class Account_IndexController extends Application_Controller_Action {
 
                 $isLoginChanged = false;
 
-                if (isset($config->account->editPasswordOnly) && !$config->account->editPasswordOnly) {
+                if (isset($config->account->editPasswordOnly) && (! filter_var($config->account->editPasswordOnly, FILTER_VALIDATE_BOOLEAN))) {
                     $account->setFirstName($firstname);
                     $account->setLastName($lastname);
                     $account->setEmail($email);
@@ -155,9 +158,8 @@ class Account_IndexController extends Application_Controller_Action {
                 if ($isLoginChanged || $isPasswordChanged) {
                     Zend_Auth::getInstance()->clearIdentity();
                 }
-            }
-            else {
-                $actionUrl = $this->view->url(array('action' => 'save'));
+            } else {
+                $actionUrl = $this->view->url(['action' => 'save']);
                 $accountForm->setAction($actionUrl);
 
                 return $this->renderForm($accountForm);
@@ -166,6 +168,4 @@ class Account_IndexController extends Application_Controller_Action {
 
         $this->_helper->redirector('index');
     }
-
 }
-

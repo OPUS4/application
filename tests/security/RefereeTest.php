@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -26,15 +27,19 @@
  *
  * @category    Application Unit Test
  * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class RefereeTest extends ControllerTestCase {
+
+class RefereeTest extends ControllerTestCase
+{
+
+    protected $additionalResources = ['authz', 'database', 'view', 'mainMenu', 'navigation', 'translation'];
 
     private $_refereeAccount;
 
-    public function setUp() {
+    public function setUp()
+    {
         parent::setUp();
 
         $userRole = Opus_UserRole::fetchByName('reviewer');
@@ -42,7 +47,7 @@ class RefereeTest extends ControllerTestCase {
         $account = new Opus_Account();
         $account->setLogin('referee');
         $account->setPassword('refereereferee');
-        $account->setRole(array($userRole));
+        $account->setRole([$userRole]);
         $account->store();
 
         $this->_refereeAccount = $account;
@@ -51,28 +56,29 @@ class RefereeTest extends ControllerTestCase {
         $this->loginUser('referee', 'refereereferee');
     }
 
-    public function tearDown() {
+    public function tearDown()
+    {
         $this->logoutUser();
         $this->restoreSecuritySetting();
 
-        if (!is_null($this->_refereeAccount))
-        {
+        if (! is_null($this->_refereeAccount)) {
             $this->_refereeAccount->delete();
         }
 
         parent::tearDown();
     }
 
-    public function testAccessReviewModule() {
+    public function testAccessReviewModule()
+    {
         $this->useEnglish();
         $this->dispatch('/review');
         $this->assertQueryContentContains('//html/head/title', 'Review Documents');
         $this->assertQueryContentContains('//html/body', 'Review Documents');
     }
 
-    public function testPublishDocument() {
+    public function testPublishDocument()
+    {
         $this->markTestIncomplete('not tested');
         // TODO
     }
-
 }

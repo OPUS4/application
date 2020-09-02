@@ -16,6 +16,57 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_enrichmentkey_label_type">
+      <tuv xml:lang="en">
+        <seg>Type</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Typ</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_enrichmentkey_label_options">
+      <tuv xml:lang="en">
+        <seg>Type Configuration</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Typ-Konfiguration</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_enrichmentkey_options_description">
+      <tuv xml:lang="en">
+        <seg>Please first select a type to get details on how to configure it appropriately.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bitte wählen Sie erst einen Typ aus, um eine Erklärung zur Typkonfiguration zu erhalten.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_enrichmentkey_label_validation">
+      <tuv xml:lang="en">
+        <seg>Validate existing values?</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sollen existierende Werte validiert werden?</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_enrichmentkey_validation_description">
+      <tuv xml:lang="en">
+        <seg>
+          If this option is enabled, existing values of the given enrichment key are considered as
+          invalid if they did not conform with its type configuration.
+        </seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>
+          Durch das Aktivieren dieser Option können Sie bereits existierende Werte für diesen Enrichmentkey
+          nur dann speichern, wenn diese gemäß seiner aktuellen Typ-Konfiguration gültig sind.
+        </seg>
+      </tuv>
+    </tu>
+
     <tu tuid="admin_enrichmentkey_index">
       <tuv xml:lang="en">
         <seg>Enrichmentkeys Overview</seg>
@@ -61,6 +112,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_enrichmentkey_removeFromDocs">
+      <tuv xml:lang="en">
+        <seg>Remove Enrichmentkey from Documents</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Enrichmentkey in Dokumenten entfernen</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="admin_enrichmentkey_none_defined">
       <tuv xml:lang="en">
         <seg>No Enrichmentkeys defined.</seg>
@@ -85,6 +145,150 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>Interner Enrichmentkey ist nicht verfügbar.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="enrichmentkey_label_description">
+      <tuv xml:lang="en">
+        <seg>Translations for label used when showing the enrichment key.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Anzeige des Enrichment-Labels in den unterstützten Sprachen. </seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="enrichmentkey_description_description">
+      <tuv xml:lang="en">
+        <seg>Short description of the purpose and usage of this enrichment.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Beschreibung und Hinweise zur Nutzung des Enrichments.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_enrichmenttype_texttype_description">
+      <tuv xml:lang="en">
+        <seg>This type does not require any configuration.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dieser Typ erwartet keine Konfiguration.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_enrichmenttype_textareatype_description">
+      <tuv xml:lang="en">
+        <seg>This type does not require any configuration.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dieser Typ erwartet keine Konfiguration.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_enrichmenttype_booleantype_description">
+      <tuv xml:lang="en">
+        <seg>This type does not require any configuration.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dieser Typ erwartet keine Konfiguration.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_enrichmenttype_regextype_description">
+      <tuv xml:lang="en">
+        <seg>Please provide a valid regular expression that defines the set of values of this type.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bitte geben Sie einen gültigen regulären Ausdruck an, der die Wertemenge dieses Typs definiert.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_enrichmenttype_selecttype_description">
+      <tuv xml:lang="en">
+        <seg>Please provide the values line by line.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bitte geben Sie die Werte zeilenweise ein.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_enrichmentkey_protected_tooltip">
+      <tuv xml:lang="en">
+        <seg>This is a system-key and can not be modified.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dies ist ein Systemkey, welcher nicht modifiziert werden kann.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_enrichmentkey_unused_tooltip">
+      <tuv xml:lang="en">
+        <seg>This is an unused enrichment key.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dieser Enrichmentkey wird nicht benutzt.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_enrichmentkey_used_tooltip">
+      <tuv xml:lang="en">
+        <seg>This enrichmentkey is used.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dieser Enrichmentkey wird benutzt.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_enrichmentkey_unregistered_tooltip">
+      <tuv xml:lang="en">
+        <seg>This is an unregistered enrichment key.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dieser Enrichmentkey ist nicht registriert.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_enrichmentkey_remove_from_documents_title">
+      <tuv xml:lang="en">
+        <seg>Remove enrichment key %1$s from all documents</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Löschen des Enrichmentkeys %1$s in allen Dokumenten</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_enrichmentkey_remove_from_documents_description">
+      <tuv xml:lang="en">
+        <seg>Remove enrichment key %1$s from all documents? This operation does not delete the enrichment key itself.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Soll der Enrichmentkey %1$s wirklich in allen Dokumenten gelöscht werden? Der Enrichmentkey wird hierbei nicht gelöscht.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_enrichmentkey_remove_unregistered_from_documents_title">
+      <tuv xml:lang="en">
+        <seg>Remove unregistered enrichment key %1$s from all documents</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Löschen des nicht registrierten Enrichmentkeys %1$s in allen Dokumenten</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_enrichmentkey_remove_unregistered_from_documents_description">
+      <tuv xml:lang="en">
+        <seg>Remove unregistered enrichment key %1$s from all documents?</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Soll der nicht registrierte Enrichmentkey %1$s wirklich in allen Dokumenten gelöscht werden?</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_button_translations">
+      <tuv xml:lang="en">
+        <seg>Translations</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Übersetzungen</seg>
       </tuv>
     </tu>
 

@@ -39,7 +39,8 @@
  * The field becomes required, so it can't be empty, if another field meets a
  * certain condition.
  */
-class Application_Form_Validate_RequiredIf extends Zend_Validate_Abstract {
+class Application_Form_Validate_RequiredIf extends Zend_Validate_Abstract
+{
 
     const FAILED = 'failed';
 
@@ -65,33 +66,34 @@ class Application_Form_Validate_RequiredIf extends Zend_Validate_Abstract {
      * Validator messages.
      * @var <type>
      */
-    protected $_messageTemplates = array(
+    protected $_messageTemplates = [
         self::FAILED => "The values entered are not the same."
-    );
+    ];
 
-    public function __construct($options) {
+    public function __construct($options)
+    {
         $this->_dependsOnField = $options['target'];
         $this->_negateResult = $options['negate'];
         $this->_expectedValue = $options['targetValue'];
     }
 
-    public function isValid($value, $context = null) {
+    public function isValid($value, $context = null)
+    {
         $result = false;
 
         // check if field is not empty
-        if (!empty($value)) {
+        if (! empty($value)) {
             $result = true;
-        }
-        else {
+        } else {
             // check if field is required if it is empty
             $result = $this->_checkTargetField($context);
         }
 
         // Apply not to result if negateResult is true
-        $result = ($result XOR $this->_negateResult);
+        $result = ($result xor $this->_negateResult);
 
         // Set error message
-        if (!$result) {
+        if (! $result) {
             $this->_error(self::FAILED);
         }
 
@@ -99,7 +101,8 @@ class Application_Form_Validate_RequiredIf extends Zend_Validate_Abstract {
     }
 
 
-    protected function _checkTargetField($context = null) {
+    protected function _checkTargetField($context = null)
+    {
         $result = true;
 
         if (is_array($context)) {
@@ -108,24 +111,19 @@ class Application_Form_Validate_RequiredIf extends Zend_Validate_Abstract {
 
                 if (empty($this->_expectedValue)) {
                     // if no targetValue has been set check if notEmpty
-                    $result = !Zend_Validate::is($otherValue, "NotEmpty");
-                }
-                else {
+                    $result = ! Zend_Validate::is($otherValue, "NotEmpty");
+                } else {
                     // check if targetValue is expected
-                    $result = !Zend_Validate::is($otherValue, "Identical", array('token' => $this->_expectedValue));
+                    $result = ! Zend_Validate::is($otherValue, "Identical", ['token' => $this->_expectedValue]);
                 }
-            }
-            else {
+            } else {
                 // if value wasn't set
                 $result = true;
             }
-        }
-        else {
+        } else {
             // TODO throw something and log
         }
 
         return $result;
     }
-
 }
-
