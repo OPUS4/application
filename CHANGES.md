@@ -6,6 +6,7 @@
 
 * [OPUSVIER-4314] - Pagination-Link-Hitlist Leiste fehlt
 * [OPUSVIER-4305] - GitHub Info für OPUS 4 Application aktualisieren
+* [OPUSVIER-3566] - Unterschied in "Name der Sammlung" und "Bezeichnung des OAI-Sets" führen zu Fehlern beim Veröffentlichen
 
 ## Patches for 4.7 - 2020-08-27
 
