@@ -38,9 +38,6 @@ class Publish_Model_FormElementTest extends ControllerTestCase
 
     protected $_logger;
 
-    /**
-     * TODO OPUSVIER-4289 Use LogService
-     */
     public function setUp()
     {
         $writer = new Zend_Log_Writer_Null;

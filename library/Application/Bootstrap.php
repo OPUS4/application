@@ -224,7 +224,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base
         // TODO OPUSVIER-4289 Use LogService
         // TODO temporary hack until LogService refactoring is finished (OPUSVIER-3657)
         $logService = LogService::getInstance();
-        $logger = $logService->createLog('translation', null, '%timestamp%: %message%' . PHP_EOL, null);
+        $logger = $logService->getLog('translation');
 
         if (is_null($logger)) {
             $logger = $this->getResource('logging');
