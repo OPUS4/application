@@ -49,6 +49,7 @@ class FindMissingSeriesNumbers
     }
 
     /**
+     * TODO OPUSVIER-4289 Use LogService
      * Initialise the logger with the given file.
      */
     private function initLogger($logfileName)

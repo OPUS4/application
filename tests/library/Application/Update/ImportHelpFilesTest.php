@@ -40,6 +40,7 @@ class Application_Update_ImportHelpFilesTest extends ControllerTestCase
     {
         $database = new Opus_Translate_Dao();
         $database->removeAll();
+        parent::tearDown();
     }
 
     public function testRun()

@@ -49,6 +49,7 @@ echo "\nmigrating classification subjects -- can take a while";
 // Initialize logger.
 $logfileName = $argv[1];
 
+//TODO OPUSVIER-4289 Use LogService
 $logfile = @fopen($logfileName, 'a', false);
 $writer = new Zend_Log_Writer_Stream($logfile);
 $formatter = new Zend_Log_Formatter_Simple('%timestamp% %priorityName%: %message%' . PHP_EOL);

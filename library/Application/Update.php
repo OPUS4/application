@@ -74,7 +74,6 @@ class Application_Update extends Application_Update_PluginAbstract
 
         $application = new Zend_Application(APPLICATION_ENV, ["config" => $configFiles]);
 
-        //TODO OPUSVIER-4289 use LogService function to log
         // setup logging for updates
         $options = $application->mergeOptions($application->getOptions(), [
             'log' => [

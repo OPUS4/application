@@ -223,7 +223,8 @@ class Application_Bootstrap extends Opus_Bootstrap_Base
 
         // TODO OPUSVIER-4289 Use LogService
         // TODO temporary hack until LogService refactoring is finished (OPUSVIER-3657)
-        $logger = $this->getTranslationLog('translation');
+        $logService = LogService::getInstance();
+        $logger = $logService->createLog('translation', null, '%timestamp%: %message%' . PHP_EOL, null);
 
         if (is_null($logger)) {
             $logger = $this->getResource('logging');
@@ -389,27 +390,5 @@ class Application_Bootstrap extends Opus_Bootstrap_Base
     protected function _initIndexPlugin()
     {
         \Opus_Model_Xml_Cache::setIndexPluginClass('Opus\Search\Plugin\Index');
-    }
-
-    /**
-     * TODO OPUSVIER-4289 Remove this function
-     * TODO this function should be remove once OPUSVIER-3657 is done
-     * TODO log should be created using LogService
-     * TOOD log needs to include unique ID from main log
-     */
-    protected function getTranslationLog($name)
-    {
-        $config = $this->getResource('configuration');
-
-        if (isset($config->workspacePath)) {
-            $filePath = $config->workspacePath . DIRECTORY_SEPARATOR . 'log' . DIRECTORY_SEPARATOR . "$name.log";
-            $logfile = @fopen($filePath, 'a', false);
-            $writer = new Zend_Log_Writer_Stream($logfile);
-            $formatter = new Zend_Log_Formatter_Simple('%timestamp%: %message%' . PHP_EOL);
-            $writer->setFormatter($formatter);
-            return new Zend_Log($writer);
-        }
-
-        return null;
     }
 }
