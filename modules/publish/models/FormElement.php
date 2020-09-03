@@ -571,7 +571,7 @@ class Publish_Model_FormElement
     public function setCurrentCollectionId($setRoot = false)
     {
         if (! $setRoot) {
-            $collectionRole = Opus_CollectionRole::fetchByOaiName($this->_collectionRole);
+            $collectionRole = Opus_CollectionRole::fetchByName($this->_collectionRole);
             if (! is_null($collectionRole)) {
                 $rootCollection = $collectionRole->getRootCollection();
                 if (! is_null($rootCollection)) {
