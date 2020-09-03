@@ -30,6 +30,15 @@ If you have made modifications to OPUS 4 that could be useful for the entire com
 request][PULLREQUESTS]. We won't always be able to respond immediately, but we will take a look at your changes. 
 It is important to communicate the idea behind a modification.    
 
+## More Information
+
+Currently, we are using an internal Jira-System at KOBV to manage the tasks for the OPUS 4 development. We are starting
+to use GitHub more and more to communicate the development goals and progress. 
+At the moment, the [milestones][MILESTONES] here on GitHub mostly reflect larger technical debts that need to be fixed
+in order to continue to expand the functionality of OPUS 4 in the future. The [projects][PROJECTS] are meant to show
+currently ongoing efforts. However, we are still experimenting and trying to figure out how to use the GitHub features
+in the best possible way without it taking too much time away from the developing work.
+
 [OPUS4]: https://www.kobv.de/entwicklung/software/opus-4/
 [DEVDOC]: https://www.opus-repository.org
 [DOC]: https://www.opus-repository.org/userdoc
@@ -39,3 +48,5 @@ It is important to communicate the idea behind a modification.
 [ISSUES]: http://github.com/OPUS4/application/issues
 [MASTER]: https://github.com/OPUS4/application/tree/master
 [PULLREQUESTS]: https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/about-pull-requests
+[MILESTONES]: https://github.com/OPUS4/application/milestones
+[PROJECTS]: https://github.com/OPUS4/application/projects
