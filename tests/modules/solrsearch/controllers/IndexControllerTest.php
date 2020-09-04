@@ -1407,4 +1407,13 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
     {
         $this->markTestIncomplete();
     }
+
+    public function testPaginationParametersArePresentInFrontdoorLinks()
+    {
+        $this->dispatch('/solrsearch/index/search/searchtype/latest');
+
+        $this->assertXpathCount('//div[@class="results_title"]/a', 10);
+        $this->assertXpath('//div[@class="results_title"]/a[contains(@href, "start") and contains(@href, "rows/10")]');
+        $this->assertXpathCount('//div[@class="results_title"]/a[contains(@href, "start") and contains(@href, "rows/10")]', 10);
+    }
 }
