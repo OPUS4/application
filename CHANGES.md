@@ -2,7 +2,7 @@
 
 --- 
 
-## Patches for 4.7 - 2020-09-08
+## Patches for 4.7 - 2020-09-04
 
 * [OPUSVIER-4314] - Pagination-Link-Hitlist Leiste fehlt
 * [OPUSVIER-4305] - GitHub Info für OPUS 4 Application aktualisieren
