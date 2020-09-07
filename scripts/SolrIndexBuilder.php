@@ -43,4 +43,5 @@ require_once __DIR__ . '/common/bootstrap.php';
  */
 
 $builder = new Opus\Search\IndexBuilder();
+$builder->setVersion(Application_Configuration::getOpusVersion());
 $builder->run();
