@@ -26,23 +26,21 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @author      Sascha Szott <szott@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2010-2020, OPUS 4 development team
+ * @copyright   Copyright (c) 2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-require_once __DIR__ . '/common/bootstrap.php';
+require_once __DIR__ . '/../scripts/common/bootstrap.php';
 
 /**
- * Script for indexing documents and index maintenance.
+ * OPUS 4 maintenance tool.
  *
  * For more information run the `help` command.
- *
- *     $ ./SolrIndexBuilder.php help
+ *   $ bin/opus4 help
  */
 
 $builder = new Opus\Search\IndexBuilder();
 $builder->setVersion(Application_Configuration::getOpusVersion());
-$builder->setDefaultCommand('index:index', true);
+$builder->setDefaultCommand('list');
 $builder->run();
