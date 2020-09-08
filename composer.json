@@ -68,6 +68,6 @@
     "phpmd": "phpmd library xml cleancode,unusedcode,design,naming --reportfile build/phpmd.xml --ignore-violations-on-exit",
     "phploc": "phploc --log-csv build/phploc.csv src",
     "phpcpd": "phpcpd . --min-lines 3 --min-tokens 30 --log-pmd build/pmd-cpd.xml --progress || true",
-    "index": "php scripts/SolrIndexBuilder.php"
+    "index": "bin/opus4 index:index"
   }
 }

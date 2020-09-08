@@ -43,4 +43,6 @@ cd $INSTANCE_DIR/server/scripts
 # remove all fulltext associated with hhar test documents
 php opus-console.php snippets/delete_files.php
 
-php SolrIndexBuilder.php
+cd $INSTANCE_DIR
+
+php bin/opus4 index:index
