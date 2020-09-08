@@ -1,4 +1,3 @@
-#!/usr/bin/env php
 <?php
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
@@ -26,19 +25,31 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
+ * @package     Application_Console
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-require_once __DIR__ . '/../scripts/common/bootstrap.php';
+use Opus\Search\IndexBuilder\IndexCommand;
+use Opus\Search\IndexBuilder\OptimizeCommand;
+use Opus\Search\IndexBuilder\RemoveCommand;
+use Symfony\Component\Console\Application;
 
 /**
- * OPUS 4 maintenance tool.
- *
- * For more information run the `help` command.
- *   $ bin/opus4 help
+ * Command line application for OPUS 4 management tasks.
  */
+class Application_Console_App extends Application
+{
 
-$app = new Application_Console_App();
-$app->run();
+    public function __construct()
+    {
+        parent::__construct('OPUS 4 Console Tool', Application_Configuration::getOpusVersion());
+
+        $this->add(new IndexCommand());
+        $this->add(new RemoveCommand());
+        $this->add(new OptimizeCommand());
+
+        $this->setDefaultCommand('list');
+    }
+}
