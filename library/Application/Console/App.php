@@ -31,9 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Search\IndexBuilder\IndexCommand;
-use Opus\Search\IndexBuilder\OptimizeCommand;
-use Opus\Search\IndexBuilder\RemoveCommand;
+use Opus\Search\Console\IndexCommand;
+use Opus\Search\Console\RemoveCommand;
 use Symfony\Component\Console\Application;
 
 /**
@@ -48,7 +47,6 @@ class Application_Console_App extends Application
 
         $this->add(new IndexCommand());
         $this->add(new RemoveCommand());
-        $this->add(new OptimizeCommand());
 
         $this->setDefaultCommand('list');
     }
