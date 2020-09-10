@@ -25,6 +25,8 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+use Opus\Log\LogService;
+
 /**
  * Provide methods to setup and run the application. It also provides a couple of static
  * variables for quicker access to application components like the front controller.
