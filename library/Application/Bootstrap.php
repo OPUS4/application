@@ -222,9 +222,6 @@ class Application_Bootstrap extends Opus_Bootstrap_Base
     protected function _initTranslation()
     {
         $this->bootstrap(['Configuration', 'Session', 'Logging', 'ZendCache']);
-
-        // TODO OPUSVIER-4289 Use LogService
-        // TODO temporary hack until LogService refactoring is finished (OPUSVIER-3657)
         $logService = LogService::getInstance();
         $logger = $logService->getLog('translation');
 
