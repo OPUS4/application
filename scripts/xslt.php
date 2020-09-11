@@ -32,6 +32,9 @@
  * @version     $Id$
  */
 
+// TODO move this script (it is used for testing/development to test out XSLT scripts)
+//      maybe add as command in 'dev' section of opus4 tool
+
 $args = $GLOBALS['argv'];
 
 if (count($args) < 3) {
