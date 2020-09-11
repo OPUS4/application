@@ -40,6 +40,7 @@
  * Diese Dokumente müssen aktuell manuell behandelt werden, da das Dokument
  * sonst nicht fehlerfrei indexiert werden kann (siehe OPUSVIER-2240).
  *
+ * TODO integrity check (where to put it?) - should be part of problem analysis package
  */
 
 $updateRequired = 0;

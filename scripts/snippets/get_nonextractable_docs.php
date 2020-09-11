@@ -34,6 +34,8 @@
 
 /**
  * Finds all non-extractable full texts.
+ *
+ * TODO make part of diagnostic tools for index problems
  */
 
 $host = 'opus4web.zib.de';

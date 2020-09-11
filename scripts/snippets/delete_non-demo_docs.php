@@ -36,6 +36,7 @@
  * Erstellt die Demoinstanz, in der nur die Testdokumente mit den IDs 91 bis 110
  * enthalten sind.
  *
+ * TODO move script (it is used for demo instance)
  */
 
 $finder = new Opus_DocumentFinder();

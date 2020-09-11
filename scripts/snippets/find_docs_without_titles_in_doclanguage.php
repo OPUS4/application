@@ -36,6 +36,7 @@
  *
  * Diese Dokumente werden in der Trefferansicht als "Unbekanntes Dokument" angezeigt.
  *
+ *  TODO integrity check (where to put it?) - should be part of problem analysis package
  */
 
 $updateRequired = 0;

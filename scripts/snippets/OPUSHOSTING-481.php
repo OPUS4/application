@@ -36,6 +36,8 @@
  * Dieses Script gibt die IDs aller veröffentlichten Dokumente aus, bei denen
  * Jane Doe der Name des Autors ODER der Name einer sonstigen beteiligten
  * Personen (advisor, contributor, editor, other, translator) ist
+ *
+ * TODO very specific script (make generic command?) - problem analysis plugin
  */
 
 $firstName = "Jane";

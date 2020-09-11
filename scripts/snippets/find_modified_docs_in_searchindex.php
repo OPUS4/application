@@ -39,6 +39,7 @@
  *
  * Siehe dazu auch das Ticket OPUSVIER-2853.
  *
+ * TODO convert to command for index analysis
  */
 $numOfModified = 0;
 $numOfErrors = 0;

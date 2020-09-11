@@ -34,6 +34,8 @@
  * TODO create test that verifies completeness (compare with describe function)
  */
 
+// TODO move script (is used for testing purposes) - also is probably out of date (since data model changes)
+
 $doc = new Opus_Document();
 $doc->setType('all');
 $doc->setServerState('published');

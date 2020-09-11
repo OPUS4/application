@@ -34,6 +34,8 @@
 
 /**
  * Tries to export and import all documents.
+ *
+ * TODO move (this is a test script)
  */
 
 $docFinder = new Opus_DocumentFinder();

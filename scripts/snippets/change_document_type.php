@@ -34,7 +34,7 @@
  * @version     $Id: update-thesispublisher.php 11775 2013-06-25 14:28:41Z tklein $
  */
 /**
- *
+ * TODO should this be part of administration, part of opus4 tool
  */
 if (basename(__FILE__) !== basename($argv[0])) {
     echo "script must be executed directy (not via opus-console)\n";

@@ -38,6 +38,7 @@
  *
  * Siehe dazu auch die Story OPUSVIER-2368.
  *
+ * TODO convert to command for index analysis
  */
 
 $numOfErrors = 0;

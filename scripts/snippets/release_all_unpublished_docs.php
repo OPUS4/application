@@ -34,6 +34,8 @@
 
 /**
  * Releases all documents in server state unpublished.
+ *
+ * TODO useful? should it be part of opus4 or opus4dev
  */
 
 $docFinder = new Opus_DocumentFinder();

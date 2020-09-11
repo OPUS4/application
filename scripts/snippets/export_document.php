@@ -34,6 +34,8 @@
 
 /**
  * Returns the XML representation of the document with given id $id.
+ *
+ * TODO convert to command (overlaps with opus-dump-document-xml.php)
  */
 
 if (isset($argv[2]) && ! empty($argv[2]) && is_numeric($argv[2])) {
