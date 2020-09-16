@@ -50,7 +50,7 @@ echo "\nmigrating classification subjects -- can take a while";
 $logfileName = $argv[1];
 
 /**
- * TODO OPUSVIER-4289 LogService cannot be used here as the log is being written into the current folder.
+ * TODO Not using LogService, because file is written to working directory (OPUSVIER-4289)
  */
 $logfile = @fopen($logfileName, 'a', false);
 $writer = new Zend_Log_Writer_Stream($logfile);
