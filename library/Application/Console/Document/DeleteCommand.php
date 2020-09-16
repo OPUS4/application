@@ -129,15 +129,14 @@ EOT;
                 $output->writeln("Document $startId has been deleted");
             } else {
                 $progress = new ProgressBar($output, $docCount);
-                $this->deleteDocuments($docIds, $permanent, $progress);
+                $this->deleteDocuments($progress, $docIds, $permanent);
             }
-        }
-        else {
+        } else {
             $output->writeln('Deletion cancelled');
         }
     }
 
-    protected function deleteDocuments($docIds, $permanent = false, $progress)
+    protected function deleteDocuments($progress, $docIds, $permanent = false)
     {
         $progress->start();
         foreach ($docIds as $docId) {
