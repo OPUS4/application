@@ -124,10 +124,9 @@ EOT;
         $question = new ConfirmationQuestion($questionText, true);
 
         if ($askHelper->ask($input, $output, $question)) {
-            $output->writeln('Deleting all documents ...');
-
             if ($this->isSingleDocument()) {
                 $this->deleteDocument($startId, $permanent);
+                $output->writeln("Document $startId has been deleted");
             } else {
                 $progress = new ProgressBar($output, $docCount);
                 $this->deleteDocuments($docIds, $permanent, $progress);
