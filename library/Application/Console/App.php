@@ -33,6 +33,7 @@
 
 use Opus\Search\Console\IndexCommand;
 use Opus\Search\Console\RemoveCommand;
+use Opus\Search\Console\ExtractCommand;
 use Symfony\Component\Console\Application;
 
 /**
@@ -47,6 +48,10 @@ class Application_Console_App extends Application
 
         $this->add(new IndexCommand());
         $this->add(new RemoveCommand());
+        $this->add(new ExtractCommand());
+        // $this->add(new Application_Console_Index_RepairCommand());
+        // $this->add(new Application_Console_Index_CheckCommand());
+        $this->add(new Application_Console_Document_DeleteCommand());
 
         $this->setDefaultCommand('list');
     }
