@@ -35,7 +35,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Opus\Console\BaseDocumentCommand;
-use Opus\Console\Helper\ProgressBar;
+use Opus\Console\Helper\ProgressMatrix;
 use Opus\Search\Console\Helper\DocumentHelper;
 
 /**
@@ -128,7 +128,7 @@ EOT;
                 $this->deleteDocument($startId, $permanent);
                 $output->writeln("Document $startId has been deleted");
             } else {
-                $progress = new ProgressBar($output, $docCount);
+                $progress = new ProgressMatrix($output, $docCount);
                 $this->deleteDocuments($progress, $docIds, $permanent);
             }
         } else {
