@@ -59,14 +59,19 @@ class Application_Update_SetStatusOfExistingDoiTest extends ControllerTestCase
 
         $modified = $doc->getServerDateModified();
 
+        $debug = "$modified (before)" . PHP_EOL;
+
         $doc = new Opus_Document($docId);
         $modified2 = $doc->getServerDateModified();
+
+        $debug .= "$modified2 (before - from new object)" . PHP_EOL;
 
         $time1 = Opus_Date::getNow();
         sleep(2);
         $time2 = Opus_Date::getNow();
 
-        // TODO check value in database
+        $debug .= "$time1 - sleep(2) - $time2" . PHP_EOL;
+        $debug .=  $this->getServerDateModifiedFromDatabase($docId) . ' (before - from database)' . PHP_EOL;
 
         $update = new Application_Update_SetStatusOfExistingDoi();
         $update->setLogger(new MockLogger());
@@ -74,16 +79,24 @@ class Application_Update_SetStatusOfExistingDoiTest extends ControllerTestCase
 
         $update->run();
 
-        // TODO check value in database again
+        $debug .=  $this->getServerDateModifiedFromDatabase($docId) . ' (after - from database)' . PHP_EOL;
 
         $doc = new Opus_Document($docId);
 
-        $message = "{$doc->getServerDateModified()} (after)" . PHP_EOL;
-        $message .= "$modified (before)" . PHP_EOL;
-        $message .= "$modified2 (before - from stored doc)" . PHP_EOL;
-        $message .= "$time1 - sleep(2) - $time2";
+        $debug .= "{$doc->getServerDateModified()} (after - from new object)" . PHP_EOL;
 
-        $this->assertEquals(0, $doc->getServerDateModified()->compare($modified), $message);
+        $this->assertEquals(0, $doc->getServerDateModified()->compare($modified), $debug);
         $this->assertEquals('registered', $doc->getIdentifierDoi(0)->getStatus());
+    }
+
+    protected function getServerDateModifiedFromDatabase($docId)
+    {
+        $table = Opus_Db_TableGateway::getInstance('Opus_Db_Documents');
+        $select = $table->select()
+            ->from($table, ['server_date_modified'])
+            ->where("id = $docId");
+        $result = $table->getAdapter()->fetchCol($select);
+
+        return $result[0];
     }
 }
