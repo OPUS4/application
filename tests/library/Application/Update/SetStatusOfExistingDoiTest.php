@@ -71,7 +71,7 @@ class Application_Update_SetStatusOfExistingDoiTest extends ControllerTestCase
         $time2 = Opus_Date::getNow();
 
         $debug .= "$time1 - sleep(2) - $time2" . PHP_EOL;
-        $debug .=  $this->getServerDateModifiedFromDatabase($docId) . ' (before - from database)' . PHP_EOL;
+        $debug .= $this->getServerDateModifiedFromDatabase($docId) . ' (before - from database)' . PHP_EOL;
 
         $update = new Application_Update_SetStatusOfExistingDoi();
         $update->setLogger(new MockLogger());
@@ -79,7 +79,7 @@ class Application_Update_SetStatusOfExistingDoiTest extends ControllerTestCase
 
         $update->run();
 
-        $debug .=  $this->getServerDateModifiedFromDatabase($docId) . ' (after - from database)' . PHP_EOL;
+        $debug .= $this->getServerDateModifiedFromDatabase($docId) . ' (after - from database)' . PHP_EOL;
 
         $doc = new Opus_Document($docId);
 
