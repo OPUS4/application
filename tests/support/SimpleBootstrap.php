@@ -78,7 +78,7 @@ class SimpleBootstrap extends Zend_Application_Bootstrap_Bootstrap
         $logger = $logService->createLog(LogService::DEFAULT_LOG, null, null, $logFilename);
         $logLevel = $logService->getDefaultPriority();
 
-        Zend_Registry::set('LOG_LEVEL', $logLevel);
+        Zend_Registry::set('Zend_Log', $logger);
         Zend_Registry::set('LOG_LEVEL', $logLevel);
 
         $logger->debug('Logging initialized');
