@@ -55,6 +55,8 @@ class Application_Update_SetStatusOfExistingDoiTest extends ControllerTestCase
         $doc->addIdentifier($doi);
         $docId = $doc->store();
 
+        sleep(2);
+
         $modified = $doc->getServerDateModified();
 
         $doc = new Opus_Document($docId);
@@ -64,11 +66,15 @@ class Application_Update_SetStatusOfExistingDoiTest extends ControllerTestCase
         sleep(2);
         $time2 = Opus_Date::getNow();
 
+        // TODO check value in database
+
         $update = new Application_Update_SetStatusOfExistingDoi();
         $update->setLogger(new MockLogger());
         $update->setQuietMode(true);
 
         $update->run();
+
+        // TODO check value in database again
 
         $doc = new Opus_Document($docId);
 
