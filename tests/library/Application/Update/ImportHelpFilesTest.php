@@ -36,6 +36,13 @@ class Application_Update_ImportHelpFilesTest extends ControllerTestCase
 
     protected $additionalResources = 'translation';
 
+    public function tearDown()
+    {
+        $database = new Opus_Translate_Dao();
+        $database->removeAll();
+        parent::tearDown();
+    }
+
     public function testRun()
     {
         $database = new Opus_Translate_Dao();

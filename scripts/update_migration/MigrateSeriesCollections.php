@@ -50,6 +50,8 @@ class FindMissingSeriesNumbers
 
     /**
      * Initialise the logger with the given file.
+     *
+     * TODO Not using LogService, because file is written to working directory (OPUSVIER-4289)
      */
     private function initLogger($logfileName)
     {
