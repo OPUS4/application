@@ -49,7 +49,7 @@ class Export_Bootstrap extends Zend_Application_Module_Bootstrap
         $exporter = Zend_Registry::get('Opus_Exporter');
 
         if (is_null($exporter)) {
-            if (!$updateInProgress) {
+            if (! $updateInProgress) {
                 Zend_Registry::get('Zend_Log')->warn(__METHOD__ . ' exporter not found');
             }
             return;
