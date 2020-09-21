@@ -71,7 +71,7 @@ class Application_View_Helper_ResultTitle extends Application_View_Helper_Docume
     public function getFrontdoorUrl($document)
     {
         if (isset($this->view->start)) {
-            $start = $this->view->start + $this->view->partialCounter;
+            $start = $this->view->start + $this->view->partialCounter - 1;
         } else {
             $start = null;
         }
