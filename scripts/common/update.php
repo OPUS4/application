@@ -75,7 +75,8 @@ $options = $application->mergeOptions($application->getOptions(), [
     'log' => [
         'filename' => 'update.log',
         'level' => 'INFO'
-    ]
+    ],
+    'updateInProgress' => true
 ]);
 
 $application->setOptions($options);
