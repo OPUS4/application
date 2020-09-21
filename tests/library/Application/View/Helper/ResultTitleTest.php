@@ -103,7 +103,7 @@ class Application_View_Helper_ResultTitleTest extends ControllerTestCase
         $output = $this->helper->resultTitle();
 
         $this->assertEquals(
-            "<a href=\"/frontdoor/index/index/docId/$docId/start/10/rows/20/searchtype/all\" class=\"missing_title\">untitled document</a>",
+            "<a href=\"/frontdoor/index/index/docId/$docId/start/9/rows/20/searchtype/all\" class=\"missing_title\">untitled document</a>",
             $output
         );
     }
