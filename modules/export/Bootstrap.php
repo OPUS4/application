@@ -37,19 +37,25 @@ class Export_Bootstrap extends Zend_Application_Module_Bootstrap
 
     protected function _initExport()
     {
-        $config = Zend_Registry::get('Zend_Config');
+        $updateInProgress = Application_Configuration::isUpdateInProgress();
 
         if (! Zend_Registry::isRegistered('Opus_Exporter')) {
-            Zend_Registry::get('Zend_Log')->err(__METHOD__ . ' exporter not found');
+            if (! $updateInProgress) {
+                Zend_Registry::get('Zend_Log')->warn(__METHOD__ . ' exporter not found');
+            }
             return;
         }
 
         $exporter = Zend_Registry::get('Opus_Exporter');
 
         if (is_null($exporter)) {
-            Zend_Registry::get('Zend_Log')->err(__METHOD__ . ' exporter not found');
+            if (! $updateInProgress) {
+                Zend_Registry::get('Zend_Log')->warn(__METHOD__ . ' exporter not found');
+            }
             return;
         }
+
+        $config = Zend_Registry::get('Zend_Config');
 
         // only add XML export if user has access and stylesheet is configured
         if (isset($config->export->stylesheet->frontdoor)) {
