@@ -112,7 +112,12 @@ class Publish_View_Helper_Group extends Publish_View_Helper_Fieldset
                     break;
 
                 case "Zend_Form_Element_Select":
-                    $fieldset .= $this->renderHtmlSelect($field, $options);
+                    if (is_array($options)) {
+                        $selectOptions = $options;
+                    } else {
+                        $selectOptions = null;
+                    }
+                    $fieldset .= $this->renderHtmlSelect($field, $selectOptions);
                     break;
 
                 case 'Zend_Form_Element_Checkbox':
