@@ -79,7 +79,8 @@ class Application_Update extends Application_Update_PluginAbstract
             'log' => [
                 'filename' => 'update.log',
                 'level' => 'INFO'
-            ]
+            ],
+            'updateInProgress' => true
         ]);
 
         $application->setOptions($options);
