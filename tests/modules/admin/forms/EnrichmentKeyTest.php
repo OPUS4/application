@@ -421,6 +421,7 @@ class Admin_Form_EnrichmentKeyTest extends ControllerTestCase
         $oldKey = 'EnrichmentTestKey';
 
         $database = new Opus_Translate_Dao();
+        $database->removeAll();
         $database->setTranslation($oldKey, [
             'en' => 'English',
             'de' => 'Deutsch'
@@ -458,6 +459,7 @@ class Admin_Form_EnrichmentKeyTest extends ControllerTestCase
         $key = 'EnrichmentTestKey';
 
         $database = new Opus_Translate_Dao();
+        $database->removeAll();
         $database->setTranslation($key, [
             'en' => 'English',
             'de' => 'Deutsch'
