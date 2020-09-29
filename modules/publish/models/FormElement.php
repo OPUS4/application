@@ -165,30 +165,40 @@ class Publish_Model_FormElement
     {
         switch ($workflow) {
             case 'Person':
+                $fields = [];
+                $name = $this->_elementName . self::FIRST;
+
                 //creates two subfields for first and last name
-                $first = new Publish_Model_FormElement(
-                    $this->form,
-                    $this->_elementName . self::FIRST,
-                    false,
-                    'text',
-                    'Person'
-                );
-                $first->isSubField = true;
-                $first->setDefaultValue($this->_default, self::FIRST);
-                $elementFirst = $first->transform();
+                if (! $this->isElementPresent($name)) {
+                    $first = new Publish_Model_FormElement(
+                        $this->form,
+                        $name,
+                        false,
+                        'text',
+                        'Person'
+                    );
+                    $first->isSubField = true;
+                    $first->setDefaultValue($this->_default, self::FIRST);
+                    $elementFirst = $first->transform();
+                    $fields[] = $elementFirst;
+                }
 
-                $last = new Publish_Model_FormElement(
-                    $this->form,
-                    $this->_elementName . self::LAST,
-                    $this->_required,
-                    'text',
-                    'Person'
-                );
-                $last->isSubField = false;
-                $last->setDefaultValue($this->_default, self::LAST);
-                $elementLast = $last->transform();
+                $name = $this->_elementName . self::LAST;
+                if (! $this->isElementPresent($name)) {
+                    $last = new Publish_Model_FormElement(
+                        $this->form,
+                        $name,
+                        $this->_required,
+                        'text',
+                        'Person'
+                    );
+                    $last->isSubField = false;
+                    $last->setDefaultValue($this->_default, self::LAST);
+                    $elementLast = $last->transform();
+                    $fields[] = $elementLast;
+                }
 
-                return [$elementFirst, $elementLast];
+                return $fields;
                 break;
 
             case 'Series':
@@ -701,6 +711,11 @@ class Publish_Model_FormElement
         return $this->_subFormElements;
     }
 
+    /**
+     * If elements are already present do not add again.
+     *
+     * @param $subFormElements
+     */
     public function addSubFormElements($subFormElements)
     {
         $this->_subFormElements = array_merge($subFormElements, $this->_subFormElements);
@@ -709,5 +724,18 @@ class Publish_Model_FormElement
     public function addSubFormElement($subField)
     {
         $this->_subFormElements[] = $subField;
+    }
+
+    protected function isElementPresent($name)
+    {
+        if (is_array($this->_subFormElements)) {
+            foreach ($this->_subFormElements as $element) {
+                if ($element->getLabel() === $name) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }
