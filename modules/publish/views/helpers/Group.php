@@ -49,7 +49,7 @@ class Publish_View_Helper_Group extends Publish_View_Helper_Fieldset
         if ($name == null && $value == null) {
             $errorMessage = $this->view->translate('template_error_unknown_field');
             // TODO move to CSS
-            return "<br/><div style='width: 400px; color:red;'>" . $errorMessage . "</div><br/><br/>";
+            return "<br/><div style='width: 400px; color:red;'>$errorMessage</div><br/><br/>";
         }
         return $this->_renderGroup($value, $options, $name);
     }
@@ -70,7 +70,7 @@ class Publish_View_Helper_Group extends Publish_View_Helper_Fieldset
             $fieldset .= "<a name='current'></a>";
         }
 
-        $fieldset .= "<fieldset class='left-labels' id='" . $group['Name'] . "' />";
+        $fieldset .= "<fieldset class='left-labels' id='" . $group['Name'] . "'>";
         $fieldset .= $this->getLegendFor($group['Name']);
         $fieldset .= $this->getFieldsetHint($group['Name']);
 
@@ -82,7 +82,7 @@ class Publish_View_Helper_Group extends Publish_View_Helper_Fieldset
             // besonderer Mechanismus erforderlich für Collection Roles (CRs sind erkennbar, weil nur bei ihnen
             // $group['Counter'] auf null gesetzt wurde)
             // dort kann jede Gruppe aus unterschiedlich vielen Select-Boxen aufgebaut sein
-            // daher greift der Mechanimus der Auswertung von $group['Counter'] hier nicht
+            // daher greift der Mechanismus der Auswertung von $group['Counter'] hier nicht
             if (is_null($group['Counter']) && $index > 0 && $field['label'] !== 'choose_collection_subcollection'
                     && $field['label'] !== 'endOfCollectionTree') {
                 $groupCount++;
