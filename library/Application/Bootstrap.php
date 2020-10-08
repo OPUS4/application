@@ -25,6 +25,8 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+use Opus\Log\LogService;
+
 /**
  * Provide methods to setup and run the application. It also provides a couple of static
  * variables for quicker access to application components like the front controller.
@@ -220,9 +222,8 @@ class Application_Bootstrap extends Opus_Bootstrap_Base
     protected function _initTranslation()
     {
         $this->bootstrap(['Configuration', 'Session', 'Logging', 'ZendCache']);
-
-        // TODO temporary hack until LogService refactoring is finished (OPUSVIER-3657)
-        $logger = $this->getTranslationLog('translation');
+        $logService = LogService::getInstance();
+        $logger = $logService->getLog('translation');
 
         if (is_null($logger)) {
             $logger = $this->getResource('logging');
@@ -388,26 +389,5 @@ class Application_Bootstrap extends Opus_Bootstrap_Base
     protected function _initIndexPlugin()
     {
         \Opus_Model_Xml_Cache::setIndexPluginClass('Opus\Search\Plugin\Index');
-    }
-
-    /**
-     * TODO this function should be remove once OPUSVIER-3657 is done
-     * TODO log should be created using LogService
-     * TOOD log needs to include unique ID from main log
-     */
-    protected function getTranslationLog($name)
-    {
-        $config = $this->getResource('configuration');
-
-        if (isset($config->workspacePath)) {
-            $filePath = $config->workspacePath . DIRECTORY_SEPARATOR . 'log' . DIRECTORY_SEPARATOR . "$name.log";
-            $logfile = @fopen($filePath, 'a', false);
-            $writer = new Zend_Log_Writer_Stream($logfile);
-            $formatter = new Zend_Log_Formatter_Simple('%timestamp%: %message%' . PHP_EOL);
-            $writer->setFormatter($formatter);
-            return new Zend_Log($writer);
-        }
-
-        return null;
     }
 }

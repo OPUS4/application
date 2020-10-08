@@ -115,6 +115,7 @@ class Admin_Model_EnrichmentKeys extends Application_Model_Abstract
      * @param null $oldName Optionally old name if it has been changed
      *
      * TODO create keys if they don't exist
+     * TODO what happens if renameKey into keys that already exist?
      */
     public function createTranslations($name, $oldName = null)
     {
