@@ -41,6 +41,8 @@
  * Dieses Problem tritt auf bei der Migration aus OPUS3, wo es noch kein
  * separates Feld für das Ablegen des akademischen Titels einer Person gab.
  *
+ * TODO fixing tool - where should it go?
+ *
  */
 
 foreach (Opus_Person::getAll() as $person) {

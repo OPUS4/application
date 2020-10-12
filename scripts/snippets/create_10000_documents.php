@@ -33,6 +33,8 @@
 
 /**
  * script to create 10000 documents, e.g., for performance testing
+ *
+ * TODO move as command to opus4dev tool
  */
 
 for ($i = 1; $i < 10000; $i++) {

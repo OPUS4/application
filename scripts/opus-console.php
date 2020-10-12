@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -35,6 +34,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
+
+// TODO integrate, if possible, as command into opus4 script
 
 // Bootstrapping
 require_once dirname(__FILE__) . '/common/bootstrap.php';

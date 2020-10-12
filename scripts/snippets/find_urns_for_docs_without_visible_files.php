@@ -35,6 +35,8 @@
 /**
  * Dieses Script sucht Dokumente ohne sichtbare Dateien, fuer die bereits
  * eine URN vergeben wurde.
+ *
+ * TODO integrity check - make part of tools (console, administration)
  */
 
 $updateRequired = 0;

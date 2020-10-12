@@ -36,6 +36,9 @@
  * @version     $Id$
  */
 
+// TODO integrate as command in opus4 tool
+// TODO add exit command
+
 $config = Zend_Registry::get('Zend_Config');
 if (isset($config->security) && filter_var($config->security, FILTER_VALIDATE_BOOLEAN)) {
     // setup realm

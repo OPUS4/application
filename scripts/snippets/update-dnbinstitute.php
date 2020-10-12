@@ -32,7 +32,8 @@
  * @version     $Id: update-thesispublisher.php 11775 2013-06-25 14:28:41Z tklein $
  */
 /**
- *
+ * TODO find out what it does - make command?
+ *      it adds ThesisPublisher to specified document types
  */
 if (basename(__FILE__) !== basename($argv[0])) {
     echo "script must be executed directy (not via opus-console)\n";

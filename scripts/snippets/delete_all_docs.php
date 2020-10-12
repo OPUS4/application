@@ -35,6 +35,8 @@
 /**
  * Removes all documents
  *
+ * TODO convert to command (with confirmation check)
+ *
  */
 
 $finder = new Opus_DocumentFinder();

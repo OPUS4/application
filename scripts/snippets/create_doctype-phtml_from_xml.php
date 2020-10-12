@@ -35,6 +35,8 @@
  * This script takes a doctype XML-definition as input and spills out the
  * PHP instructions for use in the corresponding .phtml file.
  * It requires the file doctype.xslt to be in the same directory as this script.
+ *
+ * TODO move (is used for development and probably only of limited use)
  */
 
 if ($argc == 2) {

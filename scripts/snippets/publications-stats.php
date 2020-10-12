@@ -34,6 +34,8 @@
 
 /**
  * Basic publication statistics (based on server_published_date)
+ *
+ * TODO make command in opus4 tool
  */
 
 $df = new Opus_DocumentFinder();

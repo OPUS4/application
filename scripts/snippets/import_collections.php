@@ -36,6 +36,7 @@
  * file format: each collection (name and number) on a separate line
  * collection name and number are separated by | character
  *
+ * TODO make a command for importing collections in opus4 tool
  */
 
 // ID of parent collection

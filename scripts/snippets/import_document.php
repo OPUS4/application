@@ -35,6 +35,8 @@
 /**
  * Imports the XML representation from stdin and creates a new OPUS 4
  * document (with a new ID).
+ *
+ * TODO make part of opus4 tool
  */
 
 $xml = '';

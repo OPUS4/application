@@ -38,6 +38,8 @@
  *
  * @category    Application
  * @package     Scripts
+ *
+ * TODO move this file to another location (it is used for testing)
  */
 class FakeSMTP
 {
