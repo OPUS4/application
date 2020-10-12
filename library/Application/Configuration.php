@@ -375,4 +375,11 @@ class Application_Configuration
     {
         return Zend_Registry::get('Zend_Translate');
     }
+
+    public static function isUpdateInProgress()
+    {
+        $config = Zend_Registry::get('Zend_Config');
+
+        return isset($config->updateInProgress) && filter_var($config->updateInProgress, FILTER_VALIDATE_BOOLEAN);
+    }
 }

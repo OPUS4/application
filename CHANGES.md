@@ -2,6 +2,14 @@
 
 --- 
 
+## Patches for 4.7 - 2020-09-29
+
+* [OPUSVIER-4204] - fehlerhafter Deeplink für Autor-Suche in Kurztrefferanzeige
+* [OPUSVIER-4259] - Unnötige Bootrap Fehlermeldung beim Update zu ExportPlugins
+* [OPUSVIER-4299] - translation.log enthält nach Update auf 4.7 sehr viele Einträge
+* [OPUSVIER-4321] - Falsche Anzeige beim Einstieg in Trefferliste von Dokumenten
+* [OPUSVIER-4366] - Interne OPUS Version für 4.7 aktualisieren
+
 ## Patches for 4.7 - 2020-09-04
 
 * [OPUSVIER-4314] - Pagination-Link-Hitlist Leiste fehlt

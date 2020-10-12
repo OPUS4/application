@@ -150,4 +150,24 @@ class Application_UpdateTest extends ControllerTestCase
         $this->assertFileExists($script);
         $this->assertTrue(is_executable($script), "Script \"$filename\" not executable.");
     }
+
+    /**
+     * Check if last update script and version defined in `db/masterdata/022-set-opus-version.sql` match.
+     */
+    public function testOpusVersionMatchesNewestUpdateScript()
+    {
+        $update = new Application_Update();
+
+        $version = $update->getVersion();
+
+        $scripts = $update->getUpdateScripts();
+
+        $lastScript = end($scripts);
+
+        if ($lastScript !== null) {
+            $filename = basename($lastScript);
+            $number = substr($filename, 0, 3);
+            $this->assertEquals($version, $number, 'Last update script needs to match internal opus version.');
+        }
+    }
 }
