@@ -36,3 +36,15 @@ jobs:
       
       - name: Test-library
         run: php composer.phar test -- --testsuite library
+
+      - name: Test-modules
+        run: php composer.phar test -- --testsuite modules
+
+      - name: Test-admin
+        run: php composer.phar test -- --testsuite admin
+        
+      - name: Test-security
+        run: php composer.phar test -- --testsuite security
+
+      - name: Test-scripts
+        run: php composer.phar test -- --testsuite scripts
