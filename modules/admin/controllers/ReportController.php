@@ -36,7 +36,6 @@ use Opus\Doi\DoiManager;
 use Opus\Doi\DoiManagerStatus;
 use Opus\Doi\RegistrationException;
 
-
 /**
  * Controller for generating reports.
  */

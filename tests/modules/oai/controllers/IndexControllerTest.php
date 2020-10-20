@@ -46,7 +46,6 @@ use Opus\Series;
 use Opus\TitleAbstract;
 use Opus\UserRole;
 
-
 /**
  * TODO split specific protocol tests into separate classes
  * TODO unit tests transformations directly without "dispatch"

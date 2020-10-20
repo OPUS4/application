@@ -40,7 +40,6 @@ use Opus\Enrichment\TextType;
 use Opus\Model\ModelException;
 use Opus\Model\NotFoundException;
 
-
 /**
  * Unterformular für einzelne Enrichments im Metadaten-Formular.
  *

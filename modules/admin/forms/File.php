@@ -30,7 +30,6 @@ use Opus\UserRole;
 use Opus\Model\AbstractDb;
 use Opus\Model\NotFoundException;
 
-
 /**
  * Formular fuer Anzeige/Editieren einer Datei.
  *

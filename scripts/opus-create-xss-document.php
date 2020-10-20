@@ -41,7 +41,6 @@ use Opus\Document;
 use Opus\Licence;
 use Opus\Person;
 
-
 $counter = 1;
 function randString($counter)
 {
