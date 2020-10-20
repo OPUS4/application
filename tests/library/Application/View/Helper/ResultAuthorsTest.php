@@ -43,7 +43,7 @@ class Application_View_Helper_ResultAuthorsTest extends ControllerTestCase
         parent::setUp();
 
         $this->helper = new Application_View_Helper_ResultAuthors();
-        $view = Zend_Registry::get('Opus_View');
+        $view = \Zend_Registry::get('Opus_View');
         $this->helper->setView($view);
     }
 

@@ -25,6 +25,8 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+use Opus\UserRole;
+
 /**
  * Unit Tests von Formularelement fuer die Auswahl von Rollen.
  *
@@ -54,7 +56,7 @@ class Application_Form_Element_RolesTest extends FormElementTestCase
 
         $options = $element->getRolesMultiOptions();
 
-        $this->assertEquals(count(Opus_UserRole::getAll()), count($options));
+        $this->assertEquals(count(UserRole::getAll()), count($options));
 
         foreach ($options as $value => $label) {
             $this->assertEquals($value, $label);
@@ -75,8 +77,8 @@ class Application_Form_Element_RolesTest extends FormElementTestCase
         $element = new Application_Form_Element_Roles('Roles');
 
         $element->setValue([
-            Opus_UserRole::fetchByName('docsadmin'),
-            Opus_UserRole::fetchByName('reviewer'),
+            UserRole::fetchByName('docsadmin'),
+            UserRole::fetchByName('reviewer'),
         ]);
 
         $this->assertEquals(['docsadmin', 'reviewer'], $element->getValue());
@@ -97,7 +99,7 @@ class Application_Form_Element_RolesTest extends FormElementTestCase
         $this->assertCount(count($expectedRoles), $roles);
 
         foreach ($roles as $role) {
-            $this->assertInstanceOf('Opus_UserRole', $role);
+            $this->assertInstanceOf('Opus\UserRole', $role);
             $this->assertContains($role->getName(), $expectedRoles);
 
             // removed already checked roles from expectation

@@ -31,6 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Document;
+
 /**
  * Unterformular fuer die mit einem Dokument verknuepften Personen.
  */
@@ -89,7 +91,7 @@ class Admin_Form_Document_Persons extends Admin_Form_AbstractDocumentSubForm
 
     /**
      *
-     * @param Opus_Document $model
+     * @param Document $model
      */
     public function populateFromModel($document)
     {

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -32,6 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\UserRole;
+
 /**
  *
  */
@@ -45,7 +46,7 @@ class Application_Security_RoleConfigTest extends ControllerTestCase
     public function setUp()
     {
         parent::setUp();
-        $this->guestRole = new Opus_UserRole(2);
+        $this->guestRole = new UserRole(2);
         $this->guestRole->appendAccessModule('documents');
     }
 
@@ -57,7 +58,7 @@ class Application_Security_RoleConfigTest extends ControllerTestCase
 
     public function testApplyPermissions()
     {
-        $acl = new Zend_Acl();
+        $acl = new \Zend_Acl();
         $this->setExpectedException('Zend_Acl_Role_Registry_Exception');
         $acl->isAllowed($this->guestRole, 'documents');
         $roleConfig = new Application_Security_RoleConfig('guest');

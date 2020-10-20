@@ -51,7 +51,7 @@ class Application_Form_Decorator_ElementHtmlTagTest extends ControllerTestCase
     {
         $decorator = new Application_Form_Decorator_ElementHtmlTag();
 
-        $element = new Zend_Form_Element_Text('Value');
+        $element = new \Zend_Form_Element_Text('Value');
 
         $decorator->setElement($element);
 
@@ -64,7 +64,7 @@ class Application_Form_Decorator_ElementHtmlTagTest extends ControllerTestCase
 
         $decorator->setOption('class', 'Value-data');
 
-        $element = new Zend_Form_Element_Text('Value');
+        $element = new \Zend_Form_Element_Text('Value');
 
         $decorator->setElement($element);
 

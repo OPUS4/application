@@ -40,6 +40,6 @@
     <?PHP endif; ?>
 </div>
 <?PHP else : ?>
-<?PHP Zend_Registry::get('Zend_Log')->err('Use of partial \'docinfo.phtml\' without document = null.'); ?>
+<?PHP \Zend_Registry::get('Zend_Log')->err('Use of partial \'docinfo.phtml\' without document = null.'); ?>
 <?PHP endif; ?>
 

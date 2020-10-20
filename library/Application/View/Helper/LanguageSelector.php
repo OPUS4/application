@@ -31,14 +31,13 @@
  * @author     Sascha Szott <szott@zib.de>
  * @copyright  Copyright (c) 2009, OPUS 4 development team
  * @license    http://www.gnu.org/licenses/gpl.html General Public License
- * @version    $Id$
  */
 
 /**
  * Builds the language selection form.
  *
  */
-class Application_View_Helper_LanguageSelector extends Zend_View_Helper_Abstract
+class Application_View_Helper_LanguageSelector extends \Zend_View_Helper_Abstract
 {
 
     /**
@@ -51,14 +50,14 @@ class Application_View_Helper_LanguageSelector extends Zend_View_Helper_Abstract
         if (isset($this->view->languageSelectorDisabled) && $this->view->languageSelectorDisabled === true) {
             return null;
         }
-        $returnParams = Zend_Controller_Action_HelperBroker::getStaticHelper('ReturnParams');
+        $returnParams = \Zend_Controller_Action_HelperBroker::getStaticHelper('ReturnParams');
 
-        $currentLocale = new Zend_Locale(Zend_Registry::get('Zend_Translate')->getLocale());
+        $currentLocale = new \Zend_Locale(\Zend_Registry::get('Zend_Translate')->getLocale());
 
         $configHelper = new Application_Configuration();
 
         // only show languages that are present in resources and activated in configuration
-        $translations = Zend_Registry::get('Zend_Translate')->getList();
+        $translations = \Zend_Registry::get('Zend_Translate')->getList();
         $supportedLang = $configHelper->getActivatedLanguages();
         $translations = array_intersect($translations, $supportedLang);
 

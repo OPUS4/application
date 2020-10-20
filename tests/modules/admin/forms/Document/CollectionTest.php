@@ -31,6 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Collection;
+
 /**
  * Tests fuer Admin_Form_Document_Collection Unterformular Klasse.
  */
@@ -43,7 +45,7 @@ class Admin_Form_Document_CollectionTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Collection();
 
-        $this->assertEquals(3, count($form->getElements()));
+        $this->assertCount(3, $form->getElements());
 
         $this->assertNotNull($form->getElement('Id'));
         $this->assertNotNull($form->getElement('Edit'));
@@ -54,7 +56,7 @@ class Admin_Form_Document_CollectionTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Collection();
 
-        $collection = new Opus_Collection(499);
+        $collection = new Collection(499);
 
         $form->populateFromModel($collection);
 
@@ -68,7 +70,7 @@ class Admin_Form_Document_CollectionTest extends ControllerTestCase
 
         $form = new Admin_Form_Document_Collection();
 
-        $collection = new Opus_Collection(2); // Root-Collection DDC-Klassifikation
+        $collection = new Collection(2); // Root-Collection DDC-Klassifikation
 
         $form->populateFromModel($collection);
 
@@ -122,7 +124,7 @@ class Admin_Form_Document_CollectionTest extends ControllerTestCase
 
         $form->populateFromPost($post);
 
-        $collection = new Opus_Collection(499);
+        $collection = new Collection(499);
 
         $this->assertEquals($collection->getDisplayName(), $form->getLegend());
         $this->assertEquals($collection->getId(), $form->getElement('Id')->getValue());

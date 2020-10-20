@@ -93,7 +93,7 @@ class Application_Configuration
      */
     public function getConfig()
     {
-        return Zend_Registry::get('Zend_Config');
+        return \Zend_Registry::get('Zend_Config');
     }
 
     /**
@@ -171,7 +171,7 @@ class Application_Configuration
             $this->defaultLanguage = $languages[0];
 
             if ($this->isLanguageSelectionEnabled()) {
-                $locale = new Zend_Locale();
+                $locale = new \Zend_Locale();
                 $language = $locale->getDefault();
                 if (is_array($language) and count($language) > 0) {
                     reset($language);
@@ -262,7 +262,7 @@ class Application_Configuration
      */
     public static function getOpusVersion()
     {
-        $config = Zend_Registry::get('Zend_Config');
+        $config = \Zend_Registry::get('Zend_Config');
         $localVersion = $config->version;
         return (is_null($localVersion)) ? 'unknown' : $localVersion;
     }
@@ -282,9 +282,9 @@ class Application_Configuration
      * @param Zend_Config $config
      * @throws Zend_Config_Exception
      */
-    public static function save(Zend_Config $config)
+    public static function save(\Zend_Config $config)
     {
-        $writer = new Zend_Config_Writer_Xml();
+        $writer = new \Zend_Config_Writer_Xml();
         $writer->write(APPLICATION_PATH . '/application/configs/config.xml', $config);
     }
 
@@ -298,13 +298,13 @@ class Application_Configuration
      * @param $option
      * @return mixed|Zend_Config
      */
-    public static function getValueFromConfig(Zend_Config $config, $option)
+    public static function getValueFromConfig(\Zend_Config $config, $option)
     {
         $keys = explode('.', $option);
         $subconfig = $config;
         foreach ($keys as $key) {
             $subconfig = $subconfig->get($key);
-            if (! ($subconfig instanceof Zend_Config)) {
+            if (! ($subconfig instanceof \Zend_Config)) {
                 break;
             }
         }
@@ -323,17 +323,17 @@ class Application_Configuration
     /**
      * Updates a value in a Zend_Config object.
      *
-     * @param Zend_Config $config
+     * @param \Zend_Config $config
      * @param $option string Name of option
      * @param $value string New value for option
-     * @throws Zend_Exception
+     * @throws \Zend_Exception
      *
      * TODO review and if possible replace this code with something simpler
      */
-    public static function setValueInConfig(Zend_Config $config, $option, $value)
+    public static function setValueInConfig(\Zend_Config $config, $option, $value)
     {
         if ($config->readOnly()) {
-            Zend_Registry::get('Zend_Log')->err('Zend_Config object is readonly.');
+            \Zend_Registry::get('Zend_Log')->err('Zend_Config object is readonly.');
             return;
         }
 
@@ -368,17 +368,17 @@ class Application_Configuration
 
     /**
      * Returns Zend_Translate instance for application.
-     * @return Zend_Translate
-     * @throws Zend_Exception
+     * @return \Zend_Translate
+     * @throws \Zend_Exception
      */
     public function getTranslate()
     {
-        return Zend_Registry::get('Zend_Translate');
+        return \Zend_Registry::get('Zend_Translate');
     }
 
     public static function isUpdateInProgress()
     {
-        $config = Zend_Registry::get('Zend_Config');
+        $config = \Zend_Registry::get('Zend_Config');
 
         return isset($config->updateInProgress) && filter_var($config->updateInProgress, FILTER_VALIDATE_BOOLEAN);
     }

@@ -36,7 +36,7 @@
  *
  * Wird im Metadaten-Formular und Filemanager verwendet, um die Add- und Import Buttons richtig zu positionieren.
  */
-class Application_Form_Decorator_FieldsetWithButtons extends Zend_Form_Decorator_Fieldset
+class Application_Form_Decorator_FieldsetWithButtons extends \Zend_Form_Decorator_Fieldset
 {
 
     protected $_legendButtons = null;
@@ -113,7 +113,7 @@ class Application_Form_Decorator_FieldsetWithButtons extends Zend_Form_Decorator
     {
         $name = $button->getName();
         $elementId = $button->getId();
-        $decorator = new Zend_Form_Decorator_ViewHelper();
+        $decorator = new \Zend_Form_Decorator_ViewHelper();
         $decorator->setElement($button);
         $markup =
             "<span class=\"data-wrapper $name-data\">"

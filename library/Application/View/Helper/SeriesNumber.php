@@ -29,19 +29,21 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
+use Opus\Document;
+use Opus\Series;
 
 /**
  * This view helper returns the escaped number of a document in a series.
  */
-class Application_View_Helper_SeriesNumber extends Zend_View_Helper_Abstract
+class Application_View_Helper_SeriesNumber extends \Zend_View_Helper_Abstract
 {
 
     /**
      * Returns the number of a document in a series.
-     * @param Opus_Document $document
-     * @param Opus_Series $series
+     * @param Document $document
+     * @param Series $series
      * @return string
      */
     public function seriesNumber($document, $series)

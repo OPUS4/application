@@ -34,7 +34,7 @@
 /**
  * Abstract base class for view helpers.
  */
-class Application_View_Helper_Abstract extends Zend_View_Helper_Abstract
+class Application_View_Helper_Abstract extends \Zend_View_Helper_Abstract
 {
 
     use \Opus\LoggingTrait;

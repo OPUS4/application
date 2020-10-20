@@ -38,7 +38,7 @@
  *
  * - must be at least 6 characters long
  */
-class Application_Form_Element_Password extends Zend_Form_Element_Password
+class Application_Form_Element_Password extends \Zend_Form_Element_Password
 {
 
     /**
@@ -48,7 +48,7 @@ class Application_Form_Element_Password extends Zend_Form_Element_Password
     {
         parent::init();
 
-        $this->addPrefixPath('Application_Form_Decorator', 'Application/Form/Decorator', Zend_Form::DECORATOR);
+        $this->addPrefixPath('Application_Form_Decorator', 'Application/Form/Decorator', \Zend_Form::DECORATOR);
         $this->setAllowEmpty(false);
         $this->addValidator('stringLength', false, ['min' => 6]);
 

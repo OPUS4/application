@@ -31,6 +31,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Document;
+use Opus\DocumentFinder;
+use Opus\Model\NotFoundException;
 
 /**
  * Script for exporting all documents.
@@ -44,7 +47,7 @@
 
 require_once dirname(__FILE__) . '/common/bootstrap.php';
 
-$config = Zend_Registry::get('Zend_Config');
+$config = \Zend_Registry::get('Zend_Config');
 
 // process options
 $options = getopt('o:');
@@ -83,15 +86,15 @@ $opusDocuments = new DOMDocument('1.0', 'utf-8');
 $opusDocuments->formatOutput = true;
 $export = $opusDocuments->createElement('export');
 
-$docFinder = new Opus_DocumentFinder();
+$docFinder = new DocumentFinder();
 
 // get all documents
 foreach ($docFinder->ids() as $id) {
     $doc = null;
 
     try {
-        $doc = new Opus_Document($id);
-    } catch (Opus_Model_NotFoundException $e) {
+        $doc = Document::get($id);
+    } catch (NotFoundException $e) {
         echo "Document with id $id does not exist." . PHP_EOL;
         continue;
     }

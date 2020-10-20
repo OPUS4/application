@@ -30,6 +30,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Document;
+use Opus\Title;
+
 /**
  * Unit Tests für MulitSubForm Formular das mehrere Unterformular des gleichen Typs verwalten kann.
  */
@@ -86,7 +89,7 @@ class Admin_Form_Document_MultiSubFormTest extends ControllerTestCase
             new Application_Form_Validate_MultiSubForm_RepeatedLanguages()
         );
 
-        $document = new Opus_Document(146);
+        $document = Document::get(146);
 
         $form->populateFromModel($document);
 
@@ -126,12 +129,12 @@ class Admin_Form_Document_MultiSubFormTest extends ControllerTestCase
             new Application_Form_Validate_MultiSubForm_RepeatedLanguages()
         );
 
-        $document = new Opus_Document(146);
+        $document = Document::get(146);
 
         $values = $form->getFieldValues($document);
 
         $this->assertEquals(2, count($values));
-        $this->assertTrue($values[0] instanceof Opus_Title);
+        $this->assertTrue($values[0] instanceof Title);
         $this->assertEquals('sub', $values[0]->getType());
     }
 
@@ -206,7 +209,7 @@ class Admin_Form_Document_MultiSubFormTest extends ControllerTestCase
             new Application_Form_Validate_MultiSubForm_RepeatedLanguages()
         );
 
-        $document = new Opus_Document(146);
+        $document = Document::get(146);
 
         $form->populateFromModel($document);
 
@@ -268,7 +271,7 @@ class Admin_Form_Document_MultiSubFormTest extends ControllerTestCase
             new Application_Form_Validate_MultiSubForm_RepeatedLanguages()
         );
 
-        $document = new Opus_Document(146);
+        $document = Document::get(146);
 
         $form->populateFromModel($document);
         $form->appendSubForm();
@@ -330,7 +333,7 @@ class Admin_Form_Document_MultiSubFormTest extends ControllerTestCase
             new Application_Form_Validate_MultiSubForm_RepeatedLanguages()
         );
 
-        $document = new Opus_Document(146);
+        $document = Document::get(146);
 
         $this->assertEquals($form, $form->determineSubFormForAnchor(0));
 
@@ -456,8 +459,8 @@ class Admin_Form_Document_MultiSubFormTest extends ControllerTestCase
             'columns' => $columns
         ]);
 
-        $subform = new Zend_Form_SubForm();
-        $subform->addPrefixPath('Application_Form_Decorator', 'Application/Form/Decorator', Zend_Form::DECORATOR);
+        $subform = new \Zend_Form_SubForm();
+        $subform->addPrefixPath('Application_Form_Decorator', 'Application/Form/Decorator', \Zend_Form::DECORATOR);
 
         $subform->setDecorators([]);
         $subform->addElement('text', 'test', ['decorators' => [
@@ -491,7 +494,7 @@ class Admin_Form_Document_MultiSubFormTest extends ControllerTestCase
         $method = new ReflectionMethod('Admin_Form_Document_MultiSubForm', 'addRemoveButton');
         $method->setAccessible(true);
 
-        $subform = new Zend_Form_SubForm();
+        $subform = new \Zend_Form_SubForm();
         $subform->addElement('hidden', 'Id');
 
         $method->invoke($form, $subform);
@@ -525,17 +528,17 @@ class Admin_Form_Document_MultiSubFormTest extends ControllerTestCase
 
         $document = $this->createTestDocument();
 
-        $title = new Opus_Title();
+        $title = new Title();
         $title->setValue('Titel1');
         $title->setLanguage('deu');
         $document->addTitleParent($title);
 
-        $title = new Opus_Title();
+        $title = new Title();
         $title->setValue('Titel2');
         $title->setLanguage('eng');
         $document->addTitleParent($title);
 
-        $title = new Opus_Title();
+        $title = new Title();
         $title->setValue('Titel3');
         $title->setLanguage('rus');
         $document->addTitleParent($title);
@@ -563,17 +566,17 @@ class Admin_Form_Document_MultiSubFormTest extends ControllerTestCase
 
         $document = $this->createTestDocument();
 
-        $title = new Opus_Title();
+        $title = new Title();
         $title->setValue('Titel1');
         $title->setLanguage('deu');
         $document->addTitleParent($title);
 
-        $title = new Opus_Title();
+        $title = new Title();
         $title->setValue('Titel2');
         $title->setLanguage('eng');
         $document->addTitleParent($title);
 
-        $title = new Opus_Title();
+        $title = new Title();
         $title->setValue('Titel3');
         $title->setLanguage('rus');
         $document->addTitleParent($title);
@@ -656,7 +659,7 @@ class Admin_Form_Document_MultiSubFormTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_MultiSubForm('Admin_Form_Document_Identifier', 'Identifier');
 
-        $doc = new Opus_Document(146);
+        $doc = Document::get(146);
 
         $identifiers = $doc->getIdentifier();
 

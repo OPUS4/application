@@ -36,7 +36,7 @@
  *
  * Format: character, letters and underline, starting with a character
  */
-class Setup_Form_Validate_TranslationKeyFormat extends Zend_Validate_Regex
+class Setup_Form_Validate_TranslationKeyFormat extends \Zend_Validate_Regex
 {
 
     /**

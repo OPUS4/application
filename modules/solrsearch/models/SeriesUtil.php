@@ -31,6 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Series;
+
 /**
  */
 class Solrsearch_Model_SeriesUtil extends Application_Model_Abstract
@@ -46,14 +48,14 @@ class Solrsearch_Model_SeriesUtil extends Application_Model_Abstract
     }
 
     /**
-     * Return all non-empty visible Opus_Series objects in sorted order.
+     * Return all non-empty visible Series objects in sorted order.
      *
-     * @return array an array of Opus_Series objects
+     * @return array an array of Series objects
      */
     public function getVisibleNonEmptySeriesSortedBySortKey()
     {
         $visibleSeries = [];
-        foreach (Opus_Series::getAllSortedBySortKey() as $series) {
+        foreach (Series::getAllSortedBySortKey() as $series) {
             if ($series->getVisible() == '1' && $series->getNumOfAssociatedPublishedDocuments() > 0) {
                 array_push($visibleSeries, $series);
             }

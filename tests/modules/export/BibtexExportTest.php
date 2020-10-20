@@ -42,7 +42,7 @@ class Export_BibtexExportTest extends ControllerTestCase
     {
         parent::setUp();
 
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
             'searchengine' => ['solr' => ['numberOfDefaultSearchResults' => '10']]
         ]));
     }
@@ -77,7 +77,7 @@ class Export_BibtexExportTest extends ControllerTestCase
 
     public function testExportSingleDocument()
     {
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
             'export' => ['download' => self::CONFIG_VALUE_FALSE]
         ]));
 
@@ -96,7 +96,7 @@ class Export_BibtexExportTest extends ControllerTestCase
      */
     public function testExportLatestDocuments()
     {
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
             'export' => ['download' => self::CONFIG_VALUE_FALSE],
             'searchengine' => ['solr' => ['numberOfDefaultSearchResults' => '10']]
         ]));
@@ -112,7 +112,7 @@ class Export_BibtexExportTest extends ControllerTestCase
 
     public function testExportLatestDocumentsWithCustomRows()
     {
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
             'export' => ['download' => self::CONFIG_VALUE_FALSE]
         ]));
 

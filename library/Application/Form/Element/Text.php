@@ -36,7 +36,7 @@
  *
  * Zur Zeit nur vom Metadaten-Formular genutzt.
  */
-class Application_Form_Element_Text extends Zend_Form_Element_Text implements Application_Form_IElement
+class Application_Form_Element_Text extends \Zend_Form_Element_Text implements Application_Form_IElement
 {
 
     /**
@@ -66,7 +66,7 @@ class Application_Form_Element_Text extends Zend_Form_Element_Text implements Ap
         $this->addPrefixPath(
             'Application_Form_Decorator',
             'Application/Form/Decorator',
-            Zend_Form::DECORATOR
+            \Zend_Form::DECORATOR
         );
     }
 

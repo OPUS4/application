@@ -98,7 +98,7 @@ class Application_Search_FacetManagerTest extends ControllerTestCase
 
     public function testGetFacetEnrichment()
     {
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
             'searchengine' => ['solr' => ['facets' => 'enrichment_Audience']]
         ]));
 
@@ -113,7 +113,7 @@ class Application_Search_FacetManagerTest extends ControllerTestCase
 
     public function testGetFacetEnrichmentTranslated()
     {
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
             'searchengine' => ['solr' => ['facets' => 'enrichment_Audience']]
         ]));
 
@@ -143,7 +143,7 @@ class Application_Search_FacetManagerTest extends ControllerTestCase
 
     public function testGetFacetConfigForFacetteWithDotInName()
     {
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
             'search' => ['facet' => ['enrichment_opus-source' => ['heading' => 'EnrichmentOpusSource']]]
         ]));
 
@@ -165,7 +165,7 @@ class Application_Search_FacetManagerTest extends ControllerTestCase
 
     public function testFacetSortCrit()
     {
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
             'search' => ['facet' => ['subject' => ['sort' => 'lexi']]]
         ]));
 

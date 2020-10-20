@@ -29,8 +29,8 @@
  * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
 /**
  *
  * TODO: dieses Skript wird aktuell nicht in den Tarball / Deb-Package aufgenommen
@@ -40,6 +40,17 @@
  * später nicht mehr angepasst werden muss.
  *
  */
+
+use Opus\Collection;
+use Opus\Document;
+use Opus\EnrichmentKey;
+use Opus\File;
+use Opus\Identifier;
+use Opus\Licence;
+use Opus\Person;
+use Opus\Series;
+use Opus\UserRole;
+use Opus\Model\NotFoundException;
 
 class Application_Import_CsvImporter
 {
@@ -103,7 +114,7 @@ class Application_Import_CsvImporter
                 echo "fulltext directory '" . $argv[2] . "' is not readable -- check path or permissions\n";
             } else {
                 $this->_fulltextDir = $argv[2];
-                $this->_guestRole = Opus_UserRole::fetchByName('guest');
+                $this->_guestRole = UserRole::fetchByName('guest');
             }
         }
 
@@ -153,7 +164,7 @@ class Application_Import_CsvImporter
 
     private function processRow($row)
     {
-        $doc = new Opus_Document();
+        $doc = Document::new();
 
         $oldId = $row[self::OLD_ID];
 
@@ -195,7 +206,7 @@ class Application_Import_CsvImporter
 
             $doc->store();
 
-            if (! is_null($file) && $file instanceof Opus_File && ! is_null($this->_guestRole)) {
+            if (! is_null($file) && $file instanceof File && ! is_null($this->_guestRole)) {
                 $this->_guestRole->appendAccessFile($file->getId());
                 $this->_guestRole->store();
             }
@@ -304,7 +315,7 @@ class Application_Import_CsvImporter
 
     private function addPerson($doc, $type, $firstname, $lastname, $oldId)
     {
-        $p = new Opus_Person();
+        $p = new Person();
         if (trim($firstname) == '') {
             echo "Datensatz $oldId ohne Wert für $type.firstname\n";
         } else {
@@ -352,7 +363,7 @@ class Application_Import_CsvImporter
 
     private function addIdentifier($doc, $type, $value)
     {
-        $identifier = new Opus_Identifier();
+        $identifier = new Identifier();
         $identifier->setValue(trim($value));
         $identifier->setType(trim($type));
         $method = 'addIdentifier' . ucfirst(trim($type));
@@ -385,9 +396,9 @@ class Application_Import_CsvImporter
                 $collectionId = trim($collId);
                 // check if collection with given id exists
                 try {
-                    $c = new Opus_Collection($collectionId);
+                    $c = new Collection($collectionId);
                     $doc->addCollection($c);
-                } catch (Opus_Model_NotFoundException $e) {
+                } catch (NotFoundException $e) {
                     throw new Exception('collection id ' . $collectionId . ' does not exist: ' . $e->getMessage());
                 }
             }
@@ -400,9 +411,9 @@ class Application_Import_CsvImporter
         if (trim($row[self::LICENCE_ID]) != '') {
             $licenceId = trim($row[self::LICENCE_ID]);
             try {
-                $l = new Opus_Licence($licenceId);
+                $l = new Licence($licenceId);
                 $doc->addLicence($l);
-            } catch (Opus_Model_NotFoundException $e) {
+            } catch (NotFoundException $e) {
                 throw new Exception('licence id ' . $licenceId . ' does not exist: ' . $e->getMessage());
             }
         } else {
@@ -410,31 +421,31 @@ class Application_Import_CsvImporter
             $format = trim($row[self::ENRICHMENT_FORMAT]);
 
             if (! (strpos($format, 'no download') == false) || ! (strpos($format, 'no copy') == false)) {
-                $l = new Opus_Licence(11);
+                $l = new Licence(11);
                 $doc->addLicence($l);
                 return;
             }
 
             if (! (strpos($format, 'xerox') == false)) {
-                $l = new Opus_Licence(13);
+                $l = new Licence(13);
                 $doc->addLicence($l);
                 return;
             }
 
             if (! (strpos($format, 'to download') == false)) {
-                $l = new Opus_Licence(9);
+                $l = new Licence(9);
                 $doc->addLicence($l);
                 return;
             }
 
             if (! (strpos($format, 'upon request') == false)) {
-                $l = new Opus_Licence(10);
+                $l = new Licence(10);
                 $doc->addLicence($l);
                 return;
             }
 
             if (! (strpos($format, 'to purchase') == false)) {
-                $l = new Opus_Licence(12);
+                $l = new Licence(12);
                 $doc->addLicence($l);
                 return;
             }
@@ -461,8 +472,8 @@ class Application_Import_CsvImporter
             $key = trim($matches[1]);
             // check if enrichment key exists
             try {
-                new Opus_EnrichmentKey($key);
-            } catch (Opus_Model_NotFoundException $e) {
+                new EnrichmentKey($key);
+            } catch (NotFoundException $e) {
                 throw new Exception('enrichment key ' . $key . ' does not exist: ' . $e->getMessage());
             }
 
@@ -498,7 +509,7 @@ class Application_Import_CsvImporter
                 $seriesIdTrimmed = trim($seriesId);
                 // check if series with given id exists
                 try {
-                    $series = new Opus_Series($seriesIdTrimmed);
+                    $series = new Series($seriesIdTrimmed);
 
                     $seriesNumber = 0;
                     if (array_key_exists($seriesIdTrimmed, $this->_seriesIdsMap)) {
@@ -507,7 +518,7 @@ class Application_Import_CsvImporter
                     $seriesNumber++;
                     $doc->addSeries($series)->setNumber($seriesNumber);
                     $this->_seriesIdsMap[$seriesIdTrimmed] = $seriesNumber;
-                } catch (Opus_Model_NotFoundException $e) {
+                } catch (NotFoundException $e) {
                     throw new Exception('series id ' . $seriesIdTrimmed . ' does not exist: ' . $e->getMessage());
                 }
             }

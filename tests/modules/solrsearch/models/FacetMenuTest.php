@@ -44,8 +44,8 @@ class Solrsearch_Model_FacetMenuTest extends ControllerTestCase
      */
     public function testGetFacetLimitsFromConfig()
     {
-        $config = Zend_Registry::get('Zend_Config');
-        $config->merge(new Zend_Config(['searchengine' =>
+        $config = \Zend_Registry::get('Zend_Config');
+        $config->merge(new \Zend_Config(['searchengine' =>
             ['solr' =>
                 ['facetlimit' =>
                     [
@@ -72,18 +72,18 @@ class Solrsearch_Model_FacetMenuTest extends ControllerTestCase
      */
     public function testGetFacetLimitsFromConfigWithYearInverted()
     {
-        $config = Zend_Registry::get('Zend_Config');
+        $config = \Zend_Registry::get('Zend_Config');
         if (isset($config->searchengine->solr->facets)) {
             $config->searchengine->solr->facets = 'year,doctype,author_facet,language,has_fulltext,belongs_to_bibliography,subject,institute';
         } else {
-            $testConfig = new Zend_Config([
+            $testConfig = new \Zend_Config([
                 'searchengine' => [
                     'solr' => [
                         'facets' => 'year,doctype,author_facet,language,has_fulltext,belongs_to_bibliography,subject,institute']]], true);
             // Include the above made configuration changes in the application configuration.
             $testConfig->merge($config);
         }
-        $config->merge(new Zend_Config(['searchengine' =>
+        $config->merge(new \Zend_Config(['searchengine' =>
             ['solr' =>
                 ['facetlimit' =>
                     [
@@ -130,11 +130,11 @@ class Solrsearch_Model_FacetMenuTest extends ControllerTestCase
     public function testBuildFacetArrayWithYearInverted()
     {
         $model = new Solrsearch_Model_FacetMenu();
-        $config = Zend_Registry::get('Zend_Config');
+        $config = \Zend_Registry::get('Zend_Config');
         if (isset($config->searchengine->solr->facets)) {
             $config->searchengine->solr->facets = 'year_inverted,doctype,author_facet,language,has_fulltext,belongs_to_bibliography,subject,institute';
         } else {
-            $testConfig = new Zend_Config([
+            $testConfig = new \Zend_Config([
                 'searchengine' => [
                     'solr' => [
                         'facets' => 'year_inverted,doctype,author_facet,language,has_fulltext,belongs_to_bibliography,subject,institute']]], true);

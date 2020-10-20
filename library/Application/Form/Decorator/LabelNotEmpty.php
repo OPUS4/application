@@ -34,7 +34,7 @@
 /**
  * If there is no label defined nothing is rendered in order to avoid empty LABEL-tags.
  */
-class Application_Form_Decorator_LabelNotEmpty extends Zend_Form_Decorator_Label
+class Application_Form_Decorator_LabelNotEmpty extends \Zend_Form_Decorator_Label
 {
 
     public function render($content)

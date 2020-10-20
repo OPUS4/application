@@ -31,10 +31,12 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Identifier;
+
 /**
  *
  */
-class Application_View_Helper_TranslateIdentifier extends Zend_View_Helper_Translate
+class Application_View_Helper_TranslateIdentifier extends \Zend_View_Helper_Translate
 {
 
     /**
@@ -45,9 +47,9 @@ class Application_View_Helper_TranslateIdentifier extends Zend_View_Helper_Trans
             return $this;
         }
 
-        $translator = Zend_Registry::get(Application_Translate::REGISTRY_KEY);
+        $translator = \Zend_Registry::get(Application_Translate::REGISTRY_KEY);
         // TODO map from Type to field name
-        $fieldname = Opus_Identifier::getFieldnameForType($type);
+        $fieldname = Identifier::getFieldnameForType($type);
         return $translator->translate($fieldname);
     }
 }

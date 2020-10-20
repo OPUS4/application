@@ -29,8 +29,9 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
+use Opus\Document;
 
 /**
  * Unterformular fuer Subjects eines bestimmten Typs im Metadaten-Formular.
@@ -108,7 +109,7 @@ class Admin_Form_Document_SubjectType extends Admin_Form_Document_MultiSubForm
      * Schlagwoertern nicht passieren soll, da die Werte aus mehreren MultiSubForm-Formularen zusammengesammelt werden
      * muessen.
      *
-     * @param Opus_Document $document
+     * @param Document $document
      */
     public function updateModel($document)
     {
@@ -131,7 +132,7 @@ class Admin_Form_Document_SubjectType extends Admin_Form_Document_MultiSubForm
     /**
      * Liefert die Schlagwoerter mit dem richtigen Typ.
      *
-     * @param Opus_Document $document
+     * @param Document $document
      * @return array
      */
     public function getFieldValues($document)

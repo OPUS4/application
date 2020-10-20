@@ -81,7 +81,7 @@ class Admin_Form_Person_DocumentsTest extends ControllerTestCase
         $this->assertArrayHasKey(5, $options);
 
         foreach ($options as $docId => $doc) {
-            $this->assertInstanceOf('Opus_Document', $doc);
+            $this->assertInstanceOf('Opus\Document', $doc);
             $this->assertEquals($docId, $doc->getId());
         }
     }

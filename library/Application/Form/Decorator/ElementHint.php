@@ -36,7 +36,7 @@
  *
  * TODO customizable class
  */
-class Application_Form_Decorator_ElementHint extends Zend_Form_Decorator_Abstract
+class Application_Form_Decorator_ElementHint extends \Zend_Form_Decorator_Abstract
 {
 
     public function render($content)

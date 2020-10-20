@@ -36,6 +36,10 @@
  *
  * Currently ZIP and TAR files are supported by extending classes.
  */
+
+use Opus\Model\ModelException;
+use Opus\Security\SecurityException;
+
 abstract class Application_Import_PackageReader
 {
     const METADATA_FILENAME = 'opus.xml';
@@ -57,13 +61,13 @@ abstract class Application_Import_PackageReader
      * Verarbeitet das XML-Metadatendokument, dessen Inhalt in $xml übergeben wird.
      * Zugehörige Volltextdateien werden aus dem Verzeichnis $dirName gelesen.
      *
-     * @param $xml Ausgelesener Inhalt der XML-Metadatendatei
-     * @param $dirName Pfad zum Extraktionsverzeichnis
+     * @param $xml string Ausgelesener Inhalt der XML-Metadatendatei
+     * @param $dirName string Pfad zum Extraktionsverzeichnis
      * @return Application_Import_ImportStatusDocument Statusdokument mit Informationen zum Ergebnis des Imports
      * @throws Application_Import_MetadataImportInvalidXmlException
      * @throws Application_Import_MetadataImportSkippedDocumentsException
-     * @throws Opus_Model_Exception
-     * @throws Opus_Security_Exception
+     * @throws ModelException
+     * @throws SecurityException
      * @throws Zend_Exception
      */
     private function processOpusXML($xml, $dirName)
@@ -115,7 +119,7 @@ abstract class Application_Import_PackageReader
 
     public function getLogger()
     {
-        return Zend_Registry::get('Zend_Log');
+        return \Zend_Registry::get('Zend_Log');
     }
 
     /**

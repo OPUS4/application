@@ -29,8 +29,11 @@
  * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
+use Opus\Collection;
+use Opus\CollectionRole;
+use Opus\Model\NotFoundException;
 
 class Solrsearch_Model_CollectionList
 {
@@ -47,8 +50,8 @@ class Solrsearch_Model_CollectionList
 
         $collection = null;
         try {
-            $collection = new Opus_Collection((int) $collectionId);
-        } catch (Opus_Model_NotFoundException $e) {
+            $collection = new Collection((int) $collectionId);
+        } catch (NotFoundException $e) {
             throw new Solrsearch_Model_Exception("Collection with id '" . $collectionId . "' does not exist.", 404);
         }
 
@@ -61,8 +64,8 @@ class Solrsearch_Model_CollectionList
 
         $collectionRole = null;
         try {
-            $collectionRole = new Opus_CollectionRole($collection->getRoleId());
-        } catch (Opus_Model_NotFoundException $e) {
+            $collectionRole = new CollectionRole($collection->getRoleId());
+        } catch (NotFoundException $e) {
             throw new Solrsearch_Model_Exception(
                 "Collection role with id '" . $collection->getRoleId() . "' does not exist."
             );
@@ -118,7 +121,7 @@ class Solrsearch_Model_CollectionList
 
     /**
      *
-     * @return array of Opus_Collection
+     * @return array of Collection
      */
     public function getChildren()
     {
@@ -126,7 +129,7 @@ class Solrsearch_Model_CollectionList
 
         if ($this->_collectionRole->getHideEmptyCollections()) {
             // Collection ausblenden, wenn ihr selbst und den Kind-Collections keine Dokumente zugeordnet
-            $children = array_filter($children, function (Opus_Collection $collection) {
+            $children = array_filter($children, function (Collection $collection) {
                 return $collection->getNumSubtreeEntries() > 0;
             });
         }

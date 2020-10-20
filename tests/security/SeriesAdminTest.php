@@ -1,5 +1,4 @@
 <?php
-
 /*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -31,6 +30,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Account;
+use Opus\UserRole;
+
 class SeriesAdminTest extends ControllerTestCase
 {
 
@@ -47,13 +49,13 @@ class SeriesAdminTest extends ControllerTestCase
         parent::setUp();
         $this->enableSecurity();
 
-        $userRole = new Opus_UserRole();
+        $userRole = new UserRole();
         $userRole->setName($this->roleName);
         $userRole->appendAccessModule('admin');
         $userRole->appendAccessModule('resource_series');
         $userRole->store();
 
-        $user = new Opus_Account();
+        $user = new Account();
         $user->setLogin($this->userName);
         $user->setPassword('seriesadminpwd');
         $user->addRole($userRole);
@@ -67,10 +69,10 @@ class SeriesAdminTest extends ControllerTestCase
         $this->logoutUser();
         $this->restoreSecuritySetting();
 
-        $user = Opus_Account::fetchAccountByLogin($this->userName);
+        $user = Account::fetchAccountByLogin($this->userName);
         $user->delete();
 
-        $userRole = Opus_UserRole::fetchByName($this->roleName);
+        $userRole = UserRole::fetchByName($this->roleName);
         $userRole->delete();
 
         parent::tearDown();

@@ -31,6 +31,12 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Doi\DoiException;
+use Opus\Doi\DoiManager;
+use Opus\Doi\DoiManagerStatus;
+use Opus\Doi\RegistrationException;
+
+
 /**
  * Controller for generating reports.
  */
@@ -89,7 +95,7 @@ class Admin_ReportController extends Application_Controller_Action
     private function handleDoiRegistration($docId)
     {
         try {
-            $doiManager = new Opus_Doi_DoiManager();
+            $doiManager = new DoiManager();
             $doiRegistered = $doiManager->register($docId, true);
             if (! is_null($doiRegistered)) {
                 return $this->_helper->Redirector->redirectTo(
@@ -100,7 +106,7 @@ class Admin_ReportController extends Application_Controller_Action
                     )
                 );
             }
-        } catch (Opus_Doi_RegistrationException $e) {
+        } catch (RegistrationException $e) {
             return $this->_helper->Redirector->redirectTo(
                 'doi',
                 ['failure' =>
@@ -110,7 +116,7 @@ class Admin_ReportController extends Application_Controller_Action
                     ) . ': ' . $e->getMessage()
                 ]
             );
-        } catch (Opus_Doi_DoiException $e) {
+        } catch (DoiException $e) {
             return $this->_helper->Redirector->redirectTo(
                 'doi',
                 ['failure' =>
@@ -134,8 +140,8 @@ class Admin_ReportController extends Application_Controller_Action
      */
     private function handleDoiVerification($docId)
     {
-        $doiManager = new Opus_Doi_DoiManager();
-        $status = new Opus_Doi_DoiManagerStatus();
+        $doiManager = new DoiManager();
+        $status = new DoiManagerStatus();
         $verifiedDoi = $doiManager->verify($docId, true, null, $status);
 
         if (! is_null($verifiedDoi)) {
@@ -169,14 +175,14 @@ class Admin_ReportController extends Application_Controller_Action
 
     private function handleBulkRegistration()
     {
-        $doiManager = new Opus_Doi_DoiManager();
+        $doiManager = new DoiManager();
         $status = $doiManager->registerPending();
         return $this->handleBulkOperation($status, 'registration');
     }
 
     private function handleBulkVerification()
     {
-        $doiManager = new Opus_Doi_DoiManager();
+        $doiManager = new DoiManager();
         $status = $doiManager->verifyRegistered();
         return $this->handleBulkOperation($status, 'verification');
     }
@@ -186,7 +192,7 @@ class Admin_ReportController extends Application_Controller_Action
      * Es wird die Registrierung ($mode == 'registration') sowie die Prüfung ($mode == 'verification')
      * als Operation unterstützt.
      *
-     * @param Opus_Doi_DoiManagerStatus $status
+     * @param DoiManagerStatus $status
      * @param string $mode
      */
     private function handleBulkOperation($status, $mode)

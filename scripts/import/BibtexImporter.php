@@ -41,6 +41,13 @@ require_once dirname(__FILE__) . '/../common/bootstrap.php';
  * TODO mode for only listing newly added documents in subsequent imports
  */
 
+use Opus\Collection;
+use Opus\Document;
+use Opus\DocumentFinder;
+use Opus\Enrichment;
+use Opus\EnrichmentKey;
+use Opus\Model\ModelException;
+use Opus\Model\NotFoundException;
 use Opus\Bibtex\Import\Parser;
 use Opus\Bibtex\Import\Processor\Rule\RawData;
 
@@ -68,9 +75,9 @@ $collections = [];
 
 foreach ($collectionIds as $colId) {
     try {
-        $col = new Opus_Collection($colId);
+        $col = new Collection($colId);
         $collections[] = $col;
-    } catch (Opus_Model_NotFoundException $omnfe) {
+    } catch (NotFoundException $omnfe) {
         echo "Collection $colId not found" . PHP_EOL;
     }
 }
@@ -86,9 +93,9 @@ class ImportHelper
 
     public function createEnrichmentKey($name)
     {
-        $sourceEnrichmentKey = Opus_EnrichmentKey::fetchByName($name);
+        $sourceEnrichmentKey = EnrichmentKey::fetchByName($name);
         if (is_null($sourceEnrichmentKey)) {
-            $sourceEnrichmentKey = new Opus_EnrichmentKey();
+            $sourceEnrichmentKey = new EnrichmentKey();
             $sourceEnrichmentKey->setName($name);
             $sourceEnrichmentKey->store();
         }
@@ -126,7 +133,7 @@ $imported = 0;
 $digits = strlen(count($opus));
 
 foreach ($opus as $docdata) {
-    $doc = Opus_Document::fromArray($docdata);
+    $doc = Document::fromArray($docdata);
 
     $enrichments = $doc->getEnrichment();
 
@@ -142,7 +149,7 @@ foreach ($opus as $docdata) {
     // Check if BibTeX entry has already been imported
     $alreadyImported = false;
 
-    $finder = new Opus_DocumentFinder();
+    $finder = new DocumentFinder();
 
     if (! is_null($hash)) {
         $finder->setEnrichmentKeyValue(RawData::SOURCE_DATA_HASH_KEY, $hash);
@@ -158,29 +165,29 @@ foreach ($opus as $docdata) {
         }
 
         // Add import enrichments
-        $enrichment = new Opus_Enrichment();
+        $enrichment = new Enrichment();
         $enrichment->setKeyName('opus.import.date');
         $enrichment->setValue($importDate);
         $doc->addEnrichment($enrichment);
 
-        $enrichment = new Opus_Enrichment();
+        $enrichment = new Enrichment();
         $enrichment->setKeyName('opus.import.file');
         $enrichment->setValue($filename);
         $doc->addEnrichment($enrichment);
 
-        $enrichment = new Opus_Enrichment();
+        $enrichment = new Enrichment();
         $enrichment->setKeyName('opus.import.format');
         $enrichment->setValue($format);
         $doc->addEnrichment($enrichment);
 
-        $enrichment = new Opus_Enrichment();
+        $enrichment = new Enrichment();
         $enrichment->setKeyName('opus.import.id');
         $enrichment->setValue($importId);
         $doc->addEnrichment($enrichment);
 
         try {
-            $doc = new Opus_Document($doc->store());
-        } catch (Opus_Model_Exception $ome) {
+            $doc = Document::get($doc->store());
+        } catch (ModelException $ome) {
             echo $ome->getMessage();
         }
 

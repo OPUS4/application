@@ -29,8 +29,12 @@
  * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
+use Opus\Document;
+use Opus\Collection;
+use Opus\Model\ModelException;
+use Opus\Model\NotFoundException;
 
 class Admin_Model_Collection
 {
@@ -47,22 +51,22 @@ class Admin_Model_Collection
             return;
         }
         try {
-            $this->_collection = new Opus_Collection($id);
-        } catch (Opus_Model_NotFoundException $e) {
+            $this->_collection = new Collection($id);
+        } catch (NotFoundException $e) {
             throw new Admin_Model_Exception('id parameter value unknown');
         }
     }
 
     private function initNewCollection()
     {
-        $this->_collection = new Opus_Collection();
+        $this->_collection = new Collection();
         $this->_collection->setVisible('1');
         $this->_collection->setVisiblePublish('1');
     }
 
     /**
      *
-     * @return Opus_Collection
+     * @return Collection
      */
     public function getObject()
     {
@@ -93,12 +97,12 @@ class Admin_Model_Collection
     public function addDocument($documentId)
     {
         if (is_null($documentId)) {
-            throw new Admin_ModelException('missing document id');
+            throw new Admin_Model_Exception('missing document id');
         }
         $document = null;
         try {
-            $document = new Opus_Document($documentId);
-        } catch (Opus_Model_Exception $e) {
+            $document = Document::get($documentId);
+        } catch (ModelException $e) {
             throw new Admin_Model_Exception('invalid document id');
         }
         $document->addCollection($this->_collection);

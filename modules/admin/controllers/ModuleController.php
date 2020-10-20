@@ -43,7 +43,7 @@ class Admin_ModuleController extends Application_Controller_Action
     /**
      * Displays table with all modules.
      *
-     * @throws Zend_Exception
+     * @throws \Zend_Exception
      */
     public function indexAction()
     {

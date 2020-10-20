@@ -31,6 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Util\ConsoleColors;
+
 /**
  * Class Application_Update_ImportStaticPages
  *
@@ -52,7 +54,7 @@ class Application_Update_ImportStaticPages extends Application_Update_PluginAbst
         $this->log('Importing static pages from folder');
         $this->log($path);
 
-        $colors = new Opus_Util_ConsoleColors();
+        $colors = new ConsoleColors();
 
         $this->log('Importing \'contact\' texts...');
         if (count(array_intersect($files, ['contact.en.txt', 'contact.de.txt'])) > 0) {
@@ -92,7 +94,7 @@ class Application_Update_ImportStaticPages extends Application_Update_PluginAbst
                 $this->removeFiles($files);
             }
         } else {
-            $colors = new Opus_Util_ConsoleColors();
+            $colors = new ConsoleColors();
             $this->log($colors->red("No texts for '$name' found."));
         }
 

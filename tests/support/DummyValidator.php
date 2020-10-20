@@ -30,7 +30,7 @@
  * @copyright   Copyright (c) 2020
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class DummyValidator extends Zend_Validate_Abstract
+class DummyValidator extends \Zend_Validate_Abstract
 {
 
     public function isValid($value)

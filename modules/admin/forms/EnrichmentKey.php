@@ -33,6 +33,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\EnrichmentKey;
+use Opus\Enrichment\AbstractType;
+
 /**
  * Form for creating and editing an enrichment key.
  *
@@ -84,10 +87,10 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
 
         $this->setLabelPrefix('Opus_EnrichmentKey');
         $this->setUseNameAsLabel(true);
-        $this->setModelClass('Opus_EnrichmentKey');
+        $this->setModelClass('Opus\EnrichmentKey');
         $this->setVerifyModelIdIsNumeric(false);
 
-        $nameMaxLength = Opus_EnrichmentKey::getFieldMaxLength('Name');
+        $nameMaxLength = EnrichmentKey::getFieldMaxLength('Name');
 
         $name = $this->createElement('text', self::ELEMENT_NAME, [
             'required' => true,
@@ -117,7 +120,7 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
 
         // alle verfügbaren EnrichmentTypes ermitteln und als Auswahlfeld anzeigen
         $availableTypes[''] = ''; // Standardauswahl des Select-Felds soll leer sein
-        $availableTypes = array_merge($availableTypes, Opus_Enrichment_AbstractType::getAllEnrichmentTypes());
+        $availableTypes = array_merge($availableTypes, AbstractType::getAllEnrichmentTypes());
         $element->setMultiOptions($availableTypes);
         $this->addElement($element);
 
@@ -155,7 +158,7 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
 
     /**
      * Initialisiert das Formular mit Werten einer Model-Instanz.
-     * @param $model Opus_Enrichmentkey
+     * @param $model Enrichmentkey
      */
     public function populateFromModel($enrichmentKey)
     {
@@ -201,7 +204,7 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
 
     /**
      * Aktualisiert Model-Instanz mit Werten im Formular.
-     * @param $enrichmentKey Opus_Enrichmentkey
+     * @param $enrichmentKey Enrichmentkey
      */
     public function updateModel($enrichmentKey)
     {
@@ -237,7 +240,7 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
      * Erzeugt ein Enrichment-Type Objekt für den übergebenen Typ-Namen bzw. liefert
      * null, wenn der Typ-Name nicht aufgelöst werden kann.
      *
-     * @param $enrichmentTypeName Name des Enrichment-Typs
+     * @param $enrichmentTypeName string Name des Enrichment-Typs
      *
      * @return mixed
      */
@@ -248,7 +251,7 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
         }
 
         // TODO better way? - allow registering namespaces/types like in Zend for form elements?
-        $enrichmentTypeName = 'Opus_Enrichment_' . $enrichmentTypeName;
+        $enrichmentTypeName = 'Opus\\Enrichment\\' . $enrichmentTypeName;
         try {
             if (class_exists($enrichmentTypeName, false)) {
                 $enrichmentType = new $enrichmentTypeName();
@@ -265,7 +268,7 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
     public function populate(array $values)
     {
         if (array_key_exists(parent::ELEMENT_MODEL_ID, $values)) {
-            $enrichmentKey = Opus_EnrichmentKey::fetchByName($values[parent::ELEMENT_MODEL_ID]);
+            $enrichmentKey = EnrichmentKey::fetchByName($values[parent::ELEMENT_MODEL_ID]);
             if (! is_null($enrichmentKey)) {
                 $enrichmentType = $enrichmentKey->getEnrichmentType();
                 if (! is_null($enrichmentType)) {

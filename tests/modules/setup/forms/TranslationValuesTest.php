@@ -47,7 +47,7 @@ class Setup_Form_TranslationValuesTest extends ControllerTestCase
 
         $elements = $form->getElements();
 
-        $this->assertEquals(count($languages), count($elements));
+        $this->assertSameSize($languages, $elements);
     }
 
     public function testPopulate()

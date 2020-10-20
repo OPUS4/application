@@ -28,7 +28,6 @@
  * @author      Doreen Thiede <thiede@zib.de>
  * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 /**
  * Dieses Skript gibt alle IDs der Dokumente zurück, die keinen Titel
@@ -39,10 +38,12 @@
  *  TODO integrity check (where to put it?) - should be part of problem analysis package
  */
 
+use Opus\Document;
+
 $updateRequired = 0;
-$docfinder = new Opus_DocumentFinder();
+$docfinder = new \Opus\DocumentFinder();
 foreach ($docfinder->ids() as $docId) {
-    $doc = new Opus_Document($docId);
+    $doc = Document::get($docId);
 
     foreach ($doc->getTitleMain() as $title) {
         $titleLanguage = $title->getLanguage();

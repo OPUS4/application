@@ -37,22 +37,22 @@
  * Loads languages from modules.  When registered as FrontController plugin
  * it hooks into dispatchLoopStartup().
  */
-class Application_Controller_Plugin_LoadTranslation extends Zend_Controller_Plugin_Abstract
+class Application_Controller_Plugin_LoadTranslation extends \Zend_Controller_Plugin_Abstract
 {
 
     /**
      * Hooks into preDispatch to setup include path for every request.
      *
-     * @param Zend_Controller_Request_Abstract $request The request passed to the FrontController.
+     * @param \Zend_Controller_Request_Abstract $request The request passed to the FrontController.
      * @return void
      */
-    public function preDispatch(Zend_Controller_Request_Abstract $request)
+    public function preDispatch(\Zend_Controller_Request_Abstract $request)
     {
         $currentModule = $request->getModuleName();
 
         // Add translation
-        if ($currentModule !== 'default' && Zend_Registry::isRegistered(Application_Translate::REGISTRY_KEY)) {
-            Zend_Registry::get(Application_Translate::REGISTRY_KEY)->loadModule($currentModule);
+        if ($currentModule !== 'default' && \Zend_Registry::isRegistered(Application_Translate::REGISTRY_KEY)) {
+            \Zend_Registry::get(Application_Translate::REGISTRY_KEY)->loadModule($currentModule);
         }
     }
 }

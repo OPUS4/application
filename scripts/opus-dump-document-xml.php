@@ -30,11 +30,14 @@
  * @author      Thoralf Klein <thoralf.klein@zib.de>
  * @copyright   Copyright (c) 2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 // Bootstrapping
 require_once dirname(__FILE__) . '/common/bootstrap.php';
+
+use Opus\Document;
+use Opus\Model\Xml;
+use Opus\Model\Xml\Version1;
 
 // Remove first argument
 array_shift($argv);
@@ -45,13 +48,13 @@ error_log("dumping document(s): " . implode(", ", $argv));
 foreach ($argv as $docId) {
     error_log("<!-- dumping document-id $docId: -->");
 
-    $d = new Opus_Document($docId);
+    $d = Document::get($docId);
 
-    $xmlModel = new Opus_Model_Xml();
+    $xmlModel = new Xml();
     $xmlModel->setModel($d);
     $xmlModel->excludeEmptyFields();
-    $xmlModel->setStrategy(new Opus_Model_Xml_Version1);
-   // $xmlModel->setXmlCache(new Opus_Model_Xml_Cache);
+    $xmlModel->setStrategy(new Version1());
+   // $xmlModel->setXmlCache(new Cache());
 
     $docXml = $xmlModel->getDomDocument();
     $docXml->formatOutput = true;

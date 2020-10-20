@@ -29,8 +29,10 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
+use Opus\Collection;
+use Opus\CollectionRole;
 
 /**
  * Export plugin for exporting collections based on role name and collection number.
@@ -75,7 +77,7 @@ class Export_Model_PublistExport extends Export_Model_XsltExport
         if (isset($config->stylesheetDirectory)) {
             $stylesheetDirectory = $config->stylesheetDirectory;
         } else {
-            $logger->debug(Zend_Debug::dump($config->toArray(), 'no stylesheet directory specified'));
+            $logger->debug(\Zend_Debug::dump($config->toArray(), 'no stylesheet directory specified'));
         }
 
         if (isset($config->stylesheet)) {
@@ -122,7 +124,7 @@ class Export_Model_PublistExport extends Export_Model_XsltExport
         $this->_proc->setParameter('', 'groupBy', $groupBy);
         $this->_proc->setParameter('', 'pluginName', $this->getName());
 
-        $urnResolverUrl = Zend_Registry::get('Zend_Config')->urn->resolverUrl;
+        $urnResolverUrl = \Zend_Registry::get('Zend_Config')->urn->resolverUrl;
         $this->_proc->setParameter('', 'urnResolverUrl', $urnResolverUrl);
 
         $this->loadStyleSheet($this->buildStylesheetPath($stylesheet, $view->getScriptPath('') . $stylesheetDirectory));
@@ -187,21 +189,21 @@ class Export_Model_PublistExport extends Export_Model_XsltExport
      */
     public function mapQuery($roleParam, $numberParam)
     {
-        if (is_null(Opus_CollectionRole::fetchByName($roleParam))) {
+        if (is_null(CollectionRole::fetchByName($roleParam))) {
             throw new Application_Exception('specified role does not exist');
         }
 
-        $role = Opus_CollectionRole::fetchByName($roleParam);
+        $role = CollectionRole::fetchByName($roleParam);
         if ($role->getVisible() != '1') {
             throw new Application_Exception('specified role is invisible');
         }
 
-        if (count(Opus_Collection::fetchCollectionsByRoleNumber($role->getId(), $numberParam)) == 0) {
+        if (count(Collection::fetchCollectionsByRoleNumber($role->getId(), $numberParam)) == 0) {
             throw new Application_Exception('specified number does not exist for specified role');
         }
 
         $collection = null;
-        foreach (Opus_Collection::fetchCollectionsByRoleNumber($role->getId(), $numberParam) as $coll) {
+        foreach (Collection::fetchCollectionsByRoleNumber($role->getId(), $numberParam) as $coll) {
             if ($coll->getVisible() == '1' && is_null($collection)) {
                 $collection = $coll;
             }

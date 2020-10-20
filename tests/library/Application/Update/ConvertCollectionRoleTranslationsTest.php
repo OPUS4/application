@@ -31,6 +31,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\CollectionRole;
+use Opus\Model\NotFoundException;
+
 class Application_Update_ConvertCollectionRoleTranslationsTest extends ControllerTestCase
 {
 
@@ -42,13 +45,13 @@ class Application_Update_ConvertCollectionRoleTranslationsTest extends Controlle
     {
         if (! is_null($this->roleId)) {
             try {
-                $role = new Opus_CollectionRole($this->roleId);
+                $role = new CollectionRole($this->roleId);
                 $role->delete();
-            } catch (UnknownModelException $ex) {
+            } catch (NotFoundException $ex) {
             }
         }
 
-        $database = new Opus_Translate_Dao();
+        $database = new \Opus\Translate\Dao();
         $database->removeAll();
 
         parent::tearDown();
@@ -56,7 +59,7 @@ class Application_Update_ConvertCollectionRoleTranslationsTest extends Controlle
 
     public function testRun()
     {
-        $role = new Opus_CollectionRole();
+        $role = new CollectionRole();
 
         $invalidName = 'Collection Role mit ungültigem Namen.';
 
@@ -70,7 +73,7 @@ class Application_Update_ConvertCollectionRoleTranslationsTest extends Controlle
         $update->setQuietMode(true);
         $update->run();
 
-        $role = new Opus_CollectionRole($this->roleId);
+        $role = new CollectionRole($this->roleId);
 
         $name = $role->getName();
         $oaiName = $role->getOaiName();
@@ -88,7 +91,7 @@ class Application_Update_ConvertCollectionRoleTranslationsTest extends Controlle
 
     public function testRunWithExistingInvalidTranslationKey()
     {
-        $role = new Opus_CollectionRole();
+        $role = new CollectionRole();
 
         $invalidName = 'Tagungsbände';
 
@@ -109,7 +112,7 @@ class Application_Update_ConvertCollectionRoleTranslationsTest extends Controlle
         $update->setQuietMode(true);
         $update->run();
 
-        $role = new Opus_CollectionRole($this->roleId);
+        $role = new CollectionRole($this->roleId);
 
         $name = $role->getName();
         $oaiName = $role->getOaiName();
@@ -128,7 +131,7 @@ class Application_Update_ConvertCollectionRoleTranslationsTest extends Controlle
 
     public function testRunWithInvalidOaiName()
     {
-        $role = new Opus_CollectionRole();
+        $role = new CollectionRole();
 
         $invalidName = 'Tagungsbände';
 
@@ -142,7 +145,7 @@ class Application_Update_ConvertCollectionRoleTranslationsTest extends Controlle
         $update->setQuietMode(true);
         $update->run();
 
-        $role = new Opus_CollectionRole($this->roleId);
+        $role = new CollectionRole($this->roleId);
 
         $name = $role->getName();
         $oaiName = $role->getOaiName();

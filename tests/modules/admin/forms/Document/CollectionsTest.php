@@ -31,6 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Document;
+
 class Admin_Form_Document_CollectionsTest extends ControllerTestCase
 {
 
@@ -55,7 +57,7 @@ class Admin_Form_Document_CollectionsTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Collections();
 
-        $subform = new Zend_Form_SubForm();
+        $subform = new \Zend_Form_SubForm();
 
         $form->addSubForm($subform, 'ddc-2');
 
@@ -94,7 +96,7 @@ class Admin_Form_Document_CollectionsTest extends ControllerTestCase
      */
     public function testFormNameRendering()
     {
-        $form = new Zend_Form();
+        $form = new \Zend_Form();
         $form->setName('ddc-2');
 
         $html = $form->render();
@@ -104,7 +106,7 @@ class Admin_Form_Document_CollectionsTest extends ControllerTestCase
 
     public function testGetGroupedCollections()
     {
-        $document = new Opus_Document(146);
+        $document = Document::get(146);
 
         $form = new Admin_Form_Document_Collections();
 
@@ -116,6 +118,6 @@ class Admin_Form_Document_CollectionsTest extends ControllerTestCase
         $ddc = $grouped['ddc'];
 
         $this->assertCount(4, $ddc);
-        $this->assertInstanceOf('Opus_Collection', $ddc[0]);
+        $this->assertInstanceOf('Opus\Collection', $ddc[0]);
     }
 }

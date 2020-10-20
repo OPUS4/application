@@ -38,7 +38,7 @@
  *
  * TODO make tag more configurable
  */
-class Application_Form_Decorator_FormHelp extends Zend_Form_Decorator_Abstract
+class Application_Form_Decorator_FormHelp extends \Zend_Form_Decorator_Abstract
 {
 
     protected $_placement = 'PREPEND';

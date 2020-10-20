@@ -28,9 +28,9 @@
  * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
+use Opus\DocumentFinder;
 
 /**
  * Dieses Script gibt die IDs aller veröffentlichten Dokumente aus, bei denen
@@ -43,7 +43,7 @@
 $firstName = "Jane";
 $lastName = "Doe";
 
-$docfinder = new Opus_DocumentFinder();
+$docfinder = new DocumentFinder();
 // wichtig: müssen diesen Filter setzen, da im Index nur Dokument im Zustand published sind
 $docfinder->setServerState('published');
 $select = $docfinder->getSelect();

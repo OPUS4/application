@@ -71,7 +71,7 @@ class Application_Controller_ModuleAccessTest extends ControllerTestCase
     {
         $controller = $this->getController();
 
-        Zend_Registry::set('Zend_Log', null);
+        \Zend_Registry::set('Zend_Log', null);
 
         $controller->getLogger();
     }

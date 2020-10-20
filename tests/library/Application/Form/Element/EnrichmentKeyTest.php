@@ -32,6 +32,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\EnrichmentKey;
+use Opus\Model\ModelException;
+
 class Application_Form_Element_EnrichmentKeyTest extends FormElementTestCase
 {
 
@@ -58,7 +61,7 @@ class Application_Form_Element_EnrichmentKeyTest extends FormElementTestCase
         parent::setUp();
 
         // create a new enrichment key with an untranslated name
-        $enrichmentKey = new Opus_EnrichmentKey();
+        $enrichmentKey = new EnrichmentKey();
         $enrichmentKey->setName(self::$testEnrichmentKeyName);
         $enrichmentKey->store();
     }
@@ -68,7 +71,7 @@ class Application_Form_Element_EnrichmentKeyTest extends FormElementTestCase
         parent::tearDown();
 
         // remove previously created enrichment key
-        $enrichmentKey = new Opus_EnrichmentKey(self::$testEnrichmentKeyName);
+        $enrichmentKey = new EnrichmentKey(self::$testEnrichmentKeyName);
         if (! is_null($enrichmentKey)) {
             $enrichmentKey->delete();
         }
@@ -81,7 +84,7 @@ class Application_Form_Element_EnrichmentKeyTest extends FormElementTestCase
     {
 
         // NOTE: This also refreshes the cache for enrichment keys. Static state can carry over between tests.
-        $allOptions = Opus_EnrichmentKey::getAll();
+        $allOptions = EnrichmentKey::getAll();
 
         $element = $this->getElement(); // creates form element for enrichment keys using cached keys
 
@@ -100,7 +103,7 @@ class Application_Form_Element_EnrichmentKeyTest extends FormElementTestCase
 
     public function testMessageTranslated()
     {
-        $translator = Zend_Registry::get('Zend_Translate');
+        $translator = \Zend_Registry::get('Zend_Translate');
 
         $this->assertTrue($translator->isTranslated('validation_error_unknown_enrichmentkey'));
     }
@@ -139,14 +142,14 @@ class Application_Form_Element_EnrichmentKeyTest extends FormElementTestCase
      * Formularelement berücksichtigt wird, muss der Cache im Test explizit
      * zurückgesetzt werden.
      *
-     * @throws Opus_Model_Exception
+     * @throws ModelException
      */
     public function testNewEnrichmentKeyIsAvailableAsOption()
     {
         $element = $this->getElement();
         $options = $element->getMultiOptions();
 
-        $enrichmentKey = new Opus_EnrichmentKey();
+        $enrichmentKey = new EnrichmentKey();
         $enrichmentKey->setName('thisnamedoesnotexist');
         $enrichmentKey->store();
 
@@ -156,7 +159,7 @@ class Application_Form_Element_EnrichmentKeyTest extends FormElementTestCase
         $this->assertEquals(count($options), count($optionsAfterInsertOfNewEnrichmentKey));
 
         // Cache zurücksetzen, so dass der neu angelegte Enrichment-Key berücksichtigt wird
-        Opus_EnrichmentKey::getAll(true);
+        EnrichmentKey::getAll(true);
 
         $element = $this->getElement();
         $optionsAfterInsertOfNewEnrichmentKey = $element->getMultiOptions();

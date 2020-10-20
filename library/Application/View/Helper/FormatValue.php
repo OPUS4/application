@@ -31,6 +31,10 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Date;
+use Opus\Model\AbstractModel;
+use Opus\Model\Field;
+
 /**
  * View Helper for formatting field values.
  *
@@ -39,7 +43,7 @@
  * TODO Explore options to remove overlap with ShowModel view helper
  *      (ShowModel combines value formatting and layout).
  */
-class Application_View_Helper_FormatValue extends Zend_View_Helper_Abstract
+class Application_View_Helper_FormatValue extends \Zend_View_Helper_Abstract
 {
 
     use \Opus\LoggingTrait;
@@ -61,8 +65,8 @@ class Application_View_Helper_FormatValue extends Zend_View_Helper_Abstract
      */
     public function __construct()
     {
-        $this->_translation = Zend_Controller_Action_HelperBroker::getStaticHelper('Translation');
-        $this->_dates = Zend_Controller_Action_HelperBroker::getStaticHelper('Dates');
+        $this->_translation = \Zend_Controller_Action_HelperBroker::getStaticHelper('Translation');
+        $this->_dates = \Zend_Controller_Action_HelperBroker::getStaticHelper('Dates');
     }
 
     /**
@@ -75,14 +79,14 @@ class Application_View_Helper_FormatValue extends Zend_View_Helper_Abstract
     }
 
     /**
-     * Formats value that is instance of Opus_Model_Abstract.
-     * @param Opus_Model_Abstract $field
+     * Formats value that is instance of AbstractModel.
+     * @param AbstractModel $field
      * @param string Name of model for field (default = null)
      * @return string Formatted output
      */
     public function formatModel($field, $model = null)
     {
-        if ($field instanceof Opus_Date) {
+        if ($field instanceof Date) {
             return $this->formatDate($field);
         } else {
             $modelClass = $field->getValueModelClass();
@@ -91,9 +95,9 @@ class Application_View_Helper_FormatValue extends Zend_View_Helper_Abstract
 
             if (! empty($modelClass)) {
                 switch ($modelClass) {
-                    case 'Opus_Date':
+                    case 'Opus\Date':
                         return $this->formatDate($field->getValue());
-                    case 'Opus_DnbInstitute':
+                    case 'Opus\DnbInstitute':
                         $value = $field->getValue();
                         if (isset($value[0])) {
                             return $value[0]->getName();
@@ -132,13 +136,13 @@ class Application_View_Helper_FormatValue extends Zend_View_Helper_Abstract
     }
 
     /**
-     * Returns Opus_Date values formatted as string.
-     * @param Opus_Date $date
+     * Returns Opus\Date values formatted as string.
+     * @param Date $date
      * @return string Formatted date
      */
     public function formatDate($date)
     {
-        if (! ($date instanceof Opus_Date)) {
+        if (! ($date instanceof Date)) {
             return $date;
         } else {
             return $this->_dates->getDateString($date);
@@ -159,10 +163,10 @@ class Application_View_Helper_FormatValue extends Zend_View_Helper_Abstract
      */
     public function format($value, $model = null)
     {
-        if ($value instanceof Opus_Model_Abstract) {
+        if ($value instanceof AbstractModel) {
             return $this->formatModel($value, $model);
         }
-        if ($value instanceof Opus_Model_Field) {
+        if ($value instanceof Field) {
             return $this->formatModel($value, $model);
         } else {
             $this->getLogger()->debug('Formatting ' . $value);

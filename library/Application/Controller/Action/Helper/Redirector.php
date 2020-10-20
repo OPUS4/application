@@ -31,7 +31,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Application_Controller_Action_Helper_Redirector extends Zend_Controller_Action_Helper_Redirector
+class Application_Controller_Action_Helper_Redirector extends \Zend_Controller_Action_Helper_Redirector
 {
 
     use \Opus\LoggingTrait;
@@ -42,7 +42,7 @@ class Application_Controller_Action_Helper_Redirector extends Zend_Controller_Ac
     {
         parent::init();
 
-        $this->_flashMessenger = Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger');
+        $this->_flashMessenger = \Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger');
     }
 
     /**
@@ -156,7 +156,7 @@ class Application_Controller_Action_Helper_Redirector extends Zend_Controller_Ac
             $anchor = '#' . $params['anchor'];
             unset($params['anchor']);
 
-            $urlHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('url');
+            $urlHelper = \Zend_Controller_Action_HelperBroker::getStaticHelper('url');
 
             $gotoUrl = $urlHelper->url(array_merge([
                 'action' => $action, 'controller' => $controller, 'module' => $module

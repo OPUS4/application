@@ -31,6 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Document;
+
 class Application_Import_ArrayImport
 {
 
@@ -41,6 +43,6 @@ class Application_Import_ArrayImport
      */
     public function import($data)
     {
-        $document = Opus_Document::fromArray($data);
+        $document = Document::fromArray($data);
     }
 }

@@ -29,8 +29,9 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
+use Opus\UserRole;
 
 /**
  * Lädt die Konfigurationsdatei für eine Rolle.
@@ -62,10 +63,10 @@ class Application_Security_RoleConfig
 
     public function getRolePermissions($acl, $roleName)
     {
-        $role = Opus_UserRole::fetchByName($roleName);
+        $role = UserRole::fetchByName($roleName);
 
         if (is_null($role)) {
-            Zend_Registry::get('Zend_Log')->err("Attempt to load unknown role '$roleName'.");
+            \Zend_Registry::get('Zend_Log')->err("Attempt to load unknown role '$roleName'.");
             return;
         }
 
@@ -78,12 +79,12 @@ class Application_Security_RoleConfig
         foreach ($resources as $resource) {
             if (! strncmp('resource_', $resource, 9)) {
                 // resource (like languages);
-                $resource = new Zend_Acl_Resource(substr($resource, 9));
+                $resource = new \Zend_Acl_Resource(substr($resource, 9));
                 $acl->allow($roleName, $resource);
                 $resourcesConfigured = true;
             } elseif (! strncmp('workflow_', $resource, 9)) {
                 // workflow permission
-                $resource = new Zend_Acl_Resource($resource);
+                $resource = new \Zend_Acl_Resource($resource);
                 $acl->allow($roleName, $resource);
             } else {
                 // module access
@@ -93,7 +94,7 @@ class Application_Security_RoleConfig
 
         if (! $resourcesConfigured) {
             foreach ($accessibleModules as $module) {
-                if ($acl->has(new Zend_Acl_Resource($module))) {
+                if ($acl->has(new \Zend_Acl_Resource($module))) {
                     $acl->allow($roleName, $module);
                 }
             }
@@ -102,8 +103,8 @@ class Application_Security_RoleConfig
 
     /**
      *
-     * @param type $role
-     * @return type
+     * @param $role string
+     * @return \Zend_Config|null
      *
      * TODO not used yet
      */
@@ -111,6 +112,6 @@ class Application_Security_RoleConfig
     {
         $path = APPLICATION_PATH . '/application/configs/security/' . $role . '.ini';
 
-        return is_readable($path) ? new Zend_Config_Ini($path) : null;
+        return is_readable($path) ? new \Zend_Config_Ini($path) : null;
     }
 }

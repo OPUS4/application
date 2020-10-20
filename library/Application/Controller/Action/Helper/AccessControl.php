@@ -36,9 +36,10 @@
  *
  * Dieser Helper dient dazu die accessAllowed Funktion in den Controllern zur Verfügung zu stellen.
  *
- * TODO weiter ausbauen und mit Opus_Security_IRealm konsolidieren (Framework vs. Application Security)
+ * TODO weiter ausbauen und mit Opus\Security\IRealm konsolidieren (Framework vs. Application Security)
  */
-class Application_Controller_Action_Helper_AccessControl extends Zend_Controller_Action_Helper_Abstract implements Application_Security_AccessControl
+class Application_Controller_Action_Helper_AccessControl extends \Zend_Controller_Action_Helper_Abstract
+    implements Application_Security_AccessControl
 {
 
     private $_acl;
@@ -51,7 +52,7 @@ class Application_Controller_Action_Helper_AccessControl extends Zend_Controller
     /**
      * Prüft Zugriff auf Ressource.
      *
-     * Wenn die Security für OPUS abgeschaltet ist, gibt es kein Opus_Acl Objekt, daher ist in diesem Fall der Zugriff
+     * Wenn die Security für OPUS abgeschaltet ist, gibt es kein Acl Objekt, daher ist in diesem Fall der Zugriff
      * erlaubt.
      *
      * Wenn die übergebene Ressource NULL ist
@@ -81,7 +82,7 @@ class Application_Controller_Action_Helper_AccessControl extends Zend_Controller
     protected function getAcl()
     {
         if (is_null($this->_acl)) {
-            $this->_acl = Zend_Registry::isRegistered('Opus_Acl') ? Zend_Registry::get('Opus_Acl') : null;
+            $this->_acl = \Zend_Registry::isRegistered('Opus_Acl') ? \Zend_Registry::get('Opus_Acl') : null;
         }
         return $this->_acl;
     }

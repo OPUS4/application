@@ -45,13 +45,13 @@ class Application_Form_Element_DocumentType extends Application_Form_Element_Sel
         $this->setLabel($this->getView()->translate($this->getName()));
         $this->setRequired(true);
 
-        $docTypeHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
+        $docTypeHelper = \Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
 
         $options = $docTypeHelper->getDocumentTypes();
 
         $this->setDisableTranslator(true);
 
-        $translator = Zend_Registry::get('Zend_Translate');
+        $translator = \Zend_Registry::get('Zend_Translate');
 
         foreach ($options as $index => $type) {
             if (! is_null($translator) && $translator->isTranslated($index)) {
@@ -69,7 +69,7 @@ class Application_Form_Element_DocumentType extends Application_Form_Element_Sel
     {
         $option = $this->getMultiOption($value);
 
-        $translator = Zend_Registry::get('Zend_Translate');
+        $translator = \Zend_Registry::get('Zend_Translate');
 
         if (! is_null($translator) && $translator->isTranslated($value)) {
             $label = $translator->translate($value);

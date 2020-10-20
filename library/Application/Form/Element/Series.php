@@ -29,8 +29,9 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
+use Opus\Series;
 
 /**
  * Formularelement für Auswahl einer Schriftenreihe.
@@ -45,11 +46,11 @@ class Application_Form_Element_Series extends Application_Form_Element_Select
         $this->setRequired(true);
         $this->setDisableTranslator(true); // Schriftenreihen werden nicht übersetzt
 
-        $validator = new Zend_Validate_Int();
+        $validator = new \Zend_Validate_Int();
         $validator->setMessage('validation_error_int');
         $this->addValidator($validator);
 
-        $options = Opus_Series::getAll();
+        $options = Series::getAll();
 
         foreach ($options as $option) {
             $this->addMultiOption($option->getId(), $option->getTitle());

@@ -28,9 +28,10 @@
  * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
+use Opus\Document;
+use Opus\DocumentFinder;
 
 /**
  *
@@ -45,9 +46,9 @@
 
 $updateRequired = 0;
 
-$docfinder = new Opus_DocumentFinder();
+$docfinder = new DocumentFinder();
 foreach ($docfinder->ids() as $docId) {
-    $doc = new Opus_Document($docId);
+    $doc = Document::get($docId);
 
     $numOfTitles = 0;
     foreach ($doc->getTitleMain() as $title) {

@@ -58,13 +58,13 @@ class Admin_Form_ActionBox extends Admin_Form_AbstractDocumentSubForm
     {
         parent::init();
 
-        $element = new Zend_Form_Element_Submit(self::ELEMENT_SAVE);
+        $element = new \Zend_Form_Element_Submit(self::ELEMENT_SAVE);
         $element->setValue('save');
         $element->removeDecorator('DtDdWrapper');
         $element->setLabel('Save');
         $this->addElement($element);
 
-        $element = new Zend_Form_Element_Submit(self::ELEMENT_CANCEL);
+        $element = new \Zend_Form_Element_Submit(self::ELEMENT_CANCEL);
         $element->setValue('cancel');
         $element->removeDecorator('DtDdWrapper');
         $element->setLabel('Cancel');
@@ -122,7 +122,7 @@ class Admin_Form_ActionBox extends Admin_Form_AbstractDocumentSubForm
             }
         } else {
             // Sollte niemals passieren
-            Zend_Registry::get('Zend_Log')->err('ActionBox without parent form');
+            \Zend_Registry::get('Zend_Log')->err('ActionBox without parent form');
         }
 
         return $links;
@@ -132,7 +132,7 @@ class Admin_Form_ActionBox extends Admin_Form_AbstractDocumentSubForm
     {
         $links = [];
 
-        $workflow = Zend_Controller_Action_HelperBroker::getStaticHelper('workflow');
+        $workflow = \Zend_Controller_Action_HelperBroker::getStaticHelper('workflow');
 
         $targetStates = $workflow->getAllowedTargetStatesForDocument($this->_document);
 

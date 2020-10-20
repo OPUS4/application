@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -30,7 +29,9 @@
  * @author      Sascha Szott
  * @copyright   Copyright (c) 2016-2019
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- *
+ */
+
+/**
  * @covers Sword_DepositController
  */
 class Sword_DepositControllerMultipleDocsTest extends ControllerTestCase

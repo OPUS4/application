@@ -37,7 +37,7 @@ class Admin_Form_Document_PersonMovesTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_PersonMoves();
 
-        $this->assertEquals(4, count($form->getElements()));
+        $this->assertCount(4, $form->getElements());
 
         $this->assertNotNull($form->getElement('First'));
         $this->assertNotNull($form->getElement('Up'));
@@ -49,7 +49,7 @@ class Admin_Form_Document_PersonMovesTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_PersonMoves(Admin_Form_Document_PersonMoves::POSITION_FIRST);
 
-        $this->assertEquals(2, count($form->getElements()));
+        $this->assertCount(2, $form->getElements());
 
         $this->assertNotNull($form->getElement('Down'));
         $this->assertNotNull($form->getElement('Last'));
@@ -59,7 +59,7 @@ class Admin_Form_Document_PersonMovesTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_PersonMoves(Admin_Form_Document_PersonMoves::POSITION_LAST);
 
-        $this->assertEquals(2, count($form->getElements()));
+        $this->assertCount(2, $form->getElements());
 
         $this->assertNotNull($form->getElement('First'));
         $this->assertNotNull($form->getElement('Up'));
@@ -86,23 +86,23 @@ class Admin_Form_Document_PersonMovesTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_PersonMoves();
 
-        $this->assertEquals(4, count($form->getElements()));
+        $this->assertCount(4, $form->getElements());
 
         $form->changePosition(Admin_Form_Document_PersonMoves::POSITION_FIRST);
 
-        $this->assertEquals(2, count($form->getElements()));
+        $this->assertCount(2, $form->getElements());
         $this->assertNotNull($form->getElement('Down'));
         $this->assertNotNull($form->getElement('Last'));
 
         $form->changePosition(Admin_Form_Document_PersonMoves::POSITION_LAST);
 
-        $this->assertEquals(2, count($form->getElements()));
+        $this->assertCount(2, $form->getElements());
         $this->assertNotNull($form->getElement('First'));
         $this->assertNotNull($form->getElement('Up'));
 
         $form->changePosition(Admin_Form_Document_PersonMoves::POSITION_DEFAULT);
 
-        $this->assertEquals(4, count($form->getElements()));
+        $this->assertCount(4, $form->getElements());
     }
 
     public function testProcessPostEmpty()

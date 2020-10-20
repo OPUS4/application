@@ -28,7 +28,6 @@
  * @author      Thoralf Klein <thoralf.klein@zib.de>
  * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -37,8 +36,13 @@
  * TODO move as command to opus4dev tool
  */
 
+use Opus\Collection;
+use Opus\Date;
+use Opus\Document;
+use Opus\Person;
+
 for ($i = 1; $i < 10000; $i++) {
-    $d = new Opus_Document();
+    $d = Document::new();
     $d->setServerState('published');
     $d->setType('preprint');
     $d->setLanguage('deu');
@@ -47,17 +51,17 @@ for ($i = 1; $i < 10000; $i++) {
     $title->setLanguage('deu');
     $title->setValue('title-' . rand());
 
-    $date = new Opus_Date();
+    $date = new Date();
     $date->setNow();
     $date->setYear(1990 + ($i % 23));
     $d->setPublishedDate($date);
 
-    $p = new Opus_Person();
+    $p = new Person();
     $p->setFirstName("foo-" . ($i % 7));
     $p->setLastName("bar-" . ($i % 5));
     $p = $d->addPersonAuthor($p);
 
-    $c = new Opus_Collection(15990 + ($i % 103));
+    $c = new Collection(15990 + ($i % 103));
     $d->addCollection($c);
 
     $s = $d->addSubject()->setType('ddc');

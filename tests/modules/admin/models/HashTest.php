@@ -30,13 +30,15 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Document;
+
 class Admin_Model_HashTest extends ControllerTestCase
 {
 
     public function testCreate()
     {
         $this->markTestIncomplete('No hash in test data.');
-        $doc = new Opus_Document(91);
+        $doc = Document::get(91);
         $files = $doc->getFiles();
         $file = $files[0];
     }

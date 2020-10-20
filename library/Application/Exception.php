@@ -29,10 +29,14 @@
  * @author      Julian Heise <heise@zib.de>
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
-class Application_Exception extends Exception
+/**
+ * Class Application_Exception
+ *
+ * TODO NAMESPACE change name
+ */
+class Application_Exception extends \Exception
 {
 
     protected $_httpResponseCode = null;

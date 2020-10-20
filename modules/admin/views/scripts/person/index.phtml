@@ -67,9 +67,9 @@
             [
                     'module' => 'admin', 'controller' => 'documents', 'action' => 'index', 'state' => 'all'],
             $person
-        )) ?>"><?= count(Opus_Person::getPersonDocuments($person)) ?></a></td>
+        )) ?>"><?= count(\Opus\Person::getPersonDocuments($person)) ?></a></td>
         <td class="roles">
-            <?PHP foreach (Opus_Person::getPersonRoles($person) as $role) : ?>
+            <?PHP foreach (\Opus\Person::getPersonRoles($person) as $role) : ?>
             <a href="<?= $this->url(array_merge(
                 [
                     'module' => 'admin', 'controller' => 'documents', 'action' => 'index', 'state' => 'all', 'role' => $role['role']],

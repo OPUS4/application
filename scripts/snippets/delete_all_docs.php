@@ -28,9 +28,10 @@
  * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
+use Opus\Document;
+use Opus\DocumentFinder;
 
 /**
  * Removes all documents
@@ -39,13 +40,13 @@
  *
  */
 
-$finder = new Opus_DocumentFinder();
+$finder = new DocumentFinder();
 foreach ($finder->ids() as $id) {
-    $doc = new Opus_Document($id);
+    $doc = Document::get($id);
     $doc->deletePermanent();
     echo "document " . $id . " was deleted.\n";
 }
 
-$finder = new Opus_DocumentFinder();
+$finder = new DocumentFinder();
 echo "done -- num of docs: " . $finder->count() . "\n";
 exit();

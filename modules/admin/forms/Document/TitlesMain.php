@@ -29,8 +29,9 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
+use Opus\Document;
 
 /**
  * Unterformular fuer Haupttitel eines Dokuments.
@@ -115,7 +116,7 @@ class Admin_Form_Document_TitlesMain extends Admin_Form_Document_MultiSubForm
      *
      * Sorgt dafuer, dass der Titel in der Dokumentensprache zuerst im Array steht.
      *
-     * @param Opus_Document $document
+     * @param Document $document
      * @return array
      */
     public function getFieldValues($document)

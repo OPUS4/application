@@ -62,7 +62,7 @@ class Home_Model_HelpFilesTest extends ControllerTestCase
 
     public function testGetFileContent()
     {
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
             'help' => [
                 'useFiles' => true
             ]
@@ -90,7 +90,7 @@ class Home_Model_HelpFilesTest extends ControllerTestCase
 
     public function testGetFileContentForAllFiles()
     {
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
             'help' => [
                 'useFiles' => true
             ]

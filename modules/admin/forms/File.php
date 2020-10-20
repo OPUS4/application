@@ -25,6 +25,12 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+use Opus\File;
+use Opus\UserRole;
+use Opus\Model\AbstractDb;
+use Opus\Model\NotFoundException;
+
+
 /**
  * Formular fuer Anzeige/Editieren einer Datei.
  *
@@ -118,7 +124,7 @@ class Admin_Form_File extends Admin_Form_AbstractModelSubForm
 
     /**
      * Initialisierung des Formulars mit den Werten in einer Model-Instanz.
-     * @param Opus_File $file
+     * @param File $file
      */
     public function populateFromModel($file)
     {
@@ -152,7 +158,7 @@ class Admin_Form_File extends Admin_Form_AbstractModelSubForm
      * Sets default values for form.
      *
      * @param array $post
-     * @return Zend_Form
+     * @return \Zend_Form
      */
     public function setDefaults(array $defaults)
     {
@@ -160,7 +166,7 @@ class Admin_Form_File extends Admin_Form_AbstractModelSubForm
 
         if (isset($defaults[$this->getName()])) {
             $fileId = $defaults[$this->getName()][self::ELEMENT_ID];
-            $file = new Opus_File($fileId);
+            $file = new File($fileId);
             $this->getSubForm(self::SUBFORM_HASHES)->populateFromModel($file);
             $this->getElement(self::ELEMENT_FILE_SIZE)->setValue($file->getFileSize());
         } else {
@@ -171,7 +177,7 @@ class Admin_Form_File extends Admin_Form_AbstractModelSubForm
 
     /**
      * Update einer Model-Instanz mit den Werten im Formular.
-     * @param Opus_Model_AbstractDb $model
+     * @param AbstractDb $model
      */
     public function updateModel($file)
     {
@@ -202,8 +208,8 @@ class Admin_Form_File extends Admin_Form_AbstractModelSubForm
 
         if (strlen(trim($fileId)) > 0 && is_numeric($fileId)) {
             try {
-                $file = new Opus_File($fileId);
-            } catch (Opus_Model_NotFoundException $omnfe) {
+                $file = new File($fileId);
+            } catch (NotFoundException $omnfe) {
                 $this->getLogger()->err(__METHOD__ . " Unknown file ID = '$fileId'.");
                 throw new Application_Exception("Unknown file ID = '$fileId'.");
             }
@@ -223,7 +229,7 @@ class Admin_Form_File extends Admin_Form_AbstractModelSubForm
     {
         $checkedRoles = [];
 
-        $roles = Opus_UserRole::getAll();
+        $roles = UserRole::getAll();
 
         foreach ($roles as $role) {
             $files = $role->listAccessFiles();
@@ -246,7 +252,7 @@ class Admin_Form_File extends Admin_Form_AbstractModelSubForm
         // remove roles that are not selected
         foreach ($currentRoleNames as $index => $roleName) {
             if (! in_array($roleName, $selectedRoles)) {
-                $role = Opus_UserRole::fetchByName($roleName);
+                $role = UserRole::fetchByName($roleName);
                 $role->removeAccessFile($fileId);
                 $role->store();
                 $this->getLogger()->debug("File ID = $fileId access for role '$roleName' removed.");
@@ -259,7 +265,7 @@ class Admin_Form_File extends Admin_Form_AbstractModelSubForm
 
         // add selected roles
         foreach ($selectedRoles as $roleName) {
-            $role = Opus_UserRole::fetchByName($roleName);
+            $role = UserRole::fetchByName($roleName);
             if (! is_null($role)) {
                 if (! in_array($roleName, $currentRoleNames)) {
                     $role->appendAccessFile($fileId);

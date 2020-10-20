@@ -28,9 +28,11 @@
  * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
+use Opus\Document;
+use Opus\DocumentFinder;
+use Opus\Model\NotFoundException;
 
 /**
  * Finds all non-extractable full texts.
@@ -44,7 +46,7 @@ $app = 'solr/opus';
 
 $solrServer = new Apache_Solr_Service($host, $port, $app);
 
-$docFinder = new Opus_DocumentFinder();
+$docFinder = new DocumentFinder();
 
 $overallNumOfFulltexts = 0;
 $numOfNonExtractableFulltexts = 0;
@@ -52,8 +54,8 @@ $numOfNonExtractableFulltexts = 0;
 foreach ($docFinder->ids() as $id) {
     $d = null;
     try {
-        $d = new Opus_Document($id);
-    } catch (Opus_Model_NotFoundException $e) {
+        $d = Document::get($id);
+    } catch (NotFoundException $e) {
         // document with id $id does not exist
         continue;
     }

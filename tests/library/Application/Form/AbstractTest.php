@@ -55,11 +55,11 @@ class Application_Form_AbstractTest extends ControllerTestCase
     {
         $this->form->init();
 
-        $paths = $this->form->getPluginLoader(Zend_Form::DECORATOR)->getPaths();
+        $paths = $this->form->getPluginLoader(\Zend_Form::DECORATOR)->getPaths();
         $this->assertArrayHasKey('Application_Form_Decorator_', $paths);
         $this->assertContains('Application/Form/Decorator/', $paths['Application_Form_Decorator_']);
 
-        $paths = $this->form->getPluginLoader(Zend_Form::ELEMENT)->getPaths();
+        $paths = $this->form->getPluginLoader(\Zend_Form::ELEMENT)->getPaths();
         $this->assertArrayHasKey('Application_Form_Element_', $paths);
         $this->assertContains('Application/Form/Element/', $paths['Application_Form_Element_']);
     }
@@ -83,7 +83,7 @@ class Application_Form_AbstractTest extends ControllerTestCase
     {
         $form = $this->form;
 
-        $elementText = new Zend_Form_Element_Text('text');
+        $elementText = new \Zend_Form_Element_Text('text');
         $form->addElement($elementText);
 
         $elementText->setValue('Test Test');
@@ -95,7 +95,7 @@ class Application_Form_AbstractTest extends ControllerTestCase
         $elementText->setValue('0');
         $this->assertEquals('0', $form->getElementValue('text'));
 
-        $elementCheckbox = new Zend_Form_Element_Checkbox('checkbox');
+        $elementCheckbox = new \Zend_Form_Element_Checkbox('checkbox');
         $form->addElement($elementCheckbox);
 
         $elementCheckbox->setChecked(true);
@@ -251,12 +251,12 @@ class Application_Form_AbstractTest extends ControllerTestCase
 
         $this->assertNotNull($config);
         $this->assertInstanceOf('Zend_Config', $config);
-        $this->assertSame($config, Zend_Registry::get('Zend_Config'));
+        $this->assertSame($config, \Zend_Registry::get('Zend_Config'));
     }
 
     public function testSetApplicationConfig()
     {
-        $config = new Zend_Config(['test' => true]);
+        $config = new \Zend_Config(['test' => true]);
 
         $this->form->setApplicationConfig($config);
 
@@ -268,6 +268,6 @@ class Application_Form_AbstractTest extends ControllerTestCase
 
         $returnedConfig = $this->form->getApplicationConfig();
 
-        $this->assertSame(Zend_Registry::get('Zend_Config'), $returnedConfig);
+        $this->assertSame(\Zend_Registry::get('Zend_Config'), $returnedConfig);
     }
 }

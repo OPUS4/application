@@ -29,7 +29,6 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -37,12 +36,12 @@
  *
  * TODO better way to get ACL?
  */
-class Application_View_Helper_AdminMenu extends Zend_View_Helper_Abstract
+class Application_View_Helper_AdminMenu extends \Zend_View_Helper_Abstract
 {
 
     /**
      * Returns current instance.
-     * @return View_Helper_Security
+     * @return Application_View_Helper_AdminMenu
      */
     public function adminMenu()
     {

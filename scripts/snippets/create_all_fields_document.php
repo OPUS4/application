@@ -36,7 +36,15 @@
 
 // TODO move script (is used for testing purposes) - also is probably out of date (since data model changes)
 
-$doc = new Opus_Document();
+use Opus\Collection;
+use Opus\CollectionRole;
+use Opus\DnbInstitute;
+use Opus\Document;
+use Opus\EnrichmentKey;
+use Opus\Licence;
+use Opus\Person;
+
+$doc = Document::new();
 $doc->setType('all');
 $doc->setServerState('published');
 $doc->setServerDatePublished('1900-01-01');
@@ -44,12 +52,12 @@ $doc->setServerDatePublished('1900-01-01');
 
 // damn API. $doc->addPersonSubmiter() doesn't work for link models!
 // -> we should change this in 4.x
-$submitter = new Opus_Person();
+$submitter = new Person();
 $submitter->setFirstName('Donald')->setLastName('Duck')->setEmail('donald@example.org')->setDateOfBirth('1920-03-13')
     ->setPlaceOfBirth('Entenhausen');
 $doc->addPersonSubmitter($submitter);
 
-$author = new Opus_Person();
+$author = new Person();
 $author->setFirstName('Daniel')->setLastName('Düsentrieb')->setAcademicTitle('Dr.-Ing.');
 $doc->addPersonAuthor($author);
 
@@ -87,9 +95,9 @@ $doc->setVolume('4');
 $doc->setIssue('18');
 
 $instituteName = 'Institut für empirische Forschung';
-$institutesRole = Opus_CollectionRole::fetchByName('institutes');
+$institutesRole = CollectionRole::fetchByName('institutes');
 if (is_null($institutesRole) === true) {
-    $institutesRole = new Opus_CollectionRole();
+    $institutesRole = new CollectionRole();
     $institutesRole->setName('institutes')
                    ->setOaiName('institutes')
                    ->setPosition(1)
@@ -101,7 +109,7 @@ if (is_null($institutesRole) === true) {
                    ->setVisibleOai('Name')
                    ->store();
 }
-$instituteCollections = Opus_Collection::fetchCollectionsByRoleName($institutesRole->getId(), $instituteName);
+$instituteCollections = Collection::fetchCollectionsByRoleName($institutesRole->getId(), $instituteName);
 if (count($instituteCollections) >= 1) {
     $instituteCollection = $instituteCollections[0];
 } else {
@@ -156,9 +164,9 @@ $pubmed->setValue('9382368');
 
 $doc->setThesisDateAccepted('2003-02-01');
 
-$dnbInstitute = new Opus_DnbInstitute();
+$dnbInstitute = new DnbInstitute();
 $dnbInstitute->setName('Forschungsinstitut für Code Coverage');
-foreach (Opus_DnbInstitute::getGrantors() as $grantor) {
+foreach (DnbInstitute::getGrantors() as $grantor) {
     if ($dnbInstitute->getName() === $grantor->getName()) {
         $dnbInstitute = $grantor;
         break;
@@ -170,32 +178,32 @@ if (is_null($dnbInstitute->getId()) === true) {
 $doc->setThesisGrantor($dnbInstitute);
 $doc->setThesisPublisher($dnbInstitute);
 
-$referee = new Opus_Person();
+$referee = new Person();
 $referee->setFirstName('Gyro');
 $referee->setLastName('Gearloose');
 $referee->setAcademicTitle('Prof. Dr.');
 $referee->store();
 $doc->addPersonReferee($referee);
 
-$editor = new Opus_Person();
+$editor = new Person();
 $editor->setFirstName('Bob');
 $editor->setLastName('Foster');
 $editor->store();
 $doc->addPersonEditor($editor);
 
-$advisor = new Opus_Person();
+$advisor = new Person();
 $advisor->setFirstName('Fred');
 $advisor->setLastName('Clever');
 $advisor->store();
 $doc->addPersonAdvisor($advisor);
 
-$translator = new Opus_Person();
+$translator = new Person();
 $translator->setFirstName('Erika');
 $translator->setLastName('Fuchs');
 $translator->store();
 $doc->addPersonTranslator($translator);
 
-$contributor = new Opus_Person();
+$contributor = new Person();
 $contributor->setFirstName('Jeff');
 $contributor->setLastName('Smart');
 $contributor->store();
@@ -220,11 +228,11 @@ $note->setVisibility('public')->setMessage(
 $noteTwo = $doc->addNote();
 $noteTwo->setVisibility('private')->setMessage('und noch eine Bemerkung zum Bearbeitungsstand.');
 
-$licences = Opus_Licence::getAll();
+$licences = Licence::getAll();
 if (count($licences) >= 1) {
     $lic = $licences[0];
 } else {
-    $lic = new Opus_Licence();
+    $lic = new Licence();
     $lic->setActive(1);
     $lic->setLanguage('deu');
     $lic->setLinkLicence('http://www.test.de');
@@ -234,7 +242,7 @@ if (count($licences) >= 1) {
 $doc->setLicence($lic);
 
 // check for enrichment keys before creating enrichments
-$enrichmentKeys = Opus_EnrichmentKey::getAll();
+$enrichmentKeys = EnrichmentKey::getAll();
 $enrichmentKeyNames = [];
 foreach ($enrichmentKeys as $enrichmentKey) {
     $enrichmentKeyNames[] = $enrichmentKey->getName();
@@ -245,7 +253,7 @@ $missingEnrichmentKeyNames = array_diff(
 );
 if (! empty($missingEnrichmentKeyNames)) {
     foreach ($missingEnrichmentKeyNames as $missingEnrichmentKeyName) {
-        $newEnrichmentKey = new Opus_EnrichmentKey();
+        $newEnrichmentKey = new EnrichmentKey();
         $newEnrichmentKey->setName($missingEnrichmentKeyName);
         $newEnrichmentKey->store();
     }

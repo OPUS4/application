@@ -31,6 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Document;
+
 /**
  * SubForm um mehrere Unterformulare (z.B. Patente) zu verwalten.
  *
@@ -65,7 +67,7 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
     protected $_subFormClass;
 
     /**
-     * Opus_Document Feldname für Unterformulare.
+     * Document Feldname für Unterformulare.
      * @var type
      */
     protected $_fieldName;
@@ -84,7 +86,7 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
      * Konstruiert Instanz von Fomular.
      *
      * @param string $subFormClass Name der Klasse für Unterformulare
-     * @param string $fieldName Name des Opus_Document Feldes, das angezeigt werden soll
+     * @param string $fieldName Name des Document Feldes, das angezeigt werden soll
      * @param string $validator Object für Validierungen über Unterformulare hinweg
      * @param multi $options
      */
@@ -154,7 +156,7 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
     /**
      * Erzeugt Unterformulare abhängig von den Metadaten im Dokument.
      *
-     * @param Opus_Document $document
+     * @param Document $document
      */
     public function populateFromModel($document)
     {
@@ -178,7 +180,7 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
 
     /**
      * Holt vom Dokument den Wert des konfigurierten Feldes.
-     * @param Opus_Document $document
+     * @param Document $document
      * @return array
      */
     public function getFieldValues($document)
@@ -285,7 +287,7 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
     /**
      * Aktualisiert das Dokument.
      *
-     * @param Opus_Document $document
+     * @param Document $document
      */
     public function updateModel($document)
     {
@@ -355,7 +357,7 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
 
         $multiWrapper = $subForm->getDecorator('multiWrapper');
 
-        if (! is_null($multiWrapper) && $multiWrapper instanceof Zend_Form_Decorator_HtmlTag) {
+        if (! is_null($multiWrapper) && $multiWrapper instanceof \Zend_Form_Decorator_HtmlTag) {
             $multiClass = $multiWrapper->getOption('class');
             $markerClass = ($position % 2 == 0) ? 'even' : 'odd';
 

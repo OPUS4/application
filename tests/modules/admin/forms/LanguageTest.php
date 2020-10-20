@@ -31,6 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Language;
+
 class Admin_Form_LanguageTest extends ControllerTestCase
 {
 
@@ -60,7 +62,7 @@ class Admin_Form_LanguageTest extends ControllerTestCase
     {
         $form = new Admin_Form_Language();
 
-        $language = new Opus_Language();
+        $language = new Language();
         $language->setActive(true);
         $language->setPart2B('ger');
         $language->setPart2T('deu');
@@ -87,7 +89,7 @@ class Admin_Form_LanguageTest extends ControllerTestCase
     {
         $form = new Admin_Form_Language();
 
-        $language = new Opus_Language(2);
+        $language = new Language(2);
 
         $form->populateFromModel($language);
 
@@ -108,7 +110,7 @@ class Admin_Form_LanguageTest extends ControllerTestCase
         $form->getElement('Scope')->setValue('I');
         $form->getElement('Type')->setValue('L');
 
-        $language = new Opus_Language();
+        $language = new Language();
 
         $form->updateModel($language);
 

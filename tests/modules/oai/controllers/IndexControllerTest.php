@@ -31,7 +31,23 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- *
+ */
+
+use Opus\Collection;
+use Opus\CollectionRole;
+use Opus\DnbInstitute;
+use Opus\Document;
+use Opus\Enrichment;
+use Opus\File;
+use Opus\Identifier;
+use Opus\Licence;
+use Opus\Person;
+use Opus\Series;
+use Opus\TitleAbstract;
+use Opus\UserRole;
+
+
+/**
  * TODO split specific protocol tests into separate classes
  * TODO unit tests transformations directly without "dispatch"
  * TODO create plugins for formats/protocols/standards
@@ -133,7 +149,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
      */
     public function testIdentify()
     {
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
             'oai' => ['repository' => ['name' => 'test-repo-name']]
         ]));
 
@@ -192,7 +208,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
             'comment' => ['url' => 'test-comment-url', 'text' => 'test-comment-text']
         ];
 
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
             'oai' => ['description' => ['eprints' => $values]]
         ]));
 
@@ -218,7 +234,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
 
     public function testIdentifyDescriptionOaiIdentifier()
     {
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
             'oai' => ['repository' => ['identifier' => 'test-repo-identifier'],
                 'sample' => ['identifier' => 'test-sample-identifier']]
         ]));
@@ -623,7 +639,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
      */
     public function testGetRecordXMetaDissPlusDoc146SubjectDDC()
     {
-        $doc = new Opus_Document(146);
+        $doc = Document::get(146);
         $ddcs = [];
         foreach ($doc->getCollection() as $c) {
             if ($c->getRoleName() == 'ddc') {
@@ -723,7 +739,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
      */
     public function testGetRecordXMetaDissPlusDoc132EmptyThesisGrantor()
     {
-        $doc = new Opus_Document(132);
+        $doc = Document::get(132);
         $this->assertEquals(
             'doctoralthesis',
             $doc->getType(),
@@ -758,7 +774,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
      */
     public function testGetRecordXMetaDissPlusDoc132EmptyThesisPublisher()
     {
-        $doc = new Opus_Document(132);
+        $doc = Document::get(132);
         $this->assertEquals(
             'doctoralthesis',
             $doc->getType(),
@@ -793,7 +809,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
      */
     public function testGetRecordXMetaDissPlusDoc93()
     {
-        $doc = new Opus_Document(93);
+        $doc = Document::get(93);
         $this->assertEquals(
             'doctoralthesis',
             $doc->getType(),
@@ -834,7 +850,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
      */
     public function testGetRecordXMetaDissPlusDoc146ThesisAndDdb()
     {
-        $doc = new Opus_Document(146);
+        $doc = Document::get(146);
         $this->assertEquals(
             'masterthesis',
             $doc->getType(),
@@ -913,7 +929,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
      */
     public function testGetRecordOaiDcDoc91DocType()
     {
-        $doc = new Opus_Document(91);
+        $doc = Document::get(91);
         $this->assertEquals("report", $doc->getType(), "testdata changed");
 
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=oai_dc&identifier=oai::91');
@@ -957,7 +973,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $this->assertEquals('Baz University', $elements->item(1)->nodeValue, 'dc:contributor field changed');
 
         // Regression test for OPUSVIER-2393 (show dc:identifier)
-        $urnResolverUrl = Zend_Registry::get('Zend_Config')->urn->resolverUrl;
+        $urnResolverUrl = \Zend_Registry::get('Zend_Config')->urn->resolverUrl;
         $elements = $xpath->query('//oai_dc:dc/dc:identifier[text()="' . $urnResolverUrl . 'urn:nbn:op:123"]');
         $this->assertEquals(1, $elements->length, 'dc:identifier URN count changed');
 
@@ -1009,7 +1025,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
      */
     public function testGetRecordOaiDcDoc10SubjectDdcAndDate()
     {
-        $doc = new Opus_Document(10);
+        $doc = Document::get(10);
         $ddcs = [];
         foreach ($doc->getCollection() as $c) {
             if ($c->getRoleName() == 'ddc') {
@@ -1058,7 +1074,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
      */
     public function testGetRecordOaiDcDoc114DcDate()
     {
-        $doc = new Opus_Document(114);
+        $doc = Document::get(114);
         $completedDate = $doc->getCompletedDate();
         $this->assertEquals("2011-04-19", "$completedDate", "testdata changed");
 
@@ -1206,8 +1222,8 @@ class Oai_IndexControllerTest extends ControllerTestCase
      */
     public function testListRecordsXMetaDissPlusDocumentsWithFilesOnly()
     {
-        Zend_Registry::get('Zend_Config')->merge(
-            new Zend_Config([
+        \Zend_Registry::get('Zend_Config')->merge(
+            new \Zend_Config([
                 'oai' => [
                     'max' => [
                         'listrecords' => '100',
@@ -1232,8 +1248,8 @@ class Oai_IndexControllerTest extends ControllerTestCase
      */
     public function testListRecordsXMetaDissPlusDocumentsWithoutUrn()
     {
-        Zend_Registry::get('Zend_Config')->merge(
-            new Zend_Config([
+        \Zend_Registry::get('Zend_Config')->merge(
+            new \Zend_Config([
                 'oai' => [
                     'max' => [
                         'listrecords' => '100',
@@ -1330,7 +1346,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
     {
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
-        $file = new Opus_File();
+        $file = new File();
         $file->setVisibleInOai(true);
         $file->setPathName('foobar.pdf');
         $doc->addFile($file);
@@ -1366,7 +1382,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
     {
         $expectedFileNames = ["'many'  -  spaces  and  quotes.pdf", 'special-chars-%-"-#-&.pdf'];
 
-        $doc = new Opus_Document(147);
+        $doc = Document::get(147);
         $fileNames = array_map(function ($f) {
             return $f->getPathName();
         }, $doc->getFile());
@@ -1408,12 +1424,12 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $d = $this->createTestDocument();
         $d->setServerState('published');
 
-        $f1 = new Opus_File();
+        $f1 = new File();
         $f1->setPathName('foo.pdf');
         $f1->setVisibleInOai(false);
         $d->addFile($f1);
 
-        $f2 = new Opus_File();
+        $f2 = new File();
         $f2->setPathName('bar.pdf');
         $f2->setVisibleInOai(false);
         $d->addFile($f2);
@@ -1475,7 +1491,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
 
     public function enableSecurity()
     {
-        $r = Opus_UserRole::fetchByName('guest');
+        $r = UserRole::fetchByName('guest');
 
         $modules = $r->listAccessModules();
         $this->_addOaiModuleAccess = ! in_array('oai', $modules);
@@ -1485,7 +1501,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
         }
 
         // enable security
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(['security' => self::CONFIG_VALUE_TRUE]));
+        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config(['security' => self::CONFIG_VALUE_TRUE]));
     }
 
     /**
@@ -1497,7 +1513,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
     {
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
-        $file = new Opus_File();
+        $file = new File();
         $file->setVisibleInOai(true);
         $file->setPathName('foobar.pdf');
         $doc->addFile($file);
@@ -1522,11 +1538,11 @@ class Oai_IndexControllerTest extends ControllerTestCase
     {
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
-        $file = new Opus_File();
+        $file = new File();
         $file->setVisibleInOai(true);
         $file->setPathName('foo.pdf');
         $doc->addFile($file);
-        $file = new Opus_File();
+        $file = new File();
         $file->setVisibleInOai(true);
         $file->setPathName('bar.pdf');
         $doc->addFile($file);
@@ -1549,15 +1565,15 @@ class Oai_IndexControllerTest extends ControllerTestCase
      */
     public function testDdbFileNumberForMultipleDocumentsForXMetaDissPlus()
     {
-        $collection = new Opus_Collection(112);
+        $collection = new Collection(112);
 
         $doc1 = $this->createTestDocument();
         $doc1->setServerState('published');
-        $file = new Opus_File();
+        $file = new File();
         $file->setVisibleInOai(true);
         $file->setPathName('foo.pdf');
         $doc1->addFile($file);
-        $file = new Opus_File();
+        $file = new File();
         $file->setVisibleInOai(true);
         $file->setPathName('bar.pdf');
         $doc1->addFile($file);
@@ -1566,7 +1582,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
 
         $doc2 = $this->createTestDocument();
         $doc2->setServerState('published');
-        $file = new Opus_File();
+        $file = new File();
         $file->setVisibleInOai(true);
         $file->setPathName('baz.pdf');
         $doc2->addFile($file);
@@ -1588,15 +1604,15 @@ class Oai_IndexControllerTest extends ControllerTestCase
      */
     public function testTransferUrlIsIOnlyGivenForDocsWithFulltext()
     {
-        $collection = new Opus_Collection(112);
+        $collection = new Collection(112);
 
         $doc1 = $this->createTestDocument();
         $doc1->setServerState('published');
-        $file = new Opus_File();
+        $file = new File();
         $file->setVisibleInOai(true);
         $file->setPathName('foo.pdf');
         $doc1->addFile($file);
-        $file = new Opus_File();
+        $file = new File();
         $file->setVisibleInOai(true);
         $file->setPathName('bar.pdf');
         $doc1->addFile($file);
@@ -1605,7 +1621,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
 
         $doc2 = $this->createTestDocument();
         $doc2->setServerState('published');
-        $file = new Opus_File();
+        $file = new File();
         $file->setVisibleInOai(true);
         $file->setPathName('baz.pdf');
         $doc2->addFile($file);
@@ -1648,14 +1664,14 @@ class Oai_IndexControllerTest extends ControllerTestCase
      */
     public function testForDDCSubjectTypeForXMetaDissPlus()
     {
-        $collection = new Opus_Collection(112);
+        $collection = new Collection(112);
 
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
         $doc->addCollection($collection);
 
         // fixing test for OPUSVIER-3142
-        $visibleFile = new Opus_File();
+        $visibleFile = new File();
         $visibleFile->setPathName('visible_file.txt');
         $visibleFile->setVisibleInOai(true);
         $doc->addFile($visibleFile);
@@ -1676,7 +1692,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
      */
     public function testForInvalidSetSpecsInListRecords()
     {
-        $collectionRole = Opus_CollectionRole::fetchByOaiName('pacs');
+        $collectionRole = CollectionRole::fetchByOaiName('pacs');
         $this->assertNotNull($collectionRole);
 
         $this->assertContains(79, $collectionRole->getDocumentIdsInSet('pacs:07.75.+h'));
@@ -1699,7 +1715,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
      */
     public function testForInvalidSetSpecsInListIdentifiers()
     {
-        $collectionRole = Opus_CollectionRole::fetchByOaiName('pacs');
+        $collectionRole = CollectionRole::fetchByOaiName('pacs');
         $this->assertNotNull($collectionRole);
 
         $this->assertContains(79, $collectionRole->getDocumentIdsInSet('pacs:07.75.+h'));
@@ -1722,7 +1738,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
      */
     public function testForInvalidSetSpecsInGetRecord79()
     {
-        $collectionRole = Opus_CollectionRole::fetchByOaiName('pacs');
+        $collectionRole = CollectionRole::fetchByOaiName('pacs');
         $this->assertNotNull($collectionRole);
 
         $this->assertContains(79, $collectionRole->getDocumentIdsInSet('pacs:07.75.+h'));
@@ -1774,21 +1790,21 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $document = $this->createTestDocument();
         $document->setServerState('published');
 
-        $author = new Opus_Person();
+        $author = new Person();
         $author->setLastName('Foo');
         $author->setDateOfBirth('1900-01-01');
         $author->setPlaceOfBirth('Berlin');
 //      $authorId = $author->store();
         $document->addPersonAuthor($author);
 
-        $advisor = new Opus_Person();
+        $advisor = new Person();
         $advisor->setLastName('Bar');
         $advisor->setDateOfBirth('1900-01-01');
         $advisor->setPlaceOfBirth('Berlin');
 //      $advisorId = $advisor->store();
         $document->addPersonAdvisor($advisor);
 
-        $referee = new Opus_Person();
+        $referee = new Person();
         $referee->setLastName('Baz');
         $referee->setDateOfBirth('1900-01-01');
         $referee->setPlaceOfBirth('Berlin');
@@ -1904,8 +1920,8 @@ class Oai_IndexControllerTest extends ControllerTestCase
     {
         $max_records = '2';
 
-        Zend_Registry::get('Zend_Config')->merge(
-            new Zend_Config(['oai' => ['max' => ['listrecords' => $max_records]]])
+        \Zend_Registry::get('Zend_Config')->merge(
+            new \Zend_Config(['oai' => ['max' => ['listrecords' => $max_records]]])
         );
 
         // first request: fetch documents list and expect resumption code
@@ -1950,8 +1966,8 @@ class Oai_IndexControllerTest extends ControllerTestCase
     {
         $max_records = '100';
 
-        Zend_Registry::get('Zend_Config')->merge(
-            new Zend_Config(['oai' => ['max' => ['listrecords' => $max_records]]])
+        \Zend_Registry::get('Zend_Config')->merge(
+            new \Zend_Config(['oai' => ['max' => ['listrecords' => $max_records]]])
         );
 
         // first request: fetch documents list and expect resumption code
@@ -2100,7 +2116,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
      */
     public function testXMetaDissPlusDcsourceContainsTitleParent()
     {
-        $doc = new Opus_Document(146);
+        $doc = Document::get(146);
         $parentTitle = $doc->getTitleParent();
         $this->assertFalse(empty($parentTitle), 'Test Data modified: Expected TitleParent');
 
@@ -2167,7 +2183,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
      */
     public function testXMetaDissPlusDctermsispartofContainsSeriesTitleAndNumber()
     {
-        $doc = new Opus_Document(146);
+        $doc = Document::get(146);
         $series = $doc->getSeries();
 
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=XMetaDissPlus&identifier=oai::146');
@@ -2275,17 +2291,17 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
 
-        $relation = new Opus_Enrichment();
+        $relation = new Enrichment();
         $relation->setKeyName('Relation');
         $relation->setValue('test-1234');
         $doc->addEnrichment($relation);
 
-        $relation = new Opus_Enrichment();
+        $relation = new Enrichment();
         $relation->setKeyName('Relation');
         $relation->setValue('info:eu-repo/grantAgreement/EC/FP7/1234withPrefix');
         $doc->addEnrichment($relation);
 
-        $role = Opus_CollectionRole::fetchByName('openaire');
+        $role = CollectionRole::fetchByName('openaire');
         $openaire = $role->getCollectionByOaiSubset('openaire');
         $doc->addCollection($openaire);
 
@@ -2361,7 +2377,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
         $doc->setType('periodicalpart');
-        $series = new Opus_Series(7);
+        $series = new Series(7);
         $doc->addSeries($series)->setNumber('1337');
         $docId = $doc->store();
 
@@ -2591,7 +2607,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
 
     public function testGetRecordMarc21OfDocId91()
     {
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
             'marc21' => [
                 'isil' => 'DE-9999',
                 'publisherName' => 'publisherNameFromConfig',
@@ -2650,65 +2666,65 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $doc->setPageNumber('10');
         $doc->setCreatingCorporation('Foo Creating Corp.');
 
-        $identifierUrn = new Opus_Identifier();
+        $identifierUrn = new Identifier();
         $identifierUrn->setType('urn');
         $identifierUrn->setValue('urn:nbn:de:foo:opus-4711');
-        $identifierIssn = new Opus_Identifier();
+        $identifierIssn = new Identifier();
         $identifierIssn->setType('issn');
         $identifierIssn->setValue('0953-4563');
         $doc->setIdentifier([$identifierUrn, $identifierIssn]);
 
-        $ddc33x = new Opus_Collection(45); // sichtbar
-        $ddc334 = new Opus_Collection(402); // unsichtbar
-        $ddc34x = new Opus_Collection(46); // sichtbar
+        $ddc33x = new Collection(45); // sichtbar
+        $ddc334 = new Collection(402); // unsichtbar
+        $ddc34x = new Collection(46); // sichtbar
         $doc->setCollection([$ddc33x, $ddc334, $ddc34x]);
 
-        $titleMainDeu = new Opus_TitleAbstract();
+        $titleMainDeu = new TitleAbstract();
         $titleMainDeu->setLanguage('deu');
         $titleMainDeu->setType('main');
         $titleMainDeu->setValue('TitleMainInDocumentLanguage');
-        $titleMainEng = new Opus_TitleAbstract();
+        $titleMainEng = new TitleAbstract();
         $titleMainEng->setLanguage('eng');
         $titleMainEng->setType('main');
         $titleMainEng->setValue('TitleMainInOtherLanguage');
         $doc->setTitleMain([$titleMainDeu, $titleMainEng]);
 
-        $titleSubDeu = new Opus_TitleAbstract();
+        $titleSubDeu = new TitleAbstract();
         $titleSubDeu->setLanguage('deu');
         $titleSubDeu->setType('sub');
         $titleSubDeu->setValue('TitleSubInDocumentLanguage');
-        $titleSubEng = new Opus_TitleAbstract();
+        $titleSubEng = new TitleAbstract();
         $titleSubEng->setLanguage('eng');
         $titleSubEng->setType('sub');
         $titleSubEng->setValue('TitleSubInOtherLanguage');
         $doc->setTitleSub([$titleSubDeu, $titleSubEng]);
 
-        $titleParent = new Opus_TitleAbstract();
+        $titleParent = new TitleAbstract();
         $titleParent->setLanguage('deu');
         $titleParent->setType('parent');
         $titleParent->setValue('TitleParentInDocumentLanguage');
         $doc->setTitleParent([$titleParent]);
 
-        $abstractDeu = new Opus_TitleAbstract();
+        $abstractDeu = new TitleAbstract();
         $abstractDeu->setLanguage('deu');
         $abstractDeu->setType('abstract');
         $abstractDeu->setValue('TitleAbstractInDocumentLanguage');
-        $abstractEng = new Opus_TitleAbstract();
+        $abstractEng = new TitleAbstract();
         $abstractEng->setLanguage('eng');
         $abstractEng->setType('abstract');
         $abstractEng->setValue('TitleAbstractInOtherLanguage');
         $doc->setTitleAbstract([$abstractEng, $abstractDeu]);
 
-        $doc->setThesisPublisher([new Opus_DnbInstitute(2), new Opus_DnbInstitute(4)]);
+        $doc->setThesisPublisher([new DnbInstitute(2), new DnbInstitute(4)]);
 
-        $editor = new Opus_Person();
+        $editor = new Person();
         $editor->setFirstName('John');
         $editor->setLastName('Doe');
         $doc->addPersonEditor($editor);
 
-        $doc->addSeries(new Opus_Series(1))->setNumber(1);
-        $doc->addSeries(new Opus_Series(2))->setNumber(2);
-        $doc->addSeries(new Opus_Series(3))->setNumber(3);
+        $doc->addSeries(new Series(1))->setNumber(1);
+        $doc->addSeries(new Series(2))->setNumber(2);
+        $doc->addSeries(new Series(3))->setNumber(3);
 
         $docId = $doc->store();
 
@@ -2819,15 +2835,15 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $doc->setServerState('published');
         $doc->setPublisherPlace('publisherPlace');
 
-        $f1 = new Opus_File();
+        $f1 = new File();
         $f1->setPathName('invisible-in-oai.pdf');
         $f1->setVisibleInOai(false);
         $doc->addFile($f1);
 
-        $licencePresent = new Opus_Licence(1);
+        $licencePresent = new Licence(1);
         $doc->addLicence($licencePresent);
 
-        $licenceMissing = new Opus_Licence(2);
+        $licenceMissing = new Licence(2);
         $doc->addLicence($licenceMissing);
 
         $docId = $doc->store();
@@ -2853,20 +2869,20 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $doc->setServerState('published');
         $doc->setPublisherPlace('publisherPlace');
 
-        $f1 = new Opus_File();
+        $f1 = new File();
         $f1->setPathName('visible-in-oai.pdf');
         $f1->setVisibleInOai(true);
         $doc->addFile($f1);
 
-        $f2 = new Opus_File();
+        $f2 = new File();
         $f2->setPathName('visible-in-oai.txt');
         $f2->setVisibleInOai(true);
         $doc->addFile($f2);
 
-        $licencePresent = new Opus_Licence(1);
+        $licencePresent = new Licence(1);
         $doc->addLicence($licencePresent);
 
-        $licenceMissing = new Opus_Licence(2);
+        $licenceMissing = new Licence(2);
         $doc->addLicence($licenceMissing);
 
         $docId = $doc->store();
@@ -3564,13 +3580,13 @@ class Oai_IndexControllerTest extends ControllerTestCase
     /**
      * Helper function for adding title parent to given document.
      *
-     * @param $doc Opus_Document
+     * @param $doc Document
      * @param $language string
      * @param $value string
      */
     private function addTitleParent($doc, $language, $value)
     {
-        $titleParent = new Opus_TitleAbstract();
+        $titleParent = new TitleAbstract();
         $titleParent->setType('parent');
         $titleParent->setLanguage($language);
         $titleParent->setValue($value);
@@ -3581,13 +3597,13 @@ class Oai_IndexControllerTest extends ControllerTestCase
     /**
      * Helper function for adding identifier of given type to given document.
      *
-     * @param $doc Opus_Document
+     * @param $doc Document
      * @param $value string
      * @param $type string
      */
     private function addIdentifier($doc, $value, $type)
     {
-        $identifier = new Opus_Identifier();
+        $identifier = new Identifier();
         $identifier->setType($type);
         $identifier->setValue($value);
 

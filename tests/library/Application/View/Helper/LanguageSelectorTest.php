@@ -50,7 +50,7 @@ class Application_View_Helper_LanguageSelectorTest extends ControllerTestCase
 
         $this->_helper = new Application_View_Helper_LanguageSelector();
 
-        $this->_helper->setView(Zend_Registry::get('Opus_View'));
+        $this->_helper->setView(\Zend_Registry::get('Opus_View'));
     }
 
     public function testLanguageConfiguredAndInResourcesGerman()
@@ -90,9 +90,9 @@ class Application_View_Helper_LanguageSelectorTest extends ControllerTestCase
      */
     public function testLanguageConfiguredButNotInResources()
     {
-        Zend_Registry::set(
+        \Zend_Registry::set(
             'Zend_Config',
-            Zend_Registry::get('Zend_Config')->merge(new Zend_Config(['supportedLanguages' => 'de,en,ru']))
+            \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config(['supportedLanguages' => 'de,en,ru']))
         );
 
         $result = $this->_helper->languageSelector();
@@ -113,9 +113,9 @@ class Application_View_Helper_LanguageSelectorTest extends ControllerTestCase
      */
     public function testOnlyOneLanguageConfigured()
     {
-        Zend_Registry::set(
+        \Zend_Registry::set(
             'Zend_Config',
-            Zend_Registry::get('Zend_Config')->merge(new Zend_Config(['supportedLanguages' => 'en']))
+            \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config(['supportedLanguages' => 'en']))
         );
 
         $result = $this->_helper->languageSelector();

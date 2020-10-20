@@ -46,7 +46,7 @@ class Admin_Form_Language extends Application_Form_Model_Abstract
         $this->setRemoveEmptyCheckbox(false);
         $this->setLabelPrefix('Opus_Language_');
         $this->setUseNameAsLabel(true);
-        $this->setModelClass('Opus_Language');
+        $this->setModelClass('Opus\Language');
 
         $this->addElement('checkbox', self::ELEMENT_ACTIVE);
         $this->addElement('text', self::ELEMENT_REFNAME, ['required' => true]);

@@ -31,6 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Identifier\Urn;
+
 class Admin_Model_UrnGenerator
 {
 
@@ -47,7 +49,7 @@ class Admin_Model_UrnGenerator
      */
     public function __construct()
     {
-        $config = Zend_Registry::get('Zend_Config');
+        $config = \Zend_Registry::get('Zend_Config');
 
         if (! isset($config->urn->nid) || $config->urn->nid == '') {
             throw new Application_Exception('missing configuration setting for urn.nid - is required for URN generation');
@@ -64,15 +66,15 @@ class Admin_Model_UrnGenerator
      * Generiert eine URN für das Dokument mit der übergebenen ID.
      * Hierbei wird NICHT geprüft, ob das Dokument einen Volltext mit dem aktiven Flag visibleInOai besitzt.
      *
-     * @param $docId ID des OPUS-Dokuments für das URN generiert werden soll
+     * @param $docId int ID des OPUS-Dokuments für das URN generiert werden soll
      * @return string
      */
     public function generateUrnForDocument($docId)
     {
-        $identifierUrn = new Opus_Identifier_Urn($this->nid, $this->nss);
+        $identifierUrn = new Urn($this->nid, $this->nss);
         $urn = $identifierUrn->getUrn($docId);
 
-        $log = Zend_Registry::get('Zend_Log');
+        $log = \Zend_Registry::get('Zend_Log');
         $log->debug('URN generation result for document ' . $docId . ' is ' . $urn);
 
         return $urn;

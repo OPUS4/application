@@ -29,8 +29,10 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
+use Opus\Document;
+use Opus\Model\NotFoundException;
 
 class CitationExport_Model_Helper extends Application_Model_Abstract
 {
@@ -70,7 +72,7 @@ class CitationExport_Model_Helper extends Application_Model_Abstract
      * @param string $docId
      * @throws CitationExport_Module_Exception in case of an invalid parameter value
      *
-     * @return Opus_Document
+     * @return Document
      */
     public function getDocument($request)
     {
@@ -81,8 +83,8 @@ class CitationExport_Model_Helper extends Application_Model_Abstract
 
         $document = null;
         try {
-            $document = new Opus_Document($docId);
-        } catch (Opus_Model_NotFoundException $e) {
+            $document = Document::get($docId);
+        } catch (NotFoundException $e) {
             throw new CitationExport_Model_Exception('invalid_docid', null, $e);
         }
 
@@ -115,7 +117,7 @@ class CitationExport_Model_Helper extends Application_Model_Abstract
 
     /**
      *
-     * @param Opus_Document $document
+     * @param Document $document
      * @throws CitationExport_Module_Exception in case of an invalid parameter value
      *
      * @return string
@@ -173,7 +175,7 @@ class CitationExport_Model_Helper extends Application_Model_Abstract
     /**
      * transform XML output to desired output format
      *
-     * @param Opus_Document $document Document that should be transformed
+     * @param Document $document Document that should be transformed
      * @param string $template XSLT stylesheet that should be applied
      *
      * @return string document in the given output format as plain text

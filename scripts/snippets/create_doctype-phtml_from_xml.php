@@ -28,7 +28,6 @@
  * @author      Edouard Simon <edouard.simon@zib.de>
  * @copyright   Copyright (c) 2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -49,9 +48,9 @@ if ($argc == 2) {
     echo "No file supplied";
     exit;
 }
-$xml = new DOMDocument();
+$xml = new \DOMDocument();
 $xml->load($filename);
-$xslt = new DomDocument;
+$xslt = new \DomDocument;
 $xslt->load(dirname(__FILE__)."/doctype.xslt");
 $proc = new XSLTProcessor;
 $proc->importStyleSheet($xslt);

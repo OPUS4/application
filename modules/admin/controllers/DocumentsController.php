@@ -34,6 +34,10 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Collection;
+use Opus\Person;
+use Opus\Series;
+
 /**
  * Administrative work with document metadata.
  *
@@ -122,7 +126,7 @@ class Admin_DocumentsController extends Application_Controller_Action
 
         if (! empty($collectionId)) {
             // TODO add as filter facet
-            $collection = new Opus_Collection($collectionId);
+            $collection = new Collection($collectionId);
             $result = $collection->getDocumentIds();
             $this->view->collection = $collection;
             if ($collection->isRoot()) {
@@ -136,7 +140,7 @@ class Admin_DocumentsController extends Application_Controller_Action
             }
         } elseif (! empty($seriesId)) {
             // TODO add as filter facet
-            $series = new Opus_Series($seriesId);
+            $series = new Series($seriesId);
             $this->view->series = $series;
             $result = $series->getDocumentIdsSortedBySortKey();
         } else {
@@ -166,7 +170,7 @@ class Admin_DocumentsController extends Application_Controller_Action
 
                 $role = $this->getParam('role', 'all');
 
-                $result = Opus_Person::getPersonDocuments($person, $state, $role, $sortOrder, ! $sortReverse);
+                $result = Person::getPersonDocuments($person, $state, $role, $sortOrder, ! $sortReverse);
 
                 $this->view->person = $person;
 
@@ -194,7 +198,7 @@ class Admin_DocumentsController extends Application_Controller_Action
 
         $this->prepareSortingLinks();
 
-        $paginator = Zend_Paginator::factory($result);
+        $paginator = \Zend_Paginator::factory($result);
         $page = 1;
         if (array_key_exists('page', $data)) {
             // paginator
@@ -334,7 +338,7 @@ class Admin_DocumentsController extends Application_Controller_Action
     protected function getSession()
     {
         if (is_null($this->_namespace)) {
-            $this->_namespace = new Zend_Session_Namespace('Admin');
+            $this->_namespace = new \Zend_Session_Namespace('Admin');
         }
 
         return $this->_namespace;

@@ -36,7 +36,7 @@
  *
  * TODO cleanup in connection with refactoring of Admin_CollectionController
  */
-class Application_View_Helper_AssignCollectionAllowed extends Zend_View_Helper_Abstract
+class Application_View_Helper_AssignCollectionAllowed extends \Zend_View_Helper_Abstract
 {
 
     public function assignCollectionAllowed($collection, $docId = null)

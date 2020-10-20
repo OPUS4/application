@@ -31,6 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Util\ConsoleColors;
+
 /**
  * Performs command line import of BibTeX file.
  *
@@ -52,7 +54,7 @@ class Application_Import_BibtexImporter
     {
         $filename = $arguments[1];
 
-        $colors = new Opus_Util_ConsoleColors();
+        $colors = new ConsoleColors();
 
         if (! is_readable($filename)) {
             echo $colors->red('File not found or readable.' . PHP_EOL);

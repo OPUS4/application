@@ -1,5 +1,4 @@
 <?php
-
 /*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -30,13 +29,16 @@
  * @author      Thoralf Klein <thoralf.klein@zib.de>
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
+use Opus\Document;
+use Opus\DocumentFinder;
+use Opus\Model\NotFoundException;
 
 /**
  * Helper for getting a list of document IDs used by admin and review module.
  */
-class Application_Controller_Action_Helper_Documents extends Zend_Controller_Action_Helper_Abstract
+class Application_Controller_Action_Helper_Documents extends \Zend_Controller_Action_Helper_Abstract
 {
 
     /**
@@ -53,9 +55,9 @@ class Application_Controller_Action_Helper_Documents extends Zend_Controller_Act
     }
 
     /**
-     * Returns Opus_Document for provided ID or throws exception.
+     * Returns Document for provided ID or throws exception.
      * @param string $docId Document identifier
-     * @return Opus_Document
+     * @return Document
      */
     public function getDocumentForId($docId)
     {
@@ -65,8 +67,8 @@ class Application_Controller_Action_Helper_Documents extends Zend_Controller_Act
         }
 
         try {
-            $doc = new Opus_Document($docId);
-        } catch (Opus_Model_NotFoundException $omnfe) {
+            $doc = Document::get($docId);
+        } catch (NotFoundException $omnfe) {
             return null;
         }
 
@@ -85,7 +87,7 @@ class Application_Controller_Action_Helper_Documents extends Zend_Controller_Act
      */
     public function getSortedDocumentIds($sortOrder = null, $sortReverse = true, $state = null)
     {
-        $finder = new Opus_DocumentFinder();
+        $finder = new DocumentFinder();
 
         if (! is_null($state) && $state !== 'all') {
             $finder->setServerState($state);

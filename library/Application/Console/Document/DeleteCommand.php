@@ -36,6 +36,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Opus\Console\BaseDocumentCommand;
 use Opus\Console\Helper\ProgressMatrix;
+use Opus\Document;
 use Opus\Search\Console\Helper\DocumentHelper;
 
 /**
@@ -148,7 +149,7 @@ EOT;
 
     protected function deleteDocument($docId, $permanent = false)
     {
-        $doc = new Opus_Document($docId);
+        $doc = Document::get($docId);
         if ($permanent) {
             $doc->deletePermanent();
         } else {

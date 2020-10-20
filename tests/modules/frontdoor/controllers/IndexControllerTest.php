@@ -33,6 +33,13 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Collection;
+use Opus\CollectionRole;
+use Opus\Date;
+use Opus\Document;
+use Opus\Note;
+use Opus\Title;
+
 /**
  * Class Frontdoor_IndexControllerTest.
  *
@@ -46,7 +53,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     /**
      * Document to count on :)
      *
-     * @var Opus_Document
+     * @var Document
      */
     protected $_document = null;
     protected $_document_col = null;
@@ -62,18 +69,18 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
         parent::setUpWithEnv('production');
         $this->assertSecurityConfigured();
 
-        $path = Zend_Registry::get('temp_dir') . '~localstat.xml';
+        $path = \Zend_Registry::get('temp_dir') . '~localstat.xml';
         @unlink($path);
 
         $this->_document = $this->createTestDocument();
         $this->_document->setType("doctoral_thesis");
 
-        $title = new Opus_Title();
+        $title = new Title();
         $title->setLanguage('deu');
         $title->setValue('Titel');
         $this->_document->addTitleMain($title);
 
-        $title = new Opus_Title();
+        $title = new Title();
         $title->setLanguage('eng');
         $title->setValue('Title');
         $this->_document->addTitleMain($title);
@@ -87,13 +94,13 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
 
         // create collection test document
         $this->_document_col = $this->createTestDocument();
-        $this->_document_col->addCollection(new Opus_Collection(40)); // invisible collection
-        $this->_document_col->addCollection(new Opus_Collection(16214)); // visible collection with invisible collection role
-        $this->_document_col->addCollection(new Opus_Collection(1031)); // visible collection with visible collection role
+        $this->_document_col->addCollection(new Collection(40)); // invisible collection
+        $this->_document_col->addCollection(new Collection(16214)); // visible collection with invisible collection role
+        $this->_document_col->addCollection(new Collection(1031)); // visible collection with visible collection role
 
         // collection role ID = 10 (sichbar)
-        $this->_document_col->addCollection(new Opus_Collection(16136)); // versteckte Collection (Role = 10)
-        $this->_document_col->addCollection(new Opus_Collection(15991)); // sichbare Collection (Role = 10);
+        $this->_document_col->addCollection(new Collection(16136)); // versteckte Collection (Role = 10)
+        $this->_document_col->addCollection(new Collection(15991)); // sichbare Collection (Role = 10);
         $this->_document_col->setServerState('published');
         $this->_document_col->store();
     }
@@ -216,7 +223,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     {
         $docId = $this->_document->getId();
 
-        $doc = new Opus_Document($docId);
+        $doc = Document::get($docId);
         $doc->setLanguage('deu');
         $doc->setServerState('published');
         $doc->store();
@@ -234,7 +241,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     {
         $docId = $this->_document->getId();
 
-        $doc = new Opus_Document($docId);
+        $doc = Document::get($docId);
         $doc->setLanguage('eng');
         $doc->setServerState('published');
         $doc->store();
@@ -256,7 +263,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     {
         $docId = $this->_document->getId();
 
-        $doc = new Opus_Document($docId);
+        $doc = Document::get($docId);
         $doc->setLanguage('fra');
         $doc->setServerState('published');
         $doc->store();
@@ -277,7 +284,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     {
         $docId = $this->_document->getId();
 
-        $doc = new Opus_Document($docId);
+        $doc = Document::get($docId);
         $doc->setLanguage('deu');
         $doc->setServerState('published');
         $doc->addTitleMain()->setValue('Titel2')->setLanguage('deu');
@@ -295,7 +302,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
      */
     public function testIdentifierUrlIsHandledProperlyInFrontdoorForNonProtocolURL()
     {
-        $d = new Opus_Document('91');
+        $d = Document::get('91');
         $identifiers = $d->getIdentifierUrl();
         $identifier = $identifiers[0];
         $this->assertEquals('www.myexampledomain.de/myexamplepath', $identifier->getValue());
@@ -308,7 +315,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
      */
     public function testIdentifierUrlIsHandledProperlyInFrontdoorForProtocolURL()
     {
-        $d = new Opus_Document('92');
+        $d = Document::get('92');
         $identifiers = $d->getIdentifierUrl();
         $identifier = $identifiers[0];
         $this->assertEquals('http://www.myexampledomain.de/myexamplepath', $identifier->getValue());
@@ -321,7 +328,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
      */
     public function testUrlEscapedFileNameDoc1()
     {
-        $d = new Opus_Document(1);
+        $d = Document::get(1);
         $filePathnames = [];
         foreach ($d->getFile() as $file) {
             $filePathnames[] = $file->getPathName();
@@ -345,7 +352,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
      */
     public function testUrlEscapedFileNameDoc147()
     {
-        $d = new Opus_Document(147);
+        $d = Document::get(147);
         $filePathnames = [];
         foreach ($d->getFile() as $file) {
             $filePathnames[] = $file->getPathName();
@@ -380,7 +387,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
 
     public function testSubjectSortOrderAlphabetical()
     {
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
             'frontdoor' => ['subjects' => ['alphabeticalSorting' => self::CONFIG_VALUE_TRUE]]
         ]));
 
@@ -398,7 +405,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
      */
     public function testSeries149InVisible()
     {
-        $d = new Opus_Document(149);
+        $d = Document::get(149);
         $seriesIds = [];
         $seriesNumbers = [];
         foreach ($d->getSeries() as $series) {
@@ -429,7 +436,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
      */
     public function testUrlEncodedAuthorNamesDoc150()
     {
-        $d = new Opus_Document(150);
+        $d = Document::get(150);
         $firstNames = [];
         $lastNames = [];
 
@@ -459,8 +466,8 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
             'url' => 'http://localhost/',
             'button' => ''
         ]];
-        $podConfig = new Zend_Config($podConfArray);
-        Zend_Registry::getInstance()->get('Zend_Config')->merge($podConfig);
+        $podConfig = new \Zend_Config($podConfArray);
+        \Zend_Registry::getInstance()->get('Zend_Config')->merge($podConfig);
 
         $this->dispatch('/frontdoor/index/index/docId/1');
         $this->assertQuery('div#print-on-demand');
@@ -475,8 +482,8 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
             'url' => 'http://localhost/',
             'button' => ''
         ]];
-        $podConfig = new Zend_Config($podConfArray);
-        Zend_Registry::getInstance()->get('Zend_Config')->merge($podConfig);
+        $podConfig = new \Zend_Config($podConfArray);
+        \Zend_Registry::getInstance()->get('Zend_Config')->merge($podConfig);
 
         $this->dispatch('/frontdoor/index/index/docId/91');
         $this->assertNotQuery('div#print-on-demand');
@@ -503,7 +510,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     public function testDisplayAllDocumentFields()
     {
         $this->dispatch('/frontdoor/index/index/docId/146');
-        $translate = Zend_Registry::getInstance()->get('Zend_Translate');
+        $translate = \Zend_Registry::getInstance()->get('Zend_Translate');
 
         $path = 'table.result-data.frontdoordata th.name';
 
@@ -578,7 +585,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
         $doc->setLanguage("eng");
         $doc->setServerState("published");
 
-        $abstract = new Opus_Title();
+        $abstract = new Title();
         $abstract->setLanguage("eng");
         $abstract->setValue("foo\nbar\n\nbaz");
         $doc->addTitleAbstract($abstract);
@@ -600,7 +607,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
         $doc->setLanguage("eng");
         $doc->setServerState("published");
 
-        $note = new Opus_Note();
+        $note = new Note();
         $note->setMessage("foo\nbar\n\nbaz");
         $note->setVisibility("public");
         $doc->addNote($note);
@@ -620,7 +627,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
      */
     public function testOPUSVIER2651NameNumber()
     {
-        $role = new Opus_CollectionRole(7);
+        $role = new CollectionRole(7);
         $displayFrontdoor = $role->getDisplayFrontdoor();
         $role->setDisplayFrontdoor('Name,Number');
         $role->store();
@@ -643,7 +650,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
      */
     public function testOPUSVIER2651NumberName()
     {
-        $role = new Opus_CollectionRole(7);
+        $role = new CollectionRole(7);
         $displayFrontdoor = $role->getDisplayFrontdoor();
         $role->setDisplayFrontdoor('Number,Name');
         $role->store();
@@ -666,7 +673,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
      */
     public function testOPUSVIER2651Name()
     {
-        $role = new Opus_CollectionRole(7);
+        $role = new CollectionRole(7);
         $displayFrontdoor = $role->getDisplayFrontdoor();
         $role->setDisplayFrontdoor('Name');
         $role->store();
@@ -690,7 +697,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
      */
     public function testOPUSVIER2651Number()
     {
-        $role = new Opus_CollectionRole(7);
+        $role = new CollectionRole(7);
         $displayFrontdoor = $role->getDisplayFrontdoor();
         $role->setDisplayFrontdoor('Number');
         $role->store();
@@ -790,7 +797,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     public function testValidateXHTMLWithShortendAbstracts()
     {
         // Aktiviere Kürzung von Abstrakten
-        $config = Zend_Registry::get('Zend_Config')->merge(new Zend_Config(
+        $config = \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config(
             ['frontdoor' => ['numOfShortAbstractChars' => '200']]
         ));
 
@@ -932,7 +939,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
      */
     public function testFilesInCustomSortOrder()
     {
-        $config = Zend_Registry::get('Zend_Config');
+        $config = \Zend_Registry::get('Zend_Config');
         $config->frontdoor->files->customSorting = '1';
 
         $this->dispatch('/frontdoor/index/index/docId/155');
@@ -951,7 +958,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
      */
     public function testFilesInAlphabeticSortOrder()
     {
-        $config = Zend_Registry::get('Zend_Config');
+        $config = \Zend_Registry::get('Zend_Config');
         $config->frontdoor->files->customSorting = self::CONFIG_VALUE_FALSE;
 
         $this->dispatch('/frontdoor/index/index/docId/155');
@@ -975,12 +982,12 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
         $functions = ['addTitleMain', 'addTitleParent', 'addTitleSub', 'addTitleAdditional', 'addTitleAbstract'];
         foreach ($functions as $function) {
             $doc = $this->createTestDocument();
-            $title = new Opus_Title();
+            $title = new Title();
             $title->setLanguage('deu');
             $title->setValue('deutscher Titel');
             $doc->$function($title);
 
-            $title = new Opus_Title();
+            $title = new Title();
             $title->setLanguage('eng');
             $title->setValue('englischer Titel');
             $doc->$function($title);
@@ -1020,12 +1027,12 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
         $functions = ['addTitleMain', 'addTitleParent', 'addTitleSub', 'addTitleAdditional', 'addTitleAbstract'];
         foreach ($functions as $function) {
             $doc = $this->createTestDocument();
-            $title = new Opus_Title();
+            $title = new Title();
             $title->setLanguage('deu');
             $title->setValue('deutscher Titel');
             $doc->$function($title);
 
-            $title = new Opus_Title();
+            $title = new Title();
             $title->setLanguage('eng');
             $title->setValue('englischer Titel');
             $doc->$function($title);
@@ -1194,7 +1201,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
         $doc->setServerState('published');
         $doc->addFile($file);
 
-        $date = new Opus_Date();
+        $date = new Date();
         $date->setYear('2000')->setMonth('00')->setDay('01');
         $doc->setEmbargoDate($date);
 
@@ -1217,7 +1224,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
         $doc->setServerState('published');
         $doc->addFile($file);
 
-        $date = new Opus_Date();
+        $date = new Date();
         $date->setYear('2100')->setMonth('00')->setDay('01');
         $doc->setEmbargoDate($date);
 
@@ -1314,8 +1321,8 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     {
         $this->enableSecurity();
         $this->loginUser('admin', 'adminadmin');
-        $config = Zend_Registry::get('Zend_Config');
-        $config->merge(new Zend_Config(['export' => ['stylesheet' => ['frontdoor' => 'example']]]));
+        $config = \Zend_Registry::get('Zend_Config');
+        $config->merge(new \Zend_Config(['export' => ['stylesheet' => ['frontdoor' => 'example']]]));
         $this->dispatch('/frontdoor/index/index/docId/305');
         $this->assertQuery(
             '//a[@href="/export/index/index/docId/305/export/xml/searchtype/id/stylesheet/example"]'
@@ -1328,8 +1335,8 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     public function testXmlExportNotButtonPresentForGuest()
     {
         $this->enableSecurity();
-        $config = Zend_Registry::get('Zend_Config');
-        $config->merge(new Zend_Config(['export' => ['stylesheet' => ['frontdoor' => 'example']]]));
+        $config = \Zend_Registry::get('Zend_Config');
+        $config->merge(new \Zend_Config(['export' => ['stylesheet' => ['frontdoor' => 'example']]]));
         $this->dispatch('/frontdoor/index/index/docId/305');
         $this->assertNotQuery('//a[@href="/frontdoor/index/index/docId/305/export/xml/stylesheet/example"]');
     }
@@ -1362,7 +1369,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
 
     public function testGoogleScholarOpenInNewWindowEnabled()
     {
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
             'googleScholar' => ['openInNewWindow' => self::CONFIG_VALUE_TRUE]
         ]));
         $this->dispatch('/frontdoor/index/index/docId/146');
@@ -1373,7 +1380,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
 
     public function testGoogleScholarOpenInNewWindowDisabled()
     {
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
             'googleScholar' => ['openInNewWindow' => self::CONFIG_VALUE_FALSE]
         ]));
         $this->dispatch('/frontdoor/index/index/docId/146');
@@ -1395,7 +1402,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
 
     public function testTwitterOpenInNewWindowEnabled()
     {
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
             'twitter' => ['openInNewWindow' => self::CONFIG_VALUE_TRUE]
         ]));
         $this->dispatch('/frontdoor/index/index/docId/146');
@@ -1406,7 +1413,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
 
     public function testTwitterOpenInNewWindowDisabled()
     {
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
             'twitter' => ['openInNewWindow' => self::CONFIG_VALUE_FALSE]
         ]));
         $this->dispatch('/frontdoor/index/index/docId/146');
@@ -1419,10 +1426,10 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     {
         $filter = new LogFilter();
 
-        $logger = Zend_Registry::get('Zend_Log');
+        $logger = \Zend_Registry::get('Zend_Log');
         $logger->addFilter($filter);
 
-        $this->assertEquals(7, Zend_Registry::get('LOG_LEVEL'), 'Log level should be 7 for test.');
+        $this->assertEquals(7, \Zend_Registry::get('LOG_LEVEL'), 'Log level should be 7 for test.');
 
         $this->dispatch('/frontdoor/index/index/docId/146');
 
@@ -1434,7 +1441,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
             }
         }
 
-        $output = Zend_Debug::dump($failedTranslations, null, false);
+        $output = \Zend_Debug::dump($failedTranslations, null, false);
 
         // until all messages can be prevented less than 20 is good enough
         $this->assertLessThanOrEqual(1, count($failedTranslations), $output);
@@ -1446,7 +1453,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
 
         $this->assertResponseCode(200);
 
-        $urnResolverUrl = Zend_Registry::get('Zend_Config')->urn->resolverUrl;
+        $urnResolverUrl = \Zend_Registry::get('Zend_Config')->urn->resolverUrl;
 
         $this->assertXpath('//meta[@name="DC.identifier" and @content="urn:nbn:op:123"]');
         $this->assertXpath('//meta[@name="DC.identifier" and @content="' . $urnResolverUrl . 'urn:nbn:op:123"]');
@@ -1455,7 +1462,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     public function testBelongsToBibliographyTurnedOn()
     {
         $this->useEnglish();
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
             'frontdoor' => ['metadata' => ['BelongsToBibliography' => self::CONFIG_VALUE_TRUE]]
         ]));
 
@@ -1467,7 +1474,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
 
     public function testBelongsToBibliographyTurnedOff()
     {
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
             'frontdoor' => ['metadata' => ['BelongsToBibliography' => self::CONFIG_VALUE_FALSE]]
         ]));
 

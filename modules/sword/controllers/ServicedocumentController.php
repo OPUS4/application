@@ -29,9 +29,8 @@
  * @author      Sascha Szott
  * @copyright   Copyright (c) 2016
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class Sword_ServicedocumentController extends Zend_Rest_Controller
+class Sword_ServicedocumentController extends \Zend_Rest_Controller
 {
 
     public function init()
@@ -75,7 +74,7 @@ class Sword_ServicedocumentController extends Zend_Rest_Controller
         $serviceDocument = new Sword_Model_ServiceDocument($fullUrl);
         $domDocument = $serviceDocument->getDocument();
 
-        $config = Zend_Registry::get('Zend_Config');
+        $config = \Zend_Registry::get('Zend_Config');
         $prettyPrinting = isset($config->prettyXml) && filter_var($config->prettyXml, FILTER_VALIDATE_BOOLEAN);
         if ($prettyPrinting) {
             $domDocument->preserveWhiteSpace = false;

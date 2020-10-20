@@ -31,6 +31,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Person;
+use Opus\Title;
+
 /**
  * Class Frontdoor_MailControllerTest.
  *
@@ -53,7 +56,7 @@ class Frontdoor_MailControllerTest extends ControllerTestCase
         $document->setServerState('published');
         $document->setType('baz');
 
-        $title = new Opus_Title();
+        $title = new Title();
         $title->setValue('foobartitle');
         $title->setLanguage('deu');
         $document->setTitleMain($title);
@@ -65,12 +68,12 @@ class Frontdoor_MailControllerTest extends ControllerTestCase
         $document->setServerState('published');
         $document->setType('baz');
 
-        $title = new Opus_Title();
+        $title = new Title();
         $title->setValue('foobartitle');
         $title->setLanguage('deu');
         $document->setTitleMain($title);
 
-        $author = new Opus_Person();
+        $author = new Person();
         $author->setFirstName('John');
         $author->setLastName('Doe');
         $author->setEmail('doe@example.org');

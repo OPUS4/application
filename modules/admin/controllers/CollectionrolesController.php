@@ -32,6 +32,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\CollectionRole;
+
 /**
  * Controller for administration of collection roles.
  *
@@ -45,7 +47,7 @@ class Admin_CollectionrolesController extends Application_Controller_Action
      */
     public function indexAction()
     {
-        $this->view->collectionRoles = Opus_CollectionRole::fetchAll();
+        $this->view->collectionRoles = CollectionRole::fetchAll();
     }
 
     /**
@@ -53,7 +55,7 @@ class Admin_CollectionrolesController extends Application_Controller_Action
      */
     public function newAction()
     {
-        Opus_CollectionRole::fixPositions();
+        CollectionRole::fixPositions();
         $collectionRoleModel = new Admin_Model_CollectionRole();
         $this->view->form = $this->getRoleForm($collectionRoleModel->getObject());
     }
@@ -63,7 +65,7 @@ class Admin_CollectionrolesController extends Application_Controller_Action
      */
     public function editAction()
     {
-        Opus_CollectionRole::fixPositions();
+        CollectionRole::fixPositions();
         try {
             $collectionRoleModel = new Admin_Model_CollectionRole($this->getRequest()->getParam('roleid', ''));
             $this->view->form = $this->getRoleForm($collectionRoleModel->getObject());
@@ -221,10 +223,10 @@ class Admin_CollectionrolesController extends Application_Controller_Action
     /**
      * Erzeugt Formular für ein CollectionRole Objekt.
      *
-     * @param Opus_CollectionRole $collectionRole
+     * @param CollectionRole $collectionRole
      * @return mixed
      */
-    private function getRoleForm(Opus_CollectionRole $collectionRole)
+    private function getRoleForm(CollectionRole $collectionRole)
     {
         $form = new Admin_Form_CollectionRole();
         $form->populateFromModel($collectionRole);

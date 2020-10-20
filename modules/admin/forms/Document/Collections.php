@@ -31,6 +31,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Collection;
+use Opus\Document;
+
 /**
  * Subform fuer Collections im Metadaten-Formular.
  *
@@ -81,7 +84,7 @@ class Admin_Form_Document_Collections extends Admin_Form_AbstractDocumentSubForm
 
     /**
      * Erzeugt und initialisiert Unterformulare entsprechend den Collections eines Dokuments.
-     * @param Opus_Document $document
+     * @param Document $document
      */
     public function populateFromModel($document)
     {
@@ -176,7 +179,7 @@ class Admin_Form_Document_Collections extends Admin_Form_AbstractDocumentSubForm
      * Diese Funktion iteriert über alle Unterformulare und fragt die Collections ab. Die Collections werden in einem
      * Array gesammelt und dann dem Dokument zugewiesen.
      *
-     * @param Opus_Document $document
+     * @param Document $document
      */
     public function updateModel($document)
     {
@@ -241,7 +244,7 @@ class Admin_Form_Document_Collections extends Admin_Form_AbstractDocumentSubForm
      */
     protected function _addCollection($colId)
     {
-        $collection = new Opus_Collection($colId);
+        $collection = new Collection($colId);
 
         $collectionRole = $collection->getRole();
 
@@ -286,7 +289,7 @@ class Admin_Form_Document_Collections extends Admin_Form_AbstractDocumentSubForm
 
         $multiWrapper = $subform->getDecorator('multiWrapper');
 
-        if (! is_null($multiWrapper) && $multiWrapper instanceof Zend_Form_Decorator_HtmlTag) {
+        if (! is_null($multiWrapper) && $multiWrapper instanceof \Zend_Form_Decorator_HtmlTag) {
             $multiClass = $multiWrapper->getOption('class');
             $multiClass .= ($position % 2 == 0) ? ' even' : ' odd';
             $multiWrapper->setOption('class', $multiClass);

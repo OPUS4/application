@@ -213,7 +213,7 @@ class Application_Translate_TmxFile
     /**
      * Checks if a translation exists.
      *
-     * @param $key Translation key
+     * @param $key string Translation key
      * @param null $language Optionally what language to look for
      * @return bool
      */

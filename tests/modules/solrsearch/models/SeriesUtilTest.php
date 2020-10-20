@@ -31,6 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Series;
+
 class Solrsearch_Model_SeriesUtilTest extends ControllerTestCase
 {
 
@@ -44,7 +46,7 @@ class Solrsearch_Model_SeriesUtilTest extends ControllerTestCase
     {
         parent::setUp();
 
-        foreach (Opus_Series::getAll() as $seriesItem) {
+        foreach (Series::getAll() as $seriesItem) {
             $this->visibilities[$seriesItem->getId()] = $seriesItem->getVisible();
         }
 
@@ -95,7 +97,7 @@ class Solrsearch_Model_SeriesUtilTest extends ControllerTestCase
 
     public function testGetVisibleSeriesSortedAlphabetically()
     {
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
             'browsing' => [
                 'series' => [
                     'sortByTitle' => self::CONFIG_VALUE_TRUE
@@ -116,7 +118,7 @@ class Solrsearch_Model_SeriesUtilTest extends ControllerTestCase
 
     private function setAllSeriesToUnvisible()
     {
-        foreach (Opus_Series::getAll() as $seriesItem) {
+        foreach (Series::getAll() as $seriesItem) {
             $seriesItem->setVisible(0);
             $seriesItem->store();
         }
@@ -124,7 +126,7 @@ class Solrsearch_Model_SeriesUtilTest extends ControllerTestCase
 
     private function restoreVisiblitySettings()
     {
-        foreach (Opus_Series::getAll() as $seriesItem) {
+        foreach (Series::getAll() as $seriesItem) {
             $seriesItem->setVisible($this->visibilities[$seriesItem->getId()]);
             $seriesItem->store();
         }

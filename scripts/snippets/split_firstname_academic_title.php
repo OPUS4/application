@@ -28,8 +28,9 @@
  * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
+use Opus\Person;
 
 /**
  *
@@ -45,7 +46,7 @@
  *
  */
 
-foreach (Opus_Person::getAll() as $person) {
+foreach (Person::getAll() as $person) {
     $firstname = $person->getFirstName();
     $numOfOpeningParenthesis = substr_count($firstname, '(');
     $numOfClosingParenthesis = substr_count($firstname, ')');

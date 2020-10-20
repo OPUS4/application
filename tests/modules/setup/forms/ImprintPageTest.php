@@ -40,7 +40,7 @@ class Setup_Form_ImprintPageTest extends ControllerTestCase
 
     public function testInit()
     {
-        $database = new Opus_Translate_Dao();
+        $database = new \Opus\Translate\Dao();
         $database->removeAll();
 
         $form = new Setup_Form_ImprintPage();

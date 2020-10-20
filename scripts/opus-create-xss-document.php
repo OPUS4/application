@@ -34,6 +34,14 @@
 // Bootstrapping
 require_once dirname(__FILE__) . '/common/bootstrap.php';
 
+use Opus\Collection;
+use Opus\CollectionRole;
+use Opus\DnbInstitute;
+use Opus\Document;
+use Opus\Licence;
+use Opus\Person;
+
+
 $counter = 1;
 function randString($counter)
 {
@@ -56,7 +64,7 @@ $oldErrorHandler = set_error_handler("myErrorHandler");
 //
 // Creating document, filling static fields.
 //
-$doc = new Opus_Document();
+$doc = Document::new();
 $doc->setType(randString($counter++));
 $doc->setServerState('published');
 $doc->setServerDatePublished('01.01.1900');
@@ -82,7 +90,7 @@ $doc->setContributingCorporation(randString($counter++));
 //
 // Persons
 //
-$submitter = new Opus_Person();
+$submitter = new Person();
 $submitter->getField('Email')->setValidator(null);
 $submitter->setFirstName(randString($counter++))
     ->setLastName(randString($counter++))
@@ -92,7 +100,7 @@ $submitter->setFirstName(randString($counter++))
     ->setPlaceOfBirth(randString($counter++));
 $doc->addPersonSubmitter($submitter);
 
-$author = new Opus_Person();
+$author = new Person();
 $author->getField('Email')->setValidator(null);
 $author->setFirstName(randString($counter++))
     ->setLastName(randString($counter++))
@@ -102,28 +110,28 @@ $author->setFirstName(randString($counter++))
     ->setPlaceOfBirth(randString($counter++));
 $doc->addPersonAuthor($author);
 
-$referee = new Opus_Person();
+$referee = new Person();
 $referee->setFirstName('Gyro'.randString($counter++));
 $referee->setLastName('Gearloose'.randString($counter++));
 $referee->setAcademicTitle('Prof. Dr.'.randString($counter++));
 $doc->addPersonReferee($referee);
 
-$editor = new Opus_Person();
+$editor = new Person();
 $editor->setFirstName('Bob'.randString($counter++));
 $editor->setLastName('Foster'.randString($counter++));
 $doc->addPersonEditor($editor);
 
-$advisor = new Opus_Person();
+$advisor = new Person();
 $advisor->setFirstName('Fred'.randString($counter++));
 $advisor->setLastName('Clever'.randString($counter++));
 $doc->addPersonAdvisor($advisor);
 
-$translator = new Opus_Person();
+$translator = new Person();
 $translator->setFirstName('Erika'.randString($counter++));
 $translator->setLastName('Fuchs'.randString($counter++));
 $doc->addPersonTranslator($translator);
 
-$contributor = new Opus_Person();
+$contributor = new Person();
 $contributor->setFirstName('Jeff'.randString($counter++));
 $contributor->setLastName('Smart'.randString($counter++));
 $contributor->store();
@@ -151,7 +159,7 @@ foreach (['addTitleMain', 'addTitleAbstract', 'addTitleParent', 'addTitleSub', '
 //
 // Collections
 //
-$institutesRole = new Opus_CollectionRole();
+$institutesRole = new CollectionRole();
 $institutesRole->setName('institutes'.randString($counter++).rand())
                    ->setOaiName('institutes'.randString($counter++).rand())
                    ->setPosition(1)
@@ -164,7 +172,7 @@ $institutesRole->setName('institutes'.randString($counter++).rand())
                    ->store();
 
 $instituteName = 'Institut für empirische Forschung ' . randString($counter++);
-$instituteCollections = Opus_Collection::fetchCollectionsByRoleName($institutesRole->getId(), $instituteName);
+$instituteCollections = Collection::fetchCollectionsByRoleName($institutesRole->getId(), $instituteName);
 if (count($instituteCollections) >= 1) {
     $instituteCollection = $instituteCollections[0];
 } else {
@@ -206,7 +214,7 @@ $doc->addIdentifierOpac()->setValue(randString($counter++));
 //
 // DnbInstitutes
 //
-$dnbInstitute = new Opus_DnbInstitute();
+$dnbInstitute = new DnbInstitute();
 $dnbInstitute->setName(randString($counter++).rand())
           ->setAddress(randString($counter++))
           ->setCity(randString($counter++))
@@ -262,7 +270,7 @@ $doc->addNote()
 //
 // Licenses
 //
-$lic = new Opus_Licence();
+$lic = new Licence();
 $lic->setActive(1);
 $lic->setLanguage('deu'.randString($counter++));
 $lic->setLinkLicence(randString($counter++));

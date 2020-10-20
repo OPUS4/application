@@ -29,7 +29,6 @@
  * @author      Sascha Szott
  * @copyright   Copyright (c) 2016
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 class Sword_Model_AtomEntryDocument
 {
@@ -56,7 +55,7 @@ class Sword_Model_AtomEntryDocument
         $this->fullUrl = $fullUrl;
 
         if (! empty($this->entries)) {
-            $config = Zend_Registry::get('Zend_Config');
+            $config = \Zend_Registry::get('Zend_Config');
             $prettyPrinting = isset($config->prettyXml) && filter_var($config->prettyXml, FILTER_VALIDATE_BOOLEAN);
             if ($prettyPrinting) {
                 $dom = new DOMDocument;
@@ -98,7 +97,7 @@ class Sword_Model_AtomEntryDocument
 
     private function handleSingleEntry($userName, $request)
     {
-        $root = new SimpleXMLElement('<entry xmlns="http://www.w3.org/2005/Atom" xmlns:sword="http://purl.org/net/sword/"></entry>');
+        $root = new \SimpleXMLElement('<entry xmlns="http://www.w3.org/2005/Atom" xmlns:sword="http://purl.org/net/sword/"></entry>');
         $doc = $this->entries[0];
         $this->buildAtomEntryDocPart($doc, $root, $userName);
         $this->addSwordElements($root, $request);
@@ -111,7 +110,7 @@ class Sword_Model_AtomEntryDocument
      */
     private function handleMultipleEntries($userName, $request)
     {
-        $root = new SimpleXMLElement('<opus:entries xmlns="http://www.w3.org/2005/Atom" xmlns:opus="http://www.opus-repository.org" xmlns:sword="http://purl.org/net/sword/"></opus:entries>');
+        $root = new \SimpleXMLElement('<opus:entries xmlns="http://www.w3.org/2005/Atom" xmlns:opus="http://www.opus-repository.org" xmlns:sword="http://purl.org/net/sword/"></opus:entries>');
         foreach ($this->entries as $doc) {
             $entryRoot = $root->addChild('entry', null, 'http://www.w3.org/2005/Atom');
             $this->buildAtomEntryDocPart($doc, $entryRoot, $userName);
@@ -122,7 +121,7 @@ class Sword_Model_AtomEntryDocument
 
     private function addSwordElements($rootElement, $request)
     {
-        $config = Zend_Registry::get('Zend_Config');
+        $config = \Zend_Registry::get('Zend_Config');
         $generator = $config->sword->generator;
         $rootElement->addChild('generator', $generator);
 

@@ -33,6 +33,8 @@
 
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
+use Opus\Doi\DoiManager;
+
 /*
  * Dieses Script sucht nach Dokumenten, die lokale DOIs im Status 'registered'
  * besitzen und verifiziert diese DOIs. Die Verifikation ist erforderlich, weil
@@ -54,11 +56,11 @@ $printErrors = false;
 
 $beforeDate = null;
 if (! is_null($delayInHours)) {
-    $dateTime = new DateTime();
+    $dateTime = new \DateTime();
     $beforeDate = date("Y-m-d H:i:s", strtotime("- $delayInHours hours"));
 }
 
-$doiManager = new Opus_Doi_DoiManager();
+$doiManager = new DoiManager();
 $status = $doiManager->verifyRegisteredBefore($beforeDate);
 
 if ($status->isNoDocsToProcess()) {

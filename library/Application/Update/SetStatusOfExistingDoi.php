@@ -31,6 +31,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Document;
+use Opus\DocumentFinder;
+
 /**
  * Set registration status of all existing DOIs to "registered".
  * Only documents with server state "published" are considered.
@@ -42,7 +45,7 @@ class Application_Update_SetStatusOfExistingDoi extends Application_Update_Plugi
     {
         $this->log('Set registration status of all DOIs to "registered"');
 
-        $docFinder = new Opus_DocumentFinder();
+        $docFinder = new DocumentFinder();
         $docFinder->setIdentifierTypeExists('doi');
         $docFinder->setServerState('published');
         $ids = $docFinder->ids();
@@ -52,7 +55,7 @@ class Application_Update_SetStatusOfExistingDoi extends Application_Update_Plugi
         $numOfModifiedDocs = 0;
 
         foreach ($ids as $id) {
-            $doc = new Opus_Document($id);
+            $doc = Document::get($id);
 
             $dois = $doc->getIdentifierDoi();
             foreach ($dois as $doi) {

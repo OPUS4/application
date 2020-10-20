@@ -30,6 +30,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Document;
+use Opus\Patent;
+
 /**
  * Unit Tests fuer Admin_Form_Document_Patent.
  */
@@ -59,7 +62,7 @@ class Admin_Form_Document_PatentTest extends ControllerTestCase
 
         $form = new Admin_Form_Document_Patent();
 
-        $document = new Opus_Document(146);
+        $document = Document::get(146);
         $patents = $document->getPatent();
         $patent = $patents[0];
         $patentId = $patent->getId();
@@ -88,7 +91,7 @@ class Admin_Form_Document_PatentTest extends ControllerTestCase
         $form->getElement('Application')->setValue('Patent Title');
         $form->getElement('DateGranted')->setValue('2008/03/20');
 
-        $patent = new Opus_Patent();
+        $patent = new Patent();
 
         $form->updateModel($patent);
 
@@ -129,7 +132,7 @@ class Admin_Form_Document_PatentTest extends ControllerTestCase
     {
         $this->useEnglish();
 
-        $document = new Opus_Document(146);
+        $document = Document::get(146);
         $patents = $document->getPatent();
         $patentId = $patents[0]->getId();
 
@@ -243,7 +246,7 @@ class Admin_Form_Document_PatentTest extends ControllerTestCase
         $form->getElement('Countries')->setValue('Germany');
         $form->getElement('Application')->setValue('description');
 
-        $patent = new Opus_Patent();
+        $patent = new Patent();
 
         $form->updateModel($patent);
 
@@ -254,7 +257,7 @@ class Admin_Form_Document_PatentTest extends ControllerTestCase
 
         $documentId = $document->getId();
 
-        $document = new Opus_Document($documentId);
+        $document = Document::get($documentId);
 
         $patents = $document->getPatent();
         $patent = $patents[0];

@@ -53,7 +53,7 @@ class Application_Util_ShellScript
 
     /**
      * Returns value for property if found in shell script.
-     * @param $name Property name
+     * @param $name string Property name
      * @return null|string
      */
     public function getProperty($name)
@@ -68,7 +68,7 @@ class Application_Util_ShellScript
     /**
      * Read property values from shell script.
      *
-     * @param $path Path to shell script
+     * @param $path string Path to shell script
      * @return array Map with names and values of properties
      * @throws Exception
      */

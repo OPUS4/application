@@ -30,6 +30,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\UserRole;
+
 class Admin_Form_RoleTest extends ControllerTestCase
 {
 
@@ -43,14 +45,14 @@ class Admin_Form_RoleTest extends ControllerTestCase
 
     public function testContructWithRole()
     {
-        $role = Opus_UserRole::fetchByName('guest');
+        $role = UserRole::fetchByName('guest');
         $form = new Admin_Form_Role($role->getId());
         $this->assertEquals('guest', $form->getElementValue(Admin_Form_Role::ELEMENT_NAME));
     }
 
     public function testPopulateFromModel()
     {
-        $role = Opus_UserRole::fetchByName('administrator');
+        $role = UserRole::fetchByName('administrator');
         $form = new Admin_Form_Role();
 
         $form->populateFromModel($role);
@@ -68,6 +70,8 @@ class Admin_Form_RoleTest extends ControllerTestCase
     }
 
     /**
+     * @param string $validName Role name
+     *
      * @dataProvider validRoleNameDataProvider
      */
     public function testValidRoleName($validName)
@@ -91,6 +95,7 @@ class Admin_Form_RoleTest extends ControllerTestCase
     }
 
     /**
+     * @param string $invalidName Role name
      * @dataProvider invalidRoleNameDataProvider
      */
     public function testInvalidRoleName($invalidName)
