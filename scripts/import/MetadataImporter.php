@@ -31,11 +31,12 @@
  * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 require_once 'Log.php';
+
+use Opus\Util\MetadataImport;
 
 class MetadataImporter
 {
@@ -49,7 +50,7 @@ class MetadataImporter
         $consoleConf = ['lineFormat' => '[%1$s] %4$s'];
         $logfileConf = ['append' => false, 'lineFormat' => '%4$s'];
 
-        $this->_console = Log::factory('console', '', '', $consoleConf, PEAR_LOG_INFO);
+        $this->_console = \Log::factory('console', '', '', $consoleConf, PEAR_LOG_INFO);
 
         if (count($options) < 2) {
             $this->_console->log('Missing parameter: no file to import.');
@@ -61,11 +62,11 @@ class MetadataImporter
             // logfile path is given
             $logfilePath = $options[2];
         }
-        $this->_logfile = Log::factory('file', $logfilePath, '', $logfileConf, PEAR_LOG_INFO);
+        $this->_logfile = \Log::factory('file', $logfilePath, '', $logfileConf, PEAR_LOG_INFO);
 
         $xmlFile = $options[1];
 
-        $importer = new Opus_Util_MetadataImport($xmlFile, true, $this->_console, $this->_logfile);
+        $importer = new MetadataImport($xmlFile, true, $this->_console, $this->_logfile);
         $importer->run();
     }
 }

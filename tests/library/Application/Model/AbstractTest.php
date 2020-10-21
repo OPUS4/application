@@ -73,12 +73,12 @@ class Application_Model_AbstractTest extends ControllerTestCase
         $config = $this->_model->getConfig();
 
         $this->assertInstanceOf('Zend_Config', $config);
-        $this->assertEquals(Zend_Registry::get('Zend_Config'), $config);
+        $this->assertEquals(\Zend_Registry::get('Zend_Config'), $config);
     }
 
     public function testSetConfig()
     {
-        $config = new Zend_Config([]);
+        $config = new \Zend_Config([]);
 
         $this->_model->setConfig($config);
 

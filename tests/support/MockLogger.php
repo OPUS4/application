@@ -29,7 +29,6 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2013-2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -37,12 +36,12 @@
  *
  * TODO Unterscheidung von Nachrichten in Log-Leveln?
  */
-class MockLogger extends Zend_Log
+class MockLogger extends \Zend_Log
 {
 
     private $messages = [];
 
-    private $logger = null;
+    private $logger;
 
     public function __construct($logger = null)
     {

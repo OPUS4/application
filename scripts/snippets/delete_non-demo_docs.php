@@ -28,9 +28,10 @@
  * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
+use Opus\Document;
+use Opus\DocumentFinder;
 
 /**
  * Erstellt die Demoinstanz, in der nur die Testdokumente mit den IDs 91 bis 110
@@ -39,15 +40,15 @@
  * TODO move script (it is used for demo instance)
  */
 
-$finder = new Opus_DocumentFinder();
+$finder = new DocumentFinder();
 foreach ($finder->ids() as $id) {
     if (intval($id) < 91 || intval($id) > 110) {
-        $doc = new Opus_Document($id);
+        $doc = Document::get($id);
         $doc->deletePermanent();
         echo "document " . $id . " was deleted.\n";
     }
 }
 
-$finder = new Opus_DocumentFinder();
+$finder = new DocumentFinder();
 echo "done -- num of remaining docs: " . $finder->count() . "\n";
 exit();

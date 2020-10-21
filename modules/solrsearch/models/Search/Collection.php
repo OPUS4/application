@@ -81,7 +81,7 @@ class Solrsearch_Model_Search_Collection extends Solrsearch_Model_Search_Basic
         if (! is_null($usetheme) && 1 === (int) $usetheme) {
             $layoutPath = APPLICATION_PATH . '/public/layouts/' . $collectionList->getTheme();
             if (is_readable($layoutPath . '/common.phtml')) {
-                $layout = Zend_Controller_Action_HelperBroker::getStaticHelper('layout');
+                $layout = \Zend_Controller_Action_HelperBroker::getStaticHelper('layout');
                 $layout->setLayoutPath($layoutPath);
             } else {
                 $this->getLogger()->debug(

@@ -31,6 +31,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Document;
+use Opus\Person;
+
 /**
  * Unit Test fuer Formularklasse zum Editieren einer Person.
  */
@@ -61,7 +64,7 @@ class Admin_Form_PersonTest extends ControllerTestCase
 
         $form = new Admin_Form_Person();
 
-        $person = new Opus_Person();
+        $person = new Person();
 
         $person->setFirstName('John');
         $person->setLastName('Doe');
@@ -113,7 +116,7 @@ class Admin_Form_PersonTest extends ControllerTestCase
         $form->getElement('IdentifierMisc')->setValue('5678');
 
 
-        $person = new Opus_Person();
+        $person = new Person();
 
         $form->updateModel($person);
 
@@ -145,7 +148,7 @@ class Admin_Form_PersonTest extends ControllerTestCase
         $messages = $logger->getMessages();
 
         $this->assertEquals(1, count($messages));
-        $this->assertContains('not instance of Opus_Person', $messages[0]);
+        $this->assertContains('not instance of Opus\Person', $messages[0]);
     }
 
     public function testGetModel()
@@ -154,7 +157,7 @@ class Admin_Form_PersonTest extends ControllerTestCase
 
         $form = new Admin_Form_Person();
 
-        $document = new Opus_Document(146);
+        $document = Document::get(146);
         $persons = $document->getPerson();
         $person = $persons[0]->getModel();
 

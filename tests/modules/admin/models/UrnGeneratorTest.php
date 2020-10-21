@@ -47,24 +47,24 @@ class Admin_Model_UrnGeneratorTest extends ControllerTestCase
     {
         if (! is_null($this->config)) {
             // undo modifications in configuration
-            Zend_Registry::set('Zend_Config', $this->config);
+            \Zend_Registry::set('Zend_Config', $this->config);
         }
     }
 
     private function modifyUrnConfig($nss, $nid)
     {
         // backup current config state
-        $this->config = Zend_Registry::get('Zend_Config');
+        $this->config = \Zend_Registry::get('Zend_Config');
 
         // modify current config state
-        $config = Zend_Registry::get('Zend_Config');
-        $config->merge(new Zend_Config([
+        $config = \Zend_Registry::get('Zend_Config');
+        $config->merge(new \Zend_Config([
             'urn' => [
                 'nss' => $nss,
                 'nid' => $nid
             ]
         ]));
-        Zend_Registry::set('Zend_Config', $config);
+        \Zend_Registry::set('Zend_Config', $config);
     }
 
     public function testWithMissingConfig()

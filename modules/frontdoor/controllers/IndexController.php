@@ -33,6 +33,11 @@
  * @copyright   Copyright (c) 2014-2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\Document;
+use Opus\Model\NotFoundException;
+use Opus\Statistic\LocalCounter;
+
 class Frontdoor_IndexController extends Application_Controller_Action
 {
 
@@ -66,8 +71,8 @@ class Frontdoor_IndexController extends Application_Controller_Action
 
         $document = null;
         try {
-            $document = new Opus_Document($docId);
-        } catch (Opus_Model_NotFoundException $e) {
+            $document = Document::get($docId);
+        } catch (NotFoundException $e) {
             $this->printDocumentError("frontdoor_doc_id_not_found", 404);
             return;
         }
@@ -174,7 +179,7 @@ class Frontdoor_IndexController extends Application_Controller_Action
 
     /**
      *
-     * @param Opus_Document $doc
+     * @param Document $doc
      */
     private function isMailPossible($doc)
     {
@@ -184,7 +189,7 @@ class Frontdoor_IndexController extends Application_Controller_Action
 
     /**
      *
-     * @param Opus_Document $document
+     * @param Document $document
      * @return string
      */
     private function getFrontdoorTitle($document)
@@ -233,7 +238,7 @@ class Frontdoor_IndexController extends Application_Controller_Action
     private function incrementStatisticsCounter($docId)
     {
         try {
-            $statistics = Opus_Statistic_LocalCounter::getInstance();
+            $statistics = LocalCounter::getInstance();
             $statistics->countFrontdoor($docId);
         } catch (Exception $e) {
             $this->getLogger()->err("Counting frontdoor statistics failed: " . $e);

@@ -29,7 +29,6 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 class Application_Form_Element_FileTest extends FormElementTestCase
 {
@@ -46,7 +45,7 @@ class Application_Form_Element_FileTest extends FormElementTestCase
     public function testDecoratorPath()
     {
         $element = new $this->_formElementClass('name');
-        $paths = $element->getPluginLoader(Zend_Form::DECORATOR)->getPaths();
+        $paths = $element->getPluginLoader(\Zend_Form::DECORATOR)->getPaths();
         $this->assertArrayHasKey('Application_Form_Decorator_', $paths);
         $this->assertContains('Application/Form/Decorator/', $paths['Application_Form_Decorator_']);
     }

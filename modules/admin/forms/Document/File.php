@@ -25,6 +25,8 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+use Opus\File;
+
 /**
  * Formular fuer die Anzeige einer Datei in der Metadaten-Uebersicht.
  *
@@ -33,7 +35,6 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 class Admin_Form_Document_File extends Admin_Form_AbstractDocumentSubForm
 {
@@ -55,8 +56,8 @@ class Admin_Form_Document_File extends Admin_Form_AbstractDocumentSubForm
     }
 
     /**
-     * Setzt die Instanz von Opus_File fuer das Formular.
-     * @param Opus_File $model
+     * Setzt die Instanz von File fuer das Formular.
+     * @param File $model
      */
     public function populateFromModel($model)
     {
@@ -64,7 +65,7 @@ class Admin_Form_Document_File extends Admin_Form_AbstractDocumentSubForm
     }
 
     /**
-     * Liefert die gesetzte Instanz von Opus_File fuer Formular.
+     * Liefert die gesetzte Instanz von File fuer Formular.
      * @return null
      */
     public function getModel()

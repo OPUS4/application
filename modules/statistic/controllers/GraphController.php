@@ -29,8 +29,9 @@
  * @author      Birgit Dressler (b.dressler@sulb.uni-saarland.de)
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
+use Opus\Statistic\LocalCounter;
 
 class Statistic_GraphController extends Application_Controller_Action
 {
@@ -58,10 +59,10 @@ class Statistic_GraphController extends Application_Controller_Action
         if (isset($id) === false) {
             //TODO: create own exception
 
-            throw new Exception("Parameter id must be set.");
+            throw new \Exception("Parameter id must be set.");
         }
-        $dataPdf = Opus_Statistic_LocalCounter::getInstance()->readYears($id);
-        $dataFrontdoor = Opus_Statistic_LocalCounter::getInstance()->readYears($id, 'frontdoor');
+        $dataPdf = LocalCounter::getInstance()->readYears($id);
+        $dataFrontdoor = LocalCounter::getInstance()->readYears($id, 'frontdoor');
         $years = array_merge(array_keys($dataFrontdoor), array_keys($dataPdf));
         if (count($years) == 0) {
             $years = [date('Y')];
@@ -105,8 +106,8 @@ class Statistic_GraphController extends Application_Controller_Action
             //TODO: create own exception
             throw new Exception("Parameter id must be set.");
         }
-        $dataPdf = Opus_Statistic_LocalCounter::getInstance()->readMonths($id);
-        $dataFrontdoor = Opus_Statistic_LocalCounter::getInstance()->readMonths($id, 'frontdoor');
+        $dataPdf = LocalCounter::getInstance()->readMonths($id);
+        $dataFrontdoor = LocalCounter::getInstance()->readMonths($id, 'frontdoor');
 
         for ($i = 1; $i < 13; $i++) {
             if (isset($dataPdf[$i]) === false) {

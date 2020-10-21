@@ -31,6 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Date;
+
 class Application_View_Helper_FormatDateTest extends ControllerTestCase
 {
 
@@ -55,7 +57,7 @@ class Application_View_Helper_FormatDateTest extends ControllerTestCase
     {
         $helper = new Application_View_Helper_FormatDate();
 
-        $date = new Opus_Date(DateTime::createFromFormat('Y/m/d  H:i', '2017/03/10 14:51'));
+        $date = new Date(DateTime::createFromFormat('Y/m/d  H:i', '2017/03/10 14:51'));
 
         $this->useEnglish();
 
@@ -70,7 +72,7 @@ class Application_View_Helper_FormatDateTest extends ControllerTestCase
     {
         $helper = new Application_View_Helper_FormatDate();
 
-        $date = new Opus_Date(DateTime::createFromFormat('Y/m/d  H:i', '2017/03/10 14:51'));
+        $date = new Date(DateTime::createFromFormat('Y/m/d  H:i', '2017/03/10 14:51'));
 
         $this->useEnglish();
 

@@ -30,11 +30,12 @@
  * @author      Thoralf Klein <thoralf.klein@zib.de>
  * @copyright   Copyright (c) 2009-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 // Bootstrapping
 require_once dirname(__FILE__) . '/common/bootstrap.php';
+
+use Opus\Account;
 
 $programm = array_shift($argv);
 if (count($argv) < 2) {
@@ -46,5 +47,5 @@ $username = array_shift($argv);
 $password = array_shift($argv);
 
 // Set passwort of $user to $password.
-$a = new Opus_Account(null, null, $username);
+$a = new Account(null, null, $username);
 $a->setPassword($password)->store();

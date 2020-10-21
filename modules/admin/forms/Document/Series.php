@@ -29,8 +29,11 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
+use Opus\Series;
+use Opus\Model\Dependent\Link\DocumentSeries;
+use Opus\Model\NotFoundException;
 
 /**
  * Unterformular fuer das Editieren eines Serieneintrags.
@@ -84,7 +87,7 @@ class Admin_Form_Document_Series extends Admin_Form_AbstractModelSubForm
     /**
      * Initialisiert das Formular mit den Werten im Modell.
      *
-     * @param Opus_Model_Dependent_Link_DocumentSeries $seriesLink
+     * @param DocumentSeries $seriesLink
      */
     public function populateFromModel($seriesLink)
     {
@@ -103,7 +106,7 @@ class Admin_Form_Document_Series extends Admin_Form_AbstractModelSubForm
     public function updateModel($seriesLink)
     {
         $seriesId = $this->getElementValue(self::ELEMENT_SERIES_ID);
-        $series = new Opus_Series($seriesId);
+        $series = new Series($seriesId);
         $seriesLink->setModel($series);
         $seriesLink->setNumber($this->getElementValue(self::ELEMENT_NUMBER));
         $seriesLink->setDocSortOrder($this->getElementValue(self::ELEMENT_SORT_ORDER));
@@ -111,7 +114,7 @@ class Admin_Form_Document_Series extends Admin_Form_AbstractModelSubForm
 
     /**
      * Liefert das angezeigte Modell oder ein neues für hinzugefügte Verknüpfungen.
-     * @return \Opus_Model_Dependent_Link_DocumentSeries
+     * @return DocumentSeries
      */
     public function getModel()
     {
@@ -125,9 +128,9 @@ class Admin_Form_Document_Series extends Admin_Form_AbstractModelSubForm
         }
 
         try {
-            $seriesLink = new Opus_Model_Dependent_Link_DocumentSeries($linkId);
-        } catch (Opus_Model_NotFoundException $omnfe) {
-            $seriesLink = new Opus_Model_Dependent_Link_DocumentSeries();
+            $seriesLink = new DocumentSeries($linkId);
+        } catch (NotFoundException $omnfe) {
+            $seriesLink = new DocumentSeries();
         }
 
         $this->updateModel($seriesLink);

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -30,8 +29,10 @@
  * @author      Susanne Gottwald <gottwald@zib.de>
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
+use Opus\CollectionRole;
+
 class Publish_Model_FormElement
 {
 
@@ -74,9 +75,9 @@ class Publish_Model_FormElement
         $datatype = null,
         $multiplicity = null
     ) {
-        $this->session = new Zend_Session_Namespace('Publish');
-        $this->sessionOpus = new Zend_Session_Namespace();
-        $this->log = Zend_Registry::get('Zend_Log');
+        $this->session = new \Zend_Session_Namespace('Publish');
+        $this->sessionOpus = new \Zend_Session_Namespace();
+        $this->log = \Zend_Registry::get('Zend_Log');
         $this->form = $form;
 
         $this->_elementName = $name;
@@ -581,7 +582,7 @@ class Publish_Model_FormElement
     public function setCurrentCollectionId($setRoot = false)
     {
         if (! $setRoot) {
-            $collectionRole = Opus_CollectionRole::fetchByName($this->_collectionRole);
+            $collectionRole = CollectionRole::fetchByName($this->_collectionRole);
             if (! is_null($collectionRole)) {
                 $rootCollection = $collectionRole->getRootCollection();
                 if (! is_null($rootCollection)) {

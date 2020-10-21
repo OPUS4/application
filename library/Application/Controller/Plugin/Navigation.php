@@ -29,7 +29,6 @@
  * @author      Thoralf Klein <thoralf.klein@zib.de>
  * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -38,27 +37,27 @@
  * @category    Application
  * @package     Controller
  */
-class Application_Controller_Plugin_Navigation extends Zend_Controller_Plugin_Abstract
+class Application_Controller_Plugin_Navigation extends \Zend_Controller_Plugin_Abstract
 {
 
     /**
-     * Set up Opus_Navigation.
+     * Set up Navigation.
      *
-     * @param Zend_Controller_Request_Abstract $request The current request.
+     * @param \Zend_Controller_Request_Abstract $request The current request.
      * @return void
      */
-    public function routeStartup(Zend_Controller_Request_Abstract $request)
+    public function routeStartup(\Zend_Controller_Request_Abstract $request)
     {
 
         // Hide menu entries based on privileges
-        $navigation = Zend_Registry::get('Opus_Navigation');
+        $navigation = \Zend_Registry::get('Opus_Navigation');
 
         if (empty($navigation)) {
             return;
         }
 
         // Create a Realm instance.
-        $realm = Opus_Security_Realm::getInstance();
+        $realm = \Opus\Security\Realm::getInstance();
 
         // Der folgende Code sorgt dafür, daß für Nutzer mit Zugriff auf das 'admin' und das 'review' Modul der Link
         // zu den Review Seiten in der Administration angezeigt wird.

@@ -45,7 +45,7 @@ class Export_BootstrapTest extends ControllerTestCase
         $this->dispatch('/frontdoor/index/index/docId/1');
 
         // TODO configuration change has no influence at this point
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
             'export' => [
                 'stylesheet' => [
                     'frontdoor' => null

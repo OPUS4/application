@@ -34,6 +34,10 @@
 
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
+use Opus\Date;
+use Opus\Document;
+use Opus\DocumentFinder;
+
 /*
  * This cron job must be used if embargo dates are used in repository.
  *
@@ -48,9 +52,9 @@ require_once dirname(__FILE__) . '/../common/bootstrap.php';
  * in the next harvesting ServerDateModified needs to be updated.
  */
 
-$docfinder = new Opus_DocumentFinder();
+$docfinder = new DocumentFinder();
 
-$now = new Opus_Date();
+$now = new Date();
 $now->setNow();
 
 // Find documents with expired EmbargoDate and ServerDateModified < EmbargoDate
@@ -59,4 +63,4 @@ $docfinder->setEmbargoDateBeforeNotModifiedAfter(date('Y-m-d', time()));
 $foundIds = $docfinder->ids();
 
 // Update ServerDateModified for all found documents
-Opus_Document::setServerDateModifiedByIds($now, $foundIds);
+Document::setServerDateModifiedByIds($now, $foundIds);

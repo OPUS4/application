@@ -32,6 +32,9 @@
  *
  * Updates database.
  */
+
+use Opus\Database;
+
 class Application_Update_Database extends Application_Update_PluginAbstract
 {
 
@@ -42,7 +45,7 @@ class Application_Update_Database extends Application_Update_PluginAbstract
     {
         $this->log('Updating database ...');
 
-        $database = new Opus_Database();
+        $database = new Database();
 
         $database->update();
 

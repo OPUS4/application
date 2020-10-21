@@ -49,7 +49,7 @@ abstract class Application_Model_Abstract
      * Sets configuration.
      * @param $config Zend_Config
      */
-    public function setConfig(Zend_Config $config = null)
+    public function setConfig(\Zend_Config $config = null)
     {
         $this->_config = $config;
     }
@@ -62,7 +62,7 @@ abstract class Application_Model_Abstract
     public function getConfig()
     {
         if (is_null($this->_config)) {
-            $this->_config = Zend_Registry::get('Zend_Config');
+            $this->_config = \Zend_Registry::get('Zend_Config');
         }
         return $this->_config;
     }

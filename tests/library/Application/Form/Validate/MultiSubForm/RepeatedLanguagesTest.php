@@ -88,17 +88,17 @@ class Application_Form_Validate_MultiSubForm_RepeatedLanguagesTest extends Contr
      */
     public function testPrepareValidation()
     {
-        $form = new Zend_Form();
+        $form = new \Zend_Form();
 
         $titleCount = 3;
 
         for ($index = 0; $index < $titleCount; $index++) {
-            $subform = new Zend_Form_SubForm();
+            $subform = new \Zend_Form_SubForm();
             $subform->addElement(new Application_Form_Element_Language('Language'));
             $form->addSubForm($subform, 'Title' . $index);
         }
 
-        $subform = new Zend_Form_Subform();
+        $subform = new \Zend_Form_Subform();
         $subform->addElement('submit', 'Add');
         $form->addSubForm($subform, 'Actions');
 

@@ -30,7 +30,6 @@
  * @author      Michael Lang  (lang@zib.de)
  * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id: update-thesispublisher.php 11775 2013-06-25 14:28:41Z tklein $
  */
 
 /**
@@ -49,6 +48,9 @@ if (basename(__FILE__) !== basename($argv[0])) {
 }
 
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
+
+use Opus\Document;
+use Opus\DocumentFinder;
 
 $options = getopt('', ['dryrun', 'type:', 'doctype:', 'enrichment:']);
 
@@ -82,13 +84,13 @@ if ($dryrun) {
     _log("TEST RUN: NO DATA WILL BE MODIFIED");
 }
 
-$docFinder = new Opus_DocumentFinder();
+$docFinder = new DocumentFinder();
 $docIds = $docFinder->setEnrichmentKeyExists($enrichmentField)->ids();
 
 _log(count($docIds) . " documents found");
 
 foreach ($docIds as $docId) {
-    $doc = new Opus_Document($docId);
+    $doc = Document::get($docId);
     if ($doc->getType() == $doctype || $doctype == '') {
         $enrichments = $doc->getEnrichment();
         foreach ($enrichments as $enrichment) {

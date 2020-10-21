@@ -119,6 +119,6 @@
     <?PHP endif; ?>
 </div>
 <?PHP else : ?>
-<?PHP Zend_Registry::get('Zend_Log')->err('Use of partial \'actionbox.phtml\' without document.'); ?>
+<?PHP \Zend_Registry::get('Zend_Log')->err('Use of partial \'actionbox.phtml\' without document.'); ?>
 <?PHP endif; ?>
 

@@ -34,7 +34,7 @@
 /**
  * TODO rename
  */
-class Application_Form_Decorator_HtmlTagWithId extends Zend_Form_Decorator_HtmlTag
+class Application_Form_Decorator_HtmlTagWithId extends \Zend_Form_Decorator_HtmlTag
 {
 
     protected function _htmlAttribs(array $attribs)

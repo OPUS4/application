@@ -33,7 +33,6 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 class Admin_Model_DocumentEditSession extends Application_Model_Abstract
 {
@@ -179,7 +178,7 @@ class Admin_Model_DocumentEditSession extends Application_Model_Abstract
     public function getSessionNamespace()
     {
         if (null === $this->_session) {
-            $this->_session = new Zend_Session_Namespace($this->_namespace);
+            $this->_session = new \Zend_Session_Namespace($this->_namespace);
         }
 
         return $this->_session;
@@ -194,7 +193,7 @@ class Admin_Model_DocumentEditSession extends Application_Model_Abstract
         $key = 'doc' . $this->_docId;
 
         if (! array_key_exists($key, $this->_documentNamespaces)) {
-            $namespace = new Zend_Session_Namespace($key);
+            $namespace = new \Zend_Session_Namespace($key);
             $this->_documentNamespaces[$key] = $namespace;
         } else {
             $namespace = $this->_documentNamespaces[$key];

@@ -41,7 +41,7 @@ class Application_Util_WorkspaceCache
      */
     public function clearTranslations()
     {
-        $files = new DirectoryIterator(Application_Configuration::getInstance()->getWorkspacePath() . '/cache');
+        $files = new \DirectoryIterator(Application_Configuration::getInstance()->getWorkspacePath() . '/cache');
 
         foreach ($files as $file) {
             $basename = $file->getBasename();

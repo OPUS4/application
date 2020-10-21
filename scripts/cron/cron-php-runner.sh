@@ -29,9 +29,6 @@
 # @author      Thoralf Klein <thoralf.klein@zib.de>
 # @copyright   Copyright (c) 2011, OPUS 4 development team
 # @license     http://www.gnu.org/licenses/gpl.html General Public License
-# @version     $Id$
-
-
 
 set -e
 

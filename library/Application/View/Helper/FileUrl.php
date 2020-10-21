@@ -34,7 +34,7 @@
 /**
  * Gibt die URL für den Zugriff auf eine spezifische Datei eines Dokuments zurück.
  */
-class Application_View_Helper_FileUrl extends Zend_View_Helper_Abstract
+class Application_View_Helper_FileUrl extends \Zend_View_Helper_Abstract
 {
 
     public function fileUrl($docId, $pathName)

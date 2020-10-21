@@ -29,7 +29,6 @@
  * @author      Sascha Szott
  * @copyright   Copyright (c) 2016
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 class Sword_Model_ErrorDocument
 {
@@ -44,7 +43,7 @@ class Sword_Model_ErrorDocument
     {
         $this->request = $request;
         $this->response = $response;
-        $this->logger = Zend_Registry::get('Zend_Log');
+        $this->logger = \Zend_Registry::get('Zend_Log');
     }
 
     /**
@@ -132,11 +131,11 @@ class Sword_Model_ErrorDocument
 
     private function getDocument($errorCond)
     {
-        $root = new SimpleXMLElement('<sword:error xmlns="http://www.w3.org/2005/Atom" xmlns:sword="http://purl.org/net/sword/"></sword:error>');
+        $root = new \SimpleXMLElement('<sword:error xmlns="http://www.w3.org/2005/Atom" xmlns:sword="http://purl.org/net/sword/"></sword:error>');
         $root->addAttribute('href', $errorCond);
         $root->addChild('title', 'ERROR');
 
-        $config = Zend_Registry::get('Zend_Config');
+        $config = \Zend_Registry::get('Zend_Config');
         $generator = $config->sword->generator;
         $root->addChild('generator', $generator);
 

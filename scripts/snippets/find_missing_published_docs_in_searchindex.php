@@ -28,8 +28,11 @@
  * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
+use Opus\DocumentFinder;
+use Opus\Search\Service;
+use Opus\Search\QueryFactory;
 
 /**
  *
@@ -42,12 +45,12 @@
  */
 
 $numOfErrors = 0;
-$finder = new Opus_DocumentFinder();
+$finder = new DocumentFinder();
 $finder->setServerState('published');
 foreach ($finder->ids() as $docId) {
     // check if document with id $docId is already persisted in search index
-    $search = Opus\Search\Service::selectSearchingService();
-    $query  = Opus\Search\QueryFactory::selectDocumentById($search, $docId);
+    $search = Service::selectSearchingService();
+    $query  = QueryFactory::selectDocumentById($search, $docId);
 
     if ($search->customSearch($query)->getAllMatchesCount() != 1) {
         echo "document # $docId is not stored in search index\n";

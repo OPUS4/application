@@ -33,6 +33,8 @@
 
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
+use Opus\Doi\DoiManager;
+
 /*
  * Dieses Script sucht nach Dokumenten im ServerState 'published',
  * die lokale DOIs besitzen, die noch nicht bei DataCite registiert wurden.
@@ -45,7 +47,7 @@ require_once dirname(__FILE__) . '/../common/bootstrap.php';
 // setze auf $printErrors auf true, um Fehlermeldungen auf der Konsole auszugeben
 $printErrors = false;
 
-$doiManager = new Opus_Doi_DoiManager();
+$doiManager = new DoiManager();
 $status = $doiManager->registerPending();
 
 if ($status->isNoDocsToProcess()) {

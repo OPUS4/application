@@ -64,7 +64,7 @@ class Setup_Form_Validate_TranslationKeyFormatTest extends ControllerTestCase
     public function testMessagesTranslated()
     {
         $validator = new Setup_Form_Validate_TranslationKeyFormat();
-        $translate = Zend_Registry::get('Zend_Translate');
+        $translate = \Zend_Registry::get('Zend_Translate');
         $messageTemplates = $validator->getMessageTemplates();
         $key = $messageTemplates[$validator::NOT_MATCH];
         $this->assertTrue($translate->isTranslated($key));

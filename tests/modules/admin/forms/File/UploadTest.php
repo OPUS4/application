@@ -25,6 +25,8 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+use Opus\Document;
+
 /**
  * @category    Application Unit Test
  * @package     Admin_Form_File
@@ -52,13 +54,13 @@ class Admin_Form_File_UploadTest extends ControllerTestCase
 
         $elements = ['Id', 'File', 'Label', 'Comment', 'Language', 'Save', 'Cancel', 'OpusHash', 'SortOrder'];
 
-        $this->assertEquals(count($elements), count($form->getElements()));
+        $this->assertSameSize($elements, $form->getElements());
 
         foreach ($elements as $element) {
             $this->assertNotNull($form->getElement($element), "Element '$element' is missing.'");
         }
 
-        $this->assertEquals(1, count($form->getSubForms()));
+        $this->assertCount(1, $form->getSubForms());
         $this->assertNotNull($form->getSubForm('Info'));
 
         $this->assertEquals('admin_filemanager_upload', $form->getLegend());
@@ -66,7 +68,7 @@ class Admin_Form_File_UploadTest extends ControllerTestCase
 
     public function testPopulateFromModel()
     {
-        $document = new Opus_Document(146);
+        $document = Document::get(146);
 
         $form = new Admin_Form_File_Upload();
 
@@ -118,7 +120,7 @@ class Admin_Form_File_UploadTest extends ControllerTestCase
 
         $files = $document->getFile();
 
-        $this->assertEquals(1, count($files));
+        $this->assertCount(1, $files);
 
         $file = $files[0];
 
@@ -137,7 +139,7 @@ class Admin_Form_File_UploadTest extends ControllerTestCase
         $fileInfo = $form->getFileInfo();
 
         $this->assertInternalType('array', $fileInfo);
-        $this->assertEquals(0, count($fileInfo));
+        $this->assertCount(0, $fileInfo);
     }
 
     public function testSetGetFileInfo()

@@ -31,6 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Util\ConsoleColors;
+
 class Application_Update_ImportCustomTranslations extends Application_Update_PluginAbstract
 {
 
@@ -52,7 +54,7 @@ class Application_Update_ImportCustomTranslations extends Application_Update_Plu
 
         $files = $manager->getFiles();
 
-        $colors = new Opus_Util_ConsoleColors();
+        $colors = new ConsoleColors();
 
         if (count($files) > 0) {
             // Iterate through modules und TMX files in 'language_custom'
@@ -85,7 +87,7 @@ class Application_Update_ImportCustomTranslations extends Application_Update_Plu
         }
 
         $this->log(PHP_EOL . 'Clearing translation cache...' . PHP_EOL);
-        Zend_Translate::clearCache();
+        \Zend_Translate::clearCache();
     }
 
     /**
@@ -95,7 +97,7 @@ class Application_Update_ImportCustomTranslations extends Application_Update_Plu
      */
     public function importFolder($files, $module)
     {
-        $colors = new Opus_Util_ConsoleColors();
+        $colors = new ConsoleColors();
 
         foreach ($files as $filename) {
             $path = "/modules/$module/language_custom/$filename";
@@ -108,7 +110,7 @@ class Application_Update_ImportCustomTranslations extends Application_Update_Plu
 
             $translations = $tmx->toArray();
 
-            $database = new Opus_Translate_Dao();
+            $database = new \Opus\Translate\Dao();
 
             $database->addTranslations($translations, $module);
 
@@ -128,7 +130,7 @@ class Application_Update_ImportCustomTranslations extends Application_Update_Plu
      */
     public function removeFolder($path)
     {
-        $colors = new Opus_Util_ConsoleColors();
+        $colors = new ConsoleColors();
         if (! (new \FilesystemIterator(APPLICATION_PATH . $path))->valid()) {
             rmdir(APPLICATION_PATH . $path);
             $this->log("Removed folder '$path'");

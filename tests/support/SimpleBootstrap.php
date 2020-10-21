@@ -35,7 +35,7 @@
 
 use Opus\Log\LogService;
 
-class SimpleBootstrap extends Zend_Application_Bootstrap_Bootstrap
+class SimpleBootstrap extends \Zend_Application_Bootstrap_Bootstrap
 {
 
     /**
@@ -55,8 +55,8 @@ class SimpleBootstrap extends Zend_Application_Bootstrap_Bootstrap
      */
     protected function _initConfiguration()
     {
-        $config = new Zend_Config($this->getOptions(), true);
-        Zend_Registry::set('Zend_Config', $config);
+        $config = new \Zend_Config($this->getOptions(), true);
+        \Zend_Registry::set('Zend_Config', $config);
         return $config;
     }
 
@@ -78,8 +78,8 @@ class SimpleBootstrap extends Zend_Application_Bootstrap_Bootstrap
         $logger = $logService->createLog(LogService::DEFAULT_LOG, null, null, $logFilename);
         $logLevel = $logService->getDefaultPriority();
 
-        Zend_Registry::set('Zend_Log', $logger);
-        Zend_Registry::set('LOG_LEVEL', $logLevel);
+        \Zend_Registry::set('Zend_Log', $logger);
+        \Zend_Registry::set('LOG_LEVEL', $logLevel);
 
         $logger->debug('Logging initialized');
 

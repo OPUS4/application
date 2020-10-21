@@ -31,6 +31,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\File;
+use Opus\UserRole;
+
 /**
  * Class Oai_ContainerControllerTest.
  *
@@ -73,7 +76,7 @@ class Oai_ContainerControllerTest extends ControllerTestCase
 
     public function testRequestUnpublishedDoc()
     {
-        $r = Opus_UserRole::fetchByName('guest');
+        $r = UserRole::fetchByName('guest');
 
         $modules = $r->listAccessModules();
         $addOaiModuleAccess = ! in_array('oai', $modules);
@@ -83,9 +86,9 @@ class Oai_ContainerControllerTest extends ControllerTestCase
         }
 
         // enable security
-        $config = Zend_Registry::get('Zend_Config');
+        $config = \Zend_Registry::get('Zend_Config');
         $config->security = self::CONFIG_VALUE_TRUE;
-        Zend_Registry::set('Zend_Config', $config);
+        \Zend_Registry::set('Zend_Config', $config);
 
         $doc = $this->createTestDocument();
         $doc->setServerState('unpublished');
@@ -115,7 +118,7 @@ class Oai_ContainerControllerTest extends ControllerTestCase
     public function testRequestPublishedDocWithInaccessibleFile()
     {
         // create test file test.pdf in file system
-        $config = Zend_Registry::get('Zend_Config');
+        $config = \Zend_Registry::get('Zend_Config');
         $path = $config->workspacePath . DIRECTORY_SEPARATOR . uniqid();
         mkdir($path, 0777, true);
         $filepath = $path . DIRECTORY_SEPARATOR . 'test.pdf';
@@ -124,7 +127,7 @@ class Oai_ContainerControllerTest extends ControllerTestCase
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
 
-        $file = new Opus_File();
+        $file = new File();
         $file->setVisibleInOai(false);
         $file->setPathName('test.pdf');
         $file->setTempFile($filepath);
@@ -135,7 +138,7 @@ class Oai_ContainerControllerTest extends ControllerTestCase
 
         // cleanup
         $file->delete();
-        Opus_Util_File::deleteDirectory($path);
+        \Opus\Util\File::deleteDirectory($path);
 
         $this->assertResponseCode(500);
         $this->assertContains(
@@ -152,7 +155,7 @@ class Oai_ContainerControllerTest extends ControllerTestCase
         );
 
         // create test file test.pdf in file system
-        $config = Zend_Registry::get('Zend_Config');
+        $config = \Zend_Registry::get('Zend_Config');
         $path = $config->workspacePath . DIRECTORY_SEPARATOR . uniqid();
         mkdir($path, 0777, true);
         $filepath = $path . DIRECTORY_SEPARATOR . 'test.pdf';
@@ -161,7 +164,7 @@ class Oai_ContainerControllerTest extends ControllerTestCase
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
 
-        $file = new Opus_File();
+        $file = new File();
         $file->setVisibleInOai(true);
         $file->setPathName('test.pdf');
         $file->setTempFile($filepath);
@@ -172,7 +175,7 @@ class Oai_ContainerControllerTest extends ControllerTestCase
 
         // cleanup
         $file->delete();
-        Opus_Util_File::deleteDirectory($path);
+        \Opus\Util\File::deleteDirectory($path);
 
         $this->assertResponseCode(200);
     }

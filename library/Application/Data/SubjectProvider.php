@@ -32,6 +32,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Subject;
+
 class Application_Data_SubjectProvider
 {
 
@@ -46,6 +48,6 @@ class Application_Data_SubjectProvider
      */
     public function getValues($term)
     {
-        return Opus_Subject::getMatchingSubjects($term);
+        return Subject::getMatchingSubjects($term);
     }
 }

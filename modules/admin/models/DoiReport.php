@@ -31,6 +31,11 @@
  * @copyright   Copyright (c) 2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\Document;
+use Opus\DocumentFinder;
+use Opus\Doi\DoiManager;
+
 class Admin_Model_DoiReport
 {
 
@@ -54,7 +59,7 @@ class Admin_Model_DoiReport
     {
         $result = [];
 
-        $doiManager = new Opus_Doi_DoiManager();
+        $doiManager = new DoiManager();
         $docs = $doiManager->getAll($this->filter);
 
         foreach ($docs as $doc) {
@@ -80,11 +85,11 @@ class Admin_Model_DoiReport
     {
         $result = 0;
 
-        $docFinder = new Opus_DocumentFinder();
+        $docFinder = new DocumentFinder();
         $docFinder->setServerState('published');
         $docFinder->setIdentifierTypeExists('doi');
         foreach ($docFinder->ids() as $docId) {
-            $doc = new Opus_Document($docId);
+            $doc = Document::get($docId);
             $dois = $doc->getIdentifierDoi();
             if (! is_null($dois) && ! empty($dois)) {
                 // es wird nur die erste DOI für die DOI-Registrierung berücksichtigt
@@ -109,12 +114,12 @@ class Admin_Model_DoiReport
     {
         $result = 0;
 
-        $docFinder = new Opus_DocumentFinder();
+        $docFinder = new DocumentFinder();
         $docFinder->setServerState('published');
         $docFinder->setIdentifierTypeExists('doi');
 
         foreach ($docFinder->ids() as $docId) {
-            $doc = new Opus_Document($docId);
+            $doc = Document::get($docId);
             $dois = $doc->getIdentifierDoi();
             if (! is_null($dois) && ! empty($dois)) {
                 // es wird nur die erste DOI für die DOI-Prüfung berücksichtigt

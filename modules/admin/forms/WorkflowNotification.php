@@ -32,6 +32,9 @@
  *
  * TODO use getRecipients
  */
+
+use Opus\Document;
+
 class Admin_Form_WorkflowNotification extends Admin_Form_YesNoForm
 {
 
@@ -64,7 +67,7 @@ class Admin_Form_WorkflowNotification extends Admin_Form_YesNoForm
 
     public function isNotificationEnabled()
     {
-        $config = Zend_Registry::get('Zend_Config');
+        $config = \Zend_Registry::get('Zend_Config');
         return (isset($config->notification->document->published->enabled)
             && filter_var($config->notification->document->published->enabled, FILTER_VALIDATE_BOOLEAN));
     }
@@ -73,8 +76,8 @@ class Admin_Form_WorkflowNotification extends Admin_Form_YesNoForm
      * add a checkbox for each PersonSubmitter and PersonAuthor (used to select
      * recipients for publish notification email)
      *
-     * @param Opus_Document $document
-     * @param Zend_Form $form
+     * @param Document $document
+     * @param \Zend_Form $form
      *
      */
     public function populateFromModel($document)

@@ -30,6 +30,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Document;
+use Opus\Person;
+
 class Review_Model_ClearDocumentsHelperTest extends ControllerTestCase
 {
 
@@ -48,11 +51,11 @@ class Review_Model_ClearDocumentsHelperTest extends ControllerTestCase
         $document->setEnrichment([]);
         $this->documentId = $document->store();
 
-        $document = new Opus_Document($this->documentId);
+        $document = Document::get($this->documentId);
         $this->assertEquals(0, count($document->getPersonReferee()));
         $this->assertEquals(0, count($document->getEnrichment()));
 
-        $person = new Opus_Person();
+        $person = new Person();
         $person->setFirstName('John');
         $person->setLastName('Doe');
         $this->person = $person;
@@ -63,7 +66,7 @@ class Review_Model_ClearDocumentsHelperTest extends ControllerTestCase
         $helper = new Review_Model_ClearDocumentsHelper();
         $helper->clear([$this->documentId], 23, $this->person);
 
-        $document = new Opus_Document($this->documentId);
+        $document = Document::get($this->documentId);
         $this->assertEquals('published', $document->getServerState());
         $this->assertEquals(1, count($document->getPersonReferee()));
 
@@ -82,7 +85,7 @@ class Review_Model_ClearDocumentsHelperTest extends ControllerTestCase
         $filepath = $path . DIRECTORY_SEPARATOR . "foobar.pdf";
         touch($filepath);
 
-        $document = new Opus_Document($this->documentId);
+        $document = Document::get($this->documentId);
         $document->addFile()
             ->setTempFile($filepath)
             ->setPathName('foobar.pdf')
@@ -92,7 +95,7 @@ class Review_Model_ClearDocumentsHelperTest extends ControllerTestCase
         $helper = new Review_Model_ClearDocumentsHelper();
         $helper->clear([$this->documentId], 23, $this->person);
 
-        $document = new Opus_Document($this->documentId);
+        $document = Document::get($this->documentId);
         $this->assertEquals('published', $document->getServerState());
         $this->assertEquals(1, count($document->getPersonReferee()));
 
@@ -106,7 +109,7 @@ class Review_Model_ClearDocumentsHelperTest extends ControllerTestCase
         $helper = new Review_Model_ClearDocumentsHelper();
         $helper->reject([$this->documentId], 23, $this->person);
 
-        $document = new Opus_Document($this->documentId);
+        $document = Document::get($this->documentId);
         $this->assertNotEquals('published', $document->getServerState());
         $this->assertEquals(1, count($document->getPersonReferee()));
 
@@ -119,7 +122,7 @@ class Review_Model_ClearDocumentsHelperTest extends ControllerTestCase
     {
         $helper = new Review_Model_ClearDocumentsHelper();
 
-        $this->setExpectedException('Opus_Model_NotFoundException');
+        $this->setExpectedException('Opus\Model\NotFoundException');
         $helper->clear([$this->documentId + 100000], 23);
     }
 
@@ -127,7 +130,7 @@ class Review_Model_ClearDocumentsHelperTest extends ControllerTestCase
     {
         $helper = new Review_Model_ClearDocumentsHelper();
 
-        $this->setExpectedException('Opus_Model_NotFoundException');
+        $this->setExpectedException('Opus\Model\NotFoundException');
         $helper->reject([$this->documentId + 100000], 23);
     }
 
@@ -136,7 +139,7 @@ class Review_Model_ClearDocumentsHelperTest extends ControllerTestCase
         $helper = new Review_Model_ClearDocumentsHelper();
         $helper->clear([$this->documentId], 23);
 
-        $document = new Opus_Document($this->documentId);
+        $document = Document::get($this->documentId);
         $this->assertEquals('published', $document->getServerState());
         $this->assertEquals(0, count($document->getPersonReferee()));
 
@@ -150,7 +153,7 @@ class Review_Model_ClearDocumentsHelperTest extends ControllerTestCase
         $helper = new Review_Model_ClearDocumentsHelper();
         $helper->reject([$this->documentId], 23);
 
-        $document = new Opus_Document($this->documentId);
+        $document = Document::get($this->documentId);
         $this->assertNotEquals('published', $document->getServerState());
         $this->assertEquals(0, count($document->getPersonReferee()));
 

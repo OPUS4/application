@@ -42,16 +42,19 @@ if ($argc < 3) {
 
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
+use Opus\Doi\DoiManager;
+use Opus\Doi\DoiException;
+
 $doiValue = $argv[1];
 $landingPageURL = $argv[2];
 
 echo 'Change URL of landing page of DOI ' . $doiValue . ' to ' . $landingPageURL . "\n";
 
-$config = Zend_Registry::get('Zend_Config');
+$config = \Zend_Registry::get('Zend_Config');
 try {
-    $doiManager = new Opus_Doi_DoiManager();
+    $doiManager = new DoiManager();
     $doiManager->updateLandingPageUrlOfDoi($doiValue, $landingPageURL);
     echo "Operation completed successfully\n";
-} catch (Opus_Doi_DoiException $e) {
+} catch (DoiException $e) {
     echo 'Could not successfully change landing page URL of DOI ' . $doiValue . ' : ' . $e->getMessage() . "\n";
 }

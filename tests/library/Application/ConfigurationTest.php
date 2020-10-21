@@ -32,6 +32,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Document;
+
 class Application_ConfigurationTest extends ControllerTestCase
 {
 
@@ -101,7 +103,7 @@ class Application_ConfigurationTest extends ControllerTestCase
 
     public function testGetOpusVersion()
     {
-        $config = Zend_Registry::get('Zend_Config');
+        $config = \Zend_Registry::get('Zend_Config');
         $this->assertEquals($config->version, Application_Configuration::getOpusVersion());
     }
 
@@ -123,7 +125,7 @@ class Application_ConfigurationTest extends ControllerTestCase
 
     public function testIsLanguageSelectionEnabledFalse()
     {
-        Zend_Registry::get('Zend_Config')->supportedLanguages = 'de';
+        \Zend_Registry::get('Zend_Config')->supportedLanguages = 'de';
         $this->assertEquals(['de'], $this->config->getSupportedLanguages());
         $this->assertFalse($this->config->isLanguageSelectionEnabled());
     }
@@ -135,14 +137,14 @@ class Application_ConfigurationTest extends ControllerTestCase
 
     public function testGetDefaultLanguageIfOnlyOneIsSupported()
     {
-        Zend_Registry::get('Zend_Config')->supportedLanguages = 'de';
+        \Zend_Registry::get('Zend_Config')->supportedLanguages = 'de';
         $this->assertEquals('de', $this->config->getDefaultLanguage());
     }
 
     public function testGetDefaultLanguageUnsupportedConfigured()
     {
         // because bootstrapping already happened locale needs to be manipulated directly
-        $locale = new Zend_Locale();
+        $locale = new \Zend_Locale();
         $locale->setDefault('fr');
         $this->assertEquals('de', $this->config->getDefaultLanguage());
 
@@ -165,7 +167,7 @@ class Application_ConfigurationTest extends ControllerTestCase
      */
     public function testGetWorkspacePathSetWithSlash()
     {
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
             'workspacePath' => APPLICATION_PATH . '/tests/workspace/'
         ]));
 
@@ -210,10 +212,10 @@ class Application_ConfigurationTest extends ControllerTestCase
         $config = Application_Configuration::getInstance();
         $this->assertEquals('OPUS 4', $config->getName());
 
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(['name' => 'OPUS Test']));
+        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config(['name' => 'OPUS Test']));
         $this->assertEquals('OPUS Test', $config->getName());
 
-        $zendConfig = Zend_Registry::get('Zend_Config');
+        $zendConfig = \Zend_Registry::get('Zend_Config');
         unset($zendConfig->name);
         $this->assertEquals('OPUS 4', $config->getName());
     }
@@ -266,13 +268,13 @@ class Application_ConfigurationTest extends ControllerTestCase
 
     public function testDocumentPlugins()
     {
-        $document = new Opus_Document();
+        $document = Document::new();
 
         $this->assertEquals([
             'Opus\Search\Plugin\Index',
-            'Opus_Document_Plugin_XmlCache',
-            'Opus_Document_Plugin_IdentifierUrn',
-            'Opus_Document_Plugin_IdentifierDoi'
+            'Opus\Document\Plugin\XmlCache',
+            'Opus\Document\Plugin\IdentifierUrn',
+            'Opus\Document\Plugin\IdentifierDoi'
         ], $document->getDefaultPlugins());
     }
 }

@@ -48,7 +48,7 @@ class Export_RisExportTest extends ControllerTestCase
 
         $docId = $document->store();
 
-        $doiResolverUrl = Zend_Registry::get('Zend_Config')->doi->resolverUrl;
+        $doiResolverUrl = \Zend_Registry::get('Zend_Config')->doi->resolverUrl;
 
         $this->dispatch("/export/index/ris/searchtype/id/docId/$docId");
 

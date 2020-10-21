@@ -75,7 +75,7 @@ class Application_Form_Element_TranslationTest extends ControllerTestCase
 
         $key = 'testkey';
 
-        $dao = new Opus_Translate_Dao();
+        $dao = new \Opus\Translate\Dao();
 
         $dao->remove($key);
 
@@ -99,8 +99,8 @@ class Application_Form_Element_TranslationTest extends ControllerTestCase
 
         $element = new Application_Form_Element_Translation('DisplayName');
 
-        $translate = Zend_Registry::get('Zend_Translate');
-        $dao = new Opus_Translate_Dao();
+        $translate = \Zend_Registry::get('Zend_Translate');
+        $dao = new \Opus\Translate\Dao();
 
         $dao->remove($key);
 
@@ -167,7 +167,7 @@ class Application_Form_Element_TranslationTest extends ControllerTestCase
     {
         $element = new Application_Form_Element_Translation('Content');
 
-        $dao = new Opus_Translate_Dao();
+        $dao = new \Opus\Translate\Dao();
         $dao->removeAll();
 
         $key = 'help_content_contact';

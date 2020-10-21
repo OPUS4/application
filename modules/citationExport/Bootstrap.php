@@ -32,7 +32,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class CitationExport_Bootstrap extends Zend_Application_Module_Bootstrap
+class CitationExport_Bootstrap extends \Zend_Application_Module_Bootstrap
 {
 
     /**
@@ -45,18 +45,18 @@ class CitationExport_Bootstrap extends Zend_Application_Module_Bootstrap
     {
         $updateInProgress = Application_Configuration::isUpdateInProgress();
 
-        if (! Zend_Registry::isRegistered('Opus_Exporter')) {
+        if (! \Zend_Registry::isRegistered('Opus_Exporter')) {
             if (! $updateInProgress) {
-                Zend_Registry::get('Zend_Log')->warn(__METHOD__ . ' exporter not found');
+                \Zend_Registry::get('Zend_Log')->warn(__METHOD__ . ' exporter not found');
             }
             return;
         }
 
-        $exporter = Zend_Registry::get('Opus_Exporter');
+        $exporter = \Zend_Registry::get('Opus_Exporter');
 
         if (is_null($exporter)) {
             if ($updateInProgress) {
-                Zend_Registry::get('Zend_Log')->warn(__METHOD__ . ' exporter not found');
+                \Zend_Registry::get('Zend_Log')->warn(__METHOD__ . ' exporter not found');
             }
             return;
         }

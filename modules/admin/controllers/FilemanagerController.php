@@ -25,6 +25,9 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+use Opus\File;
+use Opus\Model\ModelException;
+
 /**
  * Controller fuer die Verwaltung der Dateien eines Dokuments.
  *
@@ -34,7 +37,6 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2009-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  *
  * TODO redundanter Code mit DocumentController
  */
@@ -80,7 +82,7 @@ class Admin_FilemanagerController extends Application_Controller_Action
                             $form->updateModel($document);
                             try {
                                 $document->store();
-                            } catch (Opus_Mode_Exception $ome) {
+                            } catch (ModelException $ome) {
                                 $this->getLogger()->err(
                                     __METHOD__ . ' Error saving file metadata: '
                                     . $ome->getMessage()
@@ -206,7 +208,7 @@ class Admin_FilemanagerController extends Application_Controller_Action
                         $form->updateModel($document);
                         try {
                             $document->store();
-                        } catch (Opus_Model_Exception $e) {
+                        } catch (ModelException $e) {
                             $this->getLogger()->err("Storing document with new files failed" . $e);
                             return $this->_helper->Redirector->redirectTo(
                                 'index',
@@ -320,7 +322,7 @@ class Admin_FilemanagerController extends Application_Controller_Action
 
                 try {
                     $fileHelper->deleteFile($docId, $fileId);
-                } catch (Opus_Model_Exception $ome) {
+                } catch (ModelException $ome) {
                     $this->getLogger()->err(__METHOD__ . ' Error deleting file. (' . $ome->getMessage . ')');
                     return $this->_helper->Redirector->redirectTo(
                         'index',
@@ -350,7 +352,7 @@ class Admin_FilemanagerController extends Application_Controller_Action
             }
         } else {
             // Show confirmation page
-            $file = new Opus_File($fileId);
+            $file = new File($fileId);
 
             $form->setModel($file);
             $form->setModelDisplayName($file->getPathName());

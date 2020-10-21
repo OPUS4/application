@@ -58,7 +58,7 @@ class Publish_IndexControllerTest extends ControllerTestCase
 
     public function testShowFileUpload()
     {
-        $config = Zend_Registry::get('Zend_Config');
+        $config = \Zend_Registry::get('Zend_Config');
         $config->form->first->enable_upload = self::CONFIG_VALUE_TRUE;
 
         $this->dispatch('/publish');
@@ -78,7 +78,7 @@ class Publish_IndexControllerTest extends ControllerTestCase
 
     public function testDoNotShowFileUpload()
     {
-        $config = Zend_Registry::get('Zend_Config');
+        $config = \Zend_Registry::get('Zend_Config');
         $config->form->first->enable_upload = self::CONFIG_VALUE_FALSE;
 
         $this->dispatch('/publish');
@@ -99,7 +99,7 @@ class Publish_IndexControllerTest extends ControllerTestCase
 
     public function testShowBibliographyCheckbox()
     {
-        $config = Zend_Registry::get('Zend_Config');
+        $config = \Zend_Registry::get('Zend_Config');
         $config->form->first->bibliographie = self::CONFIG_VALUE_TRUE;
 
         $this->dispatch('/publish');
@@ -117,7 +117,7 @@ class Publish_IndexControllerTest extends ControllerTestCase
 
     public function testDoNotShowBibliographyCheckbox()
     {
-        $config = Zend_Registry::get('Zend_Config');
+        $config = \Zend_Registry::get('Zend_Config');
         $config->form->first->bibliographie = self::CONFIG_VALUE_FALSE;
 
         $this->dispatch('/publish');
@@ -139,7 +139,7 @@ class Publish_IndexControllerTest extends ControllerTestCase
     public function testDocumentTypeSelectBoxIsSortedAlphabetically()
     {
         // manipulate list of available document types in application configuration
-        $config = Zend_Registry::get('Zend_Config');
+        $config = \Zend_Registry::get('Zend_Config');
         $include = $config->documentTypes->include;
         $exclude = $config->documentTypes->exclude;
         $config->documentTypes->include = 'all, article, workingpaper, demodemo';

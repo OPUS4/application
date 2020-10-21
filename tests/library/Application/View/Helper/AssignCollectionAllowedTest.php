@@ -31,6 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\CollectionRole;
+
 class Application_View_Helper_AssignCollectionAllowedTest extends ControllerTestCase
 {
 
@@ -46,7 +48,7 @@ class Application_View_Helper_AssignCollectionAllowedTest extends ControllerTest
 
         $this->_helper = new Application_View_Helper_AssignCollectionAllowed();
 
-        $role = new Opus_CollectionRole();
+        $role = new CollectionRole();
         $role->setName('TestCollectionRole');
         $role->setOaiName('test');
         $role->setDisplayBrowsing('Number');

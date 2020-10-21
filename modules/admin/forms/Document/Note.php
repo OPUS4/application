@@ -25,6 +25,8 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+use Opus\Note;
+
 /**
  * Unterformular fuer Bemerkungen/Notizen.
  *
@@ -33,7 +35,6 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 class Admin_Form_Document_Note extends Admin_Form_AbstractModelSubForm
 {
@@ -88,7 +89,7 @@ class Admin_Form_Document_Note extends Admin_Form_AbstractModelSubForm
             $noteId = null;
         }
 
-        $note = new Opus_Note($noteId);
+        $note = new Note($noteId);
 
         $this->updateModel($note);
 

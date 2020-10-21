@@ -29,7 +29,6 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -38,7 +37,7 @@
  * This class keeps some of the special code generating translation keys out of
  * the controllers and view scripts.
  */
-class Application_Controller_Action_Helper_Translation extends Zend_Controller_Action_Helper_Abstract
+class Application_Controller_Action_Helper_Translation extends \Zend_Controller_Action_Helper_Abstract
 {
 
     /**
@@ -60,20 +59,22 @@ class Application_Controller_Action_Helper_Translation extends Zend_Controller_A
      * @param string $fieldName
      * @param string $value
      * @return string Translation key
+     *
+     * TODO NAMESPACE translations depend on class names
      */
     public function getKeyForValue($modelName, $fieldName, $value)
     {
-        // The 'Type' and the 'Language' field of Opus_Document currently need
+        // The 'Type' and the 'Language' field of Document currently need
         // to be handled separately, since their key don't have a prefix.
-        if ($modelName === 'Opus_Document'
+        if ($modelName === 'Opus\Document'
                 && ($fieldName === 'Language'
                         || $fieldName === 'Type'
                         || $fieldName === 'PublicationState')) {
             return $value;
-        } elseif ($modelName === 'Opus_Enrichment' && $fieldName === 'KeyName') {
+        } elseif ($modelName === 'Opus\Enrichment' && $fieldName === 'KeyName') {
             return $value;
         } else {
-            return $modelName . '_' . $fieldName . '_Value_' . ucfirst($value);
+            return $this->normalizeModelName($modelName) . '_' . $fieldName . '_Value_' . ucfirst($value);
         }
     }
 
@@ -90,14 +91,19 @@ class Application_Controller_Action_Helper_Translation extends Zend_Controller_A
     public function getKeyForField($modelName, $fieldName)
     {
         if ($fieldName === 'Type') {
-            return $modelName . '_' . $fieldName;
+            return $this->normalizeModelName($modelName) . '_' . $fieldName;
         } else {
             switch ($modelName) {
-                case 'Opus_Language':
-                    return $modelName . '_' . $fieldName;
+                case 'Opus\Language':
+                    return $this->normalizeModelName($modelName) . '_' . $fieldName;
                 default:
                     return $fieldName;
             }
         }
+    }
+
+    protected function normalizeModelName($name)
+    {
+        return preg_replace('/\\\\/', '_', $name);
     }
 }

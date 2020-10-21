@@ -25,6 +25,9 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+use Opus\Model\AbstractDb;
+use Opus\Model\AbstractModel;
+
 /**
  * Formular für Bestätigungsabfragen an den Nutzer, z.B. beim Löschen von Modellen.
  *
@@ -70,7 +73,7 @@ class Application_Form_Confirmation extends Application_Form_Abstract
 
     /**
      * Model auf das sich die Frage bezieht.
-     * @var Opus_Model_Abstract
+     * @var AbstractModel
      */
     private $_model = null;
 
@@ -176,22 +179,22 @@ class Application_Form_Confirmation extends Application_Form_Abstract
      * Eigentlich wird nur die ID benötigt, aber in abgeleiteten Klassen könnte das Model verwendet werden, um
      * specifischer Informationen anzuzeigen.
      *
-     * @param Opus_Abstract_Model $model
+     * @param AbstractDb $model
      * @throws Application_Exception
      */
     public function setModel($model)
     {
-        if (! is_null($model) && $model instanceof Opus_Model_AbstractDb) {
+        if (! is_null($model) && $model instanceof AbstractDb) {
             $this->_model = $model;
             $this->getElement(self::ELEMENT_MODEL_ID)->setValue($model->getId());
         } else {
             if (is_object($model)) {
                 throw new Application_Exception(
                     __METHOD__ . ' Parameter ' . get_class($model)
-                    . ' not instance of Opus_Model_AbstractDb.'
+                    . ' not instance of Opus\Model\AbstractDb.'
                 );
             } else {
-                throw new Application_Exception(__METHOD__ . ' Parameter must be Opus_Model_AbstractDb.');
+                throw new Application_Exception(__METHOD__ . ' Parameter must be Opus\Model\AbstractDb.');
             }
         }
     }
@@ -211,7 +214,7 @@ class Application_Form_Confirmation extends Application_Form_Abstract
      */
     public function getModelClassName()
     {
-        return $this->getTranslator()->translate($this->_modelClass);
+        return $this->getTranslator()->translate(preg_replace('/\\\\/', '_', $this->_modelClass));
     }
 
     /**

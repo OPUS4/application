@@ -30,6 +30,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Document;
+
 /**
  * Unit Tests fuer Unterformular fuer bibliographische Information im Metadaten-Formular.
  */
@@ -78,7 +80,7 @@ class Admin_Form_Document_BibliographicTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Bibliographic();
 
-        $doc = new Opus_Document(146);
+        $doc = Document::get(146);
 
         $form->populateFromModel($doc);
 

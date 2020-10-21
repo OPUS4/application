@@ -40,13 +40,13 @@ class Application_Update_ImportStaticPagesTest extends ControllerTestCase
     {
         parent::setUp();
 
-        $dao = new Opus_Translate_Dao();
+        $dao = new \Opus\Translate\Dao();
         $dao->removeAll();
     }
 
     public function tearDown()
     {
-        $dao = new Opus_Translate_Dao();
+        $dao = new \Opus\Translate\Dao();
         $dao->removeAll();
 
         parent::tearDown();
@@ -54,7 +54,7 @@ class Application_Update_ImportStaticPagesTest extends ControllerTestCase
 
     public function testRun()
     {
-        $database = new Opus_Translate_Dao();
+        $database = new \Opus\Translate\Dao();
 
         $update = new Application_Update_ImportStaticPages();
         $update->setRemoveFilesEnabled(false);
@@ -75,7 +75,7 @@ class Application_Update_ImportStaticPagesTest extends ControllerTestCase
 
         $update->importFilesAsKey('contact', 'testkey', 'home');
 
-        $database = new Opus_Translate_Dao();
+        $database = new \Opus\Translate\Dao();
 
         $translations = $database->getAll();
 

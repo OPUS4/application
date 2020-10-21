@@ -50,6 +50,6 @@ class Application_Controller_Action_HelperAbstractTest extends TestCase
         $logger = $helper->getLogger();
 
         $this->assertInstanceOf('Zend_Log', $logger);
-        $this->assertEquals(Zend_Registry::get('Zend_Log'), $logger);
+        $this->assertEquals(\Zend_Registry::get('Zend_Log'), $logger);
     }
 }

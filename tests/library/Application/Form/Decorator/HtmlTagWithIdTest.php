@@ -45,7 +45,7 @@ class Application_Form_Decorator_HtmlTagWithIdTest extends TestCase
     {
         $decorator = new Application_Form_Decorator_HtmlTagWithId();
 
-        $element = new Zend_Form_Element_Text('Value');
+        $element = new \Zend_Form_Element_Text('Value');
         $decorator->setElement($element);
 
         $this->assertEquals('<div class="Value-data">content</div>', $decorator->render('content'));
@@ -56,7 +56,7 @@ class Application_Form_Decorator_HtmlTagWithIdTest extends TestCase
         $decorator = new Application_Form_Decorator_HtmlTagWithId();
         $decorator->setOption('class', 'wrapper');
 
-        $element = new Zend_Form_Element_Text('Value');
+        $element = new \Zend_Form_Element_Text('Value');
         $decorator->setElement($element);
 
         $this->assertEquals('<div class="wrapper Value-data">content</div>', $decorator->render('content'));

@@ -31,7 +31,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Application_View_Helper_FileAccessAllowed extends Zend_View_Helper_Abstract
+use Opus\Security\Realm;
+
+class Application_View_Helper_FileAccessAllowed extends \Zend_View_Helper_Abstract
 {
 
     /**
@@ -46,7 +48,7 @@ class Application_View_Helper_FileAccessAllowed extends Zend_View_Helper_Abstrac
             return false;
         }
 
-        $realm = Opus_Security_Realm::getInstance();
+        $realm = Realm::getInstance();
         return $realm->checkFile($fileId);
     }
 }

@@ -30,6 +30,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Document;
+use Opus\Licence;
+
 /**
  * Description of Document_LicencesTest
  */
@@ -42,7 +45,7 @@ class Admin_Form_Document_LicencesTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Licences();
 
-        $licences = Opus_Licence::getAll();
+        $licences = Licence::getAll();
 
         foreach ($licences as $licence) {
             $element = $form->getElement('licence' . $licence->getId());
@@ -61,11 +64,11 @@ class Admin_Form_Document_LicencesTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Licences();
 
-        $document = new Opus_Document(146);
+        $document = Document::get(146);
 
         $form->populateFromModel($document);
 
-        $licences = Opus_Licence::getAll();
+        $licences = Licence::getAll();
 
         foreach ($licences as $licence) {
             $element = $form->getElement('licence' . $licence->getId());
@@ -124,8 +127,8 @@ class Admin_Form_Document_LicencesTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Licences();
 
-        $document = new Opus_Document(146);
-        $licence = new Opus_Licence(2);
+        $document = Document::get(146);
+        $licence = new Licence(2);
 
         $this->assertFalse($form->hasLicence($document, $licence));
     }
@@ -134,7 +137,7 @@ class Admin_Form_Document_LicencesTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Licences();
 
-        $document = new Opus_Document(146);
+        $document = Document::get(146);
 
         $this->assertTrue($form->hasLicence($document, 4));
     }

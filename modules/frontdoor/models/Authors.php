@@ -29,20 +29,22 @@
  * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
+use Opus\Document;
+use Opus\Model\NotFoundException;
 
 class Frontdoor_Model_Authors
 {
 
     /**
      *
-     * @var Opus_Document
+     * @var Document
      */
     private $_document;
 
     /**
-     * @param $arg either an instance of Opus_Document or an int that is interpreted
+     * @param $arg int|Document either an instance of Document or an int that is interpreted
      * as a document ID
      * @throws Frontdoor_Model_Exception throws Frontdoor_Model_Exception if
      * no document with id $docId exists
@@ -50,12 +52,12 @@ class Frontdoor_Model_Authors
      */
     public function __construct($arg)
     {
-        if ($arg instanceof Opus_Document) {
+        if ($arg instanceof Document) {
             $this->_document = $arg;
         } else {
             try {
-                $this->_document = new Opus_Document($arg);
-            } catch (Opus_Model_NotFoundException $e) {
+                $this->_document = Document::get($arg);
+            } catch (NotFoundException $e) {
                 throw new Frontdoor_Model_Exception('invalid value for parameter docId given', null, $e);
             }
         }
@@ -113,7 +115,7 @@ class Frontdoor_Model_Authors
     /**
      * Returns the underlying document that was given at object creation time.
      *
-     * @return Opus_Document
+     * @return Document
      */
     public function getDocument()
     {
@@ -126,7 +128,7 @@ class Frontdoor_Model_Authors
      *
      * @return array An array with elements of the form
      * array('address' => 'doe@example.org', 'name' => 'Doe') that can be used
-     * without conversion as input for the last argument of Opus_Mail_SendMail:sendMail().
+     * without conversion as input for the last argument of SendMail:sendMail().
      */
     private function validateAuthorCheckboxInput($checkboxSelection)
     {

@@ -51,7 +51,7 @@ class Solrsearch_Model_Search_Series extends Solrsearch_Model_Search_Abstract
             $series = new Solrsearch_Model_Series($request->getParam('id'));
         } catch (Solrsearch_Model_Exception $sme) {
             $this->getLogger()->debug($sme->getMessage());
-            $redirector = Zend_Controller_Action_HelperBroker::getStaticHelper('redirector');
+            $redirector = \Zend_Controller_Action_HelperBroker::getStaticHelper('redirector');
             $redirector->redirectToAndExit('index', '', 'browse', null, [], true);
             return false;
         }

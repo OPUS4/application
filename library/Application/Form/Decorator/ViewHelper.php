@@ -37,7 +37,7 @@
  * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Application_Form_Decorator_ViewHelper extends Zend_Form_Decorator_ViewHelper
+class Application_Form_Decorator_ViewHelper extends \Zend_Form_Decorator_ViewHelper
 {
 
     private $_viewOnlyEnabled = false;
@@ -57,7 +57,7 @@ class Application_Form_Decorator_ViewHelper extends Zend_Form_Decorator_ViewHelp
                 $helper = 'viewForm' . ucfirst($type);
                 try {
                     $element->getView()->getHelper($helper);
-                } catch (Zend_Loader_PluginLoader_Exception $zlpe) {
+                } catch (\Zend_Loader_PluginLoader_Exception $zlpe) {
                     $helper = 'viewFormDefault';
                 }
             }

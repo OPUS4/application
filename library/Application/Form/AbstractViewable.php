@@ -108,8 +108,8 @@ class Application_Form_AbstractViewable extends Application_Form_Abstract implem
         foreach ($elements as $element) {
             $value = $element->getValue();
 
-            if ($element instanceof Zend_Form_Element_Button
-                || $element instanceof Zend_Form_Element_Submit) {
+            if ($element instanceof \Zend_Form_Element_Button
+                || $element instanceof \Zend_Form_Element_Submit) {
                 $this->removeElement($element->getName());
             } elseif (is_array($value)) {
                 if (count($value) === 0 && $this->isRemoveEmptyElements()) {
@@ -117,7 +117,7 @@ class Application_Form_AbstractViewable extends Application_Form_Abstract implem
                 }
             } elseif (trim($value) === '' && $this->isRemoveEmptyElements()) {
                 $this->removeElement($element->getName());
-            } elseif ($element instanceof Zend_Form_Element_Checkbox) {
+            } elseif ($element instanceof \Zend_Form_Element_Checkbox) {
                 if (($element->getValue() == 0) && $this->isRemoveEmptyCheckbox() && $this->isRemoveEmptyElements()) {
                     $this->removeElement($element->getName());
                 }

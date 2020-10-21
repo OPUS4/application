@@ -31,6 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Document;
+use Opus\Model\NotFoundException;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Console\Application;
 
@@ -69,7 +71,7 @@ class Application_Console_Document_DeleteCommandTest extends ControllerTestCase
         $tester = new CommandTester($command);
 
         $docId = $this->documents[2];
-        $doc = new Opus_Document($docId);
+        $doc = Document::get($docId);
 
         $this->assertEquals('unpublished', $doc->getServerState());
 
@@ -80,19 +82,19 @@ class Application_Console_Document_DeleteCommandTest extends ControllerTestCase
             'interactive' => false
         ]);
 
-        $doc = new Opus_Document($this->documents[0]);
+        $doc = Document::get($this->documents[0]);
         $this->assertEquals('unpublished', $doc->getServerState());
 
-        $doc = new Opus_Document($this->documents[1]);
+        $doc = Document::get($this->documents[1]);
         $this->assertEquals('unpublished', $doc->getServerState());
 
-        $doc = new Opus_Document($this->documents[2]);
+        $doc = Document::get($this->documents[2]);
         $this->assertEquals('deleted', $doc->getServerState());
 
-        $doc = new Opus_Document($this->documents[3]);
+        $doc = Document::get($this->documents[3]);
         $this->assertEquals('unpublished', $doc->getServerState());
 
-        $doc = new Opus_Document($this->documents[4]);
+        $doc = Document::get($this->documents[4]);
         $this->assertEquals('unpublished', $doc->getServerState());
     }
 
@@ -121,19 +123,19 @@ class Application_Console_Document_DeleteCommandTest extends ControllerTestCase
             'interactive' => false
         ]);
 
-        $doc = new Opus_Document($this->documents[0]);
+        $doc = Document::get($this->documents[0]);
         $this->assertEquals('unpublished', $doc->getServerState());
 
-        $doc = new Opus_Document($this->documents[1]);
+        $doc = Document::get($this->documents[1]);
         $this->assertEquals('deleted', $doc->getServerState());
 
-        $doc = new Opus_Document($this->documents[2]);
+        $doc = Document::get($this->documents[2]);
         $this->assertEquals('deleted', $doc->getServerState());
 
-        $doc = new Opus_Document($this->documents[3]);
+        $doc = Document::get($this->documents[3]);
         $this->assertEquals('deleted', $doc->getServerState());
 
-        $doc = new Opus_Document($this->documents[4]);
+        $doc = Document::get($this->documents[4]);
         $this->assertEquals('unpublished', $doc->getServerState());
     }
 
@@ -147,7 +149,7 @@ class Application_Console_Document_DeleteCommandTest extends ControllerTestCase
         $tester = new CommandTester($command);
 
         $docId = $this->documents[2];
-        $doc = new Opus_Document($docId);
+        $doc = Document::get($docId);
 
         $this->assertEquals('unpublished', $doc->getServerState());
 
@@ -159,20 +161,20 @@ class Application_Console_Document_DeleteCommandTest extends ControllerTestCase
             'interactive' => false
         ]);
 
-        $doc = new Opus_Document($this->documents[0]);
+        $doc = Document::get($this->documents[0]);
         $this->assertEquals('unpublished', $doc->getServerState());
 
-        $doc = new Opus_Document($this->documents[1]);
+        $doc = Document::get($this->documents[1]);
         $this->assertEquals('unpublished', $doc->getServerState());
 
-        $doc = new Opus_Document($this->documents[3]);
+        $doc = Document::get($this->documents[3]);
         $this->assertEquals('unpublished', $doc->getServerState());
 
-        $doc = new Opus_Document($this->documents[4]);
+        $doc = Document::get($this->documents[4]);
         $this->assertEquals('unpublished', $doc->getServerState());
 
-        $this->setExpectedException('Opus_Model_NotFoundException');
-        new Opus_Document($this->documents[2]);
+        $this->setExpectedException('Opus\Model\NotFoundException');
+        Document::get($this->documents[2]);
     }
 
     public function testDeleteAllDocumentsPermanently()
@@ -198,28 +200,28 @@ class Application_Console_Document_DeleteCommandTest extends ControllerTestCase
             'interactive' => false
         ]);
 
-        $doc = new Opus_Document($this->documents[0]);
+        $doc = Document::get($this->documents[0]);
         $this->assertEquals('unpublished', $doc->getServerState());
 
-        $doc = new Opus_Document($this->documents[4]);
+        $doc = Document::get($this->documents[4]);
         $this->assertEquals('unpublished', $doc->getServerState());
 
         try {
-            new Opus_Document($this->documents[1]);
+            Document::get($this->documents[1]);
             $this->fail('Document should have been deleted permanently.');
-        } catch (Opus_Model_NotFoundException $e) {
+        } catch (NotFoundException $e) {
         }
 
         try {
-            new Opus_Document($this->documents[2]);
+            Document::get($this->documents[2]);
             $this->fail('Document should have been deleted permanently.');
-        } catch (Opus_Model_NotFoundException $e) {
+        } catch (NotFoundException $e) {
         }
 
         try {
-            new Opus_Document($this->documents[3]);
+            Document::get($this->documents[3]);
             $this->fail('Document should have been deleted permanently.');
-        } catch (Opus_Model_NotFoundException $e) {
+        } catch (NotFoundException $e) {
         }
     }
 

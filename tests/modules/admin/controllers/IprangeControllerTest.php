@@ -32,6 +32,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Iprange;
+use Opus\UserRole;
+
 /**
  * Basic unit tests for IP range controller in admin module.
  *
@@ -51,20 +54,20 @@ class Admin_IprangeControllerTest extends CrudControllerTestCase
 
     public function getModels()
     {
-        return Opus_Iprange::getAll();
+        return Iprange::getAll();
     }
 
     public function createNewModel()
     {
         $this->createsModels = true;
 
-        $ipRange = new Opus_Iprange();
+        $ipRange = new Iprange();
         $ipRange->setName('localhost');
         $ipRange->setStartingip('127.0.0.1');
         $ipRange->setEndingip('127.0.0.2');
         $ipRange->setRole([
-            Opus_UserRole::fetchByName('reviewer'),
-            Opus_UserRole::fetchByName('docsadmin')
+            UserRole::fetchByName('reviewer'),
+            UserRole::fetchByName('docsadmin')
         ]);
 
         return $ipRange->store();
@@ -72,7 +75,7 @@ class Admin_IprangeControllerTest extends CrudControllerTestCase
 
     public function getModel($identifier)
     {
-        return new Opus_Iprange($identifier);
+        return new Iprange($identifier);
     }
 
     public function testShowAction()
@@ -150,7 +153,7 @@ class Admin_IprangeControllerTest extends CrudControllerTestCase
 
         $this->assertRedirectTo('/admin/iprange', 'Should redirect to index action.');
 
-        $this->assertEquals($modelCount, count(Opus_Iprange::getAll()), 'There should be no new ip range.');
+        $this->assertEquals($modelCount, count(Iprange::getAll()), 'There should be no new ip range.');
     }
 
     public function testEditActionShowForm()
@@ -188,7 +191,7 @@ class Admin_IprangeControllerTest extends CrudControllerTestCase
         $this->assertRedirectTo("/admin/iprange/show/id/$iprangeId");
         $this->verifyFlashMessage('controller_crud_save_success', self::MESSAGE_LEVEL_NOTICE);
 
-        $iprange = new Opus_IpRange($iprangeId);
+        $iprange = new Iprange($iprangeId);
 
         $this->assertEquals('ModifiedName', $iprange->getName());
         $this->assertEquals('127.0.0.99', $iprange->getStartingip());
@@ -216,7 +219,7 @@ class Admin_IprangeControllerTest extends CrudControllerTestCase
         $this->dispatch("/admin/iprange/edit");
         $this->assertRedirectTo('/admin/iprange');
 
-        $iprange = new Opus_Iprange($iprangeId);
+        $iprange = new Iprange($iprangeId);
 
         $this->assertEquals('localhost', $iprange->getName());
     }

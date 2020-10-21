@@ -29,8 +29,10 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
+use Opus\TitleAbstract;
+use Opus\Model\NotFoundException;
 
 /**
  * Unterformular zum Editieren einer Zusammenfassung (abstract).
@@ -88,10 +90,10 @@ class Admin_Form_Document_Abstract extends Admin_Form_AbstractModelSubForm
         }
 
         try {
-            $abstract = new Opus_TitleAbstract($abstractId);
-        } catch (Opus_Model_NotFoundException $omnfe) {
+            $abstract = new TitleAbstract($abstractId);
+        } catch (NotFoundException $omnfe) {
             $this->getLogger()->err(__METHOD__ . " Unknown ID = '$abstractId' (" . $omnfe->getMessage() . ').');
-            $abstract = new Opus_TitleAbstract();
+            $abstract = new TitleAbstract();
         }
 
         $this->updateModel($abstract);

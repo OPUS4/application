@@ -44,7 +44,7 @@ class Application_Security_BasicAuthProtection
         $adapter->setRequest($request);
         $adapter->setResponse($response);
 
-        $auth = Zend_Auth::getInstance();
+        $auth = \Zend_Auth::getInstance();
         $result = $auth->authenticate($adapter);
 
         if (! $result->isValid()) {

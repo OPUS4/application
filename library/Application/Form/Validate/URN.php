@@ -28,10 +28,11 @@
  * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
-class Application_Form_Validate_URN extends Zend_Validate_Abstract
+use Opus\Identifier;
+
+class Application_Form_Validate_URN extends \Zend_Validate_Abstract
 {
 
     const NOT_UNIQUE = 'notUnique';
@@ -51,7 +52,7 @@ class Application_Form_Validate_URN extends Zend_Validate_Abstract
     {
         $currentDocId = $context[Admin_Form_Document_IdentifierSpecific::ELEMENT_DOC_ID];
 
-        $urn = new Opus_Identifier();
+        $urn = new Identifier();
         $urn->setValue($value);
 
         if (! ($urn->isUrnUnique($currentDocId))) {

@@ -47,7 +47,7 @@ class Application_Export_Exporter
 
         foreach ($options as $key => $option) {
             // TODO use addFormat function, get key from 'name' or use hash?
-            $format = new Zend_Navigation_Page_Mvc($option);
+            $format = new \Zend_Navigation_Page_Mvc($option);
 
             // TODO check if key is string
             $this->_formats[$key] = $format;
@@ -73,7 +73,7 @@ class Application_Export_Exporter
         foreach ($formats as $format) {
             $module = $format->getModule();
 
-            if (Opus_Security_Realm::getInstance()->checkModule($module)) {
+            if (\Opus\Security\Realm::getInstance()->checkModule($module)) {
                 $allowed[] = $format;
             }
         }

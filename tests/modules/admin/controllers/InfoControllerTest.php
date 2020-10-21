@@ -43,7 +43,7 @@ class Admin_InfoControllerTest extends ControllerTestCase
 
     public function testIndexDisplayVersion()
     {
-        $config = Zend_Registry::get('Zend_Config');
+        $config = \Zend_Registry::get('Zend_Config');
         $this->dispatch('admin/info');
         $this->assertResponseCode(200);
         $this->assertQuery('dt#admin_info_version');
@@ -59,10 +59,10 @@ class Admin_InfoControllerTest extends ControllerTestCase
         $this->useEnglish();
 
         // set version that would otherwise be retrieved from server
-        $versionHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('version');
+        $versionHelper = \Zend_Controller_Action_HelperBroker::getStaticHelper('version');
         $versionHelper->setVersion('4.6');
 
-        $config = Zend_Registry::get('Zend_Config');
+        $config = \Zend_Registry::get('Zend_Config');
         $oldVersion = $config->version;
         $config->version = '4.5-TEST';
         $this->dispatch('admin/info/update');
@@ -80,8 +80,8 @@ class Admin_InfoControllerTest extends ControllerTestCase
     public function testVersionWithCurrentVersion()
     {
         $this->useEnglish();
-        $helper = Zend_Controller_Action_HelperBroker::getStaticHelper('version');
-        $helper->setVersion(Zend_Registry::get('Zend_Config')->version);
+        $helper = \Zend_Controller_Action_HelperBroker::getStaticHelper('version');
+        $helper->setVersion(\Zend_Registry::get('Zend_Config')->version);
 
         $this->dispatch('admin/info/update');
         $this->assertQueryContentContains('//div', 'Your OPUS version is up to date.');

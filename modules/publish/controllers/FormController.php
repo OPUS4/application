@@ -30,6 +30,10 @@
  * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\Document;
+use Opus\Model\ModelException;
+
 class Publish_FormController extends Application_Controller_Action
 {
 
@@ -46,7 +50,7 @@ class Publish_FormController extends Application_Controller_Action
 
     public function init()
     {
-        $this->session = new Zend_Session_Namespace('Publish');
+        $this->session = new \Zend_Session_Namespace('Publish');
         parent::init();
     }
 
@@ -99,7 +103,7 @@ class Publish_FormController extends Application_Controller_Action
             $this->view->subtitle = $this->view->translate('publish_controller_index_anotherFile');
         }
 
-        $config = Zend_Registry::get('Zend_Config');
+        $config = \Zend_Registry::get('Zend_Config');
 
         if (isset($config->publish->filetypes->allowed)) {
             $this->view->extensions = $config->publish->filetypes->allowed;
@@ -217,9 +221,9 @@ class Publish_FormController extends Application_Controller_Action
             if (array_key_exists('abort', $postData)) {
                 if (isset($this->session->documentId)) {
                     try {
-                        $document = new Opus_Document($this->session->documentId);
+                        $document = Document::get($this->session->documentId);
                         $document->deletePermanent();
-                    } catch (Opus_Model_Exception $e) {
+                    } catch (ModelException $e) {
                         $this->getLogger()->err(
                             "deletion of document # " . $this->session->documentId . " was not successful",
                             $e
@@ -336,7 +340,7 @@ class Publish_FormController extends Application_Controller_Action
     private function _storeUploadedFiles($postData)
     {
         $comment = array_key_exists('uploadComment', $postData) ? $postData['uploadComment'] : '';
-        $upload = new Zend_File_Transfer_Adapter_Http();
+        $upload = new \Zend_File_Transfer_Adapter_Http();
         $files = $upload->getFileInfo();
         $uploadCount = 0;
 
@@ -599,7 +603,7 @@ class Publish_FormController extends Application_Controller_Action
 
     private function renderDocumenttypeForm()
     {
-        $docTypeHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
+        $docTypeHelper = \Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
         $templateName = $docTypeHelper->getTemplateName($this->session->documentType);
 
         if (is_null($templateName)) {

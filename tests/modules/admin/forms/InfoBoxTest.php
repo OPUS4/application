@@ -30,6 +30,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Document;
+use Opus\Person;
+
 class Admin_Form_InfoBoxTest extends ControllerTestCase
 {
 
@@ -48,7 +51,7 @@ class Admin_Form_InfoBoxTest extends ControllerTestCase
     {
         $form = new Admin_Form_InfoBox();
 
-        $document = new Opus_Document(146);
+        $document = Document::get(146);
 
         $form->populateFromModel($document);
 
@@ -84,7 +87,7 @@ class Admin_Form_InfoBoxTest extends ControllerTestCase
     {
         $form = new Admin_Form_InfoBox();
 
-        $document = new Opus_Document(146);
+        $document = Document::get(146);
 
         $form->constructFromPost([], $document);
 
@@ -107,12 +110,12 @@ class Admin_Form_InfoBoxTest extends ControllerTestCase
 
         $logger->clear();
 
-        $form->constructFromPost([], new Opus_Person());
+        $form->constructFromPost([], new Person());
 
         $messages = $logger->getMessages();
 
         $this->assertEquals(1, count($messages));
-        $this->assertContains('Called with instance of \'Opus_Person\'', $messages[0]);
+        $this->assertContains('Called with instance of \'Opus\Person\'', $messages[0]);
     }
 
     public function testIsEmpty()

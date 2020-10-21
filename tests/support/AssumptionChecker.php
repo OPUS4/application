@@ -59,7 +59,7 @@ class AssumptionChecker
         $this->testCase->resetRequest();
         $this->testCase->resetResponse();
 
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(
+        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config(
             ['searchengine' => ['solr' => [
                 'facetlimit' => ['year' => '10', 'year_inverted' => '10'],
                 'facets' => 'year,doctype,author_facet,language,has_fulltext,belongs_to_bibliography,subject,institute'
@@ -90,7 +90,7 @@ class AssumptionChecker
         for ($i = 0; $i < 10; $i++) {
             $lastPos = strpos($response, '>' . $searchStrings[$i] . '</a>', $lastPos);
             if ($lastPos === false) {
-                Zend_Debug::dump("'" . $searchStrings[$i] . '\' not found in year facet list (iteration ' . $i . ')');
+                \Zend_Debug::dump("'" . $searchStrings[$i] . '\' not found in year facet list (iteration ' . $i . ')');
             }
             $this->testCase->assertFalse($lastPos === false, "'" . $searchStrings[$i] . '\' not found in year facet list (iteration ' . $i . ')');
             if ($lastPos === false) {
