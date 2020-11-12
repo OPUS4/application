@@ -263,11 +263,13 @@
         </xsd:sequence>
     </xsd:complexType>
 
+	<!--Bei Verwendung des dateTypeValues 'embargo' sind die Attribute 'monthDay' und "year" im opus.xml erforderlich! -->
     <xsd:simpleType name="dateTypeValues">
         <xsd:restriction base="xsd:string">
             <xsd:enumeration value="completed"/>
             <xsd:enumeration value="published"/>
             <xsd:enumeration value="thesisAccepted"/>
+			<xsd:enumeration value="embargo"/>
         </xsd:restriction>
     </xsd:simpleType>
 
