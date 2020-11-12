@@ -37,8 +37,11 @@
 <?php
 $result = $this->result;
 $document = $result->getDocument();
-$view = Zend_Registry::get('Opus_View'); // TODO it is a bad hack to access variables in parent view
+$view = Zend_Registry::get('Opus_View'); // TODO it is a bad hack to access variables in parent view (fix with ZF3?)
 $seriesId = $view->seriesId;
+$this->start = $view->start;
+$this->rows = $view->rows;
+$this->authorSearch = $view->authorSearch;
 ?>
 
 <div class="result_box <?= $this->partialCounter % 2 === 0 ? 'even' : 'odd'; ?> <?= $document->getServerState() ?>">

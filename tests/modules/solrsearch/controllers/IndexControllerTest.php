@@ -1407,4 +1407,33 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
     {
         $this->markTestIncomplete();
     }
+
+    public function testPaginationParametersArePresentInFrontdoorLinks()
+    {
+        $this->dispatch('/solrsearch/index/search/searchtype/latest');
+
+        $this->assertXpathCount('//div[@class="results_title"]/a', 10);
+        $this->assertXpath('//div[@class="results_title"]/a[contains(@href, "start") and contains(@href, "rows/10")]');
+        $this->assertXpathCount('//div[@class="results_title"]/a[contains(@href, "start") and contains(@href, "rows/10")]', 10);
+    }
+
+    public function testPaginationParameterStartEqualsZeroForFirstResult()
+    {
+        $this->dispatch('/solrsearch/index/search/searchtype/latest');
+
+        $this->assertXpathCount('//div[@class="results_title"]/a', 10);
+        $this->assertXpath(
+            '(//div[@class="results_title"]/a)[1][contains(@href, "start/0") and contains(@href, "rows/10")]',
+            'First frontdoor link needs parameter start = 0'
+        );
+    }
+
+    public function testAuthorSearchLinks()
+    {
+        $this->dispatch('solrsearch/index/search/searchtype/all/start/0/rows/10/author_facetfq/Doe%2C+John');
+
+        $this->assertXpath(
+            '//div[@class = "results_author"]/a[contains(@href, "solrsearch/index/search/searchtype/authorsearch/author/%22Doe%2C+John%22")]'
+        );
+    }
 }

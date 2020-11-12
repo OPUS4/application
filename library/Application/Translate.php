@@ -69,7 +69,7 @@ class Application_Translate extends Zend_Translate
      */
     private $_options = [
         'logMessage' => "Unable to translate key '%message%' into locale '%locale%'",
-        'logPriority' => Zend_Log::DEBUG,
+        'logPriority' => Zend_Log::WARN,
         'adapter' => 'tmx',
         'locale' => 'en',
         'clear' => false,
