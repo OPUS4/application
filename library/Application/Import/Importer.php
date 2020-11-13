@@ -347,7 +347,7 @@ class Application_Import_Importer
             'CompletedYear',
             'ThesisDateAccepted',
             'ThesisYearAccepted',
-			'EmbargoDate',
+            'EmbargoDate',
             'ContributingCorporation',
             'CreatingCorporation',
             'Edition',
