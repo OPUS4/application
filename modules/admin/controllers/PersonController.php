@@ -31,6 +31,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Person;
+use Opus\Model\NotFoundException;
+
 /**
  * Controller fuer die Verwaltung von Personen.
  *
@@ -136,7 +139,7 @@ class Admin_PersonController extends Application_Controller_Action
 
         // TODO only include 'limit' and 'start' if provided as URL parameters (not defaults)
         $form = new Admin_Form_PersonListControl();
-        $form->setMethod(Zend_Form::METHOD_POST);
+        $form->setMethod(\Zend_Form::METHOD_POST);
 
         // TODO only include limit if not default
         $form->setAction($this->view->url(
@@ -154,7 +157,7 @@ class Admin_PersonController extends Application_Controller_Action
         $form->populate($params);
 
         // TODO move into replaceable model class
-        $personsTotal = Opus_Person::getAllPersonsCount($role, $filter);
+        $personsTotal = Person::getAllPersonsCount($role, $filter);
 
         if ($start > $personsTotal) {
             if ($personsTotal > 0 && ($personsTotal > $limit)) {
@@ -166,7 +169,7 @@ class Admin_PersonController extends Application_Controller_Action
 
         $page = intdiv($start, $limit) + 1;
 
-        $persons = Opus_Person::getAllPersons($role, $start - 1, $limit, $filter);
+        $persons = Person::getAllPersons($role, $start - 1, $limit, $filter);
 
         $this->view->headScript()->appendFile($this->view->layoutPath() . '/js/admin.js');
 
@@ -176,7 +179,7 @@ class Admin_PersonController extends Application_Controller_Action
             $end = $personsTotal;
         }
 
-        $paginator = Zend_Paginator::factory(( int )$personsTotal);
+        $paginator = \Zend_Paginator::factory(( int )$personsTotal);
         $paginator->setCurrentPageNumber($page);
         $paginator->setItemCountPerPage($limit);
 
@@ -198,7 +201,7 @@ class Admin_PersonController extends Application_Controller_Action
     {
         $person = $this->getPersonCrit();
 
-        $documents = Opus_Person::getPersonDocuments($person);
+        $documents = Person::getPersonDocuments($person);
 
         $this->view->documents = $documents;
     }
@@ -224,7 +227,7 @@ class Admin_PersonController extends Application_Controller_Action
             );
         }
 
-        $personValues = Opus_Person::getPersonValues($person);
+        $personValues = Person::getPersonValues($person);
 
         if (is_null($personValues)) {
             $this->_helper->Redirector->redirectTo(
@@ -244,7 +247,7 @@ class Admin_PersonController extends Application_Controller_Action
             $formId = $this->getParam('formId');
 
             // check if the request is coming from the 'Back' button of the confirmation form
-            $session = new Zend_Session_Namespace(self::SESSION_NAMESPACE);
+            $session = new \Zend_Session_Namespace(self::SESSION_NAMESPACE);
 
             if (isset($session->{$formId})) {
                 $data = $session->{$formId};
@@ -267,16 +270,16 @@ class Admin_PersonController extends Application_Controller_Action
                             $formId = $form->getElement(Admin_Form_Persons::ELEMENT_FORM_ID)->getValue();
 
                             // TODO store data in session for back button
-                            $personNamespace = new Zend_Session_Namespace(self::SESSION_NAMESPACE);
+                            $personNamespace = new \Zend_Session_Namespace(self::SESSION_NAMESPACE);
                             $personNamespace->{$formId} = $data;
 
                             $changes = $form->getChanges();
 
                             $confirmForm = new Admin_Form_PersonsConfirm();
                             $confirmForm->getElement(Admin_Form_PersonsConfirm::ELEMENT_FORM_ID)->setValue($formId);
-                            $confirmForm->setOldValues(Opus_Person::convertToFieldNames($personValues));
+                            $confirmForm->setOldValues(Person::convertToFieldNames($personValues));
                             $confirmForm->populateFromModel($person);
-                            $confirmForm->setChanges(Opus_Person::convertToFieldNames($changes));
+                            $confirmForm->setChanges(Person::convertToFieldNames($changes));
                             $confirmForm->setAction($this->view->url([
                                 'module' => 'admin', 'controller' => 'person', 'action' => 'update'
                             ], null, false));
@@ -338,7 +341,7 @@ class Admin_PersonController extends Application_Controller_Action
                     $formId = $form->getElementValue(Admin_Form_PersonsConfirm::ELEMENT_FORM_ID);
 
                     // make changes in database and redirect to list of persons with success message
-                    $session = new Zend_Session_Namespace(self::SESSION_NAMESPACE);
+                    $session = new \Zend_Session_Namespace(self::SESSION_NAMESPACE);
 
                     if (isset($session->{$formId})) {
                         $formData = $session->{$formId};
@@ -350,7 +353,7 @@ class Admin_PersonController extends Application_Controller_Action
                             $changes = $personForm->getChanges();
                             $documents = $form->getDocuments();
 
-                            Opus_Person::updateAll($person, $changes, $documents);
+                            Person::updateAll($person, $changes, $documents);
 
                             $message = 'admin_person_bulk_update_success';
                         }
@@ -543,8 +546,8 @@ class Admin_PersonController extends Application_Controller_Action
             }
 
             try {
-                $person = new Opus_Person($personId);
-            } catch (Opus_Model_NotFoundException $omnfe) {
+                $person = new Person($personId);
+            } catch (NotFoundException $omnfe) {
                 $this->getLogger()->err(__METHOD__ . ' ' . $omnfe->getMessage());
                 return $this->returnToMetadataForm($docId);
             }

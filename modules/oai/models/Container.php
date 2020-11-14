@@ -33,6 +33,11 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Document;
+use Opus\File;
+use Opus\Model\NotFoundException;
+use Opus\Security\Realm;
+
 /**
  * Class Oai_Model_Container
  *
@@ -48,7 +53,7 @@ class Oai_Model_Container extends Application_Model_Abstract
     private $_docId;
 
     /**
-     * @var Opus_Document
+     * @var Document
      */
     private $_doc;
 
@@ -81,7 +86,7 @@ class Oai_Model_Container extends Application_Model_Abstract
     /**
      *
      * @param string $docId
-     * @return Opus_Document returns valid Opus_Document if docId is valid, otherwise throws an Oai_Model_Exception
+     * @return Document returns valid Document if docId is valid, otherwise throws an Oai_Model_Exception
      * @throws Oai_Model_Exception throws Oai_Model_Exception if the given docId is invalid
      *
      * TODO centralize this function (is used in several controllers)
@@ -99,23 +104,23 @@ class Oai_Model_Container extends Application_Model_Abstract
         }
 
         try {
-            return new Opus_Document($docId);
-        } catch (Opus_Model_NotFoundException $e) {
+            return Document::get($docId);
+        } catch (NotFoundException $e) {
             $this->logErrorMessage('document with id ' . $docId . ' does not exist');
             throw new Oai_Model_Exception('requested docId does not exist');
         }
     }
 
     /**
-     * Returns all associated Opus_File objects that are visible in OAI and accessible by user
-     * @return array Accessible Opus_File objects
+     * Returns all associated File objects that are visible in OAI and accessible by user
+     * @return array Accessible File objects
      *
      * TODO check embargo date
      * TODO merge access checks with code for deliver controller
      */
     public function getAccessibleFiles()
     {
-        $realm = Opus_Security_Realm::getInstance();
+        $realm = Realm::getInstance();
 
         // admins sollen immer durchgelassen werden, nutzer nur wenn das doc im publizierten Zustand ist
         if (! $realm->skipSecurityChecks()) {
@@ -149,7 +154,7 @@ class Oai_Model_Container extends Application_Model_Abstract
 
         $files = [];
         $filesToCheck = $this->_doc->getFile();
-        /* @var $file Opus_File */
+        /* @var $file File */
         foreach ($filesToCheck as $file) {
             $filename = $this->_appConfig->getFilesPath() . $this->_docId . DIRECTORY_SEPARATOR . $file->getPathName();
             if (is_readable($filename)) {
@@ -165,7 +170,7 @@ class Oai_Model_Container extends Application_Model_Abstract
         }
 
         $containerFiles = [];
-        /* @var $file Opus_File */
+        /* @var $file File */
         foreach ($files as $file) {
             if ($file->getVisibleInOai() && $realm->checkFile($file->getId())) {
                 array_push($containerFiles, $file);

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -32,10 +31,12 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Document;
+
 /**
  * Mock used by DbCleanTemporary
  */
-class OpusDocumentMock extends Opus_Document
+class OpusDocumentMock extends Document
 {
 
     public function changeServerDateModified($date)

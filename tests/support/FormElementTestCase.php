@@ -113,7 +113,7 @@ abstract class FormElementTestCase extends ControllerTestCase
     {
         $element = $this->getElement();
 
-        $paths = $element->getPluginLoader(Zend_Form::DECORATOR)->getPaths();
+        $paths = $element->getPluginLoader(\Zend_Form::DECORATOR)->getPaths();
         $this->assertArrayHasKey('Application_Form_Decorator_', $paths);
         $this->assertContains('Application/Form/Decorator/', $paths['Application_Form_Decorator_']);
     }

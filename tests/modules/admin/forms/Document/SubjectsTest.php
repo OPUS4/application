@@ -30,6 +30,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Document;
+
 class Admin_Form_Document_SubjectsTest extends ControllerTestCase
 {
 
@@ -39,12 +41,12 @@ class Admin_Form_Document_SubjectsTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Subjects();
 
-        $this->assertEquals(3, count($form->getSubForms()));
+        $this->assertCount(3, $form->getSubForms());
         $this->assertNotNull($form->getSubForm('Swd'));
         $this->assertNotNull($form->getSubForm('Psyndex'));
         $this->assertNotNull($form->getSubForm('Uncontrolled'));
 
-        $this->assertEquals(1, count($form->getDecorators()));
+        $this->assertCount(1, $form->getDecorators());
         $this->assertNotNull($form->getDecorator('FormElements'));
     }
 
@@ -54,13 +56,13 @@ class Admin_Form_Document_SubjectsTest extends ControllerTestCase
 
         $document = $this->createTestDocument();
 
-        $form->populateFromModel(new Opus_Document(146)); // zwei Schlagwörter
+        $form->populateFromModel(Document::get(146)); // zwei Schlagwörter
 
         $form->updateModel($document);
 
         $subjects = $document->getSubject();
 
-        $this->assertEquals(2, count($subjects));
+        $this->assertCount(2, $subjects);
 
         // Reihenfolge sollte gleich bleiben, solange IDs in Testdaten nicht geändert werden
         $this->assertEquals('swd', $subjects[0]->getType());

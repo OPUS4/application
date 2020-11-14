@@ -29,8 +29,10 @@
  * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
+use Opus\Document;
+use Opus\Model\NotFoundException;
 
 /**
  * Browsing of file import folder for adding files to documents.
@@ -53,8 +55,8 @@ class Admin_FilebrowserController extends Application_Controller_Action
 
         $document = null;
         try {
-            $document = new Opus_Document($docId);
-        } catch (Opus_Model_NotFoundException $e) {
+            $document = Document::get($docId);
+        } catch (NotFoundException $e) {
             throw new Application_Exception('no document found for id ' . $docId, null, $e);
         }
 

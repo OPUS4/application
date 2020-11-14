@@ -30,6 +30,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Document;
+
 /**
  * Unit Tests für Unterformular, daß Subjects eines bestimmten Typs anzeigt.
  */
@@ -77,7 +79,7 @@ class Admin_Form_Document_SubjectTypeTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_SubjectType('swd');
 
-        $document = new Opus_Document(146);
+        $document = Document::get(146);
 
         $values = $form->getFieldValues($document);
 
@@ -92,7 +94,7 @@ class Admin_Form_Document_SubjectTypeTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_SubjectType('swd'); // Formular ohne Schlagwörter
 
-        $document = new Opus_Document(200);
+        $document = Document::get(200);
 
         $this->assertEquals(2, count($document->getSubject()));
 

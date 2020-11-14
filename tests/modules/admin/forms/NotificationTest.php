@@ -30,6 +30,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Document;
+
 class Admin_Form_NotificationTest extends ControllerTestCase
 {
 
@@ -39,7 +41,7 @@ class Admin_Form_NotificationTest extends ControllerTestCase
     {
         $form = new Admin_Form_Notification();
 
-        $form->addPublishNotificationSelection(new Opus_Document(146));
+        $form->addPublishNotificationSelection(Document::get(146));
 
         $rows = $form->getRows();
 

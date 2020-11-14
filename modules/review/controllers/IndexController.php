@@ -29,8 +29,10 @@
  * @author      Thoralf Klein <thoralf.klein@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
+use Opus\DocumentFinder;
+use Opus\Security\Realm;
 
 /**
  * Main entry point for the review module.
@@ -61,7 +63,7 @@ class Review_IndexController extends Application_Controller_Action
         parent::init();
 
         // Highlight menu entries.
-        if (true === Opus_Security_Realm::getInstance()->checkModule('admin')) {
+        if (true === Realm::getInstance()->checkModule('admin')) {
             $this->getHelper('MainMenu')->setActive('admin');
         } else {
             $this->getHelper('MainMenu')->setActive('review');
@@ -136,7 +138,7 @@ class Review_IndexController extends Application_Controller_Action
         }
 
         $currentPage = $this->_getParam('page', 1);
-        $paginator = Zend_Paginator::factory($result);
+        $paginator = \Zend_Paginator::factory($result);
         $paginator->setCurrentPageNumber($currentPage);
         $paginator->setItemCountPerPage(10);
 
@@ -242,11 +244,11 @@ class Review_IndexController extends Application_Controller_Action
     /**
      * Prepare document finder.
      *
-     * @return Opus_DocumentFinder
+     * @return DocumentFinder
      */
     protected function _prepareDocumentFinder()
     {
-        $finder = new Opus_DocumentFinder();
+        $finder = new DocumentFinder();
         $finder->setServerState(self::$_reviewServerState);
 
         $logger = $this->getLogger();
@@ -254,10 +256,10 @@ class Review_IndexController extends Application_Controller_Action
         $onlyReviewerByUserId = false;
 
         // Add constraint for reviewer, if current user is *not* admin.
-        if (Opus_Security_Realm::getInstance()->checkModule('admin')) {
+        if (Realm::getInstance()->checkModule('admin')) {
             $message = "Review: Showing all unpublished documents to admin";
             $logger->debug($message . " (user_id: $userId)");
-        } elseif (Opus_Security_Realm::getInstance()->checkModule('review')) {
+        } elseif (Realm::getInstance()->checkModule('review')) {
             if ($onlyReviewerByUserId) {
                 $message = "Review: Showing only documents belonging to reviewer";
                 $finder->setEnrichmentKeyValue('reviewer.user_id', $userId);

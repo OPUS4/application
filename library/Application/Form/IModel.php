@@ -34,7 +34,6 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2009-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 interface Application_Form_IModel
 {
@@ -53,8 +52,8 @@ interface Application_Form_IModel
 
     /**
      * Verarbeitet POST Daten.
-     * @param $post POST Daten fuer Formular
-     * @param $context POST Daten fuer gesamten Request
+     * @param $post array Daten fuer Formular
+     * @param $context array Daten fuer gesamten Request
      * @return mixed
      */
     public function processPost($post, $context);

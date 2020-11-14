@@ -29,7 +29,6 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 error_reporting(E_ALL | E_STRICT);
@@ -59,8 +58,11 @@ putenv("XML_CATALOG_FILES=$catalogPath");
 
 require_once 'autoload.php';
 
+// TODO OPUSVIER-4420 remove after switching to Laminas/ZF3
+require_once APPLICATION_PATH . '/vendor/opus4-repo/framework/library/OpusDb/Mysqlutf8.php';
+
 // enable fallback autoloader for testing
-$autoloader = Zend_Loader_Autoloader::getInstance();
+$autoloader = \Zend_Loader_Autoloader::getInstance();
 $autoloader->suppressNotFoundWarnings(false);
 $autoloader->setFallbackAutoloader(true);
 

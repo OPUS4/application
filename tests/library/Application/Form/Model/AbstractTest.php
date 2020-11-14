@@ -89,25 +89,25 @@ class Application_Form_Model_AbstractTest extends ControllerTestCase
 
     public function testGetModel()
     {
-        $this->form->setModelClass('Opus_Licence');
+        $this->form->setModelClass('Opus\Licence');
 
         $this->form->getElement('Id')->setValue(1);
 
         $model = $this->form->getModel();
 
         $this->assertNotNull($model);
-        $this->assertInstanceOf('Opus_Licence', $model);
+        $this->assertInstanceOf('Opus\Licence', $model);
         $this->assertEquals(1, $model->getId());
     }
 
     public function testGetModelNewInstance()
     {
-        $this->form->setModelClass('Opus_Licence');
+        $this->form->setModelClass('Opus\Licence');
 
         $model = $this->form->getModel();
 
         $this->assertNotNull($model);
-        $this->assertInstanceOf('Opus_Licence', $model);
+        $this->assertInstanceOf('Opus\Licence', $model);
         $this->assertNull($model->getId());
     }
 
@@ -126,7 +126,7 @@ class Application_Form_Model_AbstractTest extends ControllerTestCase
      */
     public function testGetModelBadModelId()
     {
-        $this->form->setModelClass('Opus_Licence');
+        $this->form->setModelClass('Opus\Licence');
         $this->form->getElement('Id')->setValue('notAnId');
         $this->form->getModel();
     }
@@ -137,7 +137,7 @@ class Application_Form_Model_AbstractTest extends ControllerTestCase
      */
     public function testGetModelUnknownModelId()
     {
-        $this->form->setModelClass('Opus_Licence');
+        $this->form->setModelClass('Opus\Licence');
         $this->form->getElement('Id')->setValue(1000);
         $this->form->getModel();
     }
@@ -148,9 +148,9 @@ class Application_Form_Model_AbstractTest extends ControllerTestCase
      */
     public function testSetGetModelClass()
     {
-        $this->form->setModelClass('Opus_Licence');
+        $this->form->setModelClass('Opus\Licence');
 
-        $this->assertEquals('Opus_Licence', $this->form->getModelClass());
+        $this->assertEquals('Opus\Licence', $this->form->getModelClass());
 
         $this->form->setModelClass(null);
 

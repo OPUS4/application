@@ -31,13 +31,19 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Date;
+use Opus\Document;
+use Opus\Identifier;
+use Opus\Db\TableGateway;
+use Opus\Model\ModelException;
+
 class Application_Update_SetStatusOfExistingDoiTest extends ControllerTestCase
 {
 
     protected $additionalResources = 'database';
 
     /**
-     * @throws Opus_Model_Exception
+     * @throws ModelException
      *
      * TODO test sets Status of all DOI identifier of published documents to 'registered' (side effect)
      * TODO this test has failed once (date got modified or compare didn't work) on Travis and worked in the next run
@@ -48,16 +54,30 @@ class Application_Update_SetStatusOfExistingDoiTest extends ControllerTestCase
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
 
-        $doi = new Opus_Identifier();
+        $doi = new Identifier();
         $doi->setType('doi');
         $doi->setValue('testdoi');
 
         $doc->addIdentifier($doi);
         $docId = $doc->store();
 
+        sleep(2);
+
         $modified = $doc->getServerDateModified();
 
+        $debug = "$modified (before)" . PHP_EOL;
+
+        $doc = Document::get($docId);
+        $modified2 = $doc->getServerDateModified();
+
+        $debug .= "$modified2 (before - from new object)" . PHP_EOL;
+
+        $time1 = Date::getNow();
         sleep(2);
+        $time2 = Date::getNow();
+
+        $debug .= "$time1 - sleep(2) - $time2" . PHP_EOL;
+        $debug .= $this->getServerDateModifiedFromDatabase($docId) . ' (before - from database)' . PHP_EOL;
 
         $update = new Application_Update_SetStatusOfExistingDoi();
         $update->setLogger(new MockLogger());
@@ -65,12 +85,24 @@ class Application_Update_SetStatusOfExistingDoiTest extends ControllerTestCase
 
         $update->run();
 
-        $doc = new Opus_Document($docId);
+        $debug .= $this->getServerDateModifiedFromDatabase($docId) . ' (after - from database)' . PHP_EOL;
 
-        $message = "{$doc->getServerDateModified()}" . PHP_EOL;
-        $message .= "$modified";
+        $doc = Document::get($docId);
 
-        $this->assertEquals(0, $doc->getServerDateModified()->compare($modified), $message);
+        $debug .= "{$doc->getServerDateModified()} (after - from new object)" . PHP_EOL;
+
+        $this->assertEquals(0, $doc->getServerDateModified()->compare($modified), $debug);
         $this->assertEquals('registered', $doc->getIdentifierDoi(0)->getStatus());
+    }
+
+    protected function getServerDateModifiedFromDatabase($docId)
+    {
+        $table = TableGateway::getInstance('Opus\Db\Documents');
+        $select = $table->select()
+            ->from($table, ['server_date_modified'])
+            ->where("id = $docId");
+        $result = $table->getAdapter()->fetchCol($select);
+
+        return $result[0];
     }
 }

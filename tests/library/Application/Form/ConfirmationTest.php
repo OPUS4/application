@@ -25,6 +25,9 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+use Opus\Date;
+use Opus\Licence;
+
 /**
  * Unit Tests für Bestaetigungsformular.
  *
@@ -99,7 +102,7 @@ class Application_Form_ConfirmationTest extends ControllerTestCase
     public function testGetFormLegend()
     {
         $this->useEnglish();
-        $form = new Application_Form_Confirmation('Opus_Language');
+        $form = new Application_Form_Confirmation('Opus\Language');
 
         $legend = $form->getFormLegend();
 
@@ -124,7 +127,7 @@ class Application_Form_ConfirmationTest extends ControllerTestCase
     public function testGetModelDisplayName()
     {
         $form = new Application_Form_Confirmation('Opus_Licence');
-        $form->setModel(new Opus_Licence(4));
+        $form->setModel(new Licence(4));
         $this->assertContains('Creative Commons - CC BY-ND - Namensnennung', $form->getModelDisplayName());
     }
 
@@ -137,7 +140,7 @@ class Application_Form_ConfirmationTest extends ControllerTestCase
     public function testSetGetModelDisplayName()
     {
         $form = new Application_Form_Confirmation('Opus_Licence');
-        $form->setModel(new Opus_Licence(4));
+        $form->setModel(new Licence(4));
         $this->assertContains('Creative Commons - CC BY-ND - Namensnennung', $form->getModelDisplayName());
 
         $form->setModelDisplayName('custom display name');
@@ -237,42 +240,33 @@ class Application_Form_ConfirmationTest extends ControllerTestCase
 
     public function testSetModel()
     {
-        $this->form->setModel(new Opus_Licence(2));
+        $this->form->setModel(new Licence(2));
         $this->assertEquals(2, $this->form->getModelId());
     }
 
-    /**
-     * @expectedException Application_Exception
-     * @expectedExceptionMessage must be Opus_Model_AbstractDb
-     */
     public function testSetModelNull()
     {
+        $this->setExpectedException(Application_Exception::class, 'must be Opus\Model\AbstractDb');
         $this->form->setModel(null);
     }
 
-    /**
-     * @expectedException Application_Exception
-     * @expectedExceptionMessage must be Opus_Model_AbstractDb
-     */
     public function testSetModelNotObject()
     {
+        $this->setExpectedException(Application_Exception::class, 'must be Opus\Model\AbstractDb');
         $this->form->setModel('notamodel');
     }
 
-    /**
-     * @expectedException Application_Exception
-     * @expectedExceptionMessage not instance of
-     */
     public function testSetModelBadModel()
     {
-        $this->form->setModel(new Opus_Date());
+        $this->setExpectedException(Application_Exception::class, 'not instance of');
+        $this->form->setModel(new Date());
     }
 
     public function testRenderQuestion()
     {
         $this->useEnglish();
 
-        $this->form->setModel(new Opus_Licence(4));
+        $this->form->setModel(new Licence(4));
 
         $this->form->setQuestion('Klasse: %1$s, Name: %2$s');
 
@@ -286,7 +280,7 @@ class Application_Form_ConfirmationTest extends ControllerTestCase
     {
         $this->useEnglish();
 
-        $this->form->setModel(new Opus_Licence(1));
+        $this->form->setModel(new Licence(1));
 
         $this->form->setQuestion('SignatureValue'); // belieber Schlüssel, es geht nur um die Übersetzung
 
@@ -295,7 +289,7 @@ class Application_Form_ConfirmationTest extends ControllerTestCase
 
     public function testRenderQuestionEscaped()
     {
-        $licence = new Opus_Licence();
+        $licence = new Licence();
 
         $licence->setNameLong('<h1>Name mit Tags</h1>');
 

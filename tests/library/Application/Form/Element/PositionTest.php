@@ -52,7 +52,7 @@ class Application_Form_Element_PositionTest extends FormElementTestCase
 
         $options = $element->getMultiOptions();
 
-        $collectionRoles = Opus_CollectionRole::fetchAll();
+        $collectionRoles = \Opus\CollectionRole::fetchAll();
 
         // One additional option for last position
         $this->assertEquals(count($collectionRoles) + 1, count($options));

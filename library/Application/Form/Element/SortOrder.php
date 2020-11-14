@@ -29,7 +29,6 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -48,11 +47,11 @@ class Application_Form_Element_SortOrder extends Application_Form_Element_Text
             $this->setAttrib('size', 6);
         }
 
-        $validator = new Zend_Validate_Int();
+        $validator = new \Zend_Validate_Int();
         $validator->setMessage('validation_error_int');
         $this->addValidator($validator);
 
-        $validator = new Zend_Validate_GreaterThan(-1);
+        $validator = new \Zend_Validate_GreaterThan(-1);
         $validator->setMessage('validation_error_negative_number');
         $this->addValidator($validator);
     }

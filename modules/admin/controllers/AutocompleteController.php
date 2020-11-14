@@ -33,6 +33,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Enrichment\AbstractType;
+
 /**
  * Controller for providing JSON formatted data used for autocomplete
  * functions in forms.
@@ -72,8 +74,8 @@ class Admin_AutocompleteController extends Application_Controller_ModuleAccess
 
         $typeName = $this->getRequest()->getParam('typeName');
         if (! is_null($typeName) && $typeName !== '') {
-            $typeName = 'Opus_Enrichment_' . $typeName;
-            $allTypes = Opus_Enrichment_AbstractType::getAllEnrichmentTypes(true);
+            $typeName = 'Opus\\Enrichment\\' . $typeName;
+            $allTypes = AbstractType::getAllEnrichmentTypes(true);
             if (in_array($typeName, $allTypes)) {
                 $typeObj = new $typeName();
                 $typeDescription = $typeObj->getDescription();

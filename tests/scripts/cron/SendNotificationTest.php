@@ -32,6 +32,9 @@
  */
 require_once('CronTestCase.php');
 
+use Opus\Job;
+use Opus\Job\Worker\MailNotification;
+
 /**
  * Dieser Test benötigt das opus-smtp-dumpserver.php ausgeführt wird, um prüfen zu können, ob Nachrichten verschickt
  * werden (Siehe Dokumentation im Wiki).
@@ -48,27 +51,27 @@ class SendNotificationTest extends CronTestCase
 
     public function testSendNotification()
     {
-        $this->createJob(Opus_Job_Worker_MailNotification::LABEL, [
+        $this->createJob(MailNotification::LABEL, [
             'subject' => 'SendNotification Test',
             'message' => 'This is a test message generated in ' . __FILE__,
             'users' => [['address' => 'user@example.org', 'name' => 'Test User']]
         ]);
         $this->executeScript('cron-send-notification.php');
-        $allJobs = Opus_Job::getByLabels([Opus_Job_Worker_MailNotification::LABEL], null, Opus_Job::STATE_UNDEFINED);
+        $allJobs = Job::getByLabels([MailNotification::LABEL], null, Job::STATE_UNDEFINED);
         $this->assertTrue(empty($allJobs), 'Expected no more jobs in queue');
-        $failedJobs = Opus_Job::getByLabels([Opus_Job_Worker_MailNotification::LABEL], null, Opus_Job::STATE_FAILED);
+        $failedJobs = Job::getByLabels([MailNotification::LABEL], null, Job::STATE_FAILED);
         $this->assertTrue(empty($failedJobs), 'Expected no failed jobs in queue');
     }
 
     public function testFailSendNotification()
     {
-        $this->createJob(Opus_Job_Worker_MailNotification::LABEL, [
+        $this->createJob(MailNotification::LABEL, [
             'subject' => 'SendNotification Test',
             'message' => 'This is a test message generated in ' . __FILE__,
             'users' => ''
         ]);
         $this->executeScript('cron-send-notification.php');
-        $failedJobs = Opus_Job::getByLabels([Opus_Job_Worker_MailNotification::LABEL], null, Opus_Job::STATE_FAILED);
+        $failedJobs = Job::getByLabels([MailNotification::LABEL], null, Job::STATE_FAILED);
         $this->assertEquals(1, count($failedJobs), 'Expected one failed job in queue');
     }
 }

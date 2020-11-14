@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -35,6 +34,10 @@
 require_once('CronTestCase.php');
 require_once('OpusDocumentMock.php');
 
+use Opus\Date;
+use Opus\Document;
+use Opus\Model\NotFoundException;
+
 /**
  *
  */
@@ -58,10 +61,10 @@ class DbCleanTemporaryTest extends CronTestCase
         $this->changeDocumentDateModified(3);
         $this->executeScript('cron-db-clean-temporary.php');
         try {
-            $doc = new Opus_Document($this->doc->getId());
+            $doc = Document::get($this->doc->getId());
             $doc->deletePermanent();
-            $this->fail("expected Opus_Model_NotFoundException");
-        } catch (Opus_Model_NotFoundException $e) {
+            $this->fail("expected Opus\Model\NotFoundException");
+        } catch (NotFoundException $e) {
         }
     }
 
@@ -70,9 +73,9 @@ class DbCleanTemporaryTest extends CronTestCase
         $this->changeDocumentDateModified(2);
         $this->executeScript('cron-db-clean-temporary.php');
         try {
-            $doc = new Opus_Document($this->doc->getId());
+            $doc = Document::get($this->doc->getId());
             $doc->deletePermanent();
-        } catch (Opus_Model_NotFoundException $e) {
+        } catch (NotFoundException $e) {
             $this->fail("expected existing document.");
         }
     }
@@ -81,6 +84,6 @@ class DbCleanTemporaryTest extends CronTestCase
     {
         $date = new DateTime();
         $date->sub(new DateInterval("P{$numDaysBeforeNow}D"));
-        $this->doc->changeServerDateModified(new Opus_Date($date));
+        $this->doc->changeServerDateModified(new Date($date));
     }
 }

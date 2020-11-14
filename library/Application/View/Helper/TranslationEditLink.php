@@ -60,7 +60,7 @@ class Application_View_Helper_TranslationEditLink extends Application_View_Helpe
      */
     public function isEditingEnabled()
     {
-        $accessControl = Zend_Controller_Action_HelperBroker::getStaticHelper('accessControl');
+        $accessControl = \Zend_Controller_Action_HelperBroker::getStaticHelper('accessControl');
 
         if (is_null($accessControl)) {
             return false; // just in case - deny editing if access control mechanism isn't available

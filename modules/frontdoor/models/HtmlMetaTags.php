@@ -28,9 +28,13 @@
  * @package     Module_Frontdoor
  * @author      Sascha Szott <opus-development@saschaszott.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- *
+ */
+
+use Opus\Document;
+
+/**
  * TODO new types have to be added as functions -> make extendable? how is it used when rendering?
  *      Basically each type could be a separate class. Refactor for later so new types or metatags won't necessarily
  *      require changing core classes (this class here).
@@ -66,7 +70,7 @@ class Frontdoor_Model_HtmlMetaTags
     }
 
     /**
-     * @param Opus_Document $document
+     * @param Document $document
      * @return array Array mit Metatag-Paaren
      */
     public function createTags($document)
@@ -131,7 +135,7 @@ class Frontdoor_Model_HtmlMetaTags
     }
 
     /**
-     * @param Opus_Document $document
+     * @param Document $document
      * @param $metas array Array mit Metatag-Paaren
      */
     private function handleAuthors($document, &$metas)
@@ -154,7 +158,7 @@ class Frontdoor_Model_HtmlMetaTags
     }
 
     /**
-     * @param Opus_Document $document
+     * @param Document $document
      * @param $metas array Array mit Metatag-Paaren
      */
     private function handleDates($document, &$metas)
@@ -177,7 +181,7 @@ class Frontdoor_Model_HtmlMetaTags
     }
 
     /**
-     * @param Opus_Document $document
+     * @param Document $document
      * @param $metas array Array mit Metatag-Paaren
      */
     private function handleTitles($document, &$metas)
@@ -229,7 +233,7 @@ class Frontdoor_Model_HtmlMetaTags
     }
 
     /**
-     * @param Opus_Document $document
+     * @param Document $document
      * @param $metas array Array mit Metatag-Paaren
      */
     private function handleJournalTitle($document, &$metas)
@@ -244,7 +248,7 @@ class Frontdoor_Model_HtmlMetaTags
     }
 
     /**
-     * @param Opus_Document $document
+     * @param Document $document
      * @param $metas array Array mit Metatag-Paaren
      */
     private function handleAbstracts($document, &$metas)
@@ -263,7 +267,7 @@ class Frontdoor_Model_HtmlMetaTags
     }
 
     /**
-     * @param Opus_Document $document
+     * @param Document $document
      * @param $metas array Array mit Metatag-Paaren
      */
     private function handleLicences($document, &$metas)
@@ -274,7 +278,7 @@ class Frontdoor_Model_HtmlMetaTags
     }
 
     /**
-     * @param Opus_Document $document
+     * @param Document $document
      * @param $metas array Array mit Metatag-Paaren
      */
     private function handleIdentifierUrn($document, &$metas)
@@ -291,7 +295,7 @@ class Frontdoor_Model_HtmlMetaTags
     }
 
     /**
-     * @param Opus_Document $document
+     * @param Document $document
      * @param $metas array Array mit Metatag-Paaren
      */
     private function handleIdentifierDoi($document, &$metas)
@@ -306,7 +310,7 @@ class Frontdoor_Model_HtmlMetaTags
     }
 
     /**
-     * @param Opus_Document $document
+     * @param Document $document
      * @param $metas array Array mit Metatag-Paaren
      */
     private function handleIdentifierIssn($document, &$metas)
@@ -321,7 +325,7 @@ class Frontdoor_Model_HtmlMetaTags
     }
 
     /**
-     * @param Opus_Document $document
+     * @param Document $document
      * @param $metas array Array mit Metatag-Paaren
      */
     private function handleIdentifierIsbn($document, &$metas)
@@ -336,7 +340,7 @@ class Frontdoor_Model_HtmlMetaTags
     }
 
     /**
-     * @param Opus_Document $document
+     * @param Document $document
      * @param $metas array Array mit Metatag-Paaren
      */
     private function handleFrontdoorUrl($document, &$metas)
@@ -347,7 +351,7 @@ class Frontdoor_Model_HtmlMetaTags
     }
 
     /**
-     * @param Opus_Document $document
+     * @param Document $document
      * @param $metas array Array mit Metatag-Paaren
      */
     private function handleFulltextUrls($document, &$metas)
@@ -389,7 +393,7 @@ class Frontdoor_Model_HtmlMetaTags
     }
 
     /**
-     * @param Opus_Document $document
+     * @param Document $document
      * @param $metas array Array mit Metatag-Paaren
      */
     private function handleKeywords($document, &$metas)
@@ -425,7 +429,7 @@ class Frontdoor_Model_HtmlMetaTags
     }
 
     /**
-     * @param Opus_Document $document
+     * @param Document $document
      * @param array $metas Array mit Metatag-Paaren
      */
     private function handleThesisPublisher($document, &$metas)
@@ -440,7 +444,7 @@ class Frontdoor_Model_HtmlMetaTags
     }
 
     /**
-     * @param Opus_Document $document
+     * @param Document $document
      * @param array $metas Array mit Metatag-Paaren
      */
     private function handleInstitution($document, &$metas)
@@ -459,7 +463,7 @@ class Frontdoor_Model_HtmlMetaTags
     }
 
     /**
-     * @param Opus_Document $document
+     * @param Document $document
      * @param array $metas Array mit Metatag-Paaren
      */
     private function handleConferenceTitle($document, &$metas)
@@ -474,7 +478,7 @@ class Frontdoor_Model_HtmlMetaTags
     }
 
     /**
-     * @param Opus_Document $document
+     * @param Document $document
      * @param array $metas Array mit Metatag-Paaren
      */
     private function handleBookTitle($document, &$metas)
@@ -489,7 +493,7 @@ class Frontdoor_Model_HtmlMetaTags
     }
 
     /**
-     * @param Opus_Document $document
+     * @param Document $document
      * @return bool
      */
     public function isJournalPaper($document)
@@ -498,7 +502,7 @@ class Frontdoor_Model_HtmlMetaTags
     }
 
     /**
-     * @param Opus_Document $document
+     * @param Document $document
      * @return bool
      */
     public function isConferencePaper($document)
@@ -507,7 +511,7 @@ class Frontdoor_Model_HtmlMetaTags
     }
 
     /**
-     * @param Opus_Document $document
+     * @param Document $document
      * @return bool
      */
     public function isThesis($document)
@@ -516,7 +520,7 @@ class Frontdoor_Model_HtmlMetaTags
     }
 
     /**
-     * @param Opus_Document $document
+     * @param Document $document
      * @return bool
      */
     public function isWorkingPaper($document)
@@ -525,7 +529,7 @@ class Frontdoor_Model_HtmlMetaTags
     }
 
     /**
-     * @param Opus_Document $document
+     * @param Document $document
      * @return bool
      */
     public function isBook($document)
@@ -534,7 +538,7 @@ class Frontdoor_Model_HtmlMetaTags
     }
 
     /**
-     * @param Opus_Document $document
+     * @param Document $document
      * @return bool
      */
     public function isBookPart($document)
@@ -543,7 +547,7 @@ class Frontdoor_Model_HtmlMetaTags
     }
 
     /**
-     * @param $document Opus_Document
+     * @param $document Document
      * @return bool
      */
     public function isOther($document)

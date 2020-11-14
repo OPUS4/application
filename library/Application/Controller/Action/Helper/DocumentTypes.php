@@ -30,14 +30,13 @@
  * @author      Michael Lang <lang@zib.de>
  * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
  * Helper class for getting document types and template names.
  *
  */
-class Application_Controller_Action_Helper_DocumentTypes extends Zend_Controller_Action_Helper_Abstract
+class Application_Controller_Action_Helper_DocumentTypes extends \Zend_Controller_Action_Helper_Abstract
 {
 
     /**
@@ -76,7 +75,7 @@ class Application_Controller_Action_Helper_DocumentTypes extends Zend_Controller
      */
     public function __construct()
     {
-        $this->_config = Zend_Registry::get('Zend_Config');
+        $this->_config = \Zend_Registry::get('Zend_Config');
     }
 
     /**
@@ -142,7 +141,7 @@ class Application_Controller_Action_Helper_DocumentTypes extends Zend_Controller
      * Returns DOMDocument for document type.
      *
      * @param string $documentType
-     * @return DOMDocument
+     * @return \DOMDocument
      * @throws Application_Exception if invalid documentType passed.
      */
     public function getDocument($documentType)
@@ -151,7 +150,7 @@ class Application_Controller_Action_Helper_DocumentTypes extends Zend_Controller
             throw new Application_Exception('Unable to load invalid document type "' . $documentType . '"');
         }
 
-        $dom = new DOMDocument();
+        $dom = new \DOMDocument();
         $dom->load($this->getPathForDocumentType($documentType));
 
         // clear libxml error buffer and enable user error handling
@@ -208,7 +207,7 @@ class Application_Controller_Action_Helper_DocumentTypes extends Zend_Controller
 
             $path = $this->_config->publish->path->documenttemplates;
 
-            if ($path instanceof Zend_Config) {
+            if ($path instanceof \Zend_Config) {
                 $path = $path->toArray();
             }
 
@@ -266,7 +265,7 @@ class Application_Controller_Action_Helper_DocumentTypes extends Zend_Controller
             throw new Application_Exception('Path to document types not configured.');
         }
 
-        if ($path instanceof Zend_Config) {
+        if ($path instanceof \Zend_Config) {
             return $path->toArray();
         } else {
             return $path;
@@ -402,7 +401,7 @@ class Application_Controller_Action_Helper_DocumentTypes extends Zend_Controller
         if (is_null($this->_errors)) {
             $this->_errors = [];
         }
-        $domDoc = new DOMDocument();
+        $domDoc = new \DOMDocument();
         $domDoc->load($this->getPathForDocumentType($documentType));
 
         libxml_clear_errors();
@@ -411,7 +410,7 @@ class Application_Controller_Action_Helper_DocumentTypes extends Zend_Controller
         try {
             $isValid = $domDoc->schemaValidate($this->getXmlSchemaPath());
             $this->_errors[$documentType] = libxml_get_errors();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->_errors[$documentType] = $e->getMessage();
             return 0;
         }
@@ -435,7 +434,7 @@ class Application_Controller_Action_Helper_DocumentTypes extends Zend_Controller
      */
     public function getXmlSchemaPath()
     {
-        $reflector = new ReflectionClass('Opus_Document');
+        $reflector = new \ReflectionClass('Opus\Document');
         return dirname($reflector->getFileName()) . DIRECTORY_SEPARATOR . 'Document' . DIRECTORY_SEPARATOR
             . 'documenttype.xsd';
     }

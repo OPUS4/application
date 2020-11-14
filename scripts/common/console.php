@@ -33,13 +33,15 @@
  * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
  * @copyright   Copyright (c) 2009-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
-$config = Zend_Registry::get('Zend_Config');
+// TODO integrate as command in opus4 tool
+// TODO add exit command
+
+$config = \Zend_Registry::get('Zend_Config');
 if (isset($config->security) && filter_var($config->security, FILTER_VALIDATE_BOOLEAN)) {
     // setup realm
-    $realm = Opus_Security_Realm::getInstance();
+    $realm = \Opus\Security\Realm::getInstance();
 }
 
 while (1) {

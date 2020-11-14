@@ -29,7 +29,6 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -37,7 +36,7 @@
  *
  * TODO IMPORTANT use setElementDecorators in form classes instead of adding decorators in element classes
  */
-class Application_Form_Element_Select extends Zend_Form_Element_Select implements Application_Form_IElement
+class Application_Form_Element_Select extends \Zend_Form_Element_Select implements Application_Form_IElement
 {
 
     /**
@@ -49,7 +48,7 @@ class Application_Form_Element_Select extends Zend_Form_Element_Select implement
     {
         parent::init();
 
-        $this->addPrefixPath('Application_Form_Decorator', 'Application/Form/Decorator', Zend_Form::DECORATOR);
+        $this->addPrefixPath('Application_Form_Decorator', 'Application/Form/Decorator', \Zend_Form::DECORATOR);
     }
 
     public function loadDefaultDecorators()

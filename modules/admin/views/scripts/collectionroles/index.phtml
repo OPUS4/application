@@ -52,7 +52,7 @@
     </thead>     
     
 <?php
-    $translator = Zend_Registry::get('Zend_Translate');
+    $translator = \Zend_Registry::get('Zend_Translate');
 
 foreach ($this->collectionRoles as $i => $collectionRole) :
     $translatelabel = 'default_collection_role_' . $collectionRole->getName();

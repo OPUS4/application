@@ -31,6 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\DnbInstitute;
+
 class Admin_Form_DnbInstituteTest extends ControllerTestCase
 {
 
@@ -40,7 +42,7 @@ class Admin_Form_DnbInstituteTest extends ControllerTestCase
     {
         $form = new Admin_Form_DnbInstitute();
 
-        $this->assertEquals(11, count($form->getElements()));
+        $this->assertCount(11, $form->getElements());
 
         $this->assertNotNull($form->getElement('Name'));
         $this->assertNotNull($form->getElement('Department'));
@@ -60,7 +62,7 @@ class Admin_Form_DnbInstituteTest extends ControllerTestCase
     {
         $form = new Admin_Form_DnbInstitute();
 
-        $model = new Opus_DnbInstitute();
+        $model = new DnbInstitute();
         $model->setName('TestName');
         $model->setDepartment('TestDepartment');
         $model->setAddress('TestAddress');
@@ -88,7 +90,7 @@ class Admin_Form_DnbInstituteTest extends ControllerTestCase
     {
         $form = new Admin_Form_DnbInstitute();
 
-        $model = new Opus_DnbInstitute(2);
+        $model = new DnbInstitute(2);
 
         $form->populateFromModel($model);
 
@@ -108,7 +110,7 @@ class Admin_Form_DnbInstituteTest extends ControllerTestCase
         $form->getElement('IsGrantor')->setChecked(true);
         $form->getElement('IsPublisher')->setChecked(false);
 
-        $model = new Opus_DnbInstitute();
+        $model = new DnbInstitute();
 
         $form->updateModel($model);
 

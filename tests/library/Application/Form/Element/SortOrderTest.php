@@ -70,7 +70,7 @@ class Application_Form_Element_SortOrderTest extends FormElementTestCase
 
     public function testMessagesTranslated()
     {
-        $translator = Zend_Registry::get('Zend_Translate');
+        $translator = \Zend_Registry::get('Zend_Translate');
 
         $this->assertTrue($translator->isTranslated('validation_error_int'));
         $this->assertTrue($translator->isTranslated('validation_error_negative_number'));

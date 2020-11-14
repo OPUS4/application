@@ -47,9 +47,9 @@ class Application_Configuration_MaxUploadSize
 
     public function getMaxUploadSizeInByte()
     {
-        $logger = Zend_Registry::get('Zend_Log');
+        $logger = \Zend_Registry::get('Zend_Log');
 
-        $config = Zend_Registry::get('Zend_Config');
+        $config = \Zend_Registry::get('Zend_Config');
         $maxFileSizeInt = intval($config->publish->maxfilesize);
         $logger->debug('publish.maxfilesize (Byte) = ' . $maxFileSizeInt);
 

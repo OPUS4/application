@@ -41,13 +41,13 @@ class Application_Form_Validate_IdentifierTest extends ControllerTestCase
 
     /**
      * Represents an validator-object for identifier-elements.
-     * @var Zend_Validate_Abstract
+     * @var \Zend_Validate_Abstract
      */
     private $_validator;
 
     /**
      * Form element providing type of identifier.
-     * @var Zend_Form_Element
+     * @var \Zend_Form_Element
      */
     private $_element;
 
@@ -60,7 +60,7 @@ class Application_Form_Validate_IdentifierTest extends ControllerTestCase
 
         $this->makeConfigurationModifiable();
 
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
             'identifier' => ['validation' => [
                 'isbn' => [
                     'class' => 'Opus\Validate\Isbn'
@@ -288,7 +288,7 @@ class Application_Form_Validate_IdentifierTest extends ControllerTestCase
      */
     public function testTranslationExists()
     {
-        $translate = Zend_Registry::get('Zend_Translate');
+        $translate = \Zend_Registry::get('Zend_Translate');
         $config = Application_Configuration::getInstance()->getConfig();
         $validators = $config->identifier->validation->toArray();
         foreach ($validators as $key => $val) {

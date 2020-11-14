@@ -27,11 +27,13 @@
  * @category    Application
  * @package     Form_Validate
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class Application_Form_Validate_CollectionRoleNameUnique extends Zend_Validate_Abstract
+
+use Opus\CollectionRole;
+
+class Application_Form_Validate_CollectionRoleNameUnique extends \Zend_Validate_Abstract
 {
 
     const NAME_NOT_UNIQUE = 'notUnique';
@@ -49,7 +51,7 @@ class Application_Form_Validate_CollectionRoleNameUnique extends Zend_Validate_A
      *
      * @param  mixed $value
      * @return boolean
-     * @throws Zend_Validate_Exception If validation of $value is impossible
+     * @throws \Zend_Validate_Exception If validation of $value is impossible
      */
     public function isValid($value, $context = null)
     {
@@ -77,10 +79,10 @@ class Application_Form_Validate_CollectionRoleNameUnique extends Zend_Validate_A
     /**
      * Holt CollectionRole mit Identifier.
      * @param $identifier
-     * @return Opus_CollectionRole
+     * @return CollectionRole
      */
     protected function _getModel($identifier)
     {
-        return Opus_CollectionRole::fetchByName($identifier);
+        return CollectionRole::fetchByName($identifier);
     }
 }

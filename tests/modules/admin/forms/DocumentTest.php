@@ -30,6 +30,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Document;
+use Opus\Title;
+
 /**
  * Unit Tests für Metadaten-Formular Klasse.
  */
@@ -72,7 +75,7 @@ class Admin_Form_DocumentTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document();
 
-        $document = new Opus_Document(146);
+        $document = Document::get(146);
 
         $form->populateFromModel($document);
 
@@ -86,7 +89,7 @@ class Admin_Form_DocumentTest extends ControllerTestCase
 
     public function testGetInstanceFromPost()
     {
-        $document = new Opus_Document(146);
+        $document = Document::get(146);
 
         $post = [];
 
@@ -150,7 +153,7 @@ class Admin_Form_DocumentTest extends ControllerTestCase
         $form = new Admin_Form_Document();
 
         $document = $this->createTestDocument();
-        $document->addTitleMain(new Opus_Title());
+        $document->addTitleMain(new Title());
 
         $form->populateFromModel($document);
 
@@ -186,7 +189,7 @@ class Admin_Form_DocumentTest extends ControllerTestCase
         $form = new Admin_Form_Document();
 
         $document = $this->createTestDocument();
-        $document->addTitleMain(new Opus_Title());
+        $document->addTitleMain(new Title());
 
         $form->populateFromModel($document);
 
@@ -226,7 +229,7 @@ class Admin_Form_DocumentTest extends ControllerTestCase
         $form = new Admin_Form_Document();
 
         $document = $this->createTestDocument();
-        $document->addTitleMain(new Opus_Title());
+        $document->addTitleMain(new Title());
 
         $form->populateFromModel($document);
 
@@ -266,8 +269,8 @@ class Admin_Form_DocumentTest extends ControllerTestCase
         $form = new Admin_Form_Document();
 
         $document = $this->createTestDocument();
-        $document->addTitleMain(new Opus_Title());
-        $document->addTitleMain(new Opus_Title());
+        $document->addTitleMain(new Title());
+        $document->addTitleMain(new Title());
 
         $form->populateFromModel($document);
 
@@ -320,7 +323,7 @@ class Admin_Form_DocumentTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document();
 
-        $document = new Opus_Document(146);
+        $document = Document::get(146);
 
         $form->populateFromModel($document);
         $form->prepareRenderingAsView();
@@ -348,7 +351,7 @@ class Admin_Form_DocumentTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document();
 
-        $document = new Opus_Document(200);
+        $document = Document::get(200);
 
         $form->populateFromModel($document);
         $form->prepareRenderingAsView();
@@ -383,7 +386,7 @@ class Admin_Form_DocumentTest extends ControllerTestCase
 
     protected function getHash($form)
     {
-        $session = new Zend_Session_Namespace('testing');
+        $session = new \Zend_Session_Namespace('testing');
 
         $hashElement = $form->getSubForm('Actions')->getElement('OpusHash');
         $hashElement->setSession($session);

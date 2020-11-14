@@ -29,7 +29,6 @@
  * @author      Sascha Szott
  * @copyright   Copyright (c) 2016
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 class Sword_Model_ServiceDocument
 {
@@ -50,7 +49,7 @@ class Sword_Model_ServiceDocument
 
     public function __construct($fullUrl)
     {
-        $this->config = Zend_Registry::get('Zend_Config');
+        $this->config = \Zend_Registry::get('Zend_Config');
         $this->fullUrl = $fullUrl;
         $this->initServiceDocument();
     }

@@ -30,6 +30,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Document;
+use Opus\TitleAbstract;
+
 /**
  * Unit Tests fuer Unterformular fuer Zusammenfassungen.
  */
@@ -52,7 +55,7 @@ class Admin_Form_Document_AbstractTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Abstract();
 
-        $doc = new Opus_Document(146);
+        $doc = Document::get(146);
 
         $abstracts = $doc->getTitleAbstract();
 
@@ -74,7 +77,7 @@ class Admin_Form_Document_AbstractTest extends ControllerTestCase
         $form->getElement('Language')->setValue('eng');
         $form->getElement('Value')->setValue('Test Zusammenfassung!');
 
-        $abstract = new Opus_TitleAbstract();
+        $abstract = new TitleAbstract();
 
         $form->updateModel($abstract);
 
@@ -86,7 +89,7 @@ class Admin_Form_Document_AbstractTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Abstract();
 
-        $doc = new Opus_Document(146);
+        $doc = Document::get(146);
 
         $abstracts = $doc->getTitleAbstract();
 

@@ -69,7 +69,7 @@ class Application_Form_Element_CollectionDisplayFormatTest extends FormElementTe
 
     public function testOptionsTranslated()
     {
-        $translator = Zend_Registry::get('Zend_Translate');
+        $translator = \Zend_Registry::get('Zend_Translate');
 
         foreach ($this->keys as $key) {
             $this->assertTrue($translator->isTranslated($key), "Key '$key' not translated.");

@@ -47,8 +47,8 @@ class Admin_Model_Option extends Application_Model_Abstract
 
     /**
      * Admin_Model_Option constructor.
-     * @param $name Name of option
-     * @param $config Parameters for option
+     * @param $name string Name of option
+     * @param $config array Parameters for option
      */
     public function __construct($name, $config)
     {

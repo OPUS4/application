@@ -123,7 +123,7 @@ class Application_Export_ExportService extends Application_Model_Abstract
     /**
      * Returns default parameters for plugins.
      *
-     * @return array|Zend_Config
+     * @return array|\Zend_Config
      */
     public function getDefaults()
     {
@@ -133,7 +133,7 @@ class Application_Export_ExportService extends Application_Model_Abstract
             if (isset($config->plugins->export->default)) {
                 $this->_defaults = $config->plugins->export->default;
             } else {
-                $this->_defaults = new Zend_Config([]);
+                $this->_defaults = new \Zend_Config([]);
             }
         }
 

@@ -30,7 +30,6 @@
  * @author      Thoralf Klein <thoralf.klein@zib.de>
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 // Saving start time for profiling.
@@ -57,14 +56,17 @@ set_include_path(implode(PATH_SEPARATOR, [
 require_once 'autoload.php';
 require_once 'opus-php-compatibility.php';
 
+// TODO OPUSVIER-4420 remove after switching to Laminas/ZF3
+require_once APPLICATION_PATH . '/vendor/opus4-repo/framework/library/OpusDb/Mysqlutf8.php';
+
 // Zend_Application
-$config = new Zend_Config_Ini(
+$config = new \Zend_Config_Ini(
     APPLICATION_PATH . '/application/configs/application.ini',
     APPLICATION_ENV,
     ['allowModifications' => true]
 );
 
-$localConfig = new Zend_Config_Ini(
+$localConfig = new \Zend_Config_Ini(
     APPLICATION_PATH . '/application/configs/config.ini',
     APPLICATION_ENV,
     ['allowModifications' => true]
@@ -74,18 +76,18 @@ $config->merge($localConfig);
 
 // configuration file that is modified via application user interface
 if (is_readable(APPLICATION_PATH . '/application/configs/config.xml')) {
-    $onlineConfig = new Zend_Config_Xml(
+    $onlineConfig = new \Zend_Config_Xml(
         APPLICATION_PATH . '/application/configs/config.xml'
     );
     $config->merge($onlineConfig);
 }
 
 // Create application, bootstrap, and run
-$application = new Zend_Application(APPLICATION_ENV, $config);
+$application = new \Zend_Application(APPLICATION_ENV, $config);
 
 try {
     $application->bootstrap()->run();
-} catch (Exception $e) {
+} catch (\Exception $e) {
     if (APPLICATION_ENV === 'production') {
         header("HTTP/1.0 500 Internal Server Error");
         echo '<b>OPUS 4</b>' . PHP_EOL;

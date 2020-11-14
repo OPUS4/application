@@ -31,6 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Database;
+
 /**
  * Class for performing updates of OPUS 4.
  *
@@ -72,14 +74,15 @@ class Application_Update extends Application_Update_PluginAbstract
             $configFiles[] = $consoleIniPath;
         }
 
-        $application = new Zend_Application(APPLICATION_ENV, ["config" => $configFiles]);
+        $application = new \Zend_Application(APPLICATION_ENV, ["config" => $configFiles]);
 
         // setup logging for updates
         $options = $application->mergeOptions($application->getOptions(), [
             'log' => [
                 'filename' => 'update.log',
                 'level' => 'INFO'
-            ]
+            ],
+            'updateInProgress' => true
         ]);
 
         $application->setOptions($options);
@@ -262,7 +265,7 @@ class Application_Update extends Application_Update_PluginAbstract
      */
     public function getVersion()
     {
-        $database = new Opus_Database();
+        $database = new Database();
 
         $pdo = $database->getPdo($database->getName());
 
@@ -299,7 +302,7 @@ class Application_Update extends Application_Update_PluginAbstract
             return;
         }
 
-        $database = new Opus_Database();
+        $database = new Database();
 
         try {
             $sql = "TRUNCATE TABLE `opus_version`; INSERT INTO `opus_version` (`version`) VALUES ($version);";

@@ -31,7 +31,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Application_View_Helper_LanguageImageExists extends Zend_View_Helper_Abstract
+class Application_View_Helper_LanguageImageExists extends \Zend_View_Helper_Abstract
 {
 
     /**

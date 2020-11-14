@@ -30,6 +30,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Account;
+
 /**
  * Basic unit tests for the Admin_AccountController class.
  *
@@ -46,8 +48,8 @@ class Admin_AccountControllerTest extends ControllerTestCase
         $accounts = ['wally', 'wally2'];
 
         foreach ($accounts as $login) {
-            $account = Opus_Account::fetchAccountByLogin($login);
-            if ($account instanceof Opus_Account) {
+            $account = Account::fetchAccountByLogin($login);
+            if ($account instanceof Account) {
                 $account->delete();
             }
         }
@@ -156,7 +158,7 @@ class Admin_AccountControllerTest extends ControllerTestCase
         $this->assertController('account');
         $this->assertAction('new');
         $this->assertRedirect();
-        $this->assertNotNull(new Opus_Account(null, null, 'wally'));
+        $this->assertNotNull(new Account(null, null, 'wally'));
     }
 
     public function testCreateActionCancel()
@@ -201,7 +203,7 @@ class Admin_AccountControllerTest extends ControllerTestCase
      */
     public function testUpdateAction()
     {
-        $account = new Opus_Account(null, null, 'wally');
+        $account = new Account(null, null, 'wally');
         $id = $account->getId();
         $this->request
                 ->setMethod('POST')
@@ -222,7 +224,7 @@ class Admin_AccountControllerTest extends ControllerTestCase
         $this->assertController('account');
         $this->assertAction('edit');
         $this->assertRedirect();
-        $this->assertNotNull(new Opus_Account(null, null, 'wally2'));
+        $this->assertNotNull(new Account(null, null, 'wally2'));
     }
 
     public function testUpdateActionCancel()
@@ -244,7 +246,7 @@ class Admin_AccountControllerTest extends ControllerTestCase
      */
     public function testUpdateActionMissingInput()
     {
-        $account = new Opus_Account(null, null, 'wally2');
+        $account = new Account(null, null, 'wally2');
         $id = $account->getId();
         $this->request
                 ->setMethod('POST')
@@ -269,7 +271,7 @@ class Admin_AccountControllerTest extends ControllerTestCase
      */
     public function testUpdateActionChangePassword()
     {
-        $account = new Opus_Account(null, null, 'wally2');
+        $account = new Account(null, null, 'wally2');
         $id = $account->getId();
         $this->request
                 ->setMethod('POST')
@@ -292,7 +294,7 @@ class Admin_AccountControllerTest extends ControllerTestCase
         $this->assertController('account');
         $this->assertAction('edit');
         $this->assertRedirect();
-        $this->assertNotNull(new Opus_Account(null, null, 'wally2'));
+        $this->assertNotNull(new Account(null, null, 'wally2'));
     }
 
     /**
@@ -302,7 +304,7 @@ class Admin_AccountControllerTest extends ControllerTestCase
      */
     public function testDeleteAction()
     {
-        $account = new Opus_Account(null, null, 'wally2');
+        $account = new Account(null, null, 'wally2');
         $id = $account->getId();
         $this->request
             ->setMethod('POST')
@@ -316,13 +318,13 @@ class Admin_AccountControllerTest extends ControllerTestCase
         $this->assertAction('delete');
         $this->assertRedirect('/admin/account/index');
 
-        $this->setExpectedException('Opus_Security_Exception');
-        $this->assertNull(new Opus_Account(null, null, 'wally2'));
+        $this->setExpectedException('Opus\Security\SecurityException');
+        $this->assertNull(new Account(null, null, 'wally2'));
     }
 
     public function testDeleteActionDeleteSelf()
     {
-        $user = new Opus_Account();
+        $user = new Account();
         $user->setLogin('john');
         $user->setPassword('testpwd');
         $user->store();
@@ -334,25 +336,25 @@ class Admin_AccountControllerTest extends ControllerTestCase
         $this->assertAction('delete');
         $this->assertRedirect('/admin/account/index');
 
-        $user = new Opus_Account(null, null, 'john');
+        $user = new Account(null, null, 'john');
         $this->assertNotNull($user);
         $user->delete();
     }
 
     public function testDeleteActionDeleteAdmin()
     {
-        $user = new Opus_Account(null, null, 'admin');
+        $user = new Account(null, null, 'admin');
         $this->dispatch('/admin/account/delete/id/' . $user->getId());
         $this->assertController('account');
         $this->assertAction('delete');
         $this->assertRedirect('/admin/account/index');
-        $user = new Opus_Account(null, null, 'admin');
+        $user = new Account(null, null, 'admin');
         $this->assertNotNull($user);
     }
 
     public function testHideDeleteLinkForAdmin()
     {
-        $user = new Opus_Account(null, null, 'admin');
+        $user = new Account(null, null, 'admin');
         $this->dispatch('/admin/account');
         $this->assertResponseCode(200);
 
@@ -369,7 +371,7 @@ class Admin_AccountControllerTest extends ControllerTestCase
         $this->assertResponseCode(200, $this->getResponse()->getBody());
         $this->logoutUser();
 
-        $user = new Opus_Account(null, null, 'security4');
+        $user = new Account(null, null, 'security4');
 
         $this->assertQueryCount(
             "a[@href='" . $this->getRequest()->getBaseUrl()

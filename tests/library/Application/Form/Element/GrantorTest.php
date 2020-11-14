@@ -31,6 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\DnbInstitute;
+
 class Application_Form_Element_GrantorTest extends FormElementTestCase
 {
 
@@ -51,7 +53,7 @@ class Application_Form_Element_GrantorTest extends FormElementTestCase
     {
         $element = $this->getElement();
 
-        $grantors = Opus_DnbInstitute::getGrantors();
+        $grantors = DnbInstitute::getGrantors();
 
         $this->assertEquals(count($grantors), count($element->getMultiOptions()));
 
@@ -77,8 +79,8 @@ class Application_Form_Element_GrantorTest extends FormElementTestCase
 
         $optionCount = count($element->getMultiOptions());
 
-        $grantors = Opus_DnbInstitute::getGrantors();
-        $publishers = Opus_DnbInstitute::getPublishers();
+        $grantors = DnbInstitute::getGrantors();
+        $publishers = DnbInstitute::getPublishers();
 
         $nonGrantors = array_diff($publishers, $grantors);
 
@@ -107,7 +109,7 @@ class Application_Form_Element_GrantorTest extends FormElementTestCase
         $optionCount = count($element->getMultiOptions());
 
         // getting unused id for test
-        $institutes = Opus_DnbInstitute::getAll();
+        $institutes = DnbInstitute::getAll();
 
         $instituteIds = array_map(function ($item) {
             return $item->getId();
@@ -129,7 +131,7 @@ class Application_Form_Element_GrantorTest extends FormElementTestCase
     {
         $element = $this->getElement();
 
-        $grantors = Opus_DnbInstitute::getGrantors();
+        $grantors = DnbInstitute::getGrantors();
 
         $this->assertGreaterThan(0, count($grantors));
 

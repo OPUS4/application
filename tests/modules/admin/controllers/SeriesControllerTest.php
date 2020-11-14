@@ -33,6 +33,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Series;
+
 /**
  * Class Admin_SeriesControllerTest.
  *
@@ -51,12 +53,12 @@ class Admin_SeriesControllerTest extends CrudControllerTestCase
 
     public function getModels()
     {
-        return Opus_Series::getAllSortedBySortKey();
+        return Series::getAllSortedBySortKey();
     }
 
     public function createNewModel()
     {
-        $series = new Opus_Series();
+        $series = new Series();
 
         $series->setTitle('Testseries');
         $series->setInfobox('Infotext');
@@ -68,7 +70,7 @@ class Admin_SeriesControllerTest extends CrudControllerTestCase
 
     public function getModel($identifier)
     {
-        return new Opus_Series($identifier);
+        return new Series($identifier);
     }
 
     public function testShowAction()
@@ -93,7 +95,7 @@ class Admin_SeriesControllerTest extends CrudControllerTestCase
     {
         $this->dispatch('/admin/series/new');
 
-        $sortOrder = Opus_Series::getMaxSortKey() + 1;
+        $sortOrder = Series::getMaxSortKey() + 1;
 
         $this->assertXPath('//input[@type = "checkbox" and @checked = "checked"]');
         $this->assertXPath('//input[@name = "SortOrder" and @value = "' . $sortOrder .  '"]');
@@ -155,7 +157,7 @@ class Admin_SeriesControllerTest extends CrudControllerTestCase
 
         $this->assertEquals(
             $modelCount,
-            count(Opus_Series::getAllSortedBySortKey()),
+            count(Series::getAllSortedBySortKey()),
             'Es sollte keine neue Series geben.'
         );
     }
@@ -192,7 +194,7 @@ class Admin_SeriesControllerTest extends CrudControllerTestCase
         $this->assertRedirectTo('/admin/series/show/id/' . $seriesId);
         $this->verifyFlashMessage('controller_crud_save_success', self::MESSAGE_LEVEL_NOTICE);
 
-        $series = new Opus_Series($seriesId);
+        $series = new Series($seriesId);
 
         $this->assertEquals('ModifiedTitle', $series->getTitle());
         $this->assertEquals('ModifiedInfo', $series->getInfobox());
@@ -218,7 +220,7 @@ class Admin_SeriesControllerTest extends CrudControllerTestCase
         $this->dispatch('/admin/series/edit');
         $this->assertRedirectTo('/admin/series');
 
-        $series = new Opus_Series($seriesId);
+        $series = new Series($seriesId);
 
         $this->assertEquals('Testseries', $series->getTitle());
     }
@@ -239,7 +241,7 @@ class Admin_SeriesControllerTest extends CrudControllerTestCase
     {
         $this->dispatch('/admin/series');
 
-        $allSeries = Opus_Series::getAll();
+        $allSeries = Series::getAll();
 
         foreach ($allSeries as $series) {
             $seriesId = $series->getId();
@@ -255,7 +257,7 @@ class Admin_SeriesControllerTest extends CrudControllerTestCase
     {
         $this->dispatch('/admin/series');
 
-        $allSeries = Opus_Series::getAll();
+        $allSeries = Series::getAll();
 
         foreach ($allSeries as $series) {
             $seriesId = $series->getId();
@@ -271,7 +273,7 @@ class Admin_SeriesControllerTest extends CrudControllerTestCase
     {
         $this->dispatch('/admin/series');
 
-        $allSeries = Opus_Series::getAll();
+        $allSeries = Series::getAll();
 
         foreach ($allSeries as $series) {
             $seriesId = $series->getId();

@@ -30,7 +30,6 @@
  * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
  * @copyright   Copyright (c) 2009, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -38,6 +37,8 @@
  *
  * @category    Application
  * @package     Scripts
+ *
+ * TODO move this file to another location (it is used for testing)
  */
 class FakeSMTP
 {

@@ -44,8 +44,8 @@ class Application_Form_Decorator_FieldsetWithButtonsTest extends ControllerTestC
     {
         parent::setUp();
 
-        $this->form = new Zend_Form_SubForm();
-        $this->form->setView(new Zend_View());
+        $this->form = new \Zend_Form_SubForm();
+        $this->form->setView(new \Zend_View());
         $this->form->setLegend('Test');
 
         $this->decorator = new Application_Form_Decorator_FieldsetWithButtons();

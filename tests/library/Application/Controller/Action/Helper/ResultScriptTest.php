@@ -52,7 +52,7 @@ class Application_Controller_Action_Helper_ResultScriptTest extends ControllerTe
 
     public function testCustomScriptDoesNotExist()
     {
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
             'search' => ['result' => ['script' => 'result.phtml']]
         ]));
 
@@ -63,7 +63,7 @@ class Application_Controller_Action_Helper_ResultScriptTest extends ControllerTe
 
     public function testCustomScriptExists()
     {
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
             'search' => ['result' => ['script' => 'result.phtml']]
         ]));
 

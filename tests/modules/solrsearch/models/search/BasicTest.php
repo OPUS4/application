@@ -58,7 +58,7 @@ class Solrsearch_Model_Search_BasicTest extends ControllerTestCase
      */
     public function testGetRowsFromConfig()
     {
-        $config = Zend_Registry::get('Zend_Config');
+        $config = \Zend_Registry::get('Zend_Config');
         $oldParamRows = $config->searchengine->solr->numberOfDefaultSearchResults;
         $config->searchengine->solr->numberOfDefaultSearchResults = '1337';
 

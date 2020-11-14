@@ -62,7 +62,7 @@ class Application_Controller_Action_Helper_FileTypesTest extends ControllerTestC
 
     public function testMimeTypeAddedToBaseConfigurationFromApplicationIni()
     {
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
             'filetypes' => ['xml' => ['mimeType' => [
                 'text/xml', 'application/xml'
             ]]]
@@ -98,7 +98,7 @@ class Application_Controller_Action_Helper_FileTypesTest extends ControllerTestC
 
     public function testIsValidMimeTypeForExtensionWithMultipleTypes()
     {
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
             'filetypes' => ['xml' => ['mimeType' => [
                 'text/xml', 'application/xml'
             ]]]
@@ -110,7 +110,7 @@ class Application_Controller_Action_Helper_FileTypesTest extends ControllerTestC
 
     public function testIsValidMimeTypeForExtension()
     {
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
             'filetypes' => ['xml' => ['mimeType' => [
                 'text/xml', 'application/xml'
             ]]]
@@ -135,7 +135,7 @@ class Application_Controller_Action_Helper_FileTypesTest extends ControllerTestC
 
     public function testExtensionCaseInsensitive()
     {
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
             'filetypes' => ['XML' => ['mimeType' => 'text/xml']]
         ]));
 

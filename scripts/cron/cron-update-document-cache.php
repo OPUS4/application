@@ -30,7 +30,6 @@
  * @author      Edouard Simon <edouard.simon@zib.de>
  * @copyright   Copyright (c) 2011-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 define('APPLICATION_ENV', 'development');
@@ -38,26 +37,33 @@ define('APPLICATION_ENV', 'development');
 // Bootstrapping
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
-$opusDocCacheTable = new Opus_Db_DocumentXmlCache();
-$db = Zend_Registry::get('db_adapter');
+use Opus\Document;
+use Opus\DocumentFinder;
+use Opus\Db\DocumentXmlCache;
+use Opus\Model\Xml;
+use Opus\Model\Xml\Cache;
+use Opus\Model\Xml\Version1;
+
+$opusDocCacheTable = new DocumentXmlCache();
+$db = \Zend_Registry::get('db_adapter');
 //
 $select = $db->select();
 $select->from($opusDocCacheTable->info('name'), 'document_id');
 
-$docFinder = new Opus_DocumentFinder();
+$docFinder = new DocumentFinder();
 $docFinder->setSubSelectNotExists($select);
 $docIds = $docFinder->ids();
 
 echo "processing ".count($docIds)." documents\n";
 
 foreach ($docIds as $docId) {
-    $model = new Opus_Document($docId);
+    $model = Document::get($docId);
 
-    $cache = new Opus_Model_Xml_Cache;
+    $cache = new Cache();
 
     // xml version 1
-    $omx = new Opus_Model_Xml();
-    $omx->setStrategy(new Opus_Model_Xml_Version1)
+    $omx = new Xml();
+    $omx->setStrategy(new Version1())
         ->excludeEmptyFields()
         ->setModel($model)
         ->setXmlCache($cache);

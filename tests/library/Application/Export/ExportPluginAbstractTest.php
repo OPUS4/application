@@ -39,7 +39,7 @@ class Application_Export_ExportPluginAbstractTest extends ControllerTestCase
     public function testIsAccessRestrictedDefaultDisabled()
     {
         $stub = $this->getMockForAbstractClass('Application_Export_ExportPluginAbstract');
-        $stub->setConfig(new Zend_Config([]));
+        $stub->setConfig(new \Zend_Config([]));
         $this->assertFalse($stub->isAccessRestricted());
     }
 
@@ -83,9 +83,9 @@ class Application_Export_ExportPluginAbstractTest extends ControllerTestCase
 
     private function setAdminOnly($optionValue)
     {
-        Zend_Registry::set(
+        \Zend_Registry::set(
             'Zend_Config',
-            new Zend_Config(['adminOnly' => $optionValue])
+            new \Zend_Config(['adminOnly' => $optionValue])
         );
     }
 }

@@ -34,7 +34,7 @@
 /**
  * View helper for translations modifying behaviour of base class.
  */
-class Application_View_Helper_TranslateLanguage extends Zend_View_Helper_Translate
+class Application_View_Helper_TranslateLanguage extends \Zend_View_Helper_Translate
 {
 
     /**
@@ -52,7 +52,7 @@ class Application_View_Helper_TranslateLanguage extends Zend_View_Helper_Transla
      */
     public function translateLanguage($langId)
     {
-        $translator = Zend_Registry::get(Application_Translate::REGISTRY_KEY);
+        $translator = \Zend_Registry::get(Application_Translate::REGISTRY_KEY);
         return $translator->translateLanguage($langId);
     }
 }

@@ -35,6 +35,8 @@
  * TODO verify previous checkbox results
  */
 
+use Opus\Document;
+
 /**
  * Controller handles transitions of documents between states.
  *
@@ -238,7 +240,7 @@ class Admin_WorkflowController extends Application_Controller_Action
     /**
      * Returns form for asking yes/no question like 'Delete file?'.
      *
-     * @param Opus_Document $document
+     * @param Document $document
      * @param string $action Target action that needs to be confirmed
      * @return Admin_Form_YesNoForm
      */

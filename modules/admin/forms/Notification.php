@@ -34,6 +34,9 @@
  * TODO adjust styling of sub form
  * TODO unit testing
  */
+
+use Opus\Document;
+
 class Admin_Form_Notification extends Admin_Form_AbstractDocumentSubForm
 {
 
@@ -62,8 +65,8 @@ class Admin_Form_Notification extends Admin_Form_AbstractDocumentSubForm
      * add a checkbox for each PersonSubmitter and PersonAuthor (used to select
      * recipients for publish notification email)
      *
-     * @param Opus_Document $document
-     * @param Zend_Form $form
+     * @param Document $document
+     * @param \Zend_Form $form
      *
      *
      * TODO css notification-option, option-not-available

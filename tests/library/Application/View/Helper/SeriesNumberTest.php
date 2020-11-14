@@ -31,6 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Series;
+
 class Application_View_Helper_SeriesNumberTest extends ControllerTestCase
 {
 
@@ -48,7 +50,7 @@ class Application_View_Helper_SeriesNumberTest extends ControllerTestCase
     public function testSeriesNumberForLinkedDocument()
     {
         $document = $this->getDocument(146);
-        $series = new Opus_Series(1);
+        $series = new Series(1);
 
         $this->assertEquals('5/5', $this->_helper->seriesNumber($document, $series));
     }
@@ -56,7 +58,7 @@ class Application_View_Helper_SeriesNumberTest extends ControllerTestCase
     public function testSeriesNumberForNotLinkedDocument()
     {
         $document = $this->getDocument(146);
-        $series = new Opus_Series(2);
+        $series = new Series(2);
 
         $this->assertEquals('', $this->_helper->seriesNumber($document, $series));
     }
@@ -64,7 +66,7 @@ class Application_View_Helper_SeriesNumberTest extends ControllerTestCase
     public function testSeriesNumberEscaped()
     {
         $document = $this->createTestDocument();
-        $series = new Opus_Series(5);
+        $series = new Series(5);
 
         $document->addSeries($series)->setNumber('<h>XIII</h>');
         $document->store();

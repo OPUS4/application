@@ -31,6 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\EnrichmentKey;
+
 /**
  * Formularelement für die Auswahl eines EnrichmentKeys.
  */
@@ -42,7 +44,7 @@ class Application_Form_Element_EnrichmentKey extends Application_Form_Element_Se
         parent::init();
 
         // load enrichment keys only once in order to save database queries
-        $options = Opus_EnrichmentKey::getAll(false);
+        $options = EnrichmentKey::getAll(false);
 
         $values = [];
 
@@ -70,7 +72,7 @@ class Application_Form_Element_EnrichmentKey extends Application_Form_Element_Se
             }
         }
 
-        $validator = new Zend_Validate_InArray($values);
+        $validator = new \Zend_Validate_InArray($values);
         $validator->setMessage('validation_error_unknown_enrichmentkey');
         $this->addValidator($validator);
     }

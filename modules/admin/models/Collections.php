@@ -31,6 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\CollectionRole;
+
 class Admin_Model_Collections extends Application_Model_Abstract
 {
 
@@ -46,7 +48,7 @@ class Admin_Model_Collections extends Application_Model_Abstract
     {
         $collections = [];
 
-        $collectionRoles = Opus_CollectionRole::fetchAll();
+        $collectionRoles = CollectionRole::fetchAll();
 
         foreach ($collectionRoles as $collectionRole) {
             $rootCollection = $collectionRole->getRootCollection();

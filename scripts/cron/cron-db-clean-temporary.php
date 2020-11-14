@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -30,20 +29,22 @@
  * @author      Thoralf Klein <thoralf.klein@zib.de>
  * @copyright   Copyright (c) 2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 // Bootstrapping
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
+use Opus\Document;
+use Opus\DocumentFinder;
+
 $date = new DateTime();
 $dateString = $date->sub(new DateInterval('P2D'))->format('Y-m-d');
-$f = new Opus_DocumentFinder();
+$f = new DocumentFinder();
 $f->setServerState('temporary')
   ->setServerDateModifiedBefore($dateString);
 
 foreach ($f->ids() as $id) {
-    $d = new Opus_Document($id);
+    $d = Document::get($id);
     if ($d->getServerState() == 'temporary') {
         echo "deleting document: $id\n";
         $d->deletePermanent();

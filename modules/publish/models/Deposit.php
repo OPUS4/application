@@ -30,7 +30,26 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- *
+ */
+
+use Opus\Collection;
+use Opus\Date;
+use Opus\DnbInstitute;
+use Opus\Document;
+use Opus\Enrichment;
+use Opus\Identifier;
+use Opus\Licence;
+use Opus\Note;
+use Opus\Person;
+use Opus\Series;
+use Opus\Subject;
+use Opus\Reference;
+use Opus\Title;
+use Opus\Model\ModelException;
+use Opus\Model\NotFoundException;
+use Opus\Model\Dependent\Link\DocumentPerson;
+
+/**
  * TODO get logger from Application_Configuration if not provided
  */
 class Publish_Model_Deposit
@@ -55,8 +74,8 @@ class Publish_Model_Deposit
         $this->_docId = $docId;
 
         try {
-            $this->_document = new Opus_Document($this->_docId);
-        } catch (Opus_Model_NotFoundException $e) {
+            $this->_document = Document::get($this->_docId);
+        } catch (NotFoundException $e) {
             $this->_log->err('Could not find document ' . $this->_docId . ' in database');
             throw new Publish_Model_FormDocumentNotFoundException();
         }
@@ -157,7 +176,7 @@ class Publish_Model_Deposit
             try {
                 $addedValue = $this->_document->$function();
                 $addedValue->setValue($dataValue);
-            } catch (Opus_Model_Exception $e) {
+            } catch (ModelException $e) {
                 $this->_log->err(
                     "could not add field $dataKey with value $dataValue to document " . $this->_docId . " : "
                     . $e->getMessage()
@@ -176,7 +195,7 @@ class Publish_Model_Deposit
             $function = "set" . $dataKey;
             try {
                 $this->_document->$function($dataValue);
-            } catch (Opus_Model_Exception $e) {
+            } catch (ModelException $e) {
                 $this->_log->err(
                     "could not set field $dataKey with value $dataValue to document " . $this->_docId . " : "
                     . $e->getMessage()
@@ -255,7 +274,7 @@ class Publish_Model_Deposit
 
     /**
      * @param String $date
-     * @return Opus_Date
+     * @return Date
      */
     public function castStringToOpusDate($date)
     {
@@ -278,8 +297,8 @@ class Publish_Model_Deposit
 
             $addFunction = 'add' . $type;
         try {
-            $person = $this->_document->$addFunction(new Opus_Person());
-        } catch (Opus_Model_Exception $e) {
+            $person = $this->_document->$addFunction(new Person());
+        } catch (ModelException $e) {
             $this->_log->err(
                 "could not add person of type $type to document " . $this->_docId . " : " . $e->getMessage()
             );
@@ -303,11 +322,11 @@ class Publish_Model_Deposit
 
     /**
      * Method stores attributes like name or email for a given person object.
-     * @param <Opus_Model_Dependent_LinkDocumentPerson> $person - given person object
-     * @param <String> $personType - type of person (editor, author etc.)
-     * @param <String> $attribute - the value to store
-     * @param <String> $attributeType - type of attribute (first name, email etc.)
-     * @param <Int> $counter - number in case of more than one person per type
+     * @param DocumentPerson $person - given person object
+     * @param string $personType - type of person (editor, author etc.)
+     * @param string $attribute - the value to store
+     * @param string $attributeType - type of attribute (first name, email etc.)
+     * @param int $counter - number in case of more than one person per type
      */
     private function storePersonAttribute($person, $personType, $attribute, $attributeType, $counter)
     {
@@ -367,7 +386,7 @@ class Publish_Model_Deposit
         $type = 'Title' . $this->getTitleType($dataKey);
         $this->_log->debug("Title type:" . $type);
         $addFunction = 'add' . $type;
-        $title = new Opus_Title();
+        $title = new Title();
 
         $counter = $this->getCounter($dataKey);
         $this->_log->debug("counter: " . $counter);
@@ -375,7 +394,7 @@ class Publish_Model_Deposit
         $this->storeTitleLanguage($title, $type, 'Language', $counter);
         try {
             $this->_document->$addFunction($title);
-        } catch (Opus_Model_Exception $e) {
+        } catch (ModelException $e) {
             $this->_log->err(
                 "could not add title of type $type to document " . $this->_docId . " : " . $e->getMessage()
             );
@@ -424,11 +443,11 @@ class Publish_Model_Deposit
 
     /**
      * method to prepare a subject object for storing
-     * @param <Opus_Document> $this->document
-     * @param <Array> $formValues
-     * @param <String> $dataKey current Element of formValues
-     * @param <Array> $externalFields
-     * @return <Array> $formValues
+     * @param Document $this->document
+     * @param array $formValues
+     * @param string $dataKey current Element of formValues
+     * @param array $externalFields
+     * @return array $formValues
      */
     private function storeSubjectObject($dataKey, $dataValue)
     {
@@ -437,7 +456,7 @@ class Publish_Model_Deposit
         $counter = $this->getCounter($dataKey);
         $this->_log->debug("counter: " . $counter);
 
-        $subject = new Opus_Subject();
+        $subject = new Subject();
 
         if ($type === 'Swd') {
             $subject->setLanguage('deu');
@@ -453,7 +472,7 @@ class Publish_Model_Deposit
         $subject->setType(strtolower($type));
         try {
             $this->_document->addSubject($subject);
-        } catch (Opus_Model_Exception $e) {
+        } catch (ModelException $e) {
             $this->_log->err(
                 "could not add subject of type $dataKey with value $dataValue to document " . $this->_docId . " : "
                 . $e->getMessage()
@@ -468,12 +487,12 @@ class Publish_Model_Deposit
      */
     private function storeNoteObject($dataValue)
     {
-        $note = new Opus_Note();
+        $note = new Note();
         $note->setMessage($dataValue);
         $note->setVisibility("private");
         try {
             $this->_document->addNote($note);
-        } catch (Opus_Model_Exception $e) {
+        } catch (ModelException $e) {
             $this->_log->err(
                 "could not add note with message $dataValue to document " . $this->_docId . " : " . $e->getMessage()
             );
@@ -488,15 +507,15 @@ class Publish_Model_Deposit
     private function storeCollectionObject($dataValue)
     {
         try {
-            $collection = new Opus_Collection($dataValue);
-        } catch (Opus_Model_NotFoundException $e) {
+            $collection = new Collection($dataValue);
+        } catch (NotFoundException $e) {
             $this->_log->err('Could not find collection #' . $dataValue . ' in database');
             throw new Publish_Model_Exception();
         }
 
         try {
             $this->_document->addCollection($collection);
-        } catch (Opus_Model_Exception $e) {
+        } catch (ModelException $e) {
             $this->_log->err(
                 "could not add collection #$dataValue to document " . $this->_docId . " : " . $e->getMessage()
             );
@@ -517,15 +536,15 @@ class Publish_Model_Deposit
         $this->_log->debug('Deposit: ' . $dataKey . ' and ' . $id . ' = ' . $seriesId);
 
         try {
-            $s = new Opus_Series($seriesId);
-        } catch (Opus_Model_Exception $e) {
+            $s = new Series($seriesId);
+        } catch (ModelException $e) {
             $this->_log->err('Could not find series #' . $dataValue . ' in database');
             throw new Publish_Model_Exception();
         }
 
         try {
             $this->_document->addSeries($s)->setNumber($dataValue);
-        } catch (Opus_Model_Exception $e) {
+        } catch (ModelException $e) {
             $this->_log->err(
                 "could not add series #$seriesId with number $dataValue to document " . $this->_docId . " : "
                 . $e->getMessage()
@@ -541,15 +560,15 @@ class Publish_Model_Deposit
     private function storeLicenceObject($dataValue)
     {
         try {
-            $licence = new Opus_Licence($dataValue);
-        } catch (Opus_Model_Exception $e) {
+            $licence = new Licence($dataValue);
+        } catch (ModelException $e) {
             $this->_log->err('Could not find licence #' . $dataValue . ' in database');
             throw new Publish_Model_Exception();
         }
 
         try {
             $this->_document->addLicence($licence);
-        } catch (Opus_Model_Exception $e) {
+        } catch (ModelException $e) {
             $this->_log->err(
                 "could not add licence #$dataValue to document " . $this->_docId . " : " . $e->getMessage()
             );
@@ -565,8 +584,8 @@ class Publish_Model_Deposit
     private function storeThesisObject($dataValue, $grantor = false)
     {
         try {
-            $thesis = new Opus_DnbInstitute($dataValue);
-        } catch (Opus_Model_Exception $e) {
+            $thesis = new DnbInstitute($dataValue);
+        } catch (ModelException $e) {
             $this->_log->err('Could not find DnbInstitute #' . $dataValue . ' in database');
             throw new Publish_Model_Exception();
         }
@@ -577,7 +596,7 @@ class Publish_Model_Deposit
             } else {
                 $this->_document->addThesisPublisher($thesis);
             }
-        } catch (Opus_Model_Exception $e) {
+        } catch (ModelException $e) {
             $function = ($grantor) ? 'grantor' : 'publisher';
             $this->_log->err(
                 "could not add DnbInstitute #$dataValue as $function to document " . $this->_docId . " : "
@@ -589,7 +608,7 @@ class Publish_Model_Deposit
 
     private function storeIdentifierObject($dataKey, $dataValue)
     {
-        $identifier = new Opus_Identifier();
+        $identifier = new Identifier();
         $identifier->setValue($dataValue);
         try {
             if (strstr($dataKey, 'Old')) {
@@ -627,7 +646,7 @@ class Publish_Model_Deposit
             } elseif (strstr($dataKey, 'Pubmed')) {
                 $this->_document->addIdentifierPubmed($identifier);
             }
-        } catch (Opus_Model_Exception $e) {
+        } catch (ModelException $e) {
             $this->_log->err(
                 "could not add identifier of type $dataKey with value $dataValue to document " . $this->_docId . " : "
                 . $e->getMessage()
@@ -645,7 +664,7 @@ class Publish_Model_Deposit
         //TODO: probably no valid storing possible because a label is missing
         //a reference should be a new datatype with implicit fields value and label
 
-        $reference = new Opus_Reference();
+        $reference = new Reference();
         $reference->setValue($dataValue);
         $reference->setLabel("no Label given");
         try {
@@ -668,7 +687,7 @@ class Publish_Model_Deposit
             } elseif (strstr($dataKey, 'SplashUrl')) {
                 $this->_document->addReferenceSplashUrl($reference);
             }
-        } catch (Opus_Model_Exception $e) {
+        } catch (ModelException $e) {
             $this->_log->err(
                 "could not add reference of type $dataKey with value $dataValue to document " . $this->_docId . " : "
                 . $e->getMessage()
@@ -688,13 +707,13 @@ class Publish_Model_Deposit
         $this->_log->debug("try to store " . $dataKey . " with id: " . $dataValue);
         $keyName = str_replace('Enrichment', '', $dataKey);
 
-        $enrichment = new Opus_Enrichment();
+        $enrichment = new Enrichment();
         $enrichment->setValue($dataValue);
         $enrichment->setKeyName($keyName);
 
         try {
             $this->_document->addEnrichment($enrichment);
-        } catch (Opus_Model_Exception $e) {
+        } catch (ModelException $e) {
             $this->_log->err(
                 "could not add enrichment key $keyName with value $dataValue to document "
                 . $this->_docId . " : " . $e->getMessage()

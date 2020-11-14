@@ -43,11 +43,11 @@ class Application_Form_Element_IpAddress extends Application_Form_Element_Text
     {
         parent::init();
 
-        $validator = new Zend_Validate_Ip(['allowipv4' => true, 'allowipv6' => false]);
+        $validator = new \Zend_Validate_Ip(['allowipv4' => true, 'allowipv6' => false]);
         $validator->setMessages(
             [
-                Zend_Validate_Ip::INVALID => 'validation_error_ip_invalid',
-                Zend_Validate_Ip::NOT_IP_ADDRESS => 'validation_error_ip_not_address',
+                \Zend_Validate_Ip::INVALID => 'validation_error_ip_invalid',
+                \Zend_Validate_Ip::NOT_IP_ADDRESS => 'validation_error_ip_not_address',
             ]
         );
         $this->setValidators([$validator]);

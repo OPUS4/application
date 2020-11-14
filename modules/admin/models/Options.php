@@ -61,7 +61,7 @@ class Admin_Model_Options extends Application_Model_Abstract
     public function __construct($config = null)
     {
         if (! is_null($config) && is_array($config)) {
-            $this->config = new Zend_Config($config);
+            $this->config = new \Zend_Config($config);
         }
     }
 
@@ -88,7 +88,7 @@ class Admin_Model_Options extends Application_Model_Abstract
     public function getConfig()
     {
         if (is_null($this->config)) {
-            $this->config = new Zend_Config_Json(APPLICATION_PATH . self::OPTIONS_CONFIG_FILE);
+            $this->config = new \Zend_Config_Json(APPLICATION_PATH . self::OPTIONS_CONFIG_FILE);
         }
 
         return $this->config;

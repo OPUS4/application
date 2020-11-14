@@ -44,7 +44,7 @@ class Admin_Model_DoiStatus
     /**
      * Admin_Model_DoiStatus constructor.
      *
-     * @param Opus_Document $doc
+     * @param Document $doc
      */
     public function __construct($doc, $doi)
     {

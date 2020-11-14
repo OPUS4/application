@@ -29,8 +29,11 @@
  * @author      Sascha Szott
  * @copyright   Copyright (c) 2016
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
+use Opus\Collection;
+use Opus\CollectionRole;
+
 class Sword_Model_ImportCollection
 {
 
@@ -40,8 +43,8 @@ class Sword_Model_ImportCollection
 
     public function __construct()
     {
-        $logger = Zend_Registry::get('Zend_Log');
-        $config = Zend_Registry::get('Zend_Config');
+        $logger = \Zend_Registry::get('Zend_Log');
+        $config = \Zend_Registry::get('Zend_Config');
 
         $collectionNumber = $config->sword->collection->default->number;
         if (trim($collectionNumber) == '') {
@@ -49,13 +52,13 @@ class Sword_Model_ImportCollection
             return;
         }
 
-        $collectionRole = Opus_CollectionRole::fetchByName('Import');
+        $collectionRole = CollectionRole::fetchByName('Import');
         if (is_null($collectionRole)) {
             $logger->warn('collection role "Import" does not exist -- documents that are imported via SWORD API will not be associated to OPUS collection');
             return;
         }
 
-        $collectionList = Opus_Collection::fetchCollectionsByRoleNumber($collectionRole->getId(), $collectionNumber);
+        $collectionList = Collection::fetchCollectionsByRoleNumber($collectionRole->getId(), $collectionNumber);
         if (empty($collectionList)) {
             $logger->warn('could not find collection with number ' . $collectionNumber . ' and collection role ' . $collectionRole->getId() . ' -- documents that are imported via SWORD API will not be associated to OPUS collection');
             return;

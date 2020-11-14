@@ -31,6 +31,11 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Collection;
+use Opus\CollectionRole;
+use Opus\Licence;
+use Opus\Series;
+
 class Publish_Model_ValidationTest extends ControllerTestCase
 {
 
@@ -41,7 +46,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase
     public function setUp()
     {
         parent::setUp();
-        $this->session = new Zend_Session_Namespace();
+        $this->session = new \Zend_Session_Namespace();
     }
 
     public function testValidationWithInvalidDatatype()
@@ -212,7 +217,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase
      */
     public function testSortOrderOfSelectOptionForLicence()
     {
-        $licences = Opus_Licence::getAll();
+        $licences = Licence::getAll();
 
         $activeLicences = [];
 
@@ -267,7 +272,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase
     {
         $val = new Publish_Model_Validation('Collection', $this->session, 'ddc');
 
-        $collectionRole = Opus_CollectionRole::fetchByName($val->collectionRole);
+        $collectionRole = CollectionRole::fetchByName($val->collectionRole);
         $visibleFlag = $collectionRole->getVisible();
         $collectionRole->setVisible(0);
         $collectionRole->store();
@@ -283,7 +288,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase
     {
         $val = new Publish_Model_Validation('Collection', $this->session, 'ddc');
 
-        $collectionRole = Opus_CollectionRole::fetchByName($val->collectionRole);
+        $collectionRole = CollectionRole::fetchByName($val->collectionRole);
         $visibleFlag = $collectionRole->getVisible();
         $collectionRole->setVisible(1);
         $collectionRole->store();
@@ -332,7 +337,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase
         $val = new Publish_Model_Validation('Series', $this->session);
         $values = $val->selectOptions();
 
-        $series = Opus_Series::getAllSortedBySortKey();
+        $series = Series::getAllSortedBySortKey();
 
         $visibleSeries = [];
 
@@ -356,7 +361,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase
      */
     public function testCollectionFieldVisiblePublish()
     {
-        $collectionRole = new Opus_CollectionRole();
+        $collectionRole = new CollectionRole();
         $collectionRole->setName("test");
         $collectionRole->setOaiName("test");
         $collectionRole->setDisplayBrowsing("Name");
@@ -368,7 +373,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase
         $rootCollection = $collectionRole->addRootCollection();
         $rootCollection->store();
 
-        $invisibleCollection = new Opus_Collection();
+        $invisibleCollection = new Collection();
         $invisibleCollection->setName("invisible collection");
         $invisibleCollection->setNumber("123");
         $invisibleCollection->setVisible(true);
@@ -376,7 +381,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase
         $rootCollection->addFirstChild($invisibleCollection);
         $invisibleCollection->store();
 
-        $visibleCollection = new Opus_Collection();
+        $visibleCollection = new Collection();
         $visibleCollection->setName("visible collection");
         $visibleCollection->setNumber("987");
         $visibleCollection->setVisiblePublish(true);
@@ -384,7 +389,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase
         $rootCollection->addLastChild($visibleCollection);
         $visibleId = $visibleCollection->store();
 
-        $mixedVisibilityCollection = new Opus_Collection();
+        $mixedVisibilityCollection = new Collection();
         $mixedVisibilityCollection->setName("mixed visibility");
         $mixedVisibilityCollection->setNumber("456");
         $mixedVisibilityCollection->setVisiblePublish(true);
@@ -408,7 +413,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase
      */
     public function testRootCollectionFieldVisiblePublish()
     {
-        $collectionRole = new Opus_CollectionRole();
+        $collectionRole = new CollectionRole();
         $collectionRole->setName("test");
         $collectionRole->setOaiName("test");
         $collectionRole->setDisplayBrowsing("Name");
@@ -423,7 +428,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase
         $rootCollection->setVisiblePublish(false);
         $rootCollection->store();
 
-        $visibleCollection = new Opus_Collection();
+        $visibleCollection = new Collection();
         $visibleCollection->setName("visible collection");
         $visibleCollection->setNumber("123");
         $visibleCollection->setVisible(true);
@@ -431,7 +436,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase
         $rootCollection->addFirstChild($visibleCollection);
         $visibleCollection->store();
 
-        $invisibleCollection = new Opus_Collection();
+        $invisibleCollection = new Collection();
         $invisibleCollection->setName("collection to invisible root collection");
         $invisibleCollection->setNumber("123");
         $invisibleCollection->setVisible(true);
@@ -439,7 +444,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase
         $rootCollection->addFirstChild($invisibleCollection);
         $invisibleCollection->store();
 
-        $childCollection = new Opus_Collection();
+        $childCollection = new Collection();
         $childCollection->setName("collection child");
         $childCollection->setNumber("123");
         $childCollection->setVisible(true);

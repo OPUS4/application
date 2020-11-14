@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -31,7 +30,11 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2016-2019
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- *
+ */
+
+use Opus\Document;
+
+/**
  * @covers Sword_DepositController
  */
 class Sword_DepositControllerTest extends ControllerTestCase
@@ -181,7 +184,7 @@ class Sword_DepositControllerTest extends ControllerTestCase
     }
 
     /**
-     * @param Opus_Document $doc
+     * @param Document $doc
      * @throws Exception
      */
     private function checkAllFieldsImport($doc)
@@ -400,15 +403,15 @@ class Sword_DepositControllerTest extends ControllerTestCase
 
     /**
      *
-     * @param type $fileName
-     * @param type $contentType
-     * @param type $abstractExist
-     * @param type $deleteDoc
-     * @param type $deleteCollection
-     * @param type $numOfEnrichments
-     * @param type $numOfCollections
-     * @param type $serverState
-     * @return Opus_Document
+     * @param string $fileName
+     * @param string $contentType
+     * @param bool $abstractExist
+     * @param bool $deleteDoc
+     * @param bool $deleteCollection
+     * @param int $numOfEnrichments
+     * @param int $numOfCollections
+     * @param string $serverState
+     * @return Document
      */
     private function depositSuccessful(
         $fileName,

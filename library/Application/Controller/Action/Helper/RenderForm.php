@@ -31,7 +31,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Application_Controller_Action_Helper_RenderForm extends Zend_Controller_Action_Helper_Abstract
+class Application_Controller_Action_Helper_RenderForm extends \Zend_Controller_Action_Helper_Abstract
 {
 
     public function direct($form)

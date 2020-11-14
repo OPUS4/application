@@ -42,7 +42,7 @@ class Application_Form_Decorator_UpdateFieldTest extends ControllerTestCase
 
         $decorator = new Application_Form_Decorator_UpdateField();
 
-        $decorator->setElement(new Zend_Form_Element_Text('city'));
+        $decorator->setElement(new \Zend_Form_Element_Text('city'));
 
         $output = $decorator->render('CONTENT');
 
@@ -58,7 +58,7 @@ class Application_Form_Decorator_UpdateFieldTest extends ControllerTestCase
     {
         $decorator = new Application_Form_Decorator_UpdateField();
 
-        $decorator->setElement(new Zend_Form_Element_Text('Name'));
+        $decorator->setElement(new \Zend_Form_Element_Text('Name'));
 
         $output = $decorator->render('CONTENT');
 
@@ -72,7 +72,7 @@ class Application_Form_Decorator_UpdateFieldTest extends ControllerTestCase
 
         $decorator = new Application_Form_Decorator_UpdateField();
 
-        $element = new Zend_Form_Element_Text('city');
+        $element = new \Zend_Form_Element_Text('city');
         $element->setAttrib('active', true);
 
         $decorator->setElement($element);
@@ -94,7 +94,7 @@ class Application_Form_Decorator_UpdateFieldTest extends ControllerTestCase
 
         $decorator = new Application_Form_Decorator_UpdateField();
 
-        $decorator->setElement(new Zend_Form_Element_Text('city'));
+        $decorator->setElement(new \Zend_Form_Element_Text('city'));
 
         $output = $decorator->render('CONTENT');
 
@@ -107,9 +107,9 @@ class Application_Form_Decorator_UpdateFieldTest extends ControllerTestCase
 
         $decorator = new Application_Form_Decorator_UpdateField();
 
-        $translator = Zend_Registry::get('Zend_Translate');
+        $translator = \Zend_Registry::get('Zend_Translate');
 
-        $element = new Zend_Form_Element_Text('city');
+        $element = new \Zend_Form_Element_Text('city');
         $element->setTranslator($translator);
 
         $decorator->setElement($element);

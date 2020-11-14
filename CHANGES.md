@@ -2,14 +2,23 @@
 
 --- 
 
+## Patches for 4.7 - 2020-09-29
+
+* [OPUSVIER-4204] - fehlerhafter Deeplink für Autor-Suche in Kurztrefferanzeige
+* [OPUSVIER-4259] - Unnötige Bootrap Fehlermeldung beim Update zu ExportPlugins
+* [OPUSVIER-4299] - translation.log enthält nach Update auf 4.7 sehr viele Einträge
+* [OPUSVIER-4321] - Falsche Anzeige beim Einstieg in Trefferliste von Dokumenten
+* [OPUSVIER-4366] - Interne OPUS Version für 4.7 aktualisieren
+
+## Patches for 4.7 - 2020-09-04
+
+* [OPUSVIER-4314] - Pagination-Link-Hitlist Leiste fehlt
+* [OPUSVIER-4305] - GitHub Info für OPUS 4 Application aktualisieren
+* [OPUSVIER-3566] - Unterschied in "Name der Sammlung" und "Bezeichnung des OAI-Sets" führen zu Fehlern beim Veröffentlichen
+
 ## Patches for 4.7 - 2020-08-27
 
-### Aufgaben
-
 * [OPUSVIER-4293] - Login-Status in XSLT abfragen
-
-### Bugs
-
 * [OPUSVIER-4304] - Inhalte der angepassten Leitlinien / Policies werden beim Update auf OPUS 4.7 nicht importiert
 
 ---

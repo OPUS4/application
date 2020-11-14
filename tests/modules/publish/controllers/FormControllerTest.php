@@ -33,6 +33,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Document;
+
 /**
  * Class Publish_FormControllerTest.
  *
@@ -117,7 +119,7 @@ class Publish_FormControllerTest extends ControllerTestCase
     {
         $doc = $this->createTemporaryDoc();
 
-        $session = new Zend_Session_Namespace('Publish');
+        $session = new \Zend_Session_Namespace('Publish');
         $session->documentType = 'preprint';
         $session->documentId = $doc->getId();
         $session->fulltext = '0';
@@ -177,7 +179,7 @@ class Publish_FormControllerTest extends ControllerTestCase
     {
         $doc = $this->createTemporaryDoc();
 
-        $session = new Zend_Session_Namespace('Publish');
+        $session = new \Zend_Session_Namespace('Publish');
         $session->documentType = 'preprint';
         $session->documentId = $doc->getId();
         $session->fulltext = '0';
@@ -209,7 +211,7 @@ class Publish_FormControllerTest extends ControllerTestCase
     {
         $doc = $this->createTemporaryDoc();
 
-        $session = new Zend_Session_Namespace('Publish');
+        $session = new \Zend_Session_Namespace('Publish');
         $session->documentType = 'preprint';
         $session->documentId = $doc->getId();
         $session->fulltext = '0';
@@ -263,12 +265,12 @@ class Publish_FormControllerTest extends ControllerTestCase
      */
     public function testOPUSVIER1886WithBibliography()
     {
-        $config = Zend_Registry::get('Zend_Config');
+        $config = \Zend_Registry::get('Zend_Config');
         $config->form->first->bibliographie = self::CONFIG_VALUE_TRUE;
 
         $doc = $this->createTemporaryDoc();
 
-        $session = new Zend_Session_Namespace('Publish');
+        $session = new \Zend_Session_Namespace('Publish');
         $session->documentType = 'demo';
         $session->documentId = $doc->getId();
         $session->fulltext = '0';
@@ -292,14 +294,14 @@ class Publish_FormControllerTest extends ControllerTestCase
 
     public function testOPUSVIER1886WithBibliographyUnselected()
     {
-        $config = Zend_Registry::get('Zend_Config');
+        $config = \Zend_Registry::get('Zend_Config');
         $config->form->first->bibliographie = self::CONFIG_VALUE_TRUE;
 
         $doc = $this->createTemporaryDoc();
         $doc->setBelongsToBibliography(0);
         $doc->store();
 
-        $session = new Zend_Session_Namespace('Publish');
+        $session = new \Zend_Session_Namespace('Publish');
         $session->documentType = 'demo';
         $session->documentId = $doc->getId();
         $session->fulltext = '0';
@@ -323,14 +325,14 @@ class Publish_FormControllerTest extends ControllerTestCase
 
     public function testOPUSVIER1886WithBibliographySelected()
     {
-        $config = Zend_Registry::get('Zend_Config');
+        $config = \Zend_Registry::get('Zend_Config');
         $config->form->first->bibliographie = self::CONFIG_VALUE_TRUE;
 
         $doc = $this->createTemporaryDoc();
         $doc->setBelongsToBibliography(1);
         $doc->store();
 
-        $session = new Zend_Session_Namespace('Publish');
+        $session = new \Zend_Session_Namespace('Publish');
         $session->documentType = 'demo';
         $session->documentId = $doc->getId();
         $session->fulltext = '0';
@@ -357,12 +359,12 @@ class Publish_FormControllerTest extends ControllerTestCase
      */
     public function testOPUSVIER1886WithoutBibliography()
     {
-        $config = Zend_Registry::get('Zend_Config');
+        $config = \Zend_Registry::get('Zend_Config');
         $config->form->first->bibliographie = self::CONFIG_VALUE_FALSE;
 
         $doc = $this->createTemporaryDoc();
 
-        $session = new Zend_Session_Namespace('Publish');
+        $session = new \Zend_Session_Namespace('Publish');
         $session->documentType = 'demo';
         $session->documentId = $doc->getId();
         $session->fulltext = '0';
@@ -390,7 +392,7 @@ class Publish_FormControllerTest extends ControllerTestCase
     public function testFormManipulationForBibliography()
     {
         $this->markTestIncomplete('testing multipart formdata not yet solved');
-        $config = Zend_Registry::get('Zend_Config');
+        $config = \Zend_Registry::get('Zend_Config');
         $config->form->first->bibliographie = self::CONFIG_VALUE_FALSE;
 
         $this->request
@@ -405,9 +407,9 @@ class Publish_FormControllerTest extends ControllerTestCase
                 'send' => 'Weiter zum nächsten Schritt',
             ]);
         $this->dispatch('/publish/form/upload');
-        $session = new Zend_Session_Namespace('Publish');
+        $session = new \Zend_Session_Namespace('Publish');
 
-        $doc = new Opus_Document($session->documentId);
+        $doc = Document::get($session->documentId);
         $belongsToBibliography = $doc->getBelongsToBibliography();
         $doc->deletePermanent();
 
@@ -417,7 +419,7 @@ class Publish_FormControllerTest extends ControllerTestCase
     }
 
     /**
-     * @return Opus_Document
+     * @return Document
      */
     private function createTemporaryDoc()
     {
@@ -450,29 +452,33 @@ class Publish_FormControllerTest extends ControllerTestCase
     {
         $this->fileNoticeOnSecondFormPage(self::CONFIG_VALUE_TRUE);
 
-        $this->assertContains('<h3 class="document-type" title="Dokumenttyp">Alle Felder (Testdokumenttyp)</h3>', $this->getResponse()->getBody());
-        $this->assertContains('<legend>Sie haben folgende Datei(en) hochgeladen:</legend>', $this->getResponse()->getBody());
-        $this->assertContains('<b>Es wurden keine Dateien hochgeladen.</b>', $this->getResponse()->getBody());
+        $output = $this->getResponse()->getBody();
+
+        $this->assertContains('<h3 class="document-type" title="Dokumenttyp">Alle Felder (Testdokumenttyp)</h3>', $output);
+        $this->assertContains('<legend>Sie haben folgende Datei(en) hochgeladen:</legend>', $output);
+        $this->assertContains('<b>Es wurden keine Dateien hochgeladen.</b>', $output);
     }
 
     public function testShowFileNoticeOnThirdFormPageIfFileUploadIsEnabled()
     {
         $this->fileNoticeOnThirdFormPage(self::CONFIG_VALUE_TRUE);
 
+        $output = $this->getResponse()->getBody();
+
         $this->assertResponseCode(200);
-        $this->assertContains('Bitte überprüfen Sie Ihre Eingaben', $this->getResponse()->getBody());
-        $this->assertContains('<legend>Sie haben folgende Datei(en) hochgeladen:</legend>', $this->getResponse()->getBody());
-        $this->assertContains('<b>Es wurden keine Dateien hochgeladen.</b>', $this->getResponse()->getBody());
+        $this->assertContains('Bitte überprüfen Sie Ihre Eingaben', $output);
+        $this->assertContains('<legend>Sie haben folgende Datei(en) hochgeladen:</legend>', $output);
+        $this->assertContains('<b>Es wurden keine Dateien hochgeladen.</b>', $output);
     }
 
     private function fileNoticeOnThirdFormPage($value)
     {
-        $config = Zend_Registry::get('Zend_Config');
+        $config = \Zend_Registry::get('Zend_Config');
         $config->form->first->enable_upload = $value;
 
         $doc = $this->createTemporaryDoc();
 
-        $session = new Zend_Session_Namespace('Publish');
+        $session = new \Zend_Session_Namespace('Publish');
         $session->documentType = 'demo';
         $session->documentId = $doc->getId();
         $session->fulltext = '0';
@@ -491,12 +497,12 @@ class Publish_FormControllerTest extends ControllerTestCase
 
     private function fileNoticeOnSecondFormPage($value)
     {
-        $config = Zend_Registry::get('Zend_Config');
+        $config = \Zend_Registry::get('Zend_Config');
         $config->form->first->enable_upload = $value;
 
         $doc = $this->createTemporaryDoc();
 
-        $session = new Zend_Session_Namespace('Publish');
+        $session = new \Zend_Session_Namespace('Publish');
         $session->documentType = 'all';
         $session->documentId = $doc->getId();
         $session->fulltext = '0';
@@ -525,7 +531,7 @@ class Publish_FormControllerTest extends ControllerTestCase
      */
     public function testCheckActionWithAddButton()
     {
-        $session = new Zend_Session_Namespace('Publish');
+        $session = new \Zend_Session_Namespace('Publish');
         $this->addTemporaryTestDocument($session, 'preprint');
         $data = [
             'PersonSubmitterFirstName_1' => '',
@@ -576,7 +582,7 @@ class Publish_FormControllerTest extends ControllerTestCase
      */
     public function testCheckActionWithDeleteButton()
     {
-        $session = new Zend_Session_Namespace('Publish');
+        $session = new \Zend_Session_Namespace('Publish');
         $this->addTemporaryTestDocument($session, 'preprint');
         $session->additionalFields['TitleMain'] = '2';
 
@@ -631,7 +637,7 @@ class Publish_FormControllerTest extends ControllerTestCase
      */
     public function testCheckActionWithBrowseDownButton()
     {
-        $session = new Zend_Session_Namespace('Publish');
+        $session = new \Zend_Session_Namespace('Publish');
         $this->addTemporaryTestDocument($session, 'preprint');
         $session->additionalFields['Institute'] = '1';
         $session->additionalFields['collId0Institute_1'] = '1';
@@ -687,7 +693,7 @@ class Publish_FormControllerTest extends ControllerTestCase
      */
     public function testCheckActionWithBrowseUpButton()
     {
-        $session = new Zend_Session_Namespace('Publish');
+        $session = new \Zend_Session_Namespace('Publish');
         $this->addTemporaryTestDocument($session, 'preprint');
         $session->additionalFields['Institute'] = '1';
         $session->additionalFields['collId0Institute_1'] = '1';
@@ -744,7 +750,7 @@ class Publish_FormControllerTest extends ControllerTestCase
      */
     public function testCheckActionWithMissingButton()
     {
-        $session = new Zend_Session_Namespace('Publish');
+        $session = new \Zend_Session_Namespace('Publish');
         $this->addTemporaryTestDocument($session, 'preprint');
         $session->additionalFields['PersonSubmitter'] = '1';
         $session->additionalFields['TitleMain'] = '1';
@@ -812,7 +818,7 @@ class Publish_FormControllerTest extends ControllerTestCase
     {
         $doc = $this->createTemporaryDoc();
 
-        $session = new Zend_Session_Namespace('Publish');
+        $session = new \Zend_Session_Namespace('Publish');
         $session->documentType = 'preprint';
         $session->documentId = $doc->getId();
         $session->fulltext = '0';
@@ -845,7 +851,7 @@ class Publish_FormControllerTest extends ControllerTestCase
     {
         $doc = $this->createTemporaryDoc();
 
-        $session = new Zend_Session_Namespace('Publish');
+        $session = new \Zend_Session_Namespace('Publish');
         $session->documentType = 'preprint';
         $session->documentId = $doc->getId();
         $session->fulltext = '0';
@@ -879,7 +885,7 @@ class Publish_FormControllerTest extends ControllerTestCase
     {
         $doc = $this->createTemporaryDoc();
 
-        $session = new Zend_Session_Namespace('Publish');
+        $session = new \Zend_Session_Namespace('Publish');
         $session->documentType = 'all';
         $session->documentId = $doc->getId();
         $session->fulltext = '0';
@@ -909,7 +915,7 @@ class Publish_FormControllerTest extends ControllerTestCase
     {
         $doc = $this->createTemporaryDoc();
 
-        $session = new Zend_Session_Namespace('Publish');
+        $session = new \Zend_Session_Namespace('Publish');
         $session->documentType = 'all';
         $session->documentId = $doc->getId();
         $session->fulltext = '0';
@@ -939,7 +945,7 @@ class Publish_FormControllerTest extends ControllerTestCase
     {
         $doc = $this->createTemporaryDoc();
 
-        $session = new Zend_Session_Namespace('Publish');
+        $session = new \Zend_Session_Namespace('Publish');
         $session->documentType = 'all';
         $session->documentId = $doc->getId();
         $session->fulltext = '0';
@@ -967,7 +973,7 @@ class Publish_FormControllerTest extends ControllerTestCase
 
     public function testBarfooTemplateIsRenderedForDoctypeFoobar()
     {
-        $session = new Zend_Session_Namespace('Publish');
+        $session = new \Zend_Session_Namespace('Publish');
         $session->documentType = 'foobar';
         $doc = $this->createTemporaryDoc();
         $session->documentId = $doc->getId();
@@ -986,7 +992,7 @@ class Publish_FormControllerTest extends ControllerTestCase
 
     public function testApplicationErrorForDoctypeBarbaz()
     {
-        $session = new Zend_Session_Namespace('Publish');
+        $session = new \Zend_Session_Namespace('Publish');
         $session->documentType = 'barbaz';
         $doc = $this->createTemporaryDoc();
         $session->documentId = $doc->getId();
@@ -1004,7 +1010,7 @@ class Publish_FormControllerTest extends ControllerTestCase
 
     public function testApplicationErrorForDoctypeBazbar()
     {
-        $session = new Zend_Session_Namespace('Publish');
+        $session = new \Zend_Session_Namespace('Publish');
         $session->documentType = 'bazbar';
         $doc = $this->createTemporaryDoc();
         $session->documentId = $doc->getId();
