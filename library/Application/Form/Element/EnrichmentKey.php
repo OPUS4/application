@@ -97,7 +97,7 @@ class Application_Form_Element_EnrichmentKey extends Application_Form_Element_Se
     }
 
     /**
-     * Fügt den übergebenen EnrichmentKey-Namen zur Auswahl hinzu, sofern es nicht bereits existiert.
+     * Fügt den übergebenen EnrichmentKey-Namen zur Auswahl hinzu, sofern er nicht bereits existiert.
      *
      * @param $keyName
      */

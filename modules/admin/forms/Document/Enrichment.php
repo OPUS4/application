@@ -619,7 +619,7 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
      * Verstößt der in einem Feld gespeicherte Enrichment-Wert gegen die aktuelle Typkonfiguration
      * des Enrichment Keys, so wird im Validierungsmodus "non strict" nur ein Hinweis, aber keine
      * Fehlermeldung angezeigt. Der unveränderte (aber bezüglich der aktuellen Typkonfiguration invalide)
-     * Wert lässt sicher weiterhin speichern.
+     * Wert lässt sich weiterhin speichern.
      *
      * Wichtig: diese Methode muss sowohl beim ersten Formularaufruf (GET-Request) als auch beim
      * Speichern des Formulars (POST-Request) aufgerufen werden, wenn es Validierungsfehler gibt.
