@@ -179,7 +179,7 @@ class Application_Form_Model_Table extends Application_Form_Abstract
      * Determines if a link for the show action should be rendered.
      * @return bool true - link should be rendered
      */
-    public function isRenderShowActionLink($model = null)
+    public function isRenderShowActionLink()
     {
         if (! is_null($this->_controller)) {
             if (! method_exists($this->_controller, 'getShowActionEnabled')) {
