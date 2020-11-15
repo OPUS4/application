@@ -38,7 +38,6 @@ use Opus\EnrichmentKey;
 use Opus\Enrichment\SelectType;
 use Opus\Enrichment\TextType;
 use Opus\Model\ModelException;
-use Opus\Model\NotFoundException;
 
 /**
  * Unterformular für einzelne Enrichments im Metadaten-Formular.
@@ -119,7 +118,7 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
      * Texteingabefeld verwendet.
      *
      * @param string $enrichmentValue Wert des anzuzeigenden Enrichments (in der Datenbank)
-     * @param Opus_EnrichmentKey|null $enrichmentKey EnrichmentKey des Enrichments, für das ein Eingabeformularelement
+     * @param EnrichmentKey|null $enrichmentKey EnrichmentKey des Enrichments, für das ein Eingabeformularelement
      *                                               erzeugt werden soll
      * @param string|null $formValue aktueller Formularwert für das Enrichment (nur bei der Verarbeitung eines
      *                               POST-Requests gesetzt)
@@ -291,7 +290,7 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
 
         try {
             $enrichment = new Enrichment($enrichmentId);
-        } catch (NotFoundException $omnfe) {
+        } catch (ModelException $omnfe) {
             $this->getLogger()->err(
                 __METHOD__ . " Unknown enrichment ID = '$enrichmentId' (" . $omnfe->getMessage() . ').'
             );
@@ -467,8 +466,8 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
                 $enrichmentId = $enrichmentData[self::ELEMENT_ID];
                 $enrichment = null;
                 try {
-                    $enrichment = new Opus_Enrichment($enrichmentId);
-                } catch (Opus\Model\Exception $e) {
+                    $enrichment = new Enrichment($enrichmentId);
+                } catch (ModelException $e) {
                     // ignore exception silently and do not change validation result
                 }
 
@@ -631,7 +630,7 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
      * Wichtig: diese Methode muss sowohl beim ersten Formularaufruf (GET-Request) als auch beim
      * Speichern des Formulars (POST-Request) aufgerufen werden, wenn es Validierungsfehler gibt.
      *
-     * @param Opus_EnrichmentKey $enrichmentKey Name des Enrichment-Keys
+     * @param EnrichmentKey $enrichmentKey Name des Enrichment-Keys
      *
      * @throws Zend_Form_Exception
      */
