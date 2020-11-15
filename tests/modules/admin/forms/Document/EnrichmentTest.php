@@ -36,6 +36,7 @@ use Opus\Enrichment;
 use Opus\EnrichmentKey;
 use Opus\Enrichment\RegexType;
 use Opus\Enrichment\SelectType;
+use Opus\Enrichment\TextType;
 
 /**
  * Unit Test für Unterformular für ein Enrichment im Metadaten-Formular.
