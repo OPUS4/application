@@ -32,6 +32,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Document;
+
 /**
  * Controller for showing and editing a document in the administration.
  *
@@ -58,7 +60,7 @@ class Admin_DocumentController extends Application_Controller_Action
 
     /**
      * Produces metadata overview page of a document.
-     * @return Opus_Document
+     * @return Document
      */
     public function indexAction()
     {
@@ -234,7 +236,7 @@ class Admin_DocumentController extends Application_Controller_Action
      * Liefert ein Formular, dessen Elemente mit den Werten des übergebenen Dokuments
      * initialisiert sind.
      *
-     * @param $document Opus_Document
+     * @param $document Document
      * @param $editSession Admin_Model_DocumentEditSession
      *
      * @return Admin_Form_Document|null
@@ -271,7 +273,7 @@ class Admin_DocumentController extends Application_Controller_Action
      */
     public function createAction()
     {
-        $doc = new Opus_Document();
+        $doc = Document::new();
 
         $docId = $doc->store();
 

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -30,7 +29,12 @@
  * @author      Sascha Szott
  * @copyright   Copyright (c) 2016-2019
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- *
+ */
+
+use Opus\Document;
+use Opus\EnrichmentKey;
+
+/**
  * @covers Sword_DepositController
  */
 class Sword_DepositControllerErrorCasesTest extends ControllerTestCase
@@ -121,12 +125,12 @@ class Sword_DepositControllerErrorCasesTest extends ControllerTestCase
         $this->getRequest()->setRawBody('some content');
 
         // remove enrichment key opus.import.user
-        $enrichmentKey = new Opus_EnrichmentKey(Application_Import_AdditionalEnrichments::OPUS_IMPORT_USER);
+        $enrichmentKey = new EnrichmentKey(Application_Import_AdditionalEnrichments::OPUS_IMPORT_USER);
         $enrichmentKey->delete();
 
         $this->dispatch('/sword/deposit');
 
-        $enrichmentKey = new Opus_EnrichmentKey();
+        $enrichmentKey = new EnrichmentKey();
         $enrichmentKey->setName(Application_Import_AdditionalEnrichments::OPUS_IMPORT_USER);
         $enrichmentKey->store();
 
@@ -199,7 +203,7 @@ class Sword_DepositControllerErrorCasesTest extends ControllerTestCase
 
     private function addDocWithUrn()
     {
-        $doc = new Opus_Document();
+        $doc = Document::new();
         $doc->addIdentifier()->setType('urn')->setValue('colliding-urn');
         $doc->store();
         return $doc;

@@ -28,36 +28,43 @@
  * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
+
+use Opus\Document;
+use Opus\DocumentFinder;
+use Opus\Model\NotFoundException;
+use Opus\Model\Xml;
+use Opus\Model\Xml\Version1;
 
 /**
  * Tries to export and import all documents.
+ *
+ * TODO move (this is a test script)
  */
 
-$docFinder = new Opus_DocumentFinder();
+$docFinder = new DocumentFinder();
 
 foreach ($docFinder->ids() as $id) {
     $doc = null;
     try {
-        $doc = new Opus_Document($id);
-    } catch (Opus_Model_NotFoundException $e) {
+        $doc = Document::get($id);
+    } catch (NotFoundException $e) {
         // document with id $id does not exist
         continue;
     }
 
     echo "try to export document $id ... ";
-    $xmlModelOutput = new Opus_Model_Xml();
+    $xmlModelOutput = new Xml();
     $xmlModelOutput->setModel($doc);
-    $xmlModelOutput->setStrategy(new Opus_Model_Xml_Version1());
+    $xmlModelOutput->setStrategy(new Version1());
     $xmlModelOutput->excludeEmptyFields();
     $domDocument = $xmlModelOutput->getDomDocument();
     echo "export of document $id was successful.\n";
 
     echo "try to import document based on the exported dom tree ... ";
-    $xmlModelImport = new Opus_Model_Xml();
-    $xmlModelImport->setStrategy(new Opus_Model_Xml_Version1());
+    $xmlModelImport = new Xml();
+    $xmlModelImport->setStrategy(new Version1());
     $xmlModelImport->setXml($domDocument->saveXML());
     try {
         $doc = $xmlModelImport->getModel();

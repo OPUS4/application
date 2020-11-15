@@ -32,6 +32,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Title;
+use Opus\Db\DocumentXmlCache;
+
 /**
  * Class Export_Model_XmlExportTest
  *
@@ -55,7 +58,7 @@ class Export_Model_XmlExportTest extends ControllerTestCase
         $plugin->setRequest($this->getRequest());
         $plugin->setResponse($this->getResponse());
         $plugin->init();
-        $plugin->setConfig(new Zend_Config([
+        $plugin->setConfig(new \Zend_Config([
             'class' => 'Export_Model_XmlExport',
             'maxDocumentsGuest' => '100',
             'maxDocumentsUser' => '500',
@@ -68,7 +71,7 @@ class Export_Model_XmlExportTest extends ControllerTestCase
     {
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
-        $title = new Opus_Title();
+        $title = new Title();
         $title->setLanguage('deu');
         $title->setValue('Deutscher Titel');
         $doc->setTitleMain($title);
@@ -91,7 +94,7 @@ class Export_Model_XmlExportTest extends ControllerTestCase
     {
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
-        $title = new Opus_Title();
+        $title = new Title();
         $title->setLanguage('deu');
         $title->setValue('Deutscher Titel');
         $doc->setTitleMain($title);
@@ -158,7 +161,7 @@ class Export_Model_XmlExportTest extends ControllerTestCase
         $thirdDocId = $thirdDoc->store();
 
         // Dokument aus dem Cache löschen
-        $documentCacheTable = new Opus_Db_DocumentXmlCache();
+        $documentCacheTable = new DocumentXmlCache();
         $documentCacheTable->delete('document_id = ' . $secondDocId);
         $documentCacheTable->delete('document_id = ' . $firstDocId);
 
@@ -273,7 +276,7 @@ class Export_Model_XmlExportTest extends ControllerTestCase
 
         $plugin->setDownloadEnabled(null);
 
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
             'export' => ['download' => self::CONFIG_VALUE_FALSE]
         ]));
 
@@ -304,7 +307,7 @@ class Export_Model_XmlExportTest extends ControllerTestCase
 
         $this->assertEquals('text/xml', $plugin->getContentType());
 
-        $config = new Zend_Config(['contentType' => 'text/plain']);
+        $config = new \Zend_Config(['contentType' => 'text/plain']);
 
         $plugin->setContentType(null); // clear cached content type
 
@@ -319,7 +322,7 @@ class Export_Model_XmlExportTest extends ControllerTestCase
 
         $plugin->setContentType(null);
 
-        $plugin->setConfig(new Zend_Config([]));
+        $plugin->setConfig(new \Zend_Config([]));
 
         $this->assertEquals('text/xml', $plugin->getContentType());
     }
@@ -341,7 +344,7 @@ class Export_Model_XmlExportTest extends ControllerTestCase
 
         $plugin->setAttachmentFilename(null); // clear cached name
 
-        $plugin->setConfig(new Zend_Config(['attachmentFilename' => 'article.pdf']));
+        $plugin->setConfig(new \Zend_Config(['attachmentFilename' => 'article.pdf']));
 
         $this->assertEquals('article.pdf', $plugin->getAttachmentFilename());
     }

@@ -32,7 +32,7 @@
  */
 
 
-class Application_View_Helper_CustomFileSortingEnabled extends Zend_View_Helper_Abstract
+class Application_View_Helper_CustomFileSortingEnabled extends \Zend_View_Helper_Abstract
 {
     /**
      * Check if custom file sorting based on sort order field is enabled.
@@ -41,7 +41,7 @@ class Application_View_Helper_CustomFileSortingEnabled extends Zend_View_Helper_
      */
     public function customFileSortingEnabled()
     {
-        $config = Zend_Registry::get('Zend_Config');
+        $config = \Zend_Registry::get('Zend_Config');
         return isset($config->frontdoor->files->customSorting) &&
             filter_var($config->frontdoor->files->customSorting, FILTER_VALIDATE_BOOLEAN);
     }

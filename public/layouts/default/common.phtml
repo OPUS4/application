@@ -33,9 +33,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-$config = Zend_Registry::get('Zend_Config');
+$config = \Zend_Registry::get('Zend_Config');
 
-$pageLanguage = Zend_Registry::get('Zend_Translate')->getLocale();
+$pageLanguage = \Zend_Registry::get('Zend_Translate')->getLocale();
 
 $this->headMeta()
     ->prependHttpEquiv('Content-Type', 'text/html; charset=UTF-8')
@@ -72,7 +72,7 @@ uncomment the following line if you want to enable your own layout changes
 $this->headLink()->appendStylesheet($this->layoutPath() . '/css/custom.css');
 */
 
-$this->container = Zend_Registry::get('Opus_Navigation');
+$this->container = \Zend_Registry::get('Opus_Navigation');
 
 $jsFiles = ['searchutil.js', 'frontdoorutil.js', 'submit.js'];
 
@@ -256,7 +256,7 @@ if (isset($config->javascript->latex->mathjax)) {
 </div>
 
 <?php
-$dbprofiler = Zend_Registry::get('db_adapter')->getProfiler();
+$dbprofiler = \Zend_Registry::get('db_adapter')->getProfiler();
 $profiler_show_queries = isset($config->db->params->showqueries) && filter_var($config->db->params->showqueries, FILTER_VALIDATE_BOOLEAN);
 $profiler_max_queries = (int) $config->db->params->maxqueries;
 if ($dbprofiler->getEnabled() === true) : ?>

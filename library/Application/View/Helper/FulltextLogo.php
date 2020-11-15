@@ -31,6 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Document;
+
 /**
  * View helper for rendering the fulltext logo for documents in the search result list.
  */
@@ -43,7 +45,7 @@ class Application_View_Helper_FulltextLogo extends Application_View_Helper_Docum
             $doc = $this->getDocument();
         }
 
-        if (! $doc instanceof Opus_Document) {
+        if (! $doc instanceof Document) {
             // TODO log
             return;
         }

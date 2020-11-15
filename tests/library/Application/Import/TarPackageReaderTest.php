@@ -44,7 +44,7 @@ class Application_Import_TarPackageReaderTest extends ControllerTestCase
 
     public function testReadPackageWithXmlFile()
     {
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
             'filetypes' => ['xml' => ['mimeType' => [
                 'text/xml', 'application/xml'
             ]]]

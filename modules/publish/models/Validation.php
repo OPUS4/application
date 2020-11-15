@@ -31,6 +31,13 @@
  * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\Collection;
+use Opus\CollectionRole;
+use Opus\DnbInstitute;
+use Opus\Licence;
+use Opus\Series;
+
 class Publish_Model_Validation
 {
 
@@ -144,9 +151,9 @@ class Publish_Model_Validation
         $validator->setLocale($lang);
 
         $messages = [
-            Zend_Validate_Date::INVALID => $this->translate('publish_validation_error_date_invalid'),
-            Zend_Validate_Date::INVALID_DATE => $this->translate('publish_validation_error_date_invaliddate'),
-            Zend_Validate_Date::FALSEFORMAT => $this->translate('publish_validation_error_date_falseformat')
+            \Zend_Validate_Date::INVALID => $this->translate('publish_validation_error_date_invalid'),
+            \Zend_Validate_Date::INVALID_DATE => $this->translate('publish_validation_error_date_invaliddate'),
+            \Zend_Validate_Date::FALSEFORMAT => $this->translate('publish_validation_error_date_falseformat')
         ];
         $validator->setMessages($messages);
 
@@ -159,15 +166,15 @@ class Publish_Model_Validation
         $validators = [];
         $validator = new Publish_Model_ValidationEmail();
         $messages = [
-            Zend_Validate_EmailAddress::INVALID => $this->translate('publish_validation_error_email_invalid'),
-            Zend_Validate_EmailAddress::INVALID_FORMAT => $this->translate('publish_validation_error_email_invalid'),
-            Zend_Validate_EmailAddress::INVALID_HOSTNAME => $this->translate('publish_validation_error_email_invalid'),
-            Zend_Validate_EmailAddress::INVALID_LOCAL_PART => $this->translate('publish_validation_error_email_invalid'),
-            Zend_Validate_EmailAddress::INVALID_MX_RECORD => $this->translate('publish_validation_error_email_invalid'),
-            Zend_Validate_EmailAddress::INVALID_SEGMENT => $this->translate('publish_validation_error_email_invalid'),
-            Zend_Validate_EmailAddress::LENGTH_EXCEEDED => $this->translate('publish_validation_error_email_invalid'),
-            Zend_Validate_EmailAddress::QUOTED_STRING => $this->translate('publish_validation_error_email_invalid'),
-            Zend_Validate_EmailAddress::DOT_ATOM => $this->translate('publish_validation_error_email_invalid'),
+            \Zend_Validate_EmailAddress::INVALID => $this->translate('publish_validation_error_email_invalid'),
+            \Zend_Validate_EmailAddress::INVALID_FORMAT => $this->translate('publish_validation_error_email_invalid'),
+            \Zend_Validate_EmailAddress::INVALID_HOSTNAME => $this->translate('publish_validation_error_email_invalid'),
+            \Zend_Validate_EmailAddress::INVALID_LOCAL_PART => $this->translate('publish_validation_error_email_invalid'),
+            \Zend_Validate_EmailAddress::INVALID_MX_RECORD => $this->translate('publish_validation_error_email_invalid'),
+            \Zend_Validate_EmailAddress::INVALID_SEGMENT => $this->translate('publish_validation_error_email_invalid'),
+            \Zend_Validate_EmailAddress::LENGTH_EXCEEDED => $this->translate('publish_validation_error_email_invalid'),
+            \Zend_Validate_EmailAddress::QUOTED_STRING => $this->translate('publish_validation_error_email_invalid'),
+            \Zend_Validate_EmailAddress::DOT_ATOM => $this->translate('publish_validation_error_email_invalid'),
         ];
         $validator->setMessages($messages);
 
@@ -178,8 +185,8 @@ class Publish_Model_Validation
     private function _validateInteger()
     {
         $validators = [];
-        $validator = new Zend_Validate_Int();
-        $validator->setMessage($this->translate('publish_validation_error_int'), Zend_Validate_Int::NOT_INT);
+        $validator = new \Zend_Validate_Int();
+        $validator->setMessage($this->translate('publish_validation_error_int'), \Zend_Validate_Int::NOT_INT);
 
         $validators[] = $validator;
         return $validators;
@@ -199,9 +206,9 @@ class Publish_Model_Validation
 
     private function validateSelect($set)
     {
-        $validator = new Zend_Validate_InArray($set);
+        $validator = new \Zend_Validate_InArray($set);
         $messages = [
-            Zend_Validate_InArray::NOT_IN_ARRAY => $this->translate('publish_validation_error_inarray_notinarray')
+            \Zend_Validate_InArray::NOT_IN_ARRAY => $this->translate('publish_validation_error_inarray_notinarray')
         ];
         $validator->setMessages($messages);
 
@@ -258,17 +265,17 @@ class Publish_Model_Validation
     {
         $validators = [];
 
-        $greaterThan = new Zend_Validate_GreaterThan('0000');
+        $greaterThan = new \Zend_Validate_GreaterThan('0000');
         $greaterThan->setMessage(
             $this->translate('publish_validation_error_year_greaterthan'),
-            Zend_Validate_GreaterThan::NOT_GREATER
+            \Zend_Validate_GreaterThan::NOT_GREATER
         );
         $validators[] = $greaterThan;
 
-        $validInt = new Zend_Validate_Int();
+        $validInt = new \Zend_Validate_Int();
         $messages = [
-            Zend_Validate_Int::INVALID => $this->translate('publish_validation_error_year_intinvalid'),
-            Zend_Validate_Int::NOT_INT => $this->translate('publish_validation_error_year_notint')
+            \Zend_Validate_Int::INVALID => $this->translate('publish_validation_error_year_intinvalid'),
+            \Zend_Validate_Int::NOT_INT => $this->translate('publish_validation_error_year_notint')
         ];
         $validInt->setMessages($messages);
         $validators[] = $validInt;
@@ -322,7 +329,7 @@ class Publish_Model_Validation
 
     private function _collectionSelect()
     {
-        $collectionRole = Opus_CollectionRole::fetchByName($this->collectionRole);
+        $collectionRole = CollectionRole::fetchByName($this->collectionRole);
         if (is_null($collectionRole) || is_null($collectionRole->getRootCollection())) {
             return null;
         }
@@ -331,7 +338,7 @@ class Publish_Model_Validation
                     && $this->hasVisiblePublishChildren($collectionRole)) {
             $children = [];
             $collectionId = $collectionRole->getRootCollection()->getId();
-            $collection = new Opus_Collection($collectionId);
+            $collection = new Collection($collectionId);
 
             $colls = $collection->getVisiblePublishChildren();
 
@@ -401,7 +408,7 @@ class Publish_Model_Validation
     {
         $licences = [];
         if (empty($this->licences)) {
-            foreach ($dbLicences = Opus_Licence::getAll() as $lic) {
+            foreach ($dbLicences = Licence::getAll() as $lic) {
                 if ($lic->getActive() == '1') {
                     $name = $lic->getDisplayName();
                     $id = $lic->getId();
@@ -423,7 +430,7 @@ class Publish_Model_Validation
     {
         $sets = [];
         if (empty($this->series)) {
-            foreach ($dbSeries = Opus_Series::getAllSortedBySortKey() as $set) {
+            foreach ($dbSeries = Series::getAllSortedBySortKey() as $set) {
                 if ($set->getVisible()) {
                     $title = $set->getTitle();
                     $id = $set->getId();
@@ -431,7 +438,7 @@ class Publish_Model_Validation
                 }
             }
 
-            $config = Zend_Registry::get('Zend_Config');
+            $config = \Zend_Registry::get('Zend_Config');
 
             if (isset($config->browsing->series->sortByTitle) &&
                 filter_var($config->browsing->series->sortByTitle, FILTER_VALIDATE_BOOLEAN)) {
@@ -459,9 +466,9 @@ class Publish_Model_Validation
     {
         $thesises = [];
         if ($grantors === true) {
-            $thesises = Opus_DnbInstitute::getGrantors();
+            $thesises = DnbInstitute::getGrantors();
         } elseif (is_null($grantors)) {
-            $thesises = Opus_DnbInstitute::getPublishers();
+            $thesises = DnbInstitute::getPublishers();
         }
         if (empty($thesises)) {
             return null;

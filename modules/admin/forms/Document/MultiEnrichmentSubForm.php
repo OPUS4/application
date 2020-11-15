@@ -31,6 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Document;
+
 /**
  * Form for editing enrichments.
  *
@@ -147,10 +149,10 @@ class Admin_Form_Document_MultiEnrichmentSubForm extends Admin_Form_Document_Mul
 
     /**
      * Erzeugt und füllt die Enrichment-Unterformular mit Werten auf Basis des
-     * übergebenen Opus_Documents. Diese Methode wird immer dann aufgerufen,
+     * übergebenen Documents. Diese Methode wird immer dann aufgerufen,
      * wenn das Metadatenformular erstmalig (per GET) aufgerufen wird.
      *
-     * @param Opus_Document $document
+     * @param Document $document
      */
     public function populateFromModel($document)
     {

@@ -29,9 +29,8 @@
  * @author      Thoralf Klein <thoralf.klein@zib.de>
  * @copyright   Copyright (c) 2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
-class Statistic_Bootstrap extends Zend_Application_Module_Bootstrap
+class Statistic_Bootstrap extends \Zend_Application_Module_Bootstrap
 {
 }

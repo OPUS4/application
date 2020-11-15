@@ -43,7 +43,7 @@ class Application_View_Helper_OptionEnabledTest extends ControllerTestCase
         $this->assertTrue($helper->optionEnabled('orcid.linkAuthor.frontdoor'));
         $this->assertTrue($helper->optionEnabled('linkAuthor.frontdoor', 'orcid'));
 
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
             'orcid' => ['linkAuthor' => ['frontdoor' => self::CONFIG_VALUE_FALSE]]
         ]));
 

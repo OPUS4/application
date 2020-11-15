@@ -30,15 +30,17 @@
  * @author      Thoralf Klein <thoralf.klein@zib.de>
  * @copyright   Copyright (c) 2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 // Bootstrapping
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
+use Opus\Document;
+use Opus\Model\NotFoundException;
+
 // Get files directory...
 $startTime = microtime(true);
-$config = Zend_Registry::get('Zend_Config');
+$config = \Zend_Registry::get('Zend_Config');
 $filesPath = realpath($config->workspacePath . DIRECTORY_SEPARATOR . "files");
 
 if ($filesPath == false or empty($filesPath)) {
@@ -70,8 +72,8 @@ foreach (glob($filesPath . DIRECTORY_SEPARATOR . "*") as $file) {
 
     $id = $matches[1];
     try {
-        $d = new Opus_Document($id);
-    } catch (Opus_Model_NotFoundException $e) {
+        $d = Document::get($id);
+    } catch (NotFoundException $e) {
         echo "ERROR: No document $id found for workspace path '$file'!\n";
         $errors++;
     }

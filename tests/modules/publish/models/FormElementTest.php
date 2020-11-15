@@ -40,14 +40,14 @@ class Publish_Model_FormElementTest extends ControllerTestCase
 
     public function setUp()
     {
-        $writer = new Zend_Log_Writer_Null;
-        $this->_logger = new Zend_Log($writer);
+        $writer = new \Zend_Log_Writer_Null;
+        $this->_logger = new \Zend_Log($writer);
         parent::setUp();
     }
 
     public function testUnrequiredFirstNames()
     {
-        $session = new Zend_Session_Namespace('Publish');
+        $session = new \Zend_Session_Namespace('Publish');
         $session->documentType = 'all';
 
         $form = new Publish_Form_PublishingSecond($this->_logger);

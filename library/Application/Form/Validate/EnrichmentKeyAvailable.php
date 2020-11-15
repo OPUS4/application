@@ -30,15 +30,16 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
+use Opus\EnrichmentKey;
 
 /**
  * Checks if a enrichmentkey already exists.
  *
  * Enrichment key names are not case-sensitive.
  */
-class Application_Form_Validate_EnrichmentKeyAvailable extends Zend_Validate_Abstract
+class Application_Form_Validate_EnrichmentKeyAvailable extends \Zend_Validate_Abstract
 {
 
     /**
@@ -91,7 +92,7 @@ class Application_Form_Validate_EnrichmentKeyAvailable extends Zend_Validate_Abs
      */
     protected function _isEnrichmentKeyUsed($name)
     {
-        $enrichmentkey = Opus_EnrichmentKey::fetchByName($name);
+        $enrichmentkey = EnrichmentKey::fetchByName($name);
 
         return ! is_null($enrichmentkey);
     }

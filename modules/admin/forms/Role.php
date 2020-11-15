@@ -31,6 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\UserRole;
+
 /**
  * Form for creating and editing a role.
  */
@@ -52,7 +54,7 @@ class Admin_Form_Role extends Application_Form_Model_Abstract
         $section = empty($id) ? 'new' : 'edit';
 
         if (! empty($id)) {
-            $role = new Opus_UserRole($id);
+            $role = new UserRole($id);
             $this->populateFromModel($role);
         }
     }
@@ -62,13 +64,13 @@ class Admin_Form_Role extends Application_Form_Model_Abstract
         parent::init();
 
         $this->setUseNameAsLabel(true);
-        $this->setModelClass('Opus_UserRole');
+        $this->setModelClass('Opus\UserRole');
 
         $name = $this->createElement('text', self::ELEMENT_NAME, [
             'required' => true
         ]);
 
-        $maxLength = Opus_UserRole::getFieldMaxLength('Name');
+        $maxLength = UserRole::getFieldMaxLength('Name');
 
         $name->addValidator('regex', false, ['pattern' => '/^[a-z][a-z0-9]/i'])
             ->addValidator('stringLength', false, ['min' => 3, 'max' => $maxLength])

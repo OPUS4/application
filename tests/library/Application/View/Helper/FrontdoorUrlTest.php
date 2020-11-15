@@ -39,7 +39,7 @@ class Application_View_Helper_FrontdoorUrlTest extends ControllerTestCase
     public function testFrontdoorUrl()
     {
         $helper = new Application_View_Helper_FrontdoorUrl();
-        $helper->setView(Zend_Registry::get('Opus_View'));
+        $helper->setView(\Zend_Registry::get('Opus_View'));
 
         $frontDoorUrl = $helper->frontdoorUrl('123');
         $this->assertEquals('http:///frontdoor/index/index/docId/123', $frontDoorUrl);

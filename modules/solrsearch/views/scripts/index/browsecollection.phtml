@@ -69,7 +69,7 @@
 <h2><?= htmlspecialchars($this->title) ?></h2>
 
 <?php
-    $config = Zend_Registry::get('Zend_Config');
+    $config = \Zend_Registry::get('Zend_Config');
     $this->disableEmptyCollections = isset($config->browsing->disableEmptyCollections) &&
         filter_var($config->browsing->disableEmptyCollections, FILTER_VALIDATE_BOOLEAN);
     $collRoleName = htmlspecialchars($this->collectionRole->getName(), ENT_QUOTES);

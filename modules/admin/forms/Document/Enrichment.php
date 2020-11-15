@@ -33,6 +33,13 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Enrichment;
+use Opus\EnrichmentKey;
+use Opus\Enrichment\SelectType;
+use Opus\Enrichment\TextType;
+use Opus\Model\ModelException;
+use Opus\Model\NotFoundException;
+
 /**
  * Unterformular für einzelne Enrichments im Metadaten-Formular.
  *
@@ -83,7 +90,7 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
      * Initialisiert die Formularelemente mit den Werten aus dem übergebenen Enrichment-Model. Diese Methode wird beim
      * initialen Formularaufruf (d.h. nur im Kontext eines GET-Requests) aufgerufen.
      *
-     * @param Opus_Enrichment $enrichment Enrichment aus der Datenbank, das im Formular angezeigt werden soll
+     * @param Enrichment $enrichment Enrichment aus der Datenbank, das im Formular angezeigt werden soll
      */
     public function populateFromModel($enrichment)
     {
@@ -129,7 +136,7 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
             // der noch keinen zugeordneten Typ besitzt oder um ein Enrichment, das
             // einen nicht registrierten EnrichmentKey verwendet: in diesem Fall wird der
             // EnrichmentType TextType angenommen (einfacher Text)
-            $enrichmentType = new Opus_Enrichment_TextType();
+            $enrichmentType = new TextType();
         }
 
         $value = $enrichmentValue;
@@ -205,7 +212,7 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
      * soll dennoch (als erster Eintrag) im Select-Formularfeld zur Auswahl angeboten werden.
      *
      * @param Zend_Form_Element_Select $element Select-Formularfeld
-     * @param Opus_Enrichment_SelectType $enrichmentType Enrichment-Typ
+     * @param SelectType $enrichmentType Enrichment-Typ
      * @param string $value Wert, der zur Auswahlliste hinzugefügt werden soll
      */
     private function addOptionToSelectElement($element, $enrichmentType, $value)
@@ -224,12 +231,12 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
     /**
      * Aktualisiert Enrichment Modell mit Werten im Formular.
      *
-     * @param Opus_Enrichment $enrichment
+     * @param Enrichment $enrichment
      */
     public function updateModel($enrichment)
     {
         $enrichmentKeyName = $this->getElementValue(self::ELEMENT_KEY_NAME);
-        $enrichmentKey = Opus_EnrichmentKey::fetchByName($enrichmentKeyName);
+        $enrichmentKey = EnrichmentKey::fetchByName($enrichmentKeyName);
 
         $enrichmentValue = $this->getElementValue(self::ELEMENT_VALUE);
 
@@ -272,7 +279,7 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
     /**
      * Liefert angezeigtes oder neues (hinzuzufügendes) Enrichment Modell.
      *
-     * @return \Opus_Enrichment
+     * @return Enrichment
      */
     public function getModel()
     {
@@ -283,12 +290,12 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
         }
 
         try {
-            $enrichment = new Opus_Enrichment($enrichmentId);
-        } catch (Opus_Model_NotFoundException $omnfe) {
+            $enrichment = new Enrichment($enrichmentId);
+        } catch (NotFoundException $omnfe) {
             $this->getLogger()->err(
                 __METHOD__ . " Unknown enrichment ID = '$enrichmentId' (" . $omnfe->getMessage() . ').'
             );
-            $enrichment = new Opus_Enrichment();
+            $enrichment = new Enrichment();
         }
 
         $this->updateModel($enrichment);
@@ -336,13 +343,13 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
         if (! is_null($enrichmentId)) {
             // Formularfeld zeigt den Wert eines in der Datenbank gespeicherten Enrichments
             try {
-                $enrichment = new Opus_Enrichment($enrichmentId);
-            } catch (\Opus\Model\Exception $e) {
+                $enrichment = new Enrichment($enrichmentId);
+            } catch (ModelException $e) {
                 // ignore exception silently
             }
         }
 
-        $enrichmentKey = Opus_EnrichmentKey::fetchByName($enrichmentKeyName);
+        $enrichmentKey = EnrichmentKey::fetchByName($enrichmentKeyName);
         if (is_null($enrichmentKey)) {
             if (! is_null($enrichment) && ($enrichmentKeyName === $enrichment->getKeyName())) {
                 // der im Enrichment gespeicherte EnrichmentKey-Name ist nicht registriert
@@ -375,8 +382,8 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
 
         $enrichment = null;
         try {
-            $enrichment = new Opus_Enrichment($enrichmentId);
-        } catch (\Opus\Model\Exception $e) {
+            $enrichment = new Enrichment($enrichmentId);
+        } catch (ModelException $e) {
             // ignore silently
             return;
         }
@@ -505,7 +512,7 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
         // gesetzt wurde und sich der Enrichment-Wert im POST-Request nicht vom ursprünglich im
         // Dokument gespeicherten Enrichment-Wert unterscheidet
         $enrichmentData = $data[$this->getName()];
-        $enrichmentKey = Opus_EnrichmentKey::fetchByName($enrichmentData[self::ELEMENT_KEY_NAME]);
+        $enrichmentKey = EnrichmentKey::fetchByName($enrichmentData[self::ELEMENT_KEY_NAME]);
         if (! is_null($enrichmentKey)) {
             $enrichmentType = $enrichmentKey->getEnrichmentType();
             if (! is_null($enrichmentType)) {
@@ -529,7 +536,7 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
 
                     $enrichmentId = $enrichmentData[self::ELEMENT_ID];
                     try {
-                        $enrichment = new Opus_Enrichment($enrichmentId);
+                        $enrichment = new Enrichment($enrichmentId);
 
                         if (! array_key_exists(self::ELEMENT_VALUE, $enrichmentData)) {
                             return false; // negatives Validierungsergebnis bleibt bestehen
@@ -586,7 +593,7 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
                                 }
                             }
                         }
-                    } catch (Opus\Model\Exception $e) {
+                    } catch (ModelException $e) {
                         // ignore exception silently: do not change validation result
                     }
                 }

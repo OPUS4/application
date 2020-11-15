@@ -46,7 +46,7 @@ class Application_View_Helper_DocumentTitleTest extends ControllerTestCase
         parent::setUp();
 
         $this->_helper = new Application_View_Helper_DocumentTitle();
-        $this->_helper->setView(Zend_Registry::get('Opus_View'));
+        $this->_helper->setView(\Zend_Registry::get('Opus_View'));
     }
 
     public function testDocumentTitle()
@@ -104,7 +104,7 @@ class Application_View_Helper_DocumentTitleTest extends ControllerTestCase
 
     public function testDocumentTitleUserInterfaceLanguage()
     {
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(
+        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config(
             ['search' => ['result' => ['display' => [
                 'preferUserInterfaceLanguage' => self::CONFIG_VALUE_TRUE
             ]]]]

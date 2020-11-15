@@ -34,8 +34,11 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
+use Opus\Collection;
+use Opus\CollectionRole;
+use Opus\Model\NotFoundException;
 
 /**
  * Controller for administration of collections.
@@ -190,7 +193,7 @@ class Admin_CollectionController extends Application_Controller_Action
         $roleId = $this->getRequest()->getParam('role');
         $id = null;
         if (! is_null($roleId)) {
-            $collectionRole = new Opus_CollectionRole($roleId);
+            $collectionRole = new CollectionRole($roleId);
             $rootCollection = $collectionRole->getRootCollection();
             if (is_null($rootCollection)) {
                 // collection role without root collection: create a new root collection
@@ -299,14 +302,14 @@ class Admin_CollectionController extends Application_Controller_Action
 
             switch ($type) {
                 case 'child':
-                    $refCollection = new Opus_Collection($id);
+                    $refCollection = new Collection($id);
                     $refCollection->addFirstChild($collection);
                     $refCollection->store();
                     $message = $this->view->translate('admin_collections_add', [$collectionModel->getName()]);
                     break;
 
                 case 'sibling':
-                    $refCollection = new Opus_Collection($id);
+                    $refCollection = new Collection($id);
                     $refCollection->addNextSibling($collection);
                     $refCollection->store();
                     $message = $this->view->translate('admin_collections_add', [$collectionModel->getName()]);
@@ -387,7 +390,7 @@ class Admin_CollectionController extends Application_Controller_Action
         }
 
         try {
-            $collection = new Opus_Collection($collectionId);
+            $collection = new Collection($collectionId);
 
             if (is_null($sortBy)) {
                 return $this->_helper->Redirector->redirectToAndExit(
@@ -418,7 +421,7 @@ class Admin_CollectionController extends Application_Controller_Action
                     );
                     break;
             }
-        } catch (Opus_Model_NotFoundException $omnfe) {
+        } catch (NotFoundException $omnfe) {
             return $this->_helper->Redirector->redirectToAndExit(
                 'index',
                 ['failure' => "collection with id $collectionId not found"],
@@ -515,7 +518,7 @@ class Admin_CollectionController extends Application_Controller_Action
 
     private function prepareAssignSubPage($documentId, $collectionId)
     {
-        $collection = new Opus_Collection($collectionId);
+        $collection = new Collection($collectionId);
         $children = $collection->getChildren();
         if (count($children) === 0) {
             // zurück zur Ausgangsansicht

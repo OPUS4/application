@@ -31,7 +31,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Application_View_Helper_FormHtml extends Zend_View_Helper_FormElement
+class Application_View_Helper_FormHtml extends \Zend_View_Helper_FormElement
 {
 
     public function formHtml($name, $value = null, array $attribs = null)

@@ -28,7 +28,6 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 // Define application environment (use 'production' by default)
@@ -40,15 +39,18 @@ defined('APPLICATION_ENV')
 
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
-$jobrunner = new Opus_Job_Runner;
-$jobrunner->setLogger(Zend_Registry::get('Zend_Log'));
+use Opus\Job\Runner;
+use Opus\Job\Worker\MailNotification;
+
+$jobrunner = new Runner;
+$jobrunner->setLogger(\Zend_Registry::get('Zend_Log'));
 // no waiting between jobs
 $jobrunner->setDelay(0);
 // set a limit of 100 index jobs per run
 $jobrunner->setLimit(100);
 
-$mailWorker = new Opus_Job_Worker_MailNotification(null, false);
-$mailWorker->setLogger(Zend_Registry::get('Zend_Log'));
+$mailWorker = new MailNotification(null, false);
+$mailWorker->setLogger(\Zend_Registry::get('Zend_Log'));
 
 $jobrunner->registerWorker($mailWorker);
 

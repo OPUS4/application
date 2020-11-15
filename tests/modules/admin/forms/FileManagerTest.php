@@ -25,6 +25,8 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+use Opus\Document;
+
 /**
  * Unit Test fuer FileManager Formular.
  *
@@ -65,7 +67,7 @@ class Admin_Form_FileManagerTest extends ControllerTestCase
     {
         $form = new Admin_Form_FileManager();
 
-        $document = new Opus_Document(92);
+        $document = Document::get(92);
 
         $filesForm = $form->getSubForm(Admin_Form_FileManager::SUBFORM_FILES);
 
@@ -91,7 +93,7 @@ class Admin_Form_FileManagerTest extends ControllerTestCase
     {
         $form = new Admin_Form_FileManager();
 
-        $document = new Opus_Document(92);
+        $document = Document::get(92);
 
         $form->populateFromModel($document);
 
@@ -162,7 +164,7 @@ class Admin_Form_FileManagerTest extends ControllerTestCase
 
     public function testConstructFromPost()
     {
-        $document = new Opus_Document(146);
+        $document = Document::get(146);
 
         $post = [
             'Files' => [
@@ -206,7 +208,7 @@ class Admin_Form_FileManagerTest extends ControllerTestCase
 
     public function testGetInstanceFromPost()
     {
-        $document = new Opus_Document(146);
+        $document = Document::get(146);
 
         $post = [
             'Files' => [

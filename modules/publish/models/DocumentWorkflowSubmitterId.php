@@ -30,7 +30,6 @@
  * @author      Thoralf Klein <thoralf.klein@zib.de>
  * @copyright   Copyright (c) 2011-2012, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 class Publish_Model_DocumentWorkflowMatheon extends Publish_Model_DocumentWorkflow
 {
@@ -46,7 +45,7 @@ class Publish_Model_DocumentWorkflowMatheon extends Publish_Model_DocumentWorkfl
         $userId = trim($loggedUserModel->getUserId());
 
         if (empty($userId)) {
-            $logger = Zend_Registry::get('Zend_Log');
+            $logger = \Zend_Registry::get('Zend_Log');
             $logger->debug("No user logged in.  Skipping enrichment.");
             return;
         }

@@ -34,6 +34,9 @@
  *
  * Controller for handling file downloads in the frontdoor.
  */
+
+use Opus\Security\Realm;
+
 class Frontdoor_DeliverController extends Application_Controller_Action
 {
 
@@ -45,7 +48,7 @@ class Frontdoor_DeliverController extends Application_Controller_Action
         $docId = $this->_getParam('docId', null);
         $path = $this->_getParam('file', null);
 
-        $realm = Opus_Security_Realm::getInstance();
+        $realm = Realm::getInstance();
 
         $fileModel = null;
 

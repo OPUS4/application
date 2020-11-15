@@ -92,5 +92,6 @@ class Application_Form_Element_LanguageTest extends FormElementTestCase
 
     public function testUnknownLanguage()
     {
+        $this->markTestIncomplete();
     }
 }

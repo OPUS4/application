@@ -29,7 +29,6 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -38,7 +37,7 @@
  * @category    Application
  * @package     View
  */
-class Application_View_Helper_Breadcrumbs extends Zend_View_Helper_Navigation_Breadcrumbs
+class Application_View_Helper_Breadcrumbs extends \Zend_View_Helper_Navigation_Breadcrumbs
 {
 
     private $_suffixSeparatorDisabled = false;
@@ -85,10 +84,10 @@ class Application_View_Helper_Breadcrumbs extends Zend_View_Helper_Navigation_Br
     /**
      * Rendert den kompletten Breadcrumbs Pfad für die aktuelle Seite.
      *
-     * @param Zend_Navigation_Container $container
+     * @param \Zend_Navigation_Container $container
      * @return string
      */
-    public function renderStraight(Zend_Navigation_Container $container = null)
+    public function renderStraight(\Zend_Navigation_Container $container = null)
     {
         if (null === $container) {
             $container = $this->getContainer();

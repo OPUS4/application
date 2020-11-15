@@ -73,7 +73,7 @@ class Application_View_Helper_ExportLinksTest extends ControllerTestCase
 
     public function testRenderLink()
     {
-        $page = new Zend_Navigation_Page_Mvc([
+        $page = new \Zend_Navigation_Page_Mvc([
             'name' => 'bibtex',
             'description' => 'Export BibTeX',
             'module' => 'citationExport',

@@ -30,7 +30,6 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -115,12 +114,13 @@ class Admin_Model_EnrichmentKeys extends Application_Model_Abstract
      * @param null $oldName Optionally old name if it has been changed
      *
      * TODO create keys if they don't exist
+     * TODO what happens if renameKey into keys that already exist?
      */
     public function createTranslations($name, $oldName = null)
     {
         $patterns = $this->translationKeyPatterns;
 
-        $database = new Opus_Translate_Dao();
+        $database = new \Opus\Translate\Dao();
         $manager = new Application_Translate_TranslationManager();
 
         if (! is_null($oldName) && $name !== $oldName) {
@@ -150,7 +150,7 @@ class Admin_Model_EnrichmentKeys extends Application_Model_Abstract
     {
         $patterns = $this->translationKeyPatterns;
 
-        $database = new Opus_Translate_Dao();
+        $database = new \Opus\Translate\Dao();
 
         foreach ($patterns as $pattern) {
             $key = sprintf($pattern, $name);

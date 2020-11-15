@@ -34,14 +34,14 @@
  * @copyright   Copyright (c) 2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Application_Form_Element_Html extends Zend_Form_Element_Xhtml
+class Application_Form_Element_Html extends \Zend_Form_Element_Xhtml
 {
 
     public $helper = 'formHtml';
 
     public function init()
     {
-        $this->addPrefixPath('Application_Form_Decorator', 'Application/Form/Decorator', Zend_Form::DECORATOR);
+        $this->addPrefixPath('Application_Form_Decorator', 'Application/Form/Decorator', \Zend_Form::DECORATOR);
     }
 
     public function loadDefaultDecorators()

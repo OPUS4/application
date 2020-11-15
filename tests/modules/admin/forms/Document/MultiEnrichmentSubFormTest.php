@@ -31,6 +31,11 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Document;
+use Opus\Enrichment;
+use Opus\EnrichmentKey;
+use Opus\Model\ModelException;
+
 /**
  * Unit Tests für Admin_Form_Document_MultiEnrichmentSubForm Formular das
  * mehrere Unterformulare vom Typ Admin_Form_Document_Enrichment verwalten kann.
@@ -49,7 +54,7 @@ class Admin_Form_Document_MultiEnrichmentSubFormTest extends ControllerTestCase
         $form = new Admin_Form_Document_MultiEnrichmentSubForm('Admin_Form_Document_Enrichment', 'Enrichment');
 
         // create a test document with four enrichments
-        $doc = new Opus_Document();
+        $doc = Document::new();
 
         $enrichments = [];
         $enrichments[] = $this->createEnrichment('Audience', 'val1');
@@ -86,7 +91,7 @@ class Admin_Form_Document_MultiEnrichmentSubFormTest extends ControllerTestCase
         );
 
         // create a test document with two enrichments
-        $doc = new Opus_Document();
+        $doc = Document::new();
 
         $enrichments = [];
         $enrichments[] = $this->createEnrichment('Audience', 'val1');
@@ -277,15 +282,15 @@ class Admin_Form_Document_MultiEnrichmentSubFormTest extends ControllerTestCase
      * Hilfsfunktion zum Erzeugen eines neuen Enrichments für den übergebenen
      * Enrichment-Key.
      *
-     * @param $keyName Name des Enrichment-Keys
-     * @param $value Wert des Enrichments
+     * @param string $keyName Name des Enrichment-Keys
+     * @param string $value Wert des Enrichments
      *
-     * @return Opus_Enrichment neu erzeugtes Enrichment-Objekt
-     * @throws Opus_Model_Exception
+     * @return Enrichment neu erzeugtes Enrichment-Objekt
+     * @throws ModelException
      */
     private function createEnrichment($keyName, $value)
     {
-        $enrichment = new Opus_Enrichment();
+        $enrichment = new Enrichment();
         $enrichment->setKeyName($keyName);
         $enrichment->setValue($value);
         return $enrichment;
@@ -298,12 +303,12 @@ class Admin_Form_Document_MultiEnrichmentSubFormTest extends ControllerTestCase
      * @param null $type optionaler Typ des Enrichment-Keys
      * @param null $options optionale Konfigurationsoptionen des Typs
      *
-     * @return Opus_EnrichmentKey neu erzeugter Enrichment-Key
-     * @throws Opus_Model_Exception
+     * @return EnrichmentKey neu erzeugter Enrichment-Key
+     * @throws ModelException
      */
     private function createEnrichmentKey($type = null, $options = null)
     {
-        $enrichmentKey = new Opus_EnrichmentKey();
+        $enrichmentKey = new EnrichmentKey();
         $enrichmentKey->setName(self::$firstEnrichmentKeyName);
 
         if (! is_null($type)) {
@@ -316,7 +321,7 @@ class Admin_Form_Document_MultiEnrichmentSubFormTest extends ControllerTestCase
 
         $enrichmentKey->store();
 
-        $enrichmentKey = Opus_EnrichmentKey::fetchByName(self::$firstEnrichmentKeyName);
+        $enrichmentKey = EnrichmentKey::fetchByName(self::$firstEnrichmentKeyName);
         $this->assertNotNull($enrichmentKey);
 
         return $enrichmentKey;
@@ -350,7 +355,7 @@ class Admin_Form_Document_MultiEnrichmentSubFormTest extends ControllerTestCase
             ],
         ];
 
-        Opus_EnrichmentKey::getAll();
+        EnrichmentKey::getAll();
 
         // trifft nur zu, wenn der Add-Button gedrückt oder ein Enrichment-Key im Select-Feld ausgewählt wurde
         if (! is_null($clickedButton)) {

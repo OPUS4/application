@@ -35,7 +35,7 @@
 /**
  * SubForm used for editing translations for multiple languages.
  */
-class Setup_Form_TranslationValues extends Zend_Form_SubForm
+class Setup_Form_TranslationValues extends \Zend_Form_SubForm
 {
 
     public function init()
@@ -49,7 +49,7 @@ class Setup_Form_TranslationValues extends Zend_Form_SubForm
             [['Wrapper' => 'HtmlTag'], ['class' => 'row']]
         ]);
 
-        $translator = Zend_Registry::get('Zend_Translate');
+        $translator = \Zend_Registry::get('Zend_Translate');
 
         $languages = $this->getLanguages();
 

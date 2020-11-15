@@ -29,7 +29,6 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -38,7 +37,7 @@
  * @category    Application
  * @package     Form_Validate
  */
-class Application_Form_Validate_Orcid extends Zend_Validate_Abstract
+class Application_Form_Validate_Orcid extends \Zend_Validate_Abstract
 {
 
     /**

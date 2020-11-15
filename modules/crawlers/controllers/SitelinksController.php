@@ -30,6 +30,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\DocumentFinder;
+
 /**
  * Generating site links suitable for search engine indexing.
  *
@@ -51,7 +53,7 @@ class Crawlers_SitelinksController extends Application_Controller_Action
      */
     public function indexAction()
     {
-        $f = new Opus_DocumentFinder();
+        $f = new DocumentFinder();
         $f->setServerState('published');
 
         $this->view->years = $f->groupedServerYearPublished();
@@ -71,7 +73,7 @@ class Crawlers_SitelinksController extends Application_Controller_Action
         $year = trim($this->_getParam('year'));
 
         if (preg_match('/^\d{4}$/', $year) > 0) {
-            $f = new Opus_DocumentFinder();
+            $f = new DocumentFinder();
             $f->setServerState('published');
             $f->setServerDatePublishedRange($year, $year + 1);
             $this->view->ids = $f->ids();

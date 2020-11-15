@@ -34,7 +34,7 @@
  * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-abstract class Application_Form_Abstract extends Zend_Form_SubForm
+abstract class Application_Form_Abstract extends \Zend_Form_SubForm
 {
 
     use \Opus\LoggingTrait;
@@ -64,7 +64,7 @@ abstract class Application_Form_Abstract extends Zend_Form_SubForm
     {
         parent::init();
 
-        $this->addPrefixPath('Application_Form_Decorator', 'Application/Form/Decorator', Zend_Form::DECORATOR);
+        $this->addPrefixPath('Application_Form_Decorator', 'Application/Form/Decorator', \Zend_Form::DECORATOR);
         // $this->addElementPrefixPath('Form_Decorator', 'Form/Decorator', Zend_Form::DECORATOR);
         $this->addPrefixPath('Form', 'Form'); // '_Element' wird anscheinend automatisch dran gehängt
         $this->addPrefixPath('Application_Form', 'Application/Form');
@@ -88,8 +88,8 @@ abstract class Application_Form_Abstract extends Zend_Form_SubForm
         if (! is_null($element)) {
             $value = $element->getValue();
 
-            if ($element instanceof Zend_Form_Element_Text || $element instanceof Zend_Form_Element_Textarea
-                || $element instanceof Zend_Form_Element_Hidden) {
+            if ($element instanceof \Zend_Form_Element_Text || $element instanceof \Zend_Form_Element_Textarea
+                || $element instanceof \Zend_Form_Element_Hidden) {
                 return (trim($value) === '') ? null : $value;
             } else {
                 return $value;
@@ -139,7 +139,7 @@ abstract class Application_Form_Abstract extends Zend_Form_SubForm
         if ($element->isRequired()) {
             // wenn Validator 'notEmpty' bereits gesetzt ist; nicht modifizieren
             if (! $element->getValidator('notEmpty') && $element->autoInsertNotEmptyValidator()) {
-                $notEmptyValidator = new Zend_Validate_NotEmpty();
+                $notEmptyValidator = new \Zend_Validate_NotEmpty();
                 $notEmptyValidator->setMessage('admin_validate_error_notempty');
                 $element->addValidator($notEmptyValidator);
             }
@@ -190,7 +190,7 @@ abstract class Application_Form_Abstract extends Zend_Form_SubForm
     public function getApplicationConfig()
     {
         if (is_null($this->_config)) {
-            $this->_config = Zend_Registry::get('Zend_Config');
+            $this->_config = \Zend_Registry::get('Zend_Config');
         }
 
         return $this->_config;

@@ -31,6 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\EnrichmentKey;
+
 /**
  * Formularelement für die Auswahl eines EnrichmentKeys.
  */
@@ -42,7 +44,7 @@ class Application_Form_Element_EnrichmentKey extends Application_Form_Element_Se
         parent::init();
 
         // load enrichment keys only once in order to save database queries
-        $options = Opus_EnrichmentKey::getAll(false);
+        $options = EnrichmentKey::getAll(false);
 
         $this->setDisableTranslator(true); // keys are translated below if possible
 
@@ -81,7 +83,7 @@ class Application_Form_Element_EnrichmentKey extends Application_Form_Element_Se
             $message = $translator->translate($message);
         }
 
-        $validator = new Zend_Validate_InArray(array_keys($this->getMultiOptions()));
+        $validator = new \Zend_Validate_InArray(array_keys($this->getMultiOptions()));
         $validator->setMessage($message);
         $this->addValidator($validator);
     }

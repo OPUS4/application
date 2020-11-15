@@ -29,8 +29,9 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
+use Opus\Model\NotFoundException;
 
 abstract class CrudControllerTestCase extends ControllerTestCase
 {
@@ -106,7 +107,6 @@ abstract class CrudControllerTestCase extends ControllerTestCase
         $this->assertAction('index');
 
         $models = $this->getModels();
-        ;
 
         $this->assertQuery('a.add', 'Kein Add Button gefunden.');
         if (count($models) > 0) {
@@ -224,7 +224,7 @@ abstract class CrudControllerTestCase extends ControllerTestCase
 
         try {
             $this->getModel($modelId);
-        } catch (Opus_Model_NotFoundException $omnfe) {
+        } catch (NotFoundException $omnfe) {
             // alles gut, Modell wurde geloescht
         }
 

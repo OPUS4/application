@@ -35,7 +35,7 @@
  * View helper for wrapping strings inside larger string in HTML for
  * highlighting search terms in results.
  */
-class Application_View_Helper_Highlight extends Zend_View_Helper_Abstract
+class Application_View_Helper_Highlight extends \Zend_View_Helper_Abstract
 {
 
     public function highlight($subject, $needle, $prefix = null, $suffix = null)

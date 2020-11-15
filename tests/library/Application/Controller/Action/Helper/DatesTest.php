@@ -31,6 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Date;
+
 /**
  * Unit Test for class Admin_Model_Workflow.
  */
@@ -107,21 +109,21 @@ class Application_Controller_Action_Helper_DatesTest extends ControllerTestCase
     public function testGetDateStringGerman()
     {
         $this->useGerman();
-        $date = new Opus_Date('2005-03-25');
+        $date = new Date('2005-03-25');
         $this->assertEquals('25.03.2005', $this->__datesHelper->getDateString($date));
     }
 
     public function testGetDateStringEnglish()
     {
         $this->useEnglish();
-        $date = new Opus_Date('2005-03-25');
+        $date = new Date('2005-03-25');
         $this->assertEquals('2005/03/25', $this->__datesHelper->getDateString($date));
     }
 
     public function testGetDateStringForInvalidDate()
     {
         $this->useGerman();
-        $date = new Opus_Date('2005');
+        $date = new Date('2005');
         $this->assertFalse($date->isValid());
         $this->assertEquals(null, $this->__datesHelper->getDateString($date));
     }

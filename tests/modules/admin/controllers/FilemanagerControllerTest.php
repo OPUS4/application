@@ -33,6 +33,10 @@
  * TODO einiges durch Selenium abgedeckt; Unit Tests vielleicht möglich
  */
 
+use Opus\Date;
+use Opus\Document;
+use Opus\UserRole;
+
 /**
  * @covers Admin_FilemanagerController
  */
@@ -269,11 +273,11 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase
         $file->setPathName('testdatei.txt');
         $documentId = $document->store();
 
-        $document = new Opus_Document($documentId);
+        $document = Document::get($documentId);
 
         $fileId = $document->getFile(0)->getId();
 
-        $roleGuest = Opus_UserRole::fetchByName('guest');
+        $roleGuest = UserRole::fetchByName('guest');
         $files = $roleGuest->listAccessFiles();
         $this->assertContains($fileId, $files);
 
@@ -297,7 +301,7 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase
         $this->assertResponseCode(302);
         $this->assertRedirectTo('/admin/document/index/id/' . $documentId);
 
-        $roleGuest = Opus_UserRole::fetchByName('guest');
+        $roleGuest = UserRole::fetchByName('guest');
         $files = $roleGuest->listAccessFiles();
         $this->assertNotContains($fileId, $files);
     }
@@ -331,7 +335,7 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase
 
         $docId = $doc->store();
 
-        $dateNow = new Opus_Date();
+        $dateNow = new Date();
         $dateNow->setNow();
 
         $this->dispatch('admin/filemanager/index/id/' . $docId);
@@ -345,7 +349,7 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase
     public function testFileUploadDateAfterModification()
     {
         $this->useGerman();
-        $doc = new Opus_Document(305);
+        $doc = Document::get(305);
 
         foreach ($doc->getFile() as $file) {
             $file->setComment(rand());

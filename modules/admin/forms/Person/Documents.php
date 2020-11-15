@@ -31,6 +31,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Document;
+use Opus\Person;
+
 /**
  * TODO Move documents element code into this subform? (use smaller single document element)
  */
@@ -61,7 +64,7 @@ class Admin_Form_Person_Documents extends Application_Form_Abstract
         $options = [];
 
         foreach ($documentIds as $docId) {
-            $options[$docId] = new Opus_Document($docId);
+            $options[$docId] = Document::get($docId);
         }
 
         $documents = $this->getElement(self::ELEMENT_DOCUMENTS);
@@ -69,7 +72,7 @@ class Admin_Form_Person_Documents extends Application_Form_Abstract
         $documents->setValue($documentIds);
 
         if (! is_null($person)) {
-            $documents->setAttrib('person', Opus_Person::convertToFieldNames($person));
+            $documents->setAttrib('person', Person::convertToFieldNames($person));
         }
     }
 

@@ -39,13 +39,10 @@ class Admin_Model_DocumentEditSessionTest extends ControllerTestCase
         $this->assertEquals(146, $model->getDocumentId());
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage mit document ID '-1' aufgerufen
-     */
     public function testCreateModelWithBadId()
     {
-        $model = new Admin_Model_DocumentEditSession(-1);
+        $this->setExpectedException(\InvalidArgumentException::class, 'mit document ID \'-1\' aufgerufen');
+        new Admin_Model_DocumentEditSession(-1);
     }
 
     public function testAddPerson()
@@ -81,7 +78,7 @@ class Admin_Model_DocumentEditSessionTest extends ControllerTestCase
 
         $model->addPerson($props);
 
-        $this->assertEquals(1, count($model->retrievePersons()));
+        $this->assertCount(1, $model->retrievePersons());
 
         // retrievePersons removes variable from session
         $this->assertEmpty($model->retrievePersons());

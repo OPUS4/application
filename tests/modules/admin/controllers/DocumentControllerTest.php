@@ -32,6 +32,12 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\CollectionRole;
+use Opus\Date;
+use Opus\Note;
+use Opus\Person;
+use Opus\Title;
+
 /**
  * Unit tests for Admin_DocumentController.
  *
@@ -87,10 +93,10 @@ class Admin_DocumentControllerTest extends ControllerTestCase
     {
         $doc = $this->createTestDocument();
 
-        $person = new Opus_Person();
+        $person = new Person();
         $person->setFirstName("Johnny");
         $person->setLastName("Test");
-        $dateOfBirth = new Opus_Date(new Zend_Date('1.1.2010', 'dd/MM/yyyy'));
+        $dateOfBirth = new Date(new \Zend_Date('1.1.2010', 'dd/MM/yyyy'));
         $person->setDateOfBirth($dateOfBirth);
 
         $doc->addPersonAuthor($person);
@@ -149,7 +155,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase
         $doc = $this->createTestDocument();
         $doc->setLanguage("eng");
 
-        $abstract = new Opus_Title();
+        $abstract = new Title();
         $abstract->setLanguage("eng");
         $abstract->setValue("foo\nbar\n\nbaz");
         $doc->addTitleAbstract($abstract);
@@ -171,7 +177,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase
         $doc->setLanguage("eng");
         $doc->setServerState("published");
 
-        $note = new Opus_Note();
+        $note = new Note();
         $note->setMessage("foo\nbar\n\nbaz");
         $note->setVisibility("public");
         $doc->addNote($note);
@@ -189,7 +195,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase
     public function testDisplayCollectionNumberAndNameOnOverviewPageForDDCCollection()
     {
         $this->markTestIncomplete("Muss fuer OPUS 4.4 angepasst werden."); // TODO OPUSVIER-2794
-        $role = new Opus_CollectionRole(2);
+        $role = new CollectionRole(2);
         $displayBrowsing = $role->getDisplayBrowsing();
         $role->setDisplayBrowsing('Name');
         $role->store();
@@ -207,7 +213,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase
     public function testDisplayCollectionNumberAndNameOnAssignmentPageForDDCCollection()
     {
         $this->markTestIncomplete("Muss fuer OPUS 4.4 angepasst werden."); // TODO OPUSVIER-2794
-        $role = new Opus_CollectionRole(2);
+        $role = new CollectionRole(2);
         $displayBrowsing = $role->getDisplayBrowsing();
         $role->setDisplayBrowsing('Name');
         $role->store();
@@ -943,9 +949,9 @@ class Admin_DocumentControllerTest extends ControllerTestCase
     public function testUnableToTranslateForMetadataView()
     {
         $logger = new MockLogger();
-        Zend_Registry::set('Zend_Log', $logger);
+        \Zend_Registry::set('Zend_Log', $logger);
 
-        $adapter = Zend_Registry::get('Zend_Translate')->getAdapter();
+        $adapter = \Zend_Registry::get('Zend_Translate')->getAdapter();
         $options = $adapter->getOptions();
         $options['log'] = $logger;
         $adapter->setOptions($options);
@@ -962,7 +968,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase
             }
         }
 
-        $output = Zend_Debug::dump($failedTranslations, null, false);
+        $output = \Zend_Debug::dump($failedTranslations, null, false);
 
         // currently only two messages cannot be avoided
         $this->assertLessThanOrEqual(2, count($failedTranslations), $output);
@@ -971,9 +977,9 @@ class Admin_DocumentControllerTest extends ControllerTestCase
     public function testUnableToTranslateForEditForm()
     {
         $logger = new MockLogger();
-        Zend_Registry::set('Zend_Log', $logger);
+        \Zend_Registry::set('Zend_Log', $logger);
 
-        $adapter = Zend_Registry::get('Zend_Translate')->getAdapter();
+        $adapter = \Zend_Registry::get('Zend_Translate')->getAdapter();
         $options = $adapter->getOptions();
         $options['log'] = $logger;
         $adapter->setOptions($options);
@@ -990,7 +996,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase
             }
         }
 
-        $output = Zend_Debug::dump($failedTranslations, null, false);
+        $output = \Zend_Debug::dump($failedTranslations, null, false);
 
         // currently only two messages cannot be avoided
         $this->assertLessThanOrEqual(2, count($failedTranslations), $output);

@@ -30,7 +30,6 @@
  * @author      Susanne Gottwald <gottwald@zib.de>
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 class Publish_IndexController extends Application_Controller_Action
 {
@@ -52,7 +51,7 @@ class Publish_IndexController extends Application_Controller_Action
      */
     public function indexAction()
     {
-        $session = new Zend_Session_Namespace('Publish');
+        $session = new \Zend_Session_Namespace('Publish');
 
         //unset all possible session content
         $session->unsetAll();
@@ -84,7 +83,7 @@ class Publish_IndexController extends Application_Controller_Action
         }
 
         // Quick bug fix for OPUSVIER-3564
-        $translate = Zend_Registry::get('Zend_Translate');
+        $translate = \Zend_Registry::get('Zend_Translate');
         if ($translate->isTranslated('tooltip_documentType')) {
             $this->view->documentType['hint'] = 'tooltip_documentType';
         }

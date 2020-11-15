@@ -1,5 +1,4 @@
 <?php
-
 /*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -66,7 +65,7 @@ class LicencesAdminTest extends ControllerTestCase
         $this->assertNotQuery('//a[@href="/admin/series"]');
         $this->assertNotQuery('//a[@href="/admin/language"]');
         $this->assertNotQuery('//a[@href="/admin/dnbinstitute"]');
-        $this->assertQuery('//a[@href="/admin/index/setup"]');
+        $this->assertNotQuery('//a[@href="/admin/index/setup"]');
         $this->assertNotQuery('//a[@href="/review"]');
     }
 
@@ -86,7 +85,7 @@ class LicencesAdminTest extends ControllerTestCase
     public function testNoAccessDocumentsController()
     {
         $this->dispatch('/admin/documents');
-        $this->assertRedirectTo('/auth');
+        $this->assertRedirectTo('/auth/index/rmodule/admin/rcontroller/documents/raction/index');
     }
 
     /**
@@ -102,18 +101,20 @@ class LicencesAdminTest extends ControllerTestCase
     public function testNoAccessFilebrowserController()
     {
         $this->dispatch('/admin/filebrowser/index/docId/92');
-        $this->assertRedirectTo('/auth');
+        $this->assertRedirectTo('/auth/index/rmodule/admin/rcontroller/filebrowser/raction/index/docId/92');
     }
 
     public function testNoAccessWorkflowController()
     {
         $this->dispatch('/admin/workflow/changestate/docId/300/targetState/deleted');
-        $this->assertRedirectTo('/auth');
+        $this->assertRedirectTo(
+            '/auth/index/rmodule/admin/rcontroller/workflow/raction/changestate/docId/300/targetState/deleted'
+        );
     }
 
     public function testNoAccessAccessController()
     {
         $this->dispatch('/admin/access/listmodule/roleid/2');
-        $this->assertRedirectTo('/auth');
+        $this->assertRedirectTo('/auth/index/rmodule/admin/rcontroller/access/raction/listmodule/roleid/2');
     }
 }

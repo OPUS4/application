@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -31,47 +30,49 @@
  * @author      Ralf Claussnitzer (ralf.claussnitzer@slub-dresden.de)
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
+use Opus\Security\Realm;
+use Opus\Security\SecurityException;
+
 /**
- * Identify the Role of the current User and set up Opus_Security_Realm with
+ * Identify the Role of the current User and set up Realm with
  * the approriate Role.
  *
  * @category    Application
  * @package     Controller
  */
-class Application_Controller_Plugin_SecurityRealm extends Zend_Controller_Plugin_Abstract
+class Application_Controller_Plugin_SecurityRealm extends \Zend_Controller_Plugin_Abstract
 {
 
     /**
-     * Determine the current User's security role and set up Opus_Security_Realm.
+     * Determine the current User's security role and set up Realm.
      *
-     * @param Zend_Controller_Request_Abstract $request The current request.
+     * @param \Zend_Controller_Request_Abstract $request The current request.
      * @return void
      */
-    public function routeStartup(Zend_Controller_Request_Abstract $request)
+    public function routeStartup(\Zend_Controller_Request_Abstract $request)
     {
 
         // Create a Realm instance.  Initialize privileges to empty.
-        $realm = Opus_Security_Realm::getInstance();
+        $realm = Realm::getInstance();
         $realm->setUser(null);
         $realm->setIp(null);
 
         // Overwrite default user if current user is logged on.
-        $auth = Zend_Auth::getInstance();
+        $auth = \Zend_Auth::getInstance();
         $identity = $auth->getIdentity();
 
         if (false === empty($identity)) {
             try {
                 $realm->setUser($identity);
-            } catch (Opus_Security_Exception $e) {
+            } catch (SecurityException $e) {
                 // unknown account -> clean identity (e.g. session of deleted user - OPUSVIER-3214)
                 $auth->clearIdentity();
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 // unexpected exception -> clear identity and throw
                 $auth->clearIdentity();
-                throw new Exception($e);
+                throw new \Exception($e);
             }
         }
 
@@ -95,7 +96,7 @@ class Application_Controller_Plugin_SecurityRealm extends Zend_Controller_Plugin
 
     private function getModuleMemberName($moduleName)
     {
-        $member = Zend_Auth_Storage_Session::MEMBER_DEFAULT;
+        $member = \Zend_Auth_Storage_Session::MEMBER_DEFAULT;
         // try to find group of module
         foreach ($this->groups as $id => $modules) {
             if (in_array($moduleName, $modules)) {
@@ -107,11 +108,11 @@ class Application_Controller_Plugin_SecurityRealm extends Zend_Controller_Plugin
         return $member;
     }
 
-    public function preDispatch(Zend_Controller_Request_Abstract $request)
+    public function preDispatch(\Zend_Controller_Request_Abstract $request)
     {
-        $namespace = Zend_Auth_Storage_Session::NAMESPACE_DEFAULT;
+        $namespace = \Zend_Auth_Storage_Session::NAMESPACE_DEFAULT;
         $member = $this->getModuleMemberName($request->getModuleName());
-        $storage = new Zend_Auth_Storage_Session($namespace, $member);
-        Zend_Auth::getInstance()->setStorage($storage);
+        $storage = new \Zend_Auth_Storage_Session($namespace, $member);
+        \Zend_Auth::getInstance()->setStorage($storage);
     }
 }

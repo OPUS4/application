@@ -51,7 +51,7 @@ class Application_View_Helper_TranslationEditLinkTest extends ControllerTestCase
 
     public function testRenderOnlyIfSetupAccess()
     {
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
             'setup' => ['translation' => ['modules' => ['allowed' => 'default,publish,help']]]
         ]));
 
@@ -76,7 +76,7 @@ class Application_View_Helper_TranslationEditLinkTest extends ControllerTestCase
 
     public function testRenderOnlyIfKeyEditable()
     {
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
             'setup' => ['translation' => ['modules' => ['allowed' => 'default']]]
         ]));
 
@@ -86,7 +86,7 @@ class Application_View_Helper_TranslationEditLinkTest extends ControllerTestCase
 
         $this->assertEquals('', $html);
 
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
             'setup' => ['translation' => ['modules' => ['allowed' => 'default,publish,help']]]
         ]));
 
@@ -104,7 +104,7 @@ class Application_View_Helper_TranslationEditLinkTest extends ControllerTestCase
     protected function getHelper()
     {
         $helper = new Application_View_Helper_TranslationEditLink();
-        $helper->setView(Zend_Registry::get('Opus_View'));
+        $helper->setView(\Zend_Registry::get('Opus_View'));
         return $helper;
     }
 }

@@ -44,6 +44,9 @@
  *
  *
  */
+
+use Opus\EnrichmentKey;
+
 class Application_Import_AdditionalEnrichments
 {
     const OPUS_IMPORT_USER = 'opus.import.user';
@@ -82,7 +85,7 @@ class Application_Import_AdditionalEnrichments
 
     private function keyExist($key)
     {
-        $enrichmentkey = Opus_EnrichmentKey::fetchByName($key);
+        $enrichmentkey = EnrichmentKey::fetchByName($key);
         return ! is_null($enrichmentkey);
     }
 

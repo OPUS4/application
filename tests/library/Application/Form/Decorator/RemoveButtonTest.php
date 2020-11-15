@@ -41,7 +41,7 @@ class Application_Form_Decorator_RemoveButtonTest extends ControllerTestCase
 
     public function testRender()
     {
-        $form = new Zend_Form();
+        $form = new \Zend_Form();
         $form->setName('Test');
         $form->addElement('submit', 'Remove');
 
@@ -55,7 +55,7 @@ class Application_Form_Decorator_RemoveButtonTest extends ControllerTestCase
 
     public function testRenderWithHidden()
     {
-        $form = new Zend_Form();
+        $form = new \Zend_Form();
         $form->setName('Test');
         $form->addElement('submit', 'Remove');
         $element = $form->createElement('hidden', 'Id');

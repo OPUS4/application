@@ -34,7 +34,6 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 class Application_Controller_Action_Helper_Version extends Application_Controller_Action_Helper_Abstract
 {
@@ -71,7 +70,7 @@ class Application_Controller_Action_Helper_Version extends Application_Controlle
      */
     public function getLatestReleaseFromServer()
     {
-        $latestUrl = Zend_Registry::get('Zend_Config')->update->latestVersionCheckUrl;
+        $latestUrl = \Zend_Registry::get('Zend_Config')->update->latestVersionCheckUrl;
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);

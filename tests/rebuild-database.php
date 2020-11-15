@@ -54,8 +54,11 @@ set_include_path(
 
 require_once 'autoload.php';
 
+// TODO OPUSVIER-4420 remove after switching to Laminas/ZF3
+require_once APPLICATION_PATH . '/vendor/opus4-repo/framework/library/OpusDb/Mysqlutf8.php';
+
 // environment initializiation
-$application = new Zend_Application(
+$application = new \Zend_Application(
     APPLICATION_ENV,
     [
         "config" => [
@@ -68,7 +71,7 @@ $application = new Zend_Application(
     ]
 );
 
-Zend_Registry::set('opus.disableDatabaseVersionCheck', true);
+\Zend_Registry::set('opus.disableDatabaseVersionCheck', true);
 
 // Bootstrapping application
 $application->bootstrap('Backend');
@@ -77,7 +80,7 @@ $application->bootstrap('Backend');
  * Prepare database.
  */
 
-$database = new Opus_Database();
+$database = new \Opus\Database();
 
 $dbName = $database->getName();
 

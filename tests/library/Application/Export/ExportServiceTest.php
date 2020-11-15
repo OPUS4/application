@@ -101,7 +101,7 @@ class Application_Export_ExportServiceTest extends ControllerTestCase
 
     public function testSetDefaults()
     {
-        $this->_service->setDefaults(new Zend_Config([
+        $this->_service->setDefaults(new \Zend_Config([
             'class' => 'Export_Model_XsltExport'
         ]));
 
@@ -112,7 +112,7 @@ class Application_Export_ExportServiceTest extends ControllerTestCase
 
     public function testAddPlugin()
     {
-        $this->_service->addPlugin('marc', new Zend_Config([
+        $this->_service->addPlugin('marc', new \Zend_Config([
             'class' => 'Export_Model_XsltExport',
             'stylesheet' => 'marc.xslt'
         ]));

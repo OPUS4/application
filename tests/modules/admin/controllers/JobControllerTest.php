@@ -29,7 +29,11 @@
  * @author      Edouard Simon <edouard.simon@zib.de>
  * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- *
+ */
+
+use Opus\Job;
+
+/**
  * @covers Admin_JobController
  */
 class Admin_JobControllerTest extends ControllerTestCase
@@ -46,20 +50,20 @@ class Admin_JobControllerTest extends ControllerTestCase
 
         $this->makeConfigurationModifiable();
 
-        $config = Zend_Registry::get('Zend_Config');
+        $config = \Zend_Registry::get('Zend_Config');
         $this->__configBackup = $config;
-        $config->merge(new Zend_Config(['runjobs' => ['asynchronous' => self::CONFIG_VALUE_TRUE]]));
+        $config->merge(new \Zend_Config(['runjobs' => ['asynchronous' => self::CONFIG_VALUE_TRUE]]));
 
-        $this->assertEquals(0, Opus_Job::getCount(Opus_Job::STATE_FAILED), 'test data changed.');
+        $this->assertEquals(0, Job::getCount(Job::STATE_FAILED), 'test data changed.');
 
         for ($i = 0; $i < 10; $i++) {
-            $job = new Opus_Job();
+            $job = new Job();
             $job->setLabel('testjob' . ($i < 5 ? 1 : 2));
             $job->setData([
                 'documentId' => $i,
                 'task' => 'get-me-a-coffee'
             ]);
-            $job->setState(Opus_Job::STATE_FAILED);
+            $job->setState(Job::STATE_FAILED);
             $this->jobIds[] = $job->store();
         }
     }
@@ -67,12 +71,12 @@ class Admin_JobControllerTest extends ControllerTestCase
     public function tearDown()
     {
 
-        $testJobs = Opus_Job::getAll($this->jobIds);
+        $testJobs = Job::getAll($this->jobIds);
         foreach ($testJobs as $job) {
             $job->delete();
         }
 
-        Zend_Registry::set('Zend_Config', $this->__configBackup);
+        \Zend_Registry::set('Zend_Config', $this->__configBackup);
         parent::tearDown();
     }
 
@@ -95,7 +99,7 @@ class Admin_JobControllerTest extends ControllerTestCase
 
     public function testJobDetailsAction()
     {
-        $failedJobsUrl = '/admin/job/detail/label/testjob1/state/' . Opus_Job::STATE_FAILED;
+        $failedJobsUrl = '/admin/job/detail/label/testjob1/state/' . Job::STATE_FAILED;
         $this->dispatch($failedJobsUrl);
         $this->assertResponseCode(200);
         $this->assertQueryContentContains('table.worker-jobs td div', 'task: get-me-a-coffee');

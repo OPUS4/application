@@ -32,6 +32,10 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Document;
+use Opus\Identifier;
+use Opus\Series;
+
 /**
  * Class CitationExport_IndexControllerTest.
  *
@@ -65,7 +69,7 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
         $this->assertContains('SN  - 1-5432-876-9', $response->getBody());
         $this->assertContains('SN  - 1234-5678', $response->getBody());
         $this->assertContains('SN  - 4321-8765', $response->getBody());
-        $urnResolverUrl = Zend_Registry::get('Zend_Config')->urn->resolverUrl;
+        $urnResolverUrl = \Zend_Registry::get('Zend_Config')->urn->resolverUrl;
         $this->assertContains('UR  - ' . $urnResolverUrl . 'urn:nbn:de:foo:123-bar-456', $response->getBody());
         $this->assertContains('UR  - ' . $urnResolverUrl . 'urn:nbn:de:foo:123-bar-789', $response->getBody());
         $this->assertContains('UR  - http://www.myexampledomain.de/foo', $response->getBody());
@@ -134,7 +138,7 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
 
     public function testIndexActionWithUnpublishedDocument()
     {
-        $doc = new Opus_Document($this->documentId);
+        $doc = Document::get($this->documentId);
         $doc->setServerState('unpublished');
         $doc->store();
         $this->dispatch('/citationExport/index/index/output/foo/docId/' . $this->documentId);
@@ -190,7 +194,6 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
         $this->setDocumentType('doctoralthesis');
         $this->dispatch('/citationExport/index/index/output/ris/docId/' . $this->documentId);
         $this->checkRisAssertions('THES');
-        ;
     }
 
     public function testIndexActionRisDoctypeMasterthesis()
@@ -316,7 +319,7 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
 
     public function testIndexActionRisSubjectUncontrolled()
     {
-        $doc = new Opus_Document($this->documentId);
+        $doc = Document::get($this->documentId);
         $doc->addSubject()->setType('uncontrolled')->setValue('Freies Schlagwort');
         $doc->store();
         $this->dispatch('/citationExport/index/index/output/ris/docId/' . $this->documentId);
@@ -327,7 +330,7 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
 
     public function testIndexActionRisSubjectSwd()
     {
-        $doc = new Opus_Document($this->documentId);
+        $doc = Document::get($this->documentId);
         $doc->addSubject()->setType('swd')->setValue('SWD-Schlagwort');
         $doc->store();
         $this->dispatch('/citationExport/index/index/output/ris/docId/' . $this->documentId);
@@ -338,8 +341,8 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
 
     public function testIndexActionRisSeriesVisible()
     {
-        $s = new Opus_Series(4);
-        $doc = new Opus_Document($this->documentId);
+        $s = new Series(4);
+        $doc = Document::get($this->documentId);
         $doc->addSeries($s)->setNumber('SeriesNumber');
         $doc->store();
         $this->dispatch('/citationExport/index/index/output/ris/docId/' . $this->documentId);
@@ -350,8 +353,8 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
 
     public function testIndexActionRisSeriesInvisible()
     {
-        $s = new Opus_Series(3);
-        $doc = new Opus_Document($this->documentId);
+        $s = new Series(3);
+        $doc = Document::get($this->documentId);
         $doc->addSeries($s)->setNumber('SeriesNumber');
         $doc->store();
         $this->dispatch('/citationExport/index/index/output/ris/docId/' . $this->documentId);
@@ -362,7 +365,7 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
 
     public function testIndexActionRisPublicNote()
     {
-        $doc = new Opus_Document(146);
+        $doc = Document::get(146);
         $this->dispatch('/citationExport/index/index/output/ris/docId/' . $doc->getId());
         $this->assertResponseCode(200);
         $response = $this->getResponse();
@@ -371,7 +374,7 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
 
     public function testIndexActionRisPrivateNote()
     {
-        $doc = new Opus_Document(146);
+        $doc = Document::get(146);
         $this->dispatch('/citationExport/index/index/output/ris/docId/' . $doc->getId());
         $this->assertResponseCode(200);
         $response = $this->getResponse();
@@ -449,8 +452,8 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
     public function testIndexActionBibtexSeriesVisible()
     {
         $this->setDocumentType('preprint');
-        $s = new Opus_Series(4);
-        $doc = new Opus_Document($this->documentId);
+        $s = new Series(4);
+        $doc = Document::get($this->documentId);
         $doc->addSeries($s)->setNumber('SeriesNumber');
         $doc->store();
         $this->dispatch('/citationExport/index/index/output/bibtex/docId/' . $this->documentId);
@@ -463,8 +466,8 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
     public function testIndexActionBibtexSeriesInvisible()
     {
         $this->setDocumentType('preprint');
-        $s = new Opus_Series(3);
-        $doc = new Opus_Document($this->documentId);
+        $s = new Series(3);
+        $doc = Document::get($this->documentId);
         $doc->addSeries($s)->setNumber('SeriesNumber');
         $doc->store();
         $this->dispatch('/citationExport/index/index/output/bibtex/docId/' . $this->documentId);
@@ -480,8 +483,8 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
         $bibtexConfArray = [
             'citationExport' => ['bibtex' => ['enrichment' => 'SourceTitle']]
         ];
-        $bibtexConf = new Zend_Config($bibtexConfArray);
-        Zend_Registry::getInstance()->get('Zend_Config')->merge($bibtexConf);
+        $bibtexConf = new \Zend_Config($bibtexConfArray);
+        \Zend_Registry::getInstance()->get('Zend_Config')->merge($bibtexConf);
         $this->dispatch('/citationExport/index/index/output/bibtex/docId/146');
         $this->assertResponseCode(200);
         $response = $this->getResponse();
@@ -519,7 +522,7 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
 
     public function testDownloadActionWithUnpublishedDocument()
     {
-        $doc = new Opus_Document($this->documentId);
+        $doc = Document::get($this->documentId);
         $doc->setServerState('unpublished');
         $doc->store();
         $this->dispatch('/citationExport/index/download/output/foo/docId/' . $this->documentId);
@@ -714,7 +717,7 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
 
     private function setDocumentType($documenttype)
     {
-        $doc = new Opus_Document($this->documentId);
+        $doc = Document::get($this->documentId);
         $doc->setType($documenttype);
         $doc->store();
     }
@@ -750,7 +753,7 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
         $doc = $this->createTestDocument();
         $doc->setType('article');
 
-        $doi = new Opus_Identifier();
+        $doi = new Identifier();
         $doi->setValue('123_345_678');
         $doc->addIdentifierDoi($doi);
 

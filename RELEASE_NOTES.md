@@ -1,5 +1,33 @@
 # OPUS 4 Release Notes
 
+## Release 4.7.1
+
+# Neues Kommandozeilen-Skript `bin/opus4`
+
+Es gibt das neue Skript `bin/opus4`, dass in Zukunft die Rolle des zentralen OPUS 4
+Werkzeugs auf der Kommandozeile übernehmen wird. Mit den Kommando `list` lassen sich
+die bisher integrierten Kommandos anzeigen. Mit `help` lassen sich Informationen zu
+einzelnen Kommandos abrufen. 
+
+    $ bin/opus4 list
+    $ bin/opus4 help index:index
+
+# Wartung des Solr-Index
+
+Das Skript `script/SolrIndexBuilder.php` wurde durch `bin/opus4` ersetzt. Dadurch 
+soll der Aufruf vereinfacht werden. Das neue Skript soll außerdem in Zukunft auch 
+andere Funktionen übernehmen, die nichts mit dem Index zu tun haben. 
+
+Im OPUS 4 Handbuch gibt es eine neue Seite, die die Funktionen des Skripts für 
+den Index beschreibt.
+
+<http://www.opus-repository.org//userdoc/search/maintenance.html>
+
+Es gibt jetzt die Möglichkeit einzelne Dokumente einfacher zu indexieren oder auch
+aus dem Index zu entfernen. Es kann über eine Option bestimmt werden wie viele 
+Dokument gleichzeitig zum Solr-Server geschickt werden sollen. Das kann helfen,
+wenn es Probleme bei der Indexierung gibt. 
+
 ## Release 4.7 2020-07-31
 
 Die Änderungen in OPUS __4.7__, die hier aufgeführt sind, ergänzen was schon für 

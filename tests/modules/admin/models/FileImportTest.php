@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -31,6 +30,9 @@
  * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\Document;
+
 class Admin_Model_FileImportTest extends ControllerTestCase
 {
 
@@ -91,7 +93,7 @@ class Admin_Model_FileImportTest extends ControllerTestCase
 
         $this->model->addFilesToDocument($this->documentId, ['test.txt']);
 
-        $document = new Opus_Document($this->documentId);
+        $document = Document::get($this->documentId);
 
         $files = $document->getFile();
 
@@ -193,7 +195,7 @@ class Admin_Model_FileImportTest extends ControllerTestCase
 
         $this->model->addFilesToDocument($this->documentId, ['test1.txt', 'test2.txt']);
 
-        $document = new Opus_Document($this->documentId);
+        $document = Document::get($this->documentId);
 
         $files = $document->getFile();
 
@@ -208,7 +210,7 @@ class Admin_Model_FileImportTest extends ControllerTestCase
         // eigentlicher Test
         $this->model->deleteFile($this->documentId, $files[0]->getId());
 
-        $document = new Opus_Document($this->documentId);
+        $document = Document::get($this->documentId);
 
         $files = $document->getFile();
 

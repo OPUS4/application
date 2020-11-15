@@ -30,6 +30,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Account;
+
 /**
  * Basic unit tests for account form for users.
  */
@@ -44,10 +46,10 @@ class Account_Form_AccountTest extends ControllerTestCase
     {
         parent::setUp();
 
-        $account = Opus_Account::fetchAccountByLogin('user');
+        $account = Account::fetchAccountByLogin('user');
 
         if (is_null($account)) {
-            $account = new Opus_Account();
+            $account = new Account();
             $account->setLogin('user');
             $account->setPassword('userpwd');
             $account->store();
@@ -107,7 +109,7 @@ class Account_Form_AccountTest extends ControllerTestCase
     public function testChangedLoginNameValidationNewLoginName()
     {
         $form = new Account_Form_Account();
-        $account = new Opus_Account(null, null, 'user');
+        $account = new Account(null, null, 'user');
         $form->populateFromModel($account);
 
         $this->assertNotNull($form);
@@ -125,7 +127,7 @@ class Account_Form_AccountTest extends ControllerTestCase
     public function testEditValidationSameAccount()
     {
         $form = new Account_Form_Account();
-        $account = new Opus_Account(null, null, 'user');
+        $account = new Account(null, null, 'user');
         $form->populateFromModel($account);
 
         // check that form was populated
@@ -145,7 +147,7 @@ class Account_Form_AccountTest extends ControllerTestCase
     public function testValidationMissmatchedPasswords()
     {
         $form = new Account_Form_Account();
-        $account = new Opus_Account(null, null, 'user');
+        $account = new Account(null, null, 'user');
         $form->populateFromModel($account);
 
         $postData = [
@@ -166,7 +168,7 @@ class Account_Form_AccountTest extends ControllerTestCase
     public function testValidationBadEmail()
     {
         $form = new Account_Form_Account();
-        $account = new Opus_Account(null, null, 'user');
+        $account = new Account(null, null, 'user');
         $form->populateFromModel($account);
 
         $postData = [

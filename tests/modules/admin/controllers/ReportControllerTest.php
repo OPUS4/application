@@ -31,6 +31,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Document;
+use Opus\Identifier;
+
 /**
  * Unit tests for Admin_ReportController
  *
@@ -50,11 +53,11 @@ class Admin_ReportControllerTest extends ControllerTestCase
         parent::setUp();
 
         // backup config
-        $this->config = Zend_Registry::get('Zend_Config');
+        $this->config = \Zend_Registry::get('Zend_Config');
 
         // modify DOI config
-        $config = Zend_Registry::get('Zend_Config');
-        $config->merge(new Zend_Config([
+        $config = \Zend_Registry::get('Zend_Config');
+        $config->merge(new \Zend_Config([
             'doi' => [
                 'prefix' => '10.5072',
                 'localPrefix' => 'opustest',
@@ -69,18 +72,18 @@ class Admin_ReportControllerTest extends ControllerTestCase
                     ]
             ]
         ]));
-        Zend_Registry::set('Zend_Config', $config);
+        \Zend_Registry::set('Zend_Config', $config);
     }
 
     public function tearDown()
     {
         // restore config
-        Zend_Registry::set('Zend_Config', $this->config);
+        \Zend_Registry::set('Zend_Config', $this->config);
 
         if (! is_null($this->docIds)) {
             // removed previously created test documents from database
             foreach ($this->docIds as $docId) {
-                $doc = new Opus_Document($docId);
+                $doc = Document::get($docId);
                 $doc->deletePermanent();
             }
         }
@@ -257,12 +260,12 @@ class Admin_ReportControllerTest extends ControllerTestCase
 
     private function createTestDocWithDoi($serverState, $doiStatus, $local = true)
     {
-        $doc = new Opus_Document();
+        $doc = Document::new();
         $doc->setServerState($serverState);
         $docId = $doc->store();
         $this->docIds[] = $docId;
 
-        $doi = new Opus_Identifier();
+        $doi = new Identifier();
         $doi->setType('doi');
         if ($local) {
             $doi->setValue('10.5072/opustest-' . $docId);

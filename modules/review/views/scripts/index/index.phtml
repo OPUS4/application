@@ -36,7 +36,7 @@
 <?PHP $suffix = ' <span class="info">(' . $this->documentCount . ' '
         . $this->translate('review_docs_found_short') . ')</span>' ?>
 
-<?PHP if (true === Opus_Security_Realm::getInstance()->check('administrate')) : ?>
+<?PHP if (true === \Opus\Security\Realm::getInstance()->check('administrate')) : ?>
     <?= $this->navigation()->breadcrumbs()->setSuffix($suffix)->setSuffixSeparatorDisabled(true) ?>
 <?PHP else : ?>
     <?= $this->navigation()->breadcrumbs()->setReplacement($this->translate('review_index_title') . $suffix) ?>

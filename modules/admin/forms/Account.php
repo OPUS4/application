@@ -29,8 +29,9 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
+use Opus\Account;
 
 /**
  * Account administration form.
@@ -61,7 +62,7 @@ class Admin_Form_Account extends Application_Form_Model_Abstract
     private $mode;
 
     /**
-     * Constructs empty form or populates it with values from Opus_Account($id).
+     * Constructs empty form or populates it with values from Account($id).
      * @param mixed $id
      */
     public function __construct($id = null)
@@ -72,7 +73,7 @@ class Admin_Form_Account extends Application_Form_Model_Abstract
         parent::__construct();
 
         if ($this->getMode() === self::MODE_EDIT) {
-            $account = new Opus_Account($id);
+            $account = new Account($id);
             $this->populateFromModel($account);
         }
 
@@ -88,7 +89,7 @@ class Admin_Form_Account extends Application_Form_Model_Abstract
 
         $this->setLabelPrefix('admin_account_label_');
         $this->setUseNameAsLabel(true);
-        $this->setModelClass('Opus_Account');
+        $this->setModelClass('Opus\Account');
 
         $this->addElement('login', self::ELEMENT_LOGIN);
 
@@ -115,8 +116,8 @@ class Admin_Form_Account extends Application_Form_Model_Abstract
     }
 
     /**
-     * Populate the form values from Opus_Account instance.
-     * @param <type> $account
+     * Populate the form values from Account instance.
+     * @param $account Account
      */
     public function populateFromModel($account)
     {
@@ -133,7 +134,7 @@ class Admin_Form_Account extends Application_Form_Model_Abstract
         // current user cannot remode administrator permission
         // TODO does it make sense?
         $adminRoleElement = $rolesForm->getElement('administrator');
-        if (Zend_Auth::getInstance()->getIdentity() === strtolower($account->getLogin())) {
+        if (\Zend_Auth::getInstance()->getIdentity() === strtolower($account->getLogin())) {
             $adminRoleElement->setAttrib('disabled', true);
         }
     }
@@ -162,7 +163,7 @@ class Admin_Form_Account extends Application_Form_Model_Abstract
         // TODO storing of model happens in ActionCRUD controller class -> need way to move this into controller
         // logout current user if login or password has changed
         if ($this->isCurrentUser() && $logout) {
-            Zend_Auth::getInstance()->clearIdentity();
+            \Zend_Auth::getInstance()->clearIdentity();
         }
     }
 
@@ -197,7 +198,7 @@ class Admin_Form_Account extends Application_Form_Model_Abstract
 
             if (! empty($accountId)) {
                 $this->setMode(self::MODE_EDIT);
-                $account = new Opus_Account($accountId);
+                $account = new Account($accountId);
                 $values['oldLogin'] = $account->getLogin();
             }
         }
@@ -226,7 +227,7 @@ class Admin_Form_Account extends Application_Form_Model_Abstract
         $accountId = $this->getElementValue(self::ELEMENT_MODEL_ID);
 
         if (! empty($accountId)) {
-            $account = new Opus_Account($accountId);
+            $account = new Account($accountId);
             $oldLogin = $account->getLogin();
         } else {
             $oldLogin = null;
@@ -237,12 +238,12 @@ class Admin_Form_Account extends Application_Form_Model_Abstract
 
     public function isCurrentUser()
     {
-        $currentUser = Zend_Auth::getInstance()->getIdentity();
+        $currentUser = \Zend_Auth::getInstance()->getIdentity();
 
         $accountId = $this->getElementValue(self::ELEMENT_MODEL_ID);
 
         if (! empty($accountId)) {
-            $account = new Opus_Account($accountId);
+            $account = new Account($accountId);
             $oldLogin = $account->getLogin();
         } else {
             $oldLogin = null;
@@ -278,7 +279,7 @@ class Admin_Form_Account extends Application_Form_Model_Abstract
 
 
             if (!$hasAdministratorRole && $isCurrentUser) {
-                $newRoles[] = Opus_UserRole::fetchByName('administrator');
+                $newRoles[] = UserRole::fetchByName('administrator');
             }
 
             $account->setRole($newRoles);

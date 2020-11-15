@@ -31,6 +31,12 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Document;
+use Opus\Enrichment;
+use Opus\EnrichmentKey;
+use Opus\Enrichment\RegexType;
+use Opus\Enrichment\SelectType;
+
 /**
  * Unit Test für Unterformular für ein Enrichment im Metadaten-Formular.
  */
@@ -55,7 +61,7 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase
     {
         $enrichmentKey = $this->createTestEnrichmentKey('keywithouttype');
 
-        $enrichment = new Opus_Enrichment();
+        $enrichment = new Enrichment();
         $enrichment->setValue('foo');
         $enrichment->setKeyName('keywithouttype');
 
@@ -69,7 +75,7 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase
     {
         $enrichmentKey = $this->createTestEnrichmentKey('keywithunknowntype', 'FooBarType');
 
-        $enrichment = new Opus_Enrichment();
+        $enrichment = new Enrichment();
         $enrichment->setValue('foo');
         $enrichment->setKeyName('keywithunknowntype');
 
@@ -83,7 +89,7 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase
     {
         $enrichmentKey = $this->createTestEnrichmentKey('boolean', 'BooleanType');
 
-        $enrichment = new Opus_Enrichment();
+        $enrichment = new Enrichment();
         $enrichment->setValue(1);
         $enrichment->setKeyName('boolean');
 
@@ -97,7 +103,7 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase
     {
         $enrichmentKey = $this->createTestEnrichmentKey('boolean', 'BooleanType');
 
-        $enrichment = new Opus_Enrichment();
+        $enrichment = new Enrichment();
         $enrichment->setValue(0);
         $enrichment->setKeyName('boolean');
 
@@ -118,7 +124,7 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase
         );
 
         foreach ($options as $option) {
-            $enrichment = new Opus_Enrichment();
+            $enrichment = new Enrichment();
             $enrichment->setValue($option);
             $enrichment->setKeyName('select');
 
@@ -138,7 +144,7 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase
             ['values' => $options, 'validation' => 'strict']
         );
 
-        $enrichment = new Opus_Enrichment();
+        $enrichment = new Enrichment();
         $enrichment->setValue('foobar'); // dieser Wert ist gemäß Konfiguration nicht gültig
         $enrichment->setKeyName('select');
 
@@ -151,7 +157,7 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase
     {
         $enrichmentKey = $this->createTestEnrichmentKey('text', 'TextType');
 
-        $enrichment = new Opus_Enrichment();
+        $enrichment = new Enrichment();
         $enrichment->setValue('foo');
         $enrichment->setKeyName('text');
 
@@ -164,7 +170,7 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase
     {
         $enrichmentKey = $this->createTestEnrichmentKey('textarea', 'TextareaType');
 
-        $enrichment = new Opus_Enrichment();
+        $enrichment = new Enrichment();
         $enrichment->setValue("foo\nbar\baz");
         $enrichment->setKeyName('textarea');
 
@@ -177,7 +183,7 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase
     {
         $enrichmentKey = $this->createTestEnrichmentKey('regexkey', 'RegexType', ["regex" => "^foo$"]);
 
-        $enrichment = new Opus_Enrichment();
+        $enrichment = new Enrichment();
         $enrichment->setValue("foo");
         $enrichment->setKeyName('regexkey');
 
@@ -197,7 +203,7 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase
             ]
         );
 
-        $enrichment = new Opus_Enrichment();
+        $enrichment = new Enrichment();
         $enrichment->setValue("bar"); // dieser Wert ist gemäß der Typkonfiguration nicht gültig
         $enrichment->setKeyName('regexkey');
 
@@ -241,7 +247,7 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase
 
     public function testUpdateModel()
     {
-        $keyNames = Opus_EnrichmentKey::getAll();
+        $keyNames = EnrichmentKey::getAll();
         $keyName = $keyNames[1]->getName(); // Geht davon aus, dass mindestens 2 Enrichment Keys existieren
 
         $form = new Admin_Form_Document_Enrichment();
@@ -250,7 +256,7 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase
         $form->getElement('KeyName')->setValue($keyName);
         $form->getElement('Value')->setValue('Test Enrichment Value');
 
-        $enrichment = new Opus_Enrichment();
+        $enrichment = new Enrichment();
         $form->updateModel($enrichment);
 
         $this->assertEquals($keyName, $enrichment->getKeyName());
@@ -271,7 +277,7 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase
         $form->getElement('KeyName')->setValue('select');
         $form->getElement('Value')->setValue(1); // Index des ausgewählten Werts
 
-        $enrichment = new Opus_Enrichment();
+        $enrichment = new Enrichment();
         $enrichment->setValue('foo'); // das Enrichment-Formular wird nur für Enrichments mit gesetztem Wert aufgerufen
         $form->updateModel($enrichment);
 
@@ -299,7 +305,7 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase
         $form->getElement('KeyName')->setValue('select');
         $form->getElement('Value')->setValue(0); // Index des ausgewählten Werts: der Ursprungswert des Enrichments (foobar)
 
-        $enrichment = new Opus_Enrichment($enrichmentId);
+        $enrichment = new Enrichment($enrichmentId);
         $form->updateModel($enrichment);
 
         // cleanup
@@ -327,7 +333,7 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase
         $form->getElement('KeyName')->setValue('select');
         $form->getElement('Value')->setValue(1); // Index des ausgewählten Werts: foo
 
-        $enrichment = new Opus_Enrichment($enrichmentId);
+        $enrichment = new Enrichment($enrichmentId);
         $form->updateModel($enrichment);
 
         $enrichmentKey->delete();
@@ -338,11 +344,11 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase
 
     public function testGetModel()
     {
-        $document = new Opus_Document(146);
+        $document = Document::get(146);
         $enrichments = $document->getEnrichment();
         $enrichment = $enrichments[0];
 
-        $keyNames = Opus_EnrichmentKey::getAll();
+        $keyNames = EnrichmentKey::getAll();
         $keyName = $keyNames[1]->getName(); // Geht davon aus, dass mindestens 2 Enrichment Keys existieren
 
         $form = new Admin_Form_Document_Enrichment();
@@ -360,7 +366,7 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase
 
     public function testGetNewModel()
     {
-        $keyNames = Opus_EnrichmentKey::getAll();
+        $keyNames = EnrichmentKey::getAll();
         $keyName = $keyNames[1]->getName(); // Geht davon aus, dass mindestens 2 Enrichment Keys existieren
 
         $form = new Admin_Form_Document_Enrichment();
@@ -378,7 +384,7 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase
 
     public function testGetModelUnknownId()
     {
-        $keyNames = Opus_EnrichmentKey::getAll();
+        $keyNames = EnrichmentKey::getAll();
         $keyName = $keyNames[1]->getName(); // Geht davon aus, dass mindestens 2 Enrichment Keys existieren
 
         $form = new Admin_Form_Document_Enrichment();
@@ -405,7 +411,7 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase
 
     public function testGetModelBadId()
     {
-        $keyNames = Opus_EnrichmentKey::getAll();
+        $keyNames = EnrichmentKey::getAll();
         $keyName = $keyNames[1]->getName(); // Geht davon aus, dass mindestens 2 Enrichment Keys existieren
 
         $form = new Admin_Form_Document_Enrichment();
@@ -424,7 +430,7 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase
 
     public function testValidationWithoutType()
     {
-        $keyNames = Opus_EnrichmentKey::getAll();
+        $keyNames = EnrichmentKey::getAll();
         $keyName = $keyNames[1]->getName(); // Test geht davon aus, dass mindestens 2 Enrichment Keys existieren
 
         $form = new Admin_Form_Document_Enrichment();
@@ -457,7 +463,7 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase
             $selectOptions['validation'] = 'none';
         }
 
-        $type = new Opus_Enrichment_SelectType();
+        $type = new SelectType();
         $type->setOptions($selectOptions);
         return $type;
     }
@@ -471,7 +477,7 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase
             $options['validation'] = 'none';
         }
 
-        $type = new Opus_Enrichment_RegexType();
+        $type = new RegexType();
         $type->setOptions($options);
         return $type;
     }
@@ -736,7 +742,7 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase
         $this->assertCount(0, $form->getErrors('KeyName'));
         $this->assertCount(0, $form->getErrors('Value'));
 
-        $enrichment = new Opus_Enrichment($enrichmentId);
+        $enrichment = new Enrichment($enrichmentId);
         $form->updateModel($enrichment);
         $this->assertEquals($options[0], $enrichment->getValue());
 
@@ -802,7 +808,7 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase
         $this->assertCount(0, $form->getErrors('KeyName'));
         $this->assertCount(0, $form->getErrors('Value'));
 
-        $enrichment = new Opus_Enrichment($enrichmentId);
+        $enrichment = new Enrichment($enrichmentId);
         $form->updateModel($enrichment);
         $this->assertEquals('testvalue', $enrichment->getValue());
 
@@ -1068,7 +1074,7 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase
 
     private function createTestEnrichmentKey($name, $type = null, $options = null)
     {
-        $enrichmentKey = new Opus_EnrichmentKey();
+        $enrichmentKey = new EnrichmentKey();
         $enrichmentKey->setName($name);
 
         if (! is_null($type)) {
@@ -1092,18 +1098,18 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase
 
         // Methodenaufruf des All-Finders hier erforderlich, damit der interne Cache, in dem
         // alle EnrichmentKeys gehalten werden, neu aufgesetzt wird
-        Opus_EnrichmentKey::getAll();
+        EnrichmentKey::getAll();
 
         return $enrichmentKey;
     }
 
     public function testPrepareRenderingAsView()
     {
-        $enrichmentKey = $this->createEnrichmentKey('text', new Opus_Enrichment_TextType());
+        $enrichmentKey = $this->createEnrichmentKey('text', new TextType());
         $enrichmentId = $this->createTestDocWithEnrichmentOfGivenKey('text');
 
         $form = new Admin_Form_Document_Enrichment();
-        $form->populateFromModel(new Opus_Enrichment($enrichmentId));
+        $form->populateFromModel(new Enrichment($enrichmentId));
         $form->prepareRenderingAsView();
 
         $enrichmentKey->delete();
@@ -1122,13 +1128,13 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase
     private function createTestDocWithEnrichmentOfGivenKey($keyName, $enrichmentValue = 'testvalue')
     {
         $doc = $this->createTestDocument();
-        $enrichment = new Opus_Enrichment();
+        $enrichment = new Enrichment();
         $enrichment->setKeyName($keyName);
         $enrichment->setValue($enrichmentValue);
         $doc->addEnrichment($enrichment);
         $docId = $doc->store();
 
-        $doc = new Opus_Document($docId);
+        $doc = Document::get($docId);
         $enrichment = $doc->getEnrichment()[0];
         return $enrichment->getId();
     }

@@ -33,7 +33,7 @@
  *
  * TODO use OPUS 4 base class?
  */
-class Sword_DepositController extends Zend_Rest_Controller
+class Sword_DepositController extends \Zend_Rest_Controller
 {
 
     public function init()
@@ -154,7 +154,7 @@ class Sword_DepositController extends Zend_Rest_Controller
 
         $maxUploadSize = (new Application_Configuration_MaxUploadSize())->getMaxUploadSizeInByte();
         if ($size > $maxUploadSize) {
-            $log = Zend_Registry::get('Zend_Log');
+            $log = \Zend_Registry::get('Zend_Log');
             $log->warn('current package size ' . $size . ' exceeds the maximum upload size ' . $maxUploadSize);
             return true;
         }
@@ -183,7 +183,7 @@ class Sword_DepositController extends Zend_Rest_Controller
     private function getFullUrl()
     {
         $fullUrlHelper = new Application_View_Helper_FullUrl();
-        $fullUrlHelper->setView(new Zend_View());
+        $fullUrlHelper->setView(new \Zend_View());
         return $fullUrlHelper->fullUrl();
     }
 

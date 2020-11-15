@@ -71,7 +71,7 @@ class Home_Model_HelpFiles extends Application_Translate_Help
      */
     public function getContent($key)
     {
-        $translate = Zend_Registry::get('Zend_Translate');
+        $translate = \Zend_Registry::get('Zend_Translate');
 
         $translationKey = "help_content_$key";
         $translation = $translate->translate($translationKey);
@@ -143,10 +143,10 @@ class Home_Model_HelpFiles extends Application_Translate_Help
 
             if (is_readable($filePath)) {
                 try {
-                    $config = new Zend_Config_Ini($filePath);
-                } catch (Zend_Config_Exception $zce) {
+                    $config = new \Zend_Config_Ini($filePath);
+                } catch (\Zend_Config_Exception $zce) {
                     // TODO einfachere Lösung?
-                    $logger = Zend_Registry::get('Zend_Log');
+                    $logger = \Zend_Registry::get('Zend_Log');
                     if (! is_null($logger)) {
                         $logger->err("could not load help configuration", $zce);
                     }
@@ -154,7 +154,7 @@ class Home_Model_HelpFiles extends Application_Translate_Help
             }
 
             if (is_null($config)) {
-                $config = new Zend_Config([]);
+                $config = new \Zend_Config([]);
             }
 
             $this->helpConfig = $config;
@@ -177,7 +177,7 @@ class Home_Model_HelpFiles extends Application_Translate_Help
 
     public function isContentAvailable($key)
     {
-        $translate = Zend_Registry::get('Zend_Translate');
+        $translate = \Zend_Registry::get('Zend_Translate');
 
         $translationKey = "help_content_$key";
 

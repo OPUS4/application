@@ -28,8 +28,10 @@
  * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
+use Opus\Document;
+use Opus\Series;
 
 /**
  *
@@ -45,7 +47,7 @@
  *
  */
 
-foreach (Opus_Series::getAll() as $series) {
+foreach (Series::getAll() as $series) {
     echo "\nreassign doc_sort_order for documents in series #" . $series->getId() . ': ';
     $docIds = $series->getDocumentIds();
     if (empty($docIds)) {
@@ -56,7 +58,7 @@ foreach (Opus_Series::getAll() as $series) {
 
     $seriesNumbers = [];
     foreach ($docIds as $docId) {
-        $doc = new Opus_Document($docId);
+        $doc = Document::get($docId);
         foreach ($doc->getSeries() as $docSeries) {
             if ($docSeries->getModel()->getId() === $series->getId()) {
                 $seriesNumbers[$docId] = $docSeries->getNumber();
@@ -88,7 +90,7 @@ foreach (Opus_Series::getAll() as $series) {
 
     $seriesCounter = 0;
     foreach ($seriesNumbers as $docId => $seriesNumber) {
-        $doc = new Opus_Document($docId);
+        $doc = Document::get($docId);
         $allSeries = $doc->getSeries();
         $doc->setSeries([]);
         $doc->store();

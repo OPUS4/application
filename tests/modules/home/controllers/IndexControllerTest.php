@@ -32,6 +32,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\DocumentFinder;
+
 /**
  * Basic unit test for inded controller of home module.
  *
@@ -82,7 +84,7 @@ class Home_IndexControllerTest extends ControllerTestCase
 
     public function testHelpActionSeparate()
     {
-        $config = Zend_Registry::get('Zend_Config');
+        $config = \Zend_Registry::get('Zend_Config');
         $config->help->separate = self::CONFIG_VALUE_TRUE;
         $this->dispatch('/home/index/help');
         $this->assertResponseCode(200);
@@ -172,7 +174,7 @@ class Home_IndexControllerTest extends ControllerTestCase
         $element = $document->getElementById('solrsearch-totalnumofdocs');
         $numOfDocs = $element->firstChild->textContent;
 
-        $docFinder = new Opus_DocumentFinder();
+        $docFinder = new DocumentFinder();
         $docFinder->setServerState('published');
 
         $numOfDbDocs = $docFinder->count();
@@ -251,7 +253,7 @@ class Home_IndexControllerTest extends ControllerTestCase
 
     public function testHideLanguageSelector()
     {
-        Zend_Registry::get('Zend_Config')->supportedLanguages = 'de';
+        \Zend_Registry::get('Zend_Config')->supportedLanguages = 'de';
         $this->dispatch("/home");
         $this->assertNotQuery('//ul#lang-switch');
     }

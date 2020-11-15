@@ -25,6 +25,8 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+use Opus\Model\AbstractDb;
+
 /**
  * Formular fuer den Upload von Dateien in der Administration.
  *
@@ -64,7 +66,7 @@ class Admin_Form_File_Upload extends Application_Form_Model_Abstract
 
         $this->addSubForm(new Admin_Form_InfoBox(), self::SUBFORM_DOCINFO);
 
-        $this->setAttrib('enctype', Zend_Form::ENCTYPE_MULTIPART);
+        $this->setAttrib('enctype', \Zend_Form::ENCTYPE_MULTIPART);
         $this->setLegend('admin_filemanager_upload');
         $this->setLabelPrefix('Opus_File_');
         $this->setUseNameAsLabel(true);
@@ -112,7 +114,7 @@ class Admin_Form_File_Upload extends Application_Form_Model_Abstract
     /**
      * Speichert Datei und verknüpft sie mit dem Dokument.
      *
-     * @param Opus_Model_AbstractDb $document
+     * @param AbstractDb $document
      */
     public function updateModel($document)
     {
@@ -142,7 +144,7 @@ class Admin_Form_File_Upload extends Application_Form_Model_Abstract
     public function getFileInfo()
     {
         if (is_null($this->_fileInfo)) {
-            $upload = new Zend_File_Transfer_Adapter_Http();
+            $upload = new \Zend_File_Transfer_Adapter_Http();
             return $upload->getFileInfo();
         } else {
             return $this->_fileInfo;

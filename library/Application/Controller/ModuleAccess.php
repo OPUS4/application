@@ -39,7 +39,7 @@
  * @category    Application
  * @package     Controller
  */
-class Application_Controller_ModuleAccess extends Zend_Controller_Action
+class Application_Controller_ModuleAccess extends \Zend_Controller_Action
 {
 
     use \Opus\LoggingTrait;
@@ -48,7 +48,7 @@ class Application_Controller_ModuleAccess extends Zend_Controller_Action
 
     /**
      * Konfigurationsobjekt.
-     * @var Zend_Config
+     * @var \Zend_Config
      */
     private $_config = null;
 
@@ -88,7 +88,7 @@ class Application_Controller_ModuleAccess extends Zend_Controller_Action
 
         $logger->debug("starting authorization check for module '$module'");
 
-        $realm = Opus_Security_Realm::getInstance();
+        $realm = \Opus\Security\Realm::getInstance();
 
         if (! $realm->skipSecurityChecks()) {
             // Check, if the user has accesss to the module...
@@ -161,12 +161,12 @@ class Application_Controller_ModuleAccess extends Zend_Controller_Action
     {
         $resource = null;
 
-        if ($activePage instanceof Zend_Navigation_Page) {
+        if ($activePage instanceof \Zend_Navigation_Page) {
             $resource = $activePage->getResource();
 
             $page = $activePage->getParent();
 
-            while (! is_null($page) && $page instanceof Zend_Navigation_Page && is_null($resource)) {
+            while (! is_null($page) && $page instanceof \Zend_Navigation_Page && is_null($resource)) {
                 $resource = $page->getResource();
                 $page = $page->getParent();
             }

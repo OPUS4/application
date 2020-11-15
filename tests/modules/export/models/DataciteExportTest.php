@@ -30,6 +30,12 @@
  * @copyright   Copyright (c) 2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\Document;
+use Opus\Identifier;
+use Opus\Person;
+use Opus\Title;
+
 class Export_Model_DataciteExportTest extends ControllerTestCase
 {
 
@@ -60,10 +66,10 @@ class Export_Model_DataciteExportTest extends ControllerTestCase
     public function testExecuteWithValidDoc()
     {
         // DOI Präfix setzen
-        $oldConfig = Zend_Registry::get('Zend_Config');
+        $oldConfig = \Zend_Registry::get('Zend_Config');
 
-        Zend_Registry::set('Zend_Config', Zend_Registry::get('Zend_Config')->merge(
-            new Zend_Config([
+        \Zend_Registry::set('Zend_Config', \Zend_Registry::get('Zend_Config')->merge(
+            new \Zend_Config([
                 'doi' => [
                     'prefix' => '10.2345',
                     'localPrefix' => 'opustest'
@@ -72,24 +78,24 @@ class Export_Model_DataciteExportTest extends ControllerTestCase
         ));
 
         // Testdokument mit allen Pflichtfeldern anlegen
-        $doc = new Opus_Document();
+        $doc = Document::new();
         $doc->setType('all');
         $doc->setServerState('published');
         $doc->setPublisherName('Foo Publishing Corp.');
         $doc->setLanguage('deu');
         $docId = $doc->store();
 
-        $doi = new Opus_Identifier();
+        $doi = new Identifier();
         $doi->setType('doi');
         $doi->setValue('10.2345/opustest-' . $docId);
         $doc->setIdentifier([$doi]);
 
-        $author = new Opus_Person();
+        $author = new Person();
         $author->setFirstName('John');
         $author->setLastName('Doe');
         $doc->setPersonAuthor([$author]);
 
-        $title = new Opus_Title();
+        $title = new Title();
         $title->setValue('Meaningless title');
         $title->setLanguage('deu');
         $doc->setTitleMain([$title]);
@@ -107,7 +113,7 @@ class Export_Model_DataciteExportTest extends ControllerTestCase
         // Testdokument wieder löschen
         $doc->deletePermanent();
         // Änderungen an Konfiguration zurücksetzen
-        Zend_Registry::set('Zend_Config', $oldConfig);
+        \Zend_Registry::set('Zend_Config', $oldConfig);
 
         $this->assertTrue($result);
         $this->assertHeaderContains('Content-Type', 'text/xml; charset=UTF-8');
@@ -116,7 +122,7 @@ class Export_Model_DataciteExportTest extends ControllerTestCase
     public function testExecuteWithInvalidDoc()
     {
         // Testdokument mit fehlenden Pflichtfeldern anlegen
-        $doc = new Opus_Document();
+        $doc = Document::new();
         $doc->setServerState('published');
         $docId = $doc->store();
 
@@ -125,7 +131,7 @@ class Export_Model_DataciteExportTest extends ControllerTestCase
         $request->setParam('docId', $docId);
         $plugin->setRequest($request);
         $plugin->setResponse($this->getResponse());
-        $view = new Zend_View();
+        $view = new \Zend_View();
         $plugin->setView($view);
 
         $result = $plugin->execute();
@@ -141,7 +147,7 @@ class Export_Model_DataciteExportTest extends ControllerTestCase
     public function testExecuteWithInvalidDocAndInvalidValidateParamValue()
     {
         // Testdokument mit fehlenden Pflichtfeldern anlegen
-        $doc = new Opus_Document();
+        $doc = Document::new();
         $doc->setServerState('published');
         $docId = $doc->store();
 
@@ -152,7 +158,7 @@ class Export_Model_DataciteExportTest extends ControllerTestCase
         $plugin->setRequest($request);
         $plugin->setResponse($this->getResponse());
 
-        $view = new Zend_View();
+        $view = new \Zend_View();
         $plugin->setView($view);
 
         $result = $plugin->execute();
@@ -167,7 +173,7 @@ class Export_Model_DataciteExportTest extends ControllerTestCase
 
     public function testExecuteWithInvalidDocSkipValidation()
     {
-        $doc = new Opus_Document();
+        $doc = Document::new();
         $doc->setServerState('published');
         $docId = $doc->store();
 

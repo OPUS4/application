@@ -30,13 +30,12 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2009, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
  * class to built the mail form for mail contact to author
  */
-class Frontdoor_Form_ToauthorForm extends Zend_Form
+class Frontdoor_Form_ToauthorForm extends \Zend_Form
 {
 
     /**
@@ -53,7 +52,7 @@ class Frontdoor_Form_ToauthorForm extends Zend_Form
     public function init()
     {
         $atLeastOne = new Frontdoor_Form_AtLeastOneValidator();
-        $authorSub = new Zend_Form_SubForm('a');
+        $authorSub = new \Zend_Form_SubForm('a');
 
         if (! is_null($this->_authors)) {
             $authCheck = null;
@@ -62,7 +61,7 @@ class Frontdoor_Form_ToauthorForm extends Zend_Form
                 if (count($this->_authors) == 1) {
                     $options['disabled'] = true;
                 }
-                $authCheck = new Zend_Form_Element_Checkbox($author['id'], $options);
+                $authCheck = new \Zend_Form_Element_Checkbox($author['id'], $options);
                 $atLeastOne->addField($authCheck);
                 $authCheck->setLabel($author['name']);
                 $authorSub->addElement($authCheck);
@@ -76,20 +75,20 @@ class Frontdoor_Form_ToauthorForm extends Zend_Form
             $this->addSubForm($authorSub, 'authors');
         }
 
-        $sender = new Zend_Form_Element_Text('sender');
+        $sender = new \Zend_Form_Element_Text('sender');
         $sender->setRequired(true);
         $sender->setLabel('frontdoor_sendername');
 
-        $senderMail = new Zend_Form_Element_Text('sender_mail');
+        $senderMail = new \Zend_Form_Element_Text('sender_mail');
         $senderMail->setRequired(true);
         $senderMail->setLabel('frontdoor_sendermail');
         $senderMail->addValidator('EmailAddress');
 
-        $message = new Zend_Form_Element_Textarea('message');
+        $message = new \Zend_Form_Element_Textarea('message');
         $message->setRequired(true);
         $message->setLabel('frontdoor_messagetext');
 
-        $captcha = new Zend_Form_Element_Captcha(
+        $captcha = new \Zend_Form_Element_Captcha(
             'foo',
             [
             'label' => 'label_captcha',
@@ -100,7 +99,7 @@ class Frontdoor_Form_ToauthorForm extends Zend_Form
             ]]
         );
 
-        $submit = new Zend_Form_Element_Submit('frontdoor_send_mailtoauthor');
+        $submit = new \Zend_Form_Element_Submit('frontdoor_send_mailtoauthor');
         $submit->setLabel('frontdoor_send_mailtoauthor');
 
         $this->addElements([$sender, $senderMail, $message, $captcha, $submit]);

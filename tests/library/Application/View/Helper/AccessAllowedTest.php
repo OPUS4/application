@@ -46,22 +46,22 @@ class Application_View_Helper_AccessAllowedTest extends ControllerTestCase
         // bootstrapping authorization twice is not possible
         parent::setUpWithEnv('production');
         $this->assertSecurityConfigured();
-        $acl = Zend_Registry::get('Opus_Acl');
+        $acl = \Zend_Registry::get('Opus_Acl');
         $acl->allow('guest', 'accounts');
         $this->__helper = new Application_View_Helper_AccessAllowed();
-        $this->__helper->setView(Zend_Registry::get('Opus_View'));
+        $this->__helper->setView(\Zend_Registry::get('Opus_View'));
     }
 
     public function tearDown()
     {
-        $acl = Zend_Registry::get('Opus_Acl');
+        $acl = \Zend_Registry::get('Opus_Acl');
         $acl->deny('guest', 'accounts');
         parent::tearDown();
     }
 
     public function testAccessAllowed()
     {
-        $user = Zend_Auth::getInstance()->getIdentity();
+        $user = \Zend_Auth::getInstance()->getIdentity();
         $this->assertEquals('', $user, "expected no user to be set (should use default 'guest' as default)");
         $allowedDocuments = $this->__helper->accessAllowed('documents');
         $this->assertFalse($allowedDocuments, "expected access denied to resource 'documents'");

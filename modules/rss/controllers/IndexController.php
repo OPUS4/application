@@ -36,6 +36,8 @@
  * TODO move feed code into Rss_Model_Feed
  */
 
+use Opus\Document;
+
 class Rss_IndexController extends Application_Controller_Xml
 {
 
@@ -138,20 +140,20 @@ class Rss_IndexController extends Application_Controller_Xml
     {
         if ($resultList->getNumberOfHits() > 0) {
             $latestDoc = $resultList->getResults();
-            $document = new Opus_Document($latestDoc[0]->getId());
-            $date = new Zend_Date($document->getServerDatePublished());
+            $document = Document::get($latestDoc[0]->getId());
+            $date = new \Zend_Date($document->getServerDatePublished());
         } else {
-            $date = Zend_Date::now();
+            $date = \Zend_Date::now();
         }
-        $this->_proc->setParameter('', 'lastBuildDate', $date->get(Zend_Date::RFC_2822));
-        $this->_proc->setParameter('', 'pubDate', $date->get(Zend_Date::RFC_2822));
+        $this->_proc->setParameter('', 'lastBuildDate', $date->get(\Zend_Date::RFC_2822));
+        $this->_proc->setParameter('', 'pubDate', $date->get(\Zend_Date::RFC_2822));
     }
 
     private function setItems($resultList)
     {
         $this->_xml->appendChild($this->_xml->createElement('Documents'));
         foreach ($resultList->getResults() as $result) {
-            $document = new Opus_Document($result->getId());
+            $document = Document::get($result->getId());
             $documentXml = new Application_Util_Document($document);
             $domNode = $this->_xml->importNode($documentXml->getNode(), true);
 

@@ -31,6 +31,9 @@
  * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\File;
+
 class Admin_Form_Document_FileTest extends ControllerTestCase
 {
 
@@ -50,7 +53,7 @@ class Admin_Form_Document_FileTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_File();
 
-        $file = new Opus_File();
+        $file = new File();
 
         $this->assertNull($form->getModel());
 

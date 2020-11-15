@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -31,6 +30,9 @@
  * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\Document;
+
 class Admin_Form_Document_FilesTest extends ControllerTestCase
 {
 
@@ -57,7 +59,7 @@ class Admin_Form_Document_FilesTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Files();
 
-        $document = new Opus_Document(84);
+        $document = Document::get(84);
 
         $this->assertEquals(1, count($form->getSubForms()));
 
@@ -83,7 +85,7 @@ class Admin_Form_Document_FilesTest extends ControllerTestCase
 
         $header = $property->getValue($form);
 
-        $translate = Zend_Registry::get('Zend_Translate');
+        $translate = \Zend_Registry::get('Zend_Translate');
 
         foreach ($header as $column) {
             if (isset($column['label']) && ! is_null($column['label'])) {

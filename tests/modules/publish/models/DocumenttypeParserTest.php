@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -31,6 +30,7 @@
  * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
 class Publish_Model_DocumenttypeParserTest extends ControllerTestCase
 {
 
@@ -40,8 +40,8 @@ class Publish_Model_DocumenttypeParserTest extends ControllerTestCase
 
     public function setUp()
     {
-        $writer = new Zend_Log_Writer_Null;
-        $this->_logger = new Zend_Log($writer);
+        $writer = new \Zend_Log_Writer_Null;
+        $this->_logger = new \Zend_Log($writer);
         parent::setUp();
     }
 
@@ -50,14 +50,14 @@ class Publish_Model_DocumenttypeParserTest extends ControllerTestCase
      */
     public function testConstructorWithWrongDom()
     {
-        $dom = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes')->getDocument('irgendwas');
+        $dom = \Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes')->getDocument('irgendwas');
         $model = new Publish_Model_DocumenttypeParser($dom, null);
         $this->assertNull($model->dom);
     }
 
     public function testConstructorWithCorrectDom()
     {
-        $dom = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes')->getDocument('preprint');
+        $dom = \Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes')->getDocument('preprint');
         $model = new Publish_Model_DocumenttypeParser($dom, null);
         $this->assertInstanceOf('DOMDocument', $model->dom);
     }
@@ -67,9 +67,9 @@ class Publish_Model_DocumenttypeParserTest extends ControllerTestCase
      */
     public function testConstructorWithCorrectDomAndWrongForm()
     {
-        $session = new Zend_Session_Namespace('Publish');
+        $session = new \Zend_Session_Namespace('Publish');
         $session->documentType = 'irgendwas';
-        $dom = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes')->getDocument('preprint');
+        $dom = \Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes')->getDocument('preprint');
         $form = new Publish_Form_PublishingSecond($this->_logger);
         $model = new Publish_Model_DocumenttypeParser($dom, $form);
         $this->assertInstanceOf('DOMDocument', $model->dom);
@@ -77,9 +77,9 @@ class Publish_Model_DocumenttypeParserTest extends ControllerTestCase
 
     public function testConstructorWithCorrectDomAndCorrectForm()
     {
-        $session = new Zend_Session_Namespace('Publish');
+        $session = new \Zend_Session_Namespace('Publish');
         $session->documentType = 'preprint';
-        $dom = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes')->getDocument('preprint');
+        $dom = \Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes')->getDocument('preprint');
         $form = new Publish_Form_PublishingSecond($this->_logger);
         $model = new Publish_Model_DocumenttypeParser($dom, $form);
         $this->assertInstanceOf('DOMDocument', $model->dom);
@@ -92,11 +92,11 @@ class Publish_Model_DocumenttypeParserTest extends ControllerTestCase
     public function testInccorectFieldName()
     {
 
-        $session = new Zend_Session_Namespace('Publish');
+        $session = new \Zend_Session_Namespace('Publish');
         $session->documentType = 'all';
 
         /* @var $dom DomDocument */
-        $dom = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes')->getDocument('all');
+        $dom = \Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes')->getDocument('all');
         $this->assertInstanceOf('DOMDocument', $dom);
 
         foreach ($dom->getElementsByTagname('documenttype') as $rootNode) {
@@ -124,11 +124,11 @@ class Publish_Model_DocumenttypeParserTest extends ControllerTestCase
     public function testIncorrectEnrichmentKey()
     {
 
-        $session = new Zend_Session_Namespace('Publish');
+        $session = new \Zend_Session_Namespace('Publish');
         $session->documentType = 'all';
 
         /* @var $dom DomDocument */
-        $dom = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes')->getDocument('all');
+        $dom = \Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes')->getDocument('all');
         $this->assertInstanceOf('DOMDocument', $dom);
 
         foreach ($dom->getElementsByTagname('documenttype') as $rootNode) {

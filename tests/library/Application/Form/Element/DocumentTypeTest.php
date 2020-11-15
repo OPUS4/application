@@ -50,7 +50,7 @@ class Application_Form_Element_DocumentTypeTest extends FormElementTestCase
     {
         $element = $this->getElement();
 
-        $types = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes')->getDocumentTypes();
+        $types = \Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes')->getDocumentTypes();
 
         $this->assertEquals(count($types), count($element->getMultiOptions()));
 

@@ -31,6 +31,10 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Account;
+use Opus\DnbInstitute;
+use Opus\UserRole;
+
 /**
  * Class Admin_DnbinstituteControllerTest
  *
@@ -55,9 +59,9 @@ class Admin_DnbinstituteControllerTest extends CrudControllerTestCase
     public function tearDown()
     {
         if (isset($this->roleId) && isset($this->userId)) {
-            $testRole = new Opus_UserRole($this->roleId);
+            $testRole = new UserRole($this->roleId);
             $testRole->delete();
-            $userAccount = new Opus_Account($this->userId);
+            $userAccount = new Account($this->userId);
             $userAccount->delete();
         }
 
@@ -70,12 +74,12 @@ class Admin_DnbinstituteControllerTest extends CrudControllerTestCase
 
     public function getModels()
     {
-        return Opus_DnbInstitute::getAll();
+        return DnbInstitute::getAll();
     }
 
     public function createNewModel()
     {
-        $model = new Opus_DnbInstitute();
+        $model = new DnbInstitute();
 
         $model->setName('TestName');
         $model->setCity('TestCity');
@@ -91,7 +95,7 @@ class Admin_DnbinstituteControllerTest extends CrudControllerTestCase
 
     public function getModel($identifier)
     {
-        return new Opus_DnbInstitute($identifier);
+        return new DnbInstitute($identifier);
     }
 
     private function verifyShow()
@@ -183,7 +187,7 @@ class Admin_DnbinstituteControllerTest extends CrudControllerTestCase
 
         $this->assertEquals(
             $modelCount,
-            count(Opus_DnbInstitute::getAll()),
+            count(DnbInstitute::getAll()),
             'Es sollte keine neue Sprache geben.'
         );
     }
@@ -269,7 +273,7 @@ class Admin_DnbinstituteControllerTest extends CrudControllerTestCase
     {
         $this->useEnglish();
 
-        $institute = new Opus_DnbInstitute();
+        $institute = new DnbInstitute();
 
         $institute->updateFromArray([
             'Name' => 'Delete Test Institute',
@@ -293,13 +297,13 @@ class Admin_DnbinstituteControllerTest extends CrudControllerTestCase
      */
     public function testUserAccessToInstituteWithInstituteRights()
     {
-        $testRole = new Opus_UserRole();
+        $testRole = new UserRole();
         $testRole->setName('TestRole');
         $testRole->appendAccessModule('admin');
         $testRole->appendAccessModule('resource_institutions');
         $this->roleId = $testRole->store();
 
-        $userAccount = new Opus_Account();
+        $userAccount = new Account();
         $userAccount->setLogin('role_tester')
             ->setPassword('role_tester');
         $userAccount->setRole($testRole);
@@ -321,13 +325,13 @@ class Admin_DnbinstituteControllerTest extends CrudControllerTestCase
      */
     public function testUserAccessToInstituteWithoutInstituteRights()
     {
-        $testRole = new Opus_UserRole();
+        $testRole = new UserRole();
         $testRole->setName('TestRole');
         $testRole->appendAccessModule('admin');
         $testRole->appendAccessModule('resource_languages');
         $this->roleId = $testRole->store();
 
-        $userAccount = new Opus_Account();
+        $userAccount = new Account();
         $userAccount->setLogin('role_tester')
             ->setPassword('role_tester');
         $userAccount->setRole($testRole);
@@ -350,13 +354,13 @@ class Admin_DnbinstituteControllerTest extends CrudControllerTestCase
      */
     public function testUserAccessToInstituteWithInstituteRightsRegression3245()
     {
-        $testRole = new Opus_UserRole();
+        $testRole = new UserRole();
         $testRole->setName('TestRole');
         $testRole->appendAccessModule('admin');
         $testRole->appendAccessModule('resource_institutions');
         $this->roleId = $testRole->store();
 
-        $userAccount = new Opus_Account();
+        $userAccount = new Account();
         $userAccount->setLogin('role_tester')
             ->setPassword('role_tester');
         $userAccount->setRole($testRole);

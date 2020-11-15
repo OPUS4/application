@@ -47,10 +47,10 @@ class Export_Model_PublistExportTest extends ControllerTestCase
 
     public function testGetMimeTypes()
     {
-        $config = Zend_Registry::get('Zend_Config');
+        $config = \Zend_Registry::get('Zend_Config');
 
         $config->merge(
-            new Zend_Config(['plugins' => ['export' => [
+            new \Zend_Config(['plugins' => ['export' => [
                 'publist' => [
                     'file' => [
                         'allow' => [

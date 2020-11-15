@@ -29,6 +29,9 @@
  * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\CollectionRole;
+
 class Admin_Model_CollectionRoleTest extends ControllerTestCase
 {
 
@@ -42,7 +45,7 @@ class Admin_Model_CollectionRoleTest extends ControllerTestCase
     {
         parent::setUp();
 
-        $collectionRole = new Opus_CollectionRole();
+        $collectionRole = new CollectionRole();
         $collectionRole->setName('TestCollectionRole-Name');
         $collectionRole->setOaiName('TestCollectionRole-OaiName');
         $collectionRole->setVisible(1);
@@ -58,11 +61,11 @@ class Admin_Model_CollectionRoleTest extends ControllerTestCase
 
     public function tearDown()
     {
-        $collectionRole = new Opus_CollectionRole($this->collectionRoleId);
+        $collectionRole = new CollectionRole($this->collectionRoleId);
         $collectionRole->delete();
 
         if (! is_null($this->moveTestColId)) {
-            $collectionRole = new Opus_CollectionRole($this->moveTestColId);
+            $collectionRole = new CollectionRole($this->moveTestColId);
             $collectionRole->delete();
         }
 
@@ -135,7 +138,7 @@ class Admin_Model_CollectionRoleTest extends ControllerTestCase
 
         $model->setVisibility(true);
 
-        $collectionRole = new Opus_CollectionRole($this->collectionRoleId);
+        $collectionRole = new CollectionRole($this->collectionRoleId);
 
         $this->assertEquals(1, $collectionRole->getVisible());
     }
@@ -150,14 +153,14 @@ class Admin_Model_CollectionRoleTest extends ControllerTestCase
 
         $model->setVisibility(false);
 
-        $collectionRole = new Opus_CollectionRole($this->collectionRoleId);
+        $collectionRole = new CollectionRole($this->collectionRoleId);
 
         $this->assertEquals(0, $collectionRole->getVisible());
     }
 
     public function testMove()
     {
-        $colRole = new Opus_CollectionRole();
+        $colRole = new CollectionRole();
         $colRole->setName('MoveTestColRole-Name');
         $colRole->setOaiName('MoveTestColRole-OaiName');
         $colRole->setDisplayFrontdoor('Number');
@@ -165,7 +168,7 @@ class Admin_Model_CollectionRoleTest extends ControllerTestCase
         $colRole->setPosition(100);
         $this->moveTestColId = $colRole->store();
 
-        $colRoles = Opus_CollectionRole::fetchAll();
+        $colRoles = CollectionRole::fetchAll();
 
         $colRolesCount = count($colRoles);
 
@@ -176,7 +179,7 @@ class Admin_Model_CollectionRoleTest extends ControllerTestCase
 
         $model->move(100);
 
-        $colRoles = Opus_CollectionRole::fetchAll();
+        $colRoles = CollectionRole::fetchAll();
 
         $colRolesCount = count($colRoles);
 

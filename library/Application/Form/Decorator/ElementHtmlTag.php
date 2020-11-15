@@ -36,7 +36,7 @@
  *
  * Die Klasse dient dazu die Decoratorkonfiguration für einzelne Elemente zu vereinfachen.
  */
-class Application_Form_Decorator_ElementHtmlTag extends Zend_Form_Decorator_HtmlTag
+class Application_Form_Decorator_ElementHtmlTag extends \Zend_Form_Decorator_HtmlTag
 {
 
     /**

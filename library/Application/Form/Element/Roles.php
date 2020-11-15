@@ -25,6 +25,8 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+use Opus\UserRole;
+
 /**
  * Formularelement für Auswahl von Rollen über Checkboxen.
  *
@@ -41,7 +43,7 @@ class Application_Form_Element_Roles extends Application_Form_Element_MultiCheck
     {
         parent::init();
 
-        $this->addPrefixPath('Application_Form_Decorator', 'Application/Form/Decorator', Zend_Form::DECORATOR);
+        $this->addPrefixPath('Application_Form_Decorator', 'Application/Form/Decorator', \Zend_Form::DECORATOR);
 
         $this->setMultiOptions($this->getRolesMultiOptions());
     }
@@ -69,7 +71,7 @@ class Application_Form_Element_Roles extends Application_Form_Element_MultiCheck
      */
     public function getRolesMultiOptions()
     {
-        $roles = Opus_UserRole::getAll();
+        $roles = UserRole::getAll();
 
         $options = [];
 
@@ -83,12 +85,12 @@ class Application_Form_Element_Roles extends Application_Form_Element_MultiCheck
 
     /**
      * Sets selected roles.
-     * @param mixed $value Role names or Opus_UserRole objects
+     * @param mixed $value Role names or UserRole objects
      */
     public function setValue($value)
     {
         if (is_array($value)) {
-            if (count($value) > 0 && $value[0] instanceof Opus_UserRole) {
+            if (count($value) > 0 && $value[0] instanceof UserRole) {
                 $value = $this->getRoleNames($value);
             }
         }
@@ -97,8 +99,8 @@ class Application_Form_Element_Roles extends Application_Form_Element_MultiCheck
     }
 
     /**
-     * Returns array of Opus_UserRole objects.
-     * @return array of Opus_UserRole
+     * Returns array of UserRole objects.
+     * @return array of UserRole
      */
     public function getRoles()
     {
@@ -108,7 +110,7 @@ class Application_Form_Element_Roles extends Application_Form_Element_MultiCheck
 
         if (is_array($names)) {
             foreach ($names as $name) {
-                array_push($roles, Opus_UserRole::fetchByName($name));
+                array_push($roles, UserRole::fetchByName($name));
             }
         }
 
@@ -117,7 +119,7 @@ class Application_Form_Element_Roles extends Application_Form_Element_MultiCheck
 
     /**
      * Converts array with objects into array with role names.
-     * @param $roles array of Opus_UserRole objects
+     * @param $roles array of UserRole objects
      * @return array Role names
      */
     public function getRoleNames($roles)

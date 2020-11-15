@@ -46,7 +46,7 @@ class Publish_View_Helper_JavascriptMessagesTest extends ControllerTestCase
 
         $this->helper = new Publish_View_Helper_JavascriptMessages();
 
-        $this->helper->setView(Zend_Registry::get('Opus_View'));
+        $this->helper->setView(\Zend_Registry::get('Opus_View'));
     }
 
     /**

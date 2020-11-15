@@ -23,5 +23,7 @@
 # 1. Files are ignored where a CDATA element is present in some but not all of the <seg> tags.
 # 2. ALL ".tmx" files within the current directory or any of it's subdirectories are parsed and possibly altered.
 
+# TODO move this is a development script
+
 
 find . -name *.tmx -exec grep -L '<seg><!\[CDATA\[' {} \; | xargs sed -i -e 's#<seg>#<seg><![CDATA[#g' -e 's#</seg>#]]></seg>#g'

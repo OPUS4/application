@@ -34,7 +34,7 @@
 /**
  * Returns true if current user is authenticated (logged in).
  */
-class Application_View_Helper_IsAuthenticated extends Zend_View_Helper_Abstract
+class Application_View_Helper_IsAuthenticated extends \Zend_View_Helper_Abstract
 {
 
     /**
@@ -42,7 +42,7 @@ class Application_View_Helper_IsAuthenticated extends Zend_View_Helper_Abstract
      */
     public function isAuthenticated()
     {
-        $identity = Zend_Auth::getInstance()->getIdentity();
+        $identity = \Zend_Auth::getInstance()->getIdentity();
         return empty($identity) === false;
     }
 }

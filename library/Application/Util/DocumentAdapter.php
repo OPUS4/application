@@ -29,11 +29,14 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
+use Opus\Account;
+use Opus\Date;
+use Opus\Document;
+
 /**
- * Wrapper around Opus_Document to prepare presentation.
+ * Wrapper around Document to prepare presentation.
  *
  * TODO split off base class, URLs are controller specific
  * TODO move code to admin module (is used there as well and belongs there, or?)
@@ -51,7 +54,7 @@ class Application_Util_DocumentAdapter
 
     /**
      * Wrapped document.
-     * @var Opus_Document
+     * @var Document
      */
     public $document = null;
 
@@ -75,23 +78,23 @@ class Application_Util_DocumentAdapter
     public function __construct($view, $value)
     {
         if (is_null($view)) {
-            $this->_view = Zend_Registry::get('Opus_View');
+            $this->_view = \Zend_Registry::get('Opus_View');
         } else {
             $this->_view = $view;
         }
 
-        if ($value instanceof Opus_Document) {
+        if ($value instanceof Document) {
             $this->document = $value;
             $this->docId = $this->document->getId();
         } else {
             $this->docId = $value;
-            $this->document = new Opus_Document((int) $value);
+            $this->document = Document::get((int) $value);
         }
     }
 
     /**
-     * Returns the Opus_Document object for this adapter.
-     * @return Opus_Document
+     * Returns the Document object for this adapter.
+     * @return Document
      */
     public function getDocument()
     {
@@ -168,7 +171,7 @@ class Application_Util_DocumentAdapter
      */
     public function getPublishedDate($yearOnly = false)
     {
-        $datesHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('Dates');
+        $datesHelper = \Zend_Controller_Action_HelperBroker::getStaticHelper('Dates');
 
         try {
             $date = $this->document->getPublishedDate();
@@ -177,7 +180,7 @@ class Application_Util_DocumentAdapter
                 $date = $this->document->getPublishedYear();
             }
 
-            if (! empty($date) && $date instanceof Opus_Date) {
+            if (! empty($date) && $date instanceof Date) {
                 if ($yearOnly) {
                     $date = $date->getYear();
                 } else {
@@ -192,7 +195,7 @@ class Application_Util_DocumentAdapter
 
     public function getCompletedDate($yearOnly = false)
     {
-        $datesHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('Dates');
+        $datesHelper = \Zend_Controller_Action_HelperBroker::getStaticHelper('Dates');
 
         try {
             $date = $this->document->getCompletedDate();
@@ -201,7 +204,7 @@ class Application_Util_DocumentAdapter
                 $date = $this->document->getCompletedYear();
             }
 
-            if (! empty($date) && $date instanceof Opus_Date) {
+            if (! empty($date) && $date instanceof Date) {
                 if ($yearOnly) {
                     $date = $date->getYear();
                 } else {
@@ -340,7 +343,7 @@ class Application_Util_DocumentAdapter
                 continue;
             }
             $userId = $e->getValue();
-            $account = new Opus_Account($userId);
+            $account = new Account($userId);
             $return[$account->getId()] = strtolower($account->getLogin());
         }
         return $return;
@@ -354,7 +357,7 @@ class Application_Util_DocumentAdapter
                 continue;
             }
             $userId = $e->getValue();
-            $account = new Opus_Account($userId);
+            $account = new Account($userId);
             $return[$account->getId()] = strtolower($account->getLogin());
         }
         return $return;
