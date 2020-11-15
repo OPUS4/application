@@ -632,7 +632,7 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase
 
         $result = $form->isValid($post);
 
-        $enrichment = new Opus_Enrichment($enrichmentId);
+        $enrichment = new Enrichment($enrichmentId);
         $form->updateModel($enrichment);
         $enrichmentValue = $enrichment->getValue();
 
@@ -669,7 +669,7 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase
 
         $result = $form->isValid($post);
 
-        $enrichment = new Opus_Enrichment($enrichmentId);
+        $enrichment = new Enrichment($enrichmentId);
         $form->updateModel($enrichment);
         $enrichmentValue = $enrichment->getValue();
 
@@ -776,7 +776,7 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase
         $this->assertCount(0, $form->getErrors('KeyName'));
         $this->assertCount(0, $form->getErrors('Value'));
 
-        $enrichment = new Opus_Enrichment($enrichmentId);
+        $enrichment = new Enrichment($enrichmentId);
         $form->updateModel($enrichment);
         $this->assertEquals($options[count($options) - 1], $enrichment->getValue());
 
