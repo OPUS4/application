@@ -7,9 +7,9 @@ redevelopment that was created as part of a DFG ([Deutsche Forschungsgemeinschaf
 Since then the development has been continued at KOBV ([Kooperativer Bibliotheksverbund Berlin-Brandenburg][KOBV])
 mostly.
 
-## OPUS 4.7 (current version)
+## OPUS 4.7.0.4 (current version)
 
-The current version of OPUS 4 is 4.7. It is available on the [master][MASTER] branch. 
+The current version of OPUS 4 is __4.7__.0.4. It is available on the [master][MASTER] branch. 
 
 [Documentation][DOC]
 : Information on setting up a repository, for users and administrators.
