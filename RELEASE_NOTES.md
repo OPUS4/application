@@ -1,5 +1,19 @@
 # OPUS 4 Release Notes
 
+## Release 4.7.0.4 2020-12-02
+
+Diese Version behebt einen Bug im Framework bei der Abfrage, wenn in einem Dokument
+mehrere Identifier vom gleichen Typ vorhanden sind. Dieses Problem hat in einem Fall
+die Anzeige des DOI-Reports in der Administration verhindert. Weitere Auswirkungen 
+wurden nicht entdeckt.
+
+Ein Update der Source-Dateien mit `git pull` und die Installation des aktualisierten
+Frameworks mit `composer update` sollten für das Update auf diese Version ausreichen.
+
+Die Versionen 4.7.0.1-4.7.0.3 wurden als kleine Patch-Releases veröffentlicht, ohne
+die Versionsnummer von OPUS 4 zu verändern. In Zukunft werden wir auch für diese 
+Patch-Releases die Versionsnummer aktualisieren.
+
 ## Release 4.7 2020-07-31
 
 Die Änderungen in OPUS __4.7__, die hier aufgeführt sind, ergänzen was schon für 
