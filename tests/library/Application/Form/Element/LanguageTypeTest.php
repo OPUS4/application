@@ -42,9 +42,9 @@ class Application_Form_Element_LanguageTypeTest extends FormElementTestCase
     {
         $this->keys = ['Null', 'A', 'C', 'E', 'H', 'L', 'S'];
         $this->_formElementClass = 'Application_Form_Element_LanguageType';
-        $this->_expectedDecoratorCount = 6;
         $this->_expectedDecorators = ['ViewHelper', 'Errors', 'Description', 'ElementHtmlTag', 'LabelNotEmpty',
-            'dataWrapper'];
+            'dataWrapper', 'ElementHint'];
+        $this->_expectedDecoratorCount = count($this->_expectedDecorators);
         $this->_staticViewHelper = 'viewFormSelect';
         parent::setUp();
     }
