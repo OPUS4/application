@@ -182,7 +182,7 @@ class Application_Form_Model_TableTest extends ControllerTestCase
 
         $mock = $this->getMockBuilder(\Zend_Controller_Action_Interface::class)->getMock();
         $form->setController($mock);
-        $this->assertTrue($form->isRenderShowActionLink(null));
+        $this->assertTrue($form->isRenderShowActionLink());
 
         $this->assertEquals('The used controller does not have the method getShowActionEnabled.', $logger->getMessages()[0]);
     }
