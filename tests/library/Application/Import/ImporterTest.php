@@ -50,7 +50,7 @@ class Application_Import_ImporterTest extends ControllerTestCase
         $document = $importer->getDocument();
 
         $this->assertNotNull($document);
-        $this->assertInstanceOf('Opus\Document', $document);
+        $this->assertInstanceOf(Document::class, $document);
 
         $this->assertCount(1, $document->getEnrichment());
         $this->assertEquals('Berlin', $document->getEnrichmentValue('City'));
@@ -68,9 +68,6 @@ class Application_Import_ImporterTest extends ControllerTestCase
 
         $this->setExpectedException(Application_Import_MetadataImportSkippedDocumentsException::class);
         $importer->run();
-
-        $document = $importer->getDocument();
-        $this->assertNull($document);
     }
 
     public function testValidEmbargoDate()
@@ -84,7 +81,7 @@ class Application_Import_ImporterTest extends ControllerTestCase
         $document = $importer->getDocument();
 
         $this->assertNotNull($document);
-        $this->assertInstanceOf('Opus\Document', $document);
+        $this->assertInstanceOf(Document::class, $document);
 
         $embargoDate = $document->getEmbargoDate();
         $this->assertEquals(12, $embargoDate->getDay());
@@ -94,6 +91,7 @@ class Application_Import_ImporterTest extends ControllerTestCase
 
     public function testFromArray()
     {
+        $this->markTestIncomplete('Test for debugging - TODO expand');
         $doc = Document::get(146);
 
         // var_dump($doc->toArray());
