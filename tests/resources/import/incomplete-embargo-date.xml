@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<import
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="opus_import.xsd">
+
+    <opusDocument oldId="999" language="eng" type="preprint" serverState="inprogress">
+
+        <titlesMain>
+            <titleMain language="eng">invalid embargoed document</titleMain>
+        </titlesMain>
+
+        <dates>
+            <!-- hier fehlt die Tages- und Monatsangabe -->
+            <date type="embargo" year="2042"/>
+        </dates>
+    </opusDocument>
+</import>
