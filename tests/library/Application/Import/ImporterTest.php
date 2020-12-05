@@ -68,9 +68,6 @@ class Application_Import_ImporterTest extends ControllerTestCase
 
         $this->setExpectedException(Application_Import_MetadataImportSkippedDocumentsException::class);
         $importer->run();
-
-        $document = $importer->getDocument();
-        $this->assertNull($document);
     }
 
     public function testValidEmbargoDate()
