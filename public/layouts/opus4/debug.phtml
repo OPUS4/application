@@ -2,8 +2,7 @@
 $dbprofiler = \Zend_Registry::get('db_adapter')->getProfiler();
 $profiler_show_queries = isset($config->db->params->showqueries) && filter_var($config->db->params->showqueries, FILTER_VALIDATE_BOOLEAN);
 $profiler_max_queries = (int) $config->db->params->maxqueries;
-if ($dbprofiler->getEnabled() === true) :
-    ?>
+if ($dbprofiler->getEnabled() === true) : ?>
     <div class="debug dbprofiler">
         <div class="wrapper">
             <h2>Profiling information
@@ -11,20 +10,30 @@ if ($dbprofiler->getEnabled() === true) :
                     (execution time <?= microtime(true) - $GLOBALS['start_mtime'] ?>)
                 <?php endif ?>
             </h2>
-            <b>Total number of queries: </b><?= $dbprofiler->getTotalNumQueries() ?><br />
-            <b>Total query time (s): </b><?= $dbprofiler->getTotalElapsedSecs() ?><br />
-            <b>Current memory consumption: </b><?= memory_get_usage(true) ?><br />
-            <b>Peak memory consumption: </b><?= memory_get_peak_usage(true) ?><br />
+            <b>Total number of queries: </b><?= $dbprofiler->getTotalNumQueries() ?><br/>
+            <b>Total query time (s): </b><?= $dbprofiler->getTotalElapsedSecs() ?><br/>
+            <b>Current memory consumption: </b><?= memory_get_usage(true) ?><br/>
+            <b>Peak memory consumption: </b><?= memory_get_peak_usage(true) ?><br/>
             <?php if ($profiler_show_queries === true and $profiler_query_profiles = $dbprofiler->getQueryProfiles()) : ?>
-                <b>Queries:</b><br />
-                <ul>
-                    <?php for ($i = 1; ($i < $profiler_max_queries) and ($i < count($profiler_query_profiles)); $i++) : ?>
-                        <li><pre><?= htmlspecialchars($profiler_query_profiles[$i]->getQuery()) ?></pre></li>
-                    <?php endfor ?>
-                    <?php if ($i < count($profiler_query_profiles)) : ?>
-                        <li>...</li>
-                    <?php endif ?>
-                </ul>
+                <b>Queries:</b><br/>
+                <dl>
+                    <?php $queryCount = null; ?>
+                    <?php foreach ($profiler_query_profiles as $value) : ?>
+                        <?php if (is_null($queryCount)) {
+                            // erste DB-Anweisung ist immer 'connect' - diese soll nicht ausgegeben werden; daher überspringen
+                            $queryCount = 0;
+                            continue;
+                        } ?>
+                        <dd style="margin-inline-start: 0;"><?= ++$queryCount ?>:</dd>
+                        <dt style="margin-inline-start: 1em;">
+                            <?php if ($queryCount > $profiler_max_queries) {
+                                echo '...';
+                                break;
+                            } ?>
+                            <pre><?= htmlspecialchars($value->getQuery()) ?></pre>
+                        </dt>
+                    <?php endforeach ?>
+                </dl>
             <?php endif ?>
         </div>
     </div>
