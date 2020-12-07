@@ -18,18 +18,18 @@ if ($dbprofiler->getEnabled() === true) : ?>
                 <b>Queries:</b><br/>
                 <dl>
                     <?php $queryCount = null; ?>
-                    <?php foreach ($profiler_query_profiles as $value) : ?>
-                        <?php if (is_null($queryCount)) {
+                    <?php foreach ($profiler_query_profiles as $value) :
+                        if (is_null($queryCount)) {
                             // erste DB-Anweisung ist immer 'connect' - diese soll nicht ausgegeben werden; daher überspringen
                             $queryCount = 0;
                             continue;
                         } ?>
                         <dd style="margin-inline-start: 0;"><?= ++$queryCount ?>:</dd>
                         <dt style="margin-inline-start: 1em;">
-                            <?php if ($queryCount > $profiler_max_queries) {
+                            <?php if ($queryCount > $profiler_max_queries) :
                                 echo '...';
                                 break;
-                            } ?>
+                            endif ?>
                             <pre><?= htmlspecialchars($value->getQuery()) ?></pre>
                         </dt>
                     <?php endforeach ?>
