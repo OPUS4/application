@@ -279,14 +279,14 @@ if ($dbprofiler->getEnabled() === true) : ?>
                         <?php if (is_null($queryCount)) {
                             // erste DB-Anweisung ist immer 'connect' - diese soll nicht ausgegeben werden; daher überspringen
                             $queryCount = 0;
-                            continue; }
-                        ?>
+                            continue;
+                        } ?>
                         <dd style="margin-inline-start: 0;"><?= ++$queryCount ?>:</dd>
                         <dt style="margin-inline-start: 1em;">
                             <?php if ($queryCount > $profiler_max_queries) {
                                 echo '...';
-                                break; }
-                            ?>
+                                break;
+                            } ?>
                             <pre><?= htmlspecialchars($value->getQuery()) ?></pre>
                         </dt>
                     <?php endforeach ?>
