@@ -25,12 +25,11 @@ if ($dbprofiler->getEnabled() === true) : ?>
                             continue;
                         } ?>
                         <dd style="margin-inline-start: 0;"><?= ++$queryCount ?>:</dd>
-                        <dt style="margin-inline-start: 1em;">
-                            <?php if ($queryCount > $profiler_max_queries) :
+                        <dt style="margin-inline-start: 1em; font-family: monospace; white-space: pre"
+                            ><?php if ($queryCount > $profiler_max_queries) :
                                 echo '...';
                                 break;
-                            endif ?>
-                            <pre><?= htmlspecialchars($value->getQuery()) ?></pre>
+                             endif ?><?= htmlspecialchars($value->getQuery()) ?>
                         </dt>
                     <?php endforeach ?>
                 </dl>
