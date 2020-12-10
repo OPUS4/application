@@ -90,6 +90,12 @@ then
   sed -i -e 's!#Enable for UBUNTU/DEBIAN:# !!' "$OUTPUT_FILE"
 fi
 
+read -p 'Enable cookie flag "secure" (only applicable if OPUS installation uses HTTPS) [N]: ' ENABLE_SECURE_FLAG
+if [ "$ENABLE_SECURE_FLAG" = Y ] || [ "$ENABLE_SECURE_FLAG" = y ] ;
+then
+  sed -i -e 's!php_value session.cookie_secure   off!php_value session.cookie_secure   on!' "$OUTPUT_FILE"
+fi
+
 [ -z "$APACHE_ADD_SITE" ] && read -p "Add site to Apache2 [Y]: " APACHE_ADD_SITE
 
 if [ -z "$APACHE_ADD_SITE" ] || [ "$APACHE_ADD_SITE" = Y ] || [ "$APACHE_ADD_SITE" = y ] ;
