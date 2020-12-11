@@ -2543,3 +2543,35 @@ a.create-document-link {
 .code {
     font-family: monospace;
 }
+
+.admin_info fieldset {
+    margin-bottom: 2.5em;
+}
+
+.admin_info fieldset legend {
+    text-transform: none;
+    font-size: 1.5em;
+    border-bottom: 2px solid #26517d;
+    margin-bottom: 1em;
+}
+
+.admin_info fieldset .opus-version-info {
+    font-size: 1.3em;
+    margin-left: 2em;
+}
+
+.admin_info fieldset table {
+    font-size: 1.3em;
+    margin-left: 2em;
+    margin-right: 2em;
+    margin-top: 0;
+    padding-left: 0;
+    margin-bottom: 0;
+    width: auto;
+}
+
+.admin_info table.workspace-folders tr.state-r,
+.admin_info table.workspace-folders tr.state- {
+    background: #ffb1ae;
+}
+

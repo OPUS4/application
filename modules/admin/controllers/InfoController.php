@@ -32,7 +32,7 @@
  * @package     Module_Admin
  * @author      Jens Schwidder <schwidder@zib.de>
  * @author      Michael Lang   <lang@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 class Admin_InfoController extends Application_Controller_Action
@@ -52,6 +52,11 @@ class Admin_InfoController extends Application_Controller_Action
         }
         $this->view->postMaxSize = ini_get('post_max_size');
         $this->view->uploadMaxFilesize = ini_get('upload_max_filesize');
+
+        $workspace = new Application_Configuration_Workspace();
+        $folders = $workspace->getFolders();
+        ksort($folders);
+        $this->view->workspaceFolders = $folders;
     }
 
     /**
