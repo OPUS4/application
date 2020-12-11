@@ -73,6 +73,7 @@
         <mkdir dir="${basedir}/workspace/cache" />
         <mkdir dir="${basedir}/workspace/export" />
         <mkdir dir="${basedir}/workspace/files" />
+        <mkdir dir="${basedir}/workspace/import" />
         <mkdir dir="${basedir}/workspace/incoming" />
         <mkdir dir="${basedir}/workspace/log" />
         <mkdir dir="${basedir}/workspace/tmp" />
@@ -83,6 +84,7 @@
         <mkdir dir="${basedir}/tests/workspace/cache" />
         <mkdir dir="${basedir}/tests/workspace/export" />
         <mkdir dir="${basedir}/tests/workspace/files" />
+        <mkdir dir="${basedir}/tests/workspace/import" />
         <mkdir dir="${basedir}/tests/workspace/incoming" />
         <mkdir dir="${basedir}/tests/workspace/log" />
         <mkdir dir="${basedir}/tests/workspace/tmp" />
