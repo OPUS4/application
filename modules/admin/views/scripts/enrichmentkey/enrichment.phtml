@@ -32,18 +32,19 @@
  */
 ?>
 
+<?PHP if (! is_null($this->enrichments) && ! empty($this->enrichments)) : ?>
 <table id="<?= $this->managed ? 'enrichmentkeyTableManaged' : 'enrichmentkeyTableUnmanaged' ?>">
     <thead>
     <tr>
         <th>Name</th>
         <?PHP if ($this->managed) : ?>
-        <th>Typ</th>
+            <th>Typ</th>
         <?PHP endif ?>
         <th colspan="4"></th>
     </tr>
     </thead>
     <tbody>
-        <?PHP foreach ($this->enrichments as $enrichment) : ?>
+    <?PHP foreach ($this->enrichments as $enrichment) : ?>
         <tr class="<?= $this->element->getRowCssClass($enrichment)?>"
             title="<?= htmlspecialchars($this->translate($this->element->getRowTooltip($enrichment))) ?>">
             <td>
@@ -51,8 +52,8 @@
                     <?= htmlspecialchars($enrichment->getDisplayName()) ?>
                 <?PHP else : ?>
                     <span class="strong">
-                        <?= htmlspecialchars($enrichment->getDisplayName()) ?>
-                    </span>
+                    <?= htmlspecialchars($enrichment->getDisplayName()) ?>
+                </span>
                     <?PHP if ($this->element->isProtected($enrichment)) : ?>
                         <i class="fa fa-lock"
                            title="<?= htmlspecialchars($this->translate('admin_enrichmentkey_protected_tooltip')); ?>"
@@ -106,6 +107,7 @@
                 <?PHP endif ?>
             </td>
         </tr>
-        <?PHP endforeach ?>
+    <?PHP endforeach ?>
     </tbody>
 </table>
+<?PHP endif ?>
