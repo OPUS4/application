@@ -41,6 +41,10 @@ class Admin_Form_EnrichmentTable extends Application_Form_Model_Table
 {
     private $enrichmentKeys;
 
+    private $managedKeys = array();
+
+    private $unmanagedKeys = array();
+
     public function init()
     {
         $this->enrichmentKeys = new Admin_Model_EnrichmentKeys();
@@ -119,5 +123,28 @@ class Admin_Form_EnrichmentTable extends Application_Form_Model_Table
         }
 
         return "";
+    }
+
+    public function setModels($models)
+    {
+        parent::setModels($models);
+        foreach ($models as $enrichmentKey) {
+            if (is_null($enrichmentKey->getEnrichmentType())) {
+                $this->unmanagedKeys[] = $enrichmentKey;
+            }
+            else {
+                $this->managedKeys[] = $enrichmentKey;
+            }
+        }
+    }
+
+    public function getManaged()
+    {
+        return $this->managedKeys;
+    }
+
+    public function getUnmanaged()
+    {
+        return $this->unmanagedKeys;
     }
 }
