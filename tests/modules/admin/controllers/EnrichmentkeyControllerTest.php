@@ -840,8 +840,9 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
             if (strpos($response->getBody(), $value) !== false) {
                 // Xpath looks, if value has an protected css-class in enrichmentkeyTable
                 $this->assertXpathContentContains(
-                '//table[@id="enrichmentkeyTableUnmanaged"]//tr[contains(@class,\'protected\')]',
-                $value);
+                    '//table[@id="enrichmentkeyTableUnmanaged"]//tr[contains(@class,\'protected\')]',
+                    $value
+                );
             }
         }
     }
@@ -861,8 +862,9 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
             if (strpos($response->getBody(), $value) !== false) {
                 // Xpath looks, if value has an used css-class in enrichmentkeyTable
                 $this->assertXpathContentContains(
-                '//table[@id="enrichmentkeyTableManaged" or @id="enrichmentkeyTableUnmanaged"]//tr[contains(@class,\'used\')]',
-                $value);
+                    '//table[@id="enrichmentkeyTableManaged" or @id="enrichmentkeyTableUnmanaged"]//tr[contains(@class,\'used\')]',
+                    $value
+                );
             }
         }
     }
@@ -883,8 +885,9 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
             if (strpos($response->getBody(), $value) !== false) {
                 // Xpath looks, if value has an protected css-class in enrichmentkeyTable
                 $this->assertNotXpathContentContains(
-                '//table[@id="enrichmentkeyTableManaged" or @id="enrichmentkeyTableUnmanaged"]//tr[contains(@class,\'protected\')]',
-                $value);
+                    '//table[@id="enrichmentkeyTableManaged" or @id="enrichmentkeyTableUnmanaged"]//tr[contains(@class,\'protected\')]',
+                    $value
+                );
             }
         }
     }
@@ -904,8 +907,9 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
             if (strpos($response->getBody(), $value) !== false) {
                 // Xpath looks, if value has an unused css-class in enrichmentkeyTable
                 $this->assertXpathContentContains(
-                    '//table[@id="enrichmentkeyTableManaged" or @id="enrichmentkeyTableUnmanaged"]//tr[contains(@class,\'unused\')]',
-                    $value);
+                        '//table[@id="enrichmentkeyTableManaged" or @id="enrichmentkeyTableUnmanaged"]//tr[contains(@class,\'unused\')]',
+                        $value
+                );
             }
         }
     }
