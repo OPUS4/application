@@ -504,14 +504,24 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
      */
     public function isValid($data)
     {
+        $enrichmentData = $data[$this->getName()];
+        $enrichmentKey = EnrichmentKey::fetchByName($enrichmentData[self::ELEMENT_KEY_NAME]);
+
+        $keyName = null;
+        if (! is_null($enrichmentKey)) {
+            $keyName = $enrichmentKey->getName();
+        }
+        // ggf. Anzeige einer EK-spezifischen Fehlermeldung
+        $errorMessage = $this->handleEnrichmentKeySpecificTranslations('errorMessage', $keyName);
+        $valueElement = $this->getElement(self::ELEMENT_VALUE);
+        $valueElement->clearErrorMessages()->addError($errorMessage);
+
         $validationResult = parent::isValid($data);
 
         // ggf. kann das negative Validierungsergebnis noch auf "positiv" (true / valid) geändert werden,
         // wenn die Validation Policy des Enrichment Types des verwendeten Enrichment Keys auf "none"
         // gesetzt wurde und sich der Enrichment-Wert im POST-Request nicht vom ursprünglich im
         // Dokument gespeicherten Enrichment-Wert unterscheidet
-        $enrichmentData = $data[$this->getName()];
-        $enrichmentKey = EnrichmentKey::fetchByName($enrichmentData[self::ELEMENT_KEY_NAME]);
         if (! is_null($enrichmentKey)) {
             $enrichmentType = $enrichmentKey->getEnrichmentType();
             if (! is_null($enrichmentType)) {
