@@ -41,9 +41,9 @@ class Admin_Form_EnrichmentTable extends Application_Form_Model_Table
 {
     private $enrichmentKeys;
 
-    private $managedKeys = array();
+    private $managedKeys = [];
 
-    private $unmanagedKeys = array();
+    private $unmanagedKeys = [];
 
     public function init()
     {
@@ -131,8 +131,7 @@ class Admin_Form_EnrichmentTable extends Application_Form_Model_Table
         foreach ($models as $enrichmentKey) {
             if (is_null($enrichmentKey->getEnrichmentType())) {
                 $this->unmanagedKeys[] = $enrichmentKey;
-            }
-            else {
+            } else {
                 $this->managedKeys[] = $enrichmentKey;
             }
         }

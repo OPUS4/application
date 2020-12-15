@@ -840,7 +840,8 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
             if (strpos($response->getBody(), $value) !== false) {
                 // Xpath looks, if value has an protected css-class in enrichmentkeyTable
                 $this->assertXpathContentContains(
-                    '//table[@id="enrichmentkeyTableUnmanaged"]//tr[contains(@class,\'protected\')]', $value);
+                '//table[@id="enrichmentkeyTableUnmanaged"]//tr[contains(@class,\'protected\')]',
+                $value);
             }
         }
     }
@@ -860,8 +861,8 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
             if (strpos($response->getBody(), $value) !== false) {
                 // Xpath looks, if value has an used css-class in enrichmentkeyTable
                 $this->assertXpathContentContains(
-                    '//table[@id="enrichmentkeyTableManaged" or @id="enrichmentkeyTableUnmanaged"]//tr[contains(@class,\'used\')]',
-                    $value);
+                '//table[@id="enrichmentkeyTableManaged" or @id="enrichmentkeyTableUnmanaged"]//tr[contains(@class,\'used\')]',
+                $value);
             }
         }
     }
@@ -882,8 +883,8 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
             if (strpos($response->getBody(), $value) !== false) {
                 // Xpath looks, if value has an protected css-class in enrichmentkeyTable
                 $this->assertNotXpathContentContains(
-                    '//table[@id="enrichmentkeyTableManaged" or @id="enrichmentkeyTableUnmanaged"]//tr[contains(@class,\'protected\')]',
-                    $value);
+                '//table[@id="enrichmentkeyTableManaged" or @id="enrichmentkeyTableUnmanaged"]//tr[contains(@class,\'protected\')]',
+                $value);
             }
         }
     }
@@ -1311,8 +1312,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
             if (strpos($textContent, 'unmanagedEKfirst') === 0) {
                 $foundFirst = true;
                 continue;
-            }
-            else if ($foundFirst) {
+            } else if ($foundFirst) {
                 if (strpos($textContent, 'unmanagedEKlast') === 0) {
                     $foundLast = true;
                 }
@@ -1376,8 +1376,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
             if (strpos($textContent, 'managedEKfirst') === 0) {
                 $foundFirst = true;
                 continue;
-            }
-            else if ($foundFirst) {
+            } else if ($foundFirst) {
                 if (strpos($textContent, 'managedEKlast') === 0) {
                     $foundLast = true;
                 }
