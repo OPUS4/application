@@ -158,6 +158,13 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
         // wird $value durch den nachfolgenden Methodenaufruf nicht gesetzt
         $element = $enrichmentType->getFormElement($value);
 
+        $enrichmentKeyName = null;
+        if (! is_null($enrichmentKey)) {
+            $enrichmentKeyName = $enrichmentKey->getName();
+        }
+        $translationKey = $this->handleEnrichmentKeySpecificTranslations('errorMessage', $enrichmentKeyName, false);
+        $element->addErrorMessage($translationKey);
+
         // neues Formularelement soll vor dem Entfernen-Button erscheinen
         $element->setOrder(2);
 
@@ -472,7 +479,7 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
                 }
 
                 if (! is_null($enrichment) && array_search($enrichment->getValue(), $enrichmentType->getValues()) === false) {
-                    $this->getElement(self::ELEMENT_VALUE)->addError($this->handleEnrichmentKeySpecificTranslations('errorMessage', $enrichment->getKeyName()));
+                    $this->getElement(self::ELEMENT_VALUE)->markAsError();
                     return false; // Auswahlwert ist nach Typkonfiguration nicht zulässig
                 }
             } else {
@@ -504,19 +511,10 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
      */
     public function isValid($data)
     {
+        $validationResult = parent::isValid($data);
+
         $enrichmentData = $data[$this->getName()];
         $enrichmentKey = EnrichmentKey::fetchByName($enrichmentData[self::ELEMENT_KEY_NAME]);
-
-        $keyName = null;
-        if (! is_null($enrichmentKey)) {
-            $keyName = $enrichmentKey->getName();
-        }
-        // ggf. Anzeige einer EK-spezifischen Fehlermeldung
-        $errorMessage = $this->handleEnrichmentKeySpecificTranslations('errorMessage', $keyName);
-        $valueElement = $this->getElement(self::ELEMENT_VALUE);
-        $valueElement->clearErrorMessages()->addError($errorMessage);
-
-        $validationResult = parent::isValid($data);
 
         // ggf. kann das negative Validierungsergebnis noch auf "positiv" (true / valid) geändert werden,
         // wenn die Validation Policy des Enrichment Types des verwendeten Enrichment Keys auf "none"
@@ -653,23 +651,30 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
         if (! is_null($enrichmentKey)) {
             $enrichmentKeyName = $enrichmentKey->getName();
         }
-        $hint = $this->handleEnrichmentKeySpecificTranslations('validationMessage', $enrichmentKeyName);
+        $hint = $this->handleEnrichmentKeySpecificTranslations('validationMessage', $enrichmentKeyName, true);
         $element->setHint($hint);
 
         $element->removeDecorator('Errors');
     }
 
-    private function handleEnrichmentKeySpecificTranslations($keySuffix, $enrichmentKeyName = null)
+    private function handleEnrichmentKeySpecificTranslations($keySuffix, $enrichmentKeyName = null, $doTranslation = false)
     {
         $translator = $this->getTranslator();
         $translationPrefix = 'admin_enrichment_';
         if (! is_null($enrichmentKeyName)) {
             $translationKey = $translationPrefix . $enrichmentKeyName . '_' . $keySuffix;
             if ($translator->isTranslated($translationKey)) {
-                return $translator->translate($translationKey);
+                if ($doTranslation) {
+                    return $translator->translate($translationKey);
+                }
+                return $translationKey;
             }
         }
 
-        return $translator->translate($translationPrefix . $keySuffix);
+        $translationKey = $translationPrefix . $keySuffix;
+        if ($doTranslation) {
+            return $translator->translate($translationKey);
+        }
+        return $translationKey;
     }
 }
