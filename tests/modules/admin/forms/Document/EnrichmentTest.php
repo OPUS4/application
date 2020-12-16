@@ -452,7 +452,7 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase
         $this->assertContains('notInArray', $form->getErrors('KeyName'));
 
         $this->assertCount(1, $form->getErrors('Value'));
-        $this->assertContains('isEmpty', $form->getErrors('Value'));
+        $this->assertContains('admin_enrichment_errorMessage', $form->getElement('Value')->getErrorMessages());
     }
 
     private function createTestSelectType($options, $strictValidation = false)
@@ -575,7 +575,7 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase
         $this->assertCount(0, $form->getErrors('KeyName'));
 
         $this->assertCount(1, $form->getErrors('Value'));
-        $this->assertContains('isEmpty', $form->getErrors('Value'));
+        $this->assertContains('admin_enrichment_errorMessage', $form->getElement('Value')->getErrorMessages());
     }
 
     public function testValidationNoneWithSelectTypeAndInvalidValue()
@@ -608,7 +608,7 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase
         $this->assertCount(0, $form->getErrors('KeyName'));
 
         $this->assertCount(1, $form->getErrors('Value'));
-        $this->assertContains('notInArray', $form->getErrors('Value'));
+        $this->assertContains('admin_enrichment_errorMessage', $form->getElement('Value')->getErrorMessages());
     }
 
     public function testValidationNoneWithSelectTypeAndValidValue()
@@ -837,12 +837,12 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase
 
         $this->assertFalse($form->isValid($post));
 
-        $this->assertCount(0, $form->getErrors('KeyName'));
-
-        $this->assertCount(1, $form->getErrors('Value'));
-        $this->assertContains('regexNotMatch', $form->getErrors('Value'));
-
+        // cleanup
         $enrichmentKey->delete();
+
+        $this->assertCount(0, $form->getErrors('KeyName'));
+        $this->assertCount(1, $form->getErrors('Value'));
+        $this->assertContains('admin_enrichment_errorMessage', $form->getElement('Value')->getErrorMessages());
     }
 
     public function testValidationWithRegexTypeWithMissingValue()
@@ -866,12 +866,12 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase
 
         $this->assertFalse($form->isValid($post));
 
-        $this->assertCount(0, $form->getErrors('KeyName'));
-
-        $this->assertCount(1, $form->getErrors('Value'));
-        $this->assertContains('isEmpty', $form->getErrors('Value'));
-
+        // cleanup
         $enrichmentKey->delete();
+
+        $this->assertCount(0, $form->getErrors('KeyName'));
+        $this->assertCount(1, $form->getErrors('Value'));
+        $this->assertContains('admin_enrichment_errorMessage', $form->getElement('Value')->getErrorMessages());
     }
 
     public function testValidationWithRegexTypeUsedByFirstEnrichmentKey()
@@ -897,12 +897,12 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase
 
         $this->assertFalse($form->isValid($post));
 
-        $this->assertCount(0, $form->getErrors('KeyName'));
-
-        $this->assertCount(1, $form->getErrors('Value'));
-        $this->assertContains('regexNotMatch', $form->getErrors('Value'));
-
+        // cleanup
         $enrichmentKey->delete();
+
+        $this->assertCount(0, $form->getErrors('KeyName'));
+        $this->assertCount(1, $form->getErrors('Value'));
+        $this->assertContains('admin_enrichment_errorMessage', $form->getElement('Value')->getErrorMessages());
     }
 
     public function testValidationStrictWithRegexTypeAndInvalidOriginalValue()
@@ -926,12 +926,12 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase
 
         $this->assertFalse($form->isValid($post));
 
-        $this->assertCount(0, $form->getErrors('KeyName'));
-
-        $this->assertCount(1, $form->getErrors('Value'));
-        $this->assertContains('regexNotMatch', $form->getErrors('Value'));
-
+        // cleanup
         $enrichmentKey->delete();
+
+        $this->assertCount(0, $form->getErrors('KeyName'));
+        $this->assertCount(1, $form->getErrors('Value'));
+        $this->assertContains('admin_enrichment_errorMessage', $form->getElement('Value')->getErrorMessages());
     }
 
     public function testValidationStrictWithRegexTypeAndInvalidChangedValue()
@@ -955,12 +955,12 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase
 
         $this->assertFalse($form->isValid($post));
 
-        $this->assertCount(0, $form->getErrors('KeyName'));
-
-        $this->assertCount(1, $form->getErrors('Value'));
-        $this->assertContains('regexNotMatch', $form->getErrors('Value'));
-
+        // cleanup
         $enrichmentKey->delete();
+
+        $this->assertCount(0, $form->getErrors('KeyName'));
+        $this->assertCount(1, $form->getErrors('Value'));
+        $this->assertContains('admin_enrichment_errorMessage', $form->getElement('Value')->getErrorMessages());
     }
 
     public function testValidationStrictWithRegexTypeAndValidValue()
@@ -984,10 +984,11 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase
 
         $this->assertTrue($form->isValid($post));
 
+        //cleanup
+        $enrichmentKey->delete();
+
         $this->assertCount(0, $form->getErrors('KeyName'));
         $this->assertCount(0, $form->getErrors('Value'));
-
-        $enrichmentKey->delete();
     }
 
     public function testValidationNoneWithRegexTypeAndInvalidOriginalValue()
@@ -1011,10 +1012,11 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase
 
         $this->assertTrue($form->isValid($post));
 
+        // cleanup
+        $enrichmentKey->delete();
+
         $this->assertCount(0, $form->getErrors('KeyName'));
         $this->assertCount(0, $form->getErrors('Value'));
-
-        $enrichmentKey->delete();
     }
 
     public function testValidationNoneWithRegexTypeAndInvalidChangedValue()
@@ -1038,12 +1040,12 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase
 
         $this->assertFalse($form->isValid($post));
 
-        $this->assertCount(0, $form->getErrors('KeyName'));
-
-        $this->assertCount(1, $form->getErrors('Value'));
-        $this->assertContains('regexNotMatch', $form->getErrors('Value'));
-
+        // cleanup
         $enrichmentKey->delete();
+
+        $this->assertCount(0, $form->getErrors('KeyName'));
+        $this->assertCount(1, $form->getErrors('Value'));
+        $this->assertContains('admin_enrichment_errorMessage', $form->getElement('Value')->getErrorMessages());
     }
 
     public function testValidationNoneWithRegexTypeAndValidValue()
@@ -1067,10 +1069,79 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase
 
         $this->assertTrue($form->isValid($post));
 
+        // cleanup
+        $enrichmentKey->delete();
+
         $this->assertCount(0, $form->getErrors('KeyName'));
         $this->assertCount(0, $form->getErrors('Value'));
+    }
 
+    public function testEnrichmentKeySpecificTranslationWithRegexType()
+    {
+        $translate = \Zend_Registry::get('Zend_Translate');
+        $translate->setTranslations('admin_enrichment_ektest_errorMessage', ['de' => 'de', 'en' => 'en']);
+        $translate->loadTranslations(true);
+
+        $type = $this->createTestRegexType('^abc$');
+        $enrichmentKey = $this->createEnrichmentKey('ektest', $type);
+        $enrichmentId = $this->createTestDocWithEnrichmentOfGivenKey('ektest', 'invalidvalue');
+
+        $form = new Admin_Form_Document_Enrichment();
+        $form->setName('Enrichment0');
+        $form->initValueFormElement('ektest', $enrichmentId);
+
+        $post = [
+            'Enrichment0' => [
+                'Id' => $enrichmentId,
+                'KeyName' => 'ektest',
+                'Value' => 'anotherinvalidvalue' // invalid value
+            ]
+        ];
+
+        $this->assertFalse($form->isValid($post));
+
+        // cleanup
         $enrichmentKey->delete();
+
+        $this->assertCount(1, $form->getErrors('Value'));
+        $this->assertContains('admin_enrichment_ektest_errorMessage', $form->getElement('Value')->getErrorMessages());
+    }
+
+    public function testEnrichmentKeySpecificTranslationWithSelectType()
+    {
+        $translate = \Zend_Registry::get('Zend_Translate');
+        $translate->setTranslations('admin_enrichment_ektest_errorMessage', ['de' => 'de', 'en' => 'en']);
+        $translate->loadTranslations(true);
+
+        $options = ['foo', 'bar', 'baz'];
+        $type = $this->createTestSelectType($options);
+
+        $enrichmentKey = $this->createEnrichmentKey('ektest', $type);
+        $enrichmentId = $this->createTestDocWithEnrichmentOfGivenKey('ektest');
+
+        $form = new Admin_Form_Document_Enrichment();
+        $form->setName('Enrichment0');
+        $form->initValueFormElement('ektest');
+
+        $post = [
+            'Enrichment0' => [
+                'Id' => $enrichmentId,
+                'KeyName' => 'ektest',
+                'Value' => count($options) + 1 // diese Option nicht zulässig
+            ]
+        ];
+
+        $result = $form->isValid($post);
+
+        // cleanup
+        $enrichmentKey->delete();
+
+        $this->assertFalse($result);
+
+        $this->assertCount(0, $form->getErrors('KeyName'));
+
+        $this->assertCount(1, $form->getErrors('Value'));
+        $this->assertContains('admin_enrichment_ektest_errorMessage', $form->getElement('Value')->getErrorMessages());
     }
 
     private function createTestEnrichmentKey($name, $type = null, $options = null)
