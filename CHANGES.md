@@ -1,5 +1,17 @@
 # OPUS 4 Change Log
 
+---
+
+## Release 4.7.0.4 - 2020-12-02
+
+### Aufgaben
+
+* [OPUSVIER-4486] - Framework Release 4.7.0.1 für Bugfix
+
+### Bugs
+
+* [OPUSVIER-4485] - Funktion getIdentifierDoi liefert Array mit falschen Index-Werten
+
 --- 
 
 ## Patches for 4.7 - 2020-09-29
