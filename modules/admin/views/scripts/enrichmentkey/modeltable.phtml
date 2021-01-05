@@ -32,18 +32,28 @@
  */
 ?>
 
-<h2>
-    <?= $this->translate($this->element->getColumnLabel(0)) ?>
-</h2>
-<div class="enrichmentkey_new">
+<h2><?= $this->translate('admin_title_enrichmentkey') ?>
+<span class="enrichmentkey_new">
     <a class="add" href="<?= $this->url(['action' => 'new']) ?>"><?= $this->translate('admin_button_add') ?></a>
-</div>
+</span>
+</h2>
 
+<?php if (count($this->element->getManaged()) > 0) : ?>
+<fieldset>
+    <legend><?= $this->translate('admin_enrichmentkey_managed') ?></legend>
 <?= $this->partial('enrichmentkey/enrichment.phtml', [
         'managed' => true,
         'enrichments' => $this->element->getManaged(),
         'element' => $this->element]); ?>
+</fieldset>
+<?php endif ?>
+
+<?php if (count($this->element->getUnmanaged()) > 0) : ?>
+<fieldset>
+    <legend><?= $this->translate('admin_enrichmentkey_unmanaged') ?></legend>
 <?= $this->partial('enrichmentkey/enrichment.phtml', [
         'managed' => false,
         'enrichments' => $this->element->getUnmanaged(),
         'element' => $this->element]); ?>
+</fieldset>
+<?php endif ?>
