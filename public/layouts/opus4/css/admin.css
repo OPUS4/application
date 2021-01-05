@@ -2536,7 +2536,9 @@ a.create-document-link {
     float: right;
 }
 
-#enrichmentkeyTable span.strong {
+#enrichmentkeyTable span.strong,
+#enrichmentkeyTableManaged span.strong,
+#enrichmentkeyTableUnmanaged span.strong {
     font-weight: bold;
 }
 
