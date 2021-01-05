@@ -839,8 +839,10 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         foreach ($protectedKeys as &$value) {
             if (strpos($response->getBody(), $value) !== false) {
                 // Xpath looks, if value has an protected css-class in enrichmentkeyTable
-                $this->assertXpathContentContains('//table[@id="enrichmentkeyTable"]
-                //tr[contains(@class,\'protected\')]', $value);
+                $this->assertXpathContentContains(
+                    '//table[@id="enrichmentkeyTableUnmanaged"]//tr[contains(@class,\'protected\')]',
+                    $value
+                );
             }
         }
     }
@@ -859,8 +861,10 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         foreach ($usedKeys as &$value) {
             if (strpos($response->getBody(), $value) !== false) {
                 // Xpath looks, if value has an used css-class in enrichmentkeyTable
-                $this->assertXpathContentContains('//table[@id="enrichmentkeyTable"]
-                //tr[contains(@class,\'used\')]', $value);
+                $this->assertXpathContentContains(
+                    '//table[@id="enrichmentkeyTableManaged" or @id="enrichmentkeyTableUnmanaged"]//tr[contains(@class,\'used\')]',
+                    $value
+                );
             }
         }
     }
@@ -880,8 +884,10 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         foreach ($unprotectedKeys as &$value) {
             if (strpos($response->getBody(), $value) !== false) {
                 // Xpath looks, if value has an protected css-class in enrichmentkeyTable
-                $this->assertNotXpathContentContains('//table[@id="enrichmentkeyTable"]
-                //tr[contains(@class,\'protected\')]', $value);
+                $this->assertNotXpathContentContains(
+                    '//table[@id="enrichmentkeyTableManaged" or @id="enrichmentkeyTableUnmanaged"]//tr[contains(@class,\'protected\')]',
+                    $value
+                );
             }
         }
     }
@@ -900,8 +906,10 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         foreach ($unusedKeys as &$value) {
             if (strpos($response->getBody(), $value) !== false) {
                 // Xpath looks, if value has an unused css-class in enrichmentkeyTable
-                $this->assertXpathContentContains('//table[@id="enrichmentkeyTable"]
-                //tr[contains(@class,\'unused\')]', $value);
+                $this->assertXpathContentContains(
+                    '//table[@id="enrichmentkeyTableManaged" or @id="enrichmentkeyTableUnmanaged"]//tr[contains(@class,\'unused\')]',
+                    $value
+                );
             }
         }
     }
@@ -1255,5 +1263,131 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
             ['BibtexRecord'], // unreferenced enrichment key
             ['Audience']      // referenced enrichment key
         ];
+    }
+
+    /**
+     * Tests the function getUnmanaged()
+     *
+     * @covers ::getUnmanaged
+     */
+    public function testGetUnmanaged()
+    {
+        $this->dispatch($this->getControllerPath() . '/');
+
+        $this->assertResponseCode(200);
+
+        $domDoc = new DOMDocument();
+        $domDoc->loadHTML($this->getResponse()->getBody());
+        $xpath = new DOMXPath($domDoc);
+        $nodeList = $xpath->query('//table[@id="enrichmentkeyTableUnmanaged"]/tbody/tr');
+        $tableRowCount = $nodeList->length;
+
+        $enrichmentKeyLast = new EnrichmentKey();
+        $enrichmentKeyLast->setName('unmanagedEKlast');
+        $enrichmentKeyLast->store();
+
+        $enrichmentKeyFirst = new EnrichmentKey();
+        $enrichmentKeyFirst->setName('unmanagedEKfirst');
+        $enrichmentKeyFirst->store();
+
+        $this->getResponse()->clearBody();
+
+        $this->dispatch($this->getControllerPath() . '/');
+
+        $this->assertResponseCode(200);
+
+        // cleanup
+        $enrichmentKeyFirst->delete();
+        $enrichmentKeyLast->delete();
+
+        $domDoc = new DOMDocument();
+        $domDoc->loadHTML($this->getResponse()->getBody());
+        $xpath = new DOMXPath($domDoc);
+
+        // zwei neue Zeilen sollten in Tabelle für unmanaged EKs erscheinen
+        $nodeList = $xpath->query('//table[@id="enrichmentkeyTableUnmanaged"]/tbody/tr');
+        $this->assertEquals(2 + $tableRowCount, $nodeList->length);
+
+        // unmanagedEKfirst sollte direkt vor unmanagedEKlast erscheinen (in der Tabelle für unmanaged EKs)
+        $foundFirst = false;
+        $foundLast = false;
+        foreach ($nodeList as $node) {
+            $textContent = trim($node->textContent);
+            if (strpos($textContent, 'unmanagedEKfirst') === 0) {
+                $foundFirst = true;
+                continue;
+            } else if ($foundFirst) {
+                if (strpos($textContent, 'unmanagedEKlast') === 0) {
+                    $foundLast = true;
+                }
+                break;
+            }
+        }
+        $this->assertTrue($foundFirst);
+        $this->assertTrue($foundLast);
+    }
+
+    /**
+     * Tests the function getManaged()
+     *
+     * @covers ::getManaged
+     */
+    public function testGetManaged()
+    {
+        $this->dispatch($this->getControllerPath() . '/');
+
+        $this->assertResponseCode(200);
+
+        $domDoc = new DOMDocument();
+        $domDoc->loadHTML($this->getResponse()->getBody());
+        $xpath = new DOMXPath($domDoc);
+        $nodeList = $xpath->query('//table[@id="enrichmentkeyTableManaged"]/tbody/tr');
+        $tableRowCount = $nodeList->length;
+
+        $enrichmentKeyLast = new EnrichmentKey();
+        $enrichmentKeyLast->setName('managedEKlast');
+        $enrichmentKeyLast->setType('TextType');
+        $enrichmentKeyLast->store();
+
+        $enrichmentKeyFirst = new EnrichmentKey();
+        $enrichmentKeyFirst->setName('managedEKfirst');
+        $enrichmentKeyFirst->setType('TextType');
+        $enrichmentKeyFirst->store();
+
+        $this->getResponse()->clearBody();
+
+        $this->dispatch($this->getControllerPath() . '/');
+
+        $this->assertResponseCode(200);
+
+        // cleanup
+        $enrichmentKeyFirst->delete();
+        $enrichmentKeyLast->delete();
+
+        $domDoc = new DOMDocument();
+        $domDoc->loadHTML($this->getResponse()->getBody());
+        $xpath = new DOMXPath($domDoc);
+
+        // zwei neue Zeilen sollten in Tabelle für managed EKs erscheinen
+        $nodeList = $xpath->query('//table[@id="enrichmentkeyTableManaged"]/tbody/tr');
+        $this->assertEquals(2 + $tableRowCount, $nodeList->length);
+
+        // managedEKfirst sollte direkt vor managedEKlast erscheinen (in der Tabelle für managed EKs)
+        $foundFirst = false;
+        $foundLast = false;
+        foreach ($nodeList as $node) {
+            $textContent = trim($node->textContent);
+            if (strpos($textContent, 'managedEKfirst') === 0) {
+                $foundFirst = true;
+                continue;
+            } else if ($foundFirst) {
+                if (strpos($textContent, 'managedEKlast') === 0) {
+                    $foundLast = true;
+                }
+                break;
+            }
+        }
+        $this->assertTrue($foundFirst);
+        $this->assertTrue($foundLast);
     }
 }
