@@ -657,6 +657,16 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
         $element->removeDecorator('Errors');
     }
 
+    /**
+     * @param $keySuffix
+     * @param null $enrichmentKeyName
+     * @param false $doTranslation
+     * @return string
+     *
+     * TODO tests for this function
+     * TODO function does not have to be private
+     * TODO function could have a better name - it doesn't just "handle" it returns something "get"
+     */
     private function handleEnrichmentKeySpecificTranslations($keySuffix, $enrichmentKeyName = null, $doTranslation = false)
     {
         $translator = $this->getTranslator();
