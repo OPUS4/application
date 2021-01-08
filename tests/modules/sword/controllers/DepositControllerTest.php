@@ -200,7 +200,11 @@ class Sword_DepositControllerTest extends ControllerTestCase
 
         $config = Application_Configuration::getInstance();
         $importDir = $config->getWorkspacePath() . 'import/';
-        $filename = 'invalid-xml.zip';
+
+        $payload = file_get_contents(APPLICATION_PATH . '/tests/resources/sword-packages/invalid-xml.zip');
+        $checksum = md5($payload);
+
+        $filename = "$checksum-invalid-xml.zip";
         $filePath = $importDir . $filename;
 
         $this->addFileToCleanup($filePath);

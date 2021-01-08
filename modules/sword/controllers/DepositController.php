@@ -107,7 +107,7 @@ class Sword_DepositController extends \Zend_Rest_Controller
         }
 
         // TODO data is stored again within handlePackage - that should be avoied
-        $filename = $additionalEnrichments->getFileName();
+        $filename = $this->generatePackageFileName($additionalEnrichments);
         $config = Application_Configuration::getInstance();
         $filePath = $config->getWorkspacePath() . 'import/' . $filename;
         file_put_contents($filePath, $payload);
@@ -233,12 +233,14 @@ class Sword_DepositController extends \Zend_Rest_Controller
     }
 
     /**
-     * Generates a name for storing the package as a file.
+     * Generates a name for storing the package as a file.\
+     * @param Application_Import_AdditionalEnrichments $importInfo
      */
     protected function generatePackageFileName($importInfo)
     {
-        $filename = '';
+        $filename = $importInfo->getFileName();
+        $checksum = $importInfo->getChecksum();
 
-        return $filename;
+        return "$checksum-$filename";
     }
 }
