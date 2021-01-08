@@ -45,6 +45,14 @@ use Opus\Model\ModelException;
 use Opus\Model\NotFoundException;
 use Opus\Security\SecurityException;
 
+/**
+ * Class Application_Import_Importer
+ *
+ * TODO behavior of this importer changes depending swordContext - It means special handling code in various places.
+ *      With every new context, every new use case this code will get more complicated. It would be better if the
+ *      different context would be implemented in separate classes that extend a base class providing common
+ *      functionality.
+ */
 class Application_Import_Importer
 {
 
@@ -59,6 +67,9 @@ class Application_Import_Importer
     private $swordContext = false;
     private $importDir = null;
 
+    /**
+     * @var null
+     */
     private $statusDoc = null;
 
     /**
