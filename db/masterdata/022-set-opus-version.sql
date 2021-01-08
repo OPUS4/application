@@ -11,7 +11,7 @@ START TRANSACTION;
 -- Set internal OPUS version (for controlling updates)
 
 TRUNCATE TABLE `opus_version`;
-INSERT INTO `opus_version` (`version`) VALUES (13);
+INSERT INTO `opus_version` (`version`) VALUES (14);
 
 COMMIT;
 

@@ -47,18 +47,44 @@
 
 use Opus\EnrichmentKey;
 
+/**
+ * Additional enrichments for imported documents.
+ *
+ * TODO each enrichment should have a separate class, so the list can be extended
+ * TODO rename, there aren't any Enrichments here, just "info" (properties)
+ * TODO map info properties to enrichments or Properties later
+ */
 class Application_Import_AdditionalEnrichments
 {
+
+    /**
+     * Authenticated user account that performed the import.
+     */
     const OPUS_IMPORT_USER = 'opus.import.user';
 
+    /**
+     * Date of import.
+     */
     const OPUS_IMPORT_DATE = 'opus.import.date';
 
+    /**
+     * Name of import file.
+     */
     const OPUS_IMPORT_FILE = 'opus.import.file';
 
+    /**
+     * Checksum of import file.
+     */
     const OPUS_IMPORT_CHECKSUM = 'opus.import.checksum';
 
+    /**
+     * Source of added document like SWORD or the publish form.
+     */
     const OPUS_SOURCE = 'opus.source';
 
+    /**
+     * @var
+     */
     private $enrichmentMap;
 
     /**
@@ -120,5 +146,13 @@ class Application_Import_AdditionalEnrichments
             return null;
         }
         return $this->enrichmentMap[self::OPUS_IMPORT_CHECKSUM];
+    }
+
+    public function getFileName()
+    {
+        if (! array_key_exists(self::OPUS_IMPORT_FILE, $this->enrichmentMap)) {
+            return null;
+        }
+        return $this->enrichmentMap[self::OPUS_IMPORT_FILE];
     }
 }

@@ -24,28 +24,36 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    TODO
+ * @category    Application
  * @author      Jens Schwidder <schwidder@zib.de>
  * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
+
+$opusVersion = Application_Configuration::getOpusVersion();
 ?>
 
-<?PHP if (! empty(Application_Configuration::getOpusInfo())) : ?>
-<dl>
-    <?PHP foreach (Application_Configuration::getOpusInfo() as $infoKey => $infoValue) : ?>
-        <dt id="<?= $infoKey ?>"><?= htmlspecialchars($this->translate($infoKey)) ?></dt>
-        <dd><?= $infoValue ?></dd>
-    <?PHP endforeach ?>
-</dl>
-<?PHP endif ?>
+<fieldset>
+    <legend><?= $this->translate('admin_info_version') ?></legend>
+    <div class="opus-version-info">
+        <?= $opusVersion ?> (<a href="<?= $this->url(['module' => 'admin', 'controller' => 'info', 'action' => 'update']) ?>">
+                    <?= htmlspecialchars($this->translate('admin_info_versioncheck')) ?></a>)
+    </div>
+</fieldset>
 
-<dl>
-    <dt><a href="<?= $this->url(['module' => 'admin', 'controller' => 'info', 'action' => 'update']) ?>">
-        <?= htmlspecialchars($this->translate('admin_info_versioncheck')) ?></a></dt>
-</dl>
+<?PHP if (! empty(Application_Configuration::getOpusInfo())) : ?>
+<fieldset>
+    <legend><?= $this->translate('admin_info_other') ?></legend>
+    <dl>
+        <?PHP foreach (Application_Configuration::getOpusInfo() as $infoKey => $infoValue) : ?>
+            <dt id="<?= $infoKey ?>"><?= htmlspecialchars($this->translate($infoKey)) ?></dt>
+            <dd><?= $infoValue ?></dd>
+        <?PHP endforeach ?>
+    </dl>
+</fieldset>
+<?PHP endif ?>
 
 <fieldset>
     <legend><?= $this->translate('admin_info_section_upload') ?></legend>
@@ -75,6 +83,24 @@
             <td class="location">php.ini</td>
             <td class="description"><?= $this->translate('admin_info_postmaxsize_description') ?></td>
         </tr>
+    </table>
+
+</fieldset>
+
+<fieldset>
+    <legend><?= $this->translate('admin_info_workspace') ?></legend>
+
+    <table class="workspace-folders">
+        <tr>
+            <th><?= $this->translate('folder') ?></th>
+            <th><?= $this->translate('state') ?></th>
+        </tr>
+    <?PHP foreach ($this->workspaceFolders as $folder => $state) : ?>
+        <tr class="state-<?= $state ?>">
+            <td><?= $folder ?></td>
+            <td><?= $state ?></td>
+        </tr>
+    <?PHP endforeach ?>
     </table>
 
 </fieldset>

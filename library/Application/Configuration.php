@@ -273,7 +273,6 @@ class Application_Configuration
     public static function getOpusInfo()
     {
         $info = [];
-        $info['admin_info_version'] = self::getOpusVersion();
         return $info;
     }
 
