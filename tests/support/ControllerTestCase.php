@@ -34,6 +34,7 @@
 
 use Opus\Db\TableGateway;
 use Opus\Document;
+use Opus\Doi\DoiManager;
 use Opus\File;
 use Opus\UserRole;
 use Opus\Model\ModelException;
@@ -113,6 +114,7 @@ class ControllerTestCase extends TestCase
 
         $this->logger = null;
 
+        DoiManager::setInstance(null);
         Application_Configuration::clearInstance(); // reset Application_Configuration
 
         parent::tearDown();
