@@ -151,9 +151,10 @@ EOT;
     {
         $doc = Document::get($docId);
         if ($permanent) {
-            $doc->deletePermanent();
-        } else {
             $doc->delete();
+        } else {
+            $doc->setServerState(Document::STATE_DELETED);
+            $doc->store();
         }
     }
 }

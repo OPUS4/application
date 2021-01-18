@@ -649,7 +649,7 @@ class ControllerTestCase extends TestCase
 
         try {
             Document::get($docId);
-            $doc->deletePermanent();
+            $doc->delete();
         } catch (NotFoundException $omnfe) {
             // Model nicht gefunden -> alles gut (hoffentlich)
             $this->getLogger()->debug("Test document {$docId} was deleted successfully by test.");

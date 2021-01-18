@@ -157,11 +157,8 @@ class Application_Controller_Action_Helper_Workflow extends \Zend_Controller_Act
     public function changeState($document, $targetState)
     {
         switch ($targetState) {
-            case 'deleted':
-                $document->delete();
-                break;
             case 'removed':
-                $document->deletePermanent();
+                $document->delete();
                 break;
             default:
                 $document->setServerState($targetState);

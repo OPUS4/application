@@ -84,7 +84,7 @@ class Admin_ReportControllerTest extends ControllerTestCase
             // removed previously created test documents from database
             foreach ($this->docIds as $docId) {
                 $doc = Document::get($docId);
-                $doc->deletePermanent();
+                $doc->delete();
             }
         }
 

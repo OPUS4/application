@@ -68,7 +68,7 @@ class Admin_Form_Document_MultiEnrichmentSubFormTest extends ControllerTestCase
         $result = $form->getFieldValues($doc);
 
         // cleanup: remove latest test document
-        $doc->deletePermanent();
+        $doc->delete();
 
         // die beiden Enrichments mit dem Schlüssel opus.doi/urn.autoCreate
         // werden gesondert behandelt und erscheinen daher nicht im Unterformular
@@ -110,7 +110,7 @@ class Admin_Form_Document_MultiEnrichmentSubFormTest extends ControllerTestCase
         $this->assertCount(count($enrichments), $form->getSubForms());
 
         // cleanup: remove latest test document
-        $doc->deletePermanent();
+        $doc->delete();
     }
 
     public function testConstructFromPost()

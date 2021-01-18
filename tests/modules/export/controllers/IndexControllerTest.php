@@ -264,7 +264,7 @@ class Export_IndexControllerTest extends ControllerTestCase
         $solrXml = $indexer->toSolrDocument($doc2);
 
         // delete document from database
-        $doc2->deletePermanent();
+        $doc2->delete();
 
         // add document to search index
         // TODO fix $methodSendSolrXmlToServer = $class->getMethod('sendSolrXmlToServer');
@@ -278,7 +278,7 @@ class Export_IndexControllerTest extends ControllerTestCase
         $indexer->removeDocumentFromEntryIndexById($docId2);
         $indexer->commit();
 
-        $doc1->deletePermanent();
+        $doc1->delete();
 
         $body = $this->getResponse()->getBody();
 

@@ -44,7 +44,7 @@ $finder = new DocumentFinder();
 foreach ($finder->ids() as $id) {
     if (intval($id) < 91 || intval($id) > 110) {
         $doc = Document::get($id);
-        $doc->deletePermanent();
+        $doc->delete();
         echo "document " . $id . " was deleted.\n";
     }
 }

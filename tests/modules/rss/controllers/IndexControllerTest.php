@@ -110,7 +110,7 @@ class Rss_IndexControllerTest extends ControllerTestCase
         $indexer->addDocumentsToIndex($doc1);
 
         // delete document from database
-        $doc1->deletePermanent();
+        $doc1->delete();
 
         sleep(2); // make sure $doc2 do not get the same value for server_date_published
 
@@ -132,7 +132,7 @@ class Rss_IndexControllerTest extends ControllerTestCase
         // make search index up to date
         $indexer->removeDocumentsFromIndexById($docId1);
 
-        $doc2->deletePermanent();
+        $doc2->delete();
 
         $body = $this->getResponse()->getBody();
         $this->assertNotContains("No Opus_Db_Documents with id $docId1 in database.", $body);

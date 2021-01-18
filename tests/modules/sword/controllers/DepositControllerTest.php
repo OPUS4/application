@@ -65,7 +65,7 @@ class Sword_DepositControllerTest extends ControllerTestCase
     {
         $doc = $this->depositSuccessful('allfields-document.zip', DepositTestHelper::CONTENT_TYPE_ZIP, true, false, false, 7, 3, 'published');
         $this->checkAllFieldsImport($doc);
-        $doc->deletePermanent();
+        $doc->delete();
         $this->testHelper->removeImportCollection();
     }
 
@@ -73,7 +73,7 @@ class Sword_DepositControllerTest extends ControllerTestCase
     {
         $doc = $this->depositSuccessful('allfields-document.tar', DepositTestHelper::CONTENT_TYPE_TAR, true, false, false, 7, 3, 'published');
         $this->checkAllFieldsImport($doc);
-        $doc->deletePermanent();
+        $doc->delete();
         $this->testHelper->removeImportCollection();
     }
 
@@ -81,7 +81,7 @@ class Sword_DepositControllerTest extends ControllerTestCase
     {
         $doc = $this->depositSuccessful('dangling-ids.zip', DepositTestHelper::CONTENT_TYPE_ZIP, false, false);
         $this->checkMinimalDoc($doc);
-        $doc->deletePermanent();
+        $doc->delete();
         $this->testHelper->removeImportCollection();
     }
 
@@ -89,7 +89,7 @@ class Sword_DepositControllerTest extends ControllerTestCase
     {
         $doc = $this->depositSuccessful('dangling-ids.tar', DepositTestHelper::CONTENT_TYPE_TAR, false, false);
         $this->checkMinimalDoc($doc);
-        $doc->deletePermanent();
+        $doc->delete();
         $this->testHelper->removeImportCollection();
     }
 
@@ -97,7 +97,7 @@ class Sword_DepositControllerTest extends ControllerTestCase
     {
         $doc = $this->depositSuccessful('urn-collision.zip', DepositTestHelper::CONTENT_TYPE_ZIP, false, false);
         $this->checkOnlyOneDocIsImported($doc);
-        $doc->deletePermanent();
+        $doc->delete();
         $this->testHelper->removeImportCollection();
     }
 
@@ -105,7 +105,7 @@ class Sword_DepositControllerTest extends ControllerTestCase
     {
         $doc = $this->depositSuccessful('urn-collision.tar', DepositTestHelper::CONTENT_TYPE_TAR, false, false);
         $this->checkOnlyOneDocIsImported($doc);
-        $doc->deletePermanent();
+        $doc->delete();
         $this->testHelper->removeImportCollection();
     }
 
@@ -113,7 +113,7 @@ class Sword_DepositControllerTest extends ControllerTestCase
     {
         $doc = $this->depositSuccessful('empty-elements.zip', DepositTestHelper::CONTENT_TYPE_ZIP, false, false);
         $this->checkMinimalDoc($doc, 'eng', 'book', 'titlemain');
-        $doc->deletePermanent();
+        $doc->delete();
         $this->testHelper->removeImportCollection();
     }
 
@@ -121,7 +121,7 @@ class Sword_DepositControllerTest extends ControllerTestCase
     {
         $doc = $this->depositSuccessful('empty-elements.tar', DepositTestHelper::CONTENT_TYPE_TAR, false, false);
         $this->checkMinimalDoc($doc, 'eng', 'book', 'titlemain');
-        $doc->deletePermanent();
+        $doc->delete();
         $this->testHelper->removeImportCollection();
     }
 
@@ -129,7 +129,7 @@ class Sword_DepositControllerTest extends ControllerTestCase
     {
         $doc = $this->depositSuccessful('empty-elements-alternative.zip', DepositTestHelper::CONTENT_TYPE_ZIP, false, false);
         $this->checkMinimalDoc($doc, 'eng', 'book', 'titlemain');
-        $doc->deletePermanent();
+        $doc->delete();
         $this->testHelper->removeImportCollection();
     }
 
@@ -137,7 +137,7 @@ class Sword_DepositControllerTest extends ControllerTestCase
     {
         $doc = $this->depositSuccessful('empty-elements-alternative.tar', DepositTestHelper::CONTENT_TYPE_TAR, false, false);
         $this->checkMinimalDoc($doc, 'eng', 'book', 'titlemain');
-        $doc->deletePermanent();
+        $doc->delete();
         $this->testHelper->removeImportCollection();
     }
 
@@ -150,7 +150,7 @@ class Sword_DepositControllerTest extends ControllerTestCase
         $this->checkFile($files[0], 'doc1.pdf', $language, null, 1, 1);
         $this->checkFile($files[1], 'doc1.txt', $language, null, 1, 1);
         $this->checkFile($files[2], 'foo.txt', $language, null, 1, 1);
-        $doc->deletePermanent();
+        $doc->delete();
         $this->testHelper->removeImportCollection();
     }
 
@@ -163,7 +163,7 @@ class Sword_DepositControllerTest extends ControllerTestCase
         $this->checkFile($files[0], 'doc1.pdf', $language, null, 1, 1);
         $this->checkFile($files[1], 'doc1.txt', $language, null, 1, 1);
         $this->checkFile($files[2], 'foo.txt', $language, null, 1, 1);
-        $doc->deletePermanent();
+        $doc->delete();
         $this->testHelper->removeImportCollection();
     }
 
@@ -463,7 +463,7 @@ class Sword_DepositControllerTest extends ControllerTestCase
             return $doc;
         }
 
-        $doc->deletePermanent();
+        $doc->delete();
     }
 
     private function checkHttpResponseHeaders($frontdoorUrl)

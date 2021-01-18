@@ -111,7 +111,7 @@ class Export_Model_DataciteExportTest extends ControllerTestCase
         $result = $plugin->execute();
 
         // Testdokument wieder löschen
-        $doc->deletePermanent();
+        $doc->delete();
         // Änderungen an Konfiguration zurücksetzen
         \Zend_Registry::set('Zend_Config', $oldConfig);
 
@@ -137,7 +137,7 @@ class Export_Model_DataciteExportTest extends ControllerTestCase
         $result = $plugin->execute();
 
         // Testdokument wieder löschen
-        $doc->deletePermanent();
+        $doc->delete();
 
         $this->assertFalse($result);
         $this->assertTrue(is_array($view->requiredFieldsStatus));
@@ -164,7 +164,7 @@ class Export_Model_DataciteExportTest extends ControllerTestCase
         $result = $plugin->execute();
 
         // Testdokument wieder löschen
-        $doc->deletePermanent();
+        $doc->delete();
 
         $this->assertFalse($result);
         $this->assertTrue(is_array($view->requiredFieldsStatus));
@@ -187,7 +187,7 @@ class Export_Model_DataciteExportTest extends ControllerTestCase
         $result = $plugin->execute();
 
         // Testdokument wieder löschen
-        $doc->deletePermanent();
+        $doc->delete();
 
         // XML wird in jedem Fall generiert, auch wenn das DataCite-XML nicht valide ist
         $this->assertTrue($result);

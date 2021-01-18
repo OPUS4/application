@@ -191,14 +191,14 @@ class Sword_DepositControllerErrorCasesTest extends ControllerTestCase
     {
         $doc = $this->addDocWithUrn();
         $this->depositError('one-doc-with-urn.zip', DepositTestHelper::CONTENT_TYPE_ZIP, 400, 'http://www.opus-repository.org/sword/error/InternalFrameworkError');
-        $doc->deletePermanent();
+        $doc->delete();
     }
 
     public function testTarArchiveProvokeUrnCollision()
     {
         $doc = $this->addDocWithUrn();
         $this->depositError('one-doc-with-urn.tar', DepositTestHelper::CONTENT_TYPE_TAR, 400, 'http://www.opus-repository.org/sword/error/InternalFrameworkError');
-        $doc->deletePermanent();
+        $doc->delete();
     }
 
     private function addDocWithUrn()

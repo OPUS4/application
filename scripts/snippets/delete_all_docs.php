@@ -43,7 +43,7 @@ use Opus\DocumentFinder;
 $finder = new DocumentFinder();
 foreach ($finder->ids() as $id) {
     $doc = Document::get($id);
-    $doc->deletePermanent();
+    $doc->delete();
     echo "document " . $id . " was deleted.\n";
 }
 
