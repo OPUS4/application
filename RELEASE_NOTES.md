@@ -30,6 +30,27 @@ aus dem Index zu entfernen. Es kann über eine Option bestimmt werden wie viele
 Dokument gleichzeitig zum Solr-Server geschickt werden sollen. Das kann helfen,
 wenn es Probleme bei der Indexierung gibt.
 
+# OPUS Framework Package
+
+## API
+
+Die `deletePermanent` Funktion von `Opus\Document`, um Dokumente vollständig zu 
+löschen, wurde entfernt. Die `delete` Funktion löscht Dokumente jetzt vollständig,
+anstatt sie nur in den Server-Status **deleted** zu versetzen. Um Dokumente als
+gelöscht zu markieren ohne sie komplett zu entfernen, muss nun `serServerState` 
+verwendet werden. 
+
+   $doc->setServerState(Document::STATE_DELETED);
+   $doc->store();
+
+Dies muss unter Umständen bei eigenen Skripten berücksichtigt werden.
+
+## PHP Namespaces
+
+Der Code des OPUS Frameworks wurde in Vorbereitung auf die Migration zu Laminas
+auf PHP Namespaces umgestellt und die Verwendung der Klassen in der Application
+entsprechend angepasst.
+
 ---
 
 ## Release 4.7.0.4 2020-12-02
