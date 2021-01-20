@@ -46,7 +46,7 @@ class Admin_Model_DoiStatusTest extends ControllerTestCase
         if (! is_null($this->docId)) {
             // removed previously created test document from database
             $doc = Document::get($this->docId);
-            $doc->deletePermanent();
+            $doc->delete();
         }
         parent::tearDown();
     }

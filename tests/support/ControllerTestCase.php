@@ -34,6 +34,7 @@
 
 use Opus\Db\TableGateway;
 use Opus\Document;
+use Opus\Doi\DoiManager;
 use Opus\File;
 use Opus\UserRole;
 use Opus\Model\ModelException;
@@ -113,6 +114,7 @@ class ControllerTestCase extends TestCase
 
         $this->logger = null;
 
+        DoiManager::setInstance(null);
         Application_Configuration::clearInstance(); // reset Application_Configuration
 
         parent::tearDown();
@@ -649,7 +651,7 @@ class ControllerTestCase extends TestCase
 
         try {
             Document::get($docId);
-            $doc->deletePermanent();
+            $doc->delete();
         } catch (NotFoundException $omnfe) {
             // Model nicht gefunden -> alles gut (hoffentlich)
             $this->getLogger()->debug("Test document {$docId} was deleted successfully by test.");

@@ -411,7 +411,7 @@ class Publish_FormControllerTest extends ControllerTestCase
 
         $doc = Document::get($session->documentId);
         $belongsToBibliography = $doc->getBelongsToBibliography();
-        $doc->deletePermanent();
+        $doc->delete();
 
         $this->assertResponseCode(200);
         $this->assertNotContains("Es sind Fehler aufgetreten.", $this->response->getBody());

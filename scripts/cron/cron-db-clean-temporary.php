@@ -39,16 +39,16 @@ use Opus\DocumentFinder;
 
 $date = new DateTime();
 $dateString = $date->sub(new DateInterval('P2D'))->format('Y-m-d');
-$f = new DocumentFinder();
-$f->setServerState('temporary')
+$finder = new DocumentFinder();
+$finder->setServerState('temporary')
   ->setServerDateModifiedBefore($dateString);
 
-foreach ($f->ids() as $id) {
-    $d = Document::get($id);
-    if ($d->getServerState() == 'temporary') {
+foreach ($finder->ids() as $id) {
+    $doc = Document::get($id);
+    if ($doc->getServerState() == 'temporary') {
         echo "deleting document: $id\n";
-        $d->deletePermanent();
+        $doc->delete();
     } else {
-        echo "NOT deleting document: $id because it has server state ".$d->getServerState();
+        echo "NOT deleting document: $id because it has server state ".$doc->getServerState();
     }
 }

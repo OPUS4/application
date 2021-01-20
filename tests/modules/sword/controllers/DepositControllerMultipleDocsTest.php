@@ -106,7 +106,7 @@ class Sword_DepositControllerMultipleDocsTest extends ControllerTestCase
         foreach ($children as $child) {
             $doc = $this->testHelper->checkAtomEntryDocument($child, $fileName, $checksum);
             $this->checkMetadata($docCount, $doc);
-            $doc->deletePermanent();
+            $doc->delete();
             $docCount++;
         }
     }

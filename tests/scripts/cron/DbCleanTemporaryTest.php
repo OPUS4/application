@@ -62,7 +62,7 @@ class DbCleanTemporaryTest extends CronTestCase
         $this->executeScript('cron-db-clean-temporary.php');
         try {
             $doc = Document::get($this->doc->getId());
-            $doc->deletePermanent();
+            $doc->delete();
             $this->fail("expected Opus\Model\NotFoundException");
         } catch (NotFoundException $e) {
         }
@@ -74,7 +74,7 @@ class DbCleanTemporaryTest extends CronTestCase
         $this->executeScript('cron-db-clean-temporary.php');
         try {
             $doc = Document::get($this->doc->getId());
-            $doc->deletePermanent();
+            $doc->delete();
         } catch (NotFoundException $e) {
             $this->fail("expected existing document.");
         }

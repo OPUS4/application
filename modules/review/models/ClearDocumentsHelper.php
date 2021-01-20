@@ -112,7 +112,8 @@ class Review_Model_ClearDocumentsHelper
             $enrichment->setKeyName('review.rejected_by')
                     ->setValue($userId);
 
-            $document->delete();
+            $document->setServerState(Document::STATE_DELETED);
+            $document->store();
         }
 
         return;

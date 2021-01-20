@@ -75,7 +75,7 @@ class Publish_DepositController extends Application_Controller_Action
             if (isset($this->session->documentId)) {
                 try {
                     $document = Document::get($this->session->documentId);
-                    $document->deletePermanent();
+                    $document->delete();
                 } catch (ModelException $e) {
                     $this->getLogger()->err(
                         "deletion of document # " . $this->session->documentId . " was not successful",

@@ -61,7 +61,7 @@ class MetadataImportTest extends CronTestCase
             $ids = Document::getAllIds();
             $last_id = array_pop($ids);
             $doc = Document::get($last_id);
-            $doc->deletePermanent();
+            $doc->delete();
         }
         parent::tearDown();
     }
