@@ -46,8 +46,7 @@ class Application_Update_SetStatusOfExistingDoiTest extends ControllerTestCase
      * @throws ModelException
      *
      * TODO test sets Status of all DOI identifier of published documents to 'registered' (side effect)
-     * TODO this test has failed once (date got modified or compare didn't work) on Travis and worked in the next run
-     *      without changes - Why?
+     * TODO Remove debug code no longer needed.
      */
     public function testRunDoesNotModifyServerDateModified()
     {
@@ -62,6 +61,8 @@ class Application_Update_SetStatusOfExistingDoiTest extends ControllerTestCase
         $docId = $doc->store();
 
         sleep(2);
+
+        $doc = Document::get($docId); // use date stored in database - sometimes rounding happens when storing dates
 
         $modified = $doc->getServerDateModified();
 

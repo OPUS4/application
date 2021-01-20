@@ -42,6 +42,7 @@ use Opus\Security\SecurityException;
 
 abstract class Application_Import_PackageReader
 {
+
     const METADATA_FILENAME = 'opus.xml';
 
     const EXTRACTION_DIR_NAME = 'extracted';
@@ -81,6 +82,7 @@ abstract class Application_Import_PackageReader
         $importer->setImportCollection($importCollection->getCollection());
 
         $importer->run();
+
         return $importer->getStatusDoc();
     }
 
@@ -94,6 +96,12 @@ abstract class Application_Import_PackageReader
      * @param string $dirName
      * @return Application_Import_ImportStatusDocument
      * @throws Zend_Exception
+     *
+     * TODO improve readability of code - readPackage extracts the package into a folder and then calls processPackage
+     *      from the outside it is the function that "processes the package"
+     *      the way these functions are chained makes it hard to add additional steps to the process - either the
+     *      calling function should call read... first and then process... or probalby better process.. should call
+     *      read... as one of its processing steps
      */
     public function readPackage($dirName)
     {

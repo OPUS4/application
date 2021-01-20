@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -23,55 +23,42 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- *
- * @category    Application Unit Test
- * @package     Form_Element
+
+ * @category    Application
+ * @package     Application_Update
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Application_Form_Element_LanguageScopeTest extends FormElementTestCase
+use Opus\Util\ConsoleColors;
+
+/**
+ * Add import folder to workspace.
+ */
+class Application_Update_AddImportToWorkspace extends Application_Update_PluginAbstract
 {
 
-    protected $additionalResources = 'translation';
-
-    private $keys = null;
-
-    public function setUp()
+    public function run()
     {
-        $this->keys = ['Null', 'I', 'M', 'S'];
+        $this->log('Checking import folder in workspace');
 
-        $this->_formElementClass = 'Application_Form_Element_LanguageScope';
-        $this->_expectedDecorators = ['ViewHelper', 'Errors', 'Description', 'ElementHtmlTag', 'LabelNotEmpty',
-            'dataWrapper', 'ElementHint'];
-        $this->_expectedDecoratorCount = count($this->_expectedDecorators);
-        $this->_staticViewHelper = 'viewFormSelect';
-        parent::setUp();
-    }
+        $workspacePath = Application_Configuration::getInstance()->getWorkspacePath();
 
-    public function testOptions()
-    {
-        $element = $this->getElement();
+        $importPath = rtrim($workspacePath, '/') . '/import';
 
-        $options = $element->getMultiOptions();
+        if (file_exists($importPath)) {
+            $this->log("Folder '$importPath' already exists.");
+        } else {
+            mkdir($importPath);
+            $this->log("Folder '$importPath' created.");
 
-        $this->assertEquals(count($this->keys), count($options));
+            $colors = new ConsoleColors();
 
-        foreach ($this->keys as $key) {
-            $this->assertTrue(array_key_exists($key, $options), "Key '$key' is missing.");
-        }
-    }
-
-    public function testOptionsTranslated()
-    {
-        $translator = \Zend_Registry::get('Zend_Translate');
-
-        foreach ($this->keys as $key) {
-            $this->assertTrue(
-                $translator->isTranslated('Opus_Language_Scope_Value_' . $key),
-                "Key '$key' not translated."
-            );
+            $this->log($colors->yellow(
+                'You might have to update the file permission (group) of the folder, so it can be accessed by Apache2.',
+                $colors::RED
+            ));
         }
     }
 }

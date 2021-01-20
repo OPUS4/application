@@ -27,8 +27,11 @@
  * @category    Application
  * @package     Module_Sword
  * @author      Sascha Szott <opus-development@saschaszott.de>
- * @copyright   Copyright (c) 2016-2019
+ * @copyright   Copyright (c) 2016-2020
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
+ *
+ * TODO separate differentiation of ZIP and TAR into separate classes - it should be possible to ADD another class to
+ *      support a new type of package - it should not be necessary to MODIFY existing classes for that
  */
 class Sword_Model_PackageHandler
 {
@@ -87,8 +90,11 @@ class Sword_Model_PackageHandler
         try {
             $tmpDirName = $this->createTmpDir($payload);
             $this->savePackage($payload, $tmpDirName);
+
+
             $statusDoc = $packageReader->readPackage($tmpDirName);
         } finally {
+            // TODO copy file before cleanup if error occured
             if (! is_null($tmpDirName)) {
                 $this->cleanupTmpDir($tmpDirName);
             }
@@ -147,6 +153,8 @@ class Sword_Model_PackageHandler
      *
      * @param string $payload
      * @param string $tmpDir
+     *
+     * TODO save package into import folder (no longer temporary file)
      */
     private function savePackage($payload, $tmpDir)
     {

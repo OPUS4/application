@@ -34,6 +34,7 @@ BASEDIR="`dirname "$SCRIPT_PATH"`"
 #
 
 mkdir -p "$BASEDIR/tests/workspace/files"
+mkdir -p "$BASEDIR/tests/workspace/import"
 mkdir -p "$BASEDIR/tests/workspace/incoming"
 mkdir -p "$BASEDIR/tests/workspace/log"
 mkdir -p "$BASEDIR/tests/workspace/cache"

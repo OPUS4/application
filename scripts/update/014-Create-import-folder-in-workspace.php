@@ -1,4 +1,6 @@
-<?php
+#!/usr/bin/env php
+
+<?PHP
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,54 +26,17 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @package     Form_Element
+ * @category    Application
+ * @package     scripts/update
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Application_Form_Element_LanguageScopeTest extends FormElementTestCase
-{
+require_once dirname(__FILE__) . '/../common/update.php';
 
-    protected $additionalResources = 'translation';
+/**
+ */
 
-    private $keys = null;
-
-    public function setUp()
-    {
-        $this->keys = ['Null', 'I', 'M', 'S'];
-
-        $this->_formElementClass = 'Application_Form_Element_LanguageScope';
-        $this->_expectedDecorators = ['ViewHelper', 'Errors', 'Description', 'ElementHtmlTag', 'LabelNotEmpty',
-            'dataWrapper', 'ElementHint'];
-        $this->_expectedDecoratorCount = count($this->_expectedDecorators);
-        $this->_staticViewHelper = 'viewFormSelect';
-        parent::setUp();
-    }
-
-    public function testOptions()
-    {
-        $element = $this->getElement();
-
-        $options = $element->getMultiOptions();
-
-        $this->assertEquals(count($this->keys), count($options));
-
-        foreach ($this->keys as $key) {
-            $this->assertTrue(array_key_exists($key, $options), "Key '$key' is missing.");
-        }
-    }
-
-    public function testOptionsTranslated()
-    {
-        $translator = \Zend_Registry::get('Zend_Translate');
-
-        foreach ($this->keys as $key) {
-            $this->assertTrue(
-                $translator->isTranslated('Opus_Language_Scope_Value_' . $key),
-                "Key '$key' not translated."
-            );
-        }
-    }
-}
+$update = new Application_Update_AddImportToWorkspace();
+$update->run();

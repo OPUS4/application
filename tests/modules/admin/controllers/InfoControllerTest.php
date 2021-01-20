@@ -46,8 +46,8 @@ class Admin_InfoControllerTest extends ControllerTestCase
         $config = \Zend_Registry::get('Zend_Config');
         $this->dispatch('admin/info');
         $this->assertResponseCode(200);
-        $this->assertQuery('dt#admin_info_version');
-        $this->assertQueryContentContains("//dt[@id='admin_info_version']/following-sibling::dd", $config->version);
+        $this->assertQuery('//div[@class="opus-version-info"]');
+        $this->assertQueryContentContains("//div[@class='opus-version-info']", $config->version);
         $this->validateXHTML();
     }
 

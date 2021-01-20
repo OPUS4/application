@@ -123,7 +123,25 @@
         <seg>Installierte OPUS Version</seg>
       </tuv>
     </tu>
-    
+
+    <tu tuid="admin_info_other">
+      <tuv xml:lang="en">
+        <seg>Other Parameters</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Weitere Parameter</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_info_workspace">
+      <tuv xml:lang="en">
+        <seg>Workspace</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Arbeitsverzeichnisse</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="admin_info_version_not_found">
       <tuv xml:lang="en">
         <seg>File 'VERSION.txt' not found.</seg>

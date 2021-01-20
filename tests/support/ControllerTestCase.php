@@ -737,6 +737,8 @@ class ControllerTestCase extends TestCase
      * @return File
      * @throws ModelException
      * @throws Zend_Exception
+     *
+     * TODO allow same filename in different locations
      */
     protected function createOpusTestFile($filename, $filepath = null)
     {
@@ -761,6 +763,17 @@ class ControllerTestCase extends TestCase
         }
         $this->testFiles[$filename] = $filepath;
         return $file;
+    }
+
+    public function addFileToCleanup($filePath)
+    {
+        if ($this->testFiles === null) {
+            $this->testFiles = [];
+        }
+
+        $fileName = basename($filePath);
+
+        $this->testFiles[$fileName]  = $filePath;
     }
 
     protected function deleteTestFiles()
