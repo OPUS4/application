@@ -70,7 +70,7 @@ class Publish_Model_DocumenttypeParser extends Application_Model_Abstract
      */
     public function __construct($dom, $form, $additionalFields = [], $postValues = [])
     {
-        $this->_log =  Log::get();
+        $this->_log = Log::get();
         $this->_session = new \Zend_Session_Namespace('Publish');
         $this->form = $form;
         $this->dom = $dom;

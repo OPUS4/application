@@ -51,7 +51,7 @@ class Admin_Model_IndexMaintenance
     public function __construct($logger = null)
     {
         $this->_config = Config::get();
-        $this->_logger = (is_null($logger)) ?  Log::get() : $logger;
+        $this->_logger = (is_null($logger)) ? Log::get() : $logger;
         $this->setFeatureDisabled();
 
         if ($this->_featureDisabled) {

@@ -64,7 +64,7 @@ class Publish_Model_DepositTest extends ControllerTestCase
         $document->setServerState('published');
         $documentId = $document->store();
 
-        $log =  Log::get();
+        $log = Log::get();
         $deposit = new Publish_Model_Deposit($log);
         $deposit->storeDocument($documentId);
     }
@@ -140,7 +140,7 @@ class Publish_Model_DepositTest extends ControllerTestCase
             'Foo2Title' => ['value' => 'title as enrichment', 'datatype' => 'Enrichment', 'subfield' => '0'],
         ];
 
-        $log =  Log::get();
+        $log = Log::get();
 
         $dep = new Publish_Model_Deposit($log);
         $dep->storeDocument($docId, null, $data);

@@ -55,8 +55,7 @@ class Export_Marc21ExportTest extends ControllerTestCase
                 ['export' =>
                     ['marc21' => ['adminOnly' => self::CONFIG_VALUE_FALSE]]
                 ]
-            ]
-        );
+            ]);
 
         $doc = $this->createTestDocument();
         $doc->setServerState('unpublished');
@@ -87,8 +86,7 @@ class Export_Marc21ExportTest extends ControllerTestCase
                 ['export' =>
                     ['marc21' => ['adminOnly' => self::CONFIG_VALUE_FALSE]]
                 ]
-            ]
-        );
+            ]);
 
         $doc = $this->createTestDocument();
         $doc->setServerState('unpublished');
@@ -124,8 +122,7 @@ class Export_Marc21ExportTest extends ControllerTestCase
                 ['export' =>
                     ['marc21' => ['adminOnly' => self::CONFIG_VALUE_FALSE]]
                 ]
-            ]
-        );
+            ]);
 
         $doc = $this->createTestDocument();
         $doc->setServerState('unpublished');
@@ -198,8 +195,7 @@ class Export_Marc21ExportTest extends ControllerTestCase
                 ['export' =>
                     ['marc21' => ['adminOnly' => self::CONFIG_VALUE_TRUE]]
                 ]
-            ]
-        );
+            ]);
 
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
@@ -242,8 +238,7 @@ class Export_Marc21ExportTest extends ControllerTestCase
                 ['export' =>
                     ['marc21' => ['adminOnly' => self::CONFIG_VALUE_FALSE]]
                 ]
-            ]
-        );
+            ]);
 
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
@@ -284,8 +279,7 @@ class Export_Marc21ExportTest extends ControllerTestCase
                 ['export' =>
                     ['marc21' => ['adminOnly' => self::CONFIG_VALUE_FALSE]]
                 ]
-            ]
-        );
+            ]);
 
         $doc = $this->createTestDocument();
         $doc->setServerState('unpublished');

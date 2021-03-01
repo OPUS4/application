@@ -51,7 +51,7 @@ class Application_Configuration_MaxUploadSize
 
     public function getMaxUploadSizeInByte()
     {
-        $logger =  Log::get();
+        $logger = Log::get();
 
         $config = Config::get();
         $maxFileSizeInt = intval($config->publish->maxfilesize);

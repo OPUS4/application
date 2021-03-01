@@ -394,7 +394,7 @@ class Oai_Model_Request
      */
     public function validate(array $oaiRequest)
     {
-        $logger =  Log::get();
+        $logger = Log::get();
 
         $errorInformation = [
             'message' => 'General oai request validation error.',

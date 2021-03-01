@@ -48,7 +48,7 @@ class Sword_Model_ErrorDocument
     {
         $this->request = $request;
         $this->response = $response;
-        $this->logger =  Log::get();
+        $this->logger = Log::get();
     }
 
     /**

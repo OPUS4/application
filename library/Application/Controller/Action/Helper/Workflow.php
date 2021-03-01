@@ -92,7 +92,7 @@ class Application_Controller_Action_Helper_Workflow extends \Zend_Controller_Act
      */
     public function getAllowedTargetStatesForDocument($document)
     {
-        $logger =  Log::get();
+        $logger = Log::get();
 
         $currentState = $document->getServerState();
 

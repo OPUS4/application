@@ -62,7 +62,7 @@ class Admin_InfoControllerTest extends ControllerTestCase
         $versionHelper = \Zend_Controller_Action_HelperBroker::getStaticHelper('version');
         $versionHelper->setVersion('4.6');
 
-        $config =  $this->getConfig();
+        $config = $this->getConfig();
         $oldVersion = $config->version;
         $config->version = '4.5-TEST';
         $this->dispatch('admin/info/update');

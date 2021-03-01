@@ -268,6 +268,6 @@ class Application_Form_AbstractTest extends ControllerTestCase
 
         $returnedConfig = $this->form->getApplicationConfig();
 
-        $this->assertSame( $this->getConfig(), $returnedConfig);
+        $this->assertSame($this->getConfig(), $returnedConfig);
     }
 }

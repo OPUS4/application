@@ -148,7 +148,7 @@ class Home_Model_HelpFiles extends Application_Translate_Help
                     $config = new \Zend_Config_Ini($filePath);
                 } catch (\Zend_Config_Exception $zce) {
                     // TODO einfachere Lösung?
-                    $logger =  Log::get();
+                    $logger = Log::get();
                     if (! is_null($logger)) {
                         $logger->err("could not load help configuration", $zce);
                     }

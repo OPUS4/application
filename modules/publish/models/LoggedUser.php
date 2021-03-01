@@ -44,7 +44,7 @@ class Publish_Model_LoggedUser
 
     public function __construct()
     {
-        $this->_log =  Log::get();
+        $this->_log = Log::get();
 
         $login = \Zend_Auth::getInstance()->getIdentity();
         if (is_null($login) or trim($login) == '') {

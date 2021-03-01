@@ -76,7 +76,7 @@ class Admin_Model_UrnGenerator
         $identifierUrn = new Urn($this->nid, $this->nss);
         $urn = $identifierUrn->getUrn($docId);
 
-        $log =  Log::get();
+        $log = Log::get();
         $log->debug('URN generation result for document ' . $docId . ' is ' . $urn);
 
         return $urn;

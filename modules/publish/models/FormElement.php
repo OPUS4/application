@@ -78,7 +78,7 @@ class Publish_Model_FormElement
     ) {
         $this->session = new \Zend_Session_Namespace('Publish');
         $this->sessionOpus = new \Zend_Session_Namespace();
-        $this->log =  Log::get();
+        $this->log = Log::get();
         $this->form = $form;
 
         $this->_elementName = $name;

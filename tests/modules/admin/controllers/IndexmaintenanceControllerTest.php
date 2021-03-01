@@ -296,7 +296,7 @@ class Admin_IndexmaintenanceControllerTest extends ControllerTestCase
          * run job immediately and check for result
          */
         $jobrunner = new Runner();
-        $jobrunner->setLogger( Log::get());
+        $jobrunner->setLogger(Log::get());
         $worker = new Opus\Search\Task\ConsistencyCheck();
         $jobrunner->registerWorker($worker);
         $jobrunner->run();

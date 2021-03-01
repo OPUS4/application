@@ -139,7 +139,7 @@ class TestCase extends \Zend_Test_PHPUnit_ControllerTestCase
      */
     protected function closeLogfile()
     {
-        $log =  Log::get();
+        $log = Log::get();
 
         if (isset($log)) {
             $log->__destruct();

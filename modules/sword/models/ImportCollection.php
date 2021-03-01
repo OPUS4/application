@@ -45,7 +45,7 @@ class Sword_Model_ImportCollection
 
     public function __construct()
     {
-        $logger =  Log::get();
+        $logger = Log::get();
         $config = Config::get();
 
         $collectionNumber = $config->sword->collection->default->number;

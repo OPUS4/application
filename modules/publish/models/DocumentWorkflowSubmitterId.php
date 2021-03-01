@@ -47,7 +47,7 @@ class Publish_Model_DocumentWorkflowMatheon extends Publish_Model_DocumentWorkfl
         $userId = trim($loggedUserModel->getUserId());
 
         if (empty($userId)) {
-            $logger =  Log::get();
+            $logger = Log::get();
             $logger->debug("No user logged in.  Skipping enrichment.");
             return;
         }

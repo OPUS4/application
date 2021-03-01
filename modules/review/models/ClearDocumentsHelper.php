@@ -55,7 +55,7 @@ class Review_Model_ClearDocumentsHelper
      */
     public function clear(array $docIds = null, $userId = null, $person = null)
     {
-        $logger =  Log::get();
+        $logger = Log::get();
 
         foreach ($docIds as $docId) {
             $logger->debug('Change state to "published" for document: ' . $docId);
@@ -99,7 +99,7 @@ class Review_Model_ClearDocumentsHelper
      */
     public function reject(array $docIds = null, $userId = null, $person = null)
     {
-        $logger =  Log::get();
+        $logger = Log::get();
 
         foreach ($docIds as $docId) {
             $logger->debug('Deleting document with id: ' . $docId);

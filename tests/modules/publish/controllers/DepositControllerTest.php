@@ -230,7 +230,7 @@ class Publish_DepositControllerTest extends ControllerTestCase
         $doc->setServerState('published');
         $doc->setType('preprint');
 
-        $log =  Log::get();
+        $log = Log::get();
         $deposit = new Publish_Model_Deposit($log);
         $deposit->storeDocument($doc->store());
     }

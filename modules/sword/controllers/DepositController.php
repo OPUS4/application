@@ -123,7 +123,7 @@ class Sword_DepositController extends \Zend_Rest_Controller
                 // im Archiv befindet sich keine Datei opus.xml oder die Datei ist leer
                 $errorDoc = new Sword_Model_ErrorDocument($request, $response);
                 $errorDoc->setMissingXml();
-            } else if ($statusDoc->noDocImported()) {
+            } elseif ($statusDoc->noDocImported()) {
                 // im Archiv befindet sich zwar ein nicht leeres opus.xml; es
                 // konnte aber kein Dokument erfolgreich importiert werden
                 $errorDoc = new Sword_Model_ErrorDocument($request, $response);
@@ -171,7 +171,7 @@ class Sword_DepositController extends \Zend_Rest_Controller
 
         $maxUploadSize = (new Application_Configuration_MaxUploadSize())->getMaxUploadSizeInByte();
         if ($size > $maxUploadSize) {
-            $log =  Log::get();
+            $log = Log::get();
             $log->warn('current package size ' . $size . ' exceeds the maximum upload size ' . $maxUploadSize);
             return true;
         }

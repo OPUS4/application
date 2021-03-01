@@ -54,9 +54,9 @@ class Application_Util_NotificationTest extends ControllerTestCase
     {
         parent::setUp();
         $this->notification = new Application_Util_Notification();
-        $this->logger =  Log::get();
+        $this->logger = Log::get();
         // add required config keys
-        $this->config =  $this->getConfig();
+        $this->config = $this->getConfig();
         $this->config->notification->document->submitted->enabled = self::CONFIG_VALUE_TRUE;
         $this->config->notification->document->published->enabled = self::CONFIG_VALUE_TRUE;
         $this->config->notification->document->submitted->subject = 'Dokument #%1$s eingestellt: %2$s : %3$s';

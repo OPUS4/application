@@ -53,7 +53,7 @@ class Application_Util_PublicationNotificationTest extends ControllerTestCase
     {
         parent::setUp();
         $this->notification = new Application_Util_PublicationNotification();
-        $this->logger =  Log::get();
+        $this->logger = Log::get();
         // add required config keys
         $this->config = Config::get();
         $this->config->notification->document->submitted->enabled = self::CONFIG_VALUE_TRUE;

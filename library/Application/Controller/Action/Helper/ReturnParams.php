@@ -51,7 +51,7 @@ class Application_Controller_Action_Helper_ReturnParams extends \Zend_Controller
     public function getReturnParameters()
     {
         // TODO put into constructor
-        $log =  Log::get();
+        $log = Log::get();
 
         $params = [];
         foreach (\Zend_Controller_Front::getInstance()->getRequest()->getUserParams() as $key => $value) {

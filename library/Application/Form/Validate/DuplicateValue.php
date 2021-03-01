@@ -115,9 +115,9 @@ class Application_Form_Validate_DuplicateValue extends \Zend_Validate_Abstract
 
         if (! ($this->_position < $valueCount)) {
              Log::get()->err(
-                __CLASS__ .
-                ' mit Position > count(values) konstruiert.'
-            );
+                 __CLASS__ .
+                 ' mit Position > count(values) konstruiert.'
+             );
         }
 
         if (! is_null($this->_values)) {

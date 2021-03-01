@@ -89,7 +89,7 @@ class Application_Controller_Action_Helper_Files extends \Zend_Controller_Action
 
     private function checkFile($file, $ignoreAllowedTypes)
     {
-        $log =  Log::get();
+        $log = Log::get();
         $logMessage = 'check for file: ' . $file->getPathname();
 
         if (! $ignoreAllowedTypes) {

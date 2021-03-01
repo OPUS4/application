@@ -176,7 +176,7 @@ class Admin_Model_IndexMaintenanceTest extends ControllerTestCase
         $this->assertEquals(1, Job::getCountForLabel(Opus\Search\Task\ConsistencyCheck::LABEL));
 
         $jobrunner = new Runner;
-        $jobrunner->setLogger( Log::get());
+        $jobrunner->setLogger(Log::get());
         $worker = new Opus\Search\Task\ConsistencyCheck();
         $jobrunner->registerWorker($worker);
         $jobrunner->run();
