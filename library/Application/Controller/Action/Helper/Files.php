@@ -31,6 +31,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Config;
+use Opus\Log;
+
 /**
  * Helper for basic file and folder operations.
  *
@@ -73,7 +76,7 @@ class Application_Controller_Action_Helper_Files extends \Zend_Controller_Action
 
     private function getAllowedFileTypes()
     {
-        $config = \Zend_Registry::get('Zend_Config');
+        $config = Config::get();
 
         if (! isset($config->publish->filetypes->allowed)) {
             return null;
@@ -86,7 +89,7 @@ class Application_Controller_Action_Helper_Files extends \Zend_Controller_Action
 
     private function checkFile($file, $ignoreAllowedTypes)
     {
-        $log = \Zend_Registry::get('Zend_Log');
+        $log =  Log::get();
         $logMessage = 'check for file: ' . $file->getPathname();
 
         if (! $ignoreAllowedTypes) {

@@ -33,7 +33,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-$config = \Zend_Registry::get('Zend_Config');
+use Opus\Config;
+
+$config = Config::get();
 
 $pageLanguage = \Zend_Registry::get('Zend_Translate')->getLocale();
 

@@ -52,14 +52,12 @@ class Admin_Model_DoiReportTest extends ControllerTestCase
     {
         parent::setUp();
 
-        $config = \Zend_Registry::get('Zend_Config');
-        $config->merge(new \Zend_Config([
+        $this->adjustConfiguration([
             'doi' => [
                 'prefix' => '10.5072',
                 'localPrefix' => 'opustest'
             ]
-        ]));
-        \Zend_Registry::set('Zend_Config', $config);
+        ]);
 
         $this->docIds = [];
 

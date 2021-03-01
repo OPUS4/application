@@ -27,9 +27,11 @@
  * @category    Application
  * @package     Application
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\Config;
 
 /**
  * Erweiterung von Zend_Translate, um Übersetzungsressourcen für Module zu laden.
@@ -216,7 +218,7 @@ class Application_Translate extends \Zend_Translate
      */
     public function isLogUntranslatedEnabled()
     {
-        $config = \Zend_Registry::get('Zend_Config');
+        $config = Config::get();
         return (isset($config->log->untranslated)) ?
             filter_var($config->log->untranslated, FILTER_VALIDATE_BOOLEAN) : false;
     }

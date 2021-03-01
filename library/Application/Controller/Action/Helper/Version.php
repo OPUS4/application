@@ -25,6 +25,8 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+use Opus\Config;
+
 /**
  * Helper für das Auslesen der aktuellen Opusversion vom Opus-Server.
  *
@@ -32,7 +34,7 @@
  * @package     Application_Controller_Helper
  * @author      Michael Lang <lang@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2014-2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 class Application_Controller_Action_Helper_Version extends Application_Controller_Action_Helper_Abstract
@@ -70,7 +72,7 @@ class Application_Controller_Action_Helper_Version extends Application_Controlle
      */
     public function getLatestReleaseFromServer()
     {
-        $latestUrl = \Zend_Registry::get('Zend_Config')->update->latestVersionCheckUrl;
+        $latestUrl = Config::get()->update->latestVersionCheckUrl;
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);

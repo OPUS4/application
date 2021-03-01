@@ -37,6 +37,7 @@
  * Currently ZIP and TAR files are supported by extending classes.
  */
 
+use Opus\Log;
 use Opus\Model\ModelException;
 use Opus\Security\SecurityException;
 
@@ -127,7 +128,7 @@ abstract class Application_Import_PackageReader
 
     public function getLogger()
     {
-        return \Zend_Registry::get('Zend_Log');
+        return  Log::get();
     }
 
     /**

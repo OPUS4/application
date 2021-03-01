@@ -31,12 +31,14 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Config;
+
 class Application_View_Helper_LayoutPath extends \Zend_View_Helper_Abstract
 {
 
     public function layoutPath()
     {
-        $config = \Zend_Registry::get('Zend_Config');
+        $config = Config::get();
         $theme = 'opus4';
         if (isset($config->theme)) {
             $theme = $config->theme;

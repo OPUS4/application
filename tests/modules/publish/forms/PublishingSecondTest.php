@@ -71,7 +71,7 @@ class Publish_Form_PublishingSecondTest extends ControllerTestCase
      */
     public function testIsValidWithInvalidData()
     {
-        $config = \Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         $config->documentTypes->include = 'all,preprint,article,demo,workingpaper';
         $session = new \Zend_Session_Namespace('Publish');
         $session->documentType = 'workingpaper';
@@ -90,7 +90,7 @@ class Publish_Form_PublishingSecondTest extends ControllerTestCase
      */
     public function testIsValidWithValidData()
     {
-        $config = \Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         $config->documentTypes->include = 'all,preprint,article,demo,workingpaper';
         $session = new \Zend_Session_Namespace('Publish');
         $session->documentType = 'demo';
@@ -109,7 +109,7 @@ class Publish_Form_PublishingSecondTest extends ControllerTestCase
      */
     public function testPrepareCheckMethodWithDemoType()
     {
-        $config = \Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         $config->documentTypes->include = 'all,preprint,article,demo,workingpaper';
         $session = new \Zend_Session_Namespace('Publish');
         $session->documentType = 'demo';

@@ -95,7 +95,7 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase
 
     public function testPersonsEmailNotificationWithValidData()
     {
-        $config = \Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         $config->documentTypes->include = 'all,preprint,article,demo,workingpaper';
         $session = new \Zend_Session_Namespace('Publish');
         $session->documentType = 'workingpaper';
@@ -121,7 +121,7 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase
 
     public function testPersonsEmailNotificationWithInvalidData()
     {
-        $config = \Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         $config->documentTypes->include = 'all,preprint,article,demo,workingpaper';
         $session = new \Zend_Session_Namespace('Publish');
         $session->documentType = 'workingpaper';
@@ -150,7 +150,7 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase
      */
     public function testMainTitleWithWrongDocLanguage()
     {
-        $config = \Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         $config->documentTypes->include = 'all,preprint,article,demo,workingpaper';
         $session = new \Zend_Session_Namespace('Publish');
         $session->documentType = 'workingpaper';
@@ -179,7 +179,7 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase
      */
     public function testEmptyMainTitleLanguage()
     {
-        $config = \Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         $config->documentTypes->include = 'all,preprint,article,demo,workingpaper';
         $session = new \Zend_Session_Namespace('Publish');
         $session->documentType = 'workingpaper';
@@ -211,7 +211,7 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase
     {
         $this->markTestSkipped('Method getExtendedForm removed from Form class: moved to FormController class as manipulateSession');
 
-        $config = \Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         $config->documentTypes->include = 'all,preprint,article,demo,workingpaper';
         $session = new \Zend_Session_Namespace('Publish');
         $session->documentType = 'workingpaper';
@@ -250,7 +250,7 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase
      */
     public function testSeveralTitleTypeLanguages()
     {
-        $config = \Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         $config->documentTypes->include = 'all,preprint,article,demo,workingpaper';
         $session = new \Zend_Session_Namespace('Publish');
         $session->documentType = 'workingpaper';
@@ -285,7 +285,7 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase
      */
     public function testSeriesNumberValidationWithUnknownSeries()
     {
-        $config = \Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         $config->documentTypes->include = 'all';
         $session = new \Zend_Session_Namespace('Publish');
         $session->documentType = 'all';
@@ -311,7 +311,7 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase
      */
     public function testSeriesNumberValidationWithMissingSeriesField()
     {
-        $config = \Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         $config->documentTypes->include = 'all';
         $session = new \Zend_Session_Namespace('Publish');
         $session->documentType = 'all';

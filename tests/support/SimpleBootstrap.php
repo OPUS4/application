@@ -27,12 +27,14 @@
  * @category    Tests
  * @package     Support
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2019-2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  *
  * TODO take care of duplicated code (from regular bootstrap) - maybe SimpleBootstrap is not needed anymore?
  */
 
+use Opus\Config;
+use Opus\Log;
 use Opus\Log\LogService;
 
 class SimpleBootstrap extends \Zend_Application_Bootstrap_Bootstrap
@@ -56,7 +58,7 @@ class SimpleBootstrap extends \Zend_Application_Bootstrap_Bootstrap
     protected function _initConfiguration()
     {
         $config = new \Zend_Config($this->getOptions(), true);
-        \Zend_Registry::set('Zend_Config', $config);
+        Config::set($config);
         return $config;
     }
 
@@ -76,10 +78,8 @@ class SimpleBootstrap extends \Zend_Application_Bootstrap_Bootstrap
         $logService = LogService::getInstance();
 
         $logger = $logService->createLog(LogService::DEFAULT_LOG, null, null, $logFilename);
-        $logLevel = $logService->getDefaultPriority();
 
-        \Zend_Registry::set('Zend_Log', $logger);
-        \Zend_Registry::set('LOG_LEVEL', $logLevel);
+        Log::set($logger);
 
         $logger->debug('Logging initialized');
 

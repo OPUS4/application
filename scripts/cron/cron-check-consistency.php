@@ -35,10 +35,11 @@ define('APPLICATION_ENV', 'production');
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
 use Opus\Job\Runner;
+use Opus\Log;
 use Opus\Search\Task\ConsistencyCheck;
 
 $jobrunner = new Runner;
-$jobrunner->setLogger(\Zend_Registry::get('Zend_Log'));
+$jobrunner->setLogger(Log::get());
 // no waiting between jobs
 $jobrunner->setDelay(0);
 // set a limit of 100 index jobs per run

@@ -84,7 +84,7 @@ class Home_IndexControllerTest extends ControllerTestCase
 
     public function testHelpActionSeparate()
     {
-        $config = \Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         $config->help->separate = self::CONFIG_VALUE_TRUE;
         $this->dispatch('/home/index/help');
         $this->assertResponseCode(200);
@@ -253,7 +253,7 @@ class Home_IndexControllerTest extends ControllerTestCase
 
     public function testHideLanguageSelector()
     {
-        \Zend_Registry::get('Zend_Config')->supportedLanguages = 'de';
+        $this->getConfig()->supportedLanguages = 'de';
         $this->dispatch("/home");
         $this->assertNotQuery('//ul#lang-switch');
     }

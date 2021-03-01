@@ -52,7 +52,7 @@ class Oai_Model_ContainerTest extends ControllerTestCase
     public function setUp()
     {
         parent::setUp();
-        $config = \Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         if (! isset($config->workspacePath)) {
             throw new Exception("config key 'workspacePath' not defined in config file");
         }
@@ -117,9 +117,8 @@ class Oai_Model_ContainerTest extends ControllerTestCase
         }
 
         // enable security
-        $config = \Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         $config->security = self::CONFIG_VALUE_TRUE;
-        \Zend_Registry::set('Zend_Config', $config);
 
         $doc = $this->createTestDocument();
         $doc->setServerState('unpublished');

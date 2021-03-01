@@ -57,19 +57,20 @@ class Rss_Model_FeedTest extends ControllerTestCase
 
         $this->assertEquals('http:///opus4test', $model->getTitle());
 
-        $config = \Zend_Registry::get('Zend_Config');
-
-        $config->merge(new \Zend_Config([
+        $this->adjustConfiguration([
             'rss' => ['default' => ['feedTitle' => 'OPUS 4 Test']]
-        ]));
+        ]);
+
+        $model->setConfig(null); // reset local reference to configuration
+
         $this->assertEquals('OPUS 4 Test', $model->getTitle());
     }
 
     public function testGetTitleWithName()
     {
-        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
+        $this->adjustConfiguration([
             'rss' => ['default' => ['feedTitle' => '%1$s']]
-        ]));
+        ]);
         $this->assertEquals('OPUS 4', $this->_model->getTitle());
     }
 
@@ -79,9 +80,9 @@ class Rss_Model_FeedTest extends ControllerTestCase
         \Zend_Controller_Front::getInstance()->setBaseUrl('/opus4test');
         $model = new Rss_Model_Feed($view);
 
-        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
+        $this->adjustConfiguration([
             'rss' => ['default' => ['feedTitle' => '%4$s']]
-        ]));
+        ]);
         $this->assertEquals('http:///opus4test', $this->_model->getTitle());
     }
 
@@ -91,9 +92,9 @@ class Rss_Model_FeedTest extends ControllerTestCase
         \Zend_Controller_Front::getInstance()->setBaseUrl('/opus4test');
         $model = new Rss_Model_Feed($view);
 
-        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
+        $this->adjustConfiguration([
             'rss' => ['default' => ['feedTitle' => '%3$s']]
-        ]));
+        ]);
         $this->assertEquals('opus4test', $model->getTitle());
     }
 
@@ -104,9 +105,9 @@ class Rss_Model_FeedTest extends ControllerTestCase
         $view->getHelper('ServerUrl')->setHost('testhost');
         $model = new Rss_Model_Feed($view);
 
-        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
+        $this->adjustConfiguration([
             'rss' => ['default' => ['feedTitle' => '%2$s']]
-        ]));
+        ]);
         $this->assertEquals('testhost', $model->getTitle());
     }
 
@@ -114,9 +115,11 @@ class Rss_Model_FeedTest extends ControllerTestCase
     {
         $this->assertEquals('OPUS documents', $this->_model->getDescription());
 
-        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
+        $this->adjustConfiguration([
             'rss' => ['default' => ['feedDescription' => 'Test description.']]
-        ]));
+        ]);
+
+        $this->_model->setConfig(null); // reset local reference to configuration
 
         $this->assertEquals('Test description.', $this->_model->getDescription());
     }

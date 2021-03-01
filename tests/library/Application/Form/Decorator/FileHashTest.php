@@ -142,7 +142,7 @@ class Application_Form_Decorator_FileHashTest extends ControllerTestCase
     public function testRenderWithFileTooBig()
     {
         $this->useEnglish();
-        $config = \Zend_Registry::get('Zend_Config');
+        $config =  $this->getConfig();
         $config->merge(new \Zend_Config(['checksum' => ['maxVerificationSize' => '0']]));
 
         $element = new Application_Form_Element_FileHash('name');

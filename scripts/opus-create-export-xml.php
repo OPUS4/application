@@ -27,10 +27,11 @@
  * @category    Application
  * @author      Gunar Maiwald <maiwald@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2011-2016, OPUS 4 development team
+ * @copyright   Copyright (c) 2011-2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Config;
 use Opus\Document;
 use Opus\DocumentFinder;
 use Opus\Model\NotFoundException;
@@ -47,7 +48,7 @@ use Opus\Model\NotFoundException;
 
 require_once dirname(__FILE__) . '/common/bootstrap.php';
 
-$config = \Zend_Registry::get('Zend_Config');
+$config = Config::get();
 
 // process options
 $options = getopt('o:');

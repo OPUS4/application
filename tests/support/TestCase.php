@@ -26,10 +26,11 @@
  *
  * @category    Application Unit Test
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Config;
 use Opus\Log;
 
 /**
@@ -138,22 +139,26 @@ class TestCase extends \Zend_Test_PHPUnit_ControllerTestCase
      */
     protected function closeLogfile()
     {
-        if (! \Zend_Registry::isRegistered('Zend_Log')) {
-            return;
-        }
+        $log =  Log::get();
 
-        $log = \Zend_Registry::get('Zend_Log');
         if (isset($log)) {
             $log->__destruct();
-            \Zend_Registry::set('Zend_Log', null);
         }
 
         Log::drop();
     }
 
+    /**
+     * TODO adjustConfiguration also makes it configurable - so maybe not needed anymore
+     */
     public function makeConfigurationModifiable()
     {
         $config = new \Zend_Config([], true);
-        \Zend_Registry::set('Zend_Config', $config->merge(\Zend_Registry::get('Zend_Config')));
+        Config::set($config->merge(Config::get()));
+    }
+
+    protected function getConfig()
+    {
+        return Config::get();
     }
 }

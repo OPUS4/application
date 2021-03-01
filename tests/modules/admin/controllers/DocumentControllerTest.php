@@ -28,12 +28,13 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @author      Michael Lang <lang@zib.de>
  * @author      Maximilian Salomon <salomon@zib.de>
- * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 use Opus\CollectionRole;
 use Opus\Date;
+use Opus\Log;
 use Opus\Note;
 use Opus\Person;
 use Opus\Title;
@@ -949,7 +950,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase
     public function testUnableToTranslateForMetadataView()
     {
         $logger = new MockLogger();
-        \Zend_Registry::set('Zend_Log', $logger);
+        Log::set($logger);
 
         $adapter = \Zend_Registry::get('Zend_Translate')->getAdapter();
         $options = $adapter->getOptions();
@@ -977,7 +978,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase
     public function testUnableToTranslateForEditForm()
     {
         $logger = new MockLogger();
-        \Zend_Registry::set('Zend_Log', $logger);
+        Log::set($logger);
 
         $adapter = \Zend_Registry::get('Zend_Translate')->getAdapter();
         $options = $adapter->getOptions();

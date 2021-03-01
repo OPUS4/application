@@ -69,7 +69,7 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
         $this->assertContains('SN  - 1-5432-876-9', $response->getBody());
         $this->assertContains('SN  - 1234-5678', $response->getBody());
         $this->assertContains('SN  - 4321-8765', $response->getBody());
-        $urnResolverUrl = \Zend_Registry::get('Zend_Config')->urn->resolverUrl;
+        $urnResolverUrl = $this->getConfig()->urn->resolverUrl;
         $this->assertContains('UR  - ' . $urnResolverUrl . 'urn:nbn:de:foo:123-bar-456', $response->getBody());
         $this->assertContains('UR  - ' . $urnResolverUrl . 'urn:nbn:de:foo:123-bar-789', $response->getBody());
         $this->assertContains('UR  - http://www.myexampledomain.de/foo', $response->getBody());
@@ -480,11 +480,10 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
     /** Regression Test for OPUSVIER-3251 */
     public function testIndexActionBibtexEnrichmentVisibleAsNote()
     {
-        $bibtexConfArray = [
+        $this->adjustConfiguration([
             'citationExport' => ['bibtex' => ['enrichment' => 'SourceTitle']]
-        ];
-        $bibtexConf = new \Zend_Config($bibtexConfArray);
-        \Zend_Registry::getInstance()->get('Zend_Config')->merge($bibtexConf);
+        ]);
+
         $this->dispatch('/citationExport/index/index/output/bibtex/docId/146');
         $this->assertResponseCode(200);
         $response = $this->getResponse();

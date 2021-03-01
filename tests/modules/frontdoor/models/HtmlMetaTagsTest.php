@@ -61,7 +61,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     {
         parent::setUp();
         $this->htmlMetaTags = new Frontdoor_Model_HtmlMetaTags(
-            \Zend_Registry::get('Zend_Config'),
+            $this->getConfig(),
             'http://localhost/opus'
         );
 
@@ -96,7 +96,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
 
     public function testCreateTagsForCustomTypeJournalPaper()
     {
-        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config(
+        $this->htmlMetaTags->setConfig($this->adjustConfiguration(
             ['metatags' => ['mapping' => ['journal_paper' => ['customdoctype']]]]
         ));
 
@@ -127,7 +127,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
 
     public function testCreateTagsForCustomTypeConferencePaper()
     {
-        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config(
+        $this->htmlMetaTags->setConfig($this->adjustConfiguration(
             ['metatags' => ['mapping' => ['conference_paper' => ['customdoctype']]]]
         ));
 
@@ -158,7 +158,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
 
     public function testCreateTagsForCustomTypeThesis()
     {
-        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config(
+        $this->htmlMetaTags->setConfig($this->adjustConfiguration(
             ['metatags' => ['mapping' => ['thesis' => ['customdoctype']]]]
         ));
 
@@ -187,7 +187,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
 
     public function testCreateTagsForCustomTypeWorkingPaper()
     {
-        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config(
+        $this->htmlMetaTags->setConfig($this->adjustConfiguration(
             ['metatags' => ['mapping' => ['working_paper' => ['customdoctype']]]]
         ));
 
@@ -220,7 +220,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
 
     public function testCreateTagsForCustomTypeWorkingPaperWithContributingCorporation()
     {
-        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config(
+        $this->htmlMetaTags->setConfig($this->adjustConfiguration(
             ['metatags' => ['mapping' => ['working_paper' => ['customdoctype']]]]
         ));
 
@@ -254,7 +254,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
 
     public function testCreateTagsForCustomTypeWorkingPaperWithPublisher()
     {
-        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config(
+        $this->htmlMetaTags->setConfig($this->adjustConfiguration(
             ['metatags' => ['mapping' => ['working_paper' => ['customdoctype']]]]
         ));
 
@@ -285,7 +285,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
 
     public function testCreateTagsForCustomTypeBook()
     {
-        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config(
+        $this->htmlMetaTags->setConfig($this->adjustConfiguration(
             ['metatags' => ['mapping' => ['book' => ['customdoctype']]]]
         ));
 
@@ -313,7 +313,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
 
     public function testCreateTagsForCustomTypeBookPart()
     {
-        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config(
+        $this->htmlMetaTags->setConfig($this->adjustConfiguration(
             ['metatags' => ['mapping' => ['book_part' => ['customdoctype']]]]
         ));
 
@@ -810,7 +810,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
      */
     private function addFile($doc)
     {
-        $config = \Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         $path = $config->workspacePath . DIRECTORY_SEPARATOR . uniqid();
         mkdir($path, 0777, true);
 
@@ -872,7 +872,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
 
     public function testGetMappingConfigCustomDocumentType()
     {
-        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
+        $this->htmlMetaTags->setConfig($this->adjustConfiguration([
             'metatags' => ['mapping' => ['book' => ['mybooktype']]]
         ]));
 
@@ -886,7 +886,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
 
     public function testGetMappingConfigDefaultOverride()
     {
-        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
+        $this->htmlMetaTags->setConfig($this->adjustConfiguration([
             'metatags' => ['mapping' => ['book' => ['article']]]
         ]));
 

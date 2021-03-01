@@ -44,7 +44,7 @@ class Publish_Form_PublishingFirstTest extends ControllerTestCase
 
     public function testIsValidMethodWithMissingDocumentType()
     {
-        $config = \Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         $config->form->first->require_upload = self::CONFIG_VALUE_FALSE;
         $config->form->first->show_rights_checkbox = self::CONFIG_VALUE_FALSE;
         $config->form->first->bibliographie = self::CONFIG_VALUE_FALSE;
@@ -60,7 +60,7 @@ class Publish_Form_PublishingFirstTest extends ControllerTestCase
 
     public function testIsValidMethodWithMissingRightsCheckbox()
     {
-        $config = \Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         $config->form->first->require_upload = self::CONFIG_VALUE_FALSE;
         $config->form->first->show_rights_checkbox = self::CONFIG_VALUE_TRUE;
         $config->form->first->bibliographie = self::CONFIG_VALUE_FALSE;

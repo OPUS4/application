@@ -661,12 +661,11 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
         $this->requireSolrConfig();
 
         // manipulate solr configuration
-        $config = \Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
 
         $host = $config->searchengine->solr->default->service->default->endpoint->localhost->host;
         $port = $config->searchengine->solr->default->service->default->endpoint->localhost->port;
         $config->searchengine->solr->default->service->default->endpoint->localhost->path = '/solr/corethatdoesnotexist';
-        \Zend_Registry::set('Zend_Config', $config);
 
         $this->dispatch('/solrsearch/browse/doctypes');
 
@@ -768,7 +767,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
 
     public function testFacetLimitWithDefaultSetting()
     {
-        $config = \Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
 
         $numOfSubjects = 20;
         $this->addSampleDocWithMultipleSubjects($numOfSubjects);
@@ -793,7 +792,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
     public function testFacetLimitWithGlobalSetting()
     {
         // manipulate application configuration
-        $config = \Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         $config->search->facet->default->limit = '5';
 
         $numOfSubjects = 10;
@@ -811,37 +810,20 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
 
     public function testFacetLimitWithLocalSettingForSubjectFacet()
     {
-        // manipulate application configuration
-        $config = \Zend_Registry::get('Zend_Config');
-        $limit = null;
-        $oldConfig = null;
-        if (isset($config->searchengine->solr->facetlimit->subject)) {
-            $limit = $config->searchengine->solr->facetlimit->subject;
-        } else {
-            $config = new \Zend_Config([
-                'searchengine' => [
-                    'solr' => [
-                        'facetlimit' => [
-                            'subject' => '5']]]], true);
-            $oldConfig = \Zend_Registry::get('Zend_Config');
-            // Include the above made configuration changes in the application configuration.
-            $config->merge(\Zend_Registry::get('Zend_Config'));
-        }
-        \Zend_Registry::set('Zend_Config', $config);
+        $this->adjustConfiguration([
+            'searchengine' => [
+                'solr' => [
+                    'facetlimit' => [
+                        'subject' => '5'
+                    ]
+                ]
+            ]
+        ]);
 
         $numOfSubjects = 10;
         $this->addSampleDocWithMultipleSubjects($numOfSubjects);
 
         $this->dispatch('/solrsearch/index/search/searchtype/simple/query/facetlimittestwithsubjects-opusvier2610');
-
-        // undo configuration manipulation
-        $config = \Zend_Registry::get('Zend_Config');
-        if (! is_null($oldConfig)) {
-            $config = $oldConfig;
-        } else {
-            $config->searchengine->solr->facetlimit->subject = $limit;
-        }
-        \Zend_Registry::set('Zend_Config', $config);
 
         for ($index = 0; $index < 5; $index++) {
             $this->assertContains('/solrsearch/index/search/searchtype/simple/query/facetlimittestwithsubjects-opusvier2610/start/0/rows/10/subjectfq/subject0' . $index, $this->getResponse()->getBody());
@@ -890,28 +872,19 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
 
     public function testFacetSortLexicographicallyForInstituteFacet()
     {
-        // manipulate application configuration
-        $oldConfig = \Zend_Registry::get('Zend_Config');
-
-        $config = \Zend_Registry::get('Zend_Config');
-        if (isset($config->searchengine->solr->sortcrit->institute)) {
-            $config->searchengine->solr->sortcrit->institute = 'lexi';
-        } else {
-            $config = new \Zend_Config([
-                'searchengine' => [
-                    'solr' => [
-                        'sortcrit' => [
-                            'institute' => 'lexi']]]], true);
-            $oldConfig = \Zend_Registry::get('Zend_Config');
-            // Include the above made configuration changes in the application configuration.
-            $config->merge(\Zend_Registry::get('Zend_Config'));
-        }
-        \Zend_Registry::set('Zend_Config', $config);
+        $this->adjustConfiguration([
+            'searchengine' => [
+                'solr' => [
+                    'sortcrit' => [
+                        'institute' => 'lexi'
+                    ]
+                ]
+            ]
+        ]);
 
         $this->dispatch('/solrsearch/index/search/searchtype/all');
 
-        // undo configuration manipulation
-        \Zend_Registry::set('Zend_Config', $oldConfig);
+        $this->resetConfiguration();
 
         $searchStrings = [
             'Abwasserwirtschaft und Gewässerschutz B-2',
@@ -945,13 +918,13 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
 
     public function testFacetSortForYearInverted()
     {
-        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
+        $this->adjustConfiguration([
             'search' => ['facet' => ['year' => [
                 'sort' => 'lexi',
                 'indexField' => 'published_year_inverted'
             ]]],
             'searchengine' => ['solr' => ['facets' => 'year,doctype,author_facet,language,has_fulltext,belongs_to_bibliography,subject,institute']]
-        ]));
+        ]);
 
         $this->dispatch('/solrsearch/index/search/searchtype/all');
 
@@ -1151,12 +1124,12 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
     public function testFacetExtenderWithVariousConfigFacetLimits()
     {
         $this->useEnglish();
-        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
+        $this->adjustConfiguration([
             'search' => ['facet' => [
                 'author_facet' => ['limit' => '3'],
                 'year' => ['limit' => '15']
             ]]
-        ]));
+        ]);
         $this->dispatch('/solrsearch/index/search/searchtype/all/');
         $this->assertQueryContentContains("//div[@id='author_facet_facet']/div/a", ' + more');
         $this->assertQueryContentContains("//div[@id='year_facet']/div/a", ' + more');
@@ -1257,10 +1230,10 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
         $this->enableSecurity();
         $this->loginUser('admin', 'adminadmin');
 
-        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
+        $this->adjustConfiguration([
             'export' => ['stylesheet' => ['search' => 'example']],
             'searchengine' => ['solr' => ['numberOfDefaultSearchResults' => '10']]
-        ]));
+        ]);
 
         $this->dispatch('/solrsearch/index/search/searchtype/latest');
         $this->assertQuery('//a[@href="/solrsearch/index/search/searchtype/latest/rows/10/export/xml/stylesheet/example"]');
@@ -1272,8 +1245,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
     public function testXmlExportButtonNotPresentForGuest()
     {
         $this->enableSecurity();
-        $config = \Zend_Registry::get('Zend_Config');
-        $config->merge(new \Zend_Config(['export' => ['stylesheet' => ['search' => 'example']]]));
+        $this->adjustConfiguration(['export' => ['stylesheet' => ['search' => 'example']]]);
         $this->dispatch('/solrsearch/index/search/searchtype/all');
         $this->assertFalse(Realm::getInstance()->checkModule('export'));
         $this->assertNotQuery('//a[@href="/solrsearch/index/search/searchtype/all/export/xml/stylesheet/example"]');
@@ -1281,9 +1253,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
 
     public function testDisableEmptyCollectionsTrue()
     {
-        \Zend_Registry::get('Zend_Config')->merge(
-            new \Zend_Config(['browsing' => ['disableEmptyCollections' => self::CONFIG_VALUE_TRUE]])
-        );
+        $this->adjustConfiguration(['browsing' => ['disableEmptyCollections' => self::CONFIG_VALUE_TRUE]]);
 
         $this->dispatch('/solrsearch/index/search/searchtype/collection/id/2');
 
@@ -1296,9 +1266,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
 
     public function testDisableEmptyCollectionsFalse()
     {
-        \Zend_Registry::get('Zend_Config')->merge(
-            new \Zend_Config(['browsing' => ['disableEmptyCollections' => self::CONFIG_VALUE_FALSE]])
-        );
+        $this->adjustConfiguration(['browsing' => ['disableEmptyCollections' => self::CONFIG_VALUE_FALSE]]);
 
         $this->dispatch('/solrsearch/index/search/searchtype/collection/id/2');
 

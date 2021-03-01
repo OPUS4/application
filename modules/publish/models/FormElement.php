@@ -32,6 +32,7 @@
  */
 
 use Opus\CollectionRole;
+use Opus\Log;
 
 class Publish_Model_FormElement
 {
@@ -77,7 +78,7 @@ class Publish_Model_FormElement
     ) {
         $this->session = new \Zend_Session_Namespace('Publish');
         $this->sessionOpus = new \Zend_Session_Namespace();
-        $this->log = \Zend_Registry::get('Zend_Log');
+        $this->log =  Log::get();
         $this->form = $form;
 
         $this->_elementName = $name;

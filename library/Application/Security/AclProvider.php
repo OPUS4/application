@@ -139,7 +139,7 @@ class Application_Security_AclProvider
         $this->loadRoles($acl, $parents);
 
         // create role for user on-the-fly with assigned roles as parents
-        if (\Zend_Registry::get('LOG_LEVEL') >= \Zend_LOG::DEBUG) {
+        if ($logger->getLevel() >= \Zend_LOG::DEBUG) {
                 $logger->debug(
                     "ACL: Create role '" . $user . "' with parents " . "(" . implode(", ", $parents) . ")"
                 );

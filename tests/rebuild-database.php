@@ -71,7 +71,9 @@ $application = new \Zend_Application(
     ]
 );
 
-\Zend_Registry::set('opus.disableDatabaseVersionCheck', true);
+$options = $application->getOptions();
+$options['opus']['disableDatabaseVersionCheck'] = true;
+$application->setOptions($options);
 
 // Bootstrapping application
 $application->bootstrap('Backend');

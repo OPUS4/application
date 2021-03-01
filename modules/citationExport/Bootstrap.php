@@ -32,6 +32,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Log;
+
 class CitationExport_Bootstrap extends \Zend_Application_Module_Bootstrap
 {
 
@@ -47,7 +49,7 @@ class CitationExport_Bootstrap extends \Zend_Application_Module_Bootstrap
 
         if (! \Zend_Registry::isRegistered('Opus_Exporter')) {
             if (! $updateInProgress) {
-                \Zend_Registry::get('Zend_Log')->warn(__METHOD__ . ' exporter not found');
+                 Log::get()->warn(__METHOD__ . ' exporter not found');
             }
             return;
         }
@@ -56,7 +58,7 @@ class CitationExport_Bootstrap extends \Zend_Application_Module_Bootstrap
 
         if (is_null($exporter)) {
             if ($updateInProgress) {
-                \Zend_Registry::get('Zend_Log')->warn(__METHOD__ . ' exporter not found');
+                 Log::get()->warn(__METHOD__ . ' exporter not found');
             }
             return;
         }

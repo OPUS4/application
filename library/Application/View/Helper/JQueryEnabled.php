@@ -32,6 +32,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Config;
+
 /**
  * Checks if JQuery Library is available.
  */
@@ -40,7 +42,7 @@ class Application_View_Helper_JQueryEnabled extends \Zend_View_Helper_Abstract
 
     public function jQueryEnabled()
     {
-        $config = \Zend_Registry::get('Zend_Config');
+        $config = Config::get();
         if (! isset($config->javascript->jquery->path)) {
             return false;
         }

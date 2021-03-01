@@ -28,10 +28,11 @@
  * @package     Application
  * @author      Jens Schwidder <schwidder@zib.de>
  * @author      Michael Lang <lang@zib.de
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Config;
 use Opus\Document;
 
 class Application_ConfigurationTest extends ControllerTestCase
@@ -55,7 +56,7 @@ class Application_ConfigurationTest extends ControllerTestCase
     {
         $zendConfig = $this->config->getConfig();
         $this->assertNotNull($zendConfig);
-        $this->assertInstanceOf('Zend_Config', $zendConfig);
+        $this->assertInstanceOf(\Zend_Config::class, $zendConfig);
     }
 
     public function testGetLogger()
@@ -63,7 +64,7 @@ class Application_ConfigurationTest extends ControllerTestCase
         $logger = $this->config->getLogger();
 
         $this->assertNotNull($logger);
-        $this->assertInstanceOf('Zend_Log', $logger);
+        $this->assertInstanceOf(\Zend_Log::class, $logger);
     }
 
     public function testSetLogger()
@@ -103,7 +104,7 @@ class Application_ConfigurationTest extends ControllerTestCase
 
     public function testGetOpusVersion()
     {
-        $config = \Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         $this->assertEquals($config->version, Application_Configuration::getOpusVersion());
     }
 
@@ -125,7 +126,7 @@ class Application_ConfigurationTest extends ControllerTestCase
 
     public function testIsLanguageSelectionEnabledFalse()
     {
-        \Zend_Registry::get('Zend_Config')->supportedLanguages = 'de';
+        Config::get()->supportedLanguages = 'de';
         $this->assertEquals(['de'], $this->config->getSupportedLanguages());
         $this->assertFalse($this->config->isLanguageSelectionEnabled());
     }
@@ -137,7 +138,7 @@ class Application_ConfigurationTest extends ControllerTestCase
 
     public function testGetDefaultLanguageIfOnlyOneIsSupported()
     {
-        \Zend_Registry::get('Zend_Config')->supportedLanguages = 'de';
+        $this->getConfig()->supportedLanguages = 'de';
         $this->assertEquals('de', $this->config->getDefaultLanguage());
     }
 
@@ -167,9 +168,9 @@ class Application_ConfigurationTest extends ControllerTestCase
      */
     public function testGetWorkspacePathSetWithSlash()
     {
-        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
+        $this->adjustConfiguration([
             'workspacePath' => APPLICATION_PATH . '/tests/workspace/'
-        ]));
+        ]);
 
         $workspacePath = $this->config->getWorkspacePath();
 
@@ -212,10 +213,10 @@ class Application_ConfigurationTest extends ControllerTestCase
         $config = Application_Configuration::getInstance();
         $this->assertEquals('OPUS 4', $config->getName());
 
-        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config(['name' => 'OPUS Test']));
+        $this->adjustConfiguration(['name' => 'OPUS Test']);
         $this->assertEquals('OPUS Test', $config->getName());
 
-        $zendConfig = \Zend_Registry::get('Zend_Config');
+        $zendConfig = $this->getConfig();
         unset($zendConfig->name);
         $this->assertEquals('OPUS 4', $config->getName());
     }
@@ -255,7 +256,7 @@ class Application_ConfigurationTest extends ControllerTestCase
 
         $subconfig = $config->getValue('orcid');
 
-        $this->assertInstanceOf('Zend_Config', $subconfig);
+        $this->assertInstanceOf(\Zend_Config::class, $subconfig);
     }
 
     public function testGetValueForNull()

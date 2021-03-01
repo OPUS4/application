@@ -43,7 +43,7 @@ class Admin_InfoControllerTest extends ControllerTestCase
 
     public function testIndexDisplayVersion()
     {
-        $config = \Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         $this->dispatch('admin/info');
         $this->assertResponseCode(200);
         $this->assertQuery('//div[@class="opus-version-info"]');
@@ -62,7 +62,7 @@ class Admin_InfoControllerTest extends ControllerTestCase
         $versionHelper = \Zend_Controller_Action_HelperBroker::getStaticHelper('version');
         $versionHelper->setVersion('4.6');
 
-        $config = \Zend_Registry::get('Zend_Config');
+        $config =  $this->getConfig();
         $oldVersion = $config->version;
         $config->version = '4.5-TEST';
         $this->dispatch('admin/info/update');
@@ -81,7 +81,7 @@ class Admin_InfoControllerTest extends ControllerTestCase
     {
         $this->useEnglish();
         $helper = \Zend_Controller_Action_HelperBroker::getStaticHelper('version');
-        $helper->setVersion(\Zend_Registry::get('Zend_Config')->version);
+        $helper->setVersion($this->getConfig()->version);
 
         $this->dispatch('admin/info/update');
         $this->assertQueryContentContains('//div', 'Your OPUS version is up to date.');

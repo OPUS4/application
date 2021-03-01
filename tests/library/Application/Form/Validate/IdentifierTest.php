@@ -58,9 +58,7 @@ class Application_Form_Validate_IdentifierTest extends ControllerTestCase
     {
         parent::setUp();
 
-        $this->makeConfigurationModifiable();
-
-        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
+        $this->adjustConfiguration([
             'identifier' => ['validation' => [
                 'isbn' => [
                     'class' => 'Opus\Validate\Isbn'
@@ -69,7 +67,7 @@ class Application_Form_Validate_IdentifierTest extends ControllerTestCase
                     'class' => 'Opus\Validate\Issn'
                 ]
             ]]
-        ]));
+        ]);
 
         $this->_element = new Application_Form_Element_Identifier('Element');
         $this->_element->setValue('ISBN');

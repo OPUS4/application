@@ -28,12 +28,13 @@
  * @package     Tests
  * @author      Sascha Szott
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2016-2017
+ * @copyright   Copyright (c) 2016-2021
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 use Opus\Collection;
 use Opus\CollectionRole;
+use Opus\Config;
 use Opus\Document;
 
 class DepositTestHelper extends PHPUnit_Framework_Assert
@@ -50,8 +51,6 @@ class DepositTestHelper extends PHPUnit_Framework_Assert
     private $collectionName;
 
     private $collectionNumber;
-
-    private $configBackup;
 
     private $frontdoorUrl;
 
@@ -125,14 +124,12 @@ class DepositTestHelper extends PHPUnit_Framework_Assert
             $rootCollection->addLastChild($collection);
             $this->collectionId = $collection->store();
 
-            $this->configBackup = \Zend_Registry::get('Zend_Config');
-            $config = \Zend_Registry::get('Zend_Config');
+            $config = Config::get();
             $config->sword->collection->default->number = $this->collectionNumber;
             $config->sword->collection->default->abstract = 'sword.collection.default.abstract';
             $config->sword->collection->default->collectionPolicy = 'sword.collection.default.collectionPolicy';
             $config->sword->collection->default->treatment = 'sword.collection.default.treatment';
             $config->sword->collection->default->acceptPackaging = 'sword.collection.default.acceptPackaging';
-            \Zend_Registry::set('Zend_Config', $config);
         }
     }
 
@@ -142,7 +139,6 @@ class DepositTestHelper extends PHPUnit_Framework_Assert
             $collection = new Collection($this->collectionId);
             $collection->delete();
             $this->collectionId = null;
-            \Zend_Registry::set('Zend_Config', $this->configBackup);
         }
     }
 
@@ -277,7 +273,7 @@ class DepositTestHelper extends PHPUnit_Framework_Assert
         $this->frontdoorUrl = 'http:///frontdoor/index/index/docId/' . $docId;
         $this->assertEquals($this->frontdoorUrl, $attribute->nodeValue);
 
-        $config = \Zend_Registry::get('Zend_Config');
+        $config = Config::get();
         $generatorValue = $config->sword->generator;
         $this->assertNodeProperties(5 + $offset, $entryChildren, 'generator', $generatorValue);
 

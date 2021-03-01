@@ -27,11 +27,12 @@
  * @category    Tests
  * @package     Publish
  * @author      Susanne Gottwald <gottwald@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 use Opus\Document;
+use Opus\Log;
 
 /**
  * Class Publish_DepositControllerTest.
@@ -229,7 +230,7 @@ class Publish_DepositControllerTest extends ControllerTestCase
         $doc->setServerState('published');
         $doc->setType('preprint');
 
-        $log = \Zend_Registry::get('Zend_Log');
+        $log =  Log::get();
         $deposit = new Publish_Model_Deposit($log);
         $deposit->storeDocument($doc->store());
     }

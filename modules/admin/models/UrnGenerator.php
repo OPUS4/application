@@ -27,11 +27,13 @@
  * @category    Application
  * @package     Module_Admin
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2018-2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Config;
 use Opus\Identifier\Urn;
+use Opus\Log;
 
 class Admin_Model_UrnGenerator
 {
@@ -49,7 +51,7 @@ class Admin_Model_UrnGenerator
      */
     public function __construct()
     {
-        $config = \Zend_Registry::get('Zend_Config');
+        $config = Config::get();
 
         if (! isset($config->urn->nid) || $config->urn->nid == '') {
             throw new Application_Exception('missing configuration setting for urn.nid - is required for URN generation');
@@ -74,7 +76,7 @@ class Admin_Model_UrnGenerator
         $identifierUrn = new Urn($this->nid, $this->nss);
         $urn = $identifierUrn->getUrn($docId);
 
-        $log = \Zend_Registry::get('Zend_Log');
+        $log =  Log::get();
         $log->debug('URN generation result for document ' . $docId . ' is ' . $urn);
 
         return $urn;

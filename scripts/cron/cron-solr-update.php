@@ -39,9 +39,10 @@ require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
 use Opus\Job\Runner;
 use Opus\Search\Task\IndexOpusDocument;
+use Opus\Log;
 
 $jobrunner = new Runner();
-$jobrunner->setLogger(\Zend_Registry::get('Zend_Log'));
+$jobrunner->setLogger(Log::get());
 
 // no waiting between jobs
 $jobrunner->setDelay(0);

@@ -167,7 +167,7 @@ class Admin_DocumentsControllerTest extends ControllerTestCase
 
     public function testConfigureDefaultHitsPerPage()
     {
-        $config = \Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         $config->admin->documents->maxDocsDefault = '7';
 
         $this->dispatch('/admin/documents');
@@ -176,7 +176,7 @@ class Admin_DocumentsControllerTest extends ControllerTestCase
 
     public function testConfigureHitsPerPageOptions()
     {
-        $config = \Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         $config->admin->documents->maxDocsOptions = "20,60,all";
 
         $this->dispatch('/admin/documents');

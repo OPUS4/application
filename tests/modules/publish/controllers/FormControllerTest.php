@@ -265,7 +265,7 @@ class Publish_FormControllerTest extends ControllerTestCase
      */
     public function testOPUSVIER1886WithBibliography()
     {
-        $config = \Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         $config->form->first->bibliographie = self::CONFIG_VALUE_TRUE;
 
         $doc = $this->createTemporaryDoc();
@@ -294,7 +294,7 @@ class Publish_FormControllerTest extends ControllerTestCase
 
     public function testOPUSVIER1886WithBibliographyUnselected()
     {
-        $config = \Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         $config->form->first->bibliographie = self::CONFIG_VALUE_TRUE;
 
         $doc = $this->createTemporaryDoc();
@@ -325,7 +325,7 @@ class Publish_FormControllerTest extends ControllerTestCase
 
     public function testOPUSVIER1886WithBibliographySelected()
     {
-        $config = \Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         $config->form->first->bibliographie = self::CONFIG_VALUE_TRUE;
 
         $doc = $this->createTemporaryDoc();
@@ -359,7 +359,7 @@ class Publish_FormControllerTest extends ControllerTestCase
      */
     public function testOPUSVIER1886WithoutBibliography()
     {
-        $config = \Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         $config->form->first->bibliographie = self::CONFIG_VALUE_FALSE;
 
         $doc = $this->createTemporaryDoc();
@@ -392,7 +392,7 @@ class Publish_FormControllerTest extends ControllerTestCase
     public function testFormManipulationForBibliography()
     {
         $this->markTestIncomplete('testing multipart formdata not yet solved');
-        $config = \Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         $config->form->first->bibliographie = self::CONFIG_VALUE_FALSE;
 
         $this->request
@@ -473,7 +473,7 @@ class Publish_FormControllerTest extends ControllerTestCase
 
     private function fileNoticeOnThirdFormPage($value)
     {
-        $config = \Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         $config->form->first->enable_upload = $value;
 
         $doc = $this->createTemporaryDoc();
@@ -497,7 +497,7 @@ class Publish_FormControllerTest extends ControllerTestCase
 
     private function fileNoticeOnSecondFormPage($value)
     {
-        $config = \Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         $config->form->first->enable_upload = $value;
 
         $doc = $this->createTemporaryDoc();

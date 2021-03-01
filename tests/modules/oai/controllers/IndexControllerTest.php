@@ -148,9 +148,9 @@ class Oai_IndexControllerTest extends ControllerTestCase
      */
     public function testIdentify()
     {
-        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
+        $this->adjustConfiguration([
             'oai' => ['repository' => ['name' => 'test-repo-name']]
-        ]));
+        ]);
 
         $this->dispatch('/oai?verb=Identify');
         $this->assertResponseCode(200);
@@ -207,9 +207,9 @@ class Oai_IndexControllerTest extends ControllerTestCase
             'comment' => ['url' => 'test-comment-url', 'text' => 'test-comment-text']
         ];
 
-        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
+        $this->adjustConfiguration([
             'oai' => ['description' => ['eprints' => $values]]
-        ]));
+        ]);
 
         $this->dispatch('/oai?verb=Identify');
         $this->assertResponseCode(200);
@@ -233,10 +233,10 @@ class Oai_IndexControllerTest extends ControllerTestCase
 
     public function testIdentifyDescriptionOaiIdentifier()
     {
-        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
+        $this->adjustConfiguration([
             'oai' => ['repository' => ['identifier' => 'test-repo-identifier'],
                 'sample' => ['identifier' => 'test-sample-identifier']]
-        ]));
+        ]);
 
         $this->dispatch('/oai?verb=Identify');
         $this->assertResponseCode(200);
@@ -972,7 +972,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $this->assertEquals('Baz University', $elements->item(1)->nodeValue, 'dc:contributor field changed');
 
         // Regression test for OPUSVIER-2393 (show dc:identifier)
-        $urnResolverUrl = \Zend_Registry::get('Zend_Config')->urn->resolverUrl;
+        $urnResolverUrl = $this->getConfig()->urn->resolverUrl;
         $elements = $xpath->query('//oai_dc:dc/dc:identifier[text()="' . $urnResolverUrl . 'urn:nbn:op:123"]');
         $this->assertEquals(1, $elements->length, 'dc:identifier URN count changed');
 
@@ -1221,16 +1221,15 @@ class Oai_IndexControllerTest extends ControllerTestCase
      */
     public function testListRecordsXMetaDissPlusDocumentsWithFilesOnly()
     {
-        \Zend_Registry::get('Zend_Config')->merge(
-            new \Zend_Config([
-                'oai' => [
-                    'max' => [
-                        'listrecords' => '100',
-                        'listidentifiers' => '200',
-                    ]
+        $this->adjustConfiguration([
+            'oai' => [
+                'max' => [
+                    'listrecords' => '100',
+                    'listidentifiers' => '200',
                 ]
-            ])
-        );
+            ]
+        ]);
+
         $this->dispatch('/oai?verb=ListRecords&metadataPrefix=xMetaDissPlus');
 
         $responseBody = $this->getResponse()->getBody();
@@ -1247,16 +1246,15 @@ class Oai_IndexControllerTest extends ControllerTestCase
      */
     public function testListRecordsXMetaDissPlusDocumentsWithoutUrn()
     {
-        \Zend_Registry::get('Zend_Config')->merge(
-            new \Zend_Config([
-                'oai' => [
-                    'max' => [
-                        'listrecords' => '100',
-                        'listidentifiers' => '200',
-                    ]
+        $this->adjustConfiguration([
+            'oai' => [
+                'max' => [
+                    'listrecords' => '100',
+                    'listidentifiers' => '200',
                 ]
-            ])
-        );
+            ]
+        ]);
+
         $this->dispatch('/oai?verb=ListRecords&metadataPrefix=xMetaDissPlus');
 
         $xpath = $this->prepareXpathFromResultString($this->getResponse()->getBody());
@@ -1500,7 +1498,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
         }
 
         // enable security
-        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config(['security' => self::CONFIG_VALUE_TRUE]));
+        $this->adjustConfiguration(['security' => self::CONFIG_VALUE_TRUE]);
     }
 
     /**
@@ -1919,9 +1917,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
     {
         $max_records = '2';
 
-        \Zend_Registry::get('Zend_Config')->merge(
-            new \Zend_Config(['oai' => ['max' => ['listrecords' => $max_records]]])
-        );
+        $this->adjustConfiguration(['oai' => ['max' => ['listrecords' => $max_records]]]);
 
         // first request: fetch documents list and expect resumption code
         $this->dispatch("/oai?verb=ListRecords&metadataPrefix=oai_dc");
@@ -1965,9 +1961,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
     {
         $max_records = '100';
 
-        \Zend_Registry::get('Zend_Config')->merge(
-            new \Zend_Config(['oai' => ['max' => ['listrecords' => $max_records]]])
-        );
+        $this->adjustConfiguration(['oai' => ['max' => ['listrecords' => $max_records]]]);
 
         // first request: fetch documents list and expect resumption code
         $this->dispatch("/oai?verb=ListRecords&metadataPrefix=oai_dc");
@@ -2606,13 +2600,13 @@ class Oai_IndexControllerTest extends ControllerTestCase
 
     public function testGetRecordMarc21OfDocId91()
     {
-        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
+        $this->adjustConfiguration([
             'marc21' => [
                 'isil' => 'DE-9999',
                 'publisherName' => 'publisherNameFromConfig',
                 'publisherCity' => 'publisherCityFromConfig',
             ]
-        ]));
+        ]);
 
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=marc21&identifier=oai::91');
 

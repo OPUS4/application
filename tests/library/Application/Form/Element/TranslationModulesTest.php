@@ -40,9 +40,9 @@ class Application_Form_Element_TranslationModulesTest extends ControllerTestCase
 
     public function testInit()
     {
-        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
+        $this->adjustConfiguration([
             'setup' => ['translation' => ['modules' => ['allowed' => 'default,publish']]]
-        ]));
+        ]);
 
         $element = new Application_Form_Element_TranslationModules('modules');
 
@@ -53,9 +53,9 @@ class Application_Form_Element_TranslationModulesTest extends ControllerTestCase
 
     public function testInitAllModules()
     {
-        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
+        $this->adjustConfiguration([
             'setup' => ['translation' => ['modules' => ['allowed' => null]]]
-        ]));
+        ]);
 
         $element = new Application_Form_Element_TranslationModules('modules');
 

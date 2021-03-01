@@ -38,6 +38,10 @@ use Opus\Document;
  * TODO new types have to be added as functions -> make extendable? how is it used when rendering?
  *      Basically each type could be a separate class. Refactor for later so new types or metatags won't necessarily
  *      require changing core classes (this class here).
+ * TODO how to handle configuration - during production requests it is not a problem, but for tests the configuration
+ *      is sometimes manipulated and setting the configuration in the constructor means that those updates only work
+ *      if the same configuration object is manipulated, which isn't always possible - one solution would be to make
+ *      sure, that the configuration for tests is always modifiable
  */
 class Frontdoor_Model_HtmlMetaTags
 {
@@ -283,12 +287,13 @@ class Frontdoor_Model_HtmlMetaTags
      */
     private function handleIdentifierUrn($document, &$metas)
     {
+        $config = $this->getConfig();
         foreach ($document->getIdentifierUrn() as $identifier) {
             $identifierValue = trim($identifier->getValue());
             if ($identifierValue !== '') {
                 $metas[] = ['DC.identifier', $identifierValue];
-                if (isset($this->config, $this->config->urn->resolverUrl)) {
-                    $metas[] = ['DC.identifier', $this->config->urn->resolverUrl . $identifierValue];
+                if (isset($config, $config->urn->resolverUrl)) {
+                    $metas[] = ['DC.identifier', $config->urn->resolverUrl . $identifierValue];
                 }
             }
         }
@@ -357,9 +362,10 @@ class Frontdoor_Model_HtmlMetaTags
     private function handleFulltextUrls($document, &$metas)
     {
         if (Application_Xslt::embargoHasPassed($document)) {
+            $config = $this->getConfig();
             $baseUrlFiles = $this->fullUrl;
-            if (isset($this->config, $this->config->deliver->url->prefix)) {
-                $baseUrlFiles .= $this->config->deliver->url->prefix;
+            if (isset($config, $config->deliver->url->prefix)) {
+                $baseUrlFiles .= $config->deliver->url->prefix;
             } else {
                 $baseUrlFiles .= '/files';
             }
@@ -568,17 +574,19 @@ class Frontdoor_Model_HtmlMetaTags
 
     public function getMappingConfig()
     {
-        if (is_null($this->mapping) && isset($this->config)) {
+        $config = $this->getConfig();
+
+        if (is_null($this->mapping) && isset($config)) {
             $mapping = [];
 
             // load default mappings
-            if (isset($this->config->metatags->defaultMapping)) {
-                $mapping = array_merge($mapping, $this->loadMapping($this->config->metatags->defaultMapping));
+            if (isset($config->metatags->defaultMapping)) {
+                $mapping = array_merge($mapping, $this->loadMapping($config->metatags->defaultMapping));
             }
 
             // load custom mapping
-            if (isset($this->config->metatags->mapping)) {
-                $mapping = array_merge($mapping, $this->loadMapping($this->config->metatags->mapping));
+            if (isset($config->metatags->mapping)) {
+                $mapping = array_merge($mapping, $this->loadMapping($config->metatags->mapping));
             }
 
             $this->mapping = $mapping;
@@ -597,5 +605,15 @@ class Frontdoor_Model_HtmlMetaTags
             }
         }
         return $mapping;
+    }
+
+    public function getConfig()
+    {
+        return $this->config;
+    }
+
+    public function setConfig($config)
+    {
+        $this->config = $config;
     }
 }

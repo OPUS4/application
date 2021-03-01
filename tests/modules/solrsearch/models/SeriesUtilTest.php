@@ -97,13 +97,13 @@ class Solrsearch_Model_SeriesUtilTest extends ControllerTestCase
 
     public function testGetVisibleSeriesSortedAlphabetically()
     {
-        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
+        $this->adjustConfiguration([
             'browsing' => [
                 'series' => [
                     'sortByTitle' => self::CONFIG_VALUE_TRUE
                 ]
             ]
-        ]));
+        ]);
 
         $series = $this->model->getVisibleSeries();
 

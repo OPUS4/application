@@ -28,13 +28,16 @@
  * @package     Module_Sword
  * @author      Sascha Szott
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2016-2017
+ * @copyright   Copyright (c) 2016-2021
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  *
  * TODO use OPUS 4 base class?
  * TODO too much code in this controller
  * TODO change AdditionalEnrichments into something like ImportInfo and make it easy to access properties like "user"
  */
+
+use Opus\Log;
+
 class Sword_DepositController extends \Zend_Rest_Controller
 {
 
@@ -168,7 +171,7 @@ class Sword_DepositController extends \Zend_Rest_Controller
 
         $maxUploadSize = (new Application_Configuration_MaxUploadSize())->getMaxUploadSizeInByte();
         if ($size > $maxUploadSize) {
-            $log = \Zend_Registry::get('Zend_Log');
+            $log =  Log::get();
             $log->warn('current package size ' . $size . ' exceeds the maximum upload size ' . $maxUploadSize);
             return true;
         }

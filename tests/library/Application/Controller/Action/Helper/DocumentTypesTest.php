@@ -183,7 +183,7 @@ class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerT
      */
     public function testGetAllDocumentTypes()
     {
-        $config = \Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         unset($config->documentTypes);
 
         $documentTypes = $this->docTypeHelper->getDocumentTypes();
@@ -223,7 +223,7 @@ class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerT
      */
     public function testGetDocumentTypesWithPathNotSet()
     {
-        $config = \Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
 
         unset($config->publish->path->documenttypes);
 
@@ -282,7 +282,7 @@ class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerT
      */
     public function testDocumentTypesAndTemplates()
     {
-        $config = \Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         $templates = $this->getFileNames($config->publish->path->documenttemplates, '.phtml');
         $types = $this->getFileNames($config->publish->path->documenttypes, '.xml');
 
@@ -331,13 +331,13 @@ class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerT
 
     public function testGetDocTypesPath()
     {
-        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
+        $this->adjustConfiguration([
             'publish' => [
                 'path' => [
                     'documenttypes' => APPLICATION_PATH . '/application/configs/doctypes'
                 ]
             ]
-        ]));
+        ]);
 
         $paths = $this->docTypeHelper->getDocTypesPath();
 
@@ -361,7 +361,7 @@ class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerT
 
     public function testTemplateForEveryDocumentType()
     {
-        $config = \Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         unset($config->documentTypes);
 
         $docTypes = $this->docTypeHelper->getAllDocumentTypes();

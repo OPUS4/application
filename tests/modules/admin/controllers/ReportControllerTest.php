@@ -44,20 +44,14 @@ class Admin_ReportControllerTest extends ControllerTestCase
 
     protected $additionalResources = 'all';
 
-    private $config;
-
     private $docIds;
 
     public function setUp()
     {
         parent::setUp();
 
-        // backup config
-        $this->config = \Zend_Registry::get('Zend_Config');
-
         // modify DOI config
-        $config = \Zend_Registry::get('Zend_Config');
-        $config->merge(new \Zend_Config([
+        $this->adjustConfiguration([
             'doi' => [
                 'prefix' => '10.5072',
                 'localPrefix' => 'opustest',
@@ -71,15 +65,11 @@ class Admin_ReportControllerTest extends ControllerTestCase
                             ]
                     ]
             ]
-        ]));
-        \Zend_Registry::set('Zend_Config', $config);
+        ]);
     }
 
     public function tearDown()
     {
-        // restore config
-        \Zend_Registry::set('Zend_Config', $this->config);
-
         if (! is_null($this->docIds)) {
             // removed previously created test documents from database
             foreach ($this->docIds as $docId) {

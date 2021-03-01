@@ -26,7 +26,7 @@
  *
  * @category    Application Unit Test
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -198,9 +198,9 @@ class ControllerTestCaseTest extends ControllerTestCase
      */
     public function testGetWorkspacePathNotDefined()
     {
-        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
+        $this->adjustConfiguration([
             'workspacePath' => null
-        ]));
+        ]);
 
         $this->getWorkspacePath();
     }

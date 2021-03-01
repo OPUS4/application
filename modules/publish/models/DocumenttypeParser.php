@@ -28,11 +28,12 @@
  * @package     Module_Publish
  * @author      Susanne Gottwald <gottwald@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 use Opus\EnrichmentKey;
+use Opus\Log;
 
 class Publish_Model_DocumenttypeParser extends Application_Model_Abstract
 {
@@ -69,7 +70,7 @@ class Publish_Model_DocumenttypeParser extends Application_Model_Abstract
      */
     public function __construct($dom, $form, $additionalFields = [], $postValues = [])
     {
-        $this->_log = \Zend_Registry::get('Zend_Log');
+        $this->_log =  Log::get();
         $this->_session = new \Zend_Session_Namespace('Publish');
         $this->form = $form;
         $this->dom = $dom;

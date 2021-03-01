@@ -27,12 +27,13 @@
  * @category    Application
  * @package     Oai_Modul
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2017-2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 use Opus\Document;
 use Opus\DocumentFinder;
+use Opus\Log;
 use Opus\Model\NotFoundException;
 use Opus\Model\Xml;
 use Opus\Model\Xml\Cache;
@@ -204,7 +205,7 @@ class Oai_Model_Server extends Application_Model_Abstract
         }
 
         foreach ($oaiRequest as $parameter => $value) {
-            \Zend_Registry::get('Zend_Log')->debug("'oai_' . $parameter, $value");
+             Log::get()->debug("'oai_' . $parameter, $value");
             $this->_proc->setParameter('', 'oai_' . $parameter, $value);
         }
 
@@ -723,7 +724,7 @@ class Oai_Model_Server extends Application_Model_Abstract
     {
         if (! in_array($document->getServerState(), $this->_deliveringDocumentStates)) {
             $message = 'Trying to get a document in server state "' . $document->getServerState() . '"';
-            \Zend_Registry::get('Zend_Log')->err($message);
+             Log::get()->err($message);
             throw new \Exception($message);
         }
 

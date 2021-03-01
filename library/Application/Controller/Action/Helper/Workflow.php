@@ -27,11 +27,12 @@
  * @category    Application
  * @package     Controller
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 use Opus\Document;
+use Opus\Log;
 
 /**
  * Controller helper for providing workflow support.
@@ -91,7 +92,7 @@ class Application_Controller_Action_Helper_Workflow extends \Zend_Controller_Act
      */
     public function getAllowedTargetStatesForDocument($document)
     {
-        $logger = \Zend_Registry::get('Zend_Log');
+        $logger =  Log::get();
 
         $currentState = $document->getServerState();
 
