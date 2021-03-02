@@ -30,6 +30,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
+
+use Opus\Log;
 ?>
 
 <?PHP $document = new Application_Util_DocumentAdapter($this, $this->element->getDocument()) ?>
@@ -43,6 +45,6 @@
     <?PHP endif; ?>
 </div>
 <?PHP else : ?>
-<?PHP \Zend_Registry::get('Zend_Log')->err('Use of partial \'docinfo.phtml\' without document = null.'); ?>
+<?PHP Log::get()->err('Use of partial \'docinfo.phtml\' without document = null.'); ?>
 <?PHP endif; ?>
 

@@ -30,6 +30,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
+
+use Opus\Log;
 ?>
 
 <?PHP if (! is_null($this->document)) : ?>
@@ -44,6 +46,6 @@
     </dl>
 </div>
 <?PHP else : ?>
-<?PHP \Zend_Registry::get('Zend_Log')->err('Use of partial \'docstatus.phtml\' without document = null.'); ?>
+<?PHP Log::get()->err('Use of partial \'docstatus.phtml\' without document = null.'); ?>
 <?PHP endif; ?>
 
