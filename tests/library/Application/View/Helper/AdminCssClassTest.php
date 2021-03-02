@@ -59,7 +59,7 @@ class Application_View_Helper_AdminCssClassTest extends ControllerTestCase
     public function testAdminCssClass($module, $expected)
     {
         $helper = new Application_View_Helper_AdminCssClass();
-        $helper->setView(\Zend_Registry::get('Opus_View'));
+        $helper->setView($this->getView());
 
         $helper->view->moduleName = $module;
 

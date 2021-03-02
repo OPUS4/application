@@ -47,7 +47,7 @@ class Application_View_Helper_FormatValueTest extends ControllerTestCase
     {
         parent::setUp();
         $this->__helper = new Application_View_Helper_FormatValue();
-        $this->__helper->setView(\Zend_Registry::get('Opus_View'));
+        $this->__helper->setView($this->getView());
     }
 
     public function testViewHelperReturnsItself()

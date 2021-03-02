@@ -39,7 +39,7 @@ class Application_View_Helper_FileUrlTest extends ControllerTestCase
     public function testFileUrl()
     {
         $helper = new Application_View_Helper_FileUrl();
-        $helper->setView(\Zend_Registry::get('Opus_View'));
+        $helper->setView($this->getView());
 
         $fileUrl = $helper->fileUrl('123', 'foo.pdf');
         $this->assertEquals('http:///files/123/foo.pdf', $fileUrl);
@@ -48,7 +48,7 @@ class Application_View_Helper_FileUrlTest extends ControllerTestCase
     public function testFileUrlWithEscaping()
     {
         $helper = new Application_View_Helper_FileUrl();
-        $helper->setView(\Zend_Registry::get('Opus_View'));
+        $helper->setView($this->getView());
 
         $fileUrl = $helper->fileUrl('123', 'foo:bar.pdf');
         $this->assertEquals('http:///files/123/foo%3Abar.pdf', $fileUrl);

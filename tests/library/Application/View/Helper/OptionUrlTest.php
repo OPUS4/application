@@ -45,7 +45,7 @@ class Application_View_Helper_OptionUrlTest extends ControllerTestCase
 
         $helper = new Application_View_Helper_OptionUrl();
 
-        $helper->setView(\Zend_Registry::get('Opus_View'));
+        $helper->setView($this->getView());
 
         $this->adjustConfiguration([
             'logoLink' => 'home'

@@ -46,7 +46,7 @@ class Application_View_Helper_DocumentTitleTest extends ControllerTestCase
         parent::setUp();
 
         $this->_helper = new Application_View_Helper_DocumentTitle();
-        $this->_helper->setView(\Zend_Registry::get('Opus_View'));
+        $this->_helper->setView($this->getView());
     }
 
     public function testDocumentTitle()

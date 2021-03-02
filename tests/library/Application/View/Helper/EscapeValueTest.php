@@ -43,7 +43,7 @@ class Application_View_Helper_EscapeValueTest extends ControllerTestCase
         parent::setUp();
 
         $this->_helper = new Application_View_Helper_EscapeValue();
-        $this->_helper->setView(\Zend_Registry::get('Opus_View'));
+        $this->_helper->setView($this->getView());
     }
 
     public function testEscapeValueNull()

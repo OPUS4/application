@@ -49,9 +49,9 @@ class Application_Controller_Action_Helper_BreadcrumbsTest extends ControllerTes
         parent::setUp();
 
         $this->helper = \Zend_Controller_Action_HelperBroker::getStaticHelper('breadcrumbs');
-        $this->navigation = \Zend_Registry::get('Opus_View')->navigation();
+        $this->navigation = $this->getView()->navigation();
         $this->helper->setNavigation($this->navigation);
-        $this->helper->setView(\Zend_Registry::get('Opus_View'));
+        $this->helper->setView($this->getView());
     }
 
     private function getPage($label)

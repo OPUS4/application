@@ -39,7 +39,7 @@ class Application_View_Helper_TransferUrlTest extends ControllerTestCase
     public function testTransferUrl()
     {
         $helper = new Application_View_Helper_TransferUrl();
-        $helper->setView(\Zend_Registry::get('Opus_View'));
+        $helper->setView($this->getView());
 
         $transferUrl = $helper->transferUrl('123');
         $this->assertEquals('http:///oai/container/index/docId/123', $transferUrl);

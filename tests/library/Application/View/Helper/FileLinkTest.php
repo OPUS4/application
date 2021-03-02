@@ -79,7 +79,7 @@ class Application_View_Helper_FileLinkTest extends ControllerTestCase
     {
         $helper = new Application_View_Helper_FileLink();
 
-        $helper->setView(\Zend_Registry::get('Opus_View'));
+        $helper->setView($this->getView());
 
         $file = new File(131);
 
@@ -94,7 +94,7 @@ class Application_View_Helper_FileLinkTest extends ControllerTestCase
     {
         $helper = new Application_View_Helper_FileLink();
 
-        $helper->setView(\Zend_Registry::get('Opus_View'));
+        $helper->setView($this->getView());
 
         $file = new File(126);
         $file->setLabel(null);

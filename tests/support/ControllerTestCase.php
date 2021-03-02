@@ -396,7 +396,7 @@ class ControllerTestCase extends TestCase
     {
         $session = new \Zend_Session_Namespace();
         $session->language = 'de';
-        Applicaton_Translate::getInstance()->setLocale('de');
+        Application_Translate::getInstance()->setLocale('de');
         Application_Form_Element_Language::initLanguageList();
     }
 
@@ -407,7 +407,7 @@ class ControllerTestCase extends TestCase
     {
         $session = new \Zend_Session_Namespace();
         $session->language = 'en';
-        Applicaton_Translate::getInstance()->setLocale('en');
+        Application_Translate::getInstance()->setLocale('en');
         Application_Form_Element_Language::initLanguageList();
     }
 
@@ -617,7 +617,7 @@ class ControllerTestCase extends TestCase
             }
         }
 
-        $view = \Zend_Registry::get('Opus_View');
+        $view = $this->getView();
 
         $path = explode('/', $location);
 
@@ -637,7 +637,7 @@ class ControllerTestCase extends TestCase
                 if (! $breadcrumbDefined) {
                     $breadcrumbDefined = true;
 
-                    $translate = Applicaton_Translate::getInstance();
+                    $translate = Application_Translate::getInstance();
 
                     $label = $page->getLabel();
 
@@ -972,7 +972,7 @@ class ControllerTestCase extends TestCase
      */
     public function setHostname($host)
     {
-        $view = \Zend_Registry::get('Opus_View');
+        $view = $this->getView();
         $view->getHelper('ServerUrl')->setHost($host);
     }
 
@@ -1001,7 +1001,7 @@ class ControllerTestCase extends TestCase
     public function disableTranslation()
     {
         if (is_null($this->translatorBackup)) {
-            $this->translatorBackup = Applicaton_Translate::getInstance();
+            $this->translatorBackup = Application_Translate::getInstance();
         }
 
         \Zend_Registry::set('Zend_Translate', new Application_Translate([
@@ -1087,5 +1087,10 @@ class ControllerTestCase extends TestCase
                 // TODO logging?
             }
         }
+    }
+
+    protected function getView()
+    {
+        return $this->application->getBootstrap()->getResource('view');
     }
 }

@@ -43,7 +43,7 @@ class Application_View_Helper_AdminMenuTest extends ControllerTestCase
         parent::setUpWithEnv('production');
         $this->assertSecurityConfigured();
         $this->_helper = new Application_View_Helper_AdminMenu();
-        $this->_helper->setView(\Zend_Registry::get('Opus_View'));
+        $this->_helper->setView($this->getView());
     }
 
     private function getPageByLabel($label)

@@ -79,7 +79,7 @@ class ControllerTestCaseTest extends ControllerTestCase
 
     public function testSetHostname()
     {
-        $view = \Zend_Registry::get('Opus_View');
+        $view = $this->getView();
 
         $this->assertEquals('http://', $view->serverUrl());
 
@@ -90,7 +90,7 @@ class ControllerTestCaseTest extends ControllerTestCase
 
     public function testSetBaseUrlNotSet()
     {
-        $view = \Zend_Registry::get('Opus_View');
+        $view = $this->getView();
 
         $this->assertEquals('', $view->baseUrl());
 
@@ -101,7 +101,7 @@ class ControllerTestCaseTest extends ControllerTestCase
 
     public function testSetBaseUrlSet()
     {
-        $view = \Zend_Registry::get('Opus_View');
+        $view = $this->getView();
 
         $this->setBaseUrl('opus4');
 
@@ -168,7 +168,7 @@ class ControllerTestCaseTest extends ControllerTestCase
 
     public function testDisableEnableTranslation()
     {
-        $defaultTranslator = Applicaton_Translate::getInstance();
+        $defaultTranslator = Application_Translate::getInstance();
         $this->assertTrue($defaultTranslator->isTranslated('LastName'));
 
         $this->disableTranslation();

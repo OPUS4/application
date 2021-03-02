@@ -63,7 +63,7 @@ class Admin_Model_CollectionsTest extends ControllerTestCase
         $this->collectionRoleId = $collectionRole->store();
 
         $this->model = new Admin_Model_Collections();
-        $this->model->setView(\Zend_Registry::get('Opus_View'));
+        $this->model->setView($this->getView());
 
         $document = $this->createTestDocument();
         $document->addCollection($root);

@@ -44,14 +44,14 @@ class Rss_Model_FeedTest extends ControllerTestCase
     {
         parent::setUp();
 
-        $view = \Zend_Registry::get('Opus_View');
+        $view = $this->getView();
 
         $this->_model = new Rss_Model_Feed($view);
     }
 
     public function testGetTitle()
     {
-        $view = \Zend_Registry::get('Opus_View');
+        $view = $this->getView();
         \Zend_Controller_Front::getInstance()->setBaseUrl('/opus4test');
         $model = new Rss_Model_Feed($view);
 
@@ -76,7 +76,7 @@ class Rss_Model_FeedTest extends ControllerTestCase
 
     public function testGetTitleWithFullUrl()
     {
-        $view = \Zend_Registry::get('Opus_View');
+        $view = $this->getView();
         \Zend_Controller_Front::getInstance()->setBaseUrl('/opus4test');
         $model = new Rss_Model_Feed($view);
 
@@ -88,7 +88,7 @@ class Rss_Model_FeedTest extends ControllerTestCase
 
     public function testGetTitleWithBaseUrl()
     {
-        $view = \Zend_Registry::get('Opus_View');
+        $view = $this->getView();
         \Zend_Controller_Front::getInstance()->setBaseUrl('/opus4test');
         $model = new Rss_Model_Feed($view);
 
@@ -100,7 +100,7 @@ class Rss_Model_FeedTest extends ControllerTestCase
 
     public function testGetTitleWithHost()
     {
-        $view = \Zend_Registry::get('Opus_View');
+        $view = $this->getView();
         \Zend_Controller_Front::getInstance()->setBaseUrl('/opus4test');
         $view->getHelper('ServerUrl')->setHost('testhost');
         $model = new Rss_Model_Feed($view);

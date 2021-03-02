@@ -43,7 +43,7 @@ class Application_View_Helper_MessagesTest extends ControllerTestCase
     {
         $this->useEnglish();
 
-        $view = \Zend_Registry::get('Opus_View');
+        $view = $this->getView();
 
         $helper = new Application_View_Helper_Messages();
         $helper->setView($view);
@@ -67,7 +67,7 @@ EOT
     {
         $this->useEnglish();
 
-        $view = \Zend_Registry::get('Opus_View');
+        $view = $this->getView();
 
         $helper = new Application_View_Helper_Messages();
         $helper->setView($view);
@@ -95,7 +95,7 @@ EOT
     {
         $this->useEnglish();
 
-        $view = \Zend_Registry::get('Opus_View');
+        $view = $this->getView();
 
         $helper = new Application_View_Helper_Messages();
         $helper->setView($view);
@@ -119,7 +119,7 @@ EOT
     {
         $helper = new Application_View_Helper_Messages();
 
-        $helper->setView(\Zend_Registry::get('Opus_View'));
+        $helper->setView($this->getView());
 
         $this->assertEquals('', $helper->messages());
     }
@@ -128,7 +128,7 @@ EOT
     {
         $helper = new Application_View_Helper_Messages();
 
-        $helper->setView(\Zend_Registry::get('Opus_View'));
+        $helper->setView($this->getView());
 
         $this->assertEquals(
             <<<EOT

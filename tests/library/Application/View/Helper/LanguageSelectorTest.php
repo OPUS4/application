@@ -50,7 +50,7 @@ class Application_View_Helper_LanguageSelectorTest extends ControllerTestCase
 
         $this->_helper = new Application_View_Helper_LanguageSelector();
 
-        $this->_helper->setView(\Zend_Registry::get('Opus_View'));
+        $this->_helper->setView($this->getView());
     }
 
     public function testLanguageConfiguredAndInResourcesGerman()

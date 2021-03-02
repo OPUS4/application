@@ -104,7 +104,7 @@ class Application_View_Helper_TranslationEditLinkTest extends ControllerTestCase
     protected function getHelper()
     {
         $helper = new Application_View_Helper_TranslationEditLink();
-        $helper->setView(\Zend_Registry::get('Opus_View'));
+        $helper->setView($this->getView());
         return $helper;
     }
 }

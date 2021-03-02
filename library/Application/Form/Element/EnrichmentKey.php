@@ -67,7 +67,7 @@ class Application_Form_Element_EnrichmentKey extends Application_Form_Element_Se
     {
         $translationKey = 'Enrichment' . $keyName;
 
-        $translator = Zend_Registry::get('Zend_Translate');
+        $translator = Application_Translate::getInstance();
         if (! is_null($translator) && ($translator->isTranslated($translationKey))) {
             $this->addMultiOption($keyName, $translator->translate($translationKey));
         } else {
@@ -77,7 +77,7 @@ class Application_Form_Element_EnrichmentKey extends Application_Form_Element_Se
 
     private function resetValidator()
     {
-        $translator = Zend_Registry::get('Zend_Translate');
+        $translator = Application_Translate::getInstance();
         $message = 'validation_error_unknown_enrichmentkey';
         if (! is_null($translator) && $translator->isTranslated($message)) {
             $message = $translator->translate($message);

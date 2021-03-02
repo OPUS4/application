@@ -50,7 +50,7 @@ class Application_View_Helper_BreadcrumbsTest extends ControllerTestCase
     {
         parent::setUp();
 
-        $this->view = \Zend_Registry::get('Opus_View');
+        $this->view = $this->getView();
 
         $this->breadcrumbs = $this->view->breadcrumbs();
 
