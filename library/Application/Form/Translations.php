@@ -143,7 +143,7 @@ class Application_Form_Translations extends Application_Form_Abstract
     {
         $elements = $this->getTranslationElements();
 
-        $translate = \Zend_Registry::get('Zend_Translate');
+        $translate = Application_Translate::getInstance();
 
         foreach ($elements as $name => $element) {
             // TODO handle no translation
@@ -162,7 +162,7 @@ class Application_Form_Translations extends Application_Form_Abstract
             $element->updateTranslations($key);
         }
 
-        $translate = \Zend_Registry::get('Zend_Translate');
+        $translate = Application_Translate::getInstance();
         $translate->clearCache();
         \Zend_Translate::clearCache();
     }

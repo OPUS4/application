@@ -37,7 +37,7 @@ use Opus\Config;
 
 $config = Config::get();
 
-$pageLanguage = \Zend_Registry::get('Zend_Translate')->getLocale();
+$pageLanguage = Application_Translate::getInstance()->getLocale();
 
 $this->headMeta()
     ->prependHttpEquiv('Content-Type', 'text/html; charset=UTF-8')

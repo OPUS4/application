@@ -168,17 +168,17 @@ class ControllerTestCaseTest extends ControllerTestCase
 
     public function testDisableEnableTranslation()
     {
-        $defaultTranslator = \Zend_Registry::get('Zend_Translate');
+        $defaultTranslator = Applicaton_Translate::getInstance();
         $this->assertTrue($defaultTranslator->isTranslated('LastName'));
 
         $this->disableTranslation();
 
-        $translator = \Zend_Registry::get('Zend_Translate');
+        $translator = Application_Translate::getInstance();
         $this->assertFalse($translator->isTranslated('LastName'));
 
         $this->enableTranslation();
 
-        $translator = \Zend_Registry::get('Zend_Translate');
+        $translator = Application_Translate::getInstance();
         $this->assertTrue($translator->isTranslated('LastName'));
 
         $this->assertSame($defaultTranslator, $translator);

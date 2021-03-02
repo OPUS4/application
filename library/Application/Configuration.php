@@ -329,7 +329,7 @@ class Application_Configuration extends Config
      */
     public function getTranslate()
     {
-        return \Zend_Registry::get('Zend_Translate');
+        return Application_Translate::getInstance();
     }
 
     public static function isUpdateInProgress()

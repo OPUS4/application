@@ -48,7 +48,7 @@ class Application_View_Helper_DocumentAbstract extends Application_View_Helper_D
     public function documentAbstract($document = null)
     {
         if ($this->isPreferUserInterfaceLanguage()) {
-            $language = Language::getPart2tForPart1(\Zend_Registry::get('Zend_Translate')->getLocale());
+            $language = Language::getPart2tForPart1(Application_Translate::getInstance()->getLocale());
 
             $abstract = $document->getMainAbstract($language);
         } else {

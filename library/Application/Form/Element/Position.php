@@ -44,7 +44,7 @@ class Application_Form_Element_Position extends Application_Form_Element_Select
 
         $allCollectionRoles = CollectionRole::fetchAll();
 
-        $translator = \Zend_Registry::get('Zend_Translate');
+        $translator = Application_Translate::getInstance();
 
         foreach ($allCollectionRoles as $collectionRole) {
             $position = $collectionRole->getPosition();

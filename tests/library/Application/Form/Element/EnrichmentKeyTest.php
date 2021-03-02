@@ -104,7 +104,7 @@ class Application_Form_Element_EnrichmentKeyTest extends FormElementTestCase
 
     public function testMessageTranslated()
     {
-        $translator = \Zend_Registry::get('Zend_Translate');
+        $translator = Application_Translate::getInstance();
 
         $this->assertTrue($translator->isTranslated('validation_error_unknown_enrichmentkey'));
     }

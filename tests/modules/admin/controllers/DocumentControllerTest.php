@@ -952,7 +952,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase
         $logger = new MockLogger();
         Log::set($logger);
 
-        $adapter = \Zend_Registry::get('Zend_Translate')->getAdapter();
+        $adapter = Application_Translate::getInstance()->getAdapter();
         $options = $adapter->getOptions();
         $options['log'] = $logger;
         $adapter->setOptions($options);
@@ -980,7 +980,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase
         $logger = new MockLogger();
         Log::set($logger);
 
-        $adapter = \Zend_Registry::get('Zend_Translate')->getAdapter();
+        $adapter = Application_Translate::getInstance()->getAdapter();
         $options = $adapter->getOptions();
         $options['log'] = $logger;
         $adapter->setOptions($options);

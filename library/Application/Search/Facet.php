@@ -205,7 +205,7 @@ class Application_Search_Facet
 
     public function getTranslator()
     {
-        return \Zend_Registry::get('Zend_Translate');
+        return Application_Translate::getInstance();
     }
 
     public function setTranslationPrefix($prefix)

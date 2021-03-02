@@ -49,7 +49,7 @@ class Setup_Form_TranslationValues extends \Zend_Form_SubForm
             [['Wrapper' => 'HtmlTag'], ['class' => 'row']]
         ]);
 
-        $translator = \Zend_Registry::get('Zend_Translate');
+        $translator = Application_Translate::getInstance();
 
         $languages = $this->getLanguages();
 

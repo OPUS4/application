@@ -37,7 +37,7 @@ use Opus\Config;
 
 $config = Config::get();
 
-$pageLanguage = \Zend_Registry::get('Zend_Translate')->getLocale();
+$pageLanguage = Application_Translate::getInstance()->getLocale();
 
 /**
  * Prevent indexing and following of links by web crawlers. Dynamic search pages should not be indexed, since their

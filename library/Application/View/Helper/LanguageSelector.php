@@ -52,12 +52,12 @@ class Application_View_Helper_LanguageSelector extends \Zend_View_Helper_Abstrac
         }
         $returnParams = \Zend_Controller_Action_HelperBroker::getStaticHelper('ReturnParams');
 
-        $currentLocale = new \Zend_Locale(\Zend_Registry::get('Zend_Translate')->getLocale());
+        $currentLocale = new \Zend_Locale(Application_Translate::getInstance()->getLocale());
 
         $configHelper = new Application_Configuration();
 
         // only show languages that are present in resources and activated in configuration
-        $translations = \Zend_Registry::get('Zend_Translate')->getList();
+        $translations = Application_Translate::getInstance()->getList();
         $supportedLang = $configHelper->getActivatedLanguages();
         $translations = array_intersect($translations, $supportedLang);
 

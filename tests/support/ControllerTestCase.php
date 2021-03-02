@@ -396,7 +396,7 @@ class ControllerTestCase extends TestCase
     {
         $session = new \Zend_Session_Namespace();
         $session->language = 'de';
-        \Zend_Registry::get('Zend_Translate')->setLocale('de');
+        Applicaton_Translate::getInstance()->setLocale('de');
         Application_Form_Element_Language::initLanguageList();
     }
 
@@ -407,7 +407,7 @@ class ControllerTestCase extends TestCase
     {
         $session = new \Zend_Session_Namespace();
         $session->language = 'en';
-        \Zend_Registry::get('Zend_Translate')->setLocale('en');
+        Applicaton_Translate::getInstance()->setLocale('en');
         Application_Form_Element_Language::initLanguageList();
     }
 
@@ -637,7 +637,7 @@ class ControllerTestCase extends TestCase
                 if (! $breadcrumbDefined) {
                     $breadcrumbDefined = true;
 
-                    $translate = \Zend_Registry::get('Zend_Translate');
+                    $translate = Applicaton_Translate::getInstance();
 
                     $label = $page->getLabel();
 
@@ -1001,7 +1001,7 @@ class ControllerTestCase extends TestCase
     public function disableTranslation()
     {
         if (is_null($this->translatorBackup)) {
-            $this->translatorBackup = \Zend_Registry::get('Zend_Translate');
+            $this->translatorBackup = Applicaton_Translate::getInstance();
         }
 
         \Zend_Registry::set('Zend_Translate', new Application_Translate([

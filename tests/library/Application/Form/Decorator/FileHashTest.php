@@ -135,7 +135,7 @@ class Application_Form_Decorator_FileHashTest extends ControllerTestCase
             . '<div class="textarea hashsoll"><span class="hash-label">Expected:</span>1ba50dc8abc619cea3ba39f77c75c0fe</div>'
             . '<input type="hidden" name="name[Soll]" value="1ba50dc8abc619cea3ba39f77c75c0fe" id="name-Soll" />'
             . '<div class="textarea hashist"><span class="hash-label">Actual:</span>'
-            . \Zend_Registry::get('Zend_Translate')->translate('frontdoor_checksum_not_verified')
+            . Application_Translate::getInstance()->translate('frontdoor_checksum_not_verified')
             . '</div>', $output);
     }
 
@@ -165,7 +165,7 @@ class Application_Form_Decorator_FileHashTest extends ControllerTestCase
             . '<div class="textarea hashsoll"><span class="hash-label">Expected:</span>1ba50dc8abc619cea3ba39f77c75c0fe</div>'
             . '<input type="hidden" name="name[Soll]" value="1ba50dc8abc619cea3ba39f77c75c0fe" id="name-Soll" />'
             . '<div class="textarea hashist"><span class="hash-label">Actual:</span>'
-            . \Zend_Registry::get('Zend_Translate')->translate('frontdoor_file_too_big')
+            . Application_Translate::getInstance()->translate('frontdoor_file_too_big')
             . '</div>', $output);
     }
 }

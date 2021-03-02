@@ -73,7 +73,7 @@ class Home_Model_HelpFiles extends Application_Translate_Help
      */
     public function getContent($key)
     {
-        $translate = \Zend_Registry::get('Zend_Translate');
+        $translate = Application_Translate::getInstance();
 
         $translationKey = "help_content_$key";
         $translation = $translate->translate($translationKey);
@@ -179,7 +179,7 @@ class Home_Model_HelpFiles extends Application_Translate_Help
 
     public function isContentAvailable($key)
     {
-        $translate = \Zend_Registry::get('Zend_Translate');
+        $translate = Application_Translate::getInstance();
 
         $translationKey = "help_content_$key";
 

@@ -48,7 +48,7 @@ class Application_Form_Element_TranslationModules extends Application_Form_Eleme
 
         $modules = $manager->getModules();
 
-        $translator = \Zend_Registry::get('Zend_Translate'); // TODO bad design (external, hidden dependency)
+        $translator = Application_Translate::getInstance(); // TODO bad design (external, hidden dependency)
 
         array_unshift($modules, $translator->translate('default_all'));
 

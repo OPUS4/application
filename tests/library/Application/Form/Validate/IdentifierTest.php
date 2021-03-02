@@ -286,7 +286,7 @@ class Application_Form_Validate_IdentifierTest extends ControllerTestCase
      */
     public function testTranslationExists()
     {
-        $translate = \Zend_Registry::get('Zend_Translate');
+        $translate = Application_Translate::getInstance();
         $config = Application_Configuration::getInstance()->getConfig();
         $validators = $config->identifier->validation->toArray();
         foreach ($validators as $key => $val) {

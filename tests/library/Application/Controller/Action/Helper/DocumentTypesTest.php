@@ -236,7 +236,7 @@ class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerT
     public function testTranslationOfDocumentTypes()
     {
         $excludeFromTranslationCheck = ['demo_invalid', 'foobar', 'barbaz', 'bazbar'];
-        $translate = \Zend_Registry::get('Zend_Translate');
+        $translate = Application_Translate::getInstance();
 
         $documentTypes = $this->docTypeHelper->getDocumentTypes();
 
