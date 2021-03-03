@@ -512,7 +512,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     public function testDisplayAllDocumentFields()
     {
         $this->dispatch('/frontdoor/index/index/docId/146');
-        $translate = \Zend_Registry::getInstance()->get('Zend_Translate');
+        $translate = Application_Translate::getInstance();
 
         $path = 'table.result-data.frontdoordata th.name';
 

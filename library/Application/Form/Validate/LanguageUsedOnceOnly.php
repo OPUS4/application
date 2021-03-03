@@ -82,7 +82,7 @@ class Application_Form_Validate_LanguageUsedOnceOnly extends \Zend_Validate_Abst
     {
         $this->_languages = $languages;
         $this->_position = $position;
-        $this->setTranslator(\Zend_Registry::get(Application_Translate::REGISTRY_KEY));
+        $this->setTranslator(Application_Translate::getInstance());
     }
 
     /**
