@@ -58,7 +58,7 @@ class Application_View_Helper_AdminMenuTest extends ControllerTestCase
 
     public function testGetAcl()
     {
-        $this->assertSame(\Zend_Registry::get('Opus_Acl'), $this->_helper->getAcl());
+        $this->assertSame(Application_Security_AclProvider::getAcl(), $this->_helper->getAcl());
     }
 
     public function testHasAllowedChildren()
@@ -78,7 +78,7 @@ class Application_View_Helper_AdminMenuTest extends ControllerTestCase
         $this->assertFalse($this->_helper->hasAllowedChildren($page));
 
         // activate sub entry below 'admin_title_setup'
-        $acl = \Zend_Registry::get('Opus_Acl');
+        $acl = Application_Security_AclProvider::getAcl();
         $acl->allow(Application_Security_AclProvider::ACTIVE_ROLE, 'options');
 
         $page = $this->getPageByLabel('admin_title_config');

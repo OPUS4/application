@@ -89,6 +89,8 @@ class Application_Security_AclProvider
         ]
     ];
 
+    private static $acl;
+
     public static function init()
     {
         $aclProvider = new Application_Security_AclProvider();
@@ -97,12 +99,22 @@ class Application_Security_AclProvider
 
         $aclProvider->getLogger()->debug('ACL: bootrapping');
 
-        \Zend_Registry::set('Opus_Acl', $acl);
+        self::$acl = $acl;
 
         \Zend_View_Helper_Navigation_HelperAbstract::setDefaultAcl($acl);
         \Zend_View_Helper_Navigation_HelperAbstract::setDefaultRole(
             Application_Security_AclProvider::ACTIVE_ROLE
         );
+    }
+
+    public static function getAcl()
+    {
+        return self::$acl;
+    }
+
+    public static function clear()
+    {
+        self::$acl = null;
     }
 
     /**

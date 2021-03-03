@@ -46,7 +46,7 @@ class Application_View_Helper_AccessAllowedTest extends ControllerTestCase
         // bootstrapping authorization twice is not possible
         parent::setUpWithEnv('production');
         $this->assertSecurityConfigured();
-        $acl = \Zend_Registry::get('Opus_Acl');
+        $acl = Application_Security_AclProvider::getAcl();
         $acl->allow('guest', 'accounts');
         $this->__helper = new Application_View_Helper_AccessAllowed();
         $this->__helper->setView($this->getView());
@@ -54,7 +54,7 @@ class Application_View_Helper_AccessAllowedTest extends ControllerTestCase
 
     public function tearDown()
     {
-        $acl = \Zend_Registry::get('Opus_Acl');
+        $acl = Application_Security_AclProvider::getAcl();
         $acl->deny('guest', 'accounts');
         parent::tearDown();
     }

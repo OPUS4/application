@@ -952,11 +952,11 @@ class ControllerTestCase extends TestCase
     public function assertSecurityConfigured()
     {
         $this->assertEquals('1', Config::get()->security);
-        $this->assertTrue(
-            \Zend_Registry::isRegistered('Opus_Acl'),
-            'Expected registry key Opus_Acl to be set'
+        $this->assertNotNull(
+            Application_Security_AclProvider::getAcl(),
+            'Expected Zend_Acl to be set'
         );
-        $acl = \Zend_Registry::get('Opus_Acl');
+        $acl = Application_Security_AclProvider::getAcl();
         $this->assertTrue($acl instanceof \Zend_Acl, 'Expected instance of Zend_Acl');
     }
 
