@@ -103,23 +103,21 @@ class Application_Controller_Action_Helper_Workflow extends \Zend_Controller_Act
         if (! is_null($acl)) {
             $logger->debug("ACL: got instance");
 
-            if (! is_null($acl)) {
-                $allowedTargetStates = [];
+            $allowedTargetStates = [];
 
-                foreach ($targetStates as $targetState) {
-                    $resource = 'workflow_' . $currentState . '_' . $targetState;
-                    if (! $acl->has(new \Zend_Acl_Resource($resource)) || $acl->isAllowed(
-                        Application_Security_AclProvider::ACTIVE_ROLE,
-                        $resource
-                    )) {
-                        $allowedTargetStates[] = $targetState;
-                    } else {
-                        $logger->debug("ACL: $resource not allowed");
-                    }
+            foreach ($targetStates as $targetState) {
+                $resource = 'workflow_' . $currentState . '_' . $targetState;
+                if (! $acl->has(new \Zend_Acl_Resource($resource)) || $acl->isAllowed(
+                    Application_Security_AclProvider::ACTIVE_ROLE,
+                    $resource
+                )) {
+                    $allowedTargetStates[] = $targetState;
+                } else {
+                    $logger->debug("ACL: $resource not allowed");
                 }
-
-                return $allowedTargetStates;
             }
+
+            return $allowedTargetStates;
         }
 
         return $targetStates;
@@ -221,7 +219,7 @@ class Application_Controller_Action_Helper_Workflow extends \Zend_Controller_Act
      */
     public function getAcl()
     {
-        if (is_null($this->_acl)) {
+        if ($this->_acl === null) {
             $this->_acl = Application_Security_AclProvider::getAcl();
         }
         return $this->_acl;
