@@ -119,6 +119,7 @@ class ControllerTestCase extends TestCase
 
         DoiManager::setInstance(null);
         Application_Configuration::clearInstance(); // reset Application_Configuration
+        Application_Translate::setInstance(null);
 
         parent::tearDown();
     }

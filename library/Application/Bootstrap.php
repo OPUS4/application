@@ -237,7 +237,7 @@ class Application_Bootstrap extends DatabaseBootstrap
             'route' => ['en' => 'de'] // TODO make configurable in administration AND/OR generate automatically (all lang -> default)
         ]);
 
-        \Zend_Registry::set(Application_Translate::REGISTRY_KEY, $translate);
+        Application_Translate::setInstance($translate);
 
         $configHelper = new Application_Configuration();
 
