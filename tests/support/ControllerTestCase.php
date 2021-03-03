@@ -1004,11 +1004,13 @@ class ControllerTestCase extends TestCase
             $this->translatorBackup = Application_Translate::getInstance();
         }
 
-        \Zend_Registry::set('Zend_Translate', new Application_Translate([
+        $translate = new Application_Translate([
             'adapter' => 'array',
             'content' => [],
             'locale' => 'auto'
-        ]));
+        ]);
+
+        Application_Translate::setInstance($translate);
     }
 
     /**
@@ -1019,7 +1021,7 @@ class ControllerTestCase extends TestCase
     public function enableTranslation()
     {
         if (! is_null($this->translatorBackup)) {
-            \Zend_Registry::set('Zend_Translate', $this->translatorBackup);
+            Application_Translate::setInstance($this->translatorBackup);
         }
     }
 

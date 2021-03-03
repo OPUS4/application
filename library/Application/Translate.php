@@ -98,6 +98,11 @@ class Application_Translate extends \Zend_Translate
         return self::$instance;
     }
 
+    public static function setInstance($instance)
+    {
+        self::$instance = $instance;
+        \Zend_Registry::set(self::REGISTRY_KEY, $instance);
+    }
     /**
      * Loads all modules.
      */
