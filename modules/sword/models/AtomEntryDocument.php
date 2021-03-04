@@ -30,6 +30,9 @@
  * @copyright   Copyright (c) 2016
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\Config;
+
 class Sword_Model_AtomEntryDocument
 {
 
@@ -55,7 +58,7 @@ class Sword_Model_AtomEntryDocument
         $this->fullUrl = $fullUrl;
 
         if (! empty($this->entries)) {
-            $config = \Zend_Registry::get('Zend_Config');
+            $config = Config::get();
             $prettyPrinting = isset($config->prettyXml) && filter_var($config->prettyXml, FILTER_VALIDATE_BOOLEAN);
             if ($prettyPrinting) {
                 $dom = new DOMDocument;
@@ -121,7 +124,7 @@ class Sword_Model_AtomEntryDocument
 
     private function addSwordElements($rootElement, $request)
     {
-        $config = \Zend_Registry::get('Zend_Config');
+        $config = Config::get();
         $generator = $config->sword->generator;
         $rootElement->addChild('generator', $generator);
 

@@ -40,6 +40,8 @@
  * If Javascript is enabled the box will remain at the top of the window even when scrolling
  * further down the page to make the functions always easily available to an administrator.
  */
+
+use Opus\Log;
 ?>
 
 <?PHP
@@ -119,6 +121,6 @@
     <?PHP endif; ?>
 </div>
 <?PHP else : ?>
-<?PHP \Zend_Registry::get('Zend_Log')->err('Use of partial \'actionbox.phtml\' without document.'); ?>
+<?PHP Log::get()->err('Use of partial \'actionbox.phtml\' without document.'); ?>
 <?PHP endif; ?>
 

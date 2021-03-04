@@ -50,17 +50,12 @@ class Export_Marc21ExportTest extends ControllerTestCase
     {
         $removeAccess = $this->addModuleAccess('export', 'guest');
         $this->enableSecurity();
-        $config = \Zend_Registry::get('Zend_Config');
-
-        \Zend_Registry::get('Zend_Config')->merge(
-            new \Zend_Config(
-                ['plugins' =>
-                    ['export' =>
-                        ['marc21' => ['adminOnly' => self::CONFIG_VALUE_FALSE]]
-                    ]
+        $this->adjustConfiguration([
+            'plugins' =>
+                ['export' =>
+                    ['marc21' => ['adminOnly' => self::CONFIG_VALUE_FALSE]]
                 ]
-            )
-        );
+            ]);
 
         $doc = $this->createTestDocument();
         $doc->setServerState('unpublished');
@@ -74,7 +69,7 @@ class Export_Marc21ExportTest extends ControllerTestCase
 
         // revert configuration changes
         $this->restoreSecuritySetting();
-        \Zend_Registry::set('Zend_Config', $config);
+
         if ($removeAccess) {
             $this->removeModuleAccess('export', 'guest');
         }
@@ -86,17 +81,12 @@ class Export_Marc21ExportTest extends ControllerTestCase
     public function testMarc21XmlExportWithUnpublishedDocAllowedForAdmin()
     {
         $this->enableSecurity();
-        $config = \Zend_Registry::get('Zend_Config');
-
-        \Zend_Registry::get('Zend_Config')->merge(
-            new \Zend_Config(
-                ['plugins' =>
-                    ['export' =>
-                        ['marc21' => ['adminOnly' => self::CONFIG_VALUE_FALSE]]
-                    ]
+        $this->adjustConfiguration([
+            'plugins' =>
+                ['export' =>
+                    ['marc21' => ['adminOnly' => self::CONFIG_VALUE_FALSE]]
                 ]
-            )
-        );
+            ]);
 
         $doc = $this->createTestDocument();
         $doc->setServerState('unpublished');
@@ -110,7 +100,6 @@ class Export_Marc21ExportTest extends ControllerTestCase
 
         // revert configuration changes
         $this->restoreSecuritySetting();
-        \Zend_Registry::set('Zend_Config', $config);
 
         $this->assertResponseCode(200);
         $this->assertXpathContentContains('//marc:leader', '00000naa a22000005  4500');
@@ -128,17 +117,12 @@ class Export_Marc21ExportTest extends ControllerTestCase
     {
         $removeAccess = $this->addModuleAccess('export', 'docsadmin');
         $this->enableSecurity();
-        $config = \Zend_Registry::get('Zend_Config');
-
-        \Zend_Registry::get('Zend_Config')->merge(
-            new \Zend_Config(
-                ['plugins' =>
-                    ['export' =>
-                        ['marc21' => ['adminOnly' => self::CONFIG_VALUE_FALSE]]
-                    ]
+        $this->adjustConfiguration([
+            'plugins' =>
+                ['export' =>
+                    ['marc21' => ['adminOnly' => self::CONFIG_VALUE_FALSE]]
                 ]
-            )
-        );
+            ]);
 
         $doc = $this->createTestDocument();
         $doc->setServerState('unpublished');
@@ -152,7 +136,7 @@ class Export_Marc21ExportTest extends ControllerTestCase
 
         // revert configuration changes
         $this->restoreSecuritySetting();
-        \Zend_Registry::set('Zend_Config', $config);
+
         if ($removeAccess) {
             $this->removeModuleAccess('export', 'docsadmin');
         }
@@ -173,17 +157,14 @@ class Export_Marc21ExportTest extends ControllerTestCase
     {
         $removeAccess = $this->addModuleAccess('export', 'guest');
         $this->enableSecurity();
-        $config = \Zend_Registry::get('Zend_Config');
 
-        \Zend_Registry::get('Zend_Config')->merge(
-            new \Zend_Config(
-                ['plugins' =>
-                    ['export' =>
-                        ['marc21' => ['adminOnly' => self::CONFIG_VALUE_TRUE]]
-                    ]
+        $this->adjustConfiguration([
+            'plugins' => [
+                'export' => [
+                    'marc21' => ['adminOnly' => self::CONFIG_VALUE_TRUE]
                 ]
-            )
-        );
+            ]
+        ]);
 
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
@@ -195,7 +176,7 @@ class Export_Marc21ExportTest extends ControllerTestCase
 
         // revert configuration changes
         $this->restoreSecuritySetting();
-        \Zend_Registry::set('Zend_Config', $config);
+
         if ($removeAccess) {
             $this->removeModuleAccess('export', 'guest');
         }
@@ -208,17 +189,13 @@ class Export_Marc21ExportTest extends ControllerTestCase
     {
         $removeAccess = $this->addModuleAccess('export', 'docsadmin');
         $this->enableSecurity();
-        $config = \Zend_Registry::get('Zend_Config');
 
-        \Zend_Registry::get('Zend_Config')->merge(
-            new \Zend_Config(
-                ['plugins' =>
-                    ['export' =>
-                        ['marc21' => ['adminOnly' => self::CONFIG_VALUE_TRUE]]
-                    ]
+        $this->adjustConfiguration([
+            'plugins' =>
+                ['export' =>
+                    ['marc21' => ['adminOnly' => self::CONFIG_VALUE_TRUE]]
                 ]
-            )
-        );
+            ]);
 
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
@@ -232,7 +209,7 @@ class Export_Marc21ExportTest extends ControllerTestCase
 
         // revert configuration changes
         $this->restoreSecuritySetting();
-        \Zend_Registry::set('Zend_Config', $config);
+
         if ($removeAccess) {
             $this->removeModuleAccess('export', 'docsadmin');
         }
@@ -255,17 +232,13 @@ class Export_Marc21ExportTest extends ControllerTestCase
     {
         $removeAccess = $this->addModuleAccess('export', 'guest');
         $this->enableSecurity();
-        $config = \Zend_Registry::get('Zend_Config');
 
-        \Zend_Registry::get('Zend_Config')->merge(
-            new \Zend_Config(
-                ['plugins' =>
-                    ['export' =>
-                        ['marc21' => ['adminOnly' => self::CONFIG_VALUE_FALSE]]
-                    ]
+        $this->adjustConfiguration([
+            'plugins' =>
+                ['export' =>
+                    ['marc21' => ['adminOnly' => self::CONFIG_VALUE_FALSE]]
                 ]
-            )
-        );
+            ]);
 
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
@@ -277,7 +250,7 @@ class Export_Marc21ExportTest extends ControllerTestCase
 
         // revert configuration changes
         $this->restoreSecuritySetting();
-        \Zend_Registry::set('Zend_Config', $config);
+
         if ($removeAccess) {
             $this->removeModuleAccess('export', 'guest');
         }
@@ -300,17 +273,13 @@ class Export_Marc21ExportTest extends ControllerTestCase
     {
         $removeAccess = $this->addModuleAccess('export', 'collectionsadmin');
         $this->enableSecurity();
-        $config = \Zend_Registry::get('Zend_Config');
 
-        \Zend_Registry::get('Zend_Config')->merge(
-            new \Zend_Config(
-                ['plugins' =>
-                    ['export' =>
-                        ['marc21' => ['adminOnly' => self::CONFIG_VALUE_FALSE]]
-                    ]
+        $this->adjustConfiguration([
+            'plugins' =>
+                ['export' =>
+                    ['marc21' => ['adminOnly' => self::CONFIG_VALUE_FALSE]]
                 ]
-            )
-        );
+            ]);
 
         $doc = $this->createTestDocument();
         $doc->setServerState('unpublished');
@@ -324,7 +293,7 @@ class Export_Marc21ExportTest extends ControllerTestCase
 
         // revert configuration changes
         $this->restoreSecuritySetting();
-        \Zend_Registry::set('Zend_Config', $config);
+
         if ($removeAccess) {
             $this->removeModuleAccess('export', 'collectionsadmin');
         }

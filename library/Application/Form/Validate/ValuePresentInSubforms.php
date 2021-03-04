@@ -27,9 +27,11 @@
  * @category    Application
  * @package     Form_Validate
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013-2020, OPUS 4 development team
+ * @copyright   Copyright (c) 2013-2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\Log;
 
 /**
  * Prüft ob ein Wertfür ein Feld in Unterformularen mindestens einmal vorkommt.
@@ -87,7 +89,7 @@ class Application_Form_Validate_ValuePresentInSubforms extends \Zend_Validate_Ab
                 }
             }
         } else {
-            \Zend_Registry::get('Zend_Log')->err(__CLASS__ . '::' . __METHOD__ . ' mit $context = null aufgerufen.');
+             Log::get()->err(__CLASS__ . '::' . __METHOD__ . ' mit $context = null aufgerufen.');
         }
 
         $this->_error(self::NOT_VALID);

@@ -25,13 +25,15 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+use Opus\Config;
+
 /**
  * Abstrakte Basisklasse für OPUS Formulare.
  *
  * @category    Application
  * @package     Application_Form
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 abstract class Application_Form_Abstract extends \Zend_Form_SubForm
@@ -190,7 +192,7 @@ abstract class Application_Form_Abstract extends \Zend_Form_SubForm
     public function getApplicationConfig()
     {
         if (is_null($this->_config)) {
-            $this->_config = \Zend_Registry::get('Zend_Config');
+            $this->_config = Config::get();
         }
 
         return $this->_config;

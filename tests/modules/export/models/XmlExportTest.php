@@ -276,9 +276,9 @@ class Export_Model_XmlExportTest extends ControllerTestCase
 
         $plugin->setDownloadEnabled(null);
 
-        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
+        $this->adjustConfiguration([
             'export' => ['download' => self::CONFIG_VALUE_FALSE]
-        ]));
+        ]);
 
         $this->assertFalse($plugin->isDownloadEnabled());
     }

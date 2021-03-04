@@ -204,7 +204,7 @@ class Setup_Form_TranslationTest extends ControllerTestCase
             'de' => 'Deutsch'
         ], 'admin');
 
-        $translate = \Zend_Registry::get('Zend_Translate');
+        $translate = Application_Translate::getInstance();
         $translate->loadDatabase(true);
 
         $this->assertFalse($form->isValid([

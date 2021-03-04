@@ -29,14 +29,16 @@
  * @author      Julian Heise <heise@zib.de>
  * @author      Michael Lang <lang@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 use Opus\Collection;
 use Opus\CollectionRole;
+use Opus\Config;
 use Opus\Date;
 use Opus\Document;
+use Opus\Log;
 use Opus\Note;
 use Opus\Title;
 
@@ -69,7 +71,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
         parent::setUpWithEnv('production');
         $this->assertSecurityConfigured();
 
-        $path = \Zend_Registry::get('temp_dir') . '~localstat.xml';
+        $path = Config::getInstance()->getTempPath() . '~localstat.xml';
         @unlink($path);
 
         $this->_document = $this->createTestDocument();
@@ -387,9 +389,9 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
 
     public function testSubjectSortOrderAlphabetical()
     {
-        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
+        $this->adjustConfiguration([
             'frontdoor' => ['subjects' => ['alphabeticalSorting' => self::CONFIG_VALUE_TRUE]]
-        ]));
+        ]);
 
         // frontdoor.subjects.alphabeticalSorting
 
@@ -462,12 +464,12 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
      */
     public function testShowLinkForPrintOnDemandIfLicenceAppropriate()
     {
-        $podConfArray = ['printOnDemand' => [
-            'url' => 'http://localhost/',
-            'button' => ''
-        ]];
-        $podConfig = new \Zend_Config($podConfArray);
-        \Zend_Registry::getInstance()->get('Zend_Config')->merge($podConfig);
+        $this->adjustConfiguration([
+            'printOnDemand' => [
+                'url' => 'http://localhost/',
+                'button' => ''
+            ]
+        ]);
 
         $this->dispatch('/frontdoor/index/index/docId/1');
         $this->assertQuery('div#print-on-demand');
@@ -478,12 +480,12 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
      */
     public function testHideLinkForPrintOnDemandIfLicenceNotAppropriate()
     {
-        $podConfArray = ['printOnDemand' => [
-            'url' => 'http://localhost/',
-            'button' => ''
-        ]];
-        $podConfig = new \Zend_Config($podConfArray);
-        \Zend_Registry::getInstance()->get('Zend_Config')->merge($podConfig);
+        $this->adjustConfiguration([
+            'printOnDemand' => [
+                'url' => 'http://localhost/',
+                'button' => ''
+            ]
+        ]);
 
         $this->dispatch('/frontdoor/index/index/docId/91');
         $this->assertNotQuery('div#print-on-demand');
@@ -510,7 +512,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     public function testDisplayAllDocumentFields()
     {
         $this->dispatch('/frontdoor/index/index/docId/146');
-        $translate = \Zend_Registry::getInstance()->get('Zend_Translate');
+        $translate = Application_Translate::getInstance();
 
         $path = 'table.result-data.frontdoordata th.name';
 
@@ -797,9 +799,9 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     public function testValidateXHTMLWithShortendAbstracts()
     {
         // Aktiviere Kürzung von Abstrakten
-        $config = \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config(
+        $this->adjustConfiguration(
             ['frontdoor' => ['numOfShortAbstractChars' => '200']]
-        ));
+        );
 
         $this->dispatch('/frontdoor/index/index/docId/92');
         $this->assertResponseCode(200);
@@ -939,7 +941,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
      */
     public function testFilesInCustomSortOrder()
     {
-        $config = \Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         $config->frontdoor->files->customSorting = '1';
 
         $this->dispatch('/frontdoor/index/index/docId/155');
@@ -958,7 +960,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
      */
     public function testFilesInAlphabeticSortOrder()
     {
-        $config = \Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         $config->frontdoor->files->customSorting = self::CONFIG_VALUE_FALSE;
 
         $this->dispatch('/frontdoor/index/index/docId/155');
@@ -1321,8 +1323,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     {
         $this->enableSecurity();
         $this->loginUser('admin', 'adminadmin');
-        $config = \Zend_Registry::get('Zend_Config');
-        $config->merge(new \Zend_Config(['export' => ['stylesheet' => ['frontdoor' => 'example']]]));
+        $this->adjustConfiguration(['export' => ['stylesheet' => ['frontdoor' => 'example']]]);
         $this->dispatch('/frontdoor/index/index/docId/305');
         $this->assertQuery(
             '//a[@href="/export/index/index/docId/305/export/xml/searchtype/id/stylesheet/example"]'
@@ -1335,8 +1336,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     public function testXmlExportNotButtonPresentForGuest()
     {
         $this->enableSecurity();
-        $config = \Zend_Registry::get('Zend_Config');
-        $config->merge(new \Zend_Config(['export' => ['stylesheet' => ['frontdoor' => 'example']]]));
+        $this->adjustConfiguration(['export' => ['stylesheet' => ['frontdoor' => 'example']]]);
         $this->dispatch('/frontdoor/index/index/docId/305');
         $this->assertNotQuery('//a[@href="/frontdoor/index/index/docId/305/export/xml/stylesheet/example"]');
     }
@@ -1369,9 +1369,9 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
 
     public function testGoogleScholarOpenInNewWindowEnabled()
     {
-        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
+        $this->adjustConfiguration([
             'googleScholar' => ['openInNewWindow' => self::CONFIG_VALUE_TRUE]
-        ]));
+        ]);
         $this->dispatch('/frontdoor/index/index/docId/146');
         $this->assertResponseCode(200);
         $this->assertXpathCount('//a[contains(@href, "scholar.google.de") and @target = "_blank"]', 1);
@@ -1380,9 +1380,9 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
 
     public function testGoogleScholarOpenInNewWindowDisabled()
     {
-        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
+        $this->adjustConfiguration([
             'googleScholar' => ['openInNewWindow' => self::CONFIG_VALUE_FALSE]
-        ]));
+        ]);
         $this->dispatch('/frontdoor/index/index/docId/146');
         $this->assertResponseCode(200);
         $this->assertXpathCount('//a[contains(@href, "scholar.google.de") and @target = "_blank"]', 0);
@@ -1402,9 +1402,9 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
 
     public function testTwitterOpenInNewWindowEnabled()
     {
-        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
+        $this->adjustConfiguration([
             'twitter' => ['openInNewWindow' => self::CONFIG_VALUE_TRUE]
-        ]));
+        ]);
         $this->dispatch('/frontdoor/index/index/docId/146');
         $this->assertResponseCode(200);
         $this->assertXpathCount('//a[contains(@href, "twitter.com") and @target = "_blank"]', 1);
@@ -1413,9 +1413,9 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
 
     public function testTwitterOpenInNewWindowDisabled()
     {
-        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
+        $this->adjustConfiguration([
             'twitter' => ['openInNewWindow' => self::CONFIG_VALUE_FALSE]
-        ]));
+        ]);
         $this->dispatch('/frontdoor/index/index/docId/146');
         $this->assertResponseCode(200);
         $this->assertXpathCount('//a[contains(@href, "twitter.com") and @target = "_blank"]', 0);
@@ -1426,10 +1426,10 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     {
         $filter = new LogFilter();
 
-        $logger = \Zend_Registry::get('Zend_Log');
+        $logger = Log::get();
         $logger->addFilter($filter);
 
-        $this->assertEquals(7, \Zend_Registry::get('LOG_LEVEL'), 'Log level should be 7 for test.');
+        $this->assertEquals(7, $logger->getLevel(), 'Log level should be 7 for test.');
 
         $this->dispatch('/frontdoor/index/index/docId/146');
 
@@ -1453,7 +1453,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
 
         $this->assertResponseCode(200);
 
-        $urnResolverUrl = \Zend_Registry::get('Zend_Config')->urn->resolverUrl;
+        $urnResolverUrl = $this->getConfig()->urn->resolverUrl;
 
         $this->assertXpath('//meta[@name="DC.identifier" and @content="urn:nbn:op:123"]');
         $this->assertXpath('//meta[@name="DC.identifier" and @content="' . $urnResolverUrl . 'urn:nbn:op:123"]');
@@ -1462,9 +1462,9 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     public function testBelongsToBibliographyTurnedOn()
     {
         $this->useEnglish();
-        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
+        $this->adjustConfiguration([
             'frontdoor' => ['metadata' => ['BelongsToBibliography' => self::CONFIG_VALUE_TRUE]]
-        ]));
+        ]);
 
         $this->dispatch('/frontdoor/index/index/docId/146');
 
@@ -1474,9 +1474,9 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
 
     public function testBelongsToBibliographyTurnedOff()
     {
-        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
+        $this->adjustConfiguration([
             'frontdoor' => ['metadata' => ['BelongsToBibliography' => self::CONFIG_VALUE_FALSE]]
-        ]));
+        ]);
 
         $this->dispatch('/frontdoor/index/index/docId/146');
 

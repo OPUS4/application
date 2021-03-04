@@ -27,10 +27,11 @@
  * @category    Application
  * @package     Controller
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Log;
 use Opus\UserRole;
 
 /**
@@ -66,7 +67,7 @@ class Application_Security_RoleConfig
         $role = UserRole::fetchByName($roleName);
 
         if (is_null($role)) {
-            \Zend_Registry::get('Zend_Log')->err("Attempt to load unknown role '$roleName'.");
+             Log::get()->err("Attempt to load unknown role '$roleName'.");
             return;
         }
 

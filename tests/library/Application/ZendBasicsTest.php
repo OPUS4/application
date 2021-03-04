@@ -65,7 +65,7 @@ class ZendBasicsTest extends ControllerTestCase
      */
     public function testZendConfigBooleanOptionLoadedFromIni($name, $value, $result)
     {
-        $config = \Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         $options = $config->tests->config;
         $value = $options->$name;
 

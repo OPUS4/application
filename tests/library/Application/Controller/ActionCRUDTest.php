@@ -445,7 +445,7 @@ class Application_Controller_ActionCRUDTest extends ControllerTestCase
     {
         $messages = $this->controller->getMessages();
 
-        $translate = \Zend_Registry::get('Zend_Translate');
+        $translate = Application_Translate::getInstance();
 
         foreach ($messages as $message) {
             if (is_array($message)) {

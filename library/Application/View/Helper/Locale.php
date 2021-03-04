@@ -42,6 +42,6 @@ class Application_View_Helper_Locale extends Application_View_Helper_Abstract
      */
     public function locale()
     {
-        return \Zend_Registry::get('Zend_Translate')->getLocale();
+        return Application_Translate::getInstance()->getLocale();
     }
 }

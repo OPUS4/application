@@ -65,7 +65,7 @@ class Application_Form_Element_LanguageScopeTest extends FormElementTestCase
 
     public function testOptionsTranslated()
     {
-        $translator = \Zend_Registry::get('Zend_Translate');
+        $translator = Application_Translate::getInstance();
 
         foreach ($this->keys as $key) {
             $this->assertTrue(

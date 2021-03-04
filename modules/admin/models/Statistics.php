@@ -131,7 +131,7 @@ class Admin_Model_Statistics
                  LEFT JOIN collections c ON ldc.collection_id=c.id
                  WHERE c.role_id=? AND YEAR(server_date_published)=? AND server_state='published'
                 group by name";
-            $db = \Zend_Registry::get('db_adapter');
+            $db = \Zend_Db_Table::getDefaultAdapter();
             $res = $db->query($query, [$role->getId(), $selectedYear])->fetchAll();
 
             foreach ($res as $result) {

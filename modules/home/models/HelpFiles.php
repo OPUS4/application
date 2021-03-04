@@ -31,6 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Log;
+
 /**
  * Model for encapsuling access to help files.
  *
@@ -71,7 +73,7 @@ class Home_Model_HelpFiles extends Application_Translate_Help
      */
     public function getContent($key)
     {
-        $translate = \Zend_Registry::get('Zend_Translate');
+        $translate = Application_Translate::getInstance();
 
         $translationKey = "help_content_$key";
         $translation = $translate->translate($translationKey);
@@ -146,7 +148,7 @@ class Home_Model_HelpFiles extends Application_Translate_Help
                     $config = new \Zend_Config_Ini($filePath);
                 } catch (\Zend_Config_Exception $zce) {
                     // TODO einfachere Lösung?
-                    $logger = \Zend_Registry::get('Zend_Log');
+                    $logger = Log::get();
                     if (! is_null($logger)) {
                         $logger->err("could not load help configuration", $zce);
                     }
@@ -177,7 +179,7 @@ class Home_Model_HelpFiles extends Application_Translate_Help
 
     public function isContentAvailable($key)
     {
-        $translate = \Zend_Registry::get('Zend_Translate');
+        $translate = Application_Translate::getInstance();
 
         $translationKey = "help_content_$key";
 

@@ -33,9 +33,11 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-$config = \Zend_Registry::get('Zend_Config');
+use Opus\Config;
 
-$pageLanguage = \Zend_Registry::get('Zend_Translate')->getLocale();
+$config = Config::get();
+
+$pageLanguage = Application_Translate::getInstance()->getLocale();
 
 $this->headMeta()
     ->prependHttpEquiv('Content-Type', 'text/html; charset=UTF-8')
@@ -256,7 +258,7 @@ if (isset($config->javascript->latex->mathjax)) {
 </div>
 
 <?php
-$dbprofiler = \Zend_Registry::get('db_adapter')->getProfiler();
+$dbprofiler = Zend_Db_Table::getDefaultAdapter()->getProfiler();
 $profiler_show_queries = isset($config->db->params->showqueries) && filter_var($config->db->params->showqueries, FILTER_VALIDATE_BOOLEAN);
 $profiler_max_queries = (int) $config->db->params->maxqueries;
 if ($dbprofiler->getEnabled() === true) : ?>

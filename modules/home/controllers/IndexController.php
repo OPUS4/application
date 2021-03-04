@@ -128,7 +128,7 @@ class Home_IndexController extends Application_Controller_Action
         $appConfig = new Application_Configuration();
 
         if ($appConfig->isLanguageSelectionEnabled() && ! is_null($language)
-                && \Zend_Registry::get('Zend_Translate')->isAvailable($language)) {
+                && Application_Translate::getInstance()->isAvailable($language)) {
             $sessiondata = new \Zend_Session_Namespace();
             $sessiondata->language = $language;
         }

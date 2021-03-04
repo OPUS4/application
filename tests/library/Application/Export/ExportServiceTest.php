@@ -60,7 +60,7 @@ class Application_Export_ExportServiceTest extends ControllerTestCase
         $this->assertArrayHasKey('publist', $plugins);
         $this->assertArrayHasKey('datacite', $plugins);
 
-        $this->assertInstanceOf('Zend_Config', $plugins['index']);
+        $this->assertInstanceOf(\Zend_Config::class, $plugins['index']);
 
         $bibtexConfig = $plugins['bibtex'];
 
@@ -84,7 +84,7 @@ class Application_Export_ExportServiceTest extends ControllerTestCase
         $pluginConfig = $plugin->getConfig();
 
         $this->assertNotNull($pluginConfig);
-        $this->assertInstanceOf('Zend_Config', $pluginConfig);
+        $this->assertInstanceOf(\Zend_Config::class, $pluginConfig);
 
         $this->assertEquals(100, $pluginConfig->maxDocumentsGuest);
     }
@@ -94,7 +94,7 @@ class Application_Export_ExportServiceTest extends ControllerTestCase
         $defaults = $this->_service->getDefaults();
 
         $this->assertNotNull($defaults);
-        $this->assertInstanceOf('Zend_Config', $defaults);
+        $this->assertInstanceOf(\Zend_Config::class, $defaults);
 
         $this->assertEquals('Export_Model_XmlExport', $defaults->class);
     }

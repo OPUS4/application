@@ -178,7 +178,7 @@ class Sword_ServicedocumentControllerTest extends ControllerTestCase
     {
         $this->assertEquals(2, $root->length);
 
-        $config = \Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         $this->testHelper->assertNodeProperties(0, $root, 'atom:title', $config->name);
 
         $collectionNode = $root->item(1);

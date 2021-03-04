@@ -1,5 +1,5 @@
 <?php
-$dbprofiler = \Zend_Registry::get('db_adapter')->getProfiler();
+$dbprofiler = \Zend_Db_Table::getDefaultAdapter()->getProfiler();
 $profiler_show_queries = isset($config->db->params->showqueries) && filter_var($config->db->params->showqueries, FILTER_VALIDATE_BOOLEAN);
 $profiler_max_queries = (int) $config->db->params->maxqueries;
 if ($dbprofiler->getEnabled() === true) : ?>

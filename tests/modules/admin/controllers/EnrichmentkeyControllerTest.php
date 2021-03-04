@@ -1316,7 +1316,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
             if (strpos($textContent, 'unmanagedEKfirst') === 0) {
                 $foundFirst = true;
                 continue;
-            } else if ($foundFirst) {
+            } elseif ($foundFirst) {
                 if (strpos($textContent, 'unmanagedEKlast') === 0) {
                     $foundLast = true;
                 }
@@ -1380,7 +1380,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
             if (strpos($textContent, 'managedEKfirst') === 0) {
                 $foundFirst = true;
                 continue;
-            } else if ($foundFirst) {
+            } elseif ($foundFirst) {
                 if (strpos($textContent, 'managedEKlast') === 0) {
                     $foundLast = true;
                 }

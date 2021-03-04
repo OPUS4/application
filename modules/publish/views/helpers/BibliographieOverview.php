@@ -31,6 +31,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Config;
 use Opus\Document;
 
 class Publish_View_Helper_BibliographieOverview extends \Zend_View_Helper_Abstract
@@ -48,7 +49,7 @@ class Publish_View_Helper_BibliographieOverview extends \Zend_View_Helper_Abstra
      */
     public function bibliographieOverview()
     {
-        $config = \Zend_Registry::get('Zend_Config');
+        $config = Config::get();
         if (! isset($config->form->first->bibliographie) ||
             (! filter_var($config->form->first->bibliographie, FILTER_VALIDATE_BOOLEAN))) {
             return;

@@ -47,7 +47,7 @@ class Application_View_Helper_TranslateIdentifier extends \Zend_View_Helper_Tran
             return $this;
         }
 
-        $translator = \Zend_Registry::get(Application_Translate::REGISTRY_KEY);
+        $translator = Application_Translate::getInstance();
         // TODO map from Type to field name
         $fieldname = Identifier::getFieldnameForType($type);
         return $translator->translate($fieldname);

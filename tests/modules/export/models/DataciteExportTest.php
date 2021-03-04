@@ -65,17 +65,12 @@ class Export_Model_DataciteExportTest extends ControllerTestCase
 
     public function testExecuteWithValidDoc()
     {
-        // DOI Präfix setzen
-        $oldConfig = \Zend_Registry::get('Zend_Config');
-
-        \Zend_Registry::set('Zend_Config', \Zend_Registry::get('Zend_Config')->merge(
-            new \Zend_Config([
-                'doi' => [
-                    'prefix' => '10.2345',
-                    'localPrefix' => 'opustest'
-                ]
-            ])
-        ));
+        $this->adjustConfiguration([
+            'doi' => [
+                'prefix' => '10.2345',
+                'localPrefix' => 'opustest'
+            ]
+        ]);
 
         // Testdokument mit allen Pflichtfeldern anlegen
         $doc = Document::new();
@@ -112,8 +107,6 @@ class Export_Model_DataciteExportTest extends ControllerTestCase
 
         // Testdokument wieder löschen
         $doc->delete();
-        // Änderungen an Konfiguration zurücksetzen
-        \Zend_Registry::set('Zend_Config', $oldConfig);
 
         $this->assertTrue($result);
         $this->assertHeaderContains('Content-Type', 'text/xml; charset=UTF-8');

@@ -58,7 +58,7 @@ class Application_Form_Validate_MultiSubForm_RepeatedValues implements Applicati
         $this->_elementName = $elementName;
         $this->_otherElements = $otherElements;
 
-        $translator = \Zend_Registry::get(Application_Translate::REGISTRY_KEY);
+        $translator = Application_Translate::getInstance();
 
         if ($translator->isTranslated($message)) {
             $this->_message = $translator->translate($message);

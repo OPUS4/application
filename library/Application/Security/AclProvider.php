@@ -89,6 +89,8 @@ class Application_Security_AclProvider
         ]
     ];
 
+    private static $acl;
+
     public static function init()
     {
         $aclProvider = new Application_Security_AclProvider();
@@ -97,12 +99,22 @@ class Application_Security_AclProvider
 
         $aclProvider->getLogger()->debug('ACL: bootrapping');
 
-        \Zend_Registry::set('Opus_Acl', $acl);
+        self::$acl = $acl;
 
         \Zend_View_Helper_Navigation_HelperAbstract::setDefaultAcl($acl);
         \Zend_View_Helper_Navigation_HelperAbstract::setDefaultRole(
             Application_Security_AclProvider::ACTIVE_ROLE
         );
+    }
+
+    public static function getAcl()
+    {
+        return self::$acl;
+    }
+
+    public static function clear()
+    {
+        self::$acl = null;
     }
 
     /**
@@ -139,7 +151,7 @@ class Application_Security_AclProvider
         $this->loadRoles($acl, $parents);
 
         // create role for user on-the-fly with assigned roles as parents
-        if (\Zend_Registry::get('LOG_LEVEL') >= \Zend_LOG::DEBUG) {
+        if ($logger->getLevel() >= \Zend_LOG::DEBUG) {
                 $logger->debug(
                     "ACL: Create role '" . $user . "' with parents " . "(" . implode(", ", $parents) . ")"
                 );

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -45,7 +44,7 @@ use Opus\Model\Xml\Cache;
 use Opus\Model\Xml\Version1;
 
 $opusDocCacheTable = new DocumentXmlCache();
-$db = \Zend_Registry::get('db_adapter');
+$db = \Zend_Db_Table::getDefaultAdapter();
 //
 $select = $db->select();
 $select->from($opusDocCacheTable->info('name'), 'document_id');

@@ -46,7 +46,7 @@ class Application_View_Helper_FulltextLogoTest extends ControllerTestCase
         parent::setUp();
 
         $this->_helper = new Application_View_Helper_FulltextLogo();
-        $this->_helper->setView(\Zend_Registry::get('Opus_View'));
+        $this->_helper->setView($this->getView());
 
         $this->useEnglish();
     }

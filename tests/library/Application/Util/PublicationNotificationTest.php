@@ -27,10 +27,12 @@
  * @category    Application
  * @package     Tests
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2018-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2018-2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Config;
+use Opus\Log;
 use Opus\Person;
 use Opus\Title;
 
@@ -51,9 +53,9 @@ class Application_Util_PublicationNotificationTest extends ControllerTestCase
     {
         parent::setUp();
         $this->notification = new Application_Util_PublicationNotification();
-        $this->logger = \Zend_Registry::get('Zend_Log');
+        $this->logger = Log::get();
         // add required config keys
-        $this->config = \Zend_Registry::get('Zend_Config');
+        $this->config = Config::get();
         $this->config->notification->document->submitted->enabled = self::CONFIG_VALUE_TRUE;
         $this->config->notification->document->published->enabled = self::CONFIG_VALUE_TRUE;
         $this->config->notification->document->submitted->subject = 'Dokument #%1$s eingestellt: %2$s : %3$s';

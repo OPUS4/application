@@ -74,7 +74,7 @@ $application = new \Zend_Application(
 // Bootstrapping application
 $application->bootstrap('Backend');
 
-$config = \Zend_Registry::get('Zend_Config');
+$config = \Opus\Config::get();
 $config = $config->merge(new \Zend_Config_Ini(dirname(__FILE__) . '/config.ini'));
 
 $database = new \Opus\Database();

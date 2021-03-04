@@ -251,6 +251,6 @@ class Setup_Form_Translation extends Application_Form_Abstract
      */
     protected function getTranslationManager()
     {
-        return \Zend_Registry::get('Zend_Translate');
+        return Application_Translate::getInstance();
     }
 }

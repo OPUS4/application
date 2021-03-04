@@ -27,10 +27,11 @@
  * @category    Application
  * @package     Module_Publish
  * @author      Susanne Gottwald <gottwald@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Config;
 use Opus\Document;
 
 class Publish_View_Helper_FileOverview extends \Zend_View_Helper_Abstract
@@ -49,7 +50,7 @@ class Publish_View_Helper_FileOverview extends \Zend_View_Helper_Abstract
      */
     public function fileOverview()
     {
-        $config = \Zend_Registry::get('Zend_Config');
+        $config = Config::get();
         if (! isset($config->form->first->enable_upload) ||
             (! filter_var($config->form->first->enable_upload, FILTER_VALIDATE_BOOLEAN))) {
             return;

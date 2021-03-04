@@ -81,7 +81,7 @@ class Application_View_Helper_FormTranslation extends \Zend_View_Helper_FormRadi
 
         $filter = new \Zend_Filter_PregReplace($pattern, '');
 
-        $translate = \Zend_Registry::get('Zend_Translate');
+        $translate = Application_Translate::getInstance();
 
         $name = $this->view->escape($name);
 

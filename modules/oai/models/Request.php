@@ -28,11 +28,12 @@
  * @category   Application
  * @package    Module_Oai
  * @author     Henning Gerhardt (henning.gerhardt@slub-dresden.de)
- * @copyright  Copyright (c) 2009, OPUS 4 development team
+ * @copyright  Copyright (c) 2009-2021, OPUS 4 development team
  * @license    http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 use Opus\Date;
+use Opus\Log;
 use Opus\Security\Realm;
 
 /**
@@ -393,7 +394,7 @@ class Oai_Model_Request
      */
     public function validate(array $oaiRequest)
     {
-        $logger = \Zend_Registry::get('Zend_Log');
+        $logger = Log::get();
 
         $errorInformation = [
             'message' => 'General oai request validation error.',

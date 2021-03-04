@@ -27,10 +27,11 @@
  * @category    Application
  * @package     Module_Publish
  * @author      Susanne Gottwald <gottwald@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Config;
 use Opus\Document;
 use Opus\Model\ModelException;
 
@@ -103,7 +104,7 @@ class Publish_FormController extends Application_Controller_Action
             $this->view->subtitle = $this->view->translate('publish_controller_index_anotherFile');
         }
 
-        $config = \Zend_Registry::get('Zend_Config');
+        $config = Config::get();
 
         if (isset($config->publish->filetypes->allowed)) {
             $this->view->extensions = $config->publish->filetypes->allowed;

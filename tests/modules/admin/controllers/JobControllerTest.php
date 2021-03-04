@@ -27,7 +27,7 @@
  * @category    Tests
  * @package     Admin
  * @author      Edouard Simon <edouard.simon@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -41,7 +41,6 @@ class Admin_JobControllerTest extends ControllerTestCase
 
     protected $additionalResources = 'all';
 
-    private $__configBackup;
     private $jobIds = [];
 
     public function setUp()
@@ -50,9 +49,7 @@ class Admin_JobControllerTest extends ControllerTestCase
 
         $this->makeConfigurationModifiable();
 
-        $config = \Zend_Registry::get('Zend_Config');
-        $this->__configBackup = $config;
-        $config->merge(new \Zend_Config(['runjobs' => ['asynchronous' => self::CONFIG_VALUE_TRUE]]));
+        $this->adjustConfiguration(['runjobs' => ['asynchronous' => self::CONFIG_VALUE_TRUE]]);
 
         $this->assertEquals(0, Job::getCount(Job::STATE_FAILED), 'test data changed.');
 
@@ -70,13 +67,11 @@ class Admin_JobControllerTest extends ControllerTestCase
 
     public function tearDown()
     {
-
         $testJobs = Job::getAll($this->jobIds);
         foreach ($testJobs as $job) {
             $job->delete();
         }
 
-        \Zend_Registry::set('Zend_Config', $this->__configBackup);
         parent::tearDown();
     }
 

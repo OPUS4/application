@@ -83,7 +83,7 @@ class Publish_IndexController extends Application_Controller_Action
         }
 
         // Quick bug fix for OPUSVIER-3564
-        $translate = \Zend_Registry::get('Zend_Translate');
+        $translate = Application_Translate::getInstance();
         if ($translate->isTranslated('tooltip_documentType')) {
             $this->view->documentType['hint'] = 'tooltip_documentType';
         }

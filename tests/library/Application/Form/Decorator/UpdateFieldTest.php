@@ -107,7 +107,7 @@ class Application_Form_Decorator_UpdateFieldTest extends ControllerTestCase
 
         $decorator = new Application_Form_Decorator_UpdateField();
 
-        $translator = \Zend_Registry::get('Zend_Translate');
+        $translator = Application_Translate::getInstance();
 
         $element = new \Zend_Form_Element_Text('city');
         $element->setTranslator($translator);

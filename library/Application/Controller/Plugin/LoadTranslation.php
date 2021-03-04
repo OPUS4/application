@@ -51,8 +51,8 @@ class Application_Controller_Plugin_LoadTranslation extends \Zend_Controller_Plu
         $currentModule = $request->getModuleName();
 
         // Add translation
-        if ($currentModule !== 'default' && \Zend_Registry::isRegistered(Application_Translate::REGISTRY_KEY)) {
-            \Zend_Registry::get(Application_Translate::REGISTRY_KEY)->loadModule($currentModule);
+        if ($currentModule !== 'default' && Application_Translate::getInstance() !== null) {
+            Application_Translate::getInstance()->loadModule($currentModule);
         }
     }
 }

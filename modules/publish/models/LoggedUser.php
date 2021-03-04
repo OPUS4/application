@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -33,6 +32,7 @@
  */
 
 use Opus\Account;
+use Opus\Log;
 use Opus\Person;
 
 class Publish_Model_LoggedUser
@@ -44,7 +44,7 @@ class Publish_Model_LoggedUser
 
     public function __construct()
     {
-        $this->_log = \Zend_Registry::get('Zend_Log');
+        $this->_log = Log::get();
 
         $login = \Zend_Auth::getInstance()->getIdentity();
         if (is_null($login) or trim($login) == '') {

@@ -620,8 +620,8 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
 
     public function clearCache()
     {
-        if (\Zend_Registry::isRegistered('Zend_Translate')) {
-            $translate = \Zend_Registry::get('Zend_Translate');
+        $translate = Application_Translate::getInstance();
+        if ($translate !== null) {
             $translate->clearCache();
         }
     }

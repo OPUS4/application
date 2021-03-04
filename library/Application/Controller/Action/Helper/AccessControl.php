@@ -81,7 +81,7 @@ class Application_Controller_Action_Helper_AccessControl extends \Zend_Controlle
     protected function getAcl()
     {
         if (is_null($this->_acl)) {
-            $this->_acl = \Zend_Registry::isRegistered('Opus_Acl') ? \Zend_Registry::get('Opus_Acl') : null;
+            $this->_acl = Application_Security_AclProvider::getAcl();
         }
         return $this->_acl;
     }

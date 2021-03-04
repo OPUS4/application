@@ -27,10 +27,11 @@
  * @category    Application
  * @package     Application_View_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2017-2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Config;
 
 class Application_View_Helper_CustomFileSortingEnabled extends \Zend_View_Helper_Abstract
 {
@@ -41,7 +42,7 @@ class Application_View_Helper_CustomFileSortingEnabled extends \Zend_View_Helper
      */
     public function customFileSortingEnabled()
     {
-        $config = \Zend_Registry::get('Zend_Config');
+        $config = Config::get();
         return isset($config->frontdoor->files->customSorting) &&
             filter_var($config->frontdoor->files->customSorting, FILTER_VALIDATE_BOOLEAN);
     }

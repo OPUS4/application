@@ -64,7 +64,7 @@ class Application_Form_Element_LanguageTypeTest extends FormElementTestCase
 
     public function testOptionsTranslated()
     {
-        $translator = \Zend_Registry::get('Zend_Translate');
+        $translator = Application_Translate::getInstance();
 
         foreach ($this->keys as $key) {
             $this->assertTrue($translator->isTranslated('Opus_Language_Type_Value_' . $key));

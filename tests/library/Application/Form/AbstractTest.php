@@ -31,7 +31,7 @@
  * @category    Application Unit Test
  * @package     Application_Form
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 class Application_Form_AbstractTest extends ControllerTestCase
@@ -76,7 +76,7 @@ class Application_Form_AbstractTest extends ControllerTestCase
     public function testGetLogger()
     {
         $this->assertNotNull($this->form->getLogger());
-        $this->assertInstanceOf('Zend_Log', $this->form->getLogger());
+        $this->assertInstanceOf(\Zend_Log::class, $this->form->getLogger());
     }
 
     public function testGetElementValue()
@@ -250,8 +250,8 @@ class Application_Form_AbstractTest extends ControllerTestCase
         $config = $this->form->getApplicationConfig();
 
         $this->assertNotNull($config);
-        $this->assertInstanceOf('Zend_Config', $config);
-        $this->assertSame($config, \Zend_Registry::get('Zend_Config'));
+        $this->assertInstanceOf(\Zend_Config::class, $config);
+        $this->assertSame($config, $this->getConfig());
     }
 
     public function testSetApplicationConfig()
@@ -268,6 +268,6 @@ class Application_Form_AbstractTest extends ControllerTestCase
 
         $returnedConfig = $this->form->getApplicationConfig();
 
-        $this->assertSame(\Zend_Registry::get('Zend_Config'), $returnedConfig);
+        $this->assertSame($this->getConfig(), $returnedConfig);
     }
 }

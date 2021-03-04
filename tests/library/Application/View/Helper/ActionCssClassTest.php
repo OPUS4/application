@@ -39,7 +39,7 @@ class Application_View_Helper_ActionCssClassTest extends ControllerTestCase
     public function testActionCssClass()
     {
         $helper = new Application_View_Helper_ActionCssClass();
-        $helper->setView(\Zend_Registry::get('Opus_View'));
+        $helper->setView($this->getView());
 
         $this->assertEquals('', $helper->actionCssClass());
 

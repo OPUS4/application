@@ -55,8 +55,8 @@ class Setup_LanguageControllerTest extends ControllerTestCase
     public function testMissingConfigMessageIsDisplayedRed()
     {
         $this->markTestSkipped('Needs to be updated for no modules allowed.');
-        $config = \Zend_Registry::get('Zend_Config');
-        $config->merge(new \Zend_Config(['setup' => ['translation' => ['modules' => ['allowed' => null]]]]));
+
+        $this->adjustConfiguration(['setup' => ['translation' => ['modules' => ['allowed' => null]]]]);
 
         $this->getRequest()->setPost(['Anzeigen' => 'Anzeigen', 'search' => 'test', 'sort' => 'unit']);
         $this->dispatch('/setup/language/show');

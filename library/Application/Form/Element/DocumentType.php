@@ -51,7 +51,7 @@ class Application_Form_Element_DocumentType extends Application_Form_Element_Sel
 
         $this->setDisableTranslator(true);
 
-        $translator = \Zend_Registry::get('Zend_Translate');
+        $translator = Application_Translate::getInstance();
 
         foreach ($options as $index => $type) {
             if (! is_null($translator) && $translator->isTranslated($index)) {
@@ -69,7 +69,7 @@ class Application_Form_Element_DocumentType extends Application_Form_Element_Sel
     {
         $option = $this->getMultiOption($value);
 
-        $translator = \Zend_Registry::get('Zend_Translate');
+        $translator = Application_Translate::getInstance();
 
         if (! is_null($translator) && $translator->isTranslated($value)) {
             $label = $translator->translate($value);

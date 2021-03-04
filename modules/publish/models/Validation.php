@@ -28,12 +28,13 @@
  * @package     Module_Publish
  * @author      Susanne Gottwald <gottwald@zib.de>
  * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 use Opus\Collection;
 use Opus\CollectionRole;
+use Opus\Config;
 use Opus\DnbInstitute;
 use Opus\Licence;
 use Opus\Series;
@@ -438,7 +439,7 @@ class Publish_Model_Validation
                 }
             }
 
-            $config = \Zend_Registry::get('Zend_Config');
+            $config = Config::get();
 
             if (isset($config->browsing->series->sortByTitle) &&
                 filter_var($config->browsing->series->sortByTitle, FILTER_VALIDATE_BOOLEAN)) {

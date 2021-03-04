@@ -28,10 +28,11 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @author      Thoralf Klein <thoralf.klein@zib.de>
  * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Config;
 use Opus\Db\TableGateway;
 use Opus\Document;
 use Opus\Doi\DoiManager;
@@ -77,6 +78,8 @@ class ControllerTestCase extends TestCase
 
     private $cleanupModels;
 
+    private $baseConfig = null;
+
     /**
      * Method to initialize Zend_Application for each test.
      */
@@ -116,8 +119,48 @@ class ControllerTestCase extends TestCase
 
         DoiManager::setInstance(null);
         Application_Configuration::clearInstance(); // reset Application_Configuration
+        Application_Translate::setInstance(null);
+        Application_Security_AclProvider::clear();
 
         parent::tearDown();
+    }
+
+    /**
+     * Overwrites selected properties of current configuration.
+     *
+     * @note A test doesn't need to backup and recover replaced configuration as
+     *       this is done in setup and tear-down phases.
+     *
+     * @param array $overlay properties to overwrite existing values in configuration
+     * @param callable $callback callback to invoke with adjusted configuration before enabling e.g. to delete some options
+     * @return \Zend_Config reference on updated configuration
+     */
+    protected function adjustConfiguration($overlay, $callback = null)
+    {
+        $previous = Config::get();
+
+        if ($this->baseConfig === null) {
+            $this->baseConfig = $previous;
+        }
+
+        $updated  = new \Zend_Config($previous->toArray(), true);
+
+        $updated->merge(new \Zend_Config($overlay));
+
+        if (is_callable($callback)) {
+            $updated = call_user_func($callback, $updated);
+        }
+
+        Config::set($updated);
+
+        return $updated;
+    }
+
+    protected function resetConfiguration()
+    {
+        if ($this->baseConfig !== null) {
+            Config::set($this->baseConfig);
+        }
     }
 
     public function getApplication()
@@ -245,7 +288,7 @@ class ControllerTestCase extends TestCase
         $auth->authenticate($adapter);
         $this->assertTrue($auth->hasIdentity());
 
-        $config = \Zend_Registry::get('Zend_Config');
+        $config = Config::get();
         if (isset($config->security) && filter_var($config->security, FILTER_VALIDATE_BOOLEAN)) {
             Application_Security_AclProvider::init();
 
@@ -296,10 +339,9 @@ class ControllerTestCase extends TestCase
      */
     protected function disableSolr()
     {
-        $config = \Zend_Registry::get('Zend_Config');
         // TODO old config path still needed?
         // $config->searchengine->index->app = 'solr/corethatdoesnotexist';
-        $config->merge(new \Zend_Config([
+        $this->adjustConfiguration([
             'searchengine' => [
                 'solr' => [
                     'default' => [
@@ -313,7 +355,7 @@ class ControllerTestCase extends TestCase
                     ]
                 ]
             ]
-        ]));
+        ]);
     }
 
     /**
@@ -335,17 +377,18 @@ class ControllerTestCase extends TestCase
 
     public function enableSecurity()
     {
-        $config = \Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         $this->securityEnabled = $config->security;
         $config->security = self::CONFIG_VALUE_TRUE;
-        \Zend_Registry::set('Zend_Config', $config);
     }
 
+    /**
+     * TODO is this needed for tearDown?
+     */
     public function restoreSecuritySetting()
     {
-        $config = \Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         $config->security = $this->securityEnabled;
-        \Zend_Registry::set('Zend_Config', $config);
     }
 
     /**
@@ -355,7 +398,7 @@ class ControllerTestCase extends TestCase
     {
         $session = new \Zend_Session_Namespace();
         $session->language = 'de';
-        \Zend_Registry::get('Zend_Translate')->setLocale('de');
+        Application_Translate::getInstance()->setLocale('de');
         Application_Form_Element_Language::initLanguageList();
     }
 
@@ -366,7 +409,7 @@ class ControllerTestCase extends TestCase
     {
         $session = new \Zend_Session_Namespace();
         $session->language = 'en';
-        \Zend_Registry::get('Zend_Translate')->setLocale('en');
+        Application_Translate::getInstance()->setLocale('en');
         Application_Form_Element_Language::initLanguageList();
     }
 
@@ -500,7 +543,7 @@ class ControllerTestCase extends TestCase
      */
     public function isFailTestOnMissingCommand()
     {
-        $config = \Zend_Registry::get('Zend_Config');
+        $config = Config::get();
         return (isset($config->tests->failTestOnMissingCommand) &&
                 filter_var($config->tests->failTestOnMissingCommand, FILTER_VALIDATE_BOOLEAN));
     }
@@ -576,7 +619,7 @@ class ControllerTestCase extends TestCase
             }
         }
 
-        $view = \Zend_Registry::get('Opus_View');
+        $view = $this->getView();
 
         $path = explode('/', $location);
 
@@ -596,7 +639,7 @@ class ControllerTestCase extends TestCase
                 if (! $breadcrumbDefined) {
                     $breadcrumbDefined = true;
 
-                    $translate = \Zend_Registry::get('Zend_Translate');
+                    $translate = Application_Translate::getInstance();
 
                     $label = $page->getLabel();
 
@@ -832,11 +875,6 @@ class ControllerTestCase extends TestCase
         $this->workspacePath = $path;
     }
 
-    protected function getConfig()
-    {
-        return \Zend_Registry::get('Zend_Config');
-    }
-
     protected function createTestFolder()
     {
         $workspacePath = $this->getWorkspacePath();
@@ -914,12 +952,12 @@ class ControllerTestCase extends TestCase
 
     public function assertSecurityConfigured()
     {
-        $this->assertEquals('1', \Zend_Registry::get('Zend_Config')->security);
-        $this->assertTrue(
-            \Zend_Registry::isRegistered('Opus_Acl'),
-            'Expected registry key Opus_Acl to be set'
+        $this->assertEquals('1', Config::get()->security);
+        $this->assertNotNull(
+            Application_Security_AclProvider::getAcl(),
+            'Expected Zend_Acl to be set'
         );
-        $acl = \Zend_Registry::get('Opus_Acl');
+        $acl = Application_Security_AclProvider::getAcl();
         $this->assertTrue($acl instanceof \Zend_Acl, 'Expected instance of Zend_Acl');
     }
 
@@ -936,7 +974,7 @@ class ControllerTestCase extends TestCase
      */
     public function setHostname($host)
     {
-        $view = \Zend_Registry::get('Opus_View');
+        $view = $this->getView();
         $view->getHelper('ServerUrl')->setHost($host);
     }
 
@@ -965,14 +1003,16 @@ class ControllerTestCase extends TestCase
     public function disableTranslation()
     {
         if (is_null($this->translatorBackup)) {
-            $this->translatorBackup = \Zend_Registry::get('Zend_Translate');
+            $this->translatorBackup = Application_Translate::getInstance();
         }
 
-        \Zend_Registry::set('Zend_Translate', new Application_Translate([
+        $translate = new Application_Translate([
             'adapter' => 'array',
             'content' => [],
             'locale' => 'auto'
-        ]));
+        ]);
+
+        Application_Translate::setInstance($translate);
     }
 
     /**
@@ -983,7 +1023,7 @@ class ControllerTestCase extends TestCase
     public function enableTranslation()
     {
         if (! is_null($this->translatorBackup)) {
-            \Zend_Registry::set('Zend_Translate', $this->translatorBackup);
+            Application_Translate::setInstance($this->translatorBackup);
         }
     }
 
@@ -1051,5 +1091,10 @@ class ControllerTestCase extends TestCase
                 // TODO logging?
             }
         }
+    }
+
+    protected function getView()
+    {
+        return $this->application->getBootstrap()->getResource('view');
     }
 }

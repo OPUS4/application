@@ -26,10 +26,11 @@
  *
  * @category    Application
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Log;
 use Opus\Series;
 use Opus\Model\NotFoundException;
 
@@ -75,14 +76,14 @@ class Application_Form_Validate_SeriesNumberAvailable extends \Zend_Validate_Abs
         }
 
         if (strlen(trim($seriesId)) == 0 && is_numeric($seriesId)) {
-            \Zend_Registry::get('Zend_Log')->err(__METHOD__ . ' Context without \'SeriesId\'.');
+             Log::get()->err(__METHOD__ . ' Context without \'SeriesId\'.');
             return true; // should be captured somewhere else
         }
 
         try {
             $series = new Series($seriesId);
         } catch (NotFoundException $omnfe) {
-            \Zend_Registry::get('Zend_Log')->err(__METHOD__ . $omnfe->getMessage());
+             Log::get()->err(__METHOD__ . $omnfe->getMessage());
             return true;
         }
 

@@ -27,11 +27,12 @@
  * @category    Application
  * @package     Module_Publish Unit Test
  * @author      Susanne Gottwald <gottwald@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 use Opus\EnrichmentKey;
+use Opus\Log;
 
 class Publish_Model_DepositTest extends ControllerTestCase
 {
@@ -63,7 +64,7 @@ class Publish_Model_DepositTest extends ControllerTestCase
         $document->setServerState('published');
         $documentId = $document->store();
 
-        $log = \Zend_Registry::get('Zend_Log');
+        $log = Log::get();
         $deposit = new Publish_Model_Deposit($log);
         $deposit->storeDocument($documentId);
     }
@@ -139,7 +140,7 @@ class Publish_Model_DepositTest extends ControllerTestCase
             'Foo2Title' => ['value' => 'title as enrichment', 'datatype' => 'Enrichment', 'subfield' => '0'],
         ];
 
-        $log = \Zend_Registry::get('Zend_Log');
+        $log = Log::get();
 
         $dep = new Publish_Model_Deposit($log);
         $dep->storeDocument($docId, null, $data);

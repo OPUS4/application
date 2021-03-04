@@ -241,7 +241,7 @@ class Setup_LanguageController extends Application_Controller_Action
                     if ($form->isValid($post)) {
                         $form->updateTranslation();
                         $form = null;
-                        \Zend_Registry::get('Zend_Translate')->clearCache(); // TODO encapsulate
+                        Application_Translate::getInstance()->clearCache(); // TODO encapsulate
                     } else {
                         // TODO go back to form
                     }

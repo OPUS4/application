@@ -29,7 +29,7 @@
  * @author      Simone Finkbeiner-Franke <simone.finkbeiner@ub.uni-stuttgart.de>
  * @author      Jens Schwidder <schwidder@zib.de>
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2009, OPUS 4 development team
+ * @copyright   Copyright (c) 2009-2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -112,7 +112,7 @@ class Frontdoor_MailController extends Application_Controller_Action
         $from = '';
         $from = $form->getValue('sender_mail');
         if ($from == '') {
-            $config = Zend_Registry::get('Zend_Config');
+            $config = Config::get();
             if (true === isset($config->mail->opus->address)) {
                 $from = $config->mail->opus->address;
             }

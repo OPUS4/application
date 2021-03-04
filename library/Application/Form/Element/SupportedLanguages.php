@@ -96,7 +96,7 @@ class Application_Form_Element_SupportedLanguages extends Application_Form_Eleme
      */
     public function getLanguageOptions()
     {
-        $translator = \Zend_Registry::get('Zend_Translate');
+        $translator = Application_Translate::getInstance();
 
         $currentLocale = new \Zend_Locale($translator->getLocale());
 

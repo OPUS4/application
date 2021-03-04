@@ -30,6 +30,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Log;
+
 /**
  * Checks if in an edit form a value is selected more than once for a field.
  *
@@ -82,8 +84,8 @@ class Application_Form_Validate_DuplicateValue extends \Zend_Validate_Abstract
     /**
      * Konstruiert Validator.
      *
-     * @param $values Werte der benachbarten Unterformulare
-     * @param $position Position des Unterformulars
+     * @param $values array Werte der benachbarten Unterformulare
+     * @param $position int Position des Unterformulars
      * @param null $message Fehlermeldung
      */
     public function __construct($values, $position, $message = null)
@@ -101,8 +103,8 @@ class Application_Form_Validate_DuplicateValue extends \Zend_Validate_Abstract
      * The function assumes that the context contains multiple arrays (subforms)
      * that contain the same element.
      *
-     * @param string $value Does not matter for this validator
-     * @param hash $context Values of all the subforms
+     * @param $value string Does not matter for this validator
+     * @param $context array Values of all the subforms
      */
     public function isValid($value, $context = null)
     {
@@ -112,10 +114,10 @@ class Application_Form_Validate_DuplicateValue extends \Zend_Validate_Abstract
         $valueCount = count($this->_values);
 
         if (! ($this->_position < $valueCount)) {
-            \Zend_Registry::get('Zend_Log')->err(
-                __CLASS__ .
-                ' mit Position > count(values) konstruiert.'
-            );
+             Log::get()->err(
+                 __CLASS__ .
+                 ' mit Position > count(values) konstruiert.'
+             );
         }
 
         if (! is_null($this->_values)) {
@@ -126,7 +128,7 @@ class Application_Form_Validate_DuplicateValue extends \Zend_Validate_Abstract
                 }
             }
         } else {
-            \Zend_Registry::get('Zend_Log')->err(__CLASS__ . ' mit Values = NULL konstruiert.');
+             Log::get()->err(__CLASS__ . ' mit Values = NULL konstruiert.');
         }
 
         return true;

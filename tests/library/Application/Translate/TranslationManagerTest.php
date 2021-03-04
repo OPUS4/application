@@ -67,9 +67,9 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
 
     public function testGetFiles()
     {
-        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
+        $this->adjustConfiguration([
             'setup' => ['translation' => ['modules' => ['allowed' => 'default,publish']]]
-        ]));
+        ]);
 
         $files = $this->object->getFiles();
 
@@ -173,9 +173,9 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
     {
         $manager = $this->object;
 
-        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
+        $this->adjustConfiguration([
             'setup' => ['translation' => ['modules' => ['allowed' => null]]]
-        ]));
+        ]);
 
         $duplicateKeys = $manager->getDuplicateKeys();
 
@@ -201,9 +201,9 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
     {
         $translations = $this->object;
 
-        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
+        $this->adjustConfiguration([
             'setup' => ['translation' => ['modules' => ['allowed' => null]]]
-        ]));
+        ]);
 
         $translations->setModules(null);
 
@@ -745,9 +745,9 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
     {
         $manager = $this->object;
 
-        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
+        $this->adjustConfiguration([
             'setup' => ['translation' => ['modules' => ['allowed' => 'default,publish']]]
-        ]));
+        ]);
 
         $modules = $manager->getModules();
 
@@ -759,9 +759,9 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
 
     public function testGetModulesNoRestrictions()
     {
-        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
+        $this->adjustConfiguration([
             'setup' => ['translation' => ['modules' => ['allowed' => null]]]
-        ]));
+        ]);
 
         $manager = $this->object;
 
@@ -776,9 +776,9 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
     {
         $manager = $this->object;
 
-        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
+        $this->adjustConfiguration([
             'setup' => ['translation' => ['modules' => ['allowed' => 'default,publish,unknown1']]]
-        ]));
+        ]);
 
         $modules = $manager->getModules();
 
@@ -792,9 +792,9 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
     {
         $manager = $this->object;
 
-        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
+        $this->adjustConfiguration([
             'setup' => ['translation' => ['modules' => ['allowed' => 'default,home,publish']]]
-        ]));
+        ]);
 
         $modules = $manager->getAllowedModules();
 
@@ -809,9 +809,9 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
     {
         $manager = $this->object;
 
-        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
+        $this->adjustConfiguration([
             'setup' => ['translation' => ['modules' => ['allowed' => 'default, home , publish ']]]
-        ]));
+        ]);
 
         $modules = $manager->getAllowedModules();
 
@@ -826,9 +826,9 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
     {
         $manager = $this->object;
 
-        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
+        $this->adjustConfiguration([
             'setup' => ['translation' => ['modules' => ['allowed' => 'default,unknown1']]]
-        ]));
+        ]);
 
         $logger = new MockLogger();
 
@@ -1246,9 +1246,9 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
 
     public function testSortLanguages()
     {
-        \Zend_Registry::get('Zend_Config')->merge(new \Zend_Config([
+        $this->adjustConfiguration([
             'supportedLanguages' => 'de,en,fr'
-        ]));
+        ]);
 
         $manager = $this->object;
 

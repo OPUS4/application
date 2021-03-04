@@ -1078,7 +1078,7 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase
 
     public function testEnrichmentKeySpecificTranslationWithRegexType()
     {
-        $translate = \Zend_Registry::get('Zend_Translate');
+        $translate = Application_Translate::getInstance();
         $translate->setTranslations('admin_enrichment_ektest_errorMessage', ['de' => 'de', 'en' => 'en']);
         $translate->loadTranslations(true);
 
@@ -1109,7 +1109,7 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase
 
     public function testEnrichmentKeySpecificTranslationWithSelectType()
     {
-        $translate = \Zend_Registry::get('Zend_Translate');
+        $translate = Application_Translate::getInstance();
         $translate->setTranslations('admin_enrichment_ektest_errorMessage', ['de' => 'de', 'en' => 'en']);
         $translate->loadTranslations(true);
 

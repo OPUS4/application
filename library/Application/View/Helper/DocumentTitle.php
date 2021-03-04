@@ -55,7 +55,7 @@ class Application_View_Helper_DocumentTitle extends Application_View_Helper_Docu
     public function documentTitle($document = null)
     {
         if ($this->isPreferUserInterfaceLanguage()) {
-            $language = Language::getPart2tForPart1(\Zend_Registry::get('Zend_Translate')->getLocale());
+            $language = Language::getPart2tForPart1(Application_Translate::getInstance()->getLocale());
 
             $title = $document->getMainTitle($language);
         } else {

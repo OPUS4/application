@@ -52,7 +52,7 @@ class Application_View_Helper_TranslateLanguage extends \Zend_View_Helper_Transl
      */
     public function translateLanguage($langId)
     {
-        $translator = \Zend_Registry::get(Application_Translate::REGISTRY_KEY);
+        $translator = Application_Translate::getInstance();
         return $translator->translateLanguage($langId);
     }
 }

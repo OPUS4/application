@@ -24,11 +24,14 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    TODO
+ * @category    Application
+ *
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\Log;
 
 /**
  * Helper class for getting an array with current request parameters.
@@ -48,7 +51,7 @@ class Application_Controller_Action_Helper_ReturnParams extends \Zend_Controller
     public function getReturnParameters()
     {
         // TODO put into constructor
-        $log = \Zend_Registry::get('Zend_Log');
+        $log = Log::get();
 
         $params = [];
         foreach (\Zend_Controller_Front::getInstance()->getRequest()->getUserParams() as $key => $value) {

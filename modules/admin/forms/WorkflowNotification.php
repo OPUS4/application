@@ -27,12 +27,13 @@
  * @category    Application
  * @package     Module_Admin
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2018-2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  *
  * TODO use getRecipients
  */
 
+use Opus\Config;
 use Opus\Document;
 
 class Admin_Form_WorkflowNotification extends Admin_Form_YesNoForm
@@ -67,7 +68,7 @@ class Admin_Form_WorkflowNotification extends Admin_Form_YesNoForm
 
     public function isNotificationEnabled()
     {
-        $config = \Zend_Registry::get('Zend_Config');
+        $config = Config::get();
         return (isset($config->notification->document->published->enabled)
             && filter_var($config->notification->document->published->enabled, FILTER_VALIDATE_BOOLEAN));
     }

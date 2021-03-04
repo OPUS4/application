@@ -33,6 +33,8 @@
 
 use Opus\Collection;
 use Opus\CollectionRole;
+use Opus\Config;
+use Opus\Log;
 
 class Sword_Model_ImportCollection
 {
@@ -43,8 +45,8 @@ class Sword_Model_ImportCollection
 
     public function __construct()
     {
-        $logger = \Zend_Registry::get('Zend_Log');
-        $config = \Zend_Registry::get('Zend_Config');
+        $logger = Log::get();
+        $config = Config::get();
 
         $collectionNumber = $config->sword->collection->default->number;
         if (trim($collectionNumber) == '') {

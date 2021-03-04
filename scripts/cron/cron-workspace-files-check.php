@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -28,19 +27,20 @@
  *
  * @category    Application
  * @author      Thoralf Klein <thoralf.klein@zib.de>
- * @copyright   Copyright (c) 2011, OPUS 4 development team
+ * @copyright   Copyright (c) 2011-2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 // Bootstrapping
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
+use Opus\Config;
 use Opus\Document;
 use Opus\Model\NotFoundException;
 
 // Get files directory...
 $startTime = microtime(true);
-$config = \Zend_Registry::get('Zend_Config');
+$config = Config::get();
 $filesPath = realpath($config->workspacePath . DIRECTORY_SEPARATOR . "files");
 
 if ($filesPath == false or empty($filesPath)) {

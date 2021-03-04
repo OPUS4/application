@@ -86,9 +86,8 @@ class Oai_ContainerControllerTest extends ControllerTestCase
         }
 
         // enable security
-        $config = \Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         $config->security = self::CONFIG_VALUE_TRUE;
-        \Zend_Registry::set('Zend_Config', $config);
 
         $doc = $this->createTestDocument();
         $doc->setServerState('unpublished');
@@ -118,7 +117,7 @@ class Oai_ContainerControllerTest extends ControllerTestCase
     public function testRequestPublishedDocWithInaccessibleFile()
     {
         // create test file test.pdf in file system
-        $config = \Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         $path = $config->workspacePath . DIRECTORY_SEPARATOR . uniqid();
         mkdir($path, 0777, true);
         $filepath = $path . DIRECTORY_SEPARATOR . 'test.pdf';
@@ -155,7 +154,7 @@ class Oai_ContainerControllerTest extends ControllerTestCase
         );
 
         // create test file test.pdf in file system
-        $config = \Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         $path = $config->workspacePath . DIRECTORY_SEPARATOR . uniqid();
         mkdir($path, 0777, true);
         $filepath = $path . DIRECTORY_SEPARATOR . 'test.pdf';

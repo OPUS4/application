@@ -27,12 +27,13 @@
  * @category    Application
  * @package     Module_Export
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 use Opus\Collection;
 use Opus\CollectionRole;
+use Opus\Config;
 
 /**
  * Export plugin for exporting collections based on role name and collection number.
@@ -124,7 +125,7 @@ class Export_Model_PublistExport extends Export_Model_XsltExport
         $this->_proc->setParameter('', 'groupBy', $groupBy);
         $this->_proc->setParameter('', 'pluginName', $this->getName());
 
-        $urnResolverUrl = \Zend_Registry::get('Zend_Config')->urn->resolverUrl;
+        $urnResolverUrl = Config::get()->urn->resolverUrl;
         $this->_proc->setParameter('', 'urnResolverUrl', $urnResolverUrl);
 
         $this->loadStyleSheet($this->buildStylesheetPath($stylesheet, $view->getScriptPath('') . $stylesheetDirectory));

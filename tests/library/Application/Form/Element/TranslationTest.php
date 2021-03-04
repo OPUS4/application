@@ -99,7 +99,7 @@ class Application_Form_Element_TranslationTest extends ControllerTestCase
 
         $element = new Application_Form_Element_Translation('DisplayName');
 
-        $translate = \Zend_Registry::get('Zend_Translate');
+        $translate = Application_Translate::getInstance();
         $dao = new \Opus\Translate\Dao();
 
         $dao->remove($key);

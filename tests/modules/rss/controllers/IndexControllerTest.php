@@ -64,11 +64,10 @@ class Rss_IndexControllerTest extends ControllerTestCase
         $this->requireSolrConfig();
 
         // manipulate solr configuration
-        $config = \Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         $host = $config->searchengine->index->host;
         $port = $config->searchengine->index->port;
         $config->searchengine->index->app = 'solr/corethatdoesnotexist';
-        \Zend_Registry::set('Zend_Config', $config);
 
         $this->dispatch('/rss/index/index/searchtype/all');
         $body = $this->getResponse()->getBody();

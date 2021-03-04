@@ -33,6 +33,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Config;
 use Opus\Security\Realm;
 
 /**
@@ -131,7 +132,7 @@ class Application_View_Helper_LoginBar extends \Zend_View_Helper_Abstract
 
         if ($realm->checkModule('account') == true) {
             // Prüfe, ob Nutzer ihren Account editieren dürfen
-            $config = \Zend_Registry::get('Zend_Config');
+            $config = Config::get();
             if (isset($config) and isset($config->account->editOwnAccount)) {
                 $addAccountLink = filter_var($config->account->editOwnAccount, FILTER_VALIDATE_BOOLEAN);
             }

@@ -32,19 +32,14 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Config;
+
 /**
  * Helper class for getting document types and template names.
  *
  */
 class Application_Controller_Action_Helper_DocumentTypes extends \Zend_Controller_Action_Helper_Abstract
 {
-
-    /**
-     * Configuration.
-     *
-     * @var Zend_Config
-     */
-    private $_config;
 
     /**
      * Names and paths for document type definition files.
@@ -69,14 +64,6 @@ class Application_Controller_Action_Helper_DocumentTypes extends \Zend_Controlle
      * @var array ($documentType => $errorMessage)
      */
     private $_errors;
-
-    /**
-     * Constructs instances.
-     */
-    public function __construct()
-    {
-        $this->_config = \Zend_Registry::get('Zend_Config');
-    }
 
     /**
      * Returns filtered list of document types.
@@ -184,8 +171,10 @@ class Application_Controller_Action_Helper_DocumentTypes extends \Zend_Controlle
 
         $template = null;
 
-        if (isset($this->_config->documentTypes->templates->$documentType)) {
-            $template = $this->_config->documentTypes->templates->$documentType;
+        $config = $this->getConfig();
+
+        if (isset($config->documentTypes->templates->$documentType)) {
+            $template = $config->documentTypes->templates->$documentType;
         }
 
         if (! empty($template)) {
@@ -200,12 +189,14 @@ class Application_Controller_Action_Helper_DocumentTypes extends \Zend_Controlle
      */
     public function getTemplates()
     {
+        $config = $this->getConfig();
+
         if (! isset($this->_templates)) {
-            if (! isset($this->_config->publish->path->documenttemplates)) {
+            if (! isset($config->publish->path->documenttemplates)) {
                 throw new Application_Exception('invalid configuration: publish.path.documenttemplates is not defined');
             }
 
-            $path = $this->_config->publish->path->documenttemplates;
+            $path = $config->publish->path->documenttemplates;
 
             if ($path instanceof \Zend_Config) {
                 $path = $path->toArray();
@@ -257,8 +248,10 @@ class Application_Controller_Action_Helper_DocumentTypes extends \Zend_Controlle
     {
         $path = null;
 
-        if (isset($this->_config->publish->path->documenttypes)) {
-            $path = $this->_config->publish->path->documenttypes;
+        $config = $this->getConfig();
+
+        if (isset($config->publish->path->documenttypes)) {
+            $path = $config->publish->path->documenttypes;
         }
 
         if (empty($path)) {
@@ -345,10 +338,12 @@ class Application_Controller_Action_Helper_DocumentTypes extends \Zend_Controlle
      */
     protected function _getIncludeList()
     {
-        if (! isset($this->_config->documentTypes->include)) {
+        $config = $this->getConfig();
+
+        if (! isset($config->documentTypes->include)) {
             return [];
         }
-        return $this->_getList($this->_config->documentTypes->include);
+        return $this->_getList($config->documentTypes->include);
     }
 
     /**
@@ -357,10 +352,12 @@ class Application_Controller_Action_Helper_DocumentTypes extends \Zend_Controlle
      */
     protected function _getExcludeList()
     {
-        if (! isset($this->_config->documentTypes->exclude)) {
+        $config = $this->getConfig();
+
+        if (! isset($config->documentTypes->exclude)) {
             return [];
         }
-        return $this->_getList($this->_config->documentTypes->exclude);
+        return $this->_getList($config->documentTypes->exclude);
     }
 
     private function _getList($str)
@@ -453,5 +450,10 @@ class Application_Controller_Action_Helper_DocumentTypes extends \Zend_Controlle
         }
 
         return null;
+    }
+
+    public function getConfig()
+    {
+        return Config::get();
     }
 }

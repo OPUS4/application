@@ -61,7 +61,7 @@ class Application_Controller_Action_Helper_TranslationTest extends ControllerTes
     {
         parent::setUp();
 
-        $this->translate = \Zend_Registry::get('Zend_Translate');
+        $this->translate = Application_Translate::getInstance();
         $this->helper = \Zend_Controller_Action_HelperBroker::getStaticHelper('Translation');
     }
 

@@ -85,7 +85,7 @@ class Admin_Form_Document_FilesTest extends ControllerTestCase
 
         $header = $property->getValue($form);
 
-        $translate = \Zend_Registry::get('Zend_Translate');
+        $translate = Application_Translate::getInstance();
 
         foreach ($header as $column) {
             if (isset($column['label']) && ! is_null($column['label'])) {

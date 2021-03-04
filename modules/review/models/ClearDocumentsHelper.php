@@ -34,6 +34,7 @@
 
 use Opus\Date;
 use Opus\Document;
+use Opus\Log;
 use Opus\Person;
 use Opus\UserRole;
 
@@ -54,7 +55,7 @@ class Review_Model_ClearDocumentsHelper
      */
     public function clear(array $docIds = null, $userId = null, $person = null)
     {
-        $logger = \Zend_Registry::get('Zend_Log');
+        $logger = Log::get();
 
         foreach ($docIds as $docId) {
             $logger->debug('Change state to "published" for document: ' . $docId);
@@ -98,7 +99,7 @@ class Review_Model_ClearDocumentsHelper
      */
     public function reject(array $docIds = null, $userId = null, $person = null)
     {
-        $logger = \Zend_Registry::get('Zend_Log');
+        $logger = Log::get();
 
         foreach ($docIds as $docId) {
             $logger->debug('Deleting document with id: ' . $docId);

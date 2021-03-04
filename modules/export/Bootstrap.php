@@ -32,6 +32,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Config;
+use Opus\Log;
 use Opus\Security\Realm;
 
 class Export_Bootstrap extends \Zend_Application_Module_Bootstrap
@@ -43,7 +45,7 @@ class Export_Bootstrap extends \Zend_Application_Module_Bootstrap
 
         if (! \Zend_Registry::isRegistered('Opus_Exporter')) {
             if (! $updateInProgress) {
-                \Zend_Registry::get('Zend_Log')->warn(__METHOD__ . ' exporter not found');
+                 Log::get()->warn(__METHOD__ . ' exporter not found');
             }
             return;
         }
@@ -52,12 +54,12 @@ class Export_Bootstrap extends \Zend_Application_Module_Bootstrap
 
         if (is_null($exporter)) {
             if (! $updateInProgress) {
-                \Zend_Registry::get('Zend_Log')->warn(__METHOD__ . ' exporter not found');
+                 Log::get()->warn(__METHOD__ . ' exporter not found');
             }
             return;
         }
 
-        $config = \Zend_Registry::get('Zend_Config');
+        $config = Config::get();
 
         // only add XML export if user has access and stylesheet is configured
         if (isset($config->export->stylesheet->frontdoor)) {
