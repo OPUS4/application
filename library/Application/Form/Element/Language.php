@@ -77,6 +77,5 @@ class Application_Form_Element_Language extends Application_Form_Element_Select
             $languages[$langId] = $translate->translateLanguage($langId);
         }
         self::$_languageList = $languages;
-        \Zend_Registry::set('Available_Languages', $languages);
     }
 }
