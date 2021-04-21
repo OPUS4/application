@@ -3602,4 +3602,45 @@ class Oai_IndexControllerTest extends ControllerTestCase
 
         $doc->addIdentifier($identifier);
     }
+
+    public function metadataPrefixProvider()
+    {
+        return [
+            ['MARC21'],
+            ['marc21'],
+            ['mArC21']
+        ];
+    }
+
+    /**
+     * @param $metadataPrefix
+     * @dataProvider metadataPrefixProvider
+     */
+    public function testMetadataPrefixCaseInsensitive($metadataPrefix)
+    {
+        $this->dispatch("/oai?verb=ListRecords&metadataPrefix=$metadataPrefix");
+        $this->assertResponseCode(200);
+
+        $body = $this->getResponse()->getBody();
+
+        $this->checkForCustomBadStringsInHtml($body, ["Exception", "Stacktrace", "badVerb"]);
+
+        $this->assertContains(
+            '<ListRecords>',
+            $body,
+            "Response must contain '<ListRecords>'"
+        );
+        $this->assertContains(
+            '<record>',
+            $body,
+            "Response must contain '<record>'"
+        );
+
+        // TODO check that metadata is generated
+        $this->assertNotContains(
+            '<metadata/>',
+            $body,
+            'Response must not contains empty \'<metadata/>\' elements.'
+        );
+    }
 }

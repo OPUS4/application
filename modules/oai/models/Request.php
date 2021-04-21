@@ -183,6 +183,9 @@ class Oai_Model_Request
      *
      * @param mixed $oaiMetadataPrefix
      * @return boolean
+     *
+     * TODO handling case insensitivity of metadataPrefix is spread through the code (here and other places)
+     * TODO function handles access control in addition to checking if format is supported (mixed responsibilities)
      */
     private function _validateMetadataPrefix($oaiMetadataPrefix)
     {
@@ -193,7 +196,7 @@ class Oai_Model_Request
         // we support both spellings, xMetaDissPlus and XMetaDissPlus TODO really?
         $availableMetadataPrefixes = ['xMetaDissPlus'];
         foreach ($possibleFiles as $prefixFile) {
-            $availableMetadataPrefixes[] = basename($prefixFile, '.xslt');
+            $availableMetadataPrefixes[] = strtolower(basename($prefixFile, '.xslt'));
         }
 
         // only adminstrators can request copy_xml format
@@ -201,7 +204,7 @@ class Oai_Model_Request
             $availableMetadataPrefixes = array_diff($availableMetadataPrefixes, ['copy_xml']);
         }
 
-        $result = in_array($oaiMetadataPrefix, $availableMetadataPrefixes);
+        $result = in_array(strtolower($oaiMetadataPrefix), $availableMetadataPrefixes);
 
         if (false === $result) {
             // MetadataPrefix not available.

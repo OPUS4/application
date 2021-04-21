@@ -74,13 +74,14 @@ class Oai_Model_DocumentList
         // add server state restrictions
         $finder->setServerStateInList($this->deliveringDocumentStates);
 
-        $metadataPrefix = $oaiRequest['metadataPrefix'];
-        if (strcasecmp('xMetaDissPlus', $metadataPrefix) === 0
-            || 'xMetaDiss' === $metadataPrefix) {
+        $metadataPrefix = strtolower($oaiRequest['metadataPrefix']);
+
+        if (strcmp('xmetadissplus', $metadataPrefix) === 0
+            || 'xmetadiss' === $metadataPrefix) {
             $finder->setFilesVisibleInOai();
             $finder->setNotEmbargoedOn($today);
         }
-        if ('xMetaDiss' === $metadataPrefix) {
+        if ('xmetadiss' === $metadataPrefix) {
             $finder->setTypeInList($this->xMetaDissRestriction);
             $finder->setNotEmbargoedOn($today);
         }
