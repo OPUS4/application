@@ -208,4 +208,38 @@ class Application_Form_Element_TranslationTest extends ControllerTestCase
         $this->assertNotContains('id="DisplayName-de" value="Institut"', $output);
         $this->assertContains('id="DisplayName-de" value="Institute"', $output);
     }
+
+    public function testUpdateTranslationForDuplicateKey()
+    {
+        $database = new \Opus\Translate\Dao();
+        $database->removeAll();
+
+        $key = 'duplicateTestKey';
+
+        $database->setTranslation($key, [
+            'en' => 'AdminEn',
+            'de' => 'AdminDe'
+        ], 'admin');
+
+        $database->setTranslation($key, [
+            'en' => 'HomeEn',
+            'de' => 'HomeDe'
+        ], 'home');
+
+        $element = new Application_Form_Element_Translation('DuplicateTest');
+
+        $data = [
+            'en' => 'NewEn',
+            'de' => 'NewDe'
+        ];
+
+        $element->setValue($data);
+
+        $element->updateTranslations($key);
+
+        $translations = $database->getTranslationsWithModules();
+
+        // var_dump($translations);
+        $this-markTestIncomplete('no assertions');
+    }
 }
