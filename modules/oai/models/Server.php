@@ -110,12 +110,12 @@ class Oai_Model_Server extends Application_Model_Abstract
         $this->_xmlFactory = new Oai_Model_XmlFactory();
     }
 
-    public function handleRequest(array $oaiRequest, $requestUri)
+    public function handleRequest($parameters, $requestUri)
     {
         // TODO move error handling into Oai_Model_Server
         try {
             // handle request
-            return $this->handleRequestIntern($oaiRequest, $requestUri);
+            return $this->handleRequestIntern($parameters, $requestUri);
         } catch (Oai_Model_Exception $e) {
             $errorCode = Oai_Model_Error::mapCode($e->getCode());
             $this->getLogger()->err($errorCode);
@@ -146,42 +146,18 @@ class Oai_Model_Server extends Application_Model_Abstract
     /**
      * Handles an OAI request.
      *
-     * @param  array  $oaiRequest Contains full request information
+     * @param  Oai_Model_OaiRequest $oaiRequest Contains full request information
      * @throws Oai_Model_Exception Thrown if the request could not be handled.
      * @return void
      */
-    protected function handleRequestIntern(array $oaiRequest, $requestUri)
+    protected function handleRequestIntern($oaiRequest, $requestUri)
     {
         $this->init();
 
         // Setup stylesheet
         $this->loadStyleSheet($this->getScriptPath() . '/oai-pmh.xslt');
 
-        $this->_proc->registerPHPFunctions('Opus\Language::getLanguageCode');
-        Application_Xslt::registerViewHelper(
-            $this->_proc,
-            [
-                'optionValue',
-                'fileUrl',
-                'frontdoorUrl',
-                'transferUrl',
-                'dcmiType',
-                'dcType',
-                'openAireType'
-            ]
-        );
-        $this->_proc->setParameter('', 'urnResolverUrl', $this->getConfig()->urn->resolverUrl);
-        $this->_proc->setParameter('', 'doiResolverUrl', $this->getConfig()->doi->resolverUrl);
-
-        // Set response time
-        $this->_proc->setParameter(
-            '',
-            'dateTime',
-            str_replace('+00:00', 'Z', \Zend_Date::now()->setTimeZone('UTC')->getIso())
-        );
-
-        // set OAI base url
-        $this->_proc->setParameter('', 'oai_base_url', $this->getOaiBaseUrl());
+        $this->setupProcessor();
 
         $metadataPrefixPath = $this->getScriptPath() . DIRECTORY_SEPARATOR . 'prefixes';
         $resumptionPath = $this->_configuration->getResumptionTokenPath();
@@ -202,6 +178,11 @@ class Oai_Model_Server extends Application_Model_Abstract
 
         if (true !== $request->validate($oaiRequest)) {
             throw new Oai_Model_Exception($request->getErrorMessage(), $request->getErrorCode());
+        }
+
+        // TODO refactor - temporary hack to have all lower case version of metadataPrefix to use in XSLT
+        if (isset($oaiRequest['metadataPrefix'])) {
+            $oaiRequest['metadataPrefixMode'] = strtolower($oaiRequest['metadataPrefix']);
         }
 
         foreach ($oaiRequest as $parameter => $value) {
@@ -240,6 +221,41 @@ class Oai_Model_Server extends Application_Model_Abstract
         }
 
         return $this->_proc->transformToXML($this->_xml);
+    }
+
+    /**
+     * @throws Zend_Date_Exception
+     * @throws Zend_Exception
+     *
+     * TODO factory (function) for processor
+     */
+    protected function setupProcessor()
+    {
+        $this->_proc->registerPHPFunctions('Opus\Language::getLanguageCode');
+        Application_Xslt::registerViewHelper(
+            $this->_proc,
+            [
+                'optionValue',
+                'fileUrl',
+                'frontdoorUrl',
+                'transferUrl',
+                'dcmiType',
+                'dcType',
+                'openAireType'
+            ]
+        );
+        $this->_proc->setParameter('', 'urnResolverUrl', $this->getConfig()->urn->resolverUrl);
+        $this->_proc->setParameter('', 'doiResolverUrl', $this->getConfig()->doi->resolverUrl);
+
+        // Set response time
+        $this->_proc->setParameter(
+            '',
+            'dateTime',
+            str_replace('+00:00', 'Z', \Zend_Date::now()->setTimeZone('UTC')->getIso())
+        );
+
+        // set OAI base url
+        $this->_proc->setParameter('', 'oai_base_url', $this->getOaiBaseUrl());
     }
 
     /**
@@ -461,6 +477,7 @@ class Oai_Model_Server extends Application_Model_Abstract
             $metadataPrefix = $token->getMetadataPrefix();
 
             $this->_proc->setParameter('', 'oai_metadataPrefix', $metadataPrefix);
+            $this->_proc->setParameter('', 'oai_metadataPrefixMode', strtolower($metadataPrefix));
             $resumed = true;
         } else {
             // no resumptionToken is given

@@ -77,23 +77,25 @@ class Oai_IndexController extends Application_Controller_ModuleAccess
      */
     public function indexAction()
     {
+        $request = $this->getRequest();
+
         // to handle POST and GET Request, take any given parameter
-        $oaiRequest = $this->getRequest()->getParams();
+        $parameters = $request->getParams();
 
         // remove parameters which are "safe" to remove
         $safeRemoveParameters = ['module', 'controller', 'action', 'role'];
 
-        foreach ($safeRemoveParameters as $parameter) {
-            unset($oaiRequest[$parameter]);
+        foreach ($safeRemoveParameters as $name) {
+            unset($parameters[$name]);
         }
 
-        $server = new Oai_Model_Server();
+        $server = new Oai_Model_Server(); // TODO needs factory
         $server->setScriptPath($this->view->getScriptPath('index'));
         $server->setBaseUrl($this->view->fullUrl());
-        $server->setBaseUri($this->getRequest()->getBaseUrl());
+        $server->setBaseUri($request->getBaseUrl());
         $server->setResponse($this->getResponse()); // TODO temporary hack
 
-        $this->getResponse()->setBody($server->handleRequest($oaiRequest, $this->getRequest()->getRequestUri()));
+        $this->getResponse()->setBody($server->handleRequest($parameters, $request->getRequestUri()));
         $this->getResponse()->setHeader('Content-Type', 'text/xml; charset=UTF-8', true);
     }
 }
