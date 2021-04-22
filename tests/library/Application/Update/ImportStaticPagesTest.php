@@ -77,10 +77,11 @@ class Application_Update_ImportStaticPagesTest extends ControllerTestCase
 
         $database = new \Opus\Translate\Dao();
 
-        $translations = $database->getAll();
+        $translations = $database->getTranslationsWithModules();
 
         $this->assertCount(1, $translations);
         $this->assertArrayHasKey('testkey', $translations);
+        $this->assertEquals('home', $translations['testkey']['module']);
     }
 
     public function testGetFiles()
