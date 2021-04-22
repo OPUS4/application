@@ -240,6 +240,6 @@ class Application_Form_Element_TranslationTest extends ControllerTestCase
         $translations = $database->getTranslationsWithModules();
 
         // var_dump($translations);
-        $this-markTestIncomplete('no assertions');
+        $this->markTestIncomplete('no assertions');
     }
 }
