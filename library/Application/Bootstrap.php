@@ -39,7 +39,7 @@ use Opus\Db\DatabaseBootstrap;
  * @author      Simone Finkbeiner (simone.finkbeiner@ub.uni-stuttgart.de)
  * @author      Jens Schwidder <schwidder@zib.de>
  * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  *
  * TODO unit test bootstrap
@@ -162,6 +162,29 @@ class Application_Bootstrap extends DatabaseBootstrap
         \Zend_Registry::set('Opus_View', $view);
 
         return $view;
+    }
+
+    /**
+     * Set base URL if it has been configured.
+     *
+     * This is useful when running OPUS 4 behind a proxy, so absolute URLs will be resolved correctly.
+     *
+     * @throws Zend_Application_Bootstrap_Exception
+     */
+    protected function _initBaseUrl()
+    {
+        $this->bootstrap('View');
+
+        $view = $this->getResource('View');
+        $config = $this->getResource('Configuration');
+
+        if (isset($config->url)) {
+            $baseUrl = $config->url;
+        }
+
+        if (! empty($baseUrl)) {
+            $view->getHelper('BaseUrl')->setBaseUrl($baseUrl);
+        }
     }
 
     /**

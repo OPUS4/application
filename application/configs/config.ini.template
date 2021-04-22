@@ -39,6 +39,10 @@
 ; Name of OPUS 4 Repository
 name = 'OPUS 4'
 
+; Base URL of OPUS 4 (used for generating absolute URLs)
+; This needs to be configured if OPUS 4 is running behind a proxy.
+url =
+
 ; Link for main logo
 logoLink = home
 
