@@ -49,6 +49,9 @@ class Setup_Form_HomePageTest extends ControllerTestCase
     public function tearDown()
     {
         $this->database->removeAll();
+        $translate = Application_Translate::getInstance();
+        $translate->clearCache();
+        \Zend_Translate::clearCache();
 
         parent::tearDown();
     }
@@ -76,6 +79,7 @@ class Setup_Form_HomePageTest extends ControllerTestCase
 
         $translations = $this->database->getTranslationsWithModules();
 
+        $this->assertCount(1, $translations);
         $this->assertArrayHasKey($key, $translations);
         $this->assertEmpty($translations[$key]['module']);
 
