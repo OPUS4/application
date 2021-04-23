@@ -183,7 +183,21 @@ class Application_Bootstrap extends DatabaseBootstrap
         }
 
         if (! empty($baseUrl)) {
-            $view->getHelper('BaseUrl')->setBaseUrl($baseUrl);
+            $urlParts = parse_url($baseUrl);
+
+            // setting server url
+            $helper = $view->getHelper('ServerUrl');
+            if (isset($urlParts['scheme'])) {
+                $helper->setScheme($urlParts['scheme']);
+            }
+            if (isset($urlParts['host'])) {
+                $helper->setHost($urlParts['host']);
+            }
+
+            // setting base url
+            if (isset($urlParts['path'])) {
+                $view->getHelper('BaseUrl')->setBaseUrl($urlParts['path']);
+            }
         }
     }
 
