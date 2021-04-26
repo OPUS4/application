@@ -40,8 +40,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
     <xsl:output method="xml" indent="yes" encoding="utf-8"/>
-    <xsl:param name="host" />
-    <xsl:param name="server" />
+    <xsl:param name="opusUrl" />
     <!--
     Suppress output for all elements that don't have an explicit template.
     -->
@@ -215,8 +214,7 @@
         <xsl:if test="@VisibleInFrontdoor = '1' and @VisibleInOai = '1'">
             <xsl:element name="file">
                 <xsl:text>https://</xsl:text>
-                <xsl:value-of select="$host"/>
-                <xsl:value-of select="$server" />
+                <xsl:value-of select="$opusUrl"/>
                 <xsl:text>/files/</xsl:text>
                 <xsl:value-of select="../@Id"/>
                 <xsl:text>/</xsl:text>
