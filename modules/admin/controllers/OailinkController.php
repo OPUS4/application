@@ -27,7 +27,8 @@
  * @category    Application
  * @package     Module_Admin
  * @author      Henning Gerhardt (henning.gerhardt@slub-dresden.de)
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -47,19 +48,16 @@ class Admin_OailinkController extends Application_Controller_Action
      */
     public function indexAction()
     {
-        $this->view->title = $this->view->translate('admin_title_oailink');
+        $view = $this->view;
 
-        $request = $this->getRequest();
+        $view->title = $this->view->translate('admin_title_oailink');
 
         // set baseLink for OAI requests
-        $baseUrl = $request->getBaseUrl();
-        $baseHost = $request->getHttpHost();
-        $baseScheme = $request->getScheme();
-        $this->view->baseLink = $baseScheme . '://' . $baseHost . $baseUrl . '/oai';
+        $view->baseLink = $view->serverUrl($view->baseUrl('/oai'));
 
         // set repIdentifier for OAI request examples
         $config = $this->getConfig();
         $repIdentifier = $config->oai->repository->identifier;
-        $this->view->repIdentifier = $repIdentifier;
+        $view->repIdentifier = $repIdentifier;
     }
 }
