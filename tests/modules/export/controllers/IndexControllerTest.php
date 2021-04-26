@@ -29,7 +29,7 @@
  * @author      Sascha Szott <szott@zib.de>
  * @author      Michael Lang <lang@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -892,15 +892,19 @@ class Export_IndexControllerTest extends ControllerTestCase
 
     /**
      * Regressionstest für OPUSVIER-3391.
-     * // TODO insert host
+     * // TODO refactor - bootstrapping happens before so the helpers need to be adjusted - better way?
      */
     public function testExportedFilePath()
     {
-        \Zend_Controller_Front::getInstance()->setBaseUrl('opus4dev');
+        $opusUrl = 'https://localhost/opus4';
+
+        $view = $this->getView();
+        $view->getHelper('ServerUrl')->setHost('localhost');
+        $view->getHelper('ServerUrl')->setScheme('https');
+        \Zend_Controller_Front::getInstance()->setBaseUrl('/opus4');
+
         $this->dispatch('/export/index/index/docId/146/export/xml/stylesheet/example/searchtype/id');
-        $host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '';
-        $server = $this->getRequest()->getBasePath();
-        $this->assertXpathContentContains('//file', 'https://' . $host . $server . '/files/146/test.pdf');
+        $this->assertXpathContentContains('//file', $opusUrl . '/files/146/test.pdf');
     }
 
     /**

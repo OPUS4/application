@@ -213,7 +213,6 @@
     <xsl:template match="File">
         <xsl:if test="@VisibleInFrontdoor = '1' and @VisibleInOai = '1'">
             <xsl:element name="file">
-                <xsl:text>https://</xsl:text>
                 <xsl:value-of select="$opusUrl"/>
                 <xsl:text>/files/</xsl:text>
                 <xsl:value-of select="../@Id"/>
