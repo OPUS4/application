@@ -4,6 +4,16 @@
 
 ## Release 4.7.1
 
+# Konfiguration
+
+Der Parameter `url` kann verwendet werden, um die absolute URL für eine OPUS 4 
+Instanz manuell zu setzen. Diese URL wird dann verwendet, um absolute Links, 
+z.B. in Exporten oder E-Mails, zu generieren.
+
+   url = 'https://opus4mig.kobv.de/opus4-demo'
+
+URLs mit Port werden momentan nicht unterstützt. 
+
 # Neues Kommandozeilen-Skript `bin/opus4`
 
 Es gibt das neue Skript `bin/opus4`, dass in Zukunft die Rolle des zentralen OPUS 4
@@ -29,6 +39,13 @@ Es gibt jetzt die Möglichkeit einzelne Dokumente einfacher zu indexieren oder a
 aus dem Index zu entfernen. Es kann über eine Option bestimmt werden wie viele
 Dokument gleichzeitig zum Solr-Server geschickt werden sollen. Das kann helfen,
 wenn es Probleme bei der Indexierung gibt.
+
+# Export
+
+Die beiden Variablen `host` und `server` in den Export-XSLT Skripten wurden durch 
+die Variable `opusUrl` ersetzt. Eigene Skripte, die diese Variablen einsetzen,
+müssen angepasst werden. Die neue Variable `opusUrl` enthält die absolute URL für
+die OPUS 4 Instanz.
 
 # OPUS Framework Package
 

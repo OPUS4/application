@@ -207,8 +207,6 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract
 
         $view = $this->getView();
 
-        $this->_proc->setParameter('', 'host', $view->serverUrl()); // TODO remove - use opusUrl
-        $this->_proc->setParameter('', 'server', $view->baseUrl()); // TODO remove - use opusUrl
         $this->_proc->setParameter('', 'opusUrl', $view->fullUrl());
     }
 
