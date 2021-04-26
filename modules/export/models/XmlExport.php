@@ -204,10 +204,12 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract
         $this->_xslt = new DomDocument;
         $this->_xslt->load($stylesheet);
         $this->_proc->importStyleSheet($this->_xslt);
-        if (isset($_SERVER['HTTP_HOST'])) {
-            $this->_proc->setParameter('', 'host', $_SERVER['HTTP_HOST']);
-        }
-        $this->_proc->setParameter('', 'server', $this->getRequest()->getBaseUrl());
+
+        $view = $this->getView();
+
+        $this->_proc->setParameter('', 'host', $view->serverUrl()); // TODO remove - use opusUrl
+        $this->_proc->setParameter('', 'server', $view->baseUrl()); // TODO remove - use opusUrl
+        $this->_proc->setParameter('', 'opusUrl', $view->fullUrl());
     }
 
     /**

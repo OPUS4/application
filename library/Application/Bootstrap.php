@@ -170,6 +170,8 @@ class Application_Bootstrap extends DatabaseBootstrap
      * This is useful when running OPUS 4 behind a proxy, so absolute URLs will be resolved correctly.
      *
      * @throws Zend_Application_Bootstrap_Exception
+     *
+     * TODO \Zend_Controller_Front::getInstance()->setBaseUrl('/opus4'); TODO is this useful
      */
     protected function _initBaseUrl()
     {
