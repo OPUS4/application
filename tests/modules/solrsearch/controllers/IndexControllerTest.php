@@ -1413,4 +1413,11 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
             '//div[@class = "results_author"]/a[contains(@href, "solrsearch/index/search/searchtype/authorsearch/author/%22Doe%2C+John%22")]'
         );
     }
+
+    public function testServerStateFacetForAdmins()
+    {
+        $this->dispatch('/solrsearch/index/search/searchtype/latest');
+
+        $this->markTestIncomplete();
+    }
 }
