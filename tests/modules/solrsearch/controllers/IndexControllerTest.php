@@ -1416,8 +1416,14 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
 
     public function testServerStateFacetForAdmins()
     {
-        $this->dispatch('/solrsearch/index/search/searchtype/latest');
+        $this->enableSecurity();
+        $this->loginUser('admin', 'adminadmin');
 
-        $this->markTestIncomplete();
+        $this->dispatch('/solrsearch/index/search/searchtype/all');
+
+        $this->assertXpath('//div[@id = "server_state_facet"]');
+        $this->assertXpath('//div[@id = "server_state_facet"]//a[contains(@href, "server_statefq/published")]');
+        $this->assertXpath('//div[@id = "server_state_facet"]//a[contains(@href, "server_statefq/unpublished")]');
+        $this->assertXpath('//div[@id = "server_state_facet"]//a[contains(@href, "server_statefq/deleted")]');
     }
 }
