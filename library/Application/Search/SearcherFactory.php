@@ -38,7 +38,7 @@ use Opus\Search\Util\Searcher;
  *
  * TODO factory should be injected into objects that need it
  */
-class SearcherFactory
+class Application_Search_SearcherFactory
 {
 
     /**

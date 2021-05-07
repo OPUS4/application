@@ -140,7 +140,7 @@ class Home_IndexControllerTest extends ControllerTestCase
 
     private function getDocsInSearchIndex($checkConsistency = true)
     {
-        $searcher = SearcherFactory::getSearcher();
+        $searcher = Application_Search_SearcherFactory::getSearcher();
         $query = new Opus\Search\Util\Query();
         $query->setCatchAll("*:*");
         $query->setRows(Opus\Search\Util\Query::MAX_ROWS);

@@ -88,7 +88,7 @@ class Rss_IndexController extends Application_Controller_Xml
 
         $resultList = [];
         try {
-            $searcher = SearcherFactory::getSearcher();
+            $searcher = Application_Search_SearcherFactory::getSearcher();
             $resultList = $searcher->search($search->createSearchQuery($params));
         } catch (Opus\Search\Exception $exception) {
             $this->handleSolrError($exception);
