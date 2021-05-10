@@ -307,7 +307,7 @@ class Frontdoor_IndexController extends Application_Controller_Action
 
             // TODO fix usage of search code - should be identical to search/export/rss - except just 1 row
 
-            $searcher = new Opus\Search\Util\Searcher();
+            $searcher = Application_Search_SearcherFactory::getSearcher();
 
             $resultList = $searcher->search($query);
 
