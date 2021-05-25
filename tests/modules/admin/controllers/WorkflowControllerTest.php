@@ -32,6 +32,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Document;
+use Opus\Person;
+
 /**
  * Class Admin_WorkflowControllerTest.
  *
@@ -39,11 +42,12 @@
  */
 class Admin_WorkflowControllerTest extends ControllerTestCase
 {
+
     protected $additionalResources = 'all';
 
     private function enablePublishNotification()
     {
-        $config = Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         $config->notification->document->published->enabled = self::CONFIG_VALUE_TRUE;
         $config->notification->document->published->email = "published@localhost";
     }
@@ -52,7 +56,7 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
     {
         $doc = $this->createTestDocument();
 
-        $author = new Opus_Person();
+        $author = new Person();
         $author->setFirstName("John");
         $author->setLastName("Doe");
         if ($author != '') {
@@ -60,7 +64,7 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
         }
         $doc->addPersonAuthor($author);
 
-        $submitter = new Opus_Person();
+        $submitter = new Person();
         $submitter->setFirstName("John");
         $submitter->setLastName("Submitter");
         if ($submitterMail != '') {
@@ -100,7 +104,7 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
         $this->assertAction('changestate');
         $this->assertRedirect('/admin/document/index');
 
-        $doc = new Opus_Document(24);
+        $doc = Document::get(24);
         $this->assertNotEquals('deleted', $doc->getServerState());
     }
 
@@ -120,7 +124,7 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
         $this->assertAction('changestate');
         $this->assertRedirect('/admin/document/index');
 
-        $doc = new Opus_Document(102);
+        $doc = Document::get(102);
         $this->assertEquals('deleted', $doc->getServerState());
         $doc->setServerState('unpublished');
         $doc->store();
@@ -163,7 +167,7 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
         $this->assertAction('changestate');
         $this->assertRedirect('/admin/document/index');
 
-        $doc = new Opus_Document($documentId);
+        $doc = Document::get($documentId);
         $this->assertEquals('deleted', $doc->getServerState());
     }
 
@@ -183,7 +187,7 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
         $this->assertAction('changestate');
         $this->assertRedirect('/admin/document/index');
 
-        $doc = new Opus_Document(100);
+        $doc = Document::get(100);
         $this->assertEquals('published', $doc->getServerState());
         $doc->setServerState('unpublished');
         $doc->store();
@@ -382,18 +386,18 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
             'author@localhost.de'
         );
 
-        $author = new Opus_Person();
+        $author = new Person();
         $author->setFirstName("AFN");
         $author->setLastName("ALN");
         $author->setEmail("A@localhost.de");
         $doc->addPersonAuthor($author);
 
-        $author = new Opus_Person();
+        $author = new Person();
         $author->setFirstName("BFN");
         $author->setLastName("BLN");
         $doc->addPersonAuthor($author);
 
-        $author = new Opus_Person();
+        $author = new Person();
         $author->setFirstName("CFN");
         $author->setLastName("CLN");
         $author->setEmail("C@localhost.de");
@@ -432,14 +436,14 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
 
     public function testConfirmationDisabled()
     {
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        $this->adjustConfiguration([
             'confirmation' => ['document' => ['statechange' => ['enabled' => self::CONFIG_VALUE_FALSE]]]
-        ]));
+        ]);
 
         $this->dispatch('/admin/workflow/changestate/docId/102/targetState/deleted');
         $this->assertRedirectTo('/admin/document/index/id/102'); // Änderung wird sofort durchgefuehrt
 
-        $doc = new Opus_Document(102);
+        $doc = Document::get(102);
         $this->assertEquals('deleted', $doc->getServerState());
         $doc->setServerState('unpublished');
         $doc->store();

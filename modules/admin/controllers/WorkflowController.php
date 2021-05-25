@@ -35,6 +35,8 @@
  * TODO verify previous checkbox results
  */
 
+use Opus\Document;
+
 /**
  * Controller handles transitions of documents between states.
  *
@@ -117,7 +119,7 @@ class Admin_WorkflowController extends Application_Controller_Action
                 'index',
                 ['failure' => $this->view->translate(
                     'admin_workflow_error_illegal_transition',
-                    [$targetState]
+                    $targetState
                 )],
                 'document',
                 'admin',
@@ -134,7 +136,7 @@ class Admin_WorkflowController extends Application_Controller_Action
             }
             return $this->_helper->Redirector->redirectTo(
                 'index',
-                ['failure' => $this->view->translate($key, [$targetState])],
+                ['failure' => $this->view->translate($key, $targetState)],
                 'document',
                 'admin',
                 ['id' => $docId]
@@ -188,7 +190,7 @@ class Admin_WorkflowController extends Application_Controller_Action
         if (! $this->view->translate()->getTranslator()->isTranslated($key)) {
             $key = 'admin_workflow_success';
         }
-        $message = $this->view->translate($key, $document->getId(), [$targetState]);
+        $message = $this->view->translate($key, $document->getId(), $targetState);
 
         if ($targetState === 'removed') {
             return $this->_helper->Redirector->redirectTo('index', $message, 'documents', 'admin');
@@ -224,7 +226,9 @@ class Admin_WorkflowController extends Application_Controller_Action
             true
         );
 
-        $recipients = $form->getSelectedRecipients($document, $this->getRequest()->getPost());
+        $post = $this->getRequest()->getPost();
+
+        $recipients = $form->getSelectedRecipients($document, $post);
 
         $notification->prepareMailFor(
             $document,
@@ -236,7 +240,7 @@ class Admin_WorkflowController extends Application_Controller_Action
     /**
      * Returns form for asking yes/no question like 'Delete file?'.
      *
-     * @param Opus_Document $document
+     * @param Document $document
      * @param string $action Target action that needs to be confirmed
      * @return Admin_Form_YesNoForm
      */

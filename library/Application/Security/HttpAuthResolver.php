@@ -31,10 +31,13 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Account;
+use Opus\Security\Realm;
+
 /**
  * HTTP auth resolver using OPUS accounts.
  */
-class Application_Security_HttpAuthResolver implements Zend_Auth_Adapter_Http_Resolver_Interface
+class Application_Security_HttpAuthResolver implements \Zend_Auth_Adapter_Http_Resolver_Interface
 {
 
     /**
@@ -48,10 +51,10 @@ class Application_Security_HttpAuthResolver implements Zend_Auth_Adapter_Http_Re
      */
     public function resolve($username, $realm)
     {
-        $user = Opus_Account::fetchAccountByLogin($username);
+        $user = Account::fetchAccountByLogin($username);
 
         if (! is_null($user)) {
-            if (Opus_Security_Realm::checkModuleForUser('sword', $username)) {
+            if (Realm::checkModuleForUser('sword', $username)) {
                 return $user->getPassword();
             }
         }

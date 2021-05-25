@@ -1,4 +1,11 @@
 <?php
+
+use Opus\Account;
+use Opus\Date;
+use Opus\Document;
+use Opus\File;
+use Opus\UserRole;
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -45,7 +52,7 @@ class Oai_Model_ContainerTest extends ControllerTestCase
     public function setUp()
     {
         parent::setUp();
-        $config = Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         if (! isset($config->workspacePath)) {
             throw new Exception("config key 'workspacePath' not defined in config file");
         }
@@ -55,11 +62,11 @@ class Oai_Model_ContainerTest extends ControllerTestCase
     public function tearDown()
     {
         if (! is_null($this->roleId)) {
-            $testRole = new Opus_UserRole($this->roleId);
+            $testRole = new UserRole($this->roleId);
             $testRole->delete();
         }
         if (! is_null($this->userId)) {
-            $userAccount = new Opus_Account($this->userId);
+            $userAccount = new Account($this->userId);
             $userAccount->delete();
         }
         parent::tearDown();
@@ -100,7 +107,7 @@ class Oai_Model_ContainerTest extends ControllerTestCase
 
     public function testConstructorWithUnpublishedDocument()
     {
-        $r = Opus_UserRole::fetchByName('guest');
+        $r = UserRole::fetchByName('guest');
 
         $modules = $r->listAccessModules();
         $addOaiModuleAccess = ! in_array('oai', $modules);
@@ -110,9 +117,8 @@ class Oai_Model_ContainerTest extends ControllerTestCase
         }
 
         // enable security
-        $config = Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         $config->security = self::CONFIG_VALUE_TRUE;
-        Zend_Registry::set('Zend_Config', $config);
 
         $doc = $this->createTestDocument();
         $doc->setServerState('unpublished');
@@ -153,7 +159,7 @@ class Oai_Model_ContainerTest extends ControllerTestCase
     {
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
-        $file = new Opus_File();
+        $file = new File();
         $file->setPathName('foo.pdf');
         $file->setVisibleInOai(false);
         $doc->addFile($file);
@@ -166,7 +172,7 @@ class Oai_Model_ContainerTest extends ControllerTestCase
     public function testDocumentWithRestrictedFile()
     {
         $filename = 'foo.pdf';
-        $file = $this->createTestFile($filename);
+        $file = $this->createOpusTestFile($filename);
 
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
@@ -190,7 +196,7 @@ class Oai_Model_ContainerTest extends ControllerTestCase
     {
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
-        $file = new Opus_File();
+        $file = new File();
         $file->setPathName('test.pdf');
         $file->setVisibleInOai(true);
         $doc->addFile($file);
@@ -209,7 +215,7 @@ class Oai_Model_ContainerTest extends ControllerTestCase
     public function testDocumentWithSingleUnrestrictedFile()
     {
         $filename = 'test.txt';
-        $file = $this->createTestFile($filename);
+        $file = $this->createOpusTestFile($filename);
 
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
@@ -239,14 +245,14 @@ class Oai_Model_ContainerTest extends ControllerTestCase
         $filename1 = 'foo.pdf';
         $filename2 = 'bar.pdf';
 
-        $file1 = $this->createTestFile($filename1);
+        $file1 = $this->createOpusTestFile($filename1);
         $file1->setVisibleInOai(true);
 
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
         $doc->addFile($file1);
 
-        $file2 = $this->createTestFile($filename2);
+        $file2 = $this->createOpusTestFile($filename2);
         $file2->setVisibleInOai(true);
         $doc->addFile($file2);
         $doc->store();
@@ -273,14 +279,14 @@ class Oai_Model_ContainerTest extends ControllerTestCase
         $filename1 = 'test.pdf';
         $filename2 = 'foo.html';
 
-        $file1 = $this->createTestFile($filename1);
+        $file1 = $this->createOpusTestFile($filename1);
         $file1->setVisibleInOai(true);
 
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
         $doc->addFile($file1);
 
-        $file2 = $this->createTestFile($filename2);
+        $file2 = $this->createOpusTestFile($filename2);
         $file2->setVisibleInOai(true);
         $doc->addFile($file2);
         $doc->store();
@@ -300,7 +306,7 @@ class Oai_Model_ContainerTest extends ControllerTestCase
     {
         $filename1 = 'test.pdf';
 
-        $file = $this->createTestFile($filename1);
+        $file = $this->createOpusTestFile($filename1);
 
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
@@ -333,7 +339,7 @@ class Oai_Model_ContainerTest extends ControllerTestCase
         $docId = $doc->store();
         $this->tryAccessForDocument($docId, true);
 
-        $doc = new Opus_Document($docId);
+        $doc = Document::get($docId);
         $doc->setServerState('unpublished');
         $docId = $doc->store();
         $this->tryAccessForDocument($docId, true);
@@ -352,13 +358,13 @@ class Oai_Model_ContainerTest extends ControllerTestCase
         $doc->setServerState('unpublished');
         $unpublishedDocId = $doc->store();
 
-        $testRole = new Opus_UserRole();
+        $testRole = new UserRole();
         $testRole->setName('test_access');
         $testRole->appendAccessDocument($unpublishedDocId);
         $testRole->appendAccessDocument($publishedDocId);
         $this->roleId = $testRole->store();
 
-        $userAccount = new Opus_Account();
+        $userAccount = new Account();
         $userAccount->setLogin('test_account')->setPassword('role_tester_user2');
         $userAccount->setRole($testRole);
         $this->userId = $userAccount->store();
@@ -379,7 +385,7 @@ class Oai_Model_ContainerTest extends ControllerTestCase
         $docId = $doc->store();
         $this->tryAccessForDocument($docId, true);
 
-        $doc = new Opus_Document($docId);
+        $doc = Document::get($docId);
         $doc->setServerState('unpublished');
         $docId = $doc->store();
         $this->tryAccessForDocument($docId, false);
@@ -414,12 +420,12 @@ class Oai_Model_ContainerTest extends ControllerTestCase
         $doc->setServerState('published');
 
         // set embargo date to tomorrow
-        $date = new Opus_Date();
+        $date = new Date();
         $date->setDateTime(new DateTime('tomorrow'));
         $doc->setEmbargoDate($date);
 
         // add a file visible in OAI
-        $file = $this->createTestFile('foo.pdf');
+        $file = $this->createOpusTestFile('foo.pdf');
         $file->setVisibleInOai(true);
         $doc->addFile($file);
 

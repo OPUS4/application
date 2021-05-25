@@ -32,6 +32,10 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Document;
+use Opus\Security\Realm;
+use Opus\Db\DocumentXmlCache;
+
 /**
  * Export plugin for exporting documents as XML.
  *
@@ -185,6 +189,7 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract
         // Initialize member variables.
         $this->_xml = new DomDocument();
         $this->_proc = new XSLTProcessor();
+        $this->registerPhpFunctions();
     }
 
     /**
@@ -199,10 +204,10 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract
         $this->_xslt = new DomDocument;
         $this->_xslt->load($stylesheet);
         $this->_proc->importStyleSheet($this->_xslt);
-        if (isset($_SERVER['HTTP_HOST'])) {
-            $this->_proc->setParameter('', 'host', $_SERVER['HTTP_HOST']);
-        }
-        $this->_proc->setParameter('', 'server', $this->getRequest()->getBaseUrl());
+
+        $view = $this->getView();
+
+        $this->_proc->setParameter('', 'opusUrl', $view->fullUrl());
     }
 
     /**
@@ -232,7 +237,7 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract
 
         // parameter stylesheet is mandatory (only administrator is able to see raw output)
         // non-administrative users can only reference user-defined stylesheets
-        if (is_null($request->getParam('stylesheet')) && ! Opus_Security_Realm::getInstance()->checkModule('admin')) {
+        if (is_null($request->getParam('stylesheet')) && ! Realm::getInstance()->checkModule('admin')) {
             throw new Application_Exception('missing parameter stylesheet');
         }
 
@@ -304,8 +309,8 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract
 
         $config = $this->getConfig();
 
-        if (! Opus_Security_Realm::getInstance()->skipSecurityChecks()) {
-            $identity = Zend_Auth::getInstance()->getIdentity();
+        if (! Realm::getInstance()->skipSecurityChecks()) {
+            $identity = \Zend_Auth::getInstance()->getIdentity();
 
             if (empty($identity) === true) {
                 if (isset($config->maxDocumentsGuest)) {
@@ -349,7 +354,7 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract
         $proc = $this->_proc;
         $xml = $this->_xml;
 
-        $proc->setParameter('', 'timestamp', str_replace('+00:00', 'Z', Zend_Date::now()->setTimeZone('UTC')->getIso()));
+        $proc->setParameter('', 'timestamp', str_replace('+00:00', 'Z', \Zend_Date::now()->setTimeZone('UTC')->getIso()));
         $proc->setParameter('', 'docCount', count($resultIds));
         $proc->setParameter('', 'queryhits', $numOfHits);
 
@@ -399,7 +404,7 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract
         if (! is_null($docId)) {
             $doc = null;
             try {
-                $doc = new Opus_Document($docId);
+                $doc = Document::get($docId);
             } catch (Exception $e) {
                 // do nothing: return empty array
             }
@@ -442,7 +447,7 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract
         $documents = [];
 
         foreach ($documentIds as $docId) {
-            $document = new Opus_Document($docId);
+            $document = Document::get($docId);
             $documentXml = new Application_Util_Document($document);
             $documents[$docId] = $documentXml->getNode();
         }
@@ -459,7 +464,7 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract
     {
         $documents = [];
 
-        $documentCacheTable = new Opus_Db_DocumentXmlCache();
+        $documentCacheTable = new DocumentXmlCache();
         $docXmlCache = $documentCacheTable->fetchAll(
             $documentCacheTable->select()->where(
                 'document_id IN (?)',
@@ -500,5 +505,16 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract
         $pos = strrpos($path, '/');
         $scriptPath = substr($path, 0, ++$pos);
         return $scriptPath . 'stylesheets' . DIRECTORY_SEPARATOR . 'raw.xslt';
+    }
+
+    /**
+     * TODO create test verifying expected functions are available
+     */
+    protected function registerPhpFunctions()
+    {
+        Application_Xslt::registerViewHelper($this->_proc, [
+            'accessAllowed',
+            'isAuthenticated'
+        ]);
     }
 }

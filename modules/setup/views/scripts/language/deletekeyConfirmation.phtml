@@ -59,7 +59,7 @@
                 <div class="current" title="<?= $this->translate('setup_translation_tooltip_value_current') ?>">
                     <?= $value ?>
                 </div>
-            <?php if (isset($translation['translationsTmx'])) : ?>
+            <?php if (isset($translation['translationsTmx'][$lang])) : ?>
                 <div class="default" title="<?= $this->translate('setup_translation_tooltip_value_default') ?>">
                     <?= $translation['translationsTmx'][$lang] ?>
                 </div>

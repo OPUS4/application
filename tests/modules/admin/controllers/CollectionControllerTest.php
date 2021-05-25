@@ -32,6 +32,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Collection;
+use Opus\CollectionRole;
+
 /**
  * Basic unit tests for the collections controller in admin module.
  *
@@ -52,7 +55,7 @@ class Admin_CollectionControllerTest extends ControllerTestCase
     {
         parent::setUp();
 
-        $this->emptyCollectionRole = new Opus_CollectionRole();
+        $this->emptyCollectionRole = new CollectionRole();
         $this->emptyCollectionRole->setName("test1role");
         $this->emptyCollectionRole->setOaiName("test1role");
         $this->emptyCollectionRole->setDisplayBrowsing("Name");
@@ -60,7 +63,7 @@ class Admin_CollectionControllerTest extends ControllerTestCase
         $this->emptyCollectionRole->setPosition(100);
         $this->emptyCollectionRole->store();
 
-        $this->nonEmptyCollectionRole = new Opus_CollectionRole();
+        $this->nonEmptyCollectionRole = new CollectionRole();
         $this->nonEmptyCollectionRole->setName("test2role");
         $this->nonEmptyCollectionRole->setOaiName("test2role");
         $this->nonEmptyCollectionRole->setDisplayBrowsing("Name");
@@ -71,13 +74,13 @@ class Admin_CollectionControllerTest extends ControllerTestCase
         $this->rootCollection = $this->nonEmptyCollectionRole->addRootCollection();
         $this->rootCollection->store();
 
-        $this->collection = new Opus_Collection();
+        $this->collection = new Collection();
         $this->collection->setName("first collection");
         $this->collection->setNumber("123");
         $this->rootCollection->addFirstChild($this->collection);
         $this->collection->store();
 
-        $this->anotherCollection = new Opus_Collection();
+        $this->anotherCollection = new Collection();
         $this->anotherCollection->setName("last collection");
         $this->anotherCollection->setNumber("987");
         $this->rootCollection->addLastChild($this->anotherCollection);

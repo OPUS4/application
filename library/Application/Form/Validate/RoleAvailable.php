@@ -28,13 +28,14 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
+use Opus\UserRole;
 
 /**
  * Checks if a role already exists.
  */
-class Application_Form_Validate_RoleAvailable extends Zend_Validate_Abstract
+class Application_Form_Validate_RoleAvailable extends \Zend_Validate_Abstract
 {
 
     /**
@@ -93,7 +94,7 @@ class Application_Form_Validate_RoleAvailable extends Zend_Validate_Abstract
     protected function _isRoleUsed($role)
     {
         try {
-            $role = Opus_UserRole::fetchByName($role);
+            $role = UserRole::fetchByName($role);
 
             if (empty($role)) {
                 return false;

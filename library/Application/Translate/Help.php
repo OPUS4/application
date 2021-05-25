@@ -29,7 +29,11 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
+ *
+ * TODO define and use interface
  */
+
+use Opus\Config;
 
 abstract class Application_Translate_Help
 {
@@ -50,7 +54,7 @@ abstract class Application_Translate_Help
     public function getConfig()
     {
         if (is_null($this->config)) {
-            $this->config = Zend_Registry::get('Zend_Config');
+            $this->config = Config::get();
         }
         return $this->config;
     }
@@ -69,4 +73,6 @@ abstract class Application_Translate_Help
     abstract public function getHelpEntries();
 
     abstract public function getContent($key);
+
+    abstract public function isContentAvailable($key);
 }

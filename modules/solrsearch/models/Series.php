@@ -32,6 +32,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Series;
+use Opus\Model\NotFoundException;
+
 class Solrsearch_Model_Series
 {
 
@@ -45,8 +48,8 @@ class Solrsearch_Model_Series
 
         $s = null;
         try {
-            $s = new Opus_Series($seriesId);
-        } catch (Opus_Model_NotFoundException $e) {
+            $s = new Series($seriesId);
+        } catch (NotFoundException $e) {
             throw new Solrsearch_Model_Exception("Series with id '" . $seriesId . "' does not exist.", 404);
         }
 
@@ -83,7 +86,7 @@ class Solrsearch_Model_Series
         $logoDir = APPLICATION_PATH . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'series_logos'
             . DIRECTORY_SEPARATOR . $this->_series->getId();
         if (is_readable($logoDir)) {
-            $iterator = new DirectoryIterator($logoDir);
+            $iterator = new \DirectoryIterator($logoDir);
             foreach ($iterator as $fileinfo) {
                 if ($fileinfo->isFile()) {
                     return $fileinfo->getFilename();

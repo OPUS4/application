@@ -31,6 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Document;
+
 class Admin_Form_Document_MultiIdentifierOtherSubForm extends Admin_Form_Document_MultiSubForm
 {
 
@@ -73,7 +75,7 @@ class Admin_Form_Document_MultiIdentifierOtherSubForm extends Admin_Form_Documen
      * wir dürfen hier nicht die setIdentifier-Methode direkt verwenden, sonst löschen wir DOIs/URNs
      * die mit dem Dokument verknüpft sind
      *
-     * @param Opus_Document $document
+     * @param Document $document
      */
     public function updateModel($document)
     {

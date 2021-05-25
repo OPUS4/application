@@ -31,6 +31,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Document;
+use Opus\Log;
+
 class Application_Import_ImporterTest extends ControllerTestCase
 {
 
@@ -40,22 +43,56 @@ class Application_Import_ImporterTest extends ControllerTestCase
     {
         $xml = file_get_contents(APPLICATION_PATH . '/tests/import/test_import_enrichment_without_value.xml');
 
-        $importer = new Application_Import_Importer($xml, false, Opus_Log::get());
+        $importer = new Application_Import_Importer($xml, false, Log::get());
 
         $importer->run();
 
         $document = $importer->getDocument();
 
         $this->assertNotNull($document);
-        $this->assertInstanceOf('Opus_Document', $document);
+        $this->assertInstanceOf(Document::class, $document);
 
         $this->assertCount(1, $document->getEnrichment());
         $this->assertEquals('Berlin', $document->getEnrichmentValue('City'));
     }
 
+    /**
+     * Bei der Angabe eines EmbargoDate im Import-XML muss eine Tages- und Monatsangabe sowie
+     * eine Jahresangabe enthalten sein. Eine alleinige Jahresangabe ist nicht zulässig.
+     */
+    public function testImportInvalidEmbargoDate()
+    {
+        $xml = file_get_contents(APPLICATION_PATH . '/tests/resources/import/incomplete-embargo-date.xml');
+
+        $importer = new Application_Import_Importer($xml, false, Log::get());
+
+        $this->setExpectedException(Application_Import_MetadataImportSkippedDocumentsException::class);
+        $importer->run();
+    }
+
+    public function testValidEmbargoDate()
+    {
+        $xml = file_get_contents(APPLICATION_PATH . '/tests/resources/import/embargo-date.xml');
+
+        $importer = new Application_Import_Importer($xml, false, Log::get());
+
+        $importer->run();
+
+        $document = $importer->getDocument();
+
+        $this->assertNotNull($document);
+        $this->assertInstanceOf(Document::class, $document);
+
+        $embargoDate = $document->getEmbargoDate();
+        $this->assertEquals(12, $embargoDate->getDay());
+        $this->assertEquals(11, $embargoDate->getMonth());
+        $this->assertEquals(2042, $embargoDate->getYear());
+    }
+
     public function testFromArray()
     {
-        $doc = new Opus_Document(146);
+        $this->markTestIncomplete('Test for debugging - TODO expand');
+        $doc = Document::get(146);
 
         // var_dump($doc->toArray());
     }

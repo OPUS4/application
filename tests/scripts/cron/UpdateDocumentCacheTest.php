@@ -33,6 +33,9 @@
 
 require_once('CronTestCase.php');
 
+use Opus\Licence;
+use Opus\Db\DocumentXmlCache;
+
 /**
  *
  */
@@ -46,7 +49,7 @@ class UpdateDocumentCacheTest extends CronTestCase
         $document = $this->createTestDocument();
         $document->store();
 
-        $documentCacheTable = new Opus_Db_DocumentXmlCache();
+        $documentCacheTable = new DocumentXmlCache();
 
         $docXmlCache = $documentCacheTable->find($document->getId(), '1')->current()->xml_data;
         $domDoc = new DomDocument();
@@ -54,7 +57,7 @@ class UpdateDocumentCacheTest extends CronTestCase
         $licences = $domDoc->getElementsByTagName('Licence');
         $this->assertTrue($licences->length == 0, 'Expected no Licence element in dom.');
 
-        $licence = new Opus_Licence();
+        $licence = new Licence();
         $licence->setNameLong('TestLicence');
         $licence->setLinkLicence('http://example.org/licence');
         $licenceId = $licence->store();
@@ -62,7 +65,7 @@ class UpdateDocumentCacheTest extends CronTestCase
         $document->setLicence($licence);
         $docId = $document->store();
 
-        $licence = new Opus_Licence($licenceId);
+        $licence = new Licence($licenceId);
         $licence->setNameLong('TestLicenceAltered');
         $licence->store();
 

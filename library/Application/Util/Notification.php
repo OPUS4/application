@@ -27,11 +27,18 @@
  * @category    Application
  * @package     Notification
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2012-2018, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2012-2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  *
  * TODO remove concept of 'context' - class should not implement different context variations (use OO principles)
  */
+
+use Opus\Document;
+use Opus\Job;
+use Opus\Job\Worker\MailNotification;
+use Opus\Model\ModelException;
+
 class Application_Util_Notification extends Application_Model_Abstract
 {
 
@@ -43,7 +50,7 @@ class Application_Util_Notification extends Application_Model_Abstract
 
     /**
      *
-     * @param Opus_Document $document das Dokument auf das sich die Notifizierung bezieht
+     * @param Document $document das Dokument auf das sich die Notifizierung bezieht
      * @param String $url vollständiger Deeplink, der in der Mail angezeigt werden soll
      * @param boolean $notifySubmitter Wenn false, wird der Submitter nicht notifiziert
      * @param array $notifyAuthors Bitmaske, die für jeden Autor (über den Index referenziert) angibt, ob ihm/ihr eine
@@ -88,6 +95,7 @@ class Application_Util_Notification extends Application_Model_Abstract
      * @param $recipients
      *
      * TODO this function is only used for PublicatioNotification at the moment - cleanup!
+     * TODO needs more tests
      */
     public function prepareMailFor($document, $url, $recipients)
     {
@@ -113,8 +121,14 @@ class Application_Util_Notification extends Application_Model_Abstract
             } else {
                 $entry['name'] = $recipient['name'];
             }
+
+            $converted[] = $entry; // TODO removing this line does not break tests
         }
 
+        // TODO removing the following line does not break tests
+        $converted = $this->getRecipients($converted); // adding general recipients
+
+        // TODO this function should not send the messages, just prepare them (refactoring)
         $this->scheduleNotification(
             $this->getMailSubject($document, $authors),
             $this->getMailBody($document->getId(), $authors, $title, $url),
@@ -141,7 +155,7 @@ class Application_Util_Notification extends Application_Model_Abstract
     }
 
     /**
-     * @param $document Opus_Document
+     * @param $document Document
      * @param $docId
      * @param $authors
      * @param $title
@@ -275,7 +289,7 @@ class Application_Util_Notification extends Application_Model_Abstract
      * @param $subject
      * @param $message
      * @param $recipients
-     * @throws Opus_Model_Exception
+     * @throws ModelException
      *
      * TODO the code here should not decide if synchronous or asynchronous - create a job and go (either way)
      * TODO the code here should not filter recipients (that should have happened earlier)
@@ -292,8 +306,8 @@ class Application_Util_Notification extends Application_Model_Abstract
         foreach ($recipients as $recipient) {
             // only send if email address has not been used before
             if (! in_array($recipient['address'], $addressesUsed)) {
-                $job = new Opus_Job();
-                $job->setLabel(Opus_Job_Worker_MailNotification::LABEL);
+                $job = new Job();
+                $job->setLabel(MailNotification::LABEL);
                 $job->setData([
                     'subject' => $subject,
                     'message' => $message,
@@ -312,7 +326,7 @@ class Application_Util_Notification extends Application_Model_Abstract
                 } else {
                     // Execute job immediately (synchronously)
                     try {
-                        $mail = new Opus_Job_Worker_MailNotification($this->getLogger(), false);
+                        $mail = new MailNotification($this->getLogger(), false);
                         $mail->work($job);
                     } catch (Exception $exc) {
                         $this->getLogger()->err("Email notification failed: " . $exc);

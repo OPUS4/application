@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -28,10 +27,13 @@
  * @category    Application
  * @package     Module_Publish
  * @author      Susanne Gottwald <gottwald@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-abstract class Publish_Form_PublishingAbstract extends Zend_Form
+
+use Opus\Config;
+
+abstract class Publish_Form_PublishingAbstract extends \Zend_Form
 {
 
     protected $_config;
@@ -44,9 +46,9 @@ abstract class Publish_Form_PublishingAbstract extends Zend_Form
 
     public function __construct()
     {
-        $this->_session = new Zend_Session_Namespace('Publish');
-        $this->_config = Zend_Registry::get('Zend_Config');
-        $this->_documentTypesHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
+        $this->_session = new \Zend_Session_Namespace('Publish');
+        $this->_config = Config::get();
+        $this->_documentTypesHelper = \Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
         $this->view = $this->getView();
         parent::__construct();
     }

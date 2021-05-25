@@ -34,7 +34,7 @@
 /**
  * View helper for rendering a combobox (text input + select).
  */
-class Application_View_Helper_FormCombobox extends Zend_View_Helper_FormElement
+class Application_View_Helper_FormCombobox extends \Zend_View_Helper_FormElement
 {
 
     public function formCombobox($name, $value = null, $attribs = null, $options = null, $listsep = "<br />\n")

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -30,8 +29,12 @@
  * @author      Thoralf Klein <thoralf.klein@zib.de>
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
+use Opus\Account;
+use Opus\Log;
+use Opus\Person;
+
 class Publish_Model_LoggedUser
 {
 
@@ -41,14 +44,14 @@ class Publish_Model_LoggedUser
 
     public function __construct()
     {
-        $this->_log = Zend_Registry::get("Zend_Log");
+        $this->_log = Log::get();
 
-        $login = Zend_Auth::getInstance()->getIdentity();
+        $login = \Zend_Auth::getInstance()->getIdentity();
         if (is_null($login) or trim($login) == '') {
             return;
         }
 
-        $account = Opus_Account::fetchAccountByLogin($login);
+        $account = Account::fetchAccountByLogin($login);
         if (is_null($account) or $account->isNewRecord()) {
             $this->_log->err("Error checking logged user: Invalid account returned for user '$login'!");
             return;
@@ -59,9 +62,9 @@ class Publish_Model_LoggedUser
     }
 
     /**
-     * Get ID of Opus_Account object.  Return null if no account has been found.
+     * Get ID of Account object.  Return null if no account has been found.
      *
-     * @return Opus_Person
+     * @return Person
      */
     public function getUserId()
     {
@@ -69,10 +72,10 @@ class Publish_Model_LoggedUser
     }
 
     /**
-     * Create Opus_Person object for currently logged user.  If no account
+     * Create Person object for currently logged user.  If no account
      * has been found, return NULL.
      *
-     * @return Opus_Person
+     * @return Person
      */
     public function createPerson()
     {
@@ -80,7 +83,7 @@ class Publish_Model_LoggedUser
             return;
         }
 
-        $person = new Opus_Person();
+        $person = new Person();
         $person->setFirstName(trim($this->_account->getFirstName()));
         $person->setLastName(trim($this->_account->getLastName()));
         $person->setEmail(trim($this->_account->getEmail()));

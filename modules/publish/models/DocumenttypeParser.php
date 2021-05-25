@@ -28,16 +28,19 @@
  * @package     Module_Publish
  * @author      Susanne Gottwald <gottwald@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\EnrichmentKey;
+use Opus\Log;
 
 class Publish_Model_DocumenttypeParser extends Application_Model_Abstract
 {
 
     /**
      *
-     * @var DOMDocument
+     * @var \DOMDocument
      */
     public $dom;
 
@@ -60,15 +63,15 @@ class Publish_Model_DocumenttypeParser extends Application_Model_Abstract
 
     /**
      *
-     * @param DOMDocument $dom
+     * @param \DOMDocument $dom
      * @param Publish_Form_PublishingSecond $form
      * @param array $additionalFields
      * @param array $postValues
      */
     public function __construct($dom, $form, $additionalFields = [], $postValues = [])
     {
-        $this->_log = Zend_Registry::get('Zend_Log');
-        $this->_session = new Zend_Session_Namespace('Publish');
+        $this->_log = Log::get();
+        $this->_session = new \Zend_Session_Namespace('Publish');
         $this->form = $form;
         $this->dom = $dom;
         if (is_array($additionalFields)) {
@@ -322,7 +325,7 @@ class Publish_Model_DocumenttypeParser extends Application_Model_Abstract
     private function zendConformElementName($string)
     {
 
-        $element = new Zend_Form_Element_Text($string);
+        $element = new \Zend_Form_Element_Text($string);
         $element->setName($string);
 
         if ($element->getName() !== $string) {
@@ -334,7 +337,7 @@ class Publish_Model_DocumenttypeParser extends Application_Model_Abstract
 
     private function isValidEnrichmentKey($elementName)
     {
-        $enrichment = Opus_EnrichmentKey::fetchByName($elementName);
+        $enrichment = EnrichmentKey::fetchByName($elementName);
         if (is_null($enrichment)) {
             throw new Publish_Model_FormIncorrectEnrichmentKeyException($elementName);
         }

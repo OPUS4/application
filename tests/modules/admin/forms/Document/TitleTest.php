@@ -30,6 +30,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Document;
+use Opus\Title;
+
 /**
  * Unit Test fuer Unterformular fuer einen Titel.
  */
@@ -52,7 +55,7 @@ class Admin_Form_Document_TitleTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Title();
 
-        $doc = new Opus_Document(146);
+        $doc = Document::get(146);
 
         $titles = $doc->getTitleMain();
 
@@ -74,7 +77,7 @@ class Admin_Form_Document_TitleTest extends ControllerTestCase
         $form->getElement('Language')->setValue('rus');
         $form->getElement('Value')->setValue('Test Title');
 
-        $title = new Opus_Title();
+        $title = new Title();
 
         $form->updateModel($title);
 
@@ -87,7 +90,7 @@ class Admin_Form_Document_TitleTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Title();
 
-        $doc = new Opus_Document(146);
+        $doc = Document::get(146);
 
         $titles = $doc->getTitleMain();
 

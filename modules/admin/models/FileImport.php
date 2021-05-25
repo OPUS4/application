@@ -29,8 +29,11 @@
  * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
+use Opus\Document;
+use Opus\File;
+use Opus\Model\NotFoundException;
 
 /**
  * Model for importing files from a specific folder.
@@ -61,8 +64,8 @@ class Admin_Model_FileImport extends Application_Model_Abstract
 
         $document = null;
         try {
-            $document = new Opus_Document($docId);
-        } catch (Opus_Model_NotFoundException $e) {
+            $document = Document::get($docId);
+        } catch (NotFoundException $e) {
             throw new Application_Exception('no document found for id ' . $docId, null, $e);
         }
 
@@ -99,7 +102,7 @@ class Admin_Model_FileImport extends Application_Model_Abstract
      */
     public function listFiles()
     {
-        return Zend_Controller_Action_HelperBroker::getStaticHelper('Files')->listFiles($this->_importFolder, true);
+        return \Zend_Controller_Action_HelperBroker::getStaticHelper('Files')->listFiles($this->_importFolder, true);
     }
 
     public function getNamesOfIncomingFiles()
@@ -129,7 +132,7 @@ class Admin_Model_FileImport extends Application_Model_Abstract
      */
     public function deleteFile($docId, $fileId)
     {
-        $doc = new Opus_Document($docId);
+        $doc = Document::get($docId);
 
         $keepFiles = [];
 
@@ -160,8 +163,8 @@ class Admin_Model_FileImport extends Application_Model_Abstract
         $file = null;
 
         try {
-            $file = new Opus_File($fileId);
-        } catch (Opus_Model_NotFoundException $omnfe) {
+            $file = new File($fileId);
+        } catch (NotFoundException $omnfe) {
             return false;
         }
 
@@ -180,7 +183,7 @@ class Admin_Model_FileImport extends Application_Model_Abstract
             return false;
         }
 
-        $doc = new Opus_Document($docId);
+        $doc = Document::get($docId);
 
         $files = $doc->getFile();
 

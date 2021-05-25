@@ -34,7 +34,7 @@
  * template, adapting it to the specific needs of displaying multiple input
  * elements label for the supported languages.
  */
-class Application_View_Helper_FormTranslation extends Zend_View_Helper_FormRadio
+class Application_View_Helper_FormTranslation extends \Zend_View_Helper_FormRadio
 {
 
     protected $_inputType = 'text';
@@ -79,9 +79,9 @@ class Application_View_Helper_FormTranslation extends Zend_View_Helper_FormRadio
             ? '/[^\p{L}\p{N}\-\_]/u'    // Unicode
             : '/[^a-zA-Z0-9\-\_]/';     // No Unicode
 
-        $filter = new Zend_Filter_PregReplace($pattern, '');
+        $filter = new \Zend_Filter_PregReplace($pattern, '');
 
-        $translate = Zend_Registry::get('Zend_Translate');
+        $translate = Application_Translate::getInstance();
 
         $name = $this->view->escape($name);
 

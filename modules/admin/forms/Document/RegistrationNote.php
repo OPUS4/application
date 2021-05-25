@@ -31,6 +31,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Identifier;
+use Opus\Model\NotFoundException;
+
 /**
  * Anzeigefeld für den Registrierungsstatus von lokalen DOIs
  */
@@ -53,7 +56,7 @@ class Admin_Form_Document_RegistrationNote extends Admin_Form_AbstractDocumentSu
     {
         parent::init();
 
-        $statusNote = new Zend_Form_Element_Note(self::ELEMENT_REGISTRATION_NOTE);
+        $statusNote = new \Zend_Form_Element_Note(self::ELEMENT_REGISTRATION_NOTE);
         $this->addElement($statusNote);
     }
 
@@ -62,14 +65,14 @@ class Admin_Form_Document_RegistrationNote extends Admin_Form_AbstractDocumentSu
         if (is_string($model) && is_numeric($model)) {
             // Identifier-ID übergeben
             try {
-                $model = new Opus_Identifier($model);
-            } catch (Opus_Model_NotFoundException $e) {
+                $model = new Identifier($model);
+            } catch (NotFoundException $e) {
                 // ignore silently
                 return;
             }
         }
 
-        if (! ($model instanceof Opus_Identifier)) {
+        if (! ($model instanceof Identifier)) {
             return;
         }
         if (! $model->isLocalDoi()) {

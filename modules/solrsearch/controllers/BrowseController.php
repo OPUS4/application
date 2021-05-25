@@ -28,7 +28,7 @@
  * @package     Module_Solrsearch
  * @author      Sascha Szott <szott@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -70,7 +70,7 @@ class Solrsearch_BrowseController extends Application_Controller_Action
         $query->setFacetField($facetname);
 
         try {
-            $searcher = new Opus\Search\Util\Searcher();
+            $searcher = Application_Search_SearcherFactory::getSearcher();
             $facets = $searcher->search($query)->getFacets();
         } catch (Opus\Search\Exception $e) {
             $this->getLogger()->err(__METHOD__ . ' : ' . $e);
@@ -92,17 +92,25 @@ class Solrsearch_BrowseController extends Application_Controller_Action
         $facetname = 'year';
 
         $query = new Opus\Search\Util\Query(Opus\Search\Util\Query::FACET_ONLY);
-        $query->setFacetField($facetname);
+
+        $facetManager = new Application_Search_FacetManager();
+        $facet = $facetManager->getFacet($facetname);
+
+        $indexField = $facet->getIndexField();
+        // do not use inverted field TODO this is a hack - better solution?
+        $indexField = preg_replace('/_inverted/', '', $indexField);
+
+        $query->setFacetField($indexField);
 
         try {
-            $searcher = new Opus\Search\Util\Searcher();
+            $searcher = Application_Search_SearcherFactory::getSearcher();
             $facets = $searcher->search($query)->getFacets();
         } catch (Opus\Search\Exception $ose) {
             $this->getLogger()->err(__METHOD__ . ' : ' . $ose);
             throw new Application_SearchException($ose);
         }
 
-        $years = $facets[$facetname];
+        $years = $facets[$indexField];
 
         krsort($years);
 

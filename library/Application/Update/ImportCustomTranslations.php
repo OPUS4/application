@@ -27,12 +27,16 @@
  * @category    Application
  * @package     Application_Update
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2019-2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Util\ConsoleColors;
+
 class Application_Update_ImportCustomTranslations extends Application_Update_PluginAbstract
 {
+
+    private $removeFilesEnabled = true;
 
     /**
      * Performs import of custom translations and removal of old files.
@@ -50,20 +54,40 @@ class Application_Update_ImportCustomTranslations extends Application_Update_Plu
 
         $files = $manager->getFiles();
 
-        $colors = new Opus_Util_ConsoleColors();
+        $colors = new ConsoleColors();
 
         if (count($files) > 0) {
             // Iterate through modules und TMX files in 'language_custom'
             foreach ($files as $module => $folders) {
                 $this->importFolder($folders['language_custom'], $module);
-                $this->removeFolder("/modules/$module/language_custom");
             }
         } else {
             $this->log($colors->yellow('No custom TMX files found'));
         }
 
-        $this->log("Clearing translation cache...");
-        Zend_Translate::clearCache();
+        // Remove example.tmx.template files
+        $this->log('Remove example.tmx.template files...');
+        foreach ($modules as $module) {
+            $path = APPLICATION_PATH . "/modules/$module/language_custom/example.tmx.template";
+            if (is_writeable($path)) {
+                $this->log("Removing $path");
+                if ($this->isRemoveFilesEnabled()) {
+                    unlink($path);
+                }
+            }
+        }
+
+        // Remove empty language_custom folders for all modules
+        $this->log(PHP_EOL . 'Remove empty \'language_custom\' directories...');
+        foreach ($modules as $module) {
+            $path = "/modules/$module/language_custom";
+            if (is_dir(APPLICATION_PATH . $path)) {
+                $this->removeFolder($path);
+            }
+        }
+
+        $this->log(PHP_EOL . 'Clearing translation cache...' . PHP_EOL);
+        \Zend_Translate::clearCache();
     }
 
     /**
@@ -73,7 +97,7 @@ class Application_Update_ImportCustomTranslations extends Application_Update_Plu
      */
     public function importFolder($files, $module)
     {
-        $colors = new Opus_Util_ConsoleColors();
+        $colors = new ConsoleColors();
 
         foreach ($files as $filename) {
             $path = "/modules/$module/language_custom/$filename";
@@ -86,7 +110,7 @@ class Application_Update_ImportCustomTranslations extends Application_Update_Plu
 
             $translations = $tmx->toArray();
 
-            $database = new Opus_Translate_Dao();
+            $database = new \Opus\Translate\Dao();
 
             $database->addTranslations($translations, $module);
 
@@ -106,12 +130,22 @@ class Application_Update_ImportCustomTranslations extends Application_Update_Plu
      */
     public function removeFolder($path)
     {
-        $colors = new Opus_Util_ConsoleColors();
+        $colors = new ConsoleColors();
         if (! (new \FilesystemIterator(APPLICATION_PATH . $path))->valid()) {
             rmdir(APPLICATION_PATH . $path);
-            $this->log("Removed folder '$path'" . PHP_EOL);
+            $this->log("Removed folder '$path'");
         } else {
-            $this->log($colors->red("Folder '$path' not removed, because it is not empty") . PHP_EOL);
+            $this->log($colors->red("Folder '$path' not removed, because it is not empty"));
         }
+    }
+
+    public function setRemoveFilesEnabled($enabled)
+    {
+        $this->removeFilesEnabled = $enabled;
+    }
+
+    public function isRemoveFilesEnabled()
+    {
+        return $this->removeFilesEnabled;
     }
 }

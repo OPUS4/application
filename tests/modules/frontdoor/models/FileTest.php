@@ -31,6 +31,10 @@
  * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\Date;
+use Opus\File;
+
 class Frontdoor_Model_FileTest extends ControllerTestCase
 {
 
@@ -94,7 +98,7 @@ class Frontdoor_Model_FileTest extends ControllerTestCase
         $realm = new MockRealm(true, true);
         $opusFile = $file->getFileObject($realm);
 
-        $this->assertTrue($opusFile instanceof Opus_File);
+        $this->assertTrue($opusFile instanceof File);
         $this->assertEquals(self::FILENAME_DELETED_DOC, $opusFile->getPathName());
     }
 
@@ -104,7 +108,7 @@ class Frontdoor_Model_FileTest extends ControllerTestCase
         $file->setAclHelper(new MockAccessControl(true));
         $realm = new MockRealm(false, false); // sollte egal sein
         $opusFile = $file->getFileObject($realm);
-        $this->assertTrue($opusFile instanceof Opus_File);
+        $this->assertTrue($opusFile instanceof File);
     }
 
     /**
@@ -272,7 +276,7 @@ class Frontdoor_Model_FileTest extends ControllerTestCase
 
         $realm = new MockRealm(true, true);
 
-        $opusFile = new Opus_File(128);
+        $opusFile = new File(128);
 
         $this->assertEquals(0, $opusFile->getVisibleInFrontdoor(), "Testdaten geändert.");
         $this->assertEquals("frontdoor_invisible.txt", $opusFile->getPathName(), "Testdaten geändert.");
@@ -322,12 +326,12 @@ class Frontdoor_Model_FileTest extends ControllerTestCase
      */
     public function testAccessDeniedForEmbargoedDocument()
     {
-        $file = $this->createTestFile('test.pdf');
+        $file = $this->createOpusTestFile('test.pdf');
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
         $doc->addFile($file);
 
-        $date = new Opus_Date();
+        $date = new Date();
         $date->setYear('2100')->setMonth('00')->setDay('01');
         $doc->setEmbargoDate($date);
 
@@ -345,12 +349,12 @@ class Frontdoor_Model_FileTest extends ControllerTestCase
     public function testAccessForEmbargoedDocumentForDocumentsAdmin()
     {
         $this->loginUser('security8', 'security8pwd');
-        $file = $this->createTestFile('test.pdf');
+        $file = $this->createOpusTestFile('test.pdf');
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
         $doc->addFile($file);
 
-        $date = new Opus_Date();
+        $date = new Date();
         $date->setYear('2100')->setMonth('00')->setDay('01');
         $doc->setEmbargoDate($date);
 
@@ -370,12 +374,12 @@ class Frontdoor_Model_FileTest extends ControllerTestCase
     public function testAccessForEmbargoedDocumentForAdmin()
     {
         $this->loginUser('admin', 'adminadmin');
-        $file = $this->createTestFile('test.pdf');
+        $file = $this->createOpusTestFile('test.pdf');
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
         $doc->addFile($file);
 
-        $date = new Opus_Date();
+        $date = new Date();
         $date->setYear('2100')->setMonth('00')->setDay('01');
         $doc->setEmbargoDate($date);
 
@@ -390,12 +394,12 @@ class Frontdoor_Model_FileTest extends ControllerTestCase
     public function testGetFileObjectForUnpublishedFileForDocumentsAdmin()
     {
         $this->loginUser('security8', 'security8pwd');
-        $file = $this->createTestFile('test.pdf');
+        $file = $this->createOpusTestFile('test.pdf');
         $doc = $this->createTestDocument();
         $doc->setServerState('unpublished');
         $doc->addFile($file);
 
-        $date = new Opus_Date();
+        $date = new Date();
         $date->setYear('2100')->setMonth('00')->setDay('01');
         $doc->setEmbargoDate($date);
 

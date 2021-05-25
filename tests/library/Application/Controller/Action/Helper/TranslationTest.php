@@ -30,6 +30,13 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Identifier;
+use Opus\Language;
+use Opus\Note;
+use Opus\Person;
+use Opus\Model\Dependent\Link\DocumentPerson;
+use Opus\Model\ModelException;
+
 /**
  * Test for class Application_Controller_Action_Helper_Translation and translations in general.
  */
@@ -54,8 +61,8 @@ class Application_Controller_Action_Helper_TranslationTest extends ControllerTes
     {
         parent::setUp();
 
-        $this->translate = Zend_Registry::get('Zend_Translate');
-        $this->helper = Zend_Controller_Action_HelperBroker::getStaticHelper('Translation');
+        $this->translate = Application_Translate::getInstance();
+        $this->helper = \Zend_Controller_Action_HelperBroker::getStaticHelper('Translation');
     }
 
     /**
@@ -65,7 +72,7 @@ class Application_Controller_Action_Helper_TranslationTest extends ControllerTes
     {
         $this->assertEquals(
             'Opus_Document_ServerState_Value_Unpublished',
-            $this->helper->getKeyForValue('Opus_Document', 'ServerState', 'unpublished')
+            $this->helper->getKeyForValue('Opus\Document', 'ServerState', 'unpublished')
         );
     }
 
@@ -73,7 +80,7 @@ class Application_Controller_Action_Helper_TranslationTest extends ControllerTes
     {
         $this->assertEquals(
             'testdoctype',
-            $this->helper->getKeyForValue('Opus_Document', 'Type', 'testdoctype')
+            $this->helper->getKeyForValue('Opus\Document', 'Type', 'testdoctype')
         );
     }
 
@@ -81,7 +88,7 @@ class Application_Controller_Action_Helper_TranslationTest extends ControllerTes
     {
         $this->assertEquals(
             'testdoclang',
-            $this->helper->getKeyForValue('Opus_Document', 'Language', 'testdoclang')
+            $this->helper->getKeyForValue('Opus\Document', 'Language', 'testdoclang')
         );
     }
 
@@ -89,7 +96,7 @@ class Application_Controller_Action_Helper_TranslationTest extends ControllerTes
     {
         $this->assertEquals(
             'Language',
-            $this->helper->getKeyForField('Opus_Document', 'Language')
+            $this->helper->getKeyForField('Opus\Document', 'Language')
         );
     }
 
@@ -97,7 +104,7 @@ class Application_Controller_Action_Helper_TranslationTest extends ControllerTes
     {
         $this->assertEquals(
             'Opus_Document_Type',
-            $this->helper->getKeyForField('Opus_Document', 'Type')
+            $this->helper->getKeyForField('Opus\Document', 'Type')
         );
     }
 
@@ -107,7 +114,7 @@ class Application_Controller_Action_Helper_TranslationTest extends ControllerTes
         $values = $doc->getField('ServerState')->getDefault();
 
         foreach ($values as $value) {
-            $key = $this->helper->getKeyForValue('Opus_Document', 'ServerState', $value);
+            $key = $this->helper->getKeyForValue('Opus\Document', 'ServerState', $value);
             $this->assertNotEquals(
                 $key,
                 $this->translate->translate($key),
@@ -118,11 +125,11 @@ class Application_Controller_Action_Helper_TranslationTest extends ControllerTes
 
     public function testTranslationOfPersonRoleValues()
     {
-        $model = new Opus_Model_Dependent_Link_DocumentPerson();
+        $model = new DocumentPerson();
         $values = $model->getField('Role')->getDefault();
 
         foreach ($values as $value) {
-            $key = $this->helper->getKeyForValue('Opus_Person', 'Role', $value);
+            $key = $this->helper->getKeyForValue('Opus\Person', 'Role', $value);
             $this->assertNotEquals(
                 $key,
                 $this->translate->translate($key),
@@ -134,16 +141,16 @@ class Application_Controller_Action_Helper_TranslationTest extends ControllerTes
     public function translationOfTypeValuesDataProvider()
     {
         return [
-            ['Opus_Title'],
-            ['Opus_TitleAbstract'],
-            ['Opus_Identifier'],
-            ['Opus_Reference'],
-            ['Opus_Subject']
+            ['Opus\Title'],
+            ['Opus\TitleAbstract'],
+            ['Opus\Identifier'],
+            ['Opus\Reference'],
+            ['Opus\Subject']
         ];
     }
 
     /**
-     * @throws Opus_Model_Exception
+     * @throws ModelException
      * @dataProvider translationOfTypeValuesDataProvider
      */
     public function testTranslationOfTypeValues($className)
@@ -163,11 +170,11 @@ class Application_Controller_Action_Helper_TranslationTest extends ControllerTes
 
     public function testTranslationOfNoteVisibilityValues()
     {
-        $model = new Opus_Note();
+        $model = new Note();
         $values = $model->getField('Visibility')->getDefault();
 
         foreach ($values as $value) {
-            $key = $this->helper->getKeyForValue('Opus_Note', 'Visibility', $value);
+            $key = $this->helper->getKeyForValue('Opus\Note', 'Visibility', $value);
             $this->assertNotEquals(
                 $key,
                 $this->translate->translate($key),
@@ -183,7 +190,7 @@ class Application_Controller_Action_Helper_TranslationTest extends ControllerTes
         $fieldNames = $model->describe();
 
         foreach ($fieldNames as $name) {
-            $key = $this->helper->getKeyForField('Opus_Document', $name);
+            $key = $this->helper->getKeyForField('Opus\Document', $name);
             $this->assertTrue(
                 $this->translate->isTranslated($key),
                 "Translation key '$key' is missing."
@@ -193,7 +200,7 @@ class Application_Controller_Action_Helper_TranslationTest extends ControllerTes
 
     public function testTranslationOfOpusIdentifierFields()
     {
-        $model = new Opus_Identifier();
+        $model = new Identifier();
 
         $fieldNames = $model->describe();
 
@@ -202,7 +209,7 @@ class Application_Controller_Action_Helper_TranslationTest extends ControllerTes
                 // do not provide translations for DOI specific fields
                 continue;
             }
-            $key = $this->helper->getKeyForField('Opus_Identifier', $name);
+            $key = $this->helper->getKeyForField('Opus\Identifier', $name);
             $this->assertTrue(
                 $this->translate->isTranslated($key),
                 "Translation key '$key' is missing."
@@ -212,14 +219,14 @@ class Application_Controller_Action_Helper_TranslationTest extends ControllerTes
 
     public function testTranslationOfDocumentPersonFields()
     {
-        $model = new Opus_Model_Dependent_Link_DocumentPerson;
-        $target = new Opus_Person;
+        $model = new DocumentPerson();
+        $target = new Person();
         $model->setModel($target);
 
         $fieldNames = $model->describe();
 
         foreach ($fieldNames as $name) {
-            $key = $this->helper->getKeyForField('Opus_Person', $name);
+            $key = $this->helper->getKeyForField('Opus\Person', $name);
             $this->assertTrue(
                 $this->translate->isTranslated($key),
                 "Translation key '$key' is missing."
@@ -230,18 +237,18 @@ class Application_Controller_Action_Helper_TranslationTest extends ControllerTes
     public function translationOfFieldsDataProvider()
     {
         return [
-            ['Opus_Reference'],
-            ['Opus_Title'],
-            ['Opus_TitleAbstract'],
-            ['Opus_Subject'],
-            ['Opus_Patent'],
-            ['Opus_Note'],
-            ['Opus_Enrichment']
+            ['Opus\Reference'],
+            ['Opus\Title'],
+            ['Opus\TitleAbstract'],
+            ['Opus\Subject'],
+            ['Opus\Patent'],
+            ['Opus\Note'],
+            ['Opus\Enrichment']
         ];
     }
 
     /**
-     * @throws Opus_Model_Exception
+     * @throws ModelException
      * @dataProvider translationOfFieldsDataProvider
      */
     public function testTranslationOfOpusEnrichmentFields($className)
@@ -261,7 +268,7 @@ class Application_Controller_Action_Helper_TranslationTest extends ControllerTes
 
     public function testTranslationOfLanguages()
     {
-        $languages = Opus_Language::getAll();
+        $languages = Language::getAll();
 
         foreach ($languages as $language) {
             $key = $language->getPart2T();

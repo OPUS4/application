@@ -41,7 +41,7 @@
 $personId = $this->element->getElement(Admin_Form_Person::ELEMENT_PERSON_ID)->getValue();
 $person = $this->element->getModel();
 if (is_null($person) && ! is_null($personId)) {
-    $person = new Opus_Person($personId);
+    $person = new \Opus\Person($personId);
 } else {
     // TODO err output
 }

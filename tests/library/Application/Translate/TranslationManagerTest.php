@@ -59,7 +59,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
 
     public function tearDown()
     {
-        $translationDb = new Opus_Translate_Dao();
+        $translationDb = $this->getStorageInterface();
         $translationDb->removeAll();
 
         parent::tearDown();
@@ -67,9 +67,9 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
 
     public function testGetFiles()
     {
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        $this->adjustConfiguration([
             'setup' => ['translation' => ['modules' => ['allowed' => 'default,publish']]]
-        ]));
+        ]);
 
         $files = $this->object->getFiles();
 
@@ -173,9 +173,9 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
     {
         $manager = $this->object;
 
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        $this->adjustConfiguration([
             'setup' => ['translation' => ['modules' => ['allowed' => null]]]
-        ]));
+        ]);
 
         $duplicateKeys = $manager->getDuplicateKeys();
 
@@ -201,9 +201,9 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
     {
         $translations = $this->object;
 
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        $this->adjustConfiguration([
             'setup' => ['translation' => ['modules' => ['allowed' => null]]]
-        ]));
+        ]);
 
         $translations->setModules(null);
 
@@ -247,7 +247,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
 
         // TODO check translations from TMX, TMX+DB and just DB
 
-        $database = new Opus_Translate_Dao();
+        $database = $this->getStorageInterface();
         $database->setTranslation('yes', ['de' => 'Ja', 'en' => 'Yes']);
 
         $translations = $manager->getMergedTranslations('key');
@@ -282,7 +282,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
         $this->assertCount(1, $translations);
         $this->assertArrayHasKey('answer_no', $translations);
 
-        $database = new Opus_Translate_Dao();
+        $database = $this->getStorageInterface();
 
         $database->setTranslation('answer_yes', ['de' => 'JA', 'en' => 'YES']);
 
@@ -330,7 +330,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
         $this->assertArrayHasKey('answer_no', $translations);
         $this->assertArrayHasKey('Field_Value_False', $translations);
 
-        $database = new Opus_Translate_Dao();
+        $database = $this->getStorageInterface();
         $database->setTranslation('answer_no', ['de' => 'Nicht', 'en' => 'No']);
 
         $translations = $manager->getMergedTranslations('key');
@@ -346,7 +346,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
 
         $testKey = 'answer_yes';
 
-        $dao = new Opus_Translate_Dao();
+        $dao = $this->getStorageInterface();
 
         $dao->setTranslation($testKey, [
             'en' => 'YesTest',
@@ -378,7 +378,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
     {
         $manager = $this->object;
 
-        $dao = new Opus_Translate_Dao();
+        $dao = $this->getStorageInterface();
 
         $key = 'customTestKey';
 
@@ -657,7 +657,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
     {
         $manager = $this->object;
 
-        $database = new Opus_Translate_Dao();
+        $database = $this->getStorageInterface();
 
         $database->setTranslation('testkey', [
             'en' => 'Testvalue',
@@ -683,7 +683,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
     {
         $manager = $this->object;
 
-        $database = new Opus_Translate_Dao();
+        $database = $this->getStorageInterface();
 
         $database->setTranslation('testkey', [
             'en' => 'Testvalue',
@@ -704,7 +704,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
     {
         $manager = $this->object;
 
-        $database = new Opus_Translate_Dao();
+        $database = $this->getStorageInterface();
 
         $database->setTranslation('dummykey', [
             'en' => 'EN text',
@@ -745,9 +745,9 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
     {
         $manager = $this->object;
 
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        $this->adjustConfiguration([
             'setup' => ['translation' => ['modules' => ['allowed' => 'default,publish']]]
-        ]));
+        ]);
 
         $modules = $manager->getModules();
 
@@ -759,9 +759,9 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
 
     public function testGetModulesNoRestrictions()
     {
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        $this->adjustConfiguration([
             'setup' => ['translation' => ['modules' => ['allowed' => null]]]
-        ]));
+        ]);
 
         $manager = $this->object;
 
@@ -776,9 +776,9 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
     {
         $manager = $this->object;
 
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        $this->adjustConfiguration([
             'setup' => ['translation' => ['modules' => ['allowed' => 'default,publish,unknown1']]]
-        ]));
+        ]);
 
         $modules = $manager->getModules();
 
@@ -792,9 +792,9 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
     {
         $manager = $this->object;
 
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        $this->adjustConfiguration([
             'setup' => ['translation' => ['modules' => ['allowed' => 'default,home,publish']]]
-        ]));
+        ]);
 
         $modules = $manager->getAllowedModules();
 
@@ -809,9 +809,9 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
     {
         $manager = $this->object;
 
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        $this->adjustConfiguration([
             'setup' => ['translation' => ['modules' => ['allowed' => 'default, home , publish ']]]
-        ]));
+        ]);
 
         $modules = $manager->getAllowedModules();
 
@@ -826,9 +826,9 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
     {
         $manager = $this->object;
 
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        $this->adjustConfiguration([
             'setup' => ['translation' => ['modules' => ['allowed' => 'default,unknown1']]]
-        ]));
+        ]);
 
         $logger = new MockLogger();
 
@@ -853,7 +853,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
 
         $oldKey = 'oldkey';
 
-        $database = new Opus_Translate_Dao();
+        $database = $this->getStorageInterface();
 
         $database->setTranslation($oldKey, [
             'en' => 'English',
@@ -932,7 +932,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
 
         $oldKey = 'oldkey';
 
-        $database = new Opus_Translate_Dao();
+        $database = $this->getStorageInterface();
 
         $database->setTranslation($oldKey, [
             'en' => 'English',
@@ -980,11 +980,28 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
         }
     }
 
+    public function testUpdateTranslationWithoutChangingModule()
+    {
+        $manager = $this->object;
+
+        $values = [
+            'en' => 'Contact information',
+            'de' => 'Kontaktinformationen'
+        ];
+
+        // key is part of home module
+        $manager->updateTranslation('help_content_contact', $values, 'home');
+
+        $translation = $manager->getTranslation('help_content_contact');
+
+        $this->assertEquals($values, $translation['translations']);
+    }
+
     public function testIsEditedTrue()
     {
         $manager = $this->object;
 
-        $dao = new Opus_Translate_Dao();
+        $dao = $this->getStorageInterface();
 
         $key = 'default_add';
 
@@ -1007,7 +1024,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
     {
         $manager = $this->object;
 
-        $dao = new Opus_Translate_Dao();
+        $dao = $this->getStorageInterface();
 
         $key = 'customtestkey';
 
@@ -1023,7 +1040,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
     {
         $manager = $this->object;
 
-        $dao = new Opus_Translate_Dao();
+        $dao = $this->getStorageInterface();
 
         $addedKey = 'customtestkey';
         $editedKey = 'default_add';
@@ -1051,7 +1068,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
     {
         $manager = $this->object;
 
-        $dao = new Opus_Translate_Dao();
+        $dao = $this->getStorageInterface();
 
         $addedKey = 'customtestkey';
         $editedKey = 'default_add';
@@ -1080,7 +1097,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
     {
         $manager = $this->object;
 
-        $dao = new Opus_Translate_Dao();
+        $dao = $this->getStorageInterface();
 
         $addedKey = 'customtestkey';
         $editedKey = 'default_add';
@@ -1109,7 +1126,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
     {
         $manager = $this->object;
 
-        $dao = new Opus_Translate_Dao();
+        $dao = $this->getStorageInterface();
 
         $addedKey = 'customtestkey';
         $editedKey = 'default_add';
@@ -1138,7 +1155,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
     {
         $manager = $this->object;
 
-        $dao = new Opus_Translate_Dao();
+        $dao = $this->getStorageInterface();
 
         $addedKey = 'customtestkey';
         $editedKey = 'default_add';
@@ -1162,5 +1179,98 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
 
         $this->assertNull($dao->getTranslation($addedKey));
         $this->assertNotNull($dao->getTranslation($editedKey));
+    }
+
+    public function testSetTranslation()
+    {
+        $database = $this->getStorageInterface();
+
+        $manager = $this->object;
+
+        $key = 'customttestkey';
+        $values = [
+            'en' => 'English',
+            'de' => 'Deutsch'
+        ];
+
+        $manager->setTranslation($key, $values, 'home');
+
+        $translation = $database->getTranslation($key, null, 'home');
+
+        $this->assertEquals($values, $translation);
+    }
+
+    public function testSetTranslationForDefaultKey()
+    {
+        $manager = $this->object;
+
+        $values = [
+            'en' => 'AddEdited',
+            'de' => 'AnlegenEdited'
+        ];
+
+        $manager->setTranslation('default_add', $values);
+
+        $translation = $manager->getTranslation('default_add');
+
+        $this->assertArrayHasKey('state', $translation);
+        $this->assertEquals('edited', $translation['state']);
+        $this->assertEquals($values, $translation['translations']);
+    }
+
+    public function testGetLanguageOrderRef()
+    {
+        $manager = $this->object;
+
+        $class = new ReflectionClass(get_class($manager));
+        $method = $class->getMethod('getLanguageOrderRef');
+        $method->setAccessible(true);
+
+        $order = $method->invoke($manager);
+
+        $this->assertEquals([
+            'de' => 0,
+            'en' => 1
+        ], $order);
+    }
+
+    public function testGetLanguageOrder()
+    {
+        $this->markTestIncomplete();
+    }
+
+    public function testSetLanguageOrder()
+    {
+        $this->markTestIncomplete();
+    }
+
+    public function testSortLanguages()
+    {
+        $this->adjustConfiguration([
+            'supportedLanguages' => 'de,en,fr'
+        ]);
+
+        $manager = $this->object;
+
+        $class = new ReflectionClass(get_class($manager));
+        $method = $class->getMethod('sortLanguages');
+        $method->setAccessible(true);
+
+        $sorted = $method->invoke($manager, [
+            'en' => 'English',
+            'de' => 'Deutsch'
+        ]);
+
+        $this->assertEquals([
+            'de' => 'Deutsch',
+            'en' => 'English'
+        ], $sorted);
+
+        $this->assertTrue(array_values($sorted)[0] === 'Deutsch');
+    }
+
+    protected function getStorageInterface()
+    {
+        return new \Opus\Translate\Dao();
     }
 }

@@ -51,15 +51,16 @@ class Application_View_Helper_Messages extends Application_View_Helper_Abstract
         if (! empty($messages)) {
             $output .= '<div class="messages">' . PHP_EOL;
 
-            foreach ($messages as $message) {
-                if (is_array($message) && array_key_exists('message', $message)) {
-                    $translated = htmlspecialchars($this->view->translate($message['message']));
-                    $level = array_key_exists('level', $message) ? $message['level'] : '';
+            foreach ($messages as $entry) {
+                if (is_array($entry) && array_key_exists('message', $entry)) {
+                    $message = $this->prepareMessage($entry['message']);
 
-                    $output .= "  <div class=\"$level\">$translated</div>" . PHP_EOL;
+                    $level = array_key_exists('level', $entry) ? $entry['level'] : '';
+
+                    $output .= "  <div class=\"$level\">$message</div>" . PHP_EOL;
                 } else {
-                    $translated = htmlspecialchars($this->view->translate($message));
-                    $output .= "  <div>$translated</div>" . PHP_EOL;
+                    $message = $this->prepareMessage($entry);
+                    $output .= "  <div>$message</div>" . PHP_EOL;
                 }
             }
 
@@ -67,6 +68,17 @@ class Application_View_Helper_Messages extends Application_View_Helper_Abstract
         }
 
         return $output;
+    }
+
+    protected function prepareMessage($message)
+    {
+        $translator = $this->view->translate()->getTranslator();
+
+        if ($translator->isTranslated($message)) {
+            $message = $this->view->translate($message);
+        }
+
+        return htmlspecialchars($message);
     }
 
     public function getMessages()

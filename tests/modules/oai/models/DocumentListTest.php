@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -33,6 +32,10 @@
  * @copyright   Copyright (c) 2014-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\Document;
+use Opus\Identifier;
+
 class Oai_Model_DocumentListTest extends ControllerTestCase
 {
 
@@ -45,7 +48,7 @@ class Oai_Model_DocumentListTest extends ControllerTestCase
     {
         $docWithUrn = $this->createTestDocument();
         $docWithUrn->setServerState('published');
-        $identifier = new Opus_Identifier();
+        $identifier = new Identifier();
         $identifier->setValue('urn_value1');
         $identifier->setType('urn');
         $docWithUrn->addIdentifier($identifier);
@@ -72,12 +75,12 @@ class Oai_Model_DocumentListTest extends ControllerTestCase
     {
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
-        $file = $this->createTestFile('article.txt');
+        $file = $this->createOpusTestFile('article.txt');
         $file->setVisibleInOai(1);
         $doc->addFile($file);
         $this->docId = $doc->store();
 
-        $doc = new Opus_Document($this->docId);
+        $doc = Document::get($this->docId);
         $serverDateModified = $doc->getServerDateModified();
 
         $today = new DateTime();
@@ -135,7 +138,7 @@ class Oai_Model_DocumentListTest extends ControllerTestCase
         $doc->setServerState('published');
         $this->docId = $doc->store();
 
-        $doc = new Opus_Document($this->docId);
+        $doc = Document::get($this->docId);
         $serverDateModified = $doc->getServerDateModified();
 
         $today = new DateTime();
@@ -186,14 +189,14 @@ class Oai_Model_DocumentListTest extends ControllerTestCase
     {
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
-        $file = $this->createTestFile('article.txt');
+        $file = $this->createOpusTestFile('article.txt');
         $file->setVisibleInOai(1);
         $doc->addFile($file);
         $docIdIncluded = $doc->store();
 
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
-        $file = $this->createTestFile('fulltext.txt');
+        $file = $this->createOpusTestFile('fulltext.txt');
         $file->setVisibleInOai(0);
         $doc->addFile($file);
         $docIdNotIncluded = $doc->store();

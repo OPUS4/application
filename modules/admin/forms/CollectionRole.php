@@ -33,6 +33,9 @@
  * TODO OaiName could be optional since it is usually the same as Name (which could be used as default)
  *
  */
+
+use Opus\CollectionRole;
+
 class Admin_Form_CollectionRole extends Application_Form_Model_Abstract
 {
 
@@ -58,7 +61,7 @@ class Admin_Form_CollectionRole extends Application_Form_Model_Abstract
         $this->setUseNameAsLabel(true);
 
         $this->addElement('text', self::ELEMENT_NAME, [
-            'required' => true, 'size' => 70, 'maxlength' => Opus_CollectionRole::getFieldMaxLength('Name')
+            'required' => true, 'size' => 70, 'maxlength' => CollectionRole::getFieldMaxLength('Name')
         ]);
         $this->getElement(self::ELEMENT_NAME)->addValidators([
                 new Application_Form_Validate_CollectionRoleNameUnique(),
@@ -70,7 +73,7 @@ class Admin_Form_CollectionRole extends Application_Form_Model_Abstract
         ]);
 
         $this->addElement('text', self::ELEMENT_OAI_NAME, [
-            'required' => true, 'size' => 30, 'maxlength' => Opus_CollectionRole::getFieldMaxLength('OaiName')
+            'required' => true, 'size' => 30, 'maxlength' => CollectionRole::getFieldMaxLength('OaiName')
         ]);
         $this->getElement(self::ELEMENT_OAI_NAME)->addValidator(
             new Application_Form_Validate_CollectionRoleOaiNameUnique()
@@ -91,7 +94,7 @@ class Admin_Form_CollectionRole extends Application_Form_Model_Abstract
     }
 
     /**
-     * @param $collectionRole Opus_CollectionRole
+     * @param $collectionRole CollectionRole
      */
     public function populateFromModel($collectionRole)
     {
@@ -116,7 +119,7 @@ class Admin_Form_CollectionRole extends Application_Form_Model_Abstract
     }
 
     /**
-     * @param $collectionRole Opus_CollectionRole
+     * @param $collectionRole CollectionRole
      */
     public function updateModel($collectionRole)
     {

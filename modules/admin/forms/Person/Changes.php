@@ -31,12 +31,14 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Date;
+
 /**
  * Class Admin_Form_Person_Changes
  *
  * TODO merge old values and changes array (only set/getChanges with all values)?
  * TODO make generic to be usable with any model (incl. excluded fields)
- * TODO work with model objects like Opus_Date for fields that use them
+ * TODO work with model objects like Opus\Date for fields that use them
  */
 class Admin_Form_Person_Changes extends Application_Form_Abstract
 {
@@ -90,13 +92,13 @@ class Admin_Form_Person_Changes extends Application_Form_Abstract
         $helper = new Application_Controller_Action_Helper_Dates();
 
         foreach ($oldValues as $field => $values) {
-            // TODO Opus_Person specific code that needs to be removed later
+            // TODO Person specific code that needs to be removed later
             if (in_array($field, ['Id', 'OpusId'])) {
                 continue;
             }
 
             if (stripos($field, 'date') !== false) {
-                $preparedChanges[$field]['old'] = $this->forceArray($helper->getDateString(new Opus_Date($values)));
+                $preparedChanges[$field]['old'] = $this->forceArray($helper->getDateString(new Date($values)));
             } else {
                 $preparedChanges[$field]['old'] = $this->forceArray($values);
             }
@@ -106,7 +108,7 @@ class Admin_Form_Person_Changes extends Application_Form_Abstract
             if (array_key_exists($field, $changes)) {
                 if (stripos($field, 'date') !== false) {
                     $preparedChanges[$field]['new'] = $this->forceArray($helper->getDateString(
-                        new Opus_Date($changes[$field])
+                        new Date($changes[$field])
                     ));
                 } else {
                     $preparedChanges[$field]['new'] = $this->forceArray($changes[$field]);

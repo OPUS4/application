@@ -53,7 +53,7 @@ class Application_Form_Decorator_TableHeaderTest extends ControllerTestCase
             ['placement' => 'prepend', 'columns' => $this->columns]
         );
 
-        $this->assertEquals(Zend_Form_Decorator_Abstract::PREPEND, $decorator->getPlacement());
+        $this->assertEquals(\Zend_Form_Decorator_Abstract::PREPEND, $decorator->getPlacement());
         $this->assertEquals($this->columns, $decorator->getColumns());
     }
 
@@ -81,8 +81,8 @@ class Application_Form_Decorator_TableHeaderTest extends ControllerTestCase
 
         $decorator->setColumns($this->columns);
 
-        $form = new Zend_Form();
-        $form->addSubForm(new Zend_Form_SubForm(), 'subform1');
+        $form = new \Zend_Form();
+        $form->addSubForm(new \Zend_Form_SubForm(), 'subform1');
 
         $decorator->setElement($form);
 
@@ -100,8 +100,8 @@ class Application_Form_Decorator_TableHeaderTest extends ControllerTestCase
 
         $decorator->setColumns([['label' => '<h1>HTML</h1>']]);
 
-        $form = new Zend_Form();
-        $form->addSubForm(new Zend_Form_SubForm(), 'subform1');
+        $form = new \Zend_Form();
+        $form->addSubForm(new \Zend_Form_SubForm(), 'subform1');
 
         $decorator->setElement($form);
 
@@ -121,8 +121,8 @@ class Application_Form_Decorator_TableHeaderTest extends ControllerTestCase
 
         $decorator->setColumns([['label' => 'Value']]);
 
-        $form = new Zend_Form();
-        $form->addSubForm(new Zend_Form_SubForm(), 'subform1');
+        $form = new \Zend_Form();
+        $form->addSubForm(new \Zend_Form_SubForm(), 'subform1');
 
         $decorator->setElement($form);
 

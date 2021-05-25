@@ -35,6 +35,8 @@
  * Form for editing translations.
  *
  * This form allows editing translations for one or more key.
+ *
+ * TODO use translation manager instead of Translate
  */
 class Application_Form_Translations extends Application_Form_Abstract
 {
@@ -93,7 +95,7 @@ class Application_Form_Translations extends Application_Form_Abstract
         $name = $this->normalizeKey($key);
 
         if ($textarea) {
-            $options = array_merge($options, ['cols' => $width, "rows" => 12]);
+            $options = array_merge($options, ['cols' => $width, 'rows' => 12]);
         } else {
             $options = array_merge($options, ['size' => $width]);
         }
@@ -141,7 +143,7 @@ class Application_Form_Translations extends Application_Form_Abstract
     {
         $elements = $this->getTranslationElements();
 
-        $translate = Zend_Registry::get('Zend_Translate');
+        $translate = Application_Translate::getInstance();
 
         foreach ($elements as $name => $element) {
             // TODO handle no translation
@@ -160,9 +162,9 @@ class Application_Form_Translations extends Application_Form_Abstract
             $element->updateTranslations($key);
         }
 
-        $translate = Zend_Registry::get('Zend_Translate');
+        $translate = Application_Translate::getInstance();
         $translate->clearCache();
-        Zend_Translate::clearCache();
+        \Zend_Translate::clearCache();
     }
 
     /**

@@ -1,4 +1,4 @@
-Dies muss nicht unbedingt im Widerspruch mit der Veröffentlichung auf unserem Dokumentenserver stehen. 
-<b>Bitte pr&uuml;fen Sie auf jeden Fall, ob Ihr Vertrag eine Publikation auf unserem Dokumentenserver 
-gestattet!</b> Dies können Sie zum Beispiel mit Hilfe der 
+Dies muss nicht unbedingt im Widerspruch mit der Veröffentlichung auf unserem Dokumentenserver stehen.
+<b>Bitte pr&uuml;fen Sie auf jeden Fall, ob Ihr Vertrag eine Publikation auf unserem Dokumentenserver
+gestattet!</b> Dies können Sie zum Beispiel mit Hilfe der
 <a href="http://www.sherpa.ac.uk/romeo.php" target="_blank">SHERPA/ROMEO-Liste</a> tun.

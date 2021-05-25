@@ -26,9 +26,12 @@
  *
  * @category    Application Unit Test
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\Config;
+use Opus\Log;
 
 /**
  * Base class for application tests.
@@ -36,7 +39,7 @@
  * TODO any effect vvv ?
  * @preserveGlobalState disabled
  */
-class TestCase extends Zend_Test_PHPUnit_ControllerTestCase
+class TestCase extends \Zend_Test_PHPUnit_ControllerTestCase
 {
 
     protected $application;
@@ -84,14 +87,14 @@ class TestCase extends Zend_Test_PHPUnit_ControllerTestCase
     public function cleanupBefore()
     {
         // FIXME Does it help with the mystery bug?
-        Zend_Registry::_unsetInstance();
+        \Zend_Registry::_unsetInstance();
 
         $this->resetAutoloader();
     }
 
     public function getApplication()
     {
-        return new Zend_Application(
+        return new \Zend_Application(
             $this->applicationEnv,
             ["config" => [
                 APPLICATION_PATH . '/tests/simple.ini'
@@ -125,8 +128,8 @@ class TestCase extends Zend_Test_PHPUnit_ControllerTestCase
      */
     public function resetAutoloader()
     {
-        Zend_Loader_Autoloader::resetInstance();
-        $autoloader = Zend_Loader_Autoloader::getInstance();
+        \Zend_Loader_Autoloader::resetInstance();
+        $autoloader = \Zend_Loader_Autoloader::getInstance();
         $autoloader->suppressNotFoundWarnings(false);
         $autoloader->setFallbackAutoloader(true);
     }
@@ -136,22 +139,26 @@ class TestCase extends Zend_Test_PHPUnit_ControllerTestCase
      */
     protected function closeLogfile()
     {
-        if (! Zend_Registry::isRegistered('Zend_Log')) {
-            return;
-        }
+        $log = Log::get();
 
-        $log = Zend_Registry::get('Zend_Log');
         if (isset($log)) {
             $log->__destruct();
-            Zend_Registry::set('Zend_Log', null);
         }
 
-        Opus_Log::drop();
+        Log::drop();
     }
 
+    /**
+     * TODO adjustConfiguration also makes it configurable - so maybe not needed anymore
+     */
     public function makeConfigurationModifiable()
     {
-        $config = new Zend_Config([], true);
-        Zend_Registry::set('Zend_Config', $config->merge(Zend_Registry::get('Zend_Config')));
+        $config = new \Zend_Config([], true);
+        Config::set($config->merge(Config::get()));
+    }
+
+    protected function getConfig()
+    {
+        return Config::get();
     }
 }

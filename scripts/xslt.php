@@ -29,8 +29,10 @@
  * @author      Ralf Claussnitzer <ralf.claussnitzer@slub-dresden.de>
  * @copyright   Copyright (c) 2009, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
+// TODO move this script (it is used for testing/development to test out XSLT scripts)
+//      maybe add as command in 'dev' section of opus4 tool
 
 $args = $GLOBALS['argv'];
 
@@ -39,13 +41,13 @@ if (count($args) < 3) {
     exit;
 }
 
-$xslt = new DOMDocument;
+$xslt = new \DOMDocument;
 $xslt->load($args[1]);
 
-$xml = new DOMDocument;
+$xml = new \DOMDocument;
 $xml->load($args[2]);
 
-$proc = new XSLTProcessor;
+$proc = new \XSLTProcessor;
 $proc->registerPhpFunctions();
 $proc->importStyleSheet($xslt);
 

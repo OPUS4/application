@@ -30,6 +30,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Document;
+use Opus\Identifier;
+
 /**
  * Unit Test fuer Identifier Formular Klasse.
  */
@@ -52,7 +55,7 @@ class Admin_Form_Document_IdentifierTest extends ControllerTestCase
     }
 
     /**
-     * Testet das Setzen der Elemente entsprechend Opus_Identifier.
+     * Testet das Setzen der Elemente entsprechend Identifier.
      *
      * Dokument 146 wird verwendet, da es vollständig besetzt ist und normalerweise in den Unit Tests nicht modifiziert
      * wird.
@@ -61,7 +64,7 @@ class Admin_Form_Document_IdentifierTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Identifier();
 
-        $document = new Opus_Document(146);
+        $document = Document::get(146);
         $identifiers = $document->getIdentifier();
         $identifier = $identifiers[0];
 
@@ -79,7 +82,7 @@ class Admin_Form_Document_IdentifierTest extends ControllerTestCase
         $form->getElement('Type')->setValue('url');
         $form->getElement('Value')->setValue('test-urn-1');
 
-        $identifier = new Opus_Identifier();
+        $identifier = new Identifier();
 
         $form->updateModel($identifier);
 
@@ -112,7 +115,7 @@ class Admin_Form_Document_IdentifierTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Identifier();
 
-        $document = new Opus_Document(146);
+        $document = Document::get(146);
         $identifiers = $document->getIdentifier();
         $identifierId = $identifiers[0]->getId();
 

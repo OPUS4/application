@@ -27,7 +27,7 @@
  * @category    Application
  * @package     Setup_Form
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2019-2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -40,7 +40,7 @@ class Setup_Form_ImprintPage extends Application_Form_Translations
 
         $this->addKey('home_index_imprint_pagetitle');
         $this->addKey('home_index_imprint_title');
-        $this->addKey('help_content_contact', true, ['label' => 'setup_page_content']);
+        $this->addKey('help_content_imprint', true, ['label' => 'setup_page_content']);
 
         $this->populateFromTranslations();
     }

@@ -31,6 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Document;
+
 class Oai_Model_XmlFactoryTest extends ControllerTestCase
 {
 
@@ -52,11 +54,11 @@ class Oai_Model_XmlFactoryTest extends ControllerTestCase
         // document with no files
         $this->assertEquals('info:eu-repo/semantics/closedAccess', $this->_xmlFactory->getAccessRights($doc));
 
-        $file = $this->createTestFile('article.pdf');
+        $file = $this->createOpusTestFile('article.pdf');
         $file->setVisibleInOai(1);
         $file->setVisibleInFrontdoor(1);
         $doc->addFile($file);
-        $doc = new Opus_Document($doc->store()); // store and get fresh object
+        $doc = Document::get($doc->store()); // store and get fresh object
 
         // document with file accessible in OAI and frontdoor
         $this->assertEquals('info:eu-repo/semantics/openAccess', $this->_xmlFactory->getAccessRights($doc));
@@ -74,11 +76,11 @@ class Oai_Model_XmlFactoryTest extends ControllerTestCase
         // document with file that is not visible in frontdoor or OAI
         $this->assertEquals('info:eu-repo/semantics/closedAccess', $this->_xmlFactory->getAccessRights($doc));
 
-        $file2 = $this->createTestFile('article.doc');
+        $file2 = $this->createOpusTestFile('article.doc');
         $file2->setVisibleInOai(1);
         $file2->setVisibleInFrontdoor(1);
         $doc->addFile($file2);
-        $doc = new Opus_Document($doc->store());
+        $doc = Document::get($doc->store());
 
         $this->assertCount(2, $doc->getFile());
 

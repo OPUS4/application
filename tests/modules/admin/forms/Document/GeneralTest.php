@@ -30,6 +30,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Document;
+
 /**
  * Unit Tests fuer Admin_Form_Document_General.
  */
@@ -54,13 +56,13 @@ class Admin_Form_Document_GeneralTest extends ControllerTestCase
     }
 
     /**
-     * TODO use temporary Opus_Document instead of doc from test data
+     * TODO use temporary Document instead of doc from test data
      */
     public function testPopulateFromModel()
     {
         $this->useEnglish();
 
-        $document = new Opus_Document(146);
+        $document = Document::get(146);
 
         $form = new Admin_Form_Document_General();
 

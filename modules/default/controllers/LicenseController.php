@@ -29,9 +29,11 @@
  * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  *
  */
+
+use Opus\Licence;
+use Opus\Model\NotFoundException;
 
 class LicenseController extends Application_Controller_Action
 {
@@ -53,10 +55,10 @@ class LicenseController extends Application_Controller_Action
         // Load document
         $licId = $this->getRequest()->getParam('licId');
         try {
-            $license = new Opus_Licence($licId);
+            $license = new Licence($licId);
 
             $this->view->license = $license;
-        } catch (Opus_Model_NotFoundException $e) {
+        } catch (NotFoundException $e) {
             throw new Exception($this->view->translate('license_id_not_found', [$licId]));
         }
     }

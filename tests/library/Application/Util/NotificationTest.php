@@ -28,9 +28,15 @@
  * @package     Tests
  * @author      Sascha Szott <szott@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\Job;
+use Opus\Log;
+use Opus\Person;
+use Opus\Title;
+use Opus\Job\Worker\MailNotification;
 
 class Application_Util_NotificationTest extends ControllerTestCase
 {
@@ -48,9 +54,9 @@ class Application_Util_NotificationTest extends ControllerTestCase
     {
         parent::setUp();
         $this->notification = new Application_Util_Notification();
-        $this->logger = Zend_Registry::get('Zend_Log');
+        $this->logger = Log::get();
         // add required config keys
-        $this->config = Zend_Registry::get('Zend_Config');
+        $this->config = $this->getConfig();
         $this->config->notification->document->submitted->enabled = self::CONFIG_VALUE_TRUE;
         $this->config->notification->document->published->enabled = self::CONFIG_VALUE_TRUE;
         $this->config->notification->document->submitted->subject = 'Dokument #%1$s eingestellt: %2$s : %3$s';
@@ -70,7 +76,7 @@ class Application_Util_NotificationTest extends ControllerTestCase
         $doc = $this->createTestDocument();
         $doc->setLanguage("eng");
 
-        $title = new Opus_Title();
+        $title = new Title();
         $title->setValue("Test Document");
         $title->setLanguage("eng");
         $doc->addTitleMain($title);
@@ -198,24 +204,24 @@ class Application_Util_NotificationTest extends ControllerTestCase
         $doc = $this->createTestDocument();
         $doc->setLanguage("eng");
 
-        $title = new Opus_Title();
+        $title = new Title();
         $title->setValue("Test Document");
         $title->setLanguage("eng");
         $doc->addTitleMain($title);
 
-        $author = new Opus_Person();
+        $author = new Person();
         $author->setFirstName("John");
         $author->setLastName("Doe");
         $author->setEmail("john@localhost.de");
         $doc->addPersonAuthor($author);
 
-        $author = new Opus_Person();
+        $author = new Person();
         $author->setFirstName("Jane");
         $author->setLastName("Doe");
         $author->setEmail("jane@localhost.de");
         $doc->addPersonAuthor($author);
 
-        $submitter = new Opus_Person();
+        $submitter = new Person();
         $submitter->setFirstName("John");
         $submitter->setLastName("Submitter");
         $submitter->setEmail("sub@localhost.de");
@@ -232,8 +238,8 @@ class Application_Util_NotificationTest extends ControllerTestCase
 
     public function testCreateWorkerJobIfAsyncEnabled()
     {
-        // TODO use Opus_Job::deleteAll() - requires opus4admin permissions !
-        $jobs = Opus_Job::getAll();
+        // TODO use Job::deleteAll() - requires opus4admin permissions !
+        $jobs = Job::getAll();
 
         if (! empty($jobs)) {
             foreach ($jobs as $job) {
@@ -241,13 +247,13 @@ class Application_Util_NotificationTest extends ControllerTestCase
             }
         }
 
-        $this->config->merge(new Zend_Config(['runjobs' => ['asynchronous' => self::CONFIG_VALUE_TRUE]]));
-        $this->assertEquals(0, Opus_Job::getCount(), 'test data changed.');
+        $this->config->merge(new \Zend_Config(['runjobs' => ['asynchronous' => self::CONFIG_VALUE_TRUE]]));
+        $this->assertEquals(0, Job::getCount(), 'test data changed.');
 
         $doc = $this->createTestDocument();
         $doc->setLanguage("eng");
 
-        $title = new Opus_Title();
+        $title = new Title();
         $title->setValue("Test Document");
         $title->setLanguage("eng");
         $doc->addTitleMain($title);
@@ -255,11 +261,11 @@ class Application_Util_NotificationTest extends ControllerTestCase
         $doc->store();
         $this->notification->prepareMail($doc, 'http://localhost/foo/1');
 
-        $mailJobs = Opus_Job::getByLabels([Opus_Job_Worker_MailNotification::LABEL]);
+        $mailJobs = Job::getByLabels([MailNotification::LABEL]);
 
         $this->assertEquals(1, count($mailJobs), 'Expected 1 mail job');
 
-        $jobs = Opus_Job::getAll();
+        $jobs = Job::getAll();
 
         if (! empty($jobs)) {
             foreach ($jobs as $job) {

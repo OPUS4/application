@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -31,7 +30,11 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2016-2019
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- *
+ */
+
+use Opus\Document;
+
+/**
  * @covers Sword_DepositController
  */
 class Sword_DepositControllerTest extends ControllerTestCase
@@ -62,7 +65,7 @@ class Sword_DepositControllerTest extends ControllerTestCase
     {
         $doc = $this->depositSuccessful('allfields-document.zip', DepositTestHelper::CONTENT_TYPE_ZIP, true, false, false, 7, 3, 'published');
         $this->checkAllFieldsImport($doc);
-        $doc->deletePermanent();
+        $doc->delete();
         $this->testHelper->removeImportCollection();
     }
 
@@ -70,7 +73,7 @@ class Sword_DepositControllerTest extends ControllerTestCase
     {
         $doc = $this->depositSuccessful('allfields-document.tar', DepositTestHelper::CONTENT_TYPE_TAR, true, false, false, 7, 3, 'published');
         $this->checkAllFieldsImport($doc);
-        $doc->deletePermanent();
+        $doc->delete();
         $this->testHelper->removeImportCollection();
     }
 
@@ -78,7 +81,7 @@ class Sword_DepositControllerTest extends ControllerTestCase
     {
         $doc = $this->depositSuccessful('dangling-ids.zip', DepositTestHelper::CONTENT_TYPE_ZIP, false, false);
         $this->checkMinimalDoc($doc);
-        $doc->deletePermanent();
+        $doc->delete();
         $this->testHelper->removeImportCollection();
     }
 
@@ -86,7 +89,7 @@ class Sword_DepositControllerTest extends ControllerTestCase
     {
         $doc = $this->depositSuccessful('dangling-ids.tar', DepositTestHelper::CONTENT_TYPE_TAR, false, false);
         $this->checkMinimalDoc($doc);
-        $doc->deletePermanent();
+        $doc->delete();
         $this->testHelper->removeImportCollection();
     }
 
@@ -94,7 +97,7 @@ class Sword_DepositControllerTest extends ControllerTestCase
     {
         $doc = $this->depositSuccessful('urn-collision.zip', DepositTestHelper::CONTENT_TYPE_ZIP, false, false);
         $this->checkOnlyOneDocIsImported($doc);
-        $doc->deletePermanent();
+        $doc->delete();
         $this->testHelper->removeImportCollection();
     }
 
@@ -102,7 +105,7 @@ class Sword_DepositControllerTest extends ControllerTestCase
     {
         $doc = $this->depositSuccessful('urn-collision.tar', DepositTestHelper::CONTENT_TYPE_TAR, false, false);
         $this->checkOnlyOneDocIsImported($doc);
-        $doc->deletePermanent();
+        $doc->delete();
         $this->testHelper->removeImportCollection();
     }
 
@@ -110,7 +113,7 @@ class Sword_DepositControllerTest extends ControllerTestCase
     {
         $doc = $this->depositSuccessful('empty-elements.zip', DepositTestHelper::CONTENT_TYPE_ZIP, false, false);
         $this->checkMinimalDoc($doc, 'eng', 'book', 'titlemain');
-        $doc->deletePermanent();
+        $doc->delete();
         $this->testHelper->removeImportCollection();
     }
 
@@ -118,7 +121,7 @@ class Sword_DepositControllerTest extends ControllerTestCase
     {
         $doc = $this->depositSuccessful('empty-elements.tar', DepositTestHelper::CONTENT_TYPE_TAR, false, false);
         $this->checkMinimalDoc($doc, 'eng', 'book', 'titlemain');
-        $doc->deletePermanent();
+        $doc->delete();
         $this->testHelper->removeImportCollection();
     }
 
@@ -126,7 +129,7 @@ class Sword_DepositControllerTest extends ControllerTestCase
     {
         $doc = $this->depositSuccessful('empty-elements-alternative.zip', DepositTestHelper::CONTENT_TYPE_ZIP, false, false);
         $this->checkMinimalDoc($doc, 'eng', 'book', 'titlemain');
-        $doc->deletePermanent();
+        $doc->delete();
         $this->testHelper->removeImportCollection();
     }
 
@@ -134,7 +137,7 @@ class Sword_DepositControllerTest extends ControllerTestCase
     {
         $doc = $this->depositSuccessful('empty-elements-alternative.tar', DepositTestHelper::CONTENT_TYPE_TAR, false, false);
         $this->checkMinimalDoc($doc, 'eng', 'book', 'titlemain');
-        $doc->deletePermanent();
+        $doc->delete();
         $this->testHelper->removeImportCollection();
     }
 
@@ -147,7 +150,7 @@ class Sword_DepositControllerTest extends ControllerTestCase
         $this->checkFile($files[0], 'doc1.pdf', $language, null, 1, 1);
         $this->checkFile($files[1], 'doc1.txt', $language, null, 1, 1);
         $this->checkFile($files[2], 'foo.txt', $language, null, 1, 1);
-        $doc->deletePermanent();
+        $doc->delete();
         $this->testHelper->removeImportCollection();
     }
 
@@ -160,9 +163,55 @@ class Sword_DepositControllerTest extends ControllerTestCase
         $this->checkFile($files[0], 'doc1.pdf', $language, null, 1, 1);
         $this->checkFile($files[1], 'doc1.txt', $language, null, 1, 1);
         $this->checkFile($files[2], 'foo.txt', $language, null, 1, 1);
-        $doc->deletePermanent();
+        $doc->delete();
         $this->testHelper->removeImportCollection();
     }
+
+    public function testFileIsRemovedFromImportFolderAfterSuccess()
+    {
+        $doc = $this->depositSuccessful(
+            'minimal-record.zip',
+            DepositTestHelper::CONTENT_TYPE_ZIP,
+            true,
+            false
+        );
+
+        $config = Application_Configuration::getInstance();
+        $importDir = $config->getWorkspacePath() . 'import/';
+        $enrichments = $doc->getEnrichmentValues();
+        $filename = $enrichments['opus.import.file'];
+        $filePath = $importDir . $filename;
+
+        $this->addFileToCleanup($filePath);
+
+        $this->assertFileNotExists($filePath);
+    }
+
+    public function testFileIsKeptInImportFolderAfterError()
+    {
+        $doc = $this->depositWithError(
+            'invalid-xml.zip',
+            DepositTestHelper::CONTENT_TYPE_ZIP,
+            true,
+            false
+        );
+
+        $this->assertNull($doc);
+
+        $config = Application_Configuration::getInstance();
+        $importDir = $config->getWorkspacePath() . 'import/';
+
+        $payload = file_get_contents(APPLICATION_PATH . '/tests/resources/sword-packages/invalid-xml.zip');
+        $checksum = md5($payload);
+
+        $filename = "$checksum-invalid-xml.zip";
+        $filePath = $importDir . $filename;
+
+        $this->addFileToCleanup($filePath);
+
+        $this->assertFileExists($filePath);
+    }
+
 
     private function checkOnlyOneDocIsImported($doc)
     {
@@ -181,7 +230,7 @@ class Sword_DepositControllerTest extends ControllerTestCase
     }
 
     /**
-     * @param Opus_Document $doc
+     * @param Document $doc
      * @throws Exception
      */
     private function checkAllFieldsImport($doc)
@@ -400,15 +449,15 @@ class Sword_DepositControllerTest extends ControllerTestCase
 
     /**
      *
-     * @param type $fileName
-     * @param type $contentType
-     * @param type $abstractExist
-     * @param type $deleteDoc
-     * @param type $deleteCollection
-     * @param type $numOfEnrichments
-     * @param type $numOfCollections
-     * @param type $serverState
-     * @return Opus_Document
+     * @param string $fileName
+     * @param string $contentType
+     * @param bool $abstractExist
+     * @param bool $deleteDoc
+     * @param bool $deleteCollection
+     * @param int $numOfEnrichments
+     * @param int $numOfCollections
+     * @param string $serverState
+     * @return Document
      */
     private function depositSuccessful(
         $fileName,
@@ -441,6 +490,38 @@ class Sword_DepositControllerTest extends ControllerTestCase
         return $doc;
     }
 
+    /**
+     * TODO addapt function to run deposit requests producing various errors
+     */
+    private function depositWithError(
+        $fileName,
+        $contentType,
+        $abstractExist = true,
+        $deleteDoc = true,
+        $deleteCollection = true,
+        $numOfEnrichments = 5,
+        $numOfCollections = 1,
+        $serverState = 'unpublished'
+    ) {
+
+        $this->testHelper->assertEmptyTmpDir();
+        $this->testHelper->disableExceptionConversion();
+        $this->getRequest()->setMethod('POST');
+        $this->getRequest()->setHeader('Content-Type', $contentType);
+        $this->testHelper->setValidAuthorizationHeader($this->getRequest(), DepositTestHelper::USER_AGENT);
+        $checksum = $this->testHelper->uploadFile($this->getRequest(), $fileName);
+        $this->getRequest()->setHeader('Content-Disposition', $fileName);
+        $this->testHelper->addImportCollection();
+
+        $this->dispatch('/sword/deposit');
+        $this->testHelper->assertEmptyTmpDir();
+
+        $doc = $this->checkErrorDocument($checksum, $fileName, $abstractExist, $numOfEnrichments, $numOfCollections, $serverState, $deleteDoc);
+        if ($deleteCollection) {
+            $this->testHelper->removeImportCollection();
+        }
+    }
+
     private function checkAtomEntryDocument($checksum, $fileName, $abstractExist, $numOfEnrichments, $numOfCollections, $serverState, $deleteDoc)
     {
         $this->assertEquals(201, $this->getResponse()->getHttpResponseCode());
@@ -460,7 +541,34 @@ class Sword_DepositControllerTest extends ControllerTestCase
             return $doc;
         }
 
+        $doc->delete();
+    }
+
+    /**
+     * TODO adapt function for checking error document OPUSVIER-4500
+     */
+    private function checkErrorDocument($checksum, $fileName, $abstractExist, $numOfEnrichments, $numOfCollections, $serverState, $deleteDoc)
+    {
+        $this->assertNotEquals(201, $this->getResponse()->getHttpResponseCode());
+
+        /**
+        $doc = new DOMDocument();
+        $doc->loadXML($this->getResponse()->getBody());
+
+        $roots = $doc->childNodes;
+        $this->assertEquals(1, $roots->length);
+        $root = $roots->item(0);
+
+        $doc = $this->testHelper->checkAtomEntryDocument($root, $fileName, $checksum, $abstractExist, $numOfEnrichments, $numOfCollections);
+        $this->assertEquals($serverState, $doc->getServerState());
+        $this->checkHttpResponseHeaders($this->testHelper->getFrontdoorUrl());
+
+        if (! $deleteDoc) {
+            return $doc;
+        }
+
         $doc->deletePermanent();
+         */
     }
 
     private function checkHttpResponseHeaders($frontdoorUrl)

@@ -36,7 +36,7 @@
  *
  * This class is needed because the passwords in the database are hashed.
  */
-class Application_Security_HttpAuthAdapter extends Zend_Auth_Adapter_Http
+class Application_Security_HttpAuthAdapter extends \Zend_Auth_Adapter_Http
 {
 
     /**

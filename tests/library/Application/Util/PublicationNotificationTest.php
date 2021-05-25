@@ -27,9 +27,14 @@
  * @category    Application
  * @package     Tests
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2018-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2018-2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\Config;
+use Opus\Log;
+use Opus\Person;
+use Opus\Title;
 
 class Application_Util_PublicationNotificationTest extends ControllerTestCase
 {
@@ -48,9 +53,9 @@ class Application_Util_PublicationNotificationTest extends ControllerTestCase
     {
         parent::setUp();
         $this->notification = new Application_Util_PublicationNotification();
-        $this->logger = Zend_Registry::get('Zend_Log');
+        $this->logger = Log::get();
         // add required config keys
-        $this->config = Zend_Registry::get('Zend_Config');
+        $this->config = Config::get();
         $this->config->notification->document->submitted->enabled = self::CONFIG_VALUE_TRUE;
         $this->config->notification->document->published->enabled = self::CONFIG_VALUE_TRUE;
         $this->config->notification->document->submitted->subject = 'Dokument #%1$s eingestellt: %2$s : %3$s';
@@ -152,7 +157,7 @@ class Application_Util_PublicationNotificationTest extends ControllerTestCase
     {
         $this->config->notification->document->published->email = "published@localhost";
         $doc = $this->createTestDocument();
-        $submitter = new Opus_Person();
+        $submitter = new Person();
         $submitter->setFirstName('John');
         $submitter->setLastName('Submitter');
         $submitter->setEmail('john.submitter@localhost.de');
@@ -185,7 +190,7 @@ class Application_Util_PublicationNotificationTest extends ControllerTestCase
     {
         $this->config->notification->document->published->email = "published@localhost";
         $doc = $this->createTestDocument();
-        $submitter = new Opus_Person();
+        $submitter = new Person();
         $submitter->setFirstName('John');
         $submitter->setLastName('Submitter');
         $doc->addPersonSubmitter($submitter);
@@ -207,12 +212,12 @@ class Application_Util_PublicationNotificationTest extends ControllerTestCase
         $doc = $this->createTestDocument();
         $doc->setLanguage("eng");
 
-        $title = new Opus_Title();
+        $title = new Title();
         $title->setValue("Test Document");
         $title->setLanguage("eng");
         $doc->addTitleMain($title);
 
-        $submitter = new Opus_Person();
+        $submitter = new Person();
         $submitter->setFirstName("John");
         $submitter->setLastName("Submitter");
         $submitter->setEmail("sub@localhost.de");
@@ -276,23 +281,23 @@ class Application_Util_PublicationNotificationTest extends ControllerTestCase
         $doc = $this->createTestDocument();
         $doc->setLanguage("eng");
 
-        $title = new Opus_Title();
+        $title = new Title();
         $title->setValue("Test Document");
         $title->setLanguage("eng");
         $doc->addTitleMain($title);
 
-        $author = new Opus_Person();
+        $author = new Person();
         $author->setFirstName("John");
         $author->setLastName("Doe");
         $doc->addPersonAuthor($author);
 
-        $author = new Opus_Person();
+        $author = new Person();
         $author->setFirstName("John With Address");
         $author->setLastName("Doe");
         $author->setEmail("doe@localhost.de");
         $doc->addPersonAuthor($author);
 
-        $submitter = new Opus_Person();
+        $submitter = new Person();
         $submitter->setFirstName("John");
         $submitter->setLastName("Submitter");
         $submitter->setEmail("sub@localhost.de");

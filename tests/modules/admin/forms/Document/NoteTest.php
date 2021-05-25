@@ -30,6 +30,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Document;
+use Opus\Note;
+
 /**
  * Description of Document_NoteTest
  */
@@ -53,7 +56,7 @@ class Admin_Form_Document_NoteTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Note();
 
-        $note = new Opus_Note();
+        $note = new Note();
         $note->setMessage('Message1');
         $note->setVisibility('public');
 
@@ -76,7 +79,7 @@ class Admin_Form_Document_NoteTest extends ControllerTestCase
         $form->getElement('Message')->setValue('Test Message');
         $form->getElement('Visibility')->setChecked(true);
 
-        $note = new Opus_Note();
+        $note = new Note();
 
         $form->updateModel($note);
 
@@ -94,7 +97,7 @@ class Admin_Form_Document_NoteTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Note();
 
-        $doc = new Opus_Document(146);
+        $doc = Document::get(146);
 
         $notes = $doc->getNote();
 
@@ -143,7 +146,7 @@ class Admin_Form_Document_NoteTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Note();
 
-        $note = new Opus_Note();
+        $note = new Note();
         $note->setMessage('Message1');
         $note->setVisibility('public');
 

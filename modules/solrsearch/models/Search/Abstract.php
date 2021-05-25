@@ -43,6 +43,10 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
 
     private $_view;
 
+    /**
+     * TODO this is used for facets (not index fields) - rename!
+     * @var array
+     */
     private $_filterFields;
 
     private $_searchFields;
@@ -65,7 +69,7 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
 
         $this->_filterFields = [];
 
-        $filters = Opus\Search\Config::getFacetFields();
+        $filters = Opus\Search\Config::getFacetNames();
         if (! count($filters)) {
             $logger->debug('key searchengine.solr.facets is not present in config. skipping filter queries');
         } else {
@@ -73,9 +77,6 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
         }
 
         foreach ($filters as $filterfield) {
-            if ($filterfield == 'year_inverted') {
-                $filterfield = 'year';
-            }
             array_push($this->_filterFields, trim($filterfield));
         }
 
@@ -229,7 +230,6 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
 
     public function getQueryUrl($request)
     {
-
         $queryBuilderInput = $this->createQueryBuilderInputFromRequest($request);
 
         $searchType = $request->getParam('searchtype');
@@ -444,7 +444,7 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
         $resultList = null;
 
         try {
-            $searcher = new Opus\Search\Util\Searcher();
+            $searcher = Application_Search_SearcherFactory::getSearcher();
 
             if (! is_null($openFacets)) {
                 $searcher->setFacetArray($openFacets);
@@ -461,14 +461,21 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
 
     public function addFiltersToQuery($query, $input)
     {
+        $facetManager = $this->getFacetManager();
+
         foreach ($this->_filterFields as $filterField) {
-            $facetKey = $filterField . 'fq';
+            $facetName = $filterField;
+            $facetKey = $facetName . 'fq';
             $facetValue = $input[$facetKey];
             if ($facetValue !== '') {
+                $facet = $facetManager->getFacet($facetName);
                 $this->getLogger()->debug(
                     "request has facet key: $facetKey - value is: $facetValue - corresponding facet is: $filterField"
                 );
-                $query->addFilterQuery($filterField, $facetValue);
+                $indexField = $facet->getIndexField();
+                $indexField = preg_replace('/_inverted/', '', $indexField);
+
+                $query->addFilterQuery($indexField, $facetValue);
             }
         }
     }
@@ -489,5 +496,10 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
     public function setMaxRows($maxRows)
     {
         $this->_maxRows = $maxRows;
+    }
+
+    public function getFacetManager()
+    {
+        return new Application_Search_FacetManager(); // TODO should be singleton
     }
 }

@@ -25,6 +25,9 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+use Opus\Model\AbstractDb;
+use Opus\Model\NotFoundException;
+
 /**
  * Abstrakte Basisklasse für Model-Formulare.
  *
@@ -149,7 +152,7 @@ abstract class Application_Form_Model_Abstract extends Application_Form_Abstract
      * Instanziert und aktualisiert vom Formular angezeigtes Model.
      *
      * @throws Application_Exception
-     * @return Opus_Model_AbbstractDb
+     * @return AbstractDb
      */
     public function getModel()
     {
@@ -167,7 +170,7 @@ abstract class Application_Form_Model_Abstract extends Application_Form_Abstract
 
         try {
             $model = new $modelClass($modelId);
-        } catch (Opus_Model_NotFoundException $omnfe) {
+        } catch (NotFoundException $omnfe) {
             $this->getLogger()->err($omnfe->getMessage());
             throw new Application_Exception(__METHOD__ . " Model with ID '$modelId' not found.");
         }

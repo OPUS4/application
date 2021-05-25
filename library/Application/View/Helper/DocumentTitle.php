@@ -31,6 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Language;
+
 /**
  * Helper for printing the title of a OPUS document.
  *
@@ -40,7 +42,7 @@
  * The document could be stored in a view variable or it could be provides as
  * a parameter.
  *
- * The document could by of type Opus_Document or it could be a result object
+ * The document could by of type Document or it could be a result object
  * of a Solr search.
  */
 class Application_View_Helper_DocumentTitle extends Application_View_Helper_Document_HelperAbstract
@@ -53,7 +55,7 @@ class Application_View_Helper_DocumentTitle extends Application_View_Helper_Docu
     public function documentTitle($document = null)
     {
         if ($this->isPreferUserInterfaceLanguage()) {
-            $language = Opus_Language::getPart2tForPart1(Zend_Registry::get('Zend_Translate')->getLocale());
+            $language = Language::getPart2tForPart1(Application_Translate::getInstance()->getLocale());
 
             $title = $document->getMainTitle($language);
         } else {

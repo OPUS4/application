@@ -31,6 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Title;
+
 /**
  * Class Rss_IndexControllerTest
  *
@@ -62,11 +64,10 @@ class Rss_IndexControllerTest extends ControllerTestCase
         $this->requireSolrConfig();
 
         // manipulate solr configuration
-        $config = Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         $host = $config->searchengine->index->host;
         $port = $config->searchengine->index->port;
         $config->searchengine->index->app = 'solr/corethatdoesnotexist';
-        Zend_Registry::set('Zend_Config', $config);
 
         $this->dispatch('/rss/index/index/searchtype/all');
         $body = $this->getResponse()->getBody();
@@ -91,7 +92,7 @@ class Rss_IndexControllerTest extends ControllerTestCase
         $doc1 = $this->createTestDocument();
         $doc1->setServerState('published');
         $doc1->setLanguage('eng');
-        $title = new Opus_Title();
+        $title = new Title();
         $title->setValue('test document for OPUSVIER-1726');
         $title->setLanguage('eng');
         $doc1->setTitleMain($title);
@@ -100,37 +101,37 @@ class Rss_IndexControllerTest extends ControllerTestCase
         $doc1->store();
 
         $docId1 = $doc1->getId();
-        $date = new Zend_Date($doc1->getServerDatePublished());
-        $dateValue1 = $date->get(Zend_Date::RFC_2822);
+        $date = new \Zend_Date($doc1->getServerDatePublished());
+        $dateValue1 = $date->get(\Zend_Date::RFC_2822);
 
         $indexer = Opus\Search\Service::selectIndexingService(null, 'solr');
 
         $indexer->addDocumentsToIndex($doc1);
 
         // delete document from database
-        $doc1->deletePermanent();
+        $doc1->delete();
 
         sleep(2); // make sure $doc2 do not get the same value for server_date_published
 
         $doc2 = $this->createTestDocument();
         $doc2->setServerState('published');
         $doc2->setLanguage('eng');
-        $title = new Opus_Title();
+        $title = new Title();
         $title->setValue('another test document for OPUSVIER-1726');
         $title->setLanguage('eng');
         $doc2->setTitleMain($title);
         $doc2->store();
 
         $docId2 = $doc2->getId();
-        $date = new Zend_Date($doc2->getServerDatePublished());
-        $dateValue2 = $date->get(Zend_Date::RFC_2822);
+        $date = new \Zend_Date($doc2->getServerDatePublished());
+        $dateValue2 = $date->get(\Zend_Date::RFC_2822);
 
         $this->dispatch('/rss/index/index/searchtype/all');
 
         // make search index up to date
         $indexer->removeDocumentsFromIndexById($docId1);
 
-        $doc2->deletePermanent();
+        $doc2->delete();
 
         $body = $this->getResponse()->getBody();
         $this->assertNotContains("No Opus_Db_Documents with id $docId1 in database.", $body);
@@ -183,7 +184,7 @@ class Rss_IndexControllerTest extends ControllerTestCase
      */
     public function testRssLink()
     {
-        Zend_Controller_Front::getInstance()->setBaseUrl('opus4dev');
+        \Zend_Controller_Front::getInstance()->setBaseUrl('opus4dev');
         $this->dispatch('/rss/index/index');
         $this->assertXpathContentContains('//link', 'http://opus4dev/frontdoor/index/index/docId/147');
         $this->assertXpathContentContains('//link', 'http://opus4dev/frontdoor/index/index/docId/150');

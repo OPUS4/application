@@ -33,6 +33,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\DocumentFinder;
+
 class Home_IndexController extends Application_Controller_Action
 {
 
@@ -126,8 +128,8 @@ class Home_IndexController extends Application_Controller_Action
         $appConfig = new Application_Configuration();
 
         if ($appConfig->isLanguageSelectionEnabled() && ! is_null($language)
-                && Zend_Registry::get('Zend_Translate')->isAvailable($language)) {
-            $sessiondata = new Zend_Session_Namespace();
+                && Application_Translate::getInstance()->isAvailable($language)) {
+            $sessiondata = new \Zend_Session_Namespace();
             $sessiondata->language = $language;
         }
         $this->_helper->Redirector->redirectTo($action, '', $controller, $module, $params);
@@ -136,7 +138,7 @@ class Home_IndexController extends Application_Controller_Action
     public function indexAction()
     {
         $this->_helper->mainMenu('home');
-        $finder = new Opus_DocumentFinder();
+        $finder = new DocumentFinder();
         $finder->setServerState('published');
         $this->view->totalNumOfDocs = $finder->count();
     }
@@ -161,6 +163,7 @@ class Home_IndexController extends Application_Controller_Action
 
                 $this->view->contenttitle = "help_title_$content";
                 $this->view->content = $help->getContent($content);
+                $this->view->contentId = $content;
             }
         }
 
@@ -195,7 +198,7 @@ class Home_IndexController extends Application_Controller_Action
     protected function getViewScripts()
     {
         $phtmlFilesAvailable = [];
-        $dir = new DirectoryIterator($this->view->getScriptPath('index'));
+        $dir = new \DirectoryIterator($this->view->getScriptPath('index'));
         foreach ($dir as $file) {
             if ($file->isFile() && $file->getFilename() != '.' && $file->getFilename() != '..' && $file->isReadable()) {
                 array_push($phtmlFilesAvailable, $file->getBasename('.phtml'));

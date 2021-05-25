@@ -30,7 +30,6 @@
  * @author      Henning Gerhardt <henning.gerhardt@slub-dresden.de>
  * @copyright   Copyright (c) 2009, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -90,7 +89,7 @@ class Oai_Model_Resumptiontokens
         do {
             $uniqueName = sprintf('%s%05d', $uniqueId, $fc++);
             $file = $this->_resumptionPath . DIRECTORY_SEPARATOR . $this->_filePrefix . $uniqueName . $fileExtension;
-        } while (true === file_exists($file));
+        } while (true === is_readable($file));
 
         $this->_resumptionId = $uniqueName;
 
@@ -146,7 +145,7 @@ class Oai_Model_Resumptiontokens
             $fileName .= '.' . $this->_fileExtension;
         }
 
-        if (true === file_exists($fileName)) {
+        if (true === is_readable($fileName)) {
             $fileContents = file_get_contents($fileName);
             // if data is not unserializueabke an E_NOTICE will be triggerd and false returned
             // avoid this E_NOTICE

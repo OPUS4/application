@@ -29,8 +29,12 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
+use Opus\DnbInstitute;
+use Opus\Model\Dependent\Link\DocumentDnbInstitute;
+use Opus\Model\NotFoundException;
+use Opus\Model\Dependent\Link\AbstractLinkModel;
 
 /**
  * Unterformular fuer Institute.
@@ -51,7 +55,7 @@ class Admin_Form_Document_Institute extends Admin_Form_AbstractModelSubForm
     const ELEMENT_INSTITUTE = 'Institute';
 
     /**
-     * @var ROLE_GRANTOR or ROLE_PUBLISHER
+     * @var string ROLE_GRANTOR or ROLE_PUBLISHER
      */
     private $_role;
 
@@ -76,7 +80,6 @@ class Admin_Form_Document_Institute extends Admin_Form_AbstractModelSubForm
                 break;
             default:
                 throw new Application_Exception(__METHOD__ . ' Unknown role \'' . $this->_role . '\'.');
-                break;
         }
     }
 
@@ -88,16 +91,16 @@ class Admin_Form_Document_Institute extends Admin_Form_AbstractModelSubForm
     }
 
     /**
-     * @param type $model
+     * @param $model AbstractLinkModel
      */
     public function updateModel($link)
     {
         $instituteId = $this->getElement(self::ELEMENT_INSTITUTE)->getValue();
         try {
-            $institute = new Opus_DnbInstitute($instituteId);
+            $institute = new DnbInstitute($instituteId);
 
             $link->setModel($institute);
-        } catch (Opus_Model_NotFoundException $omnfe) {
+        } catch (NotFoundException $omnfe) {
             $this->getLogger()->err(__METHOD__ . " Unknown institute ID = '$instituteId'.");
         }
     }
@@ -114,9 +117,9 @@ class Admin_Form_Document_Institute extends Admin_Form_AbstractModelSubForm
         }
 
         try {
-            $link = new Opus_Model_Dependent_Link_DocumentDnbInstitute($linkId);
-        } catch (Opus_Model_NotFoundException $omnfe) {
-            $link = new Opus_Model_Dependent_Link_DocumentDnbInstitute();
+            $link = new DocumentDnbInstitute($linkId);
+        } catch (NotFoundException $omnfe) {
+            $link = new DocumentDnbInstitute();
         }
 
         $this->updateModel($link);

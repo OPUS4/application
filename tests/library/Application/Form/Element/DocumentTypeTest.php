@@ -38,10 +38,10 @@ class Application_Form_Element_DocumentTypeTest extends FormElementTestCase
     public function setUp()
     {
         $this->_formElementClass = 'Application_Form_Element_DocumentType';
-        $this->_expectedDecoratorCount = 6;
         $this->_expectedDecorators = [
-            'ViewHelper', 'Errors', 'Description', 'ElementHtmlTag', 'LabelNotEmpty', 'dataWrapper'
+            'ViewHelper', 'Errors', 'Description', 'ElementHtmlTag', 'LabelNotEmpty', 'dataWrapper', 'ElementHint'
         ];
+        $this->_expectedDecoratorCount = count($this->_expectedDecorators);
         $this->_staticViewHelper = 'viewFormSelect';
         parent::setUp();
     }
@@ -50,7 +50,7 @@ class Application_Form_Element_DocumentTypeTest extends FormElementTestCase
     {
         $element = $this->getElement();
 
-        $types = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes')->getDocumentTypes();
+        $types = \Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes')->getDocumentTypes();
 
         $this->assertEquals(count($types), count($element->getMultiOptions()));
 

@@ -10,4 +10,4 @@ sudo service mysql start
 
 # Create DB and user -> have to be in one line
 export MYSQL_PWD=root \
-    && mysql --default-character-set=utf8 -h 'localhost' -P '3306' -u 'root' -v -e "CREATE DATABASE IF NOT EXISTS opusdb DEFAULT CHARACTER SET = UTF8 DEFAULT COLLATE = UTF8_GENERAL_CI; GRANT ALL PRIVILEGES ON opusdb.* TO 'opus4'@'localhost' IDENTIFIED BY 'root'; GRANT SELECT,INSERT,UPDATE,DELETE ON opusdb.* TO 'opus4admin'@'localhost' IDENTIFIED BY 'root'; FLUSH PRIVILEGES;"
+    && mysql --default-character-set=utf8 -h 'localhost' -P '3306' -u 'root' -v -e "CREATE DATABASE IF NOT EXISTS opusdb DEFAULT CHARACTER SET = UTF8 DEFAULT COLLATE = UTF8_GENERAL_CI; CREATE USER 'opus4admin'@'localhost' IDENTIFIED BY 'root'; GRANT ALL PRIVILEGES ON opusdb.* TO 'opus4admin'@'localhost'; CREATE USER 'opus4'@'localhost' IDENTIFIED BY 'root'; GRANT SELECT,INSERT,UPDATE,DELETE ON opusdb.* TO 'opus4'@'localhost'; FLUSH PRIVILEGES;"

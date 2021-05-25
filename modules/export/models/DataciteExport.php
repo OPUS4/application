@@ -32,6 +32,11 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Document;
+use Opus\Model\ModelException;
+use Opus\Doi\DataCiteXmlGenerator;
+use Opus\Doi\DataCiteXmlGenerationException;
+
 class Export_Model_DataciteExport extends Application_Export_ExportPluginAbstract
 {
 
@@ -56,8 +61,8 @@ class Export_Model_DataciteExport extends Application_Export_ExportPluginAbstrac
         }
 
         try {
-            $document = new Opus_Document($docId);
-        } catch (Opus\Model\Exception $e) {
+            $document = Document::get($docId);
+        } catch (ModelException $e) {
             throw new Application_Exception('could not retrieve document with given ID from OPUS database');
         }
 
@@ -70,7 +75,7 @@ class Export_Model_DataciteExport extends Application_Export_ExportPluginAbstrac
         $skipValidation = (! is_null($validate) && $validate === 'no');
 
         $requiredFieldsStatus = [];
-        $generator = new Opus_Doi_DataCiteXmlGenerator();
+        $generator = new DataCiteXmlGenerator();
         if (! $skipValidation) {
             // prüfe, ob das Dokument $document alle erforderlichen Pflichtfelder besitzt
             $requiredFieldsStatus = $generator->checkRequiredFields($document, false);
@@ -81,7 +86,7 @@ class Export_Model_DataciteExport extends Application_Export_ExportPluginAbstrac
         try {
             // generiere DataCite-XML, wobei Pflichtfeld-Überprüfung nicht erneut durchgeführt werden soll
             $output = $generator->getXml($document, $skipValidation, true);
-        } catch (Opus_Doi_DataCiteXmlGenerationException $e) {
+        } catch (DataCiteXmlGenerationException $e) {
             $errors = $e->getXmlErrors();
         }
 
@@ -109,7 +114,7 @@ class Export_Model_DataciteExport extends Application_Export_ExportPluginAbstrac
     /**
      * Setzt die View-Objekte für die Generierung der HTML-Statusseite mit den Fehlermeldungen der XML-Generierung.
      *
-     * @param Opus_Document $document das aktuell verarbeitete Dokument
+     * @param Document $document das aktuell verarbeitete Dokument
      * @param array $requiredFieldsStatus der Status (Existenz bzw. Nichtexistenz) der einzelnen Pflichtfelder
      * @param $errors die bei der DataCite-XML Generierung gefundenen Fehler
      */

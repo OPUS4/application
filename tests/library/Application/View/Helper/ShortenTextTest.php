@@ -44,9 +44,9 @@ class Application_View_Helper_ShortenTextTest extends ControllerTestCase
     {
         $helper = new Application_View_Helper_ShortenText();
 
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        $this->adjustConfiguration([
             'frontdoor' => ['numOfShortAbstractChars' => '10']
-        ]));
+        ]);
 
         $this->assertEquals('short text', $helper->shortenText('short text'));
         $this->assertEquals('shortened', $helper->shortenText('shortened text'));
@@ -70,17 +70,17 @@ class Application_View_Helper_ShortenTextTest extends ControllerTestCase
     {
         $helper = new Application_View_Helper_ShortenText();
 
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        $this->adjustConfiguration([
             'frontdoor' => ['numOfShortAbstractChars' => '10']
-        ]));
+        ]);
 
         $this->assertEquals(10, $helper->getMaxLength());
 
         $helper->setMaxLength(null);
 
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        $this->adjustConfiguration([
             'frontdoor' => ['numOfShortAbstractChars' => 'bla']
-        ]));
+        ]);
 
         $this->assertEquals(0, $helper->getMaxLength());
     }
@@ -89,9 +89,9 @@ class Application_View_Helper_ShortenTextTest extends ControllerTestCase
     {
         $helper = new Application_View_Helper_ShortenText();
 
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        $this->adjustConfiguration([
             'frontdoor' => ['numOfShortAbstractChars' => '10']
-        ]));
+        ]);
 
         $this->assertEquals(10, $helper->getMaxLength());
 

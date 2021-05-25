@@ -29,8 +29,9 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
+use Opus\Identifier;
 
 /**
  * Select Element für Identifier Type.
@@ -44,7 +45,7 @@ class Application_Form_Element_Identifier extends Application_Form_Element_Selec
     {
         parent::init();
 
-        $identifier = new Opus_Identifier();
+        $identifier = new Identifier();
         $types = $identifier->getField('Type')->getDefault();
 
         foreach ($types as $type) {

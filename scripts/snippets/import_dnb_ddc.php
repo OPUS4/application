@@ -28,8 +28,11 @@
  * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
+use Opus\Collection;
+use Opus\CollectionRole;
+use Opus\Db\TableGateway;
 
 /**
  * script that imports collections from a text file
@@ -55,13 +58,13 @@ if (! is_readable($inputFile)) {
 }
 
 // find next valid position for collection role
-$table  = Opus_Db_TableGateway::getInstance(Opus_CollectionRole::getTableGatewayClass());
+$table  = TableGateway::getInstance(CollectionRole::getTableGatewayClass());
 $select = $table->select()->from($table, ['MAX(position) AS max_position']);
 $row = $table->fetchRow($select);
 $position = $row->max_position + 1;
 
 // create root collection
-$collectionRole = new Opus_CollectionRole();
+$collectionRole = new CollectionRole();
 $collectionRole->setPosition($position);
 $collectionRole->setName('ddc_dnb');
 $collectionRole->setOaiName('ddc_dnb');
@@ -73,7 +76,7 @@ $collectionRole->setVisibleFrontdoor(true);
 $collectionRole->setVisibleOai(true);
 $collectionRoleId = $collectionRole->store();
 
-$rootCollection = new Opus_Collection();
+$rootCollection = new Collection();
 $rootCollection->setPositionKey('Root');
 $rootCollection->setVisible(true);
 $rootCollection->setRoleId($collectionRoleId);
@@ -97,7 +100,7 @@ if (! is_null($rootCollection)) {
             continue;
         }
 
-        $collection = new Opus_Collection();
+        $collection = new Collection();
         $collection->setNumber(trim($parts[0]));
         $collection->setOaiSubset(trim($parts[0]));
         $collection->setName(trim($parts[1]));

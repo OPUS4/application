@@ -83,6 +83,42 @@ class Application_Import_XmlValidationTest extends ControllerTestCase
         $this->assertCount(0, $errors);
     }
 
+    /**
+     * In XML Schema 1.0 lässt sich die Forderung, dass bei der Angabe eines Embargo-Date
+     * sowohl das Attribute monthDay und year angegeben werden muss, nicht definieren.
+     *
+     * Daher wird ein Dokument, in dem für das Embargo-Date nur die Jahresangabe enthalten
+     * ist, als valide betrachtet.
+     */
+    public function testIncompleteEmbargoDateMissingMonthDay()
+    {
+        $validator = new Application_Import_XmlValidation();
+
+        $xml = file_get_contents(APPLICATION_PATH . '/tests/resources/import/incomplete-embargo-date.xml');
+
+        $this->assertTrue($validator->validate($xml));
+    }
+
+    public function testIncompleteEmbargoDateMissingYear()
+    {
+        $validator = new Application_Import_XmlValidation();
+
+        $xml = file_get_contents(APPLICATION_PATH . '/tests/resources/import/incomplete-embargo-year.xml');
+
+        $this->assertFalse($validator->validate($xml));
+
+        $this->assertCount(1, $validator->getErrors());
+    }
+
+    public function testCompleteEmbargoDate()
+    {
+        $validator = new Application_Import_XmlValidation();
+
+        $xml = file_get_contents(APPLICATION_PATH . '/tests/resources/import/embargo-date.xml');
+
+        $this->assertTrue($validator->validate($xml));
+    }
+
     private function _checkValid($xml, $name)
     {
         $validator = new Application_Import_XmlValidation();

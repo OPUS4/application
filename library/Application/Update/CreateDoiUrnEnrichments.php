@@ -31,6 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\EnrichmentKey;
+
 /**
  * Update step creates enrichment key supporting handling of DOI and URN identifiers.
  */
@@ -46,11 +48,11 @@ class Application_Update_CreateDoiUrnEnrichments extends Application_Update_Plug
     public function run()
     {
         foreach ($this->keyNames as $name) {
-            $enrichmentKey = Opus_EnrichmentKey::fetchByName($name);
+            $enrichmentKey = EnrichmentKey::fetchByName($name);
 
             if (is_null($enrichmentKey)) {
                 $this->log("Creating enrichment key '$name' ...");
-                $enrichmentKey = new Opus_EnrichmentKey();
+                $enrichmentKey = new EnrichmentKey();
                 $enrichmentKey->setName($name);
                 $enrichmentKey->store();
                 $this->getLogger()->info("Enrichment key '$name' created.");

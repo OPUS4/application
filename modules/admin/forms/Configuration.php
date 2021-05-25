@@ -29,7 +29,6 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -51,7 +50,17 @@ class Admin_Form_Configuration extends Application_Form_Model_Abstract
      * Configured options for form.
      * @var array
      */
-    private $_options;
+    private $options;
+
+    public function __construct($config = null)
+    {
+        if (! is_null($config)) {
+            $options = new Admin_Model_Options($config);
+            $this->options = $options->getOptions();
+        }
+
+        parent::__construct();
+    }
 
     /**
      * Configures form and creates form elements.
@@ -60,11 +69,12 @@ class Admin_Form_Configuration extends Application_Form_Model_Abstract
     {
         parent::init();
 
-        $options = new Admin_Model_Options();
+        if (is_null($this->options)) {
+            $options = new Admin_Model_Options();
+            $this->options = $options->getOptions();
+        }
 
-        $this->_options = $options->getOptions();
-
-        foreach ($this->_options as $name => $option) {
+        foreach ($this->options as $name => $option) {
             $section = $option->getSection();
 
             $element = $this->createElement(
@@ -84,6 +94,8 @@ class Admin_Form_Configuration extends Application_Form_Model_Abstract
         }
 
         $this->removeElement(self::ELEMENT_MODEL_ID);
+
+        $this->setAttrib('class', 'admin_config');
     }
 
     /**
@@ -91,7 +103,7 @@ class Admin_Form_Configuration extends Application_Form_Model_Abstract
      */
     public function populateFromModel($config)
     {
-        foreach ($this->_options as $name => $option) {
+        foreach ($this->options as $name => $option) {
             $value = Application_Configuration::getValueFromConfig($config, $option->getKey());
             $this->getElement($name)->setValue($value);
         }
@@ -102,7 +114,7 @@ class Admin_Form_Configuration extends Application_Form_Model_Abstract
      */
     public function updateModel($config)
     {
-        foreach ($this->_options as $name => $option) {
+        foreach ($this->options as $name => $option) {
             $value = $this->getElement($name)->getValue();
 
             // TODO move into Admin_Model_Option?
@@ -119,8 +131,8 @@ class Admin_Form_Configuration extends Application_Form_Model_Abstract
      *
      * If necessary a new display group is created.
      *
-     * @param $element Form element
-     * @param $section Name of section
+     * @param $element \Zend_Form_Element Form element
+     * @param $section string Name of section
      * @throws Zend_Form_Exception
      */
     public function addElementToSection($element, $section)

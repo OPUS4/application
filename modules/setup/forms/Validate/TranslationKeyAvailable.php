@@ -36,7 +36,7 @@
  *
  * Translation keys are not case-sensitive.
  */
-class Setup_Form_Validate_TranslationKeyAvailable extends Zend_Validate_Abstract
+class Setup_Form_Validate_TranslationKeyAvailable extends \Zend_Validate_Abstract
 {
 
     /**

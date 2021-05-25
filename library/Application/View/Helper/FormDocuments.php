@@ -40,7 +40,7 @@
  * TODO not sure if there isn't a better solution (partial iterate document.phtml - easier customization)
  * TODO much more testing after refactoring
  */
-class Application_View_Helper_FormDocuments extends Zend_View_Helper_FormElement
+class Application_View_Helper_FormDocuments extends \Zend_View_Helper_FormElement
 {
 
     public function formDocuments($name, $value = null, $attribs = null, $options = null, $listsep = "<br />\n")

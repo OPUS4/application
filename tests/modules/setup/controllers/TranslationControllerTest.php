@@ -39,15 +39,8 @@
  *
  * TODO review SetupControllerTestCase
  */
-class Setup_TranslationControllerTest extends SetupControllerTestCase
+class Setup_TranslationControllerTest extends ControllerTestCase
 {
-
-    /**
-     * original file modes, needed for restoring after test
-     */
-    protected $origFileModes = [];
-
-    protected $configSection = 'static-page';
 
     public function testSomething()
     {

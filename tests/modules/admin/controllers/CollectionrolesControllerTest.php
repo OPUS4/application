@@ -30,7 +30,13 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- *
+ */
+
+use Opus\CollectionRole;
+use Opus\Document;
+use Opus\DocumentFinder;
+
+/**
  * @covers Admin_CollectionrolesController
  */
 class Admin_CollectionrolesControllerTest extends ControllerTestCase
@@ -46,7 +52,7 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase
     {
         parent::setUp();
 
-        $this->emptyCollectionRole = new Opus_CollectionRole();
+        $this->emptyCollectionRole = new CollectionRole();
         $this->emptyCollectionRole->setName("test1role");
         $this->emptyCollectionRole->setOaiName("test1role");
         $this->emptyCollectionRole->setDisplayBrowsing("Name");
@@ -54,7 +60,7 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase
         $this->emptyCollectionRole->setPosition(100);
         $this->emptyCollectionRole->store();
 
-        $this->nonEmptyCollectionRole = new Opus_CollectionRole();
+        $this->nonEmptyCollectionRole = new CollectionRole();
         $this->nonEmptyCollectionRole->setName("test2role");
         $this->nonEmptyCollectionRole->setOaiName("test2role");
         $this->nonEmptyCollectionRole->setDisplayBrowsing("Name");
@@ -68,6 +74,9 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase
 
     public function tearDown()
     {
+        $database = new \Opus\Translate\Dao();
+        $database->removeAll();
+
         if (! is_null($this->nonEmptyCollectionRole) && ! is_null($this->nonEmptyCollectionRole->getId())) {
             $this->nonEmptyCollectionRole->delete();
         }
@@ -233,12 +242,12 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase
     {
         // check for expected test data
 
-        $collectionRole1 = new Opus_CollectionRole(1);
+        $collectionRole1 = new CollectionRole(1);
         $this->assertEquals(1, $collectionRole1->getPosition(), 'Test setup changed');
-        $collectionRole2 = new Opus_CollectionRole(2);
+        $collectionRole2 = new CollectionRole(2);
         $this->assertEquals(2, $collectionRole2->getPosition(), 'Test setup changed');
 
-        $docfinder = new Opus_DocumentFinder();
+        $docfinder = new DocumentFinder();
         $docfinder->setCollectionRoleId(2);
         $collectionRoleDocs = $docfinder->ids();
 
@@ -246,9 +255,9 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase
 
         // test if server_date_modified is altered
 
-        $docBefore = new Opus_Document(146);
+        $docBefore = Document::get(146);
         $this->dispatch('/admin/collectionroles/move/roleid/1/pos/2');
-        $docAfter = new Opus_Document(146);
+        $docAfter = Document::get(146);
 
         // revert change in test data
         $this->resetRequest();
@@ -268,11 +277,11 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase
     {
         $this->useEnglish();
 
-        $dao = new Opus_Translate_Dao();
+        $dao = new \Opus\Translate\Dao();
 
         $dao->remove('default_collection_role_CreateTestColName');
 
-        $roles = Opus_CollectionRole::fetchAll();
+        $roles = CollectionRole::fetchAll();
 
         $this->assertEquals(22, count($roles));
 
@@ -304,7 +313,7 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase
 
         $this->dispatch('/admin/collectionroles/create');
 
-        $roles = Opus_CollectionRole::fetchAll();
+        $roles = CollectionRole::fetchAll();
 
         $this->assertEquals(count($roleIds) + 1, count($roles)); // neue Collection wurde erzeugt
 
@@ -348,12 +357,12 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase
     {
         $this->useEnglish();
 
-        $dao = new Opus_Translate_Dao();
+        $dao = new \Opus\Translate\Dao();
         $dao->remove('default_collection_role_ModifiedName');
 
-        $roles = Opus_CollectionRole::fetchAll();
+        $roles = CollectionRole::fetchAll();
 
-        $role = new Opus_CollectionRole();
+        $role = new CollectionRole();
         $role->setName('EditTestName');
         $role->setOaiName('EditTestOaiName');
         $role->setDisplayBrowsing('Name');
@@ -391,9 +400,9 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase
         $this->dispatch('/admin/collectionroles/create');
 
         // TODO if assertion fails newly created role is not removed (cleanup)
-        $this->assertEquals(count($roles) + 1, count(Opus_CollectionRole::fetchAll())); // keine neue Collection
+        $this->assertEquals(count($roles) + 1, count(CollectionRole::fetchAll())); // keine neue Collection
 
-        $role = new Opus_CollectionRole($roleId);
+        $role = new CollectionRole($roleId);
 
         $role->delete();
 
@@ -428,12 +437,12 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase
 
         $this->useEnglish();
 
-        $dao = new Opus_Translate_Dao();
+        $dao = new \Opus\Translate\Dao();
         $dao->remove('default_collection_role_ModifiedName');
 
-        $roles = Opus_CollectionRole::fetchAll();
+        $roles = CollectionRole::fetchAll();
 
-        $role = new Opus_CollectionRole();
+        $role = new CollectionRole();
         $role->setName('EditTestName');
         $role->setOaiName('EditTestOaiName');
         $role->setDisplayBrowsing('Name');
@@ -471,9 +480,9 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase
         $this->dispatch('/admin/collectionroles/create');
 
         // TODO if assertion fails newly created role is not removed (cleanup)
-        $this->assertEquals(count($roles) + 1, count(Opus_CollectionRole::fetchAll())); // keine neue Collection
+        $this->assertEquals(count($roles) + 1, count(CollectionRole::fetchAll())); // keine neue Collection
 
-        $role = new Opus_CollectionRole($roleId);
+        $role = new CollectionRole($roleId);
 
         $role->delete();
 
@@ -495,5 +504,58 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase
         );
 
         $this->assertNull($dao->getTranslation('default_collection_role_ModifiedName'));
+    }
+
+    public function testCollectionRoleNameChangeModifiesTranslationKey()
+    {
+        $oldName = 'TestCollectionRole';
+        $newName = 'NewNameForCollectionRole';
+
+        $role = new CollectionRole();
+        $role->setName($oldName);
+        $role->setOaiName('oaiTestRole');
+        $roleId = $role->store();
+
+        $this->addModelToCleanup($role);
+
+        $manager = new Application_Translate_TranslationManager();
+        $manager->setTranslation("default_collection_role_$oldName", [
+            'en' => 'Just for testing',
+            'de' => 'Nur zum Testen'
+        ], 'default');
+
+        $request = $this->getRequest();
+        $request->setMethod('POST');
+        $request->setPost([
+            'Id' => $roleId,
+            'Name' => $newName,
+            'DisplayName' => [
+                'en' => 'Just for testing',
+                'de' => 'Nur zum Testen'
+            ],
+            'OaiName' => 'oaiTestRole',
+            'DisplayBrowsing' => 'Name',
+            'DisplayFrontdoor' => 'Number',
+            'Visible' => '1',
+            'VisibleBrowsingStart' => '1',
+            'VisibleFrontdoor' => '0',
+            'VisibleOai' => '0',
+            'Position' => '20',
+            'HideEmptyCollections' => '1',
+            'Save' => 'Speichern'
+        ]);
+
+        $this->dispatch("/admin/collectionroles/create/roleid/$roleId/oid/$roleId");
+
+        $this->assertFalse($manager->keyExists("default_collection_role_$oldName"));
+
+        $newKey = "default_collection_role_$newName";
+        $this->assertTrue($manager->keyExists($newKey));
+
+        $translation = $manager->getTranslation($newKey);
+        $this->assertEquals([
+            'en' => 'Just for testing',
+            'de' => 'Nur zum Testen'
+        ], $translation['translations']);
     }
 }

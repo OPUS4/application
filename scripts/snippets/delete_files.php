@@ -28,13 +28,16 @@
  * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
+use Opus\Document;
+use Opus\Model\NotFoundException;
 
 /**
- * Removes associated Opus_File objects for all HHAR test documents (id = 1..90)
+ * Removes associated File objects for all HHAR test documents (id = 1..90)
  * since full text files do not exist in file system
+ *
+ * TODO move script (it is used for testing/development)
  */
 
 $startId = 1;
@@ -43,8 +46,8 @@ $endId = 90;
 for ($i = $startId; $i <= $endId; $i++) {
     $d = null;
     try {
-        $d = new Opus_Document($i);
-    } catch (Opus_Model_NotFoundException $e) {
+        $d = Document::get($i);
+    } catch (NotFoundException $e) {
         // document with id $i does not exist
         continue;
     }

@@ -31,6 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Document;
+
 /**
  * Form for editing enrichments.
  *
@@ -115,7 +117,9 @@ class Admin_Form_Document_MultiEnrichmentSubForm extends Admin_Form_Document_Mul
                     // die Eingabe des Enrichmentwerts) auswählen und behandeln
                     $newSubForm = end($subForms);
                     if ($newSubForm instanceof Admin_Form_Document_Enrichment) {
-                        $newSubForm->initEnrichmentValueElement();
+                        // expliziter Aufruf der nachfolgenden Methoden an dieser Stelle erforderlich, weil
+                        // die Methode processPost erst nach der Methode constructFromPost aufgerufen wird
+                        $newSubForm->initValueFormElement();
                         $this->prepareSubFormDecorators($newSubForm);
                     }
                 }
@@ -145,10 +149,10 @@ class Admin_Form_Document_MultiEnrichmentSubForm extends Admin_Form_Document_Mul
 
     /**
      * Erzeugt und füllt die Enrichment-Unterformular mit Werten auf Basis des
-     * übergebenen Opus_Documents. Diese Methode wird immer dann aufgerufen,
+     * übergebenen Documents. Diese Methode wird immer dann aufgerufen,
      * wenn das Metadatenformular erstmalig (per GET) aufgerufen wird.
      *
-     * @param Opus_Document $document
+     * @param Document $document
      */
     public function populateFromModel($document)
     {
@@ -177,23 +181,7 @@ class Admin_Form_Document_MultiEnrichmentSubForm extends Admin_Form_Document_Mul
 
         foreach ($this->getSubForms() as $subForm) {
             if ($subForm instanceof Admin_Form_Document_Enrichment) {
-                $subFormName = $subForm->getName();
-                $enrichmentKeyName = null;
-                if (array_key_exists($subFormName, $post)) {
-                    $enrichmentKeyName = $post[$subFormName][Admin_Form_Document_Enrichment::ELEMENT_KEY_NAME];
-                }
-
-                // es ist zu prüfen, ob das Enrichment einen Wert verwendet, der in der
-                // Typkonfiguration nicht angegeben ist
-                $enrichmentId = null;
-                if (array_key_exists(Admin_Form_Document_Enrichment::ELEMENT_ID, $post[$subFormName])) {
-                    $enrichmentId = $post[$subFormName][Admin_Form_Document_Enrichment::ELEMENT_ID];
-                    if ($enrichmentId == '') {
-                        $enrichmentId = null;
-                    }
-                }
-
-                $subForm->initEnrichmentValueElement($enrichmentKeyName, $enrichmentId);
+                $subForm->initValueElement($post);
             }
             $this->prepareSubFormDecorators($subForm);
         }

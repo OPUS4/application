@@ -31,6 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Document;
+
 class Application_View_Helper_FormDocumentsTest extends ControllerTestCase
 {
 
@@ -55,7 +57,7 @@ class Application_View_Helper_FormDocumentsTest extends ControllerTestCase
     public function testFormDocuments()
     {
         $output = $this->_helper->formDocuments('Documents', null, null, [
-            1 => new Opus_Document(1)
+            1 => Document::get(1)
         ]);
 
         $this->assertContains('<div class="documents">', $output);

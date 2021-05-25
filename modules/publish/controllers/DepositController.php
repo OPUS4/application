@@ -30,8 +30,12 @@
  * @author      Susanne Gottwald <gottwald@zib.de>
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
+use Opus\Document;
+use Opus\Enrichment;
+use Opus\Model\ModelException;
+use Opus\Security\Realm;
 
 class Publish_DepositController extends Application_Controller_Action
 {
@@ -41,12 +45,12 @@ class Publish_DepositController extends Application_Controller_Action
     public $session;
 
     public function __construct(
-        Zend_Controller_Request_Abstract $request,
-        Zend_Controller_Response_Abstract $response,
+        \Zend_Controller_Request_Abstract $request,
+        \Zend_Controller_Response_Abstract $response,
         array $invokeArgs = []
     ) {
         $this->log = $this->getLogger();
-        $this->session = new Zend_Session_Namespace('Publish');
+        $this->session = new \Zend_Session_Namespace('Publish');
 
         parent::__construct($request, $response, $invokeArgs);
     }
@@ -70,9 +74,9 @@ class Publish_DepositController extends Application_Controller_Action
         if (array_key_exists('abort', $post)) {
             if (isset($this->session->documentId)) {
                 try {
-                    $document = new Opus_Document($this->session->documentId);
-                    $document->deletePermanent();
-                } catch (Opus_Model_Exception $e) {
+                    $document = Document::get($this->session->documentId);
+                    $document->delete();
+                } catch (ModelException $e) {
                     $this->getLogger()->err(
                         "deletion of document # " . $this->session->documentId . " was not successful",
                         $e
@@ -171,9 +175,9 @@ class Publish_DepositController extends Application_Controller_Action
         }
         $this->view->docId = $this->session->depositConfirmDocumentId;
 
-        $accessControl = Zend_Controller_Action_HelperBroker::getStaticHelper('accessControl');
+        $accessControl = \Zend_Controller_Action_HelperBroker::getStaticHelper('accessControl');
 
-        if (true === Opus_Security_Realm::getInstance()->check('clearance')
+        if (true === Realm::getInstance()->check('clearance')
                 || true === $accessControl->accessAllowed('documents')) {
             $this->view->showFrontdoor = true;
         }
@@ -184,12 +188,12 @@ class Publish_DepositController extends Application_Controller_Action
     /**
      * Fügt das interne Enrichment opus.import mit dem Wert 'publish' zum Dokument hinzu.
      *
-     * @param Opus_Document $document
-     * @throws \Opus\Model\Exception
+     * @param Document $document
+     * @throws ModelException
      */
     private function addSourceEnrichment($document)
     {
-        $enrichment = new Opus_Enrichment();
+        $enrichment = new Enrichment();
         $enrichment->setKeyName('opus.source');
         $enrichment->setValue('publish');
         $document->addEnrichment($enrichment);

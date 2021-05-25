@@ -32,10 +32,13 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Config;
+use Opus\Log;
+
 /**
  * Klasse für das Laden von Übersetzungsressourcen.
  */
-class Application_Configuration
+class Application_Configuration extends Config
 {
 
     use \Opus\LoggingTrait;
@@ -49,7 +52,9 @@ class Application_Configuration
      * Unterstützte Sprachen.
      * @var array
      */
-    private $_supportedLanguages = null;
+    private $supportedLanguages = null;
+
+    private $activatedLanguages = null;
 
     /**
      * Is language selection active in user interface.
@@ -91,7 +96,7 @@ class Application_Configuration
      */
     public function getConfig()
     {
-        return Zend_Registry::get('Zend_Config');
+        return Config::get();
     }
 
     /**
@@ -117,10 +122,10 @@ class Application_Configuration
      */
     public function getSupportedLanguages()
     {
-        if (is_null($this->_supportedLanguages)) {
+        if (is_null($this->supportedLanguages)) {
             $config = $this->getConfig();
             if (isset($config->supportedLanguages)) {
-                $this->_supportedLanguages = explode(",", $config->supportedLanguages);
+                $this->supportedLanguages = explode(',', $config->supportedLanguages);
                 /* TODO only used for debugging - remove?
                 $this->getLogger()->debug(
                     Zend_Debug::dump(
@@ -130,7 +135,21 @@ class Application_Configuration
                 );*/
             }
         }
-        return $this->_supportedLanguages;
+        return $this->supportedLanguages;
+    }
+
+    public function getActivatedLanguages()
+    {
+        if (is_null($this->activatedLanguages)) {
+            $config = $this->getConfig();
+            if (isset($config->activatedLanguages)) {
+                $this->activatedLanguages = explode(',', $config->activatedLanguages);
+            } else {
+                return $this->getSupportedLanguages();
+            }
+        }
+
+        return $this->activatedLanguages;
     }
 
     /**
@@ -155,7 +174,7 @@ class Application_Configuration
             $this->defaultLanguage = $languages[0];
 
             if ($this->isLanguageSelectionEnabled()) {
-                $locale = new Zend_Locale();
+                $locale = new \Zend_Locale();
                 $language = $locale->getDefault();
                 if (is_array($language) and count($language) > 0) {
                     reset($language);
@@ -186,52 +205,6 @@ class Application_Configuration
     }
 
     /**
-     * Returns the path to the application workspace.
-     *
-     * @throws Application_Exception
-     */
-    public function getWorkspacePath()
-    {
-        $config = $this->getConfig();
-
-        if (! isset($config->workspacePath)) {
-            $this->getLogger()->err('missing config key workspacePath');
-            throw new Application_Exception('missing configuration key workspacePath');
-        }
-
-        $workspacePath = $config->workspacePath;
-
-        if (substr($workspacePath, -1) === DIRECTORY_SEPARATOR) {
-            return $workspacePath;
-        } else {
-            return $config->workspacePath . DIRECTORY_SEPARATOR;
-        }
-    }
-
-    /**
-     * Returns path to temporary files folder.
-     * @return string Path for temporary files.
-     * @throws Application_Exception
-     */
-    public function getTempPath()
-    {
-        if (is_null($this->_tempPath)) {
-            $this->_tempPath = trim($this->getWorkspacePath() . 'tmp' . DIRECTORY_SEPARATOR);
-        }
-
-        return $this->_tempPath;
-    }
-
-    /**
-     * Set path to folder for temporary files.
-     * @param $tempPath
-     */
-    public function setTempPath($tempPath)
-    {
-        $this->_tempPath = $tempPath;
-    }
-
-    /**
      * Returns path to files folder for document files.
      * @return string Folder for storing document files
      * @throws Application_Exception
@@ -246,7 +219,7 @@ class Application_Configuration
      */
     public static function getOpusVersion()
     {
-        $config = Zend_Registry::get('Zend_Config');
+        $config = Config::get();
         $localVersion = $config->version;
         return (is_null($localVersion)) ? 'unknown' : $localVersion;
     }
@@ -257,7 +230,6 @@ class Application_Configuration
     public static function getOpusInfo()
     {
         $info = [];
-        $info['admin_info_version'] = self::getOpusVersion();
         return $info;
     }
 
@@ -266,9 +238,9 @@ class Application_Configuration
      * @param Zend_Config $config
      * @throws Zend_Config_Exception
      */
-    public static function save(Zend_Config $config)
+    public static function save(\Zend_Config $config)
     {
-        $writer = new Zend_Config_Writer_Xml();
+        $writer = new \Zend_Config_Writer_Xml();
         $writer->write(APPLICATION_PATH . '/application/configs/config.xml', $config);
     }
 
@@ -282,13 +254,13 @@ class Application_Configuration
      * @param $option
      * @return mixed|Zend_Config
      */
-    public static function getValueFromConfig(Zend_Config $config, $option)
+    public static function getValueFromConfig(\Zend_Config $config, $option)
     {
         $keys = explode('.', $option);
         $subconfig = $config;
         foreach ($keys as $key) {
             $subconfig = $subconfig->get($key);
-            if (! ($subconfig instanceof Zend_Config)) {
+            if (! ($subconfig instanceof \Zend_Config)) {
                 break;
             }
         }
@@ -297,7 +269,7 @@ class Application_Configuration
 
     /**
      * Returns value for key in current configuration.
-     * @param $key Name of option
+     * @param $key string Name of option
      */
     public function getValue($key)
     {
@@ -307,15 +279,17 @@ class Application_Configuration
     /**
      * Updates a value in a Zend_Config object.
      *
-     * @param Zend_Config $config
+     * @param \Zend_Config $config
      * @param $option string Name of option
      * @param $value string New value for option
-     * @throws Zend_Exception
+     * @throws \Zend_Exception
+     *
+     * TODO review and if possible replace this code with something simpler
      */
-    public static function setValueInConfig(Zend_Config $config, $option, $value)
+    public static function setValueInConfig(\Zend_Config $config, $option, $value)
     {
         if ($config->readOnly()) {
-            Zend_Registry::get('Zend_Log')->err('Zend_Config object is readonly.');
+             Log::get()->err('Zend_Config object is readonly.');
             return;
         }
 
@@ -350,11 +324,18 @@ class Application_Configuration
 
     /**
      * Returns Zend_Translate instance for application.
-     * @return Zend_Translate
-     * @throws Zend_Exception
+     * @return \Zend_Translate
+     * @throws \Zend_Exception
      */
     public function getTranslate()
     {
-        return Zend_Registry::get('Zend_Translate');
+        return Application_Translate::getInstance();
+    }
+
+    public static function isUpdateInProgress()
+    {
+        $config = Config::get();
+
+        return isset($config->updateInProgress) && filter_var($config->updateInProgress, FILTER_VALIDATE_BOOLEAN);
     }
 }

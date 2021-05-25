@@ -28,12 +28,17 @@
  * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
+use Opus\Document;
+use Opus\Model\NotFoundException;
+use Opus\Model\Xml;
+use Opus\Model\Xml\Version1;
 
 /**
  * Returns the XML representation of the document with given id $id.
+ *
+ * TODO convert to command (overlaps with opus-dump-document-xml.php)
  */
 
 if (isset($argv[2]) && ! empty($argv[2]) && is_numeric($argv[2])) {
@@ -43,15 +48,15 @@ if (isset($argv[2]) && ! empty($argv[2]) && is_numeric($argv[2])) {
 }
 
 try {
-    $doc = new Opus_Document($id);
-} catch (Opus_Model_NotFoundException $e) {
+    $doc = Document::get($id);
+} catch (NotFoundException $e) {
     echo "document with id $id does not exist";
     exit();
 }
 
-$xmlModel = new Opus_Model_Xml();
+$xmlModel = new Xml();
 $xmlModel->setModel($doc);
-$xmlModel->setStrategy(new Opus_Model_Xml_Version1());
+$xmlModel->setStrategy(new Version1());
 $xmlModel->excludeEmptyFields();
 
 echo $xmlModel->getDomDocument()->saveXML();

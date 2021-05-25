@@ -1,7 +1,4 @@
 <?php
-include_once("jpgraph/jpgraph.php");
-include_once("jpgraph/jpgraph_bar.php");
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -32,7 +29,6 @@ include_once("jpgraph/jpgraph_bar.php");
  * @author      Birgit Dressler (b.dressler@sulb.uni-saarland.de)
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 class Statistic_Model_StatisticGraphThumb
 {
@@ -58,13 +54,13 @@ class Statistic_Model_StatisticGraphThumb
     public function drawGraph()
     {
         // generate graphic
-        $graph = new Graph($this->_width, $this->_height, "auto");
+        $graph = new \Graph($this->_width, $this->_height, "auto");
         $graph->SetScale("textlin");
 
         $graph->img->SetMargin(0, 0, 1, 0);
         //$graph->SetFrame(true);
         // generate bars
-        $bplot = new BarPlot($this->_data);
+        $bplot = new \BarPlot($this->_data);
         $graph->Add($bplot);
 
 
@@ -72,7 +68,7 @@ class Statistic_Model_StatisticGraphThumb
         $bplot->SetFillColor('gray');
 
         //show background image if file exists
-        if (false === empty($this->_bgImg) && file_exists($this->_bgImg)) {
+        if (false === empty($this->_bgImg) && is_readable($this->_bgImg)) {
             $graph->SetBackgroundImage($this->_bgImg, BGIMG_FILLFRAME);
         }
         $bplot->SetFillGradient("gray", "darkgray", GRAD_HOR);

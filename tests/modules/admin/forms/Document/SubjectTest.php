@@ -30,6 +30,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Document;
+use Opus\Subject;
+
 /**
  * Unit Tests fuer Unterformular fuer ein Subject im Metadaten-Formular.
  */
@@ -42,7 +45,7 @@ class Admin_Form_Document_SubjectTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Subject('psyndex');
 
-        $this->assertEquals(4, count($form->getElements()));
+        $this->assertCount(4, $form->getElements());
 
         $this->assertNotNull($form->getElement('Id'));
         $this->assertNotNull($form->getElement('Value'));
@@ -57,7 +60,7 @@ class Admin_Form_Document_SubjectTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Subject('swd', 'deu');
 
-        $this->assertEquals(4, count($form->getElements()));
+        $this->assertCount(4, $form->getElements());
 
         $this->assertNotNull($form->getElement('Id'));
         $this->assertNotNull($form->getElement('Value'));
@@ -76,7 +79,7 @@ class Admin_Form_Document_SubjectTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Subject('swd', 'deu');
 
-        $document = new Opus_Document(146);
+        $document = Document::get(146);
         $subjects = $document->getSubject();
         $subjectSwd = $subjects[0];
 
@@ -98,7 +101,7 @@ class Admin_Form_Document_SubjectTest extends ControllerTestCase
         $form->getElement('Value')->setValue('Test Schlagwort');
         $form->getElement('ExternalKey')->setValue('Test Schluessel');
 
-        $subject = new Opus_Subject();
+        $subject = new Subject();
 
         $form->updateModel($subject);
 
@@ -112,7 +115,7 @@ class Admin_Form_Document_SubjectTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Subject('uncontrolled');
 
-        $document = new Opus_Document(146);
+        $document = Document::get(146);
         $subjects = $document->getSubject();
         $subject = $subjects[1];
 
@@ -170,7 +173,7 @@ class Admin_Form_Document_SubjectTest extends ControllerTestCase
 
         $messages = $logger->getMessages();
 
-        $this->assertEquals(1, count($messages));
+        $this->assertCount(1, $messages);
         $this->assertContains('Unknown subject ID = \'7777\'.', $messages[0]);
     }
 

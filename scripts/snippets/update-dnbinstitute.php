@@ -29,10 +29,10 @@
  * @author      Edouard Simon (edouard.simon@zib.de)
  * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id: update-thesispublisher.php 11775 2013-06-25 14:28:41Z tklein $
  */
 /**
- *
+ * TODO find out what it does - make command?
+ *      it adds ThesisPublisher to specified document types
  */
 if (basename(__FILE__) !== basename($argv[0])) {
     echo "script must be executed directy (not via opus-console)\n";
@@ -40,6 +40,11 @@ if (basename(__FILE__) !== basename($argv[0])) {
 }
 
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
+
+use Opus\DnbInstitute;
+use Opus\Document;
+use Opus\DocumentFinder;
+use Opus\Model\NotFoundException;
 
 //if ($argc < 3) {
 //    echo "Usage: {$argv[0]} <document type> <thesis publisher ID> (dryrun)\n";
@@ -62,8 +67,8 @@ $thesisGrantorId = @$options['grantorid'] ? : null;
 $dryrun = isset($options['dryrun']);
 
 try {
-    $dnbInstitute = new Opus_DnbInstitute($thesisPublisherId);
-} catch (Opus_Model_NotFoundException $omnfe) {
+    $dnbInstitute = new DnbInstitute($thesisPublisherId);
+} catch (NotFoundException $omnfe) {
     _log("Opus_DnbInstitute with ID <$thesisPublisherId> does not exist.\nExiting...");
     exit;
 }
@@ -71,7 +76,7 @@ if ($dryrun) {
     _log("TEST RUN: NO DATA WILL BE MODIFIED");
 }
 
-$docFinder = new Opus_DocumentFinder();
+$docFinder = new DocumentFinder();
 $docIds = $docFinder
         ->setServerState('published');
 if ($documentType != false) {
@@ -83,7 +88,7 @@ _log(count($docIds) . " documents " . ($documentType != false ? "of type '$docum
 
 foreach ($docIds as $docId) {
     try {
-        $doc = new Opus_Document($docId);
+        $doc = Document::get($docId);
         if (count($doc->getFile()) == 0) {
             _log("Document <$docId> has no files, skipping..");
             continue;

@@ -1,7 +1,4 @@
 <?php
-include_once("jpgraph/jpgraph.php");
-include_once("jpgraph/jpgraph_bar.php");
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -32,7 +29,6 @@ include_once("jpgraph/jpgraph_bar.php");
  * @author      Birgit Dressler (b.dressler@sulb.uni-saarland.de)
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 class Statistic_Model_StatisticGraph
 {
@@ -89,7 +85,7 @@ class Statistic_Model_StatisticGraph
     public function drawGraph()
     {
         // generate graphic
-        $graph = new Graph($this->_width, $this->_height, "auto");
+        $graph = new \Graph($this->_width, $this->_height, "auto");
         $graph->SetScale("textlin");
 
         // add shadow
@@ -99,11 +95,11 @@ class Statistic_Model_StatisticGraph
         $graph->img->SetMargin(40, 30, 20, 40);
         $graph->legend->Pos(0.05, 0.05, "right", "top");
         // generate bars
-        $bplot = new BarPlot(array_values($this->_dataPdf));
+        $bplot = new \BarPlot(array_values($this->_dataPdf));
         $bplot->SetLegend($this->_filesLabel);
-        $bplotFrontdoor = new BarPlot(array_values($this->_dataFrontdoor));
+        $bplotFrontdoor = new \BarPlot(array_values($this->_dataFrontdoor));
         $bplotFrontdoor->SetLegend($this->_frontdoorLabel);
-        $gbplot  = new GroupBarPlot([$bplot ,$bplotFrontdoor]);
+        $gbplot  = new \GroupBarPlot([$bplot ,$bplotFrontdoor]);
         $graph->Add($gbplot);
 
         // format bars

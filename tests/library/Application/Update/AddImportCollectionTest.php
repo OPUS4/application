@@ -29,7 +29,12 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2017-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- *
+ */
+
+use Opus\CollectionRole;
+use Opus\EnrichmentKey;
+
+/**
  * TODO does deleting 'Import' for testing update make sense?
  */
 class Application_Update_AddImportCollectionTest extends ControllerTestCase
@@ -42,7 +47,7 @@ class Application_Update_AddImportCollectionTest extends ControllerTestCase
         parent::setUp();
 
         // delete import collections
-        $collectionRole = Opus_CollectionRole::fetchByName('Import');
+        $collectionRole = CollectionRole::fetchByName('Import');
 
         if (! is_null($collectionRole)) {
             $collectionRole->delete();
@@ -51,7 +56,7 @@ class Application_Update_AddImportCollectionTest extends ControllerTestCase
 
     public function tearDown()
     {
-        $enrichmentKey = Opus_EnrichmentKey::fetchByName('opus.test.key');
+        $enrichmentKey = EnrichmentKey::fetchByName('opus.test.key');
 
         if (! is_null($enrichmentKey)) {
             $enrichmentKey->delete();
@@ -68,13 +73,13 @@ class Application_Update_AddImportCollectionTest extends ControllerTestCase
 
         $keyName = 'opus.test.key';
 
-        $enrichmentKey = Opus_EnrichmentKey::fetchByName($keyName);
+        $enrichmentKey = EnrichmentKey::fetchByName($keyName);
 
         $this->assertNull($enrichmentKey);
 
         $update->addEnrichmentKey($keyName);
 
-        $enrichmentKey = Opus_EnrichmentKey::fetchByName($keyName);
+        $enrichmentKey = EnrichmentKey::fetchByName($keyName);
 
         $this->assertNotNull($enrichmentKey);
         $this->assertEquals($keyName, $enrichmentKey->getName());
@@ -89,13 +94,13 @@ class Application_Update_AddImportCollectionTest extends ControllerTestCase
         $update->setLogger(new MockLogger());
         $update->setQuietMode(true);
 
-        $collectionRole = Opus_CollectionRole::fetchByName('Import');
+        $collectionRole = CollectionRole::fetchByName('Import');
 
         $this->assertNull($collectionRole);
 
         $update->addCollection();
 
-        $collectionRole = Opus_CollectionRole::fetchByName('Import');
+        $collectionRole = CollectionRole::fetchByName('Import');
 
         $this->assertNotNull($collectionRole);
 

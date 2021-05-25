@@ -41,7 +41,6 @@ class Admin_Form_ConfigurationTest extends ControllerTestCase
         $form = new Admin_Form_Configuration();
 
         $this->assertTrue(count($form->getElements()) > 3);
-        $this->assertNotNull($form->getElement('supportedLanguages'));
         $this->assertNotNull($form->getElement('Save'));
         $this->assertNotNull($form->getElement('Cancel'));
     }
@@ -50,28 +49,26 @@ class Admin_Form_ConfigurationTest extends ControllerTestCase
     {
         $form = new Admin_Form_Configuration();
 
-        $form->populateFromModel(new Zend_Config([
-            'supportedLanguages' => 'en,de'
-        ]));
+        $form->populateFromModel(new \Zend_Config([
+            'searchengine' => ['solr' => ['parameterDefaults' => ['rows' => '20']]]
+        ])); // searchengine.solr.parameterDefaults.rows
 
-        $element = $form->getElement('supportedLanguages');
+        $element = $form->getElement('maxSearchResults');
 
         $this->assertNotNull($element);
-        $this->assertEquals(['en', 'de'], $element->getValue());
+        $this->assertEquals(20, $element->getValue());
     }
 
     public function testUpdateModel()
     {
         $form = new Admin_Form_Configuration();
 
-        $form->getElement('supportedLanguages')->setValue('de');
         $form->getElement('maxSearchResults')->setValue(15);
 
-        $config = new Zend_Config([], true);
+        $config = new \Zend_Config([], true);
 
         $form->updateModel($config);
 
-        $this->assertEquals('de', $config->supportedLanguages);
         $this->assertEquals(15, $config->searchengine->solr->parameterDefaults->rows);
     }
 

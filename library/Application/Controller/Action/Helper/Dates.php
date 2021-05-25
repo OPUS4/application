@@ -29,13 +29,14 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
+use Opus\Date;
+
 /**
- * Controller helper for handling conversion between Opus_Date and strings.
+ * Controller helper for handling conversion between Date and strings.
  */
-class Application_Controller_Action_Helper_Dates extends Zend_Controller_Action_Helper_Abstract
+class Application_Controller_Action_Helper_Dates extends \Zend_Controller_Action_Helper_Abstract
 {
 
     /**
@@ -74,18 +75,18 @@ class Application_Controller_Action_Helper_Dates extends Zend_Controller_Action_
     }
 
     /**
-     * Converts string to Opus_Date depending on current language.
+     * Converts string to Date depending on current language.
      * @param string $datestr Date string
-     * @return Opus_Date
+     * @return Date
      */
     public function getOpusDate($datestr)
     {
         if (! is_null($datestr) && $this->isValid($datestr)) {
             $dateFormat = $this->_validator->getDateFormat();
 
-            $date = new Zend_Date($datestr, $dateFormat);
+            $date = new \Zend_Date($datestr, $dateFormat);
 
-            $dateModel = new Opus_Date($date);
+            $dateModel = new Date($date);
             return $dateModel;
         } else {
             // TODO throw exception
@@ -94,9 +95,9 @@ class Application_Controller_Action_Helper_Dates extends Zend_Controller_Action_
     }
 
     /**
-     * Converts Opus_Date into string depending on current language.
-     * @param Opus_Date $date Date
-     * @return Date string for current language
+     * Converts Date into string depending on current language.
+     * @param Date $date Date
+     * @return string Date string for current language
      */
     public function getDateString($date)
     {

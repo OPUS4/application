@@ -39,7 +39,7 @@
  *
  * TODO don't add delimiter internally - just accept a complete regular expression
  */
-class Application_Form_Validate_Filename extends Zend_Validate_Abstract
+class Application_Form_Validate_Filename extends \Zend_Validate_Abstract
 {
     /**
      * @var int maximal filename length

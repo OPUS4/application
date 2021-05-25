@@ -28,14 +28,17 @@
  * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
+use Opus\Collection;
+use Opus\Model\NotFoundException;
 
 /**
  * script that imports collections from a text file
  * file format: each collection (name and number) on a separate line
  * collection name and number are separated by | character
  *
+ * TODO make a command for importing collections in opus4 tool
  */
 
 // ID of parent collection
@@ -57,8 +60,8 @@ if (! is_readable($inputFile)) {
 
 $rootCollection = null;
 try {
-    $rootCollection = new Opus_Collection($parentCollectionId);
-} catch (Opus_Model_NotFoundException $e) {
+    $rootCollection = new Collection($parentCollectionId);
+} catch (NotFoundException $e) {
     echo "Error: collection with id $parentCollectionId does not exist\n";
     exit();
 }
@@ -81,7 +84,7 @@ if (! is_null($rootCollection)) {
             continue;
         }
 
-        $collection = new Opus_Collection();
+        $collection = new Collection();
         $collection->setName(trim($parts[0]));
         $collection->setNumber(trim($parts[1]));
         $collection->setVisible($visible);

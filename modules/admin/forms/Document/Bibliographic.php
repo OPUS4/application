@@ -29,8 +29,9 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
+use Opus\Document;
 
 /**
  * Unterformular fuer weitere Metadaten eines Dokuments.
@@ -113,13 +114,13 @@ class Admin_Form_Document_Bibliographic extends Admin_Form_Document_Section
     }
 
     /**
-     * @param Opus_Document $document
+     * @param Document $document
      */
     public function populateFromModel($document)
     {
         parent::populateFromModel($document);
 
-        $datesHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('Dates');
+        $datesHelper = \Zend_Controller_Action_HelperBroker::getStaticHelper('Dates');
 
         $this->getElement(self::ELEMENT_CONTRIBUTING_CORPORATION)->setValue($document->getContributingCorporation());
         $this->getElement(self::ELEMENT_CREATING_CORPORATION)->setValue($document->getCreatingCorporation());
@@ -140,13 +141,13 @@ class Admin_Form_Document_Bibliographic extends Admin_Form_Document_Section
     }
 
     /**
-     * @param Opus_Document $document
+     * @param Document $document
      */
     public function updateModel($document)
     {
         parent::updateModel($document);
 
-        $datesHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('Dates');
+        $datesHelper = \Zend_Controller_Action_HelperBroker::getStaticHelper('Dates');
 
         $document->setContributingCorporation($this->getElementValue(self::ELEMENT_CONTRIBUTING_CORPORATION));
         $document->setCreatingCorporation($this->getElementValue(self::ELEMENT_CREATING_CORPORATION));

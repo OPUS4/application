@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -31,15 +30,19 @@
  * @author      Ralf Claussnitzer <ralf.claussnitzer@slub-dresden.de>
  * @author      Thoralf Klein <thoralf.klein@zib.de>
  * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
- * @copyright   Copyright (c) 2009-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2009-2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
-$config = Zend_Registry::get('Zend_Config');
+// TODO integrate as command in opus4 tool
+// TODO add exit command
+
+use Opus\Config;
+
+$config = Config::get();
 if (isset($config->security) && filter_var($config->security, FILTER_VALIDATE_BOOLEAN)) {
     // setup realm
-    $realm = Opus_Security_Realm::getInstance();
+    $realm = \Opus\Security\Realm::getInstance();
 }
 
 while (1) {

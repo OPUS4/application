@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -31,6 +30,9 @@
  * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\File;
+
 class Admin_Form_File_HashesTest extends ControllerTestCase
 {
 
@@ -40,11 +42,11 @@ class Admin_Form_File_HashesTest extends ControllerTestCase
     {
         $form = new Admin_Form_File_Hashes();
 
-        $file = new Opus_File(116); // MD5 und SHA512
+        $file = new File(116); // MD5 und SHA512
 
         $form->populateFromModel($file);
 
-        $this->assertEquals(2, count($form->getElements()));
+        $this->assertCount(2, $form->getElements());
         $this->assertNotNull($form->getElement('Hash0'));
         $this->assertNotNull($form->getElement('Hash1'));
     }
@@ -53,10 +55,10 @@ class Admin_Form_File_HashesTest extends ControllerTestCase
     {
         $form = new Admin_Form_File_Hashes();
 
-        $file = new Opus_File(121); // keine Hashes
+        $file = new File(121); // keine Hashes
 
         $form->populateFromModel($file);
 
-        $this->assertEquals(0, count($form->getElements()));
+        $this->assertCount(0, $form->getElements());
     }
 }

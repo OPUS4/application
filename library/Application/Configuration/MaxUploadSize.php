@@ -27,9 +27,13 @@
  * @category    Application
  * @package     Application_Configuration
  * @author      Sascha Szott
- * @copyright   Copyright (c) 2016-2019
+ * @copyright   Copyright (c) 2016-2021
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\Config;
+use Opus\Log;
+
 class Application_Configuration_MaxUploadSize
 {
 
@@ -47,9 +51,9 @@ class Application_Configuration_MaxUploadSize
 
     public function getMaxUploadSizeInByte()
     {
-        $logger = Zend_Registry::get('Zend_Log');
+        $logger = Log::get();
 
-        $config = Zend_Registry::get('Zend_Config');
+        $config = Config::get();
         $maxFileSizeInt = intval($config->publish->maxfilesize);
         $logger->debug('publish.maxfilesize (Byte) = ' . $maxFileSizeInt);
 

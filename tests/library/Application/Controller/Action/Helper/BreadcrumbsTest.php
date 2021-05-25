@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -29,9 +28,13 @@
  * @package     Application_Controller_Action_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
  * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\Document;
+use Opus\Title;
+
 class Application_Controller_Action_Helper_BreadcrumbsTest extends ControllerTestCase
 {
 
@@ -45,10 +48,10 @@ class Application_Controller_Action_Helper_BreadcrumbsTest extends ControllerTes
     {
         parent::setUp();
 
-        $this->helper = Zend_Controller_Action_HelperBroker::getStaticHelper('breadcrumbs');
-        $this->navigation = Zend_Registry::get('Opus_View')->navigation();
+        $this->helper = \Zend_Controller_Action_HelperBroker::getStaticHelper('breadcrumbs');
+        $this->navigation = $this->getView()->navigation();
         $this->helper->setNavigation($this->navigation);
-        $this->helper->setView(Zend_Registry::get('Opus_View'));
+        $this->helper->setView($this->getView());
     }
 
     private function getPage($label)
@@ -77,7 +80,7 @@ class Application_Controller_Action_Helper_BreadcrumbsTest extends ControllerTes
 
     public function testSetDocumentBreadcrumb()
     {
-        $document = new Opus_Document(146);
+        $document = Document::get(146);
 
         // Seite zuerst holen, da das Label nach dem Aufruf von setDocumentBreadcrumb nicht mehr stimmt
         $page = $this->getPage('admin_document_index');
@@ -101,7 +104,7 @@ class Application_Controller_Action_Helper_BreadcrumbsTest extends ControllerTes
 
     public function testSetGetNavigation()
     {
-        $navigation = new Zend_Navigation();
+        $navigation = new \Zend_Navigation();
 
         $this->helper->setNavigation($navigation);
         $this->assertEquals($navigation, $this->helper->getNavigation());
@@ -139,13 +142,33 @@ class Application_Controller_Action_Helper_BreadcrumbsTest extends ControllerTes
 
         $document->setLanguage('deu');
 
-        $title = new Opus_Title();
+        $title = new Title();
         $title->setLanguage('deu');
         $title->setValue('01234567890123456789012345678901234567890123456789'); // 50 Zeichen lang
 
         $document->addTitleMain($title);
 
-        $this->assertEquals('0123456789012345678901234567890123456789 ...', $this->helper->getDocumentTitle($document));
+        $title = $this->helper->getDocumentTitle($document);
+
+        $this->assertTrue(ctype_print($title));
+        $this->assertEquals('0123456789012345678901234567890123456789 ...', $title);
+    }
+
+    public function testGetDocumentTitleWithMultiByteChars()
+    {
+        $document = $this->createTestDocument();
+        $document->setLanguage('deu');
+
+        $title = new Title();
+        $title->setLanguage('deu');
+        $title->setValue('012345678901234567890123456789012345678ü123'); // 50 Zeichen lang
+
+        $document->addTitleMain($title);
+
+        $title = $this->helper->getDocumentTitle($document);
+
+        $this->assertTrue(mb_check_encoding($title));
+        $this->assertEquals('012345678901234567890123456789012345678ü ...', $title);
     }
 
     /**

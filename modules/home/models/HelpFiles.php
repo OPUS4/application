@@ -31,6 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Log;
+
 /**
  * Model for encapsuling access to help files.
  *
@@ -49,23 +51,29 @@ class Home_Model_HelpFiles extends Application_Translate_Help
      */
     private $helpConfig;
 
+    private $helpPath;
+
     /**
      * Returns the path to the help files.
      * @return string Path to help files
      */
     public function getHelpPath()
     {
-        return APPLICATION_PATH . '/application/configs/help/';
+        if (is_null($this->helpPath)) {
+            $this->helpPath = APPLICATION_PATH . '/application/configs/help/';
+        }
+
+        return $this->helpPath;
     }
 
     /**
-     * Returns the contant of a help file.
+     * Returns the content of a help file.
      * @param string $file File basename
      * @return string Content of file
      */
     public function getContent($key)
     {
-        $translate = Zend_Registry::get('Zend_Translate');
+        $translate = Application_Translate::getInstance();
 
         $translationKey = "help_content_$key";
         $translation = $translate->translate($translationKey);
@@ -86,7 +94,7 @@ class Home_Model_HelpFiles extends Application_Translate_Help
 
         if ($pos !== false) {
             $path = $this->getHelpPath() . $file;
-            if (file_exists($path) && is_readable($path)) {
+            if (is_readable($path)) {
                 return file_get_contents($path);
             } else {
                 return null;
@@ -135,12 +143,12 @@ class Home_Model_HelpFiles extends Application_Translate_Help
 
             $filePath = $this->getHelpPath() . 'help.ini';
 
-            if (file_exists($filePath)) {
+            if (is_readable($filePath)) {
                 try {
-                    $config = new Zend_Config_Ini($filePath);
-                } catch (Zend_Config_Exception $zce) {
+                    $config = new \Zend_Config_Ini($filePath);
+                } catch (\Zend_Config_Exception $zce) {
                     // TODO einfachere Lösung?
-                    $logger = Zend_Registry::get('Zend_Log');
+                    $logger = Log::get();
                     if (! is_null($logger)) {
                         $logger->err("could not load help configuration", $zce);
                     }
@@ -148,7 +156,7 @@ class Home_Model_HelpFiles extends Application_Translate_Help
             }
 
             if (is_null($config)) {
-                $config = new Zend_Config([]);
+                $config = new \Zend_Config([]);
             }
 
             $this->helpConfig = $config;
@@ -162,5 +170,19 @@ class Home_Model_HelpFiles extends Application_Translate_Help
         $config = $this->getConfig();
 
         return (! isset($config->help->useFiles) || filter_var($config->help->useFiles, FILTER_VALIDATE_BOOLEAN));
+    }
+
+    public function setHelpPath($path)
+    {
+        $this->helpPath = rtrim($path, '/') . '/';
+    }
+
+    public function isContentAvailable($key)
+    {
+        $translate = Application_Translate::getInstance();
+
+        $translationKey = "help_content_$key";
+
+        return $translate->isTranslated($translationKey);
     }
 }

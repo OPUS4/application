@@ -33,13 +33,11 @@
  * @copyright   Copyright (c) 2009-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-require_once 'Zend/Validate/Abstract.php';
-
 
 /**
  * validator class to check if at least one of the given fields is not empty
  */
-class Frontdoor_Form_AtLeastOneValidator extends Zend_Validate_Abstract
+class Frontdoor_Form_AtLeastOneValidator extends \Zend_Validate_Abstract
 {
 
     const REQUIRED_EMPTY = 'requiredFieldsEmpty';

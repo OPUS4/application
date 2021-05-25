@@ -31,6 +31,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\CollectionRole;
+use Opus\DocumentFinder;
+
 class Oai_Model_Sets extends Application_Model_Abstract
 {
 
@@ -69,7 +72,7 @@ class Oai_Model_Sets extends Application_Model_Abstract
 
         $dcTypeHelper = new Application_View_Helper_DcType();
 
-        $finder = new Opus_DocumentFinder();
+        $finder = new DocumentFinder();
         $finder->setServerState('published');
 
         foreach ($finder->groupedTypesPlusCount() as $doctype => $row) {
@@ -101,7 +104,7 @@ class Oai_Model_Sets extends Application_Model_Abstract
 
         $setSpecPattern = self::SET_SPEC_PATTERN;
 
-        $oaiRolesSets = Opus_CollectionRole::fetchAllOaiEnabledRoles();
+        $oaiRolesSets = CollectionRole::fetchAllOaiEnabledRoles();
 
         foreach ($oaiRolesSets as $result) {
             if ($result['oai_name'] == 'doc-type') {
@@ -129,7 +132,7 @@ class Oai_Model_Sets extends Application_Model_Abstract
     /**
      * Returns sets for collections of a collection role.
      * @param $setSpec OAI name for collection role
-     * @param $roleId Database ID of role
+     * @param $roleId int Database ID of role
      * @return array
      */
     public function getSetsForCollectionRole($setSpec, $roleId)
@@ -140,7 +143,7 @@ class Oai_Model_Sets extends Application_Model_Abstract
 
         $setSpecPattern = self::SET_SPEC_PATTERN;
 
-        $role = new Opus_CollectionRole($roleId);
+        $role = new CollectionRole($roleId);
         foreach ($role->getOaiSetNames() as $subset) {
             $subSetSpec  = "$setSpec:" . $subset['oai_subset'];
             // $subSetCount = $subset['count'];

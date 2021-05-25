@@ -33,6 +33,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\EnrichmentKey;
+use Opus\Enrichment\AbstractType;
+
 /**
  * Form for creating and editing an enrichment key.
  *
@@ -46,6 +49,11 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
      * Form element name for enrichment key name.
      */
     const ELEMENT_NAME = 'Name';
+
+    /**
+     * Form element for translation of enrichment name.
+     */
+    const ELEMENT_DISPLAYNAME = 'DisplayName';
 
     /**
      * Form element name for associated enrichment type.
@@ -79,10 +87,10 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
 
         $this->setLabelPrefix('Opus_EnrichmentKey');
         $this->setUseNameAsLabel(true);
-        $this->setModelClass('Opus_EnrichmentKey');
+        $this->setModelClass('Opus\EnrichmentKey');
         $this->setVerifyModelIdIsNumeric(false);
 
-        $nameMaxLength = Opus_EnrichmentKey::getFieldMaxLength('Name');
+        $nameMaxLength = EnrichmentKey::getFieldMaxLength('Name');
 
         $name = $this->createElement('text', self::ELEMENT_NAME, [
             'required' => true,
@@ -97,6 +105,10 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
         $name->addValidator(new Application_Form_Validate_EnrichmentKeyAvailable());
         $this->addElement($name);
 
+        $this->addElement('translation', self::ELEMENT_DISPLAYNAME, [
+            'required' => false, 'size' => 70, 'label' => 'DisplayName'
+        ]);
+
         $element = $this->createElement(
             'select',
             self::ELEMENT_TYPE,
@@ -108,7 +120,7 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
 
         // alle verfügbaren EnrichmentTypes ermitteln und als Auswahlfeld anzeigen
         $availableTypes[''] = ''; // Standardauswahl des Select-Felds soll leer sein
-        $availableTypes = array_merge($availableTypes, Opus_Enrichment_AbstractType::getAllEnrichmentTypes());
+        $availableTypes = array_merge($availableTypes, AbstractType::getAllEnrichmentTypes());
         $element->setMultiOptions($availableTypes);
         $this->addElement($element);
 
@@ -146,13 +158,21 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
 
     /**
      * Initialisiert das Formular mit Werten einer Model-Instanz.
-     * @param $model Opus_Enrichmentkey
+     * @param $model Enrichmentkey
      */
     public function populateFromModel($enrichmentKey)
     {
+        $name = $enrichmentKey->getName();
+
+        if (! is_null($name)) {
+            $this->getElement(self::ELEMENT_DISPLAYNAME)->populateFromTranslations(
+                'Enrichment' . $name
+            );
+        }
+
         // Enrichment-Keys haben keine numerische ID: hier wirkt der Name als Identifikator
-        $this->getElement(self::ELEMENT_MODEL_ID)->setValue($enrichmentKey->getName());
-        $this->getElement(self::ELEMENT_NAME)->setValue($enrichmentKey->getName());
+        $this->getElement(self::ELEMENT_MODEL_ID)->setValue($name);
+        $this->getElement(self::ELEMENT_NAME)->setValue($name);
         $this->getElement(self::ELEMENT_TYPE)->setValue($enrichmentKey->getType());
 
         $enrichmentType = $this->initEnrichmentType($enrichmentKey->getType());
@@ -184,11 +204,15 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
 
     /**
      * Aktualisiert Model-Instanz mit Werten im Formular.
-     * @param $enrichmentKey Opus_Enrichmentkey
+     * @param $enrichmentKey Enrichmentkey
      */
     public function updateModel($enrichmentKey)
     {
-        $enrichmentKey->setName($this->getElementValue(self::ELEMENT_NAME));
+        $oldName = $this->getElementValue(self::ELEMENT_MODEL_ID);
+
+        $name = $this->getElementValue(self::ELEMENT_NAME);
+
+        $enrichmentKey->setName($name);
 
         $enrichmentTypeValue = $this->getElementValue(self::ELEMENT_TYPE);
         $enrichmentType = $this->initEnrichmentType($enrichmentTypeValue);
@@ -200,13 +224,23 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
                 'validation' => $this->getElementValue(self::ELEMENT_VALIDATION)]);
             $enrichmentKey->setOptions($enrichmentType->getOptions());
         }
+
+        // update translation keys for enrichment
+        $this->getElement(self::ELEMENT_DISPLAYNAME)->updateTranslations(
+            "Enrichment$name",
+            'default',
+            "Enrichment$oldName"
+        );
+
+        $helper = new Admin_Model_EnrichmentKeys();
+        $helper->createTranslations($name, $oldName);
     }
 
     /**
      * Erzeugt ein Enrichment-Type Objekt für den übergebenen Typ-Namen bzw. liefert
      * null, wenn der Typ-Name nicht aufgelöst werden kann.
      *
-     * @param $enrichmentTypeName Name des Enrichment-Typs
+     * @param $enrichmentTypeName string Name des Enrichment-Typs
      *
      * @return mixed
      */
@@ -216,15 +250,15 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
             return null;
         }
 
-        $enrichmentTypeName = 'Opus_Enrichment_' . $enrichmentTypeName;
+        // TODO better way? - allow registering namespaces/types like in Zend for form elements?
+        $enrichmentTypeName = 'Opus\\Enrichment\\' . $enrichmentTypeName;
         try {
-            // TODO OPUSVIER-4161 is this check necessary?
-            if (@class_exists($enrichmentTypeName)) {
+            if (class_exists($enrichmentTypeName, false)) {
                 $enrichmentType = new $enrichmentTypeName();
                 return $enrichmentType;
             }
             $this->getLogger()->err('could not find class ' . $enrichmentTypeName);
-        } catch (\Throwable $ex) {
+        } catch (\Throwable $ex) { // TODO Throwable only available in PHP 7+
             $this->getLogger()->err('could not instantiate class ' . $enrichmentTypeName . ': ' . $ex->getMessage());
         }
 
@@ -234,7 +268,7 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
     public function populate(array $values)
     {
         if (array_key_exists(parent::ELEMENT_MODEL_ID, $values)) {
-            $enrichmentKey = Opus_EnrichmentKey::fetchByName($values[parent::ELEMENT_MODEL_ID]);
+            $enrichmentKey = EnrichmentKey::fetchByName($values[parent::ELEMENT_MODEL_ID]);
             if (! is_null($enrichmentKey)) {
                 $enrichmentType = $enrichmentKey->getEnrichmentType();
                 if (! is_null($enrichmentType)) {

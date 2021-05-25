@@ -1,9 +1,4 @@
 {
-  "supportedLanguages": {
-    "key": "supportedLanguages",
-    "type": "supportedLanguages",
-    "section": "general"
-  },
   "maxSearchResults": {
     "key": "searchengine.solr.parameterDefaults.rows",
     "type": "number",

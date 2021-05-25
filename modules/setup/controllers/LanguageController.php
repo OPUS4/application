@@ -127,12 +127,14 @@ class Setup_LanguageController extends Application_Controller_Action
     /**
      * Action for adding a new translation key.
      *
-     * TODO form with new key name
-     * TODO action shows form and processes submit
+     * TODO merge EDIT and ADD action?
      */
     public function addAction()
     {
         $request = $this->getRequest();
+
+        $key = $this->getParam('key', null);
+        $module = $this->getParam('keymodule', null);
 
         if ($request->isPost()) {
             $post = $request->getPost();
@@ -141,6 +143,13 @@ class Setup_LanguageController extends Application_Controller_Action
 
             switch ($result) {
                 case Setup_Form_Translation::RESULT_SAVE:
+                    if (! isset($post[$form::ELEMENT_KEY])) {
+                        $post[$form::ELEMENT_KEY] = $key;
+                    }
+                    if (! isset($post[$form::ELEMENT_MODULE])) {
+                        $post[$form::ELEMENT_MODULE] = $module;
+                    }
+
                     if ($form->isValid($post)) {
                         $form->updateTranslation();
                         // TODO manipulate filter so new key is visible (?) - could lead to confusion
@@ -156,10 +165,20 @@ class Setup_LanguageController extends Application_Controller_Action
                     $form = null;
             }
             if (is_null($form)) {
-                $this->redirectWithParameters();
+                if (! is_null($this->getParam('back', null))) {
+                    $this->redirectBack();
+                } else {
+                    $this->redirectWithParameters();
+                }
             }
         } else {
             $form = $this->getTranslationForm();
+
+            if (! is_null($key)) {
+                $form->getElement($form::ELEMENT_KEY)->setValue($key);
+                $form->getElement($form::ELEMENT_MODULE)->setValue($module);
+                $form->disableKeyEditing();
+            }
         }
 
         // render form
@@ -222,7 +241,7 @@ class Setup_LanguageController extends Application_Controller_Action
                     if ($form->isValid($post)) {
                         $form->updateTranslation();
                         $form = null;
-                        Zend_Registry::get('Zend_Translate')->clearCache(); // TODO encapsulate
+                        Application_Translate::getInstance()->clearCache(); // TODO encapsulate
                     } else {
                         // TODO go back to form
                     }
@@ -234,7 +253,11 @@ class Setup_LanguageController extends Application_Controller_Action
                     $form = null;
             }
             if (is_null($form)) {
-                $this->redirectWithParameters();
+                if (! is_null($this->getParam('back', null))) {
+                    $this->redirectBack();
+                } else {
+                    $this->redirectWithParameters();
+                }
                 $form = null;
             }
         } else {
@@ -431,7 +454,7 @@ class Setup_LanguageController extends Application_Controller_Action
 
         if ($request->isPost()) {
             // TODO validate form
-            $upload = new Zend_File_Transfer_Adapter_Http();
+            $upload = new \Zend_File_Transfer_Adapter_Http();
             $files = $upload->getFileInfo();
 
             foreach ($files as $file => $fileInfo) {
@@ -467,10 +490,59 @@ class Setup_LanguageController extends Application_Controller_Action
     /**
      * Action for editing general language settings for the user interface.
      *
-     * TODO move language options from configuration page
+     *
+     * TODO modify configuration
+     * TODO create tests
      */
     public function settingsAction()
     {
+        // TODO provide form with options config
+
+        $form = new Admin_Form_Configuration([
+            'supportedLanguages' => [
+                'key' => 'activatedLanguages',
+                'type' => 'supportedLanguages',
+                'section' => 'general'
+            ]
+        ]);
+
+        if ($this->getRequest()->isPost()) {
+            $data = $this->getRequest()->getPost();
+
+            $form->populate($data);
+
+            $result = $form->processPost($data, $data);
+
+            switch ($result) {
+                case Admin_Form_Configuration::RESULT_SAVE:
+                    if ($form->isValid($data)) {
+                        $config = new \Zend_Config([], true);
+                        $form->updateModel($config);
+                        Application_Configuration::save($config);
+                    } else {
+                        break;
+                    }
+                // after saving fall through for same redirect as 'Cancel'
+                case Admin_Form_Configuration::RESULT_CANCEL:
+                    $this->redirectWithParameters();
+                    break;
+                default:
+                    break;
+            }
+        } else {
+            $config = $this->getConfig();
+
+            $form->populateFromModel($config);
+
+            $element = $form->getElement('supportedLanguages');
+            if (! isset($config->activatedLanguages)) {
+                $element->setValue($config->supportedLanguages);
+            }
+        }
+
+        $this->_helper->viewRenderer->setNoRender(true);
+
+        echo $form;
     }
 
     protected function getTranslationForm()
@@ -536,6 +608,19 @@ class Setup_LanguageController extends Application_Controller_Action
                 self::PARAM_SORT => $this->getParam(self::PARAM_SORT)
             ]
         );
+    }
+
+    protected function redirectBack()
+    {
+        $key = $this->getParam('key');
+
+        $url = '/home/index/help';
+
+        if (! empty($key)) {
+            $url .= "#$key";
+        }
+
+        $this->_helper->Redirector->gotoUrl($url);
     }
 
     protected function setFilterParameters($manager)

@@ -93,7 +93,7 @@ class Setup_Form_Translation extends Application_Form_Abstract
             'label' => 'setup_language_key', 'size' => 80, 'maxlength' => 100, 'required' => true
         ]);
 
-        $lengthValidator = new Zend_Validate_StringLength(['max' => 100]);
+        $lengthValidator = new \Zend_Validate_StringLength(['max' => 100]);
         $lengthValidator->setMessage('setup_translation_error_key_too_long', $lengthValidator::TOO_LONG);
         // TODO test customized message
 
@@ -230,12 +230,19 @@ class Setup_Form_Translation extends Application_Form_Abstract
 
         // disable editing of key and module for keys defined in TMX files
         if (! isset($translation['state']) || $translation['state'] !== 'added') {
-            $keyElement->setAttrib('disabled', true);
-            $keyElement->removeValidator('Setup_Form_Validate_TranslationKeyFormat');
-            $moduleElement->setAttrib('disabled', true);
+            $this->disableKeyEditing();
         }
 
         $this->getSubForm(self::SUBFORM_TRANSLATION)->setTranslations($translation['translations']);
+    }
+
+    public function disableKeyEditing()
+    {
+        $keyElement = $this->getElement(self::ELEMENT_KEY);
+        $keyElement->setAttrib('disabled', true);
+        $keyElement->removeValidator('Setup_Form_Validate_TranslationKeyFormat');
+        $moduleElement = $this->getElement(self::ELEMENT_MODULE);
+        $moduleElement->setAttrib('disabled', true);
     }
 
     /**
@@ -244,6 +251,6 @@ class Setup_Form_Translation extends Application_Form_Abstract
      */
     protected function getTranslationManager()
     {
-        return Zend_Registry::get('Zend_Translate');
+        return Application_Translate::getInstance();
     }
 }

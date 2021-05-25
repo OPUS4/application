@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -31,6 +30,9 @@
  * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\CollectionRole;
+
 class Application_Form_Validate_CollectionRoleOaiNameUniqueTest extends ControllerTestCase
 {
 
@@ -47,7 +49,7 @@ class Application_Form_Validate_CollectionRoleOaiNameUniqueTest extends Controll
 
     public function tearDown()
     {
-        $collectionRole = Opus_CollectionRole::fetchByName('NewTestColRoleName');
+        $collectionRole = CollectionRole::fetchByName('NewTestColRoleName');
         if (! is_null($collectionRole)) {
             $collectionRole->delete();
         }
@@ -75,7 +77,7 @@ class Application_Form_Validate_CollectionRoleOaiNameUniqueTest extends Controll
 
     public function testGetModel()
     {
-        $collectionRole = new Opus_CollectionRole();
+        $collectionRole = new CollectionRole();
         $collectionRole->setName('NewTestColRoleName');
         $collectionRole->setOaiName('NewTestColRoleOaiName');
         $collectionRole->store();

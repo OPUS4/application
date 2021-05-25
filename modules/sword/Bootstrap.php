@@ -32,7 +32,7 @@
  * @copyright   Copyright (c) 2016-2017
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Sword_Bootstrap extends Zend_Application_Module_Bootstrap
+class Sword_Bootstrap extends \Zend_Application_Module_Bootstrap
 {
 
     protected function _initSwordModule()

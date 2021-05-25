@@ -37,7 +37,7 @@
 class Application_Form_Element_TranslationTest extends ControllerTestCase
 {
 
-    protected $additionalResources = 'translation';
+    protected $additionalResources = ['translation', 'view'];
 
     public function testConstruct()
     {
@@ -73,11 +73,13 @@ class Application_Form_Element_TranslationTest extends ControllerTestCase
     {
         $element = new Application_Form_Element_Translation('DisplayName');
 
-        $dao = new Opus_Translate_Dao();
+        $key = 'testkey';
 
-        $dao->remove('testkey');
+        $dao = new \Opus\Translate\Dao();
 
-        $this->assertNull($dao->getTranslation('testkey'));
+        $dao->remove($key);
+
+        $this->assertNull($dao->getTranslation($key));
 
         $data = [
             'en' => 'test key',
@@ -86,9 +88,9 @@ class Application_Form_Element_TranslationTest extends ControllerTestCase
 
         $element->setValue($data);
 
-        $element->updateTranslations('testkey');
+        $element->updateTranslations($key);
 
-        $this->assertEquals($data, $dao->getTranslation('testkey'));
+        $this->assertEquals($data, $dao->getTranslation($key));
     }
 
     public function testUpdateTranslationsOnlyIfChanged()
@@ -97,8 +99,8 @@ class Application_Form_Element_TranslationTest extends ControllerTestCase
 
         $element = new Application_Form_Element_Translation('DisplayName');
 
-        $translate = Zend_Registry::get('Zend_Translate');
-        $dao = new Opus_Translate_Dao();
+        $translate = Application_Translate::getInstance();
+        $dao = new \Opus\Translate\Dao();
 
         $dao->remove($key);
 
@@ -159,5 +161,51 @@ class Application_Form_Element_TranslationTest extends ControllerTestCase
         $element->setValue($value);
 
         $this->assertEquals($value, $element->getMultiOptions());
+    }
+
+    public function testKeepModuleWhenUpdatingTranslation()
+    {
+        $element = new Application_Form_Element_Translation('Content');
+
+        $dao = new \Opus\Translate\Dao();
+        $dao->removeAll();
+
+        $key = 'help_content_contact';
+
+        $data = [
+            'en' => 'Content',
+            'de' => 'Inhalt'
+        ];
+
+        $element->setValue($data);
+
+        $element->updateTranslations($key);
+
+        $manager = new Application_Translate_TranslationManager();
+
+        $translation = $manager->getTranslation($key);
+
+        $this->assertEquals($data, $translation['translations']);
+        $this->assertEquals('home', $translation['module']);
+    }
+
+    /**
+     * TODO improve test? check directly that translation of values is disabled
+     */
+    public function testValuesAreNotTranslated()
+    {
+        $this->useGerman();
+
+        $element = new Application_Form_Element_Translation('DisplayName');
+
+        $key = 'default_collection_role_institutes';
+
+        $element->populateFromTranslations($key);
+
+        $output = $element->render();
+
+        // do not translate 'Institute' into 'Institut'
+        $this->assertNotContains('id="DisplayName-de" value="Institut"', $output);
+        $this->assertContains('id="DisplayName-de" value="Institute"', $output);
     }
 }

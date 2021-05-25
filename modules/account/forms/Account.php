@@ -31,6 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Account;
+
 class Account_Form_Account extends Application_Form_Model_Abstract
 {
 
@@ -70,12 +72,12 @@ class Account_Form_Account extends Application_Form_Model_Abstract
         );
 
         $this->getElement(self::ELEMENT_PASSWORD)->addErrorMessages(
-            [Zend_Validate_StringLength::TOO_SHORT => 'admin_account_error_password_tooshort']
+            [\Zend_Validate_StringLength::TOO_SHORT => 'admin_account_error_password_tooshort']
         );
     }
 
     /**
-     * @param $account Opus_Account
+     * @param $account Account
      */
     public function populateFromModel($account)
     {

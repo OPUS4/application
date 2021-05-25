@@ -31,6 +31,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Account;
+use Opus\UserRole;
+
 class Admin_Form_UserRolesTest extends ControllerTestCase
 {
 
@@ -40,16 +43,16 @@ class Admin_Form_UserRolesTest extends ControllerTestCase
     {
         $form = new Admin_Form_UserRoles();
 
-        $roles = Opus_UserRole::getAll();
+        $roles = UserRole::getAll();
 
         $elements = $form->getElements();
 
-        $this->assertEquals(count($roles), count($elements));
+        $this->assertSameSize($roles, $elements);
     }
 
     public function testPopulateFromModel()
     {
-        $account = Opus_Account::fetchAccountByLogin('sworduser');
+        $account = Account::fetchAccountByLogin('sworduser');
 
         $form = new Admin_Form_UserRoles();
 
@@ -97,7 +100,7 @@ class Admin_Form_UserRolesTest extends ControllerTestCase
         $form->getElement('administrator')->setValue(1);
         $form->getElement('sworduser')->setValue(1);
 
-        $account = new Opus_Account();
+        $account = new Account();
 
         $form->updateModel($account);
 

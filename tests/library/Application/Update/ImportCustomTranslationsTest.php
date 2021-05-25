@@ -50,7 +50,7 @@ class Application_Update_ImportCustomTranslationsTest extends ControllerTestCase
 
         $this->testPath = $path;
 
-        $database = new Opus_Translate_Dao();
+        $database = new \Opus\Translate\Dao();
         $database->removeAll();
     }
 
@@ -78,7 +78,7 @@ class Application_Update_ImportCustomTranslationsTest extends ControllerTestCase
 
         $tmxFile->save($filePath);
 
-        $database = new Opus_Translate_Dao();
+        $database = new \Opus\Translate\Dao();
 
         // Check translations not in database
         $this->assertNull($database->getTranslation('test_admin_title'));
@@ -86,6 +86,7 @@ class Application_Update_ImportCustomTranslationsTest extends ControllerTestCase
 
         // Perform import operation
         $update = new Application_Update_ImportCustomTranslations();
+        $update->setRemoveFilesEnabled(false);
         $update->setQuietMode(true);
         $update->run();
 

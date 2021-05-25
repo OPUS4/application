@@ -55,7 +55,10 @@ defined('APPLICATION_ENV') || define('APPLICATION_ENV', 'production');
 require_once 'autoload.php';
 require_once 'opus-php-compatibility.php';
 
-$autoloader = Zend_Loader_Autoloader::getInstance();
+// TODO OPUSVIER-4420 remove after switching to Laminas/ZF3
+require_once APPLICATION_PATH . '/vendor/opus4-repo/framework/library/OpusDb/Mysqlutf8.php';
+
+$autoloader = \Zend_Loader_Autoloader::getInstance();
 $autoloader->suppressNotFoundWarnings(false);
 $autoloader->setFallbackAutoloader(true);
 

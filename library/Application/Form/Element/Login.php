@@ -50,7 +50,7 @@ class Application_Form_Element_Login extends Application_Form_Element_Text
         parent::init();
         $this->setLabel('admin_account_label_login');
 
-        // NOTE: This validation is also defined in Opus_Account.
+        // NOTE: This validation is also defined in Account.
         $this->addValidator('regex', false, ['/^[a-z0-9@._-]+$/']);
 
         $this->addValidator('stringLength', false, ['min' => 3, 'max' => 50]);

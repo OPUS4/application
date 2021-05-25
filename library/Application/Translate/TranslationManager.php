@@ -140,6 +140,11 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
     private $folders = ['language'];
 
     /**
+     * @var array Reference for sorting languages
+     */
+    private $languageOrderRef;
+
+    /**
      * Get editable modules.
      */
     public function getModules()
@@ -256,6 +261,8 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
                                     $row['translations'][$lang] = $value;
                                 }
 
+                                $row['translations'] = $this->sortLanguages($row['translations']);
+
                                 if (! array_key_exists($key, $translations)) {
                                     $translations[$key] = $row;
                                     $sortArray[] = $row[$sortKey];
@@ -283,6 +290,35 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
         array_multisort($sortArray, $sortOrder, SORT_STRING, $translations);
 
         return $translations;
+    }
+
+    protected function sortLanguages($translations)
+    {
+        $ref = array_intersect_key($this->getLanguageOrderRef(), $translations);
+        return array_merge($ref, $translations);
+    }
+
+    protected function getLanguageOrderRef()
+    {
+        if (is_null($this->languageOrderRef)) {
+            $this->languageOrderRef = array_flip(Application_Configuration::getInstance()->getSupportedLanguages());
+        }
+
+        return $this->languageOrderRef;
+    }
+
+    public function getLanguageOrder()
+    {
+        if (is_array($this->languageOrderRef)) {
+            return array_flip($this->getLanguageOrderRef());
+        } else {
+            return null;
+        }
+    }
+
+    public function setLanguageOrder($order)
+    {
+        $this->languageOrderRef = array_flip($order);
     }
 
     /**
@@ -313,7 +349,7 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
         // get translations from TMX files
         $translations = $this->getTranslations($sortKey, $sortOrder);
 
-        $database = new Opus_Translate_Dao();
+        $database = new \Opus\Translate\Dao();
 
         $modules = $this->getModules();
 
@@ -326,7 +362,7 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
                 // keep original values from TMX files
                 if ($this->matches($key, $languages, $this->filter)) {
                     $translations[$key]['translationsTmx'] = $translations[$key]['translations'];
-                    $translations[$key]['translations'] = $languages;
+                    $translations[$key]['translations'] = $this->sortLanguages($languages);
                     $translations[$key]['state'] = 'edited';
                 } else {
                     // remove if edited version does not match anymore
@@ -336,7 +372,7 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
                 // key does not exist in TMX file and needs to be marked as ADDED
                 if ($this->matches($key, $languages, $this->filter)) {
                     $translations[$key]['key'] = $key;
-                    $translations[$key]['translations'] = $languages;
+                    $translations[$key]['translations'] = $this->sortLanguages($languages);
                     $translations[$key]['state'] = 'added';
                     $translations[$key]['module'] = $info['module'];
                 }
@@ -388,7 +424,7 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
      * Filtering by state happens outside this function because this depends on the presence of the
      * key in the TMX files and the database or just the database.
      *
-     * TODO should filting by module happen here
+     * TODO should filtering by module happen here
      *
      * @param $key string Name of translation key
      * @param $values array Translated texts for supported languages
@@ -534,7 +570,7 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
      */
     public function keyExists($key)
     {
-        $database = new Opus_Translate_Dao();
+        $database = new \Opus\Translate\Dao();
 
         return ! is_null($database->getTranslation($key));
     }
@@ -552,7 +588,7 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
      */
     public function reset($key)
     {
-        $database = new Opus_Translate_Dao();
+        $database = new \Opus\Translate\Dao();
 
         $translations = $this->getTranslations();
 
@@ -584,8 +620,10 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
 
     public function clearCache()
     {
-        $translate = Zend_Registry::get('Zend_Translate');
-        $translate->clearCache();
+        $translate = Application_Translate::getInstance();
+        if ($translate !== null) {
+            $translate->clearCache();
+        }
     }
 
     /**
@@ -655,7 +693,7 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
                     // TODO write to log
                 }
 
-                if (isset($old['transaltionsTmx'])) {
+                if (isset($old['translationsTmx'])) {
                     $oldValues = $old['translationsTmx'];
                 } else {
                     $oldValues = $old['translations'];
@@ -673,11 +711,11 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
     }
 
     /**
-     * @return Opus_Translate_Dao $database
+     * @return \Opus\Translate\Dao $database
      */
     public function getDatabase()
     {
-        return new Opus_Translate_Dao();
+        return new \Opus\Translate\Dao();
     }
 
     public function setState($state)
@@ -698,27 +736,28 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
      * TODO perform as transaction
      * TODO refactor to be efficient
      */
-    public function updateTranslation($key, $translations, $module, $oldKey = null)
+    public function updateTranslation($key, $translations, $module = null, $oldKey = null)
     {
-        $dao = new Opus_Translate_Dao();
-        $translate = Zend_Registry::get('Zend_Translate');
+        $dao = new \Opus\Translate\Dao();
 
         if ($key !== $oldKey && ! is_null($oldKey)) {
             $translation = $this->getTranslation($oldKey);
             if (isset($translation['state']) && $translation['state'] === 'added') {
                 $dao->remove($oldKey);
-                $translate->clearCache();
+                $this->clearCache();
             } else {
                 throw new \Opus\Translate\Exception("Name of key '$oldKey' cannot be changed.");
             }
         } else {
             $translation = $this->getTranslation($key);
-            if (isset($translation['module']) && $translation['module'] !== $module &&
-                isset($translation['state']) && $translation['state'] === 'added') {
-                $dao->remove($key);
-                $translate->clearCache();
-            } else {
-                throw new \Opus\Translate\Exception("Module of key '$key' cannot be changed.");
+            $changeModule = isset($translation['module']) && $translation['module'] !== $module && ! is_null($module);
+            if ($changeModule) {
+                if (isset($translation['state']) && $translation['state'] === 'added') {
+                    $dao->remove($key);
+                    $this->clearCache();
+                } else {
+                    throw new \Opus\Translate\Exception("Module of key '$key' cannot be changed.");
+                }
             }
         }
 
@@ -755,5 +794,31 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
         }
 
         return $duplicateKeys;
+    }
+
+    public function setTranslation($key, $values, $module = null)
+    {
+        try {
+            $old = $this->getTranslation($key);
+        } catch (\Opus\Translate\UnknownTranslationKey $excep) {
+            $old = null;
+        }
+
+        if (! is_null($old)) {
+            if (isset($old['translationsTmx'])) {
+                $defaultValues = $old['translationsTmx'];
+            } else {
+                $defaultValues = $old['translations'];
+            }
+
+            if ($defaultValues == $values) {
+                $this->reset($key);
+            } else {
+                $this->updateTranslation($key, $values, $module);
+            }
+        } else {
+            $dao = $this->getDatabase();
+            $dao->setTranslation($key, $values, $module);
+        }
     }
 }

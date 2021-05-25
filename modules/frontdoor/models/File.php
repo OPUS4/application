@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -32,6 +31,12 @@
  * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\Document;
+use Opus\File;
+use Opus\Model\NotFoundException;
+use Opus\Security\IRealm;
+
 class Frontdoor_Model_File
 {
 
@@ -41,7 +46,7 @@ class Frontdoor_Model_File
     const ILLEGAL_FILENAME_MESSAGE_KEY = 'illegal_argument_filename';
 
     /**
-     * @var Opus_Document
+     * @var Document
      */
     private $_doc;
 
@@ -71,8 +76,8 @@ class Frontdoor_Model_File
         }
 
         try {
-            $this->_doc = new Opus_Document($docId);
-        } catch (Opus_Model_NotFoundException $e) {
+            $this->_doc = Document::get($docId);
+        } catch (NotFoundException $e) {
             throw new Frontdoor_Model_DocumentNotFoundException();
         }
 
@@ -104,7 +109,7 @@ class Frontdoor_Model_File
 
     private function fetchFile($realm)
     {
-        $targetFile = Opus_File::fetchByDocIdPathName($this->_doc->getId(), $this->_filename);
+        $targetFile = File::fetchByDocIdPathName($this->_doc->getId(), $this->_filename);
 
         if (is_null($targetFile)) {
             throw new Frontdoor_Model_FileNotFoundException();
@@ -119,7 +124,7 @@ class Frontdoor_Model_File
 
     private function isDocumentAccessAllowed($docId, $realm)
     {
-        if (! ($realm instanceof Opus_Security_IRealm)) {
+        if (! ($realm instanceof IRealm)) {
             return false;
         }
         return $realm->checkDocument($docId) || $this->getAclHelper()->accessAllowed('documents');
@@ -127,7 +132,7 @@ class Frontdoor_Model_File
 
     private function isFileAccessAllowed($file, $realm)
     {
-        if (is_null($file) or ! ($realm instanceof Opus_Security_IRealm)) {
+        if (is_null($file) or ! ($realm instanceof IRealm)) {
             return false;
         }
 
@@ -140,7 +145,7 @@ class Frontdoor_Model_File
     public function getAclHelper()
     {
         if (is_null($this->_accessControl)) {
-            $this->_accessControl = Zend_Controller_Action_HelperBroker::getStaticHelper('accessControl');
+            $this->_accessControl = \Zend_Controller_Action_HelperBroker::getStaticHelper('accessControl');
         }
 
         return $this->_accessControl;

@@ -28,9 +28,11 @@
  * @package     Home
  * @author      Jens Schwidder <schwidder@zib.de>
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\DocumentFinder;
 
 /**
  * Basic unit test for inded controller of home module.
@@ -82,7 +84,7 @@ class Home_IndexControllerTest extends ControllerTestCase
 
     public function testHelpActionSeparate()
     {
-        $config = Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         $config->help->separate = self::CONFIG_VALUE_TRUE;
         $this->dispatch('/home/index/help');
         $this->assertResponseCode(200);
@@ -138,7 +140,7 @@ class Home_IndexControllerTest extends ControllerTestCase
 
     private function getDocsInSearchIndex($checkConsistency = true)
     {
-        $searcher = new Opus\Search\Util\Searcher();
+        $searcher = Application_Search_SearcherFactory::getSearcher();
         $query = new Opus\Search\Util\Query();
         $query->setCatchAll("*:*");
         $query->setRows(Opus\Search\Util\Query::MAX_ROWS);
@@ -172,7 +174,7 @@ class Home_IndexControllerTest extends ControllerTestCase
         $element = $document->getElementById('solrsearch-totalnumofdocs');
         $numOfDocs = $element->firstChild->textContent;
 
-        $docFinder = new Opus_DocumentFinder();
+        $docFinder = new DocumentFinder();
         $docFinder->setServerState('published');
 
         $numOfDbDocs = $docFinder->count();
@@ -251,7 +253,7 @@ class Home_IndexControllerTest extends ControllerTestCase
 
     public function testHideLanguageSelector()
     {
-        Zend_Registry::get('Zend_Config')->supportedLanguages = 'de';
+        $this->getConfig()->supportedLanguages = 'de';
         $this->dispatch("/home");
         $this->assertNotQuery('//ul#lang-switch');
     }

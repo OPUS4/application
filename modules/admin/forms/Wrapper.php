@@ -29,7 +29,6 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -44,7 +43,7 @@
  * Verarbeitung des POST wird die erste Ebene übersprungen ($post['Document']) und nur mit dem obersten Unterformular
  * weitergearbeitet.
  */
-class Admin_Form_Wrapper extends Zend_Form
+class Admin_Form_Wrapper extends \Zend_Form
 {
 
     private $_subFormName;

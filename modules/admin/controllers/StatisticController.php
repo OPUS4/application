@@ -30,10 +30,12 @@
  * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
  * @author      Michael Lang <lang@zib.de>
    @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
+use Opus\Date;
+
 class Admin_StatisticController extends Application_Controller_Action
 {
 
@@ -53,7 +55,7 @@ class Admin_StatisticController extends Application_Controller_Action
 
         $highest = max($years);
 
-        $selectYear = new Zend_Form_Element_Select(
+        $selectYear = new \Zend_Form_Element_Select(
             'selectedYear',
             ["multiOptions" => $years, "value" => $highest]
         );
@@ -61,10 +63,10 @@ class Admin_StatisticController extends Application_Controller_Action
         $selectYear->setRequired(true)
             ->setLabel($this->view->translate('Select_Year_Label'));
 
-        $submit = new Zend_Form_Element_Submit('submit');
+        $submit = new \Zend_Form_Element_Submit('submit');
         $submit->setLabel($this->view->translate('Submit_Button_Label'));
 
-        $form = new Zend_Form();
+        $form = new \Zend_Form();
         $form->setAction($this->view->url(["controller" => "statistic", "action" => "show"]));
         $form->addElements([$selectYear, $submit]);
 
@@ -81,7 +83,7 @@ class Admin_StatisticController extends Application_Controller_Action
 
         $this->view->languageSelectorDisabled = true;
 
-        $date = new Opus_Date();
+        $date = new Date();
         $date->setYear($selectedYear)->setMonth(12)->setDay(31);
         $this->view->dateThreshold = $this->getHelper('Dates')->getDateString($date);
 

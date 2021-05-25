@@ -31,6 +31,6 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Application_Import_MetadataImportInvalidXmlException extends Exception
+class Application_Import_MetadataImportInvalidXmlException extends \Exception
 {
 }
