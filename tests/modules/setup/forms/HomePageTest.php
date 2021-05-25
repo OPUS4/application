@@ -24,83 +24,84 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @package     Application_Update
+ * @category    Test
+ * @package     Setup_Form
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2020, OPUS 4 development team
+ * @copyright   Copyright (c) 2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Application_Update_ImportStaticPagesTest extends ControllerTestCase
+class Setup_Form_HomePageTest extends ControllerTestCase
 {
 
-    protected $additionalResources = ['database', 'translation'];
+    protected $additionalResources = 'Translation';
+
+    private $database;
 
     public function setUp()
     {
         parent::setUp();
 
-        $dao = new \Opus\Translate\Dao();
-        $dao->removeAll();
+        $this->database = new \Opus\Translate\Dao();
+        $this->database->removeAll();
     }
 
     public function tearDown()
     {
-        $dao = new \Opus\Translate\Dao();
-        $dao->removeAll();
+        $this->database->removeAll();
+        $translate = Application_Translate::getInstance();
+        $translate->clearCache();
+        \Zend_Translate::clearCache();
 
         parent::tearDown();
     }
 
-    public function testRun()
+    public function testInit()
     {
-        $database = new \Opus\Translate\Dao();
+        $form = new Setup_Form_HomePage();
 
-        $update = new Application_Update_ImportStaticPages();
-        $update->setRemoveFilesEnabled(false);
-        $update->setQuietMode(true);
-        $update->run();
-
-        $translations = $database->getAll();
-
-        // nothing should be in database because content matches TMX
-        $this->assertCount(0, $translations);
+        $element = $form->getElement('home_index_index_pagetitle');
+        $this->assertNotNull($element);
+        $this->assertEquals([
+            'en' => 'Home',
+            'de' => 'Einstieg'
+        ], $element->getValue());
     }
 
-    public function testImportFilesAsKey()
+    public function testUpdatingTranslations()
     {
-        $update = new Application_Update_ImportStaticPages();
-        $update->setQuietMode(true);
-        $update->setRemoveFilesEnabled(false);
+        $key = 'home_index_index_pagetitle';
 
-        $update->importFilesAsKey('contact', 'testkey', 'home');
+        $this->database->setTranslation($key, [
+            'en' => 'TestHome',
+            'de' => 'TestEinstieg'
+        ], null);
 
-        $database = new \Opus\Translate\Dao();
+        $translations = $this->database->getTranslationsWithModules();
+
+        $this->assertCount(1, $translations);
+        $this->assertArrayHasKey($key, $translations);
+        $this->assertEmpty($translations[$key]['module']);
+
+        $form = new Setup_Form_HomePage();
+
+        $element = $form->getElement($key);
+
+        $change = [
+            'en' => 'Homepage',
+            'de' => 'Startseite'
+        ];
+
+        $element->setValue($change);
+
+        $form->updateTranslations();
+
+        $database = $this->database;
 
         $translations = $database->getTranslationsWithModules();
 
         $this->assertCount(1, $translations);
-        $this->assertArrayHasKey('testkey', $translations);
-        $this->assertEquals('home', $translations['testkey']['module']);
-    }
-
-    public function testGetFiles()
-    {
-        $update = new Application_Update_ImportStaticPages();
-
-        $files = $update->getFiles('contact');
-
-        $this->assertCount(2, $files);
-        $this->assertContains('contact.en.txt', $files);
-        $this->assertContains('contact.de.txt', $files);
-    }
-
-    public function testGetTranslations()
-    {
-        $update = new Application_Update_ImportStaticPages();
-
-        $translations = $update->getTranslations('contact');
-
-        $this->assertNotNull($translations);
+        $this->assertArrayHasKey($key, $translations);
+        $this->assertEquals('home', $translations[$key]['module']);
     }
 }
