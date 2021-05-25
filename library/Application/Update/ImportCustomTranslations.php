@@ -77,7 +77,7 @@ class Application_Update_ImportCustomTranslations extends Application_Update_Plu
             }
         }
 
-        // Remove empry language_custom folders for all modules
+        // Remove empty language_custom folders for all modules
         $this->log(PHP_EOL . 'Remove empty \'language_custom\' directories...');
         foreach ($modules as $module) {
             $path = "/modules/$module/language_custom";

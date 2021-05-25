@@ -424,7 +424,7 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
      * Filtering by state happens outside this function because this depends on the presence of the
      * key in the TMX files and the database or just the database.
      *
-     * TODO should filting by module happen here
+     * TODO should filtering by module happen here
      *
      * @param $key string Name of translation key
      * @param $values array Translated texts for supported languages
