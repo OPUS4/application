@@ -2532,8 +2532,14 @@ a.link-button:hover {
     color: white;
 }
 
-a.create-document-link {
+div.create-document-link {
     float: right;
+    display: block;
+}
+
+div.preformatted {
+    font-family: monospace;
+    white-space: pre;
 }
 
 #enrichmentkeyTable span.strong {

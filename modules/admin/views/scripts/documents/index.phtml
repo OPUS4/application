@@ -86,9 +86,11 @@
                     </dd>
                 </dl>
             </div>
-            <div>
+            <div class="create-document-link">
                 <a href="<?= $this->createLink ?>" title="<?= $this->translate('admin_document_create_tooltip') ?>"
-                    class="link-button create-document-link"><?= $this->translate('admin_document_create') ?></a>
+                   class="link-button"><?= $this->translate('admin_document_create') ?></a>
+                <a href="<?= $this->bibtexImportLink ?>" title="<?= $this->translate('admin_bibtex_import_tooltip') ?>"
+                   class="link-button"><?= $this->translate('admin_bibtex_import') ?></a>
             </div>
         <?PHP endif; ?>
     </div>
