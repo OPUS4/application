@@ -46,7 +46,7 @@ class Application_Configuration_MaxUploadSizeTest extends TestCase
      */
     public function testMaxUploadSize()
     {
-        $config = Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
 
         $configMaxFileSize = intval($config->publish->maxfilesize);
         $postMaxSize = $this->convertToKByte(ini_get('post_max_size'));

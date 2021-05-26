@@ -45,21 +45,21 @@ class Application_Controller_Action_Helper_AccessControlTest extends ControllerT
     {
         parent::setUpWithEnv('production');
         $this->assertSecurityConfigured();
-        $acl = Zend_Registry::get('Opus_Acl');
+        $acl = Application_Security_AclProvider::getAcl();
         $acl->allow('guest', 'accounts');
         $this->accessControl = new Application_Controller_Action_Helper_AccessControl();
     }
 
     public function tearDown()
     {
-        $acl = Zend_Registry::get('Opus_Acl');
+        $acl = Application_Security_AclProvider::getAcl();
         $acl->deny('guest', 'accounts');
         parent::tearDown();
     }
 
     public function testAccessAllowed()
     {
-        $user = Zend_Auth::getInstance()->getIdentity();
+        $user = \Zend_Auth::getInstance()->getIdentity();
         $this->assertEquals('', $user, "expected no user to be set (should use default 'guest' as default)");
 
         $allowedDocuments = $this->accessControl->accessAllowed('documents');

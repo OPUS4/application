@@ -30,6 +30,11 @@
  * @copyright   Copyright (c) 2017-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\Document;
+use Opus\Licence;
+use Opus\Model\Xml\Cache;
+
 class Application_Update_AddCC30LicenceShotNamesTest extends ControllerTestCase
 {
 
@@ -81,18 +86,18 @@ class Application_Update_AddCC30LicenceShotNamesTest extends ControllerTestCase
      */
     public function testUpdateLicenceWithoutVersion()
     {
-        $licence = new Opus_Licence();
+        $licence = new Licence();
         $licence->setNameLong('Creative Commons - Namensnennung');
         $licence->setLanguage('deu');
         $licence->setLinkLicence('http://opus4.kobv.org/test-licence');
         $licenceId = $licence->store();
 
-        $licence = new Opus_Licence($licenceId);
+        $licence = new Licence($licenceId);
         $this->assertNull($licence->getName());
 
         $this->_update->run();
 
-        $licence = new Opus_Licence($licenceId);
+        $licence = new Licence($licenceId);
         $licence->delete();
 
         $this->assertEquals('CC BY 3.0', $licence->getName());
@@ -100,18 +105,18 @@ class Application_Update_AddCC30LicenceShotNamesTest extends ControllerTestCase
 
     public function testDoNotUpdate40Licence()
     {
-        $licence = new Opus_Licence();
+        $licence = new Licence();
         $licence->setNameLong('Creative Commons 4.0 - Namensnennung');
         $licence->setLanguage('deu');
         $licence->setLinkLicence('http://opus4.kobv.org/test-licence');
         $licenceId = $licence->store();
 
-        $licence = new Opus_Licence($licenceId);
+        $licence = new Licence($licenceId);
         $this->assertNull($licence->getName());
 
         $this->_update->run();
 
-        $licence = new Opus_Licence($licenceId);
+        $licence = new Licence($licenceId);
         $licence->delete();
 
         $this->assertNull($licence->getName());
@@ -119,18 +124,18 @@ class Application_Update_AddCC30LicenceShotNamesTest extends ControllerTestCase
 
     public function testUpdateForUnknownLicence()
     {
-        $licence = new Opus_Licence();
+        $licence = new Licence();
         $licence->setNameLong('Custom licence');
         $licence->setLanguage('deu');
         $licence->setLinkLicence('http://opus4.kobv.org/test-licence');
         $licenceId = $licence->store();
 
-        $licence = new Opus_Licence($licenceId);
+        $licence = new Licence($licenceId);
         $this->assertNull($licence->getName());
 
         $this->_update->run();
 
-        $licence = new Opus_Licence($licenceId);
+        $licence = new Licence($licenceId);
         $licence->delete();
 
         $this->assertNull($licence->getName());
@@ -138,7 +143,7 @@ class Application_Update_AddCC30LicenceShotNamesTest extends ControllerTestCase
 
     public function testUpdateForLicenceWithShortName()
     {
-        $licence = new Opus_Licence();
+        $licence = new Licence();
         $licence->setName('CC BY 5.0');
         $licence->setNameLong('Creative Commons - Namensnennung');
         $licence->setLanguage('deu');
@@ -147,7 +152,7 @@ class Application_Update_AddCC30LicenceShotNamesTest extends ControllerTestCase
 
         $this->_update->run();
 
-        $licence = new Opus_Licence($licenceId);
+        $licence = new Licence($licenceId);
         $licence->delete();
 
         $this->assertEquals('CC BY 5.0', $licence->getName());
@@ -168,7 +173,7 @@ class Application_Update_AddCC30LicenceShotNamesTest extends ControllerTestCase
 
     public function testDoNotUpdateServerDateModified()
     {
-        $licence = new Opus_Licence();
+        $licence = new Licence();
         $licence->setNameLong('Creative Commons - Namensnennung');
         $licence->setLanguage('deu');
         $licence->setLinkLicence('http://opus4.kobv.org/test-licence');
@@ -179,27 +184,27 @@ class Application_Update_AddCC30LicenceShotNamesTest extends ControllerTestCase
         $doc->addLicence($licence);
         $docId = $doc->store();
 
-        $cache = new Opus_Model_Xml_Cache();
+        $cache = new Cache();
 
         $this->assertNotNull($cache->getData($docId, '1.0'));
 
-        $doc = new Opus_Document($docId);
+        $doc = Document::get($docId);
 
         $dateModified = $doc->getServerDateModified();
 
         sleep(2);
 
-        $licence = new Opus_Licence($licenceId);
+        $licence = new Licence($licenceId);
         $this->assertNull($licence->getName());
 
         $this->_update->run();
 
-        $doc = new Opus_Document($docId);
+        $doc = Document::get($docId);
 
         $cacheResult = $cache->getData($docId, '1.0');
 
         // clean up licence first
-        $licence = new Opus_Licence($licenceId);
+        $licence = new Licence($licenceId);
         $licence->delete();
 
         $this->assertNull($cacheResult);

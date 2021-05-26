@@ -36,8 +36,14 @@
  *
  * Currently ZIP and TAR files are supported by extending classes.
  */
+
+use Opus\Log;
+use Opus\Model\ModelException;
+use Opus\Security\SecurityException;
+
 abstract class Application_Import_PackageReader
 {
+
     const METADATA_FILENAME = 'opus.xml';
 
     const EXTRACTION_DIR_NAME = 'extracted';
@@ -57,13 +63,13 @@ abstract class Application_Import_PackageReader
      * Verarbeitet das XML-Metadatendokument, dessen Inhalt in $xml übergeben wird.
      * Zugehörige Volltextdateien werden aus dem Verzeichnis $dirName gelesen.
      *
-     * @param $xml Ausgelesener Inhalt der XML-Metadatendatei
-     * @param $dirName Pfad zum Extraktionsverzeichnis
+     * @param $xml string Ausgelesener Inhalt der XML-Metadatendatei
+     * @param $dirName string Pfad zum Extraktionsverzeichnis
      * @return Application_Import_ImportStatusDocument Statusdokument mit Informationen zum Ergebnis des Imports
      * @throws Application_Import_MetadataImportInvalidXmlException
      * @throws Application_Import_MetadataImportSkippedDocumentsException
-     * @throws Opus_Model_Exception
-     * @throws Opus_Security_Exception
+     * @throws ModelException
+     * @throws SecurityException
      * @throws Zend_Exception
      */
     private function processOpusXML($xml, $dirName)
@@ -77,6 +83,7 @@ abstract class Application_Import_PackageReader
         $importer->setImportCollection($importCollection->getCollection());
 
         $importer->run();
+
         return $importer->getStatusDoc();
     }
 
@@ -90,6 +97,12 @@ abstract class Application_Import_PackageReader
      * @param string $dirName
      * @return Application_Import_ImportStatusDocument
      * @throws Zend_Exception
+     *
+     * TODO improve readability of code - readPackage extracts the package into a folder and then calls processPackage
+     *      from the outside it is the function that "processes the package"
+     *      the way these functions are chained makes it hard to add additional steps to the process - either the
+     *      calling function should call read... first and then process... or probalby better process.. should call
+     *      read... as one of its processing steps
      */
     public function readPackage($dirName)
     {
@@ -115,7 +128,7 @@ abstract class Application_Import_PackageReader
 
     public function getLogger()
     {
-        return Zend_Registry::get('Zend_Log');
+        return  Log::get();
     }
 
     /**

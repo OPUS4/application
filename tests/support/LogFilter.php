@@ -29,7 +29,6 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2013-2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id: MockLogger.php 13692 2014-10-10 11:08:14Z schwidder $
  */
 
 /**
@@ -37,7 +36,7 @@
  *
  * TODO expand functionality
  */
-class LogFilter implements Zend_Log_Filter_Interface
+class LogFilter implements \Zend_Log_Filter_Interface
 {
 
     private $messages = [];

@@ -62,11 +62,11 @@ class Application_Controller_Action_Helper_FileTypesTest extends ControllerTestC
 
     public function testMimeTypeAddedToBaseConfigurationFromApplicationIni()
     {
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        $this->adjustConfiguration([
             'filetypes' => ['xml' => ['mimeType' => [
                 'text/xml', 'application/xml'
             ]]]
-        ]));
+        ]);
 
         $types = $this->_helper->getValidMimeTypes();
 
@@ -98,11 +98,11 @@ class Application_Controller_Action_Helper_FileTypesTest extends ControllerTestC
 
     public function testIsValidMimeTypeForExtensionWithMultipleTypes()
     {
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        $this->adjustConfiguration([
             'filetypes' => ['xml' => ['mimeType' => [
                 'text/xml', 'application/xml'
             ]]]
-        ]));
+        ]);
 
         $this->assertTrue($this->_helper->isValidMimeType('application/xml'));
         $this->assertTrue($this->_helper->isValidMimeType('text/xml'));
@@ -110,11 +110,11 @@ class Application_Controller_Action_Helper_FileTypesTest extends ControllerTestC
 
     public function testIsValidMimeTypeForExtension()
     {
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        $this->adjustConfiguration([
             'filetypes' => ['xml' => ['mimeType' => [
                 'text/xml', 'application/xml'
             ]]]
-        ]));
+        ]);
 
         $this->assertTrue($this->_helper->isValidMimeType('application/xml', 'xml'));
         $this->assertTrue($this->_helper->isValidMimeType('text/xml', 'xml'));
@@ -135,9 +135,9 @@ class Application_Controller_Action_Helper_FileTypesTest extends ControllerTestC
 
     public function testExtensionCaseInsensitive()
     {
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        $this->adjustConfiguration([
             'filetypes' => ['XML' => ['mimeType' => 'text/xml']]
-        ]));
+        ]);
 
         $this->assertTrue($this->_helper->isValidMimeType('text/xml', 'xml'));
         $this->assertTrue($this->_helper->isValidMimeType('text/xml', 'XML'));

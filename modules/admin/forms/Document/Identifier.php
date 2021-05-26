@@ -32,6 +32,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Identifier;
+use Opus\Model\NotFoundException;
+
 /**
  * Formular fuer einen Identifier eines Dokuments.
  *
@@ -77,8 +80,8 @@ class Admin_Form_Document_Identifier extends Admin_Form_AbstractModelSubForm
     }
 
     /**
-     * Befuehlt Formularelement von Opus_Identifier Instanz.
-     * @param Opus_Identifier $identifier
+     * Befuehlt Formularelement von Identifier Instanz.
+     * @param Identifier $identifier
      */
     public function populateFromModel($identifier)
     {
@@ -88,8 +91,8 @@ class Admin_Form_Document_Identifier extends Admin_Form_AbstractModelSubForm
     }
 
     /**
-     * Aktualisiert Opus_Identifier Instanz aus Formularelementen.
-     * @param Opus_Identifier $identifier
+     * Aktualisiert Identifier Instanz aus Formularelementen.
+     * @param Identifier $identifier
      */
     public function updateModel($identifier)
     {
@@ -108,14 +111,14 @@ class Admin_Form_Document_Identifier extends Admin_Form_AbstractModelSubForm
 
         if (strlen(trim($modelId)) > 0) {
             try {
-                $identifier = new Opus_Identifier($modelId);
-            } catch (Opus_Model_NotFoundException $omnfe) {
+                $identifier = new Identifier($modelId);
+            } catch (NotFoundException $omnfe) {
                 $this->getLogger()->err(__METHOD__ . " Unknown identifier ID = '$modelId'.");
             }
         }
 
         if (is_null($identifier)) {
-            $identifier = new Opus_Identifier();
+            $identifier = new Identifier();
         }
 
         $this->updateModel($identifier);

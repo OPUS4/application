@@ -42,7 +42,7 @@ class Admin_Model_EnrichmentKeysTest extends ControllerTestCase
 
     public function tearDown()
     {
-        $database = new Opus_Translate_Dao();
+        $database = new \Opus\Translate\Dao();
         $database->removeAll();
 
         parent::tearDown();
@@ -52,7 +52,7 @@ class Admin_Model_EnrichmentKeysTest extends ControllerTestCase
     {
         $model = new Admin_Model_EnrichmentKeys();
 
-        $config = new Zend_Config(['enrichmentkey' => ['protected' => [
+        $config = new \Zend_Config(['enrichmentkey' => ['protected' => [
             'modules' => 'pkey1,pkey2',
             'migration' => 'pkey3,pkey4'
         ]]]);
@@ -67,7 +67,7 @@ class Admin_Model_EnrichmentKeysTest extends ControllerTestCase
         $this->assertContains('pkey3', $protectedKeys);
         $this->assertContains('pkey4', $protectedKeys);
 
-        $config = new Zend_Config(['enrichmentkey' => ['protected' => [
+        $config = new \Zend_Config(['enrichmentkey' => ['protected' => [
             'migration' => 'pkey3,pkey4'
         ]]]);
 
@@ -80,7 +80,7 @@ class Admin_Model_EnrichmentKeysTest extends ControllerTestCase
         $this->assertContains('pkey3', $protectedKeys);
         $this->assertContains('pkey4', $protectedKeys);
 
-        $config = new Zend_Config(['enrichmentkey' => ['protected' => [
+        $config = new \Zend_Config(['enrichmentkey' => ['protected' => [
             'modules' => 'pkey1,pkey2',
         ]]]);
 
@@ -98,7 +98,7 @@ class Admin_Model_EnrichmentKeysTest extends ControllerTestCase
     {
         $model = new Admin_Model_EnrichmentKeys();
 
-        $config = new Zend_Config([]);
+        $config = new \Zend_Config([]);
 
         $model->setConfig($config);
 
@@ -110,7 +110,7 @@ class Admin_Model_EnrichmentKeysTest extends ControllerTestCase
 
     public function testCreateTranslations()
     {
-        $database = new Opus_Translate_Dao();
+        $database = new \Opus\Translate\Dao();
         $database->removeAll();
 
         $model = new Admin_Model_EnrichmentKeys();
@@ -133,7 +133,7 @@ class Admin_Model_EnrichmentKeysTest extends ControllerTestCase
 
     public function testCreateTranslationsDoNotOverwriteExistingValues()
     {
-        $database = new Opus_Translate_Dao();
+        $database = new \Opus\Translate\Dao();
         $database->removeAll();
 
         $hintKey = 'hint_EnrichmentMyTestEnrichment';
@@ -174,7 +174,7 @@ class Admin_Model_EnrichmentKeysTest extends ControllerTestCase
 
     public function testChangeNamesOfTranslationKeys()
     {
-        $database = new Opus_Translate_Dao();
+        $database = new \Opus\Translate\Dao();
         $database->removeAll();
 
         $model = new Admin_Model_EnrichmentKeys();
@@ -203,7 +203,7 @@ class Admin_Model_EnrichmentKeysTest extends ControllerTestCase
     {
         $model = new Admin_Model_EnrichmentKeys();
 
-        $database = new Opus_Translate_Dao();
+        $database = new \Opus\Translate\Dao();
         $database->removeAll();
 
         $name = 'TestEnrichment';

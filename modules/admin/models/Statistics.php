@@ -28,8 +28,12 @@
  * @author      Michael Lang <lang@zib.de>
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
+use Opus\CollectionRole;
+use Opus\DocumentFinder;
+use Opus\Db\Documents;
+
 class Admin_Model_Statistics
 {
 
@@ -37,7 +41,7 @@ class Admin_Model_Statistics
 
     public function __construct()
     {
-        $this->_documents = new Opus_Db_Documents();
+        $this->_documents = new Documents();
     }
 
     /**
@@ -118,7 +122,7 @@ class Admin_Model_Statistics
      */
     public function getInstituteStatistics($selectedYear)
     {
-        $role = Opus_CollectionRole::fetchByName('institutes');
+        $role = CollectionRole::fetchByName('institutes');
         $instStat = [];
         if (isset($role)) {
             $query = "SELECT c.name name, COUNT(DISTINCT(d.id)) entries
@@ -127,7 +131,7 @@ class Admin_Model_Statistics
                  LEFT JOIN collections c ON ldc.collection_id=c.id
                  WHERE c.role_id=? AND YEAR(server_date_published)=? AND server_state='published'
                 group by name";
-            $db = Zend_Registry::get('db_adapter');
+            $db = \Zend_Db_Table::getDefaultAdapter();
             $res = $db->query($query, [$role->getId(), $selectedYear])->fetchAll();
 
             foreach ($res as $result) {
@@ -143,7 +147,7 @@ class Admin_Model_Statistics
      */
     public function getYears()
     {
-        $documents = new Opus_Db_Documents();
+        $documents = new Documents();
         $select = $documents->select()->from('documents', ['year' => 'YEAR(server_date_published)'])
             ->where('server_state = ?', 'published')
             ->where('server_date_published IS NOT NULL')
@@ -161,7 +165,7 @@ class Admin_Model_Statistics
      */
     public function getNumDocsUntil($thresholdYear)
     {
-        $finder = new Opus_DocumentFinder();
+        $finder = new DocumentFinder();
         $finder->setServerState('published');
         $finder->setServerDatePublishedBefore($thresholdYear + 1);
         return $finder->count();

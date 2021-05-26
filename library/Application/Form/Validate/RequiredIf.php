@@ -26,11 +26,10 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Opus_Form
+ * @package     Opus\Form
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2010-2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -39,7 +38,7 @@
  * The field becomes required, so it can't be empty, if another field meets a
  * certain condition.
  */
-class Application_Form_Validate_RequiredIf extends Zend_Validate_Abstract
+class Application_Form_Validate_RequiredIf extends \Zend_Validate_Abstract
 {
 
     const FAILED = 'failed';
@@ -111,10 +110,10 @@ class Application_Form_Validate_RequiredIf extends Zend_Validate_Abstract
 
                 if (empty($this->_expectedValue)) {
                     // if no targetValue has been set check if notEmpty
-                    $result = ! Zend_Validate::is($otherValue, "NotEmpty");
+                    $result = ! \Zend_Validate::is($otherValue, "NotEmpty");
                 } else {
                     // check if targetValue is expected
-                    $result = ! Zend_Validate::is($otherValue, "Identical", ['token' => $this->_expectedValue]);
+                    $result = ! \Zend_Validate::is($otherValue, "Identical", ['token' => $this->_expectedValue]);
                 }
             } else {
                 // if value wasn't set

@@ -25,6 +25,8 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+use Opus\Licence;
+
 /**
  * Class Application_Controller_ActionCRUDTest
  *
@@ -52,7 +54,7 @@ class Application_Controller_ActionCRUDTest extends ControllerTestCase
         $this->controller = $this->getController();
         $this->controller->setFormClass('Admin_Form_Licence');
 
-        $licences = Opus_Licence::getAll();
+        $licences = Licence::getAll();
 
         $this->licenceIds = [];
 
@@ -63,7 +65,7 @@ class Application_Controller_ActionCRUDTest extends ControllerTestCase
 
     public function tearDown()
     {
-        $licences = Opus_Licence::getAll();
+        $licences = Licence::getAll();
 
         if (count($this->licenceIds) < count($licences)) {
             foreach ($licences as $licence) {
@@ -107,7 +109,7 @@ class Application_Controller_ActionCRUDTest extends ControllerTestCase
      */
     public function testSetFormClassBadClass()
     {
-        $this->controller->setFormClass('Opus_Document');
+        $this->controller->setFormClass('Opus\Document');
     }
 
     public function testIsClassSupportedTrue()
@@ -122,7 +124,7 @@ class Application_Controller_ActionCRUDTest extends ControllerTestCase
 
     public function testGetAllModels()
     {
-        $licences = Opus_Licence::getAll();
+        $licences = Licence::getAll();
 
         $models = $this->controller->getAllModels();
 
@@ -134,7 +136,7 @@ class Application_Controller_ActionCRUDTest extends ControllerTestCase
         $model = $this->controller->getModel(2);
 
         $this->assertNotNull($model);
-        $this->assertInstanceOf('Opus_Licence', $model);
+        $this->assertInstanceOf(Licence::class, $model);
         $this->assertEquals(2, $model->getId());
     }
 
@@ -160,7 +162,7 @@ class Application_Controller_ActionCRUDTest extends ControllerTestCase
         $model = $this->controller->getModel('City');
 
         $this->assertNotNull($model);
-        $this->assertInstanceOf('Opus_EnrichmentKey', $model);
+        $this->assertInstanceOf('Opus\EnrichmentKey', $model);
         $this->assertEquals('City', $model->getName());
     }
 
@@ -176,7 +178,7 @@ class Application_Controller_ActionCRUDTest extends ControllerTestCase
         $model = $this->controller->getNewModel();
 
         $this->assertNotNull($model);
-        $this->assertInstanceOf('Opus_Licence', $model);
+        $this->assertInstanceOf(Licence::class, $model);
         $this->assertNull($model->getId());
     }
 
@@ -199,7 +201,7 @@ class Application_Controller_ActionCRUDTest extends ControllerTestCase
 
     public function testGetEditModelForm()
     {
-        $model = new Opus_Licence(2);
+        $model = new Licence(2);
 
         $form = $this->controller->getEditModelForm($model);
 
@@ -234,7 +236,7 @@ class Application_Controller_ActionCRUDTest extends ControllerTestCase
 
     public function testGetConfirmationForm()
     {
-        $model = new Opus_Licence(2);
+        $model = new Licence(2);
         $form = $this->controller->getConfirmationForm($model);
         $this->assertNotNull($form);
         $this->assertInstanceOf('Application_Form_Confirmation', $form);
@@ -281,7 +283,7 @@ class Application_Controller_ActionCRUDTest extends ControllerTestCase
 
         $licenceId = $params['id'];
 
-        $licence = new Opus_Licence($licenceId);
+        $licence = new Licence($licenceId);
         $licence->delete();
     }
 
@@ -419,7 +421,7 @@ class Application_Controller_ActionCRUDTest extends ControllerTestCase
 
     public function testHandleConfirmationPostYes()
     {
-        $licence = new Opus_Licence();
+        $licence = new Licence();
 
         $licence->setNameLong(__METHOD__);
         $licence->setLanguage('deu');
@@ -443,7 +445,7 @@ class Application_Controller_ActionCRUDTest extends ControllerTestCase
     {
         $messages = $this->controller->getMessages();
 
-        $translate = Zend_Registry::get('Zend_Translate');
+        $translate = Application_Translate::getInstance();
 
         foreach ($messages as $message) {
             if (is_array($message)) {

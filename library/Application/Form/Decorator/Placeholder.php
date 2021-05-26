@@ -31,7 +31,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Application_Form_Decorator_Placeholder extends Zend_Form_Decorator_Abstract
+class Application_Form_Decorator_Placeholder extends \Zend_Form_Decorator_Abstract
 {
 
     public function render($content)

@@ -29,7 +29,6 @@
  * @author      Susanne Gottwald <gottwald@zib.de>
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -58,7 +57,7 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract
 
     /**
      * Overwritten method isValid to support extended validation
-     * @param <type> $data
+     * @param array $data
      */
     public function isValid($data)
     {
@@ -136,7 +135,7 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract
      */
     private function getExternalElements()
     {
-        $session = new Zend_Session_Namespace('Publish');
+        $session = new \Zend_Session_Namespace('Publish');
         $externalFields = $session->DT_externals;
 
         // No external values found!
@@ -186,8 +185,8 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract
             // (d) bei Collections erfolgt die Zuordnung zum Dokument nur die unterste Collection pro Gruppe
             // (e) additional externals fields (from view helpers)
             if ($element->getValue() == ""
-                    || $element->getType() == "Zend_Form_Element_Submit"        // Submit buttons
-                    || $element->getType() == "Zend_Form_Element_Hidden"        // Hidden fields
+                    || $element->getType() == "\Zend_Form_Element_Submit"        // Submit buttons
+                    || $element->getType() == "\Zend_Form_Element_Hidden"        // Hidden fields
                     || $element->getAttrib('isRoot') == true                    // Root Nodes of Browsefields
                     || $element->getAttrib('doNotStore') == true                // (*d)
                     || (! is_null($this->_session->DT_externals))
@@ -261,8 +260,8 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract
 
     /**
      * Method to find out the element name stemming.
-     * @param <String> $element element name
-     * @return <String> $name
+     * @param string $element element name
+     * @return string $name
      */
     private function _getRawElementName($element)
     {

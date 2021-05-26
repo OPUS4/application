@@ -32,7 +32,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Admin_Form_YesNoForm extends Zend_Form
+class Admin_Form_YesNoForm extends \Zend_Form
 {
 
     const ELEMENT_YES = 'sureyes';
@@ -46,10 +46,10 @@ class Admin_Form_YesNoForm extends Zend_Form
      */
     public function init()
     {
-        $sureyes = new Zend_Form_Element_Submit(self::ELEMENT_YES);
+        $sureyes = new \Zend_Form_Element_Submit(self::ELEMENT_YES);
         $sureyes->setLabel('answer_yes');
 
-        $sureno = new Zend_Form_Element_Submit(self::ELEMENT_NO);
+        $sureno = new \Zend_Form_Element_Submit(self::ELEMENT_NO);
         $sureno->setLabel('answer_no');
 
         $this->addElements([$sureyes, $sureno]);

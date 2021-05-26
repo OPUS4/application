@@ -29,7 +29,6 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -120,7 +119,7 @@ class Admin_Form_Document_Section extends Admin_Form_AbstractDocumentSubForm
 
         $multiWrapper = $subForm->getDecorator('multiWrapper');
 
-        if (! is_null($multiWrapper) && $multiWrapper instanceof Zend_Form_Decorator_HtmlTag) {
+        if (! is_null($multiWrapper) && $multiWrapper instanceof \Zend_Form_Decorator_HtmlTag) {
             $multiClass = $multiWrapper->getOption('class');
             $markerClass = ($position % 2 == 0) ? 'even' : 'odd';
 

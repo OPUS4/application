@@ -93,7 +93,7 @@ class Setup_Form_Translation extends Application_Form_Abstract
             'label' => 'setup_language_key', 'size' => 80, 'maxlength' => 100, 'required' => true
         ]);
 
-        $lengthValidator = new Zend_Validate_StringLength(['max' => 100]);
+        $lengthValidator = new \Zend_Validate_StringLength(['max' => 100]);
         $lengthValidator->setMessage('setup_translation_error_key_too_long', $lengthValidator::TOO_LONG);
         // TODO test customized message
 
@@ -251,6 +251,6 @@ class Setup_Form_Translation extends Application_Form_Abstract
      */
     protected function getTranslationManager()
     {
-        return Zend_Registry::get('Zend_Translate');
+        return Application_Translate::getInstance();
     }
 }

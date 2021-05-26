@@ -29,8 +29,10 @@
  * @author      Birgit Dressler (b.dressler@sulb.uni-saarland.de)
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
+use Opus\Document;
+use Opus\Statistic\LocalCounter;
 
 class Statistic_IndexController extends Application_Controller_Action
 {
@@ -44,7 +46,7 @@ class Statistic_IndexController extends Application_Controller_Action
     public function testAction()
     {
         $this->view->title = 'statistic';
-        $counter = Opus_Statistic_LocalCounter::getInstance();
+        $counter = LocalCounter::getInstance();
         $form = new Test();
         print_r($_POST);
         $form->populate($_POST);
@@ -81,12 +83,12 @@ class Statistic_IndexController extends Application_Controller_Action
         }
         $this->view->docId = $docId;
 
-        $document = new Opus_Document($docId);
+        $document = Document::get($docId);
 
         $titles = $document->getTitleMain();
         $authors = $document->getPersonAuthor();
 
-        $session = new Zend_Session_Namespace();
+        $session = new \Zend_Session_Namespace();
 
         if (isset($session->language)) {
             $language = $session->language;
@@ -107,7 +109,7 @@ class Statistic_IndexController extends Application_Controller_Action
         $this->view->authors = implode(', ', $authorsArray);
 
         //get statistics from db for total count and for image tag (accessibility)
-        $statistic = Opus_Statistic_LocalCounter::getInstance();
+        $statistic = LocalCounter::getInstance();
         $totalAbstractPage = $statistic->readTotal($docId, 'frontdoor');
         $totalFiles = $statistic->readTotal($docId, 'files');
 

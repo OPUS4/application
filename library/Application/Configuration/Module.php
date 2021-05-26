@@ -31,6 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\UserRole;
+
 /**
  * Default descriptor for modules.
  *
@@ -99,7 +101,7 @@ class Application_Configuration_Module implements Application_Configuration_Modu
      */
     public function isPublic()
     {
-        $guest = Opus_UserRole::fetchByName('guest');
+        $guest = UserRole::fetchByName('guest');
         $guestModules = $guest->listAccessModules();
 
         return in_array($this->getName(), $guestModules);

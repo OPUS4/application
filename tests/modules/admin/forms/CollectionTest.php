@@ -31,6 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Collection;
+
 class Admin_Form_CollectionTest extends ControllerTestCase
 {
 
@@ -40,7 +42,7 @@ class Admin_Form_CollectionTest extends ControllerTestCase
     {
         $form = new Admin_Form_Collection();
 
-        $this->assertEquals('7', count($form->getElements()));
+        $this->assertCount(7, $form->getElements());
         $this->assertNotNull($form->getElement('Name'));
         $this->assertNotNull($form->getElement('Number'));
         $this->assertNotNull($form->getElement('Visible'));
@@ -56,7 +58,7 @@ class Admin_Form_CollectionTest extends ControllerTestCase
     {
         $form = new Admin_Form_Collection();
 
-        $model = new Opus_Collection();
+        $model = new Collection();
 
         $model->setName('TestName');
         $model->setNumber('50');
@@ -77,7 +79,7 @@ class Admin_Form_CollectionTest extends ControllerTestCase
     {
         $form = new Admin_Form_Collection();
 
-        $model = new Opus_Collection();
+        $model = new Collection();
 
         $model->setName('TestName');
         $model->setNumber(null);
@@ -94,7 +96,7 @@ class Admin_Form_CollectionTest extends ControllerTestCase
     {
         $form = new Admin_Form_Collection();
 
-        $model = new Opus_Collection(3);
+        $model = new Collection(3);
 
         $form->populateFromModel($model);
 
@@ -113,7 +115,7 @@ class Admin_Form_CollectionTest extends ControllerTestCase
         $form->getElement('OaiSubset')->setValue('TestSubset');
         // $form->getElement('Theme')->setValue('plain');
 
-        $model = new Opus_Collection();
+        $model = new Collection();
 
         $form->updateModel($model);
 

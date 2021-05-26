@@ -25,6 +25,8 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+use Opus\EnrichmentKey;
+
 /**
  * Formular für die Anzeige der Enrichment-Tabelle.
  *
@@ -39,6 +41,10 @@ class Admin_Form_EnrichmentTable extends Application_Form_Model_Table
 {
     private $enrichmentKeys;
 
+    private $managedKeys = [];
+
+    private $unmanagedKeys = [];
+
     public function init()
     {
         $this->enrichmentKeys = new Admin_Model_EnrichmentKeys();
@@ -48,7 +54,7 @@ class Admin_Form_EnrichmentTable extends Application_Form_Model_Table
     /**
      * Liefert true, wenn es sich um einen geschützten EnrichmentKey handelt; andernfalls false.
      *
-     * @param Opus_EnrichmentKey $model
+     * @param EnrichmentKey $model
      * @return bool
      */
     public function isProtected($model)
@@ -60,18 +66,18 @@ class Admin_Form_EnrichmentTable extends Application_Form_Model_Table
      * Liefert true, wenn der EnrichmentKey in mindestens einem Enrichment eines Dokuments
      * verwendet wird; andernfalls false.
      *
-     * @param Opus_EnrichmentKey $model
+     * @param EnrichmentKey $model
      * @return bool
      */
     public function isUsed($model)
     {
-        return in_array($model->getId(), Opus_EnrichmentKey::getAllReferenced());
+        return in_array($model->getId(), EnrichmentKey::getAllReferenced());
     }
 
     /**
      * Bestimmt die zu verwendene CSS-Klasse für den übergebenen EnrichmentKey in der Listenansicht.
      *
-     * @param Opus_EnrichmentKey $model
+     * @param EnrichmentKey $model
      * @return string Name der zu nutzenden CSS-Klasse
      */
     public function getRowCssClass($model)
@@ -98,7 +104,7 @@ class Admin_Form_EnrichmentTable extends Application_Form_Model_Table
      * Bestimmt den Übersetzungsschlüssel des anzuzeigenden Tooltips für den übergebenen EnrichmentKey in
      * der Listenansicht.
      *
-     * @param Opus_EnrichmentKey $model
+     * @param EnrichmentKey $model
      * @return string Übersetzungsschlüssel für den Tooltip
      */
     public function getRowTooltip($model)
@@ -117,5 +123,27 @@ class Admin_Form_EnrichmentTable extends Application_Form_Model_Table
         }
 
         return "";
+    }
+
+    public function setModels($models)
+    {
+        parent::setModels($models);
+        foreach ($models as $enrichmentKey) {
+            if (is_null($enrichmentKey->getEnrichmentType())) {
+                $this->unmanagedKeys[] = $enrichmentKey;
+            } else {
+                $this->managedKeys[] = $enrichmentKey;
+            }
+        }
+    }
+
+    public function getManaged()
+    {
+        return $this->managedKeys;
+    }
+
+    public function getUnmanaged()
+    {
+        return $this->unmanagedKeys;
     }
 }

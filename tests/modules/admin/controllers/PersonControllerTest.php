@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -31,7 +30,11 @@
  * @author      Maximilian Salomon <salomon@zib.de>
  * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- *
+ */
+
+use Opus\Person;
+
+/**
  * @covers Admin_PersonController
  */
 class Admin_PersonControllerTest extends ControllerTestCase
@@ -110,7 +113,7 @@ class Admin_PersonControllerTest extends ControllerTestCase
         preg_match('/person\/(\d+)\//', $location, $matches);
         $personId = $matches[1];
 
-        $person = new Opus_Person($personId);
+        $person = new Person($personId);
 
         $lastName = $person->getLastName();
 
@@ -193,7 +196,7 @@ class Admin_PersonControllerTest extends ControllerTestCase
     {
         $document = $this->createTestDocument();
 
-        $person = new Opus_Person();
+        $person = new Person();
         $person->setLastName('Testy-EditlinkedAction');
 
         $person = $document->addPersonTranslator($person);
@@ -218,7 +221,7 @@ class Admin_PersonControllerTest extends ControllerTestCase
         $this->assertRedirectTo('/admin/document/edit/id/' . $documentId
             . '/continue/updateperson/person/' . $personId);
 
-        $person = new Opus_Person($personId);
+        $person = new Person($personId);
 
         $this->assertEquals('Testy', $person->getLastName());
         $this->assertEquals('Simone', $person->getFirstName());
@@ -378,7 +381,7 @@ class Admin_PersonControllerTest extends ControllerTestCase
     }
 
     /**
-     * TODO test is affected by other tests creating Opus_Person objects, because deleting test documents does not
+     * TODO test is affected by other tests creating Person objects, because deleting test documents does not
      *      delete linked persons
      */
     public function testIndexPaginationLastPage()
@@ -392,7 +395,7 @@ class Admin_PersonControllerTest extends ControllerTestCase
         $this->assertQuery('div.pagination-next');
         $this->assertQuery('div.pagination-last');
 
-        $personsCount = Opus_Person::getAllPersonsCount();
+        $personsCount = Person::getAllPersonsCount();
 
         $pages = ceil($personsCount / 50);
 

@@ -28,22 +28,25 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 define('APPLICATION_ENV', 'production');
 
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
-$jobrunner = new Opus_Job_Runner;
-$jobrunner->setLogger(Zend_Registry::get('Zend_Log'));
+use Opus\Job\Runner;
+use Opus\Job\Worker\MetadataImport;
+use Opus\Log;
+
+$jobrunner = new Runner;
+$jobrunner->setLogger(Log::get());
 // no waiting between jobs
 $jobrunner->setDelay(0);
 // set a limit of 100 index jobs per run
 $jobrunner->setLimit(100);
 
-$importWorker = new Opus_Job_Worker_MetadataImport(null);
-$importWorker->setLogger(Zend_Registry::get('Zend_Log'));
+$importWorker = new MetadataImport(null);
+$importWorker->setLogger(Log::get());
 
 $jobrunner->registerWorker($importWorker);
 

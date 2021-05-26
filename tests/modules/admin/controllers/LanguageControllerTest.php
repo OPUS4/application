@@ -31,6 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Language;
+
 /**
  * Basic unit tests for Admin_LanguageController class.
  *
@@ -49,14 +51,14 @@ class Admin_LanguageControllerTest extends CrudControllerTestCase
 
     public function getModels()
     {
-        return Opus_Language::getAll();
+        return Language::getAll();
     }
 
     public function testShowAction()
     {
         $this->createsModels = true;
 
-        $language = new Opus_Language();
+        $language = new Language();
 
         $language->setActive(true);
         $language->setRefName('German');
@@ -71,7 +73,7 @@ class Admin_LanguageControllerTest extends CrudControllerTestCase
 
         $this->dispatch('/admin/language/show/id/' . $modelId);
 
-        $model = new Opus_Language($modelId);
+        $model = new Language($modelId);
         $model->delete();
 
         $this->assertResponseCode(200);
@@ -166,7 +168,7 @@ class Admin_LanguageControllerTest extends CrudControllerTestCase
 
         $this->assertEquals(
             $modelCount,
-            count(Opus_Language::getAll()),
+            count(Language::getAll()),
             'Es sollte keine neue Sprache geben.'
         );
     }
@@ -192,7 +194,7 @@ class Admin_LanguageControllerTest extends CrudControllerTestCase
     {
         $this->createsModels = true;
 
-        $model = new Opus_Language();
+        $model = new Language();
 
         $model->setRefName('Test');
         $model->setPart2T('tst');
@@ -216,7 +218,7 @@ class Admin_LanguageControllerTest extends CrudControllerTestCase
         $this->assertRedirectTo('/admin/language/show/id/' . $modelId);
         $this->verifyFlashMessage('controller_crud_save_success', self::MESSAGE_LEVEL_NOTICE);
 
-        $model = new Opus_Language($modelId);
+        $model = new Language($modelId);
 
         $this->assertEquals(1, $model->getActive());
         $this->assertEquals('RefNameModified', $model->getRefName());
@@ -232,7 +234,7 @@ class Admin_LanguageControllerTest extends CrudControllerTestCase
     {
         $this->createsModels = true;
 
-        $model = new Opus_Language();
+        $model = new Language();
 
         $model->setRefName('Test');
         $model->setPart2T('tst');
@@ -249,7 +251,7 @@ class Admin_LanguageControllerTest extends CrudControllerTestCase
         $this->dispatch('/admin/language/edit');
         $this->assertRedirectTo('/admin/language');
 
-        $model = new Opus_Language($modelId);
+        $model = new Language($modelId);
 
         $this->assertEquals('Test', $model->getRefName());
     }
@@ -268,7 +270,7 @@ class Admin_LanguageControllerTest extends CrudControllerTestCase
 
     public function createNewModel()
     {
-        $model = new Opus_Language();
+        $model = new Language();
 
         $model->setRefName('TestLang');
         $model->setPart2T('lan');
@@ -278,6 +280,6 @@ class Admin_LanguageControllerTest extends CrudControllerTestCase
 
     public function getModel($identifier)
     {
-        return new Opus_Language($identifier);
+        return new Language($identifier);
     }
 }

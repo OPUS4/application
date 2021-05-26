@@ -31,6 +31,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Job;
+use Opus\Model\NotFoundException;
+
 /**
  *
  */
@@ -53,9 +56,9 @@ class CronTestCase extends ControllerTestCase
         if (! empty($this->jobIds)) {
             foreach ($this->jobIds as $jobId) {
                 try {
-                    $job = new Opus_Job($jobId);
+                    $job = new Job($jobId);
                     $job->delete();
-                } catch (Opus_Model_NotFoundException $e) {
+                } catch (NotFoundException $e) {
                 }
             }
         }
@@ -76,7 +79,7 @@ class CronTestCase extends ControllerTestCase
 
     protected function createJob($label, $data = [])
     {
-        $job = new Opus_Job();
+        $job = new Job();
         $job->setLabel($label);
         $job->setData($data);
         $this->jobIds[] = $job->store();

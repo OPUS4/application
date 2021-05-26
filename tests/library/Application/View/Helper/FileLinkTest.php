@@ -25,6 +25,8 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+use Opus\File;
+
 /**
  * Unit Tests fuer View Helper zum Rendern von Datei-Links.
  *
@@ -46,9 +48,9 @@ class Application_View_Helper_FileLinkTest extends ControllerTestCase
     {
         $helper = new Application_View_Helper_FileLink();
 
-        $helper->setView(new Zend_View());
+        $helper->setView(new \Zend_View());
 
-        $file = new Opus_File(126);
+        $file = new File(126);
 
         $this->assertEquals('<a href="http:///files/146/test.pdf" class="filelink">foo-pdf</a>'
             . '<input type="hidden" name="" value="126" id="" />', $helper->fileLink(
@@ -62,9 +64,9 @@ class Application_View_Helper_FileLinkTest extends ControllerTestCase
     {
         $helper = new Application_View_Helper_FileLink();
 
-        $helper->setView(new Zend_View());
+        $helper->setView(new \Zend_View());
 
-        $file = new Opus_File(130);
+        $file = new File(130);
 
         $this->assertEquals(
             '<a href="http:///files/147/special-chars-%25-%22-%23-%26.pdf" class="filelink">Dateiname-mit-Sonderzeichen.pdf</a>'
@@ -77,9 +79,9 @@ class Application_View_Helper_FileLinkTest extends ControllerTestCase
     {
         $helper = new Application_View_Helper_FileLink();
 
-        $helper->setView(Zend_Registry::get('Opus_View'));
+        $helper->setView($this->getView());
 
-        $file = new Opus_File(131);
+        $file = new File(131);
 
         $this->assertEquals(
             '<a href="http:///files/147/%27many%27++-++spaces++and++quotes.pdf" class="filelink">'
@@ -92,9 +94,9 @@ class Application_View_Helper_FileLinkTest extends ControllerTestCase
     {
         $helper = new Application_View_Helper_FileLink();
 
-        $helper->setView(Zend_Registry::get('Opus_View'));
+        $helper->setView($this->getView());
 
-        $file = new Opus_File(126);
+        $file = new File(126);
         $file->setLabel(null);
 
         $this->assertEquals(
@@ -111,13 +113,13 @@ class Application_View_Helper_FileLinkTest extends ControllerTestCase
     {
         $helper = new Application_View_Helper_FileLink();
 
-        $view = new Zend_View();
+        $view = new \Zend_View();
 
         $view->getHelper('BaseUrl')->setBaseUrl('/testbase');
 
         $helper->setView($view);
 
-        $file = new Opus_File(126);
+        $file = new File(126);
 
         $this->assertEquals('<a href="http:///testbase/files/146/test.pdf" class="filelink">foo-pdf</a>'
             . '<input type="hidden" name="" value="126" id="" />', $helper->fileLink(

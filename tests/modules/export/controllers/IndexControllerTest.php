@@ -29,12 +29,15 @@
  * @author      Sascha Szott <szott@zib.de>
  * @author      Michael Lang <lang@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Document;
+use Opus\File;
+use Opus\Title;
+use Opus\Model\ModelException;
 use Opus\Search\Service;
-use \Opus\Search\Util\Indexer;
 
 /**
  * Class Export_IndexControllerTest.
@@ -188,9 +191,8 @@ class Export_IndexControllerTest extends ControllerTestCase
         $this->_removeExportFromGuest = $this->addAccessOnModuleExportForGuest();
 
         // enable security
-        $config = Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         $config->security = self::CONFIG_VALUE_TRUE;
-        Zend_Registry::set('Zend_Config', $config);
 
         $this->dispatch('/export/index/index/export/xml');
 
@@ -211,13 +213,12 @@ class Export_IndexControllerTest extends ControllerTestCase
         $this->_removeExportFromGuest = $this->addAccessOnModuleExportForGuest();
 
         // manipulate solr configuration
-        $config = Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         $host = $config->searchengine->index->host;
         $port = $config->searchengine->index->port;
         $this->disableSolr();
 
         $config->security = self::CONFIG_VALUE_TRUE;
-        Zend_Registry::set('Zend_Config', $config);
 
         $this->dispatch('/export/index/index/searchtype/all/export/xml/stylesheet/example');
         $body = $this->getResponse()->getBody();
@@ -237,7 +238,7 @@ class Export_IndexControllerTest extends ControllerTestCase
         $doc1 = $this->createTestDocument();
         $doc1->setServerState('published');
         $doc1->setLanguage('eng');
-        $title = new Opus_Title();
+        $title = new Title();
         $title->setValue('test document for OPUSVIER-1726');
         $title->setLanguage('eng');
         $doc1->setTitleMain($title);
@@ -248,7 +249,7 @@ class Export_IndexControllerTest extends ControllerTestCase
         $doc2 = $this->createTestDocument();
         $doc2->setServerState('published');
         $doc2->setLanguage('eng');
-        $title = new Opus_Title();
+        $title = new Title();
         $title->setValue('another test document for OPUSVIER-1726');
         $title->setLanguage('eng');
         $doc2->setTitleMain($title);
@@ -261,7 +262,7 @@ class Export_IndexControllerTest extends ControllerTestCase
         $solrXml = $indexer->toSolrDocument($doc2);
 
         // delete document from database
-        $doc2->deletePermanent();
+        $doc2->delete();
 
         // add document to search index
         // TODO fix $methodSendSolrXmlToServer = $class->getMethod('sendSolrXmlToServer');
@@ -275,7 +276,7 @@ class Export_IndexControllerTest extends ControllerTestCase
         $indexer->removeDocumentFromEntryIndexById($docId2);
         $indexer->commit();
 
-        $doc1->deletePermanent();
+        $doc1->delete();
 
         $body = $this->getResponse()->getBody();
 
@@ -300,7 +301,7 @@ class Export_IndexControllerTest extends ControllerTestCase
             $doc = $this->createTestDocument();
             $doc->setServerState('published');
             $doc->setLanguage('eng');
-            $title = new Opus_Title();
+            $title = new Title();
             $title->setValue('OPUSVIER-2488');
             $title->setLanguage('eng');
             $doc->setTitleMain($title);
@@ -603,16 +604,14 @@ class Export_IndexControllerTest extends ControllerTestCase
 
     public function testPublistActionWithoutStylesheetParameterInUrlAndInvalidConfigParameter()
     {
-        $config = Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         if (isset($config->plugins->export->publist->stylesheet)) {
             $config->plugins->export->publist->stylesheet = 'invalid';
         } else {
-            $config = new Zend_Config(['plugins' => ['export' => [
-                'publist' => ['stylesheet' => 'invalid']], true]]);
-            // Include the above made configuration changes in the application configuration.
-            $config->merge(Zend_Registry::get('Zend_Config'));
+            $this->adjustConfiguration([
+                'plugins' => ['export' => ['publist' => ['stylesheet' => 'invalid']]]
+            ]);
         }
-        Zend_Registry::set('Zend_Config', $config);
 
         $this->dispatch('/export/index/publist/role/publists/number/coll_visible');
 
@@ -623,25 +622,23 @@ class Export_IndexControllerTest extends ControllerTestCase
 
     public function testPublistActionWithValidStylesheetInConfig()
     {
-        $config = Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
+
         if (isset($config->plugins->export->publist->stylesheet)) {
             $config->plugins->export->publist->stylesheet = 'raw';
         } else {
-            $config = new Zend_Config(['plugins' => ['export' => [
-                'publist' => ['stylesheet' => 'raw']], true]]);
-            // Include the above made configuration changes in the application configuration.
-            $config->merge(Zend_Registry::get('Zend_Config'));
+            $this->adjustConfiguration([
+                'plugins' => ['export' => ['publist' => ['stylesheet' => 'raw']], true]
+            ]);
         }
 
         if (isset($config->plugins->export->publist->stylesheetDirectory)) {
             $config->plugins->export->publist->stylesheetDirectory = 'stylesheets';
         } else {
-            $config = new Zend_Config(['plugins' => ['export' => [
-                'publist' => ['stylesheetDirectory' => 'stylesheets']], true]]);
-            // Include the above made configuration changes in the application configuration.
-            $config->merge(Zend_Registry::get('Zend_Config'));
+            $this->adjustConfiguration([
+                'plugins' => ['export' => ['publist' => ['stylesheetDirectory' => 'stylesheets']], true]
+            ]);
         }
-        Zend_Registry::set('Zend_Config', $config);
 
         $this->dispatch('/export/index/publist/role/publists/number/coll_visible');
 
@@ -677,7 +674,7 @@ class Export_IndexControllerTest extends ControllerTestCase
     {
         $this->dispatch('/export/index/publist/role/ccs/number/H.3');
 
-        $urnResolverUrl = Zend_Registry::get('Zend_Config')->urn->resolverUrl;
+        $urnResolverUrl = $this->getConfig()->urn->resolverUrl;
 
         $this->assertXpathContentContains('//a[starts-with(@href, "' . $urnResolverUrl . '")]', 'URN');
     }
@@ -686,7 +683,7 @@ class Export_IndexControllerTest extends ControllerTestCase
     {
         $this->dispatch('/export/index/publist/role/ddc/number/51'); // contains test document 146
 
-        $doiResolverUrl = Zend_Registry::get('Zend_Config')->doi->resolverUrl;
+        $doiResolverUrl = $this->getConfig()->doi->resolverUrl;
 
         $this->assertXpathContentContains('//a[starts-with(@href, "' . $doiResolverUrl . '")]', 'DOI');
     }
@@ -704,17 +701,15 @@ class Export_IndexControllerTest extends ControllerTestCase
 
     public function testPublistActionGroupedByCompletedYear()
     {
-        $config = Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         // FIXME OPUSVIER-4130 config does not make sense - completely ignores value of setting
         if (isset($config->plugins->export->publist->groupby->completedyear)) {
             $config->plugins->export->publist->groupby->completedyear = self::CONFIG_VALUE_TRUE;
         } else {
-            $configNew = new Zend_Config(['plugins' => ['export' => [
-                'publist' => ['groupby' => ['completedyear' => self::CONFIG_VALUE_TRUE]]]]], false);
-            // Include the above made configuration changes in the application configuration.
-            $config->merge($configNew);
+            $this->adjustConfiguration([
+                'plugins' => ['export' => ['publist' => ['groupby' => ['completedyear' => self::CONFIG_VALUE_TRUE]]]]
+            ]);
         }
-        Zend_Registry::set('Zend_Config', $config);
 
         $this->dispatch('/export/index/publist/role/publists/number/coll_visible');
 
@@ -795,19 +790,17 @@ class Export_IndexControllerTest extends ControllerTestCase
      */
     public function testPublistActionDisplaysUrlencodedFiles()
     {
-        Zend_Registry::get('Zend_Config')->merge(
-            new Zend_Config(['plugins' => ['export' => [
-                'publist' => [
-                    'file' => [
-                        'allow' => [
-            'mimetype' => ['application/xhtml+xml' => 'HTML']]]]]]])
-        );
+        $this->adjustConfiguration([
+            'plugins' => ['export' => ['publist' => ['file' => ['allow' => [
+                'mimetype' => ['application/xhtml+xml' => 'HTML']
+            ]]]]]
+        ]);
 
         // explicitly re-initialize mime type config to apply changes in Zend_Config
         // This is necessary due to static variable in Export_Model_PublicationList
         // which is not reset between tests.
 
-        $config = Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         $this->assertTrue(
             isset($config->plugins->export->publist->file->allow->mimetype),
             'Failed setting configuration option'
@@ -818,9 +811,9 @@ class Export_IndexControllerTest extends ControllerTestCase
             'Failed setting configuration option'
         );
 
-        $doc = new Opus_Document(92);
+        $doc = Document::get(92);
         $file = $doc->getFile(1);
-        $this->assertTrue($file instanceof Opus_File, 'Test setup has changed.');
+        $this->assertTrue($file instanceof File, 'Test setup has changed.');
         $this->assertEquals('datei mit unüblichem Namen.xhtml', $file->getPathName(), 'Test setup has changed.');
 
         $collection = $doc->getCollection(0);
@@ -899,22 +892,26 @@ class Export_IndexControllerTest extends ControllerTestCase
 
     /**
      * Regressionstest für OPUSVIER-3391.
-     * // TODO insert host
+     * // TODO refactor - bootstrapping happens before so the helpers need to be adjusted - better way?
      */
     public function testExportedFilePath()
     {
-        Zend_Controller_Front::getInstance()->setBaseUrl('opus4dev');
+        $opusUrl = 'https://localhost/opus4';
+
+        $view = $this->getView();
+        $view->getHelper('ServerUrl')->setHost('localhost');
+        $view->getHelper('ServerUrl')->setScheme('https');
+        \Zend_Controller_Front::getInstance()->setBaseUrl('/opus4');
+
         $this->dispatch('/export/index/index/docId/146/export/xml/stylesheet/example/searchtype/id');
-        $host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '';
-        $server = $this->getRequest()->getBasePath();
-        $this->assertXpathContentContains('//file', 'https://' . $host . $server . '/files/146/test.pdf');
+        $this->assertXpathContentContains('//file', $opusUrl . '/files/146/test.pdf');
     }
 
     /**
      * Zugriff auf MARC21 Export standardmäßig nur für Administratoren freigegeben,
      * auch wenn das Zugriffsrecht auf das Module export vorhanden ist.
      *
-     * @throws Opus_Model_Exception
+     * @throws ModelException
      */
     public function testNonAdminAccessOnRestrictedMarc21ExportForbidden()
     {
@@ -934,7 +931,7 @@ class Export_IndexControllerTest extends ControllerTestCase
      * Zugriff auf DataCite Export standardmäßig nur für Administratoren freigegeben,
      * auch wenn das Zugriffsrecht auf das Module export vorhanden ist.
      *
-     * @throws Opus_Model_Exception
+     * @throws ModelException
      */
     public function testNonAdminAccessOnRestrictedDataCiteExportForbidden()
     {
@@ -954,7 +951,7 @@ class Export_IndexControllerTest extends ControllerTestCase
      * Zugriff auf RIS Export ist nicht eingeschränkt, wenn Zugriffsrecht auf das
      * Module export besteht.
      *
-     * @throws Opus_Model_Exception
+     * @throws ModelException
      */
     public function testNonAdminAccessOnUnrestrictedExportAllowed()
     {
@@ -976,11 +973,9 @@ class Export_IndexControllerTest extends ControllerTestCase
      */
     public function testNonAdminAccessOnUnrestrictedMarc21ExportAllowed()
     {
-        Zend_Registry::get('Zend_Config')->merge(
-            new Zend_Config(
-                ['plugins' => ['export' => ['marc21' => ['adminOnly' => self::CONFIG_VALUE_FALSE]]]]
-            )
-        );
+        $this->adjustConfiguration([
+            'plugins' => ['export' => ['marc21' => ['adminOnly' => self::CONFIG_VALUE_FALSE]]]
+        ]);
 
         $exportAccessProvided = $this->addAccessOnModuleExportForGuest();
         $this->enableSecurity();
@@ -999,7 +994,7 @@ class Export_IndexControllerTest extends ControllerTestCase
      * Gibt true zurück, wenn der Zugriff auf das Module export hinzugefügt wurde.
      *
      * @return bool
-     * @throws Opus_Model_Exception
+     * @throws ModelException
      */
     private function addAccessOnModuleExportForGuest()
     {

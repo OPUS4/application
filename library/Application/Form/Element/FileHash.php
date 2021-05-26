@@ -25,17 +25,18 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+use Opus\HashValues;
+
 /**
  * Formularelement fuer Anzeige von File Hashes.
  *
  * @category    Application
  * @package     Application_Form_Element_FileHash
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class Application_Form_Element_FileHash extends Zend_Form_Element_Xhtml
+class Application_Form_Element_FileHash extends \Zend_Form_Element_Xhtml
 {
 
     private $_hash;
@@ -46,7 +47,7 @@ class Application_Form_Element_FileHash extends Zend_Form_Element_Xhtml
     {
         parent::init();
 
-        $this->addPrefixPath('Application_Form_Decorator', 'Application/Form/Decorator', Zend_Form::DECORATOR);
+        $this->addPrefixPath('Application_Form_Decorator', 'Application/Form/Decorator', \Zend_Form::DECORATOR);
 
         $this->setLabel($this->getTranslator()->translate('admin_filemanager_checksum') . ' - ');
     }
@@ -78,7 +79,7 @@ class Application_Form_Element_FileHash extends Zend_Form_Element_Xhtml
 
     public function setValue($hash)
     {
-        if ($hash instanceof Opus_HashValues) {
+        if ($hash instanceof HashValues) {
             $this->_hash = $hash;
         }
     }

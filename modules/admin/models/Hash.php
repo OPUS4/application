@@ -25,6 +25,8 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+use Opus\File;
+
 /**
  * Klasse fuer die Handhabung von Datei-Hashes.
  *
@@ -33,7 +35,6 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 class Admin_Model_Hash
 {
@@ -41,7 +42,7 @@ class Admin_Model_Hash
     private $_hash = null;
 
     /**
-     * @var Opus_File
+     * @var File
      */
     private $_file = null;
 

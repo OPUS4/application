@@ -32,6 +32,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Date;
+use Opus\Person;
+
 /**
  * Form for editing a person across multiple objects.
  *
@@ -46,7 +49,7 @@ class Admin_Form_Persons extends Application_Form_Model_Abstract
 {
 
     /**
-     * Name fuer Formularelement fuer Feld ID von Opus_Person.
+     * Name fuer Formularelement fuer Feld ID von Person.
      */
     const ELEMENT_PERSON_ID = 'PersonId';
 
@@ -129,7 +132,7 @@ class Admin_Form_Persons extends Application_Form_Model_Abstract
             self::ELEMENT_LAST_NAME,
             [
                 'label' => 'LastName', 'required' => true, 'size' => 50,
-                'maxlength' => Opus_Person::getFieldMaxLength('LastName')
+                'maxlength' => Person::getFieldMaxLength('LastName')
             ]
         );
         $this->addElement('text', self::ELEMENT_FIRST_NAME, ['label' => 'FirstName', 'size' => 50]);
@@ -229,8 +232,8 @@ class Admin_Form_Persons extends Application_Form_Model_Abstract
     }
 
     /**
-     * Setzt die Werte der Formularelmente entsprechend der uebergebenen Opus_Person Instanz.
-     * @param Opus_Person $model
+     * Setzt die Werte der Formularelmente entsprechend der uebergebenen Person Instanz.
+     * @param Person $model
      */
     public function populateFromModel($values)
     {
@@ -265,10 +268,10 @@ class Admin_Form_Persons extends Application_Form_Model_Abstract
 
             $formattedDates = [];
 
-            $datesHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('dates');
+            $datesHelper = \Zend_Controller_Action_HelperBroker::getStaticHelper('dates');
 
             foreach ($dates as $date) {
-                $opusDate = new Opus_Date($date);
+                $opusDate = new Date($date);
                 array_push($formattedDates, $datesHelper->getDateString($opusDate));
             }
 
@@ -295,7 +298,7 @@ class Admin_Form_Persons extends Application_Form_Model_Abstract
         $person = $this->getPerson();
 
         if (! is_null($person)) {
-            $columnName = Opus_Person::convertFieldnameToColumn($element->getName());
+            $columnName = Person::convertFieldnameToColumn($element->getName());
             if (array_key_exists($columnName, $person)) {
                 $displayValue = $person[$columnName];
             }
@@ -322,8 +325,8 @@ class Admin_Form_Persons extends Application_Form_Model_Abstract
     }
 
     /**
-     * Setzt die Felder einer Opus_Person Instanz entsprechend dem Formularinhalt.
-     * @param Opus_Person $model
+     * Setzt die Felder einer Person Instanz entsprechend dem Formularinhalt.
+     * @param Person $model
      */
     public function updateModel($model)
     {
@@ -366,8 +369,8 @@ class Admin_Form_Persons extends Application_Form_Model_Abstract
     }
 
     /**
-     * Liefert Instanz von Opus_Person zurueck.
-     * @return \Opus_Person
+     * Liefert Instanz von Person zurueck.
+     * @return Person
      */
     public function getModel()
     {

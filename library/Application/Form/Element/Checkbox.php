@@ -29,13 +29,12 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
  * Angepasste Klasse für Checkbox Formularelemente.
  */
-class Application_Form_Element_Checkbox extends Zend_Form_Element_Checkbox implements Application_Form_IElement
+class Application_Form_Element_Checkbox extends \Zend_Form_Element_Checkbox implements Application_Form_IElement
 {
 
     private $_viewCheckedValue = 'Field_Value_True';
@@ -44,7 +43,7 @@ class Application_Form_Element_Checkbox extends Zend_Form_Element_Checkbox imple
 
     public function init()
     {
-        $this->addPrefixPath('Application_Form_Decorator', 'Application/Form/Decorator', Zend_Form::DECORATOR);
+        $this->addPrefixPath('Application_Form_Decorator', 'Application/Form/Decorator', \Zend_Form::DECORATOR);
     }
 
     public function loadDefaultDecorators()

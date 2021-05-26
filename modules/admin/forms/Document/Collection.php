@@ -29,8 +29,9 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
+use Opus\Collection;
 
 /**
  * Unterformular fuer eine zugewiesene Collection.
@@ -77,7 +78,7 @@ class Admin_Form_Document_Collection extends Admin_Form_AbstractDocumentSubForm
 
     /**
      * Initialisiert das Formular mit einer Collection.
-     * @param Opus_Collection $collection
+     * @param Collection $collection
      */
     public function populateFromModel($collection)
     {
@@ -133,13 +134,13 @@ class Admin_Form_Document_Collection extends Admin_Form_AbstractDocumentSubForm
     /**
      * Liefert das Model für die angezeigte Collection.
      *
-     * @return \Opus_Collection
+     * @return Collection
      */
     public function getModel()
     {
         $colId = $this->getElement(self::ELEMENT_ID)->getValue();
 
-        return new Opus_Collection($colId);
+        return new Collection($colId);
     }
 
     /**
@@ -156,7 +157,7 @@ class Admin_Form_Document_Collection extends Admin_Form_AbstractDocumentSubForm
     public function populateFromPost($post)
     {
         $colId = $post[self::ELEMENT_ID];
-        $collection = new Opus_Collection($colId);
+        $collection = new Collection($colId);
         $this->populateFromModel($collection);
     }
 

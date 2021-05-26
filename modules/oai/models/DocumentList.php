@@ -30,8 +30,10 @@
  * @author     Thoralf Klein <thoralf.klein@zib.de>
  * @copyright  Copyright (c) 2012, OPUS 4 development team
  * @license    http://www.gnu.org/licenses/gpl.html General Public License
- * @version    $Id$
  */
+
+use Opus\CollectionRole;
+use Opus\DocumentFinder;
 
 class Oai_Model_DocumentList
 {
@@ -67,18 +69,19 @@ class Oai_Model_DocumentList
     {
         $today = date('Y-m-d', time());
 
-        $finder = new Opus_DocumentFinder();
+        $finder = new DocumentFinder();
 
         // add server state restrictions
         $finder->setServerStateInList($this->deliveringDocumentStates);
 
-        $metadataPrefix = $oaiRequest['metadataPrefix'];
-        if (strcasecmp('xMetaDissPlus', $metadataPrefix) === 0
-            || 'xMetaDiss' === $metadataPrefix) {
+        $metadataPrefix = strtolower($oaiRequest['metadataPrefix']);
+
+        if (strcmp('xmetadissplus', $metadataPrefix) === 0
+            || 'xmetadiss' === $metadataPrefix) {
             $finder->setFilesVisibleInOai();
             $finder->setNotEmbargoedOn($today);
         }
-        if ('xMetaDiss' === $metadataPrefix) {
+        if ('xmetadiss' === $metadataPrefix) {
             $finder->setTypeInList($this->xMetaDissRestriction);
             $finder->setNotEmbargoedOn($today);
         }
@@ -120,7 +123,7 @@ class Oai_Model_DocumentList
                 }
 
                 // Trying to locate collection role and filter documents.
-                $role = Opus_CollectionRole::fetchByOaiName($setarray[0]);
+                $role = CollectionRole::fetchByOaiName($setarray[0]);
                 if (is_null($role)) {
                     $msg = "Invalid SetSpec: Top level set does not exist.";
                     throw new Oai_Model_Exception($msg);

@@ -29,8 +29,9 @@
  * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
+use Opus\DocumentFinder;
 
 class Rewrite_IndexController extends Application_Controller_Action
 {
@@ -52,7 +53,7 @@ class Rewrite_IndexController extends Application_Controller_Action
                 'home'
             );
         }
-        $f = new Opus_DocumentFinder();
+        $f = new DocumentFinder();
         $ids = $f->setIdentifierTypeValue($type, $value)->ids();
         if (count($ids) < 1) {
             return $this->_helper->Redirector->redirectToAndExit(
@@ -95,7 +96,7 @@ class Rewrite_IndexController extends Application_Controller_Action
                 'home'
             );
         }
-        $f = new Opus_DocumentFinder();
+        $f = new DocumentFinder();
         $ids = $f->setIdentifierTypeValue('opus3-id', $docid)->ids();
         if (count($ids) < 1) {
             return $this->_helper->Redirector->redirectToAndExit(

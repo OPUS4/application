@@ -29,8 +29,9 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
+use Opus\Title;
 
 /**
  * Unterformular fuer das Editieren von Titeln.
@@ -45,7 +46,7 @@ class Admin_Form_Document_Title extends Admin_Form_AbstractModelSubForm
 {
 
     /**
-     * Name von Formularelement fuer ID von Opus_Title Objekt.
+     * Name von Formularelement fuer ID von Title Objekt.
      */
     const ELEMENT_ID = 'Id';
 
@@ -103,7 +104,7 @@ class Admin_Form_Document_Title extends Admin_Form_AbstractModelSubForm
     /**
      * Initialisiert das Formular mit den Werten im Modell.
      *
-     * @param \Opus_Title $title
+     * @param Title $title
      */
     public function populateFromModel($title)
     {
@@ -116,7 +117,7 @@ class Admin_Form_Document_Title extends Admin_Form_AbstractModelSubForm
     /**
      * Aktualisiert Modell mit den Werten im Formular.
      *
-     * @param \Opus_Title $title
+     * @param Title $title
      */
     public function updateModel($title)
     {
@@ -127,13 +128,13 @@ class Admin_Form_Document_Title extends Admin_Form_AbstractModelSubForm
 
     /**
      * Liefert das angezeigte Objekt bzw. eine neue Instanz für Titel die im Formular hinzugefügt wurden.
-     * @return \Opus_Title
+     * @return Title
      */
     public function getModel()
     {
         $titleId = $this->getElementValue(self::ELEMENT_ID);
 
-        $title = new Opus_Title($titleId);
+        $title = new Title($titleId);
 
         $this->updateModel($title);
 

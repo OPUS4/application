@@ -29,13 +29,14 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
+use Opus\Document;
+
 /**
- * Mock Opus_Document for unit testing.
+ * Mock Document for unit testing.
  */
-class Mock_Opus_Document extends Opus_Document
+class Mock_Opus_Document extends Document
 {
 
     public function store()

@@ -37,6 +37,8 @@
 opusdb.params.admin.name = @db.admin.name@
 opusdb.params.admin.password = @db.admin.password@
 
+searchengine.solr.default.service.default.endpoint.localhost.timeout = 0
+searchengine.solr.default.service.extract.endpoint.localhost.timeout = 0
 [staging : production]
 
 [testing : production]

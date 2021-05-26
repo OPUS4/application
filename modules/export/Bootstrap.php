@@ -32,24 +32,34 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Export_Bootstrap extends Zend_Application_Module_Bootstrap
+use Opus\Config;
+use Opus\Log;
+use Opus\Security\Realm;
+
+class Export_Bootstrap extends \Zend_Application_Module_Bootstrap
 {
 
     protected function _initExport()
     {
-        $config = Zend_Registry::get('Zend_Config');
+        $updateInProgress = Application_Configuration::isUpdateInProgress();
 
-        if (! Zend_Registry::isRegistered('Opus_Exporter')) {
-            Zend_Registry::get('Zend_Log')->err(__METHOD__ . ' exporter not found');
+        if (! \Zend_Registry::isRegistered('Opus_Exporter')) {
+            if (! $updateInProgress) {
+                 Log::get()->warn(__METHOD__ . ' exporter not found');
+            }
             return;
         }
 
-        $exporter = Zend_Registry::get('Opus_Exporter');
+        $exporter = \Zend_Registry::get('Opus_Exporter');
 
         if (is_null($exporter)) {
-            Zend_Registry::get('Zend_Log')->err(__METHOD__ . ' exporter not found');
+            if (! $updateInProgress) {
+                 Log::get()->warn(__METHOD__ . ' exporter not found');
+            }
             return;
         }
+
+        $config = Config::get();
 
         // only add XML export if user has access and stylesheet is configured
         if (isset($config->export->stylesheet->frontdoor)) {
@@ -98,7 +108,7 @@ class Export_Bootstrap extends Zend_Application_Module_Bootstrap
             ]
         ]);
 
-        if (Opus_Security_Realm::getInstance()->checkModule('admin')) {
+        if (Realm::getInstance()->checkModule('admin')) {
             // add admin-only format(s) to exporter
             // hiermit wird nur die Sichtbarkeit des Export-Buttons gesteuert
             $exporter->addFormats([

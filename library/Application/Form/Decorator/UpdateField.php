@@ -36,7 +36,7 @@
  *
  * TODO rename?
  */
-class Application_Form_Decorator_UpdateField extends Zend_Form_Decorator_Abstract
+class Application_Form_Decorator_UpdateField extends \Zend_Form_Decorator_Abstract
 {
 
     public function render($content)

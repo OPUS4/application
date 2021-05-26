@@ -29,8 +29,9 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
+use Opus\Log;
 
 /**
  * Prüft, ob die Sprache bereits benutzt wurde.
@@ -41,7 +42,7 @@
  *
  * TODO Redundanz mit DuplicateValue eliminieren
  */
-class Application_Form_Validate_LanguageUsedOnceOnly extends Zend_Validate_Abstract
+class Application_Form_Validate_LanguageUsedOnceOnly extends \Zend_Validate_Abstract
 {
 
     /**
@@ -81,7 +82,7 @@ class Application_Form_Validate_LanguageUsedOnceOnly extends Zend_Validate_Abstr
     {
         $this->_languages = $languages;
         $this->_position = $position;
-        $this->setTranslator(Zend_Registry::get(Application_Translate::REGISTRY_KEY));
+        $this->setTranslator(Application_Translate::getInstance());
     }
 
     /**
@@ -99,7 +100,7 @@ class Application_Form_Validate_LanguageUsedOnceOnly extends Zend_Validate_Abstr
         $langCount = count($this->_languages);
 
         if (! ($this->_position < $langCount)) {
-            Zend_Registry::get('Zend_Log')->err(__CLASS__ . ' mit Position > count(Languages) konstruiert.');
+             Log::get()->err(__CLASS__ . ' mit Position > count(Languages) konstruiert.');
         }
 
         if (! is_null($this->_languages)) {
@@ -110,7 +111,7 @@ class Application_Form_Validate_LanguageUsedOnceOnly extends Zend_Validate_Abstr
                 }
             }
         } else {
-            Zend_Registry::get('Zend_Log')->err(__CLASS__ . ' mit Languages = NULL konstruiert.');
+             Log::get()->err(__CLASS__ . ' mit Languages = NULL konstruiert.');
         }
 
         return true;

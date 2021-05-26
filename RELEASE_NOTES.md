@@ -1,5 +1,91 @@
 # OPUS 4 Release Notes
 
+---
+
+## Release 4.7.1
+
+# Konfiguration
+
+Der Parameter `url` kann verwendet werden, um die absolute URL für eine OPUS 4 
+Instanz manuell zu setzen. Diese URL wird dann verwendet, um absolute Links, 
+z.B. in Exporten oder E-Mails, zu generieren.
+
+   url = 'https://opus4mig.kobv.de/opus4-demo'
+
+URLs mit Port werden momentan nicht unterstützt. 
+
+# Neues Kommandozeilen-Skript `bin/opus4`
+
+Es gibt das neue Skript `bin/opus4`, dass in Zukunft die Rolle des zentralen OPUS 4
+Werkzeugs auf der Kommandozeile übernehmen wird. Mit den Kommando `list` lassen sich
+die bisher integrierten Kommandos anzeigen. Mit `help` lassen sich Informationen zu
+einzelnen Kommandos abrufen.
+
+    $ bin/opus4 list
+    $ bin/opus4 help index:index
+
+# Wartung des Solr-Index
+
+Das Skript `script/SolrIndexBuilder.php` wurde durch `bin/opus4` ersetzt. Dadurch
+soll der Aufruf vereinfacht werden. Das neue Skript soll außerdem in Zukunft auch
+andere Funktionen übernehmen, die nichts mit dem Index zu tun haben.
+
+Im OPUS 4 Handbuch gibt es eine neue Seite, die die Funktionen des Skripts für
+den Index beschreibt.
+
+<http://www.opus-repository.org//userdoc/search/maintenance.html>
+
+Es gibt jetzt die Möglichkeit einzelne Dokumente einfacher zu indexieren oder auch
+aus dem Index zu entfernen. Es kann über eine Option bestimmt werden wie viele
+Dokument gleichzeitig zum Solr-Server geschickt werden sollen. Das kann helfen,
+wenn es Probleme bei der Indexierung gibt.
+
+# Export
+
+Die beiden Variablen `host` und `server` in den Export-XSLT Skripten wurden durch 
+die Variable `opusUrl` ersetzt. Eigene Skripte, die diese Variablen einsetzen,
+müssen angepasst werden. Die neue Variable `opusUrl` enthält die absolute URL für
+die OPUS 4 Instanz.
+
+# OPUS Framework Package
+
+## API
+
+Die `deletePermanent` Funktion von `Opus\Document`, um Dokumente vollständig zu 
+löschen, wurde entfernt. Die `delete` Funktion löscht Dokumente jetzt vollständig,
+anstatt sie nur in den Server-Status **deleted** zu versetzen. Um Dokumente als
+gelöscht zu markieren ohne sie komplett zu entfernen, muss nun `serServerState` 
+verwendet werden. 
+
+   $doc->setServerState(Document::STATE_DELETED);
+   $doc->store();
+
+Dies muss unter Umständen bei eigenen Skripten berücksichtigt werden.
+
+## PHP Namespaces
+
+Der Code des OPUS Frameworks wurde in Vorbereitung auf die Migration zu Laminas
+auf PHP Namespaces umgestellt und die Verwendung der Klassen in der Application
+entsprechend angepasst.
+
+---
+
+## Release 4.7.0.4 2020-12-02
+
+Diese Version behebt einen Bug im Framework bei der Abfrage, wenn in einem Dokument
+mehrere Identifier vom gleichen Typ vorhanden sind. Dieses Problem hat in einem Fall
+die Anzeige des DOI-Reports in der Administration verhindert. Weitere Auswirkungen 
+wurden nicht entdeckt.
+
+Ein Update der Source-Dateien mit `git pull` und die Installation des aktualisierten
+Frameworks mit `composer update` sollten für das Update auf diese Version ausreichen.
+
+Die Versionen 4.7.0.1-4.7.0.3 wurden als kleine Patch-Releases veröffentlicht, ohne
+die Versionsnummer von OPUS 4 zu verändern. In Zukunft werden wir auch für diese 
+Patch-Releases die Versionsnummer aktualisieren.
+
+---
+
 ## Release 4.7 2020-07-31
 
 Die Änderungen in OPUS __4.7__, die hier aufgeführt sind, ergänzen was schon für 

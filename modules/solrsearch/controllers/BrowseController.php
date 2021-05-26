@@ -70,7 +70,7 @@ class Solrsearch_BrowseController extends Application_Controller_Action
         $query->setFacetField($facetname);
 
         try {
-            $searcher = new Opus\Search\Util\Searcher();
+            $searcher = Application_Search_SearcherFactory::getSearcher();
             $facets = $searcher->search($query)->getFacets();
         } catch (Opus\Search\Exception $e) {
             $this->getLogger()->err(__METHOD__ . ' : ' . $e);
@@ -103,7 +103,7 @@ class Solrsearch_BrowseController extends Application_Controller_Action
         $query->setFacetField($indexField);
 
         try {
-            $searcher = new Opus\Search\Util\Searcher();
+            $searcher = Application_Search_SearcherFactory::getSearcher();
             $facets = $searcher->search($query)->getFacets();
         } catch (Opus\Search\Exception $ose) {
             $this->getLogger()->err(__METHOD__ . ' : ' . $ose);

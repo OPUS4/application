@@ -30,6 +30,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Document;
+use Opus\Model\Dependent\Link\DocumentSeries;
+
 /**
  * Unit Tests fuer Unterformular fuer Verknuepfung mit Schriftenreihe in Metadaten-Formular.
  */
@@ -42,7 +45,7 @@ class Admin_Form_Document_SeriesTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Series();
 
-        $this->assertEquals(4, count($form->getElements()));
+        $this->assertCount(4, $form->getElements());
         $this->assertNotNull($form->getElement('Id'));
         $this->assertNotNull($form->getElement('SeriesId'));
         $this->assertNotNull($form->getElement('Number'));
@@ -53,7 +56,7 @@ class Admin_Form_Document_SeriesTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Series();
 
-        $doc = new Opus_Document(146);
+        $doc = Document::get(146);
 
         $series = $doc->getSeries();
         $model = $series[0];
@@ -74,7 +77,7 @@ class Admin_Form_Document_SeriesTest extends ControllerTestCase
         $form->getElement('Number')->setValue('III');
         $form->getElement('SortOrder')->setValue(2);
 
-        $model = new Opus_Model_Dependent_Link_DocumentSeries();
+        $model = new DocumentSeries();
 
         $form->updateModel($model);
 
@@ -87,7 +90,7 @@ class Admin_Form_Document_SeriesTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Series();
 
-        $doc = new Opus_Document(146);
+        $doc = Document::get(146);
         $series = $doc->getSeries();
 
         $form->getElement('Id')->setValue($doc->getId());

@@ -82,7 +82,7 @@ class Application_Search_FacetManager
         // cache configuration
         $config = $this->getConfig();
 
-        $default = new Zend_Config($config->search->facet->default->toArray(), true);
+        $default = new \Zend_Config($config->search->facet->default->toArray(), true);
 
         if (isset($config->search->facet->$name)) {
             $facetConfig = $default->merge($config->search->facet->$name);

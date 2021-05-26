@@ -299,7 +299,7 @@ then
     echo -e "Solr server is running under http://localhost:$SOLR_SERVER_PORT/solr\n"
 
     # start indexing of testdata
-    "$BASEDIR/scripts/SolrIndexBuilder.php"
+    "$BASEDIR/bin/opus4" index:index
 fi
 
 cd "$BASEDIR"

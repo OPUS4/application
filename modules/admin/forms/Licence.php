@@ -25,10 +25,13 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+use Opus\Licence;
+use Opus\Model\AbstractDb;
+
 /**
  * Formular fuer das Editieren und Anzeigen einer Lizenz.
  *
- * Die Klasse Opus_Licence enthaelt auch noch das Feld 'LinkSign'. Es gibt Ticket OPUSVIER-1492 fuer das Entfernen
+ * Die Klasse Licence enthaelt auch noch das Feld 'LinkSign'. Es gibt Ticket OPUSVIER-1492 fuer das Entfernen
  * dieses Feldes, daher wurde es in diesem Formular nicht mehr verwendet. TODO Kommentar entfernen
  *
  * @category    Application
@@ -51,27 +54,27 @@ class Admin_Form_Licence extends Application_Form_Model_Abstract
     const ELEMENT_COMMENT_INTERNAL = 'CommentInternal';
 
     /**
-     * Name von Formularelement fuer Feld 'DescMarkup' von Opus_Licence.
+     * Name von Formularelement fuer Feld 'DescMarkup' von Licence.
      */
     const ELEMENT_DESC_MARKUP = 'DescMarkup';
 
     /**
-     * Name von Formularelement fuer Feld 'DescText' von Opus_Licence.
+     * Name von Formularelement fuer Feld 'DescText' von Licence.
      */
     const ELEMENT_DESC_TEXT = 'DescText';
 
     /**
-     * Name von Formularelement fuer Feld 'Language' von Opus_Licence.
+     * Name von Formularelement fuer Feld 'Language' von Licence.
      */
     const ELEMENT_LANGUAGE = 'Language';
 
     /**
-     * Name von Formularelement fuer Feld 'LinkLicence' von Opus_Licence.
+     * Name von Formularelement fuer Feld 'LinkLicence' von Licence.
      */
     const ELEMENT_LINK_LICENCE = 'LinkLicence';
 
     /**
-     * Name von Formularelement fuer Feld 'LinkLogo' von Opus_Licence.
+     * Name von Formularelement fuer Feld 'LinkLogo' von Licence.
      */
     const ELEMENT_LINK_LOGO = 'LinkLogo';
 
@@ -81,27 +84,27 @@ class Admin_Form_Licence extends Application_Form_Model_Abstract
     const ELEMENT_LINK_SIGN = 'LinkSign';
 
     /**
-     * Name von Formularelement fuer Feld 'MimeType' von Opus_Licence.
+     * Name von Formularelement fuer Feld 'MimeType' von Licence.
      */
     const ELEMENT_MIME_TYPE = 'MimeType';
 
     /**
-     * Name von Formularelement fuer Feld 'Name' von Opus_Licence.
+     * Name von Formularelement fuer Feld 'Name' von Licence.
      */
     const ELEMENT_NAME = 'Name';
 
     /**
-     * Name von Formularelement fuer Feld 'NameLong' von Opus_Licence.
+     * Name von Formularelement fuer Feld 'NameLong' von Licence.
      */
     const ELEMENT_NAME_LONG = 'NameLong';
 
     /**
-     * Name von Formularelement fuer Feld 'SortOrder' von Opus_Licence.
+     * Name von Formularelement fuer Feld 'SortOrder' von Licence.
      */
     const ELEMENT_SORT_ORDER = 'SortOrder';
 
     /**
-     * Name von Formularelement fuer Feld 'PodAllowed' von Opus_Licence.
+     * Name von Formularelement fuer Feld 'PodAllowed' von Licence.
      */
     const ELEMENT_POD_ALLOWED = 'PodAllowed';
 
@@ -114,11 +117,11 @@ class Admin_Form_Licence extends Application_Form_Model_Abstract
 
         $this->setRemoveEmptyCheckbox(false);
         $this->setUseNameAsLabel(true);
-        $this->setModelClass('Opus_Licence');
+        $this->setModelClass('Opus\Licence');
 
         $this->addElement('checkbox', self::ELEMENT_ACTIVE);
         $this->addElement('text', self::ELEMENT_NAME, [
-            'maxlength' => Opus_Licence::getFieldMaxLength('Name')
+            'maxlength' => Licence::getFieldMaxLength('Name')
         ]);
         $this->addElement('text', self::ELEMENT_NAME_LONG, ['required' => true, 'size' => 70]);
         $this->addElement('Language', self::ELEMENT_LANGUAGE, ['required' => true]);
@@ -133,8 +136,8 @@ class Admin_Form_Licence extends Application_Form_Model_Abstract
     }
 
     /**
-     * Initialisiert Formular von Opus_Licence Instanz.
-     * @param Opus_Model_Licence $licence
+     * Initialisiert Formular von Licence Instanz.
+     * @param Licence $licence
      */
     public function populateFromModel($licence)
     {
@@ -154,8 +157,8 @@ class Admin_Form_Licence extends Application_Form_Model_Abstract
     }
 
     /**
-     * Aktualisiert Instanz von Opus_Licence mit Werte aus Formular.
-     * @param Opus_Model_AbstractDb $licence
+     * Aktualisiert Instanz von Licence mit Werte aus Formular.
+     * @param AbstractDb $licence
      */
     public function updateModel($licence)
     {

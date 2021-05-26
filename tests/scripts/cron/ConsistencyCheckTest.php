@@ -33,6 +33,9 @@
 
 require_once('CronTestCase.php');
 
+use Opus\DocumentFinder;
+use Opus\Job;
+
 class ConsistencyCheckTest extends CronTestCase
 {
 
@@ -40,7 +43,7 @@ class ConsistencyCheckTest extends CronTestCase
 
     private function getPublishedDocumentCount()
     {
-        $finder = new Opus_DocumentFinder();
+        $finder = new DocumentFinder();
         $finder->setServerState('published');
         return count($finder->ids());
     }
@@ -53,10 +56,10 @@ class ConsistencyCheckTest extends CronTestCase
         $this->createJob(Opus\Search\Task\ConsistencyCheck::LABEL);
         $this->executeScript('cron-check-consistency.php');
 
-        $allJobs = Opus_Job::getByLabels([Opus\Search\Task\ConsistencyCheck::LABEL], null, Opus_Job::STATE_UNDEFINED);
+        $allJobs = Job::getByLabels([Opus\Search\Task\ConsistencyCheck::LABEL], null, Job::STATE_UNDEFINED);
         $this->assertTrue(empty($allJobs), 'Expected no more jobs in queue: found ' . count($allJobs) . ' jobs');
 
-        $failedJobs = Opus_Job::getByLabels([Opus\Search\Task\ConsistencyCheck::LABEL], null, Opus_Job::STATE_FAILED);
+        $failedJobs = Job::getByLabels([Opus\Search\Task\ConsistencyCheck::LABEL], null, Job::STATE_FAILED);
         $this->assertTrue(empty($failedJobs), 'Expected no failed jobs in queue: found ' . count($failedJobs) . ' jobs');
 
         $logPath = parent::$scriptPath . '/../../workspace/log/';
@@ -95,10 +98,10 @@ class ConsistencyCheckTest extends CronTestCase
         $this->createJob(Opus\Search\Task\ConsistencyCheck::LABEL);
         $this->executeScript('cron-check-consistency.php');
 
-        $allJobs = Opus_Job::getByLabels([Opus\Search\Task\ConsistencyCheck::LABEL], null, Opus_Job::STATE_UNDEFINED);
+        $allJobs = Job::getByLabels([Opus\Search\Task\ConsistencyCheck::LABEL], null, Job::STATE_UNDEFINED);
         $this->assertTrue(empty($allJobs), 'Expected no more jobs in queue: found ' . count($allJobs) . ' jobs');
 
-        $failedJobs = Opus_Job::getByLabels([Opus\Search\Task\ConsistencyCheck::LABEL], null, Opus_Job::STATE_FAILED);
+        $failedJobs = Job::getByLabels([Opus\Search\Task\ConsistencyCheck::LABEL], null, Job::STATE_FAILED);
         $this->assertTrue(empty($failedJobs), 'Expected no failed jobs in queue: found ' . count($failedJobs) . ' jobs');
 
         $logPath = parent::$scriptPath . '/../../workspace/log/';

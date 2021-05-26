@@ -35,7 +35,7 @@
  *
  * TODO
  */
-class Admin_Form_CopyDocument extends Zend_Form
+class Admin_Form_CopyDocument extends \Zend_Form
 {
 
     const ELEMENT_COPY = 'Copy';

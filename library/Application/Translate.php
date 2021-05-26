@@ -27,9 +27,11 @@
  * @category    Application
  * @package     Application
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\Config;
 
 /**
  * Erweiterung von Zend_Translate, um Übersetzungsressourcen für Module zu laden.
@@ -42,7 +44,7 @@
  * modules. Loading the translations for a module only when a request is directed at that module might not load all the
  * necessary translations if this module uses resources from another module that has not been loaded.
  */
-class Application_Translate extends Zend_Translate
+class Application_Translate extends \Zend_Translate
 {
 
     use \Opus\LoggingTrait;
@@ -69,11 +71,11 @@ class Application_Translate extends Zend_Translate
      */
     private $_options = [
         'logMessage' => "Unable to translate key '%message%' into locale '%locale%'",
-        'logPriority' => Zend_Log::DEBUG,
+        'logPriority' => \Zend_Log::WARN,
         'adapter' => 'tmx',
         'locale' => 'en',
         'clear' => false,
-        'scan' => Zend_Translate::LOCALE_FILENAME,
+        'scan' => \Zend_Translate::LOCALE_FILENAME,
         'ignore' => '.',
         'disableNotices' => true
     ];
@@ -96,6 +98,11 @@ class Application_Translate extends Zend_Translate
         return self::$instance;
     }
 
+    public static function setInstance($instance)
+    {
+        self::$instance = $instance;
+        \Zend_Registry::set(self::REGISTRY_KEY, $instance);
+    }
     /**
      * Loads all modules.
      */
@@ -122,8 +129,8 @@ class Application_Translate extends Zend_Translate
     public function loadDatabase($reload = false)
     {
         // TODO use cache
-        $translate = new Zend_Translate([
-            'adapter' => 'Opus_Translate_DatabaseAdapter',
+        $translate = new \Zend_Translate([
+            'adapter' => 'Opus\Translate\DatabaseAdapter',
             'content' => 'all',
             'locale' => 'en',
             'disableNotices' => true,
@@ -216,7 +223,7 @@ class Application_Translate extends Zend_Translate
      */
     public function isLogUntranslatedEnabled()
     {
-        $config = Zend_Registry::get('Zend_Config');
+        $config = Config::get();
         return (isset($config->log->untranslated)) ?
             filter_var($config->log->untranslated, FILTER_VALIDATE_BOOLEAN) : false;
     }
@@ -268,7 +275,7 @@ class Application_Translate extends Zend_Translate
      */
     public function setTranslations($key, $translations, $module = 'default')
     {
-        $database = new Opus_Translate_Dao();
+        $database = new \Opus\Translate\Dao();
 
         $database->setTranslation($key, $translations, $module);
 
@@ -282,7 +289,7 @@ class Application_Translate extends Zend_Translate
      */
     public function clear()
     {
-        $translate = new Zend_Translate([
+        $translate = new \Zend_Translate([
             'adapter' => 'array',
             'content' => ['en' => [], 'de' => []],
             'locale' => 'en',

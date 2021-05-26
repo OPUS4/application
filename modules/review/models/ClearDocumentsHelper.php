@@ -30,8 +30,13 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
+use Opus\Date;
+use Opus\Document;
+use Opus\Log;
+use Opus\Person;
+use Opus\UserRole;
 
 /**
  * Contains code for clearing documents (switching to published state).
@@ -44,25 +49,25 @@ class Review_Model_ClearDocumentsHelper
      *
      * @param array $docIds
      * @param mixed $userId
-     * @param Opus_Person $person
+     * @param Person $person
      *
      * FIXME capture success or failure for display afterwards
      */
     public function clear(array $docIds = null, $userId = null, $person = null)
     {
-        $logger = Zend_Registry::get('Zend_Log');
+        $logger = Log::get();
 
         foreach ($docIds as $docId) {
             $logger->debug('Change state to "published" for document: ' . $docId);
-            $document = new Opus_Document($docId);
+            $document = Document::get($docId);
             $document->setServerState('published');
 
-            $date = new Opus_Date();
+            $date = new Date();
             $date->setNow();
             $document->setServerDatePublished($date);
             $document->setPublishedDate($date);
 
-            $guestRole = Opus_UserRole::fetchByName('guest');
+            $guestRole = UserRole::fetchByName('guest');
             foreach ($document->getFile() as $file) {
                 $guestRole->appendAccessFile($file->getId());
             }
@@ -88,17 +93,17 @@ class Review_Model_ClearDocumentsHelper
      *
      * @param array $docIds
      * @param mixed $userId
-     * @param Opus_Person $person
+     * @param Person $person
      *
      * FIXME capture success or failure for display afterwards
      */
     public function reject(array $docIds = null, $userId = null, $person = null)
     {
-        $logger = Zend_Registry::get('Zend_Log');
+        $logger = Log::get();
 
         foreach ($docIds as $docId) {
             $logger->debug('Deleting document with id: ' . $docId);
-            $document = new Opus_Document($docId);
+            $document = Document::get($docId);
 
             if (isset($person)) {
                 $document->addPersonReferee($person);
@@ -108,7 +113,8 @@ class Review_Model_ClearDocumentsHelper
             $enrichment->setKeyName('review.rejected_by')
                     ->setValue($userId);
 
-            $document->delete();
+            $document->setServerState(Document::STATE_DELETED);
+            $document->store();
         }
 
         return;

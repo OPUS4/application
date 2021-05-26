@@ -34,13 +34,13 @@
 /**
  * Route for automatic redirect for matching route.
  */
-class Application_Controller_Route_Redirect extends Zend_Controller_Router_Route_Regex
+class Application_Controller_Route_Redirect extends \Zend_Controller_Router_Route_Regex
 {
 
     public function match($path, $partial = false)
     {
         if ($route = parent::match($path, $partial)) {
-            $helper = Zend_Controller_Action_HelperBroker::getStaticHelper('redirector');
+            $helper = \Zend_Controller_Action_HelperBroker::getStaticHelper('redirector');
             $helper->setCode(301);
             $helper->gotoRoute($route);
         }

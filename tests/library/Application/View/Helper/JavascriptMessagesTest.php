@@ -47,7 +47,7 @@ class Application_View_Helper_JavascriptMessagesTest extends ControllerTestCase
 
         $this->helper = new Application_View_Helper_JavascriptMessages();
 
-        $this->helper->setView(Zend_Registry::get('Opus_View'));
+        $this->helper->setView($this->getView());
     }
 
     /**
@@ -114,5 +114,24 @@ class Application_View_Helper_JavascriptMessagesTest extends ControllerTestCase
     public function testGetMessages()
     {
         $this->assertEquals([], $this->helper->getMessages());
+    }
+
+    /**
+     * Tests if default translations for javascript in the publish module are set correctly.
+     */
+    public function testGetDefaultMessageSet()
+    {
+        $this->helper->getDefaultMessageSet();
+
+        $expectation = '        <script type="text/javascript">' . "\n"
+            . '            opus4Messages["uploadedFileHasErrorMessage"] = "The file \'%name%\' has the following errors: ";' . "\n"
+            . '            opus4Messages["fileExtensionFalse"] = "File has a forbidden extension.";' . "\n"
+            . '            opus4Messages["fileUploadErrorSize"] = "Your file exceeds the defined size. The allowed size is \'%size%\' Byte.";' . "\n"
+            . '            opus4Messages["filenameLengthError"] = "The length of your filename is too long. Your filename should have less then \'%size%\' characters. ";' . "\n"
+            . '            opus4Messages["filenameFormatError"] = "Your filename has not allowed characters or a wrong form. ";' . "\n"
+            . '            opus4Messages["chooseAnotherFile"] = "Please choose another File.";' . "\n"
+            . '        </script>' . "\n";
+
+        $this->assertEquals($expectation, $this->helper->javascriptMessages());
     }
 }

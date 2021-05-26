@@ -31,6 +31,12 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Document;
+use Opus\Enrichment;
+use Opus\Identifier;
+use Opus\Doi\DoiException;
+use Opus\Doi\DoiManager;
+
 class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_MultiSubForm
 {
 
@@ -131,7 +137,7 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
     /**
      * Erzeugt Unterformulare abhängig von den Metadaten im Dokument.
      *
-     * @param Opus_Document $document
+     * @param Document $document
      */
     public function populateFromModel($document)
     {
@@ -173,7 +179,7 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
      * @param int $position
      * @param null $disableGenerateButton
      *
-     * @return _subFormClass
+     * @return \Zend_Form _subFormClass
      */
     protected function _addSubForm($position, $disableGenerateButton = null)
     {
@@ -242,8 +248,8 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
      * bei bereits veröffentlichten Dokumenten soll die Checkbox zum automatischen
      * Setzen der ID nicht angezeigt werden
      *
-     * @param Opus_Document $document das zu editierende Dokument
-     * @return liefert true zurück, wenn die Checkbox entfernt wurde
+     * @param Document $document das zu editierende Dokument
+     * @return bool liefert true zurück, wenn die Checkbox entfernt wurde
      */
     private function removeCheckboxForPublishedDocs($document)
     {
@@ -257,8 +263,8 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
     /**
      * Filtert aus der übergebenen Liste von Identifiern nur die Identifier mit dem Typ aus.
      *
-     * @param array $identifiers Liste mit Elementen vom Typ Opus_Identifier
-     * @return array mit Elementen vom Typ Opus_Identifier (nach der Filterung auf Basis des Typs)
+     * @param array $identifiers Liste mit Elementen vom Typ Identifier
+     * @return array mit Elementen vom Typ Identifier (nach der Filterung auf Basis des Typs)
      */
     private function filterIdentifier($identifiers)
     {
@@ -372,7 +378,7 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
         switch ($this->_subFormClass) {
             case 'Admin_Form_Document_IdentifierDOI':
                 try {
-                    $doiManager = new Opus_Doi_DoiManager();
+                    $doiManager = new DoiManager();
                     $doiValue = $doiManager->generateNewDoi($docId);
                     $subform->setValue($doiValue);
                     if ($doiValue != '') {
@@ -380,7 +386,7 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
                         $button = $subform->getElement(self::ELEMENT_GENERATE);
                         $button->setAttrib('disabled', 'disabled');
                     }
-                } catch (Opus_Doi_DoiException $e) {
+                } catch (DoiException $e) {
                     // generation of DOI value failed: show error message
                 }
                 break;
@@ -411,11 +417,11 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
     /**
      * Aktualisiert das in der Datenbank gespeicherte Dokument (hier: seine Identifier)
      *
-     * @param Opus_Document $document
+     * @param Document $document
      */
     public function updateModel($document)
     {
-        // Array von Opus_Identifier Objekten eines Typs
+        // Array von Identifier Objekten eines Typs
         $values = $this->getSubFormModels($document);
 
         if (! empty($values)) {
@@ -448,7 +454,7 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
             }
 
             while ($identifierValuesIndex < $identifierValuesCount) {
-                $identifier = new Opus_Identifier();
+                $identifier = new Identifier();
                 $identifier->setType($this->_typeShort);
                 $identifier->setValue($identifierValues[$identifierValuesIndex]);
                 $identifiers[] = $identifier;
@@ -488,7 +494,7 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
             }
 
             if (! $enrichmentExists) {
-                $enrichment = new Opus_Enrichment();
+                $enrichment = new Enrichment();
                 $enrichment->setKeyName($enrichmentKeyName);
                 $enrichment->setValue($enrichmentValue);
                 $newEnrichments[] = $enrichment;
@@ -500,7 +506,7 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
 
     /**
      * Erzeugt neues Unterformular zum Hinzufügen.
-     * @return _subFormClass
+     * @return \Zend_Form _subFormClass
      */
     public function createSubForm()
     {
@@ -548,7 +554,7 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
     /**
      * Bereitet die Dekoratoren für das Unterformular vor.
      *
-     * @param type $subform
+     * @param $subform \Zend_Form
      */
     protected function prepareSubFormDecorators($subform)
     {

@@ -31,6 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Iprange;
+
 /**
  * Form for creating or editing IP ranges.
  */
@@ -59,7 +61,7 @@ class Admin_Form_IpRange extends Application_Form_Model_Abstract
 
         $this->setUseNameAsLabel(true);
         $this->setLabelPrefix('admin_iprange_label_');
-        $this->setModelClass('Opus_Iprange');
+        $this->setModelClass('Opus\Iprange');
 
         $name = $this->createElement('text', self::ELEMENT_NAME, ['required' => true]);
         $name->addValidator('regex', false, ['pattern' => self::NAME_PATTERN, 'messages' => [
@@ -80,8 +82,8 @@ class Admin_Form_IpRange extends Application_Form_Model_Abstract
     }
 
     /**
-     * Populates form with values from Opus_Iprange instance.
-     * @param Opus_Iprange $ipRange
+     * Populates form with values from Iprange instance.
+     * @param $ipRange Iprange
      */
     public function populateFromModel($ipRange)
     {
@@ -94,7 +96,7 @@ class Admin_Form_IpRange extends Application_Form_Model_Abstract
 
     /**
      * Updates object with values from form elements.
-     * @param $ipRange Opus_IpRange
+     * @param $ipRange Iprange
      */
     public function updateModel($ipRange)
     {

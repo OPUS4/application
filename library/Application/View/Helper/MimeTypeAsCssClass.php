@@ -25,6 +25,8 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+use Opus\File;
+
 /**
  * View Helper fuer Link zu Datei.
  *
@@ -36,13 +38,13 @@
  * @copyright   Copyright (c) 2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Application_View_Helper_MimeTypeAsCssClass extends Zend_View_Helper_Abstract
+class Application_View_Helper_MimeTypeAsCssClass extends \Zend_View_Helper_Abstract
 {
 
     /**
      * Rendert Link fuer Datei.
      *
-     * @param $file Opus_File
+     * @param $file File
      * @return string HTML output
      */
     public function mimeTypeAsCssClass($mimeType)

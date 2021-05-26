@@ -30,10 +30,9 @@
  * @author      Simone Finkbeiner (simone.finkbeiner@ub.uni-stuttgart.de)
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
-class Default_Bootstrap extends Zend_Application_Module_Bootstrap
+class Default_Bootstrap extends \Zend_Application_Module_Bootstrap
 {
 
     /**
@@ -44,11 +43,11 @@ class Default_Bootstrap extends Zend_Application_Module_Bootstrap
      */
     public function _initControllerHelpers()
     {
-        Zend_Controller_Action_HelperBroker::addPrefix('Application_Controller_Action_Helper');
+        \Zend_Controller_Action_HelperBroker::addPrefix('Application_Controller_Action_Helper');
     }
 
     public function _initValidationNamespaces()
     {
-        Zend_Validate::addDefaultNamespaces('Form_Validate');
+        \Zend_Validate::addDefaultNamespaces('Form_Validate');
     }
 }

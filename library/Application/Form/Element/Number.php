@@ -47,7 +47,7 @@ class Application_Form_Element_Number extends Application_Form_Element_Text
             $this->setAttrib('size', 6);
         }
 
-        $validator = new Zend_Validate_Int();
+        $validator = new \Zend_Validate_Int();
         $validator->setMessage('validation_error_int');
         $this->addValidator($validator);
 
@@ -63,13 +63,13 @@ class Application_Form_Element_Number extends Application_Form_Element_Text
 
         $max = $this->getAttrib('max');
         if (is_null($max)) {
-            $validator = new Zend_Validate_GreaterThan(['min' => $min - 1]); // inclusive not supported in ZF1
+            $validator = new \Zend_Validate_GreaterThan(['min' => $min - 1]); // inclusive not supported in ZF1
             $validator->setMessage('validation_error_number_tooSmall');
         } else {
             $this->setAttrib('max', null); // remove from rendered attributes
             $options['max'] = $max;
 
-            $validator = new Zend_Validate_Between(['min' => $min, 'max' => $max]);
+            $validator = new \Zend_Validate_Between(['min' => $min, 'max' => $max]);
             $validator->setMessage('validation_error_number_notBetween');
         }
 

@@ -39,11 +39,13 @@
 
 require_once dirname(__FILE__) . '/../common/update.php';
 
+use Opus\Database;
+
 $helper = new Application_Update_Helper();
 
 $helper->log('Removing leading zeros from person GND identifiers ...');
 
-$database = new Opus_Database();
+$database = new Database();
 
 $script = APPLICATION_PATH . '/db/update/remove-leading-zeros-from-author-GND-ids.sql';
 

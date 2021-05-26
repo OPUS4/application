@@ -29,7 +29,6 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -132,8 +131,8 @@ class Admin_Form_Configuration extends Application_Form_Model_Abstract
      *
      * If necessary a new display group is created.
      *
-     * @param $element Form element
-     * @param $section Name of section
+     * @param $element \Zend_Form_Element Form element
+     * @param $section string Name of section
      * @throws Zend_Form_Exception
      */
     public function addElementToSection($element, $section)

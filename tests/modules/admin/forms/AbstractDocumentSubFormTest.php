@@ -25,6 +25,8 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+use Opus\Licence;
+
 /**
  * Unit Tests fuer abstrakte Parent-Klasse fuer Metadaten Unterformulare.
  *
@@ -70,7 +72,7 @@ class Admin_Form_AbstractDocumentSubFormTest extends ControllerTestCase
      */
     public function testPopulateFromModel()
     {
-        $this->form->populateFromModel(new Opus_Licence());
+        $this->form->populateFromModel(new Licence());
     }
 
     /**

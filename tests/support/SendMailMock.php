@@ -29,7 +29,6 @@
  * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 class SendMailMock
@@ -49,7 +48,7 @@ class SendMailMock
      * @param string $bodyText
      * @param array  $address Recipients (array [#] => array ('name' => '...', 'address' => '...'))
      */
-    public function sendMail($from, $fromName, $subject, $bodyText, $address)
+    public function sendMail(string $from, string $fromName, string $subject, string $bodyText, array $address)
     {
         $this->from = $from;
         $this->fromName = $fromName;

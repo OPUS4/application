@@ -60,9 +60,9 @@ class Application_Form_Element_HitsPerPageTest extends ControllerTestCase
 
     public function testInitWithCustomDefaultRows()
     {
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        $this->adjustConfiguration([
             'searchengine' => ['solr' => ['numberOfDefaultSearchResults' => '15']]
-        ]));
+        ]);
 
         $element = new Application_Form_Element_HitsPerPage('rows');
 

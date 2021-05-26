@@ -28,23 +28,26 @@
  * @author      Thoralf Klein <thoralf.klein@zib.de>
  * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
+use Opus\Document;
+use Opus\DocumentFinder;
 
 /**
  * Dieses Script sucht Dokumente ohne sichtbare Dateien, fuer die bereits
  * eine URN vergeben wurde.
+ *
+ * TODO integrity check - make part of tools (console, administration)
  */
 
 $updateRequired = 0;
 
-$docfinder = new Opus_DocumentFinder();
+$docfinder = new DocumentFinder();
 $docfinder->setIdentifierTypeExists('urn');
 
 echo "checking documents...\n";
 foreach ($docfinder->ids() as $docId) {
-    $doc = new Opus_Document($docId);
+    $doc = Document::get($docId);
 
     $numVisibleFiles = 0;
     foreach ($doc->getFile() as $file) {

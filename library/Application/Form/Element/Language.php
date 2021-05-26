@@ -31,6 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Language;
+
 /**
  *
  * TODO override setLabel for more robust translation
@@ -68,13 +70,12 @@ class Application_Form_Element_Language extends Application_Form_Element_Select
      */
     public static function initLanguageList()
     {
-        $translate = Zend_Registry::get(Application_Translate::REGISTRY_KEY);
+        $translate = Application_Translate::getInstance();
         $languages = [];
-        foreach (Opus_Language::getAllActiveTable() as $languageRow) {
+        foreach (Language::getAllActiveTable() as $languageRow) {
             $langId = $languageRow['part2_t'];
             $languages[$langId] = $translate->translateLanguage($langId);
         }
         self::$_languageList = $languages;
-        Zend_Registry::set('Available_Languages', $languages);
     }
 }

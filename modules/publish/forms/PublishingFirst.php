@@ -110,7 +110,7 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract
         // TODO can be removed?
         //$this->addSubmitButton('Send', 'send');
 
-        $this->setAttrib('enctype', Zend_Form::ENCTYPE_MULTIPART);
+        $this->setAttrib('enctype', \Zend_Form::ENCTYPE_MULTIPART);
         $this->setViewValues();
     }
 
@@ -119,7 +119,7 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract
      * shows selection: >1 Options
      * shows text field: =1 Option
      *
-     * @return <Zend_Element>
+     * @return \Zend_Form_Element
      */
     private function _createDocumentTypeField()
     {
@@ -143,7 +143,7 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract
 
     /**
      * Method shows the fields for file uploads by looking in config file
-     * @return <Zend_Element>
+     * @return \Zend_Form_Element
      */
     private function _createFileuploadField()
     {
@@ -175,7 +175,7 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract
         $filenameValidator = new Application_Form_Validate_Filename($filenameOptions);
 
         //file upload field(s)
-        $fileupload = new Zend_Form_Element_File('fileupload');
+        $fileupload = new \Zend_Form_Element_File('fileupload');
         $fileupload
                 ->setDisableTranslator(true)
                 ->setLabel('fileupload')
@@ -214,7 +214,7 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract
 
     /**
      * Method shows bibliography field by looking in config file
-     * @return <Zend_Element>
+     * @return \Zend_Form_Element
      */
     private function _createBibliographyField()
     {

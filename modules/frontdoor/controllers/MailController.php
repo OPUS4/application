@@ -29,10 +29,11 @@
  * @author      Simone Finkbeiner-Franke <simone.finkbeiner@ub.uni-stuttgart.de>
  * @author      Jens Schwidder <schwidder@zib.de>
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2009, OPUS 4 development team
+ * @copyright   Copyright (c) 2009-2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
+use Opus\Mail\SendMail;
 
 /**
  * Controller for document recommendation starting from Frontdoor
@@ -55,7 +56,7 @@ class Frontdoor_MailController extends Application_Controller_Action
             throw new Application_Exception('missing parameter docId');
         }
 
-        $document = new Opus_Document($docId);
+        $document = new Document($docId);
         $this->view->docId = $docId;
         $this->view->type = $document->getType();
 
@@ -111,7 +112,7 @@ class Frontdoor_MailController extends Application_Controller_Action
         $from = '';
         $from = $form->getValue('sender_mail');
         if ($from == '') {
-            $config = Zend_Registry::get('Zend_Config');
+            $config = Config::get();
             if (true === isset($config->mail->opus->address)) {
                 $from = $config->mail->opus->address;
             }
@@ -129,7 +130,7 @@ class Frontdoor_MailController extends Application_Controller_Action
         $bodyText .= '\n' . $this->view->translate('frontdoor_sendersname') . ': ' . $fromName;
         $bodyText .= '\n' . $this->view->translate('frontdoor_sendersmail') . ': ' . $from;
         $recipient = array(1 => array('address' => $recipientMail, 'name' => $form->getValue('recipient')));
-        $mailSendMail = new Opus_Mail_SendMail();
+        $mailSendMail = new SendMail();
         try {
             $mailSendMail->sendMail($from, $fromName, $subject, $bodyText, $recipient);
             $this->view->ok = '1';
@@ -198,7 +199,7 @@ class Frontdoor_MailController extends Application_Controller_Action
 
         try {
             $authorsModel->sendMail(
-                new Opus_Mail_SendMail(),
+                new SendMail(),
                 $form->getValue('sender_mail'),
                 $form->getValue('sender'),
                 $this->view->translate('mail_toauthor_subject'),

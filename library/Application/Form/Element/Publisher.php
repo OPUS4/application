@@ -31,6 +31,10 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\DnbInstitute;
+use Opus\Model\ModelException;
+use Opus\Model\NotFoundException;
+
 /**
  * Select Element für Thesis Publisher Institute.
  */
@@ -44,11 +48,11 @@ class Application_Form_Element_Publisher extends Application_Form_Element_Select
         $this->setRequired(true);
         $this->setDisableTranslator(true); // publishing institutions are not translated
 
-        $validator = new Zend_Validate_Int();
+        $validator = new \Zend_Validate_Int();
         $validator->setMessage('validation_error_int');
         $this->addValidator($validator);
 
-        $options = Opus_DnbInstitute::getPublishers();
+        $options = DnbInstitute::getPublishers();
 
         foreach ($options as $option) {
             $this->addMultiOption($option->getId(), $option->getDisplayName());
@@ -61,14 +65,14 @@ class Application_Form_Element_Publisher extends Application_Form_Element_Select
      * If $value is a valid DNB institute a corresponding option is added to select if necessary.
      *
      * @param mixed $value
-     * @return void|Zend_Form_Element
-     * @throws Opus_Model_Exception
+     * @return void|\Zend_Form_Element
+     * @throws ModelException
      */
     public function setValue($value)
     {
         try {
-            $institute = new Opus_DnbInstitute($value);
-        } catch (Opus_Model_NotFoundException $omne) {
+            $institute = new DnbInstitute($value);
+        } catch (NotFoundException $omne) {
             parent::setValue($value); // could be blocked, but keeping compatibility just in case
             return;
         }

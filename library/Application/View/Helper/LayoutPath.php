@@ -29,20 +29,21 @@
  * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
-class Application_View_Helper_LayoutPath extends Zend_View_Helper_Abstract
+use Opus\Config;
+
+class Application_View_Helper_LayoutPath extends \Zend_View_Helper_Abstract
 {
 
     public function layoutPath()
     {
-        $config = Zend_Registry::get('Zend_Config');
+        $config = Config::get();
         $theme = 'opus4';
         if (isset($config->theme)) {
             $theme = $config->theme;
         }
-        $fc = Zend_Controller_Front::getInstance();
+        $fc = \Zend_Controller_Front::getInstance();
         $request = $fc->getRequest();
         return $request->getBaseUrl() . '/layouts/' . $theme;
     }

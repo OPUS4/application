@@ -28,10 +28,13 @@
  * @category   Application
  * @package    Module_Oai
  * @author     Henning Gerhardt (henning.gerhardt@slub-dresden.de)
- * @copyright  Copyright (c) 2009, OPUS 4 development team
+ * @copyright  Copyright (c) 2009-2021, OPUS 4 development team
  * @license    http://www.gnu.org/licenses/gpl.html General Public License
- * @version    $Id$
  */
+
+use Opus\Date;
+use Opus\Log;
+use Opus\Security\Realm;
 
 /**
  * TODO
@@ -145,10 +148,10 @@ class Oai_Model_Request
     private function checkDate(&$date)
     {
         // simple proofing
-        $result = Zend_Date::isDate($date, $this->_dateFormat);
+        $result = \Zend_Date::isDate($date, $this->_dateFormat);
 
         if (true === $result) {
-             $zd = new Zend_Date($date, $this->_dateFormat);
+             $zd = new \Zend_Date($date, $this->_dateFormat);
              $result = $date === $zd->get($this->_dateFormat);
         }
 
@@ -180,6 +183,9 @@ class Oai_Model_Request
      *
      * @param mixed $oaiMetadataPrefix
      * @return boolean
+     *
+     * TODO handling case insensitivity of metadataPrefix is spread through the code (here and other places)
+     * TODO function handles access control in addition to checking if format is supported (mixed responsibilities)
      */
     private function _validateMetadataPrefix($oaiMetadataPrefix)
     {
@@ -190,15 +196,15 @@ class Oai_Model_Request
         // we support both spellings, xMetaDissPlus and XMetaDissPlus TODO really?
         $availableMetadataPrefixes = ['xMetaDissPlus'];
         foreach ($possibleFiles as $prefixFile) {
-            $availableMetadataPrefixes[] = basename($prefixFile, '.xslt');
+            $availableMetadataPrefixes[] = strtolower(basename($prefixFile, '.xslt'));
         }
 
         // only adminstrators can request copy_xml format
-        if (! Opus_Security_Realm::getInstance()->checkModule('admin')) {
+        if (! Realm::getInstance()->checkModule('admin')) {
             $availableMetadataPrefixes = array_diff($availableMetadataPrefixes, ['copy_xml']);
         }
 
-        $result = in_array($oaiMetadataPrefix, $availableMetadataPrefixes);
+        $result = in_array(strtolower($oaiMetadataPrefix), $availableMetadataPrefixes);
 
         if (false === $result) {
             // MetadataPrefix not available.
@@ -254,7 +260,7 @@ class Oai_Model_Request
 
         $result = true;
 
-        $untilDate = new Zend_Date($until, $this->_dateFormat);
+        $untilDate = new \Zend_Date($until, $this->_dateFormat);
         $isEqual = $untilDate->equals($from, $this->_dateFormat);
         $isLater = $untilDate->isLater($from, $this->_dateFormat);
 
@@ -391,7 +397,7 @@ class Oai_Model_Request
      */
     public function validate(array $oaiRequest)
     {
-        $logger = Zend_Registry::get('Zend_Log');
+        $logger = Log::get();
 
         $errorInformation = [
             'message' => 'General oai request validation error.',

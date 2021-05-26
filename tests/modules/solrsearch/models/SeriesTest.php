@@ -32,6 +32,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Series;
+
 class Solrsearch_Model_SeriesTest extends ControllerTestCase
 {
 
@@ -65,7 +67,7 @@ class Solrsearch_Model_SeriesTest extends ControllerTestCase
     {
         $series = new Solrsearch_Model_Series(1);
         $this->assertNotNull($series);
-        $seriesFramework = new Opus_Series(1);
+        $seriesFramework = new Series(1);
         $this->assertEquals($seriesFramework->getId(), $series->getId());
         $this->assertEquals($seriesFramework->getTitle(), $series->getTitle());
         $this->assertEquals($seriesFramework->getInfobox(), $series->getInfobox());

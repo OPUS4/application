@@ -24,12 +24,14 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    TODO
+ * @category    Application
+ *
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
+use Opus\Log;
 
 /**
  * Helper class for getting an array with current request parameters.
@@ -38,7 +40,7 @@
  *
  * It is used by the LoginBar and the init.php files.
  */
-class Application_Controller_Action_Helper_ReturnParams extends Zend_Controller_Action_Helper_Abstract
+class Application_Controller_Action_Helper_ReturnParams extends \Zend_Controller_Action_Helper_Abstract
 {
 
     /**
@@ -49,10 +51,10 @@ class Application_Controller_Action_Helper_ReturnParams extends Zend_Controller_
     public function getReturnParameters()
     {
         // TODO put into constructor
-        $log = Zend_Registry::get('Zend_Log');
+        $log = Log::get();
 
         $params = [];
-        foreach (Zend_Controller_Front::getInstance()->getRequest()->getUserParams() as $key => $value) {
+        foreach (\Zend_Controller_Front::getInstance()->getRequest()->getUserParams() as $key => $value) {
             switch ($key) {
                 case 'module':
                     $params['rmodule'] = $value;
@@ -82,7 +84,7 @@ class Application_Controller_Action_Helper_ReturnParams extends Zend_Controller_
                     } else {
                         // ignore array values
                         // TODO when do these values occur?
-                        $output = Zend_Debug::dump($value, null, false);
+                        $output = \Zend_Debug::dump($value, null, false);
                         $log->debug("Login array param ignored: $key -> $output");
                     }
                     break;

@@ -42,7 +42,7 @@ class Application_Form_Decorator_FormHelpTest extends ControllerTestCase
     {
         parent::setUp();
 
-        $form = new Zend_Form();
+        $form = new \Zend_Form();
         $this->_decorator = new Application_Form_Decorator_FormHelp();
         $this->_decorator->setElement($form);
     }

@@ -31,6 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Licence;
+
 class Application_Form_Model_TableTest extends ControllerTestCase
 {
 
@@ -65,7 +67,7 @@ class Application_Form_Model_TableTest extends ControllerTestCase
     {
         $form = new Application_Form_Model_Table();
 
-        $models = Opus_Licence::getAll();
+        $models = Licence::getAll();
 
         $form->setModels($models);
 
@@ -80,7 +82,7 @@ class Application_Form_Model_TableTest extends ControllerTestCase
     {
         $form = new Application_Form_Model_Table();
 
-        $models = Opus_Licence::getAll();
+        $models = Licence::getAll();
 
         $form->setModels('notanarray');
     }
@@ -89,7 +91,7 @@ class Application_Form_Model_TableTest extends ControllerTestCase
     {
         $form = new Application_Form_Model_Table();
 
-        $form->setModels(Opus_Licence::getAll());
+        $form->setModels(Licence::getAll());
 
         $this->assertNotNull($form->getModels());
 
@@ -178,9 +180,9 @@ class Application_Form_Model_TableTest extends ControllerTestCase
 
         $form->setLogger($logger);
 
-        $mock = $this->getMockBuilder(Zend_Controller_Action_Interface::class)->getMock();
+        $mock = $this->getMockBuilder(\Zend_Controller_Action_Interface::class)->getMock();
         $form->setController($mock);
-        $this->assertTrue($form->isRenderShowActionLink(null));
+        $this->assertTrue($form->isRenderShowActionLink());
 
         $this->assertEquals('The used controller does not have the method getShowActionEnabled.', $logger->getMessages()[0]);
     }
@@ -192,7 +194,7 @@ class Application_Form_Model_TableTest extends ControllerTestCase
 
         $form->setLogger($logger);
 
-        $mock = $this->getMockBuilder(Zend_Controller_Action_Interface::class)->getMock();
+        $mock = $this->getMockBuilder(\Zend_Controller_Action_Interface::class)->getMock();
         $form->setController($mock);
         $this->assertTrue($form->isModifiable(null));
 
@@ -206,7 +208,7 @@ class Application_Form_Model_TableTest extends ControllerTestCase
 
         $form->setLogger($logger);
 
-        $mock = $this->getMockBuilder(Zend_Controller_Action_Interface::class)->getMock();
+        $mock = $this->getMockBuilder(\Zend_Controller_Action_Interface::class)->getMock();
         $form->setController($mock);
         $this->assertTrue($form->isDeletable(null));
 
@@ -220,7 +222,7 @@ class Application_Form_Model_TableTest extends ControllerTestCase
 
         $form->setLogger($logger);
 
-        $mock = $this->getMockBuilder(Zend_Controller_Action_Interface::class)->getMock();
+        $mock = $this->getMockBuilder(\Zend_Controller_Action_Interface::class)->getMock();
         $form->setController($mock);
         $this->assertFalse($form->isUsed(null));
 
@@ -234,7 +236,7 @@ class Application_Form_Model_TableTest extends ControllerTestCase
 
         $form->setLogger($logger);
 
-        $mock = $this->getMockBuilder(Zend_Controller_Action_Interface::class)->getMock();
+        $mock = $this->getMockBuilder(\Zend_Controller_Action_Interface::class)->getMock();
         $form->setController($mock);
         $this->assertFalse($form->isProtected(null));
 
@@ -248,7 +250,7 @@ class Application_Form_Model_TableTest extends ControllerTestCase
 
         $form->setLogger($logger);
 
-        $mock = $this->getMockBuilder(Zend_Controller_Action_Interface::class)->getMock();
+        $mock = $this->getMockBuilder(\Zend_Controller_Action_Interface::class)->getMock();
         $form->setController($mock);
         $this->assertNull($form->getRowCssClass(null));
 
@@ -262,7 +264,7 @@ class Application_Form_Model_TableTest extends ControllerTestCase
 
         $form->setLogger($logger);
 
-        $mock = $this->getMockBuilder(Zend_Controller_Action_Interface::class)->getMock();
+        $mock = $this->getMockBuilder(\Zend_Controller_Action_Interface::class)->getMock();
         $form->setController($mock);
         $this->assertNull($form->getRowTooltip(null));
 

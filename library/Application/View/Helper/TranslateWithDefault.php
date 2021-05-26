@@ -34,7 +34,7 @@
 /**
  * View helper that translates key if translation is found or returns provided default value.
  */
-class Application_View_Helper_TranslateWithDefault extends Zend_View_Helper_Abstract
+class Application_View_Helper_TranslateWithDefault extends \Zend_View_Helper_Abstract
 {
 
     public function translateWithDefault($messageId, $default = '')

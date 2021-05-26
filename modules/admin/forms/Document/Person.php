@@ -29,8 +29,11 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
+use Opus\Person;
+use Opus\Model\Dependent\Link\DocumentPerson;
+use Opus\Model\NotFoundException;
 
 /**
  * Unterformular fuer eine einem Dokument zugewiesene Person im Metadaten-Formular.
@@ -89,11 +92,11 @@ class Admin_Form_Document_Person extends Admin_Form_PersonLink
     /**
      * Liefert angezeigtes Model.
      *
-     * Die ID für ein Opus_Model_Dependent_Link_DocumentPerson Objekt setzt sich aus Dokument-ID, Person-ID und Rolle
+     * Die ID für ein DocumentPerson Objekt setzt sich aus Dokument-ID, Person-ID und Rolle
      * zusammen.
      *
      * @param int $documentId Identifier für das Dokument
-     * @return \Opus_Model_Dependent_Link_DocumentPerson
+     * @return DocumentPerson
      *
      * TODO rename in getModel() !!!Konflikt mit getModel in PersonLink auflösen
      * TODO personId darf nicht null sein
@@ -103,29 +106,30 @@ class Admin_Form_Document_Person extends Admin_Form_PersonLink
         $personId = $this->getElementValue(Admin_Form_Person::ELEMENT_PERSON_ID);
 
         try {
-            $personLink = new Opus_Model_Dependent_Link_DocumentPerson([$personId, $documentId, $role]);
-        } catch (Opus_Model_NotFoundException $opnfe) {
-            $personLink = new Opus_Model_Dependent_Link_DocumentPerson();
-            $person = new Opus_Person($personId);
+            $personLink = new DocumentPerson([$personId, $documentId, $role]);
+        } catch (NotFoundException $opnfe) {
+            $personLink = new DocumentPerson();
+            $person = new Person($personId);
             $personLink->setModel($person);
         }
 
         $this->updateModel($personLink);
         $personLink->setRole($role);
 
-        if (Zend_Registry::get('LOG_LEVEL') >= Zend_Log::DEBUG) {
-            $log = $this->getLogger();
-            $log->debug(Zend_Debug::dump($personLink->getId(), 'DocumentPerson-ID', false));
-            $log->debug(Zend_Debug::dump($personLink->getRole(), 'DocumentPerson-Role', false));
-            $log->debug(Zend_Debug::dump($personLink->getSortOrder(), 'DocumentPerson-SortOrder', false));
+        $log = $this->getLogger();
+
+        if ($log->getLevel() >= \Zend_Log::DEBUG) {
+            $log->debug(\Zend_Debug::dump($personLink->getId(), 'DocumentPerson-ID', false));
+            $log->debug(\Zend_Debug::dump($personLink->getRole(), 'DocumentPerson-Role', false));
+            $log->debug(\Zend_Debug::dump($personLink->getSortOrder(), 'DocumentPerson-SortOrder', false));
             $log->debug(
-                Zend_Debug::dump(
+                \Zend_Debug::dump(
                     $personLink->getAllowEmailContact(),
                     'DocumentPerson->AllowEmailContact',
                     false
                 )
             );
-            $log->debug(Zend_Debug::dump($personLink->getModel()->getId(), 'DocumentPerson-Model-ID', false));
+            $log->debug(\Zend_Debug::dump($personLink->getModel()->getId(), 'DocumentPerson-Model-ID', false));
         }
 
         return $personLink;

@@ -63,7 +63,7 @@ class Export_IndexController extends Application_Controller_ModuleAccess
         // Controller outputs plain Xml, so rendering and layout are disabled.
         $this->disableViewRendering(); // TODO there could be plugins requiring rendering
 
-        $this->_exportService = Zend_Registry::get('Opus_ExportService');
+        $this->_exportService = \Zend_Registry::get('Opus_ExportService');
         $this->_exportService->loadPlugins();
     }
 

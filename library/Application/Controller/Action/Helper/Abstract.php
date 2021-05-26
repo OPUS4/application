@@ -34,7 +34,7 @@
  * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-abstract class Application_Controller_Action_Helper_Abstract extends Zend_Controller_Action_Helper_Abstract
+abstract class Application_Controller_Action_Helper_Abstract extends \Zend_Controller_Action_Helper_Abstract
 {
 
     use \Opus\LoggingTrait;
@@ -48,7 +48,7 @@ abstract class Application_Controller_Action_Helper_Abstract extends Zend_Contro
      *
      * NOTE: This helps with unit tests.
      *
-     * @return null|Zend_View_Interface
+     * @return null|\Zend_View_Interface
      */
     public function getView()
     {

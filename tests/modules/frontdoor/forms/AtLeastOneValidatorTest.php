@@ -37,8 +37,8 @@ class Frontdoor_Form_AtLeastOneValidatorTest extends ControllerTestCase
     {
         $validator = new Frontdoor_Form_AtLeastOneValidator();
 
-        $checkbox1 = new Zend_Form_Element_Checkbox('checkbox1');
-        $checkbox2 = new Zend_Form_Element_Checkbox('checkbox2');
+        $checkbox1 = new \Zend_Form_Element_Checkbox('checkbox1');
+        $checkbox2 = new \Zend_Form_Element_Checkbox('checkbox2');
         $validator->addField($checkbox1);
         $validator->addField($checkbox2);
 
@@ -52,8 +52,8 @@ class Frontdoor_Form_AtLeastOneValidatorTest extends ControllerTestCase
     {
         $validator = new Frontdoor_Form_AtLeastOneValidator();
 
-        $checkbox1 = new Zend_Form_Element_Checkbox('checkbox1');
-        $checkbox2 = new Zend_Form_Element_Checkbox('checkbox2');
+        $checkbox1 = new \Zend_Form_Element_Checkbox('checkbox1');
+        $checkbox2 = new \Zend_Form_Element_Checkbox('checkbox2');
         $validator->addField($checkbox1);
         $validator->addField($checkbox2);
 

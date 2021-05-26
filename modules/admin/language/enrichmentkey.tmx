@@ -292,6 +292,24 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_enrichmentkey_managed">
+      <tuv xml:lang="en">
+        <seg>Managed Keys</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Registrierte Enrichments</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_enrichmentkey_unmanaged">
+      <tuv xml:lang="en">
+        <seg>Unmanaged Keys</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Enrichments ohne Typ</seg>
+      </tuv>
+    </tu>
+
   </body>
 
 </tmx>

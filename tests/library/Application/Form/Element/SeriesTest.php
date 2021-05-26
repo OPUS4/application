@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -31,6 +30,9 @@
  * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\Series;
+
 class Application_Form_Element_SeriesTest extends FormElementTestCase
 {
 
@@ -39,9 +41,9 @@ class Application_Form_Element_SeriesTest extends FormElementTestCase
     public function setUp()
     {
         $this->_formElementClass = 'Application_Form_Element_Series';
-        $this->_expectedDecoratorCount = 6;
         $this->_expectedDecorators = ['ViewHelper', 'Errors', 'Description', 'ElementHtmlTag', 'LabelNotEmpty',
-            'dataWrapper'];
+            'dataWrapper', 'ElementHint'];
+        $this->_expectedDecoratorCount = count($this->_expectedDecorators);
         $this->_staticViewHelper = 'viewFormSelect';
         parent::setUp();
     }
@@ -50,7 +52,7 @@ class Application_Form_Element_SeriesTest extends FormElementTestCase
     {
         $element = $this->getElement();
 
-        $allSeries = Opus_Series::getAll();
+        $allSeries = Series::getAll();
 
         $this->assertEquals(count($allSeries), count($element->getMultiOptions()));
 
@@ -80,7 +82,7 @@ class Application_Form_Element_SeriesTest extends FormElementTestCase
 
     public function testTranslation()
     {
-        $translator = Zend_Registry::get(Application_Translate::REGISTRY_KEY);
+        $translator = Application_Translate::getInstance();
 
         $this->assertTrue($translator->isTranslated('validation_error_int'));
     }

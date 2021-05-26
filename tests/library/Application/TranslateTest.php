@@ -46,15 +46,15 @@ class Application_TranslateTest extends ControllerTestCase
 
     public function tearDown()
     {
-        $dao = new Opus_Translate_Dao();
+        $dao = new \Opus\Translate\Dao();
         $dao->removeAll();
-        Zend_Translate::clearCache();
+        \Zend_Translate::clearCache();
         parent::tearDown();
     }
 
     public static function tearDownAfterClass()
     {
-        $translate = Zend_Registry::get('Zend_Translate');
+        $translate = Application_Translate::getInstance();
         $translate->loadTranslations(true);
 
         parent::tearDownAfterClass();
@@ -87,7 +87,7 @@ class Application_TranslateTest extends ControllerTestCase
         $logger = $this->translate->getLogger();
 
         $this->assertNotNull($logger);
-        $this->assertInstanceOf('Zend_Log', $logger);
+        $this->assertInstanceOf(\Zend_Log::class, $logger);
     }
 
     public function testSetLogger()
@@ -132,21 +132,21 @@ class Application_TranslateTest extends ControllerTestCase
      */
     public function testIsLogUntranslatedEnabledTrue()
     {
-        $config = Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         $config->log->untranslated = self::CONFIG_VALUE_TRUE;
         $this->assertTrue($this->translate->isLogUntranslatedEnabled());
     }
 
     public function testIsLogUntranslatedEnabledFalse()
     {
-        $config = Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         $config->log->untranslated = self::CONFIG_VALUE_FALSE;
         $this->assertFalse($this->translate->isLogUntranslatedEnabled());
     }
 
     public function testGetOptionsLogEnabled()
     {
-        $config = Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         $config->log->untranslated = self::CONFIG_VALUE_TRUE;
 
         $options = $this->translate->getOptions();
@@ -154,13 +154,13 @@ class Application_TranslateTest extends ControllerTestCase
         $this->assertInternalType('array', $options);
         $this->assertEquals(10, count($options));
         $this->assertArrayHasKey('log', $options);
-        $this->assertInstanceOf('Zend_Log', $options['log']);
+        $this->assertInstanceOf(\Zend_Log::class, $options['log']);
         $this->assertTrue($options['logUntranslated']);
     }
 
     public function testGetOptionsLogDisabled()
     {
-        $config = Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         $config->log->untranslated = self::CONFIG_VALUE_FALSE;
 
         $options = $this->translate->getOptions();
@@ -172,7 +172,7 @@ class Application_TranslateTest extends ControllerTestCase
 
     public function testLoggingEnabled()
     {
-        $config = Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         $config->log->untranslated = self::CONFIG_VALUE_TRUE;
 
         $logger = new MockLogger();
@@ -205,7 +205,7 @@ class Application_TranslateTest extends ControllerTestCase
 
     public function testLoggingDisabled()
     {
-        $config = Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         $config->log->untranslated = self::CONFIG_VALUE_FALSE;
 
         $logger = new MockLogger();
@@ -271,10 +271,11 @@ class Application_TranslateTest extends ControllerTestCase
         $key = 'admin_title_configuration';
 
         // clear custom translations from database
-        $database = new Opus_Translate_Dao();
+        $database = new \Opus\Translate\Dao();
         $database->removeAll();
 
-        $translate = Zend_Registry::get('Zend_Translate');
+        $translate = Application_Translate::getInstance();
+
         $translate->clearCache();
         $translate->loadTranslations();
 
@@ -296,7 +297,7 @@ class Application_TranslateTest extends ControllerTestCase
         ], 'admin');
 
         // load module again with changes in database
-        Zend_Translate::clearCache();
+        \Zend_Translate::clearCache();
 
         $translate = new Application_Translate();
         $translate->loadTranslations();
@@ -310,12 +311,12 @@ class Application_TranslateTest extends ControllerTestCase
 
     public function testGetTranslations()
     {
-        $database = new Opus_Translate_Dao();
+        $database = new \Opus\Translate\Dao();
         $database->removeAll();
 
-        Zend_Translate::clearCache();
+        \Zend_Translate::clearCache();
 
-        $translate = Zend_Registry::get('Zend_Translate');
+        $translate = Application_Translate::getInstance();
         $translate->loadTranslations(true);
 
         $key = 'default_collection_role_ddc';
@@ -335,7 +336,7 @@ class Application_TranslateTest extends ControllerTestCase
         $database->setTranslation($key, $custom, 'default');
 
         // new object necessary, because translation have already been loaded
-        Zend_Translate::clearCache();
+        \Zend_Translate::clearCache();
         $translate->loadDatabase();
 
         $translations = $translate->getTranslations($key);
@@ -345,20 +346,20 @@ class Application_TranslateTest extends ControllerTestCase
 
     public function testGetTranslationsUnknownKey()
     {
-        $translate = Zend_Registry::get('Zend_Translate');
+        $translate = Application_Translate::getInstance();
 
         $this->assertNull($translate->getTranslations('unknownkey9999'));
     }
 
     public function testSetTranslations()
     {
-        $dao = new Opus_Translate_Dao();
+        $dao = new \Opus\Translate\Dao();
 
         $dao->remove('testkey');
 
         $this->assertNull($dao->getTranslation('testkey'));
 
-        $translate = Zend_Registry::get('Zend_Translate');
+        $translate = Application_Translate::getInstance();
 
         $data = [
             'en' => 'test key',
@@ -377,7 +378,7 @@ class Application_TranslateTest extends ControllerTestCase
         $translate = new Application_Translate();
 
         for ($i = 0; $i < 1000; $i++) {
-            Zend_Translate::clearCache();
+            \Zend_Translate::clearCache();
             $translate->loadTranslations();
         }
     }
@@ -386,24 +387,24 @@ class Application_TranslateTest extends ControllerTestCase
     {
         $this->useGerman();
 
-        $translate = Zend_Registry::get('Zend_Translate');
+        $translate = Application_Translate::getInstance();
 
         $this->assertInstanceOf('Application_Translate', $translate);
 
         $key = 'test_fallback';
 
-        $dao = new Opus_Translate_Dao();
+        $dao = new \Opus\Translate\Dao();
 
         $dao->setTranslation($key, [
             'en' => 'English'
         ]);
 
-        Zend_Translate::clearCache();
+        \Zend_Translate::clearCache();
 
         $translate->loadTranslations();
 
         // TODO this is currently necessary (not sure why)
-        Zend_Registry::get('Zend_Translate')->setLocale('de');
+        Application_Translate::getInstance()->setLocale('de');
 
         $this->assertTrue($translate->isTranslated($key));
 

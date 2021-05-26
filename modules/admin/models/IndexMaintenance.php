@@ -32,6 +32,11 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Config;
+use Opus\Job;
+use Opus\Log;
+use Opus\Search\Task\ConsistencyCheck;
+
 class Admin_Model_IndexMaintenance
 {
 
@@ -45,8 +50,8 @@ class Admin_Model_IndexMaintenance
 
     public function __construct($logger = null)
     {
-        $this->_config = Zend_Registry::get('Zend_Config');
-        $this->_logger = (is_null($logger)) ? Zend_Registry::get('Zend_Log') : $logger;
+        $this->_config = Config::get();
+        $this->_logger = (is_null($logger)) ? Log::get() : $logger;
         $this->setFeatureDisabled();
 
         if ($this->_featureDisabled) {
@@ -92,8 +97,8 @@ class Admin_Model_IndexMaintenance
 
     public function createJob()
     {
-        $job = new Opus_Job();
-        $job->setLabel(Opus\Search\Task\ConsistencyCheck::LABEL);
+        $job = new Job();
+        $job->setLabel(ConsistencyCheck::LABEL);
 
         if (! $this->_featureDisabled) {
             // Queue job (execute asynchronously)
@@ -167,7 +172,7 @@ class Admin_Model_IndexMaintenance
 
     public function allowConsistencyCheck()
     {
-        return Opus_Job::getCountForLabel(Opus\Search\Task\ConsistencyCheck::LABEL) == 0;
+        return Job::getCountForLabel(Opus\Search\Task\ConsistencyCheck::LABEL) == 0;
     }
 
     public function allowFulltextExtractionCheck()

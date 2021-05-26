@@ -30,8 +30,12 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Document;
+use Opus\Person;
+use Opus\Model\Dependent\Link\DocumentPerson;
+
 /**
- * Unit Tests für Formular das Opus_Model_Dependent_Link_DocumentPerson Objekte anzeigt.
+ * Unit Tests für Formular das DocumentPerson Objekte anzeigt.
  */
 class Admin_Form_PersonLinkTest extends ControllerTestCase
 {
@@ -56,9 +60,9 @@ class Admin_Form_PersonLinkTest extends ControllerTestCase
     {
         $form = new Admin_Form_PersonLink();
 
-        $model = new Opus_Model_Dependent_Link_DocumentPerson();
+        $model = new DocumentPerson();
 
-        $person = new Opus_Person(310); // von Testdokument 250 (Personensortierung)
+        $person = new Person(310); // von Testdokument 250 (Personensortierung)
 
         $model->setModel($person);
         $model->setSortOrder(5);
@@ -94,7 +98,7 @@ class Admin_Form_PersonLinkTest extends ControllerTestCase
 
         $this->assertNull($form->getModel());
 
-        $document = new Opus_Document(250);
+        $document = Document::get(250);
         $authors = $document->getPersonAuthor();
 
         $this->assertEquals(3, count($authors));
@@ -158,7 +162,7 @@ class Admin_Form_PersonLinkTest extends ControllerTestCase
         $form->getElement('SortOrder')->setValue(6);
         $form->getElement('AllowContact')->setChecked(true);
 
-        $model = new Opus_Model_Dependent_Link_DocumentPerson();
+        $model = new DocumentPerson();
 
         $form->updateModel($model);
 

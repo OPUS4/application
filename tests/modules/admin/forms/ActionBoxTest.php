@@ -36,17 +36,17 @@ class Admin_Form_ActionBoxTest extends ControllerTestCase
 
     public function testGetJumpLinks()
     {
-        $testForm = new Zend_Form();
+        $testForm = new \Zend_Form();
 
-        $subform = new Zend_Form_SubForm();
+        $subform = new \Zend_Form_SubForm();
         $subform->setLegend('Subform 1');
         $testForm->addSubForm($subform, 'form1');
 
-        $subform = new Zend_Form_SubForm();
+        $subform = new \Zend_Form_SubForm();
         $subform->setLegend('Subform 2');
         $testForm->addSubForm($subform, 'form2');
 
-        $subform = new Zend_Form_SubForm();
+        $subform = new \Zend_Form_SubForm();
         $subform->setLegend(null);
         $testForm->addSubForm($subform, 'form3');
 

@@ -34,7 +34,7 @@
 /**
  * Email validator with custom messages.
  */
-class Application_Form_Validate_EmailAddress extends Zend_Validate_EmailAddress
+class Application_Form_Validate_EmailAddress extends \Zend_Validate_EmailAddress
 {
 
     public function __construct($options = [])

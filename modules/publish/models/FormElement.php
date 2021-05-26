@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -30,8 +29,11 @@
  * @author      Susanne Gottwald <gottwald@zib.de>
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
+use Opus\CollectionRole;
+use Opus\Log;
+
 class Publish_Model_FormElement
 {
 
@@ -74,9 +76,9 @@ class Publish_Model_FormElement
         $datatype = null,
         $multiplicity = null
     ) {
-        $this->session = new Zend_Session_Namespace('Publish');
-        $this->sessionOpus = new Zend_Session_Namespace();
-        $this->log = Zend_Registry::get('Zend_Log');
+        $this->session = new \Zend_Session_Namespace('Publish');
+        $this->sessionOpus = new \Zend_Session_Namespace();
+        $this->log = Log::get();
         $this->form = $form;
 
         $this->_elementName = $name;
@@ -165,30 +167,40 @@ class Publish_Model_FormElement
     {
         switch ($workflow) {
             case 'Person':
+                $fields = [];
+                $name = $this->_elementName . self::FIRST;
+
                 //creates two subfields for first and last name
-                $first = new Publish_Model_FormElement(
-                    $this->form,
-                    $this->_elementName . self::FIRST,
-                    false,
-                    'text',
-                    'Person'
-                );
-                $first->isSubField = true;
-                $first->setDefaultValue($this->_default, self::FIRST);
-                $elementFirst = $first->transform();
+                if (! $this->isElementPresent($name)) {
+                    $first = new Publish_Model_FormElement(
+                        $this->form,
+                        $name,
+                        false,
+                        'text',
+                        'Person'
+                    );
+                    $first->isSubField = true;
+                    $first->setDefaultValue($this->_default, self::FIRST);
+                    $elementFirst = $first->transform();
+                    $fields[] = $elementFirst;
+                }
 
-                $last = new Publish_Model_FormElement(
-                    $this->form,
-                    $this->_elementName . self::LAST,
-                    $this->_required,
-                    'text',
-                    'Person'
-                );
-                $last->isSubField = false;
-                $last->setDefaultValue($this->_default, self::LAST);
-                $elementLast = $last->transform();
+                $name = $this->_elementName . self::LAST;
+                if (! $this->isElementPresent($name)) {
+                    $last = new Publish_Model_FormElement(
+                        $this->form,
+                        $name,
+                        $this->_required,
+                        'text',
+                        'Person'
+                    );
+                    $last->isSubField = false;
+                    $last->setDefaultValue($this->_default, self::LAST);
+                    $elementLast = $last->transform();
+                    $fields[] = $elementLast;
+                }
 
-                return [$elementFirst, $elementLast];
+                return $fields;
                 break;
 
             case 'Series':
@@ -571,7 +583,7 @@ class Publish_Model_FormElement
     public function setCurrentCollectionId($setRoot = false)
     {
         if (! $setRoot) {
-            $collectionRole = Opus_CollectionRole::fetchByOaiName($this->_collectionRole);
+            $collectionRole = CollectionRole::fetchByName($this->_collectionRole);
             if (! is_null($collectionRole)) {
                 $rootCollection = $collectionRole->getRootCollection();
                 if (! is_null($rootCollection)) {
@@ -701,6 +713,11 @@ class Publish_Model_FormElement
         return $this->_subFormElements;
     }
 
+    /**
+     * If elements are already present do not add again.
+     *
+     * @param $subFormElements
+     */
     public function addSubFormElements($subFormElements)
     {
         $this->_subFormElements = array_merge($subFormElements, $this->_subFormElements);
@@ -709,5 +726,18 @@ class Publish_Model_FormElement
     public function addSubFormElement($subField)
     {
         $this->_subFormElements[] = $subField;
+    }
+
+    protected function isElementPresent($name)
+    {
+        if (is_array($this->_subFormElements)) {
+            foreach ($this->_subFormElements as $element) {
+                if ($element->getLabel() === $name) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }

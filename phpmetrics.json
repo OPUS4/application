@@ -1,0 +1,13 @@
+{
+    "includes": [
+        "library",
+        "modules",
+        "scripts"
+    ],
+    "exclude": [
+    ],
+    "report": {
+        "html": "build/metrics/",
+        "violations": "build/violations.xml"
+    }
+}

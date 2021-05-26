@@ -32,8 +32,10 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Person;
+
 /**
- * Formular zum Editieren einer Person (Opus_Person).
+ * Formular zum Editieren einer Person (Person).
  *
  * Dieses Formular beruecksichtigt nicht die Felder, die bei der Verknuepfung einer Person mit einem Dokument in dem
  * Link Objekt hinzukommen.
@@ -42,7 +44,7 @@ class Admin_Form_Person extends Admin_Form_AbstractDocumentSubForm
 {
 
     /**
-     * Name fuer Formularelement fuer Feld ID von Opus_Person.
+     * Name fuer Formularelement fuer Feld ID von Person.
      */
     const ELEMENT_PERSON_ID = 'PersonId';
 
@@ -133,7 +135,7 @@ class Admin_Form_Person extends Admin_Form_AbstractDocumentSubForm
             'text',
             self::ELEMENT_LAST_NAME,
             ['label' => 'LastName', 'required' => true,
-            'size' => 50, 'maxlength' => Opus_Person::getFieldMaxLength('LastName')]
+            'size' => 50, 'maxlength' => Person::getFieldMaxLength('LastName')]
         );
         $this->addElement('text', self::ELEMENT_FIRST_NAME, ['label' => 'FirstName', 'size' => 50]);
         $this->addElement('Email', self::ELEMENT_EMAIL, ['label' => 'Email']);
@@ -188,8 +190,8 @@ class Admin_Form_Person extends Admin_Form_AbstractDocumentSubForm
     }
 
     /**
-     * Setzt die Werte der Formularelmente entsprechend der uebergebenen Opus_Person Instanz.
-     * @param Opus_Person $model
+     * Setzt die Werte der Formularelmente entsprechend der uebergebenen Person Instanz.
+     * @param Person $model
      */
     public function populateFromModel($person)
     {
@@ -226,12 +228,12 @@ class Admin_Form_Person extends Admin_Form_AbstractDocumentSubForm
     }
 
     /**
-     * Setzt die Felder einer Opus_Person Instanz entsprechend dem Formularinhalt.
-     * @param Opus_Person $model
+     * Setzt die Felder einer Person Instanz entsprechend dem Formularinhalt.
+     * @param Person $model
      */
     public function updateModel($model)
     {
-        if ($model instanceof Opus_Person) {
+        if ($model instanceof Person) {
             $model->setAcademicTitle($this->getElementValue(self::ELEMENT_ACADEMIC_TITLE));
             $model->setLastName($this->getElementValue(self::ELEMENT_LAST_NAME));
             $model->setFirstName($this->getElementValue(self::ELEMENT_FIRST_NAME));
@@ -243,22 +245,22 @@ class Admin_Form_Person extends Admin_Form_AbstractDocumentSubForm
             $datesHelper = $this->getDatesHelper();
             $model->setDateOfBirth($datesHelper->getOpusDate($this->getElementValue(self::ELEMENT_DATE_OF_BIRTH)));
         } else {
-            $this->getLogger()->err(__METHOD__ . ' called with object that is not instance of Opus_Person');
+            $this->getLogger()->err(__METHOD__ . ' called with object that is not instance of Opus\Person');
         }
     }
 
     /**
-     * Liefert Instanz von Opus_Person zurueck.
-     * @return \Opus_Person
+     * Liefert Instanz von Person zurueck.
+     * @return Person
      */
     public function getModel()
     {
         $personId = $this->getElementValue(self::ELEMENT_PERSON_ID);
 
         if (is_numeric($personId)) {
-            $person = new Opus_Person($personId);
+            $person = new Person($personId);
         } else {
-            $person = new Opus_Person();
+            $person = new Person();
         }
 
         $this->updateModel($person);

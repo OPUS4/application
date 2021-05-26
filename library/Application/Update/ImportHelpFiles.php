@@ -184,6 +184,23 @@ class Application_Update_ImportHelpFiles extends Application_Update_PluginAbstra
                 $content = file_get_contents($path);
                 $values[$lang] = $content;
                 $this->removeFile($path);
+            } else {
+                // OPUSVIER-4304 Try to see if there is a file after all.
+                $this->log("Trying to resolve default file for key '$key' in language '$lang'.");
+                $prefix = 'help_content_';
+                if (substr($key, 0, strlen($prefix)) == $prefix) {
+                    $baseName = substr($key, strlen($prefix));
+                    $fileName = "$baseName.{$lang}.txt";
+                    $path = $helpPath . $fileName;
+                    if (is_readable($path)) {
+                        $this->log("Default file '$fileName' found.");
+                        $content = trim(file_get_contents($path));
+                        $values[$lang] = $content;
+                        $this->removeFile($path);
+                    } else {
+                        $this->log("Default file '$fileName' not found.");
+                    }
+                }
             }
         }
 
