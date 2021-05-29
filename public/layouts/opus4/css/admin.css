@@ -2532,7 +2532,7 @@ a.link-button:hover {
     color: white;
 }
 
-div.create-document-link {
+div.document-action-links {
     float: right;
     display: block;
 }
