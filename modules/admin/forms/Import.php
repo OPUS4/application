@@ -109,7 +109,10 @@ class Admin_Form_Import extends Application_Form_Abstract
 
         $this->addElement(
             'submit',
-            self::ELEMENT_IMPORT
+            self::ELEMENT_IMPORT,
+            [
+                'label' => 'admin_import_start'
+            ]
         );
 
         $this->setDecorators([
