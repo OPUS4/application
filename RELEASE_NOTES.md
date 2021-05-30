@@ -47,6 +47,38 @@ die Variable `opusUrl` ersetzt. Eigene Skripte, die diese Variablen einsetzen,
 müssen angepasst werden. Die neue Variable `opusUrl` enthält die absolute URL für
 die OPUS 4 Instanz.
 
+# BibTeX-Import
+
+OPUS 4 erlaubt nun den Import von Dokumentmetadaten aus BibTeX-Dateien. Der Import
+einer BibTeX-Datei kann über das CLI mit dem Befehl
+
+    $ bin/opus4 import:bibtex <filename.bib>
+
+aufgerufen werden. Es können hierbei weitere Optionen angegeben werden. Die Auflistung
+der verfügbaren Optionen und ihrer Bedeutungist mit dem Befehl
+
+    $ bin/opus4 help import:bibtex
+
+möglich.
+
+Der BibTeX-Import kann auch über die Weboberfläche von OPUS 4 aufgerufen werden.
+Der Administrationsbereich bietet dazu einen entsprechenden Button _BibTeX-Import_ beim
+Aufruf des Menüeintrags _Dokumente_. Das Webformular in der Administration für den
+Import von BibTeX-Dateien bietet sämtliche Optionen an, die auch über den CLI-Befehl
+`import:bibtex` gesetzt werden können.
+
+Nach dem Import einer BibTeX-Datei (sowohl über CLI als auch Weboberfläche) wird ein
+Protokoll über die Verarbeitungsschritte ausgegeben, aus dem u.a. hervorgeht, wie viele
+BibTeX-Einträge aus der zu importierenden Daten erfolgreich in die OPUS 4 Datenbank
+übernommen wurden. Im Falle von Verarbeitungsfehlern erfolgt an dieser Stelle eine
+Ausgaben mit weiteren Details zur späteren Nachverfolgung.
+
+Im OPUS 4 Handbuch gibt es eine neue Seite, die die Optionen des CLI-Befehls für
+den BibTeX-Import ausführlich beschreibt.
+
+<http://www.opus-repository.org/userdoc/import/bibtex.html>
+
+
 # OPUS Framework Package
 
 ## API
