@@ -125,6 +125,13 @@
                             <action>assign</action>
                         </collection>
 
+                        <import>
+                            <type>mvc</type>
+                            <label>admin_import_bibtex</label>
+                            <module>admin</module>
+                            <controller>import</controller>
+                            <action>bibtex</action>
+                        </import>
                     </pages>
                 </documents>
 
