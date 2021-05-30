@@ -33,6 +33,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Bibtex\Import\Config\BibtexConfigException;
 use Opus\Bibtex\Import\Console\Helper\BibtexImportHelper;
 use Opus\Bibtex\Import\Console\Helper\BibtexImportResult;
 
@@ -48,10 +49,10 @@ class Admin_ImportController extends Application_Controller_Action
             $postData = $this->getRequest()->getPost();
 
             if (! $form->isValid($postData)) {
-                // ['module' => 'admin', 'controller' => 'import', 'action' => 'bibtex'],
+                // die BibTeX-Datei ist das einzige Pflichtfeld des Formulars
                 $this->_helper->Redirector->redirectTo(
                     'bibtex',
-                    ['failure' => 'missing file'],
+                    ['failure' => $this->view->translate('admin_import_missing_file')],
                     'import',
                     'admin'
                 );
@@ -67,17 +68,29 @@ class Admin_ImportController extends Application_Controller_Action
                     $bibtexImportResult = new BibtexImportResult();
 
                     $bibtexImportHelper = $this->createBibtexImportHelper($bibtexFile['tmp_name'], $postData);
-                    $bibtexImportHelper->doImport($bibtexImportResult);
+                    try {
+                        $bibtexImportHelper->doImport($bibtexImportResult);
+                    } catch (BibtexConfigException $e) {
+                        $this->_helper->Redirector->redirectTo(
+                            'bibtex',
+                            ['failure' => $this->view->translate('admin_import_config_error', [$e->getMessage()])],
+                            'import',
+                            'admin'
+                        );
+                        return;
+                    }
 
                     $this->view->importResult = $bibtexImportResult->getMessages();
                     $this->view->numDocsImported = $bibtexImportResult->getNumDocsImported();
                     $this->view->numDocsProcessed = $bibtexImportResult->getNumDocsProcessed();
+                    $this->view->numSkipped = $bibtexImportResult->getNumSkipped();
+                    $this->view->numErrors = $bibtexImportResult->getNumErrors();
                 }
             } else {
                 // POST-Request ist zwar gültig; allerdings konnte keine Datei ausgelesen werden
                 $this->_helper->Redirector->redirectTo(
                     'bibtex',
-                    ['failure' => 'missing file'],
+                    ['failure' => $this->view->translate('admin_import_missing_file')],
                     'import',
                     'admin'
                 );
