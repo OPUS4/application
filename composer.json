@@ -26,7 +26,7 @@
     "opus4-repo/opus4-common": "dev-master",
     "opus4-repo/framework": "dev-master",
     "opus4-repo/search": "dev-master",
-    "opus4-repo/opus4-bibtex": "0.1-beta",
+    "opus4-repo/opus4-bibtex": "dev-master",
     "components/jquery": "3.4.*",
     "components/jqueryui": "1.12.*",
     "robloach/component-installer": "*",

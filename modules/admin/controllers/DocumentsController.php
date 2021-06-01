@@ -215,6 +215,12 @@ class Admin_DocumentsController extends Application_Controller_Action
             'default',
             true
         );
+
+        $this->view->bibtexImportLink = $this->view->url(
+            ['module' => 'admin', 'controller' => 'import', 'action' => 'bibtex'],
+            'default',
+            true
+        );
     }
 
     /**

@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tmx SYSTEM "http://www.gala-global.org/oscarStandards/tmx/tmx14.dtd">
+<tmx version="1.4">
+<header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
+</header>
+<body>
+    <tu tuid="admin_import_bibtex_label_output">
+      <tuv xml:lang="en">
+        <seg>Output of BibTeX import process</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Ausgabe während des BibTeX-Imports</seg>
+      </tuv>
+    </tu>
+    <tu tuid="admin_import_bibtex_label_num_docs_processed">
+      <tuv xml:lang="en">
+        <seg>Number of processed documents</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Anzahl der verarbeiteten Dokumente</seg>
+      </tuv>
+    </tu>
+    <tu tuid="admin_import_bibtex_label_num_docs_imported">
+      <tuv xml:lang="en">
+        <seg>Number of imported documents</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Anzahl der importierten Dokumente</seg>
+      </tuv>
+    </tu>
+    <tu tuid="admin_import_bibtex_label_num_skipped">
+      <tuv xml:lang="en">
+        <seg>Number of skipped BibTeX records due to hash value matches</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Anzahl der aufgrund von Hashwert-Übereinstimmungen nicht verarbeiteten BibTeX-Records</seg>
+      </tuv>
+    </tu>
+    <tu tuid="admin_import_bibtex_label_num_errors">
+      <tuv xml:lang="en">
+        <seg>Number of discarded BibTeX records due to errors</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Anzahl der aufgrund von Fehlern nicht verarbeiteten BibTeX-Records</seg>
+      </tuv>
+    </tu>
+    <tu tuid="admin_import_bibtex_label_button">
+      <tuv xml:lang="en">
+        <seg>Import another BibTeX file</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Weitere BibTeX-Datei importieren</seg>
+      </tuv>
+    </tu>
+    <tu tuid="admin_import_bibtex">
+      <tuv xml:lang="en">
+        <seg>BibTeX Import</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>BibTeX-Import</seg>
+      </tuv>
+    </tu>
+    <tu tuid="admin_import_file">
+      <tuv xml:lang="en">
+        <seg>BibTeX file</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>BibTeX-Datei</seg>
+      </tuv>
+    </tu>
+    <tu tuid="admin_import_ini_filename">
+       <tuv xml:lang="en">
+         <seg>Filesystem path of INI configuration file (default: import.ini)</seg>
+       </tuv>
+       <tuv xml:lang="de">
+         <seg>Dateisystem-Pfad der INI-Konfigurationsdatei (Standard: import.ini)</seg>
+       </tuv>
+    </tu>
+    <tu tuid="admin_import_mapping_name">
+       <tuv xml:lang="en">
+         <seg>Name of BibTeX field mapping (default name: default)</seg>
+       </tuv>
+       <tuv xml:lang="de">
+         <seg>Name des zu verwendenden BibTeX-Feldmappings (Standard: default)</seg>
+       </tuv>
+    </tu>
+    <tu tuid="admin_import_collection_ids">
+       <tuv xml:lang="en">
+         <seg>comma-separated list of IDs of collections each imported document is assigned to</seg>
+       </tuv>
+       <tuv xml:lang="de">
+         <seg>kommaseparierte Liste von IDs der Sammlungen, mit denen die importierten Dokumente verknüpft werden sollen</seg>
+       </tuv>
+    </tu>
+    <tu tuid="admin_import_verbose">
+       <tuv xml:lang="en">
+         <seg>Enable verbose output</seg>
+       </tuv>
+       <tuv xml:lang="de">
+         <seg>Ausführliche Logausgabe während der Verarbeitung aktivieren</seg>
+       </tuv>
+    </tu>
+    <tu tuid="admin_import_dry_mode">
+       <tuv xml:lang="en">
+         <seg>Enable dry mode (do not import documents to database)</seg>
+       </tuv>
+       <tuv xml:lang="de">
+         <seg>Trockenlauf durchführen (es werden keine Dokumente in die Datenbank importiert)</seg>
+       </tuv>
+    </tu>
+    <tu tuid="admin_import_start">
+       <tuv xml:lang="en">
+         <seg>Start BibTeX import</seg>
+       </tuv>
+       <tuv xml:lang="de">
+         <seg>BibTeX-Import starten</seg>
+       </tuv>
+    </tu>
+    <tu tuid="admin_import_missing_file">
+       <tuv xml:lang="en">
+         <seg>Missing BibTeX file</seg>
+       </tuv>
+       <tuv xml:lang="de">
+         <seg>Fehlende BibTeX-Datei</seg>
+       </tuv>
+    </tu>
+    <tu tuid="admin_import_config_error">
+       <tuv xml:lang="en">
+         <seg>Configuration error: %1$s</seg>
+       </tuv>
+       <tuv xml:lang="de">
+         <seg>Konfigurationsfehler: %1$s</seg>
+       </tuv>
+    </tu>
+</body>
+</tmx>
