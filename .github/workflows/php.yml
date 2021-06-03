@@ -9,10 +9,6 @@ on:
   schedule:
     - cron: '30 1 * * *'
 
-    branches:
-      - master
-      - '4.*'
-
 jobs:
   build:
 
