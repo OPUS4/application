@@ -54,8 +54,8 @@ einer BibTeX-Datei kann über das CLI mit dem Befehl
 
     $ bin/opus4 import:bibtex <filename.bib>
 
-aufgerufen werden. Es können hierbei weitere Optionen angegeben werden. Die Auflistung
-der verfügbaren Optionen und ihrer Bedeutungist mit dem Befehl
+aufgerufen werden. Es können hierbei mehrere Optionen angegeben werden. Die Auflistung
+der verfügbaren Optionen sowie einer Erklärung ihrer Bedeutung ist mit dem Befehl
 
     $ bin/opus4 help import:bibtex
 
@@ -67,14 +67,21 @@ Aufruf des Menüeintrags _Dokumente_. Das Webformular in der Administration für
 Import von BibTeX-Dateien bietet sämtliche Optionen an, die auch über den CLI-Befehl
 `import:bibtex` gesetzt werden können.
 
-Nach dem Import einer BibTeX-Datei (sowohl über CLI als auch Weboberfläche) wird ein
-Protokoll über die Verarbeitungsschritte ausgegeben, aus dem u.a. hervorgeht, wie viele
+Für die Ausführung des BibTeX-Imports, insbesondere die Umwandlung von LaTeX-codierten
+Sonderzeichen (z. B. Umlaute) in ihre Unicode-Entsprechungen, wird das Programm **Pandoc**
+benötigt. Es wird hierbei empfohlen eine möglichst aktuelle Version zu verwenden,
+mindestens aber Version 2.0. Das BibTeX-Import-Feature wurde ausführlich mit Pandoc 2.9
+getestet, welches mit den aktuellen Ubuntu-Versionen (2020.10 und 2021.04) über die
+Paketverwaltung installiert werden kann.
+
+Nach dem Import einer BibTeX-Datei (sowohl über CLI als auch das Webformular) wird ein
+Protokoll über die Verarbeitungsschritte ausgegeben, aus dem u. a. hervorgeht, wie viele
 BibTeX-Einträge aus der zu importierenden Daten erfolgreich in die OPUS 4 Datenbank
 übernommen wurden. Im Falle von Verarbeitungsfehlern erfolgt an dieser Stelle eine
-Ausgaben mit weiteren Details zur späteren Nachverfolgung.
+Ausgabe mit weiteren Details zur späteren Nachverfolgung.
 
-Im OPUS 4 Handbuch gibt es eine neue Seite, die die Optionen des CLI-Befehls für
-den BibTeX-Import ausführlich beschreibt.
+Im OPUS 4 Handbuch gibt es eine neue Seite, auf der die Optionen des CLI-Befehls für
+den BibTeX-Import ausführlich beschrieben werden:
 
 <http://www.opus-repository.org/userdoc/import/bibtex.html>
 
