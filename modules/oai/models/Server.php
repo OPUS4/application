@@ -148,7 +148,7 @@ class Oai_Model_Server extends Application_Model_Abstract
      *
      * @param  Oai_Model_OaiRequest $oaiRequest Contains full request information
      * @throws Oai_Model_Exception Thrown if the request could not be handled.
-     * @return void
+     * @return string Generated XML
      */
     protected function handleRequestIntern($oaiRequest, $requestUri)
     {
@@ -220,7 +220,20 @@ class Oai_Model_Server extends Application_Model_Abstract
                 break;
         }
 
-        return $this->_proc->transformToXML($this->_xml);
+        $doc = $this->_proc->transformToDoc($this->_xml);
+
+        // TODO is this something that should happen for all metadataPrefixes (OPUSVIER-4531)
+        if ($oaiRequest['metadataPrefixMode'] === 'oai_dc') {
+            $records = $doc->getElementsByTagName('dc');
+            foreach ($records as $record) {
+                $record->setAttribute('xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
+            }
+        }
+
+        $doc->formatOutput = true;
+        $xml = $doc->saveXML();
+
+        return $xml;
     }
 
     /**
