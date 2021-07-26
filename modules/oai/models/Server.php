@@ -223,7 +223,7 @@ class Oai_Model_Server extends Application_Model_Abstract
         $doc = $this->_proc->transformToDoc($this->_xml);
 
         // TODO is this something that should happen for all metadataPrefixes (OPUSVIER-4531)
-        if ($oaiRequest['metadataPrefixMode'] === 'oai_dc') {
+        if (isset($oaiRequest['metadataPrefixMode']) && $oaiRequest['metadataPrefixMode'] === 'oai_dc') {
             $records = $doc->getElementsByTagName('dc');
             foreach ($records as $record) {
                 $record->setAttribute('xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
