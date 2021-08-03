@@ -44,6 +44,14 @@ class Setup_Form_FaqItemTest extends ControllerTestCase
         $translations->removeAll();
     }
 
+    public function tearDown()
+    {
+        $translations = new Opus_Translate_Dao();
+        $translations->removeAll();
+
+        parent::tearDown();
+    }
+
     public function testInit()
     {
         $this->markTestIncomplete();
