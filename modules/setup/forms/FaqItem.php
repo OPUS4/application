@@ -93,7 +93,9 @@ class Setup_Form_FaqItem extends Application_Form_Translations
 
         $answer = $this->getElement(self::ELEMENT_ANSWER);
         if (! $this->isArrayEmpty($answer->getValue())) {
-            $answer->updateTranslations("help_content_$faqId", 'help');
+            // TODO special handling for OPUSVIER-4560 (find general design, remove need to set module here)
+            $module = in_array($faqId, ['contact', 'imprint']) ? 'home' : 'help';
+            $answer->updateTranslations("help_content_$faqId", $module);
         } else {
             $database->remove("help_content_$faqId");
         }
