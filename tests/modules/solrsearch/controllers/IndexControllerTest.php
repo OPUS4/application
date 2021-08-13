@@ -1433,7 +1433,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
         $this->dispatch('solrsearch/index/search/searchtype/all/start/0/rows/10/author_facetfq/Doe%2C+John');
 
         $this->assertXpath(
-            '//div[@class = "results_author"]/a[contains(@href, "solrsearch/index/search/searchtype/authorsearch/author/%22Doe%2C+John%22")]'
+            '//div[@class = "results_author"]/a[contains(@href, "solrsearch/index/search/searchtype/authorsearch/author/Doe%2C+John")]'
         );
     }
 }
