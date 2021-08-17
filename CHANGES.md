@@ -11,7 +11,7 @@
 
 ## Aufgaben
 
-* [OPUSVIER-4531] - oai_dc: xml schema namespace um xmlns:xsi erweitern für jeden Metadata-Bereich
+* [OPUSVIER-4531] - (GH-412) oai_dc: xml schema namespace um xmlns:xsi erweitern für jeden Metadata-Bereich
 
 ---
 
