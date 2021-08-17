@@ -34,8 +34,74 @@
 class Setup_Form_FaqItemTest extends ControllerTestCase
 {
 
+    protected $additionalResources = 'Translation';
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        $translations = new Opus_Translate_Dao();
+        $translations->removeAll();
+    }
+
+    public function tearDown()
+    {
+        $translations = new Opus_Translate_Dao();
+        $translations->removeAll();
+
+        parent::tearDown();
+    }
+
     public function testInit()
     {
         $this->markTestIncomplete();
+    }
+
+    public function testUpdatingContact()
+    {
+        $form = new Setup_Form_FaqItem();
+
+        $form->setName('contact');
+
+        $content = [
+            'en' => 'new contact text',
+            'de' => 'neuer Kontakt text'
+        ];
+
+        $element = $form->getElement('Answer');
+        $element->setValue($content);
+
+        $form->updateEntry();
+
+        $translations = new Opus_Translate_Dao();
+
+        $this->assertEquals(
+            $content,
+            $translations->getTranslation('help_content_contact')
+        );
+    }
+
+    public function testUpdatingImprint()
+    {
+        $form = new Setup_Form_FaqItem();
+
+        $form->setName('imprint');
+
+        $content = [
+            'en' => 'new imprint text',
+            'de' => 'neuer Impressum text'
+        ];
+
+        $element = $form->getElement('Answer');
+        $element->setValue($content);
+
+        $form->updateEntry();
+
+        $translations = new Opus_Translate_Dao();
+
+        $this->assertEquals(
+            $content,
+            $translations->getTranslation('help_content_imprint')
+        );
     }
 }
