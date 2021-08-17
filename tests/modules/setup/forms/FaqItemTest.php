@@ -31,6 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Translate\Dao;
+
 class Setup_Form_FaqItemTest extends ControllerTestCase
 {
 
@@ -40,13 +42,13 @@ class Setup_Form_FaqItemTest extends ControllerTestCase
     {
         parent::setUp();
 
-        $translations = new Opus_Translate_Dao();
+        $translations = new Dao();
         $translations->removeAll();
     }
 
     public function tearDown()
     {
-        $translations = new Opus_Translate_Dao();
+        $translations = new Dao();
         $translations->removeAll();
 
         parent::tearDown();
@@ -73,7 +75,7 @@ class Setup_Form_FaqItemTest extends ControllerTestCase
 
         $form->updateEntry();
 
-        $translations = new Opus_Translate_Dao();
+        $translations = new Dao();
 
         $this->assertEquals(
             $content,
@@ -97,7 +99,7 @@ class Setup_Form_FaqItemTest extends ControllerTestCase
 
         $form->updateEntry();
 
-        $translations = new Opus_Translate_Dao();
+        $translations = new Dao();
 
         $this->assertEquals(
             $content,
