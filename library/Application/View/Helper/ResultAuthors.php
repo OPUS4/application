@@ -58,7 +58,7 @@ class Application_View_Helper_ResultAuthors extends Application_View_Helper_Docu
 
             // TODO put somewhere else -> view helper for author search ?
             $authorSearch = $this->view->authorSearch;
-            $authorSearch['author'] = '"' . $authorStr . '"';
+            $authorSearch['author'] = $authorStr;
             $authorSearchUrl = $this->view->url($authorSearch, null, true);
 
             if ($authorIndex !== 0) {
