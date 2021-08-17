@@ -2,6 +2,19 @@
 
 ---
 
+## Release 4.7.0.5 - 2021-08-17
+
+### Bugs
+
+* [OPUSVIER-4560] - Editieren von Kontakt und Impressum geht nur über Translation und nicht über FAQ-Seite
+* [OPUSVIER-4561] - Authorsearch-Link in Ergebnisanzeige funktioniert nicht mit Bindestrich im Nachnamen
+
+## Aufgaben
+
+* [OPUSVIER-4531] - (GH-412) oai_dc: xml schema namespace um xmlns:xsi erweitern für jeden Metadata-Bereich
+
+---
+
 ## Release 4.7.0.4 - 2020-12-02
 
 ### Aufgaben

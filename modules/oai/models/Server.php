@@ -148,7 +148,7 @@ class Oai_Model_Server extends Application_Model_Abstract
      *
      * @param  Oai_Model_OaiRequest $oaiRequest Contains full request information
      * @throws Oai_Model_Exception Thrown if the request could not be handled.
-     * @return void
+     * @return string Generated XML
      */
     protected function handleRequestIntern($oaiRequest, $requestUri)
     {
@@ -183,6 +183,9 @@ class Oai_Model_Server extends Application_Model_Abstract
         // TODO refactor - temporary hack to have all lower case version of metadataPrefix to use in XSLT
         if (isset($oaiRequest['metadataPrefix'])) {
             $oaiRequest['metadataPrefixMode'] = strtolower($oaiRequest['metadataPrefix']);
+            $metadataPrefix = $oaiRequest['metadataPrefixMode'];
+        } else {
+            $metadataPrefix = null;
         }
 
         foreach ($oaiRequest as $parameter => $value) {
@@ -220,7 +223,30 @@ class Oai_Model_Server extends Application_Model_Abstract
                 break;
         }
 
-        return $this->_proc->transformToXML($this->_xml);
+        $doc = $this->_proc->transformToDoc($this->_xml);
+
+        // TODO is this something that should happen for all metadataPrefixes (OPUSVIER-4531)
+        $metadataPrefixTags = [
+            'oai_dc' => 'dc',
+            'oai_pp' => 'ProPrint',
+            'xmetadissplus' => 'xMetaDiss',
+            'epicur' => 'epicur',
+            'marc21' => 'collection'
+        ];
+
+        if ($metadataPrefix !== null && isset($metadataPrefixTags[$metadataPrefix])) {
+            $tagName = $metadataPrefixTags[$metadataPrefix];
+
+            $records = $doc->getElementsByTagName($tagName);
+            foreach ($records as $record) {
+                $record->setAttribute('xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
+            }
+        }
+
+        $doc->formatOutput = true;
+        $xml = $doc->saveXML();
+
+        return $xml;
     }
 
     /**

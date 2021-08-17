@@ -1,18 +1,17 @@
 # OPUS 4 Release Notes
-
 ---
 
 ## Release 4.7.1
 
 # Konfiguration
 
-Der Parameter `url` kann verwendet werden, um die absolute URL für eine OPUS 4 
-Instanz manuell zu setzen. Diese URL wird dann verwendet, um absolute Links, 
+Der Parameter `url` kann verwendet werden, um die absolute URL für eine OPUS 4
+Instanz manuell zu setzen. Diese URL wird dann verwendet, um absolute Links,
 z.B. in Exporten oder E-Mails, zu generieren.
 
-   url = 'https://opus4mig.kobv.de/opus4-demo'
+url = 'https://opus4mig.kobv.de/opus4-demo'
 
-URLs mit Port werden momentan nicht unterstützt. 
+URLs mit Port werden momentan nicht unterstützt.
 
 # Neues Kommandozeilen-Skript `bin/opus4`
 
@@ -42,7 +41,7 @@ wenn es Probleme bei der Indexierung gibt.
 
 # Export
 
-Die beiden Variablen `host` und `server` in den Export-XSLT Skripten wurden durch 
+Die beiden Variablen `host` und `server` in den Export-XSLT Skripten wurden durch
 die Variable `opusUrl` ersetzt. Eigene Skripte, die diese Variablen einsetzen,
 müssen angepasst werden. Die neue Variable `opusUrl` enthält die absolute URL für
 die OPUS 4 Instanz.
@@ -90,14 +89,14 @@ den BibTeX-Import ausführlich beschrieben werden:
 
 ## API
 
-Die `deletePermanent` Funktion von `Opus\Document`, um Dokumente vollständig zu 
+Die `deletePermanent` Funktion von `Opus\Document`, um Dokumente vollständig zu
 löschen, wurde entfernt. Die `delete` Funktion löscht Dokumente jetzt vollständig,
 anstatt sie nur in den Server-Status **deleted** zu versetzen. Um Dokumente als
-gelöscht zu markieren ohne sie komplett zu entfernen, muss nun `serServerState` 
-verwendet werden. 
+gelöscht zu markieren ohne sie komplett zu entfernen, muss nun `serServerState`
+verwendet werden.
 
-   $doc->setServerState(Document::STATE_DELETED);
-   $doc->store();
+$doc->setServerState(Document::STATE_DELETED);
+$doc->store();
 
 Dies muss unter Umständen bei eigenen Skripten berücksichtigt werden.
 
@@ -106,6 +105,20 @@ Dies muss unter Umständen bei eigenen Skripten berücksichtigt werden.
 Der Code des OPUS Frameworks wurde in Vorbereitung auf die Migration zu Laminas
 auf PHP Namespaces umgestellt und die Verwendung der Klassen in der Application
 entsprechend angepasst.
+
+---
+
+## Release 4.7.0.5 2020-08-17
+
+Dieser Patch Release behebt zwei kleinere Bugs. Das Editieren der Inhalte der
+Impressum und Kontakt-Seite ist nun auch von der FAQ-Seite aus ohne Probleme beim
+Speichern möglich.
+Von den Suchlinks für Autoren in der Anzeige von Suchergebnissen wurden
+Anführungszeichen entfernt. Damit funktioniert die Autorensuche nun zuverlässiger,
+insbesondere auch mit Namen, die  Bindestriche enthalten.
+
+Die Deklaration des Namespaces "xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+erfolgt nun beim OAI-Export in jedem Metadata Wurzel Element (GH-412).
 
 ---
 

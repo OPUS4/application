@@ -58,7 +58,7 @@ class Application_View_Helper_ResultAuthorsTest extends ControllerTestCase
 
         $output = $this->helper->resultAuthors();
 
-        $this->assertEquals('<a href="/index/index/author/%22Muster%22">Muster</a>', $output);
+        $this->assertEquals('<a href="/index/index/author/Muster">Muster</a>', $output);
     }
 
     public function testRenderingRemovesComma()
@@ -72,7 +72,7 @@ class Application_View_Helper_ResultAuthorsTest extends ControllerTestCase
 
         $output = $this->helper->resultAuthors();
 
-        $this->assertEquals('<a href="/index/index/author/%22Muster%22">Muster</a>', $output);
+        $this->assertEquals('<a href="/index/index/author/Muster">Muster</a>', $output);
     }
 
     public function testRenderingMultipleAuthors()
@@ -86,9 +86,9 @@ class Application_View_Helper_ResultAuthorsTest extends ControllerTestCase
 
         $output = $this->helper->resultAuthors();
 
-        $this->assertEquals('<a href="/index/index/author/%22Muster%2C+John%22">Muster, John</a>'
-             . ' ; <a href="/index/index/author/%22Doe%22">Doe</a>'
-             . ' ; <a href="/index/index/author/%22Smith%2C+John%22">Smith, John</a>', $output);
+        $this->assertEquals('<a href="/index/index/author/Muster%2C+John">Muster, John</a>'
+             . ' ; <a href="/index/index/author/Doe">Doe</a>'
+             . ' ; <a href="/index/index/author/Smith%2C+John">Smith, John</a>', $output);
     }
 
     public function testUseCustomSeparator()
@@ -105,8 +105,8 @@ class Application_View_Helper_ResultAuthorsTest extends ControllerTestCase
         $output = $this->helper->resultAuthors();
 
         $this->assertEquals(
-            '<a href="/index/index/author/%22Muster%2C+John%22">Muster, John</a>'
-            . ' # <a href="/index/index/author/%22Smith%2C+John%22">Smith, John</a>',
+            '<a href="/index/index/author/Muster%2C+John">Muster, John</a>'
+            . ' # <a href="/index/index/author/Smith%2C+John">Smith, John</a>',
             $output
         );
     }
