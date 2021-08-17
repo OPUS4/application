@@ -1,5 +1,17 @@
 # OPUS 4 Release Notes
 
+## Release 4.7.0.5 2020-08-17
+
+Dieser Patch Release behebt zwei kleinere Bugs. Das Editieren der Inhalte der 
+Impressum und Kontakt-Seite ist nun auch von der FAQ-Seite aus ohne Probleme beim 
+Speichern möglich.
+Von den Suchlinks für Autoren in der Anzeige von Suchergebnissen wurden 
+Anführungszeichen entfernt. Damit funktioniert die Autorensuche nun zuverlässiger,
+insbesondere auch mit Namen, die  Bindestriche enthalten.
+
+Die Deklaration des Namespaces "xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+erfolgt nun beim OAI-Export in jedem Metadata Wurzel Element (GH-412). 
+
 ## Release 4.7.0.4 2020-12-02
 
 Diese Version behebt einen Bug im Framework bei der Abfrage, wenn in einem Dokument
