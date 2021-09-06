@@ -33,22 +33,7 @@
 
 // Bootstrapping
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
+require_once dirname(__FILE__) . '/../../library/Application/Job/CleanTemporariesJob.php';
 
-use Opus\Document;
-use Opus\DocumentFinder;
-
-$date = new DateTime();
-$dateString = $date->sub(new DateInterval('P2D'))->format('Y-m-d');
-$finder = new DocumentFinder();
-$finder->setServerState('temporary')
-  ->setServerDateModifiedBefore($dateString);
-
-foreach ($finder->ids() as $id) {
-    $doc = Document::get($id);
-    if ($doc->getServerState() == 'temporary') {
-        echo "deleting document: $id\n";
-        $doc->delete();
-    } else {
-        echo "NOT deleting document: $id because it has server state ".$doc->getServerState();
-    }
-}
+$job = new CleanTemporariesJob('P2D');
+$job->run();

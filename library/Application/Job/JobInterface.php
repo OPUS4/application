@@ -26,52 +26,18 @@
  *
  * @category    Script
  * @author      Kaustabh Barman <barman@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
-use Opus\DocumentFinder;
-
-/**
- * Class for cleaning temporary documents.
- */
-class DbCleanTemporaries implements JobInterface
+ /**
+  * Basic process interface as required to define
+  * jobs for background processes
+  */
+interface JobInterface
 {
     /**
-     * @var string Default format of the date
-     */
-    private $DEFAULT_DATE_FORMAT = 'Y-m-d';
-
-    public function run()
-    {
-        $dateString = $this->getDate();
-        $finder = new DocumentFinder();
-        $finder->setServerState('temporary')
-            ->setServerDateModifiedBefore($dateString);
-
-        foreach ($finder->ids() as $id) {
-            $doc = Document::get($id);
-            if ($doc->getServerState() == 'temporary') {
-                echo "deleting document: $id\n";
-                $doc->delete();
-            } else {
-                echo "NOT deleting document: $id because it has server state ".$doc->getServerState();
-            }
-        }
-    }
-
-    /**
-     * @param string format
-     * @returns string date
-     */
-    public function getDate($format)
-    {
-        $date = new DateTime();
-        if (null === $format) {
-            $format = $this->DEFAULT_DATE_FORMAT;
-        }
-        $dateString = $date->sub(new DateInterval('P2D'))->format($format);
-        return $dateString;
-    }
+      * Perform job.
+      */
+    public function run();
 }

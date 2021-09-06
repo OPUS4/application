@@ -26,19 +26,61 @@
  *
  * @category    Script
  * @author      Kaustabh Barman <barman@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
- /**
-  * Basic process interface as required to define
-  * jobs for background processes
-  */
- interface JobInterface
- {
-     /**
-      * Perform job.
-      */
-     public function run();
+require_once('JobInterface.php');
 
- }
+use Opus\Document;
+use Opus\DocumentFinder;
+
+/**
+ * Class for cleaning temporary documents.
+ */
+class CleanTemporariesJob implements JobInterface
+{
+    /**
+     * @var string Duration of the temporary document
+     */
+    private $duration;
+
+    /**
+     * CleanTemporariesJob constructor.
+     * @param $duration string Duration e.g., P2D, P4M
+     */
+    public function __construct($duration)
+    {
+        $this->duration = $duration;
+    }
+
+    public function run()
+    {
+        $dateString = $this->getPreviousDate();
+        $finder = new DocumentFinder();
+        $finder->setServerState('temporary')
+            ->setServerDateModifiedBefore($dateString);
+
+        foreach ($finder->ids() as $id) {
+            $doc = Document::get($id);
+            if ($doc->getServerState() == 'temporary') {
+                echo "deleting document: $id\n";
+                $doc->delete();
+            } else {
+                echo "NOT deleting document: $id because it has server state ".$doc->getServerState();
+            }
+        }
+    }
+
+    /**
+     * Returns the previous date of the mentioned duration in class contructor.
+     *
+     * @returns string date
+     */
+    private function getPreviousDate()
+    {
+        $date = new DateTime();
+        $dateString = $date->sub(new DateInterval($this->duration))->format('Y-m-d');
+        return $dateString;
+    }
+}
