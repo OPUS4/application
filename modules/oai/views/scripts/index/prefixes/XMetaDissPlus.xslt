@@ -287,22 +287,31 @@
 
     <xsl:template match="PersonAuthor" mode="xmetadissplus">
        <dc:creator xsi:type="pc:MetaPers">
-         <pc:person>
-          <pc:name type="nameUsedByThePerson">
-             <xsl:if test="normalize-space(@FirstName)">
-                <pc:foreName>
-                  <xsl:value-of select="@FirstName" />
-                </pc:foreName>
-             </xsl:if>
-             <pc:surName>
-               <xsl:value-of select="@LastName" />
-             </pc:surName>
-          </pc:name>
-          <xsl:if test="normalize-space(@AcademicTitle)">
+         <pc:person>          
+           <xsl:choose>
+             <xsl:when test="normalize-space(@FirstName) != '' and normalize-space(@LastName) != ''">
+               <pc:name type="nameUsedByThePerson">
+                 <pc:foreName>
+                    <xsl:value-of select="@FirstName" />
+                 </pc:foreName>
+                 <pc:surName>
+                    <xsl:value-of select="@LastName" />
+                 </pc:surName>                
+               </pc:name>
+             </xsl:when>
+             <xsl:otherwise>
+               <pc:name type="otherName">
+                 <pc:personEnteredUnderGivenName>
+                   <xsl:value-of select="@LastName" />
+                 </pc:personEnteredUnderGivenName>
+               </pc:name>
+             </xsl:otherwise>
+           </xsl:choose>           
+           <xsl:if test="normalize-space(@AcademicTitle)">
              <pc:academicTitle>
                <xsl:value-of select="@AcademicTitle" />
              </pc:academicTitle>
-          </xsl:if>
+           </xsl:if>
          </pc:person>
        </dc:creator>
     </xsl:template>
