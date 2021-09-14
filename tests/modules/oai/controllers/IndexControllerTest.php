@@ -1807,7 +1807,8 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $this->assertEquals(1, $authorName->length);
         $authorFirstName = $xpath->query('//xMetaDiss:xMetaDiss/dc:creator/pc:person/pc:name/pc:foreName');
         $this->assertEquals(0, $authorFirstName->length);
-        $authorLastName = $xpath->query('//xMetaDiss:xMetaDiss/dc:creator/pc:person/pc:name/pc:surName');
+
+        $authorLastName = $xpath->query('//xMetaDiss:xMetaDiss/dc:creator/pc:person/pc:name/pc:personEnteredUnderGivenName');
         $this->assertEquals(1, $authorLastName->length);
 
         $advisorName = $xpath->query('//xMetaDiss:xMetaDiss/dc:contributor[@thesis:role="advisor"]/pc:person/pc:name');
