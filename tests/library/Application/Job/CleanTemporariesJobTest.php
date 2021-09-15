@@ -59,7 +59,7 @@ class CleanTemporaries extends ControllerTestCase
 
         $doc = Document::get($this->doc->getId());
         $this->setExpectedException(NotFoundException::class);
-        $doc->delete();
+//        $doc->delete();
     }
 
     public function testRunForMultipleDocs()
@@ -76,9 +76,9 @@ class CleanTemporaries extends ControllerTestCase
         $this->job->run();
 
         foreach ($docArray as $document) {
-            $doc = Document::get($document->getId());
             $this->setExpectedException(NotFoundException::class);
-            $doc->delete();
+            $doc = Document::get($document->getId());
+//            $doc->delete();
         }
     }
 
