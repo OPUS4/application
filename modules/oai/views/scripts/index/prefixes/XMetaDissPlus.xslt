@@ -370,21 +370,30 @@
     <xsl:template match="PersonAdvisor" mode="xmetadissplus">
        <dc:contributor xsi:type="pc:Contributor" type="dcterms:ISO3166" thesis:role="advisor">
           <pc:person>
-             <pc:name type="nameUsedByThePerson">
-                <xsl:if test="normalize-space(@FirstName)">
-                   <pc:foreName>
-                      <xsl:value-of select="@FirstName" />
-                   </pc:foreName>
-                </xsl:if>
-                <pc:surName>
-                   <xsl:value-of select="@LastName" />
-                </pc:surName>
-             </pc:name>
-             <xsl:if test="normalize-space(@AcademicTitle)">
-                <pc:academicTitle>
-                   <xsl:value-of select="@AcademicTitle" />
-                </pc:academicTitle>
-             </xsl:if>
+            <xsl:choose>
+              <xsl:when test="normalize-space(@FirstName) != '' and normalize-space(@LastName) != ''">
+                <pc:name type="nameUsedByThePerson">
+                  <pc:foreName>
+                    <xsl:value-of select="@FirstName" />
+                  </pc:foreName>
+                  <pc:surName>
+                     <xsl:value-of select="@LastName" />
+                  </pc:surName>
+                </pc:name>
+              </xsl:when>
+              <xsl:otherwise>
+                <pc:name type="otherName">
+                  <pc:personEnteredUnderGivenName>
+                    <xsl:value-of select="@LastName" />
+                  </pc:personEnteredUnderGivenName>
+                </pc:name>
+              </xsl:otherwise>
+            </xsl:choose>
+            <xsl:if test="normalize-space(@AcademicTitle)">
+              <pc:academicTitle>
+                <xsl:value-of select="@AcademicTitle" />
+              </pc:academicTitle>
+            </xsl:if>
           </pc:person>
        </dc:contributor>
     </xsl:template>
@@ -392,16 +401,25 @@
     <xsl:template match="PersonReferee" mode="xmetadissplus">
        <dc:contributor xsi:type="pc:Contributor" type="dcterms:ISO3166" thesis:role="referee">
            <pc:person>
-             <pc:name type="nameUsedByThePerson">
-               <xsl:if test="normalize-space(@FirstName)">
-                  <pc:foreName>
-                    <xsl:value-of select="@FirstName" />
-                  </pc:foreName>
-               </xsl:if>
-                <pc:surName>
-                  <xsl:value-of select="@LastName" />
-                </pc:surName>
-             </pc:name>
+             <xsl:choose>
+               <xsl:when test="normalize-space(@FirstName) != '' and normalize-space(@LastName) != ''">
+                 <pc:name type="nameUsedByThePerson">
+                   <pc:foreName>
+                     <xsl:value-of select="@FirstName" />
+                   </pc:foreName>
+                   <pc:surName>
+                     <xsl:value-of select="@LastName" />
+                   </pc:surName>
+                 </pc:name>
+               </xsl:when>
+               <xsl:otherwise>
+                 <pc:name type="otherName">
+                   <pc:personEnteredUnderGivenName>
+                     <xsl:value-of select="@LastName" />
+                   </pc:personEnteredUnderGivenName>
+                 </pc:name>
+               </xsl:otherwise>
+             </xsl:choose>
              <xsl:if test="normalize-space(@AcademicTitle)">
                 <pc:academicTitle>
                   <xsl:value-of select="@AcademicTitle" />
@@ -414,16 +432,25 @@
     <xsl:template match="PersonEditor" mode="xmetadissplus">
        <dc:contributor xsi:type="pc:Contributor" type="dcterms:ISO3166" thesis:role="editor">
            <pc:person>
-             <pc:name type="nameUsedByThePerson">
-               <xsl:if test="normalize-space(@FirstName)">
-                  <pc:foreName>
-                    <xsl:value-of select="@FirstName" />
-                  </pc:foreName>
-               </xsl:if>
-                <pc:surName>
-                  <xsl:value-of select="@LastName" />
-                </pc:surName>
-             </pc:name>
+             <xsl:choose>
+               <xsl:when test="normalize-space(@FirstName) != '' and normalize-space(@LastName) != ''">
+                 <pc:name type="nameUsedByThePerson">
+                   <pc:foreName>
+                     <xsl:value-of select="@FirstName" />
+                   </pc:foreName>
+                   <pc:surName>
+                     <xsl:value-of select="@LastName" />
+                   </pc:surName>
+                 </pc:name>
+               </xsl:when>
+               <xsl:otherwise>
+                 <pc:name type="otherName">
+                   <pc:personEnteredUnderGivenName>
+                     <xsl:value-of select="@LastName" />
+                   </pc:personEnteredUnderGivenName>
+                 </pc:name>
+               </xsl:otherwise>
+             </xsl:choose>
              <xsl:if test="normalize-space(@AcademicTitle)">
                 <pc:academicTitle>
                   <xsl:value-of select="@AcademicTitle" />

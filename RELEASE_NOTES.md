@@ -1,6 +1,20 @@
 # OPUS 4 Release Notes
 
-## Release 4.7.0.5 2020-08-17
+## Release 4.7.0.6 2021-09-21
+
+AutorInnen ohne Vornamen werden in XMetaDissPlus nun mit dem Element
+`pc:personEnteredUnderGivenName` abgebildet. Der Nachname kann damit 
+auch für Künstlernamen verwendet werden, die keinen Vornamen haben.
+
+```
+<pc:name type="otherName">
+    <pc:personEnteredUnderGivenName>
+        NACHNAME
+    </pc:personEnteredUnderGivenName>
+</pc:name>
+```
+
+## Release 4.7.0.5 2021-08-17
 
 Dieser Patch Release behebt zwei kleinere Bugs. Das Editieren der Inhalte der 
 Impressum und Kontakt-Seite ist nun auch von der FAQ-Seite aus ohne Probleme beim 
