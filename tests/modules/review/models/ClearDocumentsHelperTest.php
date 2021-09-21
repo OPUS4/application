@@ -26,7 +26,7 @@
  *
  * @category    Application Unit Tests
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -74,8 +74,6 @@ class Review_Model_ClearDocumentsHelperTest extends ControllerTestCase
 
     public function testClearDocumentWithFile()
     {
-        $this->markTestIncomplete('TODO: Re-enable, as soon as OPUSVIER-1220 is fixed.');
-
         $path = '/tmp/opus4-test/' . uniqid() . "/src";
         mkdir($path, 0777, true);
 
@@ -157,5 +155,53 @@ class Review_Model_ClearDocumentsHelperTest extends ControllerTestCase
         $enrichments = $document->getEnrichment();
         $this->assertEquals(1, count($enrichments));
         $this->assertEquals(23, $enrichments[0]->getValue());
+    }
+
+    public function testPublishedDateIsSetIfEmpty()
+    {
+        $document = new Opus_Document($this->documentId);
+        $this->assertNull($document->getPublishedDate());
+
+        $helper = new Review_Model_ClearDocumentsHelper();
+        $helper->clear([$this->documentId], 23, $this->person);
+
+        $document = new Opus_Document($this->documentId);
+        $this->assertEquals('published', $document->getServerState());
+        $this->assertEquals(1, count($document->getPersonReferee()));
+
+        $publishedDate = $document->getPublishedDate();
+
+        $this->assertNotNull($publishedDate);
+
+        $today = new DateTime('today');
+        $publishedDateTime = $publishedDate->getDateTime($today->getTimezone()->getName());
+        $publishedDateTime->setTime(0, 0, 0);
+
+        $this->assertEquals(0, (integer)$today->diff($publishedDateTime)->format('%R%a'));
+    }
+
+    public function testPublishedDateIsNotOverwritten()
+    {
+        // set PublishedDate to yesterday
+        $document = new Opus_Document($this->documentId);
+        $yesterday = new DateTime('yesterday');
+        $expectedDate = new Opus_Date($yesterday);
+        $document->setPublishedDate($expectedDate);
+        $document->store();
+
+        $helper = new Review_Model_ClearDocumentsHelper();
+        $helper->clear([$this->documentId], 23, $this->person);
+
+        $document = new Opus_Document($this->documentId);
+        $this->assertEquals('published', $document->getServerState());
+        $this->assertEquals(1, count($document->getPersonReferee()));
+
+        $publishedDate = $document->getPublishedDate();
+        $publishedDate->setHour(0);
+        $publishedDate->setMinute(0);
+        $publishedDate->setSecond(0);
+
+        $this->assertNotNull($publishedDate);
+        $this->assertEquals(0, $expectedDate->compare($publishedDate)); // still yesterday
     }
 }
