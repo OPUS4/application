@@ -12,9 +12,9 @@
 
     <!-- Properties for configuration files (config.ini, console.ini, tests/config.ini) used for testing. -->
     <property name="dbName" value="opusdb" />
-    <property name="dbUserName" value="opus4admin" />
+    <property name="dbUserName" value="opus4" />
     <property name="dbUserPassword" value="" />
-    <property name="dbAdminName" value="opus4" />
+    <property name="dbAdminName" value="opus4admin" />
     <property name="dbAdminPassword" value="" />
     <property name="solrIndexHost" value="localhost" />
     <property name="solrIndexPort" value="8983" />
