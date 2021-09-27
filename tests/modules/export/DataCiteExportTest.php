@@ -301,6 +301,10 @@ class Export_DataCiteExportTest extends ControllerTestCase
             $this->removeModuleAccess('export', 'docsadmin');
         }
 
+        $doc = new Opus_Document($docId);
+        var_dump(APPLICATION_ENV);
+        var_dump($doc->getIdentifier());
+
         $this->assertResponseCode(200);
         $this->assertContains("DataCite XML of document ${docId} is not valid", $this->getResponse()->getBody());
     }
