@@ -45,6 +45,8 @@ class Application_View_Helper_ResultTitleTest extends ControllerTestCase
         $this->helper = new Application_View_Helper_ResultTitle();
         $view = Zend_Registry::get('Opus_View');
         $this->helper->setView($view);
+
+        $this->useEnglish();
     }
 
     public function testRendering()
