@@ -237,6 +237,8 @@ class Export_DataCiteExportTest extends ControllerTestCase
 
     public function testExportOfDataCiteXmlWithUnpublishedDocAllowedForAdmin()
     {
+        $this->useEnglish();
+
         $this->enableSecurity();
         $config = Zend_Registry::get('Zend_Config');
 
