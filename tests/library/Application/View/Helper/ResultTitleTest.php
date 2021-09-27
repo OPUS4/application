@@ -34,7 +34,7 @@
 class Application_View_Helper_ResultTitleTest extends ControllerTestCase
 {
 
-    protected $additionalResources = ['database', 'view'];
+    protected $additionalResources = ['database', 'view', 'translation'];
 
     protected $helper;
 
