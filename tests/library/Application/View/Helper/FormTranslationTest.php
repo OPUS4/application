@@ -30,7 +30,7 @@
  * @copyright   Copyright (c) 2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Application_View_Helper_Form_TranslationTest extends ControllerTestCase
+class Application_View_Helper_FormTranslationTest extends ControllerTestCase
 {
 
     protected $additionalResources = ['view', 'translation'];
@@ -47,6 +47,8 @@ class Application_View_Helper_Form_TranslationTest extends ControllerTestCase
 
     public function testRenderingOptions()
     {
+        $this->useEnglish();
+
         $helper = new Application_View_Helper_FormTranslation();
         $helper->setView(Zend_Registry::get('Opus_View'));
 
