@@ -40,6 +40,8 @@ class Admin_Form_Document_SubjectTypeTest extends ControllerTestCase
 
     public function testCreateForm()
     {
+        $this->useEnglish();
+
         $form = new Admin_Form_Document_SubjectType('swd');
 
         $this->assertEquals(0, count($form->getSubForms()));
