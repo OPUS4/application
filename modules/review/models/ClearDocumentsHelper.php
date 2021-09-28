@@ -28,9 +28,8 @@
  * @package     Module_Review
  * @author      Thoralf Klein <thoralf.klein@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -60,7 +59,12 @@ class Review_Model_ClearDocumentsHelper
             $date = new Opus_Date();
             $date->setNow();
             $document->setServerDatePublished($date);
-            $document->setPublishedDate($date);
+
+            // Only set PublishedDate, if it is empty (the field is used in various ways)
+            $publishedDate = $document->getPublishedDate();
+            if ($publishedDate === null) {
+                $document->setPublishedDate($date);
+            }
 
             $guestRole = Opus_UserRole::fetchByName('guest');
             foreach ($document->getFile() as $file) {
