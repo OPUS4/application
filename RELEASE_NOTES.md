@@ -1,6 +1,11 @@
 # OPUS 4 Release Notes
 
-## Release 4.7.0.6 2021-09-21
+## Release 4.7.0.6 2021-09-28
+
+Dieser Patch Release behebt Problem bei XMetaDissPlus und beim 
+Freischalten von Dokumenten im Review-Modul.  
+
+### Personen ohne Vornamen in XMetaDissPlus
 
 AutorInnen ohne Vornamen werden in XMetaDissPlus nun mit dem Element
 `pc:personEnteredUnderGivenName` abgebildet. Der Nachname kann damit 
@@ -13,6 +18,14 @@ auch für Künstlernamen verwendet werden, die keinen Vornamen haben.
     </pc:personEnteredUnderGivenName>
 </pc:name>
 ```
+
+### `PublishedDate` beim Freischalten von Dokumenten
+
+Beim Freischalten von Dokumenten im Review-Modul, also nicht beim 
+Freischalten eines einzelnen Dokuments in der Administration, wurde
+bisher immer das Feld `PublishedDate` auf das aktuelle Datum gesetzt. 
+Mit der neuen Version werden existierende Einträge in dem Feld nicht 
+mehr überschrieben.
 
 ## Release 4.7.0.5 2021-08-17
 

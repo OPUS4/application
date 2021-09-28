@@ -2,6 +2,21 @@
 
 ---
 
+## Release 4.7.0.6 - 2021-09-28
+
+### Bugs
+
+* [OPUSVIER-4562] - "Freischalten" überschreibt "PublishedDate" mit aktuellem Datum
+* [OPUSVIER-3981] - Persönlicher Name eines Verfassers ist in XMetaDissPlus bisher nicht möglich
+* [#420] - Fehler bei XMetaDissPlus-Ausgabe bei Personen ohne Vornamen
+* [#424] - Tests, die von UI-Sprache abhängen fixen
+
+### Aufgaben
+
+* [#418] - Automatische Tests mit GitHub Actions auf Ubuntu 20 umstellen
+
+---
+
 ## Release 4.7.0.5 - 2021-08-17
 
 ### Bugs
