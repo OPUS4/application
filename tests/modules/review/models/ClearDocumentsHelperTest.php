@@ -32,6 +32,7 @@
 
 use Opus\Document;
 use Opus\Person;
+use Opus\Date;
 
 class Review_Model_ClearDocumentsHelperTest extends ControllerTestCase
 {
@@ -162,13 +163,13 @@ class Review_Model_ClearDocumentsHelperTest extends ControllerTestCase
 
     public function testPublishedDateIsSetIfEmpty()
     {
-        $document = new Opus_Document($this->documentId);
+        $document = Document::get($this->documentId);
         $this->assertNull($document->getPublishedDate());
 
         $helper = new Review_Model_ClearDocumentsHelper();
         $helper->clear([$this->documentId], 23, $this->person);
 
-        $document = new Opus_Document($this->documentId);
+        $document = Document::get($this->documentId);
         $this->assertEquals('published', $document->getServerState());
         $this->assertEquals(1, count($document->getPersonReferee()));
 
@@ -186,16 +187,16 @@ class Review_Model_ClearDocumentsHelperTest extends ControllerTestCase
     public function testPublishedDateIsNotOverwritten()
     {
         // set PublishedDate to yesterday
-        $document = new Opus_Document($this->documentId);
+        $document = Document::get($this->documentId);
         $yesterday = new DateTime('yesterday');
-        $expectedDate = new Opus_Date($yesterday);
+        $expectedDate = new Date($yesterday);
         $document->setPublishedDate($expectedDate);
         $document->store();
 
         $helper = new Review_Model_ClearDocumentsHelper();
         $helper->clear([$this->documentId], 23, $this->person);
 
-        $document = new Opus_Document($this->documentId);
+        $document = Document::get($this->documentId);
         $this->assertEquals('published', $document->getServerState());
         $this->assertEquals(1, count($document->getPersonReferee()));
 
