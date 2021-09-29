@@ -1572,7 +1572,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
 //      $refereeId = $referee->store();
         $document->addPersonReferee($referee);
 
-        $editor = new Opus_Person();
+        $editor = new Person();
         $editor->setLastName('TestEditor');
         $document->addPersonEditor($editor);
 
