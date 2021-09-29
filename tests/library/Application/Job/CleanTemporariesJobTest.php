@@ -38,8 +38,10 @@ use Opus\Date;
 use Opus\Document;
 use Opus\Model\NotFoundException;
 
-class CleanTemporaries extends ControllerTestCase
+class CleanTemporariesJobTest extends ControllerTestCase
 {
+    protected $additionalResources = 'database';
+
     private $job;
     private $doc;
 
@@ -57,9 +59,8 @@ class CleanTemporaries extends ControllerTestCase
         $this->changeDocumentDateModified($this->doc, 3);
         $this->job->run();
 
-        $doc = Document::get($this->doc->getId());
         $this->setExpectedException(NotFoundException::class);
-//        $doc->delete();
+        $doc = Document::get($this->doc->getId());
     }
 
     public function testRunForMultipleDocs()
@@ -78,7 +79,6 @@ class CleanTemporaries extends ControllerTestCase
         foreach ($docArray as $document) {
             $this->setExpectedException(NotFoundException::class);
             $doc = Document::get($document->getId());
-//            $doc->delete();
         }
     }
 

@@ -25,15 +25,45 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Script
- * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @author      Kaustabh Barman <barman@zib.de>
+ * @copyright   Copyright (c) 2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-define('APPLICATION_ENV', 'production');
+require_once('JobInterface.php');
 
-require_once dirname(__FILE__) . '/../common/bootstrap.php';
-require_once dirname(__FILE__) . '/../../library/Application/Job/CheckConsistensyJob.php';
+use Opus\Date;
+use Opus\Document;
+use Opus\DocumentFinder;
 
-$job = new CheckConsistensyJob();
-$job->run();
+/*
+ * This cron job must be used if embargo dates are used in repository.
+ *
+ * This script finds documents with expired embargo date that have to been
+ * updated after the expiration (ServerDateModified < EmbargoDate) and sets
+ * ServerDateModified to the current time.
+ *
+ * The expiration of an embargo date does not change the document. Until the
+ * date is expired access to the files of the document is blocked. After the
+ * expiration access to the files is possible. However the document will not
+ * be harvested again automatically. In order for the document to be included
+ * in the next harvesting ServerDateModified needs to be updated.
+ */
+class EmbargoUpdateJob implements JobInterface
+{
+    public function run()
+    {
+        $docfinder = new DocumentFinder();
+
+        $now = new Date();
+        $now->setNow();
+
+        // Find documents with expired EmbargoDate and ServerDateModified < EmbargoDate
+        $docfinder->setEmbargoDateBeforeNotModifiedAfter(date('Y-m-d', time()));
+
+        $foundIds = $docfinder->ids();
+
+        // Update ServerDateModified for all found documents
+        Document::setServerDateModifiedByIds($now, $foundIds);
+    }
+}

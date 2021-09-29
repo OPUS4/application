@@ -25,15 +25,33 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Script
- * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @author      Kaustabh Barman <barman@zib.de>
+ * @copyright   Copyright (c) 2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-define('APPLICATION_ENV', 'production');
+require_once('JobInterface.php');
 
-require_once dirname(__FILE__) . '/../common/bootstrap.php';
-require_once dirname(__FILE__) . '/../../library/Application/Job/CheckConsistensyJob.php';
+use Opus\Job\Runner;
+use Opus\Log;
+use Opus\Search\Task\ConsistencyCheck;
 
-$job = new CheckConsistensyJob();
-$job->run();
+/**
+ * Class to check consistency
+ */
+class CheckConsistensyJob implements JobInterface
+{
+    public function run()
+    {
+        $jobrunner = new Runner;
+        $jobrunner->setLogger(Log::get());
+        // no waiting between jobs
+        $jobrunner->setDelay(0);
+        // set a limit of 100 index jobs per run
+        $jobrunner->setLimit(100);
+
+        $worker = new ConsistencyCheck();
+        $jobrunner->registerWorker($worker);
+        $jobrunner->run();
+    }
+}
