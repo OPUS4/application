@@ -44,6 +44,8 @@ class Application_Form_Element_PositionTest extends FormElementTestCase
         $this->_expectedDecoratorCount = count($this->_expectedDecorators);
         $this->_staticViewHelper = 'viewFormSelect';
         parent::setUp();
+
+        $this->useEnglish();
     }
 
     public function testOptions()

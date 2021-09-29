@@ -221,6 +221,8 @@ class Export_DataCiteExportTest extends ControllerTestCase
 
     public function testExportOfDataCiteXmlWithUnpublishedDocAllowedForAdmin()
     {
+        $this->useEnglish();
+
         $this->enableSecurity();
 
         $this->adjustConfiguration([
@@ -250,6 +252,8 @@ class Export_DataCiteExportTest extends ControllerTestCase
 
     public function testExportOfDataCiteXmlWithUnpublishedDocAllowedForNonAdminUserWithPermission()
     {
+        $this->useEnglish();
+
         $removeAccess = $this->addModuleAccess('export', 'docsadmin');
         $this->enableSecurity();
 
@@ -284,6 +288,8 @@ class Export_DataCiteExportTest extends ControllerTestCase
 
     public function testExportOfDataCiteXmlWithUnpublishedDocAllowedForNonAdminUserWithoutPermission()
     {
+        $this->useEnglish();
+
         $removeAccess = $this->addModuleAccess('export', 'collectionsadmin');
         $this->enableSecurity();
 

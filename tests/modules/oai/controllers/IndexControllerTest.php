@@ -1546,7 +1546,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
      *
      * @covers ::indexAction
      */
-    public function testXMetaDissPlusOmitPersonSurnameIfEmpty()
+    public function testXMetaDissPlusUsePersonEnteredUnderGivenNameIfSurnameIsEmpty()
     {
         $document = $this->createTestDocument();
         $document->setServerState('published');
@@ -1572,6 +1572,10 @@ class Oai_IndexControllerTest extends ControllerTestCase
 //      $refereeId = $referee->store();
         $document->addPersonReferee($referee);
 
+        $editor = new Opus_Person();
+        $editor->setLastName('TestEditor');
+        $document->addPersonEditor($editor);
+
         $this->docIds[] = $document->store();
 
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=xMetaDissPlus&identifier=oai::' . $document->getId());
@@ -1584,22 +1588,30 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $this->assertEquals(1, $authorName->length);
         $authorFirstName = $xpath->query('//xMetaDiss:xMetaDiss/dc:creator/pc:person/pc:name/pc:foreName');
         $this->assertEquals(0, $authorFirstName->length);
-        $authorLastName = $xpath->query('//xMetaDiss:xMetaDiss/dc:creator/pc:person/pc:name/pc:surName');
+
+        $authorLastName = $xpath->query('//xMetaDiss:xMetaDiss/dc:creator/pc:person/pc:name/pc:personEnteredUnderGivenName');
         $this->assertEquals(1, $authorLastName->length);
 
         $advisorName = $xpath->query('//xMetaDiss:xMetaDiss/dc:contributor[@thesis:role="advisor"]/pc:person/pc:name');
         $this->assertEquals(1, $advisorName->length);
         $advisorFirstName = $xpath->query('//xMetaDiss:xMetaDiss/dc:contributor[@thesis:role="advisor"]/pc:person/pc:name/pc:foreName');
         $this->assertEquals(0, $advisorFirstName->length);
-        $advisorLastName = $xpath->query('//xMetaDiss:xMetaDiss/dc:contributor[@thesis:role="advisor"]/pc:person/pc:name/pc:surName');
+        $advisorLastName = $xpath->query('//xMetaDiss:xMetaDiss/dc:contributor[@thesis:role="advisor"]/pc:person/pc:name/pc:personEnteredUnderGivenName');
         $this->assertEquals(1, $advisorLastName->length);
 
         $refereeName = $xpath->query('//xMetaDiss:xMetaDiss/dc:contributor[@thesis:role="referee"]/pc:person/pc:name');
         $this->assertEquals(1, $refereeName->length);
         $refereeFirstName = $xpath->query('//xMetaDiss:xMetaDiss/dc:contributor[@thesis:role="referee"]/pc:person/pc:name/pc:foreName');
         $this->assertEquals(0, $refereeFirstName->length);
-        $refereeLastName = $xpath->query('//xMetaDiss:xMetaDiss/dc:contributor[@thesis:role="referee"]/pc:person/pc:name/pc:surName');
+        $refereeLastName = $xpath->query('//xMetaDiss:xMetaDiss/dc:contributor[@thesis:role="referee"]/pc:person/pc:name/pc:personEnteredUnderGivenName');
         $this->assertEquals(1, $refereeLastName->length);
+
+        $editorName = $xpath->query('//xMetaDiss:xMetaDiss/dc:contributor[@thesis:role="editor"]/pc:person/pc:name');
+        $this->assertEquals(1, $editorName->length);
+        $editorFirstName = $xpath->query('//xMetaDiss:xMetaDiss/dc:contributor[@thesis:role="editor"]/pc:person/pc:name/pc:foreName');
+        $this->assertEquals(0, $editorFirstName->length);
+        $editorLastName = $xpath->query('//xMetaDiss:xMetaDiss/dc:contributor[@thesis:role="editor"]/pc:person/pc:name/pc:personEnteredUnderGivenName');
+        $this->assertEquals(1, $editorLastName->length);
     }
 
     /**
