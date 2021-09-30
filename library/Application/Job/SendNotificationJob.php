@@ -39,7 +39,7 @@ use Opus\Log;
 /**
  * Class for sending notification
  */
-class SendNotificationJob implements JobInterface
+class Application_Job_SendNotificationJob implements JobInterface
 {
     public function run()
     {

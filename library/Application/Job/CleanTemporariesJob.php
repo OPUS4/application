@@ -38,7 +38,7 @@ use Opus\DocumentFinder;
 /**
  * Class for cleaning temporary documents.
  */
-class CleanTemporariesJob implements JobInterface
+class Application_Job_CleanTemporariesJob implements JobInterface
 {
     /**
      * @var string Duration of the temporary document

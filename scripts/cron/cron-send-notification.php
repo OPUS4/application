@@ -38,9 +38,6 @@ defined('APPLICATION_ENV')
     );
 
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
-//require_once dirname(__FILE__) . '/../../library/Application/Job/SendNotificationJob.php';
-include(dirname(__FILE__) . '/../../library/Application/Job/SendNotificationJob.php');
 
-//$job = new \library\Application\Job\SendNotificationJob();
-$job = new SendNotificationJob();
+$job = new Application_Job_SendNotificationJob();
 $job->run();

@@ -33,7 +33,6 @@
 
 // Bootstrapping
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
-require_once dirname(__FILE__) . '/../../library/Application/Job/CleanTemporariesJob.php';
 
-$job = new CleanTemporariesJob('P2D');
+$job = new Application_Job_CleanTemporariesJob('P2D');
 $job->run();

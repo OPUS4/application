@@ -49,7 +49,7 @@ use Opus\DocumentFinder;
  * be harvested again automatically. In order for the document to be included
  * in the next harvesting ServerDateModified needs to be updated.
  */
-class EmbargoUpdateJob implements JobInterface
+class Application_Job_EmbargoUpdateJob implements JobInterface
 {
     public function run()
     {

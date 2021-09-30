@@ -32,13 +32,12 @@
  */
 
 require_once dirname(__FILE__) . '/../../../scripts/cron/OpusDocumentMock.php';
-require_once dirname(__FILE__) . '/../../../../library/Application/Job/CleanTemporariesJob.php';
 
 use Opus\Date;
 use Opus\Document;
 use Opus\Model\NotFoundException;
 
-class CleanTemporariesJobTest extends ControllerTestCase
+class Application_Job_CleanTemporariesJobTest extends ControllerTestCase
 {
     protected $additionalResources = 'database';
 
@@ -48,7 +47,7 @@ class CleanTemporariesJobTest extends ControllerTestCase
     public function setUp()
     {
         parent::setUp();
-        $this->job = new CleanTemporariesJob('P2D');
+        $this->job = new Application_Job_CleanTemporariesJob('P2D');
         $this->doc = new OpusDocumentMock();
         $this->doc->setServerState('temporary');
         $this->doc->store();

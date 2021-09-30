@@ -39,7 +39,7 @@ use Opus\Search\Task\ConsistencyCheck;
 /**
  * Class to check consistency
  */
-class CheckConsistensyJob implements JobInterface
+class Application_Job_CheckConsistensyJob implements JobInterface
 {
     public function run()
     {

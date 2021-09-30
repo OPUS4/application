@@ -33,7 +33,6 @@
 define('APPLICATION_ENV', 'production');
 
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
-require_once dirname(__FILE__) . '/../../library/Application/Job/CheckConsistensyJob.php';
 
-$job = new CheckConsistensyJob();
+$job = new Application_Job_CheckConsistensyJob();
 $job->run();

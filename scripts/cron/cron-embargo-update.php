@@ -33,8 +33,6 @@
  */
 
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
-require_once dirname(__FILE__) . '/../../library/Application/Job/EmbargoUpdateJob.php';
 
-$job = new EmbargoUpdateJob();
+$job = new Application_Job_EmbargoUpdateJob();
 $job->run();
-
