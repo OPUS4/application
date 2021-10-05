@@ -1,6 +1,8 @@
 # OPUS 4 Release Notes
 
-## Release 4.7.0.6 2021-09-28
+## Patch Release 4.7.0.7 2021-10-19
+
+## Patch Release 4.7.0.6 2021-09-28
 
 Dieser Patch Release behebt Problem bei XMetaDissPlus und beim 
 Freischalten von Dokumenten im Review-Modul.  
@@ -27,7 +29,7 @@ bisher immer das Feld `PublishedDate` auf das aktuelle Datum gesetzt.
 Mit der neuen Version werden existierende Einträge in dem Feld nicht 
 mehr überschrieben.
 
-## Release 4.7.0.5 2021-08-17
+## Patch Release 4.7.0.5 2021-08-17
 
 Dieser Patch Release behebt zwei kleinere Bugs. Das Editieren der Inhalte der 
 Impressum und Kontakt-Seite ist nun auch von der FAQ-Seite aus ohne Probleme beim 
@@ -39,7 +41,7 @@ insbesondere auch mit Namen, die  Bindestriche enthalten.
 Die Deklaration des Namespaces "xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 erfolgt nun beim OAI-Export in jedem Metadata Wurzel Element (GH-412). 
 
-## Release 4.7.0.4 2020-12-02
+## Patch Release 4.7.0.4 2020-12-02
 
 Diese Version behebt einen Bug im Framework bei der Abfrage, wenn in einem Dokument
 mehrere Identifier vom gleichen Typ vorhanden sind. Dieses Problem hat in einem Fall
