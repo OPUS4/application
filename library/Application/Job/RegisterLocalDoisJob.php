@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -25,25 +26,52 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Script
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
+ * @author      Kaustabh Barman <barman@zib.de>
+ * @copyright   Copyright (c) 2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-/**
+require_once('JobInterface.php');
+
+use Opus\Doi\DoiManager;
+
+/*
+ * Dieses Script sucht nach Dokumenten im ServerState 'published',
+ * die lokale DOIs besitzen, die noch nicht bei DataCite registiert wurden.
+ * Nicht registrierte DOIs sind am Statuswert 'null' erkennbar.
  *
- * This file is not part of the main OPUS 4 distribution!
- *
- * It is currently used in the matheon module. The tarball
- * creation script prepare_directories.sh ignores this file and
- * does not add it to the tarball.
- *
+ * Für die ermittelten DOIs wird die Registrierung bei DataCite versucht.
  *
  */
+class Application_Job_RegisterLocalDoisJob implements JobInterface
+{
+    private $printErrors = false;
 
-define('APPLICATION_ENV', 'production');
+    /**
+     * setze auf $printErrors auf true, um Fehlermeldungen auf der Konsole auszugeben
+     */
+    public function printErrors()
+    {
+        $this->printErrors = true;
+    }
 
-require_once dirname(__FILE__) . '/../common/bootstrap.php';
+    public function run()
+    {
+        $doiManager = new DoiManager();
+        $status = $doiManager->registerPending();
 
-$job = new Application_Job_SendReviewRequestJob();
-$job->run();
+        if ($status->isNoDocsToProcess()) {
+            echo "could not find matching documents for DOI registration\n";
+        } else {
+            echo count($status->getDocsWithDoiStatus()) . " documents have been processed\n";
+
+            if ($this->printErrors) {
+                foreach ($status->getDocsWithDoiStatus() as $docId => $docWithStatus) {
+                    if ($docWithStatus['error']) {
+                        echo "document $docId could not registered successfully: " . $docWithStatus['msg'] . "\n";
+                    }
+                }
+            }
+        }
+    }
+}

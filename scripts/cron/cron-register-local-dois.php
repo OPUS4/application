@@ -33,5 +33,5 @@
 
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
-$job = new Application_Job_RegisterLocalDois();
+$job = new Application_Job_RegisterLocalDoisJob();
 $job->run();

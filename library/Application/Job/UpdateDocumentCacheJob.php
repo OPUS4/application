@@ -33,45 +33,55 @@
 
 require_once('JobInterface.php');
 
-use Opus\Doi\DoiManager;
+use Opus\Document;
+use Opus\DocumentFinder;
+use Opus\Db\DocumentXmlCache;
+use Opus\Model\Xml;
+use Opus\Model\Xml\Cache;
+use Opus\Model\Xml\Version1;
 
-/*
- * Dieses Script sucht nach Dokumenten im ServerState 'published',
- * die lokale DOIs besitzen, die noch nicht bei DataCite registiert wurden.
- * Nicht registrierte DOIs sind am Statuswert 'null' erkennbar.
- *
- * Für die ermittelten DOIs wird die Registrierung bei DataCite versucht.
- *
- */
-class Application_Job_RegisterLocalDois implements JobInterface
+class Application_Job_UpdateDocumentCacheJob implements JobInterface
 {
-    private $printErrors = false;
-
-    /**
-     * setze auf $printErrors auf true, um Fehlermeldungen auf der Konsole auszugeben
-     */
-    public function printErrors()
-    {
-        $this->printErrors = true;
-    }
-
     public function run()
     {
-        $doiManager = new DoiManager();
-        $status = $doiManager->registerPending();
+        $docIds = $this->getDocIds();
 
-        if ($status->isNoDocsToProcess()) {
-            echo "could not find matching documents for DOI registration\n";
-        } else {
-            echo count($status->getDocsWithDoiStatus()) . " documents have been processed\n";
+        echo "processing ".count($docIds)." documents\n";
 
-            if ($this->printErrors) {
-                foreach ($status->getDocsWithDoiStatus() as $docId => $docWithStatus) {
-                    if ($docWithStatus['error']) {
-                        echo "document $docId could not registered successfully: " . $docWithStatus['msg'] . "\n";
-                    }
-                }
-            }
+        foreach ($docIds as $docId) {
+            $model = Document::get($docId);
+
+            $cache = new Cache();
+
+            // xml version 1
+            $omx = new Xml();
+            $omx->setStrategy(new Version1())
+                ->excludeEmptyFields()
+                ->setModel($model)
+                ->setXmlCache($cache);
+            $dom = $omx->getDomDocument();
+            echo "Cache refreshed for document#$docId\n";
         }
+    }
+
+    /**
+     * @return array
+     * @throws Zend_Db_Table_Exception
+     *
+     * Get doc Ids.
+     */
+    private function getDocIds()
+    {
+        $opusDocCacheTable = new DocumentXmlCache();
+        $db = \Zend_Db_Table::getDefaultAdapter();
+
+        //
+        $select = $db->select();
+        $select->from($opusDocCacheTable->info('name'), 'document_id');
+
+        $docFinder = new DocumentFinder();
+        $docFinder->setSubSelectNotExists($select);
+        $docIds = $docFinder->ids();
+        return $docIds;
     }
 }
