@@ -241,6 +241,11 @@ class Oai_Model_Server extends Application_Model_Abstract
 
         $doc = $this->_proc->transformToDoc($this->_xml);
 
+        // Requests with resumptionToken do not provide metadataPrefix in the URL
+        if ($metadataPrefix === null && isset($oaiRequest['metadataPrefixMode'])) {
+            $metadataPrefix = $oaiRequest['metadataPrefixMode'];
+        }
+
         // TODO is this something that should happen for all metadataPrefixes (OPUSVIER-4531)
         $metadataPrefixTags = [
             'oai_dc' => 'dc',
@@ -483,7 +488,10 @@ class Oai_Model_Server extends Application_Model_Abstract
             $restIds = $token->getDocumentIds();
             $metadataPrefix = $token->getMetadataPrefix();
 
+            $oaiRequest['metadataPrefix'] = $metadataPrefix;
+            $oaiRequest['metadataPrefixMode'] = strtolower($metadataPrefix);
             $this->_proc->setParameter('', 'oai_metadataPrefix', $metadataPrefix);
+
             $resumed = true;
         } else {
             // no resumptionToken is given
