@@ -31,8 +31,6 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-require_once('JobInterface.php');
-
 use Opus\Document;
 use Opus\DocumentFinder;
 use Opus\Db\DocumentXmlCache;
@@ -40,7 +38,7 @@ use Opus\Model\Xml;
 use Opus\Model\Xml\Cache;
 use Opus\Model\Xml\Version1;
 
-class Application_Job_UpdateDocumentCacheJob implements JobInterface
+class Application_Job_UpdateDocumentCacheJob implements Application_Job_JobInterface
 {
     public function run()
     {

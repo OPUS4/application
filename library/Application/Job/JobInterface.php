@@ -34,7 +34,7 @@
   * Basic process interface as required to define
   * jobs for background processes
   */
-interface JobInterface
+interface Application_Job_JobInterface
 {
     /**
       * Perform job.

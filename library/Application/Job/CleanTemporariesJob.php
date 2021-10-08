@@ -30,15 +30,13 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-require_once('JobInterface.php');
-
 use Opus\Document;
 use Opus\DocumentFinder;
 
 /**
  * Class for cleaning temporary documents.
  */
-class Application_Job_CleanTemporariesJob implements JobInterface
+class Application_Job_CleanTemporariesJob implements Application_Job_JobInterface
 {
     /**
      * @var string Duration of the temporary document

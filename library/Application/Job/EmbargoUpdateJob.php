@@ -30,8 +30,6 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-require_once('JobInterface.php');
-
 use Opus\Date;
 use Opus\Document;
 use Opus\DocumentFinder;
@@ -49,7 +47,7 @@ use Opus\DocumentFinder;
  * be harvested again automatically. In order for the document to be included
  * in the next harvesting ServerDateModified needs to be updated.
  */
-class Application_Job_EmbargoUpdateJob implements JobInterface
+class Application_Job_EmbargoUpdateJob implements Application_Job_JobInterface
 {
     public function run()
     {

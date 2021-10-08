@@ -32,7 +32,6 @@
  */
 
 require_once('CronTestCase.php');
-require_once('OpusDocumentMock.php');
 
 use Opus\Date;
 use Opus\Document;
@@ -51,7 +50,7 @@ class DbCleanTemporaryTest extends CronTestCase
     public function setUp()
     {
         parent::setUp();
-        $this->doc = new OpusDocumentMock();
+        $this->doc = new Mock_OpusDocumentMock();
         $this->doc->setServerState('temporary');
         $this->doc->store();
     }

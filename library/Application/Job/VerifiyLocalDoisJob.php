@@ -31,8 +31,6 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-require_once('JobInterface.php');
-
 use Opus\Doi\DoiManager;
 
 /*
@@ -45,7 +43,7 @@ use Opus\Doi\DoiManager;
  * gesetzt, wenn sie über das Handle-System tatsächlich auflösbar ist.
  *
  */
-class Application_Job_VerifyLocalDoisJob implements JobInterface
+class Application_Job_VerifyLocalDoisJob implements Application_Job_JobInterface
 {
     private $printErrors = false;
 

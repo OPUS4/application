@@ -30,8 +30,6 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-require_once('JobInterface.php');
-
 use Opus\Job\Runner;
 use Opus\Job\Worker\MailNotification;
 use Opus\Log;
@@ -39,7 +37,7 @@ use Opus\Log;
 /**
  * Class for sending notification
  */
-class Application_Job_SendNotificationJob implements JobInterface
+class Application_Job_SendNotificationJob implements Application_Job_JobInterface
 {
     public function run()
     {

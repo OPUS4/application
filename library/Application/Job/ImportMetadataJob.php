@@ -30,8 +30,6 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-require_once('JobInterface.php');
-
 use Opus\Job\Runner;
 use Opus\Job\Worker\MetadataImport;
 use Opus\Log;
@@ -41,7 +39,7 @@ use Opus\Log;
  *
  * Class to import metadata.
  */
-class Application_Job_ImportMetadataJob implements JobInterface
+class Application_Job_ImportMetadataJob implements Application_Job_JobInterface
 {
     public function run()
     {

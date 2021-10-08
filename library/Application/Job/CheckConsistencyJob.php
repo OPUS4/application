@@ -30,8 +30,6 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-require_once('JobInterface.php');
-
 use Opus\Job\Runner;
 use Opus\Log;
 use Opus\Search\Task\ConsistencyCheck;
@@ -39,7 +37,7 @@ use Opus\Search\Task\ConsistencyCheck;
 /**
  * Class to check consistency
  */
-class Application_Job_CheckConsistensyJob implements JobInterface
+class Application_Job_CheckConsistencyJob implements Application_Job_JobInterface
 {
     public function run()
     {

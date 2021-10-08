@@ -34,5 +34,5 @@ define('APPLICATION_ENV', 'production');
 
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
-$job = new Application_Job_CheckConsistensyJob();
+$job = new Application_Job_CheckConsistencyJob();
 $job->run();

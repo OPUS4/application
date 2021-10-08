@@ -31,8 +31,6 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-require_once dirname(__FILE__) . '/../../../scripts/cron/OpusDocumentMock.php';
-
 use Opus\Date;
 use Opus\Document;
 use Opus\Model\NotFoundException;
@@ -48,7 +46,7 @@ class Application_Job_CleanTemporariesJobTest extends ControllerTestCase
     {
         parent::setUp();
         $this->job = new Application_Job_CleanTemporariesJob('P2D');
-        $this->doc = new OpusDocumentMock();
+        $this->doc = new Mock_OpusDocumentMock();
         $this->doc->setServerState('temporary');
         $this->doc->store();
     }
@@ -66,7 +64,7 @@ class Application_Job_CleanTemporariesJobTest extends ControllerTestCase
     {
         $this->changeDocumentDateModified($this->doc, 3);
 
-        $newDoc = new OpusDocumentMock();
+        $newDoc = new Mock_OpusDocumentMock();
         $newDoc->setServerState('temporary');
         $newDoc->store();
         $this->changeDocumentDateModified($newDoc, 3);

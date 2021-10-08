@@ -31,13 +31,11 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-require_once('JobInterface.php');
-
 use Opus\Job\Runner;
 use Opus\Search\Task\IndexOpusDocument;
 use Opus\Log;
 
-class Application_Job_SolrUpdateJob implements JobInterface
+class Application_Job_SolrUpdateJob implements Application_Job_JobInterface
 {
     public function run()
     {

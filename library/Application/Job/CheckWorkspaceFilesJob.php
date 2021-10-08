@@ -31,13 +31,11 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-require_once('JobInterface.php');
-
 use Opus\Config;
 use Opus\Document;
 use Opus\Model\NotFoundException;
 
-class Application_Job_CheckWorkspaceFilesJob implements JobInterface
+class Application_Job_CheckWorkspaceFilesJob implements Application_Job_JobInterface
 {
     private $startTime;
 

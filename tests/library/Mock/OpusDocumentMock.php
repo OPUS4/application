@@ -36,7 +36,7 @@ use Opus\Document;
 /**
  * Mock used by DbCleanTemporary
  */
-class OpusDocumentMock extends Document
+class Mock_OpusDocumentMock extends Document
 {
 
     public function changeServerDateModified($date)
