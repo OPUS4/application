@@ -57,7 +57,7 @@ class Oai_Format_Marc21Test extends ControllerTestCase
         'marc' => 'http://www.loc.gov/MARC21/slim'
     ];
 
-    public function testXmlXsiSchemaDeclarationPresentForDcMetadata()
+    public function testXmlXsiSchemaDeclarationPresentForMarc21Metadata()
     {
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=marc21&identifier=oai::146');
 
