@@ -58,7 +58,7 @@ class Oai_Format_OaiPpTest extends ControllerTestCase
         'PP' => 'http://www.proprint-service.de/xml/schemes/v1/CHECKED'
     ];
 
-    public function testXmlXsiSchemaDeclarationPresentForDcMetadata()
+    public function testXmlXsiSchemaDeclarationPresentForOaiPpMetadata()
     {
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=oai_pp&identifier=oai::146');
 

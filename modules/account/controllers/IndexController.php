@@ -157,6 +157,8 @@ class Account_IndexController extends Application_Controller_Action
 
                 if ($isLoginChanged || $isPasswordChanged) {
                     Zend_Auth::getInstance()->clearIdentity();
+                    $this->_helper->redirector->redirectToAndExit('index', 'account_password_change_success', 'index', 'auth');
+                    return;
                 }
             } else {
                 $actionUrl = $this->view->url(['action' => 'save']);
