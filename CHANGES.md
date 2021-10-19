@@ -1,5 +1,11 @@
 # OPUS 4 Change Log
 
+## Release 4.7.0.7 - 2021-10-19
+
+### Bugs
+
+* [OPUSVIER-4563] - OAI-PMH: Deklaration von xmlns:xsi XMLSchema-instance fehlt auf Folgeseiten
+* GH-377 - Nach erfolgreicher Änderung eines Passworts erscheint Fehlermeldung und keine Bestätigungsmeldung
 ---
 
 ## Release 4.7.0.6 - 2021-09-28
