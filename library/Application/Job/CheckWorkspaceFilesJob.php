@@ -35,9 +35,18 @@ use Opus\Config;
 use Opus\Document;
 use Opus\Model\NotFoundException;
 
+/**
+ * Class for checking workspace files
+ */
 class Application_Job_CheckWorkspaceFilesJob implements Application_Job_JobInterface
 {
     private $startTime;
+
+    private $errors = 0;
+
+    private $file;
+
+    private $filesPath;
 
     public function run()
     {
@@ -47,9 +56,10 @@ class Application_Job_CheckWorkspaceFilesJob implements Application_Job_JobInter
 
         // Iterate over all files
         $count = 0;
-        $errors = 0;
+        $this->errors = 0;
 
         foreach (glob($filesPath . DIRECTORY_SEPARATOR . "*") as $file) {
+            $this->file = $file;
             if ($count > 0 and $count % 100 == 0) {
                 echo "INFO: checked $count entries with ".round($count / (microtime(true) - $this->startTime))." entries/seconds.\n";
             }
@@ -62,44 +72,62 @@ class Application_Job_CheckWorkspaceFilesJob implements Application_Job_JobInter
 
             if (! is_dir($file)) {
                 echo "ERROR: expected directory: $file\n";
-                $errors++;
+                $this->errors++;
                 continue;
             }
 
             $id = $matches[1];
-            try {
-                $d = Document::get($id);
-            } catch (NotFoundException $e) {
-                echo "ERROR: No document $id found for workspace path '$file'!\n";
-                $errors++;
-            }
+            $d = $this->checkDocument($id);
         }
 
         echo "INFO: Checked a total of $count entries with ".round($count / (microtime(true) - $this->startTime))." entries/seconds.\n";
 
-        if ($errors === 0) {
-            exit(0);
+        if ($this->errors > 0) {
+            throw new Exception("Found $this->errors ERRORs in workspace files directory '$filesPath'!\n");
         }
 
-        echo "ERROR: Found $errors ERRORs in workspace files directory '$filesPath'!\n";
-        exit(1);
+        return $count;
     }
 
     /**
-     * @return string filesPath
+     * Check if document with specified id exists and can be fetched.
      *
+     * @param $id
+     * @return Document
+     */
+    private function checkDocument($id)
+    {
+        try {
+            $doc = Document::get($id);
+            return $doc;
+        } catch (NotFoundException $e) {
+            echo "ERROR: No document $id found for workspace path '$this->file'!\n";
+            $this->errors++;
+        }
+    }
+
+    /**
      * Get files directory.
+     *
+     * @return string filesPath
      */
     private function getFilesPath()
     {
         $this->startTime = microtime(true);
-        $config = Config::get();
-        $filesPath = realpath($config->workspacePath . DIRECTORY_SEPARATOR . "files");
 
-        if ($filesPath == false or empty($filesPath)) {
-            die("ERROR: Failed scanning workspace files path.\n");
+        if (is_null($this->filesPath)) {
+            $config = Config::get();
+            $this->filesPath = realpath($config->workspacePath . DIRECTORY_SEPARATOR . "files");
+
+            if ($this->filesPath == false or empty($this->filesPath)) {
+                throw new Exception("Failed scanning workspace files path.\n");
+            }
         }
+        return $this->filesPath;
+    }
 
-        return $filesPath;
+    public function setFilesPath($path)
+    {
+        $this->filesPath = $path;
     }
 }

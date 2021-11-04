@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -25,71 +24,71 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Script
+ * @category    Application Unit Test
+ * @package     Application
  * @author      Kaustabh Barman <barman@zib.de>
  * @copyright   Copyright (c) 2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
-use Opus\DocumentFinder;
-use Opus\Db\DocumentXmlCache;
-use Opus\Model\Xml;
-use Opus\Model\Xml\Cache;
-use Opus\Model\Xml\Version1;
+use Opus\Config;
 
-/**
- * Class to update document cache
- *
- * Since the metadata of documents are stored in multiple tables,
- * the cache stores the metadata in one place for faster access.
- */
-class Application_Job_UpdateDocumentCacheJob implements Application_Job_JobInterface
+class Application_Job_CheckWorkspaceFilesJobTest extends ControllerTestCase
 {
-    public function run()
+    protected $additionalResources = 'database';
+
+    private $job;
+
+    public function setup()
     {
-        $docIds = $this->getDocIds();
-
-        echo "processing ".count($docIds)." documents\n";
-
-        foreach ($docIds as $docId) {
-            $model = Document::get($docId);
-
-            $cache = new Cache();
-
-            // xml version 1
-            $omx = new Xml();
-            $omx->setStrategy(new Version1())
-                ->excludeEmptyFields()
-                ->setModel($model)
-                ->setXmlCache($cache);
-            $dom = $omx->getDomDocument();
-            echo "Cache refreshed for document#$docId\n";
-        }
+        parent::setUp();
+        $this->job = new Application_Job_CheckWorkspaceFilesJob();
     }
 
-    /**
-     * Get doc Ids.
-     *
-     * Firstly selects all doc id in table, then that are missing.
-     *
-     * @return array
-     * @throws Zend_Db_Table_Exception
-     *
-     * TODO what about expired doc?
-     */
-    private function getDocIds()
+    public function tearDown()
     {
-        $opusDocCacheTable = new DocumentXmlCache();
-        $db = \Zend_Db_Table::getDefaultAdapter();
+        parent::tearDown();
+    }
 
-        //
-        $select = $db->select();
-        $select->from($opusDocCacheTable->info('name'), 'document_id');
+    public function testRun()
+    {
+        $path = $this->createTestFolder();
 
-        $docFinder = new DocumentFinder();
-        $docFinder->setSubSelectNotExists($select);
-        $docIds = $docFinder->ids();
-        return $docIds;
+        $job = $this->job;
+        $job->setFilesPath($path);
+
+        $expectedCount = count(glob($path . DIRECTORY_SEPARATOR . "*"));
+        $count = $job->run();
+
+        $this->assertEquals($expectedCount, $count);
+    }
+
+    public function testGetFilePath()
+    {
+        $job = $this->job;
+        $reflector = new \ReflectionClass($job);
+        $getPath = $reflector->getMethod('getFilesPath');
+        $getPath->setAccessible(true);
+        $path = $getPath->invokeArgs($job, []);
+
+        $expectedPath = realpath(Config::get()->workspacePath . DIRECTORY_SEPARATOR . "files");
+
+        $this->assertSame($expectedPath, $path);
+    }
+
+    public function testRunException()
+    {
+        $job = $this->job;
+        $reflector = new \ReflectionClass($job);
+        $getPath = $reflector->getMethod('getFilesPath');
+        $getPath->setAccessible(true);
+        $path = $getPath->invokeArgs($job, []);
+
+        $file = $this->createTestFile('TestFile.txt', 'This is a test File', $path);
+
+        $expectedErrors = 1;
+        $this->setExpectedException(Exception::class, "Found $expectedErrors ERRORs in workspace files directory '$path'!\n");
+
+        $job->run();
     }
 }
