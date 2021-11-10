@@ -24,65 +24,71 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Cronjob
- * @package     Tests
- * @author      Edouard Simon (edouard.simon@zib.de)
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @category    Application Unit Test
+ * @package     Application
+ * @author      Kaustabh Barman <barman@zib.de>
+ * @copyright   Copyright (c) 2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-require_once('CronTestCase.php');
+use Opus\Config;
 
-use Opus\Date;
-use Opus\Document;
-use Opus\Model\NotFoundException;
-
-/**
- *
- */
-class DbCleanTemporaryTest extends CronTestCase
+class Application_Job_CheckWorkspaceFilesJobTest extends ControllerTestCase
 {
-
     protected $additionalResources = 'database';
 
-    private $doc;
+    private $job;
 
-    public function setUp()
+    public function setup()
     {
         parent::setUp();
-        $this->doc = new Mock_OpusDocumentMock();
-        $this->doc->setServerState('temporary');
-        $this->doc->store();
+        $this->job = new Application_Job_CheckWorkspaceFilesJob();
     }
 
-    public function testCleanUpDocumentOlderThan2Days()
+    public function tearDown()
     {
-        $this->changeDocumentDateModified(3);
-        $this->executeScript('cron-db-clean-temporary.php');
-        try {
-            $doc = Document::get($this->doc->getId());
-            $doc->delete();
-            $this->fail("expected Opus\Model\NotFoundException");
-        } catch (NotFoundException $e) {
-        }
+        parent::tearDown();
     }
 
-    public function testKeepDocumentNewerThan3Days()
+    public function testRun()
     {
-        $this->changeDocumentDateModified(2);
-        $this->executeScript('cron-db-clean-temporary.php');
-        try {
-            $doc = Document::get($this->doc->getId());
-            $doc->delete();
-        } catch (NotFoundException $e) {
-            $this->fail("expected existing document.");
-        }
+        $path = $this->createTestFolder();
+
+        $job = $this->job;
+        $job->setFilesPath($path);
+
+        $expectedCount = count(glob($path . DIRECTORY_SEPARATOR . "*"));
+        $count = $job->run();
+
+        $this->assertEquals($expectedCount, $count);
     }
 
-    private function changeDocumentDateModified($numDaysBeforeNow)
+    public function testGetFilePath()
     {
-        $date = new DateTime();
-        $date->sub(new DateInterval("P{$numDaysBeforeNow}D"));
-        $this->doc->changeServerDateModified(new Date($date));
+        $job = $this->job;
+        $reflector = new \ReflectionClass($job);
+        $getPath = $reflector->getMethod('getFilesPath');
+        $getPath->setAccessible(true);
+        $path = $getPath->invokeArgs($job, []);
+
+        $expectedPath = realpath(Config::get()->workspacePath . DIRECTORY_SEPARATOR . "files");
+
+        $this->assertSame($expectedPath, $path);
+    }
+
+    public function testRunException()
+    {
+        $job = $this->job;
+        $reflector = new \ReflectionClass($job);
+        $getPath = $reflector->getMethod('getFilesPath');
+        $getPath->setAccessible(true);
+        $path = $getPath->invokeArgs($job, []);
+
+        $file = $this->createTestFile('TestFile.txt', 'This is a test File', $path);
+
+        $expectedErrors = 1;
+        $this->setExpectedException(Exception::class, "Found $expectedErrors ERRORs in workspace files directory '$path'!\n");
+
+        $job->run();
     }
 }

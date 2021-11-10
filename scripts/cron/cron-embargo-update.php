@@ -34,33 +34,5 @@
 
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
-use Opus\Date;
-use Opus\Document;
-use Opus\DocumentFinder;
-
-/*
- * This cron job must be used if embargo dates are used in repository.
- *
- * This script finds documents with expired embargo date that have to been
- * updated after the expiration (ServerDateModified < EmbargoDate) and sets
- * ServerDateModified to the current time.
- *
- * The expiration of an embargo date does not change the document. Until the
- * date is expired access to the files of the document is blocked. After the
- * expiration access to the files is possible. However the document will not
- * be harvested again automatically. In order for the document to be included
- * in the next harvesting ServerDateModified needs to be updated.
- */
-
-$docfinder = new DocumentFinder();
-
-$now = new Date();
-$now->setNow();
-
-// Find documents with expired EmbargoDate and ServerDateModified < EmbargoDate
-$docfinder->setEmbargoDateBeforeNotModifiedAfter(date('Y-m-d', time()));
-
-$foundIds = $docfinder->ids();
-
-// Update ServerDateModified for all found documents
-Document::setServerDateModifiedByIds($now, $foundIds);
+$job = new Application_Job_EmbargoUpdateJob();
+$job->run();

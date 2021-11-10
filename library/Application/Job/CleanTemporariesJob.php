@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -25,14 +25,60 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Script
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
+ * @author      Kaustabh Barman <barman@zib.de>
+ * @copyright   Copyright (c) 2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-define('APPLICATION_ENV', 'production');
+use Opus\Document;
+use Opus\DocumentFinder;
 
-require_once dirname(__FILE__) . '/../common/bootstrap.php';
+/**
+ * Class for cleaning temporary documents.
+ */
+class Application_Job_CleanTemporariesJob implements Application_Job_JobInterface
+{
+    /**
+     * @var string Duration of the temporary document
+     */
+    private $duration;
 
-$job = new Application_Job_ImportMetadataJob();
-$job->run();
+    /**
+     * CleanTemporariesJob constructor.
+     * @param $duration string Duration e.g., P2D, P4M
+     */
+    public function __construct($duration)
+    {
+        $this->duration = $duration;
+    }
+
+    public function run()
+    {
+        $dateString = $this->getPreviousDate();
+        $finder = new DocumentFinder();
+        $finder->setServerState('temporary')
+            ->setServerDateModifiedBefore($dateString);
+
+        foreach ($finder->ids() as $id) {
+            $doc = Document::get($id);
+            if ($doc->getServerState() == 'temporary') {
+                echo "deleting document: $id\n";
+                $doc->delete();
+            } else {
+                echo "NOT deleting document: $id because it has server state ".$doc->getServerState();
+            }
+        }
+    }
+
+    /**
+     * Returns the previous date of the mentioned duration in class contructor.
+     *
+     * @returns string date
+     */
+    private function getPreviousDate()
+    {
+        $date = new DateTime();
+        $dateString = $date->sub(new DateInterval($this->duration))->format('Y-m-d');
+        return $dateString;
+    }
+}

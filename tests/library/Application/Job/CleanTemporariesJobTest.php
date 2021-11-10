@@ -24,65 +24,79 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Cronjob
- * @package     Tests
- * @author      Edouard Simon (edouard.simon@zib.de)
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @category    Application Unit Test
+ * @package     Application
+ * @author      Kaustabh Barman <barman@zib.de>
+ * @copyright   Copyright (c) 2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-
-require_once('CronTestCase.php');
 
 use Opus\Date;
 use Opus\Document;
 use Opus\Model\NotFoundException;
 
-/**
- *
- */
-class DbCleanTemporaryTest extends CronTestCase
+class Application_Job_CleanTemporariesJobTest extends ControllerTestCase
 {
-
     protected $additionalResources = 'database';
 
+    private $job;
     private $doc;
 
     public function setUp()
     {
         parent::setUp();
+        $this->job = new Application_Job_CleanTemporariesJob('P2D');
         $this->doc = new Mock_OpusDocumentMock();
         $this->doc->setServerState('temporary');
         $this->doc->store();
     }
 
-    public function testCleanUpDocumentOlderThan2Days()
+    public function testRun()
     {
-        $this->changeDocumentDateModified(3);
-        $this->executeScript('cron-db-clean-temporary.php');
-        try {
-            $doc = Document::get($this->doc->getId());
-            $doc->delete();
-            $this->fail("expected Opus\Model\NotFoundException");
-        } catch (NotFoundException $e) {
+        $this->changeDocumentDateModified($this->doc, 3);
+        $this->job->run();
+
+        $this->setExpectedException(NotFoundException::class);
+        $doc = Document::get($this->doc->getId());
+    }
+
+    public function testRunForMultipleDocs()
+    {
+        $this->changeDocumentDateModified($this->doc, 3);
+
+        $newDoc = new Mock_OpusDocumentMock();
+        $newDoc->setServerState('temporary');
+        $newDoc->store();
+        $this->changeDocumentDateModified($newDoc, 3);
+
+        $docArray = [$this->doc, $newDoc];
+
+        $this->job->run();
+
+        foreach ($docArray as $document) {
+            $this->setExpectedException(NotFoundException::class);
+            $doc = Document::get($document->getId());
         }
     }
 
-    public function testKeepDocumentNewerThan3Days()
+    public function testGetPreviousDate()
     {
-        $this->changeDocumentDateModified(2);
-        $this->executeScript('cron-db-clean-temporary.php');
-        try {
-            $doc = Document::get($this->doc->getId());
-            $doc->delete();
-        } catch (NotFoundException $e) {
-            $this->fail("expected existing document.");
-        }
+        $job = $this->job;
+        $reflector = new \ReflectionClass($job);
+        $getDate = $reflector->getMethod('getPreviousDate');
+        $getDate->setAccessible(true);
+        $date = $getDate->invokeArgs($job, []);
+
+        $dateTime = new DateTime();
+        $expected = $dateTime->sub(new DateInterval('P2D'))->format('Y-m-d');
+
+        $this->assertSame($expected, $date);
     }
 
-    private function changeDocumentDateModified($numDaysBeforeNow)
+    private function changeDocumentDateModified($document, $numDaysBeforeNow)
     {
         $date = new DateTime();
         $date->sub(new DateInterval("P{$numDaysBeforeNow}D"));
-        $this->doc->changeServerDateModified(new Date($date));
+        $document->changeServerDateModified(new Date($date));
     }
 }

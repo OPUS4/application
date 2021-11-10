@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -25,14 +25,19 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Script
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
+ * @author      Kaustabh Barman <barman@zib.de>
+ * @copyright   Copyright (c) 2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-define('APPLICATION_ENV', 'production');
-
-require_once dirname(__FILE__) . '/../common/bootstrap.php';
-
-$job = new Application_Job_ImportMetadataJob();
-$job->run();
+ /**
+  * Basic process interface as required to define
+  * jobs for background processes
+  */
+interface Application_Job_JobInterface
+{
+    /**
+      * Perform job.
+      */
+    public function run();
+}

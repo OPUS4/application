@@ -37,21 +37,5 @@ define('APPLICATION_ENV', 'development');
 // Bootstrapping
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
-use Opus\Job\Runner;
-use Opus\Search\Task\IndexOpusDocument;
-use Opus\Log;
-
-$jobrunner = new Runner();
-$jobrunner->setLogger(Log::get());
-
-// no waiting between jobs
-$jobrunner->setDelay(0);
-
-// set a limit of 100 index jobs per run
-$jobrunner->setLimit(100);
-
-$indexWorker = new IndexOpusDocument();
-$jobrunner->registerWorker($indexWorker);
-
-// run processing
-$jobrunner->run();
+$job = new Application_Job_SolrUpdateJob();
+$job->run();
