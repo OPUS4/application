@@ -36,7 +36,10 @@ use Opus\Document;
 use Opus\Model\NotFoundException;
 
 /**
- * Class for checking workspace files
+ * Class for checking workspace files.
+ *
+ * This class checks if all the items in workspace/files directory are a directory and throws an exception for the items
+ * which are not.
  */
 class Application_Job_CheckWorkspaceFilesJob implements Application_Job_JobInterface
 {
