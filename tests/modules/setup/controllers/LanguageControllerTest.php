@@ -363,7 +363,7 @@ class Setup_LanguageControllerTest extends ControllerTestCase
 
         try {
             $manager->getTranslation('customkey');
-        } catch (\Opus\Translate\UnknownTranslationKey $ex) {
+        } catch (\Opus\Translate\UnknownTranslationKeyException $ex) {
             $keyFound = false;
         }
 

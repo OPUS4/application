@@ -895,7 +895,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
 
         try {
             $translation = $manager->getTranslation($oldKey);
-        } catch (\Opus\Translate\UnknownTranslationKey $ex) {
+        } catch (\Opus\Translate\UnknownTranslationKeyException $ex) {
             $failed = false;
         }
 
@@ -905,7 +905,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
     }
 
     /**
-     * @expectedException \Opus\Translate\Exception
+     * @expectedException \Opus\Translate\TranslateException
      * @expectedExceptionMessage default_add
      */
     public function testUpdateTranslationForEditedKey()
@@ -916,7 +916,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
     }
 
     /**
-     * @expectedException \Opus\Translate\Exception
+     * @expectedException \Opus\Translate\TranslateException
      * @expectedExceptionMessage Module of key 'default_add' cannot be changed.
      */
     public function testUpdateTranslationCannotModifyModuleForEditedKey()
@@ -971,7 +971,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
 
         try {
             $translation = $manager->getTranslation($oldKey);
-        } catch (\Opus\Translate\UnknownTranslationKey $ex) {
+        } catch (\Opus\Translate\UnknownTranslationKeyException $ex) {
             $failed = false;
         }
 

@@ -400,7 +400,7 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
     /**
      * @param $key
      * TODO IMPORTANT optimize (do some caching or something)
-     * @throws \Opus\Translate\UnknownTranslationKey
+     * @throws \Opus\Translate\UnknownTranslationKeyException
      */
     public function getTranslation($key)
     {
@@ -411,7 +411,7 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
         if (isset($translations[$key])) {
             $translation = $translations[$key];
         } else {
-            throw new \Opus\Translate\UnknownTranslationKey("Unknown key '$key'.");
+            throw new \Opus\Translate\UnknownTranslationKeyException("Unknown key '$key'.");
         }
 
         return $translation;
@@ -681,7 +681,7 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
 
             try {
                 $old = $this->getTranslation($key);
-            } catch (\Opus\Translate\UnknownTranslationKey $ex) {
+            } catch (\Opus\Translate\UnknownTranslationKeyException $ex) {
                 // do nothing
                 // TODO work without exception here (keyExists)?
             }
@@ -746,7 +746,7 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
                 $dao->remove($oldKey);
                 $this->clearCache();
             } else {
-                throw new \Opus\Translate\Exception("Name of key '$oldKey' cannot be changed.");
+                throw new \Opus\Translate\TranslateException("Name of key '$oldKey' cannot be changed.");
             }
         } else {
             $translation = $this->getTranslation($key);
@@ -756,7 +756,7 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
                     $dao->remove($key);
                     $this->clearCache();
                 } else {
-                    throw new \Opus\Translate\Exception("Module of key '$key' cannot be changed.");
+                    throw new \Opus\Translate\TranslateException("Module of key '$key' cannot be changed.");
                 }
             }
         }
@@ -800,7 +800,7 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
     {
         try {
             $old = $this->getTranslation($key);
-        } catch (\Opus\Translate\UnknownTranslationKey $excep) {
+        } catch (\Opus\Translate\UnknownTranslationKeyException $excep) {
             $old = null;
         }
 

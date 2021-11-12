@@ -34,7 +34,7 @@
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
-use Opus\Console\BaseDocumentCommand;
+use Opus\Console\AbstractBaseDocumentCommand;
 use Opus\Console\Helper\ProgressMatrix;
 use Opus\Document;
 use Opus\Search\Console\Helper\DocumentHelper;
@@ -44,7 +44,7 @@ use Opus\Search\Console\Helper\DocumentHelper;
  *
  * TODO use switch instead of singleDocument and removeAll (?)
  */
-class Application_Console_Document_DeleteCommand extends BaseDocumentCommand
+class Application_Console_Document_DeleteCommand extends AbstractBaseDocumentCommand
 {
 
     const OPTION_PERMANENT = 'permanent';

@@ -261,7 +261,7 @@ class Setup_Form_TranslationTest extends ControllerTestCase
     }
 
     /**
-     * @expectedException \Opus\Translate\UnknownTranslationKey
+     * @expectedException \Opus\Translate\UnknownTranslationKeyException
      * @expectedExceptionMessage unknownKey789
      */
     public function testPopulateFromKeyUnknownKey()
@@ -388,7 +388,7 @@ class Setup_Form_TranslationTest extends ControllerTestCase
         $failed = true;
         try {
             $translation = $manager->getTranslation($oldKey);
-        } catch (\Opus\Translate\UnknownTranslationKey $ex) {
+        } catch (\Opus\Translate\UnknownTranslationKeyException $ex) {
             $failed = false;
         }
         if ($failed) {

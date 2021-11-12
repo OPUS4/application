@@ -99,7 +99,7 @@ class Application_Form_Element_Translation extends \Zend_Form_Element_Multi
 
         try {
             $translation = $manager->getTranslation($key);
-        } catch (\Opus\Translate\UnknownTranslationKey $ex) {
+        } catch (\Opus\Translate\UnknownTranslationKeyException $ex) {
             $translation = null;
         }
 
@@ -120,7 +120,7 @@ class Application_Form_Element_Translation extends \Zend_Form_Element_Multi
             try {
                 $translation = $manager->getTranslation($key);
                 $old = $translation['translations'];
-            } catch (\Opus\Translate\UnknownTranslationKey $ex) {
+            } catch (\Opus\Translate\UnknownTranslationKeyException $ex) {
             }
         }
 

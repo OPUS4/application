@@ -35,7 +35,7 @@
  * Form for adding or editing translations.
  *
  * This form is independent of the classes used to integrate translation editing into other forms. This currently makes
- * sense, because the requirments are different.
+ * sense, because the requirements are different.
  * - Application_Form_Element_Translation
  * - Application_Form_Translations
  *
@@ -214,7 +214,7 @@ class Setup_Form_Translation extends Application_Form_Abstract
         $translation = $manager->getTranslation($key);
 
         if (is_null($translation)) {
-            throw new \Opus\Translate\UnknownTranslationKey("Unknown key '$key'.");
+            throw new \Opus\Translate\UnknownTranslationKeyException("Unknown key '$key'.");
         }
 
         $idElement = $this->getElement(self::ELEMENT_ID);

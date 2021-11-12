@@ -95,7 +95,7 @@ class Application_Update_ConvertCollectionRoleTranslations extends Application_U
                         $manager->delete($translationKey);
                         $this->log("  Removing old translation key '{$colors->blue($translationKey)}'");
                     }
-                } catch (\Opus\Translate\UnknownTranslationKey $ex) {
+                } catch (\Opus\Translate\UnknownTranslationKeyException $ex) {
                     $this->log("  Translation key '{$colors->blue($translationKey)}' does not exist");
                     $this->log('  Using old Name for translations');
                 }
