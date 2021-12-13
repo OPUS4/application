@@ -40,8 +40,6 @@ class Application_Update_SetStatusOfExistingDoiTest extends ControllerTestCase
      * @throws Opus_Model_Exception
      *
      * TODO test sets Status of all DOI identifier of published documents to 'registered' (side effect)
-     * TODO this test has failed once (date got modified or compare didn't work) on Travis and worked in the next run
-     *      without changes - Why?
      */
     public function testRunDoesNotModifyServerDateModified()
     {
@@ -55,6 +53,9 @@ class Application_Update_SetStatusOfExistingDoiTest extends ControllerTestCase
         $doc->addIdentifier($doi);
         $docId = $doc->store();
 
+        // ServerDateModified wird manchmal gerundet beim Speichern = deshalb muss das Dokument noch mal geladen werden
+        // TODO https://github.com/OPUS4/framework/issues/228
+        $doc = Document::get($docId);
         $modified = $doc->getServerDateModified();
 
         sleep(2);
