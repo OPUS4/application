@@ -55,7 +55,7 @@ class Application_Update_SetStatusOfExistingDoiTest extends ControllerTestCase
 
         // ServerDateModified wird manchmal gerundet beim Speichern = deshalb muss das Dokument noch mal geladen werden
         // TODO https://github.com/OPUS4/framework/issues/228
-        $doc = Document::get($docId);
+        $doc = new Opus_Document($docId);
         $modified = $doc->getServerDateModified();
 
         sleep(2);
