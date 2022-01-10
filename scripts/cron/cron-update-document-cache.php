@@ -50,7 +50,7 @@ $select = $db->select();
 $select->from($opusDocCacheTable->info('name'), 'document_id');
 
 $docFinder = new DocumentFinder();
-$docFinder->setSubSelectNotExists($select);
+$docFinder->setSubSelectNotExists($select); // TODO DocumentFinder
 $docIds = $docFinder->ids();
 
 echo "processing ".count($docIds)." documents\n";

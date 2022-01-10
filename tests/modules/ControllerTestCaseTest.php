@@ -31,6 +31,8 @@
  */
 
 use Opus\Document;
+use Opus\DocumentFinderInterface;
+use Opus\DocumentFinder\DefaultDocumentFinder;
 use Opus\Model\NotFoundException;
 use Opus\Security\Realm;
 
@@ -433,5 +435,12 @@ class ControllerTestCaseTest extends ControllerTestCase
         $this->assertContains('help.ini', $files);
         $this->assertContains('imprint.de.txt', $files);
         $this->assertContains('metadata.en.txt', $files);
+    }
+
+    public function testGetDocumentFinder()
+    {
+        $finder = $this->getDocumentFinder();
+
+        $this->assertInstanceOf(DefaultDocumentFinder::class, $finder);
     }
 }

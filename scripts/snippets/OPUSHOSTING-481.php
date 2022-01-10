@@ -46,7 +46,8 @@ $lastName = "Doe";
 $docfinder = new DocumentFinder();
 // wichtig: müssen diesen Filter setzen, da im Index nur Dokument im Zustand published sind
 $docfinder->setServerState('published');
-$select = $docfinder->getSelect();
+
+$select = $docfinder->getSelect(); // TODO DocumentFinder
 $select
   ->joinLeft(
       ['pd' => 'link_persons_documents'],

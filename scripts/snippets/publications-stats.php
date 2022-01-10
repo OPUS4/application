@@ -38,8 +38,8 @@ use Opus\DocumentFinder;
  * TODO make command in opus4 tool
  */
 
-$df = new DocumentFinder();
-$years = $df->setServerState('published')->groupedServerYearPublished();
+$finder = new DocumentFinder(); // TODO DocumentFinder
+$years = $finder->setServerState('published')->groupedServerYearPublished();
 sort($years);
 
 $cumSum = 0;

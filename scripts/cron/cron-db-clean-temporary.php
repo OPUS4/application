@@ -35,15 +35,15 @@
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
 use Opus\Document;
-use Opus\DocumentFinder;
+use Opus\Repository;
 
 $date = new DateTime();
 $dateString = $date->sub(new DateInterval('P2D'))->format('Y-m-d');
-$finder = new DocumentFinder();
+$finder = Repository::getInstance()->getDocumentFinder();
 $finder->setServerState('temporary')
   ->setServerDateModifiedBefore($dateString);
 
-foreach ($finder->ids() as $id) {
+foreach ($finder->getIds() as $id) {
     $doc = Document::get($id);
     if ($doc->getServerState() == 'temporary') {
         echo "deleting document: $id\n";

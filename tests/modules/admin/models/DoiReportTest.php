@@ -33,7 +33,6 @@
  */
 
 use Opus\Document;
-use Opus\DocumentFinder;
 use Opus\Identifier;
 
 /**
@@ -111,13 +110,13 @@ class Admin_Model_DoiReportTest extends ControllerTestCase
 
     public function testGetNumDoisForBulkVerification()
     {
-        $finder = new DocumentFinder();
+        $finder = $this->getDocumentFinder();
         $finder->setServerState('published');
         $finder->setIdentifierTypeExists('doi');
 
         $expected = 0;
 
-        foreach ($finder->ids() as $docId) {
+        foreach ($finder->getIds() as $docId) {
             $doc = Document::get($docId);
             $identifier = $doc->getIdentifierDoi(0);
             if ($identifier->getStatus() === 'registered') {

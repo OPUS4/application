@@ -248,7 +248,7 @@ class Review_IndexController extends Application_Controller_Action
      */
     protected function _prepareDocumentFinder()
     {
-        $finder = new DocumentFinder();
+        $finder = new DocumentFinder(); // TODO DocumentFinder
         $finder->setServerState(self::$_reviewServerState);
 
         $logger = $this->getLogger();

@@ -34,9 +34,9 @@
  */
 
 use Opus\Collection;
-use Opus\DocumentFinder;
 use Opus\Series;
 use Opus\Model\ModelException;
+use Opus\Respository;
 
 class Publish_Model_ExtendedValidation
 {
@@ -794,9 +794,9 @@ class Publish_Model_ExtendedValidation
         }
 
         // check URN $urn for collision
-        $finder = new DocumentFinder();
-        $finder->setIdentifierTypeValue('urn', $value);
-        if ($finder->count() == 0) {
+        $finder = Repository::getInstance()->getDocumentFinder();
+        $finder->setIdentifierValue('urn', $value);
+        if ($finder->getCount() === 0) {
             return true;
         }
 
@@ -825,10 +825,10 @@ class Publish_Model_ExtendedValidation
             return true;
         }
 
-        $finder = new DocumentFinder();
-        $finder->setIdentifierTypeValue('doi', $value);
+        $finder = Repository::getInstance()->getDocumentFinder();
+        $finder->setIdentifierValue('doi', $value);
 
-        if ($finder->count() == 0) {
+        if ($finder->getCount() == 0) {
             return true;
         }
 

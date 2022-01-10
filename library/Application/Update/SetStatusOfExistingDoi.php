@@ -32,7 +32,7 @@
  */
 
 use Opus\Document;
-use Opus\DocumentFinder;
+use Opus\Repository;
 
 /**
  * Set registration status of all existing DOIs to "registered".
@@ -45,10 +45,10 @@ class Application_Update_SetStatusOfExistingDoi extends Application_Update_Plugi
     {
         $this->log('Set registration status of all DOIs to "registered"');
 
-        $docFinder = new DocumentFinder();
-        $docFinder->setIdentifierTypeExists('doi');
+        $docFinder = Repository::getInstance()->getDocumentFinder();
+        $docFinder->setIdentifierExists('doi');
         $docFinder->setServerState('published');
-        $ids = $docFinder->ids();
+        $ids = $docFinder->getIds();
 
         $this->log('number of published documents with identifier of type DOI: ' . count($ids));
 

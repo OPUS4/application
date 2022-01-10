@@ -87,7 +87,7 @@ class Application_Controller_Action_Helper_Documents extends \Zend_Controller_Ac
      */
     public function getSortedDocumentIds($sortOrder = null, $sortReverse = true, $state = null)
     {
-        $finder = new DocumentFinder();
+        $finder = new DocumentFinder(); // TODO DocumentFinder sorting order
 
         if (! is_null($state) && $state !== 'all') {
             $finder->setServerState($state);

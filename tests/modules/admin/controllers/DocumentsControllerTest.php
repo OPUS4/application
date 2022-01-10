@@ -31,7 +31,6 @@
  */
 
 use Opus\CollectionRole;
-use Opus\DocumentFinder;
 use Opus\Person;
 
 /**
@@ -148,10 +147,10 @@ class Admin_DocumentsControllerTest extends ControllerTestCase
 
     public function testShowAllHits()
     {
-        $docFinder = new DocumentFinder();
+        $docFinder = $this->getDocumentFinder();
         $docFinder->setServerState('unpublished');
 
-        $unpublishedDocs = $docFinder->count();
+        $unpublishedDocs = $docFinder->getCount();
 
         $this->dispatch('/admin/documents/index/state/unpublished/hitsperpage/all');
         $this->assertQueryCount('span.title', $unpublishedDocs);
@@ -159,8 +158,6 @@ class Admin_DocumentsControllerTest extends ControllerTestCase
 
     public function testHitsPerPageBadParameter()
     {
-        $docFinder = new DocumentFinder();
-
         $this->dispatch('/admin/documents/index/state/unpublished/hitsperpage/dummy');
         $this->assertQueryCount('span.title', 10); // default
     }

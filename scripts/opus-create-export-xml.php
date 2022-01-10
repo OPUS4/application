@@ -33,8 +33,8 @@
 
 use Opus\Config;
 use Opus\Document;
-use Opus\DocumentFinder;
 use Opus\Model\NotFoundException;
+use Opus\Repository;
 
 /**
  * Script for exporting all documents.
@@ -87,10 +87,10 @@ $opusDocuments = new DOMDocument('1.0', 'utf-8');
 $opusDocuments->formatOutput = true;
 $export = $opusDocuments->createElement('export');
 
-$docFinder = new DocumentFinder();
+$docFinder = Repository::getInstance()->getDocumentFinder();
 
 // get all documents
-foreach ($docFinder->ids() as $id) {
+foreach ($docFinder->getIds() as $id) {
     $doc = null;
 
     try {

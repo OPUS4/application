@@ -32,8 +32,8 @@
 
 use Opus\Date;
 use Opus\Document;
-use Opus\DocumentFinder;
 use Opus\Model\NotFoundException;
+use Opus\Repository;
 
 /**
  * Releases all documents in server state unpublished.
@@ -41,10 +41,10 @@ use Opus\Model\NotFoundException;
  * TODO useful? should it be part of opus4 or opus4dev
  */
 
-$docFinder = new DocumentFinder();
+$docFinder = Repository::getInstance()->getDocumentFinder();
 $docFinder->setServerState('unpublished');
 
-foreach ($docFinder->ids() as $id) {
+foreach ($docFinder->getIds() as $id) {
     $d = null;
     try {
         $d = Document::get($id);
@@ -64,4 +64,5 @@ foreach ($docFinder->ids() as $id) {
 }
 
 echo "done.\n";
+
 exit();

@@ -69,7 +69,7 @@ class Oai_Model_DocumentList
     {
         $today = date('Y-m-d', time());
 
-        $finder = new DocumentFinder();
+        $finder = new DocumentFinder(); // TODO DocumentFinder
 
         // add server state restrictions
         $finder->setServerStateInList($this->deliveringDocumentStates);

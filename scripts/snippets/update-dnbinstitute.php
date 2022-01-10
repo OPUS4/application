@@ -43,8 +43,8 @@ require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
 use Opus\DnbInstitute;
 use Opus\Document;
-use Opus\DocumentFinder;
 use Opus\Model\NotFoundException;
+use Opus\Repository;
 
 //if ($argc < 3) {
 //    echo "Usage: {$argv[0]} <document type> <thesis publisher ID> (dryrun)\n";
@@ -76,13 +76,13 @@ if ($dryrun) {
     _log("TEST RUN: NO DATA WILL BE MODIFIED");
 }
 
-$docFinder = new DocumentFinder();
-$docIds = $docFinder
-        ->setServerState('published');
+$docFinder = Repository::getInstance()->getDocumentFinder();
+$docFinder->setServerState('published');
 if ($documentType != false) {
-    $docFinder->setType($documentType);
+    $docFinder->setDocumentType($documentType);
 }
-$docIds = $docFinder->ids();
+
+$docIds = $docFinder->getIds();
 
 _log(count($docIds) . " documents " . ($documentType != false ? "of type '$documentType' " : '') . "found");
 

@@ -30,7 +30,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\DocumentFinder;
+use Opus\Repository;
 use Opus\Search\Service;
 use Opus\Search\QueryFactory;
 
@@ -45,9 +45,11 @@ use Opus\Search\QueryFactory;
  */
 
 $numOfErrors = 0;
-$finder = new DocumentFinder();
+
+$finder = Repository::getInstance()->getDocumentFinder();
 $finder->setServerState('published');
-foreach ($finder->ids() as $docId) {
+
+foreach ($finder->getIds() as $docId) {
     // check if document with id $docId is already persisted in search index
     $search = Service::selectSearchingService();
     $query  = QueryFactory::selectDocumentById($search, $docId);
@@ -57,6 +59,7 @@ foreach ($finder->ids() as $docId) {
         $numOfErrors++;
     }
 }
+
 if ($numOfErrors > 0) {
     echo "$numOfErrors missing documents were found\n";
 } else {

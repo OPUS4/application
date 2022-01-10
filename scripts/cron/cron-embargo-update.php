@@ -58,7 +58,7 @@ $now = new Date();
 $now->setNow();
 
 // Find documents with expired EmbargoDate and ServerDateModified < EmbargoDate
-$docfinder->setEmbargoDateBeforeNotModifiedAfter(date('Y-m-d', time()));
+$docfinder->setEmbargoDateBeforeNotModifiedAfter(date('Y-m-d', time())); // TODO DocumentFinder
 
 $foundIds = $docfinder->ids();
 

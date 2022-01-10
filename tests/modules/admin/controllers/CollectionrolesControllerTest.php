@@ -34,7 +34,6 @@
 
 use Opus\CollectionRole;
 use Opus\Document;
-use Opus\DocumentFinder;
 
 /**
  * @covers Admin_CollectionrolesController
@@ -247,9 +246,9 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase
         $collectionRole2 = new CollectionRole(2);
         $this->assertEquals(2, $collectionRole2->getPosition(), 'Test setup changed');
 
-        $docfinder = new DocumentFinder();
+        $docfinder = $this->getDocumentFinder();
         $docfinder->setCollectionRoleId(2);
-        $collectionRoleDocs = $docfinder->ids();
+        $collectionRoleDocs = $docfinder->getIds();
 
         $this->assertTrue(in_array(146, $collectionRoleDocs), 'Test setup changed');
 

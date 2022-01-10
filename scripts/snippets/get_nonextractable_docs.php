@@ -31,8 +31,8 @@
  */
 
 use Opus\Document;
-use Opus\DocumentFinder;
 use Opus\Model\NotFoundException;
+use Opus\Repository;
 
 /**
  * Finds all non-extractable full texts.
@@ -46,12 +46,12 @@ $app = 'solr/opus';
 
 $solrServer = new Apache_Solr_Service($host, $port, $app);
 
-$docFinder = new DocumentFinder();
+$docFinder = Repository::getInstance()->getDocumentFinder();
 
 $overallNumOfFulltexts = 0;
 $numOfNonExtractableFulltexts = 0;
 
-foreach ($docFinder->ids() as $id) {
+foreach ($docFinder->getIds() as $id) {
     $d = null;
     try {
         $d = Document::get($id);
@@ -91,4 +91,5 @@ echo "overall num of full texts: $overallNumOfFulltexts\n";
 
 $errorRate = (100.0 * $numOfNonExtractableFulltexts) / $overallNumOfFulltexts;
 echo "num of non extractable full texts: $numOfNonExtractableFulltexts ($errorRate %)\n";
+
 exit();

@@ -38,7 +38,7 @@ require_once dirname(__FILE__) . '/../common/bootstrap.php';
 use Opus\Collection;
 use Opus\CollectionRole;
 use Opus\Document;
-use Opus\DocumentFinder;
+use Opus\Repository;
 use Opus\EnrichmentKey;
 use Opus\Model\NotFoundException;
 
@@ -81,9 +81,9 @@ createEnrichmentKey('MigrateSubjectMSC');
 createEnrichmentKey('MigrateSubjectDDC');
 
 // Iterate over all documents.
-$docFinder = new DocumentFinder();
+$docFinder = Repository::getInstance()-getDocumentFinder();
 $changedDocumentIds = [];
-foreach ($docFinder->ids() as $docId) {
+foreach ($docFinder->getIds() as $docId) {
     $doc = null;
     try {
         $doc = Document::get($docId);

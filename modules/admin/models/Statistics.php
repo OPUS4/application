@@ -31,8 +31,8 @@
  */
 
 use Opus\CollectionRole;
-use Opus\DocumentFinder;
 use Opus\Db\Documents;
+use Opus\Repository;
 
 class Admin_Model_Statistics
 {
@@ -165,9 +165,9 @@ class Admin_Model_Statistics
      */
     public function getNumDocsUntil($thresholdYear)
     {
-        $finder = new DocumentFinder();
+        $finder = Repository::getInstance()->getDocumentFinder();
         $finder->setServerState('published');
         $finder->setServerDatePublishedBefore($thresholdYear + 1);
-        return $finder->count();
+        return $finder->getCount();
     }
 }

@@ -33,7 +33,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\DocumentFinder;
+use Opus\Repository;
 
 class Home_IndexController extends Application_Controller_Action
 {
@@ -138,9 +138,9 @@ class Home_IndexController extends Application_Controller_Action
     public function indexAction()
     {
         $this->_helper->mainMenu('home');
-        $finder = new DocumentFinder();
+        $finder = Repository::getInstance()->getDocumentFinder();
         $finder->setServerState('published');
-        $this->view->totalNumOfDocs = $finder->count();
+        $this->view->totalNumOfDocs = $finder->getCount();
     }
 
     public function helpAction()

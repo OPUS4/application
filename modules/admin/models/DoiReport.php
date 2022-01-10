@@ -33,7 +33,7 @@
  */
 
 use Opus\Document;
-use Opus\DocumentFinder;
+use Opus\Repository;
 use Opus\Doi\DoiManager;
 
 class Admin_Model_DoiReport
@@ -85,10 +85,10 @@ class Admin_Model_DoiReport
     {
         $result = 0;
 
-        $docFinder = new DocumentFinder();
+        $docFinder = Repository::getInstance()->getDocumentFinder();
         $docFinder->setServerState('published');
-        $docFinder->setIdentifierTypeExists('doi');
-        foreach ($docFinder->ids() as $docId) {
+        $docFinder->setIdentifierExists('doi');
+        foreach ($docFinder->getIds() as $docId) {
             $doc = Document::get($docId);
             $dois = $doc->getIdentifierDoi();
             if (! is_null($dois) && ! empty($dois)) {
@@ -114,11 +114,11 @@ class Admin_Model_DoiReport
     {
         $result = 0;
 
-        $docFinder = new DocumentFinder();
+        $docFinder = Repository::getInstance()->getDocumentFinder();
         $docFinder->setServerState('published');
-        $docFinder->setIdentifierTypeExists('doi');
+        $docFinder->setIdentifierExists('doi');
 
-        foreach ($docFinder->ids() as $docId) {
+        foreach ($docFinder->getIds() as $docId) {
             $doc = Document::get($docId);
             $dois = $doc->getIdentifierDoi();
             if (! is_null($dois) && ! empty($dois)) {
