@@ -112,7 +112,7 @@ class Admin_Model_DoiReportTest extends ControllerTestCase
     {
         $finder = $this->getDocumentFinder();
         $finder->setServerState('published');
-        $finder->setIdentifierTypeExists('doi');
+        $finder->setIdentifierExists('doi');
 
         $expected = 0;
 
