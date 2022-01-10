@@ -37,7 +37,7 @@ use Opus\Model\NotFoundException;
 use Opus\Model\Xml;
 use Opus\Model\Xml\Cache;
 use Opus\Model\Xml\Version1;
-use Opus\Respository;
+use Opus\Repository;
 
 class Oai_Model_Server extends Application_Model_Abstract
 {
