@@ -81,7 +81,7 @@ createEnrichmentKey('MigrateSubjectMSC');
 createEnrichmentKey('MigrateSubjectDDC');
 
 // Iterate over all documents.
-$docFinder = Repository::getInstance()-getDocumentFinder();
+$docFinder = Repository::getInstance()->getDocumentFinder();
 $changedDocumentIds = [];
 foreach ($docFinder->getIds() as $docId) {
     $doc = null;
