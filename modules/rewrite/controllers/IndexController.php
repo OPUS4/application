@@ -96,7 +96,7 @@ class Rewrite_IndexController extends Application_Controller_Action
                 'home'
             );
         }
-        $finder = Repository::getInstance()->getDocumentFinder(); // TODO DocumentFinder findByIdentifierValue
+        $finder = Repository::getInstance()->getDocumentFinder();
         $ids = $finder->setIdentifierValue('opus3-id', $docid)->getIds();
         if (count($ids) < 1) {
             return $this->_helper->Redirector->redirectToAndExit(
