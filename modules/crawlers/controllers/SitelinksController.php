@@ -29,7 +29,6 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\DocumentFinder;
 use Opus\Repository;
 
 /**
@@ -53,10 +52,10 @@ class Crawlers_SitelinksController extends Application_Controller_Action
      */
     public function indexAction()
     {
-        $finder = new DocumentFinder();
+        $finder = Repository::getInstance()->getDocumentFinder();
         $finder->setServerState('published');
 
-        $this->view->years = $finder->groupedServerYearPublished(); // TODO DocumentFinder
+        $this->view->years = $finder->getYearsPublished();
 
         sort($this->view->years);
 
