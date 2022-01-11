@@ -79,7 +79,7 @@ class Oai_Model_DocumentList
 
         if (strcmp('xmetadissplus', $metadataPrefix) === 0
             || 'xmetadiss' === $metadataPrefix) {
-            $finder->setFilesVisibleInOai();
+            $finder->setHasFilesVisibleInOai();
             $finder->setNotEmbargoedOn($today);
         }
         if ('xmetadiss' === $metadataPrefix) {
