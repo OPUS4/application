@@ -36,7 +36,7 @@ require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
 use Opus\Date;
 use Opus\Document;
-use Opus\DocumentFinder;
+use Opus\Repository;
 
 /*
  * This cron job must be used if embargo dates are used in repository.
@@ -50,17 +50,22 @@ use Opus\DocumentFinder;
  * expiration access to the files is possible. However the document will not
  * be harvested again automatically. In order for the document to be included
  * in the next harvesting ServerDateModified needs to be updated.
+ *
+ * TODO put functionality in class that can be tested and reused
+ * TODO document policies of EmbargoDate - is it '<' or '<=' ?
  */
 
-$docfinder = new DocumentFinder();
+$finder = Repository::getInstance()->getDocumentFinder();
+
+// Find documents with expired EmbargoDate and ServerDateModified < EmbargoDate
+$finder->setEmbargoDateBefore(date('Y-m-d', time()));
+$finder->setNotModifiedAfterEmbargoDate();
+
+$foundIds = $finder->getIds();
+
+// Update ServerDateModified for all found documents
 
 $now = new Date();
 $now->setNow();
 
-// Find documents with expired EmbargoDate and ServerDateModified < EmbargoDate
-$docfinder->setEmbargoDateBeforeNotModifiedAfter(date('Y-m-d', time())); // TODO DocumentFinder
-
-$foundIds = $docfinder->ids();
-
-// Update ServerDateModified for all found documents
 Document::setServerDateModifiedByIds($now, $foundIds);
