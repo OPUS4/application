@@ -28,6 +28,7 @@
 use Opus\Log\LogService;
 
 use Opus\Db\DatabaseBootstrap;
+use Opus\Repository;
 
 /**
  * Provide methods to setup and run the application. It also provides a couple of static
