@@ -35,7 +35,6 @@ use Opus\Document;
 use Opus\Log;
 use Opus\Model\NotFoundException;
 use Opus\Model\Xml;
-use Opus\Model\Xml\Cache;
 use Opus\Model\Xml\Version1;
 use Opus\Repository;
 
@@ -775,7 +774,7 @@ class Oai_Model_Server extends Application_Model_Abstract
         $xmlModel->setModel($document);
         $xmlModel->excludeEmptyFields();
         $xmlModel->setStrategy(new Version1);
-        $xmlModel->setXmlCache(new Cache);
+        $xmlModel->setXmlCache(Repository::getInstance()->getDocumentXmlCache());
         return $xmlModel->getDomDocument()->getElementsByTagName('Opus_Document')->item(0);
     }
 

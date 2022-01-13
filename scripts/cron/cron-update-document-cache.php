@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -25,47 +26,47 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @author      Edouard Simon <edouard.simon@zib.de>
- * @copyright   Copyright (c) 2011-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2011-2022, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+/**
+ * TODO is this script needed for performance reasons?
+ * TODO convert into class for use as Command
+ */
+
+// TODO Why set to development?
 define('APPLICATION_ENV', 'development');
 
 // Bootstrapping
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
 use Opus\Document;
-use Opus\DocumentFinder;
-use Opus\Db\DocumentXmlCache;
 use Opus\Model\Xml;
-use Opus\Model\Xml\Cache;
 use Opus\Model\Xml\Version1;
+use Opus\Repository;
 
-$opusDocCacheTable = new DocumentXmlCache();
-$db = \Zend_Db_Table::getDefaultAdapter();
-//
-$select = $db->select();
-$select->from($opusDocCacheTable->info('name'), 'document_id');
+$repository = Repository::getInstance();
 
-$docFinder = new DocumentFinder();
-$docFinder->setSubSelectNotExists($select); // TODO DocumentFinder
-$docIds = $docFinder->ids();
+$finder = $repository->getDocumentFinder();
+$cache = $repository->getDocumentXmlCache();
 
-echo "processing ".count($docIds)." documents\n";
+$docIds = $finder->setNotInXmlCache()->getIds();
+
+echo 'Processing ' . count($docIds) . ' documents' . PHP_EOL;
 
 foreach ($docIds as $docId) {
-    $model = Document::get($docId);
-
-    $cache = new Cache();
+    $document = Document::get($docId);
 
     // xml version 1
     $omx = new Xml();
     $omx->setStrategy(new Version1())
         ->excludeEmptyFields()
-        ->setModel($model)
+        ->setModel($document)
         ->setXmlCache($cache);
-    $dom = $omx->getDomDocument();
-    echo "Cache refreshed for document#$docId\n";
+
+    // TODO cache is updated as a side effect (that is not ideal and might not always be true)
+    $omx->getDomDocument();
+
+    echo "Cache refreshed for document #$docId\n";
 }
