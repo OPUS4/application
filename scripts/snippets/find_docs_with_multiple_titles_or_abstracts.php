@@ -31,7 +31,7 @@
  */
 
 use Opus\Document;
-use Opus\DocumentFinder;
+use Opus\Repository;
 
 /**
  *
@@ -46,8 +46,8 @@ use Opus\DocumentFinder;
 
 $updateRequired = 0;
 
-$docfinder = new DocumentFinder();
-foreach ($docfinder->ids() as $docId) {
+$docfinder = Repository::getInstance()->getDocumentFinder();
+foreach ($docfinder->getIds() as $docId) {
     $doc = Document::get($docId);
 
     $numOfTitles = 0;

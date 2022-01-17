@@ -31,7 +31,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\DocumentFinder;
+use Opus\Repository;
 
 class Rewrite_IndexController extends Application_Controller_Action
 {
@@ -53,8 +53,8 @@ class Rewrite_IndexController extends Application_Controller_Action
                 'home'
             );
         }
-        $f = new DocumentFinder();
-        $ids = $f->setIdentifierTypeValue($type, $value)->ids();
+        $finder = Repository::getInstance()->getDocumentFinder();
+        $ids = $finder->setIdentifierValue($type, $value)->getIds();
         if (count($ids) < 1) {
             return $this->_helper->Redirector->redirectToAndExit(
                 'index',
@@ -96,8 +96,8 @@ class Rewrite_IndexController extends Application_Controller_Action
                 'home'
             );
         }
-        $f = new DocumentFinder();
-        $ids = $f->setIdentifierTypeValue('opus3-id', $docid)->ids();
+        $finder = Repository::getInstance()->getDocumentFinder();
+        $ids = $finder->setIdentifierValue('opus3-id', $docid)->getIds();
         if (count($ids) < 1) {
             return $this->_helper->Redirector->redirectToAndExit(
                 'index',

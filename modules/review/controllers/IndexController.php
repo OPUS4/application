@@ -31,7 +31,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\DocumentFinder;
+use Opus\Repository;
 use Opus\Security\Realm;
 
 /**
@@ -114,24 +114,25 @@ class Review_IndexController extends Application_Controller_Action
 
         switch ($sortOrder) {
             case 'author':
-                $finder->orderByAuthorLastname($sortReverse != 1);
+                $finder->setOrder($finder::ORDER_AUTHOR, $sortReverse != 1);
                 break;
             case 'publicationDate':
-                $finder->orderByServerDatePublished($sortReverse != 1);
+                $finder->setOrder($finder::ORDER_SERVER_DATE_PUBLISHED, $sortReverse != 1);
                 break;
             case 'docType':
-                $finder->orderByType($sortReverse != 1);
+                $finder->setOrder($finder::ORDER_DOCUMENT_TYPE, $sortReverse != 1);
                 break;
             case 'title':
-                $finder->orderByTitleMain($sortReverse != 1);
+                $finder->setOrder($finder::ORDER_TITLE, $sortReverse != 1);
                 break;
             default:
-                $finder->orderById($sortReverse != 1);
+                $finder->setOrder($finder::ORDER_ID, $sortReverse != 1);
         }
 
         $this->view->breadcrumbsDisabled = true;
 
-        $result = $finder->ids();
+        $result = $finder->getIds();
+
         if (empty($result)) {
             $this->view->message = 'review_no_docs_found';
             return $this->render('message');
@@ -244,11 +245,11 @@ class Review_IndexController extends Application_Controller_Action
     /**
      * Prepare document finder.
      *
-     * @return DocumentFinder
+     * @return DocumentFinderInterface
      */
     protected function _prepareDocumentFinder()
     {
-        $finder = new DocumentFinder();
+        $finder = Repository::getInstance()->getDocumentFinder();
         $finder->setServerState(self::$_reviewServerState);
 
         $logger = $this->getLogger();
@@ -262,7 +263,7 @@ class Review_IndexController extends Application_Controller_Action
         } elseif (Realm::getInstance()->checkModule('review')) {
             if ($onlyReviewerByUserId) {
                 $message = "Review: Showing only documents belonging to reviewer";
-                $finder->setEnrichmentKeyValue('reviewer.user_id', $userId);
+                $finder->setEnrichmentValue('reviewer.user_id', $userId);
             } else {
                 $message = "Review: Showing all unpublished documents to reviewer";
             }
@@ -295,10 +296,11 @@ class Review_IndexController extends Application_Controller_Action
         $this->getLogger()->debug("ids before filtering: " . implode(", ", $ids));
 
         $finder = $this->_prepareDocumentFinder();
-        $ids = $finder->setIdSubset($ids)->ids();
+        $foundIds = $finder->setDocumentIds($ids)->getIds();
 
-        $this->getLogger()->debug("ids after filtering: " . implode(", ", $ids));
-        return $ids;
+        $this->getLogger()->debug("ids after filtering: " . implode(", ", $foundIds));
+
+        return $foundIds;
     }
 
     /**

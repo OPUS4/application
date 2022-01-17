@@ -41,7 +41,7 @@ if (basename(__FILE__) !== basename($argv[0])) {
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
 use Opus\Document;
-use Opus\DocumentFinder;
+use Opus\Repository;
 
 $options = getopt('', ['dryrun', 'from:', 'to:']);
 
@@ -60,8 +60,8 @@ if ($dryrun) {
     _log("TEST RUN: NO DATA WILL BE MODIFIED");
 }
 
-$docFinder = new DocumentFinder();
-$docIds = $docFinder->setType($from)->ids();
+$docFinder = Repository::getInstance()->getDocumentFinder();
+$docIds = $docFinder->setDocumentType($from)->getIds();
 
 _log(count($docIds) . " documents found");
 

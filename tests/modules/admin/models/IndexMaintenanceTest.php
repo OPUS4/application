@@ -33,7 +33,6 @@
  */
 
 use Opus\Config;
-use Opus\DocumentFinder;
 use Opus\Job;
 use Opus\Job\Runner;
 use Opus\Log;
@@ -247,9 +246,9 @@ class Admin_Model_IndexMaintenanceTest extends ControllerTestCase
     {
         $this->enableAsyncMode();
 
-        $finder = new DocumentFinder();
+        $finder = $this->getDocumentFinder();
         $finder->setServerState('published');
-        $numOfPublishedDocs = $finder->count();
+        $numOfPublishedDocs = $finder->getCount();
 
         $model = new Admin_Model_IndexMaintenance();
         $model->createJob();

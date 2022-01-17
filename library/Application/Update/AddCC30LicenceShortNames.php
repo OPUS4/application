@@ -36,7 +36,7 @@
  */
 
 use Opus\Licence;
-use Opus\Model\Xml\Cache;
+use Opus\Repository;
 
 /**
  * Added short names (labels) to licences that look like the old standard licences distributed with OPUS 4.
@@ -60,7 +60,7 @@ class Application_Update_AddCC30LicenceShortNames extends Application_Update_Plu
 
     public function run()
     {
-        $cache = new Cache();
+        $cache = Repository::getInstance()->getDocumentXmlCache();
 
         $licences = Licence::getAll();
 

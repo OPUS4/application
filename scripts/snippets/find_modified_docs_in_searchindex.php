@@ -31,7 +31,7 @@
  */
 
 use Opus\Document;
-use Opus\DocumentFinder;
+use Opus\Repository;
 
 /**
  *
@@ -45,9 +45,11 @@ use Opus\DocumentFinder;
  */
 $numOfModified = 0;
 $numOfErrors = 0;
-$finder = new DocumentFinder();
+
+$finder = Repository::getInstance()->getDocumentFinder();
 $finder->setServerState('published');
-foreach ($finder->ids() as $docId) {
+
+foreach ($finder->getIds() as $docId) {
     // check if document with id $docId is already persisted in search index
     $search = Opus\Search\Service::selectSearchingService();
     $query  = Opus\Search\QueryFactory::selectDocumentById($search, $docId);
@@ -66,6 +68,7 @@ foreach ($finder->ids() as $docId) {
         }
     }
 }
+
 if ($numOfErrors > 0) {
     echo "$numOfErrors missing documents were found\n";
     echo "$numOfModified modified documents were found\n";

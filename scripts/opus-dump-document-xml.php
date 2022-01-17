@@ -54,7 +54,6 @@ foreach ($argv as $docId) {
     $xmlModel->setModel($d);
     $xmlModel->excludeEmptyFields();
     $xmlModel->setStrategy(new Version1());
-   // $xmlModel->setXmlCache(new Cache());
 
     $docXml = $xmlModel->getDomDocument();
     $docXml->formatOutput = true;

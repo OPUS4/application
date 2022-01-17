@@ -28,6 +28,7 @@
 use Opus\Log\LogService;
 
 use Opus\Db\DatabaseBootstrap;
+use Opus\Repository;
 
 /**
  * Provide methods to setup and run the application. It also provides a couple of static
@@ -429,6 +430,9 @@ class Application_Bootstrap extends DatabaseBootstrap
 
     protected function _initIndexPlugin()
     {
-        \Opus\Model\Xml\Cache::setIndexPluginClass('Opus\Search\Plugin\Index');
+        $cache = Repository::getInstance()->getDocumentXmlCache();
+
+        // TODO this is a dependency on a specific implementation (refactor to remove)
+        $cache::setIndexPluginClass('Opus\Search\Plugin\Index');
     }
 }

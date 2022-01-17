@@ -33,7 +33,7 @@
  */
 
 use Opus\CollectionRole;
-use Opus\DocumentFinder;
+use Opus\Repository;
 
 class Oai_Model_DocumentList
 {
@@ -63,30 +63,31 @@ class Oai_Model_DocumentList
      * @param array &$oaiRequest
      * @return array
      *
-     * TODO function contains metadataPrefix specifische criteria for generating document list (refactor!)
+     * TODO function contains metadataPrefix specific criteria for generating document list (refactor!)
+     * TODO simplify function
      */
     public function query(array $oaiRequest)
     {
         $today = date('Y-m-d', time());
 
-        $finder = new DocumentFinder();
+        $finder = Repository::getInstance()->getDocumentFinder();
 
         // add server state restrictions
-        $finder->setServerStateInList($this->deliveringDocumentStates);
+        $finder->setServerState($this->deliveringDocumentStates);
 
         $metadataPrefix = strtolower($oaiRequest['metadataPrefix']);
 
         if (strcmp('xmetadissplus', $metadataPrefix) === 0
             || 'xmetadiss' === $metadataPrefix) {
-            $finder->setFilesVisibleInOai();
+            $finder->setHasFilesVisibleInOai();
             $finder->setNotEmbargoedOn($today);
         }
         if ('xmetadiss' === $metadataPrefix) {
-            $finder->setTypeInList($this->xMetaDissRestriction);
+            $finder->setDocumentType($this->xMetaDissRestriction);
             $finder->setNotEmbargoedOn($today);
         }
         if ('epicur' === $metadataPrefix) {
-            $finder->setIdentifierTypeExists('urn');
+            $finder->setIdentifierExists('urn');
         }
 
         if (array_key_exists('set', $oaiRequest)) {
@@ -97,7 +98,7 @@ class Oai_Model_DocumentList
 
             if ($setarray[0] == 'doc-type') {
                 if (count($setarray) === 2 and ! empty($setarray[1])) {
-                    $finder->setType($setarray[1]);
+                    $finder->setDocumentType($setarray[1]);
                 } else {
                     return [];
                 }
@@ -107,6 +108,7 @@ class Oai_Model_DocumentList
                 }
                 $setValue = $setarray[1];
 
+                // TODO why this complicated mapping?
                 $bibliographyMap = [
                     "true"  => 1,
                     "false" => 0,
@@ -175,6 +177,6 @@ class Oai_Model_DocumentList
             $finder->setServerDateModifiedBefore($until->format('Y-m-d'));
         }
 
-        return $finder->ids();
+        return $finder->getIds();
     }
 }

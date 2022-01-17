@@ -37,7 +37,7 @@ require_once dirname(__FILE__) . '/../common/bootstrap.php';
 use Opus\Collection;
 use Opus\CollectionRole;
 use Opus\Document;
-use Opus\DocumentFinder;
+use Opus\Repository;
 use Opus\Series;
 
 class FindMissingSeriesNumbers
@@ -136,10 +136,12 @@ class FindMissingSeriesNumbers
     {
         $numOfConflicts = 0;
         $numOfDocsMigrated = 0;
-        $finder = new DocumentFinder();
+
+        $finder = Repository::getInstance()->getDocumentFinder();
         $finder->setCollectionRoleId($this->_seriesRole->getId());
+
         $serialIdsInUse = [];
-        foreach ($finder->ids() as $docId) {
+        foreach ($finder->getIds() as $docId) {
             $doc = Document::get($docId);
             $serialIds = $doc->getIdentifierSerial();
             $numOfSerialIds = count($serialIds);

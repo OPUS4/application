@@ -33,7 +33,7 @@
 
 use Opus\Document;
 use Opus\Licence;
-use Opus\Model\Xml\Cache;
+use Opus\Repository;
 
 class Application_Update_AddCC30LicenceShotNamesTest extends ControllerTestCase
 {
@@ -184,7 +184,7 @@ class Application_Update_AddCC30LicenceShotNamesTest extends ControllerTestCase
         $doc->addLicence($licence);
         $docId = $doc->store();
 
-        $cache = new Cache();
+        $cache = Repository::getInstance()->getDocumentXmlCache();
 
         $this->assertNotNull($cache->getData($docId, '1.0'));
 

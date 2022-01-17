@@ -32,8 +32,6 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\DocumentFinder;
-
 /**
  * Basic unit test for inded controller of home module.
  *
@@ -174,10 +172,10 @@ class Home_IndexControllerTest extends ControllerTestCase
         $element = $document->getElementById('solrsearch-totalnumofdocs');
         $numOfDocs = $element->firstChild->textContent;
 
-        $docFinder = new DocumentFinder();
+        $docFinder = $this->getDocumentFinder();
         $docFinder->setServerState('published');
 
-        $numOfDbDocs = $docFinder->count();
+        $numOfDbDocs = $docFinder->getCount();
         $this->assertEquals($numOfDbDocs, $numOfDocs);
 
         // kurze Erklärung des Vorhabens: die Dokumentanzahl bei der Catch-All-Suche
@@ -197,7 +195,7 @@ class Home_IndexControllerTest extends ControllerTestCase
                 array_push($idsIndex, $result->getId());
             }
 
-            $idsDb = $docFinder->ids();
+            $idsDb = $docFinder->getIds();
 
             $idsIndexOnly = array_diff($idsIndex, $idsDb);
             $this->assertEquals(0, count($idsIndexOnly), 'Document IDs in search index, but not in database: '

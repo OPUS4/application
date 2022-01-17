@@ -37,6 +37,7 @@ use Opus\Db\TableGateway;
 use Opus\Document;
 use Opus\Doi\DoiManager;
 use Opus\File;
+use Opus\Repository;
 use Opus\UserRole;
 use Opus\Model\ModelException;
 use Opus\Model\NotFoundException;
@@ -731,6 +732,16 @@ class ControllerTestCase extends TestCase
     {
         return Document::get($docId);
     }
+
+    /**
+     * Returns finder for documents.
+     * @return DocumentFinderInterface
+     */
+    protected function getDocumentFinder()
+    {
+        return Repository::getInstance()->getDocumentFinder();
+    }
+
 
     /**
      * Erzeugt ein Testdokument, das nach der Testausführung automatisch aufgeräumt wird.

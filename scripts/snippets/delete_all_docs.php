@@ -31,7 +31,7 @@
  */
 
 use Opus\Document;
-use Opus\DocumentFinder;
+use Opus\Repository;
 
 /**
  * Removes all documents
@@ -40,13 +40,16 @@ use Opus\DocumentFinder;
  *
  */
 
-$finder = new DocumentFinder();
-foreach ($finder->ids() as $id) {
+$repository = Repository::getInstance();
+
+$finder = $repository->getDocumentFinder();
+
+foreach ($finder->getIds() as $id) {
     $doc = Document::get($id);
     $doc->delete();
     echo "document " . $id . " was deleted.\n";
 }
 
-$finder = new DocumentFinder();
-echo "done -- num of docs: " . $finder->count() . "\n";
+$finder = $repository->getDocumentFinder();
+echo "done -- num of docs: " . $finder->getCount() . "\n";
 exit();

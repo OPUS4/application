@@ -31,7 +31,7 @@
  */
 
 use Opus\Document;
-use Opus\DocumentFinder;
+use Opus\Repository;
 
 /**
  * Dieses Script sucht Dokumente ohne sichtbare Dateien, fuer die bereits
@@ -42,11 +42,12 @@ use Opus\DocumentFinder;
 
 $updateRequired = 0;
 
-$docfinder = new DocumentFinder();
-$docfinder->setIdentifierTypeExists('urn');
+$docfinder = Repository::getInstance()->getDocumentFinder();
+$docfinder->setIdentifierExists('urn');
 
 echo "checking documents...\n";
-foreach ($docfinder->ids() as $docId) {
+
+foreach ($docfinder->getIds() as $docId) {
     $doc = Document::get($docId);
 
     $numVisibleFiles = 0;

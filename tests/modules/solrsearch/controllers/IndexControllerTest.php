@@ -36,7 +36,6 @@
 
 use Opus\CollectionRole;
 use Opus\Date;
-use Opus\DocumentFinder;
 use Opus\Identifier;
 use Opus\Person;
 use Opus\Security\Realm;
@@ -335,11 +334,11 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
      */
     public function testLastPageUrlEqualsNextPageUrlDocTypeArticle()
     {
-        $docFinder = new DocumentFinder();
-        $docFinder->setType('article')->setServerState('published');
+        $docFinder = $this->getDocumentFinder();
+        $docFinder->setDocumentType('article')->setServerState('published');
 
         // check if test requirements are met
-        $docCount = $docFinder->count();
+        $docCount = $docFinder->getCount();
 
         $this->assertGreaterThan(10, $docCount, "Test requires at least 11 documents.");
 

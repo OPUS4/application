@@ -32,10 +32,10 @@
 
 
 use Opus\Document;
-use Opus\DocumentFinder;
 use Opus\Model\NotFoundException;
 use Opus\Model\Xml;
 use Opus\Model\Xml\Version1;
+use Opus\Repository;
 
 /**
  * Tries to export and import all documents.
@@ -43,9 +43,9 @@ use Opus\Model\Xml\Version1;
  * TODO move (this is a test script)
  */
 
-$docFinder = new DocumentFinder();
+$docFinder = Repository::getInstance()->getDocumentFinder();
 
-foreach ($docFinder->ids() as $id) {
+foreach ($docFinder->getIds() as $id) {
     $doc = null;
     try {
         $doc = Document::get($id);

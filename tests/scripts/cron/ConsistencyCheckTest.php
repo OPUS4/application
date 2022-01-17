@@ -33,7 +33,6 @@
 
 require_once('CronTestCase.php');
 
-use Opus\DocumentFinder;
 use Opus\Job;
 
 class ConsistencyCheckTest extends CronTestCase
@@ -43,9 +42,9 @@ class ConsistencyCheckTest extends CronTestCase
 
     private function getPublishedDocumentCount()
     {
-        $finder = new DocumentFinder();
+        $finder = $this->getDocumentFinder();
         $finder->setServerState('published');
-        return count($finder->ids());
+        return $finder->getCount();
     }
 
     /**

@@ -31,7 +31,7 @@
  */
 
 use Opus\Document;
-use Opus\DocumentFinder;
+use Opus\Repository;
 
 /**
  * Erstellt die Demoinstanz, in der nur die Testdokumente mit den IDs 91 bis 110
@@ -40,8 +40,10 @@ use Opus\DocumentFinder;
  * TODO move script (it is used for demo instance)
  */
 
-$finder = new DocumentFinder();
-foreach ($finder->ids() as $id) {
+$repository = Repository::getInstance();
+
+$finder = $repository->getDocumentFinder();
+foreach ($finder->getIds() as $id) {
     if (intval($id) < 91 || intval($id) > 110) {
         $doc = Document::get($id);
         $doc->delete();
@@ -49,6 +51,6 @@ foreach ($finder->ids() as $id) {
     }
 }
 
-$finder = new DocumentFinder();
-echo "done -- num of remaining docs: " . $finder->count() . "\n";
+$finder = $repository->getDocumentFinder();
+echo "done -- num of remaining docs: " . $finder->getCount() . "\n";
 exit();

@@ -50,7 +50,7 @@ if (basename(__FILE__) !== basename($argv[0])) {
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
 use Opus\Document;
-use Opus\DocumentFinder;
+use Opus\Repository;
 
 $options = getopt('', ['dryrun', 'type:', 'doctype:', 'enrichment:']);
 
@@ -84,8 +84,8 @@ if ($dryrun) {
     _log("TEST RUN: NO DATA WILL BE MODIFIED");
 }
 
-$docFinder = new DocumentFinder();
-$docIds = $docFinder->setEnrichmentKeyExists($enrichmentField)->ids();
+$docFinder = Repository::getInstance()->DocumentFinder();
+$docIds = $docFinder->setEnrichmentExists($enrichmentField)->getIds();
 
 _log(count($docIds) . " documents found");
 

@@ -39,10 +39,11 @@
  */
 
 use Opus\Document;
+use Opus\Repository;
 
 $updateRequired = 0;
-$docfinder = new \Opus\DocumentFinder();
-foreach ($docfinder->ids() as $docId) {
+$docfinder = Repository::getInstance()->getDocumentFinder();
+foreach ($docfinder->getIds() as $docId) {
     $doc = Document::get($docId);
 
     foreach ($doc->getTitleMain() as $title) {
