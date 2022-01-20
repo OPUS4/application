@@ -27,10 +27,10 @@
     "opus4-repo/framework": "dev-master",
     "opus4-repo/search": "dev-master",
     "opus4-repo/opus4-bibtex": "dev-master",
-    "components/jquery": "3.4.*",
-    "components/jqueryui": "1.12.*",
-    "robloach/component-installer": "*",
-    "symfony/console": "*"
+    "components/jquery": "*",
+    "components/jqueryui": "*",
+    "symfony/console": "*",
+    "oomphinc/composer-installers-extender": "^2.0"
   },
   "require-dev": {
     "phpunit/phpunit": "4.8.*",
@@ -51,8 +51,12 @@
   },
   "minimum-stability": "dev",
   "prefer-stable": true,
-  "config": {
-    "component-dir": "public/assets"
+
+  "extra": {
+    "installer-types": ["component", "component"],
+    "installer-paths": {
+      "public/assets/{$name}": ["type:component", "type:component"]
+    }
   },
   "scripts": {
     "analysis": [
@@ -79,5 +83,11 @@
     "phpcpd": "phpcpd . --min-lines 3 --min-tokens 30 --log-pmd build/pmd-cpd.xml --progress || true",
     "index": "bin/opus4 index:index",
     "metrics": "phpmetrics --config=phpmetrics.json"
+  },
+  "config": {
+    "allow-plugins": {
+      "composer/installers": true,
+      "oomphinc/composer-installers-extender": true
+    }
   }
 }
