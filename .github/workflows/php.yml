@@ -23,10 +23,10 @@ jobs:
           php-version: '7.1'
 
       - name: Install Composer and Dependencies
-        run: sudo apt-get update && curl -s http://getcomposer.org/installer | php && php composer.phar self-update && php composer.phar install
+        run: sudo apt update && curl -s http://getcomposer.org/installer | php && php composer.phar self-update && php composer.phar install
 
       - name: Install additional Software
-        run: sudo apt-get install libxml2-utils
+        run: sudo apt install libxml2-utils
 
       - name: Solr
         run: sudo bash bin/install_solr_docker.sh
