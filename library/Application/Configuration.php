@@ -215,6 +215,16 @@ class Application_Configuration extends Config
     }
 
     /**
+     * Returns path to files folder for cached document files.
+     * @return string Folder for storing cached document files
+     * @throws Application_Exception
+     */
+    public function getFilecachePath()
+    {
+        return $this->getWorkspacePath() . 'filecache' . DIRECTORY_SEPARATOR;
+    }
+
+    /**
      * Liest Inhalt von VERSION.txt um die installierte Opusversion zu ermitteln.
      */
     public static function getOpusVersion()

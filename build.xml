@@ -72,6 +72,7 @@
     <target name="prepare-workspace">
         <mkdir dir="${basedir}/workspace/cache" />
         <mkdir dir="${basedir}/workspace/export" />
+        <mkdir dir="${basedir}/workspace/filecache" />
         <mkdir dir="${basedir}/workspace/files" />
         <mkdir dir="${basedir}/workspace/import" />
         <mkdir dir="${basedir}/workspace/incoming" />
@@ -83,6 +84,7 @@
     <target name="prepare-test-workspace">
         <mkdir dir="${basedir}/tests/workspace/cache" />
         <mkdir dir="${basedir}/tests/workspace/export" />
+        <mkdir dir="${basedir}/tests/workspace/filecache" />
         <mkdir dir="${basedir}/tests/workspace/files" />
         <mkdir dir="${basedir}/tests/workspace/import" />
         <mkdir dir="${basedir}/tests/workspace/incoming" />
