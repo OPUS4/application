@@ -35,6 +35,10 @@
  * Controller for handling file downloads in the frontdoor.
  */
 
+use Opus\Document;
+use Opus\File;
+use Opus\Pdf\Cover\CoverGeneratorFactory;
+use Opus\Pdf\Cover\CoverGeneratorInterface;
 use Opus\Security\Realm;
 
 class Frontdoor_DeliverController extends Application_Controller_Action
@@ -73,9 +77,16 @@ class Frontdoor_DeliverController extends Application_Controller_Action
             return;
         }
 
-        $fullFilename = $fileObject->getPath();
-        $baseFilename = basename($fullFilename);
+        $originalFilePath = $fileObject->getPath();
+        $baseFilename = basename($originalFilePath);
         $baseFilename = self::quoteFileName($baseFilename);
+
+        try {
+            $filePath = $this->prepareFile($fileObject);
+        } catch (Exception $e) {
+            $this->handleDeliveryError($e);
+            return;
+        }
 
         $this->disableViewRendering();
 
@@ -91,7 +102,7 @@ class Frontdoor_DeliverController extends Application_Controller_Action
 
         $this->_helper->SendFile->setLogger($this->getLogger());
         try {
-            $this->_helper->SendFile($fullFilename);
+            $this->_helper->SendFile($filePath);
         } catch (Exception $e) {
             $this->logError($e);
             $response = $this->getResponse();
@@ -132,5 +143,64 @@ class Frontdoor_DeliverController extends Application_Controller_Action
         $this->getResponse()->setHttpResponseCode($exception->getCode());
         $this->view->translateKey = $exception->getTranslateKey();
         $this->render('error');
+    }
+
+    /**
+     * Prepares the given file for download and returns the path to the resulting file.
+     *
+     * @param File $file
+     * @return string the file's path
+     */
+    private function prepareFile($file)
+    {
+        // only handle PDF files
+        if ($file->getMimeType() !== 'application/pdf') {
+            throw new Exception('File mimetype must be application/pdf');
+        }
+
+        $filePath = $file->getPath();
+
+        // check if a PDF cover should be generated
+        $coverGenerator = $this->getCoverGenerator();
+
+        if ($coverGenerator === null) {
+            return $filePath;
+        }
+
+        // get the file's parent document
+        $doc = null;
+        $docId = $file->getParentId();
+        if ($docId !== null) {
+            $doc = new Document($docId);
+        }
+
+        if ($doc === null) {
+            return $filePath;
+        }
+
+        $filecacheDir = Application_Configuration::getInstance()->getFilecachePath();
+        $tmpDir = Application_Configuration::getInstance()->getTempPath();
+
+        // if a PDF cover should be served for this file, create a file copy that includes an
+        // appropriate cover page and return its path (instead of the original file's path)
+        $filePath = $coverGenerator->processFile($doc, $file, $filecacheDir, $tmpDir);
+
+        return $filePath;
+    }
+
+    /**
+     * Returns the cover generator instance to be used for creation of PDF covers.
+     *
+     * @return CoverGeneratorInterface|null
+     */
+    private function getCoverGenerator()
+    {
+        $generator = CoverGeneratorFactory::create();
+
+        if ($generator === null) {
+            return null;
+        }
+
+        return $generator;
     }
 }
