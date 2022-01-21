@@ -30,7 +30,7 @@
     "opus4-repo/opus4-pdf": "*",
     "components/jquery": "3.4.*",
     "components/jqueryui": "1.12.*",
-    "robloach/component-installer": "*",
+    "oomphinc/composer-installers-extender": "^2.0",
     "symfony/console": "*"
   },
   "require-dev": {
@@ -52,8 +52,11 @@
   },
   "minimum-stability": "dev",
   "prefer-stable": true,
-  "config": {
-    "component-dir": "public/assets"
+  "extra": {
+    "installer-types": ["component"],
+    "installer-paths": {
+      "public/assets/{$name}": ["type:component"]
+    }
   },
   "scripts": {
     "analysis": [
