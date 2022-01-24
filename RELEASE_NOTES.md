@@ -2,6 +2,17 @@
 
 ---
 
+## Patch Release 4.7.0.8 2022-01-25
+
+Die Resolver-URL für PUBMED Einträge wurde aktualisiert und konfigurierbar gemacht, damit 
+sie in Zukunft leichter ausgetauscht werden kann.
+
+Die Installation von Components, JQuery und JQuery-UI, mit Composer 2 wurde gefixt, indem 
+auf ein aktuelles Installer-Plugin umgestiegen wurde. Das hat für existierende Instanzen 
+keine Auswirkungen.  
+
+---
+
 ## Patch Release 4.7.0.7 2021-10-19
 
 Die Deklaration des Namespaces "xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
