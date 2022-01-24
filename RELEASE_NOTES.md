@@ -4,12 +4,20 @@
 
 ## Patch Release 4.7.0.8 2022-01-25
 
-Die Resolver-URL für PUBMED Einträge wurde aktualisiert und konfigurierbar gemacht, damit 
-sie in Zukunft leichter ausgetauscht werden kann.
+Die Resolver-URL für PUBMED Einträge wurde aktualisiert und konfigurierbar gemacht, 
+damit sie in Zukunft leichter ausgetauscht werden kann.
 
-Die Installation von Components, JQuery und JQuery-UI, mit Composer 2 wurde gefixt, indem 
-auf ein aktuelles Installer-Plugin umgestiegen wurde. Das hat für existierende Instanzen 
-keine Auswirkungen.  
+```
+pubmed.baseUrl = https://pubmed.ncbi.nlm.nih.gov/
+```
+
+Die Installation von Components, JQuery und JQuery-UI, mit Composer 2 wurde gefixt, 
+indem auf ein aktuelles Installer-Plugin umgestiegen wurde. Bei existierenden 
+Instanzen kann es während der Ausführungen von `composer update` zu Fehlermeldungen 
+über fehlende Klassen kommen. Ein nochmaliges ausführen von `composer update` behebt 
+in der Regel das Problem. Im Zweifelsfall können die Verzeichnisse `vendor` und auch 
+`public/assets` gelöscht werden, um dann sämtliche Pakete und auch die Komponenten 
+mit `composer install` frisch zu installieren. 
 
 ---
 
