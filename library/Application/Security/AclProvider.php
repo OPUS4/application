@@ -31,6 +31,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Config;
 use Opus\Security\Realm;
 use Opus\Security\SecurityException;
 
@@ -130,8 +131,17 @@ class Application_Security_AclProvider
 
         $realm = Realm::getInstance();
 
-        if (isset($_SERVER['REMOTE_ADDR']) and preg_match('/:/', $_SERVER['REMOTE_ADDR']) === 0) {
-            $realm->setIp($_SERVER['REMOTE_ADDR']);
+        $request = \Zend_Controller_Front::getInstance()->getRequest();
+
+        if ($request instanceof \Zend_Controller_Request_Http) {
+            $clientIp = $request->getClientIp($this->isCheckProxy());
+
+            // OPUS_Security does not support IPv6.  Skip setting IP address, if
+            // IPv6 address has been detected.  This means, that authentication by
+            // IPv6 address does not work, but username-password still does.
+            if ($clientIp !== null && ! preg_match('/:/', $clientIp) === 0) {
+                $realm->setIp($clientIp);
+            }
         }
 
         $user = \Zend_Auth::getInstance()->getIdentity();
@@ -226,5 +236,16 @@ class Application_Security_AclProvider
 
             $roleConfig->applyPermissions($acl);
         }
+    }
+
+    /**
+     * @return bool
+     *
+     * TODO redundant function exists in SecurityRealm (refactoring)
+     */
+    public function isCheckProxy()
+    {
+        $config = Config::get();
+        return isset($config->proxy->enabled) && filter_var($config->proxy->enabled, FILTER_VALIDATE_BOOLEAN);
     }
 }

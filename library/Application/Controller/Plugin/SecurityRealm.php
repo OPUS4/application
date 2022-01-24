@@ -32,6 +32,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Config;
 use Opus\Security\Realm;
 use Opus\Security\SecurityException;
 
@@ -76,11 +77,16 @@ class Application_Controller_Plugin_SecurityRealm extends \Zend_Controller_Plugi
             }
         }
 
-        // OPUS_Security does not support IPv6.  Skip setting IP address, if
-        // IPv6 address has been detected.  This means, that authentication by
-        // IPv6 address does not work, but username-password still does.
-        if (isset($_SERVER['REMOTE_ADDR']) and preg_match('/:/', $_SERVER['REMOTE_ADDR']) === 0) {
-            $realm->setIp($_SERVER['REMOTE_ADDR']);
+        // TODO redundant - exists also in AclProvider (unify security)
+        if ($request instanceof \Zend_Controller_Request_Http) {
+            $clientIp = $request->getClientIp($this->isCheckProxy());
+
+            // OPUS_Security does not support IPv6.  Skip setting IP address, if
+            // IPv6 address has been detected.  This means, that authentication by
+            // IPv6 address does not work, but username-password still does.
+            if ($clientIp !== null && ! preg_match('/:/', $clientIp) === 0) {
+                $realm->setIp($clientIp);
+            }
         }
     }
 
@@ -114,5 +120,11 @@ class Application_Controller_Plugin_SecurityRealm extends \Zend_Controller_Plugi
         $member = $this->getModuleMemberName($request->getModuleName());
         $storage = new \Zend_Auth_Storage_Session($namespace, $member);
         \Zend_Auth::getInstance()->setStorage($storage);
+    }
+
+    public function isCheckProxy()
+    {
+        $config = Config::get();
+        return isset($config->proxy->enabled) && filter_var($config->proxy->enabled, FILTER_VALIDATE_BOOLEAN);
     }
 }
