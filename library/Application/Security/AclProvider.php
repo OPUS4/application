@@ -236,4 +236,15 @@ class Application_Security_AclProvider
             $roleConfig->applyPermissions($acl);
         }
     }
+
+    /**
+     * @return bool
+     *
+     * TODO redundant function exists in SecurityRealm (refactoring)
+     */
+    public function isCheckProxy()
+    {
+        $config = Config::get();
+        return isset($config->proxy->enabled) && filter_var($config->proxy->enabled, FILTER_VALIDATE_BOOLEAN);
+    }
 }
