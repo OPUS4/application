@@ -1545,4 +1545,18 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
         $this->assertXpathContentContains('//h2[@class="titlemain"]', 'KOBV');
         $this->assertNotXpathContentContains('//h2[@class="titlemain"]', 'Sonderzeichen');
     }
+
+    public function testPubmedRendering()
+    {
+        $this->dispatch('/frontdoor/index/index/docId/146');
+
+        $path = 'table.result-data.frontdoordata th.name';
+
+        $config = $this->getConfig();
+
+        $pubmedUrl = $config->pubmed->baseUrl . '123';
+
+        $this->assertQueryContentContains('table.result-data.frontdoordata td', $pubmedUrl);
+        $this->assertXpath("//table/tr/td/a[@href=\"$pubmedUrl\"]");
+    }
 }

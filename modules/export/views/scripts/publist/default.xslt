@@ -572,7 +572,7 @@
        <xsl:if test="@Type='pubmed'">
             <xsl:element name="a">
                 <xsl:attribute name="href">
-                    <xsl:text>http://www.ncbi.nlm.nih.gov/pubmed/</xsl:text>
+                    <xsl:value-of select="php:functionString('Application_Xslt::optionValue', 'baseUrl', 'pubmed')"/>
                     <xsl:value-of select="@Value" />
                 </xsl:attribute>
                 <xsl:text>PMID</xsl:text>

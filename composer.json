@@ -22,7 +22,7 @@
     "opus4-repo/opus4-bibtex": "0.1-beta",
     "components/jquery": "3.4.*",
     "components/jqueryui": "1.12.*",
-    "robloach/component-installer": "*"
+    "oomphinc/composer-installers-extender": "^2.0"
   },
   "require-dev": {
     "phpunit/phpunit": "4.8.*",
@@ -42,8 +42,11 @@
   },
   "minimum-stability": "dev",
   "prefer-stable": true,
-  "config": {
-    "component-dir": "public/assets"
+  "extra": {
+    "installer-types": ["component"],
+    "installer-paths": {
+      "public/assets/{$name}": ["type:component"]
+    }
   },
   "scripts": {
     "analysis": [
