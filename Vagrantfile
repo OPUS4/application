@@ -136,5 +136,5 @@ Vagrant.configure("2") do |config|
   config.vm.provision "Setup environment...", type: "shell", inline: $environment
   config.vm.provision "Start services...", type: "shell", privileged: false, run: "always", inline: $start
   config.vm.provision "Initialize test data...", type: "shell", privileged: false, inline: $testdata
-  config.vm.provision "Information", type: "shell", privileged: false, inline: $help
+  config.vm.provision "Information", type: "shell", privileged: false, run: "always", inline: $help
 end
