@@ -110,6 +110,14 @@ cd /home/vagrant/solr-7.7.2
 ./bin/solr start
 SCRIPT
 
+$help = <<SCRIPT
+echo "You can access OPUS 4 and Solr in your browser."
+echo "  OPUS 4: http://localhost:8080/opus4"
+echo "  Solr  : http://localhost:9983"
+echo "Log into the VM using 'vagrant ssh' and logout using 'logout'."
+echo "You can use 'ant reset-testdata' to reinitialize the database."
+SCRIPT
+
 Vagrant.configure("2") do |config|
   config.vm.box = "bento/ubuntu-20.04"
 
@@ -128,4 +136,5 @@ Vagrant.configure("2") do |config|
   config.vm.provision "Setup environment...", type: "shell", inline: $environment
   config.vm.provision "Start services...", type: "shell", privileged: false, run: "always", inline: $start
   config.vm.provision "Initialize test data...", type: "shell", privileged: false, inline: $testdata
+  config.vm.provision "Information", type: "shell", privileged: false, inline: $help
 end
