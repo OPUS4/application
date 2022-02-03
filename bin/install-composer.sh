@@ -11,9 +11,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 #
-# @author      Thomas Urban <thomas.urban@cepharum.de>
-# @author      Jens Schwidder <schwidder@zib.de>
-# @copyright   Copyright (c) 2010-2016, OPUS 4 development team
+# @copyright   Copyright (c) 2010-2022, OPUS 4 development team
 # @license     http://www.gnu.org/licenses/gpl.html General Public License
 
 #
@@ -33,13 +31,8 @@ SCRIPT_NAME="$(basename "$0")"
 SCRIPT_NAME_FULL="`readlink -f "$0"`"
 SCRIPT_PATH="`dirname "$SCRIPT_NAME_FULL"`"
 
-BASEDIR="`dirname "$SCRIPT_PATH"`"
 
-# get BASEDIR from first argument if present
-if [ $# -ge 1 ] ;
-then
-    BASEDIR="$1"
-fi
+BASEDIR="`dirname "$SCRIPT_PATH"`"
 
 # Don't run Composer as root - Composer itself warns against that
 if [[ $EUID -eq 0 ]]; then
@@ -47,28 +40,24 @@ if [[ $EUID -eq 0 ]]; then
     exit 1
 fi
 
-# create base folder on demand and qualify its pathname
-mkdir -p "$BASEDIR" || exit 1
-cd "$BASEDIR"
-BASEDIR="$(pwd)"
-
-if [ -e composer.phar ] ;
+if [ -e composer ] ;
 then
-	# upgrade existing composer
-	php composer.phar selfupdate || {
-		echo "failed self-updating composer" >&2
-		exit 1
-	}
-else
-	# install composer
-	curl -s http://getcomposer.org/installer | php || {
-		echo "failed getting composer" >&2
-		exit 1
-	}
+  exit 1
 fi
 
-# install all dependencies
-php composer.phar install || {
-    echo "failed installing dependencies" >&2
+EXPECTED_CHECKSUM="$(php -r 'copy("https://composer.github.io/installer.sig", "php://stdout");')"
+php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+ACTUAL_CHECKSUM="$(php -r "echo hash_file('sha384', 'composer-setup.php');")"
+
+if [ "$EXPECTED_CHECKSUM" != "$ACTUAL_CHECKSUM" ]
+then
+    >&2 echo 'ERROR: Invalid installer checksum'
+    rm composer-setup.php
     exit 1
-}
+fi
+
+php composer-setup.php --quiet --install-dir="$BASEDIR/bin" --filename=composer
+RESULT=$?
+rm composer-setup.php
+exit $RESULT
+

@@ -31,13 +31,12 @@ apt-get -yq install pandoc
 apt-get -yq install ant
 
 # Install Composer
-cd /vagrant
-curl -s http://getcomposer.org/installer | php
+/vagrant/bin/install-composer.sh
 SCRIPT
 
 $composer = <<SCRIPT
 cd /vagrant
-php composer.phar update
+bin/composer update
 SCRIPT
 
 $solr = <<SCRIPT
@@ -95,6 +94,9 @@ SCRIPT
 $environment = <<SCRIPT
 if ! grep "cd /vagrant" /home/vagrant/.profile > /dev/null; then
   echo "cd /vagrant" >> /home/vagrant/.profile
+fi
+if ! grep "PATH=/vagrant/bin" /home/vagrant/.bashrc > /dev/null; then
+  echo "export PATH=/vagrant/bin:$PATH" >> /home/vagrant/.bashrc
 fi
 if ! grep "vagrant hard" /etc/security/limits.conf > /dev/null; then
   echo "vagrant hard nofile 65535" >> /etc/security/limits.conf
