@@ -12,6 +12,7 @@ vendor
 # ignore composer runtime
 composer.phar
 composer.lock
+bin/composer
 
 # ignore all workspace files
 workspace/**/*
