@@ -29,13 +29,11 @@ apt-get -yq install openjdk-11-jdk
 apt-get -yq install libxml2-utils
 apt-get -yq install pandoc
 apt-get -yq install ant
-
-# Install Composer
-/vagrant/bin/install-composer.sh
 SCRIPT
 
 $composer = <<SCRIPT
 cd /vagrant
+bin/install-composer.sh
 bin/composer update
 SCRIPT
 
