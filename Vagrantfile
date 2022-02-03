@@ -65,15 +65,16 @@ SCRIPT
 
 $apache = <<SCRIPT
 cd /vagrant/apacheconf
-cp apache24.conf.template apache.conf
-OPUS_URL_BASE="/opus4"
-BASEDIR="/vagrant"
-sed -e "s!/OPUS_URL_BASE!/$OPUS_URL_BASE!g; s!/BASEDIR/!/$BASEDIR/!; s!//*!/!g" "apache24.conf.template" > "apache.conf"
+if test ! -f "apache.conf"; then
+  cp apache24.conf.template apache.conf
+  OPUS_URL_BASE="/opus4"
+  BASEDIR="/vagrant"
+  sed -e "s!/OPUS_URL_BASE!/$OPUS_URL_BASE!g; s!/BASEDIR/!/$BASEDIR/!; s!//*!/!g" "apache24.conf.template" > "apache.conf"
+fi
 ln -s /vagrant/apacheconf/apache.conf /etc/apache2/sites-available/opus4.conf
 a2enmod rewrite
 a2ensite opus4
 service apache2 restart
-# TODO workspace write permissions for Apache2
 SCRIPT
 
 $opus = <<SCRIPT
@@ -97,6 +98,10 @@ if ! grep "cd /vagrant" /home/vagrant/.profile > /dev/null; then
 fi
 SCRIPT
 
+$reload_apache = <<SCRIPT
+service apache2 reload
+SCRIPT
+
 Vagrant.configure("2") do |config|
   config.vm.box = "bento/ubuntu-20.04"
 
@@ -114,4 +119,5 @@ Vagrant.configure("2") do |config|
   config.vm.provision "Initialize test data...", type: "shell", privileged: false, inline: $testdata
   config.vm.provision "Fix permissions...", type: "shell", inline: $fix
   config.vm.provision "Setup environment...", type: "shell", inline: $environment
+  config.vm.provision "Reload Apache...", type: "shell", run: "always", inline: $reload_apache
 end
