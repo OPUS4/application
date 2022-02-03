@@ -55,8 +55,8 @@ echo name=opus4 > server/solr/opus4/core.properties
 cd server/solr/opus4/conf/
 ln -s /vagrant/vendor/opus4-repo/search/conf/schema.xml schema.xml
 ln -s /vagrant/vendor/opus4-repo/search/conf/solrconfig.xml solrconfig.xml
-cd /home/vagrant/solr-7.7.2
-./bin/solr start
+# cd /home/vagrant/solr-7.7.2
+# ./bin/solr start
 SCRIPT
 
 $database = <<SCRIPT
@@ -96,10 +96,16 @@ $environment = <<SCRIPT
 if ! grep "cd /vagrant" /home/vagrant/.profile > /dev/null; then
   echo "cd /vagrant" >> /home/vagrant/.profile
 fi
+if ! grep "vagrant hard" /etc/security/limits.conf > /dev/null; then
+  echo "vagrant hard nofile 65535" >> /etc/security/limits.conf
+  echo "vagrant soft nofile 65535" >> /etc/security/limits.conf
+  echo "vagrant hard nproc 65535" >> /etc/security/limits.conf
+  echo "vagrant soft nproc 65535" >> /etc/security/limits.conf
+fi
 SCRIPT
 
 $start = <<SCRIPT
-service apache2 reload
+sudo service apache2 reload
 cd /home/vagrant/solr-7.7.2
 ./bin/solr start
 SCRIPT
@@ -118,8 +124,8 @@ Vagrant.configure("2") do |config|
   config.vm.provision "Create database...", type: "shell", inline: $database
   config.vm.provision "Configure OPUS 4...", type: "shell", privileged: false, inline: $opus
   config.vm.provision "Setup site in Apache2...", type: "shell", inline: $apache
-  config.vm.provision "Initialize test data...", type: "shell", privileged: false, inline: $testdata
   config.vm.provision "Fix permissions...", type: "shell", inline: $fix
   config.vm.provision "Setup environment...", type: "shell", inline: $environment
-  config.vm.provision "Start services...", type: "shell", run: "always", inline: $start
+  config.vm.provision "Start services...", type: "shell", privileged: false, run: "always", inline: $start
+  config.vm.provision "Initialize test data...", type: "shell", privileged: false, inline: $testdata
 end
