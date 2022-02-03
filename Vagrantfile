@@ -98,8 +98,10 @@ if ! grep "cd /vagrant" /home/vagrant/.profile > /dev/null; then
 fi
 SCRIPT
 
-$reload_apache = <<SCRIPT
+$start = <<SCRIPT
 service apache2 reload
+cd /home/vagrant/solr-7.7.2
+./bin/solr start
 SCRIPT
 
 Vagrant.configure("2") do |config|
@@ -119,5 +121,5 @@ Vagrant.configure("2") do |config|
   config.vm.provision "Initialize test data...", type: "shell", privileged: false, inline: $testdata
   config.vm.provision "Fix permissions...", type: "shell", inline: $fix
   config.vm.provision "Setup environment...", type: "shell", inline: $environment
-  config.vm.provision "Reload Apache...", type: "shell", run: "always", inline: $reload_apache
+  config.vm.provision "Start services...", type: "shell", run: "always", inline: $start
 end
