@@ -14,20 +14,8 @@
 # @copyright   Copyright (c) 2010-2022, OPUS 4 development team
 # @license     http://www.gnu.org/licenses/gpl.html General Public License
 
-#
-# Skript for installing composer and OPUS 4 dependencies.
-#
-# Call like this "bin/install-composer.sh ." from the base directory of the
-# OPUS 4 application to install composer.phar into the same directory and
-# install the necessary dependencies.
-#
-# Parameters:
-#   1) Directory for installing composer
-#
-
 set -e
 
-SCRIPT_NAME="$(basename "$0")"
 SCRIPT_NAME_FULL="`readlink -f "$0"`"
 SCRIPT_PATH="`dirname "$SCRIPT_NAME_FULL"`"
 
@@ -60,4 +48,3 @@ php composer-setup.php --quiet --install-dir="$BASEDIR/bin" --filename=composer
 RESULT=$?
 rm composer-setup.php
 exit $RESULT
-
