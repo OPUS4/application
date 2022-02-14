@@ -30,6 +30,7 @@
  */
 
 use Opus\Config;
+use Opus\Log;
 use Opus\Security\Realm;
 use Opus\Security\SecurityException;
 
@@ -51,7 +52,6 @@ class Application_Controller_Plugin_SecurityRealm extends \Zend_Controller_Plugi
      */
     public function routeStartup(\Zend_Controller_Request_Abstract $request)
     {
-
         // Create a Realm instance.  Initialize privileges to empty.
         $realm = Realm::getInstance();
         $realm->setUser(null);
@@ -76,6 +76,8 @@ class Application_Controller_Plugin_SecurityRealm extends \Zend_Controller_Plugi
 
         if ($request instanceof \Zend_Controller_Request_Http) {
             $clientIp = $request->getClientIp($this->isCheckProxy());
+
+            Log::get()->debug("Client-IP: $clientIp");
 
             // OPUS_Security does not support IPv6.  Skip setting IP address, if
             // IPv6 address has been detected.  This means, that authentication by
