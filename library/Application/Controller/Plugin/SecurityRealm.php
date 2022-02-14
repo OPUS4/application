@@ -74,7 +74,6 @@ class Application_Controller_Plugin_SecurityRealm extends \Zend_Controller_Plugi
             }
         }
 
-        // TODO redundant - exists also in AclProvider (unify security)
         if ($request instanceof \Zend_Controller_Request_Http) {
             $clientIp = $request->getClientIp($this->isCheckProxy());
 
@@ -85,6 +84,8 @@ class Application_Controller_Plugin_SecurityRealm extends \Zend_Controller_Plugi
                 $realm->setIp($clientIp);
             }
         }
+
+        $config = Config::get();
 
         if (isset($config->security) && filter_var($config->security, FILTER_VALIDATE_BOOLEAN)) {
             Application_Security_AclProvider::init();
