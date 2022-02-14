@@ -82,7 +82,7 @@ class Application_Controller_Plugin_SecurityRealm extends \Zend_Controller_Plugi
             // OPUS_Security does not support IPv6.  Skip setting IP address, if
             // IPv6 address has been detected.  This means, that authentication by
             // IPv6 address does not work, but username-password still does.
-            if ($clientIp !== null && ! preg_match('/:/', $clientIp) === 0) {
+            if ($clientIp !== null && preg_match('/:/', $clientIp) === 0) {
                 $realm->setIp($clientIp);
             }
         }
