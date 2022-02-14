@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -23,6 +24,9 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * @copyright   Copyright (c) 2008-2022, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 use Opus\Log\LogService;
@@ -33,15 +37,6 @@ use Opus\Repository;
 /**
  * Provide methods to setup and run the application. It also provides a couple of static
  * variables for quicker access to application components like the front controller.
- *
- * @category    Application
- * @package     Application
- * @author      Ralf Claussnitzer (ralf.claussnitzer@slub-dresden.de)
- * @author      Simone Finkbeiner (simone.finkbeiner@ub.uni-stuttgart.de)
- * @author      Jens Schwidder <schwidder@zib.de>
- * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2021, OPUS 4 development team
- * @license     http://www.gnu.org/licenses/gpl.html General Public License
  *
  * TODO unit test bootstrap
  */
@@ -363,14 +358,8 @@ class Application_Bootstrap extends DatabaseBootstrap
     {
         $this->bootstrap('Logging', 'Navigation', 'view');
 
-        $config = $this->getResource('configuration');
-
-        if (isset($config->security) && filter_var($config->security, FILTER_VALIDATE_BOOLEAN)) {
-            Application_Security_AclProvider::init();
-        } else {
-            \Zend_View_Helper_Navigation_HelperAbstract::setDefaultAcl(null);
-            \Zend_View_Helper_Navigation_HelperAbstract::setDefaultRole(null);
-        }
+        \Zend_View_Helper_Navigation_HelperAbstract::setDefaultAcl(null);
+        \Zend_View_Helper_Navigation_HelperAbstract::setDefaultRole(null);
     }
 
     /**
