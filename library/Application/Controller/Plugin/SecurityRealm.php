@@ -82,7 +82,18 @@ class Application_Controller_Plugin_SecurityRealm extends \Zend_Controller_Plugi
             $clientIp = $request->getClientIp($checkProxy);
 
             Log::get()->debug("Client-IP: $clientIp");
-            Log::get()->debug(\Zend_Debug::dump(apache_request_headers(), "HTTP-Headers", false));
+            if (function_exists('apache_request_headers')) {
+                ob_start();
+                var_dump($_SERVER);
+                $debugOutput = ob_get_contents();
+                ob_end_clean();
+                Log::get()->debug($debugOutput);
+            }
+            ob_start();
+            var_dump($_SERVER);
+            $debugOutput = ob_get_contents();
+            ob_end_clean();
+            Log::get()->debug($debugOutput);
 
             // OPUS_Security does not support IPv6.  Skip setting IP address, if
             // IPv6 address has been detected.  This means, that authentication by
