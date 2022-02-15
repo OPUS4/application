@@ -75,7 +75,11 @@ class Application_Controller_Plugin_SecurityRealm extends \Zend_Controller_Plugi
         }
 
         if ($request instanceof \Zend_Controller_Request_Http) {
-            $clientIp = $request->getClientIp($this->isCheckProxy());
+            $checkProxy = $this->isCheckProxy();
+
+            Log::get()->debug('Check-Proxy: ' . (($checkProxy) ? 'true' : 'false'));
+
+            $clientIp = $request->getClientIp($checkProxy);
 
             Log::get()->debug("Client-IP: $clientIp");
 
