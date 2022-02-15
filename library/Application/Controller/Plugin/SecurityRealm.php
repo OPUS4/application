@@ -84,7 +84,7 @@ class Application_Controller_Plugin_SecurityRealm extends \Zend_Controller_Plugi
             Log::get()->debug("Client-IP: $clientIp");
             if (function_exists('apache_request_headers')) {
                 ob_start();
-                var_dump($_SERVER);
+                var_dump(apache_request_headers());
                 $debugOutput = ob_get_contents();
                 ob_end_clean();
                 Log::get()->debug($debugOutput);
