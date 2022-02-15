@@ -131,8 +131,6 @@ class Application_Controller_Plugin_SecurityRealm extends \Zend_Controller_Plugi
 
     /**
      * @return bool
-     *
-     * TODO redundant function exists in SecurityRealm (refactoring)
      */
     public function isCheckProxy()
     {
