@@ -482,7 +482,7 @@ class Admin_PersonControllerTest extends ControllerTestCase
         $this->assertXpath('//li/a[@href = "/admin/person"]');
     }
 
-    public function testAccessControl()
+    public function testAccessControlAdmin()
     {
         $this->useEnglish();
         $this->enableSecurity();
@@ -493,7 +493,12 @@ class Admin_PersonControllerTest extends ControllerTestCase
         $this->assertResponseCode(200);
         $this->assertQueryContentContains('li.group-sky/a/strong', 'Persons');
         $this->assertXpath('//li/a[@href = "/admin/person"]');
+    }
 
+    public function testAccessControlUser()
+    {
+        $this->useEnglish();
+        $this->enableSecurity();
         $this->loginUser('security2', 'security2pwd');
 
         $this->dispatch('/admin');

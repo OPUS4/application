@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,16 +25,11 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Application_Security
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2022, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Config;
 use Opus\Security\Realm;
-use Opus\Security\SecurityException;
 
 /**
  * Erzeugt das Zend_Acl object für die Prüfung von Nutzerprivilegien.
@@ -131,40 +127,16 @@ class Application_Security_AclProvider
 
         $realm = Realm::getInstance();
 
-        $request = \Zend_Controller_Front::getInstance()->getRequest();
-
-        if ($request instanceof \Zend_Controller_Request_Http) {
-            $clientIp = $request->getClientIp($this->isCheckProxy());
-
-            // OPUS_Security does not support IPv6.  Skip setting IP address, if
-            // IPv6 address has been detected.  This means, that authentication by
-            // IPv6 address does not work, but username-password still does.
-            if ($clientIp !== null && ! preg_match('/:/', $clientIp) === 0) {
-                $realm->setIp($clientIp);
-            }
-        }
-
-        $user = \Zend_Auth::getInstance()->getIdentity();
-
-        if (! is_null($user)) {
-            try {
-                $realm->setUser($user);
-            } catch (SecurityException $ose) {
-                // unknown user -> invalidate session (logout)
-                \Zend_Auth::getInstance()->clearIdentity();
-                $user = null;
-            }
-        }
-
         $parents = $realm->getRoles();
 
         $this->loadRoles($acl, $parents);
 
         // create role for user on-the-fly with assigned roles as parents
         if ($logger->getLevel() >= \Zend_LOG::DEBUG) {
-                $logger->debug(
-                    "ACL: Create role '" . $user . "' with parents " . "(" . implode(", ", $parents) . ")"
-                );
+            $user = \Zend_Auth::getInstance()->getIdentity();
+            $logger->debug(
+                "ACL: Create role '" . $user . "' with parents " . "(" . implode(", ", $parents) . ")"
+            );
         }
 
         // Add role for current user
@@ -236,16 +208,5 @@ class Application_Security_AclProvider
 
             $roleConfig->applyPermissions($acl);
         }
-    }
-
-    /**
-     * @return bool
-     *
-     * TODO redundant function exists in SecurityRealm (refactoring)
-     */
-    public function isCheckProxy()
-    {
-        $config = Config::get();
-        return isset($config->proxy->enabled) && filter_var($config->proxy->enabled, FILTER_VALIDATE_BOOLEAN);
     }
 }

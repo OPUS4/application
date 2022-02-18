@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,20 +25,18 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Tests
- * @author      Edouard Simon (edouard.simon@zib.de)
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2022, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 use Opus\Account;
+use Opus\Security\Realm;
 use Opus\UserRole;
 
 class Application_Security_AclProviderTest extends ControllerTestCase
 {
 
-    protected $additionalResources = 'database';
+    protected $additionalResources = 'all';
 
     private $roleId;
     private $userId;
@@ -58,8 +57,7 @@ class Application_Security_AclProviderTest extends ControllerTestCase
         $userAccount->setRole($testRole);
         $this->userId = $userAccount->store();
 
-        // fake authentication
-        \Zend_Auth::getInstance()->getStorage()->write('role_tester');
+        $this->loginUser('role_tester', 'role_tester');
     }
 
     public function tearDown()
