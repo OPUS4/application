@@ -75,25 +75,9 @@ class Application_Controller_Plugin_SecurityRealm extends \Zend_Controller_Plugi
         }
 
         if ($request instanceof \Zend_Controller_Request_Http) {
-            $checkProxy = $this->isCheckProxy();
-
-            Log::get()->debug('Check-Proxy: ' . (($checkProxy) ? 'true' : 'false'));
-
-            $clientIp = $request->getClientIp($checkProxy);
+            $clientIp = $request->getClientIp(false);
 
             Log::get()->debug("Client-IP: $clientIp");
-            if (function_exists('apache_request_headers')) {
-                ob_start();
-                var_dump(apache_request_headers());
-                $debugOutput = ob_get_contents();
-                ob_end_clean();
-                Log::get()->debug($debugOutput);
-            }
-            ob_start();
-            var_dump($_SERVER);
-            $debugOutput = ob_get_contents();
-            ob_end_clean();
-            Log::get()->debug($debugOutput);
 
             // OPUS_Security does not support IPv6.  Skip setting IP address, if
             // IPv6 address has been detected.  This means, that authentication by
@@ -143,14 +127,5 @@ class Application_Controller_Plugin_SecurityRealm extends \Zend_Controller_Plugi
         $member = $this->getModuleMemberName($request->getModuleName());
         $storage = new \Zend_Auth_Storage_Session($namespace, $member);
         \Zend_Auth::getInstance()->setStorage($storage);
-    }
-
-    /**
-     * @return bool
-     */
-    public function isCheckProxy()
-    {
-        $config = Config::get();
-        return isset($config->proxy->enabled) && filter_var($config->proxy->enabled, FILTER_VALIDATE_BOOLEAN);
     }
 }

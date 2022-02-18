@@ -350,19 +350,6 @@ class Application_Bootstrap extends DatabaseBootstrap
     }
 
     /**
-     * Initialisiert \Zend_Acl für die Authorization in OPUS.
-     *
-     * TODO use Application_Security_AclProvider
-     */
-    protected function _initAuthz()
-    {
-        $this->bootstrap('Logging', 'Navigation', 'view');
-
-        \Zend_View_Helper_Navigation_HelperAbstract::setDefaultAcl(null);
-        \Zend_View_Helper_Navigation_HelperAbstract::setDefaultRole(null);
-    }
-
-    /**
      * Initializes navigation container for main menu.
      * @return \Zend_Navigation
      */

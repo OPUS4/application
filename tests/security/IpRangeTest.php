@@ -36,7 +36,7 @@ class IpRangeTest extends ControllerTestCase
 
     protected $configModifiable = true;
 
-    protected $additionalResources = ['authz', 'database', 'view', 'navigation', 'mainMenu', 'translation'];
+    protected $additionalResources = ['database', 'view', 'navigation', 'mainMenu', 'translation'];
 
     public function setUp()
     {
@@ -50,7 +50,7 @@ class IpRangeTest extends ControllerTestCase
         parent::tearDown();
     }
 
-    public function testClientIpWithoutProxy()
+    public function testClientIpSetDuringRouting()
     {
         $_SERVER['REMOTE_ADDR'] = '127.0.0.2';
         $_SERVER['HTTP_X_FORWARDED_FOR'] = '127.0.0.3';
@@ -60,21 +60,5 @@ class IpRangeTest extends ControllerTestCase
         $realm = Realm::getInstance();
 
         $this->assertEquals('127.0.0.2', $realm->getIp());
-    }
-
-    public function testClientIpRangeWithProxy()
-    {
-        $_SERVER['REMOTE_ADDR'] = '127.0.0.2';
-        $_SERVER['HTTP_X_FORWARDED_FOR'] = '127.0.0.3';
-
-        $this->adjustConfiguration([
-            'proxy' => ['enabled' => '1']
-        ]);
-
-        $this->dispatch('/home');
-
-        $realm = Realm::getInstance();
-
-        $this->assertEquals('127.0.0.3', $realm->getIp());
     }
 }
