@@ -95,6 +95,8 @@ class Application_Controller_Plugin_SecurityRealm extends \Zend_Controller_Plugi
             \Zend_View_Helper_Navigation_HelperAbstract::setDefaultAcl(null);
             \Zend_View_Helper_Navigation_HelperAbstract::setDefaultRole(null);
         }
+
+        $this->setupExportFormats();
     }
 
 
@@ -127,5 +129,54 @@ class Application_Controller_Plugin_SecurityRealm extends \Zend_Controller_Plugi
         $member = $this->getModuleMemberName($request->getModuleName());
         $storage = new \Zend_Auth_Storage_Session($namespace, $member);
         \Zend_Auth::getInstance()->setStorage($storage);
+    }
+
+    /**
+     * @throws Zend_Exception
+     *
+     * TODO LAMINAS temporary hack for https://github.com/OPUS4/application/issues/516
+     */
+    protected function setupExportFormats()
+    {
+        if (! \Zend_Registry::isRegistered('Opus_Exporter')) {
+            Log::get()->warn(__METHOD__ . ' exporter not found');
+            return;
+        }
+
+        $exporter = \Zend_Registry::get('Opus_Exporter');
+
+        if (is_null($exporter)) {
+            Log::get()->warn(__METHOD__ . ' exporter not found');
+            return;
+        }
+
+        if (Realm::getInstance()->checkModule('admin')) {
+            // add admin-only format(s) to exporter
+            // hiermit wird nur die Sichtbarkeit des Export-Buttons gesteuert
+            $exporter->addFormats([
+                'datacite' => [
+                    'name' => 'DataCite',
+                    'description' => 'Export DataCite-XML',
+                    'module' => 'export',
+                    'controller' => 'index',
+                    'action' => 'datacite',
+                    'search' => false
+                ]
+            ]);
+
+            $exporter->addFormats([
+                'marc21' => [
+                    'name' => 'MARC21-XML',
+                    'description' => 'Export MARC21-XML',
+                    'module' => 'export',
+                    'controller' => 'index',
+                    'action' => 'marc21',
+                    'search' => false,
+                    'params' => [
+                        'searchtype' => 'id'
+                    ]
+                ]
+            ]);
+        }
     }
 }
