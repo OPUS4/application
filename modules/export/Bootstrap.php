@@ -107,34 +107,5 @@ class Export_Bootstrap extends \Zend_Application_Module_Bootstrap
                 'frontdoor' => false
             ]
         ]);
-
-        if (Realm::getInstance()->checkModule('admin')) {
-            // add admin-only format(s) to exporter
-            // hiermit wird nur die Sichtbarkeit des Export-Buttons gesteuert
-            $exporter->addFormats([
-                'datacite' => [
-                    'name' => 'DataCite',
-                    'description' => 'Export DataCite-XML',
-                    'module' => 'export',
-                    'controller' => 'index',
-                    'action' => 'datacite',
-                    'search' => false
-                ]
-            ]);
-
-            $exporter->addFormats([
-                'marc21' => [
-                    'name' => 'MARC21-XML',
-                    'description' => 'Export MARC21-XML',
-                    'module' => 'export',
-                    'controller' => 'index',
-                    'action' => 'marc21',
-                    'search' => false,
-                    'params' => [
-                        'searchtype' => 'id'
-                    ]
-                ]
-            ]);
-        }
     }
 }
