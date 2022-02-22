@@ -147,6 +147,9 @@ class Application_Export_ExporterTest extends ControllerTestCase
 
     public function testGetAllowedFormats()
     {
+        // Restricted format are only setup during request processing (OPUS4/application#516)
+        $this->dispatch('/home');
+
         $exporter = \Zend_Registry::get('Opus_Exporter');
 
         $formats = $exporter->getAllowedFormats();
