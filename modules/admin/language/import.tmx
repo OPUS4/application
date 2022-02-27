@@ -68,44 +68,44 @@
         <seg>BibTeX-Datei</seg>
       </tuv>
     </tu>
-    <tu tuid="admin_import_ini_filename">
-       <tuv xml:lang="en">
-         <seg>Filesystem path of INI configuration file (default: import.ini)</seg>
-       </tuv>
-       <tuv xml:lang="de">
-         <seg>Dateisystem-Pfad der INI-Konfigurationsdatei (Standard: import.ini)</seg>
-       </tuv>
-    </tu>
     <tu tuid="admin_import_mapping_name">
        <tuv xml:lang="en">
-         <seg>Name of BibTeX field mapping (default name: default)</seg>
+         <seg>BibTeX field mapping</seg>
        </tuv>
        <tuv xml:lang="de">
-         <seg>Name des zu verwendenden BibTeX-Feldmappings (Standard: default)</seg>
+         <seg>BibTeX-Feldmapping</seg>
        </tuv>
     </tu>
     <tu tuid="admin_import_collection_ids">
        <tuv xml:lang="en">
-         <seg>comma-separated list of IDs of collections each imported document is assigned to</seg>
+         <seg>List of collection IDs (comma-separated)</seg>
        </tuv>
        <tuv xml:lang="de">
-         <seg>kommaseparierte Liste von IDs der Sammlungen, mit denen die importierten Dokumente verknüpft werden sollen</seg>
+         <seg>Liste von Sammlungs-IDs (kommasepariert)</seg>
+       </tuv>
+    </tu>
+    <tu tuid="admin_import_collection_ids_hint">
+       <tuv xml:lang="en">
+         <seg>Imported documents will be assigned to collections.</seg>
+       </tuv>
+       <tuv xml:lang="de">
+         <seg>Importierte Dokumente werden mit Sammlungen verknüpft.</seg>
        </tuv>
     </tu>
     <tu tuid="admin_import_verbose">
        <tuv xml:lang="en">
-         <seg>Enable verbose output</seg>
+         <seg>Verbose output</seg>
        </tuv>
        <tuv xml:lang="de">
-         <seg>Ausführliche Logausgabe während der Verarbeitung aktivieren</seg>
+         <seg>Ausführliche Logausgabe</seg>
        </tuv>
     </tu>
     <tu tuid="admin_import_dry_mode">
        <tuv xml:lang="en">
-         <seg>Enable dry mode (do not import documents to database)</seg>
+         <seg>Test import (database will not be changed)</seg>
        </tuv>
        <tuv xml:lang="de">
-         <seg>Trockenlauf durchführen (es werden keine Dokumente in die Datenbank importiert)</seg>
+         <seg>Test-Import (Datenbank wird nicht verändert)</seg>
        </tuv>
     </tu>
     <tu tuid="admin_import_start">

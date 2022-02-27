@@ -26,10 +26,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Sascha Szott <opus-repository@saschaszott.de>
- * @copyright   Copyright (c) 2021, OPUS 4 development team
+ * @copyright   Copyright (c) 2021-2022, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -43,8 +40,11 @@ class Admin_ImportController extends Application_Controller_Action
     public function bibtexAction()
     {
         $this->view->title = 'admin_import_bibtex';
+
         $request = $this->getRequest();
+
         $form = new Admin_Form_Import();
+
         if ($request->isPost()) {
             $postData = $this->getRequest()->getPost();
 
@@ -105,12 +105,9 @@ class Admin_ImportController extends Application_Controller_Action
     private function createBibtexImportHelper($fileName, $postData)
     {
         $bibtexImportHelper = new BibtexImportHelper($fileName);
-        if (array_key_exists(Admin_Form_Import::ELEMENT_INI_FILENAME, $postData)) {
-            $bibtexImportHelper->setIniFileName($postData[Admin_Form_Import::ELEMENT_INI_FILENAME]);
-        }
 
-        if (array_key_exists(Admin_Form_Import::ELEMENT_MAPPING_NAME, $postData)) {
-            $bibtexImportHelper->setMappingConfiguration($postData[Admin_Form_Import::ELEMENT_MAPPING_NAME]);
+        if (array_key_exists(Admin_Form_Import::ELEMENT_MAPPING, $postData)) {
+            $bibtexImportHelper->setMappingConfiguration($postData[Admin_Form_Import::ELEMENT_MAPPING]);
         }
 
         if (array_key_exists(Admin_Form_Import::ELEMENT_COLLECTION_IDS, $postData)) {
