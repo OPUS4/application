@@ -148,6 +148,10 @@ class Frontdoor_DeliverController extends Application_Controller_Action
     /**
      * Prepares the given file for download and returns the path to the resulting file.
      *
+     * Depending on certain criteria (such as the document collection), the file download
+     * may include a PDF cover that was generated based on a template and using the document's
+     * metadata.
+     *
      * @param File $file
      * @return string the file's path
      */
@@ -178,12 +182,9 @@ class Frontdoor_DeliverController extends Application_Controller_Action
             return $filePath;
         }
 
-        $filecacheDir = Application_Configuration::getInstance()->getFilecachePath();
-        $tmpDir = Application_Configuration::getInstance()->getTempPath();
-
         // if a PDF cover should be served for this file, create a file copy that includes an
         // appropriate cover page and return its path (instead of the original file's path)
-        $filePath = $coverGenerator->processFile($doc, $file, $filecacheDir, $tmpDir);
+        $filePath = $coverGenerator->processFile($doc, $file);
 
         return $filePath;
     }
@@ -200,6 +201,13 @@ class Frontdoor_DeliverController extends Application_Controller_Action
         if ($generator === null) {
             return null;
         }
+
+        // configure cover generator with appropriate workspace subdirectory paths
+        $filecacheDir = Application_Configuration::getInstance()->getFilecachePath();
+        $generator->setFilecacheDir($filecacheDir);
+
+        $tempDir = Application_Configuration::getInstance()->getTempPath();
+        $generator->setTempDir($tempDir);
 
         return $generator;
     }
