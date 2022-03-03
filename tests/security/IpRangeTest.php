@@ -25,38 +25,40 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2020-2022, OPUS 4 development team
+ * @copyright   Copyright (c) 2022, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-/**
- *
- */
-class Application_View_Helper_IsAuthenticatedTest extends ControllerTestCase
+use Opus\Security\Realm;
+
+class IpRangeTest extends ControllerTestCase
 {
 
-    protected $additionalResources = ['database', 'view'];
+    protected $configModifiable = true;
 
-    private $helper;
+    protected $additionalResources = ['database', 'view', 'navigation', 'mainMenu', 'translation'];
 
     public function setUp()
     {
         parent::setUp();
-        $this->helper = new Application_View_Helper_IsAuthenticated();
+        $this->enableSecurity();
     }
 
-    public function testIsAuthenticated()
+    public function tearDown()
     {
-        $helper = $this->helper;
+        $this->restoreSecuritySetting();
+        parent::tearDown();
+    }
 
-        $this->assertFalse($helper->isAuthenticated());
+    public function testClientIpSetDuringRouting()
+    {
+        $_SERVER['REMOTE_ADDR'] = '127.0.0.2';
+        $_SERVER['HTTP_X_FORWARDED_FOR'] = '127.0.0.3';
 
-        $this->loginUser('security1', 'security1pwd');
+        $this->dispatch('/home');
 
-        $this->assertTrue($helper->isAuthenticated());
+        $realm = Realm::getInstance();
 
-        $this->logoutUser();
-
-        $this->assertFalse($helper->isAuthenticated());
+        $this->assertEquals('127.0.0.2', $realm->getIp());
     }
 }

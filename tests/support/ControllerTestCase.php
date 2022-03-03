@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,10 +25,6 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @author      Jens Schwidder <schwidder@zib.de>
- * @author      Thoralf Klein <thoralf.klein@zib.de>
- * @author      Michael Lang <lang@zib.de>
  * @copyright   Copyright (c) 2008-2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
@@ -43,6 +40,7 @@ use Opus\Model\ModelException;
 use Opus\Model\NotFoundException;
 use Opus\Security\AuthAdapter;
 use Opus\Security\Realm;
+use Opus\Security\SecurityException;
 
 /**
  * Base class for controller tests.
@@ -289,6 +287,19 @@ class ControllerTestCase extends TestCase
         $auth->authenticate($adapter);
         $this->assertTrue($auth->hasIdentity());
 
+        $user = \Zend_Auth::getInstance()->getIdentity();
+
+        if (! is_null($user)) {
+            try {
+                $realm = Realm::getInstance();
+                $realm->setUser($user);
+            } catch (SecurityException $ose) {
+                // unknown user -> invalidate session (logout)
+                \Zend_Auth::getInstance()->clearIdentity();
+                $user = null;
+            }
+        }
+
         $config = Config::get();
         if (isset($config->security) && filter_var($config->security, FILTER_VALIDATE_BOOLEAN)) {
             Application_Security_AclProvider::init();
@@ -381,6 +392,7 @@ class ControllerTestCase extends TestCase
         $config = $this->getConfig();
         $this->securityEnabled = $config->security;
         $config->security = self::CONFIG_VALUE_TRUE;
+        Application_Security_AclProvider::init();
     }
 
     /**
@@ -964,10 +976,7 @@ class ControllerTestCase extends TestCase
     public function assertSecurityConfigured()
     {
         $this->assertEquals('1', Config::get()->security);
-        $this->assertNotNull(
-            Application_Security_AclProvider::getAcl(),
-            'Expected Zend_Acl to be set'
-        );
+        Application_Security_AclProvider::init();
         $acl = Application_Security_AclProvider::getAcl();
         $this->assertTrue($acl instanceof \Zend_Acl, 'Expected instance of Zend_Acl');
     }

@@ -58,6 +58,12 @@
       "public/assets/{$name}": ["type:component"]
     }
   },
+  "config": {
+    "allow-plugins": {
+      "composer/installers": true,
+      "oomphinc/composer-installers-extender": true
+    }
+  },
   "scripts": {
     "analysis": [
       "Composer\\Config::disableProcessTimeout",

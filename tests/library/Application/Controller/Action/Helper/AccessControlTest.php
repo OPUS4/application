@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,10 +25,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @package     Controller_Helper
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2022, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -37,7 +35,7 @@
 class Application_Controller_Action_Helper_AccessControlTest extends ControllerTestCase
 {
 
-    protected $additionalResources = ['database', 'authz'];
+    protected $additionalResources = ['database'];
 
     private $accessControl;
 
@@ -69,30 +67,21 @@ class Application_Controller_Action_Helper_AccessControlTest extends ControllerT
         $this->assertTrue($allowedAccount, "expected access allowed to module 'account'");
     }
 
-    /**
-     * @expectedException Application_Exception
-     * @expectedExceptionMessage #1 argument must not be empty|null
-     */
     public function testAccessAllowedForEmptyResource()
     {
+        $this->setExpectedException(Application_Exception::class, '#1 argument must not be empty|null');
         $this->accessControl->accessAllowed('  ');
     }
 
-    /**
-     * @expectedException Application_Exception
-     * @expectedExceptionMessage #1 argument must not be empty|null
-     */
     public function testAccessAllowedForNullResource()
     {
+        $this->setExpectedException(Application_Exception::class, '#1 argument must not be empty|null');
         $this->accessControl->accessAllowed(null);
     }
 
-    /**
-     * @expectedException Zend_Acl_Exception
-     * @expectedExceptionMessage Resource 'unknown' not found
-     */
     public function testAccessAllowedForUnknownResource()
     {
+        $this->setExpectedException(\Zend_Acl_Exception::class, 'Resource \'unknown\' not found');
         $this->assertFalse($this->accessControl->accessAllowed('unknown'));
     }
 }

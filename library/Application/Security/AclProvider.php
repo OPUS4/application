@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,15 +25,11 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Application_Security
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2022, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 use Opus\Security\Realm;
-use Opus\Security\SecurityException;
 
 /**
  * Erzeugt das Zend_Acl object für die Prüfung von Nutzerprivilegien.
@@ -130,31 +127,16 @@ class Application_Security_AclProvider
 
         $realm = Realm::getInstance();
 
-        if (isset($_SERVER['REMOTE_ADDR']) and preg_match('/:/', $_SERVER['REMOTE_ADDR']) === 0) {
-            $realm->setIp($_SERVER['REMOTE_ADDR']);
-        }
-
-        $user = \Zend_Auth::getInstance()->getIdentity();
-
-        if (! is_null($user)) {
-            try {
-                $realm->setUser($user);
-            } catch (SecurityException $ose) {
-                // unknown user -> invalidate session (logout)
-                \Zend_Auth::getInstance()->clearIdentity();
-                $user = null;
-            }
-        }
-
         $parents = $realm->getRoles();
 
         $this->loadRoles($acl, $parents);
 
         // create role for user on-the-fly with assigned roles as parents
         if ($logger->getLevel() >= \Zend_LOG::DEBUG) {
-                $logger->debug(
-                    "ACL: Create role '" . $user . "' with parents " . "(" . implode(", ", $parents) . ")"
-                );
+            $user = \Zend_Auth::getInstance()->getIdentity();
+            $logger->debug(
+                "ACL: Create role '" . $user . "' with parents " . "(" . implode(", ", $parents) . ")"
+            );
         }
 
         // Add role for current user

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,14 +25,12 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Controller/Plugin
- * @author      Pascal-Nicolas Becker <becker@zib.de>
- * @author      Ralf Claussnitzer (ralf.claussnitzer@slub-dresden.de)
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2022, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Config;
+use Opus\Log;
 use Opus\Security\Realm;
 use Opus\Security\SecurityException;
 
@@ -53,7 +52,6 @@ class Application_Controller_Plugin_SecurityRealm extends \Zend_Controller_Plugi
      */
     public function routeStartup(\Zend_Controller_Request_Abstract $request)
     {
-
         // Create a Realm instance.  Initialize privileges to empty.
         $realm = Realm::getInstance();
         $realm->setUser(null);
@@ -76,12 +74,29 @@ class Application_Controller_Plugin_SecurityRealm extends \Zend_Controller_Plugi
             }
         }
 
-        // OPUS_Security does not support IPv6.  Skip setting IP address, if
-        // IPv6 address has been detected.  This means, that authentication by
-        // IPv6 address does not work, but username-password still does.
-        if (isset($_SERVER['REMOTE_ADDR']) and preg_match('/:/', $_SERVER['REMOTE_ADDR']) === 0) {
-            $realm->setIp($_SERVER['REMOTE_ADDR']);
+        if ($request instanceof \Zend_Controller_Request_Http) {
+            $clientIp = $request->getClientIp(false);
+
+            Log::get()->debug("Client-IP: $clientIp");
+
+            // OPUS_Security does not support IPv6.  Skip setting IP address, if
+            // IPv6 address has been detected.  This means, that authentication by
+            // IPv6 address does not work, but username-password still does.
+            if ($clientIp !== null && preg_match('/:/', $clientIp) === 0) {
+                $realm->setIp($clientIp);
+            }
         }
+
+        $config = Config::get();
+
+        if (isset($config->security) && filter_var($config->security, FILTER_VALIDATE_BOOLEAN)) {
+            Application_Security_AclProvider::init();
+        } else {
+            \Zend_View_Helper_Navigation_HelperAbstract::setDefaultAcl(null);
+            \Zend_View_Helper_Navigation_HelperAbstract::setDefaultRole(null);
+        }
+
+        $this->setupExportFormats();
     }
 
 
@@ -114,5 +129,54 @@ class Application_Controller_Plugin_SecurityRealm extends \Zend_Controller_Plugi
         $member = $this->getModuleMemberName($request->getModuleName());
         $storage = new \Zend_Auth_Storage_Session($namespace, $member);
         \Zend_Auth::getInstance()->setStorage($storage);
+    }
+
+    /**
+     * @throws Zend_Exception
+     *
+     * TODO LAMINAS temporary hack for https://github.com/OPUS4/application/issues/516
+     */
+    protected function setupExportFormats()
+    {
+        if (! \Zend_Registry::isRegistered('Opus_Exporter')) {
+            Log::get()->warn(__METHOD__ . ' exporter not found');
+            return;
+        }
+
+        $exporter = \Zend_Registry::get('Opus_Exporter');
+
+        if (is_null($exporter)) {
+            Log::get()->warn(__METHOD__ . ' exporter not found');
+            return;
+        }
+
+        if (Realm::getInstance()->checkModule('admin')) {
+            // add admin-only format(s) to exporter
+            // hiermit wird nur die Sichtbarkeit des Export-Buttons gesteuert
+            $exporter->addFormats([
+                'datacite' => [
+                    'name' => 'DataCite',
+                    'description' => 'Export DataCite-XML',
+                    'module' => 'export',
+                    'controller' => 'index',
+                    'action' => 'datacite',
+                    'search' => false
+                ]
+            ]);
+
+            $exporter->addFormats([
+                'marc21' => [
+                    'name' => 'MARC21-XML',
+                    'description' => 'Export MARC21-XML',
+                    'module' => 'export',
+                    'controller' => 'index',
+                    'action' => 'marc21',
+                    'search' => false,
+                    'params' => [
+                        'searchtype' => 'id'
+                    ]
+                ]
+            ]);
+        }
     }
 }
