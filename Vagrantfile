@@ -33,7 +33,6 @@ SCRIPT
 $pandoc = <<SCRIPT
 # Install newer 'pandoc' version
 cd /home/vagrant
-mkdir -p "downloads"
 wget https://github.com/jgm/pandoc/releases/download/2.17.1.1/pandoc-2.17.1.1-1-amd64.deb
 dpkg -i pandoc-2.17.1.1-1-amd64.deb
 SCRIPT
@@ -50,7 +49,7 @@ mkdir -p "downloads"
 cd downloads
 SOLR_TAR="solr-7.7.2.tgz"
 if test ! -f "$SOLR_TAR"; then
-  wget -q "https://archive.apache.org/dist/lucene/solr/7.7.2/$SOLR_TAR"
+  wget "https://archive.apache.org/dist/lucene/solr/7.7.2/$SOLR_TAR"
 fi
 tar xfz "$SOLR_TAR" -C /home/vagrant
 cd /home/vagrant/solr-7.7.2
