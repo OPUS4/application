@@ -27,8 +27,15 @@ apt-get -yq install openjdk-11-jdk
 
 # Install required tools
 apt-get -yq install libxml2-utils
-apt-get -yq install pandoc
 apt-get -yq install ant
+SCRIPT
+
+$pandoc = <<SCRIPT
+# Install newer 'pandoc' version
+cd /home/vagrant
+mkdir -p "downloads"
+wget https://github.com/jgm/pandoc/releases/download/2.17.1.1/pandoc-2.17.1.1-1-amd64.deb
+dpkg -i pandoc-2.17.1.1-1-amd64.deb
 SCRIPT
 
 $composer = <<SCRIPT
@@ -39,7 +46,7 @@ SCRIPT
 
 $solr = <<SCRIPT
 cd /home/vagrant
-mkdir "downloads"
+mkdir -p "downloads"
 cd downloads
 SOLR_TAR="solr-7.7.2.tgz"
 if test ! -f "$SOLR_TAR"; then
@@ -127,6 +134,7 @@ Vagrant.configure("2") do |config|
   config.vm.network "forwarded_port", guest: 8983, host: 9983, host_ip: "127.0.0.1"
 
   config.vm.provision "Install required software...", type: "shell", inline: $software
+  config.vm.provision "Install pandoc...", type: "shell", inline: $pandoc
   config.vm.provision "Install Composer dependencies...", type: "shell", privileged: false, inline: $composer
   config.vm.provision "Install Apache Solr...", type: "shell", privileged: false, inline: $solr
   config.vm.provision "Create database...", type: "shell", inline: $database
