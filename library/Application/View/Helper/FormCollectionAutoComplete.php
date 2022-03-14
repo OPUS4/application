@@ -49,8 +49,7 @@ class Application_View_Helper_FormCollectionAutoComplete extends Zend_View_Helpe
 
         $xhtml =
             $this->view->formText($name, null, $textAttribs) .
-            "<ul id=\"{$name}List\"></ul>";
-
+            "<div id=\"{$name}Selected\"></div>";
 
         return $xhtml;
     }

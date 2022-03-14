@@ -10,10 +10,10 @@
 $(document).ready(function () {
 
     $.getJSON(window.opusBaseUrl + "/admin/autocomplete/collectionroles", function (data) {
-        $('.collections').data( 'roles', data);
+        $('.collections').data('roles', data);
     });
 
-    $('.collections').on('keydown', function(event) {
+    $('.collections').on('keydown', function (event) {
         if (event.key == "Enter") {
             event.preventDefault();
         }
@@ -21,20 +21,31 @@ $(document).ready(function () {
         source: window.opusBaseUrl + "/admin/autocomplete/collection",
         minLength: 3,
         select: function (event, ui) {
+            var container = $('#CollectionIdsSelected'); // TODO get element without hard coded name (ColectionIds)
+            var listId = 'CollectionList' + ui.item.RoleId;
+            var colList = $("#" + listId);
 
-            // TODO check if list for role exists
-            // TODO if list for role does not exist create
-            // TODO if list is empty remove it
+            // Check if list for collection role exists
+            if (! colList.length) {
+                var roleName = $('.collections').data('roles')[ui.item.RoleId];
 
-            $('#CollectionIdsList')
-                .append( $( "<li>" )
-                    .append(ui.item.Name)
-                    .append( $("<button>").attr("class", "remove-me").text('Remove')));
+                var listWrapper = $("<fieldset>").append($("<legend>").text(roleName))
+                colList = $("<ul>").attr('id', listId);
+                listWrapper.append(colList);
+                container.append(listWrapper);
+            }
+
+            // Add collection to list
+            if (colList) {
+                colList
+                    .append($("<li>")
+                        .append(ui.item.Name)
+                        .append($("<button>").attr("class", "remove-me").text('Remove')));
+            }
         },
-        create: function() {
+        create: function () {
 
             $(this).data('ui-autocomplete')._renderItem = function (ul, item) {
-
                 var label = item.Name;
 
                 if (item.Number) {
@@ -49,12 +60,12 @@ $(document).ready(function () {
 
             $(this).data('ui-autocomplete')._renderMenu = function (ul, items) {
                 var that = this, currentRole = 0;
+                var roles = $('.collections').data('roles');
                 $.each(items, function (index, item) {
                     var li;
                     if (item.RoleId != currentRole) {
                         currentRole = item.RoleId;
-                        roles = $('.collections').data('roles');
-                        roleLabel = roles[currentRole];
+                        var roleLabel = roles[currentRole];
                         ul.append("<li class='ui-autocomplete-category'>" + roleLabel + "</li>");
                     }
 
@@ -71,8 +82,12 @@ $(document).ready(function () {
 
 });
 
-$(document).on('click', ".remove-me", function(event) {
-    var entry = $(this).parent();
-    entry.remove();
+$(document).on('click', ".remove-me", function (event) {
     event.preventDefault();
+    var entry = $(this).parent();
+    var list = entry.parent();
+    entry.remove();
+    if (! list.children('li').length) {
+        list.parent().remove();
+    }
 });

@@ -73,5 +73,4 @@ class Application_Form_Element_CollectionAutoComplete extends \Zend_Form_Element
             ]);
         }
     }
-
 }
