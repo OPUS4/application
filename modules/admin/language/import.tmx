@@ -76,6 +76,14 @@
          <seg>BibTeX-Feldmapping</seg>
        </tuv>
     </tu>
+    <tu tuid="admin_import_collections">
+       <tuv xml:lang="en">
+         <seg>Collections</seg>
+       </tuv>
+       <tuv xml:lang="de">
+         <seg>Sammlungen</seg>
+       </tuv>
+    </tu>
     <tu tuid="admin_import_collection_ids">
        <tuv xml:lang="en">
          <seg>List of collection IDs (comma-separated)</seg>

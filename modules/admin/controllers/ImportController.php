@@ -103,6 +103,7 @@ class Admin_ImportController extends Application_Controller_Action
             }
         } else {
             // show upload form
+            $this->view->headScript()->prependFile($this->view->layoutPath() . '/js/collections.js'); // TODO refactor - tie to form element class
             $this->view->form = $form;
         }
     }

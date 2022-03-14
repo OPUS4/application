@@ -65,6 +65,7 @@ class Admin_Form_Import extends Application_Form_Abstract
         $mapping = $this->getBibtexMappingSelect();
         $this->addElement($mapping);
 
+        /*
         $this->addElement(
             'text',
             self::ELEMENT_COLLECTION_IDS,
@@ -81,6 +82,14 @@ class Admin_Form_Import extends Application_Form_Abstract
                     [['dataWrapper' => 'HtmlTagWithId'], ['tag' => 'div', 'class' => 'data-wrapper']]
                 ],
                 'description' => 'admin_import_collection_ids_hint'
+            ]
+        );*/
+
+        $this->addElement(
+            'collectionAutoComplete',
+            self::ELEMENT_COLLECTION_IDS,
+            [
+                'label' => 'admin_import_collections',
             ]
         );
 
