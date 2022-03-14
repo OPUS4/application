@@ -30,7 +30,8 @@
     "components/jquery": "3.4.*",
     "components/jqueryui": "1.12.*",
     "oomphinc/composer-installers-extender": "^2.0",
-    "symfony/console": "*"
+    "symfony/console": "2.8.*",
+    "lavary/crunz": "1.12.*"
   },
   "require-dev": {
     "phpunit/phpunit": "4.8.*",
@@ -60,7 +61,8 @@
   "config": {
     "allow-plugins": {
       "composer/installers": true,
-      "oomphinc/composer-installers-extender": true
+      "oomphinc/composer-installers-extender": true,
+      "kylekatarnls/update-helper": true
     }
   },
   "scripts": {
