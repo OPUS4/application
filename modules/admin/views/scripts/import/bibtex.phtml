@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -25,43 +26,41 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Sascha Szott <opus-repository@saschaszott.de>
- * @copyright   Copyright (c) 2021, OPUS 4 development team
+ * @copyright   Copyright (c) 2021-2022, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 ?>
-<h1><?=$this->translate('admin_import_bibtex')?></h1>
 
-<p></p>
+<h1><?= $this->translate('admin_import_bibtex')?></h1>
 
-<?=$this->form?>
+<?= $this->form ?>
 
 <?php if (! is_null($this->importResult)) : ?>
 <p>
-    <?=$this->translate('admin_import_bibtex_label_output')?>
+    <?= $this->translate('admin_import_bibtex_label_output')?>
 </p>
+
 <p>
 <pre>
 <?=$this->importResult?>
 </pre>
 </p>
-<table>
+
+    <table>
     <tr>
-        <td><?=$this->translate('admin_import_bibtex_label_num_docs_processed')?></td>
+        <td><?= $this->translate('admin_import_bibtex_label_num_docs_processed')?></td>
         <td><?= $this->numDocsProcessed ?></td>
     </tr>
     <tr>
-        <td><?=$this->translate('admin_import_bibtex_label_num_docs_imported')?></td>
+        <td><?= $this->translate('admin_import_bibtex_label_num_docs_imported')?></td>
         <td><?= $this->numDocsImported ?></td>
     </tr>
     <tr>
-        <td><?=$this->translate('admin_import_bibtex_label_num_skipped')?></td>
+        <td><?= $this->translate('admin_import_bibtex_label_num_skipped')?></td>
         <td><?= $this->numSkipped ?></td>
     </tr>
     <tr>
-        <td><?=$this->translate('admin_import_bibtex_label_num_errors')?></td>
+        <td><?= $this->translate('admin_import_bibtex_label_num_errors')?></td>
         <td><?= $this->numErrors ?></td>
     </tr>
 </table>

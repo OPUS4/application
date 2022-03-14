@@ -732,7 +732,7 @@
                             <pages>
                                 <structure>
                                     <type>mvc</type>
-                                    <label>setup_helppage_structure</label>
+                                    <label>setup_helppage_structure_title</label>
                                     <module>setup</module>
                                     <controller>helppage</controller>
                                     <action>structure</action>

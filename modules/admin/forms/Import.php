@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,12 +25,11 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Sascha Szott <opus-repository@saschaszott.de>
- * @copyright   Copyright (c) 2021, OPUS 4 development team
+ * @copyright   Copyright (c) 2021-2022, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\Bibtex\Import\Config\BibtexService;
 
 /**
  * Form for uploading metadata file, e.g. BibTeX file.
@@ -47,9 +47,7 @@ class Admin_Form_Import extends Application_Form_Abstract
 
     const ELEMENT_IMPORT = 'Import';
 
-    const ELEMENT_MAPPING_NAME = 'MappingName';
-
-    const ELEMENT_INI_FILENAME = 'IniFilename';
+    const ELEMENT_MAPPING = 'Mapping';
 
     public function init()
     {
@@ -64,30 +62,25 @@ class Admin_Form_Import extends Application_Form_Abstract
             ]
         );
 
-        $this->addElement(
-            'text',
-            self::ELEMENT_INI_FILENAME,
-            [
-                'label' => 'admin_import_ini_filename',
-                'size' => 50
-            ]
-        );
-
-        $this->addElement(
-            'text',
-            self::ELEMENT_MAPPING_NAME,
-            [
-                'label' => 'admin_import_mapping_name',
-                'size' => 50
-            ]
-        );
+        $mapping = $this->getBibtexMappingSelect();
+        $this->addElement($mapping);
 
         $this->addElement(
             'text',
             self::ELEMENT_COLLECTION_IDS,
             [
                 'label' => 'admin_import_collection_ids',
-                'size' => 50
+                'size' => 50,
+                'decorators' => [
+                    'ViewHelper',
+                    'Description',
+                    'Errors',
+                    'ElementHtmlTag',
+                    ['LabelNotEmpty', ['tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend',
+                        'disableFor' => true]],
+                    [['dataWrapper' => 'HtmlTagWithId'], ['tag' => 'div', 'class' => 'data-wrapper']]
+                ],
+                'description' => 'admin_import_collection_ids_hint'
             ]
         );
 
@@ -111,13 +104,57 @@ class Admin_Form_Import extends Application_Form_Abstract
             'submit',
             self::ELEMENT_IMPORT,
             [
-                'label' => 'admin_import_start'
+                'label' => 'admin_import_start',
+                'decorators' => [
+                    'ViewHelper',
+                    [['liWrapper' => 'HtmlTag'], ['tag' => 'li', 'class' => 'save-element']]
+                ]
             ]
+        );
+
+        $this->addDisplayGroup(
+            [self::ELEMENT_IMPORT],
+            'actions',
+            ['order' => 1000, 'decorators' => [
+                'FormElements',
+                [['ulWrapper' => 'HtmlTag'], ['tag' => 'ul', 'class' => 'form-action']],
+                [['divWrapper' => 'HtmlTag'], ['id' => 'form-action']]
+            ]]
         );
 
         $this->setDecorators([
             'FormElements',
             'Form'
         ]);
+    }
+
+    protected function getBibtexMappingSelect()
+    {
+        $mappingElement = $this->createElement('select', self::ELEMENT_MAPPING, [
+            'label' => 'admin_import_mapping_name'
+        ]);
+
+        $bibtex = BibtexService::getInstance();
+
+        $mappingNames = $bibtex->listAvailableMappings();
+
+        $options = [];
+
+        foreach ($mappingNames as $name) {
+            $mapping = $bibtex->getFieldMapping($name);
+
+            $translator = $this->getTranslator();
+            $translationKey = "bibtex_mapping_description_$name";
+
+            if ($translator->isTranslated($translationKey)) {
+                $description = $translationKey;
+            } else {
+                $description = $mapping->getDescription();
+            }
+
+            $mappingElement->addMultiOption($name, $description);
+        }
+
+        return $mappingElement;
     }
 }

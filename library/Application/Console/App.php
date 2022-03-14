@@ -36,6 +36,7 @@ use Opus\Search\Console\RemoveCommand;
 use Opus\Search\Console\ExtractCommand;
 use Opus\Search\Console\ExtractFileCommand;
 use Opus\Bibtex\Import\Console\BibtexImportCommand;
+use Opus\Bibtex\Import\Console\BibtexListCommand;
 use Symfony\Component\Console\Application;
 
 /**
@@ -56,6 +57,7 @@ class Application_Console_App extends Application
         // $this->add(new Application_Console_Index_CheckCommand());
         $this->add(new Application_Console_Document_DeleteCommand());
         $this->add(new BibtexImportCommand());
+        $this->add(new BibtexListCommand());
 
         $this->setDefaultCommand('list');
     }
