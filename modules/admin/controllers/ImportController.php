@@ -37,6 +37,11 @@ use Opus\Bibtex\Import\Console\Helper\BibtexImportResult;
 class Admin_ImportController extends Application_Controller_Action
 {
 
+    /**
+     * TODO move processing into model class
+     *
+     * @throws Zend_Form_Exception
+     */
     public function bibtexAction()
     {
         $this->view->title = 'admin_import_bibtex';
@@ -102,6 +107,13 @@ class Admin_ImportController extends Application_Controller_Action
         }
     }
 
+    /**
+     * @param $fileName
+     * @param $postData
+     * @return BibtexImportHelper
+     *
+     * TODO move form processing into form class
+     */
     private function createBibtexImportHelper($fileName, $postData)
     {
         $bibtexImportHelper = new BibtexImportHelper($fileName);
