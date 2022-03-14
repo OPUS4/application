@@ -23,21 +23,21 @@ timezone_log: false
 
 # By default the errors are not logged by Crunz
 # You may set the value to true for logging the errors
-log_errors: false
+log_errors: true
 
 # This is the absolute path to the errors' log file
 # You need to make sure you have the required permission to write to this file though.
-errors_log_file: ~
+errors_log_file: workspace/log/crunz-error.log
 
 # By default the output is not logged as they are redirected to the
 # null output.
 # Set this to true if you want to keep the outputs
-log_output: true
+log_output: false
 
 # This is the absolute path to the global output log file
 # The events which have dedicated log files (defined with them), won't be
 # logged to this file though.
-output_log_file: var/log/crunz/crunz.log
+output_log_file: ~
 
 # By default line breaks in logs aren't allowed.
 # Set the value to true to allow them.

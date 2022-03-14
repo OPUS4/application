@@ -39,7 +39,6 @@ define('APPLICATION_ENV', 'production');
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
 $log = Log::get();
-$log->debug("Task script running");
 
 $config = Config::get();
 $status = $config->cron->jobs->consistencyCheck->enabled;
