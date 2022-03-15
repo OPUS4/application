@@ -39,7 +39,7 @@ $(document).ready(function () {
             if (colList) {
                 colList
                     .append($("<li>")
-                        .append( "<input name='Collections[]' type='hidden' value='" + ui.item.Id + "'/>")
+                        .append("<input name='Collections[]' type='hidden' value='" + ui.item.Id + "'/>")
                         .append(ui.item.Name)
                         .append($("<button>").attr("class", "remove-me").text('Remove')));
             }
