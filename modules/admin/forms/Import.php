@@ -41,7 +41,7 @@ class Admin_Form_Import extends Application_Form_Abstract
 
     const ELEMENT_VERBOSE = 'Verbose';
 
-    const ELEMENT_COLLECTION_IDS = 'CollectionIds';
+    const ELEMENT_COLLECTION_IDS = 'Collections';
 
     const ELEMENT_DRY_MODE = 'DryMode';
 
@@ -87,7 +87,7 @@ class Admin_Form_Import extends Application_Form_Abstract
 
         $this->addElement(
             'collectionAutoComplete',
-            self::ELEMENT_COLLECTION_IDS,
+            'CollectionIds', // TODO different name for input to avoid conflicts with 'Collections' - fix
             [
                 'label' => 'admin_import_collections',
             ]
