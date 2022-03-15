@@ -72,6 +72,11 @@ class Admin_ImportController extends Application_Controller_Action
                 if (isset($bibtexFile['tmp_name'])) {
                     $bibtexImportResult = new BibtexImportResult();
 
+                    if (array_key_exists(Admin_Form_Import::ELEMENT_VERBOSE, $postData)
+                        && $postData[Admin_Form_Import::ELEMENT_VERBOSE] === '1') {
+                        $bibtexImportResult->setVerboseEnabled(true);
+                    }
+
                     $bibtexImportHelper = $this->createBibtexImportHelper($bibtexFile['tmp_name'], $postData);
                     try {
                         $bibtexImportHelper->doImport($bibtexImportResult);
