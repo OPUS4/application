@@ -94,10 +94,10 @@
     </tu>
     <tu tuid="admin_import_collection_ids_hint">
        <tuv xml:lang="en">
-         <seg>Imported documents will be assigned to collections.</seg>
+         <seg>Search will match Name or Number of collections. Imported documents will be assigned to collections.</seg>
        </tuv>
        <tuv xml:lang="de">
-         <seg>Importierte Dokumente werden mit Sammlungen verknüpft.</seg>
+         <seg>Suche berücksichtigt Name oder Nummer von Sammlungen. Importierte Dokumente werden mit Sammlungen verknüpft.</seg>
        </tuv>
     </tu>
     <tu tuid="admin_import_verbose">

@@ -47,8 +47,11 @@ class Application_View_Helper_FormCollectionAutoComplete extends Zend_View_Helpe
             'class' => 'collections ui-autocomplete-input'
         ];
 
+        $description = $this->view->translate('admin_import_collection_ids_hint');
+
         $xhtml =
             $this->view->formText($name, null, $textAttribs) .
+            "<p class=\"hint\">$description</p>" .
             "<div id=\"{$name}Selected\"></div>";
 
         return $xhtml;

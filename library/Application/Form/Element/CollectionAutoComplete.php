@@ -64,7 +64,6 @@ class Application_Form_Element_CollectionAutoComplete extends \Zend_Form_Element
             $this->setDecorators([
                 'ViewHelper',
                 'Placeholder',
-                'Description',
                 'ElementHint',
                 'Errors',
                 'ElementHtmlTag',
