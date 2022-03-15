@@ -2583,3 +2583,10 @@ div.preformatted {
     background: #ffb1ae;
 }
 
+.ui-autocomplete-category {
+    font-weight: bold;
+    padding: .2em .2em;
+    margin: .2em 0 .8em;
+}
+
+
