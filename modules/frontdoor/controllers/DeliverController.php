@@ -158,12 +158,12 @@ class Frontdoor_DeliverController extends Application_Controller_Action
      */
     private function prepareFile($file)
     {
+        $filePath = $file->getPath();
+
         // only handle PDF files
         if ($file->getMimeType() !== 'application/pdf') {
-            throw new Exception('File mimetype must be application/pdf');
+            return $filePath;
         }
-
-        $filePath = $file->getPath();
 
         $coverGenerator = $this->getCoverGenerator();
 
