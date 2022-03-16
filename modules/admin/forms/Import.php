@@ -41,7 +41,7 @@ class Admin_Form_Import extends Application_Form_Abstract
 
     const ELEMENT_VERBOSE = 'Verbose';
 
-    const ELEMENT_COLLECTION_IDS = 'CollectionIds';
+    const ELEMENT_COLLECTION_IDS = 'Collections';
 
     const ELEMENT_DRY_MODE = 'DryMode';
 
@@ -64,25 +64,6 @@ class Admin_Form_Import extends Application_Form_Abstract
 
         $mapping = $this->getBibtexMappingSelect();
         $this->addElement($mapping);
-
-        $this->addElement(
-            'text',
-            self::ELEMENT_COLLECTION_IDS,
-            [
-                'label' => 'admin_import_collection_ids',
-                'size' => 50,
-                'decorators' => [
-                    'ViewHelper',
-                    'Description',
-                    'Errors',
-                    'ElementHtmlTag',
-                    ['LabelNotEmpty', ['tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend',
-                        'disableFor' => true]],
-                    [['dataWrapper' => 'HtmlTagWithId'], ['tag' => 'div', 'class' => 'data-wrapper']]
-                ],
-                'description' => 'admin_import_collection_ids_hint'
-            ]
-        );
 
         $this->addElement(
             'checkbox',
@@ -109,6 +90,15 @@ class Admin_Form_Import extends Application_Form_Abstract
                     'ViewHelper',
                     [['liWrapper' => 'HtmlTag'], ['tag' => 'li', 'class' => 'save-element']]
                 ]
+            ]
+        );
+
+        $this->addElement(
+            'collectionAutoComplete',
+            'CollectionIds', // TODO different name for input to avoid conflicts with 'Collections' - fix
+            [
+                'label' => 'admin_import_collections',
+                'description' => 'admin_import_collection_ids_hint' // TODO not used right now -> see view helper
             ]
         );
 

@@ -2583,3 +2583,43 @@ div.preformatted {
     background: #ffb1ae;
 }
 
+.pre-wrapped {
+    background: #dddddd;
+    white-space: pre-wrap;
+    padding: 1em;
+    font-size: 1.2em;
+}
+
+/**
+ * Collection auto complete form element
+ */
+
+fieldset.collectionRole legend {
+    padding-top: 0.8em;
+    border: none;
+    font-weight: bold;
+}
+
+fieldset.collectionRole ul {
+    margin: 0;
+    padding: 0.2em 2em;
+}
+
+fieldset.collectionRole li {
+    padding: 0.1em 0em;
+}
+
+fieldset.collectionRole i.fa-trash {
+    margin-left: 0.4em;
+    color: #26517d;
+}
+
+fieldset.collectionRole i.fa-trash:hover {
+    cursor: pointer;
+}
+
+.ui-autocomplete-category {
+    font-weight: bold;
+    padding: .2em .2em;
+    margin: .2em 0 .8em;
+}

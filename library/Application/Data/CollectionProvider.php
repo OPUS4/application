@@ -26,47 +26,26 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2021-2022, OPUS 4 development team
+ * @copyright   Copyright (c) 2022, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-?>
 
-<h1><?= $this->translate('admin_import_bibtex')?></h1>
+use Opus\Collection;
 
-<?= $this->form ?>
+class Application_Data_CollectionProvider
+{
 
-<?php if (! is_null($this->importResult)) : ?>
-<p>
-    <?= $this->translate('admin_import_bibtex_label_output')?>
-</p>
-
-<p>
-<pre class="pre-wrapped">
-<?=$this->importResult?>
-</pre>
-</p>
-
-    <table>
-    <tr>
-        <td><?= $this->translate('admin_import_bibtex_label_num_docs_processed')?></td>
-        <td><?= $this->numDocsProcessed ?></td>
-    </tr>
-    <tr>
-        <td><?= $this->translate('admin_import_bibtex_label_num_docs_imported')?></td>
-        <td><?= $this->numDocsImported ?></td>
-    </tr>
-    <tr>
-        <td><?= $this->translate('admin_import_bibtex_label_num_skipped')?></td>
-        <td><?= $this->numSkipped ?></td>
-    </tr>
-    <tr>
-        <td><?= $this->translate('admin_import_bibtex_label_num_errors')?></td>
-        <td><?= $this->numErrors ?></td>
-    </tr>
-</table>
-<p>
-    <a href="<?= $this->bibtexImportLink ?>" title="<?= $this->translate('admin_bibtex_import_tooltip') ?>"
-       class="link-button"><?= $this->translate('admin_import_bibtex_label_button') ?></a>
-</p>
-<?php endif; ?>
-
+    /**
+     * Returns matching values as suggestions for autocomplete.
+     *
+     * value
+     * extkey
+     *
+     * @param $term
+     * @return array
+     */
+    public function getValues($term)
+    {
+        return Collection::find($term);
+    }
+}
