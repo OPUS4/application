@@ -35,6 +35,7 @@
  * Controller for handling file downloads in the frontdoor.
  */
 
+use Opus\Config;
 use Opus\Document;
 use Opus\File;
 use Opus\Pdf\Cover\CoverGeneratorFactory;
@@ -164,7 +165,6 @@ class Frontdoor_DeliverController extends Application_Controller_Action
 
         $filePath = $file->getPath();
 
-        // check if a PDF cover should be generated
         $coverGenerator = $this->getCoverGenerator();
 
         if ($coverGenerator === null) {
@@ -190,12 +190,23 @@ class Frontdoor_DeliverController extends Application_Controller_Action
     }
 
     /**
-     * Returns the cover generator instance to be used for creation of PDF covers.
+     * Returns the cover generator instance to be used for creation of PDF covers. Returns
+     * null if generation of PDF covers has been disabled in the application configuration.
      *
      * @return CoverGeneratorInterface|null
      */
     private function getCoverGenerator()
     {
+        $config = Config::get();
+
+        // check if a PDF cover should be generated
+        $generatePdfCover = (isset($config->pdf->covers->generate)
+            && filter_var($config->pdf->covers->generate, FILTER_VALIDATE_BOOLEAN));
+
+        if (! $generatePdfCover) {
+            return null;
+        }
+
         $generator = CoverGeneratorFactory::create();
 
         if ($generator === null) {
