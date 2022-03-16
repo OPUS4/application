@@ -213,12 +213,17 @@ class Frontdoor_DeliverController extends Application_Controller_Action
             return null;
         }
 
-        // configure cover generator with appropriate workspace subdirectory paths
-        $filecacheDir = Application_Configuration::getInstance()->getFilecachePath();
+        // configure cover generator with appropriate directory paths
+        $appConfig = Application_Configuration::getInstance();
+
+        $filecacheDir = $appConfig->getFilecachePath();
         $generator->setFilecacheDir($filecacheDir);
 
-        $tempDir = Application_Configuration::getInstance()->getTempPath();
+        $tempDir = $appConfig->getTempPath();
         $generator->setTempDir($tempDir);
+
+        $templateDir = APPLICATION_PATH . '/application/configs/covers';
+        $generator->setTemplateDir($templateDir);
 
         return $generator;
     }
