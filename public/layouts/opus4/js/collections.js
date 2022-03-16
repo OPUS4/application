@@ -29,7 +29,7 @@ $(document).ready(function () {
             if (! colList.length) {
                 var roleName = $('.collections').data('roles')[ui.item.RoleId];
 
-                var listWrapper = $("<fieldset>").append($("<legend>").text(roleName))
+                var listWrapper = $("<fieldset>").attr('class', 'collectionRole').append($("<legend>").text(roleName));
                 colList = $("<ul>").attr('id', listId);
                 listWrapper.append(colList);
                 container.append(listWrapper);
@@ -41,7 +41,8 @@ $(document).ready(function () {
                     .append($("<li>")
                         .append("<input name='Collections[]' type='hidden' value='" + ui.item.Id + "'/>")
                         .append(ui.item.Name)
-                        .append($("<button>").attr("class", "remove-me").text('Remove')));
+                        .append($("<i>").attr("class", "fa fa-trash remove-me").attr("aria-hidden", "true"))
+                    );
             }
         },
         create: function () {
