@@ -2583,6 +2583,13 @@ div.preformatted {
     background: #ffb1ae;
 }
 
+.pre-wrapped {
+    background: #dddddd;
+    white-space: pre-wrap;
+    padding: 1em;
+    font-size: 1.2em;
+}
+
 /**
  * Collection auto complete form element
  */
