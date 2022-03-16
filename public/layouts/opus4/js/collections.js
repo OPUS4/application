@@ -41,8 +41,7 @@ $(document).ready(function () {
                     .append($("<li>")
                         .append("<input name='Collections[]' type='hidden' value='" + ui.item.Id + "'/>")
                         .append(ui.item.Name)
-                        .append($("<i>").attr("class", "fa fa-trash remove-me").attr("aria-hidden", "true"))
-                    );
+                        .append($("<i>").attr("class", "fa fa-trash remove-me").attr("aria-hidden", "true")));
             }
         },
         create: function () {
