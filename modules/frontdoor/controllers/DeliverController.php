@@ -222,9 +222,6 @@ class Frontdoor_DeliverController extends Application_Controller_Action
         $tempDir = $appConfig->getTempPath();
         $generator->setTempDir($tempDir);
 
-        $templateDir = APPLICATION_PATH . '/application/configs/covers';
-        $generator->setTemplateDir($templateDir);
-
         return $generator;
     }
 }
