@@ -47,7 +47,7 @@ class Admin_ConfigController extends Application_Controller_Action
             switch ($result) {
                 case Admin_Form_Configuration::RESULT_SAVE:
                     if ($form->isValid($data)) {
-                        $config = new Zend_Config([], true);
+                        $config = new \Zend_Config([], true);
                         $form->updateModel($config);
                         Application_Configuration::save($config);
                     } else {

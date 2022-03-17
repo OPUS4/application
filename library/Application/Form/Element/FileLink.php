@@ -25,17 +25,19 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+use Opus\File;
+use Opus\Model\NotFoundException;
+
 /**
- * Formularelement für die Anzeige eines Download Links für ein Opus_File Objekt.
+ * Formularelement für die Anzeige eines Download Links für ein File Objekt.
  *
- * Das Formularelement kann nur mit gültigen IDs für Opus_File verwendet werden.
+ * Das Formularelement kann nur mit gültigen IDs für File verwendet werden.
  *
  * @category    Application
  * @package     Form_Element
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 class Application_Form_Element_FileLink extends Application_Form_Element_Text
 {
@@ -62,10 +64,10 @@ class Application_Form_Element_FileLink extends Application_Form_Element_Text
             throw new Application_Exception(__METHOD__ . " Value must not be null.");
         }
 
-        if (! $file instanceof Opus_File) {
+        if (! $file instanceof File) {
             try {
-                $file = new Opus_File($file);
-            } catch (Opus_Model_NotFoundException $omnfe) {
+                $file = new File($file);
+            } catch (NotFoundException $omnfe) {
                 throw new Application_Exception("File with ID = $file not found.");
             }
         }
@@ -77,7 +79,7 @@ class Application_Form_Element_FileLink extends Application_Form_Element_Text
     }
 
     /**
-     * Validierung ist erfolgreich, wenn Opus_File mit ID existiert.
+     * Validierung ist erfolgreich, wenn File mit ID existiert.
      *
      * Wenn die ID nicht existiert wird in setValue eine Application_Exception geworfen.
      *
@@ -89,7 +91,7 @@ class Application_Form_Element_FileLink extends Application_Form_Element_Text
         $this->setValue($value);
         $file = $this->getValue();
 
-        if ($file instanceof Opus_File) {
+        if ($file instanceof File) {
             return true;
         } else {
             return false;

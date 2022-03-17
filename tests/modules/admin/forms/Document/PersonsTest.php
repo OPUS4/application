@@ -30,6 +30,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  **/
 
+use Opus\Document;
+
 /**
  * Unit Tests fuer Unterformular fuer Personen im Metadaten-Formular.
  */
@@ -51,7 +53,7 @@ class Admin_Form_Document_PersonsTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Persons();
 
-        $this->assertEquals(8, count($form->getSubForms()));
+        $this->assertCount(8, $form->getSubForms());
 
         foreach ($this->roles as $role) {
             $this->assertNotNull($form->getSubForm($role), "Unterformular '$role' fehlt.");
@@ -66,17 +68,17 @@ class Admin_Form_Document_PersonsTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Persons();
 
-        $document = new Opus_Document(146); // 1 Person in jeder Rolle
+        $document = Document::get(146); // 1 Person in jeder Rolle
 
         $form->populateFromModel($document);
 
         foreach ($this->roles as $role) {
             $subform = $form->getSubForm($role);
             $this->assertNotNull($subform, "Unterformular '$role' fehlt.");
-            $this->assertEquals(
+            $this->assertCount(
                 1,
-                count($subform->getSubForms()),
-                "Unterformular '$role' sollte ein Unterformlar haben."
+                $subform->getSubForms(),
+                "Unterformular '$role' sollte ein Unterformular haben."
             );
         }
     }
@@ -254,7 +256,7 @@ class Admin_Form_Document_PersonsTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Persons();
 
-        $document = new Opus_Document(250);
+        $document = Document::get(250);
 
         $form->populateFromModel($document);
 
@@ -292,7 +294,7 @@ class Admin_Form_Document_PersonsTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Persons();
 
-        $document = new Opus_Document(146);
+        $document = Document::get(146);
 
         $form->populateFromModel($document);
 
@@ -328,7 +330,7 @@ class Admin_Form_Document_PersonsTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Persons();
 
-        $document = new Opus_Document(146);
+        $document = Document::get(146);
 
         $form->populateFromModel($document);
 
@@ -339,7 +341,7 @@ class Admin_Form_Document_PersonsTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Persons();
 
-        $document = new Opus_Document(146);
+        $document = Document::get(146);
 
         $form->populateFromModel($document);
 

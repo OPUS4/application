@@ -29,6 +29,9 @@
  * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\Account;
+
 class Publish_Model_LoggedUserTest extends ControllerTestCase
 {
 
@@ -73,7 +76,7 @@ class Publish_Model_LoggedUserTest extends ControllerTestCase
 
         $this->setZendAuthIdentity($accountName);
 
-        $account = new Opus_Account();
+        $account = new Account();
         $account->setLogin($accountName)
             ->setPassword($accountPassword)
             ->store();
@@ -92,9 +95,9 @@ class Publish_Model_LoggedUserTest extends ControllerTestCase
      */
     private function setZendAuthIdentity($identity)
     {
-        $namespace = Zend_Auth_Storage_Session::NAMESPACE_DEFAULT;
-        $member = Zend_Auth_Storage_Session::MEMBER_DEFAULT;
-        $session = new Zend_Session_Namespace($namespace);
+        $namespace = \Zend_Auth_Storage_Session::NAMESPACE_DEFAULT;
+        $member = \Zend_Auth_Storage_Session::MEMBER_DEFAULT;
+        $session = new \Zend_Session_Namespace($namespace);
         $session->{$member} = $identity;
     }
 }

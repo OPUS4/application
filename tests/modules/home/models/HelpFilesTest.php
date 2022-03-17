@@ -62,11 +62,11 @@ class Home_Model_HelpFilesTest extends ControllerTestCase
 
     public function testGetFileContent()
     {
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        $this->adjustConfiguration([
             'help' => [
                 'useFiles' => true
             ]
-        ]));
+        ]);
 
         $content = $this->help->getContent('contact.de.txt');
 
@@ -90,11 +90,11 @@ class Home_Model_HelpFilesTest extends ControllerTestCase
 
     public function testGetFileContentForAllFiles()
     {
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        $this->adjustConfiguration([
             'help' => [
                 'useFiles' => true
             ]
-        ]));
+        ]);
 
         $helpFiles = $this->help->getFiles();
 

@@ -25,6 +25,8 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+use Opus\Config;
+
 /**
  * Unit Tests fuer abstrakte Basisklasse fuer Modelle.
  *
@@ -55,7 +57,7 @@ class Application_Model_AbstractTest extends ControllerTestCase
         $logger = $this->_model->getLogger();
 
         $this->assertNotNull($logger);
-        $this->assertInstanceOf('Zend_Log', $logger);
+        $this->assertInstanceOf(\Zend_Log::class, $logger);
     }
 
     public function testSetLogger()
@@ -72,19 +74,19 @@ class Application_Model_AbstractTest extends ControllerTestCase
     {
         $config = $this->_model->getConfig();
 
-        $this->assertInstanceOf('Zend_Config', $config);
-        $this->assertEquals(Zend_Registry::get('Zend_Config'), $config);
+        $this->assertInstanceOf(\Zend_Config::class, $config);
+        $this->assertEquals(Config::get(), $config);
     }
 
     public function testSetConfig()
     {
-        $config = new Zend_Config([]);
+        $config = new \Zend_Config([]);
 
         $this->_model->setConfig($config);
 
         $returnedConfig = $this->_model->getConfig();
 
-        $this->assertInstanceOf('Zend_Config', $returnedConfig);
+        $this->assertInstanceOf(\Zend_Config::class, $returnedConfig);
         $this->assertEquals($config, $returnedConfig);
     }
 }

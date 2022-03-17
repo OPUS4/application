@@ -32,6 +32,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\DnbInstitute;
+use Opus\Document;
+
 class CitationExport_Model_HelperTest extends ControllerTestCase
 {
 
@@ -78,10 +81,10 @@ class CitationExport_Model_HelperTest extends ControllerTestCase
 
     public function testBibtexAttributeSchoolForMasterThesis()
     {
-        $document = new Opus_Document($this->_documentId);
+        $document = Document::get($this->_documentId);
 
         $document->setType('masterthesis');
-        $institute = new Opus_DnbInstitute(4);
+        $institute = new DnbInstitute(4);
         $document->addThesisPublisher($institute);
 
         $document->store();
@@ -98,11 +101,11 @@ class CitationExport_Model_HelperTest extends ControllerTestCase
 
     public function testBibtexAttributeSchoolWithDepartment()
     {
-        $document = new Opus_Document($this->_documentId);
+        $document = Document::get($this->_documentId);
 
         $document->setType('masterthesis');
 
-        $institute = new Opus_DnbInstitute();
+        $institute = new DnbInstitute();
         $institute->setName('Test Uni');
         $institute->setDepartment('Test Dep');
         $institute->setIsPublisher(true);
@@ -127,10 +130,10 @@ class CitationExport_Model_HelperTest extends ControllerTestCase
 
     public function testBibtexAttributeSchoolForDoctoralThesis()
     {
-        $document = new Opus_Document($this->_documentId);
+        $document = Document::get($this->_documentId);
 
         $document->setType('doctoralthesis');
-        $institute = new Opus_DnbInstitute(4);
+        $institute = new DnbInstitute(4);
         $document->addThesisPublisher($institute);
 
         $document->store();
@@ -156,7 +159,7 @@ class CitationExport_Model_HelperTest extends ControllerTestCase
 
     public function testGetTemplateForDocument()
     {
-        $document = new Opus_Document($this->_documentId);
+        $document = Document::get($this->_documentId);
 
         $document->setType('masterthesis');
         $document->store();
@@ -176,7 +179,7 @@ class CitationExport_Model_HelperTest extends ControllerTestCase
      */
     public function testGetTemplateForDocumentInvalidFormat()
     {
-        $document = new Opus_Document($this->_documentId);
+        $document = Document::get($this->_documentId);
 
         $document->setType('masterthesis');
         $document->store();
@@ -223,7 +226,7 @@ class CitationExport_Model_HelperTest extends ControllerTestCase
         $this->enableSecurity();
         $this->loginUser('security7', 'security7pwd');
 
-        $document = new Opus_Document($this->_documentId);
+        $document = Document::get($this->_documentId);
         $document->setServerState('unpublished');
         $document->store();
 
@@ -236,7 +239,7 @@ class CitationExport_Model_HelperTest extends ControllerTestCase
 
     public function testGetPlainOutputRis()
     {
-        $document = new Opus_Document(146);
+        $document = Document::get(146);
 
         $output = $this->_helper->getPlainOutput($document, 'ris.xslt');
 

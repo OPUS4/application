@@ -34,6 +34,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Mail\MailException;
+use Opus\Mail\SendMail;
+
 /**
  * This controller is called on every error or exception.
  *
@@ -60,7 +63,7 @@ class ErrorController extends Application_Controller_Action
         $logger = $this->getLogger();
 
         // log request URI if error occurs
-        $uri = Zend_Controller_Front::getInstance()->getRequest()->getRequestUri();
+        $uri = \Zend_Controller_Front::getInstance()->getRequest()->getRequestUri();
         $logger->err("Request '$uri'");
 
         $errors = $this->_getParam('error_handler');
@@ -71,9 +74,9 @@ class ErrorController extends Application_Controller_Action
         }
 
         switch ($errors->type) {
-            case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ROUTE:
-            case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_CONTROLLER:
-            case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ACTION:
+            case \Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ROUTE:
+            case \Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_CONTROLLER:
+            case \Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ACTION:
                 // 404 error -- controller or action not found
                 $this->getResponse()->setHttpResponseCode(404);
                 $this->view->title = 'error_page_not_found';
@@ -122,7 +125,7 @@ class ErrorController extends Application_Controller_Action
                 $errors->request,
                 $errors->exception
             );
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $logger->err('ErrorController: Failed sending error email: ' . $e);
         }
     }
@@ -144,7 +147,7 @@ class ErrorController extends Application_Controller_Action
      * @param $exception
      * @return bool
      * @throws Application_Exception
-     * @throws Opus_Mail_Exception
+     * @throws MailException
      *
      * TODO Escape exception messages, other stuff? Is it possible to inject javascript in E-Mail?
      */
@@ -158,7 +161,7 @@ class ErrorController extends Application_Controller_Action
             throw new Application_Exception('Invalid Exception object given.');
         }
 
-        if (! is_object($request) or ! ($request instanceof Zend_Controller_Request_Abstract)) {
+        if (! is_object($request) or ! ($request instanceof \Zend_Controller_Request_Abstract)) {
             throw new Application_Exception('Invalid Zend_Controller_Request_Abstract object given.');
         }
 
@@ -190,7 +193,7 @@ class ErrorController extends Application_Controller_Action
         $body .= "\n";
 
         // Add document ID for errors occuring during publish process
-        $session = new Zend_Session_Namespace('Publish');
+        $session = new \Zend_Session_Namespace('Publish');
         if (isset($session->documentId)) {
             $body .= "User Session (Namespace Publish):\n";
             $body .= "   Document ID: " . $session->documentId . "\n";
@@ -237,7 +240,7 @@ class ErrorController extends Application_Controller_Action
             'name' => $config->errorController->mailTo->name,
         ];
 
-        $mail = new Opus_Mail_SendMail();
+        $mail = new SendMail();
         $mail->sendMail(
             $config->mail->opus->address,
             $config->mail->opus->name,

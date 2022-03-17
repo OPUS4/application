@@ -26,12 +26,13 @@
  *
  * @category    Application
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2018-2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
-class Application_Form_Validate_DOI extends Zend_Validate_Abstract
+use Opus\Identifier;
+
+class Application_Form_Validate_DOI extends \Zend_Validate_Abstract
 {
 
     const NOT_UNIQUE = 'notUnique';
@@ -51,7 +52,7 @@ class Application_Form_Validate_DOI extends Zend_Validate_Abstract
     {
         $currentDocId = $context[Admin_Form_Document_IdentifierSpecific::ELEMENT_DOC_ID];
 
-        $doi = new Opus_Identifier();
+        $doi = new Identifier();
         $doi->setType('doi');
         $doi->setValue($value);
 

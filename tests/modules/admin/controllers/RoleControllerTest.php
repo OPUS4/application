@@ -30,6 +30,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\UserRole;
+
 /**
  * Basic unit tests for Admin_RoleController class.
  *
@@ -123,7 +125,7 @@ class Admin_RoleControllerTest extends ControllerTestCase
         $this->assertController('role');
         $this->assertAction('new');
         $this->assertRedirect('/admin/role/index');
-        $this->assertNotNull(Opus_UserRole::fetchByName('testrole'));
+        $this->assertNotNull(UserRole::fetchByName('testrole'));
     }
 
     public function testCreateActionCancel()
@@ -166,7 +168,7 @@ class Admin_RoleControllerTest extends ControllerTestCase
      */
     public function testUpdateAction()
     {
-        $role = Opus_UserRole::fetchByName('testrole');
+        $role = UserRole::fetchByName('testrole');
 
          $this->request
                 ->setMethod('POST')
@@ -183,7 +185,7 @@ class Admin_RoleControllerTest extends ControllerTestCase
         $this->assertController('role');
         $this->assertAction('edit');
         $this->assertRedirect();
-        $role = Opus_UserRole::fetchByName('testrole2');
+        $role = UserRole::fetchByName('testrole2');
         $this->assertNotNull($role);
         $this->assertNotNull($role->getId());
         $this->assertEquals('testrole2', $role->getDisplayName());
@@ -194,7 +196,7 @@ class Admin_RoleControllerTest extends ControllerTestCase
      */
     public function testUpdateActionInvalidInput()
     {
-        $role = Opus_UserRole::fetchByName('testrole2');
+        $role = UserRole::fetchByName('testrole2');
 
          $this->request
                 ->setMethod('POST')
@@ -218,7 +220,7 @@ class Admin_RoleControllerTest extends ControllerTestCase
      */
     public function testDeleteAction()
     {
-        $role = Opus_UserRole::fetchByName('testrole2');
+        $role = UserRole::fetchByName('testrole2');
         $this->assertNotNull($role);
         $this->getRequest()->setMethod('POST')
             ->setPost([

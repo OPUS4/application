@@ -30,6 +30,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Date;
+use Opus\Document;
+
 /**
  * Unit tests for FormatValue view helper.
  */
@@ -44,7 +47,7 @@ class Application_View_Helper_FormatValueTest extends ControllerTestCase
     {
         parent::setUp();
         $this->__helper = new Application_View_Helper_FormatValue();
-        $this->__helper->setView(Zend_Registry::get('Opus_View'));
+        $this->__helper->setView($this->getView());
     }
 
     public function testViewHelperReturnsItself()
@@ -76,7 +79,7 @@ class Application_View_Helper_FormatValueTest extends ControllerTestCase
 
         $field->setValue('deu');
 
-        $output = $this->__helper->format($field, 'Opus_Document');
+        $output = $this->__helper->format($field, 'Opus\Document');
 
         $this->assertTrue(in_array($output, ['German', 'Deutsch']));
     }
@@ -102,7 +105,7 @@ class Application_View_Helper_FormatValueTest extends ControllerTestCase
      */
     public function testFormatValueForDate()
     {
-        $doc = new Opus_Document(3);
+        $doc = Document::get(3);
 
         $field = $doc->getField('ThesisDateAccepted');
 
@@ -115,7 +118,7 @@ class Application_View_Helper_FormatValueTest extends ControllerTestCase
     {
         $doc = $this->createTestDocument();
 
-        $doc->setPublishedDate(new Opus_Date('2005'));
+        $doc->setPublishedDate(new Date('2005'));
 
         $field = $doc->getField('PublishedDate');
 
@@ -126,11 +129,11 @@ class Application_View_Helper_FormatValueTest extends ControllerTestCase
 
     public function testFormatValueForPublicationState()
     {
-        $doc = new Opus_Document(3);
+        $doc = Document::get(3);
 
         $field = $doc->getField('PublicationState');
 
-        $output = $this->__helper->format($field, 'Opus_Document');
+        $output = $this->__helper->format($field, 'Opus\Document');
 
         // PublicationState is not translated right now
         $this->assertEquals('draft', $output);

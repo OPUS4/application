@@ -30,11 +30,17 @@
  * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  **/
 
 // Bootstrapping.
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
+
+use Opus\Collection;
+use Opus\CollectionRole;
+use Opus\Document;
+use Opus\Repository;
+use Opus\EnrichmentKey;
+use Opus\Model\NotFoundException;
 
 // Parse arguments.
 global $argc, $argv;
@@ -49,20 +55,23 @@ echo "\nmigrating classification subjects -- can take a while";
 // Initialize logger.
 $logfileName = $argv[1];
 
+/**
+ * TODO Not using LogService, because file is written to working directory (OPUSVIER-4289)
+ */
 $logfile = @fopen($logfileName, 'a', false);
-$writer = new Zend_Log_Writer_Stream($logfile);
-$formatter = new Zend_Log_Formatter_Simple('%timestamp% %priorityName%: %message%' . PHP_EOL);
+$writer = new \Zend_Log_Writer_Stream($logfile);
+$formatter = new \Zend_Log_Formatter_Simple('%timestamp% %priorityName%: %message%' . PHP_EOL);
 $writer->setFormatter($formatter);
-$logger = new Zend_Log($writer);
+$logger = new \Zend_Log($writer);
 
 
 // load collections (and check existence)
-$mscRole = Opus_CollectionRole::fetchByName('msc');
+$mscRole = CollectionRole::fetchByName('msc');
 if (! is_object($mscRole)) {
     $logger->warn("MSC collection does not exist.  Cannot migrate SubjectMSC.");
 }
 
-$ddcRole = Opus_CollectionRole::fetchByName('ddc');
+$ddcRole = CollectionRole::fetchByName('ddc');
 if (! is_object($ddcRole)) {
     $logger->warn("DDC collection does not exist.  Cannot migrate SubjectDDC.");
 }
@@ -72,13 +81,13 @@ createEnrichmentKey('MigrateSubjectMSC');
 createEnrichmentKey('MigrateSubjectDDC');
 
 // Iterate over all documents.
-$docFinder = new Opus_DocumentFinder();
+$docFinder = Repository::getInstance()->getDocumentFinder();
 $changedDocumentIds = [];
-foreach ($docFinder->ids() as $docId) {
+foreach ($docFinder->getIds() as $docId) {
     $doc = null;
     try {
-        $doc = new Opus_Document($docId);
-    } catch (Opus_Model_NotFoundException $e) {
+        $doc = Document::get($docId);
+    } catch (NotFoundException $e) {
         continue;
     }
 
@@ -101,7 +110,7 @@ foreach ($docFinder->ids() as $docId) {
         $changedDocumentIds[] = $docId;
 
         try {
-            $doc->unregisterPlugin('Opus_Document_Plugin_Index');
+            $doc->unregisterPlugin('Opus\Document\Plugin\Index');
             $doc->store();
             $logger->info("changed document $docId");
         } catch (Exception $e) {
@@ -144,7 +153,7 @@ function migrateSubjectToCollection($doc, $subjectType, $roleId, $eKeyName)
         $removeSubjects[] = $subject;
 
         // check if (unique) collection for subject value exists
-        $collections = Opus_Collection::fetchCollectionsByRoleNumber($roleId, $value);
+        $collections = Collection::fetchCollectionsByRoleNumber($roleId, $value);
         if (! is_array($collections) or count($collections) < 1) {
             $logger->warn("$logPrefix  No collection found for value '$value' -- migrating to enrichment $eKeyName.");
             // migrate subject to enrichments
@@ -215,12 +224,12 @@ function migrateSubjectToCollection($doc, $subjectType, $roleId, $eKeyName)
 function createEnrichmentKey($name)
 {
     try {
-        $eKey = new Opus_EnrichmentKey();
+        $eKey = new EnrichmentKey();
         $eKey->setName($name)->store();
     } catch (Exception $e) {
     }
 
-    return new Opus_EnrichmentKey($name);
+    return new EnrichmentKey($name);
 }
 
 echo "\nConsult the log file $argv[1] for full details\n";

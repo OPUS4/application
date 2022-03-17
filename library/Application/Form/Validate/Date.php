@@ -27,15 +27,14 @@
  * @category    Application
  * @package     Form_Validate
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
  * Validiert Datumseingaben.
  */
-class Application_Form_Validate_Date extends Zend_Validate_Date
+class Application_Form_Validate_Date extends \Zend_Validate_Date
 {
 
     /**
@@ -61,7 +60,7 @@ class Application_Form_Validate_Date extends Zend_Validate_Date
 
     /**
      * Constructs Application_Form_Validate_Date class for validating date input.
-     * @param array $config Configuration options (see Zend_Validate_Date)
+     * @param array $config Configuration options (see \Zend_Validate_Date)
      */
     public function __construct($config = null)
     {
@@ -72,9 +71,9 @@ class Application_Form_Validate_Date extends Zend_Validate_Date
 
         $this->setMessages(
             [
-                Zend_Validate_Date::INVALID => 'validation_error_date_invalid',
-                Zend_Validate_Date::INVALID_DATE => 'validation_error_date_invaliddate',
-                Zend_Validate_Date::FALSEFORMAT => 'validation_error_date_falseformat'
+                \Zend_Validate_Date::INVALID => 'validation_error_date_invalid',
+                \Zend_Validate_Date::INVALID_DATE => 'validation_error_date_invaliddate',
+                \Zend_Validate_Date::FALSEFORMAT => 'validation_error_date_falseformat'
             ]
         );
     }
@@ -89,9 +88,9 @@ class Application_Form_Validate_Date extends Zend_Validate_Date
         $this->_setValue($value);
         // Check first if input matches expected pattern
         $datePattern = $this->getInputPattern();
-        $validator = new Zend_Validate_Regex($datePattern);
+        $validator = new \Zend_Validate_Regex($datePattern);
         if (! $validator->isValid($value)) {
-            $this->_error(Zend_Validate_Date::FALSEFORMAT);
+            $this->_error(\Zend_Validate_Date::FALSEFORMAT);
             return false;
         }
 
@@ -123,12 +122,12 @@ class Application_Form_Validate_Date extends Zend_Validate_Date
 
     /**
      * Sets locale and updated input format automatically.
-     * @param Zend_Locale $locale
+     * @param \Zend_Locale $locale
      */
     public function setLocale($locale = null)
     {
         parent::setLocale($locale);
-        if ($locale instanceof Zend_Locale) {
+        if ($locale instanceof \Zend_Locale) {
             $dateFormat = $this->getDateFormat($locale->getLanguage());
             $inputPattern = $this->getDatePattern($locale->getLanguage());
         } else {
@@ -146,7 +145,7 @@ class Application_Form_Validate_Date extends Zend_Validate_Date
     public function getDateFormat($locale = null)
     {
         if (empty($locale)) {
-            $session = new Zend_Session_Namespace();
+            $session = new \Zend_Session_Namespace();
             $language = $session->language;
         } else {
             $language = $locale;
@@ -162,7 +161,7 @@ class Application_Form_Validate_Date extends Zend_Validate_Date
     public function getDatePattern($locale = null)
     {
         if (empty($locale)) {
-            $session = new Zend_Session_Namespace();
+            $session = new \Zend_Session_Namespace();
             $language = $session->language;
         } else {
             $language = $locale;

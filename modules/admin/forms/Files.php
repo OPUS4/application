@@ -25,6 +25,8 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+use Opus\Document;
+
 /**
  * Formular fuer alle Dateien eines Dokuments.
  *
@@ -158,9 +160,9 @@ class Admin_Form_Files extends Admin_Form_Document_MultiSubForm
     }
 
     /**
-     * Liefert Opus_File objects for document through getFile function to get proper order of files.
-     * @param Opus_Document $document
-     * @return array Array of Opus_File objects
+     * Liefert File objects for document through getFile function to get proper order of files.
+     * @param Document $document
+     * @return array Array of File objects
      */
     public function getFieldValues($document)
     {

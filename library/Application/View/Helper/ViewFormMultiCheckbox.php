@@ -34,7 +34,7 @@
  * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Application_View_Helper_ViewFormMultiCheckbox extends Zend_View_Helper_FormMultiCheckbox
+class Application_View_Helper_ViewFormMultiCheckbox extends \Zend_View_Helper_FormMultiCheckbox
 {
 
     public function viewFormMultiCheckbox($name, $value = null, $attribs = null, $options = null, $listsep = "<br />\n")

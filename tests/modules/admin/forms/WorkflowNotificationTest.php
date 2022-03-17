@@ -31,6 +31,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Document;
+use Opus\Person;
+
 class Admin_Form_WorkflowNotificationTest extends ControllerTestCase
 {
 
@@ -42,46 +45,46 @@ class Admin_Form_WorkflowNotificationTest extends ControllerTestCase
     {
         $doc = $this->createTestDocument();
 
-        $author = new Opus_Person();
+        $author = new Person();
         $author->setFirstName('John');
         $author->setLastName('Tester');
         $author->setEmail('john@example.org');
         $doc->addPersonAuthor($author);
 
-        $author = new Opus_Person();
+        $author = new Person();
         $author->setFirstName('Jane');
         $author->setLastName('Doe');
         $author->setEmail('jane@example.org');
         $doc->addPersonAuthor($author);
 
         // This email is used twice for different authors (John & Anton)
-        $author = new Opus_Person();
+        $author = new Person();
         $author->setFirstName('Anton');
         $author->setLastName('Other');
         $author->setEmail('john@example.org');
         $doc->addPersonAuthor($author);
 
         // Jim doesn't have an email address and won't be a recipient
-        $author = new Opus_Person();
+        $author = new Person();
         $author->setFirstName('Jim');
         $author->setLastName('Busy');
         $doc->addPersonAuthor($author);
 
         // Jane is author and submitter
-        $submitter = new Opus_Person();
+        $submitter = new Person();
         $submitter->setFirstName('Jane');
         $submitter->setLastName('Doe');
         $submitter->setEmail('jane@example.org');
         $doc->addPersonSubmitter($submitter);
 
         // Bob is just submitter
-        $submitter = new Opus_Person();
+        $submitter = new Person();
         $submitter->setFirstName('Bob');
         $submitter->setLastName('Writer');
         $submitter->setEmail('bob@example.org');
         $doc->addPersonSubmitter($submitter);
 
-        $this->doc = new Opus_Document($doc->store());
+        $this->doc = Document::get($doc->store());
     }
 
     public function testGetRecipients()
@@ -143,7 +146,7 @@ class Admin_Form_WorkflowNotificationTest extends ControllerTestCase
      * Add a checkbox for each PersonSubmitter and PersonAuthor (used to select
      * recipients for publish notification email)
      *
-     * @param Opus_Document $document
+     * @param Document $document
     protected function addPublishNotificationSelection($document)
     {
         $translator = $this->getTranslator();

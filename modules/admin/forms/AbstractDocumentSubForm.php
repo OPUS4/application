@@ -25,6 +25,8 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+use Opus\Document;
+
 /**
  * Abstraktes Unterformular (SubForm) fuer Metadaten-Formular.
  *
@@ -109,10 +111,10 @@ abstract class Admin_Form_AbstractDocumentSubForm extends Application_Form_Abstr
     }
 
     /**
-     * Aktualisiert die Instanz von Opus_Document durch Formularwerte.
+     * Aktualisiert die Instanz von Document durch Formularwerte.
      *
      * TODO consider options for ChangeLog
-     * @param Opus_Document $document
+     * @param Document $document
      */
     public function updateModel($model)
     {
@@ -164,7 +166,7 @@ abstract class Admin_Form_AbstractDocumentSubForm extends Application_Form_Abstr
      */
     public function getDatesHelper()
     {
-        return Zend_Controller_Action_HelperBroker::getStaticHelper('Dates');
+        return \Zend_Controller_Action_HelperBroker::getStaticHelper('Dates');
     }
 
     /**

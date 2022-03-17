@@ -31,6 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Person;
+
 /**
  * Class Admin_Form_PersonsConfirm
  *
@@ -99,7 +101,7 @@ class Admin_Form_PersonsConfirm extends Application_Form_Model_Abstract
 
     public function populateFromModel($person)
     {
-        $documentIds = Opus_Person::getPersonDocuments($person);
+        $documentIds = Person::getPersonDocuments($person);
 
         $docCount = count($documentIds);
 

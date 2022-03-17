@@ -528,7 +528,7 @@ class Admin_Form_PersonsTest extends ControllerTestCase
 
         $form->getElement('PlaceOfBirth')->setValue('Köln');
 
-        $output = $form->render(Zend_Registry::get('Opus_View'));
+        $output = $form->render($this->getView());
 
         $this->assertContains('<option value="Köln">Köln</option>', $output);
         $this->assertContains('<option value="Berlin">Berlin</option>', $output);

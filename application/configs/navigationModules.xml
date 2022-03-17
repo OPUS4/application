@@ -125,6 +125,13 @@
                             <action>assign</action>
                         </collection>
 
+                        <import>
+                            <type>mvc</type>
+                            <label>admin_import_bibtex</label>
+                            <module>admin</module>
+                            <controller>import</controller>
+                            <action>bibtex</action>
+                        </import>
                     </pages>
                 </documents>
 
@@ -644,6 +651,24 @@
                     <controller>index</controller>
                     <action>setup</action>
                     <pages>
+                        <doctype>
+                            <type>mvc</type>
+                            <label>admin_title_doctype</label>
+                            <group>group-cafelatte</group>
+                            <module>admin</module>
+                            <controller>doctype</controller>
+                            <action>index</action>
+                            <resource>setup</resource>
+                            <pages>
+                                <detail>
+                                    <type>mvc</type>
+                                    <label>admin_doctype_show</label>
+                                    <module>admin</module>
+                                    <controller>doctype</controller>
+                                    <action>show</action>
+                                </detail>
+                            </pages>
+                        </doctype>
                         <enrichmentKey>
                             <type>mvc</type>
                             <label>admin_title_enrichmentkey</label>
@@ -707,7 +732,7 @@
                             <pages>
                                 <structure>
                                     <type>mvc</type>
-                                    <label>setup_helppage_structure</label>
+                                    <label>setup_helppage_structure_title</label>
                                     <module>setup</module>
                                     <controller>helppage</controller>
                                     <action>structure</action>
@@ -965,23 +990,6 @@
                             <action>index</action>
                             <resource>indexmaintenance</resource>
                         </indexmaintenance>
-                        <doctype>
-                            <type>mvc</type>
-                            <label>admin_title_doctype</label>
-                            <group>group-chocolate</group>
-                            <module>admin</module>
-                            <controller>doctype</controller>
-                            <action>index</action>
-                            <pages>
-                                <detail>
-                                    <type>mvc</type>
-                                    <label>admin_doctype_show</label>
-                                    <module>admin</module>
-                                    <controller>doctype</controller>
-                                    <action>show</action>
-                                </detail>
-                            </pages>
-                        </doctype>
                         <doireport>
                             <type>mvc</type>
                             <label>admin_title_doireport</label>

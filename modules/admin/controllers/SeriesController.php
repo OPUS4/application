@@ -29,14 +29,15 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
+use Opus\Series;
+
 /**
- * Controller for management of Opus_Series models in database.
+ * Controller for management of Series models in database.
  *
- * Creating, editing, deleting of Opus_Series models. Changing the order
- * of Opus_Series models.
+ * Creating, editing, deleting of Series models. Changing the order
+ * of Series models.
  */
 class Admin_SeriesController extends Application_Controller_ActionCRUD
 {
@@ -53,13 +54,13 @@ class Admin_SeriesController extends Application_Controller_ActionCRUD
 
     /**
      * Setzt Defaultwerte für das Formular.
-     * @return Opus_Series
+     * @return Series
      */
     public function getNewModel()
     {
         $series = parent::getNewModel();
         $series->setVisible(1);
-        $series->setSortOrder(Opus_Series::getMaxSortKey() + 1);
+        $series->setSortOrder(Series::getMaxSortKey() + 1);
         return $series;
     }
 

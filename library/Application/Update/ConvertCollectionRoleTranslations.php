@@ -31,6 +31,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\CollectionRole;
+use Opus\Util\ConsoleColors;
+
 /**
  * Handles update of "speaking" collection role names.
  *
@@ -48,9 +51,9 @@ class Application_Update_ConvertCollectionRoleTranslations extends Application_U
 
         $validator = new Application_Form_Validate_CollectionRoleName();
 
-        $roles = Opus_CollectionRole::fetchAll();
+        $roles = CollectionRole::fetchAll();
 
-        $colors = new Opus_Util_ConsoleColors();
+        $colors = new ConsoleColors();
 
         foreach ($roles as $role) {
             $name = $role->getName();
@@ -92,7 +95,7 @@ class Application_Update_ConvertCollectionRoleTranslations extends Application_U
                         $manager->delete($translationKey);
                         $this->log("  Removing old translation key '{$colors->blue($translationKey)}'");
                     }
-                } catch (\Opus\Translate\UnknownTranslationKey $ex) {
+                } catch (\Opus\Translate\UnknownTranslationKeyException $ex) {
                     $this->log("  Translation key '{$colors->blue($translationKey)}' does not exist");
                     $this->log('  Using old Name for translations');
                 }

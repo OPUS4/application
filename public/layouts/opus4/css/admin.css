@@ -570,7 +570,7 @@ ul.form-action {
 
 /* @group form content */
 .adminContainer .collection_new a.add,
-.adminContainer .enrichmentkey_new a.add,
+.adminContainer span.enrichmentkey_new a.add,
 .adminContainer table a.add,
 .adminContainer td.edit a,
 .adminContainer td.move-up a,
@@ -1637,7 +1637,7 @@ ul.links input:hover {
 }
 
 .adminContainer .collection_new a.add,
-.adminContainer .enrichmentkey_new a.add,
+.adminContainer span.enrichmentkey_new a.add,
 .adminContainer table a.add {
     background-position: -17px -16px;
     border-radius: 5px;
@@ -2532,14 +2532,94 @@ a.link-button:hover {
     color: white;
 }
 
-a.create-document-link {
+div.document-action-links {
     float: right;
+    display: block;
 }
 
-#enrichmentkeyTable span.strong {
+div.preformatted {
+    font-family: monospace;
+    white-space: pre;
+}
+
+#enrichmentkeyTable span.strong,
+#enrichmentkeyTableManaged span.strong,
+#enrichmentkeyTableUnmanaged span.strong {
     font-weight: bold;
 }
 
 .code {
     font-family: monospace;
+}
+
+.admin_info fieldset {
+    margin-bottom: 2.5em;
+}
+
+.admin_info fieldset legend {
+    text-transform: none;
+    font-size: 1.5em;
+    border-bottom: 2px solid #26517d;
+    margin-bottom: 1em;
+}
+
+.admin_info fieldset .opus-version-info {
+    font-size: 1.3em;
+    margin-left: 2em;
+}
+
+.admin_info fieldset table {
+    font-size: 1.3em;
+    margin-left: 2em;
+    margin-right: 2em;
+    margin-top: 0;
+    padding-left: 0;
+    margin-bottom: 0;
+    width: auto;
+}
+
+.admin_info table.workspace-folders tr.state-r,
+.admin_info table.workspace-folders tr.state- {
+    background: #ffb1ae;
+}
+
+.pre-wrapped {
+    background: #dddddd;
+    white-space: pre-wrap;
+    padding: 1em;
+    font-size: 1.2em;
+}
+
+/**
+ * Collection auto complete form element
+ */
+
+fieldset.collectionRole legend {
+    padding-top: 0.8em;
+    border: none;
+    font-weight: bold;
+}
+
+fieldset.collectionRole ul {
+    margin: 0;
+    padding: 0.2em 2em;
+}
+
+fieldset.collectionRole li {
+    padding: 0.1em 0em;
+}
+
+fieldset.collectionRole i.fa-trash {
+    margin-left: 0.4em;
+    color: #26517d;
+}
+
+fieldset.collectionRole i.fa-trash:hover {
+    cursor: pointer;
+}
+
+.ui-autocomplete-category {
+    font-weight: bold;
+    padding: .2em .2em;
+    margin: .2em 0 .8em;
 }

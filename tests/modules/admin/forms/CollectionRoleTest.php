@@ -31,6 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\CollectionRole;
+
 class Admin_Form_CollectionRoleTest extends ControllerTestCase
 {
 
@@ -40,7 +42,7 @@ class Admin_Form_CollectionRoleTest extends ControllerTestCase
     {
         $form = new Admin_Form_CollectionRole();
 
-        $this->assertEquals(15, count($form->getElements()));
+        $this->assertCount(15, $form->getElements());
 
         $this->assertNotNull($form->getElement('Name'));
         $this->assertNotNull($form->getElement('DisplayName'));
@@ -65,7 +67,7 @@ class Admin_Form_CollectionRoleTest extends ControllerTestCase
     {
         $form = new Admin_Form_CollectionRole();
 
-        $model = new Opus_CollectionRole();
+        $model = new CollectionRole();
 
         $model->setName('TestName');
         $model->setOaiName('TestOaiName');
@@ -103,7 +105,7 @@ class Admin_Form_CollectionRoleTest extends ControllerTestCase
     {
         $form = new Admin_Form_CollectionRole();
 
-        $model = new Opus_CollectionRole(2);
+        $model = new CollectionRole(2);
 
         $form->populateFromModel($model);
 
@@ -135,7 +137,7 @@ class Admin_Form_CollectionRoleTest extends ControllerTestCase
         $form->getElement('AssignLeavesOnly')->setValue(1);
         $form->getElement('HideEmptyCollections')->setValue(1);
 
-        $model = new Opus_CollectionRole();
+        $model = new CollectionRole();
 
         $form->updateModel($model);
 

@@ -31,6 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\DnbInstitute;
+
 class Application_Form_Element_PublisherTest extends FormElementTestCase
 {
 
@@ -39,10 +41,10 @@ class Application_Form_Element_PublisherTest extends FormElementTestCase
     public function setUp()
     {
         $this->_formElementClass = 'Application_Form_Element_Publisher';
-        $this->_expectedDecoratorCount = 6;
         $this->_expectedDecorators = [
-            'ViewHelper', 'Errors', 'Description', 'ElementHtmlTag', 'LabelNotEmpty', 'dataWrapper'
+            'ViewHelper', 'Errors', 'Description', 'ElementHtmlTag', 'LabelNotEmpty', 'dataWrapper', 'ElementHint'
         ];
+        $this->_expectedDecoratorCount = count($this->_expectedDecorators);
         $this->_staticViewHelper = 'viewFormSelect';
         parent::setUp();
     }
@@ -51,7 +53,7 @@ class Application_Form_Element_PublisherTest extends FormElementTestCase
     {
         $element = $this->getElement();
 
-        $publishers = Opus_DnbInstitute::getPublishers();
+        $publishers = DnbInstitute::getPublishers();
 
         $this->assertEquals(count($publishers), count($element->getMultiOptions()));
 
@@ -77,8 +79,8 @@ class Application_Form_Element_PublisherTest extends FormElementTestCase
 
         $optionCount = count($element->getMultiOptions());
 
-        $grantors = Opus_DnbInstitute::getGrantors();
-        $publishers = Opus_DnbInstitute::getPublishers();
+        $grantors = DnbInstitute::getGrantors();
+        $publishers = DnbInstitute::getPublishers();
 
         $nonPublishers = array_diff($grantors, $publishers);
 
@@ -107,7 +109,7 @@ class Application_Form_Element_PublisherTest extends FormElementTestCase
         $optionCount = count($element->getMultiOptions());
 
         // getting unused id for test
-        $institutes = Opus_DnbInstitute::getAll();
+        $institutes = DnbInstitute::getAll();
 
         $instituteIds = array_map(function ($item) {
             return $item->getId();
@@ -129,7 +131,7 @@ class Application_Form_Element_PublisherTest extends FormElementTestCase
     {
         $element = $this->getElement();
 
-        $publishers = Opus_DnbInstitute::getPublishers();
+        $publishers = DnbInstitute::getPublishers();
 
         $this->assertGreaterThan(0, count($publishers));
 

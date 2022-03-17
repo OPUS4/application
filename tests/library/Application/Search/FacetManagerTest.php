@@ -98,9 +98,9 @@ class Application_Search_FacetManagerTest extends ControllerTestCase
 
     public function testGetFacetEnrichment()
     {
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        $this->adjustConfiguration([
             'searchengine' => ['solr' => ['facets' => 'enrichment_Audience']]
-        ]));
+        ]);
 
         $manager = new Application_Search_FacetManager();
 
@@ -113,9 +113,9 @@ class Application_Search_FacetManagerTest extends ControllerTestCase
 
     public function testGetFacetEnrichmentTranslated()
     {
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        $this->adjustConfiguration([
             'searchengine' => ['solr' => ['facets' => 'enrichment_Audience']]
-        ]));
+        ]);
 
         $manager = new Application_Search_FacetManager();
 
@@ -143,9 +143,9 @@ class Application_Search_FacetManagerTest extends ControllerTestCase
 
     public function testGetFacetConfigForFacetteWithDotInName()
     {
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        $this->adjustConfiguration([
             'search' => ['facet' => ['enrichment_opus-source' => ['heading' => 'EnrichmentOpusSource']]]
-        ]));
+        ]);
 
         $manager = new Application_Search_FacetManager();
 
@@ -165,9 +165,9 @@ class Application_Search_FacetManagerTest extends ControllerTestCase
 
     public function testFacetSortCrit()
     {
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        $this->adjustConfiguration([
             'search' => ['facet' => ['subject' => ['sort' => 'lexi']]]
-        ]));
+        ]);
 
         $manager = new Application_Search_FacetManager();
 

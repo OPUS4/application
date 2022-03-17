@@ -38,10 +38,10 @@ class Application_Form_Element_PositionTest extends FormElementTestCase
     public function setUp()
     {
         $this->_formElementClass = 'Application_Form_Element_Position';
-        $this->_expectedDecoratorCount = 6;
         $this->_expectedDecorators = [
-            'ViewHelper', 'Errors', 'Description', 'ElementHtmlTag', 'LabelNotEmpty', 'dataWrapper'
+            'ViewHelper', 'Errors', 'Description', 'ElementHtmlTag', 'LabelNotEmpty', 'dataWrapper', 'ElementHint'
         ];
+        $this->_expectedDecoratorCount = count($this->_expectedDecorators);
         $this->_staticViewHelper = 'viewFormSelect';
         parent::setUp();
 
@@ -54,7 +54,7 @@ class Application_Form_Element_PositionTest extends FormElementTestCase
 
         $options = $element->getMultiOptions();
 
-        $collectionRoles = Opus_CollectionRole::fetchAll();
+        $collectionRoles = \Opus\CollectionRole::fetchAll();
 
         // One additional option for last position
         $this->assertEquals(count($collectionRoles) + 1, count($options));

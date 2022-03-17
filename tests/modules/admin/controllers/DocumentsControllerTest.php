@@ -30,6 +30,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\CollectionRole;
+use Opus\Person;
+
 /**
  * Basic unit test for the documents controller in the admin module.
  *
@@ -68,7 +71,7 @@ class Admin_DocumentsControllerTest extends ControllerTestCase
      */
     public function testCollectionRoleNameGetsTranslatedForUserCollection()
     {
-        $cr = new Opus_CollectionRole();
+        $cr = new CollectionRole();
         $cr->setName('foo');
         $cr->setOaiName('foo');
         $cr->store();
@@ -82,7 +85,7 @@ class Admin_DocumentsControllerTest extends ControllerTestCase
 
     public function testShowAllDocsForDDCCollection()
     {
-        $role = new Opus_CollectionRole(2);
+        $role = new CollectionRole(2);
         $displayBrowsing = $role->getDisplayBrowsing();
         $role->setDisplayBrowsing('Name');
         $role->store();
@@ -99,7 +102,7 @@ class Admin_DocumentsControllerTest extends ControllerTestCase
 
     public function testShowAllDocsForBklCollection()
     {
-        $role = new Opus_CollectionRole(7);
+        $role = new CollectionRole(7);
         $displayBrowsing = $role->getDisplayBrowsing();
         $role->setDisplayBrowsing('Name');
         $role->store();
@@ -144,10 +147,10 @@ class Admin_DocumentsControllerTest extends ControllerTestCase
 
     public function testShowAllHits()
     {
-        $docFinder = new Opus_DocumentFinder();
+        $docFinder = $this->getDocumentFinder();
         $docFinder->setServerState('unpublished');
 
-        $unpublishedDocs = $docFinder->count();
+        $unpublishedDocs = $docFinder->getCount();
 
         $this->dispatch('/admin/documents/index/state/unpublished/hitsperpage/all');
         $this->assertQueryCount('span.title', $unpublishedDocs);
@@ -155,15 +158,13 @@ class Admin_DocumentsControllerTest extends ControllerTestCase
 
     public function testHitsPerPageBadParameter()
     {
-        $docFinder = new Opus_DocumentFinder();
-
         $this->dispatch('/admin/documents/index/state/unpublished/hitsperpage/dummy');
         $this->assertQueryCount('span.title', 10); // default
     }
 
     public function testConfigureDefaultHitsPerPage()
     {
-        $config = Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         $config->admin->documents->maxDocsDefault = '7';
 
         $this->dispatch('/admin/documents');
@@ -172,7 +173,7 @@ class Admin_DocumentsControllerTest extends ControllerTestCase
 
     public function testConfigureHitsPerPageOptions()
     {
-        $config = Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         $config->admin->documents->maxDocsOptions = "20,60,all";
 
         $this->dispatch('/admin/documents');
@@ -205,7 +206,7 @@ class Admin_DocumentsControllerTest extends ControllerTestCase
 
     public function testShowAuthorFilter()
     {
-        $person = new Opus_Person();
+        $person = new Person();
         $person->setLastName('Test');
         $person->setFirstName('Justa');
         $person->setIdentifierOrcid('0000-0000-0000-0001');

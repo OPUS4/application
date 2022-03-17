@@ -30,6 +30,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Config;
+
 if (basename(__FILE__) !== basename($argv[0])) {
     echo "script must be executed directy (not via opus-console)\n";
     exit;
@@ -42,16 +44,19 @@ if ($argc < 3) {
 
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
+use Opus\Doi\DoiManager;
+use Opus\Doi\DoiException;
+
 $doiValue = $argv[1];
 $landingPageURL = $argv[2];
 
 echo 'Change URL of landing page of DOI ' . $doiValue . ' to ' . $landingPageURL . "\n";
 
-$config = Zend_Registry::get('Zend_Config');
+$config = Config::get();
 try {
-    $doiManager = new Opus_Doi_DoiManager();
+    $doiManager = new DoiManager();
     $doiManager->updateLandingPageUrlOfDoi($doiValue, $landingPageURL);
     echo "Operation completed successfully\n";
-} catch (Opus_Doi_DoiException $e) {
+} catch (DoiException $e) {
     echo 'Could not successfully change landing page URL of DOI ' . $doiValue . ' : ' . $e->getMessage() . "\n";
 }

@@ -30,6 +30,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  **/
 
+use Opus\Document;
+
 /**
  * Unit Tests fuer Unterformular fuer Personen in einer Rolle im Metadaten-Formular.
  */
@@ -42,8 +44,8 @@ class Admin_Form_Document_PersonRoleTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_PersonRole('author');
 
-        $this->assertEquals(1, count($form->getElements()));
-        $this->assertEquals(0, count($form->getSubForms()));
+        $this->assertCount(1, $form->getElements());
+        $this->assertCount(0, $form->getSubForms());
         $this->assertEquals('author', $form->getRoleName());
         $this->assertNotNull($form->getElement('Add'));
     }
@@ -52,13 +54,13 @@ class Admin_Form_Document_PersonRoleTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_PersonRole('author');
 
-        $document = new Opus_Document(21); // hat zwei Authoren
+        $document = Document::get(21); // hat zwei Authoren
 
-        $this->assertEquals(0, count($form->getSubForms()));
+        $this->assertCount(0, $form->getSubForms());
 
         $form->populateFromModel($document);
 
-        $this->assertEquals(2, count($form->getSubForms()));
+        $this->assertCount(2, $form->getSubForms());
     }
 
     public function testProcessPostAdd()
@@ -92,15 +94,15 @@ class Admin_Form_Document_PersonRoleTest extends ControllerTestCase
             ]
         ];
 
-        $document = new Opus_Document(21); // hat zwei Authoren
+        $document = Document::get(21); // hat zwei Authoren
 
         $form->populateFromModel($document);
 
-        $this->assertEquals(2, count($form->getSubForms()), 'Ungenügend Unterformulare.');
+        $this->assertCount(2, $form->getSubForms(), 'Ungenügend Unterformulare.');
 
         $form->processPost($post, null);
 
-        $this->assertEquals(1, count($form->getSubForms()), 'Unterformular wurde nicht entfernt.');
+        $this->assertCount(1, $form->getSubForms(), 'Unterformular wurde nicht entfernt.');
 
         // TODO prüfe Namen von Unterformularen
     }
@@ -115,11 +117,11 @@ class Admin_Form_Document_PersonRoleTest extends ControllerTestCase
             ]
         ];
 
-        $document = new Opus_Document(21); // hat zwei Authoren
+        $document = Document::get(21); // hat zwei Authoren
 
         $form->populateFromModel($document);
 
-        $this->assertEquals(2, count($form->getSubForms()));
+        $this->assertCount(2, $form->getSubForms());
 
         $result = $form->processPost($post, null);
 
@@ -517,11 +519,11 @@ class Admin_Form_Document_PersonRoleTest extends ControllerTestCase
     {
         $form = $this->getFormForSorting();
 
-        $doc = new Opus_Document(250);
+        $doc = Document::get(250);
 
         $authors = $form->getSubFormModels($doc);
 
-        $this->assertEquals(3, count($authors));
+        $this->assertCount(3, $authors);
 
         $this->assertEquals(310, $authors[0]->getModel()->getId());
         $this->assertEquals(311, $authors[1]->getModel()->getId());
@@ -532,13 +534,13 @@ class Admin_Form_Document_PersonRoleTest extends ControllerTestCase
     {
         $form = $this->getFormForSorting();
 
-        $doc = new Opus_Document(250);
+        $doc = Document::get(250);
 
         $form->updateModel($doc);
 
         $authors = $doc->getPersonAuthor();
 
-        $this->assertEquals(3, count($authors));
+        $this->assertCount(3, $authors);
 
         $this->assertEquals(310, $authors[0]->getModel()->getId());
         $this->assertEquals(311, $authors[1]->getModel()->getId());
@@ -553,7 +555,7 @@ class Admin_Form_Document_PersonRoleTest extends ControllerTestCase
         $form->addPerson(['person' => '311']);
         $form->addPerson(['person' => '312']);
 
-        $this->assertEquals(3, count($form->getSubForms()));
+        $this->assertCount(3, $form->getSubForms());
 
         $this->verifyExpectedOrder($form, [310, 311, 312]);
     }
@@ -628,7 +630,7 @@ class Admin_Form_Document_PersonRoleTest extends ControllerTestCase
         $form->addPerson(['person' => '310']);
         $form->addPerson(['person' => '310']);
 
-        $this->assertEquals(1, count($form->getSubForms()));
+        $this->assertCount(1, $form->getSubForms());
 
         $this->assertEquals(310, $form->getSubForm('PersonAuthor0')->getElementValue('PersonId'));
     }
@@ -643,11 +645,11 @@ class Admin_Form_Document_PersonRoleTest extends ControllerTestCase
 
         $form->addPerson([]);
 
-        $this->assertEquals(0, count($form->getSubForms()));
+        $this->assertCount(0, $form->getSubForms());
 
         $messages = $logger->getMessages();
 
-        $this->assertEquals(1, count($messages));
+        $this->assertCount(1, $messages);
         $this->assertContains('Attempt to add person without ID.', $messages[0]);
     }
 
@@ -688,7 +690,7 @@ class Admin_Form_Document_PersonRoleTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_PersonRole('author');
 
-        $document = new Opus_Document(250);
+        $document = Document::get(250);
 
         $authors = $document->getPersonAuthor();
         $authorId0 = $authors[0]->getModel()->getId(); // 310

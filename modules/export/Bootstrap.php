@@ -32,30 +32,34 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Export_Bootstrap extends Zend_Application_Module_Bootstrap
+use Opus\Config;
+use Opus\Log;
+use Opus\Security\Realm;
+
+class Export_Bootstrap extends \Zend_Application_Module_Bootstrap
 {
 
     protected function _initExport()
     {
         $updateInProgress = Application_Configuration::isUpdateInProgress();
 
-        if (! Zend_Registry::isRegistered('Opus_Exporter')) {
+        if (! \Zend_Registry::isRegistered('Opus_Exporter')) {
             if (! $updateInProgress) {
-                Zend_Registry::get('Zend_Log')->warn(__METHOD__ . ' exporter not found');
+                 Log::get()->warn(__METHOD__ . ' exporter not found');
             }
             return;
         }
 
-        $exporter = Zend_Registry::get('Opus_Exporter');
+        $exporter = \Zend_Registry::get('Opus_Exporter');
 
         if (is_null($exporter)) {
             if (! $updateInProgress) {
-                Zend_Registry::get('Zend_Log')->warn(__METHOD__ . ' exporter not found');
+                 Log::get()->warn(__METHOD__ . ' exporter not found');
             }
             return;
         }
 
-        $config = Zend_Registry::get('Zend_Config');
+        $config = Config::get();
 
         // only add XML export if user has access and stylesheet is configured
         if (isset($config->export->stylesheet->frontdoor)) {
@@ -103,34 +107,5 @@ class Export_Bootstrap extends Zend_Application_Module_Bootstrap
                 'frontdoor' => false
             ]
         ]);
-
-        if (Opus_Security_Realm::getInstance()->checkModule('admin')) {
-            // add admin-only format(s) to exporter
-            // hiermit wird nur die Sichtbarkeit des Export-Buttons gesteuert
-            $exporter->addFormats([
-                'datacite' => [
-                    'name' => 'DataCite',
-                    'description' => 'Export DataCite-XML',
-                    'module' => 'export',
-                    'controller' => 'index',
-                    'action' => 'datacite',
-                    'search' => false
-                ]
-            ]);
-
-            $exporter->addFormats([
-                'marc21' => [
-                    'name' => 'MARC21-XML',
-                    'description' => 'Export MARC21-XML',
-                    'module' => 'export',
-                    'controller' => 'index',
-                    'action' => 'marc21',
-                    'search' => false,
-                    'params' => [
-                        'searchtype' => 'id'
-                    ]
-                ]
-            ]);
-        }
     }
 }

@@ -52,9 +52,9 @@ class Application_Controller_Action_Helper_ResultScriptTest extends ControllerTe
 
     public function testCustomScriptDoesNotExist()
     {
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        $this->adjustConfiguration([
             'search' => ['result' => ['script' => 'result.phtml']]
-        ]));
+        ]);
 
         $script = $this->helper->direct();
 
@@ -63,9 +63,9 @@ class Application_Controller_Action_Helper_ResultScriptTest extends ControllerTe
 
     public function testCustomScriptExists()
     {
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        $this->adjustConfiguration([
             'search' => ['result' => ['script' => 'result.phtml']]
-        ]));
+        ]);
 
         touch(APPLICATION_PATH . '/application/configs/templates/result.phtml');
 

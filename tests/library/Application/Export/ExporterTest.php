@@ -31,6 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\UserRole;
+
 class Application_Export_ExporterTest extends ControllerTestCase
 {
 
@@ -42,7 +44,7 @@ class Application_Export_ExporterTest extends ControllerTestCase
     {
         parent::setUp();
 
-        $guest = Opus_UserRole::fetchByName('guest');
+        $guest = UserRole::fetchByName('guest');
         $modules = $guest->listAccessModules();
 
         $this->_guestExportEnabled = in_array('export', $modules);
@@ -51,7 +53,7 @@ class Application_Export_ExporterTest extends ControllerTestCase
     public function tearDown()
     {
         // restore guest access to export module
-        $guest = Opus_UserRole::fetchByName('guest');
+        $guest = UserRole::fetchByName('guest');
 
         if ($this->_guestExportEnabled) {
             $guest->appendAccessModule('export');
@@ -145,7 +147,10 @@ class Application_Export_ExporterTest extends ControllerTestCase
 
     public function testGetAllowedFormats()
     {
-        $exporter = Zend_Registry::get('Opus_Exporter');
+        // Restricted format are only setup during request processing (OPUS4/application#516)
+        $this->dispatch('/home');
+
+        $exporter = \Zend_Registry::get('Opus_Exporter');
 
         $formats = $exporter->getAllowedFormats();
 
@@ -153,7 +158,7 @@ class Application_Export_ExporterTest extends ControllerTestCase
 
         $this->enableSecurity();
 
-        $guest = Opus_UserRole::fetchByName('guest');
+        $guest = UserRole::fetchByName('guest');
         $guest->removeAccessModule('export');
         $guest->store();
 
@@ -164,7 +169,7 @@ class Application_Export_ExporterTest extends ControllerTestCase
 
     public function testGetAllowedFormatsSorted()
     {
-        $exporter = Zend_Registry::get('Opus_Exporter');
+        $exporter = \Zend_Registry::get('Opus_Exporter');
 
         $formats = $exporter->getAllowedFormats();
 

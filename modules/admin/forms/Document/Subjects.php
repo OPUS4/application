@@ -29,8 +29,9 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
+use Opus\Document;
 
 /**
  * Unterformular fuer Subjects im Metadaten-Formular.
@@ -87,7 +88,7 @@ class Admin_Form_Document_Subjects extends Admin_Form_Document_Section
 
     /**
      * Sammelt Schlagwoerter von Unterformularen ein und aktualisiert Dokument.
-     * @param Opus_Document $document
+     * @param Document $document
      */
     public function updateModel($document)
     {

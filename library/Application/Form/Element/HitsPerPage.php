@@ -29,7 +29,6 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -49,7 +48,7 @@ class Application_Form_Element_HitsPerPage extends Application_Form_Element_Sele
 
         $options = ['10', '20', '50', '100'];
 
-        $defaultRows = Opus\Search\Query::getDefaultRows();
+        $defaultRows = \Opus\Search\Query::getDefaultRows();
 
         if (! in_array($defaultRows, $options)) {
             $options[] = $defaultRows;

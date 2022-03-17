@@ -31,7 +31,7 @@
  * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Application_Form_Decorator_TableWrapper extends Zend_Form_Decorator_Abstract
+class Application_Form_Decorator_TableWrapper extends \Zend_Form_Decorator_Abstract
 {
 
     public function render($content)

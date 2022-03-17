@@ -36,7 +36,7 @@ class Application_View_Helper_ViewFormMultiCheckboxTest extends ControllerTestCa
     public function testViewFormMultiCheckbox()
     {
         $helper = new Application_View_Helper_ViewFormMultiCheckbox();
-        $helper->setView(new Zend_View());
+        $helper->setView(new \Zend_View());
 
         $markup = $helper->viewFormMultiCheckbox(
             'testName',
@@ -51,7 +51,7 @@ class Application_View_Helper_ViewFormMultiCheckboxTest extends ControllerTestCa
     public function testViewFormMultiCheckboxEscaping()
     {
         $helper = new Application_View_Helper_ViewFormMultiCheckbox();
-        $helper->setView(new Zend_View());
+        $helper->setView(new \Zend_View());
 
         $markup = $helper->viewFormMultiCheckbox(
             'testName',

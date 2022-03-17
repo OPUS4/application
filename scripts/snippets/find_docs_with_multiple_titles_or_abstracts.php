@@ -28,9 +28,10 @@
  * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
+use Opus\Document;
+use Opus\Repository;
 
 /**
  *
@@ -40,13 +41,14 @@
  * Diese Dokumente müssen aktuell manuell behandelt werden, da das Dokument
  * sonst nicht fehlerfrei indexiert werden kann (siehe OPUSVIER-2240).
  *
+ * TODO integrity check (where to put it?) - should be part of problem analysis package
  */
 
 $updateRequired = 0;
 
-$docfinder = new Opus_DocumentFinder();
-foreach ($docfinder->ids() as $docId) {
-    $doc = new Opus_Document($docId);
+$docfinder = Repository::getInstance()->getDocumentFinder();
+foreach ($docfinder->getIds() as $docId) {
+    $doc = Document::get($docId);
 
     $numOfTitles = 0;
     foreach ($doc->getTitleMain() as $title) {

@@ -30,8 +30,10 @@
  * @author     Thoralf Klein <thoralf.klein@zib.de>
  * @copyright  Copyright (c) 2012, OPUS 4 development team
  * @license    http://www.gnu.org/licenses/gpl.html General Public License
- * @version    $Id$
  */
+
+use Opus\CollectionRole;
+use Opus\Repository;
 
 class Oai_Model_DocumentList
 {
@@ -61,29 +63,31 @@ class Oai_Model_DocumentList
      * @param array &$oaiRequest
      * @return array
      *
-     * TODO function contains metadataPrefix specifische criteria for generating document list (refactor!)
+     * TODO function contains metadataPrefix specific criteria for generating document list (refactor!)
+     * TODO simplify function
      */
     public function query(array $oaiRequest)
     {
         $today = date('Y-m-d', time());
 
-        $finder = new Opus_DocumentFinder();
+        $finder = Repository::getInstance()->getDocumentFinder();
 
         // add server state restrictions
-        $finder->setServerStateInList($this->deliveringDocumentStates);
+        $finder->setServerState($this->deliveringDocumentStates);
 
-        $metadataPrefix = $oaiRequest['metadataPrefix'];
-        if (strcasecmp('xMetaDissPlus', $metadataPrefix) === 0
-            || 'xMetaDiss' === $metadataPrefix) {
-            $finder->setFilesVisibleInOai();
+        $metadataPrefix = strtolower($oaiRequest['metadataPrefix']);
+
+        if (strcmp('xmetadissplus', $metadataPrefix) === 0
+            || 'xmetadiss' === $metadataPrefix) {
+            $finder->setHasFilesVisibleInOai();
             $finder->setNotEmbargoedOn($today);
         }
-        if ('xMetaDiss' === $metadataPrefix) {
-            $finder->setTypeInList($this->xMetaDissRestriction);
+        if ('xmetadiss' === $metadataPrefix) {
+            $finder->setDocumentType($this->xMetaDissRestriction);
             $finder->setNotEmbargoedOn($today);
         }
         if ('epicur' === $metadataPrefix) {
-            $finder->setIdentifierTypeExists('urn');
+            $finder->setIdentifierExists('urn');
         }
 
         if (array_key_exists('set', $oaiRequest)) {
@@ -94,7 +98,7 @@ class Oai_Model_DocumentList
 
             if ($setarray[0] == 'doc-type') {
                 if (count($setarray) === 2 and ! empty($setarray[1])) {
-                    $finder->setType($setarray[1]);
+                    $finder->setDocumentType($setarray[1]);
                 } else {
                     return [];
                 }
@@ -104,6 +108,7 @@ class Oai_Model_DocumentList
                 }
                 $setValue = $setarray[1];
 
+                // TODO why this complicated mapping?
                 $bibliographyMap = [
                     "true"  => 1,
                     "false" => 0,
@@ -120,7 +125,7 @@ class Oai_Model_DocumentList
                 }
 
                 // Trying to locate collection role and filter documents.
-                $role = Opus_CollectionRole::fetchByOaiName($setarray[0]);
+                $role = CollectionRole::fetchByOaiName($setarray[0]);
                 if (is_null($role)) {
                     $msg = "Invalid SetSpec: Top level set does not exist.";
                     throw new Oai_Model_Exception($msg);
@@ -172,6 +177,6 @@ class Oai_Model_DocumentList
             $finder->setServerDateModifiedBefore($until->format('Y-m-d'));
         }
 
-        return $finder->ids();
+        return $finder->getIds();
     }
 }

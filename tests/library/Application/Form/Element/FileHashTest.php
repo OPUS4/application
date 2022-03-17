@@ -25,6 +25,8 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+use Opus\File;
+
 /**
  * Unit Test fuer Formularelement zur Anzeige eines File Hashes.
  *
@@ -51,7 +53,7 @@ class Application_Form_Element_FileHashTest extends FormElementTestCase
 
         $element = new Application_Form_Element_FileHash('filehash');
 
-        $file = new Opus_File(116);
+        $file = new File(116);
         $hashes = $file->getHashValue();
         $hash = $hashes[0];
 

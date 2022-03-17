@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -31,6 +30,10 @@
  * @copyright   Copyright (c) 2018-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\Document;
+use Opus\Identifier;
+
 class Admin_Model_DoiStatusTest extends ControllerTestCase
 {
 
@@ -42,8 +45,8 @@ class Admin_Model_DoiStatusTest extends ControllerTestCase
     {
         if (! is_null($this->docId)) {
             // removed previously created test document from database
-            $doc = new Opus_Document($this->docId);
-            $doc->deletePermanent();
+            $doc = Document::get($this->docId);
+            $doc->delete();
         }
         parent::tearDown();
     }
@@ -51,7 +54,7 @@ class Admin_Model_DoiStatusTest extends ControllerTestCase
     public function testWithPublishedDoc()
     {
         $this->createTestDocWithDoi('published');
-        $doc = new Opus_Document($this->docId);
+        $doc = Document::get($this->docId);
         $identifiers = $doc->getIdentifier();
         $doi = $identifiers[0];
 
@@ -66,7 +69,7 @@ class Admin_Model_DoiStatusTest extends ControllerTestCase
     public function testWithUnpublishedDoc()
     {
         $this->createTestDocWithDoi('unpublished');
-        $doc = new Opus_Document($this->docId);
+        $doc = Document::get($this->docId);
         $identifiers = $doc->getIdentifier();
         $doi = $identifiers[0];
 
@@ -80,11 +83,11 @@ class Admin_Model_DoiStatusTest extends ControllerTestCase
 
     private function createTestDocWithDoi($serverState)
     {
-        $doc = new Opus_Document();
+        $doc = Document::new();
         $doc->setServerState($serverState);
         $this->docId = $doc->store();
 
-        $doi = new Opus_Identifier();
+        $doi = new Identifier();
         $doi->setType('doi');
         $doi->setValue('10.5027/opustest-' . $this->docId);
         $doi->setStatus('registered');

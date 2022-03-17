@@ -269,4 +269,33 @@ $(document).ready(function () {
         };
     });
 
+    /**
+     * Im Falle des Validierungsmodus "non strict" soll im Eingabeformular ein möglicher Hinweistext, der
+     * darauf hinweist, dass der aktuelle Formularwert gegen die Typkonfiguration des Enrichment-Keys verstößt,
+     * ausgeblendet werden, wenn der Formularwert geändert wird. Wird der Wert auf den ursprünglichen Formularwert
+     * zurückgesetzt, so soll der Hinweistext wieder eingeblendet werden (ohne Interaktion mit dem Server).
+     */
+    $("input[data-opusValidationError='true'], select[data-opusValidationError='true']").on('input', function (event) {
+        var element = $(this);
+        var errorMessage = element.next(".datahint");
+        if (errorMessage) {
+            var oldValue = errorMessage.data('errorValue');
+            if (typeof oldValue === 'undefined' && (typeof event.target.defaultValue !== 'undefined')) {
+                // Input-Element wird das erste Mal behandelt (beim Select-Element brauchen wir den Ursprungswert nicht speichern)
+                errorMessage.data('errorValue', event.target.defaultValue);
+            }
+
+            if (errorMessage.is(":visible")) {
+                errorMessage.hide();
+            } else {
+                if (element.val() === errorMessage.data('errorValue') ||
+                    ((typeof errorMessage.data('errorValue') === 'undefined') && element.val() === '0')) {
+                    // beim Zurücksetzen auf den Ursprungswert Fehlermeldung wieder einblenden
+                    // Sonderbehandlung für Select-Element: dort steht der Ursprungswert in der Auswahlliste immer an Position 0
+                    errorMessage.show();
+                }
+            }
+        }
+    })
+
 });

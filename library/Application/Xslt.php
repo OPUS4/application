@@ -87,7 +87,7 @@ class Application_Xslt
      */
     public function findHelper($method)
     {
-        $helper = Zend_Registry::get('Opus_View')->getHelper($method);
+        $helper = \Zend_Registry::get('Opus_View')->getHelper($method);
 
         return $helper;
     }

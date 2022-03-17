@@ -1,4 +1,112 @@
 # OPUS 4 Release Notes
+---
+
+## Release 4.7.1
+
+# Konfiguration
+
+Der Parameter `url` kann verwendet werden, um die absolute URL für eine OPUS 4
+Instanz manuell zu setzen. Diese URL wird dann verwendet, um absolute Links,
+z.B. in Exporten oder E-Mails, zu generieren.
+
+url = 'https://opus4mig.kobv.de/opus4-demo'
+
+URLs mit Port werden momentan nicht unterstützt.
+
+# Neues Kommandozeilen-Skript `bin/opus4`
+
+Es gibt das neue Skript `bin/opus4`, dass in Zukunft die Rolle des zentralen OPUS 4
+Werkzeugs auf der Kommandozeile übernehmen wird. Mit den Kommando `list` lassen sich
+die bisher integrierten Kommandos anzeigen. Mit `help` lassen sich Informationen zu
+einzelnen Kommandos abrufen.
+
+    $ bin/opus4 list
+    $ bin/opus4 help index:index
+
+# Wartung des Solr-Index
+
+Das Skript `script/SolrIndexBuilder.php` wurde durch `bin/opus4` ersetzt. Dadurch
+soll der Aufruf vereinfacht werden. Das neue Skript soll außerdem in Zukunft auch
+andere Funktionen übernehmen, die nichts mit dem Index zu tun haben.
+
+Im OPUS 4 Handbuch gibt es eine neue Seite, die die Funktionen des Skripts für
+den Index beschreibt.
+
+<http://www.opus-repository.org//userdoc/search/maintenance.html>
+
+Es gibt jetzt die Möglichkeit einzelne Dokumente einfacher zu indexieren oder auch
+aus dem Index zu entfernen. Es kann über eine Option bestimmt werden wie viele
+Dokument gleichzeitig zum Solr-Server geschickt werden sollen. Das kann helfen,
+wenn es Probleme bei der Indexierung gibt.
+
+# Export
+
+Die beiden Variablen `host` und `server` in den Export-XSLT Skripten wurden durch
+die Variable `opusUrl` ersetzt. Eigene Skripte, die diese Variablen einsetzen,
+müssen angepasst werden. Die neue Variable `opusUrl` enthält die absolute URL für
+die OPUS 4 Instanz.
+
+# BibTeX-Import
+
+OPUS 4 erlaubt nun den Import von Dokumentmetadaten aus BibTeX-Dateien. Der Import
+einer BibTeX-Datei kann über das CLI mit dem Befehl
+
+    $ bin/opus4 import:bibtex <filename.bib>
+
+aufgerufen werden. Es können hierbei mehrere Optionen angegeben werden. Die Auflistung
+der verfügbaren Optionen sowie einer Erklärung ihrer Bedeutung ist mit dem Befehl
+
+    $ bin/opus4 help import:bibtex
+
+möglich.
+
+Der BibTeX-Import kann auch über die Weboberfläche von OPUS 4 aufgerufen werden.
+Der Administrationsbereich bietet dazu einen entsprechenden Button _BibTeX-Import_ beim
+Aufruf des Menüeintrags _Dokumente_. Das Webformular in der Administration für den
+Import von BibTeX-Dateien bietet sämtliche Optionen an, die auch über den CLI-Befehl
+`import:bibtex` gesetzt werden können.
+
+Für die Ausführung des BibTeX-Imports, insbesondere die Umwandlung von LaTeX-codierten
+Sonderzeichen (z. B. Umlaute) in ihre Unicode-Entsprechungen, wird das Programm **Pandoc**
+benötigt. Es wird hierbei empfohlen eine möglichst aktuelle Version zu verwenden,
+mindestens aber Version 2.0. Das BibTeX-Import-Feature wurde ausführlich mit Pandoc 2.9
+getestet, welches mit den aktuellen Ubuntu-Versionen (2020.10 und 2021.04) über die
+Paketverwaltung installiert werden kann.
+
+Nach dem Import einer BibTeX-Datei (sowohl über CLI als auch das Webformular) wird ein
+Protokoll über die Verarbeitungsschritte ausgegeben, aus dem u. a. hervorgeht, wie viele
+BibTeX-Einträge aus der zu importierenden Daten erfolgreich in die OPUS 4 Datenbank
+übernommen wurden. Im Falle von Verarbeitungsfehlern erfolgt an dieser Stelle eine
+Ausgabe mit weiteren Details zur späteren Nachverfolgung.
+
+Im OPUS 4 Handbuch gibt es eine neue Seite, auf der die Optionen des CLI-Befehls für
+den BibTeX-Import ausführlich beschrieben werden:
+
+<http://www.opus-repository.org/userdoc/import/bibtex.html>
+
+
+# OPUS Framework Package
+
+## API
+
+Die `deletePermanent` Funktion von `Opus\Document`, um Dokumente vollständig zu
+löschen, wurde entfernt. Die `delete` Funktion löscht Dokumente jetzt vollständig,
+anstatt sie nur in den Server-Status **deleted** zu versetzen. Um Dokumente als
+gelöscht zu markieren ohne sie komplett zu entfernen, muss nun `serServerState`
+verwendet werden.
+
+$doc->setServerState(Document::STATE_DELETED);
+$doc->store();
+
+Dies muss unter Umständen bei eigenen Skripten berücksichtigt werden.
+
+## PHP Namespaces
+
+Der Code des OPUS Frameworks wurde in Vorbereitung auf die Migration zu Laminas
+auf PHP Namespaces umgestellt und die Verwendung der Klassen in der Application
+entsprechend angepasst.
+
+---
 
 ---
 
@@ -62,15 +170,17 @@ mehr überschrieben.
 
 ## Patch Release 4.7.0.5 2021-08-17
 
-Dieser Patch Release behebt zwei kleinere Bugs. Das Editieren der Inhalte der 
-Impressum und Kontakt-Seite ist nun auch von der FAQ-Seite aus ohne Probleme beim 
+Dieser Patch Release behebt zwei kleinere Bugs. Das Editieren der Inhalte der
+Impressum und Kontakt-Seite ist nun auch von der FAQ-Seite aus ohne Probleme beim
 Speichern möglich.
-Von den Suchlinks für Autoren in der Anzeige von Suchergebnissen wurden 
+Von den Suchlinks für Autoren in der Anzeige von Suchergebnissen wurden
 Anführungszeichen entfernt. Damit funktioniert die Autorensuche nun zuverlässiger,
 insbesondere auch mit Namen, die  Bindestriche enthalten.
 
-Die Deklaration des Namespaces "xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-erfolgt nun beim OAI-Export in jedem Metadata Wurzel Element (GH-412). 
+Die Deklaration des Namespaces "xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+erfolgt nun beim OAI-Export in jedem Metadata Wurzel Element (GH-412).
+
+---
 
 ---
 

@@ -28,12 +28,17 @@
  * @package     Module_Sword
  * @author      Sascha Szott
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2016-2017
+ * @copyright   Copyright (c) 2016-2021
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  *
  * TODO use OPUS 4 base class?
+ * TODO too much code in this controller
+ * TODO change AdditionalEnrichments into something like ImportInfo and make it easy to access properties like "user"
  */
-class Sword_DepositController extends Zend_Rest_Controller
+
+use Opus\Log;
+
+class Sword_DepositController extends \Zend_Rest_Controller
 {
 
     public function init()
@@ -42,6 +47,9 @@ class Sword_DepositController extends Zend_Rest_Controller
         $this->getHelper('ViewRenderer')->setNoRender();
     }
 
+    /**
+     * TODO This function does too much.
+     */
     public function postAction()
     {
         $request = $this->getRequest();
@@ -101,30 +109,39 @@ class Sword_DepositController extends Zend_Rest_Controller
             }
         }
 
+        // TODO data is stored again within handlePackage - that should be avoied
+        $filename = $this->generatePackageFileName($additionalEnrichments);
+        $config = Application_Configuration::getInstance();
+        $filePath = $config->getWorkspacePath() . 'import/' . $filename;
+        file_put_contents($filePath, $payload);
+
+        $errorDoc = null;
+
         try {
             $statusDoc = $packageHandler->handlePackage($payload);
             if (is_null($statusDoc)) {
                 // im Archiv befindet sich keine Datei opus.xml oder die Datei ist leer
                 $errorDoc = new Sword_Model_ErrorDocument($request, $response);
                 $errorDoc->setMissingXml();
-                return;
-            }
-
-            if ($statusDoc->noDocImported()) {
+            } elseif ($statusDoc->noDocImported()) {
                 // im Archiv befindet sich zwar ein nicht leeres opus.xml; es
                 // konnte aber kein Dokument erfolgreich importiert werden
                 $errorDoc = new Sword_Model_ErrorDocument($request, $response);
                 $errorDoc->setInternalFrameworkError();
-                return;
             }
         } catch (Application_Import_MetadataImportInvalidXmlException $ex) {
             $errorDoc = new Sword_Model_ErrorDocument($request, $response);
             $errorDoc->setInvalidXml();
-            return;
         } catch (Exception $ex) {
             $errorDoc = new Sword_Model_ErrorDocument($request, $response);
+        }
+
+        if ($errorDoc !== null) {
             return;
         }
+
+        // cleanup file after successful import
+        unlink($filePath);
 
         $this->returnAtomEntryDocument($statusDoc, $request, $response, $userName);
     }
@@ -154,7 +171,7 @@ class Sword_DepositController extends Zend_Rest_Controller
 
         $maxUploadSize = (new Application_Configuration_MaxUploadSize())->getMaxUploadSizeInByte();
         if ($size > $maxUploadSize) {
-            $log = Zend_Registry::get('Zend_Log');
+            $log = Log::get();
             $log->warn('current package size ' . $size . ' exceeds the maximum upload size ' . $maxUploadSize);
             return true;
         }
@@ -183,7 +200,7 @@ class Sword_DepositController extends Zend_Rest_Controller
     private function getFullUrl()
     {
         $fullUrlHelper = new Application_View_Helper_FullUrl();
-        $fullUrlHelper->setView(new Zend_View());
+        $fullUrlHelper->setView(new \Zend_View());
         return $fullUrlHelper->fullUrl();
     }
 
@@ -216,5 +233,17 @@ class Sword_DepositController extends Zend_Rest_Controller
     public function deleteAction()
     {
         $this->return500($this->getResponse());
+    }
+
+    /**
+     * Generates a name for storing the package as a file.\
+     * @param Application_Import_AdditionalEnrichments $importInfo
+     */
+    protected function generatePackageFileName($importInfo)
+    {
+        $filename = $importInfo->getFileName();
+        $checksum = $importInfo->getChecksum();
+
+        return "$checksum-$filename";
     }
 }

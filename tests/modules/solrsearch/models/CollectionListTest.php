@@ -31,6 +31,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\CollectionRole;
+use Opus\Model\ModelException;
+
 class Solrsearch_Model_CollectionListTest extends ControllerTestCase
 {
 
@@ -225,12 +228,12 @@ class Solrsearch_Model_CollectionListTest extends ControllerTestCase
     /**
      * Teste das Ausblenden von leeren Sammlungen am Beispiel der MSC.
      *
-     * @throws Opus_Model_Exception
+     * @throws ModelException
      * @throws Solrsearch_Model_Exception
      */
     public function testGetChildrenWithoutEmptyCollections()
     {
-        $collRole = Opus_CollectionRole::fetchByName('msc');
+        $collRole = CollectionRole::fetchByName('msc');
         $hideEmptyCollections = $collRole->getHideEmptyCollections();
         $collRole->setHideEmptyCollections(1);
         $collRole->store();
@@ -251,7 +254,7 @@ class Solrsearch_Model_CollectionListTest extends ControllerTestCase
 
     private function getCollectionRole($collectionRoleId)
     {
-        $collectionRole = new Opus_CollectionRole($collectionRoleId);
+        $collectionRole = new CollectionRole($collectionRoleId);
         $this->assertNotNull($collectionRole);
         $this->assertEquals('1', $collectionRole->getVisible());
         $this->assertEquals('1', $collectionRole->getVisibleBrowsingStart());

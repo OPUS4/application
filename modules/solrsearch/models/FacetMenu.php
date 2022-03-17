@@ -32,6 +32,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\CollectionRole;
+
 /**
  * Class Solrsearch_Model_FacetMenu
  *
@@ -103,7 +105,7 @@ class Solrsearch_Model_FacetMenu extends Application_Model_Abstract
         }
 
         // Hide institutes facet if collection does not exist or is hidden TODO handle somewhere else
-        $institutes = Opus_CollectionRole::fetchByName('institutes');
+        $institutes = CollectionRole::fetchByName('institutes');
 
         if (is_null($institutes) || ! $institutes->getVisible()) {
             unset($facetArray['institute']);

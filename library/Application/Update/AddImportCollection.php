@@ -25,6 +25,10 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+use Opus\Collection;
+use Opus\CollectionRole;
+use Opus\EnrichmentKey;
+
 /**
  * Add import collection if necessary.
  *
@@ -57,11 +61,11 @@ class Application_Update_AddImportCollection extends Application_Update_PluginAb
 
     public function addEnrichmentKey($name)
     {
-        $enrichmentKey = Opus_EnrichmentKey::fetchByName($name);
+        $enrichmentKey = EnrichmentKey::fetchByName($name);
 
         if (is_null($enrichmentKey)) {
             $this->log("Creating enrichment key '$name' ... ");
-            $enrichmentKey = new Opus_EnrichmentKey();
+            $enrichmentKey = new EnrichmentKey();
             $enrichmentKey->setName($name);
             $enrichmentKey->store();
         }
@@ -69,12 +73,12 @@ class Application_Update_AddImportCollection extends Application_Update_PluginAb
 
     public function addCollection()
     {
-        $collectionRole = Opus_CollectionRole::fetchByName('Import');
+        $collectionRole = CollectionRole::fetchByName('Import');
 
         if (is_null($collectionRole)) {
             $this->log("Creating collection role 'Import' ... ");
 
-            $collectionRole = new Opus_CollectionRole();
+            $collectionRole = new CollectionRole();
 
             $collectionRole->setName('Import');
             $collectionRole->setOaiName('import');
@@ -83,7 +87,7 @@ class Application_Update_AddImportCollection extends Application_Update_PluginAb
             $collectionRole->setDisplayBrowsing('Number');
             $collectionRole->setDisplayFrontdoor('Number');
             $collectionRole->setVisibleOai(0);
-            $collectionRole->setPosition(Opus_CollectionRole::getLastPosition() + 1);
+            $collectionRole->setPosition(CollectionRole::getLastPosition() + 1);
             $root = $collectionRole->addRootCollection();
             $collectionRole->store();
         } else {
@@ -97,7 +101,7 @@ class Application_Update_AddImportCollection extends Application_Update_PluginAb
         if (is_null($collection)) {
             $this->log("Creating collection 'import' ... ");
 
-            $collection = new Opus_Collection();
+            $collection = new Collection();
             $collection->setName('Import');
             $collection->setNumber('import');
             $collection->setOaiSubset('import');

@@ -28,8 +28,10 @@
  * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
+use Opus\Document;
+use Opus\Repository;
 
 /**
  *
@@ -39,12 +41,15 @@
  *
  * Siehe dazu auch das Ticket OPUSVIER-2853.
  *
+ * TODO convert to command for index analysis
  */
 $numOfModified = 0;
 $numOfErrors = 0;
-$finder = new Opus_DocumentFinder();
+
+$finder = Repository::getInstance()->getDocumentFinder();
 $finder->setServerState('published');
-foreach ($finder->ids() as $docId) {
+
+foreach ($finder->getIds() as $docId) {
     // check if document with id $docId is already persisted in search index
     $search = Opus\Search\Service::selectSearchingService();
     $query  = Opus\Search\QueryFactory::selectDocumentById($search, $docId);
@@ -55,7 +60,7 @@ foreach ($finder->ids() as $docId) {
     } else {
         $result = $search->getResults();
         $solrModificationDate = $result[0]->getServerDateModified();
-        $document = new Opus_Document($docId);
+        $document = Document::get($docId);
         $docModificationDate = $document->getServerDateModified()->getUnixTimestamp();
         if ($solrModificationDate != $docModificationDate) {
             $numOfModified++;
@@ -63,6 +68,7 @@ foreach ($finder->ids() as $docId) {
         }
     }
 }
+
 if ($numOfErrors > 0) {
     echo "$numOfErrors missing documents were found\n";
     echo "$numOfModified modified documents were found\n";

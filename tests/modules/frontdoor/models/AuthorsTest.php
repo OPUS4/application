@@ -30,6 +30,11 @@
  * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\Document;
+use Opus\Person;
+use Opus\Title;
+
 class Frontdoor_Model_AuthorsTest extends ControllerTestCase
 {
 
@@ -50,12 +55,12 @@ class Frontdoor_Model_AuthorsTest extends ControllerTestCase
         $document->setType('testtype');
         $document->setLanguage('deu');
 
-        $title = new Opus_Title();
+        $title = new Title();
         $title->setValue('testtitle');
         $title->setLanguage('deu');
         $document->setTitleMain($title);
 
-        $author1 = new Opus_Person();
+        $author1 = new Person();
         $author1->setFirstName('John');
         $author1->setLastName('Doe');
         $author1->setEmail('doe@example.org');
@@ -64,7 +69,7 @@ class Frontdoor_Model_AuthorsTest extends ControllerTestCase
         $link_person1 = $document->addPersonAuthor($author1);
         $link_person1->setAllowEmailContact('1');
 
-        $author2 = new Opus_Person();
+        $author2 = new Person();
         $author2->setFirstName('Jane');
         $author2->setLastName('Doe');
         $this->author2Id = $author2->store();
@@ -72,7 +77,7 @@ class Frontdoor_Model_AuthorsTest extends ControllerTestCase
         $link_person2 = $document->addPersonAuthor($author2);
         $link_person2->setAllowEmailContact('0');
 
-        $author3 = new Opus_Person();
+        $author3 = new Person();
         $author3->setFirstName('Jimmy');
         $author3->setLastName('Doe');
         $this->author3Id = $author3->store();
@@ -80,7 +85,7 @@ class Frontdoor_Model_AuthorsTest extends ControllerTestCase
         $link_person3 = $document->addPersonAuthor($author3);
         $link_person3->setAllowEmailContact('1');
 
-        $author4 = new Opus_Person();
+        $author4 = new Person();
         $author4->setFirstName('Foo');
         $author4->setLastName('Bar');
         $author4->setEmail('foo@bar.de');
@@ -197,7 +202,7 @@ class Frontdoor_Model_AuthorsTest extends ControllerTestCase
 
     public function testPublishedDocument()
     {
-        $doc = new Opus_Document($this->documentId);
+        $doc = Document::get($this->documentId);
         $model = new Frontdoor_Model_Authors($doc);
         $this->assertNotNull($model);
     }
@@ -205,7 +210,7 @@ class Frontdoor_Model_AuthorsTest extends ControllerTestCase
     public function testUnpublishedDocument()
     {
         $this->markTestIncomplete('TODO: ensure that this method is called with guest privileges');
-        $doc = new Opus_Document($this->unpublishedDocumentId);
+        $doc = Document::get($this->unpublishedDocumentId);
         $this->setExpectedException('Frontdoor_Model_Exception', 'access to requested document is forbidden');
         new Frontdoor_Model_Authors($doc);
     }

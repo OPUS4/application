@@ -29,8 +29,10 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
+use Opus\Document;
+use Opus\Licence;
 
 /**
  * Formular fuer das Editieren der Lizenzen eines Dokuments.
@@ -66,7 +68,7 @@ class Admin_Form_Document_Licences extends Admin_Form_AbstractDocumentSubForm
     {
         parent::init();
 
-        $licences = Opus_Licence::getAll();
+        $licences = Licence::getAll();
 
         foreach ($licences as $licence) {
             $element = new Application_Form_Element_Checkbox(self::ELEMENT_NAME_PREFIX . $licence->getId());
@@ -84,14 +86,14 @@ class Admin_Form_Document_Licences extends Admin_Form_AbstractDocumentSubForm
 
     /**
      * Setzt die dem Dokument zugewiesenen Lizenzen als ausgewählt im Formular.
-     * @param Opus_Document $document
+     * @param Document $document
      */
     public function populateFromModel($document)
     {
         $licences = $this->getElements();
 
         foreach ($licences as $element) {
-            if ($element instanceof Zend_Form_Element_Checkbox) {
+            if ($element instanceof \Zend_Form_Element_Checkbox) {
                 $licenceId = $element->getCheckedValue();
                 $element->setChecked($this->hasLicence($document, $licenceId));
             }
@@ -100,7 +102,7 @@ class Admin_Form_Document_Licences extends Admin_Form_AbstractDocumentSubForm
 
     /**
      * Aktualisiert die Liste der Lizenzen fuer ein Dokument.
-     * @param Opus_Document $document
+     * @param Document $document
      */
     public function updateModel($document)
     {
@@ -109,10 +111,10 @@ class Admin_Form_Document_Licences extends Admin_Form_AbstractDocumentSubForm
         $docLicences = [];
 
         foreach ($licences as $element) {
-            if ($element instanceof Zend_Form_Element_Checkbox) {
+            if ($element instanceof \Zend_Form_Element_Checkbox) {
                 $licenceId = $element->getCheckedValue();
                 if ($element->getValue() !== '0') {
-                    $docLicences[] = new Opus_Licence($licenceId);
+                    $docLicences[] = new Licence($licenceId);
                 }
             }
         }
@@ -123,8 +125,8 @@ class Admin_Form_Document_Licences extends Admin_Form_AbstractDocumentSubForm
     /**
      * Prueft, ob eine Lizenz einem Dokument zugewiesen ist.
      *
-     * @param Opus_Document $document
-     * @param Opus_Licence $licence
+     * @param Document $document
+     * @param Licence $licence
      * @return boolean true - Lizenz zugewiesen; false - Lizenz nicht zugewiesen
      */
     public function hasLicence($document, $licenceId)

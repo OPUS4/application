@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,26 +25,28 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Application_Util
- * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2022, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
+use Opus\Document;
+use Opus\Model\Xml;
+use Opus\Model\Xml\Version1;
+use Opus\Repository;
+use Opus\Security\Realm;
 
 class Application_Util_Document
 {
 
     /**
      *
-     * @var Opus_Document
+     * @var Document
      */
     private $_document;
 
     /**
      *
-     * @param Opus_Document $document
+     * @param Document $document
      * @throws Application_Exception
      */
     public function __construct($document)
@@ -62,23 +65,25 @@ class Application_Util_Document
         if ($this->_document->getServerState() === 'published') {
             return true;
         }
-        $accessControl = Zend_Controller_Action_HelperBroker::getStaticHelper('accessControl');
-        return Opus_Security_Realm::getInstance()->checkDocument($this->_document->getId())
+        $accessControl = \Zend_Controller_Action_HelperBroker::getStaticHelper('accessControl');
+        return Realm::getInstance()->checkDocument($this->_document->getId())
                 || $accessControl->accessAllowed('documents');
     }
 
     /**
      * @param boolean $useCache
-     * @return DOMNode Opus_Document node
+     * @return DOMNode Document node
      */
     public function getNode($useCache = true)
     {
-        $xmlModel = new Opus_Model_Xml();
+        $cache = Repository::getInstance()->getDocumentXmlCache();
+
+        $xmlModel = new Xml();
         $xmlModel->setModel($this->_document);
         $xmlModel->excludeEmptyFields(); // needed for preventing handling errors
-        $xmlModel->setStrategy(new Opus_Model_Xml_Version1);
+        $xmlModel->setStrategy(new Version1);
         if ($useCache) {
-              $xmlModel->setXmlCache(new Opus_Model_Xml_Cache);
+              $xmlModel->setXmlCache($cache);
         }
         $result = $xmlModel->getDomDocument();
         return $result->getElementsByTagName('Opus_Document')->item(0);

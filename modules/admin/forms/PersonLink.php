@@ -31,8 +31,10 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Model\Dependent\Link\DocumentPerson;
+
 /**
- * Formular für die Felder von Opus_Model_Dependent_Link_DocumentPerson.
+ * Formular für die Felder von DocumentPerson.
  *
  * Das sind folgende Felder.
  *
@@ -47,7 +49,7 @@ class Admin_Form_PersonLink extends Admin_Form_AbstractDocumentSubForm
     /**
      * Nachricht für Funktionsaufruf mit falschem Model Parameter.
      */
-    const BAD_MODEL_MESSAGE = ' Called with object that is not instance of Opus_Model_Dependent_Link_DocumentPerson';
+    const BAD_MODEL_MESSAGE = ' Called with object that is not instance of Opus\Model\Dependent\Link\DocumentPerson';
 
     /**
      * Name fuer Formularelement fuer Feld AllowEmailContact.
@@ -66,7 +68,7 @@ class Admin_Form_PersonLink extends Admin_Form_AbstractDocumentSubForm
 
     /**
      * Link-Model das angezeigt wird.
-     * @var \Opus_Model_Dependent_Link_DocumentPerson
+     * @var DocumentPerson
      */
     private $_model = null;
 
@@ -90,11 +92,11 @@ class Admin_Form_PersonLink extends Admin_Form_AbstractDocumentSubForm
 
     /**
      * Initialisiert Formular mit Werten aus Model.
-     * @param Opus_Model_Dependent_Link_DocumentPerson $personLink
+     * @param DocumentPerson $personLink
      */
     public function populateFromModel($personLink)
     {
-        if ($personLink instanceof Opus_Model_Dependent_Link_DocumentPerson) {
+        if ($personLink instanceof DocumentPerson) {
             $this->getElement(self::ELEMENT_ALLOW_CONTACT)->setValue($personLink->getAllowEmailContact());
             $this->getElement(self::ELEMENT_SORT_ORDER)->setValue($personLink->getSortOrder());
             $this->getElement(Admin_Form_Person::ELEMENT_PERSON_ID)->setValue($personLink->getModel()->getId());
@@ -107,11 +109,11 @@ class Admin_Form_PersonLink extends Admin_Form_AbstractDocumentSubForm
 
     /**
      * Setzt Werte im Model mit dem Inhalt der Formularelemente.
-     * @param Opus_Model_Dependent_Link_DocumentPerson $personLink
+     * @param DocumentPerson $personLink
      */
     public function updateModel($personLink)
     {
-        if ($personLink instanceof Opus_Model_Dependent_Link_DocumentPerson) {
+        if ($personLink instanceof DocumentPerson) {
             $personLink->setAllowEmailContact($this->getElementValue(self::ELEMENT_ALLOW_CONTACT));
             $personLink->setSortOrder($this->getElementValue(self::ELEMENT_SORT_ORDER));
             $personLink->setRole($this->getElementValue(self::ELEMENT_ROLE));
@@ -122,7 +124,7 @@ class Admin_Form_PersonLink extends Admin_Form_AbstractDocumentSubForm
 
     /**
      * Liefert angezeigtes Model.
-     * @return \Opus_Model_Dependent_Link_DocumentPerson
+     * @return DocumentPerson
      */
     public function getModel()
     {

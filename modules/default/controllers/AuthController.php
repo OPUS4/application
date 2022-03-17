@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -31,8 +30,10 @@
  * @author      Pascal-Nicolas Becker <becker@zib.de>
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
+use Opus\Security\AuthAdapter;
+use Opus\Security\AuthAdapter\Ldap;
 
 /**
  * Provides actions for basic authenticating login and logout.
@@ -79,7 +80,7 @@ class AuthController extends Application_Controller_Action
      */
     public function indexAction()
     {
-        $identity = Zend_Auth::getInstance()->getIdentity();
+        $identity = \Zend_Auth::getInstance()->getIdentity();
         if (empty($identity) === true) {
             return $this->loginAction();
         }
@@ -97,7 +98,7 @@ class AuthController extends Application_Controller_Action
     public function loginAction()
     {
         // Redirect to start page if user is already logged in
-        $identity = Zend_Auth::getInstance()->getIdentity();
+        $identity = \Zend_Auth::getInstance()->getIdentity();
         if (empty($identity) !== true) {
             $this->_helper->_redirector('index', 'index', 'home', []);
             return;
@@ -139,12 +140,12 @@ class AuthController extends Application_Controller_Action
         }
 
         // Form data is valid (including the hash field)
-        $auth = new Opus_Security_AuthAdapter();
+        $auth = new AuthAdapter();
 
         // Overwrite auth adapter if config-key is set.
         $config = $this->getConfig();
         if (isset($config, $config->authenticationModule) and ($config->authenticationModule === 'Ldap')) {
-            $auth = new Opus_Security_AuthAdapter_Ldap();
+            $auth = new Ldap();
         }
 
         // Perfom authentication attempt
@@ -168,7 +169,7 @@ class AuthController extends Application_Controller_Action
 
         // Persistent the successful authenticated identity.
         $logger->notice("Successful login attempt of user '" . ($login) . "'.");
-        Zend_Auth::getInstance()->getStorage()->write(strtolower($login));
+        \Zend_Auth::getInstance()->getStorage()->write(strtolower($login));
 
         // Redirect to post login url.
         $action = $this->_loginUrl['action'];
@@ -185,45 +186,45 @@ class AuthController extends Application_Controller_Action
      */
     public function logoutAction()
     {
-        Zend_Auth::getInstance()->clearIdentity();
+        \Zend_Auth::getInstance()->clearIdentity();
         return $this->_helper->_redirector('index', 'index', 'home');
     }
 
     /**
      * Assembles and returns a login form.
      *
-     * @return unknown
+     * @return \Zend_Form
      */
     protected function getLoginForm()
     {
-        $form = new Zend_Form();
+        $form = new \Zend_Form();
 
         // Add hash element to detect counterfeit formular data via validation.
-        $hash = new Zend_Form_Element_Hash('hash');
+        $hash = new \Zend_Form_Element_Hash('hash');
 
         // Login name element.
-        $login = new Zend_Form_Element_Text('login');
-        $login->addValidator(new Zend_Validate_Regex('/^[A-Za-z0-9@._-]+$/'))
+        $login = new \Zend_Form_Element_Text('login');
+        $login->addValidator(new \Zend_Validate_Regex('/^[A-Za-z0-9@._-]+$/'))
                 ->setRequired()
                 ->setLabel('auth_field_login');
         $login->addErrorMessages(
             [
-            Zend_Validate_NotEmpty::IS_EMPTY => 'auth_error_no_username'
+            \Zend_Validate_NotEmpty::IS_EMPTY => 'auth_error_no_username'
             ]
         );
 
         // Password element.
-        $password = new Zend_Form_Element_Password('password');
+        $password = new \Zend_Form_Element_Password('password');
         $password->setRequired()
                 ->setLabel('auth_field_password');
         $password->addErrorMessages(
             [
-            Zend_Validate_NotEmpty::IS_EMPTY => 'auth_error_no_password'
+            \Zend_Validate_NotEmpty::IS_EMPTY => 'auth_error_no_password'
             ]
         );
 
         // Submit button.
-        $submit = new Zend_Form_Element_Submit('SubmitCredentials');
+        $submit = new \Zend_Form_Element_Submit('SubmitCredentials');
         $submit->setLabel('Login');
 
         $form->setMethod('POST');

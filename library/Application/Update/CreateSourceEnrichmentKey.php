@@ -31,6 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\EnrichmentKey;
+
 /**
  * Update step that adds enrichment key opus.source if it does not exist.
  */
@@ -40,11 +42,11 @@ class Application_Update_CreateSourceEnrichmentKey extends Application_Update_Pl
 
     public function run()
     {
-        $enrichmentKey = Opus_EnrichmentKey::fetchByName(self::ENRICHMENT_KEY_NAME);
+        $enrichmentKey = EnrichmentKey::fetchByName(self::ENRICHMENT_KEY_NAME);
 
         if (is_null($enrichmentKey)) {
             $this->log("Creating enrichment key '" . self::ENRICHMENT_KEY_NAME . "' …");
-            $enrichmentKey = new Opus_EnrichmentKey();
+            $enrichmentKey = new EnrichmentKey();
             $enrichmentKey->setName(self::ENRICHMENT_KEY_NAME);
             $enrichmentKey->store();
             $this->getLogger()->info("Enrichment key '" . self::ENRICHMENT_KEY_NAME . "' created successfully.");

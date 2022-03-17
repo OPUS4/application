@@ -30,6 +30,8 @@
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\Config;
 ?>
 
 <?php if (! empty($this->parents)) : ?>
@@ -69,7 +71,7 @@
 <h2><?= htmlspecialchars($this->title) ?></h2>
 
 <?php
-    $config = Zend_Registry::get('Zend_Config');
+    $config = Config::get();
     $this->disableEmptyCollections = isset($config->browsing->disableEmptyCollections) &&
         filter_var($config->browsing->disableEmptyCollections, FILTER_VALIDATE_BOOLEAN);
     $collRoleName = htmlspecialchars($this->collectionRole->getName(), ENT_QUOTES);

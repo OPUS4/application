@@ -57,6 +57,9 @@ class Application_View_Helper_ExportLinksTest extends ControllerTestCase
 
     public function testToStringForFrontdoor()
     {
+        // Restricted format are only setup during request processing (OPUS4/application#516)
+        $this->dispatch('/home');
+
         $exportLink = new Application_View_Helper_ExportLinks();
 
         $this->assertEquals(
@@ -73,7 +76,7 @@ class Application_View_Helper_ExportLinksTest extends ControllerTestCase
 
     public function testRenderLink()
     {
-        $page = new Zend_Navigation_Page_Mvc([
+        $page = new \Zend_Navigation_Page_Mvc([
             'name' => 'bibtex',
             'description' => 'Export BibTeX',
             'module' => 'citationExport',

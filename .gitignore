@@ -7,10 +7,12 @@ db/schema
 
 # ignore any third-party library
 vendor
+.vagrant
 
 # ignore composer runtime
 composer.phar
 composer.lock
+bin/composer
 
 # ignore all workspace files
 workspace/**/*

@@ -33,6 +33,11 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Collection;
+use Opus\Series;
+use Opus\Model\ModelException;
+use Opus\Respository;
+
 class Publish_Model_ExtendedValidation
 {
 
@@ -210,7 +215,7 @@ class Publish_Model_ExtendedValidation
 
     /**
      * Retrieves all first names from form data
-     * @return <Array> of first names
+     * @return array Of first names
      */
     private function _getPersonFirstNameFields()
     {
@@ -413,7 +418,7 @@ class Publish_Model_ExtendedValidation
 
     /**
      * Retrieves all title language fields from form data
-     * @return <Array> of languages
+     * @return array Languages
      */
     private function _getTitleLanguageFields()
     {
@@ -430,7 +435,7 @@ class Publish_Model_ExtendedValidation
 
     /**
      * Retrieves all title fields from form data
-     * @return <Array> of titles
+     * @return array Titles
      */
     private function _getTitleFields()
     {
@@ -447,7 +452,7 @@ class Publish_Model_ExtendedValidation
 
     /**
      * Retrieves all title main fields from form data
-     * @return <Array> of main titles
+     * @return array Main titles
      */
     private function _getTitleMainFields()
     {
@@ -465,7 +470,7 @@ class Publish_Model_ExtendedValidation
 
     /**
      * Retrieves all title main language fields from form data
-     * @return <Array> of languages
+     * @return array Languages
      */
     private function _getTitleMainLanguageFields()
     {
@@ -554,7 +559,7 @@ class Publish_Model_ExtendedValidation
 
     /**
      * Retrieves all language fields from form data
-     * @return <Array> of languages
+     * @return array Languages
      */
     private function _getSubjectFields()
     {
@@ -634,8 +639,8 @@ class Publish_Model_ExtendedValidation
             if (isset($collId)) {
                 $coll = null;
                 try {
-                    $coll = new Opus_Collection($collId);
-                } catch (Opus_Model_Exception $e) {
+                    $coll = new Collection($collId);
+                } catch (ModelException $e) {
                     $this->log->err("could not instantiate Opus_Collection with id $collId", $e);
                     $collectionLeafSelection = false;
                 }
@@ -710,9 +715,9 @@ class Publish_Model_ExtendedValidation
                     $seriesId = $matches[1];
                     $currSeries = null;
                     try {
-                        $currSeries = new Opus_Series($seriesId);
-                    } catch (Opus_Model_Exception $e) {
-                        $this->log->err(__METHOD__ . " could not instantiate Opus_Series with id $seriesId", $e);
+                        $currSeries = new Series($seriesId);
+                    } catch (ModelException $e) {
+                        $this->log->err(__METHOD__ . " could not instantiate Opus\Series with id $seriesId", $e);
                         $validSeries = false;
                     }
 
@@ -789,9 +794,9 @@ class Publish_Model_ExtendedValidation
         }
 
         // check URN $urn for collision
-        $finder = new Opus_DocumentFinder();
-        $finder->setIdentifierTypeValue('urn', $value);
-        if ($finder->count() == 0) {
+        $finder = Repository::getInstance()->getDocumentFinder();
+        $finder->setIdentifierValue('urn', $value);
+        if ($finder->getCount() === 0) {
             return true;
         }
 
@@ -820,10 +825,10 @@ class Publish_Model_ExtendedValidation
             return true;
         }
 
-        $finder = new Opus_DocumentFinder();
-        $finder->setIdentifierTypeValue('doi', $value);
+        $finder = Repository::getInstance()->getDocumentFinder();
+        $finder->setIdentifierValue('doi', $value);
 
-        if ($finder->count() == 0) {
+        if ($finder->getCount() == 0) {
             return true;
         }
 

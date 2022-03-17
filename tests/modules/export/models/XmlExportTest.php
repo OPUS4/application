@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,13 +25,12 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Export
- * @author      Michael Lang <lang@zib.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2022, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\Title;
+use Opus\Db\DocumentXmlCache;
 
 /**
  * Class Export_Model_XmlExportTest
@@ -40,7 +40,7 @@
 class Export_Model_XmlExportTest extends ControllerTestCase
 {
 
-    protected $additionalResources = ['database', 'authz'];
+    protected $additionalResources = ['database'];
 
     /**
      * @var \Export_Model_XmlExport
@@ -55,7 +55,7 @@ class Export_Model_XmlExportTest extends ControllerTestCase
         $plugin->setRequest($this->getRequest());
         $plugin->setResponse($this->getResponse());
         $plugin->init();
-        $plugin->setConfig(new Zend_Config([
+        $plugin->setConfig(new \Zend_Config([
             'class' => 'Export_Model_XmlExport',
             'maxDocumentsGuest' => '100',
             'maxDocumentsUser' => '500',
@@ -68,7 +68,7 @@ class Export_Model_XmlExportTest extends ControllerTestCase
     {
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
-        $title = new Opus_Title();
+        $title = new Title();
         $title->setLanguage('deu');
         $title->setValue('Deutscher Titel');
         $doc->setTitleMain($title);
@@ -91,7 +91,7 @@ class Export_Model_XmlExportTest extends ControllerTestCase
     {
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
-        $title = new Opus_Title();
+        $title = new Title();
         $title->setLanguage('deu');
         $title->setValue('Deutscher Titel');
         $doc->setTitleMain($title);
@@ -158,7 +158,7 @@ class Export_Model_XmlExportTest extends ControllerTestCase
         $thirdDocId = $thirdDoc->store();
 
         // Dokument aus dem Cache löschen
-        $documentCacheTable = new Opus_Db_DocumentXmlCache();
+        $documentCacheTable = new DocumentXmlCache();
         $documentCacheTable->delete('document_id = ' . $secondDocId);
         $documentCacheTable->delete('document_id = ' . $firstDocId);
 
@@ -273,9 +273,9 @@ class Export_Model_XmlExportTest extends ControllerTestCase
 
         $plugin->setDownloadEnabled(null);
 
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        $this->adjustConfiguration([
             'export' => ['download' => self::CONFIG_VALUE_FALSE]
-        ]));
+        ]);
 
         $this->assertFalse($plugin->isDownloadEnabled());
     }
@@ -290,11 +290,11 @@ class Export_Model_XmlExportTest extends ControllerTestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
      * @dataProvider setDownloadEnabledInvalidArgumentProvider
      */
     public function testSetDownloadEnabledInvalidArgument($argument)
     {
+        $this->setExpectedException(InvalidArgumentException::class);
         $this->plugin->setDownloadEnabled($argument);
     }
 
@@ -304,7 +304,7 @@ class Export_Model_XmlExportTest extends ControllerTestCase
 
         $this->assertEquals('text/xml', $plugin->getContentType());
 
-        $config = new Zend_Config(['contentType' => 'text/plain']);
+        $config = new \Zend_Config(['contentType' => 'text/plain']);
 
         $plugin->setContentType(null); // clear cached content type
 
@@ -319,7 +319,7 @@ class Export_Model_XmlExportTest extends ControllerTestCase
 
         $plugin->setContentType(null);
 
-        $plugin->setConfig(new Zend_Config([]));
+        $plugin->setConfig(new \Zend_Config([]));
 
         $this->assertEquals('text/xml', $plugin->getContentType());
     }
@@ -341,7 +341,7 @@ class Export_Model_XmlExportTest extends ControllerTestCase
 
         $plugin->setAttachmentFilename(null); // clear cached name
 
-        $plugin->setConfig(new Zend_Config(['attachmentFilename' => 'article.pdf']));
+        $plugin->setConfig(new \Zend_Config(['attachmentFilename' => 'article.pdf']));
 
         $this->assertEquals('article.pdf', $plugin->getAttachmentFilename());
     }

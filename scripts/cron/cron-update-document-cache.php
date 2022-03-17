@@ -26,41 +26,47 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @author      Edouard Simon <edouard.simon@zib.de>
- * @copyright   Copyright (c) 2011-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2011-2022, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
+/**
+ * TODO is this script needed for performance reasons?
+ * TODO convert into class for use as Command
+ */
+
+// TODO Why set to development?
 define('APPLICATION_ENV', 'development');
 
 // Bootstrapping
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
-$opusDocCacheTable = new Opus_Db_DocumentXmlCache();
-$db = Zend_Registry::get('db_adapter');
-//
-$select = $db->select();
-$select->from($opusDocCacheTable->info('name'), 'document_id');
+use Opus\Document;
+use Opus\Model\Xml;
+use Opus\Model\Xml\Version1;
+use Opus\Repository;
 
-$docFinder = new Opus_DocumentFinder();
-$docFinder->setSubSelectNotExists($select);
-$docIds = $docFinder->ids();
+$repository = Repository::getInstance();
 
-echo "processing ".count($docIds)." documents\n";
+$finder = $repository->getDocumentFinder();
+$cache = $repository->getDocumentXmlCache();
+
+$docIds = $finder->setNotInXmlCache()->getIds();
+
+echo 'Processing ' . count($docIds) . ' documents' . PHP_EOL;
 
 foreach ($docIds as $docId) {
-    $model = new Opus_Document($docId);
-
-    $cache = new Opus_Model_Xml_Cache;
+    $document = Document::get($docId);
 
     // xml version 1
-    $omx = new Opus_Model_Xml();
-    $omx->setStrategy(new Opus_Model_Xml_Version1)
+    $omx = new Xml();
+    $omx->setStrategy(new Version1())
         ->excludeEmptyFields()
-        ->setModel($model)
+        ->setModel($document)
         ->setXmlCache($cache);
-    $dom = $omx->getDomDocument();
-    echo "Cache refreshed for document#$docId\n";
+
+    // TODO cache is updated as a side effect (that is not ideal and might not always be true)
+    $omx->getDomDocument();
+
+    echo "Cache refreshed for document #$docId\n";
 }

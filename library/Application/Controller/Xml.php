@@ -30,7 +30,6 @@
  * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
  * @copyright   Copyright (c) 2009, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -45,21 +44,21 @@ class Application_Controller_Xml extends Application_Controller_ModuleAccess
     /**
      * Holds xml representation of document information to be processed.
      *
-     * @var DomDocument  Defaults to null.
+     * @var \DomDocument  Defaults to null.
      */
     protected $_xml = null;
 
     /**
      * Holds the stylesheet for the transformation.
      *
-     * @var DomDocument  Defaults to null.
+     * @var \DomDocument  Defaults to null.
      */
     protected $_xslt = null;
 
     /**
      * Holds the xslt processor.
      *
-     * @var XSLTProcessor  Defaults to null.
+     * @var \XSLTProcessor  Defaults to null.
      */
     protected $_proc = null;
 
@@ -74,8 +73,8 @@ class Application_Controller_Xml extends Application_Controller_ModuleAccess
         $this->disableViewRendering();
 
         // Initialize member variables.
-        $this->_xml = new DomDocument;
-        $this->_proc = new XSLTProcessor;
+        $this->_xml = new \DomDocument;
+        $this->_proc = new \XSLTProcessor;
     }
 
     /**
@@ -104,7 +103,7 @@ class Application_Controller_Xml extends Application_Controller_ModuleAccess
      */
     protected function loadStyleSheet($stylesheet)
     {
-        $this->_xslt = new DomDocument;
+        $this->_xslt = new \DomDocument;
         $this->_xslt->load($stylesheet);
         $this->_proc->importStyleSheet($this->_xslt);
         if (isset($_SERVER['HTTP_HOST'])) {

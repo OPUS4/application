@@ -1,4 +1,6 @@
-<?php
+#!/usr/bin/env php
+
+<?PHP
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -25,13 +27,16 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Scripts_Import
+ * @package     scripts/update
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-require_once dirname(__FILE__) . '/../common/bootstrap.php';
+require_once dirname(__FILE__) . '/../common/update.php';
 
-$importer = new Application_Import_BibtexImporter();
-$importer->run($argv);
+/**
+ */
+
+$update = new Application_Update_AddImportToWorkspace();
+$update->run();

@@ -27,17 +27,18 @@
  * @category    Application
  * @package     Form_Validate
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2013-2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
+use Opus\Log;
 
 /**
  * Prüft ob ein Wertfür ein Feld in Unterformularen mindestens einmal vorkommt.
  *
  * Wird für die Prüfung verwendet, ob ein TitleMain in der Dokumentensprache vorliegt.
  */
-class Application_Form_Validate_ValuePresentInSubforms extends Zend_Validate_Abstract
+class Application_Form_Validate_ValuePresentInSubforms extends \Zend_Validate_Abstract
 {
 
     /**
@@ -88,7 +89,7 @@ class Application_Form_Validate_ValuePresentInSubforms extends Zend_Validate_Abs
                 }
             }
         } else {
-            Zend_Registry::get('Zend_Log')->err(__CLASS__ . '::' . __METHOD__ . ' mit $context = null aufgerufen.');
+             Log::get()->err(__CLASS__ . '::' . __METHOD__ . ' mit $context = null aufgerufen.');
         }
 
         $this->_error(self::NOT_VALID);

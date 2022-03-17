@@ -40,8 +40,8 @@ class Publish_Form_PublishingSecondTest extends ControllerTestCase
 
     public function setUp()
     {
-        $writer = new Zend_Log_Writer_Null;
-        $this->_logger = new Zend_Log($writer);
+        $writer = new \Zend_Log_Writer_Null;
+        $this->_logger = new \Zend_Log($writer);
         parent::setUp();
     }
 
@@ -59,7 +59,7 @@ class Publish_Form_PublishingSecondTest extends ControllerTestCase
      */
     public function testConstructorWithDocTypeInSession()
     {
-        $session = new Zend_Session_Namespace('Publish');
+        $session = new \Zend_Session_Namespace('Publish');
         $session->documentType = 'preprint';
         $form = new Publish_Form_PublishingSecond($this->_logger);
         $this->assertNotNull($form->getElement('back'));
@@ -71,9 +71,9 @@ class Publish_Form_PublishingSecondTest extends ControllerTestCase
      */
     public function testIsValidWithInvalidData()
     {
-        $config = Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         $config->documentTypes->include = 'all,preprint,article,demo,workingpaper';
-        $session = new Zend_Session_Namespace('Publish');
+        $session = new \Zend_Session_Namespace('Publish');
         $session->documentType = 'workingpaper';
         $form = new Publish_Form_PublishingSecond($this->_logger);
         $data = [
@@ -90,9 +90,9 @@ class Publish_Form_PublishingSecondTest extends ControllerTestCase
      */
     public function testIsValidWithValidData()
     {
-        $config = Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         $config->documentTypes->include = 'all,preprint,article,demo,workingpaper';
-        $session = new Zend_Session_Namespace('Publish');
+        $session = new \Zend_Session_Namespace('Publish');
         $session->documentType = 'demo';
         $form = new Publish_Form_PublishingSecond($this->_logger);
         $data = [
@@ -109,9 +109,9 @@ class Publish_Form_PublishingSecondTest extends ControllerTestCase
      */
     public function testPrepareCheckMethodWithDemoType()
     {
-        $config = Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         $config->documentTypes->include = 'all,preprint,article,demo,workingpaper';
-        $session = new Zend_Session_Namespace('Publish');
+        $session = new \Zend_Session_Namespace('Publish');
         $session->documentType = 'demo';
 
         $form = new Publish_Form_PublishingSecond($this->_logger);
@@ -128,7 +128,7 @@ class Publish_Form_PublishingSecondTest extends ControllerTestCase
 
     public function testExternalElementLegalNotices()
     {
-        $session = new Zend_Session_Namespace('Publish');
+        $session = new \Zend_Session_Namespace('Publish');
         $session->documentType = 'all';
         $session->additionalFields = [];
 

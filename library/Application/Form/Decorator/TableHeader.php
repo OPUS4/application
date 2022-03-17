@@ -34,7 +34,7 @@
  * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Application_Form_Decorator_TableHeader extends Zend_Form_Decorator_Abstract
+class Application_Form_Decorator_TableHeader extends \Zend_Form_Decorator_Abstract
 {
 
     private $_columns = null;
@@ -48,7 +48,7 @@ class Application_Form_Decorator_TableHeader extends Zend_Form_Decorator_Abstrac
 
         $view = $this->getElement()->getView();
 
-        if (! $view instanceof Zend_View_Interface) {
+        if (! $view instanceof \Zend_View_Interface) {
             return $content;
         }
 

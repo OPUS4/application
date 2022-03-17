@@ -755,5 +755,23 @@
         </tuv>
       </tu>
 
+      <tu tuid="folder">
+        <tuv xml:lang="en">
+          <seg>Folder</seg>
+        </tuv>
+        <tuv xml:lang="de">
+          <seg>Verzeichnis</seg>
+        </tuv>
+      </tu>
+
+      <tu tuid="state">
+        <tuv xml:lang="en">
+          <seg>Status</seg>
+        </tuv>
+        <tuv xml:lang="de">
+          <seg>State</seg>
+        </tuv>
+      </tu>
+
     </body>
 </tmx>

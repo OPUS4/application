@@ -33,7 +33,7 @@
  * TODO clean up
  */
 
-class Application_View_Helper_FormatDate extends Zend_View_Helper_Abstract
+class Application_View_Helper_FormatDate extends \Zend_View_Helper_Abstract
 {
 
     /**
@@ -52,7 +52,7 @@ class Application_View_Helper_FormatDate extends Zend_View_Helper_Abstract
 
         $date = new DateTime();
         $date->setDate($year, $month, $day);
-        $session = new Zend_Session_Namespace();
+        $session = new \Zend_Session_Namespace();
 
         // TODO aktuell werden nur zwei Sprachen unterstützt
         $formatPattern = ($session->language == 'de') ? 'd.m.Y' : 'Y/m/d';
@@ -66,7 +66,7 @@ class Application_View_Helper_FormatDate extends Zend_View_Helper_Abstract
             return '';
         }
 
-        $session = new Zend_Session_Namespace();
+        $session = new \Zend_Session_Namespace();
 
         // TODO aktuell werden nur zwei Sprachen unterstützt
         if ($showTime) {

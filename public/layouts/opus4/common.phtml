@@ -33,9 +33,11 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-$config = Zend_Registry::get('Zend_Config');
+use Opus\Config;
 
-$pageLanguage = Zend_Registry::get('Zend_Translate')->getLocale();
+$config = Config::get();
+
+$pageLanguage = Application_Translate::getInstance()->getLocale();
 
 /**
  * Prevent indexing and following of links by web crawlers. Dynamic search pages should not be indexed, since their
@@ -83,7 +85,7 @@ $this->headLink()
         'href' => $this->serverUrl() . $this->baseUrl() . '/solrsearch/opensearch'
     ]);
 
-$this->container = Zend_Registry::get('Opus_Navigation');
+$this->container = \Zend_Registry::get('Opus_Navigation');
 
 $jsFiles = ['searchutil.js', 'frontdoorutil.js', 'submit.js'];
 
@@ -97,6 +99,7 @@ if (in_array($this->moduleName, ['admin', 'review', 'setup', 'account'])) {
 
 if (in_array($this->moduleName, ['admin'])) {
     $jsFiles[] = 'validation.js';
+    $jsFiles[] = 'upload.js';
 }
 
 if ($this->jQueryEnabled()) {

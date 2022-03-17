@@ -49,27 +49,27 @@ interface Application_Export_ExportPlugin
 
     /**
      * Sets the plugin configuration.
-     * @param Zend_Config $config
+     * @param \Zend_Config $config
      */
-    public function setConfig(Zend_Config $config = null);
+    public function setConfig(\Zend_Config $config = null);
 
     /**
      * Sets the HTTP request being processed.
-     * @param Zend_Controller_Request_Http $request
+     * @param \Zend_Controller_Request_Http $request
      */
-    public function setRequest(Zend_Controller_Request_Http $request);
+    public function setRequest(\Zend_Controller_Request_Http $request);
 
     /**
      * Sets the HTTP response.
-     * @param Zend_Controller_Response_Http $response
+     * @param \Zend_Controller_Response_Http $response
      */
-    public function setResponse(Zend_Controller_Response_Http $response);
+    public function setResponse(\Zend_Controller_Response_Http $response);
 
     /**
      * Sets the view objekt for rendering the response.
-     * @param Zend_View $view
+     * @param \Zend_View $view
      */
-    public function setView(Zend_View $view);
+    public function setView(\Zend_View $view);
 
     /**
      * Main function performing export.

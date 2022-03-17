@@ -127,4 +127,17 @@ class Application_View_Helper_JavascriptMessages extends Application_View_Helper
     {
         return $this->toString();
     }
+
+    /**
+     * Default message-set
+     */
+    public function getDefaultMessageSet()
+    {
+        $this->addMessage('uploadedFileHasErrorMessage');
+        $this->addMessage('fileExtensionFalse');
+        $this->addMessage('fileUploadErrorSize');
+        $this->addMessage('filenameLengthError');
+        $this->addMessage('filenameFormatError');
+        $this->addMessage('chooseAnotherFile');
+    }
 }

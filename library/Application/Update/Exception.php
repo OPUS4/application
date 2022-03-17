@@ -33,6 +33,8 @@
 
 /**
  * Exception class for problems during update.
+ *
+ * TODO NAMESPACE rename
  */
 class Application_Update_Exception extends Exception
 {

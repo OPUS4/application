@@ -1,5 +1,6 @@
 <?php
-/**
+
+/*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,45 +25,51 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Application_Import
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2020
+ * @copyright   Copyright (c) 2022, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Collection;
+use Opus\Model\NotFoundException;
+
 /**
- * Performs command line import of BibTeX file.
+ * Form element for editing a list of collections.
  *
- * TODO this class should only contain the command line specific code
- * TODO processing should be in other classes
- * TODO help output
- *
- * Command line parameters:
- * - filename
- * - defaultLanguage
- * - submitter
- *
- * TODO any additional parameters for default values?
+ * Collections can be searched and added. Collections in the list can be removed. The value of the form element is
+ * an array of collection IDs.
  */
-class Application_Import_BibtexImporter
+class Application_Form_Element_CollectionAutoComplete extends \Zend_Form_Element_Xhtml
 {
 
-    public function run($arguments)
+    public $helper = 'formCollectionAutoComplete';
+
+    private $collections = null;
+
+    public function getValue()
     {
-        $filename = $arguments[1];
+        return $this->collections;
+    }
 
-        $colors = new Opus_Util_ConsoleColors();
+    public function setValue($value)
+    {
+        $this->collections = $value;
+    }
 
-        if (! is_readable($filename)) {
-            echo $colors->red('File not found or readable.' . PHP_EOL);
-            return;
+    /**
+     * Lädt die Defaultdekoratoren für ein Textelement.
+     */
+    public function loadDefaultDecorators()
+    {
+        if (! $this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
+            $this->setDecorators([
+                'ViewHelper',
+                'Placeholder',
+                'ElementHint',
+                'Errors',
+                'ElementHtmlTag',
+                ['LabelNotEmpty', ['tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend']],
+                [['dataWrapper' => 'HtmlTagWithId'], ['tag' => 'div', 'class' => 'data-wrapper']]
+            ]);
         }
-
-        // TODO call BibTexParser with file - return OPUS object array
-
-        // TODO import object array (one by one)
-
-        $data = [];
     }
 }

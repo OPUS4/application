@@ -46,17 +46,17 @@ abstract class Application_Export_ExportPluginAbstract extends Application_Model
     private $_name;
 
     /**
-     * @var Zend_Controller_Request_Http Current request.
+     * @var \Zend_Controller_Request_Http Current request.
      */
     private $_request;
 
     /**
-     * @var Zend_Controller_Response_Http Response object.
+     * @var \Zend_Controller_Response_Http Response object.
      */
     private $_response;
 
     /**
-     * @var Zend_View View object for rendering response.
+     * @var \Zend_View View object for rendering response.
      */
     private $_view;
 
@@ -80,7 +80,7 @@ abstract class Application_Export_ExportPluginAbstract extends Application_Model
 
     /**
      * Returns request object.
-     * @return Zend_Controller_Request_Http
+     * @return \Zend_Controller_Request_Http
      */
     public function getRequest()
     {
@@ -89,16 +89,16 @@ abstract class Application_Export_ExportPluginAbstract extends Application_Model
 
     /**
      * Sets request object.
-     * @param Zend_Controller_Request_Http $request
+     * @param \Zend_Controller_Request_Http $request
      */
-    public function setRequest(Zend_Controller_Request_Http $request)
+    public function setRequest(\Zend_Controller_Request_Http $request)
     {
         $this->_request = $request;
     }
 
     /**
      * Returns response object.
-     * @return Zend_Controller_Response_Http
+     * @return \Zend_Controller_Response_Http
      */
     public function getResponse()
     {
@@ -107,16 +107,16 @@ abstract class Application_Export_ExportPluginAbstract extends Application_Model
 
     /**
      * Sets response object.
-     * @param Zend_Controller_Response_Http $response
+     * @param \Zend_Controller_Response_Http $response
      */
-    public function setResponse(Zend_Controller_Response_Http $response)
+    public function setResponse(\Zend_Controller_Response_Http $response)
     {
         $this->_response = $response;
     }
 
     /**
      * Returns view object.
-     * @return Zend_View
+     * @return \Zend_View
      */
     public function getView()
     {
@@ -125,9 +125,9 @@ abstract class Application_Export_ExportPluginAbstract extends Application_Model
 
     /**
      * Sets view object.
-     * @param Zend_View $view
+     * @param \Zend_View $view
      */
-    public function setView(Zend_View $view)
+    public function setView(\Zend_View $view)
     {
         $this->_view = $view;
     }
@@ -136,13 +136,13 @@ abstract class Application_Export_ExportPluginAbstract extends Application_Model
      * Checks if access is restricted to adminstrators.
      *
      * @return bool true if access is restricted, otherwise false
-     * @throws Zend_Exception
+     * @throws \Zend_Exception
      */
     public function isAccessRestricted()
     {
         if (isset($this->getConfig()->adminOnly) &&
             filter_var($this->getConfig()->adminOnly, FILTER_VALIDATE_BOOLEAN)) {
-            return ! Opus_Security_Realm::getInstance()->checkModule('admin');
+            return ! \Opus\Security\Realm::getInstance()->checkModule('admin');
         }
         return false; // keine Einschränkung des Zugriffs
     }
@@ -162,7 +162,7 @@ abstract class Application_Export_ExportPluginAbstract extends Application_Model
      */
     public function isAllowExportOfUnpublishedDocs()
     {
-        $accessControl = Zend_Controller_Action_HelperBroker::getStaticHelper('accessControl');
+        $accessControl = \Zend_Controller_Action_HelperBroker::getStaticHelper('accessControl');
         if (is_null($accessControl)) {
             return false;
         }

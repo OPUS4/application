@@ -25,18 +25,18 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    TODO
- * @author      Jens Schwidder <schwidder@zib.de>
- * @author      Thoralf Klein <thoralf.klein@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2022, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
+use Opus\Document;
+use Opus\Model\NotFoundException;
+use Opus\Repository;
 
 /**
  * Helper for getting a list of document IDs used by admin and review module.
  */
-class Application_Controller_Action_Helper_Documents extends Zend_Controller_Action_Helper_Abstract
+class Application_Controller_Action_Helper_Documents extends \Zend_Controller_Action_Helper_Abstract
 {
 
     /**
@@ -53,9 +53,9 @@ class Application_Controller_Action_Helper_Documents extends Zend_Controller_Act
     }
 
     /**
-     * Returns Opus_Document for provided ID or throws exception.
+     * Returns Document for provided ID or throws exception.
      * @param string $docId Document identifier
-     * @return Opus_Document
+     * @return Document
      */
     public function getDocumentForId($docId)
     {
@@ -65,8 +65,8 @@ class Application_Controller_Action_Helper_Documents extends Zend_Controller_Act
         }
 
         try {
-            $doc = new Opus_Document($docId);
-        } catch (Opus_Model_NotFoundException $omnfe) {
+            $doc = Document::get($docId);
+        } catch (NotFoundException $omnfe) {
             return null;
         }
 
@@ -85,30 +85,30 @@ class Application_Controller_Action_Helper_Documents extends Zend_Controller_Act
      */
     public function getSortedDocumentIds($sortOrder = null, $sortReverse = true, $state = null)
     {
-        $finder = new Opus_DocumentFinder();
+        $finder = Repository::getInstance()->getDocumentFinder();
 
-        if (! is_null($state) && $state !== 'all') {
+        if ($state !== null && $state !== 'all') {
             $finder->setServerState($state);
         }
 
         switch ($sortOrder) {
             case 'author':
-                $finder->orderByAuthorLastname($sortReverse);
+                $finder->setOrder('Author', $sortReverse);
                 break;
             case 'publicationDate':
-                $finder->orderByServerDatePublished($sortReverse);
+                $finder->setOrder('ServerDatePublished', $sortReverse);
                 break;
             case 'docType':
-                $finder->orderByType($sortReverse);
+                $finder->setOrder('Type', $sortReverse);
                 break;
             case 'title':
-                $finder->orderByTitleMain($sortReverse);
+                $finder->setOrder('Title', $sortReverse);
                 break;
             default:
-                $finder->orderById($sortReverse);
+                $finder->setOrder('Id', $sortReverse);
                 break;
         }
 
-        return $finder->ids();
+        return $finder->getIds();
     }
 }

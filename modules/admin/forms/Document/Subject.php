@@ -29,8 +29,10 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
+use Opus\Subject;
+use Opus\Model\NotFoundException;
 
 /**
  * Unterformular fuer das Editieren eines Stichwortes.
@@ -121,8 +123,8 @@ class Admin_Form_Document_Subject extends Admin_Form_AbstractModelSubForm
     }
 
     /**
-     * Initialisiert das Formular mit den Werten in einem Opus_Subject Objekt.
-     * @param \Opus_Subject $subject
+     * Initialisiert das Formular mit den Werten in einem Subject Objekt.
+     * @param Subject $subject
      */
     public function populateFromModel($subject)
     {
@@ -133,8 +135,8 @@ class Admin_Form_Document_Subject extends Admin_Form_AbstractModelSubForm
     }
 
     /**
-     * Überträgt die Werte im Formular in ein Opus_Subject Objekt.
-     * @param \Opus_Subject $subject
+     * Überträgt die Werte im Formular in ein Subject Objekt.
+     * @param Subject $subject
      */
     public function updateModel($subject)
     {
@@ -147,9 +149,9 @@ class Admin_Form_Document_Subject extends Admin_Form_AbstractModelSubForm
     /**
      * Liefert das angezeigt Model zurück.
      *
-     * Wenn ein neues Subject zum Formular hinzugefügt wurde wird ein new Opus_Subject Objekt ohne ID zurückgeliefert.
+     * Wenn ein neues Subject zum Formular hinzugefügt wurde wird ein new Subject Objekt ohne ID zurückgeliefert.
      *
-     * @return \Opus_Subject
+     * @return Subject
      */
     public function getModel()
     {
@@ -160,10 +162,10 @@ class Admin_Form_Document_Subject extends Admin_Form_AbstractModelSubForm
         }
 
         try {
-            $subject = new Opus_Subject($subjectId);
-        } catch (Opus_Model_NotFoundException $omnfe) {
+            $subject = new Subject($subjectId);
+        } catch (NotFoundException $omnfe) {
             $this->getLogger()->err(__METHOD__ . " Unknown subject ID = '$subjectId'.");
-            $subject = new Opus_Subject();
+            $subject = new Subject();
         }
 
         $this->updateModel($subject);

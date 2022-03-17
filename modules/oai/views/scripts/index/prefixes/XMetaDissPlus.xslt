@@ -154,7 +154,7 @@
 
             <!-- weird DNB constraint: dc:language must appear after dcterms:medium -->
             <dc:language xsi:type="dcterms:ISO639-2">
-                <xsl:value-of select="php:functionString('Opus_Language::getLanguageCode', @Language)" />
+                <xsl:value-of select="php:functionString('Opus\Language::getLanguageCode', @Language)" />
             </dc:language >
 
             <!-- dcterms:isPartOf -->
@@ -256,7 +256,7 @@
     <xsl:template match="TitleMain" mode="xmetadissplus">
         <dc:title xsi:type="ddb:titleISO639-2">
             <xsl:attribute name="lang">
-              <xsl:value-of select="php:functionString('Opus_Language::getLanguageCode', @Language)" />
+              <xsl:value-of select="php:functionString('Opus\Language::getLanguageCode', @Language)" />
              </xsl:attribute>
             <xsl:choose>
               <xsl:when test="../@Language!=@Language">
@@ -272,7 +272,7 @@
     <xsl:template match="TitleSub" mode="xmetadissplus">
         <dcterms:alternative xsi:type="ddb:talternativeISO639-2">
             <xsl:attribute name="lang">
-                 <xsl:value-of select="php:functionString('Opus_Language::getLanguageCode', @Language)" />
+                 <xsl:value-of select="php:functionString('Opus\Language::getLanguageCode', @Language)" />
             </xsl:attribute>
             <xsl:choose>
               <xsl:when test="../@Language!=@Language">
@@ -361,7 +361,7 @@
     <xsl:template match="TitleAbstract" mode="xmetadissplus">
         <dcterms:abstract xsi:type="ddb:contentISO639-2" ddb:type="noScheme">
             <xsl:attribute name="lang">
-                <xsl:value-of select="php:functionString('Opus_Language::getLanguageCode', @Language)" />
+                <xsl:value-of select="php:functionString('Opus\Language::getLanguageCode', @Language)" />
             </xsl:attribute>
             <xsl:value-of select="@Value" />
         </dcterms:abstract>

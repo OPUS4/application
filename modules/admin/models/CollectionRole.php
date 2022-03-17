@@ -29,8 +29,12 @@
  * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
- *
+ */
+
+use Opus\CollectionRole;
+use Opus\Model\NotFoundException;
+
+/**
  * TODO überarbeiten (entfernen?)
  */
 class Admin_Model_CollectionRole
@@ -48,8 +52,8 @@ class Admin_Model_CollectionRole
             return;
         }
         try {
-            $this->_collectionRole = new Opus_CollectionRole((int) $id);
-        } catch (Opus_Model_NotFoundException $e) {
+            $this->_collectionRole = new CollectionRole((int) $id);
+        } catch (NotFoundException $e) {
             throw new Admin_Model_Exception('roleid parameter value unknown');
         }
     }
@@ -59,7 +63,7 @@ class Admin_Model_CollectionRole
      */
     private function initNewCollectionRole()
     {
-        $this->_collectionRole = new Opus_CollectionRole();
+        $this->_collectionRole = new CollectionRole();
         foreach (['Visible', 'VisibleBrowsingStart', 'VisibleFrontdoor', 'VisibleOai'] as $field) {
             $this->_collectionRole->getField($field)->setValue(1);
         }
@@ -67,7 +71,7 @@ class Admin_Model_CollectionRole
 
     /**
      * Liefert CollectionRole.
-     * @return null|Opus_CollectionRole
+     * @return null|CollectionRole
      */
     public function getObject()
     {

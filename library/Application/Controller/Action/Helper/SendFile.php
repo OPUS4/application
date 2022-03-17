@@ -25,7 +25,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Applicaton
+ * @category    Application
  * @author      Thoralf Klein <thoralf.klein@zib.de>
  * @copyright   Copyright (c) 2011-2016, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
@@ -61,12 +61,12 @@ class Application_Controller_Action_Helper_SendFile extends Application_Controll
     {
         $response = $this->getResponse();
         if (! $response->canSendHeaders()) {
-            throw new Exception("Cannot send headers");
+            throw new \Exception("Cannot send headers");
         }
 
         $file = realpath($file);
         if (! is_readable($file)) {
-            throw new Exception("File is not readable");
+            throw new \Exception("File is not readable");
         }
 
         $modified = filemtime($file);

@@ -34,6 +34,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Security\Realm;
+
 /**
  * Main controller for solrsearch module.
  *
@@ -172,7 +174,7 @@ class Solrsearch_IndexController extends Application_Controller_Action
         // TODO does the following make sense after the above?
         // TODO move code somewhere else (encapsulate)
         $config = $this->getConfig();
-        if (isset($config->export->stylesheet->search) && Opus_Security_Realm::getInstance()->checkModule('export')) {
+        if (isset($config->export->stylesheet->search) && Realm::getInstance()->checkModule('export')) {
             $this->view->stylesheet = $config->export->stylesheet->search;
         }
 

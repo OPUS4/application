@@ -29,7 +29,6 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -46,24 +45,20 @@ class Application_Form_Element_Year extends Application_Form_Element_Text
 
         $validators = [];
 
-        $validator = new Zend_Validate_Int();
+        $validator = new \Zend_Validate_Int();
         $validator->setMessage('validation_error_year_invalid_format');
         $validators[] = $validator;
 
-        $validator = new Zend_Validate_GreaterThan(-1);
-        $validator->setMessages(
-            [
-            Zend_Validate_GreaterThan::NOT_GREATER => 'validation_error_year_invalid_negative'
-            ]
-        );
+        $validator = new \Zend_Validate_GreaterThan(-1);
+        $validator->setMessages([
+            \Zend_Validate_GreaterThan::NOT_GREATER => 'validation_error_year_invalid_negative'
+        ]);
         $validators[] = $validator;
 
-        $validator = new Zend_Validate_LessThan(10000);
-        $validator->setMessages(
-            [
-            Zend_Validate_LessThan::NOT_LESS => 'validation_error_year_too_large'
-            ]
-        );
+        $validator = new \Zend_Validate_LessThan(10000);
+        $validator->setMessages([
+            \Zend_Validate_LessThan::NOT_LESS => 'validation_error_year_too_large'
+        ]);
         $validators[] = $validator;
 
         $this->setAttrib('placeholder', $this->getTranslator()->translate('year_format'));

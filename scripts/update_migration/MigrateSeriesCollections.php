@@ -30,10 +30,15 @@
  * @author      Susanne Gottwald <gottwald@zib.de>
  * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  **/
 
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
+
+use Opus\Collection;
+use Opus\CollectionRole;
+use Opus\Document;
+use Opus\Repository;
+use Opus\Series;
 
 class FindMissingSeriesNumbers
 {
@@ -44,25 +49,27 @@ class FindMissingSeriesNumbers
 
     public function __construct($logfile)
     {
-        $this->_seriesRole = Opus_CollectionRole::fetchByName('series');
+        $this->_seriesRole = CollectionRole::fetchByName('series');
         $this->initLogger($logfile);
     }
 
     /**
      * Initialise the logger with the given file.
+     *
+     * TODO Not using LogService, because file is written to working directory (OPUSVIER-4289)
      */
     private function initLogger($logfileName)
     {
         $logfile = @fopen($logfileName, 'a', false);
-        $writer = new Zend_Log_Writer_Stream($logfile);
-        $formatter = new Zend_Log_Formatter_Simple('%priorityName%: %message%' . PHP_EOL);
+        $writer = new \Zend_Log_Writer_Stream($logfile);
+        $formatter = new \Zend_Log_Formatter_Simple('%priorityName%: %message%' . PHP_EOL);
         $writer->setFormatter($formatter);
-        $this->_logger = new Zend_Log($writer);
+        $this->_logger = new \Zend_Log($writer);
     }
 
     /**
      * Für jede Collection der Collection Role series wird eine neue Schriftenreihe
-     * Opus_Series angelegt, wobei der Name, die Sichtbarkeit und die Sorierreihenfolge
+     * Series angelegt, wobei der Name, die Sichtbarkeit und die Sorierreihenfolge
      * übernommen wird.
      *
      * Die Wurzel-Collection der Collection Role series wird nicht betrachtet.
@@ -73,12 +80,12 @@ class FindMissingSeriesNumbers
     private function migrateCollectionToSeries()
     {
         $numOfCollectionsMigrated = 0;
-        foreach (Opus_Collection::fetchCollectionsByRoleId($this->_seriesRole->getId()) as $collection) {
+        foreach (Collection::fetchCollectionsByRoleId($this->_seriesRole->getId()) as $collection) {
             // ignore root collection (does not have valid data and associated documents)
             if ($collection->isRoot()) {
                 continue;
             }
-            $series = new Opus_Series(Opus_Series::createRowWithCustomId($collection->getId()));
+            $series = new Series(Series::createRowWithCustomId($collection->getId()));
             $series->setTitle($collection->getName());
             $series->setVisible($collection->getVisible());
             $series->setSortOrder($collection->getSortOrder());
@@ -97,7 +104,7 @@ class FindMissingSeriesNumbers
      * der Collection Role series (kurz: series-Collection) zugeordnet sind.
      *
      * Fall 1 (Dokumente ohne IdentifierSerial):
-     * Da die Bandnummer einer Schriftenreihe Opus_Series obligatorisch ist, können
+     * Da die Bandnummer einer Schriftenreihe Series obligatorisch ist, können
      * Dokumente ohne IdentifierSerial nicht migriert werden. Sie verbleiben
      * unangetastet. Die Zuweisung(en) zu series-Collection(s) wird (werden) nicht
      * verändert.
@@ -129,11 +136,13 @@ class FindMissingSeriesNumbers
     {
         $numOfConflicts = 0;
         $numOfDocsMigrated = 0;
-        $finder = new Opus_DocumentFinder();
+
+        $finder = Repository::getInstance()->getDocumentFinder();
         $finder->setCollectionRoleId($this->_seriesRole->getId());
+
         $serialIdsInUse = [];
-        foreach ($finder->ids() as $docId) {
-            $doc = new Opus_Document($docId);
+        foreach ($finder->getIds() as $docId) {
+            $doc = Document::get($docId);
             $serialIds = $doc->getIdentifierSerial();
             $numOfSerialIds = count($serialIds);
 
@@ -176,7 +185,7 @@ class FindMissingSeriesNumbers
                             $numOfConflicts++;
                         } else {
                             // no conflict
-                            $series = new Opus_Series($collectionId);
+                            $series = new Series($collectionId);
                             $doc->addSeries($series)->setNumber($serialId);
                             $doc->setIdentifierSerial([]);
 
