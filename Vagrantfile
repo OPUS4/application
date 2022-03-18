@@ -40,7 +40,7 @@ SCRIPT
 $composer = <<SCRIPT
 cd /vagrant
 bin/install-composer.sh
-bin/composer update
+php bin/composer update
 SCRIPT
 
 $solr = <<SCRIPT
