@@ -46,20 +46,15 @@ $config = Config::get();
 
 $cronScript = APPLICATION_PATH . $config->cron->scriptRunner;
 
-if (isset($config->cron->jobs))
-{
-    foreach ($config->cron->jobs as $job)
-    {
-        $cronJob = $config->cron->jobs->$job;
-        if (null !== $cronJob->class && null !== $cronJob->schedule)
-        {
-            $log->debug("Adding job " . $cronJob->class);
-            $task = $schedule->run(PHP_BINARY. $cronScript, ['--jobclass' => $cronJob->class]);
+if (isset($config->cron->jobs)) {
+    foreach ($config->cron->jobs as $job => $options) {
+        if (isset($options->class) && isset($options->schedule)) {
+            $log->debug("Adding job " . $options->class);
+            $task = $schedule->run(PHP_BINARY. $cronScript, ['--jobclass' => $options->class]);
             $task
-                ->cron($cronJob->schedule)
-                ->description($cronJob->class);
-        }
-        else {
+                ->cron($options->schedule)
+                ->description($options->class);
+        } else {
             $log->err("Cron job class name or schedule not configured");
         }
     }
@@ -68,4 +63,3 @@ if (isset($config->cron->jobs))
 }
 
 return $schedule;
-
