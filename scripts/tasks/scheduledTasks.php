@@ -40,25 +40,32 @@ require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
 $log = Log::get();
 
-$config = Config::get();
-$status = $config->cron->jobs->consistencyCheck->enabled;
-
 $schedule = new Schedule();
-$job = new Application_Jobs_CheckConsistencyJob();
-$desc = "Check consistency ";
 
-if ($job->isEnabled()) {
-    $desc .= "(enabled)";
+$config = Config::get();
+
+$cronScript = APPLICATION_PATH . $config->cron->scriptRunner;
+
+if (isset($config->cron->jobs))
+{
+    foreach ($config->cron->jobs as $job)
+    {
+        $cronJob = $config->cron->jobs->$job;
+        if (null !== $cronJob->class && null !== $cronJob->schedule)
+        {
+            $log->debug("Adding job " . $cronJob->class);
+            $task = $schedule->run(PHP_BINARY. $cronScript, ['--jobclass' => $cronJob->class]);
+            $task
+                ->cron($cronJob->schedule)
+                ->description($cronJob->class);
+        }
+        else {
+            $log->err("Cron job class name or schedule not configured");
+        }
+    }
 } else {
-    $desc .= "(disabled)";
+    $log->err("Couldn't access jobs from configuration file");
 }
 
-$task = $schedule->run(function () use ($job) {
-    $job->run();
-});
-
-$task
-    ->everyMinute()
-    ->description($desc);
-
 return $schedule;
+

@@ -89,6 +89,7 @@
     "phploc": "phploc --log-csv build/phploc.csv src",
     "phpcpd": "phpcpd . --min-lines 3 --min-tokens 30 --log-pmd build/pmd-cpd.xml --progress || true",
     "index": "bin/opus4 index:index",
-    "metrics": "phpmetrics --config=phpmetrics.json"
+    "metrics": "phpmetrics --config=phpmetrics.json",
+    "cronlist": "crunz schedule:list"
   }
 }
