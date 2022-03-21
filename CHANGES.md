@@ -1,5 +1,126 @@
 # OPUS 4 Change Log
 
+## Release 4.7.1 - 2022-03-22
+
+### Aufgaben
+
+* [OPUSVIER-421] - Feinschliff des SolrIndexBuilder-Skripts
+* [OPUSVIER-1443] - Cookies: Setzen der Option http_only gegen XSS-Cookie-Klau
+* [OPUSVIER-3657] - Logging Setupcode verschieben und erweitern
+* [OPUSVIER-3698] - Skript für die Volltextextraktion von Dateien
+* [OPUSVIER-4140] - Verbesserung der Übersichtlichkeit in EnrichmentKey-Administration durch Trennung von nicht geschützten und geschützten EKs
+* [OPUSVIER-4202] - Fehlermeldung bei Enrichments vom Typ Regex verbessern: Regex in Validierungsfehlermeldung ausgeben
+* [OPUSVIER-4213] - BibTex-Parser für den BibTex-Import erstellen
+* [OPUSVIER-4216] - Sonderzeichenbehandlung in BibTeX das Anführungszeichen verwendet fixen
+* [OPUSVIER-4279] - Seite für Dokumenttypen aus Info in den Setup Bereich verschieben
+* [OPUSVIER-4289] - Application Logging Code auf LogService umstellen
+* [OPUSVIER-4298] - Embargofristen aus SWORD Schnittstelle übernehmen
+* [OPUSVIER-4319] - Systemdaten für Dokumente separat von Enrichments speichern
+* [OPUSVIER-4323] - Formatierung der Hilfe verbessern
+* [OPUSVIER-4324] - Symfony/Console für Kommandozeileninterface verwenden
+* [OPUSVIER-4325] - Kommando zum Entfernen von Dokumenten aus Index hinzufügen
+* [OPUSVIER-4327] - Option für Indexing Blockgröße unterstützen
+* [OPUSVIER-4328] - SolrIndexBuilder.php-Skript durch opus4-Skript ersetzen
+* [OPUSVIER-4329] - Index-Löschen vor der Indexierung optional machen
+* [OPUSVIER-4330] - Index Building Code von IndexCommand trennen
+* [OPUSVIER-4331] - Support %runId% for custom log formats
+* [OPUSVIER-4333] - BibTeX Import Skript in Kommando umwandeln
+* [OPUSVIER-4338] - Skript für Volltextextraktion in Kommando umwandeln
+* [OPUSVIER-4343] - Separate Logdatei für Indexierung
+* [OPUSVIER-4344] - Delete Skript in Kommando umwandeln
+* [OPUSVIER-4345] - Allgemeinen Console Code zu OPUS 4 Common verschieben
+* [OPUSVIER-4346] - Logging using LogService in OPUS Framework
+* [OPUSVIER-4348] - "Language set to 'de'" Nachricht nicht ständig ausgeben
+* [OPUSVIER-4356] - Detailliertere Fortschrittsanzeige für Kommandos
+* [OPUSVIER-4364] - Neue Klasse für System-Metadaten für Model-Objekte
+* [OPUSVIER-4368] - Datenbankschema für neue Model-Properties erweitern
+* [OPUSVIER-4369] - Model-Properties Funktionen in Opus_Model_Abstract integrieren
+* [OPUSVIER-4393] - Extraktion von Datei als Kommando
+* [OPUSVIER-4394] - Properties entfernen, wenn Model gelöscht wird
+* [OPUSVIER-4395] - Sonderbehandlung von Delete für Dokumente beseitigen
+* [OPUSVIER-4401] - Timeout Option für Extract/Index-Kommandos
+* [OPUSVIER-4407] - Add information necessary for developers to framework README.md
+* [OPUSVIER-4413] - Change level of logger at runtime
+* [OPUSVIER-4414] - Function createLog should accept string and integer for priority
+* [OPUSVIER-4415] - Framework Code auf PHP Namespaces umstellen
+* [OPUSVIER-4416] - (Opus\Model\)Exception in ModelException umbenennen
+* [OPUSVIER-4450] - LicencesAdminTest schlägt fehl
+* [OPUSVIER-4454] - SWORD-Pakete bei Fehlern aufheben
+* [OPUSVIER-4458] - Remove Log class from Framework
+* [OPUSVIER-4459] - BibTeX-Import in Administration integrieren
+* [OPUSVIER-4460] - Zugriffskontrolle auf BibTeX-Import
+* [OPUSVIER-4461] - BibTeX-Parser
+* [OPUSVIER-4462] - BibTeX-Processor
+* [OPUSVIER-4463] - Konfiguration des BibTeX-Mappings
+* [OPUSVIER-4464] - Mapping des Document-Type
+* [OPUSVIER-4465] - Mapping-Klassen verallgemeinern
+* [OPUSVIER-4466] - Umgang mit zusätzlichen Feldern
+* [OPUSVIER-4467] - Umgang mit unbekannten Feldern
+* [OPUSVIER-4468] - Mapping Originaldaten/Hash
+* [OPUSVIER-4469] - Mapping Identifiers
+* [OPUSVIER-4471] - Kanonisierung von BibTeX-Records
+* [OPUSVIER-4472] - translation.log wird mit Meldungen zu "locale" und "language" unnötig groß
+* [OPUSVIER-4494] - Import-Verzeichnis zu Workspace hinzufügen
+* [OPUSVIER-4496] - Workspace Setup in Administration anzeigen
+* [OPUSVIER-4499] - Funktion, um alle Enrichments eines Dokuments abzufragen
+* [OPUSVIER-4505] - DOI Plugin von Delete-Event auf Status-Change umstellen
+* [OPUSVIER-4507] - OPUS-Export-Funktionen hinter einem Proxy-Server
+* [OPUSVIER-4508] - OAI-Abfragen in OPUS hinter einem Proxy-Server
+* [OPUSVIER-4509] - "Administration > Dokumente > DOKUMENT > Dateien" hinter einem Proxy-Server
+* [OPUSVIER-4510] - Benachrichtigungen (Notification) hinter einem Proxy-Server
+* [OPUSVIER-4518] - Zugriff auf Zend_Registry kapseln
+* [OPUSVIER-4520] - Verwendung von LOG_LEVEL entfernen
+* [OPUSVIER-4521] - Verwendung von "Available_Languages" in Zend_Registry entfernen
+* [OPUSVIER-4522] - Move opus.disableDatabaseVersionCheck into configuration
+* [OPUSVIER-4523] - Stop using "db_adapter" in Zend_Registry
+* [OPUSVIER-4524] - Stop using 'Zend_Locale' in Zend_Registry
+* [OPUSVIER-4532] - Publikationslisten hinter einem Proxy
+* [OPUSVIER-4543] - Run GitHub Actions for Pull Requests
+* [OPUSVIER-4550] - MySQL Version 8: Install Skript zum Anlegen von Usern muss angepasst werden
+* [OPUSVIER-4554] - Tägliche automatische GitHub Action Runs für alle Repositorien
+* [OPUSVIER-4555] - BibTeX-Import: "and" zwischen Autoren wird manchmal ignoriert
+* [OPUSVIER-4570] - BibTeX-Import - Import von DOI mit Maskierung
+
+### Bugs
+
+* [OPUSVIER-4038] - Betrieb von OPUS hinter einem Proxy
+* [OPUSVIER-4043] - Schattierung bei mehreren Autoren im Publishformular verschiebt sich
+* [OPUSVIER-4161] - Class-Loading Warnungen in Admin_Form_EnrichmentKeyTest
+* [OPUSVIER-4360] - Timeout bei Extraktion großer Dateien
+* [OPUSVIER-4367] - "PHP Notice:  Failed saving metadata to metadataCache" aus der Konsole
+* [OPUSVIER-4370] - Sprache im Publishformular nicht auswählbar bei angepassten Feldern in der Templatedatei
+* [OPUSVIER-4385] - Fehlerhafte Sortierung der Ergebnisse nach Jahr bei Einstellung CompletedYear
+* [OPUSVIER-4419] - Bezeichnung des Formats MARC21 über OAI inkonsistent
+* [OPUSVIER-4482] - Fix Ant "build.xml" script for framework
+* [OPUSVIER-4484] - Skript nicht gefunden für die Indexierung der Testdaten während der Installation
+* [OPUSVIER-4512] - Fehler beim Abspeichern in der Administration mit Select-Enrichmentfeld
+* [OPUSVIER-4527] - Duplizierung von Übersetzungsschlüsseln beim Editieren der statischen Seiten
+* [OPUSVIER-4547] - Facette "server_state" zeigt für den Admin nur noch publizierte Dokumente an
+* [OPUSVIER-4551] - DOI-Vergabe funktioniert mit dev-4.7.1 nicht mehr
+* [OPUSVIER-4556] - BibTeX-Import: Probleme mit Unterstrich in Werten
+* [OPUSVIER-4557] - Bestimmte leere Felder im BibTeX-Import-File verhindern den Import
+* [OPUSVIER-4571] - Maskierung von URLs beim BibTeX-Import funktioniert nur teilweise
+
+### Entwicklung
+
+* [OPUSVIER-4251] - Horizontal Tab (ASCII-Code 9) in Abstract und Subject von Testdokument 41
+* [OPUSVIER-4358] - SetStatusOfExistingDoiTest schlägt unregelmässig fehl
+* [OPUSVIER-4359] - Branch 4.7 lässt sich auf GitHub nicht löschen
+* [OPUSVIER-4553] - Framework Builds laufen auf GitHub nicht mehr
+
+### Feature Request
+
+* [OPUSVIER-2245] - SolrIndexBuilder: Index löschen nur durch explizites Kommando "--rebuild-all"
+
+### Spezifikation
+
+* [OPUSVIER-1276] - Wie könnte Kapselung von "Opus_Document" aussehen?
+* [OPUSVIER-2560] - Spezifikation nachreichen für den Umgang mit Fehlern während der Indexierung
+* [OPUSVIER-4100] - Hinweistext zu Enrichments im Metadaten-Edit-Formular einbauen
+* [OPUSVIER-4504] - Entwurfsentscheidung zum ProcessorRule-Interface
+
+---
+
 ## Release 4.7.0.8 - 2022-01-25
 
 ### Aufgaben
