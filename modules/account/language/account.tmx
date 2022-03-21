@@ -34,6 +34,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="account_password_change_success">
+      <tuv xml:lang="en">
+        <seg>Your password was changed successfully. Please login again.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Ihr Passwort wurde erfolgreich geändert. Bitte erneut einloggen.</seg>
+      </tuv>
+    </tu>
+
   </body>
 
 </tmx>

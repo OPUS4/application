@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,10 +25,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Oai_Modul
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017-2021, OPUS 4 development team
+ * @copyright   Copyright (c) 2017-2022, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -223,6 +221,11 @@ class Oai_Model_Server extends Application_Model_Abstract
         }
 
         $doc = $this->_proc->transformToDoc($this->_xml);
+
+        // Requests with resumptionToken do not provide metadataPrefix in the URL
+        if ($metadataPrefix === null && isset($oaiRequest['metadataPrefixMode'])) {
+            $metadataPrefix = $oaiRequest['metadataPrefixMode'];
+        }
 
         // TODO is this something that should happen for all metadataPrefixes (OPUSVIER-4531)
         $metadataPrefixTags = [
@@ -501,6 +504,8 @@ class Oai_Model_Server extends Application_Model_Abstract
             $restIds = $token->getDocumentIds();
             $metadataPrefix = $token->getMetadataPrefix();
 
+            $oaiRequest['metadataPrefix'] = $metadataPrefix;
+            $oaiRequest['metadataPrefixMode'] = strtolower($metadataPrefix);
             $this->_proc->setParameter('', 'oai_metadataPrefix', $metadataPrefix);
             $this->_proc->setParameter('', 'oai_metadataPrefixMode', strtolower($metadataPrefix));
             $resumed = true;

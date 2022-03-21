@@ -75,7 +75,7 @@ class Oai_Format_EpicurTest extends ControllerTestCase
         'marc' => 'http://www.loc.gov/MARC21/slim'
     ];
 
-    public function testXmlXsiSchemaDeclarationPresentForDcMetadata()
+    public function testXmlXsiSchemaDeclarationPresentForEpicurMetadata()
     {
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=epicur&identifier=oai::146');
 

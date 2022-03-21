@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,10 +25,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Account
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2022, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -157,7 +155,9 @@ class Account_IndexController extends Application_Controller_Action
                 $account->store();
 
                 if ($isLoginChanged || $isPasswordChanged) {
-                    \Zend_Auth::getInstance()->clearIdentity();
+                    Zend_Auth::getInstance()->clearIdentity();
+                    $this->_helper->redirector->redirectToAndExit('index', 'account_password_change_success', 'index', 'auth');
+                    return;
                 }
             } else {
                 $actionUrl = $this->view->url(['action' => 'save']);

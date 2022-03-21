@@ -58,7 +58,7 @@ class Oai_Format_XMetaDissPlusTest extends ControllerTestCase
         'PP' => 'http://www.proprint-service.de/xml/schemes/v1/CHECKED'
     ];
 
-    public function testXmlXsiSchemaDeclarationPresentForDcMetadata()
+    public function testXmlXsiSchemaDeclarationPresentForXMetaDissPlusMetadata()
     {
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=XMetaDissPlus&identifier=oai::146');
 

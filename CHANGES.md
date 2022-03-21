@@ -1,5 +1,25 @@
 # OPUS 4 Change Log
 
+## Release 4.7.0.8 - 2022-01-25
+
+### Aufgaben
+
+* GH-485 PUBMED URL aktualisiert und konfigurierbar gemacht
+* GH-482 Components Installer Plugin für Composer 2 aktualisiert
+
+### Development Tools
+
+* GH-502 Fixed build problem on GitHub
+
+---
+
+## Release 4.7.0.7 - 2021-10-19
+
+### Bugs
+
+* [OPUSVIER-4563] - OAI-PMH: Deklaration von xmlns:xsi XMLSchema-instance fehlt auf Folgeseiten
+* GH-377 - Nach erfolgreicher Änderung eines Passworts erscheint Fehlermeldung und keine Bestätigungsmeldung
+
 ---
 
 ## Release 4.7.0.6 - 2021-09-28

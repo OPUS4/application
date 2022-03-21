@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,10 +25,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @package     Application_Update
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2018-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2018-2022, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -60,9 +58,9 @@ class Application_Update_SetStatusOfExistingDoiTest extends ControllerTestCase
         $doc->addIdentifier($doi);
         $docId = $doc->store();
 
-        sleep(2);
-
-        $doc = Document::get($docId); // use date stored in database - sometimes rounding happens when storing dates
+        // ServerDateModified wird manchmal gerundet beim Speichern = deshalb muss das Dokument noch mal geladen werden
+        // TODO https://github.com/OPUS4/framework/issues/228
+        $doc = Document::get($docId);
 
         $modified = $doc->getServerDateModified();
 

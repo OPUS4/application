@@ -1009,4 +1009,13 @@ class Export_IndexControllerTest extends ControllerTestCase
     {
         return $this->removeModuleAccess('export', 'guest');
     }
+
+    public function testPublistPubmedRendering()
+    {
+        $this->dispatch('/export/index/publist/role/publists/number/coll_visible');
+
+        $this->assertResponseCode(200);
+
+        $this->markTestIncomplete('Setup collection for publist including document with pubmed-id');
+    }
 }
