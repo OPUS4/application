@@ -219,4 +219,18 @@ class Admin_Form_AccountTest extends ControllerTestCase
         $this->assertContains('jobaccess', $selected);
         $this->assertContains('guest', $selected);
     }
+
+    public function testValidationNewAccountMissingPassword()
+    {
+        $form = new Admin_Form_Account();
+
+        $postData = [
+            'username' => 'newaccount'
+        ];
+
+        $this->assertFalse($form->isValid($postData));
+
+        $this->assertContains('isEmpty', $form->getErrors('password'));
+        $this->assertContains('isEmpty', $form->getErrors('confirmPassword'));
+    }
 }
