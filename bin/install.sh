@@ -177,13 +177,9 @@ done
 php "$BASEDIR/scripts/change-password.php" admin "$ADMIN_PWD"
 
 #
-# Install and configure Solr search server
+# Configure Solr connection
 #
 # Add Solr connection parameters to configuration files.
-# Optionally install new local Solr.
-#
-# TODO add new core to existing, local Solr
-# TODO separate Solr setup out so it can be used directly
 #
 
 echo
@@ -195,38 +191,25 @@ echo
 SOLR_SERVER_PORT="${SOLR_SERVER_PORT:-8983}"
 
 cd "$BASEDIR"
-[ -z "$INSTALL_SOLR" ] && read -p "Install Solr server? [Y]: " INSTALL_SOLR
-if [ -z "$INSTALL_SOLR" ] || [ "$INSTALL_SOLR" = Y ] || [ "$INSTALL_SOLR" = y ] ;
+
+# ask for host of solr service
+[ -z "$SOLR_SERVER_HOST" ] && read -p "Solr server host name [localhost]: " SOLR_SERVER_HOST
+SOLR_SERVER_HOST="${SOLR_SERVER_HOST:-localhost}"
+
+[ -z "$SOLR_CONTEXT" ] && read -p "Solr context name [/solr/opus4]: " SOLR_CONTEXT
+SOLR_CONTEXT="${SOLR_CONTEXT:-/solr/opus4}"
+
+# Text extraction can use a different Solr connection
+[ -z "$SOLR_EXTRACT" ] && read -p "Use different connection for text extraction? [N]: " SOLR_EXTRACT
+SOLR_EXTRACT="${SOLR_EXTRACT:-N}"
+
+if [ "$SOLR_EXTRACT" = Y ] || [ "$SOLR_EXTRACT" = y ] ;
 then
+  [ -z "$SOLR_EXTRACT_SERVER_HOST" ] && read -p "Solr extraction server host [$SOLR_SERVER_HOST]: " SOLR_EXTRACT_SERVER_HOST
 
-  echo "Installing Apache Solr ..."
-  "$SCRIPT_PATH/install-solr.sh" "$SOLR_SERVER_PORT"
+  [ -z "$SOLR_EXTRACT_SERVER_PORT" ] && read -p "Solr extraction server port [$SOLR_SERVER_PORT]: " SOLR_EXTRACT_SERVER_PORT
 
-  SOLR_SERVER_HOST='localhost'
-  SOLR_CONTEXT='/solr/solr'
-
-else
-  # Do not install Solr, just configure connection
-
-  # ask for host of solr service
-  [ -z "$SOLR_SERVER_HOST" ] && read -p "Solr server host name [localhost]: " SOLR_SERVER_HOST
-  SOLR_SERVER_HOST="${SOLR_SERVER_HOST:-localhost}"
-
-  [ -z "$SOLR_CONTEXT" ] && read -p "Solr context name [/opus4]: " SOLR_CONTEXT
-  SOLR_CONTEXT="${SOLR_CONTEXT:-/opus4}"
-
-  # Text extraction can use a different Solr connection
-  [ -z "$SOLR_EXTRACT" ] && read -p "Use different connection for text extraction? [N]: " SOLR_EXTRACT
-  SOLR_EXTRACT="${SOLR_EXTRACT:-N}"
-
-  if [ "$SOLR_EXTRACT" = Y ] || [ "$SOLR_EXTRACT" = y ] ;
-  then
-    [ -z "$SOLR_EXTRACT_SERVER_HOST" ] && read -p "Solr extraction server host [$SOLR_SERVER_HOST]: " SOLR_EXTRACT_SERVER_HOST
-
-    [ -z "$SOLR_EXTRACT_SERVER_PORT" ] && read -p "Solr extraction server port [$SOLR_SERVER_PORT]: " SOLR_EXTRACT_SERVER_PORT
-
-    [ -z "$SOLR_EXTRACT_CONTEXT" ] && read -p "Solr extraction server context [$SOLR_CONTEXT]: " SOLR_EXTRACT_CONTEXT
-  fi
+  [ -z "$SOLR_EXTRACT_CONTEXT" ] && read -p "Solr extraction server context [$SOLR_CONTEXT]: " SOLR_EXTRACT_CONTEXT
 fi
 
 # Use same connection if not set
