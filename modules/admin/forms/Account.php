@@ -206,8 +206,10 @@ class Admin_Form_Account extends Application_Form_Model_Abstract
         $passwordChanged = false;
 
         if (empty($values[self::ELEMENT_PASSWORD])) {
-            $values[self::ELEMENT_PASSWORD] = 'notchanged';
-            $values[self::ELEMENT_PASSWORD_CONFIRM] = 'notchanged';
+            if ($this->getMode() === self::MODE_EDIT) {
+                $values[self::ELEMENT_PASSWORD] = 'notchanged';
+                $values[self::ELEMENT_PASSWORD_CONFIRM] = 'notchanged';
+            }
         } else {
             $passwordChanged = true;
         }
