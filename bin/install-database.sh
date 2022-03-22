@@ -11,8 +11,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 #
-# @author      Jens Schwidder <schwidder@zib.de>
-# @copyright   Copyright (c) 2018, OPUS 4 development team
+# @copyright   Copyright (c) 2018-2022, OPUS 4 development team
 # @license     http://www.gnu.org/licenses/gpl.html General Public License
 #
 
@@ -176,9 +175,9 @@ mysqlRoot() {
 
 mysqlRoot <<LimitString
 CREATE DATABASE IF NOT EXISTS $DBNAME DEFAULT CHARACTER SET = UTF8MB4 DEFAULT COLLATE = UTF8MB4_UNICODE_CI;
-CREATE USER '$DB_ADMIN'@'$MYSQLHOST' IDENTIFIED BY '$DB_ADMIN_PASSWORD';
+CREATE USER '$DB_ADMIN'@'$MYSQLHOST' IDENTIFIED WITH mysql_native_password BY '$DB_ADMIN_PASSWORD';
 GRANT ALL PRIVILEGES ON $DBNAME.* TO '$DB_ADMIN'@'$MYSQLHOST';
-CREATE USER '$DB_USER'@'$MYSQLHOST' IDENTIFIED BY '$DB_USER_PASSWORD';
+CREATE USER '$DB_USER'@'$MYSQLHOST' IDENTIFIED WITH mysql_native_password BY '$DB_USER_PASSWORD';
 GRANT SELECT,INSERT,UPDATE,DELETE ON $DBNAME.* TO '$DB_USER'@'$MYSQLHOST';
 FLUSH PRIVILEGES;
 LimitString
