@@ -113,7 +113,10 @@ function cleanupFolders() {
     fi
 
     if [ -d ${workspace_log_dir} ] ; then
-        rm -rf $workspace_log_dir
+        rm -f $workspace_log_dir/opus.log
+        rm -f $workspace_log_dir/opus-console.log
+        rm -f $workspace_log_dir/index.log
+        # do not remove error.log (Apache2 is using it)
     fi
 
     if [ -d ${series_logos_dir} ] ; then
