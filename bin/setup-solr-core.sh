@@ -22,11 +22,19 @@
 
 set -e
 
+if [[ $EUID -ne 0 ]]; then
+    echo -e "\nERROR: This script must be run as root.\n" 1>&2
+    exit 1
+fi
+
 SCRIPT_NAME="`basename "$0"`"
 SCRIPT_NAME_FULL="`readlink -f "$0"`"
 SCRIPT_PATH="`dirname "$SCRIPT_NAME_FULL"`"
 
 BASEDIR="`dirname "$SCRIPT_PATH"`"
+
+[ -z "$SOLR_USER" ] && read -p "Solr user [solr]: " SOLR_USER
+SOLR_USER="${SOLR_USER:-solr}"
 
 [ -z "$SOLR_DATA_PATH" ] && read -p "Solr data path [/var/solr/data]: " SOLR_DATA_PATH
 SOLR_DATA_PATH="${SOLR_DATA_PATH:-/var/solr/data}"
@@ -48,7 +56,7 @@ ln -sf "${BASEDIR}/vendor/opus4-repo/search/conf/schema.xml" "${CORE_PATH}/conf"
 ln -sf "${BASEDIR}/vendor/opus4-repo/search/conf/solrconfig.xml" "${CORE_PATH}/conf"
 
 # Set owner and group of files
-# TODO handle SOLR user having a different name (get USER and OWNER from data folder)
-chown -R solr:solr "$CORE_PATH"
+chown -R $SOLR_USER:$SOLR_USER "$CORE_PATH"
 
-# TODO restart solr (message)
+# Restart solr (message)
+systemctl restart $SOLR_USER
