@@ -7,15 +7,25 @@ redevelopment that was created as part of a DFG ([Deutsche Forschungsgemeinschaf
 Since then the development has been continued at KOBV ([Kooperativer Bibliotheksverbund Berlin-Brandenburg][KOBV])
 mostly.
 
-## OPUS 4.7.0.7 (current version)
+## OPUS 4.7.1 (current version)
 
-The current version of OPUS 4 is __4.7__.0.7. It is available on the [master][MASTER] branch. 
+The current version of OPUS 4 is __4.7.1__ It is available on the [master][MASTER] branch. 
 
 [Documentation][DOC]
 : Information on setting up a repository, for users and administrators.
 
 [Developers][DEVDOC]
 : Information for developers.
+
+_We are in the process to moving the developer information into the GitHub Wiki. Specific information about OPUS 4
+packages, might be found in the Wiki pages of their repositories._
+
+## Testing OPUS 4
+
+You can run OPUS 4 using Vagrant. This makes it easy to create a VM running OPUS 4 for testing or even development.
+More information in the Wiki:
+
+https://github.com/OPUS4/application/wiki/Vagrant
 
 ## Questions & Issues
 
