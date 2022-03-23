@@ -9,7 +9,7 @@ mostly.
 
 ## OPUS 4.7.1 (current version)
 
-The current version of OPUS 4 is __4.7.1__ It is available on the [master][MASTER] branch. 
+The current version of OPUS 4 is __4.7.1__. It is available on the [master][MASTER] branch. 
 
 [Documentation][DOC]
 : Information on setting up a repository, for users and administrators.

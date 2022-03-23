@@ -3,6 +3,54 @@
 
 ## Release 4.7.1
 
+# Anforderungen
+
+OPUS 4.7.1 erfordert weiterhin PHP 7.1 bzw. eine Version vor PHP 7.2. Durch 
+die Verwendung von Zend Framework 1 ist OPUS 4 nicht kompatibel mit neueren
+PHP Versionen. Diese werden erst nach dem vollständigen Umstieg auf Laminas
+mit OPUS 4 v5.0 unterstützt werden. 
+
+# Installation
+
+Die Installation von Apache Solr wurde aus den Installationsskripten entfernt.
+Für den produktiven Betrieb sollte Solr entsprechend den Empfehlungen der
+Apache Solr Dokumentation installiert werden.
+
+<https://solr.apache.org/guide/7_2/taking-solr-to-production.html>
+
+OPUS 4.7.1 ist mit Apache Solr 7.7.2 getestet. Der Umstieg auf Solr 8 ist 
+nach dem Umstieg auf Laminas geplant.
+
+Die Integration in die Installationsskripte war vor allem für Test-Installationen
+gedacht. Tests sind nun mit dem Einsatz von Vagrant leichter geworden.
+
+# Testen mit Vagrant
+
+Mit Vagrant (<https://www.vagrantup.com/>) und dem `Vagrantfile` in OPUS 4 
+Application lässt sich eine Virtuelle Maschine hochfahren in der ein vollständiges 
+OPUS 4 läuft. Informationen dazu finden sich im Wiki. 
+
+<https://github.com/OPUS4/application/wiki/Vagrant>
+
+Damit kann man OPUS 4, auch Entwicklungsversionen, unter Linux, Mac OS-X
+oder auch Windows laufen lassen, z.B. um neue Funktionen zu testen oder
+an Anpassungen zu arbeiten.
+
+# User Interface "Experimente"
+
+Das Formular für den Import von BibTeX-Dateien verwendet ein neues Eingabefeld
+für die Auswahl von Sammlungen. Es funktioniert wie ein Suchfeld für Sammlungen,
+die dann direkt ausgewählt werden können. Bei der Suche werden der Name und die
+Nummer von Sammlungen berücksichtigt. 
+
+Auch wenn man den BibTeX-Import nicht nutzen möchte, lohnt es sich vielleicht das
+Eingabefeld zu testen. Das Formularelement muss noch weiter ausgebaut werden. 
+Es soll aber später auch im neuen Publish-Modul und im Metadaten-Formular verwendet 
+werden. Feedback kann in folgendem GitHub Issue oder über die Tester-Mailing-Liste 
+gegeben werden.
+
+<https://github.com/OPUS4/application/issues/500>
+
 # Konfiguration
 
 Der Parameter `url` kann verwendet werden, um die absolute URL für eine OPUS 4
@@ -11,17 +59,25 @@ z.B. in Exporten oder E-Mails, zu generieren.
 
 url = 'https://opus4mig.kobv.de/opus4-demo'
 
-URLs mit Port werden momentan nicht unterstützt.
+__URLs mit Port werden momentan nicht unterstützt.__
+
+# Betrieb mit Proxy
+
+Es wurden eine Reihe von Problemen beim Betrieb von OPUS 4 mit einem Proxy-Server
+behoben, hauptsächlich das korrekte Rendern von URLs in Exports. Der Betrieb mit
+einem Proxy sollte nun ohne Einschränkungen möglich sein.
 
 # Neues Kommandozeilen-Skript `bin/opus4`
 
 Es gibt das neue Skript `bin/opus4`, dass in Zukunft die Rolle des zentralen OPUS 4
-Werkzeugs auf der Kommandozeile übernehmen wird. Mit den Kommando `list` lassen sich
+Werkzeugs auf der Kommandozeile übernehmen wird. Mit dem Kommando `list` lassen sich
 die bisher integrierten Kommandos anzeigen. Mit `help` lassen sich Informationen zu
 einzelnen Kommandos abrufen.
 
     $ bin/opus4 list
     $ bin/opus4 help index:index
+
+Es sind noch nicht alle alten Skripte in Kommandos umgewandelt worden.
 
 # Wartung des Solr-Index
 
@@ -36,7 +92,7 @@ den Index beschreibt.
 
 Es gibt jetzt die Möglichkeit einzelne Dokumente einfacher zu indexieren oder auch
 aus dem Index zu entfernen. Es kann über eine Option bestimmt werden wie viele
-Dokument gleichzeitig zum Solr-Server geschickt werden sollen. Das kann helfen,
+Dokumente gleichzeitig zum Solr-Server geschickt werden sollen. Das kann helfen,
 wenn es Probleme bei der Indexierung gibt.
 
 # Export
@@ -49,54 +105,77 @@ die OPUS 4 Instanz.
 # BibTeX-Import
 
 OPUS 4 erlaubt nun den Import von Dokumentmetadaten aus BibTeX-Dateien. Der Import
-einer BibTeX-Datei kann über das CLI mit dem Befehl
+ist bisher auf Administratoren beschränkt. Der Import einer BibTeX-Datei kann auf
+der Kommandozeile mit dem Befehl
 
-    $ bin/opus4 import:bibtex <filename.bib>
+    $ bin/opus4 bibtex:import <filename.bib>
 
 aufgerufen werden. Es können hierbei mehrere Optionen angegeben werden. Die Auflistung
-der verfügbaren Optionen sowie einer Erklärung ihrer Bedeutung ist mit dem Befehl
+der verfügbaren Optionen ist mit folgendem Befehl möglich.
 
-    $ bin/opus4 help import:bibtex
-
-möglich.
+    $ bin/opus4 help bibtex:import
 
 Der BibTeX-Import kann auch über die Weboberfläche von OPUS 4 aufgerufen werden.
-Der Administrationsbereich bietet dazu einen entsprechenden Button _BibTeX-Import_ beim
-Aufruf des Menüeintrags _Dokumente_. Das Webformular in der Administration für den
-Import von BibTeX-Dateien bietet sämtliche Optionen an, die auch über den CLI-Befehl
-`import:bibtex` gesetzt werden können.
+In der Dokumentenverwaltung gibt es dazu einen entsprechenden Button _BibTeX-Import_. 
+Das Webformular in der Administration für den Import von BibTeX-Dateien bietet 
+sämtliche Optionen an, die auch auf der Kommandozeile verwendet werden können.
+
+## Anforderungen für BibTeX-Import
 
 Für die Ausführung des BibTeX-Imports, insbesondere die Umwandlung von LaTeX-codierten
-Sonderzeichen (z. B. Umlaute) in ihre Unicode-Entsprechungen, wird das Programm **Pandoc**
-benötigt. Es wird hierbei empfohlen eine möglichst aktuelle Version zu verwenden,
-mindestens aber Version 2.0. Das BibTeX-Import-Feature wurde ausführlich mit Pandoc 2.9
-getestet, welches mit den aktuellen Ubuntu-Versionen (2020.10 und 2021.04) über die
-Paketverwaltung installiert werden kann.
+Sonderzeichen (z. B. Umlaute) in ihren Unicode-Entsprechungen, wird das Programm 
+**Pandoc** benötigt. Das BibTeX-Import-Feature wurde ausführlich mit Pandoc 2.9 
+getestet, welches mit den aktuellen Ubuntu-Versionen (2020.10 und 2021.04) über die 
+Paketverwaltung installiert werden kann. Es wird empfohlen möglichst die neueste 
+Version von Pandoc (2.17+) zu installieren.
 
-Nach dem Import einer BibTeX-Datei (sowohl über CLI als auch das Webformular) wird ein
-Protokoll über die Verarbeitungsschritte ausgegeben, aus dem u. a. hervorgeht, wie viele
-BibTeX-Einträge aus der zu importierenden Daten erfolgreich in die OPUS 4 Datenbank
-übernommen wurden. Im Falle von Verarbeitungsfehlern erfolgt an dieser Stelle eine
-Ausgabe mit weiteren Details zur späteren Nachverfolgung.
+<https://pandoc.org/>
+
+Nach dem Import einer BibTeX-Datei (sowohl über CLI als auch das Webformular) wird 
+ein Protokoll über die Verarbeitungsschritte ausgegeben, aus dem u. a. hervorgeht, 
+wie viele BibTeX-Einträge aus der zu importierenden Daten erfolgreich in die OPUS 4 
+Datenbank übernommen wurden. Im Falle von Verarbeitungsfehlern erfolgt an dieser 
+Stelle eine Ausgabe mit weiteren Details zur späteren Nachverfolgung.
 
 Im OPUS 4 Handbuch gibt es eine neue Seite, auf der die Optionen des CLI-Befehls für
 den BibTeX-Import ausführlich beschrieben werden:
 
 <http://www.opus-repository.org/userdoc/import/bibtex.html>
 
+# SWORD Import
 
-# OPUS Framework Package
+Nach dem Import über die SWORD-Schnittstelle werden die übertragenen Pakete gelöscht.
+Das erfolgt nicht mehr automatische, wenn beim Import Probleme aufgetreten sind, damit 
+diese leichter analysiert und behoben werden können.
+
+# Deckblätter für PDF-Downloads
+
+Die Entwicklung von automatisch generierten Deckblättern in OPUS 4 hat begonnen. Sie 
+findet im neuen Paket __opus4-pdf__ statt und ist noch nicht abgeschlossen. In 4.7.1
+wurde die Grundlagen gelegt, um den Deckblatt-Support nach dem Abschluss der Arbeiten
+aktivieren zu können.
+
+<http://github.com/OPUS4/opus4-pdf>
+
+# Umstieg auf Laminas
+
+In 4.7.1 sind bereits einige Vorarbeiten für den Umstieg zu Laminas, dem Nachfolger
+des Zend Frameworks, eingeflossen, insbesondere im Framework. Die kommenden Releases
+werden sich zum größten Teil mit dem Umstieg befassen, da nur so eine solide Platform 
+für die Entwicklung und das Hosting in den kommenden Jahren geschaffen werden kann.
+
+# OPUS 4 Framework Package
 
 ## API
 
 Die `deletePermanent` Funktion von `Opus\Document`, um Dokumente vollständig zu
 löschen, wurde entfernt. Die `delete` Funktion löscht Dokumente jetzt vollständig,
 anstatt sie nur in den Server-Status **deleted** zu versetzen. Um Dokumente als
-gelöscht zu markieren ohne sie komplett zu entfernen, muss nun `serServerState`
+gelöscht zu markieren, ohne sie komplett zu entfernen, muss nun `setServerState`
 verwendet werden.
 
-$doc->setServerState(Document::STATE_DELETED);
-$doc->store();
+    $doc->setServerState(Document::STATE_DELETED);
+    $doc->store();
 
 Dies muss unter Umständen bei eigenen Skripten berücksichtigt werden.
 
@@ -105,8 +184,6 @@ Dies muss unter Umständen bei eigenen Skripten berücksichtigt werden.
 Der Code des OPUS Frameworks wurde in Vorbereitung auf die Migration zu Laminas
 auf PHP Namespaces umgestellt und die Verwendung der Klassen in der Application
 entsprechend angepasst.
-
----
 
 ---
 
